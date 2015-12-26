@@ -1,0 +1,147 @@
+#!/usr/bin/env node
+
+var Khaos = require('khaos')
+var metadata = require('read-metadata')
+var download = require('download-github-repo')
+var logger = require('../lib/logger')
+var program = require('commander')
+var exists = require('fs').existsSync
+var join = require('path').join
+var resolve = require('path').resolve
+var rm = require('rimraf').sync
+var uid = require('uid')
+
+/**
+ * Usage.
+ */
+
+program
+  .usage('<template> <project-name>')
+
+/**
+ * Help.
+ */
+
+program.on('--help', function () {
+  console.log('  Examples:')
+  console.log()
+  console.log('    # create a new project with an official template')
+  console.log('    $ vue init webpack my-project')
+  console.log()
+  console.log('    # create a new project straight from a github template')
+  console.log('    $ vue init username/repo my-project')
+  console.log()
+})
+
+/**
+ * Help.
+ */
+
+program.parse(process.argv)
+if (program.args.length < 2) return program.help()
+
+/**
+ * Padding.
+ */
+
+console.log()
+process.on('exit', function () {
+  console.log()
+})
+
+/**
+ * Settings.
+ */
+
+var template = program.args[0]
+var name = program.args[1]
+var dir = program.directory
+var to = resolve(name)
+if (exists(to)) logger.fatal('"%s" already exists.', name)
+
+/**
+ * Detect official template.
+ */
+
+if (!~template.indexOf('/')) {
+  template = 'vuejs-templates/' + template
+}
+
+/**
+ * Download and generate.
+ */
+
+var tmp = '/tmp/vue-template-' + uid()
+download(template, tmp, function (err) {
+  if (err) logger.fatal(err)
+  generate(tmp, to, function (err) {
+    if (err) logger.fatal(err)
+    rm(tmp)
+    console.log()
+    logger.success('Generated "%s".', name)
+  })
+})
+
+/**
+ * Generate a template given a `src` and `dest`.
+ *
+ * @param {String} src
+ * @param {String} dest
+ * @param {Function} fn
+ */
+
+function generate (src, dest, fn) {
+  var template = join(src, 'template')
+  var khaos = new Khaos(template)
+  var opts = options(src)
+
+  // work around prompt-for bug...
+  // which ignores default value for strings
+  // otherwise we can just use khaos.generate :(
+  khaos.schema(opts.schema)
+  khaos.read(function (err, files) {
+    if (err) logger.fatal(err)
+    khaos.parse(files, function (err, schema) {
+      if (err) logger.fatal(err)
+      khaos.prompt(schema, function (err, answers) {
+        if (err) logger.fatal(err)
+        if (!answers.name) answers.name = name
+        khaos.write(dest, files, answers, fn)
+      })
+    })
+  })
+}
+
+/**
+ * Read prompts metadata.
+ *
+ * @param {String} dir
+ * @return {Object}
+ */
+
+function options (dir) {
+  var file = join(dir, 'meta.json')
+  var opts = exists(file)
+    ? metadata.sync(file)
+    : {}
+  defaultName(opts)
+  return opts
+}
+
+/**
+ * Automatically infer the default project name
+ *
+ * @param {Object} opts
+ */
+
+function defaultName (opts) {
+  var schema = opts.schema || (opts.schema = {})
+  if (!schema.name || typeof schema.name !== 'object') {
+    schema.name = {
+      'type': 'string',
+      'default': name
+    }
+  } else {
+    schema.name['default'] = name
+  }
+}

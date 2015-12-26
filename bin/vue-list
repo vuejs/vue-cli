@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+var logger = require('../lib/logger')
+var request = require('request')
+var chalk = require('chalk')
+
+request({
+  url: 'https://api.github.com/users/vuejs-templates/repos',
+  headers: {
+    'User-Agent': 'vue-cli'
+  }
+}, function (err, res, body) {
+  if (err) logger.fatal(err)
+  console.log('  Available official templates:')
+  console.log()
+  JSON.parse(body).forEach(function (repo) {
+    console.log('  ' + chalk.yellow('★') + '  ' + chalk.blue(repo.name) + ' - ' + repo.description)
+  })
+})

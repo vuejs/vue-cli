@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+
+var exists = require('fs').existsSync
+var join = require('path').join
+var logger = require('../lib/logger')
+var program = require('commander')
+var resolve = require('path').resolve
+var spawn = require('child_process').spawn
+var stat = require('fs').statSync
+
+/**
+ * Usage.
+ */
+
+program
+  .version(require('../package').version)
+  .usage('<command> [options]')
+
+/**
+ * Help.
+ */
+
+program.on('--help', function () {
+  console.log('  Commands:')
+  console.log()
+  console.log('    init        generate a new project from a template')
+  console.log('    list        list available official templates')
+  console.log()
+})
+
+/**
+ * Parse.
+ */
+
+program.parse(process.argv)
+if (!program.args.length) program.help()
+
+/**
+ * Padding.
+ */
+
+console.log()
+process.on('exit', function () {
+  console.log()
+})
+
+/**
+ * Settings.
+ */
+
+var cmd = program.args[0]
+var args = process.argv.slice(3)
+var name = 'vue-' + cmd
+
+/**
+ * Resolve a local or remote executable.
+ */
+
+var bin = join(__dirname, name)
+if (!exists(bin)) {
+  bin = process.env.PATH.split(':').reduce(function (binary, path) {
+    path = resolve(path, bin)
+    return exists(path) && stat(path).isFile() ? path : binary
+  }, bin)
+}
+
+if (!exists(bin)) logger.fatal('The "%s" command does not exist.', name)
+
+/**
+ * Spawn a new, forwarded child process with the executable.
+ */
+
+spawn(bin, args, { stdio: 'inherit' })
+  .on('close', process.exit.bind(process))
