@@ -95,9 +95,6 @@ function generate (src, dest, fn) {
   var khaos = new Khaos(template)
   var opts = options(src)
 
-  // work around prompt-for bug...
-  // which ignores default value for strings
-  // otherwise we can just use khaos.generate :(
   khaos.schema(opts.schema)
   khaos.read(function (err, files) {
     if (err) logger.fatal(err)
@@ -105,7 +102,19 @@ function generate (src, dest, fn) {
       if (err) logger.fatal(err)
       khaos.prompt(schema, function (err, answers) {
         if (err) logger.fatal(err)
-        if (!answers.name) answers.name = name
+        // work around prompt-for bug...
+        // which ignores default value for strings
+        // otherwise we can just use khaos.generate :(
+        Object.keys(schema).forEach(function (key) {
+          if (
+            typeof schema[key] === 'object' &&
+            schema[key].type === 'string' &&
+            schema[key].default != null &&
+            answers[key] === ''
+          ) {
+            answers[key] = schema[key].default
+          }
+        })
         khaos.write(dest, files, answers, fn)
       })
     })
