@@ -17,7 +17,7 @@ var chalk = require('chalk')
  */
 
 program
-  .usage('<template> <project-name>')
+  .usage('<template-name> <project-name>')
 
 /**
  * Help.

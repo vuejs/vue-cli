@@ -1,12 +1,10 @@
 {
   "name": "vue-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple CLI for scaffolding Vue.js projects.",
   "preferGlobal": true,
   "bin": {
-    "vue": "bin/vue",
-    "vue-init": "bin/vue-init",
-    "vue-list": "bin/vue-list"
+    "vue": "bin/vue"
   },
   "scripts": {
     "test": "mocha"
