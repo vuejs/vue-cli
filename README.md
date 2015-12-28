@@ -33,7 +33,7 @@ Current available templates include:
 
 - [webpack](https://github.com/vuejs-templates/webpack) - A full-featured Webpack + vue-loader setup with hot reload, linting, testing & css extraction.
 
-- [webpack-simple](https://github.com/vuejs-templates/webpack) - A simple Webpack + vue-loader setup for quick prototyping.
+- [webpack-simple](https://github.com/vuejs-templates/webpack-simple) - A simple Webpack + vue-loader setup for quick prototyping.
 
 ### Custom Templates
 
