@@ -1,7 +1,7 @@
 {
   "name": "vue-cli",
   "version": "1.0.1",
-  "description": "Opinionated CLI for starting Vue.js single page applications",
+  "description": "A simple CLI for scaffolding Vue.js projects.",
   "preferGlobal": true,
   "bin": {
     "vue": "bin/vue"

@@ -4,6 +4,19 @@ var logger = require('../lib/logger')
 var request = require('request')
 var chalk = require('chalk')
 
+/**
+ * Padding.
+ */
+
+console.log()
+process.on('exit', function () {
+  console.log()
+})
+
+/**
+ * List repos.
+ */
+
 request({
   url: 'https://api.github.com/users/vuejs-templates/repos',
   headers: {
@@ -14,6 +27,9 @@ request({
   console.log('  Available official templates:')
   console.log()
   JSON.parse(body).forEach(function (repo) {
-    console.log('  ' + chalk.yellow('★') + '  ' + chalk.blue(repo.name) + ' - ' + repo.description)
+    console.log(
+      '  ' + chalk.yellow('★') +
+      '  ' + chalk.blue(repo.name) +
+      ' - ' + repo.description)
   })
 })

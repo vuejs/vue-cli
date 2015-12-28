@@ -21,6 +21,7 @@ program
  */
 
 program.on('--help', function () {
+  console.log()
   console.log('  Commands:')
   console.log()
   console.log('    init        generate a new project from a template')
@@ -34,15 +35,6 @@ program.on('--help', function () {
 
 program.parse(process.argv)
 if (!program.args.length) program.help()
-
-/**
- * Padding.
- */
-
-console.log()
-process.on('exit', function () {
-  console.log()
-})
 
 /**
  * Settings.
