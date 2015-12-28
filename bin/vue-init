@@ -10,6 +10,7 @@ var join = require('path').join
 var resolve = require('path').resolve
 var rm = require('rimraf').sync
 var uid = require('uid')
+var chalk = require('chalk')
 
 /**
  * Usage.
@@ -25,10 +26,10 @@ program
 program.on('--help', function () {
   console.log('  Examples:')
   console.log()
-  console.log('    # create a new project with an official template')
+  console.log(chalk.gray('    # create a new project with an official template'))
   console.log('    $ vue init webpack my-project')
   console.log()
-  console.log('    # create a new project straight from a github template')
+  console.log(chalk.gray('    # create a new project straight from a github template'))
   console.log('    $ vue init username/repo my-project')
   console.log()
 })
