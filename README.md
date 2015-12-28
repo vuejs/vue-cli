@@ -4,6 +4,8 @@ A simple CLI for scaffolding Vue.js projects.
 
 ### Installation
 
+Prerequisites: [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/).
+
 ``` bash
 $ npm install -g vue-cli
 ```
