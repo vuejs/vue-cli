@@ -61,27 +61,39 @@ var to = resolve(name)
 if (exists(to)) logger.fatal('"%s" already exists.', name)
 
 /**
- * Detect official template.
+ * Detect if template on file system.
  */
 
-if (!~template.indexOf('/')) {
-  template = 'vuejs-templates/' + template
-}
-
-/**
- * Download and generate.
- */
-
-var tmp = '/tmp/vue-template-' + uid()
-download(template, tmp, function (err) {
-  if (err) logger.fatal(err)
-  generate(tmp, to, function (err) {
+if (exists(template)) {
+  generate(template, to, function (err) {
     if (err) logger.fatal(err)
-    rm(tmp)
     console.log()
     logger.success('Generated "%s".', name)
   })
-})
+} else {
+  /**
+   * Detect official template.
+   */
+
+  if (!~template.indexOf('/')) {
+    template = 'vuejs-templates/' + template
+  }
+
+  /**
+   * Download and generate.
+   */
+
+  var tmp = '/tmp/vue-template-' + uid()
+  download(template, tmp, function (err) {
+    if (err) logger.fatal(err)
+    generate(tmp, to, function (err) {
+      if (err) logger.fatal(err)
+      rm(tmp)
+      console.log()
+      logger.success('Generated "%s".', name)
+    })
+  })
+}
 
 /**
  * Generate a template given a `src` and `dest`.
