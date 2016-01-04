@@ -55,6 +55,7 @@ process.on('exit', function () {
  */
 
 var template = program.args[0]
+var hasSlash = template.indexOf('/') > -1
 var name = program.args[1]
 var dir = program.directory
 var to = resolve(name)
@@ -64,7 +65,7 @@ if (exists(to)) logger.fatal('"%s" already exists.', name)
  * Detect if template on file system.
  */
 
-if (exists(template)) {
+if (hasSlash && exists(template)) {
   generate(template, to, function (err) {
     if (err) logger.fatal(err)
     console.log()
@@ -75,7 +76,7 @@ if (exists(template)) {
    * Detect official template.
    */
 
-  if (!~template.indexOf('/')) {
+  if (!hasSlash) {
     template = 'vuejs-templates/' + template
   }
 
