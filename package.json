@@ -29,7 +29,7 @@
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "download-github-repo": "^0.1.3",
-    "khaos": "^0.9.3",
+    "khaos-patched": "^0.9.3",
     "read-metadata": "^1.0.0",
     "request": "^2.67.0",
     "rimraf": "^2.5.0",

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var Khaos = require('khaos')
+var Khaos = require('khaos-patched')
 var metadata = require('read-metadata')
 var download = require('download-github-repo')
 var logger = require('../lib/logger')
@@ -110,29 +110,7 @@ function generate (src, dest, fn) {
   var opts = options(src)
 
   khaos.schema(opts.schema)
-  khaos.read(function (err, files) {
-    if (err) logger.fatal(err)
-    khaos.parse(files, function (err, schema) {
-      if (err) logger.fatal(err)
-      khaos.prompt(schema, function (err, answers) {
-        if (err) logger.fatal(err)
-        // work around prompt-for bug...
-        // which ignores default value for strings
-        // otherwise we can just use khaos.generate :(
-        Object.keys(schema).forEach(function (key) {
-          if (
-            typeof schema[key] === 'object' &&
-            schema[key].type === 'string' &&
-            schema[key].default != null &&
-            answers[key] === ''
-          ) {
-            answers[key] = schema[key].default
-          }
-        })
-        khaos.write(dest, files, answers, fn)
-      })
-    })
-  })
+  khaos.generate(dest, fn)
 }
 
 /**
