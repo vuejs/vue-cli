@@ -3,7 +3,6 @@
 var Khaos = require('khaos-patched')
 var metadata = require('read-metadata')
 var download = require('download-github-repo')
-var logger = require('../lib/logger')
 var program = require('commander')
 var exists = require('fs').existsSync
 var join = require('path').join
@@ -11,6 +10,8 @@ var resolve = require('path').resolve
 var rm = require('rimraf').sync
 var uid = require('uid')
 var chalk = require('chalk')
+var logger = require('../lib/logger')
+var getGitUser = require('../lib/git-user')
 
 /**
  * Usage.
@@ -125,24 +126,33 @@ function options (dir) {
   var opts = exists(file)
     ? metadata.sync(file)
     : {}
-  defaultName(opts)
+
+  setDefault(opts, 'name', name)
+
+  var author = getGitUser()
+  if (author) {
+    setDefault(opts, 'author', author)
+  }
+
   return opts
 }
 
 /**
- * Automatically infer the default project name
+ * Set the default value for a schema key
  *
  * @param {Object} opts
+ * @param {String} key
+ * @param {String} val
  */
 
-function defaultName (opts) {
+function setDefault (opts, key, val) {
   var schema = opts.schema || (opts.schema = {})
-  if (!schema.name || typeof schema.name !== 'object') {
-    schema.name = {
+  if (!schema[key] || typeof schema[key] !== 'object') {
+    schema[key] = {
       'type': 'string',
-      'default': name
+      'default': val
     }
   } else {
-    schema.name['default'] = name
+    schema[key]['default'] = val
   }
 }
