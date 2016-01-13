@@ -47,6 +47,8 @@ vue init username/repo my-project
 
 Where `username/repo` is the GitHub repo shorthand for your fork.
 
+The shorthand repo notation is passed to [download-git-repo](https://github.com/flipxfx/download-git-repo) so you can also use things like `bitbucket:username/repo` for a Bitbucket repo and `username/repo#branch` for tags or branches.
+
 You can also create your own template from scratch:
 
 - A template repo **must** have a `template` directory that holds the template files.

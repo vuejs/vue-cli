@@ -2,7 +2,7 @@
 
 var Khaos = require('khaos-patched')
 var metadata = require('read-metadata')
-var download = require('download-github-repo')
+var download = require('download-git-repo')
 var program = require('commander')
 var exists = require('fs').existsSync
 var join = require('path').join
