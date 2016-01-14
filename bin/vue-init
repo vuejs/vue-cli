@@ -19,6 +19,7 @@ var getGitUser = require('../lib/git-user')
 
 program
   .usage('<template-name> <project-name>')
+  .option('-c, --clone', 'use git clone')
 
 /**
  * Help.
@@ -60,6 +61,7 @@ var hasSlash = template.indexOf('/') > -1
 var name = program.args[1]
 var dir = program.directory
 var to = resolve(name)
+var clone = program.clone || false
 if (exists(to)) logger.fatal('"%s" already exists.', name)
 
 /**
@@ -86,7 +88,7 @@ if (hasSlash && exists(template)) {
    */
 
   var tmp = '/tmp/vue-template-' + uid()
-  download(template, tmp, function (err) {
+  download(template, tmp, { clone: clone }, function (err) {
     if (err) logger.fatal(err)
     generate(tmp, to, function (err) {
       if (err) logger.fatal(err)
