@@ -28,7 +28,7 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
-    "download-git-repo": "^0.0.1",
+    "download-git-repo": "^0.1.1",
     "khaos-patched": "^0.9.3",
     "read-metadata": "^1.0.0",
     "request": "^2.67.0",

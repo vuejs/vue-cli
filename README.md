@@ -49,6 +49,8 @@ Where `username/repo` is the GitHub repo shorthand for your fork.
 
 The shorthand repo notation is passed to [download-git-repo](https://github.com/flipxfx/download-git-repo) so you can also use things like `bitbucket:username/repo` for a Bitbucket repo and `username/repo#branch` for tags or branches.
 
+If you would like to download from a private repository use the `--clone` flag and the cli will use `git clone` so your SHH keys are used.
+
 You can also create your own template from scratch:
 
 - A template repo **must** have a `template` directory that holds the template files.
