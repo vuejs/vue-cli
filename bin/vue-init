@@ -12,6 +12,7 @@ var uid = require('uid')
 var chalk = require('chalk')
 var logger = require('../lib/logger')
 var getGitUser = require('../lib/git-user')
+var unyield = require('unyield')
 
 /**
  * Usage.
@@ -108,12 +109,21 @@ if (hasSlash && exists(template)) {
  */
 
 function generate (src, dest, fn) {
-  var template = join(src, 'template')
-  var khaos = new Khaos(template)
-  var opts = options(src)
+  (unyield(function * (src, dest) {
+    var template = join(src, 'template')
+    var opts = options(src)
+    var khaos = new Khaos(template)
 
-  khaos.schema(opts.schema)
-  khaos.generate(dest, fn)
+    var files = yield khaos.read()
+    var schema = yield khaos.parse(files)
+
+    for (var name in schema)
+      if (opts.schema[name]) schema[name] = opts.schema[name]
+
+    var answers = yield khaos.prompt(schema)
+
+    yield khaos.write(dest, files, answers)
+  }))(src, dest, fn)
 }
 
 /**
