@@ -9,9 +9,10 @@ var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
 var chalk = require('chalk')
+var prompt = require('prompt-for-patched')
 var logger = require('../lib/logger')
 var getGitUser = require('../lib/git-user')
-var prompt = require('prompt-for-patched')
+var Spinner = require('../lib/spinner')
 
 /**
  * Usage.
@@ -103,7 +104,10 @@ function run () {
     }
     // download and generate
     var tmp = '/tmp/vue-template-' + uid()
+    var spinner = new Spinner('downloading template')
+    spinner.start()
     download(template, tmp, { clone: clone }, function (err) {
+      spinner.stop()
       if (err) logger.fatal(err)
       generate(tmp, to, function (err) {
         if (err) logger.fatal(err)
