@@ -30,6 +30,7 @@
     "commander": "^2.9.0",
     "download-git-repo": "^0.1.1",
     "khaos-patched": "^0.9.3",
+    "prompt-for-patched": "^1.1.3",
     "read-metadata": "^1.0.0",
     "request": "^2.67.0",
     "rimraf": "^2.5.0",

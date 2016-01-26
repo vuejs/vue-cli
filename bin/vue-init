@@ -5,20 +5,20 @@ var metadata = require('read-metadata')
 var download = require('download-git-repo')
 var program = require('commander')
 var exists = require('fs').existsSync
-var join = require('path').join
-var resolve = require('path').resolve
+var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
 var chalk = require('chalk')
 var logger = require('../lib/logger')
 var getGitUser = require('../lib/git-user')
+var prompt = require('prompt-for-patched')
 
 /**
  * Usage.
  */
 
 program
-  .usage('<template-name> <project-name>')
+  .usage('<template-name> [project-name]')
   .option('-c, --clone', 'use git clone')
 
 /**
@@ -41,7 +41,7 @@ program.on('--help', function () {
  */
 
 program.parse(process.argv)
-if (program.args.length < 2) return program.help()
+if (program.args.length < 1) return program.help()
 
 /**
  * Padding.
@@ -58,45 +58,61 @@ process.on('exit', function () {
 
 var template = program.args[0]
 var hasSlash = template.indexOf('/') > -1
-var name = program.args[1]
+var rawName = program.args[1]
+var inPlace = !rawName || rawName === '.'
+var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var dir = program.directory
-var to = resolve(name)
+var to = path.resolve(rawName || '.')
 var clone = program.clone || false
-if (exists(to)) logger.fatal('"%s" already exists.', name)
 
-/**
- * Detect if template on file system.
- */
-
-if (hasSlash && exists(template)) {
-  generate(template, to, function (err) {
-    if (err) logger.fatal(err)
-    console.log()
-    logger.success('Generated "%s".', name)
+if (exists(to)) {
+  prompt({
+    ok: {
+      type: 'boolean',
+      default: true,
+      label: inPlace
+        ? 'Generate project in current directory?'
+        : 'Target directory exists. Continue?'
+    }
+  }, function (err, answers) {
+    if (err) throw err
+    if (answers.ok) {
+      run()
+    }
   })
 } else {
-  /**
-   * Detect official template.
-   */
+  run()
+}
 
-  if (!hasSlash) {
-    template = 'vuejs-templates/' + template
-  }
+/**
+ * Check, download and generate the project.
+ */
 
-  /**
-   * Download and generate.
-   */
-
-  var tmp = '/tmp/vue-template-' + uid()
-  download(template, tmp, { clone: clone }, function (err) {
-    if (err) logger.fatal(err)
-    generate(tmp, to, function (err) {
+function run () {
+  // check if template is local
+  if (hasSlash && exists(template)) {
+    generate(template, to, function (err) {
       if (err) logger.fatal(err)
-      rm(tmp)
       console.log()
       logger.success('Generated "%s".', name)
     })
-  })
+  } else {
+    // use official templates
+    if (!hasSlash) {
+      template = 'vuejs-templates/' + template
+    }
+    // download and generate
+    var tmp = '/tmp/vue-template-' + uid()
+    download(template, tmp, { clone: clone }, function (err) {
+      if (err) logger.fatal(err)
+      generate(tmp, to, function (err) {
+        if (err) logger.fatal(err)
+        rm(tmp)
+        console.log()
+        logger.success('Generated "%s".', name)
+      })
+    })
+  }
 }
 
 /**
@@ -108,7 +124,7 @@ if (hasSlash && exists(template)) {
  */
 
 function generate (src, dest, fn) {
-  var template = join(src, 'template')
+  var template = path.join(src, 'template')
   var khaos = new Khaos(template)
   var opts = options(src)
 
@@ -124,7 +140,7 @@ function generate (src, dest, fn) {
  */
 
 function options (dir) {
-  var file = join(dir, 'meta.json')
+  var file = path.join(dir, 'meta.json')
   var opts = exists(file)
     ? metadata.sync(file)
     : {}
