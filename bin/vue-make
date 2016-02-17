@@ -1,0 +1,137 @@
+#!/usr/bin/env node
+
+var logger = require('../lib/logger')
+var request = require('request')
+var chalk = require('chalk')
+var path = require ('path');
+var fs = require ('fs');
+var mkdirp = require ('mkdirp');
+
+// Look for projects in these dirs
+var BOILERPLATE_DIR_NAME = ".vue-boilerplate";
+var BOILERPLATE_CONFIG_NAME = "config.json";
+
+/**
+ * Main Process.
+ */
+
+console.log()
+process.on('exit', function () {
+  // Add padding
+  console.log()
+})
+
+var program = require('commander')
+  .usage('make <type> [name]')
+  .option('-l, --list', 'list available generators and usage examples')
+
+
+program.parse(process.argv)
+
+if (program.list) {
+  command_list ();
+}
+else if (program.args.length > 1) {
+  command_generate (program.args[0], program.args[1]);
+}
+else {
+  program.help ();
+}
+
+
+
+/**
+ * Functions
+ */
+
+function command_list () {
+  console.log('  Examples:')
+  console.log()
+  var config = get_boilerplate_config ();
+  for (var key in config) {
+    if (!config.hasOwnProperty (key)) {
+      continue;
+    }
+    var item = config[key];
+    console.log(chalk.gray('    # ' + item['desc']))
+    console.log('    $ ' + item['example'])
+    console.log()
+  }
+}
+
+function command_generate (type, name) {
+  var config = get_boilerplate_config (),
+    cwd = process.cwd (),
+    target_path,
+    genObj,
+    gen_source_path,
+    gen_source_content,
+    target_dir,
+    target_path,
+    target_filename;
+
+  if (!config.hasOwnProperty (type)) {
+    error ("Unknown generator type: "+ type);
+  }
+  genObj = config[type];
+  gen_source_path = path.join(cwd, BOILERPLATE_DIR_NAME, genObj['file']);
+  try {
+    gen_source_content = fs.readFileSync (gen_source_path);
+  }
+  catch (e) {
+    error ("Unable to read file: " + gen_source_path);
+  }
+
+  target_filename = genObj['target'].replace ("{{ name }}", name);
+  target_path = path.join (cwd, target_filename);
+  target_dir = path.dirname (target_path);
+
+  // force a mkdirp of the target_dir
+  mkdirp.sync (target_dir);
+
+  // write the file
+  try {
+    // Use `wx` so that the write fails if the file exists
+    fs.writeFileSync (target_path, gen_source_content, {flag: 'wx'});
+  }
+  catch (e) {
+    error ("Unable to write file: " + target_path);
+    throw e;
+  }
+
+  console.log ();
+  console.log (chalk.green ("Created: "), target_filename);
+}
+
+function log () {
+  console.log.apply(console, arguments);
+}
+
+function error (s) {
+  console.log(chalk.red (s));
+  process.exit ();
+}
+
+function get_boilerplate_config () {
+  var cwd = process.cwd (),
+      bp_path = path.join (cwd, BOILERPLATE_DIR_NAME, BOILERPLATE_CONFIG_NAME);
+
+  try {
+    fs.accessSync (bp_path, fs.R_OK);
+  } catch (e) {
+    error ("Not able to open " + bp_path +". \n\nPlease run this from root of a supported vue-cli scaffold project.");
+  }
+
+  var content = fs.readFileSync (bp_path),
+      config = null;
+
+  try {
+    config = JSON.parse (content);
+  } catch (e) {
+    error ("Unable to parse " + bp_path);
+  }
+
+  return config;
+}
+
+
