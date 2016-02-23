@@ -19,7 +19,7 @@ $ npm install
 $ npm run dev
 ```
 
-The above command pulls the template from [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack), prompts for some information, and generates the project at `.my-project/`.
+The above command pulls the template from [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack), prompts for some information, and generates the project at `./my-project/`.
 
 ### Official Templates
 
