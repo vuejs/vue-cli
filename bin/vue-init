@@ -9,7 +9,7 @@ var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
 var chalk = require('chalk')
-var prompt = require('prompt-for-patched')
+var inquirer = require('inquirer')
 var logger = require('../lib/logger')
 var getGitUser = require('../lib/git-user')
 var Spinner = require('../lib/spinner')
@@ -67,16 +67,13 @@ var to = path.resolve(rawName || '.')
 var clone = program.clone || false
 
 if (exists(to)) {
-  prompt({
-    ok: {
-      type: 'boolean',
-      default: true,
-      label: inPlace
-        ? 'Generate project in current directory?'
-        : 'Target directory exists. Continue?'
-    }
-  }, function (err, answers) {
-    if (err) throw err
+  inquirer.prompt([{
+    type: 'confirm',
+    message: inPlace
+      ? 'Generate project in current directory?'
+      : 'Target directory exists. Continue?',
+    name: 'ok'
+  }], function (answers) {
     if (answers.ok) {
       run()
     }
