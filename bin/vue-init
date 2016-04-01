@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
-var Khaos = require('khaos-patched')
-var metadata = require('read-metadata')
+// var metadata = require('read-metadata')
+var async = require('async')
+var Metalsmith = require('metalsmith')
+var render = require('consolidate').handlebars.render
 var download = require('download-git-repo')
 var program = require('commander')
 var exists = require('fs').existsSync
@@ -62,7 +64,7 @@ var hasSlash = template.indexOf('/') > -1
 var rawName = program.args[1]
 var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
-var dir = program.directory
+// var dir = program.directory
 var to = path.resolve(rawName || '.')
 var clone = program.clone || false
 
@@ -117,6 +119,60 @@ function run () {
 }
 
 /**
+ * Prompt plugin.
+ *
+ * @param {Object} files
+ * @param {Metalsmith} metalsmith
+ * @param {Function} done
+ */
+
+function ask (files, metalsmith, done) {
+  var prompts = ['name']
+  var metadata = metalsmith.metadata()
+
+  async.eachSeries(prompts, run, done)
+
+  function run(key, done){
+    // prompt('  ' + key + ': ', function(val){
+    //   metadata[key] = val
+    //   done()
+    // })
+    inquirer.prompt([{
+      type: 'input',
+      message: key,
+      name: key
+    }], function (answers) {
+      metadata[key] = answers[key]
+      done()
+    })
+  }
+}
+
+/**
+ * Template in place plugin.
+ *
+ * @param {Object} files
+ * @param {Metalsmith} metalsmith
+ * @param {Function} done
+ */
+
+function renderTemplateFiles (files, metalsmith, done) {
+  var keys = Object.keys(files)
+  var metadata = metalsmith.metadata()
+
+  async.each(keys, run, done)
+
+  function run(file, done){
+    var str = files[file].contents.toString()
+    render(str, metadata, function (err, res) {
+      if (err) return done(err)
+      files[file].contents = new Buffer(res)
+      done()
+    });
+  }
+}
+
+/**
  * Generate a template given a `src` and `dest`.
  *
  * @param {String} src
@@ -126,11 +182,27 @@ function run () {
 
 function generate (src, dest, fn) {
   var template = path.join(src, 'template')
-  var khaos = new Khaos(template)
-  var opts = options(src)
 
-  khaos.schema(opts.schema)
-  khaos.generate(dest, fn)
+  /**
+   * Build.
+   */
+
+  var metalsmith = Metalsmith(template)
+    .use(ask)
+    .use(renderTemplateFiles)
+    .source('.') // start from template root
+    .destination('build') // use dest when ready
+    .build(function (err) {
+      if (err) throw err
+
+      fn()
+    })
+
+  // var khaos = new Khaos(template)
+  // var opts = options(src)
+  //
+  // khaos.schema(opts.schema)
+  // khaos.generate(dest, fn)
 }
 
 /**
