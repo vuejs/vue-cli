@@ -191,8 +191,9 @@ function generate (src, dest, fn) {
   Metalsmith(template)
     .use(ask)
     .use(renderTemplateFiles)
-    .source('.') // start from template root
-    .destination(path.join(dest, name))
+    .clean(false)
+    .source('.') // start from template root instead of `./src` which is Metalsmith's default for `source`
+    .destination(dest)
     .build(function (err) {
       if (err) throw err
 
