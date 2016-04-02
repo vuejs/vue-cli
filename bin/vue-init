@@ -199,8 +199,7 @@ function generate (src, dest, fn) {
     .use(ask)
     .use(renderTemplateFiles)
     .source('.') // start from template root
-    .destination(path.join(dest, 'project-name')) // TODO: use dest + name when ready
-    // .destination(path.join(dest, outputDirName)) // Argh!
+    .destination(path.join(dest, outputDirName))
     .build(function (err) {
       if (err) throw err
 
