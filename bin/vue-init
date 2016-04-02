@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
-var Khaos = require('khaos-patched')
 var metadata = require('read-metadata')
+var async = require('async')
+var Metalsmith = require('metalsmith')
+var render = require('consolidate').handlebars.render
 var download = require('download-git-repo')
 var program = require('commander')
 var exists = require('fs').existsSync
@@ -9,7 +11,7 @@ var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
 var chalk = require('chalk')
-var prompt = require('prompt-for-patched')
+var inquirer = require('inquirer')
 var logger = require('../lib/logger')
 var getGitUser = require('../lib/git-user')
 var Spinner = require('../lib/spinner')
@@ -62,21 +64,17 @@ var hasSlash = template.indexOf('/') > -1
 var rawName = program.args[1]
 var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
-var dir = program.directory
 var to = path.resolve(rawName || '.')
 var clone = program.clone || false
 
 if (exists(to)) {
-  prompt({
-    ok: {
-      type: 'boolean',
-      default: true,
-      label: inPlace
-        ? 'Generate project in current directory?'
-        : 'Target directory exists. Continue?'
-    }
-  }, function (err, answers) {
-    if (err) throw err
+  inquirer.prompt([{
+    type: 'confirm',
+    message: inPlace
+      ? 'Generate project in current directory?'
+      : 'Target directory exists. Continue?',
+    name: 'ok'
+  }], function (answers) {
     if (answers.ok) {
       run()
     }
@@ -119,6 +117,66 @@ function run () {
   }
 }
 
+var promptInquirerTypeMapping = {
+  string: 'input',
+  boolean: 'confirm'
+}
+
+/**
+ * Prompt plugin.
+ *
+ * @param {Object} files
+ * @param {Metalsmith} metalsmith
+ * @param {Function} done
+ */
+
+function ask (files, metalsmith, done) {
+  var opts = options(metalsmith._directory + '/..')
+
+  var prompts = Object.keys(opts.schema)
+  var metalsmithMetadata = metalsmith.metadata()
+
+  async.eachSeries(prompts, run, done)
+
+  function run(key, done) {
+    var prompt = opts.schema[key]
+
+    inquirer.prompt([{
+      type: promptInquirerTypeMapping[prompt.type],
+      name: key,
+      message: prompt.label || key,
+      default: prompt.default
+    }], function (answers) {
+      metalsmithMetadata[key] = answers[key]
+      done()
+    })
+  }
+}
+
+/**
+ * Template in place plugin.
+ *
+ * @param {Object} files
+ * @param {Metalsmith} metalsmith
+ * @param {Function} done
+ */
+
+function renderTemplateFiles (files, metalsmith, done) {
+  var keys = Object.keys(files)
+  var metalsmithMetadata = metalsmith.metadata()
+
+  async.each(keys, run, done)
+
+  function run(file, done){
+    var str = files[file].contents.toString()
+    render(str, metalsmithMetadata, function (err, res) {
+      if (err) return done(err)
+      files[file].contents = new Buffer(res)
+      done()
+    });
+  }
+}
+
 /**
  * Generate a template given a `src` and `dest`.
  *
@@ -129,11 +187,18 @@ function run () {
 
 function generate (src, dest, fn) {
   var template = path.join(src, 'template')
-  var khaos = new Khaos(template)
-  var opts = options(src)
 
-  khaos.schema(opts.schema)
-  khaos.generate(dest, fn)
+  Metalsmith(template)
+    .use(ask)
+    .use(renderTemplateFiles)
+    .clean(false)
+    .source('.') // start from template root instead of `./src` which is Metalsmith's default for `source`
+    .destination(dest)
+    .build(function (err) {
+      if (err) throw err
+
+      fn()
+    })
 }
 
 /**
