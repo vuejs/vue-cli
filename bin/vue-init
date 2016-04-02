@@ -167,13 +167,17 @@ function renderTemplateFiles (files, metalsmith, done) {
 
   async.each(keys, run, done)
 
-  function run(file, done){
+  function run (file, done) {
     var str = files[file].contents.toString()
+    // do not attempt to render files that do not have mustaches
+    if (!/\{\{[#^] *(\w+) *\}\}/.test(str)) {
+      return done()
+    }
     render(str, metalsmithMetadata, function (err, res) {
       if (err) return done(err)
       files[file].contents = new Buffer(res)
       done()
-    });
+    })
   }
 }
 
@@ -196,7 +200,6 @@ function generate (src, dest, fn) {
     .destination(dest)
     .build(function (err) {
       if (err) throw err
-
       fn()
     })
 }
