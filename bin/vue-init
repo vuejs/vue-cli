@@ -122,8 +122,6 @@ var promptInquirerTypeMapping = {
   boolean: 'confirm'
 }
 
-var outputDirName = ''
-
 /**
  * Prompt plugin.
  *
@@ -150,11 +148,6 @@ function ask (files, metalsmith, done) {
       default: prompt.default
     }], function (answers) {
       metalsmithMetadata[key] = answers[key]
-
-      if (key === 'name') {
-        outputDirName = answers[key]
-      }
-
       done()
     })
   }
@@ -199,7 +192,7 @@ function generate (src, dest, fn) {
     .use(ask)
     .use(renderTemplateFiles)
     .source('.') // start from template root
-    .destination(path.join(dest, outputDirName))
+    .destination(path.join(dest, name))
     .build(function (err) {
       if (err) throw err
 
