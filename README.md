@@ -59,7 +59,7 @@ You can also create your own template from scratch:
 
 - All template files will be piped through Handlebars for simple templating - `vue-cli` will automatically infer the prompts based on `{{}}` interpolations found in the files.
 
-- A template repo **may** have a `meta.json` file that provides a schema for the prompts. The schema will be passed to [inquirer](https://github.com/SBoudrias/Inquirer.js). See [example](https://github.com/vuejs-templates/webpack/blob/master/meta.json). We only support `string` and `boolean` types at the moment.
+- A template repo **may** have a `meta.json` file that provides a schema for the prompts. The schema will be passed to [inquirer](https://github.com/SBoudrias/Inquirer.js). See [example](https://github.com/vuejs-templates/webpack/blob/master/meta.json). We support `string`, `boolean` and `checkbox` (for multi choice) types.
 
 While developing your template you can test via `vue-cli` with:
 

@@ -142,12 +142,21 @@ function ask (files, metalsmith, done) {
     var prompt = opts.schema[key]
 
     inquirer.prompt([{
-      type: promptInquirerTypeMapping[prompt.type],
+      type: promptInquirerTypeMapping[prompt.type] || prompt.type,
       name: key,
       message: prompt.label || key,
-      default: prompt.default
+      default: prompt.default,
+      choices: prompt.choices || []
     }], function (answers) {
-      metalsmithMetadata[key] = answers[key]
+      if (Array.isArray(answers[key])) {
+        metalsmithMetadata[key] = {}
+        answers[key].forEach(function (multiChoiceAnswer) {
+          metalsmithMetadata[key][multiChoiceAnswer] = true
+        })
+      } else {
+        metalsmithMetadata[key] = answers[key]
+      }
+
       done()
     })
   }
