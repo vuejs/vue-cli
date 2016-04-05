@@ -1,0 +1,13 @@
+{
+  "name": "{{ name }}",
+  "description": "{{ description }}",
+  "author": "{{ author }}",
+  "devDependencies": {
+    {{#preprocessor.less}}
+    "less": "^2.6.1",
+    {{/preprocessor.less}}
+    {{#preprocessor.sass}}
+    "node-sass": "^3.4.2"
+    {{/preprocessor.sass}}
+  }
+}
