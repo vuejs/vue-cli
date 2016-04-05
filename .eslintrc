@@ -1,0 +1,6 @@
+{
+  "extends": "standard",
+  "rules": {
+    "arrow-parens": [2, "as-needed"]
+  }
+}
