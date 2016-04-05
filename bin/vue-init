@@ -6,10 +6,10 @@ var exists = require('fs').existsSync
 var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
+var ora = require('ora')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
 var logger = require('../lib/logger')
-var Spinner = require('../lib/spinner')
 
 /**
  * Usage.
@@ -105,7 +105,7 @@ function run () {
     }
     // download and generate
     var tmp = '/tmp/vue-template-' + uid()
-    var spinner = new Spinner('downloading template')
+    var spinner = ora('downloading template')
     spinner.start()
     download(template, tmp, { clone: clone }, function (err) {
       spinner.stop()
