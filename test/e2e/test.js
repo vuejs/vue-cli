@@ -1,6 +1,10 @@
 import { expect } from 'chai'
 const fs = require('fs')
+const path = require('path')
 const render = require('consolidate').handlebars.render
+
+const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
+const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 
 describe('vue-cli generate', () => {
   it('test template generation', done => {
@@ -22,11 +26,11 @@ describe('vue-cli generate', () => {
     const ask = require('../../lib/ask')(options, promptFn)
     const generate = require('../../lib/generate')(ask)
 
-    generate('./test/e2e/mock-template-repo', '../../mock-template-build', err => {
+    generate(MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done()
 
-      const handlebarsPackageJsonFile = fs.readFileSync('./test/e2e/mock-template-repo/template/package.json', 'utf8')
-      const generatedPackageJsonFile = fs.readFileSync('./test/e2e/mock-template-build/package.json', 'utf8')
+      const handlebarsPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/package.json`, 'utf8')
+      const generatedPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/package.json`, 'utf8')
 
       render(handlebarsPackageJsonFile, answers, (err, res) => {
         if (err) return done(err)

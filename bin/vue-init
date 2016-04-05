@@ -87,8 +87,8 @@ if (exists(to)) {
 
 function run () {
   var options = require('../lib/options')(name)
-  var promptFn = require('../lib/prompt')
-  var ask = require('../lib/ask')(options, promptFn)
+  var prompt = require('../lib/prompt')
+  var ask = require('../lib/ask')(options, prompt)
   var generate = require('../lib/generate')(ask)
 
   // check if template is local
