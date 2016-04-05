@@ -64,7 +64,6 @@ var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
 var clone = program.clone || false
-var generate = require('../lib/generate')(name)
 
 if (exists(to)) {
   inquirer.prompt([{
@@ -87,6 +86,11 @@ if (exists(to)) {
  */
 
 function run () {
+  var options = require('../lib/options')(name)
+  var promptFn = require('../lib/prompt')
+  var ask = require('../lib/ask')(options, promptFn)
+  var generate = require('../lib/generate')(ask)
+
   // check if template is local
   if (hasSlash && exists(template)) {
     generate(template, to, function (err) {
