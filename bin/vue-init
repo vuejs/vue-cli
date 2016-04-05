@@ -43,8 +43,11 @@ program.on('--help', function () {
  * Help.
  */
 
-program.parse(process.argv)
-if (program.args.length < 1) return program.help()
+function help () {
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help()
+}
+help()
 
 /**
  * Padding.
