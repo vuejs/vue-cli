@@ -42,7 +42,8 @@
     "request": "^2.67.0",
     "rimraf": "^2.5.0",
     "semver": "^5.1.0",
-    "uid": "0.0.2"
+    "uid": "0.0.2",
+    "validate-npm-package-name": "^2.2.2"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
