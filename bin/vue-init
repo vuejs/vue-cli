@@ -125,7 +125,7 @@ function checkDistBranch (template, cb) {
   }, function (err, res, body) {
     if (err) logger.fatal(err)
     if (res.statusCode !== 200) {
-      return cb(template)
+      logger.fatal('Template does not exist: ' + template)
     } else {
       var hasDist = JSON.parse(body).some(function (branch) {
         return branch.name === 'dist'
@@ -150,7 +150,7 @@ function downloadAndGenerate (template) {
   spinner.start()
   download(template, tmp, { clone: clone }, function (err) {
     spinner.stop()
-    if (err) logger.fatal(err)
+    if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
     generate(name, tmp, to, function (err) {
       rm(tmp)
       if (err) logger.fatal(err)
