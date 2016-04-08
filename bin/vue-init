@@ -10,6 +10,7 @@ var ora = require('ora')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
 var logger = require('../lib/logger')
+var checkVersion = require('../lib/check-version')
 
 /**
  * Usage.
@@ -103,18 +104,20 @@ function run () {
     if (!hasSlash) {
       template = 'vuejs-templates/' + template
     }
-    // download and generate
-    var tmp = '/tmp/vue-template-' + uid()
-    var spinner = ora('downloading template')
-    spinner.start()
-    download(template, tmp, { clone: clone }, function (err) {
-      spinner.stop()
-      if (err) logger.fatal(err)
-      generate(tmp, to, function (err) {
+    checkVersion(function () {
+      // download and generate
+      var tmp = '/tmp/vue-template-' + uid()
+      var spinner = ora('downloading template')
+      spinner.start()
+      download(template, tmp, { clone: clone }, function (err) {
+        spinner.stop()
         if (err) logger.fatal(err)
-        rm(tmp)
-        console.log()
-        logger.success('Generated "%s".', name)
+        generate(tmp, to, function (err) {
+          if (err) logger.fatal(err)
+          rm(tmp)
+          console.log()
+          logger.success('Generated "%s".', name)
+        })
       })
     })
   }
