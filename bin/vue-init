@@ -152,8 +152,8 @@ function downloadAndGenerate (template) {
     spinner.stop()
     if (err) logger.fatal(err)
     generate(name, tmp, to, function (err) {
-      if (err) logger.fatal(err)
       rm(tmp)
+      if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)
     })
