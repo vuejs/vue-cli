@@ -26,6 +26,17 @@
         "less",
         "sass"
       ]
+    },
+    "pick": {
+      "type": "list",
+      "choices": [
+        "yes",
+        "no"
+      ]
     }
+  },
+  "filters": {
+    "src/*.js": "pick === 'yes'",
+    "**/*.vue": "pick === 'no'"
   }
 }

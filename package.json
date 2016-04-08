@@ -24,7 +24,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run lint && npm run e2e",
-    "lint": "eslint test lib bin/* --env mocha",
+    "lint": "eslint test/test.js lib bin/* --env mocha",
     "e2e": "rimraf test/e2e/mock-template-build/*.* && BABEL_ENV=development mocha test/e2e/test.js --slow 1000 --compilers js:babel-core/register"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "handlebars": "^4.0.5",
     "inquirer": "^0.12.0",
     "metalsmith": "^2.1.0",
+    "minimatch": "^3.0.0",
     "ora": "^0.2.1",
     "read-metadata": "^1.0.0",
     "request": "^2.67.0",

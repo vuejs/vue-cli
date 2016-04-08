@@ -6,6 +6,7 @@ const exists = require('fs').existsSync
 const crypto = require('crypto')
 const render = require('consolidate').handlebars.render
 const inquirer = require('inquirer')
+const async = require('async')
 const generate = require('../../lib/generate')
 
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
@@ -19,7 +20,8 @@ describe('vue-cli', () => {
     preprocessor: {
       less: true,
       sass: true
-    }
+    },
+    pick: 'no'
   }
 
   // monkey patch inquirer
@@ -32,18 +34,24 @@ describe('vue-cli', () => {
 
   it('template generation', done => {
     generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
-      if (err) done()
+      if (err) done(err)
 
-      const handlebarsPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/package.json`, 'utf8')
-      const generatedPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/package.json`, 'utf8')
+      expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/src/yes.vue`)).to.equal(true)
+      expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/src/no.js`)).to.equal(false)
 
-      render(handlebarsPackageJsonFile, answers, (err, res) => {
-        if (err) return done(err)
+      async.eachSeries([
+        'package.json',
+        'src/yes.vue'
+      ], function (file, next) {
+        const template = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/${file}`, 'utf8')
+        const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/${file}`, 'utf8')
 
-        // compare if vue-cli generate returns same as passing options directly to handlebars
-        expect(res).to.equal(generatedPackageJsonFile)
-        done()
-      })
+        render(template, answers, (err, res) => {
+          if (err) return next(err)
+          expect(res).to.equal(generated)
+          next()
+        })
+      }, done)
     })
   })
 
@@ -54,7 +62,7 @@ describe('vue-cli', () => {
     wstream.end()
 
     generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
-      if (err) done()
+      if (err) done(err)
 
       const handlebarsPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/package.json`, 'utf8')
       const generatedPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/package.json`, 'utf8')
