@@ -2,15 +2,16 @@ const { expect } = require('chai')
 const fs = require('fs')
 const path = require('path')
 const rm = require('rimraf').sync
-var exists = require('fs').existsSync
+const exists = require('fs').existsSync
 const crypto = require('crypto')
 const render = require('consolidate').handlebars.render
+const inquirer = require('inquirer')
+const generate = require('../../lib/generate')
 
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 
 describe('vue-cli', () => {
-  const options = require('../../lib/options')('test')
   const answers = {
     name: 'vue-cli-test',
     author: 'ziga',
@@ -21,15 +22,16 @@ describe('vue-cli', () => {
     }
   }
 
-  const promptFn = (metalsmithMetadata, key, prompt, cb) => {
-    metalsmithMetadata[key] = answers[key]
-    cb()
+  // monkey patch inquirer
+  inquirer.prompt = (questions, cb) => {
+    const key = questions[0].name
+    const _answers = {}
+    _answers[key] = answers[key]
+    cb(_answers)
   }
-  const ask = require('../../lib/ask')(options, promptFn)
-  const generate = require('../../lib/generate')(ask)
 
   it('template generation', done => {
-    generate(MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done()
 
       const handlebarsPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/package.json`, 'utf8')
@@ -51,7 +53,7 @@ describe('vue-cli', () => {
     wstream.write(crypto.randomBytes(100))
     wstream.end()
 
-    generate(MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done()
 
       const handlebarsPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/package.json`, 'utf8')
