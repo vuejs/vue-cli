@@ -9,6 +9,7 @@ var uid = require('uid')
 var ora = require('ora')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
+var request = require('request')
 var logger = require('../lib/logger')
 var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
@@ -96,25 +97,65 @@ function run () {
       logger.success('Generated "%s".', name)
     })
   } else {
-    // use official templates
-    if (!hasSlash) {
-      template = 'vuejs-templates/' + template
-    }
     checkVersion(function () {
-      // download and generate
-      var tmp = '/tmp/vue-template-' + uid()
-      var spinner = ora('downloading template')
-      spinner.start()
-      download(template, tmp, { clone: clone }, function (err) {
-        spinner.stop()
-        if (err) logger.fatal(err)
-        generate(name, tmp, to, function (err) {
-          if (err) logger.fatal(err)
-          rm(tmp)
-          console.log()
-          logger.success('Generated "%s".', name)
-        })
-      })
+      if (!hasSlash) {
+        // use official templates
+        template = 'vuejs-templates/' + template
+        checkDistBranch(template, downloadAndGenerate)
+      } else {
+        downloadAndGenerate(template)
+      }
     })
   }
+}
+
+/**
+ * Check if the template has a dist branch, if yes, use that.
+ *
+ * @param {String} template
+ * @param {Function} cb
+ */
+
+function checkDistBranch (template, cb) {
+  request({
+    url: 'https://api.github.com/repos/' + template + '/branches',
+    headers: {
+      'User-Agent': 'vue-cli'
+    }
+  }, function (err, res, body) {
+    if (err) logger.fatal(err)
+    if (res.statusCode !== 200) {
+      return cb(template)
+    } else {
+      var hasDist = JSON.parse(body).some(function (branch) {
+        return branch.name === 'dist'
+      })
+      if (!hasDist) {
+        console.log(JSON.parse(body))
+      }
+      return cb(hasDist ? template + '#dist' : template)
+    }
+  })
+}
+
+/**
+ * Download a generate from a template repo.
+ *
+ * @param {String} template
+ */
+
+function downloadAndGenerate (template) {
+  var tmp = '/tmp/vue-template-' + uid()
+  var spinner = ora('downloading template')
+  spinner.start()
+  download(template, tmp, { clone: clone }, function (err) {
+    spinner.stop()
+    if (err) logger.fatal(err)
+    generate(name, tmp, to, function (err) {
+      if (err) logger.fatal(err)
+      rm(tmp)
+      console.log()
+      logger.success('Generated "%s".', name)
+    })
+  })
 }
