@@ -4,7 +4,7 @@ A simple CLI for scaffolding Vue.js projects.
 
 ### Installation
 
-Prerequisites: [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/).
+Prerequisites: [Node.js](https://nodejs.org/en/) (>5.x preferred) and [Git](https://git-scm.com/).
 
 ``` bash
 $ npm install -g vue-cli
@@ -13,10 +13,13 @@ $ npm install -g vue-cli
 ### Usage
 
 ``` bash
+$ vue init <template-name> <project-name>
+```
+
+Example:
+
+``` bash
 $ vue init webpack my-project
-$ cd my-project
-$ npm install
-$ npm run dev
 ```
 
 The above command pulls the template from [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack), prompts for some information, and generates the project at `./my-project/`.
@@ -53,16 +56,91 @@ The shorthand repo notation is passed to [download-git-repo](https://github.com/
 
 If you would like to download from a private repository use the `--clone` flag and the cli will use `git clone` so your SHH keys are used.
 
-You can also create your own template from scratch:
+### Local Templates
 
-- A template repo **must** have a `template` directory that holds the template files.
-
-- All template files will be piped through Handlebars for simple templating - `vue-cli` will automatically infer the prompts based on `{{}}` interpolations found in the files.
-
-- A template repo **may** have a `meta.json` file that provides a schema for the prompts. The schema will be passed to [inquirer](https://github.com/SBoudrias/Inquirer.js). See [example](https://github.com/vuejs-templates/webpack/blob/master/meta.json). We support `string`, `boolean` and `checkbox` (for multi choice) types.
-
-While developing your template you can test via `vue-cli` with:
+Instead of a GitHub repo, you can also use a template on your local file system:
 
 ``` bash
 vue init ~/fs/path/to-custom-template my-project
 ```
+
+### Writing Custom Templates from Scratch
+
+- A template repo **must** have a `template` directory that holds the template files.
+
+- A template repo **may** have a `meta.json` file that provides metadata for the template. The `meta.json` can contain the following fields:
+
+  - `prompts`: used to collect user options data;
+
+  - `filters`: used to conditional filter files to render.
+
+  - `completeMessage`: the message to be displayed to the user when the template has been generated. You can include custom instruction here.
+
+#### prompts
+
+The `prompts` field in `meta.json` should be an object hash containing prompts for the user. For each entry, the key is the variable name and the value is an [Inquirer.js question object](https://github.com/SBoudrias/Inquirer.js/#question). Example:
+
+``` json
+{
+  "prompts": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "message": "Project name"
+    }
+  }
+}
+```
+
+After all prompts are finished, all files inside `template` will be rendered using [Handlebars](http://handlebarsjs.com/), with the prompt results as the data.
+
+##### Conditional Prompts
+
+A prompt can be made conditional by adding a `when` field, which should be a JavaScript expression evaluated with data collected from previous prompts. For example:
+
+``` json
+{
+  "prompts": {
+    "lint": {
+      "type": "confirm",
+      "message": "Use a linter?"
+    },
+    "lintConfig": {
+      "when": "lint",
+      "type": "list",
+      "message": "Pick a lint config",
+      "choices": [
+        "standard",
+        "airbnb",
+        "none"
+      ]
+    }
+  }
+}
+```
+
+The prompt for `lintConfig` will only be triggered when the user answered yes to the `lint` prompt.
+
+##### Pre-registered Handlebars Helpers
+
+Two commonly used Handlebars helpers, `if_eq` and `unless_eq` are pre-registered:
+
+``` handlebars
+{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
+```
+
+#### File filters
+
+The `filters` field in `meta.json` should be an object hash containing file filtering rules. For each entry, the key is a [minimatch glob pattern](https://github.com/isaacs/minimatch) and the value is a JavaScript expression evaluated in the context of prompt answers data. Example:
+
+``` json
+{
+  "filters": {
+    "test/**/*": "needTests"
+  }
+}
+```
+
+Files under `test` will only be generated if the user answered yes to the prompt for `needTests`.
+
+Note that the `dot` option for minimatch is set to `true` so glob patterns would also match dotfiles by default.
