@@ -37,7 +37,8 @@ describe('vue-cli', () => {
       less: true,
       sass: true
     },
-    pick: 'no'
+    pick: 'no',
+    license: 'MIT'
   }
 
   it('template generation', done => {
@@ -90,11 +91,21 @@ describe('vue-cli', () => {
     })
   })
 
-  it('validate input value', done => {
+  it('validate invalid name', done => {
     // deep copy
     var invalidName = extend({}, answers, {name: 'INVALID-NAME'})
     monkeyPatchInquirer(invalidName)
     generate('INVALID-NAME', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+      expect(err).to.be.an('error');
+      done()
+    })
+  })
+
+  it('validate invalid lisence', done => {
+    // deep copy
+    var invalidLicense = extend({}, answers, {license: 'INVALID-LICENSE'})
+    monkeyPatchInquirer(invalidLicense)
+    generate('INVALID-LICENSE', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       expect(err).to.be.an('error');
       done()
     })
