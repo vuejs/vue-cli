@@ -43,6 +43,7 @@
     "rimraf": "^2.5.0",
     "semver": "^5.1.0",
     "uid": "0.0.2",
+    "validate-npm-package-license": "^3.0.1",
     "validate-npm-package-name": "^2.2.2"
   },
   "devDependencies": {
