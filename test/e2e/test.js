@@ -13,7 +13,7 @@ const generate = require('../../lib/generate')
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 
-function monkeyPatchInquirer(answers) {
+function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
   inquirer.prompt = (questions, cb) => {
     const key = questions[0].name
@@ -25,7 +25,7 @@ function monkeyPatchInquirer(answers) {
     }
     _answers[key] = answers[key]
     cb(_answers)
-  };
+  }
 }
 
 describe('vue-cli', () => {
@@ -95,7 +95,7 @@ describe('vue-cli', () => {
     var invalidName = extend({}, answers, {name: 'INVALID-NAME'})
     monkeyPatchInquirer(invalidName)
     generate('INVALID-NAME', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
-      expect(err).to.be.an('error');
+      expect(err).to.be.an('error')
       done()
     })
   })
