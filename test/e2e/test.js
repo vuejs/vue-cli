@@ -31,13 +31,14 @@ function monkeyPatchInquirer (answers) {
 describe('vue-cli', () => {
   const answers = {
     name: 'vue-cli-test',
-    author: 'ziga',
+    author: 'John Doe <john@doe.com>',
     description: 'vue-cli e2e test',
     preprocessor: {
       less: true,
       sass: true
     },
-    pick: 'no'
+    pick: 'no',
+    noEscape: true
   }
 
   it('template generation', done => {
@@ -54,7 +55,6 @@ describe('vue-cli', () => {
       ], function (file, next) {
         const template = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/${file}`, 'utf8')
         const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/${file}`, 'utf8')
-
         render(template, answers, (err, res) => {
           if (err) return next(err)
           expect(res).to.equal(generated)
