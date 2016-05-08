@@ -68,7 +68,7 @@ vue init ~/fs/path/to-custom-template my-project
 
 - A template repo **must** have a `template` directory that holds the template files.
 
-- A template repo **may** have a `meta.json` file that provides metadata for the template. The `meta.json` can contain the following fields:
+- A template repo **may** have a metadata file for the template which can be both a `meta.js` or a `meta.json` file. It can contain the following fields:
 
   - `prompts`: used to collect user options data;
 
@@ -78,7 +78,7 @@ vue init ~/fs/path/to-custom-template my-project
 
 #### prompts
 
-The `prompts` field in `meta.json` should be an object hash containing prompts for the user. For each entry, the key is the variable name and the value is an [Inquirer.js question object](https://github.com/SBoudrias/Inquirer.js/#question). Example:
+The `prompts` field in the metadata file should be an object hash containing prompts for the user. For each entry, the key is the variable name and the value is an [Inquirer.js question object](https://github.com/SBoudrias/Inquirer.js/#question). Example:
 
 ``` json
 {
@@ -127,6 +127,24 @@ Two commonly used Handlebars helpers, `if_eq` and `unless_eq` are pre-registered
 
 ``` handlebars
 {{#if_eq lintConfig "airbnb"}};{{/if_eq}}
+```
+
+##### Custom Handlebars Helpers
+
+You may want to register additional Handlebars helpers using the `helpers` property in the metadata file. The object key is the helper name:
+
+``` js
+module.exports = {
+  helpers: {
+    lowercase: str => str.toLowerCase()
+  }
+}
+```
+
+Upon registration, they can be used as follows:
+
+``` handlebars
+{{ lowercase name }}
 ```
 
 #### File filters
