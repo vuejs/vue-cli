@@ -25,7 +25,7 @@
   "scripts": {
     "test": "npm run lint && npm run e2e",
     "lint": "eslint test/test.js lib bin/* --env mocha",
-    "e2e": "rimraf test/e2e/mock-template-build/*.* && BABEL_ENV=development mocha test/e2e/test.js --slow 1000 --compilers js:babel-core/register"
+    "e2e": "rimraf test/e2e/mock-template-build/*.* && cross-env BABEL_ENV=development mocha test/e2e/test.js --slow 1000 --compilers js:babel-core/register"
   },
   "dependencies": {
     "async": "^2.0.0-rc.2",
@@ -50,6 +50,7 @@
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-stage-2": "^6.5.0",
     "chai": "^3.5.0",
+    "cross-env": "^1.0.7",
     "eslint": "^2.7.0",
     "eslint-config-standard": "^5.1.0",
     "eslint-plugin-promise": "^1.1.0",
