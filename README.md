@@ -68,7 +68,7 @@ vue init ~/fs/path/to-custom-template my-project
 
 - A template repo **must** have a `template` directory that holds the template files.
 
-- A template repo **may** have a metadata file for the template which can be both a `meta.js` or a `meta.json` file. It can contain the following fields:
+- A template repo **may** have a metadata file for the template which can be either a `meta.js` or `meta.json` file. It can contain the following fields:
 
   - `prompts`: used to collect user options data;
 
@@ -149,7 +149,7 @@ Upon registration, they can be used as follows:
 
 #### File filters
 
-The `filters` field in `meta.json` should be an object hash containing file filtering rules. For each entry, the key is a [minimatch glob pattern](https://github.com/isaacs/minimatch) and the value is a JavaScript expression evaluated in the context of prompt answers data. Example:
+The `filters` field in the metadata file should be an object hash containing file filtering rules. For each entry, the key is a [minimatch glob pattern](https://github.com/isaacs/minimatch) and the value is a JavaScript expression evaluated in the context of prompt answers data. Example:
 
 ``` json
 {
