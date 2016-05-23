@@ -130,9 +130,6 @@ function checkDistBranch (template, cb) {
       var hasDist = JSON.parse(body).some(function (branch) {
         return branch.name === 'dist'
       })
-      if (!hasDist) {
-        console.log(JSON.parse(body))
-      }
       return cb(hasDist ? template + '#dist' : template)
     }
   })
