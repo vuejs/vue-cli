@@ -7,6 +7,7 @@ var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
 var ora = require('ora')
+var url = require('url')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
 var request = require('request')
@@ -61,7 +62,6 @@ process.on('exit', function () {
  */
 
 var template = program.args[0]
-var hasSlash = template.indexOf('/') > -1
 var rawName = program.args[1]
 var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
@@ -90,7 +90,7 @@ if (exists(to)) {
 
 function run () {
   // check if template is local
-  if (hasSlash && exists(template)) {
+  if (isLocal(template) && exists(template)) {
     generate(name, template, to, function (err) {
       if (err) logger.fatal(err)
       console.log()
@@ -98,7 +98,7 @@ function run () {
     })
   } else {
     checkVersion(function () {
-      if (!hasSlash) {
+      if (!isLocal(template)) {
         // use official templates
         template = 'vuejs-templates/' + template
         checkDistBranch(template, downloadAndGenerate)
@@ -157,4 +157,8 @@ function downloadAndGenerate (template) {
       logger.success('Generated "%s".', name)
     })
   })
+}
+
+function isLocal (str) {
+  return typeof str === 'string' && !url.parse(str).hostname
 }
