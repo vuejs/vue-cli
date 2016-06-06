@@ -162,3 +162,7 @@ The `filters` field in the metadata file should be an object hash containing fil
 Files under `test` will only be generated if the user answered yes to the prompt for `needTests`.
 
 Note that the `dot` option for minimatch is set to `true` so glob patterns would also match dotfiles by default.
+
+### License
+
+[MIT](http://opensource.org/licenses/MIT)
