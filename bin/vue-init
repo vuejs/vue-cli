@@ -91,7 +91,7 @@ if (exists(to)) {
 function run () {
   // check if template is local
   if (hasSlash && exists(template)) {
-    generate(name, template, to, function (err) {
+    generate(name, template, to, inPlace, function (err) {
       if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)
