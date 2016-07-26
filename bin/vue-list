@@ -35,9 +35,6 @@ request({
         ' - ' + repo.description)
     })
   } else {
-    console.log('  Unavailable official templates:')
-    console.log()
-    console.error('  ' + requestBody.message)
+    console.error(requestBody.message)
   }
-
 })
