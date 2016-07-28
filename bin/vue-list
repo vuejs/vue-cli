@@ -40,7 +40,7 @@ request({
     } else if (!_body.length) {
       console.log('%s %s',
         chalk.yellow('No Templates found:'),
-        template_url)
+        templateUrl)
     } else if (_body.hasOwnProperty('message')) {
       console.log(chalk.yellow(_body.message))
     } else {
