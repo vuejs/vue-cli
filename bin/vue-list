@@ -16,7 +16,7 @@ process.on('exit', function () {
 /**
  * List repos.
  */
- 
+
 request({
   url: 'https://api.github.com/users/vuejs-templates/repos',
   headers: {
@@ -24,13 +24,10 @@ request({
   }
 }, function (err, res, body) {
   if (err) {
-    logger.fatal(err);
-  }else{
-
-    var _body = JSON.parse(body);
-
-    if(Array.isArray(_body)){
-
+    logger.fatal(err)
+  } else {
+    var _body = JSON.parse(body)
+    if (Array.isArray(_body)) {
       console.log('  Available official templates: \n');
       _body.forEach(function (repo) {
         console.log('%s %s - %s', 
@@ -38,10 +35,10 @@ request({
           chalk.blue(repo.name), 
           repo.description);
       });
-    }else if(_body.hasOwnProperty('message')){
-      console.log(chalk.yellow(_body.message));
-    }else{
-      console.log(_body);
+    } else if (_body.hasOwnProperty('message')) {
+      console.log(chalk.yellow(_body.message))
+    } else {
+      console.log(_body)
     }
   }
 })
