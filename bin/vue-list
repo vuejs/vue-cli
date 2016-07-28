@@ -33,10 +33,13 @@ request({
 
       console.log('  Available official templates: \n');
       _body.forEach(function (repo) {
-        console.log('%s %s - %s', chalk.yellow('★'), chalk.blue(repo.name), repo.description);
+        console.log('%s %s - %s', 
+          chalk.yellow('★'), 
+          chalk.blue(repo.name), 
+          repo.description);
       });
     }else if(_body.hasOwnProperty('message')){
-      console.log('%s', chalk.yellow(_body.message));
+      console.log(chalk.yellow(_body.message));
     }else{
       console.log(_body);
     }
