@@ -62,6 +62,7 @@ process.on('exit', function () {
 
 var template = program.args[0]
 var hasSlash = template.indexOf('/') > -1
+var hasHash = template.indexOf('#') > -1
 var rawName = program.args[1]
 var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
@@ -102,7 +103,11 @@ function run () {
         // use official templates
         template = 'vuejs-templates/' + template
         checkDistBranch(template, downloadAndGenerate)
+      } else if (!hasHash) {
+        // check dist branch
+        checkDistBranch(template, downloadAndGenerate)
       } else {
+        // has specified branch
         downloadAndGenerate(template)
       }
     })
