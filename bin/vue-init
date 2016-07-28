@@ -103,7 +103,7 @@ function run () {
         template = 'vuejs-templates/' + template
         checkDistBranch(template, downloadAndGenerate)
       } else {
-        downloadAndGenerate(template)
+        checkDistBranch(template, downloadAndGenerate)
       }
     })
   }
