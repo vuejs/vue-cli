@@ -27,24 +27,24 @@ request({
   if (err) {
     logger.fatal(err)
   } else {
-    var _body = JSON.parse(body)
-    if (Array.isArray(_body) &&
-        _body.length) {
+    body = JSON.parse(body)
+    if (Array.isArray(body) &&
+        body.length) {
       console.log('  Available official templates: \n')
-      _body.forEach(function (repo) {
+      body.forEach(function (repo) {
         console.log('%s %s - %s',
           chalk.yellow('★'),
           chalk.blue(repo.name),
           repo.description)
       })
-    } else if (!_body.length) {
+    } else if (!body.length) {
       console.log('%s %s',
         chalk.yellow('No Templates found:'),
         templateUrl)
-    } else if (_body.hasOwnProperty('message')) {
+    } else if (body.hasOwnProperty('message')) {
       console.log(chalk.yellow(_body.message))
     } else {
-      console.log(_body)
+      console.log(body)
     }
   }
 })
