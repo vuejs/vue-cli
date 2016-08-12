@@ -50,7 +50,7 @@ describe('vue-cli', () => {
   })
 
   it('read metadata from js', done => {
-    const meta = metadata('test-pkg', __dirname + '/mock-metadata-repo-js')
+    const meta = metadata('test-pkg', path.join(__dirname, '/mock-metadata-repo-js'))
     expect(meta).to.be.an('object')
     expect(meta.prompts).to.have.property('description')
     done()
@@ -58,7 +58,7 @@ describe('vue-cli', () => {
 
   it('helpers', done => {
     monkeyPatchInquirer(answers)
-    const buildPath = __dirname + '/mock-metadata-repo-js'
+    const buildPath = path.join(__dirname, '/mock-metadata-repo-js')
     generate('test', buildPath, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done(err)
       const contents = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/readme.md`, 'utf-8')
