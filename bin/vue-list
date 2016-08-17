@@ -3,6 +3,7 @@
 var logger = require('../lib/logger')
 var request = require('request')
 var chalk = require('chalk')
+var templateUrl = 'https://api.github.com/users/vuejs-templates/repos'
 
 /**
  * Padding.
@@ -18,18 +19,32 @@ process.on('exit', function () {
  */
 
 request({
-  url: 'https://api.github.com/users/vuejs-templates/repos',
+  url: templateUrl,
   headers: {
     'User-Agent': 'vue-cli'
   }
 }, function (err, res, body) {
-  if (err) logger.fatal(err)
-  console.log('  Available official templates:')
-  console.log()
-  JSON.parse(body).forEach(function (repo) {
-    console.log(
-      '  ' + chalk.yellow('★') +
-      '  ' + chalk.blue(repo.name) +
-      ' - ' + repo.description)
-  })
+  if (err) {
+    logger.fatal(err)
+  } else {
+    body = JSON.parse(body)
+    if (Array.isArray(body) &&
+        body.length) {
+      console.log('  Available official templates: \n')
+      body.forEach(function (repo) {
+        console.log('%s %s - %s',
+          chalk.yellow('★'),
+          chalk.blue(repo.name),
+          repo.description)
+      })
+    } else if (!body.length) {
+      console.log('%s %s',
+        chalk.yellow('No Templates found:'),
+        templateUrl)
+    } else if (body.hasOwnProperty('message')) {
+      console.log(chalk.yellow(_body.message))
+    } else {
+      console.log(body)
+    }
+  }
 })
