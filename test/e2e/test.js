@@ -13,6 +13,7 @@ const metadata = require('../../lib/options')
 
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
+const MOCK_METADATA_REPO_JS_PATH = './test/e2e/mock-metadata-repo-js'
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
@@ -50,7 +51,7 @@ describe('vue-cli', () => {
   })
 
   it('read metadata from js', done => {
-    const meta = metadata('test-pkg', path.join(__dirname, '/mock-metadata-repo-js'))
+    const meta = metadata('test-pkg', MOCK_METADATA_REPO_JS_PATH)
     expect(meta).to.be.an('object')
     expect(meta.prompts).to.have.property('description')
     done()
@@ -58,8 +59,7 @@ describe('vue-cli', () => {
 
   it('helpers', done => {
     monkeyPatchInquirer(answers)
-    const buildPath = path.join(__dirname, '/mock-metadata-repo-js')
-    generate('test', buildPath, MOCK_TEMPLATE_BUILD_PATH, err => {
+    generate('test', MOCK_METADATA_REPO_JS_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done(err)
       const contents = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/readme.md`, 'utf-8')
       expect(contents).to.equal(answers.name.toUpperCase())
