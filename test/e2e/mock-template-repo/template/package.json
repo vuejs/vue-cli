@@ -1,13 +1,9 @@
 {
-  "name": "{{ name }}",
-  "description": "{{ description }}",
-  "author": "{{ author }}",
+  "name": "vue-cli-test",
+  "description": "vue-cli e2e test",
+  "author": "John Doe <john@doe.com>",
   "devDependencies": {
-    {{#preprocessor.less}}
     "less": "^2.6.1",
-    {{/preprocessor.less}}
-    {{#preprocessor.sass}}
     "node-sass": "^3.4.2"
-    {{/preprocessor.sass}}
   }
 }

@@ -40,7 +40,8 @@ describe('vue-cli', () => {
       sass: true
     },
     pick: 'no',
-    noEscape: true
+    noEscape: true,
+    isInPlace: false
   }
 
   it('read metadata from json', done => {

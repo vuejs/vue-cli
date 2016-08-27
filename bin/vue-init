@@ -107,7 +107,11 @@ function run () {
           checkDistBranch(template, downloadAndGenerate)
         }
       } else {
-        downloadAndGenerate(template)
+        if (template.indexOf('#') !== -1) {
+          downloadAndGenerate(template)
+        } else {
+          checkDistBranch(template, downloadAndGenerate)
+        }
       }
     })
   }
