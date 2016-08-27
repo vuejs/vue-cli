@@ -24,12 +24,17 @@ request({
   }
 }, function (err, res, body) {
   if (err) logger.fatal(err)
-  console.log('  Available official templates:')
-  console.log()
-  JSON.parse(body).forEach(function (repo) {
-    console.log(
-      '  ' + chalk.yellow('★') +
-      '  ' + chalk.blue(repo.name) +
-      ' - ' + repo.description)
-  })
+  var requestBody = JSON.parse(body)
+  if (Array.isArray(requestBody)) {
+    console.log('  Available official templates:')
+    console.log()
+    requestBody.forEach(function (repo) {
+      console.log(
+        '  ' + chalk.yellow('★') +
+        '  ' + chalk.blue(repo.name) +
+        ' - ' + repo.description)
+    })
+  } else {
+    console.error(requestBody.message)
+  }
 })

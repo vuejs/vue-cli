@@ -13,6 +13,7 @@ const metadata = require('../../lib/options')
 
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
+const MOCK_METADATA_REPO_JS_PATH = './test/e2e/mock-metadata-repo-js'
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
@@ -51,7 +52,7 @@ describe('vue-cli', () => {
   })
 
   it('read metadata from js', done => {
-    const meta = metadata('test-pkg', __dirname + '/mock-metadata-repo-js')
+    const meta = metadata('test-pkg', MOCK_METADATA_REPO_JS_PATH)
     expect(meta).to.be.an('object')
     expect(meta.prompts).to.have.property('description')
     done()
@@ -59,8 +60,7 @@ describe('vue-cli', () => {
 
   it('helpers', done => {
     monkeyPatchInquirer(answers)
-    const buildPath = __dirname + '/mock-metadata-repo-js'
-    generate('test', buildPath, MOCK_TEMPLATE_BUILD_PATH, false, err => {
+    generate('test', MOCK_METADATA_REPO_JS_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done(err)
       const contents = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/readme.md`, 'utf-8')
       expect(contents).to.equal(answers.name.toUpperCase())
@@ -70,7 +70,7 @@ describe('vue-cli', () => {
 
   it('template generation', done => {
     monkeyPatchInquirer(answers)
-    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, false, err => {
+    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done(err)
 
       expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/src/yes.vue`)).to.equal(true)
@@ -98,7 +98,7 @@ describe('vue-cli', () => {
     wstream.write(crypto.randomBytes(100))
     wstream.end()
 
-    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, false, err => {
+    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       if (err) done(err)
 
       const handlebarsPackageJsonFile = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/package.json`, 'utf8')
@@ -121,7 +121,7 @@ describe('vue-cli', () => {
     // deep copy
     var invalidName = extend({}, answers, {name: 'INVALID-NAME'})
     monkeyPatchInquirer(invalidName)
-    generate('INVALID-NAME', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, false, err => {
+    generate('INVALID-NAME', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       expect(err).to.be.an('error')
       done()
     })

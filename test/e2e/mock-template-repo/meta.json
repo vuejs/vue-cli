@@ -39,5 +39,5 @@
     "src/*.js": "pick === 'yes'",
     "**/*.vue": "pick === 'no'"
   },
-  "completeMessage": "You created a vue project{{#isInPlace}} in the current directory{{/isInPlace}}."
+  "completeMessage": "You created a vue project{{#isCurrentDirectory}} in the current directory{{/isCurrentDirectory}}."
 }

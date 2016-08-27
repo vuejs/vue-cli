@@ -129,12 +129,12 @@ Two commonly used Handlebars helpers, `if_eq` and `unless_eq` are pre-registered
 {{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 ```
 
-You also have an `isInPlace` boolean data that you can use to render conditionnal `completeMessage`:
+You also have an `isCurrentDirectory` boolean data that you can use to render conditionnal `completeMessage`:
 
 
 ```js
 module.exports = {
-  completeMessage: "{{#isInPlace}}This will render only if you provided nothing or '.' as <project-name>. {{/isInPlace}}This will render anyways."
+  completeMessage: "{{#isCurrentDirectory}}This will render only if you provided nothing or '.' as <project-name>. {{/isCurrentDirectory}}This will render anyways."
 }
 ```
 
