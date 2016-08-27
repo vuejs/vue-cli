@@ -101,9 +101,17 @@ function run () {
       if (!hasSlash) {
         // use official templates
         template = 'vuejs-templates/' + template
-        checkDistBranch(template, downloadAndGenerate)
+        if (template.indexOf('#') !== -1) {
+          downloadAndGenerate(template)
+        } else {
+          checkDistBranch(template, downloadAndGenerate)
+        }
       } else {
-        checkDistBranch(template, downloadAndGenerate)
+        if (template.indexOf('#') !== -1) {
+          downloadAndGenerate(template)
+        } else {
+          checkDistBranch(template, downloadAndGenerate)
+        }
       }
     })
   }
