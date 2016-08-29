@@ -163,6 +163,24 @@ Files under `test` will only be generated if the user answered yes to the prompt
 
 Note that the `dot` option for minimatch is set to `true` so glob patterns would also match dotfiles by default.
 
+#### Additional data available in meta.{js,json}
+
+- `destDirName` - destination directory name
+
+```json
+{
+  "completeMessage": "To get started:\n\n  cd {{destDirName}}\n  npm install\n  npm run dev"
+}
+```
+
+- `inPlace` - generating template into current directory
+
+```json
+{
+  "completeMessage": "{{#inPlace}}To get started:\n\n  npm install\n  npm run dev.{{else}}To get started:\n\n  cd {{destDirName}}\n  npm install\n  npm run dev.{{/inPlace}}"
+}
+```
+
 ### License
 
 [MIT](http://opensource.org/licenses/MIT)

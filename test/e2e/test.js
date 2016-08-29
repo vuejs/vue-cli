@@ -11,6 +11,7 @@ const extend = Object.assign || require('util')._extend
 const generate = require('../../lib/generate')
 const metadata = require('../../lib/options')
 
+const MOCK_META_JSON_PATH = './test/e2e/mock-meta-json'
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 const MOCK_METADATA_REPO_JS_PATH = './test/e2e/mock-metadata-repo-js'
@@ -43,18 +44,16 @@ describe('vue-cli', () => {
     noEscape: true
   }
 
-  it('read metadata from json', done => {
+  it('read metadata from json', () => {
     const meta = metadata('test-pkg', MOCK_TEMPLATE_REPO_PATH)
     expect(meta).to.be.an('object')
     expect(meta.prompts).to.have.property('description')
-    done()
   })
 
-  it('read metadata from js', done => {
+  it('read metadata from js', () => {
     const meta = metadata('test-pkg', MOCK_METADATA_REPO_JS_PATH)
     expect(meta).to.be.an('object')
     expect(meta.prompts).to.have.property('description')
-    done()
   })
 
   it('helpers', done => {
@@ -65,6 +64,21 @@ describe('vue-cli', () => {
       expect(contents).to.equal(answers.name.toUpperCase())
       done()
     })
+  })
+
+  it('adds additional data to meta data', () => {
+    const data = generate('test', MOCK_META_JSON_PATH, MOCK_TEMPLATE_BUILD_PATH)
+    expect(data.destDirName).to.equal('test')
+    expect(data.inPlace).to.equal(false)
+  })
+
+  it('sets `inPlace` to true when generating in same directory', () => {
+    const currentDir = process.cwd()
+    process.chdir(MOCK_TEMPLATE_BUILD_PATH)
+    const data = generate('test', MOCK_META_JSON_PATH, MOCK_TEMPLATE_BUILD_PATH)
+    expect(data.destDirName).to.equal('test')
+    expect(data.inPlace).to.equal(true)
+    process.chdir(currentDir)
   })
 
   it('template generation', done => {
