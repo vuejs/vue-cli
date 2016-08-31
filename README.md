@@ -32,6 +32,7 @@ cd my-project
 npm install
 npm run dev # tada! ```
 
+
 ### Official Templates
 
 The purpose of official Vue project templates are to provide opinionated, battery-included development tooling setups so that users can get started with actual app code as fast as possible. However, these templates are un-opinionated in terms of how you structure your app code and what libraries you use in addition to Vue.js.
