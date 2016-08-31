@@ -25,12 +25,12 @@ $ vue init webpack my-project
 The above command pulls the template from [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack), prompts for some information, and generates the project at `./my-project/`.
 
 Full Example:
-```npm install -g vue-cli
+``` npm install -g vue-cli
 vue init webpack my-project
 # answer prompts
 cd my-project
 npm install
-npm run dev # tada!```
+npm run dev # tada! ```
 
 ### Official Templates
 
