@@ -27,10 +27,10 @@ The above command pulls the template from [vuejs-templates/webpack](https://gith
 Full Example:
 ``` npm install -g vue-cli
 vue init webpack my-project
-# answer prompts
+<answer prompts>
 cd my-project
 npm install
-npm run dev # tada! ```
+npm run dev ```
 
 
 ### Official Templates
