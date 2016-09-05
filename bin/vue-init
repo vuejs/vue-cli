@@ -12,7 +12,8 @@ var inquirer = require('inquirer')
 var request = require('request')
 var logger = require('../lib/logger')
 var generate = require('../lib/generate')
-var { checkVersion, warnForVue2Version } = require('../lib/check-version')
+var checkVersion = require('../lib/check-version')
+var vue2VersionWarn = require('../lib/vue2-version-warn')
 
 /**
  * Usage.
@@ -106,7 +107,7 @@ function run () {
         } else {
           // until official webpack template for Vue 2.0 is released in master/dist branch
           if (template !== 'webpack') {
-            warnForVue2Version(template, name)
+            vue2VersionWarn(template, name)
           }
           checkDistBranch(officialTemplate, downloadAndGenerate)
         }
