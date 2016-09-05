@@ -107,7 +107,7 @@ function run () {
         } else {
           // until official webpack template for Vue 2.0 is released in master/dist branch
           if (template !== 'webpack') {
-            vue2VersionWarn(template, name)
+            vue2VersionWarn(template, inPlace ? '' : name)
           }
           checkDistBranch(officialTemplate, downloadAndGenerate)
         }
