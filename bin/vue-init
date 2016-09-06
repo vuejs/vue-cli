@@ -13,6 +13,7 @@ var request = require('request')
 var logger = require('../lib/logger')
 var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
+var vue2VersionWarn = require('../lib/vue2-version-warn')
 
 /**
  * Usage.
@@ -100,11 +101,15 @@ function run () {
     checkVersion(function () {
       if (!hasSlash) {
         // use official templates
-        template = 'vuejs-templates/' + template
+        var officialTemplate = 'vuejs-templates/' + template
         if (template.indexOf('#') !== -1) {
-          downloadAndGenerate(template)
+          downloadAndGenerate(officialTemplate)
         } else {
-          checkDistBranch(template, downloadAndGenerate)
+          // until official webpack template for Vue 2.0 is released in master/dist branch
+          if (template !== 'webpack') {
+            vue2VersionWarn(template, inPlace ? '' : name)
+          }
+          checkDistBranch(officialTemplate, downloadAndGenerate)
         }
       } else {
         downloadAndGenerate(template)
