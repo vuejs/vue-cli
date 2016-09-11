@@ -181,6 +181,25 @@ Note that the `dot` option for minimatch is set to `true` so glob patterns would
 }
 ```
 
+### Installing a specific template version
+
+`vue-cli` uses the tool [`download-git-repo`](https://github.com/flipxfx/download-git-repo) to download the official templates used. The `download-git-repo` tool allows you to indicate a specific branch for a given repository by providing the desired branch name after a pound sign (`#`).
+
+The format needed for a specific official template is:
+
+```
+vue init <template-name>#<branch-name> <project-name>
+```
+
+Example: 
+
+Installing the [`1.0` branch](https://github.com/vuejs-templates/webpack-simple/tree/1.0) of the webpack-simple vue template:
+
+```
+vue init webpack-simple#1.0 mynewproject
+```
+
+
 ### License
 
 [MIT](http://opensource.org/licenses/MIT)
