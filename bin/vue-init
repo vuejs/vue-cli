@@ -105,14 +105,13 @@ function run () {
         if (template.indexOf('#') !== -1) {
           downloadAndGenerate(officialTemplate)
         } else {
-          // until official webpack template for Vue 2.0 is released in master/dist branch
           if (template.indexOf('-2.0') !== -1) {
-            warnings.deprecation(template, inPlace ? '' : name)
+            warnings.v2SuffixTemplatesDeprecated(template, inPlace ? '' : name)
             return
           }
-
+          // until official webpack template for Vue 2.0 is released in master/dist branch
           if (template !== 'webpack') {
-            warnings.vue2Version(template, inPlace ? '' : name)
+            warnings.v2BranchIsNowDefault(template, inPlace ? '' : name)
           }
           checkDistBranch(officialTemplate, downloadAndGenerate)
         }
