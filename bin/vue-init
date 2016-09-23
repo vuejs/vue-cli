@@ -3,6 +3,7 @@
 var download = require('download-git-repo')
 var program = require('commander')
 var exists = require('fs').existsSync
+var os = require('os')
 var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
@@ -155,7 +156,7 @@ function checkDistBranch (template, cb) {
  */
 
 function downloadAndGenerate (template) {
-  var tmp = '/tmp/vue-template-' + uid()
+  var tmp = os.tmpdir() + '/vue-template-' + uid()
   var spinner = ora('downloading template')
   spinner.start()
   download(template, tmp, { clone: clone }, function (err) {
