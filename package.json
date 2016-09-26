@@ -32,7 +32,7 @@
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "consolidate": "^0.14.0",
-    "download-git-repo": "^0.1.1",
+    "download-git-repo": "^0.2.1",
     "handlebars": "^4.0.5",
     "inquirer": "^0.12.0",
     "metalsmith": "^2.1.0",
