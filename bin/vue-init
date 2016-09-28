@@ -10,7 +10,6 @@ var uid = require('uid')
 var ora = require('ora')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
-var request = require('request')
 var logger = require('../lib/logger')
 var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
@@ -110,43 +109,15 @@ function run () {
             warnings.v2SuffixTemplatesDeprecated(template, inPlace ? '' : name)
             return
           }
-          // until official webpack template for Vue 2.0 is released in master/dist branch
-          if (template !== 'webpack') {
-            warnings.v2BranchIsNowDefault(template, inPlace ? '' : name)
-          }
-          checkDistBranch(officialTemplate, downloadAndGenerate)
+
+          warnings.v2BranchIsNowDefault(template, inPlace ? '' : name)
+          downloadAndGenerate(officialTemplate)
         }
       } else {
         downloadAndGenerate(template)
       }
     })
   }
-}
-
-/**
- * Check if the template has a dist branch, if yes, use that.
- *
- * @param {String} template
- * @param {Function} cb
- */
-
-function checkDistBranch (template, cb) {
-  request({
-    url: 'https://api.github.com/repos/' + template + '/branches',
-    headers: {
-      'User-Agent': 'vue-cli'
-    }
-  }, function (err, res, body) {
-    if (err) logger.fatal(err)
-    if (res.statusCode !== 200) {
-      logger.fatal('Template does not exist: ' + template)
-    } else {
-      var hasDist = JSON.parse(body).some(function (branch) {
-        return branch.name === 'dist'
-      })
-      return cb(hasDist ? template + '#dist' : template)
-    }
-  })
 }
 
 /**
