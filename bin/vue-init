@@ -64,7 +64,7 @@ process.on('exit', function () {
 var template = program.args[0]
 var hasSlash = template.indexOf('/') > -1
 var rawName = program.args[1]
-var templatePath = path.normalize(path.join(process.cwd(), template))
+var templatePath = exists(template) ? template : path.normalize(path.join(process.cwd(), template))
 var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
