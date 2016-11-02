@@ -64,6 +64,7 @@ process.on('exit', function () {
 var template = program.args[0]
 var hasSlash = template.indexOf('/') > -1
 var rawName = program.args[1]
+var templatePath = exists(template) ? template : path.normalize(path.join(process.cwd(), template))
 var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
@@ -91,8 +92,8 @@ if (exists(to)) {
 
 function run () {
   // check if template is local
-  if (hasSlash && exists(template)) {
-    generate(name, template, to, function (err) {
+  if (exists(templatePath)) {
+    generate(name, templatePath, to, function (err) {
       if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)
