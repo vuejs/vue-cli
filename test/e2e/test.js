@@ -130,6 +130,31 @@ describe('vue-cli', () => {
     })
   })
 
+  it('avoid rendering files that match skipInterpolation option', done => {
+    monkeyPatchInquirer(answers)
+    const binFilePath = `${MOCK_TEMPLATE_REPO_PATH}/template/bin.file`
+    const wstream = fs.createWriteStream(binFilePath)
+    wstream.write(crypto.randomBytes(100))
+    wstream.end()
+
+    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+      if (err) done(err)
+
+      const originalVueFileOne = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/src/skip-one.vue`, 'utf8')
+      const originalVueFileTwo = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/src/skip-two.vue`, 'utf8')
+      const generatedVueFileOne = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/src/skip-one.vue`, 'utf8')
+      const generatedVueFileTwo = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/src/skip-two.vue`, 'utf8')
+
+      expect(originalVueFileOne).to.equal(generatedVueFileOne)
+      expect(originalVueFileTwo).to.equal(generatedVueFileTwo)
+      expect(exists(binFilePath)).to.equal(true)
+      expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/bin.file`)).to.equal(true)
+      rm(binFilePath)
+
+      done()
+    })
+  })
+
   it('validate input value', done => {
     // deep copy
     var invalidName = extend({}, answers, {name: 'INVALID-NAME'})
