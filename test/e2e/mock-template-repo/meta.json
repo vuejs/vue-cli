@@ -38,5 +38,6 @@
   "filters": {
     "src/*.js": "pick === 'yes'",
     "**/*.vue": "pick === 'no'"
-  }
+  },
+  "skipInterpolation": "src/*-{one,two}.vue"
 }

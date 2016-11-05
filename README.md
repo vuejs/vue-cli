@@ -163,6 +163,16 @@ Files under `test` will only be generated if the user answered yes to the prompt
 
 Note that the `dot` option for minimatch is set to `true` so glob patterns would also match dotfiles by default.
 
+#### Skip rendering
+
+The `skipInterpolation` field in the metadata file should be a [minimatch glob pattern](https://github.com/isaacs/minimatch). The files matched should skip rendering. Example:
+
+``` json
+{
+  "skipInterpolation": "src/**/*.vue"
+}
+```
+
 #### Additional data available in meta.{js,json}
 
 - `destDirName` - destination directory name
