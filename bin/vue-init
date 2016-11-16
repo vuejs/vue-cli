@@ -64,7 +64,6 @@ process.on('exit', function () {
 var template = program.args[0]
 var hasSlash = template.indexOf('/') > -1
 var rawName = program.args[1]
-var templatePath = exists(template) ? template : path.normalize(path.join(process.cwd(), template))
 var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
@@ -92,12 +91,19 @@ if (exists(to)) {
 
 function run () {
   // check if template is local
-  if (exists(templatePath)) {
-    generate(name, templatePath, to, function (err) {
-      if (err) logger.fatal(err)
-      console.log()
-      logger.success('Generated "%s".', name)
-    })
+  if (/^[./]/.test(template)) {
+    var templatePath = template.charAt(0) === '/'
+      ? template
+      : path.normalize(path.join(process.cwd(), template))
+    if (exists(templatePath)) {
+      generate(name, templatePath, to, function (err) {
+        if (err) logger.fatal(err)
+        console.log()
+        logger.success('Generated "%s".', name)
+      })
+    } else {
+      logger.fatal('Local template "%s" not found.', template)
+    }
   } else {
     checkVersion(function () {
       if (!hasSlash) {
