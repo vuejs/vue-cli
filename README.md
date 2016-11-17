@@ -4,7 +4,7 @@ A simple CLI for scaffolding Vue.js projects.
 
 ### Installation
 
-Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 5.x preferred) and [Git](https://git-scm.com/).
+Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x preferred) and [Git](https://git-scm.com/).
 
 ``` bash
 $ npm install -g vue-cli
@@ -201,7 +201,7 @@ The format needed for a specific official template is:
 vue init <template-name>#<branch-name> <project-name>
 ```
 
-Example: 
+Example:
 
 Installing the [`1.0` branch](https://github.com/vuejs-templates/webpack-simple/tree/1.0) of the webpack-simple vue template:
 
