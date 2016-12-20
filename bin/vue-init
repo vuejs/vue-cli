@@ -91,8 +91,8 @@ if (exists(to)) {
 
 function run () {
   // check if template is local
-  if (/^[./]/.test(template)) {
-    var templatePath = template.charAt(0) === '/'
+  if (/^[./]|(\w:)/.test(template)) {
+    var templatePath = template.charAt(0) === '/' || /^\w:/.test(template)
       ? template
       : path.normalize(path.join(process.cwd(), template))
     if (exists(templatePath)) {
