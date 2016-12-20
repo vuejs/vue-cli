@@ -198,7 +198,7 @@ The `skipInterpolation` field in the metadata file should be a [minimatch glob p
 The format needed for a specific official template is:
 
 ```
-vue init <template-name>#<branch-name> <project-name>
+vue init '<template-name>#<branch-name>' <project-name>
 ```
 
 Example:
@@ -206,8 +206,10 @@ Example:
 Installing the [`1.0` branch](https://github.com/vuejs-templates/webpack-simple/tree/1.0) of the webpack-simple vue template:
 
 ```
-vue init webpack-simple#1.0 mynewproject
+vue init 'webpack-simple#1.0' mynewproject
 ```
+
+_Note_: The surrounding quotes are necessary on zsh shells because of the special meaning of the `#` character.
 
 
 ### License
