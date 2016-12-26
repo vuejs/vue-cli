@@ -157,9 +157,18 @@ describe('vue-cli', () => {
 
   it('validate input value', done => {
     // deep copy
-    var invalidName = extend({}, answers, {name: 'INVALID-NAME'})
+    var invalidName = extend({}, answers, { name: 'INVALID-NAME' })
     monkeyPatchInquirer(invalidName)
     generate('INVALID-NAME', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+      expect(err).to.be.an('error')
+      done()
+    })
+  })
+
+  it.only('custom validate', done => {
+    var invalidName = extend({}, answers, { name: 'custom' })
+    monkeyPatchInquirer(invalidName)
+    generate('test', MOCK_METADATA_REPO_JS_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
       expect(err).to.be.an('error')
       done()
     })
