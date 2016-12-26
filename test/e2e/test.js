@@ -165,7 +165,7 @@ describe('vue-cli', () => {
     })
   })
 
-  it.only('custom validate', done => {
+  it('custom validate', done => {
     var invalidName = extend({}, answers, { name: 'custom' })
     monkeyPatchInquirer(invalidName)
     generate('test', MOCK_METADATA_REPO_JS_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
