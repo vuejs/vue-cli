@@ -39,6 +39,7 @@
     "inquirer": "^0.12.0",
     "metalsmith": "^2.1.0",
     "minimatch": "^3.0.0",
+    "multimatch": "^2.1.0",
     "ora": "^0.2.1",
     "read-metadata": "^1.0.0",
     "request": "^2.67.0",

@@ -15,6 +15,7 @@ const MOCK_META_JSON_PATH = './test/e2e/mock-meta-json'
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 const MOCK_METADATA_REPO_JS_PATH = './test/e2e/mock-metadata-repo-js'
+const MOCK_SKIP_GLOB = './test/e2e/mock-skip-glob'
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
@@ -144,6 +145,31 @@ describe('vue-cli', () => {
       const originalVueFileTwo = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/src/skip-two.vue`, 'utf8')
       const generatedVueFileOne = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/src/skip-one.vue`, 'utf8')
       const generatedVueFileTwo = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/src/skip-two.vue`, 'utf8')
+
+      expect(originalVueFileOne).to.equal(generatedVueFileOne)
+      expect(originalVueFileTwo).to.equal(generatedVueFileTwo)
+      expect(exists(binFilePath)).to.equal(true)
+      expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/bin.file`)).to.equal(true)
+      rm(binFilePath)
+
+      done()
+    })
+  })
+
+  it('support multiple globs in skipInterpolation', done => {
+    monkeyPatchInquirer(answers)
+    const binFilePath = `${MOCK_SKIP_GLOB}/template/bin.file`
+    const wstream = fs.createWriteStream(binFilePath)
+    wstream.write(crypto.randomBytes(100))
+    wstream.end()
+
+    generate('test', MOCK_SKIP_GLOB, MOCK_TEMPLATE_BUILD_PATH, err => {
+      if (err) done(err)
+
+      const originalVueFileOne = fs.readFileSync(`${MOCK_SKIP_GLOB}/template/src/no.vue`, 'utf8')
+      const originalVueFileTwo = fs.readFileSync(`${MOCK_SKIP_GLOB}/template/src/no.js`, 'utf8')
+      const generatedVueFileOne = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/src/no.vue`, 'utf8')
+      const generatedVueFileTwo = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/src/no.js`, 'utf8')
 
       expect(originalVueFileOne).to.equal(generatedVueFileOne)
       expect(originalVueFileTwo).to.equal(generatedVueFileTwo)
