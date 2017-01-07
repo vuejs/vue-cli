@@ -172,10 +172,12 @@ var compiler = webpack(webpackConfig)
 if (production) {
   compiler.run((err, stats) => {
     if (err) {
-      return console.log(err.stack)
+      process.exitCode = 1
+      return console.error(err.stack)
     }
     if (stats.hasErrors() || stats.hasWarnings()) {
-      return console.log(stats.toString('errors-only'))
+      process.exitCode = 1
+      return console.error(stats.toString('errors-only'))
     }
     console.log(stats.toString({
       chunks: false,
