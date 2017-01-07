@@ -1,0 +1,106 @@
+#!/usr/bin/env node
+
+var path = require('path')
+var program = require('commander')
+var webpack = require('webpack')
+var Server = require('webpack-dev-server')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+var PostCompilePlugin = require('post-compile-webpack-plugin')
+
+/**
+ * Usage.
+ */
+
+program
+  .usage('[entry]')
+  .option('--port [port]', 'Server port', 4000)
+  .parse(process.argv)
+
+var args = program.args
+var entry = args[0] || 'index.js'
+var port = program.port
+
+var webpackConfig = {
+  devtool: 'eval-source-map',
+  entry: {
+    client: [
+      entry,
+      require.resolve('webpack-dev-server/client'),
+      require.resolve('webpack/hot/dev-server')
+    ]
+  },
+  output: {
+    path: path.join(process.cwd(), '.vue', 'dist'),
+    filename: '[name].js',
+    publicPath: '/'
+  },
+  performance: {
+    hints: false
+  },
+  resolve: {
+    extensions: ['.js', '.vue'],
+    modules: [
+      path.join(__dirname, '../node_modules'),
+      path.join(process.cwd(), 'node_modules'),
+      process.cwd()
+    ]
+  },
+  resolveLoader: {
+    modules: [
+      path.join(__dirname, '../node_modules'),
+      path.join(process.cwd(), 'node_modules'),
+    ]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'buble-loader',
+        exclude: [/node_modules/]
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+            js: 'buble-loader'
+          }
+        }
+      }
+    ]
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, '../lib/template.html')
+    }),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        buble: {
+          objectAssign: 'Object.assign',
+          transforms: {
+            dangerousForOf: false,
+            modules: false
+          }
+        }
+      }
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new FriendlyErrorsPlugin(),
+    new PostCompilePlugin(() => {
+      console.log(`> Open http://localhost:${port}`)
+    })
+  ]
+}
+
+var compiler = webpack(webpackConfig)
+var server = new Server(compiler, {
+  quiet: true,
+  hot: true,
+  inline: true
+})
+
+server.listen(port)
