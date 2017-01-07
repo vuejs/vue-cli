@@ -24,6 +24,8 @@ program
 var args = program.args
 var production = program.production
 
+process.env.NODE_ENV = production ? 'production' : 'development'
+
 // load config and webpack config from ~/.vue
 var localConfigPath = path.join(home, '.vue/config.js')
 var localWebpackConfigPath = path.join(home, '.vue/webpack.config.js')
@@ -94,6 +96,9 @@ var webpackConfig = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, '../lib/template.html')
     }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    }),
     new webpack.LoaderOptionsPlugin({
       options: {
         buble: {
@@ -112,9 +117,6 @@ if (production) {
   webpackConfig.devtool = 'source-map'
   webpackConfig.plugins.push(
     new ProgressPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
       compressor: {
@@ -139,9 +141,6 @@ if (production) {
     new FriendlyErrorsPlugin(),
     new PostCompilePlugin(() => {
       console.log(`> Open http://localhost:${options.port}`)
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
     })
   )
 }
