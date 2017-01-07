@@ -2,7 +2,6 @@
 
 var path = require('path')
 var program = require('commander')
-var home = require('user-home')
 var webpack = require('webpack')
 var Server = require('webpack-dev-server')
 var webpackMerge = require('webpack-merge')
@@ -21,6 +20,7 @@ program
   .usage('[entry]')
   .option('--port [port]', 'Server port', 4000)
   .option('--prod, --production', 'Build for production', false)
+  .option('--local', 'Use config file in local `.vue` directory', false)
   .parse(process.argv)
 
 var args = program.args
@@ -29,8 +29,9 @@ var production = program.production
 process.env.NODE_ENV = production ? 'production' : 'development'
 
 // load config and webpack config from ~/.vue
-var localConfigPath = path.join(home, '.vue/config.js')
-var localWebpackConfigPath = path.join(home, '.vue/webpack.config.js')
+var configContext = program.local ? process.cwd() : require('user-home')
+var localConfigPath = path.join(configContext, '.vue/config.js')
+var localWebpackConfigPath = path.join(configContext, '.vue/webpack.config.js')
 var localConfig
 var localWebpackConfig
 
@@ -58,7 +59,7 @@ var webpackConfig = {
     client: []
   },
   output: {
-    path: path.join(process.cwd(), '.vue', 'dist'),
+    path: path.join(process.cwd(), 'dist'),
     filename: production ? '[name].[chunkhash:8].js' : '[name].js',
     publicPath: '/'
   },
@@ -162,8 +163,8 @@ if (production) {
 
 // apply custom webpack config
 if (localWebpackConfig) {
-  webpackConfig.resolve.modules.push(path.join(home, '.vue'))
-  webpackConfig.resolveLoader.modules.push(path.join(home, '.vue/node_modules'))
+  webpackConfig.resolve.modules.push(path.join(configContext, '.vue'))
+  webpackConfig.resolveLoader.modules.push(path.join(configContext, '.vue/node_modules'))
   webpackConfig = webpackMerge(webpackConfig, localWebpackConfig)
 }
 
