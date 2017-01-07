@@ -38,6 +38,7 @@
     "consolidate": "^0.14.0",
     "css-loader": "^0.26.1",
     "download-git-repo": "^0.2.1",
+    "extract-text-webpack-plugin": "2.0.0-beta.4",
     "friendly-errors-webpack-plugin": "^1.1.2",
     "handlebars": "^4.0.5",
     "html-webpack-plugin": "^2.26.0",

@@ -10,6 +10,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 var PostCompilePlugin = require('post-compile-webpack-plugin')
 var ProgressPlugin = require('webpack/lib/ProgressPlugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var loaders = require('../lib/loaders')
 
 /**
  * Usage.
@@ -46,6 +48,11 @@ var options = Object.assign({
   port: program.port
 }, localConfig)
 
+var cssOptions = {
+  extract: production,
+  sourceMap: true
+}
+
 var webpackConfig = {
   entry: {
     client: [
@@ -54,7 +61,7 @@ var webpackConfig = {
   },
   output: {
     path: path.join(process.cwd(), '.vue', 'dist'),
-    filename: '[name].js',
+    filename: production? '[name].[chunkhash:8].js' : '[name].js',
     publicPath: '/'
   },
   performance: {
@@ -85,12 +92,12 @@ var webpackConfig = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {
+          loaders: Object.assign({
             js: 'buble-loader'
-          }
+          }, loaders.cssLoaders(cssOptions))
         }
       }
-    ]
+    ].concat(loaders.styleLoaders(cssOptions))
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -101,6 +108,7 @@ var webpackConfig = {
     }),
     new webpack.LoaderOptionsPlugin({
       options: {
+        context: process.cwd(),
         buble: {
           objectAssign: 'Object.assign',
           transforms: {
@@ -118,7 +126,7 @@ if (production) {
   webpackConfig.plugins.push(
     new ProgressPlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
+      sourceMap: true,
       compressor: {
         warnings: false
       },
@@ -128,7 +136,8 @@ if (production) {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+    }),
+    new ExtractTextPlugin('[name].[contenthash:8].css')
   )
 } else {
   webpackConfig.devtool = 'eval-source-map'
