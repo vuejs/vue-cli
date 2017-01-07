@@ -55,9 +55,7 @@ var cssOptions = {
 
 var webpackConfig = {
   entry: {
-    client: [
-      options.entry
-    ]
+    client: []
   },
   output: {
     path: path.join(process.cwd(), '.vue', 'dist'),
@@ -73,7 +71,8 @@ var webpackConfig = {
       path.join(__dirname, '../node_modules'),
       path.join(process.cwd(), 'node_modules'),
       process.cwd()
-    ]
+    ],
+    alias: {}
   },
   resolveLoader: {
     modules: [
@@ -119,6 +118,13 @@ var webpackConfig = {
       }
     })
   ]
+}
+
+if (/\.vue$/.test(options.entry) || options.component) {
+  webpackConfig.entry.client.push(path.join(__dirname, '../lib/default-entry'))
+  webpackConfig.resolve.alias['your-tasteful-component'] = options.entry
+} else {
+  webpackConfig.entry.client.push(options.entry)
 }
 
 if (production) {
