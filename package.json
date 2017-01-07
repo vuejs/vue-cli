@@ -52,12 +52,14 @@
     "rimraf": "^2.5.0",
     "semver": "^5.1.0",
     "uid": "0.0.2",
+    "user-home": "^2.0.0",
     "validate-npm-package-name": "^2.2.2",
     "vue": "2.1.8",
     "vue-loader": "^10.0.2",
     "vue-template-compiler": "2.1.8",
     "webpack": "2.2.0-rc.3",
-    "webpack-dev-server": "2.2.0-rc.0"
+    "webpack-dev-server": "2.2.0-rc.0",
+    "webpack-merge": "^2.3.1"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",

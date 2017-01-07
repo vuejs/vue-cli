@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 
+var fs = require('fs')
 var path = require('path')
 var program = require('commander')
+var home = require('user-home')
 var webpack = require('webpack')
 var Server = require('webpack-dev-server')
+var webpackMerge = require('webpack-merge')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 var PostCompilePlugin = require('post-compile-webpack-plugin')
+var ProgressPlugin = require('webpack/lib/ProgressPlugin')
 
 /**
  * Usage.
@@ -15,19 +19,36 @@ var PostCompilePlugin = require('post-compile-webpack-plugin')
 program
   .usage('[entry]')
   .option('--port [port]', 'Server port', 4000)
+  .option('--prod, --production', 'Build for production', false)
   .parse(process.argv)
 
 var args = program.args
-var entry = args[0] || 'index.js'
-var port = program.port
+var production = program.production
+
+// load config and webpack config from ~/.vue
+var localConfigPath = path.join(home, '.vue/config.js')
+var localWebpackConfigPath = path.join(home, '.vue/webpack.config.js')
+var localConfig
+var localWebpackConfig
+
+try {
+  localConfig = require(localConfigPath)
+  localWebpackConfig = require(localWebpackConfigPath)
+} catch (err) {
+  if (err.code !== 'MODULE_NOT_FOUND') {
+    throw err
+  }
+}
+
+var options = Object.assign({
+  entry: args[0] || 'index.js',
+  port: program.port
+}, localConfig)
 
 var webpackConfig = {
-  devtool: 'eval-source-map',
   entry: {
     client: [
-      entry,
-      require.resolve('webpack-dev-server/client'),
-      require.resolve('webpack/hot/dev-server')
+      options.entry
     ]
   },
   output: {
@@ -71,9 +92,6 @@ var webpackConfig = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, '../lib/template.html')
     }),
@@ -87,20 +105,79 @@ var webpackConfig = {
           }
         }
       }
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-    new FriendlyErrorsPlugin(),
-    new PostCompilePlugin(() => {
-      console.log(`> Open http://localhost:${port}`)
     })
   ]
 }
 
-var compiler = webpack(webpackConfig)
-var server = new Server(compiler, {
-  quiet: true,
-  hot: true,
-  inline: true
-})
+if (production) {
+  webpackConfig.devtool = 'source-map'
+  webpackConfig.plugins.push(
+    new ProgressPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: false,
+      compressor: {
+        warnings: false
+      },
+      output: {
+        comments: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+  )
+} else {
+  webpackConfig.devtool = 'eval-source-map'
+  webpackConfig.entry.client.push(
+    require.resolve('webpack-dev-server/client'),
+    require.resolve('webpack/hot/dev-server')
+  )
+  webpackConfig.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new FriendlyErrorsPlugin(),
+    new PostCompilePlugin(() => {
+      console.log(`> Open http://localhost:${options.port}`)
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    })
+  )
+}
 
-server.listen(port)
+// apply custom webpack config
+if (localWebpackConfig) {
+  webpackConfig.resolve.modules.push(path.join(home, '.vue'))
+  webpackConfig.resolveLoader.modules.push(path.join(home, '.vue/node_modules'))
+  webpackConfig = webpackMerge(webpackConfig, localWebpackConfig)
+}
+
+var compiler = webpack(webpackConfig)
+
+if (production) {
+  compiler.run((err, stats) => {
+    if (err) {
+      return console.log(err.stack)
+    }
+    if (stats.hasErrors() || stats.hasWarnings()) {
+      return console.log(stats.toString('errors-only'))
+    }
+    console.log(stats.toString({
+      chunks: false,
+      children: false,
+      modules: false,
+      colors: true
+    }))
+  })
+} else {
+  var compiler = webpack(webpackConfig)
+  var server = new Server(compiler, {
+    quiet: true,
+    hot: true,
+    inline: true
+  })
+
+  server.listen(options.port)
+}
