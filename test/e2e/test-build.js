@@ -17,7 +17,7 @@ describe('command:build', () => {
   })
 
   afterEach(() => {
-    rm('.vue')
+    rm('dist')
   })
 
   it('production mode', done => {

@@ -3,3 +3,4 @@ node_modules
 test/e2e/mock-template-build
 *.log
 .vue/
+dist/
