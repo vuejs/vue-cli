@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-var fs = require('fs')
 var path = require('path')
 var program = require('commander')
 var home = require('user-home')
@@ -70,7 +69,7 @@ var webpackConfig = {
   resolveLoader: {
     modules: [
       path.join(__dirname, '../node_modules'),
-      path.join(process.cwd(), 'node_modules'),
+      path.join(process.cwd(), 'node_modules')
     ]
   },
   module: {
@@ -172,7 +171,6 @@ if (production) {
     }))
   })
 } else {
-  var compiler = webpack(webpackConfig)
   var server = new Server(compiler, {
     quiet: true,
     hot: true,
