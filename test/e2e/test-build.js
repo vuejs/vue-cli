@@ -23,7 +23,7 @@ describe('command:build', () => {
   it('production mode', done => {
     execa(cli, ['--prod'])
       .then(res => {
-        const files = fs.readdirSync('.vue/dist')
+        const files = fs.readdirSync('dist')
         expect(files.length).to.equal(3)
         expect(res.code).to.equal(0)
         done()
