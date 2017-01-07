@@ -188,11 +188,11 @@ if (production) {
     }))
   })
 } else {
-  var server = new Server(compiler, {
+  var server = new Server(compiler, Object.assign({
     quiet: true,
     hot: true,
     inline: true
-  })
+  }, options.devServer))
 
   server.listen(options.port)
 }
