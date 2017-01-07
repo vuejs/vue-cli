@@ -61,7 +61,7 @@ var webpackConfig = {
   },
   output: {
     path: path.join(process.cwd(), '.vue', 'dist'),
-    filename: production? '[name].[chunkhash:8].js' : '[name].js',
+    filename: production ? '[name].[chunkhash:8].js' : '[name].js',
     publicPath: '/'
   },
   performance: {
