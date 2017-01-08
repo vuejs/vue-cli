@@ -131,6 +131,13 @@ var webpackConfig = {
             js: 'buble-loader'
           }, loaders.cssLoaders(cssOptions))
         }
+      },
+      {
+        test: /\.(ico|jpg|png|gif|svg|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
+        loader: 'file-loader',
+        query: {
+          name: 'static/[name].[hash:8].[ext]'
+        }
       }
     ].concat(loaders.styleLoaders(cssOptions))
   },
