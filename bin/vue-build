@@ -197,7 +197,7 @@ if (production) {
     quiet: true,
     hot: true,
     inline: true
-  }, options.devServer))
+  }, localWebpackConfig && localWebpackConfig.devServer))
 
   server.listen(options.port)
 }
