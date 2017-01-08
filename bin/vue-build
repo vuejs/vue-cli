@@ -11,6 +11,7 @@ var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 var PostCompilePlugin = require('post-compile-webpack-plugin')
 var ProgressPlugin = require('webpack/lib/ProgressPlugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var isYarn = require('installed-by-yarn-globally')
 var loaders = require('../lib/loaders')
 
 /**
@@ -93,18 +94,18 @@ var webpackConfig = {
     hints: false
   },
   resolve: {
-    extensions: ['.js', '.vue'],
+    extensions: ['.js', '.vue', '.css'],
     modules: [
-      path.join(__dirname, '../node_modules'),
-      path.join(process.cwd(), 'node_modules'),
-      process.cwd()
+      process.cwd(),
+      path.join(process.cwd(), 'node_modules'), // modules in cwd's node_modules
+      path.join(__dirname, '../node_modules') // modules in package's node_modules
     ],
     alias: {}
   },
   resolveLoader: {
     modules: [
-      path.join(__dirname, '../node_modules'),
-      path.join(process.cwd(), 'node_modules')
+      path.join(process.cwd(), 'node_modules'), // loaders in cwd's node_modules
+      path.join(__dirname, '../node_modules') // loaders in package's node_modules
     ]
   },
   module: {
@@ -156,6 +157,15 @@ if (/\.vue$/.test(options.entry) || options.component) {
   webpackConfig.entry.client.push(options.entry)
 }
 
+// installed by `yarn global add`
+if (isYarn(__dirname)) {
+  // modules in yarn global node_modules
+  // becuase of yarn's flat node_modules structure
+  webpackConfig.resolve.modules.push(path.join(__dirname, '../../'))
+  // loaders in yarn global node_modules
+  webpackConfig.resolveLoader.modules.push(path.join(__dirname, '../../'))
+}
+
 if (production) {
   webpackConfig.devtool = 'source-map'
   webpackConfig.plugins.push(
@@ -191,7 +201,9 @@ if (production) {
 
 // apply custom webpack config
 if (localWebpackConfig) {
+  // modules in config directory's node_modules
   webpackConfig.resolve.modules.push(path.join(configContext, configDirectory))
+  // loaders in config directory's node_modules
   webpackConfig.resolveLoader.modules.push(path.join(configContext, configDirectory, 'node_modules'))
   webpackConfig = webpackMerge(webpackConfig, localWebpackConfig)
 }
