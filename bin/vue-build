@@ -21,9 +21,11 @@ var loaders = require('../lib/loaders')
 program
   .usage('[entry]')
   .option('--port [port]', 'Server port', 4000)
+  .option('--host [host]', 'Server host', 'localhost')
   .option('--prod, --production', 'Build for production', false)
-  .option('--config [directory]', 'Use custom config directory')
+  .option('-c, --config [directory]', 'Use custom config directory')
   .option('--no-config', 'You do not want global and local config')
+  .option('-o, --open', 'Open browser')
   .parse(process.argv)
 
 var args = program.args
@@ -52,7 +54,9 @@ if (program.config !== false) {
 
 var options = Object.assign({}, localConfig, {
   entry: args[0] || 'index.js',
-  port: program.port
+  port: program.port,
+  host: program.host,
+  open: program.open
 })
 
 var cssOptions = {
@@ -194,7 +198,7 @@ if (production) {
     new webpack.HotModuleReplacementPlugin(),
     new FriendlyErrorsPlugin(),
     new PostCompilePlugin(() => {
-      console.log(`> Open http://localhost:${options.port}`)
+      console.log(`> Open http://${options.host}:${options.port}`)
     })
   )
 }
@@ -239,5 +243,8 @@ if (production) {
     inline: true
   }, localWebpackConfig && localWebpackConfig.devServer))
 
-  server.listen(options.port)
+  server.listen(options.port, options.host)
+  if (options.open) {
+    require('opn')(`http://${options.host}:${options.port}`)
+  }
 }
