@@ -30,9 +30,9 @@ var production = program.production
 
 process.env.NODE_ENV = production ? 'production' : 'development'
 
-// load config and webpack config from ~/.vue
-var configContext = program.config ? process.cwd() : require('user-home')
-var configDirectory = program.config || '.vue'
+// load config and webpack config from $config/.vue
+var configContext = typeof program.config === 'string' ? process.cwd() : require('user-home')
+var configDirectory = typeof program.config === 'string' ? program.config : '.vue'
 var localConfigPath = path.join(configContext, configDirectory, 'config.js')
 var localWebpackConfigPath = path.join(configContext, configDirectory, 'webpack.config.js')
 var localConfig
