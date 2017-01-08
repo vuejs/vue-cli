@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "async": "^2.0.0-rc.2",
+    "autoprefixer": "^6.6.1",
     "buble-loader": "^0.4.0",
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
@@ -49,6 +50,7 @@
     "multimatch": "^2.1.0",
     "ora": "^0.2.1",
     "post-compile-webpack-plugin": "^0.1.0",
+    "postcss-loader": "^1.2.1",
     "read-metadata": "^1.0.0",
     "request": "^2.67.0",
     "rimraf": "^2.5.0",

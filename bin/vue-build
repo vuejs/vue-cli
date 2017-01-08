@@ -59,6 +59,27 @@ var cssOptions = {
   sourceMap: true
 }
 
+var postcssOptions = {
+  plugins: [
+    require('autoprefixer')(Object.assign({
+      browsers: ['ie > 8', 'last 5 versions']
+    }, options.autoprefixer))
+  ]
+}
+
+if (options.postcss) {
+  if (Object.prototype.toString.call(options.postcss) === '[object Object]') {
+    var plugins = options.postcss.plugins
+    if (plugins) {
+      postcssOptions.plugins = postcssOptions.plugins.concat(plugins)
+      delete options.postcss.plugins
+    }
+    Object.assign(postcssOptions, options.postcss)
+  } else {
+    postcssOptions = options.postcss
+  }
+}
+
 var webpackConfig = {
   entry: {
     client: []
@@ -97,6 +118,7 @@ var webpackConfig = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
+          postcss: postcssOptions,
           loaders: Object.assign({
             js: 'buble-loader'
           }, loaders.cssLoaders(cssOptions))
@@ -114,6 +136,7 @@ var webpackConfig = {
     new webpack.LoaderOptionsPlugin({
       options: {
         context: process.cwd(),
+        postcss: postcssOptions,
         buble: {
           objectAssign: 'Object.assign',
           transforms: {

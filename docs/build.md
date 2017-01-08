@@ -55,6 +55,32 @@ Type: `function`
 
 Return a new webpack config.
 
+#### autoprefixer
+
+Type: `object`
+
+Autoprefixer options, default value:
+
+```js
+{
+  browsers: ['ie > 8', 'last 5 versions']
+}
+```
+
+#### postcss
+
+Type: `Object` `Array` `Function`
+
+PostCSS options, if it's an `Array` or `Function`, the default value will be override:
+
+```js
+{
+  plugins: [
+    require('autoprefixer')(options.autoprefixer)
+  ]
+}
+```
+
 ### webpack.config.js
 
 All the webpack options and [`devServer`](http://webpack.github.io/docs/webpack-dev-server.html#api) options are available here.
@@ -68,6 +94,8 @@ CSS preprocessors (and CSS extraction) work out of the box, just install relevan
 ```bash
 $ npm i -D node-sass sass-loader
 ```
+
+Since all CSS will be piped through `postcss-loader`, `autoprefixer` and `postcss` options will always work no matter what CSS preprocessors you're using.
 
 ### Using Babel
 
