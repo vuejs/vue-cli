@@ -142,9 +142,10 @@ var webpackConfig = {
     ].concat(loaders.styleLoaders(cssOptions))
   },
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin(Object.assign({
+      title: 'Vue App',
       template: path.join(__dirname, '../lib/template.html')
-    }),
+    }, options.html)),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),

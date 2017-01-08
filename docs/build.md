@@ -81,6 +81,19 @@ PostCSS options, if it's an `Array` or `Function`, the default value will be ove
 }
 ```
 
+#### template
+
+Type: `Object`
+
+[html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) options, use this option to custom the `index.html` output, default value:
+
+```js
+{
+  title: 'Vue App',
+  template: path.join(__dirname, '../lib/template.html')
+}
+```
+
 ### webpack.config.js
 
 All the webpack options and [`devServer`](http://webpack.github.io/docs/webpack-dev-server.html#api) options are available here.
