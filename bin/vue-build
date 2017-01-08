@@ -3,6 +3,7 @@
 var fs = require('fs')
 var path = require('path')
 var program = require('commander')
+var rm = require('rimraf').sync
 var webpack = require('webpack')
 var Server = require('webpack-dev-server')
 var webpackMerge = require('webpack-merge')
@@ -20,6 +21,7 @@ var loaders = require('../lib/loaders')
 
 program
   .usage('[entry]')
+  .option('--dist [directory]', 'Output directory for bundled files', 'dist')
   .option('--port [port]', 'Server port', 4000)
   .option('--host [host]', 'Server host', 'localhost')
   .option('--prod, --production', 'Build for production', false)
@@ -56,7 +58,8 @@ var options = Object.assign({}, localConfig, {
   entry: args[0] || 'index.js',
   port: program.port,
   host: program.host,
-  open: program.open
+  open: program.open,
+  dist: program.dist
 })
 
 var cssOptions = {
@@ -90,7 +93,7 @@ var webpackConfig = {
     client: []
   },
   output: {
-    path: path.join(process.cwd(), 'dist'),
+    path: path.join(process.cwd(), options.dist),
     filename: production ? '[name].[chunkhash:8].js' : '[name].js',
     publicPath: '/'
   },
@@ -220,6 +223,8 @@ if (typeof options.webpack === 'function') {
 var compiler = webpack(webpackConfig)
 
 if (production) {
+  // remove dist files but keep that folder in production mode
+  rm(path.join(options.dist, '*'))
   compiler.run((err, stats) => {
     if (err) {
       process.exitCode = 1
