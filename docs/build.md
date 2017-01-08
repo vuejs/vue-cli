@@ -85,7 +85,7 @@ PostCSS options, if it's an `Array` or `Function`, the default value will be ove
 
 Type: `Object`
 
-[html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) options, use this option to custom the `index.html` output, default value:
+[html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) options, use this option to customize `index.html` output, default value:
 
 ```js
 {
