@@ -11,16 +11,20 @@
 
 ## Get started
 
-```bash
-$ vue build entry.js
-# or
-$ vue build component.vue
+Populate a component `./component.vue` in your project:
+
+```vue
+<template>
+  <h2>Hello World!</h2>
+</template>
 ```
+
+And then just run `vue build component.vue` and go to `http://localhost:4000`
 
 To build for production:
 
 ```bash
-$ vue build entry.js --prod
+$ vue build component.vue --prod
 ```
 
 For CLI usages:
@@ -28,6 +32,10 @@ For CLI usages:
 ```bash
 $ vue build -h
 ```
+
+## How does it work
+
+When the file name ends with `.vue`, we use a [default app entry](/lib/default-entry.js) to load it, otherwise we treat it as a normal webpack entry.
 
 ## Configuration files
 
