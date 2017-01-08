@@ -99,7 +99,7 @@ Since all CSS will be piped through `postcss-loader`, `autoprefixer` and `postcs
 
 ### Using Babel
 
-By default we use [buble](buble.surge.sh/guide) to transpile ES2015 code, if you want to use Babel for ES2015+ code:
+By default we use [buble](https://buble.surge.sh/guide) to transpile ES2015 code, if you want to use Babel for ES2015+ code:
 
 ```js
 // .vue/webpack.config.js
