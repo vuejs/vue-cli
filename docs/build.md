@@ -90,7 +90,7 @@ PostCSS options, if it's an `Array` or `Function`, the default value will be ove
 }
 ```
 
-#### template
+#### html
 
 Type: `Object`
 
