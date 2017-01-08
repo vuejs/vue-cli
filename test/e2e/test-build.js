@@ -8,31 +8,67 @@ describe('command:build', () => {
   const cli = path.join(__dirname, '../../bin/vue-build')
   let originalCwd = process.cwd()
 
-  before(() => {
+  function setup() {
     process.chdir(path.join(__dirname, 'mock-vue-app'))
-  })
+  }
 
-  after(() => {
-    process.chdir(originalCwd)
-  })
-
-  afterEach(() => {
+  function teardown(done) {
     rm('dist')
-  })
-
-  it('production mode', done => {
-    execa(cli, ['--prod'])
-      .then(res => {
-        const files = fs.readdirSync('dist')
-        expect(files.length).to.equal(3)
-        expect(res.code).to.equal(0)
-        done()
-      })
-      .catch(done)
-  })
-
-  it('hot reloading', done => {
-    // TODO
+    process.chdir(originalCwd)
     done()
+  }
+
+  describe('build an app', () => {
+    let result
+    let files
+    before(done => {
+      setup()
+      execa(cli, ['--prod'])
+        .then(res => {
+          result = res
+          files = fs.readdirSync('dist')
+          done()
+        })
+        .catch(done)
+    })
+    after(teardown)
+
+    it('build with expected files', done => {
+      expect(files.length).to.equal(5)
+      expect(result.code).to.equal(0)
+      done()
+    })
+
+    it('build with default autoprefixer', done => {
+      const cssFile = files.filter(file => file.endsWith('.css'))[0]
+      expect(typeof cssFile).to.equal('string')
+      const cssContent = fs.readFileSync(path.join('dist', cssFile), 'utf8')
+      expect(cssContent).to.contain('-ms-flexbox')
+      done()
+    })
+  })
+
+  describe('build with local config in .vue directory', () => {
+    let result
+    let files
+    before(done => {
+      setup()
+      execa(cli, ['--prod', '--config', '.vue'])
+        .then(res => {
+          result = res
+          files = fs.readdirSync('dist')
+          done()
+        })
+        .catch(done)
+    })
+    after(teardown)
+
+    it('build with custom autoprefixer options', done => {
+      const cssFile = files.filter(file => file.endsWith('.css'))[0]
+      expect(typeof cssFile).to.equal('string')
+      const cssContent = fs.readFileSync(path.join('dist', cssFile), 'utf8')
+      expect(cssContent).to.not.contain('-ms-flexbox')
+      done()
+    })
   })
 })
