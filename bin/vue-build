@@ -57,14 +57,17 @@ if (program.config !== false) {
 }
 
 var options = Object.assign({
-  entry: './index.js'
+  entry: 'index.js'
 }, localConfig, {
-  entry: args[0],
   port: program.port,
   host: program.host,
   open: program.open,
   dist: program.dist
 })
+
+if (args[0]) {
+  options.entry = args[0]
+}
 
 var cssOptions = {
   extract: production,
@@ -232,7 +235,15 @@ if (typeof options.webpack === 'function') {
   webpackConfig = options.webpack(webpackConfig, options, webpack)
 }
 
-var compiler = webpack(webpackConfig)
+try {
+  var compiler = webpack(webpackConfig)
+} catch (err) {
+  if (err.name === 'WebpackOptionsValidationError') {
+    logger.fatal(err.message)
+  } else {
+    throw err
+  }
+}
 
 checkEntryExists(options.entry)
 
