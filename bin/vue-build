@@ -56,8 +56,10 @@ if (program.config !== false) {
   }
 }
 
-var options = Object.assign({}, localConfig, {
-  entry: args[0] || 'index.js',
+var options = Object.assign({
+  entry: './index.js'
+}, localConfig, {
+  entry: args[0],
   port: program.port,
   host: program.host,
   open: program.open,
