@@ -4,7 +4,7 @@
 
 ## Features
 
-- **Not a boilerplate**: run a single command to development your app
+- **Not a boilerplate**: run a single command to develop your app
 - **Out of the box**: ES2015, single-file component with hot reloading and custom CSS preprocessors
 - **Customizable**: populate a `~/.vue/webpack.config.js` for custom webpack config
 - **Single-file component mode**: just run `vue build Component.vue` and boom!
@@ -33,15 +33,16 @@ $ vue build -h
 
 By default, we use `~/.vue/config.js` and `~/.vue/webpack.config.js` if they exist. You can use `--config [dir]` to set a custom config directory which is relative to `process.cwd()` instead of using `.vue` directory.
 
-To disable config files, simply `--no-config`.
+To disable config files, simply add `--no-config`.
 
 ### config.js
 
-CLI options will be assign to configs here.
+You can define CLI options in this file.
 
 #### port
 
-Type: `number`
+Type: `number`<br>
+Default: `4000`
 
 Port of dev server.
 
@@ -94,6 +95,8 @@ Type: `Object`
 }
 ```
 
+Check out the [default template](/lib/template.html) file we use.
+
 ### webpack.config.js
 
 All the webpack options and [`devServer`](http://webpack.github.io/docs/webpack-dev-server.html#api) options are available here.
@@ -130,4 +133,4 @@ module.exports = {
 }
 ```
 
-Don't forget to install `babel-core` `babel-loader` and relevant presets in your project or `.vue` directory.
+Don't forget to install `babel-core`, `babel-loader` and relevant presets in your project or `.vue` directory.
