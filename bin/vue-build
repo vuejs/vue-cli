@@ -3,6 +3,7 @@
 var fs = require('fs')
 var path = require('path')
 var program = require('commander')
+var chalk = require('chalk')
 var rm = require('rimraf').sync
 var webpack = require('webpack')
 var Server = require('webpack-dev-server')
@@ -14,6 +15,7 @@ var ProgressPlugin = require('webpack/lib/ProgressPlugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var isYarn = require('installed-by-yarn-globally')
 var loaders = require('../lib/loaders')
+var logger = require('../lib/logger')
 
 /**
  * Usage.
@@ -230,6 +232,8 @@ if (typeof options.webpack === 'function') {
 
 var compiler = webpack(webpackConfig)
 
+checkEntryExists(options.entry)
+
 if (production) {
   // remove dist files but keep that folder in production mode
   rm(path.join(options.dist, '*'))
@@ -259,5 +263,11 @@ if (production) {
   server.listen(options.port, options.host)
   if (options.open) {
     require('opn')(`http://${options.host}:${options.port}`)
+  }
+}
+
+function checkEntryExists (entry) {
+  if (!fs.existsSync(entry)) {
+    logger.fatal(`${chalk.yellow(entry)} does not exist, did you forget to create one?`)
   }
 }
