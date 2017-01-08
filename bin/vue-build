@@ -49,10 +49,10 @@ if (program.config !== false) {
   }
 }
 
-var options = Object.assign({
+var options = Object.assign({}, localConfig, {
   entry: args[0] || 'index.js',
   port: program.port
-}, localConfig)
+})
 
 var cssOptions = {
   extract: production,
@@ -171,6 +171,11 @@ if (localWebpackConfig) {
   webpackConfig.resolve.modules.push(path.join(configContext, configDirectory))
   webpackConfig.resolveLoader.modules.push(path.join(configContext, configDirectory, 'node_modules'))
   webpackConfig = webpackMerge(webpackConfig, localWebpackConfig)
+}
+
+// directly mutate webpackConfig
+if (typeof options.webpack === 'function') {
+  webpackConfig = options.webpack(webpackConfig, options, webpack)
 }
 
 var compiler = webpack(webpackConfig)
