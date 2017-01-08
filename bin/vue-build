@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var fs = require('fs')
 var path = require('path')
 var program = require('commander')
 var webpack = require('webpack')
@@ -20,7 +21,8 @@ program
   .usage('[entry]')
   .option('--port [port]', 'Server port', 4000)
   .option('--prod, --production', 'Build for production', false)
-  .option('--local', 'Use config file in local `.vue` directory', false)
+  .option('--config [directory]', 'Use custom config directory')
+  .option('--no-config', 'You do not want global and local config')
   .parse(process.argv)
 
 var args = program.args
@@ -29,18 +31,21 @@ var production = program.production
 process.env.NODE_ENV = production ? 'production' : 'development'
 
 // load config and webpack config from ~/.vue
-var configContext = program.local ? process.cwd() : require('user-home')
-var localConfigPath = path.join(configContext, '.vue/config.js')
-var localWebpackConfigPath = path.join(configContext, '.vue/webpack.config.js')
+var configContext = program.config ? process.cwd() : require('user-home')
+var configDirectory = program.config || '.vue'
+var localConfigPath = path.join(configContext, configDirectory, 'config.js')
+var localWebpackConfigPath = path.join(configContext, configDirectory, 'webpack.config.js')
 var localConfig
 var localWebpackConfig
 
-try {
-  localConfig = require(localConfigPath)
-  localWebpackConfig = require(localWebpackConfigPath)
-} catch (err) {
-  if (err.code !== 'MODULE_NOT_FOUND') {
-    throw err
+if (program.config !== false) {
+  var hasLocalConfig = fs.existsSync(localConfigPath)
+  var hasLocalWebpackConfig = fs.existsSync(localWebpackConfigPath)
+  if (hasLocalConfig) {
+    localConfig = require(localConfigPath)
+  }
+  if (hasLocalWebpackConfig) {
+    localWebpackConfig = require(localWebpackConfigPath)
   }
 }
 
@@ -163,8 +168,8 @@ if (production) {
 
 // apply custom webpack config
 if (localWebpackConfig) {
-  webpackConfig.resolve.modules.push(path.join(configContext, '.vue'))
-  webpackConfig.resolveLoader.modules.push(path.join(configContext, '.vue/node_modules'))
+  webpackConfig.resolve.modules.push(path.join(configContext, configDirectory))
+  webpackConfig.resolveLoader.modules.push(path.join(configContext, configDirectory, 'node_modules'))
   webpackConfig = webpackMerge(webpackConfig, localWebpackConfig)
 }
 
