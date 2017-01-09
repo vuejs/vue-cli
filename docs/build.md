@@ -7,7 +7,7 @@
 - **Not a boilerplate**: run a single command to develop your app
 - **Out of the box**: ES2015, single-file component with hot reloading and custom CSS preprocessors
 - **Customizable**: populate a `~/.vue/webpack.config.js` for custom webpack config
-- **Single-file component mode**: just run `vue build Component.vue --mount` and boom!
+- **Single-file component mode**: just run `vue build Component.vue --mount` and test it out in the browser!
 
 ## Get started
 
