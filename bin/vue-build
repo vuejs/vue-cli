@@ -63,18 +63,13 @@ if (program.config !== false) {
   }
 }
 
-var options = Object.assign({
-  entry: 'index.js'
-}, localConfig, {
+var options = merge({}, localConfig, {
+  entry: args[0],
   port: program.port,
   host: program.host,
   open: program.open,
   dist: program.dist
 })
-
-if (args[0]) {
-  options.entry = args[0]
-}
 
 var cssOptions = {
   extract: production,
@@ -290,4 +285,21 @@ function checkEntryExists (entry) {
   if (!fs.existsSync(entry)) {
     logger.fatal(`${chalk.yellow(entry)} does not exist, did you forget to create one?`)
   }
+}
+
+function merge (obj) {
+  var i = 1
+  var target
+  var key
+
+  for (; i < arguments.length; i++) {
+    target = arguments[i]
+    for (key in target) {
+      if (Object.prototype.hasOwnProperty.call(target, key) && target[key] !== undefined) {
+        obj[key] = target[key]
+      }
+    }
+  }
+
+  return obj
 }
