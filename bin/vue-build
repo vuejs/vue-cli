@@ -40,13 +40,6 @@ program
 var args = program.args
 var production = program.production
 
-function help () {
-  if (args.length === 0) {
-    return program.help()
-  }
-}
-help()
-
 process.env.NODE_ENV = production ? 'production' : 'development'
 
 var localConfig
@@ -76,6 +69,13 @@ var options = merge({
   webpack: program.webpack,
   mount: program.mount
 })
+
+function help () {
+  if (!options.entry) {
+    return program.help()
+  }
+}
+help()
 
 var cssOptions = {
   extract: production,
