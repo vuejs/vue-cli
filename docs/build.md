@@ -7,25 +7,38 @@
 - **Not a boilerplate**: run a single command to develop your app
 - **Out of the box**: ES2015, single-file component with hot reloading and custom CSS preprocessors
 - **Customizable**: populate a `~/.vue/webpack.config.js` for custom webpack config
-- **Single-file component mode**: just run `vue build Component.vue` and boom!
+- **Single-file component mode**: just run `vue build Component.vue --mount` and boom!
 
 ## Get started
 
-Populate a component `./component.vue` in your project:
+Populate an app entry `./index.js` in your project:
 
-```vue
-<template>
-  <h2>Hello World!</h2>
-</template>
+```js
+import Vue from 'vue'
+
+new Vue({
+  el: '#app',
+  render: h => h('h2', 'hello world')
+})
 ```
 
-And then just run `vue build component.vue` and go to `http://localhost:4000`
+And then just run `vue build index.js` and go to `http://localhost:4000`
 
-To build for production:
+To build for production (minimized and optimized):
 
 ```bash
-$ vue build component.vue --prod
+$ vue build index.js --prod
 ```
+
+If your want to directly test a component without manually create a Vue instance for it, just try:
+
+```bash
+$ vue build Component.vue --mount
+```
+
+<details><summary>How does this work?</summary>
+When you use `--mount` option, we use a [default app entry](/lib/default-entry.js) to load the given component, otherwise we treat it as a normal webpack entry.
+</details>
 
 For CLI usages:
 
@@ -33,15 +46,13 @@ For CLI usages:
 $ vue build -h
 ```
 
-## How does it work
-
-When the file name ends with `.vue`, we use a [default app entry](/lib/default-entry.js) to load it, otherwise we treat it as a normal webpack entry.
-
 ## Configuration files
 
-By default, we use `~/.vue/config.js` and `~/.vue/webpack.config.js` if they exist. You can use `--config [dir]` to set a custom config directory which is relative to `process.cwd()` instead of using `.vue` directory.
+By default, we use `~/.vue/config.js` and `~/.vue/webpack.config.js` if they exist. 
 
-To disable config files, simply add `--no-config`.
+To use a custom config file, just add `--config [file]` 
+
+To use a custom webpack config file, just add `--webpack [file]`
 
 ### config.js
 
@@ -54,15 +65,29 @@ Default: `4000`
 
 Port of dev server.
 
-#### webpack(webpackConfig, options, webpack)
+#### webpack
 
-Type: `function`
+Type: `function` `string` `object`
+
+##### function
+
+`webpack(webpackConfig, options, webpack)`
 
 - webpackConfig: current webpack config
 - options: CLI options (assigned with config.js)
 - webpack: The `webpack` module
 
 Return a new webpack config.
+
+##### string
+
+Used as the path to webpack config file, eg: `--webpack webpack.config.js`
+
+##### object
+
+Directly use as webpack config. 
+
+Note that we use [webpack-merge](https://github.com/survivejs/webpack-merge) to merge you webpack config with default webpack config.
 
 #### autoprefixer
 
@@ -105,7 +130,7 @@ Type: `Object`
 
 Check out the [default template](/lib/template.html) file we use.
 
-### webpack.config.js
+## webpack.config.js
 
 All the webpack options and [`devServer`](http://webpack.github.io/docs/webpack-dev-server.html#api) options are available here.
 
