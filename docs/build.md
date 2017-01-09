@@ -151,7 +151,7 @@ Since all CSS will be piped through `postcss-loader`, `autoprefixer` and `postcs
 By default we use [buble](https://buble.surge.sh/guide) to transpile ES2015 code, if you want to use Babel for ES2015+ code:
 
 ```js
-// .vue/webpack.config.js
+// webpack.config.js
 // your can define babel options in `.babelrc`
 module.exports = {
   module: {
@@ -173,4 +173,4 @@ module.exports = {
 }
 ```
 
-Don't forget to install `babel-core`, `babel-loader` and relevant presets in your project or `.vue` directory.
+Don't forget to install `babel-core`, `babel-loader` and relevant presets in your project.
