@@ -48,7 +48,7 @@ describe('command:build', () => {
     })
   })
 
-  describe('build with local config in .vue directory', () => {
+  describe('build with local config', () => {
     let result
     let files
     before(done => {
