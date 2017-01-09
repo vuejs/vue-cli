@@ -152,14 +152,21 @@ By default we use [buble](https://buble.surge.sh/guide) to transpile ES2015 code
 
 ```js
 // .vue/webpack.config.js
+// your can define babel options in `.babelrc`
 module.exports = {
   module: {
     rules: [
       {
         test: /\.js$/, 
         loader: 'babel-loader', 
-        exclude: [/node_modules/],
-        options: {/* babel presets and plugins */}
+        exclude: [/node_modules/]
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {js: 'babel-loader'}
+        }
       }
     ]
   }
