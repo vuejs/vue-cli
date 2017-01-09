@@ -5,6 +5,7 @@ var path = require('path')
 var program = require('commander')
 var chalk = require('chalk')
 var rm = require('rimraf').sync
+var home = require('user-home')
 var webpack = require('webpack')
 var Server = require('webpack-dev-server')
 var webpackMerge = require('webpack-merge')
@@ -14,6 +15,7 @@ var PostCompilePlugin = require('post-compile-webpack-plugin')
 var ProgressPlugin = require('webpack/lib/ProgressPlugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var isYarn = require('installed-by-yarn-globally')
+var tildify = require('tildify')
 var loaders = require('../lib/loaders')
 var logger = require('../lib/logger')
 
@@ -23,13 +25,16 @@ var logger = require('../lib/logger')
 
 program
   .usage('[entry]')
-  .option('--dist [directory]', 'Output directory for bundled files', 'dist')
-  .option('--port [port]', 'Server port', 4000)
+  .option('--dist [directory]', 'Output directory for bundled files')
+  .option('--port [port]', 'Server port')
   .option('--host [host]', 'Server host', 'localhost')
-  .option('--prod, --production', 'Build for production', false)
-  .option('-c, --config [directory]', 'Use custom config directory')
-  .option('--no-config', 'You do not want global and local config')
+  .option('--prod, --production', 'Build for production')
+  .option('-c, --config [file]', 'Use custom config file')
+  .option('-w, --webpack [file]', 'Use custom webpack config file')
+  .option('--no-config', 'You do not want to use config file')
+  .option('--no-webpack', 'You do not want to use webpack config file')
   .option('-o, --open', 'Open browser')
+  .option('--mount', 'Auto-create app instance from given component')
   .parse(process.argv)
 
 var args = program.args
@@ -44,31 +49,32 @@ help()
 
 process.env.NODE_ENV = production ? 'production' : 'development'
 
-// load config and webpack config from $config/.vue
-var configContext = typeof program.config === 'string' ? process.cwd() : require('user-home')
-var configDirectory = typeof program.config === 'string' ? program.config : '.vue'
-var localConfigPath = path.join(configContext, configDirectory, 'config.js')
-var localWebpackConfigPath = path.join(configContext, configDirectory, 'webpack.config.js')
 var localConfig
-var localWebpackConfig
 
+// config option in only available in CLI option
 if (program.config !== false) {
+  var localConfigPath = typeof program.config === 'string'
+    ? path.join(process.cwd(), program.config)
+    : path.join(home, '.vue', 'config.js')
   var hasLocalConfig = fs.existsSync(localConfigPath)
-  var hasLocalWebpackConfig = fs.existsSync(localWebpackConfigPath)
   if (hasLocalConfig) {
+    console.log(`> Using config file at ${chalk.yellow(tildify(localConfigPath))}`)
     localConfig = require(localConfigPath)
-  }
-  if (hasLocalWebpackConfig) {
-    localWebpackConfig = require(localWebpackConfigPath)
   }
 }
 
-var options = merge({}, localConfig, {
+var options = merge({
+  port: 4000,
+  dist: 'dist',
+  host: 'localhost'
+}, localConfig, {
   entry: args[0],
   port: program.port,
   host: program.host,
   open: program.open,
-  dist: program.dist
+  dist: program.dist,
+  webpack: program.webpack,
+  mount: program.mount
 })
 
 var cssOptions = {
@@ -174,7 +180,10 @@ var webpackConfig = {
   ]
 }
 
-if (/\.vue$/.test(options.entry) || options.component) {
+// create a Vue instance to load given component
+// set an alias to the path of the component
+// otherwise use it directly as webpack entry
+if (options.mount) {
   webpackConfig.entry.client.push(path.join(__dirname, '../lib/default-entry'))
   webpackConfig.resolve.alias['your-tasteful-component'] = options.entry
 } else {
@@ -223,18 +232,25 @@ if (production) {
   )
 }
 
-// apply custom webpack config
-if (localWebpackConfig) {
-  // modules in config directory's node_modules
-  webpackConfig.resolve.modules.push(path.join(configContext, configDirectory))
-  // loaders in config directory's node_modules
-  webpackConfig.resolveLoader.modules.push(path.join(configContext, configDirectory, 'node_modules'))
-  webpackConfig = webpackMerge(webpackConfig, localWebpackConfig)
-}
-
-// directly mutate webpackConfig
-if (typeof options.webpack === 'function') {
-  webpackConfig = options.webpack(webpackConfig, options, webpack)
+// webpack
+// object: merge with webpack config
+// function: mutate webpack config
+// string: load webpack config file then merge with webpack config
+if (options.webpack !== false) {
+  if (typeof options.webpack === 'object') {
+    webpackConfig = webpackMerge.smart(webpackConfig, options.webpack)
+  } else if (typeof options.webpack === 'function') {
+    webpackConfig = options.webpack(webpackConfig, options, webpack)
+  } else {
+    var localWebpackConfigPath = typeof options.webpack === 'string'
+      ? path.join(process.cwd(), options.webpack)
+      : path.join(home, '.vue', 'webpack.config.js')
+    var hasLocalWebpackConfig = fs.existsSync(localWebpackConfigPath)
+    if (hasLocalWebpackConfig) {
+      console.log(`> Using webpack config file at ${chalk.yellow(tildify(localWebpackConfigPath))}`)
+      webpackConfig = webpackMerge.smart(webpackConfig, require(localWebpackConfigPath))
+    }
+  }
 }
 
 try {
@@ -273,7 +289,7 @@ if (production) {
     quiet: true,
     hot: true,
     inline: true
-  }, localWebpackConfig && localWebpackConfig.devServer))
+  }, webpackConfig.devServer))
 
   server.listen(options.port, options.host)
   if (options.open) {

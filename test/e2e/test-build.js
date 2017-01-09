@@ -53,7 +53,7 @@ describe('command:build', () => {
     let files
     before(done => {
       setup()
-      execa(cli, ['index.js', '--prod', '--config', '.vue'])
+      execa(cli, ['index.js', '--prod', '--config', 'config.js'])
         .then(res => {
           result = res
           files = fs.readdirSync('dist')

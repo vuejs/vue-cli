@@ -58,6 +58,7 @@
     "request": "^2.67.0",
     "rimraf": "^2.5.0",
     "semver": "^5.1.0",
+    "tildify": "^1.2.0",
     "uid": "0.0.2",
     "url-loader": "^0.5.7",
     "user-home": "^2.0.0",
