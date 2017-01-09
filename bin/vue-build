@@ -35,6 +35,13 @@ program
 var args = program.args
 var production = program.production
 
+function help () {
+  if (args.length === 0) {
+    return program.help()
+  }
+}
+help()
+
 process.env.NODE_ENV = production ? 'production' : 'development'
 
 // load config and webpack config from $config/.vue
@@ -182,7 +189,7 @@ if (/\.vue$/.test(options.entry) || options.component) {
 // installed by `yarn global add`
 if (isYarn(__dirname)) {
   // modules in yarn global node_modules
-  // becuase of yarn's flat node_modules structure
+  // because of yarn's flat node_modules structure
   webpackConfig.resolve.modules.push(path.join(__dirname, '../../'))
   // loaders in yarn global node_modules
   webpackConfig.resolveLoader.modules.push(path.join(__dirname, '../../'))

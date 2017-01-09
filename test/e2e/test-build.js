@@ -8,11 +8,11 @@ describe('command:build', () => {
   const cli = path.join(__dirname, '../../bin/vue-build')
   let originalCwd = process.cwd()
 
-  function setup() {
+  function setup () {
     process.chdir(path.join(__dirname, 'mock-vue-app'))
   }
 
-  function teardown(done) {
+  function teardown (done) {
     rm('dist')
     process.chdir(originalCwd)
     done()
@@ -23,7 +23,7 @@ describe('command:build', () => {
     let files
     before(done => {
       setup()
-      execa(cli, ['--prod'])
+      execa(cli, ['index.js', '--prod'])
         .then(res => {
           result = res
           files = fs.readdirSync('dist')
@@ -53,7 +53,7 @@ describe('command:build', () => {
     let files
     before(done => {
       setup()
-      execa(cli, ['--prod', '--config', '.vue'])
+      execa(cli, ['index.js', '--prod', '--config', '.vue'])
         .then(res => {
           result = res
           files = fs.readdirSync('dist')
@@ -68,6 +68,7 @@ describe('command:build', () => {
       expect(typeof cssFile).to.equal('string')
       const cssContent = fs.readFileSync(path.join('dist', cssFile), 'utf8')
       expect(cssContent).to.not.contain('-ms-flexbox')
+      expect(result.code).to.equal(0)
       done()
     })
   })

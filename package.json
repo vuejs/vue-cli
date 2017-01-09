@@ -27,7 +27,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run lint && npm run e2e && npm run e2e:build",
-    "lint": "eslint test/e2e/test.js lib bin/* --env mocha",
+    "lint": "eslint test/e2e/test*.js lib bin/* --env mocha",
     "e2e": "rimraf test/e2e/mock-template-build && cross-env BABEL_ENV=development mocha test/e2e/test.js --slow 1000 --compilers js:babel-core/register",
     "e2e:build": "cross-env BABEL_ENV=development mocha test/e2e/test-build.js --timeout 60000 --compilers js:babel-core/register"
   },
