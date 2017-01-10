@@ -130,9 +130,40 @@ Type: `Object`
 
 Check out the [default template](/lib/template.html) file we use.
 
-## webpack.config.js
+#### proxy
 
-All the webpack options and [`devServer`](http://webpack.github.io/docs/webpack-dev-server.html#api) options are available here.
+To tell the development server to serve any `/api/*` request to your API server in development, use the `proxy` options:
+
+```js
+module.exports = {
+  proxy: 'http://localhost:8080/api'
+}
+```
+
+This way, you fetch `/api/todos` in your Vue app, the development server will proxy your request to `http://localhost:8080/api/todos`.
+
+We use [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware) under the hood, so the `proxy` option can also be an object:
+
+```js
+module.exports = {
+  proxy: {
+    '/api/foo': 'http://localhost:8080/api',
+    '/api/fake-data': {
+      target: 'http://jsonplaceholder.typicode.com',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/api/fake-data': ''
+      }
+    }
+  }
+}
+```
+
+Keep in mind that proxy only has effect in development.
+
+### webpack.config.js
+
+All the webpack options are available here.
 
 ## Recipes
 

@@ -7,7 +7,6 @@ var chalk = require('chalk')
 var rm = require('rimraf').sync
 var home = require('user-home')
 var webpack = require('webpack')
-var Server = require('webpack-dev-server')
 var webpackMerge = require('webpack-merge')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
@@ -18,6 +17,7 @@ var isYarn = require('installed-by-yarn-globally')
 var tildify = require('tildify')
 var loaders = require('../lib/loaders')
 var logger = require('../lib/logger')
+var createServer = require('../lib/server')
 
 /**
  * Usage.
@@ -29,12 +29,13 @@ program
   .option('--port [port]', 'Server port')
   .option('--host [host]', 'Server host', 'localhost')
   .option('--prod, --production', 'Build for production')
+  .option('--mount', 'Auto-create app instance from given component')
   .option('-c, --config [file]', 'Use custom config file')
   .option('-w, --webpack [file]', 'Use custom webpack config file')
-  .option('--no-config', 'You do not want to use config file')
-  .option('--no-webpack', 'You do not want to use webpack config file')
+  .option('--disable-config', 'You do not want to use config file')
+  .option('--disable-webpack-config', 'You do not want to use webpack config file')
   .option('-o, --open', 'Open browser')
-  .option('--mount', 'Auto-create app instance from given component')
+  .option('--proxy', 'Proxy API request')
   .parse(process.argv)
 
 var args = program.args
@@ -45,7 +46,7 @@ process.env.NODE_ENV = production ? 'production' : 'development'
 var localConfig
 
 // config option in only available in CLI option
-if (program.config !== false) {
+if (!program.disableConfig) {
   var localConfigPath = typeof program.config === 'string'
     ? path.join(process.cwd(), program.config)
     : path.join(home, '.vue', 'config.js')
@@ -67,7 +68,9 @@ var options = merge({
   open: program.open,
   dist: program.dist,
   webpack: program.webpack,
-  mount: program.mount
+  disableWebpackConfig: program.disableWebpackConfig,
+  mount: program.mount,
+  proxy: program.proxy
 })
 
 function help () {
@@ -219,9 +222,8 @@ if (production) {
   )
 } else {
   webpackConfig.devtool = 'eval-source-map'
-  webpackConfig.entry.client.push(
-    require.resolve('webpack-dev-server/client'),
-    require.resolve('webpack/hot/dev-server')
+  webpackConfig.entry.client.unshift(
+    require.resolve('webpack-hot-middleware/client') + '?reload=true'
   )
   webpackConfig.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
@@ -236,7 +238,7 @@ if (production) {
 // object: merge with webpack config
 // function: mutate webpack config
 // string: load webpack config file then merge with webpack config
-if (options.webpack !== false) {
+if (!options.disableWebpackConfig) {
   if (typeof options.webpack === 'object') {
     webpackConfig = webpackMerge.smart(webpackConfig, options.webpack)
   } else if (typeof options.webpack === 'function') {
@@ -285,11 +287,7 @@ if (production) {
     }))
   })
 } else {
-  var server = new Server(compiler, Object.assign({
-    quiet: true,
-    hot: true,
-    inline: true
-  }, webpackConfig.devServer))
+  var server = createServer(compiler, {proxy: options.proxy})
 
   server.listen(options.port, options.host)
   if (options.open) {
