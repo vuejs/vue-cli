@@ -132,6 +132,8 @@ Check out the [default template](/lib/template.html) file we use.
 
 #### proxy
 
+Type: `string`, `Object`
+
 To tell the development server to serve any `/api/*` request to your API server in development, use the `proxy` options:
 
 ```js
@@ -160,6 +162,22 @@ module.exports = {
 ```
 
 Keep in mind that proxy only has effect in development.
+
+#### setup
+
+Type: `function`
+
+Perform some custom logic to development server:
+
+```js
+module.exports = {
+  setup(app) {
+    app.get('/api', (req, res) => {
+      res.end('This is the API')
+    })
+  }
+}
+```
 
 ### webpack.config.js
 

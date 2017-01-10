@@ -287,7 +287,7 @@ if (production) {
     }))
   })
 } else {
-  var server = createServer(compiler, {proxy: options.proxy})
+  var server = createServer(compiler, options)
 
   server.listen(options.port, options.host)
   if (options.open) {
