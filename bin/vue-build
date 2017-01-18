@@ -70,7 +70,8 @@ var options = merge({
   webpack: program.webpack,
   disableWebpackConfig: program.disableWebpackConfig,
   mount: program.mount,
-  proxy: program.proxy
+  proxy: program.proxy,
+  production: program.production
 })
 
 function help () {
