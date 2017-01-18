@@ -274,6 +274,7 @@ try {
 checkEntryExists(options.entry)
 
 if (production) {
+  console.log('> Creating an optimized production build:\n')
   // remove dist files but keep that folder in production mode
   rm(path.join(options.dist, '*'))
   compiler.run((err, stats) => {
@@ -291,6 +292,11 @@ if (production) {
       modules: false,
       colors: true
     }))
+    console.log(`\n${chalk.bgGreen.black(' SUCCESS ')} Compiled successfully.\n`)
+    console.log(`The ${chalk.cyan(options.dist)} folder is ready to be deployed.`)
+    console.log(`You may also serve it locally with a static server:\n`)
+    console.log(`  ${chalk.yellow('npm')} i -g serve`)
+    console.log(`  ${chalk.yellow('serve')} ${options.dist}\n`)
   })
 } else {
   var server = createServer(compiler, options)
