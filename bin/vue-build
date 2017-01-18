@@ -14,6 +14,7 @@ var PostCompilePlugin = require('post-compile-webpack-plugin')
 var ProgressPlugin = require('webpack/lib/ProgressPlugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var isYarn = require('installed-by-yarn-globally')
+var camelcase = require('camelcase')
 var tildify = require('tildify')
 var loaders = require('../lib/loaders')
 var logger = require('../lib/logger')
@@ -29,13 +30,14 @@ program
   .option('--port [port]', 'Server port')
   .option('--host [host]', 'Server host', 'localhost')
   .option('--prod, --production', 'Build for production')
-  .option('-m, --mount', 'Auto-create app instance from given component')
+  .option('-m, --mount', 'Auto-create app instance from given component, true for `.vue` file')
   .option('-c, --config [file]', 'Use custom config file')
   .option('-w, --webpack [file]', 'Use custom webpack config file')
   .option('--disable-config', 'You do not want to use config file')
   .option('--disable-webpack-config', 'You do not want to use webpack config file')
   .option('-o, --open', 'Open browser')
   .option('--proxy', 'Proxy API request')
+  .option('--lib [libraryName]', 'Distribute component in UMD format')
   .parse(process.argv)
 
 var args = program.args
@@ -71,7 +73,8 @@ var options = merge({
   disableWebpackConfig: program.disableWebpackConfig,
   mount: program.mount,
   proxy: program.proxy,
-  production: program.production
+  production: program.production,
+  lib: program.lib
 })
 
 function help () {
@@ -107,14 +110,14 @@ if (options.postcss) {
   }
 }
 
-const babelOptions = {
+var babelOptions = {
   babelrc: true,
   cacheDirectory: true,
   sourceMaps: production ? 'both' : false,
   presets: []
 }
 
-const hasBabelRc = fs.existsSync('.babelrc')
+var hasBabelRc = fs.existsSync('.babelrc')
 if (hasBabelRc) {
   console.log('> Using .babelrc in current working directory')
 } else {
@@ -167,16 +170,12 @@ var webpackConfig = {
         test: /\.(ico|jpg|png|gif|svg|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
         loader: 'file-loader',
         query: {
-          name: 'static/[name].[hash:8].[ext]'
+          name: options.lib ? 'static/[name].[ext]' : 'static/[name].[hash:8].[ext]'
         }
       }
     ].concat(loaders.styleLoaders(cssOptions))
   },
   plugins: [
-    new HtmlWebpackPlugin(Object.assign({
-      title: 'Vue App',
-      template: path.join(__dirname, '../lib/template.html')
-    }, options.html)),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
@@ -190,6 +189,12 @@ var webpackConfig = {
   ]
 }
 
+// if entry ends with `.vue` and no `mount` option was specified
+// we implicitly set `mount` to true unless `lib` is set
+// for `.js` component you can set `mount` to true manually
+if (options.mount === undefined && !options.lib && /\.vue$/.test(options.entry)) {
+  options.mount = true
+}
 // create a Vue instance to load given component
 // set an alias to the path of the component
 // otherwise use it directly as webpack entry
@@ -198,6 +203,24 @@ if (options.mount) {
   webpackConfig.resolve.alias['your-tasteful-component'] = options.entry
 } else {
   webpackConfig.entry.client.push(options.entry)
+}
+
+// the `lib` mode
+// distribute the entry file as a component (umd format)
+if (options.lib) {
+  webpackConfig.output.filename = replaceExtension(options.entry, '.js')
+  webpackConfig.output.library = typeof options.lib === 'string'
+    ? options.lib
+    : camelcase(replaceExtension(options.entry, ''))
+  webpackConfig.output.libraryTarget = 'umd'
+} else {
+  // only output index.html in non-lib mode
+  webpackConfig.plugins.unshift(
+    new HtmlWebpackPlugin(Object.assign({
+      title: 'Vue App',
+      template: path.join(__dirname, '../lib/template.html')
+    }, options.html))
+  )
 }
 
 // installed by `yarn global add`
@@ -225,7 +248,7 @@ if (production) {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
-    new ExtractTextPlugin('[name].[contenthash:8].css')
+    new ExtractTextPlugin(options.lib ? `${replaceExtension(options.entry, '.css')}` : '[name].[contenthash:8].css')
   )
 } else {
   webpackConfig.devtool = 'eval-source-map'
@@ -329,4 +352,8 @@ function merge (obj) {
   }
 
   return obj
+}
+
+function replaceExtension (str, ext) {
+  return str.replace(/\.(vue|js)$/, ext)
 }

@@ -7,7 +7,7 @@
 - **Not a boilerplate**: run a single command to develop your app
 - **Out of the box**: ES2015, single-file component with hot reloading and custom CSS preprocessors
 - **Customizable**: populate a `~/.vue/webpack.config.js` for custom webpack config
-- **Single-file component mode**: simply run `vue build Component.vue --mount` and test it out in the browser!
+- **Single-file component mode**: simply run `vue build Component.vue` and test it out in the browser!
 
 ## Get started
 
@@ -24,7 +24,7 @@ new Vue({
 
 And then run `vue build index.js` and go to `http://localhost:4000`
 
-To build for production (minimized and optimized):
+**To build for production (minimized and optimized):**
 
 ```bash
 $ vue build index.js --prod
@@ -33,14 +33,24 @@ $ vue build index.js --prod
 If your want to directly test a component without manually create a Vue instance for it, try:
 
 ```bash
-$ vue build Component.vue --mount
+$ vue build Component.vue
 ```
 
 <details><summary>How does this work?</summary>
-When you use `--mount` option, we use a [default app entry](/lib/default-entry.js) to load the given component, otherwise we treat it as a normal webpack entry.
+When the input file ends with `.vue` extension, we use a [default app entry](/lib/default-entry.js) to load the given component, otherwise we treat it as a normal webpack entry. For jsx component which ends with `.js` extension, you can enable this behavior manually by adding `--mount`.
 </details>
 
-For CLI usages:
+**To distribute component:**
+
+```bash
+$ vue build Component.vue --prod --lib
+```
+
+This will create an optimized bundle in UMD format, and the name of exported library is set to `Component`, you can use `--lib [CustomLibraryName]` to customize it.
+
+Note that in some cases you may use [`externals`](https://webpack.js.org/configuration/externals/) to exclude some modules from your bundle.
+
+For more CLI usages:
 
 ```bash
 $ vue build -h
@@ -48,9 +58,9 @@ $ vue build -h
 
 ## Configuration files
 
-By default, we use `~/.vue/config.js` and `~/.vue/webpack.config.js` if they exist. 
+By default, we use `~/.vue/config.js` and `~/.vue/webpack.config.js` if they exist.
 
-To use a custom config file, add `--config [file]` 
+To use a custom config file, add `--config [file]`
 
 To use a custom webpack config file, add `--webpack [file]`
 
@@ -85,7 +95,7 @@ Used as the path to webpack config file, eg: `--webpack webpack.config.js`
 
 ##### object
 
-Directly use as webpack config. 
+Directly use as webpack config.
 
 Note that we use [webpack-merge](https://github.com/survivejs/webpack-merge) to merge you webpack config with default webpack config.
 

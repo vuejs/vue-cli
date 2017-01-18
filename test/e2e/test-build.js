@@ -53,7 +53,7 @@ describe('command:build', () => {
     let files
     before(done => {
       setup()
-      execa(cli, ['index.js', '--prod', '--config', 'config.js'])
+      execa(cli, ['App.vue', '--prod', '--config', 'config.js', '--lib'])
         .then(res => {
           result = res
           files = fs.readdirSync('dist')
@@ -69,6 +69,12 @@ describe('command:build', () => {
       const cssContent = fs.readFileSync(path.join('dist', cssFile), 'utf8')
       expect(cssContent).to.not.contain('-ms-flexbox')
       expect(result.code).to.equal(0)
+      done()
+    })
+
+    it('export in umd format', done => {
+      const m = require(path.join(process.cwd(), 'dist/App.js'))
+      expect(typeof m.render).to.equal('function')
       done()
     })
   })

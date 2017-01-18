@@ -37,6 +37,7 @@
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
     "babel-preset-vue-app": "^0.4.0",
+    "camelcase": "^4.0.0",
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "connect-history-api-fallback": "^1.3.0",
