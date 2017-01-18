@@ -7,7 +7,7 @@
 - **Not a boilerplate**: run a single command to develop your app
 - **Out of the box**: ES2015, single-file component with hot reloading and custom CSS preprocessors
 - **Customizable**: populate a `~/.vue/webpack.config.js` for custom webpack config
-- **Single-file component mode**: just run `vue build Component.vue --mount` and test it out in the browser!
+- **Single-file component mode**: simply run `vue build Component.vue --mount` and test it out in the browser!
 
 ## Get started
 
@@ -22,7 +22,7 @@ new Vue({
 })
 ```
 
-And then just run `vue build index.js` and go to `http://localhost:4000`
+And then run `vue build index.js` and go to `http://localhost:4000`
 
 To build for production (minimized and optimized):
 
@@ -30,7 +30,7 @@ To build for production (minimized and optimized):
 $ vue build index.js --prod
 ```
 
-If your want to directly test a component without manually create a Vue instance for it, just try:
+If your want to directly test a component without manually create a Vue instance for it, try:
 
 ```bash
 $ vue build Component.vue --mount
@@ -50,9 +50,9 @@ $ vue build -h
 
 By default, we use `~/.vue/config.js` and `~/.vue/webpack.config.js` if they exist. 
 
-To use a custom config file, just add `--config [file]` 
+To use a custom config file, add `--config [file]` 
 
-To use a custom webpack config file, just add `--webpack [file]`
+To use a custom webpack config file, add `--webpack [file]`
 
 ### config.js
 
@@ -187,7 +187,7 @@ All the webpack options are available here.
 
 ### Custom CSS preprocessors
 
-CSS preprocessors (and CSS extraction) work out of the box, just install relevant loaders and you're all set! For example, add `sass` support:
+CSS preprocessors (and CSS extraction) work out of the box, install relevant loaders and you're all set! For example, add `sass` support:
 
 ```bash
 $ npm i -D node-sass sass-loader
@@ -195,31 +195,12 @@ $ npm i -D node-sass sass-loader
 
 Since all CSS will be piped through `postcss-loader`, `autoprefixer` and `postcss` options will always work no matter what CSS preprocessors you're using.
 
-### Using Babel
+### Custom babel config
 
-By default we use [buble](https://buble.surge.sh/guide) to transpile ES2015 code, if you want to use Babel for ES2015+ code:
+By default we only use a single babel preset: [babel-preset-vue-app](https://github.com/egoist/babel-preset-vue-app) which includes following features:
 
-```js
-// webpack.config.js
-// your can define babel options in `.babelrc`
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.js$/, 
-        loader: 'babel-loader', 
-        exclude: [/node_modules/]
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {js: 'babel-loader'}
-        }
-      }
-    ]
-  }
-}
-```
+- ES2015/2016/2017 and Stage-2 features
+- Transform `async/await` and `generator`
+- Transform Vue JSX
 
-Don't forget to install `babel-core`, `babel-loader` and relevant presets in your project.
+You can populate a `.babelrc` in project root directory to override it.
