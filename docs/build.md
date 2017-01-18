@@ -11,6 +11,8 @@
 
 ## Get started
 
+Make sure that you've installed `vue-cli` with `npm >= 3` or `yarn >= 0.7`.
+
 Populate an app entry `./index.js` in your project:
 
 ```js
