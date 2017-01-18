@@ -36,7 +36,7 @@ program
   .option('--disable-config', 'You do not want to use config file')
   .option('--disable-webpack-config', 'You do not want to use webpack config file')
   .option('-o, --open', 'Open browser')
-  .option('--proxy', 'Proxy API request')
+  .option('--proxy [url]', 'Proxy API request')
   .option('--lib [libraryName]', 'Distribute component in UMD format')
   .parse(process.argv)
 
