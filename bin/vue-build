@@ -106,6 +106,20 @@ if (options.postcss) {
   }
 }
 
+const babelOptions = {
+  babelrc: true,
+  cacheDirectory: true,
+  sourceMaps: production ? 'both' : false,
+  presets: []
+}
+
+const hasBabelRc = fs.existsSync('.babelrc')
+if (hasBabelRc) {
+  console.log('> Using .babelrc in current working directory')
+} else {
+  babelOptions.presets.push(require.resolve('babel-preset-vue-app'))
+}
+
 var webpackConfig = {
   entry: {
     client: []
@@ -137,7 +151,7 @@ var webpackConfig = {
     rules: [
       {
         test: /\.js$/,
-        loader: 'buble-loader',
+        loader: 'babel-loader',
         exclude: [/node_modules/]
       },
       {
@@ -145,9 +159,7 @@ var webpackConfig = {
         loader: 'vue-loader',
         options: {
           postcss: postcssOptions,
-          loaders: Object.assign({
-            js: 'buble-loader'
-          }, loaders.cssLoaders(cssOptions))
+          loaders: loaders.cssLoaders(cssOptions)
         }
       },
       {
@@ -171,13 +183,7 @@ var webpackConfig = {
       options: {
         context: process.cwd(),
         postcss: postcssOptions,
-        buble: {
-          objectAssign: 'Object.assign',
-          transforms: {
-            dangerousForOf: false,
-            modules: false
-          }
-        }
+        babel: babelOptions
       }
     })
   ]
