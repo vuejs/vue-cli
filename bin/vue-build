@@ -1,0 +1,359 @@
+#!/usr/bin/env node
+
+var fs = require('fs')
+var path = require('path')
+var program = require('commander')
+var chalk = require('chalk')
+var rm = require('rimraf').sync
+var home = require('user-home')
+var webpack = require('webpack')
+var webpackMerge = require('webpack-merge')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+var PostCompilePlugin = require('post-compile-webpack-plugin')
+var ProgressPlugin = require('webpack/lib/ProgressPlugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var isYarn = require('installed-by-yarn-globally')
+var camelcase = require('camelcase')
+var tildify = require('tildify')
+var loaders = require('../lib/loaders')
+var logger = require('../lib/logger')
+var createServer = require('../lib/server')
+
+/**
+ * Usage.
+ */
+
+program
+  .usage('[entry]')
+  .option('--dist [directory]', 'Output directory for bundled files')
+  .option('--port [port]', 'Server port')
+  .option('--host [host]', 'Server host', 'localhost')
+  .option('--prod, --production', 'Build for production')
+  .option('-m, --mount', 'Auto-create app instance from given component, true for `.vue` file')
+  .option('-c, --config [file]', 'Use custom config file')
+  .option('-w, --webpack [file]', 'Use custom webpack config file')
+  .option('--disable-config', 'You do not want to use config file')
+  .option('--disable-webpack-config', 'You do not want to use webpack config file')
+  .option('-o, --open', 'Open browser')
+  .option('--proxy', 'Proxy API request')
+  .option('--lib [libraryName]', 'Distribute component in UMD format')
+  .parse(process.argv)
+
+var args = program.args
+var production = program.production
+
+process.env.NODE_ENV = production ? 'production' : 'development'
+
+var localConfig
+
+// config option in only available in CLI option
+if (!program.disableConfig) {
+  var localConfigPath = typeof program.config === 'string'
+    ? path.join(process.cwd(), program.config)
+    : path.join(home, '.vue', 'config.js')
+  var hasLocalConfig = fs.existsSync(localConfigPath)
+  if (hasLocalConfig) {
+    console.log(`> Using config file at ${chalk.yellow(tildify(localConfigPath))}`)
+    localConfig = require(localConfigPath)
+  }
+}
+
+var options = merge({
+  port: 4000,
+  dist: 'dist',
+  host: 'localhost'
+}, localConfig, {
+  entry: args[0],
+  port: program.port,
+  host: program.host,
+  open: program.open,
+  dist: program.dist,
+  webpack: program.webpack,
+  disableWebpackConfig: program.disableWebpackConfig,
+  mount: program.mount,
+  proxy: program.proxy,
+  production: program.production,
+  lib: program.lib
+})
+
+function help () {
+  if (!options.entry) {
+    return program.help()
+  }
+}
+help()
+
+var cssOptions = {
+  extract: production,
+  sourceMap: true
+}
+
+var postcssOptions = {
+  plugins: [
+    require('autoprefixer')(Object.assign({
+      browsers: ['ie > 8', 'last 5 versions']
+    }, options.autoprefixer))
+  ]
+}
+
+if (options.postcss) {
+  if (Object.prototype.toString.call(options.postcss) === '[object Object]') {
+    var plugins = options.postcss.plugins
+    if (plugins) {
+      postcssOptions.plugins = postcssOptions.plugins.concat(plugins)
+      delete options.postcss.plugins
+    }
+    Object.assign(postcssOptions, options.postcss)
+  } else {
+    postcssOptions = options.postcss
+  }
+}
+
+var babelOptions = {
+  babelrc: true,
+  cacheDirectory: true,
+  sourceMaps: production ? 'both' : false,
+  presets: []
+}
+
+var hasBabelRc = fs.existsSync('.babelrc')
+if (hasBabelRc) {
+  console.log('> Using .babelrc in current working directory')
+} else {
+  babelOptions.presets.push(require.resolve('babel-preset-vue-app'))
+}
+
+var webpackConfig = {
+  entry: {
+    client: []
+  },
+  output: {
+    path: path.join(process.cwd(), options.dist),
+    filename: production ? '[name].[chunkhash:8].js' : '[name].js',
+    publicPath: '/'
+  },
+  performance: {
+    hints: false
+  },
+  resolve: {
+    extensions: ['.js', '.vue', '.css'],
+    modules: [
+      process.cwd(),
+      path.join(process.cwd(), 'node_modules'), // modules in cwd's node_modules
+      path.join(__dirname, '../node_modules') // modules in package's node_modules
+    ],
+    alias: {}
+  },
+  resolveLoader: {
+    modules: [
+      path.join(process.cwd(), 'node_modules'), // loaders in cwd's node_modules
+      path.join(__dirname, '../node_modules') // loaders in package's node_modules
+    ]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: [/node_modules/]
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          postcss: postcssOptions,
+          loaders: loaders.cssLoaders(cssOptions)
+        }
+      },
+      {
+        test: /\.(ico|jpg|png|gif|svg|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
+        loader: 'file-loader',
+        query: {
+          name: options.lib ? 'static/[name].[ext]' : 'static/[name].[hash:8].[ext]'
+        }
+      }
+    ].concat(loaders.styleLoaders(cssOptions))
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    }),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: process.cwd(),
+        postcss: postcssOptions,
+        babel: babelOptions
+      }
+    })
+  ]
+}
+
+// if entry ends with `.vue` and no `mount` option was specified
+// we implicitly set `mount` to true unless `lib` is set
+// for `.js` component you can set `mount` to true manually
+if (options.mount === undefined && !options.lib && /\.vue$/.test(options.entry)) {
+  options.mount = true
+}
+// create a Vue instance to load given component
+// set an alias to the path of the component
+// otherwise use it directly as webpack entry
+if (options.mount) {
+  webpackConfig.entry.client.push(path.join(__dirname, '../lib/default-entry'))
+  webpackConfig.resolve.alias['your-tasteful-component'] = options.entry
+} else {
+  webpackConfig.entry.client.push(options.entry)
+}
+
+// the `lib` mode
+// distribute the entry file as a component (umd format)
+if (options.lib) {
+  webpackConfig.output.filename = replaceExtension(options.entry, '.js')
+  webpackConfig.output.library = typeof options.lib === 'string'
+    ? options.lib
+    : camelcase(replaceExtension(options.entry, ''))
+  webpackConfig.output.libraryTarget = 'umd'
+} else {
+  // only output index.html in non-lib mode
+  webpackConfig.plugins.unshift(
+    new HtmlWebpackPlugin(Object.assign({
+      title: 'Vue App',
+      template: path.join(__dirname, '../lib/template.html')
+    }, options.html))
+  )
+}
+
+// installed by `yarn global add`
+if (isYarn(__dirname)) {
+  // modules in yarn global node_modules
+  // because of yarn's flat node_modules structure
+  webpackConfig.resolve.modules.push(path.join(__dirname, '../../'))
+  // loaders in yarn global node_modules
+  webpackConfig.resolveLoader.modules.push(path.join(__dirname, '../../'))
+}
+
+if (production) {
+  webpackConfig.devtool = 'source-map'
+  webpackConfig.plugins.push(
+    new ProgressPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compressor: {
+        warnings: false
+      },
+      output: {
+        comments: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
+    new ExtractTextPlugin(options.lib ? `${replaceExtension(options.entry, '.css')}` : '[name].[contenthash:8].css')
+  )
+} else {
+  webpackConfig.devtool = 'eval-source-map'
+  webpackConfig.entry.client.unshift(
+    require.resolve('webpack-hot-middleware/client') + '?reload=true'
+  )
+  webpackConfig.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new FriendlyErrorsPlugin(),
+    new PostCompilePlugin(() => {
+      console.log(`> Open http://${options.host}:${options.port}`)
+    })
+  )
+}
+
+// webpack
+// object: merge with webpack config
+// function: mutate webpack config
+// string: load webpack config file then merge with webpack config
+if (!options.disableWebpackConfig) {
+  if (typeof options.webpack === 'object') {
+    webpackConfig = webpackMerge.smart(webpackConfig, options.webpack)
+  } else if (typeof options.webpack === 'function') {
+    webpackConfig = options.webpack(webpackConfig, options, webpack)
+  } else {
+    var localWebpackConfigPath = typeof options.webpack === 'string'
+      ? path.join(process.cwd(), options.webpack)
+      : path.join(home, '.vue', 'webpack.config.js')
+    var hasLocalWebpackConfig = fs.existsSync(localWebpackConfigPath)
+    if (hasLocalWebpackConfig) {
+      console.log(`> Using webpack config file at ${chalk.yellow(tildify(localWebpackConfigPath))}`)
+      webpackConfig = webpackMerge.smart(webpackConfig, require(localWebpackConfigPath))
+    }
+  }
+}
+
+try {
+  var compiler = webpack(webpackConfig)
+} catch (err) {
+  if (err.name === 'WebpackOptionsValidationError') {
+    logger.fatal(err.message)
+  } else {
+    throw err
+  }
+}
+
+checkEntryExists(options.entry)
+
+if (production) {
+  console.log('> Creating an optimized production build:\n')
+  // remove dist files but keep that folder in production mode
+  rm(path.join(options.dist, '*'))
+  compiler.run((err, stats) => {
+    if (err) {
+      process.exitCode = 1
+      return console.error(err.stack)
+    }
+    if (stats.hasErrors() || stats.hasWarnings()) {
+      process.exitCode = 1
+      return console.error(stats.toString('errors-only'))
+    }
+    console.log(stats.toString({
+      chunks: false,
+      children: false,
+      modules: false,
+      colors: true
+    }))
+    console.log(`\n${chalk.bgGreen.black(' SUCCESS ')} Compiled successfully.\n`)
+    console.log(`The ${chalk.cyan(options.dist)} folder is ready to be deployed.`)
+    console.log(`You may also serve it locally with a static server:\n`)
+    console.log(`  ${chalk.yellow('npm')} i -g serve`)
+    console.log(`  ${chalk.yellow('serve')} ${options.dist}\n`)
+  })
+} else {
+  var server = createServer(compiler, options)
+
+  server.listen(options.port, options.host)
+  if (options.open) {
+    require('opn')(`http://${options.host}:${options.port}`)
+  }
+}
+
+function checkEntryExists (entry) {
+  if (!fs.existsSync(entry)) {
+    logger.fatal(`${chalk.yellow(entry)} does not exist, did you forget to create one?`)
+  }
+}
+
+function merge (obj) {
+  var i = 1
+  var target
+  var key
+
+  for (; i < arguments.length; i++) {
+    target = arguments[i]
+    for (key in target) {
+      if (Object.prototype.hasOwnProperty.call(target, key) && target[key] !== undefined) {
+        obj[key] = target[key]
+      }
+    }
+  }
+
+  return obj
+}
+
+function replaceExtension (str, ext) {
+  return str.replace(/\.(vue|js)$/, ext)
+}
