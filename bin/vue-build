@@ -29,7 +29,7 @@ program
   .option('--port [port]', 'Server port')
   .option('--host [host]', 'Server host', 'localhost')
   .option('--prod, --production', 'Build for production')
-  .option('--mount', 'Auto-create app instance from given component')
+  .option('-m, --mount', 'Auto-create app instance from given component')
   .option('-c, --config [file]', 'Use custom config file')
   .option('-w, --webpack [file]', 'Use custom webpack config file')
   .option('--disable-config', 'You do not want to use config file')
