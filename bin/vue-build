@@ -14,7 +14,6 @@ var PostCompilePlugin = require('post-compile-webpack-plugin')
 var ProgressPlugin = require('webpack/lib/ProgressPlugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var isYarn = require('installed-by-yarn-globally')
-var camelcase = require('camelcase')
 var tildify = require('tildify')
 var loaders = require('../lib/loaders')
 var logger = require('../lib/logger')
@@ -211,7 +210,7 @@ if (options.lib) {
   webpackConfig.output.filename = replaceExtension(options.entry, '.js')
   webpackConfig.output.library = typeof options.lib === 'string'
     ? options.lib
-    : camelcase(replaceExtension(options.entry, ''))
+    : getLibraryName(replaceExtension(options.entry, ''))
   webpackConfig.output.libraryTarget = 'umd'
 } else {
   // only output index.html in non-lib mode
@@ -356,4 +355,8 @@ function merge (obj) {
 
 function replaceExtension (str, ext) {
   return str.replace(/\.(vue|js)$/, ext)
+}
+
+function getLibraryName (str) {
+  return str.replace(/[-_.]([\w])/, (_, p1) => p1.toUpperCase())
 }
