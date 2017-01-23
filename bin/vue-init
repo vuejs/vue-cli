@@ -8,6 +8,8 @@ var path = require('path')
 var rm = require('rimraf').sync
 var uid = require('uid')
 var ora = require('ora')
+var home = require('user-home')
+var tildify = require('tildify')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
 var logger = require('../lib/logger')
@@ -22,6 +24,7 @@ var warnings = require('../lib/warnings')
 program
   .usage('<template-name> [project-name]')
   .option('-c, --clone', 'use git clone')
+  .option('--offline', 'use cached template')
 
 /**
  * Help.
@@ -49,15 +52,6 @@ function help () {
 help()
 
 /**
- * Padding.
- */
-
-console.log()
-process.on('exit', function () {
-  console.log()
-})
-
-/**
  * Settings.
  */
 
@@ -68,6 +62,21 @@ var inPlace = !rawName || rawName === '.'
 var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
 var clone = program.clone || false
+
+var tmp = path.join(home, '.vue-templates', template.replace(/\//g, '-'))
+if (program.offline) {
+  console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
+  template = tmp
+}
+
+/**
+ * Padding.
+ */
+
+console.log()
+process.on('exit', function () {
+  console.log()
+})
 
 if (exists(to)) {
   inquirer.prompt([{
@@ -134,14 +143,10 @@ function run () {
  */
 
 function downloadAndGenerate (template) {
-  var tmp = os.tmpdir() + '/vue-template-' + uid()
   var spinner = ora('downloading template')
   spinner.start()
   download(template, tmp, { clone: clone }, function (err) {
     spinner.stop()
-    process.on('exit', function () {
-      rm(tmp)
-    })
     if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
     generate(name, tmp, to, function (err) {
       if (err) logger.fatal(err)
