@@ -37,6 +37,7 @@ program
   .option('-o, --open', 'Open browser')
   .option('--proxy [url]', 'Proxy API request')
   .option('--lib [libraryName]', 'Distribute component in UMD format')
+  .option('--watch', 'Run in watch mode')
   .parse(process.argv)
 
 var args = program.args
@@ -73,7 +74,8 @@ var options = merge({
   mount: program.mount,
   proxy: program.proxy,
   production: program.production,
-  lib: program.lib
+  lib: program.lib,
+  watch: program.watch
 })
 
 function help () {
@@ -189,7 +191,8 @@ var webpackConfig = {
         babel: babelOptions
       }
     })
-  ]
+  ],
+  watch: options.watch
 }
 
 // if entry ends with `.vue` and no `mount` option was specified
@@ -290,6 +293,12 @@ if (!options.disableWebpackConfig) {
 
 try {
   var compiler = webpack(webpackConfig)
+
+  if (options.watch) {
+    compiler.watch({
+      aggregateTimeout: 300
+    }, () => null)
+  }
 } catch (err) {
   if (err.name === 'WebpackOptionsValidationError') {
     logger.fatal(err.message)
