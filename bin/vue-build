@@ -309,7 +309,12 @@ if (production) {
       process.exitCode = 1
       return console.error(err.stack)
     }
-    if (stats.hasErrors() || stats.hasWarnings()) {
+    // output warning
+    if (stats.hasWarnings() && !stats.hasErrors()) {
+      console.error(stats.toString('errors-only'))
+    }
+    // output wanring and errors
+    if (stats.hasErrors()) {
       process.exitCode = 1
       return console.error(stats.toString('errors-only'))
     }
