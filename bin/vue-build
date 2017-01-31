@@ -203,7 +203,7 @@ if (options.mount === undefined && !options.lib && /\.vue$/.test(options.entry))
 // otherwise use it directly as webpack entry
 if (options.mount) {
   webpackConfig.entry.client.push(path.join(__dirname, '../lib/default-entry.es6'))
-  webpackConfig.resolve.alias['your-tasteful-component'] = options.entry
+  webpackConfig.resolve.alias['your-tasteful-component'] = path.resolve(process.cwd(), options.entry)
 } else {
   webpackConfig.entry.client.push(options.entry)
 }
