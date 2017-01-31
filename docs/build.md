@@ -32,14 +32,14 @@ And then run `vue build index.js` and go to `http://localhost:4000`
 $ vue build index.js --prod
 ```
 
-If your want to directly test a component without manually create a Vue instance for it, try:
+If you want to directly test a component without manually create a Vue instance for it, try:
 
 ```bash
 $ vue build Component.vue
 ```
 
 <details><summary>How does this work?</summary>
-When the input file ends with `.vue` extension, we use a [default app entry](/lib/default-entry.js) to load the given component, otherwise we treat it as a normal webpack entry. For jsx component which ends with `.js` extension, you can enable this behavior manually by adding `--mount`.
+When the input file ends with `.vue` extension, we use a [default app entry](/lib/default-entry.es6) to load the given component, otherwise we treat it as a normal webpack entry. For jsx component which ends with `.js` extension, you can enable this behavior manually by adding `--mount`.
 </details>
 
 **To distribute component:**
@@ -99,7 +99,7 @@ Used as the path to webpack config file, eg: `--webpack webpack.config.js`
 
 Directly use as webpack config.
 
-Note that we use [webpack-merge](https://github.com/survivejs/webpack-merge) to merge you webpack config with default webpack config.
+Note that we use [webpack-merge](https://github.com/survivejs/webpack-merge) to merge your webpack config with default webpack config.
 
 #### autoprefixer
 
@@ -154,7 +154,7 @@ module.exports = {
 }
 ```
 
-This way, you fetch `/api/todos` in your Vue app, the development server will proxy your request to `http://localhost:8080/api/todos`.
+This way, when you fetch `/api/todos` in your Vue app, the development server will proxy your request to `http://localhost:8080/api/todos`.
 
 We use [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware) under the hood, so the `proxy` option can also be an object:
 
