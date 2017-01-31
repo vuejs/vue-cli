@@ -362,10 +362,10 @@ function merge (obj) {
   return obj
 }
 
-function replaceExtension (str, ext) {
-  return str.replace(/\.(vue|js)$/, ext)
+function replaceExtension (entry, ext) {
+  return path.basename(entry).replace(/\.(vue|js)$/, ext)
 }
 
-function getLibraryName (str) {
-  return str.replace(/[-_.]([\w])/, (_, p1) => p1.toUpperCase())
+function getLibraryName (fileName) {
+  return fileName.replace(/[-_.]([\w])/, (_, p1) => p1.toUpperCase())
 }
