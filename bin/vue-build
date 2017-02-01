@@ -29,9 +29,10 @@ program
   .option('--port [port]', 'Server port')
   .option('--host [host]', 'Server host', 'localhost')
   .option('--prod, --production', 'Build for production')
+  .option('-w, --watch', 'Run in watch mode')
   .option('-m, --mount', 'Auto-create app instance from given component, true for `.vue` file')
   .option('-c, --config [file]', 'Use custom config file')
-  .option('-w, --webpack [file]', 'Use custom webpack config file')
+  .option('--wp, --webpack [file]', 'Use custom webpack config file')
   .option('--disable-config', 'You do not want to use config file')
   .option('--disable-webpack-config', 'You do not want to use webpack config file')
   .option('-o, --open', 'Open browser')
@@ -73,7 +74,8 @@ var options = merge({
   mount: program.mount,
   proxy: program.proxy,
   production: program.production,
-  lib: program.lib
+  lib: program.lib,
+  watch: program.watch
 })
 
 function help () {
@@ -254,12 +256,12 @@ if (production) {
     new ExtractTextPlugin(options.lib ? `${replaceExtension(options.entry, '.css')}` : '[name].[contenthash:8].css')
   )
 } else {
+  if (!options.watch) {
+    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
+    webpackConfig.entry.client.unshift(require.resolve('webpack-hot-middleware/client') + '?reload=true')
+  }
   webpackConfig.devtool = 'eval-source-map'
-  webpackConfig.entry.client.unshift(
-    require.resolve('webpack-hot-middleware/client') + '?reload=true'
-  )
   webpackConfig.plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
     new FriendlyErrorsPlugin(),
     new PostCompilePlugin(() => {
       console.log(`> Open http://${options.host}:${options.port}`)
@@ -300,36 +302,15 @@ try {
 
 checkEntryExists(options.entry)
 
-if (production) {
+if (options.watch) {
+  console.log('> Running in watch mode')
+  rm(path.join(options.dist, '*'))
+  compiler.watch({}, (err, stats) => handleBuild(err, stats, true))
+} else if (production) {
   console.log('> Creating an optimized production build:\n')
   // remove dist files but keep that folder in production mode
   rm(path.join(options.dist, '*'))
-  compiler.run((err, stats) => {
-    if (err) {
-      process.exitCode = 1
-      return console.error(err.stack)
-    }
-    // output warning
-    if (stats.hasWarnings() && !stats.hasErrors()) {
-      console.error(stats.toString('errors-only'))
-    }
-    // output wanring and errors
-    if (stats.hasErrors()) {
-      process.exitCode = 1
-      return console.error(stats.toString('errors-only'))
-    }
-    console.log(stats.toString({
-      chunks: false,
-      children: false,
-      modules: false,
-      colors: true
-    }))
-    console.log(`\n${chalk.bgGreen.black(' SUCCESS ')} Compiled successfully.\n`)
-    console.log(`The ${chalk.cyan(options.dist)} folder is ready to be deployed.`)
-    console.log(`You may also serve it locally with a static server:\n`)
-    console.log(`  ${chalk.yellow('npm')} i -g serve`)
-    console.log(`  ${chalk.yellow('serve')} ${options.dist}\n`)
-  })
+  compiler.run(handleBuild)
 } else {
   var server = createServer(compiler, options)
 
@@ -368,4 +349,31 @@ function replaceExtension (entry, ext) {
 
 function getLibraryName (fileName) {
   return fileName.replace(/[-_.]([\w])/, (_, p1) => p1.toUpperCase())
+}
+
+function handleBuild (err, stats, watch) {
+  if (watch) {
+    process.stdout.write('\x1Bc')
+  }
+  if (err) {
+    process.exitCode = 1
+    return console.error(err.stack)
+  }
+  if (stats.hasErrors() || stats.hasWarnings()) {
+    process.exitCode = 1
+    return console.error(stats.toString('errors-only'))
+  }
+  console.log(stats.toString({
+    chunks: false,
+    children: false,
+    modules: false,
+    colors: true
+  }))
+  console.log(`\n${chalk.bgGreen.black(' SUCCESS ')} Compiled successfully.\n`)
+  if (!watch) {
+    console.log(`The ${chalk.cyan(options.dist)} folder is ready to be deployed.`)
+    console.log(`You may also serve it locally with a static server:\n`)
+    console.log(`  ${chalk.yellow('npm')} i -g serve`)
+    console.log(`  ${chalk.yellow('serve')} ${options.dist}\n`)
+  }
 }
