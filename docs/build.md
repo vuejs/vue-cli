@@ -52,7 +52,15 @@ This will create an optimized bundle in UMD format, and the name of exported lib
 
 Note that in some cases you may use [`externals`](https://webpack.js.org/configuration/externals/) to exclude some modules from your bundle.
 
-For more CLI usages:
+**Watch mode:**
+
+```bash
+$ vue build index.js --watch
+```
+
+It's similar to `development mode` but does not add hot-reloading support and uses a real file system.
+
+**For more CLI usages:**
 
 ```bash
 $ vue build -h
