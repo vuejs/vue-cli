@@ -374,6 +374,6 @@ function handleBuild (err, stats, watch) {
     console.log(`The ${chalk.cyan(options.dist)} folder is ready to be deployed.`)
     console.log(`You may also serve it locally with a static server:\n`)
     console.log(`  ${chalk.yellow('npm')} i -g serve`)
-    console.log(`  ${chalk.yellow('serve')} ${options.dist}\n`)
+    console.log(`  ${chalk.yellow('serve')} ${options.dist} --single\n`)
   }
 }
