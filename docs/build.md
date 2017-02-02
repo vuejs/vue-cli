@@ -38,7 +38,7 @@ If you want to directly test a component without manually create a Vue instance 
 $ vue build Component.vue
 ```
 
-<details><summary>How does this work?</summary>
+<details><summary>How does this work?</summary><br>
 When the input file ends with `.vue` extension, we use a [default app entry](/lib/default-entry.es6) to load the given component, otherwise we treat it as a normal webpack entry. For jsx component which ends with `.js` extension, you can enable this behavior manually by adding `--mount`.
 </details>
 
@@ -149,6 +149,20 @@ Type: `Object`
 ```
 
 Check out the [default template](/lib/template.html) file we use.
+
+#### filename
+
+Set custom filename for `js` `css` `static` files:
+
+```js
+{
+  filename: {
+    js: 'index.js',
+    css: 'style.css',
+    static: 'static/[name].[ext]'  
+  }
+}
+```
 
 #### proxy
 
