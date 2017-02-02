@@ -125,13 +125,15 @@ if (hasBabelRc) {
   babelOptions.presets.push(require.resolve('babel-preset-vue-app'))
 }
 
+var filenames = getFilenames(options)
+
 var webpackConfig = {
   entry: {
     client: []
   },
   output: {
     path: path.join(process.cwd(), options.dist),
-    filename: production ? '[name].[chunkhash:8].js' : '[name].js',
+    filename: filenames.js,
     publicPath: '/'
   },
   performance: {
@@ -175,7 +177,7 @@ var webpackConfig = {
         test: /\.(ico|jpg|png|gif|svg|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
         loader: 'file-loader',
         query: {
-          name: options.lib ? 'static/[name].[ext]' : 'static/[name].[hash:8].[ext]'
+          name: filenames.static
         }
       }
     ].concat(loaders.styleLoaders(cssOptions))
@@ -253,7 +255,7 @@ if (production) {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
-    new ExtractTextPlugin(options.lib ? `${replaceExtension(options.entry, '.css')}` : '[name].[contenthash:8].css')
+    new ExtractTextPlugin(filenames.css)
   )
 } else {
   if (!options.watch) {
@@ -376,4 +378,12 @@ function handleBuild (err, stats, watch) {
     console.log(`  ${chalk.yellow('npm')} i -g serve`)
     console.log(`  ${chalk.yellow('serve')} ${options.dist} --single\n`)
   }
+}
+
+function getFilenames (options) {
+  return Object.assign({
+    js: options.production ? '[name].[chunkhash:8].js' : '[name].js',
+    css: options.lib ? `${replaceExtension(options.entry, '.css')}` : '[name].[contenthash:8].css',
+    static: options.lib ? 'static/[name].[ext]' : 'static/[name].[hash:8].[ext]'
+  }, options.filename)
 }
