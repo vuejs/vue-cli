@@ -14,6 +14,7 @@ var PostCompilePlugin = require('post-compile-webpack-plugin')
 var ProgressPlugin = require('webpack/lib/ProgressPlugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var isYarn = require('installed-by-yarn-globally')
+var CopyPlugin = require('copy-webpack-plugin')
 var tildify = require('tildify')
 var loaders = require('../lib/loaders')
 var logger = require('../lib/logger')
@@ -194,6 +195,14 @@ var webpackConfig = {
       }
     })
   ]
+}
+
+// copy ./static/** to dist folder
+if (fs.existsSync('static')) {
+  webpackConfig.plugins.push(new CopyPlugin([{
+    from: 'static',
+    to: './'
+  }]))
 }
 
 // if entry ends with `.vue` and no `mount` option was specified
