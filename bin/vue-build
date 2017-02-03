@@ -269,7 +269,7 @@ if (production) {
 } else {
   if (!options.watch) {
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
-    webpackConfig.entry.client.unshift(require.resolve('webpack-hot-middleware/client') + '?reload=true')
+    webpackConfig.entry.client.unshift(require.resolve('webpack-hot-middleware/client') + `?reload=true&path=http://${options.host}:${options.port}/__webpack_hmr`)
   }
   webpackConfig.devtool = 'eval-source-map'
   webpackConfig.plugins.push(
