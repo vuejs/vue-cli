@@ -238,3 +238,7 @@ By default we only use a single babel preset: [babel-preset-vue-app](https://git
 - Transform Vue JSX
 
 You can populate a `.babelrc` in project root directory to override it.
+
+### Copy static files
+
+Everything in `./static` folder will be copied to dist folder, for example: `static/favicon.ico` will be copied to `dist/favicon.ico`.
