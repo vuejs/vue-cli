@@ -288,7 +288,7 @@ if (!options.disableWebpackConfig) {
   if (typeof options.webpack === 'object') {
     webpackConfig = webpackMerge.smart(webpackConfig, options.webpack)
   } else if (typeof options.webpack === 'function') {
-    webpackConfig = options.webpack(webpackConfig, options, webpack)
+    webpackConfig = options.webpack(webpackConfig, options, webpack) || webpackConfig
   } else {
     var localWebpackConfigPath = typeof options.webpack === 'string'
       ? cwd(options.webpack)
@@ -313,7 +313,9 @@ try {
 
 checkEntryExists(options.entry)
 
-if (options.watch) {
+if (typeof options.run === 'function') {
+  options.run(webpackConfig, options)
+} else if (options.watch) {
   console.log('> Running in watch mode')
   rm(path.join(options.dist, '*'))
   compiler.watch({}, (err, stats) => handleBuild(err, stats, true))
