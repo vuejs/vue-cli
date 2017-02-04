@@ -51,7 +51,7 @@ var localConfig
 // config option in only available in CLI option
 if (!program.disableConfig) {
   var localConfigPath = typeof program.config === 'string'
-    ? path.join(process.cwd(), program.config)
+    ? cwd(program.config)
     : path.join(home, '.vue', 'config.js')
   var hasLocalConfig = fs.existsSync(localConfigPath)
   if (hasLocalConfig) {
@@ -133,7 +133,7 @@ var webpackConfig = {
     client: []
   },
   output: {
-    path: path.join(process.cwd(), options.dist),
+    path: cwd(options.dist),
     filename: filenames.js,
     publicPath: '/'
   },
@@ -143,16 +143,16 @@ var webpackConfig = {
   resolve: {
     extensions: ['.js', '.vue', '.css'],
     modules: [
-      process.cwd(),
-      path.join(process.cwd(), 'node_modules'), // modules in cwd's node_modules
-      path.join(__dirname, '../node_modules') // modules in package's node_modules
+      cwd(),
+      cwd('node_modules'), // modules in cwd's node_modules
+      ownDir('node_modules') // modules in package's node_modules
     ],
     alias: {}
   },
   resolveLoader: {
     modules: [
-      path.join(process.cwd(), 'node_modules'), // loaders in cwd's node_modules
-      path.join(__dirname, '../node_modules') // loaders in package's node_modules
+      cwd('node_modules'), // loaders in cwd's node_modules
+      ownDir('node_modules') // loaders in package's node_modules
     ]
   },
   module: {
@@ -215,8 +215,8 @@ if (options.mount === undefined && !options.lib && /\.vue$/.test(options.entry))
 // set an alias to the path of the component
 // otherwise use it directly as webpack entry
 if (options.mount) {
-  webpackConfig.entry.client.push(path.join(__dirname, '../lib/default-entry.es6'))
-  webpackConfig.resolve.alias['your-tasteful-component'] = path.resolve(process.cwd(), options.entry)
+  webpackConfig.entry.client.push(ownDir('lib/default-entry.es6'))
+  webpackConfig.resolve.alias['your-tasteful-component'] = cwd(options.entry)
 } else {
   webpackConfig.entry.client.push(options.entry)
 }
@@ -234,7 +234,7 @@ if (options.lib) {
   webpackConfig.plugins.unshift(
     new HtmlWebpackPlugin(Object.assign({
       title: 'Vue App',
-      template: path.join(__dirname, '../lib/template.html')
+      template: ownDir('lib/template.html')
     }, options.html))
   )
 }
@@ -243,9 +243,9 @@ if (options.lib) {
 if (isYarn(__dirname)) {
   // modules in yarn global node_modules
   // because of yarn's flat node_modules structure
-  webpackConfig.resolve.modules.push(path.join(__dirname, '../../'))
+  webpackConfig.resolve.modules.push(ownDir('..'))
   // loaders in yarn global node_modules
-  webpackConfig.resolveLoader.modules.push(path.join(__dirname, '../../'))
+  webpackConfig.resolveLoader.modules.push(ownDir('..'))
 }
 
 if (production) {
@@ -291,7 +291,7 @@ if (!options.disableWebpackConfig) {
     webpackConfig = options.webpack(webpackConfig, options, webpack)
   } else {
     var localWebpackConfigPath = typeof options.webpack === 'string'
-      ? path.join(process.cwd(), options.webpack)
+      ? cwd(options.webpack)
       : path.join(home, '.vue', 'webpack.config.js')
     var hasLocalWebpackConfig = fs.existsSync(localWebpackConfigPath)
     if (hasLocalWebpackConfig) {
@@ -395,4 +395,12 @@ function getFilenames (options) {
     css: options.lib ? `${replaceExtension(options.entry, '.css')}` : '[name].[contenthash:8].css',
     static: options.lib ? 'static/[name].[ext]' : 'static/[name].[hash:8].[ext]'
   }, options.filename)
+}
+
+function cwd (file) {
+  return path.resolve(file || '')
+}
+
+function ownDir (file) {
+  return path.join(__dirname, '..', file || '')
 }
