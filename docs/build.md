@@ -219,6 +219,29 @@ module.exports = {
 }
 ```
 
+#### run(webpackConfig, options)
+
+Type: `function`
+
+You can use a custom `run` function to perform your own build process instead of the default one. For example, run karma with the processed webpack config:
+
+```js
+const Server = require('karma').Server
+
+module.exports = {
+  run(webpackConfig) {
+    const server = new Server({
+      webpack: webpackConfig,
+      // other karma options...
+    }, exitCode => {
+      console.log('Karma has exited with ' + exitCode)
+      process.exit(exitCode)
+    })
+    server.start()
+  }
+}
+```
+
 ### webpack.config.js
 
 All the webpack options are available here.
