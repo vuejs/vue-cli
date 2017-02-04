@@ -78,6 +78,12 @@ To use a custom webpack config file, add `--webpack [file]`
 
 You can define CLI options in this file.
 
+#### entry
+
+Type: `string`
+
+It's the first argument of `vue build` command, eg: `vue build entry.js`. You can set it here to omit it in CLI arguments.
+
 #### port
 
 Type: `number`<br>
