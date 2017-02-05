@@ -200,6 +200,7 @@ The `skipInterpolation` field in the metadata file should be a [minimatch glob p
 ### `complete` function
 
 Arguments:
+
 - `data`: the same data you can access in `completeMessage`:
   ```js
   {
@@ -210,6 +211,7 @@ Arguments:
     }
   }
   ```
+  
 - `helpers`: some helpers you can use to log results.
   - `chalk`: the `chalk` module
   - `logger`: [the built-in vue-cli logger](/lib/logger.js)
@@ -223,7 +225,6 @@ Arguments:
     }
   }
   ```
-}
 
 ### Installing a specific template version
 
