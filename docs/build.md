@@ -80,9 +80,15 @@ You can define CLI options in this file.
 
 #### entry
 
-Type: `string`
+Type: `string` `Array` `Object`
 
 It's the first argument of `vue build` command, eg: `vue build entry.js`. You can set it here to omit it in CLI arguments.
+
+The single-component mode (`--mount`) will not work if you set `entry` to an `Array` or `Object`.
+
+- `Array`: Override `webpackConfig.entry.client`
+- `Object`: Override `webpackConfig.entry`
+- `string`: Added to `webpackConfig.entry.client` or used as `webpackConfig.resolve.alias['your-tasteful-component']` in single-component mode.
 
 #### port
 
@@ -143,7 +149,7 @@ PostCSS options, if it's an `Array` or `Function`, the default value will be ove
 
 #### html
 
-Type: `Object`
+Type: `Object` `Array`
 
 [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) options, use this option to customize `index.html` output, default value:
 
@@ -175,6 +181,13 @@ Set custom filename for `js` `css` `static` files:
 Type: `boolean`
 
 In production mode, all generated files will be compressed and produce sourcemaps file. You can use `--disableCompress` to disable this behavior.
+
+#### hmrEntries
+
+Type: `Array`<br>
+Default: `['client']`
+
+Add `webpack-hot-middleware` HMR client to specific webpack entries. By default your app is loaded in `client` entry, so we insert it here.
 
 #### proxy
 
