@@ -200,7 +200,7 @@ The `skipInterpolation` field in the metadata file should be a [minimatch glob p
 ### `complete` function
 
 Arguments:
-- `data`: the same same you can access in `completeMessage`:
+- `data`: the same data you can access in `completeMessage`:
   ```js
   {
     complete(data) {
