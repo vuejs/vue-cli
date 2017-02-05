@@ -80,6 +80,8 @@ vue init ~/fs/path/to-custom-template my-project
 
   - `completeMessage`: the message to be displayed to the user when the template has been generated. You can include custom instruction here.
 
+  - `complete`: Instead of using `completeMessage`, you can use a function to run stuffs when the template has been generated.
+
 #### prompts
 
 The `prompts` field in the metadata file should be an object hash containing prompts for the user. For each entry, the key is the variable name and the value is an [Inquirer.js question object](https://github.com/SBoudrias/Inquirer.js/#question). Example:
@@ -194,6 +196,34 @@ The `skipInterpolation` field in the metadata file should be a [minimatch glob p
   "completeMessage": "{{#inPlace}}To get started:\n\n  npm install\n  npm run dev.{{else}}To get started:\n\n  cd {{destDirName}}\n  npm install\n  npm run dev.{{/inPlace}}"
 }
 ```
+
+### `complete` function
+
+Arguments:
+- `data`: the same same you can access in `completeMessage`:
+  ```js
+  {
+    complete(data) {
+      if (!data.inPlace) {
+        console.log(`cd ${data.destDirName}`)
+      }
+    }
+  }
+  ```
+- `helpers`: some helpers you can use to log results.
+  - `chalk`: the `chalk` module
+  - `logger`: [the built-in vue-cli logger](/lib/logger.js)
+  - `files`: An array of generated files
+  ```js
+  {
+    complete(data, {logger, chalk}) {
+      if (!data.inPlace) {
+        logger.log(`cd ${chalk.yellow(data.destDirName)}`)
+      }
+    }
+  }
+  ```
+}
 
 ### Installing a specific template version
 
