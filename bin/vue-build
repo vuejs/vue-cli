@@ -81,7 +81,7 @@ var options = merge({
 })
 
 function help () {
-  if (!options.run && !options.entry) {
+  if (!options.config && !options.entry) {
     return program.help()
   }
 }
@@ -232,12 +232,16 @@ if (options.lib) {
   webpackConfig.output.libraryTarget = 'umd'
 } else {
   // only output index.html in non-lib mode
-  webpackConfig.plugins.unshift(
-    new HtmlWebpackPlugin(Object.assign({
-      title: 'Vue App',
-      template: ownDir('lib/template.html')
-    }, options.html))
-  )
+  var html = Array.isArray(options.html) ? options.html : [options.html || {}]
+
+  html.forEach(item => {
+    webpackConfig.plugins.unshift(
+      new HtmlWebpackPlugin(Object.assign({
+        title: 'Vue App',
+        template: ownDir('lib/template.html')
+      }, item))
+    )
+  })
 }
 
 // installed by `yarn global add`
@@ -284,7 +288,15 @@ if (production) {
 } else {
   if (!options.watch) {
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
-    webpackConfig.entry.client.unshift(require.resolve('webpack-hot-middleware/client') + `?reload=true&path=http://${options.host}:${options.port}/__webpack_hmr`)
+    var hmrEntries = options.hmrEntries || ['client']
+    var hmrClient = require.resolve('webpack-hot-middleware/client') + `?reload=true&path=http://${options.host}:${options.port}/__webpack_hmr`
+    hmrEntries.forEach(name => {
+      if (Array.isArray(webpackConfig.entry[name])) {
+        webpackConfig.entry[name].unshift(hmrClient)
+      } else {
+        webpackConfig.entry[name] = [hmrClient, webpackConfig.entry[name]]
+      }
+    })
   }
   webpackConfig.devtool = 'eval-source-map'
   webpackConfig.plugins.push(
@@ -316,8 +328,8 @@ if (!options.disableWebpackConfig) {
   }
 }
 
-// only check entry when there's no custom `run` process
-if (!options.run && !fs.existsSync(options.entry)) {
+// only check entry when there's no custom config
+if (!options.config && !fs.existsSync(options.entry)) {
   logger.fatal(`${chalk.yellow(options.entry)} does not exist, did you forget to create one?`)
 }
 
