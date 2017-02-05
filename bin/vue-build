@@ -219,6 +219,10 @@ if (options.mount === undefined && !options.lib && /\.vue$/.test(options.entry))
 if (options.mount) {
   webpackConfig.entry.client.push(ownDir('lib/default-entry.es6'))
   webpackConfig.resolve.alias['your-tasteful-component'] = cwd(options.entry)
+} else if (Array.isArray(options.entry)) {
+  webpackConfig.entry.client = options.client
+} else if (typeof options.entry === 'object') {
+  webpackConfig.entry = options.entry
 } else {
   webpackConfig.entry.client.push(options.entry)
 }
