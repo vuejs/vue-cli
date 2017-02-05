@@ -66,6 +66,7 @@ var options = merge({
   host: 'localhost'
 }, localConfig, {
   entry: args[0],
+  config: program.config,
   port: program.port,
   host: program.host,
   open: program.open,
