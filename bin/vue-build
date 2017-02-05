@@ -79,7 +79,7 @@ var options = merge({
 })
 
 function help () {
-  if (!options.entry) {
+  if (!options.run && !options.entry) {
     return program.help()
   }
 }
@@ -300,15 +300,12 @@ if (!options.disableWebpackConfig) {
   }
 }
 
-checkEntryExists(options.entry)
+// only check entry when there's no custom `run` process
+if (!options.run && !fs.existsSync(options.entry)) {
+  logger.fatal(`${chalk.yellow(options.entry)} does not exist, did you forget to create one?`)
+}
 
 run(webpackConfig, options)
-
-function checkEntryExists (entry) {
-  if (!fs.existsSync(entry)) {
-    logger.fatal(`${chalk.yellow(entry)} does not exist, did you forget to create one?`)
-  }
-}
 
 function merge (obj) {
   var i = 1
