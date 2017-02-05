@@ -170,6 +170,12 @@ Set custom filename for `js` `css` `static` files:
 }
 ```
 
+#### disableCompress
+
+Type: `boolean`
+
+In production mode, all generated files will be compressed and produce sourcemaps file. You can use `--disableCompress` to disable this behavior.
+
 #### proxy
 
 Type: `string`, `Object`

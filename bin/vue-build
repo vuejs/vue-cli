@@ -38,6 +38,7 @@ program
   .option('-o, --open', 'Open browser')
   .option('--proxy [url]', 'Proxy API request')
   .option('--lib [libraryName]', 'Distribute component in UMD format')
+  .option('--disable-compress', 'Disable compress when building in production mode')
   .parse(process.argv)
 
 var args = program.args
@@ -75,7 +76,8 @@ var options = merge({
   proxy: program.proxy,
   production: program.production,
   lib: program.lib,
-  watch: program.watch
+  watch: program.watch,
+  disableCompress: program.disableCompress
 })
 
 function help () {
@@ -248,23 +250,37 @@ if (isYarn(__dirname)) {
 }
 
 if (production) {
-  webpackConfig.devtool = 'source-map'
   webpackConfig.plugins.push(
     new ProgressPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
+    new webpack.LoaderOptionsPlugin({
+      minimize: !options.disableCompress
+    }),
+    new ExtractTextPlugin(filenames.css)
+  )
+
+  if (options.disableCompress) {
+    webpackConfig.devtool = false
+  } else {
+    webpackConfig.devtool = 'source-map'
+    webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compressor: {
-        warnings: false
+        warnings: false,
+        conditionals: true,
+        unused: true,
+        comparisons: true,
+        sequences: true,
+        dead_code: true,
+        evaluate: true,
+        if_return: true,
+        join_vars: true,
+        negate_iife: false
       },
       output: {
         comments: false
       }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    }),
-    new ExtractTextPlugin(filenames.css)
-  )
+    }))
+  }
 } else {
   if (!options.watch) {
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
