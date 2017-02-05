@@ -287,18 +287,6 @@ if (production) {
     }))
   }
 } else {
-  if (!options.watch) {
-    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
-    var hmrEntries = options.hmrEntries || ['client']
-    var hmrClient = require.resolve('webpack-hot-middleware/client') + `?reload=true&path=http://${options.host}:${options.port}/__webpack_hmr`
-    hmrEntries.forEach(name => {
-      if (Array.isArray(webpackConfig.entry[name])) {
-        webpackConfig.entry[name].unshift(hmrClient)
-      } else {
-        webpackConfig.entry[name] = [hmrClient, webpackConfig.entry[name]]
-      }
-    })
-  }
   webpackConfig.devtool = 'eval-source-map'
   webpackConfig.plugins.push(
     new FriendlyErrorsPlugin(),
@@ -327,6 +315,19 @@ if (!options.disableWebpackConfig) {
       webpackConfig = webpackMerge.smart(webpackConfig, require(localWebpackConfigPath))
     }
   }
+}
+
+if (!options.watch && !options.production) {
+  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
+  var hmrEntries = options.hmrEntries || ['client']
+  var hmrClient = require.resolve('webpack-hot-middleware/client') + `?reload=true&path=http://${options.host}:${options.port}/__webpack_hmr`
+  hmrEntries.forEach(name => {
+    if (Array.isArray(webpackConfig.entry[name])) {
+      webpackConfig.entry[name].unshift(hmrClient)
+    } else {
+      webpackConfig.entry[name] = [hmrClient, webpackConfig.entry[name]]
+    }
+  })
 }
 
 // only check entry when there's no custom config
