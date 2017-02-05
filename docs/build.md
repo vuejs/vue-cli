@@ -80,9 +80,15 @@ You can define CLI options in this file.
 
 #### entry
 
-Type: `string`
+Type: `string` `Array` `Object`
 
 It's the first argument of `vue build` command, eg: `vue build entry.js`. You can set it here to omit it in CLI arguments.
+
+The single-component mode (`--mount`) will not work if you set `entry` to an `Array` or `Object`.
+
+- `Array`: Override `webpackConfig.entry.client`
+- `Object`: Override `webpackConfig.entry`
+- `string`: Added to `webpackConfig.entry.client` or used as `webpackConfig.resolve.alias['your-tasteful-component']` in single-component mode.
 
 #### port
 
