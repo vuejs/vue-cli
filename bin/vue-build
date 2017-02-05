@@ -4,7 +4,6 @@ var fs = require('fs')
 var path = require('path')
 var program = require('commander')
 var chalk = require('chalk')
-var rm = require('rimraf').sync
 var home = require('user-home')
 var webpack = require('webpack')
 var webpackMerge = require('webpack-merge')
@@ -18,7 +17,7 @@ var CopyPlugin = require('copy-webpack-plugin')
 var tildify = require('tildify')
 var loaders = require('../lib/loaders')
 var logger = require('../lib/logger')
-var createServer = require('../lib/server')
+var run = require('../lib/run')
 
 /**
  * Usage.
@@ -301,37 +300,9 @@ if (!options.disableWebpackConfig) {
   }
 }
 
-try {
-  var compiler = webpack(webpackConfig)
-} catch (err) {
-  if (err.name === 'WebpackOptionsValidationError') {
-    logger.fatal(err.message)
-  } else {
-    throw err
-  }
-}
-
 checkEntryExists(options.entry)
 
-if (typeof options.run === 'function') {
-  options.run(webpackConfig, options)
-} else if (options.watch) {
-  console.log('> Running in watch mode')
-  rm(path.join(options.dist, '*'))
-  compiler.watch({}, (err, stats) => handleBuild(err, stats, true))
-} else if (production) {
-  console.log('> Creating an optimized production build:\n')
-  // remove dist files but keep that folder in production mode
-  rm(path.join(options.dist, '*'))
-  compiler.run(handleBuild)
-} else {
-  var server = createServer(compiler, options)
-
-  server.listen(options.port, options.host)
-  if (options.open) {
-    require('opn')(`http://${options.host}:${options.port}`)
-  }
-}
+run(webpackConfig, options)
 
 function checkEntryExists (entry) {
   if (!fs.existsSync(entry)) {
@@ -362,33 +333,6 @@ function replaceExtension (entry, ext) {
 
 function getLibraryName (fileName) {
   return fileName.replace(/[-_.]([\w])/, (_, p1) => p1.toUpperCase())
-}
-
-function handleBuild (err, stats, watch) {
-  if (watch) {
-    process.stdout.write('\x1Bc')
-  }
-  if (err) {
-    process.exitCode = 1
-    return console.error(err.stack)
-  }
-  if (stats.hasErrors() || stats.hasWarnings()) {
-    process.exitCode = 1
-    return console.error(stats.toString('errors-only'))
-  }
-  console.log(stats.toString({
-    chunks: false,
-    children: false,
-    modules: false,
-    colors: true
-  }))
-  console.log(`\n${chalk.bgGreen.black(' SUCCESS ')} Compiled successfully.\n`)
-  if (!watch) {
-    console.log(`The ${chalk.cyan(options.dist)} folder is ready to be deployed.`)
-    console.log(`You may also serve it locally with a static server:\n`)
-    console.log(`  ${chalk.yellow('npm')} i -g serve`)
-    console.log(`  ${chalk.yellow('serve')} ${options.dist} --single\n`)
-  }
 }
 
 function getFilenames (options) {
