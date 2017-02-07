@@ -151,7 +151,7 @@ PostCSS options, if it's an `Array` or `Function`, the default value will be ove
 
 Type: `Object`
 
-[Babel options)(https://github.com/babel/babel-loader#options). You can set `babel.babelrc` to false to disable using `.babelrc`.
+[Babel options](https://github.com/babel/babel-loader#options). You can set `babel.babelrc` to false to disable using `.babelrc`.
 
 #### html
 
