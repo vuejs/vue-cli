@@ -147,6 +147,12 @@ PostCSS options, if it's an `Array` or `Function`, the default value will be ove
 }
 ```
 
+#### babel
+
+Type: `Object`
+
+[Babel options)(https://github.com/babel/babel-loader#options). You can set `babel.babelrc` to false to disable using `.babelrc`.
+
 #### html
 
 Type: `Object` `Array`
@@ -285,7 +291,7 @@ By default we only use a single babel preset: [babel-preset-vue-app](https://git
 - Transform `async/await` and `generator`
 - Transform Vue JSX
 
-You can populate a `.babelrc` in project root directory to override it.
+You can set `babel` option in config file or populate a `.babelrc` in project root directory to override it.
 
 ### Copy static files
 

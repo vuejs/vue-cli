@@ -114,17 +114,18 @@ if (options.postcss) {
   }
 }
 
-var babelOptions = {
+var babelOptions = Object.assign({
   babelrc: true,
   cacheDirectory: true,
   sourceMaps: production ? 'both' : false,
   presets: []
-}
+}, options.babel)
 
-var hasBabelRc = fs.existsSync('.babelrc')
-if (hasBabelRc) {
+var useBabelRc = babelOptions.babelrc && fs.existsSync('.babelrc')
+if (useBabelRc) {
   console.log('> Using .babelrc in current working directory')
 } else {
+  babelOptions.babelrc = false
   babelOptions.presets.push(require.resolve('babel-preset-vue-app'))
 }
 
