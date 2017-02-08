@@ -28,7 +28,7 @@ function createComponent() {
   var optionFolder = args[1];
 
   var clivTemplate = fs.readFileSync(path.join(__dirname,'..','/lib/create-template.html'), { encoding: 'utf-8' });
-  var componentPath = path.join(cwd,optionFolder ? optionFolder : "/docs");
+  var componentPath = path.join(cwd,optionFolder ? optionFolder : "/src/components");
   
   var file = path.join(componentPath , componentName +  '.vue');
 
