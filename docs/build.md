@@ -155,7 +155,7 @@ Type: `Object`
 
 #### html
 
-Type: `Object` `Array`
+Type: `Object` `Array` `boolean`
 
 [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) options, use this option to customize `index.html` output, default value:
 
@@ -166,7 +166,7 @@ Type: `Object` `Array`
 }
 ```
 
-Check out the [default template](/lib/template.html) file we use.
+Check out the [default template](/lib/template.html) file we use. To disable generating html file, you can set `html` to `false`.
 
 #### filename
 

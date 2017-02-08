@@ -236,7 +236,7 @@ if (options.lib) {
     ? options.lib
     : getLibraryName(replaceExtension(options.entry, ''))
   webpackConfig.output.libraryTarget = 'umd'
-} else {
+} else if (options.html !== false) {
   // only output index.html in non-lib mode
   var html = Array.isArray(options.html) ? options.html : [options.html || {}]
 
