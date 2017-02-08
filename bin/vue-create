@@ -37,7 +37,7 @@ function createComponent() {
   }
 
   fs.writeFile(file,clivTemplate,function (e) {
-      if (e) logger.fatal("Did you sure exist folder ?",e)
+      if (e) logger.fatal(e)
       console.log("Success",file);  
   })
 
