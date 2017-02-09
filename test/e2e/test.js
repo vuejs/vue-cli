@@ -10,6 +10,7 @@ const async = require('async')
 const extend = Object.assign || require('util')._extend
 const generate = require('../../lib/generate')
 const metadata = require('../../lib/options')
+const { isLocalPath, getTemplatePath } = require('../../lib/local-path')
 
 const MOCK_META_JSON_PATH = './test/e2e/mock-meta-json'
 const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
@@ -198,5 +199,27 @@ describe('vue-cli', () => {
       expect(err).to.be.an('error')
       done()
     })
+  })
+
+  it('checks for local path', () => {
+    expect(isLocalPath('../')).to.equal(true)
+    expect(isLocalPath('../../')).to.equal(true)
+    expect(isLocalPath('../template')).to.equal(true)
+    expect(isLocalPath('../template/abc')).to.equal(true)
+    expect(isLocalPath('./')).to.equal(true)
+    expect(isLocalPath('.')).to.equal(true)
+    expect(isLocalPath('c:/')).to.equal(true)
+    expect(isLocalPath('D:/')).to.equal(true)
+
+    expect(isLocalPath('username/rep')).to.equal(false)
+    expect(isLocalPath('bitbucket:username/rep')).to.equal(false)
+  })
+
+  it('normalizes template path', () => {
+    expect(getTemplatePath('/')).to.equal('/')
+    expect(getTemplatePath('/absolute/path')).to.equal('/absolute/path')
+
+    expect(getTemplatePath('..')).to.equal(path.join(__dirname, '/../../..'))
+    expect(getTemplatePath('../template')).to.equal(path.join(__dirname, '/../../../template'))
   })
 })
