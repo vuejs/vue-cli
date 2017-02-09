@@ -211,6 +211,7 @@ describe('vue-cli', () => {
     expect(isLocalPath('c:/')).to.equal(true)
     expect(isLocalPath('D:/')).to.equal(true)
 
+    expect(isLocalPath('webpack')).to.equal(false)
     expect(isLocalPath('username/rep')).to.equal(false)
     expect(isLocalPath('bitbucket:username/rep')).to.equal(false)
   })
