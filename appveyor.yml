@@ -1,11 +1,18 @@
 environment:
-  nodejs_version: "5"
+  matrix:
+    - nodejs_version: "5"
+    - nodejs_version: "6"
+
+matrix:
+  allow_failures:
+  - nodejs_version: "5" # uses some bad npm version
 
 install:
-  - npm cache clean
-  - npm install --force
+  - npm install
 
 test_script:
+  - node --version
+  - npm --version
   - npm test
 
 cache:
