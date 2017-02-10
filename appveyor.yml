@@ -3,10 +3,6 @@ environment:
     - nodejs_version: "5"
     - nodejs_version: "6"
 
-matrix:
-  allow_failures:
-  - nodejs_version: "5" # uses some bad npm version
-
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install
