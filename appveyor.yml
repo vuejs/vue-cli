@@ -2,6 +2,7 @@ environment:
   nodejs_version: "5"
 
 install:
+  - npm cache clean
   - npm install
 
 test_script:
