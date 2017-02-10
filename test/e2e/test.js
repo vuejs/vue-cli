@@ -12,11 +12,11 @@ const generate = require('../../lib/generate')
 const metadata = require('../../lib/options')
 const { isLocalPath, getTemplatePath } = require('../../lib/local-path')
 
-const MOCK_META_JSON_PATH = './test/e2e/mock-meta-json'
-const MOCK_TEMPLATE_REPO_PATH = './test/e2e/mock-template-repo'
+const MOCK_META_JSON_PATH = path.resolve('./test/e2e/mock-meta-json')
+const MOCK_TEMPLATE_REPO_PATH = path.resolve('./test/e2e/mock-template-repo')
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
-const MOCK_METADATA_REPO_JS_PATH = './test/e2e/mock-metadata-repo-js'
-const MOCK_SKIP_GLOB = './test/e2e/mock-skip-glob'
+const MOCK_METADATA_REPO_JS_PATH = path.resolve('./test/e2e/mock-metadata-repo-js')
+const MOCK_SKIP_GLOB = path.resolve('./test/e2e/mock-skip-glob')
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
@@ -68,16 +68,16 @@ describe('vue-cli', () => {
     })
   })
 
-  it('adds additional data to meta data', () => {
-    const data = generate('test', MOCK_META_JSON_PATH, MOCK_TEMPLATE_BUILD_PATH)
+  it('adds additional data to meta data', done => {
+    const data = generate('test', MOCK_META_JSON_PATH, MOCK_TEMPLATE_BUILD_PATH, done)
     expect(data.destDirName).to.equal('test')
     expect(data.inPlace).to.equal(false)
   })
 
-  it('sets `inPlace` to true when generating in same directory', () => {
+  it('sets `inPlace` to true when generating in same directory', done => {
     const currentDir = process.cwd()
     process.chdir(MOCK_TEMPLATE_BUILD_PATH)
-    const data = generate('test', MOCK_META_JSON_PATH, MOCK_TEMPLATE_BUILD_PATH)
+    const data = generate('test', MOCK_META_JSON_PATH, MOCK_TEMPLATE_BUILD_PATH, done)
     expect(data.destDirName).to.equal('test')
     expect(data.inPlace).to.equal(true)
     process.chdir(currentDir)
