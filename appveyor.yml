@@ -5,11 +5,9 @@ install:
   - npm install
 
 test_script:
-  - npm cache clean
   - npm test
 
 cache:
-  # - node_modules
-  # - NO CACHE
+  - node_modules -> yarn.lock
 
 build: off
