@@ -4,7 +4,7 @@ A simple CLI for scaffolding Vue.js projects.
 
 ### Installation
 
-Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x preferred) and [Git](https://git-scm.com/).
+Prerequisites: [Node.js](https://nodejs.org/en/) (>=4.x, 6.x preferred), npm version 3+ and [Git](https://git-scm.com/).
 
 ``` bash
 $ npm install -g vue-cli
@@ -211,7 +211,7 @@ Arguments:
     }
   }
   ```
-  
+
 - `helpers`: some helpers you can use to log results.
   - `chalk`: the `chalk` module
   - `logger`: [the built-in vue-cli logger](/lib/logger.js)

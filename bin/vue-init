@@ -13,6 +13,7 @@ var logger = require('../lib/logger')
 var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
 var warnings = require('../lib/warnings')
+var { isLocalPath, getTemplatePath } = require('../lib/local-path')
 
 /**
  * Usage.
@@ -97,10 +98,8 @@ if (exists(to)) {
 
 function run () {
   // check if template is local
-  if (/^[./]|(\w:)/.test(template)) {
-    var templatePath = template.charAt(0) === '/' || /^\w:/.test(template)
-      ? template
-      : path.normalize(path.join(process.cwd(), template))
+  if (isLocalPath(template)) {
+    var templatePath = getTemplatePath(template)
     if (exists(templatePath)) {
       generate(name, templatePath, to, function (err) {
         if (err) logger.fatal(err)
