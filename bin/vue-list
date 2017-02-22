@@ -16,12 +16,18 @@ process.on('exit', function () {
 /**
  * List repos.
  */
+var auth
+
+if (process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
+  auth = { bearer: process.env.GITHUB_PERSONAL_ACCESS_TOKEN }
+}
 
 request({
   url: 'https://api.github.com/users/vuejs-templates/repos',
   headers: {
     'User-Agent': 'vue-cli'
-  }
+  },
+  auth: auth
 }, function (err, res, body) {
   if (err) logger.fatal(err)
   var requestBody = JSON.parse(body)
