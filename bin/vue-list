@@ -18,8 +18,8 @@ process.on('exit', function () {
  */
 var auth
 
-if (process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
-  auth = { bearer: process.env.GITHUB_PERSONAL_ACCESS_TOKEN }
+if (process.env.GITHUB_TOKEN) {
+  auth = { bearer: process.env.GITHUB_TOKEN }
 }
 
 request({
