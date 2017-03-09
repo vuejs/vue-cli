@@ -155,12 +155,9 @@ function downloadAndGenerate (template) {
       console.log()
       logger.success('Generated "%s".', name)
       ncp(tmpCache, tmp, function (err) {
+        rm(tmpCache)
         if (err) {
-          logger.log('Failed to cache template!')
-          rm(tmpCache)
           rm(tmp)
-        } else {
-          rm(tmpCache)
         }
       })
     })
