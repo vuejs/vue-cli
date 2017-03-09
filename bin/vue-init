@@ -15,7 +15,7 @@ var checkVersion = require('../lib/check-version')
 var warnings = require('../lib/warnings')
 var { isLocalPath, getTemplatePath } = require('../lib/local-path')
 var rm = require('rimraf').sync
-var ncp = require('ncp').ncp;
+var ncp = require('ncp').ncp
 
 /**
  * Usage.
