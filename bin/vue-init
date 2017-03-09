@@ -150,15 +150,19 @@ function downloadAndGenerate (template) {
   download(template, tmpCache, { clone: clone }, function (err) {
     spinner.stop()
     if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
-    generate(name, tmp, to, function (err) {
+    generate(name, tmpCache, to, function (err) {
       if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)
+      ncp(tmpCache, tmp, function (err) {
+        if (err) {
+          logger.log('Failed to cache template!')
+          rm(tmpCache)
+          rm(tmp)
+        } else {
+          rm(tmpCache)
+        }
+      })
     })
-    ncp(tmpCache, tmp, function (err) {
-      if (err) {
-        logger.log('Failed to cache template!')
-      }
-    });
   })
 }
