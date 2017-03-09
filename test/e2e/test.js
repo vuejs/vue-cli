@@ -34,9 +34,6 @@ function monkeyPatchInquirer (answers) {
 }
 
 describe('vue-cli', () => {
-  /* eslint-disable quotes */
-  const escapedAuthor = "John \"The Tester\" Doe <john@doe.com>"
-
   const escapedAnswers = {
     name: 'vue-cli-test',
     author: 'John "The Tester" Doe <john@doe.com>',
@@ -130,7 +127,7 @@ describe('vue-cli', () => {
       const pkg = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/package.json`, 'utf8')
       try {
         var validData = JSON.parse(pkg)
-        expect(validData.author).to.equal(escapedAuthor)
+        expect(validData.author).to.equal(escapedAnswers.author)
         done()
       } catch (err) {
         done(err)
