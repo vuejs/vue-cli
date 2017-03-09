@@ -225,7 +225,7 @@ describe('vue-cli', () => {
     expect(getTemplatePath('../template')).to.equal(path.join(__dirname, '/../../../template'))
   })
 
-  it.only('"when" set function', () => {
+  it('"when" set function', () => {
     var meta = require(path.join(MOCK_METADATA_REPO_JS_PATH, 'meta.js'))
 
     var collectQa1 = extend({}, answers, { q1: 'a1', q2: 'aq2' })
