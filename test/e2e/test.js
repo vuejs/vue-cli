@@ -34,6 +34,22 @@ function monkeyPatchInquirer (answers) {
 }
 
 describe('vue-cli', () => {
+  /* eslint-disable quotes */
+  const escapedAuthor = "John \"The Tester\" Doe <john@doe.com>"
+
+  const escapedAnswers = {
+    name: 'vue-cli-test',
+    author: 'John "The Tester" Doe <john@doe.com>',
+    description: 'vue-cli e2e test',
+    preprocessor: {
+      less: true,
+      sass: true
+    },
+    pick: 'no',
+    noEscape: true
+
+  }
+
   const answers = {
     name: 'vue-cli-test',
     author: 'John Doe <john@doe.com>',
@@ -103,6 +119,22 @@ describe('vue-cli', () => {
           next()
         })
       }, done)
+    })
+  })
+
+  it('generate a vaild package.json with escaped author', done => {
+    monkeyPatchInquirer(escapedAnswers)
+    generate('test', MOCK_TEMPLATE_REPO_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+      if (err) done(err)
+
+      const pkg = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/package.json`, 'utf8')
+      try {
+        var validData = JSON.parse(pkg)
+        expect(validData.author).to.equal(escapedAuthor)
+        done()
+      } catch (err) {
+        done(err)
+      }
     })
   })
 
