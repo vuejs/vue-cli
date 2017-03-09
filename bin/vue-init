@@ -15,6 +15,7 @@ var checkVersion = require('../lib/check-version')
 var warnings = require('../lib/warnings')
 var { isLocalPath, getTemplatePath } = require('../lib/local-path')
 var rm = require('rimraf').sync
+var ncp = require('ncp').ncp;
 
 /**
  * Usage.
@@ -66,8 +67,6 @@ var tmp = path.join(home, '.vue-templates', template.replace(/\//g, '-'))
 if (program.offline && exists(tmp)) {
   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
   template = tmp
-} else {
-  rm(tmp)
 }
 
 /**
@@ -142,9 +141,13 @@ function run () {
  */
 
 function downloadAndGenerate (template) {
+  var tmpCache = tmp + '_cache'
+  if (exists(tmpCache)) {
+    rm(tmpCache)
+  }
   var spinner = ora('downloading template')
   spinner.start()
-  download(template, tmp, { clone: clone }, function (err) {
+  download(template, tmpCache, { clone: clone }, function (err) {
     spinner.stop()
     if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
     generate(name, tmp, to, function (err) {
@@ -152,5 +155,10 @@ function downloadAndGenerate (template) {
       console.log()
       logger.success('Generated "%s".', name)
     })
+    ncp(tmpCache, tmp, function (err) {
+      if (err) {
+        logger.log('Failed to cache template!')
+      }
+    });
   })
 }

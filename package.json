@@ -56,6 +56,7 @@
     "metalsmith": "^2.1.0",
     "minimatch": "^3.0.0",
     "multimatch": "^2.1.0",
+    "ncp": "^2.0.0",
     "opn": "^4.0.2",
     "ora": "^0.2.1",
     "post-compile-webpack-plugin": "^0.1.0",
