@@ -11,6 +11,7 @@ const extend = Object.assign || require('util')._extend
 const generate = require('../../lib/generate')
 const metadata = require('../../lib/options')
 const { isLocalPath, getTemplatePath } = require('../../lib/local-path')
+const ask = require('../../lib/ask')
 
 const MOCK_META_JSON_PATH = path.resolve('./test/e2e/mock-meta-json')
 const MOCK_TEMPLATE_REPO_PATH = path.resolve('./test/e2e/mock-template-repo')
@@ -254,7 +255,23 @@ describe('vue-cli', () => {
     expect(getTemplatePath('../template')).to.equal(path.join(__dirname, '/../../../template'))
   })
 
-  it.only('points out the file in the error', done => {
+  it('"when" set function', () => {
+    var meta = require(path.join(MOCK_METADATA_REPO_JS_PATH, 'meta.js'))
+
+    var collectQa1 = extend({}, answers, { q1: 'a1', q2: 'aq2' })
+    monkeyPatchInquirer(collectQa1)
+    var data = {}
+    ask(meta.prompts, data, function () {
+      expect(data).to.have.property('q2')
+    })
+    var data2 = {}
+    var collectQa2 = extend({}, answers, { q1: 'a2', q2: 'aq2' })
+    monkeyPatchInquirer(collectQa2)
+    ask(meta.prompts, data2, function () {
+      expect(data2).to.not.have.property('q2')
+    })
+  })
+  it('points out the file in the error', done => {
     monkeyPatchInquirer(answers)
     generate('test', MOCK_ERROR, MOCK_TEMPLATE_BUILD_PATH, err => {
       expect(err.message).to.match(/^\[readme\.md\] Parse error/)
