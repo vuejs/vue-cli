@@ -17,6 +17,7 @@ const MOCK_TEMPLATE_REPO_PATH = path.resolve('./test/e2e/mock-template-repo')
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 const MOCK_METADATA_REPO_JS_PATH = path.resolve('./test/e2e/mock-metadata-repo-js')
 const MOCK_SKIP_GLOB = path.resolve('./test/e2e/mock-skip-glob')
+const MOCK_ERROR = path.resolve('./test/e2e/mock-error')
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
@@ -222,5 +223,13 @@ describe('vue-cli', () => {
 
     expect(getTemplatePath('..')).to.equal(path.join(__dirname, '/../../..'))
     expect(getTemplatePath('../template')).to.equal(path.join(__dirname, '/../../../template'))
+  })
+
+  it.only('points out the file in the error', done => {
+    monkeyPatchInquirer(answers)
+    generate('test', MOCK_ERROR, MOCK_TEMPLATE_BUILD_PATH, err => {
+      expect(err.message).to.match(/^\[readme\.md\] Parse error/)
+      done()
+    })
   })
 })
