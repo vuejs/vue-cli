@@ -240,7 +240,7 @@ describe('vue-cli', () => {
     monkeyPatchInquirer(collectQa2)
     ask(meta.prompts, data2, function () {
       expect(data2).to.not.have.property('q2')
-      })
+    })
   })
   it('points out the file in the error', done => {
     monkeyPatchInquirer(answers)
