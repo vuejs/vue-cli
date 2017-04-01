@@ -187,26 +187,26 @@ The `skipInterpolation` field in the metadata file should be a [minimatch glob p
 
 You may customize the metalsmith builder created by vue-cli to register custom plugins.
 
-```javascript
+```js
 {
-  "metalsmith": function(metalsmith, opts, helpers) {
-    function customMetalsmithPlugin(files, metalsmith, done) {
+  "metalsmith": function (metalsmith, opts, helpers) {
+    function customMetalsmithPlugin (files, metalsmith, done) {
       // Implement something really custom here.
-      done(null, files);
+      done(null, files)
     }
     
-    metalsmith.use(customMetalsmithPlugin);
+    metalsmith.use(customMetalsmithPlugin)
   }
 }
 ```
 
 If you need your to hook metalsmith before questions are asked, you may use an object with `before`/`after` keys
 
-```javascript
+```js
 {
   "metalsmith": {
-    before: function(metalsmith, opts, helpers) {},
-    after: function(metalsmith, opts, helpers) {}
+    before: function (metalsmith, opts, helpers) {},
+    after: function (metalsmith, opts, helpers) {}
   }
 }
 ```
@@ -236,7 +236,7 @@ Arguments:
 - `data`: the same data you can access in `completeMessage`:
   ```js
   {
-    complete(data) {
+    complete (data) {
       if (!data.inPlace) {
         console.log(`cd ${data.destDirName}`)
       }
@@ -250,7 +250,7 @@ Arguments:
   - `files`: An array of generated files
   ```js
   {
-    complete(data, {logger, chalk}) {
+    complete (data, {logger, chalk}) {
       if (!data.inPlace) {
         logger.log(`cd ${chalk.yellow(data.destDirName)}`)
       }
