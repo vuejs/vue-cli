@@ -150,7 +150,9 @@ var webpackConfig = {
       cwd('node_modules'), // modules in cwd's node_modules
       ownDir('node_modules') // modules in package's node_modules
     ],
-    alias: {}
+    alias: {
+      '@': 'src'
+    }
   },
   resolveLoader: {
     modules: [
