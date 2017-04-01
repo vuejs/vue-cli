@@ -77,6 +77,8 @@ vue init ~/fs/path/to-custom-template my-project
   - `prompts`: used to collect user options data;
 
   - `filters`: used to conditional filter files to render.
+  
+  - `metalsmith`: used to add custom metalsmith plugins in the chain.
 
   - `completeMessage`: the message to be displayed to the user when the template has been generated. You can include custom instruction here.
 
@@ -176,6 +178,36 @@ The `skipInterpolation` field in the metadata file should be a [minimatch glob p
 ``` json
 {
   "skipInterpolation": "src/**/*.vue"
+}
+```
+
+#### Metalsmith
+
+`vue-cli` uses [metalsmith](https://github.com/segmentio/metalsmith) to generate the project.
+
+You may customize the metalsmith builder created by vue-cli to register custom plugins.
+
+```javascript
+{
+  "metalsmith": function(metalsmith, opts, helpers) {
+    function customMetalsmithPlugin(files, metalsmith, done) {
+      // Implement something really custom here.
+      done(null, files);
+    }
+    
+    metalsmith.use(customMetalsmithPlugin);
+  }
+}
+```
+
+If you need your to hook metalsmith before questions are asked, you may use an object with `before`/`after` keys
+
+```javascript
+{
+  "metalsmith": {
+    before: function(metalsmith, opts, helpers) {},
+    after: function(metalsmith, opts, helpers) {}
+  }
 }
 ```
 
