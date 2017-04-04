@@ -200,7 +200,7 @@ You may customize the metalsmith builder created by vue-cli to register custom p
 }
 ```
 
-If you need your to hook metalsmith before questions are asked, you may use an object with `before`/`after` keys
+If you need to hook metalsmith before questions are asked, you may use an object with `before` key.
 
 ```js
 {
