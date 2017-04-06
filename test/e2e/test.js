@@ -13,6 +13,7 @@ const metadata = require('../../lib/options')
 const { isLocalPath, getTemplatePath } = require('../../lib/local-path')
 
 const MOCK_META_JSON_PATH = path.resolve('./test/e2e/mock-meta-json')
+const MOCK_METALSMITH_CUSTOM = path.resolve('./test/e2e/mock-metalsmith-custom')
 const MOCK_TEMPLATE_REPO_PATH = path.resolve('./test/e2e/mock-template-repo')
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 const MOCK_METADATA_REPO_JS_PATH = path.resolve('./test/e2e/mock-metadata-repo-js')
@@ -117,6 +118,16 @@ describe('vue-cli', () => {
           next()
         })
       }, done)
+    })
+  })
+
+  it('supports custom metalsmith plugins', done => {
+    generate('test', MOCK_METALSMITH_CUSTOM, MOCK_TEMPLATE_BUILD_PATH, err => {
+      if (err) done(err)
+
+      expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/custom/readme.md`)).to.equal(true)
+
+      done()
     })
   })
 
@@ -254,7 +265,7 @@ describe('vue-cli', () => {
     expect(getTemplatePath('../template')).to.equal(path.join(__dirname, '/../../../template'))
   })
 
-  it.only('points out the file in the error', done => {
+  it('points out the file in the error', done => {
     monkeyPatchInquirer(answers)
     generate('test', MOCK_ERROR, MOCK_TEMPLATE_BUILD_PATH, err => {
       expect(err.message).to.match(/^\[readme\.md\] Parse error/)
