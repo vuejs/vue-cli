@@ -1,5 +1,6 @@
 module.exports = {
   "metalsmith": function (metalsmith, opts, helpers) {
+    metalsmith.metadata().custom = "Custom";
     function customMetalsmithPlugin (files, metalsmith, done) {
       // Implement something really custom here.
 
