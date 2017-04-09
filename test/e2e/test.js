@@ -13,6 +13,8 @@ const metadata = require('../../lib/options')
 const { isLocalPath, getTemplatePath } = require('../../lib/local-path')
 
 const MOCK_META_JSON_PATH = path.resolve('./test/e2e/mock-meta-json')
+const MOCK_METALSMITH_CUSTOM_PATH = path.resolve('./test/e2e/mock-metalsmith-custom')
+const MOCK_METALSMITH_CUSTOM_BEFORE_AFTER_PATH = path.resolve('./test/e2e/mock-metalsmith-custom-before-after')
 const MOCK_TEMPLATE_REPO_PATH = path.resolve('./test/e2e/mock-template-repo')
 const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 const MOCK_METADATA_REPO_JS_PATH = path.resolve('./test/e2e/mock-metadata-repo-js')
@@ -112,6 +114,46 @@ describe('vue-cli', () => {
         const template = fs.readFileSync(`${MOCK_TEMPLATE_REPO_PATH}/template/${file}`, 'utf8')
         const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/${file}`, 'utf8')
         render(template, answers, (err, res) => {
+          if (err) return next(err)
+          expect(res).to.equal(generated)
+          next()
+        })
+      }, done)
+    })
+  })
+
+  it('supports custom metalsmith plugins', done => {
+    generate('test', MOCK_METALSMITH_CUSTOM_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+      if (err) done(err)
+
+      expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/custom/readme.md`)).to.equal(true)
+
+      async.eachSeries([
+        'readme.md'
+      ], function (file, next) {
+        const template = fs.readFileSync(`${MOCK_METALSMITH_CUSTOM_PATH}/template/${file}`, 'utf8')
+        const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/custom/${file}`, 'utf8')
+        render(template, {custom: 'Custom'}, (err, res) => {
+          if (err) return next(err)
+          expect(res).to.equal(generated)
+          next()
+        })
+      }, done)
+    })
+  })
+
+  it('supports custom metalsmith plugins with after/before object keys', done => {
+    generate('test', MOCK_METALSMITH_CUSTOM_BEFORE_AFTER_PATH, MOCK_TEMPLATE_BUILD_PATH, err => {
+      if (err) done(err)
+
+      expect(exists(`${MOCK_TEMPLATE_BUILD_PATH}/custom-before-after/readme.md`)).to.equal(true)
+
+      async.eachSeries([
+        'readme.md'
+      ], function (file, next) {
+        const template = fs.readFileSync(`${MOCK_METALSMITH_CUSTOM_BEFORE_AFTER_PATH}/template/${file}`, 'utf8')
+        const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/custom-before-after/${file}`, 'utf8')
+        render(template, {before: 'Before', after: 'After'}, (err, res) => {
           if (err) return next(err)
           expect(res).to.equal(generated)
           next()
@@ -254,7 +296,7 @@ describe('vue-cli', () => {
     expect(getTemplatePath('../template')).to.equal(path.join(__dirname, '/../../../template'))
   })
 
-  it.only('points out the file in the error', done => {
+  it('points out the file in the error', done => {
     monkeyPatchInquirer(answers)
     generate('test', MOCK_ERROR, MOCK_TEMPLATE_BUILD_PATH, err => {
       expect(err.message).to.match(/^\[readme\.md\] Parse error/)

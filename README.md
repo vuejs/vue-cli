@@ -77,6 +77,8 @@ vue init ~/fs/path/to-custom-template my-project
   - `prompts`: used to collect user options data;
 
   - `filters`: used to conditional filter files to render.
+  
+  - `metalsmith`: used to add custom metalsmith plugins in the chain.
 
   - `completeMessage`: the message to be displayed to the user when the template has been generated. You can include custom instruction here.
 
@@ -179,6 +181,36 @@ The `skipInterpolation` field in the metadata file should be a [minimatch glob p
 }
 ```
 
+#### Metalsmith
+
+`vue-cli` uses [metalsmith](https://github.com/segmentio/metalsmith) to generate the project.
+
+You may customize the metalsmith builder created by vue-cli to register custom plugins.
+
+```js
+{
+  "metalsmith": function (metalsmith, opts, helpers) {
+    function customMetalsmithPlugin (files, metalsmith, done) {
+      // Implement something really custom here.
+      done(null, files)
+    }
+    
+    metalsmith.use(customMetalsmithPlugin)
+  }
+}
+```
+
+If you need to hook metalsmith before questions are asked, you may use an object with `before` key.
+
+```js
+{
+  "metalsmith": {
+    before: function (metalsmith, opts, helpers) {},
+    after: function (metalsmith, opts, helpers) {}
+  }
+}
+```
+
 #### Additional data available in meta.{js,json}
 
 - `destDirName` - destination directory name
@@ -204,7 +236,7 @@ Arguments:
 - `data`: the same data you can access in `completeMessage`:
   ```js
   {
-    complete(data) {
+    complete (data) {
       if (!data.inPlace) {
         console.log(`cd ${data.destDirName}`)
       }
@@ -218,7 +250,7 @@ Arguments:
   - `files`: An array of generated files
   ```js
   {
-    complete(data, {logger, chalk}) {
+    complete (data, {logger, chalk}) {
       if (!data.inPlace) {
         logger.log(`cd ${chalk.yellow(data.destDirName)}`)
       }
