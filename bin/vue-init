@@ -14,6 +14,7 @@ var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
 var warnings = require('../lib/warnings')
 var { isLocalPath, getTemplatePath } = require('../lib/local-path')
+var rm = require("rimraf").sync
 
 /**
  * Usage.
@@ -61,11 +62,13 @@ var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
 var clone = program.clone || false
 
-var tmp = path.join(home, '.vue-templates', template.replace(/\//g, '-'))
+var tmp = path.join(home, '.vue-templates', template.replace(/\/|:/g, '-'))
 if (program.offline) {
   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
   template = tmp
 }
+
+console.log(tmp)
 
 /**
  * Padding.
@@ -148,6 +151,7 @@ function downloadAndGenerate (template) {
       if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)
+      rm(tmp)
     })
   })
 }
