@@ -68,8 +68,6 @@ if (program.offline) {
   template = tmp
 }
 
-console.log(tmp)
-
 /**
  * Padding.
  */

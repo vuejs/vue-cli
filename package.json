@@ -43,7 +43,7 @@
     "consolidate": "^0.14.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
-    "download-git-repo": "^1.0.0",
+    "download-git-repo": "^0.2.1",
     "express": "^4.14.0",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
     "file-loader": "^0.9.0",
