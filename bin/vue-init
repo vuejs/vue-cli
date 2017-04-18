@@ -14,7 +14,6 @@ var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
 var warnings = require('../lib/warnings')
 var { isLocalPath, getTemplatePath } = require('../lib/local-path')
-var rm = require('rimraf').sync
 
 /**
  * Usage.
@@ -149,7 +148,6 @@ function downloadAndGenerate (template) {
       if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)
-      rm(tmp)
     })
   })
 }
