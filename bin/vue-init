@@ -13,7 +13,10 @@ var logger = require('../lib/logger')
 var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
 var warnings = require('../lib/warnings')
-var { isLocalPath, getTemplatePath } = require('../lib/local-path')
+var localPath = require('../lib/local-path')
+
+var isLocalPath = localPath.isLocalPath
+var getTemplatePath = localPath.getTemplatePath
 
 /**
  * Usage.
