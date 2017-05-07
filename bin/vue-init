@@ -142,7 +142,7 @@ function run () {
 function downloadAndGenerate (template) {
   var spinner = ora('downloading template')
   spinner.start()
-  // check if template is local
+  // Remove if local template exists
   if (exists(tmp)) rm(tmp)
   download(template, tmp, { clone: clone }, function (err) {
     spinner.stop()
