@@ -9,6 +9,7 @@ var home = require('user-home')
 var tildify = require('tildify')
 var chalk = require('chalk')
 var inquirer = require('inquirer')
+var rm = require('rimraf').sync
 var logger = require('../lib/logger')
 var generate = require('../lib/generate')
 var checkVersion = require('../lib/check-version')
@@ -144,6 +145,8 @@ function run () {
 function downloadAndGenerate (template) {
   var spinner = ora('downloading template')
   spinner.start()
+  // Remove if local template exists
+  if (exists(tmp)) rm(tmp)
   download(template, tmp, { clone: clone }, function (err) {
     spinner.stop()
     if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())

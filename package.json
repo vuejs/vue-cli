@@ -62,7 +62,7 @@
     "postcss-loader": "^1.2.1",
     "read-metadata": "^1.0.0",
     "request": "^2.67.0",
-    "rimraf": "^2.5.0",
+    "rimraf": "^2.6.1",
     "semver": "^5.1.0",
     "tildify": "^1.2.0",
     "url-loader": "^0.5.7",
