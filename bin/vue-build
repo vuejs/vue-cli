@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 var fs = require('fs')
+var gracefulFs = require('graceful-fs')
+gracefulFs.gracefulify(fs)
 var path = require('path')
 var program = require('commander')
 var chalk = require('chalk')
