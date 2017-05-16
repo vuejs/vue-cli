@@ -126,7 +126,7 @@ function run () {
             return
           }
 
-          warnings.v2BranchIsNowDefault(template, inPlace ? '' : name)
+          // warnings.v2BranchIsNowDefault(template, inPlace ? '' : name)
           downloadAndGenerate(officialTemplate)
         }
       } else {
