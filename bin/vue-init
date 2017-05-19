@@ -130,7 +130,7 @@ function run () {
           downloadAndGenerate(officialTemplate)
         }
       } else {
-        downloadAndGenerate(template)
+        checkDistBranch(template, downloadAndGenerate)
       }
     })
   }
