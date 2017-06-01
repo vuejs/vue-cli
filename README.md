@@ -44,6 +44,8 @@ Current available templates include:
 
 - [browserify-simple](https://github.com/vuejs-templates/browserify-simple) - A simple Browserify + vueify setup for quick prototyping.
 
+- [pwa](https://github.com/vuejs-templates/pwa) - PWA template for vue-cli based on the webpack template
+
 - [simple](https://github.com/vuejs-templates/simple) - The simplest possible Vue setup in a single HTML file
 
 ### Custom Templates
