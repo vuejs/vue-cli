@@ -48,6 +48,9 @@ Current available templates include:
 
 - [simple](https://github.com/vuejs-templates/simple) - The simplest possible Vue setup in a single HTML file
 
+- [Typescript](https://github.com/danielschmitz/vue-typescript-template) -  A Vue.js + Typescript project template setup for quick prototyping. 
+
+
 ### Custom Templates
 
 It's unlikely to make everyone happy with the official templates. You can simply fork an official template and then use it via `vue-cli` with:
