@@ -151,7 +151,7 @@ var webpackConfig = {
       ownDir('node_modules') // modules in package's node_modules
     ],
     alias: {
-      '@': 'src'
+      '@': path.resolve('src')
     }
   },
   resolveLoader: {
