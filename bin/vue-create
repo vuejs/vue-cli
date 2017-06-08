@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+var program = require('commander')
+var logger = require('../lib/logger')
+var path = require('path');
+var fs = require('fs');
+
+
+program
+  .usage('[componentName]')
+  .option('-f, --folder', 'Folder name')
+  .parse(process.argv)
+
+
+var args = program.args
+var cwd = process.cwd();
+
+if (args.length) {
+  createComponent()
+}else{
+  logger.fatal("You should type the component name.")
+}
+
+
+function createComponent() {
+
+  var componentName = args[0];
+  var optionFolder = args[1];
+
+  var clivTemplate = fs.readFileSync(path.join(__dirname,'..','/lib/create-template.html'), { encoding: 'utf-8' });
+  var componentPath = path.join(cwd,optionFolder ? optionFolder : "/src/components");
+  
+  var file = path.join(componentPath , componentName +  '.vue');
+
+  if (!fs.existsSync(componentPath)){
+      fs.mkdirSync(componentPath);
+  }
+
+  fs.writeFile(file,clivTemplate,function (e) {
+      if (e) logger.fatal(e)
+      console.log("Success",file);  
+  })
+
+}
