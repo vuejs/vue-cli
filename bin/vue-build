@@ -27,7 +27,7 @@ program
   .usage('[entry]')
   .option('--dist [directory]', 'Output directory for bundled files')
   .option('--port [port]', 'Server port')
-  .option('--host [host]', 'Server host', 'localhost')
+  .option('--host [host]', 'Server host')
   .option('--prod, --production', 'Build for production')
   .option('-w, --watch', 'Run in watch mode')
   .option('-m, --mount', 'Auto-create app instance from given component, true for `.vue` file')
