@@ -20,6 +20,8 @@ const MOCK_TEMPLATE_BUILD_PATH = path.resolve('./test/e2e/mock-template-build')
 const MOCK_METADATA_REPO_JS_PATH = path.resolve('./test/e2e/mock-metadata-repo-js')
 const MOCK_SKIP_GLOB = path.resolve('./test/e2e/mock-skip-glob')
 const MOCK_ERROR = path.resolve('./test/e2e/mock-error')
+const MOCK_TEMPLATE_REPO_W_DELIMITERS_PATH = path.resolve('./test/e2e/mock-template-repo-with-delimiters')
+const MOCK_TEMPLATE_BUILD_W_DELIMITERS_PATH = path.resolve('./test/e2e/mock-template-build-with-delimiters')
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
@@ -301,6 +303,35 @@ describe('vue-cli', () => {
     generate('test', MOCK_ERROR, MOCK_TEMPLATE_BUILD_PATH, err => {
       expect(err.message).to.match(/^\[readme\.md\] Parse error/)
       done()
+    })
+  })
+
+  it('custom handlebars delimiters', done => {
+    monkeyPatchInquirer(answers)
+    generate('test', MOCK_TEMPLATE_REPO_W_DELIMITERS_PATH, MOCK_TEMPLATE_BUILD_W_DELIMITERS_PATH, err => {
+      if (err) done(err)
+
+      var Handlebars = require('handlebars')
+      const meta = metadata('test-pkg', MOCK_TEMPLATE_REPO_W_DELIMITERS_PATH)
+      if (meta.delimiters) {
+        require('handlebars-delimiters')(Handlebars, meta.delimiters)
+      }
+
+      expect(exists(`${MOCK_TEMPLATE_BUILD_W_DELIMITERS_PATH}/src/yes.vue`)).to.equal(true)
+      expect(exists(`${MOCK_TEMPLATE_BUILD_W_DELIMITERS_PATH}/src/no.js`)).to.equal(false)
+
+      async.eachSeries([
+        'package.json',
+        'src/yes.vue'
+      ], function (file, next) {
+        const template = fs.readFileSync(`${MOCK_TEMPLATE_REPO_W_DELIMITERS_PATH}/template/${file}`, 'utf8')
+        const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_W_DELIMITERS_PATH}/${file}`, 'utf8')
+        render(template, answers, (err, res) => {
+          if (err) return next(err)
+          expect(res).to.equal(generated)
+          next()
+        })
+      }, done)
     })
   })
 })

@@ -1,0 +1,47 @@
+{
+  "delimiters": [
+    "${",
+    "}"
+  ],
+  "schema": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "label": "Project name"
+    },
+    "description": {
+      "type": "string",
+      "required": true,
+      "label": "Project description",
+      "default": "A Vue.js project"
+    },
+    "author": {
+      "type": "string",
+      "label": "Author"
+    },
+    "private": {
+      "type": "boolean",
+      "default": true
+    },
+    "preprocessor": {
+      "label": "CSS Preprocessor",
+      "type": "checkbox",
+      "choices": [
+        "less",
+        "sass"
+      ]
+    },
+    "pick": {
+      "type": "list",
+      "choices": [
+        "yes",
+        "no"
+      ]
+    }
+  },
+  "filters": {
+    "src/*.js": "pick === 'yes'",
+    "**/*.vue": "pick === 'no'"
+  },
+  "skipInterpolation": "src/*-{one,two}.vue"
+}
