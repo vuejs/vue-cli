@@ -1,4 +1,4 @@
 <template>
-  {{yes}} <%=pick%>
-  {{dude}} <%=author%>
+  {{yes}} ^{pick}
+  {{dude}} ^{author}
 </template>

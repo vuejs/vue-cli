@@ -172,6 +172,17 @@ module.exports = {
 }
 ```
 
+When using special RegExp characters, preceding special characters with `\\` are necessary. For example:
+
+```js
+module.exports = {
+  delimiters: [
+    '\\^{',
+    '}'
+  ]
+}
+```
+
 #### File filters
 
 The `filters` field in the metadata file should be an object hash containing file filtering rules. For each entry, the key is a [minimatch glob pattern](https://github.com/isaacs/minimatch) and the value is a JavaScript expression evaluated in the context of prompt answers data. Example:
