@@ -161,7 +161,7 @@ Upon registration, they can be used as follows:
 
 #### Custom Handlebars Delimiters
 
-You may want to override the handlebars delimiters, which happens to be the same as Vue delimiters for plain text interpolation. The `delimiters` field in the metadata file should be an array of two strings.
+You may want to override the handlebars delimiters, which happen to be the same as Vue delimiters for plain text interpolation. The `delimiters` field in the metadata file should be an array of two strings.
 
 ```js
 module.exports = {
