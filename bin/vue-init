@@ -65,7 +65,8 @@ var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
 var clone = program.clone || false
 
-var tmp = path.join(home, '.vue-templates', template.replace(/\//g, '-'))
+// because the path can NOT contain `:` in Windows OS, which result in failure of initialization by `vue-init -c gitlab:gitlab.host:user/repo project-name` in Windows OS
+var tmp = path.join(home, '.vue-templates', template.replace(/\//g, '-').replace(/:/g, '-'))
 if (program.offline) {
   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
   template = tmp
