@@ -314,7 +314,7 @@ describe('vue-cli', () => {
       var Handlebars = require('handlebars')
       const meta = metadata('test-pkg', MOCK_TEMPLATE_REPO_W_DELIMITERS_PATH)
       if (meta.delimiters) {
-        require('../../lib/handlebars-delimiters')(Handlebars, meta.delimiters)
+        require('handlebars-delimiters')(Handlebars, meta.delimiters)
       }
 
       expect(exists(`${MOCK_TEMPLATE_BUILD_W_DELIMITERS_PATH}/src/yes.vue`)).to.equal(true)
