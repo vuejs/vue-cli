@@ -1,0 +1,8 @@
+if you run in console `npm run dev` but not see that hot reloading working double check in browser console that you see that:
+'[WDS] Hot Module Replacement enabled.'
+
+if doesn't pls try type in one console `webpack --watch` and in another console `webpack-dev-server`
+or
+in one console `webpack --watch` and in another console `webpack-dev-server --watch-poll`
+
+(and many another advices https://github.com/webpack/webpack-dev-server/issues/155)
