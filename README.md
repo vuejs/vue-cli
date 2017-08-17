@@ -19,7 +19,7 @@ $ vue init <template-name> <project-name>
 Or you may use npx and avoid global install if you are on npm >= 5
 
 ```bash
-npx vue init <template-name> <project-name>
+npx vue-cli init <template-name> <project-name>
 ```
 
 Example:
