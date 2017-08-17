@@ -16,7 +16,11 @@ $ npm install -g vue-cli
 $ vue init <template-name> <project-name>
 ```
 
-> You can also avoid installing the CLI and run **npx vue init <template-name> <project-name>**
+Or you may use npx and avoid global install if you are on npm >= 5
+
+```bash
+npx vue init <template-name> <project-name>
+```
 
 Example:
 
