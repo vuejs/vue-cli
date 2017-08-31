@@ -24,7 +24,6 @@
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
   "homepage": "https://github.com/vuejs/vue-cli#readme",
-  "main": "lib/index.js",
   "scripts": {
     "test": "npm run lint && npm run e2e && npm run e2e:build",
     "lint": "eslint test/e2e/test*.js lib bin/* --env mocha",
