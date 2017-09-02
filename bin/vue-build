@@ -130,6 +130,7 @@ if (useBabelRc) {
 }
 
 var filenames = getFilenames(options)
+var resolveModules = getModules()
 
 var webpackConfig = {
   entry: {
@@ -145,20 +146,13 @@ var webpackConfig = {
   },
   resolve: {
     extensions: ['.js', '.vue', '.css'],
-    modules: [
-      cwd(),
-      cwd('node_modules'), // modules in cwd's node_modules
-      ownDir('node_modules') // modules in package's node_modules
-    ],
+    modules: [cwd()].concat(resolveModules),
     alias: {
       '@': path.resolve('src')
     }
   },
   resolveLoader: {
-    modules: [
-      cwd('node_modules'), // loaders in cwd's node_modules
-      ownDir('node_modules') // loaders in package's node_modules
-    ]
+    modules: resolveModules
   },
   module: {
     rules: [
@@ -383,4 +377,33 @@ function cwd (file) {
 
 function ownDir (file) {
   return path.join(__dirname, '..', file || '')
+}
+
+function getPackageRoot (dir) {
+  var parentdir = path.resolve(dir, '..')
+  var pkgjson = path.resolve(dir, 'package.json')
+  if (fs.existsSync(pkgjson)) {
+    return dir
+  // not reach root path `/` or `X:\`
+  } else if (parentdir !== dir) {
+    return getPackageRoot(parentdir)
+  }
+}
+
+function getModules () {
+  // modules/loaders in cwd's node_modules
+  var modules = [cwd('node_modules')]
+
+  var parentdir = path.resolve(process.cwd(), '..')
+  var packageRoot = getPackageRoot(parentdir)
+
+  if (packageRoot !== undefined) {
+    var packageModule = path.resolve(packageRoot, 'node_modules')
+    if (fs.existsSync(packageModule)) {
+      modules.push(packageModule)
+    }
+  }
+  // modules/loaders in package's node_modules
+  modules.push(ownDir('node_modules'))
+  return modules
 }
