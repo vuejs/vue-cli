@@ -77,6 +77,8 @@ vue init ~/fs/path/to-custom-template my-project
 - A template repo **may** have a metadata file for the template which can be either a `meta.js` or `meta.json` file. It can contain the following fields:
 
   - `prompts`: used to collect user options data;
+  
+  - `delimiters`: an array of String used to override the handlebars default delimiters `{{` and `}}` to allow Vue interpolation in template.
 
   - `filters`: used to conditional filter files to render.
   
@@ -155,6 +157,30 @@ Upon registration, they can be used as follows:
 
 ``` handlebars
 {{ lowercase name }}
+```
+
+#### Custom Handlebars Delimiters
+
+You may want to override the handlebars delimiters, which happen to be the same as Vue delimiters for plain text interpolation. The `delimiters` field in the metadata file should be an array of two strings.
+
+```js
+module.exports = {
+  delimiters: [
+    '<%=',
+    '%>'
+  ]
+}
+```
+
+When using special RegExp characters, preceding special characters with `\\` are necessary. For example:
+
+```js
+module.exports = {
+  delimiters: [
+    '\\^{',
+    '}'
+  ]
+}
 ```
 
 #### File filters
