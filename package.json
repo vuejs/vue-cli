@@ -44,7 +44,9 @@
     "request": "^2.67.0",
     "rimraf": "^2.5.0",
     "semver": "^5.1.0",
+    "tildify": "^1.2.0",
     "uid": "0.0.2",
+    "user-home": "^2.0.0",
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
