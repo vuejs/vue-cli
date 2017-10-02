@@ -133,7 +133,7 @@ describe('vue-cli', () => {
       ], function (file, next) {
         const template = fs.readFileSync(`${MOCK_METALSMITH_CUSTOM_PATH}/template/${file}`, 'utf8')
         const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/custom/${file}`, 'utf8')
-        render(template, {custom: 'Custom'}, (err, res) => {
+        render(template, { custom: 'Custom' }, (err, res) => {
           if (err) return next(err)
           expect(res).to.equal(generated)
           next()
@@ -153,7 +153,7 @@ describe('vue-cli', () => {
       ], function (file, next) {
         const template = fs.readFileSync(`${MOCK_METALSMITH_CUSTOM_BEFORE_AFTER_PATH}/template/${file}`, 'utf8')
         const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/custom-before-after/${file}`, 'utf8')
-        render(template, {before: 'Before', after: 'After'}, (err, res) => {
+        render(template, { before: 'Before', after: 'After' }, (err, res) => {
           if (err) return next(err)
           expect(res).to.equal(generated)
           next()

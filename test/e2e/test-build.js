@@ -6,7 +6,7 @@ const rm = require('rimraf').sync
 
 describe('command:build', () => {
   const cli = path.join(__dirname, '../../bin/vue-build')
-  let originalCwd = process.cwd()
+  const originalCwd = process.cwd()
 
   function setup () {
     process.chdir(path.join(__dirname, 'mock-vue-app'))
