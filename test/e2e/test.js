@@ -23,16 +23,16 @@ const MOCK_ERROR = path.resolve('./test/e2e/mock-error')
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
-  inquirer.prompt = (questions, cb) => {
+  inquirer.prompt = questions => {
     const key = questions[0].name
     const _answers = {}
     const validate = questions[0].validate
     const valid = validate(answers[key])
     if (valid !== true) {
-      throw new Error(valid)
+      return Promise.reject(new Error(valid))
     }
     _answers[key] = answers[key]
-    cb(_answers)
+    return Promise.resolve(_answers)
   }
 }
 

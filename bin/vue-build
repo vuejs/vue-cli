@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var chalk = require('chalk')
+const chalk = require('chalk')
 
 console.log(chalk.yellow(
   '\n' +
