@@ -13,6 +13,6 @@ test_script:
   - npm test
 
 cache:
-  - node_modules -> yarn.lock
+  - node_modules -> package-lock.json
 
 build: off
