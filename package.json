@@ -1,6 +1,6 @@
 {
   "name": "vue-cli",
-  "version": "2.9.1",
+  "version": "2.9.2",
   "description": "A simple CLI for scaffolding Vue.js projects.",
   "preferGlobal": true,
   "bin": {
