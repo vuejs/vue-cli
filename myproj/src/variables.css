@@ -1,0 +1,15 @@
+:root {
+  --color-green: #1bbc9b;
+  --color-green-light: rgba(27, 188, 155, 0.6);
+  --color-green-lighter: rgba(27, 188, 155, 0.3);
+  --color-lightgray: #69707a;
+  --color-darkgray: #393e46;
+  --color-yellow: #f5d76e;
+  --color-red: #f22613;
+  --color-error: #d24d57;
+
+  --font-sans-serif: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-monospace: 'Share Tech Mono', monospace;
+  --font-cursive: 'Nothing You Could Do', cursive;
+}
