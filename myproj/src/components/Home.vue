@@ -1,16 +1,17 @@
 <template>
     <div class = "demo home">
-      <a v-for = "model in models" v-bind:key="model.path" v-bind:href = "'#/${mode.path}'">
-      <div class="demo-card">
-        <div class="demo-card-image"><img :src="model.imagePath" /></div>
-        <div class="demo-card-heading">{{ model.title }}</div>
-      </div>
+      <a v-for = "model in DemoModels" v-bind:key="model.path" v-bind:href = "'#/${mode.path}'">
+        <div class="demo-card">
+          <div class="demo-card-image"><img :src="model.imagePath" /></div>
+          <div class="demo-card-heading">{{ model.title }}</div>
+        </div>
       </a>
+    </div>
 </template>
 
 <script>
 
-const models = [
+const DemoModels = [
     { title: 'Basic Convnet for MNIST', path: 'mnist-cnn', imagePath: 'demos/assets/mnist-cnn.png' },
     {
       title: 'Convolutional Variational Autoencoder, trained on MNIST',
@@ -37,8 +38,8 @@ const models = [
 ]
 
 export default {
-  data: function() {
-    return { demoInfo: DEMO_INFO }
+  data: function () {
+    return { demoInfo: DemoModels }
   }
 }
 </script>
