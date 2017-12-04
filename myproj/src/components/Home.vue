@@ -1,6 +1,6 @@
 <template>
     <div class = "demo home">
-      <a v-for = "model in DemoModels" v-bind:key="model.path" v-bind:href = "'#/${mode.path}'">
+      <a v-for = "model in mode_info" v-bind:key="model.path" :href = "`#/${model.path}`">
         <div class="demo-card">
           <div class="demo-card-image"><img :src="model.imagePath" /></div>
           <div class="demo-card-heading">{{ model.title }}</div>
@@ -39,7 +39,7 @@ const DemoModels = [
 
 export default {
   data: function () {
-    return { demoInfo: DemoModels }
+    return { mode_info: DemoModels }
   }
 }
 </script>

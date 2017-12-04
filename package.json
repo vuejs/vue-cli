@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli#readme",
   "scripts": {
+    "build:browser": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
+    "build:node": "rm -rf lib; NODE_ENV=production BABEL_ENV=node babel src --out-dir lib",
+    "build": "npm run build:browser && npm run build:node",
     "test": "npm run lint && npm run e2e",
     "lint": "eslint test/e2e/test*.js lib bin/* --env mocha",
     "e2e": "rimraf test/e2e/mock-template-build && mocha test/e2e/test.js --slow 1000"
@@ -48,14 +51,40 @@
     "uid": "0.0.2",
     "user-home": "^2.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "coffee-script": "1.12.7"
+    "coffee-script": "1.12.7",
+    "axios": "^0.17.1",
+    "bluebird": "^3.5.1",
+    "cwise": "^1.0.10",
+    "lodash": "^4.17.4",
+    "ndarray": "^1.0.18",
+    "ndarray-blas-level2": "^1.1.0",
+    "ndarray-concat-rows": "^1.0.1",
+    "ndarray-gemm": "^1.0.0",
+    "ndarray-ops": "^1.2.2",
+    "ndarray-resample": "^1.0.1",
+    "ndarray-squeeze": "^1.0.2",
+    "ndarray-tile": "^1.0.3",
+    "ndarray-unpack": "^1.0.0",
+    "ndarray-unsqueeze": "^1.0.3",
+    "performance-now": "^2.1.0",
+    "protobufjs": "^6.8.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "eslint": "^3.19.0",
     "eslint-plugin-vue-libs": "^1.2.1",
     "execa": "^0.8.0",
-    "mocha": "^3.5.3"
+    "mocha": "^3.5.3",
+    "webpack": "^3.8.1",
+    "@babel/cli": "7.0.0-beta.32",
+    "@babel/core": "7.0.0-beta.32",
+    "@babel/plugin-proposal-class-properties": "7.0.0-beta.32",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.32",
+    "@babel/preset-env": "7.0.0-beta.32",
+    "babel-eslint": "^8.0.2",
+    "babel-loader": "8.0.0-beta.0",
+    "babel-plugin-inline-import": "^2.0.6",
+    "babel-plugin-lodash": "^3.3.2"
   },
   "engines": {
     "node": ">=6.0.0"
