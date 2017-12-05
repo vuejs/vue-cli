@@ -19,7 +19,7 @@
 
 import NavDrawer from './components/NavDrawer'
 import RightContent from './components/RightContent'
-import { DemoModels } from './data/DemoModels'
+import { DemoModelsDictionary } from './data/DemoModels'
 
 export default {
   data () {
@@ -34,7 +34,7 @@ export default {
       return path.replace(/^\//, '') || 'home'
     },
     currentTitle() {
-      return DemoModels[this.currentView]
+      return DemoModelsDictionary[this.currentView]
     }
   },
   name: 'app',

@@ -1,6 +1,6 @@
 <template>
     <div class = "demo home">
-      <a v-for = "model in mode_info" v-bind:key="model.path" :href = "`#/${model.path}`">
+      <a v-for = "model in mode_info" v-bind:key="model.path" v-bind:href = "`#/${model.path}`">
         <div class="demo-card">
           <div class="demo-card-image"><img :src="model.imagePath" /></div>
           <div class="demo-card-heading">{{ model.title }}</div>
@@ -11,33 +11,17 @@
 
 <script>
 
-const DemoModels = [
+const DemoModelsList = [
     { title: 'Basic Convnet for MNIST', path: 'mnist-cnn' },
-    {
-      title: 'Convolutional Variational Autoencoder, trained on MNIST',
-      path: 'mnist-vae'
-    },
-    {
-      title: 'Auxiliary Classifier Generative Adversarial Network, trained on MNIST',
-      path: 'mnist-acgan'
-    },
     { title: '50-layer Residual Network, trained on ImageNet', path: 'resnet50' },
-    { title: 'Inception v3, trained on ImageNet', path: 'inception-v3' },
-    {
-      title: 'SqueezeNet v1.1, trained on ImageNet',
-      path: 'squeezenet-v1.1'
-    },
-    {
-      title: 'Bidirectional LSTM for IMDB sentiment classification',
-      path: 'imdb-bidirectional-lstm'
-    }
 ]
 
 export default {
   data: function () {
-    return { mode_info: DemoModels }
+    return { mode_info: DemoModelsList }
   }
 }
+
 </script>
 
 <style scoped lang="postcss">

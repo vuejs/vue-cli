@@ -3,48 +3,18 @@
     <div class="logo"><a href="#/"><img src="../assets/logo-V.png" /></a></div>
     <p class="menu-label">Deep learning models</p>
     <ul class="menu-list">
+      <li :class="{ active: currentView === 'hello-world' }">
+        <a href="#/hello-world">
+          <span class="menu-item-heading">Hello World</span>
+          <span class="menu-item-subheading">Hello World</span>
+        </a>
+      </li>
       <li :class="{ active: currentView === 'mnist-cnn' }">
         <a href="#/mnist-cnn">
           <span class="menu-item-heading">Basic Convnet</span>
           <span class="menu-item-subheading">MNIST</span>
         </a>
       </li>
-      <!-- <li :class="{ active: currentView === 'mnist-vae' }">
-        <a href="#/mnist-vae">
-          <span class="menu-item-heading">Convolutional VAE</span>
-          <span class="menu-item-subheading">MNIST</span>
-        </a>
-      </li>
-      <li :class="{ active: currentView === 'mnist-acgan' }">
-        <a href="#/mnist-acgan">
-          <span class="menu-item-heading">AC-GAN</span>
-          <span class="menu-item-subheading">MNIST</span>
-        </a>
-      </li>
-      <li :class="{ active: currentView === 'resnet50' }">
-        <a href="#/resnet50">
-          <span class="menu-item-heading">ResNet-50</span>
-          <span class="menu-item-subheading">ImageNet</span>
-        </a>
-      </li>
-      <li :class="{ active: currentView === 'inception-v3' }">
-        <a href="#/inception-v3">
-          <span class="menu-item-heading">Inception v3</span>
-          <span class="menu-item-subheading">ImageNet</span>
-        </a>
-      </li>
-      <li :class="{ active: currentView === 'squeezenet-v1.1' }">
-        <a href="#/squeezenet-v1.1">
-          <span class="menu-item-heading">SqueezeNet v1.1</span>
-          <span class="menu-item-subheading">ImageNet</span>
-        </a>
-      </li>
-      <li :class="{ active: currentView === 'imdb-bidirectional-lstm' }">
-        <a href="#/imdb-bidirectional-lstm">
-          <span class="menu-item-heading">Bidirectional LSTM</span>
-          <span class="menu-item-subheading">IMDB</span>
-        </a>
-      </li> -->
     </ul>
   </aside>
 </template>
