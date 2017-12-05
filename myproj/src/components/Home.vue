@@ -12,28 +12,24 @@
 <script>
 
 const DemoModels = [
-    { title: 'Basic Convnet for MNIST', path: 'mnist-cnn', imagePath: 'demos/assets/mnist-cnn.png' },
+    { title: 'Basic Convnet for MNIST', path: 'mnist-cnn' },
     {
       title: 'Convolutional Variational Autoencoder, trained on MNIST',
-      path: 'mnist-vae',
-      imagePath: 'demos/assets/mnist-vae.png'
+      path: 'mnist-vae'
     },
     {
       title: 'Auxiliary Classifier Generative Adversarial Network, trained on MNIST',
-      path: 'mnist-acgan',
-      imagePath: 'demos/assets/mnist-acgan.png'
+      path: 'mnist-acgan'
     },
-    { title: '50-layer Residual Network, trained on ImageNet', path: 'resnet50', imagePath: 'demos/assets/resnet50.png' },
-    { title: 'Inception v3, trained on ImageNet', path: 'inception-v3', imagePath: 'demos/assets/inception-v3.png' },
+    { title: '50-layer Residual Network, trained on ImageNet', path: 'resnet50' },
+    { title: 'Inception v3, trained on ImageNet', path: 'inception-v3' },
     {
       title: 'SqueezeNet v1.1, trained on ImageNet',
-      path: 'squeezenet-v1.1',
-      imagePath: 'demos/assets/squeezenet-v1.1.png'
+      path: 'squeezenet-v1.1'
     },
     {
       title: 'Bidirectional LSTM for IMDB sentiment classification',
-      path: 'imdb-bidirectional-lstm',
-      imagePath: 'demos/assets/imdb-bidirectional-lstm.png'
+      path: 'imdb-bidirectional-lstm'
     }
 ]
 

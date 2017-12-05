@@ -27,6 +27,8 @@
     "build:browser": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
     "build:node": "rm -rf lib; NODE_ENV=production BABEL_ENV=node babel src --out-dir lib",
     "build": "npm run build:browser && npm run build:node",
+    "server": "http-server . -c-1 -p 8080",
+    "myproj:build": "cd myproj; rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
     "test": "npm run lint && npm run e2e",
     "lint": "eslint test/e2e/test*.js lib bin/* --env mocha",
     "e2e": "rimraf test/e2e/mock-template-build && mocha test/e2e/test.js --slow 1000"
@@ -70,12 +72,6 @@
     "protobufjs": "^6.8.1"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "eslint": "^3.19.0",
-    "eslint-plugin-vue-libs": "^1.2.1",
-    "execa": "^0.8.0",
-    "mocha": "^3.5.3",
-    "webpack": "^3.8.1",
     "@babel/cli": "7.0.0-beta.32",
     "@babel/core": "7.0.0-beta.32",
     "@babel/plugin-proposal-class-properties": "7.0.0-beta.32",
@@ -84,7 +80,14 @@
     "babel-eslint": "^8.0.2",
     "babel-loader": "8.0.0-beta.0",
     "babel-plugin-inline-import": "^2.0.6",
-    "babel-plugin-lodash": "^3.3.2"
+    "babel-plugin-lodash": "^3.3.2",
+    "chai": "^4.1.2",
+    "eslint": "^3.19.0",
+    "eslint-plugin-vue-libs": "^1.2.1",
+    "execa": "^0.8.0",
+    "http-server": "^0.10.0",
+    "mocha": "^3.5.3",
+    "webpack": "^3.8.1"
   },
   "engines": {
     "node": ">=6.0.0"

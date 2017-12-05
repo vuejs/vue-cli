@@ -84,7 +84,6 @@
 
 <script>
 import _ from 'lodash'
-import * as KerasJS from '../../../../src'
 import * as utils from '../../utils'
 
 const MODEL_FILEPATH_PROD = 'https://transcranial.github.io/keras-js-demos-data/mnist_cnn/mnist_cnn.bin'

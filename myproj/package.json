@@ -5,13 +5,12 @@
   "author": "Bruce Lao",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config webpack.config.js",
+    "server": "http-server . -c-1 -p 8080",
     "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "build": "node build/build.js"
+    "build": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js"
   },
   "dependencies": {
     "@babel/polyfill": "7.0.0-beta.32",
@@ -47,14 +46,9 @@
     "chroma-js": "^1.3.4",
     "css-loader": "^0.28.7",
     "eslint": "^4.12.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-html": "^4.0.1",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^5.2.0",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^3.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "http-server": "^0.10.0",
     "postcss-cssnext": "^3.0.2",
