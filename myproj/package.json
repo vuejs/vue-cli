@@ -5,7 +5,7 @@
   "author": "Bruce Lao",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
+    "build": "rm -rf dist; mkdir dist; cp external/* dist/; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
     "server": "NODE_ENV=production BABEL_ENV=browser; webpack-dev-server --inline --progress --config webpack.config.js",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",

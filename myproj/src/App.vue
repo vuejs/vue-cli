@@ -18,9 +18,8 @@
 <script>
 
 import NavDrawer from './components/NavDrawer'
-import RightContent from './components/RightContent'
 import { DemoModelsDictionary } from './data/DemoModels'
-import * as KerasJS from 'kerasjs-lib'
+//import * as KerasJS from 'kerasjs-lib'
 
 export default {
   data () {
@@ -40,7 +39,7 @@ export default {
     }
   },
   name: 'app',
-  components: { NavDrawer, RightContent }
+  components: { NavDrawer }
 }
 </script>
 

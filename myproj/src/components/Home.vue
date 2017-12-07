@@ -13,7 +13,7 @@
 
 const DemoModelsList = [
     { title: 'Basic Convnet for MNIST', path: 'mnist-cnn' },
-    { title: '50-layer Residual Network, trained on ImageNet', path: 'resnet50' },
+  //  { title: '50-layer Residual Network, trained on ImageNet', path: 'resnet50' },
 ]
 
 export default {

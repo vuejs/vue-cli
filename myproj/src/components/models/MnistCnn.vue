@@ -85,10 +85,9 @@
 <script>
 import _ from 'lodash'
 import * as utils from '../../utils'
-import * as KerasJS from 'kerasjs-lib'
+//import * as KerasJS from 'kerasjs-lib'
 
-const MODEL_FILEPATH_PROD = '/dist/mnist_cnn.pb'
-//const MODEL_FILEPATH_DEV = 'https://transcranial.github.io/keras-js-demos-data/mnist_cnn/mnist_cnn.bin' //'/demos/data/mnist_cnn/mnist_cnn.bin'
+const MODEL_FILEPATH_PROD = '/dist/mnist_cnn.bin'
 
 const LAYER_DISPLAY_CONFIG = {
   conv2d_1: { heading: '32 3x3 filters, padding valid, 1x1 strides', scalingFactor: 2 },
