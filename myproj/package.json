@@ -5,18 +5,18 @@
   "author": "Bruce Lao",
   "private": true,
   "scripts": {
-    "server": "http-server . -c-1 -p 8080",
-    "start": "npm run dev",
+    "build": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
+    "server": "NODE_ENV=production BABEL_ENV=browser; webpack-dev-server --inline --progress --config webpack.config.js",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "build": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js"
+    "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
     "@babel/polyfill": "7.0.0-beta.32",
     "axios": "^0.17.1",
     "bluebird": "^3.5.1",
     "cwise": "^1.0.10",
+    "kerasjs-lib": "file:../../kerasjs-lib",
     "lodash": "^4.17.4",
     "ndarray": "^1.0.18",
     "ndarray-blas-level2": "^1.1.0",

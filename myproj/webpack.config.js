@@ -2,14 +2,15 @@
 
 const path = require('path')
 const webpack = require('webpack')
-//const utils = require('./build/utils')
-//const config = require('./config')
-//const vueLoaderConfig = require('./build/vue-loader.conf')
 
 const configExport = {
-  entry: path.resolve(__dirname, './src/main'),
+  entry: path.resolve(__dirname, 'src/main'),
+ 
   resolve: { extensions: ['.js', '.vue'] },
-  output: { path: path.resolve(__dirname, 'dist'), filename: 'bundle.min.js' },
+  output: { 
+    path: path.resolve(__dirname, 'dist'), 
+    publicPath: "/dist/",
+    filename: 'bundle.min.js' },
   module: {
     rules: [
       { 

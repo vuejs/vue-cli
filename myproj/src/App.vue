@@ -8,7 +8,7 @@
       </v-navigation-drawer>
       <v-content>
         <v-container>
-          <router-view ></router-view>
+          <router-view v-bind:hasWebGL="hasWebGL"></router-view>
         </v-container>
       </v-content>
     </v-app>
@@ -20,12 +20,14 @@
 import NavDrawer from './components/NavDrawer'
 import RightContent from './components/RightContent'
 import { DemoModelsDictionary } from './data/DemoModels'
+import * as KerasJS from 'kerasjs-lib'
 
 export default {
   data () {
     return {
       showNav: true,
-      showInfoPanel: false
+      showInfoPanel: false,
+      hasWebGL: KerasJS.GPU_SUPPORT
     }
   },
    computed: {

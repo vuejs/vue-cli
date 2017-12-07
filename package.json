@@ -1,8 +1,9 @@
 {
-  "name": "vue-cli",
-  "version": "2.9.2",
+  "name": "kerasjs-lib",
+  "version": "1.0.0",
   "description": "A simple CLI for scaffolding Vue.js projects.",
   "preferGlobal": true,
+  "main": "src/",
   "bin": {
     "vue": "bin/vue",
     "vue-init": "bin/vue-init",
@@ -17,7 +18,7 @@
     "cli",
     "spa"
   ],
-  "author": "Evan You",
+  "author": "BL",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
@@ -27,8 +28,8 @@
     "build:browser": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
     "build:node": "rm -rf lib; NODE_ENV=production BABEL_ENV=node babel src --out-dir lib",
     "build": "npm run build:browser && npm run build:node",
-    "server": "http-server . -c-1 -p 8080",
     "myproj:build": "cd myproj; rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
+    "myproj:server": "cd myproj; http-server . -c-1 -p 8080",
     "test": "npm run lint && npm run e2e",
     "lint": "eslint test/e2e/test*.js lib bin/* --env mocha",
     "e2e": "rimraf test/e2e/mock-template-build && mocha test/e2e/test.js --slow 1000"
@@ -91,5 +92,10 @@
   },
   "engines": {
     "node": ">=6.0.0"
+  },
+  "directories": {
+    "doc": "docs",
+    "lib": "lib",
+    "test": "test"
   }
 }
