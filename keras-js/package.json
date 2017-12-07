@@ -1,14 +1,9 @@
 {
-  "name": "kerasjs-lib",
+  "name": "keras-js",
   "version": "1.0.0",
-  "description": "A simple CLI for scaffolding Vue.js projects.",
+  "description": "A simple lib for keras on nodejs.",
   "preferGlobal": true,
   "main": "src/",
-  "bin": {
-    "vue": "bin/vue",
-    "vue-init": "bin/vue-init",
-    "vue-list": "bin/vue-list"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git"
@@ -27,12 +22,7 @@
   "scripts": {
     "build:browser": "rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
     "build:node": "rm -rf lib; NODE_ENV=production BABEL_ENV=node babel src --out-dir lib",
-    "build": "npm run build:browser && npm run build:node",
-    "myproj:build": "cd myproj; rm -rf dist; NODE_ENV=production BABEL_ENV=browser webpack --config webpack.config.js",
-    "myproj:server": "cd myproj; http-server . -c-1 -p 8080",
-    "test": "npm run lint && npm run e2e",
-    "lint": "eslint test/e2e/test*.js lib bin/* --env mocha",
-    "e2e": "rimraf test/e2e/mock-template-build && mocha test/e2e/test.js --slow 1000"
+    "build": "npm run build:browser && npm run build:node"
   },
   "dependencies": {
     "async": "^2.4.0",
