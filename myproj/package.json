@@ -16,7 +16,6 @@
     "axios": "^0.17.1",
     "bluebird": "^3.5.1",
     "cwise": "^1.0.10",
-    "kerasjs-lib": "file:../../kerasjs-lib",
     "lodash": "^4.17.4",
     "ndarray": "^1.0.18",
     "ndarray-blas-level2": "^1.1.0",
