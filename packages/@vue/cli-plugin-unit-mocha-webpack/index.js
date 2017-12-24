@@ -4,7 +4,6 @@ module.exports = service => {
   })
 
   service.configureWebpack({ env: 'test' }, webpackConfig => {
-    require('jsdom-global')()
     if (!webpackConfig.externals) {
       webpackConfig.externals = []
     }

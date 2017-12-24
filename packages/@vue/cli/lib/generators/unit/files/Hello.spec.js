@@ -1,11 +1,11 @@
 import { shallow } from 'vue-test-utils'
 import Hello from '@/components/Hello.vue'
-{{#if_eq mochaAssertionLibrary 'expect'}}
+<% if (assertionLibrary === 'expect') { %>
 import { expect } from 'expect'
-{{/if_eq}}
-{{#if_eq mochaAssertionLibrary 'chai'}}
+<% } %>
+<% if (assertionLibrary === 'chai') { %>
 import { expect } from 'chai'
-{{/if_eq}}
+<% } %>
 
 describe('Hello.vue', () => {
   it('renders props.msg when passed', () => {
@@ -13,14 +13,14 @@ describe('Hello.vue', () => {
     const wrapper = shallow(Hello, {
       context: { props: { msg } }
     })
-    {{#if_eq mochaAssertionLibrary 'expect'}}
+    <% if (assertionLibrary === 'expect' || unit === 'jest') { %>
     expect(wrapper.text()).toBe(msg)
-    {{/if_eq}}
-    {{#if_eq mochaAssertionLibrary 'chai'}}
+    <% } %>
+    <% if (assertionLibrary === 'chai') { %>
     expect(wrapper.text()).to.equal(msg)
-    {{/if_eq}}
-    {{#if_eq mochaAssertionLibrary 'custom'}}
+    <% } %>
+    <% if (assertionLibrary === 'custom') { %>
     // assert wrapper.text() equals msg
-    {{/if_eq}}
+    <% } %>
   })
 })

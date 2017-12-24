@@ -1,36 +1,32 @@
+const fs = require('fs')
 const path = require('path')
 const program = require('commander')
 const Creator = require('./Creator')
 const Generator = require('./Generator')
-const { info, error } = require('./util/log')
+const { warn, error } = require('./util/log')
 const resolveInstalledGenerators = require('./util/resolveInstalledGenerators')
 
-program.usage('<app-name>')
+program
+  .usage('<app-name>')
+  .parse(process.argv)
 
-program.on('help', () => {
-  console.log('TODO')
-})
+const projectName = program.args[0]
+if (!projectName) {
+  warn(`\n  Please provide an app name.`)
+  program.outputHelp()
+  process.exit(1)
+}
 
-program.parse(process.argv)
-
-const builtInGenerators = [
-  'core',
-  'babel',
-  'typescript',
-  'pwa',
-  'eslint',
-  'unit-jest',
-  'unit-mocha-webpack',
-  'e2e-nightwatch',
-  'e2e-cypress'
-].map(id => new Generator(id, `./generators/${id}`))
+const builtInGenerators = fs
+  .readdirSync(path.resolve(__dirname, './generators'))
+  .map(id => new Generator(id, `./generators/${id}`))
 
 const installedGenerators = resolveInstalledGenerators().map(id => {
   return new Generator(id)
 })
 
-const creator = new Creator(builtInGenerators.concat(installedGenerators))
-const targetDir = path.resolve(process.cwd(), program.args[0])
+const targetDir = path.resolve(process.cwd(), projectName)
+const creator = new Creator(projectName, builtInGenerators.concat(installedGenerators))
 
 creator
   .create(targetDir)

@@ -10,12 +10,19 @@ const writeFileTree = require('./util/writeFileTree')
 const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
 
+const defaultOptions = {
+  features: ['eslint', 'unit'],
+  eslint: 'eslint-only',
+  unit: 'mocha',
+  assertionLibrary: 'expect'
+}
+
 module.exports = class Creator {
   constructor (name, generators) {
     this.name = name
-    const { modePrompt, featuresPrompt } = this.resolveIntroPrompts()
+    const { modePrompt, featurePrompt } = this.resolveIntroPrompts()
     this.modePrompt = modePrompt
-    this.featuresPrompt = featuresPrompt
+    this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
     this.injectedPrompts = []
     this.deps = {}
@@ -27,30 +34,38 @@ module.exports = class Creator {
     this.promptCompleteCbs = []
     this.fileMiddlewares = []
 
-    generators.forEach(({ module }) => {
-      module(new GeneratorAPI(this, generator))
+    generators.forEach(generator => {
+      generator.module(new GeneratorAPI(this, generator))
     })
   }
 
   async create (path) {
-    // 1. prompt
+    // prompt
     let options = await inquirer.prompt(this.resolveFinalPrompts())
+    let needSave = false
     if (options.mode === 'saved') {
       options = this.loadSavedOptions()
     } else if (options.mode === 'default') {
-      options = this.loadDefaultOptions()
+      options = defaultOptions
     } else if (options.save) {
-      this.saveOptions(options)
+      needSave = true
     }
     options.features = options.features || []
 
-    // 2. run cbs (register generators)
-    this.promptCompleteCbs.forEach((cb => cb(options))
-    // 3. resolve deps, scripts and generate final package.json
+    // run cbs (register generators)
+    this.promptCompleteCbs.forEach(cb => cb(options))
+
+    // save after prompt complete cbs are run, since generators may modify
+    // options in the callback
+    if (needSave) {
+      this.saveOptions(options)
+    }
+
+    // resolve deps, scripts and generate final package.json
     this.resolvePackage()
-    // 4. wait for file resolve
+    // wait for file resolve
     await this.resolveFiles()
-    // 5. write file tree to disk
+    // write file tree to disk
     await writeFileTree(path, this.files)
   }
 
@@ -80,12 +95,12 @@ module.exports = class Creator {
       name: 'features',
       when: isMode('manual'),
       type: 'checkbox',
-      message: 'Please check all features needed for your project.',
+      message: 'Please check the features needed for your project.',
       choices: []
     }
     return {
       modePrompt,
-      featuresPrompt
+      featurePrompt
     }
   }
 
@@ -130,6 +145,7 @@ module.exports = class Creator {
         message: 'Automatically install NPM dependencies after project creation?'
       })
     }
+    return outroPrompts
   }
 
   resolveFinalPrompts () {
@@ -140,12 +156,14 @@ module.exports = class Creator {
         return options.mode === 'manual' && originalWhen(options)
       }
     })
-    return [].concat([
+    const ret = [].concat(
       this.modePrompt,
-      this.featuresPrompt,
+      this.featurePrompt,
       this.injectedPrompts,
       this.outroPrompts
-    ])
+    )
+    console.log(ret)
+    return ret
   }
 
   loadSavedOptions () {
@@ -208,9 +226,10 @@ module.exports = class Creator {
     return this.packageFields
   }
 
-  // TODO
   async resolveFiles () {
-
+    for (const middleware of this.fileMiddlewares) {
+      await middleware(this.files)
+    }
   }
 }
 

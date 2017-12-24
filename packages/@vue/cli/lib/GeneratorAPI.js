@@ -1,3 +1,5 @@
+const { error } = require('./util/log')
+
 module.exports = class GeneratorAPI {
   constructor (creator, generator) {
     this.creator = creator
@@ -8,22 +10,22 @@ module.exports = class GeneratorAPI {
     this.creator.featurePrompt.choices.push(feature)
   }
 
-  injectOptionForFeature (featureName, option) {
-    const feature = this.creator.featurePrompt.choices.find(f => {
-      return f.name === featureName
-    })
-    if (!feature) {
-      throw new Error(
-        `injectOptionForFeature error in generator "${
-          this.generator.id
-        }": feature "${featureName}" does not exist.`
-      )
-    }
-    feature.choices.push(option)
-  }
-
   injectPrompt (prompt) {
     this.creator.injectedPrompts.push(prompt)
+  }
+
+  injectOptionForPrompt (name, option) {
+    const prompt = this.creator.injectedPrompts.find(f => {
+      return f.name === name
+    })
+    if (!prompt) {
+      error(
+        `injectOptionForFeature error in generator "${
+          this.generator.id
+        }": prompt "${name}" does not exist.`
+      )
+    }
+    prompt.choices.push(option)
   }
 
   onPromptComplete (cb) {
@@ -31,23 +33,27 @@ module.exports = class GeneratorAPI {
   }
 
   injectDeps (deps) {
+    Object.assign(this.creator.deps, deps)
+  }
 
+  injectDevDeps(deps) {
+    Object.assign(this.creator.devDeps, deps)
   }
 
   injectScripts (scripts) {
-
+    Object.assign(this.creator.scripts, scripts)
   }
 
   injectPackageFields (fields) {
-
+    Object.assign(this.creator.packageFields, fields)
   }
 
-  injectFilesMiddleware (middleware) {
+  injectFileMiddleware (middleware) {
     this.creator.fileMiddlewares.push(middleware)
   }
 
   renderFile (file) {
-
+    return file
   }
 
   onCreateComplete (msg) {

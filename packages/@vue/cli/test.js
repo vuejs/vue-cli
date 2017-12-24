@@ -45,7 +45,8 @@ inquirer.prompt([
       },
       {
         name: 'Linter',
-        value: 'linter'
+        value: 'linter',
+        short: 'Linter'
       },
       {
         name: 'Unit Testing',
@@ -66,7 +67,7 @@ inquirer.prompt([
     message: 'Pick a linter solution:',
     choices: [
       {
-        name: 'ESLint w/ only error-prevention rules & configure the rest myself',
+        name: 'ESLint w/ only error-prevention rules',
         value: 'eslint-only',
         short: 'ESLint only'
       },
