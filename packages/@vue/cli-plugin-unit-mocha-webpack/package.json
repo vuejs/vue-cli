@@ -1,0 +1,23 @@
+{
+  "name": "cli-plugin-unit-mocha-webpack",
+  "version": "1.0.0",
+  "description": "mocha-webpack unit testing plugin for vue-cli",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git"
+  },
+  "keywords": [
+    "vue",
+    "vue-cli",
+    "mocha",
+    "webpack",
+    "unit-testing"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-mocha-webpack#readme"
+}

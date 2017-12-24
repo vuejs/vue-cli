@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+require('commander')
+  .version(require('../package').version)
+  .usage('<command> [options]')
+  .command('create', 'create a new project powered by vue-cli-service')
+  .command('init', 'generate a project from a remote community template')
+  .parse(process.argv)

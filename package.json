@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/@vue/*"
+  ],
+	"devDependencies": {
+		"lerna": "^2.5.1"
+	}
+}
