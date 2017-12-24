@@ -48,7 +48,7 @@
     "uid": "0.0.2",
     "user-home": "^2.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "coffee-script": "1.12.7"
+    "coffeescript": "1.12.7"
   },
   "devDependencies": {
     "chai": "^4.1.2",
