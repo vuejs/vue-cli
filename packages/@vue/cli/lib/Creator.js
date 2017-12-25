@@ -7,6 +7,7 @@ const { execSync } = require('child_process')
 const GeneratorAPI = require('./GeneratorAPI')
 const writeFileTree = require('./util/writeFileTree')
 
+const debug = require('debug')
 const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
 
@@ -19,20 +20,26 @@ const defaultOptions = {
 
 module.exports = class Creator {
   constructor (name, generators) {
-    this.name = name
     const { modePrompt, featurePrompt } = this.resolveIntroPrompts()
     this.modePrompt = modePrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
     this.injectedPrompts = []
-    this.deps = {}
-    this.devDeps = {}
-    this.scripts = {}
-    this.packageFields = {}
-    this.files = {}
-    this.postCreateMessages = []
     this.promptCompleteCbs = []
     this.fileMiddlewares = []
+
+    this.pkg = {
+      name,
+      version: '0.1.0',
+      private: true,
+      scripts: {},
+      dependencies: {},
+      devDependencies: {}
+    }
+    // for conflict resolution
+    this.depSources = {}
+    // virtual file tree
+    this.files = {}
 
     generators.forEach(generator => {
       generator.module(new GeneratorAPI(this, generator))
@@ -42,29 +49,28 @@ module.exports = class Creator {
   async create (path) {
     // prompt
     let options = await inquirer.prompt(this.resolveFinalPrompts())
-    let needSave = false
+    debug('rawOptions')(options)
+
     if (options.mode === 'saved') {
       options = this.loadSavedOptions()
     } else if (options.mode === 'default') {
       options = defaultOptions
-    } else if (options.save) {
-      needSave = true
     }
     options.features = options.features || []
 
-    // run cbs (register generators)
+    // run cb registered by generators
     this.promptCompleteCbs.forEach(cb => cb(options))
-
-    // save after prompt complete cbs are run, since generators may modify
-    // options in the callback
-    if (needSave) {
+    debug('options')(options)
+    // save options
+    if (options.mode === 'manual' && options.save) {
       this.saveOptions(options)
     }
 
-    // resolve deps, scripts and generate final package.json
-    this.resolvePackage()
     // wait for file resolve
     await this.resolveFiles()
+    // set package.json
+    this.resolvePkg()
+    this.files['package.json'] = JSON.stringify(this.pkg, null ,2)
     // write file tree to disk
     await writeFileTree(path, this.files)
   }
@@ -156,14 +162,14 @@ module.exports = class Creator {
         return options.mode === 'manual' && originalWhen(options)
       }
     })
-    const ret = [].concat(
+    const prompts = [].concat(
       this.modePrompt,
       this.featurePrompt,
       this.injectedPrompts,
       this.outroPrompts
     )
-    console.log(ret)
-    return ret
+    debug('prompts')(prompts)
+    return prompts
   }
 
   loadSavedOptions () {
@@ -191,45 +197,21 @@ module.exports = class Creator {
     }
   }
 
-  resolvePackage () {
-    const { dependencies, devDependencies } = this.resolveDeps()
-    const scripts = this.resolveScripts()
-    const additionalFields = this.resolvePackageFields()
-    const pkg = Object.assign({}, additionalFields, {
-      name: this.name,
-      version: '0.1.0',
-      private: true,
-      scripts,
-      dependencies,
-      devDependencies
-    })
-    this.files['package.json'] = JSON.stringify(pkg, null, 2)
-  }
-
-  // TODO
-  resolveDeps () {
-    const dependencies = this.deps
-    const devDependencies = this.devDeps
-    return {
-      dependencies,
-      devDependencies
-    }
-  }
-
-  // TODO
-  resolveScripts () {
-    return this.scripts
-  }
-
-  // TODO
-  resolvePackageFields () {
-    return this.packageFields
+  resolvePkg () {
+    const sortDeps = deps => Object.keys(deps).sort().reduce((res, name) => {
+      res[name] = deps[name]
+      return res
+    }, {})
+    this.pkg.dependencies = sortDeps(this.pkg.dependencies)
+    this.pkg.devDependencies = sortDeps(this.pkg.devDependencies)
+    debug('pkg')(this.pkg)
   }
 
   async resolveFiles () {
     for (const middleware of this.fileMiddlewares) {
       await middleware(this.files)
     }
+    debug('files')(this.files)
   }
 }
 

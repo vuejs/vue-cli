@@ -1,4 +1,7 @@
 const { error } = require('./util/log')
+const mergeDeps = require('./util/mergeDeps')
+const isObject = val => val && typeof val === 'object'
+const isFunction = val => typeof val === 'function'
 
 module.exports = class GeneratorAPI {
   constructor (creator, generator) {
@@ -32,31 +35,47 @@ module.exports = class GeneratorAPI {
     this.creator.promptCompleteCbs.push(cb)
   }
 
-  injectDeps (deps) {
-    Object.assign(this.creator.deps, deps)
-  }
-
-  injectDevDeps(deps) {
-    Object.assign(this.creator.devDeps, deps)
-  }
-
-  injectScripts (scripts) {
-    Object.assign(this.creator.scripts, scripts)
-  }
-
-  injectPackageFields (fields) {
-    Object.assign(this.creator.packageFields, fields)
+  onCreateComplete (msg) {
+    this.creator.onCreateCompleteCbs.push(cb)
   }
 
   injectFileMiddleware (middleware) {
     this.creator.fileMiddlewares.push(middleware)
   }
 
-  renderFile (file) {
-    return file
+  extendPackage (fields, options = { merge: true }) {
+    const pkg = this.creator.pkg
+    const toMerge = isFunction(fields) ? fields(pkg) : fields
+    for (const key in toMerge) {
+      if (!options.merge || !(key in pkg)) {
+        pkg[key] = toMerge[key]
+      } else {
+        const value = toMerge[key]
+        const existing = pkg[key]
+        if (Array.isArray(value) && Array.isArray(existing)) {
+          pkg[key] = existing.concat(value)
+        } else if (isObject(value) && isObject(existing)) {
+          if (key === 'dependencies' || key === 'devDependencies') {
+            // use special version resolution merge
+            pkg[key] = mergeDeps(
+              this.generator.id,
+              existing,
+              value,
+              this.creator.depSources
+            )
+          } else {
+            pkg[key] = Object.assign({}, existing, value)
+          }
+        } else {
+          pkg[key] = value
+        }
+      }
+    }
   }
 
-  onCreateComplete (msg) {
-    this.creator.onCreateCompleteCbs.push(cb)
+  renderFile (file, additionalData, ejsOptions) {
+    // TODO render file based on generator path
+    // render with ejs & options
+    return file
   }
 }

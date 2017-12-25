@@ -1,17 +1,19 @@
 module.exports = (api, options) => {
-  const dependencies = {
+  const devDependencies = {
     '@vue/cli-plugin-unit-mocha-webpack': '^1.0.0',
     'vue-test-utils': '^1.0.0'
   }
   if (options.assertionLibrary === 'chai') {
-    dependencies.chai = '^4.1.2'
+    devDependencies.chai = '^4.1.2'
   } else if (options.assertionLibrary === 'expect') {
-    dependencies.expect = '^22.0.3'
+    devDependencies.expect = '^22.0.3'
   }
-  api.injectDevDeps(dependencies)
 
-  api.injectScripts({
-    test: 'vue-cli-service test'
+  api.extendPackage({
+    devDependencies,
+    scripts: {
+      test: 'vue-cli-service test'
+    }
   })
 
   api.injectFileMiddleware(files => {

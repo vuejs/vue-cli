@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const program = require('commander')
 const Creator = require('./Creator')
+const debug = require('debug')('create')
 const Generator = require('./Generator')
 const { warn, error } = require('./util/log')
 const resolveInstalledGenerators = require('./util/resolveInstalledGenerators')
@@ -20,6 +21,8 @@ if (!projectName) {
 const builtInGenerators = fs
   .readdirSync(path.resolve(__dirname, './generators'))
   .map(id => new Generator(id, `./generators/${id}`))
+
+debug(builtInGenerators)
 
 const installedGenerators = resolveInstalledGenerators().map(id => {
   return new Generator(id)

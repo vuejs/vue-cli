@@ -1,15 +1,13 @@
 module.exports = (api, options) => {
-  api.injectDevDeps({
-    '@vue/cli-plugin-unit-jest': '^1.0.0',
-    "jest": "^22.0.4",
-    'vue-test-utils': '^1.0.0'
-  })
-
-  api.injectScripts({
-    test: 'jest'
-  })
-
-  api.injectPackageFields({
+  api.extendPackage({
+    scripts: {
+      test: 'jest'
+    },
+    devDependencies: {
+      '@vue/cli-plugin-unit-jest': '^1.0.0',
+      "jest": "^22.0.4",
+      'vue-test-utils': '^1.0.0'
+    },
     "jest": {
       "moduleFileExtensions": [
         "js",
