@@ -35,7 +35,7 @@ module.exports = class GeneratorAPI {
     this.creator.promptCompleteCbs.push(cb)
   }
 
-  onCreateComplete (msg) {
+  onCreateComplete (cb) {
     this.creator.onCreateCompleteCbs.push(cb)
   }
 

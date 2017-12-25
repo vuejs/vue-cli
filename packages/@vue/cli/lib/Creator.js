@@ -70,7 +70,7 @@ module.exports = class Creator {
     await this.resolveFiles()
     // set package.json
     this.resolvePkg()
-    this.files['package.json'] = JSON.stringify(this.pkg, null ,2)
+    this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
     // write file tree to disk
     await writeFileTree(path, this.files)
   }
@@ -94,7 +94,7 @@ module.exports = class Creator {
     if (fs.existsSync(rcPath)) {
       modePrompt.choices.unshift({
         name: 'Using saved preferences',
-        value: 'saved',
+        value: 'saved'
       })
     }
     const featurePrompt = {

@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = serivce => {
   serivce.chainWebpack((webpackConfig) => {
-    config.module
+    webpackConfig.module
       .rule('js')
         .test(/\.jsx?$/)
         .include

@@ -11,7 +11,7 @@ inquirer.prompt([
     choices: [
       {
         name: 'Using saved preferences',
-        value: 'saved',
+        value: 'saved'
       },
       {
         name: 'Zero-configuration with default features',
@@ -152,7 +152,7 @@ inquirer.prompt([
     when: isMode('manual'),
     type: 'confirm',
     message: 'Save the preferences for future projects?'
-  },
+  }
 ]).then(options => {
   console.log(options)
 })
