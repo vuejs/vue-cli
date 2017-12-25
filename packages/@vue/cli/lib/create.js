@@ -20,6 +20,7 @@ if (!projectName) {
 
 const builtInGenerators = fs
   .readdirSync(path.resolve(__dirname, './generators'))
+  .filter(dir => dir.charAt(0) !== '.')
   .map(id => new Generator(id, `./generators/${id}`))
 
 debug(builtInGenerators)
