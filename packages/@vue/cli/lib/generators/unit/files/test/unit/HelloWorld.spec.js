@@ -5,15 +5,15 @@ import { expect } from 'expect'
 <%_ if (assertionLibrary === 'chai') { _%>
 import { expect } from 'chai'
 <%_ } _%>
-import Hello from '@/components/Hello.vue'
+import HelloWorld from '@/components/HelloWorld.vue'
 
 describe('Hello.vue', () => {
   it('renders props.msg when passed', () => {
     const msg = 'new message'
-    const wrapper = shallow(Hello, {
+    const wrapper = shallow(HelloWorld, {
       context: { props: { msg } }
     })
-    <%_ if (assertionLibrary === 'expect' || unit === 'jest') { _%>
+    <%_ if (assertionLibrary === 'expect') { _%>
     expect(wrapper.text()).toBe(msg)
     <%_ } _%>
     <%_ if (assertionLibrary === 'chai') { _%>

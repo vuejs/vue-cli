@@ -1,4 +1,6 @@
 module.exports = (api, options) => {
+  options.assertionLibrary = 'expect'
+  api.renderFiles('./files')
   api.extendPackage({
     scripts: {
       test: 'jest'
@@ -31,10 +33,5 @@ module.exports = (api, options) => {
       ],
       'mapCoverage': true
     }
-  })
-
-  api.injectFileMiddleware(files => {
-    // add dummy test
-    files['test/unit/Hello.spec.js'] = api.renderFile('Hello.spec.js')
   })
 }

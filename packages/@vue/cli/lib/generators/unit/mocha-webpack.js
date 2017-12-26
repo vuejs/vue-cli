@@ -16,8 +16,5 @@ module.exports = (api, options) => {
     }
   })
 
-  api.injectFileMiddleware(files => {
-    // add dummy test
-    files['test/unit/Hello.spec.js'] = api.renderFile('Hello.spec.js')
-  })
+  api.renderFiles('./files')
 }

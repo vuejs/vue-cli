@@ -1,5 +1,6 @@
 const fs = require('fs')
 const os = require('os')
+const ejs = require('ejs')
 const path = require('path')
 const inquirer = require('inquirer')
 const { warn } = require('./util/log')
@@ -20,6 +21,7 @@ const defaultOptions = {
 
 module.exports = class Creator {
   constructor (name, generators) {
+    this.name = name
     const { modePrompt, featurePrompt } = this.resolveIntroPrompts()
     this.modePrompt = modePrompt
     this.featurePrompt = featurePrompt
@@ -28,6 +30,7 @@ module.exports = class Creator {
     this.promptCompleteCbs = []
     this.fileMiddlewares = []
 
+    this.options = {}
     this.pkg = {
       name,
       version: '0.1.0',
@@ -41,8 +44,8 @@ module.exports = class Creator {
     // virtual file tree
     this.files = {}
 
-    generators.forEach(generator => {
-      generator.module(new GeneratorAPI(this, generator))
+    generators.forEach(({ id, apply }) => {
+      apply(new GeneratorAPI(id, this))
     })
   }
 
@@ -56,10 +59,12 @@ module.exports = class Creator {
     } else if (options.mode === 'default') {
       options = defaultOptions
     }
+    options.projectName = this.name
     options.features = options.features || []
 
     // run cb registered by generators
     this.promptCompleteCbs.forEach(cb => cb(options))
+    this.options = options
     debug('options')(options)
     // save options
     if (options.mode === 'manual' && options.save) {
@@ -82,18 +87,18 @@ module.exports = class Creator {
       message: `Pick a project creation mode:`,
       choices: [
         {
-          name: 'Zero-configuration with defaults (Babel, ESLint, Unit Tests w/ Mocha)',
+          name: 'Zero-configuration with defaults',
           value: 'default'
         },
         {
-          name: 'Manually select features (advanced)',
+          name: 'Manually select features',
           value: 'manual'
         }
       ]
     }
     if (fs.existsSync(rcPath)) {
       modePrompt.choices.unshift({
-        name: 'Using saved preferences',
+        name: 'Use previously saved preferences',
         value: 'saved'
       })
     }
@@ -120,7 +125,7 @@ module.exports = class Creator {
       }
     ]
     if (hasYarn()) {
-      outroPrompts.push({
+      outroPrompts.unshift({
         name: 'packageManager',
         when: isMode('manual'),
         type: 'list',
@@ -144,7 +149,7 @@ module.exports = class Creator {
         ]
       })
     } else {
-      outroPrompts.push({
+      outroPrompts.unshift({
         name: 'packageManager',
         when: isMode('manual'),
         type: 'confirm',
@@ -209,7 +214,7 @@ module.exports = class Creator {
 
   async resolveFiles () {
     for (const middleware of this.fileMiddlewares) {
-      await middleware(this.files)
+      await middleware(this.files, ejs.render)
     }
     debug('files')(this.files)
   }

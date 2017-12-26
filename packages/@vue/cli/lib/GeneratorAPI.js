@@ -1,12 +1,19 @@
+const fs = require('fs')
+const ejs = require('ejs')
+const path = require('path')
+const walk = require('klaw-sync')
 const { error } = require('./util/log')
 const mergeDeps = require('./util/mergeDeps')
-const isObject = val => val && typeof val === 'object'
+const errorParser = require('error-stack-parser')
+
+const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
+const isObject = val => val && typeof val === 'object'
 
 module.exports = class GeneratorAPI {
-  constructor (creator, generator) {
+  constructor (id, creator) {
+    this.id = id
     this.creator = creator
-    this.generator = generator
   }
 
   injectFeature (feature) {
@@ -24,7 +31,7 @@ module.exports = class GeneratorAPI {
     if (!prompt) {
       error(
         `injectOptionForFeature error in generator "${
-          this.generator.id
+          this.id
         }": prompt "${name}" does not exist.`
       )
     }
@@ -58,7 +65,7 @@ module.exports = class GeneratorAPI {
           if (key === 'dependencies' || key === 'devDependencies') {
             // use special version resolution merge
             pkg[key] = mergeDeps(
-              this.generator.id,
+              this.id,
               existing,
               value,
               this.creator.depSources
@@ -73,9 +80,40 @@ module.exports = class GeneratorAPI {
     }
   }
 
-  renderFile (file, additionalData, ejsOptions) {
-    // TODO render file based on generator path
-    // render with ejs & options
-    return file
+  renderFiles (fileDir, additionalData = {}, ejsOptions = {}) {
+    const baseDir = extractCallDir()
+    if (isString(fileDir)) {
+      fileDir = path.resolve(baseDir, fileDir)
+      this.injectFileMiddleware(files => {
+        const data = Object.assign({}, this.creator.options, additionalData)
+        const _files = walk(fileDir, { nodir: true })
+        for (const file of _files) {
+          const relativePath = path.relative(fileDir, file.path)
+          files[relativePath] = renderFile(file.path, data, ejsOptions)
+        }
+      })
+    } else if (isObject(fileDir)) {
+      this.injectFileMiddleware(files => {
+        const data = Object.assign({}, this.creator.options, additionalData)
+        for (const targetPath in fileDir) {
+          const sourcePath = path.resolve(baseDir, fileDir[targetPath])
+          files[targetPath] = renderFile(sourcePath, data, ejsOptions)
+        }
+      })
+    } else if (isFunction(fileDir)) {
+      this.injectFileMiddleware(fileDir)
+    }
   }
+}
+
+function extractCallDir () {
+  // extract api.renderFiles() callsite file location using error stack
+  const obj = {}
+  Error.captureStackTrace(obj)
+  const stack = errorParser.parse(obj)
+  return path.dirname(stack[2].fileName)
+}
+
+function renderFile (name, data, ejsOptions) {
+  return ejs.render(fs.readFileSync(name, 'utf-8'), data, ejsOptions)
 }

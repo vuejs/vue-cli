@@ -7,9 +7,7 @@ module.exports = api => {
           'babel-preset-vue-app': '^2.0.0'
         }
       })
-      api.injectFileMiddleware(files => {
-        files['.babelrc'] = api.renderFile('.babelrc')
-      })
+      api.renderFiles('./files')
     }
   })
 }

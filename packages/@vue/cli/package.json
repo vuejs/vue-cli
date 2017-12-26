@@ -23,7 +23,10 @@
   "dependencies": {
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
+    "ejs": "^2.5.7",
+    "error-stack-parser": "^2.0.1",
     "inquirer": "^4.0.1",
+    "klaw-sync": "^3.0.2",
     "mkdirp": "^0.5.1",
     "semver": "^5.4.1"
   }

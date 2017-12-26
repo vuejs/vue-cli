@@ -3,7 +3,6 @@ const path = require('path')
 const program = require('commander')
 const Creator = require('./Creator')
 const debug = require('debug')('create')
-const Generator = require('./Generator')
 const { warn, error } = require('./util/log')
 const resolveInstalledGenerators = require('./util/resolveInstalledGenerators')
 
@@ -18,15 +17,20 @@ if (!projectName) {
   process.exit(1)
 }
 
+const createGenerator = (id, requirePath = id) => ({
+  id,
+  apply: require(requirePath)
+})
+
 const builtInGenerators = fs
   .readdirSync(path.resolve(__dirname, './generators'))
   .filter(dir => dir.charAt(0) !== '.')
-  .map(id => new Generator(id, `./generators/${id}`))
+  .map(id => createGenerator(id, `./generators/${id}`))
 
 debug(builtInGenerators)
 
 const installedGenerators = resolveInstalledGenerators().map(id => {
-  return new Generator(id)
+  return createGenerator(id)
 })
 
 const targetDir = path.resolve(process.cwd(), projectName)
