@@ -5,9 +5,11 @@ module.exports = api => {
         devDependencies: {
           '@vue/cli-plugin-babel': '^1.0.0',
           'babel-preset-vue-app': '^2.0.0'
+        },
+        babel: {
+          presets: ['vue-app']
         }
       })
-      api.renderFiles('./files')
     }
   })
 }
