@@ -1,8 +1,8 @@
 import { shallow } from 'vue-test-utils'
-<%_ if (assertionLibrary === 'expect') { _%>
+<%_ if (options.assertionLibrary === 'expect') { _%>
 import { expect } from 'expect'
 <%_ } _%>
-<%_ if (assertionLibrary === 'chai') { _%>
+<%_ if (options.assertionLibrary === 'chai') { _%>
 import { expect } from 'chai'
 <%_ } _%>
 import HelloWorld from '@/components/HelloWorld.vue'
@@ -13,13 +13,11 @@ describe('Hello.vue', () => {
     const wrapper = shallow(HelloWorld, {
       context: { props: { msg } }
     })
-    <%_ if (assertionLibrary === 'expect') { _%>
+    <%_ if (options.assertionLibrary === 'expect') { _%>
     expect(wrapper.text()).toBe(msg)
-    <%_ } _%>
-    <%_ if (assertionLibrary === 'chai') { _%>
+    <%_ } else if (options.assertionLibrary === 'chai') { _%>
     expect(wrapper.text()).to.equal(msg)
-    <%_ } _%>
-    <%_ if (assertionLibrary === 'custom') { _%>
+    <%_ } else { _%>
     // assert wrapper.text() equals msg
     <%_ } _%>
   })

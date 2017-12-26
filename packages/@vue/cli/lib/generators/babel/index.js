@@ -1,6 +1,6 @@
 module.exports = api => {
   api.onPromptComplete(options => {
-    if (!options.features.includes('ts')) {
+    if (!options.features.includes('ts') && !options.features.includes('-babel')) {
       api.extendPackage({
         devDependencies: {
           '@vue/cli-plugin-babel': '^1.0.0',

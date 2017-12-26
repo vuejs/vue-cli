@@ -16,7 +16,7 @@ const defaultOptions = {
   features: ['eslint', 'unit'],
   eslint: 'eslint-only',
   unit: 'mocha',
-  assertionLibrary: 'expect'
+  assertionLibrary: 'chai'
 }
 
 module.exports = class Creator {
@@ -60,7 +60,6 @@ module.exports = class Creator {
       options = defaultOptions
     }
     options.projectName = this.name
-    options.features = options.features || []
 
     // run cb registered by generators
     this.promptCompleteCbs.forEach(cb => cb(options))

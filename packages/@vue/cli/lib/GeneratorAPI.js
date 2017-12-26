@@ -3,6 +3,7 @@ const ejs = require('ejs')
 const path = require('path')
 const walk = require('klaw-sync')
 const { error } = require('./util/log')
+const isBinary = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
 const errorParser = require('error-stack-parser')
 
@@ -85,8 +86,13 @@ module.exports = class GeneratorAPI {
     if (isString(fileDir)) {
       fileDir = path.resolve(baseDir, fileDir)
       this.injectFileMiddleware(files => {
-        const data = Object.assign({}, this.creator.options, additionalData)
-        const _files = walk(fileDir, { nodir: true })
+        const data = Object.assign({
+          options: this.creator.options
+        }, additionalData)
+        const _files = walk(fileDir, {
+          nodir: true,
+          filter: file => path.basename(file.path) !== '.DS_Store'
+        })
         for (const file of _files) {
           const relativePath = path.relative(fileDir, file.path)
           files[relativePath] = renderFile(file.path, data, ejsOptions)
@@ -94,7 +100,9 @@ module.exports = class GeneratorAPI {
       })
     } else if (isObject(fileDir)) {
       this.injectFileMiddleware(files => {
-        const data = Object.assign({}, this.creator.options, additionalData)
+        const data = Object.assign({
+          options: this.creator.options
+        }, additionalData)
         for (const targetPath in fileDir) {
           const sourcePath = path.resolve(baseDir, fileDir[targetPath])
           files[targetPath] = renderFile(sourcePath, data, ejsOptions)
@@ -115,5 +123,8 @@ function extractCallDir () {
 }
 
 function renderFile (name, data, ejsOptions) {
+  if (isBinary.sync(name)) {
+    return fs.readFileSync(name) // return buffer
+  }
   return ejs.render(fs.readFileSync(name, 'utf-8'), data, ejsOptions)
 }

@@ -25,6 +25,7 @@
     "ejs": "^2.5.7",
     "error-stack-parser": "^2.0.1",
     "inquirer": "^4.0.1",
+    "isbinaryfile": "^3.0.2",
     "klaw-sync": "^3.0.2",
     "mkdirp": "^0.5.1",
     "semver": "^5.4.1"
