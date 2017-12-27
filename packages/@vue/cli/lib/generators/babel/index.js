@@ -7,7 +7,7 @@ module.exports = api => {
           'babel-preset-vue-app': '^2.0.0'
         },
         babel: {
-          presets: ['vue-app']
+          presets: ['vue-app'] // TODO update babel-preset-vue-app
         }
       })
     }

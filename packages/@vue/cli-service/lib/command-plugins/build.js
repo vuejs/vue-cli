@@ -1,5 +1,5 @@
-module.exports = api => {
-  api.registerCommand('build', (getWebpackConfig, projectOptions, inlineArgs) => {
-
+module.exports = (api, options) => {
+  api.registerCommand('build', args => {
+    // TODO
   })
 }

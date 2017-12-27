@@ -10,6 +10,11 @@ module.exports = class PluginAPI {
     return path.resolve(this.service.context, _path)
   }
 
+  setEnv (env) {
+    process.env.NODE_ENV = env
+    process.env.BABEL_ENV = env === 'production' ? env : 'development'
+  }
+
   registerCommand (name, fn) {
     this.service.commands[name] = fn
   }
@@ -20,5 +25,9 @@ module.exports = class PluginAPI {
 
   configureWebpack (fn) {
     this.service.webpackRawConfigFns.push(fn)
+  }
+
+  resolveWebpackConfig () {
+    return this.service.resolveWebpackConfig()
   }
 }

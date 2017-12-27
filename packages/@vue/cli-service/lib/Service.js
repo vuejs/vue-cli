@@ -44,19 +44,19 @@ module.exports = class Service {
   }
 
   run (command, args) {
-    if (this.commands[command]) {
+    const runner = this.commands[command]
+    if (runner) {
       args._.shift() // remove command itself
-      this.commands[command].call(
-        null,
-        this.getWebpackConfig.bind(this),
-        args
-      )
+      runner(args)
     } else {
       // TODO warn unknown command
     }
   }
 
-  getWebpackConfig () {
+  resolveWebpackConfig (env) {
+    if (env) {
+      process.env.NODE_ENV = env
+    }
     // apply chains
     this.webpackChainFns.forEach(fn => fn(this.webpackConfig))
     // to raw config

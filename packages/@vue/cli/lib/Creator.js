@@ -6,6 +6,7 @@ const inquirer = require('inquirer')
 const { warn } = require('./util/log')
 const { execSync } = require('child_process')
 const GeneratorAPI = require('./GeneratorAPI')
+const clearConsole = require('./util/clearConsole')
 const writeFileTree = require('./util/writeFileTree')
 
 const debug = require('debug')
@@ -51,6 +52,7 @@ module.exports = class Creator {
 
   async create (path) {
     // prompt
+    clearConsole()
     let options = await inquirer.prompt(this.resolveFinalPrompts())
     debug('rawOptions')(options)
 

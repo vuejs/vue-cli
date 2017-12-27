@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const HTMLPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
@@ -21,10 +20,6 @@ module.exports = api => {
           .use(webpack.NoEmitOnErrorsPlugin)
 
       // TODO WatchMissingNodeModulesPlugin
-
-      webpackConfig
-        .plugin('friendly-errors')
-          .use(FriendlyErrorsPlugin) // TODO port message?
 
       // TODO InterpolateHtmlPlugin
 

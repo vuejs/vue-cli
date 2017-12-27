@@ -1,5 +1,6 @@
 const webpack = require('webpack')
-const { ownDir } = require('../util')
+const resolveLocal = require('../util/resolveLocal')
+const resolveClientEnv = require('../util/resolveClientEnv')
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
@@ -19,9 +20,9 @@ module.exports = (api, options) => {
         .merge(['.js', '.jsx', '.vue', '.json'])
         .end()
       .modules
-        .add(api.resolve('node_modules'))
         .add('node_modules')
-        .add(ownDir('node_modules'))
+        .add(api.resolve('node_modules'))
+        .add(resolveLocal('node_modules'))
         .end()
       .alias
         .set('@', api.resolve('src'))
@@ -31,9 +32,9 @@ module.exports = (api, options) => {
     webpackConfig.resolveLoader
       .set('symlinks', true)
       .modules
-        .add(api.resolve('node_modules'))
         .add('node_modules')
-        .add(ownDir('node_modules'))
+        .add(api.resolve('node_modules'))
+        .add(resolveLocal('node_modules'))
 
     // js is handled by cli-plugin-bable
 
@@ -99,12 +100,9 @@ module.exports = (api, options) => {
         child_process: 'empty'
       })
 
-    // TODO properly handle .env
     webpackConfig
       .plugin('define')
-        .use(webpack.DefinePlugin, [{
-          'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }
-        }])
+        .use(webpack.DefinePlugin, [resolveClientEnv()])
 
     // TODO
     // timefix
