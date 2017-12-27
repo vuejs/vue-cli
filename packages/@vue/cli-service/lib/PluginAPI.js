@@ -1,7 +1,13 @@
+const path = require('path')
+
 module.exports = class PluginAPI {
   constructor (id, service) {
     this.id = id
     this.service = service
+  }
+
+  resolve (_path) {
+    return path.resolve(this.service.context, _path)
   }
 
   registerCommand (name, fn) {
@@ -9,7 +15,7 @@ module.exports = class PluginAPI {
   }
 
   chainWebpack (fn) {
-    fn(this.service.webpackConfig)
+    this.service.webpackChainFns.push(fn)
   }
 
   configureWebpack (fn) {

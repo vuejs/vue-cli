@@ -1,6 +1,7 @@
 {
   "private": true,
   "workspaces": [
+    "packages/test",
     "packages/@vue/*"
   ],
   "scripts": {
