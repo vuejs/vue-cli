@@ -2,6 +2,17 @@ module.exports = (api, options) => {
   api.registerCommand('serve', (getWebpackConfig, args) => {
     process.env.NODE_ENV = args.prod ? 'production' : 'development'
 
+    // TODO use port-finder
+    const port = options.port || 8080
+    const host = options.host || '127.0.0.1'
+
+    api.chainWebpack(config => {
+      config
+        .entry('app')
+        .add(`webpack-dev-server/client/index.js?http://${host}:${port}`)
+        .add(`webpack/hot/dev-server`)
+    })
+
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
     const webpackConfig = getWebpackConfig()
@@ -18,6 +29,6 @@ module.exports = (api, options) => {
       quiet: true
     }, options.devServer))
 
-    server.listen(8080, '0.0.0.0')
+    server.listen(port, host)
   })
 }
