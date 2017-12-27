@@ -3,6 +3,7 @@ module.exports = (api, options) => {
     description: 'start development server',
     usage: 'vue-cli-service serve',
     options: {
+      '--open': 'open browser on server start',
       '--env': 'specify NODE_ENV (default: development)',
       '--host': 'specify host (default: 0.0.0.0)',
       '--port': 'specify port (default: 8080)',
@@ -69,7 +70,10 @@ module.exports = (api, options) => {
             `  To create a production build, run ${chalk.cyan(`npm run build`)} or ${chalk.cyan(`yarn build`)}.`
           ].join('\n'))
           console.log()
-          openBrowser(urls.localUrlForBrowser)
+
+          if (args.open) {
+            openBrowser(urls.localUrlForBrowser)
+          }
         }
       })
 
