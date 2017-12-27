@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const HTMLPlugin = require('html-webpack-plugin')
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
@@ -22,6 +23,10 @@ module.exports = api => {
       // TODO WatchMissingNodeModulesPlugin
 
       // TODO InterpolateHtmlPlugin
+
+      webpackConfig
+        .plugin('firendly-errors')
+          .use(FriendlyErrorsPlugin)
 
       webpackConfig
         .plugin('html')

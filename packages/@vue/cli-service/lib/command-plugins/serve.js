@@ -20,7 +20,6 @@ module.exports = (api, options) => {
     const portfinder = require('portfinder')
     const openBrowser = require('../util/openBrowser')
     const prepareURLs = require('../util/prepareURLs')
-    const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
     const useHttps = args.https || options.https
     const host = args.host || process.env.HOST || options.host || '0.0.0.0'
@@ -39,21 +38,6 @@ module.exports = (api, options) => {
         port
       )
 
-      // inject friendly errors
-      webpackConfig.plugins.push(new FriendlyErrorsPlugin({
-        compilationSuccessInfo: {
-          messages: [
-            `App running at:`,
-            `- Local:   ${urls.localUrlForTerminal}`,
-            `- Network: ${urls.lanUrlForTerminal}`
-          ],
-          notes: [
-            `Note that the development build is not optimized.`,
-            `To create a production build, run ${chalk.cyan(`npm run build`)} or ${chalk.cyan(`yarn build`)}.`
-          ]
-        }
-      }))
-
       // inject dev/hot client
       addDevClientToEntry(webpackConfig, [
         `webpack-dev-server/client/?${urls.localUrlForBrowser}`,
@@ -63,6 +47,32 @@ module.exports = (api, options) => {
       ])
 
       const compiler = webpack(webpackConfig)
+
+      // log instructions & open browser on first compilation complete
+      let isFirstCompile = true
+      compiler.plugin('done', stats => {
+        if (stats.hasErrors()) {
+          return
+        }
+
+        console.log([
+          `  App running at:`,
+          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)}`,
+          `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
+        ].join('\n'))
+        console.log()
+
+        if (isFirstCompile) {
+          isFirstCompile = false
+          console.log([
+            `  Note that the development build is not optimized.`,
+            `  To create a production build, run ${chalk.cyan(`npm run build`)} or ${chalk.cyan(`yarn build`)}.`
+          ].join('\n'))
+          console.log()
+          openBrowser(urls.localUrlForBrowser)
+        }
+      })
+
       const server = new WebpackDevServer(compiler, Object.assign({
         clientLogLevel: 'none',
         historyApiFallback: {
@@ -85,9 +95,6 @@ module.exports = (api, options) => {
         if (err) {
           return console.error(err)
         }
-        // TODO avoid duplicate opening
-        // TODO avoid opening when compilation fails
-        openBrowser(urls.localUrlForBrowser)
       })
     })
   })
