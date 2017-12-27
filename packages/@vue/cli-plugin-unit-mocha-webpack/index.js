@@ -1,6 +1,9 @@
 module.exports = api => {
-  api.registerCommand('test', (webpackConfig, args) => {
-    require('./runner')(webpackConfig, args)
+  api.registerCommand('test', {
+    description: 'run unit tests'
+  }, args => {
+    api.setEnv('test')
+    require('./runner')(api.resolveWebpackConfig(), args)
   })
 
   api.configureWebpack(webpackConfig => {

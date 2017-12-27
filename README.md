@@ -39,7 +39,7 @@ Both utilize a plugin-based architecture.
 
 ### Generator
 
-Generator are globally-installed plugins for the Creator. `@vue/cli` ships with a number of [built-in generators][2].
+Generators are globally-installed plugins for the Creator. `@vue/cli` ships with a number of [built-in generators][2].
 
 A generator should export a function which receives a [GeneratorAPI][3] instance as the only argument. The API allows a generator to inject prompts, `package.json` fields and files to the project being created.
 

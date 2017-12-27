@@ -15,8 +15,12 @@ module.exports = class PluginAPI {
     process.env.BABEL_ENV = env === 'production' ? env : 'development'
   }
 
-  registerCommand (name, fn) {
-    this.service.commands[name] = fn
+  registerCommand (name, opts, fn) {
+    if (typeof opts === 'function') {
+      fn = opts
+      opts = null
+    }
+    this.service.commands[name] = { fn, opts }
   }
 
   chainWebpack (fn) {

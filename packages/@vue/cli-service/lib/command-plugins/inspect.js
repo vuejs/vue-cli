@@ -1,5 +1,11 @@
 module.exports = (api, options) => {
-  api.registerCommand('inspect', args => {
+  api.registerCommand('inspect', {
+    description: 'inspect internal webpack config',
+    usage: 'vue-cli-service inspect [...keys]',
+    options: {
+      '--env': 'specify NODE_ENV (default: development)'
+    }
+  }, args => {
     api.setEnv(args.env || 'development')
 
     const stringify = require('javascript-stringify')

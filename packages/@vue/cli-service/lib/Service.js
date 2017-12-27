@@ -1,3 +1,4 @@
+const chalk = require('chalk')
 const { dirname } = require('path')
 const getPkg = require('read-pkg-up')
 const merge = require('webpack-merge')
@@ -28,6 +29,7 @@ module.exports = class Service {
       './command-plugins/serve',
       './command-plugins/build',
       './command-plugins/inspect',
+      './command-plugins/help',
       './config-plugins/base',
       './config-plugins/css',
       './config-plugins/dev',
@@ -43,14 +45,18 @@ module.exports = class Service {
     }))
   }
 
-  run (command, args) {
-    const runner = this.commands[command]
-    if (runner) {
-      args._.shift() // remove command itself
-      runner(args)
-    } else {
-      // TODO warn unknown command
+  run (name, args) {
+    let command = this.commands[name]
+    if (!command && name) {
+      console.log(chalk.red(`\n  command "${name}" does not exist.`))
     }
+    if (!command || args.help) {
+      command = this.commands.help
+    } else {
+      args._.shift() // remove command itself
+    }
+    const { fn } = command
+    return fn(args)
   }
 
   resolveWebpackConfig (env) {
@@ -75,7 +81,7 @@ module.exports = class Service {
   }
 
   loadProjectConfig () {
-    // TODO
+    // TODO load project config from vue.config.js or vue field in package.json
     return {}
   }
 }

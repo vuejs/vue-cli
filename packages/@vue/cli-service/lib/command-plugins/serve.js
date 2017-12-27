@@ -1,5 +1,14 @@
 module.exports = (api, options) => {
-  api.registerCommand('serve', args => {
+  api.registerCommand('serve', {
+    description: 'start development server',
+    usage: 'vue-cli-service serve',
+    options: {
+      '--env': 'specify NODE_ENV (default: development)',
+      '--host': 'specify host (default: 0.0.0.0)',
+      '--port': 'specify port (default: 8080)',
+      '--https': 'use https'
+    }
+  }, args => {
     // TODO improve log formatting
     console.log('[vue-cli] starting dev server, hang tight...')
 

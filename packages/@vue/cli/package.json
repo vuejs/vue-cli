@@ -7,9 +7,6 @@
     "vue-create": "bin/vue-create",
     "vue-init": "bin/vue-init"
   },
-  "scripts": {
-    "test": "jest"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git"
