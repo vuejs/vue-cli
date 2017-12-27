@@ -1,7 +1,7 @@
 const path = require('path')
 
-module.exports = serivce => {
-  serivce.chainWebpack((webpackConfig) => {
+module.exports = api => {
+  api.chainWebpack(webpackConfig => {
     webpackConfig.module
       .rule('js')
         .test(/\.jsx?$/)

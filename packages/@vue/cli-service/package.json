@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "local service for vue-cli projects",
   "main": "index.js",
+  "bin": {
+    "vue-cli-service": "bin/vue-cli-service"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git"
@@ -16,5 +19,26 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme"
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "css-loader": "^0.28.7",
+    "express-open-in-editor": "^3.1.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "html-webpack-plugin": "^2.30.1",
+    "minimist": "^1.2.0",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "ora": "^1.3.0",
+    "portfinder": "^1.0.13",
+    "read-pkg-up": "^3.0.0",
+    "uglifyjs-webpack-plugin": "^1.1.4",
+    "url-loader": "^0.6.2",
+    "vue-loader": "^13.6.1",
+    "vue-style-loader": "^3.0.3",
+    "vue-template-compiler": "^2.5.13",
+    "webpack": "^3.10.0",
+    "webpack-chain": "^4.5.0",
+    "webpack-dev-server": "^2.9.7"
+  }
 }

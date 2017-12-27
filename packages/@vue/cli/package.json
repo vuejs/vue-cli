@@ -2,6 +2,11 @@
   "name": "@vue/cli",
   "version": "3.0.0",
   "description": "Command line interface for rapid Vue.js development",
+  "bin": {
+    "vue": "bin/vue",
+    "vue-create": "bin/vue-create",
+    "vue-init": "bin/vue-init"
+  },
   "scripts": {
     "test": "jest"
   },

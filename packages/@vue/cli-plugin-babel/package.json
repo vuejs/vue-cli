@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-babel#readme"
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-babel#readme",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2"
+  }
 }

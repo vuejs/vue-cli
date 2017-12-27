@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const Service = require('../lib/Service')
+const service = new Service()
+
+const args = require('minimist')(process.argv.slice(2))
+const command = args._[0]
+
+service.run(command, args)

@@ -12,7 +12,8 @@ module.exports = api => {
           'vue': '^2.5.13'
         },
         devDependencies: {
-          '@vue/cli-service': '^1.0.0'
+          '@vue/cli-service': '^1.0.0',
+          'vue-template-compiler': '^2.5.13'
         },
         'postcss': {
           'plugins': {

@@ -1,13 +1,18 @@
-module.exports = service => {
-  service.reigsterScript('test', { env: 'test' }, (webpackConfig, args) => {
+module.exports = api => {
+  api.registerCommand('test', (webpackConfig, args) => {
     require('./runner')(webpackConfig, args)
   })
 
-  service.configureWebpack({ env: 'test' }, webpackConfig => {
-    if (!webpackConfig.externals) {
-      webpackConfig.externals = []
+  api.configureWebpack(webpackConfig => {
+    if (process.env.NODE_ENV === 'test') {
+      if (!webpackConfig.externals) {
+        webpackConfig.externals = []
+      }
+      webpackConfig.externals = [].conact(
+        webpackConfig.externals,
+        require('webpack-node-externals')()
+      )
+      webpackConfig.devtool = 'inline-cheap-module-source-map'
     }
-    webpackConfig.externals.push(require('webpack-node-externals')())
-    webpackConfig.devtool = 'inline-cheap-module-source-map'
   })
 }

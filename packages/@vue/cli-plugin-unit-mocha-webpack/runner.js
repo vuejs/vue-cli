@@ -1,1 +1,4 @@
-require('jsdom-global')()
+module.exports = () => {
+  require('jsdom-global')()
+  console.log('running test!')
+}

@@ -1,5 +1,5 @@
 {
-  "name": "cli-plugin-unit-mocha-webpack",
+  "name": "@vue/cli-plugin-unit-mocha-webpack",
   "version": "1.0.0",
   "description": "mocha-webpack unit testing plugin for vue-cli",
   "main": "index.js",
@@ -19,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-mocha-webpack#readme"
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-mocha-webpack#readme",
+  "dependencies": {
+    "jsdom": "^11.5.1",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^4.0.1",
+    "mocha-webpack": "^1.0.1",
+    "webpack-node-externals": "^1.6.0"
+  }
 }
