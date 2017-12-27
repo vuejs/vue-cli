@@ -10,8 +10,7 @@ module.exports = (api, options) => {
       '--https': 'use https'
     }
   }, args => {
-    // TODO improve log formatting
-    console.log('[vue-cli] starting dev server, hang tight...')
+    console.log('Starting dev server, hang tight...')
 
     api.setEnv(args.env || 'development')
 
@@ -22,9 +21,10 @@ module.exports = (api, options) => {
     const openBrowser = require('../util/openBrowser')
     const prepareURLs = require('../util/prepareURLs')
 
-    const useHttps = args.https || options.https
-    const host = args.host || process.env.HOST || options.host || '0.0.0.0'
-    portfinder.basePort = args.port || process.env.PORT || options.port || 8080
+    const projectDevServerOptions = options.devServer || {}
+    const useHttps = args.https || projectDevServerOptions.https
+    const host = args.host || process.env.HOST || projectDevServerOptions.host || '0.0.0.0'
+    portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || 8080
 
     portfinder.getPort((err, port) => {
       if (err) {
@@ -32,7 +32,7 @@ module.exports = (api, options) => {
       }
 
       const webpackConfig = api.resolveWebpackConfig()
-      const projectDevServerOptions = options.devServer || {}
+
       const urls = prepareURLs(
         useHttps ? 'https' : 'http',
         host,
@@ -71,7 +71,7 @@ module.exports = (api, options) => {
           ].join('\n'))
           console.log()
 
-          if (args.open) {
+          if (args.open || projectDevServerOptions.open) {
             openBrowser(urls.localUrlForBrowser)
           }
         }

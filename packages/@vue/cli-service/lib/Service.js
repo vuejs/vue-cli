@@ -1,5 +1,6 @@
+const fs = require('fs')
+const path = require('path')
 const chalk = require('chalk')
-const { dirname } = require('path')
 const getPkg = require('read-pkg-up')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
@@ -12,19 +13,26 @@ module.exports = class Service {
     this.webpackRawConfigFns = []
     this.commands = {}
 
-    const { pkg, path } = getPkg.sync()
-    this.context = dirname(path)
+    const pkg = getPkg.sync()
+    this.pkg = pkg.pkg || {}
+    this.context = path.dirname(pkg.path)
     this.projectOptions = this.loadProjectConfig()
 
     // install plugins
-    this.resolvePlugins(pkg).forEach(({ id, apply }) => {
+    this.resolvePlugins().forEach(({ id, apply }) => {
       apply(new PluginAPI(id, this), this.projectOptions)
     })
 
-    // TODO apply webpack modifications from project config file
+    // apply webpack configs from project config file
+    if (this.projectOptions.chainWebpack) {
+      this.webpackChainFns.push(this.projectOptions.chainWebpack)
+    }
+    if (this.projectOptions.configureWebpack) {
+      this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+    }
   }
 
-  resolvePlugins (pkg) {
+  resolvePlugins () {
     const builtInPlugins = [
       './command-plugins/serve',
       './command-plugins/build',
@@ -36,8 +44,8 @@ module.exports = class Service {
       './config-plugins/prod'
     ]
     const prefixRE = /^(@vue\/|vue-)cli-plugin-/
-    const projectPlugins = Object.keys(pkg.dependencies || {})
-      .concat(Object.keys(pkg.devDependencies || {}))
+    const projectPlugins = Object.keys(this.pkg.dependencies || {})
+      .concat(Object.keys(this.pkg.devDependencies || {}))
       .filter(p => prefixRE.test(p))
     return builtInPlugins.concat(projectPlugins).map(id => ({
       id: id.replace(/^.\//, 'built-in:'),
@@ -81,7 +89,31 @@ module.exports = class Service {
   }
 
   loadProjectConfig () {
-    // TODO load project config from vue.config.js or vue field in package.json
+    // vue.config.js
+    const configPath = path.resolve(this.context, 'vue.config.js')
+    if (fs.existsSync(configPath)) {
+      const config = require(configPath)
+      if (!config || typeof config !== 'object') {
+        console.log(chalk.red(
+          `\n  Error loading vue.config.js: should export an object.\n`
+        ))
+        return {}
+      } else {
+        return config
+      }
+    }
+    // package.vue
+    const config = this.pkg['vue-cli']
+    if (config) {
+      if (typeof config !== 'object') {
+        console.log(chalk.red(
+          `\n  Error loading vue-cli config in package.json: ` +
+          `the "vue" field should be an object.\n`
+        ))
+        return {}
+      }
+      return config
+    }
     return {}
   }
 }
