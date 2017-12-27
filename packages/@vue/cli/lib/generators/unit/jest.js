@@ -1,5 +1,4 @@
 module.exports = (api, options) => {
-  options.assertionLibrary = 'expect'
   api.renderFiles('./files')
   api.extendPackage({
     scripts: {

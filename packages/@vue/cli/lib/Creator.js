@@ -13,11 +13,21 @@ const debug = require('debug')
 const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
 
+const hasYarn = (() => {
+  try {
+    execSync('yarnpkg --version', { stdio: 'ignore' })
+    return true
+  } catch (e) {
+    return false
+  }
+})()
+
 const defaultOptions = {
   features: ['eslint', 'unit'],
   eslint: 'eslint-only',
   unit: 'mocha',
-  assertionLibrary: 'chai'
+  assertionLibrary: 'chai',
+  packageManager: hasYarn ? 'yarn' : 'npm'
 }
 
 module.exports = class Creator {
@@ -79,6 +89,10 @@ module.exports = class Creator {
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
     // write file tree to disk
     await writeFileTree(path, this.files)
+
+    if (options.packageManager) {
+      // TODO install deps
+    }
   }
 
   resolveIntroPrompts () {
@@ -125,7 +139,7 @@ module.exports = class Creator {
         message: 'Save the preferences for future projects?'
       }
     ]
-    if (hasYarn()) {
+    if (hasYarn) {
       outroPrompts.unshift({
         name: 'packageManager',
         when: isMode('manual'),
@@ -218,14 +232,5 @@ module.exports = class Creator {
       await middleware(this.files, ejs.render)
     }
     debug('files')(this.files)
-  }
-}
-
-function hasYarn () {
-  try {
-    execSync('yarnpkg --version', { stdio: 'ignore' })
-    return true
-  } catch (e) {
-    return false
   }
 }

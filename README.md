@@ -5,25 +5,21 @@
 
 ## Development Setup
 
-This project uses a monorepo setup that requires [Lerna](https://github.com/lerna/lerna) and [Yarn](https://yarnpkg.com).
+This project uses a monorepo setup that requires using [Yarn](https://yarnpkg.com) because it relies on [Yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/).
 
 ``` sh
-# install root dependencies
+# install dependencies
 yarn
-
-# bootstrap packages
-lerna bootstrap
 
 # link `vue` executable
 cd packages/@vue/cli
 yarn link
 
-# create a test project in /packages
-# note the name must be "test" so that dependencies can be linked properly
+# create test projects in /packages/test
 cd -
-cd packages
-vue create test
-cd test
+cd packages/test
+vue create test-app
+cd test-app
 yarn
 yarn dev
 ```

@@ -6,7 +6,7 @@ module.exports = function resolveClientEnv () {
 
   // TODO load .env files
 
-  const env = { NODE_ENV }
+  const env = { NODE_ENV: JSON.stringify(NODE_ENV) }
   Object.keys(process.env).forEach(key => {
     if (prefixRE.test(key)) {
       env[key] = JSON.stringify(process.env[key])

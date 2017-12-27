@@ -1,8 +1,8 @@
 {
   "private": true,
   "workspaces": [
-    "packages/test",
-    "packages/@vue/*"
+    "packages/@vue/*",
+    "packages/test/*"
   ],
   "scripts": {
     "lint": "eslint --fix packages/**/*.js",
