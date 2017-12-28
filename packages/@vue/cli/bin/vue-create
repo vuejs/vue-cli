@@ -5,9 +5,9 @@ const { error } = require('@vue/cli-shared-utils')
 
 if (!semver.satisfies(process.version, '>=7.7.0')) {
   error(
-    `You are using Node ${process.version}, ` +
-    `but this version of vue-cli requires a minimum version of Node 7.7.0, ` +
-    `and Node 8+ is recommended.\n`
+    `You are using Node ${process.version}, but this version of vue-cli\n` +
+    `requires a minimum version of Node 7.7.0, and Node 8+ is recommended.\n` +
+    `Please upgrade your Node version.`
   )
   process.exit(1)
 } else {

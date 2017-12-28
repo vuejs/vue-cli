@@ -21,13 +21,10 @@ exports.warn = msg => {
   console.warn(format(chalk.bgYellow.black(' WARN '), chalk.yellow(msg)))
 }
 
-exports.error = (msg, exit) => {
+exports.error = (msg) => {
   console.error(format(chalk.bgRed(' ERROR '), chalk.red(msg)))
   if (msg instanceof Error) {
     console.error(msg.stack)
-  }
-  if (exit) {
-    process.exit(1)
   }
 }
 
