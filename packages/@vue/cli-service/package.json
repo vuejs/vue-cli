@@ -49,5 +49,8 @@
     "webpack-chain": "^4.5.0",
     "webpack-dev-server": "^2.9.7",
     "webpack-merge": "^4.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

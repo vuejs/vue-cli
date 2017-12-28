@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-e2e-nightwatch#readme"
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-e2e-nightwatch#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-jest#readme"
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-jest#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

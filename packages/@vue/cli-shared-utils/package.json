@@ -21,5 +21,8 @@
   "dependencies": {
     "chalk": "^2.3.0",
     "string.prototype.padstart": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

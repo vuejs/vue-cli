@@ -26,6 +26,7 @@
     "debug": "^3.1.0",
     "eslint": "^4.14.0",
     "eslint-plugin-vue-libs": "^2.0.1",
+    "globby": "^7.1.1",
     "husky": "^0.14.3",
     "jest": "^22.0.4",
     "lerna": "^2.5.1",
