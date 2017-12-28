@@ -1,5 +1,5 @@
 const semver = require('semver')
-const { warn } = require('./log')
+const { warn } = require('@vue/cli-shared-utils')
 
 module.exports = function resolveDeps (generatorId, to, from, sources) {
   const res = Object.assign({}, to)

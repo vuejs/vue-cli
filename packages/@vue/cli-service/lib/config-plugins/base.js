@@ -104,8 +104,7 @@ module.exports = (api, options) => {
       .plugin('define')
         .use(webpack.DefinePlugin, [resolveClientEnv()])
 
-    // TODO
-    // timefix
-    // path case sensative
+    // TODO TimeFixPlugin
+    // TODO CaseSensitivePlugin
   })
 }

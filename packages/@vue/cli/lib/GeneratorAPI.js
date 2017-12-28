@@ -2,10 +2,10 @@ const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
 const walk = require('klaw-sync')
-const { error } = require('./util/log')
 const isBinary = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
 const errorParser = require('error-stack-parser')
+const { error } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'

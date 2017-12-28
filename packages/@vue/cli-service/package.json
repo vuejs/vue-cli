@@ -22,6 +22,7 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme",
   "dependencies": {
     "@vue/cli-overlay": "^1.0.0",
+    "@vue/cli-shared-utils": "^1.0.0",
     "address": "^1.0.3",
     "chalk": "^2.3.0",
     "cross-spawn": "^5.1.0",

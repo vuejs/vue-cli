@@ -1,0 +1,25 @@
+{
+  "name": "@vue/cli-shared-utils",
+  "version": "1.0.0",
+  "description": "shared utilities for vue-cli packages",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git"
+  },
+  "keywords": [
+    "vue",
+    "cli",
+    "cli-shared-utils"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-shared-utils#readme",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "string.prototype.padstart": "^3.0.0"
+  }
+}

@@ -2,25 +2,23 @@ const fs = require('fs')
 const os = require('os')
 const ejs = require('ejs')
 const path = require('path')
+const chalk = require('chalk')
 const inquirer = require('inquirer')
-const { warn } = require('./util/log')
-const { execSync } = require('child_process')
 const GeneratorAPI = require('./GeneratorAPI')
-const clearConsole = require('./util/clearConsole')
+const installDeps = require('./util/installDeps')
 const writeFileTree = require('./util/writeFileTree')
+
+const {
+  info,
+  error,
+  success,
+  hasYarn,
+  clearConsole
+} = require('@vue/cli-shared-utils')
 
 const debug = require('debug')
 const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
-
-const hasYarn = (() => {
-  try {
-    execSync('yarnpkg --version', { stdio: 'ignore' })
-    return true
-  } catch (e) {
-    return false
-  }
-})()
 
 const defaultOptions = {
   features: ['eslint', 'unit'],
@@ -60,7 +58,7 @@ module.exports = class Creator {
     })
   }
 
-  async create (path) {
+  async create (targetDir) {
     // prompt
     clearConsole()
     let options = await inquirer.prompt(this.resolveFinalPrompts())
@@ -88,10 +86,13 @@ module.exports = class Creator {
     this.resolvePkg()
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
     // write file tree to disk
-    await writeFileTree(path, this.files)
+    await writeFileTree(targetDir, this.files)
+
+    success(`Project created in ${chalk.cyan(options.projectName)}.`)
 
     if (options.packageManager) {
-      // TODO install deps
+      info(`Installing dependencies with ${options.packageManager}. This may take a while...`)
+      await installDeps(options.packageManager, targetDir)
     }
   }
 
@@ -196,11 +197,12 @@ module.exports = class Creator {
     try {
       return JSON.parse(fs.readFileSync(rcPath, 'utf-8'))
     } catch (e) {
-      throw new Error(
+      error(
         `Error loading saved preferences: ` +
         `~/.vuerc may be corrupted or have syntax errors. ` +
         `You may need to delete it and re-run vue-cli in manual mode.\n` +
-        `(${e.message})`
+        `(${e.message})`,
+        true
       )
     }
   }
@@ -209,7 +211,7 @@ module.exports = class Creator {
     try {
       fs.writeFileSync(rcPath, JSON.stringify(options, null, 2))
     } catch (e) {
-      warn(
+      error(
         `Error saving preferences: ` +
         `make sure you have write access to ~/.vuerc.\n` +
         `(${e.message})`

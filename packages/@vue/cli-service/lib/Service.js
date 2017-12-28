@@ -5,6 +5,7 @@ const getPkg = require('read-pkg-up')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
+const { info, warn, error } = require('@vue/cli-shared-utils')
 
 module.exports = class Service {
   constructor () {
@@ -57,7 +58,7 @@ module.exports = class Service {
   run (name, args) {
     let command = this.commands[name]
     if (!command && name) {
-      console.log(chalk.red(`\n  command "${name}" does not exist.`))
+      error(`command "${name}" does not exist.`)
     }
     if (!command || args.help) {
       command = this.commands.help
@@ -88,30 +89,42 @@ module.exports = class Service {
 
   loadProjectConfig () {
     // vue.config.js
+    let fileConfig, pkgConfig
     const configPath = path.resolve(this.context, 'vue.config.js')
     if (fs.existsSync(configPath)) {
-      const config = require(configPath)
-      if (!config || typeof config !== 'object') {
-        console.log(chalk.red(
-          `\n  Error loading vue.config.js: should export an object.\n`
-        ))
-        return {}
-      } else {
-        return config
+      fileConfig = require(configPath)
+      if (!fileConfig || typeof fileConfig !== 'object') {
+        error(
+          `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
+        )
+        fileConfig = null
       }
     }
-    // package.vue
-    const config = this.pkg['vue-cli']
-    if (config) {
-      if (typeof config !== 'object') {
-        console.log(chalk.red(
-          `\n  Error loading vue-cli config in package.json: ` +
-          `the "vue" field should be an object.\n`
-        ))
-        return {}
-      }
-      return config
+
+    // package['vue-cli']
+    pkgConfig = this.pkg['vue-cli']
+    if (pkgConfig && typeof pkgConfig !== 'object') {
+      error(
+        `Error loading vue-cli config in ${chalk.bold(`package.json`)}: ` +
+        `the "vue-cli" field should be an object.`
+      )
+      pkgConfig = null
     }
-    return {}
+
+    if (fileConfig) {
+      if (pkgConfig) {
+        warn(
+          `"vue-cli" field in ${chalk.bold(`package.json`)} ignored ` +
+          `due to presence of ${chalk.bold('vue.config.js')}.`
+        )
+      }
+      info(`Using project config in ${chalk.bold('vue.config.js')}.`)
+      return fileConfig
+    } else if (pkgConfig) {
+      info(`Using project config from "vue-cli" field in ${chalk.bold(`package.json`)}.`)
+      return pkgConfig
+    } else {
+      return {}
+    }
   }
 }

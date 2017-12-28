@@ -1,3 +1,5 @@
+const { info, error } = require('@vue/cli-shared-utils')
+
 module.exports = (api, options) => {
   api.registerCommand('serve', {
     description: 'start development server',
@@ -10,7 +12,7 @@ module.exports = (api, options) => {
       '--https': 'use https'
     }
   }, args => {
-    console.log('Starting dev server, hang tight...')
+    info('Starting development server...')
 
     api.setEnv(args.env || 'development')
 
@@ -30,7 +32,7 @@ module.exports = (api, options) => {
 
     portfinder.getPort((err, port) => {
       if (err) {
-        return console.error(err)
+        return error(err)
       }
 
       const webpackConfig = api.resolveWebpackConfig()
@@ -114,7 +116,7 @@ module.exports = (api, options) => {
 
       server.listen(port, host, err => {
         if (err) {
-          return console.error(err)
+          return error(err)
         }
       })
     })
