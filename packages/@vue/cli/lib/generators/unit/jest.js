@@ -5,9 +5,9 @@ module.exports = (api, options) => {
       test: 'jest'
     },
     devDependencies: {
-      '@vue/cli-plugin-unit-jest': '^1.0.0',
+      '@vue/cli-plugin-unit-jest': '^0.1.0',
       'jest': '^22.0.4',
-      'vue-test-utils': '^1.0.0'
+      'vue-test-utils': '^1.0.0-beta.9'
     },
     'jest': {
       'moduleFileExtensions': [

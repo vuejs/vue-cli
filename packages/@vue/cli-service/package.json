@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "bin": {
@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme",
   "dependencies": {
-    "@vue/cli-overlay": "^1.0.0",
-    "@vue/cli-shared-utils": "^1.0.0",
+    "@vue/cli-overlay": "^0.1.0",
+    "@vue/cli-shared-utils": "^0.1.0",
     "address": "^1.0.3",
     "chalk": "^2.3.0",
     "cross-spawn": "^5.1.0",

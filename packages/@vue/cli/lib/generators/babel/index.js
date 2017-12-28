@@ -3,7 +3,7 @@ module.exports = api => {
     if (!options.features.includes('ts') && !options.features.includes('-babel')) {
       api.extendPackage({
         devDependencies: {
-          '@vue/cli-plugin-babel': '^1.0.0',
+          '@vue/cli-plugin-babel': '^0.1.0',
           'babel-preset-vue-app': '^2.0.0'
         },
         babel: {

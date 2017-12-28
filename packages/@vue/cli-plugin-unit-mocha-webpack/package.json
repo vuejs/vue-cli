@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-mocha-webpack",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "mocha-webpack unit testing plugin for vue-cli",
   "main": "index.js",
   "repository": {

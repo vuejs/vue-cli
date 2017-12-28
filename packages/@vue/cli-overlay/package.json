@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-overlay",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "error overlay & dev server middleware for vue-cli",
   "main": "dist/client.js",
   "files": [
