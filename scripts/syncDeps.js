@@ -14,9 +14,11 @@ const npmPackageRE = /'(vue|vue-template-compiler|vuex|vue-router|vue-test-utils
   paths
     .filter(p => !/\/files\//.test(p))
     .forEach(filePath => {
+      let isUpdated = false
       const makeReplacer = versionGetter => (_, pkg, curVersion) => {
         const version = versionGetter(pkg)
         if (version !== curVersion) {
+          isUpdated = true
           console.log(
             `${chalk.cyan(pkg)}: ${curVersion} => ${version} ` +
             chalk.gray(`(${path.relative(process.cwd(), filePath)})`)
@@ -39,6 +41,8 @@ const npmPackageRE = /'(vue|vue-template-compiler|vuex|vue-router|vue-test-utils
         // also update vue, vue-template-compiler, vuex, vue-router
         .replace(npmPackageRE, npmReplacer)
 
-      fs.writeFileSync(filePath, updated)
+      if (isUpdated) {
+        fs.writeFileSync(filePath, updated)
+      }
     })
 })()
