@@ -2,11 +2,12 @@
 
 const semver = require('semver')
 const { error } = require('@vue/cli-shared-utils')
+const requiredVersion = require('../package.json').engine.node
 
-if (!semver.satisfies(process.version, '>=6.0.0')) {
+if (!semver.satisfies(process.version, requiredVersion)) {
   error(
-    `You are using Node ${process.version}, ` +
-    `but vue-cli-service requires a minimum version of Node 6.0.0. `
+    `You are using Node ${process.version}, but vue-cli-service\n` +
+    `requires Node ${requiredVersion}. Please upgrade your Node version.`
   )
   process.exit(1)
 }
