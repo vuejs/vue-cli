@@ -34,4 +34,8 @@ module.exports = class PluginAPI {
   resolveWebpackConfig () {
     return this.service.resolveWebpackConfig()
   }
+
+  configureDevServer (fn) {
+    this.service.devServerConfigFns.push(fn)
+  }
 }

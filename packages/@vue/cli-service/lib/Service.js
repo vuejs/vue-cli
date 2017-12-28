@@ -11,6 +11,7 @@ module.exports = class Service {
     this.webpackConfig = new Config()
     this.webpackChainFns = []
     this.webpackRawConfigFns = []
+    this.devServerConfigFns = []
     this.commands = {}
 
     const pkg = getPkg.sync()
@@ -67,10 +68,7 @@ module.exports = class Service {
     return fn(args)
   }
 
-  resolveWebpackConfig (env) {
-    if (env) {
-      process.env.NODE_ENV = env
-    }
+  resolveWebpackConfig () {
     // apply chains
     this.webpackChainFns.forEach(fn => fn(this.webpackConfig))
     // to raw config

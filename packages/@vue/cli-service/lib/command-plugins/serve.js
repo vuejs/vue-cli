@@ -20,6 +20,8 @@ module.exports = (api, options) => {
     const portfinder = require('portfinder')
     const openBrowser = require('../util/openBrowser')
     const prepareURLs = require('../util/prepareURLs')
+    const prepareProxy = require('../util/prepareProxy')
+    const overlayMiddleware = require('@vue/cli-overlay/middleware')
 
     const projectDevServerOptions = options.devServer || {}
     const useHttps = args.https || projectDevServerOptions.https
@@ -41,10 +43,14 @@ module.exports = (api, options) => {
 
       // inject dev/hot client
       addDevClientToEntry(webpackConfig, [
+        // dev server client
         `webpack-dev-server/client/?${urls.localUrlForBrowser}`,
+        // hmr client
         projectDevServerOptions.hotOnly
           ? 'webpack/hot/dev-server'
-          : 'webpack/hot/only-dev-server'
+          : 'webpack/hot/only-dev-server',
+        // custom overlay client
+        `@vue/cli-overlay/dist/client`
       ])
 
       const compiler = webpack(webpackConfig)
@@ -77,6 +83,11 @@ module.exports = (api, options) => {
         }
       })
 
+      const proxySettings = prepareProxy(
+        projectDevServerOptions.proxy,
+        api.resolve('public')
+      )
+
       const server = new WebpackDevServer(compiler, Object.assign({
         clientLogLevel: 'none',
         historyApiFallback: {
@@ -84,16 +95,22 @@ module.exports = (api, options) => {
         },
         contentBase: api.resolve('public'),
         watchContentBase: true,
-        https: useHttps,
         hot: true,
         quiet: true,
         compress: true,
-        publicPath: webpackConfig.output.publicPath,
-        // TODO use custom overlay w/ open-in-editor
-        overlay: { warnings: false, errors: true },
-        // TODO handle proxy
-        proxy: {}
-      }, projectDevServerOptions))
+        publicPath: webpackConfig.output.publicPath
+      }, projectDevServerOptions, {
+        https: useHttps,
+        proxy: proxySettings,
+        before (app) {
+          // overlay
+          app.use(overlayMiddleware())
+          // allow other plugins to register middlewares, e.g. PWA
+          api.service.devServerConfigFns.forEach(fn => fn(app))
+          // apply in project middlewares
+          projectDevServerOptions.before && projectDevServerOptions.before(app)
+        }
+      }))
 
       server.listen(port, host, err => {
         if (err) {
