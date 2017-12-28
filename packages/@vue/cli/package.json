@@ -7,6 +7,10 @@
     "vue-create": "bin/vue-create",
     "vue-init": "bin/vue-init"
   },
+  "files": [
+    "bin",
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git"

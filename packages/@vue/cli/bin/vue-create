@@ -1,3 +1,15 @@
 #!/usr/bin/env node
 
-require('../lib/create')
+const semver = require('semver')
+const { error } = require('@vue/cli-shared-utils')
+
+if (!semver.satisfies(process.version, '>=7.7.0')) {
+  error(
+    `You are using Node ${process.version}, ` +
+    `but this version of vue-cli requires a minimum version of Node 7.7.0, ` +
+    `and Node 8+ is recommended.\n`
+  )
+  process.exit(1)
+} else {
+  require('../lib/create')
+}

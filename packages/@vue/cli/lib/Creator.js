@@ -202,8 +202,8 @@ module.exports = class Creator {
         `~/.vuerc may be corrupted or have syntax errors. ` +
         `You may need to delete it and re-run vue-cli in manual mode.\n` +
         `(${e.message})`,
-        true
       )
+      process.exit(1)
     }
   }
 

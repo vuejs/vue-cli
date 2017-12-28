@@ -1,6 +1,7 @@
 {
   "extends": ["plugin:vue-libs/recommended"],
   "rules": {
-    "indent": ["error", 2, { "MemberExpression": "off" }]
+    "indent": ["error", 2, { "MemberExpression": "off" }],
+    "vue-libs/no-async-functions": 2
   }
 }

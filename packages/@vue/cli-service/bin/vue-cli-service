@@ -1,5 +1,16 @@
 #!/usr/bin/env node
 
+const semver = require('semver')
+const { error } = require('@vue/cli-shared-utils')
+
+if (!semver.satisfies(process.version, '>=6.0.0')) {
+  error(
+    `You are using Node ${process.version}, ` +
+    `but vue-cli-service requires a minimum version of Node 6.0.0. `
+  )
+  process.exit(1)
+}
+
 const Service = require('../lib/Service')
 const service = new Service()
 
