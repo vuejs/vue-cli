@@ -28,11 +28,18 @@ exports.error = (msg) => {
   }
 }
 
+const cliVersion = require('@vue/cli/package.json').version
 exports.clearConsole = function () {
   if (process.stdout.isTTY) {
     process.stdout.write(
       process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H'
     )
+    let title = chalk.bold.green(`Vue CLI v${cliVersion}`)
+    if (process.env.VUE_CLI_DEBUG) {
+      title += ' ' + chalk.bgRed(' DEBUG MODE ')
+    }
+    console.log(title)
+    console.log()
   }
 }
 

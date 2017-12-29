@@ -1,5 +1,6 @@
 const chalk = require('chalk')
 const padEnd = require('string.prototype.padend')
+const getPadLength = require('../util/getPadLength')
 
 module.exports = (api, options) => {
   api.registerCommand('help', args => {
@@ -17,7 +18,7 @@ module.exports = (api, options) => {
       `\n  Commands:\n`
     )
     const commands = api.service.commands
-    const padLength = getLongest(commands)
+    const padLength = getPadLength(commands)
     for (const name in commands) {
       if (name !== 'help') {
         const opts = commands[name].opts || {}
@@ -43,7 +44,7 @@ module.exports = (api, options) => {
       }
       if (opts.options) {
         console.log(`\n  Options:\n`)
-        const padLength = getLongest(opts.options)
+        const padLength = getPadLength(opts.options)
         for (const name in opts.options) {
           console.log(`    ${
             chalk.blue(padEnd(name, padLength))
@@ -55,14 +56,4 @@ module.exports = (api, options) => {
       console.log()
     }
   }
-}
-
-function getLongest (commands) {
-  let longest = 10
-  for (const name in commands) {
-    if (name.length + 1 > longest) {
-      longest = name.length + 1
-    }
-  }
-  return longest
 }

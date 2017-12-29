@@ -76,7 +76,8 @@ module.exports = class Creator {
     debug('options')(options)
 
     // write base package.json to disk
-    logWithSpinner(emoji.get('sparkles'), `Creating project in ${chalk.green(targetDir)}.`)
+    clearConsole()
+    logWithSpinner(emoji.get('sparkles'), `Creating project in ${chalk.yellow(targetDir)}.`)
     writeFileTree(targetDir, {
       'package.json': JSON.stringify({
         name,
@@ -105,7 +106,14 @@ module.exports = class Creator {
     logWithSpinner(emoji.get('package'), `Installing additional dependencies...`)
     await installDeps(options.packageManager, targetDir)
     stopSpinner()
-    console.log(`${chalk.green('✔')}  Successfully created project ${chalk.green(name)}.`)
+    console.log(`${chalk.green('✔')}  Successfully created project ${chalk.yellow(name)}.`)
+    console.log()
+    console.log(
+      `${emoji.get('point_right')}  Get started with the following commands:\n\n` +
+      chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`) +
+      chalk.cyan(` ${chalk.gray('$')} ${options.packageManager === 'yarn' ? 'yarn dev' : 'npm run dev'}`)
+    )
+    console.log()
   }
 
   resolveIntroPrompts () {

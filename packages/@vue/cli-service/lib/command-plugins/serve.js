@@ -1,4 +1,4 @@
-const { info, error } = require('@vue/cli-shared-utils')
+const { info, error, hasYarn } = require('@vue/cli-shared-utils')
 
 module.exports = (api, options) => {
   api.registerCommand('serve', {
@@ -73,9 +73,10 @@ module.exports = (api, options) => {
 
         if (isFirstCompile) {
           isFirstCompile = false
+          const buildCommand = hasYarn ? `yarn build` : `npm run build`
           console.log([
             `  Note that the development build is not optimized.`,
-            `  To create a production build, run ${chalk.cyan(`npm run build`)} or ${chalk.cyan(`yarn build`)}.`
+            `  To create a production build, run ${chalk.cyan(buildCommand)}.`
           ].join('\n'))
           console.log()
 
