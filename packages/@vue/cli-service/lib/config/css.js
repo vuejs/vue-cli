@@ -1,5 +1,5 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const CSSLoaderResolver = require('../webpack/CSSLoaderResolver')
+const CSSLoaderResolver = require('../util/CSSLoaderResolver')
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {

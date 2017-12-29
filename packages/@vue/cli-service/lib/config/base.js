@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const resolveLocal = require('../util/resolveLocal')
 const resolveClientEnv = require('../util/resolveClientEnv')
-const TimeFixPlugin = require('../webpack/TimeFixPlugin')
+const TimeFixPlugin = require('../util/TimeFixPlugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 module.exports = (api, options) => {

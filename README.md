@@ -43,7 +43,7 @@ Both utilize a plugin-based architecture.
 
 ### Plugin
 
-Plugins are locally installed into the project as devDependencies. `@vue/cli-service` ships with a number of [built-in][5] [plugins][6]. This repo also contains a number of plugins that are published as individual packages.
+Plugins are locally installed into the project as devDependencies. `@vue/cli-service`'s [built-in commands][5] and [config modules][6] are also all implemented as plugins. This repo also contains a number of plugins that are published as individual packages.
 
 A plugin should export a function which receives two arguments:
 
@@ -85,6 +85,6 @@ module.exports = (api, options) => {
 [1]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/Creator.js
 [3]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/GeneratorAPI.js
 [4]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/Service.js
-[5]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/command-plugins
-[6]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/config-plugins
+[5]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/commands
+[6]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/config
 [7]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/PluginAPI.js

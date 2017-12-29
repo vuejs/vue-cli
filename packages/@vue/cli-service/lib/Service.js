@@ -67,15 +67,15 @@ module.exports = class Service {
 
   resolvePlugins () {
     const builtInPlugins = [
-      './command-plugins/serve',
-      './command-plugins/build',
-      './command-plugins/inspect',
-      './command-plugins/help',
+      './commands/serve',
+      './commands/build',
+      './commands/inspect',
+      './commands/help',
       // config plugins are order sensitive
-      './config-plugins/base',
-      './config-plugins/css',
-      './config-plugins/dev',
-      './config-plugins/prod'
+      './config/base',
+      './config/css',
+      './config/dev',
+      './config/prod'
     ]
     const prefixRE = /^(@vue\/|vue-)cli-plugin-/
     const projectPlugins = Object.keys(this.pkg.dependencies || {})

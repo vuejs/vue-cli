@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const HTMLPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const WatchMissingNodeModulesPlugin = require('../webpack/watchmissingnodemodulesplugin')
+const WatchMissingNodeModulesPlugin = require('../util/WatchMissingNodeModulesPlugin')
 
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
