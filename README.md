@@ -16,11 +16,11 @@ cd packages/@vue/cli
 yarn link
 
 # create test projects in /packages/test
+export VUE_CLI_DEBUG=true
 cd -
 cd packages/test
 vue create test-app
 cd test-app
-yarn
 yarn dev
 ```
 
@@ -35,13 +35,7 @@ Both utilize a plugin-based architecture.
 
 ### Creator
 
-[Creator][1] is the class created when invoking `vue create <app>`. Responsible for prompting for preferences, generating the project files and installing dependencies.
-
-### Generator
-
-Generators are globally-installed plugins for the Creator. `@vue/cli` ships with a number of [built-in generators][2].
-
-A generator should export a function which receives a [GeneratorAPI][3] instance as the only argument. The API allows a generator to inject prompts, `package.json` fields and files to the project being created.
+[Creator][1] is the class created when invoking `vue create <app>`. Responsible for prompting for preferences, invoking generators and installing dependencies.
 
 ### Service
 
@@ -49,7 +43,7 @@ A generator should export a function which receives a [GeneratorAPI][3] instance
 
 ### Plugin
 
-Plugins are locally installed into the project as devDependencies. `@vue/cli-service` ships with a number of [built-in][5] [plugins][6].
+Plugins are locally installed into the project as devDependencies. `@vue/cli-service` ships with a number of [built-in][5] [plugins][6]. This repo also contains a number of plugins that are published as individual packages.
 
 A plugin should export a function which receives two arguments:
 
@@ -58,8 +52,13 @@ A plugin should export a function which receives two arguments:
 
 The API allows plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`.
 
+### Generator
+
+A plugin published as a package can also contain a `generator.js` file or a `generator` directory with `index.js`. The generator inside a plugin will be invoked after the plugin is installed.
+
+A generator should export a function which receives a [GeneratorAPI][3] instance as the only argument. The API allows a generator to inject additional dependencies or fields into `package.json` and add files to the project.
+
 [1]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/Creator.js
-[2]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/generators
 [3]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/GeneratorAPI.js
 [4]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/Service.js
 [5]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/command-plugins
