@@ -1,4 +1,4 @@
-const { info, error, hasYarn } = require('@vue/cli-shared-utils')
+const { info, error, hasYarn, clearConsole } = require('@vue/cli-shared-utils')
 
 module.exports = (api, options) => {
   api.registerCommand('serve', {
@@ -12,6 +12,7 @@ module.exports = (api, options) => {
       '--https': 'use https'
     }
   }, args => {
+    clearConsole()
     info('Starting development server...')
 
     api.setEnv(args.env || 'development')

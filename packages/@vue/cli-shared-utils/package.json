@@ -20,6 +20,7 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-shared-utils#readme",
   "dependencies": {
     "chalk": "^2.3.0",
+    "ora": "^1.3.0",
     "string.prototype.padstart": "^3.0.0"
   },
   "publishConfig": {

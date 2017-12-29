@@ -9,7 +9,7 @@ module.exports = function updatePackageForDev (targetDir, deps) {
   deps.forEach(dep => {
     pkg.devDependencies[dep] = require(path.resolve(
       __dirname,
-      '../../../',
+      '../../../../',
       dep,
       'package.json'
     )).version

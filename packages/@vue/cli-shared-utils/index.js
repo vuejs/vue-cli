@@ -1,5 +1,6 @@
 const chalk = require('chalk')
 const padStart = require('string.prototype.padstart')
+const { logWithSpinner, stopSpinner } = require('./spinner')
 
 const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
@@ -8,6 +9,9 @@ const format = (label, msg) => {
       : padStart(line, chalk.reset(label).length)
   }).join('\n')
 }
+
+exports.logWithSpinner = logWithSpinner
+exports.stopSpinner = stopSpinner
 
 exports.info = msg => {
   console.log(format(chalk.bgBlue.black(' INFO '), msg))
@@ -28,18 +32,14 @@ exports.error = (msg) => {
   }
 }
 
-const cliVersion = require('@vue/cli/package.json').version
-exports.clearConsole = function () {
+exports.clearConsole = title => {
   if (process.stdout.isTTY) {
     process.stdout.write(
       process.platform === 'win32' ? '\x1Bc' : '\x1B[2J\x1B[3J\x1B[H'
     )
-    let title = chalk.bold.green(`Vue CLI v${cliVersion}`)
-    if (process.env.VUE_CLI_DEBUG) {
-      title += ' ' + chalk.bgRed(' DEBUG MODE ')
+    if (title) {
+      console.log(title)
     }
-    console.log(title)
-    console.log()
   }
 }
 

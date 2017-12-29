@@ -18,8 +18,8 @@ exports.logWithSpinner = (symbol, msg) => {
   spinner.start()
 }
 
-exports.stopSpinner = () => {
-  if (lastMsg) {
+exports.stopSpinner = (persist) => {
+  if (lastMsg && persist !== false) {
     spinner.stopAndPersist({
       symbol: lastMsg.symbol,
       text: lastMsg.text

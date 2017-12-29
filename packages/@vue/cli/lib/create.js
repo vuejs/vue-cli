@@ -5,7 +5,13 @@ const rimraf = require('rimraf')
 const inquirer = require('inquirer')
 const program = require('commander')
 const Creator = require('./Creator')
-const { warn, error, clearConsole } = require('@vue/cli-shared-utils')
+
+const {
+  warn,
+  error,
+  stopSpinner
+} = require('@vue/cli-shared-utils')
+const clearConsole = require('./util/clearConsole')
 
 async function run () {
   program
@@ -50,4 +56,7 @@ async function run () {
   await creator.create(projectName, targetDir)
 }
 
-run().catch(error)
+run().catch(err => {
+  stopSpinner(false) // do not persist
+  error(err)
+})

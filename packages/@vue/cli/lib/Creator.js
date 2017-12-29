@@ -9,14 +9,11 @@ const Generator = require('./Generator')
 const installDeps = require('./util/installDeps')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
-const { logWithSpinner, stopSpinner } = require('./util/spinner')
 const updatePackageForDev = require('./util/updatePackageForDev')
+const { logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
 
-const {
-  error,
-  hasYarn,
-  clearConsole
-} = require('@vue/cli-shared-utils')
+const clearConsole = require('./util/clearConsole')
+const { error, hasYarn } = require('@vue/cli-shared-utils')
 
 const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
@@ -87,7 +84,7 @@ module.exports = class Creator {
       }, null, 2)
     })
 
-    // install deps
+    // install plugins
     logWithSpinner(emoji.get('electric_plug'), `Installing CLI plugins. This might take a while...`)
     const deps = Object.keys(options.plugins)
     if (process.env.VUE_CLI_DEBUG) {
@@ -98,16 +95,26 @@ module.exports = class Creator {
       await installDeps(options.packageManager, targetDir, deps)
     }
 
-    logWithSpinner(emoji.get('gear'), `Invoking generators...`)
     // run generator
+    logWithSpinner(emoji.get('gear'), `Invoking generators...`)
     const generator = new Generator(targetDir, options)
     await generator.generate()
 
-    // install deps again (new deps injected by generators)
+    // install additional deps (injected by generators)
     logWithSpinner(emoji.get('package'), `Installing additional dependencies...`)
     await installDeps(options.packageManager, targetDir)
+
+    // log instructions
     stopSpinner()
-    console.log(`${chalk.green('✔')}  Successfully created project ${chalk.yellow(name)}.`)
+    console.log()
+    console.log(`${chalk.green('✔')}  Successfully created project ${chalk.yellow(name)} with the following plugins:`)
+    console.log()
+    deps.forEach(dep => {
+      if (dep !== '@vue/cli-service') {
+        dep = dep.replace(/^(@vue\/|vue-)cli-plugin-/, '')
+        console.log(` ${chalk.gray('-')} ${dep}`)
+      }
+    })
     console.log()
     console.log(
       `${emoji.get('point_right')}  Get started with the following commands:\n\n` +
