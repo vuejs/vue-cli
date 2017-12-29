@@ -7,25 +7,21 @@ const emoji = require('node-emoji')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const installDeps = require('./util/installDeps')
+const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const updatePackageForDev = require('./util/updatePackageForDev')
-const { logWithSpinner, stopSpinner } = require('@vue/cli-shared-utils')
 
-const clearConsole = require('./util/clearConsole')
-const { error, hasYarn } = require('@vue/cli-shared-utils')
+const {
+  error,
+  hasYarn,
+  logWithSpinner,
+  stopSpinner
+} = require('@vue/cli-shared-utils')
 
+const defaultOptions = require('./defaults')
 const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
-
-const defaultOptions = {
-  packageManager: hasYarn ? 'yarn' : 'npm',
-  plugins: {
-    '@vue/cli-plugin-babel': {},
-    '@vue/cli-plugin-eslint': { config: 'eslint-only' },
-    '@vue/cli-plugin-unit-mocha-webpack': { assertionLibrary: 'chai' }
-  }
-}
 
 module.exports = class Creator {
   constructor (modules) {
