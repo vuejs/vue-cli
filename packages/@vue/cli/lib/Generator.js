@@ -3,7 +3,6 @@ const path = require('path')
 const debug = require('debug')
 const resolve = require('resolve')
 const GeneratorAPI = require('./GeneratorAPI')
-const { success } = require('@vue/cli-shared-utils')
 const writeFileTree = require('./util/writeFileTree')
 
 module.exports = class Generator {
@@ -34,7 +33,6 @@ module.exports = class Generator {
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
     // write file tree to disk
     await writeFileTree(this.context, this.files)
-    success(`Successfully generated project files.`)
   }
 
   resolvePkg () {

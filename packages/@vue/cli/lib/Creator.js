@@ -3,14 +3,15 @@ const os = require('os')
 const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
+const emoji = require('node-emoji')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const installDeps = require('./util/installDeps')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
+const { logWithSpinner, stopSpinner } = require('./util/spinner')
 
 const {
-  info,
   error,
   hasYarn,
   clearConsole
@@ -53,14 +54,14 @@ module.exports = class Creator {
     } else if (answers.mode === 'default') {
       options = defaultOptions
     } else {
+      // manual
       options = {
         packageManager: answers.packageManager,
         plugins: {}
       }
+      // run cb registered by prompt modules to finalize the options
+      this.promptCompleteCbs.forEach(cb => cb(answers, options))
     }
-
-    // run cb registered by prompt modules to finalize the options
-    this.promptCompleteCbs.forEach(cb => cb(answers, options))
 
     // save options
     if (answers.mode === 'manual' && answers.save) {
@@ -75,7 +76,7 @@ module.exports = class Creator {
     debug('options')(options)
 
     // write base package.json to disk
-    info(`Creating project in ${chalk.cyan(targetDir)}.`)
+    logWithSpinner(emoji.get('sparkles'), `Creating project in ${chalk.green(targetDir)}.`)
     writeFileTree(targetDir, {
       'package.json': JSON.stringify({
         name,
@@ -85,7 +86,7 @@ module.exports = class Creator {
     })
 
     // install deps
-    info(`Installing dependencies with ${options.packageManager}. This may take a while...`)
+    logWithSpinner(emoji.get('electric_plug'), `Installing CLI plugins. This might take a while...`)
     const deps = Object.keys(options.plugins)
     if (process.env.VUE_CLI_DEBUG) {
       // in development, use linked packages
@@ -95,21 +96,23 @@ module.exports = class Creator {
       await installDeps(options.packageManager, targetDir, deps)
     }
 
+    logWithSpinner(emoji.get('gear'), `Invoking generators...`)
     // run generator
     const generator = new Generator(targetDir, options)
     await generator.generate()
 
     // install deps again (new deps injected by generators)
+    logWithSpinner(emoji.get('package'), `Installing additional dependencies...`)
     await installDeps(options.packageManager, targetDir)
-
-    // TODO run vue-cli-service init
+    stopSpinner()
+    console.log(`${chalk.green('✔')}  Successfully created project ${chalk.green(name)}.`)
   }
 
   resolveIntroPrompts () {
     const modePrompt = {
       name: 'mode',
       type: 'list',
-      message: `Hi there! Please pick a project creation mode:`,
+      message: `Please pick a project creation mode:`,
       choices: [
         {
           name: 'Zero-configuration with defaults',

@@ -21,13 +21,21 @@ module.exports = function installDeps (command, targetDir, deps) {
 
     const child = spawn(command, args, {
       cwd: targetDir,
-      stdio: 'inherit'
+      stdio: 'pipe'
     })
+
+    let stderr = ''
+    child.stderr.on('data', buf => {
+      stderr += buf.toString()
+    })
+
     child.on('close', code => {
       if (code !== 0) {
-        return reject(
-          `command failed: ${command} ${args.join(' ')}`
+        reject(
+          `command failed: ${command} ${args.join(' ')}\n` +
+          stderr
         )
+        return
       }
       resolve()
     })
