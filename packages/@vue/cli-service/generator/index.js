@@ -1,5 +1,5 @@
 module.exports = (generatorAPI, options) => {
-  generatorAPI.renderFiles('./files')
+  generatorAPI.render('./template')
   generatorAPI.extendPackage({
     scripts: {
       'dev': 'vue-cli-service serve' + (

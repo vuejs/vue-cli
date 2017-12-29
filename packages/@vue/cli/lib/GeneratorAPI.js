@@ -51,7 +51,7 @@ module.exports = class GeneratorAPI {
     }
   }
 
-  renderFiles (fileDir, additionalData = {}, ejsOptions = {}) {
+  render (fileDir, additionalData = {}, ejsOptions = {}) {
     const baseDir = extractCallDir()
     if (isString(fileDir)) {
       fileDir = path.resolve(baseDir, fileDir)
@@ -85,7 +85,7 @@ module.exports = class GeneratorAPI {
 }
 
 function extractCallDir () {
-  // extract api.renderFiles() callsite file location using error stack
+  // extract api.render() callsite file location using error stack
   const obj = {}
   Error.captureStackTrace(obj)
   const stack = errorParser.parse(obj)

@@ -1,5 +1,5 @@
 module.exports = (api, options) => {
-  api.renderFiles('./files')
+  api.render('./template')
 
   const devDependencies = {
     'vue-test-utils': '^1.0.0-beta.9'

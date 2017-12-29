@@ -1,5 +1,5 @@
 module.exports = (api, options) => {
-  api.renderFiles('./files')
+  api.render('./template')
   api.extendPackage({
     scripts: {
       test: 'jest'
