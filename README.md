@@ -48,15 +48,39 @@ Plugins are locally installed into the project as devDependencies. `@vue/cli-ser
 A plugin should export a function which receives two arguments:
 
 - A [PluginAPI][7] instance
-- Project local options specified in `vue.config.js`
+- Project local options specified in `vue.config.js`, or in the `"vue-cli"` field in `package.json`.
 
-The API allows plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`.
+The API allows plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`. Example:
+
+``` js
+module.exports = (api, options) => {
+  api.configureWepback(config => {
+    // modify webpack config
+  })
+
+  api.regsiterCommand('test', args => {
+    // register `vue-cli-service test`
+  })
+}
+```
 
 ### Generator
 
 A plugin published as a package can also contain a `generator.js` file or a `generator` directory with `index.js`. The generator inside a plugin will be invoked after the plugin is installed.
 
-A generator should export a function which receives a [GeneratorAPI][3] instance as the only argument. The API allows a generator to inject additional dependencies or fields into `package.json` and add files to the project.
+A generator should export a function which receives a [GeneratorAPI][3] instance as the only argument. The API allows a generator to inject additional dependencies or fields into `package.json` and add files to the project. Example:
+
+``` js
+module.exports = (api, options) => {
+  api.extendPackage({
+    scripts: {
+      test: 'vue-cli-service test'
+    }
+  })
+
+  api.renderFiles('./files')
+}
+```
 
 [1]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/Creator.js
 [3]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/GeneratorAPI.js

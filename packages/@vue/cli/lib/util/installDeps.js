@@ -12,7 +12,6 @@ module.exports = function installDeps (command, targetDir, deps) {
       if (deps) {
         args.push('add', '--dev')
       }
-      args.push('--silent')
     } else {
       throw new Error(`unknown package manager: ${command}`)
     }
