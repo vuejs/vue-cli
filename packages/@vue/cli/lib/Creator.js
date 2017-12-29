@@ -10,6 +10,7 @@ const installDeps = require('./util/installDeps')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const { logWithSpinner, stopSpinner } = require('./util/spinner')
+const updatePackageForDev = require('./util/updatePackageForDev')
 
 const {
   error,
@@ -229,21 +230,4 @@ module.exports = class Creator {
       )
     }
   }
-}
-
-function updatePackageForDev (targetDir, deps) {
-  const pkg = require(path.resolve(targetDir, 'package.json'))
-  pkg.devDependencies = {}
-  deps.forEach(dep => {
-    pkg.devDependencies[dep] = require(path.resolve(
-      __dirname,
-      '../../../',
-      dep,
-      'package.json'
-    )).version
-  })
-  fs.writeFileSync(
-    path.resolve(targetDir, 'package.json'),
-    JSON.stringify(pkg, null, 2)
-  )
 }
