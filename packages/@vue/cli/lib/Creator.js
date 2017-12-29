@@ -44,7 +44,7 @@ module.exports = class Creator {
     // prompt
     clearConsole()
     const answers = await inquirer.prompt(this.resolveFinalPrompts())
-    debug('answers')(answers)
+    debug('vue:cli-answers')(answers)
 
     let options
     if (answers.mode === 'saved') {
@@ -71,7 +71,7 @@ module.exports = class Creator {
       projectName: name
     }
 
-    debug('options')(options)
+    debug('vue:cli-ptions')(options)
 
     // write base package.json to disk
     clearConsole()
@@ -204,7 +204,7 @@ module.exports = class Creator {
       this.injectedPrompts,
       this.outroPrompts
     )
-    debug('prompts')(prompts)
+    debug('vue:cli-prompts')(prompts)
     return prompts
   }
 

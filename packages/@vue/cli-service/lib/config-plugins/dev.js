@@ -5,7 +5,7 @@ const WatchMissingNodeModulesPlugin = require('../webpack/watchmissingnodemodule
 
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV === 'development') {
       webpackConfig
         .devtool('cheap-module-source-map')
 

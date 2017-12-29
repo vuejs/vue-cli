@@ -42,13 +42,13 @@ module.exports = class Generator {
     }, {})
     this.pkg.dependencies = sortDeps(this.pkg.dependencies)
     this.pkg.devDependencies = sortDeps(this.pkg.devDependencies)
-    debug('pkg')(this.pkg)
+    debug('vue:cli-pkg')(this.pkg)
   }
 
   async resolveFiles () {
     for (const middleware of this.fileMiddlewares) {
       await middleware(this.files, ejs.render)
     }
-    debug('files')(this.files)
+    debug('vue:cli-files')(this.files)
   }
 }

@@ -1,5 +1,7 @@
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
-    // TODO
+    if (process.env.NODE_ENV === 'production') {
+
+    }
   })
 }

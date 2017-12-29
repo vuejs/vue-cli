@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
+const debug = require('debug')
 const chalk = require('chalk')
+const dotenv = require('dotenv')
 const getPkg = require('read-pkg-up')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
@@ -19,6 +21,10 @@ module.exports = class Service {
     this.pkg = pkg.pkg || {}
     this.context = path.dirname(pkg.path)
     this.projectOptions = this.loadProjectConfig()
+    debug('vue:project-config')(this.projectOptions)
+
+    // load base .env
+    this.loadEnv()
 
     // install plugins
     this.resolvePlugins().forEach(({ id, apply }) => {
@@ -31,6 +37,31 @@ module.exports = class Service {
     }
     if (this.projectOptions.configureWebpack) {
       this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+    }
+  }
+
+  loadEnv (mode) {
+    const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
+    const localPath = `${basePath}.local`
+    const baseRes = dotenv.load({ path: basePath })
+    const localRes = dotenv.load({ path: localPath })
+
+    const checkError = res => {
+      // only ignore if file is not found
+      if (res.error && res.error.toString().indexOf('ENOENT') < 0) {
+        error(res.error)
+      }
+    }
+
+    checkError(baseRes)
+    checkError(localRes)
+
+    const logger = debug('vue:env')
+    if (baseRes.parsed) {
+      logger(basePath, baseRes.parsed)
+    }
+    if (localRes.parsed) {
+      logger(localPath, localRes.parsed)
     }
   }
 

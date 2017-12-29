@@ -1,21 +1,28 @@
 const { info, error, hasYarn, clearConsole } = require('@vue/cli-shared-utils')
 
+const defaults = {
+  mode: 'development',
+  host: '0.0.0.0',
+  port: 8080,
+  https: false
+}
+
 module.exports = (api, options) => {
   api.registerCommand('serve', {
     description: 'start development server',
     usage: 'vue-cli-service serve',
     options: {
-      '--open': 'open browser on server start',
-      '--env': 'specify NODE_ENV (default: development)',
-      '--host': 'specify host (default: 0.0.0.0)',
-      '--port': 'specify port (default: 8080)',
-      '--https': 'use https'
+      '--open': `open browser on server start`,
+      '--mode': `specify env mode (default: ${defaults.mode})`,
+      '--host': `specify host (default: ${defaults.host})`,
+      '--port': `specify port (default: ${defaults.port})`,
+      '--https': `use https (default: ${defaults.https})`
     }
   }, args => {
     clearConsole()
     info('Starting development server...')
 
-    api.setEnv(args.env || 'development')
+    api.setMode(args.mode || defaults.mode)
 
     const chalk = require('chalk')
     const webpack = require('webpack')
@@ -27,9 +34,9 @@ module.exports = (api, options) => {
     const overlayMiddleware = require('@vue/cli-overlay/middleware')
 
     const projectDevServerOptions = options.devServer || {}
-    const useHttps = args.https || projectDevServerOptions.https
-    const host = args.host || process.env.HOST || projectDevServerOptions.host || '0.0.0.0'
-    portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || 8080
+    const useHttps = args.https || projectDevServerOptions.https || defaults.https
+    const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
+    portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
 
     portfinder.getPort((err, port) => {
       if (err) {

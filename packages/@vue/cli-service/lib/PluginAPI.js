@@ -10,9 +10,11 @@ module.exports = class PluginAPI {
     return path.resolve(this.service.context, _path)
   }
 
-  setEnv (env) {
-    process.env.NODE_ENV = env
-    process.env.BABEL_ENV = env === 'production' ? env : 'development'
+  setMode (mode = 'development') {
+    // by default, NODE_ENV === mode, but this can be overwritten in .env files
+    process.env.NODE_ENV = mode
+    // load .env files based on mode
+    this.service.loadEnv(mode)
   }
 
   registerCommand (name, opts, fn) {
