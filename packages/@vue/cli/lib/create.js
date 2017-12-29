@@ -5,9 +5,7 @@ const rimraf = require('rimraf')
 const inquirer = require('inquirer')
 const program = require('commander')
 const Creator = require('./Creator')
-const debug = require('debug')('create')
-const { warn, error } = require('@vue/cli-shared-utils')
-const resolveInstalledGenerators = require('./util/resolveInstalledGenerators')
+const { warn, error, clearConsole } = require('@vue/cli-shared-utils')
 
 async function run () {
   program
@@ -23,39 +21,33 @@ async function run () {
 
   const targetDir = path.resolve(process.cwd(), projectName)
   if (fs.existsSync(targetDir)) {
-    const { overwrite } = await inquirer.prompt([
+    clearConsole()
+    const { action } = await inquirer.prompt([
       {
-        name: 'overwrite',
-        type: 'confirm',
-        message: `Target directory ${chalk.cyan(targetDir)} already exists.\n  Overwrite?`
+        name: 'action',
+        type: 'list',
+        message: `Target directory ${chalk.cyan(targetDir)} already exists. Pick an action:`,
+        choices: [
+          { name: 'Overwrite', value: 'overwrite' },
+          { name: 'Merge', value: 'merge' },
+          { name: 'Cancel', value: false }
+        ]
       }
     ])
-    if (overwrite) {
-      rimraf.sync(targetDir)
-    } else {
+    if (!action) {
       return
+    } else if (action === 'overwrite') {
+      rimraf.sync(targetDir)
     }
   }
 
-  const createGenerator = (id, requirePath = id) => ({
-    id,
-    apply: require(requirePath)
-  })
+  const promptModules = fs
+    .readdirSync(path.resolve(__dirname, './promptModules'))
+    .filter(file => file.charAt(0) !== '.')
+    .map(file => require(`./promptModules/${file}`))
 
-  const builtInGenerators = fs
-    .readdirSync(path.resolve(__dirname, './generators'))
-    .filter(dir => dir.charAt(0) !== '.')
-    .map(id => createGenerator(id, `./generators/${id}`))
-
-  debug(builtInGenerators)
-
-  const installedGenerators = resolveInstalledGenerators().map(id => {
-    return createGenerator(id)
-  })
-
-  const creator = new Creator(projectName, builtInGenerators.concat(installedGenerators))
-
-  await creator.create(targetDir)
+  const creator = new Creator(promptModules)
+  await creator.create(projectName, targetDir)
 }
 
 run().catch(error)

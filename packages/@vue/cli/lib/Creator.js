@@ -1,106 +1,115 @@
 const fs = require('fs')
 const os = require('os')
-const ejs = require('ejs')
 const path = require('path')
 const chalk = require('chalk')
+const debug = require('debug')
 const inquirer = require('inquirer')
-const GeneratorAPI = require('./GeneratorAPI')
+const Generator = require('./Generator')
 const installDeps = require('./util/installDeps')
+const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 
 const {
   info,
   error,
-  success,
   hasYarn,
   clearConsole
 } = require('@vue/cli-shared-utils')
 
-const debug = require('debug')
 const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
 
 const defaultOptions = {
-  features: ['eslint', 'unit'],
-  eslint: 'eslint-only',
-  unit: 'mocha',
-  assertionLibrary: 'chai',
-  packageManager: hasYarn ? 'yarn' : 'npm'
+  packageManager: hasYarn ? 'yarn' : 'npm',
+  plugins: {
+    '@vue/cli-plugin-babel': {},
+    '@vue/cli-plugin-eslint': { config: 'eslint-only' },
+    '@vue/cli-plugin-unit-mocha-webpack': { assertionLibrary: 'chai' }
+  }
 }
 
 module.exports = class Creator {
-  constructor (name, generators) {
-    this.name = name
+  constructor (modules) {
     const { modePrompt, featurePrompt } = this.resolveIntroPrompts()
     this.modePrompt = modePrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
     this.injectedPrompts = []
     this.promptCompleteCbs = []
-    this.fileMiddlewares = []
 
-    this.options = {}
-    this.pkg = {
-      name,
-      version: '0.1.0',
-      private: true,
-      scripts: {},
-      dependencies: {},
-      devDependencies: {}
-    }
-    // for conflict resolution
-    this.depSources = {}
-    // virtual file tree
-    this.files = {}
-
-    generators.forEach(({ id, apply }) => {
-      apply(new GeneratorAPI(id, this))
-    })
+    const api = new PromptModuleAPI(this)
+    modules.forEach(m => m(api))
   }
 
-  async create (targetDir) {
+  async create (name, targetDir) {
     // prompt
     clearConsole()
-    let options = await inquirer.prompt(this.resolveFinalPrompts())
-    debug('rawOptions')(options)
+    const answers = await inquirer.prompt(this.resolveFinalPrompts())
+    debug('answers')(answers)
 
-    if (options.mode === 'saved') {
+    let options
+    if (answers.mode === 'saved') {
       options = this.loadSavedOptions()
-    } else if (options.mode === 'default') {
+    } else if (answers.mode === 'default') {
       options = defaultOptions
+    } else {
+      options = {
+        packageManager: answers.packageManager,
+        plugins: {}
+      }
     }
-    options.projectName = this.name
 
-    // run cb registered by generators
-    this.promptCompleteCbs.forEach(cb => cb(options))
-    this.options = options
-    debug('options')(options)
+    // run cb registered by prompt modules to finalize the options
+    this.promptCompleteCbs.forEach(cb => cb(answers, options))
+
     // save options
-    if (options.mode === 'manual' && options.save) {
+    if (answers.mode === 'manual' && answers.save) {
       this.saveOptions(options)
     }
 
-    // wait for file resolve
-    await this.resolveFiles()
-    // set package.json
-    this.resolvePkg()
-    this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
-    // write file tree to disk
-    await writeFileTree(targetDir, this.files)
-
-    success(`Project created in ${chalk.cyan(options.projectName)}.`)
-
-    if (options.packageManager) {
-      info(`Installing dependencies with ${options.packageManager}. This may take a while...`)
-      await installDeps(options.packageManager, targetDir)
+    // inject core service
+    options.plugins['@vue/cli-service'] = {
+      projectName: name
     }
+
+    debug('options')(options)
+
+    // write base package.json to disk
+    info(`Creating project in ${chalk.cyan(targetDir)}.`)
+    writeFileTree(targetDir, {
+      'package.json': JSON.stringify({
+        name,
+        version: '0.1.0',
+        private: true
+      }, null, 2)
+    })
+
+    // install deps
+    info(`Installing dependencies with ${options.packageManager}. This may take a while...`)
+    const deps = Object.keys(options.plugins)
+    if (process.env.VUE_CLI_DEBUG) {
+      // in development, use linked packages
+      updatePackageForDev(targetDir, deps)
+      await installDeps(options.packageManager, targetDir)
+    } else {
+      await installDeps(options.packageManager, targetDir, deps)
+    }
+
+    // run generator
+    const generator = new Generator(targetDir, options)
+    await generator.generate()
+
+    // install deps again (new deps injected by generators)
+    await installDeps(options.packageManager, targetDir)
+
+    // TODO run vue-cli-service init
   }
 
   resolveIntroPrompts () {
     const modePrompt = {
       name: 'mode',
       type: 'list',
-      message: `Pick a project creation mode:`,
+      message: `Hi there! Please pick a project creation mode:`,
       choices: [
         {
           name: 'Zero-configuration with defaults',
@@ -122,7 +131,7 @@ module.exports = class Creator {
       name: 'features',
       when: isMode('manual'),
       type: 'checkbox',
-      message: 'Please check the features needed for your project.',
+      message: 'Check the features needed for your project:',
       choices: []
     }
     return {
@@ -132,46 +141,33 @@ module.exports = class Creator {
   }
 
   resolveOutroPrompts () {
-    const outroPrompts = [
-      {
-        name: 'save',
-        when: isMode('manual'),
-        type: 'confirm',
-        message: 'Save the preferences for future projects?'
-      }
-    ]
+    const outroPrompts = []
     if (hasYarn) {
-      outroPrompts.unshift({
+      outroPrompts.push({
         name: 'packageManager',
         when: isMode('manual'),
         type: 'list',
-        message: 'Automatically install NPM dependencies after project creation?',
+        message: 'Pick the package manager to use when installing dependencies:',
         choices: [
-          {
-            name: 'Use NPM',
-            value: 'npm',
-            short: 'NPM'
-          },
           {
             name: 'Use Yarn',
             value: 'yarn',
             short: 'Yarn'
           },
           {
-            name: `I'll handle that myself`,
-            value: false,
-            short: 'No'
+            name: 'Use NPM',
+            value: 'npm',
+            short: 'NPM'
           }
         ]
       })
-    } else {
-      outroPrompts.unshift({
-        name: 'packageManager',
-        when: isMode('manual'),
-        type: 'confirm',
-        message: 'Automatically install NPM dependencies after project creation?'
-      })
     }
+    outroPrompts.push({
+      name: 'save',
+      when: isMode('manual'),
+      type: 'confirm',
+      message: 'Save the preferences for future projects?'
+    })
     return outroPrompts
   }
 
@@ -208,6 +204,10 @@ module.exports = class Creator {
   }
 
   saveOptions (options) {
+    options = Object.assign({}, options)
+    delete options.projectName
+    delete options.mode
+    delete options.save
     try {
       fs.writeFileSync(rcPath, JSON.stringify(options, null, 2))
     } catch (e) {
@@ -218,21 +218,21 @@ module.exports = class Creator {
       )
     }
   }
+}
 
-  resolvePkg () {
-    const sortDeps = deps => Object.keys(deps).sort().reduce((res, name) => {
-      res[name] = deps[name]
-      return res
-    }, {})
-    this.pkg.dependencies = sortDeps(this.pkg.dependencies)
-    this.pkg.devDependencies = sortDeps(this.pkg.devDependencies)
-    debug('pkg')(this.pkg)
-  }
-
-  async resolveFiles () {
-    for (const middleware of this.fileMiddlewares) {
-      await middleware(this.files, ejs.render)
-    }
-    debug('files')(this.files)
-  }
+function updatePackageForDev (targetDir, deps) {
+  const pkg = require(path.resolve(targetDir, 'package.json'))
+  pkg.devDependencies = {}
+  deps.forEach(dep => {
+    pkg.devDependencies[dep] = require(path.resolve(
+      __dirname,
+      '../../../',
+      dep,
+      'package.json'
+    )).version
+  })
+  fs.writeFileSync(
+    path.resolve(targetDir, 'package.json'),
+    JSON.stringify(pkg, null, 2)
+  )
 }

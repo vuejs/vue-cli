@@ -1,6 +1,7 @@
 module.exports = (api, options) => {
+  api.renderFiles('./files')
+
   const devDependencies = {
-    '@vue/cli-plugin-unit-mocha-webpack': '^0.1.0',
     'vue-test-utils': '^1.0.0-beta.9'
   }
   if (options.assertionLibrary === 'chai') {
@@ -15,6 +16,4 @@ module.exports = (api, options) => {
       test: 'vue-cli-service test'
     }
   })
-
-  api.renderFiles('./files')
 }

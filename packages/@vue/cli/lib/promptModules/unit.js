@@ -1,13 +1,13 @@
-module.exports = api => {
-  api.injectFeature({
+module.exports = cli => {
+  cli.injectFeature({
     name: 'Unit Testing',
     value: 'unit',
     short: 'Unit'
   })
 
-  api.injectPrompt({
+  cli.injectPrompt({
     name: 'unit',
-    when: options => options.features.includes('unit'),
+    when: answers => answers.features.includes('unit'),
     type: 'list',
     message: 'Pick a unit testing solution:',
     choices: [
@@ -24,10 +24,10 @@ module.exports = api => {
     ]
   })
 
-  api.injectPrompt({
+  cli.injectPrompt({
     name: 'assertionLibrary',
     message: 'Pick an assertion library for unit tests:',
-    when: options => options.unit === 'mocha',
+    when: answers => answers.unit === 'mocha',
     type: 'list',
     choices: [
       {
@@ -48,11 +48,13 @@ module.exports = api => {
     ]
   })
 
-  api.onPromptComplete(options => {
-    if (options.unit === 'mocha') {
-      require('./mocha-webpack')(api, options)
-    } else if (options.unit === 'jest') {
-      require('./jest')(api, options)
+  cli.onPromptComplete((answers, options) => {
+    if (answers.unit === 'mocha') {
+      options.plugins['@vue/cli-plugin-unit-mocha-webpack'] = {
+        assertionLibrary: answers.assertionLibrary
+      }
+    } else if (answers.unit === 'jest') {
+      options.plugins['@vue/cli-plugin-unit-jest'] = {}
     }
   })
 }

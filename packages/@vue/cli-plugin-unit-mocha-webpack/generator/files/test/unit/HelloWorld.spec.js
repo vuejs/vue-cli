@@ -1,5 +1,5 @@
 import { shallow } from 'vue-test-utils'
-<%_ if (options.assertionLibrary === 'expect' && options.unit !== 'jest') { _%>
+<%_ if (options.assertionLibrary === 'expect') { _%>
 import { expect } from 'expect'
 <%_ } _%>
 <%_ if (options.assertionLibrary === 'chai') { _%>
@@ -13,7 +13,7 @@ describe('Hello.vue', () => {
     const wrapper = shallow(HelloWorld, {
       context: { props: { msg } }
     })
-    <%_ if (options.assertionLibrary === 'expect' || options.unit === 'jest') { _%>
+    <%_ if (options.assertionLibrary === 'expect') { _%>
     expect(wrapper.text()).toBe(msg)
     <%_ } else if (options.assertionLibrary === 'chai') { _%>
     expect(wrapper.text()).to.equal(msg)

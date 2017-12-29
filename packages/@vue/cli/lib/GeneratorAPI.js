@@ -5,54 +5,24 @@ const walk = require('klaw-sync')
 const isBinary = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
 const errorParser = require('error-stack-parser')
-const { error } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
 const isObject = val => val && typeof val === 'object'
 
 module.exports = class GeneratorAPI {
-  constructor (id, creator) {
+  constructor (id, generator, options) {
     this.id = id
-    this.creator = creator
-  }
-
-  injectFeature (feature) {
-    this.creator.featurePrompt.choices.push(feature)
-  }
-
-  injectPrompt (prompt) {
-    this.creator.injectedPrompts.push(prompt)
-  }
-
-  injectOptionForPrompt (name, option) {
-    const prompt = this.creator.injectedPrompts.find(f => {
-      return f.name === name
-    })
-    if (!prompt) {
-      error(
-        `injectOptionForFeature error in generator "${
-          this.id
-        }": prompt "${name}" does not exist.`
-      )
-    }
-    prompt.choices.push(option)
-  }
-
-  onPromptComplete (cb) {
-    this.creator.promptCompleteCbs.push(cb)
-  }
-
-  onCreateComplete (cb) {
-    this.creator.onCreateCompleteCbs.push(cb)
+    this.generator = generator
+    this.options = options
   }
 
   injectFileMiddleware (middleware) {
-    this.creator.fileMiddlewares.push(middleware)
+    this.generator.fileMiddlewares.push(middleware)
   }
 
   extendPackage (fields, options = { merge: true }) {
-    const pkg = this.creator.pkg
+    const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
     for (const key in toMerge) {
       if (!options.merge || !(key in pkg)) {
@@ -69,7 +39,7 @@ module.exports = class GeneratorAPI {
               this.id,
               existing,
               value,
-              this.creator.depSources
+              this.generator.depSources
             )
           } else {
             pkg[key] = Object.assign({}, existing, value)
@@ -87,7 +57,7 @@ module.exports = class GeneratorAPI {
       fileDir = path.resolve(baseDir, fileDir)
       this.injectFileMiddleware(files => {
         const data = Object.assign({
-          options: this.creator.options
+          options: this.options
         }, additionalData)
         const _files = walk(fileDir, {
           nodir: true,
@@ -101,7 +71,7 @@ module.exports = class GeneratorAPI {
     } else if (isObject(fileDir)) {
       this.injectFileMiddleware(files => {
         const data = Object.assign({
-          options: this.creator.options
+          options: this.options
         }, additionalData)
         for (const targetPath in fileDir) {
           const sourcePath = path.resolve(baseDir, fileDir[targetPath])
