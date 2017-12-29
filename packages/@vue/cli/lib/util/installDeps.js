@@ -1,5 +1,7 @@
 const { spawn } = require('child_process')
 
+// TODO ping npm registry, check npm config and prompt for npm mirror in China
+
 module.exports = function installDeps (command, targetDir, deps) {
   return new Promise((resolve, reject) => {
     const args = []

@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const HTMLPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const WatchMissingNodeModulesPlugin = require('../webpack/watchmissingnodemodulesplugin')
 
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
@@ -20,14 +21,15 @@ module.exports = api => {
         .plugin('no-emit-on-errors')
           .use(webpack.NoEmitOnErrorsPlugin)
 
-      // TODO WatchMissingNodeModulesPlugin
-
-      // TODO InterpolateHtmlPlugin
-
       webpackConfig
         .plugin('firendly-errors')
           .use(FriendlyErrorsPlugin)
 
+      webpackConfig
+        .plugin('watch-missing')
+          .use(WatchMissingNodeModulesPlugin, [api.resolve('node_modules')])
+
+      // TODO handle publicPath in template
       webpackConfig
         .plugin('html')
           .use(HTMLPlugin, [{

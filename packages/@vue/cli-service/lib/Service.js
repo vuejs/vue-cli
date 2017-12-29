@@ -40,6 +40,7 @@ module.exports = class Service {
       './command-plugins/build',
       './command-plugins/inspect',
       './command-plugins/help',
+      // config plugins are order sensitive
       './config-plugins/base',
       './config-plugins/css',
       './config-plugins/dev',

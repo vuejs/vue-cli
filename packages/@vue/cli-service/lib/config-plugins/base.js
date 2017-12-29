@@ -1,6 +1,8 @@
 const webpack = require('webpack')
 const resolveLocal = require('../util/resolveLocal')
 const resolveClientEnv = require('../util/resolveClientEnv')
+const TimeFixPlugin = require('../webpack/TimeFixPlugin')
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
@@ -27,7 +29,6 @@ module.exports = (api, options) => {
       .alias
         .set('@', api.resolve('src'))
         .set('vue$', options.compiler ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.runtime.esm.js')
-        .set('vue-hot-reload-api', require.resolve('vue-hot-reload-api'))
 
     webpackConfig.resolveLoader
       .set('symlinks', true)
@@ -42,14 +43,14 @@ module.exports = (api, options) => {
       .rule('vue')
         .test(/\.vue$/)
         .use('vue-loader')
-          .loader(require.resolve('vue-loader'))
+          .loader('vue-loader')
           .options(Object.assign({}, options.vueLoaderOptions))
 
     webpackConfig.module
       .rule('images')
         .test(/\.(png|jpe?g|gif)(\?.*)?$/)
         .use('url-loader')
-          .loader(require.resolve('url-loader'))
+          .loader('url-loader')
           .options({
             limit: 10000,
             name: 'public/img/[name].[hash:7].[ext]'
@@ -61,7 +62,7 @@ module.exports = (api, options) => {
       .rule('svg')
         .test(/\.(svg)(\?.*)?$/)
         .use('file-loader')
-          .loader(require.resolve('file-loader'))
+          .loader('file-loader')
           .options({
             name: 'public/img/[name].[hash:7].[ext]'
           })
@@ -70,7 +71,7 @@ module.exports = (api, options) => {
       .rule('media')
         .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
         .use('url-loader')
-          .loader(require.resolve('url-loader'))
+          .loader('url-loader')
           .options({
             limit: 10000,
             name: 'public/media/[name].[hash:7].[ext]'
@@ -80,7 +81,7 @@ module.exports = (api, options) => {
       .rule('fonts')
         .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/)
         .use('url-loader')
-          .loader(require.resolve('url-loader'))
+          .loader('url-loader')
           .options({
             limit: 10000,
             name: 'public/fonts/[name].[hash:7].[ext]'
@@ -104,7 +105,12 @@ module.exports = (api, options) => {
       .plugin('define')
         .use(webpack.DefinePlugin, [resolveClientEnv()])
 
-    // TODO TimeFixPlugin
-    // TODO CaseSensitivePlugin
+    webpackConfig
+      .plugin('timefix')
+        .use(TimeFixPlugin)
+
+    webpackConfig
+      .plugin('case-sensitive-paths')
+        .use(CaseSensitivePathsPlugin)
   })
 }
