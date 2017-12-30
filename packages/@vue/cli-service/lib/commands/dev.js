@@ -63,9 +63,9 @@ module.exports = (api, options) => {
         // hmr client
         projectDevServerOptions.hotOnly
           ? 'webpack/hot/dev-server'
-          : 'webpack/hot/only-dev-server',
-        // custom overlay client
-        `@vue/cli-overlay/dist/client`
+          : 'webpack/hot/only-dev-server'
+        // TODO custom overlay client
+        // `@vue/cli-overlay/dist/client`
       ])
 
       const compiler = webpack(webpackConfig)
@@ -114,7 +114,8 @@ module.exports = (api, options) => {
         hot: true,
         quiet: true,
         compress: true,
-        publicPath: webpackConfig.output.publicPath
+        publicPath: webpackConfig.output.publicPath,
+        overlay: { warnings: false, errors: true } // TODO disable this
       }, projectDevServerOptions, {
         https: useHttps,
         proxy: proxySettings,

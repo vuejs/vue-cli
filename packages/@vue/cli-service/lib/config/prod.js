@@ -104,6 +104,8 @@ module.exports = (api, options) => {
             to: api.resolve(options.outputDir),
             ignore: ['index.html', '.*']
           }]])
+
+      // TODO investigate DLL plugin options
     }
   })
 }
