@@ -1,20 +1,21 @@
-const webpack = require('webpack')
-const resolveLocal = require('../util/resolveLocal')
-const resolveClientEnv = require('../util/resolveClientEnv')
-const TimeFixPlugin = require('../util/TimeFixPlugin')
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
-
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
+    const webpack = require('webpack')
+    const resolveLocal = require('../util/resolveLocal')
+    const resolveClientEnv = require('../util/resolveClientEnv')
+    const HTMLPlugin = require('html-webpack-plugin')
+    const TimeFixPlugin = require('../util/TimeFixPlugin')
+    const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+
     webpackConfig
       .context(api.service.context)
       .entry('app')
         .add('./src/main.js')
         .end()
       .output
-        .path(api.resolve('dist'))
+        .path(api.resolve(options.outputDir))
         .filename('[name].js')
-        .publicPath('/')
+        .publicPath(options.base)
 
     webpackConfig.resolve
       .set('symlinks', true)
@@ -53,7 +54,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: 10000,
-            name: 'public/img/[name].[hash:7].[ext]'
+            name: `${options.staticDir}/img/[name].[hash:8].[ext]`
           })
 
     // do not base64-inline SVGs.
@@ -64,7 +65,7 @@ module.exports = (api, options) => {
         .use('file-loader')
           .loader('file-loader')
           .options({
-            name: 'public/img/[name].[hash:7].[ext]'
+            name: `${options.staticDir}/img/[name].[hash:8].[ext]`
           })
 
     webpackConfig.module
@@ -74,7 +75,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: 10000,
-            name: 'public/media/[name].[hash:7].[ext]'
+            name: `${options.staticDir}/media/[name].[hash:8].[ext]`
           })
 
     webpackConfig.module
@@ -84,7 +85,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: 10000,
-            name: 'public/fonts/[name].[hash:7].[ext]'
+            name: `${options.staticDir}/fonts/[name].[hash:8].[ext]`
           })
 
     webpackConfig.node
@@ -100,6 +101,13 @@ module.exports = (api, options) => {
         tls: 'empty',
         child_process: 'empty'
       })
+
+    // TODO handle publicPath in template
+    webpackConfig
+      .plugin('html')
+        .use(HTMLPlugin, [{
+          template: api.resolve('public/index.html')
+        }])
 
     webpackConfig
       .plugin('define')

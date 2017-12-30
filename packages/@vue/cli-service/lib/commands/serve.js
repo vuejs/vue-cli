@@ -1,146 +1,28 @@
-const { info, error, hasYarn, clearConsole } = require('@vue/cli-shared-utils')
-
-const defaults = {
-  mode: 'development',
-  host: '0.0.0.0',
-  port: 8080,
-  https: false
-}
+const chalk = require('chalk')
 
 module.exports = (api, options) => {
   api.registerCommand('serve', {
-    description: 'start development server',
-    usage: 'vue-cli-service serve',
-    options: {
-      '--open': `open browser on server start`,
-      '--mode': `specify env mode (default: ${defaults.mode})`,
-      '--host': `specify host (default: ${defaults.host})`,
-      '--port': `specify port (default: ${defaults.port})`,
-      '--https': `use https (default: ${defaults.https})`
-    }
+    description: `start static server in ${chalk.cyan(options.outputDir)}`,
+    usage: 'vue-cli-service serve [options]',
+    details: `For all options, see ${
+      chalk.cyan(`https://github.com/zeit/serve/blob/master/lib/options.js`)
+    }`
   }, args => {
-    clearConsole()
-    info('Starting development server...')
+    const fs = require('fs')
+    const serve = require('serve')
+    const { error, hasYarn } = require('@vue/cli-shared-utils')
 
-    api.setMode(args.mode || defaults.mode)
-
-    const chalk = require('chalk')
-    const webpack = require('webpack')
-    const WebpackDevServer = require('webpack-dev-server')
-    const portfinder = require('portfinder')
-    const openBrowser = require('../util/openBrowser')
-    const prepareURLs = require('../util/prepareURLs')
-    const prepareProxy = require('../util/prepareProxy')
-    const overlayMiddleware = require('@vue/cli-overlay/middleware')
-
-    const projectDevServerOptions = options.devServer || {}
-    const useHttps = args.https || projectDevServerOptions.https || defaults.https
-    const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
-    portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
-
-    portfinder.getPort((err, port) => {
-      if (err) {
-        return error(err)
-      }
-
-      const webpackConfig = api.resolveWebpackConfig()
-
-      const urls = prepareURLs(
-        useHttps ? 'https' : 'http',
-        host,
-        port
+    const outputDir = api.resolve(options.outputDir)
+    if (!fs.existsSync(outputDir)) {
+      error(
+        `Build directory ${chalk.gray(outputDir)} does not exist. ` +
+        `Run ${chalk.cyan(hasYarn ? 'yarn build' : 'npm run build')} first.`
       )
+      process.exit(1)
+    }
 
-      // inject dev/hot client
-      addDevClientToEntry(webpackConfig, [
-        // dev server client
-        `webpack-dev-server/client/?${urls.localUrlForBrowser}`,
-        // hmr client
-        projectDevServerOptions.hotOnly
-          ? 'webpack/hot/dev-server'
-          : 'webpack/hot/only-dev-server',
-        // custom overlay client
-        `@vue/cli-overlay/dist/client`
-      ])
-
-      const compiler = webpack(webpackConfig)
-
-      // log instructions & open browser on first compilation complete
-      let isFirstCompile = true
-      compiler.plugin('done', stats => {
-        if (stats.hasErrors()) {
-          return
-        }
-
-        console.log([
-          `  App running at:`,
-          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)}`,
-          `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
-        ].join('\n'))
-        console.log()
-
-        if (isFirstCompile) {
-          isFirstCompile = false
-          const buildCommand = hasYarn ? `yarn build` : `npm run build`
-          console.log([
-            `  Note that the development build is not optimized.`,
-            `  To create a production build, run ${chalk.cyan(buildCommand)}.`
-          ].join('\n'))
-          console.log()
-
-          if (args.open || projectDevServerOptions.open) {
-            openBrowser(urls.localUrlForBrowser)
-          }
-        }
-      })
-
-      const proxySettings = prepareProxy(
-        projectDevServerOptions.proxy,
-        api.resolve('public')
-      )
-
-      const server = new WebpackDevServer(compiler, Object.assign({
-        clientLogLevel: 'none',
-        historyApiFallback: {
-          disableDotRule: true
-        },
-        contentBase: api.resolve('public'),
-        watchContentBase: true,
-        hot: true,
-        quiet: true,
-        compress: true,
-        publicPath: webpackConfig.output.publicPath
-      }, projectDevServerOptions, {
-        https: useHttps,
-        proxy: proxySettings,
-        before (app) {
-          // overlay
-          app.use(overlayMiddleware())
-          // allow other plugins to register middlewares, e.g. PWA
-          api.service.devServerConfigFns.forEach(fn => fn(app))
-          // apply in project middlewares
-          projectDevServerOptions.before && projectDevServerOptions.before(app)
-        }
-      }))
-
-      server.listen(port, host, err => {
-        if (err) {
-          return error(err)
-        }
-      })
-    })
+    return serve(outputDir, Object.assign({}, args, {
+      single: true
+    }))
   })
-}
-
-function addDevClientToEntry (config, devClient) {
-  const { entry } = config
-  if (typeof entry === 'object' && !Array.isArray(entry)) {
-    Object.keys(entry).forEach((key) => {
-      entry[key] = devClient.concat(entry[key])
-    })
-  } else if (typeof entry === 'function') {
-    config.entry = entry(devClient)
-  } else {
-    config.entry = devClient.concat(entry)
-  }
 }

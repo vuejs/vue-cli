@@ -42,6 +42,9 @@ module.exports = class Generator {
     }, {})
     this.pkg.dependencies = sortDeps(this.pkg.dependencies)
     this.pkg.devDependencies = sortDeps(this.pkg.devDependencies)
+
+    // TODO sort pkg keys
+
     debug('vue:cli-pkg')(this.pkg)
   }
 

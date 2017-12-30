@@ -1,11 +1,10 @@
-const webpack = require('webpack')
-const HTMLPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const WatchMissingNodeModulesPlugin = require('../util/WatchMissingNodeModulesPlugin')
-
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'development') {
+      const webpack = require('webpack')
+      const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+      const WatchMissingNodeModulesPlugin = require('../util/WatchMissingNodeModulesPlugin')
+
       webpackConfig
         .devtool('cheap-module-source-map')
 
@@ -28,13 +27,6 @@ module.exports = api => {
       webpackConfig
         .plugin('watch-missing')
           .use(WatchMissingNodeModulesPlugin, [api.resolve('node_modules')])
-
-      // TODO handle publicPath in template
-      webpackConfig
-        .plugin('html')
-          .use(HTMLPlugin, [{
-            template: api.resolve('public/index.html')
-          }])
     }
   })
 }

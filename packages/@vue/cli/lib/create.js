@@ -59,4 +59,5 @@ async function run () {
 run().catch(err => {
   stopSpinner(false) // do not persist
   error(err)
+  process.exit(1)
 })

@@ -18,4 +18,7 @@ const service = new Service()
 const args = require('minimist')(process.argv.slice(2))
 const command = args._[0]
 
-service.run(command, args)
+service.run(command, args).catch(err => {
+  error(err)
+  process.exit(1)
+})

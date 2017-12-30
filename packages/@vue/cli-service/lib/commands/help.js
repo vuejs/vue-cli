@@ -53,6 +53,10 @@ module.exports = (api, options) => {
           }`)
         }
       }
+      if (opts.details) {
+        console.log()
+        console.log(opts.details.split('\n').map(line => `  ${line}`).join('\n'))
+      }
       console.log()
     }
   }

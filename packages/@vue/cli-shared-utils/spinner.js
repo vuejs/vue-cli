@@ -1,9 +1,14 @@
 const ora = require('ora')
+const chalk = require('chalk')
 
 const spinner = ora()
-let lastMsg
+let lastMsg = null
 
 exports.logWithSpinner = (symbol, msg) => {
+  if (!msg) {
+    msg = symbol
+    symbol = chalk.green('✔')
+  }
   if (lastMsg) {
     spinner.stopAndPersist({
       symbol: lastMsg.symbol,
@@ -27,4 +32,5 @@ exports.stopSpinner = (persist) => {
   } else {
     spinner.stop()
   }
+  lastMsg = null
 }

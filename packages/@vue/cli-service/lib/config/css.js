@@ -1,8 +1,8 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const CSSLoaderResolver = require('../util/CSSLoaderResolver')
-
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
+    const CSSLoaderResolver = require('../util/CSSLoaderResolver')
+    const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
     const isProd = process.env.NODE_ENV === 'production'
     const extract = isProd && options.extractCSS !== false
     const resolver = new CSSLoaderResolver({
@@ -70,7 +70,7 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('extract-css')
           .use(ExtractTextPlugin, [Object.assign({
-            filename: '[name].[contenthash:7].css',
+            filename: '[name].[contenthash:8].css',
             allChunks: true
           }, userOptions)])
     }

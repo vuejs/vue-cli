@@ -18,8 +18,8 @@ exports.info = msg => {
   console.log(format(chalk.bgBlue.black(' INFO '), msg))
 }
 
-exports.success = msg => {
-  console.log(format(chalk.bgGreen.black('  OK  '), msg))
+exports.done = msg => {
+  console.log(format(chalk.bgGreen.black(' DONE '), msg))
 }
 
 exports.warn = msg => {

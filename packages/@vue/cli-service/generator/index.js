@@ -2,7 +2,7 @@ module.exports = (generatorAPI, options) => {
   generatorAPI.render('./template')
   generatorAPI.extendPackage({
     scripts: {
-      'dev': 'vue-cli-service serve' + (
+      'dev': 'vue-cli-service dev' + (
         // only auto open browser on MacOS where applescript
         // can avoid dupilcate window opens
         process.platform === 'darwin'
@@ -10,7 +10,7 @@ module.exports = (generatorAPI, options) => {
           : ''
       ),
       'build': 'vue-cli-service build',
-      'start': 'vue-cli-service serve --prod'
+      'start': 'vue-cli-service serve'
     },
     dependencies: {
       'vue': '^2.5.13'

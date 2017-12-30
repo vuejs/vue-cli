@@ -1,7 +1,7 @@
 module.exports = (api, options) => {
   api.registerCommand('inspect', {
     description: 'inspect internal webpack config',
-    usage: 'vue-cli-service inspect [...keys]',
+    usage: 'vue-cli-service inspect [options] [...keys]',
     options: {
       '--env': 'specify NODE_ENV (default: development)'
     }
