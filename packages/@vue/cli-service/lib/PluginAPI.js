@@ -10,9 +10,12 @@ module.exports = class PluginAPI {
     return path.resolve(this.service.context, _path)
   }
 
-  setMode (mode = 'development') {
-    // by default, NODE_ENV === mode, but this can be overwritten in .env files
-    process.env.NODE_ENV = mode
+  setMode (mode) {
+    // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
+    // is production. However this can be overwritten in .env files.
+    process.env.NODE_ENV = process.env.BABE_ENV = mode === 'production'
+      ? mode
+      : 'development'
     // load .env files based on mode
     this.service.loadEnv(mode)
   }
