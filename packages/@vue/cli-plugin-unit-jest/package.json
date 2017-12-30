@@ -20,5 +20,11 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-jest#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "babel-jest": "^22.0.4",
+    "jest": "^22.0.4",
+    "jest-serializer-vue": "^0.3.0",
+    "vue-jest": "^1.4.0"
   }
 }

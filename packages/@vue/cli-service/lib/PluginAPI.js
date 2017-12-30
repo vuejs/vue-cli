@@ -10,12 +10,16 @@ module.exports = class PluginAPI {
     return path.resolve(this.service.context, _path)
   }
 
+  // set project mode.
+  // this should be called by any registered command as early as possible.
   setMode (mode) {
+    process.env.VUE_CLI_MODE = mode
     // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
-    // is production. However this can be overwritten in .env files.
-    process.env.NODE_ENV = process.env.BABE_ENV = mode === 'production'
-      ? mode
-      : 'development'
+    // is production or test. However this can be overwritten in .env files.
+    process.env.NODE_ENV = process.env.BABE_ENV =
+      (mode === 'production' || mode === 'test')
+        ? mode
+        : 'development'
     // load .env files based on mode
     this.service.loadEnv(mode)
   }

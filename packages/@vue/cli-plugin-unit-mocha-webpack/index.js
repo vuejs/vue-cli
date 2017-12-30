@@ -1,8 +1,10 @@
 module.exports = api => {
   api.registerCommand('test', {
-    description: 'run unit tests'
+    description: 'run unit tests with mocha-webpack'
   }, args => {
-    api.setEnv('test')
+    api.setMode('test')
+    // for @vue/babel-preset-app
+    process.env.VUE_CLI_BABEL_TARGET_NODE = true
     require('./runner')(api.resolveWebpackConfig(), args)
   })
 

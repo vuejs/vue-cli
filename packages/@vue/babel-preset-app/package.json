@@ -1,0 +1,34 @@
+{
+  "name": "@vue/babel-preset-app",
+  "version": "0.1.0",
+  "description": "babel-preset-app for vue-cli",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git"
+  },
+  "keywords": [
+    "vue",
+    "cli"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/babel-preset-app#readme",
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "7 || ^7.0.0-beta || ^7.0.0-rc",
+    "@babel/plugin-transform-runtime": "7 || ^7.0.0-beta || ^7.0.0-rc",
+    "@babel/preset-env": "7 || ^7.0.0-beta || ^7.0.0-rc",
+    "@babel/preset-stage-2": "7 || ^7.0.0-beta || ^7.0.0-rc",
+    "@babel/runtime": "7 || ^7.0.0-beta || ^7.0.0-rc",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-plugin-jsx-event-modifiers": "^2.0.5",
+    "babel-plugin-jsx-v-model": "^2.0.3",
+    "babel-plugin-transform-vue-jsx": "^3.5.0"
+  }
+}
