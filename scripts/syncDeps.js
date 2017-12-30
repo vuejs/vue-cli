@@ -1,4 +1,4 @@
-// make sure generators are using the latest version of libs
+// make sure generators are using the latest version of plugins
 
 const fs = require('fs')
 const path = require('path')
@@ -6,6 +6,7 @@ const chalk = require('chalk')
 const globby = require('globby')
 const { execSync } = require('child_process')
 
+const localPackageRE = /'(@vue\/[\w-]+)': '\^(\d+\.\d+\.\d+)'/g
 const npmPackageRE = /'(vue|vue-template-compiler|vuex|vue-router|vue-test-utils)': '\^(\d+\.\d+\.\d+)'/g
 
 ;(async () => {
@@ -26,11 +27,18 @@ const npmPackageRE = /'(vue|vue-template-compiler|vuex|vue-router|vue-test-utils
         return `'${pkg}': '^${version}'`
       }
 
+      const localReplacer = makeReplacer(
+        pkg => require(`../packages/${pkg}/package.json`).version
+      )
+
       const npmReplacer = makeReplacer(
         pkg => execSync(`npm view ${pkg} version`).toString().trim()
       )
 
       const updated = fs.readFileSync(filePath, 'utf-8')
+        // update @vue packages in this repo
+        .replace(localPackageRE, localReplacer)
+        // also update vue, vue-template-compiler, vuex, vue-router
         .replace(npmPackageRE, npmReplacer)
 
       if (isUpdated) {

@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const baseVersion = require('../packages/@vue/cli-service/package.json').version
 
 const packagesDir = path.resolve(__dirname, '../packages/@vue')
 const files = fs.readdirSync(packagesDir)
@@ -19,7 +20,7 @@ files.forEach(pkg => {
   if (!fs.existsSync(pkgPath)) {
     const json = {
       'name': `@vue/${pkg}`,
-      'version': '1.0.0',
+      'version': baseVersion,
       'description': desc,
       'main': 'index.js',
       'publishConfig': {
