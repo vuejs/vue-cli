@@ -53,9 +53,14 @@ A plugin should export a function which receives two arguments:
 The API allows plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`. Example:
 
 ``` js
-module.exports = (api, options) => {
-  api.configureWepback(config => {
+module.exports = (api, projectOptions) => {
+  api.chainWebpack(webpackConfig => {
+    // modify webpack config with webpack-chain
+  })
+
+  api.configureWepback(webpackConfig => {
     // modify webpack config
+    // or return object to be merged with webpack-merge
   })
 
   api.regsiterCommand('test', args => {
@@ -78,7 +83,7 @@ module.exports = (api, options) => {
     }
   })
 
-  api.renderFiles('./files')
+  api.render('./template')
 }
 ```
 
