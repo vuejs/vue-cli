@@ -82,6 +82,10 @@ module.exports = class GeneratorAPI {
       this.injectFileMiddleware(fileDir)
     }
   }
+
+  onCreateComplete (cb) {
+    this.generator.creator.createCompleteCbs.push(cb)
+  }
 }
 
 function extractCallDir () {

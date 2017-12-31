@@ -7,7 +7,7 @@ const globby = require('globby')
 const { execSync } = require('child_process')
 
 const localPackageRE = /'(@vue\/[\w-]+)': '\^(\d+\.\d+\.\d+)'/g
-const npmPackageRE = /'(vue|vue-template-compiler|vuex|vue-router|vue-test-utils)': '\^(\d+\.\d+\.\d+)'/g
+const npmPackageRE = /'(vue|vue-template-compiler|vuex|vue-router|vue-test-utils)': '\^(\d+\.\d+\.\d+[^']*)'/g
 
 ;(async () => {
   const paths = await globby(['packages/@vue/**/*.js'])

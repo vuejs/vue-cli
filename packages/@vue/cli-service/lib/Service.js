@@ -29,7 +29,8 @@ module.exports = class Service {
     this.loadEnv()
 
     // install plugins
-    this.resolvePlugins().forEach(({ id, apply }) => {
+    this.plugins = this.resolvePlugins()
+    this.plugins.forEach(({ id, apply }) => {
       apply(new PluginAPI(id, this), this.projectOptions)
     })
 

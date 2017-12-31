@@ -6,9 +6,10 @@ const GeneratorAPI = require('./GeneratorAPI')
 const writeFileTree = require('./util/writeFileTree')
 
 module.exports = class Generator {
-  constructor (context, options) {
+  constructor (context, options, creator) {
     this.context = context
     this.options = options
+    this.creator = creator
     this.pkg = require(path.resolve(context, 'package.json'))
     // for conflict resolution
     this.depSources = {}

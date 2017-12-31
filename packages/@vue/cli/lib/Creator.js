@@ -3,13 +3,13 @@ const os = require('os')
 const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
-const emoji = require('node-emoji')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const installDeps = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
+const formatFeatures = require('./util/formatfeatures')
 const updatePackageForDev = require('./util/updatePackageForDev')
 
 const {
@@ -31,6 +31,7 @@ module.exports = class Creator {
     this.outroPrompts = this.resolveOutroPrompts()
     this.injectedPrompts = []
     this.promptCompleteCbs = []
+    this.createCompleteCbs = []
 
     const api = new PromptModuleAPI(this)
     modules.forEach(m => m(api))
@@ -44,7 +45,7 @@ module.exports = class Creator {
 
     let options
     if (answers.mode === 'saved') {
-      options = this.loadSavedOptions()
+      options = this.savedOptions // this is loaded when resolving prompts
     } else if (answers.mode === 'default') {
       options = defaultOptions
     } else {
@@ -71,7 +72,7 @@ module.exports = class Creator {
 
     // write base package.json to disk
     clearConsole()
-    logWithSpinner(emoji.get('sparkles'), `Creating project in ${chalk.yellow(targetDir)}.`)
+    logWithSpinner('✨', `Creating project in ${chalk.yellow(targetDir)}.`)
     writeFileTree(targetDir, {
       'package.json': JSON.stringify({
         name,
@@ -81,7 +82,7 @@ module.exports = class Creator {
     })
 
     // install plugins
-    logWithSpinner(emoji.get('electric_plug'), `Installing CLI plugins. This might take a while...`)
+    logWithSpinner('⚙', `Installing CLI plugins. This might take a while...`)
     const deps = Object.keys(options.plugins)
     if (process.env.VUE_CLI_DEBUG) {
       // in development, use linked packages
@@ -92,28 +93,25 @@ module.exports = class Creator {
     }
 
     // run generator
-    logWithSpinner(emoji.get('gear'), `Invoking generators...`)
-    const generator = new Generator(targetDir, options)
+    logWithSpinner('🚀', `Invoking generators...`)
+    const generator = new Generator(targetDir, options, this)
     await generator.generate()
 
     // install additional deps (injected by generators)
-    logWithSpinner(emoji.get('package'), `Installing additional dependencies...`)
+    logWithSpinner('📦', `Installing additional dependencies...`)
     await installDeps(options.packageManager, targetDir)
+
+    // run complete cbs if any
+    for (const cb of this.createCompleteCbs) {
+      await cb()
+    }
 
     // log instructions
     stopSpinner()
     console.log()
-    console.log(`${chalk.green('✔')}  Successfully created project ${chalk.yellow(name)} with the following plugins:`)
-    console.log()
-    deps.forEach(dep => {
-      if (dep !== '@vue/cli-service') {
-        dep = dep.replace(/^(@vue\/|vue-)cli-plugin-/, '')
-        console.log(` ${chalk.gray('-')} ${dep}`)
-      }
-    })
-    console.log()
+    console.log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
     console.log(
-      `${emoji.get('point_right')}  Get started with the following commands:\n\n` +
+      `👉  Get started with the following commands:\n\n` +
       chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`) +
       chalk.cyan(` ${chalk.gray('$')} ${options.packageManager === 'yarn' ? 'yarn dev' : 'npm run dev'}`)
     )
@@ -121,13 +119,14 @@ module.exports = class Creator {
   }
 
   resolveIntroPrompts () {
+    const defualtFeatures = formatFeatures(defaultOptions.plugins)
     const modePrompt = {
       name: 'mode',
       type: 'list',
       message: `Please pick a project creation mode:`,
       choices: [
         {
-          name: 'Zero-configuration with defaults',
+          name: `Zero-configuration with defaults (${defualtFeatures})`,
           value: 'default'
         },
         {
@@ -137,8 +136,10 @@ module.exports = class Creator {
       ]
     }
     if (fs.existsSync(rcPath)) {
+      this.savedOptions = this.loadSavedOptions()
+      const savedFeatures = formatFeatures(this.savedOptions.plugins)
       modePrompt.choices.unshift({
-        name: 'Use previously saved preferences',
+        name: `Use previously saved preferences (${savedFeatures})`,
         value: 'saved'
       })
     }

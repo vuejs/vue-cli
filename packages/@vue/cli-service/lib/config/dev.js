@@ -6,7 +6,7 @@ module.exports = api => {
       const WatchMissingNodeModulesPlugin = require('../util/WatchMissingNodeModulesPlugin')
 
       webpackConfig
-        .devtool('cheap-module-source-map')
+        .devtool('cheap-module-eval-source-map')
 
       webpackConfig
         .plugin('hmr')

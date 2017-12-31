@@ -10,6 +10,10 @@ module.exports = class PluginAPI {
     return path.resolve(this.service.context, _path)
   }
 
+  hasPlugin (id) {
+    return this.service.plugins.some(p => p.id === id)
+  }
+
   // set project mode.
   // this should be called by any registered command as early as possible.
   setMode (mode) {

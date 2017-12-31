@@ -20,5 +20,8 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-eslint#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "eslint-loader": "^1.9.0"
   }
 }
