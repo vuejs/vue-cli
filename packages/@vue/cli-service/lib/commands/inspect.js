@@ -3,10 +3,10 @@ module.exports = (api, options) => {
     description: 'inspect internal webpack config',
     usage: 'vue-cli-service inspect [options] [...keys]',
     options: {
-      '--env': 'specify NODE_ENV (default: development)'
+      '--mode': 'specify env mode (default: development)'
     }
   }, args => {
-    api.setEnv(args.env || 'development')
+    api.setMode(args.mode || 'development')
 
     const stringify = require('javascript-stringify')
     const config = api.resolveWebpackConfig()

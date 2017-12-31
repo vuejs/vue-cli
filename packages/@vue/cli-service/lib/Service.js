@@ -90,7 +90,7 @@ module.exports = class Service {
     }))
   }
 
-  run (name, args) {
+  run (name, args, rawArgv) {
     let command = this.commands[name]
     if (!command && name) {
       error(`command "${name}" does not exist.`)
@@ -99,9 +99,10 @@ module.exports = class Service {
       command = this.commands.help
     } else {
       args._.shift() // remove command itself
+      rawArgv.shift()
     }
     const { fn } = command
-    return Promise.resolve(fn(args))
+    return Promise.resolve(fn(args, rawArgv))
   }
 
   resolveWebpackConfig () {

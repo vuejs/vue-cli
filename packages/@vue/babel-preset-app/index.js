@@ -16,8 +16,8 @@ module.exports = (context, options = {}) => {
 
   const envOptions = {
     modules: options.modules || false,
-    useBuiltIns: 'usage',
-    targets: options.targets
+    targets: options.targets,
+    useBuiltIns: 'usage'
   }
   delete envOptions.jsx
   // target running node version (this is set by unit testing plugins)

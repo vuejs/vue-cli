@@ -5,8 +5,8 @@ describe('Hello.vue', () => {
   it('renders props.msg when passed', () => {
     const msg = 'new message'
     const wrapper = shallow(HelloWorld, {
-      context: { props: { msg }}
+      propsData: { msg }
     })
-    expect(wrapper.text()).toBe(msg)
+    expect(wrapper.text()).toContain(msg)
   })
 })
