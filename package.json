@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "test": "jest --env node",
-    "lint": "eslint --fix packages/**/*.js",
+    "lint": "eslint --fix packages/**/*.js packages/**/bin/*",
     "precommit": "lint-staged"
   },
   "jest": {
@@ -17,10 +17,8 @@
     ]
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"],
+    "packages/**/bin/*": ["eslint --fix", "git add"]
   },
   "devDependencies": {
     "debug": "^3.1.0",

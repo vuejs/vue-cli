@@ -1,0 +1,23 @@
+{
+  "name": "@vue/cli-build",
+  "version": "0.1.0",
+  "description": "build addon for vue-cli",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git"
+  },
+  "keywords": [
+    "vue",
+    "cli"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-build#readme"
+}
