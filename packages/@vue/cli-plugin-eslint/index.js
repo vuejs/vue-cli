@@ -12,6 +12,7 @@ module.exports = (api, { lintOnSave }) => {
           .use('eslint-loader')
             .loader('eslint-loader')
             .options({
+              fix: true,
               formatter: require('eslint/lib/formatters/codeframe')
               // emitWarnings: ???
             })
