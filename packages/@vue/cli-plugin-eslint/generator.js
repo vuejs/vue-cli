@@ -44,6 +44,6 @@ module.exports = (api, { config, lintOn }) => {
   api.extendPackage(pkg)
 
   api.onCreateComplete(() => {
-    // TODO lint fix
+    require('./lint')(api.resolve('.'), { silent: true })
   })
 }

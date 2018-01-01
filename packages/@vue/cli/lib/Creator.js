@@ -24,7 +24,9 @@ const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
 
 module.exports = class Creator {
-  constructor (modules) {
+  constructor (name, targetDir) {
+    this.name = name
+    this.context = targetDir
     const { modePrompt, featurePrompt } = this.resolveIntroPrompts()
     this.modePrompt = modePrompt
     this.featurePrompt = featurePrompt
@@ -33,11 +35,19 @@ module.exports = class Creator {
     this.promptCompleteCbs = []
     this.createCompleteCbs = []
 
-    const api = new PromptModuleAPI(this)
-    modules.forEach(m => m(api))
+    const promptAPI = new PromptModuleAPI(this)
+    const promptModules = fs
+      .readdirSync(path.resolve(__dirname, './promptModules'))
+      .filter(file => file.charAt(0) !== '.')
+      .map(file => require(`./promptModules/${file}`))
+
+    promptModules.forEach(m => m(promptAPI))
   }
 
-  async create (name, targetDir) {
+  async create () {
+    const name = this.name
+    const targetDir = this.context
+
     // prompt
     clearConsole()
     const answers = await inquirer.prompt(this.resolveFinalPrompts())

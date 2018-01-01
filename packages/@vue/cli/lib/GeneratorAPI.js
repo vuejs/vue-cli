@@ -87,6 +87,10 @@ module.exports = class GeneratorAPI {
     this.generator.creator.createCompleteCbs.push(cb)
   }
 
+  resolve (_path) {
+    return path.resolve(this.generator.context, _path)
+  }
+
   hasPlugin (id) {
     const prefixRE = /^(@vue\/|vue-)cli-plugin-/
     const keys = Object.keys(this.generator.options.plugins)
