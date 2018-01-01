@@ -3,6 +3,7 @@ const path = require('path')
 const debug = require('debug')
 const resolve = require('resolve')
 const GeneratorAPI = require('./GeneratorAPI')
+const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 
 module.exports = class Generator {
@@ -30,21 +31,39 @@ module.exports = class Generator {
     // wait for file resolve
     await this.resolveFiles()
     // set package.json
-    this.resolvePkg()
+    this.sortPkg()
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
     // write file tree to disk
     await writeFileTree(this.context, this.files)
   }
 
-  resolvePkg () {
-    const sortDeps = deps => Object.keys(deps).sort().reduce((res, name) => {
-      res[name] = deps[name]
-      return res
-    }, {})
-    this.pkg.dependencies = sortDeps(this.pkg.dependencies)
-    this.pkg.devDependencies = sortDeps(this.pkg.devDependencies)
-
-    // TODO sort pkg keys
+  sortPkg () {
+    // ensure package.json keys has readable order
+    this.pkg.dependencies = sortObject(this.pkg.dependencies)
+    this.pkg.devDependencies = sortObject(this.pkg.devDependencies)
+    this.pkg.scripts = sortObject(this.pkg.scripts, [
+      'serve',
+      'build',
+      'test',
+      'e2e',
+      'lint',
+      'deploy'
+    ])
+    this.pkg = sortObject(this.pkg, [
+      'name',
+      'version',
+      'private',
+      'scripts',
+      'dependencies',
+      'devDependencies',
+      'vue',
+      'babel',
+      'eslintConfig',
+      'prettier',
+      'postcss',
+      'browserslist',
+      'jest'
+    ])
 
     debug('vue:cli-pkg')(this.pkg)
   }
