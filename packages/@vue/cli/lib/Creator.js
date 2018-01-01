@@ -48,7 +48,7 @@ module.exports = class Creator {
 
   async create () {
     const name = this.name
-    const targetDir = this.context
+    const targetDir = process.env.VUE_CLI_CONTEXT = this.context
 
     // prompt
     clearConsole()
@@ -93,6 +93,12 @@ module.exports = class Creator {
       }, null, 2)
     })
 
+    // intilaize git repository
+    if (hasGit) {
+      logWithSpinner('🗃', `Initializing git repository...`)
+      await exec('git init', { cwd: targetDir })
+    }
+
     // install plugins
     logWithSpinner('⚙', `Installing CLI plugins. This might take a while...`)
     const deps = Object.keys(options.plugins)
@@ -118,10 +124,8 @@ module.exports = class Creator {
       await cb()
     }
 
-    // intilaize git repository
+    // commit initial state
     if (hasGit) {
-      logWithSpinner('🗃', `Initializing git repository...`)
-      await exec('git init', { cwd: targetDir })
       await exec('git add -A', { cwd: targetDir })
       await exec('git commit -m init', { cwd: targetDir })
     }

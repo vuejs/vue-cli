@@ -32,7 +32,6 @@ module.exports = (api, { config, lintOn }) => {
 
   if (lintOn === 'commit') {
     Object.assign(pkg.devDependencies, {
-      'husky': '^0.14.3',
       'lint-staged': '^6.0.0'
     })
     pkg.scripts.precommit = 'lint-staged'
