@@ -15,10 +15,8 @@ module.exports = (api, { lintOnSave }) => {
       cwd: api.resolve('.'),
       fix: true,
       extensions: ['.js', '.vue'],
-      baseConfig: {
-        parserOptions: {
-          parser: require.resolve('babel-eslint')
-        }
+      parserOptions: {
+        parser: require.resolve('babel-eslint')
       },
       rules: {
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
