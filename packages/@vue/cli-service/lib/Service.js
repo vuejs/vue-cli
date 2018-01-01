@@ -78,9 +78,8 @@ module.exports = class Service {
 
   resolvePlugins () {
     const builtInPlugins = [
-      './commands/dev',
-      './commands/build',
       './commands/serve',
+      './commands/build',
       './commands/inspect',
       './commands/help',
       // config plugins are order sensitive
@@ -135,7 +134,7 @@ module.exports = class Service {
 
   loadProjectConfig () {
     // vue.config.js
-    let fileConfig, pkgConfig
+    let fileConfig, pkgConfig, resolved
     const configPath = path.resolve(this.context, 'vue.config.js')
     if (fs.existsSync(configPath)) {
       fileConfig = require(configPath)
@@ -165,12 +164,31 @@ module.exports = class Service {
         )
       }
       info(`Using project config in ${chalk.bold('vue.config.js')}.`)
-      return fileConfig
+      resolved = fileConfig
     } else if (pkgConfig) {
       info(`Using project config from "vue" field in ${chalk.bold(`package.json`)}.`)
-      return pkgConfig
+      resolved = pkgConfig
     } else {
-      return {}
+      resolved = {}
     }
+
+    // normlaize some options
+    ensureSlash(resolved, 'base')
+    removeSlash(resolved, 'outputDir')
+    removeSlash(resolved, 'staticDir')
+  }
+}
+
+function ensureSlash (config, key) {
+  if (typeof config[key] === 'string') {
+    config[key] = config[key]
+      .replace(/^([^/])/, '/$1')
+      .replace(/([^/])$/, '$1/')
+  }
+}
+
+function removeSlash (config, key) {
+  if (typeof config[key] === 'string') {
+    config[key] = config[key].replace(/^\/|\/$/g, '')
   }
 }

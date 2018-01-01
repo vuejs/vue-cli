@@ -98,7 +98,6 @@ module.exports = (api, options) => {
         child_process: 'empty'
       })
 
-    // TODO handle publicPath in template
     webpackConfig
       .plugin('html')
         .use(require('html-webpack-plugin'), [{
