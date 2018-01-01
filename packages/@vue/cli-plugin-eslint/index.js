@@ -1,7 +1,20 @@
 module.exports = (api, { lintOnSave }) => {
   if (lintOnSave) {
     api.chainWebpack(webpackConfig => {
-      // TODO eslint-loader
+      webpackConfig.module
+        .rule('eslint')
+          .pre()
+          .include
+            .add(api.resolve('src'))
+            .add(api.resolve('test'))
+            .end()
+          .test(/\.(vue|jsx?)$/)
+          .use('eslint-loader')
+            .loader('eslint-loader')
+            .options({
+              formatter: require('eslint/lib/formatters/codeframe')
+              // emitWarnings: ???
+            })
     })
   }
 
