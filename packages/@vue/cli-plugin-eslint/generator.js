@@ -35,6 +35,7 @@ module.exports = (api, { config, lintOn }) => {
       'husky': '^0.14.3',
       'lint-staged': '^6.0.0'
     })
+    pkg.scripts.precommit = 'lint-staged'
     pkg['lint-staged'] = {
       '*.js': ['vue-cli-service lint', 'git add'],
       '*.vue': ['vue-cli-service lint', 'git add']
@@ -43,6 +44,7 @@ module.exports = (api, { config, lintOn }) => {
 
   api.extendPackage(pkg)
 
+  // lint & fix after create to ensure files adhere to chosen config
   api.onCreateComplete(() => {
     require('./lint')(api.resolve('.'), { silent: true })
   })

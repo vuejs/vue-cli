@@ -1,4 +1,7 @@
 module.exports = cli => {
+  const chalk = require('chalk')
+  const { hasGit } = require('@vue/cli-shared-utils')
+
   cli.injectFeature({
     name: 'Linter',
     value: 'eslint',
@@ -45,7 +48,7 @@ module.exports = cli => {
         value: 'save'
       },
       {
-        name: 'Lint + fix on commit',
+        name: 'Lint + fix on commit' + (hasGit ? '' : chalk.red(' (requires Git)')),
         value: 'commit'
       },
       {

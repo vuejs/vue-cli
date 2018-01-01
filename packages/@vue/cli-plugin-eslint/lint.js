@@ -27,15 +27,14 @@ module.exports = function lint (cwd, args = {}) {
     CLIEngine.outputFixes(report)
   }
 
-  if (args.silent) {
-    return
-  }
-
   if (!report.errorCount && !report.warningCount) {
-    const hasFixed = report.results.some(f => f.output)
-    done(hasFixed ? `All lint errors auto-fixed.` : `No lint errors found!`)
+    if (!args.silent) {
+      const hasFixed = report.results.some(f => f.output)
+      done(hasFixed ? `All lint errors auto-fixed.` : `No lint errors found!`)
+    }
   } else {
     console.log(formatter(report.results))
+    process.exit(1)
   }
 }
 
