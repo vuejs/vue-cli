@@ -33,9 +33,27 @@ module.exports = api => {
     api.setMode('test')
     // for @vue/babel-preset-app
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
-    // setup JSDOM
-    require('jsdom-global')()
     // start runner
-    return require('./runner')(api.resolveWebpackConfig(), args, rawArgv)
+    const { spawn } = require('child_process')
+    const bin = require.resolve('mocha-webpack/bin/mocha-webpack')
+    const argv = rawArgv.concat([
+      '--recursive',
+      '--require',
+      require.resolve('./setup.js'),
+      '--webpack-config',
+      require.resolve('@vue/cli-service/webpack.config.js')
+    ])
+
+    return new Promise((resolve, reject) => {
+      const child = spawn(bin, argv, { stdio: 'inherit' })
+      child.on('error', reject)
+      child.on('exit', code => {
+        if (code !== 0) {
+          reject(`mocha-webpack exited with code ${code}.`)
+        } else {
+          resolve()
+        }
+      })
+    })
   })
 }

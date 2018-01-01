@@ -1,11 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
-    const webpack = require('webpack')
     const resolveLocal = require('../util/resolveLocal')
     const resolveClientEnv = require('../util/resolveClientEnv')
-    const HTMLPlugin = require('html-webpack-plugin')
-    const TimeFixPlugin = require('../util/TimeFixPlugin')
-    const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
     webpackConfig
       .context(api.service.context)
@@ -105,20 +101,20 @@ module.exports = (api, options) => {
     // TODO handle publicPath in template
     webpackConfig
       .plugin('html')
-        .use(HTMLPlugin, [{
+        .use(require('html-webpack-plugin'), [{
           template: api.resolve('public/index.html')
         }])
 
     webpackConfig
       .plugin('define')
-        .use(webpack.DefinePlugin, [resolveClientEnv()])
+        .use(require('webpack/lib/DefinePlugin'), [resolveClientEnv()])
 
     webpackConfig
       .plugin('timefix')
-        .use(TimeFixPlugin)
+        .use(require('../util/TimeFixPlugin'))
 
     webpackConfig
       .plugin('case-sensitive-paths')
-        .use(CaseSensitivePathsPlugin)
+        .use(require('case-sensitive-paths-webpack-plugin'))
   })
 }

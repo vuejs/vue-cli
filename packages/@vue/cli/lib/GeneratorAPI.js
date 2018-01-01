@@ -86,6 +86,12 @@ module.exports = class GeneratorAPI {
   onCreateComplete (cb) {
     this.generator.creator.createCompleteCbs.push(cb)
   }
+
+  hasPlugin (id) {
+    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
+    const keys = Object.keys(this.generator.options.plugins)
+    return keys.some(key => key.replace(prefixRE, '') === id)
+  }
 }
 
 function extractCallDir () {

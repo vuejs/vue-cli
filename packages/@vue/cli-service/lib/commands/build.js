@@ -42,27 +42,34 @@ module.exports = (api, options) => {
           if (err) {
             return reject(err)
           }
-          process.stdout.write(stats.toString({
-            colors: true,
-            modules: false,
-            // TODO set this to true if using TS
-            children: false,
-            chunks: false,
-            chunkModules: false
-          }) + '\n\n')
+
+          if (!args.silent) {
+            process.stdout.write(stats.toString({
+              colors: true,
+              modules: false,
+              // TODO set this to true if using TS
+              children: false,
+              chunks: false,
+              chunkModules: false
+            }) + '\n\n')
+          }
 
           if (stats.hasErrors()) {
             return reject(`Build failed with errors.`)
           }
 
-          done(`Build complete. The ${chalk.cyan(options.outputDir)} directory is ready to be deployed.\n`)
-          const previewCommand = chalk.cyan(`${hasYarn ? 'yarn' : 'npm'} start`)
-          info(`You can preview the production app by running ${previewCommand}.\n`)
-          if (options.base === '/') {
-            info(`The app is built assuming that it will be deployed at the root of a domain.`)
-            info(`If you intend to deploy it under a subpath, update the ${chalk.green('base')} option`)
-            info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
+          if (!args.silent) {
+            done(`Build complete. The ${chalk.cyan(options.outputDir)} directory is ready to be deployed.\n`)
+            const previewCommand = chalk.cyan(`${hasYarn ? 'yarn' : 'npm'} start`)
+            info(`You can preview the production app by running ${previewCommand}.\n`)
+            if (options.base === '/') {
+              info(`The app is built assuming that it will be deployed at the root of a domain.`)
+              info(`If you intend to deploy it under a subpath, update the ${chalk.green('base')} option`)
+              info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
+            }
           }
+
+          resolve()
         })
       })
     })

@@ -16,4 +16,12 @@ module.exports = (api, options) => {
       test: 'vue-cli-service test'
     }
   })
+
+  if (api.hasPlugin('eslint')) {
+    api.render(files => {
+      files['test/unit/.eslintrc'] = JSON.stringify({
+        env: { mocha: true }
+      }, null, 2)
+    })
+  }
 }

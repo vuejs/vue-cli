@@ -22,6 +22,8 @@
     "access": "public"
   },
   "dependencies": {
+    "babel-eslint": "^8.1.2",
+    "eslint": "^4.14.0",
     "eslint-loader": "^1.9.0"
   }
 }

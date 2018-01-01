@@ -13,6 +13,14 @@ const defaultOptions = require('./defaults')
 
 module.exports = class Service {
   constructor () {
+    if (process.VUE_CLI_SERVICE) {
+      throw new Error(
+        `vue-cli-service is a singleton and can have only ` +
+        `one instance running in the same process.`
+      )
+    }
+    process.VUE_CLI_SERVICE = this
+
     this.webpackConfig = new Config()
     this.webpackChainFns = []
     this.webpackRawConfigFns = []
@@ -91,7 +99,8 @@ module.exports = class Service {
     }))
   }
 
-  run (name, args, rawArgv) {
+  run (name, args = {}, rawArgv = []) {
+    args._ = args._ || []
     let command = this.commands[name]
     if (!command && name) {
       error(`command "${name}" does not exist.`)

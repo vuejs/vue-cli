@@ -11,7 +11,8 @@ module.exports = class PluginAPI {
   }
 
   hasPlugin (id) {
-    return this.service.plugins.some(p => p.id === id)
+    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
+    return this.service.plugins.some(p => p.id.replace(prefixRE, '') === id)
   }
 
   // set project mode.

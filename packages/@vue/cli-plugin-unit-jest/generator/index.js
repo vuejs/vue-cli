@@ -8,4 +8,12 @@ module.exports = (api, options) => {
       'vue-test-utils': '^1.0.0-beta.9'
     }
   })
+
+  if (api.hasPlugin('eslint')) {
+    api.render(files => {
+      files['test/unit/.eslintrc'] = JSON.stringify({
+        env: { jest: true }
+      }, null, 2)
+    })
+  }
 }

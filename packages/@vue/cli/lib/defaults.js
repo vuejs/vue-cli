@@ -4,7 +4,7 @@ module.exports = {
   packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {
     '@vue/cli-plugin-babel': {},
-    '@vue/cli-plugin-eslint': { config: 'eslint-only' },
+    '@vue/cli-plugin-eslint': { config: 'base' },
     '@vue/cli-plugin-unit-mocha-webpack': { assertionLibrary: 'chai' }
   }
 }

@@ -1,32 +1,31 @@
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'development') {
-      const webpack = require('webpack')
-      const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-      const WatchMissingNodeModulesPlugin = require('../util/WatchMissingNodeModulesPlugin')
-
       webpackConfig
         .devtool('cheap-module-eval-source-map')
 
       webpackConfig
         .plugin('hmr')
-          .use(webpack.HotModuleReplacementPlugin)
+          .use(require('webpack/lib/HotModuleReplacementPlugin'))
 
       webpackConfig
         .plugin('named-modules')
-          .use(webpack.NamedModulesPlugin)
+          .use(require('webpack/lib/NamedModulesPlugin'))
 
       webpackConfig
         .plugin('no-emit-on-errors')
-          .use(webpack.NoEmitOnErrorsPlugin)
+          .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
 
       webpackConfig
         .plugin('firendly-errors')
-          .use(FriendlyErrorsPlugin)
+          .use(require('friendly-errors-webpack-plugin'))
 
       webpackConfig
         .plugin('watch-missing')
-          .use(WatchMissingNodeModulesPlugin, [api.resolve('node_modules')])
+          .use(
+            require('../util/WatchMissingNodeModulesPlugin'),
+            [api.resolve('node_modules')]
+          )
     }
   })
 }

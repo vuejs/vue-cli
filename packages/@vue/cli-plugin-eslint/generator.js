@@ -1,39 +1,27 @@
 module.exports = (api, { config, lintOnSave, lintOnCommit }) => {
   const pkg = {
     scripts: {
-      lint: 'eslint src --ext .js,.vue --format codeframe --fix'
+      lint: 'vue-cli-service lint'
     },
     eslintConfig: {
-      extends: ['plugin:vue/essential'],
-      parserOptions: {
-        parser: 'babel-eslint'
-      }
+      extends: ['plugin:vue/essential']
     },
     devDependencies: {
-      'eslint': '^4.14.0',
-      'babel-eslint': '^8.1.2',
-      'eslint-plugin-vue': '4 || ^4.0.0-beta || ^4.0.0-rc'
+      'eslint-plugin-vue': '^4.0.0'
     }
   }
 
   if (config === 'airbnb') {
-    pkg.eslintConfig.extends.unshift('airbnb-base')
-    Object.assign(pkg.devDependencies, {
-      'eslint-config-airbnb-base': '^11.3.0',
-      'eslint-import-resolver-webpack': '^0.8.3',
-      'eslint-plugin-import': '^2.7.0'
-    })
+    pkg.eslintConfig.extends.push('@vue/airbnb')
+    pkg.devDependencies['@vue/eslint-config-airbnb'] = '^0.1.0'
   } else if (config === 'standard') {
-    pkg.eslintConfig.extends.unshift('standard')
-    Object.assign(pkg.devDependencies, {
-      'eslint-config-standard': '^10.2.1',
-      'eslint-plugin-promise': '^3.4.0',
-      'eslint-plugin-standard': '^3.0.1',
-      'eslint-plugin-import': '^2.7.0',
-      'eslint-plugin-node': '^5.2.0'
-    })
+    pkg.eslintConfig.extends.push('@vue/standard')
+    pkg.devDependencies['@vue/eslint-config-standard'] = '^0.1.0'
   } else if (config === 'prettier') {
     // TODO
+  } else {
+    // default
+    pkg.eslintConfig.extends.push('eslint:recommended')
   }
 
   if (lintOnSave) {
@@ -48,14 +36,14 @@ module.exports = (api, { config, lintOnSave, lintOnCommit }) => {
       'lint-staged': '^6.0.0'
     })
     pkg['lint-staged'] = {
-      '*.js': ['eslint --fix --format codeframe', 'git add'],
-      '*.vue': ['eslint --fix --format codeframe', 'git add']
+      '*.js': ['vue-cli-service lint', 'git add'],
+      '*.vue': ['vue-cli-service lint', 'git add']
     }
   }
 
   api.extendPackage(pkg)
 
   api.onCreateComplete(() => {
-    // run fix after creation
+    // TODO run fix after creation
   })
 }

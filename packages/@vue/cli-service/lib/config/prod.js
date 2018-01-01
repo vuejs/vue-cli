@@ -1,11 +1,6 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'production') {
-      const webpack = require('webpack')
-      const CopyPlugin = require('copy-webpack-plugin')
-      const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-      const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-
       webpackConfig
         .devtool('source-map')
         .output
@@ -15,12 +10,12 @@ module.exports = (api, options) => {
       // keep module.id stable when vendor modules does not change
       webpackConfig
         .plugin('hash-module-ids')
-          .use(webpack.HashedModuleIdsPlugin)
+          .use(require('webpack/lib/HashedModuleIdsPlugin'))
 
       // enable scope hoisting / tree shaking
       webpackConfig
         .plugin('module-concatenation')
-          .use(webpack.optimize.ModuleConcatenationPlugin)
+          .use(require('webpack/lib/optimize/ModuleConcatenationPlugin'))
 
       // minify HTML
       webpackConfig
@@ -40,7 +35,7 @@ module.exports = (api, options) => {
       // optimize CSS (dedupe)
       webpackConfig
         .plugin('optimize-css')
-          .use(OptimizeCSSPlugin, [
+          .use(require('optimize-css-assets-webpack-plugin'), [
             options.productionSourceMap && options.cssSourceMap
               ? { safe: true, map: { inline: false }}
               : { safe: true }
@@ -49,7 +44,7 @@ module.exports = (api, options) => {
       // minify JS
       webpackConfig
         .plugin('uglifyjs')
-          .use(UglifyJSPlugin, [{
+          .use(require('uglifyjs-webpack-plugin'), [{
             uglifyOptions: {
               compress: {
                 warnings: false
@@ -59,11 +54,14 @@ module.exports = (api, options) => {
             parallel: true
           }])
 
+      // Chunk splits
+      const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
+
       // extract vendor libs into its own chunk for better caching, since they
       // are more likely to stay the same.
       webpackConfig
         .plugin('split-vendor')
-          .use(webpack.optimize.CommonsChunkPlugin, [{
+          .use(CommonsChunkPlugin, [{
             name: 'vendor',
             minChunks (module) {
               // any required modules inside node_modules are extracted to vendor
@@ -79,7 +77,7 @@ module.exports = (api, options) => {
       // prevent vendor hash from being updated whenever app bundle is updated
       webpackConfig
         .plugin('split-manifest')
-          .use(webpack.optimize.CommonsChunkPlugin, [{
+          .use(CommonsChunkPlugin, [{
             name: 'manifest',
             minChunks: Infinity
           }])
@@ -89,7 +87,7 @@ module.exports = (api, options) => {
       // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
       webpackConfig
         .plugin('split-vendor-async')
-          .use(webpack.optimize.CommonsChunkPlugin, [{
+          .use(CommonsChunkPlugin, [{
             name: 'app',
             async: 'vendor-async',
             children: true,
@@ -99,7 +97,7 @@ module.exports = (api, options) => {
       // copy static assets in public/
       webpackConfig
         .plugin('copy')
-          .use(CopyPlugin, [[{
+          .use(require('copy-webpack-plugin'), [[{
             from: api.resolve('public'),
             to: api.resolve(options.outputDir),
             ignore: ['index.html', '.*']
