@@ -8,11 +8,5 @@ module.exports = {
         config: require.resolve('@vue/cli-service/webpack.config.js')
       }
     }
-  },
-  rules: {
-    'import/extensions': ['error', 'always', {
-      js: 'never',
-      vue: 'never'
-    }]
   }
 }
