@@ -1,5 +1,6 @@
 const chalk = require('chalk')
 const readline = require('readline')
+const { execSync } = require('child_process')
 const padStart = require('string.prototype.padstart')
 const { logWithSpinner, stopSpinner } = require('./spinner')
 
@@ -47,9 +48,18 @@ exports.clearConsole = title => {
 
 exports.hasYarn = (() => {
   try {
-    require('child_process').execSync('yarnpkg --version', { stdio: 'ignore' })
+    execSync('yarnpkg --version', { stdio: 'ignore' })
     return true
   } catch (e) {
     return false
   }
 })()
+
+exports.hasGit = () => {
+  try {
+    execSync('git --version', { stdio: 'ignore' })
+    return true
+  } catch (e) {
+    return false
+  }
+}

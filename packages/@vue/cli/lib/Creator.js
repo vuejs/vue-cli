@@ -11,9 +11,11 @@ const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const formatFeatures = require('./util/formatfeatures')
 const updatePackageForDev = require('./util/updatePackageForDev')
+const exec = require('util').promisify(require('child_process').exec)
 
 const {
   error,
+  hasGit,
   hasYarn,
   logWithSpinner,
   stopSpinner
@@ -114,6 +116,14 @@ module.exports = class Creator {
     // run complete cbs if any
     for (const cb of this.createCompleteCbs) {
       await cb()
+    }
+
+    // intilaize git repository
+    if (hasGit) {
+      logWithSpinner('🗃', `Initializing git repository...`)
+      await exec('git init', { cwd: targetDir })
+      await exec('git add -A', { cwd: targetDir })
+      await exec('git commit -m init', { cwd: targetDir })
     }
 
     // log instructions
