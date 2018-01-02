@@ -1,5 +1,4 @@
 const fs = require('fs')
-const os = require('os')
 const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
@@ -14,15 +13,18 @@ const updatePackageForDev = require('./util/updatePackageForDev')
 const exec = require('util').promisify(require('child_process').exec)
 
 const {
-  error,
+  defaults,
+  saveOptions,
+  loadSavedOptions
+} = require('./options')
+
+const {
   hasGit,
   hasYarn,
   logWithSpinner,
   stopSpinner
 } = require('@vue/cli-shared-utils')
 
-const defaultOptions = require('./defaults')
-const rcPath = path.join(os.homedir(), '.vuerc')
 const isMode = _mode => ({ mode }) => _mode === mode
 
 module.exports = class Creator {
@@ -59,10 +61,11 @@ module.exports = class Creator {
     if (answers.mode === 'saved') {
       options = this.savedOptions // this is loaded when resolving prompts
     } else if (answers.mode === 'default') {
-      options = defaultOptions
+      options = defaults
     } else {
       // manual
       options = {
+        useTaobaoRegistry: null,
         packageManager: answers.packageManager,
         plugins: {}
       }
@@ -72,7 +75,7 @@ module.exports = class Creator {
 
     // save options
     if (answers.mode === 'manual' && answers.save) {
-      this.saveOptions(options)
+      saveOptions(options)
     }
 
     // inject core service
@@ -105,9 +108,9 @@ module.exports = class Creator {
     if (process.env.VUE_CLI_DEBUG) {
       // in development, use linked packages
       updatePackageForDev(targetDir, deps)
-      await installDeps(options.packageManager, targetDir)
+      await installDeps(targetDir, options)
     } else {
-      await installDeps(options.packageManager, targetDir, deps)
+      await installDeps(targetDir, options, deps)
     }
 
     // run generator
@@ -117,7 +120,7 @@ module.exports = class Creator {
 
     // install additional deps (injected by generators)
     logWithSpinner('📦', `Installing additional dependencies...`)
-    await installDeps(options.packageManager, targetDir)
+    await installDeps(targetDir, options)
 
     // run complete cbs if any
     for (const cb of this.createCompleteCbs) {
@@ -143,7 +146,7 @@ module.exports = class Creator {
   }
 
   resolveIntroPrompts () {
-    const defualtFeatures = formatFeatures(defaultOptions.plugins)
+    const defualtFeatures = formatFeatures(defaults.plugins)
     const modePrompt = {
       name: 'mode',
       type: 'list',
@@ -159,9 +162,10 @@ module.exports = class Creator {
         }
       ]
     }
-    if (fs.existsSync(rcPath)) {
-      this.savedOptions = this.loadSavedOptions()
-      const savedFeatures = formatFeatures(this.savedOptions.plugins)
+    const savedOptions = loadSavedOptions()
+    if (savedOptions.plugins) {
+      this.savedOptions = savedOptions
+      const savedFeatures = formatFeatures(savedOptions.plugins)
       modePrompt.choices.unshift({
         name: `Use previously saved preferences (${savedFeatures})`,
         value: 'saved'
@@ -227,35 +231,5 @@ module.exports = class Creator {
     )
     debug('vue:cli-prompts')(prompts)
     return prompts
-  }
-
-  loadSavedOptions () {
-    try {
-      return JSON.parse(fs.readFileSync(rcPath, 'utf-8'))
-    } catch (e) {
-      error(
-        `Error loading saved preferences: ` +
-        `~/.vuerc may be corrupted or have syntax errors. ` +
-        `You may need to delete it and re-run vue-cli in manual mode.\n` +
-        `(${e.message})`,
-      )
-      process.exit(1)
-    }
-  }
-
-  saveOptions (options) {
-    options = Object.assign({}, options)
-    delete options.projectName
-    delete options.mode
-    delete options.save
-    try {
-      fs.writeFileSync(rcPath, JSON.stringify(options, null, 2))
-    } catch (e) {
-      error(
-        `Error saving preferences: ` +
-        `make sure you have write access to ~/.vuerc.\n` +
-        `(${e.message})`
-      )
-    }
   }
 }
