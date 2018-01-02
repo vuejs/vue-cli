@@ -1,9 +1,71 @@
 #!/usr/bin/env node
 
-require('commander')
+const chalk = require('chalk')
+const semver = require('semver')
+const { error } = require('@vue/cli-shared-utils')
+const requiredVersion = require('../package.json').engines.node
+
+if (!semver.satisfies(process.version, requiredVersion)) {
+  error(
+    `You are using Node ${process.version}, but this version of vue-cli ` +
+    `requires Node ${requiredVersion}.\nPlease upgrade your Node version.`
+  )
+  process.exit(1)
+}
+
+const program = require('commander')
+const loadCommand = require('../lib/util/loadCommand')
+
+program
   .version(require('../package').version)
   .usage('<command> [options]')
-  .command('create', 'create a new project powered by vue-cli-service')
-  .command('init', 'generate a project from a remote template')
-  .command('build', 'build a .js or .vue file with zero config')
-  .parse(process.argv)
+
+program
+  .command('create <app-name>')
+  .description('create a new project powered by vue-cli-service')
+  .action(require('../lib/create'))
+
+program
+  .command('init <template> <app-name>')
+  .description('generate a project from a remote template (requires @vue/cli-init)')
+  .action(() => {
+    loadCommand('init', '@vue/cli-init')
+  })
+
+program
+  .command('serve [filename]')
+  .description('serve a .js or vue file in development mode with zero config')
+  .action(filename => {
+    loadCommand('serve', '@vue/cli-service-global').serve(filename)
+  })
+
+program
+  .command('build [filename]')
+  .description('build a .js or .vue file in production mode with zero config')
+  .action(filename => {
+    loadCommand('build', '@vue/cli-service-global').build(filename)
+  })
+
+program.on('--help', () => {
+  console.log()
+})
+
+// customize missing arg messages
+const formatArgs = ({ name, required }) => {
+  return `${required ? '<' : '['}${name}${required ? '>' : ']'}`
+}
+
+program.Command.prototype.missingArgument = function (argName) {
+  console.log()
+  console.log(`  Missing required argument ${chalk.yellow(`<${argName}>`)}.`)
+  console.log()
+  console.log(`  Usage: vue ${this._name} ${this._args.map(formatArgs).join(' ')}`)
+  console.log()
+  process.exit(1)
+}
+
+program.parse(process.argv)
+
+if (!process.argv.slice(2).length) {
+  program.outputHelp()
+}

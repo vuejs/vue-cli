@@ -1,7 +1,7 @@
 {
-  "name": "@vue/cli-build",
+  "name": "@vue/cli-service-global",
   "version": "0.1.0",
-  "description": "build addon for vue-cli",
+  "description": "vue-cli-service global addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
