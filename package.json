@@ -10,6 +10,7 @@
     "precommit": "lint-staged"
   },
   "jest": {
+    "testMatch": ["<rootDir>/test/**/*.js"],
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "/node_modules/",

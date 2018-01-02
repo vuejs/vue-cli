@@ -4,6 +4,14 @@ const { execSync } = require('child_process')
 const padStart = require('string.prototype.padstart')
 const { logWithSpinner, stopSpinner } = require('./spinner')
 
+const wrapForTest = fn => {
+  return (...args) => {
+    if (!process.env.VUE_CLI_TEST) {
+      return fn.apply(null, args)
+    }
+  }
+}
+
 const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
     return i === 0
@@ -14,6 +22,8 @@ const format = (label, msg) => {
 
 exports.logWithSpinner = logWithSpinner
 exports.stopSpinner = stopSpinner
+
+exports.log = msg => console.log(msg || '')
 
 exports.info = msg => {
   console.log(format(chalk.bgBlue.black(' INFO '), msg))
@@ -27,7 +37,7 @@ exports.warn = msg => {
   console.warn(format(chalk.bgYellow.black(' WARN '), chalk.yellow(msg)))
 }
 
-exports.error = (msg) => {
+exports.error = msg => {
   console.error(format(chalk.bgRed(' ERROR '), chalk.red(msg)))
   if (msg instanceof Error) {
     console.error(msg.stack)
@@ -45,6 +55,11 @@ exports.clearConsole = title => {
     }
   }
 }
+
+// wrap all log utils for tests
+Object.keys(exports).forEach(key => {
+  exports[key] = wrapForTest(exports[key])
+})
 
 exports.hasYarn = (() => {
   try {

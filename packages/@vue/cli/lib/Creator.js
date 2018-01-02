@@ -19,6 +19,7 @@ const {
 } = require('./options')
 
 const {
+  log,
   hasGit,
   hasYarn,
   logWithSpinner,
@@ -135,14 +136,14 @@ module.exports = class Creator {
 
     // log instructions
     stopSpinner()
-    console.log()
-    console.log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
-    console.log(
+    log()
+    log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
+    log(
       `👉  Get started with the following commands:\n\n` +
       chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`) +
       chalk.cyan(` ${chalk.gray('$')} ${options.packageManager === 'yarn' ? 'yarn dev' : 'npm run dev'}`)
     )
-    console.log()
+    log()
   }
 
   resolveIntroPrompts () {
