@@ -7,6 +7,7 @@ const { spawn, exec } = require('child_process')
 const { savePartialOptions } = require('../options')
 const { stopSpinner, logWithSpinner } = require('@vue/cli-shared-utils')
 
+const SLOW_THRESHOLD = 1000
 const taobaoRegistry = 'https://registry.npm.taobao.org'
 const taobaoDistURL = 'https://npm.taobao.org/dist'
 const defaultRegistry = {
@@ -33,8 +34,8 @@ const checkRegistrySwitch = async (command) => {
     return false
   }
   const latency = await ping(currentRegistry)
-  if (latency > 10) {
-    const tbLatency = 1//await ping(taobaoRegistry)
+  if (latency > SLOW_THRESHOLD) {
+    const tbLatency = await ping(taobaoRegistry)
     if (tbLatency < latency) {
       stopSpinner(false)
       console.log()
