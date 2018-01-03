@@ -10,18 +10,13 @@
     "precommit": "lint-staged"
   },
   "jest": {
-    "testMatch": [
-      "<rootDir>/test/**/*.js"
-    ],
     "testEnvironment": "node",
     "setupFiles": [
-      "<rootDir>/test/__setup__.js"
+      "<rootDir>/scripts/testSetup.js"
     ],
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/packages/",
-      "/__mocks__/",
-      "__setup__.js"
+      "/template/",
+      "/packages/test/"
     ]
   },
   "lint-staged": {
