@@ -25,28 +25,24 @@ module.exports = class GeneratorAPI {
     const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
     for (const key in toMerge) {
-      if (!options.merge || !(key in pkg)) {
-        pkg[key] = toMerge[key]
+      const value = toMerge[key]
+      const existing = pkg[key]
+      if (isObject(value) && (key === 'dependencies' || key === 'devDependencies')) {
+        // use special version resolution merge
+        pkg[key] = mergeDeps(
+          this.id,
+          existing || {},
+          value,
+          this.generator.depSources
+        )
+      } else if (!options.merge || !(key in pkg)) {
+        pkg[key] = value
+      } else if (Array.isArray(value) && Array.isArray(existing)) {
+        pkg[key] = existing.concat(value)
+      } else if (isObject(value) && isObject(existing)) {
+        pkg[key] = Object.assign({}, existing, value)
       } else {
-        const value = toMerge[key]
-        const existing = pkg[key]
-        if (Array.isArray(value) && Array.isArray(existing)) {
-          pkg[key] = existing.concat(value)
-        } else if (isObject(value) && isObject(existing)) {
-          if (key === 'dependencies' || key === 'devDependencies') {
-            // use special version resolution merge
-            pkg[key] = mergeDeps(
-              this.id,
-              existing,
-              value,
-              this.generator.depSources
-            )
-          } else {
-            pkg[key] = Object.assign({}, existing, value)
-          }
-        } else {
-          pkg[key] = value
-        }
+        pkg[key] = value
       }
     }
   }
@@ -94,7 +90,7 @@ module.exports = class GeneratorAPI {
   hasPlugin (_id) {
     const prefixRE = /^(@vue\/|vue-)cli-plugin-/
     return this.generator.plugins.some(({ id }) => {
-      return id.replace(prefixRE, '') === _id
+      return id === _id || id.replace(prefixRE, '') === _id
     })
   }
 }

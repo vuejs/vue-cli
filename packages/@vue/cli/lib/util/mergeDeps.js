@@ -18,6 +18,7 @@ module.exports = function resolveDeps (generatorId, to, from, sources) {
 
     if (!r1) {
       res[name] = r2
+      sources[name] = generatorId
     } else {
       const r = tryGetNewerRange(r1, r2)
       const didGetNewer = !!r

@@ -47,13 +47,18 @@ exports.clearConsole = title => {
   }
 }
 
-// make all logs except error noop during tests
+// silent all logs except errors during tests and keep record
 if (process.env.VUE_CLI_TEST) {
+  const logs = {}
   Object.keys(exports).forEach(key => {
     if (key !== 'error') {
-      exports[key] = () => {}
+      exports[key] = (...args) => {
+        if (!logs[key]) logs[key] = []
+        logs[key].push(args)
+      }
     }
   })
+  exports.logs = logs
 }
 
 exports.hasYarn = (() => {

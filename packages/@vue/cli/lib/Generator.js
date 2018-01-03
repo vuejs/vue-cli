@@ -5,7 +5,7 @@ const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 
 module.exports = class Generator {
-  constructor (context, pkg, plugins, completeCbs) {
+  constructor (context, pkg, plugins, completeCbs = []) {
     this.context = context
     this.plugins = plugins
     this.pkg = pkg
