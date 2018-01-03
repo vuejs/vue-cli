@@ -72,7 +72,7 @@ module.exports = class Creator {
       // in development, avoid installation process
       setupDevProject(context, deps)
     } else {
-      await installDeps(context, options, deps)
+      await installDeps(context, options.packageManager, deps)
     }
 
     // run generator
@@ -90,7 +90,7 @@ module.exports = class Creator {
     // install additional deps (injected by generators)
     logWithSpinner('📦', `Installing additional dependencies...`)
     if (!process.env.VUE_CLI_TEST) {
-      await installDeps(context, options)
+      await installDeps(context, options.packageManager)
     }
 
     // run complete cbs if any (injected by generators)

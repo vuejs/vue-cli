@@ -26,9 +26,9 @@ const findFastestRegistry = () => {
   }))
 }
 
-module.exports = async function installDeps (targetDir, options, deps) {
-  const command = options.packageManager
-  const registry = await findFastestRegistry()
+let registry
+module.exports = async function installDeps (targetDir, command, deps) {
+  registry = registry || await findFastestRegistry()
 
   await new Promise((resolve, reject) => {
     const args = []
