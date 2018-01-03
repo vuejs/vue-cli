@@ -28,12 +28,12 @@ module.exports = cli => {
         name: 'ESLint + Standard config',
         value: 'standard',
         short: 'Standard'
-      },
-      {
-        name: 'ESLint + Prettier',
-        value: 'prettier',
-        short: 'Prettier'
       }
+      // {
+      //   name: 'ESLint + Prettier',
+      //   value: 'prettier',
+      //   short: 'Prettier'
+      // }
     ]
   })
 
