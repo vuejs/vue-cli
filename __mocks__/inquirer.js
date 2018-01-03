@@ -12,27 +12,65 @@ exports.prompt = prompts => {
       skipped++
       return
     }
-    const a = pendingAssertions[i - skipped]
-    if (a.message) {
-      expect(prompt.message).toContain(a.message)
+
+    const setValue = val => {
+      if (prompt.validate) {
+        const res = prompt.validate(val)
+        if (res !== true) {
+          throw new Error(`validation failed for prompt: ${prompt}`)
+        }
+      }
+      answers[prompt.name] = prompt.filter
+        ? prompt.filter(val)
+        : val
     }
+
+    const a = pendingAssertions[i - skipped]
+
+    if (a.message) {
+      const message = typeof prompt.message === 'function'
+        ? prompt.message(answers)
+        : prompt.message
+      expect(message).toContain(a.message)
+    }
+
     if (a.choices) {
       expect(prompt.choices.length).toBe(a.choices.length)
       a.choices.forEach((c, i) => {
-        expect(prompt.choices[i].name).toContain(a.choices[i])
+        const expected = a.choices[i]
+        if (expected) {
+          expect(prompt.choices[i].name).toContain(expected)
+        }
       })
     }
-    if (a.choose != null) {
-      expect(prompt.type).toBe('list')
-      answers[prompt.name] = prompt.choices[a.choose].value
+
+    if (a.input != null) {
+      expect(prompt.type).toBe('input')
+      setValue(a.input)
     }
+
+    if (a.choose != null) {
+      expect(prompt.type === 'list' || prompt.type === 'rawList').toBe(true)
+      setValue(prompt.choices[a.choose].value)
+    }
+
     if (a.check != null) {
       expect(prompt.type).toBe('checkbox')
-      answers[prompt.name] = a.check.map(i => prompt.choices[i].value)
+      setValue(a.check.map(i => prompt.choices[i].value))
     }
+
     if (a.confirm != null) {
       expect(prompt.type).toBe('confirm')
-      answers[prompt.name] = a.confirm
+      setValue(a.confirm)
+    }
+
+    if (a.useDefault) {
+      expect('default' in prompt).toBe(true)
+      setValue(
+        typeof prompt.default === 'function'
+          ? prompt.default(answers)
+          : prompt.default
+      )
     }
   })
 
