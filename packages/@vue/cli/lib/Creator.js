@@ -93,6 +93,7 @@ module.exports = class Creator {
     }
 
     // run complete cbs if any
+    logWithSpinner('⚓', `Running completion hooks...`)
     for (const cb of this.createCompleteCbs) {
       await cb()
     }
