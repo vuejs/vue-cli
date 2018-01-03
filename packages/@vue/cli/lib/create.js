@@ -30,7 +30,12 @@ async function create (projectName) {
     }
   }
 
-  const creator = new Creator(projectName, targetDir)
+  const promptModules = fs
+    .readdirSync(path.resolve(__dirname, './promptModules'))
+    .filter(file => file.charAt(0) !== '.')
+    .map(file => require(`./promptModules/${file}`))
+
+  const creator = new Creator(projectName, targetDir, promptModules)
   await creator.create()
 }
 

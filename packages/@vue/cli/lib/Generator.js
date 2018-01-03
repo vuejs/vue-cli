@@ -7,11 +7,12 @@ const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 
 module.exports = class Generator {
-  constructor (context, options, creator) {
+  constructor (context, pkg, plugins, completeCbs) {
     this.context = context
-    this.options = options
-    this.creator = creator
-    this.pkg = require(path.resolve(context, 'package.json'))
+    this.plugins = plugins
+    this.pkg = pkg
+    this.completeCbs = completeCbs
+
     // for conflict resolution
     this.depSources = {}
     // virtual file tree
@@ -19,11 +20,9 @@ module.exports = class Generator {
     this.fileMiddlewares = []
 
     // apply generators from plugins
-    Object.keys(options.plugins).forEach(id => {
-      const generatorPath = resolve.sync(`${id}/generator`, { basedir: context })
-      const generator = require(generatorPath)
-      const generatorOptions = options.plugins[id]
-      generator(new GeneratorAPI(id, this, generatorOptions), generatorOptions)
+    plugins.forEach(({ id, apply, options }) => {
+      const api = new GeneratorAPI(id, this, options)
+      apply(api, options)
     })
   }
 

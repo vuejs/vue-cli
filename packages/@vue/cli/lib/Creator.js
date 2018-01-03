@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
+const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const installDeps = require('./util/installDeps')
@@ -29,9 +30,9 @@ const {
 const isMode = _mode => ({ mode }) => _mode === mode
 
 module.exports = class Creator {
-  constructor (name, targetDir) {
+  constructor (name, context, promptModules) {
     this.name = name
-    this.context = targetDir
+    this.context = process.env.VUE_CLI_CONTEXT = context
     const { modePrompt, featurePrompt } = this.resolveIntroPrompts()
     this.modePrompt = modePrompt
     this.featurePrompt = featurePrompt
@@ -41,23 +42,17 @@ module.exports = class Creator {
     this.createCompleteCbs = []
 
     const promptAPI = new PromptModuleAPI(this)
-    const promptModules = fs
-      .readdirSync(path.resolve(__dirname, './promptModules'))
-      .filter(file => file.charAt(0) !== '.')
-      .map(file => require(`./promptModules/${file}`))
-
     promptModules.forEach(m => m(promptAPI))
   }
 
   async create () {
-    const name = this.name
-    const targetDir = process.env.VUE_CLI_CONTEXT = this.context
+    const { name, context, createCompleteCbs } = this
     const options = await this.promptAndResolveOptions()
 
     // write base package.json to disk
     clearConsole()
-    logWithSpinner('✨', `Creating project in ${chalk.yellow(targetDir)}.`)
-    writeFileTree(targetDir, {
+    logWithSpinner('✨', `Creating project in ${chalk.yellow(context)}.`)
+    writeFileTree(context, {
       'package.json': JSON.stringify({
         name,
         version: '0.1.0',
@@ -68,7 +63,7 @@ module.exports = class Creator {
     // intilaize git repository
     if (hasGit) {
       logWithSpinner('🗃', `Initializing git repository...`)
-      await exec('git init', { cwd: targetDir })
+      await exec('git init', { cwd: context })
     }
 
     // install plugins
@@ -76,32 +71,39 @@ module.exports = class Creator {
     const deps = Object.keys(options.plugins)
     if (process.env.VUE_CLI_TEST) {
       // in development, avoid installation process
-      setupDevProject(targetDir, deps)
+      setupDevProject(context, deps)
     } else {
-      await installDeps(targetDir, options, deps)
+      await installDeps(context, options, deps)
     }
 
     // run generator
     logWithSpinner('🚀', `Invoking generators...`)
-    const generator = new Generator(targetDir, options, this)
+    const pkg = require(path.join(context, 'package.json'))
+    const plugins = this.resolvePlugins(options.plugins)
+    const generator = new Generator(
+      context,
+      pkg,
+      plugins,
+      createCompleteCbs
+    )
     await generator.generate()
 
     // install additional deps (injected by generators)
     logWithSpinner('📦', `Installing additional dependencies...`)
     if (!process.env.VUE_CLI_TEST) {
-      await installDeps(targetDir, options)
+      await installDeps(context, options)
     }
 
-    // run complete cbs if any
+    // run complete cbs if any (injected by generators)
     logWithSpinner('⚓', `Running completion hooks...`)
-    for (const cb of this.createCompleteCbs) {
+    for (const cb of createCompleteCbs) {
       await cb()
     }
 
     // commit initial state
     if (hasGit) {
-      await exec('git add -A', { cwd: targetDir, stdio: 'ignore' })
-      await exec('git commit -m init', { cwd: targetDir, stdio: 'ignore' })
+      await exec('git add -A', { cwd: context, stdio: 'ignore' })
+      await exec('git commit -m init', { cwd: context, stdio: 'ignore' })
     }
 
     // log instructions
@@ -150,6 +152,18 @@ module.exports = class Creator {
 
     debug('vue:cli-ptions')(options)
     return options
+  }
+
+  // { id: options } => [{ id, apply, options }]
+  resolvePlugins (rawPlugins) {
+    return Object.keys(rawPlugins).map(id => {
+      const module = resolve.sync(`${id}/generator`, { basedir: this.context })
+      return {
+        id,
+        apply: require(module),
+        options: rawPlugins[id]
+      }
+    })
   }
 
   resolveIntroPrompts () {

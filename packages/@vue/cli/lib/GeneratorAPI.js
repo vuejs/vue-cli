@@ -84,17 +84,18 @@ module.exports = class GeneratorAPI {
   }
 
   onCreateComplete (cb) {
-    this.generator.creator.createCompleteCbs.push(cb)
+    this.generator.completeCbs.push(cb)
   }
 
   resolve (_path) {
     return path.resolve(this.generator.context, _path)
   }
 
-  hasPlugin (id) {
+  hasPlugin (_id) {
     const prefixRE = /^(@vue\/|vue-)cli-plugin-/
-    const keys = Object.keys(this.generator.options.plugins)
-    return keys.some(key => key.replace(prefixRE, '') === id)
+    return this.generator.plugins.some(({ id }) => {
+      return id.replace(prefixRE, '') === _id
+    })
   }
 }
 
