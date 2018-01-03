@@ -1,7 +1,5 @@
 const ejs = require('ejs')
-const path = require('path')
 const debug = require('debug')
-const resolve = require('resolve')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')

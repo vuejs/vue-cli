@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
@@ -132,7 +131,6 @@ module.exports = class Creator {
     } else {
       // manual
       options = {
-        useTaobaoRegistry: null,
         packageManager: answers.packageManager,
         plugins: {}
       }

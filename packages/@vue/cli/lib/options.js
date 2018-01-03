@@ -9,7 +9,6 @@ const rcPath = exports.rcPath = (
 )
 
 exports.defaults = {
-  useTaobaoRegistry: null,
   packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {
     '@vue/cli-plugin-babel': {},
@@ -36,8 +35,13 @@ exports.loadSavedOptions = () => {
   }
 }
 
-exports.saveOptions = options => {
-  options = Object.assign({}, options)
+exports.saveOptions = (toSave, deep) => {
+  const options = exports.loadSavedOptions()
+  if (deep) {
+    deepMerge(options, toSave)
+  } else {
+    Object.assign(options, toSave)
+  }
   for (const key in options) {
     if (!(key in exports.defaults)) {
       delete options[key]
@@ -54,13 +58,8 @@ exports.saveOptions = options => {
   }
 }
 
-exports.savePartialOptions = options => {
-  const saved = exports.loadSavedOptions()
-  deepMerge(saved, options)
-  exports.saveOptions(saved)
-}
-
 const isObject = val => val && typeof val === 'object'
+
 function deepMerge (to, from) {
   for (const key in from) {
     if (isObject(to[key]) && isObject(from[key])) {

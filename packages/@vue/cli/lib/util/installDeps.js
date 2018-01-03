@@ -1,75 +1,34 @@
 const { URL } = require('url')
 const https = require('https')
-const chalk = require('chalk')
-const inquirer = require('inquirer')
-const { promisify } = require('util')
-const { spawn, exec } = require('child_process')
-const { savePartialOptions } = require('../options')
-const { stopSpinner, logWithSpinner } = require('@vue/cli-shared-utils')
+const { spawn } = require('child_process')
 
-const SLOW_THRESHOLD = 1000
-const taobaoRegistry = 'https://registry.npm.taobao.org'
-const taobaoDistURL = 'https://npm.taobao.org/dist'
-const defaultRegistry = {
+const registries = {
   npm: 'https://registry.npmjs.org',
-  yarn: 'https://registry.yarnpkg.com'
+  yarn: 'https://registry.yarnpkg.com',
+  taobao: 'https://registry.npm.taobao.org'
 }
+const taobaoDistURL = 'https://npm.taobao.org/dist'
 
-const ping = promisify((host, cb) => {
-  const start = Date.now()
+const ping = url => new Promise((resolve, reject) => {
   const req = https.request({
-    hostname: new URL(host).hostname
+    hostname: new URL(url).hostname,
+    path: '/vue/latest'
   }, () => {
-    cb(null, Date.now() - start)
+    resolve(url)
   })
-  req.on('error', cb)
+  req.on('error', reject)
   req.end()
 })
 
-const checkRegistrySwitch = async (command) => {
-  const { stdout } = await promisify(exec)(`${command} config get registry`)
-  const currentRegistry = stdout.toString().trim()
-  // if user has set custom registry, ignore
-  if (currentRegistry.replace(/\/$/, '') !== defaultRegistry[command]) {
-    return false
-  }
-  const latency = await ping(currentRegistry)
-  if (latency > SLOW_THRESHOLD) {
-    const tbLatency = await ping(taobaoRegistry)
-    if (tbLatency < latency) {
-      stopSpinner(false)
-      console.log()
-      const { use } = await inquirer.prompt([{
-        name: 'use',
-        type: 'confirm',
-        message: chalk.yellow(
-          ` Your connection to the default ${command} registry is quite slow (${chalk.red(`${latency}ms`)}).\n` +
-          `   Use the Taobao mirror (${chalk.green(`${tbLatency}ms`)}) for faster installation?`
-        )
-      }])
-      console.log()
-
-      savePartialOptions({
-        useTaobaoRegistry: use
-      })
-
-      logWithSpinner('⚙', `Installing CLI plugins. This might take a while...`)
-      return use
-    }
-  }
+const findFastestRegistry = () => {
+  return Promise.race(Object.keys(registries).map(name => {
+    return ping(registries[name])
+  }))
 }
 
-let isFirstCall = false
-let shouldUseTaobao
 module.exports = async function installDeps (targetDir, options, deps) {
   const command = options.packageManager
-
-  if (!isFirstCall) {
-    isFirstCall = true
-    shouldUseTaobao = typeof options.useTaobaoRegistry === 'boolean'
-      ? options.useTaobaoRegistry
-      : await checkRegistrySwitch(command)
-  }
+  const registry = await findFastestRegistry()
 
   await new Promise((resolve, reject) => {
     const args = []
@@ -86,9 +45,9 @@ module.exports = async function installDeps (targetDir, options, deps) {
       throw new Error(`unknown package manager: ${command}`)
     }
 
-    if (shouldUseTaobao) {
-      args.push(`--registry=${taobaoRegistry}`)
-      if (command === 'npm') {
+    if (registry !== registries[command]) {
+      args.push(`--registry=${registry}`)
+      if (registry === 'npm' && registry === registries.taobao) {
         args.push(`--disturl=${taobaoDistURL}`)
       }
     }

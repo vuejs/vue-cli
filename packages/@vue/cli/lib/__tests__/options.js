@@ -4,63 +4,74 @@ const fs = require('fs')
 const {
   rcPath,
   saveOptions,
-  loadSavedOptions,
-  savePartialOptions
+  loadSavedOptions
 } = require('../options')
 
-it('save options', () => {
+it('load options', () => {
+  expect(loadSavedOptions()).toEqual({})
+  fs.writeFileSync(rcPath, JSON.stringify({
+    plugins: {}
+  }, null, 2))
+  expect(loadSavedOptions()).toEqual({
+    plugins: {}
+  })
+})
+
+it('should not save unknown fields', () => {
   saveOptions({
-    packageManager: 'npm',
-    plugins: {},
     foo: 'bar'
   })
-  const options = JSON.parse(fs.readFileSync(rcPath, 'utf-8'))
-  expect(options).toEqual({
-    packageManager: 'npm',
+  expect(loadSavedOptions()).toEqual({
     plugins: {}
   })
 })
 
-it('load options', () => {
+it('save options (merge)', () => {
+  saveOptions({
+    packageManager: 'yarn'
+  })
   expect(loadSavedOptions()).toEqual({
-    packageManager: 'npm',
+    packageManager: 'yarn',
     plugins: {}
   })
-  fs.unlinkSync(rcPath)
-  expect(loadSavedOptions()).toEqual({})
-})
 
-it('save partial options', () => {
-  savePartialOptions({
-    packageManager: 'yarn'
-  })
-  expect(loadSavedOptions()).toEqual({
-    packageManager: 'yarn'
-  })
-
-  savePartialOptions({
+  saveOptions({
     plugins: {
-      foo: { a: 1, b: 2 }
+      foo: { a: 1 }
     }
   })
   expect(loadSavedOptions()).toEqual({
     packageManager: 'yarn',
     plugins: {
-      foo: { a: 1, b: 2 }
+      foo: { a: 1 }
     }
   })
 
-  savePartialOptions({
+  // shallow save should replace fields
+  saveOptions({
+    plugins: {
+      bar: { b: 2 }
+    }
+  })
+  expect(loadSavedOptions()).toEqual({
+    packageManager: 'yarn',
+    plugins: {
+      bar: { b: 2 }
+    }
+  })
+
+  // deep merge
+  saveOptions({
     plugins: {
       foo: { a: 2, c: 3 },
       bar: { d: 4 }
     }
-  })
+  }, true)
   expect(loadSavedOptions()).toEqual({
     packageManager: 'yarn',
     plugins: {
-      foo: { a: 2, b: 2, c: 3 },
-      bar: { d: 4 }
+      foo: { a: 2, c: 3 },
+      bar: { b: 2, d: 4 }
     }
   })
 })
