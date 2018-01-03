@@ -64,7 +64,7 @@ const isObject = val => val && typeof val === 'object'
 function deepMerge (to, from) {
   for (const key in from) {
     if (isObject(to[key]) && isObject(from[key])) {
-      to[key] = deepMerge(to[key], from[key])
+      deepMerge(to[key], from[key])
     } else {
       to[key] = from[key]
     }
