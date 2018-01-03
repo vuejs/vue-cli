@@ -7,7 +7,7 @@ const getPkg = require('read-pkg-up')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
-const { info, warn, error } = require('@vue/cli-shared-utils')
+const { warn, error } = require('@vue/cli-shared-utils')
 
 const defaultOptions = require('./defaults')
 
@@ -27,7 +27,9 @@ module.exports = class Service {
     this.devServerConfigFns = []
     this.commands = {}
 
-    const pkg = getPkg.sync()
+    const pkg = getPkg.sync({
+      cwd: process.env.VUE_CLI_CONTEXT || process.cwd()
+    })
     this.pkg = pkg.pkg || {}
     this.context = path.dirname(pkg.path)
     this.projectOptions = Object.assign(defaultOptions, this.loadProjectConfig())
@@ -163,10 +165,8 @@ module.exports = class Service {
           `due to presence of ${chalk.bold('vue.config.js')}.`
         )
       }
-      info(`Using project config in ${chalk.bold('vue.config.js')}.`)
       resolved = fileConfig
     } else if (pkgConfig) {
-      info(`Using project config from "vue" field in ${chalk.bold(`package.json`)}.`)
       resolved = pkgConfig
     } else {
       resolved = {}
