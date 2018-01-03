@@ -47,6 +47,15 @@ exports.clearConsole = title => {
   }
 }
 
+// make all logs except error noop during tests
+if (process.env.VUE_CLI_TEST) {
+  Object.keys(exports).forEach(key => {
+    if (key !== 'error') {
+      exports[key] = () => {}
+    }
+  })
+}
+
 exports.hasYarn = (() => {
   if (process.env.VUE_CLI_TEST) {
     return true
