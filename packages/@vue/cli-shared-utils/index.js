@@ -2,7 +2,7 @@ const chalk = require('chalk')
 const readline = require('readline')
 const { execSync } = require('child_process')
 const padStart = require('string.prototype.padstart')
-const { logWithSpinner, stopSpinner } = require('./spinner')
+const spinner = require('./spinner')
 
 const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
@@ -12,8 +12,7 @@ const format = (label, msg) => {
   }).join('\n')
 }
 
-exports.logWithSpinner = logWithSpinner
-exports.stopSpinner = stopSpinner
+Object.assign(exports, spinner)
 
 exports.log = msg => console.log(msg || '')
 

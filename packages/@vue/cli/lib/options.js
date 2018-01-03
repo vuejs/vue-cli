@@ -9,6 +9,7 @@ const rcPath = exports.rcPath = (
 )
 
 exports.defaults = {
+  useTaobaoRegistry: null,
   packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {
     '@vue/cli-plugin-babel': {},
@@ -17,10 +18,16 @@ exports.defaults = {
   }
 }
 
-exports.loadSavedOptions = () => {
+let cachedOptions
+
+exports.loadOptions = () => {
+  if (cachedOptions) {
+    return cachedOptions
+  }
   if (fs.existsSync(rcPath)) {
     try {
-      return JSON.parse(fs.readFileSync(rcPath, 'utf-8'))
+      cachedOptions = JSON.parse(fs.readFileSync(rcPath, 'utf-8'))
+      return cachedOptions
     } catch (e) {
       error(
         `Error loading saved preferences: ` +
@@ -36,7 +43,7 @@ exports.loadSavedOptions = () => {
 }
 
 exports.saveOptions = (toSave, deep) => {
-  const options = exports.loadSavedOptions()
+  const options = exports.loadOptions()
   if (deep) {
     deepMerge(options, toSave)
   } else {
@@ -47,6 +54,7 @@ exports.saveOptions = (toSave, deep) => {
       delete options[key]
     }
   }
+  cachedOptions = options
   try {
     fs.writeFileSync(rcPath, JSON.stringify(options, null, 2))
   } catch (e) {

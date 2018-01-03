@@ -1,4 +1,5 @@
 module.exports = function sortObject (obj, keyOrder) {
+  if (!obj) return
   const res = {}
   const keys = Object.keys(obj)
   const getOrder = key => {

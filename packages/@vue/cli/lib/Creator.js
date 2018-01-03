@@ -15,7 +15,7 @@ const exec = require('util').promisify(require('child_process').exec)
 const {
   defaults,
   saveOptions,
-  loadSavedOptions
+  loadOptions
 } = require('./options')
 
 const {
@@ -44,9 +44,28 @@ module.exports = class Creator {
     promptModules.forEach(m => m(promptAPI))
   }
 
-  async create () {
+  async create (cliOptions = {}) {
     const { name, context, createCompleteCbs } = this
-    const options = await this.promptAndResolveOptions()
+
+    let options
+    if (cliOptions.saved) {
+      options = loadOptions()
+    } else if (cliOptions.default) {
+      options = defaults
+    } else {
+      options = await this.promptAndResolveOptions()
+    }
+
+    // inject core service
+    options.plugins['@vue/cli-service'] = {
+      projectName: name
+    }
+
+    const packageManager = (
+      cliOptions.packageManager ||
+      options.packageManager ||
+      (hasYarn ? 'yarn' : 'npm')
+    )
 
     // write base package.json to disk
     clearConsole()
@@ -72,7 +91,7 @@ module.exports = class Creator {
       // in development, avoid installation process
       setupDevProject(context, deps)
     } else {
-      await installDeps(context, options.packageManager, deps)
+      await installDeps(context, packageManager, deps, cliOptions.registry)
     }
 
     // run generator
@@ -90,7 +109,7 @@ module.exports = class Creator {
     // install additional deps (injected by generators)
     logWithSpinner('📦', `Installing additional dependencies...`)
     if (!process.env.VUE_CLI_TEST) {
-      await installDeps(context, options.packageManager)
+      await installDeps(context, packageManager, null, cliOptions.registry)
     }
 
     // run complete cbs if any (injected by generators)
@@ -125,7 +144,7 @@ module.exports = class Creator {
 
     let options
     if (answers.mode === 'saved') {
-      options = this.savedOptions // this is loaded when resolving prompts
+      options = loadOptions()
     } else if (answers.mode === 'default') {
       options = defaults
     } else {
@@ -141,11 +160,6 @@ module.exports = class Creator {
     // save options
     if (answers.mode === 'manual' && answers.save) {
       saveOptions(options)
-    }
-
-    // inject core service
-    options.plugins['@vue/cli-service'] = {
-      projectName: this.name
     }
 
     debug('vue:cli-ptions')(options)
@@ -181,9 +195,8 @@ module.exports = class Creator {
         }
       ]
     }
-    const savedOptions = loadSavedOptions()
+    const savedOptions = loadOptions()
     if (savedOptions.plugins) {
-      this.savedOptions = savedOptions
       const savedFeatures = formatFeatures(savedOptions.plugins)
       modePrompt.choices.unshift({
         name: `Use previously saved preferences (${savedFeatures})`,

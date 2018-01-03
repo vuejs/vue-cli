@@ -7,7 +7,7 @@ const Creator = require('./Creator')
 const clearConsole = require('./util/clearConsole')
 const { error, stopSpinner } = require('@vue/cli-shared-utils')
 
-async function create (projectName) {
+async function create (projectName, options) {
   const targetDir = path.resolve(process.cwd(), projectName)
   if (fs.existsSync(targetDir)) {
     clearConsole()
@@ -36,11 +36,11 @@ async function create (projectName) {
     .map(file => require(`./promptModules/${file}`))
 
   const creator = new Creator(projectName, targetDir, promptModules)
-  await creator.create()
+  await creator.create(options)
 }
 
-module.exports = projectName => {
-  create(projectName).catch(err => {
+module.exports = (...args) => {
+  create(...args).catch(err => {
     stopSpinner(false) // do not persist
     error(err)
     process.exit(1)

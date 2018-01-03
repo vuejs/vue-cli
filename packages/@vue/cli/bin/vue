@@ -23,6 +23,10 @@ program
 program
   .command('create <app-name>')
   .description('create a new project powered by vue-cli-service')
+  .option('-s, --saved', 'Skip prompts and use saved options')
+  .option('-d, --default', 'Skip prompts and use default options')
+  .option('-r, --registry <url>', 'Use specified NPM registry when installing dependencies')
+  .option('-p, --package-manager <command>', 'Use specified NPM client when installing dependencies')
   .action(require('../lib/create'))
 
 program
@@ -46,23 +50,38 @@ program
     loadCommand('build', '@vue/cli-service-global').build(filename)
   })
 
+// add some useful info on help
 program.on('--help', () => {
+  console.log()
+  console.log(`  Run ${chalk.cyan(`vue <command> --help`)} for detailed usage of given command.`)
   console.log()
 })
 
-// customize missing arg messages
-const formatArgs = ({ name, required }) => {
-  return `${required ? '<' : '['}${name}${required ? '>' : ']'}`
+program.commands.forEach(c => c.on('--help', () => console.log()))
+
+// enhance common error messages
+const enhanceErrorMessages = (methodName, log) => {
+  program.Command.prototype[methodName] = function (...args) {
+    this.outputHelp()
+    console.log(`  ` + chalk.red(log(...args)))
+    console.log()
+    process.exit(1)
+  }
 }
 
-program.Command.prototype.missingArgument = function (argName) {
-  console.log()
-  console.log(`  Missing required argument ${chalk.yellow(`<${argName}>`)}.`)
-  console.log()
-  console.log(`  Usage: vue ${this._name} ${this._args.map(formatArgs).join(' ')}`)
-  console.log()
-  process.exit(1)
-}
+enhanceErrorMessages('missingArgument', argName => {
+  return `Missing required argument ${chalk.yellow(`<${argName}>`)}.`
+})
+
+enhanceErrorMessages('unknownOption', optionName => {
+  return `Unknown option ${chalk.yellow(optionName)}.`
+})
+
+enhanceErrorMessages('optionMissingArgument', (option, flag) => {
+  return `Missing required argument for option ${chalk.yellow(option.flags)}` + (
+    flag ? `, got ${chalk.yellow(flag)}` : ``
+  )
+})
 
 program.parse(process.argv)
 

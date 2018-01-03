@@ -3,16 +3,16 @@ jest.mock('fs')
 const fs = require('fs')
 const {
   rcPath,
-  saveOptions,
-  loadSavedOptions
+  loadOptions,
+  saveOptions
 } = require('../options')
 
 it('load options', () => {
-  expect(loadSavedOptions()).toEqual({})
+  expect(loadOptions()).toEqual({})
   fs.writeFileSync(rcPath, JSON.stringify({
     plugins: {}
   }, null, 2))
-  expect(loadSavedOptions()).toEqual({
+  expect(loadOptions()).toEqual({
     plugins: {}
   })
 })
@@ -21,7 +21,7 @@ it('should not save unknown fields', () => {
   saveOptions({
     foo: 'bar'
   })
-  expect(loadSavedOptions()).toEqual({
+  expect(loadOptions()).toEqual({
     plugins: {}
   })
 })
@@ -30,7 +30,7 @@ it('save options (merge)', () => {
   saveOptions({
     packageManager: 'yarn'
   })
-  expect(loadSavedOptions()).toEqual({
+  expect(loadOptions()).toEqual({
     packageManager: 'yarn',
     plugins: {}
   })
@@ -40,7 +40,7 @@ it('save options (merge)', () => {
       foo: { a: 1 }
     }
   })
-  expect(loadSavedOptions()).toEqual({
+  expect(loadOptions()).toEqual({
     packageManager: 'yarn',
     plugins: {
       foo: { a: 1 }
@@ -53,7 +53,7 @@ it('save options (merge)', () => {
       bar: { b: 2 }
     }
   })
-  expect(loadSavedOptions()).toEqual({
+  expect(loadOptions()).toEqual({
     packageManager: 'yarn',
     plugins: {
       bar: { b: 2 }
@@ -67,7 +67,7 @@ it('save options (merge)', () => {
       bar: { d: 4 }
     }
   }, true)
-  expect(loadSavedOptions()).toEqual({
+  expect(loadOptions()).toEqual({
     packageManager: 'yarn',
     plugins: {
       foo: { a: 2, c: 3 },
