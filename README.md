@@ -16,7 +16,7 @@ cd packages/@vue/cli
 yarn link
 
 # create test projects in /packages/test
-export VUE_CLI_DEBUG=true # necessary for local tests to work
+export VUE_CLI_TEST=true # necessary for manual tests to work
 cd -
 cd packages/test
 vue create test-app
@@ -86,6 +86,10 @@ module.exports = (api, options) => {
   api.render('./template')
 }
 ```
+
+#### Important Development Note
+
+A plugin with a generator that injects additional dependencies other than packages in this repo (e.g. `chai` is conditionally injected by `@vue/cli-plugin-unit-mocha-webpack/generator/index.js`) should have those dependencies listed in its "devDependencies" field. This ensures that the package always exist in this repo's root `node_modules` so that we don't have to reinstall them on every test.
 
 [1]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/Creator.js
 [3]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/GeneratorAPI.js

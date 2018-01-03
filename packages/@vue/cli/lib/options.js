@@ -3,7 +3,10 @@ const os = require('os')
 const path = require('path')
 const { error, hasYarn } = require('@vue/cli-shared-utils')
 
-const rcPath = exports.rcPath = path.join(os.homedir(), '.vuerc')
+const rcPath = exports.rcPath = (
+  process.env.VUE_CLI_CONFIG_PATH ||
+  path.join(os.homedir(), '.vuerc')
+)
 
 exports.defaults = {
   useTaobaoRegistry: null,
@@ -45,7 +48,7 @@ exports.saveOptions = options => {
   } catch (e) {
     error(
       `Error saving preferences: ` +
-      `make sure you have write access to ~/.vuerc.\n` +
+      `make sure you have write access to ${rcPath}.\n` +
       `(${e.message})`
     )
   }

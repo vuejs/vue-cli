@@ -5,3 +5,4 @@ design
 packages/test
 dist
 yarn.lock
+.vuerc

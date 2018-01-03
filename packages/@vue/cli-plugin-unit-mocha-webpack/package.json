@@ -27,6 +27,10 @@
     "mocha-webpack": "^1.0.1",
     "webpack-node-externals": "^1.6.0"
   },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "vue-test-utils": "^1.0.0-beta.9"
+  },
   "publishConfig": {
     "access": "public"
   }

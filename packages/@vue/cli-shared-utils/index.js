@@ -4,14 +4,6 @@ const { execSync } = require('child_process')
 const padStart = require('string.prototype.padstart')
 const { logWithSpinner, stopSpinner } = require('./spinner')
 
-const wrapForTest = fn => {
-  return (...args) => {
-    if (!process.env.VUE_CLI_TEST) {
-      return fn.apply(null, args)
-    }
-  }
-}
-
 const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
     return i === 0
@@ -56,12 +48,10 @@ exports.clearConsole = title => {
   }
 }
 
-// wrap all log utils for tests
-Object.keys(exports).forEach(key => {
-  exports[key] = wrapForTest(exports[key])
-})
-
 exports.hasYarn = (() => {
+  if (process.env.VUE_CLI_TEST) {
+    return true
+  }
   try {
     execSync('yarnpkg --version', { stdio: 'ignore' })
     return true
@@ -71,6 +61,9 @@ exports.hasYarn = (() => {
 })()
 
 exports.hasGit = () => {
+  if (process.env.VUE_CLI_TEST) {
+    return true
+  }
   try {
     execSync('git --version', { stdio: 'ignore' })
     return true

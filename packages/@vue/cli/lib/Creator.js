@@ -9,7 +9,7 @@ const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const formatFeatures = require('./util/formatfeatures')
-const updatePackageForDev = require('./util/updatePackageForDev')
+const setupDevProject = require('./util/setupDevProject')
 const exec = require('util').promisify(require('child_process').exec)
 
 const {
@@ -52,7 +52,70 @@ module.exports = class Creator {
   async create () {
     const name = this.name
     const targetDir = process.env.VUE_CLI_CONTEXT = this.context
+    const options = await this.promptAndResolveOptions()
 
+    // write base package.json to disk
+    clearConsole()
+    logWithSpinner('✨', `Creating project in ${chalk.yellow(targetDir)}.`)
+    writeFileTree(targetDir, {
+      'package.json': JSON.stringify({
+        name,
+        version: '0.1.0',
+        private: true
+      }, null, 2)
+    })
+
+    // intilaize git repository
+    if (hasGit) {
+      logWithSpinner('🗃', `Initializing git repository...`)
+      await exec('git init', { cwd: targetDir })
+    }
+
+    // install plugins
+    logWithSpinner('⚙', `Installing CLI plugins. This might take a while...`)
+    const deps = Object.keys(options.plugins)
+    if (process.env.VUE_CLI_TEST) {
+      // in development, avoid installation process
+      setupDevProject(targetDir, deps)
+    } else {
+      await installDeps(targetDir, options, deps)
+    }
+
+    // run generator
+    logWithSpinner('🚀', `Invoking generators...`)
+    const generator = new Generator(targetDir, options, this)
+    await generator.generate()
+
+    // install additional deps (injected by generators)
+    logWithSpinner('📦', `Installing additional dependencies...`)
+    if (!process.env.VUE_CLI_TEST) {
+      await installDeps(targetDir, options)
+    }
+
+    // run complete cbs if any
+    for (const cb of this.createCompleteCbs) {
+      await cb()
+    }
+
+    // commit initial state
+    if (hasGit) {
+      await exec('git add -A', { cwd: targetDir, stdio: 'ignore' })
+      await exec('git commit -m init', { cwd: targetDir, stdio: 'ignore' })
+    }
+
+    // log instructions
+    stopSpinner()
+    log()
+    log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
+    log(
+      `👉  Get started with the following commands:\n\n` +
+      chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`) +
+      chalk.cyan(` ${chalk.gray('$')} ${options.packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
+    )
+    log()
+  }
+
+  async promptAndResolveOptions () {
     // prompt
     clearConsole()
     const answers = await inquirer.prompt(this.resolveFinalPrompts())
@@ -81,69 +144,11 @@ module.exports = class Creator {
 
     // inject core service
     options.plugins['@vue/cli-service'] = {
-      projectName: name
+      projectName: this.name
     }
 
     debug('vue:cli-ptions')(options)
-
-    // write base package.json to disk
-    clearConsole()
-    logWithSpinner('✨', `Creating project in ${chalk.yellow(targetDir)}.`)
-    writeFileTree(targetDir, {
-      'package.json': JSON.stringify({
-        name,
-        version: '0.1.0',
-        private: true
-      }, null, 2)
-    })
-
-    // intilaize git repository
-    if (hasGit) {
-      logWithSpinner('🗃', `Initializing git repository...`)
-      await exec('git init', { cwd: targetDir })
-    }
-
-    // install plugins
-    logWithSpinner('⚙', `Installing CLI plugins. This might take a while...`)
-    const deps = Object.keys(options.plugins)
-    if (process.env.VUE_CLI_DEBUG) {
-      // in development, use linked packages
-      updatePackageForDev(targetDir, deps)
-      await installDeps(targetDir, options)
-    } else {
-      await installDeps(targetDir, options, deps)
-    }
-
-    // run generator
-    logWithSpinner('🚀', `Invoking generators...`)
-    const generator = new Generator(targetDir, options, this)
-    await generator.generate()
-
-    // install additional deps (injected by generators)
-    logWithSpinner('📦', `Installing additional dependencies...`)
-    await installDeps(targetDir, options)
-
-    // run complete cbs if any
-    for (const cb of this.createCompleteCbs) {
-      await cb()
-    }
-
-    // commit initial state
-    if (hasGit) {
-      await exec('git add -A', { cwd: targetDir })
-      await exec('git commit -m init', { cwd: targetDir })
-    }
-
-    // log instructions
-    stopSpinner()
-    log()
-    log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
-    log(
-      `👉  Get started with the following commands:\n\n` +
-      chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`) +
-      chalk.cyan(` ${chalk.gray('$')} ${options.packageManager === 'yarn' ? 'yarn dev' : 'npm run dev'}`)
-    )
-    log()
+    return options
   }
 
   resolveIntroPrompts () {

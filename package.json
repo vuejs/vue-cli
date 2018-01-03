@@ -10,16 +10,29 @@
     "precommit": "lint-staged"
   },
   "jest": {
-    "testMatch": ["<rootDir>/test/**/*.js"],
+    "testMatch": [
+      "<rootDir>/test/**/*.js"
+    ],
     "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/test/__setup__.js"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/packages/"
+      "/packages/",
+      "/__mocks__/",
+      "__setup__.js"
     ]
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "git add"],
-    "packages/**/bin/*": ["eslint --fix", "git add"]
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "packages/**/bin/*": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "devDependencies": {
     "debug": "^3.1.0",
@@ -29,6 +42,7 @@
     "husky": "^0.14.3",
     "jest": "^22.0.4",
     "lerna": "^2.5.1",
-    "lint-staged": "^6.0.0"
+    "lint-staged": "^6.0.0",
+    "memfs": "^2.6.0"
   }
 }
