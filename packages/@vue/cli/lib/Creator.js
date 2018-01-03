@@ -8,7 +8,7 @@ const installDeps = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
-const formatFeatures = require('./util/formatfeatures')
+const formatFeatures = require('./util/formatFeatures')
 const setupDevProject = require('./util/setupDevProject')
 const exec = require('util').promisify(require('child_process').exec)
 
