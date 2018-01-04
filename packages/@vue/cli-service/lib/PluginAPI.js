@@ -12,7 +12,9 @@ module.exports = class PluginAPI {
 
   hasPlugin (id) {
     const prefixRE = /^(@vue\/|vue-)cli-plugin-/
-    return this.service.plugins.some(p => p.id.replace(prefixRE, '') === id)
+    return this.service.plugins.some(p => {
+      return p.id === id || p.id.replace(prefixRE, '') === id
+    })
   }
 
   // set project mode.
@@ -21,7 +23,7 @@ module.exports = class PluginAPI {
     process.env.VUE_CLI_MODE = mode
     // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
     // is production or test. However this can be overwritten in .env files.
-    process.env.NODE_ENV = process.env.BABE_ENV =
+    process.env.NODE_ENV = process.env.BABEL_ENV =
       (mode === 'production' || mode === 'test')
         ? mode
         : 'development'

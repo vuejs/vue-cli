@@ -2,23 +2,17 @@ const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
 const chalk = require('chalk')
-const dotenv = require('dotenv')
 const getPkg = require('read-pkg-up')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
+const loadEnv = require('./util/loadEnv')
 const { warn, error } = require('@vue/cli-shared-utils')
 
 const defaultOptions = require('./defaults')
 
 module.exports = class Service {
-  constructor () {
-    if (process.VUE_CLI_SERVICE) {
-      throw new Error(
-        `vue-cli-service is a singleton and can have only ` +
-        `one instance running in the same process.`
-      )
-    }
+  constructor (plugins) {
     process.VUE_CLI_SERVICE = this
 
     this.webpackConfig = new Config()
@@ -39,7 +33,7 @@ module.exports = class Service {
     this.loadEnv()
 
     // install plugins
-    this.plugins = this.resolvePlugins()
+    this.plugins = plugins || this.resolvePlugins()
     this.plugins.forEach(({ id, apply }) => {
       apply(new PluginAPI(id, this), this.projectOptions)
     })
@@ -54,28 +48,24 @@ module.exports = class Service {
   }
 
   loadEnv (mode) {
+    const logger = debug('vue:env')
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
-    const baseRes = dotenv.load({ path: basePath })
-    const localRes = dotenv.load({ path: localPath })
 
-    const checkError = res => {
-      // only ignore if file is not found
-      if (res.error && res.error.toString().indexOf('ENOENT') < 0) {
-        error(res.error)
+    const load = path => {
+      try {
+        const res = loadEnv(path)
+        logger(path, res)
+      } catch (err) {
+        // only ignore error if file is not found
+        if (err.toString().indexOf('ENOENT') < 0) {
+          error(err)
+        }
       }
     }
 
-    checkError(baseRes)
-    checkError(localRes)
-
-    const logger = debug('vue:env')
-    if (baseRes.parsed) {
-      logger(basePath, baseRes.parsed)
-    }
-    if (localRes.parsed) {
-      logger(localPath, localRes.parsed)
-    }
+    load(basePath)
+    load(localPath)
   }
 
   resolvePlugins () {
@@ -137,8 +127,11 @@ module.exports = class Service {
   loadProjectConfig () {
     // vue.config.js
     let fileConfig, pkgConfig, resolved
-    const configPath = path.resolve(this.context, 'vue.config.js')
-    if (fs.existsSync(configPath)) {
+    const configPath = (
+      process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
+      path.resolve(this.context, 'vue.config.js')
+    )
+    try {
       fileConfig = require(configPath)
       if (!fileConfig || typeof fileConfig !== 'object') {
         error(
@@ -146,7 +139,7 @@ module.exports = class Service {
         )
         fileConfig = null
       }
-    }
+    } catch (e) {}
 
     // package.vue
     pkgConfig = this.pkg.vue
@@ -176,6 +169,8 @@ module.exports = class Service {
     ensureSlash(resolved, 'base')
     removeSlash(resolved, 'outputDir')
     removeSlash(resolved, 'staticDir')
+
+    return resolved
   }
 }
 
