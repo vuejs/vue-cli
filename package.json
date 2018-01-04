@@ -5,7 +5,7 @@
     "packages/test/*"
   ],
   "scripts": {
-    "test": "VUE_CLI_TEST=true jest --env node",
+    "test": "jest --env node",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
     "precommit": "lint-staged"
   },
