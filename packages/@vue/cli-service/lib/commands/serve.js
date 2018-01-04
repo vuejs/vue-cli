@@ -76,8 +76,8 @@ module.exports = (api, options) => {
           `webpack-dev-server/client/?${urls.localUrlForBrowser}`,
           // hmr client
           projectDevServerOptions.hotOnly
-            ? 'webpack/hot/dev-server'
-            : 'webpack/hot/only-dev-server'
+            ? 'webpack/hot/only-dev-server'
+            : 'webpack/hot/dev-server'
           // TODO custom overlay client
           // `@vue/cli-overlay/dist/client`
         ])
