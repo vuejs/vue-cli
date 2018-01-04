@@ -33,6 +33,7 @@ module.exports = (api, options) => {
     // are running it in a mode with a production env, e.g. in E2E tests.
     const isProduction = process.env.NODE_ENV === 'production'
 
+    const path = require('path')
     const chalk = require('chalk')
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
@@ -51,6 +52,14 @@ module.exports = (api, options) => {
       if (err) {
         return error(err)
       }
+
+      // transpile webpack-dev-server client since it uses const/let
+      api.chainWebpack(webpackConfig => {
+        webpackConfig.module
+          .rule('js')
+            .include
+              .add(path.dirname(require.resolve('webpack-dev-server/client')))
+      })
 
       const webpackConfig = api.resolveWebpackConfig()
 
@@ -75,6 +84,8 @@ module.exports = (api, options) => {
       }
 
       const compiler = webpack(webpackConfig)
+
+      compiler.apply(new webpack.ProgressPlugin())
 
       // log instructions & open browser on first compilation complete
       let isFirstCompile = true
@@ -142,6 +153,14 @@ module.exports = (api, options) => {
           projectDevServerOptions.before && projectDevServerOptions.before(app)
         }
       }))
+
+      ;['SIGINT', 'SIGTERM'].forEach(signal => {
+        process.on(signal, () => {
+          server.close(() => {
+            process.exit()
+          })
+        })
+      })
 
       server.listen(port, host, err => {
         if (err) {
