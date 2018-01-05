@@ -2,8 +2,8 @@ jest.setTimeout(10000)
 
 const create = require('@vue/cli-test-utils/createTestProjectWithOptions')
 
-it('should work', async () => {
-  const { read, write, exec } = await create('eslint', {
+test('should work', async () => {
+  const { read, write, run } = await create('eslint', {
     plugins: {
       '@vue/cli-plugin-babel': {},
       '@vue/cli-plugin-eslint': {
@@ -18,7 +18,7 @@ it('should work', async () => {
   // remove semicolons
   await write('src/main.js', main.replace(/;/g, ''))
   // lint
-  await exec('node ./node_modules/.bin/vue-cli-service lint')
+  const child = await run('vue-cli-service lint')
   expect(await read('src/main.js')).toContain(';')
 
   // TODO lint-on-commit

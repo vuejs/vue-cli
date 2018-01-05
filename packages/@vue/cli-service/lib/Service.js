@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
 const chalk = require('chalk')
@@ -96,6 +95,7 @@ module.exports = class Service {
     let command = this.commands[name]
     if (!command && name) {
       error(`command "${name}" does not exist.`)
+      process.exit(1)
     }
     if (!command || args.help) {
       command = this.commands.help

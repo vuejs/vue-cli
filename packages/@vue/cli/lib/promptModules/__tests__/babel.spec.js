@@ -5,7 +5,7 @@ const assertPromptModule = require('@vue/cli-test-utils/assertPromptModule')
 
 const moduleToTest = require('../babel')
 
-it('should pass', async () => {
+test('should pass', async () => {
   const expectedPrompts = [
     {
       message: 'features',
@@ -27,7 +27,7 @@ it('should pass', async () => {
   )
 })
 
-it('should not include the plugin if ts is also present', async () => {
+test('should not include the plugin if ts is also present', async () => {
   const mockTSModule = api => {
     api.onPromptComplete(answers => {
       answers.features.push('ts')

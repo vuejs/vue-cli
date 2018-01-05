@@ -7,6 +7,6 @@ module.exports = api => {
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true
 
-    // TODO spawn jest w/ --config jest.config.js
+    // TODO execa jest w/ --config jest.config.js
   })
 }

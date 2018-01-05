@@ -4,7 +4,7 @@ jest.mock('inquirer')
 const { defaults } = require('../options')
 const assertPromptModule = require('@vue/cli-test-utils/assertPromptModule')
 
-it('default', async () => {
+test('default', async () => {
   const epxectedPrompts = [
     {
       message: 'project creation mode',
@@ -18,7 +18,7 @@ it('default', async () => {
   assertPromptModule([], epxectedPrompts, defaults)
 })
 
-it('manual + PromptModuleAPI', async () => {
+test('manual + PromptModuleAPI', async () => {
   const mockModule = api => {
     api.injectFeature({
       name: 'Foo',

@@ -13,7 +13,7 @@ fs.writeFileSync(path.resolve(templateDir, 'foo.js'), 'foo(<%- options.n %>)')
 mkdirp.sync(path.resolve(templateDir, 'bar'))
 fs.writeFileSync(path.resolve(templateDir, 'bar/bar.js'), 'bar(<%- m %>)')
 
-it('api: extendPackage', async () => {
+test('api: extendPackage', async () => {
   const generator = new Generator('/', {
     name: 'hello',
     list: [1],
@@ -49,7 +49,7 @@ it('api: extendPackage', async () => {
   })
 })
 
-it('api: extendPackage function', async () => {
+test('api: extendPackage function', async () => {
   const generator = new Generator('/', { foo: 1 }, [{
     id: 'test',
     apply: api => {
@@ -67,7 +67,7 @@ it('api: extendPackage function', async () => {
   })
 })
 
-it('api: extendPackage + { merge: false }', async () => {
+test('api: extendPackage + { merge: false }', async () => {
   const generator = new Generator('/', {
     name: 'hello',
     list: [1],
@@ -102,7 +102,7 @@ it('api: extendPackage + { merge: false }', async () => {
   })
 })
 
-it('api: extendPackage merge dependencies', async () => {
+test('api: extendPackage merge dependencies', async () => {
   const generator = new Generator('/', {}, [
     {
       id: 'test1',
@@ -140,7 +140,7 @@ it('api: extendPackage merge dependencies', async () => {
   })
 })
 
-it('api: warn invalid dep range', async () => {
+test('api: warn invalid dep range', async () => {
   new Generator('/', {}, [
     {
       id: 'test1',
@@ -162,7 +162,7 @@ it('api: warn invalid dep range', async () => {
   })).toBe(true)
 })
 
-it('api: extendPackage dependencies conflict', async () => {
+test('api: extendPackage dependencies conflict', async () => {
   new Generator('/', {}, [
     {
       id: 'test1',
@@ -196,7 +196,7 @@ it('api: extendPackage dependencies conflict', async () => {
   })).toBe(true)
 })
 
-it('api: render fs directory', async () => {
+test('api: render fs directory', async () => {
   const generator = new Generator('/', {}, [
     {
       id: 'test1',
@@ -215,7 +215,7 @@ it('api: render fs directory', async () => {
   expect(fs.readFileSync('/bar/bar.js', 'utf-8')).toContain('bar(2)')
 })
 
-it('api: render object', async () => {
+test('api: render object', async () => {
   const generator = new Generator('/', {}, [
     {
       id: 'test1',
@@ -237,7 +237,7 @@ it('api: render object', async () => {
   expect(fs.readFileSync('/bar/bar1.js', 'utf-8')).toContain('bar(3)')
 })
 
-it('api: render middleware', async () => {
+test('api: render middleware', async () => {
   const generator = new Generator('/', {}, [
     {
       id: 'test1',
@@ -259,7 +259,7 @@ it('api: render middleware', async () => {
   expect(fs.readFileSync('/bar/bar2.js', 'utf-8')).toContain('bar(3)')
 })
 
-it('api: hasPlugin', () => {
+test('api: hasPlugin', () => {
   new Generator('/', {}, [
     {
       id: 'foo',
@@ -282,7 +282,7 @@ it('api: hasPlugin', () => {
   ])
 })
 
-it('api: onCreateComplete', () => {
+test('api: onCreateComplete', () => {
   const fn = () => {}
   const cbs = []
   new Generator('/', {}, [
@@ -296,7 +296,7 @@ it('api: onCreateComplete', () => {
   expect(cbs).toContain(fn)
 })
 
-it('api: resolve', () => {
+test('api: resolve', () => {
   new Generator('/foo/bar', {}, [
     {
       id: 'test',

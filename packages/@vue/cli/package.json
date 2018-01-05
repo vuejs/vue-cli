@@ -29,6 +29,7 @@
     "commander": "^2.12.2",
     "ejs": "^2.5.7",
     "error-stack-parser": "^2.0.1",
+    "execa": "^0.8.0",
     "import-global": "^0.1.0",
     "inquirer": "^4.0.1",
     "isbinaryfile": "^3.0.2",

@@ -14,7 +14,7 @@ beforeEach(() => {
   mockPkg({})
 })
 
-it('env loading', () => {
+test('env loading', () => {
   fs.writeFileSync('/.env', `FOO=1\nBAR=2`)
   fs.writeFileSync('/.env.local', `FOO=3\nBAZ=4`)
   new Service('/', [])
@@ -23,7 +23,7 @@ it('env loading', () => {
   expect(process.env.BAZ).toBe('4')
 })
 
-it('loading plugins from package.json', () => {
+test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
@@ -37,7 +37,7 @@ it('loading plugins from package.json', () => {
   expect(service.plugins.some(({ id }) => id === 'bar')).toBe(false)
 })
 
-it('load project options from package.json', () => {
+test('load project options from package.json', () => {
   mockPkg({
     vue: {
       lintOn: 'save'
@@ -47,7 +47,7 @@ it('load project options from package.json', () => {
   expect(service.projectOptions.lintOn).toBe('save')
 })
 
-it('load project options from vue.config.js', () => {
+test('load project options from vue.config.js', () => {
   process.env.VUE_CLI_SERVICE_CONFIG_PATH = 'mock-config'
   mockPkg({
     vue: {
@@ -59,7 +59,7 @@ it('load project options from vue.config.js', () => {
   delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
 })
 
-it('api: setMode', () => {
+test('api: setMode', () => {
   fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
   fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
 
@@ -89,7 +89,7 @@ it('api: setMode', () => {
   expect(process.env.BABEL_ENV).toBe('test')
 })
 
-it('api: registerCommand', () => {
+test('api: registerCommand', () => {
   let args
   const service = new Service('/', [{
     id: 'test',
@@ -104,7 +104,7 @@ it('api: registerCommand', () => {
   expect(args).toEqual({ _: [], n: 1 })
 })
 
-it('api: chainWebpack', () => {
+test('api: chainWebpack', () => {
   const service = new Service('/', [{
     id: 'test',
     apply: api => {
@@ -118,7 +118,7 @@ it('api: chainWebpack', () => {
   expect(config.output.path).toBe('test-dist')
 })
 
-it('api: configureWebpack', () => {
+test('api: configureWebpack', () => {
   const service = new Service('/', [{
     id: 'test',
     apply: api => {
@@ -134,7 +134,7 @@ it('api: configureWebpack', () => {
   expect(config.output.path).toBe('test-dist-2')
 })
 
-it('api: configureDevServer', () => {
+test('api: configureDevServer', () => {
   const cb = () => {}
   const service = new Service('/', [{
     id: 'test',
@@ -145,7 +145,7 @@ it('api: configureDevServer', () => {
   expect(service.devServerConfigFns).toContain(cb)
 })
 
-it('api: resolve', () => {
+test('api: resolve', () => {
   new Service('/', [{
     id: 'test',
     apply: api => {
@@ -154,7 +154,7 @@ it('api: resolve', () => {
   }])
 })
 
-it('api: hasPlugin', () => {
+test('api: hasPlugin', () => {
   new Service('/', [
     {
       id: 'vue-cli-plugin-foo',

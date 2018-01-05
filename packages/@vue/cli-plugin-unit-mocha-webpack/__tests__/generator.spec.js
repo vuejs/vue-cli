@@ -1,6 +1,6 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 
-it('base', async () => {
+test('base', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
       id: 'unit-mocha-webpack',
@@ -21,7 +21,7 @@ it('base', async () => {
   expect(files['test/unit/HelloWorld.spec.js']).toContain('// assert wrapper.text() equals msg')
 })
 
-it('chai', async () => {
+test('chai', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
       id: 'unit-mocha-webpack-chai',
@@ -40,7 +40,7 @@ it('chai', async () => {
   expect(spec).toContain(`expect(wrapper.text()).to.include(msg)`)
 })
 
-it('chai', async () => {
+test('chai', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
       id: 'unit-mocha-webpack-chai',

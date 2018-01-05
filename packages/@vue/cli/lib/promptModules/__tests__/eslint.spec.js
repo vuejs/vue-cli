@@ -5,7 +5,7 @@ const assertPromptModule = require('@vue/cli-test-utils/assertPromptModule')
 
 const moduleToTest = require('../eslint')
 
-it('base', async () => {
+test('base', async () => {
   const expectedPrompts = [
     {
       message: 'features',
@@ -41,7 +41,7 @@ it('base', async () => {
   )
 })
 
-it('airbnb', async () => {
+test('airbnb', async () => {
   const expectedPrompts = [
     {
       message: 'features',
@@ -77,7 +77,7 @@ it('airbnb', async () => {
   )
 })
 
-it('standard', async () => {
+test('standard', async () => {
   const expectedPrompts = [
     {
       message: 'features',

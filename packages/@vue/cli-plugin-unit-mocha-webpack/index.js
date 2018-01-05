@@ -34,7 +34,7 @@ module.exports = api => {
     // for @vue/babel-preset-app
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     // start runner
-    const { spawn } = require('child_process')
+    const execa = require('execa')
     const bin = require.resolve('mocha-webpack/bin/mocha-webpack')
     const argv = rawArgv.concat([
       '--recursive',
@@ -45,7 +45,7 @@ module.exports = api => {
     ])
 
     return new Promise((resolve, reject) => {
-      const child = spawn(bin, argv, { stdio: 'inherit' })
+      const child = execa(bin, argv, { stdio: 'inherit' })
       child.on('error', reject)
       child.on('exit', code => {
         if (code !== 0) {

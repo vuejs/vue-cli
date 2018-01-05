@@ -7,7 +7,7 @@ const {
   saveOptions
 } = require('../options')
 
-it('load options', () => {
+test('load options', () => {
   expect(loadOptions()).toEqual({})
   fs.writeFileSync(rcPath, JSON.stringify({
     plugins: {}
@@ -17,7 +17,7 @@ it('load options', () => {
   })
 })
 
-it('should not save unknown fields', () => {
+test('should not save unknown fields', () => {
   saveOptions({
     foo: 'bar'
   })
@@ -26,7 +26,7 @@ it('should not save unknown fields', () => {
   })
 })
 
-it('save options (merge)', () => {
+test('save options (merge)', () => {
   saveOptions({
     packageManager: 'yarn'
   })

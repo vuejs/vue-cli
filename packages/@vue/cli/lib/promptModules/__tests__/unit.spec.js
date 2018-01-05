@@ -5,7 +5,7 @@ const assertPromptModule = require('@vue/cli-test-utils/assertPromptModule')
 
 const moduleToTest = require('../unit')
 
-it('mocha', async () => {
+test('mocha', async () => {
   const expectedPrompts = [
     {
       message: 'features',
@@ -40,7 +40,7 @@ it('mocha', async () => {
   )
 })
 
-it('jest', async () => {
+test('jest', async () => {
   const expectedPrompts = [
     {
       message: 'features',

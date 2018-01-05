@@ -1,14 +1,12 @@
 const fs = require('fs')
 const path = require('path')
+const execa = require('execa')
 const { promisify } = require('util')
-const childProcess = require('child_process')
-const cliBinPath = require.resolve('@vue/cli/bin/vue')
-const { spawn } = childProcess
-
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
-const _exec = promisify(childProcess.exec)
 const mkdirp = promisify(require('mkdirp'))
+
+const exec = promisify(require('child_process').exec)
 
 module.exports = function createTestProjectWithOptions (name, config, cwd) {
   cwd = cwd || path.resolve(__dirname, '../../test')
@@ -19,45 +17,43 @@ module.exports = function createTestProjectWithOptions (name, config, cwd) {
     plugins: {}
   }, config)
 
+  const projectRoot = path.resolve(cwd, name)
+
   const read = file => {
-    return readFile(path.resolve(cwd, name, file), 'utf-8')
+    return readFile(path.resolve(projectRoot, file), 'utf-8')
   }
 
   const write = (file, content) => {
-    const targetPath = path.resolve(cwd, name, file)
+    const targetPath = path.resolve(projectRoot, file)
     const dir = path.dirname(targetPath)
     return mkdirp(dir).then(() => writeFile(targetPath, content))
   }
 
-  const exec = command => {
-    return _exec(command, { cwd: path.resolve(cwd, name) })
+  const run = (command, args) => {
+    if (!args) { [command, ...args] = command.split(/\s+/) }
+    return execa(command, args, { cwd: projectRoot }).then(({ stderr }) => {
+      if (stderr) console.error(stderr)
+    })
   }
 
-  return new Promise((resolve, reject) => {
-    const child = spawn(cliBinPath, [
-      'create',
-      name,
-      '--force',
-      '--config',
-      JSON.stringify(config)
-    ], {
-      cwd,
-      env: process.env,
-      stdio: 'inherit'
-    })
+  const cliBinPath = require.resolve('@vue/cli/bin/vue')
 
-    child.on('exit', code => {
-      if (code !== 0) {
-        reject(`cli creation failed with code ${code}`)
-      } else {
-        resolve({
-          read,
-          write,
-          exec
-        })
-      }
-    })
+  const args = [
+    'create',
+    name,
+    '--force',
+    '--config',
+    JSON.stringify(config)
+  ]
 
-    child.on('error', reject)
-  })
+  const options = {
+    cwd,
+    stdio: 'inherit'
+  }
+
+  return execa(cliBinPath, args, options).then(() => ({
+    read,
+    write,
+    run
+  }))
 }

@@ -1,6 +1,7 @@
 const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
+const execa = require('execa')
 const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
@@ -10,7 +11,6 @@ const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const formatFeatures = require('./util/formatFeatures')
 const setupDevProject = require('./util/setupDevProject')
-const exec = require('util').promisify(require('child_process').exec)
 
 const {
   defaults,
@@ -48,7 +48,10 @@ module.exports = class Creator {
   async create (cliOptions = {}) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
     const { name, context, createCompleteCbs } = this
-    const run = command => exec(command, { cwd: context })
+    const run = (command, args) => {
+      if (!args) { [command, ...args] = command.split(/\s+/) }
+      return execa(command, args, { cwd: context })
+    }
 
     let options
     if (cliOptions.saved) {
@@ -132,8 +135,8 @@ module.exports = class Creator {
     if (hasGit) {
       await run('git add -A')
       if (isTestOrDebug) {
-        await run('git config user.name "test"')
-        await run('git config user.email "test@test.com"')
+        await run('git', ['config', 'user.name', 'test'])
+        await run('git', ['config', 'user.email', 'test@test.com'])
       }
       await run(`git commit -m init`)
     }

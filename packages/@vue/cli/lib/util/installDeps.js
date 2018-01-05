@@ -1,9 +1,8 @@
 const { URL } = require('url')
 const https = require('https')
 const chalk = require('chalk')
+const execa = require('execa')
 const inquirer = require('inquirer')
-const { promisify } = require('util')
-const { spawn, exec } = require('child_process')
 const { loadOptions, saveOptions } = require('../options')
 const { pauseSpinner, resumeSpinner } = require('@vue/cli-shared-utils')
 
@@ -46,8 +45,7 @@ const shouldUseTaobao = async (command) => {
     return val
   }
 
-  const configValue = await promisify(exec)(`${command} config get registry`)
-  const userCurrent = configValue.stdout.toString().trim()
+  const userCurrent = (await execa(command, ['config', 'get', 'registry'])).stdout
   const defaultRegistry = registries[command]
   if (userCurrent !== defaultRegistry) {
     // user has configured custom regsitry, respect that
@@ -114,7 +112,7 @@ module.exports = async function installDeps (targetDir, command, deps, cliRegist
   debug(`args: `, args)
 
   await new Promise((resolve, reject) => {
-    const child = spawn(command, args, {
+    const child = execa(command, args, {
       cwd: targetDir,
       stdio: 'pipe'
     })

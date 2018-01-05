@@ -19,5 +19,8 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-test-utils#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "execa": "^0.8.0"
   }
 }
