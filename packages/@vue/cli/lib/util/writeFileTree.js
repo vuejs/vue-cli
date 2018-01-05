@@ -1,11 +1,16 @@
 const fs = require('fs')
 const path = require('path')
-const mkdirp = require('mkdirp')
+const { promisify } = require('util')
+const mkdirp = promisify(require('mkdirp'))
+const write = promisify(fs.writeFile)
 
 module.exports = function writeFileTree (dir, files) {
-  for (const name in files) {
-    const filePath = path.join(dir, name)
-    mkdirp.sync(path.dirname(filePath))
-    fs.writeFileSync(filePath, files[name])
+  if (process.env.VUE_CLI_SKIP_WRITE) {
+    return
   }
+  return Promise.all(Object.keys(files).map(async (name) => {
+    const filePath = path.join(dir, name)
+    await mkdirp(path.dirname(filePath))
+    await write(filePath, files[name])
+  }))
 }

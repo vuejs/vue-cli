@@ -16,7 +16,7 @@ cd packages/@vue/cli
 yarn link
 
 # create test projects in /packages/test
-export VUE_CLI_TEST=true # necessary for manual tests to work
+export VUE_CLI_DEBUG=true # necessary for manual tests to work
 cd -
 cd packages/test
 vue create test-app

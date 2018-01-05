@@ -23,10 +23,12 @@ program
 program
   .command('create <app-name>')
   .description('create a new project powered by vue-cli-service')
-  .option('-s, --saved', 'Skip prompts and use saved options')
-  .option('-d, --default', 'Skip prompts and use default options')
+  .option('-s, --saved', 'Skip prompts and use saved config')
+  .option('-d, --default', 'Skip prompts and use default config')
+  .option('-c, --config <json>', 'Skip prompts and use inline JSON string as config')
   .option('-r, --registry <url>', 'Use specified NPM registry when installing dependencies')
-  .option('-p, --package-manager <command>', 'Use specified NPM client when installing dependencies')
+  .option('-m, --package-manager <command>', 'Use specified NPM client when installing dependencies')
+  .option('-f, --force', 'Overwrite target directory if it exists')
   .action(require('../lib/create'))
 
 program

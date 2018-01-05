@@ -1,3 +1,5 @@
+// using this requires mocking fs & inquirer
+
 const Creator = require('@vue/cli/lib/Creator')
 const { expectPrompts } = require('inquirer') // from mock
 

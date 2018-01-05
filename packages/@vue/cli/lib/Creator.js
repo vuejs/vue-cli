@@ -20,6 +20,7 @@ const {
 
 const {
   log,
+  error,
   hasGit,
   hasYarn,
   logWithSpinner,
@@ -45,6 +46,7 @@ module.exports = class Creator {
   }
 
   async create (cliOptions = {}) {
+    const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
     const { name, context, createCompleteCbs } = this
 
     let options
@@ -52,6 +54,13 @@ module.exports = class Creator {
       options = loadOptions()
     } else if (cliOptions.default) {
       options = defaults
+    } else if (cliOptions.config) {
+      try {
+        options = JSON.parse(cliOptions.config)
+      } catch (e) {
+        error(`CLI inline config is not valid JSON: ${cliOptions.config}`)
+        process.exit(1)
+      }
     } else {
       options = await this.promptAndResolveOptions()
     }
@@ -87,7 +96,7 @@ module.exports = class Creator {
     // install plugins
     logWithSpinner('⚙', `Installing CLI plugins. This might take a while...`)
     const deps = Object.keys(options.plugins)
-    if (process.env.VUE_CLI_TEST) {
+    if (isTestOrDebug) {
       // in development, avoid installation process
       setupDevProject(context, deps)
     } else {
@@ -108,7 +117,7 @@ module.exports = class Creator {
 
     // install additional deps (injected by generators)
     logWithSpinner('📦', `Installing additional dependencies...`)
-    if (!process.env.VUE_CLI_TEST) {
+    if (!isTestOrDebug) {
       await installDeps(context, packageManager, null, cliOptions.registry)
     }
 
@@ -186,7 +195,7 @@ module.exports = class Creator {
       message: `Please pick a project creation mode:`,
       choices: [
         {
-          name: `Zero-configuration with defaults (${defualtFeatures})`,
+          name: `Zero-config with defaults (${defualtFeatures})`,
           value: 'default'
         },
         {
@@ -199,7 +208,7 @@ module.exports = class Creator {
     if (savedOptions.plugins) {
       const savedFeatures = formatFeatures(savedOptions.plugins)
       modePrompt.choices.unshift({
-        name: `Use previously saved preferences (${savedFeatures})`,
+        name: `Use previously saved config (${savedFeatures})`,
         value: 'saved'
       })
     }
