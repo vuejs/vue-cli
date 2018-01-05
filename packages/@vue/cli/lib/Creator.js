@@ -83,7 +83,7 @@ module.exports = class Creator {
     // write base package.json to disk
     clearConsole()
     logWithSpinner('✨', `Creating project in ${chalk.yellow(context)}.`)
-    writeFileTree(context, {
+    await writeFileTree(context, {
       'package.json': JSON.stringify({
         name,
         version: '0.1.0',
