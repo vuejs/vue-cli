@@ -62,6 +62,9 @@
     "webpack-dev-server": "^2.9.7",
     "webpack-merge": "^4.1.1"
   },
+  "devDependencies": {
+    "vue": "^2.5.13"
+  },
   "publishConfig": {
     "access": "public"
   },
