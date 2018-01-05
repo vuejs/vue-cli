@@ -8,7 +8,6 @@ const packagesDir = path.resolve(__dirname, '../packages/@vue')
 const files = fs.readdirSync(packagesDir)
 
 files.forEach(pkg => {
-  if (pkg === 'cli') return
   if (pkg.charAt(0) === '.') return
 
   const isPlugin = /^cli-plugin-/.test(pkg)
@@ -46,11 +45,11 @@ files.forEach(pkg => {
 
   const readmePath = path.join(packagesDir, pkg, `README.md`)
   if (!fs.existsSync(readmePath)) {
-    fs.writeFileSync(readmePath,
-      `# @vue/${pkg}
+    fs.writeFileSync(readmePath, `# @vue/${pkg}\n\n> ${desc}`)
+  }
 
-> ${desc}
-`
-    )
+  const npmIgnorePath = path.join(packagesDir, pkg, `.npmignore`)
+  if (!fs.existsSync(npmIgnorePath)) {
+    fs.writeFileSync(npmIgnorePath, `__tests__/\n__mocks__/`)
   }
 })
