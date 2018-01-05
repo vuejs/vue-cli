@@ -1,4 +1,5 @@
 const ejs = require('ejs')
+const slash = require('slash')
 const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
@@ -66,9 +67,18 @@ module.exports = class Generator {
   }
 
   async resolveFiles () {
+    const files = this.files
     for (const middleware of this.fileMiddlewares) {
-      await middleware(this.files, ejs.render)
+      await middleware(files, ejs.render)
     }
+    // normalize paths
+    Object.keys(files).forEach(file => {
+      const normalized = slash(file)
+      if (file !== normalized) {
+        files[normalized] = files[file]
+        delete files[file]
+      }
+    })
     debug('vue:cli-files')(this.files)
   }
 }
