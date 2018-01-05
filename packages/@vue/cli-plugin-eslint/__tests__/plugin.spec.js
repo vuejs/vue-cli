@@ -1,3 +1,5 @@
+jest.setTimeout(10000)
+
 const create = require('@vue/cli-test-utils/createTestProjectWithOptions')
 
 it('should work', async () => {
