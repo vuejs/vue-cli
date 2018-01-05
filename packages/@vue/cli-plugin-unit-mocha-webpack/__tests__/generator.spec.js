@@ -17,8 +17,8 @@ test('base', async () => {
 
   expect(pkg.scripts.test).toBeTruthy()
   expect(pkg.devDependencies).toHaveProperty('vue-test-utils')
-  expect(files['test/unit/.eslintrc']).toContain('"mocha": true')
-  expect(files['test/unit/HelloWorld.spec.js']).toContain('// assert wrapper.text() equals msg')
+  expect(files['test/unit/.eslintrc']).toMatch('"mocha": true')
+  expect(files['test/unit/HelloWorld.spec.js']).toMatch('// assert wrapper.text() equals msg')
 })
 
 test('chai', async () => {
@@ -36,8 +36,8 @@ test('chai', async () => {
   expect(pkg.devDependencies).toHaveProperty('vue-test-utils')
 
   const spec = files['test/unit/HelloWorld.spec.js']
-  expect(spec).toContain(`import { expect } from 'chai'`)
-  expect(spec).toContain(`expect(wrapper.text()).to.include(msg)`)
+  expect(spec).toMatch(`import { expect } from 'chai'`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(msg)`)
 })
 
 test('chai', async () => {
@@ -55,6 +55,6 @@ test('chai', async () => {
   expect(pkg.devDependencies).toHaveProperty('vue-test-utils')
 
   const spec = files['test/unit/HelloWorld.spec.js']
-  expect(spec).toContain(`import expect from 'expect'`)
-  expect(spec).toContain(`expect(wrapper.text()).toContain(msg)`)
+  expect(spec).toMatch(`import expect from 'expect'`)
+  expect(spec).toMatch(`expect(wrapper.text()).toMatch(msg)`)
 })

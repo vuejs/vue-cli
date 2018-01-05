@@ -14,12 +14,12 @@ test('should work', async () => {
   })
   // should've applied airbnb autofix
   const main = await read('src/main.js')
-  expect(main).toContain(';')
+  expect(main).toMatch(';')
   // remove semicolons
   await write('src/main.js', main.replace(/;/g, ''))
   // lint
   const child = await run('vue-cli-service lint')
-  expect(await read('src/main.js')).toContain(';')
+  expect(await read('src/main.js')).toMatch(';')
 
   // TODO lint-on-commit
 

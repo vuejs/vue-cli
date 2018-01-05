@@ -14,7 +14,7 @@ describe('Hello.vue', () => {
       propsData: { msg }
     })
     <%_ if (options.assertionLibrary === 'expect') { _%>
-    expect(wrapper.text()).toContain(msg)
+    expect(wrapper.text()).toMatch(msg)
     <%_ } else if (options.assertionLibrary === 'chai') { _%>
     expect(wrapper.text()).to.include(msg)
     <%_ } else { _%>

@@ -1,6 +1,6 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 
-it('base', async () => {
+test('base', async () => {
   const { pkg } = await generateWithPlugin({
     id: 'eslint',
     apply: require('../generator'),
@@ -14,7 +14,7 @@ it('base', async () => {
   expect(pkg.devDependencies).toHaveProperty('eslint-plugin-vue')
 })
 
-it('airbnb', async () => {
+test('airbnb', async () => {
   const { pkg } = await generateWithPlugin({
     id: 'eslint',
     apply: require('../generator'),
@@ -31,7 +31,7 @@ it('airbnb', async () => {
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-airbnb')
 })
 
-it('standard', async () => {
+test('standard', async () => {
   const { pkg } = await generateWithPlugin({
     id: 'eslint',
     apply: require('../generator'),
@@ -48,7 +48,7 @@ it('standard', async () => {
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-standard')
 })
 
-it('lint on save', async () => {
+test('lint on save', async () => {
   const { pkg } = await generateWithPlugin({
     id: 'eslint',
     apply: require('../generator'),
@@ -62,7 +62,7 @@ it('lint on save', async () => {
   })
 })
 
-it('lint on commit', async () => {
+test('lint on commit', async () => {
   const { pkg } = await generateWithPlugin({
     id: 'eslint',
     apply: require('../generator'),
@@ -78,6 +78,6 @@ it('lint on commit', async () => {
   })
 })
 
-it('prettier', async () => {
+test('prettier', async () => {
   // TODO
 })

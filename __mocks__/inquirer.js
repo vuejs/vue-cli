@@ -31,7 +31,7 @@ exports.prompt = prompts => {
       const message = typeof prompt.message === 'function'
         ? prompt.message(answers)
         : prompt.message
-      expect(message).toContain(a.message)
+      expect(message).toMatch(a.message)
     }
 
     if (a.choices) {
@@ -39,7 +39,7 @@ exports.prompt = prompts => {
       a.choices.forEach((c, i) => {
         const expected = a.choices[i]
         if (expected) {
-          expect(prompt.choices[i].name).toContain(expected)
+          expect(prompt.choices[i].name).toMatch(expected)
         }
       })
     }

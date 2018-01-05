@@ -211,8 +211,8 @@ test('api: render fs directory', async () => {
 
   await generator.generate()
 
-  expect(fs.readFileSync('/foo.js', 'utf-8')).toContain('foo(1)')
-  expect(fs.readFileSync('/bar/bar.js', 'utf-8')).toContain('bar(2)')
+  expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo(1)')
+  expect(fs.readFileSync('/bar/bar.js', 'utf-8')).toMatch('bar(2)')
 })
 
 test('api: render object', async () => {
@@ -233,8 +233,8 @@ test('api: render object', async () => {
 
   await generator.generate()
 
-  expect(fs.readFileSync('/foo1.js', 'utf-8')).toContain('foo(2)')
-  expect(fs.readFileSync('/bar/bar1.js', 'utf-8')).toContain('bar(3)')
+  expect(fs.readFileSync('/foo1.js', 'utf-8')).toMatch('foo(2)')
+  expect(fs.readFileSync('/bar/bar1.js', 'utf-8')).toMatch('bar(3)')
 })
 
 test('api: render middleware', async () => {
@@ -255,8 +255,8 @@ test('api: render middleware', async () => {
 
   await generator.generate()
 
-  expect(fs.readFileSync('/foo2.js', 'utf-8')).toContain('foo(3)')
-  expect(fs.readFileSync('/bar/bar2.js', 'utf-8')).toContain('bar(3)')
+  expect(fs.readFileSync('/foo2.js', 'utf-8')).toMatch('foo(3)')
+  expect(fs.readFileSync('/bar/bar2.js', 'utf-8')).toMatch('bar(3)')
 })
 
 test('api: hasPlugin', () => {

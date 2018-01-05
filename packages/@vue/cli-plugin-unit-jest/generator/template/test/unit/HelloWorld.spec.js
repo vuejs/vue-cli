@@ -7,6 +7,6 @@ describe('Hello.vue', () => {
     const wrapper = shallow(HelloWorld, {
       propsData: { msg }
     })
-    expect(wrapper.text()).toContain(msg)
+    expect(wrapper.text()).toMatch(msg)
   })
 })
