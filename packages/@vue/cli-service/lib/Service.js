@@ -12,20 +12,21 @@ const { warn, error } = require('@vue/cli-shared-utils')
 const defaultOptions = require('./defaults')
 
 module.exports = class Service {
-  constructor (plugins) {
+  constructor (
+    context,
+    plugins /* optional, mostly used for testing. disables built-in plugins. */
+  ) {
     process.VUE_CLI_SERVICE = this
 
+    this.context = context
     this.webpackConfig = new Config()
     this.webpackChainFns = []
     this.webpackRawConfigFns = []
     this.devServerConfigFns = []
     this.commands = {}
 
-    const pkg = getPkg.sync({
-      cwd: process.env.VUE_CLI_CONTEXT || process.cwd()
-    })
-    this.pkg = pkg.pkg || {}
-    this.context = path.dirname(pkg.path)
+    const { pkg } = getPkg.sync({ cwd: context })
+    this.pkg = pkg || {}
     this.projectOptions = Object.assign(defaultOptions, this.loadProjectConfig())
     debug('vue:project-config')(this.projectOptions)
 

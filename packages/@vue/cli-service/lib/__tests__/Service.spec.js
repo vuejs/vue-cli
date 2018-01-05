@@ -17,7 +17,7 @@ beforeEach(() => {
 it('env loading', () => {
   fs.writeFileSync('/.env', `FOO=1\nBAR=2`)
   fs.writeFileSync('/.env.local', `FOO=3\nBAZ=4`)
-  new Service([])
+  new Service('/', [])
   expect(process.env.FOO).toBe('3')
   expect(process.env.BAR).toBe('2')
   expect(process.env.BAZ).toBe('4')
@@ -31,7 +31,7 @@ it('loading plugins from package.json', () => {
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
-  const service = new Service()
+  const service = new Service('/')
   expect(service.plugins.some(({ id }) => id === '@vue/cli-plugin-babel')).toBe(true)
   expect(service.plugins.some(({ id }) => id === 'vue-cli-plugin-foo')).toBe(true)
   expect(service.plugins.some(({ id }) => id === 'bar')).toBe(false)
@@ -43,7 +43,7 @@ it('load project options from package.json', () => {
       lintOn: 'save'
     }
   })
-  const service = new Service([])
+  const service = new Service('/', [])
   expect(service.projectOptions.lintOn).toBe('save')
 })
 
@@ -54,7 +54,7 @@ it('load project options from vue.config.js', () => {
       lintOn: 'save'
     }
   })
-  const service = new Service([])
+  const service = new Service('/', [])
   expect(service.projectOptions.lintOn).toBe('commit')
   delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
 })
@@ -63,7 +63,7 @@ it('api: setMode', () => {
   fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
   fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
 
-  new Service([{
+  new Service('/', [{
     id: 'test-setMode',
     apply: api => {
       api.setMode('foo')
@@ -78,7 +78,7 @@ it('api: setMode', () => {
   expect(process.env.NODE_ENV).toBe('development')
   expect(process.env.BABEL_ENV).toBe('development')
 
-  new Service([{
+  new Service('/', [{
     id: 'test-setMode',
     apply: api => {
       api.setMode('test')
@@ -91,7 +91,7 @@ it('api: setMode', () => {
 
 it('api: registerCommand', () => {
   let args
-  const service = new Service([{
+  const service = new Service('/', [{
     id: 'test',
     apply: api => {
       api.registerCommand('foo', _args => {
@@ -105,7 +105,7 @@ it('api: registerCommand', () => {
 })
 
 it('api: chainWebpack', () => {
-  const service = new Service([{
+  const service = new Service('/', [{
     id: 'test',
     apply: api => {
       api.chainWebpack(config => {
@@ -119,7 +119,7 @@ it('api: chainWebpack', () => {
 })
 
 it('api: configureWebpack', () => {
-  const service = new Service([{
+  const service = new Service('/', [{
     id: 'test',
     apply: api => {
       api.configureWebpack(config => {
@@ -136,7 +136,7 @@ it('api: configureWebpack', () => {
 
 it('api: configureDevServer', () => {
   const cb = () => {}
-  const service = new Service([{
+  const service = new Service('/', [{
     id: 'test',
     apply: api => {
       api.configureDevServer(cb)
@@ -146,17 +146,16 @@ it('api: configureDevServer', () => {
 })
 
 it('api: resolve', () => {
-  const context = process.env.VUE_CLI_CONTEXT
-  new Service([{
+  new Service('/', [{
     id: 'test',
     apply: api => {
-      expect(api.resolve('foo.js')).toBe(path.resolve(context, 'foo.js'))
+      expect(api.resolve('foo.js')).toBe(path.resolve('/', 'foo.js'))
     }
   }])
 })
 
 it('api: hasPlugin', () => {
-  new Service([
+  new Service('/', [
     {
       id: 'vue-cli-plugin-foo',
       apply: api => {
