@@ -48,6 +48,7 @@ module.exports = class Creator {
   async create (cliOptions = {}) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
     const { name, context, createCompleteCbs } = this
+    const run = command => exec(command, { cwd: context })
 
     let options
     if (cliOptions.saved) {
@@ -90,7 +91,7 @@ module.exports = class Creator {
     // intilaize git repository
     if (hasGit) {
       logWithSpinner('🗃', `Initializing git repository...`)
-      await exec('git init', { cwd: context })
+      await run('git init')
     }
 
     // install plugins
@@ -129,8 +130,12 @@ module.exports = class Creator {
 
     // commit initial state
     if (hasGit) {
-      await exec('git add -A', { cwd: context, stdio: 'ignore' })
-      await exec('git commit -m init', { cwd: context, stdio: 'ignore' })
+      await run('git add -A')
+      if (isTestOrDebug) {
+        await run('git config user.name "test"')
+        await run('git config user.email "test@test.com"')
+      }
+      await run(`git commit -m init`)
     }
 
     // log instructions
