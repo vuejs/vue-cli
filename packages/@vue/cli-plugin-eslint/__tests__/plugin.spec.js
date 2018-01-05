@@ -16,7 +16,7 @@ it('should work', async () => {
   // remove semicolons
   await write('src/main.js', main.replace(/;/g, ''))
   // lint
-  await exec('node_modules/.bin/vue-cli-service lint')
+  await exec('node ./node_modules/.bin/vue-cli-service lint')
   expect(await read('src/main.js')).toContain(';')
 
   // TODO lint-on-commit
