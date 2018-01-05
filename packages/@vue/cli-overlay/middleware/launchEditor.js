@@ -35,6 +35,8 @@ const COMMON_EDITORS_OSX = {
     '/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl',
   '/Applications/Sublime Text 2.app/Contents/MacOS/Sublime Text 2':
     '/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl',
+  '/Applications/Sublime Text Dev.app/Contents/MacOS/Sublime Text':
+    '/Applications/Sublime Text Dev.app/Contents/SharedSupport/bin/subl',
   '/Applications/Visual Studio Code.app/Contents/MacOS/Electron': 'code',
   '/Applications/AppCode.app/Contents/MacOS/appcode':
     '/Applications/AppCode.app/Contents/MacOS/appcode',
@@ -152,8 +154,8 @@ function getArgumentsForLineNumber (editor, fileName, lineNumber, workspace) {
 
 function guessEditor () {
   // Explicit config always wins
-  if (process.env.REACT_EDITOR) {
-    return shellQuote.parse(process.env.REACT_EDITOR)
+  if (process.env.VUE_EDITOR) {
+    return shellQuote.parse(process.env.VUE_EDITOR)
   }
 
   // We can find out which editor is currently running by:
@@ -234,7 +236,7 @@ function printInstructions (fileName, errorMessage) {
   console.log()
   console.log(
     'To set up the editor integration, add something like ' +
-      chalk.cyan('REACT_EDITOR=atom') +
+      chalk.cyan('VUE_EDITOR=atom') +
       ' to the ' +
       chalk.green('.env.local') +
       ' file in your project folder ' +
