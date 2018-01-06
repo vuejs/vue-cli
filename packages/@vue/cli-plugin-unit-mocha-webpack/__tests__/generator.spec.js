@@ -40,10 +40,10 @@ test('chai', async () => {
   expect(spec).toMatch(`expect(wrapper.text()).to.include(msg)`)
 })
 
-test('chai', async () => {
+test('expect', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
-      id: 'unit-mocha-webpack-chai',
+      id: 'unit-mocha-webpack-expect',
       apply: require('../generator'),
       options: {
         assertionLibrary: 'expect'
