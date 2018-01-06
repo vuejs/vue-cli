@@ -20,7 +20,10 @@ test('serve', async () => {
   }
 
   const runTest = async (url) => {
-    const browser = activeBrowser = await puppeteer.launch()
+    const opts = process.env.CI
+      ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] }
+      : {}
+    const browser = activeBrowser = await puppeteer.launch(opts)
     const page = await browser.newPage()
     await page.goto(url)
 
