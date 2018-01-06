@@ -19,9 +19,6 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "scripts": {
-    "install": "node bin/install.js"
-  },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme",
   "dependencies": {
     "@vue/cli-overlay": "^0.1.0",
