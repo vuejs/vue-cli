@@ -6,8 +6,10 @@
   ],
   "scripts": {
     "test": "jest --env node",
-    "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
-    "precommit": "lint-staged"
+    "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   },
   "jest": {
     "testEnvironment": "node",
@@ -34,7 +36,6 @@
     "eslint": "^4.14.0",
     "eslint-plugin-vue-libs": "^2.1.0",
     "globby": "^7.1.1",
-    "husky": "^0.14.3",
     "jest": "^22.0.4",
     "lerna": "^2.5.1",
     "lint-staged": "^6.0.0",

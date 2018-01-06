@@ -39,7 +39,6 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "get-value": "^2.0.6",
     "html-webpack-plugin": "^2.30.1",
-    "husky": "^0.14.3",
     "javascript-stringify": "^1.6.0",
     "minimist": "^1.2.0",
     "opn": "^5.1.0",
@@ -59,8 +58,9 @@
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.10.0",
     "webpack-chain": "^4.5.0",
-    "webpack-dev-server": "^2.9.7",
-    "webpack-merge": "^4.1.1"
+    "webpack-dev-server": "^2.10.0",
+    "webpack-merge": "^4.1.1",
+    "yorkie": "^1.0.0"
   },
   "devDependencies": {
     "vue": "^2.5.13"

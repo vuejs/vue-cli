@@ -70,7 +70,7 @@ test('lint on commit', async () => {
       lintOn: 'commit'
     }
   })
-  expect(pkg.scripts.precommit).toBe('lint-staged')
+  expect(pkg.gitHooks['pre-commit']).toBe('lint-staged')
   expect(pkg.devDependencies).toHaveProperty('lint-staged')
   expect(pkg['lint-staged']).toEqual({
     '*.js': ['vue-cli-service lint', 'git add'],

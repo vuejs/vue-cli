@@ -4,6 +4,6 @@ const projectDir =
   process.env.VUE_CLI_CONTEXT ||
   path.dirname(require('read-pkg-up').sync().path)
 
-const huskyWorkingPath = path.resolve(projectDir, 'node_modules', '@vue')
+const yorkieWorkingPath = path.resolve(projectDir, 'node_modules/@vue')
 
-require('husky/src/install')(huskyWorkingPath)
+require('yorkie/src/install')(yorkieWorkingPath)

@@ -34,7 +34,9 @@ module.exports = (api, { config, lintOn }) => {
     Object.assign(pkg.devDependencies, {
       'lint-staged': '^6.0.0'
     })
-    pkg.scripts.precommit = 'lint-staged'
+    pkg.gitHooks = {
+      'pre-commit': 'lint-staged'
+    }
     pkg['lint-staged'] = {
       '*.js': ['vue-cli-service lint', 'git add'],
       '*.vue': ['vue-cli-service lint', 'git add']
