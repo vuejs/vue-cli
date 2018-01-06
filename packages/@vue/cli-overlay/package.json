@@ -4,8 +4,7 @@
   "description": "error overlay & dev server middleware for vue-cli",
   "main": "dist/client.js",
   "files": [
-    "dist",
-    "middleware"
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -22,10 +21,6 @@
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-overlay#readme",
-  "dependencies": {
-    "chalk": "^2.3.0",
-    "shell-quote": "^1.6.1"
-  },
   "publishConfig": {
     "access": "public"
   }

@@ -40,7 +40,7 @@ module.exports = (api, options) => {
     const openBrowser = require('../util/openBrowser')
     const prepareURLs = require('../util/prepareURLs')
     const prepareProxy = require('../util/prepareProxy')
-    const overlayMiddleware = require('@vue/cli-overlay/middleware')
+    const launchEditorMiddleware = require('launch-editor-middleware')
 
     const projectDevServerOptions = options.devServer || {}
     const useHttps = args.https || projectDevServerOptions.https || defaults.https
@@ -136,8 +136,12 @@ module.exports = (api, options) => {
         https: useHttps,
         proxy: proxySettings,
         before (app) {
-          // overlay
-          app.use(overlayMiddleware())
+          // launch editor support.
+          // this works with vue-devtools & @vue/cli-overlay
+          app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
+            `To specify an editor, sepcify the EDITOR env variable or ` +
+            `add "editor" field to your Vue project config.\n`
+          )))
           // allow other plugins to register middlewares, e.g. PWA
           api.service.devServerConfigFns.forEach(fn => fn(app))
           // apply in project middlewares
