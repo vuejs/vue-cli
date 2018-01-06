@@ -85,7 +85,6 @@ module.exports = (api, options) => {
           return
         }
 
-        console.log()
         console.log([
           `  App running at:`,
           `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)}`,
@@ -110,6 +109,9 @@ module.exports = (api, options) => {
           if (args.open || projectDevServerOptions.open) {
             openBrowser(urls.localUrlForBrowser)
           }
+        } else if (process.env.VUE_CLI_TEST) {
+          // signal for test to check HMR
+          console.log('App updated')
         }
       })
 

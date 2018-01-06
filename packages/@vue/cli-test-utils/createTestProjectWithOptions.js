@@ -6,8 +6,6 @@ const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const mkdirp = promisify(require('mkdirp'))
 
-const exec = promisify(require('child_process').exec)
-
 module.exports = function createTestProjectWithOptions (name, config, cwd) {
   cwd = cwd || path.resolve(__dirname, '../../test')
 
@@ -31,9 +29,11 @@ module.exports = function createTestProjectWithOptions (name, config, cwd) {
 
   const run = (command, args) => {
     if (!args) { [command, ...args] = command.split(/\s+/) }
-    return execa(command, args, { cwd: projectRoot }).then(({ stderr }) => {
+    const child = execa(command, args, { cwd: projectRoot })
+    child.then(({ stderr }) => {
       if (stderr) console.error(stderr)
     })
+    return child
   }
 
   const cliBinPath = require.resolve('@vue/cli/bin/vue')

@@ -46,7 +46,7 @@ module.exports = (api, { config, lintOn }) => {
   api.extendPackage(pkg)
 
   // lint & fix after create to ensure files adhere to chosen config
-  if (config) {
+  if (config && config !== 'base') {
     api.onCreateComplete(() => {
       require('./lint')(api.resolve('.'), { silent: true })
     })
