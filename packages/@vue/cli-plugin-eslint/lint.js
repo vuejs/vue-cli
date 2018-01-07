@@ -1,5 +1,6 @@
 module.exports = function lint (cwd, args = {}) {
   const { CLIEngine } = require('eslint')
+  const options = require('./eslintOptions')
   const { done } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'test']
@@ -7,18 +8,10 @@ module.exports = function lint (cwd, args = {}) {
     args.fix = false
     delete args['no-fix']
   }
-  const config = Object.assign({
-    cwd,
+  const config = Object.assign({}, options, {
     fix: true,
-    extensions: ['.js', '.vue'],
-    parserOptions: {
-      parser: require.resolve('babel-eslint')
-    },
-    rules: {
-      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-    }
+    cwd
   }, normalizeConfig(args))
-
   const engine = new CLIEngine(config)
   const report = engine.executeOnFiles(files)
   const formatter = engine.getFormatter(args.format || 'codeframe')

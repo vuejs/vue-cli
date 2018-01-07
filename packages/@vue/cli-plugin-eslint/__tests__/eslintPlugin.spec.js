@@ -1,8 +1,7 @@
-jest.setTimeout(60000)
+jest.setTimeout(30000)
 
 const path = require('path')
 const create = require('@vue/cli-test-utils/createTestProject')
-const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
 const runSilently = fn => {
   const log = console.log
@@ -48,15 +47,36 @@ test('should work', async () => {
   // should be linted on commit
   expect(await read('src/main.js')).toMatch(';')
 
-  // lint-on-save
-  write('vue.config.js', 'module.exports = { lintOnSave: true }')
-  await serve(project, async ({ nextUpdate }) => {
-    // linted when starting up the server by eslint-loader
-    expect(await read('src/main.js')).toMatch(';')
-    write('src/main.js', updatedMain)
-    await nextUpdate()
-    await new Promise(r => setTimeout(r, 1000))
-    // should be linted again on save
-    expect(await read('src/main.js')).toMatch(';')
+  // lint-on-save needs to be tested in a callback
+  let done
+  const donePromise = new Promise(resolve => {
+    done = resolve
   })
+  // enable lintOnSave
+  await write('vue.config.js', 'module.exports = { lintOnSave: true }')
+  // write invalid file
+  const app = await read('src/App.vue')
+  const updatedApp = app.replace(/;/g, '')
+  await write('src/App.vue', updatedApp)
+
+  const server = run('vue-cli-service serve')
+
+  let isFirstMsg = true
+  server.stdout.on('data', data => {
+    data = data.toString()
+    if (data.match(/Failed to compile/)) {
+      // should fail on start
+      expect(isFirstMsg).toBe(true)
+      isFirstMsg = false
+      // fix it
+      write('src/App.vue', app)
+    } else if (data.match(/Compiled successfully/)) {
+      // should compile on 2nd update
+      expect(isFirstMsg).toBe(false)
+      server.stdin.write('close')
+      done()
+    }
+  })
+
+  await donePromise
 })

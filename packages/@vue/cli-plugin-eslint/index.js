@@ -1,5 +1,6 @@
 module.exports = (api, { lintOnSave }) => {
   if (lintOnSave) {
+    const options = require('./eslintOptions')
     api.chainWebpack(webpackConfig => {
       webpackConfig.module
         .rule('eslint')
@@ -11,10 +12,9 @@ module.exports = (api, { lintOnSave }) => {
           .test(/\.(vue|jsx?)$/)
           .use('eslint-loader')
             .loader('eslint-loader')
-            .options({
-              fix: true,
+            .options(Object.assign(options, {
               formatter: require('eslint/lib/formatters/codeframe')
-            })
+            }))
     })
   }
 
