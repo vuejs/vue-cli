@@ -100,6 +100,12 @@ module.exports = function createConfigPlugin (context, entry) {
         config
           .plugin('html')
             .tap(() => [{ template: indexFile }])
+
+        // disable copy plugin if no public dir
+        if (!findExisting(context, ['public'])) {
+          console.log('deleting')
+          config.plugins.delete('copy')
+        }
       })
     }
   }
