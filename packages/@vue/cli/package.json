@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "0.1.0",
+  "version": "3.0.0-alpha.1",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue"
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli#readme",
   "dependencies": {
-    "@vue/cli-shared-utils": "^0.1.0",
+    "@vue/cli-shared-utils": "^3.0.0-alpha.1",
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
     "ejs": "^2.5.7",

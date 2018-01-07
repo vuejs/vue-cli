@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service-global",
-  "version": "0.1.0",
+  "version": "3.0.0-alpha.1",
   "description": "vue-cli-service global addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-build#readme",
   "dependencies": {
-    "@vue/cli-service": "^0.1.0"
+    "@vue/cli-service": "^3.0.0-alpha.1"
   }
 }
