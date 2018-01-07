@@ -21,6 +21,7 @@
     "access": "public"
   },
   "dependencies": {
-    "execa": "^0.8.0"
+    "execa": "^0.8.0",
+    "puppeteer": "^0.13.0"
   }
 }

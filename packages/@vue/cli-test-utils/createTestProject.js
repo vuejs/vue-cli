@@ -6,7 +6,7 @@ const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const mkdirp = promisify(require('mkdirp'))
 
-module.exports = function createTestProjectWithOptions (name, config, cwd) {
+module.exports = function createTestProject (name, config, cwd) {
   cwd = cwd || path.resolve(__dirname, '../../test')
 
   config = Object.assign({
