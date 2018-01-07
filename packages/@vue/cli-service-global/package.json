@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-build#readme",
   "dependencies": {
-    "@vue/cli-serivce": "^0.1.0"
+    "@vue/cli-service": "^0.1.0"
   }
 }
