@@ -1,8 +1,8 @@
-jest.setTimeout(10000)
+jest.setTimeout(60000)
 
 const path = require('path')
 const create = require('@vue/cli-test-utils/createTestProject')
-// const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
+const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
 const runSilently = fn => {
   const log = console.log
@@ -48,5 +48,15 @@ test('should work', async () => {
   // should be linted on commit
   expect(await read('src/main.js')).toMatch(';')
 
-  // TODO lint-on-save
+  // lint-on-save
+  write('vue.config.js', 'module.exports = { lintOnSave: true }')
+  await serve(project, async ({ nextUpdate }) => {
+    // linted when starting up the server by eslint-loader
+    expect(await read('src/main.js')).toMatch(';')
+    write('src/main.js', updatedMain)
+    await nextUpdate()
+    await new Promise(r => setTimeout(r, 1000))
+    // should be linted again on save
+    expect(await read('src/main.js')).toMatch(';')
+  })
 })

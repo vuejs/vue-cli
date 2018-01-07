@@ -1,4 +1,4 @@
-jest.setTimeout(process.env.CI ? 60000 : 20000)
+jest.setTimeout(30000)
 
 const fs = require('fs')
 const path = require('path')
