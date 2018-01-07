@@ -19,8 +19,9 @@ module.exports = async function serveWithPuppeteer (
 
     let isFirstMatch = true
     child.stdout.on('data', async (data) => {
+      data = data.toString()
       try {
-        const urlMatch = data.toString().match(/http:\/\/[^/]+\//)
+        const urlMatch = data.match(/http:\/\/[^/]+\//)
         if (urlMatch && isFirstMatch) {
           isFirstMatch = false
           // start browser
@@ -50,9 +51,9 @@ module.exports = async function serveWithPuppeteer (
           activeChild = null
           // kill(child.pid)
           resolve()
-        } else if (data.toString().match(/App updated/)) {
+        } else if (data.match(/App updated/)) {
           if (notifyUpdate) {
-            notifyUpdate()
+            notifyUpdate(data)
           }
         }
       } catch (err) {

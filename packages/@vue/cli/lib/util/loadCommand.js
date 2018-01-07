@@ -3,7 +3,7 @@ module.exports = function loadCommand (commandName, moduleName) {
     return err.message.match(/Cannot find module/)
   }
   try {
-    require(moduleName)
+    return require(moduleName)
   } catch (err) {
     if (isNotFoundError(err)) {
       try {

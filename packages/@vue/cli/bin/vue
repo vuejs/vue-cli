@@ -29,7 +29,9 @@ program
   .option('-r, --registry <url>', 'Use specified NPM registry when installing dependencies')
   .option('-m, --package-manager <command>', 'Use specified NPM client when installing dependencies')
   .option('-f, --force', 'Overwrite target directory if it exists')
-  .action(require('../lib/create'))
+  .action((name, cmd) => {
+    require('../lib/create')(name, cleanArgs(cmd))
+  })
 
 program
   .command('init <template> <app-name>')
@@ -39,17 +41,18 @@ program
   })
 
 program
-  .command('serve [filename]')
+  .command('serve [entry]')
   .description('serve a .js or vue file in development mode with zero config')
-  .action(filename => {
-    loadCommand('serve', '@vue/cli-service-global').serve(filename)
+  .option('-o, --open', 'Open browser')
+  .action((entry, cmd) => {
+    loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
   })
 
 program
-  .command('build [filename]')
+  .command('build [entry]')
   .description('build a .js or .vue file in production mode with zero config')
-  .action(filename => {
-    loadCommand('build', '@vue/cli-service-global').build(filename)
+  .action((entry, cmd) => {
+    loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
   })
 
 // add some useful info on help
@@ -89,4 +92,15 @@ program.parse(process.argv)
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()
+}
+
+// commander passes the Command object itself as options,
+// extract only actual options into a fresh object.
+function cleanArgs (cmd) {
+  const args = {}
+  cmd.options.forEach(o => {
+    const key = o.long.replace(/^--/, '')
+    args[key] = cmd[key]
+  })
+  return args
 }

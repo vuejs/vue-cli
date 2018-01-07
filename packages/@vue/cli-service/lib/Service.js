@@ -1,7 +1,8 @@
+const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
 const chalk = require('chalk')
-const getPkg = require('read-pkg-up')
+const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
@@ -11,7 +12,7 @@ const { warn, error } = require('@vue/cli-shared-utils')
 const { defaults, validate } = require('./options')
 
 module.exports = class Service {
-  constructor (context, { pkg, plugins, useBuiltIn } = {}) {
+  constructor (context, { plugins, projectOptions, useBuiltIn } = {}) {
     process.VUE_CLI_SERVICE = this
     this.context = context
     this.webpackConfig = new Config()
@@ -19,14 +20,11 @@ module.exports = class Service {
     this.webpackRawConfigFns = []
     this.devServerConfigFns = []
     this.commands = {}
-
-    // inline pkg avoids hitting the disk for package.json
-    if (pkg) {
-      this.pkg = pkg
-    } else {
-      this.pkg = getPkg.sync({ cwd: context }).pkg || {}
-    }
-    this.projectOptions = Object.assign(defaults, this.loadProjectConfig())
+    this.pkg = this.resolvePkg()
+    this.projectOptions = Object.assign(
+      defaults,
+      this.loadProjectOptions(projectOptions)
+    )
 
     debug('vue:project-config')(this.projectOptions)
 
@@ -49,6 +47,14 @@ module.exports = class Service {
     }
     if (this.projectOptions.configureWebpack) {
       this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+    }
+  }
+
+  resolvePkg () {
+    if (fs.existsSync(path.join(this.context, 'package.json'))) {
+      return readPkg.sync(this.context)
+    } else {
+      return {}
     }
   }
 
@@ -140,7 +146,7 @@ module.exports = class Service {
     return config
   }
 
-  loadProjectConfig () {
+  loadProjectOptions (inlineOptions) {
     // vue.config.js
     let fileConfig, pkgConfig, resolved
     const configPath = (
@@ -178,7 +184,7 @@ module.exports = class Service {
     } else if (pkgConfig) {
       resolved = pkgConfig
     } else {
-      resolved = {}
+      resolved = inlineOptions || {}
     }
 
     // normlaize some options
