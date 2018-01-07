@@ -30,8 +30,8 @@ module.exports = function createTestProject (name, config, cwd) {
   const run = (command, args) => {
     if (!args) { [command, ...args] = command.split(/\s+/) }
     const child = execa(command, args, { cwd: projectRoot })
-    child.then(({ stderr }) => {
-      if (stderr) console.error(stderr)
+    child.then(({ code, stderr }) => {
+      if (code !== 0 && stderr) console.error(stderr)
     })
     return child
   }
@@ -52,6 +52,7 @@ module.exports = function createTestProject (name, config, cwd) {
   }
 
   return execa(cliBinPath, args, options).then(() => ({
+    dir: projectRoot,
     read,
     write,
     run

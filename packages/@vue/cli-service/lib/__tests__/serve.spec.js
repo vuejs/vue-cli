@@ -18,7 +18,7 @@ test('serve', async () => {
     await project.write(`src/App.vue`, file.replace(msg, `Updated`))
 
     await nextUpdate() // wait for child stdout update signal
-    await sleep(1000) // give the client time to update, should happen in 1s
+    await sleep(process.env.CI ? 3000 : 500) // give the client time to update
     await assertText('h1', `Updated`)
   })
 })
