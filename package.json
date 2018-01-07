@@ -36,6 +36,7 @@
     "eslint": "^4.14.0",
     "eslint-plugin-vue-libs": "^2.1.0",
     "globby": "^7.1.1",
+    "http-server": "^0.10.0",
     "jest": "^22.0.4",
     "lerna": "^2.5.1",
     "lint-staged": "^6.0.0",

@@ -1,15 +1,11 @@
-const puppeteer = require('puppeteer')
+const launchPuppeteer = require('./launchPuppeteer')
 
 module.exports = async function serveWithPuppeteer (
   project, // should be project created with createTestProject()
   testFn // must be async
 ) {
-  let browser
-  let child
-
-  const puppeteerOptions = process.env.CI
-    ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] }
-    : {}
+  let activeBrowser
+  let activeChild
 
   let notifyUpdate
   const nextUpdate = () => {
@@ -19,7 +15,7 @@ module.exports = async function serveWithPuppeteer (
   }
 
   await new Promise((resolve, reject) => {
-    child = project.run('vue-cli-service serve')
+    const child = activeChild = project.run('vue-cli-service serve')
 
     let isFirstMatch = true
     child.stdout.on('data', async (data) => {
@@ -28,10 +24,9 @@ module.exports = async function serveWithPuppeteer (
         if (urlMatch && isFirstMatch) {
           isFirstMatch = false
           // start browser
-          browser = await puppeteer.launch(puppeteerOptions)
-          const page = await browser.newPage()
           const url = urlMatch[0]
-          await page.goto(url)
+          const { page, browser } = await launchPuppeteer(url)
+          activeBrowser = browser
 
           const getText = selector => {
             return page.evaluate(selector => {
@@ -48,11 +43,11 @@ module.exports = async function serveWithPuppeteer (
           })
 
           await browser.close()
-          browser = null
+          activeBrowser = null
           // on appveyor, the spawned server process doesn't exit
           // and causes the build to hang.
           child.stdin.write('close')
-          child = null
+          activeChild = null
           // kill(child.pid)
           resolve()
         } else if (data.toString().match(/App updated/)) {
@@ -61,18 +56,18 @@ module.exports = async function serveWithPuppeteer (
           }
         }
       } catch (err) {
-        if (browser) {
-          await browser.close()
+        if (activeBrowser) {
+          await activeBrowser.close()
         }
-        if (child) {
-          child.stdin.write('close')
+        if (activeChild) {
+          activeChild.stdin.write('close')
         }
         reject(err)
       }
     })
 
     child.on('exit', code => {
-      child = null
+      activeChild = null
       if (code !== 0) {
         reject(`serve exited with code ${code}`)
       }

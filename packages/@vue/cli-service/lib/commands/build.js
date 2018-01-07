@@ -67,6 +67,11 @@ module.exports = (api, options) => {
             // TODO info(`You can view more deployment tips at ???`)
           }
 
+          // test-only signal
+          if (process.env.VUE_CLI_TEST) {
+            console.log('Build complete.')
+          }
+
           resolve()
         })
       })
