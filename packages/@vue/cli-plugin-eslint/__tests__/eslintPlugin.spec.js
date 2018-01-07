@@ -40,7 +40,9 @@ test('should work', async () => {
   expect(hook).toMatch('#yorkie')
   await write('src/main.js', updatedMain)
   // nvm doesn't like PREFIX env
-  delete process.env.PREFIX
+  if (process.platform === 'darwin') {
+    delete process.env.PREFIX
+  }
   await run('git add -A')
   await run('git commit -m save')
   // should be linted on commit

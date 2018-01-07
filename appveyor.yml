@@ -6,6 +6,7 @@ install:
   - yarn
 
 test_script:
+  - git --version
   - node --version
   - yarn --version
   - yarn test

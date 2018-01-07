@@ -18,7 +18,7 @@ module.exports = async function serveWithPuppeteer (
     })
   }
 
-  return new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     child = project.run('vue-cli-service serve')
 
     let isFirstMatch = true
@@ -33,11 +33,10 @@ module.exports = async function serveWithPuppeteer (
           const url = urlMatch[0]
           await page.goto(url)
 
-          const assertText = async (selector, text) => {
-            const value = await page.evaluate(() => {
-              return document.querySelector('h1').textContent
-            })
-            expect(value).toMatch(text)
+          const getText = selector => {
+            return page.evaluate(selector => {
+              return document.querySelector(selector).textContent
+            }, selector)
           }
 
           await testFn({
@@ -45,13 +44,16 @@ module.exports = async function serveWithPuppeteer (
             page,
             url,
             nextUpdate,
-            assertText
+            getText
           })
 
           await browser.close()
           browser = null
-          child.kill()
+          // on appveyor, the spawned server process doesn't exit
+          // and causes the build to hang.
+          child.stdin.write('close')
           child = null
+          // kill(child.pid)
           resolve()
         } else if (data.toString().match(/App updated/)) {
           if (notifyUpdate) {
@@ -63,7 +65,7 @@ module.exports = async function serveWithPuppeteer (
           await browser.close()
         }
         if (child) {
-          child.kill()
+          child.stdin.write('close')
         }
         reject(err)
       }

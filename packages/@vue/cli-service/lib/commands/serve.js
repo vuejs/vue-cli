@@ -61,8 +61,7 @@ module.exports = (api, options) => {
       )
 
       if (!isProduction) {
-        // inject dev/hot client
-        addDevClientToEntry(webpackConfig, [
+        const devClients = [
           // dev server client
           `webpack-dev-server/client/?${urls.localUrlForBrowser}`,
           // hmr client
@@ -71,12 +70,19 @@ module.exports = (api, options) => {
             : 'webpack/hot/dev-server'
           // TODO custom overlay client
           // `@vue/cli-overlay/dist/client`
-        ])
+        ]
+        if (process.env.APPVEYOR) {
+          devClients.push(`webpack/hot/poll?500`)
+        }
+        // inject dev/hot client
+        addDevClientToEntry(webpackConfig, devClients)
       }
 
       const compiler = webpack(webpackConfig)
 
-      compiler.apply(new webpack.ProgressPlugin())
+      if (!process.env.VUE_CLI_TEST) {
+        compiler.apply(new webpack.ProgressPlugin())
+      }
 
       // log instructions & open browser on first compilation complete
       let isFirstCompile = true
@@ -129,7 +135,7 @@ module.exports = (api, options) => {
         watchContentBase: !isProduction,
         hot: !isProduction,
         quiet: true,
-        compress: true,
+        compress: isProduction,
         publicPath: '/',
         overlay: isProduction // TODO disable this
           ? false
@@ -154,10 +160,23 @@ module.exports = (api, options) => {
       ;['SIGINT', 'SIGTERM'].forEach(signal => {
         process.on(signal, () => {
           server.close(() => {
-            process.exit()
+            process.exit(0)
           })
         })
       })
+
+      // on appveyor, killing the process with SIGTERM causes execa to
+      // throw error
+      if (process.env.VUE_CLI_TEST) {
+        process.stdin.on('data', data => {
+          if (data.toString() === 'close') {
+            console.log('got close signal!')
+            server.close(() => {
+              process.exit(0)
+            })
+          }
+        })
+      }
 
       server.listen(port, host, err => {
         if (err) {

@@ -28,12 +28,12 @@ module.exports = function createTestProject (name, config, cwd) {
   }
 
   const run = (command, args) => {
-    if (!args) { [command, ...args] = command.split(/\s+/) }
-    const child = execa(command, args, { cwd: projectRoot })
-    child.then(({ code, stderr }) => {
-      if (code !== 0 && stderr) console.error(stderr)
-    })
-    return child
+    [command, ...args] = command.split(/\s+/)
+    if (command === 'vue-cli-service') {
+      // appveyor has problem with paths sometimes
+      command = require.resolve('@vue/cli-service/bin/vue-cli-service')
+    }
+    return execa(command, args, { cwd: projectRoot })
   }
 
   const cliBinPath = require.resolve('@vue/cli/bin/vue')

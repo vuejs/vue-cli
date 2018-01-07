@@ -55,7 +55,7 @@
     "webpack-chain": "^4.5.0",
     "webpack-dev-server": "^2.10.0",
     "webpack-merge": "^4.1.1",
-    "yorkie": "^1.0.1"
+    "yorkie": "^1.0.2"
   },
   "devDependencies": {
     "vue": "^2.5.13"

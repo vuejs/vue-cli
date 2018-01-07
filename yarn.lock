@@ -8774,6 +8774,10 @@ tr46@^1.0.0:
   dependencies:
     punycode "^2.1.0"
 
+tree-kill@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tree-kill/-/tree-kill-1.2.0.tgz#5846786237b4239014f05db156b643212d4c6f36"
+
 trim-newlines@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
@@ -9618,9 +9622,9 @@ yauzl@^2.4.2:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.0.1"
 
-yorkie@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/yorkie/-/yorkie-1.0.1.tgz#7bbd6e6c7dba8f637dea82fdb695c7c18c570002"
+yorkie@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/yorkie/-/yorkie-1.0.2.tgz#910f47a06f8eab05e99e73080ebce1bc9d55c3dd"
   dependencies:
     execa "^0.8.0"
     is-ci "^1.0.10"
