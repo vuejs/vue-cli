@@ -10,6 +10,11 @@ const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
 
+const createMockService = (plugins = []) => new Service('/', {
+  plugins,
+  useBuiltIn: false
+})
+
 beforeEach(() => {
   mockPkg({})
 })
@@ -17,7 +22,7 @@ beforeEach(() => {
 test('env loading', () => {
   fs.writeFileSync('/.env', `FOO=1\nBAR=2`)
   fs.writeFileSync('/.env.local', `FOO=3\nBAZ=4`)
-  new Service('/', [])
+  createMockService()
   expect(process.env.FOO).toBe('3')
   expect(process.env.BAR).toBe('2')
   expect(process.env.BAZ).toBe('4')
@@ -31,7 +36,7 @@ test('loading plugins from package.json', () => {
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
-  const service = new Service('/')
+  const service = new Service('/') // this one needs to read from package.json
   expect(service.plugins.some(({ id }) => id === '@vue/cli-plugin-babel')).toBe(true)
   expect(service.plugins.some(({ id }) => id === 'vue-cli-plugin-foo')).toBe(true)
   expect(service.plugins.some(({ id }) => id === 'bar')).toBe(false)
@@ -43,7 +48,7 @@ test('load project options from package.json', () => {
       lintOnSave: true
     }
   })
-  const service = new Service('/', [])
+  const service = createMockService()
   expect(service.projectOptions.lintOnSave).toBe(true)
 })
 
@@ -54,7 +59,7 @@ test('load project options from vue.config.js', () => {
       lintOnSave: true
     }
   })
-  const service = new Service('/', [])
+  const service = createMockService()
   // vue.config.js has higher priority
   expect(service.projectOptions.lintOnSave).toBe(false)
   delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
@@ -64,7 +69,7 @@ test('api: setMode', () => {
   fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
   fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
 
-  new Service('/', [{
+  createMockService([{
     id: 'test-setMode',
     apply: api => {
       api.setMode('foo')
@@ -79,7 +84,7 @@ test('api: setMode', () => {
   expect(process.env.NODE_ENV).toBe('development')
   expect(process.env.BABEL_ENV).toBe('development')
 
-  new Service('/', [{
+  createMockService([{
     id: 'test-setMode',
     apply: api => {
       api.setMode('test')
@@ -92,7 +97,7 @@ test('api: setMode', () => {
 
 test('api: registerCommand', () => {
   let args
-  const service = new Service('/', [{
+  const service = createMockService([{
     id: 'test',
     apply: api => {
       api.registerCommand('foo', _args => {
@@ -106,7 +111,7 @@ test('api: registerCommand', () => {
 })
 
 test('api: chainWebpack', () => {
-  const service = new Service('/', [{
+  const service = createMockService([{
     id: 'test',
     apply: api => {
       api.chainWebpack(config => {
@@ -120,7 +125,7 @@ test('api: chainWebpack', () => {
 })
 
 test('api: configureWebpack', () => {
-  const service = new Service('/', [{
+  const service = createMockService([{
     id: 'test',
     apply: api => {
       api.configureWebpack(config => {
@@ -137,7 +142,7 @@ test('api: configureWebpack', () => {
 
 test('api: configureDevServer', () => {
   const cb = () => {}
-  const service = new Service('/', [{
+  const service = createMockService([{
     id: 'test',
     apply: api => {
       api.configureDevServer(cb)
@@ -147,7 +152,7 @@ test('api: configureDevServer', () => {
 })
 
 test('api: resolve', () => {
-  new Service('/', [{
+  createMockService([{
     id: 'test',
     apply: api => {
       expect(api.resolve('foo.js')).toBe(path.resolve('/', 'foo.js'))
@@ -156,7 +161,7 @@ test('api: resolve', () => {
 })
 
 test('api: hasPlugin', () => {
-  new Service('/', [
+  createMockService([
     {
       id: 'vue-cli-plugin-foo',
       apply: api => {

@@ -11,12 +11,8 @@ const { warn, error } = require('@vue/cli-shared-utils')
 const { defaults, validate } = require('./options')
 
 module.exports = class Service {
-  constructor (
-    context,
-    plugins /* optional, mostly used for testing. disables built-in plugins. */
-  ) {
+  constructor (context, { pkg, plugins, useBuiltIn } = {}) {
     process.VUE_CLI_SERVICE = this
-
     this.context = context
     this.webpackConfig = new Config()
     this.webpackChainFns = []
@@ -24,8 +20,12 @@ module.exports = class Service {
     this.devServerConfigFns = []
     this.commands = {}
 
-    const { pkg } = getPkg.sync({ cwd: context })
-    this.pkg = pkg || {}
+    // inline pkg avoids hitting the disk for package.json
+    if (pkg) {
+      this.pkg = pkg
+    } else {
+      this.pkg = getPkg.sync({ cwd: context }).pkg || {}
+    }
     this.projectOptions = Object.assign(defaults, this.loadProjectConfig())
 
     debug('vue:project-config')(this.projectOptions)
@@ -33,8 +33,12 @@ module.exports = class Service {
     // load base .env
     this.loadEnv()
 
-    // install plugins
-    this.plugins = plugins || this.resolvePlugins()
+    // install plugins.
+    // If there are inline plugins, they will be used instead of those
+    // found in pacakge.json.
+    // When useBuiltIn === false, built-in plugins are disabled. This is mostly
+    // for testing.
+    this.plugins = this.resolvePlugins(plugins, useBuiltIn)
     this.plugins.forEach(({ id, apply }) => {
       apply(new PluginAPI(id, this), this.projectOptions)
     })
@@ -69,7 +73,12 @@ module.exports = class Service {
     load(localPath)
   }
 
-  resolvePlugins () {
+  resolvePlugins (inlinePlugins, useBuiltIn) {
+    const idToPlugin = id => ({
+      id: id.replace(/^.\//, 'built-in:'),
+      apply: require(id)
+    })
+
     const builtInPlugins = [
       './commands/serve',
       './commands/build',
@@ -80,15 +89,20 @@ module.exports = class Service {
       './config/css',
       './config/dev',
       './config/prod'
-    ]
-    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
-    const projectPlugins = Object.keys(this.pkg.dependencies || {})
-      .concat(Object.keys(this.pkg.devDependencies || {}))
-      .filter(p => prefixRE.test(p))
-    return builtInPlugins.concat(projectPlugins).map(id => ({
-      id: id.replace(/^.\//, 'built-in:'),
-      apply: require(id)
-    }))
+    ].map(idToPlugin)
+
+    if (inlinePlugins) {
+      return useBuiltIn !== false
+        ? builtInPlugins.concat(inlinePlugins)
+        : inlinePlugins
+    } else {
+      const prefixRE = /^(@vue\/|vue-)cli-plugin-/
+      const projectPlugins = Object.keys(this.pkg.dependencies || {})
+        .concat(Object.keys(this.pkg.devDependencies || {}))
+        .filter(p => prefixRE.test(p))
+        .map(idToPlugin)
+      return builtInPlugins.concat(projectPlugins)
+    }
   }
 
   run (name, args = {}, rawArgv = []) {

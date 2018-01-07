@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-build#readme"
+  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-build#readme",
+  "dependencies": {
+    "@vue/cli-serivce": "^0.1.0"
+  }
 }
