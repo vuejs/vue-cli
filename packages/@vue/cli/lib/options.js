@@ -1,12 +1,25 @@
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
-const { error, hasYarn } = require('@vue/cli-shared-utils')
+const {
+  error,
+  hasYarn,
+  createSchema,
+  validate
+} = require('@vue/cli-shared-utils')
 
 const rcPath = exports.rcPath = (
   process.env.VUE_CLI_CONFIG_PATH ||
   path.join(os.homedir(), '.vuerc')
 )
+
+const schema = createSchema(joi => joi.object().keys({
+  useTaobaoRegistry: joi.any().only([true, false, null]),
+  packageManager: joi.string().only(['yarn', 'npm']),
+  plugins: joi.object().required()
+}))
+
+exports.validate = options => validate(options, schema)
 
 exports.defaults = {
   useTaobaoRegistry: null,

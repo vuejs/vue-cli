@@ -40,22 +40,23 @@ test('loading plugins from package.json', () => {
 test('load project options from package.json', () => {
   mockPkg({
     vue: {
-      lintOn: 'save'
+      lintOnSave: true
     }
   })
   const service = new Service('/', [])
-  expect(service.projectOptions.lintOn).toBe('save')
+  expect(service.projectOptions.lintOnSave).toBe(true)
 })
 
 test('load project options from vue.config.js', () => {
   process.env.VUE_CLI_SERVICE_CONFIG_PATH = 'mock-config'
   mockPkg({
     vue: {
-      lintOn: 'save'
+      lintOnSave: true
     }
   })
   const service = new Service('/', [])
-  expect(service.projectOptions.lintOn).toBe('commit')
+  // vue.config.js has higher priority
+  expect(service.projectOptions.lintOnSave).toBe(false)
   delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
 })
 

@@ -1,3 +1,3 @@
 module.exports = {
-  lintOn: 'commit'
+  lintOnSave: false
 }

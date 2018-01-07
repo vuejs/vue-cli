@@ -14,6 +14,7 @@ const setupDevProject = require('./util/setupDevProject')
 
 const {
   defaults,
+  validate,
   saveOptions,
   loadOptions
 } = require('./options')
@@ -173,6 +174,9 @@ module.exports = class Creator {
       // run cb registered by prompt modules to finalize the options
       this.promptCompleteCbs.forEach(cb => cb(answers, options))
     }
+
+    // validate
+    validate(options)
 
     // save options
     if (answers.mode === 'manual' && answers.save) {

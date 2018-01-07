@@ -8,7 +8,7 @@ const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
 const { warn, error } = require('@vue/cli-shared-utils')
 
-const defaultOptions = require('./defaults')
+const { defaults, validate } = require('./options')
 
 module.exports = class Service {
   constructor (
@@ -26,7 +26,8 @@ module.exports = class Service {
 
     const { pkg } = getPkg.sync({ cwd: context })
     this.pkg = pkg || {}
-    this.projectOptions = Object.assign(defaultOptions, this.loadProjectConfig())
+    this.projectOptions = Object.assign(defaults, this.loadProjectConfig())
+
     debug('vue:project-config')(this.projectOptions)
 
     // load base .env
@@ -170,6 +171,9 @@ module.exports = class Service {
     ensureSlash(resolved, 'base')
     removeSlash(resolved, 'outputDir')
     removeSlash(resolved, 'staticDir')
+
+    // validate options
+    validate(resolved)
 
     return resolved
   }

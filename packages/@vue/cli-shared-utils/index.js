@@ -1,8 +1,9 @@
+const joi = require('joi')
 const chalk = require('chalk')
+const spinner = require('./spinner')
 const readline = require('readline')
 const { execSync } = require('child_process')
 const padStart = require('string.prototype.padstart')
-const spinner = require('./spinner')
 
 const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
@@ -61,6 +62,18 @@ if (process.env.VUE_CLI_TEST) {
   exports.logs = logs
 }
 
+// proxy to joi for option validation
+exports.createSchema = fn => fn(joi)
+
+exports.validate = (obj, schema) => {
+  joi.validate(obj, schema, err => {
+    if (err) {
+      throw err
+    }
+  })
+}
+
+// env detection
 exports.hasYarn = (() => {
   if (process.env.VUE_CLI_TEST) {
     return true

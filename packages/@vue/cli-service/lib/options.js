@@ -1,4 +1,22 @@
-module.exports = {
+const { createSchema, validate } = require('@vue/cli-shared-utils')
+
+const schema = createSchema(joi => joi.object({
+  base: joi.string(),
+  outputDir: joi.string(),
+  staticDir: joi.string(),
+  compiler: joi.boolean(),
+  cssModules: joi.boolean(),
+  vueLoaderOptions: joi.object(),
+  productionSourceMap: joi.boolean(),
+  cssSourceMap: joi.boolean(),
+  extractCSS: joi.boolean(),
+  lintOnSave: joi.boolean(),
+  devServer: joi.object()
+}))
+
+exports.validate = options => validate(options, schema)
+
+exports.defaults = {
   // project deployment base
   base: '/',
 
@@ -25,6 +43,9 @@ module.exports = {
 
   // boolean | Object, extract css?
   extractCSS: true,
+
+  // whether to use eslint-loader
+  lintOnSave: false,
 
   devServer: {
   /*
