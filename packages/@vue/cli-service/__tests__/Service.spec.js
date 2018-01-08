@@ -4,7 +4,7 @@ jest.mock('vue-cli-plugin-foo')
 
 const fs = require('fs')
 const path = require('path')
-const Service = require('../Service')
+const Service = require('../lib/Service')
 
 const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))

@@ -5,7 +5,7 @@ const {
   rcPath,
   loadOptions,
   saveOptions
-} = require('../options')
+} = require('../lib/options')
 
 test('load options', () => {
   expect(loadOptions()).toEqual({})
