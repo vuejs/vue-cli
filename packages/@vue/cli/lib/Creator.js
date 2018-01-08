@@ -71,11 +71,9 @@ module.exports = class Creator {
     }
 
     // inject core service
-    options.plugins['@vue/cli-service'] = {
-      projectName: name,
-      router: options.router,
-      vuex: options.vuex
-    }
+    options.plugins['@vue/cli-service'] = Object.assign({
+      projectName: name
+    }, options)
 
     const packageManager = (
       cliOptions.packageManager ||

@@ -12,7 +12,7 @@ module.exports = cli => {
     message: 'Pick a unit testing solution:',
     choices: [
       {
-        name: 'Mocha (with better webpack integration, https://mochajs.org/)',
+        name: 'Mocha via mocha-webpack (https://mochajs.org/)',
         value: 'mocha',
         short: 'Mocha'
       },

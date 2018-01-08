@@ -39,8 +39,8 @@ export default {
   margin-top: 60px;
   <%_ } _%>
 }
-
 <%_ if (options.router) { _%>
+
 #nav {
   padding: 30px;
 }

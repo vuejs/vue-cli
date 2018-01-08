@@ -38,6 +38,7 @@ async function create (projectName, options) {
     'babel',
     'router',
     'vuex',
+    'cssPreprocessors',
     'eslint',
     'unit',
     'e2e',

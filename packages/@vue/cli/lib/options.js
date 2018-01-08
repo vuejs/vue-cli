@@ -16,7 +16,8 @@ const rcPath = exports.rcPath = (
 const schema = createSchema(joi => joi.object().keys({
   router: joi.boolean(),
   vuex: joi.boolean(),
-  useTaobaoRegistry: joi.any().only([true, false, null]),
+  cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
+  useTaobaoRegistry: joi.boolean(),
   packageManager: joi.string().only(['yarn', 'npm']),
   plugins: joi.object().required()
 }))
@@ -26,7 +27,8 @@ exports.validate = options => validate(options, schema)
 exports.defaults = {
   router: false,
   vuex: false,
-  useTaobaoRegistry: null,
+  cssPreprocessor: undefined,
+  useTaobaoRegistry: undefined,
   packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {
     '@vue/cli-plugin-babel': {},

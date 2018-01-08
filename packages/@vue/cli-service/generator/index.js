@@ -44,4 +44,25 @@ module.exports = (api, options) => {
       }
     })
   }
+
+  if (options.cssPreprocessor) {
+    const deps = {
+      sass: {
+        'node-sass': '^4.7.2',
+        'sass-loader': '^6.0.6'
+      },
+      less: {
+        'less': '^2.7.3',
+        'less-loader': '^4.0.5'
+      },
+      stylus: {
+        'stylus': '^0.54.5',
+        'stylus-loader': '^3.0.1'
+      }
+    }
+
+    api.extendPackage({
+      devDependencies: deps[options.cssPreprocessor]
+    })
+  }
 }

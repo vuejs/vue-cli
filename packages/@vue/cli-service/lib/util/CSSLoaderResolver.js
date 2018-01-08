@@ -50,7 +50,6 @@ module.exports = class CSSLoaderResolver {
    */
   getLoader (test, loader, options = {}) {
     const cssLoaderOptions = {
-      autoprefixer: false,
       sourceMap: this.sourceMap,
       minimize: this.minimize
     }
