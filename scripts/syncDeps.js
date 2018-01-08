@@ -15,6 +15,7 @@ const packagesToCheck = [
   'vue-router',
   'vue-test-utils',
   'eslint-plugin-vue',
+  'autoprefixer',
   'node-sass',
   'sass-loader',
   'less',
