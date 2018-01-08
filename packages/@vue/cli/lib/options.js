@@ -14,6 +14,8 @@ const rcPath = exports.rcPath = (
 )
 
 const schema = createSchema(joi => joi.object().keys({
+  router: joi.boolean(),
+  vuex: joi.boolean(),
   useTaobaoRegistry: joi.any().only([true, false, null]),
   packageManager: joi.string().only(['yarn', 'npm']),
   plugins: joi.object().required()
@@ -22,6 +24,8 @@ const schema = createSchema(joi => joi.object().keys({
 exports.validate = options => validate(options, schema)
 
 exports.defaults = {
+  router: false,
+  vuex: false,
   useTaobaoRegistry: null,
   packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {
@@ -55,12 +59,12 @@ exports.loadOptions = () => {
   }
 }
 
-exports.saveOptions = (toSave, deep) => {
-  const options = exports.loadOptions()
-  if (deep) {
-    deepMerge(options, toSave)
+exports.saveOptions = (toSave, replace) => {
+  let options
+  if (replace) {
+    options = toSave
   } else {
-    Object.assign(options, toSave)
+    options = Object.assign(exports.loadOptions(), toSave)
   }
   for (const key in options) {
     if (!(key in exports.defaults)) {
@@ -76,17 +80,5 @@ exports.saveOptions = (toSave, deep) => {
       `make sure you have write access to ${rcPath}.\n` +
       `(${e.message})`
     )
-  }
-}
-
-const isObject = val => val && typeof val === 'object'
-
-function deepMerge (to, from) {
-  for (const key in from) {
-    if (isObject(to[key]) && isObject(from[key])) {
-      deepMerge(to[key], from[key])
-    } else {
-      to[key] = from[key]
-    }
   }
 }

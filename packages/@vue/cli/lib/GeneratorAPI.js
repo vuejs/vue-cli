@@ -61,7 +61,10 @@ module.exports = class GeneratorAPI {
         })
         for (const file of _files) {
           const relativePath = path.relative(fileDir, file.path)
-          files[relativePath] = renderFile(file.path, data, ejsOptions)
+          const content = renderFile(file.path, data, ejsOptions)
+          if (Buffer.isBuffer(content) || content.trim()) {
+            files[relativePath] = content
+          }
         }
       })
     } else if (isObject(fileDir)) {
@@ -71,7 +74,10 @@ module.exports = class GeneratorAPI {
         }, additionalData)
         for (const targetPath in fileDir) {
           const sourcePath = path.resolve(baseDir, fileDir[targetPath])
-          files[targetPath] = renderFile(sourcePath, data, ejsOptions)
+          const content = renderFile(sourcePath, data, ejsOptions)
+          if (Buffer.isBuffer(content) || content.trim()) {
+            files[targetPath] = content
+          }
         }
       })
     } else if (isFunction(fileDir)) {

@@ -1,6 +1,6 @@
-module.exports = (generatorAPI, options) => {
-  generatorAPI.render('./template')
-  generatorAPI.extendPackage({
+module.exports = (api, options) => {
+  api.render('./template')
+  api.extendPackage({
     scripts: {
       'serve': 'vue-cli-service serve' + (
         // only auto open browser on MacOS where applescript
@@ -28,4 +28,20 @@ module.exports = (generatorAPI, options) => {
       'not ie <= 8'
     ]
   })
+
+  if (options.router) {
+    api.extendPackage({
+      dependencies: {
+        'vue-router': '^3.0.1'
+      }
+    })
+  }
+
+  if (options.vuex) {
+    api.extendPackage({
+      dependencies: {
+        vuex: '^3.0.1'
+      }
+    })
+  }
 }

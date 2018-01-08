@@ -72,7 +72,9 @@ module.exports = class Creator {
 
     // inject core service
     options.plugins['@vue/cli-service'] = {
-      projectName: name
+      projectName: name,
+      router: options.router,
+      vuex: options.vuex
     }
 
     const packageManager = (
@@ -180,7 +182,7 @@ module.exports = class Creator {
 
     // save options
     if (answers.mode === 'manual' && answers.save) {
-      saveOptions(options)
+      saveOptions(options, true /* replace */)
     }
 
     debug('vue:cli-ptions')(options)
@@ -200,7 +202,7 @@ module.exports = class Creator {
   }
 
   resolveIntroPrompts () {
-    const defualtFeatures = formatFeatures(defaults.plugins)
+    const defualtFeatures = formatFeatures(defaults)
     const modePrompt = {
       name: 'mode',
       type: 'list',
@@ -218,7 +220,7 @@ module.exports = class Creator {
     }
     const savedOptions = loadOptions()
     if (savedOptions.plugins) {
-      const savedFeatures = formatFeatures(savedOptions.plugins)
+      const savedFeatures = formatFeatures(savedOptions)
       modePrompt.choices.unshift({
         name: `Use previously saved config (${savedFeatures})`,
         value: 'saved'

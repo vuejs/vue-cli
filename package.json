@@ -6,7 +6,11 @@
   ],
   "scripts": {
     "test": "jest --env node",
-    "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js"
+    "posttest": "yarn clean",
+    "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
+    "clean": "node scripts/cleanTestDir.js",
+    "sync": "node scripts/syncDeps.js",
+    "boot": "node scripts/bootstrap.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

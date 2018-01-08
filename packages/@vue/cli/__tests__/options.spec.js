@@ -59,19 +59,12 @@ test('save options (merge)', () => {
       bar: { b: 2 }
     }
   })
+})
 
-  // deep merge
-  saveOptions({
-    plugins: {
-      foo: { a: 2, c: 3 },
-      bar: { d: 4 }
-    }
-  }, true)
-  expect(loadOptions()).toEqual({
-    packageManager: 'yarn',
-    plugins: {
-      foo: { a: 2, c: 3 },
-      bar: { b: 2, d: 4 }
-    }
-  })
+test('save options (replace)', () => {
+  const toSave = {
+    foo: 'bar'
+  }
+  saveOptions(toSave, true)
+  expect(loadOptions()).toEqual(toSave)
 })
