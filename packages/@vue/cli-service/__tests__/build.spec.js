@@ -13,6 +13,9 @@ let server, browser, page
 test('serve', async () => {
   const project = await create('e2e-build', defaults)
 
+  // test public copy
+  project.write('public/foo.js', '1')
+
   const { stdout } = await project.run('vue-cli-service build')
 
   expect(stdout).toMatch('Build complete.')
@@ -22,6 +25,7 @@ test('serve', async () => {
   expect(hasFile('index.html')).toBe(true)
   expect(hasFile('favicon.ico')).toBe(true)
   expect(hasFile('static/js')).toBe(true)
+  expect(hasFile('foo.js')).toBe(true)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: distDir })

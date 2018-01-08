@@ -18,7 +18,8 @@
     ],
     "testPathIgnorePatterns": [
       "/template/",
-      "/packages/test/"
+      "/packages/test/",
+      "/temp/"
     ]
   },
   "lint-staged": {

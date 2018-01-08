@@ -103,7 +103,6 @@ module.exports = function createConfigPlugin (context, entry) {
 
         // disable copy plugin if no public dir
         if (!findExisting(context, ['public'])) {
-          console.log('deleting')
           config.plugins.delete('copy')
         }
       })

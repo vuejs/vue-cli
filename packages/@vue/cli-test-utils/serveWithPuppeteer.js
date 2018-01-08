@@ -1,9 +1,6 @@
 const launchPuppeteer = require('./launchPuppeteer')
 
-module.exports = async function serveWithPuppeteer (
-  project, // should be project created with createTestProject()
-  testFn // must be async
-) {
+module.exports = async function serveWithPuppeteer (serve, test) {
   let activeBrowser
   let activeChild
 
@@ -15,7 +12,19 @@ module.exports = async function serveWithPuppeteer (
   }
 
   await new Promise((resolve, reject) => {
-    const child = activeChild = project.run('vue-cli-service serve')
+    const child = activeChild = serve()
+
+    const exit = async (err) => {
+      if (activeBrowser) {
+        await activeBrowser.close()
+        activeBrowser = null
+      }
+      if (activeChild) {
+        activeChild.stdin.write('close')
+        activeBrowser = null
+      }
+      reject(err)
+    }
 
     let isFirstMatch = true
     child.stdout.on('data', async (data) => {
@@ -35,7 +44,7 @@ module.exports = async function serveWithPuppeteer (
             }, selector)
           }
 
-          await testFn({
+          await test({
             browser,
             page,
             url,
@@ -55,15 +64,11 @@ module.exports = async function serveWithPuppeteer (
           if (notifyUpdate) {
             notifyUpdate(data)
           }
+        } else if (data.match(/Failed to compile/)) {
+          exit(data)
         }
       } catch (err) {
-        if (activeBrowser) {
-          await activeBrowser.close()
-        }
-        if (activeChild) {
-          activeChild.stdin.write('close')
-        }
-        reject(err)
+        exit(err)
       }
     })
 
