@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const fs = require('fs')
+const path = require('path')
 const chalk = require('chalk')
 const semver = require('semver')
 const { error } = require('@vue/cli-shared-utils')
@@ -11,6 +13,12 @@ if (!semver.satisfies(process.version, requiredVersion)) {
     `requires Node ${requiredVersion}.\nPlease upgrade your Node version.`
   )
   process.exit(1)
+}
+
+// enter debug mode when creating test repo
+if (process.cwd().indexOf('/packages/test') > 0 &&
+    fs.existsSync(path.resolve(process.cwd(), '../@vue'))) {
+  process.env.VUE_CLI_DEBUG = true
 }
 
 const program = require('commander')
