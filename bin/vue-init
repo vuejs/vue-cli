@@ -27,12 +27,12 @@ program
   .usage('<template-name> [project-name]')
   .option('-c, --clone', 'use git clone')
   .option('--offline', 'use cached template')
-
+  .option('-f, --force', 'skip all prompts')
 /**
  * Help.
  */
-
 program.on('--help', () => {
+  console.log()
   console.log('  Examples:')
   console.log()
   console.log(chalk.gray('    # create a new project with an official template'))
@@ -64,6 +64,7 @@ const inPlace = !rawName || rawName === '.'
 const name = inPlace ? path.relative('../', process.cwd()) : rawName
 const to = path.resolve(rawName || '.')
 const clone = program.clone || false
+const force = program.force || program.f || false
 
 const tmp = path.join(home, '.vue-templates', template.replace(/\//g, '-'))
 if (program.offline) {
@@ -105,7 +106,7 @@ function run () {
   if (isLocalPath(template)) {
     const templatePath = getTemplatePath(template)
     if (exists(templatePath)) {
-      generate(name, templatePath, to, err => {
+      generate(name, templatePath, to, force, err => {
         if (err) logger.fatal(err)
         console.log()
         logger.success('Generated "%s".', name)
@@ -150,7 +151,7 @@ function downloadAndGenerate (template) {
   download(template, tmp, { clone }, err => {
     spinner.stop()
     if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
-    generate(name, tmp, to, err => {
+    generate(name, tmp, to, force, err => {
       if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)
