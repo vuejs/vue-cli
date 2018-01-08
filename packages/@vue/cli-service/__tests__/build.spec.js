@@ -25,6 +25,7 @@ test('serve', async () => {
   expect(hasFile('index.html')).toBe(true)
   expect(hasFile('favicon.ico')).toBe(true)
   expect(hasFile('static/js')).toBe(true)
+  expect(hasFile('static/css')).toBe(true)
   expect(hasFile('foo.js')).toBe(true)
 
   const port = await portfinder.getPortPromise()

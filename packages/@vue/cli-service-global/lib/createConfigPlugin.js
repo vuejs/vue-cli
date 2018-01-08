@@ -39,14 +39,13 @@ module.exports = function createConfigPlugin (context, entry) {
           .rule('vue')
             .use('vue-loader')
               .tap(options => {
-                return Object.assign({
-                  loaders: {
-                    js: {
-                      loader: 'babel-loader',
-                      options: babelOptions
-                    }
+                options.loaders = Object.assign({
+                  js: {
+                    loader: 'babel-loader',
+                    options: babelOptions
                   }
-                }, options)
+                }, options.loaders)
+                return options
               })
 
         // set inline babel options

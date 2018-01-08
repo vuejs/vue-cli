@@ -23,6 +23,9 @@ const entryVue = `
     data: () => ({ msg: 'hi' })
   }
 </script>
+<style>
+h1 { color: red }
+</style>
 `.trim()
 
 const entryJs = `
@@ -62,6 +65,7 @@ test('global build', async () => {
   const hasFile = file => fs.existsSync(path.join(distDir, file))
   expect(hasFile('index.html')).toBe(true)
   expect(hasFile('static/js')).toBe(true)
+  expect(hasFile('static/css')).toBe(true)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: distDir })

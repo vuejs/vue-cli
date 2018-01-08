@@ -183,7 +183,7 @@ module.exports = class CSSLoaderResolver {
    * })
    */
   vue (options = {}) {
-    this.postcssOptions = false
+    this.postcss = false
     this.cssModules = false
     const loaders = {}
     for (const lang of ['css', 'sass', 'scss', 'less', 'stylus', 'styl']) {

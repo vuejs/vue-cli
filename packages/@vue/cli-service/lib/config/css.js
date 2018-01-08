@@ -19,6 +19,8 @@ module.exports = (api, options) => {
         .tap(options => {
           // ensure user injected vueLoaderOptions take higher priority
           options.loaders = Object.assign(resolver.vue(), options.loaders)
+          options.cssSourceMap = !!options.cssSourceMap
+          return options
         })
 
     // apply css loaders for standalone style files outside vue-loader
@@ -70,7 +72,7 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('extract-css')
           .use(ExtractTextPlugin, [Object.assign({
-            filename: '[name].[contenthash:8].css',
+            filename: `${options.staticDir}/css/[name].[contenthash:8].css`,
             allChunks: true
           }, userOptions)])
     }
