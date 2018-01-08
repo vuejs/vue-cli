@@ -15,8 +15,14 @@ const sleep = n => new Promise(resolve => setTimeout(resolve, n))
 const write = (file, content) => fs.writeFileSync(path.join(cwd, file), content)
 
 const entryVue = `
-<template><h1>{{ msg }}</h1></template>
-<script>export default { data: () => ({ msg: 'hi' }) }</script>
+<template>
+  <h1>{{ msg }}</h1>
+</template>
+<script>
+  export default {
+    data: () => ({ msg: 'hi' })
+  }
+</script>
 `.trim()
 
 const entryJs = `
