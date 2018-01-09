@@ -24,7 +24,7 @@
     "execa": "^0.8.0",
     "jsdom": "^11.5.1",
     "jsdom-global": "^3.0.2",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "mocha-webpack": "^1.0.1",
     "webpack-node-externals": "^1.6.0"
   },
