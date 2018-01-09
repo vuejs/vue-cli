@@ -82,6 +82,21 @@ module.exports = (api, options) => {
             minChunks: Infinity
           }])
 
+      // inline the manifest chunk into HTML
+      webpackConfig
+        .plugin('inline-manifest')
+          .use(require('../util/InlineSourcePlugin'), [{
+            include: /manifest\..*\.js$/
+          }])
+
+      // since manifest is inlined, don't preload it anymore
+      webpackConfig
+        .plugin('preload')
+          .tap(([options]) => {
+            options.fileBlacklist = [/\.map$/, /manifest\..*\.js$/]
+            return [options]
+          })
+
       // This instance extracts shared chunks from code splitted chunks and bundles them
       // in a separate chunk, similar to the vendor chunk
       // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk

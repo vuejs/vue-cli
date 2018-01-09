@@ -104,6 +104,22 @@ module.exports = (api, options) => {
           template: api.resolve('public/index.html')
         }])
 
+    // inject preload/prefetch to HTML
+    const PreloadPlugin = require('../util/PreloadPlugin')
+    webpackConfig
+      .plugin('preload')
+        .use(PreloadPlugin, [{
+          rel: 'preload',
+          include: 'initial'
+        }])
+
+    webpackConfig
+      .plugin('prefetch')
+        .use(PreloadPlugin, [{
+          rel: 'prefetch',
+          include: 'asyncChunks'
+        }])
+
     webpackConfig
       .plugin('define')
         .use(require('webpack/lib/DefinePlugin'), [resolveClientEnv()])
