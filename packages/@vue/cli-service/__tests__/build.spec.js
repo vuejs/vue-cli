@@ -28,6 +28,15 @@ test('serve', async () => {
   expect(hasFile('static/css')).toBe(true)
   expect(hasFile('foo.js')).toBe(true)
 
+  const index = await project.read('dist/index.html')
+  // should split and preload app.js & vendor.js
+  expect(index).toMatch(/<link rel=preload [^>]+app[^>]+\.js>/)
+  expect(index).toMatch(/<link rel=preload [^>]+vendor[^>]+\.js>/)
+  // should not preload manifest because it's inlined
+  expect(index).not.toMatch(/<link rel=preload [^>]+manifest[^>]+\.js>/)
+  // should inline manifest and wepback runtime
+  expect(index).toMatch('window.webpackJsonp=')
+
   const port = await portfinder.getPortPromise()
   server = createServer({ root: distDir })
 
