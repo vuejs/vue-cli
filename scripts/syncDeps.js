@@ -97,7 +97,7 @@ const flushWrite = () => {
     // update all package deps
   const packages = await globby(['packages/@vue/*/package.json'])
   await Promise.all(packages.filter(filePath => {
-    return filePath.match(/cli-plugin|babel-preset|eslint-config/)
+    return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
   }).map(async (filePath) => {
     const pkg = require(path.resolve(__dirname, '../', filePath))
     if (!pkg.dependencies) {

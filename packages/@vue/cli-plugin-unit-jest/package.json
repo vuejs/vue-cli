@@ -24,7 +24,7 @@
   "dependencies": {
     "babel-jest": "^22.0.4",
     "execa": "^0.8.0",
-    "jest": "^22.0.4",
+    "jest": "^22.0.5",
     "jest-serializer-vue": "^0.3.0",
     "vue-jest": "^1.4.0"
   },
