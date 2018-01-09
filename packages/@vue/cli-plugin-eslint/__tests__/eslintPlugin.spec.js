@@ -1,5 +1,6 @@
 jest.setTimeout(30000)
 
+const fs = require('fs')
 const path = require('path')
 const create = require('@vue/cli-test-utils/createTestProject')
 
@@ -34,6 +35,10 @@ test('should work', async () => {
   // lint-on-commit
   runSilently(() => {
     require('yorkie/src/install')(path.join(project.dir, 'node_modules'))
+    // since yorkie isn't actually installed in the test project, we need to
+    // symlink it
+    const yorkieDir = path.resolve(require.resolve('yorkie/src/install'), '../../')
+    fs.symlinkSync(yorkieDir, path.join(project.dir, 'node_modules', 'yorkie'))
   })
   const hook = await read('.git/hooks/pre-commit')
   expect(hook).toMatch('#yorkie')
