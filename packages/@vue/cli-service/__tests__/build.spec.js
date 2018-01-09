@@ -10,7 +10,7 @@ const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 let server, browser, page
 
-test('serve', async () => {
+test('build', async () => {
   const project = await create('e2e-build', defaults)
 
   // test public copy

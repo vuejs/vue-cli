@@ -45,12 +45,12 @@ beforeAll(() => {
 test('global serve', async () => {
   await serve(
     () => execa(binPath, ['serve'], { cwd }),
-    async ({ nextUpdate, getText }) => {
-      expect(await getText('h1')).toMatch('hi')
+    async ({ nextUpdate, helpers }) => {
+      expect(await helpers.getText('h1')).toMatch('hi')
       write('App.vue', entryVue.replace(`{{ msg }}`, 'Updated'))
       await nextUpdate() // wait for child stdout update signal
       await sleep(1000) // give the client time to update
-      expect(await getText('h1')).toMatch(`Updated`)
+      expect(await helpers.getText('h1')).toMatch(`Updated`)
     }
   )
 })

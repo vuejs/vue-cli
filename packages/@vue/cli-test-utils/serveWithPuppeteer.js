@@ -38,18 +38,14 @@ module.exports = async function serveWithPuppeteer (serve, test) {
           const { page, browser } = await launchPuppeteer(url)
           activeBrowser = browser
 
-          const getText = selector => {
-            return page.evaluate(selector => {
-              return document.querySelector(selector).textContent
-            }, selector)
-          }
+          const helpers = createHelpers(page)
 
           await test({
             browser,
             page,
             url,
             nextUpdate,
-            getText
+            helpers
           })
 
           await browser.close()
@@ -79,4 +75,21 @@ module.exports = async function serveWithPuppeteer (serve, test) {
       }
     })
   })
+}
+
+function createHelpers (page) {
+  return {
+    getText: selector => page.evaluate(selector => {
+      return document.querySelector(selector).textContent
+    }, selector),
+
+    hasElement: selector => page.evaluate(selector => {
+      return !!document.querySelector(selector)
+    }, selector),
+
+    hasClass: (selector, cls) => page.evaluate((selector, cls) => {
+      const el = document.querySelector(selector)
+      return el && el.classList.contains(cls)
+    }, selector, cls)
+  }
 }
