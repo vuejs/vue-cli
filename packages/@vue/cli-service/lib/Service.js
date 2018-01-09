@@ -190,7 +190,6 @@ module.exports = class Service {
     // normlaize some options
     ensureSlash(resolved, 'base')
     removeSlash(resolved, 'outputDir')
-    removeSlash(resolved, 'staticDir')
 
     // validate options
     validate(resolved)

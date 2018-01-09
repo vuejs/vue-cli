@@ -35,13 +35,10 @@ module.exports = class InlineSourcePlugin {
 
   processTags (compilation, regex, pluginData) {
     const processTag = tag => this.processTag(compilation, regex, tag)
-    return {
+    return Object.assign({}, pluginData, {
       head: pluginData.head.map(processTag),
-      body: pluginData.body.map(processTag),
-      plugin: pluginData.plugin,
-      chunks: pluginData.chunks,
-      outputName: pluginData.outputName
-    }
+      body: pluginData.body.map(processTag)
+    })
   }
 
   processTag (compilation, regex, tag) {

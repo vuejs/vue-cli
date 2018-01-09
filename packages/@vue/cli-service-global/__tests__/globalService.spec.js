@@ -64,8 +64,8 @@ test('global build', async () => {
   const distDir = path.join(cwd, 'dist')
   const hasFile = file => fs.existsSync(path.join(distDir, file))
   expect(hasFile('index.html')).toBe(true)
-  expect(hasFile('static/js')).toBe(true)
-  expect(hasFile('static/css')).toBe(true)
+  expect(hasFile('js')).toBe(true)
+  expect(hasFile('css')).toBe(true)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: distDir })
@@ -86,8 +86,9 @@ test('global build', async () => {
   })
 
   expect(h1Text).toMatch('hi')
+})
 
+afterAll(async () => {
   await browser.close()
   server.close()
-  browser = server = null
 })

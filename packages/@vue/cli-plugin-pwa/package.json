@@ -20,5 +20,8 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-pwa#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "sw-precache-webpack-plugin": "^0.11.4"
   }
 }

@@ -26,7 +26,7 @@ test('serve', async () => {
 })
 
 test('serve with router', async () => {
-  const project = await create('e2e-serve', Object.assign({}, defaults, {
+  const project = await create('e2e-serve-router', Object.assign({}, defaults, {
     router: true
   }))
 

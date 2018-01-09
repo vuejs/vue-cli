@@ -1,6 +1,6 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
-    const CSSLoaderResolver = require('../util/CSSLoaderResolver')
+    const CSSLoaderResolver = require('../webpack/CSSLoaderResolver')
     const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
     const isProd = process.env.NODE_ENV === 'production'
@@ -72,7 +72,7 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('extract-css')
           .use(ExtractTextPlugin, [Object.assign({
-            filename: `${options.staticDir}/css/[name].[contenthash:8].css`,
+            filename: `css/[name].[contenthash:8].css`,
             allChunks: true
           }, userOptions)])
     }

@@ -21,6 +21,10 @@ module.exports = function createTestProject (name, config, cwd) {
     return readFile(path.resolve(projectRoot, file), 'utf-8')
   }
 
+  const has = file => {
+    return fs.existsSync(path.resolve(projectRoot, file))
+  }
+
   const write = (file, content) => {
     const targetPath = path.resolve(projectRoot, file)
     const dir = path.dirname(targetPath)
@@ -53,6 +57,7 @@ module.exports = function createTestProject (name, config, cwd) {
 
   return execa(cliBinPath, args, options).then(() => ({
     dir: projectRoot,
+    has,
     read,
     write,
     run

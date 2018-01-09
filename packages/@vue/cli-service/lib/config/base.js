@@ -50,7 +50,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: 10000,
-            name: `${options.staticDir}/img/[name].[hash:8].[ext]`
+            name: `img/[name].[hash:8].[ext]`
           })
 
     // do not base64-inline SVGs.
@@ -61,7 +61,7 @@ module.exports = (api, options) => {
         .use('file-loader')
           .loader('file-loader')
           .options({
-            name: `${options.staticDir}/img/[name].[hash:8].[ext]`
+            name: `img/[name].[hash:8].[ext]`
           })
 
     webpackConfig.module
@@ -71,7 +71,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: 10000,
-            name: `${options.staticDir}/media/[name].[hash:8].[ext]`
+            name: `media/[name].[hash:8].[ext]`
           })
 
     webpackConfig.module
@@ -81,7 +81,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: 10000,
-            name: `${options.staticDir}/fonts/[name].[hash:8].[ext]`
+            name: `fonts/[name].[hash:8].[ext]`
           })
 
     webpackConfig.node
@@ -105,12 +105,13 @@ module.exports = (api, options) => {
         }])
 
     // inject preload/prefetch to HTML
-    const PreloadPlugin = require('../util/PreloadPlugin')
+    const PreloadPlugin = require('../webpack/PreloadPlugin')
     webpackConfig
       .plugin('preload')
         .use(PreloadPlugin, [{
           rel: 'preload',
-          include: 'initial'
+          include: 'initial',
+          fileBlacklist: [/\.map$/, /hot-update\.js$/]
         }])
 
     webpackConfig
@@ -122,11 +123,11 @@ module.exports = (api, options) => {
 
     webpackConfig
       .plugin('define')
-        .use(require('webpack/lib/DefinePlugin'), [resolveClientEnv()])
+        .use(require('webpack/lib/DefinePlugin'), [resolveClientEnv(options.base)])
 
     webpackConfig
       .plugin('timefix')
-        .use(require('../util/TimeFixPlugin'))
+        .use(require('../webpack/TimeFixPlugin'))
 
     webpackConfig
       .plugin('case-sensitive-paths')

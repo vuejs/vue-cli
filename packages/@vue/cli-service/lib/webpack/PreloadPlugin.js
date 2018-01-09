@@ -46,7 +46,7 @@ const doesChunkBelongToHTML = (chunk, roots, visitedChunks) => {
 const defaultOptions = {
   rel: 'preload',
   include: 'asyncChunks',
-  fileBlacklist: [/\.map/]
+  fileBlacklist: [/\.map$/]
 }
 
 module.exports = class PreloadPlugin {

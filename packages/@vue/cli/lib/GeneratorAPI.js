@@ -11,10 +11,11 @@ const isFunction = val => typeof val === 'function'
 const isObject = val => val && typeof val === 'object'
 
 module.exports = class GeneratorAPI {
-  constructor (id, generator, options) {
+  constructor (id, generator, options, rootOptions) {
     this.id = id
     this.generator = generator
     this.options = options
+    this.rootOptions = rootOptions
   }
 
   injectFileMiddleware (middleware) {
@@ -53,7 +54,8 @@ module.exports = class GeneratorAPI {
       fileDir = path.resolve(baseDir, fileDir)
       this.injectFileMiddleware(files => {
         const data = Object.assign({
-          options: this.options
+          options: this.options,
+          rootOptions: this.rootOptions
         }, additionalData)
         const _files = walk(fileDir, {
           nodir: true,
@@ -70,7 +72,8 @@ module.exports = class GeneratorAPI {
     } else if (isObject(fileDir)) {
       this.injectFileMiddleware(files => {
         const data = Object.assign({
-          options: this.options
+          options: this.options,
+          rootOptions: this.rootOptions
         }, additionalData)
         for (const targetPath in fileDir) {
           const sourcePath = path.resolve(baseDir, fileDir[targetPath])
@@ -83,6 +86,10 @@ module.exports = class GeneratorAPI {
     } else if (isFunction(fileDir)) {
       this.injectFileMiddleware(fileDir)
     }
+  }
+
+  postProcessFiles (cb) {
+    this.generator.postProcessFilesCbs.push(cb)
   }
 
   onCreateComplete (cb) {

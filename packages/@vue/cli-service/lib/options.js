@@ -3,18 +3,25 @@ const { createSchema, validate } = require('@vue/cli-shared-utils')
 const schema = createSchema(joi => joi.object({
   base: joi.string(),
   outputDir: joi.string(),
-  staticDir: joi.string(),
   compiler: joi.boolean(),
   cssModules: joi.boolean(),
   vueLoaderOptions: joi.object(),
   productionSourceMap: joi.boolean(),
   cssSourceMap: joi.boolean(),
   extractCSS: joi.boolean(),
+  devServer: joi.object(),
+
+  // known options from offical plugins
   lintOnSave: joi.boolean(),
-  devServer: joi.object()
+  pwa: joi.object()
 }))
 
-exports.validate = options => validate(options, schema)
+exports.validate = options => validate(
+  options,
+  schema,
+  // so that plugins can make use of custom options
+  { allowUnknown: true }
+)
 
 exports.defaults = {
   // project deployment base
@@ -22,9 +29,6 @@ exports.defaults = {
 
   // where to output built files
   outputDir: 'dist',
-
-  // where to generate static assets under outputDir
-  staticDir: 'static',
 
   // boolean, use full build?
   compiler: false,

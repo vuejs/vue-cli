@@ -4,8 +4,8 @@ module.exports = (api, options) => {
       webpackConfig
         .devtool('source-map')
         .output
-          .filename(`${options.staticDir}/js/[name].[chunkhash:8].js`)
-          .chunkFilename(`${options.staticDir}/js/[id].[chunkhash:8].js`)
+          .filename(`js/[name].[chunkhash:8].js`)
+          .chunkFilename(`js/[id].[chunkhash:8].js`)
 
       // keep module.id stable when vendor modules does not change
       webpackConfig
@@ -42,17 +42,20 @@ module.exports = (api, options) => {
           ])
 
       // minify JS
-      webpackConfig
-        .plugin('uglifyjs')
-          .use(require('uglifyjs-webpack-plugin'), [{
-            uglifyOptions: {
-              compress: {
-                warnings: false
-              }
-            },
-            sourceMap: options.productionSourceMap,
-            parallel: true
-          }])
+      // disable during tests to speed things up
+      if (!process.env.VUE_CLI_TEST) {
+        webpackConfig
+          .plugin('uglifyjs')
+            .use(require('uglifyjs-webpack-plugin'), [{
+              uglifyOptions: {
+                compress: {
+                  warnings: false
+                }
+              },
+              sourceMap: options.productionSourceMap,
+              parallel: true
+            }])
+      }
 
       // Chunk splits
       const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
@@ -85,7 +88,7 @@ module.exports = (api, options) => {
       // inline the manifest chunk into HTML
       webpackConfig
         .plugin('inline-manifest')
-          .use(require('../util/InlineSourcePlugin'), [{
+          .use(require('../webpack/InlineSourcePlugin'), [{
             include: /manifest\..*\.js$/
           }])
 
@@ -93,7 +96,7 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('preload')
           .tap(([options]) => {
-            options.fileBlacklist = [/\.map$/, /manifest\..*\.js$/]
+            options.fileBlacklist.push(/manifest\..*\.js$/)
             return [options]
           })
 

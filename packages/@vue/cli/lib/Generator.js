@@ -17,11 +17,14 @@ module.exports = class Generator {
     // virtual file tree
     this.files = {}
     this.fileMiddlewares = []
+    this.postProcessFilesCbs = []
 
+    const cliService = plugins.find(p => p.id === '@vue/cli-service')
+    const rootOptions = cliService && cliService.options
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
-      const api = new GeneratorAPI(id, this, options)
-      apply(api, options)
+      const api = new GeneratorAPI(id, this, options, rootOptions || {})
+      apply(api, options, rootOptions)
     })
   }
 
@@ -70,6 +73,9 @@ module.exports = class Generator {
     const files = this.files
     for (const middleware of this.fileMiddlewares) {
       await middleware(files, ejs.render)
+    }
+    for (const postProcess of this.postProcessFilesCbs) {
+      await postProcess(files)
     }
     // normalize paths
     Object.keys(files).forEach(file => {

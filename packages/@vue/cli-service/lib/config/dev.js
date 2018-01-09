@@ -25,7 +25,7 @@ module.exports = api => {
       webpackConfig
         .plugin('watch-missing')
           .use(
-            require('../util/WatchMissingNodeModulesPlugin'),
+            require('../webpack/WatchMissingNodeModulesPlugin'),
             [api.resolve('node_modules')]
           )
     }
