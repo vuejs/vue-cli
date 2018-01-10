@@ -1,6 +1,6 @@
 module.exports = api => {
   api.extendPackage({
-    devDependencies: {
+    dependencies: {
       '@vue/babel-preset-app': '^3.0.0-alpha.1'
     },
     babel: {

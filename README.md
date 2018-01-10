@@ -42,7 +42,7 @@ Both utilize a plugin-based architecture.
 
 ### Plugin
 
-Plugins are locally installed into the project as devDependencies. `@vue/cli-service`'s [built-in commands][5] and [config modules][6] are also all implemented as plugins. This repo also contains a number of plugins that are published as individual packages.
+Plugins are locally installed into the project as dependencies. `@vue/cli-service`'s [built-in commands][5] and [config modules][6] are also all implemented as plugins. This repo also contains a number of plugins that are published as individual packages.
 
 A plugin should export a function which receives two arguments:
 

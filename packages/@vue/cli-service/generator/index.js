@@ -12,9 +12,7 @@ module.exports = (api, options) => {
       'build': 'vue-cli-service build'
     },
     dependencies: {
-      'vue': '^2.5.13'
-    },
-    devDependencies: {
+      'vue': '^2.5.13',
       'vue-template-compiler': '^2.5.13'
     },
     'postcss': {
@@ -62,7 +60,7 @@ module.exports = (api, options) => {
     }
 
     api.extendPackage({
-      devDependencies: deps[options.cssPreprocessor]
+      dependencies: deps[options.cssPreprocessor]
     })
   }
 }
