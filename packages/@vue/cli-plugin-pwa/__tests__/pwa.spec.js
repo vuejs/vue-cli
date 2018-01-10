@@ -1,6 +1,5 @@
 jest.setTimeout(30000)
 
-const fs = require('fs')
 const path = require('path')
 const portfinder = require('portfinder')
 const { createServer } = require('http-server')
@@ -18,16 +17,14 @@ test('pwa', async () => {
   const { stdout } = await project.run('vue-cli-service build')
   expect(stdout).toMatch('Build complete.')
 
-  const distDir = path.join(project.dir, 'dist')
-  const hasFile = file => fs.existsSync(path.join(distDir, file))
-  expect(hasFile('index.html')).toBe(true)
-  expect(hasFile('favicon.ico')).toBe(true)
-  expect(hasFile('js')).toBe(true)
-  expect(hasFile('css')).toBe(true)
+  expect(project.has('dist/index.html')).toBe(true)
+  expect(project.has('dist/favicon.ico')).toBe(true)
+  expect(project.has('dist/js')).toBe(true)
+  expect(project.has('dist/css')).toBe(true)
 
   // PWA specific files
-  expect(hasFile('manifest.json')).toBe(true)
-  expect(hasFile('img/icons/android-chrome-512x512.png')).toBe(true)
+  expect(project.has('dist/manifest.json')).toBe(true)
+  expect(project.has('dist/img/icons/android-chrome-512x512.png')).toBe(true)
 
   // Make sure the base preload/prefetch are not affected
   const index = await project.read('dist/index.html')
@@ -49,7 +46,7 @@ test('pwa', async () => {
   expect(main).toMatch(`import './registerServiceWorker'`)
 
   const port = await portfinder.getPortPromise()
-  server = createServer({ root: distDir })
+  server = createServer({ root: path.join(project.dir, 'dist') })
 
   await new Promise((resolve, reject) => {
     server.listen(port, err => {

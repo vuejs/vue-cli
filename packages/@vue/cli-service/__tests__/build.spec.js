@@ -1,6 +1,5 @@
 jest.setTimeout(30000)
 
-const fs = require('fs')
 const path = require('path')
 const portfinder = require('portfinder')
 const { createServer } = require('http-server')
@@ -16,16 +15,13 @@ test('build', async () => {
   project.write('public/foo.js', '1')
 
   const { stdout } = await project.run('vue-cli-service build')
-
   expect(stdout).toMatch('Build complete.')
 
-  const distDir = path.join(project.dir, 'dist')
-  const hasFile = file => fs.existsSync(path.join(distDir, file))
-  expect(hasFile('index.html')).toBe(true)
-  expect(hasFile('favicon.ico')).toBe(true)
-  expect(hasFile('js')).toBe(true)
-  expect(hasFile('css')).toBe(true)
-  expect(hasFile('foo.js')).toBe(true)
+  expect(project.has('dist/index.html')).toBe(true)
+  expect(project.has('dist/favicon.ico')).toBe(true)
+  expect(project.has('dist/js')).toBe(true)
+  expect(project.has('dist/css')).toBe(true)
+  expect(project.has('dist/foo.js')).toBe(true)
 
   const index = await project.read('dist/index.html')
   // should split and preload app.js & vendor.js
@@ -37,7 +33,7 @@ test('build', async () => {
   expect(index).toMatch('webpackJsonp')
 
   const port = await portfinder.getPortPromise()
-  server = createServer({ root: distDir })
+  server = createServer({ root: path.join(project.dir, 'dist') })
 
   await new Promise((resolve, reject) => {
     server.listen(port, err => {
