@@ -2,7 +2,7 @@ module.exports = (api, options) => {
   api.render('./template')
 
   const dependencies = {
-    'vue-test-utils': '^1.0.0-beta.9'
+    '@vue/test-utils': '^1.0.0-beta.10'
   }
   if (options.assertionLibrary === 'chai') {
     dependencies.chai = '^4.1.2'

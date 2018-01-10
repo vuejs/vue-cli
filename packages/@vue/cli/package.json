@@ -23,6 +23,9 @@
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
   "homepage": "https://github.com/vuejs/vue-cli#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@vue/cli-shared-utils": "^3.0.0-alpha.1",
     "chalk": "^2.3.0",

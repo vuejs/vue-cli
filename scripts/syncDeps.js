@@ -19,7 +19,7 @@ const packagesToCheck = [
   'vue-template-compiler',
   'vuex',
   'vue-router',
-  'vue-test-utils',
+  '@vue/test-utils',
   'eslint-plugin-vue',
   'autoprefixer',
   'node-sass',
@@ -71,6 +71,7 @@ const flushWrite = () => {
       let isUpdated = false
       const makeReplacer = versionGetter => (_, pkg, curVersion) => {
         const version = versionGetter(pkg)
+        if (!version) return _
         if (checkUpdate(pkg, filePath, curVersion, version)) {
           isUpdated = true
         }
@@ -78,7 +79,11 @@ const flushWrite = () => {
       }
 
       const localReplacer = makeReplacer(
-        pkg => require(`../packages/${pkg}/package.json`).version
+        pkg => {
+          try {
+            return require(`../packages/${pkg}/package.json`).version
+          } catch (e) {}
+        }
       )
 
       const npmReplacer = makeReplacer(getRemoteVersion)

@@ -4,7 +4,7 @@ import expect from 'expect'
 <%_ if (options.assertionLibrary === 'chai') { _%>
 import { expect } from 'chai'
 <%_ } _%>
-import { shallow } from 'vue-test-utils'
+import { shallow } from '@vue/test-utils'
 import HelloWorld from '@/components/HelloWorld.vue'
 
 describe('Hello.vue', () => {

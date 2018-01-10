@@ -596,6 +596,12 @@
   version "0.0.30"
   resolved "https://registry.yarnpkg.com/@types/strip-json-comments/-/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
 
+"@vue/test-utils@^1.0.0-beta.10":
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.0-beta.10.tgz#898881a8cac1c6bf9b1443fd0d7c81cb1fb4a87f"
+  dependencies:
+    lodash "^4.17.4"
+
 JSONStream@^1.0.4:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-1.3.2.tgz#c102371b6ec3a7cf3b847ca00c20bb0fce4c6dea"
@@ -9044,7 +9050,7 @@ uglify-es@^3.3.4:
     commander "~2.12.1"
     source-map "~0.6.1"
 
-uglify-js@3.3.x, uglify-js@^3.0.13, uglify-js@^3.3.5:
+uglify-js@3.3.x, uglify-js@^3.0.13:
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.5.tgz#4c4143dfe08e8825746675cc49a6874a933b543e"
   dependencies:
@@ -9445,12 +9451,6 @@ vue-template-compiler@^2.5.13:
 vue-template-es2015-compiler@^1.5.3, vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
-
-vue-test-utils@^1.0.0-beta.9:
-  version "1.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/vue-test-utils/-/vue-test-utils-1.0.0-beta.9.tgz#bb67c01e2386f85c3ffbceae460b6e785eb7f81a"
-  dependencies:
-    lodash "^4.17.4"
 
 vue@^2.5.13:
   version "2.5.13"
