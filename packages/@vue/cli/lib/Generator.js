@@ -74,9 +74,6 @@ module.exports = class Generator {
     for (const middleware of this.fileMiddlewares) {
       await middleware(files, ejs.render)
     }
-    for (const postProcess of this.postProcessFilesCbs) {
-      await postProcess(files)
-    }
     // normalize paths
     Object.keys(files).forEach(file => {
       const normalized = slash(file)
@@ -85,6 +82,9 @@ module.exports = class Generator {
         delete files[file]
       }
     })
+    for (const postProcess of this.postProcessFilesCbs) {
+      await postProcess(files)
+    }
     debug('vue:cli-files')(this.files)
   }
 }
