@@ -37,6 +37,7 @@
     ]
   },
   "devDependencies": {
+    "axios": "^0.17.1",
     "debug": "^3.1.0",
     "eslint": "^4.14.0",
     "eslint-plugin-vue-libs": "^2.1.0",

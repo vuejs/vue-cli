@@ -4,36 +4,31 @@
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
-const execa = require('execa')
+const axios = require('axios')
 const semver = require('semver')
 const globby = require('globby')
 const { execSync } = require('child_process')
 const inquirer = require('inquirer')
 
-const localPackageRE = /'(@vue\/[\w-]+)': '\^(\d+\.\d+\.\d+)'/g
-
-// these are packages that may be injected by extendPackage
-// in a generator, so they only exist in js, not package.json
-const packagesToCheck = [
-  'vue',
-  'vue-template-compiler',
-  'vuex',
-  'vue-router',
-  '@vue/test-utils',
-  'eslint-plugin-vue',
-  'autoprefixer',
-  'node-sass',
-  'sass-loader',
-  'less',
-  'less-loader',
-  'stylus',
-  'stylus-loader',
-  'register-service-worker'
-]
-const npmPackageRE = new RegExp(`'(${packagesToCheck.join('|')})': '\\^(\\d+\\.\\d+\\.\\d+[^']*)'`)
+const externalVueScopedPackages = {
+  '@vue/test-utils': true,
+  '@vue/eslint-config': true
+}
+const localPackageRE = /'(@vue\/(cli|eslint|babel)[\w-]+)': '\^(\d+\.\d+\.\d+)'/g
 
 const versionCache = {}
-const getRemoteVersion = pkg => {
+
+const getRemoteVersion = async (pkg) => {
+  if (versionCache[pkg]) {
+    return versionCache[pkg]
+  }
+  const res = await axios.get(`http://registry.npmjs.org/${pkg}/latest`)
+  const version = res.data.version
+  versionCache[pkg] = version
+  return version
+}
+
+const getRemoteVersionSync = pkg => {
   if (versionCache[pkg]) {
     return versionCache[pkg]
   }
@@ -65,6 +60,40 @@ const flushWrite = () => {
 }
 
 ;(async () => {
+  // 1. update all package deps
+  const updatedDeps = new Set()
+  const packages = await globby(['packages/@vue/*/package.json'])
+  await Promise.all(packages.filter(filePath => {
+    return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
+  }).map(async (filePath) => {
+    const pkg = require(path.resolve(__dirname, '../', filePath))
+    if (!pkg.dependencies) {
+      return
+    }
+    let isUpdated = false
+    const deps = pkg.dependencies
+    for (const dep in deps) {
+      if (dep.match(/^@vue/) && !externalVueScopedPackages[dep]) {
+        continue
+      }
+      let local = deps[dep]
+      if (local.charAt(0) !== '^') {
+        continue
+      }
+      local = local.replace(/^\^/, '')
+      const remote = await getRemoteVersion(dep)
+      if (checkUpdate(dep, filePath, local, remote)) {
+        deps[dep] = `^${remote}`
+        updatedDeps.add(dep)
+        isUpdated = true
+      }
+    }
+    if (isUpdated) {
+      bufferWrite(filePath, JSON.stringify(pkg, null, 2) + '\n')
+    }
+  }))
+
+  const updatedRE = new RegExp(`'(${Array.from(updatedDeps).join('|')})': '\\^(\\d+\\.\\d+\\.\\d+[^']*)'`)
   const paths = await globby(['packages/@vue/**/*.js'])
   paths
     .filter(p => !/\/files\//.test(p))
@@ -87,45 +116,18 @@ const flushWrite = () => {
         }
       )
 
-      const npmReplacer = makeReplacer(getRemoteVersion)
+      const remoteReplacer = makeReplacer(getRemoteVersionSync)
 
       const updated = fs.readFileSync(filePath, 'utf-8')
         // update @vue packages in this repo
         .replace(localPackageRE, localReplacer)
         // also update vue, vue-template-compiler, vuex, vue-router
-        .replace(npmPackageRE, npmReplacer)
+        .replace(updatedRE, remoteReplacer)
 
       if (isUpdated) {
         bufferWrite(filePath, updated)
       }
     })
-
-    // update all package deps
-  const packages = await globby(['packages/@vue/*/package.json'])
-  await Promise.all(packages.filter(filePath => {
-    return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
-  }).map(async (filePath) => {
-    const pkg = require(path.resolve(__dirname, '../', filePath))
-    if (!pkg.dependencies) {
-      return
-    }
-    let isUpdated = false
-    const deps = pkg.dependencies
-    for (const dep in deps) {
-      if (dep.match(/^@vue/)) continue
-      let local = deps[dep]
-      if (local.charAt(0) !== '^') continue
-      local = local.replace(/^\^/, '')
-      const remote = (await execa('npm', ['view', dep, 'version'])).stdout
-      if (checkUpdate(dep, filePath, local, remote)) {
-        deps[dep] = `^${remote}`
-        isUpdated = true
-      }
-    }
-    if (isUpdated) {
-      bufferWrite(filePath, JSON.stringify(pkg, null, 2) + '\n')
-    }
-  }))
 
   if (!Object.keys(writeCache).length) {
     return console.log(`All packages up-to-date.`)
