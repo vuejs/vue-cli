@@ -23,6 +23,7 @@ module.exports = function setupDevProject (targetDir, deps) {
   mkdirp.sync(binPath)
   fs.symlinkSync(
     require.resolve('@vue/cli-service/bin/vue-cli-service'),
-    path.join(binPath, 'vue-cli-service')
+    path.join(binPath, 'vue-cli-service'),
+    'junction' // needed for windows
   )
 }

@@ -37,8 +37,11 @@ test('should work', async () => {
     require('yorkie/src/install')(path.join(project.dir, 'node_modules'))
     // since yorkie isn't actually installed in the test project, we need to
     // symlink it
-    const yorkieDir = path.resolve(require.resolve('yorkie/src/install'), '../../')
-    fs.symlinkSync(yorkieDir, path.join(project.dir, 'node_modules', 'yorkie'))
+    fs.symlinkSync(
+      path.resolve(require.resolve('yorkie/src/install'), '../../'),
+      path.join(project.dir, 'node_modules', 'yorkie'),
+      'junction' // needed for windows
+    )
   })
   const hook = await read('.git/hooks/pre-commit')
   expect(hook).toMatch('#yorkie')
