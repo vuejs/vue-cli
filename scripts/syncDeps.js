@@ -27,7 +27,8 @@ const packagesToCheck = [
   'less',
   'less-loader',
   'stylus',
-  'stylus-loader'
+  'stylus-loader',
+  'register-service-worker'
 ]
 const npmPackageRE = new RegExp(`'(${packagesToCheck.join('|')})': '\\^(\\d+\\.\\d+\\.\\d+[^']*)'`)
 
@@ -125,6 +126,10 @@ const flushWrite = () => {
       bufferWrite(filePath, JSON.stringify(pkg, null, 2) + '\n')
     }
   }))
+
+  if (!Object.keys(writeCache).length) {
+    return console.log(`All packages up-to-date.`)
+  }
 
   const { yes } = await inquirer.prompt([{
     name: 'yes',

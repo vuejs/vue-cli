@@ -1,23 +1,26 @@
 /* eslint-disable no-console */
 
-import { register } from '@vue/cli-plugin-pwa/registerServiceWorker'
+import { register } from 'register-service-worker'
 
-const serviceWorkerEventBus = register()
-
-serviceWorkerEventBus.$on('new-content', () => {
-  console.log('New content is available; please refresh.')
-})
-
-serviceWorkerEventBus.$on('content-cached', () => {
-  console.log('Content is cached for offline use.')
-})
-
-serviceWorkerEventBus.$on('offline', () => {
-  console.log('No internet connection found. App is running in offline mode.')
-})
-
-serviceWorkerEventBus.$on('error', error => {
-  console.error('Error during service worker registration:', error)
-})
-
-export default serviceWorkerEventBus
+if (process.env.NODE_ENV === 'production') {
+  register(`${process.env.BASE_URL}service-worker.js`, {
+    ready () {
+      console.log(
+        'App is being served from cache by a service worker.\n' +
+        'For more details, visit https://goo.gl/M232X8'
+      )
+    },
+    cached () {
+      console.log('Content has been cached for offline use.')
+    },
+    updated () {
+      console.log('New content is available; please refresh.')
+    },
+    offline () {
+      console.log('No internet connection found. App is running in offline mode.')
+    },
+    error (error) {
+      console.error('Error during service worker registration:', error)
+    }
+  })
+}

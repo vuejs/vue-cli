@@ -60,8 +60,8 @@ test('pwa', async () => {
 
   await new Promise(r => setTimeout(r, 500))
   const logs = launched.logs
-  expect(logs.some(msg => msg.match(/Content is cached for offline use/))).toBe(true)
-  expect(logs.some(msg => msg.match(/This web app is being served cache-first/))).toBe(true)
+  expect(logs.some(msg => msg.match(/Content has been cached for offline use/))).toBe(true)
+  expect(logs.some(msg => msg.match(/App is being served from cache by a service worker/))).toBe(true)
 })
 
 afterAll(async () => {

@@ -1,4 +1,10 @@
 module.exports = api => {
+  api.extendPackage({
+    dependencies: {
+      'register-service-worker': '^1.0.0'
+    }
+  })
+
   api.render('./template')
 
   api.postProcessFiles(files => {

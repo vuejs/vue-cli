@@ -23,5 +23,8 @@
   },
   "dependencies": {
     "sw-precache-webpack-plugin": "^0.11.4"
+  },
+  "devDependencies": {
+    "register-service-worker": "^1.0.0"
   }
 }

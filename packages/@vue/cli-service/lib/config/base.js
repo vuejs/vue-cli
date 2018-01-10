@@ -11,7 +11,7 @@ module.exports = (api, options) => {
       .output
         .path(api.resolve(options.outputDir))
         .filename('[name].js')
-        .publicPath(options.base)
+        .publicPath(options.baseUrl)
 
     webpackConfig.resolve
       .set('symlinks', true)
@@ -123,7 +123,9 @@ module.exports = (api, options) => {
 
     webpackConfig
       .plugin('define')
-        .use(require('webpack/lib/DefinePlugin'), [resolveClientEnv(options.base)])
+        .use(require('webpack/lib/DefinePlugin'), [
+          resolveClientEnv(options.baseUrl)
+        ])
 
     webpackConfig
       .plugin('timefix')

@@ -2,12 +2,6 @@ module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const name = api.service.pkg.name
 
-    // make sure the registerServiceWorker script is transpiled
-    webpackConfig.module
-      .rule('js')
-        .include
-          .add(require.resolve('./registerServiceWorker'))
-
     // the pwa plugin hooks on to html-webpack-plugin
     // and injects icons, manifest links & other PWA related tags into <head>
     webpackConfig

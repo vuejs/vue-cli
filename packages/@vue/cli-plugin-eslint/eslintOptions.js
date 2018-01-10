@@ -3,6 +3,7 @@ module.exports = {
   parserOptions: {
     parser: require.resolve('babel-eslint')
   },
+  globals: ['process'],
   rules: {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }

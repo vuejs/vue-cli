@@ -1,7 +1,7 @@
 const { createSchema, validate } = require('@vue/cli-shared-utils')
 
 const schema = createSchema(joi => joi.object({
-  base: joi.string(),
+  baseUrl: joi.string(),
   outputDir: joi.string(),
   compiler: joi.boolean(),
   cssModules: joi.boolean(),
@@ -25,7 +25,7 @@ exports.validate = options => validate(
 
 exports.defaults = {
   // project deployment base
-  base: '/',
+  baseUrl: '/',
 
   // where to output built files
   outputDir: 'dist',

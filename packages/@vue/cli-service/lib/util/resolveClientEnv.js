@@ -7,7 +7,7 @@ module.exports = function resolveClientEnv (publicPath) {
       env[key] = JSON.stringify(process.env[key])
     }
   })
-  env.PUBLIC_URL = JSON.stringify(publicPath)
+  env.BASE_URL = JSON.stringify(publicPath)
   return {
     'process.env': env
   }

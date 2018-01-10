@@ -59,7 +59,7 @@ module.exports = (api, options) => {
 
           if (!args.silent) {
             done(`Build complete. The ${chalk.cyan(options.outputDir)} directory is ready to be deployed.\n`)
-            if (options.base === '/') {
+            if (options.baseUrl === '/') {
               info(`The app is built assuming that it will be deployed at the root of a domain.`)
               info(`If you intend to deploy it under a subpath, update the ${chalk.green('base')} option`)
               info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
