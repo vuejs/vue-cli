@@ -79,11 +79,11 @@ module.exports = async function installDeps (targetDir, command, deps, cliRegist
   if (command === 'npm') {
     args.push('install', '--loglevel', 'error')
     if (deps) {
-      args.push('--save')
+      args.push('--save-dev')
     }
   } else if (command === 'yarn') {
     if (deps) {
-      args.push('add')
+      args.push('add', '--dev')
     }
   } else {
     throw new Error(`unknown package manager: ${command}`)

@@ -33,8 +33,7 @@ exports.defaults = {
   plugins: {
     '@vue/cli-plugin-babel': {},
     '@vue/cli-plugin-eslint': { config: 'base', lintOn: 'save' },
-    '@vue/cli-plugin-unit-mocha-webpack': { assertionLibrary: 'chai' },
-    '@vue/cli-plugin-pwa': {}
+    '@vue/cli-plugin-unit-mocha-webpack': { assertionLibrary: 'chai' }
   }
 }
 

@@ -6,21 +6,17 @@ module.exports = (api, { config, lintOn }) => {
     eslintConfig: {
       extends: ['plugin:vue/essential']
     },
-    dependencies: {
+    devDependencies: {
       'eslint-plugin-vue': '^4.1.0'
     }
   }
 
   if (config === 'airbnb') {
     pkg.eslintConfig.extends.push('@vue/airbnb')
-    Object.assign(pkg.dependencies, {
-      '@vue/eslint-config-airbnb': '^3.0.0-alpha.1'
-    })
+    pkg.devDependencies['@vue/eslint-config-airbnb'] = '^0.1.0'
   } else if (config === 'standard') {
     pkg.eslintConfig.extends.push('@vue/standard')
-    Object.assign(pkg.dependencies, {
-      '@vue/eslint-config-standard': '^3.0.0-alpha.1'
-    })
+    pkg.devDependencies['@vue/eslint-config-standard'] = '^0.1.0'
   } else if (config === 'prettier') {
     // TODO
   } else {
@@ -35,9 +31,9 @@ module.exports = (api, { config, lintOn }) => {
   }
 
   if (lintOn === 'commit') {
-    pkg.devDependencies = {
+    Object.assign(pkg.devDependencies, {
       'lint-staged': '^6.0.0'
-    }
+    })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }

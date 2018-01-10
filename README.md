@@ -23,6 +23,4 @@ cd test-app
 yarn dev
 ```
 
-## Plugin Development Guide
-
 See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/next/docs/Plugin.md).

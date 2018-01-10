@@ -11,7 +11,7 @@ test('base', async () => {
   expect(pkg.eslintConfig).toEqual({
     extends: ['plugin:vue/essential', 'eslint:recommended']
   })
-  expect(pkg.dependencies).toHaveProperty('eslint-plugin-vue')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-vue')
 })
 
 test('airbnb', async () => {
@@ -27,8 +27,8 @@ test('airbnb', async () => {
   expect(pkg.eslintConfig).toEqual({
     extends: ['plugin:vue/essential', '@vue/airbnb']
   })
-  expect(pkg.dependencies).toHaveProperty('eslint-plugin-vue')
-  expect(pkg.dependencies).toHaveProperty('@vue/eslint-config-airbnb')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-vue')
+  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-airbnb')
 })
 
 test('standard', async () => {
@@ -44,8 +44,8 @@ test('standard', async () => {
   expect(pkg.eslintConfig).toEqual({
     extends: ['plugin:vue/essential', '@vue/standard']
   })
-  expect(pkg.dependencies).toHaveProperty('eslint-plugin-vue')
-  expect(pkg.dependencies).toHaveProperty('@vue/eslint-config-standard')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-vue')
+  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-standard')
 })
 
 test('lint on save', async () => {

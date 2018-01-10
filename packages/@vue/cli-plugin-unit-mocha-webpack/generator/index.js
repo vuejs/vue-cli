@@ -1,17 +1,17 @@
 module.exports = (api, options) => {
   api.render('./template')
 
-  const dependencies = {
+  const devDependencies = {
     '@vue/test-utils': '^1.0.0-beta.10'
   }
   if (options.assertionLibrary === 'chai') {
-    dependencies.chai = '^4.1.2'
+    devDependencies.chai = '^4.1.2'
   } else if (options.assertionLibrary === 'expect') {
-    dependencies.expect = '^22.0.3'
+    devDependencies.expect = '^22.0.3'
   }
 
   api.extendPackage({
-    dependencies,
+    devDependencies,
     scripts: {
       test: 'vue-cli-service test'
     }

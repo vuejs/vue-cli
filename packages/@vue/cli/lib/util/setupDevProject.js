@@ -6,10 +6,9 @@ const mkdirp = require('mkdirp')
 
 module.exports = function setupDevProject (targetDir, deps) {
   const pkg = require(path.resolve(targetDir, 'package.json'))
-  pkg.dependencies = {}
   pkg.devDependencies = {}
   deps.forEach(dep => {
-    pkg.dependencies[dep] = require(path.resolve(
+    pkg.devDependencies[dep] = require(path.resolve(
       __dirname,
       '../../../../',
       dep,

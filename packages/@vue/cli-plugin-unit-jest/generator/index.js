@@ -4,7 +4,7 @@ module.exports = (api, options) => {
     scripts: {
       test: 'vue-cli-service test'
     },
-    dependencies: {
+    devDependencies: {
       '@vue/test-utils': '^1.0.0-beta.10'
     }
   })
