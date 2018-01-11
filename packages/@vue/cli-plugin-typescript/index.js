@@ -41,6 +41,7 @@ module.exports = api => {
   }, (args) => {
     const { run } = require('tslint/lib/runner')
 
+    // TODO make this support *.vue files
     return run({
       files: args._ && args._.length ? args._ : ['src/**/*.ts'],
       exclude: args.exclude || [],
