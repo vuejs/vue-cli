@@ -4,18 +4,10 @@
     "tslint:recommended"
   ],
   "rules": {
-    "quotemark": [
-      true,
-      "single"
-    ],
-    "indent": [
-      true
-    ],
-    "interface-name": [
-      false
-    ],
-    "arrow-parens": false,
-    // Pending fix for shorthand property names.
+    "quotemark": [true, "single"],
+    "indent": [true, "spaces", 2],
+    "interface-name": false,
+    "ordered-imports": false,
     "object-literal-sort-keys": false
   }
 }

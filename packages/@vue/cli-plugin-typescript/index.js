@@ -13,6 +13,7 @@ module.exports = api => {
         .test(/\.tsx?$/)
         .include
           .add(api.resolve('src'))
+          .add(api.resolve('test'))
           .end()
         .use('ts-loader')
           .loader('ts-loader')

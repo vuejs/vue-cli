@@ -1,14 +1,10 @@
 module.exports = api => {
-  api.configureWebpack(webpackConfig => {
+  api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'test') {
-      if (!webpackConfig.externals) {
-        webpackConfig.externals = []
-      }
-      webpackConfig.externals = [].concat(
-        webpackConfig.externals,
-        require('webpack-node-externals')()
-      )
-      webpackConfig.devtool = 'inline-cheap-module-source-map'
+      webpackConfig.merge({
+        devtool: 'inline-cheap-module-source-map',
+        externals: [require('webpack-node-externals')()]
+      })
     }
   })
 
