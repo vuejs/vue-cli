@@ -3,7 +3,7 @@ const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 test('base', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
-      id: 'unit-mocha-webpack',
+      id: 'unit-mocha',
       apply: require('../generator'),
       options: {}
     },

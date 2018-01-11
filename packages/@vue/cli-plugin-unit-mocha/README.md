@@ -1,3 +1,3 @@
-# @vue/cli-plugin-unit-mocha-webpack
+# @vue/cli-plugin-unit-mocha
 
-> unit-mocha-webpack plugin for vue-cli
+> unit-mocha plugin for vue-cli
