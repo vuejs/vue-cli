@@ -36,14 +36,14 @@ async function create (projectName, options) {
 
   const promptModules = [
     'babel',
+    'typescript',
+    'pwa',
     'router',
     'vuex',
     'cssPreprocessors',
-    'eslint',
+    'linter',
     'unit',
-    'e2e',
-    'pwa',
-    'typescript'
+    'e2e'
   ].map(file => require(`./promptModules/${file}`))
 
   const creator = new Creator(projectName, targetDir, promptModules)

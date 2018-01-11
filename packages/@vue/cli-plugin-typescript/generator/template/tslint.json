@@ -1,3 +1,4 @@
+<%_ if (options.lint) { _%>
 {
   "defaultSeverity": "warning",
   "extends": [
@@ -11,3 +12,4 @@
     "object-literal-sort-keys": false
   }
 }
+<%_ } _%>

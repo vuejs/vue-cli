@@ -1,4 +1,4 @@
-module.exports = api => {
+module.exports = (api, options) => {
   api.chainWebpack(config => {
     config.entry('app')
       .clear()
@@ -26,8 +26,7 @@ module.exports = api => {
       .plugin('fork-ts-checker')
         .use(require('fork-ts-checker-webpack-plugin'), [{
           vue: true,
-          tslint: true,
-          silent: true,
+          tslint: options.lintOnSave,
           formatter: 'codeframe'
         }])
   })

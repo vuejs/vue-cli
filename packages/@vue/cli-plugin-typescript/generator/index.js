@@ -1,16 +1,41 @@
-module.exports = (api, options) => {
-  api.extendPackage({
-    scripts: {
-      lint: 'vue-cli-service lint'
-    }
-  })
-
-  if (options.classComponent) {
+module.exports = (api, { classComponent, lint, lintOn = [] }) => {
+  if (classComponent) {
     api.extendPackage({
       devDependencies: {
         'vue-class-component': '^6.0.0',
         'vue-property-decorator': '^6.0.0'
       }
+    })
+  }
+
+  if (lint) {
+    api.extendPackage({
+      scripts: {
+        lint: 'vue-cli-service lint'
+      },
+      vue: {
+        lintOnSave: lintOn.includes('save')
+      }
+    })
+
+    if (lintOn.includes('commit')) {
+      api.extendPackage({
+        devDependencies: {
+          'lint-staged': '^6.0.0'
+        },
+        gitHooks: {
+          'pre-commit': 'lint-staged'
+        },
+        'lint-staged': {
+          '*.js': ['vue-cli-service lint', 'git add'],
+          '*.vue': ['vue-cli-service lint', 'git add']
+        }
+      })
+    }
+
+    // lint and fix files on creation complete
+    api.onCreateComplete(() => {
+      return require('../lib/tslint')({}, api, true)
     })
   }
 
@@ -56,10 +81,5 @@ module.exports = (api, options) => {
         delete files[file]
       }
     }
-  })
-
-  // lint and fix files on creation complete
-  api.onCreateComplete(() => {
-    return require('../lib/tslint')({}, api, true)
   })
 }

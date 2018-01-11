@@ -1,4 +1,4 @@
-module.exports = (api, { config, lintOn }) => {
+module.exports = (api, { config, lintOn = [] }) => {
   const pkg = {
     scripts: {
       lint: 'vue-cli-service lint'
@@ -28,13 +28,13 @@ module.exports = (api, { config, lintOn }) => {
     pkg.eslintConfig.extends.push('eslint:recommended')
   }
 
-  if (lintOn === 'save') {
+  if (lintOn.includes('save')) {
     pkg.vue = {
       lintOnSave: true // eslint-loader configured in runtime plugin
     }
   }
 
-  if (lintOn === 'commit') {
+  if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
       'lint-staged': '^6.0.0'
     })

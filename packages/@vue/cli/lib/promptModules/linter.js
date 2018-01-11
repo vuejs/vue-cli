@@ -3,14 +3,17 @@ module.exports = cli => {
   const { hasGit } = require('@vue/cli-shared-utils')
 
   cli.injectFeature({
-    name: 'Linter',
-    value: 'eslint',
+    name: 'Linter / Formatter',
+    value: 'linter',
     short: 'Linter'
   })
 
   cli.injectPrompt({
     name: 'eslintConfig',
-    when: answers => answers.features.includes('eslint'),
+    when: answers => (
+      answers.features.includes('linter') &&
+      !answers.features.includes('ts')
+    ),
     type: 'list',
     message: 'Pick a lint config:',
     choices: [
@@ -39,27 +42,24 @@ module.exports = cli => {
 
   cli.injectPrompt({
     name: 'lintOn',
-    message: 'Pick a lint mode:',
-    when: answers => answers.features.includes('eslint'),
-    type: 'list',
+    message: 'Pick additional lint features:',
+    when: answers => answers.features.includes('linter'),
+    type: 'checkbox',
     choices: [
       {
-        name: 'Lint + fix on save',
+        name: 'Lint on save',
         value: 'save'
       },
       {
-        name: 'Lint + fix on commit' + (hasGit ? '' : chalk.red(' (requires Git)')),
+        name: 'Lint and fix on commit' + (hasGit ? '' : chalk.red(' (requires Git)')),
         value: 'commit'
-      },
-      {
-        name: 'Manually run npm script',
-        value: false
       }
     ]
   })
 
   cli.onPromptComplete((answers, options) => {
-    if (answers.features.includes('eslint')) {
+    if (answers.features.includes('linter') &&
+        !answers.features.includes('ts')) {
       options.plugins['@vue/cli-plugin-eslint'] = {
         config: answers.eslintConfig,
         lintOn: answers.lintOn

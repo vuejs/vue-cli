@@ -26,6 +26,9 @@ exports.prompt = prompts => {
     }
 
     const a = pendingAssertions[i - skipped]
+    if (!a) {
+      console.error(`no matching assertion for prompt:`, prompt)
+    }
 
     if (a.message) {
       const message = typeof prompt.message === 'function'

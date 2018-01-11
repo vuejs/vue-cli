@@ -3,7 +3,7 @@ jest.mock('inquirer')
 
 const assertPromptModule = require('@vue/cli-test-utils/assertPromptModule')
 
-const moduleToTest = require('../eslint')
+const moduleToTest = require('../linter')
 
 test('base', async () => {
   const expectedPrompts = [
@@ -18,9 +18,9 @@ test('base', async () => {
       choose: 0
     },
     {
-      message: 'Pick a lint mode',
-      choices: ['on save', 'on commit', 'Manually'],
-      choose: 0
+      message: 'Pick additional lint features',
+      choices: ['on save', 'on commit'],
+      check: [0, 1]
     }
   ]
 
@@ -28,7 +28,7 @@ test('base', async () => {
     plugins: {
       '@vue/cli-plugin-eslint': {
         config: 'base',
-        lintOn: 'save'
+        lintOn: ['save', 'commit']
       }
     }
   }
@@ -54,9 +54,8 @@ test('airbnb', async () => {
       choose: 1
     },
     {
-      message: 'Pick a lint mode',
-      choices: ['on save', 'on commit', 'Manually'],
-      choose: 1
+      choices: ['on save', 'on commit'],
+      check: [1]
     }
   ]
 
@@ -64,7 +63,7 @@ test('airbnb', async () => {
     plugins: {
       '@vue/cli-plugin-eslint': {
         config: 'airbnb',
-        lintOn: 'commit'
+        lintOn: ['commit']
       }
     }
   }
@@ -90,9 +89,8 @@ test('standard', async () => {
       choose: 2
     },
     {
-      message: 'Pick a lint mode',
-      choices: ['on save', 'on commit', 'Manually'],
-      choose: 2
+      choices: ['on save', 'on commit'],
+      check: []
     }
   ]
 
@@ -100,7 +98,7 @@ test('standard', async () => {
     plugins: {
       '@vue/cli-plugin-eslint': {
         config: 'standard',
-        lintOn: false
+        lintOn: []
       }
     }
   }
