@@ -52,7 +52,7 @@ test('async/await', () => {
   // should use regenerator runtime
   expect(code).toMatch(`import "regenerator-runtime/runtime"`)
   // should use required helper instead of inline
-  expect(code).toMatch(`@babel/runtime/helpers/asyncToGenerator`)
+  expect(code).toMatch(/@babel.*runtime\/helpers\/asyncToGenerator/)
 })
 
 test('jsx', () => {
@@ -63,7 +63,6 @@ test('jsx', () => {
       }
     }
   `.trim(), defaultOptions)
-  console.log(code)
   expect(code).toMatch(`var h = arguments[0]`)
   expect(code).toMatch(`return h("div", null, ["bar"])`)
 })
