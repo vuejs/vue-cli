@@ -2,6 +2,7 @@ module.exports = (api, {
   classComponent,
   lint,
   lintOn = [],
+  useTsWithBabel,
   experimentalCompileTsWithBabel
 }) => {
   if (classComponent) {
@@ -11,6 +12,52 @@ module.exports = (api, {
         'vue-property-decorator': '^6.0.0'
       }
     })
+  }
+
+  if (useTsWithBabel) {
+    api.extendPackage({
+      devDependencies: {
+        'babel-loader': '8 || ^8.0.0-beta || ^8.0.0-rc',
+        '@babel/core': '7 || ^7.0.0-beta || ^7.0.0-rc',
+        '@vue/babel-preset-app': '^3.0.0-alpha.1'
+      },
+      vue: {
+        useTsWithBabel: true
+      },
+      babel: {
+        presets: ['@vue/app']
+      }
+    })
+  } else if (experimentalCompileTsWithBabel) {
+    api.extendPackage({
+      devDependencies: {
+        'babel-loader': '8 || ^8.0.0-beta || ^8.0.0-rc',
+        '@babel/core': '7 || ^7.0.0-beta || ^7.0.0-rc',
+        '@babel/preset-typescript': '7 || ^7.0.0-beta || ^7.0.0-rc',
+        '@vue/babel-preset-app': '^3.0.0-alpha.1'
+      },
+      vue: {
+        experimentalCompileTsWithBabel: true
+      },
+      babel: {
+        presets: ['@babel/typescript', '@vue/app']
+      }
+    })
+
+    if (classComponent) {
+      api.extendPackage({
+        devDependencies: {
+          '@babel/plugin-proposal-decorators': '7 || ^7.0.0-beta || ^7.0.0-rc',
+          '@babel/plugin-proposal-class-properties': '7 || ^7.0.0-beta || ^7.0.0-rc'
+        },
+        babel: {
+          plugins: [
+            '@babel/proposal-decorators',
+            ['@babel/proposal-class-properties', { 'loose': true }]
+          ]
+        }
+      })
+    }
   }
 
   if (lint) {
@@ -68,8 +115,9 @@ module.exports = (api, {
   // TODO cater to e2e test plugins
 
   api.render('./template', {
-    hasJest,
-    hasMocha
+    isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,
+    hasMocha,
+    hasJest
   })
 
   // delete all js files that have a ts file of the same name
@@ -87,36 +135,4 @@ module.exports = (api, {
       }
     }
   })
-
-  if (experimentalCompileTsWithBabel) {
-    api.extendPackage({
-      devDependencies: {
-        'babel-loader': '8 || ^8.0.0-beta || ^8.0.0-rc',
-        '@babel/core': '7 || ^7.0.0-beta || ^7.0.0-rc',
-        '@babel/preset-typescript': '7 || ^7.0.0-beta || ^7.0.0-rc',
-        '@vue/babel-preset-app': '^3.0.0-alpha.1'
-      },
-      vue: {
-        experimentalCompileTsWithBabel: true
-      },
-      babel: {
-        presets: ['@babel/typescript', '@vue/app']
-      }
-    })
-
-    if (classComponent) {
-      api.extendPackage({
-        devDependencies: {
-          '@babel/plugin-proposal-decorators': '7 || ^7.0.0-beta || ^7.0.0-rc',
-          '@babel/plugin-proposal-class-properties': '7 || ^7.0.0-beta || ^7.0.0-rc'
-        },
-        babel: {
-          plugins: [
-            '@babel/proposal-decorators',
-            ['@babel/proposal-class-properties', { 'loose': true }]
-          ]
-        }
-      })
-    }
-  }
 }

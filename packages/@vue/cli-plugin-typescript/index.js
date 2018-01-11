@@ -32,6 +32,11 @@ module.exports = (api, options) => {
               return options
             })
     } else {
+      if (options.useTsWithBabel) {
+        tsRule
+          .use('babel-loader')
+            .loader('babel-loader')
+      }
       tsRule
         .use('ts-loader')
           .loader('ts-loader')

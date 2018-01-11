@@ -21,6 +21,13 @@ module.exports = cli => {
       type: 'confirm',
       message: `Compile TS with babel? ${chalk.yellow(`(experimental)`)}`
     })
+  } else {
+    cli.injectPrompt({
+      name: 'useTsWithBabel',
+      when: answers => answers.features.includes('ts'),
+      type: 'confirm',
+      message: 'Use TypeScript together with Babel for auto-detected polyfills?'
+    })
   }
 
   cli.onPromptComplete((answers, options) => {
@@ -32,7 +39,9 @@ module.exports = cli => {
         tsOptions.lint = true
         tsOptions.lintOn = answers.lintOn
       }
-      if (answers.compileTsWithBabel) {
+      if (answers.useTsWithBabel) {
+        tsOptions.useTsWithBabel = true
+      } else if (answers.compileTsWithBabel) {
         tsOptions.experimentalCompileTsWithBabel = true
       }
       options.plugins['@vue/cli-plugin-typescript'] = tsOptions

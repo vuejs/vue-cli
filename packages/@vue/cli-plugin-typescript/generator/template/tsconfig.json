@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "<%- options.useTsWithBabel ? 'es2015' : 'es5' %>",
     "module": "es2015",
     "strict": true,
     "moduleResolution": "node",
@@ -15,14 +15,16 @@
         "src/*"
       ]
     },
+    <%_if (isTest) { _%>
     "types": [
-    <%_ if (hasMocha) { _%>
+      <%_ if (hasMocha) { _%>
       "mocha",
       "chai"
-    <%_ } else if (hasJest) { _%>
+      <%_ } else if (hasJest) { _%>
       "jest"
-    <%_ } _%>
+      <%_ } _%>
     ]
+    <%_ } _%>
   },
   "include": [
     "src/**/*.ts",
