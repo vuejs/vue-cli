@@ -22,7 +22,7 @@ module.exports = (api, { lintOnSave }) => {
     descriptions: 'lint source files',
     usage: 'vue-cli-service lint [options] [...files]',
     options: {
-      '--format': 'specify formatter (default: codeframe)',
+      '--format [formatter]': 'specify formatter (default: codeframe)',
       '--no-fix': 'do not fix errors'
     },
     details: 'For more options, see https://eslint.org/docs/user-guide/command-line-interface#options'

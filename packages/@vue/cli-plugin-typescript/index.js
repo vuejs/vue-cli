@@ -59,10 +59,11 @@ module.exports = (api, options) => {
     descriptions: 'lint source files with TSLint',
     usage: 'vue-cli-service lint [options] [...files]',
     options: {
-      '--format': 'specify formatter (default: codeframe)',
-      '--no-fix': 'do not fix errors'
-    },
-    details: 'For more options, see https://palantir.github.io/tslint/usage/cli/'
+      '--format [formatter]': 'specify formatter (default: codeframe)',
+      '--no-fix': 'do not fix errors',
+      '--formatters-dir [dir]': 'formatter directory',
+      '--rules-dir [dir]': 'rules directory'
+    }
   }, args => {
     return require('./lib/tslint')(args, api)
   })

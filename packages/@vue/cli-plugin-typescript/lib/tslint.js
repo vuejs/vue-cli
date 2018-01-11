@@ -1,31 +1,95 @@
 module.exports = function lint (args = {}, api, silent) {
   process.chdir(api.resolve('.'))
 
-  const { run } = require('tslint/lib/runner')
+  const fs = require('fs')
+  const globby = require('globby')
+  const tslint = require('tslint')
+  const vueCompiler = require('vue-template-compiler')
 
-  // TODO make this support *.vue files
-  return run({
-    files: args._ && args._.length ? args._ : ['src/**/*.ts', 'test/**/*.ts'],
-    exclude: args.exclude || [],
+  const options = {
     fix: !args['no-fix'],
-    project: args.project,
-    config: args.config || api.resolve('tslint.json'),
-    force: args.force,
-    format: args.format,
+    formatter: args.format || 'codeframe',
     formattersDirectory: args['formatters-dir'],
-    init: args.init,
-    out: args.out,
-    outputAbsolutePaths: args['output-absolute-paths'],
-    rulesDirectory: args['rules-dir'],
-    test: args.test,
-    typeCheck: args['type-check']
-  }, {
-    log (m) { if (!silent) process.stdout.write(m) },
-    error (m) { process.stdout.write(m) }
-  }).then(code => {
-    process.exitCode = code
-  }).catch(err => {
-    console.error(err)
-    process.exitCode = 1
+    rulesDirectory: args['rules-dir']
+  }
+  const linter = new tslint.Linter(options)
+
+  const config = tslint.Configuration.findConfiguration(api.resolve('tslint.json')).results
+  // create a patched config that disables the blank lines rule,
+  // so that we get correct line numbers in error reports.
+  const vueConfig = Object.assign(config)
+  const rules = vueConfig.rules = new Map(vueConfig.rules)
+  const rule = rules.get('no-consecutive-blank-lines')
+  rules.set('no-consecutive-blank-lines', Object.assign({}, rule, {
+    ruleSeverity: 'off'
+  }))
+
+  // hack to make tslint --fix work for *.vue files
+  // this works because (luckily) tslint lints synchronously
+  const vueFileCache = new Map()
+  const writeFileSync = fs.writeFileSync
+  const patchWriteFile = () => {
+    fs.writeFileSync = (file, content, options) => {
+      if (/\.vue(\.ts)?$/.test(file)) {
+        file = file.replace(/\.ts$/, '')
+        const { before, after } = vueFileCache.get(file)
+        content = `${before}\n${content.trim()}\n${after}`
+      }
+      return writeFileSync(file, content, options)
+    }
+  }
+  const restoreWriteFile = () => {
+    fs.writeFileSync = writeFileSync
+  }
+
+  const lint = file => new Promise((resolve, reject) => {
+    const filePath = api.resolve(file)
+    fs.readFile(filePath, 'utf-8', (err, content) => {
+      if (err) return reject(err)
+      const isVue = /\.vue(\.ts)?$/.test(file)
+      if (isVue) {
+        const { script } = vueCompiler.parseComponent(content, { pad: 'line' })
+        if (script) {
+          vueFileCache.set(filePath, {
+            before: content.slice(0, script.start),
+            after: content.slice(script.end)
+          })
+        }
+        content = script && script.content
+      }
+      if (content) {
+        patchWriteFile()
+        linter.lint(
+          // append .ts so that tslint apply TS rules
+          `${filePath}${isVue ? `.ts` : ``}`,
+          content,
+          // use Vue config to ignore blank lines
+          isVue ? vueConfig : config
+        )
+        restoreWriteFile()
+      }
+      resolve()
+    })
+  })
+
+  const files = args._ && args._.length ? args._ : ['src/**/*.ts', 'src/**/*.vue', 'test/**/*.ts']
+
+  return globby(files).then(files => {
+    return Promise.all(files.map(lint))
+  }).then(() => {
+    const result = linter.getResult()
+    if (result.output.trim()) {
+      process.stdout.write(result.output.replace(/\.vue\.ts\b/g, '.vue'))
+    } else if (result.fixes.length) {
+      // some formatters do not report fixes.
+      const f = new tslint.Formatters.ProseFormatter()
+      process.stdout.write(f.format(result.failures, result.fixes))
+    } else if (!result.failures.length) {
+      console.log(`No lint errors found.\n`)
+    }
+
+    if (result.failures.length && !args.force) {
+      process.exitCode = 1
+    }
   })
 }
