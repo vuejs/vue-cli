@@ -15,7 +15,7 @@ exports.linkBin = async (src, dest) => {
   if (!process.env.VUE_CLI_TEST && !process.env.VUE_CLI_DEBUG) {
     throw new Error(`linkBin should only be used during tests or debugging.`)
   }
-  if (process.platform === 'win32') {
+  if (process.platform === 'win32' && !process.env.CI) {
     // not doing mutex lock because this is only used in dev and the
     // src will not be modified
     await cmdShim(src, dest)
