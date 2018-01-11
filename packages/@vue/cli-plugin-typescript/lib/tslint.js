@@ -16,7 +16,7 @@ module.exports = function lint (args = {}, api, silent) {
 
   const config = tslint.Configuration.findConfiguration(api.resolve('tslint.json')).results
   // create a patched config that disables the blank lines rule,
-  // so that we get correct line numbers in error reports.
+  // so that we get correct line numbers in error reports for *.vue files.
   const vueConfig = Object.assign(config)
   const rules = vueConfig.rules = new Map(vueConfig.rules)
   const rule = rules.get('no-consecutive-blank-lines')
@@ -72,18 +72,22 @@ module.exports = function lint (args = {}, api, silent) {
     })
   })
 
-  const files = args._ && args._.length ? args._ : ['src/**/*.ts', 'src/**/*.vue', 'test/**/*.ts']
+  const files = args._ && args._.length
+    ? args._
+    : ['src/**/*.ts', 'src/**/*.vue', 'test/**/*.ts']
+
+  const stripTsExtension = str => str.replace(/\.vue\.ts\b/g, '.vue')
 
   return globby(files).then(files => {
     return Promise.all(files.map(lint))
   }).then(() => {
     const result = linter.getResult()
     if (result.output.trim()) {
-      process.stdout.write(result.output.replace(/\.vue\.ts\b/g, '.vue'))
+      process.stdout.write(stripTsExtension(result.output))
     } else if (result.fixes.length) {
       // some formatters do not report fixes.
       const f = new tslint.Formatters.ProseFormatter()
-      process.stdout.write(f.format(result.failures, result.fixes))
+      process.stdout.write(stripTsExtension(f.format(result.failures, result.fixes)))
     } else if (!result.failures.length) {
       console.log(`No lint errors found.\n`)
     }
