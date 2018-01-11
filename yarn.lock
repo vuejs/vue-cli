@@ -201,12 +201,18 @@
     "@babel/helper-remap-async-to-generator" "7.0.0-beta.37"
     "@babel/plugin-syntax-async-generators" "7.0.0-beta.37"
 
-"@babel/plugin-proposal-class-properties@7.0.0-beta.37":
+"@babel/plugin-proposal-class-properties@7 || ^7.0.0-beta || ^7.0.0-rc", "@babel/plugin-proposal-class-properties@7.0.0-beta.37":
   version "7.0.0-beta.37"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.0.0-beta.37.tgz#0991e720ed24fa452b02e86183aca8e890a8d2cf"
   dependencies:
     "@babel/helper-function-name" "7.0.0-beta.37"
     "@babel/plugin-syntax-class-properties" "7.0.0-beta.37"
+
+"@babel/plugin-proposal-decorators@7 || ^7.0.0-beta || ^7.0.0-rc":
+  version "7.0.0-beta.37"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.0.0-beta.37.tgz#8c5325ab2f2483bf35d651fe2ff8d7054f7770c8"
+  dependencies:
+    "@babel/plugin-syntax-decorators" "7.0.0-beta.37"
 
 "@babel/plugin-proposal-export-namespace-from@7.0.0-beta.37":
   version "7.0.0-beta.37"
@@ -260,6 +266,10 @@
   version "7.0.0-beta.37"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-class-properties/-/plugin-syntax-class-properties-7.0.0-beta.37.tgz#5d4e4712ee57815ebe59e63fb084353a27e2671d"
 
+"@babel/plugin-syntax-decorators@7.0.0-beta.37":
+  version "7.0.0-beta.37"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-decorators/-/plugin-syntax-decorators-7.0.0-beta.37.tgz#df07fa3c6930d68c02910592c07cd9c8c9910715"
+
 "@babel/plugin-syntax-dynamic-import@7.0.0-beta.37":
   version "7.0.0-beta.37"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-dynamic-import/-/plugin-syntax-dynamic-import-7.0.0-beta.37.tgz#cac79651c3ab6b3cd9c0898c801b2518dd9379aa"
@@ -295,6 +305,10 @@
 "@babel/plugin-syntax-throw-expressions@7.0.0-beta.37":
   version "7.0.0-beta.37"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-throw-expressions/-/plugin-syntax-throw-expressions-7.0.0-beta.37.tgz#59a48c87cae458ff38856faff10c3a4588c29bdc"
+
+"@babel/plugin-syntax-typescript@7.0.0-beta.37":
+  version "7.0.0-beta.37"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-typescript/-/plugin-syntax-typescript-7.0.0-beta.37.tgz#e2dcc2bdbd30e4333314fb2003fb5a7b34f799d3"
 
 "@babel/plugin-transform-arrow-functions@7.0.0-beta.37":
   version "7.0.0-beta.37"
@@ -445,6 +459,12 @@
   version "7.0.0-beta.37"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-typeof-symbol/-/plugin-transform-typeof-symbol-7.0.0-beta.37.tgz#50706473552b094f00506fe86f86c7bd2db86bc2"
 
+"@babel/plugin-transform-typescript@7.0.0-beta.37":
+  version "7.0.0-beta.37"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-typescript/-/plugin-transform-typescript-7.0.0-beta.37.tgz#9dc4f006376ca64b1eb5f14ceb2e40d290770c38"
+  dependencies:
+    "@babel/plugin-syntax-typescript" "7.0.0-beta.37"
+
 "@babel/plugin-transform-unicode-regex@7.0.0-beta.37":
   version "7.0.0-beta.37"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-unicode-regex/-/plugin-transform-unicode-regex-7.0.0-beta.37.tgz#b29b1b2c1282d73880993b27a9f3d6af43b3e675"
@@ -516,6 +536,12 @@
     "@babel/plugin-proposal-unicode-property-regex" "7.0.0-beta.37"
     "@babel/plugin-syntax-dynamic-import" "7.0.0-beta.37"
     "@babel/plugin-syntax-import-meta" "7.0.0-beta.37"
+
+"@babel/preset-typescript@7 || ^7.0.0-beta || ^7.0.0-rc":
+  version "7.0.0-beta.37"
+  resolved "https://registry.yarnpkg.com/@babel/preset-typescript/-/preset-typescript-7.0.0-beta.37.tgz#fa844111bd7183be00b466aa913b0ddf085f460a"
+  dependencies:
+    "@babel/plugin-transform-typescript" "7.0.0-beta.37"
 
 "@babel/runtime@7 || ^7.0.0-beta || ^7.0.0-rc":
   version "7.0.0-beta.37"

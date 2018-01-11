@@ -8,19 +8,38 @@ module.exports = (api, options) => {
       .extensions
         .merge(['.ts', '.tsx'])
 
-    config.module
+    const tsRule = config.module
       .rule('ts')
         .test(/\.tsx?$/)
         .include
           .add(api.resolve('src'))
           .add(api.resolve('test'))
           .end()
+
+    if (options.experimentalCompileTsWithBabel) {
+      // Experimental: compile TS with babel so that it can leverage
+      // preset-env for auto-detected polyfills based on browserslists config.
+      // this is pending on the readiness of @babel/preset-typescript.
+      tsRule
+        .use('babel-loader')
+          .loader('babel-loader')
+
+      config.module
+        .rule('vue')
+          .use('vue-loader')
+            .tap(options => {
+              options.loaders.ts = 'babel-loader'
+              return options
+            })
+    } else {
+      tsRule
         .use('ts-loader')
           .loader('ts-loader')
           .options({
             transpileOnly: true,
             appendTsSuffixTo: [/\.vue$/]
           })
+    }
 
     config
       .plugin('fork-ts-checker')
