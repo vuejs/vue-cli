@@ -12,6 +12,8 @@ This project uses a monorepo setup that requires using [Yarn](https://yarnpkg.co
 yarn
 
 # link `vue` executable
+# if you have the old vue-cli installed globally, you may
+# need to uninstall it first.
 cd packages/@vue/cli
 yarn link
 
@@ -20,7 +22,7 @@ cd -
 cd packages/test
 vue create test-app
 cd test-app
-yarn dev
+yarn serve
 ```
 
 See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/next/docs/Plugin.md).
