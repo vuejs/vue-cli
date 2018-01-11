@@ -20,5 +20,15 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-typescript#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "fork-ts-checker-webpack-plugin": "^0.3.0",
+    "ts-loader": "^3.2.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.6.2"
+  },
+  "devDependencies": {
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^6.0.0"
   }
 }

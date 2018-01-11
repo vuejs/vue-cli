@@ -1,0 +1,21 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "indent": [
+      true
+    ],
+    "interface-name": [
+      false
+    ],
+    "arrow-parens": false,
+    // Pending fix for shorthand property names.
+    "object-literal-sort-keys": false
+  }
+}

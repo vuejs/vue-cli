@@ -64,7 +64,8 @@ module.exports = class GeneratorAPI {
         for (const file of _files) {
           const relativePath = path.relative(fileDir, file.path)
           const content = renderFile(file.path, data, ejsOptions)
-          if (Buffer.isBuffer(content) || content.trim()) {
+          // only set file if it's not all whitespace, or is a Buffer (binary files)
+          if (Buffer.isBuffer(content) || /[^\s]/.test(content)) {
             files[relativePath] = content
           }
         }

@@ -5,6 +5,7 @@ const execa = require('execa')
 const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
+const sortObject = require('./util/sortObject')
 const installDeps = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
@@ -189,6 +190,8 @@ module.exports = class Creator {
 
   // { id: options } => [{ id, apply, options }]
   resolvePlugins (rawPlugins) {
+    // ensure cli-service is invoked first
+    rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'])
     return Object.keys(rawPlugins).map(id => {
       const module = resolve.sync(`${id}/generator`, { basedir: this.context })
       return {
