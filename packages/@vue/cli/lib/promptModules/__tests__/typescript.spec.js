@@ -18,6 +18,10 @@ test('should work', async () => {
       confirm: true
     },
     {
+      message: 'Use Babel',
+      confirm: true
+    },
+    {
       message: 'Pick additional lint features',
       choices: ['on save', 'on commit'],
       check: [0, 1]
@@ -29,7 +33,8 @@ test('should work', async () => {
       '@vue/cli-plugin-typescript': {
         classComponent: true,
         lint: true,
-        lintOn: ['save', 'commit']
+        lintOn: ['save', 'commit'],
+        useTsWithBabel: true
       }
     }
   }
