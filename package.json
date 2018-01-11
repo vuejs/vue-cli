@@ -8,7 +8,7 @@
     "test": "jest --env node",
     "posttest": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
-    "clean": "node scripts/cleanTestDir.js",
+    "clean": "rimraf packages/test/*",
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js"
   },
