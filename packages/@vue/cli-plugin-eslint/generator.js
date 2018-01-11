@@ -13,10 +13,14 @@ module.exports = (api, { config, lintOn }) => {
 
   if (config === 'airbnb') {
     pkg.eslintConfig.extends.push('@vue/airbnb')
-    pkg.devDependencies['@vue/eslint-config-airbnb'] = '^0.1.0'
+    Object.assign(pkg.devDependencies, {
+      '@vue/eslint-config-airbnb': '^3.0.0-alpha.1'
+    })
   } else if (config === 'standard') {
     pkg.eslintConfig.extends.push('@vue/standard')
-    pkg.devDependencies['@vue/eslint-config-standard'] = '^0.1.0'
+    Object.assign(pkg.devDependencies, {
+      '@vue/eslint-config-standard': '^3.0.0-alpha.1'
+    })
   } else if (config === 'prettier') {
     // TODO
   } else {
