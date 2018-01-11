@@ -7,8 +7,9 @@ const create = require('@vue/cli-test-utils/createTestProject')
 const runSilently = fn => {
   const log = console.log
   console.log = () => {}
-  fn()
+  const res = fn()
   console.log = log
+  return res
 }
 
 test('should work', async () => {
@@ -33,11 +34,11 @@ test('should work', async () => {
   expect(await read('src/main.js')).toMatch(';')
 
   // lint-on-commit
-  runSilently(() => {
+  await runSilently(() => {
     require('yorkie/src/install')(path.join(project.dir, 'node_modules'))
     // since yorkie isn't actually installed in the test project, we need to
     // symlink it
-    linkBin(
+    return linkBin(
       path.resolve(require.resolve('yorkie/src/install'), '../../'),
       path.join(project.dir, 'node_modules', 'yorkie')
     )
