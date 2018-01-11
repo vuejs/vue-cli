@@ -7,7 +7,7 @@ module.exports = (api, { config, lintOn }) => {
       extends: ['plugin:vue/essential']
     },
     devDependencies: {
-      'eslint-plugin-vue': '^4.1.0'
+      'eslint-plugin-vue': '^4.2.0'
     }
   }
 
