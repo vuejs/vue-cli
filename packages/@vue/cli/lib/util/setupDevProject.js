@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const mkdirp = require('mkdirp')
+const { linkBin } = require('@vue/cli-shared-utils')
 
 module.exports = function setupDevProject (targetDir, deps) {
   const pkg = require(path.resolve(targetDir, 'package.json'))
@@ -19,11 +19,8 @@ module.exports = function setupDevProject (targetDir, deps) {
     path.resolve(targetDir, 'package.json'),
     JSON.stringify(pkg, null, 2)
   )
-  const binPath = path.join(targetDir, 'node_modules', '.bin')
-  mkdirp.sync(binPath)
-  fs.symlinkSync(
+  return linkBin(
     require.resolve('@vue/cli-service/bin/vue-cli-service'),
-    path.join(binPath, 'vue-cli-service'),
-    'junction' // needed for windows
+    path.join(targetDir, 'node_modules', '.bin', 'vue-cli-service')
   )
 }

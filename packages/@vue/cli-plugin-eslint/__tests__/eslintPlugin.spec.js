@@ -1,7 +1,7 @@
 jest.setTimeout(30000)
 
-const fs = require('fs')
 const path = require('path')
+const { linkBin } = require('@vue/cli-shared-utils')
 const create = require('@vue/cli-test-utils/createTestProject')
 
 const runSilently = fn => {
@@ -37,10 +37,9 @@ test('should work', async () => {
     require('yorkie/src/install')(path.join(project.dir, 'node_modules'))
     // since yorkie isn't actually installed in the test project, we need to
     // symlink it
-    fs.symlinkSync(
+    linkBin(
       path.resolve(require.resolve('yorkie/src/install'), '../../'),
-      path.join(project.dir, 'node_modules', 'yorkie'),
-      'junction' // needed for windows
+      path.join(project.dir, 'node_modules', 'yorkie')
     )
   })
   const hook = await read('.git/hooks/pre-commit')

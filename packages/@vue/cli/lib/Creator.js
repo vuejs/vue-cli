@@ -104,7 +104,7 @@ module.exports = class Creator {
     const deps = Object.keys(options.plugins)
     if (isTestOrDebug) {
       // in development, avoid installation process
-      setupDevProject(context, deps)
+      await setupDevProject(context, deps)
     } else {
       await installDeps(context, packageManager, deps, cliOptions.registry)
     }
