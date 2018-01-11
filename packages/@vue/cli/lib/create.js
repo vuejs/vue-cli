@@ -42,8 +42,8 @@ async function create (projectName, options) {
     'eslint',
     'unit',
     'e2e',
-    'typescript',
-    'pwa'
+    'pwa',
+    'typescript'
   ].map(file => require(`./promptModules/${file}`))
 
   const creator = new Creator(projectName, targetDir, promptModules)

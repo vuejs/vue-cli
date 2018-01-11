@@ -2,7 +2,7 @@
 
 #### Important Development Note
 
-A plugin with a generator that injects additional dependencies other than packages in this repo (e.g. `chai` is conditionally injected by `@vue/cli-plugin-unit-mocha-webpack/generator/index.js`) should have those dependencies listed in its own `devDependencies` field. This ensures that:
+A plugin with a generator that injects additional dependencies other than packages in this repo (e.g. `chai` is injected by `@vue/cli-plugin-unit-mocha/generator/index.js`) should have those dependencies listed in its own `devDependencies` field. This ensures that:
 
 1. the package always exist in this repo's root `node_modules` so that we don't have to reinstall them on every test.
 

@@ -8,13 +8,16 @@ module.exports = api => {
   api.render('./template')
 
   api.postProcessFiles(files => {
-    const main = files['src/main.js']
+    const file = files['src/main.ts']
+      ? 'src/main.ts'
+      : 'src/main.js'
+    const main = files[file]
     if (main) {
       // inject import for registerServiceWorker script into main.js
       const lines = main.split(/\r?\n/g).reverse()
       const lastImportIndex = lines.findIndex(line => line.match(/^import/))
       lines[lastImportIndex] += `\nimport './registerServiceWorker'`
-      files['src/main.js'] = lines.reverse().join('\n') + '\n'
+      files[file] = lines.reverse().join('\n')
     }
   })
 }

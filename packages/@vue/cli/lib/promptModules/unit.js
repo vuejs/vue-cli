@@ -12,47 +12,21 @@ module.exports = cli => {
     message: 'Pick a unit testing solution:',
     choices: [
       {
-        name: 'Mocha via mocha-webpack (https://mochajs.org/)',
+        name: 'Mocha + Chai',
         value: 'mocha',
         short: 'Mocha'
       },
       {
-        name: 'Jest (https://facebook.github.io/jest/)',
+        name: 'Jest',
         value: 'jest',
         short: 'Jest'
       }
     ]
   })
 
-  cli.injectPrompt({
-    name: 'assertionLibrary',
-    message: 'Pick an assertion library for unit tests:',
-    when: answers => answers.unit === 'mocha',
-    type: 'list',
-    choices: [
-      {
-        name: 'Chai (http://chaijs.com/)',
-        value: 'chai',
-        short: 'Chai'
-      },
-      {
-        name: 'Expect (https://facebook.github.io/jest/docs/en/expect.html)',
-        value: 'expect',
-        short: 'Expect'
-      },
-      {
-        name: `I'll pick my own`,
-        value: 'custom',
-        short: 'Custom'
-      }
-    ]
-  })
-
   cli.onPromptComplete((answers, options) => {
     if (answers.unit === 'mocha') {
-      options.plugins['@vue/cli-plugin-unit-mocha-webpack'] = {
-        assertionLibrary: answers.assertionLibrary
-      }
+      options.plugins['@vue/cli-plugin-unit-mocha'] = {}
     } else if (answers.unit === 'jest') {
       options.plugins['@vue/cli-plugin-unit-jest'] = {}
     }

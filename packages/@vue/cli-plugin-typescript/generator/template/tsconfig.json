@@ -14,11 +14,20 @@
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    "types": [
+    <%_ if (hasMocha) { _%>
+      "mocha",
+      "chai"
+    <%_ } else if (hasJest) { _%>
+      "jest"
+    <%_ } _%>
+    ]
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "test/**/*.ts"
   ],
   "exclude": [
     "node_modules"

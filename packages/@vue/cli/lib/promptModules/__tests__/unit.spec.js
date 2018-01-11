@@ -16,19 +16,12 @@ test('mocha', async () => {
       message: 'Pick a unit testing solution',
       choices: ['Mocha', 'Jest'],
       choose: 0
-    },
-    {
-      message: 'Pick an assertion library',
-      choices: ['Chai', 'Expect', 'pick my own'],
-      choose: 0
     }
   ]
 
   const expectedOptions = {
     plugins: {
-      '@vue/cli-plugin-unit-mocha-webpack': {
-        assertionLibrary: 'chai'
-      }
+      '@vue/cli-plugin-unit-mocha': {}
     }
   }
 
