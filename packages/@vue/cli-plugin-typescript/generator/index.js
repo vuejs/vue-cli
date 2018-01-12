@@ -14,27 +14,10 @@ module.exports = (api, {
     })
   }
 
-  if (useTsWithBabel) {
+  if (experimentalCompileTsWithBabel) {
     api.extendPackage({
       devDependencies: {
-        'babel-loader': '8 || ^8.0.0-beta || ^8.0.0-rc',
-        '@babel/core': '7 || ^7.0.0-beta || ^7.0.0-rc',
-        '@vue/babel-preset-app': '^3.0.0-alpha.1'
-      },
-      vue: {
-        useTsWithBabel: true
-      },
-      babel: {
-        presets: ['@vue/app']
-      }
-    })
-  } else if (experimentalCompileTsWithBabel) {
-    api.extendPackage({
-      devDependencies: {
-        'babel-loader': '8 || ^8.0.0-beta || ^8.0.0-rc',
-        '@babel/core': '7 || ^7.0.0-beta || ^7.0.0-rc',
-        '@babel/preset-typescript': '7 || ^7.0.0-beta || ^7.0.0-rc',
-        '@vue/babel-preset-app': '^3.0.0-alpha.1'
+        '@babel/preset-typescript': '7 || ^7.0.0-beta || ^7.0.0-rc'
       },
       vue: {
         experimentalCompileTsWithBabel: true
@@ -79,7 +62,7 @@ module.exports = (api, {
           'pre-commit': 'lint-staged'
         },
         'lint-staged': {
-          '*.js': ['vue-cli-service lint', 'git add'],
+          '*.ts': ['vue-cli-service lint', 'git add'],
           '*.vue': ['vue-cli-service lint', 'git add']
         }
       })
@@ -93,7 +76,7 @@ module.exports = (api, {
 
   // inject necessary typings for other plugins
 
-  const hasMocha = api.hasPlugin('@vue/cli-plugin-unit-mocha')
+  const hasMocha = api.hasPlugin('unit-mocha')
   if (hasMocha) {
     api.extendPackage({
       devDependencies: {
@@ -103,7 +86,7 @@ module.exports = (api, {
     })
   }
 
-  const hasJest = api.hasPlugin('@vue/cli-plugin-unit-jest')
+  const hasJest = api.hasPlugin('unit-jest')
   if (hasJest) {
     api.extendPackage({
       devDependencies: {

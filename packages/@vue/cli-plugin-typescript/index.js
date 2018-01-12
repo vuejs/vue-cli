@@ -32,7 +32,7 @@ module.exports = (api, options) => {
               return options
             })
     } else {
-      if (options.useTsWithBabel) {
+      if (api.hasPlugin('babel')) {
         tsRule
           .use('babel-loader')
             .loader('babel-loader')

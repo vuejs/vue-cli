@@ -81,6 +81,8 @@ module.exports = function lint (args = {}, api, silent) {
   return globby(files).then(files => {
     return Promise.all(files.map(lint))
   }).then(() => {
+    if (silent) return
+
     const result = linter.getResult()
     if (result.output.trim()) {
       process.stdout.write(stripTsExtension(result.output))
