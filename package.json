@@ -17,7 +17,8 @@
     "boot": "node scripts/bootstrap.js"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "commit-msg": "node scripts/verifyCommitMsg.js"
   },
   "jest": {
     "testEnvironment": "node",
