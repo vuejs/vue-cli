@@ -2,13 +2,14 @@ module.exports = function lint (args = {}, api, silent) {
   process.chdir(api.resolve('.'))
 
   const fs = require('fs')
+  const path = require('path')
   const globby = require('globby')
   const tslint = require('tslint')
   const vueCompiler = require('vue-template-compiler')
 
   const options = {
     fix: !args['no-fix'],
-    formatter: args.format || 'codeframe',
+    formatter: args.format || 'codeFrame',
     formattersDirectory: args['formatters-dir'],
     rulesDirectory: args['rules-dir']
   }
@@ -32,7 +33,7 @@ module.exports = function lint (args = {}, api, silent) {
     fs.writeFileSync = (file, content, options) => {
       if (/\.vue(\.ts)?$/.test(file)) {
         file = file.replace(/\.ts$/, '')
-        const { before, after } = vueFileCache.get(file)
+        const { before, after } = vueFileCache.get(path.normalize(file))
         content = `${before}\n${content.trim()}\n${after}`
       }
       return writeFileSync(file, content, options)
