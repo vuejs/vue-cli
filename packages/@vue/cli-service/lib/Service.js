@@ -4,6 +4,7 @@ const debug = require('debug')
 const chalk = require('chalk')
 const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
+const deepMerge = require('deepmerge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
@@ -12,7 +13,7 @@ const { warn, error } = require('@vue/cli-shared-utils')
 const { defaults, validate } = require('./options')
 
 module.exports = class Service {
-  constructor (context, { plugins, projectOptions, useBuiltIn } = {}) {
+  constructor (context, { plugins, pkg, projectOptions, useBuiltIn } = {}) {
     process.VUE_CLI_SERVICE = this
     this.context = context
     this.webpackConfig = new Config()
@@ -20,9 +21,9 @@ module.exports = class Service {
     this.webpackRawConfigFns = []
     this.devServerConfigFns = []
     this.commands = {}
-    this.pkg = this.resolvePkg()
-    this.projectOptions = Object.assign(
-      defaults,
+    this.pkg = this.resolvePkg(pkg)
+    this.projectOptions = deepMerge(
+      defaults(),
       this.loadProjectOptions(projectOptions)
     )
 
@@ -50,8 +51,10 @@ module.exports = class Service {
     }
   }
 
-  resolvePkg () {
-    if (fs.existsSync(path.join(this.context, 'package.json'))) {
+  resolvePkg (inlinePkg) {
+    if (inlinePkg) {
+      return inlinePkg
+    } else if (fs.existsSync(path.join(this.context, 'package.json'))) {
       return readPkg.sync(this.context)
     } else {
       return {}

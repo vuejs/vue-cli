@@ -4,22 +4,23 @@ module.exports = (api, options) => {
     const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
     const isProd = process.env.NODE_ENV === 'production'
-    const extract = isProd && options.extractCSS !== false
-    const resolver = new CSSLoaderResolver({
-      sourceMap: !!options.cssSourceMap,
-      cssModules: !!options.cssModules,
-      minimize: isProd,
-      extract
+    const userOptions = options.css || {}
+    const extract = isProd && userOptions.extract !== false
+    const baseOptions = Object.assign({}, userOptions, {
+      extract,
+      minimize: isProd
     })
+
+    const resolver = new CSSLoaderResolver(baseOptions)
 
     // apply css loaders for vue-loader
     webpackConfig.module
       .rule('vue')
         .use('vue-loader')
         .tap(options => {
-          // ensure user injected vueLoaderOptions take higher priority
+          // ensure user injected vueLoader options take higher priority
           options.loaders = Object.assign(resolver.vue(), options.loaders)
-          options.cssSourceMap = !!options.cssSourceMap
+          options.cssSourceMap = !!userOptions.cssSourceMap
           return options
         })
 
@@ -46,12 +47,14 @@ module.exports = (api, options) => {
     }
 
     // handle cssModules for *.module.js
-    resolver.set('cssModules', true)
+    const cssModulesResolver = new CSSLoaderResolver(Object.assign({}, baseOptions, {
+      modules: true
+    }))
 
-    const cssModulesLangs = langs.map(lang => [lang, new RegExp(`\\.module\\.${lang}`)])
+    const cssModulesLangs = langs.map(lang => [lang, new RegExp(`\\.module\\.${lang}$`)])
     for (const cssModulesLang of cssModulesLangs) {
       const [lang, test] = cssModulesLang
-      const rule = resolver[lang](test)
+      const rule = cssModulesResolver[lang](test)
       const context = webpackConfig.module
         .rule(`${lang}-module`)
         .test(rule.test)

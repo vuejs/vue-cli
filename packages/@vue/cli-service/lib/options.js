@@ -4,13 +4,19 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string(),
   outputDir: joi.string(),
   compiler: joi.boolean(),
-  cssModules: joi.boolean(),
-  vueLoaderOptions: joi.object(),
   productionSourceMap: joi.boolean(),
-  cssSourceMap: joi.boolean(),
-  extractCSS: joi.boolean(),
+  vueLoader: joi.object(),
+  css: joi.object({
+    modules: joi.boolean(),
+    extract: joi.boolean(),
+    sourceMap: joi.boolean(),
+    loaderOptions: joi.object({
+      sass: joi.object(),
+      less: joi.object(),
+      stylus: joi.object()
+    })
+  }),
   devServer: joi.object(),
-
   // known options from offical plugins
   lintOnSave: joi.boolean(),
   pwa: joi.object()
@@ -23,7 +29,7 @@ exports.validate = options => validate(
   { allowUnknown: true }
 )
 
-exports.defaults = {
+exports.defaults = () => ({
   // project deployment base
   baseUrl: '/',
 
@@ -33,20 +39,20 @@ exports.defaults = {
   // boolean, use full build?
   compiler: false,
 
-  // apply css modules to CSS files that doesn't end with .module.css?
-  cssModules: false,
-
   // vue-loader options
-  vueLoaderOptions: {},
+  vueLoader: {},
 
   // sourceMap for production build?
   productionSourceMap: true,
 
-  // enable css source map?
-  cssSourceMap: false,
-
-  // boolean | Object, extract css?
-  extractCSS: true,
+  css: {
+    // boolean | Object, extract css?
+    extract: true,
+    // apply css modules to CSS files that doesn't end with .mdoule.css?
+    modules: false,
+    sourceMap: false,
+    loaderOptions: {}
+  },
 
   // whether to use eslint-loader
   lintOnSave: false,
@@ -62,4 +68,4 @@ exports.defaults = {
     before: app => {}
   */
   }
-}
+})

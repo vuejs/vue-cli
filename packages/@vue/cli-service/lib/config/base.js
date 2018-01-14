@@ -41,7 +41,7 @@ module.exports = (api, options) => {
         .test(/\.vue$/)
         .use('vue-loader')
           .loader('vue-loader')
-          .options(Object.assign({}, options.vueLoaderOptions))
+          .options(Object.assign({}, options.vueLoader))
 
     webpackConfig.module
       .rule('images')
