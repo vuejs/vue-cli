@@ -43,13 +43,6 @@ program
   })
 
 program
-  .command('init <template> <app-name>')
-  .description('generate a project from a remote template (requires @vue/cli-init)')
-  .action(() => {
-    loadCommand('init', '@vue/cli-init')
-  })
-
-program
   .command('serve [entry]')
   .description('serve a .js or vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
@@ -62,6 +55,13 @@ program
   .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
+  })
+
+program
+  .command('init <template> <app-name>')
+  .description('generate a project from a remote template (legacy API, requires @vue/cli-init)')
+  .action(() => {
+    loadCommand('init', '@vue/cli-init')
   })
 
 // add some useful info on help

@@ -21,10 +21,11 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-build#readme",
   "dependencies": {
-    "@vue/cli-service": "^3.0.0-alpha.1",
-    "@vue/cli-plugin-babel": "^3.0.0-alpha.1",
     "@vue/babel-preset-app": "^3.0.0-alpha.1",
+    "@vue/cli-plugin-babel": "^3.0.0-alpha.1",
     "@vue/cli-plugin-eslint": "^3.0.0-alpha.1",
+    "@vue/cli-service": "^3.0.0-alpha.1",
+    "chalk": "^2.3.0",
     "eslint-plugin-vue": "^4.2.0",
     "vue": "^2.5.13"
   }
