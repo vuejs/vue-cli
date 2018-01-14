@@ -33,7 +33,7 @@ exports.defaults = {
   // boolean, use full build?
   compiler: false,
 
-  // apply css modules to CSS files that doesn't end with .mdoule.css?
+  // apply css modules to CSS files that doesn't end with .module.css?
   cssModules: false,
 
   // vue-loader options
