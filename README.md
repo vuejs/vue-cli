@@ -25,4 +25,26 @@ cd test-app
 yarn serve
 ```
 
+### Testing Tips
+
+The full test suite is rather slow, because it has a number of e2e tests that performs full webpack builds of actual projects. To limit the tests to only the plugin / files you are working on, you can use the `test-changed` script, which automatically runs only tests that are related to the files that have been modified/added since the last commit:
+
+``` sh
+yarn test-changed
+```
+
+Alternatively, you can run tests for a specific plugin (note this only matches files ending in `.spec.js` in the given plugin):
+
+``` sh
+yarn test-plugin pwa
+```
+
+Or, just specify your own regex:
+
+``` sh
+yarn test <fileRegex>
+```
+
+### Plugin Development
+
 See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/next/docs/Plugin.md).

@@ -7,7 +7,9 @@
   "scripts": {
     "test": "jest --env node --runInBand",
     "test-changed": "node scripts/testChanged.js",
+    "test-plugin": "node scripts/testPlugin.js",
     "posttest": "yarn clean",
+    "posttest-changed": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
     "clean": "rimraf packages/test/*",
     "sync": "node scripts/syncDeps.js",
