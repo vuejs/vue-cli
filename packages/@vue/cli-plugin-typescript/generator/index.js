@@ -2,7 +2,6 @@ module.exports = (api, {
   classComponent,
   lint,
   lintOn = [],
-  useTsWithBabel,
   experimentalCompileTsWithBabel
 }) => {
   if (classComponent) {

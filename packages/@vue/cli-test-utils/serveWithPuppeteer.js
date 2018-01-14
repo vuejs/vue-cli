@@ -23,12 +23,15 @@ module.exports = async function serveWithPuppeteer (serve, test) {
         activeChild.stdin.write('close')
         activeBrowser = null
       }
+      console.log(log)
       reject(err)
     }
 
     let isFirstMatch = true
+    let log = ''
     child.stdout.on('data', async (data) => {
       data = data.toString()
+      log += data
       try {
         const urlMatch = data.match(/http:\/\/[^/]+\//)
         if (urlMatch && isFirstMatch) {
@@ -54,7 +57,6 @@ module.exports = async function serveWithPuppeteer (serve, test) {
           // and causes the build to hang.
           child.stdin.write('close')
           activeChild = null
-          // kill(child.pid)
           resolve()
         } else if (data.match(/App updated/)) {
           if (notifyUpdate) {
@@ -71,7 +73,7 @@ module.exports = async function serveWithPuppeteer (serve, test) {
     child.on('exit', code => {
       activeChild = null
       if (code !== 0) {
-        reject(`serve exited with code ${code}`)
+        exit(`serve exited with code ${code}`)
       }
     })
   })
