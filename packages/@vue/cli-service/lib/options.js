@@ -48,7 +48,7 @@ exports.defaults = () => ({
   css: {
     // boolean | Object, extract css?
     extract: true,
-    // apply css modules to CSS files that doesn't end with .mdoule.css?
+    // apply css modules to CSS files that doesn't end with .module.css?
     modules: false,
     sourceMap: false,
     loaderOptions: {}
