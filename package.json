@@ -5,7 +5,8 @@
     "packages/test/*"
   ],
   "scripts": {
-    "test": "jest --env node",
+    "test": "jest --env node --runInBand",
+    "test-changed": "node scripts/testChanged.js",
     "posttest": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
     "clean": "rimraf packages/test/*",
@@ -23,7 +24,8 @@
     "testPathIgnorePatterns": [
       "/template/",
       "/packages/test/",
-      "/temp/"
+      "/temp/",
+      ".*.helper.js"
     ]
   },
   "lint-staged": {
