@@ -27,11 +27,9 @@ yarn serve
 
 ### Testing Tips
 
-The full test suite is rather slow, because it has a number of e2e tests that performs full webpack builds of actual projects. To limit the tests to only the plugin / files you are working on, you can use the `test-changed` script, which automatically runs only tests that are related to the files that have been modified/added since the last commit:
+The full test suite is rather slow, because it has a number of e2e tests that performs full webpack builds of actual projects. Therefore the default `test` script automatically runs only tests that are related to the files that have been modified/added since the last commit.
 
-``` sh
-yarn test-changed
-```
+To run the full test suite, run `yarn test-all` instead. CI always runs all tests.
 
 Alternatively, you can run tests for a specific plugin (note this only matches files ending in `.spec.js` in the given plugin):
 
@@ -44,6 +42,8 @@ Or, just specify your own regex:
 ``` sh
 yarn test <fileRegex>
 ```
+
+You can also pass `--watch` to any of the test scripts, but note the matched tests are determined from the modified files when the script is started.
 
 ### Plugin Development
 
