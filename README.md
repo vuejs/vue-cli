@@ -1,4 +1,4 @@
-# vue-cli
+# vue-cli [![Build Status](https://circleci.com/gh/vuejs/vue-cli/tree/next.svg?style=shield)](https://circleci.com/gh/vuejs/vue-loader/tree/next) [![Windows Build status](https://ci.appveyor.com/api/projects/status/487fqt71e4kf46iv/branch/next?svg=true)](https://ci.appveyor.com/project/yyx990803/vue-cli-6b0a6/branch/next)
 
 > WIP: this is the work in progress branch of the upcoming vue-cli 3.0.
 > Only for preview for template maintainers.
