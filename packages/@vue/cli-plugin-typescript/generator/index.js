@@ -4,6 +4,10 @@ module.exports = (api, {
   lintOn = [],
   experimentalCompileTsWithBabel
 }) => {
+  if (typeof lintOn === 'string') {
+    lintOn = lintOn.split(',')
+  }
+
   if (classComponent) {
     api.extendPackage({
       devDependencies: {

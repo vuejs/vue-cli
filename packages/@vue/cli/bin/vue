@@ -5,6 +5,7 @@ const path = require('path')
 const slash = require('slash')
 const chalk = require('chalk')
 const semver = require('semver')
+const minimist = require('minimist')
 const { error } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
 
@@ -43,6 +44,14 @@ program
   })
 
 program
+  .command('invoke <plugin>')
+  .allowUnknownOption()
+  .description('invoke the generator of an installed plugin in an already created project')
+  .action((plugin) => {
+    require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
+  })
+
+program
   .command('serve [entry]')
   .description('serve a .js or vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
@@ -52,6 +61,9 @@ program
 
 program
   .command('build [entry]')
+  .option('-t, --target', 'Build target (app, lib, web-component). Default: app')
+  .option('-f, --format', 'How the lib is exposed (iife, amd, cjs, umd). Default: umd')
+  .option('-n, --name', 'Library name for umd export')
   .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
@@ -76,6 +88,9 @@ program.commands.forEach(c => c.on('--help', () => console.log()))
 // enhance common error messages
 const enhanceErrorMessages = (methodName, log) => {
   program.Command.prototype[methodName] = function (...args) {
+    if (methodName === 'unknownOption' && this._allowUnknownOption) {
+      return
+    }
     this.outputHelp()
     console.log(`  ` + chalk.red(log(...args)))
     console.log()

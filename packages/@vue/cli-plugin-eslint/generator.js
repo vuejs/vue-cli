@@ -1,4 +1,8 @@
 module.exports = (api, { config, lintOn = [] }) => {
+  if (typeof lintOn === 'string') {
+    lintOn = lintOn.split(',')
+  }
+
   const pkg = {
     scripts: {
       lint: 'vue-cli-service lint'

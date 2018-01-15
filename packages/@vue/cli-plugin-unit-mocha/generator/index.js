@@ -1,4 +1,4 @@
-module.exports = (api, options) => {
+module.exports = api => {
   api.render('./template')
 
   const devDependencies = {

@@ -12,7 +12,7 @@ const additionalArgs = process.argv.slice(2)
 
   if (!files.length) {
     console.log(
-      `No changed src files found.\n` +
+      `No modified & unstaged src files found.\n` +
       `To run the full test suite, run ${chalk.cyan(`yarn test-all`)} instead.`
     )
     return
