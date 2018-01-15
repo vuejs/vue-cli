@@ -32,7 +32,10 @@ exports.defaults = {
   packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {
     '@vue/cli-plugin-babel': {},
-    '@vue/cli-plugin-eslint': { config: 'base', lintOn: 'save' },
+    '@vue/cli-plugin-eslint': {
+      config: 'base',
+      lintOn: ['save', 'commit']
+    },
     '@vue/cli-plugin-unit-mocha': {}
   }
 }

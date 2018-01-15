@@ -2,7 +2,8 @@ module.exports = cli => {
   cli.injectFeature({
     name: 'Unit Testing',
     value: 'unit',
-    short: 'Unit'
+    short: 'Unit',
+    checked: true
   })
 
   cli.injectPrompt({

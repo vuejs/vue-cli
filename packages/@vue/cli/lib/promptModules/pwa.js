@@ -1,7 +1,8 @@
 module.exports = cli => {
   cli.injectFeature({
     name: 'Progressive Web App (PWA) Support',
-    value: 'pwa'
+    value: 'pwa',
+    short: 'PWA'
   })
 
   cli.onPromptComplete((answers, options) => {

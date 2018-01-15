@@ -169,7 +169,7 @@ module.exports = class Creator {
     } else {
       // manual
       options = {
-        packageManager: answers.packageManager,
+        packageManager: answers.packageManager || loadOptions().packageManager,
         plugins: {}
       }
       // run cb registered by prompt modules to finalize the options
@@ -242,7 +242,8 @@ module.exports = class Creator {
 
   resolveOutroPrompts () {
     const outroPrompts = []
-    if (hasYarn) {
+    const savedOptions = loadOptions()
+    if (hasYarn && !savedOptions.packageManager) {
       outroPrompts.push({
         name: 'packageManager',
         when: isMode('manual'),
@@ -266,7 +267,7 @@ module.exports = class Creator {
       name: 'save',
       when: isMode('manual'),
       type: 'confirm',
-      message: 'Save the preferences for future projects?'
+      message: 'Save the preferences for future projects? (You can always manually edit ~/.vuerc)'
     })
     return outroPrompts
   }
