@@ -18,8 +18,12 @@ if (!semver.satisfies(process.version, requiredVersion)) {
 }
 
 // enter debug mode when creating test repo
-if (slash(process.cwd()).indexOf('/packages/test') > 0 &&
-    fs.existsSync(path.resolve(process.cwd(), '../@vue'))) {
+if (
+  slash(process.cwd()).indexOf('/packages/test') > 0 && (
+    fs.existsSync(path.resolve(process.cwd(), '../@vue')) ||
+    fs.existsSync(path.resolve(process.cwd(), '../../@vue'))
+  )
+) {
   process.env.VUE_CLI_DEBUG = true
 }
 

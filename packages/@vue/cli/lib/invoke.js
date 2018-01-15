@@ -3,9 +3,13 @@ const path = require('path')
 const chalk = require('chalk')
 const resolve = require('resolve')
 const Generator = require('./Generator')
+const { loadOptions } = require('./options')
+const installDeps = require('./util/installDeps')
+const clearConsole = require('./util/clearConsole')
 const {
   log,
   error,
+  hasYarn,
   logWithSpinner,
   stopSpinner
 } = require('@vue/cli-shared-utils')
@@ -58,13 +62,25 @@ async function invoke (pluginName, options) {
     createCompleteCbs
   )
 
+  clearConsole()
+  logWithSpinner('🚀', `Invoking generator for ${resolvedPluginName}...`)
   await generator.generate()
 
-  // TODO check if package.json was changed,
-  // if yes installDeps
-  logWithSpinner('📦', `Installing additional dependencies...`)
+  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
+  const newDeps = generator.pkg.dependencies
+  const newDevDeps = generator.pkg.devDependencies
+  const depsChanged = (
+    JSON.stringify(newDeps) !== JSON.stringify(pkg.dependencies) ||
+    JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
+  )
 
-  if (createCompleteCbs.lenght) {
+  if (!isTestOrDebug && depsChanged) {
+    logWithSpinner('📦', `Installing additional dependencies...`)
+    const packageManager = loadOptions().packageManager || (hasYarn ? 'yarn' : 'npm')
+    await installDeps(context, packageManager)
+  }
+
+  if (createCompleteCbs.length) {
     logWithSpinner('⚓', `Running completion hooks...`)
     for (const cb of createCompleteCbs) {
       await cb()
@@ -73,8 +89,8 @@ async function invoke (pluginName, options) {
 
   stopSpinner()
   log()
-  log(`  Successfully invoked generator for plugin: ${chalk.cyan(resolvedPluginName)}`)
-  log(`  You should review and commit the changes.`)
+  log(`   Successfully invoked generator for plugin: ${chalk.cyan(resolvedPluginName)}`)
+  log(`   You should review and commit the changes.`)
   log()
 }
 
