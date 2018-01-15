@@ -21,3 +21,14 @@ test('jest', async () => {
   })
   await project.run(`vue-cli-service test`)
 })
+
+test('jest w/ babel', async () => {
+  const project = await create('ts-unit-jest', {
+    plugins: {
+      '@vue/cli-plugin-typescript': {},
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-unit-jest': {}
+    }
+  })
+  await project.run(`vue-cli-service test`)
+})
