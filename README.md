@@ -47,7 +47,7 @@ yarn test -g <filenameRegex>
 
 You can also pass `--watch` to run tests in watch mode.
 
-Note that `jest -o` (running tests related to modified files) isn't always accurate because some tests spawn child processes.
+Note that `jest --onlyChanged` isn't always accurate because some tests spawn child processes.
 
 ### Plugin Development
 

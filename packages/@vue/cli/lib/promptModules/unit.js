@@ -18,9 +18,10 @@ module.exports = cli => {
         short: 'Mocha'
       },
       {
-        name: 'Jest',
+        name: 'Jest (WIP)',
         value: 'jest',
-        short: 'Jest'
+        short: 'Jest',
+        disabled: true
       }
     ]
   })

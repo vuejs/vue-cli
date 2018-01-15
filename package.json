@@ -51,6 +51,7 @@
     "lint-staged": "^6.0.0",
     "memfs": "^2.6.0",
     "puppeteer": "^0.13.0",
-    "yorkie": "^1.0.2"
+    "yorkie": "^1.0.2",
+    "babel-core": "^7.0.0-0"
   }
 }

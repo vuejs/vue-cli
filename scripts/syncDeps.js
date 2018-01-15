@@ -22,7 +22,12 @@ const getRemoteVersion = async (pkg) => {
   if (versionCache[pkg]) {
     return versionCache[pkg]
   }
-  const res = await axios.get(`http://registry.npmjs.org/${pkg}/latest`)
+  let res
+  try {
+    res = await axios.get(`http://registry.npmjs.org/${pkg}/latest`)
+  } catch (e) {
+    return
+  }
   const version = res.data.version
   versionCache[pkg] = version
   return version
@@ -82,7 +87,7 @@ const flushWrite = () => {
       }
       local = local.replace(/^\^/, '')
       const remote = await getRemoteVersion(dep)
-      if (checkUpdate(dep, filePath, local, remote)) {
+      if (remote && checkUpdate(dep, filePath, local, remote)) {
         deps[dep] = `^${remote}`
         updatedDeps.add(dep)
         isUpdated = true

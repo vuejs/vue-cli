@@ -22,13 +22,14 @@
     "access": "public"
   },
   "dependencies": {
-    "babel-jest": "^22.0.4",
-    "execa": "^0.8.0",
-    "jest": "^22.0.5",
+    "execa": "^0.9.0",
+    "jest": "^22.1.1",
     "jest-serializer-vue": "^0.3.0",
-    "vue-jest": "^1.4.0"
+    "vue-jest": "yyx990803/vue-jest"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.0.0-beta.10"
+    "@vue/test-utils": "^1.0.0-beta.10",
+    "babel-jest": "^22.0.4",
+    "ts-jest": "^22.0.1"
   }
 }

@@ -7,7 +7,7 @@ module.exports = (context, options = {}) => {
   // JSX
   if (options.jsx !== false) {
     plugins.push(
-      require('@babel/plugin-syntax-jsx').default,
+      require('@babel/plugin-syntax-jsx'),
       require('babel-plugin-transform-vue-jsx'),
       require('babel-plugin-jsx-event-modifiers'),
       require('babel-plugin-jsx-v-model')
@@ -26,15 +26,15 @@ module.exports = (context, options = {}) => {
   }
   // cli-plugin-jest sets this to true because Jest runs without bundling
   if (process.env.VUE_CLI_BABEL_TRANSPILE_MODULES) {
-    envOptions.modules = true
+    envOptions.modules = 'commonjs'
   }
 
   // pass options along to babel-preset-env
-  presets.push([require('@babel/preset-env').default, envOptions])
+  presets.push([require('@babel/preset-env'), envOptions])
 
   // stage 2. This includes some important transforms, e.g. dynamic import
   // and rest object spread.
-  presets.push([require('@babel/preset-stage-2').default, {
+  presets.push([require('@babel/preset-stage-2'), {
     useBuiltIns: true
   }])
 
