@@ -27,23 +27,27 @@ yarn serve
 
 ### Testing Tips
 
-The full test suite is rather slow, because it has a number of e2e tests that performs full webpack builds of actual projects. Therefore the default `test` script automatically runs only tests that are related to the files that have been modified/added since the last commit.
-
-To run the full test suite, run `yarn test-all` instead. CI always runs all tests.
-
-Alternatively, you can run tests for a specific plugin (note this only matches files ending in `.spec.js` in the given plugin):
+The full test suite is rather slow, because it has a number of e2e tests that performs full webpack builds of actual projects. To narrow down the tests needed to run during development, you can use the `test-package` script to run tests for specific packages:
 
 ``` sh
-yarn test-plugin pwa
+yarn test cli cli-services
 ```
 
-Or, just specify your own regex:
+If the package is a plugin, you can commit the `cli-plugin-` prefix:
 
 ``` sh
-yarn test <fileRegex>
+yarn test typescript
 ```
 
-You can also pass `--watch` to any of the test scripts, but note the matched tests are determined from the modified files when the script is started.
+To further narrow down tests, you can also specify your own regex:
+
+``` sh
+yarn test -g <filenameRegex>
+```
+
+You can also pass `--watch` to any of the test scripts to run tests in watch mode.
+
+Note that `jest -o` (running tests related to modified files) isn't always accurate because some tests spawn child processes.
 
 ### Plugin Development
 

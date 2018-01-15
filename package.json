@@ -5,12 +5,8 @@
     "packages/test/*"
   ],
   "scripts": {
-    "test": "node scripts/testChanged.js",
-    "test-all": "jest --env node --runInBand",
-    "test-plugin": "node scripts/testPlugin.js",
+    "test": "node scripts/test.js",
     "posttest": "yarn clean",
-    "posttest-all": "yarn clean",
-    "posttest-plugin": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
     "clean": "rimraf packages/test/*",
     "sync": "node scripts/syncDeps.js",
@@ -29,6 +25,7 @@
       "/template/",
       "/packages/test/",
       "/temp/",
+      "/scripts/",
       ".*.helper.js"
     ]
   },
