@@ -18,6 +18,6 @@ if (!regex && packages.length) {
     stdio: 'inherit'
   })
 })().catch(err => {
-  console.error(err)
+  err
   process.exit(1)
 })

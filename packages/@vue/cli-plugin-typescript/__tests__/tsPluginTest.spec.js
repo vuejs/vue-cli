@@ -2,7 +2,7 @@ jest.setTimeout(20000)
 
 const create = require('@vue/cli-test-utils/createTestProject')
 
-test('should work', async () => {
+test('mocha', async () => {
   const project = await create('ts-unit-mocha', {
     plugins: {
       '@vue/cli-plugin-typescript': {},
@@ -12,4 +12,12 @@ test('should work', async () => {
   await project.run(`vue-cli-service test`)
 })
 
-// TODO jest
+test('jest', async () => {
+  const project = await create('ts-unit-jest', {
+    plugins: {
+      '@vue/cli-plugin-typescript': {},
+      '@vue/cli-plugin-unit-jest': {}
+    }
+  })
+  await project.run(`vue-cli-service test`)
+})

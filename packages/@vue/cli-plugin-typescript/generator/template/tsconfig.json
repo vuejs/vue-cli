@@ -8,9 +8,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     <%_ } _%>
-    <%_ if (hasJest) { _%>
     "allowSyntheticDefaultImports": true,
-    <%_ } _%>
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {

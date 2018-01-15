@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "axios": "^0.17.1",
+    "babel-core": "^7.0.0-0",
     "debug": "^3.1.0",
     "eslint": "^4.14.0",
     "eslint-plugin-vue-libs": "^2.1.0",
@@ -51,7 +52,6 @@
     "lint-staged": "^6.0.0",
     "memfs": "^2.6.0",
     "puppeteer": "^0.13.0",
-    "yorkie": "^1.0.2",
-    "babel-core": "^7.0.0-0"
+    "yorkie": "^1.0.2"
   }
 }

@@ -1153,7 +1153,7 @@ babel-plugin-syntax-object-rest-spread@^6.13.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-object-rest-spread/-/babel-plugin-syntax-object-rest-spread-6.13.0.tgz#fd6536f2bce13836ffa3a5458c4903a597bb3bf5"
 
-babel-plugin-transform-es2015-modules-commonjs@^6.24.1:
+babel-plugin-transform-es2015-modules-commonjs@^6.24.1, babel-plugin-transform-es2015-modules-commonjs@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-6.26.0.tgz#0d8394029b7dc6abe1a97ef181e00758dd2e5d8a"
   dependencies:
@@ -9221,8 +9221,9 @@ vue-hot-reload-api@^2.2.0:
 
 vue-jest@yyx990803/vue-jest:
   version "1.4.0"
-  resolved "https://codeload.github.com/yyx990803/vue-jest/tar.gz/73e97676882fb133aedadce66a7d811154c412bf"
+  resolved "https://codeload.github.com/yyx990803/vue-jest/tar.gz/2ce12141b70161893982325ea72f1f2dcfdc6f04"
   dependencies:
+    babel-plugin-transform-es2015-modules-commonjs "^6.26.0"
     chalk "^2.1.0"
     find-babel-config "^1.1.0"
     js-beautify "^1.6.14"
