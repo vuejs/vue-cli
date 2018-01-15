@@ -18,8 +18,21 @@ module.exports = api => {
     const execa = require('execa')
     const jestBinPath = require.resolve('jest/bin/jest')
 
+    let testMatch = []
+    if (!args._.length && api.hasPlugin('typescript')) {
+      testMatch = [`--testMatch`, `<rootDir>/**/*.spec.(ts|tsx|js)`]
+    }
+
+    const argv = [
+      ...rawArgv,
+      ...testMatch
+    ]
+
     return new Promise((resolve, reject) => {
-      const child = execa(jestBinPath, rawArgv, { stdio: 'inherit' })
+      const child = execa(jestBinPath, argv, {
+        cwd: api.resolve('.'),
+        stdio: 'inherit'
+      })
       child.on('error', reject)
       child.on('exit', code => {
         if (code !== 0) {

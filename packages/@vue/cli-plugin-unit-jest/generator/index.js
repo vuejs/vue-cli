@@ -11,6 +11,8 @@ module.exports = api => {
 
   const jestConfig = {
     'moduleFileExtensions': [
+      'js',
+      'jsx',
       'json',
       // tell Jest to handle *.vue files
       'vue'
@@ -31,7 +33,6 @@ module.exports = api => {
   }
 
   if (!api.hasPlugin('typescript')) {
-    jestConfig.moduleFileExtensions.unshift('js', 'jsx')
     jestConfig.transform['^.+\\.jsx?$'] = 'babel-jest'
     api.extendPackage({
       devDependencies: {
