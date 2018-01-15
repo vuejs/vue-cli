@@ -5,7 +5,6 @@ const resolve = require('resolve')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
 const installDeps = require('./util/installDeps')
-const clearConsole = require('./util/clearConsole')
 const {
   log,
   error,
@@ -30,26 +29,26 @@ async function invoke (pluginName, options) {
   const findPlugin = deps => {
     if (!deps) return
     let name
-    if (deps[name = pluginName] ||
-        deps[name = `@vue/cli-plugin-${pluginName}`] ||
-        deps[name = `vue-cli-plugin-${pluginName}`]) {
+    if (deps[name = `@vue/cli-plugin-${pluginName}`] ||
+        deps[name = `vue-cli-plugin-${pluginName}`] ||
+        deps[name = pluginName]) {
       return name
     }
   }
-  const resolvedPluginName = (
-    findPlugin(pkg.devDependencies) ||
-    findPlugin(pkg.dependencies)
-  )
 
-  if (!resolvedPluginName) {
-    error(`Cannot resolve plugin ${chalk.yellow(pluginName)} from package.json.`)
+  const id = findPlugin(pkg.devDependencies) || findPlugin(pkg.dependencies)
+  if (!id) {
+    error(
+      `Cannot resolve plugin ${chalk.yellow(pluginName)} from package.json. ` +
+      `Did you forget to install it?`
+    )
     process.exit(1)
   }
 
-  const generatorURI = `${resolvedPluginName}/generator`
+  const generatorURI = `${id}/generator`
   const generatorPath = resolve.sync(generatorURI, { basedir: context })
   const plugin = {
-    id: resolvedPluginName,
+    id,
     apply: require(generatorPath),
     options
   }
@@ -62,8 +61,8 @@ async function invoke (pluginName, options) {
     createCompleteCbs
   )
 
-  clearConsole()
-  logWithSpinner('🚀', `Invoking generator for ${resolvedPluginName}...`)
+  log()
+  logWithSpinner('🚀', `Invoking generator for ${id}...`)
   await generator.generate()
 
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
@@ -89,7 +88,7 @@ async function invoke (pluginName, options) {
 
   stopSpinner()
   log()
-  log(`   Successfully invoked generator for plugin: ${chalk.cyan(resolvedPluginName)}`)
+  log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
   log(`   You should review and commit the changes.`)
   log()
 }

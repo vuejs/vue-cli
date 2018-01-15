@@ -1,3 +1,4 @@
+require('../lib/invoke') // so that jest registers the file for this test
 const create = require('@vue/cli-test-utils/createTestProject')
 
 test('invoke single generator', async () => {
