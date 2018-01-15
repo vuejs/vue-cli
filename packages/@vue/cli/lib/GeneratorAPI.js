@@ -101,11 +101,8 @@ module.exports = class GeneratorAPI {
     return path.resolve(this.generator.context, _path)
   }
 
-  hasPlugin (_id) {
-    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
-    return this.generator.plugins.some(({ id }) => {
-      return id === _id || id.replace(prefixRE, '') === _id
-    })
+  hasPlugin (id) {
+    return this.generator.hasPlugin(id)
   }
 }
 

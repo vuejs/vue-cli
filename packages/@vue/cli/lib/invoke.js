@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const execa = require('execa')
 const chalk = require('chalk')
 const resolve = require('resolve')
 const Generator = require('./Generator')
@@ -9,6 +10,7 @@ const {
   log,
   error,
   hasYarn,
+  hasGit,
   logWithSpinner,
   stopSpinner
 } = require('@vue/cli-shared-utils')
@@ -87,8 +89,15 @@ async function invoke (pluginName, options) {
   }
 
   stopSpinner()
+
   log()
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
+  if (hasGit) {
+    const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'])
+    log(`   The following files have been updated / added:\n`)
+    log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))
+    log()
+  }
   log(`   You should review and commit the changes.`)
   log()
 }

@@ -87,4 +87,15 @@ module.exports = class Generator {
     }
     debug('vue:cli-files')(this.files)
   }
+
+  hasPlugin (_id) {
+    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
+    return [
+      ...this.plugins.map(p => p.id),
+      ...Object.keys(this.pkg.devDependencies || {}),
+      ...Object.keys(this.pkg.dependencies || {})
+    ].some(id => {
+      return id === _id || id.replace(prefixRE, '') === _id
+    })
+  }
 }
