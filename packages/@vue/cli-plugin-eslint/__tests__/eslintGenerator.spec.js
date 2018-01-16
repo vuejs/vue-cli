@@ -48,6 +48,23 @@ test('standard', async () => {
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-standard')
 })
 
+test('prettier', async () => {
+  const { pkg } = await generateWithPlugin({
+    id: 'eslint',
+    apply: require('../generator'),
+    options: {
+      config: 'prettier'
+    }
+  })
+
+  expect(pkg.scripts.lint).toBeTruthy()
+  expect(pkg.eslintConfig).toEqual({
+    extends: ['plugin:vue/essential', '@vue/prettier']
+  })
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-vue')
+  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+})
+
 test('lint on save', async () => {
   const { pkg } = await generateWithPlugin({
     id: 'eslint',
@@ -76,8 +93,4 @@ test('lint on commit', async () => {
     '*.js': ['vue-cli-service lint', 'git add'],
     '*.vue': ['vue-cli-service lint', 'git add']
   })
-})
-
-test('prettier', async () => {
-  // TODO
 })

@@ -4,6 +4,6 @@ module.exports = {
     require.resolve('eslint-config-prettier')
   ],
   rules: {
-    'prettier/prettier': 'error'
+    'prettier/prettier': 'warn'
   }
 }
