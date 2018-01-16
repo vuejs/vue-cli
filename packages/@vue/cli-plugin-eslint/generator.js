@@ -26,7 +26,10 @@ module.exports = (api, { config, lintOn = [] }) => {
       '@vue/eslint-config-standard': '^3.0.0-alpha.1'
     })
   } else if (config === 'prettier') {
-    // TODO
+    pkg.eslintConfig.extends.push('@vue/prettier')
+    Object.assign(pkg.devDependencies, {
+      '@vue/eslint-config-prettier': '^3.0.0-alpha.1'
+    })
   } else {
     // default
     pkg.eslintConfig.extends.push('eslint:recommended')
