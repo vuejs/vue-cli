@@ -121,7 +121,7 @@ module.exports = (api, options) => {
             ignore: ['index.html', '.*']
           }]])
 
-      // TODO investigate DLL plugin options
+      // TODO investigate happypack/cache-loader/DLL plugin options
     }
   })
 }

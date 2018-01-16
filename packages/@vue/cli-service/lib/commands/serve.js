@@ -108,7 +108,6 @@ module.exports = (api, options) => {
           } else {
             console.log(`  App is served in production mode.`)
             console.log(`  Note this is for preview or E2E testing only.`)
-            // TODO console.log(`  See URL for more deployment tips.`)
           }
           console.log()
 

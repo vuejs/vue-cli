@@ -1,5 +1,3 @@
-// TODO handle alternative build targets
-
 const defaults = {
   mode: 'production',
   target: 'app'
@@ -10,8 +8,9 @@ module.exports = (api, options) => {
     description: 'build for production',
     usage: 'vue-cli-service build [options]',
     options: {
-      '--mode': `specify env mode (default: ${defaults.mode})`,
-      '--target': `app | library | web-component (default: ${defaults.target})`
+      // TODO
+      // '--mode': `specify env mode (default: ${defaults.mode})`,
+      // '--target': `app | library | web-component (default: ${defaults.target})`
     }
   }, args => {
     api.setMode(args.mode || defaults.mode)
@@ -46,8 +45,7 @@ module.exports = (api, options) => {
             process.stdout.write(stats.toString({
               colors: true,
               modules: false,
-              // TODO set this to true if using TS
-              children: false,
+              children: api.hasPlugin('typescript'),
               chunks: false,
               chunkModules: false
             }) + '\n\n')

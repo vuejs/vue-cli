@@ -80,6 +80,7 @@ module.exports = (api, options) => {
           }, userOptions)])
     }
 
-    // TODO document receipe for adding sass-resource-loader
+    // TODO document receipe for using css.loaderOptions to add `data` option
+    // to sass-loader
   })
 }

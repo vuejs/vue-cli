@@ -14,7 +14,6 @@ module.exports = api => {
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true
 
-    // TODO execa jest w/ --config jest.config.js
     const execa = require('execa')
     const jestBinPath = require.resolve('jest/bin/jest')
 

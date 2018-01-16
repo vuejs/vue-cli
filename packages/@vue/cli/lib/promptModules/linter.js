@@ -5,8 +5,7 @@ module.exports = cli => {
   cli.injectFeature({
     name: 'Linter / Formatter',
     value: 'linter',
-    short: 'Linter',
-    checked: true
+    short: 'Linter'
   })
 
   cli.injectPrompt({
@@ -49,13 +48,11 @@ module.exports = cli => {
     choices: [
       {
         name: 'Lint on save',
-        value: 'save',
-        checked: true
+        value: 'save'
       },
       {
         name: 'Lint and fix on commit' + (hasGit ? '' : chalk.red(' (requires Git)')),
-        value: 'commit',
-        checked: true
+        value: 'commit'
       }
     ]
   })
