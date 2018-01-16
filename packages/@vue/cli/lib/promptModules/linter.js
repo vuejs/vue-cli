@@ -15,7 +15,7 @@ module.exports = cli => {
       !answers.features.includes('ts')
     ),
     type: 'list',
-    message: 'Pick a lint config:',
+    message: 'Pick a linter / formatter config:',
     choices: [
       {
         name: 'ESLint with error prevention only',

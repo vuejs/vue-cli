@@ -13,8 +13,8 @@ test('base', async () => {
       check: [0]
     },
     {
-      message: 'Pick a lint config',
-      choices: ['error prevention only', 'Airbnb', 'Standard'],
+      message: 'Pick a linter / formatter config',
+      choices: ['error prevention only', 'Airbnb', 'Standard', 'Prettier'],
       choose: 0
     },
     {
@@ -49,12 +49,9 @@ test('airbnb', async () => {
       check: [0]
     },
     {
-      message: 'Pick a lint config',
-      choices: ['error prevention only', 'Airbnb', 'Standard'],
       choose: 1
     },
     {
-      choices: ['on save', 'on commit'],
       check: [1]
     }
   ]
@@ -84,12 +81,9 @@ test('standard', async () => {
       check: [0]
     },
     {
-      message: 'Pick a lint config',
-      choices: ['error prevention only', 'Airbnb', 'Standard'],
       choose: 2
     },
     {
-      choices: ['on save', 'on commit'],
       check: []
     }
   ]
@@ -99,6 +93,38 @@ test('standard', async () => {
       '@vue/cli-plugin-eslint': {
         config: 'standard',
         lintOn: []
+      }
+    }
+  }
+
+  await assertPromptModule(
+    moduleToTest,
+    expectedPrompts,
+    expectedOptions,
+    { plguinsOnly: true }
+  )
+})
+
+test('prettier', async () => {
+  const expectedPrompts = [
+    {
+      message: 'features',
+      choices: ['Linter'],
+      check: [0]
+    },
+    {
+      choose: 3
+    },
+    {
+      check: [0]
+    }
+  ]
+
+  const expectedOptions = {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'prettier',
+        lintOn: ['save']
       }
     }
   }
