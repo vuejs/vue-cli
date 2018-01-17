@@ -1,12 +1,7 @@
 .DS_Store
 node_modules
 /dist
-<%_ if (options.coverage) { _%>
-
-# test coverage files
-/test/unit/coverage/
-<%_ } _%>
-<%_ if (options.e2e === 'nightwatch') { _%>
+<%_ if (rootOptions.plugins && rootOptions.plugins['@vue/cli-plugin-e2e-nightwatch']) { _%>
 
 # e2e reports & log
 /test/e2e/reports/

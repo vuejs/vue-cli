@@ -184,7 +184,7 @@ module.exports = class Creator {
       saveOptions(options, true /* replace */)
     }
 
-    debug('vue:cli-ptions')(options)
+    debug('vue:cli-options')(options)
     return options
   }
 

@@ -47,11 +47,8 @@ module.exports = (api, options) => {
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
 
-    portfinder.getPort((err, port) => {
-      if (err) {
-        return error(err)
-      }
-
+    const portPromise = portfinder.getPortPromise()
+    return portPromise.then(port => new Promise((resolve, reject) => {
       const webpackConfig = api.resolveWebpackConfig()
 
       const urls = prepareURLs(
@@ -114,6 +111,13 @@ module.exports = (api, options) => {
           if (args.open || projectDevServerOptions.open) {
             openBrowser(urls.localUrlForBrowser)
           }
+
+          // resolve returned Promise
+          // so other commands can do api.service.run('serve').then(...)
+          resolve({
+            server,
+            url: urls.localUrlForBrowser
+          })
         } else if (process.env.VUE_CLI_TEST) {
           // signal for test to check HMR
           console.log('App updated')
@@ -182,7 +186,7 @@ module.exports = (api, options) => {
           return error(err)
         }
       })
-    })
+    }))
   })
 }
 

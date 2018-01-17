@@ -20,5 +20,12 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-e2e-nightwatch#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "chromedriver": "^2.34.1",
+    "deepmerge": "^2.0.1",
+    "execa": "^0.9.0",
+    "nightwatch": "^0.9.19",
+    "selenium-server": "^3.8.1"
   }
 }
