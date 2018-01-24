@@ -1,5 +1,6 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
+    const fs = require('fs')
     const resolveLocal = require('../util/resolveLocal')
     const resolveClientEnv = require('../util/resolveClientEnv')
 
@@ -98,11 +99,12 @@ module.exports = (api, options) => {
         child_process: 'empty'
       })
 
+    const htmlPath = api.resolve('public/index.html')
     webpackConfig
       .plugin('html')
-        .use(require('html-webpack-plugin'), [{
-          template: api.resolve('public/index.html')
-        }])
+        .use(require('html-webpack-plugin'), [
+          fs.existsSync(htmlPath) ? { template: htmlPath } : {}
+        ])
 
     // inject preload/prefetch to HTML
     const PreloadPlugin = require('../webpack/PreloadPlugin')

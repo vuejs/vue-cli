@@ -60,11 +60,11 @@ module.exports = (api, options) => {
       if (!isProduction) {
         const devClients = [
           // dev server client
-          `webpack-dev-server/client/?${urls.localUrlForBrowser}`,
+          require.resolve(`webpack-dev-server/client`) + `?${urls.localUrlForBrowser}`,
           // hmr client
-          projectDevServerOptions.hotOnly
+          require.resolve(projectDevServerOptions.hotOnly
             ? 'webpack/hot/only-dev-server'
-            : 'webpack/hot/dev-server'
+            : 'webpack/hot/dev-server')
           // TODO custom overlay client
           // `@vue/cli-overlay/dist/client`
         ]
