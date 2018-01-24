@@ -8,8 +8,8 @@ module.exports = (api, options) => {
     description: 'build for production',
     usage: 'vue-cli-service build [options]',
     options: {
-      // TODO
-      // '--mode': `specify env mode (default: ${defaults.mode})`,
+      '--mode': `specify env mode (default: ${defaults.mode})`
+      // TODO build target
       // '--target': `app | library | web-component (default: ${defaults.target})`
     }
   }, args => {
