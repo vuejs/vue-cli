@@ -150,7 +150,20 @@ module.exports = (api, options) => {
             ignore: ['index.html', '.*']
           }]])
 
-      // TODO investigate happypack/cache-loader/DLL plugin options
+      // TODO parallelazation
+      // thread-loader doesn't seem to have obvious effect because vue-loader
+      // offloads most of the work to other loaders. We may need to re-think
+      // vue-loader implementation in order to better take advantage of
+      // parallelazation
+
+      // webpackConfig.module
+      //   .rule('vue')
+      //     .use('thread-loader')
+      //       .before('vue-loader')
+      //       .loader('thread-loader')
+      //       .options({ name: 'vue' })
+
+      // TODO DLL
     }
   })
 }
