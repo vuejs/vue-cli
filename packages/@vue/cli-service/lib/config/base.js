@@ -35,6 +35,9 @@ module.exports = (api, options) => {
         .add(api.resolve('node_modules'))
         .add(resolveLocal('node_modules'))
 
+    webpackConfig.module
+      .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
+
     // js is handled by cli-plugin-bable
 
     webpackConfig.module
