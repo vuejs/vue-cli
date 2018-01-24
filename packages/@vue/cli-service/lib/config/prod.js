@@ -77,13 +77,11 @@ module.exports = (api, options) => {
                   // required features to drop conditional branches
                   conditionals: true,
                   dead_code: true,
-                  evaluate: true,
-
-                  // turn off warnings when dropping dead code
-                  warnings: false
+                  evaluate: true
                 }
               },
               sourceMap: options.productionSourceMap,
+              cache: true,
               parallel: true
             }])
       }
