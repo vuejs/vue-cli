@@ -232,7 +232,8 @@ module.exports = class Creator {
       when: isMode('manual'),
       type: 'checkbox',
       message: 'Check the features needed for your project:',
-      choices: []
+      choices: [],
+      pageSize: 8
     }
     return {
       modePrompt,
