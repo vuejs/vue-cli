@@ -10,8 +10,6 @@ const globby = require('globby')
 const { execSync } = require('child_process')
 const inquirer = require('inquirer')
 
-const argv = process.argv.slice(2)
-
 const externalVueScopedPackages = {
   '@vue/test-utils': true,
   '@vue/eslint-config': true
@@ -70,11 +68,11 @@ const flushWrite = () => {
   }
 }
 
-;(async () => {
+async function syncDeps (local, inlineVersion) {
   // 1. update all package deps
   const updatedDeps = new Set()
 
-  if (!argv.includes('--local')) {
+  if (!local) {
     const packages = await globby(['packages/@vue/*/package.json'])
     await Promise.all(packages.filter(filePath => {
       return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
@@ -125,7 +123,8 @@ const flushWrite = () => {
       const localReplacer = makeReplacer(
         pkg => {
           try {
-            return require(`../packages/${pkg}/package.json`).version
+            // inline version takes priority
+            return inlineVersion || require(`../packages/${pkg}/package.json`).version
           } catch (e) {}
         }
       )
@@ -156,7 +155,14 @@ const flushWrite = () => {
   if (yes) {
     flushWrite()
   }
-})().catch(err => {
-  console.log(err)
-  process.exit(1)
-})
+}
+
+exports.syncDeps = syncDeps
+
+if (!process.env.VUE_CLI_RELEASE) {
+  const args = require('minimist')(process.argv.slice(2))
+  syncDeps(args.local, args.version).catch(err => {
+    console.log(err)
+    process.exit(1)
+  })
+}

@@ -10,7 +10,8 @@
     "lint": "eslint --fix packages/**/*.js packages/**/bin/* test/**/*.js",
     "clean": "rimraf packages/test/*",
     "sync": "node scripts/syncDeps.js",
-    "boot": "node scripts/bootstrap.js"
+    "boot": "node scripts/bootstrap.js",
+    "release": "node scripts/release.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
