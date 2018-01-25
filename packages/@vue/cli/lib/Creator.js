@@ -5,6 +5,7 @@ const execa = require('execa')
 const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
+const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
 const installDeps = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
@@ -71,6 +72,8 @@ module.exports = class Creator {
       options = await this.promptAndResolveOptions()
     }
 
+    // clone before mutating
+    options = cloneDeep(options)
     // inject core service
     options.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
