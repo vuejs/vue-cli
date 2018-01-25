@@ -1,13 +1,16 @@
 module.exports = (api, options) => {
   api.registerCommand('e2e', {
     description: 'run e2e tests with nightwatch',
+    usage: 'vue-cli-service e2e [options]',
     options: {
       '--url': 'run e2e tests against given url instead of auto-starting dev server',
       '-e, --env': 'specify comma-delimited browser envs to run in (default: chrome)',
       '-t, --test': 'sepcify a test to run by name',
       '-f, --filter': 'glob to filter tests by filename'
     },
-    usage: 'vue-cli-service e2e [options]'
+    details:
+      `All Nightwatch CLI options are also supported.\n` +
+      `https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js`
   }, (args, rawArgs) => {
     if (args.url) {
       const i = rawArgs.findIndex(arg => /^--url/.test(arg))

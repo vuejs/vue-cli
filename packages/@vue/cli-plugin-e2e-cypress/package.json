@@ -20,5 +20,8 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-e2e-cypress#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "cypress": "^1.4.1"
   }
 }
