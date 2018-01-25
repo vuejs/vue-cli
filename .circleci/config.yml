@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: regviz/node-xcb
+      - image: vuejs/ci
 
     working_directory: ~/repo
 
