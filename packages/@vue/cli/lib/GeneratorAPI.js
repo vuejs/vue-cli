@@ -62,11 +62,18 @@ module.exports = class GeneratorAPI {
           filter: file => path.basename(file.path) !== '.DS_Store'
         })
         for (const file of _files) {
-          const relativePath = path.relative(fileDir, file.path)
+          let filename = path.basename(file.path)
+          // dotfiles are ignored when published to npm, therefore in templates
+          // we need to use underscore instead (e.g. "_gitignore")
+          if (filename.charAt(0) === '_') {
+            filename = `.${filename.slice(1)}`
+          }
+          const normalizedPath = path.join(path.dirname(file.path), filename)
+          const targetPath = path.relative(fileDir, normalizedPath)
           const content = renderFile(file.path, data, ejsOptions)
           // only set file if it's not all whitespace, or is a Buffer (binary files)
           if (Buffer.isBuffer(content) || /[^\s]/.test(content)) {
-            files[relativePath] = content
+            files[targetPath] = content
           }
         }
       })
