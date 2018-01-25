@@ -49,6 +49,14 @@ module.exports = api => {
         'ts-jest': '^22.0.1'
       }
     })
+    if (api.hasPlugin('babel')) {
+      api.extendPackage({
+        devDependencies: {
+          // this is for now necessary to force ts-jest and vue-jest to use babel 7
+          'babel-core': '^7.0.0-0'
+        }
+      })
+    }
   }
 
   api.extendPackage({ jest: jestConfig })
