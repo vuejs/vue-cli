@@ -68,11 +68,12 @@ const flushWrite = () => {
   }
 }
 
-async function syncDeps (local, inlineVersion) {
+async function syncDeps ({ local, version, skipPrompt }) {
   // 1. update all package deps
   const updatedDeps = new Set()
 
   if (!local) {
+    console.log('Syncing remote deps...')
     const packages = await globby(['packages/@vue/*/package.json'])
     await Promise.all(packages.filter(filePath => {
       return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
@@ -105,6 +106,7 @@ async function syncDeps (local, inlineVersion) {
     }))
   }
 
+  console.log('Syncing local deps...')
   const updatedRE = new RegExp(`'(${Array.from(updatedDeps).join('|')})': '\\^(\\d+\\.\\d+\\.\\d+[^']*)'`)
   const paths = await globby(['packages/@vue/**/*.js'])
   paths
@@ -112,19 +114,19 @@ async function syncDeps (local, inlineVersion) {
     .forEach(filePath => {
       let isUpdated = false
       const makeReplacer = versionGetter => (_, pkg, curVersion) => {
-        const version = versionGetter(pkg)
-        if (!version) return _
-        if (checkUpdate(pkg, filePath, curVersion, version)) {
+        const targetVersion = versionGetter(pkg)
+        if (!targetVersion) return _
+        if (checkUpdate(pkg, filePath, curVersion, targetVersion)) {
           isUpdated = true
         }
-        return `'${pkg}': '^${version}'`
+        return `'${pkg}': '^${targetVersion}'`
       }
 
       const localReplacer = makeReplacer(
         pkg => {
           try {
             // inline version takes priority
-            return inlineVersion || require(`../packages/${pkg}/package.json`).version
+            return version || require(`../packages/${pkg}/package.json`).version
           } catch (e) {}
         }
       )
@@ -146,6 +148,11 @@ async function syncDeps (local, inlineVersion) {
     return console.log(`All packages up-to-date.`)
   }
 
+  if (skipPrompt) {
+    flushWrite()
+    return
+  }
+
   const { yes } = await inquirer.prompt([{
     name: 'yes',
     type: 'confirm',
@@ -161,7 +168,7 @@ exports.syncDeps = syncDeps
 
 if (!process.env.VUE_CLI_RELEASE) {
   const args = require('minimist')(process.argv.slice(2))
-  syncDeps(args.local, args.version).catch(err => {
+  syncDeps(args).catch(err => {
     console.log(err)
     process.exit(1)
   })
