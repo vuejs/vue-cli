@@ -48,7 +48,7 @@ module.exports = (api, options) => {
             .loader('babel-loader')
       }
       tsRule
-        .use('cache-loader')
+        .use('cache-loader-2')
           .loader('cache-loader')
           .options({ cacheDirectory })
           .end()
