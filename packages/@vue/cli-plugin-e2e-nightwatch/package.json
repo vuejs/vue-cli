@@ -22,7 +22,7 @@
     "access": "public"
   },
   "dependencies": {
-    "chromedriver": "^2.34.1",
+    "chromedriver": "^2.35.0",
     "deepmerge": "^2.0.1",
     "execa": "^0.9.0",
     "nightwatch": "^0.9.19",
