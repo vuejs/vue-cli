@@ -14,8 +14,10 @@ test('using correct loader', () => {
 
   const config = service.resolveWebpackConfig()
   const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))
-  expect(rule.use[0].loader).toBe('babel-loader')
-  expect(rule.use[1].loader).toBe('ts-loader')
+  expect(rule.use[0].loader).toBe('cache-loader')
+  expect(rule.use[1].loader).toBe('babel-loader')
+  expect(rule.use[2].loader).toBe('cache-loader')
+  expect(rule.use[3].loader).toBe('ts-loader')
 })
 
 const creatorOptions = {
