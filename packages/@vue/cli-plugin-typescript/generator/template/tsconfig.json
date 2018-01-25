@@ -11,11 +11,6 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
     <%_if (isTest) { _%>
     "types": [
       <%_ if (hasMocha) { _%>
@@ -24,8 +19,13 @@
       <%_ } else if (hasJest) { _%>
       "jest"
       <%_ } _%>
-    ]
+    ],
     <%_ } _%>
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts",
