@@ -43,15 +43,15 @@
     "axios": "^0.17.1",
     "babel-core": "^7.0.0-0",
     "debug": "^3.1.0",
-    "eslint": "^4.14.0",
+    "eslint": "^4.16.0",
     "eslint-plugin-vue-libs": "^2.1.0",
     "globby": "^7.1.1",
-    "http-server": "^0.10.0",
-    "jest": "^22.0.4",
-    "lerna": "^2.5.1",
-    "lint-staged": "^6.0.0",
+    "http-server": "^0.11.1",
+    "jest": "^22.1.4",
+    "lerna": "^2.8.0",
+    "lint-staged": "^6.0.1",
     "memfs": "^2.6.0",
-    "puppeteer": "^0.13.0",
+    "puppeteer": "^1.0.0",
     "yorkie": "^1.0.2"
   }
 }
