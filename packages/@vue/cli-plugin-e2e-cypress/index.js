@@ -28,6 +28,13 @@ module.exports = (api, options) => {
         runner.on('exit', () => server.close())
         runner.on('error', () => server.close())
       }
+
+      if (process.env.VUE_CLI_TEST) {
+        runner.on('exit', code => {
+          process.exit(code)
+        })
+      }
+
       return runner
     })
   }
