@@ -1,4 +1,6 @@
 module.exports = (api, options) => {
+  const cacheDirectory = api.resolve('node_modules/.cache/cache-loader')
+
   api.chainWebpack(config => {
     config.entry('app')
       .clear()
@@ -21,6 +23,10 @@ module.exports = (api, options) => {
       // preset-env for auto-detected polyfills based on browserslists config.
       // this is pending on the readiness of @babel/preset-typescript.
       tsRule
+        .use('cache-loader')
+          .loader('cache-loader')
+          .options({ cacheDirectory })
+          .end()
         .use('babel-loader')
           .loader('babel-loader')
 
@@ -34,10 +40,18 @@ module.exports = (api, options) => {
     } else {
       if (api.hasPlugin('babel')) {
         tsRule
+          .use('cache-loader')
+            .loader('cache-loader')
+            .options({ cacheDirectory })
+            .end()
           .use('babel-loader')
             .loader('babel-loader')
       }
       tsRule
+        .use('cache-loader')
+          .loader('cache-loader')
+          .options({ cacheDirectory })
+          .end()
         .use('ts-loader')
           .loader('ts-loader')
           .options({
