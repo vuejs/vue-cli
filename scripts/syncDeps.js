@@ -10,11 +10,13 @@ const globby = require('globby')
 const { execSync } = require('child_process')
 const inquirer = require('inquirer')
 
+const argv = process.argv.slice(2)
+
 const externalVueScopedPackages = {
   '@vue/test-utils': true,
   '@vue/eslint-config': true
 }
-const localPackageRE = /'(@vue\/(cli|eslint|babel)[\w-]+)': '\^(\d+\.\d+\.\d+)'/g
+const localPackageRE = /'(@vue\/(?:cli|eslint|babel)[\w-]+)': '\^([\w-.]+)'/g
 
 const versionCache = {}
 
@@ -71,41 +73,44 @@ const flushWrite = () => {
 ;(async () => {
   // 1. update all package deps
   const updatedDeps = new Set()
-  const packages = await globby(['packages/@vue/*/package.json'])
-  await Promise.all(packages.filter(filePath => {
-    return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
-  }).concat('package.json').map(async (filePath) => {
-    const pkg = require(path.resolve(__dirname, '../', filePath))
-    if (!pkg.dependencies) {
-      return
-    }
-    let isUpdated = false
-    const deps = pkg.dependencies
-    for (const dep in deps) {
-      if (dep.match(/^@vue/) && !externalVueScopedPackages[dep]) {
-        continue
+
+  if (!argv.includes('--local')) {
+    const packages = await globby(['packages/@vue/*/package.json'])
+    await Promise.all(packages.filter(filePath => {
+      return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
+    }).concat('package.json').map(async (filePath) => {
+      const pkg = require(path.resolve(__dirname, '../', filePath))
+      if (!pkg.dependencies) {
+        return
       }
-      let local = deps[dep]
-      if (local.charAt(0) !== '^') {
-        continue
+      let isUpdated = false
+      const deps = pkg.dependencies
+      for (const dep in deps) {
+        if (dep.match(/^@vue/) && !externalVueScopedPackages[dep]) {
+          continue
+        }
+        let local = deps[dep]
+        if (local.charAt(0) !== '^') {
+          continue
+        }
+        local = local.replace(/^\^/, '')
+        const remote = await getRemoteVersion(dep)
+        if (remote && checkUpdate(dep, filePath, local, remote)) {
+          deps[dep] = `^${remote}`
+          updatedDeps.add(dep)
+          isUpdated = true
+        }
       }
-      local = local.replace(/^\^/, '')
-      const remote = await getRemoteVersion(dep)
-      if (remote && checkUpdate(dep, filePath, local, remote)) {
-        deps[dep] = `^${remote}`
-        updatedDeps.add(dep)
-        isUpdated = true
+      if (isUpdated) {
+        bufferWrite(filePath, JSON.stringify(pkg, null, 2) + '\n')
       }
-    }
-    if (isUpdated) {
-      bufferWrite(filePath, JSON.stringify(pkg, null, 2) + '\n')
-    }
-  }))
+    }))
+  }
 
   const updatedRE = new RegExp(`'(${Array.from(updatedDeps).join('|')})': '\\^(\\d+\\.\\d+\\.\\d+[^']*)'`)
   const paths = await globby(['packages/@vue/**/*.js'])
   paths
-    .filter(p => !/\/files\//.test(p))
+    .filter(p => !/\/files\//.test(p) && !/\/node_modules/.test(p))
     .forEach(filePath => {
       let isUpdated = false
       const makeReplacer = versionGetter => (_, pkg, curVersion) => {
@@ -151,4 +156,7 @@ const flushWrite = () => {
   if (yes) {
     flushWrite()
   }
-})()
+})().catch(err => {
+  console.log(err)
+  process.exit(1)
+})
