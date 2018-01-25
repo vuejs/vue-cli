@@ -57,6 +57,18 @@ module.exports = class PreloadPlugin {
   apply (compiler) {
     const options = this.options
     compiler.plugin('compilation', compilation => {
+      // Auto DLL plugin injects assets by mutating html plugin data, so the only
+      // way to get a hold of those is by saving the pre-mutated assets and
+      // comparing them later.
+      let originalAssets
+      compilation.plugin('html-webpack-plugin-before-html-generation', (htmlPluginData, cb) => {
+        originalAssets = [
+          ...htmlPluginData.assets.js,
+          ...htmlPluginData.assets.css
+        ]
+        cb(null, htmlPluginData)
+      })
+
       compilation.plugin('html-webpack-plugin-before-html-processing', (htmlPluginData, cb) => {
         let filesToInclude = ''
         let extractedChunks = []
@@ -95,11 +107,22 @@ module.exports = class PreloadPlugin {
 
         const publicPath = compilation.outputOptions.publicPath || ''
 
-        // Only handle the chunk import by the htmlWebpackPlugin
+        // Only handle the chunk imported by the htmlWebpackPlugin
         extractedChunks = extractedChunks.filter(chunk => doesChunkBelongToHTML(
           chunk, getValues(htmlPluginData.assets.chunks), {}))
 
-        flatten(extractedChunks.map(chunk => chunk.files)).filter(entry => {
+        let files = flatten(extractedChunks.map(chunk => chunk.files))
+
+        // if handling initial or all chunks, also include assets injected by
+        // Auto DLL plugin.
+        if (options.include === 'initial' || options.include === 'all') {
+          files = [...htmlPluginData.assets.js, ...htmlPluginData.assets.css]
+              .filter(file => !originalAssets.includes(file))
+              .map(file => file.replace(publicPath, ''))
+              .concat(files)
+        }
+
+        Array.from(new Set(files)).filter(entry => {
           return this.options.fileBlacklist.every(regex => regex.test(entry) === false)
         }).forEach(entry => {
           entry = `${publicPath}${entry}`

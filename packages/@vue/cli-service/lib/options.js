@@ -6,6 +6,10 @@ const schema = createSchema(joi => joi.object({
   compiler: joi.boolean(),
   productionSourceMap: joi.boolean(),
   vueLoader: joi.object(),
+  dll: joi.alternatives().try(
+    joi.boolean(),
+    joi.array().items(joi.string())
+  ),
   css: joi.object({
     modules: joi.boolean(),
     extract: joi.boolean(),

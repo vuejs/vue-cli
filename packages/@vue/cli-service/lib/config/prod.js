@@ -42,95 +42,99 @@ module.exports = (api, options) => {
           ])
 
       // minify JS
+      const UglifyPlugin = require('uglifyjs-webpack-plugin')
+      const uglifyPluginOptions = {
+        uglifyOptions: {
+          compress: {
+            // turn off flags with small gains to speed up minification
+            arrows: false,
+            collapse_vars: false, // 0.3kb
+            comparisons: false,
+            computed_props: false,
+            hoist_funs: false,
+            hoist_props: false,
+            hoist_vars: false,
+            inline: false,
+            loops: false,
+            negate_iife: false,
+            properties: false,
+            reduce_funcs: false,
+            reduce_vars: false,
+            switches: false,
+            toplevel: false,
+            typeofs: false,
+
+            // a few flags with noticable gains/speed ratio
+            // numbers based on out of the box vendor bundle
+            booleans: true, // 0.7kb
+            if_return: true, // 0.4kb
+            sequences: true, // 0.7kb
+            unused: true, // 2.3kb
+
+            // required features to drop conditional branches
+            conditionals: true,
+            dead_code: true,
+            evaluate: true
+          }
+        },
+        sourceMap: options.productionSourceMap,
+        cache: true,
+        parallel: true
+      }
       // disable during tests to speed things up
       if (!process.env.VUE_CLI_TEST) {
         webpackConfig
-          .plugin('uglifyjs')
-            .use(require('uglifyjs-webpack-plugin'), [{
-              uglifyOptions: {
-                compress: {
-                  // turn off flags with small gains to speed up minification
-                  arrows: false,
-                  collapse_vars: false, // 0.3kb
-                  comparisons: false,
-                  computed_props: false,
-                  hoist_funs: false,
-                  hoist_props: false,
-                  hoist_vars: false,
-                  inline: false,
-                  loops: false,
-                  negate_iife: false,
-                  properties: false,
-                  reduce_funcs: false,
-                  reduce_vars: false,
-                  switches: false,
-                  toplevel: false,
-                  typeofs: false,
-
-                  // a few flags with noticable gains/speed ratio
-                  // numbers based on out of the box vendor bundle
-                  booleans: true, // 0.7kb
-                  if_return: true, // 0.4kb
-                  sequences: true, // 0.7kb
-                  unused: true, // 2.3kb
-
-                  // required features to drop conditional branches
-                  conditionals: true,
-                  dead_code: true,
-                  evaluate: true
-                }
-              },
-              sourceMap: options.productionSourceMap,
-              cache: true,
-              parallel: true
-            }])
+          .plugin('uglify')
+            .use(UglifyPlugin, [uglifyPluginOptions])
       }
 
-      // Chunk splits
       const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
 
-      // extract vendor libs into its own chunk for better caching, since they
-      // are more likely to stay the same.
-      webpackConfig
-        .plugin('split-vendor')
-          .use(CommonsChunkPlugin, [{
-            name: 'vendor',
-            minChunks (module) {
-              // any required modules inside node_modules are extracted to vendor
-              return (
-                module.resource &&
-                /\.js$/.test(module.resource) &&
-                module.resource.indexOf(`node_modules`) > -1
-              )
-            }
-          }])
+      // Chunk splits
+      if (!options.dll) {
+        // extract vendor libs into its own chunk for better caching, since they
+        // are more likely to stay the same.
+        webpackConfig
+          .plugin('split-vendor')
+            .use(CommonsChunkPlugin, [{
+              name: 'vendor',
+              minChunks (module) {
+                // any required modules inside node_modules are extracted to vendor
+                return (
+                  module.resource &&
+                  /\.js$/.test(module.resource) &&
+                  module.resource.indexOf(`node_modules`) > -1
+                )
+              }
+            }])
 
-      // extract webpack runtime and module manifest to its own file in order to
-      // prevent vendor hash from being updated whenever app bundle is updated
-      webpackConfig
-        .plugin('split-manifest')
-          .use(CommonsChunkPlugin, [{
-            name: 'manifest',
-            minChunks: Infinity
-          }])
+        // extract webpack runtime and module manifest to its own file in order to
+        // prevent vendor hash from being updated whenever app bundle is updated
+        webpackConfig
+          .plugin('split-manifest')
+            .use(CommonsChunkPlugin, [{
+              name: 'manifest',
+              minChunks: Infinity
+            }])
 
-      // inline the manifest chunk into HTML
-      webpackConfig
-        .plugin('inline-manifest')
-          .use(require('../webpack/InlineSourcePlugin'), [{
-            include: /manifest\..*\.js$/
-          }])
+        // inline the manifest chunk into HTML
+        webpackConfig
+          .plugin('inline-manifest')
+            .use(require('../webpack/InlineSourcePlugin'), [{
+              include: /manifest\..*\.js$/
+            }])
 
-      // since manifest is inlined, don't preload it anymore
-      webpackConfig
-        .plugin('preload')
-          .tap(([options]) => {
-            options.fileBlacklist.push(/manifest\..*\.js$/)
-            return [options]
-          })
+        // since manifest is inlined, don't preload it anymore
+        webpackConfig
+          .plugin('preload')
+            .tap(([options]) => {
+              options.fileBlacklist.push(/manifest\..*\.js$/)
+              return [options]
+            })
+      }
 
-      // This instance extracts shared chunks from code splitted chunks and bundles them
-      // in a separate chunk, similar to the vendor chunk
+      // This CommonsChunkPlugin instance extracts shared chunks from async
+      // chunks and bundles them in a separate chunk, similar to the vendor chunk
       // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
       webpackConfig
         .plugin('split-vendor-async')
@@ -140,6 +144,36 @@ module.exports = (api, options) => {
             children: true,
             minChunks: 3
           }])
+
+      // DLL
+      if (options.dll) {
+        const webpack = require('webpack')
+        const resolveClientEnv = require('../util/resolveClientEnv')
+        const dllEntries = Array.isArray(options.dll)
+          ? options.dll
+          : Object.keys(api.service.pkg.dependencies)
+
+        webpackConfig
+          .plugin('dll')
+            .use(require('autodll-webpack-plugin'), [{
+              inject: true,
+              inherit: true,
+              path: 'js/',
+              context: api.resolve('.'),
+              filename: '[name].[hash:8].js',
+              entry: {
+                'vendor': [
+                  ...dllEntries,
+                  'vue-loader/lib/component-normalizer'
+                ]
+              },
+              plugins: [
+                new webpack.DefinePlugin(resolveClientEnv(options.baseUrl)),
+                new UglifyPlugin(uglifyPluginOptions)
+              ]
+            }])
+            .after('preload')
+      }
 
       // copy static assets in public/
       webpackConfig
@@ -162,8 +196,6 @@ module.exports = (api, options) => {
       //       .before('vue-loader')
       //       .loader('thread-loader')
       //       .options({ name: 'vue' })
-
-      // TODO DLL
     }
   })
 }

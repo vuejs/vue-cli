@@ -102,13 +102,6 @@ module.exports = (api, options) => {
         child_process: 'empty'
       })
 
-    const htmlPath = api.resolve('public/index.html')
-    webpackConfig
-      .plugin('html')
-        .use(require('html-webpack-plugin'), [
-          fs.existsSync(htmlPath) ? { template: htmlPath } : {}
-        ])
-
     // inject preload/prefetch to HTML
     const PreloadPlugin = require('../webpack/PreloadPlugin')
     webpackConfig
@@ -125,6 +118,13 @@ module.exports = (api, options) => {
           rel: 'prefetch',
           include: 'asyncChunks'
         }])
+
+    const htmlPath = api.resolve('public/index.html')
+    webpackConfig
+      .plugin('html')
+        .use(require('html-webpack-plugin'), [
+          fs.existsSync(htmlPath) ? { template: htmlPath } : {}
+        ])
 
     webpackConfig
       .plugin('define')
