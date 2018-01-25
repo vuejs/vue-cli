@@ -44,6 +44,10 @@ const getRemoteVersionSync = pkg => {
 
 const checkUpdate = (pkg, filePath, local, remote) => {
   if (remote !== local) {
+    const isNewer = semver.gt(remote, local)
+    if (!isNewer) {
+      return false
+    }
     const isCompat = semver.intersects(`^${local}`, `^${remote}`)
     console.log(
       `${chalk.cyan(pkg)}: ${local} => ${remote} ` +
