@@ -24,11 +24,11 @@ module.exports = (api, options) => {
       // this is pending on the readiness of @babel/preset-typescript.
       tsRule
         .use('cache-loader')
-          .loader('cache-loader')
+          .loader(require.resolve('cache-loader'))
           .options({ cacheDirectory })
           .end()
         .use('babel-loader')
-          .loader('babel-loader')
+          .loader(require.resolve('babel-loader'))
 
       config.module
         .rule('vue')
@@ -41,19 +41,19 @@ module.exports = (api, options) => {
       if (api.hasPlugin('babel')) {
         tsRule
           .use('cache-loader')
-            .loader('cache-loader')
+            .loader(require.resolve('cache-loader'))
             .options({ cacheDirectory })
             .end()
           .use('babel-loader')
-            .loader('babel-loader')
+            .loader(require.resolve('babel-loader'))
       }
       tsRule
         .use('cache-loader-2')
-          .loader('cache-loader')
+          .loader(require.resolve('cache-loader'))
           .options({ cacheDirectory })
           .end()
         .use('ts-loader')
-          .loader('ts-loader')
+          .loader(require.resolve('ts-loader'))
           .options({
             transpileOnly: true,
             appendTsSuffixTo: [/\.vue$/]

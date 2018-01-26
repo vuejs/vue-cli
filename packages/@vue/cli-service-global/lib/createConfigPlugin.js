@@ -19,10 +19,14 @@ module.exports = function createConfigPlugin (context, entry) {
           }
         }
 
-        // include resolve
+        // include resolve for deps of this module.
+        // when installed globally, the location may vary depending on
+        // package managers their folder structures for global install.
+        // so we first resolve the location of vue and then trace to the
+        // install location.
         config.resolve
           .modules
-            .add(path.resolve(__dirname, '../node_modules'))
+            .add(path.resolve(require.resolve('vue'), '../../../'))
 
         // set entry
         config
