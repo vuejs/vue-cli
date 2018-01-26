@@ -47,6 +47,9 @@ const release = async () => {
       local: true,
       skipPrompt: true
     })
+    delete process.env.PREFIX
+    await execa('git', ['add', '-A'], { stdio: 'inherit' })
+    await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
   }
 
   const lernaBinPath = require.resolve('lerna/bin/lerna')
