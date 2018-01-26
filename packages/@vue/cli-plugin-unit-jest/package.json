@@ -25,7 +25,7 @@
     "execa": "^0.9.0",
     "jest": "^22.1.4",
     "jest-serializer-vue": "^0.3.0",
-    "vue-jest": "yyx990803/vue-jest"
+    "vue-jest": "vuejs/vue-jest#master"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.10",

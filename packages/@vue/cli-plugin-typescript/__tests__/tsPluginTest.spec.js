@@ -23,7 +23,7 @@ test('jest', async () => {
 })
 
 test('jest w/ babel', async () => {
-  const project = await create('ts-unit-jest', {
+  const project = await create('ts-unit-jest-babel', {
     plugins: {
       '@vue/cli-plugin-typescript': {},
       '@vue/cli-plugin-babel': {},
