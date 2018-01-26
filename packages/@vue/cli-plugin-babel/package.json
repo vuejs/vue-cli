@@ -20,8 +20,8 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-babel#readme",
   "dependencies": {
     "@babel/core": "^7.0.0-0",
-    "babel-loader": "^8.0.0-0",
-    "cache-loader": "^1.2.0"
+    "@vue/babel-preset-app": "^3.0.0-alpha.3",
+    "babel-loader": "^8.0.0-0"
   },
   "publishConfig": {
     "access": "public"

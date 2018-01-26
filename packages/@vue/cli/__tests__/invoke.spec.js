@@ -17,7 +17,6 @@ test('invoke single generator', async () => {
 
   const updatedPkg = JSON.parse(await project.read('package.json'))
   expect(updatedPkg.scripts.lint).toBe('vue-cli-service lint')
-  expect(updatedPkg.devDependencies).toHaveProperty('eslint-plugin-vue')
   expect(updatedPkg.devDependencies).toHaveProperty('lint-staged')
   expect(updatedPkg.eslintConfig).toEqual({
     extends: ['plugin:vue/essential', '@vue/airbnb']

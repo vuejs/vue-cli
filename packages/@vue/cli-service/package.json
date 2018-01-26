@@ -26,6 +26,7 @@
     "address": "^1.0.3",
     "autodll-webpack-plugin": "^0.3.8",
     "autoprefixer": "^7.2.5",
+    "cache-loader": "^1.2.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "chalk": "^2.3.0",
     "copy-webpack-plugin": "^4.3.1",

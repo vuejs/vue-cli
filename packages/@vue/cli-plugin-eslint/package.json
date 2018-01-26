@@ -24,9 +24,7 @@
   "dependencies": {
     "babel-eslint": "^8.2.1",
     "eslint": "^4.16.0",
-    "eslint-loader": "^1.9.0"
-  },
-  "devDependencies": {
+    "eslint-loader": "^1.9.0",
     "eslint-plugin-vue": "^4.0.0"
   }
 }

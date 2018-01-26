@@ -10,9 +10,7 @@ module.exports = (api, { config, lintOn = [] }) => {
     eslintConfig: {
       extends: ['plugin:vue/essential']
     },
-    devDependencies: {
-      'eslint-plugin-vue': '^4.2.0'
-    }
+    devDependencies: {}
   }
 
   if (config === 'airbnb') {

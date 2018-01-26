@@ -55,7 +55,6 @@ test('use with Babel', async () => {
     }
   ])
 
-  expect(pkg.devDependencies).toHaveProperty('@vue/babel-preset-app')
   expect(pkg.babel).toEqual({ presets: ['@vue/app'] })
   expect(files['tsconfig.json']).toMatch(`"target": "es2015"`)
 })
