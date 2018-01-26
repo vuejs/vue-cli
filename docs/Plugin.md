@@ -133,10 +133,10 @@ module.exports = api => {
 }
 ```
 
-[creator-class]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/Creator.js
-[service-class]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/Service.js
-[generator-api]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli/lib/GeneratorAPI.js
-[commands]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/commands
-[config]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/config
-[plugin-api]: https://github.com/vuejs/vue-cli/tree/next/packages/@vue/cli-service/lib/PluginAPI.js
-[prompt-modules]: https://github.com/vuejs/vue-cli/tree/next/packages/%40vue/cli/lib/promptModules
+[creator-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/Creator.js
+[service-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/Service.js
+[generator-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/GeneratorAPI.js
+[commands]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/commands
+[config]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/config
+[plugin-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/PluginAPI.js
+[prompt-modules]: https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli/lib/promptModules

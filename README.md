@@ -1,4 +1,4 @@
-# vue-cli [![Build Status](https://circleci.com/gh/vuejs/vue-cli/tree/next.svg?style=shield)](https://circleci.com/gh/vuejs/vue-cli/tree/next) [![Windows Build status](https://ci.appveyor.com/api/projects/status/487fqt71e4kf46iv/branch/next?svg=true)](https://ci.appveyor.com/project/yyx990803/vue-cli-6b0a6/branch/next)
+# vue-cli [![Build Status](https://circleci.com/gh/vuejs/vue-cli/tree/dev.svg?style=shield)](https://circleci.com/gh/vuejs/vue-cli/tree/dev) [![Windows Build status](https://ci.appveyor.com/api/projects/status/487fqt71e4kf46iv/branch/dev?svg=true)](https://ci.appveyor.com/project/yyx990803/vue-cli-6b0a6/branch/dev)
 
 > WIP: this is the work in progress branch of the upcoming vue-cli 3.0.
 > Only for preview for template maintainers.
@@ -51,4 +51,4 @@ Note that `jest --onlyChanged` isn't always accurate because some tests spawn ch
 
 ### Plugin Development
 
-See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/next/docs/Plugin.md).
+See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/dev/docs/Plugin.md).
