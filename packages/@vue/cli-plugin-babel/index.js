@@ -23,10 +23,12 @@ module.exports = api => {
           options.loaders = options.loaders || {}
           options.loaders.js = [
             {
-              loader: 'cache-loader',
+              loader: require.resolve('cache-loader'),
               options: { cacheDirectory }
             },
-            'babel-loader'
+            {
+              loader: require.resolve('babel-loader')
+            }
           ]
           return options
         })

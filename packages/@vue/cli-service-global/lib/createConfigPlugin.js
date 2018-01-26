@@ -24,9 +24,15 @@ module.exports = function createConfigPlugin (context, entry) {
         // package managers their folder structures for global install.
         // so we first resolve the location of vue and then trace to the
         // install location.
+        const modulePath = path.resolve(require.resolve('vue'), '../../../')
+
         config.resolve
           .modules
-            .add(path.resolve(require.resolve('vue'), '../../../'))
+            .add(modulePath)
+
+        config.resolveLoader
+          .modules
+            .add(modulePath)
 
         // set entry
         config
@@ -43,12 +49,7 @@ module.exports = function createConfigPlugin (context, entry) {
           .rule('vue')
             .use('vue-loader')
               .tap(options => {
-                options.loaders = Object.assign({
-                  js: {
-                    loader: 'babel-loader',
-                    options: babelOptions
-                  }
-                }, options.loaders)
+                options.loaders.js[1].options = babelOptions
                 return options
               })
 
