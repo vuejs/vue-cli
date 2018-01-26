@@ -11,7 +11,7 @@ module.exports = (api, { lintOnSave }) => {
             .end()
           .test(/\.(vue|jsx?)$/)
           .use('eslint-loader')
-            .loader(require.resolve('eslint-loader'))
+            .loader('eslint-loader')
             .options(Object.assign(options, {
               formatter: require('eslint/lib/formatters/codeframe')
             }))

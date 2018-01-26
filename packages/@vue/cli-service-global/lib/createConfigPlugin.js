@@ -1,10 +1,11 @@
 const path = require('path')
+const resolve = require('resolve')
 const { findExisting } = require('./util')
 
 module.exports = function createConfigPlugin (context, entry) {
   return {
     id: '@vue/cli-service-global-config',
-    apply: api => {
+    apply: (api, options) => {
       api.chainWebpack(config => {
         // entry is *.vue file, create alias for built-in js entry
         if (/\.vue$/.test(entry)) {
@@ -19,20 +20,28 @@ module.exports = function createConfigPlugin (context, entry) {
           }
         }
 
-        // include resolve for deps of this module.
-        // when installed globally, the location may vary depending on
-        // package managers their folder structures for global install.
-        // so we first resolve the location of vue and then trace to the
-        // install location.
+        // ensure loaders can be resolved properly
         const modulePath = path.resolve(require.resolve('vue'), '../../../')
-
-        config.resolve
-          .modules
-            .add(modulePath)
-
         config.resolveLoader
           .modules
             .add(modulePath)
+
+        // add resolve alias for vue and vue-hot-reload-api
+        // but prioritize versions installed locally.
+        try {
+          resolve.sync('vue', { basedir: context })
+        } catch (e) {
+          const vuePath = path.dirname(require.resolve('vue'))
+          config.resolve.alias
+            .set('vue$', `${vuePath}/${options.compiler ? `vue.esm.js` : `vue.runtime.esm.js`}`)
+        }
+
+        try {
+          resolve.sync('vue-hot-reload-api', { basedir: context })
+        } catch (e) {
+          config.resolve.alias
+            .set('vue-hot-reload-api', require.resolve('vue-hot-reload-api'))
+        }
 
         // set entry
         config

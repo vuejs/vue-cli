@@ -44,14 +44,14 @@ module.exports = (api, options) => {
       .rule('vue')
         .test(/\.vue$/)
         .use('vue-loader')
-          .loader(require.resolve('vue-loader'))
+          .loader('vue-loader')
           .options(Object.assign({}, options.vueLoader))
 
     webpackConfig.module
       .rule('images')
         .test(/\.(png|jpe?g|gif)(\?.*)?$/)
         .use('url-loader')
-          .loader(require.resolve('url-loader'))
+          .loader('url-loader')
           .options({
             limit: 10000,
             name: `img/[name].[hash:8].[ext]`
@@ -63,7 +63,7 @@ module.exports = (api, options) => {
       .rule('svg')
         .test(/\.(svg)(\?.*)?$/)
         .use('file-loader')
-          .loader(require.resolve('file-loader'))
+          .loader('file-loader')
           .options({
             name: `img/[name].[hash:8].[ext]`
           })
@@ -72,7 +72,7 @@ module.exports = (api, options) => {
       .rule('media')
         .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
         .use('url-loader')
-          .loader(require.resolve('url-loader'))
+          .loader('url-loader')
           .options({
             limit: 10000,
             name: `media/[name].[hash:8].[ext]`
@@ -82,7 +82,7 @@ module.exports = (api, options) => {
       .rule('fonts')
         .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/)
         .use('url-loader')
-          .loader(require.resolve('url-loader'))
+          .loader('url-loader')
           .options({
             limit: 10000,
             name: `fonts/[name].[hash:8].[ext]`

@@ -194,7 +194,7 @@ module.exports = (api, options) => {
       //   .rule('vue')
       //     .use('thread-loader')
       //       .before('vue-loader')
-      //       .loader(require.resolve('thread-loader'))
+      //       .loader('thread-loader')
       //       .options({ name: 'vue' })
     }
   })

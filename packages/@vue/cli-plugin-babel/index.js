@@ -10,11 +10,11 @@ module.exports = api => {
           .add(api.resolve('test'))
           .end()
         .use('cache-loader')
-          .loader(require.resolve('cache-loader'))
+          .loader('cache-loader')
           .options({ cacheDirectory })
           .end()
         .use('babel-loader')
-          .loader(require.resolve('babel-loader'))
+          .loader('babel-loader')
 
     webpackConfig.module
       .rule('vue')
@@ -23,11 +23,11 @@ module.exports = api => {
           options.loaders = options.loaders || {}
           options.loaders.js = [
             {
-              loader: require.resolve('cache-loader'),
+              loader: 'cache-loader',
               options: { cacheDirectory }
             },
             {
-              loader: require.resolve('babel-loader')
+              loader: 'babel-loader'
             }
           ]
           return options
