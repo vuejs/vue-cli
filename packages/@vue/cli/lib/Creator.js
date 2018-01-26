@@ -122,6 +122,7 @@ module.exports = class Creator {
     // install plugins
     stopSpinner()
     log(`⚙  Installing CLI plugins. This might take a while...`)
+    log()
     if (isTestOrDebug) {
       // in development, avoid installation process
       await setupDevProject(context)
@@ -130,6 +131,7 @@ module.exports = class Creator {
     }
 
     // run generator
+    log()
     log(`🚀  Invoking generators...`)
     const plugins = this.resolvePlugins(options.plugins)
     const generator = new Generator(
@@ -142,11 +144,13 @@ module.exports = class Creator {
 
     // install additional deps (injected by generators)
     log(`📦  Installing additional dependencies...`)
+    log()
     if (!isTestOrDebug) {
       await installDeps(context, packageManager, cliOptions.registry)
     }
 
     // run complete cbs if any (injected by generators)
+    log()
     logWithSpinner('⚓', `Running completion hooks...`)
     for (const cb of createCompleteCbs) {
       await cb()
