@@ -3491,7 +3491,7 @@ eslint-plugin-vue-libs@^2.1.0:
   dependencies:
     eslint-plugin-html "^4.0.1"
 
-eslint-plugin-vue@^4.0.0, eslint-plugin-vue@^4.2.0:
+eslint-plugin-vue@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-4.2.0.tgz#25fade387bf9a97377cf0e5cd17ef0d60ac9da57"
   dependencies:
@@ -10058,9 +10058,9 @@ vue-hot-reload-api@^2.2.0:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.2.4.tgz#683bd1d026c0d3b3c937d5875679e9a87ec6cd8f"
 
-vue-jest@vuejs/vue-jest#master:
-  version "1.4.0"
-  resolved "https://codeload.github.com/vuejs/vue-jest/tar.gz/6ad9553e7d8cf27aec69c96c2681075aa8504c68"
+vue-jest@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/vue-jest/-/vue-jest-2.0.0.tgz#fd85ffde96d1ea8640a240fa898f7cc55464cb2e"
   dependencies:
     babel-plugin-transform-es2015-modules-commonjs "^6.26.0"
     chalk "^2.1.0"

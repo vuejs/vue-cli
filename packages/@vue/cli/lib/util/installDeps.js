@@ -74,17 +74,12 @@ const shouldUseTaobao = async (command) => {
   return save(useTaobaoRegistry)
 }
 
-module.exports = async function installDeps (targetDir, command, deps, cliRegistry) {
+module.exports = async function installDeps (targetDir, command, cliRegistry) {
   const args = []
   if (command === 'npm') {
     args.push('install', '--loglevel', 'error')
-    if (deps) {
-      args.push('--save-dev')
-    }
   } else if (command === 'yarn') {
-    if (deps) {
-      args.push('add', '--dev')
-    }
+    // do nothing
   } else {
     throw new Error(`unknown package manager: ${command}`)
   }
@@ -104,30 +99,18 @@ module.exports = async function installDeps (targetDir, command, deps, cliRegist
     }
   }
 
-  if (deps) {
-    args.push.apply(args, deps)
-  }
-
   debug(`command: `, command)
   debug(`args: `, args)
 
   await new Promise((resolve, reject) => {
     const child = execa(command, args, {
       cwd: targetDir,
-      stdio: 'pipe'
-    })
-
-    let stderr = ''
-    child.stderr.on('data', buf => {
-      stderr += buf.toString()
+      stdio: 'inherit'
     })
 
     child.on('close', code => {
       if (code !== 0) {
-        reject(
-          `command failed: ${command} ${args.join(' ')}\n` +
-          stderr
-        )
+        reject(`command failed: ${command} ${args.join(' ')}`)
         return
       }
       resolve()

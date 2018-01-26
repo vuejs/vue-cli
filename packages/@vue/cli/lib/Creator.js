@@ -1,7 +1,7 @@
-const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
+const axios = require('axios')
 const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
@@ -85,36 +85,52 @@ module.exports = class Creator {
       (hasYarn ? 'yarn' : 'npm')
     )
 
-    // write base package.json to disk
     clearConsole()
-    logWithSpinner('✨', `Creating project in ${chalk.yellow(context)}.`)
+    logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
+
+    // get latest CLI version
+    let latestCLIVersion
+    if (!isTestOrDebug) {
+      const res = await axios.get(`https://registry.npmjs.org/@vue%2Fcli/`)
+      latestCLIVersion = res.data['dist-tags'].latest
+    } else {
+      latestCLIVersion = require('../package.json').version
+    }
+    // generate package.json with plugin dependencies
+    const pkg = {
+      name,
+      version: '0.1.0',
+      private: true,
+      devDependencies: {}
+    }
+    const deps = Object.keys(options.plugins)
+    deps.forEach(dep => {
+      pkg.devDependencies[dep] = `^${latestCLIVersion}`
+    })
+    // write package.json
     await writeFileTree(context, {
-      'package.json': JSON.stringify({
-        name,
-        version: '0.1.0',
-        private: true
-      }, null, 2)
+      'package.json': JSON.stringify(pkg, null, 2)
     })
 
-    // intilaize git repository
+    // intilaize git repository before installing deps
+    // so that vue-cli-service can setup git hooks.
     if (hasGit) {
-      logWithSpinner('🗃', `Initializing git repository...`)
+      logWithSpinner(`🗃`, `Initializing git repository...`)
       await run('git init')
     }
 
     // install plugins
-    logWithSpinner('⚙', `Installing CLI plugins. This might take a while...`)
-    const deps = Object.keys(options.plugins)
+    stopSpinner()
+    log(`⚙  Installing CLI plugins. This might take a while...`)
     if (isTestOrDebug) {
       // in development, avoid installation process
-      await setupDevProject(context, deps)
+      await setupDevProject(context)
     } else {
-      await installDeps(context, packageManager, deps, cliOptions.registry)
+      await installDeps(context, packageManager, cliOptions.registry)
     }
 
     // run generator
-    logWithSpinner('🚀', `Invoking generators...`)
-    const pkg = require(path.join(context, 'package.json'))
+    log(`🚀  Invoking generators...`)
     const plugins = this.resolvePlugins(options.plugins)
     const generator = new Generator(
       context,
@@ -125,9 +141,9 @@ module.exports = class Creator {
     await generator.generate()
 
     // install additional deps (injected by generators)
-    logWithSpinner('📦', `Installing additional dependencies...`)
+    log(`📦  Installing additional dependencies...`)
     if (!isTestOrDebug) {
-      await installDeps(context, packageManager, null, cliOptions.registry)
+      await installDeps(context, packageManager, cliOptions.registry)
     }
 
     // run complete cbs if any (injected by generators)

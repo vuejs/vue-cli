@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^3.0.0-alpha.3",
+    "axios": "^0.17.1",
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
     "ejs": "^2.5.7",
