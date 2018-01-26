@@ -18,17 +18,17 @@ module.exports = (api, { config, lintOn = [] }) => {
   if (config === 'airbnb') {
     pkg.eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^3.0.0-alpha.2'
+      '@vue/eslint-config-airbnb': '^3.0.0-alpha.3'
     })
   } else if (config === 'standard') {
     pkg.eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^3.0.0-alpha.2'
+      '@vue/eslint-config-standard': '^3.0.0-alpha.3'
     })
   } else if (config === 'prettier') {
     pkg.eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^3.0.0-alpha.2'
+      '@vue/eslint-config-prettier': '^3.0.0-alpha.3'
     })
   } else {
     // default
