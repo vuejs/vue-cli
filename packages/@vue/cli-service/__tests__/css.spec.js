@@ -59,7 +59,7 @@ const expectedCssLoaderModulesOptions = {
 }
 
 test('default loaders', () => {
-  const config = genConfig()
+  const config = genConfig({ postcss: {}})
 
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
@@ -81,7 +81,7 @@ test('default loaders', () => {
 })
 
 test('production defaults', () => {
-  const config = genConfig({}, 'production')
+  const config = genConfig({ postcss: {}}, 'production')
   const extractLoaderPath = require.resolve('extract-text-webpack-plugin/dist/loader')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
@@ -124,6 +124,7 @@ test('css.extract', () => {
 
 test('css.sourceMap', () => {
   const config = genConfig({
+    postcss: {},
     vue: {
       css: {
         sourceMap: true
@@ -157,4 +158,12 @@ test('css.loaderOptions', () => {
   expect(findOptionsForVue(config, 'scss', 'sass')).toEqual({ data, sourceMap: false })
   expect(findOptions(config, 'sass', 'sass')).toEqual({ data, indentedSyntax: true, sourceMap: false })
   expect(findOptionsForVue(config, 'sass', 'sass')).toEqual({ data, indentedSyntax: true, sourceMap: false })
+})
+
+test('skip postcss-loader if no postcss config found', () => {
+  const config = genConfig()
+  LANGS.forEach(lang => {
+    const loader = lang === 'css' ? [] : LOADERS[lang]
+    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css'].concat(loader))
+  })
 })

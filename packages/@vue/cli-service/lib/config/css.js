@@ -1,3 +1,14 @@
+const fs = require('fs')
+const path = require('path')
+
+const findExisting = (context, files) => {
+  for (const file of files) {
+    if (fs.existsSync(path.join(context, file))) {
+      return file
+    }
+  }
+}
+
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const CSSLoaderResolver = require('../webpack/CSSLoaderResolver')
@@ -6,9 +17,22 @@ module.exports = (api, options) => {
     const isProd = process.env.NODE_ENV === 'production'
     const userOptions = options.css || {}
     const extract = isProd && userOptions.extract !== false
+
+    // check if the project has a valid postcss config
+    // if it doesn't, don't use postcss-loader for direct style imports
+    // because otherwise it would throw error when attempting to load postcss config
+    const hasPostCSSConfig = !!(api.service.pkg.postcss || findExisting(api.resolve('.'), [
+      '.postcssrc',
+      '.postcssrc.js',
+      'postcss.config.js',
+      '.postcssrc.yaml',
+      '.postcssrc.json'
+    ]))
+
     const baseOptions = Object.assign({}, userOptions, {
       extract,
-      minimize: isProd
+      minimize: isProd,
+      postcss: hasPostCSSConfig
     })
 
     const resolver = new CSSLoaderResolver(baseOptions)

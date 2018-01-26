@@ -21,6 +21,8 @@ module.exports = function createConfigPlugin (context, entry) {
         }
 
         // ensure loaders can be resolved properly
+        // this is done by locating vue's install location (which is a
+        // dependency of the global service)
         const modulePath = path.resolve(require.resolve('vue'), '../../../')
         config.resolveLoader
           .modules
@@ -74,7 +76,9 @@ module.exports = function createConfigPlugin (context, entry) {
             .use('babel-loader')
               .tap(() => babelOptions)
 
-        // set inline eslint options
+        // check eslint config presence
+        // otherwise eslint-loader goes all the way up to look for eslintrc, can be
+        // messed up when the project is inside another project.
         const ESLintConfigFile = findExisting(context, [
           '.eslintrc.js',
           '.eslintrc.yaml',
@@ -86,6 +90,8 @@ module.exports = function createConfigPlugin (context, entry) {
         const hasESLintConfig = ESLintConfigFile === 'package.json'
           ? !!(require(path.join(context, 'package.json')).eslintConfig)
           : !!ESLintConfigFile
+
+        // set inline eslint options
         config.module
           .rule('eslint')
             .include

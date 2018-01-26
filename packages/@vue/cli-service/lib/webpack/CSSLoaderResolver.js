@@ -15,6 +15,7 @@ module.exports = class CSSLoaderResolver {
    * @param {boolean} [options.modules=undefined]  Enable CSS modules.
    * @param {boolean} [options.extract=undefined] Extract CSS.
    * @param {boolean} [options.minimize=undefined] Minimize CSS.
+   * @param {boolean} [options.postcss=undefined] Enable postcss-loader.
    * @param {Object} [options.loaderOptions={}] Options to pass on to loaders.
    */
   constructor ({
@@ -22,15 +23,16 @@ module.exports = class CSSLoaderResolver {
     modules,
     extract,
     minimize,
+    postcss,
     loaderOptions
   } = {}) {
-    this.postcss = true // true by default, turned off if generating for vue-loader
     this.cssLoader = 'css-loader'
     this.fallbackLoader = 'vue-style-loader'
     this.sourceMap = sourceMap
     this.extract = extract
     this.minimize = minimize
     this.modules = modules
+    this.postcss = postcss
     this.loaderOptions = loaderOptions || {}
   }
 
