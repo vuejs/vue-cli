@@ -31,7 +31,7 @@ const findLoaders = (config, lang) => {
 
 const findOptions = (config, lang, _loader) => {
   const rule = findRule(config, lang)
-  const use = rule.use.find(({ loader }) => `${_loader}-loader` === loader)
+  const use = rule.use.find(({ loader }) => loader.includes(`${_loader}-loader`))
   return use.options
 }
 
