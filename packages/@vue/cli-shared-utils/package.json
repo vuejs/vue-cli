@@ -21,7 +21,7 @@
   "dependencies": {
     "chalk": "^2.3.0",
     "cmd-shim": "^2.0.2",
-    "joi": "^13.1.0",
+    "joi": "^12.0.0",
     "ora": "^1.3.0",
     "readline": "^1.3.0",
     "string.prototype.padstart": "^3.0.0"
