@@ -1,54 +1,73 @@
 # vue-cli [![Build Status](https://circleci.com/gh/vuejs/vue-cli/tree/dev.svg?style=shield)](https://circleci.com/gh/vuejs/vue-cli/tree/dev) [![Windows Build status](https://ci.appveyor.com/api/projects/status/487fqt71e4kf46iv/branch/dev?svg=true)](https://ci.appveyor.com/project/yyx990803/vue-cli-6b0a6/branch/dev)
 
-> WIP: this is the work in progress branch of the upcoming vue-cli 3.0.
-> Only for preview for template maintainers.
+> This is the branch for `@vue/cli` 3.0.
 
-## Development Setup
+**Status: alpha**
 
-This project uses a monorepo setup that requires using [Yarn](https://yarnpkg.com) because it relies on [Yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/).
-
-``` sh
-# install dependencies
-yarn
-
-# link `vue` executable
-# if you have the old vue-cli installed globally, you may
-# need to uninstall it first.
-cd packages/@vue/cli
-yarn link
-
-# create test projects in /packages/test
-cd -
-cd packages/test
-vue create test-app
-cd test-app
-yarn serve
-```
-
-### Testing Tips
-
-The full test suite is rather slow, because it has a number of e2e tests that perform full webpack builds of actual projects. To narrow down the tests needed to run during development, you can pass a list of packages to the `test` script:
+## Install
 
 ``` sh
-yarn test cli cli-services
+npm install -g @vue/cli
+# or
+yarn global add @vue/cli
 ```
 
-If the package is a plugin, you can ommit the `cli-plugin-` prefix:
+## Usage
+
+#### Creating a New Project
 
 ``` sh
-yarn test typescript
+vue create my-project
 ```
 
-To further narrow down tests, you can also specify your own regex:
+#### Zero-config Prototyping
+
+You can rapidly prototype with just a single `*.vue` file with the `vue serve` and `vue build` commands, but they require an additional global addon to be installed:
 
 ``` sh
-yarn test -g <filenameRegex>
+yarn global add @vue/cli-service-global
+echo '<template><h1>Hello!</h1></template>' > App.vue
+vue serve
 ```
 
-You can also pass `--watch` to run tests in watch mode.
+`vue serve` uses the same default setup (webpack, babel, postcss & eslint) as projects created by `vue create`. It automatically infers the entry file in the current directory - the entry can be one of `main.js`, `index.js`, `App.vue` or `app.vue`. If needed, you can also provide an `index.html`, install and use local dependencies, or even configure babel, postcss & eslint with corresponding config files.
 
-Note that `jest --onlyChanged` isn't always accurate because some tests spawn child processes.
+The drawback of `vue serve` is that it relies on globally installed dependencies which may be inconsistent on different machines. Therefore this is only recommended for rapid prototyping.
 
-### Plugin Development
+#### Installing Plugins in an Existing Project
 
-See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/dev/docs/Plugin.md).
+Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, simply install it first:
+
+``` sh
+yarn add @vue/cli-plugin-eslint
+```
+
+Then you can invoke the plugin's generator so it generates files into your project:
+
+``` sh
+vue invoke eslint # the prefix can be omitted
+```
+
+It is recommended to commit your project's current state before running `vue invoke`, so that after file generation you can review the changes and revert if needed.
+
+#### Pulling `vue-cli@2.x` Templates (Legacy)
+
+`@vue/cli` uses the same `vue` binary, so it overwrites `vue-cli@2.x`. If you still need the legacy `vue init` functionality, you can install a global bridge:
+
+``` sh
+yarn global add @vue/cli-init
+# vue init now works exactly the same as vue-cli@2.x
+vue init webpack my-project
+```
+
+#### Customization and Plugin Usage
+
+For a detailed guide on how to customize a project, recipes for common tasks, detailed usage for each plugin, please see the [full documentation](https://github.com/vuejs/vue-cli/blob/dev/docs/README.md).
+
+## Contributing
+
+Please see [contributing guide](https://github.com/vuejs/vue-cli/blob/dev/.github/CONTRIBUTING.md).
+
+## License
+
+MIT
