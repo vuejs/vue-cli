@@ -16,8 +16,7 @@ test('using correct loader', () => {
   const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))
   expect(rule.use[0].loader).toMatch('cache-loader')
   expect(rule.use[1].loader).toMatch('babel-loader')
-  expect(rule.use[2].loader).toMatch('cache-loader')
-  expect(rule.use[3].loader).toMatch('ts-loader')
+  expect(rule.use[2].loader).toMatch('ts-loader')
 })
 
 const creatorOptions = {
