@@ -30,6 +30,7 @@
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "chalk": "^2.3.0",
     "copy-webpack-plugin": "^4.3.1",
+    "cosmiconfig": "^4.0.0",
     "css-loader": "^0.28.9",
     "deepmerge": "^2.0.1",
     "escape-string-regexp": "^1.0.5",
