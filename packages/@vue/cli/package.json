@@ -37,6 +37,7 @@
     "import-global": "^0.1.0",
     "inquirer": "^4.0.1",
     "isbinaryfile": "^3.0.2",
+    "javascript-stringify": "^1.6.0",
     "klaw-sync": "^3.0.2",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.0",

@@ -6857,9 +6857,9 @@ mocha-webpack@^1.0.1:
     toposort "^1.0.0"
     yargs "^4.8.0"
 
-mocha@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/mocha/-/mocha-5.0.0.tgz#cccac988b0bc5477119cba0e43de7af6d6ad8f4e"
+mocha@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/mocha/-/mocha-4.1.0.tgz#7d86cfbcf35cb829e2754c32e17355ec05338794"
   dependencies:
     browser-stdout "1.3.0"
     commander "2.11.0"

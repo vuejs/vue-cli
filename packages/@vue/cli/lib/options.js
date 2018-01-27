@@ -19,6 +19,7 @@ const schema = createSchema(joi => joi.object().keys({
   cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
   useTaobaoRegistry: joi.boolean(),
   packageManager: joi.string().only(['yarn', 'npm']),
+  useConfigFiles: joi.boolean(),
   plugins: joi.object().required()
 }))
 
@@ -28,6 +29,7 @@ exports.defaults = {
   router: false,
   vuex: false,
   cssPreprocessor: undefined,
+  useConfigFiles: undefined,
   useTaobaoRegistry: undefined,
   packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {

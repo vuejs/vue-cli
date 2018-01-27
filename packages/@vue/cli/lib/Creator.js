@@ -138,6 +138,7 @@ module.exports = class Creator {
       context,
       pkg,
       plugins,
+      options.useConfigFiles,
       createCompleteCbs
     )
     await generator.generate()
@@ -193,6 +194,7 @@ module.exports = class Creator {
       // manual
       options = {
         packageManager: answers.packageManager || loadOptions().packageManager,
+        useConfigFiles: answers.useConfigFiles === 'files',
         plugins: {}
       }
       // run cb registered by prompt modules to finalize the options
@@ -267,6 +269,24 @@ module.exports = class Creator {
   resolveOutroPrompts () {
     const outroPrompts = []
     const savedOptions = loadOptions()
+    if (savedOptions.useConfigFiles == null) {
+      outroPrompts.push({
+        name: 'useConfigFiles',
+        when: isMode('manual'),
+        type: 'list',
+        message: 'Where do you prefer placing config for Babel, PostCSS, ESLint, etc.?',
+        choices: [
+          {
+            name: 'In dedicated config files',
+            value: 'files'
+          },
+          {
+            name: 'In package.json',
+            value: 'pkg'
+          }
+        ]
+      })
+    }
     if (hasYarn && !savedOptions.packageManager) {
       outroPrompts.push({
         name: 'packageManager',

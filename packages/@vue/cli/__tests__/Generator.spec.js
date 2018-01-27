@@ -292,7 +292,7 @@ test('api: onCreateComplete', () => {
         api.onCreateComplete(fn)
       }
     }
-  ], cbs)
+  ], false, cbs)
   expect(cbs).toContain(fn)
 })
 
@@ -305,4 +305,46 @@ test('api: resolve', () => {
       }
     }
   ])
+})
+
+test('extract config files', async () => {
+  const configs = {
+    vue: {
+      lintOnSave: true
+    },
+    babel: {
+      presets: ['@vue/app']
+    },
+    postcss: {
+      autoprefixer: {}
+    },
+    eslintConfig: {
+      extends: ['plugin:vue/essential']
+    },
+    jest: {
+      foo: 'bar'
+    },
+    browserslist: [
+      '>=ie9'
+    ]
+  }
+
+  const generator = new Generator('/', {}, [
+    {
+      id: 'test',
+      apply: api => {
+        api.extendPackage(configs)
+      }
+    }
+  ], true)
+
+  await generator.generate()
+
+  const json = v => JSON.stringify(v, null, 2)
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  expect(fs.readFileSync('/.babelrc', 'utf-8')).toMatch(json(configs.babel))
+  expect(fs.readFileSync('/.postcssrc', 'utf-8')).toMatch(json(configs.postcss))
+  expect(fs.readFileSync('/.eslintrc', 'utf-8')).toMatch(json(configs.eslintConfig))
+  expect(fs.readFileSync('/.browserslistrc', 'utf-8')).toMatch(configs.browserslist.join('\n'))
+  expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(`module.exports = {\n  foo: 'bar'\n}`)
 })

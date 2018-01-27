@@ -1,12 +1,13 @@
 const ejs = require('ejs')
 const slash = require('slash')
 const debug = require('debug')
+const configMap = require('./util/configMap')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 
 module.exports = class Generator {
-  constructor (context, pkg, plugins, completeCbs = []) {
+  constructor (context, pkg, plugins, extractConfigFiles, completeCbs = []) {
     this.context = context
     this.plugins = plugins
     this.pkg = pkg
@@ -26,6 +27,11 @@ module.exports = class Generator {
       const api = new GeneratorAPI(id, this, options, rootOptions || {})
       apply(api, options, rootOptions)
     })
+    // if the user has chosen so, extract configs from package.json into
+    // dedicated files.
+    if (extractConfigFiles) {
+      this.extractConfigFiles()
+    }
   }
 
   async generate () {
@@ -36,6 +42,17 @@ module.exports = class Generator {
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
     // write file tree to disk
     await writeFileTree(this.context, this.files)
+  }
+
+  extractConfigFiles () {
+    for (const key in this.pkg) {
+      if (configMap[key]) {
+        const value = this.pkg[key]
+        const { transform, filename } = configMap[key]
+        this.files[filename] = transform(value)
+        delete this.pkg[key]
+      }
+    }
   }
 
   sortPkg () {

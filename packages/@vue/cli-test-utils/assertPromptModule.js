@@ -19,8 +19,12 @@ module.exports = async function assertPromptModule (
     )
     expectedPrompts.push(
       {
+        message: 'Where do you prefer placing config',
+        choose: 1 // package.json
+      },
+      {
         message: 'package manager',
-        choose: 0
+        choose: 0 // yarn
       },
       {
         message: 'Save the preferences',
@@ -35,6 +39,7 @@ module.exports = async function assertPromptModule (
 
   if (opts.plguinsOnly) {
     delete options.packageManager
+    delete options.useConfigFiles
   }
   expect(options).toEqual(expectedOptions)
 }

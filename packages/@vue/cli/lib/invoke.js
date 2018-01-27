@@ -19,6 +19,7 @@ async function invoke (pluginName, options) {
   delete options._
   const context = process.cwd()
   const pkgPath = path.resolve(context, 'package.json')
+  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
   if (!fs.existsSync(pkgPath)) {
     error(`package.json not found in ${chalk.yellow(context)}`)
@@ -60,6 +61,7 @@ async function invoke (pluginName, options) {
     context,
     pkg,
     [plugin],
+    isTestOrDebug ? false : loadOptions().useConfigFiles,
     createCompleteCbs
   )
 
@@ -67,7 +69,6 @@ async function invoke (pluginName, options) {
   logWithSpinner('🚀', `Invoking generator for ${id}...`)
   await generator.generate()
 
-  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
   const newDeps = generator.pkg.dependencies
   const newDevDeps = generator.pkg.devDependencies
   const depsChanged = (

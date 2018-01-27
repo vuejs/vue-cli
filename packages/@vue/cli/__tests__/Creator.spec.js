@@ -68,6 +68,11 @@ test('manual + PromptModuleAPI', async () => {
       choose: 0
     },
     {
+      message: 'Where do you prefer placing config',
+      choices: ['dedicated', 'package.json'],
+      choose: 0
+    },
+    {
       message: 'package manager',
       choices: ['Yarn', 'NPM'],
       choose: 0
@@ -80,6 +85,7 @@ test('manual + PromptModuleAPI', async () => {
 
   const expectedOptions = {
     packageManager: 'yarn',
+    useConfigFiles: true,
     plugins: {
       bar: {},
       barChoice: {}
