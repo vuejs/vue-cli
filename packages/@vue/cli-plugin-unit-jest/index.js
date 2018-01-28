@@ -19,7 +19,7 @@ module.exports = api => {
 
     let testMatch = []
     if (!args._.length && api.hasPlugin('typescript')) {
-      testMatch = [`--testMatch`, `<rootDir>/**/*.spec.(ts|tsx|js)`]
+      testMatch = [`--testMatch`, `<rootDir>/test/unit/**/*.spec.(ts|tsx|js)`]
     }
 
     const argv = [
