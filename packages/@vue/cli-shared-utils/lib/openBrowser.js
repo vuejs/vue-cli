@@ -6,10 +6,10 @@
  * https://github.com/facebookincubator/create-react-app/blob/master/LICENSE
  */
 
+const opn = require('opn')
+const execa = require('execa')
 const chalk = require('chalk')
 const execSync = require('child_process').execSync
-const execa = require('execa')
-const opn = require('opn')
 
 // https://github.com/sindresorhus/opn#app
 const OSX_CHROME = 'google chrome'
@@ -107,7 +107,7 @@ function startBrowserProcess (browser, url) {
  * Reads the BROWSER evironment variable and decides what to do with it. Returns
  * true if it opened a browser or ran a node.js script, otherwise false.
  */
-function openBrowser (url) {
+exports.openBrowser = function (url) {
   const { action, value } = getBrowserEnv()
   switch (action) {
   case Actions.NONE:
@@ -121,5 +121,3 @@ function openBrowser (url) {
     throw new Error('Not implemented.')
   }
 }
-
-module.exports = openBrowser

@@ -2,6 +2,7 @@ const {
   info,
   error,
   hasYarn,
+  openBrowser,
   clearConsole
 } = require('@vue/cli-shared-utils')
 
@@ -37,7 +38,6 @@ module.exports = (api, options) => {
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
     const portfinder = require('portfinder')
-    const openBrowser = require('../util/openBrowser')
     const prepareURLs = require('../util/prepareURLs')
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')

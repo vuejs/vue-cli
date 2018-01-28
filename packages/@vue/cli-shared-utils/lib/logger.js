@@ -1,9 +1,6 @@
 const chalk = require('chalk')
-const spinner = require('./spinner')
 const readline = require('readline')
 const padStart = require('string.prototype.padstart')
-
-Object.assign(exports, spinner)
 
 const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
@@ -48,14 +45,5 @@ exports.clearConsole = title => {
 
 // silent all logs except errors during tests and keep record
 if (process.env.VUE_CLI_TEST) {
-  const logs = {}
-  Object.keys(exports).forEach(key => {
-    if (key !== 'error') {
-      exports[key] = (...args) => {
-        if (!logs[key]) logs[key] = []
-        logs[key].push(args)
-      }
-    }
-  })
-  exports.logs = logs
+  require('./_silence')(exports)
 }

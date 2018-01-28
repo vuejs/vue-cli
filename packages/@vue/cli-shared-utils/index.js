@@ -1,4 +1,10 @@
-Object.assign(exports, require('./env'))
-Object.assign(exports, require('./logger'))
-Object.assign(exports, require('./validate'))
-Object.assign(exports, require('./linkBin'))
+[
+  'env',
+  'linkBin',
+  'logger',
+  'spinner',
+  'validate',
+  'openBrowser'
+].forEach(m => {
+  Object.assign(exports, require(`./lib/${m}`))
+})
