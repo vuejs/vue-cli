@@ -28,6 +28,8 @@ exports.prompt = prompts => {
     const a = pendingAssertions[i - skipped]
     if (!a) {
       console.error(`no matching assertion for prompt:`, prompt)
+      console.log(prompts)
+      console.log(pendingAssertions)
     }
 
     if (a.message) {

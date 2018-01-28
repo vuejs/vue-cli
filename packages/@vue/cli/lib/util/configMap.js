@@ -22,11 +22,14 @@ module.exports = {
   jest: {
     filename: 'jest.config.js',
     transform: js
-  },
-  browserslist: {
-    filename: '.browserslistrc',
-    transform: value => value.join('\n')
   }
+
+  // these are less likely to be edited frequently
+
+  // browserslist: {
+  //   filename: '.browserslistrc',
+  //   transform: value => value.join('\n')
+  // },
   // 'lint-staged': {
   //   filename: '.lintstagedrc',
   //   transform: json

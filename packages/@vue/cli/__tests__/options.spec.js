@@ -4,16 +4,17 @@ const fs = require('fs')
 const {
   rcPath,
   loadOptions,
-  saveOptions
+  saveOptions,
+  savePreset
 } = require('../lib/options')
 
 test('load options', () => {
   expect(loadOptions()).toEqual({})
   fs.writeFileSync(rcPath, JSON.stringify({
-    plugins: {}
+    presets: {}
   }, null, 2))
   expect(loadOptions()).toEqual({
-    plugins: {}
+    presets: {}
   })
 })
 
@@ -22,49 +23,52 @@ test('should not save unknown fields', () => {
     foo: 'bar'
   })
   expect(loadOptions()).toEqual({
-    plugins: {}
+    presets: {}
   })
 })
 
-test('save options (merge)', () => {
+test('save options', () => {
+  // partial
   saveOptions({
     packageManager: 'yarn'
   })
   expect(loadOptions()).toEqual({
     packageManager: 'yarn',
-    plugins: {}
+    presets: {}
   })
 
+  // replace
   saveOptions({
-    plugins: {
+    presets: {
       foo: { a: 1 }
     }
   })
   expect(loadOptions()).toEqual({
     packageManager: 'yarn',
-    plugins: {
+    presets: {
       foo: { a: 1 }
-    }
-  })
-
-  // shallow save should replace fields
-  saveOptions({
-    plugins: {
-      bar: { b: 2 }
-    }
-  })
-  expect(loadOptions()).toEqual({
-    packageManager: 'yarn',
-    plugins: {
-      bar: { b: 2 }
     }
   })
 })
 
-test('save options (replace)', () => {
-  const toSave = {
-    foo: 'bar'
-  }
-  saveOptions(toSave, true)
-  expect(loadOptions()).toEqual(toSave)
+test('save preset', () => {
+  savePreset('bar', { a: 2 })
+  expect(loadOptions()).toEqual({
+    packageManager: 'yarn',
+    presets: {
+      foo: { a: 1 },
+      bar: { a: 2 }
+    }
+  })
+
+  // should entirely replace presets
+  savePreset('foo', { c: 3 })
+  savePreset('bar', { d: 4 })
+  expect(loadOptions()).toEqual({
+    packageManager: 'yarn',
+    presets: {
+      foo: { c: 3 },
+      bar: { d: 4 }
+    }
+  })
 })

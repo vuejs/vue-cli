@@ -1,14 +1,17 @@
 const chalk = require('chalk')
 
-module.exports = function formatFeatures (options, lead, joiner) {
+module.exports = function formatFeatures (preset, lead, joiner) {
   const features = []
-  if (options.router) {
+  if (preset.router) {
     features.push('vue-router')
   }
-  if (options.vuex) {
+  if (preset.vuex) {
     features.push('vuex')
   }
-  const plugins = Object.keys(options.plugins).filter(dep => {
+  if (preset.cssPreprocessor) {
+    features.push(preset.cssPreprocessor)
+  }
+  const plugins = Object.keys(preset.plugins).filter(dep => {
     return dep !== '@vue/cli-service'
   })
   features.push.apply(features, plugins)

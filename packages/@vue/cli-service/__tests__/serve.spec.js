@@ -1,13 +1,13 @@
 jest.setTimeout(30000)
 
-const { defaults } = require('@vue/cli/lib/options')
+const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
 const sleep = n => new Promise(resolve => setTimeout(resolve, n))
 
 test('serve', async () => {
-  const project = await create('e2e-serve', defaults)
+  const project = await create('e2e-serve', defaultPreset)
 
   await serve(
     () => project.run('vue-cli-service serve'),
@@ -26,7 +26,7 @@ test('serve', async () => {
 })
 
 test('serve with router', async () => {
-  const project = await create('e2e-serve-router', Object.assign({}, defaults, {
+  const project = await create('e2e-serve-router', Object.assign({}, defaultPreset, {
     router: true
   }))
 

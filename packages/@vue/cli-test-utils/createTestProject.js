@@ -6,14 +6,8 @@ const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const mkdirp = promisify(require('mkdirp'))
 
-module.exports = function createTestProject (name, config, cwd) {
+module.exports = function createTestProject (name, preset, cwd) {
   cwd = cwd || path.resolve(__dirname, '../../test')
-
-  config = Object.assign({
-    packageManager: 'yarn',
-    useTaobaoRegistry: false,
-    plugins: {}
-  }, config)
 
   const projectRoot = path.resolve(cwd, name)
 
@@ -46,8 +40,8 @@ module.exports = function createTestProject (name, config, cwd) {
     'create',
     name,
     '--force',
-    '--config',
-    JSON.stringify(config)
+    '--inlinePreset',
+    JSON.stringify(preset)
   ]
 
   const options = {

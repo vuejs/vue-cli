@@ -3,15 +3,15 @@ jest.setTimeout(30000)
 const path = require('path')
 const portfinder = require('portfinder')
 const { createServer } = require('http-server')
-const { defaults } = require('@vue/cli/lib/options')
+const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 let server, browser
 test('pwa', async () => {
   // it's ok to mutate here since jest loads each test in a separate vm
-  defaults.plugins['@vue/cli-plugin-pwa'] = {}
-  const project = await create('pwa-build', defaults)
+  defaultPreset.plugins['@vue/cli-plugin-pwa'] = {}
+  const project = await create('pwa-build', defaultPreset)
   expect(project.has('src/registerServiceWorker.js')).toBe(true)
 
   const { stdout } = await project.run('vue-cli-service build')

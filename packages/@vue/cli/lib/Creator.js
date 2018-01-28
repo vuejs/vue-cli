@@ -16,9 +16,10 @@ const setupDevProject = require('./util/setupDevProject')
 
 const {
   defaults,
-  validate,
   saveOptions,
-  loadOptions
+  loadOptions,
+  savePreset,
+  validatePreset
 } = require('./options')
 
 const {
@@ -30,14 +31,14 @@ const {
   stopSpinner
 } = require('@vue/cli-shared-utils')
 
-const isMode = _mode => ({ mode }) => _mode === mode
+const isManualMode = answers => answers.preset === '__manual__'
 
 module.exports = class Creator {
   constructor (name, context, promptModules) {
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
-    const { modePrompt, featurePrompt } = this.resolveIntroPrompts()
-    this.modePrompt = modePrompt
+    const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
+    this.presetPrompt = presetPrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
     this.injectedPrompts = []
@@ -56,32 +57,35 @@ module.exports = class Creator {
       return execa(command, args, { cwd: context })
     }
 
-    let options
-    if (cliOptions.saved) {
-      options = loadOptions()
+    let preset
+    if (cliOptions.preset) {
+      // vue create foo --preset bar
+      preset = this.resolvePreset(cliOptions.preset)
     } else if (cliOptions.default) {
-      options = defaults
-    } else if (cliOptions.config) {
+      // vue create foo --default
+      preset = defaults.presets.default
+    } else if (cliOptions.inlinePreset) {
+      // vue create foo --inlinePreset {...}
       try {
-        options = JSON.parse(cliOptions.config)
+        preset = JSON.parse(cliOptions.inlinePreset)
       } catch (e) {
-        error(`CLI inline config is not valid JSON: ${cliOptions.config}`)
+        error(`CLI inline preset is not valid JSON: ${cliOptions.inlinePreset}`)
         process.exit(1)
       }
     } else {
-      options = await this.promptAndResolveOptions()
+      preset = await this.promptAndResolvePreset()
     }
 
     // clone before mutating
-    options = cloneDeep(options)
+    preset = cloneDeep(preset)
     // inject core service
-    options.plugins['@vue/cli-service'] = Object.assign({
+    preset.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
-    }, options)
+    }, preset)
 
     const packageManager = (
       cliOptions.packageManager ||
-      options.packageManager ||
+      loadOptions().packageManager ||
       (hasYarn ? 'yarn' : 'npm')
     )
 
@@ -103,7 +107,7 @@ module.exports = class Creator {
       private: true,
       devDependencies: {}
     }
-    const deps = Object.keys(options.plugins)
+    const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
       pkg.devDependencies[dep] = `^${latestCLIVersion}`
     })
@@ -133,12 +137,12 @@ module.exports = class Creator {
     // run generator
     log()
     log(`🚀  Invoking generators...`)
-    const plugins = this.resolvePlugins(options.plugins)
+    const plugins = this.resolvePlugins(preset.plugins)
     const generator = new Generator(
       context,
       pkg,
       plugins,
-      options.useConfigFiles,
+      preset.useConfigFiles,
       createCompleteCbs
     )
     await generator.generate()
@@ -174,43 +178,69 @@ module.exports = class Creator {
     log(
       `👉  Get started with the following commands:\n\n` +
       chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`) +
-      chalk.cyan(` ${chalk.gray('$')} ${options.packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
+      chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
     )
     log()
   }
 
-  async promptAndResolveOptions () {
+  async promptAndResolvePreset () {
     // prompt
     clearConsole()
     const answers = await inquirer.prompt(this.resolveFinalPrompts())
-    debug('vue:cli-answers')(answers)
+    debug('vue-cli:answers')(answers)
 
-    let options
-    if (answers.mode === 'saved') {
-      options = loadOptions()
-    } else if (answers.mode === 'default') {
-      options = defaults
+    if (answers.packageManager) {
+      saveOptions({
+        packageManager: answers.packageManager
+      })
+    }
+
+    let preset
+    if (answers.preset && answers.preset !== '__manual__') {
+      preset = this.resolvePreset(answers.preset)
     } else {
       // manual
-      options = {
-        packageManager: answers.packageManager || loadOptions().packageManager,
+      preset = {
         useConfigFiles: answers.useConfigFiles === 'files',
         plugins: {}
       }
-      // run cb registered by prompt modules to finalize the options
-      this.promptCompleteCbs.forEach(cb => cb(answers, options))
+      answers.features = answers.features || []
+      // run cb registered by prompt modules to finalize the preset
+      this.promptCompleteCbs.forEach(cb => cb(answers, preset))
     }
 
     // validate
-    validate(options)
+    validatePreset(preset)
 
-    // save options
-    if (answers.mode === 'manual' && answers.save) {
-      saveOptions(options, true /* replace */)
+    // save preset
+    if (answers.save && answers.saveName) {
+      savePreset(answers.saveName, preset)
     }
 
-    debug('vue:cli-options')(options)
-    return options
+    debug('vue-cli:preset')(preset)
+    return preset
+  }
+
+  resolvePreset (name) {
+    const savedPresets = loadOptions().presets || {}
+    let preset = savedPresets[name]
+    // use default preset if user has not overwritten it
+    if (name === 'default' && !preset) {
+      preset = defaults.presets.default
+    }
+    if (!preset) {
+      error(`preset "${name}" not found.`)
+      const presets = Object.keys(savedPresets)
+      if (presets.length) {
+        log()
+        log(`available presets:\n${presets.join(`\n`)}`)
+      } else {
+        log(`you don't seem to have any saved preset.`)
+        log(`run vue-cli in manual mode to create a preset.`)
+      }
+      process.exit(1)
+    }
+    return preset
   }
 
   // { id: options } => [{ id, apply, options }]
@@ -228,51 +258,45 @@ module.exports = class Creator {
   }
 
   resolveIntroPrompts () {
-    const defualtFeatures = formatFeatures(defaults)
-    const modePrompt = {
-      name: 'mode',
+    const savedOptions = loadOptions()
+    const presets = Object.assign({}, savedOptions.presets, defaults.presets)
+    const presetChoices = Object.keys(presets).map(name => {
+      return {
+        name: `${name} (${formatFeatures(presets[name])})`,
+        value: name
+      }
+    })
+    const presetPrompt = {
+      name: 'preset',
       type: 'list',
-      message: `Please pick a project creation mode:`,
+      message: `Please pick a preset:`,
       choices: [
-        {
-          name: `Zero-config with defaults (${defualtFeatures})`,
-          value: 'default'
-        },
+        ...presetChoices,
         {
           name: 'Manually select features',
-          value: 'manual'
+          value: '__manual__'
         }
       ]
     }
-    const savedOptions = loadOptions()
-    if (savedOptions.plugins) {
-      const savedFeatures = formatFeatures(savedOptions)
-      modePrompt.choices.unshift({
-        name: `Use previously saved config (${savedFeatures})`,
-        value: 'saved'
-      })
-    }
     const featurePrompt = {
       name: 'features',
-      when: isMode('manual'),
+      when: isManualMode,
       type: 'checkbox',
       message: 'Check the features needed for your project:',
       choices: [],
       pageSize: 8
     }
     return {
-      modePrompt,
+      presetPrompt,
       featurePrompt
     }
   }
 
   resolveOutroPrompts () {
-    const outroPrompts = []
-    const savedOptions = loadOptions()
-    if (savedOptions.useConfigFiles == null) {
-      outroPrompts.push({
+    const outroPrompts = [
+      {
         name: 'useConfigFiles',
-        when: isMode('manual'),
+        when: isManualMode,
         type: 'list',
         message: 'Where do you prefer placing config for Babel, PostCSS, ESLint, etc.?',
         choices: [
@@ -285,12 +309,26 @@ module.exports = class Creator {
             value: 'pkg'
           }
         ]
-      })
-    }
+      },
+      {
+        name: 'save',
+        when: isManualMode,
+        type: 'confirm',
+        message: 'Save this as a preset for future projects?'
+      },
+      {
+        name: 'saveName',
+        when: answers => answers.save,
+        type: 'input',
+        message: 'Save preset as:'
+      }
+    ]
+
+    // ask for packageManager once
+    const savedOptions = loadOptions()
     if (hasYarn && !savedOptions.packageManager) {
       outroPrompts.push({
         name: 'packageManager',
-        when: isMode('manual'),
         type: 'list',
         message: 'Pick the package manager to use when installing dependencies:',
         choices: [
@@ -307,30 +345,25 @@ module.exports = class Creator {
         ]
       })
     }
-    outroPrompts.push({
-      name: 'save',
-      when: isMode('manual'),
-      type: 'confirm',
-      message: 'Save the preferences for future projects? (You can always manually edit ~/.vuerc)'
-    })
+
     return outroPrompts
   }
 
   resolveFinalPrompts () {
-    // patch generator-injected prompts to only show when mode === 'manual'
+    // patch generator-injected prompts to only show in manual mode
     this.injectedPrompts.forEach(prompt => {
       const originalWhen = prompt.when || (() => true)
-      prompt.when = options => {
-        return options.mode === 'manual' && originalWhen(options)
+      prompt.when = answers => {
+        return isManualMode(answers) && originalWhen(answers)
       }
     })
-    const prompts = [].concat(
-      this.modePrompt,
+    const prompts = [
+      this.presetPrompt,
       this.featurePrompt,
-      this.injectedPrompts,
-      this.outroPrompts
-    )
-    debug('vue:cli-prompts')(prompts)
+      ...this.injectedPrompts,
+      ...this.outroPrompts
+    ]
+    debug('vue-cli:prompts')(prompts)
     return prompts
   }
 }

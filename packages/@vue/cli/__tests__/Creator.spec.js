@@ -7,15 +7,20 @@ const assertPromptModule = require('@vue/cli-test-utils/assertPromptModule')
 test('default', async () => {
   const epxectedPrompts = [
     {
-      message: 'project creation mode',
+      message: 'pick a preset',
       choices: [
-        'Zero-config',
+        'default',
         'Manually select'
       ],
       choose: 0
+    },
+    {
+      message: 'package manager',
+      choices: ['Yarn', 'NPM'],
+      choose: 0
     }
   ]
-  assertPromptModule([], epxectedPrompts, defaults)
+  await assertPromptModule([], epxectedPrompts, defaults.presets.default)
 })
 
 test('manual + PromptModuleAPI', async () => {
@@ -73,18 +78,16 @@ test('manual + PromptModuleAPI', async () => {
       choose: 0
     },
     {
-      message: 'package manager',
-      choices: ['Yarn', 'NPM'],
-      choose: 0
+      message: 'Save this as a preset',
+      confirm: true
     },
     {
-      message: 'Save the preferences',
-      confirm: true
+      message: 'Save preset as',
+      input: 'test'
     }
   ]
 
   const expectedOptions = {
-    packageManager: 'yarn',
     useConfigFiles: true,
     plugins: {
       bar: {},
@@ -98,8 +101,8 @@ test('manual + PromptModuleAPI', async () => {
   const expectedPromptsForSaved = [
     {
       choices: [
-        'Use previously saved',
-        'Zero-config',
+        'test',
+        'default',
         'Manually'
       ],
       choose: 0

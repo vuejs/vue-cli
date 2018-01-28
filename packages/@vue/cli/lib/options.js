@@ -1,44 +1,49 @@
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
-const {
-  error,
-  hasYarn,
-  createSchema,
-  validate
-} = require('@vue/cli-shared-utils')
+const cloneDeep = require('lodash.clonedeep')
+const { error, log, createSchema, validate } = require('@vue/cli-shared-utils')
 
 const rcPath = exports.rcPath = (
   process.env.VUE_CLI_CONFIG_PATH ||
   path.join(os.homedir(), '.vuerc')
 )
 
-const schema = createSchema(joi => joi.object().keys({
+const presetSchema = createSchema(joi => joi.object().keys({
+  useConfigFiles: joi.boolean(),
   router: joi.boolean(),
   vuex: joi.boolean(),
   cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
-  useTaobaoRegistry: joi.boolean(),
-  packageManager: joi.string().only(['yarn', 'npm']),
-  useConfigFiles: joi.boolean(),
   plugins: joi.object().required()
 }))
 
-exports.validate = options => validate(options, schema)
+const schema = createSchema(joi => joi.object().keys({
+  packageManager: joi.string().only(['yarn', 'npm']),
+  useTaobaoRegistry: joi.boolean(),
+  presets: joi.object().pattern(/^/, presetSchema)
+}))
 
-exports.defaults = {
+exports.validatePreset = preset => validate(preset, presetSchema)
+
+exports.defaultPreset = {
   router: false,
   vuex: false,
+  useConfigFiles: false,
   cssPreprocessor: undefined,
-  useConfigFiles: undefined,
-  useTaobaoRegistry: undefined,
-  packageManager: hasYarn ? 'yarn' : 'npm',
   plugins: {
     '@vue/cli-plugin-babel': {},
     '@vue/cli-plugin-eslint': {
       config: 'base',
-      lintOn: ['save', 'commit']
-    },
-    '@vue/cli-plugin-unit-mocha': {}
+      lintOn: ['save']
+    }
+  }
+}
+
+exports.defaults = {
+  packageManager: undefined,
+  useTaobaoRegistry: undefined,
+  presets: {
+    'default': exports.defaultPreset
   }
 }
 
@@ -51,28 +56,32 @@ exports.loadOptions = () => {
   if (fs.existsSync(rcPath)) {
     try {
       cachedOptions = JSON.parse(fs.readFileSync(rcPath, 'utf-8'))
-      return cachedOptions
     } catch (e) {
       error(
         `Error loading saved preferences: ` +
         `~/.vuerc may be corrupted or have syntax errors. ` +
-        `You may need to delete it and re-run vue-cli in manual mode.\n` +
+        `Please fix/delete it and re-run vue-cli in manual mode.\n` +
         `(${e.message})`,
       )
-      process.exit(1)
+      // process.exit(1)
     }
+    try {
+      validate(cachedOptions, schema, undefined, true /* noExit */)
+    } catch (e) {
+      log(
+        `~/.vuerc may be outdated. ` +
+        `Please delete it and re-run vue-cli in manual mode.`
+      )
+      // process.exit(1)
+    }
+    return cachedOptions
   } else {
     return {}
   }
 }
 
-exports.saveOptions = (toSave, replace) => {
-  let options
-  if (replace) {
-    options = toSave
-  } else {
-    options = Object.assign(exports.loadOptions(), toSave)
-  }
+exports.saveOptions = toSave => {
+  const options = Object.assign(cloneDeep(exports.loadOptions()), toSave)
   for (const key in options) {
     if (!(key in exports.defaults)) {
       delete options[key]
@@ -88,4 +97,10 @@ exports.saveOptions = (toSave, replace) => {
       `(${e.message})`
     )
   }
+}
+
+exports.savePreset = (name, preset) => {
+  const presets = cloneDeep(exports.loadOptions().presets || {})
+  presets[name] = preset
+  exports.saveOptions({ presets })
 }

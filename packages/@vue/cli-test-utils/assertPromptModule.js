@@ -1,6 +1,7 @@
 // using this requires mocking fs & inquirer
 
 const Creator = require('@vue/cli/lib/Creator')
+const { loadOptions } = require('@vue/cli/lib/options')
 const { expectPrompts } = require('inquirer') // from mock
 
 module.exports = async function assertPromptModule (
@@ -13,7 +14,7 @@ module.exports = async function assertPromptModule (
   if (opts.plguinsOnly) {
     expectedPrompts.unshift(
       {
-        message: 'project creation mode',
+        message: 'Please pick a preset',
         choose: 1
       }
     )
@@ -23,23 +24,24 @@ module.exports = async function assertPromptModule (
         choose: 1 // package.json
       },
       {
-        message: 'package manager',
-        choose: 0 // yarn
-      },
-      {
-        message: 'Save the preferences',
+        message: 'Save this as a preset',
         confirm: false
       }
     )
+    if (!loadOptions().packageManager) {
+      expectedPrompts.push({
+        message: 'package manager',
+        choose: 0 // yarn
+      })
+    }
   }
 
   expectPrompts(expectedPrompts)
   const creator = new Creator('test', '/', [].concat(module))
-  const options = await creator.promptAndResolveOptions()
+  const preset = await creator.promptAndResolvePreset()
 
   if (opts.plguinsOnly) {
-    delete options.packageManager
-    delete options.useConfigFiles
+    delete preset.useConfigFiles
   }
-  expect(options).toEqual(expectedOptions)
+  expect(preset).toEqual(expectedOptions)
 }

@@ -3,13 +3,13 @@ jest.setTimeout(30000)
 const path = require('path')
 const portfinder = require('portfinder')
 const { createServer } = require('http-server')
-const { defaults } = require('@vue/cli/lib/options')
+const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 let server, browser, page
 test('build', async () => {
-  const project = await create('e2e-build', defaults)
+  const project = await create('e2e-build', defaultPreset)
 
   // test public copy
   project.write('public/foo.js', '1')
