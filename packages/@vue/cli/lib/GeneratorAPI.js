@@ -1,10 +1,9 @@
 const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
-const walk = require('klaw-sync')
+const globby = require('globby')
 const isBinary = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
-const errorParser = require('error-stack-parser')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -52,25 +51,22 @@ module.exports = class GeneratorAPI {
     const baseDir = extractCallDir()
     if (isString(fileDir)) {
       fileDir = path.resolve(baseDir, fileDir)
-      this.injectFileMiddleware(files => {
+      this.injectFileMiddleware(async (files) => {
         const data = Object.assign({
           options: this.options,
           rootOptions: this.rootOptions
         }, additionalData)
-        const _files = walk(fileDir, {
-          nodir: true,
-          filter: file => path.basename(file.path) !== '.DS_Store'
-        })
-        for (const file of _files) {
-          let filename = path.basename(file.path)
+        const _files = await globby(['**/*'], { cwd: fileDir })
+        for (const rawPath of _files) {
+          let filename = path.basename(rawPath)
           // dotfiles are ignored when published to npm, therefore in templates
           // we need to use underscore instead (e.g. "_gitignore")
           if (filename.charAt(0) === '_') {
             filename = `.${filename.slice(1)}`
           }
-          const normalizedPath = path.join(path.dirname(file.path), filename)
-          const targetPath = path.relative(fileDir, normalizedPath)
-          const content = renderFile(file.path, data, ejsOptions)
+          const targetPath = path.join(path.dirname(rawPath), filename)
+          const sourcePath = path.resolve(fileDir, rawPath)
+          const content = renderFile(sourcePath, data, ejsOptions)
           // only set file if it's not all whitespace, or is a Buffer (binary files)
           if (Buffer.isBuffer(content) || /[^\s]/.test(content)) {
             files[targetPath] = content
@@ -117,8 +113,9 @@ function extractCallDir () {
   // extract api.render() callsite file location using error stack
   const obj = {}
   Error.captureStackTrace(obj)
-  const stack = errorParser.parse(obj)
-  return path.dirname(stack[2].fileName)
+  const callSite = obj.stack.split('\n')[3]
+  const fileName = callSite.match(/\s\((.*):\d+:\d+\)$/)[1]
+  return path.dirname(fileName)
 }
 
 function renderFile (name, data, ejsOptions) {
