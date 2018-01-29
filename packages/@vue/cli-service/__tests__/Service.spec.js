@@ -59,14 +59,6 @@ test('load project options from vue.config.js', () => {
   fs.unlinkSync('/vue.config.js')
 })
 
-test('load project options from .vuerc', () => {
-  fs.writeFileSync('/.vuerc', JSON.stringify({ lintOnSave: false }))
-  const service = createMockService()
-  // vue.config.js has higher priority
-  expect(service.projectOptions.lintOnSave).toBe(false)
-  fs.unlinkSync('/.vuerc')
-})
-
 test('package.json option should take priority', () => {
   fs.writeFileSync('/vue.config.js', `module.exports=${JSON.stringify({ lintOnSave: false })}`)
   mockPkg({

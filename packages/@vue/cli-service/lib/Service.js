@@ -155,6 +155,7 @@ module.exports = class Service {
       resolved = this.pkg.vue
     } else {
       const explorer = cosmiconfig('vue', {
+        rc: false,
         sync: true,
         stopDir: this.context
       })
