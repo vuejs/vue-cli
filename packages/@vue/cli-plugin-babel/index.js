@@ -1,8 +1,9 @@
-module.exports = api => {
+module.exports = (api, options) => {
+  const useThreads = process.env.NODE_ENV === 'production' && options.parallel
   const cacheDirectory = api.resolve('node_modules/.cache/cache-loader')
 
   api.chainWebpack(webpackConfig => {
-    webpackConfig.module
+    const jsRule = webpackConfig.module
       .rule('js')
         .test(/\.jsx?$/)
         .include
@@ -13,8 +14,16 @@ module.exports = api => {
           .loader('cache-loader')
           .options({ cacheDirectory })
           .end()
-        .use('babel-loader')
-          .loader('babel-loader')
+
+    if (useThreads) {
+      jsRule
+        .use('thread-loader')
+          .loader('thread-loader')
+    }
+
+    jsRule
+      .use('babel-loader')
+        .loader('babel-loader')
 
     webpackConfig.module
       .rule('vue')
@@ -25,11 +34,16 @@ module.exports = api => {
             {
               loader: 'cache-loader',
               options: { cacheDirectory }
-            },
-            {
-              loader: 'babel-loader'
             }
           ]
+          if (useThreads) {
+            options.loaders.js.push({
+              loader: 'thread-loader'
+            })
+          }
+          options.loaders.js.push({
+            loader: 'babel-loader'
+          })
           return options
         })
   })

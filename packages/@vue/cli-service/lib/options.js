@@ -6,6 +6,7 @@ const schema = createSchema(joi => joi.object({
   compiler: joi.boolean(),
   productionSourceMap: joi.boolean(),
   vueLoader: joi.object(),
+  parallel: joi.boolean(),
   dll: joi.alternatives().try(
     joi.boolean(),
     joi.array().items(joi.string())
@@ -22,8 +23,7 @@ const schema = createSchema(joi => joi.object({
   }),
   devServer: joi.object(),
   // known options from offical plugins
-  lintOnSave: joi.boolean(),
-  pwa: joi.object()
+  lintOnSave: joi.boolean()
 }))
 
 exports.validate = options => validate(
@@ -48,6 +48,14 @@ exports.defaults = () => ({
 
   // sourceMap for production build?
   productionSourceMap: true,
+
+  // use thread-loader for babel & TS in production build
+  // enabled by default if the machine has more than 1 cores
+  parallel: require('os').cpus().length > 1,
+
+  // split vendors using autoDLLPlugin?
+  // can be an explicit list of dependencies to include in the DLL chunk.
+  dll: false,
 
   css: {
     // boolean | Object, extract css?
