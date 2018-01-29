@@ -4,7 +4,7 @@
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "bin": {
-    "vue-cli-service": "bin/vue-cli-service"
+    "vue-cli-service": "bin/vue-cli-service.js"
   },
   "repository": {
     "type": "git",

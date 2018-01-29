@@ -3,7 +3,7 @@
   "version": "3.0.0-alpha.5",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
-    "vue": "bin/vue"
+    "vue": "bin/vue.js"
   },
   "files": [
     "bin",
