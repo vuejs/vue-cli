@@ -3,6 +3,7 @@
     "target": "<%- options.useTsWithBabel ? 'es2015' : 'es5' %>",
     "module": "es2015",
     "strict": true,
+    "jsx": "preserve",
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
@@ -13,6 +14,7 @@
     "baseUrl": ".",
     <%_if (isTest) { _%>
     "types": [
+      "node",
       <%_ if (hasMocha) { _%>
       "mocha",
       "chai"

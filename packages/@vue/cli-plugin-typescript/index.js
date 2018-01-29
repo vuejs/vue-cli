@@ -17,43 +17,75 @@ module.exports = (api, options) => {
           .add(api.resolve('src'))
           .add(api.resolve('test'))
           .end()
-
-    if (options.experimentalCompileTsWithBabel) {
-      // Experimental: compile TS with babel so that it can leverage
-      // preset-env for auto-detected polyfills based on browserslists config.
-      // this is pending on the readiness of @babel/preset-typescript.
-      tsRule
         .use('cache-loader')
           .loader('cache-loader')
           .options({ cacheDirectory })
           .end()
-        .use('babel-loader')
-          .loader('babel-loader')
 
-      config.module
-        .rule('vue')
-          .use('vue-loader')
-            .tap(options => {
-              options.loaders.ts = 'babel-loader'
-              return options
-            })
-    } else {
+    const vueLoader = config.module
+      .rule('vue')
+        .use('vue-loader')
+        .tap(options => {
+          options.loaders.ts = [
+            {
+              loader: 'cache-loader',
+              options: { cacheDirectory }
+            }
+          ]
+          return options
+        })
+
+    if (!options.experimentalCompileTsWithBabel) {
+      const tsLoaderOptions = {
+        transpileOnly: true,
+        appendTsSuffixTo: [/\.vue$/]
+      }
+
+      // if has babel plugin, inject babel-loader before ts-loader
       if (api.hasPlugin('babel')) {
         tsRule
-          .use('cache-loader')
-            .loader('cache-loader')
-            .options({ cacheDirectory })
-            .end()
           .use('babel-loader')
             .loader('babel-loader')
+        vueLoader
+          .tap(options => {
+            if (api.hasPlugin('babel')) {
+              options.loaders.ts.push({
+                loader: 'babel-loader'
+              })
+            }
+            return options
+          })
       }
+
+      // apply ts-loader
       tsRule
         .use('ts-loader')
           .loader('ts-loader')
-          .options({
-            transpileOnly: true,
-            appendTsSuffixTo: [/\.vue$/]
+          .options(tsLoaderOptions)
+      vueLoader
+        .tap(options => {
+          options.loaders.ts.push({
+            loader: 'ts-loader',
+            options: tsLoaderOptions
           })
+          return options
+        })
+    } else {
+      // Experimental: compile TS with babel so that it can leverage
+      // preset-env for auto-detected polyfills based on browserslists config.
+      // this is pending on the readiness of @babel/preset-typescript.
+      tsRule
+        .use('babel-loader')
+          .loader('babel-loader')
+      vueLoader
+        .tap(options => {
+          options.loaders.ts.push(
+            {
+              loader: 'babel-loader'
+            }
+          )
+          return options
+        })
     }
 
     config
