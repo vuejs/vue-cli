@@ -38,7 +38,7 @@ program
   .command('create <app-name>')
   .description('create a new project powered by vue-cli-service')
   .option('-p, --preset <presetName>', 'Skip prompts and use saved preset')
-  .option('-d, --default', 'Skip prompts and use default config')
+  .option('-d, --default', 'Skip prompts and use default preset')
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
   .option('-r, --registry <url>', 'Use specified NPM registry when installing dependencies')
   .option('-m, --packageManager <command>', 'Use specified NPM client when installing dependencies')

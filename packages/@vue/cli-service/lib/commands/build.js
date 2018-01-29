@@ -10,7 +10,9 @@ module.exports = (api, options) => {
     options: {
       '--mode': `specify env mode (default: ${defaults.mode})`
       // TODO build target
-      // '--target': `app | library | web-component (default: ${defaults.target})`
+      // '--target': `app | lib | web-component (default: ${defaults.target})`,
+      // '--format': `How the lib is exposed (esm, umd, cjs, amd). Default: esm`
+      // '--name': `Library name for umd/iife export`
     }
   }, args => {
     api.setMode(args.mode || defaults.mode)
