@@ -26,6 +26,7 @@ module.exports = (api, options) => {
       .rule('vue')
         .use('vue-loader')
         .tap(options => {
+          options.loaders = options.loaders || {}
           options.loaders.ts = [
             {
               loader: 'cache-loader',
@@ -48,11 +49,9 @@ module.exports = (api, options) => {
             .loader('babel-loader')
         vueLoader
           .tap(options => {
-            if (api.hasPlugin('babel')) {
-              options.loaders.ts.push({
-                loader: 'babel-loader'
-              })
-            }
+            options.loaders.ts.push({
+              loader: 'babel-loader'
+            })
             return options
           })
       }
