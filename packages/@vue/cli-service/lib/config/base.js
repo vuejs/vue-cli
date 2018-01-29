@@ -123,7 +123,11 @@ module.exports = (api, options) => {
     webpackConfig
       .plugin('html')
         .use(require('html-webpack-plugin'), [
-          fs.existsSync(htmlPath) ? { template: htmlPath } : {}
+          Object.assign(
+            fs.existsSync(htmlPath) ? { template: htmlPath } : {},
+            // expose client env to html template
+            { env: resolveClientEnv(options.baseUrl, true /* raw */) }
+          )
         ])
 
     webpackConfig
