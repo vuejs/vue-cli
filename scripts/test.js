@@ -3,10 +3,10 @@ const minimist = require('minimist')
 
 const args = minimist(process.argv.slice(2))
 
-const packages = args._
-let regex = args.g || args.grep
-if (!regex && packages.length) {
-  regex = `.*@vue/(${packages.join('|')}|cli-plugin-(${packages.join('|')}))/.*\\.spec\\.js$`
+let regex = args._[0]
+if (args.p || args.package) {
+  const packages = (args.p || args.package).split(',').join('|')
+  regex = `.*@vue/(${packages}|cli-plugin-(${packages}))/.*\\.spec\\.js$`
 }
 
 ;(async () => {

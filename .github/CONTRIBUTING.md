@@ -22,22 +22,28 @@ yarn serve
 
 ### Testing Tips
 
-The full test suite is rather slow, because it has a number of e2e tests that perform full webpack builds of actual projects. To narrow down the tests needed to run during development, you can pass a list of packages to the `test` script:
+The full test suite is rather slow, because it has a number of e2e tests that perform full webpack builds of actual projects. To narrow down the tests needed to run during development, you can pass the test script a regex to match test filenames:
 
 ``` sh
-yarn test cli cli-services
+yarn test <filenameRegex>
+```
+
+Note the regex matches against full paths relative to the project root, so for example if you want to test all the prompt modules in `packages/@vue/cli/lib/promptModules`, you can simply run:
+
+``` sh
+yarn test promptModules
+```
+
+Alternatively, you can run the tests inside specific packages with the `-p` flag:
+
+``` sh
+yarn test -p cli,cli-service
 ```
 
 If the package is a plugin, you can ommit the `cli-plugin-` prefix:
 
 ``` sh
-yarn test typescript
-```
-
-To further narrow down tests, you can also specify your own regex:
-
-``` sh
-yarn test -g <filenameRegex>
+yarn test -p typescript
 ```
 
 You can also pass `--watch` to run tests in watch mode.
