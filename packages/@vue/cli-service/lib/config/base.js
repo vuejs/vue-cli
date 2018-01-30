@@ -1,8 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
-    const fs = require('fs')
     const resolveLocal = require('../util/resolveLocal')
-    const resolveClientEnv = require('../util/resolveClientEnv')
+    const inlineLimit = process.env.VUE_CLI_INLINE_LIMIT || 1000
 
     webpackConfig
       .context(api.service.context)
@@ -53,7 +52,7 @@ module.exports = (api, options) => {
         .use('url-loader')
           .loader('url-loader')
           .options({
-            limit: 10000,
+            limit: inlineLimit,
             name: `img/[name].[hash:8].[ext]`
           })
 
@@ -74,7 +73,7 @@ module.exports = (api, options) => {
         .use('url-loader')
           .loader('url-loader')
           .options({
-            limit: 10000,
+            limit: inlineLimit,
             name: `media/[name].[hash:8].[ext]`
           })
 
@@ -84,7 +83,7 @@ module.exports = (api, options) => {
         .use('url-loader')
           .loader('url-loader')
           .options({
-            limit: 10000,
+            limit: inlineLimit,
             name: `fonts/[name].[hash:8].[ext]`
           })
 
@@ -102,34 +101,7 @@ module.exports = (api, options) => {
         child_process: 'empty'
       })
 
-    // inject preload/prefetch to HTML
-    const PreloadPlugin = require('../webpack/PreloadPlugin')
-    webpackConfig
-      .plugin('preload')
-        .use(PreloadPlugin, [{
-          rel: 'preload',
-          include: 'initial',
-          fileBlacklist: [/\.map$/, /hot-update\.js$/]
-        }])
-
-    webpackConfig
-      .plugin('prefetch')
-        .use(PreloadPlugin, [{
-          rel: 'prefetch',
-          include: 'asyncChunks'
-        }])
-
-    const htmlPath = api.resolve('public/index.html')
-    webpackConfig
-      .plugin('html')
-        .use(require('html-webpack-plugin'), [
-          Object.assign(
-            fs.existsSync(htmlPath) ? { template: htmlPath } : {},
-            // expose client env to html template
-            { env: resolveClientEnv(options.baseUrl, true /* raw */) }
-          )
-        ])
-
+    const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
       .plugin('define')
         .use(require('webpack/lib/DefinePlugin'), [
@@ -143,5 +115,15 @@ module.exports = (api, options) => {
     webpackConfig
       .plugin('case-sensitive-paths')
         .use(require('case-sensitive-paths-webpack-plugin'))
+
+    // friendly error plugin displays very confusing errors when webpack
+    // fails to resolve a loader, so we provide custom handlers to improve it
+    const { transformer, formatter } = require('../webpack/resolveLoaderError')
+    webpackConfig
+      .plugin('firendly-errors')
+        .use(require('friendly-errors-webpack-plugin'), [{
+          additionalTransformers: [transformer],
+          additionalFormatters: [formatter]
+        }])
   })
 }

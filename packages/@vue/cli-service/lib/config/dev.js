@@ -18,16 +18,6 @@ module.exports = api => {
         .plugin('no-emit-on-errors')
           .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
 
-      // friendly error plugin displays very confusing errors when webpack
-      // fails to resolve a loader, so we provide custom handlers to improve it
-      const { transformer, formatter } = require('../webpack/resolveLoaderError')
-      webpackConfig
-        .plugin('firendly-errors')
-          .use(require('friendly-errors-webpack-plugin'), [{
-            additionalTransformers: [transformer],
-            additionalFormatters: [formatter]
-          }])
-
       webpackConfig
         .plugin('watch-missing')
           .use(

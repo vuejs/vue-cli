@@ -1,6 +1,7 @@
 const defaults = {
   mode: 'production',
-  target: 'app'
+  target: 'app',
+  entry: 'src/App.vue'
 }
 
 module.exports = (api, options) => {
@@ -8,27 +9,37 @@ module.exports = (api, options) => {
     description: 'build for production',
     usage: 'vue-cli-service build [options]',
     options: {
-      '--mode': `specify env mode (default: ${defaults.mode})`
-      // TODO build target
-      // '--target': `app | lib | web-component (default: ${defaults.target})`,
-      // '--format': `How the lib is exposed (esm, umd, cjs, amd). Default: esm`
-      // '--name': `Library name for umd/iife export`
+      '--mode': `specify env mode (default: ${defaults.mode})`,
+      '--target': `app | lib | web-component (default: ${defaults.target})`,
+      '--entry': `entry for lib or web-component (default: ${defaults.entry})`,
+      '--name': `name for lib or web-component (default: "name" in package.json)`
     }
   }, args => {
-    api.setMode(args.mode || defaults.mode)
+    args = Object.assign({}, defaults, args)
+    api.setMode(args.mode)
 
     const chalk = require('chalk')
     const rimraf = require('rimraf')
     const webpack = require('webpack')
     const {
+      log,
       done,
       info,
       logWithSpinner,
       stopSpinner
     } = require('@vue/cli-shared-utils')
 
-    console.log()
-    logWithSpinner(`Building for production...`)
+    log()
+    if (args.target === 'app') {
+      logWithSpinner(`Building for production...`)
+    } else {
+      // setting this disables app-only configs
+      process.env.VUE_CLI_TARGET = args.target
+      // when building as a lib, inline all static asset files
+      // since there is no publicPath handling
+      process.env.VUE_CLI_INLINE_LIMIT = Infinity
+      logWithSpinner(`Building for production as ${args.target}...`)
+    }
 
     return new Promise((resolve, reject) => {
       const targetDir = api.resolve(options.outputDir)
@@ -36,7 +47,14 @@ module.exports = (api, options) => {
         if (err) {
           return reject(err)
         }
-        const webpackConfig = api.resolveWebpackConfig()
+        let webpackConfig
+        if (args.target === 'lib') {
+          webpackConfig = require('./resolveLibConfig')(api, args)
+        } else if (args.target === 'web-component') {
+          webpackConfig = require('./resolveWebComponentConfig')(api, args)
+        } else {
+          webpackConfig = api.resolveWebpackConfig()
+        }
         webpack(webpackConfig, (err, stats) => {
           stopSpinner(false)
           if (err) {
@@ -57,7 +75,7 @@ module.exports = (api, options) => {
             return reject(`Build failed with errors.`)
           }
 
-          if (!args.silent) {
+          if (!args.silent && args.target === 'app') {
             done(`Build complete. The ${chalk.cyan(options.outputDir)} directory is ready to be deployed.\n`)
             if (options.baseUrl === '/') {
               info(`The app is built assuming that it will be deployed at the root of a domain.`)

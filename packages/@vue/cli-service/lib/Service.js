@@ -97,7 +97,8 @@ module.exports = class Service {
       './config/base',
       './config/css',
       './config/dev',
-      './config/prod'
+      './config/prod',
+      './config/app'
     ].map(idToPlugin)
 
     if (inlinePlugins) {
