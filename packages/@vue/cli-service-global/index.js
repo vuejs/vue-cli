@@ -8,7 +8,7 @@ const babelPlugin = toPlugin('@vue/cli-plugin-babel')
 const eslintPlugin = toPlugin('@vue/cli-plugin-eslint')
 const createConfigPlugin = require('./lib/createConfigPlugin')
 
-function createService (entry) {
+function resolveEntry (entry) {
   const context = process.cwd()
 
   entry = entry || findExisting(context, [
@@ -29,6 +29,13 @@ function createService (entry) {
     process.exit(1)
   }
 
+  return {
+    context,
+    entry
+  }
+}
+
+function createService (context, entry, asLib) {
   return new Service(context, {
     projectOptions: {
       compiler: true,
@@ -37,15 +44,21 @@ function createService (entry) {
     plugins: [
       babelPlugin,
       eslintPlugin,
-      createConfigPlugin(context, entry)
+      createConfigPlugin(context, entry, asLib)
     ]
   })
 }
 
-exports.serve = (entry, args) => {
-  createService(entry).run('serve', args)
+exports.serve = (_entry, args) => {
+  const { context, entry } = resolveEntry(_entry)
+  createService(context, entry).run('serve', args)
 }
 
-exports.build = (entry, args) => {
-  createService(entry).run('build', args)
+exports.build = (_entry, args) => {
+  const { context, entry } = resolveEntry(_entry)
+  const asLib = args.target && args.target !== 'app'
+  if (asLib) {
+    args.libEntry = entry
+  }
+  createService(context, entry, asLib).run('build', args)
 }

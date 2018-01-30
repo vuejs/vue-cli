@@ -1,7 +1,7 @@
 const defaults = {
   mode: 'production',
   target: 'app',
-  entry: 'src/App.vue'
+  libEntry: 'src/App.vue'
 }
 
 module.exports = (api, options) => {
@@ -11,11 +11,13 @@ module.exports = (api, options) => {
     options: {
       '--mode': `specify env mode (default: ${defaults.mode})`,
       '--target': `app | lib | web-component (default: ${defaults.target})`,
-      '--entry': `entry for lib or web-component (default: ${defaults.entry})`,
-      '--name': `name for lib or web-component (default: "name" in package.json)`
+      '--libEntry': `entry for lib or web-component (default: ${defaults.entry})`,
+      '--libName': `name for lib or web-component (default: "name" in package.json)`
     }
   }, args => {
-    args = Object.assign({}, defaults, args)
+    for (const key in defaults) {
+      if (args[key] == null) args[key] = defaults[key]
+    }
     api.setMode(args.mode)
 
     const chalk = require('chalk')

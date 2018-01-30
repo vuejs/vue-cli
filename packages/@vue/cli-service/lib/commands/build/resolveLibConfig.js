@@ -1,21 +1,21 @@
-module.exports = (api, { entry, name }) => {
+module.exports = (api, { libEntry, libName }) => {
   const genConfig = (format, postfix = format) => {
     api.chainWebpack(config => {
-      const libName = name || api.service.pkg.name
+      libName = libName || api.service.pkg.name || libEntry.replace(/\.(js|vue)$/, '')
 
       config.entryPoints.clear()
       // set proxy entry for *.vue files
-      if (/\.vue$/.test(entry)) {
+      if (/\.vue$/.test(libEntry)) {
         config
           .entry(`${libName}.${postfix}`)
             .add(require.resolve('./entry-lib.js'))
         config.resolve
           .alias
-            .set('~entry', api.resolve(entry))
+            .set('~entry', api.resolve(libEntry))
       } else {
         config
           .entry(`${libName}.${postfix}`)
-            .add(api.resolve(entry))
+            .add(api.resolve(libEntry))
       }
 
       config.output

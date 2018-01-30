@@ -2,7 +2,7 @@ const path = require('path')
 const resolve = require('resolve')
 const { findExisting } = require('./util')
 
-module.exports = function createConfigPlugin (context, entry) {
+module.exports = function createConfigPlugin (context, entry, asLib) {
   return {
     id: '@vue/cli-service-global-config',
     apply: (api, options) => {
@@ -111,17 +111,22 @@ module.exports = function createConfigPlugin (context, entry) {
                 }
               }))
 
-        // set html plugin template
-        const indexFile = findExisting(context, [
-          'index.html',
-          'public/index.html'
-        ]) || path.resolve(__dirname, '../template/index.html')
-        config
-          .plugin('html')
-            .tap(() => [{ template: indexFile }])
+        if (!asLib) {
+          // set html plugin template
+          const indexFile = findExisting(context, [
+            'index.html',
+            'public/index.html'
+          ]) || path.resolve(__dirname, '../template/index.html')
+          config
+            .plugin('html')
+              .tap(args => {
+                args[0].template = indexFile
+                return args
+              })
+        }
 
         // disable copy plugin if no public dir
-        if (!findExisting(context, ['public'])) {
+        if (asLib || !findExisting(context, ['public'])) {
           config.plugins.delete('copy')
         }
       })

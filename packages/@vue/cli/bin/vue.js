@@ -64,9 +64,8 @@ program
 
 program
   .command('build [entry]')
-  .option('-t, --target', 'Build target (app, lib, web-component). Default: app')
-  .option('-f, --format', 'How the lib is exposed (iife, amd, cjs, umd). Default: umd')
-  .option('-n, --name', 'Library name for umd export')
+  .option('-t, --target <target>', 'Build target (app | lib | web-component, default: app)')
+  .option('-n, --libName <name>', 'name for lib or web-component')
   .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
