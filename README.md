@@ -45,7 +45,14 @@ yarn add @vue/cli-plugin-eslint
 Then you can invoke the plugin's generator so it generates files into your project:
 
 ``` sh
-vue invoke eslint # the prefix can be omitted
+# the @vue/cli-plugin- prefix can be omitted
+vue invoke eslint
+```
+
+In addition, you can pass options to the plugin:
+
+``` sh
+vue invoke eslint --config airbnb --lintOn save
 ```
 
 It is recommended to commit your project's current state before running `vue invoke`, so that after file generation you can review the changes and revert if needed.

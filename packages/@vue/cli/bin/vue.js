@@ -48,7 +48,7 @@ program
   })
 
 program
-  .command('invoke <plugin>')
+  .command('invoke <plugin> [pluginOptions]')
   .allowUnknownOption()
   .description('invoke the generator of a plugin in an already created project')
   .action((plugin) => {
