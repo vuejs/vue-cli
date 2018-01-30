@@ -1,7 +1,7 @@
 // dev only
 
 const path = require('path')
-const { linkBin } = require('@vue/cli-shared-utils')
+const { linkBin } = require('./linkBin')
 
 module.exports = function setupDevProject (targetDir) {
   return linkBin(

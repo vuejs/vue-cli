@@ -1,5 +1,3 @@
-/* eslint-disable vue-libs/no-async-functions */
-
 // cross-platform executable link, mostly for Windows
 
 const fs = require('fs')

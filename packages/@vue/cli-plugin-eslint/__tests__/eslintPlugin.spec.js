@@ -1,7 +1,7 @@
 jest.setTimeout(30000)
 
 const path = require('path')
-const { linkBin } = require('@vue/cli-shared-utils')
+const { linkBin } = require('@vue/cli/lib/util/linkBin')
 const create = require('@vue/cli-test-utils/createTestProject')
 
 const runSilently = fn => {

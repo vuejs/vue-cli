@@ -1,6 +1,5 @@
 [
   'env',
-  'linkBin',
   'logger',
   'spinner',
   'validate',

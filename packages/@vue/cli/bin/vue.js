@@ -6,14 +6,13 @@ const slash = require('slash')
 const chalk = require('chalk')
 const semver = require('semver')
 const minimist = require('minimist')
-const { error } = require('@vue/cli-shared-utils/lib/logger')
 const requiredVersion = require('../package.json').engines.node
 
 if (!semver.satisfies(process.version, requiredVersion)) {
-  error(
+  console.log(chalk.red(
     `You are using Node ${process.version}, but this version of vue-cli ` +
     `requires Node ${requiredVersion}.\nPlease upgrade your Node version.`
-  )
+  ))
   process.exit(1)
 }
 
