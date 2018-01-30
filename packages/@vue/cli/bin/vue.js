@@ -6,7 +6,7 @@ const slash = require('slash')
 const chalk = require('chalk')
 const semver = require('semver')
 const minimist = require('minimist')
-const { error } = require('@vue/cli-shared-utils')
+const { error } = require('@vue/cli-shared-utils/lib/logger')
 const requiredVersion = require('../package.json').engines.node
 
 if (!semver.satisfies(process.version, requiredVersion)) {
