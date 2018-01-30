@@ -67,9 +67,32 @@ yarn global add @vue/cli-init
 vue init webpack my-project
 ```
 
-### Customization and Plugin Usage
+### Customizing Webpack Config
 
-For a detailed guide on how to customize a project, recipes for common tasks, detailed usage for each plugin, please see the [full documentation](https://github.com/vuejs/vue-cli/blob/dev/docs/README.md).
+Create a `vue.config.js` in project root: (**Note:** if you have a `vue` field in your `package.json`, you need to move that here as well)
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: chainableConfig => {
+     // modify config with webpack-chain
+     // https://github.com/mozilla-neutrino/webpack-chain
+  },
+
+  configureWebpack: config => {
+    // mutate config directly, or return new config
+  },
+
+  // object literal will be merged into base config using webpack-merge
+  configureWebpack: {
+    // ...
+  }
+}
+```
+
+### Recipes and Plugin Usage
+
+For a detailed guide with recipes for common tasks, detailed usage for each plugin, please see the [full documentation](https://github.com/vuejs/vue-cli/blob/dev/docs/README.md).
 
 ## Contributing
 
