@@ -71,7 +71,10 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
               .clear()
               .end()
             .exclude
-              .add(/node_modules/)
+              .add(/node_modules|@vue\/cli-service/)
+              .end()
+            .uses
+              .delete('cache-loader')
               .end()
             .use('babel-loader')
               .tap(() => babelOptions)

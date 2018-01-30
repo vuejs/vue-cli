@@ -1,56 +1,63 @@
-module.exports = (api, { libEntry, libName }) => {
-  const genConfig = (format, postfix = format) => {
-    api.chainWebpack(config => {
-      libName = libName || api.service.pkg.name || libEntry.replace(/\.(js|vue)$/, '')
+module.exports = (api, { entry, name }) => {
+  const libName = name || api.service.pkg.name || entry.replace(/\.(js|vue)$/, '')
+  // setting this disables app-only configs
+  process.env.VUE_CLI_TARGET = 'lib'
+  // inline all static asset files since there is no publicPath handling
+  process.env.VUE_CLI_INLINE_LIMIT = Infinity
 
+  api.chainWebpack(config => {
+    config.output
+      .filename(`[name].js`)
+      .library(libName)
+      .libraryExport('default')
+
+    // adjust css output name
+    config
+      .plugin('extract-css')
+        .tap(args => {
+          args[0].filename = `${libName}.css`
+          return args
+        })
+
+    // only minify min entry
+    config
+      .plugin('uglify')
+        .tap(args => {
+          args[0].include = /\.min\.js$/
+          return args
+        })
+
+    // externalize Vue in case user imports it
+    config
+      .externals({
+        vue: {
+          commonjs: 'vue',
+          commonjs2: 'vue',
+          root: 'Vue'
+        }
+      })
+  })
+
+  function genConfig (format, postfix = format) {
+    api.chainWebpack(config => {
       config.entryPoints.clear()
       // set proxy entry for *.vue files
-      if (/\.vue$/.test(libEntry)) {
+      if (/\.vue$/.test(entry)) {
         config
           .entry(`${libName}.${postfix}`)
             .add(require.resolve('./entry-lib.js'))
         config.resolve
           .alias
-            .set('~entry', api.resolve(libEntry))
+            .set('~entry', api.resolve(entry))
       } else {
         config
           .entry(`${libName}.${postfix}`)
-            .add(api.resolve(libEntry))
+            .add(api.resolve(entry))
       }
 
       config.output
-        .filename(`[name].js`)
-        .library(libName)
-        .libraryExport('default')
         .libraryTarget(format)
-
-      // adjust css output name
-      config
-        .plugin('extract-css')
-          .tap(args => {
-            args[0].filename = `${libName}.css`
-            return args
-          })
-
-      // only minify min entry
-      config
-        .plugin('uglify')
-          .tap(args => {
-            args[0].include = /\.min\.js$/
-            return args
-          })
-
-      // externalize Vue in case user imports it
-      config
-        .externals({
-          vue: {
-            commonjs: 'vue',
-            commonjs2: 'vue',
-            root: 'Vue'
-          }
-        })
     })
-
     return api.resolveWebpackConfig()
   }
 

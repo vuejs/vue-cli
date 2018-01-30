@@ -1,7 +1,9 @@
 const defaults = {
   mode: 'production',
   target: 'app',
-  libEntry: 'src/App.vue'
+  entry: 'src/App.vue',
+  keepAlive: false,
+  shadow: true
 }
 
 module.exports = (api, options) => {
@@ -11,8 +13,10 @@ module.exports = (api, options) => {
     options: {
       '--mode': `specify env mode (default: ${defaults.mode})`,
       '--target': `app | lib | web-component (default: ${defaults.target})`,
-      '--libEntry': `entry for lib or web-component (default: ${defaults.entry})`,
-      '--libName': `name for lib or web-component (default: "name" in package.json)`
+      '--entry': `entry for lib or web-component (default: ${defaults.entry})`,
+      '--name': `name for lib or web-component (default: "name" in package.json or entry filename)`,
+      '--keepAlive': `keep component alive when web-component is detached? (default: ${defaults.keepAlive})`,
+      '--shadow': `use shadow DOM when building as web-component? (default: ${defaults.shadow})`
     }
   }, args => {
     for (const key in defaults) {
@@ -35,11 +39,6 @@ module.exports = (api, options) => {
     if (args.target === 'app') {
       logWithSpinner(`Building for production...`)
     } else {
-      // setting this disables app-only configs
-      process.env.VUE_CLI_TARGET = args.target
-      // when building as a lib, inline all static asset files
-      // since there is no publicPath handling
-      process.env.VUE_CLI_INLINE_LIMIT = Infinity
       logWithSpinner(`Building for production as ${args.target}...`)
     }
 

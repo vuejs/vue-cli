@@ -58,7 +58,7 @@ exports.build = (_entry, args) => {
   const { context, entry } = resolveEntry(_entry)
   const asLib = args.target && args.target !== 'app'
   if (asLib) {
-    args.libEntry = entry
+    args.entry = entry
   }
   createService(context, entry, asLib).run('build', args)
 }
