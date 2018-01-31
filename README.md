@@ -16,8 +16,16 @@ yarn global add @vue/cli
 
 ### Creating a New Project
 
+There are several templates for your new project, to list them all use 
+
 ``` sh
-vue create my-project
+vue list
+```
+
+If you decide using e.g. webpack, you could create a new project: 
+
+``` sh
+vue init webpack my-project
 ```
 
 ### Zero-config Prototyping
