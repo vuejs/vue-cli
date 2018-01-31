@@ -66,8 +66,8 @@ program
   .command('build [entry]')
   .option('-t, --target <target>', 'Build target (app | lib | web-component, default: app)')
   .option('-n, --name <name>', 'name for lib or web-component (default: entry filename)')
+  .option('-d, --dest <dir>', 'output directory (default: dist)')
   .option('--keepAlive', 'keep component alive when web-component is detached? (default: false)')
-  .option('--shadow', 'use shadow DOM when building as web-component? (default: true)')
   .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))

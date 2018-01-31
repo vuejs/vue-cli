@@ -2,8 +2,7 @@ const defaults = {
   mode: 'production',
   target: 'app',
   entry: 'src/App.vue',
-  keepAlive: false,
-  shadow: true
+  keepAlive: false
 }
 
 module.exports = (api, options) => {
@@ -12,15 +11,18 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service build [options]',
     options: {
       '--mode': `specify env mode (default: ${defaults.mode})`,
+      '--dest': `specify output directory (default: ${options.outputDir})`,
       '--target': `app | lib | web-component (default: ${defaults.target})`,
       '--entry': `entry for lib or web-component (default: ${defaults.entry})`,
       '--name': `name for lib or web-component (default: "name" in package.json or entry filename)`,
-      '--keepAlive': `keep component alive when web-component is detached? (default: ${defaults.keepAlive})`,
-      '--shadow': `use shadow DOM when building as web-component? (default: ${defaults.shadow})`
+      '--keepAlive': `keep component alive when web-component is detached? (default: ${defaults.keepAlive})`
     }
   }, args => {
     for (const key in defaults) {
       if (args[key] == null) args[key] = defaults[key]
+    }
+    if (args.dest == null) {
+      args.dest = options.outputDir
     }
     api.setMode(args.mode)
 
@@ -43,16 +45,16 @@ module.exports = (api, options) => {
     }
 
     return new Promise((resolve, reject) => {
-      const targetDir = api.resolve(options.outputDir)
+      const targetDir = api.resolve(args.dest)
       rimraf(targetDir, err => {
         if (err) {
           return reject(err)
         }
         let webpackConfig
         if (args.target === 'lib') {
-          webpackConfig = require('./resolveLibConfig')(api, args)
+          webpackConfig = require('./resolveLibConfig')(api, args, options)
         } else if (args.target === 'web-component') {
-          webpackConfig = require('./resolveWebComponentConfig')(api, args)
+          webpackConfig = require('./resolveWebComponentConfig')(api, args, options)
         } else {
           webpackConfig = api.resolveWebpackConfig()
         }
@@ -66,7 +68,7 @@ module.exports = (api, options) => {
             process.stdout.write(stats.toString({
               colors: true,
               modules: false,
-              children: api.hasPlugin('typescript'),
+              children: api.hasPlugin('typescript') || args.target !== 'app',
               chunks: false,
               chunkModules: false
             }) + '\n\n')

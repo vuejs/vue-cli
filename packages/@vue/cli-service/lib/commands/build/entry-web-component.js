@@ -12,10 +12,6 @@ const name = process.env.CUSTOM_ELEMENT_NAME
 // - true: the instance is always kept alive
 const keepAlive = process.env.CUSTOM_ELEMENT_KEEP_ALIVE
 
-// Whether to use Shadow DOM.
-// default: true
-const useShadowDOM = process.env.CUSTOM_ELEMENT_USE_SHADOW_DOM
-
 const options = typeof Component === 'function'
   ? Component.options
   : Component
@@ -29,6 +25,10 @@ const props = Array.isArray(options.props)
   ? arrToObj(options.props, {})
   : options.props || {}
 const propsList = Object.keys(props)
+
+// CSS injection function exposed by vue-loader & vue-style-loader
+const styleInjectors = window[options.__shadowInjectId]
+const injectStyle = root => styleInjectors.forEach(inject => inject(root))
 
 // TODO use ES5 syntax
 class CustomElement extends HTMLElement {
@@ -49,21 +49,15 @@ class CustomElement extends HTMLElement {
     })
 
     this._attached = false
-    if (useShadowDOM) {
-      this._shadowRoot = this.attachShadow({ mode: 'open' })
-    }
+    this._shadowRoot = this.attachShadow({ mode: 'open' })
+    injectStyle(this._shadowRoot)
   }
 
   connectedCallback () {
     this._attached = true
     if (!this._wrapper._isMounted) {
       this._wrapper.$mount()
-      const el = this._wrapper.$el
-      if (useShadowDOM) {
-        this._shadowRoot.appendChild(el)
-      } else {
-        this.appendChild(el)
-      }
+      this._shadowRoot.appendChild(this._wrapper.$el)
     }
     this._wrapper._data._active = true
   }

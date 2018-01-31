@@ -1,4 +1,4 @@
-module.exports = (api, { entry, name }) => {
+module.exports = (api, { entry, name, dest }, options) => {
   const libName = name || api.service.pkg.name || entry.replace(/\.(js|vue)$/, '')
   // setting this disables app-only configs
   process.env.VUE_CLI_TARGET = 'lib'
@@ -7,17 +7,20 @@ module.exports = (api, { entry, name }) => {
 
   api.chainWebpack(config => {
     config.output
+      .path(api.resolve(dest))
       .filename(`[name].js`)
       .library(libName)
       .libraryExport('default')
 
     // adjust css output name
-    config
-      .plugin('extract-css')
-        .tap(args => {
-          args[0].filename = `${libName}.css`
-          return args
-        })
+    if (options.css.extract !== false) {
+      config
+        .plugin('extract-css')
+          .tap(args => {
+            args[0].filename = `${libName}.css`
+            return args
+          })
+    }
 
     // only minify min entry
     config

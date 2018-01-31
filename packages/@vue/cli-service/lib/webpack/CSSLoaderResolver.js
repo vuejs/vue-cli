@@ -29,7 +29,7 @@ module.exports = class CSSLoaderResolver {
     this.cssLoader = 'css-loader'
     this.fallbackLoader = 'vue-style-loader'
     this.sourceMap = sourceMap
-    this.extract = extract
+    this.extract = extract && !process.env.VUE_CLI_CSS_SHADOW_MODE
     this.minimize = minimize
     this.modules = modules
     this.postcss = postcss
@@ -83,6 +83,7 @@ module.exports = class CSSLoaderResolver {
       }) : [{
         loader: this.fallbackLoader,
         options: {
+          shadowMode: !!process.env.VUE_CLI_CSS_SHADOW_MODE,
           sourceMap: this.sourceMap
         }
       }, ...use]
