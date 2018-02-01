@@ -7,21 +7,22 @@ const defaults = {
 module.exports = (api, options) => {
   api.registerCommand('build', {
     description: 'build for production',
-    usage: 'vue-cli-service build [options]',
+    usage: 'vue-cli-service build [options] [entry|pattern]',
     options: {
       '--mode': `specify env mode (default: ${defaults.mode})`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
-      '--target': `app | lib | web-component (default: ${defaults.target})`,
-      '--entry': `entry for lib or web-component (default: ${defaults.entry})`,
-      '--name': `name for lib or web-component (default: "name" in package.json or entry filename)`
+      '--target': `app | lib | wc | multi-wc (default: ${defaults.target})`,
+      '--name': `name for lib or (multi-)web-component mode (default: "name" in package.json or entry filename)`
     }
   }, args => {
+    args.entry = args._[0]
     for (const key in defaults) {
       if (args[key] == null) args[key] = defaults[key]
     }
     if (args.dest == null) {
       args.dest = options.outputDir
     }
+
     api.setMode(args.mode)
 
     const chalk = require('chalk')
@@ -51,7 +52,11 @@ module.exports = (api, options) => {
         let webpackConfig
         if (args.target === 'lib') {
           webpackConfig = require('./resolveLibConfig')(api, args, options)
-        } else if (args.target === 'web-component' || args.target === 'wc') {
+        } else if (
+          args.target === 'web-component' ||
+          args.target === 'wc' ||
+          args.target === 'multi-wc'
+        ) {
           webpackConfig = require('./resolveWebComponentConfig')(api, args, options)
         } else {
           webpackConfig = api.resolveWebpackConfig()
