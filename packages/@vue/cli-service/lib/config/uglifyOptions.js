@@ -30,6 +30,9 @@ module.exports = options => ({
       conditionals: true,
       dead_code: true,
       evaluate: true
+    },
+    mangle: {
+      safari10: true
     }
   },
   sourceMap: options.productionSourceMap,
