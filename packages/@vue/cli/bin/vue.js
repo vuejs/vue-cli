@@ -56,7 +56,7 @@ program
 
 program
   .command('serve [entry]')
-  .description('serve a .js or vue file in development mode with zero config')
+  .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
