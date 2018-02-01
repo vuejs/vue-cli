@@ -102,7 +102,7 @@ module.exports = (api, options, rootOptions) => {
 
 Currently, only built-in plugins have the ability to customize the prompts when creating a new project, and the prompt modules are located [inside the `@vue/cli` package][prompt-modules].
 
-A prompt module should export a function that receives a [PromptModuleAPI][prompt-api] instance. The prompts use [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood:
+A prompt module should export a function that receives a [PromptModuleAPI][prompt-api] instance. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood:
 
 ``` js
 module.exports = api => {
