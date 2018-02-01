@@ -51,6 +51,10 @@ module.exports = class PluginAPI {
     return this.service.resolveWebpackConfig()
   }
 
+  resolveChainableWebpackConfig () {
+    return this.service.resolveChainableWebpackConfig()
+  }
+
   configureDevServer (fn) {
     this.service.devServerConfigFns.push(fn)
   }

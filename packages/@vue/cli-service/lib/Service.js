@@ -16,7 +16,6 @@ module.exports = class Service {
   constructor (context, { plugins, pkg, projectOptions, useBuiltIn } = {}) {
     process.VUE_CLI_SERVICE = this
     this.context = context
-    this.webpackConfig = new Config()
     this.webpackChainFns = []
     this.webpackRawConfigFns = []
     this.devServerConfigFns = []
@@ -132,11 +131,16 @@ module.exports = class Service {
     return Promise.resolve(fn(args, rawArgv))
   }
 
-  resolveWebpackConfig () {
+  resolveChainableWebpackConfig () {
+    const chainableConfig = new Config()
     // apply chains
-    this.webpackChainFns.forEach(fn => fn(this.webpackConfig))
-    // to raw config
-    let config = this.webpackConfig.toConfig()
+    this.webpackChainFns.forEach(fn => fn(chainableConfig))
+    return chainableConfig
+  }
+
+  resolveWebpackConfig () {
+    // get raw config
+    let config = this.resolveChainableWebpackConfig().toConfig()
     // apply raw config fns
     this.webpackRawConfigFns.forEach(fn => {
       if (typeof fn === 'function') {

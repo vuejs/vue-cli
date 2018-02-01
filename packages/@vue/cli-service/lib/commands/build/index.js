@@ -1,8 +1,7 @@
 const defaults = {
   mode: 'production',
   target: 'app',
-  entry: 'src/App.vue',
-  keepAlive: false
+  entry: 'src/App.vue'
 }
 
 module.exports = (api, options) => {
@@ -14,8 +13,7 @@ module.exports = (api, options) => {
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--target': `app | lib | web-component (default: ${defaults.target})`,
       '--entry': `entry for lib or web-component (default: ${defaults.entry})`,
-      '--name': `name for lib or web-component (default: "name" in package.json or entry filename)`,
-      '--keepAlive': `keep component alive when web-component is detached? (default: ${defaults.keepAlive})`
+      '--name': `name for lib or web-component (default: "name" in package.json or entry filename)`
     }
   }, args => {
     for (const key in defaults) {
@@ -53,7 +51,7 @@ module.exports = (api, options) => {
         let webpackConfig
         if (args.target === 'lib') {
           webpackConfig = require('./resolveLibConfig')(api, args, options)
-        } else if (args.target === 'web-component') {
+        } else if (args.target === 'web-component' || args.target === 'wc') {
           webpackConfig = require('./resolveWebComponentConfig')(api, args, options)
         } else {
           webpackConfig = api.resolveWebpackConfig()
@@ -65,7 +63,10 @@ module.exports = (api, options) => {
           }
 
           if (!args.silent) {
+            // TODO polish output
             process.stdout.write(stats.toString({
+              hash: false,
+              timings: false,
               colors: true,
               modules: false,
               children: api.hasPlugin('typescript') || args.target !== 'app',

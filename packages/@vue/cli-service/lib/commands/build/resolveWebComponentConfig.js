@@ -1,4 +1,6 @@
-module.exports = (api, { entry, name, dest, keepAlive }) => {
+const path = require('path')
+
+module.exports = (api, { entry, name, dest }) => {
   const libName = name || api.service.pkg.name || entry.replace(/\.(js|vue)$/, '')
   if (libName.indexOf('-') < 0) {
     const { log, error } = require('@vue/cli-shared-utils')
@@ -14,20 +16,27 @@ module.exports = (api, { entry, name, dest, keepAlive }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
-  api.chainWebpack(config => {
+  function genConfig (minify, genHTML) {
+    const config = api.resolveChainableWebpackConfig()
+
     config.entryPoints.clear()
     // set proxy entry for *.vue files
     if (/\.vue$/.test(entry)) {
       config
-          .entry(libName)
+          .entry(`${libName}${minify ? `.min` : ``}`)
             .add(require.resolve('./entry-web-component.js'))
       config.resolve
           .alias
             .set('~entry', api.resolve(entry))
     } else {
       config
-          .entry(libName)
+          .entry(`${libName}${minify ? `.min` : ``}`)
             .add(api.resolve(entry))
+    }
+
+    // only minify min entry
+    if (!minify) {
+      config.plugins.delete('uglify')
     }
 
     config.output
@@ -44,8 +53,7 @@ module.exports = (api, { entry, name, dest, keepAlive }) => {
       .plugin('web-component-options')
         .use(require('webpack/lib/DefinePlugin'), [{
           'process.env': {
-            CUSTOM_ELEMENT_NAME: JSON.stringify(libName),
-            CUSTOM_ELEMENT_KEEP_ALIVE: keepAlive
+            CUSTOM_ELEMENT_NAME: JSON.stringify(libName)
           }
         }])
 
@@ -57,7 +65,23 @@ module.exports = (api, { entry, name, dest, keepAlive }) => {
             options.shadowMode = true
             return options
           })
-  })
 
-  return api.resolveWebpackConfig()
+    if (genHTML) {
+      config
+        .plugin('demo-html')
+          .use(require('html-webpack-plugin'), [{
+            template: path.resolve(__dirname, './demo-web-component.html'),
+            inject: false,
+            filename: 'demo.html',
+            libName
+          }])
+    }
+
+    return config.toConfig()
+  }
+
+  return [
+    genConfig(false, true),
+    genConfig(true, false)
+  ]
 }
