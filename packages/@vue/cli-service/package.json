@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.0.0-alpha.6",
+  "version": "3.0.0-alpha.7",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "bin": {
@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme",
   "dependencies": {
-    "@vue/cli-overlay": "^3.0.0-alpha.6",
-    "@vue/cli-shared-utils": "^3.0.0-alpha.6",
+    "@vue/cli-overlay": "^3.0.0-alpha.7",
+    "@vue/cli-shared-utils": "^3.0.0-alpha.7",
     "@vue/web-component-wrapper": "^1.1.2",
     "address": "^1.0.3",
     "autodll-webpack-plugin": "^0.3.8",

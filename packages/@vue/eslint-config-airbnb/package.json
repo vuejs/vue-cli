@@ -1,6 +1,6 @@
 {
   "name": "@vue/eslint-config-airbnb",
-  "version": "3.0.0-alpha.6",
+  "version": "3.0.0-alpha.7",
   "description": "eslint-config-airbnb for vue-cli",
   "main": "index.js",
   "publishConfig": {
