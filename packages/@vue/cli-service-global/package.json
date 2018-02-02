@@ -26,7 +26,7 @@
     "@vue/cli-plugin-eslint": "^3.0.0-alpha.5",
     "@vue/cli-service": "^3.0.0-alpha.5",
     "chalk": "^2.3.0",
-    "eslint-plugin-vue": "^4.2.0",
+    "eslint-plugin-vue": "^4.2.2",
     "resolve": "^1.5.0",
     "vue": "^2.5.13"
   }

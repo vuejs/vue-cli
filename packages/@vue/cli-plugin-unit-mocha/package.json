@@ -22,7 +22,7 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-mocha#readme",
   "dependencies": {
     "execa": "^0.9.0",
-    "jsdom": "^11.6.1",
+    "jsdom": "^11.6.2",
     "jsdom-global": "^3.0.2",
     "mocha": "^4.1.0",
     "mocha-webpack": "^1.0.1",

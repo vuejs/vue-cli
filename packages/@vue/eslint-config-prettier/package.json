@@ -22,7 +22,7 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/eslint-config-prettier#readme",
   "dependencies": {
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.5.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "prettier": "^1.10.2"
   }
 }
