@@ -1,4 +1,8 @@
 const path = require('path')
+const {
+  filesToComponentNames,
+  generateMultiWebComponentEntry
+} = require('./generateMultiWcEntry')
 
 module.exports = (api, { target, entry, name, dest, prefix }) => {
   const { log, error } = require('@vue/cli-shared-utils')
@@ -8,22 +12,27 @@ module.exports = (api, { target, entry, name, dest, prefix }) => {
     process.exit(1)
   }
 
-  const libName = name || api.service.pkg.name || entry.replace(/\.(js|vue)$/, '')
+  const libName = (
+    name ||
+    api.service.pkg.name ||
+    path.basename(entry).replace(/\.(jsx?|vue)$/, '')
+  )
   if (libName.indexOf('-') < 0 && target !== 'multi-wc') {
     abort(`--name must contain a hyphen with --target web-component. (got "${libName}")`)
   }
 
   let dynamicEntry
+  let resolvedFiles
   if (target === 'multi-wc') {
     if (!entry) {
       abort(`a glob pattern is required with --target multi-web-component.`)
     }
     // generate dynamic entry based on glob files
-    const files = require('globby').sync([entry], { cwd: api.resolve('.') })
-    if (!files.length) {
+    resolvedFiles = require('globby').sync([entry], { cwd: api.resolve('.') })
+    if (!resolvedFiles.length) {
       abort(`glob pattern "${entry}" did not match any files.`)
     }
-    dynamicEntry = require('./generateMultiWcEntry')(libName, files)
+    dynamicEntry = generateMultiWebComponentEntry(libName, resolvedFiles)
   }
 
   // setting this disables app-only configs
@@ -54,6 +63,12 @@ module.exports = (api, { target, entry, name, dest, prefix }) => {
         .alias
           .set('~entry', api.resolve(entry))
     }
+
+    // make sure not to transpile wc-wrapper
+    config.module
+      .rule('js')
+        .exclude
+          .add(/vue-wc-wrapper/)
 
     // only minify min entry
     if (!minify) {
@@ -91,10 +106,13 @@ module.exports = (api, { target, entry, name, dest, prefix }) => {
       config
         .plugin('demo-html')
           .use(require('html-webpack-plugin'), [{
-            template: path.resolve(__dirname, './demo-wc.html'),
+            template: path.resolve(__dirname, `./demo-${target}.html`),
             inject: false,
             filename: 'demo.html',
-            libName
+            libName,
+            components: target === 'multi-wc'
+              ? filesToComponentNames(libName, resolvedFiles).map(c => c.kebabName)
+              : null
           }])
     }
 

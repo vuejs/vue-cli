@@ -8,17 +8,15 @@ const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 let server, browser, page
-test('build as lib', async () => {
-  const project = await create('build-lib', defaultPreset)
+test('build as single wc', async () => {
+  const project = await create('build-wc', defaultPreset)
 
-  const { stdout } = await project.run('vue-cli-service build --target lib --name testLib src/components/HelloWorld.vue')
+  const { stdout } = await project.run('vue-cli-service build --target wc src/components/HelloWorld.vue')
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
-  expect(project.has('dist/testLib.common.js')).toBe(true)
-  expect(project.has('dist/testLib.umd.js')).toBe(true)
-  expect(project.has('dist/testLib.umd.min.js')).toBe(true)
-  expect(project.has('dist/testLib.css')).toBe(true)
+  expect(project.has('dist/build-wc.js')).toBe(true)
+  expect(project.has('dist/build-wc.min.js')).toBe(true)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
@@ -34,15 +32,18 @@ test('build as lib', async () => {
   browser = launched.browser
   page = launched.page
 
-  const h1Text = await page.evaluate(() => {
-    return document.querySelector('h1').textContent
+  const styleCount = await page.evaluate(() => {
+    return document.querySelector('build-wc')._shadowRoot.querySelectorAll('style').length
   })
-  expect(h1Text).toMatch('') // no props given
+  expect(styleCount).toBe(1)
 
-  const h2Text = await page.evaluate(() => {
-    return document.querySelector('h2').textContent
+  await page.evaluate(() => {
+    document.querySelector('build-wc').msg = 'hello'
   })
-  expect(h2Text).toMatch('Essential Links')
+  const h1Text = await page.evaluate(() => {
+    return document.querySelector('build-wc')._shadowRoot.querySelector('h1').textContent
+  })
+  expect(h1Text).toBe('hello')
 })
 
 afterAll(async () => {

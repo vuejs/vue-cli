@@ -8,17 +8,15 @@ const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 let server, browser, page
-test('build as lib', async () => {
-  const project = await create('build-lib', defaultPreset)
+test('build as single wc', async () => {
+  const project = await create('build-multi-wc', defaultPreset)
 
-  const { stdout } = await project.run('vue-cli-service build --target lib --name testLib src/components/HelloWorld.vue')
+  const { stdout } = await project.run(`vue-cli-service build --target multi-wc **/*.vue`)
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
-  expect(project.has('dist/testLib.common.js')).toBe(true)
-  expect(project.has('dist/testLib.umd.js')).toBe(true)
-  expect(project.has('dist/testLib.umd.min.js')).toBe(true)
-  expect(project.has('dist/testLib.css')).toBe(true)
+  expect(project.has('dist/build-multi-wc.js')).toBe(true)
+  expect(project.has('dist/build-multi-wc.min.js')).toBe(true)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
@@ -34,13 +32,23 @@ test('build as lib', async () => {
   browser = launched.browser
   page = launched.page
 
-  const h1Text = await page.evaluate(() => {
-    return document.querySelector('h1').textContent
+  const styleCount = await page.evaluate(() => {
+    return document.querySelector('build-multi-wc-app')._shadowRoot.querySelectorAll('style').length
   })
-  expect(h1Text).toMatch('') // no props given
+  expect(styleCount).toBe(2) // should contain styles from both app and child
+
+  const h1Text = await page.evaluate(() => {
+    return document.querySelector('build-multi-wc-app')._shadowRoot.querySelector('h1').textContent
+  })
+  expect(h1Text).toMatch('Welcome to Your Vue.js App')
+
+  const childStyleCount = await page.evaluate(() => {
+    return document.querySelector('build-multi-wc-hello-world')._shadowRoot.querySelectorAll('style').length
+  })
+  expect(childStyleCount).toBe(1)
 
   const h2Text = await page.evaluate(() => {
-    return document.querySelector('h2').textContent
+    return document.querySelector('build-multi-wc-hello-world')._shadowRoot.querySelector('h2').textContent
   })
   expect(h2Text).toMatch('Essential Links')
 })

@@ -1,7 +1,11 @@
 const path = require('path')
 
 module.exports = (api, { entry, name, dest }, options) => {
-  const libName = name || api.service.pkg.name || entry.replace(/\.(js|vue)$/, '')
+  const libName = (
+    name ||
+    api.service.pkg.name ||
+    path.basename(entry).replace(/\.(jsx?|vue)$/, '')
+  )
   // setting this disables app-only configs
   process.env.VUE_CLI_TARGET = 'lib'
   // inline all static asset files since there is no publicPath handling

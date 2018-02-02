@@ -11,19 +11,30 @@ const hyphenate = str => {
   return str.replace(hyphenateRE, '-$1').toLowerCase()
 }
 
-module.exports = function generateMultiWebComponentEntry (prefix, files) {
+exports.filesToComponentNames = (prefix, files) => {
+  return files.map(file => {
+    const basename = path.basename(file).replace(/\.(jsx?|vue)$/, '')
+    const camelName = camelize(basename)
+    const kebabName = `${prefix}-${hyphenate(basename)}`
+    return {
+      file,
+      basename,
+      camelName,
+      kebabName
+    }
+  })
+}
+
+exports.generateMultiWebComponentEntry = (prefix, files) => {
   const filePath = path.resolve(__dirname, 'entry-multi-wc.js')
   const content = `
 import Vue from 'vue'
 import wrap from '@vue/web-component-wrapper'
 
-${files.map(file => {
-    const basename = path.basename(file).replace(/\.(jsx?|vue)$/, '')
-    const camelName = camelize(basename)
-    const kebabName = hyphenate(basename)
+${exports.filesToComponentNames(prefix, files).map(({ file, camelName, kebabName }) => {
     return (
       `import ${camelName} from '~root/${file}'\n` +
-    `window.customElements.define('${prefix}-${kebabName}', wrap(Vue, ${camelName}))\n`
+    `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}))\n`
     )
   }).join('\n')}`.trim()
   fs.writeFileSync(filePath, content)

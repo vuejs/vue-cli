@@ -16,22 +16,20 @@ const entryVue = fs.readFileSync(path.resolve(__dirname, 'entry.vue'), 'utf-8')
 
 beforeAll(() => {
   mkdirp.sync(cwd)
-  write('testLib.vue', entryVue)
+  write('my-wc.vue', entryVue)
 })
 
 let server, browser, page
-test('global build --target lib', async () => {
-  const { stdout } = await execa(binPath, ['build', 'testLib.vue', '--target', 'lib'], { cwd })
+test('global build --target wc', async () => {
+  const { stdout } = await execa(binPath, ['build', 'my-wc.vue', '--target', 'wc'], { cwd })
 
   expect(stdout).toMatch('Build complete.')
 
   const distDir = path.join(cwd, 'dist')
   const hasFile = file => fs.existsSync(path.join(distDir, file))
   expect(hasFile('demo.html')).toBe(true)
-  expect(hasFile('testLib.common.js')).toBe(true)
-  expect(hasFile('testLib.umd.js')).toBe(true)
-  expect(hasFile('testLib.umd.min.js')).toBe(true)
-  expect(hasFile('testLib.css')).toBe(true)
+  expect(hasFile('my-wc.js')).toBe(true)
+  expect(hasFile('my-wc.min.js')).toBe(true)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: distDir })
@@ -48,7 +46,7 @@ test('global build --target lib', async () => {
   page = launched.page
 
   const h1Text = await page.evaluate(() => {
-    return document.querySelector('h1').textContent
+    return document.querySelector('my-wc')._shadowRoot.querySelector('h1').textContent
   })
 
   expect(h1Text).toMatch('hi')

@@ -127,7 +127,9 @@ function cleanArgs (cmd) {
   const args = {}
   cmd.options.forEach(o => {
     const key = o.long.replace(/^--/, '')
-    args[key] = cmd[key]
+    if (typeof cmd[key] === 'string') {
+      args[key] = cmd[key]
+    }
   })
   return args
 }

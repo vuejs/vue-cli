@@ -23,7 +23,7 @@
   "dependencies": {
     "@vue/cli-overlay": "^3.0.0-alpha.5",
     "@vue/cli-shared-utils": "^3.0.0-alpha.5",
-    "@vue/web-component-wrapper": "^1.0.0",
+    "@vue/web-component-wrapper": "^1.1.2",
     "address": "^1.0.3",
     "autodll-webpack-plugin": "^0.3.8",
     "autoprefixer": "^7.2.5",
@@ -57,7 +57,7 @@
     "thread-loader": "^1.1.2",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^0.6.2",
-    "vue-loader": "^14.1.0",
+    "vue-loader": "^14.1.1",
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.10.0",
     "webpack-chain": "^4.5.0",

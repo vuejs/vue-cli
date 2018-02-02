@@ -15,9 +15,11 @@ module.exports = (api, options) => {
       '--name': `name for lib or (multi-)web-component mode (default: "name" in package.json or entry filename)`
     }
   }, args => {
-    args.entry = args._[0]
+    args.entry = args.entry || args._[0]
     for (const key in defaults) {
-      if (args[key] == null) args[key] = defaults[key]
+      if (args[key] == null) {
+        args[key] = defaults[key]
+      }
     }
     if (args.dest == null) {
       args.dest = options.outputDir
