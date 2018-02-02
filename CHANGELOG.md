@@ -1,3 +1,19 @@
+<a name="3.0.0-alpha.7"></a>
+# [3.0.0-alpha.7](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.6...v3.0.0-alpha.7) (2018-02-02)
+
+
+### Bug Fixes
+
+* ensure vue init works when installed with npm ([6ce8565](https://github.com/vuejs/vue-cli/commit/6ce8565))
+
+
+### Features
+
+* check and show newer version on create ([3df1289](https://github.com/vuejs/vue-cli/commit/3df1289))
+* support prompts when invoking plugins ([c1142e2](https://github.com/vuejs/vue-cli/commit/c1142e2))
+
+
+
 <a name="3.0.0-alpha.6"></a>
 # [3.0.0-alpha.6](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.5...v3.0.0-alpha.6) (2018-02-02)
 
@@ -8,6 +24,7 @@
 * allow console during dev ([5ad8fae](https://github.com/vuejs/vue-cli/commit/5ad8fae))
 * avoid deepmerge on project config ([7d590d8](https://github.com/vuejs/vue-cli/commit/7d590d8))
 * compatible with safari 10 ([#755](https://github.com/vuejs/vue-cli/issues/755)) ([199c754](https://github.com/vuejs/vue-cli/commit/199c754))
+* do not extract vue.config.js in tests ([7874b0e](https://github.com/vuejs/vue-cli/commit/7874b0e))
 * ensure loaders exist ([fcfb099](https://github.com/vuejs/vue-cli/commit/fcfb099))
 * fix --force flag ([6661ac2](https://github.com/vuejs/vue-cli/commit/6661ac2))
 * fix project creation when path contains spaces (fix [#742](https://github.com/vuejs/vue-cli/issues/742)) ([5be05f3](https://github.com/vuejs/vue-cli/commit/5be05f3))
@@ -21,6 +38,7 @@
 ### Features
 
 * build --target lib/wc ([faadadf](https://github.com/vuejs/vue-cli/commit/faadadf))
+* build --target web-component (WIP) ([6db7735](https://github.com/vuejs/vue-cli/commit/6db7735))
 * complete --target wc & multi-wc + tests ([9a07eeb](https://github.com/vuejs/vue-cli/commit/9a07eeb))
 * improve build lib/web-component ([1c4943b](https://github.com/vuejs/vue-cli/commit/1c4943b))
 * improve inspect output ([fd87394](https://github.com/vuejs/vue-cli/commit/fd87394))
@@ -30,9 +48,11 @@
 * vue build --target multi-wc [pattern] ([0f59c03](https://github.com/vuejs/vue-cli/commit/0f59c03))
 * vue inspect that proxies to vue-cli-service ([4c00cfa](https://github.com/vuejs/vue-cli/commit/4c00cfa))
 
+
 ### Reverts
 
 * feat: load config w/ cosmiconfig ([702b539](https://github.com/vuejs/vue-cli/commit/702b539))
+
 
 
 <a name="3.0.0-alpha.5"></a>
