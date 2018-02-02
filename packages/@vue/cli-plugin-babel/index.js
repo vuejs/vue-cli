@@ -9,6 +9,7 @@ module.exports = (api, options) => {
         .include
           .add(api.resolve('src'))
           .add(api.resolve('test'))
+          .add(/node_modules\/(dom7|swiper)\/.*/)
           .end()
         .use('cache-loader')
           .loader('cache-loader')
