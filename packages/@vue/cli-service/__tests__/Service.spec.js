@@ -1,4 +1,5 @@
 jest.mock('fs')
+jest.mock('mock-config', () => ({ lintOnSave: false }), { virtual: true })
 jest.mock('vue-cli-plugin-foo', () => () => {}, { virtual: true })
 
 const fs = require('fs')
@@ -52,24 +53,16 @@ test('load project options from package.json', () => {
 })
 
 test('load project options from vue.config.js', () => {
-  fs.writeFileSync('/vue.config.js', `module.exports=${JSON.stringify({ lintOnSave: false })}`)
-  const service = createMockService()
-  // vue.config.js has higher priority
-  expect(service.projectOptions.lintOnSave).toBe(false)
-  fs.unlinkSync('/vue.config.js')
-})
-
-test('package.json option should take priority', () => {
-  fs.writeFileSync('/vue.config.js', `module.exports=${JSON.stringify({ lintOnSave: false })}`)
+  process.env.VUE_CLI_SERVICE_CONFIG_PATH = 'mock-config'
   mockPkg({
     vue: {
       lintOnSave: true
     }
   })
   const service = createMockService()
-  // package.json has higher priority
-  expect(service.projectOptions.lintOnSave).toBe(true)
-  fs.unlinkSync('/vue.config.js')
+  // vue.config.js has higher priority
+  expect(service.projectOptions.lintOnSave).toBe(false)
+  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
 })
 
 test('api: setMode', () => {

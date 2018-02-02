@@ -1,14 +1,14 @@
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
+const chalk = require('chalk')
 const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
 const deepMerge = require('deepmerge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
-const cosmiconfig = require('cosmiconfig')
-const { error } = require('@vue/cli-shared-utils')
+const { warn, error } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 
@@ -155,25 +155,45 @@ module.exports = class Service {
   }
 
   loadProjectOptions (inlineOptions) {
-    let resolved
-    if (this.pkg.vue) {
-      resolved = this.pkg.vue
-    } else {
-      const explorer = cosmiconfig('vue', {
-        rc: false,
-        sync: true,
-        stopDir: this.context
-      })
-      try {
-        const res = explorer.load(this.context)
-        if (res) resolved = res.config
-      } catch (e) {
+    // vue.config.js
+    let fileConfig, pkgConfig, resolved
+    const configPath = (
+      process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
+      path.resolve(this.context, 'vue.config.js')
+    )
+    try {
+      fileConfig = require(configPath)
+      if (!fileConfig || typeof fileConfig !== 'object') {
         error(
-          `Error loading vue-cli config: ${e.message}`
+          `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
+        )
+        fileConfig = null
+      }
+    } catch (e) {}
+
+    // package.vue
+    pkgConfig = this.pkg.vue
+    if (pkgConfig && typeof pkgConfig !== 'object') {
+      error(
+        `Error loading vue-cli config in ${chalk.bold(`package.json`)}: ` +
+        `the "vue" field should be an object.`
+      )
+      pkgConfig = null
+    }
+
+    if (fileConfig) {
+      if (pkgConfig) {
+        warn(
+          `"vue" field in ${chalk.bold(`package.json`)} ignored ` +
+          `due to presence of ${chalk.bold('vue.config.js')}.`
         )
       }
+      resolved = fileConfig
+    } else if (pkgConfig) {
+      resolved = pkgConfig
+    } else {
+      resolved = inlineOptions || {}
     }
-    resolved = resolved || inlineOptions || {}
 
     // normlaize some options
     ensureSlash(resolved, 'base')
