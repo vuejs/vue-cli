@@ -69,7 +69,10 @@ const release = async () => {
         return pkg
       }
     }
-  }).pipe(fileStream)
+  }).pipe(fileStream).on('close', async () => {
+    await execa('git', ['add', '-A'], { stdio: 'inherit' })
+    await execa('git', ['commit', '-m', `chore: ${version} changelog`], { stdio: 'inherit' })
+  })
 }
 
 release().catch(err => {
