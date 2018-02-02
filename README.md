@@ -20,6 +20,10 @@ yarn global add @vue/cli
 vue create my-project
 ```
 
+<p align="center">
+  <img width="809px" src="https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/screenshot.png">
+</p>
+
 ### Zero-config Prototyping
 
 You can rapidly prototype with just a single `*.vue` file with the `vue serve` and `vue build` commands, but they require an additional global addon to be installed:
