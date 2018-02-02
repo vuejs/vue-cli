@@ -2,7 +2,8 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const cloneDeep = require('lodash.clonedeep')
-const { error, log, createSchema, validate } = require('@vue/cli-shared-utils')
+const { error, log } = require('@vue/cli-shared-utils/lib/logger')
+const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
 
 const rcPath = exports.rcPath = (
   process.env.VUE_CLI_CONFIG_PATH ||
