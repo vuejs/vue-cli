@@ -2,8 +2,7 @@ const {
   info,
   error,
   hasYarn,
-  openBrowser,
-  clearConsole
+  openBrowser
 } = require('@vue/cli-shared-utils')
 
 const defaults = {
@@ -25,7 +24,6 @@ module.exports = (api, options) => {
       '--https': `use https (default: ${defaults.https})`
     }
   }, args => {
-    clearConsole()
     info('Starting development server...')
 
     api.setMode(args.mode || defaults.mode)
