@@ -1,3 +1,40 @@
+<a name="3.0.0-alpha.6"></a>
+# [3.0.0-alpha.6](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.5...v3.0.0-alpha.6) (2018-02-02)
+
+
+### Bug Fixes
+
+* --target for global build ([4fb4e35](https://github.com/vuejs/vue-cli/commit/4fb4e35))
+* allow console during dev ([5ad8fae](https://github.com/vuejs/vue-cli/commit/5ad8fae))
+* avoid deepmerge on project config ([7d590d8](https://github.com/vuejs/vue-cli/commit/7d590d8))
+* compatible with safari 10 ([#755](https://github.com/vuejs/vue-cli/issues/755)) ([199c754](https://github.com/vuejs/vue-cli/commit/199c754))
+* ensure loaders exist ([fcfb099](https://github.com/vuejs/vue-cli/commit/fcfb099))
+* fix --force flag ([6661ac2](https://github.com/vuejs/vue-cli/commit/6661ac2))
+* fix project creation when path contains spaces (fix [#742](https://github.com/vuejs/vue-cli/issues/742)) ([5be05f3](https://github.com/vuejs/vue-cli/commit/5be05f3))
+* fix version check ([e5ef34d](https://github.com/vuejs/vue-cli/commit/e5ef34d))
+* move linkBin into [@vue](https://github.com/vue)/cli since it requires node 8 ([120d5c5](https://github.com/vuejs/vue-cli/commit/120d5c5))
+* TS 2.7 compat ([c7e28fd](https://github.com/vuejs/vue-cli/commit/c7e28fd))
+* typescript caching problems ([a80cf18](https://github.com/vuejs/vue-cli/commit/a80cf18))
+* **typescript:** explicitly include global types ([31c1261](https://github.com/vuejs/vue-cli/commit/31c1261)), closes [#762](https://github.com/vuejs/vue-cli/issues/762)
+
+
+### Features
+
+* build --target lib/wc ([faadadf](https://github.com/vuejs/vue-cli/commit/faadadf))
+* complete --target wc & multi-wc + tests ([9a07eeb](https://github.com/vuejs/vue-cli/commit/9a07eeb))
+* improve build lib/web-component ([1c4943b](https://github.com/vuejs/vue-cli/commit/1c4943b))
+* improve inspect output ([fd87394](https://github.com/vuejs/vue-cli/commit/fd87394))
+* inject styles under shadow root in web component mode ([98afd07](https://github.com/vuejs/vue-cli/commit/98afd07))
+* make env variables available in HTML template ([b626ef1](https://github.com/vuejs/vue-cli/commit/b626ef1))
+* parallel mode ([b8f2487](https://github.com/vuejs/vue-cli/commit/b8f2487))
+* vue build --target multi-wc [pattern] ([0f59c03](https://github.com/vuejs/vue-cli/commit/0f59c03))
+* vue inspect that proxies to vue-cli-service ([4c00cfa](https://github.com/vuejs/vue-cli/commit/4c00cfa))
+
+### Reverts
+
+* feat: load config w/ cosmiconfig ([702b539](https://github.com/vuejs/vue-cli/commit/702b539))
+
+
 <a name="3.0.0-alpha.5"></a>
 # [3.0.0-alpha.5](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.4...v3.0.0-alpha.5) (2018-01-29)
 
