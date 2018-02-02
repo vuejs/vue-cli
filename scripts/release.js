@@ -4,6 +4,7 @@ const execa = require('execa')
 const semver = require('semver')
 const inquirer = require('inquirer')
 const { syncDeps } = require('./syncDeps')
+const cc = require('conventional-changelog')
 
 const curVersion = require('../lerna.json').version
 
@@ -52,12 +53,23 @@ const release = async () => {
     await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
   }
 
-  const lernaBinPath = require.resolve('lerna/bin/lerna')
-  await execa(lernaBinPath, [
+  await execa(require.resolve('lerna/bin/lerna'), [
     'publish',
     '--repo-version',
     version
   ], { stdio: 'inherit' })
+
+  const fileStream = require('fs').createWriteStream(`CHANGELOG.md`)
+  cc({
+    preset: 'angular',
+    releaseCount: 0,
+    pkg: {
+      transform (pkg) {
+        pkg.version = `v${version}`
+        return pkg
+      }
+    }
+  }).pipe(fileStream)
 }
 
 release().catch(err => {
