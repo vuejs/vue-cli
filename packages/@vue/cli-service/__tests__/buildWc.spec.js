@@ -33,7 +33,7 @@ test('build as single wc', async () => {
   page = launched.page
 
   const styleCount = await page.evaluate(() => {
-    return document.querySelector('build-wc')._shadowRoot.querySelectorAll('style').length
+    return document.querySelector('build-wc').shadowRoot.querySelectorAll('style').length
   })
   expect(styleCount).toBe(1)
 
@@ -41,7 +41,7 @@ test('build as single wc', async () => {
     document.querySelector('build-wc').msg = 'hello'
   })
   const h1Text = await page.evaluate(() => {
-    return document.querySelector('build-wc')._shadowRoot.querySelector('h1').textContent
+    return document.querySelector('build-wc').shadowRoot.querySelector('h1').textContent
   })
   expect(h1Text).toBe('hello')
 })

@@ -46,7 +46,7 @@ test('global build --target wc', async () => {
   page = launched.page
 
   const h1Text = await page.evaluate(() => {
-    return document.querySelector('my-wc')._shadowRoot.querySelector('h1').textContent
+    return document.querySelector('my-wc').shadowRoot.querySelector('h1').textContent
   })
 
   expect(h1Text).toMatch('hi')

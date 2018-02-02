@@ -33,22 +33,22 @@ test('build as single wc', async () => {
   page = launched.page
 
   const styleCount = await page.evaluate(() => {
-    return document.querySelector('build-multi-wc-app')._shadowRoot.querySelectorAll('style').length
+    return document.querySelector('build-multi-wc-app').shadowRoot.querySelectorAll('style').length
   })
   expect(styleCount).toBe(2) // should contain styles from both app and child
 
   const h1Text = await page.evaluate(() => {
-    return document.querySelector('build-multi-wc-app')._shadowRoot.querySelector('h1').textContent
+    return document.querySelector('build-multi-wc-app').shadowRoot.querySelector('h1').textContent
   })
   expect(h1Text).toMatch('Welcome to Your Vue.js App')
 
   const childStyleCount = await page.evaluate(() => {
-    return document.querySelector('build-multi-wc-hello-world')._shadowRoot.querySelectorAll('style').length
+    return document.querySelector('build-multi-wc-hello-world').shadowRoot.querySelectorAll('style').length
   })
   expect(childStyleCount).toBe(1)
 
   const h2Text = await page.evaluate(() => {
-    return document.querySelector('build-multi-wc-hello-world')._shadowRoot.querySelector('h2').textContent
+    return document.querySelector('build-multi-wc-hello-world').shadowRoot.querySelector('h2').textContent
   })
   expect(h2Text).toMatch('Essential Links')
 })
