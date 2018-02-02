@@ -21,7 +21,7 @@ vue create my-project
 ```
 
 <p align="center">
-  <img width="809px" src="https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/screenshot.png">
+  <img width="682px" src="https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/screenshot.png">
 </p>
 
 ### Zero-config Prototyping
