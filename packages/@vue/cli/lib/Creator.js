@@ -86,7 +86,7 @@ module.exports = class Creator {
     const packageManager = (
       cliOptions.packageManager ||
       loadOptions().packageManager ||
-      (hasYarn ? 'yarn' : 'npm')
+      (hasYarn() ? 'yarn' : 'npm')
     )
 
     await clearConsole()
@@ -112,7 +112,7 @@ module.exports = class Creator {
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
-    if (hasGit) {
+    if (hasGit()) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
       await run('git init')
     }
@@ -156,7 +156,7 @@ module.exports = class Creator {
     }
 
     // commit initial state
-    if (hasGit) {
+    if (hasGit()) {
       await run('git add -A')
       if (isTestOrDebug) {
         await run('git', ['config', 'user.name', 'test'])
@@ -179,7 +179,7 @@ module.exports = class Creator {
 
   async promptAndResolvePreset () {
     // prompt
-    await clearConsole()
+    await clearConsole(true)
     const answers = await inquirer.prompt(this.resolveFinalPrompts())
     debug('vue-cli:answers')(answers)
 
@@ -320,7 +320,7 @@ module.exports = class Creator {
 
     // ask for packageManager once
     const savedOptions = loadOptions()
-    if (hasYarn && !savedOptions.packageManager) {
+    if (!savedOptions.packageManager && hasYarn()) {
       outroPrompts.push({
         name: 'packageManager',
         type: 'list',

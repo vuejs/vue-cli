@@ -78,7 +78,7 @@ async function invoke (pluginName, options) {
 
   if (!isTestOrDebug && depsChanged) {
     logWithSpinner('📦', `Installing additional dependencies...`)
-    const packageManager = loadOptions().packageManager || (hasYarn ? 'yarn' : 'npm')
+    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
     await installDeps(context, packageManager)
   }
 
@@ -93,7 +93,7 @@ async function invoke (pluginName, options) {
 
   log()
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
-  if (hasGit) {
+  if (hasGit()) {
     const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'])
     log(`   The following files have been updated / added:\n`)
     log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))
