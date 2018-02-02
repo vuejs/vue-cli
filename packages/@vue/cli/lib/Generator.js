@@ -27,11 +27,8 @@ module.exports = class Generator {
       const api = new GeneratorAPI(id, this, options, rootOptions || {})
       apply(api, options, rootOptions)
     })
-    // if the user has chosen so, extract configs from package.json into
-    // dedicated files.
-    if (extractConfigFiles) {
-      this.extractConfigFiles()
-    }
+    // extract configs from package.json into dedicated files.
+    this.extractConfigFiles(extractConfigFiles)
   }
 
   async generate () {
@@ -44,14 +41,22 @@ module.exports = class Generator {
     await writeFileTree(this.context, this.files)
   }
 
-  extractConfigFiles () {
-    for (const key in this.pkg) {
+  extractConfigFiles (all) {
+    const extract = key => {
       if (configMap[key]) {
         const value = this.pkg[key]
         const { transform, filename } = configMap[key]
         this.files[filename] = transform(value)
         delete this.pkg[key]
       }
+    }
+    if (all) {
+      for (const key in this.pkg) {
+        extract(key)
+      }
+    } else {
+      // by default, extract vue.config.js
+      extract('vue')
     }
   }
 
