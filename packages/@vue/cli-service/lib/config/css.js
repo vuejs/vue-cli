@@ -15,7 +15,13 @@ module.exports = (api, options) => {
     const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
     const isProd = process.env.NODE_ENV === 'production'
-    const userOptions = options.css || {}
+    const defaultOptions = {
+      extract: true,
+      modules: false,
+      sourceMap: false,
+      loaderOptions: {}
+    }
+    const userOptions = Object.assign(defaultOptions, options.css || {})
     const extract = isProd && userOptions.extract !== false
 
     // check if the project has a valid postcss config

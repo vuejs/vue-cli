@@ -4,7 +4,6 @@ const debug = require('debug')
 const chalk = require('chalk')
 const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
-const deepMerge = require('deepmerge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
@@ -21,10 +20,9 @@ module.exports = class Service {
     this.devServerConfigFns = []
     this.commands = {}
     this.pkg = this.resolvePkg(pkg)
-    this.projectOptions = deepMerge(
-      defaults(),
-      this.loadProjectOptions(projectOptions)
-    )
+
+    const userOptions = this.loadProjectOptions(projectOptions)
+    this.projectOptions = Object.assign(defaults(), userOptions)
 
     debug('vue:project-config')(this.projectOptions)
 

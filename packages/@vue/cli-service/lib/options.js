@@ -22,8 +22,16 @@ const schema = createSchema(joi => joi.object({
     })
   }),
   devServer: joi.object(),
+
   // known options from offical plugins
-  lintOnSave: joi.boolean()
+  lintOnSave: joi.boolean(),
+
+  // webpack
+  chainWebpack: joi.func(),
+  configureWebpack: joi.alternatives().try(
+    joi.object(),
+    joi.func()
+  )
 }))
 
 exports.validate = options => validate(
@@ -58,12 +66,10 @@ exports.defaults = () => ({
   dll: false,
 
   css: {
-    // boolean | Object, extract css?
-    extract: true,
-    // apply css modules to CSS files that doesn't end with .module.css?
-    modules: false,
-    sourceMap: false,
-    loaderOptions: {}
+    // extract: true,
+    // modules: false,
+    // sourceMap: false,
+    // loaderOptions: {}
   },
 
   // whether to use eslint-loader
