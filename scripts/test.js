@@ -8,7 +8,7 @@ let regex
 if (args.p) {
   const packages = (args.p || args.package).split(',').join('|')
   regex = `.*@vue/(${packages}|cli-plugin-(${packages}))/.*\\.spec\\.js$`
-  const i = rawArgs.findIndex('-p')
+  const i = rawArgs.indexOf('-p')
   rawArgs.splice(i, 2)
 }
 
