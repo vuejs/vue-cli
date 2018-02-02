@@ -55,6 +55,14 @@ program
   })
 
 program
+  .command('inspect [paths...]')
+  .option('--mode <mode>')
+  .description('inspect the webpack config in a project with vue-cli-service')
+  .action((paths, cmd) => {
+    require('../lib/inspect')(paths, cmd.mode)
+  })
+
+program
   .command('serve [entry]')
   .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
