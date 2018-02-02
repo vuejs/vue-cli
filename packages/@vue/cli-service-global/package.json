@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service-global",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "vue-cli-service global addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -21,10 +21,10 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-build#readme",
   "dependencies": {
-    "@vue/babel-preset-app": "^3.0.0-alpha.5",
-    "@vue/cli-plugin-babel": "^3.0.0-alpha.5",
-    "@vue/cli-plugin-eslint": "^3.0.0-alpha.5",
-    "@vue/cli-service": "^3.0.0-alpha.5",
+    "@vue/babel-preset-app": "^3.0.0-alpha.6",
+    "@vue/cli-plugin-babel": "^3.0.0-alpha.6",
+    "@vue/cli-plugin-eslint": "^3.0.0-alpha.6",
+    "@vue/cli-service": "^3.0.0-alpha.6",
     "chalk": "^2.3.0",
     "eslint-plugin-vue": "^4.2.2",
     "resolve": "^1.5.0",
