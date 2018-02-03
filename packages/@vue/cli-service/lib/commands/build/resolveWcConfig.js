@@ -1,8 +1,5 @@
 const path = require('path')
-const {
-  resolveEntry,
-  fileToComponentName
-} = require('./resolveWebComponentEntry')
+const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
 module.exports = (api, { target, entry, name, dest }) => {
   // setting this disables app-only configs

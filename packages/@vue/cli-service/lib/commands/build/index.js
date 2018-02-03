@@ -60,7 +60,7 @@ module.exports = (api, options) => {
           args.target === 'wc' ||
           args.target === 'wc-async'
         ) {
-          webpackConfig = require('./resolveWebComponentConfig')(api, args, options)
+          webpackConfig = require('./resolveWcConfig')(api, args, options)
         } else {
           webpackConfig = api.resolveWebpackConfig()
         }
