@@ -1,7 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const resolveLocal = require('../util/resolveLocal')
-    const inlineLimit = process.env.VUE_CLI_INLINE_LIMIT || 1000
+    const inlineLimit = 10000
 
     webpackConfig
       .context(api.service.context)

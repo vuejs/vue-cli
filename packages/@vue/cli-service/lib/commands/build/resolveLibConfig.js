@@ -15,26 +15,30 @@ module.exports = (api, { entry, name, dest }, options) => {
     const config = api.resolveChainableWebpackConfig()
 
     config.entryPoints.clear()
+    const entryName = `${libName}.${postfix}`
     // set proxy entry for *.vue files
     if (/\.vue$/.test(entry)) {
       config
-        .entry(`${libName}.${postfix}`)
+        .entry(entryName)
           .add(require.resolve('./entry-lib.js'))
       config.resolve
         .alias
           .set('~entry', api.resolve(entry))
     } else {
       config
-        .entry(`${libName}.${postfix}`)
+        .entry(entryName)
           .add(api.resolve(entry))
     }
 
     config.output
       .path(api.resolve(dest))
-      .filename(`[name].js`)
+      .filename(`${entryName}.js`)
+      .chunkFilename(`${entryName}.[id].js`)
       .library(libName)
       .libraryExport('default')
       .libraryTarget(format)
+      // use relative publicPath so this can be deployed anywhere
+      .publicPath('./')
 
     // adjust css output name so they write to the same file
     if (options.css.extract !== false) {

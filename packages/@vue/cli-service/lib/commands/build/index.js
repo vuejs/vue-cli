@@ -11,7 +11,7 @@ module.exports = (api, options) => {
     options: {
       '--mode': `specify env mode (default: ${defaults.mode})`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
-      '--target': `app | lib | wc | multi-wc (default: ${defaults.target})`,
+      '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--name': `name for lib or (multi-)web-component mode (default: "name" in package.json or entry filename)`
     }
   }, args => {
@@ -56,8 +56,9 @@ module.exports = (api, options) => {
           webpackConfig = require('./resolveLibConfig')(api, args, options)
         } else if (
           args.target === 'web-component' ||
+          args.target === 'web-component-async' ||
           args.target === 'wc' ||
-          args.target === 'multi-wc'
+          args.target === 'wc-async'
         ) {
           webpackConfig = require('./resolveWebComponentConfig')(api, args, options)
         } else {

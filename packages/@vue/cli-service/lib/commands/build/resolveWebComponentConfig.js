@@ -1,10 +1,15 @@
 const path = require('path')
 const {
-  filesToComponentNames,
-  generateMultiWebComponentEntry
-} = require('./generateMultiWcEntry')
+  resolveEntry,
+  fileToComponentName
+} = require('./resolveWebComponentEntry')
 
-module.exports = (api, { target, entry, name, dest, prefix }) => {
+module.exports = (api, { target, entry, name, dest }) => {
+  // setting this disables app-only configs
+  process.env.VUE_CLI_TARGET = 'web-component'
+  // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
+  process.env.VUE_CLI_CSS_SHADOW_MODE = true
+
   const { log, error } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
@@ -12,57 +17,45 @@ module.exports = (api, { target, entry, name, dest, prefix }) => {
     process.exit(1)
   }
 
-  const libName = (
-    name ||
-    api.service.pkg.name ||
-    path.basename(entry).replace(/\.(jsx?|vue)$/, '')
-  )
-  if (libName.indexOf('-') < 0 && target !== 'multi-wc') {
-    abort(`--name must contain a hyphen with --target web-component. (got "${libName}")`)
+  const isAsync = /async/.test(target)
+
+  // generate dynamic entry based on glob files
+  const resolvedFiles = require('globby').sync([entry], { cwd: api.resolve('.') })
+  if (!resolvedFiles.length) {
+    abort(`entry pattern "${entry}" did not match any files.`)
+  }
+  let libName
+  let prefix
+  if (resolvedFiles.length === 1) {
+    // in single mode, determine the lib name from filename
+    libName = name || fileToComponentName('', resolvedFiles[0]).kebabName
+    prefix = ''
+    if (libName.indexOf('-') < 0) {
+      abort(`--name must contain a hyphen when building a single web component.`)
+    }
+  } else {
+    // multi mode
+    libName = prefix = (name || api.service.pkg.name)
+    if (!libName) {
+      abort(`--name is required when building multiple web components.`)
+    }
   }
 
-  let dynamicEntry
-  let resolvedFiles
-  if (target === 'multi-wc') {
-    if (!entry) {
-      abort(`a glob pattern is required with --target multi-web-component.`)
-    }
-    // generate dynamic entry based on glob files
-    resolvedFiles = require('globby').sync([entry], { cwd: api.resolve('.') })
-    if (!resolvedFiles.length) {
-      abort(`glob pattern "${entry}" did not match any files.`)
-    }
-    dynamicEntry = generateMultiWebComponentEntry(libName, resolvedFiles)
-  }
-
-  // setting this disables app-only configs
-  process.env.VUE_CLI_TARGET = 'web-component'
-  // inline all static asset files since there is no publicPath handling
-  process.env.VUE_CLI_INLINE_LIMIT = Infinity
-  // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
-  process.env.VUE_CLI_CSS_SHADOW_MODE = true
+  const dynamicEntry = resolveEntry(prefix, resolvedFiles, isAsync)
 
   function genConfig (minify, genHTML) {
     const config = api.resolveChainableWebpackConfig()
 
     config.entryPoints.clear()
+    const entryName = `${libName}${minify ? `.min` : ``}`
 
     // set proxy entry for *.vue files
-    if (target === 'multi-wc') {
-      config
-        .entry(`${libName}${minify ? `.min` : ``}`)
-          .add(dynamicEntry)
-      config.resolve
-        .alias
-          .set('~root', api.resolve('.'))
-    } else {
-      config
-        .entry(`${libName}${minify ? `.min` : ``}`)
-          .add(require.resolve('./entry-wc.js'))
-      config.resolve
-        .alias
-          .set('~entry', api.resolve(entry))
-    }
+    config
+      .entry(entryName)
+        .add(dynamicEntry)
+    config.resolve
+      .alias
+        .set('~root', api.resolve('.'))
 
     // make sure not to transpile wc-wrapper
     config.module
@@ -77,7 +70,10 @@ module.exports = (api, { target, entry, name, dest, prefix }) => {
 
     config.output
       .path(api.resolve(dest))
-      .filename(`[name].js`)
+      .filename(`${entryName}.js`)
+      .chunkFilename(`${libName}.[id]${minify ? `.min` : ``}.js`)
+      // use relative publicPath so this can be deployed anywhere
+      .publicPath('./')
 
     // externalize Vue in case user imports it
     config
@@ -106,13 +102,13 @@ module.exports = (api, { target, entry, name, dest, prefix }) => {
       config
         .plugin('demo-html')
           .use(require('html-webpack-plugin'), [{
-            template: path.resolve(__dirname, `./demo-${target}.html`),
+            template: path.resolve(__dirname, `./demo-wc.html`),
             inject: false,
             filename: 'demo.html',
             libName,
-            components: target === 'multi-wc'
-              ? filesToComponentNames(libName, resolvedFiles).map(c => c.kebabName)
-              : null
+            components: resolvedFiles.map(file => {
+              return fileToComponentName(prefix, file).kebabName
+            })
           }])
     }
 

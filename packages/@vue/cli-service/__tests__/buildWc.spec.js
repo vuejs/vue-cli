@@ -1,4 +1,4 @@
-jest.setTimeout(30000)
+jest.setTimeout(15000)
 
 const path = require('path')
 const portfinder = require('portfinder')
@@ -8,10 +8,10 @@ const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 let server, browser, page
-test('build as single wc', async () => {
+test('build as wc', async () => {
   const project = await create('build-wc', defaultPreset)
 
-  const { stdout } = await project.run('vue-cli-service build --target wc src/components/HelloWorld.vue')
+  const { stdout } = await project.run(`vue-cli-service build --target wc **/*.vue`)
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
@@ -33,17 +33,24 @@ test('build as single wc', async () => {
   page = launched.page
 
   const styleCount = await page.evaluate(() => {
-    return document.querySelector('build-wc').shadowRoot.querySelectorAll('style').length
+    return document.querySelector('build-wc-app').shadowRoot.querySelectorAll('style').length
   })
-  expect(styleCount).toBe(1)
+  expect(styleCount).toBe(2) // should contain styles from both app and child
 
-  await page.evaluate(() => {
-    document.querySelector('build-wc').msg = 'hello'
-  })
   const h1Text = await page.evaluate(() => {
-    return document.querySelector('build-wc').shadowRoot.querySelector('h1').textContent
+    return document.querySelector('build-wc-app').shadowRoot.querySelector('h1').textContent
   })
-  expect(h1Text).toBe('hello')
+  expect(h1Text).toMatch('Welcome to Your Vue.js App')
+
+  const childStyleCount = await page.evaluate(() => {
+    return document.querySelector('build-wc-hello-world').shadowRoot.querySelectorAll('style').length
+  })
+  expect(childStyleCount).toBe(1)
+
+  const h2Text = await page.evaluate(() => {
+    return document.querySelector('build-wc-hello-world').shadowRoot.querySelector('h2').textContent
+  })
+  expect(h2Text).toMatch('Essential Links')
 })
 
 afterAll(async () => {
