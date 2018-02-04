@@ -51,7 +51,7 @@ module.exports = cli => {
         value: 'save'
       },
       {
-        name: 'Lint and fix on commit' + (hasGit ? '' : chalk.red(' (requires Git)')),
+        name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
         value: 'commit'
       }
     ]

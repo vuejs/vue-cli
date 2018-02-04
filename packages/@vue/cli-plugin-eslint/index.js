@@ -19,7 +19,7 @@ module.exports = (api, { lintOnSave }) => {
   }
 
   api.registerCommand('lint', {
-    descriptions: 'lint source files',
+    description: 'lint and fix source files',
     usage: 'vue-cli-service lint [options] [...files]',
     options: {
       '--format [formatter]': 'specify formatter (default: codeframe)',

@@ -12,7 +12,6 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    <%_if (isTest) { _%>
     "types": [
       "node",
       <%_ if (hasMocha) { _%>
@@ -22,7 +21,6 @@
       "jest"
       <%_ } _%>
     ],
-    <%_ } _%>
     "paths": {
       "@/*": [
         "src/*"

@@ -1,0 +1,16 @@
+<title><%- htmlWebpackPlugin.options.libName %> demo</title>
+<script src="https://unpkg.com/vue"></script>
+<script src="./<%- htmlWebpackPlugin.options.libName %>.umd.js"></script>
+<link rel="stylesheet" href="./<%- htmlWebpackPlugin.options.libName %>.css">
+
+<div id="app">
+  <demo></demo>
+</div>
+
+<script>
+new Vue({
+  components: {
+    demo: <%- htmlWebpackPlugin.options.libName %>
+  }
+}).$mount('#app')
+</script>

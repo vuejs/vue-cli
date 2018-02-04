@@ -13,7 +13,7 @@ async function create (projectName, options) {
     if (options.force) {
       rimraf.sync(targetDir)
     } else {
-      clearConsole()
+      await clearConsole()
       const { action } = await inquirer.prompt([
         {
           name: 'action',

@@ -1,0 +1,7 @@
+<title><%- htmlWebpackPlugin.options.libName %> demo</title>
+<script src="https://unpkg.com/vue"></script>
+<script src="./<%- htmlWebpackPlugin.options.libName %>.js"></script>
+
+<% for (const comp of htmlWebpackPlugin.options.components) { %>
+<<%= comp %>></<%= comp %>>
+<% } %>

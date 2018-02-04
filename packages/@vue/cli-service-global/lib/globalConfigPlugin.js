@@ -71,7 +71,8 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
               .clear()
               .end()
             .exclude
-              .add(/node_modules|@vue\/cli-service/)
+              .add(/node_modules/)
+              .add(/@vue\/cli-service/)
               .end()
             .uses
               .delete('cache-loader')

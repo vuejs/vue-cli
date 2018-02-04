@@ -18,8 +18,8 @@ module.exports = api => {
     const jestBinPath = require.resolve('jest/bin/jest')
 
     let testMatch = []
-    if (!args._.length && api.hasPlugin('typescript')) {
-      testMatch = [`--testMatch`, `<rootDir>/test/unit/**/*.spec.(ts|tsx|js)`]
+    if (!args._.length) {
+      testMatch = [`--testMatch`, `<rootDir>/(test/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))`]
     }
 
     const argv = [

@@ -3,6 +3,7 @@ const path = require('path')
 const execa = require('execa')
 const chalk = require('chalk')
 const resolve = require('resolve')
+const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
 const installDeps = require('./util/installDeps')
@@ -15,15 +16,23 @@ const {
   stopSpinner
 } = require('@vue/cli-shared-utils')
 
-async function invoke (pluginName, options) {
+function load (request, context) {
+  let resolvedPath
+  try {
+    resolvedPath = resolve.sync(request, { basedir: context })
+  } catch (e) {}
+  if (resolvedPath) {
+    return require(resolvedPath)
+  }
+}
+
+async function invoke (pluginName, options = {}, context = process.cwd()) {
   delete options._
-  const context = process.cwd()
   const pkgPath = path.resolve(context, 'package.json')
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
   if (!fs.existsSync(pkgPath)) {
-    error(`package.json not found in ${chalk.yellow(context)}`)
-    process.exit(1)
+    throw new Error(`package.json not found in ${chalk.yellow(context)}`)
   }
 
   const pkg = require(pkgPath)
@@ -41,18 +50,29 @@ async function invoke (pluginName, options) {
 
   const id = findPlugin(pkg.devDependencies) || findPlugin(pkg.dependencies)
   if (!id) {
-    error(
+    throw new Error(
       `Cannot resolve plugin ${chalk.yellow(pluginName)} from package.json. ` +
       `Did you forget to install it?`
     )
-    process.exit(1)
   }
 
-  const generatorURI = `${id}/generator`
-  const generatorPath = resolve.sync(generatorURI, { basedir: context })
+  const pluginGenerator = load(`${id}/generator`, context)
+  if (!pluginGenerator) {
+    throw new Error(`Plugin ${id} does not have a generator.`)
+  }
+
+  // resolve options if no command line options are passed, and the plugin
+  // contains a prompt module.
+  if (!Object.keys(options).length) {
+    const pluginPrompts = load(`${id}/prompts`, context)
+    if (pluginPrompts) {
+      options = await inquirer.prompt(pluginPrompts)
+    }
+  }
+
   const plugin = {
     id,
-    apply: require(generatorPath),
+    apply: pluginGenerator,
     options
   }
 
@@ -78,7 +98,7 @@ async function invoke (pluginName, options) {
 
   if (!isTestOrDebug && depsChanged) {
     logWithSpinner('📦', `Installing additional dependencies...`)
-    const packageManager = loadOptions().packageManager || (hasYarn ? 'yarn' : 'npm')
+    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
     await installDeps(context, packageManager)
   }
 
@@ -93,7 +113,7 @@ async function invoke (pluginName, options) {
 
   log()
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
-  if (hasGit) {
+  if (!process.env.VUE_CLI_TEST && hasGit()) {
     const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'])
     log(`   The following files have been updated / added:\n`)
     log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))
@@ -103,9 +123,11 @@ async function invoke (pluginName, options) {
   log()
 }
 
-module.exports = (pluginName, options) => {
-  invoke(pluginName, options).catch(err => {
+module.exports = (...args) => {
+  return invoke(...args).catch(err => {
     error(err)
-    process.exit(1)
+    if (!process.env.VUE_CLI_TEST) {
+      process.exit(1)
+    }
   })
 }

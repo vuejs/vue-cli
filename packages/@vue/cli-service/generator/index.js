@@ -1,5 +1,6 @@
 module.exports = (api, options) => {
   api.render('./template')
+
   api.extendPackage({
     scripts: {
       'serve': 'vue-cli-service serve' + (

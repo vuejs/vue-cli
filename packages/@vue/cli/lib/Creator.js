@@ -1,12 +1,12 @@
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
-const axios = require('axios')
 const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
+const getVersions = require('./util/getVersions')
 const installDeps = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
@@ -86,20 +86,14 @@ module.exports = class Creator {
     const packageManager = (
       cliOptions.packageManager ||
       loadOptions().packageManager ||
-      (hasYarn ? 'yarn' : 'npm')
+      (hasYarn() ? 'yarn' : 'npm')
     )
 
-    clearConsole()
+    await clearConsole()
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
 
     // get latest CLI version
-    let latestCLIVersion
-    if (!isTestOrDebug) {
-      const res = await axios.get(`https://registry.npmjs.org/@vue%2Fcli/`)
-      latestCLIVersion = res.data['dist-tags'].latest
-    } else {
-      latestCLIVersion = require('../package.json').version
-    }
+    const { latest } = await getVersions()
     // generate package.json with plugin dependencies
     const pkg = {
       name,
@@ -109,7 +103,7 @@ module.exports = class Creator {
     }
     const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
-      pkg.devDependencies[dep] = `^${latestCLIVersion}`
+      pkg.devDependencies[dep] = `^${latest}`
     })
     // write package.json
     await writeFileTree(context, {
@@ -118,7 +112,7 @@ module.exports = class Creator {
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
-    if (hasGit) {
+    if (hasGit()) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
       await run('git init')
     }
@@ -162,7 +156,7 @@ module.exports = class Creator {
     }
 
     // commit initial state
-    if (hasGit) {
+    if (hasGit()) {
       await run('git add -A')
       if (isTestOrDebug) {
         await run('git', ['config', 'user.name', 'test'])
@@ -185,7 +179,7 @@ module.exports = class Creator {
 
   async promptAndResolvePreset () {
     // prompt
-    clearConsole()
+    await clearConsole(true)
     const answers = await inquirer.prompt(this.resolveFinalPrompts())
     debug('vue-cli:answers')(answers)
 
@@ -326,7 +320,7 @@ module.exports = class Creator {
 
     // ask for packageManager once
     const savedOptions = loadOptions()
-    if (hasYarn && !savedOptions.packageManager) {
+    if (!savedOptions.packageManager && hasYarn()) {
       outroPrompts.push({
         name: 'packageManager',
         type: 'list',

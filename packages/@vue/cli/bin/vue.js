@@ -55,8 +55,16 @@ program
   })
 
 program
+  .command('inspect [paths...]')
+  .option('--mode <mode>')
+  .description('inspect the webpack config in a project with vue-cli-service')
+  .action((paths, cmd) => {
+    require('../lib/inspect')(paths, cmd.mode)
+  })
+
+program
   .command('serve [entry]')
-  .description('serve a .js or vue file in development mode with zero config')
+  .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
@@ -64,10 +72,9 @@ program
 
 program
   .command('build [entry]')
-  .option('-t, --target <target>', 'Build target (app | lib | web-component, default: app)')
+  .option('-t, --target <target>', 'Build target (app | lib | wc, default: app)')
   .option('-n, --name <name>', 'name for lib or web-component (default: entry filename)')
   .option('-d, --dest <dir>', 'output directory (default: dist)')
-  .option('--keepAlive', 'keep component alive when web-component is detached? (default: false)')
   .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
@@ -128,7 +135,11 @@ function cleanArgs (cmd) {
   const args = {}
   cmd.options.forEach(o => {
     const key = o.long.replace(/^--/, '')
-    args[key] = cmd[key]
+    // if an option is not present and Command has a method with the same name
+    // it should not be copied
+    if (typeof cmd[key] !== 'function') {
+      args[key] = cmd[key]
+    }
   })
   return args
 }

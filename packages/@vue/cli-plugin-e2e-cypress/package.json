@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-cypress",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.8",
   "description": "e2e-cypress plugin for vue-cli",
   "main": "index.js",
   "repository": {

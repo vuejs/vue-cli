@@ -3,7 +3,7 @@ const TYPE = 'cant-resolve-loader'
 const errorRE = /Can't resolve '(.*loader)'/
 
 exports.transformer = error => {
-  if (error.webpackError) {
+  if (error.webpackError && error.webpackError.message) {
     const match = error.webpackError.message.match(errorRE)
     if (match) {
       return Object.assign({}, error, {

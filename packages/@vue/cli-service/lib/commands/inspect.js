@@ -25,7 +25,18 @@ module.exports = (api, options) => {
       res = config
     }
 
-    // TODO improve stringification for loaders, plugins etc.
-    console.log(stringify(res, null, 2))
+    const pluginRE = /(?:function|class) (\w+Plugin)/
+    console.log(stringify(res, (value, indent, stringify) => {
+      if (typeof value === 'function' && value.toString().length > 100) {
+        return `function () { /* omitted long function */ }`
+      }
+      if (value && typeof value.constructor === 'function') {
+        const match = value.constructor.toString().match(pluginRE)
+        if (match) {
+          return `/* ${match[1]} */ ` + stringify(value)
+        }
+      }
+      return stringify(value)
+    }, 2))
   })
 }

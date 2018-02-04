@@ -9,12 +9,46 @@ const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
 const isObject = val => val && typeof val === 'object'
 
+// get link for a 3rd party plugin.
+function getLink (id) {
+  let pkg = {}
+  try {
+    pkg = require(`${id}/package.json`)
+  } catch (e) {}
+  return (
+    pkg.homepage ||
+    (pkg.repository && pkg.repository.url) ||
+    `https://www.npmjs.com/package/${id.replace(`/`, `%2F`)}`
+  )
+}
+
 module.exports = class GeneratorAPI {
   constructor (id, generator, options, rootOptions) {
     this.id = id
     this.generator = generator
     this.options = options
     this.rootOptions = rootOptions
+
+    this.pluginsData = generator.plugins
+      .filter(({ id }) => id !== `@vue/cli-service`)
+      .map(({ id }) => {
+        const name = id.replace(/^(@vue|vue-)\/cli-plugin-/, '')
+        const isOfficial = /^@vue/.test(id)
+        return {
+          name: name,
+          link: isOfficial
+            ? `https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-${name}`
+            : getLink(id)
+        }
+      })
+  }
+
+  _resolveData (additionalData) {
+    return Object.assign({
+      options: this.options,
+      rootOptions: this.rootOptions,
+      plugins: this.pluginsData
+    }, additionalData)
   }
 
   injectFileMiddleware (middleware) {
@@ -52,10 +86,7 @@ module.exports = class GeneratorAPI {
     if (isString(fileDir)) {
       fileDir = path.resolve(baseDir, fileDir)
       this.injectFileMiddleware(async (files) => {
-        const data = Object.assign({
-          options: this.options,
-          rootOptions: this.rootOptions
-        }, additionalData)
+        const data = this._resolveData(additionalData)
         const _files = await globby(['**/*'], { cwd: fileDir })
         for (const rawPath of _files) {
           let filename = path.basename(rawPath)
@@ -75,10 +106,7 @@ module.exports = class GeneratorAPI {
       })
     } else if (isObject(fileDir)) {
       this.injectFileMiddleware(files => {
-        const data = Object.assign({
-          options: this.options,
-          rootOptions: this.rootOptions
-        }, additionalData)
+        const data = this._resolveData(additionalData)
         for (const targetPath in fileDir) {
           const sourcePath = path.resolve(baseDir, fileDir[targetPath])
           const content = renderFile(sourcePath, data, ejsOptions)

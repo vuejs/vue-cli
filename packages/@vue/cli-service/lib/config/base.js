@@ -1,7 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const resolveLocal = require('../util/resolveLocal')
-    const inlineLimit = process.env.VUE_CLI_INLINE_LIMIT || 1000
+    const inlineLimit = 10000
 
     webpackConfig
       .context(api.service.context)
@@ -92,6 +92,8 @@ module.exports = (api, options) => {
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).
         setImmediate: false,
+        // process is injected via DefinePlugin
+        process: false,
         // prevent webpack from injecting mocks to Node native modules
         // that does not make sense for the client
         dgram: 'empty',

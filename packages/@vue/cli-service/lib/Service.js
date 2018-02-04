@@ -1,14 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
+const chalk = require('chalk')
 const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
-const deepMerge = require('deepmerge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
-const cosmiconfig = require('cosmiconfig')
-const { error } = require('@vue/cli-shared-utils')
+const { warn, error } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 
@@ -16,16 +15,14 @@ module.exports = class Service {
   constructor (context, { plugins, pkg, projectOptions, useBuiltIn } = {}) {
     process.VUE_CLI_SERVICE = this
     this.context = context
-    this.webpackConfig = new Config()
     this.webpackChainFns = []
     this.webpackRawConfigFns = []
     this.devServerConfigFns = []
     this.commands = {}
     this.pkg = this.resolvePkg(pkg)
-    this.projectOptions = deepMerge(
-      defaults(),
-      this.loadProjectOptions(projectOptions)
-    )
+
+    const userOptions = this.loadProjectOptions(projectOptions)
+    this.projectOptions = Object.assign(defaults(), userOptions)
 
     debug('vue:project-config')(this.projectOptions)
 
@@ -132,11 +129,16 @@ module.exports = class Service {
     return Promise.resolve(fn(args, rawArgv))
   }
 
-  resolveWebpackConfig () {
+  resolveChainableWebpackConfig () {
+    const chainableConfig = new Config()
     // apply chains
-    this.webpackChainFns.forEach(fn => fn(this.webpackConfig))
-    // to raw config
-    let config = this.webpackConfig.toConfig()
+    this.webpackChainFns.forEach(fn => fn(chainableConfig))
+    return chainableConfig
+  }
+
+  resolveWebpackConfig () {
+    // get raw config
+    let config = this.resolveChainableWebpackConfig().toConfig()
     // apply raw config fns
     this.webpackRawConfigFns.forEach(fn => {
       if (typeof fn === 'function') {
@@ -151,32 +153,63 @@ module.exports = class Service {
   }
 
   loadProjectOptions (inlineOptions) {
-    let resolved
-    if (this.pkg.vue) {
-      resolved = this.pkg.vue
-    } else {
-      const explorer = cosmiconfig('vue', {
-        rc: false,
-        sync: true,
-        stopDir: this.context
-      })
-      try {
-        const res = explorer.load(this.context)
-        if (res) resolved = res.config
-      } catch (e) {
+    // vue.config.js
+    let fileConfig, pkgConfig, resolved, resovledFrom
+    const configPath = (
+      process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
+      path.resolve(this.context, 'vue.config.js')
+    )
+    try {
+      fileConfig = require(configPath)
+      if (!fileConfig || typeof fileConfig !== 'object') {
         error(
-          `Error loading vue-cli config: ${e.message}`
+          `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
+        )
+        fileConfig = null
+      }
+    } catch (e) {}
+
+    // package.vue
+    pkgConfig = this.pkg.vue
+    if (pkgConfig && typeof pkgConfig !== 'object') {
+      error(
+        `Error loading vue-cli config in ${chalk.bold(`package.json`)}: ` +
+        `the "vue" field should be an object.`
+      )
+      pkgConfig = null
+    }
+
+    if (fileConfig) {
+      if (pkgConfig) {
+        warn(
+          `"vue" field in package.json ignored ` +
+          `due to presence of ${chalk.bold('vue.config.js')}.`
+        )
+        warn(
+          `You should migrate it into ${chalk.bold('vue.config.js')} ` +
+          `and remove it from package.json.`
         )
       }
+      resolved = fileConfig
+      resovledFrom = 'vue.config.js'
+    } else if (pkgConfig) {
+      resolved = pkgConfig
+      resovledFrom = '"vue" field in package.json'
+    } else {
+      resolved = inlineOptions || {}
+      resovledFrom = 'inline options'
     }
-    resolved = resolved || inlineOptions || {}
 
     // normlaize some options
     ensureSlash(resolved, 'base')
     removeSlash(resolved, 'outputDir')
 
     // validate options
-    validate(resolved)
+    validate(resolved, msg => {
+      error(
+        `Invalid options in ${chalk.bold(resovledFrom)}: ${msg}`
+      )
+    })
 
     return resolved
   }

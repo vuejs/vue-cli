@@ -40,7 +40,7 @@ Alternatively, you can run the tests inside specific packages with the `-p` flag
 yarn test -p cli,cli-service
 ```
 
-If the package is a plugin, you can ommit the `cli-plugin-` prefix:
+If the package is a plugin, you can omit the `cli-plugin-` prefix:
 
 ``` sh
 yarn test -p typescript

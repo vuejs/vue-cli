@@ -6,7 +6,7 @@ const { toPlugin, findExisting } = require('./lib/util')
 
 const babelPlugin = toPlugin('@vue/cli-plugin-babel')
 const eslintPlugin = toPlugin('@vue/cli-plugin-eslint')
-const createConfigPlugin = require('./lib/createConfigPlugin')
+const globalConfigPlugin = require('./lib/globalConfigPlugin')
 
 function resolveEntry (entry) {
   const context = process.cwd()
@@ -44,7 +44,7 @@ function createService (context, entry, asLib) {
     plugins: [
       babelPlugin,
       eslintPlugin,
-      createConfigPlugin(context, entry, asLib)
+      globalConfigPlugin(context, entry, asLib)
     ]
   })
 }
