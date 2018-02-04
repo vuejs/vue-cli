@@ -7,7 +7,7 @@ module.exports = function inspect (paths, mode) {
   const cwd = process.cwd()
   let servicePath
   try {
-    servicePath = resolve.sync('@vue/cli-service', { cwd })
+    servicePath = resolve.sync('@vue/cli-service', { basedir: cwd })
   } catch (e) {
     const { error } = require('@vue/cli-shared-utils')
     error(`Failed to locate @vue/cli-service. Make sure you are in the right directory.`)
