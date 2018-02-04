@@ -154,7 +154,7 @@ module.exports = class Service {
 
   loadProjectOptions (inlineOptions) {
     // vue.config.js
-    let fileConfig, pkgConfig, resolved
+    let fileConfig, pkgConfig, resolved, resovledFrom
     const configPath = (
       process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
       path.resolve(this.context, 'vue.config.js')
@@ -182,15 +182,22 @@ module.exports = class Service {
     if (fileConfig) {
       if (pkgConfig) {
         warn(
-          `"vue" field in ${chalk.bold(`package.json`)} ignored ` +
+          `"vue" field in package.json ignored ` +
           `due to presence of ${chalk.bold('vue.config.js')}.`
+        )
+        warn(
+          `You should migrate it into ${chalk.bold('vue.config.js')} ` +
+          `and remove it from package.json.`
         )
       }
       resolved = fileConfig
+      resovledFrom = 'vue.config.js'
     } else if (pkgConfig) {
       resolved = pkgConfig
+      resovledFrom = '"vue" field in package.json'
     } else {
       resolved = inlineOptions || {}
+      resovledFrom = 'inline options'
     }
 
     // normlaize some options
@@ -198,7 +205,11 @@ module.exports = class Service {
     removeSlash(resolved, 'outputDir')
 
     // validate options
-    validate(resolved)
+    validate(resolved, msg => {
+      error(
+        `Invalid options in ${chalk.bold(resovledFrom)}: ${msg}`
+      )
+    })
 
     return resolved
   }

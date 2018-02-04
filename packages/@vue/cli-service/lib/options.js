@@ -7,10 +7,13 @@ const schema = createSchema(joi => joi.object({
   productionSourceMap: joi.boolean(),
   vueLoader: joi.object(),
   parallel: joi.boolean(),
+  devServer: joi.object(),
   dll: joi.alternatives().try(
     joi.boolean(),
     joi.array().items(joi.string())
   ),
+
+  // css
   css: joi.object({
     modules: joi.boolean(),
     extract: joi.boolean(),
@@ -21,25 +24,25 @@ const schema = createSchema(joi => joi.object({
       stylus: joi.object()
     })
   }),
-  devServer: joi.object(),
-
-  // known options from offical plugins
-  lintOnSave: joi.boolean(),
 
   // webpack
   chainWebpack: joi.func(),
   configureWebpack: joi.alternatives().try(
     joi.object(),
     joi.func()
-  )
+  ),
+
+  // known runtime options for built-in plugins
+  lintOnSave: joi.boolean(),
+  pwa: joi.object(),
+
+  // 3rd party plugin options
+  pluginOptions: joi.object()
 }))
 
-exports.validate = options => validate(
-  options,
-  schema,
-  // so that plugins can make use of custom options
-  { allowUnknown: true }
-)
+exports.validate = (options, cb) => {
+  validate(options, schema, cb)
+}
 
 exports.defaults = () => ({
   // project deployment base
