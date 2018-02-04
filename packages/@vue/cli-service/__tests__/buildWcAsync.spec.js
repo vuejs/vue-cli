@@ -53,10 +53,10 @@ test('build as wc in async mode', async () => {
   })
   expect(childStyleCount).toBe(1)
 
-  const h2Text = await page.evaluate(() => {
-    return document.querySelector('build-wc-async-hello-world').shadowRoot.querySelector('h2').textContent
+  const h3Text = await page.evaluate(() => {
+    return document.querySelector('build-wc-async-hello-world').shadowRoot.querySelector('h3').textContent
   })
-  expect(h2Text).toMatch('Essential Links')
+  expect(h3Text).toMatch('Installed CLI Plugins')
 })
 
 afterAll(async () => {

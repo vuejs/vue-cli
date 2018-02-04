@@ -39,10 +39,10 @@ test('build as lib', async () => {
   })
   expect(h1Text).toMatch('') // no props given
 
-  const h2Text = await page.evaluate(() => {
-    return document.querySelector('h2').textContent
+  const h3Text = await page.evaluate(() => {
+    return document.querySelector('h3').textContent
   })
-  expect(h2Text).toMatch('Essential Links')
+  expect(h3Text).toMatch('Installed CLI Plugins')
 })
 
 afterAll(async () => {
