@@ -4,6 +4,12 @@ const defaults = {
   entry: 'src/App.vue'
 }
 
+const buildModes = {
+  lib: 'library (commonjs + umd)',
+  wc: 'web component',
+  'wc-async': 'web component (async)'
+}
+
 module.exports = (api, options) => {
   api.registerCommand('build', {
     description: 'build for production',
@@ -42,7 +48,12 @@ module.exports = (api, options) => {
     if (args.target === 'app') {
       logWithSpinner(`Building for production...`)
     } else {
-      logWithSpinner(`Building for production as ${args.target}...`)
+      const buildMode = buildModes[args.target]
+      if (buildMode) {
+        logWithSpinner(`Building for production as ${buildMode}...`)
+      } else {
+        throw new Error(`Unknonw build target: ${args.target}`)
+      }
     }
 
     return new Promise((resolve, reject) => {
@@ -55,8 +66,6 @@ module.exports = (api, options) => {
         if (args.target === 'lib') {
           webpackConfig = require('./resolveLibConfig')(api, args, options)
         } else if (
-          args.target === 'web-component' ||
-          args.target === 'web-component-async' ||
           args.target === 'wc' ||
           args.target === 'wc-async'
         ) {
