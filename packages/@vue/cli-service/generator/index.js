@@ -1,28 +1,5 @@
-// get link for a 3rd party plugin.
-function getLink (id) {
-  const pkg = require(`${id}/package.json`)
-  return (
-    pkg.homepage ||
-    (pkg.repository && pkg.repository.url) ||
-    `https://www.npmjs.com/package/${id.replace(`/`, `%2F`)}`
-  )
-}
-
 module.exports = (api, options) => {
-  api.render('./template', {
-    plugins: api.generator.plugins
-      .filter(({ id }) => id !== `@vue/cli-service`)
-      .map(({ id }) => {
-        const name = id.replace(/^(@vue|vue-)\/cli-plugin-/, '')
-        const isOfficial = /^@vue/.test(id)
-        return {
-          name: name,
-          link: isOfficial
-            ? `https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-${name}`
-            : getLink(id)
-        }
-      })
-  })
+  api.render('./template')
 
   api.extendPackage({
     scripts: {
