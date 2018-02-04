@@ -33,9 +33,11 @@ module.exports = (api, options) => {
 
     api.setMode(args.mode)
 
+    const fs = require('fs')
     const chalk = require('chalk')
     const rimraf = require('rimraf')
     const webpack = require('webpack')
+    const formatStats = require('./formatStats')
     const {
       log,
       done,
@@ -79,31 +81,24 @@ module.exports = (api, options) => {
             return reject(err)
           }
 
-          if (!args.silent) {
-            // TODO polish output
-            process.stdout.write(stats.toString({
-              hash: false,
-              timings: false,
-              colors: true,
-              modules: false,
-              children: api.hasPlugin('typescript') || args.target !== 'app',
-              chunks: false,
-              chunkModules: false
-            }) + '\n\n')
-          }
-
           if (stats.hasErrors()) {
             return reject(`Build failed with errors.`)
           }
 
-          if (!args.silent && args.target === 'app') {
-            done(`Build complete. The ${chalk.cyan(options.outputDir)} directory is ready to be deployed.\n`)
-            if (options.baseUrl === '/') {
-              info(`The app is built assuming that it will be deployed at the root of a domain.`)
-              info(`If you intend to deploy it under a subpath, update the ${chalk.green('base')} option`)
-              info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
+          if (!args.silent) {
+            log(formatStats(stats, options.outputDir, api))
+            if (args.target === 'app') {
+              done(`Build complete. The ${chalk.cyan(options.outputDir)} directory is ready to be deployed.\n`)
+              if (
+                options.baseUrl === '/' &&
+                // only log the tips if this is the first build
+                !fs.existsSync(api.resolve('node_modules/.cache'))
+              ) {
+                info(`The app is built assuming that it will be deployed at the root of a domain.`)
+                info(`If you intend to deploy it under a subpath, update the ${chalk.green('baseUrl')} option`)
+                info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
+              }
             }
-            // TODO info(`You can view more deployment tips at ???`)
           }
 
           // test-only signal
