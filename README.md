@@ -6,6 +6,10 @@
 
 ## Install
 
+**WARNING: THIS IS THE DEVELOPMENT BRANCH. Some functionality may not work.**
+
+For instructions on installing the latest STABLE build of vue-cli [click here](https://github.com/vuejs/vue-cli/tree/master).
+
 ``` sh
 npm install -g @vue/cli
 # or
