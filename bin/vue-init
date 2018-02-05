@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 
-var download = require('download-git-repo')
-var program = require('commander')
-var exists = require('fs').existsSync
-var path = require('path')
-var ora = require('ora')
-var home = require('user-home')
-var tildify = require('tildify')
-var chalk = require('chalk')
-var inquirer = require('inquirer')
-var rm = require('rimraf').sync
-var logger = require('../lib/logger')
-var generate = require('../lib/generate')
-var checkVersion = require('../lib/check-version')
-var warnings = require('../lib/warnings')
-var localPath = require('../lib/local-path')
+const download = require('download-git-repo')
+const program = require('commander')
+const exists = require('fs').existsSync
+const path = require('path')
+const ora = require('ora')
+const home = require('user-home')
+const tildify = require('tildify')
+const chalk = require('chalk')
+const inquirer = require('inquirer')
+const rm = require('rimraf').sync
+const logger = require('../lib/logger')
+const generate = require('../lib/generate')
+const checkVersion = require('../lib/check-version')
+const warnings = require('../lib/warnings')
+const localPath = require('../lib/local-path')
 
-var isLocalPath = localPath.isLocalPath
-var getTemplatePath = localPath.getTemplatePath
+const isLocalPath = localPath.isLocalPath
+const getTemplatePath = localPath.getTemplatePath
 
 /**
  * Usage.
@@ -32,7 +32,7 @@ program
  * Help.
  */
 
-program.on('--help', function () {
+program.on('--help', () => {
   console.log('  Examples:')
   console.log()
   console.log(chalk.gray('    # create a new project with an official template'))
@@ -57,15 +57,15 @@ help()
  * Settings.
  */
 
-var template = program.args[0]
-var hasSlash = template.indexOf('/') > -1
-var rawName = program.args[1]
-var inPlace = !rawName || rawName === '.'
-var name = inPlace ? path.relative('../', process.cwd()) : rawName
-var to = path.resolve(rawName || '.')
-var clone = program.clone || false
+let template = program.args[0]
+const hasSlash = template.indexOf('/') > -1
+const rawName = program.args[1]
+const inPlace = !rawName || rawName === '.'
+const name = inPlace ? path.relative('../', process.cwd()) : rawName
+const to = path.resolve(rawName || '.')
+const clone = program.clone || false
 
-var tmp = path.join(home, '.vue-templates', template.replace(/[\/:]/g, '-'))
+const tmp = path.join(home, '.vue-templates', template.replace(/[\/:]/g, '-'))
 if (program.offline) {
   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
   template = tmp
@@ -76,7 +76,7 @@ if (program.offline) {
  */
 
 console.log()
-process.on('exit', function () {
+process.on('exit', () => {
   console.log()
 })
 
@@ -87,11 +87,11 @@ if (exists(to)) {
       ? 'Generate project in current directory?'
       : 'Target directory exists. Continue?',
     name: 'ok'
-  }], function (answers) {
+  }]).then(answers => {
     if (answers.ok) {
       run()
     }
-  })
+  }).catch(logger.fatal)
 } else {
   run()
 }
@@ -103,9 +103,9 @@ if (exists(to)) {
 function run () {
   // check if template is local
   if (isLocalPath(template)) {
-    var templatePath = getTemplatePath(template)
+    const templatePath = getTemplatePath(template)
     if (exists(templatePath)) {
-      generate(name, templatePath, to, function (err) {
+      generate(name, templatePath, to, err => {
         if (err) logger.fatal(err)
         console.log()
         logger.success('Generated "%s".', name)
@@ -114,10 +114,10 @@ function run () {
       logger.fatal('Local template "%s" not found.', template)
     }
   } else {
-    checkVersion(function () {
+    checkVersion(() => {
       if (!hasSlash) {
         // use official templates
-        var officialTemplate = 'vuejs-templates/' + template
+        const officialTemplate = 'vuejs-templates/' + template
         if (template.indexOf('#') !== -1) {
           downloadAndGenerate(officialTemplate)
         } else {
@@ -143,14 +143,14 @@ function run () {
  */
 
 function downloadAndGenerate (template) {
-  var spinner = ora('downloading template')
+  const spinner = ora('downloading template')
   spinner.start()
   // Remove if local template exists
   if (exists(tmp)) rm(tmp)
-  download(template, tmp, { clone: clone }, function (err) {
+  download(template, tmp, { clone }, err => {
     spinner.stop()
     if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
-    generate(name, tmp, to, function (err) {
+    generate(name, tmp, to, err => {
       if (err) logger.fatal(err)
       console.log()
       logger.success('Generated "%s".', name)

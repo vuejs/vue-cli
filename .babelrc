@@ -1,9 +1,0 @@
-{
-  "env": {
-    "node": true,
-    "mocha": true,
-    "development": {
-      "presets": ["es2015", "stage-2"]
-    }
-  }
-}

@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-var logger = require('../lib/logger')
-var request = require('request')
-var chalk = require('chalk')
+const logger = require('../lib/logger')
+const request = require('request')
+const chalk = require('chalk')
 
 /**
  * Padding.
  */
 
 console.log()
-process.on('exit', function () {
+process.on('exit', () => {
   console.log()
 })
 
@@ -22,13 +22,13 @@ request({
   headers: {
     'User-Agent': 'vue-cli'
   }
-}, function (err, res, body) {
+}, (err, res, body) => {
   if (err) logger.fatal(err)
-  var requestBody = JSON.parse(body)
+  const requestBody = JSON.parse(body)
   if (Array.isArray(requestBody)) {
     console.log('  Available official templates:')
     console.log()
-    requestBody.forEach(function (repo) {
+    requestBody.forEach(repo => {
       console.log(
         '  ' + chalk.yellow('★') +
         '  ' + chalk.blue(repo.name) +

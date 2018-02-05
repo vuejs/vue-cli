@@ -1,10 +1,7 @@
 {
-  "extends": "standard",
+  "extends": ["plugin:vue-libs/recommended"],
   "env": {
     "mocha": true,
     "node": true
-  },
-  "rules": {
-    "arrow-parens": [2, "as-needed"]
   }
 }

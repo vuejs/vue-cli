@@ -23,16 +23,16 @@ const MOCK_ERROR = path.resolve('./test/e2e/mock-error')
 
 function monkeyPatchInquirer (answers) {
   // monkey patch inquirer
-  inquirer.prompt = (questions, cb) => {
+  inquirer.prompt = questions => {
     const key = questions[0].name
     const _answers = {}
     const validate = questions[0].validate
     const valid = validate(answers[key])
     if (valid !== true) {
-      throw new Error(valid)
+      return Promise.reject(new Error(valid))
     }
     _answers[key] = answers[key]
-    cb(_answers)
+    return Promise.resolve(_answers)
   }
 }
 
@@ -133,7 +133,7 @@ describe('vue-cli', () => {
       ], function (file, next) {
         const template = fs.readFileSync(`${MOCK_METALSMITH_CUSTOM_PATH}/template/${file}`, 'utf8')
         const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/custom/${file}`, 'utf8')
-        render(template, {custom: 'Custom'}, (err, res) => {
+        render(template, { custom: 'Custom' }, (err, res) => {
           if (err) return next(err)
           expect(res).to.equal(generated)
           next()
@@ -153,7 +153,7 @@ describe('vue-cli', () => {
       ], function (file, next) {
         const template = fs.readFileSync(`${MOCK_METALSMITH_CUSTOM_BEFORE_AFTER_PATH}/template/${file}`, 'utf8')
         const generated = fs.readFileSync(`${MOCK_TEMPLATE_BUILD_PATH}/custom-before-after/${file}`, 'utf8')
-        render(template, {before: 'Before', after: 'After'}, (err, res) => {
+        render(template, { before: 'Before', after: 'After' }, (err, res) => {
           if (err) return next(err)
           expect(res).to.equal(generated)
           next()
