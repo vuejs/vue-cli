@@ -80,7 +80,7 @@ process.on('exit', () => {
   console.log()
 })
 
-if (exists(to)) {
+if (inPlace || exists(to)) {
   inquirer.prompt([{
     type: 'confirm',
     message: inPlace
