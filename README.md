@@ -16,6 +16,12 @@ $ npm install -g vue-cli
 $ vue init <template-name> <project-name>
 ```
 
+Or you may use npx and avoid global install if you are on npm >= 5
+
+```bash
+npx vue-cli init <template-name> <project-name>
+```
+
 Example:
 
 ``` bash
@@ -79,7 +85,7 @@ vue init ~/fs/path/to-custom-template my-project
   - `prompts`: used to collect user options data;
 
   - `filters`: used to conditional filter files to render.
-  
+
   - `metalsmith`: used to add custom metalsmith plugins in the chain.
 
   - `completeMessage`: the message to be displayed to the user when the template has been generated. You can include custom instruction here.
@@ -196,7 +202,7 @@ You may customize the metalsmith builder created by vue-cli to register custom p
       // Implement something really custom here.
       done(null, files)
     }
-    
+
     metalsmith.use(customMetalsmithPlugin)
   }
 }
