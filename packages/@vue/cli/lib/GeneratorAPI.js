@@ -22,7 +22,13 @@ function getLink (id) {
   )
 }
 
-module.exports = class GeneratorAPI {
+class GeneratorAPI {
+  /**
+   * @param {string} id - Id of the owner plugin
+   * @param {Generator} generator - The invoking Generator instance
+   * @param {object} options - generator options passed to this plugin
+   * @param {object} rootOptions - root options (the entire preset)
+   */
   constructor (id, generator, options, rootOptions) {
     this.id = id
     this.generator = generator
@@ -43,6 +49,11 @@ module.exports = class GeneratorAPI {
       })
   }
 
+  /**
+   * Resolves the data when rendering templates.
+   *
+   * @private
+   */
   _resolveData (additionalData) {
     return Object.assign({
       options: this.options,
@@ -51,10 +62,47 @@ module.exports = class GeneratorAPI {
     }, additionalData)
   }
 
-  injectFileMiddleware (middleware) {
+  /**
+   * Inject a file processing middleware.
+   *
+   * @private
+   * @param {FileMiddleware} middleware - A middleware function that receives the
+   *   virtual files tree object, and an ejs render function. Can be async.
+   */
+  _injectFileMiddleware (middleware) {
     this.generator.fileMiddlewares.push(middleware)
   }
 
+  /**
+   * Resolve path for a project.
+   *
+   * @param {string} _path - Relative path from project root
+   * @return {string} The resolved absolute path.
+   */
+  resolve (_path) {
+    return path.resolve(this.generator.context, _path)
+  }
+
+  /**
+   * Check if the project has a given plugin.
+   *
+   * @param {string} id - Plugin id, can omit the (@vue/|vue-)-cli-plugin- prefix
+   * @return {boolean}
+   */
+  hasPlugin (id) {
+    return this.generator.hasPlugin(id)
+  }
+
+  /**
+   * Extend the package.json of the project.
+   * Nested fields are deep-merged unless `{ merge: false }` is passed.
+   * Also resolves dependency conflicts between plugins.
+   * Tool configuration fields may be extracted into standalone files before
+   * files are written to disk.
+   *
+   * @param {object} fields - Fields to merge.
+   * @param {object} [options] - pass { merge: false } to disable deep merging.
+   */
   extendPackage (fields, options = { merge: true }) {
     const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
@@ -81,13 +129,24 @@ module.exports = class GeneratorAPI {
     }
   }
 
-  render (fileDir, additionalData = {}, ejsOptions = {}) {
+  /**
+   * Render template files into the virtual files tree object.
+   *
+   * @param {string | object | FileMiddleware} source -
+   *   Can be one of:
+   *   - relative path to a directory;
+   *   - Object hash of { sourceTemplate: targetFile } mappings;
+   *   - a custom file middleware function.
+   * @param {object} [additionalData] - additional data available to templates.
+   * @param {object} [ejsOptions] - options for ejs.
+   */
+  render (source, additionalData = {}, ejsOptions = {}) {
     const baseDir = extractCallDir()
-    if (isString(fileDir)) {
-      fileDir = path.resolve(baseDir, fileDir)
-      this.injectFileMiddleware(async (files) => {
+    if (isString(source)) {
+      source = path.resolve(baseDir, source)
+      this._injectFileMiddleware(async (files) => {
         const data = this._resolveData(additionalData)
-        const _files = await globby(['**/*'], { cwd: fileDir })
+        const _files = await globby(['**/*'], { cwd: source })
         for (const rawPath of _files) {
           let filename = path.basename(rawPath)
           // dotfiles are ignored when published to npm, therefore in templates
@@ -96,7 +155,7 @@ module.exports = class GeneratorAPI {
             filename = `.${filename.slice(1)}`
           }
           const targetPath = path.join(path.dirname(rawPath), filename)
-          const sourcePath = path.resolve(fileDir, rawPath)
+          const sourcePath = path.resolve(source, rawPath)
           const content = renderFile(sourcePath, data, ejsOptions)
           // only set file if it's not all whitespace, or is a Buffer (binary files)
           if (Buffer.isBuffer(content) || /[^\s]/.test(content)) {
@@ -104,36 +163,39 @@ module.exports = class GeneratorAPI {
           }
         }
       })
-    } else if (isObject(fileDir)) {
-      this.injectFileMiddleware(files => {
+    } else if (isObject(source)) {
+      this._injectFileMiddleware(files => {
         const data = this._resolveData(additionalData)
-        for (const targetPath in fileDir) {
-          const sourcePath = path.resolve(baseDir, fileDir[targetPath])
+        for (const targetPath in source) {
+          const sourcePath = path.resolve(baseDir, source[targetPath])
           const content = renderFile(sourcePath, data, ejsOptions)
           if (Buffer.isBuffer(content) || content.trim()) {
             files[targetPath] = content
           }
         }
       })
-    } else if (isFunction(fileDir)) {
-      this.injectFileMiddleware(fileDir)
+    } else if (isFunction(source)) {
+      this._injectFileMiddleware(source)
     }
   }
 
+  /**
+   * Push a file middleware that will be applied after all normal file
+   * middelwares have been applied.
+   *
+   * @param {FileMiddleware} cb
+   */
   postProcessFiles (cb) {
     this.generator.postProcessFilesCbs.push(cb)
   }
 
+  /**
+   * Push a callback to be called when the files have been written to disk.
+   *
+   * @param {function} cb
+   */
   onCreateComplete (cb) {
     this.generator.completeCbs.push(cb)
-  }
-
-  resolve (_path) {
-    return path.resolve(this.generator.context, _path)
-  }
-
-  hasPlugin (id) {
-    return this.generator.hasPlugin(id)
   }
 }
 
@@ -152,3 +214,5 @@ function renderFile (name, data, ejsOptions) {
   }
   return ejs.render(fs.readFileSync(name, 'utf-8'), data, ejsOptions)
 }
+
+module.exports = GeneratorAPI
