@@ -32,13 +32,18 @@ module.exports = api => {
     // start runner
     const execa = require('execa')
     const bin = require.resolve('mocha-webpack/bin/mocha-webpack')
-    const argv = rawArgv.concat([
+    const hasInlineFilesGlob = args._ && args._.length
+    const argv = [
       '--recursive',
       '--require',
       require.resolve('./setup.js'),
       '--webpack-config',
-      require.resolve('@vue/cli-service/webpack.config.js')
-    ])
+      require.resolve('@vue/cli-service/webpack.config.js'),
+      ...rawArgv,
+      ...(hasInlineFilesGlob ? [] : [`test/unit/**/*.js`])
+    ]
+
+    console.log(argv)
 
     return new Promise((resolve, reject) => {
       const child = execa(bin, argv, { stdio: 'inherit' })
