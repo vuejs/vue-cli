@@ -1,7 +1,6 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const name = api.service.pkg.name
-
     const userOptions = options.pwa || {}
 
     // the pwa plugin hooks on to html-webpack-plugin
@@ -17,24 +16,27 @@ module.exports = (api, options) => {
       // Default to GenerateSW mode, though InjectManifest also might be used.
       const workboxPluginMode = userOptions.workboxPluginMode || 'GenerateSW'
       const workboxWebpackModule = require('workbox-webpack-plugin')
-      if (workboxPluginMode in workboxWebpackModule) {
-        const workBoxConfig = Object.assign({
-          cacheId: name,
-          exclude: [
-            new RegExp('\.map$'),
-            new RegExp('img/icons/'),
-            new RegExp('favicon\.ico$'),
-            new RegExp('manifest\.json$')
-          ]
-        }, userOptions.workboxOptions)
 
-        webpackConfig
-          .plugin('workbox')
-          .use(workboxWebpackModule[workboxPluginMode], [workBoxConfig])
-      } else {
-        throw new Error(`${workboxPluginMode} is not a supported Workbox webpack plugin mode. ` +
-          `Valid modes are: ${Object.keys(workboxWebpackModule).join(', ')}`)
+      if (!(workboxPluginMode in workboxWebpackModule)) {
+        throw new Error(
+          `${workboxPluginMode} is not a supported Workbox webpack plugin mode. ` +
+          `Valid modes are: ${Object.keys(workboxWebpackModule).join(', ')}`
+        )
       }
+
+      const workBoxConfig = Object.assign({
+        cacheId: name,
+        exclude: [
+          /\.map$/,
+          /img\/icons\//,
+          /favicon\.ico$/,
+          /manifest\.json$/
+        ]
+      }, userOptions.workboxOptions)
+
+      webpackConfig
+        .plugin('workbox')
+        .use(workboxWebpackModule[workboxPluginMode], [workBoxConfig])
     }
   })
 
