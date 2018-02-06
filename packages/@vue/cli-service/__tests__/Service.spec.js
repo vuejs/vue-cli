@@ -140,6 +140,24 @@ test('api: configureWebpack', () => {
   expect(config.output.path).toBe('test-dist-2')
 })
 
+test('api: configureWebpack returning object', () => {
+  const service = createMockService([{
+    id: 'test',
+    apply: api => {
+      api.configureWebpack(config => {
+        return {
+          output: {
+            path: 'test-dist-3'
+          }
+        }
+      })
+    }
+  }])
+
+  const config = service.resolveWebpackConfig()
+  expect(config.output.path).toBe('test-dist-3')
+})
+
 test('api: configureDevServer', () => {
   const cb = () => {}
   const service = createMockService([{

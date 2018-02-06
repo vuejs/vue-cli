@@ -143,7 +143,8 @@ module.exports = class Service {
     this.webpackRawConfigFns.forEach(fn => {
       if (typeof fn === 'function') {
         // function with optional return value
-        config = fn(config) || config
+        const res = fn(config)
+        if (res) config = merge(config, res)
       } else if (fn) {
         // merge literal values
         config = merge(config, fn)
