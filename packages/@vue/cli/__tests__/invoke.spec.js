@@ -1,4 +1,4 @@
-jest.setTimeout(10000)
+jest.setTimeout(12000)
 jest.mock('inquirer')
 
 const invoke = require('../lib/invoke')
@@ -22,11 +22,13 @@ async function assertUpdates (project) {
   const updatedPkg = JSON.parse(await project.read('package.json'))
   expect(updatedPkg.scripts.lint).toBe('vue-cli-service lint')
   expect(updatedPkg.devDependencies).toHaveProperty('lint-staged')
-  expect(updatedPkg.eslintConfig).toEqual({
-    extends: ['plugin:vue/essential', '@vue/airbnb']
-  })
   expect(updatedPkg.gitHooks).toEqual({
     'pre-commit': 'lint-staged'
+  })
+
+  const eslintrc = JSON.parse(await project.read('.eslintrc'))
+  expect(eslintrc).toEqual({
+    extends: ['plugin:vue/essential', '@vue/airbnb']
   })
 
   const lintedMain = await project.read('src/main.js')
@@ -57,4 +59,67 @@ test('invoke with prompts', async () => {
   // so calling directly
   await invoke(`eslint`, {}, project.dir)
   await assertUpdates(project)
+})
+
+test('invoke with existing files', async () => {
+  const project = await create(`invoke-existing`, {
+    useConfigFiles: true,
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': { config: 'base' }
+    }
+  })
+  // mock install
+  const pkg = JSON.parse(await project.read('package.json'))
+  pkg.devDependencies['@vue/cli-plugin-eslint'] = '*'
+  await project.write('package.json', JSON.stringify(pkg, null, 2))
+
+  // mock existing vue.config.js
+  await project.write('vue.config.js', `module.exports = { lintOnSave: false }`)
+
+  const eslintrc = JSON.parse(await project.read('.eslintrc'))
+  expect(eslintrc).toEqual({
+    extends: ['plugin:vue/essential', 'eslint:recommended']
+  })
+
+  await project.run(`${require.resolve('../bin/vue')} invoke eslint --config airbnb --lintOn save,commit`)
+
+  await assertUpdates(project)
+  const updatedVueConfig = await project.read('vue.config.js')
+  expect(updatedVueConfig).toMatch(`module.exports = { lintOnSave: true }`)
+})
+
+test('invoke with existing files (yaml)', async () => {
+  const project = await create(`invoke-existing`, {
+    useConfigFiles: true,
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': { config: 'base' }
+    }
+  })
+  // mock install
+  const pkg = JSON.parse(await project.read('package.json'))
+  pkg.devDependencies['@vue/cli-plugin-eslint'] = '*'
+  await project.write('package.json', JSON.stringify(pkg, null, 2))
+
+  const eslintrc = JSON.parse(await project.read('.eslintrc'))
+  expect(eslintrc).toEqual({
+    extends: ['plugin:vue/essential', 'eslint:recommended']
+  })
+
+  await project.rm(`.eslintrc`)
+  await project.write(`.eslintrc.yml`, `
+extends:
+  - 'plugin:vue/essential'
+  - 'eslint:recommended'
+  `.trim())
+
+  await project.run(`${require.resolve('../bin/vue')} invoke eslint --config airbnb`)
+
+  const updated = await project.read('.eslintrc.yml')
+  expect(updated).toMatch(`
+extends:
+  - 'plugin:vue/essential'
+  - '@vue/airbnb'
+`.trim())
 })

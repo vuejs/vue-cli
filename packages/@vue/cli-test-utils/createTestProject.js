@@ -4,6 +4,7 @@ const execa = require('execa')
 const { promisify } = require('util')
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
+const rmFile = promisify(fs.unlink)
 const mkdirp = promisify(require('mkdirp'))
 
 module.exports = function createTestProject (name, preset, cwd) {
@@ -23,6 +24,10 @@ module.exports = function createTestProject (name, preset, cwd) {
     const targetPath = path.resolve(projectRoot, file)
     const dir = path.dirname(targetPath)
     return mkdirp(dir).then(() => writeFile(targetPath, content))
+  }
+
+  const rm = file => {
+    return rmFile(path.resolve(projectRoot, file))
   }
 
   const run = (command, args) => {
@@ -54,6 +59,7 @@ module.exports = function createTestProject (name, preset, cwd) {
     has,
     read,
     write,
-    run
+    run,
+    rm
   }))
 }

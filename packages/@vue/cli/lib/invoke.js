@@ -81,13 +81,15 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
     context,
     pkg,
     [plugin],
-    isTestOrDebug ? false : loadOptions().useConfigFiles,
     createCompleteCbs
   )
 
   log()
   logWithSpinner('🚀', `Invoking generator for ${id}...`)
-  await generator.generate()
+  await generator.generate({
+    extractConfigFiles: true,
+    checkExisting: true
+  })
 
   const newDeps = generator.pkg.dependencies
   const newDevDeps = generator.pkg.devDependencies
@@ -115,9 +117,11 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
   if (!process.env.VUE_CLI_TEST && hasGit()) {
     const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'])
-    log(`   The following files have been updated / added:\n`)
-    log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))
-    log()
+    if (stdout.trim()) {
+      log(`   The following files have been updated / added:\n`)
+      log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))
+      log()
+    }
   }
   log(`   You should review and commit the changes.`)
   log()

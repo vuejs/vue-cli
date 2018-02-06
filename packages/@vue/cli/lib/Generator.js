@@ -1,16 +1,17 @@
 const ejs = require('ejs')
 const slash = require('slash')
 const debug = require('debug')
-const configMap = require('./util/configMap')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
+const configTransforms = require('./util/configTransforms')
 
 module.exports = class Generator {
-  constructor (context, pkg, plugins, extractConfigFiles, completeCbs = []) {
+  constructor (context, pkg, plugins, completeCbs = []) {
     this.context = context
     this.plugins = plugins
-    this.pkg = pkg
+    this.originalPkg = pkg
+    this.pkg = Object.assign({}, pkg)
     this.completeCbs = completeCbs
 
     // for conflict resolution
@@ -27,11 +28,14 @@ module.exports = class Generator {
       const api = new GeneratorAPI(id, this, options, rootOptions || {})
       apply(api, options, rootOptions)
     })
-    // extract configs from package.json into dedicated files.
-    this.extractConfigFiles(extractConfigFiles)
   }
 
-  async generate () {
+  async generate ({
+    extractConfigFiles = false,
+    checkExisting = false
+  } = {}) {
+    // extract configs from package.json into dedicated files.
+    this.extractConfigFiles(extractConfigFiles, checkExisting)
     // wait for file resolve
     await this.resolveFiles()
     // set package.json
@@ -41,21 +45,32 @@ module.exports = class Generator {
     await writeFileTree(this.context, this.files)
   }
 
-  extractConfigFiles (all) {
+  extractConfigFiles (extractAll, checkExisting) {
     const extract = key => {
-      if (configMap[key]) {
+      if (
+        configTransforms[key] &&
+        this.pkg[key] &&
+        // do not extract if the field exists in original package.json
+        !this.originalPkg[key]
+      ) {
         const value = this.pkg[key]
-        const { transform, filename } = configMap[key]
-        this.files[filename] = transform(value)
+        const transform = configTransforms[key]
+        const res = transform(
+          value,
+          checkExisting,
+          this.context
+        )
+        const { content, filename } = res
+        this.files[filename] = content
         delete this.pkg[key]
       }
     }
-    if (all) {
+    if (extractAll) {
       for (const key in this.pkg) {
         extract(key)
       }
     } else if (!process.env.VUE_CLI_TEST) {
-      // by default, extract vue.config.js
+      // by default, always extract vue.config.js
       extract('vue')
     }
   }

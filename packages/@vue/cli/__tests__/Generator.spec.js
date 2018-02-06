@@ -67,41 +67,6 @@ test('api: extendPackage function', async () => {
   })
 })
 
-test('api: extendPackage + { merge: false }', async () => {
-  const generator = new Generator('/', {
-    name: 'hello',
-    list: [1],
-    vue: {
-      foo: 1,
-      bar: 2
-    }
-  }, [{
-    id: 'test',
-    apply: api => {
-      api.extendPackage({
-        name: 'hello2',
-        list: [2],
-        vue: {
-          foo: 2,
-          baz: 3
-        }
-      }, { merge: false })
-    }
-  }])
-
-  await generator.generate()
-
-  const pkg = JSON.parse(fs.readFileSync('/package.json', 'utf-8'))
-  expect(pkg).toEqual({
-    name: 'hello2',
-    list: [2],
-    vue: {
-      foo: 2,
-      baz: 3
-    }
-  })
-})
-
 test('api: extendPackage merge dependencies', async () => {
   const generator = new Generator('/', {}, [
     {
@@ -292,7 +257,7 @@ test('api: onCreateComplete', () => {
         api.onCreateComplete(fn)
       }
     }
-  ], false, cbs)
+  ], cbs)
   expect(cbs).toContain(fn)
 })
 
@@ -333,9 +298,11 @@ test('extract config files', async () => {
         api.extendPackage(configs)
       }
     }
-  ], true)
+  ])
 
-  await generator.generate()
+  await generator.generate({
+    extractConfigFiles: true
+  })
 
   const json = v => JSON.stringify(v, null, 2)
   expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')

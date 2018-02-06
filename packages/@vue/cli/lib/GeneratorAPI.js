@@ -100,10 +100,9 @@ class GeneratorAPI {
    * Tool configuration fields may be extracted into standalone files before
    * files are written to disk.
    *
-   * @param {object} fields - Fields to merge.
-   * @param {object} [options] - pass { merge: false } to disable deep merging.
+   * @param {object | () => object} fields - Fields to merge.
    */
-  extendPackage (fields, options = { merge: true }) {
+  extendPackage (fields) {
     const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
     for (const key in toMerge) {
@@ -117,7 +116,7 @@ class GeneratorAPI {
           value,
           this.generator.depSources
         )
-      } else if (!options.merge || !(key in pkg)) {
+      } else if (!(key in pkg)) {
         pkg[key] = value
       } else if (Array.isArray(value) && Array.isArray(existing)) {
         pkg[key] = existing.concat(value)

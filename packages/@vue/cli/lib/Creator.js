@@ -136,10 +136,11 @@ module.exports = class Creator {
       context,
       pkg,
       plugins,
-      preset.useConfigFiles,
       createCompleteCbs
     )
-    await generator.generate()
+    await generator.generate({
+      extractConfigFiles: preset.useConfigFiles
+    })
 
     // install additional deps (injected by generators)
     log(`📦  Installing additional dependencies...`)
