@@ -22,7 +22,7 @@
     "access": "public"
   },
   "dependencies": {
-    "sw-precache-webpack-plugin": "^0.11.4"
+    "workbox-webpack-plugin": "3.0.0-beta.0"
   },
   "devDependencies": {
     "register-service-worker": "^1.0.0"
