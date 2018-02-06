@@ -1,5 +1,4 @@
-const { URL } = require('url')
-const https = require('https')
+const axios = require('axios')
 const chalk = require('chalk')
 const execa = require('execa')
 const readline = require('readline')
@@ -16,20 +15,18 @@ const registries = {
 }
 const taobaoDistURL = 'https://npm.taobao.org/dist'
 
-const ping = url => new Promise((resolve, reject) => {
-  const req = https.request({
-    hostname: new URL(url).hostname,
-    path: '/vue/latest'
-  }, () => {
-    resolve(url)
-  })
-  req.on('error', reject)
-  req.end()
-})
+async function ping (registry) {
+  await axios.get(`${registry}/vue-cli-version-marker/latest`)
+  return registry
+}
+
+function removeSlash (url) {
+  return url.replace(/\/$/, '')
+}
 
 let checked
 let result
-const shouldUseTaobao = async () => {
+async function shouldUseTaobao () {
   // ensure this only gets called once.
   if (checked) return result
   checked = true
@@ -48,7 +45,7 @@ const shouldUseTaobao = async () => {
 
   const userCurrent = (await execa(`npm`, ['config', 'get', 'registry'])).stdout
   const defaultRegistry = registries.npm
-  if (userCurrent !== defaultRegistry) {
+  if (removeSlash(userCurrent) !== removeSlash(defaultRegistry)) {
     // user has configured custom regsitry, respect that
     return save(false)
   }
@@ -56,6 +53,7 @@ const shouldUseTaobao = async () => {
     ping(defaultRegistry),
     ping(registries.taobao)
   ])
+
   if (faster !== registries.taobao) {
     // default is already faster
     return save(false)
@@ -75,7 +73,7 @@ const shouldUseTaobao = async () => {
   return save(useTaobaoRegistry)
 }
 
-const toStartOfLine = stream => {
+function toStartOfLine (stream) {
   if (!chalk.supportsColor) {
     stream.write('\r')
     return
@@ -83,7 +81,7 @@ const toStartOfLine = stream => {
   readline.cursorTo(stream, 0)
 }
 
-const renderProgressBar = (curr, total) => {
+function renderProgressBar (curr, total) {
   const ratio = Math.min(Math.max(curr / total, 0), 1)
   const bar = ` ${curr}/${total}`
   const availableSpace = Math.max(0, process.stderr.columns - bar.length - 3)

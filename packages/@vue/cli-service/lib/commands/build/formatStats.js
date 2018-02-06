@@ -2,7 +2,7 @@ module.exports = function formatStats (stats, dir, api) {
   const fs = require('fs')
   const zlib = require('zlib')
   const chalk = require('chalk')
-  const ui = require('cliui')({ width: 60 })
+  const ui = require('cliui')({ width: 80 })
 
   const json = stats.toJson({
     hash: false,
