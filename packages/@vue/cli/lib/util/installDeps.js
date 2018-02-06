@@ -29,7 +29,7 @@ const ping = url => new Promise((resolve, reject) => {
 
 let checked
 let result
-const shouldUseTaobao = async (command) => {
+const shouldUseTaobao = async () => {
   // ensure this only gets called once.
   if (checked) return result
   checked = true
@@ -46,8 +46,8 @@ const shouldUseTaobao = async (command) => {
     return val
   }
 
-  const userCurrent = (await execa(command, ['config', 'get', 'registry'])).stdout
-  const defaultRegistry = registries[command]
+  const userCurrent = (await execa(`npm`, ['config', 'get', 'registry'])).stdout
+  const defaultRegistry = registries.npm
   if (userCurrent !== defaultRegistry) {
     // user has configured custom regsitry, respect that
     return save(false)
@@ -67,7 +67,7 @@ const shouldUseTaobao = async (command) => {
     name: 'useTaobaoRegistry',
     type: 'confirm',
     message: chalk.yellow(
-      ` Your connection to the the default ${command} registry seems to be slow.\n` +
+      ` Your connection to the the default npm registry seems to be slow.\n` +
       `   Use ${chalk.cyan(registries.taobao)} for faster installation?`
     )
   }])
@@ -102,12 +102,19 @@ module.exports = async function installDeps (targetDir, command, cliRegistry) {
   } else if (command === 'yarn') {
     // do nothing
   } else {
-    throw new Error(`unknown package manager: ${command}`)
+    throw new Error(`Unknown package manager: ${command}`)
+  }
+
+  if (command === 'yarn' && cliRegistry) {
+    throw new Error(
+      `Inline registry is not supported when using yarn. ` +
+      `Please run \`yarn config set registry ${cliRegistry}\` before running @vue/cli.`
+    )
   }
 
   const altRegistry = (
     cliRegistry || (
-      (await shouldUseTaobao(command))
+      (command === 'npm' && await shouldUseTaobao())
         ? registries.taobao
         : null
     )
@@ -115,7 +122,7 @@ module.exports = async function installDeps (targetDir, command, cliRegistry) {
 
   if (altRegistry) {
     args.push(`--registry=${altRegistry}`)
-    if (command === 'npm' && altRegistry === registries.taobao) {
+    if (altRegistry === registries.taobao) {
       args.push(`--disturl=${taobaoDistURL}`)
     }
   }

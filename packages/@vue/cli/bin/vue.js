@@ -39,8 +39,8 @@ program
   .option('-p, --preset <presetName>', 'Skip prompts and use saved preset')
   .option('-d, --default', 'Skip prompts and use default preset')
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
-  .option('-r, --registry <url>', 'Use specified NPM registry when installing dependencies')
-  .option('-m, --packageManager <command>', 'Use specified NPM client when installing dependencies')
+  .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
+  .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .action((name, cmd) => {
     require('../lib/create')(name, cleanArgs(cmd))
