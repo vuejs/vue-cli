@@ -58,7 +58,8 @@ test('pwa', async () => {
   const launched = await launchPuppeteer(`http://localhost:${port}/`)
   browser = launched.browser
 
-  await new Promise(r => setTimeout(r, process.env.CI ? 1000 : 300))
+  // workbox plugin fetches scripts from CDN so it takes a while...
+  await new Promise(r => setTimeout(r, 2000))
   const logs = launched.logs
   expect(logs.some(msg => msg.match(/Content has been cached for offline use/))).toBe(true)
   expect(logs.some(msg => msg.match(/App is being served from cache by a service worker/))).toBe(true)
