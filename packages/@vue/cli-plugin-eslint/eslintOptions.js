@@ -1,11 +1,20 @@
-module.exports = {
-  extensions: ['.js', '.vue'],
-  parserOptions: {
-    parser: require.resolve('babel-eslint')
-  },
-  globals: ['process'],
-  rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+module.exports = api => {
+  const options = {
+    extensions: ['.js', '.vue'],
+    globals: ['process'],
+    rules: {
+      'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    }
   }
+
+  if (api.hasPlugin('typescript')) {
+    options.extensions.push('.ts')
+  } else {
+    options.parserOptions = {
+      parser: require.resolve('babel-eslint')
+    }
+  }
+
+  return options
 }

@@ -35,8 +35,8 @@ module.exports = cli => {
       const tsOptions = {
         classComponent: answers.tsClassComponent
       }
-      if (answers.features.includes('linter')) {
-        tsOptions.lint = true
+      if (answers.eslintConfig === 'tslint') {
+        tsOptions.tsLint = true
         tsOptions.lintOn = answers.lintOn
       }
       if (answers.useTsWithBabel) {

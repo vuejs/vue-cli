@@ -5,8 +5,11 @@ const create = require('@vue/cli-test-utils/createTestProject')
 test('should work', async () => {
   const project = await create('ts-lint', {
     plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'prettier'
+      },
       '@vue/cli-plugin-typescript': {
-        lint: true
+        classComponent: true
       }
     }
   })
@@ -29,6 +32,6 @@ test('should work', async () => {
 
   const lintedApp = await read('src/App.vue')
   expect(lintedApp).toMatch(';')
-  // test if tslint is fixing vue files properly
+  // test if ESLint is fixing vue files properly
   expect(lintedApp).toBe(app)
 })

@@ -88,16 +88,18 @@ module.exports = (api, {
         }])
   })
 
-  api.registerCommand('lint', {
-    descriptions: 'lint source files with TSLint',
-    usage: 'vue-cli-service lint [options] [...files]',
-    options: {
-      '--format [formatter]': 'specify formatter (default: codeFrame)',
-      '--no-fix': 'do not fix errors',
-      '--formatters-dir [dir]': 'formatter directory',
-      '--rules-dir [dir]': 'rules directory'
-    }
-  }, args => {
-    return require('./lib/tslint')(args, api)
-  })
+  if (!api.hasPlugin('eslint')) {
+    api.registerCommand('lint', {
+      descriptions: 'lint source files with TSLint',
+      usage: 'vue-cli-service lint [options] [...files]',
+      options: {
+        '--format [formatter]': 'specify formatter (default: codeFrame)',
+        '--no-fix': 'do not fix errors',
+        '--formatters-dir [dir]': 'formatter directory',
+        '--rules-dir [dir]': 'rules directory'
+      }
+    }, args => {
+      return require('./lib/tslint')(args, api)
+    })
+  }
 }

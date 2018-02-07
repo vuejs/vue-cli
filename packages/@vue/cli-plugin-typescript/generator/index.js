@@ -1,6 +1,6 @@
 module.exports = (api, {
   classComponent,
-  lint,
+  tsLint,
   lintOn = [],
   experimentalCompileTsWithBabel
 }) => {
@@ -46,7 +46,7 @@ module.exports = (api, {
     }
   }
 
-  if (lint) {
+  if (tsLint && !api.hasPlugin('eslint')) {
     api.extendPackage({
       scripts: {
         lint: 'vue-cli-service lint'
@@ -97,8 +97,6 @@ module.exports = (api, {
       }
     })
   }
-
-  // TODO cater to e2e test plugins
 
   api.render('./template', {
     isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,

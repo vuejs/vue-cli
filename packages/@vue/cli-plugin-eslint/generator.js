@@ -33,6 +33,14 @@ module.exports = (api, { config, lintOn = [] }) => {
     pkg.eslintConfig.extends.push('eslint:recommended')
   }
 
+  // typescript support
+  if (api.hasPlugin('typescript')) {
+    pkg.eslintConfig.extends.push('@vue/typescript')
+    Object.assign(pkg.devDependencies, {
+      '@vue/eslint-config-typescript': '^3.0.0-alpha.9'
+    })
+  }
+
   if (lintOn.includes('save')) {
     pkg.vue = {
       lintOnSave: true // eslint-loader configured in runtime plugin
@@ -71,7 +79,7 @@ module.exports = (api, { config, lintOn = [] }) => {
   // lint & fix after create to ensure files adhere to chosen config
   if (config && config !== 'base') {
     api.onCreateComplete(() => {
-      require('./lint')(api.resolve('.'), { silent: true })
+      require('./lint')({ silent: true }, api)
     })
   }
 }

@@ -65,7 +65,7 @@ test('lint', async () => {
       id: 'ts',
       apply: require('../generator'),
       options: {
-        lint: true,
+        tsLint: true,
         lintOn: ['save', 'commit']
       }
     }

@@ -1,6 +1,6 @@
 module.exports = (api, { lintOnSave }) => {
   if (lintOnSave) {
-    const options = require('./eslintOptions')
+    const options = require('./eslintOptions')(api)
     api.chainWebpack(webpackConfig => {
       webpackConfig.module
         .rule('eslint')
@@ -27,6 +27,6 @@ module.exports = (api, { lintOnSave }) => {
     },
     details: 'For more options, see https://eslint.org/docs/user-guide/command-line-interface#options'
   }, args => {
-    require('./lint')(api.resolve('.'), args)
+    require('./lint')(args, api)
   })
 }

@@ -1,6 +1,7 @@
-module.exports = function lint (cwd, args = {}) {
+module.exports = function lint (args = {}, api) {
+  const cwd = api.resolve('.')
   const { CLIEngine } = require('eslint')
-  const options = require('./eslintOptions')
+  const options = require('./eslintOptions')(api)
   const { done } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'test']

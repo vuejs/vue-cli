@@ -39,12 +39,15 @@ exports.prompt = prompts => {
       expect(message).toMatch(a.message)
     }
 
+    const choices = typeof prompt.choices === 'function'
+      ? prompt.choices(answers)
+      : prompt.choices
     if (a.choices) {
-      expect(prompt.choices.length).toBe(a.choices.length)
+      expect(choices.length).toBe(a.choices.length)
       a.choices.forEach((c, i) => {
         const expected = a.choices[i]
         if (expected) {
-          expect(prompt.choices[i].name).toMatch(expected)
+          expect(choices[i].name).toMatch(expected)
         }
       })
     }
@@ -56,12 +59,12 @@ exports.prompt = prompts => {
 
     if (a.choose != null) {
       expect(prompt.type === 'list' || prompt.type === 'rawList').toBe(true)
-      setValue(prompt.choices[a.choose].value)
+      setValue(choices[a.choose].value)
     }
 
     if (a.check != null) {
       expect(prompt.type).toBe('checkbox')
-      setValue(a.check.map(i => prompt.choices[i].value))
+      setValue(a.check.map(i => choices[i].value))
     }
 
     if (a.confirm != null) {

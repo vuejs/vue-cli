@@ -1,4 +1,4 @@
-<%_ if (options.lint) { _%>
+<%_ if (options.tsLint) { _%>
 {
   "defaultSeverity": "warning",
   "extends": [
