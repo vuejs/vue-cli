@@ -93,6 +93,9 @@ module.exports = {
   configureWebpack: {
     // ...
   }
+  
+  // extra webpack parameters
+  baseUrl: '/' // default value
 }
 ```
 
