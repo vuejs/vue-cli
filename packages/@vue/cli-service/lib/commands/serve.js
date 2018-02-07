@@ -129,6 +129,7 @@ module.exports = (api, options) => {
 
       const server = new WebpackDevServer(compiler, Object.assign({
         clientLogLevel: 'none',
+        disableHostCheck: true,
         historyApiFallback: {
           disableDotRule: true
         },
