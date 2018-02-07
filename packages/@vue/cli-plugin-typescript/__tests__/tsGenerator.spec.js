@@ -30,8 +30,8 @@ test('classComponent', async () => {
     }
   ])
 
-  expect(pkg.devDependencies).toHaveProperty('vue-class-component')
-  expect(pkg.devDependencies).toHaveProperty('vue-property-decorator')
+  expect(pkg.dependencies).toHaveProperty('vue-class-component')
+  expect(pkg.dependencies).toHaveProperty('vue-property-decorator')
 
   expect(files['tsconfig.json']).toMatch(`"experimentalDecorators": true`)
   expect(files['tsconfig.json']).toMatch(`"emitDecoratorMetadata": true`)

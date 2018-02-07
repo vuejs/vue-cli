@@ -10,7 +10,7 @@ module.exports = (api, {
 
   if (classComponent) {
     api.extendPackage({
-      devDependencies: {
+      dependencies: {
         'vue-class-component': '^6.0.0',
         'vue-property-decorator': '^6.0.0'
       }
