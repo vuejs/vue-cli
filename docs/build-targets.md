@@ -17,25 +17,26 @@ You can build a single entry as a library using
 vue-cli-service build --target lib --name myLib [entry]
 ```
 
+```
+File                     Size                     Gzipped
+
+dist/myLib.umd.min.js    13.28 kb                 8.42 kb
+dist/myLib.umd.js        20.95 kb                 10.22 kb
+dist/myLib.common.js     20.57 kb                 10.09 kb
+dist/myLib.css           0.33 kb                  0.23 kb
+```
+
 The entry can be either a `.js` or a `.vue` file. If no entry is specified, `src/App.vue` will be used.
 
 A lib build outputs:
 
-- `dist/myLib.common.js`
+- `dist/myLib.common.js`: A CommonJS bundle for consuming via bundlers (unfortunately, webpack currently does not support ES modules output format for bundles yet)
 
-  A CommonJS bundle for consuming via bundlers (unfortunately, webpack currently does not support ES modules output format for bundles yet)
+- `dist/myLib.umd.js`: A UMD bundle for consuming directly in browsers or with AMD loaders
 
-- `dist/myLib.umd.js`
+- `dist/myLib.umd.min.js`: Minified version of the UMD build.
 
-  A UMD bundle for consuming directly in browsers or with AMD loaders
-
-- `dist/myLib.umd.min.js`
-
-  Minified version of the UMD build.
-
-- `dist/myLib.css`
-
-  Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
+- `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
 ### Web Component
 
