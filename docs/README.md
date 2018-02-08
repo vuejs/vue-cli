@@ -39,7 +39,7 @@ npm install -g @vue/cli
 vue create my-project
 ```
 
-For full details on what the `vue` command can do, see the [full CLI docs](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli/README.md).
+For full details on what the `vue` command can do, see the [full CLI docs](./cli.md).
 
 ## CLI Service
 
