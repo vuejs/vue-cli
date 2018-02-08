@@ -25,7 +25,14 @@ module.exports = (api, options) => {
       // expose dev server url to tests
       process.env.VUE_DEV_SERVER_URL = url
       // expose user options to config file
-      process.env.VUE_NIGHTWATCH_USER_OPTIONS = JSON.stringify(options.nightwatch || {})
+      const fs = require('fs')
+      let userOptionsPath, userOptions
+      if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.config.js'))) {
+        userOptions = require(userOptionsPath)
+      } else if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.json'))) {
+        userOptions = require(userOptionsPath)
+      }
+      process.env.VUE_NIGHTWATCH_USER_OPTIONS = JSON.stringify(userOptions || {})
 
       rawArgs.push('--config', require.resolve('./nightwatch.config.js'))
       if (rawArgs.indexOf('--env') === -1) {
