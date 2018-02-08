@@ -40,10 +40,12 @@ module.exports = api => {
       '--webpack-config',
       require.resolve('@vue/cli-service/webpack.config.js'),
       ...rawArgv,
-      ...(hasInlineFilesGlob ? [] : [`test/unit/**/*.js`])
+      ...(hasInlineFilesGlob ? [] : [
+        api.hasPlugin('typescript')
+          ? `test/unit/**/*.spec.ts`
+          : `test/unit/**/*.spec.js`
+      ])
     ]
-
-    console.log(argv)
 
     return new Promise((resolve, reject) => {
       const child = execa(bin, argv, { stdio: 'inherit' })

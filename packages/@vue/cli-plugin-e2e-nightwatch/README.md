@@ -4,20 +4,20 @@
 
 ## Injected Commands
 
-### `vue-cli-service e2e`
+- **`vue-cli-service e2e`**
 
-run e2e tests with [NightwatchJS](nightwatchjs.org).
+  run e2e tests with [NightwatchJS](nightwatchjs.org).
 
-Options:
+  Options:
 
-```
---url        run e2e tests against given url instead of auto-starting dev server
--e, --env    specify comma-delimited browser envs to run in (default: chrome)
--t, --test   sepcify a test to run by name
--f, --filter glob to filter tests by filename
-```
+  ```
+  --url        run e2e tests against given url instead of auto-starting dev server
+  -e, --env    specify comma-delimited browser envs to run in (default: chrome)
+  -t, --test   sepcify a test to run by name
+  -f, --filter glob to filter tests by filename
+  ```
 
-Additionally, [all Nightwatch CLI options are also supported](https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js).
+  Additionally, [all Nightwatch CLI options are also supported](https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js).
 
 ## Configuration
 

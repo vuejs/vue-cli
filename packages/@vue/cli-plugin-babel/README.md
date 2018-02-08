@@ -2,7 +2,7 @@
 
 > babel plugin for vue-cli
 
-## Transpilation
+## Configuration
 
 Uses Babel 7 + `babel-loader` + [@vue/babel-preset-app](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) by default, but can be configured via `.babelrc` to use any other Babel presets or plugins.
 
@@ -19,10 +19,6 @@ module.exports = {
 }
 ```
 
-## Injected Config Rules
-
-- `config.rule('js')`
-
 ## Caching
 
 [cache-loader](https://github.com/webpack-contrib/cache-loader) is enabled by default and cache is stored in `<projectRoot>/node_modules/.cache/cache-loader`.
@@ -37,3 +33,10 @@ module.exports = {
 npm install -D @vue/cli-plugin-babel
 vue invoke babel
 ```
+
+## Injected webpack-chain Rules
+
+- `config.rule('js')`
+- `config.rule('js').use('babel-loader')`
+- `config.rule('js').use('cache-loader')`
+- `config.rule('js').use('thread-loader')`

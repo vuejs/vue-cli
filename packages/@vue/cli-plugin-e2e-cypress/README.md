@@ -8,32 +8,32 @@ Cypress offers a rich interactive interface for running E2E tests, but currently
 
 ## Injected Commands
 
-### `vue-cli-service e2e`
+- **`vue-cli-service e2e`**
 
-run e2e tests headlessly with `cypress run`.
+  run e2e tests headlessly with `cypress run`.
 
-Options:
+  Options:
 
-```
---url      run e2e tests against given url instead of auto-starting dev server
--s, --spec runs a specific spec file. defaults to "all"
-```
+  ```
+  --url      run e2e tests against given url instead of auto-starting dev server
+  -s, --spec runs a specific spec file. defaults to "all"
+  ```
 
-Additionally, [all Cypress CLI options for `cypress run` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-run).
+  Additionally, [all Cypress CLI options for `cypress run` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-run).
 
-### `vue-cli-service e2e:open`
+- **`vue-cli-service e2e:open`**
 
-run e2e tests in interactive mode with `cypress open`.
+  run e2e tests in interactive mode with `cypress open`.
 
-Options:
+  Options:
 
-```
---url      run e2e tests against given url instead of auto-starting dev server
-```
+  ```
+  --url      run e2e tests against given url instead of auto-starting dev server
+  ```
 
-Additionally, [all Cypress CLI options for `cypress open` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-open).
+  Additionally, [all Cypress CLI options for `cypress open` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-open).
 
-Both commands automatically starts a server in production mode to run the e2e tests against. If you want to run the tests multiple times without having to restart the server every time, you can start the server with `vue-cli-service serve --mode production` in one terminal, and then run e2e tests against that server using the `--url` option.
+  Both commands automatically starts a server in production mode to run the e2e tests against. If you want to run the tests multiple times without having to restart the server every time, you can start the server with `vue-cli-service serve --mode production` in one terminal, and then run e2e tests against that server using the `--url` option.
 
 ## Configuration
 
