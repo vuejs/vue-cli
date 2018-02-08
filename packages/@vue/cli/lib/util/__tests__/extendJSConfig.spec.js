@@ -1,5 +1,11 @@
 const extend = require('../extendJSConfig')
 
+function assertMatch (source, expected) {
+  source = source.split(/\n\r?/g)
+  expected = expected.split(/\n\r?/g)
+  expect(source).toEqual(expected)
+}
+
 test(`basic`, () => {
   const value = {
     foo: true,
@@ -14,7 +20,7 @@ test(`basic`, () => {
     modules: false
   }
 }`
-  expect(extend(value, source)).toMatch(
+  assertMatch(extend(value, source),
     `module.exports = {
   foo: true,
   css: {
@@ -32,7 +38,7 @@ test(`adding new property`, () => {
 `module.exports = {
   bar: 123
 }`
-  expect(extend(value, source)).toMatch(
+  assertMatch(extend(value, source),
     `module.exports = {
   bar: 123,
   foo: true
@@ -49,7 +55,7 @@ test(`non direct assignment`, () => {
   bar: 123
 }
 module.exports = config`
-  expect(extend(value, source)).toMatch(
+  assertMatch(extend(value, source),
     `const config = {
   bar: 123,
   foo: true
