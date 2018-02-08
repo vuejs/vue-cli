@@ -1,3 +1,20 @@
+<a name="3.0.0-alpha.10"></a>
+# [3.0.0-alpha.10](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2018-02-08)
+
+
+### Bug Fixes
+
+* fix pwa info link (close [#801](https://github.com/vuejs/vue-cli/issues/801)) ([a0004ea](https://github.com/vuejs/vue-cli/commit/a0004ea))
+* vue-class-component and vue-property-decorators should be dependencies ([c26559d](https://github.com/vuejs/vue-cli/commit/c26559d))
+
+
+### Features
+
+* include eslint:recommended in prettier config ([e261718](https://github.com/vuejs/vue-cli/commit/e261718))
+* support using ESLint to lint TypeScript ([dd04add](https://github.com/vuejs/vue-cli/commit/dd04add))
+
+
+
 <a name="3.0.0-alpha.9"></a>
 # [3.0.0-alpha.9](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.8...v3.0.0-alpha.9) (2018-02-06)
 
