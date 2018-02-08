@@ -57,8 +57,6 @@ See [CLI Service docs](./cli-service.md) for all available commands.
 
 The file `public/index.html` is a template that will be processed with [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin). During build, asset links will be injected automatically. In addition, Vue CLI also automatically injects resource hints (`preload/prefetch`), manifest/icon links (when PWA plugin is used) and inlines the webpack runtime / chunk manifest for optimal performance.
 
-You can edit the file to add your own tags, but note one thing: you need to prefix links to assets with `<%= webpackConfig.output.publicPath %>` in case you are not deploying your app at the root of a domain.
-
 ### Static Assets Handling
 
 Static assets can be handled in two different ways:
