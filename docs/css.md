@@ -1,5 +1,10 @@
 ## CSS
 
+- [PostCSS](#postcss)
+- [CSS Modules](#css-modules)
+- [Pre-Processors](#pre-processors)
+- [Passing Options to Pre-Processor Loaders](#passing-options-to-pre-processor-loaders)
+
 ### PostCSS
 
 Vue CLI uses PostCSS internally, and enables [autoprefixer](https://github.com/postcss/autoprefixer) by default. You can configure PostCSS via `.postcssrc` or any config source supported by [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config).

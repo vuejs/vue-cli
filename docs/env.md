@@ -1,5 +1,12 @@
 ## Environment Variables and Modes
 
+- [Overview](#overview)
+- [Modes](#modes)
+- [Using Env Variables in Client-side Code](#using-env-variables-in-client-side-code)
+- [Local Only Variables](#local-only-variables)
+
+### Overview
+
 You can specify env variables by placing the following files in your project root:
 
 ``` sh
@@ -45,7 +52,7 @@ In addition to `VUE_APP_*` variables, there are also two special variables that 
 - `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#modes) the app is running in.
 - `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
 
-### Local Variables
+### Local Only Variables
 
 Sometimes you might have env variables that should not be committed into the codebase, especially if your project is hosted in a public repository. In that case you should use an `.env.local` file instead. Local env files are ignored in `.gitignore` by default.
 

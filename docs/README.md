@@ -43,7 +43,30 @@ For full details on what the `vue` command can do, see the [full CLI docs](./cli
 
 ## CLI Service
 
-`@vue/cli-service` is a dependency installed locally into every project created by `@vue/cli`. It contains the core service that loads other plugins, resolves the final webpack config, and provides the `vue-cli-service` binary to your project. The binary exposes commands such as `vue-cli-service serve`, which can be used in npm scripts. If you are familiar with [create-react-app](https://github.com/facebookincubator/create-react-app), `@vue/cli-service` is essentially the equivalent of `react-scripts`, but more flexible.
+`@vue/cli-service` is a dependency installed locally into every project created by `@vue/cli`. It contains the core service that loads other plugins, resolves the final webpack config, and provides the `vue-cli-service` binary to your project. If you are familiar with [create-react-app](https://github.com/facebookincubator/create-react-app), `@vue/cli-service` is essentially the equivalent of `react-scripts`, but more flexible.
+
+Inside a project, you can access the binary directly as `vue-cli-service` in npm scripts, or as `./node_modules/.bin/vue-cli-service` from the terminal. This is what you will see in the `package.json` of a project using the default preset:
+
+``` json
+{
+  "scripts": {
+    "serve": "vue-cli-service serve --open",
+    "build": "vue-cli-service build"
+  }
+}
+```
+
+Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
+
+``` sh
+./node_modules/.bin/vue-cli-service help
+```
+
+You can also learn about the available options of each command with:
+
+``` sh
+./node_modules/.bin/vue-cli-service help [command]
+```
 
 ## Configuration
 

@@ -98,6 +98,38 @@ module.exports = api => {
 }
 ```
 
+#### Resolving Webpack Config in Plugins
+
+A plugin can retrieve the resolved webpack config by calling `api.resolveWebpackConfig()`. Every call generates a fresh webpack config which can be further mutated as needed:
+
+``` js
+api.regsiterCommand('my-build', args => {
+  // make sure to set mode and load env variables
+  api.setMode('production')
+
+  const configA = api.resolveWebpackConfig()
+  const configB = api.resolveWebpackConfig()
+
+  // mutate configA and configB for different purposes...
+})
+```
+
+Alternatively, a plugin can also obtain a fresh [chainable config](https://github.com/mozilla-neutrino/webpack-chain) by calling `api.resolveChainableWebpackConfig()`:
+
+``` js
+api.regsiterCommand('my-build', args => {
+  api.setMode('production')
+
+  const configA = api.resolveChainableWebpackConfig()
+  const configB = api.resolveChainableWebpackConfig()
+
+  // chain-modify configA and configB for different purposes...
+
+  const finalConfigA = configA.toConfig()
+  const finalConfigB = configB.toConfig()
+})
+```
+
 #### Custom Options for 3rd Party Plugins
 
 The exports from `vue.config.js` will be [validated against a schema](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/options.js#L3) to avoid typos and wrong config values. However, a 3rd party plugin can still allow the user to configure its behavior via the `pluginOptions` field. For example, with the following `vue.config.js`:
