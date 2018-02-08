@@ -3,16 +3,20 @@
 - [Introduction](#introduction)
 - [CLI](#cli)
 - [CLI Service](#cli-service)
+- [Conventions](#conventions)
+  - [The Index Page](#the-index-page)
+  - [Static Assets Handling](#static-assets-handling)
+  - [Environment Variables and Modes](#environment-variables-and-modes)
 - [Configuration](#configuration)
   - [webpack](#webpack)
   - [browserslist](#browserslist)
+  - [Dev Server Proxy](#dev-server-proxy)
   - [Babel](#babel)
   - [CSS](#css)
   - [ESLint](#eslint)
   - [TypeScript](#typescript)
   - [Unit Testing](#unit-testing)
   - [E2E Testing](#e2e-testing)
-- [Environment Variables and Modes](#environment-variables-and-modes)
 - [Development](#development)
 
 ## Introduction
@@ -39,34 +43,39 @@ npm install -g @vue/cli
 vue create my-project
 ```
 
-For full details on what the `vue` command can do, see the [full CLI docs](./cli.md).
+See [CLI docs](./cli.md) for all available commands.
 
 ## CLI Service
 
 `@vue/cli-service` is a dependency installed locally into every project created by `@vue/cli`. It contains the core service that loads other plugins, resolves the final webpack config, and provides the `vue-cli-service` binary to your project. If you are familiar with [create-react-app](https://github.com/facebookincubator/create-react-app), `@vue/cli-service` is essentially the equivalent of `react-scripts`, but more flexible.
 
-Inside a project, you can access the binary directly as `vue-cli-service` in npm scripts, or as `./node_modules/.bin/vue-cli-service` from the terminal. This is what you will see in the `package.json` of a project using the default preset:
+See [CLI Service docs](./cli-service.md) for all available commands.
 
-``` json
-{
-  "scripts": {
-    "serve": "vue-cli-service serve --open",
-    "build": "vue-cli-service build"
-  }
-}
-```
+## Conventions
 
-Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
+### The Index Page
 
-``` sh
-./node_modules/.bin/vue-cli-service help
-```
+The file `public/index.html` is a template that will be processed with [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin). During build, asset links will be injected automatically. In addition, Vue CLI also automatically injects resource hints (`preload/prefetch`), manifest/icon links (when PWA plugin is used) and inlines the webpack runtime / chunk manifest for optimal performance.
 
-You can also learn about the available options of each command with:
+You can edit the file to add your own tags, but note one thing: you need to prefix links to assets with `<%= webpackConfig.output.publicPath %>` in case you are not deploying your app at the root of a domain.
 
-``` sh
-./node_modules/.bin/vue-cli-service help [command]
-```
+### Static Assets Handling
+
+Static assets can be handled in two different ways:
+
+- Imported in JavaScript or referenced in templates/CSS via relative paths. Such references will be handled by webpack.
+
+- Placed in the `public` directory and referenced via absolute paths. These assets will simply be copied and not go through webpack.
+
+See [Static Assets Handling](./assets.md) for more details.
+
+### Environment Variables and Modes
+
+It is a common need to customize the app's behavior based on the target environment - for example, you may want the app to use different API endpoints or credentials during development / staging / production environments.
+
+Vue CLI has comprehensive support for specifying different environment variables using modes and `.env` files.
+
+See [Environment Variables and Modes](./env.md) for more details.
 
 ## Configuration
 
@@ -100,6 +109,12 @@ See [here](./webpack.md) for full details.
 You will notice a `browserlist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by `babel-preset-env` and `autoprefixer` to automatically determine the JavaScript polyfills and CSS vendor prefixes needed.
 
 See [here](https://github.com/ai/browserslist) for how to specify browser ranges.
+
+### Dev Server Proxy
+
+If your frontend app and the backend API server are not running on the same host, you will need to proxy API requests to the API server during development. This is configurable via the `devServer.proxy` option in `vue.cofnig.js`.
+
+See [Configuring Proxy](./cli-service.md#configuring-proxy) for more details.
 
 ### Babel
 
@@ -153,13 +168,7 @@ See [@vue/cli-plugin-typescript](https://github.com/vuejs/vue-cli/tree/dev/packa
 
   See [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch) for more details.
 
-## Environment Variables and Modes
-
-It is a common need to customize the app's behavior based on the target environment - for example, you may want the app to use different API endpoints or credentials during development / staging / production environments.
-
-Vue CLI has comprehensive support for specifying different environment variables - see the [dedicated section](./env.md) for more details.
-
 ## Development
 
 - [Contributing Guide](https://github.com/vuejs/vue-cli/blob/dev/.github/CONTRIBUTING.md)
-- [Plugin Development Guide](https://github.com/vuejs/vue-cli/blob/dev/docs/plugin.md).
+- [Plugin Development Guide](https://github.com/vuejs/vue-cli/blob/dev/docs/plugin.md)

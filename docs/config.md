@@ -58,6 +58,7 @@ module.exports = {
 
   // split vendors using autoDLLPlugin?
   // can also be an explicit Array of dependencies to include in the DLL chunk.
+  // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#dll-mode
   dll: false,
 
   // options for the PWA plugin.
@@ -71,6 +72,7 @@ module.exports = {
     port: 8080,
     https: false,
     hotOnly: false,
+    // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
     proxy: null, // string | Object
     before: app => {}
   },

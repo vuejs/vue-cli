@@ -72,8 +72,8 @@ program
 
 program
   .command('build [entry]')
-  .option('-t, --target <target>', 'Build target (app | lib | wc, default: app)')
-  .option('-n, --name <name>', 'name for lib or web-component (default: entry filename)')
+  .option('-t, --target <target>', 'Build target (app | lib | wc | wc-async, default: app)')
+  .option('-n, --name <name>', 'name for lib or web-component mode (default: entry filename)')
   .option('-d, --dest <dir>', 'output directory (default: dist)')
   .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {

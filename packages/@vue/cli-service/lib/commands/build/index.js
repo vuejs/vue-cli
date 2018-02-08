@@ -18,7 +18,7 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: ${defaults.mode})`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
-      '--name': `name for lib or (multi-)web-component mode (default: "name" in package.json or entry filename)`
+      '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`
     }
   }, args => {
     args.entry = args.entry || args._[0]
