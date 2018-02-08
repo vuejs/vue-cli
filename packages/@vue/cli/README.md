@@ -1,8 +1,8 @@
 # @vue/cli
 
-## Usage
-
 ``` sh
 npm install -g @vue/cli
-vue create my-app
+vue create my-project
 ```
+
+[Full Docs](https://github.com/vuejs/vue-cli/tree/dev/docs)
