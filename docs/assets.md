@@ -21,7 +21,7 @@ will be compiled into:
 createElement('img', { attrs: { src: require('../image.png') }})
 ```
 
-Internally, we use `file-loader` to determine the final file location with version hashes and correct public base paths, and use `url-loader` to conditional inline assets that are smaller than 10kb, reducing the amount of HTTP requests.
+Internally, we use `file-loader` to determine the final file location with version hashes and correct public base paths, and use `url-loader` to conditionally inline assets that are smaller than 10kb, reducing the amount of HTTP requests.
 
 #### URL Transform Rules
 

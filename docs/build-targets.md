@@ -38,6 +38,8 @@ A lib build outputs:
 
 - `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
+**In lib mode, Vue is externalized.** This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
+
 ### Web Component
 
 > [Compatibility](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
@@ -50,7 +52,7 @@ vue-cli-service build --target wc --name my-element [entry]
 
 This will produce a single JavaScript file (and its minified version) with everything inlined. The script, when included on a page, registers the `<my-element>` custom element, which wraps the target Vue component using `@vue/web-component-wrapper`. The wrapper automatically proxies properties, attributes, events and slots. See the [docs for `@vue/web-component-wrapper`](https://github.com/vuejs/vue-web-component-wrapper) for more details.
 
-Note the bundle relies on `Vue` being globally available on the page.
+**Note the bundle relies on `Vue` being globally available on the page.**
 
 This mode allows consumers of your component to use the Vue component as a normal DOM element:
 

@@ -102,9 +102,9 @@ Probably the most common configuration need is tweaking the internal webpack con
 
 See [here](./webpack.md) for full details.
 
-### browserlist
+### browserslist
 
-You will notice a `browserlist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by `babel-preset-env` and `autoprefixer` to automatically determine the JavaScript polyfills and CSS vendor prefixes needed.
+You will notice a `browserslist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by `babel-preset-env` and `autoprefixer` to automatically determine the JavaScript polyfills and CSS vendor prefixes needed.
 
 See [here](https://github.com/ai/browserslist) for how to specify browser ranges.
 
@@ -118,15 +118,7 @@ See [Configuring Proxy](./cli-service.md#configuring-proxy) for more details.
 
 Babel can be configured via `.babelrc` or the `babel` field in `package.json`.
 
-All Vue CLI apps use `@vue/babel-preset-app` by default, which includes:
-
-- [babel-preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env)
-- [dynamic import syntax](https://github.com/tc39/proposal-dynamic-import)
-- [Object rest spread](https://github.com/tc39/proposal-object-rest-spread)
-- [babel-preset-stage-2](https://github.com/babel/babel/tree/master/packages/babel-preset-stage-2)
-- Vue JSX support
-
-See [@vue/babel-preset-app](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) for preset options.
+All Vue CLI apps use `@vue/babel-preset-app`, which includes `babel-preset-env`, JSX support and optimized configuration for minimal bundle size overhead. See [its docs](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) for details and preset options.
 
 ### CSS
 

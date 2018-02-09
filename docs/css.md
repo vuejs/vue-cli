@@ -19,7 +19,7 @@ If you wish to be able to use CSS modules without the `.module` postfix, you can
 
 ### Pre-Processors
 
-You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, you can also just manually install the corresponding webpack loaders. The loaders are pre-configured and will automatically be picked up. For example, to add SASS to an existing project, simply run:
+You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, you can also just manually install the corresponding webpack loaders. The loaders are pre-configured and will automatically be picked up. For example, to add Sass to an existing project, simply run:
 
 ``` sh
 npm install -D sass-loader node-sass

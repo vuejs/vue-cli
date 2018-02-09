@@ -131,7 +131,7 @@ vue build MyComponent.vue
 Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, simply install it first:
 
 ``` sh
-yarn add @vue/cli-plugin-eslint
+npm install -D @vue/cli-plugin-eslint
 ```
 
 Then you can invoke the plugin's generator so it generates files into your project:
@@ -158,7 +158,7 @@ You can use `vue inspect` to inspect the webpack config inside a Vue CLI project
 `@vue/cli` uses the same `vue` binary, so it overwrites `vue-cli@2.x`. If you still need the legacy `vue init` functionality, you can install a global bridge:
 
 ``` sh
-yarn global add @vue/cli-init
+npm install -g @vue/cli-init
 # vue init now works exactly the same as vue-cli@2.x
 vue init webpack my-project
 ```
