@@ -28,6 +28,7 @@ async function assertUpdates (project) {
 
   const eslintrc = JSON.parse(await project.read('.eslintrc'))
   expect(eslintrc).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', '@vue/airbnb']
   })
 
@@ -79,6 +80,7 @@ test('invoke with existing files', async () => {
 
   const eslintrc = JSON.parse(await project.read('.eslintrc'))
   expect(eslintrc).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', 'eslint:recommended']
   })
 
@@ -104,11 +106,13 @@ test('invoke with existing files (yaml)', async () => {
 
   const eslintrc = JSON.parse(await project.read('.eslintrc'))
   expect(eslintrc).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', 'eslint:recommended']
   })
 
   await project.rm(`.eslintrc`)
   await project.write(`.eslintrc.yml`, `
+root: true
 extends:
   - 'plugin:vue/essential'
   - 'eslint:recommended'
@@ -118,6 +122,7 @@ extends:
 
   const updated = await project.read('.eslintrc.yml')
   expect(updated).toMatch(`
+root: true
 extends:
   - 'plugin:vue/essential'
   - '@vue/airbnb'

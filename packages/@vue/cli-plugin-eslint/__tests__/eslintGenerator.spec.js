@@ -9,6 +9,7 @@ test('base', async () => {
 
   expect(pkg.scripts.lint).toBeTruthy()
   expect(pkg.eslintConfig).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', 'eslint:recommended']
   })
 })
@@ -24,6 +25,7 @@ test('airbnb', async () => {
 
   expect(pkg.scripts.lint).toBeTruthy()
   expect(pkg.eslintConfig).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', '@vue/airbnb']
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-airbnb')
@@ -40,6 +42,7 @@ test('standard', async () => {
 
   expect(pkg.scripts.lint).toBeTruthy()
   expect(pkg.eslintConfig).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', '@vue/standard']
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-standard')
@@ -56,6 +59,7 @@ test('prettier', async () => {
 
   expect(pkg.scripts.lint).toBeTruthy()
   expect(pkg.eslintConfig).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', '@vue/prettier']
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
@@ -79,6 +83,7 @@ test('typescript', async () => {
 
   expect(pkg.scripts.lint).toBeTruthy()
   expect(pkg.eslintConfig).toEqual({
+    root: true,
     extends: ['plugin:vue/essential', '@vue/prettier', '@vue/typescript']
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
