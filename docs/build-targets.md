@@ -34,7 +34,7 @@ A lib build outputs:
 
 - `dist/myLib.umd.js`: A UMD bundle for consuming directly in browsers or with AMD loaders
 
-- `dist/myLib.umd.min.js`: Minified version of the UMD build.
+- `dist/myLib.umd.min.js`: Minified version of the UMD build
 
 - `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
