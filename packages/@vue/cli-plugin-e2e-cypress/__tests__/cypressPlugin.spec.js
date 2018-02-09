@@ -1,4 +1,4 @@
-jest.setTimeout(50000)
+jest.setTimeout(process.env.APPVEYOR ? 60000 : 30000)
 
 const create = require('@vue/cli-test-utils/createTestProject')
 
