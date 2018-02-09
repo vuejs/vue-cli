@@ -110,7 +110,7 @@ See [here](https://github.com/ai/browserslist) for how to specify browser ranges
 
 ### Dev Server Proxy
 
-If your frontend app and the backend API server are not running on the same host, you will need to proxy API requests to the API server during development. This is configurable via the `devServer.proxy` option in `vue.cofnig.js`.
+If your frontend app and the backend API server are not running on the same host, you will need to proxy API requests to the API server during development. This is configurable via the `devServer.proxy` option in `vue.config.js`.
 
 See [Configuring Proxy](./cli-service.md#configuring-proxy) for more details.
 
