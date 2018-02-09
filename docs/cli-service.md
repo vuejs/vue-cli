@@ -111,7 +111,7 @@ Options:
 #### Caching and Parallel Mode
 
 - `cache-loader` is enabled for Babel/TypeScript transpilation by default.
-- `thread-loader` will be enabled for Babel/TypeScript transpilation when the machine has more than 1 CPI cores.
+- `thread-loader` will be enabled for Babel/TypeScript transpilation when the machine has more than 1 CPU cores.
 
 #### Building as Library or Web Components
 
