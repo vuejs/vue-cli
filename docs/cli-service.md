@@ -59,6 +59,8 @@ module.exports = {
 }
 ```
 
+In addition to these default values, [all options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are also supported.
+
 #### Configuring Proxy
 
 `devServer.proxy` can be a string pointing to the development API server:
