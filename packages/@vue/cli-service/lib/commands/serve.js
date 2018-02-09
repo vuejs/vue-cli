@@ -15,7 +15,7 @@ const defaults = {
 module.exports = (api, options) => {
   api.registerCommand('serve', {
     description: 'start development server',
-    usage: 'vue-cli-service dev [options]',
+    usage: 'vue-cli-service serve [options]',
     options: {
       '--open': `open browser on server start`,
       '--mode': `specify env mode (default: ${defaults.mode})`,

@@ -28,7 +28,7 @@ This is what you will see in the `package.json` of a project using the default p
 ### serve
 
 ```
-Usage: vue-cli-service dev [options]
+Usage: vue-cli-service serve [options]
 
 Options:
 
