@@ -1,7 +1,7 @@
 module.exports = api => {
   const options = {
     extensions: ['.js', '.vue'],
-    globals: ['process'],
+    envs: ['node'],
     rules: {
       'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
