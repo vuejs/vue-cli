@@ -1,5 +1,6 @@
 module.exports = function formatStats (stats, dir, api) {
   const fs = require('fs')
+  const path = require('path')
   const zlib = require('zlib')
   const chalk = require('chalk')
   const ui = require('cliui')({ width: 80 })
@@ -39,7 +40,7 @@ module.exports = function formatStats (stats, dir, api) {
   }
 
   function getGzippedSize (asset) {
-    const filepath = api.resolve(`dist/${asset.name}`)
+    const filepath = api.resolve(path.join(dir, asset.name))
     const buffer = fs.readFileSync(filepath)
     return formatSize(zlib.gzipSync(buffer).length)
   }
@@ -54,12 +55,12 @@ module.exports = function formatStats (stats, dir, api) {
       chalk.cyan.bold(`Size`),
       chalk.cyan.bold(`Gzipped`)
     ) + `\n\n` +
-    assets.map(a => makeRow(
-      /js$/.test(a.name)
-        ? chalk.green(`${dir}/${a.name}`)
-        : chalk.blue(`${dir}/${a.name}`),
-      formatSize(a.size),
-      getGzippedSize(a)
+    assets.map(asset => makeRow(
+      /js$/.test(asset.name)
+        ? chalk.green(path.join(dir, asset.name))
+        : chalk.blue(path.join(dir, asset.name)),
+      formatSize(asset.size),
+      getGzippedSize(asset)
     )).join(`\n`)
   )
 

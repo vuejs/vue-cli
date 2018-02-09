@@ -1,6 +1,6 @@
 const path = require('path')
 
-module.exports = (api, { entry, name, dest }, options) => {
+module.exports = (api, { entry, name }, options) => {
   const libName = (
     name ||
     api.service.pkg.name ||
@@ -31,7 +31,6 @@ module.exports = (api, { entry, name, dest }, options) => {
     }
 
     config.output
-      .path(api.resolve(dest))
       .filename(`${entryName}.js`)
       .chunkFilename(`${entryName}.[id].js`)
       .library(libName)
@@ -77,7 +76,7 @@ module.exports = (api, { entry, name, dest }, options) => {
           }])
     }
 
-    return config.toConfig()
+    return api.resolveWebpackConfig(config)
   }
 
   return [

@@ -136,9 +136,9 @@ module.exports = class Service {
     return chainableConfig
   }
 
-  resolveWebpackConfig () {
+  resolveWebpackConfig (chainableConfig = this.resolveChainableWebpackConfig()) {
     // get raw config
-    let config = this.resolveChainableWebpackConfig().toConfig()
+    let config = chainableConfig.toConfig()
     // apply raw config fns
     this.webpackRawConfigFns.forEach(fn => {
       if (typeof fn === 'function') {

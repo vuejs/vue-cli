@@ -1,7 +1,7 @@
 const path = require('path')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name, dest }) => {
+module.exports = (api, { target, entry, name }) => {
   // setting this disables app-only configs
   process.env.VUE_CLI_TARGET = 'web-component'
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
@@ -66,7 +66,6 @@ module.exports = (api, { target, entry, name, dest }) => {
     }
 
     config.output
-      .path(api.resolve(dest))
       .filename(`${entryName}.js`)
       .chunkFilename(`${libName}.[id]${minify ? `.min` : ``}.js`)
       // use relative publicPath so this can be deployed anywhere
@@ -109,7 +108,7 @@ module.exports = (api, { target, entry, name, dest }) => {
           }])
     }
 
-    return config.toConfig()
+    return api.resolveWebpackConfig(config)
   }
 
   return [

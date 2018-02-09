@@ -27,13 +27,11 @@ module.exports = (api, options) => {
         args[key] = defaults[key]
       }
     }
-    if (args.dest == null) {
-      args.dest = options.outputDir
-    }
 
     api.setMode(args.mode)
 
     const fs = require('fs')
+    const path = require('path')
     const chalk = require('chalk')
     const rimraf = require('rimraf')
     const webpack = require('webpack')
@@ -58,23 +56,48 @@ module.exports = (api, options) => {
       }
     }
 
+    // respect inline build destination
+    if (args.dest) {
+      api.configureWebpack({
+        output: {
+          path: path.resolve(
+            api.service.context,
+            args.dest
+          )
+        }
+      })
+    }
+
+    // resolve raw webpack config
+    let webpackConfig
+    if (args.target === 'lib') {
+      webpackConfig = require('./resolveLibConfig')(api, args, options)
+    } else if (
+      args.target === 'wc' ||
+      args.target === 'wc-async'
+    ) {
+      webpackConfig = require('./resolveWcConfig')(api, args, options)
+    } else {
+      webpackConfig = api.resolveWebpackConfig()
+    }
+
+    // get final output directory from resolve raw config
+    // because the user may have manually overwritten it too
+    const config = Array.isArray(webpackConfig)
+      ? webpackConfig[0]
+      : webpackConfig
+    const targetDir = config.output.path
+    const targetDirShort = path.relative(
+      api.service.context,
+      targetDir
+    )
+
     return new Promise((resolve, reject) => {
-      const targetDir = api.resolve(args.dest)
       rimraf(targetDir, err => {
         if (err) {
           return reject(err)
         }
-        let webpackConfig
-        if (args.target === 'lib') {
-          webpackConfig = require('./resolveLibConfig')(api, args, options)
-        } else if (
-          args.target === 'wc' ||
-          args.target === 'wc-async'
-        ) {
-          webpackConfig = require('./resolveWcConfig')(api, args, options)
-        } else {
-          webpackConfig = api.resolveWebpackConfig()
-        }
+
         webpack(webpackConfig, (err, stats) => {
           stopSpinner(false)
           if (err) {
@@ -86,9 +109,9 @@ module.exports = (api, options) => {
           }
 
           if (!args.silent) {
-            log(formatStats(stats, options.outputDir, api))
+            log(formatStats(stats, targetDirShort, api))
             if (args.target === 'app') {
-              done(`Build complete. The ${chalk.cyan(options.outputDir)} directory is ready to be deployed.\n`)
+              done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
               if (
                 options.baseUrl === '/' &&
                 // only log the tips if this is the first build

@@ -112,10 +112,11 @@ class PluginAPI {
    * Resolve the final raw webpack config, that will be passed to webpack.
    * Typically, you should call `setMode` before calling this.
    *
+   * @param {ChainableWebpackConfig} [chainableConfig]
    * @return {object} Raw webpack config.
    */
-  resolveWebpackConfig () {
-    return this.service.resolveWebpackConfig()
+  resolveWebpackConfig (chainableConfig) {
+    return this.service.resolveWebpackConfig(chainableConfig)
   }
 
   /**
