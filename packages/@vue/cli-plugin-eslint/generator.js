@@ -8,6 +8,7 @@ module.exports = (api, { config, lintOn = [] }) => {
       lint: 'vue-cli-service lint'
     },
     eslintConfig: {
+      root: true,
       extends: ['plugin:vue/essential']
     },
     devDependencies: {}
