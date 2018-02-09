@@ -1,3 +1,15 @@
+<a name="3.0.0-alpha.11"></a>
+# [3.0.0-alpha.11](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.10...v3.0.0-alpha.11) (2018-02-09)
+
+
+### Bug Fixes
+
+* eslint config should be root ([ea74da1](https://github.com/vuejs/vue-cli/commit/ea74da1))
+* **eslint:** load node env by default (fix [#806](https://github.com/vuejs/vue-cli/issues/806)) ([c2e3228](https://github.com/vuejs/vue-cli/commit/c2e3228))
+* respect user configured output path ([b5564af](https://github.com/vuejs/vue-cli/commit/b5564af)), closes [#809](https://github.com/vuejs/vue-cli/issues/809)
+
+
+
 <a name="3.0.0-alpha.10"></a>
 # [3.0.0-alpha.10](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.9...v3.0.0-alpha.10) (2018-02-08)
 
