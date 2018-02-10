@@ -51,7 +51,7 @@ By default the Babel configuration skips
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
-    config
+    config.module
       .rule('js')
         .include
           .add(/some-module-to-transpile/)
