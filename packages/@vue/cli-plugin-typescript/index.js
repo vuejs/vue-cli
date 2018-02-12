@@ -81,7 +81,7 @@ module.exports = (api, {
       .plugin('fork-ts-checker')
         .use(require('fork-ts-checker-webpack-plugin'), [{
           vue: true,
-          tslint: lintOnSave,
+          tslint: lintOnSave !== false,
           formatter: 'codeframe',
           // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
           checkSyntacticErrors: useThreads

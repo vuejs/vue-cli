@@ -33,7 +33,7 @@ const schema = createSchema(joi => joi.object({
   ),
 
   // known runtime options for built-in plugins
-  lintOnSave: joi.boolean(),
+  lintOnSave: joi.any().valid([true, false, 'error']),
   pwa: joi.object(),
 
   // 3rd party plugin options
@@ -76,7 +76,7 @@ exports.defaults = () => ({
   },
 
   // whether to use eslint-loader
-  lintOnSave: false,
+  lintOnSave: true,
 
   devServer: {
   /*

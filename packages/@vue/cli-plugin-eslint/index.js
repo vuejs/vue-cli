@@ -13,6 +13,7 @@ module.exports = (api, { lintOnSave }) => {
           .use('eslint-loader')
             .loader('eslint-loader')
             .options(Object.assign(options, {
+              emitWarning: lintOnSave !== 'error',
               formatter: require('eslint/lib/formatters/codeframe')
             }))
     })

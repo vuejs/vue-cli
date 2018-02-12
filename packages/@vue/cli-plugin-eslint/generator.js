@@ -42,9 +42,9 @@ module.exports = (api, { config, lintOn = [] }) => {
     })
   }
 
-  if (lintOn.includes('save')) {
+  if (!lintOn.includes('save')) {
     pkg.vue = {
-      lintOnSave: true // eslint-loader configured in runtime plugin
+      lintOnSave: false // eslint-loader configured in runtime plugin
     }
   }
 

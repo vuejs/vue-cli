@@ -98,10 +98,8 @@ test('lint on save', async () => {
       lintOn: 'save'
     }
   })
-
-  expect(pkg.vue).toEqual({
-    lintOnSave: true
-  })
+  // lintOnSave defaults to true so no need for the vue config
+  expect(pkg.vue).toBeFalsy()
 })
 
 test('lint on commit', async () => {
@@ -117,5 +115,8 @@ test('lint on commit', async () => {
   expect(pkg['lint-staged']).toEqual({
     '*.js': ['vue-cli-service lint', 'git add'],
     '*.vue': ['vue-cli-service lint', 'git add']
+  })
+  expect(pkg.vue).toEqual({
+    lintOnSave: false
   })
 })
