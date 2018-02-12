@@ -51,6 +51,9 @@ module.exports = (api, options) => {
           // ensure user injected vueLoader options take higher priority
           options.loaders = Object.assign(resolver.vue(), options.loaders)
           options.cssSourceMap = !!userOptions.cssSourceMap
+          options.cssModules = Object.assign({
+            localIdentName: '[name]_[local]__[hash:base64:5]'
+          }, options.cssModules)
           return options
         })
 
