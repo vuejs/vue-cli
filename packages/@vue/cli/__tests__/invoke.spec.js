@@ -76,7 +76,7 @@ test('invoke with existing files', async () => {
   await project.write('package.json', JSON.stringify(pkg, null, 2))
 
   // mock existing vue.config.js
-  await project.write('vue.config.js', `module.exports = { lintOnSave: false }`)
+  await project.write('vue.config.js', `module.exports = { lintOnSave: true }`)
 
   const eslintrc = JSON.parse(await project.read('.eslintrc'))
   expect(eslintrc).toEqual({
@@ -84,11 +84,11 @@ test('invoke with existing files', async () => {
     extends: ['plugin:vue/essential', 'eslint:recommended']
   })
 
-  await project.run(`${require.resolve('../bin/vue')} invoke eslint --config airbnb --lintOn save,commit`)
+  await project.run(`${require.resolve('../bin/vue')} invoke eslint --config airbnb --lintOn commit`)
 
   await assertUpdates(project)
   const updatedVueConfig = await project.read('vue.config.js')
-  expect(updatedVueConfig).toMatch(`module.exports = { lintOnSave: true }`)
+  expect(updatedVueConfig).toMatch(`module.exports = { lintOnSave: false }`)
 })
 
 test('invoke with existing files (yaml)', async () => {
