@@ -1,3 +1,12 @@
+function removeArg (rawArgs, arg) {
+  const matchRE = new RegExp(`^--${arg}`)
+  const equalRE = new RegExp(`^--${arg}=`)
+  const i = rawArgs.findIndex(arg => matchRE.test(arg))
+  if (i > -1) {
+    rawArgs.splice(i, equalRE.test(rawArgs[i]) ? 1 : 2)
+  }
+}
+
 module.exports = (api, options) => {
   api.registerCommand('e2e', {
     description: 'run e2e tests with nightwatch',
@@ -12,14 +21,12 @@ module.exports = (api, options) => {
       `All Nightwatch CLI options are also supported.\n` +
       `https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js`
   }, (args, rawArgs) => {
-    if (args.url) {
-      const i = rawArgs.findIndex(arg => /^--url/.test(arg))
-      rawArgs = rawArgs.splice(i, 2)
-    }
+    removeArg(rawArgs, 'url')
+    removeArg(rawArgs, 'mode')
 
     const serverPromise = args.url
       ? Promise.resolve({ url: args.url })
-      : api.service.run('serve', { mode: 'production' })
+      : api.service.run('serve', { mode: args.mode || 'production' })
 
     return serverPromise.then(({ server, url }) => {
       // expose dev server url to tests
