@@ -4,7 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
-const axios = require('axios')
+const request = require('request-promise-native')
 const semver = require('semver')
 const globby = require('globby')
 const { execSync } = require('child_process')
@@ -18,13 +18,21 @@ const localPackageRE = /'(@vue\/(?:cli|eslint|babel)[\w-]+)': '\^([\w-.]+)'/g
 
 const versionCache = {}
 
+const getRequest = uri => {
+  request({
+    method: 'GET',
+    resolveWithFullResponse: true,
+    uri
+  })
+}
+
 const getRemoteVersion = async (pkg) => {
   if (versionCache[pkg]) {
     return versionCache[pkg]
   }
   let res
   try {
-    res = await axios.get(`http://registry.npmjs.org/${pkg}/latest`)
+    res = await getRequest(`http://registry.npmjs.org/${pkg}/latest`)
   } catch (e) {
     return
   }

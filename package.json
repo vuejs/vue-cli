@@ -42,7 +42,6 @@
     ]
   },
   "devDependencies": {
-    "axios": "^0.17.1",
     "babel-core": "^7.0.0-0",
     "debug": "^3.1.0",
     "eslint": "^4.16.0",
@@ -54,6 +53,8 @@
     "lint-staged": "^6.0.1",
     "memfs": "^2.6.0",
     "puppeteer": "^1.0.0",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
     "yorkie": "^1.0.2"
   }
 }

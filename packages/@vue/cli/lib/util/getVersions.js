@@ -8,15 +8,15 @@ module.exports = async function getVersions () {
     // test/debug, use local version
     latest = process.env.VUE_CLI_LATEST_VERSION = current
   } else {
-    const axios = require('axios')
+    const request = require('./request')
     const options = require('../options').loadOptions()
     const registry = options.useTaobaoRegistry
       ? `https://registry.npm.taobao.org`
       : `https://registry.npmjs.org`
 
-    const res = await axios.get(`${registry}/vue-cli-version-marker/latest`)
-    if (res.status === 200) {
-      latest = process.env.VUE_CLI_LATEST_VERSION = res.data.version
+    const res = await request.get(`${registry}/vue-cli-version-marker/latest`)
+    if (res.statusCode === 200) {
+      latest = process.env.VUE_CLI_LATEST_VERSION = res.body.version
     } else {
       // fallback to local version
       latest = process.env.VUE_CLI_LATEST_VERSION = current
