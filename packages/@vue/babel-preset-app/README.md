@@ -31,7 +31,7 @@ This is the default Babel preset used in all Vue CLI projects.
   - `false` when building with webpack
   - `'commonjs'` when running tests in Jest.
 
-  Explicitly set `modules` option for `babel-preset-env`.
+  Explicitly set `modules` option for `babel-preset-env`. See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#modules) for more details.
 
 - **targets**
 
@@ -39,7 +39,13 @@ This is the default Babel preset used in all Vue CLI projects.
   - determined from `browserslist` field in `package.json` when building for browsers
   - set to `{ node: 'current' }` when running unit tests in Node.js
 
-  Explicitly set `targets` option for `babel-preset-env`.
+  Explicitly set `targets` option for `babel-preset-env`. See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#targets) for more details.
+
+- **useBuiltIns**
+
+  Default: `'usage'`
+
+  Explicitly set `useBuiltIns` option for `babel-preset-env`. See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins) for more details.
 
 - **jsx**
 
