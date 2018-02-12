@@ -1,4 +1,4 @@
-const axios = require('axios')
+const request = require('./request')
 const chalk = require('chalk')
 const execa = require('execa')
 const readline = require('readline')
@@ -16,7 +16,7 @@ const registries = {
 const taobaoDistURL = 'https://npm.taobao.org/dist'
 
 async function ping (registry) {
-  await axios.get(`${registry}/vue-cli-version-marker/latest`)
+  await request.get(`${registry}/vue-cli-version-marker/latest`)
   return registry
 }
 

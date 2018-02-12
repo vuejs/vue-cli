@@ -4,7 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
-const axios = require('axios')
+const request = require('request-promise-native')
 const semver = require('semver')
 const globby = require('globby')
 const { execSync } = require('child_process')
@@ -24,13 +24,12 @@ const getRemoteVersion = async (pkg) => {
   }
   let res
   try {
-    res = await axios.get(`http://registry.npmjs.org/${pkg}/latest`)
+    res = await request(`http://registry.npmjs.org/${pkg}/latest`)
   } catch (e) {
     return
   }
-  const version = res.data.version
-  versionCache[pkg] = version
-  return version
+  versionCache[pkg] = res.version
+  return res.version
 }
 
 const getRemoteVersionSync = pkg => {
