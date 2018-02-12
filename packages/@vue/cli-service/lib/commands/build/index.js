@@ -52,7 +52,7 @@ module.exports = (api, options) => {
       if (buildMode) {
         logWithSpinner(`Building for production as ${buildMode}...`)
       } else {
-        throw new Error(`Unknonw build target: ${args.target}`)
+        throw new Error(`Unknown build target: ${args.target}`)
       }
     }
 
