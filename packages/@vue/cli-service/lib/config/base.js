@@ -79,7 +79,7 @@ module.exports = (api, options) => {
 
     webpackConfig.module
       .rule('fonts')
-        .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/)
+        .test(/\.(woff2?|EOT|eot|ttf|otf)(\?.*)?$/)
         .use('url-loader')
           .loader('url-loader')
           .options({
