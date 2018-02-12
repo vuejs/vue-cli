@@ -61,12 +61,12 @@ module.exports = (api, projectOptions) => {
     // modify webpack config with webpack-chain
   })
 
-  api.configureWepback(webpackConfig => {
+  api.configureWebpack(webpackConfig => {
     // modify webpack config
     // or return object to be merged with webpack-merge
   })
 
-  api.regsiterCommand('test', args => {
+  api.registerCommand('test', args => {
     // register `vue-cli-service test`
   })
 }
@@ -80,7 +80,7 @@ An important thing to note about env variables is knowing when they are resolved
 module.exports = api => {
   process.env.NODE_ENV // may not be resolved yet
 
-  api.regsiterCommand('build', () => {
+  api.registerCommand('build', () => {
     api.setMode('production')
   })
 }
@@ -103,7 +103,7 @@ module.exports = api => {
 A plugin can retrieve the resolved webpack config by calling `api.resolveWebpackConfig()`. Every call generates a fresh webpack config which can be further mutated as needed:
 
 ``` js
-api.regsiterCommand('my-build', args => {
+api.registerCommand('my-build', args => {
   // make sure to set mode and load env variables
   api.setMode('production')
 
@@ -117,7 +117,7 @@ api.regsiterCommand('my-build', args => {
 Alternatively, a plugin can also obtain a fresh [chainable config](https://github.com/mozilla-neutrino/webpack-chain) by calling `api.resolveChainableWebpackConfig()`:
 
 ``` js
-api.regsiterCommand('my-build', args => {
+api.registerCommand('my-build', args => {
   api.setMode('production')
 
   const configA = api.resolveChainableWebpackConfig()
