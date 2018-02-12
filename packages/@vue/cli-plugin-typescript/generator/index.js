@@ -50,11 +50,16 @@ module.exports = (api, {
     api.extendPackage({
       scripts: {
         lint: 'vue-cli-service lint'
-      },
-      vue: {
-        lintOnSave: lintOn.includes('save')
       }
     })
+
+    if (!lintOn.includes('save')) {
+      api.extendPackage({
+        vue: {
+          lintOnSave: false
+        }
+      })
+    }
 
     if (lintOn.includes('commit')) {
       api.extendPackage({

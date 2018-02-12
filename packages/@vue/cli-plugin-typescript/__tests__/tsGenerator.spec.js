@@ -72,7 +72,6 @@ test('lint', async () => {
   ])
 
   expect(pkg.scripts.lint).toBe(`vue-cli-service lint`)
-  expect(pkg.vue).toEqual({ lintOnSave: true })
   expect(pkg.devDependencies).toHaveProperty('lint-staged')
   expect(pkg.gitHooks).toEqual({ 'pre-commit': 'lint-staged' })
   expect(pkg['lint-staged']).toEqual({
@@ -81,6 +80,20 @@ test('lint', async () => {
   })
 
   expect(files['tslint.json']).toBeTruthy()
+})
+
+test('lint with no lintOnSave', async () => {
+  const { pkg } = await generateWithPlugin([
+    {
+      id: 'ts',
+      apply: require('../generator'),
+      options: {
+        tsLint: true,
+        lintOn: ['commit']
+      }
+    }
+  ])
+  expect(pkg.vue).toEqual({ lintOnSave: false })
 })
 
 test('compat with unit-mocha', async () => {

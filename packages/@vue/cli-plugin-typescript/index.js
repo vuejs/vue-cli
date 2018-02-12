@@ -3,6 +3,7 @@ module.exports = (api, {
   lintOnSave,
   experimentalCompileTsWithBabel
 }) => {
+  const fs = require('fs')
   const useThreads = process.env.NODE_ENV === 'production' && parallel
   const cacheDirectory = api.resolve('node_modules/.cache/cache-loader')
 
@@ -81,7 +82,7 @@ module.exports = (api, {
       .plugin('fork-ts-checker')
         .use(require('fork-ts-checker-webpack-plugin'), [{
           vue: true,
-          tslint: lintOnSave !== false,
+          tslint: lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
           formatter: 'codeframe',
           // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
           checkSyntacticErrors: useThreads
