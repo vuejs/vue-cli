@@ -18,27 +18,18 @@ const localPackageRE = /'(@vue\/(?:cli|eslint|babel)[\w-]+)': '\^([\w-.]+)'/g
 
 const versionCache = {}
 
-const getRequest = uri => {
-  request({
-    method: 'GET',
-    resolveWithFullResponse: true,
-    uri
-  })
-}
-
 const getRemoteVersion = async (pkg) => {
   if (versionCache[pkg]) {
     return versionCache[pkg]
   }
   let res
   try {
-    res = await getRequest(`http://registry.npmjs.org/${pkg}/latest`)
+    res = await request(`http://registry.npmjs.org/${pkg}/latest`)
   } catch (e) {
     return
   }
-  const version = res.data.version
-  versionCache[pkg] = version
-  return version
+  versionCache[pkg] = res.version
+  return res.version
 }
 
 const getRemoteVersionSync = pkg => {
