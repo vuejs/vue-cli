@@ -31,7 +31,7 @@ module.exports = class Service {
 
     // install plugins.
     // If there are inline plugins, they will be used instead of those
-    // found in pacakge.json.
+    // found in package.json.
     // When useBuiltIn === false, built-in plugins are disabled. This is mostly
     // for testing.
     this.plugins = this.resolvePlugins(plugins, useBuiltIn)
