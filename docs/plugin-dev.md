@@ -253,7 +253,7 @@ A plugin with a generator that injects additional dependencies other than packag
 
 1. the package always exist in this repo's root `node_modules` so that we don't have to reinstall them on every test.
 
-2. `yarn.lock` stays consistent so that CI can better use it for inferring caching behavior.
+2. `yarn.lock` stays consistent so that CLI can better use it for inferring caching behavior.
 
 [creator-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/Creator.js
 [service-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/Service.js
