@@ -1,13 +1,11 @@
 <%_ if (hasESLint) { _%>
 {
+  "plugins": [
+    "cypress"
+  ],
   "env": {
-    "mocha": true
-  },
-  "globals": {
-    "cy": false,
-    "Cypress": false,
-    "expect": false,
-    "assert": false
+    "mocha": true,
+    "cypress/globals": true
   }
 }
 <%_ } _%>
