@@ -30,6 +30,7 @@
     "@vue/cli-shared-utils": "^3.0.0-alpha.12",
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
+    "debug": "^3.1.0",
     "ejs": "^2.5.7",
     "execa": "^0.8.0",
     "globby": "^7.1.1",
