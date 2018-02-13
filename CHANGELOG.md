@@ -1,3 +1,13 @@
+<a name="3.0.0-alpha.13"></a>
+# [3.0.0-alpha.13](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.12...v3.0.0-alpha.13) (2018-02-13)
+
+
+### Bug Fixes
+
+* include missing dep (fix [#831](https://github.com/vuejs/vue-cli/issues/831)) ([6a0bc17](https://github.com/vuejs/vue-cli/commit/6a0bc17))
+
+
+
 <a name="3.0.0-alpha.12"></a>
 # [3.0.0-alpha.12](https://github.com/vuejs/vue-cli/compare/v3.0.0-alpha.11...v3.0.0-alpha.12) (2018-02-12)
 
