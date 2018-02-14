@@ -16,9 +16,9 @@ module.exports = async function clearConsoleWithTitle (checkUpdate) {
   }
   if (checkUpdate && semver.gt(latest, current)) {
     title += chalk.green(`
-┌─────────────────────────${`─`.repeat(latest.length)}─┐
+┌─────────────────────────${`─`.repeat(latest.length + 2)}─┐
 │ ✨  Update available: ${latest} ✨  │
-└─────────────────────────${`─`.repeat(latest.length)}─┘`)
+└─────────────────────────${`─`.repeat(latest.length + 2)}─┘`)
   }
 
   clearConsole(title)
