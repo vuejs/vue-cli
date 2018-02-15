@@ -51,7 +51,7 @@ A service plugin should export a function which receives two arguments:
 
 - A [PluginAPI][plugin-api] instance
 
-- An object containing project local options specified in `vue.config.js`, or in the `"vue-cli"` field in `package.json`.
+- An object containing project local options specified in `vue.config.js`, or in the `"vue"` field in `package.json`.
 
 The API allows service plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`. Example:
 
