@@ -20,6 +20,11 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
           }
         }
 
+        // ensure core-js polyfills can be imported
+        config.resolve
+          .alias
+            .set('core-js', path.dirname(require.resolve('core-js')))
+
         // ensure loaders can be resolved properly
         // this is done by locating vue's install location (which is a
         // dependency of the global service)
