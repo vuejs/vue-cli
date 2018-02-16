@@ -4,7 +4,7 @@
 
 ## Status: beta
 
-Certain combinations of plugins may not work properly, and things may break until we reach beta phase. Do not use in production yet unless you are adventurous.
+Most of the planned features in place but there may still be bugs. API may still change until we reach RC phase. Do not use in production yet unless you are adventurous.
 
 ## Quickstart
 
