@@ -64,16 +64,28 @@ module.exports = (api, { config, lintOn = [] }) => {
   api.extendPackage(pkg)
 
   if (api.hasPlugin('unit-mocha')) {
+    const config = {
+      env: { mocha: true }
+    }
+    if (config === 'airbnb') {
+      config.rules = {
+        'import/no-extraneous-dependencies': 'off'
+      }
+    }
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify({
-        env: { mocha: true }
-      }, null, 2)
+      files['test/unit/.eslintrc'] = JSON.stringify(config, null, 2)
     })
   } else if (api.hasPlugin('unit-jest')) {
+    const config = {
+      env: { jest: true }
+    }
+    if (config === 'airbnb') {
+      config.rules = {
+        'import/no-extraneous-dependencies': 'off'
+      }
+    }
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify({
-        env: { jest: true }
-      }, null, 2)
+      files['test/unit/.eslintrc'] = JSON.stringify(config, null, 2)
     })
   }
 
