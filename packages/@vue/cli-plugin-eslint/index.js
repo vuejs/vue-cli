@@ -9,7 +9,7 @@ module.exports = (api, { lintOnSave }) => {
             .add(api.resolve('src'))
             .add(api.resolve('test'))
             .end()
-          .test(/\.(vue|jsx?)$/)
+          .test(/\.(vue|(j|t)sx?)$/)
           .use('eslint-loader')
             .loader('eslint-loader')
             .options(Object.assign(options, {
