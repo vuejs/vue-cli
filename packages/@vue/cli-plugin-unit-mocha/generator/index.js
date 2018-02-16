@@ -16,7 +16,10 @@ module.exports = api => {
   if (api.hasPlugin('eslint')) {
     api.render(files => {
       files['test/unit/.eslintrc'] = JSON.stringify({
-        env: { mocha: true }
+        env: { mocha: true },
+        rules: {
+          'import/no-extraneous-dependencies': 'off'
+        }
       }, null, 2)
     })
   }
