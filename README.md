@@ -2,7 +2,7 @@
 
 > This is the branch for `@vue/cli` 3.0.
 
-## Status: alpha
+## Status: beta
 
 Certain combinations of plugins may not work properly, and things may break until we reach beta phase. Do not use in production yet unless you are adventurous.
 
