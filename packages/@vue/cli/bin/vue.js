@@ -87,6 +87,15 @@ program
     loadCommand('init', '@vue/cli-init')
   })
 
+// output help information on unknown commands
+program
+  .arguments('<command>')
+  .action((cmd) => {
+    program.outputHelp()
+    console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
+    console.log()
+  })
+
 // add some useful info on help
 program.on('--help', () => {
   console.log()
