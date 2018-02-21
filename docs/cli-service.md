@@ -83,7 +83,8 @@ module.exports = {
     proxy: {
       '/api': {
         target: '<url>',
-        ws: true
+        ws: true,
+        changeOrigin: true
       },
       '/foo': {
         target: '<other_url>'
