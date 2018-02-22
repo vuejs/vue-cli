@@ -21,13 +21,13 @@ module.exports = class Service {
     this.commands = {}
     this.pkg = this.resolvePkg(pkg)
 
+    // load base .env
+    this.loadEnv()
+
     const userOptions = this.loadProjectOptions(projectOptions)
     this.projectOptions = Object.assign(defaults(), userOptions)
 
     debug('vue:project-config')(this.projectOptions)
-
-    // load base .env
-    this.loadEnv()
 
     // install plugins.
     // If there are inline plugins, they will be used instead of those
