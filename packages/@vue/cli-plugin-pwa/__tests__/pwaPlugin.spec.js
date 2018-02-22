@@ -33,7 +33,7 @@ test('pwa', async () => {
   expect(index).toMatch(/<link rel=preload [^>]+vendor[^>]+\.js>/)
   // should not preload manifest because it's inlined
   expect(index).not.toMatch(/<link rel=preload [^>]+manifest[^>]+\.js>/)
-  // should inline manifest and wepback runtime
+  // should inline manifest and webpack runtime
   expect(index).toMatch('webpackJsonp')
 
   // PWA specific directives
