@@ -26,7 +26,7 @@
 
   Default files matches are: any files in `test/unit` that end in `.spec.(ts|js)`.
 
-  All [mocha-wepback command line options](http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html) are also supported.
+  All [mocha-webpack command line options](http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html) are also supported.
 
 ## Configuration
 
