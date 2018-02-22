@@ -28,8 +28,7 @@ module.exports = api => {
     // serializer for snapshots
     'snapshotSerializers': [
       'jest-serializer-vue'
-    ],
-    'mapCoverage': true
+    ]
   }
 
   if (!api.hasPlugin('typescript')) {
