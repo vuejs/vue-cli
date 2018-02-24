@@ -24,7 +24,7 @@ module.exports = (api, options) => {
 
       const cyArgs = [
         command, // open or run
-        '--env', `VUE_DEV_SERVER_URL=${url}`,
+        '--config', `baseUrl=${url}`,
         ...rawArgs
       ]
 
