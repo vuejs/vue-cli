@@ -122,7 +122,7 @@ module.exports = (api, options) => {
     // fails to resolve a loader, so we provide custom handlers to improve it
     const { transformer, formatter } = require('../webpack/resolveLoaderError')
     webpackConfig
-      .plugin('firendly-errors')
+      .plugin('friendly-errors')
         .use(require('friendly-errors-webpack-plugin'), [{
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]
