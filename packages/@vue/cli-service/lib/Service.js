@@ -160,7 +160,7 @@ module.exports = class Service {
       process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
       path.resolve(this.context, 'vue.config.js')
     )
-    try {
+    if (fs.existsSync(configPath)) {
       fileConfig = require(configPath)
       if (!fileConfig || typeof fileConfig !== 'object') {
         error(
@@ -168,7 +168,7 @@ module.exports = class Service {
         )
         fileConfig = null
       }
-    } catch (e) {}
+    }
 
     // package.vue
     pkgConfig = this.pkg.vue
