@@ -74,7 +74,7 @@ class PluginAPI {
   }
 
   /**
-   * Regsiter a function that will receive a chainable webpack config
+   * Register a function that will receive a chainable webpack config
    * the function is lazy and won't be called until `resolveWebpackConfig` is
    * called
    *
@@ -85,7 +85,7 @@ class PluginAPI {
   }
 
   /**
-   * Regsiter
+   * Register
    * - a webpack configuration object that will be merged into the config
    * OR
    * - a function that will receive the raw webpack config.
@@ -100,7 +100,7 @@ class PluginAPI {
 
   /**
    * Register a dev serve config function. It will receive the express `app`
-   * instnace of the dev server.
+   * instance of the dev server.
    *
    * @param {function} fn
    */
