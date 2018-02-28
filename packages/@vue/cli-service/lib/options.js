@@ -56,6 +56,7 @@ exports.defaults = () => ({
 
   // vue-loader options
   vueLoader: {
+    preserveWhitespace: false,
     template: {
       // for pug
       doctype: 'html'
