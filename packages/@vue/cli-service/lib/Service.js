@@ -171,7 +171,10 @@ module.exports = class Service {
         )
         fileConfig = null
       }
-    } catch (e) {}
+    } catch (e) {
+      error(`Error loading ${chalk.bold('vue.config.js')}:`)
+      throw e
+    }
 
     // package.vue
     pkgConfig = this.pkg.vue
