@@ -46,11 +46,11 @@ module.exports = (api, options) => {
 
     log()
     if (args.target === 'app') {
-      logWithSpinner(`Building for production...`)
+      logWithSpinner(`Building for ${args.mode}...`)
     } else {
       const buildMode = buildModes[args.target]
       if (buildMode) {
-        logWithSpinner(`Building for production as ${buildMode}...`)
+        logWithSpinner(`Building for ${args.mode} as ${buildMode}...`)
       } else {
         throw new Error(`Unknown build target: ${args.target}`)
       }
