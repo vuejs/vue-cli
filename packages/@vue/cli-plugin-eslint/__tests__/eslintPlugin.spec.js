@@ -79,7 +79,7 @@ test('should work', async () => {
       // fix it
       setTimeout(() => {
         write('src/App.vue', app)
-      }, 100)
+      }, process.env.CI ? 1000 : 200)
     } else if (data.match(/Compiled successfully/)) {
       // should compile on 2nd update
       expect(isFirstMsg).toBe(false)
