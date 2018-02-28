@@ -55,7 +55,12 @@ exports.defaults = () => ({
   compiler: false,
 
   // vue-loader options
-  vueLoader: {},
+  vueLoader: {
+    template: {
+      // for pug
+      doctype: 'html'
+    }
+  },
 
   // sourceMap for production build?
   productionSourceMap: true,

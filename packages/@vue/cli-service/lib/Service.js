@@ -25,7 +25,10 @@ module.exports = class Service {
     this.loadEnv()
 
     const userOptions = this.loadProjectOptions(projectOptions)
-    this.projectOptions = Object.assign(defaults(), userOptions)
+    const defaultOptions = defaults()
+    this.projectOptions = Object.assign({}, defaultOptions, userOptions, {
+      vueLoader: Object.assign(defaultOptions.vueLoader, userOptions.vueLoader)
+    })
 
     debug('vue:project-config')(this.projectOptions)
 
