@@ -53,6 +53,7 @@ test('load project options from package.json', () => {
 })
 
 test('load project options from vue.config.js', () => {
+  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
   fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
   mockPkg({
     vue: {
@@ -61,6 +62,7 @@ test('load project options from vue.config.js', () => {
   })
   const service = createMockService()
   fs.unlinkSync('/vue.config.js')
+  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
   // vue.config.js has higher priority
   expect(service.projectOptions.lintOnSave).toBe(false)
 })
