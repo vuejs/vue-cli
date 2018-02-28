@@ -1,6 +1,5 @@
 module.exports = (api, { lintOnSave }) => {
   if (lintOnSave) {
-    console.log(lintOnSave)
     const options = require('./eslintOptions')(api)
     api.chainWebpack(webpackConfig => {
       webpackConfig.module
