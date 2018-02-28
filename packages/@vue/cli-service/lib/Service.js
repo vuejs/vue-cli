@@ -163,17 +163,19 @@ module.exports = class Service {
       process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
       path.resolve(this.context, 'vue.config.js')
     )
-    try {
-      fileConfig = require(configPath)
-      if (!fileConfig || typeof fileConfig !== 'object') {
-        error(
-          `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
-        )
-        fileConfig = null
+    if (fs.existsSync(configPath)) {
+      try {
+        fileConfig = require(configPath)
+        if (!fileConfig || typeof fileConfig !== 'object') {
+          error(
+            `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
+          )
+          fileConfig = null
+        }
+      } catch (e) {
+        error(`Error loading ${chalk.bold('vue.config.js')}:`)
+        throw e
       }
-    } catch (e) {
-      error(`Error loading ${chalk.bold('vue.config.js')}:`)
-      throw e
     }
 
     // package.vue
