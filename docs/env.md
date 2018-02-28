@@ -37,6 +37,12 @@ Note that a mode is different from `NODE_ENV`, as a mode can contain multiple en
 
 You can set environment variables only available to a certain mode by postfixing the `.env` file. For example, if you create a file named `.env.development` in your project root, then the variables declared in that file will only be loaded in development mode.
 
+Passing the `--mode` option flag with [build command](https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#build) will use that mode's environment variables in the build. For example, if you want to use development variables in the build command, add this to your package.json scripts:
+
+```
+"dev-build": "vue-cli-service build --mode development",
+```
+
 ### Using Env Variables in Client-side Code
 
 Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
