@@ -114,7 +114,7 @@ Options:
 - `cache-loader` is enabled for Babel/TypeScript transpilation by default.
 - `thread-loader` will be enabled for Babel/TypeScript transpilation when the machine has more than 1 CPU cores.
 
-#### Building as Library or Web Components
+#### Building as Library or Web Component
 
 It is also possible to build any component(s) inside your project as a library or as web components. See [Build Targets](./build-targets.md) for more details.
 
