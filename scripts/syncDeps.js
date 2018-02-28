@@ -9,6 +9,7 @@ const semver = require('semver')
 const globby = require('globby')
 const { execSync } = require('child_process')
 const inquirer = require('inquirer')
+const readline = require('readline')
 
 const externalVueScopedPackages = {
   '@vue/test-utils': true,
@@ -47,14 +48,36 @@ const checkUpdate = (pkg, filePath, local, remote) => {
     if (!isNewer) {
       return false
     }
-    const isCompat = semver.intersects(`^${local}`, `^${remote}`)
-    console.log(
-      `${chalk.cyan(pkg)}: ${local} => ${remote} ` +
-      (isCompat ? `` : chalk.red.bold(`maybe breaking `)) +
-      chalk.gray(`(${path.relative(process.cwd(), filePath)})`)
-    )
+    const maybeBreaking = !semver.intersects(`^${local}`, `^${remote}`)
+    console.log(genUpdateString(pkg, filePath, local, remote, maybeBreaking))
     return true
   }
+}
+
+const checkUpdateAsync = async (pkg, filePath, local, remote) => {
+  if (remote !== local) {
+    const isNewer = semver.gt(remote, local)
+    if (!isNewer) {
+      return false
+    }
+    const maybeBreaking = !semver.intersects(`^${local}`, `^${remote}`)
+    if (!maybeBreaking) {
+      return true
+    }
+    const { shouldUpdate } = await inquirer.prompt([{
+      name: 'shouldUpdate',
+      type: 'confirm',
+      message: genUpdateString(pkg, filePath, local, remote, maybeBreaking) + `\n` +
+        `Update this dependency?`
+    }])
+    return shouldUpdate
+  }
+}
+
+function genUpdateString (pkg, filePath, local, remote, maybeBreaking) {
+  return `${chalk.cyan(pkg)}: ${local} => ${remote} ` +
+    (maybeBreaking ? chalk.red.bold(`maybe breaking `) : ``) +
+    chalk.gray(`(${path.relative(process.cwd(), filePath)})`)
 }
 
 const writeCache = {}
@@ -74,15 +97,15 @@ async function syncDeps ({ local, version, skipPrompt }) {
   if (!local) {
     console.log('Syncing remote deps...')
     const packages = await globby(['packages/@vue/*/package.json'])
-    await Promise.all(packages.filter(filePath => {
+    const resolvedPackages = (await Promise.all(packages.filter(filePath => {
       return filePath.match(/cli-service|cli-plugin|babel-preset|eslint-config/)
     }).concat('package.json').map(async (filePath) => {
       const pkg = require(path.resolve(__dirname, '../', filePath))
       if (!pkg.dependencies) {
         return
       }
-      let isUpdated = false
       const deps = pkg.dependencies
+      const resolvedDeps = []
       for (const dep in deps) {
         if (dep.match(/^@vue/) && !externalVueScopedPackages[dep]) {
           continue
@@ -92,9 +115,28 @@ async function syncDeps ({ local, version, skipPrompt }) {
           continue
         }
         local = local.replace(/^\^/, '')
+        readline.clearLine(process.stdout)
+        readline.cursorTo(process.stdout, 0)
+        process.stdout.write(dep)
         const remote = await getRemoteVersion(dep)
-        if (remote && checkUpdate(dep, filePath, local, remote)) {
-          deps[dep] = `^${remote}`
+        resolvedDeps.push({
+          dep,
+          local,
+          remote
+        })
+      }
+      return {
+        pkg,
+        filePath,
+        resolvedDeps
+      }
+    }))).filter(_ => _)
+
+    for (const { pkg, filePath, resolvedDeps } of resolvedPackages) {
+      let isUpdated = false
+      for (const { dep, local, remote } of resolvedDeps) {
+        if (remote && await checkUpdateAsync(dep, filePath, local, remote)) {
+          pkg.dependencies[dep] = `^${remote}`
           updatedDeps.add(dep)
           isUpdated = true
         }
@@ -102,7 +144,7 @@ async function syncDeps ({ local, version, skipPrompt }) {
       if (isUpdated) {
         bufferWrite(filePath, JSON.stringify(pkg, null, 2) + '\n')
       }
-    }))
+    }
   }
 
   console.log('Syncing local deps...')
