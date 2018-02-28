@@ -4,7 +4,7 @@
 
 ## Status: beta
 
-Most of the planned features in place but there may still be bugs. API may still change until we reach RC phase. Do not use in production yet unless you are adventurous.
+Most of the planned features are in place but there may still be bugs. API may still change until we reach RC phase. Do not use in production yet unless you are adventurous.
 
 ## Quickstart
 
