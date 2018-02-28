@@ -24,7 +24,7 @@
     --include     include the given module into test bundle
   ```
 
-  Default files matches are: any files in `test/unit` that end in `.spec.(ts|js)`.
+  Default files matches are: any files in `tests/unit` that end in `.spec.(ts|js)`.
 
   All [mocha-webpack command line options](http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html) are also supported.
 

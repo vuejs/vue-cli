@@ -62,7 +62,7 @@ module.exports = api => {
 
   if (api.hasPlugin('eslint')) {
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify({
+      files['tests/unit/.eslintrc'] = JSON.stringify({
         env: { jest: true },
         rules: {
           'import/no-extraneous-dependencies': 'off'

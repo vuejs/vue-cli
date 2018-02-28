@@ -42,8 +42,8 @@ module.exports = api => {
       ...rawArgv,
       ...(hasInlineFilesGlob ? [] : [
         api.hasPlugin('typescript')
-          ? `test/unit/**/*.spec.ts`
-          : `test/unit/**/*.spec.js`
+          ? `tests/unit/**/*.spec.ts`
+          : `tests/unit/**/*.spec.js`
       ])
     ]
 

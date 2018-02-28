@@ -19,7 +19,7 @@ module.exports = api => {
 
     let testMatch = []
     if (!args._.length) {
-      testMatch = [`--testMatch`, `<rootDir>/(test/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))`]
+      testMatch = [`--testMatch`, `<rootDir>/(tests/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))`]
     }
 
     const argv = [

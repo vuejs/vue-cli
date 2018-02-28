@@ -3,13 +3,13 @@ node_modules
 /dist
 <%_ if (rootOptions.plugins && rootOptions.plugins['@vue/cli-plugin-e2e-nightwatch']) { _%>
 
-/test/e2e/reports/
+/tests/e2e/reports/
 selenium-debug.log
 <%_ } _%>
 <%_ if (rootOptions.plugins && rootOptions.plugins['@vue/cli-plugin-e2e-cypress']) { _%>
 
-/test/e2e/videos/
-/test/e2e/screenshots/
+/tests/e2e/videos/
+/tests/e2e/screenshots/
 <%_ } _%>
 
 # local env files

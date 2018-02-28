@@ -73,7 +73,7 @@ module.exports = (api, { config, lintOn = [] }) => {
       }
     }
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify(config, null, 2)
+      files['tests/unit/.eslintrc'] = JSON.stringify(config, null, 2)
     })
   } else if (api.hasPlugin('unit-jest')) {
     const config = {
@@ -85,7 +85,7 @@ module.exports = (api, { config, lintOn = [] }) => {
       }
     }
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify(config, null, 2)
+      files['tests/unit/.eslintrc'] = JSON.stringify(config, null, 2)
     })
   }
 

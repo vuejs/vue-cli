@@ -37,7 +37,7 @@ Cypress offers a rich interactive interface for running E2E tests, but currently
 
 ## Configuration
 
-We've pre-configured Cypress to place most of the e2e testing related files under `<projectRoot>/test/e2e`. You can also check out [how to configure Cypress via `cypress.json`](https://docs.cypress.io/guides/references/configuration.html#Options).
+We've pre-configured Cypress to place most of the e2e testing related files under `<projectRoot>/tests/e2e`. You can also check out [how to configure Cypress via `cypress.json`](https://docs.cypress.io/guides/references/configuration.html#Options).
 
 ## Installing in an Already Created Project
 

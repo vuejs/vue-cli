@@ -8,7 +8,7 @@
 
   Run unit tests with Jest. Default files matches are:
 
-  - Any files in `test/unit` that end in `.spec.(js|ts)`;
+  - Any files in `tests/unit` that end in `.spec.(js|ts)`;
   - Any js/ts files inside `__tests__` directories.
 
   Usage: `vue-cli-service test [options] <regexForTestFiles>`
