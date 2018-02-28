@@ -64,7 +64,7 @@ test('should work', async () => {
   await write('vue.config.js', 'module.exports = { lintOnSave: true }')
   // write invalid file
   const app = await read('src/App.vue')
-  const updatedApp = app.replace(/;/g, '')
+  const updatedApp = app.replace(/;/, '')
   await write('src/App.vue', updatedApp)
 
   const server = run('vue-cli-service serve')
@@ -72,12 +72,14 @@ test('should work', async () => {
   let isFirstMsg = true
   server.stdout.on('data', data => {
     data = data.toString()
-    if (data.match(/Failed to compile/)) {
+    if (data.match(/Compiled with \d warning/)) {
       // should fail on start
       expect(isFirstMsg).toBe(true)
       isFirstMsg = false
       // fix it
-      write('src/App.vue', app)
+      setTimeout(() => {
+        write('src/App.vue', app)
+      }, 100)
     } else if (data.match(/Compiled successfully/)) {
       // should compile on 2nd update
       expect(isFirstMsg).toBe(false)

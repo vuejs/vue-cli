@@ -86,6 +86,7 @@ module.exports = (api, options) => {
           return
         }
 
+        console.log()
         console.log([
           `  App running at:`,
           `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)}`,
