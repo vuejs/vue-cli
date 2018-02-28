@@ -59,6 +59,25 @@ module.exports = {
 }
 ```
 
+#### Modifying Loader Options
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('scss')
+      .use('sass-loader')
+      .tap(options =>
+        merge(options, {
+          includePaths: [path.resolve(__dirname, 'node_modules')],
+        })
+      )
+  }
+}
+```
+
+
 #### Modifying Plugin Options
 
 ``` js
