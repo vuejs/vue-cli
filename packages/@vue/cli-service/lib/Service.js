@@ -159,13 +159,11 @@ module.exports = class Service {
   loadProjectOptions (inlineOptions) {
     // vue.config.js
     let fileConfig, pkgConfig, resolved, resovledFrom
-    const configPath = (
-      process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
-      path.resolve(this.context, 'vue.config.js')
-    )
+    const configPath = path.resolve(this.context, 'vue.config.js')
     if (fs.existsSync(configPath)) {
       try {
         fileConfig = require(configPath)
+        console.log(fileConfig)
         if (!fileConfig || typeof fileConfig !== 'object') {
           error(
             `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
