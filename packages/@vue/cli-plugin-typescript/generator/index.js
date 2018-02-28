@@ -46,7 +46,7 @@ module.exports = (api, {
     }
   }
 
-  if (tsLint && !api.hasPlugin('eslint')) {
+  if (tsLint) {
     api.extendPackage({
       scripts: {
         lint: 'vue-cli-service lint'
@@ -114,13 +114,16 @@ module.exports = (api, {
   const jsRE = /\.js$/
   const excludeRE = /^test\/e2e\/|\.config\.js$/
   const convertLintFlags = require('../lib/convertLintFlags')
-  const convertImports = require('../lib/convertImports')
   api.postProcessFiles(files => {
     for (const file in files) {
       if (jsRE.test(file) && !excludeRE.test(file)) {
         const tsFile = file.replace(jsRE, '.ts')
         if (!files[tsFile]) {
-          files[tsFile] = convertLintFlags(convertImports(files[file]))
+          let content = files[file]
+          if (tsLint) {
+            content = convertLintFlags(content)
+          }
+          files[tsFile] = content
         }
         delete files[file]
       }
