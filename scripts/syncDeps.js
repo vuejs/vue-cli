@@ -24,7 +24,7 @@ const getRemoteVersion = async (pkg) => {
   }
   let res
   try {
-    res = await request(`http://registry.npmjs.org/${pkg}/latest`)
+    res = await request(`http://registry.npmjs.org/${pkg}/latest`, { json: true })
   } catch (e) {
     return
   }
