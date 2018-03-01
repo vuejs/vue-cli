@@ -19,7 +19,8 @@ module.exports = (api, options) => {
       extract: true,
       modules: false,
       sourceMap: false,
-      loaderOptions: {}
+      loaderOptions: {},
+      localIdentName: '[name]_[local]__[hash:base64:5]'
     }
     const userOptions = Object.assign(defaultOptions, options.css || {})
     const extract = isProd && userOptions.extract !== false
@@ -52,7 +53,7 @@ module.exports = (api, options) => {
           options.loaders = Object.assign(resolver.vue(), options.loaders)
           options.cssSourceMap = !!userOptions.cssSourceMap
           options.cssModules = Object.assign({
-            localIdentName: '[name]_[local]__[hash:base64:5]'
+            localIdentName: baseOptions.localIdentName
           }, options.cssModules)
           return options
         })

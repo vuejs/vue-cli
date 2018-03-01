@@ -17,6 +17,8 @@ As for standalone style files, any files ending with `.module.(css|sass|scss|les
 
 If you wish to be able to use CSS modules without the `.module` postfix, you can set `css: { modules: true }` in `vue.config.js`. This option does not affect `*.vue` files.
 
+If you wish to customize the CSS modules class name output you can set the `css: { localIdentName: [name]__[local]--[hash:base64:5]}` in `vue.config.js`.
+
 ### Pre-Processors
 
 You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, you can also just manually install the corresponding webpack loaders. The loaders are pre-configured and will automatically be picked up. For example, to add Sass to an existing project, simply run:
