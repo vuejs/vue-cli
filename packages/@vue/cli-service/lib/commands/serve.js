@@ -58,7 +58,7 @@ module.exports = (api, options) => {
       if (!isProduction) {
         const devClients = [
           // dev server client
-          require.resolve(`webpack-dev-server/client`) + `?${urls.localUrlForBrowser}`,
+          require.resolve(`webpack-dev-server/client`),
           // hmr client
           require.resolve(projectDevServerOptions.hotOnly
             ? 'webpack/hot/only-dev-server'
