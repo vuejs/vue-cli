@@ -13,6 +13,7 @@ module.exports = class CSSLoaderResolver {
    * @param {Object} options
    * @param {boolean} [options.sourceMap=undefined] Enable sourcemaps.
    * @param {boolean} [options.modules=undefined]  Enable CSS modules.
+   * @param {string} [options.localIdentName='[name]_[local]__[hash:base64:5]']  Customizes CSS modules localIdentName.
    * @param {boolean} [options.extract=undefined] Extract CSS.
    * @param {boolean} [options.minimize=undefined] Minimize CSS.
    * @param {boolean} [options.postcss=undefined] Enable postcss-loader.
@@ -21,6 +22,7 @@ module.exports = class CSSLoaderResolver {
   constructor ({
     sourceMap,
     modules,
+    localIdentName,
     extract,
     minimize,
     postcss,
@@ -32,6 +34,7 @@ module.exports = class CSSLoaderResolver {
     this.extract = extract && !process.env.VUE_CLI_CSS_SHADOW_MODE
     this.minimize = minimize
     this.modules = modules
+    this.localIdentName = localIdentName
     this.postcss = postcss
     this.loaderOptions = loaderOptions || {}
   }
@@ -45,7 +48,7 @@ module.exports = class CSSLoaderResolver {
     if (this.modules) {
       cssLoaderOptions.modules = true
       cssLoaderOptions.importLoaders = 1
-      cssLoaderOptions.localIdentName = '[name]_[local]__[hash:base64:5]'
+      cssLoaderOptions.localIdentName = this.localIdentName
     }
 
     if (loader === 'css') {

@@ -140,6 +140,21 @@ test('css.sourceMap', () => {
   })
 })
 
+test('css.localIdentName', () => {
+  const localIdentName = '[name]__[local]--[hash:base64:5]'
+  const config = genConfig({
+    vue: {
+      css: {
+        modules: true,
+        localIdentName: localIdentName
+      }
+    }
+  })
+  LANGS.forEach(lang => {
+    expect(findOptions(config, lang, 'css').localIdentName).toBe(localIdentName)
+  })
+})
+
 test('css.loaderOptions', () => {
   const data = '$env: production;'
   const config = genConfig({

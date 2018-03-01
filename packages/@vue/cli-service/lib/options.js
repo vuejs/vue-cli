@@ -17,6 +17,7 @@ const schema = createSchema(joi => joi.object({
   css: joi.object({
     modules: joi.boolean(),
     extract: joi.boolean(),
+    localIdentName: joi.string(),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
       sass: joi.object(),
@@ -77,6 +78,7 @@ exports.defaults = () => ({
   css: {
     // extract: true,
     // modules: false,
+    // localIdentName: '[name]_[local]_[hash:base64:5]',
     // sourceMap: false,
     // loaderOptions: {}
   },
