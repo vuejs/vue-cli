@@ -58,12 +58,17 @@ module.exports = (api, options) => {
 
     // respect inline build destination
     if (args.dest) {
-      api.configureWebpack({
-        output: {
-          path: path.resolve(
-            api.service.context,
-            args.dest
-          )
+      const dest = path.resolve(
+        api.service.context,
+        args.dest
+      )
+      api.chainWebpack(config => {
+        config.output.path(dest)
+        if (args.target === 'app') {
+          config.plugin('copy').tap(args => {
+            args[0][0].to = dest
+            return args
+          })
         }
       })
     }
