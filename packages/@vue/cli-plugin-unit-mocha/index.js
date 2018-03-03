@@ -2,9 +2,23 @@ module.exports = api => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'test') {
       webpackConfig.merge({
+        target: 'node',
         devtool: 'inline-cheap-module-source-map',
-        externals: [require('webpack-node-externals')()]
+        externals: [
+          require('webpack-node-externals')(),
+          'vue-server-renderer'
+        ]
       })
+
+      // when target === 'node', vue-loader will attempt to generate
+      // SSR-optimized code. We need to turn that off here.
+      webpackConfig.module
+        .rule('vue')
+          .use('vue-loader')
+          .tap(options => {
+            options.optimizeSSR = false
+            return options
+          })
     }
   })
 
