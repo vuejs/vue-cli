@@ -13,7 +13,7 @@ test('cypress', async () => {
 })
 
 test('cypress with router', async () => {
-  const project = await create('ts-e2e-cypress', {
+  const project = await create('ts-e2e-cypress-router', {
     router: true,
     plugins: {
       '@vue/cli-plugin-typescript': {},

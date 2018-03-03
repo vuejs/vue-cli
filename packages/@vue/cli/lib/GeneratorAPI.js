@@ -3,6 +3,7 @@ const ejs = require('ejs')
 const path = require('path')
 const globby = require('globby')
 const isBinary = require('isbinaryfile')
+const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
 
 const isString = val => typeof val === 'string'
@@ -207,11 +208,46 @@ function extractCallDir () {
   return path.dirname(fileName)
 }
 
+const replaceBlockRE = /<%# REPLACE %>([^]*?)<%# END_REPLACE %>/g
+
 function renderFile (name, data, ejsOptions) {
   if (isBinary.sync(name)) {
     return fs.readFileSync(name) // return buffer
   }
-  return ejs.render(fs.readFileSync(name, 'utf-8'), data, ejsOptions)
+  const template = fs.readFileSync(name, 'utf-8')
+
+  // custom template inheritance via yaml front matter.
+  // ---
+  // extend: 'source-file'
+  // replace: !!js/regexp /some-regex/
+  // OR
+  // replace:
+  //   - !!js/regexp /foo/
+  //   - !!js/regexp /bar/
+  // ---
+  const parsed = yaml.loadFront(template)
+  const content = parsed.__content
+  let finalTemplate = content.trim() + `\n`
+  if (parsed.extend) {
+    finalTemplate = fs.readFileSync(require.resolve(parsed.extend), 'utf-8')
+    if (parsed.replace) {
+      if (Array.isArray(parsed.replace)) {
+        const replaceMatch = content.match(replaceBlockRE)
+        if (replaceMatch) {
+          const replaces = replaceMatch.map(m => {
+            return m.replace(replaceBlockRE, '$1').trim()
+          })
+          parsed.replace.forEach((r, i) => {
+            finalTemplate = finalTemplate.replace(r, replaces[i])
+          })
+        }
+      } else {
+        finalTemplate = finalTemplate.replace(parsed.replace, content.trim())
+      }
+    }
+  }
+
+  return ejs.render(finalTemplate, data, ejsOptions)
 }
 
 module.exports = GeneratorAPI

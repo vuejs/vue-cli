@@ -1,4 +1,4 @@
-<%_ if (!options.router) { _%>
+<%_ if (!rootOptions.router) { _%>
 <template>
   <div id="app">
     <img src="./assets/logo.png">
@@ -35,11 +35,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  <%_ if (!options.router) { _%>
+  <%_ if (!rootOptions.router) { _%>
   margin-top: 60px;
   <%_ } _%>
 }
-<%_ if (options.router) { _%>
+<%_ if (rootOptions.router) { _%>
 
 #nav {
   padding: 30px;
