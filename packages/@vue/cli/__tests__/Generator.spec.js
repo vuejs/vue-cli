@@ -13,6 +13,35 @@ fs.writeFileSync(path.resolve(templateDir, 'foo.js'), 'foo(<%- options.n %>)')
 mkdirp.sync(path.resolve(templateDir, 'bar'))
 fs.writeFileSync(path.resolve(templateDir, 'bar/bar.js'), 'bar(<%- m %>)')
 
+fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
+---
+extend: '${path.resolve(templateDir, 'bar/bar.js')}'
+replace: !!js/regexp /bar\\((.*)\\)/
+---
+baz($1)
+`.trim())
+
+fs.writeFileSync(path.resolve(templateDir, 'multi-replace-source.js'), `
+foo(1)
+bar(2)
+`.trim())
+
+fs.writeFileSync(path.resolve(templateDir, 'multi-replace.js'), `
+---
+extend: '${path.resolve(templateDir, 'multi-replace-source.js')}'
+replace:
+  - !!js/regexp /foo\\((.*)\\)/
+  - !!js/regexp /bar\\((.*)\\)/
+---
+<%# REPLACE %>
+baz($1)
+<%# END_REPLACE %>
+
+<%# REPLACE %>
+qux($1)
+<%# END_REPLACE %>
+`.trim())
+
 test('api: extendPackage', async () => {
   const generator = new Generator('/', {
     name: 'hello',
@@ -178,6 +207,8 @@ test('api: render fs directory', async () => {
 
   expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo(1)')
   expect(fs.readFileSync('/bar/bar.js', 'utf-8')).toMatch('bar(2)')
+  expect(fs.readFileSync('/replace.js', 'utf-8')).toMatch('baz(2)')
+  expect(fs.readFileSync('/multi-replace.js', 'utf-8')).toMatch('baz(1)\nqux(2)')
 })
 
 test('api: render object', async () => {

@@ -229,7 +229,10 @@ function renderFile (name, data, ejsOptions) {
   const content = parsed.__content
   let finalTemplate = content.trim() + `\n`
   if (parsed.extend) {
-    finalTemplate = fs.readFileSync(require.resolve(parsed.extend), 'utf-8')
+    const extendPath = path.isAbsolute(parsed.extend)
+      ? parsed.extend
+      : require.resolve(parsed.extend)
+    finalTemplate = fs.readFileSync(extendPath, 'utf-8')
     if (parsed.replace) {
       if (Array.isArray(parsed.replace)) {
         const replaceMatch = content.match(replaceBlockRE)
