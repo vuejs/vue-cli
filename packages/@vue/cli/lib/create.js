@@ -22,7 +22,7 @@ async function create (projectName, options) {
           {
             name: 'ok',
             type: 'confirm',
-            message: `Generate project in current directory ${chalk.cyan(targetDir)} ?`
+            message: `Generate project in current directory?`
           }
         ])
         if (!ok) {
