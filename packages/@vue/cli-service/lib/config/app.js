@@ -149,7 +149,7 @@ module.exports = (api, options) => {
           .use(require('copy-webpack-plugin'), [[{
             from: api.resolve('public'),
             to: api.resolve(options.outputDir),
-            ignore: ['index.html', '.*']
+            ignore: ['index.html', '.DS_Store']
           }]])
     }
   })
