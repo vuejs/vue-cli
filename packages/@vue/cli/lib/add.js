@@ -14,6 +14,7 @@ async function add (pluginName, options = {}, context = process.cwd()) {
 
   log()
   log(`📦  Installing ${chalk.cyan(packageName)}...`)
+  log()
 
   const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
   await installPackage(context, packageManager, null, packageName)
