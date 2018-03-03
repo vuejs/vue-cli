@@ -55,6 +55,14 @@ program
   })
 
 program
+  .command('add <plugin> [pluginOptions]')
+  .allowUnknownOption()
+  .description('install a plugin and invoke its generator in an already created project')
+  .action((plugin) => {
+    require('../lib/add')(plugin, minimist(process.argv.slice(3)))
+  })
+
+program
   .command('inspect [paths...]')
   .option('--mode <mode>')
   .description('inspect the webpack config in a project with vue-cli-service')
