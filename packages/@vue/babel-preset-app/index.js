@@ -27,6 +27,8 @@ module.exports = (context, options = {}) => {
   // cli-plugin-jest sets this to true because Jest runs without bundling
   if (process.env.VUE_CLI_BABEL_TRANSPILE_MODULES) {
     envOptions.modules = 'commonjs'
+    // necessary for dynamic import to work in tests
+    plugins.push(require('babel-plugin-dynamic-import-node'))
   }
 
   // pass options along to babel-preset-env
