@@ -7,6 +7,7 @@ const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
+const defaultsDeep = require('lodash.defaultsdeep')
 const { warn, error } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
@@ -24,11 +25,8 @@ module.exports = class Service {
     // load base .env
     this.loadEnv()
 
-    const userOptions = this.loadProjectOptions(projectOptions)
-    const defaultOptions = defaults()
-    this.projectOptions = Object.assign({}, defaultOptions, userOptions, {
-      vueLoader: Object.assign(defaultOptions.vueLoader, userOptions.vueLoader)
-    })
+    const userOptions = this.loadUserOptions(projectOptions)
+    this.projectOptions = defaultsDeep(userOptions, defaults())
 
     debug('vue:project-config')(this.projectOptions)
 
@@ -156,7 +154,7 @@ module.exports = class Service {
     return config
   }
 
-  loadProjectOptions (inlineOptions) {
+  loadUserOptions (inlineOptions) {
     // vue.config.js
     let fileConfig, pkgConfig, resolved, resovledFrom
     const configPath = (
@@ -210,7 +208,7 @@ module.exports = class Service {
     }
 
     // normlaize some options
-    ensureSlash(resolved, 'base')
+    ensureSlash(resolved, 'baseUrl')
     removeSlash(resolved, 'outputDir')
 
     // validate options
@@ -227,7 +225,7 @@ module.exports = class Service {
 function ensureSlash (config, key) {
   if (typeof config[key] === 'string') {
     config[key] = config[key]
-      .replace(/^([^/])/, '/$1')
+      .replace(/^([^/.])/, '/$1')
       .replace(/([^/])$/, '$1/')
   }
 }

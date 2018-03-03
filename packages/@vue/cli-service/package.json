@@ -42,6 +42,7 @@
     "html-webpack-plugin": "^3.0.0",
     "javascript-stringify": "^1.6.0",
     "launch-editor-middleware": "^2.2.1",
+    "lodash.defaultsdeep": "^4.6.0",
     "minimist": "^1.2.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^2.0.0",
