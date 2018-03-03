@@ -1,0 +1,66 @@
+{
+  "name": "@vue/cli-ui",
+  "version": "3.0.0-beta.3",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "graphql-api": "vue-cli-service graphql-api",
+    "run-graphql-api": "vue-cli-service run-graphql-api"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.0-beta.3",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.3",
+    "@vue/cli-service": "^3.0.0-beta.3",
+    "@vue/eslint-config-standard": "^3.0.0-beta.3",
+    "@vue/ui": "^0.1.6",
+    "apollo-cache-inmemory": "^1.0.0",
+    "apollo-client": "^2.0.1",
+    "apollo-link": "^1.0.0",
+    "apollo-link-context": "^1.0.5",
+    "apollo-link-http": "^1.0.0",
+    "apollo-link-persisted-queries": "^0.1.0",
+    "apollo-link-ws": "^1.0.0",
+    "apollo-upload-client": "^7.0.0-alpha.4",
+    "apollo-utilities": "^1.0.1",
+    "graphql": "^0.13.0",
+    "graphql-tag": "^2.5.0",
+    "lint-staged": "^6.0.0",
+    "lowdb": "^1.0.0",
+    "mkdirp": "^0.5.1",
+    "shortid": "^2.2.8",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "subscriptions-transport-ws": "^0.9.5",
+    "vue": "^2.5.13",
+    "vue-apollo": "^3.0.0-alpha.1",
+    "vue-cli-plugin-apollo": "^0.4.1",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.13",
+    "vuex": "^3.0.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}
