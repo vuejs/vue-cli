@@ -125,6 +125,8 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   }
   log(`   You should review and commit the changes.`)
   log()
+
+  generator.printExitLogs()
 }
 
 module.exports = (...args) => {

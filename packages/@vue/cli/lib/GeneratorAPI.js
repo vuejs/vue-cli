@@ -196,6 +196,16 @@ class GeneratorAPI {
   onCreateComplete (cb) {
     this.generator.completeCbs.push(cb)
   }
+
+  /**
+   * Add a message to be printed when the generator exits (after any other standard messages).
+   *
+   * @param {} msg String or value to print after the generation is completed
+   * @param {('log'|'info'|'done'|'warn'|'error')} [type='log'] Type of message
+   */
+  exitLog (msg, type = 'log') {
+    this.generator.exitLogs.push({ id: this.id, msg, type })
+  }
 }
 
 function extractCallDir () {
