@@ -4,7 +4,7 @@ module.exports = function lint (args = {}, api) {
   const options = require('./eslintOptions')(api)
   const { done } = require('@vue/cli-shared-utils')
 
-  const files = args._ && args._.length ? args._ : ['src', 'test']
+  const files = args._ && args._.length ? args._ : ['src', 'tests', '*.js']
   if (args['no-fix']) {
     args.fix = false
     delete args['no-fix']
