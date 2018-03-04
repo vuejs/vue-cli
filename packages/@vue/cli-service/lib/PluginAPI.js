@@ -1,4 +1,5 @@
 const path = require('path')
+const { matchesPluginId } = require('@vue/cli-shared-utils')
 
 class PluginAPI {
   /**
@@ -27,10 +28,7 @@ class PluginAPI {
    * @return {boolean}
    */
   hasPlugin (id) {
-    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
-    return this.service.plugins.some(p => {
-      return p.id === id || p.id.replace(prefixRE, '') === id
-    })
+    return this.service.plugins.some(p => matchesPluginId(id, p.id))
   }
 
   /**

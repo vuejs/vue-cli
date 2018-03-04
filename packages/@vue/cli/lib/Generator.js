@@ -5,7 +5,7 @@ const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const configTransforms = require('./util/configTransforms')
-const { toShortPluginId } = require('@vue/cli-shared-utils')
+const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
 const logTypes = {
@@ -138,14 +138,11 @@ module.exports = class Generator {
   }
 
   hasPlugin (_id) {
-    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
     return [
       ...this.plugins.map(p => p.id),
       ...Object.keys(this.pkg.devDependencies || {}),
       ...Object.keys(this.pkg.dependencies || {})
-    ].some(id => {
-      return id === _id || id.replace(prefixRE, '') === _id
-    })
+    ].some(id => matchesPluginId(_id, id))
   }
 
   printExitLogs () {
