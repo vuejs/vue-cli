@@ -7,7 +7,7 @@ const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
 const getVersions = require('./util/getVersions')
-const installDeps = require('./util/installDeps')
+const { installDeps } = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
@@ -176,6 +176,8 @@ module.exports = class Creator {
       chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
     )
     log()
+
+    generator.printExitLogs()
   }
 
   async promptAndResolvePreset () {

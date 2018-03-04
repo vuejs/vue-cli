@@ -128,26 +128,41 @@ vue build MyComponent.vue
 
 ### Installing Plugins in an Existing Project
 
-Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, simply install it first:
+Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:
 
 ``` sh
-npm install -D @vue/cli-plugin-eslint
+vue add @vue/eslint
 ```
 
-Then you can invoke the plugin's generator so it generates files into your project:
+> Note: it is recommended to commit your project's current state before running `vue add`, since the command will invoke the plugin's file generator and potentially make changes to your existing files.
+
+The command resolves `@vue/eslint` to the full package name `@vue/cli-plugin-eslint`, installs it from npm, and invokes its generator.
 
 ``` sh
-# the @vue/cli-plugin- prefix can be omitted
-vue invoke eslint
+# these are equivalent to the previous usage
+vue add @vue/cli-plugin-eslint
 ```
 
-In addition, you can pass options to the plugin:
+Without the `@vue` prefix, the command will resolve to an unscoped package instead. For example, to install the 3rd party plugin `vue-cli-plugin-apollo`:
 
 ``` sh
-vue invoke eslint --config airbnb --lintOn save
+# installs and invokes vue-cli-plugin-apollo
+vue add apollo
 ```
 
-It is recommended to commit your project's current state before running `vue invoke`, so that after file generation you can review the changes and revert if needed.
+You can also use 3rd party plugins under a specific scope. For example, if a plugin is named `@foo/vue-cli-plugin-bar`, you can add it with:
+
+``` sh
+vue add @foo/bar
+```
+
+Finally, you can pass generator options to the installed plugin:
+
+``` sh
+vue add @vue/eslint --config airbnb --lintOn save
+```
+
+If a plugin is already installed, you can skip the installation and only invoke its generator with the `vue invoke` command. The command takes the same arguments as `vue add`.
 
 ### Inspecting the Project's Webpack Config
 

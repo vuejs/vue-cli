@@ -49,7 +49,8 @@
     "resolve": "^1.5.0",
     "rimraf": "^2.6.2",
     "semver": "^5.4.1",
-    "slash": "^1.0.0"
+    "slash": "^1.0.0",
+    "yaml-front-matter": "^3.4.1"
   },
   "engines": {
     "node": ">=8"

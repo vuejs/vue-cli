@@ -1,4 +1,4 @@
-<%_ if (options.router) { _%>
+<%_ if (rootOptions.router) { _%>
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'

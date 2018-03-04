@@ -6,14 +6,15 @@ const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
-const installDeps = require('./util/installDeps')
+const { installDeps } = require('./util/installDeps')
 const {
   log,
   error,
   hasYarn,
   hasGit,
   logWithSpinner,
-  stopSpinner
+  stopSpinner,
+  resolvePluginId
 } = require('@vue/cli-shared-utils')
 
 function load (request, context) {
@@ -41,9 +42,12 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   const findPlugin = deps => {
     if (!deps) return
     let name
-    if (deps[name = `@vue/cli-plugin-${pluginName}`] ||
-        deps[name = `vue-cli-plugin-${pluginName}`] ||
-        deps[name = pluginName]) {
+    // official
+    if (deps[name = `@vue/cli-plugin-${pluginName}`]) {
+      return name
+    }
+    // full id, scoped short, or default short
+    if (deps[name = resolvePluginId(pluginName)]) {
       return name
     }
   }
@@ -123,8 +127,10 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
       log()
     }
   }
-  log(`   You should review and commit the changes.`)
+  log(`   You should review these changes with ${chalk.cyan(`git diff`)} and commit them.`)
   log()
+
+  generator.printExitLogs()
 }
 
 module.exports = (...args) => {

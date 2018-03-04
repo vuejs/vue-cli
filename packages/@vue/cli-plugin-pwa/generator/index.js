@@ -17,7 +17,7 @@ module.exports = api => {
       // inject import for registerServiceWorker script into main.js
       const lines = main.split(/\r?\n/g).reverse()
       const lastImportIndex = lines.findIndex(line => line.match(/^import/))
-      lines[lastImportIndex] += `\nimport './registerServiceWorker${isTS ? `.ts` : ``}'`
+      lines[lastImportIndex] += `\nimport './registerServiceWorker'`
       files[file] = lines.reverse().join('\n')
     }
   })

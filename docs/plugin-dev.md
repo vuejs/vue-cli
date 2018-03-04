@@ -198,6 +198,48 @@ module.exports = (api, options, rootOptions) => {
 }
 ```
 
+#### Generator Templating
+
+When you call `api.render('./template')`, the generator will render files in `./template` (resolved relative to the generator file) with [EJS](https://github.com/mde/ejs).
+
+In addition, you can inherit and replace parts of an existing template file (even from another package) using YAML front-matter:
+
+``` ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace: !!js/regexp /<script>[^]*?<\/script>/
+---
+
+<script>
+export default {
+  // Replace default script
+}
+</script>
+```
+
+It's also possible to do multiple replaces, although you will need to wrap your replace strings within `<%# REPLACE %>` and `<%# END_REPLACE %>` blocks:
+
+``` ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace:
+  - !!js/regexp /Welcome to Your Vue\.js App/
+  - !!js/regexp /<script>[^]*?<\/script>/
+---
+
+<%# REPLACE %>
+Replace Welcome Message
+<%# END_REPLACE %>
+
+<%# REPLACE %>
+<script>
+export default {
+  // Replace default script
+}
+</script>
+<%# END_REPLACE %>
+```
+
 ### Prompts
 
 #### Prompts for Built-in Plugins
