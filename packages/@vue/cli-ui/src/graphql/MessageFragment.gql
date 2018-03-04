@@ -1,4 +1,0 @@
-fragment Message on Message {
-  id
-  text
-}
