@@ -47,19 +47,19 @@ program
   })
 
 program
-  .command('invoke <plugin> [pluginOptions]')
-  .allowUnknownOption()
-  .description('invoke the generator of a plugin in an already created project')
-  .action((plugin) => {
-    require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
-  })
-
-program
   .command('add <plugin> [pluginOptions]')
   .allowUnknownOption()
   .description('install a plugin and invoke its generator in an already created project')
   .action((plugin) => {
     require('../lib/add')(plugin, minimist(process.argv.slice(3)))
+  })
+
+program
+  .command('invoke <plugin> [pluginOptions]')
+  .allowUnknownOption()
+  .description('invoke the generator of a plugin in an already created project')
+  .action((plugin) => {
+    require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
