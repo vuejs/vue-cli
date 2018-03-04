@@ -153,7 +153,7 @@ function executeCommand (command, args, targetDir) {
   })
 }
 
-module.exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
+exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
   const args = []
   if (command === 'npm') {
     args.push('install', '--loglevel', 'error')
@@ -171,7 +171,7 @@ module.exports.installDeps = async function installDeps (targetDir, command, cli
   await executeCommand(command, args, targetDir)
 }
 
-module.exports.installPackage = async function (targetDir, command, cliRegistry, packageName, dev = true) {
+exports.installPackage = async function (targetDir, command, cliRegistry, packageName, dev = true) {
   const args = []
   if (command === 'npm') {
     args.push('install', '--loglevel', 'error')
