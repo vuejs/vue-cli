@@ -24,15 +24,20 @@ module.exports = (api, options) => {
         )
       }
 
-      const workBoxConfig = Object.assign({
-        cacheId: name,
+      const defaultOptions = {
         exclude: [
           /\.map$/,
           /img\/icons\//,
           /favicon\.ico$/,
           /manifest\.json$/
         ]
-      }, userOptions.workboxOptions)
+      }
+
+      const defaultGenerateSWOptions = workboxPluginMode === 'GenerateSW' ? {
+        cacheId: name
+      } : {}
+
+      const workBoxConfig = Object.assign(defaultOptions, defaultGenerateSWOptions, userOptions.workboxOptions)
 
       webpackConfig
         .plugin('workbox')
