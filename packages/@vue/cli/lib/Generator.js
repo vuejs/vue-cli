@@ -4,10 +4,10 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
+const { toShortId } = require('@vue/cli-shared-utils')
 const configTransforms = require('./util/configTransforms')
-const logger = require('@vue/cli-shared-utils/lib/logger')
-const { toShortId } = require('./util/pluginResolution')
 
+const logger = require('@vue/cli-shared-utils/lib/logger')
 const logTypes = {
   log: logger.log,
   info: logger.info,

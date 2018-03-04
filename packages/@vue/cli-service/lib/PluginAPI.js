@@ -23,7 +23,7 @@ class PluginAPI {
   /**
    * Check if the project has a given plugin.
    *
-   * @param {string} id - Plugin id, can omit the (@vue/|vue-)-cli-plugin- prefix
+   * @param {string} id - Plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
    * @return {boolean}
    */
   hasPlugin (id) {

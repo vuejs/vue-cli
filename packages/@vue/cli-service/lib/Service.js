@@ -8,7 +8,7 @@ const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { warn, error } = require('@vue/cli-shared-utils')
+const { warn, error, isPlugin } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 
@@ -104,10 +104,9 @@ module.exports = class Service {
         ? builtInPlugins.concat(inlinePlugins)
         : inlinePlugins
     } else {
-      const prefixRE = /^(@vue\/|vue-)cli-plugin-/
       const projectPlugins = Object.keys(this.pkg.dependencies || {})
         .concat(Object.keys(this.pkg.devDependencies || {}))
-        .filter(p => prefixRE.test(p))
+        .filter(isPlugin)
         .map(idToPlugin)
       return builtInPlugins.concat(projectPlugins)
     }
