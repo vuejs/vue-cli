@@ -93,16 +93,7 @@ function renderProgressBar (curr, total) {
   process.stderr.write(`[${complete}${incomplete}]${bar}`)
 }
 
-module.exports = async function installDeps (targetDir, command, cliRegistry) {
-  const args = []
-  if (command === 'npm') {
-    args.push('install', '--loglevel', 'error')
-  } else if (command === 'yarn') {
-    // do nothing
-  } else {
-    throw new Error(`Unknown package manager: ${command}`)
-  }
-
+async function addRegistryToArgs (command, args, cliRegistry) {
   if (command === 'yarn' && cliRegistry) {
     throw new Error(
       `Inline registry is not supported when using yarn. ` +
@@ -124,11 +115,10 @@ module.exports = async function installDeps (targetDir, command, cliRegistry) {
       args.push(`--disturl=${taobaoDistURL}`)
     }
   }
+}
 
-  debug(`command: `, command)
-  debug(`args: `, args)
-
-  await new Promise((resolve, reject) => {
+function executeCommand (command, args, targetDir) {
+  return new Promise((resolve, reject) => {
     const child = execa(command, args, {
       cwd: targetDir,
       stdio: ['inherit', 'inherit', command === 'yarn' ? 'pipe' : 'inherit']
@@ -161,4 +151,44 @@ module.exports = async function installDeps (targetDir, command, cliRegistry) {
       resolve()
     })
   })
+}
+
+exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
+  const args = []
+  if (command === 'npm') {
+    args.push('install', '--loglevel', 'error')
+  } else if (command === 'yarn') {
+    // do nothing
+  } else {
+    throw new Error(`Unknown package manager: ${command}`)
+  }
+
+  await addRegistryToArgs(command, args, cliRegistry)
+
+  debug(`command: `, command)
+  debug(`args: `, args)
+
+  await executeCommand(command, args, targetDir)
+}
+
+exports.installPackage = async function (targetDir, command, cliRegistry, packageName, dev = true) {
+  const args = []
+  if (command === 'npm') {
+    args.push('install', '--loglevel', 'error')
+  } else if (command === 'yarn') {
+    args.push('add')
+  } else {
+    throw new Error(`Unknown package manager: ${command}`)
+  }
+
+  if (dev) args.push('-D')
+
+  await addRegistryToArgs(command, args, cliRegistry)
+
+  args.push(packageName)
+
+  debug(`command: `, command)
+  debug(`args: `, args)
+
+  await executeCommand(command, args, targetDir)
 }

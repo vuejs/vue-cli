@@ -6,7 +6,7 @@ const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
-const installDeps = require('./util/installDeps')
+const { installDeps } = require('./util/installDeps')
 const {
   log,
   error,
