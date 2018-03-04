@@ -1,0 +1,3 @@
+subscription {
+  cwd: cwdChanged
+}

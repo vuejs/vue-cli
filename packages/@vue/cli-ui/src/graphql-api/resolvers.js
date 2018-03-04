@@ -1,6 +1,7 @@
 const channels = require('./channels')
 const cwd = require('./connectors/cwd')
 const folders = require('./connectors/folders')
+const projects = require('./connectors/projects')
 
 module.exports = {
   Folder: {
@@ -9,7 +10,9 @@ module.exports = {
 
   Query: {
     cwd: () => cwd.get(),
-    folderCurrent: (root, args, context) => folders.getCurrent(args, context)
+    folderCurrent: (root, args, context) => folders.getCurrent(args, context),
+    projects: (root, args, context) => projects.list(context),
+    projectCurrent: (root, args, context) => projects.getCurrent(context)
   },
 
   Mutation: {

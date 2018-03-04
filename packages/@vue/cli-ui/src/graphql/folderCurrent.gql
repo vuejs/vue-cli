@@ -1,0 +1,10 @@
+{
+  folderCurrent {
+    name
+    path
+    children {
+      name
+      path
+    }
+  }
+}

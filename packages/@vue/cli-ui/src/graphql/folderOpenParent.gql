@@ -1,0 +1,10 @@
+mutation {
+  folderOpenParent {
+    name
+    path
+    children {
+      name
+      path
+    }
+  }
+}
