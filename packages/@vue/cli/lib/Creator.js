@@ -176,6 +176,8 @@ module.exports = class Creator {
       chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
     )
     log()
+
+    generator.printExitLogs()
   }
 
   async promptAndResolvePreset () {

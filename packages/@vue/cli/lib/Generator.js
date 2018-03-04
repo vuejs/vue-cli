@@ -5,6 +5,16 @@ const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const configTransforms = require('./util/configTransforms')
+const logger = require('@vue/cli-shared-utils/lib/logger')
+const { toShortId } = require('./util/pluginResolution')
+
+const logTypes = {
+  log: logger.log,
+  info: logger.info,
+  done: logger.done,
+  warn: logger.warn,
+  error: logger.error
+}
 
 module.exports = class Generator {
   constructor (context, pkg, plugins, completeCbs = []) {
@@ -20,6 +30,8 @@ module.exports = class Generator {
     this.files = {}
     this.fileMiddlewares = []
     this.postProcessFilesCbs = []
+    // exit messages
+    this.exitLogs = []
 
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService && cliService.options
@@ -134,5 +146,20 @@ module.exports = class Generator {
     ].some(id => {
       return id === _id || id.replace(prefixRE, '') === _id
     })
+  }
+
+  printExitLogs () {
+    if (this.exitLogs.length) {
+      this.exitLogs.forEach(({ id, msg, type }) => {
+        const shortId = toShortId(id)
+        const logFn = logTypes[type]
+        if (!logFn) {
+          logger.error(`Invalid api.exitLog type '${type}'.`, shortId)
+        } else {
+          logFn(msg, msg && shortId)
+        }
+      })
+      logger.log()
+    }
   }
 }
