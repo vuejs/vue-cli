@@ -13,7 +13,8 @@ const {
   hasYarn,
   hasGit,
   logWithSpinner,
-  stopSpinner
+  stopSpinner,
+  resolvePluginId
 } = require('@vue/cli-shared-utils')
 
 function load (request, context) {
@@ -40,22 +41,13 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   // attempt to locate the plugin in package.json
   const findPlugin = deps => {
     if (!deps) return
-
-    // custom scoped plugin
     let name
-    if (pluginName.charAt(0) === '@') {
-      const scopeRE = /^@[\w-]+\//
-      const scopeMatch = pluginName.match(scopeRE)
-      const shortId = pluginName.replace(scopeRE, '')
-      if (scopeMatch && deps[name = `${scopeMatch[0]}vue-cli-plugin-${shortId}`]) {
-        return name
-      }
+    // official
+    if (deps[name = `@vue/cli-plugin-${pluginName}`]) {
+      return name
     }
-
-    // official, non-scoped & full name
-    if (deps[name = `@vue/cli-plugin-${pluginName}`] ||
-        deps[name = `vue-cli-plugin-${pluginName}`] ||
-        deps[name = pluginName]) {
+    // full id, scoped short, or default short
+    if (deps[name = resolvePluginId(pluginName)]) {
       return name
     }
   }
@@ -135,7 +127,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
       log()
     }
   }
-  log(`   You should review and commit the changes.`)
+  log(`   You should review these changes with ${chalk.cyan(`git diff`)} and commit them.`)
   log()
 
   generator.printExitLogs()

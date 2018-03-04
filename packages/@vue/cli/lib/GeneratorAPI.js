@@ -5,7 +5,7 @@ const globby = require('globby')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
-const { isOfficial, toShortId } = require('@vue/cli-shared-utils')
+const { isOfficialPlugin, toShortPluginId } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -40,10 +40,10 @@ class GeneratorAPI {
     this.pluginsData = generator.plugins
       .filter(({ id }) => id !== `@vue/cli-service`)
       .map(({ id }) => {
-        const name = toShortId(id)
+        const name = toShortPluginId(id)
         return {
           name: name,
-          link: isOfficial(id)
+          link: isOfficialPlugin(id)
             ? `https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-${name}`
             : getLink(id)
         }

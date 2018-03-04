@@ -4,8 +4,8 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
-const { toShortId } = require('@vue/cli-shared-utils')
 const configTransforms = require('./util/configTransforms')
+const { toShortPluginId } = require('@vue/cli-shared-utils')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
 const logTypes = {
@@ -151,7 +151,7 @@ module.exports = class Generator {
   printExitLogs () {
     if (this.exitLogs.length) {
       this.exitLogs.forEach(({ id, msg, type }) => {
-        const shortId = toShortId(id)
+        const shortId = toShortPluginId(id)
         const logFn = logTypes[type]
         if (!logFn) {
           logger.error(`Invalid api.exitLog type '${type}'.`, shortId)
