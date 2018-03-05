@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home page">
     <FolderExplorer/>
   </div>
 </template>
@@ -15,3 +15,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.folder-explorer
+  height 100%
+</style>

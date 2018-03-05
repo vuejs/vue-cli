@@ -178,6 +178,14 @@ export default {
     fill $vue-color-danger
 
 .folder-explorer
+  v-box()
+  align-items stretch
+
+  .folders
+    flex 100% 1 1
+    overflow-x hidden
+    overflow-y auto
+
   &.error
     .current-path
       color $vue-color-danger
