@@ -13,6 +13,7 @@ const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const formatFeatures = require('./util/formatFeatures')
 const setupDevProject = require('./util/setupDevProject')
+const fetchRemotePreset = require('./util/fetchRemotePreset')
 
 const {
   defaults,
@@ -60,7 +61,7 @@ module.exports = class Creator {
     let preset
     if (cliOptions.preset) {
       // vue create foo --preset bar
-      preset = this.resolvePreset(cliOptions.preset)
+      preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
     } else if (cliOptions.default) {
       // vue create foo --default
       preset = defaults.presets.default
@@ -194,7 +195,7 @@ module.exports = class Creator {
 
     let preset
     if (answers.preset && answers.preset !== '__manual__') {
-      preset = this.resolvePreset(answers.preset)
+      preset = await this.resolvePreset(answers.preset)
     } else {
       // manual
       preset = {
@@ -218,9 +219,24 @@ module.exports = class Creator {
     return preset
   }
 
-  resolvePreset (name) {
+  async resolvePreset (name, clone) {
+    let preset
     const savedPresets = loadOptions().presets || {}
-    let preset = savedPresets[name]
+
+    if (name.includes('/')) {
+      logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
+      try {
+        preset = await fetchRemotePreset(name, clone)
+        stopSpinner()
+      } catch (e) {
+        stopSpinner()
+        error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
+        throw e
+      }
+    } else {
+      preset = savedPresets[name]
+    }
+
     // use default preset if user has not overwritten it
     if (name === 'default' && !preset) {
       preset = defaults.presets.default

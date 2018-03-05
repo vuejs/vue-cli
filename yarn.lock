@@ -3080,7 +3080,7 @@ dot-prop@^3.0.0:
   dependencies:
     is-obj "^1.0.0"
 
-download-git-repo@^1.0.1:
+download-git-repo@^1.0.1, download-git-repo@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/download-git-repo/-/download-git-repo-1.0.2.tgz#0b93a62057e41e2f21b1a06c95e7b26362b108ff"
   dependencies:
