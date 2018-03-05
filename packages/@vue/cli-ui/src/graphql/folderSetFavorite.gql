@@ -1,0 +1,7 @@
+#import "./folderCurrentFragment.gql"
+
+mutation folderSetFavorite ($path: String!, $favorite: Boolean!) {
+  folderSetFavorite (path: $path, favorite: $favorite) {
+    ...folderCurrent
+  }
+}

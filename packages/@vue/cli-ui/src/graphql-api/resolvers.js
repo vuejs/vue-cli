@@ -13,13 +13,18 @@ module.exports = {
   Query: {
     cwd: () => cwd.get(),
     folderCurrent: (root, args, context) => folders.getCurrent(args, context),
+    foldersFavorite: (root, args, context) => folders.listFavorite(context),
     projects: (root, args, context) => projects.list(context),
     projectCurrent: (root, args, context) => projects.getCurrent(context)
   },
 
   Mutation: {
     folderOpen: (root, { path }, context) => folders.open(path, context),
-    folderOpenParent: (root, args, context) => folders.openParent(cwd.get(), context)
+    folderOpenParent: (root, args, context) => folders.openParent(cwd.get(), context),
+    folderSetFavorite: (root, args, context) => folders.setFavorite({
+      file: args.path,
+      favorite: args.favorite
+    }, context)
   },
 
   Subscription: {

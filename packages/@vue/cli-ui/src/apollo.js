@@ -1,5 +1,5 @@
 import { ApolloClient } from 'apollo-client'
-import { split } from 'apollo-link'
+import { split, ApolloLink } from 'apollo-link'
 import { HttpLink } from 'apollo-link-http'
 import { createUploadLink } from 'apollo-upload-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -8,6 +8,9 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries'
 import { setContext } from 'apollo-link-context'
+import { withClientState } from 'apollo-link-state'
+import defaults from './state/defaults'
+import resolvers from './state/resolvers'
 
 function getAuth () {
   // get the authentication token from local storage if it exists
@@ -63,6 +66,9 @@ export default function createApolloClient ({ ssr, base, endpoints, persisting }
   // Apollo cache
   const cache = new InMemoryCache()
 
+  // Client-side state
+  const stateLink = withClientState({ defaults, cache, resolvers })
+
   if (!ssr) {
     // If on the client, recover the injected state
     if (typeof window !== 'undefined') {
@@ -115,7 +121,7 @@ export default function createApolloClient ({ ssr, base, endpoints, persisting }
   }
 
   const apolloClient = new ApolloClient({
-    link,
+    link: ApolloLink.from([stateLink, link]),
     cache,
     // Additional options
     ...(ssr ? {

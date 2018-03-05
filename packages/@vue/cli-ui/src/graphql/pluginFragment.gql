@@ -1,0 +1,11 @@
+fragment plugin on Plugin {
+  id
+  version {
+    current
+    latest
+  }
+  official
+  installed
+  website
+  description
+}

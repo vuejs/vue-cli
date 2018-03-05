@@ -1,0 +1,15 @@
+#import "./featureFragment.gql"
+#import "./pluginFragment.gql"
+
+fragment projectCurrent on Project {
+  id
+  name
+  path
+  favorite
+  features {
+    ...feature
+  }
+  plugins {
+    ...plugin
+  }
+}

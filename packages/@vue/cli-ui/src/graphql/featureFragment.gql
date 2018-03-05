@@ -1,0 +1,7 @@
+fragment feature on Feature {
+  id
+  label
+  description
+  link
+  enabled
+}

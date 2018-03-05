@@ -26,7 +26,6 @@
 
       <ApolloQuery
         v-else
-        ref="cwd"
         :query="require('@/graphql/cwd.gql')"
         class="current-path"
         v-tooltip="'Edit path'"
@@ -49,6 +48,36 @@
       />
 
       <VueButton
+        class="icon-button favorite-button"
+        :icon-left="folderCurrent.favorite ? 'star' : 'star_border'"
+        v-tooltip="'Toggle favorite'"
+        @click="toggleFavorite"
+      />
+
+      <VueDropdown>
+        <VueButton
+          slot="trigger"
+          icon-left="arrow_drop_down"
+          class="icon-button"
+          v-tooltip="'Favorite folders'"
+        />
+
+        <template v-if="foldersFavorite.length">
+          <VueDropdownButton
+            v-for="folder of foldersFavorite"
+            :key="folder.path"
+            :label="folder.path"
+            icon-left="folder"
+            @click="openFolder(folder.path)"
+          />
+        </template>
+
+        <div v-else class="vue-empty">
+          No favorite folders yet.
+        </div>
+      </VueDropdown>
+
+      <VueButton
         class="icon-button"
         icon-left="refresh"
         v-tooltip="'Refresh'"
@@ -56,29 +85,26 @@
       />
     </div>
 
-    <ApolloQuery
-      :query="require('@/graphql/folderCurrent.gql')"
-      class="folders"
-    >
-      <template slot-scope="{ result: { data } }">
-        <template v-if="data">
-          <FolderExplorerItem
-            v-for="folder of data.folderCurrent.children"
-            :key="folder.name"
-            :folder="folder"
-            @click.native="openFolder(folder.path)"
-          />
-        </template>
+    <div class="folders">
+      <template v-if="folderCurrent.children">
+        <FolderExplorerItem
+          v-for="folder of folderCurrent.children"
+          :key="folder.name"
+          :folder="folder"
+          @click.native="openFolder(folder.path)"
+        />
       </template>
-    </ApolloQuery>
+    </div>
   </div>
 </template>
 
 <script>
 import FolderExplorerItem from './FolderExplorerItem'
-import FOLDER_OPEN from '@/graphql/folderOpen.gql'
-import FOLDER_OPEN_PARENT from '@/graphql/folderOpenParent.gql'
-import FOLDER_CURRENT from '@/graphql/folderCurrent.gql'
+import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
+import FOLDERS_FAVORITE from '../graphql/foldersFavorite.gql'
+import FOLDER_OPEN from '../graphql/folderOpen.gql'
+import FOLDER_OPEN_PARENT from '../graphql/folderOpenParent.gql'
+import FOLDER_SET_FAVORITE from '../graphql/folderSetFavorite.gql'
 
 export default {
   components: {
@@ -90,7 +116,14 @@ export default {
       error: false,
       editingPath: false,
       editedPath: '',
+      folderCurrent: {},
+      foldersFavorite: [],
     }
+  },
+
+  apollo: {
+    folderCurrent: FOLDER_CURRENT,
+    foldersFavorite: FOLDERS_FAVORITE
   },
 
   methods: {
@@ -127,6 +160,30 @@ export default {
       }
     },
 
+    async toggleFavorite () {
+      await this.$apollo.mutate({
+        mutation: FOLDER_SET_FAVORITE,
+        variables: {
+          path: this.folderCurrent.path,
+          favorite: !this.folderCurrent.favorite
+        },
+        update: (store, { data: { folderSetFavorite } }) => {
+          store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderSetFavorite } })
+
+          const data = store.readQuery({ query: FOLDERS_FAVORITE })
+          if (folderSetFavorite.favorite) {
+            data.foldersFavorite.push(folderSetFavorite)
+          } else {
+            const index = data.foldersFavorite.findIndex(
+              f => f.path === folderSetFavorite.path
+            )
+            index !== -1 && data.foldersFavorite.splice(index, 1)
+          }
+          store.writeQuery({ query: FOLDERS_FAVORITE, data })
+        }
+      })
+    },
+
     cwdChangedUpdate (previousResult, { subscriptionData }) {
       return {
         cwd: subscriptionData.data.cwd
@@ -134,7 +191,7 @@ export default {
     },
 
     async openPathEdit () {
-      this.editedPath = this.$refs.cwd.result.data.cwd
+      this.editedPath = this.folderCurrent.path
       this.editingPath = true
       await this.$nextTick()
       this.$refs.pathInput.focus()
@@ -145,7 +202,7 @@ export default {
     },
 
     refreshFolder () {
-      this.openFolder(this.$refs.cwd.result.data.cwd)
+      this.openFolder(this.folderCurrent.path)
     }
   }
 }
@@ -156,7 +213,7 @@ export default {
 
 .toolbar
   padding 12px
-  background rgba($vue-color-light-neutral, .2)
+  background $color-light-background
   h-box()
   align-items center
 
@@ -172,6 +229,9 @@ export default {
   flex 100% 1 1
   > .vue-input
     width 100%
+
+.favorite-button
+  margin-right 4px
 
 .error-icon
   >>> svg

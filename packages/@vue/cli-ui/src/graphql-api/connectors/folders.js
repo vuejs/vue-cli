@@ -22,27 +22,28 @@ function list (base, context) {
   })
 }
 
-function generateFolder (file) {
+function generateFolder (file, context) {
   return {
     name: path.basename(file),
-    path: file
+    path: file,
+    favorite: context.db.get('foldersFavorite').find({ id: file }).size().value()
   }
 }
 
 function getCurrent (args, context) {
   const base = cwd.get()
-  return generateFolder(base)
+  return generateFolder(base, context)
 }
 
 function open (file, context) {
   cwd.set(file, context)
-  return generateFolder(file)
+  return generateFolder(file, context)
 }
 
 function openParent (file, context) {
   const newFile = path.dirname(file)
   cwd.set(newFile, context)
-  return generateFolder(newFile)
+  return generateFolder(newFile, context)
 }
 
 function isPackage (file, context) {
@@ -56,11 +57,29 @@ function isVueProject (file, context) {
   return contents.includes('@vue/cli-service')
 }
 
+function listFavorite (context) {
+  return context.db.get('foldersFavorite').value().map(
+    file => generateFolder(file.id, context)
+  )
+}
+
+function setFavorite ({ file, favorite }, context) {
+  const collection = context.db.get('foldersFavorite')
+  if (favorite) {
+    collection.push({ id: file }).write()
+  } else {
+    collection.remove({ id: file }).write()
+  }
+  return generateFolder(file, context)
+}
+
 module.exports = {
   getCurrent,
   list,
   open,
   openParent,
   isPackage,
-  isVueProject
+  isVueProject,
+  listFavorite,
+  setFavorite
 }

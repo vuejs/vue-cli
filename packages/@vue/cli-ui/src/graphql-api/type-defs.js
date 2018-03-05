@@ -21,6 +21,7 @@ type Folder {
   path: String!
   isPackage: Boolean
   isVueProject: Boolean
+  favorite: Boolean
   children: [Folder]
 }
 
@@ -114,6 +115,7 @@ input PromptInput {
 type Query {
   cwd: String!
   folderCurrent: Folder
+  foldersFavorite: [Folder]
   projects: [Project]
   projectCurrent: Project
   pluginSearch (input: PluginSearchInput!): [Plugin]
@@ -122,6 +124,7 @@ type Query {
 type Mutation {
   folderOpen (path: String!): Folder
   folderOpenParent: Folder
+  folderSetFavorite (path: String!, favorite: Boolean!): Folder
   projectCreate (input: ProjectCreateInput!): Project!
   projectImport (input: ProjectImportInput!): Project!
   projectOpen (id: ID!): Project!

@@ -20,6 +20,7 @@
     "apollo-link-context": "^1.0.5",
     "apollo-link-http": "^1.0.0",
     "apollo-link-persisted-queries": "^0.1.0",
+    "apollo-link-state": "^0.4.0",
     "apollo-link-ws": "^1.0.0",
     "apollo-upload-client": "^7.0.0-alpha.4",
     "apollo-utilities": "^1.0.1",
@@ -36,8 +37,7 @@
     "vue-apollo": "^3.0.0-alpha.1",
     "vue-cli-plugin-apollo": "^0.4.1",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.5.13",
-    "vuex": "^3.0.1"
+    "vue-template-compiler": "^2.5.13"
   },
   "browserslist": [
     "> 1%",
@@ -62,5 +62,8 @@
       "vue-cli-service lint",
       "git add"
     ]
+  },
+  "dependencies": {
+    "eslint": "^4.16.0"
   }
 }

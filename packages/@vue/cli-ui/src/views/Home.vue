@@ -1,22 +1,44 @@
 <template>
   <div class="home page">
-    <FolderExplorer/>
+    <ProjectNav/>
+
+    <div class="content">
+      <router-view/>
+    </div>
+
+    <StatusBar/>
   </div>
 </template>
 
 <script>
-import FolderExplorer from '../components/FolderExplorer'
+import ProjectNav from '../components/ProjectNav'
+import StatusBar from '../components/StatusBar'
 
 export default {
   name: 'home',
 
   components: {
-    FolderExplorer
+    ProjectNav,
+    StatusBar
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-.folder-explorer
-  height 100%
+@import "~@/style/imports"
+
+.home
+  display grid
+  grid-template-columns 46px 1fr
+  grid-template-rows auto 28px
+  grid-template-areas "side-left content" "footer footer"
+
+.project-nav
+  grid-area side-left
+
+.content
+  grid-area content
+
+.status-bar
+  grid-area footer
 </style>
