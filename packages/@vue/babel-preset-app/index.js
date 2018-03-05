@@ -8,9 +8,9 @@ module.exports = (context, options = {}) => {
   if (options.jsx !== false) {
     plugins.push(
       require('@babel/plugin-syntax-jsx'),
-      require('babel-plugin-transform-vue-jsx'),
-      require('babel-plugin-jsx-event-modifiers'),
-      require('babel-plugin-jsx-v-model')
+      require('babel-plugin-transform-vue-jsx')
+      // require('babel-plugin-jsx-event-modifiers'),
+      // require('babel-plugin-jsx-v-model')
     )
   }
 
