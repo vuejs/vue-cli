@@ -15,7 +15,8 @@ module.exports = {
     folderCurrent: (root, args, context) => folders.getCurrent(args, context),
     foldersFavorite: (root, args, context) => folders.listFavorite(context),
     projects: (root, args, context) => projects.list(context),
-    projectCurrent: (root, args, context) => projects.getCurrent(context)
+    projectCurrent: (root, args, context) => projects.getCurrent(context),
+    projectCreation: (root, args, context) => projects.getCreation(context)
   },
 
   Mutation: {

@@ -35,7 +35,7 @@
       @click="$emit('console')"
     >
       <VueIcon icon="subtitles"/>
-      <span>{{ consoleLog }}</span>
+      <span v-if="consoleLog">{{ consoleLog }}</span>
     </div>
   </div>
 </template>

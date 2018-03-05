@@ -1,7 +1,7 @@
 const chalk = require('chalk')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
 
-module.exports = function formatFeatures (preset, lead, joiner) {
+exports.getFeatures = (preset) => {
   const features = []
   if (preset.router) {
     features.push('vue-router')
@@ -16,6 +16,11 @@ module.exports = function formatFeatures (preset, lead, joiner) {
     return dep !== '@vue/cli-service'
   })
   features.push.apply(features, plugins)
+  return features
+}
+
+exports.formatFeatures = (preset, lead, joiner) => {
+  const features = exports.getFeatures(preset)
   return features.map(dep => {
     dep = toShortPluginId(dep)
     return `${lead || ''}${chalk.yellow(dep)}`

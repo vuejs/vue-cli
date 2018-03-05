@@ -5,6 +5,7 @@ const rimraf = require('rimraf')
 const inquirer = require('inquirer')
 const Creator = require('./Creator')
 const clearConsole = require('./util/clearConsole')
+const { getPromptModules } = require('./util/createTools')
 const { error, stopSpinner } = require('@vue/cli-shared-utils')
 
 async function create (projectName, options) {
@@ -50,19 +51,7 @@ async function create (projectName, options) {
     }
   }
 
-  const promptModules = [
-    'babel',
-    'typescript',
-    'pwa',
-    'router',
-    'vuex',
-    'cssPreprocessors',
-    'linter',
-    'unit',
-    'e2e'
-  ].map(file => require(`./promptModules/${file}`))
-
-  const creator = new Creator(name, targetDir, promptModules)
+  const creator = new Creator(name, targetDir, getPromptModules())
   await creator.create(options)
 }
 

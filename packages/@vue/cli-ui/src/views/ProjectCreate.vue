@@ -85,6 +85,55 @@
           label="Presets"
           icon="check_circle"
           :disabled="!detailsValid"
+          lazy
+        >
+          <div class="content vue-disable-scroll">
+            <div class="vue-text info banner">
+              <VueIcon icon="info" class="big"/>
+              <span>A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.</span>
+            </div>
+
+            <div class="cta-text">Select a preset:</div>
+
+            <ProjectPresetItem
+              v-for="preset of projectCreation.presets"
+              :key="preset.id"
+              :preset="preset"
+              :selected="preset.id === selectedPreset"
+              @click.native="selectPreset(preset.id)"
+            />
+
+            <ProjectPresetItem
+              :preset="remotePresetInfo"
+              :selected="selectedPreset === 'remote'"
+              @click.native="selectPreset('remote')"
+            />
+          </div>
+
+          <div class="actions-bar">
+            <VueButton
+              icon-left="arrow_back"
+              label="Previous"
+              class="big"
+              @click="$refs.wizard.previous()"
+            />
+
+            <VueButton
+              icon-right="arrow_forward"
+              label="Next"
+              class="big primary"
+              :disabled="!selectedPreset"
+              @click="$refs.wizard.next()"
+            />
+          </div>
+        </VueTab>
+
+        <VueTab
+          id="features"
+          label="Features"
+          icon="device_hub"
+          :disabled="!detailsValid || !presetValid"
+          lazy
         >
           <div class="content">
 
@@ -108,10 +157,11 @@
         </VueTab>
 
         <VueTab
-          id="features"
-          label="Features"
+          id="plugins"
+          label="Plugins"
           icon="widgets"
-          :disabled="!detailsValid"
+          :disabled="!detailsValid || !presetValid"
+          lazy
         >
           <div class="content">
 
@@ -138,7 +188,8 @@
           id="config"
           label="Configuration"
           icon="settings_applications"
-          :disabled="!detailsValid"
+          :disabled="!detailsValid || !presetValid"
+          lazy
         >
           <div class="content">
 
@@ -163,30 +214,81 @@
     </div>
 
     <StatusBar cwd/>
+
+    <VueModal
+      v-if="remotePreset.openModal"
+      title="Configure Remote preset"
+      class="medium"
+      @close="remotePreset.openModal = false"
+    >
+      <div class="default-body">
+        <div class="vue-empty">
+          <VueIcon icon="cake" class="large"/>
+          <div>Available soon...</div>
+        </div>
+      </div>
+    </VueModal>
   </div>
 </template>
 
 <script>
-import StepWizard from '../components/StepWizard'
+import ProjectPresetItem from '../components/ProjectPresetItem'
 import StatusBar from '../components/StatusBar'
+import StepWizard from '../components/StepWizard'
+
+import PROJECT_CREATION from '../graphql/projectCreation.gql'
+import PROJECT_INIT_CREATE from '../graphql/projectInitCreate.gql'
 
 export default {
   components: {
-    StepWizard,
-    StatusBar
+    ProjectPresetItem,
+    StatusBar,
+    StepWizard
   },
 
   data () {
     return {
-      folder: '',
+      folder: 'test-app',
       force: false,
-      packageManager: undefined
+      packageManager: undefined,
+      projectCreation: null,
+      selectedPreset: null,
+      remotePreset: {
+        url: '',
+        openModal: false
+      }
     }
+  },
+
+  apollo: {
+    projectCreation: PROJECT_CREATION
   },
 
   computed: {
     detailsValid () {
       return !!this.folder
+    },
+
+    presetValid () {
+      return !!this.selectedPreset
+    },
+
+    remotePresetInfo () {
+      return {
+        name: 'Remote preset',
+        description: 'Fetch a preset from a git repository'
+      }
+    }
+  },
+
+  methods: {
+    selectPreset (id) {
+      if (id === 'remote') {
+        this.remotePreset.openModal = true
+        return
+      }
+
+      this.selectedPreset = id
     }
   }
 }

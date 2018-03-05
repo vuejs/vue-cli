@@ -1,0 +1,7 @@
+#import "./presetFragment.gql"
+
+fragment projectCreation on ProjectCreation {
+  presets {
+    ...preset
+  }
+}

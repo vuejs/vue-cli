@@ -11,7 +11,7 @@ const { installDeps } = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
-const formatFeatures = require('./util/formatFeatures')
+const { formatFeatures } = require('./util/features')
 const setupDevProject = require('./util/setupDevProject')
 const fetchRemotePreset = require('./util/fetchRemotePreset')
 
@@ -269,9 +269,13 @@ module.exports = class Creator {
     })
   }
 
-  resolveIntroPrompts () {
+  getPresets () {
     const savedOptions = loadOptions()
-    const presets = Object.assign({}, savedOptions.presets, defaults.presets)
+    return Object.assign({}, savedOptions.presets, defaults.presets)
+  }
+
+  resolveIntroPrompts () {
+    const presets = this.getPresets()
     const presetChoices = Object.keys(presets).map(name => {
       return {
         name: `${name} (${formatFeatures(presets[name])})`,

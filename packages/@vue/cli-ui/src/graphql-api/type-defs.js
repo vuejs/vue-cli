@@ -119,12 +119,24 @@ input PromptInput {
   value: String!
 }
 
+type Preset {
+  id: ID!
+  name: String
+  description: String
+  features: [String]
+}
+
+type ProjectCreation {
+  presets: [Preset]
+}
+
 type Query {
   cwd: String!
   folderCurrent: Folder
   foldersFavorite: [Folder]
   projects: [Project]
   projectCurrent: Project
+  projectCreation: ProjectCreation
   pluginSearch (input: PluginSearchInput!): [Plugin]
 }
 
