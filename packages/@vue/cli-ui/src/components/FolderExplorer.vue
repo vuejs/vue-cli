@@ -54,7 +54,9 @@
         @click="toggleFavorite"
       />
 
-      <VueDropdown>
+      <VueDropdown
+        placement="bottom-end"
+      >
         <VueButton
           slot="trigger"
           icon-left="arrow_drop_down"
