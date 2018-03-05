@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const execa = require('execa')
 const chalk = require('chalk')
+const globby = require('globby')
 const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
@@ -25,6 +26,20 @@ function load (request, context) {
   if (resolvedPath) {
     return require(resolvedPath)
   }
+}
+
+async function readFiles (context) {
+  const files = await globby(['**'], {
+    cwd: context,
+    onlyFiles: true,
+    gitignore: true,
+    ignore: ['**node_modules**']
+  })
+  const res = {}
+  for (const file of files) {
+    res[file] = fs.readFileSync(path.resolve(context, file), 'utf-8')
+  }
+  return res
 }
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
@@ -84,6 +99,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   const generator = new Generator(context, {
     pkg,
     plugins: [plugin],
+    files: await readFiles(context),
     completeCbs: createCompleteCbs
   })
 
