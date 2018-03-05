@@ -1,10 +1,7 @@
+#import "./folderCurrentFragment.gql"
+
 mutation ($path: String!) {
   folderOpen(path: $path) {
-    name
-    path
-    children {
-      name
-      path
-    }
+    ...folderCurrent
   }
 }

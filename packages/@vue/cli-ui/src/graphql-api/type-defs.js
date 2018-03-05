@@ -19,6 +19,8 @@ enum ConsoleLogType {
 type Folder {
   name: String!
   path: String!
+  isPackage: Boolean
+  isVueProject: Boolean
   children: [Folder]
 }
 
@@ -122,6 +124,7 @@ type Mutation {
   folderOpenParent: Folder
   projectCreate (input: ProjectCreateInput!): Project!
   projectImport (input: ProjectImportInput!): Project!
+  projectOpen (id: ID!): Project!
   projectSetFavorite (id: ID!, favorite: Int!): Project!
   pluginAdd (id: ID!): Plugin
   promptAnswer (input: PromptInput!): Prompt

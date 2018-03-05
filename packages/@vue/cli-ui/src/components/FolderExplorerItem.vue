@@ -1,7 +1,14 @@
 <template>
   <div class="foder-explorer-item">
-    <VueIcon icon="folder" class="folder-icon big"/>
-    <div class="folder-name">{{ folder.name }}</div>
+    <VueIcon :icon="folder.isPackage ? 'folder' : 'folder_open'" class="folder-icon big"/>
+    <div class="folder-name">
+      {{ folder.name }}
+      <img
+        v-if="folder.isVueProject"
+        class="vue-project-icon"
+        src="~@/assets/logo.png"
+      >
+    </div>
   </div>
 </template>
 
@@ -29,12 +36,20 @@ export default {
   margin-left 12px
   ellipsis()
 
+.vue-project-icon
+  width 14px
+  height @width
+  vertical-align top
+  position relative
+  top 5px
+
 .foder-explorer-item
   padding 12px
   h-box()
   align-items center
   user-select none
   cursor pointer
+  position relative
 
   &:hover
     background rgba($vue-color-primary, .1)

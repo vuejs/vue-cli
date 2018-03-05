@@ -1,0 +1,10 @@
+fragment folderCurrent on Folder {
+  name
+  path
+  children {
+    name
+    path
+    isPackage
+    isVueProject
+  }
+}

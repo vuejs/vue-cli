@@ -1,10 +1,7 @@
+#import "./folderCurrentFragment.gql"
+
 {
   folderCurrent {
-    name
-    path
-    children {
-      name
-      path
-    }
+    ...folderCurrent
   }
 }

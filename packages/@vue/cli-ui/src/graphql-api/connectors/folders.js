@@ -45,9 +45,22 @@ function openParent (file, context) {
   return generateFolder(newFile)
 }
 
+function isPackage (file, context) {
+  return fs.existsSync(path.join(file, 'package.json'))
+}
+
+function isVueProject (file, context) {
+  if (!isPackage(file)) return false
+
+  const contents = fs.readFileSync(path.join(file, 'package.json'), { encoding: 'utf8' })
+  return contents.includes('@vue/cli-service')
+}
+
 module.exports = {
   getCurrent,
   list,
   open,
-  openParent
+  openParent,
+  isPackage,
+  isVueProject
 }

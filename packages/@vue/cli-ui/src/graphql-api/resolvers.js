@@ -5,7 +5,9 @@ const projects = require('./connectors/projects')
 
 module.exports = {
   Folder: {
-    children: (folder, args, context) => folders.list(folder.path, context)
+    children: (folder, args, context) => folders.list(folder.path, context),
+    isPackage: (folder, args, context) => folders.isPackage(folder.path, context),
+    isVueProject: (folder, args, context) => folders.isVueProject(folder.path, context)
   },
 
   Query: {

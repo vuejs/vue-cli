@@ -1,15 +1,36 @@
 <template>
-  <div class="folder-explorer">
+  <div
+    class="folder-explorer"
+    :class="{
+      error
+    }"
+  >
     <div class="toolbar">
       <VueButton
         class="icon-button"
         icon-left="keyboard_arrow_up"
+        v-tooltip="'Open parent folder'"
         @click="openParentFolder"
       />
 
+      <div v-if="editingPath" class="path-edit">
+        <VueInput
+          ref="pathInput"
+          v-model="editedPath"
+          placeholder="Enter the full path to a folder"
+          icon-left="edit"
+          @keyup.esc="editingPath = false"
+          @keyup.enter="submitPathEdit()"
+        />
+      </div>
+
       <ApolloQuery
+        v-else
+        ref="cwd"
         :query="require('@/graphql/cwd.gql')"
         class="current-path"
+        v-tooltip="'Edit path'"
+        @click.native="openPathEdit()"
       >
         <ApolloSubscribeToMore
           :document="require('@/graphql/cwdChanged.gql')"
@@ -20,6 +41,19 @@
           <span v-if="data">{{ data.cwd }}</span>
         </template>
       </ApolloQuery>
+
+      <VueIcon
+        v-if="error"
+        icon="error"
+        class="error-icon big"
+      />
+
+      <VueButton
+        class="icon-button"
+        icon-left="refresh"
+        v-tooltip="'Refresh'"
+        @click="refreshFolder"
+      />
     </div>
 
     <ApolloQuery
@@ -32,7 +66,7 @@
             v-for="folder of data.folderCurrent.children"
             :key="folder.name"
             :folder="folder"
-            @click.native="openFolder(folder)"
+            @click.native="openFolder(folder.path)"
           />
         </template>
       </template>
@@ -51,32 +85,67 @@ export default {
     FolderExplorerItem,
   },
 
+  data () {
+    return {
+      error: false,
+      editingPath: false,
+      editedPath: '',
+    }
+  },
+
   methods: {
-    openFolder (folder) {
-      this.$apollo.mutate({
-        mutation: FOLDER_OPEN,
-        variables: {
-          path: folder.path
-        },
-        update: (store, { data: { folderOpen } }) => {
-          store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderOpen } })
-        }
-      })
+    async openFolder (path) {
+      this.editingPath = false
+      this.error = false
+      try {
+        await this.$apollo.mutate({
+          mutation: FOLDER_OPEN,
+          variables: {
+            path
+          },
+          update: (store, { data: { folderOpen } }) => {
+            store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderOpen } })
+          }
+        })
+      } catch (e) {
+        this.error = true
+      }
     },
 
-    openParentFolder (folder) {
-      this.$apollo.mutate({
-        mutation: FOLDER_OPEN_PARENT,
-        update: (store, { data: { folderOpenParent } }) => {
-          store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderOpenParent } })
-        }
-      })
+    async openParentFolder (folder) {
+      this.editingPath = false
+      this.error = false
+      try {
+        await this.$apollo.mutate({
+          mutation: FOLDER_OPEN_PARENT,
+          update: (store, { data: { folderOpenParent } }) => {
+            store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderOpenParent } })
+          }
+        })
+      } catch (e) {
+        this.error = true
+      }
     },
 
     cwdChangedUpdate (previousResult, { subscriptionData }) {
       return {
         cwd: subscriptionData.data.cwd
       }
+    },
+
+    async openPathEdit () {
+      this.editedPath = this.$refs.cwd.result.data.cwd
+      this.editingPath = true
+      await this.$nextTick()
+      this.$refs.pathInput.focus()
+    },
+
+    submitPathEdit () {
+      this.openFolder(this.editedPath)
+    },
+
+    refreshFolder () {
+      this.openFolder(this.$refs.cwd.result.data.cwd)
     }
   }
 }
@@ -91,8 +160,25 @@ export default {
   h-box()
   align-items center
 
+  >>> > *
+    space-between-x(12px)
+
 .current-path
   flex 100% 1 1
   ellipsis()
-  margin-left 12px
+  cursor pointer
+
+.path-edit
+  flex 100% 1 1
+  > .vue-input
+    width 100%
+
+.error-icon
+  >>> svg
+    fill $vue-color-danger
+
+.folder-explorer
+  &.error
+    .current-path
+      color $vue-color-danger
 </style>
