@@ -9,7 +9,7 @@ module.exports = async function launchPuppeteer (url) {
   const page = await browser.newPage()
 
   const logs = []
-  page.on('console', msg => logs.push(msg.text))
+  page.on('console', msg => logs.push(msg.text()))
 
   await page.goto(url)
 
