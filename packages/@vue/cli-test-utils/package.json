@@ -22,6 +22,6 @@
   },
   "dependencies": {
     "execa": "^0.8.0",
-    "puppeteer": "^0.13.0"
+    "puppeteer": "^1.0.0"
   }
 }

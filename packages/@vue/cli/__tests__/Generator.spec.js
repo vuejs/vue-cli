@@ -44,25 +44,28 @@ qux($1)
 
 test('api: extendPackage', async () => {
   const generator = new Generator('/', {
-    name: 'hello',
-    list: [1],
-    vue: {
-      foo: 1,
-      bar: 2
-    }
-  }, [{
-    id: 'test',
-    apply: api => {
-      api.extendPackage({
-        name: 'hello2',
-        list: [2],
-        vue: {
-          foo: 2,
-          baz: 3
-        }
-      })
-    }
-  }])
+    pkg: {
+      name: 'hello',
+      list: [1],
+      vue: {
+        foo: 1,
+        bar: 2
+      }
+    },
+    plugins: [{
+      id: 'test',
+      apply: api => {
+        api.extendPackage({
+          name: 'hello2',
+          list: [2],
+          vue: {
+            foo: 2,
+            baz: 3
+          }
+        })
+      }
+    }]
+  })
 
   await generator.generate()
 
@@ -79,14 +82,17 @@ test('api: extendPackage', async () => {
 })
 
 test('api: extendPackage function', async () => {
-  const generator = new Generator('/', { foo: 1 }, [{
-    id: 'test',
-    apply: api => {
-      api.extendPackage(pkg => ({
-        foo: pkg.foo + 1
-      }))
-    }
-  }])
+  const generator = new Generator('/', {
+    pkg: { foo: 1 },
+    plugins: [{
+      id: 'test',
+      apply: api => {
+        api.extendPackage(pkg => ({
+          foo: pkg.foo + 1
+        }))
+      }
+    }]
+  })
 
   await generator.generate()
 
@@ -97,7 +103,7 @@ test('api: extendPackage function', async () => {
 })
 
 test('api: extendPackage merge dependencies', async () => {
-  const generator = new Generator('/', {}, [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -120,7 +126,7 @@ test('api: extendPackage merge dependencies', async () => {
         })
       }
     }
-  ])
+  ] })
 
   await generator.generate()
 
@@ -135,7 +141,7 @@ test('api: extendPackage merge dependencies', async () => {
 })
 
 test('api: warn invalid dep range', async () => {
-  new Generator('/', {}, [
+  new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -146,7 +152,7 @@ test('api: warn invalid dep range', async () => {
         })
       }
     }
-  ])
+  ] })
 
   expect(logs.warn.some(([msg]) => {
     return (
@@ -157,7 +163,7 @@ test('api: warn invalid dep range', async () => {
 })
 
 test('api: extendPackage dependencies conflict', async () => {
-  new Generator('/', {}, [
+  new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -178,7 +184,7 @@ test('api: extendPackage dependencies conflict', async () => {
         })
       }
     }
-  ])
+  ] })
 
   expect(logs.warn.some(([msg]) => {
     return (
@@ -191,7 +197,7 @@ test('api: extendPackage dependencies conflict', async () => {
 })
 
 test('api: render fs directory', async () => {
-  const generator = new Generator('/', {}, [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -201,7 +207,7 @@ test('api: render fs directory', async () => {
         n: 1
       }
     }
-  ])
+  ] })
 
   await generator.generate()
 
@@ -212,7 +218,7 @@ test('api: render fs directory', async () => {
 })
 
 test('api: render object', async () => {
-  const generator = new Generator('/', {}, [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -225,7 +231,7 @@ test('api: render object', async () => {
         n: 2
       }
     }
-  ])
+  ] })
 
   await generator.generate()
 
@@ -234,7 +240,7 @@ test('api: render object', async () => {
 })
 
 test('api: render middleware', async () => {
-  const generator = new Generator('/', {}, [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: (api, options) => {
@@ -247,7 +253,7 @@ test('api: render middleware', async () => {
         n: 3
       }
     }
-  ])
+  ] })
 
   await generator.generate()
 
@@ -256,7 +262,7 @@ test('api: render middleware', async () => {
 })
 
 test('api: hasPlugin', () => {
-  new Generator('/', {}, [
+  new Generator('/', { plugins: [
     {
       id: 'foo',
       apply: api => {
@@ -275,32 +281,35 @@ test('api: hasPlugin', () => {
       id: '@vue/cli-plugin-baz',
       apply: () => {}
     }
-  ])
+  ] })
 })
 
 test('api: onCreateComplete', () => {
   const fn = () => {}
   const cbs = []
-  new Generator('/', {}, [
-    {
-      id: 'test',
-      apply: api => {
-        api.onCreateComplete(fn)
+  new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.onCreateComplete(fn)
+        }
       }
-    }
-  ], cbs)
+    ],
+    completeCbs: cbs
+  })
   expect(cbs).toContain(fn)
 })
 
 test('api: resolve', () => {
-  new Generator('/foo/bar', {}, [
+  new Generator('/foo/bar', { plugins: [
     {
       id: 'test',
       apply: api => {
         expect(api.resolve('baz')).toBe(path.resolve('/foo/bar', 'baz'))
       }
     }
-  ])
+  ] })
 })
 
 test('extract config files', async () => {
@@ -322,14 +331,14 @@ test('extract config files', async () => {
     }
   }
 
-  const generator = new Generator('/', {}, [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test',
       apply: api => {
         api.extendPackage(configs)
       }
     }
-  ])
+  ] })
 
   await generator.generate({
     extractConfigFiles: true

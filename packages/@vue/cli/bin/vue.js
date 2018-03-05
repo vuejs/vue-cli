@@ -36,22 +36,15 @@ program
 program
   .command('create <app-name>')
   .description('create a new project powered by vue-cli-service')
-  .option('-p, --preset <presetName>', 'Skip prompts and use saved preset')
+  .option('-p, --preset <presetName>', 'Skip prompts and use saved or remote preset')
   .option('-d, --default', 'Skip prompts and use default preset')
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
   .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
   .option('-f, --force', 'Overwrite target directory if it exists')
+  .option('-c, --clone', 'Use git clone when fetching remote preset')
   .action((name, cmd) => {
     require('../lib/create')(name, cleanArgs(cmd))
-  })
-
-program
-  .command('invoke <plugin> [pluginOptions]')
-  .allowUnknownOption()
-  .description('invoke the generator of a plugin in an already created project')
-  .action((plugin) => {
-    require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
@@ -60,6 +53,14 @@ program
   .description('install a plugin and invoke its generator in an already created project')
   .action((plugin) => {
     require('../lib/add')(plugin, minimist(process.argv.slice(3)))
+  })
+
+program
+  .command('invoke <plugin> [pluginOptions]')
+  .allowUnknownOption()
+  .description('invoke the generator of a plugin in an already created project')
+  .action((plugin) => {
+    require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
   })
 
 program

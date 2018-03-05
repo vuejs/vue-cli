@@ -1,4 +1,4 @@
-jest.setTimeout(12000)
+jest.setTimeout(20000)
 jest.mock('inquirer')
 
 const invoke = require('../lib/invoke')

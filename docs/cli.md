@@ -3,6 +3,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Creating a New Project](#creating-a-new-project)
+- [Presets](#presets)
 - [Zero-config Prototyping](#zero-config-prototyping)
 - [Installing Plugins in an Existing Project](#installing-plugins-in-an-existing-project)
 - [Inspecting the webpack Config](#inspecting-the-projects-webpack-config)
@@ -59,9 +60,61 @@ vue create my-project
   <img width="682px" src="https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/screenshot.png">
 </p>
 
-#### Presets
+### Presets
 
-After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects. If you want to delete a saved preset, you can do that by editing `~/.vuerc`.
+After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects. If you want to delete or tweak a saved preset, you can do that by editing `~/.vuerc`.
+
+A preset is defined in JSON. If you have saved a preset via the command line and then open `~/.vuerc`, you will find something like the following:
+
+``` json
+{
+  "useConfigFiles": true,
+  "router": true,
+  "vuex": true,
+  "cssPreprocessor": "sass",
+  "plugins": {
+    "@vue/cli-plugin-babel": {},
+    "@vue/cli-plugin-eslint": {
+      "config": "airbnb",
+      "lintOn": ["save", "commit"]
+    }
+  }
+}
+```
+
+The preset data is used by plugin generators to generate corresponding project files. In addition to the above fields, you can also add additional configuration for integrated tools:
+
+
+``` js
+{
+  "useConfigFiles": true,
+  "plugins": {...},
+  "configs": {
+    "vue": {...},
+    "postcss": {...},
+    "eslintConfig": {...},
+    "jest": {...}
+  }
+}
+```
+
+These additional configurations will be merged into `package.json` or corresponding config files, depending on the value of `useConfigFiles`. For example, with `"useConfigFiles": true`, the value of `configs.vue` will be merged into `vue.config.js`.
+
+#### Remote Presets
+
+You can share a preset with other developers by publishing it in a git repo. The repo should contain a `preset.json` file containing the preset data. You can then use the `--preset` option to use the remote preset when creating a project:
+
+``` sh
+# use preset from GitHub repo
+vue create --preset username/repo my-project
+```
+
+GitLab and BitBucket are also supported. Make sure to use the `--clone` option if fetching from private repos:
+
+``` sh
+vue create --preset gitlab:username/repo --clone my-project
+vue create --preset bitbucket:username/repo --clone my-project
+```
 
 ### Zero-config Prototyping
 

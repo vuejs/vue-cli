@@ -66,4 +66,9 @@ module.exports = (api, options) => {
       devDependencies: deps[options.cssPreprocessor]
     })
   }
+
+  // additional tooling configurations
+  if (options.configs) {
+    api.extendPackage(options.configs)
+  }
 }
