@@ -81,12 +81,11 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   }
 
   const createCompleteCbs = []
-  const generator = new Generator(
-    context,
+  const generator = new Generator(context, {
     pkg,
-    [plugin],
-    createCompleteCbs
-  )
+    plugins: [plugin],
+    completeCbs: createCompleteCbs
+  })
 
   log()
   logWithSpinner('🚀', `Invoking generator for ${id}...`)

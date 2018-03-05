@@ -17,7 +17,12 @@ const logTypes = {
 }
 
 module.exports = class Generator {
-  constructor (context, pkg, plugins, completeCbs = []) {
+  constructor (context, {
+    pkg = {},
+    plugins = [],
+    completeCbs = [],
+    files = {}
+  } = {}) {
     this.context = context
     this.plugins = plugins
     this.originalPkg = pkg
@@ -27,7 +32,7 @@ module.exports = class Generator {
     // for conflict resolution
     this.depSources = {}
     // virtual file tree
-    this.files = {}
+    this.files = files
     this.fileMiddlewares = []
     this.postProcessFilesCbs = []
     // exit messages

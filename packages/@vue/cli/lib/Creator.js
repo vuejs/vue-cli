@@ -133,12 +133,11 @@ module.exports = class Creator {
     log()
     log(`🚀  Invoking generators...`)
     const plugins = this.resolvePlugins(preset.plugins)
-    const generator = new Generator(
-      context,
+    const generator = new Generator(context, {
       pkg,
       plugins,
-      createCompleteCbs
-    )
+      completeCbs: createCompleteCbs
+    })
     await generator.generate({
       extractConfigFiles: preset.useConfigFiles
     })
