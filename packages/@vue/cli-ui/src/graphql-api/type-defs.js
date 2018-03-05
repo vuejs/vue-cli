@@ -16,6 +16,11 @@ enum ConsoleLogType {
   done
 }
 
+enum PackageManager {
+  npm
+  yarn
+}
+
 type Folder {
   name: String!
   path: String!
@@ -36,6 +41,8 @@ type Project {
 
 input ProjectCreateInput {
   path: String!
+  force: Boolean!
+  packageManager: PackageManager
 }
 
 input ProjectImportInput {

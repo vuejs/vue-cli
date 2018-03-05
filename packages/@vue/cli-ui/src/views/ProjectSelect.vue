@@ -1,6 +1,10 @@
 <template>
   <div class="project-select page">
-    <VueTabs class="main-tabs" group-class="accent">
+    <VueTabs
+      :tab-id.sync="tab"
+      class="main-tabs"
+      group-class="accent"
+    >
       <VueTab
         id="existing"
         label="Projects"
@@ -16,11 +20,12 @@
       >
         <FolderExplorer/>
 
-        <div class="actions">
+        <div class="actions-bar">
           <VueButton
             icon-left="add"
-            label="Create new project here"
+            label="Create a new project here"
             class="big primary"
+            :to="{ name: 'project-create' }"
           />
         </div>
       </VueTab>
@@ -32,7 +37,7 @@
       >
         <FolderExplorer/>
 
-        <div class="actions">
+        <div class="actions-bar">
           <VueButton
             icon-left="unarchive"
             label="Import this folder"
@@ -59,12 +64,18 @@ export default {
 
   data () {
     return {
-      folderCurrent: {}
+      folderCurrent: {},
+      tab: undefined
     }
   },
 
   apollo: {
     folderCurrent: FOLDER_CURRENT
+  },
+
+  async mounted () {
+    await this.$nextTick()
+    this.tab = this.$route.query.tab
   }
 }
 </script>
@@ -76,11 +87,8 @@ export default {
   height 100%
   >>> .tabs
     background $vue-color-light-neutral
-    .vue-icon
-      width 24px
-      height @width
 
-  >>>.tabs-content
+  >>> .tabs-content
     height 0
 
 .vue-tab,
@@ -94,12 +102,6 @@ export default {
 
 .folder-explorer
   flex 100% 1 1
-
-.actions
-  padding 12px
-  background $color-light-background
-  h-box()
-  box-center()
 
 .project-select
   height 100%

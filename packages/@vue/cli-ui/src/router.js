@@ -4,6 +4,7 @@ import { apolloClient } from './vue-apollo'
 
 import Home from './views/Home.vue'
 import ProjectSelect from './views/ProjectSelect.vue'
+import ProjectCreate from './views/ProjectCreate.vue'
 import About from './views/About.vue'
 
 import PROJECT_CURRENT from './graphql/projectCurrent.gql'
@@ -25,6 +26,11 @@ const router = new Router({
       path: '/project/select',
       name: 'project-select',
       component: ProjectSelect
+    },
+    {
+      path: '/project/create',
+      name: 'project-create',
+      component: ProjectCreate
     },
     {
       path: '/about',

@@ -1,10 +1,39 @@
 <template>
   <div class="status-bar">
-    <div class="section current-project">
-      <span>Current Project:</span>
+    <div
+      class="section current-project"
+      v-tooltip="'Current project'"
+      @click="$emit('project')"
+    >
+      <VueIcon icon="work"/>
+      <span v-if="projectCurrent">{{ projectCurrent.name }}</span>
+      <span v-else class="label">No project</span>
     </div>
 
-    <div class="section console-log" v-tooltip="'Console'">
+    <ApolloQuery
+      :query="require('@/graphql/cwd.gql')"
+      class="section current-path"
+      v-tooltip="'Current Working Directory'"
+      @click.native="$emit('cwd')"
+    >
+      <ApolloSubscribeToMore
+        :document="require('@/graphql/cwdChanged.gql')"
+        :update-query="(previousResult, { subscriptionData }) => ({
+          cwd: subscriptionData.data.cwd
+        })"
+      />
+
+      <template slot-scope="{ result: { data } }">
+        <VueIcon icon="folder"/>
+        <span v-if="data">{{ data.cwd }}</span>
+      </template>
+    </ApolloQuery>
+
+    <div
+      class="section console-log"
+      v-tooltip="'Console'"
+      @click="$emit('console')"
+    >
       <VueIcon icon="subtitles"/>
       <span>{{ consoleLog }}</span>
     </div>
@@ -12,11 +41,18 @@
 </template>
 
 <script>
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
+
 export default {
   data () {
     return {
-      consoleLog: ''
+      consoleLog: '',
+      projectCurrent: null
     }
+  },
+
+  apollo: {
+    projectCurrent: PROJECT_CURRENT
   }
 }
 </script>
@@ -42,4 +78,10 @@ export default {
     &:hover
       opacity 1
       background lighten(@background, 40%)
+
+    > .vue-icon + *
+      margin-left 4px
+
+    .label
+      color lighten($vue-color-dark, 20%)
 </style>
