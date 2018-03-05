@@ -5,24 +5,11 @@ const globby = require('globby')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
-const { isOfficialPlugin, toShortPluginId } = require('@vue/cli-shared-utils')
+const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
 const isObject = val => val && typeof val === 'object'
-
-// get link for a 3rd party plugin.
-function getLink (id) {
-  let pkg = {}
-  try {
-    pkg = require(`${id}/package.json`)
-  } catch (e) {}
-  return (
-    pkg.homepage ||
-    (pkg.repository && pkg.repository.url) ||
-    `https://www.npmjs.com/package/${id.replace(`/`, `%2F`)}`
-  )
-}
 
 class GeneratorAPI {
   /**
@@ -39,15 +26,10 @@ class GeneratorAPI {
 
     this.pluginsData = generator.plugins
       .filter(({ id }) => id !== `@vue/cli-service`)
-      .map(({ id }) => {
-        const name = toShortPluginId(id)
-        return {
-          name: name,
-          link: isOfficialPlugin(id)
-            ? `https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-${name}`
-            : getLink(id)
-        }
-      })
+      .map(({ id }) => ({
+        name: toShortPluginId(id),
+        link: getPluginLink(id)
+      }))
   }
 
   /**
