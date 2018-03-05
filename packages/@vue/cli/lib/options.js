@@ -15,7 +15,8 @@ const presetSchema = createSchema(joi => joi.object().keys({
   router: joi.boolean(),
   vuex: joi.boolean(),
   cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
-  plugins: joi.object().required()
+  plugins: joi.object().required(),
+  configs: joi.object()
 }))
 
 const schema = createSchema(joi => joi.object().keys({
