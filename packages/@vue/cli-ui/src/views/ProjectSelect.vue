@@ -1,5 +1,5 @@
 <template>
-  <div class="project-select">
+  <div class="project-select page">
     <VueTabs class="main-tabs" group-class="accent">
       <VueTab
         id="existing"
