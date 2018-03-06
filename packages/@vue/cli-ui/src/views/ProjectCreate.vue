@@ -16,7 +16,7 @@
                   title="Project folder"
                 >
                   <VueInput
-                    v-model="folder"
+                    v-model="formData.folder"
                     placeholder="my-app"
                     icon-left="folder"
                     class="big"
@@ -32,7 +32,7 @@
                   title="Package manager"
                 >
                   <VueSelect
-                    v-model="packageManager"
+                    v-model="formData.packageManager"
                   >
                     <VueSelectButton
                       :value="undefined"
@@ -53,7 +53,7 @@
                   title="Additional options"
                 >
                   <VueSwitch
-                    v-model="force"
+                    v-model="formData.force"
                     class="extend-left"
                   >
                     Overwrite target directory if it exists
@@ -64,10 +64,10 @@
 
             <div class="actions-bar">
               <VueButton
-                :to="{ name: 'project-select' }"
                 icon-left="close"
                 label="Cancel"
                 class="big"
+                @click="showCancel = true"
               />
 
               <VueButton
@@ -100,14 +100,14 @@
                   v-for="preset of projectCreation.presets"
                   :key="preset.id"
                   :preset="preset"
-                  :selected="preset.id === selectedPreset"
+                  :selected="formData.selectedPreset === preset.id"
                   @click.native="selectPreset(preset.id)"
                 />
               </template>
 
               <ProjectPresetItem
                 :preset="remotePresetInfo"
-                :selected="selectedPreset === 'remote'"
+                :selected="formData.selectedPreset === 'remote'"
                 @click.native="selectPreset('remote')"
               />
             </div>
@@ -124,7 +124,7 @@
                 icon-right="arrow_forward"
                 label="Next"
                 class="big primary"
-                :disabled="!selectedPreset"
+                :disabled="!presetValid"
                 @click="next()"
               />
             </div>
@@ -219,16 +219,42 @@
     <StatusBar cwd/>
 
     <VueModal
-      v-if="remotePreset.openModal"
+      v-if="showRemotePreset"
       title="Configure Remote preset"
       class="medium"
-      @close="remotePreset.openModal = false"
+      @close="showRemotePreset = false"
     >
       <div class="default-body">
         <div class="vue-empty">
           <VueIcon icon="cake" class="large"/>
           <div>Available soon...</div>
         </div>
+      </div>
+    </VueModal>
+
+    <VueModal
+      v-if="showCancel"
+      title="Cancel and reset project creation"
+      class="small"
+      @close="showCancel = false"
+    >
+      <div class="default-body">
+        Are you sure you want to cancel the project creation?
+      </div>
+
+      <div slot="footer" class="actions end">
+        <VueButton
+          label="Go back"
+          @click="showCancel = false"
+        />
+
+        <VueButton
+          :to="{ name: 'project-select' }"
+          label="Clear project"
+          icon-left="delete_forever"
+          class="danger"
+          @click="cancel()"
+        />
       </div>
     </VueModal>
   </div>
@@ -242,6 +268,20 @@ import StepWizard from '../components/StepWizard'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
 import PROJECT_INIT_CREATE from '../graphql/projectInitCreate.gql'
 
+function formDataFactory () {
+  return {
+    folder: '',
+    force: false,
+    packageManager: undefined,
+    selectedPreset: null,
+    remotePreset: {
+      url: ''
+    }
+  }
+}
+
+let formData = formDataFactory()
+
 export default {
   components: {
     ProjectPresetItem,
@@ -251,15 +291,10 @@ export default {
 
   data () {
     return {
-      folder: 'test-app',
-      force: false,
-      packageManager: undefined,
+      formData: formData,
       projectCreation: null,
-      selectedPreset: null,
-      remotePreset: {
-        url: '',
-        openModal: false
-      }
+      showCancel: false,
+      showRemotePreset: false
     }
   },
 
@@ -269,11 +304,11 @@ export default {
 
   computed: {
     detailsValid () {
-      return !!this.folder
+      return !!this.formData.folder
     },
 
     presetValid () {
-      return !!this.selectedPreset
+      return !!this.formData.selectedPreset
     },
 
     remotePresetInfo () {
@@ -285,13 +320,17 @@ export default {
   },
 
   methods: {
+    cancel () {
+      formData = formDataFactory()
+    },
+
     selectPreset (id) {
       if (id === 'remote') {
-        this.remotePreset.openModal = true
+        this.showRemotePreset = true
         return
       }
 
-      this.selectedPreset = id
+      this.formData.selectedPreset = id
     }
   }
 }
