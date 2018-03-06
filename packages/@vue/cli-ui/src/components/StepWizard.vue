@@ -8,14 +8,21 @@
       ref="tabs"
       class="main-tabs"
       group-class="accent"
+      v-bind="$attrs"
+      v-on="$listeners"
     >
-      <slot/>
+      <slot
+        :next="next"
+        :previous="previous"
+      />
     </VueTabs>
   </div>
 </template>
 
 <script>
 export default {
+  inheritAttrs: false,
+
   props: {
     title: {
       type: String,

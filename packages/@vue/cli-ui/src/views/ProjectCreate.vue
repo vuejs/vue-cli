@@ -2,214 +2,217 @@
   <div class="project-create page">
     <div class="content">
       <StepWizard
-        ref="wizard"
         title="Create a new project"
       >
-        <VueTab
-          id="details"
-          label="Details"
-          icon="subject"
-        >
-          <div class="content">
-            <div class="project-details vue-grid col-1 big-gap">
-              <VueFormField
-                title="Project folder"
-              >
-                <VueInput
-                  v-model="folder"
-                  placeholder="my-app"
-                  icon-left="folder"
-                  class="big"
-                />
-
-                <VueButton
-                  label="Change current working directory"
-                  :to="{ name: 'project-select', query: { tab: 'create' } }"
-                />
-              </VueFormField>
-
-              <VueFormField
-                title="Package manager"
-              >
-                <VueSelect
-                  v-model="packageManager"
+        <template slot-scope="{ next, previous }">
+          <VueTab
+            id="details"
+            label="Details"
+            icon="subject"
+          >
+            <div class="content">
+              <div class="project-details vue-grid col-1 big-gap">
+                <VueFormField
+                  title="Project folder"
                 >
-                  <VueSelectButton
-                    :value="undefined"
-                    label="Default"
+                  <VueInput
+                    v-model="folder"
+                    placeholder="my-app"
+                    icon-left="folder"
+                    class="big"
                   />
-                  <VueSelectButton
-                    value="npm"
-                    label="npm"
-                  />
-                  <VueSelectButton
-                    value="yarn"
-                    label="yarn"
-                  />
-                </VueSelect>
-              </VueFormField>
 
-              <VueFormField
-                title="Additional options"
-              >
-                <VueSwitch
-                  v-model="force"
-                  class="extend-left"
+                  <VueButton
+                    label="Change current working directory"
+                    :to="{ name: 'project-select', query: { tab: 'create' } }"
+                  />
+                </VueFormField>
+
+                <VueFormField
+                  title="Package manager"
                 >
-                  Overwrite target directory if it exists
-                </VueSwitch>
-              </VueFormField>
-            </div>
-          </div>
+                  <VueSelect
+                    v-model="packageManager"
+                  >
+                    <VueSelectButton
+                      :value="undefined"
+                      label="Default"
+                    />
+                    <VueSelectButton
+                      value="npm"
+                      label="npm"
+                    />
+                    <VueSelectButton
+                      value="yarn"
+                      label="yarn"
+                    />
+                  </VueSelect>
+                </VueFormField>
 
-          <div class="actions-bar">
-            <VueButton
-              :to="{ name: 'project-select' }"
-              icon-left="close"
-              label="Cancel"
-              class="big"
-            />
-
-            <VueButton
-              icon-right="arrow_forward"
-              label="Next"
-              class="big primary"
-              :disabled="!detailsValid"
-              @click="$refs.wizard.next()"
-            />
-          </div>
-        </VueTab>
-
-        <VueTab
-          id="presets"
-          label="Presets"
-          icon="check_circle"
-          :disabled="!detailsValid"
-          lazy
-        >
-          <div class="content vue-disable-scroll">
-            <div class="vue-text info banner">
-              <VueIcon icon="info" class="big"/>
-              <span>A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.</span>
+                <VueFormField
+                  title="Additional options"
+                >
+                  <VueSwitch
+                    v-model="force"
+                    class="extend-left"
+                  >
+                    Overwrite target directory if it exists
+                  </VueSwitch>
+                </VueFormField>
+              </div>
             </div>
 
-            <div class="cta-text">Select a preset:</div>
+            <div class="actions-bar">
+              <VueButton
+                :to="{ name: 'project-select' }"
+                icon-left="close"
+                label="Cancel"
+                class="big"
+              />
 
-            <ProjectPresetItem
-              v-for="preset of projectCreation.presets"
-              :key="preset.id"
-              :preset="preset"
-              :selected="preset.id === selectedPreset"
-              @click.native="selectPreset(preset.id)"
-            />
+              <VueButton
+                icon-right="arrow_forward"
+                label="Next"
+                class="big primary"
+                :disabled="!detailsValid"
+                @click="next()"
+              />
+            </div>
+          </VueTab>
 
-            <ProjectPresetItem
-              :preset="remotePresetInfo"
-              :selected="selectedPreset === 'remote'"
-              @click.native="selectPreset('remote')"
-            />
-          </div>
+          <VueTab
+            id="presets"
+            label="Presets"
+            icon="check_circle"
+            :disabled="!detailsValid"
+            lazy
+          >
+            <div class="content vue-disable-scroll">
+              <div class="vue-text info banner">
+                <VueIcon icon="info" class="big"/>
+                <span>A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.</span>
+              </div>
 
-          <div class="actions-bar">
-            <VueButton
-              icon-left="arrow_back"
-              label="Previous"
-              class="big"
-              @click="$refs.wizard.previous()"
-            />
+              <div class="cta-text">Select a preset:</div>
 
-            <VueButton
-              icon-right="arrow_forward"
-              label="Next"
-              class="big primary"
-              :disabled="!selectedPreset"
-              @click="$refs.wizard.next()"
-            />
-          </div>
-        </VueTab>
+              <template v-if="projectCreation">
+                <ProjectPresetItem
+                  v-for="preset of projectCreation.presets"
+                  :key="preset.id"
+                  :preset="preset"
+                  :selected="preset.id === selectedPreset"
+                  @click.native="selectPreset(preset.id)"
+                />
+              </template>
 
-        <VueTab
-          id="features"
-          label="Features"
-          icon="device_hub"
-          :disabled="!detailsValid || !presetValid"
-          lazy
-        >
-          <div class="content">
+              <ProjectPresetItem
+                :preset="remotePresetInfo"
+                :selected="selectedPreset === 'remote'"
+                @click.native="selectPreset('remote')"
+              />
+            </div>
 
-          </div>
+            <div class="actions-bar">
+              <VueButton
+                icon-left="arrow_back"
+                label="Previous"
+                class="big"
+                @click="previous()"
+              />
 
-          <div class="actions-bar">
-            <VueButton
-              icon-left="arrow_back"
-              label="Previous"
-              class="big"
-              @click="$refs.wizard.previous()"
-            />
+              <VueButton
+                icon-right="arrow_forward"
+                label="Next"
+                class="big primary"
+                :disabled="!selectedPreset"
+                @click="next()"
+              />
+            </div>
+          </VueTab>
 
-            <VueButton
-              icon-right="arrow_forward"
-              label="Next"
-              class="big primary"
-              @click="$refs.wizard.next()"
-            />
-          </div>
-        </VueTab>
+          <VueTab
+            id="features"
+            label="Features"
+            icon="device_hub"
+            :disabled="!detailsValid || !presetValid"
+            lazy
+          >
+            <div class="content">
 
-        <VueTab
-          id="plugins"
-          label="Plugins"
-          icon="widgets"
-          :disabled="!detailsValid || !presetValid"
-          lazy
-        >
-          <div class="content">
+            </div>
 
-          </div>
+            <div class="actions-bar">
+              <VueButton
+                icon-left="arrow_back"
+                label="Previous"
+                class="big"
+                @click="previous()"
+              />
 
-          <div class="actions-bar">
-            <VueButton
-              icon-left="arrow_back"
-              label="Previous"
-              class="big"
-              @click="$refs.wizard.previous()"
-            />
+              <VueButton
+                icon-right="arrow_forward"
+                label="Next"
+                class="big primary"
+                @click="next()"
+              />
+            </div>
+          </VueTab>
 
-            <VueButton
-              icon-right="arrow_forward"
-              label="Next"
-              class="big primary"
-              @click="$refs.wizard.next()"
-            />
-          </div>
-        </VueTab>
+          <VueTab
+            id="plugins"
+            label="Plugins"
+            icon="widgets"
+            :disabled="!detailsValid || !presetValid"
+            lazy
+          >
+            <div class="content">
 
-        <VueTab
-          id="config"
-          label="Configuration"
-          icon="settings_applications"
-          :disabled="!detailsValid || !presetValid"
-          lazy
-        >
-          <div class="content">
+            </div>
 
-          </div>
+            <div class="actions-bar">
+              <VueButton
+                icon-left="arrow_back"
+                label="Previous"
+                class="big"
+                @click="previous()"
+              />
 
-          <div class="actions-bar">
-            <VueButton
-              icon-left="arrow_back"
-              label="Previous"
-              class="big"
-              @click="$refs.wizard.previous()"
-            />
+              <VueButton
+                icon-right="arrow_forward"
+                label="Next"
+                class="big primary"
+                @click="next()"
+              />
+            </div>
+          </VueTab>
 
-            <VueButton
-              icon-left="done"
-              label="Create project"
-              class="big primary"
-            />
-          </div>
-        </VueTab>
+          <VueTab
+            id="config"
+            label="Configuration"
+            icon="settings_applications"
+            :disabled="!detailsValid || !presetValid"
+            lazy
+          >
+            <div class="content">
+
+            </div>
+
+            <div class="actions-bar">
+              <VueButton
+                icon-left="arrow_back"
+                label="Previous"
+                class="big"
+                @click="previous()"
+              />
+
+              <VueButton
+                icon-left="done"
+                label="Create project"
+                class="big primary"
+              />
+            </div>
+          </VueTab>
+        </template>
       </StepWizard>
     </div>
 
