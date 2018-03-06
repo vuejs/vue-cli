@@ -34,11 +34,14 @@ const doesChunkBelongToHTML = (chunk, roots, visitedChunks) => {
     }
   }
 
-  for (const parent of chunk.parents) {
-    if (doesChunkBelongToHTML(parent, roots, visitedChunks)) {
-      return true
-    }
-  }
+  // TODO: this does not work with webpack 4
+  // also prefetch doesn't seem to work at all
+
+  // for (const parent of chunk.parents) {
+  //   if (doesChunkBelongToHTML(parent, roots, visitedChunks)) {
+  //     return true
+  //   }
+  // }
 
   return false
 }
@@ -56,20 +59,19 @@ module.exports = class PreloadPlugin {
 
   apply (compiler) {
     const options = this.options
-    compiler.plugin('compilation', compilation => {
+    compiler.hooks.compilation.tap('PreloadPlugin', compilation => {
       // Auto DLL plugin injects assets by mutating html plugin data, so the only
       // way to get a hold of those is by saving the pre-mutated assets and
       // comparing them later.
       let originalAssets
-      compilation.plugin('html-webpack-plugin-before-html-generation', (htmlPluginData, cb) => {
+      compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tap('PreloadPlugin', htmlPluginData => {
         originalAssets = [
           ...htmlPluginData.assets.js,
           ...htmlPluginData.assets.css
         ]
-        cb(null, htmlPluginData)
       })
 
-      compilation.plugin('html-webpack-plugin-before-html-processing', (htmlPluginData, cb) => {
+      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tap('PreloadPlugin', htmlPluginData => {
         let filesToInclude = ''
         let extractedChunks = []
         // 'asyncChunks' are chunks intended for lazy/async loading usually generated as
@@ -78,13 +80,13 @@ module.exports = class PreloadPlugin {
         // configured to preload all types of chunks or just prefetch chunks as needed.
         if (options.include === undefined || options.include === 'asyncChunks') {
           try {
-            extractedChunks = compilation.chunks.filter(chunk => !chunk.isInitial())
+            extractedChunks = compilation.chunks.filter(chunk => !chunk.isOnlyInitial())
           } catch (e) {
             extractedChunks = compilation.chunks
           }
         } else if (options.include === 'initial') {
           try {
-            extractedChunks = compilation.chunks.filter(chunk => chunk.isInitial())
+            extractedChunks = compilation.chunks.filter(chunk => chunk.isOnlyInitial())
           } catch (e) {
             extractedChunks = compilation.chunks
           }
@@ -155,7 +157,7 @@ module.exports = class PreloadPlugin {
           // Otherwise assume at least a <body> is present and update it to include a new <head>
           htmlPluginData.html = htmlPluginData.html.replace('<body>', '<head>' + filesToInclude + '</head><body>')
         }
-        cb(null, htmlPluginData)
+        return htmlPluginData
       })
     })
   }

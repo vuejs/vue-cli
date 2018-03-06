@@ -2,6 +2,9 @@ module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'production') {
       webpackConfig
+        .set('mode', 'production')
+
+      webpackConfig
         .devtool('source-map')
         .output
           .filename(`js/[name].[chunkhash:8].js`)
@@ -11,11 +14,6 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('hash-module-ids')
           .use(require('webpack/lib/HashedModuleIdsPlugin'))
-
-      // enable scope hoisting / tree shaking
-      webpackConfig
-        .plugin('module-concatenation')
-          .use(require('webpack/lib/optimize/ModuleConcatenationPlugin'))
 
       // optimize CSS (dedupe)
       webpackConfig
@@ -27,14 +25,17 @@ module.exports = (api, options) => {
           }])
 
       // minify JS
-      const UglifyPlugin = require('uglifyjs-webpack-plugin')
-      const getUglifyOptions = require('./uglifyOptions')
-      // disable during tests to speed things up
-      if (!process.env.VUE_CLI_TEST) {
-        webpackConfig
-          .plugin('uglify')
-            .use(UglifyPlugin, [getUglifyOptions(options)])
-      }
+      webpackConfig.optimization.set('minimizer', [{
+        apply: compiler => {
+          // disable during tests to speed things up
+          if (process.env.VUE_CLI_TEST) {
+            return
+          }
+          const UglifyPlugin = require('uglifyjs-webpack-plugin')
+          const getUglifyOptions = require('./uglifyOptions')
+          new UglifyPlugin(getUglifyOptions(options)).apply(compiler)
+        }
+      }])
     }
   })
 }

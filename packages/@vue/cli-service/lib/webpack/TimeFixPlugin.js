@@ -4,12 +4,11 @@ module.exports = class TimeFixPlugin {
   }
 
   apply (compiler) {
-    compiler.plugin('watch-run', (watching, callback) => {
+    compiler.hooks.watchRun.tap('TimeFixPlugin', watching => {
       watching.startTime += this.timefix
-      callback()
     })
 
-    compiler.plugin('done', stats => {
+    compiler.hooks.done.tap('TimeFixPlugin', stats => {
       stats.startTime -= this.timefix
     })
   }

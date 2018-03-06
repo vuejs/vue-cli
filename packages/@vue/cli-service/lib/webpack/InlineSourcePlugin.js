@@ -18,17 +18,13 @@ module.exports = class InlineSourcePlugin {
 
   apply (compiler) {
     // Hook into the html-webpack-plugin processing
-    compiler.plugin('compilation', compilation => {
-      compilation.plugin('html-webpack-plugin-before-html-generation', (htmlPluginData, callback) => {
-        callback(null, htmlPluginData)
-      })
-      compilation.plugin('html-webpack-plugin-alter-asset-tags', (htmlPluginData, callback) => {
+    compiler.hooks.compilation.tap('InlineSourcePlugin', compilation => {
+      compilation.hooks.htmlWebpackPluginAlterAssetTags.tap('InlineSourcePlugin', htmlPluginData => {
         if (!this.options.include) {
-          return callback(null, htmlPluginData)
+          return htmlPluginData
         }
         const regex = this.options.include
-        const result = this.processTags(compilation, regex, htmlPluginData)
-        callback(null, result)
+        return this.processTags(compilation, regex, htmlPluginData)
       })
     })
   }

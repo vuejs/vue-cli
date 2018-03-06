@@ -8,6 +8,7 @@ const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const loadEnv = require('./util/loadEnv')
 const defaultsDeep = require('lodash.defaultsdeep')
+const ChainedMap = require('webpack-chain/src/ChainedMap')
 const { warn, error, isPlugin } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
@@ -131,6 +132,16 @@ module.exports = class Service {
 
   resolveChainableWebpackConfig () {
     const chainableConfig = new Config()
+
+    // temporary patch for new option "optimization" for wepback 4
+    chainableConfig.optimization = new ChainedMap(chainableConfig)
+    const toConfig = chainableConfig.toConfig
+    chainableConfig.toConfig = function () {
+      const res = toConfig.call(this)
+      res.optimization = this.optimization.entries()
+      return res
+    }
+
     // apply chains
     this.webpackChainFns.forEach(fn => fn(chainableConfig))
     return chainableConfig

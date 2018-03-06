@@ -101,6 +101,8 @@ module.exports = (api, options) => {
       })
     }
 
+    // TODO: this is emitting useless css chunks with webpack 4 + async chunks
+
     // inject CSS extraction plugin
     if (extract) {
       const userOptions = options.extractCSS && typeof options.extractCSS === 'object'
@@ -113,8 +115,5 @@ module.exports = (api, options) => {
             allChunks: true
           }, userOptions)])
     }
-
-    // TODO document receipe for using css.loaderOptions to add `data` option
-    // to sass-loader
   })
 }

@@ -25,7 +25,7 @@
     "@types/node": "^9.3.0",
     "fork-ts-checker-webpack-plugin": "^0.4.0",
     "globby": "^8.0.1",
-    "ts-loader": "^3.4.0",
+    "ts-loader": "^4.0.1",
     "tslint": "^5.9.1",
     "typescript": "^2.7.2"
   },

@@ -11,19 +11,15 @@ module.exports = api => {
           .use(require('webpack/lib/HotModuleReplacementPlugin'))
 
       webpackConfig
-        .plugin('named-modules')
-          .use(require('webpack/lib/NamedModulesPlugin'))
-
-      webpackConfig
         .plugin('no-emit-on-errors')
           .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
 
-      webpackConfig
-        .plugin('watch-missing')
-          .use(
-            require('../webpack/WatchMissingNodeModulesPlugin'),
-            [api.resolve('node_modules')]
-          )
+      // webpackConfig
+      //   .plugin('watch-missing')
+      //     .use(
+      //       require('../webpack/WatchMissingNodeModulesPlugin'),
+      //       [api.resolve('node_modules')]
+      //     )
     }
   })
 }

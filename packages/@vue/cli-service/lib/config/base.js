@@ -4,6 +4,9 @@ module.exports = (api, options) => {
     const inlineLimit = 10000
 
     webpackConfig
+      .set('mode', 'development')
+
+    webpackConfig
       .context(api.service.context)
       .entry('app')
         .add('./src/main.js')
