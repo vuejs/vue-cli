@@ -1,5 +1,10 @@
 <template>
-  <div class="step-wizard">
+  <div
+    class="step-wizard"
+    :class="{
+      'hide-tabs': hideTabs
+    }"
+  >
     <div class="header">
       <div v-if="title" class="title">{{ title }}</div>
     </div>
@@ -24,6 +29,11 @@ export default {
   inheritAttrs: false,
 
   props: {
+    hideTabs: {
+      type: Boolean,
+      default: false
+    },
+
     title: {
       type: String,
       default: null
@@ -38,11 +48,10 @@ export default {
     previous () {
       const tabs = this.$refs.tabs
       tabs.activateChild(tabs.activeChildIndex - 1)
-    },
+    }
   }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import "~@/style/imports"
@@ -85,5 +94,9 @@ export default {
     font-size 24px
     text-align center
     font-weight lighter
+
+  &.hide-tabs
+    >>> .tabs
+      display none
 
 </style>

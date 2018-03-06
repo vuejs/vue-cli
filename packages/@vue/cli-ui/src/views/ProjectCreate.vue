@@ -14,6 +14,7 @@
               <div class="project-details vue-grid col-1 big-gap">
                 <VueFormField
                   title="Project folder"
+                  :subtitle="cwd"
                 >
                   <VueInput
                     v-model="formData.folder"
@@ -24,7 +25,7 @@
 
                   <VueButton
                     label="Change current working directory"
-                    :to="{ name: 'project-select', query: { tab: 'create' } }"
+                    :to="{ name: 'project-select', query: { tab: 'create', hideTabs: true } }"
                   />
                 </VueFormField>
 
@@ -265,8 +266,8 @@ import ProjectPresetItem from '../components/ProjectPresetItem'
 import StatusBar from '../components/StatusBar'
 import StepWizard from '../components/StepWizard'
 
+import CWD from '../graphql/cwd.gql'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
-import PROJECT_INIT_CREATE from '../graphql/projectInitCreate.gql'
 
 function formDataFactory () {
   return {
@@ -292,6 +293,7 @@ export default {
   data () {
     return {
       formData: formData,
+      cwd: '',
       projectCreation: null,
       showCancel: false,
       showRemotePreset: false
@@ -299,6 +301,7 @@ export default {
   },
 
   apollo: {
+    cwd: CWD,
     projectCreation: PROJECT_CREATION
   },
 

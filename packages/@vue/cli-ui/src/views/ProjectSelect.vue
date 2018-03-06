@@ -3,6 +3,7 @@
     <StepWizard
       :tab-id.sync="tab"
       title="Vue Project Manager"
+      :hide-tabs="hideTabs"
     >
       <VueTab
         id="existing"
@@ -70,7 +71,8 @@ export default {
   data () {
     return {
       folderCurrent: {},
-      tab: undefined
+      tab: undefined,
+      hideTabs: this.$route.query.hideTabs
     }
   },
 
