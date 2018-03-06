@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "babel-eslint": "^8.2.2",
-    "eslint": "^4.18.1",
+    "eslint": "^4.18.2",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-vue": "^4.3.0"
   }

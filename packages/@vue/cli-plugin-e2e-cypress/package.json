@@ -22,7 +22,7 @@
     "access": "public"
   },
   "dependencies": {
-    "cypress": "^2.0.4",
+    "cypress": "^2.1.0",
     "eslint-plugin-cypress": "^2.0.1"
   }
 }
