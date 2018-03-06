@@ -33,6 +33,13 @@ import 'css-loader/lib/css-base'
 import 'vue-style-loader/lib/addStylesShadow'
 import 'vue-loader/lib/runtime/component-normalizer'
 
+;(() => {
+  let i
+  if ((i = document.currentScript) && (i = i.src.match(/(.+\\/)[^/]+\\.js$/))) {
+    __webpack_public_path__ = i[1]
+  }
+})()
+
 ${files.map(file => {
     const { camelName, kebabName } = exports.fileToComponentName(prefix, file)
     return async

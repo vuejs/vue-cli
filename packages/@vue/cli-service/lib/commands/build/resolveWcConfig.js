@@ -68,8 +68,10 @@ module.exports = (api, { target, entry, name }) => {
     config.output
       .filename(`${entryName}.js`)
       .chunkFilename(`${libName}.[id]${minify ? `.min` : ``}.js`)
-      // use relative publicPath so this can be deployed anywhere
-      .publicPath('./')
+      // use dynamic publicPath so this can be deployed anywhere
+      // the actual path will be determined at runtime by checking
+      // document.currentScript.src.
+      .publicPath('')
 
     // externalize Vue in case user imports it
     config
