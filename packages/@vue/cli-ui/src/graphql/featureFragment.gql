@@ -1,6 +1,6 @@
 fragment feature on Feature {
   id
-  label
+  name
   description
   link
   enabled

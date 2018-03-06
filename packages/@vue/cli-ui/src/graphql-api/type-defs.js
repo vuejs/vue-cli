@@ -75,9 +75,9 @@ input PluginSearchInput {
 
 type Feature {
   id: ID!
-  label: String!
-  description: String!
-  link: String!
+  name: String!
+  description: String
+  link: String
   enabled: Boolean!
 }
 
@@ -128,6 +128,7 @@ type Preset {
 
 type ProjectCreation {
   presets: [Preset]
+  features: [Feature]
 }
 
 type Query {
@@ -148,6 +149,8 @@ type Mutation {
   projectImport (input: ProjectImportInput!): Project!
   projectOpen (id: ID!): Project!
   projectSetFavorite (id: ID!, favorite: Int!): Project!
+  presetApply (id: ID!): ProjectCreation
+  featureSetEnabled (id: ID!, enabled: Boolean): Feature
   pluginAdd (id: ID!): Plugin
   promptAnswer (input: PromptInput!): Prompt
 }

@@ -25,7 +25,9 @@ module.exports = {
     folderSetFavorite: (root, args, context) => folders.setFavorite({
       file: args.path,
       favorite: args.favorite
-    }, context)
+    }, context),
+    presetApply: (root, { id }, context) => projects.applyPreset(id, context),
+    featureSetEnabled: (root, args, context) => projects.setFeatureEnabled(args, context)
   },
 
   Subscription: {

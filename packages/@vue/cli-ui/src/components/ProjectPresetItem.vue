@@ -48,7 +48,7 @@ export default {
   .content
     display grid
     grid-template-columns 64px auto
-    grid-template-rows 24px 24px
+    grid-template-rows repeat(2, 24px)
     grid-template-areas "icon name" "icon description"
 
   .radio-icon

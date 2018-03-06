@@ -2,7 +2,10 @@ module.exports = cli => {
   cli.injectFeature({
     name: 'Unit Testing',
     value: 'unit',
-    short: 'Unit'
+    short: 'Unit',
+    description: 'Add a Unit Testing solution like Jest or Mocha',
+    link: 'https://github.com/vuejs/vue-cli/tree/dev/docs#unit-testing',
+    plugins: ['unit-jest', 'unit-mocha']
   })
 
   cli.injectPrompt({

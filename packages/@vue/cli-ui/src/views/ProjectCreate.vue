@@ -10,7 +10,7 @@
             label="Details"
             icon="subject"
           >
-            <div class="content">
+            <div class="content vue-disable-scroll">
               <div class="project-details vue-grid col-1 big-gap">
                 <VueFormField
                   title="Project folder"
@@ -109,7 +109,7 @@
                 <span>A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.</span>
               </div>
 
-              <div class="cta-text">Select a preset:</div>
+              <div class="cta-text">Select a preset</div>
 
               <template v-if="projectCreation">
                 <ProjectPresetItem
@@ -153,8 +153,22 @@
             :disabled="!detailsValid || !presetValid"
             lazy
           >
-            <div class="content">
+            <div class="content vue-disable-scroll">
+              <!-- <div class="vue-text info banner">
+                <VueIcon icon="info" class="big"/>
+                <span></span>
+              </div> -->
 
+              <div class="cta-text">Enable features</div>
+
+              <template v-if="projectCreation">
+                <ProjectFeatureItem
+                  v-for="feature of projectCreation.features"
+                  :key="feature.id"
+                  :feature="feature"
+                  @click.native="toggleFeature(feature)"
+                />
+              </template>
             </div>
 
             <div class="actions-bar">
@@ -174,14 +188,14 @@
             </div>
           </VueTab>
 
-          <VueTab
+          <!-- <VueTab
             id="plugins"
             label="Plugins"
             icon="widgets"
             :disabled="!detailsValid || !presetValid"
             lazy
           >
-            <div class="content">
+            <div class="content vue-disable-scroll">
 
             </div>
 
@@ -200,7 +214,7 @@
                 @click="next()"
               />
             </div>
-          </VueTab>
+          </VueTab> -->
 
           <VueTab
             id="config"
@@ -209,7 +223,7 @@
             :disabled="!detailsValid || !presetValid"
             lazy
           >
-            <div class="content">
+            <div class="content vue-disable-scroll">
 
             </div>
 
@@ -277,12 +291,15 @@
 </template>
 
 <script>
+import ProjectFeatureItem from '../components/ProjectFeatureItem'
 import ProjectPresetItem from '../components/ProjectPresetItem'
 import StatusBar from '../components/StatusBar'
 import StepWizard from '../components/StepWizard'
 
 import CWD from '../graphql/cwd.gql'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
+import FEATURE_SET_ENABLED from '../graphql/featureSetEnabled.gql'
+import PRESET_APPLY from '../graphql/presetApply.gql'
 
 function formDataFactory () {
   return {
@@ -300,6 +317,7 @@ let formData = formDataFactory()
 
 export default {
   components: {
+    ProjectFeatureItem,
     ProjectPresetItem,
     StatusBar,
     StepWizard
@@ -349,6 +367,26 @@ export default {
       }
 
       this.formData.selectedPreset = id
+
+      this.$apollo.mutate({
+        mutation: PRESET_APPLY,
+        variables: {
+          id
+        },
+        update: (store, { data: { presetApply } }) => {
+          store.writeQuery({ query: PROJECT_CREATION, data: { projectCreation: presetApply } })
+        }
+      })
+    },
+
+    toggleFeature (feature) {
+      this.$apollo.mutate({
+        mutation: FEATURE_SET_ENABLED,
+        variables: {
+          id: feature.id,
+          enabled: !feature.enabled
+        }
+      })
     }
   }
 }

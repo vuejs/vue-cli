@@ -1,7 +1,9 @@
 module.exports = cli => {
   cli.injectFeature({
     name: 'CSS Pre-processors',
-    value: 'css-preprocessor'
+    value: 'css-preprocessor',
+    description: 'Add support for CSS pre-processors like SASS, Less or Stylus',
+    link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/css.md'
   })
 
   cli.injectPrompt({
