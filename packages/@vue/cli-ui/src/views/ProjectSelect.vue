@@ -1,9 +1,8 @@
 <template>
   <div class="project-select page">
-    <VueTabs
+    <StepWizard
       :tab-id.sync="tab"
-      class="main-tabs"
-      group-class="accent"
+      title="Vue Project Manager"
     >
       <VueTab
         id="existing"
@@ -18,9 +17,11 @@
         label="Create"
         icon="add_box"
       >
-        <FolderExplorer/>
+        <div class="content">
+          <FolderExplorer/>
+        </div>
 
-        <div class="actions-bar">
+        <div class="actions-bar center">
           <VueButton
             icon-left="add"
             label="Create a new project here"
@@ -35,9 +36,11 @@
         label="Import"
         icon="unarchive"
       >
-        <FolderExplorer/>
+        <div class="content">
+          <FolderExplorer/>
+        </div>
 
-        <div class="actions-bar">
+        <div class="actions-bar center">
           <VueButton
             icon-left="unarchive"
             label="Import this folder"
@@ -46,20 +49,22 @@
           />
         </div>
       </VueTab>
-    </VueTabs>
+    </StepWizard>
   </div>
 </template>
 
 <script>
-import ProjectSelectList from '../components/ProjectSelectList'
 import FolderExplorer from '../components/FolderExplorer'
+import ProjectSelectList from '../components/ProjectSelectList'
+import StepWizard from '../components/StepWizard'
 
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
 
 export default {
   components: {
+    FolderExplorer,
     ProjectSelectList,
-    FolderExplorer
+    StepWizard
   },
 
   data () {
@@ -75,7 +80,7 @@ export default {
 
   async mounted () {
     await this.$nextTick()
-    this.tab = this.$route.query.tab
+    this.tab = this.$route.query.tab || 'existing'
   }
 }
 </script>
@@ -83,22 +88,8 @@ export default {
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 
-.main-tabs
-  height 100%
-  >>> .tabs
-    background $vue-color-light-neutral
-
-  >>> .tabs-content
-    height 0
-
-.vue-tab,
->>> .vue-tab-content,
 .folder-explorer
   height 100%
-
->>> .vue-tab-content
-  overflow-y auto
-  v-box()
 
 .folder-explorer
   flex 100% 1 1

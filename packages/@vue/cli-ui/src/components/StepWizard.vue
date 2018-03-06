@@ -67,14 +67,18 @@ export default {
     height 100%
 
   >>> .vue-tab-content
-    overflow-y auto
+    overflow-y hidden
     v-box()
 
     > .content
       flex 100% 1 1
+      height 0
+      overflow-y auto
 
     > .actions-bar
       justify-content space-between
+      &.center
+        justify-content center
 
   .title
     padding 12px
