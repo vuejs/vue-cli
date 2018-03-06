@@ -29,8 +29,7 @@ const {
   hasGit,
   hasYarn,
   logWithSpinner,
-  stopSpinner,
-  isOfficialPlugin
+  stopSpinner
 } = require('@vue/cli-shared-utils')
 
 const isManualMode = answers => answers.preset === '__manual__'
@@ -106,7 +105,7 @@ module.exports = class Creator {
     const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
       pkg.devDependencies[dep] = preset.plugins[dep].version ||
-        (isOfficialPlugin(dep) ? `^${latest}` : `latest`)
+        (/^@vue/.test(dep) ? `^${latest}` : `latest`)
     })
     // write package.json
     await writeFileTree(context, {
