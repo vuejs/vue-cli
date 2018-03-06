@@ -14,7 +14,6 @@
               <div class="project-details vue-grid col-1 big-gap">
                 <VueFormField
                   title="Project folder"
-                  :subtitle="cwd"
                 >
                   <VueInput
                     v-model="formData.folder"
@@ -23,10 +22,26 @@
                     class="big"
                   />
 
-                  <VueButton
-                    label="Change current working directory"
-                    :to="{ name: 'project-select', query: { tab: 'create', hideTabs: true } }"
-                  />
+                  <div slot="subtitle">
+                    <div class="project-path">
+                      <div class="path">
+                        <span
+                          class="cwd"
+                          v-tooltip="cwd"
+                        >
+                          {{ cwd | folder(42 - formData.folder.length) }}
+                        </span>
+                        <span class="folder">{{ formData.folder }}</span>
+                      </div>
+
+                      <VueButton
+                        icon-left="edit"
+                        class="icon-button"
+                        v-tooltip="'Change base directory'"
+                        :to="{ name: 'project-select', query: { tab: 'create', hideTabs: true } }"
+                      />
+                    </div>
+                  </div>
                 </VueFormField>
 
                 <VueFormField
@@ -358,4 +373,17 @@ export default {
   max-width 400px
   width 100%
   margin 42px auto
+
+.project-path
+  h-box()
+  box-center()
+
+  .path
+    flex 100% 1 1
+    margin-right 6px
+    h-box()
+    align-items baseline
+
+    .folder
+      font-weight bold
 </style>
