@@ -65,7 +65,7 @@ export default {
   h-box()
   align-items center
   background $vue-color-light-neutral
-  font-size 12px
+  font-size $padding-item
 
   .section
     h-box()

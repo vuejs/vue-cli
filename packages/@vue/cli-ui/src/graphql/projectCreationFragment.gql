@@ -1,5 +1,6 @@
 #import "./presetFragment.gql"
 #import "./featureFragment.gql"
+#import "./promptFragment.gql"
 
 fragment projectCreation on ProjectCreation {
   presets {
@@ -7,5 +8,8 @@ fragment projectCreation on ProjectCreation {
   }
   features {
     ...feature
+  }
+  prompts {
+    ...prompt
   }
 }

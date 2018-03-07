@@ -5,22 +5,24 @@
       'hide-tabs': hideTabs
     }"
   >
-    <div class="header">
-      <div v-if="title" class="title">{{ title }}</div>
-    </div>
+    <div class="shell">
+      <div class="header">
+        <div v-if="title" class="title">{{ title }}</div>
+      </div>
 
-    <VueTabs
-      ref="tabs"
-      class="main-tabs"
-      group-class="accent"
-      v-bind="$attrs"
-      v-on="$listeners"
-    >
-      <slot
-        :next="next"
-        :previous="previous"
-      />
-    </VueTabs>
+      <VueTabs
+        ref="tabs"
+        class="main-tabs"
+        group-class="accent"
+        v-bind="$attrs"
+        v-on="$listeners"
+      >
+        <slot
+          :next="next"
+          :previous="previous"
+        />
+      </VueTabs>
+    </div>
   </div>
 </template>
 
@@ -57,7 +59,11 @@ export default {
 @import "~@/style/imports"
 
 .step-wizard
-  v-box()
+  box-sizing border-box
+
+  .shell
+    v-box()
+    height 100%
 
   .main-tabs
     height 100%
@@ -90,7 +96,7 @@ export default {
         justify-content center
 
   .title
-    padding 12px
+    padding $padding-item
     font-size 24px
     text-align center
     font-weight lighter
@@ -98,5 +104,13 @@ export default {
   &.hide-tabs
     >>> .tabs
       display none
+
+  &.frame
+    margin 0 auto
+    padding $padding-item
+    max-width 1200px
+    .shell
+      border solid 1px $vue-color-light-neutral
+      border-radius $br
 
 </style>

@@ -5,21 +5,17 @@
     <div class="content">
       <router-view/>
     </div>
-
-    <StatusBar/>
   </div>
 </template>
 
 <script>
 import ProjectNav from '../components/ProjectNav'
-import StatusBar from '../components/StatusBar'
 
 export default {
   name: 'home',
 
   components: {
-    ProjectNav,
-    StatusBar
+    ProjectNav
   }
 }
 </script>
@@ -30,8 +26,8 @@ export default {
 .home
   display grid
   grid-template-columns 46px 1fr
-  grid-template-rows auto 28px
-  grid-template-areas "side-left content" "footer footer"
+  grid-template-rows auto
+  grid-template-areas "side-left content"
 
 .project-nav
   grid-area side-left
@@ -39,6 +35,4 @@ export default {
 .content
   grid-area content
 
-.status-bar
-  grid-area footer
 </style>

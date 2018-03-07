@@ -13,13 +13,13 @@ body,
   height @width
 
 .actions-bar
-  padding 12px
+  padding $padding-item
   background $color-light-background
   h-box()
   box-center()
 
   > *
-    space-between-x(12px)
+    space-between-x($padding-item)
 
   &.space-between
     justify-content space-between
@@ -31,6 +31,9 @@ body,
     justify-content flex-end
 
 .cta-text
-  margin 12px
+  margin $padding-item
   color lighten($vue-color-dark, 40%)
   font-size 18px
+
+.list-item
+  list-item()

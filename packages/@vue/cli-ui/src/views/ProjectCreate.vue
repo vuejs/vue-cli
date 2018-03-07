@@ -3,6 +3,7 @@
     <div class="content">
       <StepWizard
         title="Create a new project"
+        class="frame"
       >
         <template slot-scope="{ next, previous }">
           <VueTab
@@ -38,7 +39,15 @@
                         icon-left="edit"
                         class="icon-button"
                         v-tooltip="'Change base directory'"
-                        :to="{ name: 'project-select', query: { tab: 'create', hideTabs: true } }"
+                        :to="{
+                          name: 'project-select',
+                          query: {
+                            title: 'Create a new project',
+                            tab: 'create',
+                            hideTabs: true,
+                            action: 'Select this folder'
+                          }
+                        }"
                       />
                     </div>
                   </div>
@@ -137,11 +146,18 @@
               />
 
               <VueButton
+                v-if="manual"
                 icon-right="arrow_forward"
                 label="Next"
                 class="big primary"
                 :disabled="!presetValid"
                 @click="next()"
+              />
+              <VueButton
+                v-else
+                icon-left="done"
+                label="Create project"
+                class="big primary"
               />
             </div>
           </VueTab>
@@ -150,14 +166,14 @@
             id="features"
             label="Features"
             icon="device_hub"
-            :disabled="!detailsValid || !presetValid"
+            :disabled="!detailsValid || !presetValid || !manual"
             lazy
           >
             <div class="content vue-disable-scroll">
-              <!-- <div class="vue-text info banner">
+              <div class="vue-text info banner">
                 <VueIcon icon="info" class="big"/>
-                <span></span>
-              </div> -->
+                <span>You will be able to add features after the project is created.</span>
+              </div>
 
               <div class="cta-text">Enable features</div>
 
@@ -180,10 +196,17 @@
               />
 
               <VueButton
+                v-if="enabledPrompts.length"
                 icon-right="arrow_forward"
                 label="Next"
                 class="big primary"
                 @click="next()"
+              />
+              <VueButton
+                v-else
+                icon-left="done"
+                label="Create project"
+                class="big primary"
               />
             </div>
           </VueTab>
@@ -220,11 +243,14 @@
             id="config"
             label="Configuration"
             icon="settings_applications"
-            :disabled="!detailsValid || !presetValid"
+            :disabled="!detailsValid || !presetValid || !manual || !enabledPrompts.length"
             lazy
           >
             <div class="content vue-disable-scroll">
-
+              <PrompsList
+                :prompts="enabledPrompts"
+                @answer="answerPrompt"
+              />
             </div>
 
             <div class="actions-bar">
@@ -239,14 +265,13 @@
                 icon-left="done"
                 label="Create project"
                 class="big primary"
+                :disabled="!configurationValid"
               />
             </div>
           </VueTab>
         </template>
       </StepWizard>
     </div>
-
-    <StatusBar cwd/>
 
     <VueModal
       v-if="showRemotePreset"
@@ -293,13 +318,14 @@
 <script>
 import ProjectFeatureItem from '../components/ProjectFeatureItem'
 import ProjectPresetItem from '../components/ProjectPresetItem'
-import StatusBar from '../components/StatusBar'
+import PrompsList from '../components/PromptsList'
 import StepWizard from '../components/StepWizard'
 
 import CWD from '../graphql/cwd.gql'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
 import FEATURE_SET_ENABLED from '../graphql/featureSetEnabled.gql'
 import PRESET_APPLY from '../graphql/presetApply.gql'
+import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
 
 function formDataFactory () {
   return {
@@ -319,7 +345,7 @@ export default {
   components: {
     ProjectFeatureItem,
     ProjectPresetItem,
-    StatusBar,
+    PrompsList,
     StepWizard
   },
 
@@ -347,6 +373,25 @@ export default {
       return !!this.formData.selectedPreset
     },
 
+    configurationValid () {
+      return this.enabledPrompts.filter(
+        p => p.value === null
+      ).length === 0
+    },
+
+    enabledPrompts () {
+      if (!this.projectCreation) {
+        return []
+      }
+      return this.projectCreation.prompts.filter(
+        p => p.enabled
+      )
+    },
+
+    manual () {
+      return this.formData.selectedPreset === 'manual'
+    },
+
     remotePresetInfo () {
       return {
         name: 'Remote preset',
@@ -360,7 +405,7 @@ export default {
       formData = formDataFactory()
     },
 
-    selectPreset (id) {
+    async selectPreset (id) {
       if (id === 'remote') {
         this.showRemotePreset = true
         return
@@ -368,7 +413,7 @@ export default {
 
       this.formData.selectedPreset = id
 
-      this.$apollo.mutate({
+      await this.$apollo.mutate({
         mutation: PRESET_APPLY,
         variables: {
           id
@@ -379,12 +424,31 @@ export default {
       })
     },
 
-    toggleFeature (feature) {
-      this.$apollo.mutate({
+    async toggleFeature (feature) {
+      await this.$apollo.mutate({
         mutation: FEATURE_SET_ENABLED,
         variables: {
           id: feature.id,
           enabled: !feature.enabled
+        }
+      })
+
+      this.$apollo.queries.projectCreation.refetch()
+    },
+
+    async answerPrompt ({ prompt, value }) {
+      await this.$apollo.mutate({
+        mutation: PROMPT_ANSWER,
+        variables: {
+          input: {
+            id: prompt.id,
+            value: JSON.stringify(value)
+          }
+        },
+        update: (store, { data: { promptAnswer } }) => {
+          const data = store.readQuery({ query: PROJECT_CREATION })
+          data.projectCreation.prompts = promptAnswer
+          store.writeQuery({ query: PROJECT_CREATION, data })
         }
       })
     }
@@ -398,14 +462,11 @@ export default {
 .project-create
   display grid
   grid-template-columns 1fr
-  grid-template-rows auto 28px
-  grid-template-areas "content" "footer"
+  grid-template-rows auto
+  grid-template-areas "content"
 
 .content
   grid-area content
-
-.status-bar
-  grid-area footer
 
 .project-details
   max-width 400px

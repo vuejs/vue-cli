@@ -49,6 +49,20 @@ input ProjectImportInput {
   path: String!
 }
 
+type Preset {
+  id: ID!
+  name: String
+  description: String
+  link: String
+  features: [String]
+}
+
+type ProjectCreation {
+  presets: [Preset]
+  features: [Feature]
+  prompts: [Prompt]
+}
+
 type Version {
   current: String!
   latest: String
@@ -94,6 +108,9 @@ enum PromptType {
 
 type PromptChoice {
   value: String!
+  name: String
+  checked: Boolean
+  disabled: Boolean
 }
 
 type PromptError {
@@ -110,25 +127,14 @@ type Prompt {
   description: String
   link: String
   choices: [PromptChoice]
-  currentValue: String
+  value: String
+  valueChanged: Boolean
   error: PromptError
 }
 
 input PromptInput {
   id: ID!
   value: String!
-}
-
-type Preset {
-  id: ID!
-  name: String
-  description: String
-  features: [String]
-}
-
-type ProjectCreation {
-  presets: [Preset]
-  features: [Feature]
 }
 
 type Query {
@@ -152,7 +158,7 @@ type Mutation {
   presetApply (id: ID!): ProjectCreation
   featureSetEnabled (id: ID!, enabled: Boolean): Feature
   pluginAdd (id: ID!): Plugin
-  promptAnswer (input: PromptInput!): Prompt
+  promptAnswer (input: PromptInput!): [Prompt]
 }
 
 type Subscription {

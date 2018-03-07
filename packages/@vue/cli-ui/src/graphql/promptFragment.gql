@@ -1,0 +1,20 @@
+#import "./promptChoiceFragment.gql"
+#import "./promptErrorFragment.gql"
+
+fragment prompt on Prompt {
+  id
+  enabled
+  type
+  name
+  message
+  description
+  link
+  choices {
+    ...promptChoice
+  }
+  value
+  valueChanged
+  error {
+    ...promptError
+  }
+}

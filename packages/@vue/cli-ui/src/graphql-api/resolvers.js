@@ -27,7 +27,8 @@ module.exports = {
       favorite: args.favorite
     }, context),
     presetApply: (root, { id }, context) => projects.applyPreset(id, context),
-    featureSetEnabled: (root, args, context) => projects.setFeatureEnabled(args, context)
+    featureSetEnabled: (root, args, context) => projects.setFeatureEnabled(args, context),
+    promptAnswer: (root, { input }, context) => projects.answerPrompt(input, context)
   },
 
   Subscription: {

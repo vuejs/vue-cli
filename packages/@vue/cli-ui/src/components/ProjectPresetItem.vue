@@ -1,6 +1,6 @@
 <template>
   <div
-    class="project-preset-item"
+    class="project-preset-item list-item"
     :class="{
       selected
     }"
@@ -14,14 +14,25 @@
           class="medium"
         />
       </div>
-      <div class="name">{{ preset.name }}</div>
-      <div class="description">{{ preset.description }}</div>
+
+      <ListItemInfo
+        :name="preset.name"
+        :description="preset.description"
+        :link="preset.link"
+        :selected="selected"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import ListItemInfo from './ListItemInfo'
+
 export default {
+  components: {
+    ListItemInfo
+  },
+
   props: {
     preset: {
       type: Object,
@@ -40,38 +51,26 @@ export default {
 @import "~@/style/imports"
 
 .project-preset-item
-  padding 12px
+  padding $padding-item
   padding-left 0
-  user-select none
-  cursor pointer
 
   .content
     display grid
     grid-template-columns 64px auto
-    grid-template-rows repeat(2, 24px)
-    grid-template-areas "icon name" "icon description"
+    grid-template-rows auto
+    grid-template-areas "icon info"
 
   .radio-icon
     h-box()
     box-center()
     grid-area icon
 
-  .name
-    grid-area name
-
-  .description
-    grid-area description
-    color lighten($vue-color-dark, 40%)
+  .list-item-info
+    grid-area info
 
   &.selected
-    background rgba($vue-color-primary, .05)
     .radio-icon
       >>> svg
         fill $vue-color-primary
-    .name
-      color $vue-color-primary
-
-  &:hover
-    background rgba($vue-color-primary, .1)
 
 </style>

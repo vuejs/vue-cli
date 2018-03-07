@@ -214,13 +214,13 @@ export default {
 @import "~@/style/imports"
 
 .toolbar
-  padding 12px
+  padding $padding-item
   background $color-light-background
   h-box()
   align-items center
 
   >>> > *
-    space-between-x(12px)
+    space-between-x($padding-item)
 
 .current-path
   flex 100% 1 1

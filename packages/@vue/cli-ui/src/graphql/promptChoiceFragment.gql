@@ -1,0 +1,6 @@
+fragment promptChoice on PromptChoice {
+  value
+  name
+  checked
+  disabled
+}

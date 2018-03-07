@@ -33,7 +33,7 @@ export default {
 
 .folder-name
   flex 100% 1 1
-  margin-left 12px
+  margin-left $padding-item
   ellipsis()
 
 .vue-project-icon
@@ -44,7 +44,7 @@ export default {
   top 5px
 
 .foder-explorer-item
-  padding 12px
+  padding $padding-item
   h-box()
   align-items center
   user-select none

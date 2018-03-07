@@ -1,0 +1,65 @@
+<template>
+  <div class="prompt prompt-checkbox">
+    <div class="prompt-content">
+      <ListItemInfo
+        :name="prompt.message"
+        :description="prompt.description"
+        :link="prompt.link"
+      />
+
+      <VueSwitch
+        v-for="(choice, index) of prompt.choices"
+        :key="index"
+        :value="isCheckboxSelected(choice)"
+        :disabled="choice.disabled"
+        class="right"
+        @input="value => asnwerCheckbox(choice, value)"
+      >
+        {{ choice.name }}
+      </VueSwitch>
+    </div>
+  </div>
+</template>
+
+<script>
+import Prompt from './Prompt'
+
+export default {
+  extends: Prompt,
+
+  computed: {
+    checkboxValue () {
+      return this.value(this.prompt.value)
+    }
+  },
+
+  methods: {
+    isCheckboxSelected (choice) {
+      return this.checkboxValue && this.checkboxValue.includes(this.value(choice.value))
+    },
+
+    asnwerCheckbox (choice, value) {
+      let list = this.checkboxValue
+      const choiceValue = this.value(choice.value)
+      if (value) {
+        list.push(choiceValue)
+      } else {
+        const index = list.indexOf(choiceValue)
+        if (index !== -1) list.splice(index, 1)
+      }
+      this.answer(list)
+    }
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+@import "~@/style/imports"
+
+.prompt-content
+  v-box()
+  align-items stretch
+
+  .vue-switch
+    margin-top 6px
+</style>

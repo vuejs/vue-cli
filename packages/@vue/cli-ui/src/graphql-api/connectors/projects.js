@@ -3,6 +3,7 @@ const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { getFeatures } = require('@vue/cli/lib/util/features')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
 const cwd = require('./cwd')
+const prompts = require('./prompts')
 
 let currentProject = null
 let creator = null
@@ -30,7 +31,8 @@ function generatePresetDescription (preset) {
 function generateProjectCreation (creator) {
   return {
     presets,
-    features
+    features,
+    prompts: prompts.list()
   }
 }
 
@@ -50,6 +52,7 @@ function initCreator () {
           id: key,
           name: key === 'default' ? 'Default preset' : key,
           features,
+          link: null,
           raw: preset
         }
         info.description = generatePresetDescription(info)
@@ -58,8 +61,9 @@ function initCreator () {
     ),
     {
       id: 'manual',
-      name: 'No preset',
-      description: 'No included features',
+      name: 'Manual',
+      description: 'Manually select features',
+      link: null,
       features: []
     }
   ]
@@ -87,6 +91,10 @@ function initCreator () {
     }
   ]
 
+  // Prompts
+  prompts.reset()
+  creator.injectedPrompts.forEach(prompts.add)
+
   return creator
 }
 
@@ -97,13 +105,24 @@ function getCreation (context) {
   return generateProjectCreation(creator)
 }
 
-function setFeatureEnabled ({ id, enabled }, context) {
+function updatePromptsFeatures () {
+  prompts.changeAnswers(answers => {
+    answers.features = features.filter(
+      f => f.enabled
+    ).map(
+      f => f.id
+    )
+  })
+}
+
+function setFeatureEnabled ({ id, enabled, updatePrompts = true }, context) {
   const feature = features.find(f => f.id === id)
   if (feature) {
     feature.enabled = enabled
   } else {
     console.warn(`Feature '${id}' not found`)
   }
+  if (updatePrompts) updatePromptsFeatures()
   return feature
 }
 
@@ -118,18 +137,19 @@ function applyPreset (id, context) {
     }
     if (preset.raw) {
       if (preset.raw.router) {
-        setFeatureEnabled({ id: 'router', enabled: true }, context)
+        setFeatureEnabled({ id: 'router', enabled: true, updatePrompts: false }, context)
       }
       if (preset.raw.vuex) {
-        setFeatureEnabled({ id: 'vuex', enabled: true }, context)
+        setFeatureEnabled({ id: 'vuex', enabled: true, updatePrompts: false }, context)
       }
       if (preset.raw.cssPreprocessor) {
-        setFeatureEnabled({ id: 'css-preprocessor', enabled: true }, context)
+        setFeatureEnabled({ id: 'css-preprocessor', enabled: true, updatePrompts: false }, context)
       }
       if (preset.raw.useConfigFiles) {
-        setFeatureEnabled({ id: 'use-config-files', enabled: true }, context)
+        setFeatureEnabled({ id: 'use-config-files', enabled: true, updatePrompts: false }, context)
       }
     }
+    updatePromptsFeatures()
   } else {
     console.warn(`Preset '${id}' not found`)
   }
@@ -137,10 +157,16 @@ function applyPreset (id, context) {
   return generateProjectCreation(creator)
 }
 
+function answerPrompt ({ id, value }, context) {
+  prompts.setValue({ id, value: JSON.parse(value) })
+  return prompts.list()
+}
+
 module.exports = {
   list,
   getCurrent,
   getCreation,
   applyPreset,
-  setFeatureEnabled
+  setFeatureEnabled,
+  answerPrompt
 }

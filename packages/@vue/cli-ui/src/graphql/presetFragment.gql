@@ -2,5 +2,5 @@ fragment preset on Preset {
   id
   name
   description
-  features
+  link
 }

@@ -2,8 +2,9 @@
   <div class="project-select page">
     <StepWizard
       :tab-id.sync="tab"
-      title="Vue Project Manager"
-      :hide-tabs="hideTabs"
+      :title="$route.query.title || 'Vue Project Manager'"
+      :hide-tabs="!!hideTabs"
+      class="frame"
     >
       <VueTab
         id="existing"
@@ -25,7 +26,7 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="add"
-            label="Create a new project here"
+            :label="$route.query.action || 'Create a new project here'"
             class="big primary"
             :to="{ name: 'project-create' }"
           />
@@ -44,7 +45,7 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="unarchive"
-            label="Import this folder"
+            :label="$route.query.action || 'Import this folder'"
             class="big primary"
             :disabled="!folderCurrent.isVueProject"
           />

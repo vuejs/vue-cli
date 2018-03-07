@@ -1,0 +1,7 @@
+#import "./promptFragment.gql"
+
+mutation promptAnswer ($input: PromptInput!) {
+  promptAnswer(input: $input) {
+    ...prompt
+  }
+}
