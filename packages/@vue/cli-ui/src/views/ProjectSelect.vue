@@ -48,6 +48,7 @@
             :label="$route.query.action || 'Import this folder'"
             class="big primary"
             :disabled="!folderCurrent.isVueProject"
+            @click="importProject()"
           />
         </div>
       </VueTab>
@@ -61,6 +62,7 @@ import ProjectSelectList from '../components/ProjectSelectList'
 import StepWizard from '../components/StepWizard'
 
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
+import PROJECT_IMPORT from '../graphql/projectImport.gql'
 
 export default {
   components: {
@@ -84,6 +86,21 @@ export default {
   async mounted () {
     await this.$nextTick()
     this.tab = this.$route.query.tab || 'existing'
+  },
+
+  methods: {
+    async importProject () {
+      await this.$apollo.mutate({
+        mutation: PROJECT_IMPORT,
+        variables: {
+          input: {
+            path: this.folderCurrent.path
+          }
+        }
+      })
+
+      this.$router.push({ name: 'home' })
+    }
   }
 }
 </script>

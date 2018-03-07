@@ -1,0 +1,6 @@
+fragment project on Project {
+  id
+  name
+  path
+  favorite
+}

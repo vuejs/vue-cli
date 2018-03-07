@@ -181,6 +181,10 @@ function changeAnswers (cb) {
   updatePrompts()
 }
 
+function getAnswers () {
+  return answers
+}
+
 function reset () {
   prompts = []
   setAnswers({})
@@ -223,6 +227,7 @@ function setValue ({ id, value }) {
 module.exports = {
   setAnswers,
   changeAnswers,
+  getAnswers,
   reset,
   list,
   add,

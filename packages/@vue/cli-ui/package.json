@@ -8,28 +8,29 @@
     "graphql-api": "vue-cli-service graphql-api",
     "run-graphql-api": "vue-cli-service run-graphql-api"
   },
+  "dependencies": {
+    "graphql": "^0.13.0",
+    "lowdb": "^1.0.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "shortid": "^2.2.8"
+  },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.3",
     "@vue/cli-plugin-eslint": "^3.0.0-beta.3",
     "@vue/cli-service": "^3.0.0-beta.3",
     "@vue/eslint-config-standard": "^3.0.0-beta.3",
-    "@vue/ui": "^0.1.6",
-    "apollo-cache-inmemory": "^1.0.0",
-    "apollo-client": "^2.0.1",
-    "apollo-link": "^1.0.0",
-    "apollo-link-context": "^1.0.5",
-    "apollo-link-http": "^1.0.0",
-    "apollo-link-persisted-queries": "^0.1.0",
+    "@vue/ui": "^0.1.9",
+    "apollo-cache-inmemory": "^1.1.10",
+    "apollo-client": "^2.2.6",
+    "apollo-link": "^1.2.1",
+    "apollo-link-http": "^1.5.3",
     "apollo-link-state": "^0.4.0",
     "apollo-link-ws": "^1.0.0",
-    "apollo-upload-client": "^7.0.0-alpha.4",
-    "apollo-utilities": "^1.0.1",
-    "graphql": "^0.13.0",
+    "apollo-utilities": "^1.0.9",
+    "eslint": "^4.16.0",
     "graphql-tag": "^2.5.0",
     "lint-staged": "^6.0.0",
-    "lowdb": "^1.0.0",
-    "mkdirp": "^0.5.1",
-    "shortid": "^2.2.8",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "subscriptions-transport-ws": "^0.9.5",
@@ -62,8 +63,5 @@
       "vue-cli-service lint",
       "git add"
     ]
-  },
-  "dependencies": {
-    "eslint": "^4.16.0"
   }
 }

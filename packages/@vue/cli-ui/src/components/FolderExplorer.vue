@@ -51,7 +51,7 @@
         class="icon-button favorite-button"
         :icon-left="folderCurrent.favorite ? 'star' : 'star_border'"
         v-tooltip="'Toggle favorite'"
-        @click="toggleFavorite"
+        @click="toggleFavorite()"
       />
 
       <VueDropdown
@@ -124,7 +124,11 @@ export default {
   },
 
   apollo: {
-    folderCurrent: FOLDER_CURRENT,
+    folderCurrent: {
+      query: FOLDER_CURRENT,
+      fetchPolicy: 'network-only'
+    },
+
     foldersFavorite: FOLDERS_FAVORITE
   },
 

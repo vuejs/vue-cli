@@ -35,14 +35,17 @@ type Project {
   name: String!
   path: String!
   favorite: Int
-  features: [Feature]
   plugins: [Plugin]
 }
 
 input ProjectCreateInput {
-  path: String!
+  folder: String!
   force: Boolean!
   packageManager: PackageManager
+  preset: String!
+  remote: Boolean
+  clone: Boolean
+  save: String
 }
 
 input ProjectImportInput {
@@ -155,6 +158,7 @@ type Mutation {
   projectImport (input: ProjectImportInput!): Project!
   projectOpen (id: ID!): Project!
   projectSetFavorite (id: ID!, favorite: Int!): Project!
+  projectRemove (id: ID!): Boolean!
   presetApply (id: ID!): ProjectCreation
   featureSetEnabled (id: ID!, enabled: Boolean): Feature
   pluginAdd (id: ID!): Plugin
@@ -164,5 +168,6 @@ type Mutation {
 type Subscription {
   consoleLogAdded: ConsoleLog!
   cwdChanged: String!
+  createStatus: String!
 }
 `

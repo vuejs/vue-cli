@@ -1,4 +1,5 @@
 const joi = require('joi')
+const { exit } = require('./exit')
 
 // proxy to joi for option validation
 exports.createSchema = fn => fn(joi)
@@ -10,7 +11,7 @@ exports.validate = (obj, schema, cb) => {
       if (process.env.VUE_CLI_TEST) {
         throw err
       } else {
-        process.exit(1)
+        exit(1)
       }
     }
   })

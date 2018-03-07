@@ -158,6 +158,7 @@
                 icon-left="done"
                 label="Create project"
                 class="big primary"
+                @click="createWithoutSaving()"
               />
             </div>
           </VueTab>
@@ -328,7 +329,7 @@
           subtitle="Save the features and configuration into a new preset"
         >
           <VueInput
-            v-model="formData.newPreset"
+            v-model="formData.save"
             icon-left="local_offer"
           />
         </VueFormField>
@@ -344,19 +345,49 @@
         <VueButton
           label="Continue without saving"
           class="flat"
+          @click="createWithoutSaving()"
         />
 
         <VueButton
           label="Create a new preset"
           icon-left="save"
           class="primary"
+          :disabled="!formData.save"
+          @click="createProject()"
         />
       </div>
     </VueModal>
+
+    <transition name="vue-fade">
+      <LoadingScreen
+        v-if="showLoading"
+        :loading="loading"
+      >
+        <div v-if="error" class="error">
+          <VueIcon
+            icon="error"
+            class="huge"
+          />
+          <div>{{ error }}</div>
+          <div class="actions">
+            <VueButton
+              icon-left="close"
+              label="close"
+              @click="showLoading = false"
+            />
+          </div>
+        </div>
+
+        <template v-else>
+          <div class="status">{{ statusMessage }}</div>
+        </template>
+      </LoadingScreen>
+    </transition>
   </div>
 </template>
 
 <script>
+import LoadingScreen from '../components/LoadingScreen'
 import ProjectFeatureItem from '../components/ProjectFeatureItem'
 import ProjectPresetItem from '../components/ProjectPresetItem'
 import PrompsList from '../components/PromptsList'
@@ -367,6 +398,8 @@ import PROJECT_CREATION from '../graphql/projectCreation.gql'
 import FEATURE_SET_ENABLED from '../graphql/featureSetEnabled.gql'
 import PRESET_APPLY from '../graphql/presetApply.gql'
 import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
+import PROJECT_CREATE from '../graphql/projectCreate.gql'
+import CREATE_STATUS from '../graphql/createStatus.gql'
 
 function formDataFactory () {
   return {
@@ -375,9 +408,10 @@ function formDataFactory () {
     packageManager: undefined,
     selectedPreset: null,
     remotePreset: {
-      url: ''
+      url: '',
+      clone: false
     },
-    newPreset: ''
+    save: ''
   }
 }
 
@@ -385,6 +419,7 @@ let formData = formDataFactory()
 
 export default {
   components: {
+    LoadingScreen,
     ProjectFeatureItem,
     ProjectPresetItem,
     PrompsList,
@@ -398,13 +433,33 @@ export default {
       projectCreation: null,
       showCancel: false,
       showRemotePreset: false,
-      showSavePreset: false
+      showSavePreset: false,
+      showLoading: false,
+      loading: false,
+      createStatus: '',
+      error: null
     }
   },
 
   apollo: {
-    cwd: CWD,
-    projectCreation: PROJECT_CREATION
+    cwd: {
+      query: CWD,
+      fetchPolicy: 'network-only',
+    },
+
+    projectCreation: {
+      query: PROJECT_CREATION,
+      fetchPolicy: 'network-only',
+    },
+
+    $subscribe: {
+      createStatus: {
+        query: CREATE_STATUS,
+        result ({ data }) {
+          this.createStatus = data.createStatus
+        }
+      }
+    }
   },
 
   computed: {
@@ -432,7 +487,7 @@ export default {
     },
 
     manual () {
-      return this.formData.selectedPreset === 'manual'
+      return this.formData.selectedPreset === '__manual__'
     },
 
     remotePresetInfo () {
@@ -440,6 +495,24 @@ export default {
         name: 'Remote preset',
         description: 'Fetch a preset from a git repository'
       }
+    },
+
+    statusMessage () {
+      const messages = {
+        'creating': 'Creating project...',
+        'git-init': 'Initializing git repository...',
+        'plugins-install': 'Installing CLI plugins. This might take a while...',
+        'invoking-generators': 'Invoking generators...',
+        'deps-install': 'Installing additional dependencies...',
+        'completion-hooks': 'Running completion hooks...',
+        'fetch-remote-preset': `Fetching remote preset ${this.formData.remotePreset.url}...`,
+        'done': 'Successfully created project'
+      }
+      const message = messages[this.createStatus]
+      if (!message) {
+        console.warn(`Message not found for '${this.createStatus}'`)
+      }
+      return message || ''
     }
   },
 
@@ -494,7 +567,46 @@ export default {
           store.writeQuery({ query: PROJECT_CREATION, data })
         }
       })
-    }
+    },
+
+    createWithoutSaving () {
+      this.formData.save = ''
+      this.createProject()
+    },
+
+    async createProject () {
+      this.showSavePreset = false
+      this.error = null
+      this.createStatus = 'creating'
+      this.showLoading = true
+      this.loading = true
+
+      try {
+        await this.$apollo.mutate({
+          mutation: PROJECT_CREATE,
+          variables: {
+            input: {
+              folder: this.formData.folder,
+              force: this.formData.force,
+              packageManager: this.formData.packageManager,
+              preset: this.formData.selectedPreset,
+              remote: this.formData.remotePreset.url,
+              clone: this.formData.remotePreset.clone,
+              save: this.formData.save
+            }
+          }
+        })
+        this.$router.push({ name: 'home' })
+      } catch(e) {
+        if (e.graphQLErrors && e.graphQLErrors.length) {
+          this.error = e.graphQLErrors[0].message
+        } else {
+          this.error = e.message
+        }
+      }
+
+      this.loading = false
+    },
   }
 }
 </script>

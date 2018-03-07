@@ -50,10 +50,14 @@ function isPackage (file, context) {
   return fs.existsSync(path.join(file, 'package.json'))
 }
 
+function readPackage (file, context) {
+  return fs.readFileSync(path.join(file, 'package.json'), { encoding: 'utf8' })
+}
+
 function isVueProject (file, context) {
   if (!isPackage(file)) return false
 
-  const contents = fs.readFileSync(path.join(file, 'package.json'), { encoding: 'utf8' })
+  const contents = readPackage(file)
   return contents.includes('@vue/cli-service')
 }
 
@@ -79,6 +83,7 @@ module.exports = {
   open,
   openParent,
   isPackage,
+  readPackage,
   isVueProject,
   listFavorite,
   setFavorite

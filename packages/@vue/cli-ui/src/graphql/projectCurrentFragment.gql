@@ -1,14 +1,8 @@
-#import "./featureFragment.gql"
+#import "./projectFragment.gql"
 #import "./pluginFragment.gql"
 
 fragment projectCurrent on Project {
-  id
-  name
-  path
-  favorite
-  features {
-    ...feature
-  }
+  ...project
   plugins {
     ...plugin
   }
