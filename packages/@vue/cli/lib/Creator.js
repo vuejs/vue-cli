@@ -104,7 +104,8 @@ module.exports = class Creator {
     }
     const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
-      pkg.devDependencies[dep] = `^${latest}`
+      pkg.devDependencies[dep] = preset.plugins[dep].version ||
+        (/^@vue/.test(dep) ? `^${latest}` : `latest`)
     })
     // write package.json
     await writeFileTree(context, {

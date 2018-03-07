@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-nightwatch",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.6",
   "description": "e2e-nightwatch plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,7 @@
     "chromedriver": "^2.35.0",
     "deepmerge": "^2.0.1",
     "execa": "^0.9.0",
-    "nightwatch": "^0.9.19",
-    "selenium-server": "^3.9.1"
+    "nightwatch": "^0.9.20",
+    "selenium-server": "^3.10.0"
   }
 }

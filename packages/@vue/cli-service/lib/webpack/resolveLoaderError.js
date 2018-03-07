@@ -1,14 +1,38 @@
 const chalk = require('chalk')
-const TYPE = 'cant-resolve-loader'
-const errorRE = /Can't resolve '(.*loader)'/
+
+const rules = [
+  {
+    type: 'cant-resolve-loader',
+    re: /Can't resolve '(.*loader)'/,
+    msg: (e, match) => (
+      `Failed to resolve loader: ${chalk.yellow(match[1])}\n` +
+      `You may need to install it.`
+    )
+  }
+]
 
 exports.transformer = error => {
-  if (error.webpackError && error.webpackError.message) {
-    const match = error.webpackError.message.match(errorRE)
-    if (match) {
+  if (error.webpackError) {
+    const message = typeof error.webpackError === 'string'
+      ? error.webpackError
+      : error.webpackError.message || ''
+    for (const { re, msg, type } of rules) {
+      const match = message.match(re)
+      if (match) {
+        return Object.assign({}, error, {
+          // type is necessary to avoid being printed as defualt error
+          // by friendly-error-webpack-plugin
+          type,
+          shortMessage: msg(error, match)
+        })
+      }
+    }
+    // no match, unknown webpack error withotu a message.
+    // friendly-error-webpack-plugin fails to handle this.
+    if (!error.message) {
       return Object.assign({}, error, {
-        type: TYPE,
-        loader: match[1]
+        type: 'unknown-webpack-error',
+        shortMessage: message
       })
     }
   }
@@ -16,10 +40,8 @@ exports.transformer = error => {
 }
 
 exports.formatter = errors => {
-  errors = errors.filter(e => e.type === TYPE)
+  errors = errors.filter(e => e.shortMessage)
   if (errors.length) {
-    return errors.map(e => {
-      return `Failed to resolve loader: ${chalk.yellow(e.loader)}`
-    }).concat(`\nYou may need to install the missing loader.`)
+    return errors.map(e => e.shortMessage)
   }
 }

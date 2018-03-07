@@ -2,6 +2,7 @@ const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
 const globby = require('globby')
+const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
@@ -223,7 +224,7 @@ function renderFile (name, data, ejsOptions) {
   if (parsed.extend) {
     const extendPath = path.isAbsolute(parsed.extend)
       ? parsed.extend
-      : require.resolve(parsed.extend)
+      : resolve.sync(parsed.extend, { basedir: path.dirname(name) })
     finalTemplate = fs.readFileSync(extendPath, 'utf-8')
     if (parsed.replace) {
       if (Array.isArray(parsed.replace)) {

@@ -17,17 +17,17 @@ module.exports = (api, { config, lintOn = [] }) => {
   if (config === 'airbnb') {
     pkg.eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^3.0.0-beta.3'
+      '@vue/eslint-config-airbnb': '^3.0.0-beta.6'
     })
   } else if (config === 'standard') {
     pkg.eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^3.0.0-beta.3'
+      '@vue/eslint-config-standard': '^3.0.0-beta.6'
     })
   } else if (config === 'prettier') {
     pkg.eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^3.0.0-beta.3'
+      '@vue/eslint-config-prettier': '^3.0.0-beta.6'
     })
   } else {
     // default
@@ -38,7 +38,7 @@ module.exports = (api, { config, lintOn = [] }) => {
   if (api.hasPlugin('typescript')) {
     pkg.eslintConfig.extends.push('@vue/typescript')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-typescript': '^3.0.0-beta.3'
+      '@vue/eslint-config-typescript': '^3.0.0-beta.6'
     })
   }
 

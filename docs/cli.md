@@ -84,7 +84,6 @@ A preset is defined in JSON. If you have saved a preset via the command line and
 
 The preset data is used by plugin generators to generate corresponding project files. In addition to the above fields, you can also add additional configuration for integrated tools:
 
-
 ``` js
 {
   "useConfigFiles": true,
@@ -99,6 +98,23 @@ The preset data is used by plugin generators to generate corresponding project f
 ```
 
 These additional configurations will be merged into `package.json` or corresponding config files, depending on the value of `useConfigFiles`. For example, with `"useConfigFiles": true`, the value of `configs.vue` will be merged into `vue.config.js`.
+
+#### Preset Plugin Versioning
+
+You can explicitly specify versions of the plugins being used:
+
+``` js
+{
+  "plugins": {
+    "@vue/cli-plugin-eslint": {
+      "version": "^3.0.0",
+      // ... other options for this plugin
+    }
+  }
+}
+```
+
+Note this is not required for official plugins - when omitted, the CLI will automatically use the latest version available in the registry. However, **it is recommended to provide a explicit version range for any 3rd party plugins listed in a preset**.
 
 #### Remote Presets
 

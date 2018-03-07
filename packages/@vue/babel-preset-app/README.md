@@ -20,8 +20,8 @@ This is the default Babel preset used in all Vue CLI projects.
 - Vue JSX support
   - [@babel/plugin-syntax-jsx](https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx)
   - [babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
-  - [babel-plugin-jsx-event-modifiers](https://github.com/nickmessing/babel-plugin-jsx-event-modifiers)
-  - [babel-plugin-jsx-v-model](https://github.com/nickmessing/babel-plugin-jsx-v-model)
+  - ~~[babel-plugin-jsx-event-modifiers](https://github.com/nickmessing/babel-plugin-jsx-event-modifiers)~~ (temporarily disabled until fixed for Babel 7)
+  - ~~[babel-plugin-jsx-v-model](https://github.com/nickmessing/babel-plugin-jsx-v-model)~~ (temporarily disabled until fixed for Babel 7)
 
 ## Options
 

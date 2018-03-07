@@ -64,5 +64,5 @@ test('jsx', () => {
     }
   `.trim(), defaultOptions)
   expect(code).toMatch(`var h = arguments[0]`)
-  expect(code).toMatch(`return h("div", null, ["bar"])`)
+  expect(code).toMatch(`return h("div", ["bar"])`)
 })
