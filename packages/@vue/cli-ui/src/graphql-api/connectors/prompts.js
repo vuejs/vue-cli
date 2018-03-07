@@ -103,7 +103,7 @@ function setAnswer (id, value) {
   const fields = id.split('.')
   let obj = answers
   const l = fields.length
-  for (let i = 0; i < l - 1; i++) {
+  for (let i = 0; i < l - 2; i++) {
     const key = fields[i]
     if (!obj[key]) {
       obj[key] = {}
@@ -111,6 +111,30 @@ function setAnswer (id, value) {
     obj = obj[key]
   }
   obj[fields[l - 1]] = value
+  console.log('answers', answers)
+}
+
+function removeAnswer (id) {
+  const fields = id.split('.')
+  let obj = answers
+  const l = fields.length
+  const objs = []
+  for (let i = 0; i < l - 2; i++) {
+    const key = fields[i]
+    if (!obj[key]) {
+      return
+    }
+    objs.splice(0, 0, { obj, key, value: obj[key] })
+    obj = obj[key]
+  }
+  delete obj[fields[l - 1]]
+  // Clear empty objects
+  for (const { obj, key, value } of objs) {
+    if (!Object.keys(value).length) {
+      delete obj[key]
+    }
+  }
+  console.log('answers', answers)
 }
 
 function generatePrompt (data) {
@@ -131,11 +155,15 @@ function generatePrompt (data) {
 
 function updatePrompts () {
   for (const prompt of prompts) {
+    const oldEnabled = prompt.enabled
     prompt.enabled = getEnabled(prompt.raw.when)
 
     prompt.choices = getChoices(prompt)
 
-    if (!prompt.valueChanged) {
+    if (oldEnabled !== prompt.enabled && !prompt.enabled) {
+      removeAnswer(prompt.id)
+      prompt.valueChanged = false
+    } else if (prompt.enabled && !prompt.valueChanged) {
       let value = getDefaultValue(prompt)
       prompt.value = getDisplayedValue(prompt, value)
       setAnswer(prompt.id, getValue(prompt, value))
