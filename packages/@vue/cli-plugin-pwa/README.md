@@ -42,6 +42,8 @@ module.exports = {
       swSrc: 'dev/sw.js',
       // ...other Workbox options...
     },
+    themeColor: '#4DBA87',
+    msTileColor: '#000000',
   },
 };
 ```
