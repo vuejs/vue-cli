@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.6",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
