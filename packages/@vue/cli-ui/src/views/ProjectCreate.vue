@@ -207,6 +207,7 @@
                 icon-left="done"
                 label="Create project"
                 class="big primary"
+                @click="showSavePreset = true"
               />
             </div>
           </VueTab>
@@ -266,6 +267,7 @@
                 label="Create project"
                 class="big primary"
                 :disabled="!configurationValid"
+                @click="showSavePreset = true"
               />
             </div>
           </VueTab>
@@ -297,9 +299,10 @@
         Are you sure you want to cancel the project creation?
       </div>
 
-      <div slot="footer" class="actions end">
+      <div slot="footer" class="actions space-between">
         <VueButton
           label="Go back"
+          class="flat"
           @click="showCancel = false"
         />
 
@@ -309,6 +312,44 @@
           icon-left="delete_forever"
           class="danger"
           @click="cancel()"
+        />
+      </div>
+    </VueModal>
+
+    <VueModal
+      v-if="showSavePreset"
+      title="Save as a new preset"
+      class="small"
+      @close="showSavePreset = false"
+    >
+      <div class="default-body">
+        <VueFormField
+          title="Preset name"
+          subtitle="Save the features and configuration into a new preset"
+        >
+          <VueInput
+            v-model="formData.newPreset"
+            icon-left="local_offer"
+          />
+        </VueFormField>
+      </div>
+
+      <div slot="footer" class="actions end">
+        <VueButton
+          label="Cancel"
+          class="flat"
+          @click="showSavePreset = false"
+        />
+
+        <VueButton
+          label="Continue without saving"
+          class="flat"
+        />
+
+        <VueButton
+          label="Create a new preset"
+          icon-left="save"
+          class="primary"
         />
       </div>
     </VueModal>
@@ -335,7 +376,8 @@ function formDataFactory () {
     selectedPreset: null,
     remotePreset: {
       url: ''
-    }
+    },
+    newPreset: ''
   }
 }
 
@@ -355,7 +397,8 @@ export default {
       cwd: '',
       projectCreation: null,
       showCancel: false,
-      showRemotePreset: false
+      showRemotePreset: false,
+      showSavePreset: false
     }
   },
 
