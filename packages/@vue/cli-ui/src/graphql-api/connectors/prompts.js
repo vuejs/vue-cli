@@ -103,7 +103,7 @@ function setAnswer (id, value) {
   const fields = id.split('.')
   let obj = answers
   const l = fields.length
-  for (let i = 0; i < l - 2; i++) {
+  for (let i = 0; i < l - 1; i++) {
     const key = fields[i]
     if (!obj[key]) {
       obj[key] = {}
@@ -111,7 +111,6 @@ function setAnswer (id, value) {
     obj = obj[key]
   }
   obj[fields[l - 1]] = value
-  console.log('answers', answers)
 }
 
 function removeAnswer (id) {
@@ -119,7 +118,7 @@ function removeAnswer (id) {
   let obj = answers
   const l = fields.length
   const objs = []
-  for (let i = 0; i < l - 2; i++) {
+  for (let i = 0; i < l - 1; i++) {
     const key = fields[i]
     if (!obj[key]) {
       return
@@ -134,7 +133,6 @@ function removeAnswer (id) {
       delete obj[key]
     }
   }
-  console.log('answers', answers)
 }
 
 function generatePrompt (data) {
