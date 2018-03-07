@@ -23,7 +23,9 @@ module.exports = (api, {
         '@babel/preset-typescript': '7 || ^7.0.0-beta || ^7.0.0-rc'
       },
       vue: {
-        experimentalCompileTsWithBabel: true
+        pluginOptions: {
+          experimentalCompileTsWithBabel
+        }
       },
       babel: {
         presets: ['@babel/typescript', '@vue/app']
