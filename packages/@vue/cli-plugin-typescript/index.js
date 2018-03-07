@@ -1,7 +1,7 @@
 module.exports = (api, {
   parallel,
   lintOnSave,
-  experimentalCompileTsWithBabel
+  pluginOptions
 }) => {
   const fs = require('fs')
   const useThreads = process.env.NODE_ENV === 'production' && parallel
@@ -54,7 +54,7 @@ module.exports = (api, {
       })
     }
 
-    if (!experimentalCompileTsWithBabel) {
+    if (!(pluginOptions && pluginOptions.experimentalCompileTsWithBabel)) {
       if (api.hasPlugin('babel')) {
         addLoader({
           loader: 'babel-loader'
