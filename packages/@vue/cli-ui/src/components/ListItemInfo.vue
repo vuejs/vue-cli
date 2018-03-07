@@ -52,6 +52,7 @@ export default {
 .list-item-info
   v-box()
   align-items stretch
+  justify-content center
 
   .description
     color lighten($vue-color-dark, 40%)
