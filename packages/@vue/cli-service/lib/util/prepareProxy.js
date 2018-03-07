@@ -50,7 +50,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     return !fs.existsSync(maybePublicPath)
   }
 
-  function createProxyEntry (target, context) {
+  function createProxyEntry (target, usersOnProxyReq, context) {
     if (process.platform === 'win32') {
       target = resolveLoopback(target)
     }
@@ -80,7 +80,10 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
         }
       },
       onProxyReq (proxyReq) {
-        // Browers may send Origin headers even with same-origin
+        if (usersOnProxyReq) {
+          usersOnProxyReq(proxyReq)
+        }
+        // Browsers may send Origin headers even with same-origin
         // requests. To prevent CORS issues, we have to change
         // the Origin to match the target URL.
         if (proxyReq.getHeader('origin')) {
@@ -118,7 +121,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
       )
       process.exit(1)
     }
-    const entry = createProxyEntry(proxy[context].target, context)
+    const entry = createProxyEntry(proxy[context].target, proxy[context].onProxyReq, context)
     return Object.assign({}, defaultConfig, proxy[context], entry)
   })
 }
