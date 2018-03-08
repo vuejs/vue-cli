@@ -7,11 +7,11 @@ const defaults = {
 }
 
 module.exports = class HtmlPwaPlugin {
-  constructor(options = {}) {
+  constructor (options = {}) {
     this.options = Object.assign({}, defaults, options)
   }
 
-  apply(compiler) {
+  apply (compiler) {
     compiler.plugin('compilation', compilation => {
       compilation.plugin('html-webpack-plugin-before-html-processing', (data, cb) => {
         // wrap favicon in the base template with IE only comment
@@ -88,7 +88,7 @@ module.exports = class HtmlPwaPlugin {
   }
 }
 
-function makeTag(tagName, attributes, closeTag = false) {
+function makeTag (tagName, attributes, closeTag = false) {
   return {
     tagName,
     closeTag,
