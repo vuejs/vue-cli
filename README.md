@@ -13,7 +13,7 @@ npm install -g @vue/cli
 # or
 yarn global add @vue/cli
 
-vue create my-project
+vue init my-project
 ```
 
 For a detailed guide with recipes for common tasks, detailed usage for each plugin, please see the [full documentation](https://github.com/vuejs/vue-cli/blob/dev/docs/README.md).
