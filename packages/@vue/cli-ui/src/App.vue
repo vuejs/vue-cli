@@ -4,9 +4,7 @@
       <router-view/>
     </div>
 
-    <StatusBar
-      @project="$router.push({ name: 'project-select' })"
-    />
+    <StatusBar/>
   </div>
 </template>
 

@@ -1,5 +1,35 @@
 <template>
   <div class="logger-view">
+    <div class="toolbar">
+      <VueIcon
+        icon="dvr"
+      />
+      <div class="title">
+        Logs
+      </div>
+      <VueButton
+        class="icon-button"
+        icon-left="delete_forever"
+        v-tooltip="'Clear logs'"
+        @click="clearLogs()"
+      />
+      <VueIcon
+        icon="lens"
+        class="separator"
+      />
+      <VueButton
+        class="icon-button"
+        icon-left="arrow_downward"
+        v-tooltip="'Scroll to bottom'"
+        @click="scrollToBottom()"
+      />
+      <VueButton
+        class="icon-button"
+        icon-left="close"
+        v-tooltip="'Close'"
+        @click="close()"
+      />
+    </div>
     <ApolloQuery
       ref="logs"
       :query="require('../graphql/consoleLogs.gql')"
@@ -20,6 +50,14 @@
             :message="log"
             pre
           />
+
+          <div
+            v-if="!data.consoleLogs.length"
+            class="vue-empty"
+          >
+            <VueIcon icon="wifi" class="large"/>
+            <div>No logs yet</div>
+          </div>
         </template>
       </template>
     </ApolloQuery>
@@ -28,6 +66,10 @@
 
 <script>
 import LoggerMessage from './LoggerMessage'
+
+import CONSOLE_LOGS from '../graphql/consoleLogs.gql'
+import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
+import CONSOLE_LOGS_CLEAR from '../graphql/consoleLogsClear.gql'
 
 export default {
   components: {
@@ -51,8 +93,19 @@ export default {
       list.scrollTop = list.scrollHeight
     },
 
-    clearLogs () {
-      // TODO
+    async clearLogs () {
+      await this.$apollo.mutate({
+        mutation: CONSOLE_LOGS_CLEAR,
+        update: store => {
+          store.writeQuery({ query: CONSOLE_LOGS, data: { consoleLogs: [] }})
+          store.writeQuery({ query: CONSOLE_LOG_LAST, data: { consoleLogLast: null }})
+        }
+      })
+      this.close()
+    },
+
+    close () {
+      this.$emit('close')
     }
   }
 }
@@ -63,21 +116,34 @@ export default {
 
 .logger-view
   background $vue-color-light-neutral
-  padding $padding-item 0
-  height 160px
+  height 174px
   display grid
   grid-template-columns 1fr
-  grid-template-rows 1fr
-  grid-template-areas "logs"
+  grid-template-rows auto 1fr
+  grid-template-areas "toolbar" "logs"
+
+  .toolbar
+    grid-area toolbar
+    h-box()
+    align-items center
+    padding 6px 6px 6px $padding-item
+    > :not(.separator)
+      space-between-x(6px)
+    > * + .separator
+      margin-left 6px
+    .title
+      flex 100% 1 1
+      width 0
+      ellipsis()
 
   .logs
     grid-area logs
     padding 0 $padding-item
     overflow-x hidden
     overflow-y auto
-    font-size 12px
 
   .logger-message
+    font-size 12px
     &:hover
       background lighten(@background, 40%)
 </style>

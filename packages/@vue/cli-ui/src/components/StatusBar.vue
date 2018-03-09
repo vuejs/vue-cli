@@ -2,13 +2,14 @@
   <div class="status-bar">
     <LoggerView
       v-if="showLogs"
+      @close="showLogs = false"
     />
 
     <div class="content">
       <div
-        class="section current-project"
-        v-tooltip="'Current project'"
-        @click="$emit('project')"
+        class="section action current-project"
+        v-tooltip="'Current project<br><i>Click to toggle Project Manager</i>'"
+        @click="onProjectClick()"
       >
         <VueIcon icon="work"/>
         <span v-if="projectCurrent">{{ projectCurrent.name }}</span>
@@ -19,7 +20,7 @@
         :query="require('@/graphql/cwd.gql')"
         class="section current-path"
         v-tooltip="'Current Working Directory'"
-        @click.native="$emit('cwd')"
+        @click.native="onCwdClick()"
       >
         <ApolloSubscribeToMore
           :document="require('@/graphql/cwdChanged.gql')"
@@ -35,11 +36,11 @@
       </ApolloQuery>
 
       <div
-        class="section console-log"
-        v-tooltip="'Logs'"
+        class="section action console-log"
+        v-tooltip="'Logs<br><i>Click to toggle vue-cli logs</i>'"
         @click="onConsoleClick()"
       >
-        <VueIcon icon="subtitles"/>
+        <VueIcon icon="dvr"/>
         <LoggerMessage class="last-message"
           v-if="consoleLogLast"
           :message="consoleLogLast"
@@ -66,6 +67,8 @@ import LoggerView from '../components/LoggerView'
 import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
 import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
+
+let lastRoute
 
 export default {
   components: {
@@ -103,6 +106,21 @@ export default {
   },
 
   methods: {
+    onProjectClick () {
+      this.$emit('project')
+      if (this.$route.name === 'project-select') {
+        this.$router.push(lastRoute || { name: 'home' })
+      } else {
+        const { name, params, query } = this.$route
+        lastRoute = { name, params, query }
+        this.$router.push({ name: 'project-select' })
+      }
+    },
+
+    onCwdClick () {
+      this.$emit('cwd')
+    },
+
     onConsoleClick () {
       this.$emit('console')
       this.showLogs = !this.showLogs
@@ -142,6 +160,10 @@ export default {
 
     .label
       color lighten($vue-color-dark, 20%)
+
+    &.action
+      user-select none
+      cursor pointer
 
   .console-log
     &,

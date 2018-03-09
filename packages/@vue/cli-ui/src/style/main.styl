@@ -46,3 +46,12 @@ ansi-colors('blue', $md-blue)
 ansi-colors('magenta', $vue-color-accent)
 ansi-colors('cyan', $vue-color-info)
 ansi-colors('white', $vue-color-light)
+
+.vue-icon.separator
+  width 6px
+  height @width
+  h-box()
+  box-center()
+  margin $padding-item
+  svg
+    fill rgba($vue-color-dark, .2)
