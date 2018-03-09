@@ -1,12 +1,13 @@
 <template>
   <div class="logger-view">
     <ApolloQuery
+      ref="logs"
       :query="require('../graphql/consoleLogs.gql')"
       fetch-policy="cache-and-network"
       class="logs"
+      @result="scrollToBottom()"
     >
       <ApolloSubscribeToMore
-        ref="logs"
         :document="require('../graphql/consoleLogAdded.gql')"
         :update-query="onConsoleLogAdded"
       />
@@ -48,7 +49,6 @@ export default {
       await this.$nextTick()
       const list = this.$refs.logs.$el
       list.scrollTop = list.scrollHeight
-      console.log(list.scrollHeight)
     },
 
     clearLogs () {

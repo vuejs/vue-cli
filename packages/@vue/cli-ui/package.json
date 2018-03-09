@@ -36,7 +36,7 @@
     "stylus-loader": "^3.0.1",
     "subscriptions-transport-ws": "^0.9.5",
     "vue": "^2.5.13",
-    "vue-apollo": "^3.0.0-alpha.1",
+    "vue-apollo": "^3.0.0-beta.5",
     "vue-cli-plugin-apollo": "^0.4.1",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.13",
