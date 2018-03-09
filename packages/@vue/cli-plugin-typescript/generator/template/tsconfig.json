@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "<%- options.useTsWithBabel ? 'es2015' : 'es5' %>",
-    "module": "es2015",
+    "target": "<%- options.useTsWithBabel ? 'esnext' : 'es5' %>",
+    "module": "esnext",
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
