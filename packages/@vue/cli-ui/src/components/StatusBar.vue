@@ -45,6 +45,7 @@
           v-if="consoleLogLast"
           :message="consoleLogLast"
         />
+        <div v-else class="last-message">No logs yet</div>
         <!-- <TerminalView
           :cols="100"
           :rows="1"
@@ -171,6 +172,6 @@ export default {
       flex 100% 1 1
       width 0
 
-    .last-message
+    .logger-message
       font-size .9em
 </style>
