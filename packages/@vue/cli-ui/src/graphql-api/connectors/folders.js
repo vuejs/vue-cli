@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const rimraf = require('rimraf')
 
 const cwd = require('./cwd')
 
@@ -77,6 +78,18 @@ function setFavorite ({ file, favorite }, context) {
   return generateFolder(file, context)
 }
 
+function deleteFolder (file) {
+  return new Promise((resolve, reject) => {
+    rimraf(file, err => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
 module.exports = {
   getCurrent,
   list,
@@ -86,5 +99,6 @@ module.exports = {
   readPackage,
   isVueProject,
   listFavorite,
-  setFavorite
+  setFavorite,
+  delete: deleteFolder
 }

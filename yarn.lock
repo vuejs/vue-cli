@@ -905,6 +905,10 @@ ansi-wrap@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/ansi-wrap/-/ansi-wrap-0.1.0.tgz#a82250ddb0015e9a27ca82e82ea603bbfa45efaf"
 
+ansi_up@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ansi_up/-/ansi_up-2.0.2.tgz#9b54de508c5c579f5b6968e65c1b863e0680ab92"
+
 any-observable@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/any-observable/-/any-observable-0.2.0.tgz#c67870058003579009083f54ac0abafb5c33d242"
@@ -11166,6 +11170,10 @@ xregexp@2.0.0:
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
+
+xterm@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/xterm/-/xterm-3.2.0.tgz#da50f54a83d81463c0a2c9f2e0a5d14d3867df02"
 
 y18n@^3.2.1:
   version "3.2.1"

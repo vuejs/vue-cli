@@ -1,4 +1,5 @@
 module.exports = {
   CWD_CHANGED: 'cwd_changed',
-  CREATE_STATUS: 'create_status'
+  PROGRESS_CHANGED: 'progress_changed',
+  CONSOLE_LOG_ADDED: 'console_log_added'
 }

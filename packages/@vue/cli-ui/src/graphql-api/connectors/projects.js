@@ -1,24 +1,27 @@
 const path = require('path')
 const fs = require('fs')
 const shortId = require('shortid')
-const rimraf = require('rimraf')
 const Creator = require('@vue/cli/lib/Creator')
 const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { getFeatures } = require('@vue/cli/lib/util/features')
 const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
+const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
 
-const channels = require('../channels')
-
+const progress = require('./progress')
 const cwd = require('./cwd')
 const prompts = require('./prompts')
 const folders = require('./folders')
+
+const PROGRESS_ID = 'project-create'
 
 let currentProject = null
 let creator = null
 let presets = []
 let features = []
 let onCreationEvent = null
+let onInstallProgress = null
+let onInstallLog = null
 
 function list (context) {
   return context.db.get('projects').value()
@@ -50,9 +53,23 @@ function initCreator (context) {
   const creator = new Creator('', cwd.get(), getPromptModules())
 
   onCreationEvent = ({ event }) => {
-    context.pubsub.publish(channels.CREATE_STATUS, { createStatus: event })
+    progress.set({ id: PROGRESS_ID, status: event, info: null }, context)
   }
-  creator.addListener('creation', onCreationEvent)
+  creator.on('creation', onCreationEvent)
+
+  onInstallProgress = value => {
+    if (progress.get(PROGRESS_ID)) {
+      progress.set({ id: PROGRESS_ID, progress: value }, context)
+    }
+  }
+  installProgress.on('progress', onInstallProgress)
+
+  onInstallLog = message => {
+    if (progress.get(PROGRESS_ID)) {
+      progress.set({ id: PROGRESS_ID, info: message }, context)
+    }
+  }
+  installProgress.on('log', onInstallLog)
 
   // Presets
   const presetsData = creator.getPresets()
@@ -116,6 +133,8 @@ function initCreator (context) {
 function removeCreator (context) {
   if (creator) {
     creator.removeListener('creation', onCreationEvent)
+    installProgress.removeListener('progress', onInstallProgress)
+    installProgress.removeListener('log', onInstallLog)
     creator = null
   }
 }
@@ -185,59 +204,77 @@ function answerPrompt ({ id, value }, context) {
 }
 
 async function create (input, context) {
-  const targetDir = path.join(cwd.get(), input.folder)
-  creator.context = targetDir
+  return progress.wrap(PROGRESS_ID, context, async setProgress => {
+    setProgress({
+      status: 'creating'
+    })
 
-  const inCurrent = input.folder === '.'
-  const name = inCurrent ? path.relative('../', process.cwd()) : input.folder
-  creator.name = name
+    const targetDir = path.join(cwd.get(), input.folder)
+    creator.context = targetDir
 
-  if (fs.existsSync(targetDir)) {
-    if (input.force) {
-      rimraf.sync(targetDir)
-    } else {
-      throw new Error(`Folder ${targetDir} already exists`)
+    const inCurrent = input.folder === '.'
+    const name = inCurrent ? path.relative('../', process.cwd()) : input.folder
+    creator.name = name
+
+    if (fs.existsSync(targetDir)) {
+      if (input.force) {
+        setProgress({
+          info: 'Cleaning folder...'
+        })
+        await folders.delete(targetDir)
+        setProgress({
+          info: null
+        })
+      } else {
+        throw new Error(`Folder ${targetDir} already exists`)
+      }
     }
-  }
 
-  const answers = prompts.getAnswers()
-  prompts.reset()
-  let index
+    const answers = prompts.getAnswers()
+    prompts.reset()
+    let index
 
-  // Package Manager
-  answers.packageManager = input.packageManager
+    // Package Manager
+    answers.packageManager = input.packageManager
 
-  // Config files
-  if ((index = answers.features.includes('use-config-files')) !== -1) {
-    answers.features.splice(index, 1)
-    answers.useConfigFiles = 'files'
-  }
+    // Config files
+    if ((index = answers.features.includes('use-config-files')) !== -1) {
+      answers.features.splice(index, 1)
+      answers.useConfigFiles = 'files'
+    }
 
-  // Preset
-  answers.preset = input.preset
-  if (input.save) {
-    answers.save = true
-    answers.saveName = input.save
-  }
+    // Preset
+    answers.preset = input.preset
+    if (input.save) {
+      answers.save = true
+      answers.saveName = input.save
+    }
 
-  let preset
-  if (input.remote) {
-    // vue create foo --preset bar
-    preset = await creator.resolvePreset(input.preset, input.clone)
-  } else if (input.preset === 'default') {
-    // vue create foo --default
-    preset = defaults.presets.default
-  } else {
-    preset = await creator.promptAndResolvePreset(answers)
-  }
+    setProgress({
+      info: 'Resolving preset...'
+    })
+    let preset
+    if (input.remote) {
+      // vue create foo --preset bar
+      preset = await creator.resolvePreset(input.preset, input.clone)
+    } else if (input.preset === 'default') {
+      // vue create foo --default
+      preset = defaults.presets.default
+    } else {
+      preset = await creator.promptAndResolvePreset(answers)
+    }
+    setProgress({
+      info: null
+    })
 
-  await creator.create({}, preset)
+    await creator.create({}, preset)
 
-  removeCreator()
+    removeCreator()
 
-  return importProject({
-    path: targetDir
-  }, context)
+    return importProject({
+      path: targetDir
+    }, context)
+  })
 }
 
 async function importProject (input, context) {

@@ -1,0 +1,7 @@
+#import "./consoleLogFragment.gql"
+
+mutation consoleLogsClear {
+  consoleLogsClear {
+    ...consoleLog
+  }
+}

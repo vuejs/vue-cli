@@ -3,7 +3,7 @@ const semver = require('semver')
 const getVersions = require('./getVersions')
 const { clearConsole } = require('@vue/cli-shared-utils')
 
-module.exports = async function clearConsoleWithTitle (checkUpdate) {
+exports.generateTitle = async function (checkUpdate) {
   const { current, latest } = await getVersions()
 
   let title = chalk.bold.blue(`Vue CLI v${current}`)
@@ -21,5 +21,10 @@ module.exports = async function clearConsoleWithTitle (checkUpdate) {
 └─────────────────────────${`─`.repeat(latest.length)}─┘`)
   }
 
+  return title
+}
+
+exports.clearConsole = async function clearConsoleWithTitle (checkUpdate) {
+  const title = await exports.generateTitle(checkUpdate)
   clearConsole(title)
 }

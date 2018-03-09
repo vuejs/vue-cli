@@ -32,8 +32,17 @@ body,
 
 .cta-text
   margin $padding-item
-  color lighten($vue-color-dark, 40%)
+  color $color-text-light
   font-size 18px
 
 .list-item
   list-item()
+
+ansi-colors('black', $vue-color-dark)
+ansi-colors('red', $vue-color-danger)
+ansi-colors('green', $vue-color-primary)
+ansi-colors('yellow', $vue-color-warning)
+ansi-colors('blue', $md-blue)
+ansi-colors('magenta', $vue-color-accent)
+ansi-colors('cyan', $vue-color-info)
+ansi-colors('white', $vue-color-light)

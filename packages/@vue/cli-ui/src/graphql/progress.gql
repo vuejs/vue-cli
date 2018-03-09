@@ -1,0 +1,7 @@
+#import "./progressFragment.gql"
+
+query progress ($id: ID!) {
+  progress (id: $id) {
+    ...progress
+  }
+}

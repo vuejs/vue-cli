@@ -55,7 +55,7 @@ export default {
   justify-content center
 
   .description
-    color lighten($vue-color-dark, 40%)
+    color $color-text-light
 
   &.selected
     .name

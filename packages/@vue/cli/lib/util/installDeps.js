@@ -1,3 +1,4 @@
+const EventEmitter = require('events')
 const request = require('./request')
 const chalk = require('chalk')
 const execa = require('execa')
@@ -14,6 +15,37 @@ const registries = {
   taobao: 'https://registry.npm.taobao.org'
 }
 const taobaoDistURL = 'https://npm.taobao.org/dist'
+
+class InstallProgress extends EventEmitter {
+  constructor () {
+    super()
+
+    this._progress = -1
+  }
+
+  get progress () {
+    return this._progress
+  }
+
+  set progress (value) {
+    this._progress = value
+    this.emit('progress', value)
+  }
+
+  get enabled () {
+    return this._progress !== -1
+  }
+
+  set enabled (value) {
+    this.progress = value ? 0 : -1
+  }
+
+  log (value) {
+    this.emit('log', value)
+  }
+}
+
+const progress = exports.progress = new InstallProgress()
 
 async function ping (registry) {
   await request.get(`${registry}/vue-cli-version-marker/latest`)
@@ -119,28 +151,86 @@ async function addRegistryToArgs (command, args, cliRegistry) {
 
 function executeCommand (command, args, targetDir) {
   return new Promise((resolve, reject) => {
+    const apiMode = process.env.VUE_CLI_API_MODE
+
+    progress.enabled = false
+
+    // const lines = []
+    // let count = 0
+    // const unhook = intercept(buffer => {
+    //   count++
+    //   lines.push(buffer)
+    //   const str = buffer === 'string' ? buffer : buffer.toString()
+    //   // Steps
+    //   const stepMatch = str.match(/\[\d+\/\d+]\s+(.*)/)
+    //   if (stepMatch) {
+    //     progress.log(stepMatch[1])
+    //   }
+    // })
+
+    if (apiMode) {
+      if (command === 'npm') {
+        // TODO when this is supported
+      } else if (command === 'yarn') {
+        args.push('--json')
+      }
+    }
+
     const child = execa(command, args, {
       cwd: targetDir,
-      stdio: ['inherit', 'inherit', command === 'yarn' ? 'pipe' : 'inherit']
+      stdio: ['inherit', apiMode ? 'pipe' : 'inherit', !apiMode && command === 'yarn' ? 'pipe' : 'inherit']
     })
 
-    // filter out unwanted yarn output
-    if (command === 'yarn') {
-      child.stderr.on('data', buf => {
-        const str = buf.toString()
-        if (/warning/.test(str)) {
-          return
+    if (apiMode) {
+      let progressTotal = 0
+      let progressTime = Date.now()
+      child.stdout.on('data', buffer => {
+        let str = buffer.toString().trim()
+        if (str && command === 'yarn' && str.indexOf('"type":') !== -1) {
+          const newLineIndex = str.lastIndexOf('\n')
+          if (newLineIndex !== -1) {
+            str = str.substr(newLineIndex)
+          }
+          const data = JSON.parse(str)
+          if (data.type === 'step') {
+            progress.enabled = false
+            progress.log(data.data.message)
+          } else if (data.type === 'progressStart') {
+            progressTotal = data.data.total
+          } else if (data.type === 'progressTick') {
+            const time = Date.now()
+            if (time - progressTime > 20) {
+              progressTime = time
+              progress.progress = data.data.current / progressTotal
+            }
+          } else {
+            progress.enabled = false
+          }
+        } else {
+          process.stdout.write(buffer)
         }
-        // progress bar
-        const progressBarMatch = str.match(/\[.*\] (\d+)\/(\d+)/)
-        if (progressBarMatch) {
-          // since yarn is in a child process, it's unable to get the width of
-          // the terminal. reimplement the progress bar ourselves!
-          renderProgressBar(progressBarMatch[1], progressBarMatch[2])
-          return
-        }
-        process.stderr.write(buf)
       })
+    } else {
+      // filter out unwanted yarn output
+      if (command === 'yarn') {
+        child.stderr.on('data', buf => {
+          const str = buf.toString()
+          if (/warning/.test(str)) {
+            return
+          }
+
+          // progress bar
+          const progressBarMatch = str.match(/\[.*\] (\d+)\/(\d+)/)
+          if (progressBarMatch) {
+            // since yarn is in a child process, it's unable to get the width of
+            // the terminal. reimplement the progress bar ourselves!
+            renderProgressBar(progressBarMatch[1], progressBarMatch[2])
+            return
+          }
+
+          process.stderr.write(buf)
+        })
+      }
     }
 
     child.on('close', code => {

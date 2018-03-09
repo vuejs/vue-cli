@@ -3,9 +3,9 @@ module.exports = `
 type ConsoleLog {
   id: ID!
   message: String!
-  label: String
   tag: String
   type: ConsoleLogType!
+  date: String
 }
 
 enum ConsoleLogType {
@@ -140,8 +140,20 @@ input PromptInput {
   value: String!
 }
 
+type Progress {
+  id: ID!
+  status: String
+  info: String
+  error: String
+  # Progress from 0 to 1 (-1 means disabled)
+  progress: Float
+}
+
 type Query {
+  progress (id: ID!): Progress
   cwd: String!
+  consoleLogs: [ConsoleLog]
+  consoleLogLast: ConsoleLog
   folderCurrent: Folder
   foldersFavorite: [Folder]
   projects: [Project]
@@ -151,6 +163,7 @@ type Query {
 }
 
 type Mutation {
+  consoleLogsClear: [ConsoleLog]
   folderOpen (path: String!): Folder
   folderOpenParent: Folder
   folderSetFavorite (path: String!, favorite: Boolean!): Folder
@@ -166,8 +179,8 @@ type Mutation {
 }
 
 type Subscription {
+  progressChanged (id: ID!): Progress
   consoleLogAdded: ConsoleLog!
   cwdChanged: String!
-  createStatus: String!
 }
 `

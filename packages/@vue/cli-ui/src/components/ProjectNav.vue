@@ -52,7 +52,8 @@ export default {
       button-colors(rgba($vue-color-light, .7), transparent)
       border-radius 0
       &:hover
-        button-colors($vue-color-light, lighten($vue-color-dark, 10%))
+        $bg = darken($vue-color-dark, 70%)
+        button-colors($vue-color-light, $bg)
         &.selected
-          button-colors($vue-color-primary, lighten($vue-color-dark, 10%))
+          button-colors(lighten($vue-color-primary, 40%), $bg)
 </style>

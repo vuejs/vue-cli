@@ -31,7 +31,7 @@ export default {
 .app
   display grid
   grid-template-columns 1fr
-  grid-template-rows auto 28px
+  grid-template-rows 1fr auto
   grid-template-areas "content" "status"
 
 .content

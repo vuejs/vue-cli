@@ -297,7 +297,7 @@
       @close="showCancel = false"
     >
       <div class="default-body">
-        Are you sure you want to cancel the project creation?
+        Are you sure you want to reset the project creation?
       </div>
 
       <div slot="footer" class="actions space-between">
@@ -312,7 +312,7 @@
           label="Clear project"
           icon-left="delete_forever"
           class="danger"
-          @click="cancel()"
+          @click="reset()"
         />
       </div>
     </VueModal>
@@ -358,36 +358,14 @@
       </div>
     </VueModal>
 
-    <transition name="vue-fade">
-      <LoadingScreen
-        v-if="showLoading"
-        :loading="loading"
-      >
-        <div v-if="error" class="error">
-          <VueIcon
-            icon="error"
-            class="huge"
-          />
-          <div>{{ error }}</div>
-          <div class="actions">
-            <VueButton
-              icon-left="close"
-              label="close"
-              @click="showLoading = false"
-            />
-          </div>
-        </div>
-
-        <template v-else>
-          <div class="status">{{ statusMessage }}</div>
-        </template>
-      </LoadingScreen>
-    </transition>
+    <ProgressScreen
+      progress-id="project-create"
+    />
   </div>
 </template>
 
 <script>
-import LoadingScreen from '../components/LoadingScreen'
+import ProgressScreen from '../components/ProgressScreen'
 import ProjectFeatureItem from '../components/ProjectFeatureItem'
 import ProjectPresetItem from '../components/ProjectPresetItem'
 import PrompsList from '../components/PromptsList'
@@ -399,12 +377,11 @@ import FEATURE_SET_ENABLED from '../graphql/featureSetEnabled.gql'
 import PRESET_APPLY from '../graphql/presetApply.gql'
 import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
 import PROJECT_CREATE from '../graphql/projectCreate.gql'
-import CREATE_STATUS from '../graphql/createStatus.gql'
 
 function formDataFactory () {
   return {
-    folder: '',
-    force: false,
+    folder: 'test-app',
+    force: true,
     packageManager: undefined,
     selectedPreset: null,
     remotePreset: {
@@ -419,7 +396,7 @@ let formData = formDataFactory()
 
 export default {
   components: {
-    LoadingScreen,
+    ProgressScreen,
     ProjectFeatureItem,
     ProjectPresetItem,
     PrompsList,
@@ -434,10 +411,6 @@ export default {
       showCancel: false,
       showRemotePreset: false,
       showSavePreset: false,
-      showLoading: false,
-      loading: false,
-      createStatus: '',
-      error: null
     }
   },
 
@@ -450,15 +423,6 @@ export default {
     projectCreation: {
       query: PROJECT_CREATION,
       fetchPolicy: 'network-only',
-    },
-
-    $subscribe: {
-      createStatus: {
-        query: CREATE_STATUS,
-        result ({ data }) {
-          this.createStatus = data.createStatus
-        }
-      }
     }
   },
 
@@ -495,29 +459,11 @@ export default {
         name: 'Remote preset',
         description: 'Fetch a preset from a git repository'
       }
-    },
-
-    statusMessage () {
-      const messages = {
-        'creating': 'Creating project...',
-        'git-init': 'Initializing git repository...',
-        'plugins-install': 'Installing CLI plugins. This might take a while...',
-        'invoking-generators': 'Invoking generators...',
-        'deps-install': 'Installing additional dependencies...',
-        'completion-hooks': 'Running completion hooks...',
-        'fetch-remote-preset': `Fetching remote preset ${this.formData.remotePreset.url}...`,
-        'done': 'Successfully created project'
-      }
-      const message = messages[this.createStatus]
-      if (!message) {
-        console.warn(`Message not found for '${this.createStatus}'`)
-      }
-      return message || ''
     }
   },
 
   methods: {
-    cancel () {
+    reset () {
       formData = formDataFactory()
     },
 
@@ -576,10 +522,6 @@ export default {
 
     async createProject () {
       this.showSavePreset = false
-      this.error = null
-      this.createStatus = 'creating'
-      this.showLoading = true
-      this.loading = true
 
       try {
         await this.$apollo.mutate({
@@ -597,15 +539,10 @@ export default {
           }
         })
         this.$router.push({ name: 'home' })
+        this.reset()
       } catch(e) {
-        if (e.graphQLErrors && e.graphQLErrors.length) {
-          this.error = e.graphQLErrors[0].message
-        } else {
-          this.error = e.message
-        }
+        console.error(e)
       }
-
-      this.loading = false
     },
   }
 }

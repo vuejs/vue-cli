@@ -21,6 +21,7 @@
     "@vue/cli-service": "^3.0.0-beta.3",
     "@vue/eslint-config-standard": "^3.0.0-beta.3",
     "@vue/ui": "^0.1.9",
+    "ansi_up": "^2.0.2",
     "apollo-cache-inmemory": "^1.1.10",
     "apollo-client": "^2.2.6",
     "apollo-link": "^1.2.1",
@@ -38,7 +39,8 @@
     "vue-apollo": "^3.0.0-alpha.1",
     "vue-cli-plugin-apollo": "^0.4.1",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.5.13"
+    "vue-template-compiler": "^2.5.13",
+    "xterm": "^3.2.0"
   },
   "browserslist": [
     "> 1%",

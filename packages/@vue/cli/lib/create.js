@@ -4,7 +4,7 @@ const chalk = require('chalk')
 const rimraf = require('rimraf')
 const inquirer = require('inquirer')
 const Creator = require('./Creator')
-const clearConsole = require('./util/clearConsole')
+const { clearConsole } = require('./util/clearConsole')
 const { getPromptModules } = require('./util/createTools')
 const { error, stopSpinner } = require('@vue/cli-shared-utils')
 

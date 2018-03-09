@@ -7,3 +7,14 @@ list-item()
 
   &:hover
     background rgba($vue-color-primary, .1)
+
+
+ansi-colors($name, $color)
+  .ansi-{$name}-fg
+    color $color
+  .ansi-{$name}-bg
+    background $color
+  .ansi-bright-{$name}-fg
+    color lighten($color, 10%)
+  .ansi-bright-{$name}-bg
+    background lighten($color, 10%)
