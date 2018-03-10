@@ -112,8 +112,12 @@ export default {
       if (this.$route.name === 'project-select') {
         this.$router.push(lastRoute || { name: 'home' })
       } else {
-        const { name, params, query } = this.$route
-        lastRoute = { name, params, query }
+        if (this.$route.name === 'project-create') {
+          lastRoute = null
+        } else {
+          const { name, params, query } = this.$route
+          lastRoute = { name, params, query }
+        }
         this.$router.push({ name: 'project-select' })
       }
     },

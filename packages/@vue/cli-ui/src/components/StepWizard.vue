@@ -7,7 +7,9 @@
   >
     <div class="shell">
       <div class="header">
-        <div v-if="title" class="title">{{ title }}</div>
+        <div class="content">
+          <div v-if="title" class="title">{{ title }}</div>
+        </div>
       </div>
 
       <VueTabs
@@ -65,9 +67,18 @@ export default {
     v-box()
     height 100%
 
+  .header
+    .content
+      margin 0 auto
+
   .main-tabs
     height 100%
     flex auto 1 1
+
+  >>> .vue-tab
+    margin 0 auto
+    padding $padding-item $padding-item 0
+    box-sizing border-box
 
   .header,
   >>> .tabs
@@ -84,6 +95,7 @@ export default {
   >>> .vue-tab-content
     overflow-y hidden
     v-box()
+    margin 0 auto
 
     > .content
       flex 100% 1 1
@@ -107,10 +119,11 @@ export default {
 
   &.frame
     margin 0 auto
-    padding $padding-item
-    max-width 1200px
+    $max-width = 1200px
     .shell
-      border solid 1px $vue-color-light-neutral
-      border-radius $br
+      background $color-light-background
+    .header .content,
+    >>> .vue-tab
+      max-width $max-width
 
 </style>
