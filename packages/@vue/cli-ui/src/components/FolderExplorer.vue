@@ -107,6 +107,7 @@ import FOLDERS_FAVORITE from '../graphql/foldersFavorite.gql'
 import FOLDER_OPEN from '../graphql/folderOpen.gql'
 import FOLDER_OPEN_PARENT from '../graphql/folderOpenParent.gql'
 import FOLDER_SET_FAVORITE from '../graphql/folderSetFavorite.gql'
+import PROJECT_CWD_RESET from '../graphql/projectCwdReset.gql'
 
 export default {
   components: {
@@ -130,6 +131,10 @@ export default {
     },
 
     foldersFavorite: FOLDERS_FAVORITE
+  },
+
+  beforeDestroy () {
+    this.resetProjectCwd()
   },
 
   methods: {
@@ -209,6 +214,12 @@ export default {
 
     refreshFolder () {
       this.openFolder(this.folderCurrent.path)
+    },
+
+    resetProjectCwd () {
+      this.$apollo.mutate({
+        mutation: PROJECT_CWD_RESET
+      })
     }
   }
 }

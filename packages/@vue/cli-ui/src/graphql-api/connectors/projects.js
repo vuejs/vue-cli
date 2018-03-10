@@ -322,6 +322,12 @@ async function getPlugins (id, context) {
   return []
 }
 
+function resetCwd (context) {
+  if (currentProject) {
+    cwd.set(currentProject.path, context)
+  }
+}
+
 module.exports = {
   list,
   getCurrent,
@@ -333,5 +339,6 @@ module.exports = {
   import: importProject,
   open,
   remove,
-  getPlugins
+  getPlugins,
+  resetCwd
 }

@@ -172,6 +172,7 @@ type Mutation {
   projectOpen (id: ID!): Project!
   projectSetFavorite (id: ID!, favorite: Int!): Project!
   projectRemove (id: ID!): Boolean!
+  projectCwdReset: String
   presetApply (id: ID!): ProjectCreation
   featureSetEnabled (id: ID!, enabled: Boolean): Feature
   pluginAdd (id: ID!): Plugin

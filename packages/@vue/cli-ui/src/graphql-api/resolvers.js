@@ -52,7 +52,8 @@ module.exports = {
     projectCreate: (root, { input }, context) => projects.create(input, context),
     projectImport: (root, { input }, context) => projects.import(input, context),
     projectOpen: (root, { id }, context) => projects.open(id, context),
-    projectRemove: (root, { id }, context) => projects.remove(id, context)
+    projectRemove: (root, { id }, context) => projects.remove(id, context),
+    projectCwdReset: (root, args, context) => projects.resetCwd(context)
   },
 
   Subscription: {
