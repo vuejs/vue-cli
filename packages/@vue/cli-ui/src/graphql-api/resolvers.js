@@ -29,7 +29,8 @@ module.exports = {
 
   Plugin: {
     version: (plugin, args, context) => plugins.getVersion(plugin, context),
-    description: (plugin, args, context) => plugins.getDescription(plugin, context)
+    description: (plugin, args, context) => plugins.getDescription(plugin, context),
+    logo: (plugin, args, context) => plugins.getLogo(plugin, context)
   },
 
   Query: {

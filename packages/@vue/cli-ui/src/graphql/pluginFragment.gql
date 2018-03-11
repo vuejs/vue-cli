@@ -9,4 +9,5 @@ fragment plugin on Plugin {
   installed
   website
   description
+  logo
 }

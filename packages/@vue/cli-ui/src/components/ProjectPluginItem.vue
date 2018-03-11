@@ -1,5 +1,19 @@
 <template>
   <div class="project-plugin-item list-item">
+    <div class="logo">
+      <div class="wrapper">
+        <img
+          v-if="plugin.logo"
+          class="image"
+          :src="plugin.logo"
+        >
+        <VueIcon
+          v-else
+          icon="widgets"
+        />
+      </div>
+    </div>
+
     <ListItemInfo
       :name="plugin.id"
       :link="plugin.website"
@@ -61,6 +75,12 @@ export default {
 
 .project-plugin-item
   padding $padding-item
+  h-box()
+  box-center()
+
+  .list-item-info
+    flex 100% 1 1
+    width 0
 
   .plugin-description
     margin-right $padding-item
@@ -69,6 +89,7 @@ export default {
     opacity .7
 
   .info
+    display inline-block
     space-between-x($padding-item)
     >>> > *
       space-between-x(4px)
@@ -76,4 +97,24 @@ export default {
   .package-description
     font-style italic
     opacity .7
+
+  .logo
+    margin-right $padding-item
+    .wrapper
+      h-box()
+      box-center()
+      width 42px
+      height @width
+      background rgba(black, .03)
+      border-radius 50%
+      overflow hidden
+      .image
+        width 100%
+        height @width
+      .vue-icon
+        width 24px
+        height @width
+        >>> svg
+          fill rgba($color-text-light, .3)
+
 </style>

@@ -12,6 +12,10 @@ const metadataCache = new LRU({
   maxAge: 1000 * 60 * 30
 })
 
+const logoCache = new LRU({
+  max: 50
+})
+
 function getPath (id) {
   return path.join(cwd.get(), 'node_modules', id)
 }
@@ -89,8 +93,24 @@ async function getDescription ({ id }, context) {
   return null
 }
 
+async function getLogo ({ id }, context) {
+  const cached = logoCache.get(id)
+  if (cached) {
+    return `data:image/png;base64,${cached}`
+  }
+  const folder = getPath(id)
+  const file = path.join(folder, 'logo.png')
+  if (fs.existsSync(file)) {
+    const data = fs.readFileSync(file, { encoding: 'base64' })
+    logoCache.set(id, data)
+    return `data:image/png;base64,${data}`
+  }
+  return null
+}
+
 module.exports = {
   list,
   getVersion,
-  getDescription
+  getDescription,
+  getLogo
 }

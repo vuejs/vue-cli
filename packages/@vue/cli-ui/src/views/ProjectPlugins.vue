@@ -16,6 +16,8 @@
         fetch-policy="cache-and-network"
       >
         <template slot-scope="{ result: { data, loading } }">
+          <div class="cta-text">Installed plugins</div>
+
           <VueLoadingIndicator
             v-if="loading"
             class="overlay"

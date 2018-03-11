@@ -85,6 +85,7 @@ type Plugin {
   description: String
   githubStats: GitHubStats
   prompts: [Prompt]
+  logo: String
 }
 
 type Feature {
