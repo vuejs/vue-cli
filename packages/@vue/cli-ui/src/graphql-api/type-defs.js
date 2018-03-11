@@ -69,6 +69,7 @@ type ProjectCreation {
 type Version {
   current: String!
   latest: String
+  range: String
 }
 
 type GitHubStats {
@@ -84,10 +85,6 @@ type Plugin {
   description: String
   githubStats: GitHubStats
   prompts: [Prompt]
-}
-
-input PluginSearchInput {
-  terms: String!
 }
 
 type Feature {
@@ -159,7 +156,6 @@ type Query {
   projects: [Project]
   projectCurrent: Project
   projectCreation: ProjectCreation
-  pluginSearch (input: PluginSearchInput!): [Plugin]
 }
 
 type Mutation {

@@ -20,13 +20,7 @@
 </template>
 
 <script>
-import ListItemInfo from './ListItemInfo'
-
 export default {
-  components: {
-    ListItemInfo
-  },
-
   props: {
     feature: {
       type: Object,

@@ -101,7 +101,6 @@
 </template>
 
 <script>
-import FolderExplorerItem from './FolderExplorerItem'
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
 import FOLDERS_FAVORITE from '../graphql/foldersFavorite.gql'
 import FOLDER_OPEN from '../graphql/folderOpen.gql'
@@ -110,10 +109,6 @@ import FOLDER_SET_FAVORITE from '../graphql/folderSetFavorite.gql'
 import PROJECT_CWD_RESET from '../graphql/projectCwdReset.gql'
 
 export default {
-  components: {
-    FolderExplorerItem,
-  },
-
   data () {
     return {
       error: false,

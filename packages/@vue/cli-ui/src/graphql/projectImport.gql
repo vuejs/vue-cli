@@ -1,7 +1,7 @@
-#import "./projectCurrentFragment.gql"
+#import "./projectFragment.gql"
 
 mutation projectImport ($input: ProjectImportInput!) {
   projectImport(input: $input) {
-    ...projectCurrent
+    ...project
   }
 }

@@ -1,9 +1,0 @@
-#import "./projectFragment.gql"
-#import "./pluginFragment.gql"
-
-fragment projectCurrent on Project {
-  ...project
-  plugins {
-    ...plugin
-  }
-}

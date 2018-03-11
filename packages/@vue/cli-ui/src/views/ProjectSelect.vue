@@ -57,19 +57,11 @@
 </template>
 
 <script>
-import FolderExplorer from '../components/FolderExplorer'
-import ProjectSelectList from '../components/ProjectSelectList'
-import StepWizard from '../components/StepWizard'
-
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
 import PROJECT_IMPORT from '../graphql/projectImport.gql'
 
 export default {
-  components: {
-    FolderExplorer,
-    ProjectSelectList,
-    StepWizard
-  },
+  name: 'ProjectSelect',
 
   data () {
     return {
@@ -99,7 +91,7 @@ export default {
         }
       })
 
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'project-home' })
     }
   }
 }

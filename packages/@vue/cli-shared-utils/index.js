@@ -5,7 +5,8 @@
   'validate',
   'openBrowser',
   'pluginResolution',
-  'exit'
+  'exit',
+  'request'
 ].forEach(m => {
   Object.assign(exports, require(`./lib/${m}`))
 })

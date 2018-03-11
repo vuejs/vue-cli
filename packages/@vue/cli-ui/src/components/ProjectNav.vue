@@ -7,22 +7,12 @@
         indicator
       >
         <VueGroupButton
+          v-for="route of routes"
+          :key="route.name"
           class="flat big icon-button"
-          value="plugins"
-          icon-left="widgets"
-          v-tooltip.right="'Plugins'"
-        />
-        <VueGroupButton
-          class="flat big icon-button"
-          value="config"
-          icon-left="settings_applications"
-          v-tooltip.right="'Configurations'"
-        />
-        <VueGroupButton
-          class="flat big icon-button"
-          value="tasks"
-          icon-left="assignment"
-          v-tooltip.right="'Tasks'"
+          :value="route.name"
+          :icon-left="route.icon"
+          v-tooltip.right="route.tooltip"
         />
       </VueGroup>
     </div>
@@ -30,10 +20,50 @@
 </template>
 
 <script>
+const BUILTIN_ROUTES = [
+  {
+    name: 'project-plugins',
+    icon: 'widgets',
+    tooltip: 'Plugins'
+  },
+  {
+    name: 'project-configuration',
+    icon: 'settings_applications',
+    tooltip: 'Configuration'
+  },
+  {
+    name: 'project-tasks',
+    icon: 'assignment',
+    tooltip: 'Tasks'
+  }
+]
+
 export default {
   data () {
     return {
-      currentRoute: 'plugins'
+      currentRoute: null,
+      routes: [
+        ...BUILTIN_ROUTES
+        // Plugins routes here
+        // TODO
+      ]
+    }
+  },
+
+  watch: {
+    currentRoute (name) {
+      if (this.$route.name !== name) {
+        this.$router.push({ name })
+      }
+    },
+
+    '$route.name': {
+      handler (value) {
+        if (value !== this.currentRoute) {
+          this.currentRoute = value
+        }
+      },
+      immediate: true
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="home page">
+  <div class="project-home page">
     <ProjectNav/>
 
     <div class="content">
@@ -9,21 +9,15 @@
 </template>
 
 <script>
-import ProjectNav from '../components/ProjectNav'
-
 export default {
-  name: 'home',
-
-  components: {
-    ProjectNav
-  }
+  name: 'ProjectHome',
 }
 </script>
 
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 
-.home
+.project-home
   display grid
   grid-template-columns 46px 1fr
   grid-template-rows auto

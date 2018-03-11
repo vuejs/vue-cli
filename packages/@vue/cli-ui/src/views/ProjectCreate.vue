@@ -249,7 +249,7 @@
             lazy
           >
             <div class="content vue-disable-scroll">
-              <PrompsList
+              <PromptsList
                 :prompts="enabledPrompts"
                 @answer="answerPrompt"
               />
@@ -365,12 +365,6 @@
 </template>
 
 <script>
-import ProgressScreen from '../components/ProgressScreen'
-import ProjectFeatureItem from '../components/ProjectFeatureItem'
-import ProjectPresetItem from '../components/ProjectPresetItem'
-import PrompsList from '../components/PromptsList'
-import StepWizard from '../components/StepWizard'
-
 import CWD from '../graphql/cwd.gql'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
 import FEATURE_SET_ENABLED from '../graphql/featureSetEnabled.gql'
@@ -380,8 +374,8 @@ import PROJECT_CREATE from '../graphql/projectCreate.gql'
 
 function formDataFactory () {
   return {
-    folder: 'test-app',
-    force: true,
+    folder: '',
+    force: false,
     packageManager: undefined,
     selectedPreset: null,
     remotePreset: {
@@ -395,13 +389,7 @@ function formDataFactory () {
 let formData = formDataFactory()
 
 export default {
-  components: {
-    ProgressScreen,
-    ProjectFeatureItem,
-    ProjectPresetItem,
-    PrompsList,
-    StepWizard
-  },
+  name: 'ProjectCreate',
 
   data () {
     return {
@@ -538,7 +526,7 @@ export default {
             }
           }
         })
-        this.$router.push({ name: 'home' })
+        this.$router.push({ name: 'project-home' })
         this.reset()
       } catch(e) {
         console.error(e)

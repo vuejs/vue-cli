@@ -1,8 +1,8 @@
 module.exports = function fetchRemotePreset (name, clone) {
   // github shorthand fastpath
   if (!clone && /^[\w_-]+\/[\w_-]+$/.test(name)) {
-    const { get } = require('./request')
-    return get(`https://raw.githubusercontent.com/${name}/master/preset.json`)
+    const { request } = require('@vue/cli-shared-utils')
+    return request.get(`https://raw.githubusercontent.com/${name}/master/preset.json`)
       .then(res => res.body)
   }
 

@@ -65,17 +65,11 @@
 </template>
 
 <script>
-import LoggerMessage from './LoggerMessage'
-
 import CONSOLE_LOGS from '../graphql/consoleLogs.gql'
 import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
 import CONSOLE_LOGS_CLEAR from '../graphql/consoleLogsClear.gql'
 
 export default {
-  components: {
-    LoggerMessage
-  },
-
   methods: {
     onConsoleLogAdded (previousResult, { subscriptionData }) {
       this.scrollToBottom()

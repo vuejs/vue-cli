@@ -6,8 +6,10 @@
     }"
   >
     <div class="name">{{ name }}</div>
-    <div v-if="description || link" class="description">
-      {{ description }}
+    <div v-if="description || link || showDescription" class="description">
+      <slot name="description">
+        {{ description }}
+      </slot>
       <a
         v-if="link"
         :href="link"
@@ -41,6 +43,11 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    },
+
+    showDescription: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -56,6 +63,10 @@ export default {
 
   .description
     color $color-text-light
+
+    >>> .vue-icon
+      svg
+        fill @color
 
   &.selected
     .name

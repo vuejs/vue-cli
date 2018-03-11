@@ -1,7 +1,7 @@
-#import "./projectCurrentFragment.gql"
+#import "./projectFragment.gql"
 
 mutation projectOpen ($id: ID!) {
   projectOpen(id: $id) {
-    ...projectCurrent
+    ...project
   }
 }

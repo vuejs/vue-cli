@@ -1,7 +1,7 @@
 const request = require('request-promise-native')
 
-module.exports = {
-  async get (uri) {
+exports.request = {
+  get (uri) {
     const reqOpts = {
       method: 'GET',
       resolveWithFullResponse: true,

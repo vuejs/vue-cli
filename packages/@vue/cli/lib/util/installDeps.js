@@ -1,11 +1,10 @@
 const EventEmitter = require('events')
-const request = require('./request')
 const chalk = require('chalk')
 const execa = require('execa')
 const readline = require('readline')
 const inquirer = require('inquirer')
 const { loadOptions, saveOptions } = require('../options')
-const { pauseSpinner, resumeSpinner } = require('@vue/cli-shared-utils')
+const { request, pauseSpinner, resumeSpinner } = require('@vue/cli-shared-utils')
 
 const debug = require('debug')('vue-cli:install')
 

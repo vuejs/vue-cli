@@ -3,6 +3,7 @@ fragment plugin on Plugin {
   version {
     current
     latest
+    range
   }
   official
   installed

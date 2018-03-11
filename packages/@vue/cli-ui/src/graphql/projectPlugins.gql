@@ -1,0 +1,10 @@
+#import "./pluginFragment.gql"
+
+query projectPlugins {
+  projectCurrent {
+    id
+    plugins {
+      ...plugin
+    }
+  }
+}

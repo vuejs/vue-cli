@@ -9,6 +9,7 @@ const folders = require('./connectors/folders')
 const projects = require('./connectors/projects')
 const progress = require('./connectors/progress')
 const logs = require('./connectors/logs')
+const plugins = require('./connectors/plugins')
 
 // Prevent code from exiting server process
 exit.exitProcess = false
@@ -23,7 +24,12 @@ module.exports = {
   },
 
   Project: {
-    plugins: (project, args, context) => projects.getPlugins(project.id, context)
+    plugins: (project, args, context) => plugins.list(project.path, context)
+  },
+
+  Plugin: {
+    version: (plugin, args, context) => plugins.getVersion(plugin, context),
+    description: (plugin, args, context) => plugins.getDescription(plugin, context)
   },
 
   Query: {

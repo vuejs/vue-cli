@@ -284,7 +284,7 @@ async function importProject (input, context) {
     favorite: 0
   }
 
-  const packageData = JSON.parse(folders.readPackage(project.path, context))
+  const packageData = folders.readPackage(project.path, context)
   project.name = packageData.name
 
   context.db.get('projects').push(project).write()
@@ -317,11 +317,6 @@ async function remove (id, context) {
   return true
 }
 
-async function getPlugins (id, context) {
-  // TODO
-  return []
-}
-
 function resetCwd (context) {
   if (currentProject) {
     cwd.set(currentProject.path, context)
@@ -339,6 +334,5 @@ module.exports = {
   import: importProject,
   open,
   remove,
-  getPlugins,
   resetCwd
 }

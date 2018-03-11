@@ -26,13 +26,7 @@
 </template>
 
 <script>
-import ListItemInfo from './ListItemInfo'
-
 export default {
-  components: {
-    ListItemInfo
-  },
-
   props: {
     preset: {
       type: Object,

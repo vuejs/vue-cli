@@ -62,9 +62,6 @@
 </template>
 
 <script>
-import LoggerMessage from '../components/LoggerMessage'
-import LoggerView from '../components/LoggerView'
-
 import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
 import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
@@ -72,11 +69,6 @@ import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
 let lastRoute
 
 export default {
-  components: {
-    LoggerMessage,
-    LoggerView
-  },
-
   data () {
     return {
       consoleLogLast: null,
@@ -110,7 +102,7 @@ export default {
     onProjectClick () {
       this.$emit('project')
       if (this.$route.name === 'project-select') {
-        this.$router.push(lastRoute || { name: 'home' })
+        this.$router.push(lastRoute || { name: 'project-home' })
       } else {
         if (this.$route.name === 'project-create') {
           lastRoute = null

@@ -27,17 +27,11 @@
 </template>
 
 <script>
-import ProjectSelectListItem from './ProjectSelectListItem'
-
 import PROJECTS from '../graphql/projects.gql'
 import PROJECT_OPEN from '../graphql/projectOpen.gql'
 import PROJECT_REMOVE from '../graphql/projectRemove.gql'
 
 export default {
-  components: {
-    ProjectSelectListItem
-  },
-
   methods: {
     async openProject (project) {
       await this.$apollo.mutate({
@@ -47,7 +41,7 @@ export default {
         }
       })
 
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'project-home' })
     },
 
     async removeProject (project) {

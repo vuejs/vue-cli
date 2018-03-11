@@ -1,6 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 const rimraf = require('rimraf')
+const LRU = require('lru-cache')
+
+const pkgCache = new LRU({
+  max: 500,
+  maxAge: 1000 * 5
+})
 
 const cwd = require('./cwd')
 
@@ -52,14 +58,22 @@ function isPackage (file, context) {
 }
 
 function readPackage (file, context) {
-  return fs.readFileSync(path.join(file, 'package.json'), { encoding: 'utf8' })
+  const cachedValue = pkgCache.get(file)
+  if (cachedValue) {
+    return cachedValue
+  }
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(file, 'package.json'), { encoding: 'utf8' })
+  )
+  pkgCache.set(file, pkg)
+  return pkg
 }
 
 function isVueProject (file, context) {
   if (!isPackage(file)) return false
 
-  const contents = readPackage(file)
-  return contents.includes('@vue/cli-service')
+  const pkg = readPackage(file, context)
+  return Object.keys(pkg.devDependencies || {}).includes('@vue/cli-service')
 }
 
 function listFavorite (context) {
