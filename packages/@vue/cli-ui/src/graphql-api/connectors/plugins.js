@@ -1,11 +1,24 @@
 const path = require('path')
 const fs = require('fs')
 const LRU = require('lru-cache')
-const { isPlugin, isOfficialPlugin, getPluginLink } = require('@vue/cli-shared-utils')
+const {
+  isPlugin,
+  isOfficialPlugin,
+  getPluginLink,
+  hasYarn
+} = require('@vue/cli-shared-utils')
 const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
+const {
+  progress: installProgress,
+  installPackage,
+  uninstallPackage
+} = require('@vue/cli/lib/util/installDeps')
+const { loadOptions } = require('@vue/cli/lib/options')
 
 const cwd = require('./cwd')
 const folders = require('./folders')
+const prompts = require('./prompts')
+const progress = require('./progress')
 
 const metadataCache = new LRU({
   max: 200,
@@ -15,6 +28,11 @@ const metadataCache = new LRU({
 const logoCache = new LRU({
   max: 50
 })
+
+const PROGRESS_ID = 'plugin-installation'
+
+let currentPluginId
+let eventsInstalled = false
 
 function getPath (id) {
   return path.join(cwd.get(), 'node_modules', id)
@@ -108,9 +126,82 @@ async function getLogo ({ id }, context) {
   return null
 }
 
+function getInstallation (context) {
+  if (!eventsInstalled) {
+    eventsInstalled = true
+
+    // Package installation progress events
+    installProgress.on('progress', value => {
+      if (progress.get(PROGRESS_ID)) {
+        progress.set({ id: PROGRESS_ID, progress: value }, context)
+      }
+    })
+    installProgress.on('log', message => {
+      if (progress.get(PROGRESS_ID)) {
+        progress.set({ id: PROGRESS_ID, info: message }, context)
+      }
+    })
+  }
+
+  return {
+    id: 'plugin-install',
+    pluginId: currentPluginId,
+    prompts: prompts.list()
+  }
+}
+
+function install (id, context) {
+  return progress.wrap(PROGRESS_ID, context, async setProgress => {
+    setProgress({
+      status: 'plugin-install',
+      args: [id]
+    })
+
+    currentPluginId = id
+
+    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
+    await installPackage(cwd.get(), packageManager, null, id)
+
+    return getInstallation(context)
+  })
+}
+
+function uninstall (id, context) {
+  return progress.wrap(PROGRESS_ID, context, async setProgress => {
+    setProgress({
+      status: 'plugin-uninstall',
+      args: [id]
+    })
+
+    currentPluginId = id
+
+    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
+    await uninstallPackage(cwd.get(), packageManager, null, id)
+
+    return getInstallation(context)
+  })
+}
+
+function invoke (id, context) {
+  return progress.wrap(PROGRESS_ID, context, async setProgress => {
+    setProgress({
+      status: 'plugin-invoke',
+      args: [id]
+    })
+
+    currentPluginId = id
+    // TODO
+    return getInstallation(context)
+  })
+}
+
 module.exports = {
   list,
   getVersion,
   getDescription,
-  getLogo
+  getLogo,
+  getInstallation,
+  install,
+  uninstall,
+  invoke
 }

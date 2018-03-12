@@ -4,4 +4,5 @@ fragment progress on Progress {
   info
   error
   progress
+  args
 }

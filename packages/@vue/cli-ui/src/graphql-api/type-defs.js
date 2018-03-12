@@ -84,8 +84,13 @@ type Plugin {
   website: String
   description: String
   githubStats: GitHubStats
-  prompts: [Prompt]
   logo: String
+}
+
+type PluginInstallation {
+  id: ID!
+  pluginId: ID
+  prompts: [Prompt]
 }
 
 type Feature {
@@ -145,6 +150,7 @@ type Progress {
   error: String
   # Progress from 0 to 1 (-1 means disabled)
   progress: Float
+  args: [String]
 }
 
 type Query {
@@ -157,6 +163,7 @@ type Query {
   projects: [Project]
   projectCurrent: Project
   projectCreation: ProjectCreation
+  pluginInstallation: PluginInstallation
 }
 
 type Mutation {
@@ -172,12 +179,15 @@ type Mutation {
   projectCwdReset: String
   presetApply (id: ID!): ProjectCreation
   featureSetEnabled (id: ID!, enabled: Boolean): Feature
-  pluginAdd (id: ID!): Plugin
   promptAnswer (input: PromptInput!): [Prompt]
+  pluginInstall (id: ID!): PluginInstallation
+  pluginUninstall (id: ID!): PluginInstallation
+  pluginInvoke (id: ID!): PluginInstallation
 }
 
 type Subscription {
   progressChanged (id: ID!): Progress
+  progressRemoved (id: ID!): ID
   consoleLogAdded: ConsoleLog!
   cwdChanged: String!
 }

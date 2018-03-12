@@ -1,0 +1,8 @@
+#import "./promptFragment.gql"
+
+fragment pluginInstallation on PluginInstallation {
+  id
+  prompts {
+    ...prompt
+  }
+}

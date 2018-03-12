@@ -1,6 +1,7 @@
 <template>
   <div class="instant-search-input">
     <VueInput
+      ref="input"
       icon-left="search"
       v-model="query"
       class="big"
@@ -55,6 +56,10 @@ export default {
       }
       this.searchStore.start()
       this.searchStore.refresh()
+    },
+
+    focus () {
+      this.$refs.input.focus()
     }
   }
 }

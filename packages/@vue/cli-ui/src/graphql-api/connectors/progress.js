@@ -15,6 +15,7 @@ function set (data, context) {
       status: null,
       error: null,
       info: null,
+      args: null,
       progress: -1
     }, progress))
   } else {
@@ -25,6 +26,7 @@ function set (data, context) {
 }
 
 function remove (id, context) {
+  context.pubsub.publish(channels.PROGRESS_REMOVED, { progressRemoved: { id } })
   return map.delete(id)
 }
 

@@ -32,10 +32,11 @@
                   attributesToHighlight: [
                     'name',
                     'description'
-                  ]
+                  ],
+                  // filters: `keywords:vue-cli-plugin`
                 }"
               >
-                <InstantSearchInput/>
+                <InstantSearchInput ref="searchInput"/>
                 <ais-results>
                   <PackageSearchItem
                     slot-scope="{ result }"
@@ -44,6 +45,12 @@
                     @click.native="selectedId = result.name"
                   />
                 </ais-results>
+                <ais-no-results>
+                  <div class="vue-empty">
+                    <VueIcon icon="search" class="huge"/>
+                    <div>No results found</div>
+                  </div>
+                </ais-no-results>
                 <InstantSearchPagination/>
               </ais-index>
             </div>
@@ -61,7 +68,7 @@
               </div>
 
               <VueButton
-                icon-left="add"
+                icon-left="file_download"
                 :label="`Install ${selectedId || 'plugin'}`"
                 class="big primary"
                 :disabled="!selectedId"
@@ -136,10 +143,19 @@
         />
       </div>
     </VueModal>
+
+    <ProgressScreen
+      progress-id="plugin-installation"
+    />
   </div>
 </template>
 
 <script>
+import PLUGIN_INSTALLATION from '../graphql/pluginInstallation.gql'
+import PLUGIN_INSTALL from '../graphql/pluginInstall.gql'
+import PLUGIN_UNINSTALL from '../graphql/pluginUninstall.gql'
+import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
+
 export default {
   name: 'ProjectPluginsAdd',
 
@@ -148,7 +164,15 @@ export default {
       tabId: 'search',
       selectedId: null,
       enabledPrompts: [],
-      showCancelInstall: false
+      showCancelInstall: false,
+      pluginInstallation: null
+    }
+  },
+
+  apollo: {
+    pluginInstallation: {
+      query: PLUGIN_INSTALLATION,
+      fetchPolicy: 'netork-only'
     }
   },
 
@@ -158,14 +182,29 @@ export default {
     }
   },
 
+  mounted () {
+    requestAnimationFrame(() => {
+      this.$refs.searchInput.focus()
+    })
+  },
+
   methods: {
     cancel () {
       this.$router.push({ name: 'project-home' })
     },
 
-    installPlugin () {
-      // TODO
-      this.tabId = 'config'
+    async installPlugin () {
+      try {
+        await this.$apollo.mutate({
+          mutation: PLUGIN_INSTALL,
+          variables: {
+            id: this.selectedId
+          }
+        })
+        this.tabId = 'config'
+      } catch(e) {
+        console.error(e)
+      }
     },
 
     cancelInstall ()  {
@@ -174,18 +213,41 @@ export default {
       this.showCancelInstall = false
     },
 
-    uninstallPlugin () {
-      // TODO
-      this.cancelInstall()
+    async uninstallPlugin () {
+      this.showCancelInstall = false
+      try {
+        await this.$apollo.mutate({
+          mutation: PLUGIN_UNINSTALL,
+          variables: {
+            id: this.selectedId
+          }
+        })
+        this.cancelInstall()
+      } catch(e) {
+        console.error(e)
+      }
     },
 
-    invokePlugin () {
+    async invokePlugin () {
       // TODO
     },
 
-    answerPrompt () {
-      // TODO
-    }
+    async answerPrompt ({ prompt, value }) {
+      await this.$apollo.mutate({
+        mutation: PROMPT_ANSWER,
+        variables: {
+          input: {
+            id: prompt.id,
+            value: JSON.stringify(value)
+          }
+        },
+        update: (store, { data: { promptAnswer } }) => {
+          const data = store.readQuery({ query: PLUGIN_INSTALLATION })
+          data.pluginInstallation.prompts = promptAnswer
+          store.writeQuery({ query: PLUGIN_INSTALLATION, data })
+        }
+      })
+    },
   }
 }
 </script>

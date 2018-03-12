@@ -4,6 +4,7 @@
     :class="{
       selected,
       loaded,
+      error,
       vuejs: image && image.includes('vuejs')
     }"
   >
@@ -13,11 +14,12 @@
         icon="done"
       />
       <img
-        v-else-if="image"
+        v-else-if="image && !error"
         class="image"
         :src="image"
         :key="image"
         @load="loaded = true"
+        @error="error = true"
       >
       <VueIcon
         v-else
@@ -48,13 +50,20 @@ export default {
 
   data () {
     return {
-      loaded: false
+      loaded: false,
+      error: false
     }
   },
 
   watch: {
-    image (value) {
+    image: 'reset',
+    selected: 'reset'
+  },
+
+  methods: {
+    reset () {
       this.loaded = false
+      this.error = false
     }
   }
 }
@@ -97,10 +106,14 @@ export default {
       animation zoom .1s
       transform none
 
+  &.selected,
+  &.error
+    .wrapper
+      animation zoom .1s
+
   &.selected
     .wrapper
       background $vue-color-primary
-      animation zoom .1s
       .vue-icon
         >>> svg
           fill $vue-color-light

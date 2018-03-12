@@ -42,7 +42,8 @@ module.exports = {
     foldersFavorite: (root, args, context) => folders.listFavorite(context),
     projects: (root, args, context) => projects.list(context),
     projectCurrent: (root, args, context) => projects.getCurrent(context),
-    projectCreation: (root, args, context) => projects.getCreation(context)
+    projectCreation: (root, args, context) => projects.getCreation(context),
+    pluginInstallation: (root, args, context) => plugins.getInstallation(context)
   },
 
   Mutation: {
@@ -60,7 +61,10 @@ module.exports = {
     projectImport: (root, { input }, context) => projects.import(input, context),
     projectOpen: (root, { id }, context) => projects.open(id, context),
     projectRemove: (root, { id }, context) => projects.remove(id, context),
-    projectCwdReset: (root, args, context) => projects.resetCwd(context)
+    projectCwdReset: (root, args, context) => projects.resetCwd(context),
+    pluginInstall: (root, { id }, context) => plugins.install(id, context),
+    pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
+    pluginInvoke: (root, { id }, context) => plugins.invoke(id, context)
   },
 
   Subscription: {
@@ -73,6 +77,14 @@ module.exports = {
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_CHANGED),
         // Filter
         (payload, variables) => payload.progressChanged.id === variables.id
+      )
+    },
+    progressRemoved: {
+      subscribe: withFilter(
+        // Iterator
+        (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_REMOVED),
+        // Filter
+        (payload, variables) => payload.progressRemoved.id === variables.id
       )
     },
     consoleLogAdded: {

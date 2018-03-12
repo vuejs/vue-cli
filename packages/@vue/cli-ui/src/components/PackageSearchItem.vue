@@ -31,6 +31,10 @@
             attribute-name="description"
           />
         </span>
+        <span v-if="official" class="info">
+          <VueIcon icon="star" class="top medium"/>
+          <span>Official</span>
+        </span>
         <span class="info downloads">
           <VueIcon class="medium" icon="file_download"/>
           <span>{{ pkg.humanDownloadsLast30Days }}</span>
@@ -55,6 +59,12 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    }
+  },
+
+  computed: {
+    official () {
+      return this.pkg.owner.name === 'vuejs'
     }
   }
 }
