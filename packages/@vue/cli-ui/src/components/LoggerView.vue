@@ -19,7 +19,7 @@
       />
       <VueButton
         class="icon-button"
-        icon-left="arrow_downward"
+        icon-left="subdirectory_arrow_left"
         v-tooltip="'Scroll to bottom'"
         @click="scrollToBottom()"
       />

@@ -67,7 +67,7 @@ type ProjectCreation {
 }
 
 type Version {
-  current: String!
+  current: String
   latest: String
   range: String
 }

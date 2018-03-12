@@ -17,6 +17,7 @@ body,
   background $color-light-background
   h-box()
   box-center()
+  position relative
 
   > *
     space-between-x($padding-item)
@@ -55,3 +56,39 @@ ansi-colors('white', $vue-color-light)
   margin $padding-item
   svg
     fill rgba($vue-color-dark, .2)
+
+.ais-index
+  height 100%
+  v-box()
+  align-items stretch
+
+.ais-results
+  flex 100% 1 1
+  height 0
+  overflow-x hidden
+  overflow-y auto
+  margin $padding-item 0
+
+.ais-highlight
+  em
+    font-style normal
+    background lighten($vue-color-primary, 80%)
+    color darken($vue-color-primary, 10%)
+    padding 0 2px
+    border-radius $br
+
+.ais-logo
+  max-width 150px
+
+.no-padding-x
+  padding-left 0
+  padding-right 0
+.no-padding-y
+  padding-top 0
+  padding-bottom 0
+.no-margin-x
+  margin-left 0
+  margin-right 0
+.no-margin-y
+  margin-top 0
+  margin-bottom 0

@@ -39,6 +39,7 @@
     "vue": "^2.5.13",
     "vue-apollo": "^3.0.0-beta.5",
     "vue-cli-plugin-apollo": "^0.4.1",
+    "vue-instantsearch": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.13",
     "xterm": "^3.2.0"

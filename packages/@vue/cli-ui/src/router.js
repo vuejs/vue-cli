@@ -4,6 +4,7 @@ import { apolloClient } from './vue-apollo'
 
 import ProjectHome from './views/ProjectHome.vue'
 import ProjectPlugins from './views/ProjectPlugins.vue'
+import ProjectPluginsAdd from './views/ProjectPluginsAdd.vue'
 import ProjectConfiguration from './views/ProjectConfiguration.vue'
 import ProjectTasks from './views/ProjectTasks.vue'
 import ProjectSelect from './views/ProjectSelect.vue'
@@ -33,6 +34,11 @@ const router = new Router({
           path: 'plugins',
           name: 'project-plugins',
           component: ProjectPlugins
+        },
+        {
+          path: 'plugins/add',
+          name: 'project-plugins-add',
+          component: ProjectPluginsAdd
         },
         {
           path: 'configuration',

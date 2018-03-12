@@ -5,7 +5,11 @@
       selected
     }"
   >
-    <div class="name">{{ name }}</div>
+    <div class="name">
+      <slot name="name">
+        {{ name }}
+      </slot>
+    </div>
     <div v-if="description || link || showDescription" class="description">
       <slot name="description">
         {{ description }}
@@ -14,8 +18,10 @@
         v-if="link"
         :href="link"
         target="_blank"
+        class="more-info"
         @click.stop="() => {}"
       >
+        <VueIcon icon="open_in_new" class="medium top"/>
         More info
       </a>
     </div>
@@ -37,7 +43,7 @@ export default {
 
     name: {
       type: String,
-      required: true
+      default: null
     },
 
     selected: {
@@ -67,6 +73,22 @@ export default {
     >>> .vue-icon
       svg
         fill @color
+
+    .more-info
+      color $vue-color-primary
+      padding 0 4px 0 2px
+      border-radius $br
+      .vue-icon
+        >>> svg
+          fill @color
+      &:hover
+        color $vue-color-light
+        background $vue-color-primary
+        .vue-icon
+          >>> svg
+            fill @color
+      &:active
+        background darken($vue-color-primary, 10%)
 
   &.selected
     .name

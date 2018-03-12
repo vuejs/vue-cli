@@ -8,6 +8,7 @@
           icon-left="add"
           label="Add plugin"
           class="primary"
+          :to="{ name: 'project-plugins-add' }"
         />
       </template>
 

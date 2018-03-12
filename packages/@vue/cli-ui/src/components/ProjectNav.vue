@@ -41,7 +41,6 @@ const BUILTIN_ROUTES = [
 export default {
   data () {
     return {
-      currentRoute: null,
       routes: [
         ...BUILTIN_ROUTES
         // Plugins routes here
@@ -50,22 +49,22 @@ export default {
     }
   },
 
-  watch: {
-    currentRoute (name) {
-      if (this.$route.name !== name) {
-        this.$router.push({ name })
-      }
-    },
-
-    '$route.name': {
-      handler (value) {
-        if (value !== this.currentRoute) {
-          this.currentRoute = value
-        }
+  computed: {
+    currentRoute: {
+      get () {
+        const currentRoute = this.$route.name
+        const route = this.routes.find(
+          r => currentRoute.indexOf(r.name) === 0
+        )
+        return route ? route.name : null
       },
-      immediate: true
+      set (name) {
+        if (this.$route.name !== name) {
+          this.$router.push({ name })
+        }
+      }
     }
-  }
+  },
 }
 </script>
 

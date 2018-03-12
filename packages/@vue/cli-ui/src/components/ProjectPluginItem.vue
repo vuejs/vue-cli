@@ -1,18 +1,6 @@
 <template>
   <div class="project-plugin-item list-item">
-    <div class="logo">
-      <div class="wrapper">
-        <img
-          v-if="plugin.logo"
-          class="image"
-          :src="plugin.logo"
-        >
-        <VueIcon
-          v-else
-          icon="widgets"
-        />
-      </div>
-    </div>
+    <ItemLogo :image="plugin.logo"/>
 
     <ListItemInfo
       :name="plugin.id"
@@ -97,24 +85,5 @@ export default {
   .package-description
     font-style italic
     opacity .7
-
-  .logo
-    margin-right $padding-item
-    .wrapper
-      h-box()
-      box-center()
-      width 42px
-      height @width
-      background rgba(black, .03)
-      border-radius 50%
-      overflow hidden
-      .image
-        width 100%
-        height @width
-      .vue-icon
-        width 24px
-        height @width
-        >>> svg
-          fill rgba($color-text-light, .3)
 
 </style>
