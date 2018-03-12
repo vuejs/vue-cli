@@ -3,7 +3,8 @@
     class="item-logo"
     :class="{
       selected,
-      loaded
+      loaded,
+      vuejs: image && image.includes('vuejs')
     }"
   >
     <div class="wrapper">
@@ -81,6 +82,15 @@ export default {
       height @width
       >>> svg
         fill rgba($color-text-light, .3)
+
+  &.vuejs
+    .wrapper
+      background lighten($vue-color-primary, 70%)
+    .image
+      width 70%
+      height @width
+      position relative
+      top 3px
 
   &.loaded
     .image
