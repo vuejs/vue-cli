@@ -2,6 +2,7 @@
 
 fragment pluginInstallation on PluginInstallation {
   id
+  pluginId
   prompts {
     ...prompt
   }

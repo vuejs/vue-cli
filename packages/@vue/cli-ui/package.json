@@ -6,7 +6,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "graphql-api": "vue-cli-service graphql-api",
-    "run-graphql-api": "vue-cli-service run-graphql-api"
+    "run-graphql-api": "vue-cli-service run-graphql-api",
+    "prod-graphql-api": "cross-env NODE_ENV=production vue-cli-service run-graphql-api"
   },
   "dependencies": {
     "graphql": "^0.13.0",
@@ -38,7 +39,7 @@
     "subscriptions-transport-ws": "^0.9.5",
     "vue": "^2.5.13",
     "vue-apollo": "^3.0.0-beta.5",
-    "vue-cli-plugin-apollo": "^0.4.1",
+    "vue-cli-plugin-apollo": "^0.6.1",
     "vue-instantsearch": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.13",

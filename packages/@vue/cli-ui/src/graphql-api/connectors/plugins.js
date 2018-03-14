@@ -162,6 +162,8 @@ function install (id, context) {
     const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
     await installPackage(cwd.get(), packageManager, null, id)
 
+    await initPrompts(id, context)
+
     return getInstallation(context)
   })
 }
@@ -178,6 +180,8 @@ function uninstall (id, context) {
     const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
     await uninstallPackage(cwd.get(), packageManager, null, id)
 
+    currentPluginId = null
+
     return getInstallation(context)
   })
 }
@@ -190,9 +194,23 @@ function invoke (id, context) {
     })
 
     currentPluginId = id
+
     // TODO
+
+    currentPluginId = null
+
     return getInstallation(context)
   })
+}
+
+async function initPrompts (id, context) {
+  prompts.reset()
+  let data = require(path.join(getPath(id), 'prompts.js'))
+  if (typeof data === 'function') {
+    data = await data()
+  }
+  data.forEach(prompts.add)
+  prompts.start()
 }
 
 module.exports = {

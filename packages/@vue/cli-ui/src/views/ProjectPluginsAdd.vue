@@ -33,7 +33,7 @@
                     'name',
                     'description'
                   ],
-                  // filters: `keywords:vue-cli-plugin`
+                  filters: `keywords:vue-cli-plugin`
                 }"
               >
                 <InstantSearchInput ref="searchInput"/>
@@ -163,7 +163,6 @@ export default {
     return {
       tabId: 'search',
       selectedId: null,
-      enabledPrompts: [],
       showCancelInstall: false,
       pluginInstallation: null
     }
@@ -172,13 +171,29 @@ export default {
   apollo: {
     pluginInstallation: {
       query: PLUGIN_INSTALLATION,
-      fetchPolicy: 'netork-only'
+      fetchPolicy: 'netork-only',
+      result () {
+        if (this.pluginInstallation.pluginId) {
+          this.tabId = 'config'
+        } else {
+          this.tabId = 'search'
+        }
+      },
     }
   },
 
   computed: {
     configurationValid () {
       return false
+    },
+
+    enabledPrompts () {
+      if (!this.pluginInstallation) {
+        return []
+      }
+      return this.pluginInstallation.prompts.filter(
+        p => p.enabled
+      )
     }
   },
 

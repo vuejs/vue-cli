@@ -14,6 +14,11 @@
 </template>
 
 <script>
+const types = {
+  rawlist: 'list',
+  password: 'input'
+}
+
 export default {
   props: {
     prompts: {
@@ -24,7 +29,11 @@ export default {
 
   methods: {
     getModule (prompt) {
-      const type = prompt.type.charAt(0).toUpperCase() + prompt.type.substr(1)
+      let type = prompt.type
+      if (types[type]) {
+        type = types[type]
+      }
+      type = type.charAt(0).toUpperCase() + type.substr(1)
       return require(`./Prompt${type}.vue`).default
     }
   }

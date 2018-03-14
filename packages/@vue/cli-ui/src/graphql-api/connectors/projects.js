@@ -126,6 +126,7 @@ function initCreator (context) {
   // Prompts
   prompts.reset()
   creator.injectedPrompts.forEach(prompts.add)
+  prompts.start()
 
   return creator
 }

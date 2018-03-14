@@ -41,7 +41,7 @@ function getDefaultValue (prompt) {
 function getEnabled (value) {
   const type = typeof value
   if (type === 'function') {
-    return value(answers)
+    return !!value(answers)
   } else if (type === 'boolean') {
     return value
   } else {
@@ -198,6 +198,10 @@ function add (data) {
   prompts.push(generatePrompt(data))
 }
 
+function start () {
+  updatePrompts()
+}
+
 function remove (id) {
   const index = prompts.findIndex(p => p.id === id)
   index !== -1 && prompts.splice(index, 1)
@@ -232,5 +236,6 @@ module.exports = {
   list,
   add,
   remove,
+  start,
   setValue
 }
