@@ -135,7 +135,9 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   log()
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
   if (!process.env.VUE_CLI_TEST && hasGit()) {
-    const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'])
+    const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], {
+      cwd: context
+    })
     if (stdout.trim()) {
       log(`   The following files have been updated / added:\n`)
       log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))

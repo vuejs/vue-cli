@@ -4,7 +4,7 @@ module.exports = function lint (args = {}, api) {
   const cwd = api.resolve('.')
   const { CLIEngine } = require('eslint')
   const options = require('./eslintOptions')(api)
-  const { log, done } = require('@vue/cli-shared-utils')
+  const { log, done, exit } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'tests', '*.js']
   if (args['no-fix']) {
@@ -44,7 +44,7 @@ module.exports = function lint (args = {}, api) {
     }
   } else {
     console.log(formatter(report.results))
-    process.exit(1)
+    exit(1)
   }
 }
 

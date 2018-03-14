@@ -64,7 +64,7 @@ module.exports = {
     projectCwdReset: (root, args, context) => projects.resetCwd(context),
     pluginInstall: (root, { id }, context) => plugins.install(id, context),
     pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
-    pluginInvoke: (root, { id }, context) => plugins.invoke(id, context)
+    pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context)
   },
 
   Subscription: {

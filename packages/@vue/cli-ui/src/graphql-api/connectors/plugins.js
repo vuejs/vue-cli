@@ -14,6 +14,7 @@ const {
   uninstallPackage
 } = require('@vue/cli/lib/util/installDeps')
 const { loadOptions } = require('@vue/cli/lib/options')
+const invoke = require('@vue/cli/lib/invoke')
 
 const cwd = require('./cwd')
 const folders = require('./folders')
@@ -186,7 +187,7 @@ function uninstall (id, context) {
   })
 }
 
-function invoke (id, context) {
+function runInvoke (id, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'plugin-invoke',
@@ -195,7 +196,7 @@ function invoke (id, context) {
 
     currentPluginId = id
 
-    // TODO
+    await invoke(id, prompts.getAnswers(), cwd.get())
 
     currentPluginId = null
 
@@ -221,5 +222,5 @@ module.exports = {
   getInstallation,
   install,
   uninstall,
-  invoke
+  runInvoke
 }

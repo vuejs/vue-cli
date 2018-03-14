@@ -60,7 +60,7 @@
                 icon-left="close"
                 label="Cancel"
                 class="big"
-                @click="cancel()"
+                @click="close()"
               />
 
               <div class="algolia">
@@ -156,6 +156,7 @@ import Prompts from '../mixins/Prompts'
 import PLUGIN_INSTALLATION from '../graphql/pluginInstallation.gql'
 import PLUGIN_INSTALL from '../graphql/pluginInstall.gql'
 import PLUGIN_UNINSTALL from '../graphql/pluginUninstall.gql'
+import PLUGIN_INVOKE from '../graphql/pluginInvoke.gql'
 import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
 
 export default {
@@ -198,7 +199,7 @@ export default {
   },
 
   methods: {
-    cancel () {
+    close () {
       this.$router.push({ name: 'project-home' })
     },
 
@@ -238,7 +239,17 @@ export default {
     },
 
     async invokePlugin () {
-      // TODO
+      try {
+        await this.$apollo.mutate({
+          mutation: PLUGIN_INVOKE,
+          variables: {
+            id: this.selectedId
+          }
+        })
+        this.close()
+      } catch(e) {
+        console.error(e)
+      }
     },
   }
 }

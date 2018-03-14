@@ -154,19 +154,6 @@ function executeCommand (command, args, targetDir) {
 
     progress.enabled = false
 
-    // const lines = []
-    // let count = 0
-    // const unhook = intercept(buffer => {
-    //   count++
-    //   lines.push(buffer)
-    //   const str = buffer === 'string' ? buffer : buffer.toString()
-    //   // Steps
-    //   const stepMatch = str.match(/\[\d+\/\d+]\s+(.*)/)
-    //   if (stepMatch) {
-    //     progress.log(stepMatch[1])
-    //   }
-    // })
-
     if (apiMode) {
       if (command === 'npm') {
         // TODO when this is supported
