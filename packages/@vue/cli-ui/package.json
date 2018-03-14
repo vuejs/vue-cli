@@ -22,7 +22,7 @@
     "@vue/cli-plugin-eslint": "^3.0.0-beta.3",
     "@vue/cli-service": "^3.0.0-beta.3",
     "@vue/eslint-config-standard": "^3.0.0-beta.3",
-    "@vue/ui": "^0.1.9",
+    "@vue/ui": "^0.1.10",
     "ansi_up": "^2.0.2",
     "apollo-cache-inmemory": "^1.1.10",
     "apollo-client": "^2.2.6",
