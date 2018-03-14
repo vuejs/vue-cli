@@ -85,6 +85,8 @@
             lazy
           >
             <div class="content vue-disable-scroll">
+              <div class="cta-text">Installation of {{ selectedId }}</div>
+
               <PromptsList
                 :prompts="enabledPrompts"
                 @answer="answerPrompt"
