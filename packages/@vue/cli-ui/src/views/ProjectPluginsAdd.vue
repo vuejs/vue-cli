@@ -184,7 +184,9 @@ export default {
 
   computed: {
     configurationValid () {
-      return false
+      return this.enabledPrompts.filter(
+        p => p.value === null || JSON.parse(p.value) === ''
+      ).length === 0
     },
 
     enabledPrompts () {

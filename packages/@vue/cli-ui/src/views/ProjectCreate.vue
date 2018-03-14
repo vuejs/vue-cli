@@ -425,7 +425,7 @@ export default {
 
     configurationValid () {
       return this.enabledPrompts.filter(
-        p => p.value === null
+        p => p.value === null || JSON.parse(p.value) === ''
       ).length === 0
     },
 
