@@ -34,21 +34,16 @@ async function wrap (id, context, operation) {
   set({ id }, context)
 
   let result
-  let error = null
   try {
     result = await operation(data => {
       set(Object.assign({ id }, data), context)
     })
-  } catch (e) {
-    error = e
+  } catch (error) {
+    console.error(error)
     set({ id, error: error.message }, context)
   }
 
   remove(id, context)
-
-  if (error) {
-    throw error
-  }
 
   return result
 }
