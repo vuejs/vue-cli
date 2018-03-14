@@ -15,6 +15,8 @@
         />
       </div>
     </div>
+
+    <PromptError :error="prompt.error"/>
   </div>
 </template>
 

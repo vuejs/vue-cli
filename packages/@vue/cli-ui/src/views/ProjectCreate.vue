@@ -365,11 +365,12 @@
 </template>
 
 <script>
+import Prompts from '../mixins/Prompts'
+
 import CWD from '../graphql/cwd.gql'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
 import FEATURE_SET_ENABLED from '../graphql/featureSetEnabled.gql'
 import PRESET_APPLY from '../graphql/presetApply.gql'
-import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
 import PROJECT_CREATE from '../graphql/projectCreate.gql'
 
 function formDataFactory () {
@@ -390,6 +391,13 @@ let formData = formDataFactory()
 
 export default {
   name: 'ProjectCreate',
+
+  mixins: [
+    Prompts({
+      field: 'projectCreation',
+      query: PROJECT_CREATION
+    }),
+  ],
 
   data () {
     return {
@@ -421,21 +429,6 @@ export default {
 
     presetValid () {
       return !!this.formData.selectedPreset
-    },
-
-    configurationValid () {
-      return this.enabledPrompts.filter(
-        p => p.value === null || JSON.parse(p.value) === ''
-      ).length === 0
-    },
-
-    enabledPrompts () {
-      if (!this.projectCreation) {
-        return []
-      }
-      return this.projectCreation.prompts.filter(
-        p => p.enabled
-      )
     },
 
     manual () {
@@ -484,23 +477,6 @@ export default {
       })
 
       this.$apollo.queries.projectCreation.refetch()
-    },
-
-    async answerPrompt ({ prompt, value }) {
-      await this.$apollo.mutate({
-        mutation: PROMPT_ANSWER,
-        variables: {
-          input: {
-            id: prompt.id,
-            value: JSON.stringify(value)
-          }
-        },
-        update: (store, { data: { promptAnswer } }) => {
-          const data = store.readQuery({ query: PROJECT_CREATION })
-          data.projectCreation.prompts = promptAnswer
-          store.writeQuery({ query: PROJECT_CREATION, data })
-        }
-      })
     },
 
     createWithoutSaving () {

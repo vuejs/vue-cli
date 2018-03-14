@@ -18,6 +18,8 @@
         {{ choice.name }}
       </VueSwitch>
     </div>
+
+    <PromptError :error="prompt.error"/>
   </div>
 </template>
 

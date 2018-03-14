@@ -151,6 +151,8 @@
 </template>
 
 <script>
+import Prompts from '../mixins/Prompts'
+
 import PLUGIN_INSTALLATION from '../graphql/pluginInstallation.gql'
 import PLUGIN_INSTALL from '../graphql/pluginInstall.gql'
 import PLUGIN_UNINSTALL from '../graphql/pluginUninstall.gql'
@@ -158,6 +160,13 @@ import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
 
 export default {
   name: 'ProjectPluginsAdd',
+
+  mixins: [
+    Prompts({
+      field: 'pluginInstallation',
+      query: PLUGIN_INSTALLATION
+    })
+  ],
 
   data () {
     return {
@@ -179,23 +188,6 @@ export default {
           this.tabId = 'search'
         }
       },
-    }
-  },
-
-  computed: {
-    configurationValid () {
-      return this.enabledPrompts.filter(
-        p => p.value === null || JSON.parse(p.value) === ''
-      ).length === 0
-    },
-
-    enabledPrompts () {
-      if (!this.pluginInstallation) {
-        return []
-      }
-      return this.pluginInstallation.prompts.filter(
-        p => p.enabled
-      )
     }
   },
 
@@ -247,23 +239,6 @@ export default {
 
     async invokePlugin () {
       // TODO
-    },
-
-    async answerPrompt ({ prompt, value }) {
-      await this.$apollo.mutate({
-        mutation: PROMPT_ANSWER,
-        variables: {
-          input: {
-            id: prompt.id,
-            value: JSON.stringify(value)
-          }
-        },
-        update: (store, { data: { promptAnswer } }) => {
-          const data = store.readQuery({ query: PLUGIN_INSTALLATION })
-          data.pluginInstallation.prompts = promptAnswer
-          store.writeQuery({ query: PLUGIN_INSTALLATION, data })
-        }
-      })
     },
   }
 }

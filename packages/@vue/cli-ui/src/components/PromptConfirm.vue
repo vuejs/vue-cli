@@ -11,6 +11,8 @@
         :link="prompt.link"
       />
     </VueSwitch>
+
+    <PromptError :error="prompt.error"/>
   </div>
 </template>
 

@@ -52,7 +52,7 @@ function getEnabled (value) {
 function validateInput (prompt, value) {
   const validate = prompt.raw.validate
   if (typeof validate === 'function') {
-    return validate(value)
+    return validate(value, answers)
   }
   return true
 }
@@ -147,6 +147,7 @@ function generatePrompt (data) {
     choices: null,
     value: null,
     valueChanged: false,
+    error: null,
     raw: data
   }
 }
@@ -218,7 +219,7 @@ function setValue ({ id, value }) {
   if (validation !== true) {
     prompt.error = generatePromptError(validation)
   } else {
-    prompt.error = undefined
+    prompt.error = null
   }
   prompt.value = getDisplayedValue(prompt, value)
   const finalValue = getValue(prompt, value)
