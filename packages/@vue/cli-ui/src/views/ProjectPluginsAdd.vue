@@ -85,7 +85,7 @@
             lazy
           >
             <div class="content vue-disable-scroll">
-              <div class="cta-text">Installation of {{ selectedId }}</div>
+              <div class="cta-text">Installation of {{ pluginId }}</div>
 
               <PromptsList
                 :prompts="enabledPrompts"
@@ -116,12 +116,12 @@
 
     <VueModal
       v-if="showCancelInstall"
-      :title="`Uninstall ${selectedId}?`"
+      :title="`Uninstall ${pluginId}?`"
       class="small"
       @close="showCancelInstall = false"
     >
       <div class="default-body">
-        Do you want to uninstall the {{ selectedId }} plugin?
+        Do you want to uninstall the {{ pluginId }} plugin?
       </div>
 
       <div slot="footer" class="actions space-between">
@@ -191,6 +191,12 @@ export default {
           this.tabId = 'search'
         }
       },
+    }
+  },
+
+  computed: {
+    pluginId () {
+      return this.pluginInstallation && this.pluginInstallation.pluginId
     }
   },
 
