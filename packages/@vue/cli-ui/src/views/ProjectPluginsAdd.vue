@@ -185,11 +185,7 @@ export default {
       query: PLUGIN_INSTALLATION,
       fetchPolicy: 'netork-only',
       result () {
-        if (this.pluginInstallation.pluginId) {
-          this.tabId = 'config'
-        } else {
-          this.tabId = 'search'
-        }
+        this.checkTab()
       },
     }
   },
@@ -203,12 +199,23 @@ export default {
   mounted () {
     requestAnimationFrame(() => {
       this.$refs.searchInput.focus()
+      this.checkTab()
     })
   },
 
   methods: {
     close () {
       this.$router.push({ name: 'project-home' })
+    },
+
+    checkTab () {
+      if (!this.pluginInstallation) return
+
+      if (this.pluginInstallation.pluginId) {
+        this.tabId = 'config'
+      } else {
+        this.tabId = 'search'
+      }
     },
 
     async installPlugin () {
