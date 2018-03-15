@@ -10627,6 +10627,10 @@ vue-hot-reload-api@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.0.tgz#97976142405d13d8efae154749e88c4e358cf926"
 
+vue-i18n@^7.6.0:
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-7.6.0.tgz#8745807756f6ca5090fd85629e9cab99b1c6e442"
+
 vue-instantsearch@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/vue-instantsearch/-/vue-instantsearch-1.5.1.tgz#6a16b4e2de746a555bc096082cb43eb423355f8e"
