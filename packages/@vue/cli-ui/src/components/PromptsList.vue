@@ -9,6 +9,11 @@
         :prompt="prompt"
         @answer="value => $emit('answer', { prompt, value })"
       />
+
+      <div v-if="!prompts.length" class="vue-ui-empty">
+        <VueIcon icon="check_circle" class="empty-icon"/>
+        <span>{{ $t('components.prompts-list.empty') }}</span>
+      </div>
     </div>
   </div>
 </template>

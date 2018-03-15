@@ -36,7 +36,10 @@
                   filters: `keywords:vue-cli-plugin`
                 }"
               >
-                <InstantSearchInput ref="searchInput"/>
+                <InstantSearchInput
+                  ref="searchInput"
+                  :placeholder="$t('views.project-plugins-add.tabs.search.search-input')"
+                />
                 <ais-results>
                   <PackageSearchItem
                     slot-scope="{ result }"
@@ -116,7 +119,7 @@
     <VueModal
       v-if="showCancelInstall"
       :title="$t('views.project-plugins-add.modal.title', { target: pluginId })"
-      class="small"
+      class="medium"
       @close="showCancelInstall = false"
     >
       <div class="default-body">
@@ -129,6 +132,8 @@
           class="flat"
           @click="showCancelInstall = false"
         />
+
+        <div class="vue-ui-spacer"/>
 
         <VueButton
           :label="$t('views.project-plugins-add.modal.buttons.cancel')"
@@ -243,7 +248,7 @@ export default {
         await this.$apollo.mutate({
           mutation: PLUGIN_UNINSTALL,
           variables: {
-            id: this.selectedId
+            id: this.pluginId
           }
         })
         this.cancelInstall()
@@ -257,7 +262,7 @@ export default {
         await this.$apollo.mutate({
           mutation: PLUGIN_INVOKE,
           variables: {
-            id: this.selectedId
+            id: this.pluginId
           }
         })
         this.close()

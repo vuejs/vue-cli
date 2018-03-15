@@ -5,7 +5,7 @@
       icon-left="search"
       v-model="query"
       class="big"
-      :placeholder="$t('components.instant-search-input.placeholder')"
+      :placeholder="placeholder"
     >
       <template slot="right">
         <VueButton
@@ -25,6 +25,13 @@ export default {
   mixins: [
     Component
   ],
+
+  props: {
+    placeholder: {
+      type: String,
+      default: null
+    }
+  },
 
   computed: {
     query: {

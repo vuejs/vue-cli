@@ -326,7 +326,7 @@
     <VueModal
       v-if="showSavePreset"
       :title="$t('views.project-create.tabs.configuration.modal.title')"
-      class="small"
+      class="medium"
       @close="showSavePreset = false"
     >
       <div class="default-body">
@@ -347,6 +347,8 @@
           class="flat"
           @click="showSavePreset = false"
         />
+
+        <div class="vue-ui-spacer"/>
 
         <VueButton
           :label="$t('views.project-create.tabs.configuration.modal.buttons.continue')"

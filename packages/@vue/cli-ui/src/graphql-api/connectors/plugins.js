@@ -218,11 +218,15 @@ function runInvoke (id, context) {
 
 async function initPrompts (id, context) {
   prompts.reset()
-  let data = require(path.join(getPath(id), 'prompts.js'))
-  if (typeof data === 'function') {
-    data = await data()
+  try {
+    let data = require(path.join(getPath(id), 'prompts.js'))
+    if (typeof data === 'function') {
+      data = await data()
+    }
+    data.forEach(prompts.add)
+  } catch (e) {
+    console.warn(`No prompts found for ${id}`)
   }
-  data.forEach(prompts.add)
   prompts.start()
 }
 

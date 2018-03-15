@@ -66,13 +66,19 @@ export default {
       if (!this.progress) return null
 
       const { status } = this.progress
-      const values = {}
-      if (this.progress.args) {
-        for (let i = 0, l = this.progress.args.length; i < l; i++) {
-          values[`arg${i}`] = this.progress.args[i]
+      let message
+      if (status) {
+        const values = {}
+        if (this.progress.args) {
+          for (let i = 0, l = this.progress.args.length; i < l; i++) {
+            values[`arg${i}`] = this.progress.args[i]
+          }
         }
+        const key = `mixins.progress.${status}`
+        message = this.$t(key, values)
+        message = (message !== key && message)
       }
-      return this.$t(`mixins.progress.${status}`, values) || status || ''
+      return message || status || ''
     }
   }
 }

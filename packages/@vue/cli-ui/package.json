@@ -10,7 +10,7 @@
     "prod-graphql-api": "cross-env NODE_ENV=production vue-cli-service run-graphql-api"
   },
   "dependencies": {
-    "@vue/ui": "^0.2.0",
+    "@vue/ui": "^0.2.1",
     "ansi_up": "^2.0.2",
     "apollo-cache-inmemory": "^1.1.10",
     "apollo-client": "^2.2.6",

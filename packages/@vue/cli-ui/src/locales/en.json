@@ -13,9 +13,6 @@
         "empty": "No favorite folders yet."
       }
     },
-    "instant-search-input": {
-      "placeholder": "Search a plugin"
-    },
     "list-item-info": {
       "more-info": "More Info"
     },
@@ -53,6 +50,9 @@
       "official": "Official",
       "installed": "Installed"
     },
+    "prompts-list": {
+      "empty": "No configuration"
+    },
     "status-bar": {
       "project": {
         "tooltip": "Current project<br><i>Click to toggle Project Manager</i>",
@@ -77,9 +77,9 @@
       "completion-hooks": "Running completion hooks...",
       "fetch-remote-preset": "Fetching remote preset...",
       "done": "Successfully created project",
-      "plugin-install": "Installing {arg0}",
-      "plugin-uninstall": "Uninstalling {arg0}",
-      "plugin-invoke": "Invoking {arg0}"
+      "plugin-install": "Installing {arg0}...",
+      "plugin-uninstall": "Uninstalling {arg0}...",
+      "plugin-invoke": "Invoking {arg0}..."
     }
   },
   "views": {
@@ -108,7 +108,7 @@
               "action": "Select this folder"
             },
             "manager": {
-              "label": "Project manager",
+              "label": "Package manager",
               "default": "Default"
             },
             "options": {
@@ -145,7 +145,7 @@
         },
         "features": {
           "title": "Features",
-          "description": "You will be able to add features after the project is created.",
+          "description": "You will be able to add features after the project is created by installing plugins.",
           "enable": "Enable features",
           "buttons": {
             "previous": "Previous",
@@ -185,7 +185,8 @@
       "tabs": {
         "search": {
           "label": "Search",
-          "not-found": "Not results found",
+          "search-input": "Search a plugin",
+          "not-found": "No results found",
           "buttons": {
             "cancel": "Cancel",
             "install": "Install {target}"

@@ -13,9 +13,6 @@
         "empty": "まだお気に入りフォルダがありません。"
       }
     },
-    "instant-search-input": {
-      "placeholder": "プラグインを検索する"
-    },
     "list-item-info": {
       "more-info": "詳細情報"
     },
@@ -53,6 +50,9 @@
       "official": "公式",
       "installed": "インストール済み"
     },
+    "prompts-list": {
+      "empty": "No configuration"
+    },
     "status-bar": {
       "project": {
         "tooltip": "現在のプロジェクト<br><i>プロジェクトマネージャにトグルするにはクリック</i>",
@@ -77,9 +77,9 @@
       "completion-hooks": "完了フックを実行中...",
       "fetch-remote-preset": "リモートプリセットのフェッチング...",
       "done": "プロジェクトを作成しました",
-      "plugin-install": "{arg0} をインストール中",
-      "plugin-uninstall": "{arg0} をアンインストール中",
-      "plugin-invoke": "{arg0} を起動中"
+      "plugin-install": "{arg0} をインストール中...",
+      "plugin-uninstall": "{arg0} をアンインストール中...",
+      "plugin-invoke": "{arg0} を起動中..."
     }
   },
   "views": {
@@ -108,7 +108,7 @@
               "action": "このフォルダを選択する"
             },
             "manager": {
-              "label": "プロジェクトマネージャ",
+              "label": "パッケージマネージャ",
               "default": "デフォルト"
             },
             "options": {
@@ -145,7 +145,7 @@
         },
         "features": {
           "title": "機能",
-          "description": "プロジェクトが作成された後に機能を追加することができます。",
+          "description": "プロジェクトの作成後、プラグインをインストールすることによって機能を追加することができます。",
           "enable": "機能の有効化",
           "buttons": {
             "previous": "前へ",
@@ -185,6 +185,7 @@
       "tabs": {
         "search": {
           "label": "検索",
+          "search-input": "プラグインを検索する",
           "not-found": "結果が見つかりません",
           "buttons": {
             "cancel": "キャンセル",
