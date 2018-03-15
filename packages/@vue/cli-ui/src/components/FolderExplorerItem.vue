@@ -5,7 +5,7 @@
       {{ folder.name }}
       <img
         v-if="folder.isVueProject"
-        class="vue-project-icon"
+        class="vue-ui-project-icon"
         src="~@/assets/logo.png"
       >
     </div>
@@ -29,14 +29,14 @@ export default {
 .folder-icon
   margin 0 4px
   >>> svg
-    fill $vue-color-primary
+    fill $vue-ui-color-primary
 
 .folder-name
   flex 100% 1 1
   margin-left $padding-item
   ellipsis()
 
-.vue-project-icon
+.vue-ui-project-icon
   width 14px
   height @width
   vertical-align top
@@ -52,5 +52,5 @@ export default {
   position relative
 
   &:hover
-    background rgba($vue-color-primary, .1)
+    background rgba($vue-ui-color-primary, .1)
 </style>

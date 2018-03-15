@@ -13,7 +13,7 @@
             icon="search"
             disabled
           >
-            <div class="content vue-disable-scroll">
+            <div class="content vue-ui-disable-scroll">
               <ais-index
                 app-id="OFCNCOG2CU"
                 api-key="db283631f89b5b8a10707311f911fd00"
@@ -46,7 +46,7 @@
                   />
                 </ais-results>
                 <ais-no-results>
-                  <div class="vue-empty">
+                  <div class="vue-ui-empty">
                     <VueIcon icon="search" class="huge"/>
                     <div>No results found</div>
                   </div>
@@ -84,7 +84,7 @@
             disabled
             lazy
           >
-            <div class="content vue-disable-scroll">
+            <div class="content vue-ui-disable-scroll">
               <div class="cta-text">Installation of {{ pluginId }}</div>
 
               <PromptsList

@@ -53,7 +53,7 @@
 
           <div
             v-if="!data.consoleLogs.length"
-            class="vue-empty"
+            class="vue-ui-empty"
           >
             <VueIcon icon="wifi" class="large"/>
             <div>No logs yet</div>
@@ -109,7 +109,7 @@ export default {
 @import "~@/style/imports"
 
 .logger-view
-  background $vue-color-light-neutral
+  background $vue-ui-color-light-neutral
   height 174px
   display grid
   grid-template-columns 1fr

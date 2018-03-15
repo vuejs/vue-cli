@@ -62,6 +62,6 @@ export default {
     h-box()
     box-center()
 
-    > .vue-button
+    > .vue-ui-button
       space-between-x(6px)
 </style>

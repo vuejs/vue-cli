@@ -67,6 +67,6 @@ export default {
 
 <style lang="stylus" scoped>
 .instant-search-input
-  .vue-input
+  .vue-ui-input
     width 100%
 </style>

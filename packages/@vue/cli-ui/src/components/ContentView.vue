@@ -36,7 +36,7 @@ export default {
     grid-area header
     h-box()
     box-center()
-    background $vue-color-light-neutral
+    background $vue-ui-color-light-neutral
     padding $padding-item
 
     .title

@@ -11,8 +11,8 @@
             label="Details"
             icon="subject"
           >
-            <div class="content vue-disable-scroll">
-              <div class="project-details vue-grid col-1 big-gap">
+            <div class="content vue-ui-disable-scroll">
+              <div class="project-details vue-ui-grid col-1 big-gap">
                 <VueFormField
                   title="Project folder"
                 >
@@ -112,8 +112,8 @@
             :disabled="!detailsValid"
             lazy
           >
-            <div class="content vue-disable-scroll">
-              <div class="vue-text info banner">
+            <div class="content vue-ui-disable-scroll">
+              <div class="vue-ui-text info banner">
                 <VueIcon icon="info" class="big"/>
                 <span>A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.</span>
               </div>
@@ -170,8 +170,8 @@
             :disabled="!detailsValid || !presetValid || !manual"
             lazy
           >
-            <div class="content vue-disable-scroll">
-              <div class="vue-text info banner">
+            <div class="content vue-ui-disable-scroll">
+              <div class="vue-ui-text info banner">
                 <VueIcon icon="info" class="big"/>
                 <span>You will be able to add features after the project is created.</span>
               </div>
@@ -220,7 +220,7 @@
             :disabled="!detailsValid || !presetValid"
             lazy
           >
-            <div class="content vue-disable-scroll">
+            <div class="content vue-ui-disable-scroll">
 
             </div>
 
@@ -248,7 +248,7 @@
             :disabled="!detailsValid || !presetValid || !manual || !enabledPrompts.length"
             lazy
           >
-            <div class="content vue-disable-scroll">
+            <div class="content vue-ui-disable-scroll">
               <PromptsList
                 :prompts="enabledPrompts"
                 @answer="answerPrompt"
@@ -283,7 +283,7 @@
       @close="showRemotePreset = false"
     >
       <div class="default-body">
-        <div class="vue-empty">
+        <div class="vue-ui-empty">
           <VueIcon icon="cake" class="large"/>
           <div>Available soon...</div>
         </div>

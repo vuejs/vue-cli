@@ -99,6 +99,6 @@ export default {
     text-transform uppercase
 
   .owner
-    .vue-icon
+    .vue-ui-icon
       margin-right 2px
 </style>
