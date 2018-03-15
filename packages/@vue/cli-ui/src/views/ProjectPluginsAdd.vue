@@ -2,14 +2,14 @@
   <div class="project-plugins-add page">
     <div class="content">
       <StepWizard
-        title="Add a plugin"
+        :title="$t('views.project-plugins-add.title')"
         class="frame"
         :tab-id.sync="tabId"
       >
         <template slot-scope="{ next, previous }">
           <VueTab
             id="search"
-            label="Search"
+            :label="$t('views.project-plugins-add.tabs.search.label')"
             icon="search"
             disabled
           >
@@ -48,7 +48,7 @@
                 <ais-no-results>
                   <div class="vue-ui-empty">
                     <VueIcon icon="search" class="huge"/>
-                    <div>No results found</div>
+                    <div>{{ $t('views.project-plugins-add.tabs.search.not-found') }}</div>
                   </div>
                 </ais-no-results>
                 <InstantSearchPagination/>
@@ -58,7 +58,7 @@
             <div class="actions-bar no-padding-x">
               <VueButton
                 icon-left="close"
-                label="Cancel"
+                :label="$t('views.project-plugins-add.tabs.search.buttons.cancel')"
                 class="big"
                 @click="close()"
               />
@@ -69,7 +69,7 @@
 
               <VueButton
                 icon-left="file_download"
-                :label="`Install ${selectedId || 'plugin'}`"
+                :label="$t('views.project-plugins-add.tabs.search.buttons.install', { target: selectedId || $t('views.project-plugins-add.plugin') })"
                 class="big primary"
                 :disabled="!selectedId"
                 @click="installPlugin()"
@@ -79,14 +79,13 @@
 
           <VueTab
             id="config"
-            label="Configuration"
+            :label="$t('views.project-plugins-add.tabs.configuration.label')"
             icon="settings_applications"
             disabled
             lazy
           >
             <div class="content vue-ui-disable-scroll">
-              <div class="cta-text">Installation of {{ pluginId }}</div>
-
+              <div class="cta-text">{{ $t('views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}</div>
               <PromptsList
                 :prompts="enabledPrompts"
                 @answer="answerPrompt"
@@ -96,14 +95,14 @@
             <div class="actions-bar no-padding-x">
               <VueButton
                 icon-left="arrow_back"
-                label="Cancel"
+                :label="$t('views.project-plugins-add.tabs.configuration.buttons.cancel')"
                 class="big"
                 @click="showCancelInstall = true"
               />
 
               <VueButton
                 icon-left="done"
-                label="Finish installation"
+                :label="$t('views.project-plugins-add.tabs.configuration.buttons.finish')"
                 class="big primary"
                 :disabled="!configurationValid"
                 @click="invokePlugin()"
@@ -116,29 +115,29 @@
 
     <VueModal
       v-if="showCancelInstall"
-      :title="`Uninstall ${pluginId}?`"
+      :title="$t('views.project-plugins-add.modal.title', { target: pluginId })"
       class="small"
       @close="showCancelInstall = false"
     >
       <div class="default-body">
-        Do you want to uninstall the {{ pluginId }} plugin?
+        {{ $t('views.project-plugins-add.modal.body', { target: pluginId }) }}
       </div>
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          label="Go back"
+          :label="$t('views.project-plugins-add.modal.buttons.back')"
           class="flat"
           @click="showCancelInstall = false"
         />
 
         <VueButton
-          label="Cancel without uninstalling"
+          :label="$t('views.project-plugins-add.modal.buttons.cancel')"
           class="flat"
           @click="cancelInstall()"
         />
 
         <VueButton
-          label="Uninstall"
+          :label="$t('views.project-plugins-add.modal.buttons.uninstall')"
           icon-left="delete_forever"
           class="danger"
           @click="uninstallPlugin()"

@@ -1,7 +1,7 @@
 <template>
   <div class="project-configuration page">
     <ContentView
-      title="Project configuration"
+      :title="$t('views.project-configuration.title')"
     >
       WIP
     </ContentView>

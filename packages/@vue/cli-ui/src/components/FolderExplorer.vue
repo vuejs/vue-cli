@@ -9,7 +9,7 @@
       <VueButton
         class="icon-button"
         icon-left="keyboard_arrow_up"
-        v-tooltip="'Open parent folder'"
+        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.parent-folder')"
         @click="openParentFolder"
       />
 
@@ -17,7 +17,7 @@
         <VueInput
           ref="pathInput"
           v-model="editedPath"
-          placeholder="Enter the full path to a folder"
+          :placeholder="$t('components.folder-explorer.toolbar.placeholder')"
           icon-left="edit"
           @keyup.esc="editingPath = false"
           @keyup.enter="submitPathEdit()"
@@ -28,7 +28,7 @@
         v-else
         :query="require('@/graphql/cwd.gql')"
         class="current-path"
-        v-tooltip="'Edit path'"
+        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.edit-path')"
         @click.native="openPathEdit()"
       >
         <ApolloSubscribeToMore
@@ -50,7 +50,7 @@
       <VueButton
         class="icon-button favorite-button"
         :icon-left="folderCurrent.favorite ? 'star' : 'star_border'"
-        v-tooltip="'Toggle favorite'"
+        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.favorite')"
         @click="toggleFavorite()"
       />
 
@@ -61,7 +61,7 @@
           slot="trigger"
           icon-left="arrow_drop_down"
           class="icon-button"
-          v-tooltip="'Favorite folders'"
+          v-tooltip="$t('components.folder-explorer.toolbar.tooltips.favorite-folders')"
         />
 
         <template v-if="foldersFavorite.length">
@@ -75,14 +75,14 @@
         </template>
 
         <div v-else class="vue-ui-empty">
-          No favorite folders yet.
+          {{ $t('components.folder-explorer.toolbar.empty') }}
         </div>
       </VueDropdown>
 
       <VueButton
         class="icon-button"
         icon-left="refresh"
-        v-tooltip="'Refresh'"
+        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.refresh')"
         @click="refreshFolder"
       />
     </div>

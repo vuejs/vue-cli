@@ -8,18 +8,18 @@
     <div class="content">
       <div
         class="section action current-project"
-        v-tooltip="'Current project<br><i>Click to toggle Project Manager</i>'"
+        v-tooltip="$t('components.status-bar.project.tooltip')"
         @click="onProjectClick()"
       >
         <VueIcon icon="work"/>
         <span v-if="projectCurrent">{{ projectCurrent.name }}</span>
-        <span v-else class="label">No project</span>
+        <span v-else class="label">{{ $t('components.status-bar.project.empty') }}</span>
       </div>
 
       <ApolloQuery
         :query="require('@/graphql/cwd.gql')"
         class="section current-path"
-        v-tooltip="'Current Working Directory'"
+        v-tooltip="$t('components.status-bar.path.tooltip')"
         @click.native="onCwdClick()"
       >
         <ApolloSubscribeToMore
@@ -37,7 +37,7 @@
 
       <div
         class="section action console-log"
-        v-tooltip="'Logs<br><i>Click to toggle vue-cli logs</i>'"
+        v-tooltip="$t('components.status-bar.log.tooltip')"
         @click="onConsoleClick()"
       >
         <VueIcon icon="dvr"/>
@@ -45,7 +45,7 @@
           v-if="consoleLogLast"
           :message="consoleLogLast"
         />
-        <div v-else class="last-message">No logs yet</div>
+        <div v-else class="last-message">{{ $t('components.status-bar.log.empty') }}</div>
         <!-- <TerminalView
           :cols="100"
           :rows="1"

@@ -5,7 +5,7 @@
       icon-left="search"
       v-model="query"
       class="big"
-      placeholder="Search a plugin"
+      :placeholder="$t('components.instant-search-input.placeholder')"
     >
       <template slot="right">
         <VueButton

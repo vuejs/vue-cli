@@ -9,12 +9,12 @@
     >
       <span slot="description" class="plugin-description">
         <span class="info version">
-          <span class="label">version</span>
+          <span class="label">{{ $t('components.project-plugin-item.version') }}</span>
           <span class="value">{{ plugin.version.current }}</span>
         </span>
 
         <span class="info latest">
-          <span class="label">latest</span>
+          <span class="label">{{ $t('components.project-plugin-item.latest') }}</span>
           <VueIcon
             v-if="plugin.version.current !== plugin.version.latest"
             icon="warning"
@@ -28,7 +28,7 @@
             icon="star"
             class="top medium"
           />
-          Official
+          {{ $t('components.project-plugin-item.official') }}
         </span>
 
         <span v-if="plugin.installed" class="info">
@@ -36,7 +36,7 @@
             icon="check_circle"
             class="top medium"
           />
-          Installed
+          {{ $t('components.project-plugin-item.installed') }}
         </span>
 
         <span v-if="plugin.description" class="package-description">

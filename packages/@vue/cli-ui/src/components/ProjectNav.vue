@@ -12,7 +12,7 @@
           class="flat big icon-button"
           :value="route.name"
           :icon-left="route.icon"
-          v-tooltip.right="route.tooltip"
+          v-tooltip.right="renderTooltip(route.tooltip)"
         />
       </VueGroup>
     </div>
@@ -24,17 +24,17 @@ const BUILTIN_ROUTES = [
   {
     name: 'project-plugins',
     icon: 'widgets',
-    tooltip: 'Plugins'
+    tooltip: 'plugins'
   },
   {
     name: 'project-configuration',
     icon: 'settings_applications',
-    tooltip: 'Configuration'
+    tooltip: 'configuration'
   },
   {
     name: 'project-tasks',
     icon: 'assignment',
-    tooltip: 'Tasks'
+    tooltip: 'tasks'
   }
 ]
 
@@ -65,6 +65,12 @@ export default {
       }
     }
   },
+
+  methods: {
+    renderTooltip (target) {
+      return this.$t(`components.project-nav.tooltips.${target}`)
+    }
+  }
 }
 </script>
 

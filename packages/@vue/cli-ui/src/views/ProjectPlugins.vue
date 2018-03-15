@@ -1,12 +1,12 @@
 <template>
   <div class="project-plugins page">
     <ContentView
-      title="Project plugins"
+      :title="$t('views.project-plugins.title')"
     >
       <template slot="header">
         <VueButton
           icon-left="add"
-          label="Add plugin"
+          :label="$t('views.project-plugins.button')"
           class="primary"
           :to="{ name: 'project-plugins-add' }"
         />
@@ -17,7 +17,7 @@
         fetch-policy="cache-and-network"
       >
         <template slot-scope="{ result: { data, loading } }">
-          <div class="cta-text">Installed plugins</div>
+          <div class="cta-text">{{ $t('views.project-plugins.heading') }}</div>
 
           <VueLoadingIndicator
             v-if="loading"
