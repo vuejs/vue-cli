@@ -50,4 +50,6 @@ export default {
   .content
     grid-area content
     position relative
+    overflow-x hidden
+    overflow-y auto
 </style>

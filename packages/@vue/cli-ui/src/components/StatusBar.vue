@@ -143,7 +143,7 @@ export default {
   .section
     h-box()
     align-items center
-    opacity .5
+    opacity .8
     padding 0 8px
     height 100%
     cursor default

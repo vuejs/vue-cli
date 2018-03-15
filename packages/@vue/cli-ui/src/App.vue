@@ -34,6 +34,7 @@ export default {
 
 .content
   grid-area content
+  overflow hidden
 
 .status-bar
   grid-area status
