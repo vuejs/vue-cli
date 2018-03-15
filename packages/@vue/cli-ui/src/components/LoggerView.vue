@@ -5,12 +5,12 @@
         icon="dvr"
       />
       <div class="title">
-        Logs
+        {{ $t('components.logger-view.title') }}
       </div>
       <VueButton
         class="icon-button"
         icon-left="delete_forever"
-        v-tooltip="'Clear logs'"
+        v-tooltip="$t('components.logger-view.buttons.clear')"
         @click="clearLogs()"
       />
       <VueIcon
@@ -20,13 +20,13 @@
       <VueButton
         class="icon-button"
         icon-left="subdirectory_arrow_left"
-        v-tooltip="'Scroll to bottom'"
+        v-tooltip="$t('components.logger-view.buttons.scroll')"
         @click="scrollToBottom()"
       />
       <VueButton
         class="icon-button"
         icon-left="close"
-        v-tooltip="'Close'"
+        v-tooltip="$t('components.logger-view.buttons.close')"
         @click="close()"
       />
     </div>
@@ -56,7 +56,7 @@
             class="vue-empty"
           >
             <VueIcon icon="wifi" class="large"/>
-            <div>No logs yet</div>
+            <div>{{ $t('components.logger-view.empty') }}</div>
           </div>
         </template>
       </template>

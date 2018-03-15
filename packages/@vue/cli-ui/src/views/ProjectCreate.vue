@@ -2,23 +2,23 @@
   <div class="project-create page">
     <div class="content">
       <StepWizard
-        title="Create a new project"
+        :title="$t('views.project-create.title')"
         class="frame"
       >
         <template slot-scope="{ next, previous }">
           <VueTab
             id="details"
-            label="Details"
+            :label="$t('views.project-create.tabs.details.title')"
             icon="subject"
           >
             <div class="content vue-disable-scroll">
               <div class="project-details vue-grid col-1 big-gap">
                 <VueFormField
-                  title="Project folder"
+                  :title="$t('views.project-create.tabs.details.form.folder.label')"
                 >
                   <VueInput
                     v-model="formData.folder"
-                    placeholder="my-app"
+                    :placeholder="$t('views.project-create.tabs.details.form.folder.placeholder')"
                     icon-left="folder"
                     class="big"
                   />
@@ -38,14 +38,14 @@
                       <VueButton
                         icon-left="edit"
                         class="icon-button"
-                        v-tooltip="'Change base directory'"
+                        v-tooltip="$t('views.project-create.tabs.details.form.folder.tooltip')"
                         :to="{
                           name: 'project-select',
                           query: {
-                            title: 'Create a new project',
+                            title: $t('views.project-create.title'),
                             tab: 'create',
                             hideTabs: true,
-                            action: 'Select this folder'
+                            action: $t('views.project-create.tabs.details.form.folder.action')
                           }
                         }"
                       />
@@ -54,14 +54,14 @@
                 </VueFormField>
 
                 <VueFormField
-                  title="Package manager"
+                  :title="$t('views.project-create.tabs.details.form.manager.label')"
                 >
                   <VueSelect
                     v-model="formData.packageManager"
                   >
                     <VueSelectButton
                       :value="undefined"
-                      label="Default"
+                      :label="$t('views.project-create.tabs.details.form.manager.default')"
                     />
                     <VueSelectButton
                       value="npm"
@@ -75,13 +75,13 @@
                 </VueFormField>
 
                 <VueFormField
-                  title="Additional options"
+                  :title="$t('views.project-create.tabs.details.form.options.label')"
                 >
                   <VueSwitch
                     v-model="formData.force"
                     class="extend-left"
                   >
-                    Overwrite target directory if it exists
+                    {{ $t('views.project-create.tabs.details.form.options.description') }}
                   </VueSwitch>
                 </VueFormField>
               </div>
@@ -90,14 +90,14 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="close"
-                label="Cancel"
+                :label="$t('views.project-create.tabs.details.buttons.cancel')"
                 class="big"
                 @click="showCancel = true"
               />
 
               <VueButton
                 icon-right="arrow_forward"
-                label="Next"
+                :label="$t('views.project-create.tabs.details.buttons.next')"
                 class="big primary"
                 :disabled="!detailsValid"
                 @click="next()"
@@ -107,7 +107,7 @@
 
           <VueTab
             id="presets"
-            label="Presets"
+            :label="$t('views.project-create.tabs.presets.title')"
             icon="check_circle"
             :disabled="!detailsValid"
             lazy
@@ -115,10 +115,12 @@
             <div class="content vue-disable-scroll">
               <div class="vue-text info banner">
                 <VueIcon icon="info" class="big"/>
-                <span>A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.</span>
+                <span>{{ $t('views.project-create.tabs.presets.description') }}</span>
               </div>
 
-              <div class="cta-text">Select a preset</div>
+              <div class="cta-text">
+                {{ $t('views.project-create.tabs.presets.select') }}
+              </div>
 
               <template v-if="projectCreation">
                 <ProjectPresetItem
@@ -140,7 +142,7 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="arrow_back"
-                label="Previous"
+                :label="$t('views.project-create.tabs.presets.buttons.previous')"
                 class="big"
                 @click="previous()"
               />
@@ -148,7 +150,7 @@
               <VueButton
                 v-if="manual"
                 icon-right="arrow_forward"
-                label="Next"
+                :label="$t('views.project-create.tabs.presets.buttons.next')"
                 class="big primary"
                 :disabled="!presetValid"
                 @click="next()"
@@ -156,7 +158,7 @@
               <VueButton
                 v-else
                 icon-left="done"
-                label="Create project"
+                :label="$t('views.project-create.tabs.presets.buttons.create')"
                 class="big primary"
                 @click="createWithoutSaving()"
               />
@@ -165,7 +167,7 @@
 
           <VueTab
             id="features"
-            label="Features"
+            :label="$t('views.project-create.tabs.features.title')"
             icon="device_hub"
             :disabled="!detailsValid || !presetValid || !manual"
             lazy
@@ -173,10 +175,12 @@
             <div class="content vue-disable-scroll">
               <div class="vue-text info banner">
                 <VueIcon icon="info" class="big"/>
-                <span>You will be able to add features after the project is created.</span>
+                <span>{{ $t('views.project-create.tabs.features.description') }}</span>
               </div>
 
-              <div class="cta-text">Enable features</div>
+              <div class="cta-text">
+                {{ $t('views.project-create.tabs.features.enable') }}
+              </div>
 
               <template v-if="projectCreation">
                 <ProjectFeatureItem
@@ -191,7 +195,7 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="arrow_back"
-                label="Previous"
+                :label="$t('views.project-create.tabs.features.buttons.previous')"
                 class="big"
                 @click="previous()"
               />
@@ -199,14 +203,14 @@
               <VueButton
                 v-if="enabledPrompts.length"
                 icon-right="arrow_forward"
-                label="Next"
+                :label="$t('views.project-create.tabs.features.buttons.next')"
                 class="big primary"
                 @click="next()"
               />
               <VueButton
                 v-else
                 icon-left="done"
-                label="Create project"
+                :label="$t('views.project-create.tabs.features.buttons.create')"
                 class="big primary"
                 @click="showSavePreset = true"
               />
@@ -243,7 +247,7 @@
 
           <VueTab
             id="config"
-            label="Configuration"
+            :label="$t('views.project-create.tabs.configuration.title')"
             icon="settings_applications"
             :disabled="!detailsValid || !presetValid || !manual || !enabledPrompts.length"
             lazy
@@ -258,14 +262,14 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="arrow_back"
-                label="Previous"
+                :label="$t('views.project-create.tabs.configuration.buttons.previous')"
                 class="big"
                 @click="previous()"
               />
 
               <VueButton
                 icon-left="done"
-                label="Create project"
+                :label="$t('views.project-create.tabs.configuration.buttons.create')"
                 class="big primary"
                 :disabled="!configurationValid"
                 @click="showSavePreset = true"
@@ -278,38 +282,40 @@
 
     <VueModal
       v-if="showRemotePreset"
-      title="Configure Remote preset"
+      :title="$t('views.project-create.tabs.presets.modal.title')"
       class="medium"
       @close="showRemotePreset = false"
     >
       <div class="default-body">
         <div class="vue-empty">
           <VueIcon icon="cake" class="large"/>
-          <div>Available soon...</div>
+          <div>
+            {{ $t('views.project-create.tabs.presets.modal.body') }}
+          </div>
         </div>
       </div>
     </VueModal>
 
     <VueModal
       v-if="showCancel"
-      title="Cancel and reset project creation"
+      :title="$t('views.project-create.tabs.details.modal.title')"
       class="small"
       @close="showCancel = false"
     >
       <div class="default-body">
-        Are you sure you want to reset the project creation?
+        {{ $t('views.project-create.tabs.details.modal.body') }}
       </div>
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          label="Go back"
+          :label="$t('views.project-create.tabs.details.modal.buttons.back')"
           class="flat"
           @click="showCancel = false"
         />
 
         <VueButton
           :to="{ name: 'project-select' }"
-          label="Clear project"
+          :label="$t('views.project-create.tabs.details.modal.buttons.clear')"
           icon-left="delete_forever"
           class="danger"
           @click="reset()"
@@ -319,14 +325,14 @@
 
     <VueModal
       v-if="showSavePreset"
-      title="Save as a new preset"
+      :title="$t('views.project-create.tabs.configuration.modal.title')"
       class="small"
       @close="showSavePreset = false"
     >
       <div class="default-body">
         <VueFormField
-          title="Preset name"
-          subtitle="Save the features and configuration into a new preset"
+          :title="$t('views.project-create.tabs.configuration.modal.body.title')"
+          :subtitle="$t('views.project-create.tabs.configuration.modal.body.subtitle')"
         >
           <VueInput
             v-model="formData.save"
@@ -337,19 +343,19 @@
 
       <div slot="footer" class="actions end">
         <VueButton
-          label="Cancel"
+          :label="$t('views.project-create.tabs.configuration.modal.buttons.cancel')"
           class="flat"
           @click="showSavePreset = false"
         />
 
         <VueButton
-          label="Continue without saving"
+          :label="$t('views.project-create.tabs.configuration.modal.buttons.continue')"
           class="flat"
           @click="createWithoutSaving()"
         />
 
         <VueButton
-          label="Create a new preset"
+          :label="$t('views.project-create.tabs.configuration.modal.buttons.create')"
           icon-left="save"
           class="primary"
           :disabled="!formData.save"

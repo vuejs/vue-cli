@@ -20,7 +20,7 @@
             <div class="actions">
               <VueButton
                 icon-left="close"
-                label="Close"
+                :label="$t('components.progress-screen.close')"
                 @click="close()"
               />
             </div>

@@ -1,0 +1,220 @@
+{
+  "components": {
+    "folder-explorer": {
+      "toolbar": {
+        "tooltips": {
+          "parent-folder": "Open parent folder",
+          "edit-path": "Edit path",
+          "favorite": "Toggle favorite",
+          "favorite-folders": "Favorite folders",
+          "refresh": "Refresh"
+        },
+        "placeholder": "Enter the full path to a folder",
+        "empty": "No favorite folders yet."
+      }
+    },
+    "instant-search-input": {
+      "placeholder": "Search a plugin"
+    },
+    "list-item-info": {
+      "more-info": "More Info"
+    },
+    "logger-view": {
+      "title": "Logs",
+      "empty": "Not logs yet",
+      "buttons": {
+        "clear": "Clear logs",
+        "scroll": "Scroll to bottom",
+        "close": "Close"
+      }
+    },
+    "progress-screen": {
+      "close": "Close"
+    },
+    "project-nav": {
+      "tooltips": {
+        "plugins": "Plugins",
+        "configuration": "Configuration",
+        "tasks": "Tasks"
+      }
+    },
+    "project-select-list": {
+      "empty": "No existing projects"
+    },
+    "project-select-list-item": {
+      "tooltips": {
+        "favorite": "Toggle favorite",
+        "delete": "Delete"
+      }
+    },
+    "project-plugin-item": {
+      "version": "version",
+      "latest": "latest",
+      "official": "Official",
+      "installed": "Installed"
+    },
+    "status-bar": {
+      "project": {
+        "tooltip": "Current project<br><i>Click to toggle Project Manager</i>",
+        "empty": "No project"
+      },
+      "path": {
+        "tooltip": "Current Working Folder"
+      },
+      "log": {
+        "tooltip": "Logs<br><i>Click to toggle Vue CLI logs</i>",
+        "empty": "No logs yet"
+      }
+    }
+  },
+  "mixins": {
+    "progress": {
+      "creating": "Creating project...",
+      "git-init": "Initializing git repository...",
+      "plugins-install": "Installing Vue CLI plugins. This might take a while...",
+      "invoking-generators": "Invoking generators...",
+      "deps-install": "Installing additional dependencies...",
+      "completion-hooks": "Running completion hooks...",
+      "fetch-remote-preset": "Fetching remote preset...",
+      "done": "Successfully created project",
+      "plugin-install": "Installing {arg0}",
+      "plugin-uninstall": "Uninstalling {arg0}",
+      "plugin-invoke": "Invoking {arg0}"
+    }
+  },
+  "views": {
+    "project-select": {
+      "title": "Vue Project Manager",
+      "tabs": {
+        "projects": "Projects",
+        "create": "Create",
+        "import": "Import"
+      },
+      "buttons": {
+        "create": "Create a new project here",
+        "import": "Import this folder"
+      }
+    },
+    "project-create": {
+      "title": "Create a new project",
+      "tabs": {
+        "details": {
+          "title": "Details",
+          "form": {
+            "folder": {
+              "label": "Project folder",
+              "placeholder": "my-app",
+              "tooltip": "Change base folder",
+              "action": "Select this folder"
+            },
+            "manager": {
+              "label": "Project manager",
+              "default": "Default"
+            },
+            "options": {
+              "label": "Additional options",
+              "description": "Overwrite target folder if it exists"
+            }
+          },
+          "buttons": {
+            "cancel": "Cancel",
+            "next": "Next"
+          },
+          "modal": {
+            "title": "Cancel and reset project creation",
+            "body": "Are you sure you want to reset the project creation?",
+            "buttons": {
+              "back": "Go back",
+              "clear": "Clear project"
+            }
+          }
+        },
+        "presets": {
+          "title": "Presets",
+          "description": "A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.",
+          "select": "Select a preset",
+          "buttons": {
+            "previous": "Previous",
+            "next": "Next",
+            "create": "Create Project"
+          },
+          "modal": {
+            "title": "Configure Remote preset",
+            "body": "Available soon..."
+          }
+        },
+        "features": {
+          "title": "Features",
+          "description": "You will be able to add features after the project is created.",
+          "enable": "Enable features",
+          "buttons": {
+            "previous": "Previous",
+            "next": "Next",
+            "create": "Create Project"
+          }
+        },
+        "configuration": {
+          "title": "Configuration",
+          "buttons": {
+            "previous": "Previous",
+            "create": "Create Project"
+          },
+          "modal": {
+            "title": "Save as a new preset",
+            "body": {
+              "title": "Preset name",
+              "subtitle": "Save the features and configuration into a new preset"
+            },
+            "buttons": {
+              "cancel": "Cancel",
+              "continue": "Continue without saving",
+              "create": "Create a new preset"
+            }
+          }
+        }
+      }
+    },
+    "project-plugins": {
+      "title": "Project plugins",
+      "button": "Add plugin",
+      "heading": "Installed plugins"
+    },
+    "project-plugins-add": {
+      "title": "Add a plugin",
+      "plugin": "plugin",
+      "tabs": {
+        "search": {
+          "label": "Search",
+          "not-found": "Not results found",
+          "buttons": {
+            "cancel": "Cancel",
+            "install": "Install {target}"
+          }
+        },
+        "configuration": {
+          "label": "Configuration",
+          "heading": "Installation of {target}",
+          "buttons": {
+            "cancel": "Cancel",
+            "finish": "Finish installation"
+          }
+        }
+      },
+      "modal": {
+        "title": "Uninstall {target}?",
+        "body": "Do you want to uninstall the {target} plugin?",
+        "buttons": {
+          "back": "Go back",
+          "cancel": "Cancel without uninstalling",
+          "uninstall": "Uninstall"
+        }
+      }
+    },
+    "project-configuration": {
+      "title": "Project configuration"
+    },
+    "project-tasks": {
+      "title": "Project tasks"
+    }
+  }
+}

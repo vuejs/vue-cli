@@ -22,7 +22,7 @@
         @click.stop="() => {}"
       >
         <VueIcon icon="open_in_new" class="medium top"/>
-        More info
+        {{ $t('components.list-item-info.more-info') }}
       </a>
     </div>
   </div>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import i18n from './i18n'
 import { apolloProvider } from './vue-apollo'
 import VueUi from '@vue/ui'
 import InstantSearch from 'vue-instantsearch'
@@ -19,6 +20,7 @@ Vue.config.productionTip = false
 const app = new Vue({
   provide: apolloProvider.provide(),
   router,
+  i18n,
   ...App
 })
 

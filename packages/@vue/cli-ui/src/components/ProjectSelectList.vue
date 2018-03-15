@@ -18,7 +18,7 @@
           </div>
           <div v-else class="vue-empty">
             <VueIcon icon="attach_file" class="empty-icon"/>
-            <div>No existing projects</div>
+            <div>{{ $t('components.project-select-list.empty') }}</div>
           </div>
         </template>
       </template>

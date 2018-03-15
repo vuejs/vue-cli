@@ -5,7 +5,7 @@
         <VueButton
           class="icon-button"
           :icon-left="project.favorite ? 'star' : 'star_border'"
-          v-tooltip="'Toggle favorite'"
+          v-tooltip="$t('components.project-select-list-item.tooltips.favorite')"
           @click.stop="$emit('favorite')"
         />
       </div>
@@ -19,7 +19,7 @@
         <VueButton
           class="icon-button"
           icon-left="delete"
-          v-tooltip="'Delete'"
+          v-tooltip="$t('components.project-select-list-item.tooltips.delete')"
           @click.stop="$emit('remove')"
         />
       </div>
