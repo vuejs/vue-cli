@@ -65,14 +65,26 @@ function readPackage (id, context) {
   return folders.readPackage(getPath(id), context)
 }
 
-async function getMetadata (id) {
+async function getMetadata (id, context) {
   let metadata = metadataCache.get(id)
   if (metadata) {
     return metadata
   }
-  const res = await getPackageVersion(id)
-  if (res.statusCode === 200) {
-    metadata = res.body
+  if (isOfficialPlugin(id)) {
+    const res = await getPackageVersion('vue-cli-version-marker', 'latest')
+    if (res.statusCode === 200) {
+      metadata = res.body
+    }
+    const pkg = folders.readPackage(path.dirname(require.resolve(id)), context)
+    metadata.description = pkg.description
+  } else {
+    const res = await getPackageVersion(id, id.indexOf('@') === -1 ? 'latest' : '')
+    if (res.statusCode === 200) {
+      metadata = res.body
+    }
+  }
+
+  if (metadata) {
     metadataCache.set(id, metadata)
     return metadata
   }
@@ -87,9 +99,9 @@ async function getVersion ({ id, installed, versionRange }, context) {
     current = null
   }
   let latest
-  const metadata = await getMetadata(id)
+  const metadata = await getMetadata(id, context)
   if (metadata) {
-    latest = metadata['dist-tags'].latest
+    latest = (metadata['dist-tags'] && metadata['dist-tags'].latest) || metadata.version
   }
 
   if (!latest) {
@@ -105,7 +117,7 @@ async function getVersion ({ id, installed, versionRange }, context) {
 }
 
 async function getDescription ({ id }, context) {
-  const metadata = await getMetadata(id)
+  const metadata = await getMetadata(id, context)
   if (metadata) {
     return metadata.description
   }
