@@ -1,5 +1,5 @@
 <template>
-  <transition name="vue-fade">
+  <transition name="vue-ui-fade">
     <div
       v-if="progress"
       class="loading-screen"
@@ -79,10 +79,10 @@ export default {
     text-align center
 
     .error
-      color $vue-color-danger
+      color $vue-ui-color-danger
       v-box()
       box-center()
-      > .vue-icon
+      > .vue-ui-icon
         margin-bottom $padding-item
         >>> svg
           fill @color
@@ -100,14 +100,14 @@ export default {
     .info
       color $color-text-light
 
-    .vue-loading-bar
+    .vue-ui-loading-bar
       width 50vw
       max-width 400px
       margin-top 24px
 
 
   &:not(.loading)
-    .vue-loading-indicator
+    .vue-ui-loading-indicator
       >>> .animation
         display none
 

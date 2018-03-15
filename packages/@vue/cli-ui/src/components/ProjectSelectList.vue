@@ -16,7 +16,7 @@
               @favorite="toggleFavorite(project)"
             />
           </div>
-          <div v-else class="vue-empty">
+          <div v-else class="vue-ui-empty">
             <VueIcon icon="attach_file" class="empty-icon"/>
             <div>{{ $t('components.project-select-list.empty') }}</div>
           </div>

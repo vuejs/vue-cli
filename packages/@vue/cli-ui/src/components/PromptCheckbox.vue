@@ -62,6 +62,6 @@ export default {
   v-box()
   align-items stretch
 
-  .vue-switch
+  .vue-ui-switch
     margin-top 6px
 </style>

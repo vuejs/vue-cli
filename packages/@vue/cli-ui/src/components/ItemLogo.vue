@@ -86,7 +86,7 @@ export default {
       width 100%
       height @width
       transform scale(0)
-    .vue-icon
+    .vue-ui-icon
       width 24px
       height @width
       >>> svg
@@ -94,7 +94,7 @@ export default {
 
   &.vuejs
     .wrapper
-      background lighten($vue-color-primary, 70%)
+      background lighten($vue-ui-color-primary, 70%)
     .image
       width 70%
       height @width
@@ -113,10 +113,10 @@ export default {
 
   &.selected
     .wrapper
-      background $vue-color-primary
-      .vue-icon
+      background $vue-ui-color-primary
+      .vue-ui-icon
         >>> svg
-          fill $vue-color-light
+          fill $vue-ui-color-light
 
 @keyframes zoom
   0%

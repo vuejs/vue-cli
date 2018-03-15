@@ -63,23 +63,23 @@ export default {
 
   &.type-warn
     .type
-      background $vue-color-warning
-      color $vue-color-light
+      background $vue-ui-color-warning
+      color $vue-ui-color-light
   &.type-error
     .type
-      background $vue-color-danger
-      color $vue-color-light
+      background $vue-ui-color-danger
+      color $vue-ui-color-light
   &.type-info
     .type
-      background $vue-color-info
-      color $vue-color-light
+      background $vue-ui-color-info
+      color $vue-ui-color-light
   &.type-done
     .type
-      background $vue-color-success
-      color $vue-color-light
+      background $vue-ui-color-success
+      color $vue-ui-color-light
 
   .tag
-    background lighten($vue-color-dark, 60%)
+    background lighten($vue-ui-color-dark, 60%)
 
   &.has-type.has-tag
     .type

@@ -34,7 +34,7 @@ export default {
 @import "~@/style/imports"
 
 .project-feature-item
-  .vue-switch
+  .vue-ui-switch
     padding $padding-item
     width 100%
     box-sizing border-box

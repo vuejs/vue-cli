@@ -65,6 +65,6 @@ export default {
   &.selected
     .radio-icon
       >>> svg
-        fill $vue-color-primary
+        fill $vue-ui-color-primary
 
 </style>

@@ -28,7 +28,7 @@ export default {
 @import "~@/style/imports"
 
 .prompt-confirm
-  .vue-switch
+  .vue-ui-switch
     padding $padding-item
     width 100%
     box-sizing border-box

@@ -75,24 +75,24 @@ export default {
     height 100%
     flex auto 1 1
 
-  >>> .vue-tab
+  >>> .vue-ui-tab
     margin 0 auto
     padding $padding-item $padding-item 0
     box-sizing border-box
 
   .header,
   >>> .tabs
-    background $vue-color-light-neutral
+    background $vue-ui-color-light-neutral
 
   >>> .tabs-content
     height 0
 
   &,
-  >>> .vue-tab,
-  >>> .vue-tab-content
+  >>> .vue-ui-tab,
+  >>> .vue-ui-tab-content
     height 100%
 
-  >>> .vue-tab-content
+  >>> .vue-ui-tab-content
     overflow-y hidden
     v-box()
     margin 0 auto
@@ -123,7 +123,7 @@ export default {
     .shell
       background $color-light-background
     .header .content,
-    >>> .vue-tab
+    >>> .vue-ui-tab
       max-width $max-width
 
 </style>

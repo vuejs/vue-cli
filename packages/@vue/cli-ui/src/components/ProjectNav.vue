@@ -78,17 +78,17 @@ export default {
 @import "~@/style/imports"
 
 .project-nav
-  background $vue-color-dark
+  background $vue-ui-color-dark
 
   .content
     v-box()
 
-    >>> .vue-button
-      button-colors(rgba($vue-color-light, .7), transparent)
+    >>> .vue-ui-button
+      button-colors(rgba($vue-ui-color-light, .7), transparent)
       border-radius 0
       &:hover
-        $bg = darken($vue-color-dark, 70%)
-        button-colors($vue-color-light, $bg)
+        $bg = darken($vue-ui-color-dark, 70%)
+        button-colors($vue-ui-color-light, $bg)
         &.selected
-          button-colors(lighten($vue-color-primary, 40%), $bg)
+          button-colors(lighten($vue-ui-color-primary, 40%), $bg)
 </style>

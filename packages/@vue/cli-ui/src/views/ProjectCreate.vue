@@ -11,8 +11,8 @@
             :label="$t('views.project-create.tabs.details.title')"
             icon="subject"
           >
-            <div class="content vue-disable-scroll">
-              <div class="project-details vue-grid col-1 big-gap">
+            <div class="content vue-ui-disable-scroll">
+              <div class="project-details vue-ui-grid col-1 big-gap">
                 <VueFormField
                   :title="$t('views.project-create.tabs.details.form.folder.label')"
                 >
@@ -112,8 +112,8 @@
             :disabled="!detailsValid"
             lazy
           >
-            <div class="content vue-disable-scroll">
-              <div class="vue-text info banner">
+            <div class="content vue-ui-disable-scroll">
+              <div class="vue-ui-text info banner">
                 <VueIcon icon="info" class="big"/>
                 <span>{{ $t('views.project-create.tabs.presets.description') }}</span>
               </div>
@@ -172,8 +172,8 @@
             :disabled="!detailsValid || !presetValid || !manual"
             lazy
           >
-            <div class="content vue-disable-scroll">
-              <div class="vue-text info banner">
+            <div class="content vue-ui-disable-scroll">
+              <div class="vue-ui-text info banner">
                 <VueIcon icon="info" class="big"/>
                 <span>{{ $t('views.project-create.tabs.features.description') }}</span>
               </div>
@@ -224,7 +224,7 @@
             :disabled="!detailsValid || !presetValid"
             lazy
           >
-            <div class="content vue-disable-scroll">
+            <div class="content vue-ui-disable-scroll">
 
             </div>
 
@@ -252,7 +252,7 @@
             :disabled="!detailsValid || !presetValid || !manual || !enabledPrompts.length"
             lazy
           >
-            <div class="content vue-disable-scroll">
+            <div class="content vue-ui-disable-scroll">
               <PromptsList
                 :prompts="enabledPrompts"
                 @answer="answerPrompt"
@@ -287,7 +287,7 @@
       @close="showRemotePreset = false"
     >
       <div class="default-body">
-        <div class="vue-empty">
+        <div class="vue-ui-empty">
           <VueIcon icon="cake" class="large"/>
           <div>
             {{ $t('views.project-create.tabs.presets.modal.body') }}

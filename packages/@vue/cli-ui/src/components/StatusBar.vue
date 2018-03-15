@@ -131,7 +131,7 @@ export default {
 @import "~@/style/imports"
 
 .status-bar
-  $bg = $vue-color-light-neutral
+  $bg = $vue-ui-color-light-neutral
 
   .content
     h-box()
@@ -152,11 +152,11 @@ export default {
       opacity 1
       background lighten($bg, 40%)
 
-    > .vue-icon + *
+    > .vue-ui-icon + *
       margin-left 4px
 
     .label
-      color lighten($vue-color-dark, 20%)
+      color lighten($vue-ui-color-dark, 20%)
 
     &.action
       user-select none

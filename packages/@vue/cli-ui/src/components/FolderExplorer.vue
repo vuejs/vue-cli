@@ -74,7 +74,7 @@
           />
         </template>
 
-        <div v-else class="vue-empty">
+        <div v-else class="vue-ui-empty">
           {{ $t('components.folder-explorer.toolbar.empty') }}
         </div>
       </VueDropdown>
@@ -239,7 +239,7 @@ export default {
 
 .path-edit
   flex 100% 1 1
-  > .vue-input
+  > .vue-ui-input
     width 100%
 
 .favorite-button
@@ -247,7 +247,7 @@ export default {
 
 .error-icon
   >>> svg
-    fill $vue-color-danger
+    fill $vue-ui-color-danger
 
 .folder-explorer
   v-box()
@@ -260,5 +260,5 @@ export default {
 
   &.error
     .current-path
-      color $vue-color-danger
+      color $vue-ui-color-danger
 </style>

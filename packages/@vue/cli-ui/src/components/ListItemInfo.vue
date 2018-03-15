@@ -70,27 +70,27 @@ export default {
   .description
     color $color-text-light
 
-    >>> .vue-icon
+    >>> .vue-ui-icon
       svg
         fill @color
 
     .more-info
-      color $vue-color-primary
+      color $vue-ui-color-primary
       padding 0 4px 0 2px
       border-radius $br
-      .vue-icon
+      .vue-ui-icon
         >>> svg
           fill @color
       &:hover
-        color $vue-color-light
-        background $vue-color-primary
-        .vue-icon
+        color $vue-ui-color-light
+        background $vue-ui-color-primary
+        .vue-ui-icon
           >>> svg
             fill @color
       &:active
-        background darken($vue-color-primary, 10%)
+        background darken($vue-ui-color-primary, 10%)
 
   &.selected
     .name
-      color $vue-color-primary
+      color $vue-ui-color-primary
 </style>
