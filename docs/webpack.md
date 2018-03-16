@@ -77,6 +77,21 @@ module.exports = {
 }
 ```
 
+#### Replace existing Base Loader
+
+If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js). For example using `vue-svg-loader` to inline SVG files instead of loading the File.
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('svg')
+      .use('file-loader')
+        .loader('vue-svg-loader')
+  }
+}
+```
 
 #### Modifying Plugin Options
 
