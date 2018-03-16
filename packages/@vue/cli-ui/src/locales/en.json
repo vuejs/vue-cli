@@ -48,7 +48,10 @@
       "version": "version",
       "latest": "latest",
       "official": "Official",
-      "installed": "Installed"
+      "installed": "Installed",
+      "actions": {
+        "update": "Update {target}"
+      }
     },
     "prompts-list": {
       "empty": "No configuration"
@@ -79,7 +82,8 @@
       "done": "Successfully created project",
       "plugin-install": "Installing {arg0}...",
       "plugin-uninstall": "Uninstalling {arg0}...",
-      "plugin-invoke": "Invoking {arg0}..."
+      "plugin-invoke": "Invoking {arg0}...",
+      "plugin-update": "Updating {arg0}..."
     }
   },
   "views": {

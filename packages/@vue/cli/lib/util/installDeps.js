@@ -288,3 +288,23 @@ exports.uninstallPackage = async function (targetDir, command, cliRegistry, pack
 
   await executeCommand(command, args, targetDir)
 }
+
+exports.updatePackage = async function (targetDir, command, cliRegistry, packageName) {
+  const args = []
+  if (command === 'npm') {
+    args.push('update', '--loglevel', 'error')
+  } else if (command === 'yarn') {
+    args.push('upgrade')
+  } else {
+    throw new Error(`Unknown package manager: ${command}`)
+  }
+
+  await addRegistryToArgs(command, args, cliRegistry)
+
+  args.push(packageName)
+
+  debug(`command: `, command)
+  debug(`args: `, args)
+
+  await executeCommand(command, args, targetDir)
+}

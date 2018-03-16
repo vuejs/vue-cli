@@ -1,13 +1,6 @@
 fragment plugin on Plugin {
   id
-  version {
-    current
-    latest
-    range
-  }
   official
   installed
   website
-  description
-  logo
 }

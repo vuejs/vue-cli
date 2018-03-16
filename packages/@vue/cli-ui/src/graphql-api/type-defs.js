@@ -69,6 +69,7 @@ type ProjectCreation {
 type Version {
   current: String
   latest: String
+  wanted: String
   range: String
 }
 
@@ -164,6 +165,7 @@ type Query {
   projectCurrent: Project
   projectCreation: ProjectCreation
   pluginInstallation: PluginInstallation
+  plugin (id: ID!): Plugin
 }
 
 type Mutation {
@@ -183,6 +185,7 @@ type Mutation {
   pluginInstall (id: ID!): PluginInstallation
   pluginUninstall (id: ID!): PluginInstallation
   pluginInvoke (id: ID!): PluginInstallation
+  pluginUpdate (id: ID!): Plugin
 }
 
 type Subscription {

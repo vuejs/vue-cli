@@ -43,7 +43,8 @@ module.exports = {
     projects: (root, args, context) => projects.list(context),
     projectCurrent: (root, args, context) => projects.getCurrent(context),
     projectCreation: (root, args, context) => projects.getCreation(context),
-    pluginInstallation: (root, args, context) => plugins.getInstallation(context)
+    pluginInstallation: (root, args, context) => plugins.getInstallation(context),
+    plugin: (root, { id }, context) => plugins.findOne(id, context)
   },
 
   Mutation: {
@@ -64,7 +65,8 @@ module.exports = {
     projectCwdReset: (root, args, context) => projects.resetCwd(context),
     pluginInstall: (root, { id }, context) => plugins.install(id, context),
     pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
-    pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context)
+    pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
+    pluginUpdate: (root, { id }, context) => plugins.update(id, context)
   },
 
   Subscription: {

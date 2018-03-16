@@ -48,7 +48,10 @@
       "version": "version",
       "latest": "dernière version",
       "official": "Officiel",
-      "installed": "Installé"
+      "installed": "Installé",
+      "actions": {
+        "update": "Mettre à jour {target}"
+      }
     },
     "prompts-list": {
       "empty": "Pas de configuration"
@@ -79,7 +82,8 @@
       "done": "Projet créé avec succès",
       "plugin-install": "Installation de {arg0}...",
       "plugin-uninstall": "Désinstallation de {arg0}...",
-      "plugin-invoke": "Invocation de {arg0}..."
+      "plugin-invoke": "Invocation de {arg0}...",
+      "plugin-update": "Mise à jour de {arg0}..."
     }
   },
   "views": {

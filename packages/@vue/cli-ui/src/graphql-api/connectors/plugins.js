@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const LRU = require('lru-cache')
+const semver = require('semver')
 const {
   isPlugin,
   isOfficialPlugin,
@@ -11,7 +12,8 @@ const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
 const {
   progress: installProgress,
   installPackage,
-  uninstallPackage
+  uninstallPackage,
+  updatePackage
 } = require('@vue/cli/lib/util/installDeps')
 const { loadOptions } = require('@vue/cli/lib/options')
 const invoke = require('@vue/cli/lib/invoke')
@@ -20,6 +22,7 @@ const cwd = require('./cwd')
 const folders = require('./folders')
 const prompts = require('./prompts')
 const progress = require('./progress')
+const logs = require('./logs')
 
 const metadataCache = new LRU({
   max: 200,
@@ -34,9 +37,12 @@ const PROGRESS_ID = 'plugin-installation'
 
 let currentPluginId
 let eventsInstalled = false
+let plugins = []
 
 function getPath (id) {
-  return path.join(cwd.get(), 'node_modules', id)
+  return path.dirname(require.resolve(id, {
+    paths: [cwd.get()]
+  }))
 }
 
 function findPlugins (deps) {
@@ -55,10 +61,16 @@ function findPlugins (deps) {
 
 function list (file, context) {
   const pkg = folders.readPackage(file, context)
-  let plugins = []
+  plugins = []
   plugins = plugins.concat(findPlugins(pkg.dependencies || {}))
   plugins = plugins.concat(findPlugins(pkg.devDependencies || {}))
   return plugins
+}
+
+function findOne (id, context) {
+  return plugins.find(
+    p => p.id === id
+  )
 }
 
 function readPackage (id, context) {
@@ -70,18 +82,10 @@ async function getMetadata (id, context) {
   if (metadata) {
     return metadata
   }
-  if (isOfficialPlugin(id)) {
-    const res = await getPackageVersion('vue-cli-version-marker', 'latest')
-    if (res.statusCode === 200) {
-      metadata = res.body
-    }
-    const pkg = folders.readPackage(path.dirname(require.resolve(id)), context)
-    metadata.description = pkg.description
-  } else {
-    const res = await getPackageVersion(id, id.indexOf('@') === -1 ? 'latest' : '')
-    if (res.statusCode === 200) {
-      metadata = res.body
-    }
+
+  const res = await getPackageVersion(id)
+  if (res.statusCode === 200) {
+    metadata = res.body
   }
 
   if (metadata) {
@@ -98,20 +102,22 @@ async function getVersion ({ id, installed, versionRange }, context) {
   } else {
     current = null
   }
-  let latest
+  let latest, wanted
   const metadata = await getMetadata(id, context)
   if (metadata) {
-    latest = (metadata['dist-tags'] && metadata['dist-tags'].latest) || metadata.version
+    latest = metadata['dist-tags'].latest
+
+    const versions = Object.keys(metadata.versions)
+    wanted = semver.maxSatisfying(versions, versionRange)
   }
 
-  if (!latest) {
-    // fallback to local version
-    latest = current
-  }
+  if (!latest) latest = current
+  if (!wanted) wanted = current
 
   return {
     current,
     latest,
+    wanted,
     range: versionRange
   }
 }
@@ -230,13 +236,41 @@ async function initPrompts (id, context) {
   prompts.start()
 }
 
+function update (id, context) {
+  return progress.wrap('plugin-update', context, async setProgress => {
+    setProgress({
+      status: 'plugin-update',
+      args: [id]
+    })
+
+    currentPluginId = id
+
+    const plugin = findOne(id, context)
+    const { current, wanted } = await getVersion(plugin, context)
+
+    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
+    await updatePackage(cwd.get(), packageManager, null, id)
+
+    logs.add({
+      message: `Plugin ${id} updated from ${current} to ${wanted}`,
+      type: 'info'
+    }, context)
+
+    currentPluginId = null
+
+    return findOne(id)
+  })
+}
+
 module.exports = {
   list,
+  findOne,
   getVersion,
   getDescription,
   getLogo,
   getInstallation,
   install,
   uninstall,
+  update,
   runInvoke
 }

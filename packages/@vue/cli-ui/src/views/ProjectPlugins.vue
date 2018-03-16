@@ -2,6 +2,7 @@
   <div class="project-plugins page">
     <ContentView
       :title="$t('views.project-plugins.title')"
+      class="limit-width"
     >
       <template slot="header">
         <VueButton
@@ -34,6 +35,10 @@
         </template>
       </ApolloQuery>
     </ContentView>
+
+    <ProgressScreen
+      progress-id="plugin-update"
+    />
   </div>
 </template>
 
