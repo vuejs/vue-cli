@@ -10,7 +10,7 @@ function list (context) {
   if (pkg.scripts) {
     tasks = Object.keys(pkg.scripts).map(
       name => ({
-        id: `${file}${name}`,
+        id: `${file}:${name}`,
         name,
         command: pkg.scripts[name],
         status: 'idle'

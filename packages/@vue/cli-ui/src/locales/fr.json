@@ -90,6 +90,16 @@
       "plugin-update": "Mise à jour de {arg0}..."
     }
   },
+  "types": {
+    "task": {
+      "status": {
+        "idle": "A l'arrêt",
+        "running": "En cours",
+        "done": "Terminée",
+        "error": "Erreur"
+      }
+    }
+  },
   "views": {
     "project-select": {
       "title": "Gestion des Projets Vue",
