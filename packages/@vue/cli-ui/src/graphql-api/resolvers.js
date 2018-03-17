@@ -63,6 +63,7 @@ module.exports = {
     projectOpen: (root, { id }, context) => projects.open(id, context),
     projectRemove: (root, { id }, context) => projects.remove(id, context),
     projectCwdReset: (root, args, context) => projects.resetCwd(context),
+    projectSetFavorite: (root, args, context) => projects.setFavorite(args, context),
     pluginInstall: (root, { id }, context) => plugins.install(id, context),
     pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),

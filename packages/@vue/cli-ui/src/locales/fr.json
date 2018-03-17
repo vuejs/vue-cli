@@ -36,7 +36,11 @@
       }
     },
     "project-select-list": {
-      "empty": "Aucun projet"
+      "empty": "Aucun projet",
+      "titles": {
+        "favorite": "Projets favoris",
+        "other": "Autres projets"
+      }
     },
     "project-select-list-item": {
       "tooltips": {

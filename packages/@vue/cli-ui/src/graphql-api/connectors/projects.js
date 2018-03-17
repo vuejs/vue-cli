@@ -325,6 +325,16 @@ function resetCwd (context) {
   }
 }
 
+function findOne (id, context) {
+  return context.db.get('projects').find({ id }).value()
+}
+
+function setFavorite ({ id, favorite }, context) {
+  context.db.get('projects').find({ id }).assign({ favorite }).write()
+
+  return findOne(id, context)
+}
+
 module.exports = {
   list,
   getCurrent,
@@ -336,5 +346,6 @@ module.exports = {
   import: importProject,
   open,
   remove,
-  resetCwd
+  resetCwd,
+  setFavorite
 }

@@ -1,0 +1,7 @@
+#import "./projectFragment.gql"
+
+mutation projectSetFavorite ($id: ID!, $favorite: Int!) {
+  projectSetFavorite (id: $id, favorite: $favorite) {
+    ...project
+  }
+}
