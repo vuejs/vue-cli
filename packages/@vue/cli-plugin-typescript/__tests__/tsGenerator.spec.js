@@ -56,7 +56,7 @@ test('use with Babel', async () => {
   ])
 
   expect(pkg.babel).toEqual({ presets: ['@vue/app'] })
-  expect(files['tsconfig.json']).toMatch(`"target": "es2015"`)
+  expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
 })
 
 test('lint', async () => {
