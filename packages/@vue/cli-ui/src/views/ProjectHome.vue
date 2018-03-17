@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'ProjectHome',
+  name: 'ProjectHome'
 }
 </script>
 

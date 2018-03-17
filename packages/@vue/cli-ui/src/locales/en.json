@@ -90,6 +90,16 @@
       "plugin-update": "Updating {arg0}..."
     }
   },
+  "types": {
+    "task": {
+      "status": {
+        "idle": "Idle",
+        "running": "Running",
+        "done": "Done",
+        "error": "Error"
+      }
+    }
+  },
   "views": {
     "project-select": {
       "title": "Vue Project Manager",
@@ -223,7 +233,8 @@
       "title": "Project configuration"
     },
     "project-tasks": {
-      "title": "Project tasks"
+      "title": "Project tasks",
+      "heading": "Scripts"
     }
   }
 }

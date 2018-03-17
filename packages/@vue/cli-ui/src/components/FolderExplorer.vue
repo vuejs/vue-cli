@@ -115,7 +115,7 @@ export default {
       editingPath: false,
       editedPath: '',
       folderCurrent: {},
-      foldersFavorite: [],
+      foldersFavorite: []
     }
   },
 

@@ -105,7 +105,6 @@ export default {
       max-width 400px
       margin-top 24px
 
-
   &:not(.loading)
     .vue-ui-loading-indicator
       >>> .animation

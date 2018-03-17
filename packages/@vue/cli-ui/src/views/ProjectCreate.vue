@@ -404,7 +404,7 @@ export default {
     Prompts({
       field: 'projectCreation',
       query: PROJECT_CREATION
-    }),
+    })
   ],
 
   data () {
@@ -414,19 +414,19 @@ export default {
       projectCreation: null,
       showCancel: false,
       showRemotePreset: false,
-      showSavePreset: false,
+      showSavePreset: false
     }
   },
 
   apollo: {
     cwd: {
       query: CWD,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'network-only'
     },
 
     projectCreation: {
       query: PROJECT_CREATION,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'network-only'
     }
   },
 
@@ -512,10 +512,10 @@ export default {
         })
         this.$router.push({ name: 'project-home' })
         this.reset()
-      } catch(e) {
+      } catch (e) {
         console.error(e)
       }
-    },
+    }
   }
 }
 </script>

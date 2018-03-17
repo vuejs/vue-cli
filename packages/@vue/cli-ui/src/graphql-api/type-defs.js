@@ -154,6 +154,21 @@ type Progress {
   args: [String]
 }
 
+type Task {
+  id: ID!
+  status: TaskStatus!
+  name: String!
+  command: String!
+  description: String
+}
+
+enum TaskStatus {
+  idle
+  running
+  done
+  error
+}
+
 type Query {
   progress (id: ID!): Progress
   cwd: String!
@@ -166,6 +181,8 @@ type Query {
   projectCreation: ProjectCreation
   pluginInstallation: PluginInstallation
   plugin (id: ID!): Plugin
+  tasks: [Task]
+  task (id: ID!): Task
 }
 
 type Mutation {

@@ -1,0 +1,7 @@
+fragment task on Task {
+  id
+  status
+  name
+  command
+  description
+}

@@ -76,7 +76,7 @@ export default {
   data () {
     return {
       pluginDetails: null,
-      pluginLogo:! null,
+      pluginLogo: null,
       updating: false
     }
   },

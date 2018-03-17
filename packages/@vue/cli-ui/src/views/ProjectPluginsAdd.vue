@@ -163,7 +163,6 @@ import PLUGIN_INSTALLATION from '../graphql/pluginInstallation.gql'
 import PLUGIN_INSTALL from '../graphql/pluginInstall.gql'
 import PLUGIN_UNINSTALL from '../graphql/pluginUninstall.gql'
 import PLUGIN_INVOKE from '../graphql/pluginInvoke.gql'
-import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
 
 export default {
   name: 'ProjectPluginsAdd',
@@ -190,7 +189,7 @@ export default {
       fetchPolicy: 'netork-only',
       result () {
         this.checkTab()
-      },
+      }
     }
   },
 
@@ -231,12 +230,12 @@ export default {
           }
         })
         this.tabId = 'config'
-      } catch(e) {
+      } catch (e) {
         console.error(e)
       }
     },
 
-    cancelInstall ()  {
+    cancelInstall () {
       this.selectedId = null
       this.tabId = 'search'
       this.showCancelInstall = false
@@ -252,7 +251,7 @@ export default {
           }
         })
         this.cancelInstall()
-      } catch(e) {
+      } catch (e) {
         console.error(e)
       }
     },
@@ -266,10 +265,10 @@ export default {
           }
         })
         this.close()
-      } catch(e) {
+      } catch (e) {
         console.error(e)
       }
-    },
+    }
   }
 }
 </script>

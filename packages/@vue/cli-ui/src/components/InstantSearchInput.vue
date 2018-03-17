@@ -35,7 +35,7 @@ export default {
 
   computed: {
     query: {
-      get() {
+      get () {
         return this.searchStore.query
       },
       set (value) {

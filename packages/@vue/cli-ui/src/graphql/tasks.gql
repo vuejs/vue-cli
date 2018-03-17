@@ -1,0 +1,7 @@
+#import "./taskFragment.gql"
+
+query tasks {
+  tasks {
+    ...task
+  }
+}

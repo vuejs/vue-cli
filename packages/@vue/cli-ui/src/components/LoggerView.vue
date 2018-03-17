@@ -91,8 +91,14 @@ export default {
       await this.$apollo.mutate({
         mutation: CONSOLE_LOGS_CLEAR,
         update: store => {
-          store.writeQuery({ query: CONSOLE_LOGS, data: { consoleLogs: [] }})
-          store.writeQuery({ query: CONSOLE_LOG_LAST, data: { consoleLogLast: null }})
+          store.writeQuery({
+            query: CONSOLE_LOGS,
+            data: { consoleLogs: [] }
+          })
+          store.writeQuery({
+            query: CONSOLE_LOG_LAST,
+            data: { consoleLogLast: null }
+          })
         }
       })
       this.close()

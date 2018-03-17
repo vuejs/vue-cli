@@ -7,6 +7,7 @@ import ProjectPlugins from './views/ProjectPlugins.vue'
 import ProjectPluginsAdd from './views/ProjectPluginsAdd.vue'
 import ProjectConfiguration from './views/ProjectConfiguration.vue'
 import ProjectTasks from './views/ProjectTasks.vue'
+import ProjectTaskDetails from './views/ProjectTaskDetails.vue'
 import ProjectSelect from './views/ProjectSelect.vue'
 import ProjectCreate from './views/ProjectCreate.vue'
 import About from './views/About.vue'
@@ -48,7 +49,15 @@ const router = new Router({
         {
           path: 'tasks',
           name: 'project-tasks',
-          component: ProjectTasks
+          component: ProjectTasks,
+          children: [
+            {
+              path: ':id',
+              name: 'project-task-details',
+              component: ProjectTaskDetails,
+              props: true
+            }
+          ]
         }
       ]
     },

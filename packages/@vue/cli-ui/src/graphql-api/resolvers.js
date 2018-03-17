@@ -10,6 +10,7 @@ const projects = require('./connectors/projects')
 const progress = require('./connectors/progress')
 const logs = require('./connectors/logs')
 const plugins = require('./connectors/plugins')
+const tasks = require('./connectors/tasks')
 
 // Prevent code from exiting server process
 exit.exitProcess = false
@@ -44,7 +45,9 @@ module.exports = {
     projectCurrent: (root, args, context) => projects.getCurrent(context),
     projectCreation: (root, args, context) => projects.getCreation(context),
     pluginInstallation: (root, args, context) => plugins.getInstallation(context),
-    plugin: (root, { id }, context) => plugins.findOne(id, context)
+    plugin: (root, { id }, context) => plugins.findOne(id, context),
+    tasks: (root, args, context) => tasks.list(context),
+    task: (root, { id }, context) => tasks.findOne(id, context)
   },
 
   Mutation: {
