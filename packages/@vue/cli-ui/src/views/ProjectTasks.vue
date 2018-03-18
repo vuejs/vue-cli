@@ -32,9 +32,15 @@
 </template>
 
 <script>
+import RestoreRoute from '../mixins/RestoreRoute'
+
 import TASK_CHANGED from '../graphql/taskChanged.gql'
 
 export default {
+  mixins: [
+    RestoreRoute()
+  ],
+
   apollo: {
     $subscribe: {
       taskChanged: {
