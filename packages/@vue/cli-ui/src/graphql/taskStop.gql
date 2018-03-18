@@ -1,0 +1,7 @@
+#import "./taskFragment.gql"
+
+mutation taskStop ($id: ID!) {
+  taskStop (id: $id) {
+    ...task
+  }
+}

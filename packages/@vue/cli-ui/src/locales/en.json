@@ -234,6 +234,13 @@
     },
     "project-tasks": {
       "title": "Project tasks"
+    },
+    "project-task-details": {
+      "actions": {
+        "play": "Run task",
+        "stop": "Stop task"
+      },
+      "command": "Script command"
     }
   }
 }

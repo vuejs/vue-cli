@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { isSameRoute, isIncludedRoute } from '../util/route'
+
 const BUILTIN_ROUTES = [
   {
     name: 'project-plugins',
@@ -52,14 +54,14 @@ export default {
   computed: {
     currentRoute: {
       get () {
-        const currentRoute = this.$route.name
+        const currentRoute = this.$route
         const route = this.routes.find(
-          r => currentRoute.indexOf(r.name) === 0
+          item => isIncludedRoute(currentRoute, this.$router.resolve({ name: item.name }).route)
         )
-        return route ? route.name : null
+        return route && route.name
       },
       set (name) {
-        if (this.$route.name !== name) {
+        if (!isSameRoute(this.$route, this.$router.resolve({ name }).route)) {
           this.$router.push({ name })
         }
       }

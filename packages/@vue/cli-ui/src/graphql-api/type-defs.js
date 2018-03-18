@@ -203,6 +203,8 @@ type Mutation {
   pluginUninstall (id: ID!): PluginInstallation
   pluginInvoke (id: ID!): PluginInstallation
   pluginUpdate (id: ID!): Plugin
+  taskRun (id: ID!): Task
+  taskStop (id: ID!): Task
 }
 
 type Subscription {
@@ -210,5 +212,6 @@ type Subscription {
   progressRemoved (id: ID!): ID
   consoleLogAdded: ConsoleLog!
   cwdChanged: String!
+  taskChanged: Task
 }
 `

@@ -70,7 +70,7 @@
       },
       "log": {
         "tooltip": "Journal<br><i>Cliquer pour Afficher/Masquer le Journal Vue CLI</i>",
-        "empty": "Aucun entrée dans le journal"
+        "empty": "Aucune entrée dans le journal"
       }
     }
   },
@@ -234,6 +234,13 @@
     },
     "project-tasks": {
       "title": "Tâches du projet"
+    },
+    "project-task-details": {
+      "actions": {
+        "play": "Lancer la tâche",
+        "stop": "Arrêter la tâche"
+      },
+      "command": "Commande de script"
     }
   }
 }

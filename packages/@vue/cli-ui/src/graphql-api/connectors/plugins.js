@@ -5,8 +5,7 @@ const semver = require('semver')
 const {
   isPlugin,
   isOfficialPlugin,
-  getPluginLink,
-  hasYarn
+  getPluginLink
 } = require('@vue/cli-shared-utils')
 const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
 const {
@@ -15,7 +14,6 @@ const {
   uninstallPackage,
   updatePackage
 } = require('@vue/cli/lib/util/installDeps')
-const { loadOptions } = require('@vue/cli/lib/options')
 const invoke = require('@vue/cli/lib/invoke')
 
 const cwd = require('./cwd')
@@ -23,6 +21,8 @@ const folders = require('./folders')
 const prompts = require('./prompts')
 const progress = require('./progress')
 const logs = require('./logs')
+
+const { getCommand } = require('../utils/command')
 
 const metadataCache = new LRU({
   max: 200,
@@ -178,8 +178,7 @@ function install (id, context) {
 
     currentPluginId = id
 
-    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
-    await installPackage(cwd.get(), packageManager, null, id)
+    await installPackage(cwd.get(), getCommand(), null, id)
 
     await initPrompts(id, context)
 
@@ -196,8 +195,7 @@ function uninstall (id, context) {
 
     currentPluginId = id
 
-    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
-    await uninstallPackage(cwd.get(), packageManager, null, id)
+    await uninstallPackage(cwd.get(), getCommand(), null, id)
 
     currentPluginId = null
 
@@ -248,8 +246,7 @@ function update (id, context) {
     const plugin = findOne(id, context)
     const { current, wanted } = await getVersion(plugin, context)
 
-    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
-    await updatePackage(cwd.get(), packageManager, null, id)
+    await updatePackage(cwd.get(), getCommand(), null, id)
 
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,

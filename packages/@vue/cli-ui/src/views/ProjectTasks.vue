@@ -32,7 +32,17 @@
 </template>
 
 <script>
+import TASK_CHANGED from '../graphql/taskChanged.gql'
+
 export default {
+  apollo: {
+    $subscribe: {
+      taskChanged: {
+        query: TASK_CHANGED
+      }
+    }
+  },
+
   methods: {
     generateItems (tasks) {
       return tasks.map(
