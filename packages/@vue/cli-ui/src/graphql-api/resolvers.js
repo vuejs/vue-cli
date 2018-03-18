@@ -72,7 +72,8 @@ module.exports = {
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
     pluginUpdate: (root, { id }, context) => plugins.update(id, context),
     taskRun: (root, { id }, context) => tasks.run(id, context),
-    taskStop: (root, { id }, context) => tasks.stop(id, context)
+    taskStop: (root, { id }, context) => tasks.stop(id, context),
+    taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context)
   },
 
   Subscription: {
@@ -84,7 +85,7 @@ module.exports = {
         // Iterator
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_CHANGED),
         // Filter
-        (payload, variables) => payload.progressChanged.id === variables.id
+        (payload, vars) => payload.progressChanged.id === vars.id
       )
     },
     progressRemoved: {
@@ -92,7 +93,7 @@ module.exports = {
         // Iterator
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_REMOVED),
         // Filter
-        (payload, variables) => payload.progressRemoved.id === variables.id
+        (payload, vars) => payload.progressRemoved.id === vars.id
       )
     },
     consoleLogAdded: {
@@ -103,6 +104,12 @@ module.exports = {
     },
     taskChanged: {
       subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.TASK_CHANGED)
+    },
+    taskLogAdded: {
+      subscribe: withFilter(
+        (parent, args, { pubsub }) => pubsub.asyncIterator(channels.TASK_LOG_ADDED),
+        (payload, vars) => payload.taskLogAdded.taskId === vars.id
+      )
     }
   }
 }

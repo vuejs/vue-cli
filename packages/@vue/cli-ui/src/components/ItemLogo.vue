@@ -118,6 +118,23 @@ export default {
         >>> svg
           fill $vue-ui-color-light
 
+  &.danger
+    .vue-ui-icon
+      >>> svg
+        fill $vue-ui-color-danger
+  &.warning
+    .vue-ui-icon
+      >>> svg
+        fill $vue-ui-color-warning
+  &.info
+    .vue-ui-icon
+      >>> svg
+        fill $vue-ui-color-info
+  &.success
+    .vue-ui-icon
+      >>> svg
+        fill $vue-ui-color-success
+
 @keyframes zoom
   0%
     transform scale(0)

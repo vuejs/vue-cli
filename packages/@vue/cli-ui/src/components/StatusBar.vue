@@ -46,16 +46,6 @@
           :message="consoleLogLast"
         />
         <div v-else class="last-message">{{ $t('components.status-bar.log.empty') }}</div>
-        <!-- <TerminalView
-          :cols="100"
-          :rows="1"
-          :content="consoleLogLast"
-          auto-size
-          :options="{
-            scorllback: 0,
-            disableStdin: true
-          }"
-        /> -->
       </div>
     </div>
   </div>

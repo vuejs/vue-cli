@@ -72,6 +72,12 @@
         "tooltip": "Logs<br><i>Click to toggle Vue CLI logs</i>",
         "empty": "No logs yet"
       }
+    },
+    "terminal-view": {
+      "buttons": {
+        "clear": "Clear console",
+        "scroll": "Scroll to bottom"
+      }
     }
   },
   "mixins": {
@@ -96,7 +102,8 @@
         "idle": "Idle",
         "running": "Running",
         "done": "Done",
-        "error": "Error"
+        "error": "Error",
+        "terminated": "Terminated"
       }
     }
   },
@@ -240,7 +247,8 @@
         "play": "Run task",
         "stop": "Stop task"
       },
-      "command": "Script command"
+      "command": "Script command",
+      "output": "Output"
     }
   }
 }

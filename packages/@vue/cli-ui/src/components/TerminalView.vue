@@ -1,6 +1,31 @@
 <template>
   <div class="terminal-view">
-    <div ref="render" class="xterm-render"></div>
+    <div v-if="toolbar" class="toolbar">
+      <VueIcon
+        icon="dvr"
+      />
+      <div class="title">{{ title }}</div>
+      <VueButton
+        class="icon-button"
+        icon-left="delete_forever"
+        v-tooltip="$t('components.terminal-view.buttons.clear')"
+        @click="clear(); $emit('clear')"
+      />
+      <VueIcon
+        icon="lens"
+        class="separator"
+      />
+      <VueButton
+        class="icon-button"
+        icon-left="subdirectory_arrow_left"
+        v-tooltip="$t('components.terminal-view.buttons.scroll')"
+        @click="scrollToBottom()"
+      />
+    </div>
+
+    <div class="view">
+      <div ref="render" class="xterm-render"></div>
+    </div>
 
     <resize-observer v-if="autoSize" @notify="fit"/>
   </div>
@@ -62,6 +87,16 @@ export default {
     options: {
       type: Object,
       default: () => ({})
+    },
+
+    toolbar: {
+      type: Boolean,
+      default: false
+    },
+
+    title: {
+      type: String,
+      default: null
     }
   },
 
@@ -79,6 +114,10 @@ export default {
 
   mounted () {
     this.initTerminal()
+
+    if (this.autoSize) {
+      this.$nextTick(this.fit)
+    }
   },
 
   beforeDestroy () {
@@ -100,16 +139,30 @@ export default {
       term.on('focus', () => this.$emit('focus'))
     },
 
-    setContent (value) {
+    setContent (value, ln = true) {
+      if (ln && value.indexOf('\n') !== -1) {
+        value.split('\n').forEach(
+          t => this.setContent(t)
+        )
+        return
+      }
       if (typeof value === 'string') {
-        this.$_terminal.write(value)
+        this.$_terminal[ln ? 'writeln' : 'write'](value)
       } else {
         this.$_terminal.writeln('')
       }
     },
 
+    addLog (log) {
+      this.setContent(log.text, log.type === 'stdout')
+    },
+
     clear () {
       this.$_terminal.clear()
+    },
+
+    scrollToBottom () {
+      this.$_terminal.scrollToBottom()
     },
 
     handleLink (event, uri) {
@@ -148,12 +201,33 @@ export default {
 @import "~@/style/imports"
 
 .terminal-view
-  position relative
+  v-box()
+  align-items stretch
+  background $vue-ui-color-light-neutral
 
-.xterm-render
-  width 100%
-  height 100%
-  >>> .xterm
-    .xterm-cursor-layer
-      display none
+  .toolbar
+    h-box()
+    align-items center
+    padding 6px 6px 6px $padding-item
+    > :not(.separator)
+      space-between-x(6px)
+    > * + .separator
+      margin-left 6px
+    .title
+      flex 100% 1 1
+      width 0
+      ellipsis()
+
+  .view
+    flex 100% 1 1
+    height 0
+    position relative
+    padding-left $padding-item
+
+  .xterm-render
+    width 100%
+    height 100%
+    >>> .xterm
+      .xterm-cursor-layer
+        display none
 </style>

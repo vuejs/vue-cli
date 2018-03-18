@@ -72,6 +72,12 @@
         "tooltip": "Journal<br><i>Cliquer pour Afficher/Masquer le Journal Vue CLI</i>",
         "empty": "Aucune entrée dans le journal"
       }
+    },
+    "terminal-view": {
+      "buttons": {
+        "clear": "Nettoyer la console",
+        "scroll": "Défiler en bas"
+      }
     }
   },
   "mixins": {
@@ -96,7 +102,8 @@
         "idle": "A l'arrêt",
         "running": "En cours",
         "done": "Terminée",
-        "error": "Erreur"
+        "error": "Erreur",
+        "terminated": "Interrompue"
       }
     }
   },
@@ -240,7 +247,8 @@
         "play": "Lancer la tâche",
         "stop": "Arrêter la tâche"
       },
-      "command": "Commande de script"
+      "command": "Commande de script",
+      "output": "Sortie"
     }
   }
 }

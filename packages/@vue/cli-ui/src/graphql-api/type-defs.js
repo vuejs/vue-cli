@@ -160,6 +160,7 @@ type Task {
   name: String!
   command: String!
   description: String
+  logs: [TaskLog]
 }
 
 enum TaskStatus {
@@ -167,6 +168,18 @@ enum TaskStatus {
   running
   done
   error
+  terminated
+}
+
+type TaskLog {
+  taskId: ID!
+  type: TaskLogType!
+  text: String
+}
+
+enum TaskLogType {
+  stdout
+  stderr
 }
 
 type Query {
@@ -205,6 +218,7 @@ type Mutation {
   pluginUpdate (id: ID!): Plugin
   taskRun (id: ID!): Task
   taskStop (id: ID!): Task
+  taskLogsClear (id: ID!): Task
 }
 
 type Subscription {
@@ -213,5 +227,6 @@ type Subscription {
   consoleLogAdded: ConsoleLog!
   cwdChanged: String!
   taskChanged: Task
+  taskLogAdded (id: ID!): TaskLog
 }
 `

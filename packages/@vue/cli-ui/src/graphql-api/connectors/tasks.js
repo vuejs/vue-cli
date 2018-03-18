@@ -1,4 +1,5 @@
 const execa = require('execa')
+const terminate = require('terminate')
 
 const channels = require('../channels')
 const cwd = require('./cwd')
@@ -6,6 +7,8 @@ const folders = require('./folders')
 const logs = require('./logs')
 
 const { getCommand } = require('../utils/command')
+
+const MAX_LOGS = 2000
 
 const tasks = new Map()
 
@@ -113,25 +116,31 @@ function run (id, context) {
     }, context)
 
     child.stdout.on('data', buffer => {
-      // TODO logs
-      console.log(buffer.toString())
+      addLog({
+        taskId: task.id,
+        type: 'stdout',
+        text: buffer.toString()
+      }, context)
     })
 
     child.stderr.on('data', buffer => {
-      // TODO logs
-      console.log(buffer.toString())
+      addLog({
+        taskId: task.id,
+        type: 'stderr',
+        text: buffer.toString()
+      }, context)
     })
 
     child.on('close', (code, signal) => {
-      if (signal === 'SIGINT') {
+      if (code === null) {
         updateOne({
           id: task.id,
-          status: 'error',
+          status: 'terminated',
           child: null
         }, context)
         logs.add({
           message: `Task ${task.id} was terminated`,
-          type: 'error'
+          type: 'warn'
         }, context)
       } else if (code !== 0) {
         updateOne({
@@ -140,7 +149,7 @@ function run (id, context) {
           child: null
         }, context)
         logs.add({
-          message: `Task ${task.id} ended with error code`,
+          message: `Task ${task.id} ended with error code ${code}`,
           type: 'error'
         }, context)
       } else {
@@ -162,7 +171,28 @@ function run (id, context) {
 function stop (id, context) {
   const task = findOne(id, context)
   if (task && task.status === 'running') {
-    task.child.kill('SIGINT') // TODO not working
+    terminate(task.child.pid)
+  }
+  return task
+}
+
+function addLog (log, context) {
+  const task = findOne(log.taskId, context)
+  if (task) {
+    if (task.logs.length === MAX_LOGS) {
+      task.logs.shift()
+    }
+    task.logs.push(log)
+    context.pubsub.publish(channels.TASK_LOG_ADDED, {
+      taskLogAdded: log
+    })
+  }
+}
+
+function clearLogs (id, context) {
+  const task = findOne(id, context)
+  if (task) {
+    task.logs = []
   }
   return task
 }
@@ -172,5 +202,6 @@ module.exports = {
   findOne,
   run,
   stop,
-  updateOne
+  updateOne,
+  clearLogs
 }

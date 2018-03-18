@@ -7,7 +7,8 @@
   >
     <div class="content">
       <ItemLogo
-        icon="assignment"
+        :icon="iconData.icon"
+        :class="iconData.class"
         v-tooltip="status"
       />
 
@@ -21,6 +22,14 @@
 </template>
 
 <script>
+const icons = {
+  idle: { icon: 'assignment', class: '' },
+  running: { icon: 'more_horiz', class: 'info' },
+  done: { icon: 'check_circle', class: 'success' },
+  error: { icon: 'error', class: 'danger' },
+  terminated: { icon: 'error', class: '' }
+}
+
 export default {
   props: {
     task: {
@@ -37,6 +46,10 @@ export default {
   computed: {
     status () {
       return this.$t(`types.task.status.${this.task.status}`)
+    },
+
+    iconData () {
+      return icons[this.task.status]
     }
   }
 }
