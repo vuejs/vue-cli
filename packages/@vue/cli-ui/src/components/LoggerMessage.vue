@@ -13,6 +13,7 @@
     <div v-if="message.type !== 'log'" class="type">{{ message.type }}</div>
     <div v-if="message.tag" class="tag">{{ message.tag }}</div>
     <div class="message" v-html="formattedMessage"/>
+    <div class="date">{{ message.date | date }}</div>
   </div>
 </template>
 
@@ -102,4 +103,7 @@ export default {
   &.pre
     .message
       white-space pre-wrap
+
+  .date
+    opacity .5
 </style>

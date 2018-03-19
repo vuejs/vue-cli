@@ -19,3 +19,7 @@ export function folder (value, maxLength = -1) {
 
   return value
 }
+
+export function date (value) {
+  return new Date(value).toLocaleString()
+}
