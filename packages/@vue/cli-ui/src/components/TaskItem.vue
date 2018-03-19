@@ -1,9 +1,12 @@
 <template>
   <div
     class="task-item list-item"
-    :class="{
-      selected
-    }"
+    :class="[
+      `status-${task.status}`,
+      {
+        selected
+      }
+    ]"
   >
     <div class="content">
       <ItemLogo
@@ -68,4 +71,10 @@ export default {
   .list-item-info
     flex 100% 1 1
     width 0
+
+  &.selected
+    &.status-error .list-item-info >>> .name
+      color $vue-ui-color-danger
+    &.status-running .list-item-info >>> .name
+      color $vue-ui-color-info
 </style>

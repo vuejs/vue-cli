@@ -140,7 +140,7 @@ export default {
     },
 
     setContent (value, ln = true) {
-      if (ln && value.indexOf('\n') !== -1) {
+      if (value.indexOf('\n') !== -1) {
         value.split('\n').forEach(
           t => this.setContent(t)
         )
