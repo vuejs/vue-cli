@@ -93,6 +93,28 @@ module.exports = {
 }
 ```
 
+For example say you want to change the default location of index.html from */Users/username/proj/public/index.html* to */Users/username/proj/app/templates/index.html*.  By referencing [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) you can see a list of options you can pass in. To change our template path we simply pass in a new template path like:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config
+      .plugin('html')
+      .tap(args => {
+        return [{
+          template: '/Users/username/proj/app/templates/index.html'
+        }]
+      })
+  }
+}
+```
+
+You can confirm that this change has taken place by examining the vue webpack config with the **vue inspect** utility.
+
+```vue inspect > output.js```
+
+
 You will need to familiarize yourself with [webpack-chain's API](https://github.com/mozilla-neutrino/webpack-chain#getting-started) and [read some source code](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config) in order to understand how to leverage the full power of this option, but it gives you a more expressive and safer way to modify the webpack config than directly mutation values.
 
 ### Inspecting the Project's Webpack Config
