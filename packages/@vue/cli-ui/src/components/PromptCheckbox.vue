@@ -1,5 +1,8 @@
 <template>
-  <div class="prompt prompt-checkbox">
+  <VueDisable
+    :disabled="!prompt.enabled"
+    class="prompt prompt-checkbox"
+  >
     <div class="prompt-content">
       <ListItemInfo
         :name="prompt.message"
@@ -20,7 +23,7 @@
     </div>
 
     <PromptError :error="prompt.error"/>
-  </div>
+  </VueDisable>
 </template>
 
 <script>

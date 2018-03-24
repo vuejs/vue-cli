@@ -90,7 +90,7 @@
             <div class="content vue-ui-disable-scroll">
               <div class="cta-text">{{ $t('views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}</div>
               <PromptsList
-                :prompts="enabledPrompts"
+                :prompts="visiblePrompts"
                 @answer="answerPrompt"
               />
             </div>

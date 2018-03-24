@@ -3,8 +3,9 @@
 
 fragment prompt on Prompt {
   id
-  enabled
   type
+  visible
+  enabled
   name
   message
   description

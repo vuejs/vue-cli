@@ -138,8 +138,9 @@ function removeAnswer (id) {
 function generatePrompt (data) {
   return {
     id: data.name,
-    enabled: true,
     type: data.type,
+    visible: true,
+    enabled: true,
     name: data.short || null,
     message: data.message,
     description: data.description || null,
@@ -154,15 +155,15 @@ function generatePrompt (data) {
 
 function updatePrompts () {
   for (const prompt of prompts) {
-    const oldEnabled = prompt.enabled
-    prompt.enabled = getEnabled(prompt.raw.when)
+    const oldVisible = prompt.visible
+    prompt.visible = getEnabled(prompt.raw.when)
 
     prompt.choices = getChoices(prompt)
 
-    if (oldEnabled !== prompt.enabled && !prompt.enabled) {
+    if (oldVisible !== prompt.visible && !prompt.visible) {
       removeAnswer(prompt.id)
       prompt.valueChanged = false
-    } else if (prompt.enabled && !prompt.valueChanged) {
+    } else if (prompt.visible && !prompt.valueChanged) {
       let value = getDefaultValue(prompt)
       prompt.value = getDisplayedValue(prompt, value)
       setAnswer(prompt.id, getValue(prompt, value))

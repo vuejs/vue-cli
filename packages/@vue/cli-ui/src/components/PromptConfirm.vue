@@ -1,5 +1,8 @@
 <template>
-  <div class="prompt prompt-confirm">
+  <VueDisable
+    :disabled="!prompt.enabled"
+    class="prompt prompt-confirm"
+  >
     <VueSwitch
       :value="value(prompt.value)"
       class="extend-left"
@@ -13,7 +16,7 @@
     </VueSwitch>
 
     <PromptError :error="prompt.error"/>
-  </div>
+  </VueDisable>
 </template>
 
 <script>

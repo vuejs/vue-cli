@@ -8,7 +8,7 @@ export default function ({
   return {
     computed: {
       configurationValid () {
-        return this.enabledPrompts.filter(
+        return this.visiblePrompts.filter(
           p =>
             p.error ||
             p.value === null ||
@@ -16,12 +16,12 @@ export default function ({
         ).length === 0
       },
 
-      enabledPrompts () {
+      visiblePrompts () {
         if (!this[field]) {
           return []
         }
         return this[field].prompts.filter(
-          p => p.enabled
+          p => p.visible
         )
       }
     },

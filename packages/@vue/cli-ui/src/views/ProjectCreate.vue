@@ -201,7 +201,7 @@
               />
 
               <VueButton
-                v-if="enabledPrompts.length"
+                v-if="visiblePrompts.length"
                 icon-right="arrow_forward"
                 :label="$t('views.project-create.tabs.features.buttons.next')"
                 class="big primary"
@@ -249,12 +249,12 @@
             id="config"
             :label="$t('views.project-create.tabs.configuration.title')"
             icon="settings_applications"
-            :disabled="!detailsValid || !presetValid || !manual || !enabledPrompts.length"
+            :disabled="!detailsValid || !presetValid || !manual || !visiblePrompts.length"
             lazy
           >
             <div class="content vue-ui-disable-scroll">
               <PromptsList
-                :prompts="enabledPrompts"
+                :prompts="visiblePrompts"
                 @answer="answerPrompt"
               />
             </div>

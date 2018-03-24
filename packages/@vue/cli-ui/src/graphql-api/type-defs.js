@@ -21,6 +21,12 @@ enum PackageManager {
   yarn
 }
 
+interface DescribedEntity {
+  name: String
+  description: String
+  link: String
+}
+
 type Folder {
   name: String!
   path: String!
@@ -52,7 +58,7 @@ input ProjectImportInput {
   path: String!
 }
 
-type Preset {
+type Preset implements DescribedEntity {
   id: ID!
   name: String
   description: String
@@ -94,9 +100,9 @@ type PluginInstallation {
   prompts: [Prompt]
 }
 
-type Feature {
+type Feature implements DescribedEntity {
   id: ID!
-  name: String!
+  name: String
   description: String
   link: String
   enabled: Boolean!
@@ -125,10 +131,11 @@ type PromptError {
   link: String
 }
 
-type Prompt {
+type Prompt implements DescribedEntity {
   id: ID!
-  enabled: Boolean!
   type: PromptType!
+  visible: Boolean!
+  enabled: Boolean
   name: String
   message: String
   description: String
@@ -154,12 +161,13 @@ type Progress {
   args: [String]
 }
 
-type Task {
+type Task implements DescribedEntity {
   id: ID!
   status: TaskStatus!
-  name: String!
+  name: String
   command: String!
   description: String
+  link: String
   logs: [TaskLog]
 }
 
@@ -182,6 +190,15 @@ enum TaskLogType {
   stderr
 }
 
+type Configuration implements DescribedEntity {
+  id: ID!
+  name: String
+  description: String
+  link: String
+  icon: String
+  prompts: [Prompt]
+}
+
 type Query {
   progress (id: ID!): Progress
   cwd: String!
@@ -196,6 +213,8 @@ type Query {
   plugin (id: ID!): Plugin
   tasks: [Task]
   task (id: ID!): Task
+  configurations: [Configuration]
+  configuration (id: ID!): Configuration
 }
 
 type Mutation {

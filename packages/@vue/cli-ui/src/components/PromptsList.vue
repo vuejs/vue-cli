@@ -3,7 +3,7 @@
     <div class="content">
       <component
         v-for="prompt of prompts"
-        v-if="prompt.enabled"
+        v-if="prompt.visible"
         :key="prompt.id"
         :is="getModule(prompt)"
         :prompt="prompt"
