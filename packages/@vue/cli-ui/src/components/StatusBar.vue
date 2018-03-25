@@ -47,6 +47,14 @@
         />
         <div v-else class="last-message">{{ $t('components.status-bar.log.empty') }}</div>
       </div>
+
+      <div
+        class="section action bug-report"
+        @click="onBugReportClick()"
+      >
+        <VueIcon icon="bug_report"/>
+        <span>Report bug</span>
+      </div>
     </div>
   </div>
 </template>
@@ -111,6 +119,14 @@ export default {
     onConsoleClick () {
       this.$emit('console')
       this.showLogs = !this.showLogs
+    },
+
+    onBugReportClick () {
+      const win = window.open(
+        'https://new-issue.vuejs.org/?repo=vuejs/vue-cli',
+        '_blank'
+      )
+      win.focus()
     }
   }
 }
