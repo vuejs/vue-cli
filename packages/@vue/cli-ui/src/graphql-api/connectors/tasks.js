@@ -13,7 +13,6 @@ const { getCommand } = require('../utils/command')
 const MAX_LOGS = 2000
 
 const tasks = new Map()
-let promptMemoId
 
 function getTasks () {
   const file = cwd.get()
@@ -108,18 +107,13 @@ function updateSavedData (data, context) {
 function getPrompts (id, context) {
   const task = findOne(id, context)
   if (task) {
-    if (promptMemoId !== id) {
-      promptMemoId = id
-
-      prompts.reset()
-      task.prompts.forEach(prompts.add)
-      const data = getSavedData(id, context)
-      if (data) {
-        prompts.setAnswers(data.answers)
-      }
-      prompts.start()
+    prompts.reset()
+    task.prompts.forEach(prompts.add)
+    const data = getSavedData(id, context)
+    if (data) {
+      prompts.setAnswers(data.answers)
     }
-
+    prompts.start()
     return prompts.list()
   }
 }

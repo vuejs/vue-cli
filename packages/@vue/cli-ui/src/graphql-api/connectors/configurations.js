@@ -88,22 +88,20 @@ function writeData ({ config, data }, context) {
 function getPrompts (id, context) {
   const config = findOne(id, context)
   if (config) {
-    if (current.config !== config) {
-      const data = readData(config, context)
-      current = {
-        config,
-        data
-      }
-      const configData = config.onRead({
-        data
-      })
-      prompts.reset()
-      configData.prompts.forEach(prompts.add)
-      if (configData.answers) {
-        prompts.setAnswers(configData.answers)
-      }
-      prompts.start()
+    const data = readData(config, context)
+    current = {
+      config,
+      data
     }
+    const configData = config.onRead({
+      data
+    })
+    prompts.reset()
+    configData.prompts.forEach(prompts.add)
+    if (configData.answers) {
+      prompts.setAnswers(configData.answers)
+    }
+    prompts.start()
     return prompts.list()
   }
   return []
