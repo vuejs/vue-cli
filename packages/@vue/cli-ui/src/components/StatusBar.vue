@@ -175,4 +175,5 @@ export default {
 
     .logger-message
       font-size .9em
+      padding-right 0
 </style>
