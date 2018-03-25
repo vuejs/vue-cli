@@ -248,6 +248,8 @@
         "stop": "Stop task"
       },
       "command": "Script command",
+      "parameters": "Parameters",
+      "more-info": "More Info",
       "output": "Output"
     }
   }

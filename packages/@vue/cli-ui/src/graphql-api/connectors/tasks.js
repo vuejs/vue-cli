@@ -5,12 +5,15 @@ const channels = require('../channels')
 const cwd = require('./cwd')
 const folders = require('./folders')
 const logs = require('./logs')
+const plugins = require('./plugins')
+const prompts = require('./prompts')
 
 const { getCommand } = require('../utils/command')
 
 const MAX_LOGS = 2000
 
 const tasks = new Map()
+let promptMemoId
 
 function getTasks () {
   const file = cwd.get()
@@ -34,11 +37,15 @@ function list (context) {
       name => {
         const id = `${file}:${name}`
         existing.set(id, true)
+        const command = pkg.scripts[name]
+        const moreData = plugins.getApi().getTask(command)
         return {
           id,
           name,
-          command: pkg.scripts[name],
-          index: list.findIndex(t => t.id === id)
+          command,
+          index: list.findIndex(t => t.id === id),
+          prompts: [],
+          ...moreData
         }
       }
     )
@@ -84,6 +91,39 @@ function findOne (id, context) {
   )
 }
 
+function getSavedData (id, context) {
+  return context.db.get('tasks').find({
+    id
+  }).value()
+}
+
+function updateSavedData (data, context) {
+  if (getSavedData(data.id, context)) {
+    context.db.get('tasks').find({ id: data.id }).assign(data).write()
+  } else {
+    context.db.get('tasks').push(data).write()
+  }
+}
+
+function getPrompts (id, context) {
+  const task = findOne(id, context)
+  if (task) {
+    if (promptMemoId !== id) {
+      promptMemoId = id
+
+      prompts.reset()
+      task.prompts.forEach(prompts.add)
+
+      const data = getSavedData(id, context)
+      if (data) {
+        prompts.setAnswers(data.answers)
+      }
+    }
+
+    return prompts.list()
+  }
+}
+
 function updateOne (data, context) {
   const task = findOne(data.id)
   if (task) {
@@ -99,6 +139,21 @@ function run (id, context) {
   const task = findOne(id, context)
   if (task && task.status !== 'running') {
     const args = ['run', task.name]
+    const answers = prompts.getAnswers()
+
+    // Save parameters
+    updateSavedData({
+      id,
+      answers
+    }, context)
+
+    // Plugin api
+    if (task.onRun) {
+      task.onRun({
+        answers,
+        args
+      })
+    }
 
     const child = execa(getCommand(), args, {
       cwd: cwd.get(),
@@ -200,6 +255,7 @@ function clearLogs (id, context) {
 module.exports = {
   list,
   findOne,
+  getPrompts,
   run,
   stop,
   updateOne,

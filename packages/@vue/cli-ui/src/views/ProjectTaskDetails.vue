@@ -1,52 +1,97 @@
 <template>
   <div class="project-task-details">
-    <div v-if="task" class="actions-bar">
-      <VueButton
-        v-if="task.status !== 'running'"
-        icon-left="play_arrow"
-        class="primary"
-        :label="$t('views.project-task-details.actions.play')"
-        @click="runTask()"
-      />
-      <VueButton
-        v-else
-        icon-left="stop"
-        class="primary"
-        :label="$t('views.project-task-details.actions.stop')"
-        @click="stopTask()"
-      />
-
-      <div
-        class="command"
-        v-tooltip="$t('views.project-task-details.command')"
-      >
-        {{ task.command }}
+    <template v-if="task">
+      <div class="header">
+        <div class="name">{{ task.name }}</div>
+        <div class="description">{{ task.description }}</div>
       </div>
 
-      <div class="vue-ui-spacer"/>
-    </div>
+      <div class="actions-bar">
+        <VueButton
+          v-if="task.status !== 'running'"
+          icon-left="play_arrow"
+          class="primary"
+          :label="$t('views.project-task-details.actions.play')"
+          @click="runTask()"
+        />
+        <VueButton
+          v-else
+          icon-left="stop"
+          class="primary"
+          :label="$t('views.project-task-details.actions.stop')"
+          @click="stopTask()"
+        />
 
-    <div class="content">
-      <TerminalView
-        ref="terminal"
-        :key="id"
-        :cols="100"
-        :rows="24"
-        auto-size
-        :options="{
-          scrollback: 1000,
-          disableStdin: true,
-          useFlowControl: true
-        }"
-        :title="$t('views.project-task-details.output')"
-        toolbar
-        @clear="clearLogs()"
-      />
-    </div>
+        <VueButton
+          v-if="task.prompts.length"
+          icon-left="settings"
+          class="icon-button primary"
+          :disabled="task.status === 'running'"
+          v-tooltip="$t('views.project-task-details.parameters')"
+          @click="showParameters = true"
+        />
+
+        <div
+          class="command"
+          v-tooltip="$t('views.project-task-details.command')"
+        >
+          {{ task.command }}
+        </div>
+
+        <VueButton
+          v-if="task.link"
+          :href="task.link"
+          target="_blank"
+          icon-left="open_in_new"
+          class="icon-button"
+          v-tooltip="$t('views.project-task-details.more-info')"
+        />
+
+        <div class="vue-ui-spacer"/>
+      </div>
+
+      <div class="content">
+        <TerminalView
+          ref="terminal"
+          :key="id"
+          :cols="100"
+          :rows="24"
+          auto-size
+          :options="{
+            scrollback: 1000,
+            disableStdin: true,
+            useFlowControl: true
+          }"
+          :title="$t('views.project-task-details.output')"
+          toolbar
+          @clear="clearLogs()"
+        />
+      </div>
+    </template>
+
+    <VueModal
+      v-if="showParameters"
+      :title="$t('views.project-task-details.parameters')"
+      class="medium"
+      @close="showParameters = false"
+    >
+      <div class="default-body">
+        <PromptsList
+          :prompts="visiblePrompts"
+          @answer="answerPrompt"
+        />
+      </div>
+
+      <div slot="footer" class="actions">
+        <VueButton class="primary" @click="showParameters = false">Close</VueButton>
+      </div>
+    </VueModal>
   </div>
 </template>
 
 <script>
+import Prompts from '../mixins/Prompts'
+
 import TASK from '../graphql/task.gql'
 import TASK_LOGS from '../graphql/taskLogs.gql'
 import TASK_RUN from '../graphql/taskRun.gql'
@@ -56,6 +101,13 @@ import TASK_LOG_ADDED from '../graphql/taskLogAdded.gql'
 
 export default {
   name: 'ProjectTaskDetails',
+
+  mixins: [
+    Prompts({
+      field: 'task',
+      query: TASK
+    })
+  ],
 
   props: {
     id: {
@@ -67,6 +119,7 @@ export default {
   data () {
     return {
       task: null,
+      showParameters: false
     }
   },
 
@@ -116,6 +169,12 @@ export default {
     }
   },
 
+  watch: {
+    id () {
+      this.showParameters = false
+    }
+  },
+
   methods: {
     runTask () {
       this.$apollo.mutate({
@@ -158,8 +217,8 @@ export default {
   .command
     font-family 'Roboto Mono', monospace
     font-size 12px
-    background lighten($vue-ui-color-dark, 40%)
-    color $vue-ui-color-light
+    background $vue-ui-color-light-neutral
+    color $vue-ui-color-dark
     padding 0 16px
     height 32px
     h-box()
@@ -174,4 +233,16 @@ export default {
   .terminal-view
     height 100%
     border-radius $br
+
+  .header
+    padding $padding-item $padding-item 0
+    h-box()
+    align-items center
+
+    .name
+      font-size 18px
+
+    .description
+      color $color-text-light
+      margin-left $padding-item
 </style>

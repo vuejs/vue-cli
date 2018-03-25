@@ -7,11 +7,12 @@ const { getFeatures } = require('@vue/cli/lib/util/features')
 const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
-
+// Connectors
 const progress = require('./progress')
 const cwd = require('./cwd')
 const prompts = require('./prompts')
 const folders = require('./folders')
+const plugins = require('./plugins')
 
 const PROGRESS_ID = 'project-create'
 
@@ -33,11 +34,9 @@ function getCurrent (context) {
 
 function generatePresetDescription (preset) {
   let description = `Features: ${preset.features.join(', ')}`
-
   if (preset.raw.useConfigFiles) {
     description += ` (Use config files)`
   }
-
   return description
 }
 
@@ -52,18 +51,20 @@ function generateProjectCreation (creator) {
 function initCreator (context) {
   const creator = new Creator('', cwd.get(), getPromptModules())
 
+  /* Event listeners */
+  // Creator emits creation events (the project creation steps)
   onCreationEvent = ({ event }) => {
     progress.set({ id: PROGRESS_ID, status: event, info: null }, context)
   }
   creator.on('creation', onCreationEvent)
-
+  // Progress bar
   onInstallProgress = value => {
     if (progress.get(PROGRESS_ID)) {
       progress.set({ id: PROGRESS_ID, progress: value }, context)
     }
   }
   installProgress.on('progress', onInstallProgress)
-
+  // Package manager steps
   onInstallLog = message => {
     if (progress.get(PROGRESS_ID)) {
       progress.set({ id: PROGRESS_ID, info: message }, context)
@@ -218,6 +219,7 @@ async function create (input, context) {
     const name = inCurrent ? path.relative('../', process.cwd()) : input.folder
     creator.name = name
 
+    // Delete existing folder
     if (fs.existsSync(targetDir)) {
       if (input.force) {
         setProgress({
@@ -232,6 +234,7 @@ async function create (input, context) {
       }
     }
 
+    // Answers
     const answers = prompts.getAnswers()
     prompts.reset()
     let index
@@ -269,8 +272,8 @@ async function create (input, context) {
       info: null
     })
 
+    // Create
     await creator.create({}, preset)
-
     removeCreator()
 
     return importProject({
@@ -285,12 +288,9 @@ async function importProject (input, context) {
     path: input.path,
     favorite: 0
   }
-
   const packageData = folders.readPackage(project.path, context)
   project.name = packageData.name
-
   context.db.get('projects').push(project).write()
-
   return open(project.id, context)
 }
 
@@ -305,6 +305,8 @@ async function open (id, context) {
 
   currentProject = project
   cwd.set(project.path, context)
+  // Load plugins
+  plugins.list(project.path, context)
 
   return project
 }
@@ -313,9 +315,7 @@ async function remove (id, context) {
   if (currentProject && currentProject.id === id) {
     currentProject = null
   }
-
   context.db.get('projects').remove({ id }).write()
-
   return true
 }
 
@@ -331,7 +331,6 @@ function findOne (id, context) {
 
 function setFavorite ({ id, favorite }, context) {
   context.db.get('projects').find({ id }).assign({ favorite }).write()
-
   return findOne(id, context)
 }
 

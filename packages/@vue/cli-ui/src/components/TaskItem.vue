@@ -17,7 +17,7 @@
 
       <ListItemInfo
         :name="task.name"
-        :description="task.description || status"
+        :description="(task.status === 'idle' && task.description) || status"
         :selected="selected"
       />
     </div>
@@ -71,6 +71,11 @@ export default {
   .list-item-info
     flex 100% 1 1
     width 0
+
+    >>> .description
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
 
   &.selected
     &.status-error .list-item-info >>> .name

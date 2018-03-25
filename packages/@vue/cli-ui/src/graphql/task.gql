@@ -1,7 +1,12 @@
 #import "./taskFragment.gql"
+#import "./promptFragment.gql"
 
 query task ($id: ID!) {
   task (id: $id) {
     ...task
+    prompts {
+      ...prompt
+    }
+    link
   }
 }

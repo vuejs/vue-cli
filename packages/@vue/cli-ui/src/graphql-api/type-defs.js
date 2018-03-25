@@ -164,11 +164,12 @@ type Progress {
 type Task implements DescribedEntity {
   id: ID!
   status: TaskStatus!
-  name: String
   command: String!
+  name: String
   description: String
   link: String
   logs: [TaskLog]
+  prompts: [Prompt]
 }
 
 enum TaskStatus {

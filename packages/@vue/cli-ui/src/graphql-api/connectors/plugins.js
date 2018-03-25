@@ -8,6 +8,7 @@ const {
   getPluginLink
 } = require('@vue/cli-shared-utils')
 const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
+const { resolveModule, loadModule } = require('@vue/cli/lib/util/module')
 const {
   progress: installProgress,
   installPackage,
@@ -15,34 +16,36 @@ const {
   updatePackage
 } = require('@vue/cli/lib/util/installDeps')
 const invoke = require('@vue/cli/lib/invoke')
-
+// Connectors
 const cwd = require('./cwd')
 const folders = require('./folders')
 const prompts = require('./prompts')
 const progress = require('./progress')
 const logs = require('./logs')
-
+// Api
+const PluginApi = require('../api/PluginApi')
+// Utils
 const { getCommand } = require('../utils/command')
 
+const PROGRESS_ID = 'plugin-installation'
+
+// Caches
 const metadataCache = new LRU({
   max: 200,
   maxAge: 1000 * 60 * 30
 })
-
 const logoCache = new LRU({
   max: 50
 })
 
-const PROGRESS_ID = 'plugin-installation'
-
+// Local
 let currentPluginId
 let eventsInstalled = false
 let plugins = []
+let pluginApi
 
 function getPath (id) {
-  return path.dirname(require.resolve(id, {
-    paths: [cwd.get()]
-  }))
+  return path.dirname(resolveModule(id, cwd.get()))
 }
 
 function findPlugins (deps) {
@@ -64,7 +67,21 @@ function list (file, context) {
   plugins = []
   plugins = plugins.concat(findPlugins(pkg.dependencies || {}))
   plugins = plugins.concat(findPlugins(pkg.devDependencies || {}))
+  resetPluginApi(context)
   return plugins
+}
+
+function resetPluginApi (context) {
+  pluginApi = new PluginApi()
+  plugins.forEach(plugin => runPluginApi(plugin.id, context))
+}
+
+function runPluginApi (id, context) {
+  const module = loadModule(`${id}/ui`, cwd.get(), true)
+  if (module) {
+    module(pluginApi)
+    console.log(`PluginApi called for ${id}`)
+  }
 }
 
 function findOne (id, context) {
@@ -175,13 +192,9 @@ function install (id, context) {
       status: 'plugin-install',
       args: [id]
     })
-
     currentPluginId = id
-
     await installPackage(cwd.get(), getCommand(), null, id)
-
     await initPrompts(id, context)
-
     return getInstallation(context)
   })
 }
@@ -192,13 +205,9 @@ function uninstall (id, context) {
       status: 'plugin-uninstall',
       args: [id]
     })
-
     currentPluginId = id
-
     await uninstallPackage(cwd.get(), getCommand(), null, id)
-
     currentPluginId = null
-
     return getInstallation(context)
   })
 }
@@ -209,13 +218,14 @@ function runInvoke (id, context) {
       status: 'plugin-invoke',
       args: [id]
     })
-
     currentPluginId = id
-
-    await invoke(id, prompts.getAnswers(), cwd.get())
-
+    // Allow plugins that don't have a generator
+    if (resolveModule(`${id}/generator`, cwd.get())) {
+      await invoke(id, prompts.getAnswers(), cwd.get())
+    }
+    // Run plugin api
+    runPluginApi(id, context)
     currentPluginId = null
-
     return getInstallation(context)
   })
 }
@@ -240,23 +250,21 @@ function update (id, context) {
       status: 'plugin-update',
       args: [id]
     })
-
     currentPluginId = id
-
     const plugin = findOne(id, context)
     const { current, wanted } = await getVersion(plugin, context)
-
     await updatePackage(cwd.get(), getCommand(), null, id)
-
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
       type: 'info'
     }, context)
-
     currentPluginId = null
-
     return findOne(id)
   })
+}
+
+function getApi () {
+  return pluginApi
 }
 
 module.exports = {
@@ -269,5 +277,7 @@ module.exports = {
   install,
   uninstall,
   update,
-  runInvoke
+  runInvoke,
+  resetPluginApi,
+  getApi
 }

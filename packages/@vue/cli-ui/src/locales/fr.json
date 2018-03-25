@@ -248,6 +248,8 @@
         "stop": "Arrêter la tâche"
       },
       "command": "Commande de script",
+      "parameters": "Paramètres",
+      "more-info": "Plus d'infos",
       "output": "Sortie"
     }
   }

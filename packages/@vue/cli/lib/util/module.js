@@ -1,16 +1,19 @@
-const resolve = require('resolve')
-
-exports.resolveModule = function resolveModule (request, context) {
+exports.resolveModule = function (request, context) {
   let resolvedPath
   try {
-    resolvedPath = resolve.sync(request, { basedir: context })
+    resolvedPath = require.resolve(request, {
+      paths: [context]
+    })
   } catch (e) {}
   return resolvedPath
 }
 
-exports.loadModule = function loadModule (request, context) {
+exports.loadModule = function (request, context, force = false) {
   const resolvedPath = exports.resolveModule(request, context)
   if (resolvedPath) {
+    if (force) {
+      delete require.cache[resolvedPath]
+    }
     return require(resolvedPath)
   }
 }

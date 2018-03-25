@@ -34,6 +34,10 @@ module.exports = {
     logo: (plugin, args, context) => plugins.getLogo(plugin, context)
   },
 
+  Task: {
+    prompts: (task, args, context) => tasks.getPrompts(task.id, context)
+  },
+
   Query: {
     cwd: () => cwd.get(),
     consoleLogs: (root, args, context) => logs.list(context),

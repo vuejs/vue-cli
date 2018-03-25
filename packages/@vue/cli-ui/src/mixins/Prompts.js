@@ -37,9 +37,13 @@ export default function ({
             }
           },
           update: (store, { data: { promptAnswer } }) => {
-            const data = store.readQuery({ query })
+            let variables = this.$apollo.queries[field].options.variables || undefined
+            if (typeof variables === 'function') {
+              variables = variables.call(this)
+            }
+            const data = store.readQuery({ query, variables })
             data[field].prompts = promptAnswer
-            store.writeQuery({ query, data })
+            store.writeQuery({ query, variables, data })
           }
         })
       }

@@ -20,6 +20,9 @@ function generatePromptError (value) {
 }
 
 function getDefaultValue (prompt) {
+  if (typeof prompt.raw.value !== 'undefined') {
+    return prompt.raw.value
+  }
   const defaultValue = prompt.raw.default
   if (typeof defaultValue === 'function') {
     return defaultValue(answers)
@@ -113,6 +116,20 @@ function setAnswer (id, value) {
   obj[fields[l - 1]] = value
 }
 
+function getAnswer (id) {
+  const fields = id.split('.')
+  let obj = answers
+  const l = fields.length
+  for (let i = 0; i < l - 1; i++) {
+    const key = fields[i]
+    if (!obj[key]) {
+      return undefined
+    }
+    obj = obj[key]
+  }
+  return obj[fields[l - 1]]
+}
+
 function removeAnswer (id) {
   const fields = id.split('.')
   let obj = answers
@@ -164,7 +181,13 @@ function updatePrompts () {
       removeAnswer(prompt.id)
       prompt.valueChanged = false
     } else if (prompt.visible && !prompt.valueChanged) {
-      let value = getDefaultValue(prompt)
+      let value
+      const answer = getAnswer(prompt.id)
+      if (typeof answer !== 'undefined') {
+        value = answer
+      } else {
+        value = getDefaultValue(prompt)
+      }
       prompt.value = getDisplayedValue(prompt, value)
       setAnswer(prompt.id, getValue(prompt, value))
     }
