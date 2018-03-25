@@ -3,11 +3,11 @@ const path = require('path')
 const execa = require('execa')
 const chalk = require('chalk')
 const globby = require('globby')
-const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
 const { installDeps } = require('./util/installDeps')
+const { loadModule } = require('./util/module')
 const {
   log,
   error,
@@ -17,16 +17,6 @@ const {
   stopSpinner,
   resolvePluginId
 } = require('@vue/cli-shared-utils')
-
-function load (request, context) {
-  let resolvedPath
-  try {
-    resolvedPath = resolve.sync(request, { basedir: context })
-  } catch (e) {}
-  if (resolvedPath) {
-    return require(resolvedPath)
-  }
-}
 
 async function readFiles (context) {
   const files = await globby(['**'], {
@@ -75,7 +65,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
     )
   }
 
-  const pluginGenerator = load(`${id}/generator`, context)
+  const pluginGenerator = loadModule(`${id}/generator`, context)
   if (!pluginGenerator) {
     throw new Error(`Plugin ${id} does not have a generator.`)
   }
@@ -83,7 +73,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   // resolve options if no command line options are passed, and the plugin
   // contains a prompt module.
   if (!Object.keys(options).length) {
-    const pluginPrompts = load(`${id}/prompts`, context)
+    const pluginPrompts = loadModule(`${id}/prompts`, context)
     if (pluginPrompts) {
       options = await inquirer.prompt(pluginPrompts)
     }
