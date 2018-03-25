@@ -236,7 +236,7 @@
         }
       }
     },
-    "project-configuration": {
+    "project-configurations": {
       "title": "Configuration du projet"
     },
     "project-tasks": {

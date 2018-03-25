@@ -16,6 +16,12 @@ export default function ({
         ).length === 0
       },
 
+      hasPromptsChanged () {
+        return !!this.visiblePrompts.find(
+          prompt => prompt.valueChanged
+        )
+      },
+
       visiblePrompts () {
         if (!this[field]) {
           return []

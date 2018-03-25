@@ -80,7 +80,6 @@ function runPluginApi (id, context) {
   const module = loadModule(`${id}/ui`, cwd.get(), true)
   if (module) {
     module(pluginApi)
-    console.log(`PluginApi called for ${id}`)
   }
 }
 

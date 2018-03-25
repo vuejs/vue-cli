@@ -211,7 +211,7 @@
         }
       }
     },
-    "project-configuration": {
+    "project-configurations": {
       "title": "プロジェクト設定"
     },
     "project-tasks": {

@@ -5,7 +5,8 @@ import { apolloClient } from './vue-apollo'
 import ProjectHome from './views/ProjectHome.vue'
 import ProjectPlugins from './views/ProjectPlugins.vue'
 import ProjectPluginsAdd from './views/ProjectPluginsAdd.vue'
-import ProjectConfiguration from './views/ProjectConfiguration.vue'
+import ProjectConfigurations from './views/ProjectConfigurations.vue'
+import ProjectConfigurationDetails from './views/ProjectConfigurationDetails.vue'
 import ProjectTasks from './views/ProjectTasks.vue'
 import ProjectTaskDetails from './views/ProjectTaskDetails.vue'
 import ProjectSelect from './views/ProjectSelect.vue'
@@ -43,8 +44,16 @@ const router = new Router({
         },
         {
           path: 'configuration',
-          name: 'project-configuration',
-          component: ProjectConfiguration
+          name: 'project-configurations',
+          component: ProjectConfigurations,
+          children: [
+            {
+              path: ':id',
+              name: 'project-configuration-details',
+              component: ProjectConfigurationDetails,
+              props: true
+            }
+          ]
         },
         {
           path: 'tasks',

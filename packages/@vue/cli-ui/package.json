@@ -1,6 +1,8 @@
 {
   "name": "@vue/cli-ui",
   "version": "3.0.0-beta.6",
+  "author": "Guillaume Chau",
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -19,8 +21,10 @@
     "apollo-link-state": "^0.4.0",
     "apollo-link-ws": "^1.0.0",
     "apollo-utilities": "^1.0.9",
+    "clone": "^1.0.4",
     "file-icons-js": "^1.0.3",
     "graphql": "^0.13.0",
+    "js-yaml": "^3.11.0",
     "lowdb": "^1.0.0",
     "lru-cache": "^4.1.2",
     "mkdirp": "^0.5.1",

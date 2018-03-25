@@ -239,6 +239,8 @@ type Mutation {
   taskRun (id: ID!): Task
   taskStop (id: ID!): Task
   taskLogsClear (id: ID!): Task
+  configurationSave (id: ID!): Configuration
+  configurationCancel (id: ID!): Configuration
 }
 
 type Subscription {

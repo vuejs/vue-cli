@@ -113,11 +113,11 @@ function getPrompts (id, context) {
 
       prompts.reset()
       task.prompts.forEach(prompts.add)
-
       const data = getSavedData(id, context)
       if (data) {
         prompts.setAnswers(data.answers)
       }
+      prompts.start()
     }
 
     return prompts.list()

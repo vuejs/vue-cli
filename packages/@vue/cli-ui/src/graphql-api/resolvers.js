@@ -11,6 +11,7 @@ const progress = require('./connectors/progress')
 const logs = require('./connectors/logs')
 const plugins = require('./connectors/plugins')
 const tasks = require('./connectors/tasks')
+const configurations = require('./connectors/configurations')
 
 // Prevent code from exiting server process
 exit.exitProcess = false
@@ -38,6 +39,10 @@ module.exports = {
     prompts: (task, args, context) => tasks.getPrompts(task.id, context)
   },
 
+  Configuration: {
+    prompts: (configuration, args, context) => configurations.getPrompts(configuration.id, context)
+  },
+
   Query: {
     cwd: () => cwd.get(),
     consoleLogs: (root, args, context) => logs.list(context),
@@ -51,7 +56,9 @@ module.exports = {
     pluginInstallation: (root, args, context) => plugins.getInstallation(context),
     plugin: (root, { id }, context) => plugins.findOne(id, context),
     tasks: (root, args, context) => tasks.list(context),
-    task: (root, { id }, context) => tasks.findOne(id, context)
+    task: (root, { id }, context) => tasks.findOne(id, context),
+    configurations: (root, args, context) => configurations.list(context),
+    configuration: (root, { id }, context) => configurations.findOne(id, context)
   },
 
   Mutation: {
@@ -77,7 +84,9 @@ module.exports = {
     pluginUpdate: (root, { id }, context) => plugins.update(id, context),
     taskRun: (root, { id }, context) => tasks.run(id, context),
     taskStop: (root, { id }, context) => tasks.stop(id, context),
-    taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context)
+    taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context),
+    configurationSave: (root, { id }, context) => configurations.save(id, context),
+    configurationCancel: (root, { id }, context) => configurations.cancel(id, context)
   },
 
   Subscription: {

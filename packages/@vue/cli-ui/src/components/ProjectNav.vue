@@ -29,7 +29,7 @@ const BUILTIN_ROUTES = [
     tooltip: 'plugins'
   },
   {
-    name: 'project-configuration',
+    name: 'project-configurations',
     icon: 'settings_applications',
     tooltip: 'configuration'
   },

@@ -236,8 +236,14 @@
         }
       }
     },
-    "project-configuration": {
+    "project-configurations": {
       "title": "Project configuration"
+    },
+    "project-configuration-details": {
+      "actions": {
+        "cancel": "Cancel changes",
+        "save": "Save changes"
+      }
     },
     "project-tasks": {
       "title": "Project tasks"

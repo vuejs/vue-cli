@@ -21,6 +21,11 @@
         @load="loaded = true"
         @error="error = true"
       >
+      <div
+        v-else-if="fileIcon"
+        class="dynamic-file-icon"
+        :class="fileIcon"
+      />
       <VueIcon
         v-else
         :icon="icon"
@@ -40,6 +45,11 @@ export default {
     icon: {
       type: String,
       default: 'widgets'
+    },
+
+    fileIcon: {
+      type: String,
+      default: null
     },
 
     selected: {
@@ -91,6 +101,10 @@ export default {
       height @width
       >>> svg
         fill rgba($color-text-light, .3)
+
+  .dynamic-file-icon
+    &::before
+      font-size 24px
 
   &.vuejs
     .wrapper

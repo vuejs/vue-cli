@@ -1,0 +1,12 @@
+#import "./configurationFragment.gql"
+#import "./promptFragment.gql"
+
+query configuration ($id: ID!) {
+  configuration(id: $id) {
+    ...configuration
+    link
+    prompts {
+      ...prompt
+    }
+  }
+}

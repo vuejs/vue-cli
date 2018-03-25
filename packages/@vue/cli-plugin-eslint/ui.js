@@ -1,12 +1,14 @@
 module.exports = api => {
   // Config file
   api.describeConfig({
+    id: 'eslintrc',
     name: 'ESLint configuration',
     description: 'Error checking & Code quality',
     link: 'https://eslint.org',
+    icon: '.eslintrc.json',
     files: {
-      json: ['eslintrc', 'eslintrc.json'],
-      js: ['eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      js: ['.eslintrc.js'],
       package: 'eslintConfig'
     },
     onRead: ({ data }) => {
@@ -21,7 +23,7 @@ module.exports = api => {
             choices: [
               {
                 name: 'Off',
-                value: 'off'
+                value: JSON.stringify('off')
               },
               {
                 name: 'Never',
@@ -40,14 +42,14 @@ module.exports = api => {
                 value: JSON.stringify(['error', 'only-multiline'])
               }
             ],
-            value: JSON.stringify(data.rules['comma-dangle'] || ['error', 'never'])
+            value: JSON.stringify(data.rules && data.rules['comma-dangle'] || ['error', 'never'])
           }
         ]
       }
     },
     onWrite: ({ file, answers }) => {
-      file.assignData({
-        'rules.comma-dangle': answers.rules.commaDangle
+      file.setData({
+        'rules.comma-dangle': JSON.parse(answers.rules.commaDangle)
       })
     }
   })
