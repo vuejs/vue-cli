@@ -6,11 +6,17 @@ const inquirer = require('inquirer')
 const Creator = require('./Creator')
 const clearConsole = require('./util/clearConsole')
 const { error, stopSpinner } = require('@vue/cli-shared-utils')
+const validateProjectName = require('validate-npm-package-name')
 
 async function create (projectName, options) {
   const inCurrent = projectName === '.'
   const name = inCurrent ? path.relative('../', process.cwd()) : projectName
   const targetDir = path.resolve(projectName || '.')
+
+  if (!validateProjectName(name).validForNewPackages) {
+    console.error(chalk.red(`Could not be created because ${projectName} is an invalid name.`))
+    process.exit(1)
+  }
 
   if (fs.existsSync(targetDir)) {
     if (options.force) {
