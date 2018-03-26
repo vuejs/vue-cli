@@ -51,6 +51,8 @@ module.exports = class Generator {
     extractConfigFiles = false,
     checkExisting = false
   } = {}) {
+    // save the file system before applying plugin for comparison
+    const initialFiles = Object.assign({}, this.files)
     // extract configs from package.json into dedicated files.
     this.extractConfigFiles(extractConfigFiles, checkExisting)
     // wait for file resolve
@@ -58,8 +60,8 @@ module.exports = class Generator {
     // set package.json
     this.sortPkg()
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
-    // write file tree to disk
-    await writeFileTree(this.context, this.files)
+    // write/update file tree to disk
+    await writeFileTree(this.context, this.files, initialFiles)
   }
 
   extractConfigFiles (extractAll, checkExisting) {
