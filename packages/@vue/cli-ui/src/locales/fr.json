@@ -57,6 +57,9 @@
         "update": "Mettre à jour {target}"
       }
     },
+    "prompt-list": {
+      "default": "Par défaut"
+    },
     "prompts-list": {
       "empty": "Pas de configuration"
     },

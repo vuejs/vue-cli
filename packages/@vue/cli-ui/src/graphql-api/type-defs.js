@@ -124,6 +124,7 @@ type PromptChoice {
   name: String
   checked: Boolean
   disabled: Boolean
+  isDefault: Boolean
 }
 
 type PromptError {

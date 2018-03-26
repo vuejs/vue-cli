@@ -3,12 +3,6 @@ const ObjectUtil = require('../../util/object')
 let answers = {}
 let prompts = []
 
-function getPrompt (id) {
-  return prompts.find(
-    p => p.id === id
-  )
-}
-
 function generatePromptError (value) {
   let message
   if (typeof value === 'string') {
@@ -19,28 +13,6 @@ function generatePromptError (value) {
   return {
     message
   }
-}
-
-function getDefaultValue (prompt) {
-  if (typeof prompt.raw.value !== 'undefined') {
-    return prompt.raw.value
-  }
-  const defaultValue = prompt.raw.default
-  if (typeof defaultValue === 'function') {
-    return defaultValue(answers)
-  } else if (prompt.type === 'checkbox') {
-    const choices = getChoices(prompt)
-    if (choices) {
-      return choices.filter(
-        c => c.checked
-      ).map(
-        c => c.value
-      )
-    }
-  } else if (prompt.type === 'confirm') {
-    return false
-  }
-  return defaultValue
 }
 
 function getEnabled (value) {
@@ -78,12 +50,13 @@ function getDisplayedValue (prompt, value) {
   return JSON.stringify(value)
 }
 
-function generatePromptChoice (prompt, data) {
+function generatePromptChoice (prompt, data, defaultValue) {
   return {
     value: getDisplayedValue(prompt, data.value),
     name: data.name,
     checked: data.checked,
-    disabled: data.disabled
+    disabled: data.disabled,
+    isDefault: data.value === defaultValue
   }
 }
 
@@ -99,8 +72,9 @@ function getChoices (prompt) {
   } else {
     result = data
   }
+  const defaultValue = getDefaultValue(prompt)
   return result.map(
-    item => generatePromptChoice(prompt, item)
+    item => generatePromptChoice(prompt, item, defaultValue)
   )
 }
 
@@ -149,10 +123,13 @@ function updatePrompts () {
       const answer = getAnswer(prompt.id)
       if (typeof answer !== 'undefined') {
         value = answer
+      } else if (typeof prompt.raw.value !== 'undefined') {
+        value = prompt.raw.value
       } else {
         value = getDefaultValue(prompt)
       }
       prompt.value = getDisplayedValue(prompt, value)
+      prompt.rawValue = value
       setAnswer(prompt.id, getValue(prompt, value))
     }
   }
@@ -197,7 +174,7 @@ function remove (id) {
 }
 
 function setValue ({ id, value }) {
-  const prompt = getPrompt(id)
+  const prompt = findOne(id)
   if (!prompt) {
     console.warn(`Prompt '${prompt}' not found`)
     return null
@@ -210,11 +187,37 @@ function setValue ({ id, value }) {
     prompt.error = null
   }
   prompt.value = getDisplayedValue(prompt, value)
+  prompt.rawValue = value
   const finalValue = getValue(prompt, value)
   prompt.valueChanged = true
   setAnswer(prompt.id, finalValue)
   updatePrompts()
   return prompt
+}
+
+function findOne (id) {
+  return prompts.find(
+    p => p.id === id
+  )
+}
+
+function getDefaultValue (prompt) {
+  const defaultValue = prompt.raw.default
+  if (typeof defaultValue === 'function') {
+    return defaultValue(answers)
+  } else if (prompt.type === 'checkbox') {
+    const choices = getChoices(prompt)
+    if (choices) {
+      return choices.filter(
+        c => c.checked
+      ).map(
+        c => c.value
+      )
+    }
+  } else if (prompt.type === 'confirm') {
+    return defaultValue || false
+  }
+  return defaultValue
 }
 
 module.exports = {
@@ -226,5 +229,7 @@ module.exports = {
   add,
   remove,
   start,
-  setValue
+  setValue,
+  findOne,
+  getDefaultValue
 }

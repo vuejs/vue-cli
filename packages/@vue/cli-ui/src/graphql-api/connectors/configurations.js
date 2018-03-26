@@ -8,7 +8,7 @@ const plugins = require('./plugins')
 const folders = require('./folders')
 const prompts = require('./prompts')
 // Utils
-const { set } = require('../../util/object')
+const { get, set, remove } = require('../../util/object')
 
 const fileTypes = ['js', 'json', 'yaml']
 let current = {}
@@ -116,15 +116,34 @@ function save (id, context) {
       config.onWrite({
         answers,
         data,
-        file: {
-          ...config.file,
+        file: config.file,
+        api: {
           assignData: newData => {
             Object.assign(data, newData)
           },
           setData: newData => {
             Object.keys(newData).forEach(key => {
-              set(data, key, newData[key])
+              const value = newData[key]
+              if (typeof value === 'undefined') {
+                remove(data, key)
+              } else {
+                set(data, key, value)
+              }
             })
+          },
+          getAnswer: (id, mapper) => {
+            const prompt = prompts.findOne(id)
+            if (prompt) {
+              const defaultValue = prompts.getDefaultValue(prompt)
+              console.log(defaultValue, prompt.rawValue)
+              if (defaultValue !== prompt.rawValue) {
+                let value = get(answers, prompt.id)
+                if (mapper) {
+                  value = mapper(value)
+                }
+                return value
+              }
+            }
           }
         }
       })

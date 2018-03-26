@@ -57,6 +57,9 @@
         "update": "Update {target}"
       }
     },
+    "prompt-list": {
+      "default": "Default"
+    },
     "prompts-list": {
       "empty": "No configuration"
     },

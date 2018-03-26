@@ -20,6 +20,7 @@ module.exports = api => {
             message: 'Trailing commas',
             description: 'Enforce or disallow trailing commas at the end of the lines',
             link: 'https://eslint.org/docs/rules/comma-dangle',
+            default: JSON.stringify(['error', 'never']),
             choices: [
               {
                 name: 'Off',
@@ -42,14 +43,14 @@ module.exports = api => {
                 value: JSON.stringify(['error', 'only-multiline'])
               }
             ],
-            value: JSON.stringify(data.rules && data.rules['comma-dangle'] || ['error', 'never'])
+            value: JSON.stringify(data.rules && data.rules['comma-dangle'])
           }
         ]
       }
     },
-    onWrite: ({ file, answers }) => {
-      file.setData({
-        'rules.comma-dangle': JSON.parse(answers.rules.commaDangle)
+    onWrite: ({ api }) => {
+      api.setData({
+        'rules.comma-dangle': api.getAnswer('rules.commaDangle', JSON.parse)
       })
     }
   })

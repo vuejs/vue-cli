@@ -19,7 +19,7 @@
             v-for="(choice, index) of prompt.choices"
             :key="index"
             :value="value(choice.value)"
-            :label="choice.name"
+            :label="generateLabel(choice)"
           />
         </VueSelect>
       </div>
@@ -33,6 +33,16 @@
 import Prompt from './Prompt'
 
 export default {
-  extends: Prompt
+  extends: Prompt,
+
+  methods: {
+    generateLabel (choice) {
+      let label = choice.name
+      if (choice.isDefault) {
+        label += ` (${this.$t('components.prompt-list.default')})`
+      }
+      return label
+    }
+  }
 }
 </script>

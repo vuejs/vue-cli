@@ -3,4 +3,5 @@ fragment promptChoice on PromptChoice {
   name
   checked
   disabled
+  isDefault
 }
