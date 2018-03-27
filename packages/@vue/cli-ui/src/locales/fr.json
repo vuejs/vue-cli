@@ -1,5 +1,29 @@
 {
   "components": {
+    "file-diff-view": {
+      "files-changed": "Fichiers modifiés",
+      "search-file": "Rechercher un fichier",
+      "empty": "Aucune modification trouvée",
+      "modals": {
+        "commit": {
+          "title": "Valider les modifications",
+          "input": "Entrer un message pour le commit",
+          "subtitle": "Enregistre les changements effectués au dépôt",
+          "actions": {
+            "commit": "Commit",
+            "cancel": "Annuler"
+          }
+        }
+      },
+      "actions": {
+        "collapse-all": "Tout replier",
+        "expand-all": "Tout étendre",
+        "commit": "Valider les modifications",
+        "skip": "Passer",
+        "continue": "Continuer",
+        "refresh": "Rafraîchir"
+      }
+    },
     "folder-explorer": {
       "toolbar": {
         "tooltips": {

@@ -51,5 +51,5 @@ export default {
 .nav-list
   overflow-x none
   overflow-y auto
-  background darken($color-light-background, 2%)
+  background darken($color-background-light, 2%)
 </style>

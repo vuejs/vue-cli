@@ -121,7 +121,7 @@ export default {
     margin 0 auto
     $max-width = 1200px
     .shell
-      background $color-light-background
+      background $color-background-light
     .header .content,
     >>> .vue-ui-tab
       max-width $max-width

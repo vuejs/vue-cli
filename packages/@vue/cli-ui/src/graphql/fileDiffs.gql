@@ -1,0 +1,23 @@
+query fileDiffs {
+  fileDiffs {
+    id
+    from
+    to
+    new
+    deleted
+    chunks {
+      oldStart
+      oldLines
+      newStart
+      newLines
+      changes {
+        type
+        ln
+        ln1
+        ln2
+        content
+        normal
+      }
+    }
+  }
+}

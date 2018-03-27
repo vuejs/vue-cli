@@ -1,5 +1,29 @@
 {
   "components": {
+    "file-diff-view": {
+      "files-changed": "Files changed",
+      "search-file": "Search file",
+      "empty": "No change found",
+      "modals": {
+        "commit": {
+          "title": "Commit changes",
+          "input": "Enter a commit message",
+          "subtitle": "Record changes to the repository",
+          "actions": {
+            "commit": "Commit",
+            "cancel": "Cancel"
+          }
+        }
+      },
+      "actions": {
+        "collapse-all": "Collapse all",
+        "expand-all": "Expand all",
+        "commit": "Commit changes",
+        "skip": "Skip",
+        "continue": "Continue",
+        "refresh": "Refresh"
+      }
+    },
     "folder-explorer": {
       "toolbar": {
         "tooltips": {

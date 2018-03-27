@@ -50,7 +50,7 @@ export default {
 .logger-message
   h-box()
   align-items baseline
-  font-family 'Roboto Mono', monospace
+  font-family $font-mono
   box-sizing border-box
   padding 2px 4px
 

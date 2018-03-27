@@ -12,6 +12,7 @@ import ProjectTaskDetails from './views/ProjectTaskDetails.vue'
 import ProjectSelect from './views/ProjectSelect.vue'
 import ProjectCreate from './views/ProjectCreate.vue'
 import About from './views/About.vue'
+import FileDiffView from './components/FileDiffView.vue'
 
 import PROJECT_CURRENT from './graphql/projectCurrent.gql'
 
@@ -79,6 +80,11 @@ const router = new Router({
       path: '/project/create',
       name: 'project-create',
       component: ProjectCreate
+    },
+    {
+      path: '/file-diff',
+      name: 'file-diff',
+      component: FileDiffView
     },
     {
       path: '/about',

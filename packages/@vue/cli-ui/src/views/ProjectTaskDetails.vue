@@ -215,7 +215,7 @@ export default {
   height 100%
 
   .command
-    font-family 'Roboto Mono', monospace
+    font-family $font-mono
     font-size 12px
     background $vue-ui-color-light-neutral
     color $vue-ui-color-dark

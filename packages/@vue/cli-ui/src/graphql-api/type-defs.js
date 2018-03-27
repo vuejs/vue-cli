@@ -201,6 +201,38 @@ type Configuration implements DescribedEntity {
   prompts: [Prompt]
 }
 
+type FileDiff {
+  id: ID!
+  from: String
+  to: String
+  new: Boolean
+  deleted: Boolean
+  chunks: [FileDiffChunk]
+}
+
+type FileDiffChunk {
+  changes: [FileDiffChange]
+  oldStart: Int
+  oldLines: Int
+  newStart: Int
+  newLines: Int
+}
+
+type FileDiffChange {
+  type: FileDiffChangeType
+  ln: Int
+  ln1: Int
+  ln2: Int
+  content: String
+  normal: Boolean
+}
+
+enum FileDiffChangeType {
+  normal
+  add
+  del
+}
+
 type Query {
   progress (id: ID!): Progress
   cwd: String!
@@ -217,6 +249,7 @@ type Query {
   task (id: ID!): Task
   configurations: [Configuration]
   configuration (id: ID!): Configuration
+  fileDiffs: [FileDiff]
 }
 
 type Mutation {
@@ -242,6 +275,7 @@ type Mutation {
   taskLogsClear (id: ID!): Task
   configurationSave (id: ID!): Configuration
   configurationCancel (id: ID!): Configuration
+  gitCommit (message: String!): Boolean
 }
 
 type Subscription {

@@ -12,6 +12,7 @@ const logs = require('./connectors/logs')
 const plugins = require('./connectors/plugins')
 const tasks = require('./connectors/tasks')
 const configurations = require('./connectors/configurations')
+const git = require('./connectors/git')
 
 // Prevent code from exiting server process
 exit.exitProcess = false
@@ -58,7 +59,8 @@ module.exports = {
     tasks: (root, args, context) => tasks.list(context),
     task: (root, { id }, context) => tasks.findOne(id, context),
     configurations: (root, args, context) => configurations.list(context),
-    configuration: (root, { id }, context) => configurations.findOne(id, context)
+    configuration: (root, { id }, context) => configurations.findOne(id, context),
+    fileDiffs: (root, args, context) => git.getDiffs(context)
   },
 
   Mutation: {
@@ -86,7 +88,8 @@ module.exports = {
     taskStop: (root, { id }, context) => tasks.stop(id, context),
     taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context),
     configurationSave: (root, { id }, context) => configurations.save(id, context),
-    configurationCancel: (root, { id }, context) => configurations.cancel(id, context)
+    configurationCancel: (root, { id }, context) => configurations.cancel(id, context),
+    gitCommit: (root, { message }, context) => git.commit(message, context)
   },
 
   Subscription: {
