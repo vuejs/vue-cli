@@ -64,10 +64,12 @@
       </template>
     </div>
 
-    <VueLoadingIndicator
-      v-if="loading"
-      class="overlay"
-    />
+    <transition name="vue-ui-fade">
+      <VueLoadingIndicator
+        v-if="loading"
+        class="overlay"
+      />
+    </transition>
 
     <VueModal
       v-if="showCommitModal"
@@ -108,10 +110,16 @@
 </template>
 
 <script>
+import PageVisibility from '../mixins/PageVisibility'
+
 import FILE_DIFFS from '../graphql/fileDiffs.gql'
 import GIT_COMMIT from '../graphql/gitCommit.gql'
 
 export default {
+  mixins: [
+    PageVisibility
+  ],
+
   data () {
     return {
       fileDiffs: [],
@@ -151,6 +159,14 @@ export default {
     }
   },
 
+  watch: {
+    documentFocus (value) {
+      if (value) {
+        this.refresh()
+      }
+    }
+  },
+
   methods: {
     setCollapsedToAll (value) {
       const map = {}
@@ -180,6 +196,8 @@ export default {
             message: this.commitMessage
           }
         })
+        this.showCommitModal = false
+        this.refresh()
         this.$emit('continue')
       } catch (e) {
         console.error(e)
