@@ -4,6 +4,7 @@ const execa = require('execa')
 const chalk = require('chalk')
 const globby = require('globby')
 const inquirer = require('inquirer')
+const isBinary = require('isbinaryfile')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
 const { installDeps } = require('./util/installDeps')
@@ -27,7 +28,10 @@ async function readFiles (context) {
   })
   const res = {}
   for (const file of files) {
-    res[file] = fs.readFileSync(path.resolve(context, file), 'utf-8')
+    const name = path.resolve(context, file)
+    res[file] = isBinary.sync(name)
+      ? fs.readFileSync(name)
+      : fs.readFileSync(name, 'utf-8')
   }
   return res
 }
@@ -48,11 +52,11 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
     if (!deps) return
     let name
     // official
-    if (deps[name = `@vue/cli-plugin-${pluginName}`]) {
+    if (deps[(name = `@vue/cli-plugin-${pluginName}`)]) {
       return name
     }
     // full id, scoped short, or default short
-    if (deps[name = resolvePluginId(pluginName)]) {
+    if (deps[(name = resolvePluginId(pluginName))]) {
       return name
     }
   }
@@ -61,7 +65,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   if (!id) {
     throw new Error(
       `Cannot resolve plugin ${chalk.yellow(pluginName)} from package.json. ` +
-      `Did you forget to install it?`
+        `Did you forget to install it?`
     )
   }
 
@@ -102,14 +106,14 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
 
   const newDeps = generator.pkg.dependencies
   const newDevDeps = generator.pkg.devDependencies
-  const depsChanged = (
+  const depsChanged =
     JSON.stringify(newDeps) !== JSON.stringify(pkg.dependencies) ||
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
-  )
 
   if (!isTestOrDebug && depsChanged) {
     logWithSpinner('📦', `Installing additional dependencies...`)
-    const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
+    const packageManager =
+      loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
     await installDeps(context, packageManager)
   }
 
@@ -125,16 +129,32 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   log()
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
   if (!process.env.VUE_CLI_TEST && hasGit()) {
-    const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'], {
+    const { stdout } = await execa('git', [
+      'ls-files',
+      '--exclude-standard',
+      '--modified',
+      '--others'
+    ], {
       cwd: context
     })
     if (stdout.trim()) {
       log(`   The following files have been updated / added:\n`)
-      log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))
+      log(
+        chalk.red(
+          stdout
+            .split(/\r?\n/g)
+            .map(line => `     ${line}`)
+            .join('\n')
+        )
+      )
       log()
     }
   }
-  log(`   You should review these changes with ${chalk.cyan(`git diff`)} and commit them.`)
+  log(
+    `   You should review these changes with ${chalk.cyan(
+      `git diff`
+    )} and commit them.`
+  )
   log()
 
   generator.printExitLogs()
