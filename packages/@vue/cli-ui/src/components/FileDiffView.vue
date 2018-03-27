@@ -188,6 +188,7 @@ export default {
     },
 
     async commit () {
+      this.showCommitModal = false
       this.loading++
       try {
         await this.$apollo.mutate({
@@ -196,7 +197,6 @@ export default {
             message: this.commitMessage
           }
         })
-        this.showCommitModal = false
         this.refresh()
         this.$emit('continue')
       } catch (e) {
