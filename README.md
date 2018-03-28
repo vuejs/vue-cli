@@ -1,5 +1,7 @@
 # vue-cli [![Build Status](https://circleci.com/gh/vuejs/vue-cli/tree/dev.svg?style=shield)](https://circleci.com/gh/vuejs/vue-cli/tree/dev) [![Windows Build status](https://ci.appveyor.com/api/projects/status/487fqt71e4kf46iv/branch/dev?svg=true)](https://ci.appveyor.com/project/yyx990803/vue-cli-6b0a6/branch/dev)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/neighbourhoodie/gk-test-lerna-yarn-workspaces.svg)](https://greenkeeper.io/)
+
 > This is the branch for `@vue/cli` 3.0.
 
 ## Status: beta
