@@ -83,6 +83,7 @@ module.exports = {
     pluginInstall: (root, { id }, context) => plugins.install(id, context),
     pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
+    pluginFinishInstall: (root, args, context) => plugins.finishInstall(context),
     pluginUpdate: (root, { id }, context) => plugins.update(id, context),
     taskRun: (root, { id }, context) => tasks.run(id, context),
     taskStop: (root, { id }, context) => tasks.stop(id, context),

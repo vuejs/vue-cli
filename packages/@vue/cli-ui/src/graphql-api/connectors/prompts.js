@@ -72,7 +72,9 @@ function getChoices (prompt) {
   } else {
     result = data
   }
-  const defaultValue = getDefaultValue(prompt)
+  const defaultValue = prompt.type === 'list' || prompt.type === 'rawlist'
+    ? getDefaultValue(prompt)
+    : undefined
   return result.map(
     item => generatePromptChoice(prompt, item, defaultValue)
   )

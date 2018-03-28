@@ -1,5 +1,8 @@
 {
   "components": {
+    "file-diff": {
+      "binary": "Fichier binaire non affiché"
+    },
     "file-diff-view": {
       "files-changed": "Fichiers modifiés",
       "search-file": "Rechercher un fichier",
@@ -251,6 +254,9 @@
             "cancel": "Annuler",
             "finish": "Terminer l'installation"
           }
+        },
+        "diff": {
+          "label": "Fichers modifiés"
         }
       },
       "modal": {

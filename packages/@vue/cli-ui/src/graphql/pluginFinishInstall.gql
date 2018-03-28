@@ -1,0 +1,7 @@
+#import "./pluginInstallationFragment.gql"
+
+mutation pluginFinishInstall {
+  pluginFinishInstall {
+    ...pluginInstallation
+  }
+}

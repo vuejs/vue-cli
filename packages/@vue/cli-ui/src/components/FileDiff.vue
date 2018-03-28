@@ -27,11 +27,17 @@
     </div>
 
     <div v-if="!collapsed" class="content">
-      <FileDiffChunk
-        v-for="(chunk, index) in fileDiff.chunks"
-        :key="index"
-        :chunk="chunk"
-      />
+      <div v-if="fileDiff.binary" class="is-binary">
+        <VueIcon icon="memory" class="icon"/>
+        <span>{{ $t('components.file-diff.binary') }}</span>
+      </div>
+      <template v-else>
+        <FileDiffChunk
+          v-for="(chunk, index) in fileDiff.chunks"
+          :key="index"
+          :chunk="chunk"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -102,8 +108,14 @@ status-color($color)
         flex 100% 1 1
         width 0
 
-    .content
-      overflow-x auto
+  .is-binary
+    h-box()
+    box-center()
+    padding $padding-item
+    opacity .5
+
+    .icon
+      margin-right 4px
 
   &.new
     status-color($vue-ui-color-success)

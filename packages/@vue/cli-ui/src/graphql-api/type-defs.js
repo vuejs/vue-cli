@@ -97,7 +97,15 @@ type Plugin {
 type PluginInstallation {
   id: ID!
   pluginId: ID
+  step: PluginInstallationStep
   prompts: [Prompt]
+}
+
+enum PluginInstallationStep {
+  install
+  uninstall
+  config
+  diff
 }
 
 type Feature implements DescribedEntity {
@@ -207,6 +215,7 @@ type FileDiff {
   to: String
   new: Boolean
   deleted: Boolean
+  binary: Boolean
   chunks: [FileDiffChunk]
 }
 
@@ -269,6 +278,7 @@ type Mutation {
   pluginInstall (id: ID!): PluginInstallation
   pluginUninstall (id: ID!): PluginInstallation
   pluginInvoke (id: ID!): PluginInstallation
+  pluginFinishInstall: PluginInstallation
   pluginUpdate (id: ID!): Plugin
   taskRun (id: ID!): Task
   taskStop (id: ID!): Task

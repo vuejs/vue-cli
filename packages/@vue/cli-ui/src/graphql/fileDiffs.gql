@@ -5,6 +5,7 @@ query fileDiffs {
     to
     new
     deleted
+    binary
     chunks {
       oldStart
       oldLines

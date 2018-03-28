@@ -43,6 +43,7 @@ let currentPluginId
 let eventsInstalled = false
 let plugins = []
 let pluginApi
+let installationStep
 
 function getPath (id) {
   return path.dirname(resolveModule(id, cwd.get()))
@@ -181,6 +182,7 @@ function getInstallation (context) {
   return {
     id: 'plugin-install',
     pluginId: currentPluginId,
+    step: installationStep,
     prompts: prompts.list()
   }
 }
@@ -192,8 +194,10 @@ function install (id, context) {
       args: [id]
     })
     currentPluginId = id
+    installationStep = 'install'
     await installPackage(cwd.get(), getCommand(), null, id)
     await initPrompts(id, context)
+    installationStep = 'config'
     return getInstallation(context)
   })
 }
@@ -204,9 +208,11 @@ function uninstall (id, context) {
       status: 'plugin-uninstall',
       args: [id]
     })
+    installationStep = 'uninstall'
     currentPluginId = id
     await uninstallPackage(cwd.get(), getCommand(), null, id)
     currentPluginId = null
+    installationStep = null
     return getInstallation(context)
   })
 }
@@ -224,9 +230,15 @@ function runInvoke (id, context) {
     }
     // Run plugin api
     runPluginApi(id, context)
-    currentPluginId = null
+    installationStep = 'diff'
     return getInstallation(context)
   })
+}
+
+function finishInstall (context) {
+  installationStep = null
+  currentPluginId = null
+  return getInstallation(context)
 }
 
 async function initPrompts (id, context) {
@@ -278,5 +290,6 @@ module.exports = {
   update,
   runInvoke,
   resetPluginApi,
-  getApi
+  getApi,
+  finishInstall
 }

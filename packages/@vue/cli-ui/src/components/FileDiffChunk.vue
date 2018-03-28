@@ -25,6 +25,11 @@ export default {
 @import "~@/style/imports"
 
 .file-diff-chunk
+  .changes
+    overflow-x auto
+    display grid
+    grid-template-column 1fr
+
   &:not(:last-child)
     &::after
       content '•••'

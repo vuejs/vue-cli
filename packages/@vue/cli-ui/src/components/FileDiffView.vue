@@ -115,6 +115,11 @@ import PageVisibility from '../mixins/PageVisibility'
 import FILE_DIFFS from '../graphql/fileDiffs.gql'
 import GIT_COMMIT from '../graphql/gitCommit.gql'
 
+const defaultCollapsed = [
+  'yarn.lock',
+  'package-lock.json'
+]
+
 export default {
   mixins: [
     PageVisibility
@@ -135,7 +140,18 @@ export default {
     fileDiffs: {
       query: FILE_DIFFS,
       loadingKey: 'loading',
-      fetchPolicy: 'cahe-and-network'
+      fetchPolicy: 'cahe-and-network',
+      result () {
+        this.fileDiffs.forEach(fileDiff => {
+          if (typeof this.collapsed[fileDiff.id] === 'undefined' && (
+            fileDiff.binary ||
+            defaultCollapsed.includes(fileDiff.from) ||
+            defaultCollapsed.includes(fileDiff.to)
+          )) {
+            this.$set(this.collapsed, fileDiff.id, true)
+          }
+        })
+      }
     }
   },
 

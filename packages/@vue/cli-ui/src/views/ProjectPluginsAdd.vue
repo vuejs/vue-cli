@@ -112,6 +112,18 @@
               />
             </div>
           </VueTab>
+
+          <VueTab
+            id="diff"
+            :label="$t('views.project-plugins-add.tabs.diff.label')"
+            icon="note_add"
+            disabled
+            lazy
+          >
+            <FileDiffView
+              @continue="finishInstall()"
+            />
+          </VueTab>
         </template>
       </StepWizard>
     </div>
@@ -163,6 +175,7 @@ import PLUGIN_INSTALLATION from '../graphql/pluginInstallation.gql'
 import PLUGIN_INSTALL from '../graphql/pluginInstall.gql'
 import PLUGIN_UNINSTALL from '../graphql/pluginUninstall.gql'
 import PLUGIN_INVOKE from '../graphql/pluginInvoke.gql'
+import PLUGIN_FINISH_INSTALL from '../graphql/pluginFinishInstall.gql'
 
 export default {
   name: 'ProjectPluginsAdd',
@@ -219,6 +232,17 @@ export default {
       } else {
         this.tabId = 'search'
       }
+
+      switch (this.pluginInstallation.step) {
+        case 'config':
+          this.tabId = 'config'
+          break
+        case 'diff':
+          this.tabId = 'diff'
+          break
+        default:
+          this.tabId = 'search'
+      }
     },
 
     async installPlugin () {
@@ -264,6 +288,17 @@ export default {
             id: this.pluginId
           }
         })
+        this.tabId = 'diff'
+      } catch (e) {
+        console.error(e)
+      }
+    },
+
+    async finishInstall () {
+      try {
+        await this.$apollo.mutate({
+          mutation: PLUGIN_FINISH_INSTALL
+        })
         this.close()
       } catch (e) {
         console.error(e)
@@ -284,6 +319,7 @@ export default {
 
 .content
   grid-area content
+  overflow hidden
 
 .algolia
   position absolute

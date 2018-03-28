@@ -3,6 +3,7 @@ module.exports = {
 
   pluginOptions: {
     graphqlMock: false,
-    apolloEngine: false
+    apolloEngine: false,
+    graphqlTimeout: 0
   }
 }
