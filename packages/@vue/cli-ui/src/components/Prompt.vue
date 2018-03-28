@@ -35,6 +35,7 @@ export default {
     grid-template-columns auto 300px
     grid-template-rows auto
     grid-template-areas "info input"
+    grid-gap $padding-item
     padding $padding-item
 
     > .list-item-info
