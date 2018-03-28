@@ -278,7 +278,8 @@
     "project-task-details": {
       "actions": {
         "play": "Lancer la tâche",
-        "stop": "Arrêter la tâche"
+        "stop": "Arrêter la tâche",
+        "close": "Fermer"
       },
       "command": "Commande de script",
       "parameters": "Paramètres",

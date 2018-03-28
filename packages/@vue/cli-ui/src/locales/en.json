@@ -284,7 +284,8 @@
     "project-task-details": {
       "actions": {
         "play": "Run task",
-        "stop": "Stop task"
+        "stop": "Stop task",
+        "close": "Close"
       },
       "command": "Script command",
       "parameters": "Parameters",

@@ -83,7 +83,11 @@
       </div>
 
       <div slot="footer" class="actions">
-        <VueButton class="primary" @click="showParameters = false">Close</VueButton>
+        <VueButton
+          class="primary"
+          :label="$t('views.project-task-details.actions.close')"
+          @click="showParameters = false"
+        />
       </div>
     </VueModal>
   </div>
