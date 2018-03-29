@@ -3,7 +3,7 @@
     "file-diff": {
       "binary": "Fichier binaire non affiché",
       "actions": {
-        "open": "Open in editor"
+        "open": "Ouvrir dans l'éditeur"
       }
     },
     "file-diff-view": {
