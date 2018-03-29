@@ -14,6 +14,7 @@ const tasks = require('./connectors/tasks')
 const configurations = require('./connectors/configurations')
 const git = require('./connectors/git')
 const files = require('./connectors/files')
+const routes = require('./connectors/routes')
 
 // Prevent code from exiting server process
 exit.exitProcess = false
@@ -61,7 +62,8 @@ module.exports = {
     task: (root, { id }, context) => tasks.findOne(id, context),
     configurations: (root, args, context) => configurations.list(context),
     configuration: (root, { id }, context) => configurations.findOne(id, context),
-    fileDiffs: (root, args, context) => git.getDiffs(context)
+    fileDiffs: (root, args, context) => git.getDiffs(context),
+    routes: (root, args, context) => routes.list(context)
   },
 
   Mutation: {

@@ -249,6 +249,13 @@ input OpenInEditorInput {
   gitPath: Boolean
 }
 
+type Route {
+  id: ID!
+  name: String!
+  icon: String!
+  tooltip: String
+}
+
 type Query {
   progress (id: ID!): Progress
   cwd: String!
@@ -266,6 +273,7 @@ type Query {
   configurations: [Configuration]
   configuration (id: ID!): Configuration
   fileDiffs: [FileDiff]
+  routes: [Route]
 }
 
 type Mutation {
@@ -303,5 +311,8 @@ type Subscription {
   cwdChanged: String!
   taskChanged: Task
   taskLogAdded (id: ID!): TaskLog
+  routeAdded: Route
+  routeRemoved: Route
+  routeChanged: Route
 }
 `

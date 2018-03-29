@@ -12,7 +12,7 @@
           class="flat big icon-button"
           :value="route.name"
           :icon-left="route.icon"
-          v-tooltip.right="renderTooltip(route.tooltip)"
+          v-tooltip.right="$t(route.tooltip)"
         />
       </VueGroup>
     </div>
@@ -22,32 +22,19 @@
 <script>
 import { isSameRoute, isIncludedRoute } from '../util/route'
 
-const BUILTIN_ROUTES = [
-  {
-    name: 'project-plugins',
-    icon: 'widgets',
-    tooltip: 'plugins'
-  },
-  {
-    name: 'project-configurations',
-    icon: 'settings_applications',
-    tooltip: 'configuration'
-  },
-  {
-    name: 'project-tasks',
-    icon: 'assignment',
-    tooltip: 'tasks'
-  }
-]
+import ROUTES from '../graphql/routes.gql'
 
 export default {
   data () {
     return {
-      routes: [
-        ...BUILTIN_ROUTES
-        // Plugins routes here
-        // TODO
-      ]
+      routes: []
+    }
+  },
+
+  apollo: {
+    routes: {
+      query: ROUTES,
+      fetchPolicy: 'cache-and-network'
     }
   },
 
@@ -65,12 +52,6 @@ export default {
           this.$router.push({ name })
         }
       }
-    }
-  },
-
-  methods: {
-    renderTooltip (target) {
-      return this.$t(`components.project-nav.tooltips.${target}`)
     }
   }
 }

@@ -1,0 +1,6 @@
+fragment route on Route {
+  id
+  name
+  icon
+  tooltip
+}
