@@ -242,6 +242,13 @@ enum FileDiffChangeType {
   del
 }
 
+input OpenInEditorInput {
+  file: String!
+  line: Int
+  column: Int
+  gitPath: Boolean
+}
+
 type Query {
   progress (id: ID!): Progress
   cwd: String!
@@ -286,6 +293,7 @@ type Mutation {
   configurationSave (id: ID!): Configuration
   configurationCancel (id: ID!): Configuration
   gitCommit (message: String!): Boolean
+  fileOpenInEditor (input: OpenInEditorInput!): Boolean
 }
 
 type Subscription {

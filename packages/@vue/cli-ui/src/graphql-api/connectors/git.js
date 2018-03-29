@@ -1,4 +1,5 @@
 const execa = require('execa')
+const path = require('path')
 const parseDiff = require('../utils/parse-diff')
 // Connectors
 const cwd = require('./cwd')
@@ -55,8 +56,25 @@ async function reset (context) {
   return true
 }
 
+async function getRoot (context) {
+  const { stdout } = await execa('git', [
+    'rev-parse',
+    '--show-toplevel'
+  ], {
+    cwd: cwd.get()
+  })
+  return stdout
+}
+
+async function resolveFile (file, context) {
+  const root = await getRoot(context)
+  return path.resolve(root, file)
+}
+
 module.exports = {
   getDiffs,
   commit,
-  reset
+  reset,
+  getRoot,
+  resolveFile
 }

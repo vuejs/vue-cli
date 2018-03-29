@@ -21,6 +21,14 @@
       <div class="vue-ui-spacer"/>
 
       <VueButton
+        v-if="!fileDiff.deleted"
+        icon-left="edit"
+        class="icon-button"
+        v-tooltip="$t('components.file-diff.actions.open')"
+        @click.stop="openInEditor()"
+      />
+
+      <VueButton
         :icon-left="collapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up'"
         class="icon-button"
       />
@@ -43,7 +51,18 @@
 </template>
 
 <script>
+import FILE_OPEN_IN_EDITOR from '../graphql/fileOpenInEditor.gql'
+
 export default {
+  provide () {
+    const vm = this
+    return {
+      FileDiffInjection: {
+        get data () { return vm.fileDiff }
+      }
+    }
+  },
+
   props: {
     fileDiff: {
       type: Object,
@@ -64,6 +83,20 @@ export default {
         return 'delete'
       }
       return 'insert_drive_file'
+    }
+  },
+
+  methods: {
+    openInEditor () {
+      this.$apollo.mutate({
+        mutation: FILE_OPEN_IN_EDITOR,
+        variables: {
+          input: {
+            file: this.fileDiff.to,
+            gitPath: true
+          }
+        }
+      })
     }
   }
 }

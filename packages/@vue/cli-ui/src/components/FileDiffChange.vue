@@ -9,7 +9,13 @@
       <div class="ln ln1">
         {{ ln1 }}
       </div>
-      <div class="ln ln2">
+      <div
+        :class="{
+          disabled: !ln2
+        }"
+        class="ln ln2"
+        @click="openInEditor()"
+      >
         {{ ln2 }}
       </div>
     </div>
@@ -18,7 +24,13 @@
 </template>
 
 <script>
+import FILE_OPEN_IN_EDITOR from '../graphql/fileOpenInEditor.gql'
+
 export default {
+  inject: [
+    'FileDiffInjection'
+  ],
+
   props: {
     change: {
       type: Object,
@@ -41,6 +53,23 @@ export default {
       } else if (this.change.type === 'add') {
         return this.change.ln
       }
+    }
+  },
+
+  methods: {
+    openInEditor () {
+      if (!this.ln2) return
+
+      this.$apollo.mutate({
+        mutation: FILE_OPEN_IN_EDITOR,
+        variables: {
+          input: {
+            file: this.FileDiffInjection.data.to,
+            line: this.ln2,
+            gitPath: true
+          }
+        }
+      })
     }
   }
 }
@@ -69,6 +98,13 @@ export default {
       flex 100% 1 1
       width 0
       overflow hidden
+
+    .ln2
+      cursor pointer
+      &:hover
+        text-decoration underline
+      &.disabled
+        pointer-events none
 
   .content
     flex auto 1 1

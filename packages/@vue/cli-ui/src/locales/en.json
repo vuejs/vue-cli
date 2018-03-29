@@ -1,7 +1,10 @@
 {
   "components": {
     "file-diff": {
-      "binary": "Binary file not shown"
+      "binary": "Binary file not shown",
+      "actions": {
+        "open": "Open in editor"
+      }
     },
     "file-diff-view": {
       "files-changed": "Files changed",

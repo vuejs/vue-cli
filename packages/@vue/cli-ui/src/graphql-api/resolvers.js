@@ -13,6 +13,7 @@ const plugins = require('./connectors/plugins')
 const tasks = require('./connectors/tasks')
 const configurations = require('./connectors/configurations')
 const git = require('./connectors/git')
+const files = require('./connectors/files')
 
 // Prevent code from exiting server process
 exit.exitProcess = false
@@ -90,7 +91,8 @@ module.exports = {
     taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context),
     configurationSave: (root, { id }, context) => configurations.save(id, context),
     configurationCancel: (root, { id }, context) => configurations.cancel(id, context),
-    gitCommit: (root, { message }, context) => git.commit(message, context)
+    gitCommit: (root, { message }, context) => git.commit(message, context),
+    fileOpenInEditor: (root, { input }, context) => files.openInEditor(input, context)
   },
 
   Subscription: {
