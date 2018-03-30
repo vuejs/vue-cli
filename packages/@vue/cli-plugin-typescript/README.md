@@ -10,7 +10,7 @@ TypeScript can be configured via `tsconfig.json`.
 
 This plugin can be used alongside `@vue/cli-plugin-babel`. When used with Babel, this plugin will output ES2015 and delegate the rest to Babel for auto polyfill based on browser targets.
 
-By default, `ts-loader` is only applied to files inside `src` and `test` directories. If you wish to explicitly transpile a dependency module, you will need to configure webpack in `vue.config.js`:
+By default, `ts-loader` is only applied to files inside `src` and `tests` directories. If you wish to explicitly transpile a dependency module, you will need to configure webpack in `vue.config.js`:
 
 ``` js
 module.exports = {
