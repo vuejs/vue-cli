@@ -16,9 +16,10 @@ By default, `ts-loader` is only applied to files inside `src` and `test` directo
 module.exports = {
   chainWebpack: config => {
     config
-      .rule('ts')
-        .include
-          .add(/module-to-transpile/)
+      .module
+        .rule('ts')
+          .include
+            .add(/module-to-transpile/)
   }
 }
 ```
