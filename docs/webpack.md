@@ -102,9 +102,8 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        return [{
-          template: '/Users/username/proj/app/templates/index.html'
-        }]
+        args[0].template = '/Users/username/proj/app/templates/index.html'
+        return args
       })
   }
 }
