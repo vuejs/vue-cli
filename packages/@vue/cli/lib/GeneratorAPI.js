@@ -2,6 +2,7 @@ const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
 const globby = require('globby')
+const merge = require('deepmerge')
 const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
@@ -105,7 +106,7 @@ class GeneratorAPI {
       } else if (Array.isArray(value) && Array.isArray(existing)) {
         pkg[key] = existing.concat(value)
       } else if (isObject(value) && isObject(existing)) {
-        pkg[key] = Object.assign({}, existing, value)
+        pkg[key] = merge(existing, value)
       } else {
         pkg[key] = value
       }
