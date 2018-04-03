@@ -23,7 +23,7 @@ module.exports = (api, options) => {
       localIdentName: '[name]_[local]__[hash:base64:5]'
     }
     const userOptions = Object.assign(defaultOptions, options.css || {})
-    const extract = isProd && userOptions.extract !== false
+    const extract = isProd || userOptions.extract !== false
 
     // check if the project has a valid postcss config
     // if it doesn't, don't use postcss-loader for direct style imports
