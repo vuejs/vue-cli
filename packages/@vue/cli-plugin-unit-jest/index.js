@@ -18,7 +18,7 @@ module.exports = api => {
     const jestBinPath = require.resolve('jest/bin/jest')
 
     let testMatch = []
-    if (!args._.length) {
+    if (!args._.length && !api.service.pkg.jest.testMatch) {
       testMatch = [`--testMatch`, `<rootDir>/(tests/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))`]
     }
 
