@@ -92,6 +92,7 @@ program
 program
   .command('init <template> <app-name>')
   .description('generate a project from a remote template (legacy API, requires @vue/cli-init)')
+  .option('-c, --clone', 'Use git clone when fetching remote template')
   .action(() => {
     loadCommand('init', '@vue/cli-init')
   })
