@@ -21,7 +21,8 @@
   "dependencies": {
     "@babel/core": "^7.0.0-0",
     "@vue/babel-preset-app": "^3.0.0-beta.6",
-    "babel-loader": "^8.0.0-0"
+    "babel-loader": "^8.0.0-0",
+    "neighbourhoodie-test-package": "^10.0.0"
   },
   "publishConfig": {
     "access": "public"
