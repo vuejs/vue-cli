@@ -22,9 +22,9 @@
     "access": "public"
   },
   "dependencies": {
-    "execa": "^0.9.0",
+    "execa": "^0.10.0",
     "jest": "^22.4.2",
-    "jest-serializer-vue": "^0.3.0",
+    "jest-serializer-vue": "^1.0.0",
     "vue-jest": "^2.1.1"
   },
   "devDependencies": {
