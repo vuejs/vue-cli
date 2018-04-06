@@ -2,5 +2,4 @@ language: node_js
 node_js:
   - "node"
 script:
-  - yarn install
-  - yarn test
+  - echo 'hello'
