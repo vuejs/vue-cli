@@ -16,12 +16,15 @@ const {
   updatePackage
 } = require('@vue/cli/lib/util/installDeps')
 const invoke = require('@vue/cli/lib/invoke')
+// Subs
+const channels = require('../channels')
 // Connectors
 const cwd = require('./cwd')
 const folders = require('./folders')
 const prompts = require('./prompts')
 const progress = require('./progress')
 const logs = require('./logs')
+const clientAddons = require('./client-addons')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
@@ -73,12 +76,17 @@ function list (file, context) {
 }
 
 function resetPluginApi (context) {
-  pluginApi = new PluginApi()
+  pluginApi = new PluginApi(context)
+  // Run Plugin API
+  runPluginApi('@vue/cli-service', context)
   plugins.forEach(plugin => runPluginApi(plugin.id, context))
+  runPluginApi('.', context, 'vue-cli-ui')
+  // Add client addons
+  pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
 }
 
-function runPluginApi (id, context) {
-  const module = loadModule(`${id}/ui`, cwd.get(), true)
+function runPluginApi (id, context, fileName = 'ui') {
+  const module = loadModule(`${id}/${fileName}`, cwd.get(), true)
   if (module) {
     module(pluginApi)
   }
@@ -278,6 +286,32 @@ function getApi () {
   return pluginApi
 }
 
+async function callAction ({ id, params }, context) {
+  context.pubsub.publish(channels.PLUGIN_ACTION_CALLED, {
+    pluginActionCalled: { id, params }
+  })
+  const results = []
+  const errors = []
+  const list = pluginApi.actions.get(id)
+  if (list) {
+    for (const cb of list) {
+      let result = null
+      let error = null
+      try {
+        result = await cb(params)
+      } catch (e) {
+        error = e
+      }
+      results.push(result)
+      errors.push(error)
+    }
+  }
+  context.pubsub.publish(channels.PLUGIN_ACTION_RESOLVED, {
+    pluginActionResolved: { id, params, results, errors }
+  })
+  return { id, params, results, errors }
+}
+
 module.exports = {
   list,
   findOne,
@@ -291,5 +325,6 @@ module.exports = {
   runInvoke,
   resetPluginApi,
   getApi,
-  finishInstall
+  finishInstall,
+  callAction
 }

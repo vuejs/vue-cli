@@ -1,0 +1,7 @@
+#import "./pluginActionResultFragment.gql"
+
+mutation pluginActionCall ($id: ID!, $params: JSON) {
+  pluginActionCall (id: $id, params: $params) {
+    ...pluginActionResult
+  }
+}

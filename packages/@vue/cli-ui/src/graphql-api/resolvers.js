@@ -1,8 +1,8 @@
 const { withFilter } = require('graphql-subscriptions')
 const exit = require('@vue/cli-shared-utils/lib/exit')
-
+const GraphQLJSON = require('graphql-type-json')
+// Channels for subscriptions
 const channels = require('./channels')
-
 // Connectors
 const cwd = require('./connectors/cwd')
 const folders = require('./connectors/folders')
@@ -15,6 +15,10 @@ const configurations = require('./connectors/configurations')
 const git = require('./connectors/git')
 const files = require('./connectors/files')
 const routes = require('./connectors/routes')
+const clientAddons = require('./connectors/client-addons')
+const sharedData = require('./connectors/shared-data')
+// Start ipc server
+require('./utils/ipc')
 
 // Prevent code from exiting server process
 exit.exitProcess = false
@@ -22,6 +26,8 @@ exit.exitProcess = false
 process.env.VUE_CLI_API_MODE = true
 
 module.exports = {
+  JSON: GraphQLJSON,
+
   Folder: {
     children: (folder, args, context) => folders.list(folder.path, context),
     isPackage: (folder, args, context) => folders.isPackage(folder.path, context),
@@ -63,7 +69,9 @@ module.exports = {
     configurations: (root, args, context) => configurations.list(context),
     configuration: (root, { id }, context) => configurations.findOne(id, context),
     fileDiffs: (root, args, context) => git.getDiffs(context),
-    routes: (root, args, context) => routes.list(context)
+    routes: (root, args, context) => routes.list(context),
+    clientAddons: (root, args, context) => clientAddons.list(context),
+    sharedData: (root, { id }, context) => sharedData.get(id, context)
   },
 
   Mutation: {
@@ -88,13 +96,15 @@ module.exports = {
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
     pluginFinishInstall: (root, args, context) => plugins.finishInstall(context),
     pluginUpdate: (root, { id }, context) => plugins.update(id, context),
+    pluginActionCall: (root, args, context) => plugins.callAction(args, context),
     taskRun: (root, { id }, context) => tasks.run(id, context),
     taskStop: (root, { id }, context) => tasks.stop(id, context),
     taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context),
     configurationSave: (root, { id }, context) => configurations.save(id, context),
     configurationCancel: (root, { id }, context) => configurations.cancel(id, context),
     gitCommit: (root, { message }, context) => git.commit(message, context),
-    fileOpenInEditor: (root, { input }, context) => files.openInEditor(input, context)
+    fileOpenInEditor: (root, { input }, context) => files.openInEditor(input, context),
+    sharedDataUpdate: (root, args, context) => sharedData.set(args, context)
   },
 
   Subscription: {
@@ -131,6 +141,21 @@ module.exports = {
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.TASK_LOG_ADDED),
         (payload, vars) => payload.taskLogAdded.taskId === vars.id
       )
+    },
+    clientAddonAdded: {
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.CLIENT_ADDON_ADDED)
+    },
+    sharedDataUpdated: {
+      subscribe: withFilter(
+        (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SHARED_DATA_UPDATED),
+        (payload, vars) => payload.sharedDataUpdated.id === vars.id
+      )
+    },
+    pluginActionCalled: {
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PLUGIN_ACTION_CALLED)
+    },
+    pluginActionResolved: {
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PLUGIN_ACTION_RESOLVED)
     }
   }
 }

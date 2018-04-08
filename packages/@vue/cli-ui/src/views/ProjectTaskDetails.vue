@@ -2,6 +2,7 @@
   <div class="project-task-details">
     <template v-if="task">
       <div class="header">
+        <VueIcon icon="assignment" class="task-icon big"/>
         <div class="name">{{ task.name }}</div>
         <div class="description">{{ task.description }}</div>
       </div>
@@ -48,11 +49,33 @@
         />
 
         <div class="vue-ui-spacer"/>
+
+        <VueGroup
+          v-if="task.views.length"
+          v-model="currentView"
+        >
+          <VueGroupButton
+            :label="$t('views.project-task-details.output')"
+            icon-left="dvr"
+            value="_output"
+          />
+
+          <VueGroupButton
+            v-for="view of task.views"
+            :key="view.id"
+            :value="view.id"
+            :icon-left="view.icon"
+            :label="view.label"
+          />
+        </VueGroup>
       </div>
 
       <div class="content">
         <TerminalView
           ref="terminal"
+          :class="{
+            ghost: currentView !== '_output'
+          }"
           :key="id"
           :cols="100"
           :rows="24"
@@ -64,7 +87,15 @@
           }"
           :title="$t('views.project-task-details.output')"
           toolbar
+          open-links
           @clear="clearLogs()"
+        />
+
+        <ClientAddonComponent
+          v-if="currentView !== '_output'"
+          :name="currentViewComponent"
+          :key="currentView"
+          class="view"
         />
       </div>
     </template>
@@ -106,6 +137,12 @@ import TASK_LOG_ADDED from '../graphql/taskLogAdded.gql'
 export default {
   name: 'ProjectTaskDetails',
 
+  provide () {
+    return {
+      TaskDetails: this
+    }
+  },
+
   mixins: [
     Prompts({
       field: 'task',
@@ -123,7 +160,8 @@ export default {
   data () {
     return {
       task: null,
-      showParameters: false
+      showParameters: false,
+      currentView: '_output'
     }
   },
 
@@ -135,7 +173,14 @@ export default {
           id: this.id
         }
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      async result ({ data, loading }) {
+        if (!this.$_init && !loading && data && data.task.defaultView) {
+          this.$_init = true
+          await this.$nextTick()
+          this.currentView = data.task.defaultView
+        }
+      }
     },
 
     taskLogs: {
@@ -147,10 +192,13 @@ export default {
       },
       fetchPolicy: 'network-only',
       manual: true,
-      result ({ data, loading }) {
+      async result ({ data, loading }) {
         if (!loading) {
+          await this.$nextTick()
           const terminal = this.$refs.terminal
-          data.taskLogs.logs.forEach(terminal.addLog)
+          if (terminal) {
+            data.taskLogs.logs.forEach(terminal.addLog)
+          }
         }
       }
     },
@@ -163,8 +211,9 @@ export default {
             id: this.id
           }
         },
-        result ({ data }) {
+        async result ({ data }) {
           if (data.taskLogAdded.taskId === this.id) {
+            await this.$nextTick()
             const terminal = this.$refs.terminal
             terminal.addLog(data.taskLogAdded)
           }
@@ -173,9 +222,22 @@ export default {
     }
   },
 
+  computed: {
+    currentViewComponent () {
+      if (this.currentView !== '_output') {
+        const id = this.task.views.find(
+          view => view.id === this.currentView
+        ).component
+        return id
+      }
+    },
+  },
+
   watch: {
     id () {
       this.showParameters = false
+      this.currentView = '_output'
+      this.$_init = false
     }
   },
 
@@ -232,19 +294,40 @@ export default {
   .content
     flex 100% 1 1
     height 0
-    padding 0 $padding-item $padding-item
+    margin 0 $padding-item $padding-item
+    position relative
 
   .terminal-view
+    position absolute
+    top 0
+    left 0
+    width 100%
     height 100%
     border-radius $br
+    &.ghost
+      opacity 0
+      pointer-events none
+
+  .view
+    max-height 100%
+    overflow-x hidden
+    overflow-y auto
 
   .header
     padding $padding-item $padding-item 0
     h-box()
     align-items center
 
+    .task-icon
+      margin-right 4px
+      >>> svg
+        fill $vue-ui-color-dark
+
     .name
-      font-size 18px
+      font-size 22px
+      color $vue-ui-color-dark
+      position relative
+      top -1px
 
     .description
       color $color-text-light

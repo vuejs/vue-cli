@@ -68,7 +68,7 @@ module.exports = api => {
         description: 'Do not fix errors'
       }
     ],
-    onRun: ({ answers, args }) => {
+    onBeforeRun: ({ answers, args }) => {
       if (answers.noFix) {
         args.push('--no-fix')
       }

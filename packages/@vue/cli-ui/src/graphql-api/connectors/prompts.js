@@ -85,7 +85,7 @@ function setAnswer (id, value) {
 }
 
 function getAnswer (id) {
-  ObjectUtil.get(answers, id)
+  return ObjectUtil.get(answers, id)
 }
 
 function removeAnswer (id) {

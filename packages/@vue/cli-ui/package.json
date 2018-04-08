@@ -24,6 +24,7 @@
     "clone": "^1.0.4",
     "file-icons-js": "^1.0.3",
     "graphql": "^0.13.0",
+    "graphql-type-json": "^0.2.0",
     "js-yaml": "^3.11.0",
     "lowdb": "^1.0.0",
     "lru-cache": "^4.1.2",

@@ -1,6 +1,6 @@
 <template>
   <div class="terminal-view">
-    <div v-if="toolbar" class="toolbar">
+    <div v-if="toolbar" class="pane-toolbar">
       <VueIcon
         icon="dvr"
       />
@@ -97,6 +97,11 @@ export default {
     title: {
       type: String,
       default: null
+    },
+
+    openLinks: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -166,6 +171,9 @@ export default {
     },
 
     handleLink (event, uri) {
+      if (this.openLinks) {
+        window.open(uri, '_blank')
+      }
       this.$emit('link', uri)
     },
 
@@ -204,19 +212,6 @@ export default {
   v-box()
   align-items stretch
   background $vue-ui-color-light-neutral
-
-  .toolbar
-    h-box()
-    align-items center
-    padding 6px 6px 6px $padding-item
-    > :not(.separator)
-      space-between-x(6px)
-    > * + .separator
-      margin-left 6px
-    .title
-      flex 100% 1 1
-      width 0
-      ellipsis()
 
   .view
     flex 100% 1 1

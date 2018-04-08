@@ -101,3 +101,29 @@ ansi-colors('white', $vue-ui-color-light)
 
 .fill-height
   height 100%
+
+.blank-icon
+  width 24px
+  height @width
+  display block
+  margin auto
+  svg
+    fill rgba($vue-ui-color-dark, .3)
+
+.pane-toolbar
+  h-box()
+  align-items center
+  padding 6px 6px 6px $padding-item
+  > :not(.separator)
+    space-between-x(6px)
+  > * + .separator
+    margin-left 6px
+  .title
+    flex 100% 1 1
+    width 0
+    ellipsis()
+
+  > .vue-ui-switch
+    &:not(.selected)
+      .wrapper
+        background rgba($vue-ui-color-dark, .2)

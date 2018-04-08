@@ -7,15 +7,41 @@ import VueUi from '@vue/ui'
 import InstantSearch from 'vue-instantsearch'
 import * as Filters from './filters'
 import './register-components'
+import ClientAddonApi from './util/ClientAddonApi'
+import Responsive from './util/responsive'
+import SharedData from './util/SharedData'
+import PluginAction from './util/PluginAction'
+import gql from 'graphql-tag'
+
+window.gql = gql
 
 Vue.use(VueUi)
 Vue.use(InstantSearch)
+Vue.use(Responsive, {
+  computed: {
+    mobile () {
+      return this.width <= 768
+    },
+    tablet () {
+      return this.width <= 900
+    },
+    desktop () {
+      return !this.tablet
+    }
+  }
+})
+Vue.use(SharedData)
+Vue.use(PluginAction)
 
 for (const key in Filters) {
   Vue.filter(key, Filters[key])
 }
 
 Vue.config.productionTip = false
+
+// For client addons
+window.Vue = Vue
+window.ClientAddonApi = new ClientAddonApi()
 
 const app = new Vue({
   provide: apolloProvider.provide(),

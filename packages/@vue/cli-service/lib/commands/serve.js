@@ -49,6 +49,16 @@ module.exports = (api, options) => {
     return portPromise.then(port => new Promise((resolve, reject) => {
       const webpackConfig = api.resolveWebpackConfig()
 
+      // Expose advanced stats
+      if (args.dashboard) {
+        const DashboardPlugin = require('../webpack/DashboardPlugin')
+        ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
+          type: 'serve',
+          gzip: false,
+          minified: false
+        }))
+      }
+
       const urls = prepareURLs(
         useHttps ? 'https' : 'http',
         host,

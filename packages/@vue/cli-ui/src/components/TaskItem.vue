@@ -71,6 +71,7 @@ export default {
   .list-item-info
     flex 100% 1 1
     width 0
+    overflow hidden
 
     >>> .description
       white-space nowrap

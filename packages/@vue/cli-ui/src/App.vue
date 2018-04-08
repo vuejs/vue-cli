@@ -5,18 +5,9 @@
     </div>
 
     <StatusBar/>
+    <ClientAddonLoader/>
   </div>
 </template>
-
-<script>
-import StatusBar from './components/StatusBar'
-
-export default {
-  components: {
-    StatusBar
-  }
-}
-</script>
 
 <style lang="stylus">
 @import "~@vue/ui/dist/vue-ui.css"

@@ -44,6 +44,7 @@ function list (context) {
           command,
           index: list.findIndex(t => t.id === id),
           prompts: [],
+          views: [],
           ...moreData
         }
       }
@@ -141,9 +142,9 @@ function run (id, context) {
       answers
     }, context)
 
-    // Plugin api
-    if (task.onRun) {
-      task.onRun({
+    // Plugin API
+    if (task.onBeforeRun) {
+      task.onBeforeRun({
         answers,
         args
       })
@@ -151,8 +152,17 @@ function run (id, context) {
 
     const child = execa(getCommand(), args, {
       cwd: cwd.get(),
-      stdio: ['inherit', 'pipe', 'pipe']
+      stdio: ['inherit', 'pipe', 'pipe', 'ipc']
     })
+
+    // Plugin API
+    if (task.onRun) {
+      task.onRun({
+        args,
+        child,
+        cwd: cwd.get()
+      })
+    }
 
     updateOne({
       id: task.id,
@@ -180,7 +190,18 @@ function run (id, context) {
       }, context)
     })
 
-    child.on('close', (code, signal) => {
+    const onExit = (code, signal) => {
+      // Plugin API
+      if (task.onExit) {
+        task.onExit({
+          args,
+          child,
+          cwd: cwd.get(),
+          code,
+          signal
+        })
+      }
+
       if (code === null) {
         updateOne({
           id: task.id,
@@ -212,7 +233,9 @@ function run (id, context) {
           type: 'done'
         }, context)
       }
-    })
+    }
+
+    child.on('exit', onExit)
   }
   return task
 }

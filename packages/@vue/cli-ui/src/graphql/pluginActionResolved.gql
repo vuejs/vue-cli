@@ -1,0 +1,7 @@
+#import "./pluginActionResultFragment.gql"
+
+subscription pluginActionResolved {
+  pluginActionResolved {
+    ...pluginActionResult
+  }
+}

@@ -97,6 +97,14 @@ module.exports = (api, options) => {
       targetDir
     )
 
+    // Expose advanced stats
+    if (args.dashboard) {
+      const DashboardPlugin = require('../../webpack/DashboardPlugin')
+      ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
+        type: 'build'
+      }))
+    }
+
     return new Promise((resolve, reject) => {
       rimraf(targetDir, err => {
         if (err) {

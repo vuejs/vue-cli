@@ -4,9 +4,16 @@
 query task ($id: ID!) {
   task (id: $id) {
     ...task
+    link
     prompts {
       ...prompt
     }
-    link
+    views {
+      id
+      label
+      icon
+      component
+    }
+    defaultView
   }
 }

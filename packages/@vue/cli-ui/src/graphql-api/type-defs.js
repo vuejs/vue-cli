@@ -1,4 +1,5 @@
 module.exports = `
+scalar JSON
 
 type ConsoleLog {
   id: ID!
@@ -108,6 +109,18 @@ enum PluginInstallationStep {
   diff
 }
 
+type PluginActionCall {
+  id: ID!
+  params: JSON
+}
+
+type PluginActionResult {
+  id: ID!
+  params: JSON
+  results: [JSON]
+  errors: [JSON]
+}
+
 type Feature implements DescribedEntity {
   id: ID!
   name: String
@@ -179,6 +192,8 @@ type Task implements DescribedEntity {
   link: String
   logs: [TaskLog]
   prompts: [Prompt]
+  views: [TaskView]
+  defaultView: String
 }
 
 enum TaskStatus {
@@ -198,6 +213,13 @@ type TaskLog {
 enum TaskLogType {
   stdout
   stderr
+}
+
+type TaskView {
+  id: ID!
+  label: String!
+  component: String!
+  icon: String
 }
 
 type Configuration implements DescribedEntity {
@@ -256,6 +278,16 @@ type Route {
   tooltip: String
 }
 
+type ClientAddon {
+  id: ID!
+  url: String!
+}
+
+type SharedData {
+  id: ID!
+  value: JSON
+}
+
 type Query {
   progress (id: ID!): Progress
   cwd: String!
@@ -274,6 +306,8 @@ type Query {
   configuration (id: ID!): Configuration
   fileDiffs: [FileDiff]
   routes: [Route]
+  clientAddons: [ClientAddon]
+  sharedData (id: ID!): SharedData
 }
 
 type Mutation {
@@ -295,6 +329,7 @@ type Mutation {
   pluginInvoke (id: ID!): PluginInstallation
   pluginFinishInstall: PluginInstallation
   pluginUpdate (id: ID!): Plugin
+  pluginActionCall (id: ID!, params: JSON): PluginActionResult
   taskRun (id: ID!): Task
   taskStop (id: ID!): Task
   taskLogsClear (id: ID!): Task
@@ -302,6 +337,7 @@ type Mutation {
   configurationCancel (id: ID!): Configuration
   gitCommit (message: String!): Boolean
   fileOpenInEditor (input: OpenInEditorInput!): Boolean
+  sharedDataUpdate (id: ID!, value: JSON!): SharedData
 }
 
 type Subscription {
@@ -314,5 +350,9 @@ type Subscription {
   routeAdded: Route
   routeRemoved: Route
   routeChanged: Route
+  clientAddonAdded: ClientAddon
+  sharedDataUpdated (id: ID!): SharedData
+  pluginActionCalled: PluginActionCall
+  pluginActionResolved: PluginActionResult
 }
 `
