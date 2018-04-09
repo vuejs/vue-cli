@@ -33,7 +33,7 @@
                     'name',
                     'description'
                   ],
-                  filters: `keywords:vue-cli-plugin`
+                  filters: `computedKeywords:vue-cli-plugin`
                 }"
               >
                 <InstantSearchInput
