@@ -1,0 +1,38 @@
+{
+  "groups": {
+    "misc": {
+      "packages": [
+        "package.json",
+        "packages/@vue/babel-preset-app/package.json"
+      ]
+    },
+    "cli": {
+      "packages": [
+        "packages/@vue/cli-init/package.json",
+        "packages/@vue/cli-overlay/package.json",
+        "packages/@vue/cli-plugin-babel/package.json",
+        "packages/@vue/cli-plugin-e2e-cypress/package.json",
+        "packages/@vue/cli-plugin-e2e-nightwatch/package.json",
+        "packages/@vue/cli-plugin-eslint/package.json",
+        "packages/@vue/cli-plugin-pwa/package.json",
+        "packages/@vue/cli-plugin-typescript/package.json",
+        "packages/@vue/cli-plugin-unit-jest/package.json",
+        "packages/@vue/cli-plugin-unit-mocha/package.json",
+        "packages/@vue/cli-service-global/package.json",
+        "packages/@vue/cli-service/package.json",
+        "packages/@vue/cli-shared-utils/package.json",
+        "packages/@vue/cli-test-utils/package.json",
+        "packages/@vue/cli/package.json",
+        "packages/vue-cli-version-marker/package.json"
+      ]
+    },
+    "eslint": {
+      "packages": [
+        "packages/@vue/eslint-config-airbnb/package.json",
+        "packages/@vue/eslint-config-prettier/package.json",
+        "packages/@vue/eslint-config-standard/package.json",
+        "packages/@vue/eslint-config-typescript/package.json"
+      ]
+    }
+  }
+}
