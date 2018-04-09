@@ -1,7 +1,7 @@
 {
   "groups": {
-    "misc" : {
-      "packages" : [
+    "misc": {
+      "packages": [
         "package.json",
         "packages/@vue/babel-preset-app/package.json"
       ]
@@ -24,10 +24,10 @@
         "packages/@vue/cli-test-utils/package.json",
         "packages/@vue/cli/package.json",
         "packages/vue-cli-version-marker/package.json"
-       ]
+      ]
     },
     "eslint": {
-      "packages" :[
+      "packages": [
         "packages/@vue/eslint-config-airbnb/package.json",
         "packages/@vue/eslint-config-prettier/package.json",
         "packages/@vue/eslint-config-standard/package.json",
