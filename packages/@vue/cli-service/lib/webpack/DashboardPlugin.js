@@ -79,9 +79,22 @@ class DashboardPlugin {
       }
     }
 
-    setTimeout(() => {
-      ipc.disconnect('vue-cli')
-    }, 4000)
+    if (sendMessage) {
+      const ipcTimer = setTimeout(() => {
+        ipc.disconnect('vue-cli')
+      }, 15000)
+
+      sendMessage({
+        webpackDashboardDone: true
+      })
+
+      ipc.of['vue-cli'].on('message', data => {
+        if (data.webpackDashboardAck) {
+          clearTimeout(ipcTimer)
+          ipc.disconnect('vue-cli')
+        }
+      })
+    }
   }
 
   apply (compiler) {
