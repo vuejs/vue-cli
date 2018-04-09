@@ -32,7 +32,7 @@ function off (cb) {
 }
 
 function send (data) {
-  ipc.server.emit('message', data)
+  ipc.server.broadcast('message', data)
 }
 
 module.exports = {
