@@ -22,7 +22,7 @@
         "packages/@vue/cli-service/package.json",
         "packages/@vue/cli-shared-utils/package.json",
         "packages/@vue/cli-test-utils/package.json",
-        "packages/@vue/cli/package.json"
+        "packages/@vue/cli/package.json",
         "packages/vue-cli-version-marker/package.json"
        ]
     },
