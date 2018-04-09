@@ -31,7 +31,7 @@
         "packages/@vue/eslint-config-airbnb/package.json",
         "packages/@vue/eslint-config-prettier/package.json",
         "packages/@vue/eslint-config-standard/package.json",
-        "packages/@vue/eslint-config-typescript/package.json",
+        "packages/@vue/eslint-config-typescript/package.json"
       ]
     }
   }
