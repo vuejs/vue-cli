@@ -8,7 +8,7 @@ export default {
   install (Vue) {
     Vue.mixin({
       methods: {
-        $callAction (id, params) {
+        $callPluginAction (id, params) {
           return this.$apollo.mutate({
             mutation: PLUGIN_ACTION_CALL,
             variables: {
@@ -17,13 +17,13 @@ export default {
             }
           })
         },
-        $onActionCalled (cb) {
+        $onPluginActionCalled (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-called-${uid++}`, {
             query: PLUGIN_ACTION_CALLED,
             result: cb
           })
         },
-        $onActionResolved (cb) {
+        $onPluginActionResolved (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-resolved-${uid++}`, {
             query: PLUGIN_ACTION_RESOLVED,
             result: cb

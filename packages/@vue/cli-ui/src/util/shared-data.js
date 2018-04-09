@@ -62,6 +62,7 @@ export default {
           })
           return result.sharedData.value
         },
+
         $watchSharedData (id, cb) {
           return this.$apollo.addSmartQuery(id, {
             ...genQuery(id),
@@ -71,6 +72,7 @@ export default {
             }
           })
         },
+
         $setSharedData (id, value) {
           return this.$apollo.mutate({
             mutation: SHARED_DATA_UPDATE,
@@ -80,6 +82,7 @@ export default {
             }
           })
         },
+
         $syncSharedData (options) {
           const smartQueries = []
           for (const key in options) {

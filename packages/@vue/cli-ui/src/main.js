@@ -9,13 +9,14 @@ import * as Filters from './filters'
 import './register-components'
 import ClientAddonApi from './util/ClientAddonApi'
 import Responsive from './util/responsive'
-import SharedData from './util/SharedData'
-import PluginAction from './util/PluginAction'
+import SharedData from './util/shared-data'
+import PluginAction from './util/plugin-action'
 import gql from 'graphql-tag'
 
 window.gql = gql
 
-Vue.use(VueUi)
+Vue.use(SharedData)
+Vue.use(PluginAction)
 Vue.use(InstantSearch)
 Vue.use(Responsive, {
   computed: {
@@ -30,8 +31,7 @@ Vue.use(Responsive, {
     }
   }
 })
-Vue.use(SharedData)
-Vue.use(PluginAction)
+Vue.use(VueUi)
 
 for (const key in Filters) {
   Vue.filter(key, Filters[key])
