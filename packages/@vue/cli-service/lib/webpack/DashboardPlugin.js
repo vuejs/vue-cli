@@ -203,7 +203,7 @@ class DashboardPlugin {
       const outputPath = compiler.options.output.path
       statsData.assets.forEach(asset => {
         asset.fullPath = path.join(outputPath, asset.name)
-        asset.gzipSize = getGzipSize(assetSources.get(asset.name))
+        asset.gzipSize = assetSources && getGzipSize(assetSources.get(asset.name))
       })
 
       handler([

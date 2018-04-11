@@ -3,13 +3,7 @@ module.exports = (api, options) => {
 
   api.extendPackage({
     scripts: {
-      'serve': 'vue-cli-service serve' + (
-        // only auto open browser on MacOS where applescript
-        // can avoid dupilcate window opens
-        process.platform === 'darwin'
-          ? ' --open'
-          : ''
-      ),
+      'serve': 'vue-cli-service serve',
       'build': 'vue-cli-service build'
     },
     dependencies: {

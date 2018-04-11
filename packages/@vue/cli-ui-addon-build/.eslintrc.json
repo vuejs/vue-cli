@@ -6,6 +6,7 @@
   ],
   "globals": {
     "ClientAddonApi": false,
+    "mapSharedData": false,
     "Vue": false
   }
 }

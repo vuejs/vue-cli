@@ -177,20 +177,25 @@ function executeCommand (command, args, targetDir) {
           if (newLineIndex !== -1) {
             str = str.substr(newLineIndex)
           }
-          const data = JSON.parse(str)
-          if (data.type === 'step') {
-            progress.enabled = false
-            progress.log(data.data.message)
-          } else if (data.type === 'progressStart') {
-            progressTotal = data.data.total
-          } else if (data.type === 'progressTick') {
-            const time = Date.now()
-            if (time - progressTime > 20) {
-              progressTime = time
-              progress.progress = data.data.current / progressTotal
+          try {
+            const data = JSON.parse(str)
+            if (data.type === 'step') {
+              progress.enabled = false
+              progress.log(data.data.message)
+            } else if (data.type === 'progressStart') {
+              progressTotal = data.data.total
+            } else if (data.type === 'progressTick') {
+              const time = Date.now()
+              if (time - progressTime > 20) {
+                progressTime = time
+                progress.progress = data.data.current / progressTotal
+              }
+            } else {
+              progress.enabled = false
             }
-          } else {
-            progress.enabled = false
+          } catch (e) {
+            console.error(e)
+            console.log(str)
           }
         } else {
           process.stdout.write(buffer)

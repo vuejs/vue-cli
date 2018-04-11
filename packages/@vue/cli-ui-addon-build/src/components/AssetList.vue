@@ -62,4 +62,3 @@ export default {
   text-align right
   margin-bottom $padding-item
 </style>
-
