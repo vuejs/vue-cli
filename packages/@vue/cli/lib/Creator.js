@@ -79,6 +79,22 @@ module.exports = class Creator {
 
     // clone before mutating
     preset = cloneDeep(preset)
+
+    let initialCommit
+    if (cliOptions.initialCommit) {
+      initialCommit = cliOptions.initialCommit
+    } else {
+      // clear the console and ask for the initial commit message #1086
+      await clearConsole(true)
+      initialCommit = (await inquirer.prompt([{
+        name: 'commitMessage',
+        when: hasGit,
+        type: 'input',
+        message: 'Initial Git commit message:',
+        default: 'init'
+      }])).commitMessage
+    }
+
     // inject core service
     preset.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
@@ -164,7 +180,7 @@ module.exports = class Creator {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
       }
-      await run(`git commit -m init`)
+      await run('git', ['commit', '-m', initialCommit])
     }
 
     // log instructions

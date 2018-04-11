@@ -29,7 +29,7 @@ test('cypress', async () => {
     moduleToTest,
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })
 
@@ -57,6 +57,6 @@ test('nightwatch', async () => {
     moduleToTest,
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })

@@ -23,7 +23,7 @@ test('should pass', async () => {
     moduleToTest,
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })
 
@@ -49,6 +49,6 @@ test('should not include the plugin if ts is also present', async () => {
     [mockTSModule, moduleToTest],
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })
