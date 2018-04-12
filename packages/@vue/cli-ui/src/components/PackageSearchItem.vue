@@ -6,7 +6,7 @@
     }"
   >
     <ItemLogo
-      :image="pkg.owner.avatar"
+      :image="logoUrl"
       :selected="selected"
     />
 
@@ -62,9 +62,38 @@ export default {
     }
   },
 
+  data () {
+    return {
+      logoUrl: null
+    }
+  },
+
   computed: {
     official () {
       return this.pkg.owner.name === 'vuejs'
+    }
+  },
+
+  watch: {
+    pkg: {
+      handler: 'updateLogo',
+      immediate: true
+    }
+  },
+
+  methods: {
+    updateLogo () {
+      // By default, show the npm user avatar
+      this.logoUrl = this.pkg.owner.avatar
+
+      // Try to load the logo.png file inside the package
+      const name = this.pkg.name
+      const img = new Image()
+      img.onload = () => {
+        if (name !== this.pkg.name) return
+        this.logoUrl = img.src
+      }
+      img.src = `https://unpkg.com/${name}/logo.png`
     }
   }
 }
