@@ -8,7 +8,7 @@
       />
 
       <div class="progress">
-        {{ Math.round(progress * 100) }}
+        {{ typeof progress === 'number' ? Math.round(progress * 100) : 0 }}
       </div>
 
       <div class="operations">
