@@ -9,7 +9,7 @@ function genQuery (id) {
       id
     },
     fetchPolicy: 'cache-and-network',
-    update: ({ sharedData }) => sharedData.value,
+    update: ({ sharedData }) => (sharedData && sharedData.value) || undefined,
     subscribeToMore: {
       document: SHARED_DATA_UPDATED,
       variables: {
@@ -68,7 +68,7 @@ export default {
             ...genQuery(id),
             manual: true,
             result: ({ data }) => {
-              data && cb(data.sharedData.value)
+              data && data.sharedData && cb(data.sharedData.value)
             }
           })
         },
