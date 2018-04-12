@@ -135,6 +135,7 @@ function run (id, context) {
   if (task && task.status !== 'running') {
     const args = ['run', task.name]
     const answers = prompts.getAnswers()
+    const command = getCommand()
 
     // Save parameters
     updateSavedData({
@@ -150,7 +151,11 @@ function run (id, context) {
       })
     }
 
-    const child = execa(getCommand(), args, {
+    if (command === 'npm') {
+      args.splice(0, 0, '--')
+    }
+
+    const child = execa(command, args, {
       cwd: cwd.get(),
       stdio: ['inherit', 'pipe', 'pipe', 'ipc']
     })

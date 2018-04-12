@@ -222,6 +222,11 @@ function getDefaultValue (prompt) {
   return defaultValue
 }
 
+function answerPrompt ({ id, value }, context) {
+  setValue({ id, value: JSON.parse(value) })
+  return list()
+}
+
 module.exports = {
   setAnswers,
   changeAnswers,
@@ -233,5 +238,6 @@ module.exports = {
   start,
   setValue,
   findOne,
-  getDefaultValue
+  getDefaultValue,
+  answerPrompt
 }

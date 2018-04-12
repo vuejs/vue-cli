@@ -16,15 +16,39 @@ const ONE_SECOND = 1000
 const INSPECTPACK_PROBLEM_ACTIONS = ['versions', 'duplicates']
 const INSPECTPACK_PROBLEM_TYPE = 'problems'
 
+/* Message sending to vue-cli-ui */
 ipc.config.id = 'vue-cli'
 ipc.config.retry = 1500
 ipc.config.silent = true
 
+let queue
 let sendMessage
 
-ipc.connectTo('vue-cli', () => {
-  sendMessage = data => ipc.of['vue-cli'].emit('message', data)
-})
+function resetSendMessage () {
+  console.log('ipc sendMessage reset')
+  queue = []
+  sendMessage = data => queue.push(data)
+}
+
+function connectSendMessage () {
+  console.log('ipc connect...')
+  ipc.connectTo('vue-cli', () => {
+    console.log('ipc connected')
+    console.log(queue)
+    sendMessage = data => ipc.of['vue-cli'].emit('message', data)
+    queue && queue.forEach(data => sendMessage(data))
+    queue = null
+  })
+}
+
+function disconnectSendMessage () {
+  console.log('ipc disconnect...')
+  ipc.disconnect('vue-cli')
+  resetSendMessage()
+}
+
+resetSendMessage()
+/* ----- */
 
 const cacheFilename = path.resolve(os.homedir(), '.webpack-dashboard-cache.db')
 
@@ -81,7 +105,7 @@ class DashboardPlugin {
 
     if (sendMessage) {
       const ipcTimer = setTimeout(() => {
-        ipc.disconnect('vue-cli')
+        disconnectSendMessage()
       }, 15000)
 
       sendMessage({
@@ -91,7 +115,7 @@ class DashboardPlugin {
       ipc.of['vue-cli'].on('message', data => {
         if (data.webpackDashboardAck) {
           clearTimeout(ipcTimer)
-          ipc.disconnect('vue-cli')
+          disconnectSendMessage()
         }
       })
     }
@@ -111,8 +135,10 @@ class DashboardPlugin {
 
     const nodeEnv = process.env.NODE_ENV
 
+    connectSendMessage()
+
     if (!handler) {
-      handler = data => sendMessage && sendMessage({
+      handler = data => sendMessage({
         webpackDashboardData: {
           type: this.type,
           value: data
@@ -151,6 +177,7 @@ class DashboardPlugin {
 
     compiler.plugin('compile', () => {
       timer = Date.now()
+
       handler([
         {
           type: 'status',

@@ -201,11 +201,6 @@ function applyPreset (id, context) {
   return generateProjectCreation(creator)
 }
 
-function answerPrompt ({ id, value }, context) {
-  prompts.setValue({ id, value: JSON.parse(value) })
-  return prompts.list()
-}
-
 async function create (input, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
@@ -340,7 +335,6 @@ module.exports = {
   getCreation,
   applyPreset,
   setFeatureEnabled,
-  answerPrompt,
   create,
   import: importProject,
   open,

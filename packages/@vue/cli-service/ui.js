@@ -1,5 +1,5 @@
 module.exports = api => {
-  const { setSharedData } = api.namespace('webpack-dashboard-')
+  const { setSharedData, getSharedData } = api.namespace('webpack-dashboard-')
 
   function resetSharedData (key) {
     setSharedData(`${key}-status`, null)
@@ -24,8 +24,10 @@ module.exports = api => {
   }
 
   // Init data
-  for (const key of ['serve', 'build']) {
-    resetSharedData(key)
+  if (typeof getSharedData('serve-status') === 'undefined') {
+    for (const key of ['serve', 'build']) {
+      resetSharedData(key)
+    }
   }
 
   // Tasks
