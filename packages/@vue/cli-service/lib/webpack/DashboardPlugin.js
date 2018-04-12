@@ -141,22 +141,28 @@ class DashboardPlugin {
       })
     }
 
+    let progressTime = Date.now()
+
     compiler.apply(
       new webpack.ProgressPlugin((percent, msg) => {
-        handler([
-          {
-            type: 'status',
-            value: 'Compiling'
-          },
-          {
-            type: 'progress',
-            value: percent
-          },
-          {
-            type: 'operations',
-            value: msg + getTimeMessage(timer)
-          }
-        ])
+        const time = Date.now()
+        if (time - progressTime > 100) {
+          progressTime = time
+          handler([
+            {
+              type: 'status',
+              value: 'Compiling'
+            },
+            {
+              type: 'progress',
+              value: percent
+            },
+            {
+              type: 'operations',
+              value: msg + getTimeMessage(timer)
+            }
+          ])
+        }
       })
     )
 
