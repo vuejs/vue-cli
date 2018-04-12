@@ -15,6 +15,7 @@ const schema = createSchema(joi => joi.object({
 
   // css
   css: joi.object({
+    camelCase: joi.boolean().allow(['dashes', 'only', 'dashesOnly']),
     modules: joi.boolean(),
     extract: joi.boolean(),
     localIdentName: joi.string(),
