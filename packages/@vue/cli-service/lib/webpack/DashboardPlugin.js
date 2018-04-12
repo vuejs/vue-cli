@@ -25,16 +25,12 @@ let queue
 let sendMessage
 
 function resetSendMessage () {
-  console.log('ipc sendMessage reset')
   queue = []
   sendMessage = data => queue.push(data)
 }
 
 function connectSendMessage () {
-  console.log('ipc connect...')
   ipc.connectTo('vue-cli', () => {
-    console.log('ipc connected')
-    console.log(queue)
     sendMessage = data => ipc.of['vue-cli'].emit('message', data)
     queue && queue.forEach(data => sendMessage(data))
     queue = null
@@ -42,7 +38,6 @@ function connectSendMessage () {
 }
 
 function disconnectSendMessage () {
-  console.log('ipc disconnect...')
   ipc.disconnect('vue-cli')
   resetSendMessage()
 }
