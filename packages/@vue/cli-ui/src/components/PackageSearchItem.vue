@@ -75,7 +75,7 @@ export default {
   },
 
   watch: {
-    pkg: {
+    'pkg.name': {
       handler: 'updateLogo',
       immediate: true
     }
