@@ -407,6 +407,12 @@ export default {
     })
   ],
 
+  metaInfo () {
+    return {
+      title: this.$t('views.project-create.title')
+    }
+  },
+
   data () {
     return {
       formData: formData,

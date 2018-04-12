@@ -187,6 +187,12 @@ export default {
     })
   ],
 
+  metaInfo () {
+    return {
+      title: this.$t('views.project-plugins-add.title')
+    }
+  },
+
   data () {
     return {
       tabId: 'search',

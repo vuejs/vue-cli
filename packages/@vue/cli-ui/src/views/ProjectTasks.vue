@@ -41,6 +41,12 @@ export default {
     RestoreRoute()
   ],
 
+  metaInfo () {
+    return {
+      title: this.$t('views.project-tasks.title')
+    }
+  },
+
   apollo: {
     $subscribe: {
       taskChanged: {

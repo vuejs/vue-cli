@@ -5,6 +5,7 @@ import i18n from './i18n'
 import { apolloProvider } from './vue-apollo'
 import VueUi from '@vue/ui'
 import InstantSearch from 'vue-instantsearch'
+import VueMeta from 'vue-meta'
 import * as Filters from './filters'
 import './register-components'
 import ClientAddonApi from './util/ClientAddonApi'
@@ -18,6 +19,7 @@ window.gql = gql
 Vue.use(SharedData)
 Vue.use(PluginAction)
 Vue.use(InstantSearch)
+Vue.use(VueMeta)
 Vue.use(Responsive, {
   computed: {
     mobile () {

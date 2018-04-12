@@ -9,6 +9,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  metaInfo: {
+    titleTemplate: chunk => chunk ? `[Beta] ${chunk} - Vue CLI` : '[Beta] Vue CLI'
+  }
+}
+</script>
+
+
 <style lang="stylus">
 @import "~@vue/ui/dist/vue-ui.css"
 @import "~file-icons-js/css/style.css"

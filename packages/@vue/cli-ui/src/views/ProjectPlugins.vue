@@ -44,6 +44,12 @@
 
 <script>
 export default {
-  name: 'ProjectPlugins'
+  name: 'ProjectPlugins',
+
+  metaInfo () {
+    return {
+      title: this.$t('views.project-plugins.title')
+    }
+  }
 }
 </script>

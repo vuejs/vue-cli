@@ -63,6 +63,12 @@ import PROJECT_IMPORT from '../graphql/projectImport.gql'
 export default {
   name: 'ProjectSelect',
 
+  metaInfo () {
+    return {
+      title: this.$t('views.project-select.title')
+    }
+  },
+
   data () {
     return {
       folderCurrent: {},

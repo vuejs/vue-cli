@@ -40,6 +40,12 @@ export default {
     RestoreRoute()
   ],
 
+  metaInfo () {
+    return {
+      title: this.$t('views.project-configurations.title')
+    }
+  },
+
   methods: {
     generateItems (configurations) {
       return configurations.map(
