@@ -44,13 +44,6 @@ input OpenInEditorInput {
   gitPath: Boolean
 }
 
-type Route {
-  id: ID!
-  name: String!
-  icon: String!
-  tooltip: String
-}
-
 type ClientAddon {
   id: ID!
   url: String!
@@ -64,7 +57,6 @@ type SharedData {
 type Query {
   progress (id: ID!): Progress
   cwd: String!
-  routes: [Route]
   clientAddons: [ClientAddon]
   sharedData (id: ID!): SharedData
 }
@@ -78,9 +70,6 @@ type Subscription {
   progressChanged (id: ID!): Progress
   progressRemoved (id: ID!): ID
   cwdChanged: String!
-  routeAdded: Route
-  routeRemoved: Route
-  routeChanged: Route
   clientAddonAdded: ClientAddon
   sharedDataUpdated (id: ID!): SharedData
 }

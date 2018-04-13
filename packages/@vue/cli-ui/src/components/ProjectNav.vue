@@ -6,13 +6,10 @@
         class="vertical small-indicator left-indicator primary"
         indicator
       >
-        <VueGroupButton
+        <ProjectNavButton
           v-for="route of routes"
-          :key="route.name"
-          class="flat big icon-button"
-          :value="route.name"
-          :icon-left="route.icon"
-          v-tooltip.right="$t(route.tooltip)"
+          :key="route.id"
+          :route="route"
         />
       </VueGroup>
     </div>
@@ -23,6 +20,9 @@
 import { isSameRoute, isIncludedRoute } from '../util/route'
 
 import ROUTES from '../graphql/routes.gql'
+import ROUTE_ADDED from '../graphql/routeAdded.gql'
+import ROUTE_REMOVED from '../graphql/routeRemoved.gql'
+import ROUTE_CHANGED from '../graphql/routeChanged.gql'
 
 export default {
   data () {
@@ -34,7 +34,47 @@ export default {
   apollo: {
     routes: {
       query: ROUTES,
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      subscribeToMore: [
+        {
+          document: ROUTE_ADDED,
+          updateQuery: (previousResult, { subscriptionData }) => {
+            const route = subscriptionData.data.routeAdded
+            if (previousResult.routes.find(r => r.id === route.id)) return previousResult
+            return {
+              routes: [
+                ...previousResult.routes,
+                route
+              ]
+            }
+          }
+        },
+        {
+          document: ROUTE_REMOVED,
+          updateQuery: (previousResult, { subscriptionData }) => {
+            const index = previousResult.routes.findIndex(r => r.id === subscriptionData.data.routeRemoved.id)
+            if (index === -1) return previousResult
+            const routes = previousResult.routes.slice()
+            routes.splice(index, 1)
+            return {
+              routes
+            }
+          }
+        },
+        {
+          document: ROUTE_CHANGED,
+          updateQuery: (previousResult, { subscriptionData }) => {
+            const route = subscriptionData.data.routeChanged
+            const index = previousResult.routes.findIndex(r => r.id === route.id)
+            if (index === -1) return previousResult
+            const routes = previousResult.routes.slice()
+            routes.splice(index, 1, route)
+            return {
+              routes
+            }
+          }
+        }
+      ]
     }
   },
 
@@ -69,7 +109,7 @@ export default {
     >>> .vue-ui-button
       button-colors(rgba($vue-ui-color-light, .7), transparent)
       border-radius 0
-      &:hover
+      &:hover, &:active
         $bg = darken($vue-ui-color-dark, 70%)
         button-colors($vue-ui-color-light, $bg)
         &.selected

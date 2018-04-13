@@ -10,7 +10,6 @@ const channels = require('./channels')
 const cwd = require('./connectors/cwd')
 const progress = require('./connectors/progress')
 const files = require('./connectors/files')
-const routes = require('./connectors/routes')
 const clientAddons = require('./connectors/client-addons')
 const sharedData = require('./connectors/shared-data')
 // Start ipc server
@@ -27,7 +26,6 @@ const resolvers = [{
   Query: {
     cwd: () => cwd.get(),
     progress: (root, { id }, context) => progress.get(id, context),
-    routes: (root, args, context) => routes.list(context),
     clientAddons: (root, args, context) => clientAddons.list(context),
     sharedData: (root, { id }, context) => sharedData.get(id, context)
   },

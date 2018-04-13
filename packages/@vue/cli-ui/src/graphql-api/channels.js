@@ -8,6 +8,8 @@ module.exports = {
   ROUTE_ADDED: 'route_added',
   ROUTE_REMOVED: 'route_removed',
   ROUTE_CHANGED: 'route_changed',
+  VUE_ROUTER_DEFINITION_ADDED: 'vue_router_definition_added',
+  VUE_ROUTER_DEFINITION_REMOVED: 'vue_router_definition_removed',
   CLIENT_ADDON_ADDED: 'client_addon_added',
   SHARED_DATA_UPDATED: 'shared_data_updated',
   PLUGIN_ACTION_CALLED: 'plugin_action_called',
