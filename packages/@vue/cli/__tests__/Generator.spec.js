@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
+const { makeJSONTransform } = require('../lib/util/configTransforms')
 
 // prepare template fixtures
 const mkdirp = require('mkdirp')
@@ -310,6 +311,62 @@ test('api: resolve', () => {
       }
     }
   ] })
+})
+
+test('api: addConfigTransform', async () => {
+  const configs = {
+    fooConfig: {
+      bar: 42
+    }
+  }
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.addConfigTransform('fooConfig', makeJSONTransform('foo.config.json'))
+        api.extendPackage(configs)
+      }
+    }
+  ] })
+
+  await generator.generate({
+    extractConfigFiles: true
+  })
+
+  const json = v => JSON.stringify(v, null, 2)
+  expect(fs.readFileSync('/foo.config.json', 'utf-8')).toMatch(json(configs.fooConfig))
+  expect(generator.pkg).not.toHaveProperty('fooConfig')
+})
+
+test('api: addConfigTransform transform vue warn', async () => {
+  const configs = {
+    vue: {
+      lintOnSave: true
+    }
+  }
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.addConfigTransform('vue', () => ({
+          filename: 'myVue.json',
+          content: 'foo'
+        }))
+        api.extendPackage(configs)
+      }
+    }
+  ] })
+
+  await generator.generate({
+    extractConfigFiles: true
+  })
+
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  expect(logs.warn.some(([msg]) => {
+    return msg.match(/do not override vue config transform/)
+  })).toBe(true)
 })
 
 test('extract config files', async () => {

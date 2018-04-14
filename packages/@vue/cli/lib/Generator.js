@@ -4,7 +4,11 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
-const configTransforms = require('./util/configTransforms')
+const {
+  makeJSTransform,
+  makeJSONTransform,
+  makeMutliExtensionJSONTransform
+} = require('./util/configTransforms')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
@@ -14,6 +18,17 @@ const logTypes = {
   done: logger.done,
   warn: logger.warn,
   error: logger.error
+}
+
+const defaultConfigTransforms = {
+  babel: makeJSONTransform('.babelrc'),
+  postcss: makeMutliExtensionJSONTransform('.postcssrc'),
+  eslintConfig: makeMutliExtensionJSONTransform('.eslintrc'),
+  jest: makeJSTransform('jest.config.js')
+}
+
+const reservedConfigTransforms = {
+  vue: makeJSTransform('vue.config.js')
 }
 
 module.exports = class Generator {
@@ -28,6 +43,7 @@ module.exports = class Generator {
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
     this.completeCbs = completeCbs
+    this.configTransforms = {}
 
     // for conflict resolution
     this.depSources = {}
@@ -63,6 +79,11 @@ module.exports = class Generator {
   }
 
   extractConfigFiles (extractAll, checkExisting) {
+    const configTransforms = Object.assign({},
+      defaultConfigTransforms,
+      this.configTransforms,
+      reservedConfigTransforms
+    )
     const extract = key => {
       if (
         configTransforms[key] &&

@@ -6,7 +6,7 @@ const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
-const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
+const { warn, getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -75,6 +75,24 @@ class GeneratorAPI {
    */
   hasPlugin (id) {
     return this.generator.hasPlugin(id)
+  }
+
+  /**
+   * Configure how config files are extracted.
+   *
+   * @param {string} key - Config key in package.json
+   * @param {ConfigTransform} transformer - A function that receives the
+   *   config object, whether to check for an existing config on disk, and the
+   *   current context.
+   */
+  addConfigTransform (key, configTransform) {
+    const reserved = ['vue']
+    if (reserved.includes(key)) {
+      warn(`do not override vue config transform`)
+      return
+    }
+
+    this.generator.configTransforms[key] = configTransform
   }
 
   /**
