@@ -8,7 +8,7 @@ module.exports = api => {
     const opts = {
       mock: false,
       apolloEngine: false,
-      timeout: 0,
+      timeout: 999999999,
       paths: {
         typeDefs: require.resolve('@vue/cli-ui/src/graphql-api/type-defs.js'),
         resolvers: require.resolve('@vue/cli-ui/src/graphql-api/resolvers.js'),
