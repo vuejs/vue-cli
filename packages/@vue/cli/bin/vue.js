@@ -90,6 +90,14 @@ program
   })
 
 program
+  .command('ui')
+  .option('-p, --port <port>', 'Port used for the UI server (by default search for awailable port)')
+  .description('start and open the vue-cli ui')
+  .action((cmd) => {
+    require('../lib/ui')(cleanArgs(cmd))
+  })
+
+program
   .command('init <template> <app-name>')
   .description('generate a project from a remote template (legacy API, requires @vue/cli-init)')
   .action(() => {

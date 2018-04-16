@@ -202,6 +202,6 @@ module.exports = api => {
   // Testing client addon
   api.addClientAddon({
     id: 'vue-webpack',
-    url: 'http://localhost:8081/app.js'
+    path: '@vue/cli-ui-addon-webpack/dist'
   })
 }

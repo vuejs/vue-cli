@@ -23,6 +23,16 @@ process.env.VUE_CLI_API_MODE = true
 const resolvers = [{
   JSON: GraphQLJSON,
 
+  DescribedEntity: {
+    __resolveType (obj, context, info) {
+      return null
+    }
+  },
+
+  ClientAddon: {
+    url: (addon, args, context) => clientAddons.getUrl(addon, context)
+  },
+
   Query: {
     cwd: () => cwd.get(),
     progress: (root, { id }, context) => progress.get(id, context),

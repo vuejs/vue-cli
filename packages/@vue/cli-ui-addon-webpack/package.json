@@ -1,6 +1,6 @@
 {
-  "name": "cli-ui-addon-build",
-  "version": "0.1.0",
+  "name": "@vue/cli-ui-addon-webpack",
+  "version": "3.0.0-beta.6",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -72,7 +72,7 @@ export default {
       margin 0 auto
 
   .main-tabs
-    height 100%
+    height 0
     flex auto 1 1
 
   >>> .vue-ui-tab
@@ -86,6 +86,7 @@ export default {
 
   >>> .tabs-content
     height 0
+    flex auto 1 1
 
   &,
   >>> .vue-ui-tab,
@@ -121,7 +122,7 @@ export default {
     margin 0 auto
     $max-width = 1200px
     .shell
-      background $color-background-light
+      background $md-white
     .header .content,
     >>> .vue-ui-tab
       max-width $max-width

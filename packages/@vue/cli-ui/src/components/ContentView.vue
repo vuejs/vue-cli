@@ -60,9 +60,9 @@ export default {
 
   .content
     grid-area content
-    background darken($color-background-light, 3%)
+    background $color-background-light
     .wrapper
-      background $color-background-light
+      background $md-white
       position relative
       overflow-x hidden
       overflow-y auto

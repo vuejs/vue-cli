@@ -53,6 +53,7 @@
         <VueGroup
           v-if="task.views.length"
           v-model="currentView"
+          class="views"
         >
           <VueGroupButton
             :label="$t('views.project-task-details.output')"
@@ -279,6 +280,13 @@ export default {
   v-box()
   align-items stretch
   height 100%
+
+  @media (max-width: 1250px)
+    .actions-bar
+      flex-wrap wrap
+
+    .views
+      margin-top $padding-item
 
   .command
     font-family $font-mono

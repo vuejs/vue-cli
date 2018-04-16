@@ -26,7 +26,7 @@ export default function createApolloClient ({ base, endpoints, persisting }) {
   const stateLink = withClientState({ defaults, cache, resolvers })
 
   // Web socket
-  wsClient = new SubscriptionClient(base.replace(/^https?/i, 'ws' + (process.env.NODE_ENV === 'production' ? 's' : '')) +
+  wsClient = new SubscriptionClient(base.replace(/^https?/i, 'ws') +
   endpoints.subscription, {
     reconnect: true
   })

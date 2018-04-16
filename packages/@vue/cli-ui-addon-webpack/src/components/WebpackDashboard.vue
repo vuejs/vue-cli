@@ -17,6 +17,12 @@
       <AssetList />
       <ModuleList />
     </div>
+
+    <div class="logo">
+      <a href="https://webpack.js.org/" target="_blank">
+        <img src="../assets/webpack.svg" class="webpack-logo">
+      </a>
+    </div>
   </div>
 </template>
 
@@ -114,4 +120,12 @@ export default {
 
   .pane-toolbar
     margin-bottom $padding-item
+
+  .logo
+    margin $padding-item 0
+    v-box()
+    box-center()
+    .webpack-logo
+      width 32px
+      height @width
 </style>
