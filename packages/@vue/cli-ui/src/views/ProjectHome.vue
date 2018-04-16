@@ -2,15 +2,30 @@
   <div class="project-home page">
     <ProjectNav/>
 
-    <div class="content">
+    <div v-if="ready" class="content">
       <router-view/>
     </div>
   </div>
 </template>
 
 <script>
+import PROJECT_CWD_RESET from '../graphql/projectCwdReset.gql'
+
 export default {
-  name: 'ProjectHome'
+  name: 'ProjectHome',
+
+  data () {
+    return {
+      ready: false
+    }
+  },
+
+  async created () {
+    await this.$apollo.mutate({
+      mutation: PROJECT_CWD_RESET
+    })
+    this.ready = true
+  }
 }
 </script>
 
