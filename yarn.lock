@@ -799,9 +799,9 @@
   dependencies:
     lodash "^4.17.4"
 
-"@vue/ui@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.2.4.tgz#2255ce06b1c0ee1555e51e496871f6fc9414a0c9"
+"@vue/ui@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.2.5.tgz#6eeef05462bd8e7a1dd2437623e3062fe6f81876"
   dependencies:
     focus-visible "^4.1.0"
     material-design-icons "^3.0.1"
@@ -10950,6 +10950,13 @@ vue-style-loader@^4.0.1:
   dependencies:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
+
+vue-template-compiler@^2.5.13:
+  version "2.5.16"
+  resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.5.16.tgz#93b48570e56c720cdf3f051cc15287c26fbd04cb"
+  dependencies:
+    de-indent "^1.0.2"
+    he "^1.1.0"
 
 vue-template-compiler@^2.5.17-beta.0:
   version "2.5.17-beta.0"

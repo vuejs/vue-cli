@@ -16,8 +16,6 @@ import gql from 'graphql-tag'
 
 window.gql = gql
 
-Vue.use(SharedData)
-Vue.use(PluginAction)
 Vue.use(InstantSearch)
 Vue.use(VueMeta)
 Vue.use(Responsive, {
@@ -34,6 +32,8 @@ Vue.use(Responsive, {
   }
 })
 Vue.use(VueUi)
+Vue.use(SharedData)
+Vue.use(PluginAction)
 
 for (const key in Filters) {
   Vue.filter(key, Filters[key])
