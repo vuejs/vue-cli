@@ -1,5 +1,6 @@
 module.exports = {
   baseUrl: '/_addon/vue-webpack',
+  devBaseUrl: 'http://localhost:8042/',
   configureWebpack: {
     output: {
       // Important
@@ -20,6 +21,7 @@ module.exports = {
   devServer: {
     headers: {
       'Access-Control-Allow-Origin': '*'
-    }
+    },
+    port: 8042
   }
 }

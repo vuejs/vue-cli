@@ -28,7 +28,7 @@ export default {
 
   methods: {
     loadAddon (addon) {
-      console.log(`Loading addon ${addon.id}...`)
+      console.log(`Loading addon ${addon.id} (${addon.url})...`)
       const script = document.createElement('script')
       this.$_scripts.set(addon.id, script)
       script.setAttribute('src', addon.url)
