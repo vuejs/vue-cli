@@ -1,10 +1,10 @@
-module.exports = api => {
+module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'development') {
       webpackConfig
         .devtool('cheap-module-eval-source-map')
         .output
-          .publicPath('/')
+          .publicPath(options.devBaseUrl || '/')
 
       webpackConfig
         .plugin('hmr')
