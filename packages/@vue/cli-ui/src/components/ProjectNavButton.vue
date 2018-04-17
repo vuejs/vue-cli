@@ -6,6 +6,7 @@
       popover-class="force-tooltip"
       placement="right"
       offset="4"
+      :delay="{ show: 300, hide: 0 }"
     >
       <VueGroupButton
         class="flat big icon-button"
