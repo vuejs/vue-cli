@@ -135,7 +135,6 @@ function save (id, context) {
             const prompt = prompts.findOne(id)
             if (prompt) {
               const defaultValue = prompts.getDefaultValue(prompt)
-              console.log(defaultValue, prompt.rawValue)
               if (defaultValue !== prompt.rawValue) {
                 let value = get(answers, prompt.id)
                 if (mapper) {

@@ -6,7 +6,6 @@ let addons = []
 
 let baseUrl = process.env.VUE_APP_GRAPHQL_ENDPOINT
 if (typeof baseUrl === 'undefined') baseUrl = 'http://localhost:4000'
-console.log(process.env.VUE_APP_GRAPHQL_ENDPOINT, baseUrl)
 
 function list (context) {
   return addons
