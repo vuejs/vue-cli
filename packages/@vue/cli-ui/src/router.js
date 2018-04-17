@@ -26,7 +26,8 @@ const router = new Router({
       path: '/',
       component: ProjectHome,
       meta: {
-        needProject: true
+        needProject: true,
+        restore: true
       },
       children: [
         {
@@ -75,12 +76,18 @@ const router = new Router({
     {
       path: '/project/select',
       name: 'project-select',
-      component: ProjectSelect
+      component: ProjectSelect,
+      meta: {
+        restore: true
+      }
     },
     {
       path: '/project/create',
       name: 'project-create',
-      component: ProjectCreate
+      component: ProjectCreate,
+      meta: {
+        restore: true
+      }
     },
     {
       path: '/file-diff',
@@ -117,6 +124,14 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   next()
+})
+
+router.afterEach((to, from) => {
+  if (to.matched.some(m => m.meta.restore)) {
+    localStorage.setItem('vue-cli-ui.lastRoute', to.fullPath)
+  } else {
+    localStorage.removeItem('vue-cli-ui.lastRoute')
+  }
 })
 
 export default router

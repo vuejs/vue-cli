@@ -54,6 +54,12 @@ const app = new Vue({
 
 async function start () {
   app.$mount('#app')
+
+  // Restore last route
+  const lastRoute = localStorage.getItem('vue-cli-ui.lastRoute')
+  if (lastRoute) {
+    router.push(lastRoute)
+  }
 }
 
 start()
