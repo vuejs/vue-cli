@@ -13,6 +13,8 @@ const cwd = require('./cwd')
 const prompts = require('./prompts')
 const folders = require('./folders')
 const plugins = require('./plugins')
+// Context
+const getContext = require('../context')
 
 const PROGRESS_ID = 'project-create'
 
@@ -295,13 +297,17 @@ async function open (id, context) {
   }).value()
 
   if (!project) {
-    throw new Error(`Project '${id}' not found`)
+    console.warn(`Project '${id}' not found`)
+    return null
   }
 
   currentProject = project
   cwd.set(project.path, context)
   // Load plugins
   plugins.list(project.path, context)
+
+  // Save for next time
+  context.db.set('config.lastOpenProject', id).write()
 
   return project
 }
@@ -327,6 +333,15 @@ function findOne (id, context) {
 function setFavorite ({ id, favorite }, context) {
   context.db.get('projects').find({ id }).assign({ favorite }).write()
   return findOne(id, context)
+}
+
+// Open last project
+{
+  const context = getContext(null)
+  const id = context.db.get('config.lastOpenProject').value()
+  if (id) {
+    open(id, context)
+  }
 }
 
 module.exports = {

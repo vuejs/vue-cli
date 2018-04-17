@@ -11,7 +11,8 @@ const db = new Lowdb(new FileSync(resolve(__dirname, '../../../live/db.json')))
 db.defaults({
   projects: [],
   foldersFavorite: [],
-  tasks: []
+  tasks: [],
+  config: {}
 }).write()
 
 module.exports = {
