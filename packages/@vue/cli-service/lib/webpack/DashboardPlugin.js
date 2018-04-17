@@ -42,6 +42,12 @@ function disconnectSendMessage () {
   resetSendMessage()
 }
 
+// Prevent forced process exit
+// (or else ipc messages may not be sent before kill)
+process.exit = code => {
+  process.exitCode = code
+}
+
 resetSendMessage()
 /* ----- */
 
@@ -234,10 +240,12 @@ class DashboardPlugin {
         asset.gzipSize = assetSources && getGzipSize(assetSources.get(asset.name))
       })
 
+      const hasErrors = stats.hasErrors()
+
       handler([
         {
           type: 'status',
-          value: 'Success'
+          value: hasErrors ? 'Failed' : 'Success'
         },
         {
           type: 'progress',
@@ -250,7 +258,7 @@ class DashboardPlugin {
         {
           type: 'stats',
           value: {
-            errors: stats.hasErrors(),
+            errors: hasErrors,
             warnings: stats.hasWarnings(),
             data: statsData
           }
