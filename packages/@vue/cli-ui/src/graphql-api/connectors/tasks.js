@@ -1,5 +1,7 @@
+const path = require('path')
 const execa = require('execa')
 const terminate = require('terminate')
+const notifier = require('node-notifier')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -295,6 +297,11 @@ function run (id, context) {
           message: `Task ${task.id} ended with error code ${code}`,
           type: 'error'
         }, context)
+        notifier.notify({
+          title: `Task error`,
+          message: `Task ${task.id} ended with error code ${code}`,
+          icon: path.resolve(__dirname, '../../assets/error.png')
+        })
       } else {
         updateOne({
           id: task.id,
@@ -305,6 +312,12 @@ function run (id, context) {
           message: `Task ${task.id} completed`,
           type: 'done'
         }, context)
+        notifier.notify({
+          title: `Task completed`,
+          message: `Task ${task.id} completed`,
+          icon: path.resolve(__dirname, '../../assets/done.png')
+        })
+        console.log(path.resolve(__dirname, '../../assets/done.png'))
       }
     }
 
