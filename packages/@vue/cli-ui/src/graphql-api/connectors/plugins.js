@@ -16,6 +16,7 @@ const {
   updatePackage
 } = require('@vue/cli/lib/util/installDeps')
 const invoke = require('@vue/cli/lib/invoke')
+const notifier = require('node-notifier')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -206,6 +207,13 @@ function install (id, context) {
     await installPackage(cwd.get(), getCommand(), null, id)
     await initPrompts(id, context)
     installationStep = 'config'
+
+    notifier.notify({
+      title: `Plugin installed`,
+      message: `Plugin ${id} installed, next step is configuration`,
+      icon: path.resolve(__dirname, '../../assets/done.png')
+    })
+
     return getInstallation(context)
   })
 }
@@ -221,6 +229,13 @@ function uninstall (id, context) {
     await uninstallPackage(cwd.get(), getCommand(), null, id)
     currentPluginId = null
     installationStep = null
+
+    notifier.notify({
+      title: `Plugin uninstalled`,
+      message: `Plugin ${id} uninstalled`,
+      icon: path.resolve(__dirname, '../../assets/done.png')
+    })
+
     return getInstallation(context)
   })
 }
@@ -239,6 +254,13 @@ function runInvoke (id, context) {
     // Run plugin api
     runPluginApi(id, context)
     installationStep = 'diff'
+
+    notifier.notify({
+      title: `Plugin invoke sucess`,
+      message: `Plugin ${id} invoked successfully`,
+      icon: path.resolve(__dirname, '../../assets/done.png')
+    })
+
     return getInstallation(context)
   })
 }

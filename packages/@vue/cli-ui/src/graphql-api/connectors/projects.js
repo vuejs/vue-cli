@@ -7,6 +7,7 @@ const { getFeatures } = require('@vue/cli/lib/util/features')
 const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
+const notifier = require('node-notifier')
 // Connectors
 const progress = require('./progress')
 const cwd = require('./cwd')
@@ -272,6 +273,12 @@ async function create (input, context) {
     // Create
     await creator.create({}, preset)
     removeCreator()
+
+    notifier.notify({
+      title: `Project created`,
+      message: `Project ${cwd.get()} created`,
+      icon: path.resolve(__dirname, '../../assets/done.png')
+    })
 
     return importProject({
       path: targetDir
