@@ -317,7 +317,6 @@ function run (id, context) {
           message: `Task ${task.id} completed`,
           icon: path.resolve(__dirname, '../../assets/done.png')
         })
-        console.log(path.resolve(__dirname, '../../assets/done.png'))
       }
     }
 
