@@ -50,11 +50,14 @@ function serve (req, res) {
   const addon = findOne(id)
   if (addon) {
     const basePath = getBasePath(require.resolve(addon.path || ''))
-    basePath && res.sendFile(path.join(basePath, file))
-  } else {
-    res.status(404)
-    res.send(`Addon ${id} not found in loaded addons. Try opening a vue-cli project first?`)
+    if (basePath) {
+      res.sendFile(path.join(basePath, file))
+      return
+    }
   }
+
+  res.status(404)
+  res.send(`Addon ${id} not found in loaded addons. Try opening a vue-cli project first?`)
 }
 
 module.exports = {
