@@ -78,6 +78,7 @@ export default {
       color $vue-ui-color-primary
       padding 0 4px 0 2px
       border-radius $br
+      display inline-block
       .vue-ui-icon
         >>> svg
           fill @color
