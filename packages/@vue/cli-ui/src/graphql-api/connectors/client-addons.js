@@ -48,8 +48,8 @@ function getBasePath (filePath) {
 function serve (req, res) {
   const { id, 0: file } = req.params
   const addon = findOne(id)
-  if (addon) {
-    const basePath = getBasePath(require.resolve(addon.path || ''))
+  if (addon && addon.path) {
+    const basePath = getBasePath(require.resolve(addon.path))
     if (basePath) {
       res.sendFile(path.join(basePath, file))
       return
