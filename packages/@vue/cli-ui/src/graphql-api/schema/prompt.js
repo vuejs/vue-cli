@@ -14,6 +14,7 @@ type Prompt implements DescribedEntity {
   enabled: Boolean
   name: String
   message: String
+  group: String
   description: String
   link: String
   choices: [PromptChoice]

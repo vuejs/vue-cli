@@ -43,9 +43,9 @@ function getValue (prompt, value) {
 }
 
 function getDisplayedValue (prompt, value) {
-  const transform = prompt.raw.transform
-  if (typeof transform === 'function') {
-    value = transform(value)
+  const transformer = prompt.raw.transformer
+  if (typeof transformer === 'function') {
+    value = transformer(value, answers)
   }
   return JSON.stringify(value)
 }
@@ -84,10 +84,6 @@ function setAnswer (id, value) {
   ObjectUtil.set(answers, id, value)
 }
 
-function getAnswer (id) {
-  return ObjectUtil.get(answers, id)
-}
-
 function removeAnswer (id) {
   ObjectUtil.remove(answers, id)
 }
@@ -100,6 +96,7 @@ function generatePrompt (data) {
     enabled: true,
     name: data.short || null,
     message: data.message,
+    group: data.group || null,
     description: data.description || null,
     link: data.link || null,
     choices: null,
@@ -122,19 +119,18 @@ function updatePrompts () {
       prompt.valueChanged = false
     } else if (prompt.visible && !prompt.valueChanged) {
       let value
-      const answer = getAnswer(prompt.id)
-      if (typeof answer !== 'undefined') {
-        value = answer
-      } else if (typeof prompt.raw.value !== 'undefined') {
+      if (typeof prompt.raw.value !== 'undefined') {
         value = prompt.raw.value
       } else {
         value = getDefaultValue(prompt)
       }
-      prompt.value = getDisplayedValue(prompt, value)
       prompt.rawValue = value
+      prompt.value = getDisplayedValue(prompt, value)
       setAnswer(prompt.id, getValue(prompt, value))
     }
   }
+
+  if (process.env.NODE_ENV !== 'production') console.log('answers =', answers)
 }
 
 // Public API
@@ -151,6 +147,10 @@ function changeAnswers (cb) {
 
 function getAnswers () {
   return answers
+}
+
+function getAnswer (id) {
+  return ObjectUtil.get(answers, id)
 }
 
 function reset () {
@@ -188,9 +188,9 @@ function setValue ({ id, value }) {
   } else {
     prompt.error = null
   }
-  prompt.value = getDisplayedValue(prompt, value)
-  prompt.rawValue = value
   const finalValue = getValue(prompt, value)
+  prompt.rawValue = value
+  prompt.value = getDisplayedValue(prompt, value)
   prompt.valueChanged = true
   setAnswer(prompt.id, finalValue)
   updatePrompts()
@@ -231,6 +231,7 @@ module.exports = {
   setAnswers,
   changeAnswers,
   getAnswers,
+  getAnswer,
   reset,
   list,
   add,

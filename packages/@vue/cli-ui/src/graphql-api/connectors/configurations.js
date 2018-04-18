@@ -114,6 +114,7 @@ function save (id, context) {
       const answers = prompts.getAnswers()
       let data = clone(current.data)
       config.onWrite({
+        prompts: prompts.list(),
         answers,
         data,
         file: config.file,

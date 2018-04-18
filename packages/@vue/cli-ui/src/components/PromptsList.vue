@@ -1,14 +1,22 @@
 <template>
   <div class="prompts-list">
     <div class="content">
-      <component
-        v-for="prompt of prompts"
-        v-if="prompt.visible"
-        :key="prompt.id"
-        :is="getModule(prompt)"
-        :prompt="prompt"
-        @answer="value => $emit('answer', { prompt, value })"
-      />
+      <div
+        v-for="group of groups"
+        :key="group.id"
+        class="group"
+      >
+        <div v-if="group.id" class="group-name">{{ $t(group.id) }}</div>
+
+        <component
+          v-for="prompt of group.prompts"
+          v-if="prompt.visible"
+          :key="prompt.id"
+          :is="getModule(prompt)"
+          :prompt="prompt"
+          @answer="value => $emit('answer', { prompt, value })"
+        />
+      </div>
 
       <div v-if="!prompts.length" class="vue-ui-empty">
         <VueIcon icon="check_circle" class="empty-icon"/>
@@ -32,6 +40,25 @@ export default {
     }
   },
 
+  computed: {
+    groups () {
+      const groupMap = {}
+      const groups = []
+      this.prompts.forEach(prompt => {
+        let group = groups[prompt.group]
+        if (!group) {
+          group = groups[prompt.group] = {
+            id: prompt.group,
+            prompts: []
+          }
+          groups.push(group)
+        }
+        group.prompts.push(prompt)
+      })
+      return groups
+    }
+  },
+
   methods: {
     getModule (prompt) {
       let type = prompt.type
@@ -48,4 +75,12 @@ export default {
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 
+.group
+  margin-bottom ($padding-item * 2)
+
+.group-name
+  padding $padding-item $padding-item ($padding-item / 2)
+  font-size 1.6em
+  font-weight lighter
+  color $vue-ui-color-accent
 </style>
