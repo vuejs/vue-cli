@@ -1,3 +1,5 @@
+/* eslint-disable vue-libs/no-async-functions */
+
 module.exports = api => {
   const { setSharedData, getSharedData } = api.namespace('webpack-dashboard-')
 
