@@ -126,6 +126,7 @@ export default {
 
 .project-plugin-item
   padding $padding-item
+  cursor default
 
   .content
     h-box()
