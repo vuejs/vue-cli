@@ -7,15 +7,12 @@ const routes = require('../connectors/routes')
 exports.types = gql`
 extend type Query {
   routes: [Route]
-  vueRouterDefinitions: [VueRouterDefinition]
 }
 
 extend type Subscription {
   routeAdded: Route
   routeRemoved: Route
   routeChanged: Route
-  vueRouterDefinitionAdded: VueRouterDefinition
-  vueRouterDefinitionRemoved: VueRouterDefinition
 }
 
 type Route {
@@ -43,17 +40,11 @@ enum RouteBadgeType {
   accent
   dim
 }
-
-type VueRouterDefinition {
-  id: ID!
-  routes: JSON
-}
 `
 
 exports.resolvers = {
   Query: {
-    routes: (root, args, context) => routes.list(context),
-    vueRouterDefinitions: (root, args, context) => routes.listVueRouterDefinitions(context)
+    routes: (root, args, context) => routes.list(context)
   },
 
   Subscription: {
@@ -65,12 +56,6 @@ exports.resolvers = {
     },
     routeRemoved: {
       subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.ROUTE_REMOVED)
-    },
-    vueRouterDefinitionAdded: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VUE_ROUTER_DEFINITION_ADDED)
-    },
-    vueRouterDefinitionRemoved: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VUE_ROUTER_DEFINITION_REMOVED)
     }
   }
 }

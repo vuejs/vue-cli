@@ -1,7 +1,9 @@
 import Vue from 'vue'
+import router from '../router'
+import ProjectHome from '../views/ProjectHome.vue'
 
 export default class ClientAddonApi {
-  constructor (addonId) {
+  constructor () {
     this.components = new Map()
     this.componentListeners = new Map()
   }
@@ -41,6 +43,20 @@ export default class ClientAddonApi {
         this.listenForComponent(id, resolve)
       }
     })
+  }
+
+  addRoutes (id, routes) {
+    router.addRoutes([
+      {
+        path: `/addon/${id}`,
+        component: ProjectHome,
+        meta: {
+          needProject: true,
+          restore: true
+        },
+        children: routes
+      }
+    ])
   }
 }
 

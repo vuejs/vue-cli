@@ -16,6 +16,6 @@ const schema = createSchema(joi => ({
   onWrite: joi.func().required()
 }))
 
-exports.validate = (options) => {
+exports.validateConfiguration = (options) => {
   validateSync(options, schema)
 }

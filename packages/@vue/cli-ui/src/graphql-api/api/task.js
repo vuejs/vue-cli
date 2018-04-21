@@ -17,6 +17,6 @@ const schema = createSchema(joi => ({
   onExit: joi.func()
 }))
 
-exports.validate = (options) => {
+exports.validateTask = (options) => {
   validateSync(options, schema)
 }

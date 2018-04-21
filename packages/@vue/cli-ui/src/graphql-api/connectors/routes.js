@@ -26,8 +26,6 @@ let routes = [
   ...BUILTIN_ROUTES
 ]
 
-let vueRouterDefinitions = []
-
 function list (context) {
   return routes
 }
@@ -64,29 +62,6 @@ function update (route, context) {
   }
 }
 
-function listVueRouterDefinitions (context) {
-  return vueRouterDefinitions
-}
-
-function addVueRouterDefinition ({ id, routes }, context) {
-  const def = { id, routes }
-  vueRouterDefinitions.push(def)
-  context.pubsub.publish(channels.VUE_ROUTER_DEFINITION_ADDED, {
-    vueRouterDEfinitionAdded: def
-  })
-}
-
-function removeVueRouterDefinition (id, context) {
-  const index = vueRouterDefinitions.findIndex(d => d.id === id)
-  if (index !== -1) {
-    const def = vueRouterDefinitions[index]
-    vueRouterDefinitions.splice(index, 1)
-    context.pubsub.publish(channels.VUE_ROUTER_DEFINITION_REMOVED, {
-      vueRouterDefinitionRemoved: def
-    })
-  }
-}
-
 function addBadge ({ routeId, badge }, context) {
   const route = findOne(routeId)
   if (route) {
@@ -94,12 +69,12 @@ function addBadge ({ routeId, badge }, context) {
     const existingBadge = route.badges.find(b => b.id === badge.id)
     if (existingBadge) {
       Object.assign(existingBadge, badge, {
-        count: existingBadge.count + 1
+        count: existingBadge.count + (badge.count || 1)
       })
     } else {
       route.badges.push({
         type: 'dim',
-        count: 1,
+        count: (badge.count || 1),
         priority: 0,
         hidden: false,
         ...badge
@@ -130,9 +105,6 @@ module.exports = {
   add,
   remove,
   update,
-  listVueRouterDefinitions,
-  addVueRouterDefinition,
-  removeVueRouterDefinition,
   addBadge,
   removeBadge
 }

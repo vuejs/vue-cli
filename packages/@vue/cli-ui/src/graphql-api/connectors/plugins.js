@@ -26,6 +26,7 @@ const prompts = require('./prompts')
 const progress = require('./progress')
 const logs = require('./logs')
 const clientAddons = require('./client-addons')
+const routes = require('./routes')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
@@ -77,6 +78,11 @@ function list (file, context) {
 }
 
 function resetPluginApi (context) {
+  // Clean up
+  if (pluginApi) {
+    pluginApi.routes.forEach(r => routes.remove(r.id, context))
+  }
+
   pluginApi = new PluginApi(context)
   // Run Plugin API
   runPluginApi('@vue/cli-service', context)
@@ -84,6 +90,8 @@ function resetPluginApi (context) {
   runPluginApi('.', context, 'vue-cli-ui')
   // Add client addons
   pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
+  // Add routes
+  pluginApi.routes.forEach(route => routes.add(route, context))
 }
 
 function runPluginApi (id, context, fileName = 'ui') {

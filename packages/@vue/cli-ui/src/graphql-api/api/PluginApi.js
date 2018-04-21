@@ -1,24 +1,31 @@
+// Connectors
 const logs = require('../connectors/logs')
 const plugins = require('../connectors/plugins')
 const sharedData = require('../connectors/shared-data')
+const routes = require('../connectors/routes')
+// Utils
 const ipc = require('../utils/ipc')
-const { validate: validateConfig } = require('./configuration')
-const { validate: validateTask } = require('./task')
-const { validate: validateClientAddon } = require('./client-addon')
+// Validators
+const { validateConfiguration } = require('./configuration')
+const { validateTask } = require('./task')
+const { validateClientAddon } = require('./client-addon')
+const { validateRoute, validateBadge } = require('./route')
 
 class PluginApi {
   constructor (context) {
     this.context = context
+    this.pluginId = null
+    // Data
     this.configurations = []
     this.tasks = []
     this.clientAddons = []
+    this.routes = []
     this.actions = new Map()
-    this.pluginId = null
   }
 
   describeConfig (options) {
     try {
-      validateConfig(options)
+      validateConfiguration(options)
       this.configurations.push(options)
     } catch (e) {
       logs.add({
@@ -63,6 +70,42 @@ class PluginApi {
       console.error(new Error(`Invalid options: ${e.message}`))
     }
   }
+
+  /* Routes */
+
+  addRoute (options) {
+    try {
+      validateRoute(options)
+      this.routes.push(options)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'addRoute' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
+  }
+
+  addRouteBadge (routeId, options) {
+    try {
+      validateBadge(options)
+      routes.addBadge({ routeId, badge: options }, this.context)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'addRouteBadge' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
+  }
+
+  removeRouteBadge (routeId, badgeId) {
+    routes.removeBadge({ routeId, badgeId }, this.context)
+  }
+
+  /* IPC */
 
   ipcOn (cb) {
     return ipc.on(cb)

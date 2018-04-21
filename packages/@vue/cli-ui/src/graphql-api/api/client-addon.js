@@ -6,6 +6,6 @@ const schema = createSchema(joi => ({
   url: joi.string()
 }))
 
-exports.validate = (options) => {
+exports.validateClientAddon = (options) => {
   validateSync(options, schema)
 }
