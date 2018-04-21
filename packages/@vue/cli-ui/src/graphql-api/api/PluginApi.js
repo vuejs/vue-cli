@@ -13,6 +13,7 @@ class PluginApi {
     this.tasks = []
     this.clientAddons = []
     this.actions = new Map()
+    this.pluginId = null
   }
 
   describeConfig (options) {
@@ -23,9 +24,9 @@ class PluginApi {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: 'describeConfig options are invalid\n' +
-          e.message
+        message: `(${this.pluginId || 'unknown plugin'}) 'describeConfig' options are invalid\n${e.message}`
       }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
     }
   }
 
@@ -37,9 +38,9 @@ class PluginApi {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: 'describeTask options are invalid\n' +
-          e.message
+        message: `(${this.pluginId || 'unknown plugin'}) 'describeTask' options are invalid\n${e.message}`
       }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
     }
   }
 
@@ -57,9 +58,9 @@ class PluginApi {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: 'addClientAddon options are invalid\n' +
-          e.message
+        message: `(${this.pluginId || 'unknown plugin'}) 'addClientAddon' options are invalid\n${e.message}`
       }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
     }
   }
 
