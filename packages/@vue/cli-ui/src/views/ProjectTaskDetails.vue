@@ -151,6 +151,12 @@ export default {
     })
   ],
 
+  metaInfo () {
+    return {
+      title: this.task && `${this.task.name} - ${this.$t('views.project-tasks.title')}`
+    }
+  },
+
   props: {
     id: {
       type: String,
@@ -231,7 +237,7 @@ export default {
         ).component
         return id
       }
-    },
+    }
   },
 
   watch: {

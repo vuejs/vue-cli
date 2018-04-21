@@ -42,6 +42,12 @@ export default {
     })
   ],
 
+  metaInfo () {
+    return {
+      title: this.configuration && `${this.configuration.name} - ${this.$t('views.project-configurations.title')}`
+    }
+  },
+
   props: {
     id: {
       type: String,
@@ -89,7 +95,7 @@ export default {
 
       this.$apollo.queries.configuration.refetch()
     }
-  },
+  }
 }
 </script>
 
