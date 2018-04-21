@@ -24,6 +24,10 @@ function findOne (id, context) {
 }
 
 function findFile (config, context) {
+  if (!config.files) {
+    return null
+  }
+
   if (config.files.package) {
     const pkg = folders.readPackage(cwd.get(), context)
     const data = pkg[config.files.package]
@@ -59,9 +63,11 @@ function readData (config, context) {
         return yaml.safeLoad(rawContent)
       } else if (file.type === 'js') {
         // TODO
+        console.warn('JS config read not implemented')
       }
     }
   }
+  return {}
 }
 
 function writeData ({ config, data }, context) {
@@ -79,6 +85,7 @@ function writeData ({ config, data }, context) {
         rawContent = yaml.safeDump(data)
       } else if (file.type === 'js') {
         // TODO
+        console.warn('JS config write not implemented')
       }
     }
     fs.writeFileSync(file.path, rawContent, { encoding: 'utf8' })
