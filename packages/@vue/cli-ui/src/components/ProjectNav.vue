@@ -12,6 +12,8 @@
           :route="route"
         />
       </VueGroup>
+
+      <ProjectNavMore/>
     </div>
   </div>
 </template>
@@ -105,10 +107,26 @@ export default {
 
   .content
     v-box()
+    height 100%
+
+    .vue-ui-group
+      flex auto 1 1
+      height 0
+      overflow hidden
+
+    >>> .v-popover .trigger,
+    >>> .vue-ui-dropdown
+      display block !important
 
     >>> .vue-ui-button
       button-colors(rgba($vue-ui-color-light, .7), transparent)
       border-radius 0
+      padding-left 0
+      padding-right @padding-left
+      h-box()
+      box-center()
+      width 100%
+
       &:hover, &:active
         $bg = darken($vue-ui-color-dark, 70%)
         button-colors($vue-ui-color-light, $bg)

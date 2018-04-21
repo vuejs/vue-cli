@@ -78,9 +78,6 @@ $bg = darken($vue-ui-color-dark, 70%)
 .project-nav-button
   position relative
 
-  .v-popover >>> .trigger
-    display block !important
-
   .bullet
     position absolute
     width 6px
@@ -110,12 +107,6 @@ $bg = darken($vue-ui-color-dark, 70%)
   &:active
     .bullet
       border-color darken($bg, 8%)
-
-  .icon-button
-    padding-left 0
-    padding-right @padding-left
-    h-box()
-    box-center()
 
   .image-icon
     max-width 24px
