@@ -1,6 +1,10 @@
+const logs = require('../connectors/logs')
 const plugins = require('../connectors/plugins')
 const sharedData = require('../connectors/shared-data')
 const ipc = require('../utils/ipc')
+const { validate: validateConfig } = require('./configuration')
+const { validate: validateTask } = require('./task')
+const { validate: validateClientAddon } = require('./client-addon')
 
 class PluginApi {
   constructor (context) {
@@ -12,11 +16,31 @@ class PluginApi {
   }
 
   describeConfig (options) {
-    this.configurations.push(options)
+    try {
+      validateConfig(options)
+      this.configurations.push(options)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: 'describeConfig options are invalid\n' +
+          e.message
+      }, this.context)
+    }
   }
 
   describeTask (options) {
-    this.tasks.push(options)
+    try {
+      validateTask(options)
+      this.tasks.push(options)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: 'describeTask options are invalid\n' +
+          e.message
+      }, this.context)
+    }
   }
 
   getTask (command) {
@@ -26,7 +50,17 @@ class PluginApi {
   }
 
   addClientAddon (options) {
-    this.clientAddons.push(options)
+    try {
+      validateClientAddon(options)
+      this.clientAddons.push(options)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: 'addClientAddon options are invalid\n' +
+          e.message
+      }, this.context)
+    }
   }
 
   ipcOn (cb) {

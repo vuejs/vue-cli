@@ -15,7 +15,7 @@ extend type Mutation {
 
 type Configuration implements DescribedEntity {
   id: ID!
-  name: String
+  name: String!
   description: String
   link: String
   icon: String

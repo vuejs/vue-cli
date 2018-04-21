@@ -119,16 +119,16 @@ function updateSavedData (data, context) {
   }
 }
 
-function getPrompts (id, context) {
+async function getPrompts (id, context) {
   const task = findOne(id, context)
   if (task) {
-    prompts.reset()
+    await prompts.reset()
     task.prompts.forEach(prompts.add)
     const data = getSavedData(id, context)
     if (data) {
-      prompts.setAnswers(data.answers)
+      await prompts.setAnswers(data.answers)
     }
-    prompts.start()
+    await prompts.start()
     return prompts.list()
   }
 }
@@ -200,7 +200,7 @@ function updateRouteBadges ({ task, data }, context) {
   }
 }
 
-function run (id, context) {
+async function run (id, context) {
   const task = findOne(id, context)
   if (task && task.status !== 'running') {
     const args = ['run', task.name]
@@ -215,7 +215,7 @@ function run (id, context) {
 
     // Plugin API
     if (task.onBeforeRun) {
-      task.onBeforeRun({
+      await task.onBeforeRun({
         answers,
         args
       })
@@ -232,7 +232,7 @@ function run (id, context) {
 
     // Plugin API
     if (task.onRun) {
-      task.onRun({
+      await task.onRun({
         args,
         child,
         cwd: cwd.get()
@@ -265,10 +265,10 @@ function run (id, context) {
       }, context)
     })
 
-    const onExit = (code, signal) => {
+    const onExit = async (code, signal) => {
       // Plugin API
       if (task.onExit) {
-        task.onExit({
+        await task.onExit({
           args,
           child,
           cwd: cwd.get(),

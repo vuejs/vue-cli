@@ -272,7 +272,7 @@ function finishInstall (context) {
 }
 
 async function initPrompts (id, context) {
-  prompts.reset()
+  await prompts.reset()
   try {
     let data = require(path.join(getPath(id), 'prompts.js'))
     if (typeof data === 'function') {
@@ -282,7 +282,7 @@ async function initPrompts (id, context) {
   } catch (e) {
     console.warn(`No prompts found for ${id}`)
   }
-  prompts.start()
+  await prompts.start()
 }
 
 function update (id, context) {

@@ -92,7 +92,7 @@ function writeData ({ config, data }, context) {
   }
 }
 
-function getPrompts (id, context) {
+async function getPrompts (id, context) {
   const config = findOne(id, context)
   if (config) {
     const data = readData(config, context)
@@ -100,27 +100,27 @@ function getPrompts (id, context) {
       config,
       data
     }
-    const configData = config.onRead({
+    const configData = await config.onRead({
       data
     })
-    prompts.reset()
+    await prompts.reset()
     configData.prompts.forEach(prompts.add)
     if (configData.answers) {
-      prompts.setAnswers(configData.answers)
+      await prompts.setAnswers(configData.answers)
     }
-    prompts.start()
+    await prompts.start()
     return prompts.list()
   }
   return []
 }
 
-function save (id, context) {
+async function save (id, context) {
   const config = findOne(id, context)
   if (config) {
     if (current.config === config) {
       const answers = prompts.getAnswers()
       let data = clone(current.data)
-      config.onWrite({
+      await config.onWrite({
         prompts: prompts.list(),
         answers,
         data,
@@ -139,10 +139,10 @@ function save (id, context) {
               }
             })
           },
-          getAnswer: (id, mapper) => {
+          getAnswer: async (id, mapper) => {
             const prompt = prompts.findOne(id)
             if (prompt) {
-              const defaultValue = prompts.getDefaultValue(prompt)
+              const defaultValue = await prompts.getDefaultValue(prompt)
               if (defaultValue !== prompt.rawValue) {
                 let value = get(answers, prompt.id)
                 if (mapper) {

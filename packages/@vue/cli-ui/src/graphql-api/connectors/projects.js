@@ -51,7 +51,7 @@ function generateProjectCreation (creator) {
   }
 }
 
-function initCreator (context) {
+async function initCreator (context) {
   const creator = new Creator('', cwd.get(), getPromptModules())
 
   /* Event listeners */
@@ -128,10 +128,10 @@ function initCreator (context) {
   ]
 
   // Prompts
-  prompts.reset()
+  await prompts.reset()
   creator.injectedPrompts.forEach(prompts.add)
-  updatePromptsFeatures()
-  prompts.start()
+  await updatePromptsFeatures()
+  await prompts.start()
 
   return creator
 }
@@ -145,15 +145,15 @@ function removeCreator (context) {
   }
 }
 
-function getCreation (context) {
+async function getCreation (context) {
   if (!creator) {
-    creator = initCreator(context)
+    creator = await initCreator(context)
   }
   return generateProjectCreation(creator)
 }
 
-function updatePromptsFeatures () {
-  prompts.changeAnswers(answers => {
+async function updatePromptsFeatures () {
+  await prompts.changeAnswers(answers => {
     answers.features = features.filter(
       f => f.enabled
     ).map(
@@ -162,18 +162,18 @@ function updatePromptsFeatures () {
   })
 }
 
-function setFeatureEnabled ({ id, enabled, updatePrompts = true }, context) {
+async function setFeatureEnabled ({ id, enabled, updatePrompts = true }, context) {
   const feature = features.find(f => f.id === id)
   if (feature) {
     feature.enabled = enabled
   } else {
     console.warn(`Feature '${id}' not found`)
   }
-  if (updatePrompts) updatePromptsFeatures()
+  if (updatePrompts) await updatePromptsFeatures()
   return feature
 }
 
-function applyPreset (id, context) {
+async function applyPreset (id, context) {
   const preset = presets.find(p => p.id === id)
   if (preset) {
     for (const feature of features) {
@@ -184,19 +184,19 @@ function applyPreset (id, context) {
     }
     if (preset.raw) {
       if (preset.raw.router) {
-        setFeatureEnabled({ id: 'router', enabled: true, updatePrompts: false }, context)
+        await setFeatureEnabled({ id: 'router', enabled: true, updatePrompts: false }, context)
       }
       if (preset.raw.vuex) {
-        setFeatureEnabled({ id: 'vuex', enabled: true, updatePrompts: false }, context)
+        await setFeatureEnabled({ id: 'vuex', enabled: true, updatePrompts: false }, context)
       }
       if (preset.raw.cssPreprocessor) {
-        setFeatureEnabled({ id: 'css-preprocessor', enabled: true, updatePrompts: false }, context)
+        await setFeatureEnabled({ id: 'css-preprocessor', enabled: true, updatePrompts: false }, context)
       }
       if (preset.raw.useConfigFiles) {
-        setFeatureEnabled({ id: 'use-config-files', enabled: true, updatePrompts: false }, context)
+        await setFeatureEnabled({ id: 'use-config-files', enabled: true, updatePrompts: false }, context)
       }
     }
-    updatePromptsFeatures()
+    await updatePromptsFeatures()
   } else {
     console.warn(`Preset '${id}' not found`)
   }
@@ -234,7 +234,7 @@ async function create (input, context) {
 
     // Answers
     const answers = prompts.getAnswers()
-    prompts.reset()
+    await prompts.reset()
     let index
 
     // Package Manager

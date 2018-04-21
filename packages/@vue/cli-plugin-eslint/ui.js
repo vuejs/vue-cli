@@ -1,3 +1,5 @@
+/* eslint-disable vue-libs/no-async-functions */
+
 module.exports = api => {
   // Config file
   api.describeConfig({
@@ -46,7 +48,8 @@ module.exports = api => {
           link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-end-tags.md',
           default: false,
           value: data.rules && data.rules['vue/html-end-tags'] === 'error',
-          filter: input => JSON.stringify(input ? 'error' : 'off')
+          filter: input => JSON.stringify(input ? 'error' : 'off'),
+          transformer: input => input === JSON.stringify('error')
         },
         {
           name: 'vue/html-indent',
@@ -89,7 +92,8 @@ module.exports = api => {
           link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-self-closing.md',
           default: false,
           value: data.rules && data.rules['vue/html-self-closing'] === 'error',
-          filter: input => JSON.stringify(input ? 'error' : 'off')
+          filter: input => JSON.stringify(input ? 'error' : 'off'),
+          transformer: input => input === JSON.stringify('error')
         },
         {
           name: 'vue/require-default-prop',
@@ -100,7 +104,8 @@ module.exports = api => {
           link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/require-default-prop.md',
           default: false,
           value: data.rules && data.rules['vue/require-default-prop'] === 'error',
-          filter: input => JSON.stringify(input ? 'error' : 'off')
+          filter: input => JSON.stringify(input ? 'error' : 'off'),
+          transformer: input => input === JSON.stringify('error')
         },
         {
           name: 'vue/require-prop-types',
@@ -111,7 +116,8 @@ module.exports = api => {
           link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/require-prop-types.md',
           default: false,
           value: data.rules && data.rules['vue/require-prop-types'] === 'error',
-          filter: input => JSON.stringify(input ? 'error' : 'off')
+          filter: input => JSON.stringify(input ? 'error' : 'off'),
+          transformer: input => input === JSON.stringify('error')
         },
         {
           name: 'vue/attributes-order',
@@ -122,7 +128,8 @@ module.exports = api => {
           link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attributes-order.md',
           default: false,
           value: data.rules && data.rules['vue/attributes-order'] === 'error',
-          filter: input => JSON.stringify(input ? 'error' : 'off')
+          filter: input => JSON.stringify(input ? 'error' : 'off'),
+          transformer: input => input === JSON.stringify('error')
         },
         {
           name: 'vue/html-quotes',
@@ -157,15 +164,17 @@ module.exports = api => {
           link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/order-in-components.md',
           default: false,
           value: data.rules && data.rules['vue/order-in-components'] === 'error',
-          filter: input => JSON.stringify(input ? 'error' : 'off')
+          filter: input => JSON.stringify(input ? 'error' : 'off'),
+          transformer: input => input === JSON.stringify('error')
         }
       ]
     }),
-    onWrite: ({ api, prompts }) => {
-      api.setData(prompts.reduce((obj, prompt) => {
-        obj[`rules.${prompt.id}`] = api.getAnswer(prompt.id, JSON.parse)
-        return obj
-      }, {}))
+    onWrite: async ({ api, prompts }) => {
+      const result = {}
+      for (const prompt of prompts) {
+        result[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
+      }
+      api.setData(result)
     }
   })
 

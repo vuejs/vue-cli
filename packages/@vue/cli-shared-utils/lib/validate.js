@@ -16,3 +16,10 @@ exports.validate = (obj, schema, cb) => {
     }
   })
 }
+
+exports.validateSync = (obj, schema) => {
+  const result = joi.validate(obj, schema)
+  if (result.error) {
+    throw result.error
+  }
+}

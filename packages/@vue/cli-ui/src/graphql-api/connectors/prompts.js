@@ -15,10 +15,11 @@ function generatePromptError (value) {
   }
 }
 
-function getEnabled (value) {
+async function getEnabled (value) {
   const type = typeof value
   if (type === 'function') {
-    return !!value(answers)
+    const result = await value(answers)
+    return !!result
   } else if (type === 'boolean') {
     return value
   } else {
@@ -34,7 +35,7 @@ function validateInput (prompt, value) {
   return true
 }
 
-function getValue (prompt, value) {
+function getFilteredValue (prompt, value) {
   const filter = prompt.raw.filter
   if (typeof filter === 'function') {
     return filter(value)
@@ -42,17 +43,17 @@ function getValue (prompt, value) {
   return value
 }
 
-function getDisplayedValue (prompt, value) {
+function getTransformedValue (prompt, value) {
   const transformer = prompt.raw.transformer
   if (typeof transformer === 'function') {
-    value = transformer(value, answers)
+    return transformer(value, answers)
   }
-  return JSON.stringify(value)
+  return value
 }
 
 function generatePromptChoice (prompt, data, defaultValue) {
   return {
-    value: getDisplayedValue(prompt, data.value),
+    value: getTransformedValue(prompt, data.value),
     name: data.name,
     checked: data.checked,
     disabled: data.disabled,
@@ -60,7 +61,7 @@ function generatePromptChoice (prompt, data, defaultValue) {
   }
 }
 
-function getChoices (prompt) {
+async function getChoices (prompt) {
   const data = prompt.raw.choices
   if (!data) {
     return null
@@ -68,13 +69,14 @@ function getChoices (prompt) {
 
   let result
   if (typeof data === 'function') {
-    result = data(answers)
+    result = await data(answers)
   } else {
     result = data
   }
-  const defaultValue = prompt.type === 'list' || prompt.type === 'rawlist'
-    ? getDefaultValue(prompt)
-    : undefined
+  let defaultValue
+  if (prompt.type === 'list' || prompt.type === 'rawlist') {
+    defaultValue = await getDefaultValue(prompt)
+  }
   return result.map(
     item => generatePromptChoice(prompt, item, defaultValue)
   )
@@ -107,26 +109,30 @@ function generatePrompt (data) {
   }
 }
 
-function updatePrompts () {
+async function updatePrompts () {
   for (const prompt of prompts) {
     const oldVisible = prompt.visible
-    prompt.visible = getEnabled(prompt.raw.when)
+    prompt.visible = await getEnabled(prompt.raw.when)
 
-    prompt.choices = getChoices(prompt)
+    prompt.choices = await getChoices(prompt)
 
     if (oldVisible !== prompt.visible && !prompt.visible) {
       removeAnswer(prompt.id)
       prompt.valueChanged = false
     } else if (prompt.visible && !prompt.valueChanged) {
       let value
-      if (typeof prompt.raw.value !== 'undefined') {
+      let answer = getAnswer(prompt.id)
+      if (typeof answer !== 'undefined') {
+        value = await getTransformedValue(prompt, answer)
+      } else if (typeof prompt.raw.value !== 'undefined') {
         value = prompt.raw.value
       } else {
         value = getDefaultValue(prompt)
       }
       prompt.rawValue = value
-      prompt.value = getDisplayedValue(prompt, value)
-      setAnswer(prompt.id, getValue(prompt, value))
+      prompt.value = JSON.stringify(value)
+      const finalValue = await getFilteredValue(prompt, value)
+      setAnswer(prompt.id, finalValue)
     }
   }
 
@@ -135,14 +141,14 @@ function updatePrompts () {
 
 // Public API
 
-function setAnswers (newAnswers) {
+async function setAnswers (newAnswers) {
   answers = newAnswers
-  updatePrompts()
+  await updatePrompts()
 }
 
-function changeAnswers (cb) {
+async function changeAnswers (cb) {
   cb(answers)
-  updatePrompts()
+  await updatePrompts()
 }
 
 function getAnswers () {
@@ -153,9 +159,9 @@ function getAnswer (id) {
   return ObjectUtil.get(answers, id)
 }
 
-function reset () {
+async function reset () {
   prompts = []
-  setAnswers({})
+  await setAnswers({})
 }
 
 function list () {
@@ -166,8 +172,8 @@ function add (data) {
   prompts.push(generatePrompt(data))
 }
 
-function start () {
-  updatePrompts()
+async function start () {
+  await updatePrompts()
 }
 
 function remove (id) {
@@ -175,25 +181,25 @@ function remove (id) {
   index !== -1 && prompts.splice(index, 1)
 }
 
-function setValue ({ id, value }) {
+async function setValue ({ id, value }) {
   const prompt = findOne(id)
   if (!prompt) {
     console.warn(`Prompt '${prompt}' not found`)
     return null
   }
 
-  const validation = validateInput(prompt, value)
+  const validation = await validateInput(prompt, value)
   if (validation !== true) {
     prompt.error = generatePromptError(validation)
   } else {
     prompt.error = null
   }
-  const finalValue = getValue(prompt, value)
   prompt.rawValue = value
-  prompt.value = getDisplayedValue(prompt, value)
+  const finalValue = await getFilteredValue(prompt, value)
+  prompt.value = JSON.stringify(value)
   prompt.valueChanged = true
   setAnswer(prompt.id, finalValue)
-  updatePrompts()
+  await updatePrompts()
   return prompt
 }
 
@@ -203,12 +209,14 @@ function findOne (id) {
   )
 }
 
-function getDefaultValue (prompt) {
-  const defaultValue = prompt.raw.default
+async function getDefaultValue (prompt) {
+  let defaultValue = prompt.raw.default
   if (typeof defaultValue === 'function') {
-    return defaultValue(answers)
-  } else if (prompt.type === 'checkbox') {
-    const choices = getChoices(prompt)
+    defaultValue = await defaultValue(answers)
+  }
+
+  if (prompt.type === 'checkbox') {
+    const choices = await getChoices(prompt)
     if (choices) {
       return choices.filter(
         c => c.checked
@@ -222,8 +230,8 @@ function getDefaultValue (prompt) {
   return defaultValue
 }
 
-function answerPrompt ({ id, value }, context) {
-  setValue({ id, value: JSON.parse(value) })
+async function answerPrompt ({ id, value }, context) {
+  await setValue({ id, value: JSON.parse(value) })
   return list()
 }
 

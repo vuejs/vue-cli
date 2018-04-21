@@ -37,9 +37,18 @@ export default {
 
   computed: {
     iconClass () {
-      return icons.getClassWithColor(this.configuration.icon || this.configuration.id) || 'gear-icon medium-blue'
+      return icons.getClassWithColor(this.getFileName(this.configuration.icon) || this.configuration.id) || 'gear-icon medium-blue'
     }
   },
+
+  methods: {
+    getFileName (icon) {
+      if (icon) {
+        if (!icon.includes('.')) return `f.${icon}`
+        return icon
+      }
+    }
+  }
 }
 </script>
 

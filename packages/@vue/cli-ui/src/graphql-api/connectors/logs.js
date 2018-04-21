@@ -3,8 +3,9 @@ const { events } = require('@vue/cli-shared-utils/lib/logger')
 const { generateTitle } = require('@vue/cli/lib/util/clearConsole')
 // Subs
 const channels = require('../channels')
+// Context
+const getContext = require('../context')
 
-let init = false
 let logs = []
 
 exports.add = function (log, context) {
@@ -21,21 +22,6 @@ exports.add = function (log, context) {
   return item
 }
 
-exports.init = function (context) {
-  if (!init) {
-    init = true
-    events.on('log', log => {
-      exports.add(log, context)
-    })
-
-    exports.add({
-      type: 'info',
-      tag: null,
-      message: generateTitle(true)
-    }, context)
-  }
-}
-
 exports.list = function (context) {
   return logs
 }
@@ -50,4 +36,18 @@ exports.last = function (context) {
 exports.clear = function (context) {
   logs = []
   return logs
+}
+
+// Init
+{
+  const context = getContext(null)
+  events.on('log', log => {
+    exports.add(log, context)
+  })
+
+  exports.add({
+    type: 'info',
+    tag: null,
+    message: generateTitle(true)
+  }, context)
 }

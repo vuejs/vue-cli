@@ -47,10 +47,7 @@ exports.resolvers = {
 
   Subscription: {
     consoleLogAdded: {
-      subscribe: (parent, args, context) => {
-        logs.init(context)
-        return context.pubsub.asyncIterator(channels.CONSOLE_LOG_ADDED)
-      }
+      subscribe: (parent, args, context) => context.pubsub.asyncIterator(channels.CONSOLE_LOG_ADDED)
     }
   }
 }
