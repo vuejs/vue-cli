@@ -53,7 +53,7 @@ function getTransformedValue (prompt, value) {
 
 function generatePromptChoice (prompt, data, defaultValue) {
   return {
-    value: getTransformedValue(prompt, data.value),
+    value: JSON.stringify(getTransformedValue(prompt, data.value)),
     name: data.name,
     checked: data.checked,
     disabled: data.disabled,
