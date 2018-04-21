@@ -11,11 +11,17 @@
       <VueGroupButton
         class="flat big icon-button"
         :value="route.name"
-        :icon-left="route.icon"
-      />
+        :icon-left="!imageIcon && route.icon"
+      >
+        <img
+          v-if="imageIcon"
+          :src="route.icon"
+          class="image-icon"
+        >
+      </VueGroupButton>
 
       <template slot="popover">
-        <div class="title">{{ $t(route.tooltip) }}</div>
+        <div class="title">{{ $t(route.tooltip) }}</div>
 
         <div v-if="badges" class="badges">
           <RouteBadge
@@ -55,6 +61,10 @@ export default {
 
     firstNotHiddenBadge () {
       return this.badges && this.badges.find(b => !b.hidden)
+    },
+
+    imageIcon () {
+      return this.route.icon && this.route.icon.indexOf('.') !== -1
     }
   }
 }
@@ -100,6 +110,16 @@ $bg = darken($vue-ui-color-dark, 70%)
   &:active
     .bullet
       border-color darken($bg, 8%)
+
+  .icon-button
+    padding-left 0
+    padding-right @padding-left
+    h-box()
+    box-center()
+
+  .image-icon
+    max-width 24px
+    max-height @width
 
 .badges
   margin ($padding-item/2) 0

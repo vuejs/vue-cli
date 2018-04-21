@@ -1,6 +1,8 @@
 const path = require('path')
 // Subs
 const channels = require('../channels')
+// Utils
+const { getBasePath } = require('../utils/serve')
 
 let addons = []
 
@@ -35,14 +37,6 @@ function remove (id, context) {
 
 function getUrl (addon, context) {
   return addon.url || `${baseUrl}/_addon/${addon.id}/index.js`
-}
-
-function getBasePath (filePath) {
-  const index = filePath.lastIndexOf('/index.js')
-  if (index !== -1) {
-    return filePath.substr(0, index)
-  }
-  return filePath
 }
 
 function serve (req, res) {

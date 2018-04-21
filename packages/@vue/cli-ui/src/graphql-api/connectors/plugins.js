@@ -31,6 +31,7 @@ const routes = require('./routes')
 const PluginApi = require('../api/PluginApi')
 // Utils
 const { getCommand } = require('../utils/command')
+const { getBasePath } = require('../utils/serve')
 
 const PROGRESS_ID = 'plugin-installation'
 
@@ -344,6 +345,18 @@ async function callAction ({ id, params }, context) {
   return { id, params, results, errors }
 }
 
+function serve (req, res) {
+  const { id, 0: file } = req.params
+  const basePath = getBasePath(require.resolve(id), id)
+  if (basePath) {
+    res.sendFile(path.join(basePath, 'ui-public', file))
+    return
+  }
+
+  res.status(404)
+  res.send(`Addon ${id} not found in loaded addons. Try opening a vue-cli project first?`)
+}
+
 module.exports = {
   list,
   findOne,
@@ -358,5 +371,6 @@ module.exports = {
   resetPluginApi,
   getApi,
   finishInstall,
-  callAction
+  callAction,
+  serve
 }
