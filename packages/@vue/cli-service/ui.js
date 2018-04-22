@@ -197,7 +197,7 @@ module.exports = api => {
     defaultView: 'vue-webpack-dashboard'
   })
 
-  // Testing client addon
+  // Webpack dashboard
   api.addClientAddon({
     id: 'vue-webpack',
     path: '@vue/cli-ui-addon-webpack/dist'

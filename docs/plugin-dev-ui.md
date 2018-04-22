@@ -44,6 +44,10 @@ You should add the url to the plugin website or repository in the `homepage` or 
 }
 ```
 
+<p align="center">
+  <img width="613px" src="https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/plugin-search-item.png">
+</p>
+
 ## UI API
 
 The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
@@ -62,17 +66,430 @@ module.exports = api => {
 
 ### Project configurations
 
+You can add a project configuration with the `api.describeConfig` method.
+
+First you need to pass some informations:
+
+```js
+api.describeConfig({
+  // Unique ID for the config
+  id: 'eslintrc',
+  // Displayed name
+  name: 'ESLint configuration',
+  // Shown below the name
+  description: 'Error checking & Code quality',
+  // "More info" link
+  link: 'https://eslint.org'
+})
+```
+
+Specify an icon with either a file type (like `'json'`) or a file name (like `.babelrc` to get the babel icon). This is powered by file-icons.
+
+```js
+api.describeConfig({
+  /* ... */
+  // Icon generated using file-icons
+  icon: '.eslintrc.json'
+})
+```
+
+Then you can specify which files will be read when loading the configuration and then written to (JS files aren't supported yet):
+
+```js
+api.describeConfig({
+  /* ... */
+  // All possible files for this config
+  files: {
+    json: ['.eslintrc', '.eslintrc.json'],
+    // Will read from `package.json`
+    package: 'eslintConfig'
+  },
+})
+```
+
+Supported types: `json`, `yaml`, `package`.
+
+Use the `onRead` hook to return a list of prompts to be displayed for the configuration:
+
+```js
+api.describeConfig({
+  /* ... */
+  onRead: ({ data }) => ({
+    prompts: [
+      // Prompt objects
+    ]
+  })
+})
+```
+
+The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) prompts with the following additional fields (which are optional):
+
+```js
+{
+  /* ... */
+  // Used to group the prompts into sections
+  group: 'Strongly recommended',
+  // Additional description
+  description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
+  // "More info" link
+  link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
+}
+```
+
+Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+
+Use the `onWrite` hook to write the data to the configuration file (or execute any node code):
+
+```js
+api.describeConfig({
+  /* ... */
+  onWrite: ({ prompts, answers, data, file, api }) => {
+    // ...
+  }
+})
+```
+
+Arguments:
+
+- `prompts`: current prompts runtime objects
+- `answers`: answers data from the user inputs
+- `data`: initial data read from the file
+- `file`: descriptor of the found file (`{ type: 'json', path: '...' }`)
+- `api`: onWrite API
+
+Prompts runtime objects:
+
+```js
+{
+  id: data.name,
+  type: data.type,
+  name: data.short || null,
+  message: data.message,
+  group: data.group || null,
+  description: data.description || null,
+  link: data.link || null,
+  choices: null,
+  visible: true,
+  enabled: true,
+  // Current value (not filtered)
+  value: null,
+  // true if changed by user
+  valueChanged: false,
+  error: null,
+  // Original inquirer prompt object
+  raw: data
+}
+```
+
+onWrite API:
+
+- `assignData(newData)`: use `Object.assign` to update the config data before writing.
+- `setData(newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
+- `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provide (for example `JSON.parse`).
+
 ### Project tasks
+
+Tasks are generated from the `scripts` field in the project `package.json` file.
+
+You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method:
+
+```js
+api.describeTask({
+  // RegExp executed on script commands to select which task will be described here
+  match: /vue-cli-service serve/,
+  description: 'Compiles and hot-reloads for development',
+  // "More info" link
+  link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve',
+  // Optional parameters (inquirer prompts)
+  prompts: [
+    {
+      name: 'open',
+      type: 'confirm',
+      default: false,
+      description: 'Open browser on server start'
+    },
+    {
+      name: 'mode',
+      type: 'list',
+      default: 'development',
+      choices: [
+        {
+          name: 'development',
+          value: 'development'
+        },
+        {
+          name: 'production',
+          value: 'production'
+        },
+        {
+          name: 'test',
+          value: 'test'
+        }
+      ],
+      description: 'Specify env mode'
+    }
+  ],
+  // Hooks
+  // Modify arguments here
+  onBeforeRun: ({ answers, args }) => {
+    // Args
+    if (answers.open) args.push('--open')
+    if (answers.mode) args.push('--mode', answers.mode)
+    args.push('--dashboard')
+  },
+  // Immediatly after running the task
+  onRun: ({ args, child, cwd }) => {
+    // child: node child process
+    // cwd: process working directory
+  },
+  onExit: ({ args, child, cwd, code, signal }) => {
+    // code: exit code
+    // signal: kill signal used if any
+  },
+  // Additional views (for example the webpack dashboard)
+  // By default, there is the 'output' view which displays the terminal output
+  views: [
+    {
+      // Unique ID
+      id: 'vue-webpack-dashboard-client-addon',
+      // Button label
+      label: 'Dashboard',
+      // Button icon
+      icon: 'dashboard',
+      // Dynamic component to load (see 'Client addon' section below)
+      component: 'vue-webpack-dashboard'
+    }
+  ],
+  // Default selected view when displaying the task details (by default it's the output)
+  defaultView: 'vue-webpack-dashboard'
+})
+```
 
 ### Client addon
 
+A Client addon is a JS bundle which is dynamically loaded into the cli-ui. It is useful to load custom components and routes.
+
+#### Create a client addon
+
+The recommended way to create a Client addon is by creating a new project using vue-cli 3. You can either do this in a subfolder of your plugin or in a different npm package.
+
+Then add a `vue.config.js` file with the following content:
+
+```js
+module.exports = {
+  // Change the id here
+  baseUrl: '/_addon/<client-addon-id>',
+  // You can change the port here
+  devBaseUrl: 'http://localhost:8042/',
+  configureWebpack: {
+    output: {
+      // Important
+      filename: 'index.js'
+    }
+  },
+  // Don't extract CSS into a separate file
+  css: {
+    extract: false
+  },
+  // Remove unneeded webpack plugins
+  chainWebpack: config => {
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+    config.plugins.delete('html')
+    config.plugins.delete('split-vendor')
+    config.plugins.delete('split-vendor-async')
+    config.plugins.delete('split-manifest')
+  },
+  // Configure dev server
+  devServer: {
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
+    // You can change the port here
+    port: 8042
+  }
+}
+```
+
+**Don't forget to replace `<client-addon-id>` in the `baseUrl` field with the id of your new client addon!**
+
+Then modify the `.eslintrc.json` file to add some allowed global objects:
+
+```json
+{
+  // ...
+  "globals": {
+    "ClientAddonApi": false,
+    "mapSharedData": false,
+    "Vue": false
+  }
+}
+```
+
+You can now run the `serve` script in development and the `build` one when you are ready to publish your plugin.
+
+#### ClientAddonApi
+
+Open the `main.js` file in the client addon sources and remove all the code.
+
+**Don't import Vue in the client addon sources, use the global `Vue` object from the browser `window`.**
+
+Here is an example of code for `main.js`:
+
+```js
+import VueProgress from 'vue-progress-path'
+import WebpackDashboard from './components/WebpackDashboard.vue'
+import TestView from './components/TestView.vue'
+
+// You can install additional vue plugins
+// using the global 'Vue' variable
+Vue.use(VueProgress, {
+  defaultShape: 'circle'
+})
+
+// Register a custom component
+// (works like 'Vue.component')
+ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
+
+// Add routes to vue-router under a /addon/<id> parent route.
+// For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
+// will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
+// Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
+ClientAddonApi.addRoutes('vue-webpack', [
+  { path: '', name: 'test-webpack-route', component: TestView }
+])
+```
+
+The cli-ui registers `Vue` and `ClientAddonApi` as global variable in the `window` scope.
+
+#### Register the client addon
+
+**Back to the UI API (in the `ui.js` file).**
+
+Use the `api.addClientAddon` method with a require query to the built folder:
+
+```js
+api.addClientAddon({
+  id: 'vue-webpack',
+  // Folder containing the built JS files
+  path: '@vue/cli-ui-addon-webpack/dist'
+})
+```
+
+Or specify an url when developping the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
+
+```js
+// Useful for dev
+// Will override path if already defined in a plugin
+api.addClientAddon({
+  id: 'vue-webpack',
+  // Use the same port you configured earlier
+  url: 'http://localhost:8042/index.js'
+})
+```
+
+#### Use the client addon
+
+You can now use the client addon in the views. For example, you can specify a view in a described task:
+
+```js
+api.describeTask({
+  /* ... */
+  // Additional views (for example the webpack dashboard)
+  // By default, there is the 'output' view which displays the terminal output
+  views: [
+    {
+      // Unique ID
+      id: 'vue-webpack-dashboard-client-addon',
+      // Button label
+      label: 'Dashboard',
+      // Button icon (material-icons)
+      icon: 'dashboard',
+      // Dynamic component to load, registered using ClientAddonApi
+      component: 'vue-webpack-dashboard'
+    }
+  ],
+  // Default selected view when displaying the task details (by default it's the output)
+  defaultView: 'vue-webpack-dashboard'
+})
+```
+
+### Custom views
+
+You can add a new view below the standard 'Project plugins', 'Project configuration' and 'Project tasks' ones using the `api.addView` method:
+
+```js
+api.addView({
+  // Unique id
+  id: 'vue-webpack-test-view',
+
+  // Route name (from vue-router)
+  // Use the same name used in the 'ClientAddonApi.addRoutes' method (see above in the Client addon section)
+  name: 'test-webpack-route',
+
+  // Button icon (material-icons)
+  icon: 'pets',
+  // You can also specify a custom image (see Public static files section below):
+  // icon: 'http://localhost:4000/_plugin/%40vue%2Fcli-service/webpack-icon.svg',
+
+  // Button tooltip
+  tooltip: 'Test view from webpack addon'
+})
+```
+
 ### Shared data
+
+Use Shared data to communicate info with custom components in an easy way.
+
+In the plugin `ui.js`:
+
+```js
+// Set or update
+api.setSharedData('my-variable', 'some-data')
+// Get
+api.getSharedData('my-variable')
+// Namespaced versions
+const { setSharedData, getSharedData } = api.namespace('webpack-dashboard-')
+```
+
+In the custom component:
+
+```js
+{
+  // Sync Shared data
+  sharedData () {
+    return {
+      // You can use `status` in template
+      status: `webpack-dashboard-${this.mode}-status`
+      // You can also map namespaced Shared data
+      ...mapSharedData('webpack-dashboard-', {
+        status: `${this.mode}-status`,
+        progress: `${this.mode}-progress`,
+        operations: `${this.mode}-operations`
+      })
+    }
+  },
+
+  // Manual methods
+  async created () {
+    const value = await this.$getSharedData('my-variable')
+
+    this.$watchSharedData(`my-variable`, value => {
+      console.log(value)
+    })
+
+    await this.$setSharedData('my-variable', 'new-value')
+  }
+}
+```
 
 ### Plugin actions
 
+TODO
+
 ### IPC
 
-### Custom views
+TODO
 
 ### Public static files
 
