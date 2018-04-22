@@ -11,7 +11,6 @@ const badgeSchema = createSchema(joi => ({
   id: joi.string().required(),
   type: joi.string(),
   label: joi.string().required(),
-  count: joi.number().integer(),
   priority: joi.number().integer(),
   hidden: joi.boolean()
 }))

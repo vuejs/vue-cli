@@ -69,12 +69,12 @@ function addBadge ({ routeId, badge }, context) {
     const existingBadge = route.badges.find(b => b.id === badge.id)
     if (existingBadge) {
       Object.assign(existingBadge, badge, {
-        count: existingBadge.count + (badge.count || 1)
+        count: existingBadge.count + 1
       })
     } else {
       route.badges.push({
         type: 'dim',
-        count: (badge.count || 1),
+        count: 1,
         priority: 0,
         hidden: false,
         ...badge
