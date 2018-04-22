@@ -10,46 +10,13 @@ const webpack = require('webpack')
 const InspectpackDaemon = require('inspectpack').daemon
 const flatten = require('lodash.flatten')
 const zlib = require('zlib')
-const ipc = require('node-ipc')
+const { IpcMessenger } = require('@vue/cli-shared-utils')
 
 const ONE_SECOND = 1000
 const INSPECTPACK_PROBLEM_ACTIONS = ['versions', 'duplicates']
 const INSPECTPACK_PROBLEM_TYPE = 'problems'
 
-/* Message sending to vue-cli-ui */
-ipc.config.id = 'vue-cli'
-ipc.config.retry = 1500
-ipc.config.silent = true
-
-let queue
-let sendMessage
-
-function resetSendMessage () {
-  queue = []
-  sendMessage = data => queue.push(data)
-}
-
-function connectSendMessage () {
-  ipc.connectTo('vue-cli', () => {
-    sendMessage = data => ipc.of['vue-cli'].emit('message', data)
-    queue && queue.forEach(data => sendMessage(data))
-    queue = null
-  })
-}
-
-function disconnectSendMessage () {
-  ipc.disconnect('vue-cli')
-  resetSendMessage()
-}
-
-// Prevent forced process exit
-// (or else ipc messages may not be sent before kill)
-process.exit = code => {
-  process.exitCode = code
-}
-
-resetSendMessage()
-/* ----- */
+const ipc = new IpcMessenger()
 
 const cacheFilename = path.resolve(os.homedir(), '.webpack-dashboard-cache.db')
 
@@ -104,22 +71,7 @@ class DashboardPlugin {
       }
     }
 
-    if (sendMessage) {
-      const ipcTimer = setTimeout(() => {
-        disconnectSendMessage()
-      }, 15000)
-
-      sendMessage({
-        webpackDashboardDone: true
-      })
-
-      ipc.of['vue-cli'].on('message', data => {
-        if (data.webpackDashboardAck) {
-          clearTimeout(ipcTimer)
-          disconnectSendMessage()
-        }
-      })
-    }
+    ipc.disconnect()
   }
 
   apply (compiler) {
@@ -136,10 +88,9 @@ class DashboardPlugin {
 
     const nodeEnv = process.env.NODE_ENV
 
-    connectSendMessage()
-
     if (!handler) {
-      handler = data => sendMessage({
+      ipc.connect()
+      handler = data => ipc.send({
         webpackDashboardData: {
           type: this.type,
           value: data

@@ -17,6 +17,12 @@ ipc.serve(() => {
       })
     }
   })
+
+  ipc.server.on('ack', (data, socket) => {
+    if (data.done) {
+      ipc.server.emit(socket, 'ack', { ok: true })
+    }
+  })
 })
 
 ipc.server.start()

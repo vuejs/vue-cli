@@ -1,12 +1,13 @@
 [
   'env',
+  'exit',
+  'ipc',
   'logger',
-  'spinner',
-  'validate',
   'openBrowser',
   'pluginResolution',
-  'exit',
-  'request'
+  'request',
+  'spinner',
+  'validate'
 ].forEach(m => {
   Object.assign(exports, require(`./lib/${m}`))
 })

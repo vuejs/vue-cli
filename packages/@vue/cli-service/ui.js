@@ -18,10 +18,6 @@ module.exports = api => {
       for (const data of message.webpackDashboardData.value) {
         setSharedData(`${type}-${data.type}`, data.value)
       }
-    } else if (message.webpackDashboardDone) {
-      api.ipcSend({
-        webpackDashboardAck: true
-      })
     }
   }
 
