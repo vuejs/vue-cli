@@ -51,6 +51,7 @@ function findFile (config, context) {
 
 function readData (config, context) {
   const file = findFile(config, context)
+  config.file = file
   if (file) {
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
