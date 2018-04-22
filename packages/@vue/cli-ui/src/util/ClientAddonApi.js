@@ -8,6 +8,12 @@ export default class ClientAddonApi {
     this.componentListeners = new Map()
   }
 
+  /**
+   * Register a component globally.
+   *
+   * @param {string} id Component id
+   * @param {object} definition Component definition
+   */
   component (id, definition) {
     this.components.set(id, definition)
     const componentId = toComponentId(id)
@@ -20,6 +26,30 @@ export default class ClientAddonApi {
       this.componentListeners.delete(id)
     }
   }
+
+  /**
+   * Add routes to vue-router under a /addon/<id> parent route.
+   * For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
+   * will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
+   *
+   * @param {string} id Routes pack id (generally the vue-cli plugin id)
+   * @param {any} routes vue-router route definitions
+   */
+  addRoutes (id, routes) {
+    router.addRoutes([
+      {
+        path: `/addon/${id}`,
+        component: ProjectHome,
+        meta: {
+          needProject: true,
+          restore: true
+        },
+        children: routes
+      }
+    ])
+  }
+
+  /* Internal */
 
   getComponent (id) {
     return this.components.get(id)
@@ -43,20 +73,6 @@ export default class ClientAddonApi {
         this.listenForComponent(id, resolve)
       }
     })
-  }
-
-  addRoutes (id, routes) {
-    router.addRoutes([
-      {
-        path: `/addon/${id}`,
-        component: ProjectHome,
-        meta: {
-          needProject: true,
-          restore: true
-        },
-        children: routes
-      }
-    ])
   }
 }
 
