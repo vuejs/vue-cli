@@ -2,14 +2,14 @@
   <div class="project-nav">
     <div class="content">
       <VueGroup
-        v-model="currentRoute"
+        v-model="currentView"
         class="vertical small-indicator left-indicator primary"
         indicator
       >
         <ProjectNavButton
-          v-for="route of routes"
-          :key="route.id"
-          :route="route"
+          v-for="view of views"
+          :key="view.id"
+          :view="view"
         />
       </VueGroup>
 
@@ -21,58 +21,58 @@
 <script>
 import { isSameRoute, isIncludedRoute } from '../util/route'
 
-import ROUTES from '../graphql/routes.gql'
-import ROUTE_ADDED from '../graphql/routeAdded.gql'
-import ROUTE_REMOVED from '../graphql/routeRemoved.gql'
-import ROUTE_CHANGED from '../graphql/routeChanged.gql'
+import VIEWS from '../graphql/views.gql'
+import VIEW_ADDED from '../graphql/viewAdded.gql'
+import VIEW_REMOVED from '../graphql/viewRemoved.gql'
+import VIEW_CHANGED from '../graphql/viewChanged.gql'
 
 export default {
   data () {
     return {
-      routes: []
+      views: []
     }
   },
 
   apollo: {
-    routes: {
-      query: ROUTES,
+    views: {
+      query: VIEWS,
       fetchPolicy: 'cache-and-network',
       subscribeToMore: [
         {
-          document: ROUTE_ADDED,
+          document: VIEW_ADDED,
           updateQuery: (previousResult, { subscriptionData }) => {
-            const route = subscriptionData.data.routeAdded
-            if (previousResult.routes.find(r => r.id === route.id)) return previousResult
+            const view = subscriptionData.data.viewAdded
+            if (previousResult.views.find(r => r.id === view.id)) return previousResult
             return {
-              routes: [
-                ...previousResult.routes,
-                route
+              views: [
+                ...previousResult.views,
+                view
               ]
             }
           }
         },
         {
-          document: ROUTE_REMOVED,
+          document: VIEW_REMOVED,
           updateQuery: (previousResult, { subscriptionData }) => {
-            const index = previousResult.routes.findIndex(r => r.id === subscriptionData.data.routeRemoved.id)
+            const index = previousResult.views.findIndex(r => r.id === subscriptionData.data.viewRemoved.id)
             if (index === -1) return previousResult
-            const routes = previousResult.routes.slice()
-            routes.splice(index, 1)
+            const views = previousResult.views.slice()
+            views.splice(index, 1)
             return {
-              routes
+              views
             }
           }
         },
         {
-          document: ROUTE_CHANGED,
+          document: VIEW_CHANGED,
           updateQuery: (previousResult, { subscriptionData }) => {
-            const route = subscriptionData.data.routeChanged
-            const index = previousResult.routes.findIndex(r => r.id === route.id)
+            const view = subscriptionData.data.viewChanged
+            const index = previousResult.views.findIndex(r => r.id === view.id)
             if (index === -1) return previousResult
-            const routes = previousResult.routes.slice()
-            routes.splice(index, 1, route)
+            const views = previousResult.views.slice()
+            views.splice(index, 1, view)
             return {
-              routes
+              views
             }
           }
         }
@@ -81,13 +81,13 @@ export default {
   },
 
   computed: {
-    currentRoute: {
+    currentView: {
       get () {
         const currentRoute = this.$route
-        const route = this.routes.find(
+        const view = this.views.find(
           item => isIncludedRoute(currentRoute, this.$router.resolve({ name: item.name }).route)
         )
-        return route && route.name
+        return view && view.name
       },
       set (name) {
         if (!isSameRoute(this.$route, this.$router.resolve({ name }).route)) {

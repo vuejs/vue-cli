@@ -1,7 +1,0 @@
-#import "./routeFragment.gql"
-
-query routes {
-  routes {
-    ...route
-  }
-}

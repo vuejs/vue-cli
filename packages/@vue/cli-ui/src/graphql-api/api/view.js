@@ -1,6 +1,6 @@
 const { createSchema, validateSync } = require('@vue/cli-shared-utils')
 
-const routeSchema = createSchema(joi => ({
+const viewSchema = createSchema(joi => ({
   id: joi.string().required(),
   name: joi.string().required().description('route name (vue-router)'),
   icon: joi.string().required(),
@@ -15,8 +15,8 @@ const badgeSchema = createSchema(joi => ({
   hidden: joi.boolean()
 }))
 
-exports.validateRoute = (options) => {
-  validateSync(options, routeSchema)
+exports.validateView = (options) => {
+  validateSync(options, viewSchema)
 }
 
 exports.validateBadge = (options) => {

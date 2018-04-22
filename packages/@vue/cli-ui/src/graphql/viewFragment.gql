@@ -1,4 +1,4 @@
-fragment route on Route {
+fragment view on View {
   id
   name
   icon

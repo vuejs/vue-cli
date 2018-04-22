@@ -10,12 +10,12 @@ const folders = require('./folders')
 const logs = require('./logs')
 const plugins = require('./plugins')
 const prompts = require('./prompts')
-const routes = require('./routes')
+const views = require('./views')
 
 const { getCommand } = require('../utils/command')
 
 const MAX_LOGS = 2000
-const ROUTE_ID = 'vue-project-tasks'
+const VIEW_ID = 'vue-project-tasks'
 
 const tasks = new Map()
 
@@ -70,7 +70,7 @@ function list (context) {
     )
     // Remove badges
     removedTasks.forEach(task => {
-      updateRouteBadges({ task }, context)
+      updateViewBadges({ task }, context)
     })
 
     // Process new tasks
@@ -137,7 +137,7 @@ function updateOne (data, context) {
   const task = findOne(data.id)
   if (task) {
     if (task.status !== data.status) {
-      updateRouteBadges({
+      updateViewBadges({
         task,
         data
       }, context)
@@ -151,38 +151,38 @@ function updateOne (data, context) {
   return task
 }
 
-function updateRouteBadges ({ task, data }, context) {
-  const routeId = ROUTE_ID
+function updateViewBadges ({ task, data }, context) {
+  const viewId = VIEW_ID
 
   // New badges
   if (data) {
     if (data.status === 'error') {
-      routes.addBadge({
-        routeId,
+      views.addBadge({
+        viewId,
         badge: {
           id: 'vue-task-error',
           type: 'error',
-          label: 'components.route-badge.labels.tasks.error',
+          label: 'components.view-badge.labels.tasks.error',
           priority: 3
         }
       }, context)
     } else if (data.status === 'running') {
-      routes.addBadge({
-        routeId,
+      views.addBadge({
+        viewId,
         badge: {
           id: 'vue-task-running',
           type: 'info',
-          label: 'components.route-badge.labels.tasks.running',
+          label: 'components.view-badge.labels.tasks.running',
           priority: 2
         }
       }, context)
     } else if (data.status === 'done') {
-      routes.addBadge({
-        routeId,
+      views.addBadge({
+        viewId,
         badge: {
           id: 'vue-task-done',
           type: 'success',
-          label: 'components.route-badge.labels.tasks.done',
+          label: 'components.view-badge.labels.tasks.done',
           priority: 1,
           hidden: true
         }
@@ -192,11 +192,11 @@ function updateRouteBadges ({ task, data }, context) {
 
   // Remove previous badges
   if (task.status === 'error') {
-    routes.removeBadge({ routeId, badgeId: 'vue-task-error' }, context)
+    views.removeBadge({ viewId, badgeId: 'vue-task-error' }, context)
   } else if (task.status === 'running') {
-    routes.removeBadge({ routeId, badgeId: 'vue-task-running' }, context)
+    views.removeBadge({ viewId, badgeId: 'vue-task-running' }, context)
   } else if (task.status === 'done') {
-    routes.removeBadge({ routeId, badgeId: 'vue-task-done' }, context)
+    views.removeBadge({ viewId, badgeId: 'vue-task-done' }, context)
   }
 }
 

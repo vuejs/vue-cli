@@ -1,6 +1,6 @@
 <template>
   <div
-    class="route-badge"
+    class="view-badge"
     :class="[
       `type-${badge.type}`
     ]"
@@ -26,7 +26,7 @@ export default {
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 
-.route-badge
+.view-badge
   .content
     font-size 12px
     h-box()

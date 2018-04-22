@@ -93,15 +93,6 @@
     "prompts-list": {
       "empty": "No configuration"
     },
-    "route-badge": {
-      "labels": {
-        "tasks": {
-          "error": "Error status",
-          "running": "Running status",
-          "done": "Done status"
-        }
-      }
-    },
     "status-bar": {
       "project": {
         "tooltip": "Current project<br><i>Click to toggle Project Manager</i>",
@@ -119,6 +110,15 @@
       "buttons": {
         "clear": "Clear console",
         "scroll": "Scroll to bottom"
+      }
+    },
+    "view-badge": {
+      "labels": {
+        "tasks": {
+          "error": "Error status",
+          "running": "Running status",
+          "done": "Done status"
+        }
       }
     }
   },

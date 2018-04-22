@@ -1,0 +1,7 @@
+#import "./viewFragment.gql"
+
+subscription viewChanged {
+  viewChanged {
+    ...view
+  }
+}

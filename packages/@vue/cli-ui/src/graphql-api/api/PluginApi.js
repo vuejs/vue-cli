@@ -2,14 +2,14 @@
 const logs = require('../connectors/logs')
 const plugins = require('../connectors/plugins')
 const sharedData = require('../connectors/shared-data')
-const routes = require('../connectors/routes')
+const views = require('../connectors/views')
 // Utils
 const ipc = require('../utils/ipc')
 // Validators
 const { validateConfiguration } = require('./configuration')
 const { validateTask } = require('./task')
 const { validateClientAddon } = require('./client-addon')
-const { validateRoute, validateBadge } = require('./route')
+const { validateView, validateBadge } = require('./view')
 
 class PluginApi {
   constructor (context) {
@@ -20,7 +20,7 @@ class PluginApi {
     this.configurations = []
     this.tasks = []
     this.clientAddons = []
-    this.routes = []
+    this.views = []
     this.actions = new Map()
   }
 
@@ -114,15 +114,15 @@ class PluginApi {
    *
    * @param {object} options ProjectView options
    */
-  addRoute (options) {
+  addView (options) {
     try {
-      validateRoute(options)
-      this.routes.push(options)
+      validateView(options)
+      this.views.push(options)
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'addRoute' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'addView' options are invalid\n${e.message}`
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -132,18 +132,18 @@ class PluginApi {
    * Add a badge to the project view button.
    * If the badge already exists, add 1 to the counter.
    *
-   * @param {string} routeId Project view id
+   * @param {string} viewId Project view id
    * @param {object} options Badge options
    */
-  addRouteBadge (routeId, options) {
+  addViewBadge (viewId, options) {
     try {
       validateBadge(options)
-      routes.addBadge({ routeId, badge: options }, this.context)
+      views.addBadge({ viewId, badge: options }, this.context)
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'addRouteBadge' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'addViewBadge' options are invalid\n${e.message}`
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -153,12 +153,12 @@ class PluginApi {
    * Remove 1 from the counter of a badge if it exists.
    * If the badge counter reaches 0, it is removed from the button.
    *
-   * @param {any} routeId
+   * @param {any} viewId
    * @param {any} badgeId
    * @memberof PluginApi
    */
-  removeRouteBadge (routeId, badgeId) {
-    routes.removeBadge({ routeId, badgeId }, this.context)
+  removeViewBadge (viewId, badgeId) {
+    views.removeBadge({ viewId, badgeId }, this.context)
   }
 
   /* IPC */

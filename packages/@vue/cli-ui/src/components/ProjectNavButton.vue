@@ -10,21 +10,21 @@
     >
       <VueGroupButton
         class="flat big icon-button"
-        :value="route.name"
-        :icon-left="!imageIcon && route.icon"
+        :value="view.name"
+        :icon-left="!imageIcon && view.icon"
       >
         <img
           v-if="imageIcon"
-          :src="route.icon"
+          :src="view.icon"
           class="image-icon"
         >
       </VueGroupButton>
 
       <template slot="popover">
-        <div class="title">{{ $t(route.tooltip) }}</div>
+        <div class="title">{{ $t(view.tooltip) }}</div>
 
         <div v-if="badges" class="badges">
-          <RouteBadge
+          <ViewBadge
             v-for="badge of badges"
             :key="badge.id"
             :badge="badge"
@@ -46,7 +46,7 @@
 <script>
 export default {
   props: {
-    route: {
+    view: {
       type: Object,
       required: true
     }
@@ -54,8 +54,8 @@ export default {
 
   computed: {
     badges () {
-      if (this.route.badges && this.route.badges.length) {
-        return this.route.badges.slice().sort((a, b) => b.priority - a.priority)
+      if (this.view.badges && this.view.badges.length) {
+        return this.view.badges.slice().sort((a, b) => b.priority - a.priority)
       }
     },
 
@@ -64,7 +64,7 @@ export default {
     },
 
     imageIcon () {
-      return this.route.icon && this.route.icon.indexOf('.') !== -1
+      return this.view.icon && this.view.icon.indexOf('.') !== -1
     }
   }
 }

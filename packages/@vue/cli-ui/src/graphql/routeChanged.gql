@@ -1,7 +1,0 @@
-#import "./routeFragment.gql"
-
-subscription routeChanged {
-  routeChanged {
-    ...route
-  }
-}
