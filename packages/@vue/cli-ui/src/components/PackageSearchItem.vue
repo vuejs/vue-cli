@@ -11,7 +11,7 @@
     />
 
     <ListItemInfo
-      :link="pkg.repository && pkg.repository.url || ''"
+      :link="pkg.homepage || (pkg.repository && pkg.repository.url) || ''"
       :selected="selected"
       show-description
     >
