@@ -2,6 +2,7 @@
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Launch the GUI](#launch-the-gui)
 - [Creating a New Project](#creating-a-new-project)
 - [Presets](#presets)
 - [Zero-config Prototyping](#zero-config-prototyping)

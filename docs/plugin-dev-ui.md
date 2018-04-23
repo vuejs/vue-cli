@@ -2,6 +2,16 @@
 
 This guide will walk you through the development of cli-ui specific features for your vue-cli plugins.
 
+- [Plugin Info](#plugin-info)
+- [Project configurations](#project-configurations)
+- [Project tasks](#project-tasks)
+- [Client addon](#client-addon)
+- [Custom views](#custom-views)
+- [Shared data](#shared-data)
+- [Plugin actions](#plugin-actions)
+- [IPC](#ipc)
+- [Public static files](#public-static-files)
+
 ## Plugin Info
 
 When used in the UI, your plugin can show additional information to make it more discoverable and recognizable.
