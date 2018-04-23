@@ -287,6 +287,8 @@ module.exports = {
 }
 ```
 
+The `clientAddonConfig` method will generate the needed vue-cli configuration. Among other things, it disables CSS extraction and outputs the code to `./dist/index.js` in the client addon folder.
+
 **⚠️ Don't forget to replace `<client-addon-id>` in the `baseUrl` field with the id of your new client addon!**
 
 Then modify the `.eslintrc.json` file to add some allowed global objects:
@@ -349,6 +351,8 @@ api.addClientAddon({
   path: '@vue/cli-ui-addon-webpack/dist'
 })
 ```
+
+This will use the nodejs `require.resolve` API to find the folder and serve the `index.js` file built from the client addon.
 
 Or specify an url when developping the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
 
