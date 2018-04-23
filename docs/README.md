@@ -162,3 +162,4 @@ See [@vue/cli-plugin-typescript](https://github.com/vuejs/vue-cli/tree/dev/packa
 
 - [Contributing Guide](https://github.com/vuejs/vue-cli/blob/dev/.github/CONTRIBUTING.md)
 - [Plugin Development Guide](https://github.com/vuejs/vue-cli/blob/dev/docs/plugin-dev.md)
+- [Plugin UI Development Guide](https://github.com/vuejs/vue-cli/blob/dev/docs/plugin-dev-ui.md)
