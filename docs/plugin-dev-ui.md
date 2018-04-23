@@ -287,7 +287,7 @@ module.exports = {
 }
 ```
 
-**Don't forget to replace `<client-addon-id>` in the `baseUrl` field with the id of your new client addon!**
+**⚠️ Don't forget to replace `<client-addon-id>` in the `baseUrl` field with the id of your new client addon!**
 
 Then modify the `.eslintrc.json` file to add some allowed global objects:
 
@@ -308,7 +308,7 @@ You can now run the `serve` script in development and the `build` one when you a
 
 Open the `main.js` file in the client addon sources and remove all the code.
 
-**Don't import Vue in the client addon sources, use the global `Vue` object from the browser `window`.**
+**⚠️ Don't import Vue in the client addon sources, use the global `Vue` object from the browser `window`.**
 
 Here is an example of code for `main.js`:
 
@@ -336,7 +336,7 @@ ClientAddonApi.addRoutes('vue-webpack', [
 ])
 ```
 
-The cli-ui registers `Vue` and `ClientAddonApi` as global variable in the `window` scope.
+The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
 
 #### Register the client addon
 
