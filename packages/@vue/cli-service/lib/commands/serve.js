@@ -2,7 +2,8 @@ const {
   info,
   error,
   hasYarn,
-  openBrowser
+  openBrowser,
+  IpcMessenger
 } = require('@vue/cli-shared-utils')
 
 const defaults = {
@@ -119,6 +120,17 @@ module.exports = (api, options) => {
 
           if (args.open || projectDevServerOptions.open) {
             openBrowser(urls.localUrlForBrowser)
+          }
+
+          if (args.dashboard) {
+            const ipc = new IpcMessenger()
+            ipc.connect()
+            ipc.send({
+              vueServe: {
+                url: urls.localUrlForBrowser
+              }
+            })
+            ipc.disconnect()
           }
 
           // resolve returned Promise

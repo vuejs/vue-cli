@@ -3,6 +3,21 @@
     <div class="pane-toolbar">
       <VueIcon icon="dashboard"/>
       <div class="title">Dashboard</div>
+
+      <template
+        v-if="mode === 'serve'"
+      >
+        <VueButton
+          icon-left="open_in_browser"
+          label="Open app"
+          :disabled="!serveUrl"
+          @click="$callPluginAction('webpack-dashboard-open-app')"
+        />
+        <VueIcon
+          icon="lens"
+          class="separator"
+        />
+      </template>
       <VueSwitch
         v-model="useGzip"
       >
@@ -50,6 +65,18 @@ export default {
     'TaskDetails'
   ],
 
+  data () {
+    return {
+      mode: null
+    }
+  },
+
+  sharedData () {
+    return {
+      serveUrl: `webpack-dashboard-serve-url`
+    }
+  },
+
   computed: {
     useGzip: {
       get () { return this.$store.getters.useGzip },
@@ -58,7 +85,7 @@ export default {
   },
 
   created () {
-    const mode = this.TaskDetails.task.command.indexOf('vue-cli-service serve') !== -1 ? 'serve' : 'build'
+    const mode = this.mode = this.TaskDetails.task.command.indexOf('vue-cli-service serve') !== -1 ? 'serve' : 'build'
     this.$store.commit('mode', mode)
     this.$watchSharedData(`webpack-dashboard-${mode}-stats`, value => {
       this.$store.commit('stats', {

@@ -70,6 +70,8 @@ module.exports = api => {
 }
 ```
 
+**⚠️ The files will be reloaded when feetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left.**
+
 ### Project configurations
 
 ![Configuration ui](./config-ui.png)
@@ -466,9 +468,14 @@ In the plugin `ui.js`:
 // Set or update
 api.setSharedData('my-variable', 'some-data')
 // Get
-api.getSharedData('my-variable')
+const sharedData = api.getSharedData('my-variable')
+if (sharedData) {
+  console.log(sharedData.value)
+}
+// Remove
+api.removeSharedData('my-variable')
 // Namespaced versions
-const { setSharedData, getSharedData } = api.namespace('webpack-dashboard-')
+const { setSharedData, getSharedData, removeSharedData } = api.namespace('webpack-dashboard-')
 ```
 
 In the custom component:

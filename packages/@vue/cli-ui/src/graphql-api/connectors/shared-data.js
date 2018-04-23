@@ -22,7 +22,15 @@ function set ({ id, value }, context) {
   return { id, value }
 }
 
+function remove (id, context) {
+  sharedData.delete(id)
+  context.pubsub.publish(channels.SHARED_DATA_UPDATED, {
+    sharedDataUpdated: { id, value: undefined }
+  })
+}
+
 module.exports = {
   get,
-  set
+  set,
+  remove
 }

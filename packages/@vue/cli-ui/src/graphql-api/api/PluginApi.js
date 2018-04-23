@@ -212,6 +212,15 @@ class PluginApi {
   }
 
   /**
+   * Delete a shared data.
+   *
+   * @param {string} id Id of the Shared data
+   */
+  removeSharedData (id) {
+    sharedData.remove(id, this.context)
+  }
+
+  /**
    * Listener triggered when a Plugin action is called from a client addon component.
    *
    * @param {string} id Id of the action to listen
@@ -252,6 +261,7 @@ class PluginApi {
     return {
       getSharedData: (id) => this.getSharedData(namespace + id),
       setSharedData: (id, value) => this.setSharedData(namespace + id, value),
+      removeSharedData: (id) => this.removeSharedData(namespace + id),
       onAction: (id, cb) => this.onAction(namespace + id, cb),
       callAction: (id, params) => this.callAction(namespace + id, params)
     }
