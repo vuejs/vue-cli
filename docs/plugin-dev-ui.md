@@ -1,6 +1,6 @@
 # Plugin UI Development Guide
 
-> Work-in-progress documentation
+This guide will walk you through the development of cli-ui specific features for your vue-cli plugins.
 
 ## Plugin Info
 

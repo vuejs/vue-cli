@@ -28,10 +28,27 @@ Commands:
   inspect [options] [paths...]     inspect the webpack config in a project with vue-cli-service
   serve [options] [entry]          serve a .js or .vue file in development mode with zero config
   build [options] [entry]          build a .js or .vue file in production mode with zero config
+  ui [options]                     start and open the vue-cli ui
   init <template> <app-name>       generate a project from a remote template (legacy API, requires @vue/cli-init)
 ```
 
 For each command, you can also use `vue <command> --help` to see more detailed usage.
+
+### Launch the GUI
+
+```
+Usage: ui [options]
+
+start and open the vue-cli ui
+
+
+Options:
+
+  -p, --port <port>  Port used for the UI server (by default search for awailable port)
+  -h, --help         output usage information
+```
+
+![Vue-cli UI preview](./vue-cli-ui-preview.gif)
 
 ### Creating a New Project
 
