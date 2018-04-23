@@ -37,7 +37,8 @@ module.exports = (context, options = {}) => {
   // stage 2. This includes some important transforms, e.g. dynamic import
   // and rest object spread.
   presets.push([require('@babel/preset-stage-2'), {
-    useBuiltIns: true
+    useBuiltIns: true,
+    decoratorsLegacy: true
   }])
 
   // transform runtime, but only for helpers
