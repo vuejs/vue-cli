@@ -62,9 +62,9 @@ module.exports = api => {
 
 ### Project configurations
 
-You can add a project configuration with the `api.describeConfig` method.
-
 ![Configuration ui](./config-ui.png)
+
+You can add a project configuration with the `api.describeConfig` method.
 
 First you need to pass some informations:
 
@@ -187,9 +187,9 @@ onWrite API:
 
 ### Project tasks
 
-Tasks are generated from the `scripts` field in the project `package.json` file.
-
 ![Tasks ui](./tasks-ui.png)
+
+Tasks are generated from the `scripts` field in the project `package.json` file.
 
 You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method:
 
