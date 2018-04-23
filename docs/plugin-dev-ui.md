@@ -350,6 +350,7 @@ ClientAddonApi.addRoutes('vue-webpack', [
 
 The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
 
+In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent.
 #### Register the client addon
 
 Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
