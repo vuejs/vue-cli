@@ -276,38 +276,14 @@ The recommended way to create a Client addon is by creating a new project using 
 Then add a `vue.config.js` file with the following content:
 
 ```js
+const { clientAddonConfig } = require('@vue/cli-ui')
+
 module.exports = {
-  // Change the id here
-  baseUrl: '/_addon/<client-addon-id>',
-  // You can change the port here
-  devBaseUrl: 'http://localhost:8042/',
-  configureWebpack: {
-    output: {
-      // Important
-      filename: 'index.js'
-    }
-  },
-  // Don't extract CSS into a separate file
-  css: {
-    extract: false
-  },
-  // Remove unneeded webpack plugins
-  chainWebpack: config => {
-    config.plugins.delete('preload')
-    config.plugins.delete('prefetch')
-    config.plugins.delete('html')
-    config.plugins.delete('split-vendor')
-    config.plugins.delete('split-vendor-async')
-    config.plugins.delete('split-manifest')
-  },
-  // Configure dev server
-  devServer: {
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    // You can change the port here
+  ...clientAddonConfig({
+    id: '<client-addon-id>',
+    // Development port (default 8042)
     port: 8042
-  }
+  })
 }
 ```
 
