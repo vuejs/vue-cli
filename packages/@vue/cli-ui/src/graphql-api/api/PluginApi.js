@@ -1,6 +1,5 @@
 // Connectors
 const logs = require('../connectors/logs')
-const plugins = require('../connectors/plugins')
 const sharedData = require('../connectors/shared-data')
 const views = require('../connectors/views')
 // Utils
@@ -235,6 +234,7 @@ class PluginApi {
    * @returns {Promise}
    */
   callAction (id, params) {
+    const plugins = require('../connectors/plugins')
     return plugins.callAction({ id, params }, this.context)
   }
 

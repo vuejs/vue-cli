@@ -20,13 +20,13 @@ export default {
         $onPluginActionCalled (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-called-${uid++}`, {
             query: PLUGIN_ACTION_CALLED,
-            result: cb
+            result: ({ data }) => cb(data.pluginActionCalled)
           })
         },
         $onPluginActionResolved (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-resolved-${uid++}`, {
             query: PLUGIN_ACTION_RESOLVED,
-            result: cb
+            result: ({ data }) => cb(data.pluginActionResolved)
           })
         }
       }
