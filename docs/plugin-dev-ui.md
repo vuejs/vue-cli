@@ -64,6 +64,8 @@ module.exports = api => {
 
 You can add a project configuration with the `api.describeConfig` method.
 
+![Configuration ui](./config-ui.png)
+
 First you need to pass some informations:
 
 ```js
@@ -186,6 +188,8 @@ onWrite API:
 ### Project tasks
 
 Tasks are generated from the `scripts` field in the project `package.json` file.
+
+![Tasks ui](./tasks-ui.png)
 
 You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method:
 
@@ -410,6 +414,8 @@ api.describeTask({
 })
 ```
 
+![Task view example](./task-view.png)
+
 ### Custom views
 
 You can add a new view below the standard 'Project plugins', 'Project configuration' and 'Project tasks' ones using the `api.addView` method:
@@ -432,6 +438,8 @@ api.addView({
   tooltip: 'Test view from webpack addon'
 })
 ```
+
+![Custom view example](./custom-view.png)
 
 ### Shared data
 
@@ -488,6 +496,8 @@ TODO
 TODO
 
 ### Public static files
+
+You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).
 
 Any file in an optional `ui-public` folder in the root of the plugin package folder will be exposed to the `/_plugin/:id/*` HTTP route.
 
