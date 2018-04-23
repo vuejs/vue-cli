@@ -493,11 +493,124 @@ In the custom component:
 
 ### Plugin actions
 
-TODO
+Plugin actions are calls sent between the cli-ui (browser) and plugins (nodejs).
+
+In the `ui.js` file in the plugin (nodejs), you can use two methods from `PluginApi`:
+
+```js
+// Call an action
+api.callAction('other-action', { foo: 'bar' }).then(results => {
+  console.log(results)
+}).catch(errors => {
+  console.error(errors)
+})
+```
+
+```js
+// Listen for an action
+api.onAction('test-action', params => {
+  console.log('test-action called', params)
+})
+```
+
+You can use namespaced versions with `api.namespace` (similar to Shared data):
+
+```js
+const { onAction, callAction } = api.namespace('vue-webpack-')
+```
+
+In the client addon components (browser), you have access to `$onPluginActionCalled`, `$onPluginActionResolved` and `$callPluginAction`:
+
+```js
+export default {
+  created () {
+    this.$onPluginActionCalled(action => {
+      // When the action is called
+      // before being run
+      console.log('called', action)
+    })
+    this.$onPluginActionResolved(action => {
+      // After the action is run and completed
+      console.log('resolved', action)
+    })
+  },
+
+  methods: {
+    testPluginAction () {
+      // Call a plugin action
+      this.$callPluginAction('test-action', {
+        meow: 'meow'
+      })
+    }
+  }
+}
+```
 
 ### IPC
 
-TODO
+IPC stands for Inter-Process Communication. This system allows you to easily send messages from child processes (for example, tasks!). And it's pretty fast and lightweight.
+
+> To display the data in the webpack dashboard UI, the `serve` and `build` commands from `@vue/cli-service` send IPC messages to the cli-ui nodejs server when the `--dashboard` argument is passed in.
+
+In you process code (which can be a Webpack plugin or a nodejs task script), you can use the `IpcMessenger` class from `@vue/cli-shared-utils`:
+
+```js
+const { IpcMessenger } = require('@vue/cli-shared-utils')
+
+// Create a new IpcMessenger instance
+const ipc = new IpcMessenger()
+
+// Connect to the vue-cli IPC network
+ipc.connect()
+
+function sendMessage (data) {
+  // Send a message to the cli-ui server
+  ipc.send({
+    webpackDashboardData: {
+      type: 'build',
+      value: data
+    }
+  })
+}
+
+function messageHandler (data) {
+  console.log(data)
+}
+
+// Listen for message
+ipc.on(messageHandler)
+
+// Don't listen anymore
+ipc.off(messageHandler)
+
+function cleanup () {
+  // Disconnect from the IPC network
+  ipc.disconnect()
+}
+```
+
+In a vue-cli plugin `ui.js` file, you can use the `ipcOn`, `ipcOff` and `ipcSend` methods:
+
+```js
+function onWebpackMessage ({ data: message }) {
+  if (message.webpackDashboardData) {
+    console.log(message.webpackDashboardData)
+  }
+}
+
+// Listen for any IPC message
+api.ipcOn(onWebpackMessage)
+
+// Don't listen anymore
+api.ipcOff(onWebpackMessage)
+
+// Send a message to all connected IpcMessenger instances
+api.ipcSend({
+  webpackDashboardMessage: {
+    foo: 'bar'
+  }
+})
+```
 
 ### Public static files
 
