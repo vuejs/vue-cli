@@ -261,7 +261,7 @@ api.describeTask({
     }
   ],
   // Default selected view when displaying the task details (by default it's the output)
-  defaultView: 'vue-webpack-dashboard'
+  defaultView: 'vue-webpack-dashboard-client-addon'
 })
 ```
 
@@ -388,8 +388,19 @@ api.describeTask({
     }
   ],
   // Default selected view when displaying the task details (by default it's the output)
-  defaultView: 'vue-webpack-dashboard'
+  defaultView: 'vue-webpack-dashboard-client-addon'
 })
+```
+
+Here is the client addon code that register the `'vue-webpack-dashboard'` component (like we saw earlier):
+
+```js
+/* In `main.js` */
+// Import the component
+import WebpackDashboard from './components/WebpackDashboard.vue'
+// Register a custom component
+// (works like 'Vue.component')
+ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 ```
 
 ![Task view example](./task-view.png)
@@ -415,6 +426,21 @@ api.addView({
   // Button tooltip
   tooltip: 'Test view from webpack addon'
 })
+```
+
+Here is the code in the client addon that register the `'test-webpack-route'` (like we saw earlier):
+
+```js
+/* In `main.js` */
+// Import the component
+import TestView from './components/TestView.vue'
+// Add routes to vue-router under a /addon/<id> parent route.
+// For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
+// will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
+// Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
+ClientAddonApi.addRoutes('vue-webpack', [
+  { path: '', name: 'test-webpack-route', component: TestView }
+])
 ```
 
 ![Custom view example](./custom-view.png)
