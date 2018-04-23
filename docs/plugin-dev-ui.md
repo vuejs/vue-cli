@@ -12,9 +12,7 @@ You can put a `logo.png` file in the root directory of the folder that will be p
  - When searching for a plugin to install
  - In the installed plugin list
 
-<p align="center">
-  <img width="911px" src="https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/plugins.png">
-</p>
+![Plugins](./plugins.png)
 
 The logo should be a square non-transparent image (ideally 84x84).
 
@@ -44,9 +42,7 @@ You should add the url to the plugin website or repository in the `homepage` or 
 }
 ```
 
-<p align="center">
-  <img width="613px" src="https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/plugin-search-item.png">
-</p>
+![Plugin search item](./plugin-search-item.png)
 
 ## UI API
 
