@@ -299,7 +299,7 @@ module.exports = {
 
 The `clientAddonConfig` method will generate the needed vue-cli configuration. Among other things, it disables CSS extraction and outputs the code to `./dist/index.js` in the client addon folder.
 
-**⚠️ Don't forget to replace `<client-addon-id>` in the `baseUrl` field with the id of your new client addon!**
+**⚠️ Don't forget to replace `<client-addon-id>` in the `id` field with the id of your new client addon!**
 
 Then modify the `.eslintrc.json` file to add some allowed global objects:
 
