@@ -340,9 +340,7 @@ The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `wind
 
 #### Register the client addon
 
-**Back to the UI API (in the `ui.js` file).**
-
-Use the `api.addClientAddon` method with a require query to the built folder:
+Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
 
 ```js
 api.addClientAddon({
