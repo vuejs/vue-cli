@@ -206,12 +206,12 @@ module.exports = api => {
     path: '@vue/cli-ui-addon-webpack/dist'
   })
 
+  // Open app button
   api.ipcOn(({ data }) => {
     if (data.vueServe) {
       setSharedData('serve-url', data.vueServe.url)
     }
   })
-
   onAction('open-app', () => {
     const url = getSharedData('serve-url')
     url && openBrowser(url.value)
