@@ -3,7 +3,8 @@
     "target": "<%- options.useTsWithBabel ? 'esnext' : 'es5' %>",
     "module": "esnext",
     "strict": true,
-    "jsx": "preserve",
+    "jsx": "preserve", 
+    "jsxFactory": "h",
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
