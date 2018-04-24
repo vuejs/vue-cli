@@ -17,8 +17,7 @@ module.exports = (context, options = {}) => {
   const envOptions = {
     modules: options.modules || false,
     targets: options.targets,
-    useBuiltIns: typeof options.useBuiltIns === 'undefined' ? 'usage' : options.useBuiltIns,
-    decoratorsLegacy: options.decoratorsLegacy || false
+    useBuiltIns: typeof options.useBuiltIns === 'undefined' ? 'usage' : options.useBuiltIns
   }
   delete envOptions.jsx
   // target running node version (this is set by unit testing plugins)
@@ -39,7 +38,7 @@ module.exports = (context, options = {}) => {
   // and rest object spread.
   presets.push([require('@babel/preset-stage-2'), {
     useBuiltIns: true,
-    decoratorsLegacy: envOptions.decoratorsLegacy
+    decoratorsLegacy: options.decoratorsLegacy || false
   }])
 
   // transform runtime, but only for helpers
