@@ -25,9 +25,9 @@
     "@vue/cli-plugin-babel": "^3.0.0-beta.6",
     "@vue/cli-plugin-eslint": "^3.0.0-beta.6",
     "@vue/cli-service": "^3.0.0-beta.6",
-    "chalk": "^2.3.2",
+    "chalk": "^2.4.0",
     "eslint-plugin-vue": "^4.3.0",
-    "resolve": "^1.5.0",
-    "vue": "^2.5.13"
+    "resolve": "^1.7.1",
+    "vue": "^2.5.16"
   }
 }
