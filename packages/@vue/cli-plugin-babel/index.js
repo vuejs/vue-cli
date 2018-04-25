@@ -8,7 +8,7 @@ module.exports = (api, options) => {
         .test(/\.jsx?$/)
         .include
           .add(api.resolve('src'))
-          .add(api.resolve('test'))
+          .add(api.resolve('tests'))
           .end()
         .use('cache-loader')
           .loader('cache-loader')
