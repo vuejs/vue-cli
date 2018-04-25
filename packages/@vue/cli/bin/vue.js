@@ -66,9 +66,10 @@ program
 program
   .command('inspect [paths...]')
   .option('--mode <mode>')
+  .option('-v --verbose', 'Show full function definitions in output')
   .description('inspect the webpack config in a project with vue-cli-service')
   .action((paths, cmd) => {
-    require('../lib/inspect')(paths, cmd.mode)
+    require('../lib/inspect')(paths, cleanArgs(cmd))
   })
 
 program
