@@ -12,9 +12,13 @@ async function create (projectName, options) {
   const inCurrent = projectName === '.'
   const name = inCurrent ? path.relative('../', process.cwd()) : projectName
   const targetDir = path.resolve(projectName || '.')
-
-  if (!validateProjectName(name).validForNewPackages) {
-    console.error(chalk.red(`Could not be created because ${projectName} is an invalid name.`))
+  
+  const result = validateProjectName(name)
+  if (!result.validForNewPackages) {
+    console.error(chalk.red(`Invalid project name: "${projectName}"`))
+    result.errors && result.errors.forEach(err => {
+      console.error(chalk.red(err))
+    })
     process.exit(1)
   }
 
