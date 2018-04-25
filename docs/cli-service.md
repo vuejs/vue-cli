@@ -120,7 +120,9 @@ It is also possible to build any component(s) inside your project as a library o
 
 #### DLL Mode
 
-If your app has a large amount of dependency libraries, you can improve the build performance by opting into DLL mode. DLL mode builds your dependencies into a separate vendor bundle which will be reused on future builds as long as your dependencies did not change.
+If your app has a large amount of dependency libraries, you can improve the build performance by opting into DLL mode. DLL mode caches your dependencies in development so they don't have to be re-evaluated between builds.
+
+It should be noted that DLL mode may not produce the most optimally _sized_ bundles and it is therefore recommended to disable this option for production builds.
 
 To enable DLL mode, set the `dll` option in `vue.config.js` to `true`:
 
