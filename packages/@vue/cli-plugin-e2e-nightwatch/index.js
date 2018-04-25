@@ -31,17 +31,20 @@ module.exports = (api, options) => {
     return serverPromise.then(({ server, url }) => {
       // expose dev server url to tests
       process.env.VUE_DEV_SERVER_URL = url
-      // expose user options to config file
-      const fs = require('fs')
-      let userOptionsPath, userOptions
-      if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.config.js'))) {
-        userOptions = require(userOptionsPath)
-      } else if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.json'))) {
-        userOptions = require(userOptionsPath)
+      if (rawArgs.indexOf('--config') === -1) {
+        // expose user options to config file
+        const fs = require('fs')
+        let userOptionsPath, userOptions
+        if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.config.js'))) {
+          userOptions = require(userOptionsPath)
+        } else if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.json'))) {
+          userOptions = require(userOptionsPath)
+        }
+        process.env.VUE_NIGHTWATCH_USER_OPTIONS = JSON.stringify(userOptions || {})
+  
+        rawArgs.push('--config', require.resolve('./nightwatch.config.js'))
       }
-      process.env.VUE_NIGHTWATCH_USER_OPTIONS = JSON.stringify(userOptions || {})
 
-      rawArgs.push('--config', require.resolve('./nightwatch.config.js'))
       if (rawArgs.indexOf('--env') === -1) {
         rawArgs.push('--env', 'chrome')
       }
