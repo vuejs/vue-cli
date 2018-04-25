@@ -128,3 +128,12 @@ extends:
   - '@vue/airbnb'
 `.trim())
 })
+
+test('invoking a plugin that renames files', async () => {
+  const project = await create(`invoke-rename`, { plugins: {}})
+  const pkg = JSON.parse(await project.read('package.json'))
+  pkg.devDependencies['@vue/cli-plugin-typescript'] = '*'
+  await project.write('package.json', JSON.stringify(pkg, null, 2))
+  await project.run(`${require.resolve('../bin/vue')} invoke typescript -d`)
+  expect(project.has('src/main.js')).toBe(false)
+})
