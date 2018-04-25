@@ -38,7 +38,7 @@ module.exports = (context, options = {}) => {
   // and rest object spread.
   presets.push([require('@babel/preset-stage-2'), {
     useBuiltIns: true,
-    decoratorsLegacy: options.decoratorsLegacy || false
+    decoratorsLegacy: options.decoratorsLegacy !== false
   }])
 
   // transform runtime, but only for helpers
