@@ -1,3 +1,4 @@
+const stripAnsi = require('strip-ansi')
 const launchPuppeteer = require('./launchPuppeteer')
 
 module.exports = async function serveWithPuppeteer (serve, test) {
@@ -36,8 +37,13 @@ module.exports = async function serveWithPuppeteer (serve, test) {
         const urlMatch = data.match(/http:\/\/[^/]+\//)
         if (urlMatch && isFirstMatch) {
           isFirstMatch = false
+          let url = urlMatch[0]
+
+          // fix "Protocol error (Page.navigate): Cannot navigate to invalid URL undefined" error
+          // when running test in vscode terminal(zsh)
+          url = stripAnsi(url)
+
           // start browser
-          const url = urlMatch[0]
           const { page, browser } = await launchPuppeteer(url)
           activeBrowser = browser
 
