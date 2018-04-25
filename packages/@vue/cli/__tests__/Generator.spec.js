@@ -49,7 +49,11 @@ test('api: extendPackage', async () => {
       list: [1],
       vue: {
         foo: 1,
-        bar: 2
+        bar: 2,
+        pluginOptions: {
+          graphqlMock: true,
+          apolloEngine: false
+        }
       }
     },
     plugins: [{
@@ -60,7 +64,10 @@ test('api: extendPackage', async () => {
           list: [2],
           vue: {
             foo: 2,
-            baz: 3
+            baz: 3,
+            pluginOptions: {
+              enableInSFC: true
+            }
           }
         })
       }
@@ -76,7 +83,12 @@ test('api: extendPackage', async () => {
     vue: {
       foo: 2,
       bar: 2,
-      baz: 3
+      baz: 3,
+      pluginOptions: {
+        graphqlMock: true,
+        apolloEngine: false,
+        enableInSFC: true
+      }
     }
   })
 })
