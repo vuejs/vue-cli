@@ -110,8 +110,9 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     ]
   }
 
-  // Otherwise, proxy is an object so create an array of proxies to pass to webpackDevServer
-  return Object.keys(proxy).map(context => {
+  // Otherwise, proxy is an associative array, so enhance values before passing them to webpackDevServer
+  const proxies = {}
+  for (const context in proxy) {
     if (!proxy[context].hasOwnProperty('target')) {
       console.log(
         chalk.red(
@@ -122,8 +123,9 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
       process.exit(1)
     }
     const entry = createProxyEntry(proxy[context].target, proxy[context].onProxyReq, context)
-    return Object.assign({}, defaultConfig, proxy[context], entry)
-  })
+    proxies[context] = Object.assign({}, defaultConfig, proxy[context], entry)
+  }
+  return proxies
 }
 
 function resolveLoopback (proxy) {
