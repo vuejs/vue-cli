@@ -36,16 +36,17 @@ file, or the `"vue"` field in `package.json`.
 module.exports = {
   // ...other vue-cli plugin options...
   pwa: {
+    name: 'My App', // used for apple-mobile-web-app-title
+    themeColor: '#4DBA87',
+    msTileColor: '#000000',
     workboxPluginMode: 'InjectManifest',
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
       swSrc: 'dev/sw.js',
       // ...other Workbox options...
-    },
-    themeColor: '#4DBA87',
-    msTileColor: '#000000',
-  },
-};
+    }
+  }
+}
 ```
 
 ## Installing in an Already Created Project
