@@ -224,7 +224,7 @@ module.exports = class Service {
 function ensureSlash (config, key) {
   if (typeof config[key] === 'string') {
     config[key] = config[key]
-      .replace(/^([^/.])/, '/$1')
+      .replace(/^([^/.(https?:)])/, '/$1')
       .replace(/([^/])$/, '$1/')
   }
 }

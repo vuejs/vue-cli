@@ -52,6 +52,18 @@ test('load project options from package.json', () => {
   expect(service.projectOptions.lintOnSave).toBe(true)
 })
 
+test('handle option baseUrl and outputDir correctly', () => {
+  mockPkg({
+    vue: {
+      baseUrl: 'https://foo.com/bar',
+      outputDir: '/public/'
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.baseUrl).toBe('https://foo.com/bar/')
+  expect(service.projectOptions.outputDir).toBe('public')
+})
+
 test('load project options from vue.config.js', () => {
   process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
   fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
