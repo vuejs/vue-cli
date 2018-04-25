@@ -190,6 +190,9 @@ class DashboardPlugin {
         asset.fullPath = path.join(outputPath, asset.name)
         asset.gzipSize = assetSources && getGzipSize(assetSources.get(asset.name))
       })
+      statsData.modules.forEach(module => {
+        module.gzipSize = module.source && getGzipSize(module.source)
+      })
 
       const hasErrors = stats.hasErrors()
 

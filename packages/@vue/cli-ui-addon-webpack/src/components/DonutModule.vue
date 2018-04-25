@@ -1,0 +1,151 @@
+<template>
+  <g
+    v-if="visible"
+    class="donut-module"
+    :class="{
+      hover
+    }"
+    :transform="`translate(-${size / 2}, -${size / 2}) rotate(${rotation}, ${size / 2}, ${size / 2})`"
+  >
+    <g class="container">
+      <path
+        ref="path"
+        class="progress"
+        :d="`M ${size / 2}, ${size / 2}
+        m 0, -${size / 2}
+        a ${size / 2},${size / 2} 0 1 1 0,${size}
+        a ${size / 2},${size / 2} 0 1 1 0,-${size}`"
+        :stroke-dasharray="`${finalDasharray - .25} ${finalDasharray - .25}`"
+        :stroke-dashoffset="finalDashoffset"
+        :stroke="stroke"
+      />
+    </g>
+
+    <g
+      v-if="depth + 1 < colors.length"
+      class="children"
+      :transform="`translate(${size / 2}, ${size / 2})`"
+    >
+      <DonutModule
+        v-for="module of module.children"
+        :key="module.id"
+        :module="module"
+        :depth="depth + 1"
+        :parent-ratio="ratio"
+        :colors="colors"
+      />
+    </g>
+  </g>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+  name: 'DonutModule',
+
+  inject: [
+    'WebpackAnalyzer'
+  ],
+
+  props: {
+    module: {
+      type: Object,
+      required: true
+    },
+
+    depth: {
+      type: Number,
+      required: true
+    },
+
+    parentRatio: {
+      type: Number,
+      required: true
+    },
+
+    colors: {
+      type: Array,
+      required: true
+    }
+  },
+
+  data () {
+    return {
+      dasharray: 0,
+      dashoffset: 0,
+      animating: false
+    }
+  },
+
+  computed: {
+    ...mapGetters([
+      'useGzip'
+    ]),
+
+    finalDasharray () {
+      return (this.finalDashoffset === 0 ||
+        this.finalDashoffset === this.dasharray * 2)
+        ? 0 : this.dasharray
+    },
+
+    finalDashoffset () {
+      if (this.animating) {
+        return this.dashoffset
+      } else {
+        if (this.ratio < 0) {
+          return -this.dasharray * this.ratio + this.dasharray
+        } else {
+          return (1 - this.ratio) * this.dasharray
+        }
+      }
+    },
+
+    sizeField () {
+      return this.useGzip ? 'gzip' : 'disk'
+    },
+
+    ratio () {
+      return this.module.size[this.sizeField] / this.module.parent.size[this.sizeField] * this.parentRatio
+    },
+
+    rotation () {
+      return this.module.previousSize[this.sizeField] / this.module.parent.size[this.sizeField] * this.parentRatio * 360
+    },
+
+    size () {
+      return this.depth * 6.5 + 40
+    },
+
+    stroke () {
+      return this.colors[this.depth]
+    },
+
+    visible () {
+      return this.ratio > .003
+    },
+
+    hover () {
+      return this.WebpackAnalyzer.hoverModule === this.module
+    }
+  },
+
+  mounted () {
+    if (this.visible) {
+      this.dasharray = this.$refs.path.getTotalLength()
+    }
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+@import "~@vue/cli-ui/src/style/imports"
+
+path
+  fill none
+  stroke-width 3
+
+.hover > .container
+  path
+    stroke $vue-ui-color-warning
+</style>

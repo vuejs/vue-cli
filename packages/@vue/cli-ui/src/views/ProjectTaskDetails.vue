@@ -287,63 +287,63 @@ export default {
   align-items stretch
   height 100%
 
-  @media (max-width: 1250px)
-    .actions-bar
-      flex-wrap wrap
+@media (max-width: 1250px)
+  .actions-bar
+    flex-wrap wrap
 
-    .views
-      margin-top $padding-item
+  .views
+    margin-top $padding-item
 
-  .command
-    font-family $font-mono
-    font-size 12px
-    background $vue-ui-color-light-neutral
+.command
+  font-family $font-mono
+  font-size 12px
+  background $vue-ui-color-light-neutral
+  color $vue-ui-color-dark
+  padding 0 16px
+  height 32px
+  h-box()
+  box-center()
+  border-radius $br
+
+.content
+  flex 100% 1 1
+  height 0
+  margin 0 $padding-item $padding-item
+  position relative
+
+.terminal-view
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+  border-radius $br
+  &.ghost
+    opacity 0
+    pointer-events none
+
+.view
+  max-height 100%
+  overflow-x hidden
+  overflow-y auto
+
+.header
+  padding $padding-item $padding-item 0
+  h-box()
+  align-items center
+
+  .task-icon
+    margin-right 4px
+    >>> svg
+      fill $vue-ui-color-dark
+
+  .name
+    font-size 22px
     color $vue-ui-color-dark
-    padding 0 16px
-    height 32px
-    h-box()
-    box-center()
-    border-radius $br
-
-  .content
-    flex 100% 1 1
-    height 0
-    margin 0 $padding-item $padding-item
     position relative
+    top -1px
 
-  .terminal-view
-    position absolute
-    top 0
-    left 0
-    width 100%
-    height 100%
-    border-radius $br
-    &.ghost
-      opacity 0
-      pointer-events none
-
-  .view
-    max-height 100%
-    overflow-x hidden
-    overflow-y auto
-
-  .header
-    padding $padding-item $padding-item 0
-    h-box()
-    align-items center
-
-    .task-icon
-      margin-right 4px
-      >>> svg
-        fill $vue-ui-color-dark
-
-    .name
-      font-size 22px
-      color $vue-ui-color-dark
-      position relative
-      top -1px
-
-    .description
-      color $color-text-light
-      margin-left $padding-item
+  .description
+    color $color-text-light
+    margin-left $padding-item
 </style>

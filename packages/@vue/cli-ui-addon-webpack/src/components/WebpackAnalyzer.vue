@@ -1,0 +1,325 @@
+<template>
+  <div class="vue-webpack-analyzer">
+    <div class="pane-toolbar">
+      <VueIcon icon="donut_large"/>
+      <div class="title">Analyzer</div>
+
+      <template v-if="currentTree">
+        <VueButton
+          icon-left="arrow_upward"
+          label="Go up"
+          :disabled="currentTree === rootTree"
+          @click="goToParent()"
+        />
+        <VueButton
+          icon-left="home"
+          label="Go to home"
+          :disabled="currentTree === rootTree"
+          @click="goToHome()"
+        />
+        <VueIcon
+          icon="lens"
+          class="separator"
+        />
+      </template>
+      <VueSelect v-model="selectedChunk">
+        <VueSelectButton
+          v-for="(chunk, key) of modulesTrees"
+          :key="key"
+          :value="key"
+          :label="`Chunk ${getChunkName(key)}`"
+        />
+      </VueSelect>
+      <VueSwitch
+        v-model="useGzip"
+      >
+        Gzip size
+      </VueSwitch>
+    </div>
+
+    <div class="content">
+      <template v-if="currentTree">
+        <svg
+          ref="svg"
+          class="donut"
+          :class="{
+            hover: hoverModule
+          }"
+          viewBox="0 0 80 80"
+          @mousemove="onMouseMove"
+          @mouseout="onMouseOut"
+          @click="onDonutClick"
+        >
+          <g transform="translate(40, 40)">
+            <DonutModule
+              v-for="(module, index) of currentTree.children"
+              :key="module.id"
+              :module="module"
+              :colors="getColors(index)"
+              :depth="0"
+              :parent-ratio="1"
+            />
+          </g>
+        </svg>
+      </template>
+
+      <div class="described-module">
+        <div class="wrapper">
+          <div class="path" v-html="modulePath"/>
+          <div
+            class="disk size"
+            :class="{ selected: !useGzip }"
+          >
+            Disk: {{ describedModule.size.disk | size('B')}}
+          </div>
+          <div
+            class="gzip size"
+            :class="{ selected: useGzip }"
+          >
+            Gzip: {{ describedModule.size.gzip | size('B')}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+import Dashboard from '../mixins/Dashboard'
+import colors from '../util/colors'
+import { size } from '../filters'
+
+import DonutModule from './DonutModule.vue'
+
+export default {
+  mixins: [
+    Dashboard
+  ],
+
+  filters: {
+    size
+  },
+
+  components: {
+    DonutModule
+  },
+
+  provide () {
+    return {
+      WebpackAnalyzer: this.injection
+    }
+  },
+
+  data () {
+    return {
+      selectedChunk: null,
+      injection: {
+        hoverModule: null
+      },
+      currentTree: null
+    }
+  },
+
+  computed: {
+    ...mapGetters([
+      'modulesTrees',
+      'chunks'
+    ]),
+
+    hoverModule: {
+      get () { return this.injection.hoverModule },
+      set (value) { return this.injection.hoverModule = value }
+    },
+
+    describedModule () {
+      return this.hoverModule || this.currentTree
+    },
+
+    modulePath () {
+      let path = `<b>${this.describedModule.id}</b>`
+      let module = this.describedModule
+      while (module.parent && module !== this.currentTree) {
+        module = module.parent
+        path = `${module.id} / ${path}`
+      }
+      return path
+    },
+
+    rootTree () {
+      return this.modulesTrees && this.modulesTrees[this.selectedChunk]
+    }
+  },
+
+  watch: {
+    modulesTrees: {
+      handler (value) {
+        if (!this.selectedChunk && value) {
+          const keys = Object.keys(value)
+          if (keys.length) {
+            this.selectedChunk = keys[0]
+          }
+        }
+      },
+      immediate: true
+    },
+
+    selectedChunk: {
+      handler: 'goToHome',
+      immediate: true
+    }
+  },
+
+  methods: {
+    getColors (index) {
+      return colors[index % colors.length]
+    },
+
+    getChunk (id) {
+      return this.chunks.find(
+        c => c.id.toString() === id.toString()
+      )
+    },
+
+    getChunkName (id) {
+      const chunk = this.getChunk(id)
+      if (chunk) {
+        if (chunk.names && chunk.names.length) {
+          return `${chunk.names[0]} (${id})`
+        }
+        if (chunk.files && chunk.files.length) {
+          return `${chunk.files[0]} (${id})`
+        }
+      }
+      return id
+    },
+
+    onMouseMove (event) {
+      const svg = this.$refs.svg
+      const { clientX, clientY } = event
+      const pt = svg.createSVGPoint()
+      pt.x = clientX
+      pt.y = clientY
+      let { x, y } = pt.matrixTransform(svg.getScreenCTM().inverse())
+      x -= 40
+      y -= 40
+
+      let angle = (Math.atan2(y, x) / Math.PI * 180 + 90)
+      // Modulo 360
+      angle = ((angle % 360) + 360) % 360
+      const distance = Math.sqrt(x * x + y * y)
+      const depth = Math.floor(((distance + 1.5) * 2 - 40) / 6.5)
+
+      if (depth < 0) {
+        this.hoverModule = null
+        return
+      }
+
+      // Walk the tree to find the hovered module
+      const sizeField = this.useGzip ? 'gzip' : 'disk'
+      let tree = this.currentTree
+      let rotation = angle
+      let ratio = rotation / 360
+      // We use a target module size
+      let targetSize = tree.size[sizeField] * ratio
+      let parentRatio = 1
+      for (let d = 0; d <= depth; d++) {
+        let found = false
+        for (const child of tree.children) {
+          const previousSize = child.previousSize[sizeField]
+          const size = child.size[sizeField]
+          if (previousSize + size >= targetSize) {
+            // Select child
+            const parentSize = tree.size[sizeField]
+            const childRatio = size / parentSize * parentRatio
+            const childRotation = previousSize / parentSize * parentRatio * 360
+            // We update rotation to become relative to selected child
+            rotation -= childRotation
+            // We calculate a new target module size relative to selected child
+            ratio = rotation / 360 / childRatio
+            targetSize = size * ratio
+            // New base ratio to deeper children
+            parentRatio = childRatio
+            // Go deeper
+            tree = child
+            found = true
+            break
+          }
+        }
+        if (!found) {
+          tree = null
+          break
+        }
+      }
+      this.hoverModule = tree
+    },
+
+    onMouseOut (event) {
+      this.hoverModule = null
+    },
+
+    onDonutClick () {
+      if (this.hoverModule && this.hoverModule.children.length) {
+        this.currentTree = this.hoverModule
+        this.hoverModule = null
+      }
+    },
+
+    goToParent () {
+      if (this.currentTree && this.currentTree.parent) {
+        this.currentTree = this.currentTree.parent
+      }
+    },
+
+    goToHome () {
+      this.currentTree = this.rootTree
+    }
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+@import "~@vue/cli-ui/src/style/imports"
+
+.vue-webpack-analyzer
+  height 100%
+  display grid
+  grid-template-columns auto
+  grid-template-rows auto 1fr
+  grid-gap $padding-item
+  overflow-y hidden
+
+  .pane-toolbar,
+  .described-module .wrapper
+    padding $padding-item
+    background $vue-ui-color-light-neutral
+    border-radius $br
+
+  .content
+    display flex
+    flex-direction row
+    position relative
+
+  .donut
+    width 100%
+    &.hover
+      cursor pointer
+
+  .described-module
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    pointer-events none
+    v-box()
+    box-center()
+
+    .wrapper
+      max-width 170px
+      overflow hidden
+
+      .size
+        &:not(.selected)
+          opacity .5
+</style>

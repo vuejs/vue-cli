@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import store from '../store'
+import Dashboard from '../mixins/Dashboard'
 
 import BuildStatus from './BuildStatus'
 import BuildProgress from './BuildProgress'
@@ -51,7 +51,9 @@ import AssetList from './AssetList'
 import ModuleList from './ModuleList'
 
 export default {
-  store,
+  mixins: [
+    Dashboard
+  ],
 
   components: {
     BuildStatus,
@@ -61,38 +63,10 @@ export default {
     ModuleList
   },
 
-  inject: [
-    'TaskDetails'
-  ],
-
-  data () {
-    return {
-      mode: null
-    }
-  },
-
   sharedData () {
     return {
       serveUrl: `webpack-dashboard-serve-url`
     }
-  },
-
-  computed: {
-    useGzip: {
-      get () { return this.$store.getters.useGzip },
-      set (value) { this.$store.commit('useGzip', value) }
-    }
-  },
-
-  created () {
-    const mode = this.mode = this.TaskDetails.task.command.indexOf('vue-cli-service serve') !== -1 ? 'serve' : 'build'
-    this.$store.commit('mode', mode)
-    this.$watchSharedData(`webpack-dashboard-${mode}-stats`, value => {
-      this.$store.commit('stats', {
-        mode,
-        value
-      })
-    })
   }
 }
 </script>

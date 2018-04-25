@@ -1,0 +1,34 @@
+export default [
+  [
+    '#42b983',
+    '#5DC395',
+    '#78CDA7',
+    '#93D7B9',
+    '#AEE1CB',
+    '#C9EBDD'
+  ],
+  [
+    '#A96FDA',
+    '#B684DF',
+    '#C399E4',
+    '#D0AEE9',
+    '#DDC3EE',
+    '#EAD8F3'
+  ],
+  [
+    '#03C2E6',
+    '#27CBEA',
+    '#4BD4EE',
+    '#6FDDF2',
+    '#93E6F6',
+    '#B7EFFA'
+  ],
+  [
+    '#778F9B',
+    '#8B9FA9',
+    '#9FAFB7',
+    '#B3BFC5',
+    '#C7CFD3',
+    '#DBDFE1'
+  ]
+]

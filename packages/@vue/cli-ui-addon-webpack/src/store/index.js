@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 
 import { buildSortedAssets } from '../util/assets'
-import { buildDepModules } from '../util/modules'
+import { filterModules, buildDepModules, buildModulesTrees } from '../util/modules'
 
 Vue.use(Vuex)
 
@@ -28,8 +28,9 @@ const store = new Vuex.Store({
     assets: (state, getters) => (getters.stats && getters.stats.data.assets) || [],
     assetsSorted: (state, getters) => buildSortedAssets(getters.assets, getters.useGzip),
     assetsTotalSize: (state, getters) => getters.assetsSorted.filter(a => !a.secondary).reduce((total, asset) => total + asset.size, 0),
-    modules: (state, getters) => (getters.stats && getters.stats.data.modules) || [],
+    modules: (state, getters) => (getters.stats && filterModules(getters.stats.data.modules)) || [],
     modulesTotalSize: (state, getters) => getters.modules.reduce((total, module) => total + module.size, 0),
+    modulesTrees: (state, getters) => buildModulesTrees(getters.modules),
     depModules: (state, getters) => buildDepModules(getters.modules),
     depModulesTotalSize: (state, getters) => getters.depModules.reduce((total, module) => total + module.size, 0),
     chunks: (state, getters) => (getters.stats && getters.stats.data.chunks) || []

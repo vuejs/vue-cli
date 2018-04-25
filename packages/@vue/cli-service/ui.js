@@ -30,6 +30,23 @@ module.exports = api => {
   }
 
   // Tasks
+  const views = {
+    views: [
+      {
+        id: 'vue-webpack-dashboard',
+        label: 'Dashboard',
+        icon: 'dashboard',
+        component: 'vue-webpack-dashboard'
+      },
+      {
+        id: 'vue-webpack-analyzer',
+        label: 'Analyzer',
+        icon: 'donut_large',
+        component: 'vue-webpack-analyzer'
+      }
+    ],
+    defaultView: 'vue-webpack-dashboard'
+  }
   api.describeTask({
     match: /vue-cli-service serve/,
     description: 'Compiles and hot-reloads for development',
@@ -100,15 +117,7 @@ module.exports = api => {
       api.ipcOff(onWebpackMessage)
       removeSharedData('serve-url')
     },
-    views: [
-      {
-        id: 'vue-webpack-dashboard',
-        label: 'Dashboard',
-        icon: 'dashboard',
-        component: 'vue-webpack-dashboard'
-      }
-    ],
-    defaultView: 'vue-webpack-dashboard'
+    ...views
   })
   api.describeTask({
     match: /vue-cli-service build/,
@@ -189,15 +198,7 @@ module.exports = api => {
     onExit: () => {
       api.ipcOff(onWebpackMessage)
     },
-    views: [
-      {
-        id: 'vue-webpack-dashboard',
-        label: 'Dashboard',
-        icon: 'dashboard',
-        component: 'vue-webpack-dashboard'
-      }
-    ],
-    defaultView: 'vue-webpack-dashboard'
+    ...views
   })
 
   // Webpack dashboard
