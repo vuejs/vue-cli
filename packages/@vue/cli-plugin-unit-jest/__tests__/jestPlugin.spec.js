@@ -13,7 +13,7 @@ test('should work', async () => {
 })
 
 test('should respect jest testMatch config', async () => {
-  const project = await create('unit-jest', {
+  const project = await create('unit-jest-package.json', {
     plugins: {
       '@vue/cli-plugin-babel': {},
       '@vue/cli-plugin-unit-jest': {}
@@ -30,6 +30,30 @@ test('should respect jest testMatch config', async () => {
   } catch (e) {
     result = e
   }
-  console.log(result)
-  expect(result.stdout).toMatch('custom-test-directory/my.spec.js')
+  expect(result.stdout).toMatch('testMatch: custom-test-directory/my.spec.js')
+  expect(result.stdout).toMatch('No tests found')
+})
+
+test('should respect jest.config.js testMatch config', async () => {
+  const project = await create('unit-jest-jest.config.js', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-unit-jest': {}
+    },
+    useConfigFiles: true
+  })
+  await project.write('jest.config.js', `
+  module.exports = ${JSON.stringify({
+    testMatch: ['custom-test-directory/my.spec.js']
+  })}
+  `)
+
+  let result
+  try {
+    await project.run(`vue-cli-service test`)
+  } catch (e) {
+    result = e
+  }
+  expect(result.stdout).toMatch('testMatch: custom-test-directory/my.spec.js')
+  expect(result.stdout).toMatch('No tests found')
 })

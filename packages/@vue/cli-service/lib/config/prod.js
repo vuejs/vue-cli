@@ -5,7 +5,7 @@ module.exports = (api, options) => {
         .devtool('source-map')
         .output
           .filename(`js/[name].[chunkhash:8].js`)
-          .chunkFilename(`js/[id].[chunkhash:8].js`)
+          .chunkFilename(`js/[name].[id].[chunkhash:8].js`)
 
       // keep module.id stable when vendor modules does not change
       webpackConfig

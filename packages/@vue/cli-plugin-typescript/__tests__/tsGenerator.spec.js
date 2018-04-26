@@ -35,8 +35,12 @@ test('classComponent', async () => {
 
   expect(files['tsconfig.json']).toMatch(`"experimentalDecorators": true`)
   expect(files['tsconfig.json']).toMatch(`"emitDecoratorMetadata": true`)
-  expect(files['src/App.vue']).toMatch(`export default class App extends Vue {`)
-  expect(files['src/components/HelloWorld.vue']).toMatch(`export default class HelloWorld extends Vue {`)
+  expect(files['src/App.vue']).toMatch(
+    `export default class App extends Vue {`
+  )
+  expect(files['src/components/HelloWorld.vue']).toMatch(
+    `export default class HelloWorld extends Vue {`
+  )
 })
 
 test('use with Babel', async () => {
@@ -94,6 +98,19 @@ test('lint with no lintOnSave', async () => {
     }
   ])
   expect(pkg.vue).toEqual({ lintOnSave: false })
+})
+
+test('tsconfig.json should be valid json', async () => {
+  const { files } = await generateWithPlugin([
+    {
+      id: 'ts',
+      apply: require('../generator'),
+      options: {}
+    }
+  ])
+  expect(() => {
+    JSON.parse(files['tsconfig.json'])
+  }).not.toThrow()
 })
 
 test('compat with unit-mocha', async () => {

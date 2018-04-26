@@ -77,6 +77,21 @@ module.exports = {
 }
 ```
 
+#### Replace existing Base Loader
+
+If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), for example using `vue-svg-loader` to inline SVG files instead of loading the file:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('svg')
+      .use('file-loader')
+        .loader('vue-svg-loader')
+  }
+}
+```
 
 #### Modifying Plugin Options
 
@@ -94,6 +109,24 @@ module.exports = {
 ```
 
 You will need to familiarize yourself with [webpack-chain's API](https://github.com/mozilla-neutrino/webpack-chain#getting-started) and [read some source code](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config) in order to understand how to leverage the full power of this option, but it gives you a more expressive and safer way to modify the webpack config than directly mutation values.
+
+For example, say you want to change the default location of index.html from */Users/username/proj/public/index.html* to */Users/username/proj/app/templates/index.html*.  By referencing [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) you can see a list of options you can pass in. To change our template path we can pass in a new template path with the following config:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config
+      .plugin('html')
+      .tap(args => {
+        args[0].template = '/Users/username/proj/app/templates/index.html'
+        return args
+      })
+  }
+}
+```
+
+You can confirm that this change has taken place by examining the vue webpack config with the **vue inspect** utility, which we will discuss next.
 
 ### Inspecting the Project's Webpack Config
 

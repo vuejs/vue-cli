@@ -39,7 +39,7 @@ test('pwa', async () => {
   // PWA specific directives
   expect(index).toMatch(`<link rel=manifest href=/manifest.json>`)
   expect(index).toMatch(`<!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->`)
-  expect(index).toMatch(`<meta name=apple-mobile-web-app-capable content=yes>`)
+  expect(index).toMatch(`<meta name=apple-mobile-web-app-capable content=no>`)
 
   // should import service worker script
   const main = await project.read('src/main.js')

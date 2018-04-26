@@ -29,6 +29,30 @@ file, or the `"vue"` field in `package.json`.
   [`GenerateSW`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_generatesw_config)
   or for [`InjectManifest`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_injectmanifest_config).
 
+- **pwa.name**
+
+  - Default: "name" field in `package.json`
+
+    Used as the value for the `apple-mobile-web-app-title` meta tag in the generated HTML. Note you will need to edit `public/manifest.json` to match this.
+
+- **pwa.themeColor**
+
+  - Default: `'#4DBA87'`
+
+- **pwa.msTileColor**
+
+  - Default: `'#000000'`
+
+- **pwa.appleMobileWebAppCapable**
+
+  - Default: `'no'`
+
+    This defaults to `'no'` because iOS before 11.3 does not have proper PWA support. See [this article](https://medium.com/@firt/dont-use-ios-web-app-meta-tag-irresponsibly-in-your-progressive-web-apps-85d70f4438cb) for more details.
+
+- **pwa.appleMobileWebAppStatusBarStyle**
+
+  - Default: `'default'`
+
 ### Example Configuration
 
 ```js
@@ -36,14 +60,21 @@ file, or the `"vue"` field in `package.json`.
 module.exports = {
   // ...other vue-cli plugin options...
   pwa: {
+    name: 'My App',
+    themeColor: '#4DBA87',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+
+    // configure the workbox plugin
     workboxPluginMode: 'InjectManifest',
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
       swSrc: 'dev/sw.js',
       // ...other Workbox options...
-    },
-  },
-};
+    }
+  }
+}
 ```
 
 ## Installing in an Already Created Project
