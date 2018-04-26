@@ -25,6 +25,7 @@ class PluginApi {
     this.clientAddons = []
     this.views = []
     this.actions = new Map()
+    this.ipcHandlers = []
   }
 
   /**
@@ -194,6 +195,7 @@ class PluginApi {
    * @param {function} cb Callback with 'data' param
    */
   ipcOn (cb) {
+    this.ipcHandlers.push(cb)
     return ipc.on(cb)
   }
 
@@ -203,6 +205,8 @@ class PluginApi {
    * @param {any} cb Callback to be removed
    */
   ipcOff (cb) {
+    const index = this.ipcHandlers.indexOf(cb)
+    if (index !== -1) this.ipcHandlers.splice(index, 1)
     ipc.off(cb)
   }
 

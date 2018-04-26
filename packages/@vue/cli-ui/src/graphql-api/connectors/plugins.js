@@ -32,6 +32,7 @@ const PluginApi = require('../api/PluginApi')
 // Utils
 const { getCommand } = require('../utils/command')
 const { getBasePath } = require('../utils/serve')
+const ipc = require('../utils/ipc')
 
 const PROGRESS_ID = 'plugin-installation'
 
@@ -83,6 +84,7 @@ function resetPluginApi (context) {
   // Clean up
   if (pluginApi) {
     pluginApi.views.forEach(r => views.remove(r.id, context))
+    pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
   }
 
   pluginApi = new PluginApi(context)
