@@ -24,6 +24,7 @@ const cwd = require('./cwd')
 const folders = require('./folders')
 const prompts = require('./prompts')
 const progress = require('./progress')
+const projects = require('./projects')
 const logs = require('./logs')
 const clientAddons = require('./client-addons')
 const views = require('./views')
@@ -50,6 +51,7 @@ let eventsInstalled = false
 let plugins = []
 let pluginApi
 let installationStep
+let projectId
 
 function getPath (id) {
   return path.dirname(resolveModule(id, cwd.get()))
@@ -93,6 +95,16 @@ function resetPluginApi (context) {
   pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
   // Add views
   pluginApi.views.forEach(view => views.add(view, context))
+
+  const project = projects.getCurrent(context)
+  if (!project) return
+  if (projectId !== project.id) {
+    projectId = project.id
+    pluginApi.projectOpenHooks.forEach(fn => fn(project, projects.getLast(context)))
+    pluginApi.project = project
+  } else {
+    pluginApi.pluginReloadHooks.forEach(fn => fn(project))
+  }
 }
 
 function runPluginApi (id, context, fileName = 'ui') {
@@ -306,6 +318,7 @@ function update (id, context) {
     const plugin = findOne(id, context)
     const { current, wanted } = await getVersion(plugin, context)
     await updatePackage(cwd.get(), getCommand(), null, id)
+    resetPluginApi(context)
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
       type: 'info'

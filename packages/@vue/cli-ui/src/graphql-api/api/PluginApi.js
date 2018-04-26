@@ -15,12 +15,38 @@ class PluginApi {
     // Context
     this.context = context
     this.pluginId = null
+    this.project = null
+    // Hooks
+    this.projectOpenHooks = []
+    this.pluginReloadHooks = []
     // Data
     this.configurations = []
     this.tasks = []
     this.clientAddons = []
     this.views = []
     this.actions = new Map()
+  }
+
+  /**
+   * Register an handler called when the project is open (only if this plugin is loaded).
+   *
+   * @param {function} cb Handler
+   */
+  onProjectOpen (cb) {
+    if (this.project) {
+      cb(this.project)
+      return
+    }
+    this.projectOpenHooks.push(cb)
+  }
+
+  /**
+   * Register an handler called when the plugin is reloaded.
+   *
+   * @param {function} cb Handler
+   */
+  onPluginReload (cb) {
+    this.pluginReloadHooks.push(cb)
   }
 
   /**

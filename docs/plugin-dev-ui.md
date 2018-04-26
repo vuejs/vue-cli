@@ -10,6 +10,7 @@ This guide will walk you through the development of cli-ui specific features for
 - [Shared data](#shared-data)
 - [Plugin actions](#plugin-actions)
 - [IPC](#ipc)
+- [Hooks](#hooks)
 - [Public static files](#public-static-files)
 
 ## Plugin Info
@@ -627,6 +628,26 @@ api.ipcSend({
   webpackDashboardMessage: {
     foo: 'bar'
   }
+})
+```
+
+### Hooks
+
+Hooks allows to react to certain cli-ui events.
+
+`onProjectOpen`: Called when the plugin is loaded for the first time for the current project.
+
+```js
+api.onProjectOpen((project, previousProject) => {
+  // Reset data
+})
+```
+
+`onPluginReload`: Called when the plugin is reloaded.
+
+```js
+api.onPluginReload((project) => {
+  console.log('plugin reloaded')
 })
 ```
 

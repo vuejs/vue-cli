@@ -23,11 +23,11 @@ module.exports = api => {
   }
 
   // Init data
-  if (typeof getSharedData('serve-status') === 'undefined') {
+  api.onProjectOpen(() => {
     for (const key of ['serve', 'build']) {
       resetSharedData(key)
     }
-  }
+  })
 
   // Tasks
   const views = {

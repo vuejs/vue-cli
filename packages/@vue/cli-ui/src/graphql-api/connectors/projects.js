@@ -19,6 +19,7 @@ const getContext = require('../context')
 
 const PROGRESS_ID = 'project-create'
 
+let lastProject = null
 let currentProject = null
 let creator = null
 let presets = []
@@ -33,6 +34,10 @@ function list (context) {
 
 function getCurrent (context) {
   return currentProject
+}
+
+function getLast (context) {
+  return lastProject
 }
 
 function generatePresetDescription (preset) {
@@ -308,6 +313,7 @@ async function open (id, context) {
     return null
   }
 
+  lastProject = currentProject
   currentProject = project
   cwd.set(project.path, context)
   // Load plugins
@@ -354,6 +360,7 @@ function setFavorite ({ id, favorite }, context) {
 module.exports = {
   list,
   getCurrent,
+  getLast,
   getCreation,
   applyPreset,
   setFeatureEnabled,
