@@ -7,10 +7,6 @@ module.exports = function lint (args = {}, api) {
   const { log, done } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'tests', '*.js']
-  if (args['no-fix']) {
-    args.fix = false
-    delete args['no-fix']
-  }
   const config = Object.assign({}, options, {
     fix: true,
     cwd
