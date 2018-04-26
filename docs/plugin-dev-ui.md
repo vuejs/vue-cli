@@ -9,7 +9,7 @@ This guide will walk you through the development of cli-ui specific features for
 - [Custom views](#custom-views)
 - [Shared data](#shared-data)
 - [Plugin actions](#plugin-actions)
-- [IPC](#ipc)
+- [Inter-process communication (IPC)](#inter-process-communication-ipc)
 - [Hooks](#hooks)
 - [Public static files](#public-static-files)
 
@@ -565,7 +565,7 @@ export default {
 }
 ```
 
-### IPC
+### Inter-process communication (IPC)
 
 IPC stands for Inter-Process Communication. This system allows you to easily send messages from child processes (for example, tasks!). And it's pretty fast and lightweight.
 
