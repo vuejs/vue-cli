@@ -1,3 +1,5 @@
+const { openBrowser } = require('@vue/cli-shared-utils')
+
 module.exports = api => {
   api.registerCommand('ui', args => {
     api.setMode('production')
@@ -18,6 +20,8 @@ module.exports = api => {
       }
     }
 
-    server(opts)
+    server(opts, () => {
+      openBrowser(`http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}`)
+    })
   })
 }

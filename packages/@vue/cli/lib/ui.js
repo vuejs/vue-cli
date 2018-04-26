@@ -1,4 +1,4 @@
-const { log, error, openBrowser } = require('@vue/cli-shared-utils')
+const { log, error } = require('@vue/cli-shared-utils')
 const portfinder = require('portfinder')
 const execa = require('execa')
 
@@ -23,10 +23,6 @@ async function ui (options = {}, context = process.cwd()) {
     cwd: context,
     stdio: ['inherit', 'inherit', 'inherit']
   })
-
-  setTimeout(() => {
-    openBrowser(`http://localhost:${port}`)
-  }, 1000)
 }
 
 module.exports = (...args) => {
