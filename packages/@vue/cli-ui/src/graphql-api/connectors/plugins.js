@@ -24,7 +24,6 @@ const cwd = require('./cwd')
 const folders = require('./folders')
 const prompts = require('./prompts')
 const progress = require('./progress')
-const projects = require('./projects')
 const logs = require('./logs')
 const clientAddons = require('./client-addons')
 const views = require('./views')
@@ -96,15 +95,18 @@ function resetPluginApi (context) {
   // Add views
   pluginApi.views.forEach(view => views.add(view, context))
 
-  const project = projects.getCurrent(context)
-  if (!project) return
-  if (projectId !== project.id) {
-    projectId = project.id
-    pluginApi.projectOpenHooks.forEach(fn => fn(project, projects.getLast(context)))
-    pluginApi.project = project
-  } else {
-    pluginApi.pluginReloadHooks.forEach(fn => fn(project))
-  }
+  setTimeout(() => {
+    const projects = require('./projects')
+    const project = projects.getCurrent(context)
+    if (!project) return
+    if (projectId !== project.id) {
+      projectId = project.id
+      pluginApi.projectOpenHooks.forEach(fn => fn(project, projects.getLast(context)))
+      pluginApi.project = project
+    } else {
+      pluginApi.pluginReloadHooks.forEach(fn => fn(project))
+    }
+  })
 }
 
 function runPluginApi (id, context, fileName = 'ui') {

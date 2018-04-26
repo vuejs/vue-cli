@@ -63,7 +63,7 @@
         </svg>
       </template>
 
-      <div class="described-module">
+      <div v-if="describedModule" class="described-module">
         <div class="wrapper">
           <div class="path" v-html="modulePath"/>
           <div
@@ -137,6 +137,7 @@ export default {
     },
 
     modulePath () {
+      if (!this.describedModule) return
       let path = `<b>${this.describedModule.id}</b>`
       let module = this.describedModule
       while (module.parent && module !== this.currentTree) {
@@ -154,12 +155,22 @@ export default {
   watch: {
     modulesTrees: {
       handler (value) {
-        if (!this.selectedChunk && value) {
+        if (value) {
           const keys = Object.keys(value)
           if (keys.length) {
-            this.selectedChunk = keys[0]
+            if (!this.selectedChunk || !keys.includes(this.selectedChunk)) {
+              if (keys.length) {
+                this.selectedChunk = keys[0]
+              }
+            }
+            this.goToHome()
+            return
           }
         }
+
+        // Clear
+        this.currentTree = null
+        this.selectedChunk = null
       },
       immediate: true
     },

@@ -182,7 +182,7 @@ export default {
       },
       fetchPolicy: 'cache-and-network',
       async result ({ data, loading }) {
-        if (!this.$_init && !loading && data && data.task.defaultView) {
+        if (!this.$_init && !loading && data && data.task && data.task.defaultView) {
           this.$_init = true
           await this.$nextTick()
           this.currentView = data.task.defaultView
