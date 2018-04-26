@@ -1,7 +1,9 @@
 const defaults = {
   name: 'PWA app',
   themeColor: '#4DBA87', // The Vue color
-  msTileColor: '#000000'
+  msTileColor: '#000000',
+  appleMobileWebAppCapable: 'no',
+  appleMobileWebAppStatusBarStyle: 'default'
 }
 
 module.exports = class HtmlPwaPlugin {
@@ -18,7 +20,7 @@ module.exports = class HtmlPwaPlugin {
       })
 
       compilation.plugin('html-webpack-plugin-alter-asset-tags', (data, cb) => {
-        const { name, themeColor, msTileColor } = this.options
+        const { name, themeColor, msTileColor, appleMobileWebAppCapable, appleMobileWebAppStatusBarStyle } = this.options
         const { publicPath } = compiler.options.output
 
         data.head.push(
@@ -49,11 +51,11 @@ module.exports = class HtmlPwaPlugin {
           // Add to home screen for Safari on iOS
           makeTag('meta', {
             name: 'apple-mobile-web-app-capable',
-            content: 'yes'
+            content: appleMobileWebAppCapable
           }),
           makeTag('meta', {
             name: 'apple-mobile-web-app-status-bar-style',
-            content: 'black'
+            content: appleMobileWebAppStatusBarStyle
           }),
           makeTag('meta', {
             name: 'apple-mobile-web-app-title',

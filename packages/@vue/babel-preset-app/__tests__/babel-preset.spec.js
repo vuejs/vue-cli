@@ -31,8 +31,8 @@ test('object spread', () => {
   const { code } = babel.transformSync(`
     const a = { ...b }
   `.trim(), defaultOptions)
-  expect(code).toMatch(`import "core-js/modules/es6.object.assign"`)
-  expect(code).toMatch(`var a = Object.assign({}, b)`)
+  expect(code).toMatch(`import _objectSpread from`)
+  expect(code).toMatch(`var a = _objectSpread({}, b)`)
 })
 
 test('dynamic import', () => {

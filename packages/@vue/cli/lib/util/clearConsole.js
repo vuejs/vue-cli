@@ -16,9 +16,9 @@ exports.generateTitle = async function (checkUpdate) {
   }
   if (checkUpdate && semver.gt(latest, current)) {
     title += chalk.green(`
-┌─────────────────────────${`─`.repeat(latest.length)}─┐
-│ ✨  Update available: ${latest} ✨  │
-└─────────────────────────${`─`.repeat(latest.length)}─┘`)
+┌────────────────────${`─`.repeat(latest.length)}──┐
+│  Update available: ${latest}  │
+└────────────────────${`─`.repeat(latest.length)}──┘`)
   }
 
   return title

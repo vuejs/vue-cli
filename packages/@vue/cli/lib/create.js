@@ -6,12 +6,22 @@ const inquirer = require('inquirer')
 const Creator = require('./Creator')
 const { clearConsole } = require('./util/clearConsole')
 const { getPromptModules } = require('./util/createTools')
-const { error, stopSpinner } = require('@vue/cli-shared-utils')
+const { error, stopSpinner, exit } = require('@vue/cli-shared-utils')
+const validateProjectName = require('validate-npm-package-name')
 
 async function create (projectName, options) {
   const inCurrent = projectName === '.'
   const name = inCurrent ? path.relative('../', process.cwd()) : projectName
   const targetDir = path.resolve(projectName || '.')
+
+  const result = validateProjectName(name)
+  if (!result.validForNewPackages) {
+    console.error(chalk.red(`Invalid project name: "${projectName}"`))
+    result.errors && result.errors.forEach(err => {
+      console.error(chalk.red(err))
+    })
+    exit(1)
+  }
 
   if (fs.existsSync(targetDir)) {
     if (options.force) {

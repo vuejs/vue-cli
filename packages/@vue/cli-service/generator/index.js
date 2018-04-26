@@ -7,7 +7,7 @@ module.exports = (api, options) => {
       'build': 'vue-cli-service build'
     },
     dependencies: {
-      'vue': '^2.5.13'
+      'vue': '^2.5.16'
     },
     devDependencies: {
       'vue-template-compiler': '^2.5.13'

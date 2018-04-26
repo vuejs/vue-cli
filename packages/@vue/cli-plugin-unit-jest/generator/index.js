@@ -28,6 +28,9 @@ module.exports = api => {
     // serializer for snapshots
     'snapshotSerializers': [
       'jest-serializer-vue'
+    ],
+    'testMatch': [
+      '<rootDir>/(tests/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))'
     ]
   }
 
