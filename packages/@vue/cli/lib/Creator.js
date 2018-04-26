@@ -164,7 +164,7 @@ module.exports = class Creator {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
       }
-      await run(`git commit -m init`)
+      await run('git', ['commit', '-m', cliOptions.initialCommit || 'init'])
     }
 
     // log instructions
