@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.0.0-beta.6",
+  "version": "3.0.0-beta.7",
   "author": "Guillaume Chau",
   "license": "MIT",
   "main": "index.js",
@@ -47,10 +47,10 @@
     "xterm": "^3.2.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.3",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.3",
-    "@vue/cli-service": "^3.0.0-beta.3",
-    "@vue/eslint-config-standard": "^3.0.0-beta.3",
+    "@vue/cli-plugin-babel": "^3.0.0-beta.7",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.7",
+    "@vue/cli-service": "^3.0.0-beta.7",
+    "@vue/eslint-config-standard": "^3.0.0-beta.7",
     "eslint": "^4.16.0",
     "graphql-tag": "^2.5.0",
     "lint-staged": "^6.0.0",
