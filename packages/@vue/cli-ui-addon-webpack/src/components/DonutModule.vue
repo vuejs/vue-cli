@@ -72,9 +72,7 @@ export default {
 
   data () {
     return {
-      dasharray: 0,
-      dashoffset: 0,
-      animating: false
+      dasharray: 0
     }
   },
 
@@ -90,14 +88,10 @@ export default {
     },
 
     finalDashoffset () {
-      if (this.animating) {
-        return this.dashoffset
+      if (this.ratio < 0) {
+        return -this.dasharray * this.ratio + this.dasharray
       } else {
-        if (this.ratio < 0) {
-          return -this.dasharray * this.ratio + this.dasharray
-        } else {
-          return (1 - this.ratio) * this.dasharray
-        }
+        return (1 - this.ratio) * this.dasharray
       }
     },
 
