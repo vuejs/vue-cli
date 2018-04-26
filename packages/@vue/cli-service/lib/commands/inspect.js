@@ -3,7 +3,8 @@ module.exports = (api, options) => {
     description: 'inspect internal webpack config',
     usage: 'vue-cli-service inspect [options] [...paths]',
     options: {
-      '--mode': 'specify env mode (default: development)'
+      '--mode': 'specify env mode (default: development)',
+      '--verbose': 'show full function definitions in output'
     }
   }, args => {
     api.setMode(args.mode || 'development')
@@ -27,13 +28,15 @@ module.exports = (api, options) => {
 
     const pluginRE = /(?:function|class) (\w+Plugin)/
     console.log(stringify(res, (value, indent, stringify) => {
-      if (typeof value === 'function' && value.toString().length > 100) {
-        return `function () { /* omitted long function */ }`
-      }
-      if (value && typeof value.constructor === 'function') {
-        const match = value.constructor.toString().match(pluginRE)
-        if (match) {
-          return `/* ${match[1]} */ ` + stringify(value)
+      if (!args.verbose) {
+        if (typeof value === 'function' && value.toString().length > 100) {
+          return `function () { /* omitted long function */ }`
+        }
+        if (value && typeof value.constructor === 'function') {
+          const match = value.constructor.toString().match(pluginRE)
+          if (match) {
+            return `/* ${match[1]} */ ` + stringify(value)
+          }
         }
       }
       return stringify(value)
