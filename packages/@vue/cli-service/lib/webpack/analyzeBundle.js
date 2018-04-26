@@ -6,12 +6,14 @@ const walk = require('acorn/dist/walk')
 const mapValues = require('lodash.mapvalues')
 const transform = require('lodash.transform')
 const zlib = require('zlib')
+const { warn } = require('@vue/cli-shared-utils')
 
 exports.analyzeBundle = function analyzeBundle (bundleStats, assetSources) {
   // Picking only `*.js` assets from bundle that has non-empty `chunks` array
   const jsAssets = []
   const otherAssets = []
 
+  // Separate JS assets
   bundleStats.assets.forEach(asset => {
     if (asset.name.endsWith('.js') && asset.chunks && asset.chunks.length) {
       jsAssets.push(asset)
@@ -20,7 +22,7 @@ exports.analyzeBundle = function analyzeBundle (bundleStats, assetSources) {
     }
   })
 
-  // Trying to parse bundle assets and get real module sizes if `bundleDir` is provided
+  // Trying to parse bundle assets and get real module sizes
   let bundlesSources = null
   let parsedModules = null
 
@@ -28,17 +30,17 @@ exports.analyzeBundle = function analyzeBundle (bundleStats, assetSources) {
   parsedModules = {}
 
   for (const asset of jsAssets) {
-    const content = assetSources.get(asset.name)
+    const source = assetSources.get(asset.name)
     let bundleInfo
 
     try {
-      bundleInfo = parseBundle(content)
+      bundleInfo = parseBundle(source)
     } catch (err) {
       bundleInfo = null
     }
 
     if (!bundleInfo) {
-      console.warn(
+      warn(
         `\nCouldn't parse bundle asset "${asset.fullPath}".\n` +
         'Analyzer will use module sizes from stats file.\n'
       )
@@ -51,8 +53,10 @@ exports.analyzeBundle = function analyzeBundle (bundleStats, assetSources) {
     Object.assign(parsedModules, bundleInfo.modules)
   }
 
+  // Update sizes
+
   bundleStats.modules.forEach(module => {
-    const parsedSrc = parsedModules[module.id]
+    const parsedSrc = parsedModules && parsedModules[module.id]
     module.size = {
       stats: module.size
     }
@@ -66,7 +70,7 @@ exports.analyzeBundle = function analyzeBundle (bundleStats, assetSources) {
   })
 
   jsAssets.forEach(asset => {
-    const src = bundlesSources[asset.name]
+    const src = bundlesSources && bundlesSources[asset.name]
     asset.size = {
       stats: asset.size
     }
