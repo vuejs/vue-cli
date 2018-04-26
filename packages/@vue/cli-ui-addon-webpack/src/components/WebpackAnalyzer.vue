@@ -320,11 +320,13 @@ export default {
 
   .content
     display flex
-    flex-direction row
+    flex-direction column
     position relative
 
   .donut
     width 100%
+    flex auto 1 1
+    height 0
     &.hover
       cursor pointer
 

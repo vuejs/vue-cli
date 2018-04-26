@@ -141,7 +141,7 @@ export default {
       .wrapper::after
         transition opacity .2s
       .vue-ui-icon
-        transition visibility 0
+        transition opacity 0
     &.v-enter-active
       .wrapper::after,
       .vue-ui-icon
@@ -153,7 +153,7 @@ export default {
         opacity 0
     &.v-enter
       .vue-ui-icon
-        visibility hidden
+        opacity 0
     &.v-leave-to
       opacity 0
 </style>

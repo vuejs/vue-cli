@@ -306,7 +306,7 @@ export default {
   border-radius $br
 
 .content
-  flex 100% 1 1
+  flex auto 1 1
   height 0
   margin 0 $padding-item $padding-item
   position relative
