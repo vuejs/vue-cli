@@ -79,7 +79,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
           )
         }
       },
-      onProxyReq(proxyReq, req, res) {
+      onProxyReq (proxyReq, req, res) {
         if (usersOnProxyReq) {
           usersOnProxyReq(proxyReq, req, res)
         }
