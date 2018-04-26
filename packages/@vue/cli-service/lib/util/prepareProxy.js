@@ -86,7 +86,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
         // Browsers may send Origin headers even with same-origin
         // requests. To prevent CORS issues, we have to change
         // the Origin to match the target URL.
-        if (proxyReq.getHeader('origin')) {
+        if (!proxyReq.agent && proxyReq.getHeader('origin')) {
           proxyReq.setHeader('origin', target)
         }
       },
