@@ -261,7 +261,7 @@ export default {
             // We calculate a new target module size relative to selected child
             ratio = rotation / 360 / childRatio
             targetSize = size * ratio
-            // New base ratio to deeper children
+            // New base ratio for deeper children
             parentRatio = childRatio
             // Go deeper
             tree = child
