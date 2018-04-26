@@ -13,6 +13,7 @@ module.exports = api => {
         typeDefs: require.resolve('@vue/cli-ui/src/graphql-api/type-defs.js'),
         resolvers: require.resolve('@vue/cli-ui/src/graphql-api/resolvers.js'),
         context: require.resolve('@vue/cli-ui/src/graphql-api/context.js'),
+        pubsub: require.resolve('@vue/cli-ui/src/graphql-api/pubsub.js'),
         server: require.resolve('@vue/cli-ui/src/graphql-api/server.js')
       }
     }
