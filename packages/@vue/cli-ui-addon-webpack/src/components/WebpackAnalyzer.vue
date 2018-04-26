@@ -141,7 +141,7 @@ export default {
 
     hoverModule: {
       get () { return this.injection.hoverModule },
-      set (value) { return this.injection.hoverModule = value }
+      set (value) { this.injection.hoverModule = value }
     },
 
     describedModule () {
