@@ -18,10 +18,10 @@
     "@vue/eslint-config-standard": "^3.0.0-beta.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue-template-compiler": "^2.5.17-beta.0"
+    "vue-template-compiler": "^2.5.16"
   },
   "peerDependencies": {
-    "vue": "^2.5.17-beta.0"
+    "vue": "^2.5.16"
   },
   "browserslist": [
     "> 1%",
