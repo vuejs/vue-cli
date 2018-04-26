@@ -17,14 +17,15 @@
         <div class="label">Assets</div>
         <div class="value">
           {{ assetsTotalSize | size('B') }}
-          <span class="secondary">
-            {{ useGzip ? '(gzip)' : '(disk)' }}
-          </span>
+          <span class="secondary">({{ sizeField }})</span>
         </div>
       </div>
       <div class="info-block modules">
         <div class="label">Modules</div>
-        <div class="value">{{ modulesTotalSize | size('B') }}</div>
+        <div class="value">
+          {{ modulesTotalSize | size('B') }}
+          <span class="secondary">({{ sizeField }})</span>
+        </div>
       </div>
       <div class="info-block dep-modules">
         <div class="label">Dependencies</div>
@@ -51,7 +52,7 @@ export default {
 
   computed: {
     ...mapGetters([
-      'useGzip',
+      'sizeField',
       'mode',
       'errors',
       'warnings',

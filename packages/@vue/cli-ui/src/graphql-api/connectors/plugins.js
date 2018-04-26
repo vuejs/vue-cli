@@ -110,7 +110,10 @@ function resetPluginApi (context) {
 }
 
 function runPluginApi (id, context, fileName = 'ui') {
-  const module = loadModule(`${id}/${fileName}`, cwd.get(), true)
+  let module
+  try {
+    module = loadModule(`${id}/${fileName}`, cwd.get(), true)
+  } catch (e) {}
   if (module) {
     pluginApi.pluginId = id
     module(pluginApi)

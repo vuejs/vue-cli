@@ -18,11 +18,16 @@
           class="separator"
         />
       </template>
-      <VueSwitch
-        v-model="useGzip"
-      >
-        Gzip assets
-      </VueSwitch>
+      <VueSelect v-model="sizeField">
+        <VueSelectButton value="stats" label="Stats sizes"/>
+        <VueSelectButton value="parsed" label="Parsed sizes"/>
+        <VueSelectButton value="gzip" label="Gzip sizes"/>
+      </VueSelect>
+      <VueButton
+        class="icon-button"
+        icon-left="help"
+        v-tooltip="sizeHelp"
+      />
     </div>
 
     <div class="content vue-ui-grid default-gap">

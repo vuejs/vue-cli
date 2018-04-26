@@ -1,14 +1,16 @@
-// From https://github.com/FormidableLabs/webpack-dashboard/blob/master/plugin/index.js
+// From https://github.com/FormidableLabs/webpack-dashboard/blob/7f99b31c5f00a7818d8129cb8a8fc6eb1b71799c/plugin/index.js
 // Modified by Guillaume Chau (Akryum)
+
 /* eslint-disable max-params, max-statements */
 'use strict'
 
 const path = require('path')
 const webpack = require('webpack')
-const zlib = require('zlib')
 const { IpcMessenger } = require('@vue/cli-shared-utils')
+const { analyzeBundle } = require('./analyzeBundle')
 
 const ONE_SECOND = 1000
+const FILENAME_QUERY_REGEXP = /\?.*$/
 
 const ipc = new IpcMessenger()
 
@@ -26,20 +28,12 @@ function getTimeMessage (timer) {
   return ` (${time})`
 }
 
-function getGzipSize (buffer) {
-  return zlib.gzipSync(buffer).length
-}
-
 class DashboardPlugin {
   constructor (options) {
     if (typeof options === 'function') {
       this.handler = options
     } else {
       options = options || {}
-      this.root = options.root
-      this.gzip = !(options.gzip === false)
-      // `gzip = true` implies `minified = true`.
-      this.minified = this.gzip || !(options.minified === false)
       this.handler = options.handler || null
       this.type = options.type
     }
@@ -52,11 +46,7 @@ class DashboardPlugin {
   cleanup () {
     if (!this.watching) {
       this.handler = null
-      if (this.inspectpack) {
-        this.inspectpack.terminate()
-      }
     }
-
     ipc.disconnect()
   }
 
@@ -65,9 +55,6 @@ class DashboardPlugin {
     let timer
 
     let assetSources
-
-    // Enable pathinfo for inspectpack support
-    compiler.options.output.pathinfo = true
 
     if (!handler) {
       ipc.connect()
@@ -159,21 +146,25 @@ class DashboardPlugin {
       assetSources = new Map()
       for (const name in compilation.assets) {
         const asset = compilation.assets[name]
-        assetSources.set(name, asset.source())
+        assetSources.set(name.replace(FILENAME_QUERY_REGEXP, ''), asset.source())
       }
       done()
     })
 
     compiler.plugin('done', stats => {
-      const statsData = stats.toJson()
+      let statsData = stats.toJson()
+      // Sometimes all the information is located in `children` array
+      if ((!statsData.assets || !statsData.assets.length) && statsData.children && statsData.children.length) {
+        statsData = statsData.children[0]
+      }
+
       const outputPath = compiler.options.output.path
       statsData.assets.forEach(asset => {
+        // Removing query part from filename (yes, somebody uses it for some reason and Webpack supports it)
+        asset.name = asset.name.replace(FILENAME_QUERY_REGEXP, '')
         asset.fullPath = path.join(outputPath, asset.name)
-        asset.gzipSize = assetSources && getGzipSize(assetSources.get(asset.name))
       })
-      statsData.modules.forEach(module => {
-        module.gzipSize = module.source && getGzipSize(module.source)
-      })
+      analyzeBundle(statsData, assetSources)
 
       const hasErrors = stats.hasErrors()
 

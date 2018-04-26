@@ -12,7 +12,7 @@
       <template v-else>
         <div class="headers">
           <div class="header"></div>
-          <div class="header">{{ useGzip ? 'Gzip' : 'Disk' }}</div>
+          <div class="header size-field">{{ sizeField }}</div>
           <div class="header">Global</div>
           <div class="header">3G Slow</div>
           <div class="header">3G Fast</div>
@@ -44,7 +44,7 @@ export default {
   computed: {
     ...mapGetters([
       'assetsSorted',
-      'useGzip'
+      'sizeField'
     ])
   }
 }
@@ -61,4 +61,8 @@ export default {
   font-size 12px
   text-align right
   margin-bottom $padding-item
+
+  .size-field
+    &:first-letter
+      text-transform uppercase
 </style>

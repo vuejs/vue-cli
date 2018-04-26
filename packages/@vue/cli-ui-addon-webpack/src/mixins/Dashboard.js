@@ -15,9 +15,9 @@ export default {
   },
 
   computed: {
-    useGzip: {
-      get () { return this.$store.getters.useGzip },
-      set (value) { this.$store.commit('useGzip', value) }
+    sizeField: {
+      get () { return this.$store.getters.sizeField },
+      set (value) { this.$store.commit('sizeField', value) }
     }
   },
 
@@ -30,5 +30,9 @@ export default {
         value
       })
     })
+
+    this.sizeHelp = `<b>Stats:</b> size from webpack stats data.<br>
+    <b>Parsed:</b> size from extracted source (after minification plugins). More accurate.<br>
+    <b>Gzip:</b> size of gzipped extracted source.`
   }
 }

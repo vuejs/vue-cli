@@ -128,8 +128,11 @@ export default {
     foldersFavorite: FOLDERS_FAVORITE
   },
 
-  beforeDestroy () {
-    this.resetProjectCwd()
+  beforeRouteLeave (to, from, next) {
+    if (to.matched.some(m => m.meta.needProject)) {
+      this.resetProjectCwd()
+    }
+    next()
   },
 
   methods: {

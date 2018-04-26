@@ -6,6 +6,22 @@ export function filterModules (modules) {
   return modules.filter(module => module.name.indexOf('(webpack)') === -1)
 }
 
+export function buildSortedModules (modules, sizeField) {
+  let list = modules.slice()
+  if (list.length) {
+    list = list.map(module => {
+      const size = module.size[sizeField]
+      return {
+        id: module.id,
+        identifier: module.identifier,
+        size
+      }
+    })
+    list = list.sort((a, b) => b.size - a.size)
+  }
+  return list
+}
+
 export function buildDepModules (modules) {
   const deps = new Map()
   for (const module of modules) {
@@ -45,7 +61,8 @@ export function buildDepModules (modules) {
 {
   id: './node_modules',
   size: {
-    disk: 1024,
+    stats: 1024,
+    parsed: 0,
     gzip: 400
   }
   fullPath: '/node_modules',
@@ -55,12 +72,14 @@ export function buildDepModules (modules) {
       id: 'vuex',
       identifier: '...',
       size: {
-        disk: 42,
+        stats: 42,
+        parsed: 0,
         gzip: 12
       },
       // Total size of previous children in list
       previousSize: {
-        disk: 0,
+        stats: 0,
+        parsed: 0,
         gzip: 0
       },
       fullPath: '/node_modules/vuex',
@@ -87,7 +106,8 @@ export function buildModulesTrees (modules) {
         subtree = trees[treeId] = {
           id: treeId,
           size: {
-            disk: 0,
+            stats: 0,
+            parsed: 0,
             gzip: 0
           },
           children: {}
@@ -102,7 +122,8 @@ export function buildModulesTrees (modules) {
           child = subtree.children[part] = {
             id: part,
             size: {
-              disk: 0,
+              stats: 0,
+              parsed: 0,
               gzip: 0
             },
             fullPath: fullPath.join('/'),
@@ -110,8 +131,9 @@ export function buildModulesTrees (modules) {
             parent: subtree
           }
         }
-        child.size.disk += module.size
-        child.size.gzip += module.gzipSize || 0
+        child.size.stats += module.size.stats
+        child.size.parsed += module.size.parsed || 0
+        child.size.gzip += module.size.gzip || 0
         // Leaf
         if (i === parts.length - 1) {
           child.identifier = module.identifier
@@ -136,18 +158,21 @@ export function buildModulesTrees (modules) {
 
 function walkTreeToSortChildren (tree) {
   let size = {
-    disk: 0,
+    stats: 0,
+    parsed: 0,
     gzip: 0
   }
   tree.children = Object.keys(tree.children).map(
     key => tree.children[key]
-  ).sort((a, b) => b.size.gzip - a.size.gzip)
+  ).sort((a, b) => b.size.stats - a.size.stats)
   for (const child of tree.children) {
     child.previousSize = {
-      disk: size.disk,
+      stats: size.stats,
+      parsed: size.parsed,
       gzip: size.gzip
     }
-    size.disk += child.size.disk
+    size.stats += child.size.stats
+    size.parsed += child.size.parsed
     size.gzip += child.size.gzip
     walkTreeToSortChildren(child)
   }

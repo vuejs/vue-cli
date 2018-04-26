@@ -30,17 +30,23 @@
           :label="`Chunk ${getChunkName(key)}`"
         />
       </VueSelect>
-      <VueSwitch
-        v-model="useGzip"
-      >
-        Gzip size
-      </VueSwitch>
+      <VueSelect v-model="sizeField">
+        <VueSelectButton value="stats" label="Stats sizes"/>
+        <VueSelectButton value="parsed" label="Parsed sizes"/>
+        <VueSelectButton value="gzip" label="Gzip sizes"/>
+      </VueSelect>
+      <VueButton
+        class="icon-button"
+        icon-left="help"
+        v-tooltip="sizeHelp"
+      />
     </div>
 
     <div class="content">
       <template v-if="currentTree">
         <svg
           ref="svg"
+          :key="sizeField"
           class="donut"
           :class="{
             hover: hoverModule
@@ -67,14 +73,20 @@
         <div class="wrapper">
           <div class="path" v-html="modulePath"/>
           <div
-            class="disk size"
-            :class="{ selected: !useGzip }"
+            class="stats size"
+            :class="{ selected: sizeField === 'stats' }"
           >
-            Disk: {{ describedModule.size.disk | size('B')}}
+            Stats: {{ describedModule.size.stats | size('B')}}
+          </div>
+          <div
+            class="parsed size"
+            :class="{ selected: sizeField === 'parsed' }"
+          >
+            Parsed: {{ describedModule.size.parsed | size('B')}}
           </div>
           <div
             class="gzip size"
-            :class="{ selected: useGzip }"
+            :class="{ selected: sizeField === 'gzip' }"
           >
             Gzip: {{ describedModule.size.gzip | size('B')}}
           </div>
@@ -227,7 +239,7 @@ export default {
       }
 
       // Walk the tree to find the hovered module
-      const sizeField = this.useGzip ? 'gzip' : 'disk'
+      const sizeField = this.sizeField
       let tree = this.currentTree
       let rotation = angle
       let ratio = rotation / 360

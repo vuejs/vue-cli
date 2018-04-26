@@ -80,7 +80,7 @@ export default {
 
   computed: {
     ...mapGetters([
-      'useGzip'
+      'sizeField'
     ]),
 
     finalDasharray () {
@@ -99,10 +99,6 @@ export default {
           return (1 - this.ratio) * this.dasharray
         }
       }
-    },
-
-    sizeField () {
-      return this.useGzip ? 'gzip' : 'disk'
     },
 
     ratio () {

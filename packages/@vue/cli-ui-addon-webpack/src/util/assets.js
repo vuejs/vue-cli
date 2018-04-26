@@ -34,12 +34,12 @@ export function getSpeeds (size) {
   }, {})
 }
 
-export function buildSortedAssets (assets, userGzip) {
+export function buildSortedAssets (assets, sizeField) {
   let list = assets.slice()
   if (list.length) {
     const max = list[0].size
     list = list.map(asset => {
-      const size = userGzip ? asset.gzipSize : asset.size
+      const size = asset.size[sizeField]
       return {
         name: asset.name,
         size,
