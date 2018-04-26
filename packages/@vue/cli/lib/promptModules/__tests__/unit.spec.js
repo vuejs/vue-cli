@@ -29,7 +29,7 @@ test('mocha', async () => {
     moduleToTest,
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })
 
@@ -57,6 +57,6 @@ test('jest', async () => {
     moduleToTest,
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })

@@ -48,7 +48,7 @@ test('with TSLint', async () => {
     [moduleToTest, linterModule],
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })
 
@@ -96,6 +96,6 @@ test('with ESLint', async () => {
     [moduleToTest, linterModule],
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })

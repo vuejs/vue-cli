@@ -23,6 +23,6 @@ test('vuex', async () => {
     moduleToTest,
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })

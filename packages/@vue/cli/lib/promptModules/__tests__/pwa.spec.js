@@ -24,6 +24,6 @@ test('pwa', async () => {
     moduleToTest,
     expectedPrompts,
     expectedOptions,
-    { plguinsOnly: true }
+    { pluginsOnly: true }
   )
 })
