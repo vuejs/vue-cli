@@ -54,9 +54,7 @@ module.exports = (api, options) => {
       if (args.dashboard) {
         const DashboardPlugin = require('../webpack/DashboardPlugin')
         ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
-          type: 'serve',
-          gzip: false,
-          minified: false
+          type: 'serve'
         }))
       }
 
@@ -122,6 +120,7 @@ module.exports = (api, options) => {
             openBrowser(urls.localUrlForBrowser)
           }
 
+          // Send final app URL
           if (args.dashboard) {
             const ipc = new IpcMessenger()
             ipc.connect()

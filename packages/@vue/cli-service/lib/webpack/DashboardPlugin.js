@@ -30,35 +30,24 @@ function getTimeMessage (timer) {
 
 class DashboardPlugin {
   constructor (options) {
-    if (typeof options === 'function') {
-      this.handler = options
-    } else {
-      options = options || {}
-      this.handler = options.handler || null
-      this.type = options.type
-    }
-
-    this.cleanup = this.cleanup.bind(this)
-
+    this.type = options.type
     this.watching = false
   }
 
   cleanup () {
-    if (!this.watching) {
-      this.handler = null
-    }
+    this.sendData = null
     ipc.disconnect()
   }
 
   apply (compiler) {
-    let handler = this.handler
+    let sendData = this.sendData
     let timer
 
     let assetSources
 
-    if (!handler) {
+    if (!sendData) {
       ipc.connect()
-      handler = data => ipc.send({
+      sendData = data => ipc.send({
         webpackDashboardData: {
           type: this.type,
           value: data
@@ -70,10 +59,11 @@ class DashboardPlugin {
 
     compiler.apply(
       new webpack.ProgressPlugin((percent, msg) => {
+        // Debouncing
         const time = Date.now()
         if (time - progressTime > 100) {
           progressTime = time
-          handler([
+          sendData([
             {
               type: 'status',
               value: 'Compiling'
@@ -104,7 +94,7 @@ class DashboardPlugin {
     compiler.plugin('compile', () => {
       timer = Date.now()
 
-      handler([
+      sendData([
         {
           type: 'status',
           value: 'Compiling'
@@ -113,7 +103,7 @@ class DashboardPlugin {
     })
 
     compiler.plugin('invalid', () => {
-      handler([
+      sendData([
         {
           type: 'status',
           value: 'Invalidated'
@@ -130,7 +120,7 @@ class DashboardPlugin {
     })
 
     compiler.plugin('failed', () => {
-      handler([
+      sendData([
         {
           type: 'status',
           value: 'Failed'
@@ -164,11 +154,12 @@ class DashboardPlugin {
         asset.name = asset.name.replace(FILENAME_QUERY_REGEXP, '')
         asset.fullPath = path.join(outputPath, asset.name)
       })
+      // Analyze the assets and update sizes on assets and modules
       analyzeBundle(statsData, assetSources)
 
       const hasErrors = stats.hasErrors()
 
-      handler([
+      sendData([
         {
           type: 'status',
           value: hasErrors ? 'Failed' : 'Success'
@@ -190,7 +181,10 @@ class DashboardPlugin {
           }
         }
       ])
-      this.cleanup()
+
+      if (!this.watching) {
+        this.cleanup()
+      }
     })
   }
 }
