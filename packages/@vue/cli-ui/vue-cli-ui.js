@@ -1,5 +1,7 @@
 // This file will be loaded when the project is opened
 module.exports = api => {
+  if (process.env.NODE_ENV === 'production') return
+
   // Add dynamic components in dev mode (webpack dashboard & analyzer)
   api.addClientAddon({
     id: 'vue-webpack',
