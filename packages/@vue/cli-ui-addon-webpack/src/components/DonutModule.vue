@@ -118,7 +118,7 @@ export default {
     },
 
     visible () {
-      return this.ratio > .003
+      return this.ratio > .002
     },
 
     hover () {
