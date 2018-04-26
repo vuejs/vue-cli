@@ -28,6 +28,7 @@
     >
       <DonutModule
         v-for="module of module.children"
+        v-if="isVisible(getRatio(module, ratio))"
         :key="module.id"
         :module="module"
         :depth="depth + 1"
@@ -96,7 +97,7 @@ export default {
     },
 
     ratio () {
-      return this.module.size[this.sizeField] / this.module.parent.size[this.sizeField] * this.parentRatio
+      return this.getRatio(this.module, this.parentRatio)
     },
 
     rotation () {
@@ -112,7 +113,7 @@ export default {
     },
 
     visible () {
-      return this.ratio > .002
+      return this.isVisible(this.ratio)
     },
 
     hover () {
@@ -124,7 +125,17 @@ export default {
     if (this.visible) {
       this.dasharray = this.$refs.path.getTotalLength()
     }
-  }
+  },
+
+  methods: {
+    getRatio (module, parentRatio) {
+      return module.size[this.sizeField] / module.parent.size[this.sizeField] * parentRatio
+    },
+
+    isVisible (ratio) {
+      return ratio > .0025
+    }
+  },
 }
 </script>
 
