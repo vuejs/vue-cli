@@ -23,11 +23,11 @@
 
 ESLint can be configured via `.eslintrc` or the `eslintConfig` field in `package.json`.
 
-Lint-on-save during development with `eslint-loader` can be enabled with the `lintOnSave` option in `vue.config.js`:
+Lint-on-save during development with `eslint-loader` is enabled by default. It can be disabled with the `lintOnSave` option in `vue.config.js`:
 
 ``` js
 module.exports = {
-  lintOnSave: true
+  lintOnSave: false
 }
 ```
 
