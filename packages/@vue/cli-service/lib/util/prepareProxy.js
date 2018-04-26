@@ -79,9 +79,9 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
           )
         }
       },
-      onProxyReq (proxyReq) {
+      onProxyReq (proxyReq, req, res) {
         if (usersOnProxyReq) {
-          usersOnProxyReq(proxyReq)
+          usersOnProxyReq(proxyReq, req, res)
         }
         // Browsers may send Origin headers even with same-origin
         // requests. To prevent CORS issues, we have to change
