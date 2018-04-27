@@ -127,7 +127,7 @@ async function updatePrompts () {
       } else if (typeof prompt.raw.value !== 'undefined') {
         value = prompt.raw.value
       } else {
-        value = getDefaultValue(prompt)
+        value = await getDefaultValue(prompt)
       }
       prompt.rawValue = value
       prompt.value = JSON.stringify(value)
