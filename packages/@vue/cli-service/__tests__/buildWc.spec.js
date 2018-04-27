@@ -89,7 +89,7 @@ test('build as single wc', async () => {
   expect(h1Text).toMatch('Welcome to Your Vue.js App')
 })
 
-afterAll(async () => {
+afterEach(async () => {
   await browser.close()
   server.close()
 })
