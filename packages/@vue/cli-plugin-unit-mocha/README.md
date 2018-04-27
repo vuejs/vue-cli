@@ -28,10 +28,6 @@
 
   All [mocha-webpack command line options](http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html) are also supported.
 
-## Configuration
-
-Jest can be configured via `jest.config.js` in your project root, or the `jest` field in `package.json`.
-
 ## Installing in an Already Created Project
 
 ``` sh
