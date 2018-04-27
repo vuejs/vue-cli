@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prepublishOnly": "yarn run lint --no-fix && yarn run build"
   },
   "dependencies": {
     "vue-progress-path": "^0.0.2",

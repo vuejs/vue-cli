@@ -10,7 +10,8 @@
     "lint": "vue-cli-service lint",
     "graphql-api": "vue-cli-service graphql-api",
     "run-graphql-api": "vue-cli-service run-graphql-api",
-    "prod-graphql-api": "cross-env NODE_ENV=production vue-cli-service run-graphql-api"
+    "prod-graphql-api": "cross-env NODE_ENV=production vue-cli-service run-graphql-api",
+    "prepublishOnly": "yarn run lint --no-fix && yarn run build"
   },
   "dependencies": {
     "@vue/ui": "^0.2.5",
