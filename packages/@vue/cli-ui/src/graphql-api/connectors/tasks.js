@@ -65,8 +65,8 @@ function list (context) {
     })
 
     // Process removed tasks
-    const removedTasks = currentTasks.filter(
-      task => task.index === -1
+    const removedTasks = list.filter(
+      t => currentTasks.findIndex(c => c.id === t.id) === -1
     )
     // Remove badges
     removedTasks.forEach(task => {
