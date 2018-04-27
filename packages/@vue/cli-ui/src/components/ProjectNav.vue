@@ -42,6 +42,11 @@ export default {
           document: VIEW_ADDED,
           updateQuery: (previousResult, { subscriptionData }) => {
             const view = subscriptionData.data.viewAdded
+            if (!previousResult.views) {
+              return {
+                views: [ view ]
+              }
+            }
             if (previousResult.views.find(r => r.id === view.id)) return previousResult
             return {
               views: [
