@@ -91,7 +91,6 @@ module.exports = class Service {
       './commands/build',
       './commands/inspect',
       './commands/help',
-      './commands/ui',
       // config plugins are order sensitive
       './config/base',
       './config/css',
