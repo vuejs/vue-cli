@@ -43,17 +43,6 @@ module.exports = (api, { target, entry, name }) => {
   function genConfig (minify, genHTML) {
     const config = api.resolveChainableWebpackConfig()
 
-    config.entryPoints.clear()
-    const entryName = `${libName}${minify ? `.min` : ``}`
-
-    // set proxy entry for *.vue files
-    config
-      .entry(entryName)
-        .add(dynamicEntry)
-    config.resolve
-      .alias
-        .set('~root', api.resolve('.'))
-
     // make sure not to transpile wc-wrapper
     config.module
       .rule('js')
@@ -64,14 +53,6 @@ module.exports = (api, { target, entry, name }) => {
     if (!minify) {
       config.plugins.delete('uglify')
     }
-
-    config.output
-      .filename(`${entryName}.js`)
-      .chunkFilename(`${libName}.[id]${minify ? `.min` : ``}.js`)
-      // use dynamic publicPath so this can be deployed anywhere
-      // the actual path will be determined at runtime by checking
-      // document.currentScript.src.
-      .publicPath('')
 
     // externalize Vue in case user imports it
     config
@@ -110,7 +91,31 @@ module.exports = (api, { target, entry, name }) => {
           }])
     }
 
-    return api.resolveWebpackConfig(config)
+    // set entry/output last so it takes higher priority than user
+    // configureWebpack hooks
+
+    // set proxy entry for *.vue files
+    config.resolve
+      .alias
+        .set('~root', api.resolve('.'))
+
+    const rawConfig = api.resolveWebpackConfig(config)
+
+    const entryName = `${libName}${minify ? `.min` : ``}`
+    rawConfig.entry = {
+      [entryName]: dynamicEntry
+    }
+
+    Object.assign(rawConfig.output, {
+      filename: `${entryName}.js`,
+      chunkFilename: `${libName}.[id]${minify ? `.min` : ``}.js`,
+      // use dynamic publicPath so this can be deployed anywhere
+      // the actual path will be determined at runtime by checking
+      // document.currentScript.src.
+      publicPath: ''
+    })
+
+    return rawConfig
   }
 
   return [
