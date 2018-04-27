@@ -44,6 +44,7 @@ program
   .option('-g, --git [message]', 'Force / skip git intialization, optionally specify initial commit message')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
+  .option('-x, --proxy', 'Use specified proxy when creating project')
   .action((name, cmd) => {
     require('../lib/create')(name, cleanArgs(cmd))
   })
