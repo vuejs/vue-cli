@@ -138,6 +138,12 @@ TypeScript can be configured via `tsconfig.json`.
 
 See [@vue/cli-plugin-typescript](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript) for more details.
 
+
+### Deployment
+
+Run ```yarn run build```.
+Upload the `dist` folder to whatever hosting service you are using. 
+
 ### Unit Testing
 
 - #### Jest
