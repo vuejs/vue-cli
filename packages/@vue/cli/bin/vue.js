@@ -39,9 +39,10 @@ program
   .option('-p, --preset <presetName>', 'Skip prompts and use saved or remote preset')
   .option('-d, --default', 'Skip prompts and use default preset')
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
-  .option('-g, --initialCommit <message>', 'Specify initial commit message (when git is available)')
   .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
+  .option('-s, --skipGit', 'Do not setup git repository when creating project')
+  .option('-g, --git <message>', 'Specify initial commit message (when git is available)')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .action((name, cmd) => {
