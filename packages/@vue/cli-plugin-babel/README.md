@@ -6,7 +6,7 @@
 
 Uses Babel 7 + `babel-loader` + [@vue/babel-preset-app](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) by default, but can be configured via `.babelrc` to use any other Babel presets or plugins.
 
-By default, `babel-loader` is only applied to files inside `src` and `test` directories. If you wish to explicitly transpile a dependency module, you will need to configure webpack in `vue.config.js`:
+By default, `babel-loader` is only applied to files inside `src` and `tests` directories. If you wish to explicitly transpile a dependency module, you will need to configure webpack in `vue.config.js`:
 
 ``` js
 module.exports = {

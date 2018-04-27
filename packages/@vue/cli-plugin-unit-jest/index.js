@@ -17,18 +17,8 @@ module.exports = api => {
     const execa = require('execa')
     const jestBinPath = require.resolve('jest/bin/jest')
 
-    let testMatch = []
-    if (!args._.length) {
-      testMatch = [`--testMatch`, `<rootDir>/(tests/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))`]
-    }
-
-    const argv = [
-      ...rawArgv,
-      ...testMatch
-    ]
-
     return new Promise((resolve, reject) => {
-      const child = execa(jestBinPath, argv, {
+      const child = execa(jestBinPath, rawArgv, {
         cwd: api.resolve('.'),
         stdio: 'inherit'
       })

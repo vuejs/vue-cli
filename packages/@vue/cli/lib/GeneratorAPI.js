@@ -2,11 +2,13 @@ const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
 const globby = require('globby')
+const merge = require('deepmerge')
 const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
 const { warn, getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
+const stringifyJS = require('javascript-stringify')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -123,7 +125,7 @@ class GeneratorAPI {
       } else if (Array.isArray(value) && Array.isArray(existing)) {
         pkg[key] = existing.concat(value)
       } else if (isObject(value) && isObject(existing)) {
-        pkg[key] = Object.assign({}, existing, value)
+        pkg[key] = merge(existing, value)
       } else {
         pkg[key] = value
       }
@@ -207,6 +209,13 @@ class GeneratorAPI {
    */
   exitLog (msg, type = 'log') {
     this.generator.exitLogs.push({ id: this.id, msg, type })
+  }
+
+  /**
+   * convenience method for generating a js config file from json
+   */
+  genJSConfig (value) {
+    return `module.exports = ${stringifyJS(value, null, 2)}`
   }
 }
 

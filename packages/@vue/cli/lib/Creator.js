@@ -46,17 +46,15 @@ module.exports = class Creator {
     this.promptCompleteCbs = []
     this.createCompleteCbs = []
 
+    this.run = this.run.bind(this)
+
     const promptAPI = new PromptModuleAPI(this)
     promptModules.forEach(m => m(promptAPI))
   }
 
   async create (cliOptions = {}) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-    const { name, context, createCompleteCbs } = this
-    const run = (command, args) => {
-      if (!args) { [command, ...args] = command.split(/\s+/) }
-      return execa(command, args, { cwd: context })
-    }
+    const { run, name, context, createCompleteCbs } = this
 
     let preset
     if (cliOptions.preset) {
@@ -114,7 +112,8 @@ module.exports = class Creator {
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
-    if (hasGit()) {
+    const shouldInitGit = await this.shouldInitGit(cliOptions)
+    if (shouldInitGit) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
       await run('git init')
     }
@@ -158,13 +157,14 @@ module.exports = class Creator {
     }
 
     // commit initial state
-    if (hasGit()) {
+    if (shouldInitGit) {
       await run('git add -A')
       if (isTestOrDebug) {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
       }
-      await run(`git commit -m init`)
+      const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
+      await run('git', ['commit', '-m', msg])
     }
 
     // log instructions
@@ -179,6 +179,11 @@ module.exports = class Creator {
     log()
 
     generator.printExitLogs()
+  }
+
+  run (command, args) {
+    if (!args) { [command, ...args] = command.split(/\s+/) }
+    return execa(command, args, { cwd: this.context })
   }
 
   async promptAndResolvePreset () {
@@ -378,5 +383,24 @@ module.exports = class Creator {
     ]
     debug('vue-cli:prompts')(prompts)
     return prompts
+  }
+
+  async shouldInitGit (cliOptions) {
+    if (!hasGit()) {
+      return false
+    }
+    if (cliOptions.git) {
+      return cliOptions.git !== 'false'
+    }
+    // check if we are in a git repo already
+    try {
+      await this.run('git', ['status'])
+    } catch (e) {
+      // if git status failed, let's create a fresh repo
+      return true
+    }
+    // if git status worked, it means we are already in a git repo
+    // so don't init again.
+    return false
   }
 }

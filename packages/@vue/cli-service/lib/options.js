@@ -16,7 +16,7 @@ const schema = createSchema(joi => joi.object({
   // css
   css: joi.object({
     modules: joi.boolean(),
-    extract: joi.boolean(),
+    extract: joi.alternatives().try(joi.boolean(), joi.object()),
     localIdentName: joi.string(),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({

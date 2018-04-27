@@ -112,7 +112,7 @@ module.exports = (api, {
   // delete all js files that have a ts file of the same name
   // and simply rename other js files to ts
   const jsRE = /\.js$/
-  const excludeRE = /^tests\/e2e\/|\.config\.js$/
+  const excludeRE = /^tests\/e2e\/|(\.config|rc)\.js$/
   const convertLintFlags = require('../lib/convertLintFlags')
   api.postProcessFiles(files => {
     for (const file in files) {

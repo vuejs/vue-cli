@@ -7,7 +7,7 @@ const writeFile = promisify(fs.writeFile)
 const rmFile = promisify(fs.unlink)
 const mkdirp = promisify(require('mkdirp'))
 
-module.exports = function createTestProject (name, preset, cwd) {
+module.exports = function createTestProject (name, preset, cwd, initGit) {
   cwd = cwd || path.resolve(__dirname, '../../test')
 
   const projectRoot = path.resolve(cwd, name)
@@ -46,7 +46,9 @@ module.exports = function createTestProject (name, preset, cwd) {
     name,
     '--force',
     '--inlinePreset',
-    JSON.stringify(preset)
+    JSON.stringify(preset),
+    '--git',
+    initGit ? 'init' : 'false'
   ]
 
   const options = {

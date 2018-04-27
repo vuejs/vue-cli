@@ -50,3 +50,7 @@ This is the default Babel preset used in all Vue CLI projects.
 - **jsx**
 
   Default: `true`. Set to `false` to disable JSX support.
+
+- **loose**
+
+  Default: `false`. Setting this to `true` will generate code that is more performant but less spec-compliant.

@@ -14,31 +14,6 @@ module.exports = (api, { entry, name }, options) => {
   function genConfig (format, postfix = format, genHTML) {
     const config = api.resolveChainableWebpackConfig()
 
-    config.entryPoints.clear()
-    const entryName = `${libName}.${postfix}`
-    // set proxy entry for *.vue files
-    if (/\.vue$/.test(entry)) {
-      config
-        .entry(entryName)
-          .add(require.resolve('./entry-lib.js'))
-      config.resolve
-        .alias
-          .set('~entry', api.resolve(entry))
-    } else {
-      config
-        .entry(entryName)
-          .add(api.resolve(entry))
-    }
-
-    config.output
-      .filename(`${entryName}.js`)
-      .chunkFilename(`${entryName}.[id].js`)
-      .library(libName)
-      .libraryExport('default')
-      .libraryTarget(format)
-      // use relative publicPath so this can be deployed anywhere
-      .publicPath('./')
-
     // adjust css output name so they write to the same file
     if (options.css.extract !== false) {
       config
@@ -76,7 +51,32 @@ module.exports = (api, { entry, name }, options) => {
           }])
     }
 
-    return api.resolveWebpackConfig(config)
+    // resolve entry/output
+    const entryName = `${libName}.${postfix}`
+    config.resolve
+      .alias
+        .set('~entry', api.resolve(entry))
+
+    // set entry/output after user configureWebpack hooks are applied
+    const rawConfig = api.resolveWebpackConfig(config)
+
+    rawConfig.entry = {
+      [entryName]: require.resolve('./entry-lib.js')
+    }
+
+    Object.assign(rawConfig.output, {
+      filename: `${entryName}.js`,
+      chunkFilename: `${entryName}.[id].js`,
+      library: libName,
+      libraryExport: 'default',
+      libraryTarget: format,
+      // use dynamic publicPath so this can be deployed anywhere
+      // the actual path will be determined at runtime by checking
+      // document.currentScript.src.
+      publicPath: ''
+    })
+
+    return rawConfig
   }
 
   return [

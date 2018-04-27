@@ -14,12 +14,20 @@ module.exports = (context, options = {}) => {
     )
   }
 
+  const {
+    loose = false,
+    useBuiltIns = 'usage',
+    modules = false,
+    targets,
+    decoratorsLegacy
+  } = options
+
   const envOptions = {
-    modules: options.modules || false,
-    targets: options.targets,
-    useBuiltIns: typeof options.useBuiltIns === 'undefined' ? 'usage' : options.useBuiltIns
+    loose,
+    modules,
+    targets,
+    useBuiltIns
   }
-  delete envOptions.jsx
   // target running node version (this is set by unit testing plugins)
   if (process.env.VUE_CLI_BABEL_TARGET_NODE) {
     envOptions.targets = { node: 'current' }
@@ -37,7 +45,9 @@ module.exports = (context, options = {}) => {
   // stage 2. This includes some important transforms, e.g. dynamic import
   // and rest object spread.
   presets.push([require('@babel/preset-stage-2'), {
-    useBuiltIns: true
+    loose,
+    useBuiltIns: useBuiltIns !== false,
+    decoratorsLegacy: decoratorsLegacy !== false
   }])
 
   // transform runtime, but only for helpers

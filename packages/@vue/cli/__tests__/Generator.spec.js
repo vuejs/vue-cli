@@ -5,6 +5,7 @@ const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
 const { makeJSONTransform } = require('../lib/util/configTransforms')
+const stringifyJS = require('javascript-stringify')
 
 // prepare template fixtures
 const mkdirp = require('mkdirp')
@@ -50,7 +51,11 @@ test('api: extendPackage', async () => {
       list: [1],
       vue: {
         foo: 1,
-        bar: 2
+        bar: 2,
+        pluginOptions: {
+          graphqlMock: true,
+          apolloEngine: false
+        }
       }
     },
     plugins: [{
@@ -61,7 +66,10 @@ test('api: extendPackage', async () => {
           list: [2],
           vue: {
             foo: 2,
-            baz: 3
+            baz: 3,
+            pluginOptions: {
+              enableInSFC: true
+            }
           }
         })
       }
@@ -77,7 +85,12 @@ test('api: extendPackage', async () => {
     vue: {
       foo: 2,
       bar: 2,
-      baz: 3
+      baz: 3,
+      pluginOptions: {
+        graphqlMock: true,
+        apolloEngine: false,
+        enableInSFC: true
+      }
     }
   })
 })
@@ -372,7 +385,7 @@ test('api: addConfigTransform transform vue warn', async () => {
 test('extract config files', async () => {
   const configs = {
     vue: {
-      lintOnSave: true
+      lintOnSave: false
     },
     babel: {
       presets: ['@vue/app']
@@ -402,9 +415,10 @@ test('extract config files', async () => {
   })
 
   const json = v => JSON.stringify(v, null, 2)
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(js(configs.vue))
   expect(fs.readFileSync('/.babelrc', 'utf-8')).toMatch(json(configs.babel))
-  expect(fs.readFileSync('/.postcssrc', 'utf-8')).toMatch(json(configs.postcss))
-  expect(fs.readFileSync('/.eslintrc', 'utf-8')).toMatch(json(configs.eslintConfig))
-  expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(`module.exports = {\n  foo: 'bar'\n}`)
+  expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
+  expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
+  expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
 })

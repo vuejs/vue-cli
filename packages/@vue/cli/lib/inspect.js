@@ -3,7 +3,7 @@ const path = require('path')
 const execa = require('execa')
 const resolve = require('resolve')
 
-module.exports = function inspect (paths, mode) {
+module.exports = function inspect (paths, args) {
   const cwd = process.cwd()
   let servicePath
   try {
@@ -18,7 +18,8 @@ module.exports = function inspect (paths, mode) {
     execa('node', [
       binPath,
       'inspect',
-      ...(mode ? ['--mode', mode] : []),
+      ...(args.mode ? ['--mode', args.mode] : []),
+      ...(args.verbose ? ['--verbose'] : []),
       ...paths
     ], { cwd, stdio: 'inherit' })
   }
