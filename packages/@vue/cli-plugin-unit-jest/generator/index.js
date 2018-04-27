@@ -19,7 +19,8 @@ module.exports = api => {
     ],
     'transform': {
       // process *.vue files with vue-jest
-      '^.+\\.vue$': 'vue-jest'
+      '^.+\\.vue$': 'vue-jest',
+      '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
     },
     // support the same @ -> src alias mapping in source code
     'moduleNameMapper': {
