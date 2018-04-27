@@ -7,6 +7,7 @@ const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
+const stringifyJS = require('javascript-stringify')
 const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
@@ -190,6 +191,13 @@ class GeneratorAPI {
    */
   exitLog (msg, type = 'log') {
     this.generator.exitLogs.push({ id: this.id, msg, type })
+  }
+
+  /**
+   * convenience method for generating a js config file from json
+   */
+  genJSConfig (value) {
+    return `module.exports = ${stringifyJS(value, null, 2)}`
   }
 }
 

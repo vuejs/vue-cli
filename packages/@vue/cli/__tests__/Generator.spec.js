@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
+const stringifyJS = require('javascript-stringify')
 
 // prepare template fixtures
 const mkdirp = require('mkdirp')
@@ -327,7 +328,7 @@ test('api: resolve', () => {
 test('extract config files', async () => {
   const configs = {
     vue: {
-      lintOnSave: true
+      lintOnSave: false
     },
     babel: {
       presets: ['@vue/app']
@@ -357,9 +358,10 @@ test('extract config files', async () => {
   })
 
   const json = v => JSON.stringify(v, null, 2)
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(js(configs.vue))
   expect(fs.readFileSync('/.babelrc', 'utf-8')).toMatch(json(configs.babel))
-  expect(fs.readFileSync('/.postcssrc', 'utf-8')).toMatch(json(configs.postcss))
-  expect(fs.readFileSync('/.eslintrc', 'utf-8')).toMatch(json(configs.eslintConfig))
-  expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(`module.exports = {\n  foo: 'bar'\n}`)
+  expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
+  expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
+  expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
 })

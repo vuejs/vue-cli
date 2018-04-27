@@ -4,6 +4,8 @@ jest.mock('inquirer')
 const invoke = require('../lib/invoke')
 const { expectPrompts } = require('inquirer')
 const create = require('@vue/cli-test-utils/createTestProject')
+const stringifyJS = require('javascript-stringify')
+const toJS = v => `module.exports = ${stringifyJS(v, null, 2)}`
 
 async function createAndInstall (name) {
   const project = await create(name, {
@@ -26,11 +28,11 @@ async function assertUpdates (project) {
     'pre-commit': 'lint-staged'
   })
 
-  const eslintrc = JSON.parse(await project.read('.eslintrc'))
-  expect(eslintrc).toEqual({
+  const eslintrc = await project.read('.eslintrc.js')
+  expect(eslintrc).toEqual(toJS({
     root: true,
     extends: ['plugin:vue/essential', '@vue/airbnb']
-  })
+  }))
 
   const lintedMain = await project.read('src/main.js')
   expect(lintedMain).toMatch(';') // should've been linted in post-generate hook
@@ -78,11 +80,11 @@ test('invoke with existing files', async () => {
   // mock existing vue.config.js
   await project.write('vue.config.js', `module.exports = { lintOnSave: true }`)
 
-  const eslintrc = JSON.parse(await project.read('.eslintrc'))
-  expect(eslintrc).toEqual({
+  const eslintrc = await project.read('.eslintrc.js')
+  expect(eslintrc).toEqual(toJS({
     root: true,
     extends: ['plugin:vue/essential', 'eslint:recommended']
-  })
+  }))
 
   await project.run(`${require.resolve('../bin/vue')} invoke eslint --config airbnb --lintOn commit`)
 
@@ -104,13 +106,13 @@ test('invoke with existing files (yaml)', async () => {
   pkg.devDependencies['@vue/cli-plugin-eslint'] = '*'
   await project.write('package.json', JSON.stringify(pkg, null, 2))
 
-  const eslintrc = JSON.parse(await project.read('.eslintrc'))
-  expect(eslintrc).toEqual({
+  const eslintrc = await project.read('.eslintrc.js')
+  expect(eslintrc).toEqual(toJS({
     root: true,
     extends: ['plugin:vue/essential', 'eslint:recommended']
-  })
+  }))
 
-  await project.rm(`.eslintrc`)
+  await project.rm(`.eslintrc.js`)
   await project.write(`.eslintrc.yml`, `
 root: true
 extends:
