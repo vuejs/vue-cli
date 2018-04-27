@@ -43,7 +43,7 @@ class DashboardPlugin {
     let sendData = this.sendData
     let timer
 
-    let assetSources
+    let assetSources = new Map()
 
     if (!sendData) {
       ipc.connect()
