@@ -103,18 +103,15 @@ module.exports = (api, options) => {
 
     // inject CSS extraction plugin
     if (extract) {
-      const userOptions = options.extractCSS && typeof options.extractCSS === 'object'
-        ? options.extractCSS
+      const extractOptions = userOptions.extract && typeof userOptions.extract === 'object'
+        ? userOptions.extract
         : {}
       webpackConfig
         .plugin('extract-css')
           .use(ExtractTextPlugin, [Object.assign({
             filename: `css/[name].[contenthash:8].css`,
             allChunks: true
-          }, userOptions)])
+          }, extractOptions)])
     }
-
-    // TODO document receipe for using css.loaderOptions to add `data` option
-    // to sass-loader
   })
 }
