@@ -43,12 +43,15 @@ create a new project powered by vue-cli-service
 
 Options:
 
-  -p, --preset <presetName>       Skip prompts and use saved preset
+  -p, --preset <presetName>       Skip prompts and use saved or remote preset
   -d, --default                   Skip prompts and use default preset
   -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
   -m, --packageManager <command>  Use specified npm client when installing dependencies
   -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
+  -g, --git [message]             Force / skip git intialization, optionally specify initial commit message
   -f, --force                     Overwrite target directory if it exists
+  -c, --clone                     Use git clone when fetching remote preset
+  -x, --proxy                     Use specified proxy when creating project
   -h, --help                      output usage information
 ```
 
