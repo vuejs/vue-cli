@@ -27,6 +27,7 @@
     "express-history-api-fallback": "^2.2.1",
     "file-icons-js": "^1.0.3",
     "graphql": "^0.13.0",
+    "graphql-tag": "^2.5.0",
     "graphql-type-json": "^0.2.0",
     "js-yaml": "^3.11.0",
     "lodash.merge": "^4.6.1",
@@ -41,6 +42,7 @@
     "terminate": "^2.1.0",
     "vue": "^2.5.16",
     "vue-apollo": "^3.0.0-beta.5",
+    "vue-cli-plugin-apollo": "^0.7.8",
     "vue-i18n": "^7.6.0",
     "vue-instantsearch": "^1.5.1",
     "vue-meta": "^1.5.0",
@@ -53,11 +55,9 @@
     "@vue/cli-service": "^3.0.0-beta.7",
     "@vue/eslint-config-standard": "^3.0.0-beta.7",
     "eslint": "^4.16.0",
-    "graphql-tag": "^2.5.0",
     "lint-staged": "^6.0.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue-cli-plugin-apollo": "^0.7.8",
     "vue-template-compiler": "^2.5.16"
   },
   "browserslist": [
