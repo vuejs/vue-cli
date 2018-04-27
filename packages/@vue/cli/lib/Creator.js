@@ -163,7 +163,8 @@ module.exports = class Creator {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
       }
-      await run('git', ['commit', '-m', cliOptions.initialCommit || 'init'])
+      const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
+      await run('git', ['commit', '-m', msg])
     }
 
     // log instructions
@@ -388,8 +389,8 @@ module.exports = class Creator {
     if (!hasGit()) {
       return false
     }
-    if (cliOptions.skipGit) {
-      return false
+    if (cliOptions.git) {
+      return cliOptions.git !== 'false'
     }
     // check if we are in a git repo already
     try {

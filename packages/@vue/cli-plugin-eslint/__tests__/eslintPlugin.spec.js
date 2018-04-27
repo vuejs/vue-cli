@@ -21,7 +21,7 @@ test('should work', async () => {
         lintOn: 'commit'
       }
     }
-  })
+  }, null, true /* initGit */)
   const { read, write, run } = project
   // should've applied airbnb autofix
   const main = await read('src/main.js')
