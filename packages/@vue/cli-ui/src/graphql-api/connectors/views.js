@@ -1,40 +1,55 @@
+// Connectors
+const cwd = require('./cwd')
 // Subs
 const channels = require('../channels')
 
-const BUILTIN_VIEWS = [
-  {
-    id: 'vue-project-plugins',
-    name: 'project-plugins',
-    icon: 'widgets',
-    tooltip: 'components.project-nav.tooltips.plugins'
-  },
-  {
-    id: 'vue-project-configurations',
-    name: 'project-configurations',
-    icon: 'settings_applications',
-    tooltip: 'components.project-nav.tooltips.configuration'
-  },
-  {
-    id: 'vue-project-tasks',
-    name: 'project-tasks',
-    icon: 'assignment',
-    tooltip: 'components.project-nav.tooltips.tasks'
-  }
-]
+function createViewsSet () {
+  // Builtin views
+  return [
+    {
+      id: 'vue-project-plugins',
+      name: 'project-plugins',
+      icon: 'widgets',
+      tooltip: 'components.project-nav.tooltips.plugins'
+    },
+    {
+      id: 'vue-project-configurations',
+      name: 'project-configurations',
+      icon: 'settings_applications',
+      tooltip: 'components.project-nav.tooltips.configuration'
+    },
+    {
+      id: 'vue-project-tasks',
+      name: 'project-tasks',
+      icon: 'assignment',
+      tooltip: 'components.project-nav.tooltips.tasks'
+    }
+  ]
+}
 
-let views = [
-  ...BUILTIN_VIEWS
-]
+const viewsMap = new Map()
+
+function getViews () {
+  const file = cwd.get()
+  let list = viewsMap.get(file)
+  if (!list) {
+    list = createViewsSet()
+    viewsMap.set(file, list)
+  }
+  return list
+}
 
 function list (context) {
-  return views
+  return getViews()
 }
 
 function findOne (id) {
+  const views = getViews()
   return views.find(r => r.id === id)
 }
 
 function add (view, context) {
+  const views = getViews()
   views.push(view)
   context.pubsub.publish(channels.VIEW_ADDED, {
     viewAdded: view
@@ -42,6 +57,7 @@ function add (view, context) {
 }
 
 function remove (id, context) {
+  const views = getViews()
   const index = views.findIndex(r => r.id === id)
   if (index !== -1) {
     const view = views[index]
