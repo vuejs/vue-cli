@@ -129,7 +129,6 @@ module.exports = (api, options) => {
                 url: urls.localUrlForBrowser
               }
             })
-            ipc.disconnect()
           }
 
           // resolve returned Promise
