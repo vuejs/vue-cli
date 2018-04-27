@@ -19,7 +19,7 @@
                 api-key="db283631f89b5b8a10707311f911fd00"
                 index-name="npm-search"
                 :query-parameters="{
-                  hitsPerPage: 10,
+                  hitsPerPage: 20,
                   attributesToRetrieve: [
                     'name',
                     'description',
@@ -40,7 +40,7 @@
                   ref="searchInput"
                   :placeholder="$t('views.project-plugins-add.tabs.search.search-input')"
                 />
-                <ais-results>
+                <ais-results ref="results">
                   <PackageSearchItem
                     slot-scope="{ result }"
                     :pkg="result"
@@ -54,7 +54,7 @@
                     <div>{{ $t('views.project-plugins-add.tabs.search.not-found') }}</div>
                   </div>
                 </ais-no-results>
-                <InstantSearchPagination/>
+                <InstantSearchPagination @page-change="scrollResultsToTop()"/>
               </ais-index>
             </div>
 
@@ -309,6 +309,11 @@ export default {
       } catch (e) {
         console.error(e)
       }
+    },
+
+    scrollResultsToTop () {
+      const vm = this.$refs.results
+      if (vm) vm.$el.scrollTop = 0
     }
   }
 }
