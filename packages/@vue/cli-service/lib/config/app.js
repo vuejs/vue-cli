@@ -38,6 +38,15 @@ module.exports = (api, options) => {
           )
         ])
 
+    // copy static assets in public/
+    webpackConfig
+      .plugin('copy')
+        .use(require('copy-webpack-plugin'), [[{
+          from: api.resolve('public'),
+          to: api.resolve(options.outputDir),
+          ignore: ['index.html', '.DS_Store']
+        }]])
+
     if (process.env.NODE_ENV === 'production') {
       // minify HTML
       webpackConfig
@@ -142,15 +151,6 @@ module.exports = (api, options) => {
             }])
             .after('preload')
       }
-
-      // copy static assets in public/
-      webpackConfig
-        .plugin('copy')
-          .use(require('copy-webpack-plugin'), [[{
-            from: api.resolve('public'),
-            to: api.resolve(options.outputDir),
-            ignore: ['index.html', '.DS_Store']
-          }]])
     }
   })
 }
