@@ -44,7 +44,7 @@ export default {
   grid-template-areas "side-left content"
 
   &.wide
-    grid-template-columns 250px 1fr
+    grid-template-columns 180px 1fr
 
 .project-nav
   grid-area side-left

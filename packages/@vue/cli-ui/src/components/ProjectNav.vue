@@ -157,5 +157,7 @@ export default {
           flex auto 1 1
           width 0
           margin-left 6px
+          height 100%
           ellipsis()
+          padding-top 8px
 </style>
