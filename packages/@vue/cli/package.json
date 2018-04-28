@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-beta.9",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -27,10 +27,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.0-beta.7",
+    "@vue/cli-shared-utils": "^3.0.0-beta.9",
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
     "debug": "^3.1.0",
+    "deepmerge": "^2.0.1",
     "download-git-repo": "^1.0.2",
     "ejs": "^2.5.7",
     "execa": "^0.8.0",

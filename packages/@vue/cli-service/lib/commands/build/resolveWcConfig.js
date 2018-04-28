@@ -18,6 +18,7 @@ module.exports = (api, { target, entry, name }) => {
 
   // generate dynamic entry based on glob files
   const resolvedFiles = require('globby').sync([entry], { cwd: api.resolve('.') })
+
   if (!resolvedFiles.length) {
     abort(`entry pattern "${entry}" did not match any files.`)
   }
@@ -38,7 +39,7 @@ module.exports = (api, { target, entry, name }) => {
     }
   }
 
-  const dynamicEntry = resolveEntry(prefix, resolvedFiles, isAsync)
+  const dynamicEntry = resolveEntry(prefix, libName, resolvedFiles, isAsync)
 
   function genConfig (minify, genHTML) {
     const config = api.resolveChainableWebpackConfig()
@@ -85,9 +86,12 @@ module.exports = (api, { target, entry, name }) => {
             inject: false,
             filename: 'demo.html',
             libName,
-            components: resolvedFiles.map(file => {
-              return fileToComponentName(prefix, file).kebabName
-            })
+            components:
+              prefix === ''
+                ? [libName]
+                : resolvedFiles.map(file => {
+                  return fileToComponentName(prefix, file).kebabName
+                })
           }])
     }
 
