@@ -4,12 +4,8 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
-const {
-  makeJSTransform,
-  makeJSONTransform,
-  makeMutliExtensionJSONTransform
-} = require('./util/configTransforms')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
 const logTypes = {
@@ -21,14 +17,23 @@ const logTypes = {
 }
 
 const defaultConfigTransforms = {
-  babel: makeJSONTransform('.babelrc'),
-  postcss: makeMutliExtensionJSONTransform('.postcssrc', true),
-  eslintConfig: makeMutliExtensionJSONTransform('.eslintrc', true),
-  jest: makeJSTransform('jest.config.js')
+  babel: new ConfigTransform({
+    file: '.babelrc',
+    types: ['bare', 'json', 'js']
+  }),
+  postcss: new ConfigTransform({
+    file: '.postcssrc',
+    types: ['js', 'json', 'yaml', 'bare']
+  }),
+  eslintConfig: new ConfigTransform({
+    file: '.eslintrc',
+    types: ['js', 'json', 'yaml', 'bare']
+  }),
+  jest: new ConfigTransform({ file: 'jest.config', types: ['js'] })
 }
 
 const reservedConfigTransforms = {
-  vue: makeJSTransform('vue.config.js')
+  vue: new ConfigTransform({ file: 'vue.config', types: ['js'] })
 }
 
 module.exports = class Generator {
@@ -94,8 +99,8 @@ module.exports = class Generator {
         !this.originalPkg[key]
       ) {
         const value = this.pkg[key]
-        const transform = configTransforms[key]
-        const res = transform(
+        const configTransform = configTransforms[key]
+        const res = configTransform.transform(
           value,
           checkExisting,
           this.context

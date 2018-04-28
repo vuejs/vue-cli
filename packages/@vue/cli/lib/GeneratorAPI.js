@@ -9,6 +9,7 @@ const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
 const { warn, getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 const stringifyJS = require('javascript-stringify')
+const ConfigTransform = require('./ConfigTransform')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -83,18 +84,30 @@ class GeneratorAPI {
    * Configure how config files are extracted.
    *
    * @param {string} key - Config key in package.json
-   * @param {ConfigTransform} transformer - A function that receives the
-   *   config object, whether to check for an existing config on disk, and the
-   *   current context.
+   * @param {object[]} configs - List of config descriptions.
+   *   The first config description will be used to generate a config file if
+   *   an existing config is not found. Existing configs are searched for
+   *   using the provided config descriptions.
+   * @param {string} configs[].file - File name without extension
+   * @param {string[]} configs[].types - List of file types.
+   *   Can include one or more of: 'js', 'json', 'yaml', 'bare'.
+   *   The first file type will be used when an existing config is not found.
    */
-  addConfigTransform (key, configTransform) {
+  addConfigTransform (key, configs) {
     const reserved = ['vue']
-    if (reserved.includes(key)) {
-      warn(`do not override vue config transform`)
+    const hasReserved = reserved.includes(key)
+    if (
+      hasReserved ||
+      !configs ||
+      (configs && configs.length === 0)
+    ) {
+      if (hasReserved) {
+        warn(`do not override vue config transform`)
+      }
       return
     }
 
-    this.generator.configTransforms[key] = configTransform
+    this.generator.configTransforms[key] = new ConfigTransform(configs)
   }
 
   /**

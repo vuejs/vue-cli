@@ -4,7 +4,6 @@ const fs = require('fs')
 const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
-const { makeJSONTransform } = require('../lib/util/configTransforms')
 const stringifyJS = require('javascript-stringify')
 
 // prepare template fixtures
@@ -337,7 +336,10 @@ test('api: addConfigTransform', async () => {
     {
       id: 'test',
       apply: api => {
-        api.addConfigTransform('fooConfig', makeJSONTransform('foo.config.json'))
+        api.addConfigTransform('fooConfig', {
+          file: 'foo.config',
+          types: ['json']
+        })
         api.extendPackage(configs)
       }
     }
@@ -352,6 +354,41 @@ test('api: addConfigTransform', async () => {
   expect(generator.pkg).not.toHaveProperty('fooConfig')
 })
 
+test('api: addConfigTransform (multiple)', async () => {
+  const configs = {
+    bazConfig: {
+      field: 2501
+    }
+  }
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.addConfigTransform('bazConfig', [
+          {
+            file: '.bazrc',
+            types: ['js', 'bare']
+          },
+          {
+            file: 'baz.config',
+            types: ['json']
+          }
+        ])
+        api.extendPackage(configs)
+      }
+    }
+  ] })
+
+  await generator.generate({
+    extractConfigFiles: true
+  })
+
+  const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
+  expect(fs.readFileSync('/.bazrc.js', 'utf-8')).toMatch(js(configs.bazConfig))
+  expect(generator.pkg).not.toHaveProperty('bazConfig')
+})
+
 test('api: addConfigTransform transform vue warn', async () => {
   const configs = {
     vue: {
@@ -363,10 +400,7 @@ test('api: addConfigTransform transform vue warn', async () => {
     {
       id: 'test',
       apply: api => {
-        api.addConfigTransform('vue', () => ({
-          filename: 'myVue.json',
-          content: 'foo'
-        }))
+        api.addConfigTransform('vue', [{ file: 'vue.config', types: ['js'] }])
         api.extendPackage(configs)
       }
     }
