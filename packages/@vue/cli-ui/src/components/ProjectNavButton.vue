@@ -11,7 +11,7 @@
       <VueGroupButton
         class="flat big"
         :class="{
-          'icon-button': $responsive.wide
+          'icon-button': !$responsive.wide
         }"
         :value="view.name"
         :icon-left="!imageIcon && view.icon"

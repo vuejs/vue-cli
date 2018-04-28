@@ -70,6 +70,9 @@ export default {
   .description
     color $color-text-light
 
+    >>> :first-child
+      margin-right 4px
+
     >>> .vue-ui-icon
       svg
         fill @color

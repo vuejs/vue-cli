@@ -156,7 +156,6 @@ export default {
         > .default-slot
           flex auto 1 1
           width 0
-          margin-left 6px
           ellipsis()
           padding 4px 0
 </style>
