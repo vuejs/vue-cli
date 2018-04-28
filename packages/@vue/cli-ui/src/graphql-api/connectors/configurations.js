@@ -9,6 +9,8 @@ const folders = require('./folders')
 const prompts = require('./prompts')
 // Utils
 const { get, set, remove } = require('../../util/object')
+const { loadModule } = require('@vue/cli/lib/util/module')
+const extendJSConfig = require('@vue/cli/lib/util/extendJSConfig')
 
 const fileTypes = ['js', 'json', 'yaml']
 let current = {}
@@ -56,24 +58,24 @@ function readData (config, context) {
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
       return pkg[config.files.package]
+    } else if (file.type === 'js') {
+      return loadModule(file.path, cwd.get(), true)
     } else {
       const rawContent = fs.readFileSync(file.path, { encoding: 'utf8' })
       if (file.type === 'json') {
         return JSON.parse(rawContent)
       } else if (file.type === 'yaml') {
         return yaml.safeLoad(rawContent)
-      } else if (file.type === 'js') {
-        // TODO
-        console.warn('JS config read not implemented')
       }
     }
   }
   return {}
 }
 
-function writeData ({ config, data }, context) {
+function writeData ({ config, data, changedFields }, context) {
   const file = findFile(config, context)
   if (file) {
+    if (process.env.NODE_ENV !== 'production') console.log('write', config.id, data, changedFields)
     let rawContent
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
@@ -85,8 +87,12 @@ function writeData ({ config, data }, context) {
       } else if (file.type === 'yaml') {
         rawContent = yaml.safeDump(data)
       } else if (file.type === 'js') {
-        // TODO
-        console.warn('JS config write not implemented')
+        const changedData = changedFields.reduce((obj, field) => {
+          obj[field] = data[field]
+          return obj
+        }, {})
+        const source = fs.readFileSync(file.path, { encoding: 'utf8' })
+        rawContent = extendJSConfig(changedData, source)
       }
     }
     fs.writeFileSync(file.path, rawContent, { encoding: 'utf8' })
@@ -97,6 +103,7 @@ async function getPrompts (id, context) {
   const config = findOne(id, context)
   if (config) {
     const data = readData(config, context)
+    if (process.env.NODE_ENV !== 'production') console.log('read', config.id, data)
     current = {
       config,
       data
@@ -121,17 +128,26 @@ async function save (id, context) {
     if (current.config === config) {
       const answers = prompts.getAnswers()
       let data = clone(current.data)
+      const changedFields = []
       await config.onWrite({
         prompts: prompts.list(),
         answers,
-        data,
+        data: current.data,
         file: config.file,
         api: {
           assignData: newData => {
+            changedFields.push(...Object.keys(newData))
             Object.assign(data, newData)
           },
           setData: newData => {
             Object.keys(newData).forEach(key => {
+              let field = key
+              const dotIndex = key.indexOf('.')
+              if (dotIndex !== -1) {
+                field = key.substr(0, dotIndex)
+              }
+              changedFields.push(field)
+
               const value = newData[key]
               if (typeof value === 'undefined') {
                 remove(data, key)
@@ -155,7 +171,7 @@ async function save (id, context) {
           }
         }
       })
-      writeData({ config, data }, context)
+      writeData({ config, data, changedFields }, context)
       current = {}
     }
   }

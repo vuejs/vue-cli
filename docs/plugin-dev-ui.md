@@ -104,7 +104,7 @@ api.describeConfig({
 })
 ```
 
-Then you can specify which files will be read when loading the configuration and then written to (JS files aren't supported yet):
+Then you can specify which files will be read when loading the configuration and then written to:
 
 ```js
 api.describeConfig({
@@ -112,13 +112,14 @@ api.describeConfig({
   // All possible files for this config
   files: {
     json: ['.eslintrc', '.eslintrc.json'],
+    js: ['.eslintrc.js'],
     // Will read from `package.json`
     package: 'eslintConfig'
   },
 })
 ```
 
-Supported types: `json`, `yaml`, `package`.
+Supported types: `json`, `yaml`, `js`, `package`.
 
 Use the `onRead` hook to return a list of prompts to be displayed for the configuration:
 
@@ -164,7 +165,7 @@ Arguments:
 
 - `prompts`: current prompts runtime objects
 - `answers`: answers data from the user inputs
-- `data`: initial data read from the file
+- `data`: read-only initial data read from the file
 - `file`: descriptor of the found file (`{ type: 'json', path: '...' }`)
 - `api`: onWrite API
 
