@@ -8,7 +8,7 @@ module.exports = function lint (args = {}, api, silent) {
   const vueCompiler = require('vue-template-compiler')
 
   const options = {
-    fix: !args['no-fix'],
+    fix: args['fix'] !== false,
     formatter: args.format || 'codeFrame',
     formattersDirectory: args['formatters-dir'],
     rulesDirectory: args['rules-dir']

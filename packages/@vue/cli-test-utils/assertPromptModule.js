@@ -11,7 +11,7 @@ module.exports = async function assertPromptModule (
   opts = {}
 ) {
   // auto fill non-module prompts
-  if (opts.plguinsOnly) {
+  if (opts.pluginsOnly) {
     expectedPrompts.unshift(
       {
         message: 'Please pick a preset',
@@ -40,7 +40,7 @@ module.exports = async function assertPromptModule (
   const creator = new Creator('test', '/', [].concat(module))
   const preset = await creator.promptAndResolvePreset()
 
-  if (opts.plguinsOnly) {
+  if (opts.pluginsOnly) {
     delete preset.useConfigFiles
   }
   expect(preset).toEqual(expectedOptions)

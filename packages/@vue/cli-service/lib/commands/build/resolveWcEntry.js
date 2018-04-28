@@ -11,6 +11,22 @@ const hyphenate = str => {
   return str.replace(hyphenateRE, '-$1').toLowerCase()
 }
 
+/**
+ * Creates the script to add the component to the custom elements
+ * @param {string} prefix The prefix for the component library
+ * @param {string} component The component name for single entry builds, component file for multi-entry builds
+ * @param {string} file The file for the component
+ * @param {boolean} async Whether to load component async or not
+ */
+const createElement = (prefix, component, file, async) => {
+  const { camelName, kebabName } = exports.fileToComponentName(prefix, component)
+
+  return async
+    ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}')))\n`
+    : `import ${camelName} from '~root/${file}'\n` +
+        `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}))\n`
+}
+
 exports.fileToComponentName = (prefix, file) => {
   const basename = path.basename(file).replace(/\.(jsx?|vue)$/, '')
   const camelName = camelize(basename)
@@ -22,8 +38,13 @@ exports.fileToComponentName = (prefix, file) => {
   }
 }
 
-exports.resolveEntry = (prefix, files, async) => {
+exports.resolveEntry = (prefix, libName, files, async) => {
   const filePath = path.resolve(__dirname, 'entry-wc.js')
+  const elements =
+    prefix === ''
+      ? [createElement('', libName, files[0])]
+      : files.map(file => createElement(prefix, file, file, async)).join('\n')
+
   const content = `
 import Vue from 'vue'
 import wrap from '@vue/web-component-wrapper'
@@ -40,15 +61,7 @@ import 'vue-loader/lib/runtime/component-normalizer'
   }
 })()
 
-${files.map(file => {
-    const { camelName, kebabName } = exports.fileToComponentName(prefix, file)
-    return async
-      ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}')))\n`
-      : (
-        `import ${camelName} from '~root/${file}'\n` +
-      `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}))\n`
-      )
-  }).join('\n')}`.trim()
+${elements}`.trim()
   fs.writeFileSync(filePath, content)
   return filePath
 }

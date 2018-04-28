@@ -10,6 +10,10 @@ const { error, stopSpinner, exit } = require('@vue/cli-shared-utils')
 const validateProjectName = require('validate-npm-package-name')
 
 async function create (projectName, options) {
+  if (options.proxy) {
+    process.env.HTTP_PROXY = options.proxy
+  }
+
   const inCurrent = projectName === '.'
   const name = inCurrent ? path.relative('../', process.cwd()) : projectName
   const targetDir = path.resolve(projectName || '.')

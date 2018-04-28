@@ -1,4 +1,4 @@
-jest.setTimeout(30000)
+jest.setTimeout(35000)
 
 const path = require('path')
 const { linkBin } = require('@vue/cli/lib/util/linkBin')
@@ -21,7 +21,7 @@ test('should work', async () => {
         lintOn: 'commit'
       }
     }
-  })
+  }, null, true /* initGit */)
   const { read, write, run } = project
   // should've applied airbnb autofix
   const main = await read('src/main.js')
@@ -89,4 +89,34 @@ test('should work', async () => {
   })
 
   await donePromise
+})
+
+test('should not fix with --no-fix option', async () => {
+  const project = await create('eslint-nofix', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      }
+    }
+  })
+  const { read, write, run } = project
+  // should've applied airbnb autofix
+  const main = await read('src/main.js')
+  expect(main).toMatch(';')
+  // remove semicolons
+  const updatedMain = main.replace(/;/g, '')
+  await write('src/main.js', updatedMain)
+
+  // lint with no fix should fail
+  try {
+    await run('vue-cli-service lint --no-fix')
+  } catch (e) {
+    expect(e.code).toBe(1)
+    expect(e.failed).toBeTruthy()
+  }
+
+  // files should not have been fixed
+  expect(await read('src/main.js')).not.toMatch(';')
 })

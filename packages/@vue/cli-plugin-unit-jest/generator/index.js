@@ -19,7 +19,8 @@ module.exports = api => {
     ],
     'transform': {
       // process *.vue files with vue-jest
-      '^.+\\.vue$': 'vue-jest'
+      '^.+\\.vue$': 'vue-jest',
+      '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
     },
     // support the same @ -> src alias mapping in source code
     'moduleNameMapper': {
@@ -65,12 +66,12 @@ module.exports = api => {
 
   if (api.hasPlugin('eslint')) {
     api.render(files => {
-      files['tests/unit/.eslintrc'] = JSON.stringify({
+      files['tests/unit/.eslintrc.js'] = api.genJSConfig({
         env: { jest: true },
         rules: {
           'import/no-extraneous-dependencies': 'off'
         }
-      }, null, 2)
+      })
     })
   }
 }

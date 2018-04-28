@@ -35,11 +35,20 @@ function makeJSONTransform (filename) {
   }
 }
 
-function makeMutliExtensionJSONTransform (filename) {
+function makeMutliExtensionJSONTransform (filename, preferJS) {
   return function transformToMultiExtensions (value, checkExisting, context) {
-    if (!checkExisting) {
-      return makeJSONTransform(filename)(value, checkExisting, context)
+    function defaultTransform () {
+      if (preferJS) {
+        return makeJSTransform(`${filename}.js`)(value, false, context)
+      } else {
+        return makeJSONTransform(filename)(value, false, context)
+      }
     }
+
+    if (!checkExisting) {
+      return defaultTransform()
+    }
+
     const absolutePath = path.resolve(context, filename)
     if (fs.existsSync(absolutePath)) {
       return makeJSONTransform(filename)(value, checkExisting, context)
@@ -52,7 +61,7 @@ function makeMutliExtensionJSONTransform (filename) {
     } else if (fs.existsSync(`${absolutePath}.yml`)) {
       return transformYAML(value, `${filename}.yml`, fs.readFileSync(`${absolutePath}.yml`, 'utf-8'))
     } else {
-      return makeJSONTransform(filename)(value, false, context)
+      return defaultTransform()
     }
   }
 }
@@ -69,7 +78,7 @@ function transformYAML (value, filename, source) {
 module.exports = {
   vue: makeJSTransform('vue.config.js'),
   babel: makeJSONTransform('.babelrc'),
-  postcss: makeMutliExtensionJSONTransform('.postcssrc'),
-  eslintConfig: makeMutliExtensionJSONTransform('.eslintrc'),
+  postcss: makeMutliExtensionJSONTransform('.postcssrc', true),
+  eslintConfig: makeMutliExtensionJSONTransform('.eslintrc', true),
   jest: makeJSTransform('jest.config.js')
 }

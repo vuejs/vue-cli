@@ -5,6 +5,12 @@ const invoke = require('../lib/invoke')
 const { expectPrompts } = require('inquirer')
 const create = require('@vue/cli-test-utils/createTestProject')
 
+const parseJS = file => {
+  const res = {}
+  ;(new Function('module', file))(res)
+  return res.exports
+}
+
 async function createAndInstall (name) {
   const project = await create(name, {
     plugins: {
@@ -26,7 +32,7 @@ async function assertUpdates (project) {
     'pre-commit': 'lint-staged'
   })
 
-  const eslintrc = JSON.parse(await project.read('.eslintrc'))
+  const eslintrc = parseJS(await project.read('.eslintrc.js'))
   expect(eslintrc).toEqual({
     root: true,
     extends: ['plugin:vue/essential', '@vue/airbnb']
@@ -78,7 +84,7 @@ test('invoke with existing files', async () => {
   // mock existing vue.config.js
   await project.write('vue.config.js', `module.exports = { lintOnSave: true }`)
 
-  const eslintrc = JSON.parse(await project.read('.eslintrc'))
+  const eslintrc = parseJS(await project.read('.eslintrc.js'))
   expect(eslintrc).toEqual({
     root: true,
     extends: ['plugin:vue/essential', 'eslint:recommended']
@@ -104,13 +110,13 @@ test('invoke with existing files (yaml)', async () => {
   pkg.devDependencies['@vue/cli-plugin-eslint'] = '*'
   await project.write('package.json', JSON.stringify(pkg, null, 2))
 
-  const eslintrc = JSON.parse(await project.read('.eslintrc'))
+  const eslintrc = parseJS(await project.read('.eslintrc.js'))
   expect(eslintrc).toEqual({
     root: true,
     extends: ['plugin:vue/essential', 'eslint:recommended']
   })
 
-  await project.rm(`.eslintrc`)
+  await project.rm(`.eslintrc.js`)
   await project.write(`.eslintrc.yml`, `
 root: true
 extends:

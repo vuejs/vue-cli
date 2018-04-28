@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
+const stringifyJS = require('javascript-stringify')
 
 // prepare template fixtures
 const mkdirp = require('mkdirp')
@@ -114,6 +115,79 @@ test('api: extendPackage function', async () => {
   })
 })
 
+test('api: extendPackage allow git, github, http, file version ranges', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.extendPackage({
+          dependencies: {
+            foo: 'git+ssh://git@github.com:npm/npm.git#v1.0.27',
+            baz: 'git://github.com/npm/npm.git#v1.0.27',
+            bar: 'expressjs/express',
+            bad: 'mochajs/mocha#4727d357ea',
+            bac: 'http://asdf.com/asdf.tar.gz',
+            bae: 'file:../dyl',
+            'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
+          }
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+
+  const pkg = JSON.parse(fs.readFileSync('/package.json', 'utf-8'))
+  expect(pkg).toEqual({
+    dependencies: {
+      foo: 'git+ssh://git@github.com:npm/npm.git#v1.0.27',
+      baz: 'git://github.com/npm/npm.git#v1.0.27',
+      bar: 'expressjs/express',
+      bad: 'mochajs/mocha#4727d357ea',
+      bac: 'http://asdf.com/asdf.tar.gz',
+      bae: 'file:../dyl',
+      'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
+    }
+  })
+})
+
+test('api: extendPackage merge nonstrictly semver deps', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.extendPackage({
+          dependencies: {
+            'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:1.0.0',
+            bar: 'expressjs/express'
+          }
+        })
+      }
+    },
+    {
+      id: 'test2',
+      apply: api => {
+        api.extendPackage({
+          dependencies: {
+            'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:1.2.0',
+            bar: 'expressjs/express'
+          }
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+
+  const pkg = JSON.parse(fs.readFileSync('/package.json', 'utf-8'))
+  expect(pkg).toEqual({
+    dependencies: {
+      'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:1.2.0',
+      bar: 'expressjs/express'
+    }
+  })
+})
+
 test('api: extendPackage merge dependencies', async () => {
   const generator = new Generator('/', { plugins: [
     {
@@ -204,6 +278,40 @@ test('api: extendPackage dependencies conflict', async () => {
       msg.match(/\^1\.0\.0 injected by generator "test1"/) &&
       msg.match(/\^2\.0\.0 injected by generator "test2"/) &&
       msg.match(/Using newer version \(\^2\.0\.0\)/)
+    )
+  })).toBe(true)
+})
+
+test('api: extendPackage merge warn nonstrictly semver deps', async () => {
+  new Generator('/', { plugins: [
+    {
+      id: 'test3',
+      apply: api => {
+        api.extendPackage({
+          dependencies: {
+            bar: 'expressjs/express'
+          }
+        })
+      }
+    },
+    {
+      id: 'test4',
+      apply: api => {
+        api.extendPackage({
+          dependencies: {
+            bar: 'expressjs/express#1234'
+          }
+        })
+      }
+    }
+  ] })
+
+  expect(logs.warn.some(([msg]) => {
+    return (
+      msg.match(/conflicting versions for project dependency "bar"/) &&
+      msg.match(/expressjs\/express injected by generator "test3"/) &&
+      msg.match(/expressjs\/express#1234 injected by generator "test4"/) &&
+      msg.match(/Using version \(expressjs\/express\)/)
     )
   })).toBe(true)
 })
@@ -327,7 +435,7 @@ test('api: resolve', () => {
 test('extract config files', async () => {
   const configs = {
     vue: {
-      lintOnSave: true
+      lintOnSave: false
     },
     babel: {
       presets: ['@vue/app']
@@ -357,9 +465,10 @@ test('extract config files', async () => {
   })
 
   const json = v => JSON.stringify(v, null, 2)
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(js(configs.vue))
   expect(fs.readFileSync('/.babelrc', 'utf-8')).toMatch(json(configs.babel))
-  expect(fs.readFileSync('/.postcssrc', 'utf-8')).toMatch(json(configs.postcss))
-  expect(fs.readFileSync('/.eslintrc', 'utf-8')).toMatch(json(configs.eslintConfig))
-  expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(`module.exports = {\n  foo: 'bar'\n}`)
+  expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
+  expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
+  expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
 })
