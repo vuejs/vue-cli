@@ -32,6 +32,7 @@
     "commander": "^2.12.2",
     "debug": "^3.1.0",
     "download-git-repo": "^1.0.2",
+    "deepmerge": "^2.0.1",
     "ejs": "^2.5.7",
     "execa": "^0.8.0",
     "globby": "^8.0.1",
