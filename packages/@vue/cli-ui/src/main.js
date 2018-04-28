@@ -28,6 +28,9 @@ Vue.use(Responsive, {
     },
     desktop () {
       return !this.tablet
+    },
+    wide () {
+      return this.width >= 1600
     }
   }
 })

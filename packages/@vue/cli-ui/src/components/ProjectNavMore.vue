@@ -5,7 +5,9 @@
         slot="trigger"
         icon-left="more_horiz"
         class="icon-button big flat"
-      />
+      >
+        <span v-if="$responsive.wide" class="label">{{ $t('components.project-nav.tooltips.more') }}</span>
+      </VueButton>
 
       <VueDropdownButton
         icon-left="work"
@@ -20,3 +22,17 @@
     </VueDropdown>
   </div>
 </template>
+
+<style lang="stylus" scoped>
+@import "~@/style/imports"
+
+.project-nav-more
+  .vue-ui-dropdown.open .dropdown-trigger .vue-ui-button
+    &,
+    &:hover
+      background lighten($vue-ui-color-dark, 10%) !important
+      color $md-white
+      /deep/ > .content > .button-icon
+        svg
+          fill @color
+</style>

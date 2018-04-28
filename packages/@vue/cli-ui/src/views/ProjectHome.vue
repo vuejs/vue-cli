@@ -1,5 +1,10 @@
 <template>
-  <div class="project-home page">
+  <div
+    class="project-home page"
+    :class="{
+      wide: $responsive.wide
+    }"
+  >
     <ProjectNav/>
 
     <div v-if="ready" class="content">
@@ -37,6 +42,9 @@ export default {
   grid-template-columns 46px 1fr
   grid-template-rows auto
   grid-template-areas "side-left content"
+
+  &.wide
+    grid-template-columns 250px 1fr
 
 .project-nav
   grid-area side-left

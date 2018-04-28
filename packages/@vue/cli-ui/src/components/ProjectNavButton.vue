@@ -9,7 +9,10 @@
       :delay="{ show: 300, hide: 0 }"
     >
       <VueGroupButton
-        class="flat big icon-button"
+        class="flat big"
+        :class="{
+          'icon-button': $responsive.wide
+        }"
         :value="view.name"
         :icon-left="!imageIcon && view.icon"
       >
@@ -18,6 +21,8 @@
           :src="view.icon"
           class="image-icon"
         >
+
+        <span v-if="$responsive.wide" class="label">{{ $t(view.tooltip) }}</span>
       </VueGroupButton>
 
       <template slot="popover">

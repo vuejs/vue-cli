@@ -1,5 +1,10 @@
 <template>
-  <div class="project-nav">
+  <div
+    class="project-nav"
+    :class="{
+      wide: $responsive.wide
+    }"
+  >
     <div class="content">
       <VueGroup
         v-model="currentView"
@@ -139,4 +144,18 @@ export default {
         button-colors($vue-ui-color-light, $bg)
         &.selected
           button-colors(lighten($vue-ui-color-primary, 40%), $bg)
+
+  &.wide
+    >>> .vue-ui-button
+      justify-content flex-start
+      padding-left $padding-item
+      padding-right @padding-left
+      > .content
+        width 100%
+        text-align left
+        > .default-slot
+          flex auto 1 1
+          width 0
+          margin-left 6px
+          ellipsis()
 </style>

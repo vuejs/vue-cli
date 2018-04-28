@@ -62,7 +62,8 @@
       "tooltips": {
         "plugins": "Plugins",
         "configuration": "Configuration",
-        "tasks": "Tasks"
+        "tasks": "Tasks",
+        "more": "More"
       }
     },
     "project-select-list": {
