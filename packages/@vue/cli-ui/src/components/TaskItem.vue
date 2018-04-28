@@ -7,6 +7,7 @@
         selected
       }
     ]"
+    @dblclick="runTask()"
   >
     <div class="content">
       <ItemLogo
@@ -25,6 +26,8 @@
 </template>
 
 <script>
+import TASK_RUN from '../graphql/taskRun.gql'
+
 const icons = {
   idle: { icon: 'assignment', class: '' },
   running: { icon: 'more_horiz', class: 'info' },
@@ -54,6 +57,18 @@ export default {
     iconData () {
       return icons[this.task.status]
     }
+  },
+
+  methods: {
+    runTask () {
+      if (this.task.status === 'running') return
+      this.$apollo.mutate({
+        mutation: TASK_RUN,
+        variables: {
+          id: this.task.id
+        }
+      })
+    },
   }
 }
 </script>
