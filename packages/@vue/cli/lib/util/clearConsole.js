@@ -15,10 +15,14 @@ exports.generateTitle = async function (checkUpdate) {
     title += ' ' + chalk.magenta.bold('DEBUG')
   }
   if (checkUpdate && semver.gt(latest, current)) {
-    title += chalk.green(`
+    if (process.env.VUE_CLI_API_MODE) {
+      title += chalk.green(` 🌟️ Update available: ${latest}`)
+    } else {
+      title += chalk.green(`
 ┌────────────────────${`─`.repeat(latest.length)}──┐
 │  Update available: ${latest}  │
 └────────────────────${`─`.repeat(latest.length)}──┘`)
+    }
   }
 
   return title
