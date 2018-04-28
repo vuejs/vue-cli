@@ -1,3 +1,13 @@
+<a name="3.0.0-beta.9"></a>
+# [3.0.0-beta.9](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2018-04-28)
+
+
+### Bug Fixes
+
+* **dependencies:** add deepmerge dependencies ([#1188](https://github.com/vuejs/vue-cli/issues/1188)) ([67fa39d](https://github.com/vuejs/vue-cli/commit/67fa39d)), closes [#1187](https://github.com/vuejs/vue-cli/issues/1187)
+
+
+
 <a name="3.0.0-beta.8"></a>
 # [3.0.0-beta.8](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.7...v3.0.0-beta.8) (2018-04-27)
 
