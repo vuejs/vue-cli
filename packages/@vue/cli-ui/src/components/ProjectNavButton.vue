@@ -89,7 +89,7 @@ $bg = darken($vue-ui-color-dark, 70%)
     height @width
     border-radius 50%
     bottom 12px
-    right 10px
+    left 27px
     pointer-events none
     border solid 2px $vue-ui-color-dark
     transition border-color .1s
@@ -105,6 +105,10 @@ $bg = darken($vue-ui-color-dark, 70%)
       background $vue-ui-color-accent
     &.type-dim
       background $md-grey
+
+  .wide &
+    .bullet
+      left 28px
 
   &:hover
     .bullet
