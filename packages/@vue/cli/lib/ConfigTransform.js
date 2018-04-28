@@ -11,9 +11,9 @@ class ConfigTransform {
     this.configs = Array.isArray(configs) ? configs : [configs]
 
     this.filenames = this.configs.reduce((acc, config) => {
-      const types = new Set(types)
+      const types = new Set(config.types)
 
-      if (types.includes('bare')) {
+      if (types.has('bare')) {
         acc.push(String(config.file))
         types.delete('bare')
       }
@@ -23,7 +23,7 @@ class ConfigTransform {
         types.add('yml')
       }
 
-      return acc.concat(types.values().map(type => `${config.file}.${type}`))
+      return acc.concat(Array.from(types.values()).map(type => `${config.file}.${type}`))
     }, []) || []
   }
 
