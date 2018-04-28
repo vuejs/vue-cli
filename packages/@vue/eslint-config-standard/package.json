@@ -1,6 +1,6 @@
 {
   "name": "@vue/eslint-config-standard",
-  "version": "3.0.0-beta.8",
+  "version": "3.0.0-beta.9",
   "description": "eslint-config-standard for vue-cli",
   "main": "index.js",
   "publishConfig": {

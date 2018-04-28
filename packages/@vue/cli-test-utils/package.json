@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-test-utils",
-  "version": "3.0.0-beta.8",
+  "version": "3.0.0-beta.9",
   "description": "test utilities for vue-cli packages",
   "repository": {
     "type": "git",
