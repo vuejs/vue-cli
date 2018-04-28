@@ -4,7 +4,10 @@
       <VueButton
         slot="trigger"
         icon-left="more_horiz"
-        class="icon-button big flat"
+        class="big flat"
+        :class="{
+          'icon-button': !$responsive.wide
+        }"
       >
         <span v-if="$responsive.wide" class="label">{{ $t('components.project-nav.tooltips.more') }}</span>
       </VueButton>
