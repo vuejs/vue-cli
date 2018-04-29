@@ -4,6 +4,7 @@
     :class="{
       selected
     }"
+    v-tooltip.right="$t(configuration.description)"
   >
     <div class="content">
       <ItemLogo
