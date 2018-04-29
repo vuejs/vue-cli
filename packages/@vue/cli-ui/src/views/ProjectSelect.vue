@@ -2,7 +2,7 @@
   <div class="project-select page">
     <StepWizard
       :tab-id.sync="tab"
-      :title="$route.query.title || $t('views.project-select.title')"
+      :title="$route.query.hideTabs ? $t('views.project-create.title') : $t('views.project-select.title')"
       :hide-tabs="!!hideTabs"
       class="frame"
     >
@@ -26,7 +26,7 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="add"
-            :label="$route.query.action || $t('views.project-select.buttons.create')"
+            :label="$route.query.hideTabs ? $t('views.project-create.tabs.details.form.folder.action') : $t('views.project-select.buttons.create')"
             class="big primary"
             :to="{ name: 'project-create' }"
           />
@@ -81,9 +81,11 @@ export default {
     folderCurrent: FOLDER_CURRENT
   },
 
-  async mounted () {
-    await this.$nextTick()
-    this.tab = this.$route.query.tab || 'existing'
+  mounted () {
+    // Fix issue with Firefox
+    setTimeout(() => {
+      this.tab = this.$route.query.tab || 'existing'
+    })
   },
 
   methods: {

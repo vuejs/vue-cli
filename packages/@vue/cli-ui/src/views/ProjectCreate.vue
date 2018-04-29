@@ -42,10 +42,8 @@
                         :to="{
                           name: 'project-select',
                           query: {
-                            title: $t('views.project-create.title'),
                             tab: 'create',
-                            hideTabs: true,
-                            action: $t('views.project-create.tabs.details.form.folder.action')
+                            hideTabs: true
                           }
                         }"
                       />
