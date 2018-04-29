@@ -9,8 +9,8 @@
       @input="value => answer(value)"
     >
       <ListItemInfo
-        :name="prompt.message"
-        :description="prompt.description"
+        :name="$t(prompt.message)"
+        :description="$t(prompt.description)"
         :link="prompt.link"
       />
     </VueSwitch>

@@ -1,7 +1,9 @@
 <template>
   <div class="asset-list list-block">
     <div class="content">
-      <div class="title">Assets</div>
+      <div class="title">
+        {{ $t('vue-webpack.dashboard.asset-list.title') }}
+      </div>
 
       <VueIcon
         v-if="!assetsSorted.length"

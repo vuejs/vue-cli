@@ -4,7 +4,7 @@
       <div class="header">
         <VueIcon icon="assignment" class="task-icon big"/>
         <div class="name">{{ task.name }}</div>
-        <div class="description">{{ task.description }}</div>
+        <div class="description">{{ $t(task.description) }}</div>
       </div>
 
       <div class="actions-bar">
@@ -66,7 +66,7 @@
             :key="view.id"
             :value="view.id"
             :icon-left="view.icon"
-            :label="view.label"
+            :label="$t(view.label)"
           />
         </VueGroup>
       </div>

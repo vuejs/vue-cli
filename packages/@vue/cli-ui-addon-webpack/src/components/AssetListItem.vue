@@ -17,7 +17,7 @@
           v-if="!asset.secondary && asset.big"
           icon="warning"
           class="icon"
-          v-tooltip="'This asset is big, consider using Code splitting to create smaller assets.'"
+          v-tooltip="$t('vue-webpack.dashboard.asset-list.size-warning')"
         />
       </div>
     </div>

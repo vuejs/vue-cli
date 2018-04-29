@@ -2,33 +2,49 @@
   <div class="build-status">
     <div class="content">
       <div class="info-block status">
-        <div class="label">Status</div>
-        <div class="value">{{ status || 'Idle' }}</div>
+        <div class="label">
+          {{ $t('vue-webpack.dashboard.build-status.labels.status') }}
+        </div>
+        <div class="value">{{ $t(`vue-webpack.dashboard.webpack-status.${status || 'Idle'}`) }}</div>
       </div>
       <div class="info-block errors">
-        <div class="label">Errors</div>
+        <div class="label">
+          {{ $t('vue-webpack.dashboard.build-status.labels.errors') }}
+        </div>
         <div class="value">{{ errors.length }}</div>
       </div>
       <div class="info-block warnings">
-        <div class="label">Warnings</div>
+        <div class="label">
+          {{ $t('vue-webpack.dashboard.build-status.labels.warnings') }}
+        </div>
         <div class="value">{{ warnings.length }}</div>
       </div>
       <div class="info-block assets">
-        <div class="label">Assets</div>
+        <div class="label">
+          {{ $t('vue-webpack.dashboard.build-status.labels.assets') }}
+        </div>
         <div class="value">
           {{ assetsTotalSize | size('B') }}
-          <span class="secondary">({{ sizeField }})</span>
+          <span class="secondary">
+            ({{ $t(`vue-webpack.sizes.${sizeField}`) }})
+          </span>
         </div>
       </div>
       <div class="info-block modules">
-        <div class="label">Modules</div>
+        <div class="label">
+          {{ $t('vue-webpack.dashboard.build-status.labels.modules') }}
+        </div>
         <div class="value">
           {{ modulesTotalSize | size('B') }}
-          <span class="secondary">({{ sizeField }})</span>
+          <span class="secondary">
+            ({{ $t(`vue-webpack.sizes.${sizeField}`) }})
+          </span>
         </div>
       </div>
       <div class="info-block dep-modules">
-        <div class="label">Dependencies</div>
+        <div class="label">
+          {{ $t('vue-webpack.dashboard.build-status.labels.deps') }}
+        </div>
         <div class="value">
           {{ depModulesTotalSize | size('B') }}
           <span class="secondary">

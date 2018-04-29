@@ -5,8 +5,8 @@
   >
     <div class="prompt-content">
       <ListItemInfo
-        :name="prompt.message"
-        :description="prompt.description"
+        :name="$t(prompt.message)"
+        :description="$t(prompt.description)"
         :link="prompt.link"
       />
 
@@ -37,7 +37,7 @@ export default {
 
   methods: {
     generateLabel (choice) {
-      let label = choice.name
+      let label = this.$t(choice.name)
       if (choice.isDefault) {
         label += ` (${this.$t('components.prompt-list.default')})`
       }

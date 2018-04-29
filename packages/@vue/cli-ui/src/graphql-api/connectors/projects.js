@@ -14,6 +14,7 @@ const cwd = require('./cwd')
 const prompts = require('./prompts')
 const folders = require('./folders')
 const plugins = require('./plugins')
+const locales = require('./locales')
 // Context
 const getContext = require('../context')
 
@@ -316,6 +317,8 @@ async function open (id, context) {
   lastProject = currentProject
   currentProject = project
   cwd.set(project.path, context)
+  // Reset locales
+  locales.clear()
   // Load plugins
   plugins.list(project.path, context)
 

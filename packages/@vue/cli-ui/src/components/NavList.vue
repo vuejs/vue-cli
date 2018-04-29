@@ -49,7 +49,7 @@ export default {
 @import "~@/style/imports"
 
 .nav-list
-  overflow-x none
+  overflow-x hidden
   overflow-y auto
   background $color-background-light
 </style>

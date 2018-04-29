@@ -10,6 +10,7 @@ This guide will walk you through the development of cli-ui specific features for
 - [Shared data](#shared-data)
 - [Plugin actions](#plugin-actions)
 - [Inter-process communication (IPC)](#inter-process-communication-ipc)
+- [Localization](#localization)
 - [Hooks](#hooks)
 - [Public static files](#public-static-files)
 
@@ -350,11 +351,19 @@ ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 ClientAddonApi.addRoutes('vue-webpack', [
   { path: '', name: 'test-webpack-route', component: TestView }
 ])
+
+// You can translate your plugin components
+// Load the locale files (uses vue-i18n)
+const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
+locales.keys().forEach(key => {
+  const locale = key.match(/([a-z0-9]+)\./i)[1]
+  ClientAddonApi.addLocalization(locale, locales(key))
+})
 ```
 
 The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
 
-In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent.
+In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent. You can also translate the strings with [vue-i18n](https://github.com/kazupon/vue-i18n) which is included.
 #### Register the client addon
 
 Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
@@ -629,6 +638,43 @@ api.ipcSend({
   webpackDashboardMessage: {
     foo: 'bar'
   }
+})
+```
+
+### Localization
+
+You can put locale files compatible with [vue-i18n](https://github.com/kazupon/vue-i18n) in a `locales` folder at the root of your plugin. They will be automatically loaded into the client when the project is opened. You can then use `$t` to translate strings in your components and other vue-i18n helpers. Also, the strings used in the UI API (like `describeTask`) will go through vue-i18n as well to you can localize them.
+
+Example `locales` folder:
+
+```
+vue-cli-plugin/locales/en.json
+vue-cli-plugin/locales/fr.json
+```
+
+Example usage in API:
+
+```js
+api.describeConfig({
+  // vue-i18n path
+  description: 'my-plugin.config.foo'
+})
+```
+
+Example usage in components:
+
+```html
+<VueButton>{{ $t('my-plugin.actions.bar') }}</VueButton>
+```
+
+You can also load the locale files in a client addon if you prefer, using the `ClientAddonApi`:
+
+```js
+// Load the locale files (uses vue-i18n)
+const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
+locales.keys().forEach(key => {
+  const locale = key.match(/([a-z0-9]+)\./i)[1]
+  ClientAddonApi.addLocalization(locale, locales(key))
 })
 ```
 

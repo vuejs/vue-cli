@@ -6,6 +6,7 @@
 
     <StatusBar/>
     <ClientAddonLoader/>
+    <LocaleLoader/>
   </div>
 </template>
 

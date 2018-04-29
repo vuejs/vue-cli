@@ -62,7 +62,8 @@
       "tooltips": {
         "plugins": "Plugins",
         "configuration": "Configuration",
-        "tasks": "Tâches"
+        "tasks": "Tâches",
+        "more": "Plus"
       }
     },
     "project-select-list": {
@@ -275,6 +276,12 @@
     "project-configurations": {
       "title": "Configuration du projet"
     },
+    "project-configuration-details": {
+      "actions": {
+        "cancel": "Annuler les changements",
+        "save": "Sauvegarder les modifications"
+      }
+    },
     "project-tasks": {
       "title": "Tâches du projet"
     },
@@ -288,6 +295,13 @@
       "parameters": "Paramètres",
       "more-info": "Plus d'infos",
       "output": "Sortie"
+    },
+    "about": {
+      "title": "A propos",
+      "description": "<a href=\"https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui\" target=\"_blank\">@vue/cli-ui</a> est un paquet inclus dans @vue/cli qui affiche une interface graphique.",
+      "quote": "Vue-cli 3.x is a complete rewrite, with a lot of new awesome features. You will be to select features like routing, Vuex or Typescript, then add and upgrade building blocks called \"vue-cli plugins\". But having so much more options also means the tool is now more complex and harder to start using. That's why we thought having a full-blown GUI would help discover the new features, search and install vue-cli plugins and unlock more possibilities overall while not being limited by a terminal interface. To sum up, vue-cli will not only allow you to bootstrap a new project easily, but it will also remain useful for ongoing work afterwards!",
+      "links": "Liens utiles",
+      "back": "Retour"
     }
   }
 }

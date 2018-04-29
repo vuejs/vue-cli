@@ -1,7 +1,9 @@
 <template>
   <div class="speed-stats">
     <div class="content">
-      <div class="title">Speed stats</div>
+      <div class="title">
+        {{ $t('vue-webpack.dashboard.speed-stats.title') }}
+      </div>
 
       <VueIcon
         v-if="!assetsTotalSize"

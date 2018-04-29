@@ -12,7 +12,7 @@
 
       <ListItemInfo
         :name="configuration.name"
-        :description="configuration.description"
+        :description="$t(configuration.description)"
         :selected="selected"
       />
     </div>
@@ -63,7 +63,7 @@ export default {
     box-center()
 
   .list-item-info
-    flex 100% 1 1
+    flex auto 1 1
     width 0
 
     >>> .description

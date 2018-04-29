@@ -2,7 +2,7 @@ const path = require('path')
 // Subs
 const channels = require('../channels')
 // Utils
-const { getBasePath } = require('../utils/serve')
+const { resolveModuleRoot } = require('../utils/resolve-path')
 
 let addons = []
 
@@ -43,7 +43,7 @@ function serve (req, res) {
   const { id, 0: file } = req.params
   const addon = findOne(id)
   if (addon && addon.path) {
-    const basePath = getBasePath(require.resolve(addon.path))
+    const basePath = resolveModuleRoot(require.resolve(addon.path))
     if (basePath) {
       res.sendFile(path.join(basePath, file))
       return

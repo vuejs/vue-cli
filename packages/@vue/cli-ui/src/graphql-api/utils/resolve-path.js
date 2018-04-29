@@ -1,4 +1,4 @@
-exports.getBasePath = function (filePath, id = null) {
+exports.resolveModuleRoot = function (filePath, id = null) {
   {
     const index = filePath.lastIndexOf('/index.js')
     if (index !== -1) {

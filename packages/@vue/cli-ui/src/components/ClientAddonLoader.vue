@@ -22,15 +22,10 @@ export default {
     }
   },
 
-  created () {
-    this.$_scripts = new Map()
-  },
-
   methods: {
     loadAddon (addon) {
-      console.log(`Loading addon ${addon.id} (${addon.url})...`)
+      console.log(`[UI] Loading client addon ${addon.id} (${addon.url})...`)
       const script = document.createElement('script')
-      this.$_scripts.set(addon.id, script)
       script.setAttribute('src', addon.url)
       document.body.appendChild(script)
     }

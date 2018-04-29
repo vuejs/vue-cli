@@ -5,8 +5,8 @@
   >
     <div class="prompt-content">
       <ListItemInfo
-        :name="prompt.message"
-        :description="prompt.description"
+        :name="$t(prompt.message)"
+        :description="$t(prompt.description)"
         :link="prompt.link"
       />
 

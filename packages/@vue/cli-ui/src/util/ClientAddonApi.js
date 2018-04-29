@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import router from '../router'
+import { mergeLocale } from '../i18n'
 import ProjectHome from '../views/ProjectHome.vue'
 
 export default class ClientAddonApi {
@@ -18,7 +19,7 @@ export default class ClientAddonApi {
     this.components.set(id, definition)
     const componentId = toComponentId(id)
     Vue.component(componentId, definition)
-    console.log(`Registered ${componentId} component`)
+    console.log(`[ClientAddonApi] Registered ${componentId} component`)
     // Call listeners
     const listeners = this.componentListeners.get(id)
     if (listeners) {
@@ -47,6 +48,18 @@ export default class ClientAddonApi {
         children: routes
       }
     ])
+    console.log(`[ClientAddonApi] Registered new routes under the /addon/${id} route`)
+  }
+
+  /**
+   * Merge new strings into the specified lang translations (using vue-i18n).
+   *
+   * @param {string} lang Locale to merge to (ex: 'en', 'fr'...)
+   * @param {object} strings A vue-i18n strings object containing the translations
+   */
+  addLocalization (lang, strings) {
+    mergeLocale(lang, strings)
+    console.log(`[ClientAddonApi] Registered new strings for locale ${lang}`)
   }
 
   /* Internal */

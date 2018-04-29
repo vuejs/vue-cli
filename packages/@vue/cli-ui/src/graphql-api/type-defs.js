@@ -54,11 +54,17 @@ type SharedData {
   value: JSON
 }
 
+type Locale {
+  lang: String!
+  strings: JSON!
+}
+
 type Query {
   progress (id: ID!): Progress
   cwd: String!
   clientAddons: [ClientAddon]
   sharedData (id: ID!): SharedData
+  locales: [Locale]
 }
 
 type Mutation {
@@ -72,6 +78,7 @@ type Subscription {
   cwdChanged: String!
   clientAddonAdded: ClientAddon
   sharedDataUpdated (id: ID!): SharedData
+  localeAdded: Locale
 }
 `]
 

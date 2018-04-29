@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import deepmerge from 'deepmerge'
 
 Vue.use(VueI18n)
 
@@ -29,5 +30,10 @@ const i18n = new VueI18n({
   fallbackLocale: 'en',
   messages: loadLocaleMessages()
 })
+
+export function mergeLocale (lang, messages) {
+  const newData = deepmerge(i18n.getLocaleMessage(lang), messages)
+  i18n.setLocaleMessage(lang, newData)
+}
 
 export default i18n

@@ -1,7 +1,9 @@
 <template>
   <div class="module-list list-block">
     <div class="content">
-      <div class="title">Dependencies</div>
+      <div class="title">
+        {{ $t('vue-webpack.dashboard.module-list.title') }}
+      </div>
 
       <VueIcon
         v-if="!depModules.length"

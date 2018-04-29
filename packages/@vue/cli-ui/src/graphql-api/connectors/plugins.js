@@ -17,6 +17,7 @@ const {
 } = require('@vue/cli/lib/util/installDeps')
 const invoke = require('@vue/cli/lib/invoke')
 const notifier = require('node-notifier')
+const globby = require('globby')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -27,11 +28,12 @@ const progress = require('./progress')
 const logs = require('./logs')
 const clientAddons = require('./client-addons')
 const views = require('./views')
+const locales = require('./locales')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
 const { getCommand } = require('../utils/command')
-const { getBasePath } = require('../utils/serve')
+const { resolveModuleRoot } = require('../utils/resolve-path')
 const ipc = require('../utils/ipc')
 
 const PROGRESS_ID = 'plugin-installation'
@@ -54,7 +56,7 @@ let installationStep
 let projectId
 
 function getPath (id) {
-  return path.dirname(resolveModule(id, cwd.get()))
+  return resolveModuleRoot(resolveModule(id, cwd.get()), id)
 }
 
 function findPlugins (deps) {
@@ -91,7 +93,7 @@ function resetPluginApi (context) {
   // Run Plugin API
   runPluginApi('@vue/cli-service', context)
   plugins.forEach(plugin => runPluginApi(plugin.id, context))
-  runPluginApi('.', context, 'vue-cli-ui')
+  runPluginApi(cwd.get(), context, 'vue-cli-ui')
   // Add client addons
   pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
   // Add views
@@ -121,6 +123,18 @@ function runPluginApi (id, context, fileName = 'ui') {
     module(pluginApi)
     pluginApi.pluginId = null
   }
+
+  // Locales
+  try {
+    const folder = fs.existsSync(id) ? id : getPath(id)
+    const paths = globby.sync([path.join(folder, './locales/*.json')])
+    paths.forEach(file => {
+      const basename = path.basename(file)
+      const lang = basename.substr(0, basename.indexOf('.'))
+      const strings = JSON.parse(fs.readFileSync(file, { encoding: 'utf8' }))
+      locales.add({ lang, strings }, context)
+    })
+  } catch (e) {}
 }
 
 function findOne (id, context) {
@@ -367,7 +381,7 @@ async function callAction ({ id, params }, context) {
 
 function serve (req, res) {
   const { id, 0: file } = req.params
-  const basePath = getBasePath(require.resolve(id), id)
+  const basePath = id === '.' ? cwd.get() : getPath(id)
   if (basePath) {
     res.sendFile(path.join(basePath, 'ui-public', file))
     return

@@ -12,6 +12,7 @@ const progress = require('./connectors/progress')
 const files = require('./connectors/files')
 const clientAddons = require('./connectors/client-addons')
 const sharedData = require('./connectors/shared-data')
+const locales = require('./connectors/locales')
 // Start ipc server
 require('./utils/ipc')
 
@@ -37,7 +38,8 @@ const resolvers = [{
     cwd: () => cwd.get(),
     progress: (root, { id }, context) => progress.get(id, context),
     clientAddons: (root, args, context) => clientAddons.list(context),
-    sharedData: (root, { id }, context) => sharedData.get(id, context)
+    sharedData: (root, { id }, context) => sharedData.get(id, context),
+    locales: (root, args, context) => locales.list(context)
   },
 
   Mutation: {
@@ -73,6 +75,9 @@ const resolvers = [{
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SHARED_DATA_UPDATED),
         (payload, vars) => payload.sharedDataUpdated.id === vars.id
       )
+    },
+    localeAdded: {
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.LOCALE_ADDED)
     }
   }
 }]

@@ -34,13 +34,13 @@ module.exports = api => {
     views: [
       {
         id: 'vue-webpack-dashboard',
-        label: 'Dashboard',
+        label: 'vue-webpack.dashboard.title',
         icon: 'dashboard',
         component: 'vue-webpack-dashboard'
       },
       {
         id: 'vue-webpack-analyzer',
-        label: 'Analyzer',
+        label: 'vue-webpack.analyzer.title',
         icon: 'donut_large',
         component: 'vue-webpack-analyzer'
       }
@@ -49,7 +49,7 @@ module.exports = api => {
   }
   api.describeTask({
     match: /vue-cli-service serve/,
-    description: 'Compiles and hot-reloads for development',
+    description: 'vue-webpack.tasks.serve.description',
     link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve',
     prompts: [
       {
@@ -121,7 +121,7 @@ module.exports = api => {
   })
   api.describeTask({
     match: /vue-cli-service build/,
-    description: 'Compiles and minifies for production',
+    description: 'vue-webpack.tasks.build.description',
     link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#build',
     prompts: [
       {

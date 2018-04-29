@@ -2,7 +2,7 @@
   <div v-if="error" class="prompt-error">
     <div class="vue-ui-text danger banner">
       <VueIcon icon="warning" class="big"/>
-      <span>{{ error.message }}</span>
+      <span>{{ $t(error.message) }}</span>
     </div>
   </div>
 </template>

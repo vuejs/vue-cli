@@ -2,14 +2,14 @@
   <div class="vue-webpack-dashboard">
     <div class="pane-toolbar">
       <VueIcon icon="dashboard"/>
-      <div class="title">Dashboard</div>
+      <div class="title">{{ $t('vue-webpack.dashboard.title') }}</div>
 
       <template
         v-if="mode === 'serve'"
       >
         <VueButton
           icon-left="open_in_browser"
-          label="Open app"
+          :label="$t('vue-webpack.dashboard.open-app')"
           :disabled="!serveUrl"
           @click="$callPluginAction('webpack-dashboard-open-app')"
         />
@@ -19,14 +19,14 @@
         />
       </template>
       <VueSelect v-model="sizeField">
-        <VueSelectButton value="stats" label="Stats sizes"/>
-        <VueSelectButton value="parsed" label="Parsed sizes"/>
-        <VueSelectButton value="gzip" label="Gzip sizes"/>
+        <VueSelectButton value="stats" :label="`${$t('vue-webpack.sizes.stats')}`"/>
+        <VueSelectButton value="parsed" :label="`${$t('vue-webpack.sizes.parsed')}`"/>
+        <VueSelectButton value="gzip" :label="`${$t('vue-webpack.sizes.gzip')}`"/>
       </VueSelect>
       <VueButton
         class="icon-button"
         icon-left="help"
-        v-tooltip="sizeHelp"
+        v-tooltip="$t('vue-webpack.sizes.help')"
       />
     </div>
 

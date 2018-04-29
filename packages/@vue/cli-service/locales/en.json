@@ -1,0 +1,18 @@
+{
+  "vue-webpack": {
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "analyzer": {
+      "title": "Analyzer"
+    },
+    "tasks": {
+      "serve": {
+        "description": "Compiles and hot-reloads for development"
+      },
+      "build": {
+        "description": "Compiles and minifies for production"
+      }
+    }
+  }
+}

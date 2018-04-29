@@ -11,5 +11,6 @@ module.exports = {
   CLIENT_ADDON_ADDED: 'client_addon_added',
   SHARED_DATA_UPDATED: 'shared_data_updated',
   PLUGIN_ACTION_CALLED: 'plugin_action_called',
-  PLUGIN_ACTION_RESOLVED: 'plugin_action_resolved'
+  PLUGIN_ACTION_RESOLVED: 'plugin_action_resolved',
+  LOCALE_ADDED: 'locale_added'
 }
