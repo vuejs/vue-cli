@@ -53,7 +53,7 @@
         @click="onBugReportClick()"
       >
         <VueIcon icon="bug_report"/>
-        <span>Report bug</span>
+        <span>{{ $t('components.status-bar.report-bug') }}</span>
       </div>
     </div>
   </div>

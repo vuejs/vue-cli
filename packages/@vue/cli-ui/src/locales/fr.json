@@ -105,7 +105,8 @@
       "log": {
         "tooltip": "Journal<br><i>Cliquer pour Afficher/Masquer le Journal Vue CLI</i>",
         "empty": "Aucune entrée dans le journal"
-      }
+      },
+      "report-bug": "Signaler bug"
     },
     "terminal-view": {
       "buttons": {
