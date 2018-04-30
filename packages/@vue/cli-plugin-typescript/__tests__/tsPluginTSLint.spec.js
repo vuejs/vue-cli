@@ -67,3 +67,24 @@ test('should not fix with --no-fix option', async () => {
   expect(await read('src/main.ts')).not.toMatch(';')
   expect((await read('src/App.vue')).match(/<script(.|\n)*\/script>/)[1]).not.toMatch(';')
 })
+
+test('should ignore issues in node_modules', async () => {
+  const project = await create('ts-lint-node_modules', {
+    plugins: {
+      '@vue/cli-plugin-typescript': {
+        tsLint: true
+      }
+    }
+  })
+
+  const { read, write, run } = project
+  const main = await read('src/main.ts')
+
+  // update file to not match tslint spec and dump it into the node_modules directory
+  const updatedMain = main.replace(/;/g, '')
+  await write('node_modules/bad.ts', updatedMain)
+
+  // lint
+  await run('vue-cli-service lint')
+  expect(await read('node_modules/bad.ts')).toMatch(updatedMain)
+})
