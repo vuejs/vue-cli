@@ -17,7 +17,6 @@ const {
 } = require('@vue/cli/lib/util/installDeps')
 const invoke = require('@vue/cli/lib/invoke')
 const notifier = require('node-notifier')
-const globby = require('globby')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -127,13 +126,7 @@ function runPluginApi (id, context, fileName = 'ui') {
   // Locales
   try {
     const folder = fs.existsSync(id) ? id : getPath(id)
-    const paths = globby.sync([path.join(folder, './locales/*.json')])
-    paths.forEach(file => {
-      const basename = path.basename(file)
-      const lang = basename.substr(0, basename.indexOf('.'))
-      const strings = JSON.parse(fs.readFileSync(file, { encoding: 'utf8' }))
-      locales.add({ lang, strings }, context)
-    })
+    locales.loadFolder(folder, context)
   } catch (e) {}
 }
 

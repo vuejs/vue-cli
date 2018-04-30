@@ -313,5 +313,69 @@
       "links": "Useful links",
       "back": "Go back"
     }
+  },
+  "vue-webpack": {
+    "dashboard": {
+      "title": "Dashboard",
+      "open-app": "Open app",
+      "webpack-status": {
+        "Success": "Success",
+        "Failed": "Failed",
+        "Compiling": "Compiling",
+        "Invalidated": "Invalidated",
+        "Idle": "Idle"
+      },
+      "build-status": {
+        "labels": {
+          "status": "Status",
+          "errors": "Errors",
+          "warnings": "Warnings",
+          "assets": "Assets",
+          "modules": "Modules",
+          "deps": "Dependencies"
+        }
+      },
+      "speed-stats": {
+        "title": "Speed stats"
+      },
+      "module-list": {
+        "title": "Dependencies"
+      },
+      "asset-list": {
+        "title": "Assets",
+        "size-warning": "This asset is big, consider using Code splitting to create smaller assets."
+      }
+    },
+    "analyzer": {
+      "title": "Analyzer",
+      "go-up": "Go up",
+      "go-home": "Go to home",
+      "chunk": "Chunk"
+    },
+    "sizes": {
+      "stats": "Stats",
+      "parsed": "Parsed",
+      "gzip": "Gzip",
+      "help": "<b>Stats:</b> size from webpack stats data.<br><b>Parsed:</b> size from extracted source (after minification plugins). More accurate.<br><b>Gzip:</b> size of gzipped extracted source."
+    },
+    "tasks": {
+      "serve": {
+        "description": "Compiles and hot-reloads for development"
+      },
+      "build": {
+        "description": "Compiles and minifies for production"
+      }
+    }
+  },
+  "eslint": {
+    "config": {
+      "eslint": {
+        "description": "Error checking & Code quality",
+        "groups": {
+          "strongly-recommended": "Strongly recommended",
+          "recommended": "Recommended"
+        }
+      }
+    }
   }
 }

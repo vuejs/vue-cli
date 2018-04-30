@@ -18,7 +18,7 @@
 
       <ListItemInfo
         :name="task.name"
-        :description="(task.status === 'idle' && task.description) || status"
+        :description="(task.status === 'idle' && $t(task.description)) || status"
         :selected="selected"
       />
     </div>

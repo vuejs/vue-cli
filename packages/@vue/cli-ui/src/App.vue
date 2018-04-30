@@ -1,8 +1,9 @@
 <template>
   <div id="app" class="app">
-    <div class="content">
+    <div v-if="ready" class="content">
       <router-view/>
     </div>
+    <VueLoadingIndicator v-else class="overlay big accent"/>
 
     <StatusBar/>
     <ClientAddonLoader/>
@@ -11,9 +12,17 @@
 </template>
 
 <script>
+import i18n from './i18n'
+
 export default {
   metaInfo: {
     titleTemplate: chunk => chunk ? `[Beta] ${chunk} - Vue CLI` : '[Beta] Vue CLI'
+  },
+
+  computed: {
+    ready () {
+      return Object.keys(i18n.getLocaleMessage('en')).length
+    }
   }
 }
 </script>

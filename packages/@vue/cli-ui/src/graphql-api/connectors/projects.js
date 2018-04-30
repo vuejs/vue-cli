@@ -318,7 +318,7 @@ async function open (id, context) {
   currentProject = project
   cwd.set(project.path, context)
   // Reset locales
-  locales.clear()
+  locales.reset(context)
   // Load plugins
   plugins.list(project.path, context)
 

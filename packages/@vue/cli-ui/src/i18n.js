@@ -4,16 +4,6 @@ import deepmerge from 'deepmerge'
 
 Vue.use(VueI18n)
 
-function loadLocaleMessages () {
-  const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
-  const messages = {}
-  locales.keys().forEach(key => {
-    const locale = key.match(/([a-z0-9]+)\./i)[1]
-    messages[locale] = locales(key)
-  })
-  return messages
-}
-
 function detectLanguage () {
   try {
     const lang = (window.navigator.languages && window.navigator.languages[0]) ||
@@ -25,11 +15,39 @@ function detectLanguage () {
   }
 }
 
+async function autoInstallLocale (lang) {
+  try {
+    let response = await fetch(`https://unpkg.com/vue-cli-locale-${lang}`)
+    if (response.ok) {
+      // Redirect
+      const location = response.headers.get('location')
+      if (location) {
+        response = await fetch(`https://unpkg.com${location}`)
+      }
+      const data = await response.json()
+      mergeLocale(lang, data)
+    }
+  } catch (e) {}
+}
+
+async function autoDetect () {
+  const lang = detectLanguage()
+  if (lang !== 'en') {
+    await autoInstallLocale(lang)
+    i18n.locale = lang
+  }
+}
+
 const i18n = new VueI18n({
-  locale: detectLanguage() || 'en',
+  locale: 'en',
   fallbackLocale: 'en',
-  messages: loadLocaleMessages()
+  messages: {
+    en: {}
+  },
+  silentTranslationWarn: process.env.NODE_ENV !== 'production'
 })
+
+autoDetect()
 
 export function mergeLocale (lang, messages) {
   const newData = deepmerge(i18n.getLocaleMessage(lang), messages)
