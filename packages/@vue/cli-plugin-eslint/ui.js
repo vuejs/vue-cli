@@ -6,7 +6,7 @@ module.exports = api => {
     id: 'eslintrc',
     name: 'ESLint configuration',
     description: 'eslint.config.eslint.description',
-    link: 'https://eslint.org',
+    link: 'https://github.com/vuejs/eslint-plugin-vue',
     icon: '.eslintrc.json',
     files: {
       json: ['.eslintrc', '.eslintrc.json'],
@@ -178,10 +178,41 @@ module.exports = api => {
     }
   })
 
+  api.describeConfig({
+    id: 'eslintrc-config',
+    name: 'ESLint extra',
+    description: 'eslint.config.eslint-extra.description',
+    link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#configuration',
+    icon: '.eslintrc.json',
+    files: {
+      js: ['vue.config.js']
+    },
+    onRead: ({ data }) => ({
+      prompts: [
+        {
+          name: 'lintOnSave',
+          type: 'confirm',
+          message: 'Lint on save',
+          description: 'Automatically lint source files when saved',
+          link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#configuration',
+          default: false,
+          value: data.lintOnSave
+        }
+      ]
+    }),
+    onWrite: async ({ api, prompts }) => {
+      const result = {}
+      for (const prompt of prompts) {
+        result[prompt.id] = await api.getAnswer(prompt.id)
+      }
+      api.setData(result)
+    }
+  })
+
   // Tasks
   api.describeTask({
     match: /vue-cli-service lint/,
-    description: 'Lints and fixes files',
+    description: 'eslint.tasks.lint.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#injected-commands',
     prompts: [
       {

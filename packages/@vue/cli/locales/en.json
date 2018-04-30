@@ -375,6 +375,21 @@
           "strongly-recommended": "Strongly recommended",
           "recommended": "Recommended"
         }
+      },
+      "eslint-extra": {
+        "description": "Extra ESLint settings"
+      }
+    },
+    "tasks": {
+      "lint": {
+        "description": "Lints and fixes files"
+      }
+    }
+  },
+  "pwa": {
+    "config": {
+      "pwa": {
+        "description": "Progressive Web App"
       }
     }
   }

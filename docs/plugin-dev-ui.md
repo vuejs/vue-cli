@@ -127,7 +127,7 @@ Use the `onRead` hook to return a list of prompts to be displayed for the config
 ```js
 api.describeConfig({
   /* ... */
-  onRead: ({ data }) => ({
+  onRead: ({ data, cwd }) => ({
     prompts: [
       // Prompt objects
     ]
@@ -156,7 +156,7 @@ Use the `onWrite` hook to write the data to the configuration file (or execute a
 ```js
 api.describeConfig({
   /* ... */
-  onWrite: ({ prompts, answers, data, file, api }) => {
+  onWrite: ({ prompts, answers, data, file, cwd, api }) => {
     // ...
   }
 })
@@ -168,6 +168,7 @@ Arguments:
 - `answers`: answers data from the user inputs
 - `data`: read-only initial data read from the file
 - `file`: descriptor of the found file (`{ type: 'json', path: '...' }`)
+- `cwd`: current working directory
 - `api`: onWrite API
 
 Prompts runtime objects:

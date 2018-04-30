@@ -109,6 +109,7 @@ async function getPrompts (id, context) {
       data
     }
     const configData = await config.onRead({
+      cwd: cwd.get(),
       data
     })
     await prompts.reset()
@@ -134,6 +135,7 @@ async function save (id, context) {
         answers,
         data: current.data,
         file: config.file,
+        cwd: cwd.get(),
         api: {
           assignData: newData => {
             changedFields.push(...Object.keys(newData))
