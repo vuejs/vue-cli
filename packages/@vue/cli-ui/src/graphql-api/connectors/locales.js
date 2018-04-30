@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const globby = require('globby')
+const deepmerge = require('deepmerge')
 // Connectors
 const cwd = require('./cwd')
 // Subs
@@ -17,9 +18,13 @@ function list (context) {
   return locales
 }
 
-function add ({ lang, strings }, context) {
-  const locale = { lang, strings }
-  locales.push(locale)
+function add (locale, context) {
+  const existing = locales.find(l => l.lang === locale.lang)
+  if (existing) {
+    existing.strings = deepmerge(existing.strings, locale.strings)
+  } else {
+    locales.push(locale)
+  }
   context.pubsub.publish(channels.LOCALE_ADDED, {
     localeAdded: locale
   })
