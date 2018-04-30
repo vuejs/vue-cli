@@ -1,5 +1,4 @@
 const path = require('path')
-const chalk = require('chalk')
 const { matchesPluginId } = require('@vue/cli-shared-utils')
 
 class PluginAPI {
@@ -115,18 +114,7 @@ class PluginAPI {
    * @return {object} Raw webpack config.
    */
   resolveWebpackConfig (chainableConfig) {
-    const config = this.service.resolveWebpackConfig(chainableConfig)
-    // performa a few warning checks
-    const options = this.service.projectOptions
-    if (config.output.path !== this.resolve(options.outputDir)) {
-      console.error(chalk.red(
-        `\n\nConfiguration Error: ` +
-        `Avoid modifying webpack output.path directly. ` +
-        `Use the "outputDir" option instead.\n`
-      ))
-      process.exit(1)
-    }
-    return config
+    return this.service.resolveWebpackConfig(chainableConfig)
   }
 
   /**

@@ -56,17 +56,14 @@ module.exports = (api, options) => {
       }
     }
 
-    // respect inline build destination
+    const targetDir = api.resolve(args.dest || options.outputDir)
+
+    // respect inline build destination in copy plugin
     if (args.dest) {
-      const dest = path.resolve(
-        api.service.context,
-        args.dest
-      )
       api.chainWebpack(config => {
-        config.output.path(dest)
         if (args.target === 'app') {
           config.plugin('copy').tap(args => {
-            args[0][0].to = dest
+            args[0][0].to = targetDir
             return args
           })
         }
@@ -86,16 +83,45 @@ module.exports = (api, options) => {
       webpackConfig = api.resolveWebpackConfig()
     }
 
-    // get final output directory from resolve raw config
-    // because the user may have manually overwritten it too
-    const config = Array.isArray(webpackConfig)
-      ? webpackConfig[0]
-      : webpackConfig
-    const targetDir = config.output.path
-    const targetDirShort = path.relative(
-      api.service.context,
-      targetDir
-    )
+    // apply inline dest path after user configureWebpack hooks
+    // so it takes higher priority
+    if (args.dest) {
+      const applyDest = config => {
+        config.output.path = targetDir
+      }
+      if (Array.isArray(webpackConfig)) {
+        webpackConfig.forEach(applyDest)
+      } else {
+        applyDest(webpackConfig)
+      }
+    }
+
+    // grab the actual output path and check for common mis-configuration
+    const actualTargetDir = (
+      Array.isArray(webpackConfig)
+        ? webpackConfig[0]
+        : webpackConfig
+    ).output.path
+
+    if (!args.dest && actualTargetDir !== api.resolve(options.outputDir)) {
+      // user directly modifys output.path in configureWebpack or chainWebpack.
+      // this is not supported because there's no way for us to give copy
+      // plugin the correct value this way.
+      console.error(chalk.red(
+        `\n\nConfiguration Error: ` +
+        `Avoid modifying webpack output.path directly. ` +
+        `Use the "outputDir" option instead.\n`
+      ))
+      process.exit(1)
+    }
+
+    if (actualTargetDir === api.service.context) {
+      console.error(chalk.red(
+        `\n\nConfiguration Error: ` +
+        `Do not set output directory to project root.\n`
+      ))
+      process.exit(1)
+    }
 
     return new Promise((resolve, reject) => {
       rimraf(targetDir, err => {
@@ -114,6 +140,10 @@ module.exports = (api, options) => {
           }
 
           if (!args.silent) {
+            const targetDirShort = path.relative(
+              api.service.context,
+              targetDir
+            )
             log(formatStats(stats, targetDirShort, api))
             if (args.target === 'app') {
               done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
