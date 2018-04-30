@@ -33,7 +33,7 @@ function reset (context) {
   loadFolder(folder, context)
 }
 
-function loadFolder (root, context) {
+function _loadFolder (root, context) {
   const paths = globby.sync([path.join(root, './locales/*.json')])
   paths.forEach(file => {
     const basename = path.basename(file)
@@ -41,6 +41,18 @@ function loadFolder (root, context) {
     const strings = JSON.parse(fs.readFileSync(file, { encoding: 'utf8' }))
     add({ lang, strings }, context)
   })
+}
+
+function loadFolder (root, context) {
+  if (process.env.NODE_ENV !== 'production') {
+    const watch = require('watch')
+    watch.watchTree(root, () => {
+      _loadFolder(root, context)
+      console.log(`Locales reloaded: ${root}`)
+    })
+  } else {
+    _loadFolder(root, context)
+  }
 }
 
 reset(getContext())
