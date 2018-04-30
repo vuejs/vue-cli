@@ -14,6 +14,7 @@ const writeFileTree = require('./util/writeFileTree')
 const formatFeatures = require('./util/formatFeatures')
 const setupDevProject = require('./util/setupDevProject')
 const fetchRemotePreset = require('./util/fetchRemotePreset')
+const readLocalPreset = require('./util/readLocalPreset')
 
 const {
   defaults,
@@ -238,6 +239,8 @@ module.exports = class Creator {
         error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
         throw e
       }
+    } else if (name.endsWith('.json')) {
+      preset = await readLocalPreset(this.context, name)
     } else {
       preset = savedPresets[name]
     }
