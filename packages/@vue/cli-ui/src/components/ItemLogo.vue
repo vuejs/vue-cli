@@ -14,10 +14,10 @@
         icon="done"
       />
       <img
-        v-else-if="image && !error"
+        v-else-if="imageEnabled && !error"
         class="image"
-        :src="image"
-        :key="image"
+        :src="imageUrl"
+        :key="imageUrl"
         @load="loaded = true"
         @error="error = true"
       >
@@ -62,6 +62,16 @@ export default {
     return {
       loaded: false,
       error: false
+    }
+  },
+
+  computed: {
+    imageEnabled () {
+      return this.image || (this.icon && this.icon.indexOf('.') !== -1)
+    },
+
+    imageUrl () {
+      return this.image || this.icon
     }
   },
 
