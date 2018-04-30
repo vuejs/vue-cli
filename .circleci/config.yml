@@ -15,7 +15,7 @@ jobs:
             - v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - v1-vue-{{ .Branch }}-
             - v1-vue-
-      - run: yarn install
+      - run: yarn
       - save_cache:
           key: v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
@@ -45,6 +45,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
+      - run: yarn lint
       - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app
 
   group-4:
