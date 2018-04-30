@@ -289,7 +289,8 @@
     "project-configuration-details": {
       "actions": {
         "cancel": "Cancel changes",
-        "save": "Save changes"
+        "save": "Save changes",
+        "more-info": "More info"
       }
     },
     "project-tasks": {

@@ -17,6 +17,15 @@
       />
 
       <VueButton
+        v-if="configuration && configuration.link"
+        icon-right="open_in_new"
+        class="big flat"
+        :label="$t('views.project-configuration-details.actions.more-info')"
+        :href="configuration.link"
+        target="_blank"
+      />
+
+      <VueButton
         :disabled="!hasPromptsChanged"
         icon-left="save"
         class="primary big"
