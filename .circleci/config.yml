@@ -38,7 +38,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
-      - run: yarn test -p typescript
+      - run: yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
 
   group-3:
     <<: *defaults
@@ -53,6 +53,7 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run: yarn test -p unit-mocha,unit-jest,e2e-nightwatch,e2e-cypress
+      - run: yarn test tsPluginE2e
 
 workflows:
   version: 2
