@@ -333,6 +333,9 @@ async function remove (id, context) {
     currentProject = null
   }
   context.db.get('projects').remove({ id }).write()
+  if (context.db.get('config.lastOpenProject').value() === id) {
+    context.db.set('config.lastOpenProject', undefined).write()
+  }
   return true
 }
 
