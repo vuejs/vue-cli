@@ -15,7 +15,7 @@
         m 0, -${size / 2}
         a ${size / 2},${size / 2} 0 1 1 0,${size}
         a ${size / 2},${size / 2} 0 1 1 0,-${size}`"
-        :stroke-dasharray="`${finalDasharray - .25} ${finalDasharray - .25}`"
+        :stroke-dasharray="`${finalDasharray - 0.25} ${finalDasharray - 0.25}`"
         :stroke-dashoffset="finalDashoffset"
         :stroke="stroke"
       />
@@ -133,9 +133,9 @@ export default {
     },
 
     isVisible (ratio) {
-      return ratio > .0025
+      return ratio > 0.0025
     }
-  },
+  }
 }
 </script>
 

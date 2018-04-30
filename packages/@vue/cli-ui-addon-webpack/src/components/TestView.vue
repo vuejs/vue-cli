@@ -29,7 +29,6 @@ export default {
 }
 </script>
 
-
 <style lang="stylus" scoped>
 .test-view
   padding 42px
