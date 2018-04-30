@@ -1,6 +1,5 @@
 const {
   info,
-  error,
   hasYarn,
   openBrowser
 } = require('@vue/cli-shared-utils')
@@ -23,7 +22,7 @@ module.exports = (api, options) => {
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`
     }
-  }, args => {
+  }, async function serve (args) {
     info('Starting development server...')
 
     api.setMode(args.mode || defaults.mode)
@@ -40,45 +39,109 @@ module.exports = (api, options) => {
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
 
+    // load user devServer options
     const projectDevServerOptions = options.devServer || {}
+
+    // resolve webpack config
+    const webpackConfig = api.resolveWebpackConfig()
+
+    // inject dev & hot-reload middleware entries
+    if (!isProduction) {
+      const devClients = [
+        // dev server client
+        require.resolve(`webpack-dev-server/client`),
+        // hmr client
+        require.resolve(projectDevServerOptions.hotOnly
+          ? 'webpack/hot/only-dev-server'
+          : 'webpack/hot/dev-server')
+        // TODO custom overlay client
+        // `@vue/cli-overlay/dist/client`
+      ]
+      if (process.env.APPVEYOR) {
+        devClients.push(`webpack/hot/poll?500`)
+      }
+      // inject dev/hot client
+      addDevClientToEntry(webpackConfig, devClients)
+    }
+
+    // create compiler
+    const compiler = webpack(webpackConfig)
+
+    if (!process.env.VUE_CLI_TEST) {
+      compiler.apply(new webpack.ProgressPlugin())
+    }
+
+    // resolve server options
     const useHttps = args.https || projectDevServerOptions.https || defaults.https
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
+    const port = await portfinder.getPortPromise()
 
-    const portPromise = portfinder.getPortPromise()
-    return portPromise.then(port => new Promise((resolve, reject) => {
-      const webpackConfig = api.resolveWebpackConfig()
+    const urls = prepareURLs(
+      useHttps ? 'https' : 'http',
+      host,
+      port
+    )
 
-      const urls = prepareURLs(
-        useHttps ? 'https' : 'http',
-        host,
-        port
-      )
+    const proxySettings = prepareProxy(
+      projectDevServerOptions.proxy,
+      api.resolve('public')
+    )
 
-      if (!isProduction) {
-        const devClients = [
-          // dev server client
-          require.resolve(`webpack-dev-server/client`),
-          // hmr client
-          require.resolve(projectDevServerOptions.hotOnly
-            ? 'webpack/hot/only-dev-server'
-            : 'webpack/hot/dev-server')
-          // TODO custom overlay client
-          // `@vue/cli-overlay/dist/client`
-        ]
-        if (process.env.APPVEYOR) {
-          devClients.push(`webpack/hot/poll?500`)
+    // create server
+    const server = new WebpackDevServer(compiler, Object.assign({
+      clientLogLevel: 'none',
+      historyApiFallback: {
+        disableDotRule: true
+      },
+      contentBase: api.resolve('public'),
+      watchContentBase: !isProduction,
+      hot: !isProduction,
+      quiet: true,
+      compress: isProduction,
+      publicPath: '/',
+      overlay: isProduction // TODO disable this
+        ? false
+        : { warnings: false, errors: true }
+    }, projectDevServerOptions, {
+      https: useHttps,
+      proxy: proxySettings,
+      before (app) {
+        // launch editor support.
+        // this works with vue-devtools & @vue/cli-overlay
+        app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
+          `To specify an editor, sepcify the EDITOR env variable or ` +
+          `add "editor" field to your Vue project config.\n`
+        )))
+        // allow other plugins to register middlewares, e.g. PWA
+        api.service.devServerConfigFns.forEach(fn => fn(app))
+        // apply in project middlewares
+        projectDevServerOptions.before && projectDevServerOptions.before(app)
+      }
+    }))
+
+    ;['SIGINT', 'SIGTERM'].forEach(signal => {
+      process.on(signal, () => {
+        server.close(() => {
+          process.exit(0)
+        })
+      })
+    })
+
+    // on appveyor, killing the process with SIGTERM causes execa to
+    // throw error
+    if (process.env.VUE_CLI_TEST) {
+      process.stdin.on('data', data => {
+        if (data.toString() === 'close') {
+          console.log('got close signal!')
+          server.close(() => {
+            process.exit(0)
+          })
         }
-        // inject dev/hot client
-        addDevClientToEntry(webpackConfig, devClients)
-      }
+      })
+    }
 
-      const compiler = webpack(webpackConfig)
-
-      if (!process.env.VUE_CLI_TEST) {
-        compiler.apply(new webpack.ProgressPlugin())
-      }
-
+    return new Promise((resolve, reject) => {
       // log instructions & open browser on first compilation complete
       let isFirstCompile = true
       compiler.plugin('done', stats => {
@@ -123,69 +186,12 @@ module.exports = (api, options) => {
         }
       })
 
-      const proxySettings = prepareProxy(
-        projectDevServerOptions.proxy,
-        api.resolve('public')
-      )
-
-      const server = new WebpackDevServer(compiler, Object.assign({
-        clientLogLevel: 'none',
-        historyApiFallback: {
-          disableDotRule: true
-        },
-        contentBase: api.resolve('public'),
-        watchContentBase: !isProduction,
-        hot: !isProduction,
-        quiet: true,
-        compress: isProduction,
-        publicPath: '/',
-        overlay: isProduction // TODO disable this
-          ? false
-          : { warnings: false, errors: true }
-      }, projectDevServerOptions, {
-        https: useHttps,
-        proxy: proxySettings,
-        before (app) {
-          // launch editor support.
-          // this works with vue-devtools & @vue/cli-overlay
-          app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
-            `To specify an editor, sepcify the EDITOR env variable or ` +
-            `add "editor" field to your Vue project config.\n`
-          )))
-          // allow other plugins to register middlewares, e.g. PWA
-          api.service.devServerConfigFns.forEach(fn => fn(app))
-          // apply in project middlewares
-          projectDevServerOptions.before && projectDevServerOptions.before(app)
-        }
-      }))
-
-      ;['SIGINT', 'SIGTERM'].forEach(signal => {
-        process.on(signal, () => {
-          server.close(() => {
-            process.exit(0)
-          })
-        })
-      })
-
-      // on appveyor, killing the process with SIGTERM causes execa to
-      // throw error
-      if (process.env.VUE_CLI_TEST) {
-        process.stdin.on('data', data => {
-          if (data.toString() === 'close') {
-            console.log('got close signal!')
-            server.close(() => {
-              process.exit(0)
-            })
-          }
-        })
-      }
-
       server.listen(port, host, err => {
         if (err) {
-          return error(err)
+          reject(err)
         }
       })
-    }))
+    })
   })
 }
 

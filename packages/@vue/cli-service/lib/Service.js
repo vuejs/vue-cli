@@ -112,7 +112,7 @@ module.exports = class Service {
     }
   }
 
-  run (name, args = {}, rawArgv = []) {
+  async run (name, args = {}, rawArgv = []) {
     args._ = args._ || []
     let command = this.commands[name]
     if (!command && name) {
@@ -126,7 +126,7 @@ module.exports = class Service {
       rawArgv.shift()
     }
     const { fn } = command
-    return Promise.resolve(fn(args, rawArgv))
+    await fn(args, rawArgv)
   }
 
   resolveChainableWebpackConfig () {

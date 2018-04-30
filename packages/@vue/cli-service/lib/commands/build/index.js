@@ -20,7 +20,7 @@ module.exports = (api, options) => {
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`
     }
-  }, args => {
+  }, async function build (args) {
     args.entry = args.entry || args._[0]
     for (const key in defaults) {
       if (args[key] == null) {
@@ -122,49 +122,45 @@ module.exports = (api, options) => {
       process.exit(1)
     }
 
+    await fs.remove(targetDir)
+
     return new Promise((resolve, reject) => {
-      fs.remove(targetDir, err => {
+      webpack(webpackConfig, (err, stats) => {
+        stopSpinner(false)
         if (err) {
           return reject(err)
         }
 
-        webpack(webpackConfig, (err, stats) => {
-          stopSpinner(false)
-          if (err) {
-            return reject(err)
-          }
+        if (stats.hasErrors()) {
+          return reject(`Build failed with errors.`)
+        }
 
-          if (stats.hasErrors()) {
-            return reject(`Build failed with errors.`)
-          }
-
-          if (!args.silent) {
-            const targetDirShort = path.relative(
-              api.service.context,
-              targetDir
-            )
-            log(formatStats(stats, targetDirShort, api))
-            if (args.target === 'app') {
-              done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
-              if (
-                options.baseUrl === '/' &&
-                // only log the tips if this is the first build
-                !fs.existsSync(api.resolve('node_modules/.cache'))
-              ) {
-                info(`The app is built assuming that it will be deployed at the root of a domain.`)
-                info(`If you intend to deploy it under a subpath, update the ${chalk.green('baseUrl')} option`)
-                info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
-              }
+        if (!args.silent) {
+          const targetDirShort = path.relative(
+            api.service.context,
+            targetDir
+          )
+          log(formatStats(stats, targetDirShort, api))
+          if (args.target === 'app') {
+            done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
+            if (
+              options.baseUrl === '/' &&
+              // only log the tips if this is the first build
+              !fs.existsSync(api.resolve('node_modules/.cache'))
+            ) {
+              info(`The app is built assuming that it will be deployed at the root of a domain.`)
+              info(`If you intend to deploy it under a subpath, update the ${chalk.green('baseUrl')} option`)
+              info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
             }
           }
+        }
 
-          // test-only signal
-          if (process.env.VUE_CLI_TEST) {
-            console.log('Build complete.')
-          }
+        // test-only signal
+        if (process.env.VUE_CLI_TEST) {
+          console.log('Build complete.')
+        }
 
-          resolve()
-        })
+        resolve()
       })
     })
   })
