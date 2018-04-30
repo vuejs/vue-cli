@@ -2,8 +2,8 @@ const defaults = {
   name: 'PWA app',
   themeColor: '#4DBA87', // The Vue color
   msTileColor: '#000000',
-  appleMobileWebAppCapable: "no",
-  appleMobileWebAppStatusBarStyle: "default",
+  appleMobileWebAppCapable: 'no',
+  appleMobileWebAppStatusBarStyle: 'default'
 }
 
 module.exports = class HtmlPwaPlugin {
