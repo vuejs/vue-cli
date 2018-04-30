@@ -6,6 +6,7 @@ export default {
   apollo: {
     clientAddons: {
       query: CLIENT_ADDONS,
+      fetchPolicy: 'no-cache',
       manual: true,
       result ({ data: { clientAddons } }) {
         clientAddons.forEach(this.loadAddon)

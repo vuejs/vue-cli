@@ -8,6 +8,7 @@ export default {
   apollo: {
     locales: {
       query: LOCALES,
+      fetchPolicy: 'no-cache',
       manual: true,
       result ({ data: { locales } }) {
         locales.forEach(this.loadLocale)
