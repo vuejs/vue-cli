@@ -35,6 +35,7 @@ async function autoDetect () {
   if (lang !== 'en') {
     await autoInstallLocale(lang)
     i18n.locale = lang
+    console.log(`[UI] Automatically loaded ${lang} locale`)
   }
 }
 
