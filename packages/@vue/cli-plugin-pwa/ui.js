@@ -64,7 +64,7 @@ module.exports = api => {
             name: 'name',
             type: 'input',
             message: 'App name',
-            description: 'Used as the value for the `apple-mobile-web-app-title` meta tag in the generated HTML.',
+            description: 'App name displayed on the Splash screen and various other places. Also used as the value for the `apple-mobile-web-app-title` meta tag in the generated HTML.',
             value: data.pwa && data.pwa.name
           },
           {
