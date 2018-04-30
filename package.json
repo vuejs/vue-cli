@@ -55,6 +55,7 @@
     "puppeteer": "^1.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
+    "rimraf": "^2.6.2",
     "yorkie": "^1.0.2"
   }
 }

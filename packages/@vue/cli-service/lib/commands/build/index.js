@@ -30,10 +30,9 @@ module.exports = (api, options) => {
 
     api.setMode(args.mode)
 
-    const fs = require('fs')
+    const fs = require('fs-extra')
     const path = require('path')
     const chalk = require('chalk')
-    const rimraf = require('rimraf')
     const webpack = require('webpack')
     const formatStats = require('./formatStats')
     const {
@@ -124,7 +123,7 @@ module.exports = (api, options) => {
     }
 
     return new Promise((resolve, reject) => {
-      rimraf(targetDir, err => {
+      fs.remove(targetDir, err => {
         if (err) {
           return reject(err)
         }
