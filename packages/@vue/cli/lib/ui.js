@@ -49,7 +49,9 @@ async function ui (options = {}, context = process.cwd()) {
     }
 
     server(opts, () => {
-      openBrowser(`http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}`)
+      const url = `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}`
+      console.log(`🌠  Ready on ${url}`)
+      openBrowser(url)
     })
   }
 }
