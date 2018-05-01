@@ -72,54 +72,52 @@ module.exports = (api, projectOptions) => {
 }
 ```
 
-#### Environment Variables in Service Plugins
+#### Specifying Mode for Commands
 
-An important thing to note about env variables is knowing when they are resolved. Typically, a command like `vue-cli-service serve` or `vue-cli-service build` will always call `api.setMode()` as the first thing it does. However, this also means those env variables may not yet be available when a service plugin is invoked:
+> Note: the way plugins set modes has been changed in beta.10.
+
+If a plugin-registered command needs to run in a specific default mode,
+the plugin needs to expose it via `module.exports.defaultModes` in the form
+of `{ [commandName]: mode }`:
 
 ``` js
 module.exports = api => {
-  process.env.NODE_ENV // may not be resolved yet
-
   api.registerCommand('build', () => {
-    api.setMode('production')
+    // ...
   })
+}
+
+module.exports.defaultModes = {
+  build: 'production'
 }
 ```
 
-Instead, it's safer to rely on env variables in `configureWebpack` or `chainWebpack` functions, which are called lazily only when `api.resolveWebpackConfig()` is finally called:
-
-``` js
-module.exports = api => {
-  api.configureWebpack(config => {
-    if (process.env.NODE_ENV === 'production') {
-      // ...
-    }
-  })
-}
-```
+This is because the command's expected mode needs to be known before loading environment variables, which in turn needs to happen before loading user options / applying the plugins.
 
 #### Resolving Webpack Config in Plugins
 
 A plugin can retrieve the resolved webpack config by calling `api.resolveWebpackConfig()`. Every call generates a fresh webpack config which can be further mutated as needed:
 
 ``` js
-api.registerCommand('my-build', args => {
-  // make sure to set mode and load env variables
-  api.setMode('production')
+module.exports = api => {
+  api.registerCommand('my-build', args => {
+    const configA = api.resolveWebpackConfig()
+    const configB = api.resolveWebpackConfig()
 
-  const configA = api.resolveWebpackConfig()
-  const configB = api.resolveWebpackConfig()
+    // mutate configA and configB for different purposes...
+  })
+}
 
-  // mutate configA and configB for different purposes...
-})
+// make sure to specify the default mode for correct env variables
+module.exports.defaultModes = {
+  'my-build': 'production'
+}
 ```
 
 Alternatively, a plugin can also obtain a fresh [chainable config](https://github.com/mozilla-neutrino/webpack-chain) by calling `api.resolveChainableWebpackConfig()`:
 
 ``` js
 api.registerCommand('my-build', args => {
-  api.setMode('production')
-
   const configA = api.resolveChainableWebpackConfig()
   const configB = api.resolveChainableWebpackConfig()
 

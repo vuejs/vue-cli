@@ -1,5 +1,4 @@
 const defaults = {
-  mode: 'production',
   target: 'app',
   entry: 'src/App.vue'
 }
@@ -15,7 +14,7 @@ module.exports = (api, options) => {
     description: 'build for production',
     usage: 'vue-cli-service build [options] [entry|pattern]',
     options: {
-      '--mode': `specify env mode (default: ${defaults.mode})`,
+      '--mode': `specify env mode (default: production)`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`
@@ -27,8 +26,6 @@ module.exports = (api, options) => {
         args[key] = defaults[key]
       }
     }
-
-    api.setMode(args.mode)
 
     const fs = require('fs-extra')
     const path = require('path')
@@ -164,4 +161,8 @@ module.exports = (api, options) => {
       })
     })
   })
+}
+
+module.exports.defaultModes = {
+  build: 'production'
 }

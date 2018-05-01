@@ -16,7 +16,7 @@ module.exports = (api, options) => {
 
     const serverPromise = args.url
       ? Promise.resolve({ url: args.url })
-      : api.service.run('serve', { mode: args.mode || 'production' })
+      : api.service.run('serve')
 
     return serverPromise.then(({ url, server }) => {
       const { info } = require('@vue/cli-shared-utils')
@@ -70,4 +70,9 @@ module.exports = (api, options) => {
       `All Cypress CLI options are supported:\n` +
       chalk.yellow(`https://docs.cypress.io/guides/guides/command-line.html#cypress-open`)
   }, (args, rawArgs) => run('open', args, rawArgs))
+}
+
+module.exports.defaultModes = {
+  e2e: 'production',
+  'e2e:open': 'production'
 }

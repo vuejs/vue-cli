@@ -27,7 +27,7 @@ module.exports = (api, options) => {
 
     const serverPromise = args.url
       ? Promise.resolve({ url: args.url })
-      : api.service.run('serve', { mode: args.mode || 'production' })
+      : api.service.run('serve')
 
     return serverPromise.then(({ server, url }) => {
       // expose dev server url to tests
@@ -67,4 +67,8 @@ module.exports = (api, options) => {
       return runner
     })
   })
+}
+
+module.exports.defaultModes = {
+  e2e: 'production'
 }

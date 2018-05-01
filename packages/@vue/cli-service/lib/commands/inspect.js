@@ -7,8 +7,6 @@ module.exports = (api, options) => {
       '--verbose': 'show full function definitions in output'
     }
   }, args => {
-    api.setMode(args.mode || 'development')
-
     const get = require('get-value')
     const stringify = require('javascript-stringify')
     const config = api.resolveWebpackConfig()
@@ -42,4 +40,8 @@ module.exports = (api, options) => {
       return stringify(value)
     }, 2))
   })
+}
+
+module.exports.defaultModes = {
+  inspect: 'development'
 }

@@ -14,7 +14,9 @@ const LOADERS = {
 const genConfig = (pkg = {}, env) => {
   const prevEnv = process.env.NODE_ENV
   if (env) process.env.NODE_ENV = env
-  const config = new Service('/', { pkg }).resolveWebpackConfig()
+  const service = new Service('/', { pkg })
+  service.init()
+  const config = service.resolveWebpackConfig()
   process.env.NODE_ENV = prevEnv
   return config
 }

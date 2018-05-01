@@ -1,6 +1,11 @@
 const path = require('path')
 const { matchesPluginId } = require('@vue/cli-shared-utils')
 
+// Note: if a plugin-registered command needs to run in a specific default mode,
+// the plugin needs to expose it via `module.exports.defaultModes` in the form
+// of { [commandName]: mode }. This is because the command mode needs to be
+// known and applied before loading user options / applying plugins.
+
 class PluginAPI {
   /**
    * @param {string} id - Id of the plugin.
@@ -32,25 +37,6 @@ class PluginAPI {
   }
 
   /**
-   * Set project mode and resolve env variables for that mode.
-   * this should be called by any registered command as early as possible, and
-   * should be called only once per command.
-   *
-   * @param {string} mode
-   */
-  setMode (mode) {
-    process.env.VUE_CLI_MODE = mode
-    // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
-    // is production or test. However this can be overwritten in .env files.
-    process.env.NODE_ENV = process.env.BABEL_ENV =
-      (mode === 'production' || mode === 'test')
-        ? mode
-        : 'development'
-    // load .env files based on mode
-    this.service.loadEnv(mode)
-  }
-
-  /**
    * Register a command that will become available as `vue-cli-service [name]`.
    *
    * @param {string} name
@@ -68,7 +54,7 @@ class PluginAPI {
       fn = opts
       opts = null
     }
-    this.service.commands[name] = { fn, opts }
+    this.service.commands[name] = { fn, opts: opts || {}}
   }
 
   /**
@@ -108,7 +94,6 @@ class PluginAPI {
 
   /**
    * Resolve the final raw webpack config, that will be passed to webpack.
-   * Typically, you should call `setMode` before calling this.
    *
    * @param {ChainableWebpackConfig} [chainableConfig]
    * @return {object} Raw webpack config.

@@ -5,7 +5,6 @@ const {
 } = require('@vue/cli-shared-utils')
 
 const defaults = {
-  mode: 'development',
   host: '0.0.0.0',
   port: 8080,
   https: false
@@ -17,15 +16,13 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service serve [options]',
     options: {
       '--open': `open browser on server start`,
-      '--mode': `specify env mode (default: ${defaults.mode})`,
+      '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`
     }
   }, async function serve (args) {
     info('Starting development server...')
-
-    api.setMode(args.mode || defaults.mode)
 
     // although this is primarily a dev server, it is possible that we
     // are running it in a mode with a production env, e.g. in E2E tests.
@@ -206,4 +203,8 @@ function addDevClientToEntry (config, devClient) {
   } else {
     config.entry = devClient.concat(entry)
   }
+}
+
+module.exports.defaultModes = {
+  serve: 'development'
 }
