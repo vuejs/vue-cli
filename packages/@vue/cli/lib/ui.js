@@ -8,12 +8,17 @@ async function ui (options = {}, context = process.cwd()) {
     port = await portfinder.getPortPromise()
   }
 
-  // Re-run in production mode
-  if (process.env.NODE_ENV !== 'production') {
+  const configOk = process.env.VUE_UI_CONFIGURED === 'OK'
+  if (!configOk) {
+    process.env.VUE_UI_CONFIGURED = 'OK'
+    // Config
     process.env.VUE_APP_GRAPHQL_PORT = port
     process.env.VUE_APP_GRAPHQL_ENDPOINT = ''
     process.env.VUE_APP_GRAPHQL_PLAYGROUND_PATH = '/graphql-playground'
+  }
 
+  if (!options.dev && !configOk) {
+    // Re-run in production mode
     const command = require.resolve('@vue/cli/bin/vue')
     execa('cross-env', [
       'NODE_ENV=production',
@@ -33,6 +38,7 @@ async function ui (options = {}, context = process.cwd()) {
       mock: false,
       apolloEngine: false,
       timeout: 999999999,
+      quiet: true,
       paths: {
         typeDefs: require.resolve('@vue/cli-ui/src/graphql-api/type-defs.js'),
         resolvers: require.resolve('@vue/cli-ui/src/graphql-api/resolvers.js'),

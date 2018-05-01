@@ -3,17 +3,22 @@
 This guide will walk you through the development of cli-ui specific features for your vue-cli plugins.
 
 - [Plugin Info](#plugin-info)
-- [Project configurations](#project-configurations)
-- [Project tasks](#project-tasks)
-- [Client addon](#client-addon)
-- [Custom views](#custom-views)
-- [Shared data](#shared-data)
-- [Plugin actions](#plugin-actions)
-- [Inter-process communication (IPC)](#inter-process-communication-ipc)
-- [Local storage](#local-storage)
-- [Localization](#localization)
-- [Hooks](#hooks)
-- [Public static files](#public-static-files)
+  - [Logo](#logo)
+  - [Discoverability](#discoverability)
+- [UI API](#ui-api)
+  - [UI files](#ui-files)
+  - [Dev mode](#dev-mode)
+  - [Project configurations](#project-configurations)
+  - [Project tasks](#project-tasks)
+  - [Client addon](#client-addon)
+  - [Custom views](#custom-views)
+  - [Shared data](#shared-data)
+  - [Plugin actions](#plugin-actions)
+  - [Inter-process communication (IPC)](#inter-process-communication-ipc)
+  - [Local storage](#local-storage)
+  - [Localization](#localization)
+  - [Hooks](#hooks)
+  - [Public static files](#public-static-files)
 
 ## Plugin Info
 
@@ -74,6 +79,14 @@ module.exports = api => {
 ```
 
 **⚠️ The files will be reloaded when feetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left.**
+
+### Dev mode
+
+While building your plugin, you may want to run the cli-ui in Dev mode, so it will output useful logs to you:
+
+```
+vue ui --dev
+```
 
 ### Project configurations
 
