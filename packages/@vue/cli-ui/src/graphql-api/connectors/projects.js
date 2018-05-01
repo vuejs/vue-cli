@@ -17,6 +17,8 @@ const plugins = require('./plugins')
 const locales = require('./locales')
 // Context
 const getContext = require('../context')
+// Utils
+const { log } = require('../utils/logger')
 
 const PROGRESS_ID = 'project-create'
 
@@ -324,6 +326,8 @@ async function open (id, context) {
 
   // Save for next time
   context.db.set('config.lastOpenProject', id).write()
+
+  log('Project open', id, project.path)
 
   return project
 }

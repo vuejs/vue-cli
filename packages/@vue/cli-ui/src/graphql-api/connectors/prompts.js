@@ -1,4 +1,6 @@
+// Utils
 const ObjectUtil = require('../../util/object')
+const { log } = require('../utils/logger')
 
 let answers = {}
 let prompts = []
@@ -136,7 +138,7 @@ async function updatePrompts () {
     }
   }
 
-  if (process.env.NODE_ENV !== 'production') console.log('answers =', answers)
+  log('Prompt answers', answers)
 }
 
 // Public API

@@ -11,8 +11,10 @@ const getContext = require('../context')
 // Utils
 const { resolveModule } = require('@vue/cli/lib/util/module')
 const { resolveModuleRoot } = require('../utils/resolve-path')
+const { log } = require('../utils/logger')
 
 let locales
+const watchedTrees = new Map()
 
 function list (context) {
   return locales
@@ -49,11 +51,12 @@ function _loadFolder (root, context) {
 }
 
 function loadFolder (root, context) {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production' && !watchedTrees.get(root)) {
+    watchedTrees.set(root, true)
     const watch = require('watch')
     watch.watchTree(root, () => {
       _loadFolder(root, context)
-      console.log(`Locales reloaded: ${root}`)
+      log('Locales reloaded', root)
     })
   } else {
     _loadFolder(root, context)

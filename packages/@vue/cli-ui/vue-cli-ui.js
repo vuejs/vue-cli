@@ -17,6 +17,15 @@ module.exports = api => {
     tooltip: 'Test view from webpack addon'
   })
 
+  // Shared data example to store a value (for example a setting)
+  api.onProjectOpen(() => {
+    api.setSharedData('test-data', api.storageGet('vue-cli.test-data'))
+  })
+  api.watchSharedData('test-data', value => {
+    api.storageSet('vue-cli.test-data', value)
+    console.log('test-data value saved')
+  })
+
   // Test Plugin Action
   api.onAction('test-action', params => {
     console.log('test-action called', params)
@@ -24,5 +33,7 @@ module.exports = api => {
     setTimeout(() => {
       api.callAction('other-action', { foo: 'bar' })
     }, 1000)
+
+    return 'meow'
   })
 }

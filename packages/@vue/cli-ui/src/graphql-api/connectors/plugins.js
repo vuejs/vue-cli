@@ -28,12 +28,14 @@ const logs = require('./logs')
 const clientAddons = require('./client-addons')
 const views = require('./views')
 const locales = require('./locales')
+const sharedData = require('./shared-data')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
 const { getCommand } = require('../utils/command')
 const { resolveModuleRoot } = require('../utils/resolve-path')
 const ipc = require('../utils/ipc')
+const { log } = require('../utils/logger')
 
 const PROGRESS_ID = 'plugin-installation'
 
@@ -87,6 +89,7 @@ function resetPluginApi (context) {
     pluginApi.views.forEach(r => views.remove(r.id, context))
     pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
   }
+  sharedData.unWatchAll()
 
   pluginApi = new PluginApi(context)
   // Run Plugin API
@@ -104,9 +107,11 @@ function resetPluginApi (context) {
     if (!project) return
     if (projectId !== project.id) {
       projectId = project.id
+      log('Hook onProjectOpen', pluginApi.projectOpenHooks.length, 'handlers')
       pluginApi.projectOpenHooks.forEach(fn => fn(project, projects.getLast(context)))
       pluginApi.project = project
     } else {
+      log('Hook onPluginReload', pluginApi.pluginReloadHooks.length, 'handlers')
       pluginApi.pluginReloadHooks.forEach(fn => fn(project))
     }
   })
@@ -120,6 +125,7 @@ function runPluginApi (id, context, fileName = 'ui') {
   if (module) {
     pluginApi.pluginId = id
     module(pluginApi)
+    log('Plugin API loaded for', id)
     pluginApi.pluginId = null
   }
 
@@ -350,6 +356,7 @@ async function callAction ({ id, params }, context) {
   context.pubsub.publish(channels.PLUGIN_ACTION_CALLED, {
     pluginActionCalled: { id, params }
   })
+  log('PluginAction called', id, params)
   const results = []
   const errors = []
   const list = pluginApi.actions.get(id)
@@ -369,6 +376,7 @@ async function callAction ({ id, params }, context) {
   context.pubsub.publish(channels.PLUGIN_ACTION_RESOLVED, {
     pluginActionResolved: { id, params, results, errors }
   })
+  log('PluginAction resolved', id, params, 'results:', results, 'errors:', errors)
   return { id, params, results, errors }
 }
 

@@ -9,6 +9,7 @@ const folders = require('./folders')
 const prompts = require('./prompts')
 // Utils
 const { get, set, remove } = require('../../util/object')
+const { log } = require('../utils/logger')
 const { loadModule } = require('@vue/cli/lib/util/module')
 const extendJSConfig = require('@vue/cli/lib/util/extendJSConfig')
 
@@ -75,7 +76,7 @@ function readData (config, context) {
 function writeData ({ config, data, changedFields }, context) {
   const file = findFile(config, context)
   if (file) {
-    if (process.env.NODE_ENV !== 'production') console.log('write', config.id, data, changedFields)
+    log('Config write', config.id, data, changedFields)
     let rawContent
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
@@ -103,7 +104,7 @@ async function getPrompts (id, context) {
   const config = findOne(id, context)
   if (config) {
     const data = readData(config, context)
-    if (process.env.NODE_ENV !== 'production') console.log('read', config.id, data)
+    log('Config read', config.id, data)
     current = {
       config,
       data

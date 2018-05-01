@@ -10,6 +10,7 @@ This guide will walk you through the development of cli-ui specific features for
 - [Shared data](#shared-data)
 - [Plugin actions](#plugin-actions)
 - [Inter-process communication (IPC)](#inter-process-communication-ipc)
+- [Local storage](#local-storage)
 - [Localization](#localization)
 - [Hooks](#hooks)
 - [Public static files](#public-static-files)
@@ -479,15 +480,32 @@ In the plugin `ui.js`:
 ```js
 // Set or update
 api.setSharedData('my-variable', 'some-data')
+
 // Get
 const sharedData = api.getSharedData('my-variable')
 if (sharedData) {
   console.log(sharedData.value)
 }
+
 // Remove
 api.removeSharedData('my-variable')
+
+// Watch for changes
+const watcher = (value, id) => {
+  console.log(value, id)
+}
+api.watchSharedData('my-variable', watcher)
+// Unwatch
+api.unwatchSharedData('my-variable', watcher)
+
 // Namespaced versions
-const { setSharedData, getSharedData, removeSharedData } = api.namespace('webpack-dashboard-')
+const {
+  setSharedData,
+  getSharedData,
+  removeSharedData,
+  watchSharedData,
+  unwatchSharedData
+} = api.namespace('webpack-dashboard-')
 ```
 
 In the custom component:
@@ -520,6 +538,25 @@ In the custom component:
   }
 }
 ```
+
+If you use the `sharedData` option, the shared data can be updated by assigning a new value to the corresponding property.
+
+```html
+<template>
+  <VueInput v-model="message"/>
+</template>
+
+<script>
+export default {
+  sharedData: {
+    // Will sync the the 'my-message' shared data on the server
+    message: 'my-message'
+  }
+}
+</script>
+```
+
+This is very usefull if you create a settings component for example.
 
 ### Plugin actions
 
@@ -640,6 +677,27 @@ api.ipcSend({
     foo: 'bar'
   }
 })
+```
+
+### Local storage
+
+A plugin can save and load data from the local [lowdb](https://github.com/typicode/lowdb) database used by the ui server.
+
+```js
+// Store a value into the local DB
+api.storageSet('my-plugin.an-id', { some: 'value' })
+
+// Retrieve a value from the local DB
+console.log(api.storageGet('my-plugin.an-id'))
+
+// Full lowdb instance
+api.db.get('posts')
+  .find({ title: 'low!' })
+  .assign({ title: 'hi!'})
+  .write()
+
+// Namespaced helpers
+const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
 
 ### Localization

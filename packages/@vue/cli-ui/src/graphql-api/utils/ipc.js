@@ -1,4 +1,6 @@
 const ipc = require('node-ipc')
+// Utils
+const { log, dumpObject } = require('../utils/logger')
 
 ipc.config.id = 'vue-cli'
 ipc.config.retry = 1500
@@ -8,6 +10,7 @@ const listeners = []
 
 ipc.serve(() => {
   ipc.server.on('message', (data, socket) => {
+    log('IPC message', dumpObject(data))
     for (const listener of listeners) {
       listener({
         data,
@@ -19,6 +22,7 @@ ipc.serve(() => {
   })
 
   ipc.server.on('ack', (data, socket) => {
+    log('IPC ack', dumpObject(data))
     if (data.done) {
       ipc.server.emit(socket, 'ack', { ok: true })
     }
@@ -38,6 +42,7 @@ function off (cb) {
 }
 
 function send (data) {
+  log('IPC send', dumpObject(data))
   ipc.server.broadcast('message', data)
 }
 

@@ -91,11 +91,25 @@ export default {
             // Proxy
             Object.defineProperty(this, key, {
               get: () => this.$data.$sharedData[key],
-              set: value => this.$set(this.$data.$sharedData, key, value),
+              set: value => {
+                this.$set(this.$data.$sharedData, key, value)
+                this.$setSharedData(id, value)
+              },
               enumerable: true,
               configurable: true
             })
-            const smartQuery = this.$apollo.addSmartQuery(key, genQuery(id))
+            const smartQuery = this.$apollo.addSmartQuery(key, {
+              ...genQuery(id),
+              update: undefined,
+              manual: true,
+              result: (result) => {
+                if (result && result.data) {
+                  const { data: { sharedData } } = result
+                  const value = (sharedData && sharedData.value) || undefined
+                  this.$set(this.$data.$sharedData, key, value)
+                }
+              }
+            })
             smartQueries.push(smartQuery)
           }
           return smartQueries

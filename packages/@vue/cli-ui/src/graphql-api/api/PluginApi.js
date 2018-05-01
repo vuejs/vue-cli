@@ -219,6 +219,15 @@ class PluginApi {
     ipc.send(data)
   }
 
+  /**
+   * Get the local DB instance (lowdb)
+   *
+   * @readonly
+   */
+  get db () {
+    return this.context.db
+  }
+
   /* Namespaced */
 
   /**
@@ -251,6 +260,26 @@ class PluginApi {
   }
 
   /**
+   * Watch for a value change of a shared data
+   *
+   * @param {string} id Id of the Shared data
+   * @param {function} handler Callback
+   */
+  watchSharedData (id, handler) {
+    sharedData.watch(id, handler)
+  }
+
+  /**
+   * Delete the watcher of a shared data.
+   *
+   * @param {string} id Id of the Shared data
+   * @param {function} handler Callback
+   */
+  unwatchSharedData (id, handler) {
+    sharedData.unwatch(id, handler)
+  }
+
+  /**
    * Listener triggered when a Plugin action is called from a client addon component.
    *
    * @param {string} id Id of the action to listen
@@ -278,6 +307,26 @@ class PluginApi {
   }
 
   /**
+   * Retrieve a value from the local DB
+   *
+   * @param {string} id Path to the item
+   * @returns Item value
+   */
+  storageGet (id) {
+    return this.db.get(id).value()
+  }
+
+  /**
+   * Store a value into the local DB
+   *
+   * @param {string} id Path to the item
+   * @param {any} value Value to be stored (must be serializable in JSON)
+   */
+  storageSet (id, value) {
+    this.db.set(id, value).write()
+  }
+
+  /**
    * Create a namespaced version of:
    *   - getSharedData
    *   - setSharedData
@@ -292,8 +341,12 @@ class PluginApi {
       getSharedData: (id) => this.getSharedData(namespace + id),
       setSharedData: (id, value) => this.setSharedData(namespace + id, value),
       removeSharedData: (id) => this.removeSharedData(namespace + id),
+      watchSharedData: (id, handler) => this.watchSharedData(namespace + id, handler),
+      unwatchSharedData: (id, handler) => this.unwatchSharedData(namespace + id, handler),
       onAction: (id, cb) => this.onAction(namespace + id, cb),
-      callAction: (id, params) => this.callAction(namespace + id, params)
+      callAction: (id, params) => this.callAction(namespace + id, params),
+      storageGet: (id) => this.storageGet(namespace + id),
+      storageSet: (id, value) => this.storageSet(namespace + id, value)
     }
   }
 }
