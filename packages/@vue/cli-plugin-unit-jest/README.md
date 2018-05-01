@@ -4,14 +4,14 @@
 
 ## Injected Commands
 
-- **`vue-cli-service test`**
+- **`vue-cli-service test:unit`**
 
-  Run unit tests with Jest. Default files matches are:
+  Run unit tests with Jest. Default `testMatch` is `<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))` which matches:
 
-  - Any files in `tests/unit` that end in `.spec.(js|ts)`;
-  - Any js/ts files inside `__tests__` directories.
+  - Any files in `tests/unit` that end in `.spec.(js|jsx|ts|tsx)`;
+  - Any js(x)/ts(x) files inside `__tests__` directories.
 
-  Usage: `vue-cli-service test [options] <regexForTestFiles>`
+  Usage: `vue-cli-service test:unit [options] <regexForTestFiles>`
 
   All [Jest command line options](https://facebook.github.io/jest/docs/en/cli.html) are also supported.
 
@@ -22,6 +22,5 @@ Jest can be configured via `jest.config.js` in your project root, or the `jest` 
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-unit-jest
-vue invoke unit-jest
+vue add unit-jest
 ```

@@ -1,7 +1,7 @@
 module.exports = api => {
-  api.registerCommand('test', {
+  api.registerCommand('test:unit', {
     description: 'run unit tests with jest',
-    usage: 'vue-cli-service test [options] <regexForTestFiles>',
+    usage: 'vue-cli-service test:unit [options] <regexForTestFiles>',
     options: {
       '--watch': 'run tests in watch mode'
     },
@@ -34,5 +34,5 @@ module.exports = api => {
 }
 
 module.exports.defaultModes = {
-  test: 'test'
+  'test:unit': 'test'
 }

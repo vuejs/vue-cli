@@ -6,8 +6,7 @@ module.exports = api => {
 
   api.extendPackage({
     scripts: {
-      e2e: 'vue-cli-service e2e',
-      'e2e:open': 'vue-cli-service e2e:open'
+      'test:e2e': 'vue-cli-service test:e2e'
     }
   })
 }

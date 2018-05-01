@@ -22,9 +22,9 @@ module.exports = api => {
     }
   })
 
-  api.registerCommand('test', {
+  api.registerCommand('test:unit', {
     description: 'run unit tests with mocha-webpack',
-    usage: 'vue-cli-service test [options] [...files]',
+    usage: 'vue-cli-service test:unit [options] [...files]',
     options: {
       '--watch, -w': 'run in watch mode',
       '--grep, -g': 'only run tests matching <pattern>',
@@ -75,5 +75,5 @@ module.exports = api => {
 }
 
 module.exports.defaultModes = {
-  test: 'test'
+  'test:unit': 'test'
 }
