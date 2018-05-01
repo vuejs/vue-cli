@@ -126,7 +126,7 @@ module.exports = class Service {
       rawArgv.shift()
     }
     const { fn } = command
-    await fn(args, rawArgv)
+    return fn(args, rawArgv)
   }
 
   resolveChainableWebpackConfig () {
