@@ -66,6 +66,8 @@ You should add the url to the plugin website or repository in the `homepage` or 
 
 The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
 
+![UI Plugin architecture](./vue-cli-ui-schema.png)
+
 ### UI files
 
 Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. It will also try to load a `vue-cli-ui.js` file in the user project root so the UI can be manually extended on a per-project basis (also useful to quickly prototype a plugin).
