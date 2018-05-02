@@ -1,6 +1,5 @@
 const path = require('path')
-const fs = require('fs')
-const rimraf = require('rimraf')
+const fs = require('fs-extra')
 const LRU = require('lru-cache')
 
 const pkgCache = new LRU({
@@ -10,23 +9,16 @@ const pkgCache = new LRU({
 
 const cwd = require('./cwd')
 
-function list (base, context) {
-  return new Promise((resolve, reject) => {
-    fs.readdir(base, 'utf8', (err, files) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(files.map(
-          file => ({
-            path: path.join(base, file),
-            name: file
-          })
-        ).filter(
-          file => fs.statSync(file.path).isDirectory()
-        ))
-      }
+async function list (base, context) {
+  const files = await fs.readdir(base, 'utf8')
+  return files.map(
+    file => ({
+      path: path.join(base, file),
+      name: file
     })
-  })
+  ).filter(
+    file => fs.statSync(file.path).isDirectory()
+  )
 }
 
 function generateFolder (file, context) {
@@ -62,9 +54,7 @@ function readPackage (file, context) {
   if (cachedValue) {
     return cachedValue
   }
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(file, 'package.json'), { encoding: 'utf8' })
-  )
+  const pkg = fs.readJsonSync(path.join(file, 'package.json'))
   pkgCache.set(file, pkg)
   return pkg
 }
@@ -92,16 +82,8 @@ function setFavorite ({ file, favorite }, context) {
   return generateFolder(file, context)
 }
 
-function deleteFolder (file) {
-  return new Promise((resolve, reject) => {
-    rimraf(file, err => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
-  })
+async function deleteFolder (file) {
+  await fs.remove(file)
 }
 
 module.exports = {

@@ -1,5 +1,5 @@
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const globby = require('globby')
 const deepmerge = require('deepmerge')
 // Connectors
@@ -45,7 +45,7 @@ function _loadFolder (root, context) {
   paths.forEach(file => {
     const basename = path.basename(file)
     const lang = basename.substr(0, basename.indexOf('.'))
-    const strings = JSON.parse(fs.readFileSync(file, { encoding: 'utf8' }))
+    const strings = fs.readJsonSync(file)
     add({ lang, strings }, context)
   })
 }
