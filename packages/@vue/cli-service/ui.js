@@ -1,4 +1,3 @@
-/* eslint-disable vue-libs/no-async-functions */
 const { openBrowser } = require('@vue/cli-shared-utils')
 
 module.exports = api => {

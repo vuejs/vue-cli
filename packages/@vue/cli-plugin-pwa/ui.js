@@ -1,4 +1,3 @@
-/* eslint-disable vue-libs/no-async-functions */
 const path = require('path')
 const fs = require('fs')
 

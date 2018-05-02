@@ -1,5 +1,3 @@
-/* eslint-disable vue-libs/no-async-functions */
-
 module.exports = api => {
   // Config file
   api.describeConfig({
