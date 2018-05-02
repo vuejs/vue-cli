@@ -9,7 +9,7 @@ test('should work', async () => {
       '@vue/cli-plugin-unit-jest': {}
     }
   })
-  await project.run(`vue-cli-service test`)
+  await project.run(`vue-cli-service test:unit`)
 })
 
 test('should respect jest testMatch config', async () => {
@@ -26,7 +26,7 @@ test('should respect jest testMatch config', async () => {
 
   let result
   try {
-    await project.run(`vue-cli-service test`)
+    await project.run(`vue-cli-service test:unit`)
   } catch (e) {
     result = e
   }
@@ -50,7 +50,7 @@ test('should respect jest.config.js testMatch config', async () => {
 
   let result
   try {
-    await project.run(`vue-cli-service test`)
+    await project.run(`vue-cli-service test:unit`)
   } catch (e) {
     result = e
   }

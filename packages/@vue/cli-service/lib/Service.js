@@ -13,29 +13,60 @@ const { warn, error, isPlugin } = require('@vue/cli-shared-utils')
 const { defaults, validate } = require('./options')
 
 module.exports = class Service {
-  constructor (context, { plugins, pkg, projectOptions, useBuiltIn } = {}) {
+  constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
     process.VUE_CLI_SERVICE = this
+    this.initialized = false
     this.context = context
+    this.inlineOptions = inlineOptions
     this.webpackChainFns = []
     this.webpackRawConfigFns = []
     this.devServerConfigFns = []
     this.commands = {}
     this.pkg = this.resolvePkg(pkg)
-
-    // load base .env
-    this.loadEnv()
-
-    const userOptions = this.loadUserOptions(projectOptions)
-    this.projectOptions = defaultsDeep(userOptions, defaults())
-
-    debug('vue:project-config')(this.projectOptions)
-
-    // install plugins.
     // If there are inline plugins, they will be used instead of those
     // found in package.json.
     // When useBuiltIn === false, built-in plugins are disabled. This is mostly
     // for testing.
     this.plugins = this.resolvePlugins(plugins, useBuiltIn)
+    // resolve the default mode to use for each command
+    // this is provided by plugins as module.exports.defaulModes
+    // so we can get the information without actually applying the plugin.
+    this.modes = this.plugins.reduce((modes, { apply: { defaultModes }}) => {
+      return Object.assign(modes, defaultModes)
+    }, {})
+  }
+
+  resolvePkg (inlinePkg) {
+    if (inlinePkg) {
+      return inlinePkg
+    } else if (fs.existsSync(path.join(this.context, 'package.json'))) {
+      return readPkg.sync(this.context)
+    } else {
+      return {}
+    }
+  }
+
+  init (mode = process.env.VUE_CLI_MODE) {
+    if (this.initialized) {
+      return
+    }
+    this.initialized = true
+    this.mode = mode
+
+    // load base .env
+    this.loadEnv()
+    // load mode .env
+    if (mode) {
+      this.loadEnv(mode)
+    }
+
+    // load user config
+    const userOptions = this.loadUserOptions()
+    this.projectOptions = defaultsDeep(userOptions, defaults())
+
+    debug('vue:project-config')(this.projectOptions)
+
+    // apply plugins.
     this.plugins.forEach(({ id, apply }) => {
       apply(new PluginAPI(id, this), this.projectOptions)
     })
@@ -49,17 +80,16 @@ module.exports = class Service {
     }
   }
 
-  resolvePkg (inlinePkg) {
-    if (inlinePkg) {
-      return inlinePkg
-    } else if (fs.existsSync(path.join(this.context, 'package.json'))) {
-      return readPkg.sync(this.context)
-    } else {
-      return {}
-    }
-  }
-
   loadEnv (mode) {
+    if (mode) {
+      // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
+      // is production or test. However this can be overwritten in .env files.
+      process.env.NODE_ENV = process.env.BABEL_ENV =
+        (mode === 'production' || mode === 'test')
+          ? mode
+          : 'development'
+    }
+
     const logger = debug('vue:env')
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
@@ -112,7 +142,15 @@ module.exports = class Service {
     }
   }
 
-  run (name, args = {}, rawArgv = []) {
+  async run (name, args = {}, rawArgv = []) {
+    // resolve mode
+    // prioritize inline --mode
+    // fallback to resolved default modes from plugins
+    const mode = args.mode || this.modes[name]
+
+    // load env variables, load user config, apply plugins
+    this.init(mode)
+
     args._ = args._ || []
     let command = this.commands[name]
     if (!command && name) {
@@ -126,7 +164,7 @@ module.exports = class Service {
       rawArgv.shift()
     }
     const { fn } = command
-    return Promise.resolve(fn(args, rawArgv))
+    return fn(args, rawArgv)
   }
 
   resolveChainableWebpackConfig () {
@@ -137,6 +175,9 @@ module.exports = class Service {
   }
 
   resolveWebpackConfig (chainableConfig = this.resolveChainableWebpackConfig()) {
+    if (!this.initialized) {
+      throw new Error('Service must call init() before calling resolveWebpackConfig().')
+    }
     // get raw config
     let config = chainableConfig.toConfig()
     // apply raw config fns
@@ -153,7 +194,7 @@ module.exports = class Service {
     return config
   }
 
-  loadUserOptions (inlineOptions) {
+  loadUserOptions () {
     // vue.config.js
     let fileConfig, pkgConfig, resolved, resovledFrom
     const configPath = (
@@ -202,7 +243,7 @@ module.exports = class Service {
       resolved = pkgConfig
       resovledFrom = '"vue" field in package.json'
     } else {
-      resolved = inlineOptions || {}
+      resolved = this.inlineOptions || {}
       resovledFrom = 'inline options'
     }
 

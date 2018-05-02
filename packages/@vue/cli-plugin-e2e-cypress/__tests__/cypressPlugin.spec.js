@@ -14,5 +14,5 @@ test('should work', async () => {
   config.videoRecording = false
   await project.write('cypress.json', JSON.stringify(config))
 
-  await project.run(`vue-cli-service e2e`)
+  await project.run(`vue-cli-service test:e2e --headless`)
 })

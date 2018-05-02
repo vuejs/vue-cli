@@ -8,9 +8,9 @@ function removeArg (rawArgs, arg) {
 }
 
 module.exports = (api, options) => {
-  api.registerCommand('e2e', {
+  api.registerCommand('test:e2e', {
     description: 'run e2e tests with nightwatch',
-    usage: 'vue-cli-service e2e [options]',
+    usage: 'vue-cli-service test:e2e [options]',
     options: {
       '--url': 'run e2e tests against given url instead of auto-starting dev server',
       '--config': 'use custom nightwatch config file (overrides internals)',
@@ -27,7 +27,7 @@ module.exports = (api, options) => {
 
     const serverPromise = args.url
       ? Promise.resolve({ url: args.url })
-      : api.service.run('serve', { mode: args.mode || 'production' })
+      : api.service.run('serve')
 
     return serverPromise.then(({ server, url }) => {
       // expose dev server url to tests
@@ -67,4 +67,8 @@ module.exports = (api, options) => {
       return runner
     })
   })
+}
+
+module.exports.defaultModes = {
+  'test:e2e': 'production'
 }

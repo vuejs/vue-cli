@@ -2,7 +2,7 @@ module.exports = api => {
   api.render('./template')
   api.extendPackage({
     scripts: {
-      test: 'vue-cli-service test'
+      'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
       '@vue/test-utils': '^1.0.0-beta.10'
@@ -31,7 +31,7 @@ module.exports = api => {
       'jest-serializer-vue'
     ],
     'testMatch': [
-      '<rootDir>/(tests/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))'
+      '<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))'
     ]
   }
 

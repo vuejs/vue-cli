@@ -4,14 +4,14 @@
 
 ## Injected Commands
 
-- **`vue-cli-service test`**
+- **`vue-cli-service test:unit`**
 
   Run unit tests with [mocha-webpack](https://github.com/zinserjan/mocha-webpack) + [chai](http://chaijs.com/).
 
   **Note the tests are run inside Node.js with browser environment simulated with JSDOM.**
 
   ```
-  Usage: vue-cli-service test [options] [...files]
+  Usage: vue-cli-service test:unit [options] [...files]
 
   Options:
 
@@ -31,6 +31,5 @@
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-unit-mocha
-vue invoke unit-mocha
+vue add unit-mocha
 ```

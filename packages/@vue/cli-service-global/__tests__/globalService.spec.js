@@ -1,10 +1,9 @@
 jest.setTimeout(40000)
 
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const portfinder = require('portfinder')
 const { createServer } = require('http-server')
-const mkdirp = require('mkdirp')
 const execa = require('execa')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
@@ -12,7 +11,7 @@ const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 const cwd = path.resolve(__dirname, 'temp')
 const binPath = require.resolve('@vue/cli/bin/vue')
 const sleep = n => new Promise(resolve => setTimeout(resolve, n))
-const write = (file, content) => fs.writeFileSync(path.join(cwd, file), content)
+const write = (file, content) => fs.writeFile(path.join(cwd, file), content)
 
 const entryVue = fs.readFileSync(path.resolve(__dirname, 'entry.vue'), 'utf-8')
 
@@ -23,11 +22,11 @@ import App from './Other.vue'
 new Vue({ render: h => h(App) }).$mount('#app')
 `.trim()
 
-beforeAll(() => {
-  mkdirp.sync(cwd)
-  write('App.vue', entryVue)
-  write('Other.vue', entryVue)
-  write('foo.js', entryJs)
+beforeAll(async () => {
+  await fs.ensureDir(cwd)
+  await write('App.vue', entryVue)
+  await write('Other.vue', entryVue)
+  await write('foo.js', entryJs)
 })
 
 test('global serve', async () => {

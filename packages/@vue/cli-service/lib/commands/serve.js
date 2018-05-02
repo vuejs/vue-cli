@@ -1,13 +1,11 @@
 const {
   info,
-  error,
   hasYarn,
   openBrowser,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
 
 const defaults = {
-  mode: 'development',
   host: '0.0.0.0',
   port: 8080,
   https: false
@@ -19,15 +17,13 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service serve [options]',
     options: {
       '--open': `open browser on server start`,
-      '--mode': `specify env mode (default: ${defaults.mode})`,
+      '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`
     }
-  }, args => {
+  }, async function serve (args) {
     info('Starting development server...')
-
-    api.setMode(args.mode || defaults.mode)
 
     // although this is primarily a dev server, it is possible that we
     // are running it in a mode with a production env, e.g. in E2E tests.
@@ -41,53 +37,117 @@ module.exports = (api, options) => {
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
 
+    // load user devServer options
     const projectDevServerOptions = options.devServer || {}
+
+    // resolve webpack config
+    const webpackConfig = api.resolveWebpackConfig()
+
+    // expose advanced stats
+    if (args.dashboard) {
+      const DashboardPlugin = require('../webpack/DashboardPlugin')
+      ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
+        type: 'serve'
+      }))
+    }
+
+    // inject dev & hot-reload middleware entries
+    if (!isProduction) {
+      const devClients = [
+        // dev server client
+        require.resolve(`webpack-dev-server/client`),
+        // hmr client
+        require.resolve(projectDevServerOptions.hotOnly
+          ? 'webpack/hot/only-dev-server'
+          : 'webpack/hot/dev-server')
+        // TODO custom overlay client
+        // `@vue/cli-overlay/dist/client`
+      ]
+      if (process.env.APPVEYOR) {
+        devClients.push(`webpack/hot/poll?500`)
+      }
+      // inject dev/hot client
+      addDevClientToEntry(webpackConfig, devClients)
+    }
+
+    // create compiler
+    const compiler = webpack(webpackConfig)
+
+    if (!process.env.VUE_CLI_TEST) {
+      compiler.apply(new webpack.ProgressPlugin())
+    }
+
+    // resolve server options
     const useHttps = args.https || projectDevServerOptions.https || defaults.https
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
+    const port = await portfinder.getPortPromise()
 
-    const portPromise = portfinder.getPortPromise()
-    return portPromise.then(port => new Promise((resolve, reject) => {
-      const webpackConfig = api.resolveWebpackConfig()
+    const urls = prepareURLs(
+      useHttps ? 'https' : 'http',
+      host,
+      port
+    )
 
-      // Expose advanced stats
-      if (args.dashboard) {
-        const DashboardPlugin = require('../webpack/DashboardPlugin')
-        ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
-          type: 'serve'
-        }))
+    const proxySettings = prepareProxy(
+      projectDevServerOptions.proxy,
+      api.resolve('public')
+    )
+
+    // create server
+    const server = new WebpackDevServer(compiler, Object.assign({
+      clientLogLevel: 'none',
+      historyApiFallback: {
+        disableDotRule: true
+      },
+      contentBase: api.resolve('public'),
+      watchContentBase: !isProduction,
+      hot: !isProduction,
+      quiet: true,
+      compress: isProduction,
+      publicPath: '/',
+      overlay: isProduction // TODO disable this
+        ? false
+        : { warnings: false, errors: true }
+    }, projectDevServerOptions, {
+      https: useHttps,
+      proxy: proxySettings,
+      before (app) {
+        // launch editor support.
+        // this works with vue-devtools & @vue/cli-overlay
+        app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
+          `To specify an editor, sepcify the EDITOR env variable or ` +
+          `add "editor" field to your Vue project config.\n`
+        )))
+        // allow other plugins to register middlewares, e.g. PWA
+        api.service.devServerConfigFns.forEach(fn => fn(app))
+        // apply in project middlewares
+        projectDevServerOptions.before && projectDevServerOptions.before(app)
       }
+    }))
 
-      const urls = prepareURLs(
-        useHttps ? 'https' : 'http',
-        host,
-        port
-      )
+    ;['SIGINT', 'SIGTERM'].forEach(signal => {
+      process.on(signal, () => {
+        server.close(() => {
+          process.exit(0)
+        })
+      })
+    })
 
-      if (!isProduction) {
-        const devClients = [
-          // dev server client
-          require.resolve(`webpack-dev-server/client`),
-          // hmr client
-          require.resolve(projectDevServerOptions.hotOnly
-            ? 'webpack/hot/only-dev-server'
-            : 'webpack/hot/dev-server')
-          // TODO custom overlay client
-          // `@vue/cli-overlay/dist/client`
-        ]
-        if (process.env.APPVEYOR) {
-          devClients.push(`webpack/hot/poll?500`)
+    // on appveyor, killing the process with SIGTERM causes execa to
+    // throw error
+    if (process.env.VUE_CLI_TEST) {
+      process.stdin.on('data', data => {
+        if (data.toString() === 'close') {
+          console.log('got close signal!')
+          server.close(() => {
+            process.exit(0)
+          })
         }
-        // inject dev/hot client
-        addDevClientToEntry(webpackConfig, devClients)
-      }
+      })
+    }
 
-      const compiler = webpack(webpackConfig)
-
-      if (!process.env.VUE_CLI_TEST) {
-        compiler.apply(new webpack.ProgressPlugin())
-      }
-
+    return new Promise((resolve, reject) => {
       // log instructions & open browser on first compilation complete
       let isFirstCompile = true
       compiler.plugin('done', stats => {
@@ -143,69 +203,12 @@ module.exports = (api, options) => {
         }
       })
 
-      const proxySettings = prepareProxy(
-        projectDevServerOptions.proxy,
-        api.resolve('public')
-      )
-
-      const server = new WebpackDevServer(compiler, Object.assign({
-        clientLogLevel: 'none',
-        historyApiFallback: {
-          disableDotRule: true
-        },
-        contentBase: api.resolve('public'),
-        watchContentBase: !isProduction,
-        hot: !isProduction,
-        quiet: true,
-        compress: isProduction,
-        publicPath: '/',
-        overlay: isProduction // TODO disable this
-          ? false
-          : { warnings: false, errors: true }
-      }, projectDevServerOptions, {
-        https: useHttps,
-        proxy: proxySettings,
-        before (app) {
-          // launch editor support.
-          // this works with vue-devtools & @vue/cli-overlay
-          app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
-            `To specify an editor, sepcify the EDITOR env variable or ` +
-            `add "editor" field to your Vue project config.\n`
-          )))
-          // allow other plugins to register middlewares, e.g. PWA
-          api.service.devServerConfigFns.forEach(fn => fn(app))
-          // apply in project middlewares
-          projectDevServerOptions.before && projectDevServerOptions.before(app)
-        }
-      }))
-
-      ;['SIGINT', 'SIGTERM'].forEach(signal => {
-        process.on(signal, () => {
-          server.close(() => {
-            process.exit(0)
-          })
-        })
-      })
-
-      // on appveyor, killing the process with SIGTERM causes execa to
-      // throw error
-      if (process.env.VUE_CLI_TEST) {
-        process.stdin.on('data', data => {
-          if (data.toString() === 'close') {
-            console.log('got close signal!')
-            server.close(() => {
-              process.exit(0)
-            })
-          }
-        })
-      }
-
       server.listen(port, host, err => {
         if (err) {
-          return error(err)
+          reject(err)
         }
       })
-    }))
+    })
   })
 }
 
@@ -220,4 +223,8 @@ function addDevClientToEntry (config, devClient) {
   } else {
     config.entry = devClient.concat(entry)
   }
+}
+
+module.exports.defaultModes = {
+  serve: 'development'
 }

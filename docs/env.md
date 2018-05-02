@@ -30,14 +30,14 @@ Loaded variables will become available to all `vue-cli-service` commands, plugin
 **Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
 
 - `development` is used by `vue-cli-service serve`
-- `production` is used by `vue-cli-service build`
-- `test` is used by `vue-cli-service test`
+- `production` is used by `vue-cli-service build` and `vue-cli-service test:e2e`
+- `test` is used by `vue-cli-service test:unit`
 
 Note that a mode is different from `NODE_ENV`, as a mode can contain multiple environment variables. That said, each mode does set `NODE_ENV` to the same value by default - for example, `NODE_ENV` will be set to `"development"` in development mode.
 
 You can set environment variables only available to a certain mode by postfixing the `.env` file. For example, if you create a file named `.env.development` in your project root, then the variables declared in that file will only be loaded in development mode.
 
-Passing the `--mode` option flag with [build command](https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#build) will use that mode's environment variables in the build. For example, if you want to use development variables in the build command, add this to your package.json scripts:
+You can overwrite the default mode used for a command by passing the `--mode` option flag. For example, if you want to use development variables in the build command, add this to your `package.json` scripts:
 
 ```
 "dev-build": "vue-cli-service build --mode development",

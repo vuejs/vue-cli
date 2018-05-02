@@ -4,7 +4,7 @@
 
 ## Injected Commands
 
-- **`vue-cli-service e2e`**
+- **`vue-cli-service test:e2e`**
 
   run e2e tests with [NightwatchJS](nightwatchjs.org).
 
@@ -17,6 +17,8 @@
   -t, --test   sepcify a test to run by name
   -f, --filter glob to filter tests by filename
   ```
+
+  > Note: this plugin currently uses Nightwatch v0.9.x. We are waiting for Nightwatch 1.0 to stabilize before upgrading.
 
   Additionally, [all Nightwatch CLI options are also supported](https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js).
 
@@ -31,6 +33,5 @@ Consult Nightwatch docs for [configuration options](http://nightwatchjs.org/gett
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-e2e-nightwatch
-vue invoke e2e-nightwatch
+vue add e2e-nightwatch
 ```
