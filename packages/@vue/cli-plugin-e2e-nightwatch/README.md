@@ -6,7 +6,7 @@
 
 - **`vue-cli-service test:e2e`**
 
-  run e2e tests with [NightwatchJS](nightwatchjs.org).
+  run e2e tests with [NightwatchJS](http://nightwatchjs.org).
 
   Options:
 
