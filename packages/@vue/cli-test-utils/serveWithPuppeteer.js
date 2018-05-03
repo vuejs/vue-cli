@@ -1,7 +1,7 @@
 const stripAnsi = require('strip-ansi')
 const launchPuppeteer = require('./launchPuppeteer')
 
-module.exports = async function serveWithPuppeteer (serve, test) {
+module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
   let activeBrowser
   let activeChild
 
@@ -43,22 +43,27 @@ module.exports = async function serveWithPuppeteer (serve, test) {
           // when running test in vscode terminal(zsh)
           url = stripAnsi(url)
 
-          // start browser
-          const { page, browser } = await launchPuppeteer(url)
-          activeBrowser = browser
+          if (noPuppeteer) {
+            await test({ url })
+          } else {
+            // start browser
+            const { page, browser } = await launchPuppeteer(url)
+            activeBrowser = browser
 
-          const helpers = createHelpers(page)
+            const helpers = createHelpers(page)
 
-          await test({
-            browser,
-            page,
-            url,
-            nextUpdate,
-            helpers
-          })
+            await test({
+              browser,
+              page,
+              url,
+              nextUpdate,
+              helpers
+            })
 
-          await browser.close()
-          activeBrowser = null
+            await browser.close()
+            activeBrowser = null
+          }
+
           // on appveyor, the spawned server process doesn't exit
           // and causes the build to hang.
           child.stdin.write('close')
