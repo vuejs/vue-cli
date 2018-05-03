@@ -316,6 +316,11 @@ async function open (id, context) {
     return null
   }
 
+  if (!fs.existsSync(project.path)) {
+    log('Project folder not found', id, project.path)
+    return null
+  }
+
   lastProject = currentProject
   currentProject = project
   cwd.set(project.path, context)
