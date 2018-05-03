@@ -1,3 +1,4 @@
+const fs = require('fs-extra')
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
@@ -238,6 +239,8 @@ module.exports = class Creator {
         error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
         throw e
       }
+    } else if (name.endsWith('.json')) {
+      preset = await fs.readJson(name)
     } else {
       preset = savedPresets[name]
     }
