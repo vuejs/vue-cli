@@ -38,7 +38,7 @@
     "download-git-repo": "^1.0.2",
     "ejs": "^2.5.7",
     "execa": "^0.8.0",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.0",
     "globby": "^8.0.1",
     "import-global": "^0.1.0",
     "inquirer": "^4.0.1",

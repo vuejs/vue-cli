@@ -351,7 +351,8 @@ module.exports = class Creator extends EventEmitter {
         name: 'save',
         when: isManualMode,
         type: 'confirm',
-        message: 'Save this as a preset for future projects?'
+        message: 'Save this as a preset for future projects?',
+        default: false
       },
       {
         name: 'saveName',
