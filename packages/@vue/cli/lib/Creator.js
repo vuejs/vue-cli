@@ -1,3 +1,4 @@
+const fs = require('fs-extra')
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
@@ -14,7 +15,6 @@ const writeFileTree = require('./util/writeFileTree')
 const formatFeatures = require('./util/formatFeatures')
 const setupDevProject = require('./util/setupDevProject')
 const fetchRemotePreset = require('./util/fetchRemotePreset')
-const readLocalPreset = require('./util/readLocalPreset')
 
 const {
   defaults,
@@ -240,7 +240,7 @@ module.exports = class Creator {
         throw e
       }
     } else if (name.endsWith('.json')) {
-      preset = await readLocalPreset(this.context, name)
+      preset = await fs.readJson(name)
     } else {
       preset = savedPresets[name]
     }
