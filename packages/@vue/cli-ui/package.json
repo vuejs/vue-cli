@@ -26,7 +26,7 @@
     "deepmerge": "^2.0.1",
     "express-history-api-fallback": "^2.2.1",
     "file-icons-js": "^1.0.3",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.0",
     "graphql": "^0.13.0",
     "graphql-tag": "^2.5.0",
     "graphql-type-json": "^0.2.0",
