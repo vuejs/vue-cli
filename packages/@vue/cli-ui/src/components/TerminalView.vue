@@ -178,8 +178,6 @@ export default {
     },
 
     async fit () {
-      let parent = this.$el
-      let el = this.$refs.render
       let term = this.$_terminal
       term.element.style.display = 'none'
 

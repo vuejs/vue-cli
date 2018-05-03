@@ -45,9 +45,9 @@ export default {
       const groupMap = {}
       const groups = []
       this.prompts.forEach(prompt => {
-        let group = groups[prompt.group]
+        let group = groupMap[prompt.group]
         if (!group) {
-          group = groups[prompt.group] = {
+          group = groupMap[prompt.group] = {
             id: prompt.group,
             prompts: []
           }

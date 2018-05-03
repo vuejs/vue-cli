@@ -68,7 +68,7 @@ export default {
           id: this.task.id
         }
       })
-    },
+    }
   }
 }
 </script>

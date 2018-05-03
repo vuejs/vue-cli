@@ -71,4 +71,3 @@ export default {
   .content-view /deep/ > .content
     overflow-y hidden
 </style>
-
