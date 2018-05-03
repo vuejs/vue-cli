@@ -43,7 +43,7 @@
     "terminate": "^2.1.0",
     "vue": "^2.5.16",
     "vue-apollo": "^3.0.0-beta.5",
-    "vue-cli-plugin-apollo": "^0.7.10",
+    "vue-cli-plugin-apollo": "^0.8.0",
     "vue-i18n": "^7.6.0",
     "vue-instantsearch": "^1.5.1",
     "vue-meta": "^1.5.0",
