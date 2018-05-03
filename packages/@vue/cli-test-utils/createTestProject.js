@@ -15,6 +15,10 @@ module.exports = function createTestProject (name, preset, cwd, initGit) {
     return fs.existsSync(path.resolve(projectRoot, file))
   }
 
+  if (has(projectRoot)) {
+    console.warn(`An existing test project already exists for ${name}. May get unexpected test results due to project re-use`)
+  }
+
   const write = (file, content) => {
     const targetPath = path.resolve(projectRoot, file)
     const dir = path.dirname(targetPath)
