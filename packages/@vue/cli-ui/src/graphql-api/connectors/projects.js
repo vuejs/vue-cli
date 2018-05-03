@@ -312,7 +312,7 @@ async function open (id, context) {
   }).value()
 
   if (!project) {
-    console.warn(`Project '${id}' not found`)
+    log('Project not found', id)
     return null
   }
 
@@ -359,13 +359,19 @@ function setFavorite ({ id, favorite }, context) {
 }
 
 // Open last project
-{
+async function autoOpenLastProject () {
   const context = getContext(null)
   const id = context.db.get('config.lastOpenProject').value()
   if (id) {
-    open(id, context)
+    try {
+      await open(id, context)
+    } catch (e) {
+      log(`Project can't be auto-opened`, id)
+    }
   }
 }
+
+autoOpenLastProject()
 
 module.exports = {
   list,
