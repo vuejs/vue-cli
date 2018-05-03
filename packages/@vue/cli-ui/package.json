@@ -47,7 +47,8 @@
     "vue-instantsearch": "^1.5.1",
     "vue-meta": "^1.5.0",
     "vue-router": "^3.0.1",
-    "xterm": "^3.2.0"
+    "xterm": "^3.2.0",
+    "watch": "^1.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.9",
@@ -58,8 +59,7 @@
     "lint-staged": "^6.0.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue-template-compiler": "^2.5.16",
-    "watch": "^1.0.2"
+    "vue-template-compiler": "^2.5.16"
   },
   "browserslist": [
     "> 1%",
