@@ -13,7 +13,7 @@ const defaults = {
 module.exports = (api, options) => {
   api.registerCommand('serve', {
     description: 'start development server',
-    usage: 'vue-cli-service serve [options]',
+    usage: 'vue-cli-service serve [options] [entry]',
     options: {
       '--open': `open browser on server start`,
       '--mode': `specify env mode (default: development)`,
@@ -41,6 +41,13 @@ module.exports = (api, options) => {
 
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
+
+    const entry = args._[0]
+    if (entry) {
+      webpackConfig.entry = {
+        app: api.resolve(entry)
+      }
+    }
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
