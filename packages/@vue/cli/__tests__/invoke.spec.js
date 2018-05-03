@@ -98,7 +98,7 @@ test('invoke with existing files', async () => {
 })
 
 test('invoke with existing files (yaml)', async () => {
-  const project = await create(`invoke-existing`, {
+  const project = await create(`invoke-existing-yaml`, {
     useConfigFiles: true,
     plugins: {
       '@vue/cli-plugin-babel': {},
