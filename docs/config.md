@@ -25,6 +25,10 @@ module.exports = {
   // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
   compiler: false,
 
+  // babel-loader skips node_module deps by default.
+  // explicitly transpile a dependency with this option.
+  transpileDependencies: [/* string or regex */],
+
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   chainWebpack: () => {},

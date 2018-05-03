@@ -4,6 +4,7 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string(),
   outputDir: joi.string(),
   compiler: joi.boolean(),
+  transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
   vueLoader: joi.object(),
   parallel: joi.boolean(),
@@ -54,6 +55,9 @@ exports.defaults = () => ({
 
   // boolean, use full build?
   compiler: false,
+
+  // deps to transpile
+  transpileDependencies: [/* string or regex */],
 
   // vue-loader options
   vueLoader: {

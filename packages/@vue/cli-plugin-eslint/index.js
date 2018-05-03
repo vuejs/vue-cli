@@ -5,9 +5,8 @@ module.exports = (api, { lintOnSave }) => {
       webpackConfig.module
         .rule('eslint')
           .pre()
-          .include
-            .add(api.resolve('src'))
-            .add(api.resolve('tests'))
+          .exclude
+            .add(/node_modules/)
             .end()
           .test(/\.(vue|(j|t)sx?)$/)
           .use('eslint-loader')

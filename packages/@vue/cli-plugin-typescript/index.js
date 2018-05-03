@@ -19,10 +19,6 @@ module.exports = (api, {
     const tsRule = config.module
       .rule('ts')
         .test(/\.tsx?$/)
-        .include
-          .add(api.resolve('src'))
-          .add(api.resolve('tests'))
-          .end()
 
     const vueLoader = config.module
       .rule('vue')
