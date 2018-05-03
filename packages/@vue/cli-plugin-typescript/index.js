@@ -40,6 +40,20 @@ module.exports = (api, {
         options.loaders = options.loaders || {}
         options.loaders.ts = options.loaders.ts || []
         options.loaders.ts.push(loader)
+        options.loaders.tsx = options.loaders.tsx || []
+        if (loader.loader === 'ts-loader') {
+          // for TSX need to append tsx suffix
+          options.loaders.tsx.push({
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              appendTsxSuffixTo: [/\.vue$/],
+              happyPackMode: useThreads
+            }
+          })
+        } else {
+          options.loaders.tsx.push(loader)
+        }
         return options
       })
     }
