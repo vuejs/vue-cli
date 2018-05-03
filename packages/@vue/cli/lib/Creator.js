@@ -229,7 +229,9 @@ module.exports = class Creator {
     let preset
     const savedPresets = loadOptions().presets || {}
 
-    if (name.includes('/')) {
+    if (name.endsWith('.json')) {
+      preset = await fs.readJson(name)
+    } else if (name.includes('/')) {
       logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
       try {
         preset = await fetchRemotePreset(name, clone)
@@ -239,8 +241,6 @@ module.exports = class Creator {
         error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
         throw e
       }
-    } else if (name.endsWith('.json')) {
-      preset = await fs.readJson(name)
     } else {
       preset = savedPresets[name]
     }
