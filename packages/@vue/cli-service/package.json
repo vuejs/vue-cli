@@ -57,7 +57,7 @@
     "thread-loader": "^1.1.5",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
-    "vue-loader": "^15.0.8",
+    "vue-loader": "^15.0.9",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^3.10.0",
     "webpack-chain": "^4.6.0",
