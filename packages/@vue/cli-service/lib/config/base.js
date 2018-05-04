@@ -37,14 +37,26 @@ module.exports = (api, options) => {
     webpackConfig.module
       .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
 
-    // js is handled by cli-plugin-bable
+    // js is handled by cli-plugin-bable ---------------------------------------
+
+    // vue-loader --------------------------------------------------------------
 
     webpackConfig.module
       .rule('vue')
         .test(/\.vue$/)
         .use('vue-loader')
           .loader('vue-loader')
-          .options(Object.assign({}, options.vueLoader))
+          .options({
+            compilerOpitons: {
+              preserveWhitespace: false
+            }
+          })
+
+    webpackConfig
+      .plugin('vue-loader')
+      .use(require('vue-loader/lib/plugin'))
+
+    // static assets -----------------------------------------------------------
 
     webpackConfig.module
       .rule('images')
@@ -86,6 +98,17 @@ module.exports = (api, options) => {
             limit: inlineLimit,
             name: `fonts/[name].[hash:8].[ext]`
           })
+
+    // Other common pre-processors ---------------------------------------------
+
+    webpackConfig.module
+      .rule('pug')
+      .test(/\.pug$/)
+      .use('pug-plain-loader')
+        .loader('pug-plain-loader')
+        .end()
+
+    // shims
 
     webpackConfig.node
       .merge({

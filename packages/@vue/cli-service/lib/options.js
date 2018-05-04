@@ -6,7 +6,6 @@ const schema = createSchema(joi => joi.object({
   compiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
-  vueLoader: joi.object(),
   parallel: joi.boolean(),
   devServer: joi.object(),
   dll: joi.alternatives().try(
@@ -58,15 +57,6 @@ exports.defaults = () => ({
 
   // deps to transpile
   transpileDependencies: [/* string or regex */],
-
-  // vue-loader options
-  vueLoader: {
-    preserveWhitespace: false,
-    template: {
-      // for pug
-      doctype: 'html'
-    }
-  },
 
   // sourceMap for production build?
   productionSourceMap: true,

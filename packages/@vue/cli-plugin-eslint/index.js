@@ -7,6 +7,7 @@ module.exports = (api, { lintOnSave }) => {
           .pre()
           .exclude
             .add(/node_modules/)
+            .add(require('path').dirname(require.resolve('@vue/cli-service')))
             .end()
           .test(/\.(vue|(j|t)sx?)$/)
           .use('eslint-loader')

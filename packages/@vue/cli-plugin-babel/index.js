@@ -42,27 +42,5 @@ module.exports = (api, {
     jsRule
       .use('babel-loader')
         .loader('babel-loader')
-
-    webpackConfig.module
-      .rule('vue')
-        .use('vue-loader')
-        .tap(options => {
-          options.loaders = options.loaders || {}
-          options.loaders.js = [
-            {
-              loader: 'cache-loader',
-              options: { cacheDirectory }
-            }
-          ]
-          if (useThreads) {
-            options.loaders.js.push({
-              loader: 'thread-loader'
-            })
-          }
-          options.loaders.js.push({
-            loader: 'babel-loader'
-          })
-          return options
-        })
   })
 }

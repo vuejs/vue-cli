@@ -60,15 +60,6 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
           presets: [require.resolve('@vue/babel-preset-app')]
         }
 
-        // set inline vue-loader options
-        config.module
-          .rule('vue')
-            .use('vue-loader')
-              .tap(options => {
-                options.loaders.js[1].options = babelOptions
-                return options
-              })
-
         // set inline babel options
         config.module
           .rule('js')

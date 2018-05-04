@@ -41,12 +41,13 @@ module.exports = (api, options) => {
     } = require('@vue/cli-shared-utils')
 
     log()
+    const mode = api.service.mode
     if (args.target === 'app') {
-      logWithSpinner(`Building for ${args.mode}...`)
+      logWithSpinner(`Building for ${mode}...`)
     } else {
       const buildMode = buildModes[args.target]
       if (buildMode) {
-        logWithSpinner(`Building for ${args.mode} as ${buildMode}...`)
+        logWithSpinner(`Building for ${mode} as ${buildMode}...`)
       } else {
         throw new Error(`Unknown build target: ${args.target}`)
       }
