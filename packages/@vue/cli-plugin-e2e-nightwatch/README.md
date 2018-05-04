@@ -14,7 +14,7 @@
   --url        run e2e tests against given url instead of auto-starting dev server
   --config     use custom nightwatch config file (overrides internals)
   -e, --env    specify comma-delimited browser envs to run in (default: chrome)
-  -t, --test   sepcify a test to run by name
+  -t, --test   specify a test to run by name
   -f, --filter glob to filter tests by filename
   ```
 
