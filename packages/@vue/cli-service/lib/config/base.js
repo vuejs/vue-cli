@@ -48,7 +48,7 @@ module.exports = (api, options) => {
           .loader('vue-loader')
           .options({
             compilerOpitons: {
-              preserveWhitespace: false
+              preserveWhitespace: options.preserveWhitespace
             }
           })
 

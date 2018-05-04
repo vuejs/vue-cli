@@ -5,6 +5,7 @@ const schema = createSchema(joi => joi.object({
   outputDir: joi.string(),
   compiler: joi.boolean(),
   transpileDependencies: joi.array(),
+  preserveWhitespace: joi.boolean(),
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
@@ -57,6 +58,9 @@ exports.defaults = () => ({
 
   // deps to transpile
   transpileDependencies: [/* string or regex */],
+
+  // whether to preserve whitespaces between elements
+  preserveWhitespace: false,
 
   // sourceMap for production build?
   productionSourceMap: true,
