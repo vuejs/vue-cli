@@ -1,6 +1,5 @@
 module.exports = function lint (args = {}, api, silent) {
-  process.chdir(api.resolve('.'))
-
+  const cwd = api.resolve('.')
   const fs = require('fs')
   const path = require('path')
   const globby = require('globby')
@@ -79,7 +78,7 @@ module.exports = function lint (args = {}, api, silent) {
 
   const stripTsExtension = str => str.replace(/\.vue\.ts\b/g, '.vue')
 
-  return globby(files).then(files => {
+  return globby(files, { cwd }).then(files => {
     return Promise.all(files.map(lint))
   }).then(() => {
     if (silent) return
