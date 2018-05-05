@@ -19,7 +19,9 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
-      '--https': `use https (default: ${defaults.https})`
+      '--https': `use https (default: ${defaults.https})`,
+      '--cert': 'Specify a cert to enable https. Must be paired with a key',
+      '--key': 'Specify a key to enable https. Must be paired with a cert'
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -78,8 +80,19 @@ module.exports = (api, options) => {
     // resolve server options
     const useHttps = args.https || projectDevServerOptions.https || defaults.https
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
+    const cert = args.cert || process.env.CERT || projectDevServerOptions.cert || false
+    const key = args.key || process.env.KEY || projectDevServerOptions.key || false
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
     const port = await portfinder.getPortPromise()
+
+    let https = useHttps
+
+    if (cert && key) {
+      https = {
+        cert: cert,
+        key: key
+      }
+    }
 
     const urls = prepareURLs(
       useHttps ? 'https' : 'http',
@@ -108,7 +121,7 @@ module.exports = (api, options) => {
         ? false
         : { warnings: false, errors: true }
     }, projectDevServerOptions, {
-      https: useHttps,
+      https: https,
       proxy: proxySettings,
       before (app) {
         // launch editor support.
