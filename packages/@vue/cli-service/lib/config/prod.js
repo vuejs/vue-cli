@@ -5,7 +5,7 @@ module.exports = (api, options) => {
         .devtool('source-map')
         .output
           .filename(`js/[name].[chunkhash:8].js`)
-          .chunkFilename(`js/[id].[chunkhash:8].js`)
+          .chunkFilename(`js/[name].[id].[chunkhash:8].js`)
 
       // keep module.id stable when vendor modules does not change
       webpackConfig
@@ -20,11 +20,11 @@ module.exports = (api, options) => {
       // optimize CSS (dedupe)
       webpackConfig
         .plugin('optimize-css')
-          .use(require('optimize-css-assets-webpack-plugin'), [
-            options.productionSourceMap && options.cssSourceMap
+          .use(require('optimize-css-assets-webpack-plugin'), [{
+            cssProcessorOptions: options.productionSourceMap && options.cssSourceMap
               ? { safe: true, map: { inline: false }}
               : { safe: true }
-          ])
+          }])
 
       // minify JS
       const UglifyPlugin = require('uglifyjs-webpack-plugin')

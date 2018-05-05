@@ -2,26 +2,93 @@ const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
 const globby = require('globby')
+const merge = require('deepmerge')
+const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
+const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
+const stringifyJS = require('javascript-stringify')
+const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
 const isObject = val => val && typeof val === 'object'
 
-module.exports = class GeneratorAPI {
+class GeneratorAPI {
+  /**
+   * @param {string} id - Id of the owner plugin
+   * @param {Generator} generator - The invoking Generator instance
+   * @param {object} options - generator options passed to this plugin
+   * @param {object} rootOptions - root options (the entire preset)
+   */
   constructor (id, generator, options, rootOptions) {
     this.id = id
     this.generator = generator
     this.options = options
     this.rootOptions = rootOptions
+
+    this.pluginsData = generator.plugins
+      .filter(({ id }) => id !== `@vue/cli-service`)
+      .map(({ id }) => ({
+        name: toShortPluginId(id),
+        link: getPluginLink(id)
+      }))
   }
 
-  injectFileMiddleware (middleware) {
+  /**
+   * Resolves the data when rendering templates.
+   *
+   * @private
+   */
+  _resolveData (additionalData) {
+    return Object.assign({
+      options: this.options,
+      rootOptions: this.rootOptions,
+      plugins: this.pluginsData
+    }, additionalData)
+  }
+
+  /**
+   * Inject a file processing middleware.
+   *
+   * @private
+   * @param {FileMiddleware} middleware - A middleware function that receives the
+   *   virtual files tree object, and an ejs render function. Can be async.
+   */
+  _injectFileMiddleware (middleware) {
     this.generator.fileMiddlewares.push(middleware)
   }
 
-  extendPackage (fields, options = { merge: true }) {
+  /**
+   * Resolve path for a project.
+   *
+   * @param {string} _path - Relative path from project root
+   * @return {string} The resolved absolute path.
+   */
+  resolve (_path) {
+    return path.resolve(this.generator.context, _path)
+  }
+
+  /**
+   * Check if the project has a given plugin.
+   *
+   * @param {string} id - Plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
+   * @return {boolean}
+   */
+  hasPlugin (id) {
+    return this.generator.hasPlugin(id)
+  }
+
+  /**
+   * Extend the package.json of the project.
+   * Nested fields are deep-merged unless `{ merge: false }` is passed.
+   * Also resolves dependency conflicts between plugins.
+   * Tool configuration fields may be extracted into standalone files before
+   * files are written to disk.
+   *
+   * @param {object | () => object} fields - Fields to merge.
+   */
+  extendPackage (fields) {
     const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
     for (const key in toMerge) {
@@ -35,28 +102,36 @@ module.exports = class GeneratorAPI {
           value,
           this.generator.depSources
         )
-      } else if (!options.merge || !(key in pkg)) {
+      } else if (!(key in pkg)) {
         pkg[key] = value
       } else if (Array.isArray(value) && Array.isArray(existing)) {
         pkg[key] = existing.concat(value)
       } else if (isObject(value) && isObject(existing)) {
-        pkg[key] = Object.assign({}, existing, value)
+        pkg[key] = merge(existing, value)
       } else {
         pkg[key] = value
       }
     }
   }
 
-  render (fileDir, additionalData = {}, ejsOptions = {}) {
+  /**
+   * Render template files into the virtual files tree object.
+   *
+   * @param {string | object | FileMiddleware} source -
+   *   Can be one of:
+   *   - relative path to a directory;
+   *   - Object hash of { sourceTemplate: targetFile } mappings;
+   *   - a custom file middleware function.
+   * @param {object} [additionalData] - additional data available to templates.
+   * @param {object} [ejsOptions] - options for ejs.
+   */
+  render (source, additionalData = {}, ejsOptions = {}) {
     const baseDir = extractCallDir()
-    if (isString(fileDir)) {
-      fileDir = path.resolve(baseDir, fileDir)
-      this.injectFileMiddleware(async (files) => {
-        const data = Object.assign({
-          options: this.options,
-          rootOptions: this.rootOptions
-        }, additionalData)
-        const _files = await globby(['**/*'], { cwd: fileDir })
+    if (isString(source)) {
+      source = path.resolve(baseDir, source)
+      this._injectFileMiddleware(async (files) => {
+        const data = this._resolveData(additionalData)
+        const _files = await globby(['**/*'], { cwd: source })
         for (const rawPath of _files) {
           let filename = path.basename(rawPath)
           // dotfiles are ignored when published to npm, therefore in templates
@@ -65,7 +140,7 @@ module.exports = class GeneratorAPI {
             filename = `.${filename.slice(1)}`
           }
           const targetPath = path.join(path.dirname(rawPath), filename)
-          const sourcePath = path.resolve(fileDir, rawPath)
+          const sourcePath = path.resolve(source, rawPath)
           const content = renderFile(sourcePath, data, ejsOptions)
           // only set file if it's not all whitespace, or is a Buffer (binary files)
           if (Buffer.isBuffer(content) || /[^\s]/.test(content)) {
@@ -73,39 +148,56 @@ module.exports = class GeneratorAPI {
           }
         }
       })
-    } else if (isObject(fileDir)) {
-      this.injectFileMiddleware(files => {
-        const data = Object.assign({
-          options: this.options,
-          rootOptions: this.rootOptions
-        }, additionalData)
-        for (const targetPath in fileDir) {
-          const sourcePath = path.resolve(baseDir, fileDir[targetPath])
+    } else if (isObject(source)) {
+      this._injectFileMiddleware(files => {
+        const data = this._resolveData(additionalData)
+        for (const targetPath in source) {
+          const sourcePath = path.resolve(baseDir, source[targetPath])
           const content = renderFile(sourcePath, data, ejsOptions)
           if (Buffer.isBuffer(content) || content.trim()) {
             files[targetPath] = content
           }
         }
       })
-    } else if (isFunction(fileDir)) {
-      this.injectFileMiddleware(fileDir)
+    } else if (isFunction(source)) {
+      this._injectFileMiddleware(source)
     }
   }
 
+  /**
+   * Push a file middleware that will be applied after all normal file
+   * middelwares have been applied.
+   *
+   * @param {FileMiddleware} cb
+   */
   postProcessFiles (cb) {
     this.generator.postProcessFilesCbs.push(cb)
   }
 
+  /**
+   * Push a callback to be called when the files have been written to disk.
+   *
+   * @param {function} cb
+   */
   onCreateComplete (cb) {
     this.generator.completeCbs.push(cb)
   }
 
-  resolve (_path) {
-    return path.resolve(this.generator.context, _path)
+  /**
+   * Add a message to be printed when the generator exits (after any other standard messages).
+   *
+   * @param {} msg String or value to print after the generation is completed
+   * @param {('log'|'info'|'done'|'warn'|'error')} [type='log'] Type of message
+   */
+  exitLog (msg, type = 'log') {
+    this.generator.exitLogs.push({ id: this.id, msg, type })
   }
 
-  hasPlugin (id) {
-    return this.generator.hasPlugin(id)
+  /**
+   * convenience method for generating a js config file from json
+   */
+  genJSConfig (value) {
+    return `module.exports = ${stringifyJS(value, null, 2)}`
   }
 }
 
@@ -118,9 +210,49 @@ function extractCallDir () {
   return path.dirname(fileName)
 }
 
+const replaceBlockRE = /<%# REPLACE %>([^]*?)<%# END_REPLACE %>/g
+
 function renderFile (name, data, ejsOptions) {
   if (isBinary.sync(name)) {
     return fs.readFileSync(name) // return buffer
   }
-  return ejs.render(fs.readFileSync(name, 'utf-8'), data, ejsOptions)
+  const template = fs.readFileSync(name, 'utf-8')
+
+  // custom template inheritance via yaml front matter.
+  // ---
+  // extend: 'source-file'
+  // replace: !!js/regexp /some-regex/
+  // OR
+  // replace:
+  //   - !!js/regexp /foo/
+  //   - !!js/regexp /bar/
+  // ---
+  const parsed = yaml.loadFront(template)
+  const content = parsed.__content
+  let finalTemplate = content.trim() + `\n`
+  if (parsed.extend) {
+    const extendPath = path.isAbsolute(parsed.extend)
+      ? parsed.extend
+      : resolve.sync(parsed.extend, { basedir: path.dirname(name) })
+    finalTemplate = fs.readFileSync(extendPath, 'utf-8')
+    if (parsed.replace) {
+      if (Array.isArray(parsed.replace)) {
+        const replaceMatch = content.match(replaceBlockRE)
+        if (replaceMatch) {
+          const replaces = replaceMatch.map(m => {
+            return m.replace(replaceBlockRE, '$1').trim()
+          })
+          parsed.replace.forEach((r, i) => {
+            finalTemplate = finalTemplate.replace(r, replaces[i])
+          })
+        }
+      } else {
+        finalTemplate = finalTemplate.replace(parsed.replace, content.trim())
+      }
+    }
+  }
+
+  return ejs.render(finalTemplate, data, ejsOptions)
 }
+
+module.exports = GeneratorAPI

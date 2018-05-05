@@ -1,4 +1,4 @@
-jest.setTimeout(30000)
+jest.setTimeout(40000)
 
 const path = require('path')
 const portfinder = require('portfinder')
@@ -33,13 +33,13 @@ test('pwa', async () => {
   expect(index).toMatch(/<link rel=preload [^>]+vendor[^>]+\.js>/)
   // should not preload manifest because it's inlined
   expect(index).not.toMatch(/<link rel=preload [^>]+manifest[^>]+\.js>/)
-  // should inline manifest and wepback runtime
+  // should inline manifest and webpack runtime
   expect(index).toMatch('webpackJsonp')
 
   // PWA specific directives
   expect(index).toMatch(`<link rel=manifest href=/manifest.json>`)
   expect(index).toMatch(`<!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->`)
-  expect(index).toMatch(`<meta name=apple-mobile-web-app-capable content=yes>`)
+  expect(index).toMatch(`<meta name=apple-mobile-web-app-capable content=no>`)
 
   // should import service worker script
   const main = await project.read('src/main.js')
@@ -58,7 +58,8 @@ test('pwa', async () => {
   const launched = await launchPuppeteer(`http://localhost:${port}/`)
   browser = launched.browser
 
-  await new Promise(r => setTimeout(r, 500))
+  // workbox plugin fetches scripts from CDN so it takes a while...
+  await new Promise(r => setTimeout(r, process.env.CI ? 5000 : 2000))
   const logs = launched.logs
   expect(logs.some(msg => msg.match(/Content has been cached for offline use/))).toBe(true)
   expect(logs.some(msg => msg.match(/App is being served from cache by a service worker/))).toBe(true)

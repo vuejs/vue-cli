@@ -1,5 +1,4 @@
-const { URL } = require('url')
-const https = require('https')
+const request = require('./request')
 const chalk = require('chalk')
 const execa = require('execa')
 const readline = require('readline')
@@ -16,20 +15,18 @@ const registries = {
 }
 const taobaoDistURL = 'https://npm.taobao.org/dist'
 
-const ping = url => new Promise((resolve, reject) => {
-  const req = https.request({
-    hostname: new URL(url).hostname,
-    path: '/vue/latest'
-  }, () => {
-    resolve(url)
-  })
-  req.on('error', reject)
-  req.end()
-})
+async function ping (registry) {
+  await request.get(`${registry}/vue-cli-version-marker/latest`)
+  return registry
+}
+
+function removeSlash (url) {
+  return url.replace(/\/$/, '')
+}
 
 let checked
 let result
-const shouldUseTaobao = async (command) => {
+async function shouldUseTaobao () {
   // ensure this only gets called once.
   if (checked) return result
   checked = true
@@ -46,9 +43,9 @@ const shouldUseTaobao = async (command) => {
     return val
   }
 
-  const userCurrent = (await execa(command, ['config', 'get', 'registry'])).stdout
-  const defaultRegistry = registries[command]
-  if (userCurrent !== defaultRegistry) {
+  const userCurrent = (await execa(`npm`, ['config', 'get', 'registry'])).stdout
+  const defaultRegistry = registries.npm
+  if (removeSlash(userCurrent) !== removeSlash(defaultRegistry)) {
     // user has configured custom regsitry, respect that
     return save(false)
   }
@@ -56,6 +53,7 @@ const shouldUseTaobao = async (command) => {
     ping(defaultRegistry),
     ping(registries.taobao)
   ])
+
   if (faster !== registries.taobao) {
     // default is already faster
     return save(false)
@@ -67,7 +65,7 @@ const shouldUseTaobao = async (command) => {
     name: 'useTaobaoRegistry',
     type: 'confirm',
     message: chalk.yellow(
-      ` Your connection to the the default ${command} registry seems to be slow.\n` +
+      ` Your connection to the the default npm registry seems to be slow.\n` +
       `   Use ${chalk.cyan(registries.taobao)} for faster installation?`
     )
   }])
@@ -75,7 +73,7 @@ const shouldUseTaobao = async (command) => {
   return save(useTaobaoRegistry)
 }
 
-const toStartOfLine = stream => {
+function toStartOfLine (stream) {
   if (!chalk.supportsColor) {
     stream.write('\r')
     return
@@ -83,7 +81,7 @@ const toStartOfLine = stream => {
   readline.cursorTo(stream, 0)
 }
 
-const renderProgressBar = (curr, total) => {
+function renderProgressBar (curr, total) {
   const ratio = Math.min(Math.max(curr / total, 0), 1)
   const bar = ` ${curr}/${total}`
   const availableSpace = Math.max(0, process.stderr.columns - bar.length - 3)
@@ -95,19 +93,17 @@ const renderProgressBar = (curr, total) => {
   process.stderr.write(`[${complete}${incomplete}]${bar}`)
 }
 
-module.exports = async function installDeps (targetDir, command, cliRegistry) {
-  const args = []
-  if (command === 'npm') {
-    args.push('install', '--loglevel', 'error')
-  } else if (command === 'yarn') {
-    // do nothing
-  } else {
-    throw new Error(`unknown package manager: ${command}`)
+async function addRegistryToArgs (command, args, cliRegistry) {
+  if (command === 'yarn' && cliRegistry) {
+    throw new Error(
+      `Inline registry is not supported when using yarn. ` +
+      `Please run \`yarn config set registry ${cliRegistry}\` before running @vue/cli.`
+    )
   }
 
   const altRegistry = (
     cliRegistry || (
-      (await shouldUseTaobao(command))
+      (command === 'npm' && await shouldUseTaobao())
         ? registries.taobao
         : null
     )
@@ -115,15 +111,14 @@ module.exports = async function installDeps (targetDir, command, cliRegistry) {
 
   if (altRegistry) {
     args.push(`--registry=${altRegistry}`)
-    if (command === 'npm' && altRegistry === registries.taobao) {
+    if (altRegistry === registries.taobao) {
       args.push(`--disturl=${taobaoDistURL}`)
     }
   }
+}
 
-  debug(`command: `, command)
-  debug(`args: `, args)
-
-  await new Promise((resolve, reject) => {
+function executeCommand (command, args, targetDir) {
+  return new Promise((resolve, reject) => {
     const child = execa(command, args, {
       cwd: targetDir,
       stdio: ['inherit', 'inherit', command === 'yarn' ? 'pipe' : 'inherit']
@@ -156,4 +151,44 @@ module.exports = async function installDeps (targetDir, command, cliRegistry) {
       resolve()
     })
   })
+}
+
+exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
+  const args = []
+  if (command === 'npm') {
+    args.push('install', '--loglevel', 'error')
+  } else if (command === 'yarn') {
+    // do nothing
+  } else {
+    throw new Error(`Unknown package manager: ${command}`)
+  }
+
+  await addRegistryToArgs(command, args, cliRegistry)
+
+  debug(`command: `, command)
+  debug(`args: `, args)
+
+  await executeCommand(command, args, targetDir)
+}
+
+exports.installPackage = async function (targetDir, command, cliRegistry, packageName, dev = true) {
+  const args = []
+  if (command === 'npm') {
+    args.push('install', '--loglevel', 'error')
+  } else if (command === 'yarn') {
+    args.push('add')
+  } else {
+    throw new Error(`Unknown package manager: ${command}`)
+  }
+
+  if (dev) args.push('-D')
+
+  await addRegistryToArgs(command, args, cliRegistry)
+
+  args.push(packageName)
+
+  debug(`command: `, command)
+  debug(`args: `, args)
+
+  await executeCommand(command, args, targetDir)
 }

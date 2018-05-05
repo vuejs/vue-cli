@@ -4,16 +4,21 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string(),
   outputDir: joi.string(),
   compiler: joi.boolean(),
+  transpileDependencies: joi.array(),
+  preserveWhitespace: joi.boolean(),
   productionSourceMap: joi.boolean(),
-  vueLoader: joi.object(),
   parallel: joi.boolean(),
+  devServer: joi.object(),
   dll: joi.alternatives().try(
     joi.boolean(),
     joi.array().items(joi.string())
   ),
+
+  // css
   css: joi.object({
     modules: joi.boolean(),
-    extract: joi.boolean(),
+    extract: joi.alternatives().try(joi.boolean(), joi.object()),
+    localIdentName: joi.string(),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
       sass: joi.object(),
@@ -21,17 +26,25 @@ const schema = createSchema(joi => joi.object({
       stylus: joi.object()
     })
   }),
-  devServer: joi.object(),
-  // known options from offical plugins
-  lintOnSave: joi.boolean()
+
+  // webpack
+  chainWebpack: joi.func(),
+  configureWebpack: joi.alternatives().try(
+    joi.object(),
+    joi.func()
+  ),
+
+  // known runtime options for built-in plugins
+  lintOnSave: joi.any().valid([true, false, 'error']),
+  pwa: joi.object(),
+
+  // 3rd party plugin options
+  pluginOptions: joi.object()
 }))
 
-exports.validate = options => validate(
-  options,
-  schema,
-  // so that plugins can make use of custom options
-  { allowUnknown: true }
-)
+exports.validate = (options, cb) => {
+  validate(options, schema, cb)
+}
 
 exports.defaults = () => ({
   // project deployment base
@@ -43,8 +56,11 @@ exports.defaults = () => ({
   // boolean, use full build?
   compiler: false,
 
-  // vue-loader options
-  vueLoader: {},
+  // deps to transpile
+  transpileDependencies: [/* string or regex */],
+
+  // whether to preserve whitespaces between elements
+  preserveWhitespace: false,
 
   // sourceMap for production build?
   productionSourceMap: true,
@@ -58,16 +74,15 @@ exports.defaults = () => ({
   dll: false,
 
   css: {
-    // boolean | Object, extract css?
-    extract: true,
-    // apply css modules to CSS files that doesn't end with .module.css?
-    modules: false,
-    sourceMap: false,
-    loaderOptions: {}
+    // extract: true,
+    // modules: false,
+    // localIdentName: '[name]_[local]_[hash:base64:5]',
+    // sourceMap: false,
+    // loaderOptions: {}
   },
 
   // whether to use eslint-loader
-  lintOnSave: false,
+  lintOnSave: true,
 
   devServer: {
   /*

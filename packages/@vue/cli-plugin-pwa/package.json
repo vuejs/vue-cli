@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-pwa",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-beta.9",
   "description": "pwa plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -22,7 +22,7 @@
     "access": "public"
   },
   "dependencies": {
-    "sw-precache-webpack-plugin": "^0.11.4"
+    "workbox-webpack-plugin": "^3.1.0"
   },
   "devDependencies": {
     "register-service-worker": "^1.0.0"

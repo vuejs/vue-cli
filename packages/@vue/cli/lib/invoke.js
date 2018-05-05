@@ -2,28 +2,47 @@ const fs = require('fs')
 const path = require('path')
 const execa = require('execa')
 const chalk = require('chalk')
-const resolve = require('resolve')
+const globby = require('globby')
+const inquirer = require('inquirer')
+const isBinary = require('isbinaryfile')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
-const installDeps = require('./util/installDeps')
+const { installDeps } = require('./util/installDeps')
+const { loadModule } = require('./util/module')
 const {
   log,
   error,
   hasYarn,
   hasGit,
   logWithSpinner,
-  stopSpinner
+  stopSpinner,
+  resolvePluginId
 } = require('@vue/cli-shared-utils')
 
-async function invoke (pluginName, options) {
+async function readFiles (context) {
+  const files = await globby(['**'], {
+    cwd: context,
+    onlyFiles: true,
+    gitignore: true,
+    ignore: ['**/node_modules/**']
+  })
+  const res = {}
+  for (const file of files) {
+    const name = path.resolve(context, file)
+    res[file] = isBinary.sync(name)
+      ? fs.readFileSync(name)
+      : fs.readFileSync(name, 'utf-8')
+  }
+  return res
+}
+
+async function invoke (pluginName, options = {}, context = process.cwd()) {
   delete options._
-  const context = process.cwd()
   const pkgPath = path.resolve(context, 'package.json')
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
   if (!fs.existsSync(pkgPath)) {
-    error(`package.json not found in ${chalk.yellow(context)}`)
-    process.exit(1)
+    throw new Error(`package.json not found in ${chalk.yellow(context)}`)
   }
 
   const pkg = require(pkgPath)
@@ -32,53 +51,69 @@ async function invoke (pluginName, options) {
   const findPlugin = deps => {
     if (!deps) return
     let name
-    if (deps[name = `@vue/cli-plugin-${pluginName}`] ||
-        deps[name = `vue-cli-plugin-${pluginName}`] ||
-        deps[name = pluginName]) {
+    // official
+    if (deps[(name = `@vue/cli-plugin-${pluginName}`)]) {
+      return name
+    }
+    // full id, scoped short, or default short
+    if (deps[(name = resolvePluginId(pluginName))]) {
       return name
     }
   }
 
   const id = findPlugin(pkg.devDependencies) || findPlugin(pkg.dependencies)
   if (!id) {
-    error(
+    throw new Error(
       `Cannot resolve plugin ${chalk.yellow(pluginName)} from package.json. ` +
-      `Did you forget to install it?`
+        `Did you forget to install it?`
     )
-    process.exit(1)
   }
 
-  const generatorURI = `${id}/generator`
-  const generatorPath = resolve.sync(generatorURI, { basedir: context })
+  const pluginGenerator = loadModule(`${id}/generator`, context)
+  if (!pluginGenerator) {
+    throw new Error(`Plugin ${id} does not have a generator.`)
+  }
+
+  // resolve options if no command line options are passed, and the plugin
+  // contains a prompt module.
+  if (!Object.keys(options).length) {
+    const pluginPrompts = loadModule(`${id}/prompts`, context)
+    if (pluginPrompts) {
+      options = await inquirer.prompt(pluginPrompts)
+    }
+  }
+
   const plugin = {
     id,
-    apply: require(generatorPath),
+    apply: pluginGenerator,
     options
   }
 
   const createCompleteCbs = []
-  const generator = new Generator(
-    context,
+  const generator = new Generator(context, {
     pkg,
-    [plugin],
-    isTestOrDebug ? false : loadOptions().useConfigFiles,
-    createCompleteCbs
-  )
+    plugins: [plugin],
+    files: await readFiles(context),
+    completeCbs: createCompleteCbs
+  })
 
   log()
   logWithSpinner('🚀', `Invoking generator for ${id}...`)
-  await generator.generate()
+  await generator.generate({
+    extractConfigFiles: true,
+    checkExisting: true
+  })
 
   const newDeps = generator.pkg.dependencies
   const newDevDeps = generator.pkg.devDependencies
-  const depsChanged = (
+  const depsChanged =
     JSON.stringify(newDeps) !== JSON.stringify(pkg.dependencies) ||
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
-  )
 
   if (!isTestOrDebug && depsChanged) {
     logWithSpinner('📦', `Installing additional dependencies...`)
-    const packageManager = loadOptions().packageManager || (hasYarn ? 'yarn' : 'npm')
+    const packageManager =
+      loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
     await installDeps(context, packageManager)
   }
 
@@ -93,19 +128,41 @@ async function invoke (pluginName, options) {
 
   log()
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
-  if (hasGit) {
-    const { stdout } = await execa('git', ['ls-files', '--exclude-standard', '--modified', '--others'])
-    log(`   The following files have been updated / added:\n`)
-    log(chalk.red(stdout.split(/\r?\n/g).map(line => `     ${line}`).join('\n')))
-    log()
+  if (!process.env.VUE_CLI_TEST && hasGit()) {
+    const { stdout } = await execa('git', [
+      'ls-files',
+      '--exclude-standard',
+      '--modified',
+      '--others'
+    ])
+    if (stdout.trim()) {
+      log(`   The following files have been updated / added:\n`)
+      log(
+        chalk.red(
+          stdout
+            .split(/\r?\n/g)
+            .map(line => `     ${line}`)
+            .join('\n')
+        )
+      )
+      log()
+    }
   }
-  log(`   You should review and commit the changes.`)
+  log(
+    `   You should review these changes with ${chalk.cyan(
+      `git diff`
+    )} and commit them.`
+  )
   log()
+
+  generator.printExitLogs()
 }
 
-module.exports = (pluginName, options) => {
-  invoke(pluginName, options).catch(err => {
+module.exports = (...args) => {
+  return invoke(...args).catch(err => {
     error(err)
-    process.exit(1)
+    if (!process.env.VUE_CLI_TEST) {
+      process.exit(1)
+    }
   })
 }

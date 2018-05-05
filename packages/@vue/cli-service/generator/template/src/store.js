@@ -1,4 +1,4 @@
-<%_ if (options.vuex) { _%>
+<%_ if (rootOptions.vuex) { _%>
 import Vue from 'vue'
 import Vuex from 'vuex'
 

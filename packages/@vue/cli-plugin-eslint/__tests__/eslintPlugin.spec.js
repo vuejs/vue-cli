@@ -1,4 +1,4 @@
-jest.setTimeout(30000)
+jest.setTimeout(35000)
 
 const path = require('path')
 const { linkBin } = require('@vue/cli/lib/util/linkBin')
@@ -21,7 +21,7 @@ test('should work', async () => {
         lintOn: 'commit'
       }
     }
-  })
+  }, null, true /* initGit */)
   const { read, write, run } = project
   // should've applied airbnb autofix
   const main = await read('src/main.js')
@@ -64,7 +64,7 @@ test('should work', async () => {
   await write('vue.config.js', 'module.exports = { lintOnSave: true }')
   // write invalid file
   const app = await read('src/App.vue')
-  const updatedApp = app.replace(/;/g, '')
+  const updatedApp = app.replace(/;/, '')
   await write('src/App.vue', updatedApp)
 
   const server = run('vue-cli-service serve')
@@ -72,12 +72,14 @@ test('should work', async () => {
   let isFirstMsg = true
   server.stdout.on('data', data => {
     data = data.toString()
-    if (data.match(/Failed to compile/)) {
+    if (data.match(/Compiled with \d warning/)) {
       // should fail on start
       expect(isFirstMsg).toBe(true)
       isFirstMsg = false
       // fix it
-      write('src/App.vue', app)
+      setTimeout(() => {
+        write('src/App.vue', app)
+      }, process.env.CI ? 1000 : 200)
     } else if (data.match(/Compiled successfully/)) {
       // should compile on 2nd update
       expect(isFirstMsg).toBe(false)
@@ -87,4 +89,34 @@ test('should work', async () => {
   })
 
   await donePromise
+})
+
+test('should not fix with --no-fix option', async () => {
+  const project = await create('eslint-nofix', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      }
+    }
+  })
+  const { read, write, run } = project
+  // should've applied airbnb autofix
+  const main = await read('src/main.js')
+  expect(main).toMatch(';')
+  // remove semicolons
+  const updatedMain = main.replace(/;/g, '')
+  await write('src/main.js', updatedMain)
+
+  // lint with no fix should fail
+  try {
+    await run('vue-cli-service lint --no-fix')
+  } catch (e) {
+    expect(e.code).toBe(1)
+    expect(e.failed).toBeTruthy()
+  }
+
+  // files should not have been fixed
+  expect(await read('src/main.js')).not.toMatch(';')
 })

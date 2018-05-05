@@ -12,6 +12,14 @@ const path = require('path')
 const chalk = require('chalk')
 const address = require('address')
 
+const defaultConfig = {
+  logLevel: 'silent',
+  secure: false,
+  changeOrigin: true,
+  ws: true,
+  xfwd: true
+}
+
 module.exports = function prepareProxy (proxy, appPublicFolder) {
   // `proxy` lets you specify alternate servers for specific requests.
   // It can either be a string or an object conforming to the Webpack dev server proxy configuration
@@ -42,6 +50,50 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     return !fs.existsSync(maybePublicPath)
   }
 
+  function createProxyEntry (target, usersOnProxyReq, context) {
+    if (process.platform === 'win32') {
+      target = resolveLoopback(target)
+    }
+    return {
+      target,
+      context (pathname, req) {
+        // is a static asset
+        if (!mayProxy(pathname)) {
+          return false
+        }
+        if (context) {
+          // Explicit context, e.g. /api
+          return pathname.match(context)
+        } else {
+          // not a static request
+          if (req.method !== 'GET') {
+            return true
+          }
+          // Heuristics: if request `accept`s text/html, we pick /index.html.
+          // Modern browsers include text/html into `accept` header when navigating.
+          // However API calls like `fetch()` won’t generally accept text/html.
+          // If this heuristic doesn’t work well for you, use a custom `proxy` object.
+          return (
+            req.headers.accept &&
+            req.headers.accept.indexOf('text/html') === -1
+          )
+        }
+      },
+      onProxyReq (proxyReq, req, res) {
+        if (usersOnProxyReq) {
+          usersOnProxyReq(proxyReq, req, res)
+        }
+        // Browsers may send Origin headers even with same-origin
+        // requests. To prevent CORS issues, we have to change
+        // the Origin to match the target URL.
+        if (!proxyReq.agent && proxyReq.getHeader('origin')) {
+          proxyReq.setHeader('origin', target)
+        }
+      },
+      onError: onProxyError(target)
+    }
+  }
+
   // Support proxy as a string for those who are using the simple proxy option
   if (typeof proxy === 'string') {
     if (!/^http(s)?:\/\//.test(proxy)) {
@@ -53,50 +105,15 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
       process.exit(1)
     }
 
-    let target
-    if (process.platform === 'win32') {
-      target = resolveLoopback(proxy)
-    } else {
-      target = proxy
-    }
     return [
-      {
-        target,
-        logLevel: 'silent',
-        // For single page apps, we generally want to fallback to /index.html.
-        // However we also want to respect `proxy` for API calls.
-        // So if `proxy` is specified as a string, we need to decide which fallback to use.
-        // We use a heuristic: if request `accept`s text/html, we pick /index.html.
-        // Modern browsers include text/html into `accept` header when navigating.
-        // However API calls like `fetch()` won’t generally accept text/html.
-        // If this heuristic doesn’t work well for you, use a custom `proxy` object.
-        context: function (pathname, req) {
-          return (
-            mayProxy(pathname) &&
-            req.headers.accept &&
-            req.headers.accept.indexOf('text/html') === -1
-          )
-        },
-        onProxyReq: proxyReq => {
-          // Browers may send Origin headers even with same-origin
-          // requests. To prevent CORS issues, we have to change
-          // the Origin to match the target URL.
-          if (proxyReq.getHeader('origin')) {
-            proxyReq.setHeader('origin', target)
-          }
-        },
-        onError: onProxyError(target),
-        secure: false,
-        changeOrigin: true,
-        ws: true,
-        xfwd: true
-      }
+      Object.assign({}, defaultConfig, createProxyEntry(proxy))
     ]
   }
 
   // Otherwise, proxy is an object so create an array of proxies to pass to webpackDevServer
-  return Object.keys(proxy).map(function (context) {
-    if (!proxy[context].hasOwnProperty('target')) {
+  return Object.keys(proxy).map(context => {
+    const config = proxy[context]
+    if (!config.hasOwnProperty('target')) {
       console.log(
         chalk.red(
           'When `proxy` in package.json is as an object, each `context` object must have a ' +
@@ -105,27 +122,8 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
       )
       process.exit(1)
     }
-    let target
-    if (process.platform === 'win32') {
-      target = resolveLoopback(proxy[context].target)
-    } else {
-      target = proxy[context].target
-    }
-    return Object.assign({}, proxy[context], {
-      context: function (pathname) {
-        return mayProxy(pathname) && pathname.match(context)
-      },
-      onProxyReq: proxyReq => {
-        // Browers may send Origin headers even with same-origin
-        // requests. To prevent CORS issues, we have to change
-        // the Origin to match the target URL.
-        if (proxyReq.getHeader('origin')) {
-          proxyReq.setHeader('origin', target)
-        }
-      },
-      target,
-      onError: onProxyError(target)
-    })
+    const entry = createProxyEntry(config.target, config.onProxyReq, context)
+    return Object.assign({}, defaultConfig, config, entry)
   })
 }
 

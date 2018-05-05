@@ -1,6 +1,6 @@
 module.exports = (api, {
   classComponent,
-  lint,
+  tsLint,
   lintOn = [],
   experimentalCompileTsWithBabel
 }) => {
@@ -10,7 +10,7 @@ module.exports = (api, {
 
   if (classComponent) {
     api.extendPackage({
-      devDependencies: {
+      dependencies: {
         'vue-class-component': '^6.0.0',
         'vue-property-decorator': '^6.0.0'
       }
@@ -46,15 +46,20 @@ module.exports = (api, {
     }
   }
 
-  if (lint) {
+  if (tsLint) {
     api.extendPackage({
       scripts: {
         lint: 'vue-cli-service lint'
-      },
-      vue: {
-        lintOnSave: lintOn.includes('save')
       }
     })
+
+    if (!lintOn.includes('save')) {
+      api.extendPackage({
+        vue: {
+          lintOnSave: false
+        }
+      })
+    }
 
     if (lintOn.includes('commit')) {
       api.extendPackage({
@@ -98,8 +103,6 @@ module.exports = (api, {
     })
   }
 
-  // TODO cater to e2e test plugins
-
   api.render('./template', {
     isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,
     hasMocha,
@@ -109,14 +112,18 @@ module.exports = (api, {
   // delete all js files that have a ts file of the same name
   // and simply rename other js files to ts
   const jsRE = /\.js$/
-  const excludeRE = /^test\/e2e\/|\.config\.js$/
+  const excludeRE = /^tests\/e2e\/|(\.config|rc)\.js$/
   const convertLintFlags = require('../lib/convertLintFlags')
   api.postProcessFiles(files => {
     for (const file in files) {
       if (jsRE.test(file) && !excludeRE.test(file)) {
         const tsFile = file.replace(jsRE, '.ts')
         if (!files[tsFile]) {
-          files[tsFile] = convertLintFlags(files[file])
+          let content = files[file]
+          if (tsLint) {
+            content = convertLintFlags(content)
+          }
+          files[tsFile] = content
         }
         delete files[file]
       }

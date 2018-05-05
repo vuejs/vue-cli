@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "<%- options.useTsWithBabel ? 'es2015' : 'es5' %>",
-    "module": "es2015",
+    "target": "<%- options.useTsWithBabel ? 'esnext' : 'es5' %>",
+    "module": "esnext",
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
@@ -12,17 +12,14 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    <%_if (isTest) { _%>
     "types": [
-      "node",
-      <%_ if (hasMocha) { _%>
+      "node"<%_ if (hasMocha) { _%>,
       "mocha",
       "chai"
-      <%_ } else if (hasJest) { _%>
+      <%_ } else if (hasJest) { _%>,
       "jest"
       <%_ } _%>
     ],
-    <%_ } _%>
     "paths": {
       "@/*": [
         "src/*"
@@ -31,8 +28,10 @@
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.tsx",
     "src/**/*.vue",
-    "test/**/*.ts"
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

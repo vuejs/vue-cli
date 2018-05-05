@@ -1,17 +1,16 @@
 const joi = require('joi')
-const { error } = require('./logger')
 
 // proxy to joi for option validation
 exports.createSchema = fn => fn(joi)
 
-exports.validate = (obj, schema, options = {}, noExit) => {
-  joi.validate(obj, schema, options, err => {
+exports.validate = (obj, schema, cb) => {
+  joi.validate(obj, schema, {}, err => {
     if (err) {
-      error(`vue-cli options validation failed:\n` + err.message)
-      if (!noExit) {
-        process.exit(1)
-      } else {
+      cb(err.message)
+      if (process.env.VUE_CLI_TEST) {
         throw err
+      } else {
+        process.exit(1)
       }
     }
   })

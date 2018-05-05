@@ -1,24 +1,42 @@
 const ejs = require('ejs')
 const slash = require('slash')
 const debug = require('debug')
-const configMap = require('./util/configMap')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
+const configTransforms = require('./util/configTransforms')
+const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+
+const logger = require('@vue/cli-shared-utils/lib/logger')
+const logTypes = {
+  log: logger.log,
+  info: logger.info,
+  done: logger.done,
+  warn: logger.warn,
+  error: logger.error
+}
 
 module.exports = class Generator {
-  constructor (context, pkg, plugins, extractConfigFiles, completeCbs = []) {
+  constructor (context, {
+    pkg = {},
+    plugins = [],
+    completeCbs = [],
+    files = {}
+  } = {}) {
     this.context = context
     this.plugins = plugins
-    this.pkg = pkg
+    this.originalPkg = pkg
+    this.pkg = Object.assign({}, pkg)
     this.completeCbs = completeCbs
 
     // for conflict resolution
     this.depSources = {}
     // virtual file tree
-    this.files = {}
+    this.files = files
     this.fileMiddlewares = []
     this.postProcessFilesCbs = []
+    // exit messages
+    this.exitLogs = []
 
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService && cliService.options
@@ -27,31 +45,52 @@ module.exports = class Generator {
       const api = new GeneratorAPI(id, this, options, rootOptions || {})
       apply(api, options, rootOptions)
     })
-    // if the user has chosen so, extract configs from package.json into
-    // dedicated files.
-    if (extractConfigFiles) {
-      this.extractConfigFiles()
-    }
   }
 
-  async generate () {
+  async generate ({
+    extractConfigFiles = false,
+    checkExisting = false
+  } = {}) {
+    // save the file system before applying plugin for comparison
+    const initialFiles = Object.assign({}, this.files)
+    // extract configs from package.json into dedicated files.
+    this.extractConfigFiles(extractConfigFiles, checkExisting)
     // wait for file resolve
     await this.resolveFiles()
     // set package.json
     this.sortPkg()
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
-    // write file tree to disk
-    await writeFileTree(this.context, this.files)
+    // write/update file tree to disk
+    await writeFileTree(this.context, this.files, initialFiles)
   }
 
-  extractConfigFiles () {
-    for (const key in this.pkg) {
-      if (configMap[key]) {
+  extractConfigFiles (extractAll, checkExisting) {
+    const extract = key => {
+      if (
+        configTransforms[key] &&
+        this.pkg[key] &&
+        // do not extract if the field exists in original package.json
+        !this.originalPkg[key]
+      ) {
         const value = this.pkg[key]
-        const { transform, filename } = configMap[key]
-        this.files[filename] = transform(value)
+        const transform = configTransforms[key]
+        const res = transform(
+          value,
+          checkExisting,
+          this.context
+        )
+        const { content, filename } = res
+        this.files[filename] = content
         delete this.pkg[key]
       }
+    }
+    if (extractAll) {
+      for (const key in this.pkg) {
+        extract(key)
+      }
+    } else if (!process.env.VUE_CLI_TEST) {
+      // by default, always extract vue.config.js
+      extract('vue')
     }
   }
 
@@ -106,13 +145,25 @@ module.exports = class Generator {
   }
 
   hasPlugin (_id) {
-    const prefixRE = /^(@vue\/|vue-)cli-plugin-/
     return [
       ...this.plugins.map(p => p.id),
       ...Object.keys(this.pkg.devDependencies || {}),
       ...Object.keys(this.pkg.dependencies || {})
-    ].some(id => {
-      return id === _id || id.replace(prefixRE, '') === _id
-    })
+    ].some(id => matchesPluginId(_id, id))
+  }
+
+  printExitLogs () {
+    if (this.exitLogs.length) {
+      this.exitLogs.forEach(({ id, msg, type }) => {
+        const shortId = toShortPluginId(id)
+        const logFn = logTypes[type]
+        if (!logFn) {
+          logger.error(`Invalid api.exitLog type '${type}'.`, shortId)
+        } else {
+          logFn(msg, msg && shortId)
+        }
+      })
+      logger.log()
+    }
   }
 }

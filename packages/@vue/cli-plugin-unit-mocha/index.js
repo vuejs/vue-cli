@@ -2,15 +2,29 @@ module.exports = api => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'test') {
       webpackConfig.merge({
+        target: 'node',
         devtool: 'inline-cheap-module-source-map',
-        externals: [require('webpack-node-externals')()]
+        externals: [
+          require('webpack-node-externals')(),
+          'vue-server-renderer'
+        ]
       })
+
+      // when target === 'node', vue-loader will attempt to generate
+      // SSR-optimized code. We need to turn that off here.
+      webpackConfig.module
+        .rule('vue')
+          .use('vue-loader')
+          .tap(options => {
+            options.optimizeSSR = false
+            return options
+          })
     }
   })
 
-  api.registerCommand('test', {
+  api.registerCommand('test:unit', {
     description: 'run unit tests with mocha-webpack',
-    usage: 'vue-cli-service test [options] [...files]',
+    usage: 'vue-cli-service test:unit [options] [...files]',
     options: {
       '--watch, -w': 'run in watch mode',
       '--grep, -g': 'only run tests matching <pattern>',
@@ -26,19 +40,25 @@ module.exports = api => {
       `http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html`
     )
   }, (args, rawArgv) => {
-    api.setMode('test')
     // for @vue/babel-preset-app
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     // start runner
     const execa = require('execa')
     const bin = require.resolve('mocha-webpack/bin/mocha-webpack')
-    const argv = rawArgv.concat([
+    const hasInlineFilesGlob = args._ && args._.length
+    const argv = [
       '--recursive',
       '--require',
       require.resolve('./setup.js'),
       '--webpack-config',
-      require.resolve('@vue/cli-service/webpack.config.js')
-    ])
+      require.resolve('@vue/cli-service/webpack.config.js'),
+      ...rawArgv,
+      ...(hasInlineFilesGlob ? [] : [
+        api.hasPlugin('typescript')
+          ? `tests/unit/**/*.spec.ts`
+          : `tests/unit/**/*.spec.js`
+      ])
+    ]
 
     return new Promise((resolve, reject) => {
       const child = execa(bin, argv, { stdio: 'inherit' })
@@ -52,4 +72,15 @@ module.exports = api => {
       })
     })
   })
+
+  // TODO remove in RC
+  api.registerCommand('test', (args, rawArgv) => {
+    const { warn } = require('@vue/cli-shared-utils')
+    warn(`Deprecation Warning: "vue-cli-service test" has been renamed to "vue-cli-service test:unit".`)
+    return api.service.run('test:unit', args, rawArgv)
+  })
+}
+
+module.exports.defaultModes = {
+  'test:unit': 'test'
 }

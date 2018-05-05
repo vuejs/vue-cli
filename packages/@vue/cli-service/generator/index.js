@@ -1,5 +1,6 @@
 module.exports = (api, options) => {
   api.render('./template')
+
   api.extendPackage({
     scripts: {
       'serve': 'vue-cli-service serve' + (
@@ -12,7 +13,7 @@ module.exports = (api, options) => {
       'build': 'vue-cli-service build'
     },
     dependencies: {
-      'vue': '^2.5.13'
+      'vue': '^2.5.16'
     },
     devDependencies: {
       'vue-template-compiler': '^2.5.13'
@@ -64,5 +65,10 @@ module.exports = (api, options) => {
     api.extendPackage({
       devDependencies: deps[options.cssPreprocessor]
     })
+  }
+
+  // additional tooling configurations
+  if (options.configs) {
+    api.extendPackage(options.configs)
   }
 }

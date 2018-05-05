@@ -1,7 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const resolveLocal = require('../util/resolveLocal')
-    const inlineLimit = process.env.VUE_CLI_INLINE_LIMIT || 1000
+    const inlineLimit = 10000
 
     webpackConfig
       .context(api.service.context)
@@ -37,14 +37,26 @@ module.exports = (api, options) => {
     webpackConfig.module
       .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
 
-    // js is handled by cli-plugin-bable
+    // js is handled by cli-plugin-bable ---------------------------------------
+
+    // vue-loader --------------------------------------------------------------
 
     webpackConfig.module
       .rule('vue')
         .test(/\.vue$/)
         .use('vue-loader')
           .loader('vue-loader')
-          .options(Object.assign({}, options.vueLoader))
+          .options({
+            compilerOpitons: {
+              preserveWhitespace: options.preserveWhitespace
+            }
+          })
+
+    webpackConfig
+      .plugin('vue-loader')
+      .use(require('vue-loader/lib/plugin'))
+
+    // static assets -----------------------------------------------------------
 
     webpackConfig.module
       .rule('images')
@@ -79,7 +91,7 @@ module.exports = (api, options) => {
 
     webpackConfig.module
       .rule('fonts')
-        .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/)
+        .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
         .use('url-loader')
           .loader('url-loader')
           .options({
@@ -87,11 +99,25 @@ module.exports = (api, options) => {
             name: `fonts/[name].[hash:8].[ext]`
           })
 
+    // Other common pre-processors ---------------------------------------------
+
+    webpackConfig.module
+      .rule('pug')
+      .test(/\.pug$/)
+      .use('pug-plain-loader')
+        .loader('pug-plain-loader')
+        .end()
+
+    // shims
+
     webpackConfig.node
       .merge({
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).
         setImmediate: false,
+        // process is injected via DefinePlugin, although some 3rd party
+        // libraries may require a mock to work properly (#934)
+        process: 'mock',
         // prevent webpack from injecting mocks to Node native modules
         // that does not make sense for the client
         dgram: 'empty',
@@ -120,7 +146,7 @@ module.exports = (api, options) => {
     // fails to resolve a loader, so we provide custom handlers to improve it
     const { transformer, formatter } = require('../webpack/resolveLoaderError')
     webpackConfig
-      .plugin('firendly-errors')
+      .plugin('friendly-errors')
         .use(require('friendly-errors-webpack-plugin'), [{
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]

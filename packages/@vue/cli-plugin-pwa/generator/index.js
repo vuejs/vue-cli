@@ -8,7 +8,8 @@ module.exports = api => {
   api.render('./template')
 
   api.postProcessFiles(files => {
-    const file = files['src/main.ts']
+    const isTS = 'src/main.ts' in files
+    const file = isTS
       ? 'src/main.ts'
       : 'src/main.js'
     const main = files[file]

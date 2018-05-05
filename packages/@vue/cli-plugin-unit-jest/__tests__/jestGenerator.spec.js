@@ -15,11 +15,11 @@ test('base', async () => {
     }
   ])
 
-  expect(pkg.scripts.test).toBeTruthy()
+  expect(pkg.scripts['test:unit']).toBe('vue-cli-service test:unit')
   expect(pkg.devDependencies).toHaveProperty('@vue/test-utils')
   expect(pkg.devDependencies).toHaveProperty('babel-jest')
-  expect(files['test/unit/.eslintrc']).toMatch('"jest": true')
+  expect(files['tests/unit/.eslintrc.js']).toMatch('jest: true')
 
-  const spec = files['test/unit/HelloWorld.spec.js']
+  const spec = files['tests/unit/HelloWorld.spec.js']
   expect(spec).toMatch(`expect(wrapper.text()).toMatch(msg)`)
 })

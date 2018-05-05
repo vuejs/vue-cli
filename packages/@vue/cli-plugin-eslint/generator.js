@@ -8,6 +8,7 @@ module.exports = (api, { config, lintOn = [] }) => {
       lint: 'vue-cli-service lint'
     },
     eslintConfig: {
+      root: true,
       extends: ['plugin:vue/essential']
     },
     devDependencies: {}
@@ -16,26 +17,34 @@ module.exports = (api, { config, lintOn = [] }) => {
   if (config === 'airbnb') {
     pkg.eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^3.0.0-alpha.5'
+      '@vue/eslint-config-airbnb': '^3.0.0-beta.9'
     })
   } else if (config === 'standard') {
     pkg.eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^3.0.0-alpha.5'
+      '@vue/eslint-config-standard': '^3.0.0-beta.9'
     })
   } else if (config === 'prettier') {
     pkg.eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^3.0.0-alpha.5'
+      '@vue/eslint-config-prettier': '^3.0.0-beta.9'
     })
   } else {
     // default
     pkg.eslintConfig.extends.push('eslint:recommended')
   }
 
-  if (lintOn.includes('save')) {
+  // typescript support
+  if (api.hasPlugin('typescript')) {
+    pkg.eslintConfig.extends.push('@vue/typescript')
+    Object.assign(pkg.devDependencies, {
+      '@vue/eslint-config-typescript': '^3.0.0-beta.9'
+    })
+  }
+
+  if (!lintOn.includes('save')) {
     pkg.vue = {
-      lintOnSave: true // eslint-loader configured in runtime plugin
+      lintOnSave: false // eslint-loader configured in runtime plugin
     }
   }
 
@@ -55,23 +64,35 @@ module.exports = (api, { config, lintOn = [] }) => {
   api.extendPackage(pkg)
 
   if (api.hasPlugin('unit-mocha')) {
+    const config = {
+      env: { mocha: true }
+    }
+    if (config === 'airbnb') {
+      config.rules = {
+        'import/no-extraneous-dependencies': 'off'
+      }
+    }
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify({
-        env: { mocha: true }
-      }, null, 2)
+      files['tests/unit/.eslintrc.js'] = api.genJSConfig(config)
     })
   } else if (api.hasPlugin('unit-jest')) {
+    const config = {
+      env: { jest: true }
+    }
+    if (config === 'airbnb') {
+      config.rules = {
+        'import/no-extraneous-dependencies': 'off'
+      }
+    }
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify({
-        env: { jest: true }
-      }, null, 2)
+      files['tests/unit/.eslintrc.js'] = api.genJSConfig(config)
     })
   }
 
   // lint & fix after create to ensure files adhere to chosen config
   if (config && config !== 'base') {
     api.onCreateComplete(() => {
-      require('./lint')(api.resolve('.'), { silent: true })
+      require('./lint')({ silent: true }, api)
     })
   }
 }

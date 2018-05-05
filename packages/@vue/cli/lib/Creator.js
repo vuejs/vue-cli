@@ -1,18 +1,20 @@
+const fs = require('fs-extra')
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
-const axios = require('axios')
-const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
-const installDeps = require('./util/installDeps')
+const { loadModule } = require('./util/module')
+const getVersions = require('./util/getVersions')
+const { installDeps } = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const formatFeatures = require('./util/formatFeatures')
 const setupDevProject = require('./util/setupDevProject')
+const fetchRemotePreset = require('./util/fetchRemotePreset')
 
 const {
   defaults,
@@ -45,22 +47,20 @@ module.exports = class Creator {
     this.promptCompleteCbs = []
     this.createCompleteCbs = []
 
+    this.run = this.run.bind(this)
+
     const promptAPI = new PromptModuleAPI(this)
     promptModules.forEach(m => m(promptAPI))
   }
 
   async create (cliOptions = {}) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-    const { name, context, createCompleteCbs } = this
-    const run = (command, args) => {
-      if (!args) { [command, ...args] = command.split(/\s+/) }
-      return execa(command, args, { cwd: context })
-    }
+    const { run, name, context, createCompleteCbs } = this
 
     let preset
     if (cliOptions.preset) {
       // vue create foo --preset bar
-      preset = this.resolvePreset(cliOptions.preset)
+      preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
     } else if (cliOptions.default) {
       // vue create foo --default
       preset = defaults.presets.default
@@ -86,20 +86,14 @@ module.exports = class Creator {
     const packageManager = (
       cliOptions.packageManager ||
       loadOptions().packageManager ||
-      (hasYarn ? 'yarn' : 'npm')
+      (hasYarn() ? 'yarn' : 'npm')
     )
 
-    clearConsole()
+    await clearConsole()
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
 
     // get latest CLI version
-    let latestCLIVersion
-    if (!isTestOrDebug) {
-      const res = await axios.get(`https://registry.npmjs.org/@vue%2Fcli/`)
-      latestCLIVersion = res.data['dist-tags'].latest
-    } else {
-      latestCLIVersion = require('../package.json').version
-    }
+    const { latest } = await getVersions()
     // generate package.json with plugin dependencies
     const pkg = {
       name,
@@ -109,7 +103,8 @@ module.exports = class Creator {
     }
     const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
-      pkg.devDependencies[dep] = `^${latestCLIVersion}`
+      pkg.devDependencies[dep] = preset.plugins[dep].version ||
+        (/^@vue/.test(dep) ? `^${latest}` : `latest`)
     })
     // write package.json
     await writeFileTree(context, {
@@ -118,7 +113,8 @@ module.exports = class Creator {
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
-    if (hasGit) {
+    const shouldInitGit = await this.shouldInitGit(cliOptions)
+    if (shouldInitGit) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
       await run('git init')
     }
@@ -137,15 +133,15 @@ module.exports = class Creator {
     // run generator
     log()
     log(`🚀  Invoking generators...`)
-    const plugins = this.resolvePlugins(preset.plugins)
-    const generator = new Generator(
-      context,
+    const plugins = await this.resolvePlugins(preset.plugins)
+    const generator = new Generator(context, {
       pkg,
       plugins,
-      preset.useConfigFiles,
-      createCompleteCbs
-    )
-    await generator.generate()
+      completeCbs: createCompleteCbs
+    })
+    await generator.generate({
+      extractConfigFiles: preset.useConfigFiles
+    })
 
     // install additional deps (injected by generators)
     log(`📦  Installing additional dependencies...`)
@@ -162,13 +158,14 @@ module.exports = class Creator {
     }
 
     // commit initial state
-    if (hasGit) {
+    if (shouldInitGit) {
       await run('git add -A')
       if (isTestOrDebug) {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
       }
-      await run(`git commit -m init`)
+      const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
+      await run('git', ['commit', '-m', msg])
     }
 
     // log instructions
@@ -177,15 +174,22 @@ module.exports = class Creator {
     log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
     log(
       `👉  Get started with the following commands:\n\n` +
-      chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`) +
+      (this.context === process.cwd() ? `` : chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`)) +
       chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
     )
     log()
+
+    generator.printExitLogs()
+  }
+
+  run (command, args) {
+    if (!args) { [command, ...args] = command.split(/\s+/) }
+    return execa(command, args, { cwd: this.context })
   }
 
   async promptAndResolvePreset () {
     // prompt
-    clearConsole()
+    await clearConsole(true)
     const answers = await inquirer.prompt(this.resolveFinalPrompts())
     debug('vue-cli:answers')(answers)
 
@@ -197,7 +201,7 @@ module.exports = class Creator {
 
     let preset
     if (answers.preset && answers.preset !== '__manual__') {
-      preset = this.resolvePreset(answers.preset)
+      preset = await this.resolvePreset(answers.preset)
     } else {
       // manual
       preset = {
@@ -221,9 +225,26 @@ module.exports = class Creator {
     return preset
   }
 
-  resolvePreset (name) {
+  async resolvePreset (name, clone) {
+    let preset
     const savedPresets = loadOptions().presets || {}
-    let preset = savedPresets[name]
+
+    if (name.endsWith('.json')) {
+      preset = await fs.readJson(name)
+    } else if (name.includes('/')) {
+      logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
+      try {
+        preset = await fetchRemotePreset(name, clone)
+        stopSpinner()
+      } catch (e) {
+        stopSpinner()
+        error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
+        throw e
+      }
+    } else {
+      preset = savedPresets[name]
+    }
+
     // use default preset if user has not overwritten it
     if (name === 'default' && !preset) {
       preset = defaults.presets.default
@@ -244,17 +265,26 @@ module.exports = class Creator {
   }
 
   // { id: options } => [{ id, apply, options }]
-  resolvePlugins (rawPlugins) {
+  async resolvePlugins (rawPlugins) {
     // ensure cli-service is invoked first
     rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'])
-    return Object.keys(rawPlugins).map(id => {
-      const module = resolve.sync(`${id}/generator`, { basedir: this.context })
-      return {
-        id,
-        apply: require(module),
-        options: rawPlugins[id]
+    const plugins = []
+    for (const id of Object.keys(rawPlugins)) {
+      const apply = loadModule(`${id}/generator`, this.context)
+      if (!apply) {
+        throw new Error(`Failed to resolve plugin: ${id}`)
       }
-    })
+      let options = rawPlugins[id] || {}
+      if (options.prompts) {
+        const prompts = loadModule(`${id}/prompts`, this.context)
+        if (prompts) {
+          console.log(`\n${chalk.cyan(id)}`)
+          options = await inquirer.prompt(prompts)
+        }
+      }
+      plugins.push({ id, apply, options })
+    }
+    return plugins
   }
 
   resolveIntroPrompts () {
@@ -314,7 +344,8 @@ module.exports = class Creator {
         name: 'save',
         when: isManualMode,
         type: 'confirm',
-        message: 'Save this as a preset for future projects?'
+        message: 'Save this as a preset for future projects?',
+        default: false
       },
       {
         name: 'saveName',
@@ -326,7 +357,7 @@ module.exports = class Creator {
 
     // ask for packageManager once
     const savedOptions = loadOptions()
-    if (hasYarn && !savedOptions.packageManager) {
+    if (!savedOptions.packageManager && hasYarn()) {
       outroPrompts.push({
         name: 'packageManager',
         type: 'list',
@@ -365,5 +396,24 @@ module.exports = class Creator {
     ]
     debug('vue-cli:prompts')(prompts)
     return prompts
+  }
+
+  async shouldInitGit (cliOptions) {
+    if (!hasGit()) {
+      return false
+    }
+    if (cliOptions.git) {
+      return cliOptions.git !== 'false'
+    }
+    // check if we are in a git repo already
+    try {
+      await this.run('git', ['status'])
+    } catch (e) {
+      // if git status failed, let's create a fresh repo
+      return true
+    }
+    // if git status worked, it means we are already in a git repo
+    // so don't init again.
+    return false
   }
 }

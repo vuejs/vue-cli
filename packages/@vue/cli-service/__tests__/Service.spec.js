@@ -1,4 +1,5 @@
 jest.mock('fs')
+jest.mock('/vue.config.js', () => ({ lintOnSave: false }), { virtual: true })
 jest.mock('vue-cli-plugin-foo', () => () => {}, { virtual: true })
 
 const fs = require('fs')
@@ -9,10 +10,16 @@ const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
 
-const createMockService = (plugins = []) => new Service('/', {
-  plugins,
-  useBuiltIn: false
-})
+const createMockService = (plugins = [], init = true) => {
+  const service = new Service('/', {
+    plugins,
+    useBuiltIn: false
+  })
+  if (init) {
+    service.init()
+  }
+  return service
+}
 
 beforeEach(() => {
   mockPkg({})
@@ -31,7 +38,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.0.0-alpha.5',
+      '@vue/cli-plugin-babel': '^3.0.0-beta.9',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -51,55 +58,31 @@ test('load project options from package.json', () => {
   expect(service.projectOptions.lintOnSave).toBe(true)
 })
 
-test('load project options from vue.config.js', () => {
-  fs.writeFileSync('/vue.config.js', `module.exports=${JSON.stringify({ lintOnSave: false })}`)
+test('handle option baseUrl and outputDir correctly', () => {
+  mockPkg({
+    vue: {
+      baseUrl: 'https://foo.com/bar',
+      outputDir: '/public/'
+    }
+  })
   const service = createMockService()
-  // vue.config.js has higher priority
-  expect(service.projectOptions.lintOnSave).toBe(false)
-  fs.unlinkSync('/vue.config.js')
+  expect(service.projectOptions.baseUrl).toBe('https://foo.com/bar/')
+  expect(service.projectOptions.outputDir).toBe('public')
 })
 
-test('package.json option should take priority', () => {
-  fs.writeFileSync('/vue.config.js', `module.exports=${JSON.stringify({ lintOnSave: false })}`)
+test('load project options from vue.config.js', () => {
+  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
+  fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
   mockPkg({
     vue: {
       lintOnSave: true
     }
   })
   const service = createMockService()
-  // package.json has higher priority
-  expect(service.projectOptions.lintOnSave).toBe(true)
   fs.unlinkSync('/vue.config.js')
-})
-
-test('api: setMode', () => {
-  fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
-  fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
-
-  createMockService([{
-    id: 'test-setMode',
-    apply: api => {
-      api.setMode('foo')
-    }
-  }])
-  expect(process.env.FOO).toBe('7')
-  expect(process.env.BAR).toBe('6')
-  expect(process.env.BAZ).toBe('8')
-  expect(process.env.VUE_CLI_MODE).toBe('foo')
-  // for NODE_ENV & BABEL_ENV
-  // any mode that is not test or production defaults to development
-  expect(process.env.NODE_ENV).toBe('development')
-  expect(process.env.BABEL_ENV).toBe('development')
-
-  createMockService([{
-    id: 'test-setMode',
-    apply: api => {
-      api.setMode('test')
-    }
-  }])
-  expect(process.env.VUE_CLI_MODE).toBe('test')
-  expect(process.env.NODE_ENV).toBe('test')
-  expect(process.env.BABEL_ENV).toBe('test')
+  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
+  // vue.config.js has higher priority
+  expect(service.projectOptions.lintOnSave).toBe(false)
 })
 
 test('api: registerCommand', () => {
@@ -115,6 +98,44 @@ test('api: registerCommand', () => {
 
   service.run('foo', { n: 1 })
   expect(args).toEqual({ _: [], n: 1 })
+})
+
+test('api: defaultModes', () => {
+  fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
+  fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
+
+  const plugin1 = {
+    id: 'test-defaultModes',
+    apply: api => {
+      expect(process.env.FOO).toBe('7')
+      expect(process.env.BAR).toBe('6')
+      expect(process.env.BAZ).toBe('8')
+      // for NODE_ENV & BABEL_ENV
+      // any mode that is not test or production defaults to development
+      expect(process.env.NODE_ENV).toBe('development')
+      expect(process.env.BABEL_ENV).toBe('development')
+      api.registerCommand('foo', () => {})
+    }
+  }
+  plugin1.apply.defaultModes = {
+    foo: 'foo'
+  }
+
+  createMockService([plugin1], false /* init */).run('foo')
+
+  const plugin2 = {
+    id: 'test-defaultModes',
+    apply: api => {
+      expect(process.env.NODE_ENV).toBe('test')
+      expect(process.env.BABEL_ENV).toBe('test')
+      api.registerCommand('test', () => {})
+    }
+  }
+  plugin2.apply.defaultModes = {
+    test: 'test'
+  }
+
+  createMockService([plugin2], false /* init */).run('test')
 })
 
 test('api: chainWebpack', () => {
@@ -145,6 +166,24 @@ test('api: configureWebpack', () => {
 
   const config = service.resolveWebpackConfig()
   expect(config.output.path).toBe('test-dist-2')
+})
+
+test('api: configureWebpack returning object', () => {
+  const service = createMockService([{
+    id: 'test',
+    apply: api => {
+      api.configureWebpack(config => {
+        return {
+          output: {
+            path: 'test-dist-3'
+          }
+        }
+      })
+    }
+  }])
+
+  const config = service.resolveWebpackConfig()
+  expect(config.output.path).toBe('test-dist-3')
 })
 
 test('api: configureDevServer', () => {

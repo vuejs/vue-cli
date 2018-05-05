@@ -1,6 +1,5 @@
 module.exports = function lint (args = {}, api, silent) {
-  process.chdir(api.resolve('.'))
-
+  const cwd = api.resolve('.')
   const fs = require('fs')
   const path = require('path')
   const globby = require('globby')
@@ -8,7 +7,7 @@ module.exports = function lint (args = {}, api, silent) {
   const vueCompiler = require('vue-template-compiler')
 
   const options = {
-    fix: !args['no-fix'],
+    fix: args['fix'] !== false,
     formatter: args.format || 'codeFrame',
     formattersDirectory: args['formatters-dir'],
     rulesDirectory: args['rules-dir']
@@ -75,11 +74,11 @@ module.exports = function lint (args = {}, api, silent) {
 
   const files = args._ && args._.length
     ? args._
-    : ['src/**/*.ts', 'src/**/*.vue', 'test/**/*.ts']
+    : ['src/**/*.ts', 'src/**/*.vue', 'tests/**/*.ts']
 
   const stripTsExtension = str => str.replace(/\.vue\.ts\b/g, '.vue')
 
-  return globby(files).then(files => {
+  return globby(files, { cwd }).then(files => {
     return Promise.all(files.map(lint))
   }).then(() => {
     if (silent) return

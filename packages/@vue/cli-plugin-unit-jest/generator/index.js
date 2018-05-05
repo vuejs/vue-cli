@@ -2,7 +2,7 @@ module.exports = api => {
   api.render('./template')
   api.extendPackage({
     scripts: {
-      test: 'vue-cli-service test'
+      'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
       '@vue/test-utils': '^1.0.0-beta.10'
@@ -19,7 +19,8 @@ module.exports = api => {
     ],
     'transform': {
       // process *.vue files with vue-jest
-      '^.+\\.vue$': 'vue-jest'
+      '^.+\\.vue$': 'vue-jest',
+      '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
     },
     // support the same @ -> src alias mapping in source code
     'moduleNameMapper': {
@@ -29,7 +30,9 @@ module.exports = api => {
     'snapshotSerializers': [
       'jest-serializer-vue'
     ],
-    'mapCoverage': true
+    'testMatch': [
+      '<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))'
+    ]
   }
 
   if (!api.hasPlugin('typescript')) {
@@ -63,9 +66,12 @@ module.exports = api => {
 
   if (api.hasPlugin('eslint')) {
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify({
-        env: { jest: true }
-      }, null, 2)
+      files['tests/unit/.eslintrc.js'] = api.genJSConfig({
+        env: { jest: true },
+        rules: {
+          'import/no-extraneous-dependencies': 'off'
+        }
+      })
     })
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@vue/eslint-config-airbnb",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-beta.9",
   "description": "eslint-config-airbnb for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -23,6 +23,6 @@
   "dependencies": {
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-import-resolver-webpack": "^0.8.4",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.11.0"
   }
 }

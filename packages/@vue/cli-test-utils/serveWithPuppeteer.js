@@ -1,6 +1,7 @@
+const stripAnsi = require('strip-ansi')
 const launchPuppeteer = require('./launchPuppeteer')
 
-module.exports = async function serveWithPuppeteer (serve, test) {
+module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
   let activeBrowser
   let activeChild
 
@@ -36,23 +37,33 @@ module.exports = async function serveWithPuppeteer (serve, test) {
         const urlMatch = data.match(/http:\/\/[^/]+\//)
         if (urlMatch && isFirstMatch) {
           isFirstMatch = false
-          // start browser
-          const url = urlMatch[0]
-          const { page, browser } = await launchPuppeteer(url)
-          activeBrowser = browser
+          let url = urlMatch[0]
 
-          const helpers = createHelpers(page)
+          // fix "Protocol error (Page.navigate): Cannot navigate to invalid URL undefined" error
+          // when running test in vscode terminal(zsh)
+          url = stripAnsi(url)
 
-          await test({
-            browser,
-            page,
-            url,
-            nextUpdate,
-            helpers
-          })
+          if (noPuppeteer) {
+            await test({ url })
+          } else {
+            // start browser
+            const { page, browser } = await launchPuppeteer(url)
+            activeBrowser = browser
 
-          await browser.close()
-          activeBrowser = null
+            const helpers = createHelpers(page)
+
+            await test({
+              browser,
+              page,
+              url,
+              nextUpdate,
+              helpers
+            })
+
+            await browser.close()
+            activeBrowser = null
+          }
+
           // on appveyor, the spawned server process doesn't exit
           // and causes the build to hang.
           child.stdin.write('close')

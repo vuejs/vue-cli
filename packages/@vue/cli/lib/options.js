@@ -2,7 +2,8 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const cloneDeep = require('lodash.clonedeep')
-const { error, log, createSchema, validate } = require('@vue/cli-shared-utils')
+const { error } = require('@vue/cli-shared-utils/lib/logger')
+const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
 
 const rcPath = exports.rcPath = (
   process.env.VUE_CLI_CONFIG_PATH ||
@@ -14,7 +15,8 @@ const presetSchema = createSchema(joi => joi.object().keys({
   router: joi.boolean(),
   vuex: joi.boolean(),
   cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
-  plugins: joi.object().required()
+  plugins: joi.object().required(),
+  configs: joi.object()
 }))
 
 const schema = createSchema(joi => joi.object().keys({
@@ -23,7 +25,9 @@ const schema = createSchema(joi => joi.object().keys({
   presets: joi.object().pattern(/^/, presetSchema)
 }))
 
-exports.validatePreset = preset => validate(preset, presetSchema)
+exports.validatePreset = preset => validate(preset, presetSchema, msg => {
+  error(`invalid preset options: ${msg}`)
+})
 
 exports.defaultPreset = {
   router: false,
@@ -63,17 +67,14 @@ exports.loadOptions = () => {
         `Please fix/delete it and re-run vue-cli in manual mode.\n` +
         `(${e.message})`,
       )
-      // process.exit(1)
+      process.exit(1)
     }
-    try {
-      validate(cachedOptions, schema, undefined, true /* noExit */)
-    } catch (e) {
-      log(
+    validate(cachedOptions, schema, () => {
+      error(
         `~/.vuerc may be outdated. ` +
         `Please delete it and re-run vue-cli in manual mode.`
       )
-      // process.exit(1)
-    }
+    })
     return cachedOptions
   } else {
     return {}

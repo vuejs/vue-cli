@@ -40,7 +40,7 @@ Alternatively, you can run the tests inside specific packages with the `-p` flag
 yarn test -p cli,cli-service
 ```
 
-If the package is a plugin, you can ommit the `cli-plugin-` prefix:
+If the package is a plugin, you can omit the `cli-plugin-` prefix:
 
 ``` sh
 yarn test -p typescript
@@ -52,4 +52,4 @@ Note that `jest --onlyChanged` isn't always accurate because some tests spawn ch
 
 ### Plugin Development
 
-See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/dev/docs/Plugin.md).
+See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/dev/docs/plugin-dev.md).

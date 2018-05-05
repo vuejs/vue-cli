@@ -1,4 +1,5 @@
 const chalk = require('chalk')
+const { toShortPluginId } = require('@vue/cli-shared-utils')
 
 module.exports = function formatFeatures (preset, lead, joiner) {
   const features = []
@@ -16,7 +17,7 @@ module.exports = function formatFeatures (preset, lead, joiner) {
   })
   features.push.apply(features, plugins)
   return features.map(dep => {
-    dep = dep.replace(/^(@vue\/|vue-)cli-plugin-/, '')
+    dep = toShortPluginId(dep)
     return `${lead || ''}${chalk.yellow(dep)}`
   }).join(joiner || ', ')
 }

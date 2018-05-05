@@ -36,14 +36,25 @@ program
 program
   .command('create <app-name>')
   .description('create a new project powered by vue-cli-service')
-  .option('-p, --preset <presetName>', 'Skip prompts and use saved preset')
+  .option('-p, --preset <presetName>', 'Skip prompts and use saved or remote preset')
   .option('-d, --default', 'Skip prompts and use default preset')
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
-  .option('-r, --registry <url>', 'Use specified NPM registry when installing dependencies')
-  .option('-m, --packageManager <command>', 'Use specified NPM client when installing dependencies')
+  .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
+  .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
+  .option('-g, --git [message]', 'Force / skip git intialization, optionally specify initial commit message')
   .option('-f, --force', 'Overwrite target directory if it exists')
+  .option('-c, --clone', 'Use git clone when fetching remote preset')
+  .option('-x, --proxy', 'Use specified proxy when creating project')
   .action((name, cmd) => {
     require('../lib/create')(name, cleanArgs(cmd))
+  })
+
+program
+  .command('add <plugin> [pluginOptions]')
+  .allowUnknownOption()
+  .description('install a plugin and invoke its generator in an already created project')
+  .action((plugin) => {
+    require('../lib/add')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
@@ -55,8 +66,17 @@ program
   })
 
 program
+  .command('inspect [paths...]')
+  .option('--mode <mode>')
+  .option('-v --verbose', 'Show full function definitions in output')
+  .description('inspect the webpack config in a project with vue-cli-service')
+  .action((paths, cmd) => {
+    require('../lib/inspect')(paths, cleanArgs(cmd))
+  })
+
+program
   .command('serve [entry]')
-  .description('serve a .js or vue file in development mode with zero config')
+  .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
@@ -64,10 +84,9 @@ program
 
 program
   .command('build [entry]')
-  .option('-t, --target <target>', 'Build target (app | lib | web-component, default: app)')
-  .option('-n, --name <name>', 'name for lib or web-component (default: entry filename)')
+  .option('-t, --target <target>', 'Build target (app | lib | wc | wc-async, default: app)')
+  .option('-n, --name <name>', 'name for lib or web-component mode (default: entry filename)')
   .option('-d, --dest <dir>', 'output directory (default: dist)')
-  .option('--keepAlive', 'keep component alive when web-component is detached? (default: false)')
   .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
@@ -76,8 +95,18 @@ program
 program
   .command('init <template> <app-name>')
   .description('generate a project from a remote template (legacy API, requires @vue/cli-init)')
+  .option('-c, --clone', 'Use git clone when fetching remote template')
   .action(() => {
     loadCommand('init', '@vue/cli-init')
+  })
+
+// output help information on unknown commands
+program
+  .arguments('<command>')
+  .action((cmd) => {
+    program.outputHelp()
+    console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
+    console.log()
   })
 
 // add some useful info on help
@@ -128,7 +157,11 @@ function cleanArgs (cmd) {
   const args = {}
   cmd.options.forEach(o => {
     const key = o.long.replace(/^--/, '')
-    args[key] = cmd[key]
+    // if an option is not present and Command has a method with the same name
+    // it should not be copied
+    if (typeof cmd[key] !== 'function') {
+      args[key] = cmd[key]
+    }
   })
   return args
 }

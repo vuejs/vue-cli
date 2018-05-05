@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-beta.9",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,11 +23,11 @@
   },
   "dependencies": {
     "@types/node": "^9.3.0",
-    "fork-ts-checker-webpack-plugin": "^0.3.0",
-    "globby": "^7.1.1",
-    "ts-loader": "^3.3.1",
+    "fork-ts-checker-webpack-plugin": "^0.4.1",
+    "globby": "^8.0.1",
+    "ts-loader": "^3.4.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.6.2"
+    "typescript": "^2.8.3"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "7 || ^7.0.0-beta || ^7.0.0-rc",

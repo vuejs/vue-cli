@@ -1,6 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const name = api.service.pkg.name
+    const userOptions = options.pwa || {}
 
     // the pwa plugin hooks on to html-webpack-plugin
     // and injects icons, manifest links & other PWA related tags into <head>
@@ -8,19 +9,39 @@ module.exports = (api, options) => {
       .plugin('pwa')
         .use(require('./lib/HtmlPwaPlugin'), [Object.assign({
           name
-        }, options.pwa)])
+        }, userOptions)])
 
     // generate /service-worker.js in production mode
     if (process.env.NODE_ENV === 'production') {
+      // Default to GenerateSW mode, though InjectManifest also might be used.
+      const workboxPluginMode = userOptions.workboxPluginMode || 'GenerateSW'
+      const workboxWebpackModule = require('workbox-webpack-plugin')
+
+      if (!(workboxPluginMode in workboxWebpackModule)) {
+        throw new Error(
+          `${workboxPluginMode} is not a supported Workbox webpack plugin mode. ` +
+          `Valid modes are: ${Object.keys(workboxWebpackModule).join(', ')}`
+        )
+      }
+
+      const defaultOptions = {
+        exclude: [
+          /\.map$/,
+          /img\/icons\//,
+          /favicon\.ico$/,
+          /manifest\.json$/
+        ]
+      }
+
+      const defaultGenerateSWOptions = workboxPluginMode === 'GenerateSW' ? {
+        cacheId: name
+      } : {}
+
+      const workBoxConfig = Object.assign(defaultOptions, defaultGenerateSWOptions, userOptions.workboxOptions)
+
       webpackConfig
-        .plugin('sw-precache')
-          .use(require('sw-precache-webpack-plugin'), [{
-            cacheId: name,
-            filename: 'service-worker.js',
-            staticFileGlobs: [`${options.outputDir}/**/*.{js,html,css}`],
-            minify: true,
-            stripPrefix: `${options.outputDir}/`
-          }])
+        .plugin('workbox')
+        .use(workboxWebpackModule[workboxPluginMode], [workBoxConfig])
     }
   })
 

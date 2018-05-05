@@ -1,4 +1,4 @@
-<%_ if (options.router) { _%>
+<%_ if (rootOptions.router) { _%>
 <template>
   <div class="home">
     <img src="../assets/logo.png">

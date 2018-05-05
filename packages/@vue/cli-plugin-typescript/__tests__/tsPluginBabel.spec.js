@@ -12,6 +12,7 @@ test('using correct loader', () => {
     ]
   })
 
+  service.init()
   const config = service.resolveWebpackConfig()
   const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))
   expect(rule.use[0].loader).toMatch('cache-loader')

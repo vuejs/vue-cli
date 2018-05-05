@@ -10,13 +10,19 @@ module.exports = cli => {
 
   cli.injectPrompt({
     name: 'eslintConfig',
-    when: answers => (
-      answers.features.includes('linter') &&
-      !answers.features.includes('ts')
-    ),
+    when: answers => answers.features.includes('linter'),
     type: 'list',
     message: 'Pick a linter / formatter config:',
-    choices: [
+    choices: answers => [
+      ...(
+        answers.features.includes('ts')
+          ? [{
+            name: `TSLint`,
+            value: 'tslint',
+            short: 'TSLint'
+          }]
+          : []
+      ),
       {
         name: 'ESLint with error prevention only',
         value: 'base',
@@ -51,15 +57,14 @@ module.exports = cli => {
         value: 'save'
       },
       {
-        name: 'Lint and fix on commit' + (hasGit ? '' : chalk.red(' (requires Git)')),
+        name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
         value: 'commit'
       }
     ]
   })
 
   cli.onPromptComplete((answers, options) => {
-    if (answers.features.includes('linter') &&
-        !answers.features.includes('ts')) {
+    if (answers.features.includes('linter') && answers.eslintConfig !== 'tslint') {
       options.plugins['@vue/cli-plugin-eslint'] = {
         config: answers.eslintConfig,
         lintOn: answers.lintOn

@@ -9,15 +9,18 @@ module.exports = api => {
   api.extendPackage({
     devDependencies,
     scripts: {
-      test: 'vue-cli-service test'
+      'test:unit': 'vue-cli-service test:unit'
     }
   })
 
   if (api.hasPlugin('eslint')) {
     api.render(files => {
-      files['test/unit/.eslintrc'] = JSON.stringify({
-        env: { mocha: true }
-      }, null, 2)
+      files['tests/unit/.eslintrc.js'] = api.genJSConfig({
+        env: { mocha: true },
+        rules: {
+          'import/no-extraneous-dependencies': 'off'
+        }
+      })
     })
   }
 }

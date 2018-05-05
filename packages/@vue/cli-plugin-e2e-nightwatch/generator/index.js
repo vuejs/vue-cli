@@ -5,7 +5,7 @@ module.exports = api => {
 
   api.extendPackage({
     scripts: {
-      e2e: 'vue-cli-service e2e'
+      'test:e2e': 'vue-cli-service test:e2e'
     }
   })
 }
