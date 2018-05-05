@@ -13,6 +13,10 @@ npm install -g @vue/cli
 # or
 yarn global add @vue/cli
 
+
+### Creating a New Project
+
+```
 vue create my-project
 ```
 
