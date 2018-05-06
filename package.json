@@ -49,12 +49,14 @@
     "globby": "^8.0.1",
     "http-server": "^0.11.1",
     "jest": "^22.1.4",
+    "json-server": "^0.12.2",
     "lerna": "^2.8.0",
     "lint-staged": "^6.0.1",
     "memfs": "^2.6.0",
     "puppeteer": "^1.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
+    "rimraf": "^2.6.2",
     "yorkie": "^1.0.2"
   }
 }

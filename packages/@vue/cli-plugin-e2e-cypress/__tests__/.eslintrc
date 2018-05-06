@@ -1,5 +1,0 @@
-{
-  "rules": {
-    "vue-libs/no-async-functions": 0
-  }
-}

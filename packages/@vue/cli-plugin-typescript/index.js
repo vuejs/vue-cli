@@ -16,32 +16,13 @@ module.exports = (api, {
       .extensions
         .merge(['.ts', '.tsx'])
 
-    const tsRule = config.module
-      .rule('ts')
-        .test(/\.tsx?$/)
-        .include
-          .add(api.resolve('src'))
-          .add(api.resolve('tests'))
-          .end()
-
-    const vueLoader = config.module
-      .rule('vue')
-        .use('vue-loader')
+    const tsRule = config.module.rule('ts').test(/\.ts$/)
+    const tsxRule = config.module.rule('tsx').test(/\.tsx$/)
 
     // add a loader to both *.ts & vue<lang="ts">
-    const addLoader = loader => {
-      const use = tsRule
-        .use(loader.loader)
-          .loader(loader.loader)
-      if (loader.options) {
-        use.options(loader.options)
-      }
-      vueLoader.tap(options => {
-        options.loaders = options.loaders || {}
-        options.loaders.ts = options.loaders.ts || []
-        options.loaders.ts.push(loader)
-        return options
-      })
+    const addLoader = ({ loader, options }) => {
+      tsRule.use(loader).loader(loader).options(options)
+      tsxRule.use(loader).loader(loader).options(options)
     }
 
     addLoader({
@@ -68,6 +49,12 @@ module.exports = (api, {
           // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
           happyPackMode: useThreads
         }
+      })
+      // make sure to append TSX suffix
+      tsxRule.use('ts-loader').loader('ts-loader').tap(options => {
+        delete options.appendTsSuffixTo
+        options.appendTsxSuffixTo = [/\.vue$/]
+        return options
       })
     } else {
       // Experimental: compile TS with babel so that it can leverage

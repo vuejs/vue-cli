@@ -1,11 +1,6 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const execa = require('execa')
-const { promisify } = require('util')
-const readFile = promisify(fs.readFile)
-const writeFile = promisify(fs.writeFile)
-const rmFile = promisify(fs.unlink)
-const mkdirp = promisify(require('mkdirp'))
 
 module.exports = function createTestProject (name, preset, cwd, initGit) {
   cwd = cwd || path.resolve(__dirname, '../../test')
@@ -13,21 +8,25 @@ module.exports = function createTestProject (name, preset, cwd, initGit) {
   const projectRoot = path.resolve(cwd, name)
 
   const read = file => {
-    return readFile(path.resolve(projectRoot, file), 'utf-8')
+    return fs.readFile(path.resolve(projectRoot, file), 'utf-8')
   }
 
   const has = file => {
     return fs.existsSync(path.resolve(projectRoot, file))
   }
 
+  if (has(projectRoot)) {
+    console.warn(`An existing test project already exists for ${name}. May get unexpected test results due to project re-use`)
+  }
+
   const write = (file, content) => {
     const targetPath = path.resolve(projectRoot, file)
     const dir = path.dirname(targetPath)
-    return mkdirp(dir).then(() => writeFile(targetPath, content))
+    return fs.ensureDir(dir).then(() => fs.writeFile(targetPath, content))
   }
 
   const rm = file => {
-    return rmFile(path.resolve(projectRoot, file))
+    return fs.remove(path.resolve(projectRoot, file))
   }
 
   const run = (command, args) => {

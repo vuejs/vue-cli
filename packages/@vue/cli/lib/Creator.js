@@ -1,11 +1,12 @@
+const fs = require('fs-extra')
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
-const resolve = require('resolve')
 const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
+const { loadModule } = require('./util/module')
 const getVersions = require('./util/getVersions')
 const { installDeps } = require('./util/installDeps')
 const clearConsole = require('./util/clearConsole')
@@ -132,7 +133,7 @@ module.exports = class Creator {
     // run generator
     log()
     log(`🚀  Invoking generators...`)
-    const plugins = this.resolvePlugins(preset.plugins)
+    const plugins = await this.resolvePlugins(preset.plugins)
     const generator = new Generator(context, {
       pkg,
       plugins,
@@ -228,7 +229,9 @@ module.exports = class Creator {
     let preset
     const savedPresets = loadOptions().presets || {}
 
-    if (name.includes('/')) {
+    if (name.endsWith('.json')) {
+      preset = await fs.readJson(name)
+    } else if (name.includes('/')) {
       logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
       try {
         preset = await fetchRemotePreset(name, clone)
@@ -262,17 +265,26 @@ module.exports = class Creator {
   }
 
   // { id: options } => [{ id, apply, options }]
-  resolvePlugins (rawPlugins) {
+  async resolvePlugins (rawPlugins) {
     // ensure cli-service is invoked first
     rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'])
-    return Object.keys(rawPlugins).map(id => {
-      const module = resolve.sync(`${id}/generator`, { basedir: this.context })
-      return {
-        id,
-        apply: require(module),
-        options: rawPlugins[id]
+    const plugins = []
+    for (const id of Object.keys(rawPlugins)) {
+      const apply = loadModule(`${id}/generator`, this.context)
+      if (!apply) {
+        throw new Error(`Failed to resolve plugin: ${id}`)
       }
-    })
+      let options = rawPlugins[id] || {}
+      if (options.prompts) {
+        const prompts = loadModule(`${id}/prompts`, this.context)
+        if (prompts) {
+          console.log(`\n${chalk.cyan(id)}`)
+          options = await inquirer.prompt(prompts)
+        }
+      }
+      plugins.push({ id, apply, options })
+    }
+    return plugins
   }
 
   resolveIntroPrompts () {
@@ -332,7 +344,8 @@ module.exports = class Creator {
         name: 'save',
         when: isManualMode,
         type: 'confirm',
-        message: 'Save this as a preset for future projects?'
+        message: 'Save this as a preset for future projects?',
+        default: false
       },
       {
         name: 'saveName',

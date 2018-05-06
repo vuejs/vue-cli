@@ -9,7 +9,7 @@ module.exports = api => {
   api.extendPackage({
     devDependencies,
     scripts: {
-      test: 'vue-cli-service test'
+      'test:unit': 'vue-cli-service test:unit'
     }
   })
 

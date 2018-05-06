@@ -57,10 +57,6 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     return {
       target,
       context (pathname, req) {
-        // not a static request
-        if (req.method !== 'GET') {
-          return true
-        }
         // is a static asset
         if (!mayProxy(pathname)) {
           return false
@@ -69,6 +65,10 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
           // Explicit context, e.g. /api
           return pathname.match(context)
         } else {
+          // not a static request
+          if (req.method !== 'GET') {
+            return true
+          }
           // Heuristics: if request `accept`s text/html, we pick /index.html.
           // Modern browsers include text/html into `accept` header when navigating.
           // However API calls like `fetch()` won’t generally accept text/html.
@@ -112,7 +112,8 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
 
   // Otherwise, proxy is an object so create an array of proxies to pass to webpackDevServer
   return Object.keys(proxy).map(context => {
-    if (!proxy[context].hasOwnProperty('target')) {
+    const config = proxy[context]
+    if (!config.hasOwnProperty('target')) {
       console.log(
         chalk.red(
           'When `proxy` in package.json is as an object, each `context` object must have a ' +
@@ -121,8 +122,8 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
       )
       process.exit(1)
     }
-    const entry = createProxyEntry(proxy[context].target, proxy[context].onProxyReq, context)
-    return Object.assign({}, defaultConfig, proxy[context], entry)
+    const entry = createProxyEntry(config.target, config.onProxyReq, context)
+    return Object.assign({}, defaultConfig, config, entry)
   })
 }
 

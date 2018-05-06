@@ -9,5 +9,5 @@ test('should work', async () => {
       '@vue/cli-plugin-unit-mocha': {}
     }
   })
-  await project.run(`vue-cli-service test`)
+  await project.run(`vue-cli-service test:unit`)
 })

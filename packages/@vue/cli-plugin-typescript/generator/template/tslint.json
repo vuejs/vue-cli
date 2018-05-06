@@ -4,6 +4,11 @@
   "extends": [
     "tslint:recommended"
   ],
+  "linterOptions": {
+      "exclude": [
+          "node_modules/**"
+      ]
+  },
   "rules": {
     "quotemark": [true, "single"],
     "indent": [true, "spaces", 2],

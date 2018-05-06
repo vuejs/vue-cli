@@ -15,7 +15,7 @@ test('base', async () => {
     }
   ])
 
-  expect(pkg.scripts.test).toBeTruthy()
+  expect(pkg.scripts['test:unit']).toBe('vue-cli-service test:unit')
   expect(pkg.devDependencies).toHaveProperty('@vue/test-utils')
   expect(files['tests/unit/.eslintrc.js']).toMatch('mocha: true')
 

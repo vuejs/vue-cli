@@ -1,22 +1,21 @@
 jest.setTimeout(20000)
 
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const portfinder = require('portfinder')
 const { createServer } = require('http-server')
-const mkdirp = require('mkdirp')
 const execa = require('execa')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 const cwd = path.resolve(__dirname, 'temp')
 const binPath = require.resolve('@vue/cli/bin/vue')
-const write = (file, content) => fs.writeFileSync(path.join(cwd, file), content)
+const write = (file, content) => fs.writeFile(path.join(cwd, file), content)
 
 const entryVue = fs.readFileSync(path.resolve(__dirname, 'entry.vue'), 'utf-8')
 
-beforeAll(() => {
-  mkdirp.sync(cwd)
-  write('my-wc.vue', entryVue)
+beforeAll(async () => {
+  await fs.ensureDir(cwd)
+  await write('my-wc.vue', entryVue)
 })
 
 let server, browser, page

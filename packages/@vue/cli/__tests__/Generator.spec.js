@@ -1,17 +1,16 @@
 jest.mock('fs')
 
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
 const stringifyJS = require('javascript-stringify')
 
 // prepare template fixtures
-const mkdirp = require('mkdirp')
 const templateDir = path.resolve(__dirname, 'template')
-mkdirp.sync(templateDir)
+fs.ensureDirSync(templateDir)
 fs.writeFileSync(path.resolve(templateDir, 'foo.js'), 'foo(<%- options.n %>)')
-mkdirp.sync(path.resolve(templateDir, 'bar'))
+fs.ensureDirSync(path.resolve(templateDir, 'bar'))
 fs.writeFileSync(path.resolve(templateDir, 'bar/bar.js'), 'bar(<%- m %>)')
 
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `

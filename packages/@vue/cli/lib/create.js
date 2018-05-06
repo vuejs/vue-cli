@@ -1,7 +1,6 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const chalk = require('chalk')
-const rimraf = require('rimraf')
 const inquirer = require('inquirer')
 const Creator = require('./Creator')
 const clearConsole = require('./util/clearConsole')
@@ -28,7 +27,7 @@ async function create (projectName, options) {
 
   if (fs.existsSync(targetDir)) {
     if (options.force) {
-      rimraf.sync(targetDir)
+      await fs.remove(targetDir)
     } else {
       await clearConsole()
       if (inCurrent) {
@@ -58,7 +57,7 @@ async function create (projectName, options) {
         if (!action) {
           return
         } else if (action === 'overwrite') {
-          rimraf.sync(targetDir)
+          await fs.remove(targetDir)
         }
       }
     }

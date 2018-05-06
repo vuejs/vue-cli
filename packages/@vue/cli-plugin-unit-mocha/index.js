@@ -22,9 +22,9 @@ module.exports = api => {
     }
   })
 
-  api.registerCommand('test', {
+  api.registerCommand('test:unit', {
     description: 'run unit tests with mocha-webpack',
-    usage: 'vue-cli-service test [options] [...files]',
+    usage: 'vue-cli-service test:unit [options] [...files]',
     options: {
       '--watch, -w': 'run in watch mode',
       '--grep, -g': 'only run tests matching <pattern>',
@@ -40,7 +40,6 @@ module.exports = api => {
       `http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html`
     )
   }, (args, rawArgv) => {
-    api.setMode('test')
     // for @vue/babel-preset-app
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     // start runner
@@ -73,4 +72,15 @@ module.exports = api => {
       })
     })
   })
+
+  // TODO remove in RC
+  api.registerCommand('test', (args, rawArgv) => {
+    const { warn } = require('@vue/cli-shared-utils')
+    warn(`Deprecation Warning: "vue-cli-service test" has been renamed to "vue-cli-service test:unit".`)
+    return api.service.run('test:unit', args, rawArgv)
+  })
+}
+
+module.exports.defaultModes = {
+  'test:unit': 'test'
 }

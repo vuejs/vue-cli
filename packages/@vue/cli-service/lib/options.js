@@ -4,8 +4,9 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string(),
   outputDir: joi.string(),
   compiler: joi.boolean(),
+  transpileDependencies: joi.array(),
+  preserveWhitespace: joi.boolean(),
   productionSourceMap: joi.boolean(),
-  vueLoader: joi.object(),
   parallel: joi.boolean(),
   devServer: joi.object(),
   dll: joi.alternatives().try(
@@ -55,14 +56,11 @@ exports.defaults = () => ({
   // boolean, use full build?
   compiler: false,
 
-  // vue-loader options
-  vueLoader: {
-    preserveWhitespace: false,
-    template: {
-      // for pug
-      doctype: 'html'
-    }
-  },
+  // deps to transpile
+  transpileDependencies: [/* string or regex */],
+
+  // whether to preserve whitespaces between elements
+  preserveWhitespace: false,
 
   // sourceMap for production build?
   productionSourceMap: true,

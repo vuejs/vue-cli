@@ -22,8 +22,8 @@ const createElement = (prefix, component, file, async) => {
   const { camelName, kebabName } = exports.fileToComponentName(prefix, component)
 
   return async
-    ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}')))\n`
-    : `import ${camelName} from '~root/${file}'\n` +
+    ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}?shadow')))\n`
+    : `import ${camelName} from '~root/${file}?shadow'\n` +
         `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}))\n`
 }
 
@@ -52,7 +52,7 @@ import wrap from '@vue/web-component-wrapper'
 // runtime shared by every component chunk
 import 'css-loader/lib/css-base'
 import 'vue-style-loader/lib/addStylesShadow'
-import 'vue-loader/lib/runtime/component-normalizer'
+import 'vue-loader/lib/runtime/componentNormalizer'
 
 ;(() => {
   let i

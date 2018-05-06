@@ -1,12 +1,8 @@
 // cross-platform executable link, mostly for Windows
 
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const { promisify } = require('util')
-
-const chmod = promisify(fs.chmod)
-const symlink = promisify(fs.symlink)
-const mkdirp = promisify(require('mkdirp'))
 const cmdShim = promisify(require('cmd-shim'))
 
 exports.linkBin = async (src, dest) => {
@@ -18,8 +14,8 @@ exports.linkBin = async (src, dest) => {
     // src will not be modified
     await cmdShim(src, dest)
   } else {
-    await mkdirp(path.dirname(dest))
-    await symlink(src, dest)
-    await chmod(dest, '755')
+    await fs.ensureDir(path.dirname(dest))
+    await fs.symlink(src, dest)
+    await fs.chmod(dest, '755')
   }
 }

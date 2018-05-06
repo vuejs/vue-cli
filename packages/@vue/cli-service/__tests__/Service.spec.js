@@ -10,10 +10,16 @@ const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
 
-const createMockService = (plugins = []) => new Service('/', {
-  plugins,
-  useBuiltIn: false
-})
+const createMockService = (plugins = [], init = true) => {
+  const service = new Service('/', {
+    plugins,
+    useBuiltIn: false
+  })
+  if (init) {
+    service.init()
+  }
+  return service
+}
 
 beforeEach(() => {
   mockPkg({})
@@ -79,36 +85,6 @@ test('load project options from vue.config.js', () => {
   expect(service.projectOptions.lintOnSave).toBe(false)
 })
 
-test('api: setMode', () => {
-  fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
-  fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
-
-  createMockService([{
-    id: 'test-setMode',
-    apply: api => {
-      api.setMode('foo')
-    }
-  }])
-  expect(process.env.FOO).toBe('7')
-  expect(process.env.BAR).toBe('6')
-  expect(process.env.BAZ).toBe('8')
-  expect(process.env.VUE_CLI_MODE).toBe('foo')
-  // for NODE_ENV & BABEL_ENV
-  // any mode that is not test or production defaults to development
-  expect(process.env.NODE_ENV).toBe('development')
-  expect(process.env.BABEL_ENV).toBe('development')
-
-  createMockService([{
-    id: 'test-setMode',
-    apply: api => {
-      api.setMode('test')
-    }
-  }])
-  expect(process.env.VUE_CLI_MODE).toBe('test')
-  expect(process.env.NODE_ENV).toBe('test')
-  expect(process.env.BABEL_ENV).toBe('test')
-})
-
 test('api: registerCommand', () => {
   let args
   const service = createMockService([{
@@ -122,6 +98,44 @@ test('api: registerCommand', () => {
 
   service.run('foo', { n: 1 })
   expect(args).toEqual({ _: [], n: 1 })
+})
+
+test('api: defaultModes', () => {
+  fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
+  fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
+
+  const plugin1 = {
+    id: 'test-defaultModes',
+    apply: api => {
+      expect(process.env.FOO).toBe('7')
+      expect(process.env.BAR).toBe('6')
+      expect(process.env.BAZ).toBe('8')
+      // for NODE_ENV & BABEL_ENV
+      // any mode that is not test or production defaults to development
+      expect(process.env.NODE_ENV).toBe('development')
+      expect(process.env.BABEL_ENV).toBe('development')
+      api.registerCommand('foo', () => {})
+    }
+  }
+  plugin1.apply.defaultModes = {
+    foo: 'foo'
+  }
+
+  createMockService([plugin1], false /* init */).run('foo')
+
+  const plugin2 = {
+    id: 'test-defaultModes',
+    apply: api => {
+      expect(process.env.NODE_ENV).toBe('test')
+      expect(process.env.BABEL_ENV).toBe('test')
+      api.registerCommand('test', () => {})
+    }
+  }
+  plugin2.apply.defaultModes = {
+    test: 'test'
+  }
+
+  createMockService([plugin2], false /* init */).run('test')
 })
 
 test('api: chainWebpack', () => {
