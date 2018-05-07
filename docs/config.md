@@ -25,12 +25,12 @@ module.exports = {
   // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
   compiler: false,
 
-  // babel-loader skips node_module deps by default.
+  // babel-loader skips `node_modules` deps by default.
   // explicitly transpile a dependency with this option.
   transpileDependencies: [/* string or regex */],
 
   // whether to preserve whitespaces between elements during template
-  // compilation. Defaults to false for smaller compiled code size and
+  // compilation. Defaults to `false` for smaller compiled code size and
   // performance.
   preserveWhitepsace: false,
 
