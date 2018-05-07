@@ -9,10 +9,6 @@ const schema = createSchema(joi => joi.object({
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
-  dll: joi.alternatives().try(
-    joi.boolean(),
-    joi.array().items(joi.string())
-  ),
 
   // css
   css: joi.object({
@@ -68,10 +64,6 @@ exports.defaults = () => ({
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
   parallel: require('os').cpus().length > 1,
-
-  // split vendors using autoDLLPlugin?
-  // can be an explicit list of dependencies to include in the DLL chunk.
-  dll: false,
 
   css: {
     // extract: true,

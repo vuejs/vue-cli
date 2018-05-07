@@ -67,47 +67,45 @@ module.exports = (api, options) => {
       // This needs to be updated when upgrading to webpack 4
       const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
 
-      if (!options.dll) {
-        // extract vendor libs into its own chunk for better caching, since they
-        // are more likely to stay the same.
-        webpackConfig
-          .plugin('split-vendor')
-            .use(CommonsChunkPlugin, [{
-              name: 'vendor',
-              minChunks (module) {
-                // any required modules inside node_modules are extracted to vendor
-                return (
-                  module.resource &&
-                  /\.js$/.test(module.resource) &&
-                  module.resource.indexOf(`node_modules`) > -1
-                )
-              }
-            }])
+      // extract vendor libs into its own chunk for better caching, since they
+      // are more likely to stay the same.
+      webpackConfig
+        .plugin('split-vendor')
+          .use(CommonsChunkPlugin, [{
+            name: 'vendor',
+            minChunks (module) {
+              // any required modules inside node_modules are extracted to vendor
+              return (
+                module.resource &&
+                /\.js$/.test(module.resource) &&
+                module.resource.indexOf(`node_modules`) > -1
+              )
+            }
+          }])
 
-        // extract webpack runtime and module manifest to its own file in order to
-        // prevent vendor hash from being updated whenever app bundle is updated
-        webpackConfig
-          .plugin('split-manifest')
-            .use(CommonsChunkPlugin, [{
-              name: 'manifest',
-              minChunks: Infinity
-            }])
+      // extract webpack runtime and module manifest to its own file in order to
+      // prevent vendor hash from being updated whenever app bundle is updated
+      webpackConfig
+        .plugin('split-manifest')
+          .use(CommonsChunkPlugin, [{
+            name: 'manifest',
+            minChunks: Infinity
+          }])
 
-        // inline the manifest chunk into HTML
-        webpackConfig
-          .plugin('inline-manifest')
-            .use(require('../webpack/InlineSourcePlugin'), [{
-              include: /manifest\..*\.js$/
-            }])
+      // inline the manifest chunk into HTML
+      webpackConfig
+        .plugin('inline-manifest')
+          .use(require('../webpack/InlineSourcePlugin'), [{
+            include: /manifest\..*\.js$/
+          }])
 
-        // since manifest is inlined, don't preload it anymore
-        webpackConfig
-          .plugin('preload')
-            .tap(([options]) => {
-              options.fileBlacklist.push(/manifest\..*\.js$/)
-              return [options]
-            })
-      }
+      // since manifest is inlined, don't preload it anymore
+      webpackConfig
+        .plugin('preload')
+          .tap(([options]) => {
+            options.fileBlacklist.push(/manifest\..*\.js$/)
+            return [options]
+          })
 
       // This CommonsChunkPlugin instance extracts shared chunks from async
       // chunks and bundles them in a separate chunk, similar to the vendor chunk
@@ -120,37 +118,6 @@ module.exports = (api, options) => {
             children: true,
             minChunks: 3
           }])
-
-      // DLL
-      if (options.dll) {
-        const webpack = require('webpack')
-        const UglifyPlugin = require('uglifyjs-webpack-plugin')
-        const getUglifyOptions = require('./uglifyOptions')
-        const dllEntries = Array.isArray(options.dll)
-          ? options.dll
-          : Object.keys(api.service.pkg.dependencies)
-
-        webpackConfig
-          .plugin('dll')
-            .use(require('autodll-webpack-plugin'), [{
-              inject: true,
-              inherit: true,
-              path: 'js/',
-              context: api.resolve('.'),
-              filename: '[name].[hash:8].js',
-              entry: {
-                'vendor': [
-                  ...dllEntries,
-                  'vue-loader/lib/component-normalizer'
-                ]
-              },
-              plugins: [
-                new webpack.DefinePlugin(resolveClientEnv(options.baseUrl)),
-                new UglifyPlugin(getUglifyOptions(options))
-              ]
-            }])
-            .after('preload')
-      }
     }
   })
 }

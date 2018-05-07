@@ -6,7 +6,6 @@
 - [build](#build)
   - [Caching and Parallel Mode](#caching-and-parallel-mode)
   - [Building as Library or Web Component](#building-as-library-or-web-component)
-  - [DLL Mode](#dll-mode)
 - [inspect](#inspect)
 - [Checking All Available Commands](#checking-all-available-commands)
 
@@ -117,33 +116,6 @@ Options:
 #### Building as Library or Web Components
 
 It is also possible to build any component(s) inside your project as a library or as web components. See [Build Targets](./build-targets.md) for more details.
-
-#### DLL Mode
-
-If your app has a large amount of dependency libraries, you can improve the build performance by opting into DLL mode. DLL mode builds your dependencies into a separate vendor bundle which will be reused on future builds as long as your dependencies did not change.
-
-To enable DLL mode, set the `dll` option in `vue.config.js` to `true`:
-
-``` js
-// vue.config.js
-module.exports = {
-  dll: true
-}
-```
-
-This by default builds **all the modules listed in the `dependencies` field in `package.json`** into the DLL bundle. It is important that you correctly list your dependencies, otherwise it may end up including unnecessary code.
-
-If you wish to have finer grained control over what modules to be included in the DLL bundle, you can also provide an Array of modules to the `dll` option:
-
-``` js
-// vue.config.js
-module.exports = {
-  dll: [
-    'dep-a',
-    'dep-b/some/nested/file.js'
-  ]
-}
-```
 
 ### inspect
 

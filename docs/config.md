@@ -34,13 +34,13 @@ module.exports = {
   // performance.
   preserveWhitepsace: false,
 
+  // generate sourceMap for production build?
+  productionSourceMap: true,
+
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   chainWebpack: () => {},
   configureWebpack: () => {},
-
-  // generate sourceMap for production build?
-  productionSourceMap: true,
 
   // CSS related options
   css: {
@@ -63,11 +63,6 @@ module.exports = {
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
   parallel: require('os').cpus().length > 1,
-
-  // split vendors using autoDLLPlugin?
-  // can also be an explicit Array of dependencies to include in the DLL chunk.
-  // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#dll-mode
-  dll: false,
 
   // options for the PWA plugin.
   // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
