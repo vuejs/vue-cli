@@ -135,16 +135,12 @@ module.exports = (api, options) => {
         ])
 
     webpackConfig
-      .plugin('timefix')
-        .use(require('../webpack/TimeFixPlugin'))
-
-    webpackConfig
       .plugin('case-sensitive-paths')
         .use(require('case-sensitive-paths-webpack-plugin'))
 
     // friendly error plugin displays very confusing errors when webpack
     // fails to resolve a loader, so we provide custom handlers to improve it
-    const { transformer, formatter } = require('../webpack/resolveLoaderError')
+    const { transformer, formatter } = require('../util/resolveLoaderError')
     webpackConfig
       .plugin('friendly-errors')
         .use(require('friendly-errors-webpack-plugin'), [{

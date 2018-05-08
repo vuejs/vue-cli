@@ -52,7 +52,7 @@ module.exports = (api, { target, entry, name }) => {
 
     // only minify min entry
     if (!minify) {
-      config.plugins.delete('uglify')
+      config.optimization.minimize(false)
     }
 
     // externalize Vue in case user imports it

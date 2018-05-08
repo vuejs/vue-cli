@@ -49,7 +49,6 @@
     "globby": "^8.0.1",
     "http-server": "^0.11.1",
     "jest": "^22.1.4",
-    "json-server": "^0.12.2",
     "lerna": "^2.8.0",
     "lint-staged": "^6.0.1",
     "memfs": "^2.6.0",

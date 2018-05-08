@@ -1,6 +1,7 @@
 const Service = require('../lib/Service')
 
 const LANGS = ['css', 'sass', 'scss', 'less', 'styl', 'stylus']
+const extractLoaderPath = require('mini-css-extract-plugin').loader
 
 const LOADERS = {
   css: 'css',
@@ -36,7 +37,7 @@ const findLoaders = (config, lang) => {
 const findOptions = (config, lang, _loader) => {
   const rule = findRule(config, lang)
   const use = rule.use.find(({ loader }) => loader.includes(`${_loader}-loader`))
-  return use.options
+  return use.options || {}
 }
 
 test('default loaders', () => {
@@ -58,10 +59,9 @@ test('default loaders', () => {
 
 test('production defaults', () => {
   const config = genConfig({ postcss: {}}, 'production')
-  const extractLoaderPath = require.resolve('extract-text-webpack-plugin/dist/loader')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
-    expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'vue-style', 'css', 'postcss'].concat(loader))
+    expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'css')).toEqual({
       minimize: true,
       sourceMap: false,
@@ -97,7 +97,6 @@ test('css.extract', () => {
       }
     }
   }, 'production')
-  const extractLoaderPath = require.resolve('extract-text-webpack-plugin/dist/loader')
   LANGS.forEach(lang => {
     expect(findLoaders(config, lang)).not.toContain(extractLoaderPath)
   })

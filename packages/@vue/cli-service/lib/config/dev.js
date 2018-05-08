@@ -2,6 +2,9 @@ module.exports = api => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'development') {
       webpackConfig
+        .mode('development')
+
+      webpackConfig
         .devtool('cheap-module-eval-source-map')
         .output
           .publicPath('/')
@@ -18,12 +21,11 @@ module.exports = api => {
         .plugin('no-emit-on-errors')
           .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
 
-      webpackConfig
-        .plugin('watch-missing')
-          .use(
-            require('../webpack/WatchMissingNodeModulesPlugin'),
-            [api.resolve('node_modules')]
-          )
+      if (!process.env.VUE_CLI_TEST) {
+        webpackConfig
+          .plugin('progress')
+          .use(require('webpack/lib/ProgressPlugin'))
+      }
     }
   })
 }

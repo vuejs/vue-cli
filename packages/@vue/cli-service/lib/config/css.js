@@ -24,7 +24,7 @@ module.exports = (api, options) => {
     const shouldExtract = isProd && extract !== false && !shadowMode
     const extractOptions = Object.assign({
       filename: `css/[name].[contenthash:8].css`,
-      allChunks: true
+      chunkFilename: 'css/[name].[id].[contenthash:8].css'
     }, extract && typeof extract === 'object' ? extract : {})
 
     // check if the project has a valid postcss config
@@ -50,14 +50,16 @@ module.exports = (api, options) => {
         if (shouldExtract) {
           rule
             .use('extract-css-loader')
-            .loader(require.resolve('extract-text-webpack-plugin/dist/loader'))
-            .options({ omit: 1, remove: true })
+            .loader(require('mini-css-extract-plugin').loader)
+        } else {
+          rule
+            .use('vue-style-loader')
+            .loader('vue-style-loader')
+            .options({
+              sourceMap,
+              shadowMode
+            })
         }
-
-        rule.use('vue-style-loader').loader('vue-style-loader').options({
-          sourceMap,
-          shadowMode
-        })
 
         const cssLoaderOptions = {
           minimize: isProd,
@@ -70,21 +72,23 @@ module.exports = (api, options) => {
             localIdentName
           })
         }
-        rule.use('css-loader')
+        rule
+          .use('css-loader')
           .loader('css-loader')
           .options(cssLoaderOptions)
 
         if (hasPostCSSConfig) {
-          rule.use('postcss-loader').loader('postcss-loader').options({
-            // TODO: use config value after https://github.com/postcss/postcss-loader/pull/361 is merged
-            sourceMap: true
-          })
+          rule
+            .use('postcss-loader')
+            .loader('postcss-loader')
+            .options({ sourceMap })
         }
 
         if (loader) {
-          rule.use(loader).loader(loader).options(Object.assign({
-            sourceMap
-          }, options))
+          rule
+            .use(loader)
+            .loader(loader)
+            .options(Object.assign({ sourceMap }, options))
         }
       }
     }
@@ -103,7 +107,25 @@ module.exports = (api, options) => {
     if (shouldExtract) {
       webpackConfig
         .plugin('extract-css')
-          .use(require('extract-text-webpack-plugin'), [extractOptions])
+          .use(require('mini-css-extract-plugin'), [extractOptions])
+    }
+
+    if (isProd) {
+      // optimize CSS (dedupe)
+      const cssProcessorOptions = {
+        safe: true,
+        autoprefixer: { disable: true },
+        mergeLonghand: false
+      }
+      if (options.productionSourceMap && options.cssSourceMap) {
+        cssProcessorOptions.map = { inline: false }
+      }
+      webpackConfig
+        .plugin('optimize-css')
+          .use(require('optimize-css-assets-webpack-plugin'), [{
+            canPrint: false,
+            cssProcessorOptions
+          }])
     }
   })
 }
