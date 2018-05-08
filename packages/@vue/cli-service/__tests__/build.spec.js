@@ -30,6 +30,9 @@ test('build', async () => {
   // should preload css
   expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload>/)
 
+  // should reference favicon with correct base URL
+  expect(index).toMatch(/<link rel=icon href=\/favicon.ico>/)
+
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
 

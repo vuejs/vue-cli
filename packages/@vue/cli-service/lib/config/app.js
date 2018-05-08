@@ -8,18 +8,34 @@ module.exports = (api, options) => {
     }
 
     // HTML plugin
-    const fs = require('fs')
-    const htmlPath = api.resolve('public/index.html')
     const resolveClientEnv = require('../util/resolveClientEnv')
+    const htmlOptions = {
+      templateParameters: (compilation, assets, pluginOptions) => {
+        // enhance html-webpack-plugin's built in template params
+        let stats
+        return Object.assign({
+          // make stats lazy as it is expensive
+          get webpack () {
+            return stats || (stats = compilation.getStats().toJson())
+          },
+          compilation: compilation,
+          webpackConfig: compilation.options,
+          htmlWebpackPlugin: {
+            files: assets,
+            options: pluginOptions
+          }
+        }, resolveClientEnv(options.baseUrl, true /* raw */))
+      }
+    }
+    // only set template path if index.html exists
+    const htmlPath = api.resolve('public/index.html')
+    if (require('fs').existsSync(htmlPath)) {
+      htmlOptions.template = htmlPath
+    }
+
     webpackConfig
       .plugin('html')
-        .use(require('html-webpack-plugin'), [
-          Object.assign(
-            fs.existsSync(htmlPath) ? { template: htmlPath } : {},
-            // expose client env to html template
-            { env: resolveClientEnv(options.baseUrl, true /* raw */) }
-          )
-        ])
+        .use(require('html-webpack-plugin'), [htmlOptions])
 
     // inject preload/prefetch to HTML
     const PreloadPlugin = require('preload-webpack-plugin')
