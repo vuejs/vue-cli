@@ -82,7 +82,7 @@ module.exports = (api, { entry, name }, options) => {
 
     Object.assign(rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${entryName}.[id].js`,
+      chunkFilename: `${entryName}.[name].js`,
       library: libName,
       libraryExport: 'default',
       libraryTarget: format,

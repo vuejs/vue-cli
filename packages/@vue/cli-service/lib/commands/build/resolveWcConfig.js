@@ -112,7 +112,7 @@ module.exports = (api, { target, entry, name }) => {
 
     Object.assign(rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${libName}.[id]${minify ? `.min` : ``}.js`,
+      chunkFilename: `${libName}.[name]${minify ? `.min` : ``}.js`,
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
       // document.currentScript.src.
