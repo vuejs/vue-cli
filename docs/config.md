@@ -29,11 +29,6 @@ module.exports = {
   // explicitly transpile a dependency with this option.
   transpileDependencies: [/* string or regex */],
 
-  // whether to preserve whitespaces between elements during template
-  // compilation. Defaults to `false` for smaller compiled code size and
-  // performance.
-  preserveWhitepsace: false,
-
   // generate sourceMap for production build?
   productionSourceMap: true,
 
@@ -48,16 +43,16 @@ module.exports = {
     // can also be an object of options to pass to extract-text-webpack-plugin
     extract: true,
 
-    // Enable CSS modules for all css / pre-processor files.
-    // This option does not affect *.vue files.
-    modules: false,
-
     // enable CSS source maps?
     sourceMap: false,
 
     // pass custom options to pre-processor loaders. e.g. to pass options to
     // sass-loader, use { sass: { ... } }
-    loaderOptions: {}
+    loaderOptions: {},
+
+    // Enable CSS modules for all css / pre-processor files.
+    // This option does not affect *.vue files.
+    modules: false
   },
 
   // use thread-loader for babel & TS in production build
