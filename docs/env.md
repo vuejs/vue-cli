@@ -69,7 +69,7 @@ All resolved env variables will be available inside `public/index.html` via [lod
 For example, to reference static assets copied from the root of `public`, you will need to use the `BASE_URL` variable:
 
 ``` html
-<link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
+<link rel="shortcut icon" href="<%= htmlWebpackPlugin.options.env.BASE_URL %>favicon.ico">
 ```
 
 ### Local Only Variables
