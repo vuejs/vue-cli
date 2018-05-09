@@ -46,7 +46,7 @@ exports.resolveEntry = (prefix, libName, files, async) => {
       : files.map(file => createElement(prefix, file, file, async)).join('\n')
 
   const content = `
-import './setPubicPath'
+import './setPublicPath'
 import Vue from 'vue'
 import wrap from '@vue/web-component-wrapper'
 
