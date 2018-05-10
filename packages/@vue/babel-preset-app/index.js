@@ -1,8 +1,7 @@
 const path = require('path')
 
 const defaultPolyfills = [
-  'es6.promise',
-  'es6.object.assign'
+  'es6.promise'
 ]
 
 function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
