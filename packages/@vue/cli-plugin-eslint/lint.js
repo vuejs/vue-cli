@@ -1,3 +1,20 @@
+const renamedArrayArgs = {
+  ext: 'extensions',
+  env: 'envs',
+  global: 'globals',
+  rulesdir: 'rulePaths',
+  plugin: 'plugins',
+  'ignore-pattern': 'ignorePattern'
+}
+
+const renamedArgs = {
+  'inline-config': 'allowInlineConfig',
+  rule: 'rules',
+  eslintrc: 'useEslintrc',
+  c: 'configFile',
+  config: 'configFile'
+}
+
 module.exports = function lint (args = {}, api) {
   const path = require('path')
   const chalk = require('chalk')
@@ -47,7 +64,11 @@ module.exports = function lint (args = {}, api) {
 function normalizeConfig (args) {
   const config = {}
   for (const key in args) {
-    if (key !== '_') {
+    if (renamedArrayArgs[key]) {
+      config[renamedArrayArgs[key]] = args[key].split(',')
+    } else if (renamedArgs[key]) {
+      config[renamedArgs[key]] = args[key]
+    } else if (key !== '_') {
       config[camelize(key)] = args[key]
     }
   }
