@@ -12,6 +12,7 @@ This is the default Babel preset used in all Vue CLI projects.
   - `targets` is determined:
     - using `browserslist` field in `package.json` when building for browsers
     - set to `{ node: 'current' }` when running unit tests in Node.js
+- Includes `Promise` and `Object.assign` polyfills by default so that they are usable even in non-transpiled dependencies (only for environments that need them)
 - [@babel/plugin-transform-runtime](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-runtime)
   - Only enabled for helpers since polyfills are handled by `babel-preset-env`
 - [dynamic import syntax](https://github.com/tc39/proposal-dynamic-import)
@@ -45,7 +46,25 @@ This is the default Babel preset used in all Vue CLI projects.
 
   Default: `'usage'`
 
-  Explicitly set `useBuiltIns` option for `babel-preset-env`. See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins) for more details.
+  Explicitly set `useBuiltIns` option for `babel-preset-env`.
+
+  The default value is `'usage'`, which adds imports to polyfills based on the usage in transpiled code. Note that the usage detection does not apply to your dependencies (which are excluded by `cli-plugin-babel` by default). If one of your dependencies need polyfills, you have three options:
+
+  1. Add that dependency to the `transpileDependencies` option in `vue.config.js`. This would enable the same usage-based polyfill detection for that dependency as well;
+
+  2. OR, you can explicitly include the needed polyfills using the [polyfills](#polyfills) option for this preset.
+
+  3. Use `useBuiltIns: 'entry'` and then add `import '@babel/polyfill'` to your entry file. This will import **ALL** polyfills based on your `browserslist` targets so that you don't need to worry about dependency polyfills anymore, but will likely bloat your final bundle with some unused polyfills.
+
+  See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins) for more details.
+
+- **polyfills**
+
+  Default: `['es6.promise', 'es6.object.assign']`
+
+  A list of [core-js](https://github.com/zloirock/core-js) polyfills to force-include when using `useBuiltIns: 'usage'`.
+
+  Use this option when you have 3rd party dependencies that are not processed by Babel but have specific polyfill requirements. **These polyfills are automatically excluded if they are not needed for your target environments specified via `browserslist`**.
 
 - **jsx**
 
