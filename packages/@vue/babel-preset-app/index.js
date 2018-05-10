@@ -105,7 +105,7 @@ module.exports = (context, options = {}) => {
     polyfill: false,
     regenerator: useBuiltIns !== 'usage',
     useBuiltIns: useBuiltIns !== false,
-    useESModules: true,
+    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
     moduleName: path.dirname(require.resolve('@babel/runtime/package.json'))
   }])
 
