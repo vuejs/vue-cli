@@ -16,7 +16,6 @@ test('polyfill detection', () => {
   })
   // default includes
   expect(code).not.toMatch(`import "core-js/modules/es6.promise"`)
-  expect(code).not.toMatch(`import "core-js/modules/es6.object.assign"`)
   // usage-based detection
   expect(code).not.toMatch(`import "core-js/modules/es6.map"`)
 
@@ -30,7 +29,6 @@ test('polyfill detection', () => {
   }))
   // default includes
   expect(code).toMatch(`import "core-js/modules/es6.promise"`)
-  expect(code).toMatch(`import "core-js/modules/es6.object.assign"`)
   // usage-based detection
   expect(code).toMatch(`import "core-js/modules/es6.map"`)
 })
