@@ -13,7 +13,6 @@ module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const {
       extract = true,
-      modules = false,
       sourceMap = false,
       localIdentName = '[name]_[local]_[hash:base64:5]',
       loaderOptions = {}
@@ -39,12 +38,14 @@ module.exports = (api, options) => {
     ]))
 
     function createCSSRule (lang, test, loader, options) {
-      const normalRule = webpackConfig.module.rule(lang).test(test).resourceQuery(q => !/module/.test(q))
-      applyLoaders(normalRule, modules)
+      const baseRule = webpackConfig.module.rule(lang).test(test)
 
       // rules for <style lang="module">
-      const modulesRule = webpackConfig.module.rule(lang + '-modules').test(test).resourceQuery(/module/)
+      const modulesRule = baseRule.oneOf('modules').resourceQuery(/module/)
       applyLoaders(modulesRule, true)
+
+      const normalRule = baseRule.oneOf('normal')
+      applyLoaders(normalRule, false)
 
       function applyLoaders (rule, modules) {
         if (shouldExtract) {
