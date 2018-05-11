@@ -53,6 +53,7 @@
     "subscriptions-transport-ws": "^0.9.5",
     "vue": "^2.5.16",
     "vue-apollo": "^3.0.0-beta.5",
+    "vue-color": "^2.4.6",
     "vue-i18n": "^7.6.0",
     "vue-instantsearch": "^1.5.1",
     "vue-meta": "^1.5.0",

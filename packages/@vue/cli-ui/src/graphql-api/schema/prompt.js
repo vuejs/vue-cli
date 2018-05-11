@@ -50,6 +50,7 @@ enum PromptType {
   checkbox
   password
   editor
+  color
 }
 `
 

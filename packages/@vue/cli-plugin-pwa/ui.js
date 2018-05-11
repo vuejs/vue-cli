@@ -68,7 +68,7 @@ module.exports = api => {
           },
           {
             name: 'themeColor',
-            type: 'input',
+            type: 'color',
             message: 'Theme color',
             description: 'Color used to theme the browser',
             default: '#4DBA87',
@@ -76,7 +76,7 @@ module.exports = api => {
           },
           {
             name: 'backgroundColor',
-            type: 'input',
+            type: 'color',
             message: 'Splash background color',
             description: 'Background color used for the app splash screen',
             default: '#000000',
@@ -85,7 +85,7 @@ module.exports = api => {
           },
           {
             name: 'msTileColor',
-            type: 'input',
+            type: 'color',
             message: 'Windows app tile color',
             description: 'Color used for the app tile on Windows',
             default: '#000000',
