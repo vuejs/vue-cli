@@ -112,11 +112,16 @@
           :prompts="visiblePrompts"
           @answer="answerPrompt"
         />
+
+        <div class="vue-ui-text info banner">
+          <VueIcon icon="info" class="big"/>
+          <span>{{ $t('views.project-task-details.parameters-info') }}</span>
+        </div>
       </div>
 
       <div slot="footer" class="actions">
         <VueButton
-          class="primary"
+          class="primary big"
           :label="$t('views.project-task-details.actions.close')"
           @click="showParameters = false"
         />

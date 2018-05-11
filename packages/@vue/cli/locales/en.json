@@ -304,6 +304,7 @@
       },
       "command": "Script command",
       "parameters": "Parameters",
+      "parameters-info": "Parameters will be saved when the task is run.",
       "more-info": "More Info",
       "output": "Output"
     },
