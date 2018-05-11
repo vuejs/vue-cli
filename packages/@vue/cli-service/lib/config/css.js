@@ -118,7 +118,7 @@ module.exports = (api, options) => {
         autoprefixer: { disable: true },
         mergeLonghand: false
       }
-      if (options.productionSourceMap && options.cssSourceMap) {
+      if (options.productionSourceMap && sourceMap) {
         cssProcessorOptions.map = { inline: false }
       }
       webpackConfig
