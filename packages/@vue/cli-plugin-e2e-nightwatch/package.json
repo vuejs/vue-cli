@@ -26,6 +26,6 @@
     "deepmerge": "^2.1.0",
     "execa": "^0.10.0",
     "nightwatch": "^0.9.21",
-    "selenium-server": "^3.11.0"
+    "selenium-server": "^3.12.0"
   }
 }

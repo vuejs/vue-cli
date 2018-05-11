@@ -16,7 +16,7 @@ module.exports = (api, options) => {
       'vue': '^2.5.16'
     },
     devDependencies: {
-      'vue-template-compiler': '^2.5.13'
+      'vue-template-compiler': '^2.5.16'
     },
     'postcss': {
       'plugins': {
@@ -49,16 +49,16 @@ module.exports = (api, options) => {
   if (options.cssPreprocessor) {
     const deps = {
       sass: {
-        'node-sass': '^4.7.2',
-        'sass-loader': '^6.0.6'
+        'node-sass': '^4.9.0',
+        'sass-loader': '^7.0.1'
       },
       less: {
-        'less': '^2.7.3',
-        'less-loader': '^4.0.5'
+        'less': '^3.0.4',
+        'less-loader': '^4.1.0'
       },
       stylus: {
         'stylus': '^0.54.5',
-        'stylus-loader': '^3.0.1'
+        'stylus-loader': '^3.0.2'
       }
     }
 

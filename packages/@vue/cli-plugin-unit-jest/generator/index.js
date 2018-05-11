@@ -39,9 +39,9 @@ module.exports = api => {
     jestConfig.transform['^.+\\.jsx?$'] = 'babel-jest'
     api.extendPackage({
       devDependencies: {
-        'babel-jest': '^22.0.4',
+        'babel-jest': '^22.4.3',
         // this is for now necessary to force babel-jest and vue-jest to use babel 7
-        'babel-core': '^7.0.0-0'
+        'babel-core': '7.0.0-bridge.0'
       }
     })
   } else {
@@ -49,14 +49,14 @@ module.exports = api => {
     jestConfig.transform['^.+\\.tsx?$'] = 'ts-jest'
     api.extendPackage({
       devDependencies: {
-        'ts-jest': '^22.0.1'
+        'ts-jest': '^22.4.6'
       }
     })
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
           // this is for now necessary to force ts-jest and vue-jest to use babel 7
-          'babel-core': '^7.0.0-0'
+          'babel-core': '7.0.0-bridge.0'
         }
       })
     }
