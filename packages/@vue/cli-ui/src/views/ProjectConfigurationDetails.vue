@@ -19,7 +19,7 @@
       <VueButton
         v-if="configuration && configuration.link"
         icon-right="open_in_new"
-        class="big flat"
+        class="big flat success"
         :label="$t('views.project-configuration-details.actions.more-info')"
         :href="configuration.link"
         target="_blank"
