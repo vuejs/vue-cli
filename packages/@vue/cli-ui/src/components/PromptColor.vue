@@ -46,7 +46,9 @@ export default {
 
   components: {
     ColorPicker: Sketch
-  }
+  },
+
+  buffer: true
 }
 </script>
 

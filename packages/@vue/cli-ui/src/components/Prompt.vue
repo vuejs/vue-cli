@@ -21,7 +21,7 @@ export default {
 
   methods: {
     value (value) {
-      if (typeof this.modifiedValue !== 'undefined') return this.modifiedValue
+      if (this.$options.buffer && typeof this.modifiedValue !== 'undefined') return this.modifiedValue
       return JSON.parse(value)
     },
 
