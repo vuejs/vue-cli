@@ -199,6 +199,45 @@ module.exports = api => {
     },
     ...views
   })
+  // vue inspect
+  api.addTask({
+    name: 'inspect',
+    command: 'vue-cli-service inspect',
+    description: 'Inspect the resolved webpack config',
+    link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md#inspecting-the-projects-webpack-config',
+    prompts: [
+      {
+        name: 'mode',
+        type: 'list',
+        default: 'production',
+        choices: [
+          {
+            name: 'development',
+            value: 'development'
+          },
+          {
+            name: 'production',
+            value: 'production'
+          },
+          {
+            name: 'test',
+            value: 'test'
+          }
+        ],
+        description: 'Specify env mode'
+      },
+      {
+        name: 'verbose',
+        type: 'confirm',
+        default: false,
+        description: 'Show full function definitions in output'
+      }
+    ],
+    onBeforeRun: ({ answers, args }) => {
+      if (answers.mode) args.push('--mode', answers.mode)
+      if (answers.verbose) args.push('--verbose')
+    }
+  })
 
   // Webpack dashboard
   api.addClientAddon({

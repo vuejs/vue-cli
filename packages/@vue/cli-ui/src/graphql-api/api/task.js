@@ -1,7 +1,6 @@
 const { createSchema, validateSync } = require('@vue/cli-shared-utils')
 
-const schema = createSchema(joi => ({
-  match: joi.object().type(RegExp).required().description('Match a npm script command'),
+const schema = joi => ({
   description: joi.string(),
   link: joi.string().uri(),
   prompts: joi.array(),
@@ -15,8 +14,23 @@ const schema = createSchema(joi => ({
   onBeforeRun: joi.func(),
   onRun: joi.func(),
   onExit: joi.func()
+})
+
+const describeSchema = createSchema(joi => ({
+  match: joi.object().type(RegExp).required().description('Match a npm script command'),
+  ...schema(joi)
 }))
 
-exports.validateTask = (options) => {
-  validateSync(options, schema)
+const addSchema = createSchema(joi => ({
+  name: joi.string().required(),
+  command: joi.string().required(),
+  ...schema(joi)
+}))
+
+exports.validateDescribeTask = (options) => {
+  validateSync(options, describeSchema)
+}
+
+exports.validateAddTask = (options) => {
+  validateSync(options, addSchema)
 }

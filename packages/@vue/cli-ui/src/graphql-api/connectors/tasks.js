@@ -11,8 +11,9 @@ const logs = require('./logs')
 const plugins = require('./plugins')
 const prompts = require('./prompts')
 const views = require('./views')
-
+// Utils
 const { getCommand } = require('../utils/command')
+const { log } = require('../utils/logger')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -42,7 +43,7 @@ function list (context) {
         const id = `${file}:${name}`
         existing.set(id, true)
         const command = pkg.scripts[name]
-        const moreData = plugins.getApi().getTask(command)
+        const moreData = plugins.getApi().getDescribedTask(command)
         return {
           id,
           name,
@@ -53,7 +54,20 @@ function list (context) {
           ...moreData
         }
       }
-    )
+    ).concat(plugins.getApi().addedTasks.map(
+      task => {
+        const id = `${file}:${task.name}`
+        existing.set(id, true)
+        return {
+          id,
+          index: list.findIndex(t => t.id === id),
+          prompts: [],
+          views: [],
+          fullCommand: true,
+          ...task
+        }
+      }
+    ))
 
     // Process existing tasks
     const existingTasks = currentTasks.filter(
@@ -203,9 +217,16 @@ function updateViewBadges ({ task, data }, context) {
 async function run (id, context) {
   const task = findOne(id, context)
   if (task && task.status !== 'running') {
-    const args = ['run', task.name]
     const answers = prompts.getAnswers()
-    const command = getCommand()
+    let args = task.fullCommand ? [] : ['run', task.name]
+    let command = task.fullCommand ? task.command : getCommand()
+
+    // Process command containing args
+    if (command.indexOf(' ')) {
+      const parts = command.split(' ')
+      command = parts.shift()
+      args = [...parts, ...args]
+    }
 
     // Save parameters
     updateSavedData({
@@ -225,29 +246,31 @@ async function run (id, context) {
       args.splice(0, 0, '--')
     }
 
-    const child = execa(command, args, {
-      cwd: cwd.get(),
-      stdio: ['inherit', 'pipe', 'pipe', 'ipc']
-    })
-
-    // Plugin API
-    if (task.onRun) {
-      await task.onRun({
-        args,
-        child,
-        cwd: cwd.get()
-      })
-    }
+    log('Task run', command, args)
 
     updateOne({
       id: task.id,
-      status: 'running',
-      child
+      status: 'running'
     }, context)
     logs.add({
       message: `Task ${task.id} started`,
       type: 'info'
     }, context)
+
+    if (task.fullCommand) {
+      addLog({
+        taskId: task.id,
+        type: 'stdout',
+        text: `$ ${command} ${args.join(' ')}`
+      }, context)
+    }
+
+    const child = execa(command, args, {
+      cwd: cwd.get(),
+      stdio: ['inherit', 'pipe', 'pipe', 'ipc']
+    })
+
+    task.child = child
 
     child.stdout.on('data', buffer => {
       addLog({
@@ -266,6 +289,8 @@ async function run (id, context) {
     })
 
     const onExit = async (code, signal) => {
+      log('Task exit', command, args, 'code:', code, 'signal:', signal)
+
       // Plugin API
       if (task.onExit) {
         await task.onExit({
@@ -280,8 +305,7 @@ async function run (id, context) {
       if (code === null) {
         updateOne({
           id: task.id,
-          status: 'terminated',
-          child: null
+          status: 'terminated'
         }, context)
         logs.add({
           message: `Task ${task.id} was terminated`,
@@ -290,8 +314,7 @@ async function run (id, context) {
       } else if (code !== 0) {
         updateOne({
           id: task.id,
-          status: 'error',
-          child: null
+          status: 'error'
         }, context)
         logs.add({
           message: `Task ${task.id} ended with error code ${code}`,
@@ -305,8 +328,7 @@ async function run (id, context) {
       } else {
         updateOne({
           id: task.id,
-          status: 'done',
-          child: null
+          status: 'done'
         }, context)
         logs.add({
           message: `Task ${task.id} completed`,
@@ -321,13 +343,22 @@ async function run (id, context) {
     }
 
     child.on('exit', onExit)
+
+    // Plugin API
+    if (task.onRun) {
+      await task.onRun({
+        args,
+        child,
+        cwd: cwd.get()
+      })
+    }
   }
   return task
 }
 
 function stop (id, context) {
   const task = findOne(id, context)
-  if (task && task.status === 'running') {
+  if (task && task.status === 'running' && task.child) {
     terminate(task.child.pid)
   }
   return task

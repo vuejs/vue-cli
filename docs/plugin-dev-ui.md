@@ -265,18 +265,18 @@ api.describeTask({
   ],
   // Hooks
   // Modify arguments here
-  onBeforeRun: ({ answers, args }) => {
+  onBeforeRun: async ({ answers, args }) => {
     // Args
     if (answers.open) args.push('--open')
     if (answers.mode) args.push('--mode', answers.mode)
     args.push('--dashboard')
   },
   // Immediatly after running the task
-  onRun: ({ args, child, cwd }) => {
+  onRun: async ({ args, child, cwd }) => {
     // child: node child process
     // cwd: process working directory
   },
-  onExit: ({ args, child, cwd, code, signal }) => {
+  onExit: async ({ args, child, cwd, code, signal }) => {
     // code: exit code
     // signal: kill signal used if any
   },
@@ -298,6 +298,28 @@ api.describeTask({
   defaultView: 'vue-webpack-dashboard-client-addon'
 })
 ```
+
+You can also add entirely new tasks which aren't in the `package.json` scripts. Those tasks will only appear in the cli UI:
+
+```js
+api.addTask({
+  // Required
+  name: 'inspect',
+  command: 'vue-cli-service inspect',
+  // Optional
+  // The rest is like `describeTask` without the `match` option
+  description: '...',
+  link: 'https://github.com/vuejs/vue-cli/...',
+  prompts: [ /* ... */ ],
+  onBeforeRun: () => {},
+  onRun: () => {},
+  onExit: () => {},
+  views: [ /* ... */ ],
+  defaultView: '...'
+})
+```
+
+**⚠️ The `command` will run a node context. This means you can call node bin commands like you would normally do in the `package.json` scripts.**
 
 ### Client addon
 

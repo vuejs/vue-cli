@@ -6,7 +6,7 @@ const views = require('../connectors/views')
 const ipc = require('../utils/ipc')
 // Validators
 const { validateConfiguration } = require('./configuration')
-const { validateTask } = require('./task')
+const { validateDescribeTask, validateAddTask } = require('./task')
 const { validateClientAddon } = require('./client-addon')
 const { validateView, validateBadge } = require('./view')
 
@@ -21,7 +21,8 @@ class PluginApi {
     this.pluginReloadHooks = []
     // Data
     this.configurations = []
-    this.tasks = []
+    this.describedTasks = []
+    this.addedTasks = []
     this.clientAddons = []
     this.views = []
     this.actions = new Map()
@@ -77,8 +78,8 @@ class PluginApi {
    */
   describeTask (options) {
     try {
-      validateTask(options)
-      this.tasks.push(options)
+      validateDescribeTask(options)
+      this.describedTasks.push(options)
     } catch (e) {
       logs.add({
         type: 'error',
@@ -95,10 +96,30 @@ class PluginApi {
    * @param {string} command Npm script command from `package.json`
    * @returns {object} Task description
    */
-  getTask (command) {
-    return this.tasks.find(
+  getDescribedTask (command) {
+    return this.describedTasks.find(
       options => options.match.test(command)
     )
+  }
+
+  /**
+   * Add a new task indepently from the scripts.
+   * The task will only appear in the UI.
+   *
+   * @param {object} options Task description
+   */
+  addTask (options) {
+    try {
+      validateAddTask(options)
+      this.addedTasks.push(options)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'addTask' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
   }
 
   /**
