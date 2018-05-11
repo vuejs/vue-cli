@@ -299,6 +299,8 @@ api.describeTask({
 })
 ```
 
+#### Add new tasks
+
 You can also add entirely new tasks which aren't in the `package.json` scripts. Those tasks will only appear in the cli UI:
 
 ```js
