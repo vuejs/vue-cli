@@ -9,6 +9,7 @@ const webpack = require('webpack')
 const { IpcMessenger } = require('@vue/cli-shared-utils')
 const { analyzeBundle } = require('./analyzeBundle')
 
+const ID = 'DashboardPlugin'
 const ONE_SECOND = 1000
 const FILENAME_QUERY_REGEXP = /\?.*$/
 
@@ -55,43 +56,40 @@ class DashboardPlugin {
       })
     }
 
+    // Progress status
     let progressTime = Date.now()
+    const progressPlugin = new webpack.ProgressPlugin((percent, msg) => {
+      // Debouncing
+      const time = Date.now()
+      if (time - progressTime > 100) {
+        progressTime = time
+        sendData([
+          {
+            type: 'status',
+            value: 'Compiling'
+          },
+          {
+            type: 'progress',
+            value: percent
+          },
+          {
+            type: 'operations',
+            value: msg + getTimeMessage(timer)
+          }
+        ])
+      }
+    })
+    progressPlugin.apply(compiler)
 
-    compiler.apply(
-      new webpack.ProgressPlugin((percent, msg) => {
-        // Debouncing
-        const time = Date.now()
-        if (time - progressTime > 100) {
-          progressTime = time
-          sendData([
-            {
-              type: 'status',
-              value: 'Compiling'
-            },
-            {
-              type: 'progress',
-              value: percent
-            },
-            {
-              type: 'operations',
-              value: msg + getTimeMessage(timer)
-            }
-          ])
-        }
-      })
-    )
-
-    compiler.plugin('watch-run', (c, done) => {
+    compiler.hooks.watchRun.tap(ID, c => {
       this.watching = true
-      done()
     })
 
-    compiler.plugin('run', (c, done) => {
+    compiler.hooks.run.tap(ID, c => {
       this.watching = false
-      done()
     })
 
-    compiler.plugin('compile', () => {
+    compiler.hooks.compile.tap(ID, () => {
       timer = Date.now()
 
       sendData([
@@ -102,7 +100,7 @@ class DashboardPlugin {
       ])
     })
 
-    compiler.plugin('invalid', () => {
+    compiler.hooks.invalid.tap(ID, () => {
       sendData([
         {
           type: 'status',
@@ -119,7 +117,7 @@ class DashboardPlugin {
       ])
     })
 
-    compiler.plugin('failed', () => {
+    compiler.hooks.failed.tap(ID, () => {
       sendData([
         {
           type: 'status',
@@ -132,16 +130,15 @@ class DashboardPlugin {
       ])
     })
 
-    compiler.plugin('after-emit', (compilation, done) => {
+    compiler.hooks.afterEmit.tap(ID, compilation => {
       assetSources = new Map()
       for (const name in compilation.assets) {
         const asset = compilation.assets[name]
         assetSources.set(name.replace(FILENAME_QUERY_REGEXP, ''), asset.source())
       }
-      done()
     })
 
-    compiler.plugin('done', stats => {
+    compiler.hooks.done.tap(ID, stats => {
       let statsData = stats.toJson()
       // Sometimes all the information is located in `children` array
       if ((!statsData.assets || !statsData.assets.length) && statsData.children && statsData.children.length) {
