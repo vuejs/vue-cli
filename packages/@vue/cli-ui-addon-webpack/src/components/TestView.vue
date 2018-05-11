@@ -22,9 +22,11 @@ export default {
 
   created () {
     this.$onPluginActionCalled(action => {
+      // eslint-disable-next-line no-console
       console.log('called', action)
     })
     this.$onPluginActionResolved(action => {
+      // eslint-disable-next-line no-console
       console.log('resolved', action)
     })
   },
