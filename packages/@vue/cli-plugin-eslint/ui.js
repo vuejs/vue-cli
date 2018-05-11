@@ -221,9 +221,7 @@ module.exports = api => {
       }
     ],
     onBeforeRun: ({ answers, args }) => {
-      if (answers.noFix) {
-        args.push('--no-fix')
-      }
+      if (answers.noFix) args.push('--no-fix')
     }
   })
 }
