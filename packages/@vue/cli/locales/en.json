@@ -453,5 +453,13 @@
         "url": "Run e2e tests against given url instead of auto-starting dev server"
       }
     }
+  },
+  "nightwatch": {
+    "tasks": {
+      "test": {
+        "description": "Run e2e tests with nightwatch",
+        "url": "Run e2e tests against given url instead of auto-starting dev server"
+      }
+    }
   }
 }
