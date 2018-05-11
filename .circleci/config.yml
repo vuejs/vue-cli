@@ -10,11 +10,11 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v1-vue-{{ .Branch }}-
-            - v1-vue-
+      # - restore_cache:
+      #     keys:
+      #       - v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      #       - v1-vue-{{ .Branch }}-
+      #       - v1-vue-
       - run: yarn
       - save_cache:
           key: v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
