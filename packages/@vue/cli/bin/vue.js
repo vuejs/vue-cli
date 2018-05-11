@@ -70,6 +70,8 @@ program
   .option('--mode <mode>')
   .option('--rule <ruleName>', 'inspect a specific module rule')
   .option('--plugin <pluginName>', 'inspect a specific plugin')
+  .option('--rules', 'list all module rule names')
+  .option('--plugins', 'list all plugin names')
   .option('-v --verbose', 'Show full function definitions in output')
   .description('inspect the webpack config in a project with vue-cli-service')
   .action((paths, cmd) => {
