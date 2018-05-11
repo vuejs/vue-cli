@@ -167,6 +167,8 @@ The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquire
 
 Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
 
+In addition to those, the UI supports special types that only works with it: `color`.
+
 Use the `onWrite` hook to write the data to the configuration file (or execute any node code):
 
 ```js
