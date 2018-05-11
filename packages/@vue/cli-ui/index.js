@@ -16,6 +16,7 @@ exports.clientAddonConfig = function ({ id, port = 8042 }) {
       config.plugins.delete('prefetch')
       config.plugins.delete('html')
       config.plugins.delete('optimize-css')
+      config.optimization.splitChunks(false)
     },
     devServer: {
       headers: {
