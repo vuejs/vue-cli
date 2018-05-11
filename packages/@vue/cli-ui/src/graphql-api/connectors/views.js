@@ -49,6 +49,7 @@ function findOne (id) {
 }
 
 function add (view, context) {
+  remove(view.id, context)
   const views = getViews()
   views.push(view)
   context.pubsub.publish(channels.VIEW_ADDED, {
