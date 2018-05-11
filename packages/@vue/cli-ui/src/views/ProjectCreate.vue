@@ -517,6 +517,7 @@ export default {
         this.$router.push({ name: 'project-home' })
         this.reset()
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
       }
     }

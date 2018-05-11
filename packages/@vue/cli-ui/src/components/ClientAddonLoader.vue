@@ -25,6 +25,7 @@ export default {
 
   methods: {
     loadAddon (addon) {
+      // eslint-disable-next-line no-console
       console.log(`[UI] Loading client addon ${addon.id} (${addon.url})...`)
       const script = document.createElement('script')
       script.setAttribute('src', addon.url)

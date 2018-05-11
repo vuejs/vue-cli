@@ -216,6 +216,7 @@ export default {
         this.refresh()
         this.$emit('continue')
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
       }
       this.loading--

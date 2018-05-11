@@ -19,6 +19,7 @@ export default class ClientAddonApi {
     this.components.set(id, definition)
     const componentId = toComponentId(id)
     Vue.component(componentId, definition)
+    // eslint-disable-next-line no-console
     console.log(`[ClientAddonApi] Registered ${componentId} component`)
     // Call listeners
     const listeners = this.componentListeners.get(id)
@@ -48,6 +49,7 @@ export default class ClientAddonApi {
         children: routes
       }
     ])
+    // eslint-disable-next-line no-console
     console.log(`[ClientAddonApi] Registered new routes under the /addon/${id} route`)
   }
 
@@ -59,6 +61,7 @@ export default class ClientAddonApi {
    */
   addLocalization (lang, strings) {
     mergeLocale(lang, strings)
+    // eslint-disable-next-line no-console
     console.log(`[ClientAddonApi] Registered new strings for locale ${lang}`)
   }
 

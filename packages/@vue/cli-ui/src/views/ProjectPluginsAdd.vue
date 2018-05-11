@@ -261,6 +261,7 @@ export default {
         })
         this.tabId = 'config'
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
       }
     },
@@ -282,6 +283,7 @@ export default {
         })
         this.cancelInstall()
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
       }
     },
@@ -296,6 +298,7 @@ export default {
         })
         this.tabId = 'diff'
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
       }
     },
@@ -307,6 +310,7 @@ export default {
         })
         this.close()
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
       }
     },

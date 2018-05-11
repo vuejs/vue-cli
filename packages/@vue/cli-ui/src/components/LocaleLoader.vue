@@ -27,6 +27,7 @@ export default {
 
   methods: {
     loadLocale (locale) {
+      // eslint-disable-next-line no-console
       console.log(`[UI] Locale ${locale.lang} updated with new strings`)
       mergeLocale(locale.lang, locale.strings)
     }
