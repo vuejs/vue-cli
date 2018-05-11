@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.0.0-beta.9",
+  "version": "3.0.0-beta.10",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "bin": {
@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme",
   "dependencies": {
-    "@vue/cli-overlay": "^3.0.0-beta.9",
-    "@vue/cli-shared-utils": "^3.0.0-beta.9",
+    "@vue/cli-overlay": "^3.0.0-beta.10",
+    "@vue/cli-shared-utils": "^3.0.0-beta.10",
     "@vue/web-component-wrapper": "^1.2.0",
     "acorn": "^5.5.3",
     "address": "^1.0.3",
@@ -60,7 +60,7 @@
     "thread-loader": "^1.1.5",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
-    "vue-loader": "^15.0.9",
+    "vue-loader": "^15.0.10",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.8.1",
     "webpack-chain": "^4.6.0",

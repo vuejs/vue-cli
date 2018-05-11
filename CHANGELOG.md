@@ -1,3 +1,75 @@
+<a name="3.0.0-beta.10"></a>
+# [3.0.0-beta.10](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.9...v3.0.0-beta.10) (2018-05-11)
+
+
+### Bug Fixes
+
+* **build:** fix --dest flag regression ([fd9d255](https://github.com/vuejs/vue-cli/commit/fd9d255)), closes [#1193](https://github.com/vuejs/vue-cli/issues/1193)
+* **serve:** fix non-GET requests match error w/ multi-proxy config ([c4c4bff](https://github.com/vuejs/vue-cli/commit/c4c4bff)), closes [#1210](https://github.com/vuejs/vue-cli/issues/1210)
+* **tslint:** don't change working directory ([#1225](https://github.com/vuejs/vue-cli/issues/1225)) ([8dbe262](https://github.com/vuejs/vue-cli/commit/8dbe262))
+* **typescript:** add node_modules/** to tslint default excludes ([#1200](https://github.com/vuejs/vue-cli/issues/1200)) ([a6e47ce](https://github.com/vuejs/vue-cli/commit/a6e47ce)), closes [#1194](https://github.com/vuejs/vue-cli/issues/1194)
+* **typescript:** separate tsx shim ([51c8090](https://github.com/vuejs/vue-cli/commit/51c8090)), closes [#1198](https://github.com/vuejs/vue-cli/issues/1198)
+* css imports from js ([1b5bdde](https://github.com/vuejs/vue-cli/commit/1b5bdde))
+* ensure dynamic publicPath is set early in lib/wc mode ([c3d246f](https://github.com/vuejs/vue-cli/commit/c3d246f)), closes [#1253](https://github.com/vuejs/vue-cli/issues/1253)
+* improve error message when entry is missing w/ --target lib ([8b4a112](https://github.com/vuejs/vue-cli/commit/8b4a112)), closes [#1051](https://github.com/vuejs/vue-cli/issues/1051)
+* pwa plugin compat with webpack 4 ([6d1716e](https://github.com/vuejs/vue-cli/commit/6d1716e))
+* respect chunk name in all build targets ([66bab8c](https://github.com/vuejs/vue-cli/commit/66bab8c)), closes [#1251](https://github.com/vuejs/vue-cli/issues/1251)
+
+
+### Code Refactoring
+
+* adjust mode loading order ([d595ada](https://github.com/vuejs/vue-cli/commit/d595ada)), closes [#959](https://github.com/vuejs/vue-cli/issues/959)
+* rename test commands ([69ebd80](https://github.com/vuejs/vue-cli/commit/69ebd80)), closes [#876](https://github.com/vuejs/vue-cli/issues/876) [#878](https://github.com/vuejs/vue-cli/issues/878)
+* require Node 8 ([6b865db](https://github.com/vuejs/vue-cli/commit/6b865db))
+
+
+### Features
+
+* default preset save to no ([ab90d50](https://github.com/vuejs/vue-cli/commit/ab90d50)), closes [#1212](https://github.com/vuejs/vue-cli/issues/1212)
+* expose env variables as root level in index.html template ([4c5784d](https://github.com/vuejs/vue-cli/commit/4c5784d))
+* new option "preserveWhitespace" ([ea83441](https://github.com/vuejs/vue-cli/commit/ea83441))
+* relex transpile includes + new transpileDependencies option ([da4d0b2](https://github.com/vuejs/vue-cli/commit/da4d0b2))
+* **babel:** better Babel polyfill defaults ([4e7d57f](https://github.com/vuejs/vue-cli/commit/4e7d57f))
+* **cli:** allow local .json files for presets ([#1201](https://github.com/vuejs/vue-cli/issues/1201)) ([9766db1](https://github.com/vuejs/vue-cli/commit/9766db1)), closes [#1068](https://github.com/vuejs/vue-cli/issues/1068)
+* **serve:** support entry in `vue-cli-service serve` ([05f9f3a](https://github.com/vuejs/vue-cli/commit/05f9f3a)), closes [#974](https://github.com/vuejs/vue-cli/issues/974)
+* **typescript:** support lang="tsx" in vue files ([718ba3c](https://github.com/vuejs/vue-cli/commit/718ba3c)), closes [#1219](https://github.com/vuejs/vue-cli/issues/1219)
+* remove DLL option ([6d4e51d](https://github.com/vuejs/vue-cli/commit/6d4e51d))
+* support { prompts: true } for preset plugins ([3dd38da](https://github.com/vuejs/vue-cli/commit/3dd38da)), closes [#952](https://github.com/vuejs/vue-cli/issues/952)
+* upgrade to vue-loader 15 ([f5c0f58](https://github.com/vuejs/vue-cli/commit/f5c0f58))
+* upgrade to webpack 4 ([2dcdedd](https://github.com/vuejs/vue-cli/commit/2dcdedd))
+
+
+### Reverts
+
+* feat: new option "preserveWhitespace"" ([a8af883](https://github.com/vuejs/vue-cli/commit/a8af883))
+
+
+### BREAKING CHANGES
+
+* `css.modules` option has been removed. To import css files (or
+any other supported pre-processor files) as CSS Modules, append the request
+with a `?module` resourceQuery.
+* Upgrade wepback 4, all webpack option
+modifications must be webpcak 4 compatible. Drop support
+for webpack plugins that do not work with v4 or above.
+* dll option has been removed.
+* the "vueLoader" option has been removed. To modify vue-loader
+options, use chainWebpack then `config.module.rule(vue).use(vue-loader).tap()`.
+vue-loader has been upgraded to v15 and expects different options from v14.
+* To include a dependency for Babel transpilation, tapping
+babel-loader and adding .include() will no longer work. Use the new
+transpileDependencies option instead.
+* `cli-plugin-unit-jest` and `cli-plugin-unit-mocha` now register
+"test:unit" command and script instead of "test"; `cli-plugin-e2e-cypress` now
+register "test:e2e" with optional `--headless` flag instead of "e2e" and
+"e2e:open"; `cli-plugin-e2e-nightwatch` now register "test:e2e" instead of "e2e".
+* PluginAPI.setMode() has been removed. Instead, for a plugin to
+sepcify the default mode for a registered command, the plugins should expose
+`module.exports.defaultModes` in the form of `{ [commandName]: mode }`.
+* @vue/cli-service and all plugins now require Node version 8+.
+
+
+
 <a name="3.0.0-beta.9"></a>
 # [3.0.0-beta.9](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2018-04-28)
 
