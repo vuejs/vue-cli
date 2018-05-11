@@ -14,7 +14,7 @@ const defaults = {
 module.exports = (api, options) => {
   api.registerCommand('serve', {
     description: 'start development server',
-    usage: 'vue-cli-service serve [options]',
+    usage: 'vue-cli-service serve [options] [entry]',
     options: {
       '--open': `open browser on server start`,
       '--mode': `specify env mode (default: development)`,
@@ -51,6 +51,14 @@ module.exports = (api, options) => {
       }))
     }
 
+    // entry arg
+    const entry = args._[0]
+    if (entry) {
+      webpackConfig.entry = {
+        app: api.resolve(entry)
+      }
+    }
+
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
       const devClients = [
@@ -72,10 +80,6 @@ module.exports = (api, options) => {
 
     // create compiler
     const compiler = webpack(webpackConfig)
-
-    if (!process.env.VUE_CLI_TEST) {
-      compiler.apply(new webpack.ProgressPlugin())
-    }
 
     // resolve server options
     const useHttps = args.https || projectDevServerOptions.https || defaults.https
@@ -150,7 +154,7 @@ module.exports = (api, options) => {
     return new Promise((resolve, reject) => {
       // log instructions & open browser on first compilation complete
       let isFirstCompile = true
-      compiler.plugin('done', stats => {
+      compiler.hooks.done.tap('vue-cli-service serve', stats => {
         if (stats.hasErrors()) {
           return
         }

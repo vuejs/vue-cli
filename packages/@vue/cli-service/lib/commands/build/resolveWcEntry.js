@@ -22,8 +22,8 @@ const createElement = (prefix, component, file, async) => {
   const { camelName, kebabName } = exports.fileToComponentName(prefix, component)
 
   return async
-    ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}')))\n`
-    : `import ${camelName} from '~root/${file}'\n` +
+    ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}?shadow')))\n`
+    : `import ${camelName} from '~root/${file}?shadow'\n` +
         `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}))\n`
 }
 
@@ -46,20 +46,14 @@ exports.resolveEntry = (prefix, libName, files, async) => {
       : files.map(file => createElement(prefix, file, file, async)).join('\n')
 
   const content = `
+import './setPublicPath'
 import Vue from 'vue'
 import wrap from '@vue/web-component-wrapper'
 
 // runtime shared by every component chunk
 import 'css-loader/lib/css-base'
 import 'vue-style-loader/lib/addStylesShadow'
-import 'vue-loader/lib/runtime/component-normalizer'
-
-;(() => {
-  let i
-  if ((i = document.currentScript) && (i = i.src.match(/(.+\\/)[^/]+\\.js$/))) {
-    __webpack_public_path__ = i[1]
-  }
-})()
+import 'vue-loader/lib/runtime/componentNormalizer'
 
 ${elements}`.trim()
   fs.writeFileSync(filePath, content)

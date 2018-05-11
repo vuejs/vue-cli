@@ -1,3 +1,5 @@
+const ID = 'vue-cli:pwa-html-plugin'
+
 const defaults = {
   name: 'PWA app',
   themeColor: '#4DBA87', // The Vue color
@@ -12,14 +14,14 @@ module.exports = class HtmlPwaPlugin {
   }
 
   apply (compiler) {
-    compiler.plugin('compilation', compilation => {
-      compilation.plugin('html-webpack-plugin-before-html-processing', (data, cb) => {
+    compiler.hooks.compilation.tap(ID, compilation => {
+      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(ID, (data, cb) => {
         // wrap favicon in the base template with IE only comment
-        data.html = data.html.replace(/<link rel="shortcut icon"[^>]+>/, '<!--[if IE]>$&<![endif]-->')
+        data.html = data.html.replace(/<link rel="icon"[^>]+>/, '<!--[if IE]>$&<![endif]-->')
         cb(null, data)
       })
 
-      compilation.plugin('html-webpack-plugin-alter-asset-tags', (data, cb) => {
+      compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, (data, cb) => {
         const { name, themeColor, msTileColor, appleMobileWebAppCapable, appleMobileWebAppStatusBarStyle } = this.options
         const { publicPath } = compiler.options.output
 

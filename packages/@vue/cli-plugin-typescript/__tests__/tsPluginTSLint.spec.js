@@ -3,7 +3,7 @@ jest.setTimeout(10000)
 const create = require('@vue/cli-test-utils/createTestProject')
 
 test('should work', async () => {
-  const project = await create('ts-lint', {
+  const project = await create('ts-tslint', {
     plugins: {
       '@vue/cli-plugin-typescript': {
         tsLint: true
@@ -34,7 +34,7 @@ test('should work', async () => {
 })
 
 test('should not fix with --no-fix option', async () => {
-  const project = await create('ts-lint-nofix', {
+  const project = await create('ts-tslint-nofix', {
     plugins: {
       '@vue/cli-plugin-typescript': {
         tsLint: true

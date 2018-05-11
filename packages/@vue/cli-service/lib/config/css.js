@@ -11,19 +11,20 @@ const findExisting = (context, files) => {
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
-    const CSSLoaderResolver = require('../webpack/CSSLoaderResolver')
-    const ExtractTextPlugin = require('extract-text-webpack-plugin')
+    const {
+      extract = true,
+      sourceMap = false,
+      localIdentName = '[name]_[local]_[hash:base64:5]',
+      loaderOptions = {}
+    } = options.css || {}
 
+    const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
-    const defaultOptions = {
-      extract: true,
-      modules: false,
-      sourceMap: false,
-      loaderOptions: {},
-      localIdentName: '[name]_[local]__[hash:base64:5]'
-    }
-    const userOptions = Object.assign(defaultOptions, options.css || {})
-    const extract = isProd && userOptions.extract !== false
+    const shouldExtract = isProd && extract !== false && !shadowMode
+    const extractOptions = Object.assign({
+      filename: `css/[name].[contenthash:8].css`,
+      chunkFilename: 'css/[name].[id].[contenthash:8].css'
+    }, extract && typeof extract === 'object' ? extract : {})
 
     // check if the project has a valid postcss config
     // if it doesn't, don't use postcss-loader for direct style imports
@@ -36,82 +37,96 @@ module.exports = (api, options) => {
       '.postcssrc.json'
     ]))
 
-    const baseOptions = Object.assign({}, userOptions, {
-      extract,
-      minimize: isProd,
-      postcss: hasPostCSSConfig
-    })
+    function createCSSRule (lang, test, loader, options) {
+      const baseRule = webpackConfig.module.rule(lang).test(test)
 
-    const resolver = new CSSLoaderResolver(baseOptions)
+      // rules for <style lang="module">
+      const modulesRule = baseRule.oneOf('modules').resourceQuery(/module/)
+      applyLoaders(modulesRule, true)
 
-    // apply css loaders for vue-loader
-    webpackConfig.module
-      .rule('vue')
-        .use('vue-loader')
-        .tap(options => {
-          // ensure user injected vueLoader options take higher priority
-          options.loaders = Object.assign(resolver.vue(), options.loaders)
-          options.cssSourceMap = !!userOptions.cssSourceMap
-          options.cssModules = Object.assign({
-            localIdentName: baseOptions.localIdentName
-          }, options.cssModules)
-          return options
-        })
+      const normalRule = baseRule.oneOf('normal')
+      applyLoaders(normalRule, false)
 
-    // apply css loaders for standalone style files outside vue-loader
-    const langs = ['css', 'stylus', 'styl', 'sass', 'scss', 'less']
-    for (const lang of langs) {
-      const rule = resolver[lang]()
-      const context = webpackConfig.module
-        .rule(lang)
-        .test(rule.test)
-        .include
-          .add(filepath => {
-            // Not ends with `.module.xxx`
-            return !/\.module\.[a-z]+$/.test(filepath)
+      function applyLoaders (rule, modules) {
+        if (shouldExtract) {
+          rule
+            .use('extract-css-loader')
+            .loader(require('mini-css-extract-plugin').loader)
+        } else {
+          rule
+            .use('vue-style-loader')
+            .loader('vue-style-loader')
+            .options({
+              sourceMap,
+              shadowMode
+            })
+        }
+
+        const cssLoaderOptions = {
+          minimize: isProd,
+          sourceMap,
+          importLoaders: hasPostCSSConfig + !!loader // boolean + boolean
+        }
+        if (modules) {
+          Object.assign(cssLoaderOptions, {
+            modules,
+            localIdentName
           })
-          .end()
+        }
+        rule
+          .use('css-loader')
+          .loader('css-loader')
+          .options(cssLoaderOptions)
 
-      rule.use.forEach(use => {
-        context
-          .use(use.loader)
-            .loader(use.loader)
-            .options(use.options)
-      })
+        if (hasPostCSSConfig) {
+          rule
+            .use('postcss-loader')
+            .loader('postcss-loader')
+            .options({ sourceMap })
+        }
+
+        if (loader) {
+          rule
+            .use(loader)
+            .loader(loader)
+            .options(Object.assign({ sourceMap }, options))
+        }
+      }
     }
 
-    // handle cssModules for *.module.js
-    const cssModulesResolver = new CSSLoaderResolver(Object.assign({}, baseOptions, {
-      modules: true
-    }))
-
-    const cssModulesLangs = langs.map(lang => [lang, new RegExp(`\\.module\\.${lang}$`)])
-    for (const cssModulesLang of cssModulesLangs) {
-      const [lang, test] = cssModulesLang
-      const rule = cssModulesResolver[lang](test)
-      const context = webpackConfig.module
-        .rule(`${lang}-module`)
-        .test(rule.test)
-
-      rule.use.forEach(use => {
-        context
-          .use(use.loader)
-            .loader(use.loader)
-            .options(use.options)
-      })
-    }
+    createCSSRule('css', /\.css$/)
+    createCSSRule('scss', /\.scss$/, 'sass-loader', loaderOptions.sass)
+    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign({
+      indentedSyntax: true
+    }, loaderOptions.sass))
+    createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
+    createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', Object.assign({
+      preferPathResolver: 'webpack'
+    }, loaderOptions.stylus))
 
     // inject CSS extraction plugin
-    if (extract) {
-      const extractOptions = userOptions.extract && typeof userOptions.extract === 'object'
-        ? userOptions.extract
-        : {}
+    if (shouldExtract) {
       webpackConfig
         .plugin('extract-css')
-          .use(ExtractTextPlugin, [Object.assign({
-            filename: `css/[name].[contenthash:8].css`,
-            allChunks: true
-          }, extractOptions)])
+          .use(require('mini-css-extract-plugin'), [extractOptions])
+    }
+
+    if (isProd) {
+      // optimize CSS (dedupe)
+      const cssProcessorOptions = {
+        safe: true,
+        autoprefixer: { disable: true },
+        mergeLonghand: false
+      }
+      if (options.productionSourceMap && options.cssSourceMap) {
+        cssProcessorOptions.map = { inline: false }
+      }
+      webpackConfig
+        .plugin('optimize-css')
+          .use(require('optimize-css-assets-webpack-plugin'), [{
+            canPrint: false,
+            cssProcessorOptions
+          }])
     }
   })
 }

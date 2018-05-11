@@ -13,11 +13,15 @@ Vue CLI uses PostCSS internally, and enables [autoprefixer](https://github.com/p
 
 You can [use CSS Modules in `*.vue` files](https://vue-loader.vuejs.org/en/features/css-modules.html) out of the box with `<style module>`.
 
-As for standalone style files, any files ending with `.module.(css|sass|scss|less|styl|stylus)` will be processed as CSS modules.
+If you wish to import style files as CSS Modules in JavaScript, you can import a file with a `?module` resourceQuery:
 
-If you wish to be able to use CSS modules without the `.module` postfix, you can set `css: { modules: true }` in `vue.config.js`. This option does not affect `*.vue` files.
+``` js
+import styles from './foo.css?module'
+// works for all supported pre-processors as well
+import sassStyles from './foo.scss?module'
+```
 
-If you wish to customize the CSS modules class name output you can set the `css: { localIdentName: [name]__[local]--[hash:base64:5]}` in `vue.config.js`.
+If you wish to customize the CSS modules class name output you can set the `css.localIdentName` option in `vue.config.js`.
 
 ### Pre-Processors
 

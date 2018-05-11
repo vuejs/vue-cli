@@ -58,6 +58,20 @@ In addition to `VUE_APP_*` variables, there are also two special variables that 
 - `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#modes) the app is running in.
 - `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
 
+### Env Variables in Index HTML
+
+All resolved env variables will be available inside `public/index.html` via [lodash template interpolation](https://lodash.com/docs/4.17.5#template):
+
+- `<%= VAR %>` for unescaped interpolation;
+- `<%- VAR %>` for HTML-escaped interpolationl;
+- `<% expression %>` for JavaScript control flows.
+
+For example, to reference static assets copied from the root of `public`, you will need to use the `BASE_URL` variable:
+
+``` html
+<link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
+```
+
 ### Local Only Variables
 
 Sometimes you might have env variables that should not be committed into the codebase, especially if your project is hosted in a public repository. In that case you should use an `.env.local` file instead. Local env files are ignored in `.gitignore` by default.

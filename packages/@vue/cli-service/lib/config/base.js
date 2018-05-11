@@ -37,14 +37,26 @@ module.exports = (api, options) => {
     webpackConfig.module
       .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
 
-    // js is handled by cli-plugin-bable
+    // js is handled by cli-plugin-bable ---------------------------------------
+
+    // vue-loader --------------------------------------------------------------
 
     webpackConfig.module
       .rule('vue')
         .test(/\.vue$/)
         .use('vue-loader')
           .loader('vue-loader')
-          .options(Object.assign({}, options.vueLoader))
+          .options({
+            compilerOpitons: {
+              preserveWhitespace: false
+            }
+          })
+
+    webpackConfig
+      .plugin('vue-loader')
+      .use(require('vue-loader/lib/plugin'))
+
+    // static assets -----------------------------------------------------------
 
     webpackConfig.module
       .rule('images')
@@ -87,6 +99,17 @@ module.exports = (api, options) => {
             name: `fonts/[name].[hash:8].[ext]`
           })
 
+    // Other common pre-processors ---------------------------------------------
+
+    webpackConfig.module
+      .rule('pug')
+      .test(/\.pug$/)
+      .use('pug-plain-loader')
+        .loader('pug-plain-loader')
+        .end()
+
+    // shims
+
     webpackConfig.node
       .merge({
         // prevent webpack from injecting useless setImmediate polyfill because Vue
@@ -112,16 +135,12 @@ module.exports = (api, options) => {
         ])
 
     webpackConfig
-      .plugin('timefix')
-        .use(require('../webpack/TimeFixPlugin'))
-
-    webpackConfig
       .plugin('case-sensitive-paths')
         .use(require('case-sensitive-paths-webpack-plugin'))
 
     // friendly error plugin displays very confusing errors when webpack
     // fails to resolve a loader, so we provide custom handlers to improve it
-    const { transformer, formatter } = require('../webpack/resolveLoaderError')
+    const { transformer, formatter } = require('../util/resolveLoaderError')
     webpackConfig
       .plugin('friendly-errors')
         .use(require('friendly-errors-webpack-plugin'), [{
