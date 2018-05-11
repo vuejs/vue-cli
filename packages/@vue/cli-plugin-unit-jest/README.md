@@ -22,5 +22,5 @@ Jest can be configured via `jest.config.js` in your project root, or the `jest` 
 ## Installing in an Already Created Project
 
 ``` sh
-vue add unit-jest
+vue add @vue/unit-jest
 ```
