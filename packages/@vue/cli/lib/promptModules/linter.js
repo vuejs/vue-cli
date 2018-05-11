@@ -5,7 +5,8 @@ module.exports = cli => {
   cli.injectFeature({
     name: 'Linter / Formatter',
     value: 'linter',
-    short: 'Linter'
+    short: 'Linter',
+    checked: true
   })
 
   cli.injectPrompt({

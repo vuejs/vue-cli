@@ -314,7 +314,7 @@ module.exports = class Creator {
       type: 'checkbox',
       message: 'Check the features needed for your project:',
       choices: [],
-      pageSize: 8
+      pageSize: 10
     }
     return {
       presetPrompt,

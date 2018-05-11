@@ -26,7 +26,8 @@ module.exports = cli => {
       name: 'useTsWithBabel',
       when: answers => answers.features.includes('ts'),
       type: 'confirm',
-      message: 'Use Babel alongside TypeScript for auto-detected polyfills?'
+      message: 'Use Babel alongside TypeScript for auto-detected polyfills?',
+      default: answers => answers.features.includes('babel')
     })
   }
 
