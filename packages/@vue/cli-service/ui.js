@@ -55,7 +55,7 @@ module.exports = api => {
         name: 'open',
         type: 'confirm',
         default: false,
-        description: 'Open browser on server start'
+        description: 'vue-webpack.tasks.serve.open'
       },
       {
         name: 'mode',
@@ -75,25 +75,25 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'Specify env mode'
+        description: 'vue-webpack.tasks.serve.mode'
       },
       {
         name: 'host',
         type: 'input',
         default: '0.0.0.0',
-        description: 'Specify host'
+        description: 'vue-webpack.tasks.serve.host'
       },
       {
         name: 'port',
         type: 'input',
         default: 8080,
-        description: 'Specify port'
+        description: 'vue-webpack.tasks.serve.port'
       },
       {
         name: 'https',
         type: 'confirm',
         default: false,
-        description: 'Use HTTPS'
+        description: 'vue-webpack.tasks.serve.https'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
@@ -141,13 +141,13 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'Specify env mode'
+        description: 'vue-webpack.tasks.build.mode'
       },
       {
         name: 'dest',
         type: 'input',
         default: 'dist',
-        description: 'Output directory'
+        description: 'vue-webpack.tasks.build.dest'
       },
       {
         name: 'target',
@@ -155,29 +155,29 @@ module.exports = api => {
         default: 'app',
         choices: [
           {
-            name: 'Web app',
+            name: 'vue-webpack.tasks.build.target.app',
             value: 'app'
           },
           {
-            name: 'Library',
+            name: 'vue-webpack.tasks.build.target.lib',
             value: 'lib'
           },
           {
-            name: 'Web component',
+            name: 'vue-webpack.tasks.build.target.wc',
             value: 'wc'
           },
           {
-            name: 'Async web component',
+            name: 'vue-webpack.tasks.build.wc-async',
             value: 'wc-async'
           }
         ],
-        description: 'Build target'
+        description: 'vue-webpack.tasks.build.description'
       },
       {
         name: 'name',
         type: 'input',
         default: '',
-        description: 'Name for library or web-component mode (default: "name" in package.json or entry filename)'
+        description: 'vue-webpack.tasks.build.name'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
@@ -203,7 +203,7 @@ module.exports = api => {
   api.addTask({
     name: 'inspect',
     command: 'vue-cli-service inspect',
-    description: 'Inspect the resolved webpack config',
+    description: 'vue-webpack.tasks.inspect.description',
     link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md#inspecting-the-projects-webpack-config',
     prompts: [
       {
@@ -224,13 +224,13 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'Specify env mode'
+        description: 'vue-webpack.tasks.inspect.mode'
       },
       {
         name: 'verbose',
         type: 'confirm',
         default: false,
-        description: 'Show full function definitions in output'
+        description: 'vue-webpack.tasks.inspect.verbose'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

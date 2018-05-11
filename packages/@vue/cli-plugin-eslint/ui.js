@@ -190,8 +190,8 @@ module.exports = api => {
         {
           name: 'lintOnSave',
           type: 'confirm',
-          message: 'Lint on save',
-          description: 'Automatically lint source files when saved',
+          message: 'eslint.config.eslint-extra.lintOnSave.message',
+          description: 'eslint.config.eslint-extra.lintOnSave.description',
           link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#configuration',
           default: false,
           value: data.lintOnSave
@@ -217,7 +217,7 @@ module.exports = api => {
         name: 'noFix',
         type: 'confirm',
         default: false,
-        description: 'Do not fix errors'
+        description: 'eslint.tasks.lint.noFix'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

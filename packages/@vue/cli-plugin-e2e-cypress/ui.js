@@ -1,14 +1,14 @@
 module.exports = api => {
   api.describeTask({
     match: /vue-cli-service test:e2e/,
-    description: 'Run e2e tests with `cypress run`',
+    description: 'cypress.tasks.test.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress#injected-commands',
     prompts: [
       {
         name: 'headless',
         type: 'confirm',
         default: false,
-        description: 'Run in headless mode without GUI'
+        description: 'cypress.tasks.test.headless'
       },
       {
         name: 'mode',
@@ -28,13 +28,13 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'Specify the mode the dev server should run in'
+        description: 'cypress.tasks.test.mode'
       },
       {
         name: 'url',
         type: 'input',
         default: '',
-        description: 'Run e2e tests against given url instead of auto-starting dev server'
+        description: 'cypress.tasks.test.url'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

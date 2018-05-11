@@ -43,8 +43,8 @@ module.exports = api => {
           {
             name: 'workboxPluginMode',
             type: 'list',
-            message: 'Plugin mode',
-            description: 'This allows you to the choose between the two modes supported by the underlying `workbox-webpack-plugin`',
+            message: 'pwa.config.pwa.workboxPluginMode.message',
+            description: 'pwa.config.pwa.workboxPluginMode.description',
             link: 'https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#which_plugin_to_use',
             default: 'GenerateSW',
             value: data.pwa && data.pwa.workboxPluginMode,
@@ -62,23 +62,23 @@ module.exports = api => {
           {
             name: 'name',
             type: 'input',
-            message: 'App name',
-            description: 'App name displayed on the Splash screen and various other places. Also used as the value for the `apple-mobile-web-app-title` meta tag in the generated HTML.',
+            message: 'pwa.config.pwa.name.message',
+            description: 'pwa.config.pwa.name.description',
             value: data.pwa && data.pwa.name
           },
           {
             name: 'themeColor',
             type: 'color',
-            message: 'Theme color',
-            description: 'Color used to theme the browser',
+            message: 'pwa.config.pwa.themeColor.message',
+            description: 'pwa.config.pwa.themeColor.description',
             default: '#4DBA87',
             value: data.pwa && data.pwa.themeColor
           },
           {
             name: 'backgroundColor',
             type: 'color',
-            message: 'Splash background color',
-            description: 'Background color used for the app splash screen',
+            message: 'pwa.config.pwa.backgroundColor.message',
+            description: 'pwa.config.pwa.backgroundColor.description',
             default: '#000000',
             value: manifest && manifest.background_color,
             skipSave: true
@@ -86,16 +86,16 @@ module.exports = api => {
           {
             name: 'msTileColor',
             type: 'color',
-            message: 'Windows app tile color',
-            description: 'Color used for the app tile on Windows',
+            message: 'pwa.config.pwa.msTileColor.message',
+            description: 'pwa.config.pwa.msTileColor.description',
             default: '#000000',
             value: data.pwa && data.pwa.msTileColor
           },
           {
             name: 'appleMobileWebAppStatusBarStyle',
             type: 'input',
-            message: 'Apple mobile status bar style',
-            description: 'Style for the web app status bar on iOS',
+            message: 'pwa.config.pwa.appleMobileWebAppStatusBarStyle.message',
+            description: 'pwa.config.pwa.appleMobileWebAppStatusBarStyle.description',
             default: 'default',
             value: data.pwa && data.pwa.appleMobileWebAppStatusBarStyle
           }

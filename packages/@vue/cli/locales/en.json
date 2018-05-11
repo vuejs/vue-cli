@@ -362,11 +362,31 @@
     },
     "tasks": {
       "serve": {
-        "description": "Compiles and hot-reloads for development"
+        "description": "Compiles and hot-reloads for development",
+        "open": "Open browser on server start",
+        "mode": "Specify env mode",
+        "host": "Specify host",
+        "port": "Specify port",
+        "https": "Use HTTPS"
       },
       "build": {
-        "description": "Compiles and minifies for production"
+        "description": "Compiles and minifies for production",
+        "mode": "Specify env mode",
+        "dest": "Output directory",
+        "target": {
+          "description": "Build target",
+          "app": "Web app",
+          "lib": "Library",
+          "wc": "Web component",
+          "wc-async": "Async web component"
+        },
+        "name": "Name for library or web-component mode (default: 'name' in package.json or entry filename)"
       }
+    },
+    "inspect": {
+      "description": "Inspect the resolved webpack config",
+      "mode": "Specify env mode",
+      "verbose": "Show full function definitions in output"
     }
   },
   "eslint": {
@@ -379,19 +399,58 @@
         }
       },
       "eslint-extra": {
-        "description": "Extra ESLint settings"
+        "description": "Extra ESLint settings",
+        "lintOnSave": {
+          "message": "Lint on save",
+          "description": "Automatically lint source files when saved"
+        }
       }
     },
     "tasks": {
       "lint": {
-        "description": "Lints and fixes files"
+        "description": "Lints and fixes files",
+        "noFix": "Do not fix errors"
       }
     }
   },
   "pwa": {
     "config": {
       "pwa": {
-        "description": "Progressive Web App"
+        "description": "Progressive Web App",
+        "workboxPluginMode": {
+          "message": "Plugin mode",
+          "description": "This allows you to the choose between the two modes supported by the underlying `workbox-webpack-plugin`"
+        },
+        "name": {
+          "message": "App name",
+          "description": "App name displayed on the Splash screen and various other places. Also used as the value for the `apple-mobile-web-app-title` meta tag in the generated HTML."
+        },
+        "themeColor": {
+          "message": "Theme color",
+          "description": "Color used to theme the browser"
+        },
+        "backgroundColor": {
+          "message": "Splash background color",
+          "description": "Background color used for the app splash screen"
+        },
+        "msTileColor": {
+          "message": "Windows app tile color",
+          "description": "Color used for the app tile on Windows"
+        },
+        "appleMobileWebAppStatusBarStyle": {
+          "message": "Apple mobile status bar style",
+          "description": "Style for the web app status bar on iOS"
+        }
+      }
+    }
+  },
+  "cypress": {
+    "tasks": {
+      "test": {
+        "description": "Run e2e tests with `cypress run`",
+        "headless": "Run in headless mode without GUI",
+        "mode": "Specify the mode the dev server should run in",
+        "url": "Run e2e tests against given url instead of auto-starting dev server"
       }
     }
   }
