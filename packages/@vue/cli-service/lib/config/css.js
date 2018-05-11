@@ -41,8 +41,12 @@ module.exports = (api, options) => {
       const baseRule = webpackConfig.module.rule(lang).test(test)
 
       // rules for <style lang="module">
-      const modulesRule = baseRule.oneOf('modules').resourceQuery(/module/)
+      const modulesRule = baseRule.oneOf('modules-query').resourceQuery(/module/)
       applyLoaders(modulesRule, true)
+
+      // rules for *.module.* files
+      const modulesExtRule = baseRule.oneOf('modules-ext').test(/\.module\.\w+$/)
+      applyLoaders(modulesExtRule, true)
 
       const normalRule = baseRule.oneOf('normal')
       applyLoaders(normalRule, false)
@@ -65,7 +69,11 @@ module.exports = (api, options) => {
         const cssLoaderOptions = {
           minimize: isProd,
           sourceMap,
-          importLoaders: hasPostCSSConfig + !!loader // boolean + boolean
+          importLoaders: (
+            1 + // stylePostLoader injected by vue-loader
+            hasPostCSSConfig +
+            !!loader
+          )
         }
         if (modules) {
           Object.assign(cssLoaderOptions, {
