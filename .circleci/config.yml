@@ -16,7 +16,6 @@ jobs:
             - v1-vue-{{ .Branch }}-
             - v1-vue-
       - run: yarn
-      - run: rm -rf node_modules/babel-jest/node_modules
       - save_cache:
           key: v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:

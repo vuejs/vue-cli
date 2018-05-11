@@ -59,6 +59,7 @@
     "yorkie": "^1.0.2"
   },
   "resolutions": {
-    "fs-monkey": "0.3.1"
+    "fs-monkey": "0.3.1",
+    "babel-core": "7.0.0-bridge.0"
   }
 }
