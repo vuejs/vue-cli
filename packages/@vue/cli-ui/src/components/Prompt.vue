@@ -13,12 +13,20 @@ export default {
     }
   },
 
+  data () {
+    return {
+      modifiedValue: undefined
+    }
+  },
+
   methods: {
     value (value) {
+      if (typeof this.modifiedValue !== 'undefined') return this.modifiedValue
       return JSON.parse(value)
     },
 
     answer (value) {
+      this.modifiedValue = value
       this.$emit('answer', value)
     }
   }
