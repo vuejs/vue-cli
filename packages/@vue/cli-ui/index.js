@@ -15,9 +15,7 @@ exports.clientAddonConfig = function ({ id, port = 8042 }) {
       config.plugins.delete('preload')
       config.plugins.delete('prefetch')
       config.plugins.delete('html')
-      config.plugins.delete('split-vendor')
-      config.plugins.delete('split-vendor-async')
-      config.plugins.delete('split-manifest')
+      config.plugins.delete('optimize-css')
     },
     devServer: {
       headers: {
