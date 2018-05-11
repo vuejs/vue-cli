@@ -1,9 +1,9 @@
 const Lowdb = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
-const mkdirp = require('mkdirp')
+const fs = require('fs-extra')
 const { resolve } = require('path')
 
-mkdirp(resolve(__dirname, '../../../live'))
+fs.ensureDirSync(resolve(__dirname, '../../../live'))
 
 const db = new Lowdb(new FileSync(resolve(__dirname, '../../../live/db.json')))
 
