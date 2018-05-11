@@ -1,7 +1,8 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const yaml = require('js-yaml')
 const clone = require('clone')
+const stringifyJS = require('javascript-stringify')
 // Connectors
 const cwd = require('./cwd')
 const plugins = require('./plugins')
@@ -52,6 +53,25 @@ function findFile (config, context) {
   }
 }
 
+function getDefaultFile (config, context) {
+  if (!config.files) {
+    return null
+  }
+
+  const keys = Object.keys(config.files)
+  if (keys.length) {
+    for (const key of keys) {
+      if (key !== 'package') {
+        const file = config.files[key][0]
+        return {
+          type: key,
+          path: path.resolve(cwd.get(), file)
+        }
+      }
+    }
+  }
+}
+
 function readData (config, context) {
   const file = findFile(config, context)
   config.file = file
@@ -74,9 +94,15 @@ function readData (config, context) {
 }
 
 function writeData ({ config, data, changedFields }, context) {
-  const file = findFile(config, context)
+  let file = findFile(config, context)
+
+  if (!file) {
+    file = getDefaultFile(config, context)
+  }
+
   if (file) {
-    log('Config write', config.id, data, changedFields)
+    log('Config write', config.id, data, changedFields, file.path)
+    fs.ensureFileSync(file.path)
     let rawContent
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
@@ -88,12 +114,16 @@ function writeData ({ config, data, changedFields }, context) {
       } else if (file.type === 'yaml') {
         rawContent = yaml.safeDump(data)
       } else if (file.type === 'js') {
-        const changedData = changedFields.reduce((obj, field) => {
-          obj[field] = data[field]
-          return obj
-        }, {})
-        const source = fs.readFileSync(file.path, { encoding: 'utf8' })
-        rawContent = extendJSConfig(changedData, source)
+        let source = fs.readFileSync(file.path, { encoding: 'utf8' })
+        if (!source.trim()) {
+          rawContent = `module.exports = ${stringifyJS(data, null, 2)}`
+        } else {
+          const changedData = changedFields.reduce((obj, field) => {
+            obj[field] = data[field]
+            return obj
+          }, {})
+          rawContent = extendJSConfig(changedData, source)
+        }
       }
     }
     fs.writeFileSync(file.path, rawContent, { encoding: 'utf8' })
