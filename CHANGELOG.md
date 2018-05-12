@@ -54,7 +54,7 @@ modifications must be webpcak 4 compatible. Drop support
 for webpack plugins that do not work with v4 or above.
 * dll option has been removed.
 * the "vueLoader" option has been removed. To modify vue-loader
-options, use chainWebpack then `config.module.rule(vue).use(vue-loader).tap()`.
+options, use chainWebpack then `config.module.rule('vue').use('vue-loader').tap()`.
 vue-loader has been upgraded to v15 and expects different options from v14.
 * To include a dependency for Babel transpilation, tapping
 babel-loader and adding .include() will no longer work. Use the new
