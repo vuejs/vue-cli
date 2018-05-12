@@ -84,6 +84,13 @@ async function initCreator (context) {
   installProgress.on('log', onInstallLog)
 
   // Presets
+  const manualPreset = {
+    id: '__manual__',
+    name: 'views.project-create.tabs.presets.manual.name',
+    description: 'views.project-create.tabs.presets.manual.description',
+    link: null,
+    features: []
+  }
   const presetsData = creator.getPresets()
   presets = [
     ...Object.keys(presetsData).map(
@@ -103,13 +110,7 @@ async function initCreator (context) {
         return info
       }
     ),
-    {
-      id: '__manual__',
-      name: 'views.project-create.tabs.presets.manual.name',
-      description: 'views.project-create.tabs.presets.manual.description',
-      link: null,
-      features: []
-    }
+    manualPreset
   ]
 
   // Features
@@ -122,7 +123,7 @@ async function initCreator (context) {
         description: data.description || null,
         link: data.link || null,
         plugins: data.plugins || null,
-        enabled: false
+        enabled: !!data.checked
       })
     ),
     {
@@ -134,6 +135,12 @@ async function initCreator (context) {
       enabled: false
     }
   ]
+
+  manualPreset.features = features.filter(
+    f => f.enabled
+  ).map(
+    f => f.id
+  )
 
   // Prompts
   await prompts.reset()
