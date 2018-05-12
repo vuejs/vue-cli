@@ -9,8 +9,7 @@ module.exports = async function getVersions () {
     latest = process.env.VUE_CLI_LATEST_VERSION = current
   } else {
     const request = require('./request')
-    const options = require('../options').loadOptions()
-    const registry = options.useTaobaoRegistry
+    const registry = (await require('./shouldUseTaobao')())
       ? `https://registry.npm.taobao.org`
       : `https://registry.npmjs.org`
 
