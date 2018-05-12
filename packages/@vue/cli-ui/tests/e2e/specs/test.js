@@ -38,7 +38,6 @@ describe('Vue project manager', () => {
       cy.get('[data-id="router"] .bullet').click()
       cy.get('[data-id="vuex"] .bullet').click()
       cy.get('[data-id="css-preprocessor"] .bullet').click()
-      cy.get('[data-id="linter"] .bullet').click()
       cy.get('[data-id="use-config-files"] .bullet').click()
       cy.get('.next').click()
     })
