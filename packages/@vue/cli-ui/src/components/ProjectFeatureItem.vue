@@ -4,14 +4,15 @@
     :class="{
       selected: feature.enabled
     }"
+    :data-id="feature.id"
   >
     <VueSwitch
       :value="feature.enabled"
       class="extend-left"
     >
       <ListItemInfo
-        :name="feature.name"
-        :description="feature.description"
+        :name="$t(feature.name)"
+        :description="$t(feature.description)"
         :link="feature.link"
         :selected="feature.enabled"
       />

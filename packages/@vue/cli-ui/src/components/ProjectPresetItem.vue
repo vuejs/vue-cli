@@ -4,6 +4,7 @@
     :class="{
       selected
     }"
+    :data-id="preset.id"
   >
     <div class="content">
       <div
@@ -16,8 +17,8 @@
       </div>
 
       <ListItemInfo
-        :name="preset.name"
-        :description="preset.description"
+        :name="$t(preset.name)"
+        :description="$t(preset.description)"
         :link="preset.link"
         :selected="selected"
       />

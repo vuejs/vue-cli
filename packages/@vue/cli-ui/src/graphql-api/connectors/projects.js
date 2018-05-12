@@ -44,7 +44,7 @@ function getLast (context) {
 }
 
 function generatePresetDescription (preset) {
-  let description = `Features: ${preset.features.join(', ')}`
+  let description = preset.features.join(', ')
   if (preset.raw.useConfigFiles) {
     description += ` (Use config files)`
   }
@@ -94,7 +94,7 @@ async function initCreator (context) {
         )
         const info = {
           id: key,
-          name: key === 'default' ? 'Default preset' : key,
+          name: key === 'default' ? 'views.project-create.tabs.presets.default-preset' : key,
           features,
           link: null,
           raw: preset
@@ -105,8 +105,8 @@ async function initCreator (context) {
     ),
     {
       id: '__manual__',
-      name: 'Manual',
-      description: 'Manually select features',
+      name: 'views.project-create.tabs.presets.manual.name',
+      description: 'views.project-create.tabs.presets.manual.description',
       link: null,
       features: []
     }
@@ -127,8 +127,8 @@ async function initCreator (context) {
     ),
     {
       id: 'use-config-files',
-      name: 'Use config files',
-      description: `Use specific configuration files (like '.babelrc') instead of using 'package.json'.`,
+      name: 'views.project-create.tabs.features.userConfigFiles.name',
+      description: 'views.project-create.tabs.features.userConfigFiles.description',
       link: null,
       plugins: null,
       enabled: false

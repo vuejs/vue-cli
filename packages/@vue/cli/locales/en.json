@@ -210,7 +210,16 @@
           "modal": {
             "title": "Configure Remote preset",
             "body": "Available soon..."
-          }
+          },
+          "manual": {
+            "name": "Manual",
+            "description": "Manually select features"
+          },
+          "remote": {
+            "name": "Remote preset",
+            "description": "Fetch a preset from a git repository"
+          },
+          "default-preset": "Default preset"
         },
         "features": {
           "title": "Features",
@@ -220,6 +229,10 @@
             "previous": "Previous",
             "next": "Next",
             "create": "Create Project"
+          },
+          "userConfigFiles": {
+            "name": "Use config files",
+            "description": "Use specific configuration files (like '.babelrc') instead of using 'package.json'."
           }
         },
         "configuration": {
