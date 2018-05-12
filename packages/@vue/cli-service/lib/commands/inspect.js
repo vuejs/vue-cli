@@ -83,6 +83,10 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service inspect [options] [...paths]',
     options: {
       '--mode': 'specify env mode (default: development)',
+      '--rule <ruleName>': 'inspect a specific module rule',
+      '--plugin <pluginName>': 'inspect a specific plugin',
+      '--rules': 'list all module rule names',
+      '--plugins': 'list all plugin names',
       '--verbose': 'show full function definitions in output'
     }
   }, args => {
@@ -94,7 +98,15 @@ module.exports = (api, options) => {
     const paths = args._
 
     let res
-    if (paths.length > 1) {
+    if (args.rule) {
+      res = config.module.rules.find(r => r.__ruleName === args.rule)
+    } else if (args.plugin) {
+      res = config.plugins.find(p => p.__pluginName === args.plugin)
+    } else if (args.rules) {
+      res = config.module.rules.map(r => r.__ruleName)
+    } else if (args.plugins) {
+      res = config.plugins.map(p => p.__pluginName)
+    } else if (paths.length > 1) {
       res = {}
       paths.forEach(path => {
         res[path] = get(config, path)
@@ -106,7 +118,7 @@ module.exports = (api, options) => {
     }
 
     const pluginRE = /(?:function|class) (\w+Plugin)/
-    console.log(stringify(res, (value, indent, stringify) => {
+    const output = stringify(res, (value, indent, stringify) => {
       // shorten long functions
       if (
         !args.verbose &&
@@ -151,7 +163,9 @@ module.exports = (api, options) => {
       }
 
       return stringify(value)
-    }, 2))
+    }, 2)
+
+    console.log(output)
   })
 }
 

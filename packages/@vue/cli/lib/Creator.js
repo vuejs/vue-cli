@@ -333,7 +333,7 @@ module.exports = class Creator extends EventEmitter {
       type: 'checkbox',
       message: 'Check the features needed for your project:',
       choices: [],
-      pageSize: 8
+      pageSize: 10
     }
     return {
       presetPrompt,

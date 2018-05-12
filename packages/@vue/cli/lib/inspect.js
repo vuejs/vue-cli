@@ -19,6 +19,10 @@ module.exports = function inspect (paths, args) {
       binPath,
       'inspect',
       ...(args.mode ? ['--mode', args.mode] : []),
+      ...(args.rule ? ['--rule', args.rule] : []),
+      ...(args.plugin ? ['--plugin', args.plugin] : []),
+      ...(args.rules ? ['--rules'] : []),
+      ...(args.plugins ? ['--plugins'] : []),
       ...(args.verbose ? ['--verbose'] : []),
       ...paths
     ], { cwd, stdio: 'inherit' })

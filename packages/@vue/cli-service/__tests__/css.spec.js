@@ -22,7 +22,7 @@ const genConfig = (pkg = {}, env) => {
   return config
 }
 
-const findRule = (config, lang, index = 1) => {
+const findRule = (config, lang, index = 2) => {
   const baseRule = config.module.rules.find(rule => {
     return rule.test.test(`.${lang}`)
   })
@@ -55,7 +55,7 @@ test('default loaders', () => {
     expect(findOptions(config, lang, 'css')).toEqual({
       minimize: false,
       sourceMap: false,
-      importLoaders: lang === 'css' ? 1 : 2
+      importLoaders: lang === 'css' ? 2 : 3
     })
   })
   // sass indented syntax
@@ -70,7 +70,7 @@ test('production defaults', () => {
     expect(findOptions(config, lang, 'css')).toEqual({
       minimize: true,
       sourceMap: false,
-      importLoaders: lang === 'css' ? 1 : 2
+      importLoaders: lang === 'css' ? 2 : 3
     })
   })
 })
@@ -78,13 +78,17 @@ test('production defaults', () => {
 test('CSS Modules rules', () => {
   const config = genConfig()
   LANGS.forEach(lang => {
-    expect(findOptions(config, lang, 'css', 0)).toEqual({
-      importLoaders: lang === 'css' ? 0 : 1, // no postcss-loader
+    const expected = {
+      importLoaders: lang === 'css' ? 1 : 2, // no postcss-loader
       localIdentName: `[name]_[local]_[hash:base64:5]`,
       minimize: false,
       sourceMap: false,
       modules: true
-    })
+    }
+    // module-query rules
+    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
+    // module-ext rules
+    expect(findOptions(config, lang, 'css', 1)).toEqual(expected)
   })
 })
 

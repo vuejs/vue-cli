@@ -1,5 +1,3 @@
-const chalk = require('chalk')
-
 module.exports = cli => {
   cli.injectFeature({
     name: 'TypeScript',
@@ -17,21 +15,13 @@ module.exports = cli => {
     message: 'Use class-style component syntax?'
   })
 
-  if (process.env.VUE_CLI_EXPERIMENTAL) {
-    cli.injectPrompt({
-      name: 'compileTsWithBabel',
-      when: answers => answers.features.includes('ts'),
-      type: 'confirm',
-      message: `Compile TS with babel? ${chalk.yellow(`(experimental)`)}`
-    })
-  } else {
-    cli.injectPrompt({
-      name: 'useTsWithBabel',
-      when: answers => answers.features.includes('ts'),
-      type: 'confirm',
-      message: 'Use Babel alongside TypeScript for auto-detected polyfills?'
-    })
-  }
+  cli.injectPrompt({
+    name: 'useTsWithBabel',
+    when: answers => answers.features.includes('ts'),
+    type: 'confirm',
+    message: 'Use Babel alongside TypeScript for auto-detected polyfills?',
+    default: answers => answers.features.includes('babel')
+  })
 
   cli.onPromptComplete((answers, options) => {
     if (answers.features.includes('ts')) {
@@ -44,8 +34,6 @@ module.exports = cli => {
       }
       if (answers.useTsWithBabel) {
         tsOptions.useTsWithBabel = true
-      } else if (answers.compileTsWithBabel) {
-        tsOptions.experimentalCompileTsWithBabel = true
       }
       options.plugins['@vue/cli-plugin-typescript'] = tsOptions
     }

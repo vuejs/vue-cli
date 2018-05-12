@@ -1,7 +1,6 @@
 module.exports = (api, {
   parallel,
-  lintOnSave,
-  experimentalCompileTsWithBabel
+  lintOnSave
 }) => {
   const fs = require('fs')
   const useThreads = process.env.NODE_ENV === 'production' && parallel
@@ -35,35 +34,26 @@ module.exports = (api, {
       })
     }
 
-    if (!experimentalCompileTsWithBabel) {
-      if (api.hasPlugin('babel')) {
-        addLoader({
-          loader: 'babel-loader'
-        })
-      }
-      addLoader({
-        loader: 'ts-loader',
-        options: {
-          transpileOnly: true,
-          appendTsSuffixTo: [/\.vue$/],
-          // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
-          happyPackMode: useThreads
-        }
-      })
-      // make sure to append TSX suffix
-      tsxRule.use('ts-loader').loader('ts-loader').tap(options => {
-        delete options.appendTsSuffixTo
-        options.appendTsxSuffixTo = [/\.vue$/]
-        return options
-      })
-    } else {
-      // Experimental: compile TS with babel so that it can leverage
-      // preset-env for auto-detected polyfills based on browserslists config.
-      // this is pending on the readiness of @babel/preset-typescript.
+    if (api.hasPlugin('babel')) {
       addLoader({
         loader: 'babel-loader'
       })
     }
+    addLoader({
+      loader: 'ts-loader',
+      options: {
+        transpileOnly: true,
+        appendTsSuffixTo: [/\.vue$/],
+        // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
+        happyPackMode: useThreads
+      }
+    })
+    // make sure to append TSX suffix
+    tsxRule.use('ts-loader').loader('ts-loader').tap(options => {
+      delete options.appendTsSuffixTo
+      options.appendTsxSuffixTo = [/\.vue$/]
+      return options
+    })
 
     config
       .plugin('fork-ts-checker')

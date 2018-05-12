@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.16",
-    "babel-jest": "^22.0.4",
-    "ts-jest": "^22.0.1"
+    "babel-jest": "^22.4.3",
+    "ts-jest": "^22.4.6"
   }
 }
