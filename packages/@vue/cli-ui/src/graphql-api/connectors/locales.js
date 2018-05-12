@@ -51,7 +51,7 @@ function _loadFolder (root, context) {
 }
 
 function loadFolder (root, context) {
-  if (process.env.NODE_ENV !== 'production' && !watchedTrees.get(root)) {
+  if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test' && !watchedTrees.get(root)) {
     watchedTrees.set(root, true)
     const watch = require('watch')
     watch.watchTree(root, () => {
