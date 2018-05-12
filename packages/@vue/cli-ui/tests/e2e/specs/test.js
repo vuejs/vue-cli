@@ -58,7 +58,7 @@ describe('Vue project manager', () => {
       cy.get('.continue').click()
     })
     cy.get('.loading-screen .vue-ui-loading-indicator').should('be.visible')
-    cy.get('.project-home', { timeout: 60000 }).should('be.visible')
+    cy.get('.project-home', { timeout: 300000 }).should('be.visible')
     cy.get('.current-project').should('have.text', 'cli-ui-test')
   })
 })
