@@ -3,13 +3,14 @@
     <StepWizard
       :tab-id.sync="tab"
       :title="$route.query.hideTabs ? $t('views.project-create.title') : $t('views.project-select.title')"
-      :hide-tabs="!!hideTabs"
+      :hide-tabs="hideTabs"
       class="frame"
     >
       <VueTab
         id="existing"
         :label="$t('views.project-select.tabs.projects')"
         icon="storage"
+        class="select"
       >
         <ProjectSelectList/>
       </VueTab>
@@ -18,6 +19,7 @@
         id="create"
         :label="$t('views.project-select.tabs.create')"
         icon="add_box"
+        class="create"
       >
         <div class="content">
           <FolderExplorer/>
@@ -27,7 +29,7 @@
           <VueButton
             icon-left="add"
             :label="$route.query.hideTabs ? $t('views.project-create.tabs.details.form.folder.action') : $t('views.project-select.buttons.create')"
-            class="big primary"
+            class="big primary create-project"
             :to="{ name: 'project-create' }"
           />
         </div>
@@ -37,6 +39,7 @@
         id="import"
         :label="$t('views.project-select.tabs.import')"
         icon="unarchive"
+        class="import"
       >
         <div class="content">
           <FolderExplorer/>
@@ -46,7 +49,7 @@
           <VueButton
             icon-left="unarchive"
             :label="$route.query.action || $t('views.project-select.buttons.import')"
-            class="big primary"
+            class="big primary import-project"
             :disabled="!folderCurrent.isVueProject"
             @click="importProject()"
           />
@@ -73,7 +76,7 @@ export default {
     return {
       folderCurrent: {},
       tab: undefined,
-      hideTabs: this.$route.query.hideTabs
+      hideTabs: !!this.$route.query.hideTabs
     }
   },
 

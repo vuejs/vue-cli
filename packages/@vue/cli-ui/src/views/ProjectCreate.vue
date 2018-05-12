@@ -8,6 +8,7 @@
         <template slot-scope="{ next, previous }">
           <VueTab
             id="details"
+            class="details"
             :label="$t('views.project-create.tabs.details.title')"
             icon="subject"
           >
@@ -20,7 +21,7 @@
                     v-model="formData.folder"
                     :placeholder="$t('views.project-create.tabs.details.form.folder.placeholder')"
                     icon-left="folder"
-                    class="big"
+                    class="big app-name"
                   />
 
                   <div slot="subtitle">
@@ -37,7 +38,7 @@
 
                       <VueButton
                         icon-left="edit"
-                        class="icon-button"
+                        class="icon-button change-folder"
                         v-tooltip="$t('views.project-create.tabs.details.form.folder.tooltip')"
                         :to="{
                           name: 'project-select',
@@ -77,7 +78,7 @@
                 >
                   <VueSwitch
                     v-model="formData.force"
-                    class="extend-left"
+                    class="extend-left force"
                   >
                     {{ $t('views.project-create.tabs.details.form.options.description') }}
                   </VueSwitch>
@@ -89,14 +90,14 @@
               <VueButton
                 icon-left="close"
                 :label="$t('views.project-create.tabs.details.buttons.cancel')"
-                class="big"
+                class="big close"
                 @click="showCancel = true"
               />
 
               <VueButton
                 icon-right="arrow_forward"
                 :label="$t('views.project-create.tabs.details.buttons.next')"
-                class="big primary"
+                class="big primary next"
                 :disabled="!detailsValid"
                 @click="next()"
               />
@@ -105,6 +106,7 @@
 
           <VueTab
             id="presets"
+            class="presets"
             :label="$t('views.project-create.tabs.presets.title')"
             icon="check_circle"
             :disabled="!detailsValid"
@@ -141,7 +143,7 @@
               <VueButton
                 icon-left="arrow_back"
                 :label="$t('views.project-create.tabs.presets.buttons.previous')"
-                class="big"
+                class="big previous"
                 @click="previous()"
               />
 
@@ -149,7 +151,7 @@
                 v-if="manual"
                 icon-right="arrow_forward"
                 :label="$t('views.project-create.tabs.presets.buttons.next')"
-                class="big primary"
+                class="big primary next"
                 :disabled="!presetValid"
                 @click="next()"
               />
@@ -157,7 +159,7 @@
                 v-else
                 icon-left="done"
                 :label="$t('views.project-create.tabs.presets.buttons.create')"
-                class="big primary"
+                class="big primary next"
                 @click="createWithoutSaving()"
               />
             </div>
@@ -165,6 +167,7 @@
 
           <VueTab
             id="features"
+            class="features"
             :label="$t('views.project-create.tabs.features.title')"
             icon="device_hub"
             :disabled="!detailsValid || !presetValid || !manual"
@@ -194,7 +197,7 @@
               <VueButton
                 icon-left="arrow_back"
                 :label="$t('views.project-create.tabs.features.buttons.previous')"
-                class="big"
+                class="big previous"
                 @click="previous()"
               />
 
@@ -202,14 +205,14 @@
                 v-if="visiblePrompts.length"
                 icon-right="arrow_forward"
                 :label="$t('views.project-create.tabs.features.buttons.next')"
-                class="big primary"
+                class="big primary next"
                 @click="next()"
               />
               <VueButton
                 v-else
                 icon-left="done"
                 :label="$t('views.project-create.tabs.features.buttons.create')"
-                class="big primary"
+                class="big primary next"
                 @click="showSavePreset = true"
               />
             </div>
@@ -245,6 +248,7 @@
 
           <VueTab
             id="config"
+            class="config"
             :label="$t('views.project-create.tabs.configuration.title')"
             icon="settings_applications"
             :disabled="!detailsValid || !presetValid || !manual || !visiblePrompts.length"
@@ -261,14 +265,14 @@
               <VueButton
                 icon-left="arrow_back"
                 :label="$t('views.project-create.tabs.configuration.buttons.previous')"
-                class="big"
+                class="big previous"
                 @click="previous()"
               />
 
               <VueButton
                 icon-left="done"
                 :label="$t('views.project-create.tabs.configuration.buttons.create')"
-                class="big primary"
+                class="big primary next"
                 :disabled="!configurationValid"
                 @click="showSavePreset = true"
               />
@@ -324,7 +328,7 @@
     <VueModal
       v-if="showSavePreset"
       :title="$t('views.project-create.tabs.configuration.modal.title')"
-      class="medium"
+      class="medium save-preset-modal"
       @close="showSavePreset = false"
     >
       <div class="default-body">
@@ -342,7 +346,7 @@
       <div slot="footer" class="actions end">
         <VueButton
           :label="$t('views.project-create.tabs.configuration.modal.buttons.cancel')"
-          class="flat"
+          class="flat close"
           @click="showSavePreset = false"
         />
 
@@ -350,14 +354,14 @@
 
         <VueButton
           :label="$t('views.project-create.tabs.configuration.modal.buttons.continue')"
-          class="flat"
+          class="flat continue"
           @click="createWithoutSaving()"
         />
 
         <VueButton
           :label="$t('views.project-create.tabs.configuration.modal.buttons.create')"
           icon-left="save"
-          class="primary"
+          class="primary save"
           :disabled="!formData.save"
           @click="createProject()"
         />
@@ -449,8 +453,8 @@ export default {
 
     remotePresetInfo () {
       return {
-        name: 'Remote preset',
-        description: 'Fetch a preset from a git repository'
+        name: 'views.project-create.tabs.presets.remote.name',
+        description: 'views.project-create.tabs.presets.remote.description'
       }
     }
   },

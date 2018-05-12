@@ -3,9 +3,17 @@ const FileSync = require('lowdb/adapters/FileSync')
 const fs = require('fs-extra')
 const { resolve } = require('path')
 
-fs.ensureDirSync(resolve(__dirname, '../../../live'))
+let folder = '../../../live'
 
-const db = new Lowdb(new FileSync(resolve(__dirname, '../../../live/db.json')))
+if (process.env.NODE_ENV === 'test') {
+  folder = '../../../live-test'
+  // Clean DB
+  fs.removeSync(resolve(__dirname, folder))
+}
+
+fs.ensureDirSync(resolve(__dirname, folder))
+
+const db = new Lowdb(new FileSync(resolve(__dirname, folder, 'db.json')))
 
 // Seed an empty DB
 db.defaults({

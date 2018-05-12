@@ -7,7 +7,7 @@
   >
     <div class="toolbar">
       <VueButton
-        class="icon-button"
+        class="icon-button go-up"
         icon-left="keyboard_arrow_up"
         v-tooltip="$t('components.folder-explorer.toolbar.tooltips.parent-folder')"
         @click="openParentFolder"
@@ -16,6 +16,7 @@
       <div v-if="editingPath" class="path-edit">
         <VueInput
           ref="pathInput"
+          class="path-input"
           v-model="editedPath"
           :placeholder="$t('components.folder-explorer.toolbar.placeholder')"
           icon-left="edit"

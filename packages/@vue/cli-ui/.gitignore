@@ -20,3 +20,4 @@ yarn-error.log*
 *.sln
 
 /live/
+/live-test/

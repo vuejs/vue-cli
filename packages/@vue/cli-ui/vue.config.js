@@ -2,6 +2,6 @@ module.exports = {
   pluginOptions: {
     graphqlMock: false,
     apolloEngine: false,
-    graphqlTimeout: 999999999
+    graphqlTimeout: 10000000
   }
 }

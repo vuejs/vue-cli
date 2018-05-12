@@ -1,16 +1,16 @@
 {
   "name": "@vue/cli-ui",
   "version": "3.0.0-beta.10",
-  "author": "Guillaume Chau",
-  "license": "MIT",
-  "main": "index.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "graphql-api": "vue-cli-service graphql-api",
     "run-graphql-api": "vue-cli-service run-graphql-api",
-    "prepublishOnly": "yarn run lint --no-fix && yarn run build"
+    "run-test-graphql-api": "cross-env NODE_ENV=test yarn run graphql-api",
+    "prepublishOnly": "yarn run lint --no-fix && yarn run build",
+    "test:e2e:run": "vue-cli-service test:e2e --mode development",
+    "test:e2e": "start-server-and-test run-test-graphql-api http://localhost:4000 test:e2e:run"
   },
   "dependencies": {
     "clone": "^2.1.1",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.10",
+    "@vue/cli-plugin-e2e-cypress": "^3.0.0-beta.10",
     "@vue/cli-plugin-eslint": "^3.0.0-beta.10",
     "@vue/cli-service": "^3.0.0-beta.10",
     "@vue/eslint-config-standard": "^3.0.0-beta.10",
@@ -45,9 +46,11 @@
     "apollo-link-state": "^0.4.0",
     "apollo-link-ws": "^1.0.0",
     "apollo-utilities": "^1.0.9",
+    "cross-env": "^5.1.5",
     "eslint": "^4.16.0",
     "file-icons-js": "^1.0.3",
     "lint-staged": "^6.0.0",
+    "start-server-and-test": "^1.4.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "subscriptions-transport-ws": "^0.9.5",
@@ -66,6 +69,9 @@
     "last 2 versions",
     "not ie <= 8"
   ],
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Guillaume Chau",
   "engines": {
     "node": ">=8"
   },
