@@ -227,6 +227,7 @@ async function getDefaultValue (prompt) {
       )
     }
   } else if (prompt.type === 'confirm') {
+    if (prompt.raw.checked) return true
     return defaultValue || false
   }
   return defaultValue
