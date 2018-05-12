@@ -56,6 +56,13 @@ jobs:
       - run: yarn test -p unit-mocha,unit-jest,e2e-nightwatch,e2e-cypress
       - run: yarn test tsPluginE2e
 
+  cli-ui:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run: cd packages/@vue/cli-ui && yarn test
+
 workflows:
   version: 2
   test:
@@ -71,5 +78,8 @@ workflows:
           requires:
             - install
       - group-4:
+          requires:
+            - install
+      - cli-ui:
           requires:
             - install
