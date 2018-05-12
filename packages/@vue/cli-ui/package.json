@@ -9,8 +9,11 @@
     "run-graphql-api": "vue-cli-service run-graphql-api",
     "run-test-graphql-api": "cross-env NODE_ENV=test yarn run graphql-api",
     "prepublishOnly": "yarn run lint --no-fix && yarn run build",
-    "test:e2e:run": "vue-cli-service test:e2e --mode development",
-    "test:e2e": "start-server-and-test run-test-graphql-api http://localhost:4000 test:e2e:run"
+    "test:e2e:dev": "vue-cli-service test:e2e --mode development",
+    "test:e2e:run": "vue-cli-service test:e2e --mode production --headless --url=http://localhost:4000",
+    "test:e2e": "start-server-and-test run-test-graphql-api http://localhost:4000 test:e2e:dev",
+    "test:run": "start-server-and-test run-test-graphql-api http://localhost:4000 test:e2e:run",
+    "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui && yarn run test:run"
   },
   "dependencies": {
     "clone": "^2.1.1",
