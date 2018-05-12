@@ -37,10 +37,11 @@ Vue CLI aims to be the standard tooling baseline for the Vue ecosystem. It ensur
 ## CLI
 
 The CLI is installed globally and provides the `vue` command in your terminal:
+We will make an app of template 'webpack'
 
 ``` sh
 npm install -g @vue/cli
-vue create my-project
+vue init webpack my-project
 ```
 
 See [CLI docs](./cli.md) for all available commands.
