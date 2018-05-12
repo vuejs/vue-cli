@@ -394,12 +394,12 @@
           "wc-async": "Async web component"
         },
         "name": "Name for library or web-component mode (default: 'name' in package.json or entry filename)"
+      },
+      "inspect": {
+        "description": "Inspect the resolved webpack config",
+        "mode": "Specify env mode",
+        "verbose": "Show full function definitions in output"
       }
-    },
-    "inspect": {
-      "description": "Inspect the resolved webpack config",
-      "mode": "Specify env mode",
-      "verbose": "Show full function definitions in output"
     }
   },
   "eslint": {
