@@ -3,6 +3,8 @@
 // TODO remove after upgrading Babel to 7.0.0-beta.47
 require('./patchBabel')
 
+const { babelHelpers } = require('@vue/cli-shared-utils')
+
 module.exports = (api, {
   parallel,
   transpileDependencies
@@ -44,8 +46,20 @@ module.exports = (api, {
           .loader('thread-loader')
     }
 
-    jsRule
+    const babelLoader = jsRule
       .use('babel-loader')
         .loader('babel-loader')
+
+    // use project's babel config for dependencies
+    if (transpileDependencies.length !== 0) {
+      // `babelrc` = false
+      const config = babelHelpers.loadUsersConfig(api.resolve('.'))
+
+      // prevent from ignore
+      config.ignore = [babelHelpers.resolveNodeModulesIgnorePattern(transpileDependencies)]
+
+      babelLoader
+        .options(config)
+    }
   })
 }
