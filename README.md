@@ -264,6 +264,8 @@ Arguments:
 
 `vue-cli` uses the tool [`download-git-repo`](https://github.com/flipxfx/download-git-repo) to download the official templates used. The `download-git-repo` tool allows you to indicate a specific branch for a given repository by providing the desired branch name after a pound sign (`#`).
 
+
+
 The format needed for a specific official template is:
 
 ```
@@ -279,6 +281,16 @@ vue init 'webpack-simple#1.0' mynewproject
 ```
 
 _Note_: The surrounding quotes are necessary on zsh shells because of the special meaning of the `#` character.
+### Installing latest version of nodejs on ubuntu based linux destros:
+
+For installing latest version of nodejs on your ubuntu, follow given commands:
+
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - 
+sudo apt-get install -y nodejs
+
+OR ( if you want to install latest version nodejs 10)
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
 
 
 ### License
