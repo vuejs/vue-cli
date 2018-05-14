@@ -17,7 +17,7 @@ module.exports = (api, {
         .test(/\.jsx?$/)
         .exclude
           .add(filepath => {
-            // always trasnpile js in vue files
+            // always transpile js in vue files
             if (/\.vue\.jsx?$/.test(filepath)) {
               return false
             }
@@ -27,7 +27,7 @@ module.exports = (api, {
             }
             // check if this is something the user explicitly wants to transpile
             if (transpileDependencies.some(dep => filepath.match(dep))) {
-              return false
+              return true
             }
             // Don't transpile node_modules
             return /node_modules/.test(filepath)
