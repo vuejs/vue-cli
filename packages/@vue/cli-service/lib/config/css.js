@@ -103,6 +103,7 @@ module.exports = (api, options) => {
     }
 
     createCSSRule('css', /\.css$/)
+    createCSSRule('postcss', /\.p(ost)?css$/)
     createCSSRule('scss', /\.scss$/, 'sass-loader', loaderOptions.sass)
     createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign({
       indentedSyntax: true
