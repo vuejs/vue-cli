@@ -1,4 +1,4 @@
-module.exports = api => {
+module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'development') {
       webpackConfig
@@ -21,7 +21,7 @@ module.exports = api => {
         .plugin('no-emit-on-errors')
           .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
 
-      if (!process.env.VUE_CLI_TEST) {
+      if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
         webpackConfig
           .plugin('progress')
           .use(require('webpack/lib/ProgressPlugin'))
