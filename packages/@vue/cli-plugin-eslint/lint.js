@@ -7,10 +7,11 @@ module.exports = function lint (args = {}, api) {
   const { log, done } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'tests', '*.js']
+  const argsConfig = normalizeConfig(args)
   const config = Object.assign({}, options, {
     fix: true,
     cwd
-  }, normalizeConfig(args))
+  }, argsConfig)
   const engine = new CLIEngine(config)
   const report = engine.executeOnFiles(files)
   const formatter = engine.getFormatter(args.format || 'codeframe')
@@ -19,7 +20,7 @@ module.exports = function lint (args = {}, api) {
     CLIEngine.outputFixes(report)
   }
 
-  if (!report.errorCount) {
+  if (!report.errorCount || report.errorCount <= (argsConfig.maxWarnings || 0)) {
     if (!args.silent) {
       const hasFixed = report.results.some(f => f.output)
       if (hasFixed) {
