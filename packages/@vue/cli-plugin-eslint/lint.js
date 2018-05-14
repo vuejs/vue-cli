@@ -20,7 +20,7 @@ module.exports = function lint (args = {}, api) {
     CLIEngine.outputFixes(report)
   }
 
-  if (!report.errorCount || report.errorCount <= (argsConfig.maxWarnings || 0)) {
+  if (report.errorCount <= (argsConfig.maxWarnings || 0)) {
     if (!args.silent) {
       const hasFixed = report.results.some(f => f.output)
       if (hasFixed) {
@@ -33,7 +33,7 @@ module.exports = function lint (args = {}, api) {
         })
         log()
       }
-      if (report.warningCount) {
+      if (report.warningCount || report.errorCount) {
         console.log(formatter(report.results))
       } else {
         done(hasFixed ? `All lint errors auto-fixed.` : `No lint errors found!`)
