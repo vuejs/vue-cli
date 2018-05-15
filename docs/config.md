@@ -49,10 +49,6 @@ module.exports = {
     // pass custom options to pre-processor loaders. e.g. to pass options to
     // sass-loader, use { sass: { ... } }
     loaderOptions: {},
-
-    // Enable CSS modules for all css / pre-processor files.
-    // This option does not affect *.vue files.
-    modules: false
   },
 
   // use thread-loader for babel & TS in production build
