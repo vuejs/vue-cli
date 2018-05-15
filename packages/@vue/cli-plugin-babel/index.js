@@ -55,9 +55,6 @@ module.exports = (api, {
       // `babelrc` = false
       const config = babelHelpers.loadUsersConfig(api.resolve('.'))
 
-      // prevent from ignore
-      config.ignore = [babelHelpers.resolveNodeModulesIgnorePattern(transpileDependencies)]
-
       babelLoader
         .options(config)
     }

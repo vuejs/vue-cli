@@ -27,13 +27,3 @@ lib.loadUsersConfig = (rootDir) => {
 
   return config
 }
-
-lib.resolveNodeModulesIgnorePattern = (include) => {
-  const pattern = 'node_modules'
-
-  if (Array.isArray(include) && include.length !== 0) {
-    return `${pattern}\/(?!${include.join('|')})`
-  }
-
-  return pattern
-}
