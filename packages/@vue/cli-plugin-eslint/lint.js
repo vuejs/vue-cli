@@ -20,7 +20,10 @@ module.exports = function lint (args = {}, api) {
     CLIEngine.outputFixes(report)
   }
 
-  if (report.errorCount <= (argsConfig.maxWarnings || 0)) {
+  const isErrorsExceed = report.errorCount > (argsConfig.maxErrors || 0)
+  const isWarningsExceed = report.warningCount > (
+    argsConfig.hasOwnProperty('maxWarnings') ? argsConfig.maxWarnings : Infinity)
+  if (!isErrorsExceed && !isWarningsExceed) {
     if (!args.silent) {
       const hasFixed = report.results.some(f => f.output)
       if (hasFixed) {
@@ -41,6 +44,12 @@ module.exports = function lint (args = {}, api) {
     }
   } else {
     console.log(formatter(report.results))
+    if (isErrorsExceed && typeof argsConfig.maxErrors === 'number') {
+      log(`Eslint found too many errors (maximum: ${argsConfig.maxErrors}).`)
+    }
+    if (isWarningsExceed) {
+      log(`Eslint found too many warnings (maximum: ${argsConfig.maxWarnings}).`)
+    }
     process.exit(1)
   }
 }
