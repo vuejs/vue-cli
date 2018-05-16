@@ -33,5 +33,5 @@ Consult Nightwatch docs for [configuration options](http://nightwatchjs.org/gett
 ## Installing in an Already Created Project
 
 ``` sh
-vue add e2e-nightwatch
+vue add @vue/e2e-nightwatch
 ```
