@@ -31,5 +31,5 @@
 ## Installing in an Already Created Project
 
 ``` sh
-vue add unit-mocha
+vue add @vue/cli-plugin-unit-mocha
 ```
