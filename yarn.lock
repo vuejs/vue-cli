@@ -10483,9 +10483,9 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.0.tgz#97976142405d13d8efae154749e88c4e358cf926"
 
-vue-jest@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/vue-jest/-/vue-jest-2.5.0.tgz#9dcf902720fa47ba98e60eb771a02c13e6b4eb56"
+vue-jest@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/vue-jest/-/vue-jest-2.6.0.tgz#23dc99a4dce0bb59fea3946e1317b234968cf12a"
   dependencies:
     babel-plugin-transform-es2015-modules-commonjs "^6.26.0"
     chalk "^2.1.0"
@@ -10496,7 +10496,7 @@ vue-jest@^2.5.0:
     object-assign "^4.1.1"
     source-map "^0.5.6"
     tsconfig "^7.0.0"
-    vue-template-es2015-compiler "^1.5.3"
+    vue-template-es2015-compiler "^1.6.0"
 
 vue-loader@^15.0.11:
   version "15.0.11"
@@ -10539,7 +10539,7 @@ vue-template-compiler@^2.5.16:
     de-indent "^1.0.2"
     he "^1.1.0"
 
-vue-template-es2015-compiler@^1.5.3, vue-template-es2015-compiler@^1.6.0:
+vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
 
