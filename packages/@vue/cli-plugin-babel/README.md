@@ -29,8 +29,7 @@ module.exports = {
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-babel
-vue invoke babel
+vue add @vue/babel
 ```
 
 ## Injected webpack-chain Rules
