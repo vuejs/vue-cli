@@ -4,7 +4,8 @@
   'spinner',
   'validate',
   'openBrowser',
-  'pluginResolution'
+  'pluginResolution',
+  'babelHelpers'
 ].forEach(m => {
   Object.assign(exports, require(`./lib/${m}`))
 })

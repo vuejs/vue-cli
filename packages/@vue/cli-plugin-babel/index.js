@@ -3,6 +3,8 @@
 // TODO remove after upgrading Babel to 7.0.0-beta.47
 require('./patchBabel')
 
+const { babelHelpers } = require('@vue/cli-shared-utils')
+
 module.exports = (api, {
   parallel,
   transpileDependencies
@@ -25,10 +27,6 @@ module.exports = (api, {
             if (filepath.startsWith(cliServicePath)) {
               return true
             }
-            // check if this is something the user explicitly wants to transpile
-            if (transpileDependencies.some(dep => filepath.match(dep))) {
-              return false
-            }
             // Don't transpile node_modules
             return /node_modules/.test(filepath)
           })
@@ -47,5 +45,40 @@ module.exports = (api, {
     jsRule
       .use('babel-loader')
         .loader('babel-loader')
+
+    // config for external dependencies
+    if (transpileDependencies.length !== 0) {
+      const jsExternals = webpackConfig.module
+        .rule('js-externals')
+         .test(/\.jsx?$/)
+          .exclude
+            .add(filepath => {
+              // include only from `transpileDependencies` list
+              if (transpileDependencies.some(dep => filepath.match(dep))) {
+                return false
+              }
+              return true
+            })
+            .end()
+          .use('cache-loader')
+            .loader('cache-loader')
+            .options({ cacheDirectory })
+            .end()
+
+      if (useThreads) {
+        jsExternals
+          .use('thread-loader')
+            .loader('thread-loader')
+      }
+
+      // `babelrc` = false
+      // find nearest babel config from project's root
+      const config = babelHelpers.loadUsersConfig(api.resolve('.'))
+
+      jsExternals
+        .use('babel-loader')
+          .loader('babel-loader')
+            .options(config)
+    }
   })
 }
