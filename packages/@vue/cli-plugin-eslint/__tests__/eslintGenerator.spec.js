@@ -8,9 +8,11 @@ test('base', async () => {
   })
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.eslintConfig).toEqual({
-    root: true,
-    extends: ['plugin:vue/essential', 'eslint:recommended']
+  expect(pkg.eslintConfig.extends).toEqual([
+    'plugin:vue/essential', 'eslint:recommended'
+  ])
+  expect(pkg.eslintConfig.parserOptions).toEqual({
+    parser: 'babel-eslint'
   })
 })
 
@@ -24,9 +26,12 @@ test('airbnb', async () => {
   })
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.eslintConfig).toEqual({
-    root: true,
-    extends: ['plugin:vue/essential', '@vue/airbnb']
+  expect(pkg.eslintConfig.extends).toEqual([
+    'plugin:vue/essential',
+    '@vue/airbnb'
+  ])
+  expect(pkg.eslintConfig.parserOptions).toEqual({
+    parser: 'babel-eslint'
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-airbnb')
 })
@@ -41,9 +46,12 @@ test('standard', async () => {
   })
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.eslintConfig).toEqual({
-    root: true,
-    extends: ['plugin:vue/essential', '@vue/standard']
+  expect(pkg.eslintConfig.extends).toEqual([
+    'plugin:vue/essential',
+    '@vue/standard'
+  ])
+  expect(pkg.eslintConfig.parserOptions).toEqual({
+    parser: 'babel-eslint'
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-standard')
 })
@@ -58,9 +66,12 @@ test('prettier', async () => {
   })
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.eslintConfig).toEqual({
-    root: true,
-    extends: ['plugin:vue/essential', '@vue/prettier']
+  expect(pkg.eslintConfig.extends).toEqual([
+    'plugin:vue/essential',
+    '@vue/prettier'
+  ])
+  expect(pkg.eslintConfig.parserOptions).toEqual({
+    parser: 'babel-eslint'
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
 })
@@ -82,10 +93,12 @@ test('typescript', async () => {
   ])
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.eslintConfig).toEqual({
-    root: true,
-    extends: ['plugin:vue/essential', '@vue/prettier', '@vue/typescript']
-  })
+  expect(pkg.eslintConfig.extends).toEqual([
+    'plugin:vue/essential',
+    '@vue/prettier',
+    '@vue/typescript'
+  ])
+  expect(pkg.eslintConfig).not.toHaveProperty('parserOptions')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
 })

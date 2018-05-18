@@ -20,12 +20,13 @@ module.exports = function lint (args = {}, api) {
   const chalk = require('chalk')
   const cwd = api.resolve('.')
   const { CLIEngine } = require('eslint')
-  const options = require('./eslintOptions')(api)
   const { log, done } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'tests', '*.js']
+  const extensions = require('./eslintOptions').extensions(api)
   const argsConfig = normalizeConfig(args)
-  const config = Object.assign({}, options, {
+  const config = Object.assign({
+    extensions,
     fix: true,
     cwd
   }, argsConfig)
@@ -36,7 +37,7 @@ module.exports = function lint (args = {}, api) {
   if (config.fix) {
     CLIEngine.outputFixes(report)
   }
-  
+
   const maxErrors = argsConfig.maxErrors || 0
   const maxWarnings = typeof argsConfig.maxWarnings === 'number' ? argsConfig.maxWarnings : Infinity
   const isErrorsExceeded = report.errorCount > maxErrors
@@ -63,10 +64,10 @@ module.exports = function lint (args = {}, api) {
     }
   } else {
     console.log(formatter(report.results))
-    if (isErrorsExceed && typeof argsConfig.maxErrors === 'number') {
+    if (isErrorsExceeded && typeof argsConfig.maxErrors === 'number') {
       log(`Eslint found too many errors (maximum: ${argsConfig.maxErrors}).`)
     }
-    if (isWarningsExceed) {
+    if (isWarningsExceeded) {
       log(`Eslint found too many warnings (maximum: ${argsConfig.maxWarnings}).`)
     }
     process.exit(1)

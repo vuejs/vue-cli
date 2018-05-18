@@ -1,6 +1,6 @@
 module.exports = (api, { lintOnSave }) => {
   if (lintOnSave) {
-    const options = require('./eslintOptions')(api)
+    const extensions = require('./eslintOptions').extensions(api)
     api.chainWebpack(webpackConfig => {
       webpackConfig.module
         .rule('eslint')
@@ -12,10 +12,11 @@ module.exports = (api, { lintOnSave }) => {
           .test(/\.(vue|(j|t)sx?)$/)
           .use('eslint-loader')
             .loader('eslint-loader')
-            .options(Object.assign(options, {
+            .options({
+              extensions,
               emitWarning: lintOnSave !== 'error',
               formatter: require('eslint/lib/formatters/codeframe')
-            }))
+            })
     })
   }
 
