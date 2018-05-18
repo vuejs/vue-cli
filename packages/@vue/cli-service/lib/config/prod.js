@@ -1,12 +1,14 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'production') {
+      const getAssetPath = require('../util/getAssetPath')
+
       webpackConfig
         .mode('production')
         .devtool('source-map')
         .output
-          .filename(`js/[name].[chunkhash:8].js`)
-          .chunkFilename(`js/[name].[chunkhash:8].js`)
+          .filename(getAssetPath(options, `js/[name].[chunkhash:8].js`))
+          .chunkFilename(getAssetPath(options, `js/[name].[chunkhash:8].js`))
 
       // keep module.id stable when vendor modules does not change
       webpackConfig
