@@ -7,7 +7,7 @@ const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
-const stringifyJS = require('javascript-stringify')
+const stringifyJS = require('./util/stringifyJS')
 const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'

@@ -1,16 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const extendJSConfig = require('./extendJSConfig')
-const stringify = require('javascript-stringify')
-
-function stringifyJS (value) {
-  return stringify(value, (val, indent, stringify) => {
-    if (val && val.__expression) {
-      return val.__expression
-    }
-    return stringify(val)
-  }, 2)
-}
+const stringifyJS = require('./stringifyJS')
 
 function makeJSTransform (filename) {
   return function transformToJS (value, checkExisting, context) {
