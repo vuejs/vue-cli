@@ -19,11 +19,13 @@ module.exports = function lint (args = {}, api) {
   if (config.fix) {
     CLIEngine.outputFixes(report)
   }
+  
+  const maxErrors = argsConfig.maxErrors || 0
+  const maxWarnings = typeof argsConfig.maxWarnings === 'number' ? argsConfig.maxWarnings : Infinity
+  const isErrorsExceeded = report.errorCount > maxErrors
+  const isWarningsExceeded = report.warningCount > maxWarnings
 
-  const isErrorsExceed = report.errorCount > (argsConfig.maxErrors || 0)
-  const isWarningsExceed = report.warningCount > (
-    argsConfig.hasOwnProperty('maxWarnings') ? argsConfig.maxWarnings : Infinity)
-  if (!isErrorsExceed && !isWarningsExceed) {
+  if (!isErrorsExceeded && !isWarningsExceeded) {
     if (!args.silent) {
       const hasFixed = report.results.some(f => f.output)
       if (hasFixed) {
