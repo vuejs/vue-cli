@@ -23,7 +23,7 @@ async function ui (options = {}, context = process.cwd()) {
   const opts = {
     mock: false,
     apolloEngine: false,
-    timeout: 999999999,
+    timeout: 1000000,
     quiet: true,
     paths: {
       typeDefs: require.resolve('@vue/cli-ui/src/graphql-api/type-defs.js'),

@@ -8,7 +8,10 @@ module.exports = (on, config) => {
     screenshotsFolder: 'tests/e2e/screenshots',
     videosFolder: 'tests/e2e/videos',
     supportFile: 'tests/e2e/support/index.js',
-    responseTimeout: 10000000,
+    execTimeout: 1000000,
+    pageLoadTimeout: 1000000,
+    requestTimeout: 1000000,
+    responseTimeout: 1000000,
     env: {
       cwd: path.resolve(__dirname, '../../../../../test')
     }
