@@ -36,7 +36,7 @@ module.exports = (api, options) => {
       res = config
     }
 
-    const output = toString(config, { verbose })
+    const output = toString(res, { verbose })
     console.log(output)
   })
 }
