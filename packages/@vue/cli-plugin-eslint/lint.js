@@ -7,10 +7,11 @@ module.exports = function lint (args = {}, api) {
   const { log, done } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'tests', '*.js']
+  const argsConfig = normalizeConfig(args)
   const config = Object.assign({}, options, {
     fix: true,
     cwd
-  }, normalizeConfig(args))
+  }, argsConfig)
   const engine = new CLIEngine(config)
   const report = engine.executeOnFiles(files)
   const formatter = engine.getFormatter(args.format || 'codeframe')
@@ -18,8 +19,13 @@ module.exports = function lint (args = {}, api) {
   if (config.fix) {
     CLIEngine.outputFixes(report)
   }
+  
+  const maxErrors = argsConfig.maxErrors || 0
+  const maxWarnings = typeof argsConfig.maxWarnings === 'number' ? argsConfig.maxWarnings : Infinity
+  const isErrorsExceeded = report.errorCount > maxErrors
+  const isWarningsExceeded = report.warningCount > maxWarnings
 
-  if (!report.errorCount) {
+  if (!isErrorsExceeded && !isWarningsExceeded) {
     if (!args.silent) {
       const hasFixed = report.results.some(f => f.output)
       if (hasFixed) {
@@ -32,7 +38,7 @@ module.exports = function lint (args = {}, api) {
         })
         log()
       }
-      if (report.warningCount) {
+      if (report.warningCount || report.errorCount) {
         console.log(formatter(report.results))
       } else {
         done(hasFixed ? `All lint errors auto-fixed.` : `No lint errors found!`)
@@ -40,6 +46,12 @@ module.exports = function lint (args = {}, api) {
     }
   } else {
     console.log(formatter(report.results))
+    if (isErrorsExceed && typeof argsConfig.maxErrors === 'number') {
+      log(`Eslint found too many errors (maximum: ${argsConfig.maxErrors}).`)
+    }
+    if (isWarningsExceed) {
+      log(`Eslint found too many warnings (maximum: ${argsConfig.maxWarnings}).`)
+    }
     process.exit(1)
   }
 }
