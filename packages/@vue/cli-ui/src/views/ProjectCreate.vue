@@ -370,6 +370,7 @@
 
     <ProgressScreen
       progress-id="project-create"
+      :debug="debug"
     />
   </div>
 </template>
@@ -422,7 +423,8 @@ export default {
       projectCreation: null,
       showCancel: false,
       showRemotePreset: false,
-      showSavePreset: false
+      showSavePreset: false,
+      debug: ''
     }
   },
 
@@ -518,11 +520,15 @@ export default {
             }
           }
         })
-        this.$router.push({ name: 'project-home' })
+        this.debug = 'MUTATION DONE'
         this.reset()
+        this.$router.push({ name: 'project-home' })
+        await this.$nextTick()
+        this.debug = `ROUTER PUSH: ${this.$route.name}`
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e)
+        this.debug = `ERROR: ${e}`
       }
     }
   }

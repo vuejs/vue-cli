@@ -40,6 +40,8 @@
                 v-if="progress.progress !== -1"
                 :value="progress.progress"
               />
+
+              <div v-if="debug" class="debug"><pre>{{ debug }}</pre></div>
             </div>
           </template>
         </div>
@@ -57,6 +59,10 @@ export default {
     DisableScroll,
     Progress
   ],
+
+  props: {
+    debug: String
+  },
 
   methods: {
     close () {

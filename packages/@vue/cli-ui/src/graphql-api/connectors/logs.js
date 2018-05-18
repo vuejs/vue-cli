@@ -19,6 +19,7 @@ exports.add = function (log, context) {
   context.pubsub.publish(channels.CONSOLE_LOG_ADDED, {
     consoleLogAdded: item
   })
+  console.log(log)
   return item
 }
 
