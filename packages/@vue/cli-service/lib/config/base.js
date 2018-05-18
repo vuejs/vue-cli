@@ -60,7 +60,7 @@ module.exports = (api, options) => {
 
     webpackConfig.module
       .rule('images')
-        .test(/\.(png|jpe?g|gif)(\?.*)?$/)
+        .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
         .use('url-loader')
           .loader('url-loader')
           .options({
