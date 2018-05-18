@@ -27,6 +27,7 @@ const {
 
 const {
   log,
+  warn,
   error,
   hasGit,
   hasYarn,
@@ -169,6 +170,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // commit initial state
+    let gitCommitFailed = false
     if (shouldInitGit) {
       await run('git add -A')
       if (isTestOrDebug) {
@@ -176,7 +178,11 @@ module.exports = class Creator extends EventEmitter {
         await run('git', ['config', 'user.email', 'test@test.com'])
       }
       const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
-      await run('git', ['commit', '-m', msg])
+      try {
+        await run('git', ['commit', '-m', msg])
+      } catch (e) {
+        gitCommitFailed = true
+      }
     }
 
     // log instructions
@@ -190,6 +196,13 @@ module.exports = class Creator extends EventEmitter {
     )
     log()
     this.emit('creation', { event: 'done' })
+
+    if (gitCommitFailed) {
+      warn(
+        `Skipped git commit due to missing username and email in git config.\n` +
+        `You will need to perform the initial commit yourself.\n`
+      )
+    }
 
     generator.printExitLogs()
   }

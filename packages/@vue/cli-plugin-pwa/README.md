@@ -80,8 +80,7 @@ module.exports = {
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-pwa
-vue invoke pwa
+vue add @vue/pwa
 ```
 
 ## Injected webpack-chain Rules

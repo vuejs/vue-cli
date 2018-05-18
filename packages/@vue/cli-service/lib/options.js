@@ -4,6 +4,7 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string(),
   devBaseUrl: joi.string(),
   outputDir: joi.string(),
+  assetsDir: joi.string(),
   compiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
@@ -47,6 +48,9 @@ exports.defaults = () => ({
 
   // where to output built files
   outputDir: 'dist',
+
+  // where to put static assets (js/css/img/font/...)
+  assetsDir: '',
 
   // boolean, use full build?
   compiler: false,

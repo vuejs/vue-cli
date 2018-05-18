@@ -44,7 +44,7 @@ test('classComponent', async () => {
 })
 
 test('use with Babel', async () => {
-  const { pkg, files } = await generateWithPlugin([
+  const { files } = await generateWithPlugin([
     {
       id: 'babel',
       apply: require('@vue/cli-plugin-babel/generator'),
@@ -59,7 +59,7 @@ test('use with Babel', async () => {
     }
   ])
 
-  expect(pkg.babel).toEqual({ presets: ['@vue/app'] })
+  expect(files['babel.config.js']).toMatch(`presets: [\n    '@vue/app'\n  ]`)
   expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
 })
 

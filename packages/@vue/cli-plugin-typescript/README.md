@@ -25,8 +25,7 @@ If opted to use [TSLint](https://palantir.github.io/tslint/) during project crea
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-typescript
-vue invoke typescript
+vue add @vue/typescript
 ```
 
 ## Injected webpack-chain Rules

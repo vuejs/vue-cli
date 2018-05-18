@@ -463,10 +463,9 @@ test('extract config files', async () => {
     extractConfigFiles: true
   })
 
-  const json = v => JSON.stringify(v, null, 2)
   const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
   expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(js(configs.vue))
-  expect(fs.readFileSync('/.babelrc', 'utf-8')).toMatch(json(configs.babel))
+  expect(fs.readFileSync('/babel.config.js', 'utf-8')).toMatch(js(configs.babel))
   expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))

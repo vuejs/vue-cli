@@ -77,7 +77,7 @@ function transformYAML (value, filename, source) {
 
 module.exports = {
   vue: makeJSTransform('vue.config.js'),
-  babel: makeJSONTransform('.babelrc'),
+  babel: makeJSTransform('babel.config.js'),
   postcss: makeMutliExtensionJSONTransform('.postcssrc', true),
   eslintConfig: makeMutliExtensionJSONTransform('.eslintrc', true),
   jest: makeJSTransform('jest.config.js')

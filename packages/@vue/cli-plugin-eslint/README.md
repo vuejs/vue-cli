@@ -34,8 +34,7 @@ module.exports = {
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-eslint
-vue invoke eslint
+vue add @vue/eslint
 ```
 
 ## Injected webpack-chain Rules

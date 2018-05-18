@@ -88,9 +88,15 @@ module.exports = class Generator {
       for (const key in this.pkg) {
         extract(key)
       }
-    } else if (!process.env.VUE_CLI_TEST) {
-      // by default, always extract vue.config.js
-      extract('vue')
+    } else {
+      if (!process.env.VUE_CLI_TEST) {
+        // by default, always extract vue.config.js
+        extract('vue')
+      }
+      // always extract babel.config.js as this is the only way to apply
+      // project-wide configuration even to dependencies.
+      // TODO: this can be removed when Babel supports root: true in package.json
+      extract('babel')
     }
   }
 

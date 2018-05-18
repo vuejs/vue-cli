@@ -1,8 +1,3 @@
-// hack babel's codegen to fix source map.
-// this is a temporary patch before the actual change is released.
-// TODO remove after upgrading Babel to 7.0.0-beta.47
-require('./patchBabel')
-
 module.exports = (api, {
   parallel,
   transpileDependencies

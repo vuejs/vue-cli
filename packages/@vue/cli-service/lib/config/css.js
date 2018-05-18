@@ -11,6 +11,8 @@ const findExisting = (context, files) => {
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
+    const getAssetPath = require('../util/getAssetPath')
+
     const {
       extract = true,
       sourceMap = false,
@@ -22,8 +24,8 @@ module.exports = (api, options) => {
     const isProd = process.env.NODE_ENV === 'production'
     const shouldExtract = isProd && extract !== false && !shadowMode
     const extractOptions = Object.assign({
-      filename: `css/[name].[contenthash:8].css`,
-      chunkFilename: 'css/[name].[id].[contenthash:8].css'
+      filename: getAssetPath(options, `css/[name].[contenthash:8].css`),
+      chunkFilename: getAssetPath(options, 'css/[name].[id].[contenthash:8].css')
     }, extract && typeof extract === 'object' ? extract : {})
 
     // check if the project has a valid postcss config
@@ -103,6 +105,7 @@ module.exports = (api, options) => {
     }
 
     createCSSRule('css', /\.css$/)
+    createCSSRule('postcss', /\.p(ost)?css$/)
     createCSSRule('scss', /\.scss$/, 'sass-loader', loaderOptions.sass)
     createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign({
       indentedSyntax: true

@@ -1,6 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const resolveLocal = require('../util/resolveLocal')
+    const getAssetPath = require('../util/getAssetPath')
     const inlineLimit = 10000
 
     webpackConfig
@@ -60,12 +61,12 @@ module.exports = (api, options) => {
 
     webpackConfig.module
       .rule('images')
-        .test(/\.(png|jpe?g|gif)(\?.*)?$/)
+        .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
         .use('url-loader')
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: `img/[name].[hash:8].[ext]`
+            name: getAssetPath(options, `img/[name].[hash:8].[ext]`)
           })
 
     // do not base64-inline SVGs.
@@ -76,7 +77,7 @@ module.exports = (api, options) => {
         .use('file-loader')
           .loader('file-loader')
           .options({
-            name: `img/[name].[hash:8].[ext]`
+            name: getAssetPath(options, `img/[name].[hash:8].[ext]`)
           })
 
     webpackConfig.module
@@ -86,7 +87,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: `media/[name].[hash:8].[ext]`
+            name: getAssetPath(options, `media/[name].[hash:8].[ext]`)
           })
 
     webpackConfig.module
@@ -96,7 +97,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: `fonts/[name].[hash:8].[ext]`
+            name: getAssetPath(options, `fonts/[name].[hash:8].[ext]`)
           })
 
     // Other common pre-processors ---------------------------------------------

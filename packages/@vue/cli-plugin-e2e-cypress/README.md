@@ -34,5 +34,5 @@ We've pre-configured Cypress to place most of the e2e testing related files unde
 ## Installing in an Already Created Project
 
 ``` sh
-vue add e2e-cypress
+vue add @vue/e2e-cypress
 ```
