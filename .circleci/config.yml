@@ -62,6 +62,10 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run: cd packages/@vue/cli-ui && yarn test
+      - store_artifacts:
+          path: tests/e2e/videos
+      - store_artifacts:
+          path: tests/e2e/screenshots
 
 workflows:
   version: 2
