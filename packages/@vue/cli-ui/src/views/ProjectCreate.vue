@@ -520,11 +520,9 @@ export default {
             }
           }
         })
-        this.debug = 'MUTATION DONE'
         this.reset()
         this.$router.push({ name: 'project-home' })
         await this.$nextTick()
-        this.debug = `ROUTER PUSH: ${this.$route.name}`
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e)

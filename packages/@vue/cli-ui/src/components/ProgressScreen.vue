@@ -106,6 +106,10 @@ export default {
     .info
       color $color-text-light
 
+    .debug
+      color $vue-ui-color-warning
+      font-size 10px
+
     .vue-ui-loading-bar
       width 50vw
       max-width 400px
