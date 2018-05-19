@@ -104,6 +104,7 @@ Options:
   --dest    specify output directory (default: dist)
   --target  app | lib | wc | wc-async (default: app)
   --name    name for lib or web-component mode (default: "name" in package.json or entry filename)
+  --watch   watch for changes
 ```
 
 `vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
