@@ -1,6 +1,6 @@
 module.exports = function extendJSConfig (value, source) {
   const recast = require('recast')
-  const stringifyJS = require('javascript-stringify')
+  const stringifyJS = require('./stringifyJS')
 
   let exportsIdentifier = null
 
