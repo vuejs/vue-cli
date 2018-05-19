@@ -30,15 +30,15 @@ describe('Vue project manager', () => {
       cy.get('.next').click()
     })
     cy.get('.presets').within(() => {
-      cy.get('[data-id="__manual__"]').click()
+      cy.get('[data-testid="__manual__"]').click()
       cy.get('.next').click()
     })
     cy.get('.features').within(() => {
-      cy.get('[data-id="pwa"] .bullet').click()
-      cy.get('[data-id="router"] .bullet').click()
-      cy.get('[data-id="vuex"] .bullet').click()
-      cy.get('[data-id="css-preprocessor"] .bullet').click()
-      cy.get('[data-id="use-config-files"] .bullet').click()
+      cy.get('[data-testid="pwa"] .bullet').click()
+      cy.get('[data-testid="router"] .bullet').click()
+      cy.get('[data-testid="vuex"] .bullet').click()
+      cy.get('[data-testid="css-preprocessor"] .bullet').click()
+      cy.get('[data-testid="use-config-files"] .bullet').click()
       cy.get('.next').click()
     })
     cy.get('.config').within(() => {

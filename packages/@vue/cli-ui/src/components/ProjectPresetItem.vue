@@ -4,7 +4,7 @@
     :class="{
       selected
     }"
-    :data-id="preset.id"
+    :data-testid="preset.id"
   >
     <div class="content">
       <div

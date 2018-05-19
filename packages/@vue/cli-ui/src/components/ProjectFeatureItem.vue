@@ -4,7 +4,7 @@
     :class="{
       selected: feature.enabled
     }"
-    :data-id="feature.id"
+    :data-testid="feature.id"
   >
     <VueSwitch
       :value="feature.enabled"
