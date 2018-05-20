@@ -50,6 +50,7 @@ module.exports = (api, {
     })
     // make sure to append TSX suffix
     tsxRule.use('ts-loader').loader('ts-loader').tap(options => {
+      options = Object.assign({}, options)
       delete options.appendTsSuffixTo
       options.appendTsxSuffixTo = [/\.vue$/]
       return options

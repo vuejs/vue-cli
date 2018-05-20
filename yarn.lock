@@ -11490,9 +11490,9 @@ vue-jest@^2.6.0:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-loader@^15.0.11:
-  version "15.0.11"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.0.11.tgz#b41dee864cdeb0012c8a2c02a66b13459e45e16e"
+vue-loader@^15.1.0:
+  version "15.1.0"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.1.0.tgz#82a2a5c310951aba17ad5d8680fe016c77d37e80"
   dependencies:
     "@vue/component-compiler-utils" "^1.2.1"
     hash-sum "^1.0.2"
