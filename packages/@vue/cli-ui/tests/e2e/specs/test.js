@@ -108,6 +108,6 @@ describe('Plugins', () => {
     cy.get('.loading-screen .vue-ui-loading-indicator').should('be.visible')
     cy.get('.prompts-list', { timeout: 250000 }).should('be.visible')
     cy.get('[data-testid="finish-install"]').should('not.have.class', 'disabled').click()
-    cy.get('.project-plugin-item').should('have.length', 3)
+    cy.get('.project-plugin-item', { timeout: 250000 }).should('have.length', 3)
   })
 })
