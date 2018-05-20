@@ -60,4 +60,54 @@ describe('Vue project manager', () => {
     cy.get('.project-home', { timeout: 250000 }).should('be.visible')
     cy.get('.current-project').should('have.text', 'cli-ui-test')
   })
+
+  it('Favorites the project', () => {
+    cy.visit('/project/select')
+    cy.get('.project-select-list-item').eq(0).get('[data-testid="favorite-button"]').click()
+    cy.get('.cta-text.favorite').should('be.visible')
+    cy.get('.project-select-list-item').eq(0).get('[data-testid="favorite-button"]').click()
+    cy.get('.cta-text.favorite').should('not.exist')
+  })
+
+  it('Imports a project', () => {
+    cy.visit('/project/select')
+    cy.get('.project-select-list-item').eq(0).get('[data-testid="delete-button"]').click()
+    cy.get('.project-select-list-item').should('not.exist')
+    cy.get('.tab-button').eq(2).click()
+    cy.get('.import').within(() => {
+      cy.get('.folder-explorer').should('be.visible')
+      cy.get('.current-path').click()
+      cy.get('.path-input input').clear().type(Cypress.env('cwd') + '{enter}')
+      cy.get(`.folder-explorer-item:contains('cli-ui-test')`).click()
+      cy.get('.import-project').should('not.have.class', 'disabled').click()
+    })
+    cy.get('.project-home').should('be.visible')
+    cy.get('.current-project').should('have.text', 'cli-ui-test')
+  })
+})
+
+describe('Plugins', () => {
+  it('Should display the plugins', () => {
+    cy.visit('/')
+    cy.get('.project-plugin-item').should('have.length', 2)
+  })
+
+  it('Should add a plugin', () => {
+    cy.visit('/')
+    cy.get('[data-testid="add-plugin"]').click()
+    cy.get('.project-plugins-add').should('be.visible')
+    // Search
+    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa")').should('be.visible')
+    cy.get('.instant-search-input input').clear().type('unit-jest')
+    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa")').should('be.not.visible')
+    cy.get('.package-search-item:contains("@vue/cli-plugin-unit-jest")').should('be.visible')
+    cy.get('.instant-search-input input').clear()
+    // Install
+    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa") [data-testid="name"]').should('be.visible').click()
+    cy.get('[data-testid="download-plugin"]:contains("@vue/cli-plugin-pwa")').should('not.have.class', 'disabled').click()
+    cy.get('.loading-screen .vue-ui-loading-indicator').should('be.visible')
+    cy.get('.prompts-list', { timeout: 250000 }).should('be.visible')
+    cy.get('[data-testid="finish-install"]').should('not.have.class', 'disabled').click()
+    cy.get('.project-plugin-item').should('have.length', 3)
+  })
 })

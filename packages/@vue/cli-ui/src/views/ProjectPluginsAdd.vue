@@ -75,6 +75,7 @@
                 :label="$t('views.project-plugins-add.tabs.search.buttons.install', { target: selectedId || $t('views.project-plugins-add.plugin') })"
                 class="big primary"
                 :disabled="!selectedId"
+                data-testid="download-plugin"
                 @click="installPlugin()"
               />
             </div>
@@ -108,6 +109,7 @@
                 :label="$t('views.project-plugins-add.tabs.configuration.buttons.finish')"
                 class="big primary"
                 :disabled="!configurationValid"
+                data-testid="finish-install"
                 @click="invokePlugin()"
               />
             </div>

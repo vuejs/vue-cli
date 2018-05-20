@@ -10,6 +10,7 @@
           :label="$t('views.project-plugins.button')"
           class="primary"
           :to="{ name: 'project-plugins-add' }"
+          data-testid="add-plugin"
         />
       </template>
 

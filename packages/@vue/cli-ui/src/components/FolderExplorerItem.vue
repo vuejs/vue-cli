@@ -1,5 +1,5 @@
 <template>
-  <div class="foder-explorer-item">
+  <div class="folder-explorer-item">
     <VueIcon :icon="folder.isPackage ? 'folder' : 'folder_open'" class="folder-icon big"/>
     <div class="folder-name">
       {{ folder.name }}
@@ -43,7 +43,7 @@ export default {
   position relative
   top 5px
 
-.foder-explorer-item
+.folder-explorer-item
   padding $padding-item
   h-box()
   align-items center

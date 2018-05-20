@@ -16,7 +16,7 @@
       show-description
     >
       <template slot="name">
-        <span class="name">
+        <span class="name" data-testid="name">
           <ais-highlight
             :result="pkg"
             attribute-name="name"

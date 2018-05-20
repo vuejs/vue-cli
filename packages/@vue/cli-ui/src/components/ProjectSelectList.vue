@@ -17,6 +17,7 @@
                 <div
                   v-if="data.projects.find(item => item.favorite)"
                   class="cta-text"
+                  :class="favorite ? 'favorite' : 'other'"
                 >
                   {{ $t(`components.project-select-list.titles.${favorite ? 'favorite' : 'other'}`) }}
                 </div>
