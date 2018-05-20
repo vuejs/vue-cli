@@ -1,5 +1,3 @@
-// https://docs.cypress.io/api/introduction/api.html
-
 describe('Vue project manager', () => {
   it('Switches between tabs', () => {
     cy.visit('/project/select')
@@ -83,31 +81,5 @@ describe('Vue project manager', () => {
     })
     cy.get('.project-home').should('be.visible')
     cy.get('.current-project').should('have.text', 'cli-ui-test')
-  })
-})
-
-describe('Plugins', () => {
-  it('Should display the plugins', () => {
-    cy.visit('/')
-    cy.get('.project-plugin-item').should('have.length', 2)
-  })
-
-  it('Should add a plugin', () => {
-    cy.visit('/')
-    cy.get('[data-testid="add-plugin"]').click()
-    cy.get('.project-plugins-add').should('be.visible')
-    // Search
-    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa")').should('be.visible')
-    cy.get('.instant-search-input input').clear().type('unit-jest')
-    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa")').should('be.not.visible')
-    cy.get('.package-search-item:contains("@vue/cli-plugin-unit-jest")').should('be.visible')
-    cy.get('.instant-search-input input').clear()
-    // Install
-    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa") [data-testid="name"]').should('be.visible').click()
-    cy.get('[data-testid="download-plugin"]:contains("@vue/cli-plugin-pwa")').should('not.have.class', 'disabled').click()
-    cy.get('.loading-screen .vue-ui-loading-indicator').should('be.visible')
-    cy.get('.prompts-list', { timeout: 250000 }).should('be.visible')
-    cy.get('[data-testid="finish-install"]').should('not.have.class', 'disabled').click()
-    cy.get('.project-plugin-item', { timeout: 250000 }).should('have.length', 3)
   })
 })
