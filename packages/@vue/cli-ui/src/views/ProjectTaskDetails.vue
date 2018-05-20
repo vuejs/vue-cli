@@ -13,6 +13,7 @@
           icon-left="play_arrow"
           class="primary"
           :label="$t('views.project-task-details.actions.play')"
+          data-testid="run-task"
           @click="runTask()"
         />
         <VueButton
@@ -20,6 +21,7 @@
           icon-left="stop"
           class="primary"
           :label="$t('views.project-task-details.actions.stop')"
+          data-testid="stop-task"
           @click="stopTask()"
         />
 
