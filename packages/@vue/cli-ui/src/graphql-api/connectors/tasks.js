@@ -309,7 +309,7 @@ async function run (id, context) {
         }, context)
         logs.add({
           message: `Task ${task.id} was terminated`,
-          type: 'warn'
+          type: 'info'
         }, context)
       } else if (code !== 0) {
         updateOne({
