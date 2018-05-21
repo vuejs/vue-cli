@@ -145,7 +145,11 @@ module.exports = (api, options) => {
           )
           log(formatStats(stats, targetDirShort, api))
           if (args.target === 'app') {
-            done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
+            if (!args.watch) {
+              done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
+            } else {
+              done(`Build complete. Watching for changes...`)
+            }
             if (
               options.baseUrl === '/' &&
               // only log the tips if this is the first build
