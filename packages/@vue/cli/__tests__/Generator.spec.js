@@ -12,6 +12,13 @@ fs.ensureDirSync(templateDir)
 fs.writeFileSync(path.resolve(templateDir, 'foo.js'), 'foo(<%- options.n %>)')
 fs.ensureDirSync(path.resolve(templateDir, 'bar'))
 fs.writeFileSync(path.resolve(templateDir, 'bar/bar.js'), 'bar(<%- m %>)')
+fs.writeFileSync(path.resolve(templateDir, 'entry.js'), `
+import foo from 'foo'
+
+new Vue({
+  render: h => h(App)
+}).$mount('#app')
+`.trim())
 
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
 ---
@@ -429,6 +436,31 @@ test('api: resolve', () => {
       }
     }
   ] })
+})
+
+test('api: addEntryImport & addEntryInjection', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.js', `import bar from 'bar'`)
+        api.injectRootOptions('main.js', ['foo', 'bar'])
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(`import foo from 'foo'\nimport bar from 'bar'`)
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(
+    `new Vue({
+  foo,
+  bar,
+  render: h => h(App)
+})`
+  )
 })
 
 test('extract config files', async () => {

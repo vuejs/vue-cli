@@ -1,4 +1,3 @@
-<%_ if (rootOptions.vuex) { _%>
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -15,4 +14,3 @@ export default new Vuex.Store({
 
   }
 })
-<%_ } _%>

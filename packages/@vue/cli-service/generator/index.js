@@ -25,19 +25,11 @@ module.exports = (api, options) => {
   })
 
   if (options.router) {
-    api.extendPackage({
-      dependencies: {
-        'vue-router': '^3.0.1'
-      }
-    })
+    require('./router')(api, options)
   }
 
   if (options.vuex) {
-    api.extendPackage({
-      dependencies: {
-        vuex: '^3.0.1'
-      }
-    })
+    require('./vuex')(api, options)
   }
 
   if (options.cssPreprocessor) {

@@ -5,6 +5,7 @@ const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const configTransforms = require('./util/configTransforms')
+const injectImportsAndOptions = require('./util/injectImportsAndOptions')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
@@ -27,6 +28,8 @@ module.exports = class Generator {
     this.plugins = plugins
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
+    this.imports = {}
+    this.rootOptions = {}
     this.completeCbs = completeCbs
 
     // for conflict resolution
@@ -136,13 +139,19 @@ module.exports = class Generator {
     for (const middleware of this.fileMiddlewares) {
       await middleware(files, ejs.render)
     }
-    // normalize paths
     Object.keys(files).forEach(file => {
+      // normalize paths
       const normalized = slash(file)
       if (file !== normalized) {
         files[normalized] = files[file]
         delete files[file]
       }
+      // handle imports and root option injections
+      files[normalized] = injectImportsAndOptions(
+        files[normalized],
+        this.imports[normalized],
+        this.rootOptions[normalized]
+      )
     })
     for (const postProcess of this.postProcessFilesCbs) {
       await postProcess(files)
