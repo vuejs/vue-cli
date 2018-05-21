@@ -178,6 +178,12 @@ module.exports = api => {
         type: 'input',
         default: '',
         description: 'vue-webpack.tasks.build.name'
+      },
+      {
+        name: 'watch',
+        type: 'confirm',
+        default: false,
+        description: 'vue-webpack.tasks.build.watch'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
@@ -186,6 +192,7 @@ module.exports = api => {
       if (answers.dest) args.push('--dest', answers.dest)
       if (answers.target) args.push('--target', answers.target)
       if (answers.name) args.push('--port', answers.name)
+      if (answers.watch) args.push('--watch')
       args.push('--dashboard')
 
       // Data

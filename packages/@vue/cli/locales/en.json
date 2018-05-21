@@ -393,7 +393,8 @@
           "wc": "Web component",
           "wc-async": "Async web component"
         },
-        "name": "Name for library or web-component mode (default: 'name' in package.json or entry filename)"
+        "name": "Name for library or web-component mode (default: 'name' in package.json or entry filename)",
+        "watch": "Watch for changes"
       },
       "inspect": {
         "description": "Inspect the resolved webpack config",
