@@ -55,7 +55,8 @@ module.exports = cli => {
     choices: [
       {
         name: 'Lint on save',
-        value: 'save'
+        value: 'save',
+        checked: true
       },
       {
         name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
