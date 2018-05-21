@@ -17,7 +17,8 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: production)`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
-      '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`
+      '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
+      '--watch': `watch for changes`
     }
   }, async function build (args) {
     args.entry = args.entry || args._[0]
@@ -100,8 +101,12 @@ module.exports = (api, options) => {
         : webpackConfig
     ).output.path
 
+    if (args.watch) {
+      webpackConfig.watch = true
+    }
+
     if (!args.dest && actualTargetDir !== api.resolve(options.outputDir)) {
-      // user directly modifys output.path in configureWebpack or chainWebpack.
+      // user directly modifies output.path in configureWebpack or chainWebpack.
       // this is not supported because there's no way for us to give copy
       // plugin the correct value this way.
       console.error(chalk.red(
@@ -148,7 +153,11 @@ module.exports = (api, options) => {
           )
           log(formatStats(stats, targetDirShort, api))
           if (args.target === 'app') {
-            done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
+            if (!args.watch) {
+              done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
+            } else {
+              done(`Build complete. Watching for changes...`)
+            }
             if (
               options.baseUrl === '/' &&
               // only log the tips if this is the first build
