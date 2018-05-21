@@ -199,6 +199,32 @@ class GeneratorAPI {
   genJSConfig (value) {
     return `module.exports = ${stringifyJS(value, null, 2)}`
   }
+
+  /**
+   * Add import statements to a file.
+   */
+  injectImports (file, imports) {
+    const _imports = (
+      this.generator.imports[file] ||
+      (this.generator.imports[file] = new Set())
+    )
+    ;(Array.isArray(imports) ? imports : [imports]).forEach(imp => {
+      _imports.add(imp)
+    })
+  }
+
+  /**
+   * Add options to the root Vue instance (detected by `new Vue`).
+   */
+  injectRootOptions (file, options) {
+    const _options = (
+      this.generator.rootOptions[file] ||
+      (this.generator.rootOptions[file] = new Set())
+    )
+    ;(Array.isArray(options) ? options : [options]).forEach(opt => {
+      _options.add(opt)
+    })
+  }
 }
 
 function extractCallDir () {

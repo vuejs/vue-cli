@@ -31,6 +31,8 @@ module.exports = (api, options) => {
   })
 
   if (options.router) {
+    api.injectImports(`src/main.js`, `import router from './router'`)
+    api.injectRootOptions(`src/main.js`, `router`)
     api.extendPackage({
       dependencies: {
         'vue-router': '^3.0.1'
@@ -39,6 +41,8 @@ module.exports = (api, options) => {
   }
 
   if (options.vuex) {
+    api.injectImports(`import store from './store'`)
+    api.injectRootOptions(`store`)
     api.extendPackage({
       dependencies: {
         vuex: '^3.0.1'
