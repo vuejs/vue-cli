@@ -33,6 +33,8 @@ class GeneratorAPI {
         name: toShortPluginId(id),
         link: getPluginLink(id)
       }))
+
+    this._entryFile = undefined
   }
 
   /**
@@ -224,6 +226,11 @@ class GeneratorAPI {
     ;(Array.isArray(options) ? options : [options]).forEach(opt => {
       _options.add(opt)
     })
+  }
+
+  get entryFile () {
+    if (this._entryFile) return this._entryFile
+    return (this._entryFile = fs.existsSync(this.resolve('src/main.ts')) ? 'src/main.ts' : 'src/main.js')
   }
 }
 

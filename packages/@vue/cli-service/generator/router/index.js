@@ -1,6 +1,6 @@
 module.exports = (api, options) => {
-  api.injectImports(`src/main.js`, `import router from './router'`)
-  api.injectRootOptions(`src/main.js`, `router`)
+  api.injectImports(api.entryFile, `import router from './router'`)
+  api.injectRootOptions(api.entryFile, `router`)
   api.extendPackage({
     dependencies: {
       'vue-router': '^3.0.1'
