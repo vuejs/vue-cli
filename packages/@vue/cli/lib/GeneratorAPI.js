@@ -228,9 +228,23 @@ class GeneratorAPI {
     })
   }
 
+  /**
+   * Get the entry file taking into account typescript.
+   *
+   * @readonly
+   */
   get entryFile () {
     if (this._entryFile) return this._entryFile
     return (this._entryFile = fs.existsSync(this.resolve('src/main.ts')) ? 'src/main.ts' : 'src/main.js')
+  }
+
+  /**
+   * Is the plugin being invoked?
+   *
+   * @readonly
+   */
+  get invoking () {
+    return this.generator.invoking
   }
 }
 

@@ -6,4 +6,9 @@ module.exports = api => {
   })
   api.injectImports(api.entryFile, `import './registerServiceWorker'`)
   api.render('./template')
+
+  if (api.invoking && api.hasPlugin('typescript')) {
+    const convertFiles = require('@vue/cli-plugin-typescript/generator/convert')
+    convertFiles(api)
+  }
 }

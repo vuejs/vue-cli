@@ -100,7 +100,8 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     pkg,
     plugins: [plugin],
     files: await readFiles(context),
-    completeCbs: createCompleteCbs
+    completeCbs: createCompleteCbs,
+    invoking: true
   })
 
   log()
