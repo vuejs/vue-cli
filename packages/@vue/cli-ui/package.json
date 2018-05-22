@@ -54,7 +54,7 @@
     "start-server-and-test": "^1.4.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "subscriptions-transport-ws": "^0.9.5",
+    "subscriptions-transport-ws": "^0.9.9",
     "vue": "^2.5.16",
     "vue-apollo": "^3.0.0-beta.5",
     "vue-color": "^2.4.6",
