@@ -453,14 +453,8 @@ test('api: addEntryImport & addEntryInjection', async () => {
   ] })
 
   await generator.generate()
-  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(`import foo from 'foo'\nimport bar from 'bar'`)
-  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(
-    `new Vue({
-  foo,
-  bar,
-  render: h => h(App)
-})`
-  )
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\s+import bar from 'bar'/)
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
 })
 
 test('extract config files', async () => {
