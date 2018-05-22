@@ -3,7 +3,6 @@ module.exports = (api, options) => {
     const resolveLocal = require('../util/resolveLocal')
     const getAssetPath = require('../util/getAssetPath')
     const inlineLimit = 10000
-    const useThreads = process.env.NODE_ENV === 'production' && options.parallel
 
     webpackConfig
       .context(api.service.context)
@@ -44,29 +43,22 @@ module.exports = (api, options) => {
     // vue-loader --------------------------------------------------------------
 
     const { genCacheConfig } = require('@vue/cli-shared-utils')
+    const vueLoaderCacheConfig = genCacheConfig(api, options, 'vue-loader')
 
-    const vueRule = webpackConfig.module
+    webpackConfig.module
       .rule('vue')
         .test(/\.vue$/)
         .use('cache-loader')
           .loader('cache-loader')
-          .options(genCacheConfig(api, options, 'vue-loader'))
+          .options(vueLoaderCacheConfig)
           .end()
-
-    if (useThreads) {
-      vueRule
-        .use('thread-loader')
-          .loader('thread-loader')
-    }
-
-    vueRule
-      .use('vue-loader')
-        .loader('vue-loader')
-        .options({
-          compilerOptions: {
-            preserveWhitespace: false
-          }
-        })
+        .use('vue-loader')
+          .loader('vue-loader')
+          .options(Object.assign({
+            compilerOptions: {
+              preserveWhitespace: false
+            }
+          }, vueLoaderCacheConfig))
 
     webpackConfig
       .plugin('vue-loader')
