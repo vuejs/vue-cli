@@ -26,6 +26,12 @@ module.exports = (api, options) => {
       options: genCacheConfig(api, options, 'ts-loader', 'tsconfig.json')
     })
 
+    if (useThreads) {
+      addLoader({
+        loader: 'thread-loader'
+      })
+    }
+
     if (api.hasPlugin('babel')) {
       addLoader({
         loader: 'babel-loader'
