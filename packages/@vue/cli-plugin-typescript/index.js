@@ -1,10 +1,7 @@
-module.exports = (api, {
-  parallel,
-  lintOnSave
-}) => {
+module.exports = (api, options) => {
   const fs = require('fs')
-  const useThreads = process.env.NODE_ENV === 'production' && parallel
-  const cacheDirectory = api.resolve('node_modules/.cache/cache-loader')
+  const { genCacheConfig } = require('@vue/cli-shared-utils')
+  const useThreads = process.env.NODE_ENV === 'production' && options.parallel
 
   api.chainWebpack(config => {
     config.entry('app')
@@ -26,13 +23,8 @@ module.exports = (api, {
 
     addLoader({
       loader: 'cache-loader',
-      options: { cacheDirectory }
+      options: genCacheConfig(api, options, 'ts-loader', 'tsconfig.json')
     })
-    if (useThreads) {
-      addLoader({
-        loader: 'thread-loader'
-      })
-    }
 
     if (api.hasPlugin('babel')) {
       addLoader({
@@ -60,7 +52,7 @@ module.exports = (api, {
       .plugin('fork-ts-checker')
         .use(require('fork-ts-checker-webpack-plugin'), [{
           vue: true,
-          tslint: lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
+          tslint: options.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
           formatter: 'codeframe',
           // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
           checkSyntacticErrors: useThreads

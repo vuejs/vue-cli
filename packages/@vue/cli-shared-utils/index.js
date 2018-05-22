@@ -1,5 +1,6 @@
 [
   'env',
+  'cache',
   'logger',
   'spinner',
   'validate',
