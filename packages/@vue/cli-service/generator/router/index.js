@@ -1,6 +1,6 @@
 module.exports = (api, options) => {
-  api.injectImports(`src/main.js`, `import router from './router'`)
-  api.injectRootOptions(`src/main.js`, `router`)
+  api.injectImports(api.entryFile, `import router from './router'`)
+  api.injectRootOptions(api.entryFile, `router`)
   api.extendPackage({
     dependencies: {
       'vue-router': '^3.0.1'
@@ -8,7 +8,7 @@ module.exports = (api, options) => {
   })
   api.render('./template')
 
-  if (options.invoking) {
+  if (api.invoking) {
     api.postProcessFiles(files => {
       const appFile = files[`src/App.vue`]
       if (appFile) {
@@ -26,5 +26,10 @@ module.exports = (api, options) => {
         console.log(files[`src/App.vue`])
       }
     })
+
+    if (api.hasPlugin('typescript')) {
+      const convertFiles = require('@vue/cli-plugin-typescript/generator/convert')
+      convertFiles(api)
+    }
   }
 }

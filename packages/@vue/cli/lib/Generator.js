@@ -22,7 +22,8 @@ module.exports = class Generator {
     pkg = {},
     plugins = [],
     completeCbs = [],
-    files = {}
+    files = {},
+    invoking = false
   } = {}) {
     this.context = context
     this.plugins = plugins
@@ -31,6 +32,7 @@ module.exports = class Generator {
     this.imports = {}
     this.rootOptions = {}
     this.completeCbs = completeCbs
+    this.invoking = invoking
 
     // for conflict resolution
     this.depSources = {}
