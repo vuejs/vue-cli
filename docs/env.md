@@ -63,7 +63,7 @@ In addition to `VUE_APP_*` variables, there are also two special variables that 
 All resolved env variables will be available inside `public/index.html` via [lodash template interpolation](https://lodash.com/docs/4.17.5#template):
 
 - `<%= VAR %>` for unescaped interpolation;
-- `<%- VAR %>` for HTML-escaped interpolationl;
+- `<%- VAR %>` for HTML-escaped interpolation;
 - `<% expression %>` for JavaScript control flows.
 
 For example, to reference static assets copied from the root of `public`, you will need to use the `BASE_URL` variable:
