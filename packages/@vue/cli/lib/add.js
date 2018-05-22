@@ -46,16 +46,14 @@ async function add (pluginName, options = {}, context = process.cwd()) {
 async function addRouter (context) {
   invoke.runGenerator(context, {
     id: 'core:router',
-    apply: require('@vue/cli-service/generator/router'),
-    options: { invoking: true }
+    apply: require('@vue/cli-service/generator/router')
   })
 }
 
 async function addVuex (context) {
   invoke.runGenerator(context, {
     id: 'core:vuex',
-    apply: require('@vue/cli-service/generator/vuex'),
-    options: { invoking: true }
+    apply: require('@vue/cli-service/generator/vuex')
   })
 }
 

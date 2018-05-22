@@ -1,9 +1,5 @@
-module.exports = (api, {
-  parallel,
-  transpileDependencies
-}) => {
-  const useThreads = process.env.NODE_ENV === 'production' && parallel
-  const cacheDirectory = api.resolve('node_modules/.cache/cache-loader')
+module.exports = (api, options) => {
+  const { genCacheConfig } = require('@vue/cli-shared-utils')
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
 
   api.chainWebpack(webpackConfig => {
@@ -21,7 +17,7 @@ module.exports = (api, {
               return true
             }
             // check if this is something the user explicitly wants to transpile
-            if (transpileDependencies.some(dep => filepath.match(dep))) {
+            if (options.transpileDependencies.some(dep => filepath.match(dep))) {
               return false
             }
             // Don't transpile node_modules
@@ -30,14 +26,8 @@ module.exports = (api, {
           .end()
         .use('cache-loader')
           .loader('cache-loader')
-          .options({ cacheDirectory })
+          .options(genCacheConfig(api, options, 'babel-loader', 'babel.config.js'))
           .end()
-
-    if (useThreads) {
-      jsRule
-        .use('thread-loader')
-          .loader('thread-loader')
-    }
 
     jsRule
       .use('babel-loader')

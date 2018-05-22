@@ -2,6 +2,7 @@
   'env',
   'exit',
   'ipc',
+  'cache',
   'logger',
   'openBrowser',
   'pluginResolution',
