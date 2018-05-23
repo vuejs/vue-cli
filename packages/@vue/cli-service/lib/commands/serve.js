@@ -159,10 +159,16 @@ module.exports = (api, options) => {
           return
         }
 
+        let copied = ''
+        if (isFirstCompile && (args.copy || projectDevServerOptions.copy)) {
+          clipboardy.write(urls.localUrlForBrowser)
+          copied = chalk.dim('(copied!)')
+        }
+
         console.log()
         console.log([
           `  App running at:`,
-          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)}`,
+          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`,
           `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
         ].join('\n'))
         console.log()
