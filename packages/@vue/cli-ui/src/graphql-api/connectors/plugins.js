@@ -247,7 +247,11 @@ function install (id, context) {
     })
     currentPluginId = id
     installationStep = 'install'
-    await installPackage(cwd.get(), getCommand(), null, id)
+    if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
+      mockInstall(id, context)
+    } else {
+      await installPackage(cwd.get(), getCommand(), null, id)
+    }
     await initPrompts(id, context)
     installationStep = 'config'
 
@@ -261,6 +265,13 @@ function install (id, context) {
   })
 }
 
+function mockInstall (id, context) {
+  const pkg = folders.readPackage(cwd.get(), context, true)
+  pkg.devDependencies[id] = '*'
+  folders.writePackage({ file: cwd.get(), data: pkg }, context)
+  return true
+}
+
 function uninstall (id, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
@@ -269,7 +280,11 @@ function uninstall (id, context) {
     })
     installationStep = 'uninstall'
     currentPluginId = id
-    await uninstallPackage(cwd.get(), getCommand(), null, id)
+    if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
+      mockUninstall(id, context)
+    } else {
+      await uninstallPackage(cwd.get(), getCommand(), null, id)
+    }
     currentPluginId = null
     installationStep = null
 
@@ -281,6 +296,13 @@ function uninstall (id, context) {
 
     return getInstallation(context)
   })
+}
+
+function mockUninstall (id, context) {
+  const pkg = folders.readPackage(cwd.get(), context, true)
+  delete pkg.devDependencies[id]
+  folders.writePackage({ file: cwd.get(), data: pkg }, context)
+  return true
 }
 
 function runInvoke (id, context) {

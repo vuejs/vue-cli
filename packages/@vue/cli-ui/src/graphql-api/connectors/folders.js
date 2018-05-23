@@ -49,14 +49,23 @@ function isPackage (file, context) {
   return fs.existsSync(path.join(file, 'package.json'))
 }
 
-function readPackage (file, context) {
-  const cachedValue = pkgCache.get(file)
-  if (cachedValue) {
-    return cachedValue
+function readPackage (file, context, force = false) {
+  if (!force) {
+    const cachedValue = pkgCache.get(file)
+    if (cachedValue) {
+      return cachedValue
+    }
   }
   const pkg = fs.readJsonSync(path.join(file, 'package.json'))
   pkgCache.set(file, pkg)
   return pkg
+}
+
+function writePackage ({ file, data }, context) {
+  fs.outputJsonSync(path.join(file, 'package.json'), data, {
+    spaces: 2
+  })
+  return true
 }
 
 function isVueProject (file, context) {
@@ -93,6 +102,7 @@ module.exports = {
   openParent,
   isPackage,
   readPackage,
+  writePackage,
   isVueProject,
   listFavorite,
   setFavorite,
