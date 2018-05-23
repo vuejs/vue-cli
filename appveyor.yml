@@ -10,6 +10,7 @@ test_script:
   - node --version
   - yarn --version
   - yarn test
+  - yarn clean && cd packages/@vue/cli-ui && yarn test
 
 cache:
   - node_modules -> yarn.lock
