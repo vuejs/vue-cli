@@ -39,5 +39,5 @@ vue add @vue/eslint
 
 ## Injected webpack-chain Rules
 
-- `config.rule('eslint')`
-- `config.rule('eslint').use('eslint-loader')`
+- `config.module.rule('eslint')`
+- `config.module.rule('eslint').use('eslint-loader')`
