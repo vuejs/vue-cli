@@ -217,6 +217,9 @@ function updateViewBadges ({ task, data }, context) {
 async function run (id, context) {
   const task = findOne(id, context)
   if (task && task.status !== 'running') {
+    task._terminating = false
+
+    // Answers
     const answers = prompts.getAnswers()
     let args = task.fullCommand ? [] : ['run', task.name]
     let command = task.fullCommand ? task.command : getCommand()
@@ -304,7 +307,7 @@ async function run (id, context) {
         })
       }
 
-      if (code === null) {
+      if (code === null || task._terminating) {
         updateOne({
           id: task.id,
           status: 'terminated'
@@ -361,6 +364,7 @@ async function run (id, context) {
 function stop (id, context) {
   const task = findOne(id, context)
   if (task && task.status === 'running' && task.child) {
+    task._terminating = true
     terminate(task.child.pid)
   }
   return task
