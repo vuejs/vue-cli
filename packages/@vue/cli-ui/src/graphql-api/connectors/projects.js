@@ -32,7 +32,23 @@ let onInstallProgress = null
 let onInstallLog = null
 
 function list (context) {
-  return context.db.get('projects').value()
+  let projects = context.db.get('projects').value()
+  projects = autoClean(projects, context)
+  return projects
+}
+
+function autoClean (projects, context) {
+  let result = []
+  for (const project of projects) {
+    if (fs.existsSync(project.path)) {
+      result.push(project)
+    }
+  }
+  if (result.length !== projects.length) {
+    console.log(`Auto cleaned ${projects.length - result.length} projects (folder not found).`)
+    context.db.set('projects', result).write()
+  }
+  return result
 }
 
 function getCurrent (context) {
