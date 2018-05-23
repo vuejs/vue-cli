@@ -5,7 +5,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "graphql-api": "vue-cli-service graphql-api",
+    "graphql-api": "cross-env VUE_CLI_DEBUG=true vue-cli-service graphql-api",
     "run-graphql-api": "vue-cli-service run-graphql-api",
     "run-test-graphql-api": "cross-env NODE_ENV=test yarn run graphql-api",
     "prepublishOnly": "yarn run lint --no-fix && yarn run build",
