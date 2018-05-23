@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-init#readme",
   "dependencies": {
-    "execa": "^0.9.0",
+    "execa": "^0.10.0",
     "vue-cli": "^2.9.2"
   }
 }
