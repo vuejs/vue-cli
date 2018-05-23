@@ -1,29 +1,26 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
-import createApolloClient from './apollo'
+import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 
 // Install the vue plugin
 Vue.use(VueApollo)
 
-let base = process.env.VUE_APP_GRAPHQL_ENDPOINT
-if (typeof base === 'undefined') {
-  base = 'http://localhost:4000'
-} else if (base === '') {
-  base = window.location.origin
+let endpoint = process.env.VUE_APP_GRAPHQL_WS
+if (typeof endpoint === 'undefined') {
+  endpoint = 'ws://localhost:4000/graphql'
+} else if (endpoint === '') {
+  endpoint = window.location.origin.replace('http', 'ws') + '/graphql'
 }
 
 // Config
 const options = {
-  base,
-  endpoints: {
-    graphql: process.env.VUE_APP_GRAPHQL_PATH || '/graphql',
-    subscription: process.env.VUE_APP_GRAPHQL_SUBSCRIPTIONS_PATH || '/graphql'
-  },
-  persisting: false
+  wsEndpoint: endpoint,
+  persisting: false,
+  websocketsOnly: true
 }
 
 // Create apollo client
-export const apolloClient = createApolloClient(options)
+export const { apolloClient } = createApolloClient(options)
 
 // Create vue apollo provider
 export const apolloProvider = new VueApollo({

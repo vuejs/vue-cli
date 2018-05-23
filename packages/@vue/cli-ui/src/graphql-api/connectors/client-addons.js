@@ -6,8 +6,12 @@ const { resolveModuleRoot } = require('../utils/resolve-path')
 
 let addons = []
 
-let baseUrl = process.env.VUE_APP_GRAPHQL_ENDPOINT
-if (typeof baseUrl === 'undefined') baseUrl = 'http://localhost:4000'
+let baseUrl = process.env.VUE_APP_GRAPHQL_WS
+if (typeof baseUrl === 'undefined') {
+  baseUrl = 'http://localhost:4000'
+} else {
+  baseUrl = baseUrl.replace(/ws:\/\/([a-z0-9_-]+:\d+).*/i, 'http://$1')
+}
 
 function list (context) {
   return addons

@@ -9,7 +9,7 @@ async function ui (options = {}, context = process.cwd()) {
 
   // Config
   process.env.VUE_APP_GRAPHQL_PORT = port
-  process.env.VUE_APP_GRAPHQL_ENDPOINT = ''
+  process.env.VUE_APP_GRAPHQL_WS = ''
   process.env.VUE_APP_GRAPHQL_PLAYGROUND_PATH = '/graphql-playground'
 
   if (!options.dev) {
