@@ -265,6 +265,8 @@ async function run (id, context) {
       }, context)
     }
 
+    process.env.VUE_CLI_CONTEXT = cwd.get()
+
     const child = execa(command, args, {
       cwd: cwd.get(),
       stdio: ['inherit', 'pipe', 'pipe', 'ipc']
