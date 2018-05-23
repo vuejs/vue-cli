@@ -269,7 +269,7 @@ async function run (id, context) {
 
     const child = execa(command, args, {
       cwd: cwd.get(),
-      stdio: ['inherit', 'pipe', 'pipe', 'ipc']
+      stdio: ['inherit', 'pipe', 'pipe']
     })
 
     task.child = child
