@@ -16,6 +16,9 @@ module.exports = {
   // where to output built files
   outputDir: 'dist',
 
+  // where to put static assets (js/css/img/font/...)
+  assetsDir: '',
+
   // whether to use eslint-loader for lint on save.
   // valid values: true | false | 'error'
   // when set to 'error', lint errors will cause compilation to fail.
