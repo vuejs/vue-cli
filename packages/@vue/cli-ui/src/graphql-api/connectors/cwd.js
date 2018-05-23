@@ -7,5 +7,8 @@ module.exports = {
   set: (value, context) => {
     cwd = value
     context.pubsub.publish(channels.CWD_CHANGED, { cwdChanged: value })
+    try {
+      process.chdir(value)
+    } catch (err) {}
   }
 }
