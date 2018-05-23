@@ -82,6 +82,7 @@ program
   .command('serve [entry]')
   .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
+  .option('-c, --copy', 'Copy local url to clipboard')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
   })

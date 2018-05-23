@@ -32,6 +32,7 @@ Usage: vue-cli-service serve [options]
 Options:
 
   --open    open browser on server start
+  --copy    copy url to clipboard on server start
   --mode    specify env mode (default: development)
   --host    specify host (default: 0.0.0.0)
   --port    specify port (default: 8080)
