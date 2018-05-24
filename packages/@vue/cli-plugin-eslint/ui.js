@@ -193,7 +193,7 @@ module.exports = api => {
           message: 'eslint.config.eslint-extra.lintOnSave.message',
           description: 'eslint.config.eslint-extra.lintOnSave.description',
           link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#configuration',
-          default: false,
+          default: true,
           value: data.lintOnSave
         }
       ]
