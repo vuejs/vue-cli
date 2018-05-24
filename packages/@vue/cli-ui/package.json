@@ -31,7 +31,7 @@
     "semver": "^5.5.0",
     "shortid": "^2.2.8",
     "terminate": "^2.1.0",
-    "vue-cli-plugin-apollo": "^0.10.0",
+    "vue-cli-plugin-apollo": "^0.11.0",
     "watch": "^1.0.2"
   },
   "devDependencies": {

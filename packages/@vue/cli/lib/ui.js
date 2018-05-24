@@ -8,9 +8,7 @@ async function ui (options = {}, context = process.cwd()) {
   }
 
   // Config
-  process.env.VUE_APP_GRAPHQL_PORT = port
-  process.env.VUE_APP_GRAPHQL_WS = ''
-  process.env.VUE_APP_GRAPHQL_PLAYGROUND_PATH = '/graphql-playground'
+  process.env.VUE_CLI_UI_URL = ''
 
   if (!options.dev) {
     process.env.NODE_ENV = 'production'
@@ -21,6 +19,11 @@ async function ui (options = {}, context = process.cwd()) {
   server = server.default || server
 
   const opts = {
+    port,
+    graphqlPath: '/graphql',
+    graphqlSubscriptionsPath: '/graphql',
+    graphqlPlaygroundPath: '/graphql-playground',
+    graphqlCors: '*',
     mock: false,
     apolloEngine: false,
     timeout: 1000000,
@@ -35,7 +38,7 @@ async function ui (options = {}, context = process.cwd()) {
   }
 
   server(opts, () => {
-    const url = `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}`
+    const url = `http://localhost:${port}`
     if (!options.quiet) log(`🌠  Ready on ${url}`)
     if (options.headless) {
       console.log(port)

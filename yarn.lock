@@ -11442,9 +11442,9 @@ vue-class-component@^6.0.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.2.0.tgz#7adb1daa9a868c75f30f97f33f4f1b94aee62089"
 
-vue-cli-plugin-apollo@^0.10.0:
-  version "0.10.3"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.10.3.tgz#4b43c33fe64eae21c5b321fe3b0a475e12897f9c"
+vue-cli-plugin-apollo@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.11.0.tgz#13d390006fd44245ce4914548a0d4a11bf5198bf"
   dependencies:
     apollo-cache-inmemory "^1.2.1"
     apollo-client "^2.3.1"
