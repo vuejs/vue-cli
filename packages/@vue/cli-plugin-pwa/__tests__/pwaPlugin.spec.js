@@ -28,17 +28,17 @@ test('pwa', async () => {
 
   // Make sure the base preload/prefetch are not affected
   const index = await project.read('dist/index.html')
+
   // should split and preload app.js & vendor.js
-  expect(index).toMatch(/<link rel=preload [^>]+app[^>]+\.js>/)
-  expect(index).toMatch(/<link rel=preload [^>]+vendor[^>]+\.js>/)
-  // should not preload manifest because it's inlined
-  expect(index).not.toMatch(/<link rel=preload [^>]+manifest[^>]+\.js>/)
-  // should inline manifest and webpack runtime
-  expect(index).toMatch('webpackJsonp')
+  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js rel=preload>/)
+  expect(index).toMatch(/<link [^>]+js\/vendors~app[^>]+\.js rel=preload>/)
+  // should preload css
+  expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload>/)
 
   // PWA specific directives
   expect(index).toMatch(`<link rel=manifest href=/manifest.json>`)
-  expect(index).toMatch(`<!--[if IE]><link rel="shortcut icon" href="/favicon.ico"><![endif]-->`)
+  // favicon is not minified because it's technically a comment
+  expect(index).toMatch(`<!--[if IE]><link rel="icon" href="/favicon.ico"><![endif]-->`)
   expect(index).toMatch(`<meta name=apple-mobile-web-app-capable content=no>`)
 
   // should import service worker script

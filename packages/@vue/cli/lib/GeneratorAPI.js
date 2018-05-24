@@ -7,8 +7,8 @@ const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
+const stringifyJS = require('./util/stringifyJS')
 const { warn, getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
-const stringifyJS = require('javascript-stringify')
 const ConfigTransform = require('./ConfigTransform')
 
 const isString = val => typeof val === 'string'
@@ -34,6 +34,8 @@ class GeneratorAPI {
         name: toShortPluginId(id),
         link: getPluginLink(id)
       }))
+
+    this._entryFile = undefined
   }
 
   /**
@@ -87,7 +89,7 @@ class GeneratorAPI {
    * @param {object[]} configs - List of config descriptions.
    *   The first config description will be used to generate a config file if
    *   an existing config is not found. Existing configs are searched for
-   *   using the provided config descriptions.
+   *   using the provided config descriptions in their listed order.
    * @param {string} configs[].file - File name without extension
    * @param {string[]} configs[].types - List of file types.
    *   Can include one or more of: 'js', 'json', 'yaml', 'bare'.
@@ -229,6 +231,51 @@ class GeneratorAPI {
    */
   genJSConfig (value) {
     return `module.exports = ${stringifyJS(value, null, 2)}`
+  }
+
+  /**
+   * Add import statements to a file.
+   */
+  injectImports (file, imports) {
+    const _imports = (
+      this.generator.imports[file] ||
+      (this.generator.imports[file] = new Set())
+    )
+    ;(Array.isArray(imports) ? imports : [imports]).forEach(imp => {
+      _imports.add(imp)
+    })
+  }
+
+  /**
+   * Add options to the root Vue instance (detected by `new Vue`).
+   */
+  injectRootOptions (file, options) {
+    const _options = (
+      this.generator.rootOptions[file] ||
+      (this.generator.rootOptions[file] = new Set())
+    )
+    ;(Array.isArray(options) ? options : [options]).forEach(opt => {
+      _options.add(opt)
+    })
+  }
+
+  /**
+   * Get the entry file taking into account typescript.
+   *
+   * @readonly
+   */
+  get entryFile () {
+    if (this._entryFile) return this._entryFile
+    return (this._entryFile = fs.existsSync(this.resolve('src/main.ts')) ? 'src/main.ts' : 'src/main.js')
+  }
+
+  /**
+   * Is the plugin being invoked?
+   *
+   * @readonly
+   */
+  get invoking () {
+    return this.generator.invoking
   }
 }
 

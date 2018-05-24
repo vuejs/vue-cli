@@ -4,16 +4,28 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service inspect [options] [...paths]',
     options: {
       '--mode': 'specify env mode (default: development)',
+      '--rule <ruleName>': 'inspect a specific module rule',
+      '--plugin <pluginName>': 'inspect a specific plugin',
+      '--rules': 'list all module rule names',
+      '--plugins': 'list all plugin names',
       '--verbose': 'show full function definitions in output'
     }
   }, args => {
     const get = require('get-value')
-    const stringify = require('javascript-stringify')
+    const { toString } = require('webpack-chain')
     const config = api.resolveWebpackConfig()
-    const paths = args._
+    const { _: paths, verbose } = args
 
     let res
-    if (paths.length > 1) {
+    if (args.rule) {
+      res = config.module.rules.find(r => r.__ruleNames[0] === args.rule)
+    } else if (args.plugin) {
+      res = config.plugins.find(p => p.__pluginName === args.plugin)
+    } else if (args.rules) {
+      res = config.module.rules.map(r => r.__ruleNames[0])
+    } else if (args.plugins) {
+      res = config.plugins.map(p => p.__pluginName)
+    } else if (paths.length > 1) {
       res = {}
       paths.forEach(path => {
         res[path] = get(config, path)
@@ -24,21 +36,8 @@ module.exports = (api, options) => {
       res = config
     }
 
-    const pluginRE = /(?:function|class) (\w+Plugin)/
-    console.log(stringify(res, (value, indent, stringify) => {
-      if (!args.verbose) {
-        if (typeof value === 'function' && value.toString().length > 100) {
-          return `function () { /* omitted long function */ }`
-        }
-        if (value && typeof value.constructor === 'function') {
-          const match = value.constructor.toString().match(pluginRE)
-          if (match) {
-            return `/* ${match[1]} */ ` + stringify(value)
-          }
-        }
-      }
-      return stringify(value)
-    }, 2))
+    const output = toString(res, { verbose })
+    console.log(output)
   })
 }
 

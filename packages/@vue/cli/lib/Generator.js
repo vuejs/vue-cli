@@ -4,6 +4,7 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
+const injectImportsAndOptions = require('./util/injectImportsAndOptions')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
@@ -18,8 +19,8 @@ const logTypes = {
 
 const defaultConfigTransforms = {
   babel: new ConfigTransform({
-    file: '.babelrc',
-    types: ['bare', 'json', 'js']
+    file: 'babel.config',
+    types: ['js']
   }),
   postcss: new ConfigTransform({
     file: '.postcssrc',
@@ -41,15 +42,18 @@ module.exports = class Generator {
     pkg = {},
     plugins = [],
     completeCbs = [],
-    files = {}
+    files = {},
+    invoking = false
   } = {}) {
     this.context = context
     this.plugins = plugins
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
+    this.imports = {}
+    this.rootOptions = {}
     this.completeCbs = completeCbs
     this.configTransforms = {}
-
+    this.invoking = invoking
     // for conflict resolution
     this.depSources = {}
     // virtual file tree
@@ -114,9 +118,15 @@ module.exports = class Generator {
       for (const key in this.pkg) {
         extract(key)
       }
-    } else if (!process.env.VUE_CLI_TEST) {
-      // by default, always extract vue.config.js
-      extract('vue')
+    } else {
+      if (!process.env.VUE_CLI_TEST) {
+        // by default, always extract vue.config.js
+        extract('vue')
+      }
+      // always extract babel.config.js as this is the only way to apply
+      // project-wide configuration even to dependencies.
+      // TODO: this can be removed when Babel supports root: true in package.json
+      extract('babel')
     }
   }
 
@@ -156,13 +166,19 @@ module.exports = class Generator {
     for (const middleware of this.fileMiddlewares) {
       await middleware(files, ejs.render)
     }
-    // normalize paths
     Object.keys(files).forEach(file => {
+      // normalize paths
       const normalized = slash(file)
       if (file !== normalized) {
         files[normalized] = files[file]
         delete files[file]
       }
+      // handle imports and root option injections
+      files[normalized] = injectImportsAndOptions(
+        files[normalized],
+        this.imports[normalized],
+        this.rootOptions[normalized]
+      )
     })
     for (const postProcess of this.postProcessFilesCbs) {
       await postProcess(files)

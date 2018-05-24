@@ -16,7 +16,7 @@ If opted to use [TSLint](https://palantir.github.io/tslint/) during project crea
 
 ## Caching
 
-[cache-loader](https://github.com/webpack-contrib/cache-loader) is enabled by default and cache is stored in `<projectRoot>/node_modules/.cache/cache-loader`.
+[cache-loader](https://github.com/webpack-contrib/cache-loader) is enabled by default and cache is stored in `<projectRoot>/node_modules/.cache/ts-loader`.
 
 ## Parallelization
 
@@ -25,8 +25,7 @@ If opted to use [TSLint](https://palantir.github.io/tslint/) during project crea
 ## Installing in an Already Created Project
 
 ``` sh
-npm install -D @vue/cli-plugin-typescript
-vue invoke typescript
+vue add @vue/typescript
 ```
 
 ## Injected webpack-chain Rules
@@ -35,5 +34,4 @@ vue invoke typescript
 - `config.rule('ts').use('ts-loader')`
 - `config.rule('ts').use('babel-loader')` (when used alongside `@vue/cli-plugin-babel`)
 - `config.rule('ts').use('cache-loader')`
-- `config.rule('ts').use('thread-loader')`
 - `config.plugin('fork-ts-checker')`

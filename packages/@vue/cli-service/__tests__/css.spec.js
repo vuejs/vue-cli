@@ -1,6 +1,7 @@
 const Service = require('../lib/Service')
 
 const LANGS = ['css', 'sass', 'scss', 'less', 'styl', 'stylus']
+const extractLoaderPath = require('mini-css-extract-plugin').loader
 
 const LOADERS = {
   css: 'css',
@@ -21,22 +22,27 @@ const genConfig = (pkg = {}, env) => {
   return config
 }
 
-const findRule = (config, lang) => config.module.rules.find(rule => {
-  return rule.test.test(`.${lang}`)
-})
+const findRule = (config, lang, index = 2) => {
+  const baseRule = config.module.rules.find(rule => {
+    return rule.test.test(`.${lang}`)
+  })
+  // all CSS rules have oneOf with two child rules, one for <style lang="module">
+  // and one for normal imports
+  return baseRule.oneOf[index]
+}
 
-const findLoaders = (config, lang) => {
-  const rule = findRule(config, lang)
+const findLoaders = (config, lang, index) => {
+  const rule = findRule(config, lang, index)
   if (!rule) {
     throw new Error(`rule not found for ${lang}`)
   }
   return rule.use.map(({ loader }) => loader.replace(/-loader$/, ''))
 }
 
-const findOptions = (config, lang, _loader) => {
-  const rule = findRule(config, lang)
+const findOptions = (config, lang, _loader, index) => {
+  const rule = findRule(config, lang, index)
   const use = rule.use.find(({ loader }) => loader.includes(`${_loader}-loader`))
-  return use.options
+  return use.options || {}
 }
 
 test('default loaders', () => {
@@ -49,7 +55,7 @@ test('default loaders', () => {
     expect(findOptions(config, lang, 'css')).toEqual({
       minimize: false,
       sourceMap: false,
-      importLoaders: lang === 'css' ? 1 : 2
+      importLoaders: lang === 'css' ? 2 : 3
     })
   })
   // sass indented syntax
@@ -58,34 +64,31 @@ test('default loaders', () => {
 
 test('production defaults', () => {
   const config = genConfig({ postcss: {}}, 'production')
-  const extractLoaderPath = require.resolve('extract-text-webpack-plugin/dist/loader')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
-    expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'vue-style', 'css', 'postcss'].concat(loader))
+    expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'css')).toEqual({
       minimize: true,
       sourceMap: false,
-      importLoaders: lang === 'css' ? 1 : 2
+      importLoaders: lang === 'css' ? 2 : 3
     })
   })
 })
 
-test('css.modules', () => {
-  const config = genConfig({
-    vue: {
-      css: {
-        modules: true
-      }
-    }
-  })
+test('CSS Modules rules', () => {
+  const config = genConfig()
   LANGS.forEach(lang => {
-    expect(findOptions(config, lang, 'css')).toEqual({
-      importLoaders: lang === 'css' ? 0 : 1, // no postcss-loader
+    const expected = {
+      importLoaders: lang === 'css' ? 1 : 2, // no postcss-loader
       localIdentName: `[name]_[local]_[hash:base64:5]`,
       minimize: false,
       sourceMap: false,
       modules: true
-    })
+    }
+    // module-query rules
+    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
+    // module-ext rules
+    expect(findOptions(config, lang, 'css', 1)).toEqual(expected)
   })
 })
 
@@ -97,7 +100,6 @@ test('css.extract', () => {
       }
     }
   }, 'production')
-  const extractLoaderPath = require.resolve('extract-text-webpack-plugin/dist/loader')
   LANGS.forEach(lang => {
     expect(findLoaders(config, lang)).not.toContain(extractLoaderPath)
   })
@@ -124,13 +126,12 @@ test('css.localIdentName', () => {
   const config = genConfig({
     vue: {
       css: {
-        modules: true,
         localIdentName: localIdentName
       }
     }
   })
   LANGS.forEach(lang => {
-    expect(findOptions(config, lang, 'css').localIdentName).toBe(localIdentName)
+    expect(findOptions(config, lang, 'css', 0).localIdentName).toBe(localIdentName)
   })
 })
 

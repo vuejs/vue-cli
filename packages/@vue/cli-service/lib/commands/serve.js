@@ -71,10 +71,6 @@ module.exports = (api, options) => {
     // create compiler
     const compiler = webpack(webpackConfig)
 
-    if (!process.env.VUE_CLI_TEST) {
-      compiler.apply(new webpack.ProgressPlugin())
-    }
-
     // resolve server options
     const useHttps = args.https || projectDevServerOptions.https || defaults.https
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
@@ -148,7 +144,7 @@ module.exports = (api, options) => {
     return new Promise((resolve, reject) => {
       // log instructions & open browser on first compilation complete
       let isFirstCompile = true
-      compiler.plugin('done', stats => {
+      compiler.hooks.done.tap('vue-cli-service serve', stats => {
         if (stats.hasErrors()) {
           return
         }

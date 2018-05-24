@@ -10,11 +10,7 @@ module.exports = [
     type: `confirm`,
     message: `Use class-style component syntax?`
   },
-  process.env.VUE_CLI_EXPERIMENTAL ? {
-    name: `experimentalCompileTsWithBabel`,
-    type: `confirm`,
-    message: `Compile TS with babel? ${chalk.yellow(`(experimental)`)}`
-  } : {
+  {
     name: `useTsWithBabel`,
     type: `confirm`,
     message: `Use Babel alongside TypeScript for auto-detected polyfills?`

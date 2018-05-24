@@ -1,4 +1,3 @@
-<%_ if (rootOptions.router) { _%>
 <template>
   <div class="home">
     <img src="../assets/logo.png">
@@ -17,4 +16,3 @@ export default {
   }
 }
 </script>
-<%_ } _%>

@@ -3,42 +3,41 @@ module.exports = (api, { config, lintOn = [] }) => {
     lintOn = lintOn.split(',')
   }
 
+  const eslintConfig = require('./eslintOptions').config(api)
+
   const pkg = {
     scripts: {
       lint: 'vue-cli-service lint'
     },
-    eslintConfig: {
-      root: true,
-      extends: ['plugin:vue/essential']
-    },
+    eslintConfig,
     devDependencies: {}
   }
 
   if (config === 'airbnb') {
-    pkg.eslintConfig.extends.push('@vue/airbnb')
+    eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^3.0.0-beta.9'
+      '@vue/eslint-config-airbnb': '^3.0.0-beta.11'
     })
   } else if (config === 'standard') {
-    pkg.eslintConfig.extends.push('@vue/standard')
+    eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^3.0.0-beta.9'
+      '@vue/eslint-config-standard': '^3.0.0-beta.11'
     })
   } else if (config === 'prettier') {
-    pkg.eslintConfig.extends.push('@vue/prettier')
+    eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^3.0.0-beta.9'
+      '@vue/eslint-config-prettier': '^3.0.0-beta.11'
     })
   } else {
     // default
-    pkg.eslintConfig.extends.push('eslint:recommended')
+    eslintConfig.extends.push('eslint:recommended')
   }
 
   // typescript support
   if (api.hasPlugin('typescript')) {
-    pkg.eslintConfig.extends.push('@vue/typescript')
+    eslintConfig.extends.push('@vue/typescript')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-typescript': '^3.0.0-beta.9'
+      '@vue/eslint-config-typescript': '^3.0.0-beta.11'
     })
   }
 

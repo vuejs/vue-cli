@@ -7,24 +7,30 @@ const defaultOptions = {
 
 test('polyfill detection', () => {
   let { code } = babel.transformSync(`
-    const a = Promise.resolve()
+    const a = new Map()
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
       targets: { node: 'current' }
     }]]
   })
+  // default includes
   expect(code).not.toMatch(`import "core-js/modules/es6.promise"`)
+  // usage-based detection
+  expect(code).not.toMatch(`import "core-js/modules/es6.map"`)
 
   ;({ code } = babel.transformSync(`
-    const a = Promise.resolve()
+    const a = new Map()
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
       targets: { ie: 9 }
     }]]
   }))
+  // default includes
   expect(code).toMatch(`import "core-js/modules/es6.promise"`)
+  // usage-based detection
+  expect(code).toMatch(`import "core-js/modules/es6.map"`)
 })
 
 test('object spread', () => {
@@ -52,7 +58,7 @@ test('async/await', () => {
   // should use regenerator runtime
   expect(code).toMatch(`import "regenerator-runtime/runtime"`)
   // should use required helper instead of inline
-  expect(code).toMatch(/@babel.*runtime\/helpers\/asyncToGenerator/)
+  expect(code).toMatch(/@babel.*runtime\/helpers\/.*asyncToGenerator/)
 })
 
 test('jsx', () => {

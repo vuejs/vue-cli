@@ -36,16 +36,17 @@ async function readFiles (context) {
   return res
 }
 
-async function invoke (pluginName, options = {}, context = process.cwd()) {
-  delete options._
+function getPkg (context) {
   const pkgPath = path.resolve(context, 'package.json')
-  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-
   if (!fs.existsSync(pkgPath)) {
     throw new Error(`package.json not found in ${chalk.yellow(context)}`)
   }
+  return require(pkgPath)
+}
 
-  const pkg = require(pkgPath)
+async function invoke (pluginName, options = {}, context = process.cwd()) {
+  delete options._
+  const pkg = getPkg(context)
 
   // attempt to locate the plugin in package.json
   const findPlugin = deps => {
@@ -89,16 +90,22 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
     options
   }
 
+  await runGenerator(context, plugin, pkg)
+}
+
+async function runGenerator (context, plugin, pkg = getPkg(context)) {
+  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
   const createCompleteCbs = []
   const generator = new Generator(context, {
     pkg,
     plugins: [plugin],
     files: await readFiles(context),
-    completeCbs: createCompleteCbs
+    completeCbs: createCompleteCbs,
+    invoking: true
   })
 
   log()
-  logWithSpinner('🚀', `Invoking generator for ${id}...`)
+  logWithSpinner('🚀', `Invoking generator for ${plugin.id}...`)
   await generator.generate({
     extractConfigFiles: true,
     checkExisting: true
@@ -127,7 +134,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   stopSpinner()
 
   log()
-  log(`   Successfully invoked generator for plugin: ${chalk.cyan(id)}`)
+  log(`   Successfully invoked generator for plugin: ${chalk.cyan(plugin.id)}`)
   if (!process.env.VUE_CLI_TEST && hasGit()) {
     const { stdout } = await execa('git', [
       'ls-files',
@@ -166,3 +173,5 @@ module.exports = (...args) => {
     }
   })
 }
+
+module.exports.runGenerator = runGenerator

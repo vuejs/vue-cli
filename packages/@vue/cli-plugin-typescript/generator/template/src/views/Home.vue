@@ -1,5 +1,5 @@
 ---
-extend: '@vue/cli-service/generator/template/src/views/Home.vue'
+extend: '@vue/cli-service/generator/router/template/src/views/Home.vue'
 replace:
   - !!js/regexp /Welcome to Your Vue\.js App/
   - !!js/regexp /<script>[^]*?<\/script>/

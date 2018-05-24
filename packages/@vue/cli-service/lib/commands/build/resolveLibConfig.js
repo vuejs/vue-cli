@@ -1,15 +1,31 @@
+const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { entry, name }, options) => {
+  // setting this disables app-only configs
+  process.env.VUE_CLI_TARGET = 'lib'
+  // inline all static asset files since there is no publicPath handling
+  process.env.VUE_CLI_INLINE_LIMIT = Infinity
+
+  const { log, error } = require('@vue/cli-shared-utils')
+  const abort = msg => {
+    log()
+    error(msg)
+    process.exit(1)
+  }
+
+  if (!fs.existsSync(api.resolve(entry))) {
+    abort(
+      `Failed to resolve lib entry: ${entry}${entry === `src/App.vue` ? ' (default)' : ''}. ` +
+      `Make sure to specify the correct entry file.`
+    )
+  }
+
   const libName = (
     name ||
     api.service.pkg.name ||
     path.basename(entry).replace(/\.(jsx?|vue)$/, '')
   )
-  // setting this disables app-only configs
-  process.env.VUE_CLI_TARGET = 'lib'
-  // inline all static asset files since there is no publicPath handling
-  process.env.VUE_CLI_INLINE_LIMIT = Infinity
 
   function genConfig (format, postfix = format, genHTML) {
     const config = api.resolveChainableWebpackConfig()
@@ -26,7 +42,7 @@ module.exports = (api, { entry, name }, options) => {
 
     // only minify min entry
     if (!/\.min/.test(postfix)) {
-      config.plugins.delete('uglify')
+      config.optimization.minimize(false)
     }
 
     // externalize Vue in case user imports it
@@ -66,7 +82,7 @@ module.exports = (api, { entry, name }, options) => {
 
     Object.assign(rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${entryName}.[id].js`,
+      chunkFilename: `${entryName}.[name].js`,
       library: libName,
       libraryExport: 'default',
       libraryTarget: format,

@@ -1,6 +1,6 @@
 const fs = require('fs')
 const extendJSConfig = require('./extendJSConfig')
-const stringifyJS = require('javascript-stringify')
+const stringifyJS = require('./stringifyJS')
 
 function transformJSON (value, filename, source) {
   let existing = {}

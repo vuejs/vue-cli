@@ -4,7 +4,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
-const stringifyJS = require('javascript-stringify')
+const stringifyJS = require('../lib/util/stringifyJS')
 
 // prepare template fixtures
 const templateDir = path.resolve(__dirname, 'template')
@@ -12,6 +12,13 @@ fs.ensureDirSync(templateDir)
 fs.writeFileSync(path.resolve(templateDir, 'foo.js'), 'foo(<%- options.n %>)')
 fs.ensureDirSync(path.resolve(templateDir, 'bar'))
 fs.writeFileSync(path.resolve(templateDir, 'bar/bar.js'), 'bar(<%- m %>)')
+fs.writeFileSync(path.resolve(templateDir, 'entry.js'), `
+import foo from 'foo'
+
+new Vue({
+  render: h => h(App)
+}).$mount('#app')
+`.trim())
 
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
 ---
@@ -431,6 +438,25 @@ test('api: resolve', () => {
   ] })
 })
 
+test('api: addEntryImport & addEntryInjection', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.js', `import bar from 'bar'`)
+        api.injectRootOptions('main.js', ['foo', 'bar'])
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\s+import bar from 'bar'/)
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
+})
+
 test('api: addConfigTransform', async () => {
   const configs = {
     fooConfig: {
@@ -554,10 +580,9 @@ test('extract config files', async () => {
     extractConfigFiles: true
   })
 
-  const json = v => JSON.stringify(v, null, 2)
   const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
   expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(js(configs.vue))
-  expect(fs.readFileSync('/.babelrc', 'utf-8')).toMatch(json(configs.babel))
+  expect(fs.readFileSync('/babel.config.js', 'utf-8')).toMatch(js(configs.babel))
   expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))

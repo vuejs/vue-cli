@@ -16,6 +16,9 @@ module.exports = {
   // where to output built files
   outputDir: 'dist',
 
+  // where to put static assets (js/css/img/font/...)
+  assetsDir: '',
+
   // whether to use eslint-loader for lint on save.
   // valid values: true | false | 'error'
   // when set to 'error', lint errors will cause compilation to fail.
@@ -25,22 +28,17 @@ module.exports = {
   // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
   compiler: false,
 
-  // babel-loader skips node_module deps by default.
+  // babel-loader skips `node_modules` deps by default.
   // explicitly transpile a dependency with this option.
   transpileDependencies: [/* string or regex */],
 
-  // whether to preserve whitespaces between elements during template
-  // compilation. Defaults to false for smaller compiled code size and
-  // performance.
-  preserveWhitepsace: false,
+  // generate sourceMap for production build?
+  productionSourceMap: true,
 
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   chainWebpack: () => {},
   configureWebpack: () => {},
-
-  // generate sourceMap for production build?
-  productionSourceMap: true,
 
   // CSS related options
   css: {
@@ -48,26 +46,21 @@ module.exports = {
     // can also be an object of options to pass to extract-text-webpack-plugin
     extract: true,
 
-    // Enable CSS modules for all css / pre-processor files.
-    // This option does not affect *.vue files.
-    modules: false,
-
     // enable CSS source maps?
     sourceMap: false,
 
     // pass custom options to pre-processor loaders. e.g. to pass options to
     // sass-loader, use { sass: { ... } }
-    loaderOptions: {}
+    loaderOptions: {},
+
+    // Enable CSS modules for all css / pre-processor files.
+    // This option does not affect *.vue files.
+    modules: false
   },
 
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
   parallel: require('os').cpus().length > 1,
-
-  // split vendors using autoDLLPlugin?
-  // can also be an explicit Array of dependencies to include in the DLL chunk.
-  // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#dll-mode
-  dll: false,
 
   // options for the PWA plugin.
   // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
