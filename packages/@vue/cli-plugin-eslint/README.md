@@ -13,6 +13,8 @@
 
     --format [formatter] specify formatter (default: codeframe)
     --no-fix             do not fix errors
+    --max-errors         specify number of errors to make build failed (default: 0)
+    --max-warnings       specify number of warnings to make build failed (default: Infinity)
   ```
 
   Lints and fixes files. If no specific files are given, it lints all files in `src` and `test`.
@@ -39,5 +41,5 @@ vue add @vue/eslint
 
 ## Injected webpack-chain Rules
 
-- `config.rule('eslint')`
-- `config.rule('eslint').use('eslint-loader')`
+- `config.module.rule('eslint')`
+- `config.module.rule('eslint').use('eslint-loader')`
