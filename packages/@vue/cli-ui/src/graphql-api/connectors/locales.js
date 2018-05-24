@@ -2,15 +2,11 @@ const path = require('path')
 const fs = require('fs-extra')
 const globby = require('globby')
 const deepmerge = require('deepmerge')
-// Connectors
-const cwd = require('./cwd')
 // Subs
 const channels = require('../channels')
 // Context
 const getContext = require('../context')
 // Utils
-const { resolveModule } = require('@vue/cli/lib/util/module')
-const { resolveModuleRoot } = require('../utils/resolve-path')
 const { log } = require('../utils/logger')
 
 let locales
@@ -35,8 +31,7 @@ function add (locale, context) {
 function reset (context) {
   locales = []
   // Load builtin locales
-  const modulePath = resolveModule('@vue/cli/bin/vue', cwd.get())
-  const folder = resolveModuleRoot(modulePath, '@vue/cli')
+  const folder = path.resolve(__dirname, '../../../')
   loadFolder(folder, context)
 }
 
