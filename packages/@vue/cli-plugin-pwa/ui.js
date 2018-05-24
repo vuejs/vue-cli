@@ -18,7 +18,7 @@ function updateAppManifest (cwd, handler) {
     try {
       const manifest = JSON.parse(fs.readFileSync(manifestPath, { encoding: 'utf8' }))
       handler(manifest)
-      fs.writeFileSync(manifestPath, JSON.stringify(manifest), { encoding: 'utf8' })
+      fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), { encoding: 'utf8' })
     } catch (e) {
       console.log(`Can't update JSON in ${manifestPath}`)
     }
