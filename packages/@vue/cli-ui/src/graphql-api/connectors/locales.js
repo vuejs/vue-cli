@@ -46,10 +46,11 @@ function _loadFolder (root, context) {
 }
 
 function loadFolder (root, context) {
-  if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test' && !watchedTrees.get(root)) {
+  const folder = path.join(root, './locales')
+  if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test' && !watchedTrees.get(root) && fs.existsSync(folder)) {
     watchedTrees.set(root, true)
     const watch = require('watch')
-    watch.watchTree(root, () => {
+    watch.watchTree(folder, () => {
       _loadFolder(root, context)
       log('Locales reloaded', root)
     })
