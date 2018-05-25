@@ -5,7 +5,7 @@ import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 // Install the vue plugin
 Vue.use(VueApollo)
 
-let endpoint = process.env.VUE_CLI_UI_URL
+let endpoint = process.env.VUE_APP_CLI_UI_URL
 if (typeof endpoint === 'undefined') {
   endpoint = 'ws://localhost:4000/graphql'
 } else if (endpoint === '') {

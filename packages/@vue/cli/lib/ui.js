@@ -8,7 +8,7 @@ async function ui (options = {}, context = process.cwd()) {
   }
 
   // Config
-  process.env.VUE_CLI_UI_URL = ''
+  process.env.VUE_APP_CLI_UI_URL = ''
 
   if (!options.dev) {
     process.env.NODE_ENV = 'production'

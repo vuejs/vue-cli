@@ -6,7 +6,7 @@ const { resolveModuleRoot } = require('../utils/resolve-path')
 
 let addons = []
 
-let baseUrl = process.env.VUE_CLI_UI_URL
+let baseUrl = process.env.VUE_APP_CLI_UI_URL
 if (typeof baseUrl === 'undefined') {
   baseUrl = 'http://localhost:4000'
 } else {
