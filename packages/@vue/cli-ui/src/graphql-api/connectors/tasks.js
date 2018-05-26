@@ -231,6 +231,10 @@ async function run (id, context) {
       args = [...parts, ...args]
     }
 
+    // Output colors
+    // See: https://www.npmjs.com/package/supports-color
+    process.env.FORCE_COLOR = 1
+
     // Save parameters
     updateSavedData({
       id,
