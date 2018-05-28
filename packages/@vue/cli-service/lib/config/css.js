@@ -26,7 +26,7 @@ module.exports = (api, options) => {
     const shouldExtract = isProd && extract !== false && !shadowMode
     const extractOptions = Object.assign({
       filename: getAssetPath(options, `css/[name].[contenthash:8].css`),
-      chunkFilename: getAssetPath(options, 'css/[name].[id].[contenthash:8].css')
+      chunkFilename: getAssetPath(options, 'css/[name].[contenthash:8].css')
     }, extract && typeof extract === 'object' ? extract : {})
 
     // check if the project has a valid postcss config
