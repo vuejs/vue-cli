@@ -31,7 +31,7 @@ module.exports = (api, { entry, name }, options) => {
     const config = api.resolveChainableWebpackConfig()
 
     // adjust css output name so they write to the same file
-    if (options.css.extract !== false) {
+    if (config.plugins.has('extract-css')) {
       config
         .plugin('extract-css')
           .tap(args => {
