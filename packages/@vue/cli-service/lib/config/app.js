@@ -1,4 +1,6 @@
 // config that are specific to --target app
+const fs = require('fs')
+const path = require('path')
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
@@ -7,9 +9,16 @@ module.exports = (api, options) => {
       return
     }
 
+    const isProd = process.env.NODE_ENV === 'production'
+
     // HTML plugin
     const resolveClientEnv = require('../util/resolveClientEnv')
+    const htmlPath = api.resolve('public/index.html')
     const htmlOptions = {
+      // use default index.html
+      template: fs.existsSync(htmlPath)
+        ? htmlPath
+        : path.resolve(__dirname, 'index-default.html'),
       templateParameters: (compilation, assets, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
         let stats
@@ -27,10 +36,19 @@ module.exports = (api, options) => {
         }, resolveClientEnv(options.baseUrl, true /* raw */))
       }
     }
-    // only set template path if index.html exists
-    const htmlPath = api.resolve('public/index.html')
-    if (require('fs').existsSync(htmlPath)) {
-      htmlOptions.template = htmlPath
+
+    if (isProd) {
+      Object.assign(htmlOptions, {
+        minify: {
+          removeComments: true,
+          collapseWhitespace: true,
+          removeAttributeQuotes: true
+          // more options:
+          // https://github.com/kangax/html-minifier#options-quick-reference
+        },
+        // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+        chunksSortMode: 'dependency'
+      })
     }
 
     webpackConfig
@@ -55,31 +73,18 @@ module.exports = (api, options) => {
         }])
 
     // copy static assets in public/
-    webpackConfig
-      .plugin('copy')
-        .use(require('copy-webpack-plugin'), [[{
-          from: api.resolve('public'),
-          to: api.resolve(options.outputDir),
-          ignore: ['index.html', '.DS_Store']
-        }]])
-
-    if (process.env.NODE_ENV === 'production') {
-      // minify HTML
+    if (fs.existsSync(api.resolve('public'))) {
       webpackConfig
-        .plugin('html')
-          .tap(([options]) => [Object.assign(options, {
-            minify: {
-              removeComments: true,
-              collapseWhitespace: true,
-              removeAttributeQuotes: true
-              // more options:
-              // https://github.com/kangax/html-minifier#options-quick-reference
-            },
-            // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-            chunksSortMode: 'dependency'
-          })])
+        .plugin('copy')
+          .use(require('copy-webpack-plugin'), [[{
+            from: api.resolve('public'),
+            to: api.resolve(options.outputDir),
+            ignore: ['index.html', '.DS_Store']
+          }]])
+    }
 
-      // code splitting
+    // code splitting
+    if (isProd) {
       webpackConfig
         .optimization.splitChunks({
           chunks: 'all'
