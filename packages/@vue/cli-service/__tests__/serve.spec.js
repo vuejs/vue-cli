@@ -1,4 +1,4 @@
-jest.setTimeout(45000)
+jest.setTimeout(60000)
 
 const path = require('path')
 const fs = require('fs-extra')

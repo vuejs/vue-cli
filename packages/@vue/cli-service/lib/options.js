@@ -9,6 +9,7 @@ const schema = createSchema(joi => joi.object({
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
+  pages: joi.object(),
 
   // css
   css: joi.object({
@@ -64,6 +65,9 @@ exports.defaults = () => ({
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
   parallel: require('os').cpus().length > 1,
+
+  // multi-page config
+  pages: undefined,
 
   css: {
     // extract: true,

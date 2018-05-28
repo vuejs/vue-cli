@@ -13,12 +13,8 @@ module.exports = (api, options) => {
 
     // HTML plugin
     const resolveClientEnv = require('../util/resolveClientEnv')
-    const htmlPath = api.resolve('public/index.html')
+
     const htmlOptions = {
-      // use default index.html
-      template: fs.existsSync(htmlPath)
-        ? htmlPath
-        : path.resolve(__dirname, 'index-default.html'),
       templateParameters: (compilation, assets, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
         let stats
@@ -51,26 +47,91 @@ module.exports = (api, options) => {
       })
     }
 
-    webpackConfig
-      .plugin('html')
-        .use(require('html-webpack-plugin'), [htmlOptions])
+    // resolve HTML file(s)
+    const HTMLPlugin = require('html-webpack-plugin')
+    const PreloadPlugin = require('@vue/preload-webpack-plugin')
+    const multiPageConfig = options.pages
+    const htmlPath = api.resolve('public/index.html')
+    const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
 
-    // inject preload/prefetch to HTML
-    const PreloadPlugin = require('preload-webpack-plugin')
-    webpackConfig
-      .plugin('preload')
-        .use(PreloadPlugin, [{
-          rel: 'preload',
-          include: 'initial',
-          fileBlacklist: [/\.map$/, /hot-update\.js$/]
-        }])
+    if (!multiPageConfig) {
+      // default, single page setup.
+      htmlOptions.template = fs.existsSync(htmlPath)
+        ? htmlPath
+        : defaultHtmlPath
 
-    webpackConfig
-      .plugin('prefetch')
-        .use(PreloadPlugin, [{
-          rel: 'prefetch',
-          include: 'asyncChunks'
-        }])
+      webpackConfig
+        .plugin('html')
+          .use(HTMLPlugin, [htmlOptions])
+
+      // inject preload/prefetch to HTML
+      webpackConfig
+        .plugin('preload')
+          .use(PreloadPlugin, [{
+            rel: 'preload',
+            include: 'initial',
+            fileBlacklist: [/\.map$/, /hot-update\.js$/]
+          }])
+
+      webpackConfig
+        .plugin('prefetch')
+          .use(PreloadPlugin, [{
+            rel: 'prefetch',
+            include: 'asyncChunks'
+          }])
+    } else {
+      // multi-page setup
+      webpackConfig.entryPoints.clear()
+
+      const pages = Object.keys(multiPageConfig)
+
+      pages.forEach(name => {
+        const {
+          entry,
+          template = `public/${name}.html`,
+          filename = `${name}.html`
+        } = multiPageConfig[name]
+        // inject entry
+        webpackConfig.entry(name).add(api.resolve(entry))
+
+        // inject html plugin for the page
+        const pageHtmlOptions = Object.assign({}, htmlOptions, {
+          chunks: ['chunk-vendors', 'chunk-common', name],
+          template: fs.existsSync(template) ? template : defaultHtmlPath,
+          filename
+        })
+
+        webpackConfig
+          .plugin(`html-${name}`)
+            .use(HTMLPlugin, [pageHtmlOptions])
+      })
+
+      pages.forEach(name => {
+        const { filename = `${name}.html` } = multiPageConfig[name]
+        webpackConfig
+          .plugin(`preload-${name}`)
+            .use(PreloadPlugin, [{
+              rel: 'preload',
+              includeHtmlNames: [filename],
+              include: {
+                type: 'initial',
+                entries: [name]
+              },
+              fileBlacklist: [/\.map$/, /hot-update\.js$/]
+            }])
+
+        webpackConfig
+          .plugin(`prefetch-${name}`)
+            .use(PreloadPlugin, [{
+              rel: 'prefetch',
+              includeHtmlNames: [filename],
+              include: {
+                type: 'asyncChunks',
+                entries: [name]
+              }
+            }])
+      })
+    }
 
     // copy static assets in public/
     if (fs.existsSync(api.resolve('public'))) {
@@ -87,7 +148,19 @@ module.exports = (api, options) => {
     if (isProd) {
       webpackConfig
         .optimization.splitChunks({
-          chunks: 'all'
+          chunks: 'all',
+          name: (m, chunks, cacheGroup) => `chunk-${cacheGroup}`,
+          cacheGroups: {
+            vendors: {
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10
+            },
+            common: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true
+            }
+          }
         })
     }
   })
