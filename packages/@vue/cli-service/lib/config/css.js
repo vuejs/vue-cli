@@ -14,6 +14,7 @@ module.exports = (api, options) => {
     const getAssetPath = require('../util/getAssetPath')
 
     const {
+      modules = false,
       extract = true,
       sourceMap = false,
       localIdentName = '[name]_[local]_[hash:base64:5]',
@@ -43,15 +44,20 @@ module.exports = (api, options) => {
       const baseRule = webpackConfig.module.rule(lang).test(test)
 
       // rules for <style lang="module">
-      const modulesRule = baseRule.oneOf('modules-query').resourceQuery(/module/)
-      applyLoaders(modulesRule, true)
+      const vueModulesRule = baseRule.oneOf('vue-modules').resourceQuery(/module/)
+      applyLoaders(vueModulesRule, true)
+
+      // rules for <style>
+      const vueNormalRule = baseRule.oneOf('vue').resourceQuery(/\?vue/)
+      applyLoaders(vueNormalRule, false)
 
       // rules for *.module.* files
-      const modulesExtRule = baseRule.oneOf('modules-ext').test(/\.module\.\w+$/)
-      applyLoaders(modulesExtRule, true)
+      const extModulesRule = baseRule.oneOf('normal-modules').test(/\.module\.\w+$/)
+      applyLoaders(extModulesRule, true)
 
+      // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      applyLoaders(normalRule, false)
+      applyLoaders(normalRule, modules)
 
       function applyLoaders (rule, modules) {
         if (shouldExtract) {
