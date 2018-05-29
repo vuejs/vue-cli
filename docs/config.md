@@ -13,6 +13,11 @@ module.exports = {
   // then change this to '/my-app/'
   baseUrl: '/',
 
+  // baseUrl, but for the dev server.
+  // you'll only need this if you need to serve your dev server under
+  // a specific sub-path in order to work with your dev setup.
+  devBaseUrl: '/',
+
   // where to output built files
   outputDir: 'dist',
 
@@ -26,7 +31,7 @@ module.exports = {
 
   // use the full build with in-browser compiler?
   // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
-  compiler: false,
+  runtimeCompiler: false,
 
   // babel-loader skips `node_modules` deps by default.
   // explicitly transpile a dependency with this option.
