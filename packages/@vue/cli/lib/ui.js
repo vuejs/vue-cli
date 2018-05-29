@@ -1,5 +1,5 @@
 const { log, error, openBrowser } = require('@vue/cli-shared-utils')
-const portfinder = require('portfinder')
+const { portfinder, server } = require('@vue/cli-ui/server')
 
 async function ui (options = {}, context = process.cwd()) {
   let port = options.port
@@ -10,14 +10,15 @@ async function ui (options = {}, context = process.cwd()) {
   // Config
   process.env.VUE_APP_CLI_UI_URL = ''
 
-  if (!options.dev) {
-    // Optimize express
-    process.env.NODE_ENV = 'production'
+  // Optimize express
+  process.env.NODE_ENV = 'production'
+
+  // Dev mode
+  if (options.dev) {
+    process.env.VUE_CLI_UI_DEV = true
   }
 
   if (!options.quiet) log(`🚀  Starting GUI...`)
-  let server = require('vue-cli-plugin-apollo/graphql-server')
-  server = server.default || server
 
   const opts = {
     port,
