@@ -45,7 +45,7 @@ start and open the vue-cli ui
 
 Options:
 
-  -p, --port <port>  Port used for the UI server (by default search for awailable port)
+  -p, --port <port>  Port used for the UI server (by default search for available port)
   -h, --help         output usage information
 ```
 
