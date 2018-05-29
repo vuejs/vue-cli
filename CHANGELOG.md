@@ -1,3 +1,19 @@
+<a name="3.0.0-beta.13"></a>
+# [3.0.0-beta.13](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2018-05-29)
+
+
+### Bug Fixes
+
+* **ui:** add missing dependency ([3bcc511](https://github.com/vuejs/vue-cli/commit/3bcc511))
+* fix caching dependency (close [#1384](https://github.com/vuejs/vue-cli/issues/1384)) ([9846cd5](https://github.com/vuejs/vue-cli/commit/9846cd5))
+
+
+### Features
+
+* add --copy option for vue-cli-service serve ([#1355](https://github.com/vuejs/vue-cli/issues/1355)) ([5e95b3d](https://github.com/vuejs/vue-cli/commit/5e95b3d))
+
+
+
 <a name="3.0.0-beta.12"></a>
 # [3.0.0-beta.12](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.11...v3.0.0-beta.12) (2018-05-29)
 
