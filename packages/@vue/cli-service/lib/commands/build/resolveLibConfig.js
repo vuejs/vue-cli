@@ -89,7 +89,12 @@ module.exports = (api, { entry, name }, options) => {
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
       // document.currentScript.src.
-      publicPath: ''
+      publicPath: '',
+      // preserve UDM header from webpack 3 until webpack provides either
+      // libraryTarget: 'esm' or target: 'universal'
+      // https://github.com/webpack/webpack/issues/6522
+      // https://github.com/webpack/webpack/issues/6525
+      globalObject: `typeof self !== 'undefined' ? self : this`
     })
 
     return rawConfig
