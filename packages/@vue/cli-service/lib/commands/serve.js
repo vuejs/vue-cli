@@ -160,8 +160,8 @@ module.exports = (api, options) => {
         }
 
         let copied = ''
-        if (isFirstCompile && (args.copy || projectDevServerOptions.copy)) {
-          clipboardy.write(urls.localUrlForBrowser)
+        if (isFirstCompile && args.copy) {
+          require('clipboardy').write(urls.localUrlForBrowser)
           copied = chalk.dim('(copied!)')
         }
 
