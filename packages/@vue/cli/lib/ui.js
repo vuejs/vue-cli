@@ -1,5 +1,5 @@
 const { log, error, openBrowser } = require('@vue/cli-shared-utils')
-const portfinder = require('portfinder')
+const { portfinder, server } = require('@vue/cli-ui/server')
 
 async function ui (options = {}, context = process.cwd()) {
   let port = options.port
@@ -10,14 +10,15 @@ async function ui (options = {}, context = process.cwd()) {
   // Config
   process.env.VUE_APP_CLI_UI_URL = ''
 
-  if (!options.dev) {
-    // Optimize express
-    process.env.NODE_ENV = 'production'
+  // Optimize express
+  process.env.NODE_ENV = 'production'
+
+  // Dev mode
+  if (options.dev) {
+    process.env.VUE_CLI_UI_DEV = true
   }
 
   if (!options.quiet) log(`🚀  Starting GUI...`)
-  let server = require('vue-cli-plugin-apollo/graphql-server')
-  server = server.default || server
 
   const opts = {
     port,
@@ -34,7 +35,8 @@ async function ui (options = {}, context = process.cwd()) {
       resolvers: require.resolve('@vue/cli-ui/src/graphql-api/resolvers.js'),
       context: require.resolve('@vue/cli-ui/src/graphql-api/context.js'),
       pubsub: require.resolve('@vue/cli-ui/src/graphql-api/pubsub.js'),
-      server: require.resolve('@vue/cli-ui/src/graphql-api/server.js')
+      server: require.resolve('@vue/cli-ui/src/graphql-api/server.js'),
+      directives: require.resolve('@vue/cli-ui/src/graphql-api/directives.js')
     }
   }
 

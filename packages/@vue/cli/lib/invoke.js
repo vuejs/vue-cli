@@ -41,7 +41,7 @@ function getPkg (context) {
   if (!fs.existsSync(pkgPath)) {
     throw new Error(`package.json not found in ${chalk.yellow(context)}`)
   }
-  return require(pkgPath)
+  return loadModule(pkgPath, context, true)
 }
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
