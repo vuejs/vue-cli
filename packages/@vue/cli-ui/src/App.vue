@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <ConnectionStatus />
+    <ConnectionStatus v-if="ready" />
     <div v-if="ready" class="content">
       <router-view/>
     </div>
