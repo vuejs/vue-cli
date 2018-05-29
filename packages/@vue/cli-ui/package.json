@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.0.0-beta.13",
+  "version": "3.0.0-beta.14",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -16,7 +16,7 @@
     "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui && yarn run test:run"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.0-beta.12",
+    "@vue/cli-shared-utils": "^3.0.0-beta.14",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
     "deepmerge": "^2.1.0",
@@ -43,11 +43,11 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.13",
-    "@vue/cli-plugin-e2e-cypress": "^3.0.0-beta.13",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.13",
-    "@vue/cli-service": "^3.0.0-beta.13",
-    "@vue/eslint-config-standard": "^3.0.0-beta.13",
+    "@vue/cli-plugin-babel": "^3.0.0-beta.14",
+    "@vue/cli-plugin-e2e-cypress": "^3.0.0-beta.14",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.14",
+    "@vue/cli-service": "^3.0.0-beta.14",
+    "@vue/eslint-config-standard": "^3.0.0-beta.14",
     "@vue/ui": "^0.2.5",
     "ansi_up": "^2.0.2",
     "cross-env": "^5.1.5",
