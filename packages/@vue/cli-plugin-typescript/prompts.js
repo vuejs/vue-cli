@@ -8,7 +8,8 @@ module.exports = [
   {
     name: `classComponent`,
     type: `confirm`,
-    message: `Use class-style component syntax?`
+    message: `Use class-style component syntax?`,
+    default: true
   },
   {
     name: `useTsWithBabel`,
@@ -28,7 +29,8 @@ module.exports = [
     choices: [
       {
         name: 'Lint on save',
-        value: 'save'
+        value: 'save',
+        checked: true
       },
       {
         name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
