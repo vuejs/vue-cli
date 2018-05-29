@@ -134,8 +134,8 @@ module.exports = class Service {
         ? builtInPlugins.concat(inlinePlugins)
         : inlinePlugins
     } else {
-      const projectPlugins = Object.keys(this.pkg.dependencies || {})
-        .concat(Object.keys(this.pkg.devDependencies || {}))
+      const projectPlugins = Object.keys(this.pkg.devDependencies || {})
+        .concat(Object.keys(this.pkg.dependencies || {}))
         .filter(isPlugin)
         .map(idToPlugin)
       return builtInPlugins.concat(projectPlugins)
