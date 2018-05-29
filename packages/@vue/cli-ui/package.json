@@ -40,7 +40,7 @@
     "semver": "^5.5.0",
     "shortid": "^2.2.8",
     "terminate": "^2.1.0",
-    "vue-cli-plugin-apollo": "^0.11.0",
+    "vue-cli-plugin-apollo": "^0.13.0",
     "watch": "^1.0.2"
   },
   "devDependencies": {
@@ -53,6 +53,7 @@
     "ansi_up": "^2.0.2",
     "cross-env": "^5.1.5",
     "eslint": "^4.16.0",
+    "eslint-plugin-graphql": "^2.1.1",
     "file-icons-js": "^1.0.3",
     "lint-staged": "^6.0.0",
     "start-server-and-test": "^1.4.1",
