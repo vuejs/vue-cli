@@ -34,7 +34,8 @@ async function ui (options = {}, context = process.cwd()) {
       resolvers: require.resolve('@vue/cli-ui/src/graphql-api/resolvers.js'),
       context: require.resolve('@vue/cli-ui/src/graphql-api/context.js'),
       pubsub: require.resolve('@vue/cli-ui/src/graphql-api/pubsub.js'),
-      server: require.resolve('@vue/cli-ui/src/graphql-api/server.js')
+      server: require.resolve('@vue/cli-ui/src/graphql-api/server.js'),
+      directives: require.resolve('@vue/cli-ui/src/graphql-api/directives.js')
     }
   }
 
