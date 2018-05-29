@@ -218,7 +218,7 @@ async function getDefaultValue (prompt) {
   }
 
   if (prompt.type === 'checkbox') {
-    const choices = await getChoices(prompt)
+    const choices = prompt.raw.choices
     if (choices) {
       return choices.filter(
         c => c.checked
