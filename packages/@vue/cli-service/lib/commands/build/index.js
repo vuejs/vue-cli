@@ -59,7 +59,7 @@ module.exports = (api, options) => {
     // respect inline build destination in copy plugin
     if (args.dest) {
       api.chainWebpack(config => {
-        if (args.target === 'app') {
+        if (config.plugins.has('copy')) {
           config.plugin('copy').tap(args => {
             args[0][0].to = targetDir
             return args

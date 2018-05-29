@@ -42,7 +42,7 @@ beforeAll(async () => {
 test('dep from node_modules should not been transpiled', async () => {
   const { stdout } = await project.run('vue-cli-service build')
 
-  let $vendorjs = stdout.match(/(js\/vendors~app\.[^.]+\.js)/)[1]
+  let $vendorjs = stdout.match(/(js\/chunk-vendors\.[^.]+\.js)/)[1]
 
   $vendorjs = `dist/${$vendorjs}`
   $vendorjs = await project.read($vendorjs)
@@ -58,7 +58,7 @@ test('dep from node_modules should been transpiled', async () => {
 
   const { stdout } = await project.run('vue-cli-service build')
 
-  let $vendorjs = stdout.match(/(js\/vendors~app\.[^.]+\.js)/)[1]
+  let $vendorjs = stdout.match(/(js\/chunk-vendors\.[^.]+\.js)/)[1]
 
   $vendorjs = `dist/${$vendorjs}`
   $vendorjs = await project.read($vendorjs)

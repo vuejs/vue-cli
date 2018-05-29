@@ -1,25 +1,44 @@
 const fs = require('fs')
-const path = require('path')
+const hash = require('hash-sum')
 
-exports.genCacheConfig = (api, options, id, configFile) => {
-  const cacheDirectory = process.env.VUE_CLI_TEST
-    ? path.resolve(__dirname, `../../../../node_modules/.cache/${id}`)
-    : api.resolve(`node_modules/.cache/${id}`)
+exports.genCacheConfig = (api, options, deps, configFiles) => {
+  if (!Array.isArray(deps)) {
+    deps = [deps]
+  }
+  const id = deps[0]
+  const cacheDirectory = api.resolve(`node_modules/.cache/${id}`)
 
   const variables = {
-    [id]: require(`${id}/package.json`).version,
     'cache-loader': require('cache-loader/package.json').version,
     env: process.env.NODE_ENV,
     test: !!process.env.VUE_CLI_TEST,
-    config: (options.chainWebpack || '').toString() + (options.configureWebpack || '').toString()
+    config: [options.chainWebpack, options.configureWebpack]
   }
-  if (configFile) {
-    const file = api.resolve(configFile)
-    if (fs.existsSync(file)) {
-      variables.configFile = fs.readFileSync(configFile, 'utf-8')
+
+  for (const dep of deps) {
+    variables[dep] = require(`${dep}/package.json`).version
+  }
+
+  const readConfig = file => {
+    const absolutePath = api.resolve(file)
+    if (fs.existsSync(absolutePath)) {
+      return fs.readFileSync(absolutePath, 'utf-8')
     }
   }
-  const cacheIdentifier = JSON.stringify(variables)
 
+  if (configFiles) {
+    if (!Array.isArray(configFiles)) {
+      configFiles = [configFiles]
+    }
+    for (const file of configFiles) {
+      const content = readConfig(file)
+      if (content) {
+        variables.configFiles = content
+        break
+      }
+    }
+  }
+
+  const cacheIdentifier = hash(variables)
   return { cacheDirectory, cacheIdentifier }
 }

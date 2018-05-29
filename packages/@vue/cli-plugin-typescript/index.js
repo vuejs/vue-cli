@@ -41,7 +41,7 @@ module.exports = (api, options) => {
       loader: 'ts-loader',
       options: {
         transpileOnly: true,
-        appendTsSuffixTo: [/\.vue$/],
+        appendTsSuffixTo: ['\\.vue$'],
         // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
         happyPackMode: useThreads
       }
@@ -50,7 +50,7 @@ module.exports = (api, options) => {
     tsxRule.use('ts-loader').loader('ts-loader').tap(options => {
       options = Object.assign({}, options)
       delete options.appendTsSuffixTo
-      options.appendTsxSuffixTo = [/\.vue$/]
+      options.appendTsxSuffixTo = ['\\.vue$']
       return options
     })
 

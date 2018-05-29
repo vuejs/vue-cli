@@ -1,7 +1,27 @@
-module.exports = (api, { lintOnSave }) => {
-  if (lintOnSave) {
+module.exports = (api, options) => {
+  if (options.lintOnSave) {
     const extensions = require('./eslintOptions').extensions(api)
-    const cacheIdentifier = genCacheIdentifier(api.resolve('.'))
+
+    // eslint-loader doesn't bust cache when eslint config changes
+    // so we have to manually generate a cache identifier that takes the config
+    // into account.
+    const { genCacheConfig } = require('@vue/cli-shared-utils')
+    const { cacheIdentifier } = genCacheConfig(
+      api,
+      options,
+      [
+        'eslint-loader',
+        'eslint'
+      ],
+      [
+        '.eslintrc.js',
+        '.eslintrc.yaml',
+        '.eslintrc.yml',
+        '.eslintrc.json',
+        '.eslintrc',
+        'package.json'
+      ]
+    )
 
     api.chainWebpack(webpackConfig => {
       webpackConfig.module
@@ -18,7 +38,7 @@ module.exports = (api, { lintOnSave }) => {
               extensions,
               cache: true,
               cacheIdentifier,
-              emitWarning: lintOnSave !== 'error',
+              emitWarning: options.lintOnSave !== 'error',
               formatter: require('eslint/lib/formatters/codeframe')
             })
     })
@@ -36,35 +56,5 @@ module.exports = (api, { lintOnSave }) => {
     details: 'For more options, see https://eslint.org/docs/user-guide/command-line-interface#options'
   }, args => {
     require('./lint')(args, api)
-  })
-}
-
-// eslint-loader doesn't bust cache when eslint config changes
-// so we have to manually generate a cache identifier that takes the config
-// into account.
-function genCacheIdentifier (context) {
-  const fs = require('fs')
-  const path = require('path')
-  const files = [
-    '.eslintrc.js',
-    '.eslintrc.yaml',
-    '.eslintrc.yml',
-    '.eslintrc.json',
-    '.eslintrc',
-    'package.json'
-  ]
-
-  const configTimeStamp = (() => {
-    for (const file of files) {
-      if (fs.existsSync(path.join(context, file))) {
-        return fs.statSync(file).mtimeMs
-      }
-    }
-  })()
-
-  return JSON.stringify({
-    'eslint-loader': require('eslint-loader/package.json').version,
-    'eslint': require('eslint/package.json').version,
-    'config': configTimeStamp
   })
 }

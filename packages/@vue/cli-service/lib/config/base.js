@@ -26,7 +26,12 @@ module.exports = (api, options) => {
         .end()
       .alias
         .set('@', api.resolve('src'))
-        .set('vue$', options.compiler ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.runtime.esm.js')
+        .set(
+          'vue$',
+          options.runtimeCompiler
+            ? 'vue/dist/vue.esm.js'
+            : 'vue/dist/vue.runtime.esm.js'
+        )
 
     webpackConfig.resolveLoader
       .set('symlinks', true)

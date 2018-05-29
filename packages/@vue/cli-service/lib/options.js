@@ -5,14 +5,16 @@ const schema = createSchema(joi => joi.object({
   devBaseUrl: joi.string(),
   outputDir: joi.string(),
   assetsDir: joi.string(),
-  compiler: joi.boolean(),
+  runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
+  pages: joi.object(),
 
   // css
   css: joi.object({
+    modules: joi.boolean(),
     localIdentName: joi.string(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
@@ -65,8 +67,12 @@ exports.defaults = () => ({
   // enabled by default if the machine has more than 1 cores
   parallel: require('os').cpus().length > 1,
 
+  // multi-page config
+  pages: undefined,
+
   css: {
     // extract: true,
+    // modules: false,
     // localIdentName: '[name]_[local]_[hash:base64:5]',
     // sourceMap: false,
     // loaderOptions: {}

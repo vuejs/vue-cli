@@ -22,12 +22,15 @@ const genConfig = (pkg = {}, env) => {
   return config
 }
 
-const findRule = (config, lang, index = 2) => {
+const findRule = (config, lang, index = 3) => {
   const baseRule = config.module.rules.find(rule => {
     return rule.test.test(`.${lang}`)
   })
-  // all CSS rules have oneOf with two child rules, one for <style lang="module">
-  // and one for normal imports
+  // all CSS rules have 4 oneOf rules:
+  // - <style lang="module"> in Vue files
+  // - <style> in Vue files
+  // - *.modules.css imports from JS
+  // - *.css imports from JS
   return baseRule.oneOf[index]
 }
 
@@ -76,7 +79,13 @@ test('production defaults', () => {
 })
 
 test('CSS Modules rules', () => {
-  const config = genConfig()
+  const config = genConfig({
+    vue: {
+      css: {
+        modules: true
+      }
+    }
+  })
   LANGS.forEach(lang => {
     const expected = {
       importLoaders: lang === 'css' ? 1 : 2, // no postcss-loader
@@ -85,10 +94,12 @@ test('CSS Modules rules', () => {
       sourceMap: false,
       modules: true
     }
-    // module-query rules
+    // vue-modules rules
     expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
-    // module-ext rules
-    expect(findOptions(config, lang, 'css', 1)).toEqual(expected)
+    // normal-modules rules
+    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
+    // normal rules
+    expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
   })
 })
 
