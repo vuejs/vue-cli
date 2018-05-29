@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.0.0-beta.11",
+  "version": "3.0.0-beta.12",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -35,11 +35,11 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.11",
-    "@vue/cli-plugin-e2e-cypress": "^3.0.0-beta.11",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.11",
-    "@vue/cli-service": "^3.0.0-beta.11",
-    "@vue/eslint-config-standard": "^3.0.0-beta.11",
+    "@vue/cli-plugin-babel": "^3.0.0-beta.12",
+    "@vue/cli-plugin-e2e-cypress": "^3.0.0-beta.12",
+    "@vue/cli-plugin-eslint": "^3.0.0-beta.12",
+    "@vue/cli-service": "^3.0.0-beta.12",
+    "@vue/eslint-config-standard": "^3.0.0-beta.12",
     "@vue/ui": "^0.2.5",
     "ansi_up": "^2.0.2",
     "cross-env": "^5.1.5",

@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "3.0.0-beta.11",
+  "version": "3.0.0-beta.12",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
