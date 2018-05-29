@@ -162,7 +162,7 @@ module.exports = (api, options) => {
         let copied = ''
         if (isFirstCompile && args.copy) {
           require('clipboardy').write(urls.localUrlForBrowser)
-          copied = chalk.dim('(copied!)')
+          copied = chalk.dim('(copied to clipboard)')
         }
 
         console.log()
