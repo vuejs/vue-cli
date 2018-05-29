@@ -24,6 +24,7 @@
     "graphql-tag": "^2.9.2",
     "graphql-type-json": "^0.2.0",
     "js-yaml": "^3.11.0",
+    "launch-editor": "^2.2.1",
     "lodash.merge": "^4.6.1",
     "lowdb": "^1.0.0",
     "lru-cache": "^4.1.2",
