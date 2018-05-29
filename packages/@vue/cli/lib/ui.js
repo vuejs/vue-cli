@@ -11,6 +11,7 @@ async function ui (options = {}, context = process.cwd()) {
   process.env.VUE_APP_CLI_UI_URL = ''
 
   if (!options.dev) {
+    // Optimize express
     process.env.NODE_ENV = 'production'
   }
 
@@ -38,6 +39,10 @@ async function ui (options = {}, context = process.cwd()) {
   }
 
   server(opts, () => {
+    // Reset for yarn/npm to work correctly
+    process.env.NODE_ENV = undefined
+
+    // Open browser
     const url = `http://localhost:${port}`
     if (!options.quiet) log(`🌠  Ready on ${url}`)
     if (options.headless) {

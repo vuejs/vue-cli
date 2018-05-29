@@ -1,5 +1,9 @@
 {
   "components": {
+    "connection-status": {
+      "disconnected": "Disconnected from UI server",
+      "connected": "Connected!"
+    },
     "file-diff": {
       "binary": "Binary file not shown",
       "actions": {

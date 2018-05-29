@@ -6,5 +6,8 @@ module.exports = {
   ],
   globals: {
     ClientAddonApi: false
-  }
+  },
+  plugins: [
+    'graphql'
+  ]
 }

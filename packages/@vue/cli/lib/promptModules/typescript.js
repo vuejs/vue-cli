@@ -12,7 +12,8 @@ module.exports = cli => {
     name: 'tsClassComponent',
     when: answers => answers.features.includes('ts'),
     type: 'confirm',
-    message: 'Use class-style component syntax?'
+    message: 'Use class-style component syntax?',
+    default: true
   })
 
   cli.injectPrompt({

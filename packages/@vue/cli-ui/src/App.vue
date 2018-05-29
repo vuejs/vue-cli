@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="app">
+    <ConnectionStatus v-if="ready" />
     <div v-if="ready" class="content">
       <router-view/>
     </div>
@@ -39,8 +40,11 @@ export default {
 .app
   display grid
   grid-template-columns 1fr
-  grid-template-rows 1fr auto
-  grid-template-areas "content" "status"
+  grid-template-rows auto 1fr auto
+  grid-template-areas "connection" "content" "status"
+
+.connection-status
+  grid-area connection
 
 .content
   grid-area content
