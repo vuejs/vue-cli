@@ -1,4 +1,5 @@
 const path = require('path')
+const hash = require('hash-sum')
 const { matchesPluginId } = require('@vue/cli-shared-utils')
 
 // Note: if a plugin-registered command needs to run in a specific default mode,
@@ -113,6 +114,48 @@ class PluginAPI {
    */
   resolveChainableWebpackConfig () {
     return this.service.resolveChainableWebpackConfig()
+  }
+
+  /**
+   * Generate a cache identifier from a number of variables
+   */
+  genCacheConfig (id, partialIdentifier, configFiles) {
+    const fs = require('fs')
+    const cacheDirectory = this.resolve(`node_modules/.cache/${id}`)
+
+    const variables = {
+      partialIdentifier,
+      'cli-service': require('../package.json').version,
+      'cache-loader': require('cache-loader/package.json').version,
+      env: process.env.NODE_ENV,
+      test: !!process.env.VUE_CLI_TEST,
+      config: [
+        this.service.projectOptions.chainWebpack,
+        this.service.projectOptions.configureWebpack
+      ]
+    }
+
+    if (configFiles) {
+      const readConfig = file => {
+        const absolutePath = this.resolve(file)
+        if (fs.existsSync(absolutePath)) {
+          return fs.readFileSync(absolutePath, 'utf-8')
+        }
+      }
+      if (!Array.isArray(configFiles)) {
+        configFiles = [configFiles]
+      }
+      for (const file of configFiles) {
+        const content = readConfig(file)
+        if (content) {
+          variables.configFiles = content
+          break
+        }
+      }
+    }
+
+    const cacheIdentifier = hash(variables)
+    return { cacheDirectory, cacheIdentifier }
   }
 }
 

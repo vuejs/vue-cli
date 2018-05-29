@@ -46,9 +46,11 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-bable ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-
-    const { genCacheConfig } = require('@vue/cli-shared-utils')
-    const vueLoaderCacheConfig = genCacheConfig(api, options, 'vue-loader')
+    const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
+      'vue-loader': require('vue-loader/package.json').version,
+      '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
+      'vue-template-compiler': require('vue-template-compiler/package.json').version
+    })
 
     webpackConfig.module
       .rule('vue')

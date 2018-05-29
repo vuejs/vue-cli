@@ -5,14 +5,12 @@ module.exports = (api, options) => {
     // eslint-loader doesn't bust cache when eslint config changes
     // so we have to manually generate a cache identifier that takes the config
     // into account.
-    const { genCacheConfig } = require('@vue/cli-shared-utils')
-    const { cacheIdentifier } = genCacheConfig(
-      api,
-      options,
-      [
-        'eslint-loader',
-        'eslint'
-      ],
+    const { cacheIdentifier } = api.genCacheConfig(
+      'eslint-loader',
+      {
+        'eslint-loader': require('eslint-loader/package.json').version,
+        'eslint': require('eslint/package.json').version
+      },
       [
         '.eslintrc.js',
         '.eslintrc.yaml',

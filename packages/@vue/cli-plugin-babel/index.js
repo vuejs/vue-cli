@@ -1,5 +1,4 @@
 module.exports = (api, options) => {
-  const { genCacheConfig } = require('@vue/cli-shared-utils')
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
 
@@ -27,7 +26,11 @@ module.exports = (api, options) => {
           .end()
         .use('cache-loader')
           .loader('cache-loader')
-          .options(genCacheConfig(api, options, 'babel-loader', 'babel.config.js'))
+          .options(api.genCacheConfig('babel-loader', {
+            '@babel/core': require('@babel/core/package.json').version,
+            '@vue/babel-preset-app': require('@vue/babel-preset-app').version,
+            'babel-loader': require('babel-loader/package.json').version
+          }, 'babel.config.js'))
           .end()
 
     if (useThreads) {

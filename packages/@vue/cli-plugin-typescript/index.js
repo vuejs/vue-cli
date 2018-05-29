@@ -1,6 +1,5 @@
 module.exports = (api, options) => {
   const fs = require('fs')
-  const { genCacheConfig } = require('@vue/cli-shared-utils')
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
 
   api.chainWebpack(config => {
@@ -23,7 +22,10 @@ module.exports = (api, options) => {
 
     addLoader({
       loader: 'cache-loader',
-      options: genCacheConfig(api, options, 'ts-loader', 'tsconfig.json')
+      options: api.genCacheConfig('ts-loader', {
+        'ts-loader': require('ts-loader/package.json').version,
+        'typescript': require('typescript/package.json').versiono
+      }, 'tsconfig.json')
     })
 
     if (useThreads) {
