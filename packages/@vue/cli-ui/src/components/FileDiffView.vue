@@ -46,6 +46,7 @@
         <VueButton
           :label="$t('components.file-diff-view.actions.skip')"
           class="big"
+          data-testid="skip-button"
           @click="skip()"
         />
       </template>
@@ -54,7 +55,6 @@
           icon-left="done"
           :label="$t('components.file-diff-view.actions.continue')"
           class="big primary"
-          data-testid="skip-button"
           @click="skip()"
         />
         <VueButton

@@ -302,7 +302,7 @@ async function create (input, context) {
     })
 
     // Create
-    await creator.create({}, preset)
+    await creator.create({ git: true }, preset)
     removeCreator()
 
     notifier.notify({
