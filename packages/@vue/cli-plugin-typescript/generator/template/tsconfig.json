@@ -4,6 +4,7 @@
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
+    "importHelpers": true,
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
