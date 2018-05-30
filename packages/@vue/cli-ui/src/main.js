@@ -31,7 +31,7 @@ Vue.use(Responsive, {
       return !this.tablet
     },
     wide () {
-      return this.width >= 1600
+      return this.width >= 1300
     }
   }
 })

@@ -1,6 +1,7 @@
 <template>
   <div class="top-bar">
     <VueDropdown
+      v-if="$responsive.wide"
       :label="projectCurrent ? projectCurrent.name : $t('components.status-bar.project.empty')"
       class="current-project"
       icon-right="arrow_drop_down"
@@ -13,6 +14,8 @@
         icon-left="star"
         @click="openProject(project)"
       />
+
+      <div v-if="!favoriteProjects.length" class="vue-ui-empty">{{ $t('components.top-bar.no-favorites') }}</div>
 
       <div class="dropdown-separator"/>
 
@@ -46,7 +49,7 @@ export default {
     favoriteProjects () {
       if (!this.projects) return []
       return this.projects.filter(
-        p => p.favorite
+        p => p.favorite && (!this.projectCurrent || this.projectCurrent.id !== p.id)
       )
     }
   },
@@ -84,6 +87,7 @@ export default {
 
 .current-project
   min-width (180px - $padding-item * 2)
+  margin-right ($padding-item * 2)
 
   >>> .trigger
     .vue-ui-button
@@ -92,8 +96,10 @@ export default {
         width 20px
         height @width
 
+.vue-ui-empty
+  padding 6px
+
 .title
   font-size 22px
   font-weight lighter
-  margin-left $padding-item
 </style>

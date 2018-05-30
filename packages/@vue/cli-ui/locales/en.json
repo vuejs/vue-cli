@@ -118,6 +118,9 @@
         "scroll": "Scroll to bottom"
       }
     },
+    "top-bar": {
+      "no-favorites": "No favorite projects"
+    },
     "view-badge": {
       "labels": {
         "tasks": {
