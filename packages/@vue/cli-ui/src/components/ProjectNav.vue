@@ -41,7 +41,6 @@ export default {
   apollo: {
     views: {
       query: VIEWS,
-      fetchPolicy: 'cache-and-network',
       subscribeToMore: [
         {
           document: VIEW_ADDED,

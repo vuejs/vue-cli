@@ -59,7 +59,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "vue": "^2.5.16",
-    "vue-apollo": "^3.0.0-beta.5",
+    "vue-apollo": "^3.0.0-beta.16",
     "vue-color": "^2.4.6",
     "vue-i18n": "^7.6.0",
     "vue-instantsearch": "^1.5.1",

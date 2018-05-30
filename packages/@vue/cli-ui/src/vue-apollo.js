@@ -31,7 +31,12 @@ export const { apolloClient, wsClient } = createApolloClient(options)
 
 // Create vue apollo provider
 export const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
+  defaultClient: apolloClient,
+  defaultOptions: {
+    $query: {
+      fetchPolicy: 'cache-and-network'
+    }
+  }
 })
 
 /* Connected state */

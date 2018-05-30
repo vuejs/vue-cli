@@ -33,7 +33,6 @@
     <ApolloQuery
       ref="logs"
       :query="require('../graphql/consoleLogs.gql')"
-      fetch-policy="cache-and-network"
       class="logs"
       @result="scrollToBottom()"
     >

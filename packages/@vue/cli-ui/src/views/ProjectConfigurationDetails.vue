@@ -78,7 +78,6 @@ export default {
           id: this.id
         }
       },
-      fetchPolicy: 'cache-and-network'
     }
   },
 

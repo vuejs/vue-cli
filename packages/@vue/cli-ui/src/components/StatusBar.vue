@@ -78,12 +78,10 @@ export default {
   apollo: {
     projectCurrent: {
       query: PROJECT_CURRENT,
-      fetchPolicy: 'cache-and-network'
     },
 
     consoleLogLast: {
       query: CONSOLE_LOG_LAST,
-      fetchPolicy: 'cache-and-network'
     },
 
     $subscribe: {

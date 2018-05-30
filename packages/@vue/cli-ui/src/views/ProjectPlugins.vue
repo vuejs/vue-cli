@@ -16,7 +16,6 @@
 
       <ApolloQuery
         :query="require('../graphql/projectPlugins.gql')"
-        fetch-policy="cache-and-network"
       >
         <template slot-scope="{ result: { data, loading } }">
           <div class="cta-text">{{ $t('views.project-plugins.heading') }}</div>
