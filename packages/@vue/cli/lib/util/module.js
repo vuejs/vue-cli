@@ -7,21 +7,21 @@ function resolveFallback (request, options) {
 
   const paths = []
 
-  for (var i = 0; i < options.paths.length; i++) {
+  for (let i = 0; i < options.paths.length; i++) {
     const path = options.paths[i]
     fakeParent.paths = Module._nodeModulePaths(path)
     const lookupPaths = Module._resolveLookupPaths(request, fakeParent, true)
 
     if (!paths.includes(path)) paths.push(path)
 
-    for (var j = 0; j < lookupPaths.length; j++) {
+    for (let j = 0; j < lookupPaths.length; j++) {
       if (!paths.includes(lookupPaths[j])) paths.push(lookupPaths[j])
     }
   }
 
-  var filename = Module._findPath(request, paths, isMain)
+  const filename = Module._findPath(request, paths, isMain)
   if (!filename) {
-    var err = new Error(`Cannot find module '${request}'`)
+    const err = new Error(`Cannot find module '${request}'`)
     err.code = 'MODULE_NOT_FOUND'
     throw err
   }
