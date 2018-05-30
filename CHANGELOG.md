@@ -1,3 +1,36 @@
+<a name="3.0.0-beta.15"></a>
+# [3.0.0-beta.15](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2018-05-30)
+
+
+### Bug Fixes
+
+* **cli-service:** make devBaseUrl work properly in serve command ([#1405](https://github.com/vuejs/vue-cli/issues/1405)) ([04600e6](https://github.com/vuejs/vue-cli/commit/04600e6))
+* **typescript:** avoid including router file when router is not selected ([4d00161](https://github.com/vuejs/vue-cli/commit/4d00161))
+* **unit-mocha:** ensure correct mode for webpack config ([e17f78c](https://github.com/vuejs/vue-cli/commit/e17f78c)), closes [#1389](https://github.com/vuejs/vue-cli/issues/1389)
+* e2e runner args passing ([05391b6](https://github.com/vuejs/vue-cli/commit/05391b6)), closes [#1393](https://github.com/vuejs/vue-cli/issues/1393)
+* remove console.log ([7d98d69](https://github.com/vuejs/vue-cli/commit/7d98d69))
+* require.resolve fallback on node < 8.10.0 ([#1404](https://github.com/vuejs/vue-cli/issues/1404)) ([ef2ecf5](https://github.com/vuejs/vue-cli/commit/ef2ecf5)), closes [#1369](https://github.com/vuejs/vue-cli/issues/1369)
+* UI fixes ([#1397](https://github.com/vuejs/vue-cli/issues/1397)) ([4f39461](https://github.com/vuejs/vue-cli/commit/4f39461))
+
+
+### Features
+
+* respect baseUrl during development ([a9e1286](https://github.com/vuejs/vue-cli/commit/a9e1286))
+
+
+### Performance Improvements
+
+* use importHelpers: true in tsconfig.json ([60f0a0a](https://github.com/vuejs/vue-cli/commit/60f0a0a))
+
+
+### BREAKING CHANGES
+
+* `devBaseUrl` option has been removed. `baseUrl` now works for
+both development and production. To use different paths for prod/dev, use
+conditional values based on `process.env.NODE_ENV` in `vue.config.js`.
+
+
+
 <a name="3.0.0-beta.14"></a>
 # [3.0.0-beta.14](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.12...v3.0.0-beta.14) (2018-05-29)
 
