@@ -1,8 +1,6 @@
 module.exports = (api, options) => {
   const { info, chalk, execa } = require('@vue/cli-shared-utils')
 
-  console.log(require('@vue/cli-shared-utils'))
-
   api.registerCommand('test:e2e', {
     description: 'run e2e tests with Cypress',
     usage: 'vue-cli-service test:e2e [options]',
