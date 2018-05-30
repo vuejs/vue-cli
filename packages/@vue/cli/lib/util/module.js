@@ -1,4 +1,4 @@
-const { minNode } = require('./nodeVersion')
+const semver = require('semver')
 
 function resolveFallback (request, options) {
   const Module = require('module')
@@ -28,7 +28,7 @@ function resolveFallback (request, options) {
   return filename
 }
 
-const resolve = minNode(8, 10) ? require.resolve : resolveFallback
+const resolve = semver.satisfies(process.version, '>=8.10.0') ? require.resolve : resolveFallback
 
 exports.resolveModule = function (request, context) {
   let resolvedPath
