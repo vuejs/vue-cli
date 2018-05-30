@@ -3,7 +3,6 @@
     <VueDropdown
       :label="projectCurrent ? projectCurrent.name : $t('components.status-bar.project.empty')"
       class="current-project"
-      icon-left="work"
       icon-right="arrow_drop_down"
       button-class="flat round"
     >
