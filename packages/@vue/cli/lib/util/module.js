@@ -1,7 +1,39 @@
+const { minNode } = require('./nodeVersion')
+
+function resolveFallback (request, options) {
+  const Module = require('module')
+  const isMain = false
+  const fakeParent = new Module('', null)
+
+  const paths = []
+
+  for (var i = 0; i < options.paths.length; i++) {
+    const path = options.paths[i]
+    fakeParent.paths = Module._nodeModulePaths(path)
+    const lookupPaths = Module._resolveLookupPaths(request, fakeParent, true)
+
+    if (!paths.includes(path)) paths.push(path)
+
+    for (var j = 0; j < lookupPaths.length; j++) {
+      if (!paths.includes(lookupPaths[j])) paths.push(lookupPaths[j])
+    }
+  }
+
+  var filename = Module._findPath(request, paths, isMain)
+  if (!filename) {
+    var err = new Error(`Cannot find module '${request}'`)
+    err.code = 'MODULE_NOT_FOUND'
+    throw err
+  }
+  return filename
+}
+
+const resolve = minNode(8, 10) ? require.resolve : resolveFallback
+
 exports.resolveModule = function (request, context) {
   let resolvedPath
   try {
-    resolvedPath = require.resolve(request, {
+    resolvedPath = resolve(request, {
       paths: [context]
     })
   } catch (e) {}
