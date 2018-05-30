@@ -144,5 +144,5 @@ export default {
   .logger-message
     font-size 12px
     &:hover
-      background lighten(@background, 40%)
+      background rgba($vue-ui-color-primary, .05)
 </style>
