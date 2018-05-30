@@ -22,6 +22,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@vue/cli-shared-utils": "^3.0.0-beta.14",
     "cypress": "^2.1.0",
     "eslint-plugin-cypress": "^2.0.1"
   }

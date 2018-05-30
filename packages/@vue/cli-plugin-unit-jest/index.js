@@ -13,7 +13,7 @@ module.exports = api => {
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true
 
-    const execa = require('execa')
+    const { execa } = require('@vue/cli-shared-utils')
     const jestBinPath = require.resolve('jest/bin/jest')
 
     return new Promise((resolve, reject) => {

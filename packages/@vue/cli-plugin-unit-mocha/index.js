@@ -43,7 +43,7 @@ module.exports = api => {
     // for @vue/babel-preset-app
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     // start runner
-    const execa = require('execa')
+    const { execa } = require('@vue/cli-shared-utils')
     const bin = require.resolve('mocha-webpack/bin/mocha-webpack')
     const hasInlineFilesGlob = args._ && args._.length
     const argv = [

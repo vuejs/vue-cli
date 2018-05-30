@@ -4,6 +4,7 @@ module.exports = function lint (args = {}, api, silent) {
   const path = require('path')
   const globby = require('globby')
   const tslint = require('tslint')
+  /* eslint-disable-next-line node/no-extraneous-require */
   const vueCompiler = require('vue-template-compiler')
 
   const options = {

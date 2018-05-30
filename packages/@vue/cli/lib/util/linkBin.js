@@ -2,8 +2,7 @@
 
 const fs = require('fs-extra')
 const path = require('path')
-const { promisify } = require('util')
-const cmdShim = promisify(require('cmd-shim'))
+const { cmdShim } = require('@vue/cli-shared-utils')
 
 exports.linkBin = async (src, dest) => {
   if (!process.env.VUE_CLI_TEST && !process.env.VUE_CLI_DEBUG) {

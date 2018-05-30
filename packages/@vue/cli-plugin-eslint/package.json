@@ -22,6 +22,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@vue/cli-shared-utils": "^3.0.0-beta.14",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",

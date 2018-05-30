@@ -45,6 +45,7 @@
     "babel-core": "7.0.0-bridge.0",
     "debug": "^3.1.0",
     "eslint": "^4.16.0",
+    "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-vue-libs": "^2.1.0",
     "globby": "^8.0.1",
     "http-server": "^0.11.1",
