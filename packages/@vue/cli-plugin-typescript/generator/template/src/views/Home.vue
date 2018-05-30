@@ -1,5 +1,6 @@
 ---
 extend: '@vue/cli-service/generator/router/template/src/views/Home.vue'
+when: 'rootOptions.router'
 replace:
   - !!js/regexp /Welcome to Your Vue\.js App/
   - !!js/regexp /<script>[^]*?<\/script>/

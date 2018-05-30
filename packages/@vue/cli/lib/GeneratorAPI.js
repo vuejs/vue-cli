@@ -297,6 +297,13 @@ function renderFile (name, data, ejsOptions) {
         finalTemplate = finalTemplate.replace(parsed.replace, content.trim())
       }
     }
+    if (parsed.when) {
+      finalTemplate = (
+        `<%_ if (${parsed.when}) { _%>` +
+          finalTemplate +
+        `<%_ } _%>`
+      )
+    }
   }
 
   return ejs.render(finalTemplate, data, ejsOptions)
