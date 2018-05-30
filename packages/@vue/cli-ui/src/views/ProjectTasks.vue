@@ -9,7 +9,7 @@
       >
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
-            v-if="loading"
+            v-if="loading && !data"
             class="overlay"
           />
 

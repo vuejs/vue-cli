@@ -21,7 +21,7 @@
           <div class="cta-text">{{ $t('views.project-plugins.heading') }}</div>
 
           <VueLoadingIndicator
-            v-if="loading"
+            v-if="loading && !data"
             class="overlay"
           />
 
