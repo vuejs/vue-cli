@@ -69,20 +69,13 @@ let lastRoute
 export default {
   data () {
     return {
-      consoleLogLast: null,
-      showLogs: false,
-      projectCurrent: null
+      showLogs: false
     }
   },
 
   apollo: {
-    projectCurrent: {
-      query: PROJECT_CURRENT
-    },
-
-    consoleLogLast: {
-      query: CONSOLE_LOG_LAST
-    },
+    projectCurrent: PROJECT_CURRENT,
+    consoleLogLast: CONSOLE_LOG_LAST,
 
     $subscribe: {
       consoleLogAdded: {
@@ -134,12 +127,14 @@ export default {
 @import "~@/style/imports"
 
 .status-bar
-  $bg = $vue-ui-color-light-neutral
+  position relative
+  z-index 1
+  box-shadow 0 -2px 10px rgba(black, .05)
 
   .content
     h-box()
     align-items center
-    background $bg
+    background $vue-ui-color-light
     font-size $padding-item
     height 28px
 
@@ -153,7 +148,7 @@ export default {
 
     &:hover
       opacity 1
-      background lighten($bg, 40%)
+      background lighten($vue-ui-color-light-neutral, 30%)
 
     > .vue-ui-icon + *
       margin-left 4px

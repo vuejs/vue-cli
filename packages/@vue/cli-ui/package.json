@@ -39,7 +39,7 @@
     "semver": "^5.5.0",
     "shortid": "^2.2.8",
     "terminate": "^2.1.0",
-    "vue-cli-plugin-apollo": "^0.13.0",
+    "vue-cli-plugin-apollo": "^0.13.4",
     "watch": "^1.0.2"
   },
   "devDependencies": {
@@ -55,6 +55,7 @@
     "eslint-plugin-graphql": "^2.1.1",
     "file-icons-js": "^1.0.3",
     "lint-staged": "^6.0.0",
+    "portal-vue": "^1.3.0",
     "start-server-and-test": "^1.4.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",

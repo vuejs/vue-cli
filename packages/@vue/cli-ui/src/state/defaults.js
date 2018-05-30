@@ -1,3 +1,4 @@
 export default {
-  connected: false
+  connected: true,
+  loading: 0
 }

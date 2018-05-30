@@ -5,31 +5,17 @@
 
 import Vue from 'vue'
 
-// To extract the component name
-const nameReg = /([a-z0-9]+)\./i
+// https://webpack.js.org/guides/dependency-management/#require-context
+const requireComponent = require.context('./components', false, /[a-z0-9]+\.(jsx?|vue)$/i)
 
-function registerGlobalComponents (components) {
-  components.keys().forEach(key => {
-    const name = key.match(nameReg)[1]
-    Vue.component(name, {
-      name,
-      ...components(key).default
-    })
-  })
-}
-
-// Require all the components that start with 'BaseXXX.vue'
-let components = require.context('./components', true, /[a-z0-9]+\.(jsx?|vue)$/i)
-registerGlobalComponents(components)
-
-// Webpack HMR
-if (module.hot) {
-  module.hot.accept(components.id, () => {
-    try {
-      const components = require.context('./components', true, /[a-z0-9]+\.(jsx?|vue)$/i)
-      registerGlobalComponents(components)
-    } catch (e) {
-      location.reload()
-    }
-  })
-}
+// For each matching file name...
+requireComponent.keys().forEach(fileName => {
+  const componentConfig = requireComponent(fileName)
+  const componentName = fileName
+    // Remove the "./" from the beginning
+    .replace(/^\.\//, '')
+    // Remove the file extension from the end
+    .replace(/\.\w+$/, '')
+  // Globally register the component
+  Vue.component(componentName, componentConfig.default || componentConfig)
+})

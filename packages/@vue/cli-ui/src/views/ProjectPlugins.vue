@@ -4,11 +4,11 @@
       :title="$t('views.project-plugins.title')"
       class="limit-width"
     >
-      <template slot="header">
+      <template slot="actions">
         <VueButton
           icon-left="add"
           :label="$t('views.project-plugins.button')"
-          class="primary"
+          class="primary round"
           :to="{ name: 'project-plugins-add' }"
           data-testid="add-plugin"
         />
