@@ -77,7 +77,7 @@ export default {
         return {
           id: this.id
         }
-      },
+      }
     }
   },
 

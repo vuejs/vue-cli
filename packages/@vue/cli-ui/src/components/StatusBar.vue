@@ -77,11 +77,11 @@ export default {
 
   apollo: {
     projectCurrent: {
-      query: PROJECT_CURRENT,
+      query: PROJECT_CURRENT
     },
 
     consoleLogLast: {
-      query: CONSOLE_LOG_LAST,
+      query: CONSOLE_LOG_LAST
     },
 
     $subscribe: {

@@ -88,7 +88,7 @@ export default {
         return {
           id: this.plugin.id
         }
-      },
+      }
     },
 
     pluginLogo: {
