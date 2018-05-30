@@ -11,7 +11,8 @@
           icon-left="open_in_browser"
           :label="$t('vue-webpack.dashboard.open-app')"
           :disabled="!serveUrl"
-          @click="$callPluginAction('webpack-dashboard-open-app')"
+          :href="serveUrl"
+          target="_blank"
         />
         <VueIcon
           icon="lens"

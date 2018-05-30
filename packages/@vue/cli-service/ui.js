@@ -1,7 +1,5 @@
-const { openBrowser } = require('@vue/cli-shared-utils')
-
 module.exports = api => {
-  const { setSharedData, getSharedData, removeSharedData, onAction } = api.namespace('webpack-dashboard-')
+  const { setSharedData, removeSharedData } = api.namespace('webpack-dashboard-')
 
   function resetSharedData (key) {
     setSharedData(`${key}-status`, null)
@@ -257,9 +255,5 @@ module.exports = api => {
     if (data.vueServe) {
       setSharedData('serve-url', data.vueServe.url)
     }
-  })
-  onAction('open-app', () => {
-    const url = getSharedData('serve-url')
-    url && openBrowser(url.value)
   })
 }
