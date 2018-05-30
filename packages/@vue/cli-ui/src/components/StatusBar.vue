@@ -69,7 +69,8 @@ let lastRoute
 export default {
   data () {
     return {
-      showLogs: false
+      showLogs: false,
+      consoleLogLast: null
     }
   },
 
