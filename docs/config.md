@@ -13,11 +13,6 @@ module.exports = {
   // then change this to '/my-app/'
   baseUrl: '/',
 
-  // baseUrl, but for the dev server.
-  // you'll only need this if you need to serve your dev server under
-  // a specific sub-path in order to work with your dev setup.
-  devBaseUrl: '/',
-
   // where to output built files
   outputDir: 'dist',
 

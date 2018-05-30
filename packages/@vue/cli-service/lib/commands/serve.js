@@ -64,10 +64,7 @@ module.exports = (api, options) => {
     if (!isProduction) {
       const devClients = [
         // dev server client
-        require.resolve(`webpack-dev-server/client`) +
-          // fix webpack-dev-server socket url to /sockjs-node
-          // in case it uses options.devBaseUrl
-          '?/sockjs-node',
+        require.resolve(`webpack-dev-server/client`) + '?/sockjs-node',
         // hmr client
         require.resolve(projectDevServerOptions.hotOnly
           ? 'webpack/hot/only-dev-server'
@@ -94,7 +91,8 @@ module.exports = (api, options) => {
     const urls = prepareURLs(
       useHttps ? 'https' : 'http',
       host,
-      port
+      port,
+      options.baseUrl
     )
 
     const proxySettings = prepareProxy(
@@ -108,7 +106,7 @@ module.exports = (api, options) => {
       historyApiFallback: {
         disableDotRule: true,
         rewrites: [
-          { from: /./, to: path.posix.join(options.devBaseUrl, 'index.html') }
+          { from: /./, to: path.posix.join(options.baseUrl, 'index.html') }
         ]
       },
       contentBase: api.resolve('public'),
@@ -116,7 +114,7 @@ module.exports = (api, options) => {
       hot: !isProduction,
       quiet: true,
       compress: isProduction,
-      publicPath: options.devBaseUrl,
+      publicPath: options.baseUrl,
       overlay: isProduction // TODO disable this
         ? false
         : { warnings: false, errors: true }
