@@ -66,4 +66,9 @@ export default {
 
   >>> > *
     space-between-x($padding-item)
+
+.project-select-list-item
+  &.open
+    &:not(:hover)
+      background rgba($vue-ui-color-primary, .05)
 </style>
