@@ -48,6 +48,9 @@ exports.defaults = () => ({
   // project deployment base
   baseUrl: '/',
 
+  // baseUrl, but for the dev server.
+  devBaseUrl: '/',
+
   // where to output built files
   outputDir: 'dist',
 

@@ -7,7 +7,7 @@ module.exports = (api, options) => {
       webpackConfig
         .devtool('cheap-module-eval-source-map')
         .output
-          .publicPath(options.devBaseUrl || '/')
+          .publicPath(options.devBaseUrl)
 
       webpackConfig
         .plugin('hmr')
