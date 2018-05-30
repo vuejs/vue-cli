@@ -29,6 +29,7 @@ module.exports = (api, options) => {
     // are running it in a mode with a production env, e.g. in E2E tests.
     const isProduction = process.env.NODE_ENV === 'production'
 
+    const path = require('path')
     const chalk = require('chalk')
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
@@ -63,7 +64,10 @@ module.exports = (api, options) => {
     if (!isProduction) {
       const devClients = [
         // dev server client
-        require.resolve(`webpack-dev-server/client`),
+        require.resolve(`webpack-dev-server/client`) +
+          // fix webpack-dev-server socket url to /sockjs-node
+          // in case it uses options.devBaseUrl
+          '?/sockjs-node',
         // hmr client
         require.resolve(projectDevServerOptions.hotOnly
           ? 'webpack/hot/only-dev-server'
@@ -102,14 +106,17 @@ module.exports = (api, options) => {
     const server = new WebpackDevServer(compiler, Object.assign({
       clientLogLevel: 'none',
       historyApiFallback: {
-        disableDotRule: true
+        disableDotRule: true,
+        rewrites: [
+          { from: /./, to: path.posix.join(options.devBaseUrl, 'index.html') }
+        ]
       },
       contentBase: api.resolve('public'),
       watchContentBase: !isProduction,
       hot: !isProduction,
       quiet: true,
       compress: isProduction,
-      publicPath: '/',
+      publicPath: options.devBaseUrl,
       overlay: isProduction // TODO disable this
         ? false
         : { warnings: false, errors: true }

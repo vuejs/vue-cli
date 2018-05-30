@@ -29,7 +29,7 @@ module.exports = (api, options) => {
             files: assets,
             options: pluginOptions
           }
-        }, resolveClientEnv(options.baseUrl, true /* raw */))
+        }, resolveClientEnv(options, true /* raw */))
       }
     }
 

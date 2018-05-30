@@ -1,13 +1,14 @@
 const prefixRE = /^VUE_APP_/
 
-module.exports = function resolveClientEnv (publicPath, raw) {
+module.exports = function resolveClientEnv (options, raw) {
+  const isProd = process.env.NODE_ENV === 'production'
   const env = {}
   Object.keys(process.env).forEach(key => {
     if (prefixRE.test(key) || key === 'NODE_ENV') {
       env[key] = process.env[key]
     }
   })
-  env.BASE_URL = publicPath
+  env.BASE_URL = isProd ? options.baseUrl : options.devBaseUrl
 
   if (raw) {
     return env

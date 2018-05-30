@@ -147,7 +147,7 @@ module.exports = (api, options) => {
     webpackConfig
       .plugin('define')
         .use(require('webpack/lib/DefinePlugin'), [
-          resolveClientEnv(options.baseUrl)
+          resolveClientEnv(options)
         ])
 
     webpackConfig
