@@ -1,9 +1,25 @@
 #!/usr/bin/env node
 
-require('commander')
+const chalk = require('chalk')
+const program = require('commander')
+
+program
   .version(require('../package').version)
   .usage('<command> [options]')
   .command('init', 'generate a new project from a template')
   .command('list', 'list available official templates')
   .command('build', 'prototype a new project')
-  .parse(process.argv)
+
+// output help information on unknown commands
+program
+  .arguments('<command>')
+  .action((cmd) => {
+    console.log()
+    console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
+    if (cmd === 'create') {
+      console.log(`  ` + chalk.cyan(`vue create`) + ' is a Vue CLI 3 only command and you are using Vue CLI 2.x.')
+    }
+    console.log()
+  })
+
+program.parse(process.argv)
