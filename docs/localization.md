@@ -4,7 +4,7 @@
 
 Follow those simple steps to propose a new language for the CLI UI!
 
-1. Run `navigator.languages` or `navigator.language` to get the language code for the new locale. Take only the first 2 characters. *For example: `'en-US'`, take `en`.*
+1. Run `navigator.languages` or `navigator.language` to get the language code for the new locale. *For example: `'fr'`.*
 
 2. Search NPM to see if a package called `vue-cli-locale-<language code>` doesn't already exist. If it does, please contribute to it by submitting PRs! If you don't find any, create a new package called `vue-cli-locale-<language code>`. *For example: `vue-cli-locale-fr`*
 
