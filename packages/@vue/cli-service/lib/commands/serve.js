@@ -64,7 +64,7 @@ module.exports = (api, options) => {
     if (!isProduction) {
       const devClients = [
         // dev server client
-        require.resolve(`webpack-dev-server/client`) + '?/sockjs-node',
+        require.resolve(`webpack-dev-server/client`) + (options.baseUrl !== '/' ? '?/sockjs-node' : ''),
         // hmr client
         require.resolve(projectDevServerOptions.hotOnly
           ? 'webpack/hot/only-dev-server'
