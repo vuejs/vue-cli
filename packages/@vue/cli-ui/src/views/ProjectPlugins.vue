@@ -4,11 +4,11 @@
       :title="$t('views.project-plugins.title')"
       class="limit-width"
     >
-      <template slot="header">
+      <template slot="actions">
         <VueButton
           icon-left="add"
           :label="$t('views.project-plugins.button')"
-          class="primary"
+          class="primary round"
           :to="{ name: 'project-plugins-add' }"
           data-testid="add-plugin"
         />
@@ -16,13 +16,12 @@
 
       <ApolloQuery
         :query="require('../graphql/projectPlugins.gql')"
-        fetch-policy="cache-and-network"
       >
         <template slot-scope="{ result: { data, loading } }">
           <div class="cta-text">{{ $t('views.project-plugins.heading') }}</div>
 
           <VueLoadingIndicator
-            v-if="loading"
+            v-if="loading && !data"
             class="overlay"
           />
 

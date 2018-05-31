@@ -5,6 +5,7 @@
       wide: $responsive.wide
     }"
   >
+    <TopBar />
     <ProjectNav/>
 
     <div v-if="ready" class="content">
@@ -40,11 +41,14 @@ export default {
 .project-home
   display grid
   grid-template-columns 46px 1fr
-  grid-template-rows auto
-  grid-template-areas "side-left content"
+  grid-template-rows auto 1fr
+  grid-template-areas "topbar topbar" "side-left content"
 
   &.wide
     grid-template-columns 180px 1fr
+
+.top-bar
+  grid-area topbar
 
 .project-nav
   grid-area side-left

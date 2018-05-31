@@ -5,12 +5,11 @@
     >
       <ApolloQuery
         :query="require('../graphql/tasks.gql')"
-        fetch-policy="cache-and-network"
         class="fill-height"
       >
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
-            v-if="loading"
+            v-if="loading && !data"
             class="overlay"
           />
 

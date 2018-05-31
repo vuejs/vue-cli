@@ -31,6 +31,9 @@
                       v-for="project of list"
                       :key="project.id"
                       :project="project"
+                      :class="{
+                        open: projectCurrent && projectCurrent.id === project.id
+                      }"
                       @click.native="openProject(project)"
                       @remove="removeProject(project)"
                       @favorite="toggleFavorite(project)"
@@ -52,19 +55,26 @@
 
 <script>
 import PROJECTS from '../graphql/projects.gql'
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import PROJECT_OPEN from '../graphql/projectOpen.gql'
 import PROJECT_REMOVE from '../graphql/projectRemove.gql'
 import PROJECT_SET_FAVORITE from '../graphql/projectSetFavorite.gql'
 
 export default {
+  apollo: {
+    projectCurrent: PROJECT_CURRENT
+  },
+
   methods: {
     async openProject (project) {
-      await this.$apollo.mutate({
-        mutation: PROJECT_OPEN,
-        variables: {
-          id: project.id
-        }
-      })
+      if (!this.projectCurrent || this.projectCurrent.id !== project.id) {
+        await this.$apollo.mutate({
+          mutation: PROJECT_OPEN,
+          variables: {
+            id: project.id
+          }
+        })
+      }
 
       this.$router.push({ name: 'project-home' })
     },

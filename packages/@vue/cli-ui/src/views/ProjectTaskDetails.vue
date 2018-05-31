@@ -187,7 +187,6 @@ export default {
           id: this.id
         }
       },
-      fetchPolicy: 'cache-and-network',
       async result ({ data, loading }) {
         if (!this.$_init && !loading && data && data.task && data.task.defaultView) {
           this.$_init = true

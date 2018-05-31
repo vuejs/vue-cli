@@ -10,6 +10,7 @@ This guide will walk you through the development of cli-ui specific features for
   - [Dev mode](#dev-mode)
   - [Project configurations](#project-configurations)
   - [Project tasks](#project-tasks)
+  - [Prompts](#prompts)
   - [Client addon](#client-addon)
   - [Custom views](#custom-views)
   - [Shared data](#shared-data)
@@ -111,6 +112,8 @@ api.describeConfig({
 })
 ```
 
+#### Config icon
+
 Specify an icon with either a file type (like `'json'`) or a file name (like `.babelrc` to get the babel icon). This is powered by file-icons.
 
 ```js
@@ -121,7 +124,11 @@ api.describeConfig({
 })
 ```
 
-Then you can specify which files will be read when loading the configuration and then written to:
+#### Config file
+
+By default, a configuration UI might read and write to a configuration file, for example `.eslintrc.js`.
+
+You can provide what are the possible files to be detected in the user project:
 
 ```js
 api.describeConfig({
@@ -138,6 +145,10 @@ api.describeConfig({
 
 Supported types: `json`, `yaml`, `js`, `package`.
 
+**⚠️ Currently, only 1 file can be read and written to at a time.**
+
+#### Display config prompts
+
 Use the `onRead` hook to return a list of prompts to be displayed for the configuration:
 
 ```js
@@ -151,25 +162,13 @@ api.describeConfig({
 })
 ```
 
-The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) prompts with the following additional fields (which are optional):
+Those prompts will be displayed in the configuration details pane.
 
-```js
-{
-  /* ... */
-  // Used to group the prompts into sections
-  group: 'Strongly recommended',
-  // Additional description
-  description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
-  // "More info" link
-  link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
-}
-```
+See [Prompts](#prompts) for more info.
 
-Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+#### Save config changes
 
-In addition to those, the UI supports special types that only works with it: `color`.
-
-Use the `onWrite` hook to write the data to the configuration file (or execute any node code):
+Use the `onWrite` hook to write the data to the configuration file (or execute any nodejs code):
 
 ```js
 api.describeConfig({
@@ -182,12 +181,12 @@ api.describeConfig({
 
 Arguments:
 
-- `prompts`: current prompts runtime objects
+- `prompts`: current prompts runtime objects (see below)
 - `answers`: answers data from the user inputs
 - `data`: read-only initial data read from the file
 - `file`: descriptor of the found file (`{ type: 'json', path: '...' }`)
 - `cwd`: current working directory
-- `api`: onWrite API
+- `api`: `onWrite API` (see below)
 
 Prompts runtime objects:
 
@@ -213,11 +212,28 @@ Prompts runtime objects:
 }
 ```
 
-onWrite API:
+`onWrite` API:
 
 - `assignData(newData)`: use `Object.assign` to update the config data before writing.
 - `setData(newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
-- `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provide (for example `JSON.parse`).
+- `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provided (for example `JSON.parse`).
+
+Example (from the ESLint plugin):
+
+```js
+api.describeConfig({
+  // ...
+
+  onWrite: async ({ api, prompts }) => {
+    // Update ESLint rules
+    const result = {}
+    for (const prompt of prompts) {
+      result[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
+    }
+    api.setData(result)
+  }
+})
+```
 
 ### Project tasks
 
@@ -233,7 +249,20 @@ api.describeTask({
   match: /vue-cli-service serve/,
   description: 'Compiles and hot-reloads for development',
   // "More info" link
-  link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve',
+  link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve'
+})
+```
+
+#### Tasks parameters
+
+You can add prompts to modify the command arguments. They will be displayed in a 'Parameters' modal.
+
+Example:
+
+```js
+api.describeTask({
+  // ...
+
   // Optional parameters (inquirer prompts)
   prompts: [
     {
@@ -262,7 +291,26 @@ api.describeTask({
       ],
       description: 'Specify env mode'
     }
-  ],
+  ]
+})
+```
+
+See [Prompts](#prompts) for more info.
+
+#### Task hooks
+
+Several hooks are available:
+
+- `onBeforeRun`
+- `onRun`
+- `onExit`
+
+For example, you can use the answers to the prompts (see above) to add new arguments to the command:
+
+```js
+api.describeTask({
+  // ...
+
   // Hooks
   // Modify arguments here
   onBeforeRun: async ({ answers, args }) => {
@@ -279,7 +327,18 @@ api.describeTask({
   onExit: async ({ args, child, cwd, code, signal }) => {
     // code: exit code
     // signal: kill signal used if any
-  },
+  }
+})
+```
+
+#### Task views
+
+You can display custom views in the task details pane using the `ClientAddon` API:
+
+```js
+api.describeTask({
+  // ...
+
   // Additional views (for example the webpack dashboard)
   // By default, there is the 'output' view which displays the terminal output
   views: [
@@ -299,9 +358,16 @@ api.describeTask({
 })
 ```
 
+See [Client addon](#client-addon) for more info.
+
+
 #### Add new tasks
 
-You can also add entirely new tasks which aren't in the `package.json` scripts. Those tasks will only appear in the cli UI:
+You can also add entirely new tasks which aren't in the `package.json` scripts with `api.addTask` instead of `api.describeTask`. Those tasks will only appear in the cli UI.
+
+**You need to provide a `command` option instead of `match`.**
+
+Example:
 
 ```js
 api.addTask({
@@ -322,6 +388,36 @@ api.addTask({
 ```
 
 **⚠️ The `command` will run a node context. This means you can call node bin commands like you would normally do in the `package.json` scripts.**
+
+### Prompts
+
+The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) objects.
+
+However, you can add the following additional fields (which are optional and only used by the UI):
+
+```js
+{
+  /* ... */
+  // Used to group the prompts into sections
+  group: 'Strongly recommended',
+  // Additional description
+  description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
+  // "More info" link
+  link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
+}
+```
+
+Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+
+In addition to those, the UI supports special types that only works with it:
+
+- `color`: displays a color picker.
+
+#### Prompts for invocation
+
+In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
+
+**⚠️ Currently, the inquirer types which aren't supported (see above) whill not work properly in the UI.**
 
 ### Client addon
 
@@ -518,7 +614,9 @@ ClientAddonApi.addRoutes('vue-webpack', [
 
 Use Shared data to communicate info with custom components in an easy way.
 
-In the plugin `ui.js`:
+> For example, the Webpack dashboard shares the build stats between the UI client and the UI server using this API.
+
+In the plugin `ui.js` (nodejs):
 
 ```js
 // Set or update
@@ -554,7 +652,8 @@ const {
 In the custom component:
 
 ```js
-{
+// Vue component
+export default {
   // Sync Shared data
   sharedData () {
     return {
@@ -605,6 +704,8 @@ This is very usefull if you create a settings component for example.
 
 Plugin actions are calls sent between the cli-ui (browser) and plugins (nodejs).
 
+> For example, you might have a button in a custom component (see [Client addon](#client-addon)) which calls some nodejs code on the server using this API.
+
 In the `ui.js` file in the plugin (nodejs), you can use two methods from `PluginApi`:
 
 ```js
@@ -632,6 +733,7 @@ const { onAction, callAction } = api.namespace('vue-webpack-')
 In the client addon components (browser), you have access to `$onPluginActionCalled`, `$onPluginActionResolved` and `$callPluginAction`:
 
 ```js
+// Vue component
 export default {
   created () {
     this.$onPluginActionCalled(action => {
@@ -779,6 +881,10 @@ locales.keys().forEach(key => {
   ClientAddonApi.addLocalization(locale, locales(key))
 })
 ```
+
+#### Help translate the main UI!
+
+See [how to help translating the main UI](./localization.md).
 
 ### Hooks
 

@@ -1,11 +1,9 @@
 <template>
   <div class="content-view">
-    <div class="header">
-      <div class="wrapper">
-        <h2 v-if="title" class="title">{{ title }}</h2>
-        <slot name="header"/>
-      </div>
-    </div>
+    <portal v-if="title" to="top-title">{{ title }}</portal>
+    <portal to="top-actions">
+      <slot name="actions"/>
+    </portal>
 
     <div class="content">
       <div class="wrapper">
@@ -31,35 +29,14 @@ export default {
 
 .content-view
   height 100%
-  display grid
-  grid-template-columns 1fr
-  grid-template-rows auto 1fr
-  grid-template-areas "header" "content"
 
   .wrapper
     width 100%
     height 100%
     box-sizing border-box
 
-  .header
-    grid-area header
-    background darken($vue-ui-color-light-neutral, 3%)
-    .wrapper
-      background $vue-ui-color-light-neutral
-      h-box()
-      box-center()
-      padding $padding-item
-
-    .title
-      flex 100% 1 1
-      width 0
-      margin 0
-
-    >>> > *
-      space-between-x($padding-item)
-
   .content
-    grid-area content
+    height 100%
     background $color-background-light
     .wrapper
       background $md-white

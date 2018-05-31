@@ -8,7 +8,7 @@
         {{ $t('components.logger-view.title') }}
       </div>
       <VueButton
-        class="icon-button"
+        class="icon-button flat"
         icon-left="delete_forever"
         v-tooltip="$t('components.logger-view.buttons.clear')"
         @click="clearLogs()"
@@ -18,13 +18,13 @@
         class="separator"
       />
       <VueButton
-        class="icon-button"
+        class="icon-button flat"
         icon-left="subdirectory_arrow_left"
         v-tooltip="$t('components.logger-view.buttons.scroll')"
         @click="scrollToBottom()"
       />
       <VueButton
-        class="icon-button"
+        class="icon-button flat"
         icon-left="close"
         v-tooltip="$t('components.logger-view.buttons.close')"
         @click="close()"
@@ -33,7 +33,6 @@
     <ApolloQuery
       ref="logs"
       :query="require('../graphql/consoleLogs.gql')"
-      fetch-policy="cache-and-network"
       class="logs"
       @result="scrollToBottom()"
     >
@@ -115,7 +114,7 @@ export default {
 @import "~@/style/imports"
 
 .logger-view
-  background $vue-ui-color-light-neutral
+  background $vue-ui-color-light
   height 174px
   display grid
   grid-template-columns 1fr
@@ -145,5 +144,5 @@ export default {
   .logger-message
     font-size 12px
     &:hover
-      background lighten(@background, 40%)
+      background rgba($vue-ui-color-primary, .05)
 </style>

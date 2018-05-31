@@ -3,7 +3,10 @@ import VueApollo from 'vue-apollo'
 import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 import clientStateDefaults from './state/defaults'
 import clientStateResolvers from './state/resolvers'
+// GraphQL documents
+// import CONNECTED from './graphql/connected.gql'
 import CONNECTED_SET from './graphql/connectedSet.gql'
+import LOADING_CHANGE from './graphql/loadingChange.gql'
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -31,8 +34,29 @@ export const { apolloClient, wsClient } = createApolloClient(options)
 
 // Create vue apollo provider
 export const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
+  defaultClient: apolloClient,
+  defaultOptions: {
+    $query: {
+      fetchPolicy: 'cache-and-network'
+    }
+  },
+  watchLoading (state, mod) {
+    apolloClient.mutate({
+      mutation: LOADING_CHANGE,
+      variables: {
+        mod
+      }
+    })
+  }
 })
+
+export async function resetApollo () {
+  try {
+    await apolloClient.resetStore()
+  } catch (e) {
+    // Potential errors
+  }
+}
 
 /* Connected state */
 

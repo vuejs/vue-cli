@@ -1,6 +1,7 @@
 <template>
   <ApolloQuery
     :query="require('../graphql/connected.gql')"
+    fetch-policy="cache-only"
     class="connection-status"
   >
     <template slot-scope="{ result: { data: { connected } } }">

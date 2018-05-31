@@ -1,8 +1,8 @@
 <template>
   <div class="project-plugins-add page">
     <div class="content">
+      <portal to="top-title">{{ $t('views.project-plugins-add.title') }}</portal>
       <StepWizard
-        :title="$t('views.project-plugins-add.title')"
         class="frame"
         :tab-id.sync="tabId"
       >

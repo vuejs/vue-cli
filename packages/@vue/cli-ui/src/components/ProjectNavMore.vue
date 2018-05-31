@@ -13,7 +13,7 @@
       </VueButton>
 
       <VueDropdownButton
-        icon-left="work"
+        icon-left="home"
         :to="{ name: 'project-select' }"
         :label="$t('views.project-select.title')"
       />

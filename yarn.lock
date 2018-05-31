@@ -8854,6 +8854,10 @@ popper.js@^1.12.9:
   version "1.14.3"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.3.tgz#1438f98d046acf7b4d78cd502bf418ac64d4f095"
 
+portal-vue@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/portal-vue/-/portal-vue-1.3.0.tgz#479630547c12bc94200d3485d40f21368955f809"
+
 portfinder@^1.0.13, portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
@@ -11386,9 +11390,9 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-apollo@^3.0.0-beta.5:
-  version "3.0.0-beta.15"
-  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.0-beta.15.tgz#7ce5ed63b85da14cb19bce0e201c06a652d7d2bb"
+vue-apollo@^3.0.0-beta.16:
+  version "3.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.0-beta.16.tgz#6624629ef5c96fc1bdecb745d97fc2998895b16a"
   dependencies:
     throttle-debounce "^1.0.1"
 
@@ -11396,9 +11400,9 @@ vue-class-component@^6.0.0, vue-class-component@^6.1.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.2.0.tgz#7adb1daa9a868c75f30f97f33f4f1b94aee62089"
 
-vue-cli-plugin-apollo@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.13.0.tgz#caaa0970f1eded500aa551a2a648e0c258539ada"
+vue-cli-plugin-apollo@^0.13.4:
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.13.4.tgz#1477b8e2eaa711fe13e4905410351cfd3978bedb"
   dependencies:
     apollo-cache-inmemory "^1.2.1"
     apollo-client "^2.3.1"

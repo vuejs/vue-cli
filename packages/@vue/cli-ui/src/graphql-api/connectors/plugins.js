@@ -339,7 +339,7 @@ function finishInstall (context) {
 async function initPrompts (id, context) {
   await prompts.reset()
   try {
-    let data = require(path.join(getPath(id), 'prompts.js'))
+    let data = require(path.join(getPath(id), 'prompts'))
     if (typeof data === 'function') {
       data = await data()
     }

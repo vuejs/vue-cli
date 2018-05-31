@@ -88,8 +88,7 @@ export default {
         return {
           id: this.plugin.id
         }
-      },
-      fetchPolicy: 'cache-and-network'
+      }
     },
 
     pluginLogo: {

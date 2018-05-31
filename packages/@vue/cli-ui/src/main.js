@@ -6,6 +6,7 @@ import { apolloProvider } from './vue-apollo'
 import VueUi from '@vue/ui'
 import InstantSearch from 'vue-instantsearch'
 import VueMeta from 'vue-meta'
+import PortalVue from 'portal-vue'
 import * as Filters from './filters'
 import './register-components'
 import ClientAddonApi from './util/ClientAddonApi'
@@ -30,11 +31,12 @@ Vue.use(Responsive, {
       return !this.tablet
     },
     wide () {
-      return this.width >= 1600
+      return this.width >= 1300
     }
   }
 })
 Vue.use(VueUi)
+Vue.use(PortalVue)
 Vue.use(SharedData)
 Vue.use(PluginAction)
 

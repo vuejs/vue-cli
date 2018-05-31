@@ -8,7 +8,6 @@ function genQuery (id) {
     variables: {
       id
     },
-    fetchPolicy: 'cache-and-network',
     update: ({ sharedData }) => (sharedData && sharedData.value) || undefined,
     subscribeToMore: {
       document: SHARED_DATA_UPDATED,
