@@ -417,7 +417,7 @@ In addition to those, the UI supports special types that only works with it:
 
 In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
 
-**⚠️ Currently, the inquirer type which aren't supported (see above) whill not work properly in the UI.**
+**⚠️ Currently, the inquirer types which aren't supported (see above) whill not work properly in the UI.**
 
 ### Client addon
 
