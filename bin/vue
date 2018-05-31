@@ -9,17 +9,6 @@ program
   .command('init', 'generate a new project from a template')
   .command('list', 'list available official templates')
   .command('build', 'prototype a new project')
-
-// output help information on unknown commands
-program
-  .arguments('<command>')
-  .action((cmd) => {
-    console.log()
-    console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
-    if (cmd === 'create') {
-      console.log(`  ` + chalk.cyan(`vue create`) + ' is a Vue CLI 3 only command and you are using Vue CLI 2.x.')
-    }
-    console.log()
-  })
+  .command('create', '(for v3 warning only)')
 
 program.parse(process.argv)

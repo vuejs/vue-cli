@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+const chalk = require('chalk')
+
+console.log()
+console.log(
+  `  ` +
+  chalk.yellow(`vue create`) +
+  ' is a Vue CLI 3 only command and you are using Vue CLI ' +
+  require('../package.json').version + '.'
+)
+console.log(`  You may want to run the following to upgrade to Vue CLI 3:`)
+console.log()
+console.log(chalk.cyan(`  npm uninstall -g vue-cli`))
+console.log(chalk.cyan(`  npm install -g @vue/cli`))
+console.log()
