@@ -14,6 +14,7 @@ program
 program
   .arguments('<command>')
   .action((cmd) => {
+    if (['init', 'list', 'build'].includes(cmd)) return
     console.log()
     console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     if (cmd === 'create') {
