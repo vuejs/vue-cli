@@ -128,7 +128,7 @@ api.describeConfig({
 
 By default, a configuration UI might read and write to a configuration file, for example `.eslintrc.js`.
 
-You can what are the possible files to be detected in the user project:
+You can provide what are the possible files to be detected in the user project:
 
 ```js
 api.describeConfig({
