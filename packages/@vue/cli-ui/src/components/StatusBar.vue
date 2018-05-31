@@ -55,6 +55,13 @@
         <VueIcon icon="bug_report"/>
         <span>{{ $t('components.status-bar.report-bug') }}</span>
       </div>
+      <div
+        class="section action translate"
+        @click="onTranslateClick()"
+      >
+        <VueIcon icon="g_translate"/>
+        <span>{{ $t('components.status-bar.translate') }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -116,6 +123,14 @@ export default {
     onBugReportClick () {
       const win = window.open(
         'https://new-issue.vuejs.org/?repo=vuejs/vue-cli',
+        '_blank'
+      )
+      win.focus()
+    },
+
+    onTranslateClick () {
+      const win = window.open(
+        'https://github.com/vuejs/vue-cli/tree/dev/docs/localization.md',
         '_blank'
       )
       win.focus()

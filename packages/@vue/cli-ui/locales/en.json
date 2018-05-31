@@ -110,7 +110,8 @@
         "tooltip": "Logs<br><i>Click to toggle Vue CLI logs</i>",
         "empty": "No logs yet"
       },
-      "report-bug": "Report bug"
+      "report-bug": "Report bug",
+      "translate": "Help translating"
     },
     "terminal-view": {
       "buttons": {
