@@ -63,12 +63,12 @@ function getPath (id) {
 
 function findPlugins (deps) {
   return Object.keys(deps).filter(
-    key => isPlugin(key) || key === CLI_SERVICE
+    id => isPlugin(id) || id === CLI_SERVICE
   ).map(
     id => ({
       id,
       versionRange: deps[id],
-      official: isOfficialPlugin(id),
+      official: isOfficialPlugin(id) || id === CLI_SERVICE,
       installed: fs.existsSync(getPath(id)),
       website: getPluginLink(id)
     })
