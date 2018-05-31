@@ -14,4 +14,6 @@ Follow those simple steps to propose a new language for the CLI UI!
 
 5. Publish the package on NPM.
 
+The English reference locale is [here](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-ui/locales/en.json).
+
 Take a look at [the french localization package](https://github.com/Akryum/vue-cli-locale-fr) as an example.
