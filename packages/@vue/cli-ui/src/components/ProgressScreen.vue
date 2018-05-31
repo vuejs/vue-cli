@@ -77,6 +77,7 @@ export default {
 
 .loading-screen
   position absolute
+  z-index 900
 
   .content
     display grid
