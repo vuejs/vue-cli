@@ -12,7 +12,6 @@ program
 
 // output help information on unknown commands
 program
-  .arguments('<command>')
   .action((cmd) => {
     if (['init', 'list', 'build'].includes(cmd)) return
     console.log()
