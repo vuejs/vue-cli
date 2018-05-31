@@ -391,7 +391,7 @@ api.addTask({
 
 ### Prompts
 
-The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) pbjects.
+The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) objects.
 
 However, you can add the following additional fields (which are optional and only used by the UI):
 
