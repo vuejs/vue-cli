@@ -4,7 +4,7 @@
     <div v-if="ready" class="content">
       <router-view/>
     </div>
-    <VueLoadingIndicator v-else class="overlay big accent"/>
+    <VueLoadingIndicator v-else class="app-init-loading overlay big accent"/>
 
     <StatusBar/>
     <ClientAddonLoader/>
@@ -52,4 +52,7 @@ export default {
 
 .status-bar
   grid-area status
+
+.app-init-loading
+  z-index 100000
 </style>
