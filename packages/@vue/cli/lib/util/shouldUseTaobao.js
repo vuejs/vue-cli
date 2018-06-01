@@ -36,14 +36,21 @@ module.exports = async function shouldUseTaobao () {
 
   const userCurrent = (await execa(`npm`, ['config', 'get', 'registry'])).stdout
   const defaultRegistry = registries.npm
+
   if (removeSlash(userCurrent) !== removeSlash(defaultRegistry)) {
     // user has configured custom regsitry, respect that
     return save(false)
   }
-  const faster = await Promise.race([
-    ping(defaultRegistry),
-    ping(registries.taobao)
-  ])
+
+  let faster
+  try {
+    faster = await Promise.race([
+      ping(defaultRegistry),
+      ping(registries.taobao)
+    ])
+  } catch (e) {
+    return save(false)
+  }
 
   if (faster !== registries.taobao) {
     // default is already faster
