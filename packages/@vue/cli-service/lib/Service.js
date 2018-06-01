@@ -29,7 +29,7 @@ module.exports = class Service {
     // for testing.
     this.plugins = this.resolvePlugins(plugins, useBuiltIn)
     // resolve the default mode to use for each command
-    // this is provided by plugins as module.exports.defaulModes
+    // this is provided by plugins as module.exports.defaultModes
     // so we can get the information without actually applying the plugin.
     this.modes = this.plugins.reduce((modes, { apply: { defaultModes }}) => {
       return Object.assign(modes, defaultModes)
@@ -146,7 +146,7 @@ module.exports = class Service {
     // resolve mode
     // prioritize inline --mode
     // fallback to resolved default modes from plugins
-    const mode = args.mode || this.modes[name]
+    const mode = name === 'build' && args.watch ? 'development' : args.mode || this.modes[name]
 
     // load env variables, load user config, apply plugins
     this.init(mode)
