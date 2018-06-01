@@ -40,7 +40,7 @@ module.exports = api => {
       jestConfig.transform['^.+\\.jsx?$'] = 'babel-jest'
       api.extendPackage({
         devDependencies: {
-          'babel-jest': '^22.4.3',
+          'babel-jest': '^23.0.1',
           // this is for now necessary to force babel-jest and vue-jest to use babel 7
           'babel-core': '7.0.0-bridge.0'
         }
