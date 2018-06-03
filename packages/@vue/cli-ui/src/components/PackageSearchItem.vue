@@ -25,7 +25,10 @@
         <span class="version">{{ pkg.version }}</span>
       </template>
       <template slot="description">
-        <span class="info description">
+        <span
+          class="info description"
+          v-tooltip="pkg.description"
+        >
           <ais-highlight
             :result="pkg"
             attribute-name="description"
@@ -110,6 +113,9 @@ export default {
   .list-item-info
     flex 100% 1 1
     width 0
+    >>> .description
+      display inline-flex
+      align-items baseline
 
   .name
     font-weight bold
@@ -121,13 +127,18 @@ export default {
   .info
     space-between-x(6px)
 
-  .description
-    font-style italic
+    &.description
+      font-style italic
+      max-width 550px
+      white-space nowrap
+      text-overflow ellipsis
+      display block
+      overflow hidden
 
-  .downloads
-    text-transform uppercase
+    &.downloads
+      text-transform uppercase
 
-  .owner
-    .vue-ui-icon
-      margin-right 2px
+    &.owner
+      .vue-ui-icon
+        margin-right 2px
 </style>
