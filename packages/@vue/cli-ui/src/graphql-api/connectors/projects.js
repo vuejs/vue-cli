@@ -52,6 +52,10 @@ function autoClean (projects, context) {
 }
 
 function getCurrent (context) {
+  if (currentProject && !fs.existsSync(currentProject.path)) {
+    log('Project folder not found', currentProject.id, currentProject.path)
+    return null
+  }
   return currentProject
 }
 
