@@ -169,7 +169,7 @@ module.exports = api => {
             value: 'wc-async'
           }
         ],
-        description: 'vue-webpack.tasks.build.description'
+        description: 'vue-webpack.tasks.build.target.description'
       },
       {
         name: 'name',
