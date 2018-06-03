@@ -30,7 +30,6 @@ export default {
 
 <style lang="stylus">
 @import "~@vue/ui/dist/vue-ui.css"
-@import "~file-icons-js/css/style.css"
 @import "~@/style/main"
 </style>
 

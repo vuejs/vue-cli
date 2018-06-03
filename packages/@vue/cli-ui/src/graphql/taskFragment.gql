@@ -4,4 +4,8 @@ fragment task on Task {
   name
   command
   description
+  plugin {
+    id
+    logo
+  }
 }

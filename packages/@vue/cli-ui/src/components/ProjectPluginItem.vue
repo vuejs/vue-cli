@@ -1,7 +1,10 @@
 <template>
   <div class="project-plugin-item list-item">
     <div class="content">
-      <ItemLogo :image="pluginLogo && pluginLogo.logo"/>
+      <ItemLogo
+        :image="pluginLogo && pluginLogo.logo"
+        fallback-icon="widgets"
+      />
 
       <ListItemInfo
         :name="plugin.id"

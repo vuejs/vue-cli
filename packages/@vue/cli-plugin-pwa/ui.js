@@ -32,7 +32,6 @@ module.exports = api => {
     name: 'PWA',
     description: 'pwa.config.pwa.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa#configuration',
-    icon: 'mobile.xm',
     files: {
       js: ['vue.config.js']
     },

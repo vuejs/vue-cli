@@ -5,7 +5,6 @@ module.exports = api => {
     name: 'ESLint configuration',
     description: 'eslint.config.eslint.description',
     link: 'https://github.com/vuejs/eslint-plugin-vue',
-    icon: '.eslintrc.json',
     files: {
       json: ['.eslintrc', '.eslintrc.json'],
       js: ['.eslintrc.js'],
@@ -181,7 +180,6 @@ module.exports = api => {
     name: 'ESLint extra',
     description: 'eslint.config.eslint-extra.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#configuration',
-    icon: '.eslintrc.json',
     files: {
       js: ['vue.config.js']
     },
