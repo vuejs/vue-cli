@@ -11,7 +11,7 @@
   >
     <div class="content">
       <ItemLogo
-        :image="showLogo ? logo : iconData.icon"
+        :image="logo ? logo : iconData.icon"
         :class="iconData.class"
         v-tooltip="status"
       />
@@ -56,10 +56,6 @@ export default {
 
     iconData () {
       return icons[this.task.status]
-    },
-
-    showLogo () {
-      return ['idle', 'terminated'].includes(this.task.status) && this.logo
     },
 
     logo () {
