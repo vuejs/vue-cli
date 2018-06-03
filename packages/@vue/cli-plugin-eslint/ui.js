@@ -64,7 +64,7 @@ module.exports = api => {
             },
             {
               name: 'Tabs',
-              value: JSON.stringify(['error', 'tabs'])
+              value: JSON.stringify(['error', 'tab'])
             },
             {
               name: '2 spaces',
