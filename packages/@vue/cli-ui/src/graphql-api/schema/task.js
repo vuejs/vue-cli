@@ -30,6 +30,7 @@ type Task implements DescribedEntity {
   name: String
   description: String
   link: String
+  icon: String
   logs: [TaskLog]
   prompts: [Prompt]
   views: [TaskView]
