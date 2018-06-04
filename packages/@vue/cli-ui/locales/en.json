@@ -267,7 +267,8 @@
     "project-plugins": {
       "title": "Project plugins",
       "button": "Add plugin",
-      "heading": "Installed plugins"
+      "heading": "Installed plugins",
+      "update-all": "Update all plugins"
     },
     "project-plugins-add": {
       "title": "Add a plugin",

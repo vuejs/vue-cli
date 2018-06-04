@@ -350,7 +350,7 @@ async function initPrompts (id, context) {
   await prompts.start()
 }
 
-function update (id, context) {
+function update (id, context, notify = true) {
   return progress.wrap('plugin-update', context, async setProgress => {
     setProgress({
       status: 'plugin-update',
@@ -361,13 +361,42 @@ function update (id, context) {
     const { current, wanted } = await getVersion(plugin, context)
     await updatePackage(cwd.get(), getCommand(), null, id)
     resetPluginApi(context)
+
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
       type: 'info'
     }, context)
+
+    if (notify) {
+      notifier.notify({
+        title: `Plugin updated`,
+        message: `Plugin ${id} was successfully updated`,
+        icon: path.resolve(__dirname, '../../assets/done.png')
+      })
+    }
+
     currentPluginId = null
     return findOne(id)
   })
+}
+
+async function updateAll (context) {
+  const plugins = await list(cwd.get(), context)
+  let updatedPlugins = []
+  for (const plugin of plugins) {
+    const version = await getVersion(plugin, context)
+    if (version.current !== version.wanted) {
+      updatedPlugins.push(await update(plugin.id, context, false))
+    }
+  }
+
+  notifier.notify({
+    title: `Plugins updated`,
+    message: `${updatedPlugins.length} plugin(s) were successfully updated`,
+    icon: path.resolve(__dirname, '../../assets/done.png')
+  })
+
+  return updatedPlugins
 }
 
 function getApi () {
@@ -424,6 +453,7 @@ module.exports = {
   install,
   uninstall,
   update,
+  updateAll,
   runInvoke,
   resetPluginApi,
   getApi,

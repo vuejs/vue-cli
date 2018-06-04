@@ -12,6 +12,20 @@
           :to="{ name: 'project-plugins-add' }"
           data-testid="add-plugin"
         />
+
+        <VueDropdown>
+          <VueButton
+            slot="trigger"
+            icon-left="more_vert"
+            class="icon-button flat round"
+          />
+
+          <VueDropdownButton
+            icon-left="file_download"
+            :label="$t('views.project-plugins.update-all')"
+            @click="updateAll()"
+          />
+        </VueDropdown>
       </template>
 
       <ApolloQuery
@@ -43,12 +57,22 @@
 </template>
 
 <script>
+import PLUGINS_UPDATE from '../graphql/pluginsUpdate.gql'
+
 export default {
   name: 'ProjectPlugins',
 
   metaInfo () {
     return {
       title: this.$t('views.project-plugins.title')
+    }
+  },
+
+  methods: {
+    updateAll () {
+      return this.$apollo.mutate({
+        mutation: PLUGINS_UPDATE
+      })
     }
   }
 }
