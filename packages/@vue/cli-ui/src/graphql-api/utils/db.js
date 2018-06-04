@@ -5,7 +5,7 @@ const { resolve } = require('path')
 
 let folder = '../../../live'
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.VUE_CLI_UI_TEST) {
   folder = '../../../live-test'
   // Clean DB
   fs.removeSync(resolve(__dirname, folder))
