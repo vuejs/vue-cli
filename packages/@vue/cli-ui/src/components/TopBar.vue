@@ -82,8 +82,10 @@ export default {
   z-index 1
   box-shadow 0 2px 10px rgba(black, .05)
 
-  >>> *
-    space-between-x($padding-item)
+  &,
+  .actions
+    /deep/ > *
+      space-between-x($padding-item)
 
 .current-project
   min-width (180px - $padding-item * 2)
