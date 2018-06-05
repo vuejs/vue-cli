@@ -12,7 +12,9 @@
     "clean": "rimraf packages/test/*",
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js",
-    "release": "yarn clean && node scripts/release.js"
+    "release": "yarn clean && node scripts/release.js",
+    "docs": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
@@ -57,6 +59,8 @@
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "rimraf": "^2.6.2",
+    "vuepress": "^0.10.0",
+    "vuepress-theme-vue": "^1.0.3",
     "yorkie": "^1.0.2"
   },
   "resolutions": {

@@ -1,13 +1,10 @@
+---
+sidebarDepth: 3
+---
+
 # Plugin Development Guide
 
 ## Core Concepts
-
-- [Creator](#creator)
-- [Service](#service)
-- [CLI Plugin](#cli-plugin)
-- [Service Plugin](#service-plugin)
-- [Generator](#generator)
-- [Prompts](#prompts)
 
 There are two major parts of the system:
 
@@ -281,7 +278,7 @@ module.exports = api => {
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 
-``` sh
+``` bash
 vue invoke my-plugin --mode awesome
 ```
 

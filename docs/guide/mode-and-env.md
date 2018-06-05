@@ -1,15 +1,8 @@
-## Environment Variables and Modes
-
-- [Overview](#overview)
-- [Modes](#modes)
-- [Using Env Variables in Client-side Code](#using-env-variables-in-client-side-code)
-- [Local Only Variables](#local-only-variables)
-
-### Overview
+# Environment Variables and Modes
 
 You can specify env variables by placing the following files in your project root:
 
-``` sh
+``` bash
 .env                # loaded in all cases
 .env.local          # loaded in all cases, ignored by git
 .env.[mode]         # only loaded in specified mode
@@ -25,7 +18,7 @@ VUE_APP_SECRET=secret
 
 Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
 
-### Modes
+## Modes
 
 **Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
 
@@ -43,7 +36,7 @@ You can overwrite the default mode used for a command by passing the `--mode` op
 "dev-build": "vue-cli-service build --mode development",
 ```
 
-### Using Env Variables in Client-side Code
+## Using Env Variables in Client-side Code
 
 Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
 
@@ -58,7 +51,7 @@ In addition to `VUE_APP_*` variables, there are also two special variables that 
 - `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#modes) the app is running in.
 - `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
 
-### Env Variables in Index HTML
+## Env Variables in Index HTML
 
 All resolved env variables will be available inside `public/index.html` via [lodash template interpolation](https://lodash.com/docs/4.17.5#template):
 
@@ -72,7 +65,7 @@ For example, to reference static assets copied from the root of `public`, you wi
 <link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
 ```
 
-### Local Only Variables
+## Local Only Variables
 
 Sometimes you might have env variables that should not be committed into the codebase, especially if your project is hosted in a public repository. In that case you should use an `.env.local` file instead. Local env files are ignored in `.gitignore` by default.
 

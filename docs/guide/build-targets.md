@@ -1,6 +1,6 @@
-## Build Targets
+# Build Targets
 
-### App
+## App
 
 App mode is the default mode. In this mode:
 
@@ -9,7 +9,7 @@ App mode is the default mode. In this mode:
 - static assets under 10kb are inlined into JavaScript
 - static assets in `public` are copied into output directory
 
-### Library
+## Library
 
 You can build a single entry as a library using
 
@@ -38,9 +38,27 @@ A lib build outputs:
 
 - `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
+### Vue vs. JS/TS Entry Files
+
+When using a `.vue` file as entry, your library will directly expose the Vue component itself, because the component is always the default export.
+
+However, when you are using a `.js` or `.ts` file as your entry, it may contain named exports, so your library will be exposed as a Module. This means the default export of your library must be accessed as `window.yourLib.default` in UMD builds, or as `const myLib = require('mylib').default` in CommonJS builds. If you don't have any named exports and wish to directly expose the default export, you can use the following webpack configuration in `vue.config.js`:
+
+``` js
+module.exports = {
+  configureWebpack: {
+    output: {
+      libraryExport: 'default'
+    }
+  }
+}
+```
+
+### Vue Externalization
+
 **In lib mode, Vue is externalized.** This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
 
-### Web Component
+## Web Component
 
 > [Compatibility](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
 
@@ -64,7 +82,7 @@ This mode allows consumers of your component to use the Vue component as a norma
 <my-element></my-element>
 ```
 
-#### Bundle that Registers Multiple Web Components
+### Bundle that Registers Multiple Web Components
 
 When building a web component bundle, you can also target multiple components by using a glob as entry:
 
@@ -75,8 +93,6 @@ vue-cli-service build --target wc --name foo 'src/components/*.vue'
 When building multiple web components, `--name` will be used as the prefix and the custom element name will be inferred from the component filename. For example, with `--name foo` and a component named `HelloWorld.vue`, the resulting custom element will be registered as `<foo-hello-world>`.
 
 ### Async Web Component
-
-> [Compatibility](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
 
 When targeting multiple web components, the bundle may become quite large, and the user may only use a few of the components your bundle registers. The async web component mode produces a code-split bundle with a small entry file that provides the shared runtime between all the components, and registers all the custom elements upfront. The actual implementation of a component is then fetched on-demand only when an instance of the corresponding custom element is used on the page:
 
@@ -104,3 +120,7 @@ Now on the page, the user only needs to include Vue and the entry file:
 <!-- foo-one's implementation chunk is auto fetched when it's used -->
 <foo-one></foo-one>
 ```
+
+### Vue Externalization
+
+**In web component mode, Vue is externalized.** This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.

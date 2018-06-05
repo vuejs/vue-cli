@@ -1,9 +1,24 @@
-## Static Asset Handling
+# HTML and Static Assets
 
-- [Relative Path Imports](#relative-path-imports)
-  - [URL Transform Rules](#url-transform-rules)
-- [The `public` Folder](#the-public-folder)
-  - [When to use the `public` folder](#when-to-use-the-public-folder)
+## Understanding `baseUrl`
+
+## HTML
+
+### The Index File
+
+The file `public/index.html` is a template that will be processed with [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin). During build, asset links will be injected automatically. In addition, Vue CLI also automatically injects resource hints (`preload/prefetch`), manifest/icon links (when PWA plugin is used) and inlines the webpack runtime / chunk manifest for optimal performance.
+
+### Prefetch & Preload
+
+### Building a Multi-Page App
+
+## Static Assets Handling
+
+Static assets can be handled in two different ways:
+
+- Imported in JavaScript or referenced in templates/CSS via relative paths. Such references will be handled by webpack.
+
+- Placed in the `public` directory and referenced via absolute paths. These assets will simply be copied and not go through webpack.
 
 ### Relative Path Imports
 
@@ -12,18 +27,18 @@ When you reference a static asset using relative path inside JavaScript, CSS or 
 For example, `url(./image.png)` will be translated into `require('./image.png')`, and
 
 ``` html
-<img src="../image.png">
+<img src="./image.png">
 ```
 
 will be compiled into:
 
 ``` js
-createElement('img', { attrs: { src: require('../image.png') }})
+createElement('img', { attrs: { src: require('./image.png') }})
 ```
 
 Internally, we use `file-loader` to determine the final file location with version hashes and correct public base paths, and use `url-loader` to conditionally inline assets that are smaller than 10kb, reducing the amount of HTTP requests.
 
-#### URL Transform Rules
+### URL Transform Rules
 
 - If the URL is an absolute path (e.g. `/images/foo.png`), it will be preserved as-is.
 
@@ -71,7 +86,7 @@ The `public` directory is provided as an **escape hatch**, and when you referenc
   <img :src="`${baseUrl}my-image.png`">
   ```
 
-#### When to use the `public` folder
+### When to use the `public` folder
 
 - You need a file with a specific name in the build output.
 - You have thousands of images and need to dynamically reference their paths.

@@ -1,25 +1,6 @@
-# Plugin UI Development Guide
+# UI Plugin Development Guide
 
 This guide will walk you through the development of cli-ui specific features for your vue-cli plugins.
-
-- [Plugin Info](#plugin-info)
-  - [Logo](#logo)
-  - [Discoverability](#discoverability)
-- [UI API](#ui-api)
-  - [UI files](#ui-files)
-  - [Dev mode](#dev-mode)
-  - [Project configurations](#project-configurations)
-  - [Project tasks](#project-tasks)
-  - [Prompts](#prompts)
-  - [Client addon](#client-addon)
-  - [Custom views](#custom-views)
-  - [Shared data](#shared-data)
-  - [Plugin actions](#plugin-actions)
-  - [Inter-process communication (IPC)](#inter-process-communication-ipc)
-  - [Local storage](#local-storage)
-  - [Localization](#localization)
-  - [Hooks](#hooks)
-  - [Public static files](#public-static-files)
 
 ## Plugin Info
 
@@ -31,7 +12,7 @@ You can put a `logo.png` file in the root directory of the folder that will be p
  - When searching for a plugin to install
  - In the installed plugin list
 
-![Plugins](./plugins.png)
+![Plugins](/plugins.png)
 
 The logo should be a square non-transparent image (ideally 84x84).
 
@@ -61,13 +42,13 @@ You should add the url to the plugin website or repository in the `homepage` or 
 }
 ```
 
-![Plugin search item](./plugin-search-item.png)
+![Plugin search item](/plugin-search-item.png)
 
 ## UI API
 
 The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
 
-![UI Plugin architecture](./vue-cli-ui-schema.png)
+![UI Plugin architecture](/vue-cli-ui-schema.png)
 
 ### UI files
 
@@ -93,7 +74,7 @@ vue ui --dev
 
 ### Project configurations
 
-![Configuration ui](./config-ui.png)
+![Configuration ui](/config-ui.png)
 
 You can add a project configuration with the `api.describeConfig` method.
 
@@ -239,7 +220,7 @@ api.describeConfig({
 
 ### Project tasks
 
-![Tasks ui](./tasks-ui.png)
+![Tasks ui](/tasks-ui.png)
 
 Tasks are generated from the `scripts` field in the project `package.json` file.
 
@@ -584,7 +565,7 @@ import WebpackDashboard from './components/WebpackDashboard.vue'
 ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 ```
 
-![Task view example](./task-view.png)
+![Task view example](/task-view.png)
 
 ### Custom views
 
@@ -624,7 +605,7 @@ ClientAddonApi.addRoutes('vue-webpack', [
 ])
 ```
 
-![Custom view example](./custom-view.png)
+![Custom view example](/custom-view.png)
 
 ### Shared data
 
@@ -900,7 +881,7 @@ locales.keys().forEach(key => {
 
 #### Help translate the main UI!
 
-See [how to help translating the main UI](./localization.md).
+See [how to help translating the main UI](./ui-localization.md).
 
 ### Hooks
 
