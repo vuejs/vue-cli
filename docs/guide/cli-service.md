@@ -66,7 +66,7 @@ Options:
   --mode    specify env mode (default: development)
 ```
 
-You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue CLI project. See [Inspecting Webpack Config](../config/webpack.md#inspecting-the-projects-webpack-config) for more details.
+You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue CLI project. See [Inspecting Webpack Config](../config/#inspecting-the-projects-webpack-config) for more details.
 
 ## Checking All Available Commands
 

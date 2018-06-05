@@ -63,9 +63,8 @@ module.exports = {
               collapsable: false,
               children: [
                 '/guide/creating-a-project',
-                '/guide/plugins-and-presets',
                 '/guide/prototyping',
-                '/guide/ui'
+                '/guide/plugins-and-presets'
               ]
             },
             {

@@ -11,6 +11,10 @@ App mode is the default mode. In this mode:
 
 ## Library
 
+::: tip Note on Vue Dependency
+In lib mode, Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
+:::
+
 You can build a single entry as a library using
 
 ```
@@ -54,13 +58,15 @@ module.exports = {
 }
 ```
 
-### Vue Externalization
-
-**In lib mode, Vue is externalized.** This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
-
 ## Web Component
 
-> [Compatibility](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
+::: tip Note on Compatibility
+Web Component mode does not support IE11 and below. [More details](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
+:::
+
+::: tip Note on Vue Dependency
+In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
+:::
 
 You can build a single entry as a library using
 
@@ -120,7 +126,3 @@ Now on the page, the user only needs to include Vue and the entry file:
 <!-- foo-one's implementation chunk is auto fetched when it's used -->
 <foo-one></foo-one>
 ```
-
-### Vue Externalization
-
-**In web component mode, Vue is externalized.** This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
