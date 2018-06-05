@@ -26,7 +26,7 @@
     "@vue/cli-shared-utils": "^3.0.0-beta.15",
     "fork-ts-checker-webpack-plugin": "^0.4.1",
     "globby": "^8.0.1",
-    "ts-loader": "^4.3.0",
+    "ts-loader": "^4.3.1",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
   },
