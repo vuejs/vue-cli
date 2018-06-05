@@ -25,7 +25,7 @@ jobs:
           root: ~/
           paths:
             - project/vue
-            - .cache
+            - .cache/Cypress
 
   group-1:
     <<: *defaults
