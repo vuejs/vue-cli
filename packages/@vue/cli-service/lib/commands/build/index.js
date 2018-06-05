@@ -19,7 +19,7 @@ module.exports = (api, options) => {
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
-      '--no-clean': `does not remove the dist directory before building the project`,
+      '--no-clean': `do not remove the dist directory before building the project`,
       '--watch': `watch for changes`
     }
   }, async function build (args) {
