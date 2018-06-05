@@ -24,9 +24,14 @@ module.exports = (api, options) => {
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
     const shouldExtract = isProd && extract !== false && !shadowMode
+    const filename = getAssetPath(
+      options,
+      `css/[name].[contenthash:8].css`,
+      true /* placeAtRootIfRelative */
+    )
     const extractOptions = Object.assign({
-      filename: getAssetPath(options, `css/[name].[contenthash:8].css`),
-      chunkFilename: getAssetPath(options, 'css/[name].[contenthash:8].css')
+      filename,
+      chunkFilename: filename
     }, extract && typeof extract === 'object' ? extract : {})
 
     // check if the project has a valid postcss config

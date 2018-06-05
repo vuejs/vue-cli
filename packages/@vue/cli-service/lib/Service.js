@@ -248,6 +248,7 @@ module.exports = class Service {
     }
 
     // normlaize some options
+    resolved.baseUrl = resolved.baseUrl.replace(/^\.\//, '')
     ensureSlash(resolved, 'baseUrl')
     removeSlash(resolved, 'outputDir')
 
