@@ -35,7 +35,7 @@
     "consolidate": "^0.14.0",
     "download-git-repo": "^1.0.1",
     "handlebars": "^4.0.5",
-    "inquirer": "^3.3.0",
+    "inquirer": "^6.0.0",
     "metalsmith": "^2.1.0",
     "minimatch": "^3.0.0",
     "multimatch": "^2.1.0",
