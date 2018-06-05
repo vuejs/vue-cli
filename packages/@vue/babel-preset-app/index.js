@@ -58,7 +58,7 @@ module.exports = (context, options = {}) => {
   // be force-included.
   let polyfills
   const buildTarget = process.env.VUE_CLI_TARGET || 'app'
-  if (buildTarget === 'app' && useBuiltIns === 'usage') {
+  if (buildTarget === 'app' && useBuiltIns === 'usage' && !process.env.VUE_CLI_BABEL_TARGET_NODE) {
     polyfills = getPolyfills(targets, userPolyfills || defaultPolyfills, {
       ignoreBrowserslistConfig,
       configPath
