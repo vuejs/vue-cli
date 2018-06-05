@@ -17,6 +17,7 @@ extend type Mutation {
   pluginFinishInstall: PluginInstallation
   pluginUpdate (id: ID!): Plugin
   pluginActionCall (id: ID!, params: JSON): PluginActionResult
+  pluginsUpdate: [Plugin]
 }
 
 extend type Subscription {
@@ -80,7 +81,8 @@ exports.resolvers = {
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
     pluginFinishInstall: (root, args, context) => plugins.finishInstall(context),
     pluginUpdate: (root, { id }, context) => plugins.update(id, context),
-    pluginActionCall: (root, args, context) => plugins.callAction(args, context)
+    pluginActionCall: (root, args, context) => plugins.callAction(args, context),
+    pluginsUpdate: (root, args, context) => plugins.updateAll(context)
   },
 
   Subscription: {
