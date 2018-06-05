@@ -20,32 +20,32 @@ jobs:
           key: v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules/
-            - ~/.cache/yarn
-            - ~/.cache/Cypress
+            - ~/.cache
       - persist_to_workspace:
-          root: ~/project
+          root: ~/
           paths:
-            - vue
+            - project/vue
+            - .cache
 
   group-1:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run: yarn test -p cli,cli-service,cli-shared-utils
 
   group-2:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run: yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
 
   group-3:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run: yarn lint
       - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app
 
@@ -53,7 +53,7 @@ jobs:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run: yarn test -p unit-mocha,unit-jest,e2e-nightwatch,e2e-cypress
       - run: yarn test tsPluginE2e
 
@@ -61,7 +61,7 @@ jobs:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run: cd packages/@vue/cli-ui && yarn test
       - store_artifacts:
           path: packages/@vue/cli-ui/tests/e2e/videos
