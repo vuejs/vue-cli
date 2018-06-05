@@ -75,7 +75,7 @@ module.exports = function lint (args = {}, api, silent) {
 
   const files = args._ && args._.length
     ? args._
-    : ['src/**/*.ts', 'src/**/*.vue', 'tests/**/*.ts']
+    : ['src/**/*.ts', 'src/**/*.vue', 'src/**/*.tsx', 'tests/**/*.ts', 'tests/**/*.tsx']
 
   const stripTsExtension = str => str.replace(/\.vue\.ts\b/g, '.vue')
 
