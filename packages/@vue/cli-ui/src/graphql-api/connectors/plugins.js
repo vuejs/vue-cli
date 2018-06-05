@@ -38,6 +38,7 @@ const ipc = require('../utils/ipc')
 const { log } = require('../utils/logger')
 
 const PROGRESS_ID = 'plugin-installation'
+const CLI_SERVICE = '@vue/cli-service'
 
 // Caches
 const metadataCache = new LRU({
@@ -62,12 +63,12 @@ function getPath (id) {
 
 function findPlugins (deps) {
   return Object.keys(deps).filter(
-    key => isPlugin(key)
+    id => isPlugin(id) || id === CLI_SERVICE
   ).map(
     id => ({
       id,
       versionRange: deps[id],
-      official: isOfficialPlugin(id),
+      official: isOfficialPlugin(id) || id === CLI_SERVICE,
       installed: fs.existsSync(getPath(id)),
       website: getPluginLink(id)
     })
@@ -77,8 +78,17 @@ function findPlugins (deps) {
 function list (file, context) {
   const pkg = folders.readPackage(file, context)
   plugins = []
-  plugins = plugins.concat(findPlugins(pkg.dependencies || {}))
   plugins = plugins.concat(findPlugins(pkg.devDependencies || {}))
+  plugins = plugins.concat(findPlugins(pkg.dependencies || {}))
+
+  // Put cli service at the top
+  const index = plugins.findIndex(p => p.id === CLI_SERVICE)
+  if (index !== -1) {
+    const service = plugins[index]
+    plugins.splice(index, 1)
+    plugins.unshift(service)
+  }
+
   resetPluginApi(context)
   return plugins
 }
@@ -93,7 +103,6 @@ function resetPluginApi (context) {
 
   pluginApi = new PluginApi(context)
   // Run Plugin API
-  runPluginApi('@vue/cli-service', context)
   plugins.forEach(plugin => runPluginApi(plugin.id, context))
   runPluginApi(cwd.get(), context, 'vue-cli-ui')
   // Add client addons
