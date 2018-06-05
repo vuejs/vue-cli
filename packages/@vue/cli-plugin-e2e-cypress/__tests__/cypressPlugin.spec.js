@@ -11,7 +11,7 @@ test('should work', async () => {
   })
 
   const config = JSON.parse(await project.read('cypress.json'))
-  config.videoRecording = false
+  config.video = false
   await project.write('cypress.json', JSON.stringify(config))
 
   await project.run(`vue-cli-service test:e2e --headless`)
