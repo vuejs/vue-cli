@@ -23,7 +23,6 @@ module.exports = (api, options) => {
   </div>
 </template>
         `.trim())
-        console.log(files[`src/App.vue`])
       }
     })
 
