@@ -1,4 +1,5 @@
 const defaults = {
+  clean: true,
   target: 'app',
   entry: 'src/App.vue'
 }
@@ -18,6 +19,7 @@ module.exports = (api, options) => {
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
+      '--no-clean': `do not remove the dist directory before building the project`,
       '--watch': `watch for changes`
     }
   }, async function build (args) {
@@ -125,7 +127,9 @@ module.exports = (api, options) => {
       process.exit(1)
     }
 
-    await fs.remove(targetDir)
+    if (args.clean) {
+      await fs.remove(targetDir)
+    }
 
     // Expose advanced stats
     if (args.dashboard) {
