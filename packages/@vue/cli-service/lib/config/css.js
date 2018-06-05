@@ -103,7 +103,7 @@ module.exports = (api, options) => {
           rule
             .use('postcss-loader')
             .loader('postcss-loader')
-            .options({ sourceMap })
+            .options(Object.assign({ sourceMap }, loaderOptions.postcss))
         }
 
         if (loader) {

@@ -20,7 +20,8 @@ const schema = createSchema(joi => joi.object({
     loaderOptions: joi.object({
       sass: joi.object(),
       less: joi.object(),
-      stylus: joi.object()
+      stylus: joi.object(),
+      postcss: joi.object()
     })
   }),
 
