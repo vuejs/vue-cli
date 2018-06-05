@@ -1,6 +1,6 @@
 {
   "name": "vue-cli",
-  "version": "2.9.6",
+  "version": "2.9.5",
   "description": "A simple CLI for scaffolding Vue.js projects.",
   "preferGlobal": true,
   "bin": {
@@ -35,7 +35,7 @@
     "consolidate": "^0.14.0",
     "download-git-repo": "^1.0.1",
     "handlebars": "^4.0.5",
-    "inquirer": "^5.2.0",
+    "inquirer": "^6.0.0",
     "metalsmith": "^2.1.0",
     "minimatch": "^3.0.0",
     "multimatch": "^2.1.0",
