@@ -14,21 +14,16 @@
         icon="done"
       />
       <img
-        v-else-if="imageEnabled && !error"
+        v-else-if="!isMaterialIcon && !error"
         class="image"
-        :src="imageUrl"
-        :key="imageUrl"
+        :src="image"
+        :key="image"
         @load="loaded = true"
         @error="error = true"
       >
-      <div
-        v-else-if="fileIcon"
-        class="dynamic-file-icon"
-        :class="fileIcon"
-      />
       <VueIcon
         v-else
-        :icon="icon"
+        :icon="error || !image ? fallbackIcon : image"
       />
     </div>
   </div>
@@ -39,17 +34,12 @@ export default {
   props: {
     image: {
       type: String,
-      default: null
-    },
-
-    icon: {
-      type: String,
       default: 'widgets'
     },
 
-    fileIcon: {
+    fallbackIcon: {
       type: String,
-      default: null
+      default: 'image'
     },
 
     selected: {
@@ -66,12 +56,8 @@ export default {
   },
 
   computed: {
-    imageEnabled () {
-      return this.image || (this.icon && this.icon.indexOf('.') !== -1)
-    },
-
-    imageUrl () {
-      return this.image || this.icon
+    isMaterialIcon () {
+      return /^[a-z0-9_]+$/.test(this.image)
     }
   },
 
@@ -111,10 +97,6 @@ export default {
       height @width
       >>> svg
         fill rgba($color-text-light, .3)
-
-  .dynamic-file-icon
-    &::before
-      font-size 24px
 
   &.vuejs
     .wrapper

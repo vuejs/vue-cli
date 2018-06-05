@@ -8,7 +8,8 @@
   >
     <div class="content">
       <ItemLogo
-        :file-icon="iconClass"
+        :image="configuration.icon || (configuration.plugin && configuration.plugin.logo)"
+        fallback-icon="settings_applications"
       />
 
       <ListItemInfo
@@ -21,8 +22,6 @@
 </template>
 
 <script>
-import icons from 'file-icons-js'
-
 export default {
   props: {
     configuration: {
@@ -33,21 +32,6 @@ export default {
     selected: {
       type: Boolean,
       default: false
-    }
-  },
-
-  computed: {
-    iconClass () {
-      return icons.getClassWithColor(this.getFileName(this.configuration.icon) || this.configuration.id) || 'gear-icon medium-blue'
-    }
-  },
-
-  methods: {
-    getFileName (icon) {
-      if (icon) {
-        if (!icon.includes('.')) return `f.${icon}`
-        return icon
-      }
     }
   }
 }

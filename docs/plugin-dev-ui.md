@@ -114,15 +114,17 @@ api.describeConfig({
 
 #### Config icon
 
-Specify an icon with either a file type (like `'json'`) or a file name (like `.babelrc` to get the babel icon). This is powered by file-icons.
+It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
 
 ```js
 api.describeConfig({
   /* ... */
-  // Icon generated using file-icons
-  icon: '.eslintrc.json'
+  // Config icon
+  icon: 'application_settings'
 })
 ```
+
+If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
 
 #### Config file
 
@@ -252,6 +254,20 @@ api.describeTask({
   link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve'
 })
 ```
+
+#### Task icon
+
+It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
+
+```js
+api.describeTask({
+  /* ... */
+  // Task icon
+  icon: 'application_settings'
+})
+```
+
+If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
 
 #### Tasks parameters
 
@@ -912,4 +928,12 @@ You may need to expose some static files over the cli-ui builtin HTTP server (ty
 
 Any file in an optional `ui-public` folder in the root of the plugin package folder will be exposed to the `/_plugin/:id/*` HTTP route.
 
-For example, if you put a `my-logo.png` file into the `my-package/ui-public/` folder, it will be available with the `http://localhost:8000/_plugin/my-package/my-logo.png` URL when the cli-ui loads the plugin.
+For example, if you put a `my-logo.png` file into the `my-package/ui-public/` folder, it will be available with the `/_plugin/my-package/my-logo.png` URL when the cli-ui loads the plugin.
+
+```js
+api.describeConfig({
+  /* ... */
+  // Custom image
+  icon: '/_plugin/my-package/my-logo.png'
+})
+```

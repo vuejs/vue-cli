@@ -54,7 +54,6 @@
     "cross-env": "^5.1.5",
     "eslint": "^4.16.0",
     "eslint-plugin-graphql": "^2.1.1",
-    "file-icons-js": "^1.0.3",
     "lint-staged": "^6.0.0",
     "portal-vue": "^1.3.0",
     "rimraf": "^2.6.2",

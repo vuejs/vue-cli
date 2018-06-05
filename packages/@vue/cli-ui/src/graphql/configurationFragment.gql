@@ -3,4 +3,8 @@ fragment configuration on Configuration {
   name
   description
   icon
+  plugin {
+    id
+    logo
+  }
 }

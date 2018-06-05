@@ -45,7 +45,7 @@ function getUrl (addon, context) {
 
 function serve (req, res) {
   const { id, 0: file } = req.params
-  const addon = findOne(id)
+  const addon = findOne(decodeURIComponent(id))
   if (addon && addon.path) {
     const basePath = resolveModuleRoot(require.resolve(addon.path))
     if (basePath) {

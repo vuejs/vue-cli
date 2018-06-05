@@ -59,7 +59,10 @@ class PluginApi {
   describeConfig (options) {
     try {
       validateConfiguration(options)
-      this.configurations.push(options)
+      this.configurations.push({
+        ...options,
+        pluginId: this.pluginId
+      })
     } catch (e) {
       logs.add({
         type: 'error',
@@ -79,7 +82,10 @@ class PluginApi {
   describeTask (options) {
     try {
       validateDescribeTask(options)
-      this.describedTasks.push(options)
+      this.describedTasks.push({
+        ...options,
+        pluginId: this.pluginId
+      })
     } catch (e) {
       logs.add({
         type: 'error',
@@ -111,7 +117,10 @@ class PluginApi {
   addTask (options) {
     try {
       validateAddTask(options)
-      this.addedTasks.push(options)
+      this.addedTasks.push({
+        ...options,
+        pluginId: this.pluginId
+      })
     } catch (e) {
       logs.add({
         type: 'error',
@@ -143,7 +152,10 @@ class PluginApi {
       if (options.url && options.path) {
         throw new Error(`'url' and 'path' can't be defined at the same time.`)
       }
-      this.clientAddons.push(options)
+      this.clientAddons.push({
+        ...options,
+        pluginId: this.pluginId
+      })
     } catch (e) {
       logs.add({
         type: 'error',
@@ -164,7 +176,10 @@ class PluginApi {
   addView (options) {
     try {
       validateView(options)
-      this.views.push(options)
+      this.views.push({
+        ...options,
+        pluginId: this.pluginId
+      })
     } catch (e) {
       logs.add({
         type: 'error',

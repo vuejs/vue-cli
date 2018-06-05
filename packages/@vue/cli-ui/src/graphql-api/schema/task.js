@@ -4,6 +4,7 @@ const { withFilter } = require('graphql-subscriptions')
 const channels = require('../channels')
 // Connectors
 const tasks = require('../connectors/tasks')
+const plugins = require('../connectors/plugins')
 
 exports.types = gql`
 extend type Query {
@@ -29,10 +30,12 @@ type Task implements DescribedEntity {
   name: String
   description: String
   link: String
+  icon: String
   logs: [TaskLog]
   prompts: [Prompt]
   views: [TaskView]
   defaultView: String
+  plugin: Plugin
 }
 
 enum TaskStatus {
@@ -64,7 +67,8 @@ type TaskView {
 
 exports.resolvers = {
   Task: {
-    prompts: (task, args, context) => tasks.getPrompts(task.id, context)
+    prompts: (task, args, context) => tasks.getPrompts(task.id, context),
+    plugin: (task, args, context) => plugins.findOne(task.pluginId, context)
   },
 
   Query: {

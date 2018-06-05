@@ -404,7 +404,7 @@ async function callAction ({ id, params }, context) {
 
 function serve (req, res) {
   const { id, 0: file } = req.params
-  const basePath = id === '.' ? cwd.get() : getPath(id)
+  const basePath = id === '.' ? cwd.get() : getPath(decodeURIComponent(id))
   if (basePath) {
     res.sendFile(path.join(basePath, 'ui-public', file))
     return

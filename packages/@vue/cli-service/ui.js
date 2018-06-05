@@ -48,6 +48,7 @@ module.exports = api => {
     match: /vue-cli-service serve/,
     description: 'vue-webpack.tasks.serve.description',
     link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve',
+    icon: '/_plugin/%40vue%2Fcli-service/webpack-logo.png',
     prompts: [
       {
         name: 'open',
@@ -120,6 +121,7 @@ module.exports = api => {
     match: /vue-cli-service build/,
     description: 'vue-webpack.tasks.build.description',
     link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#build',
+    icon: '/_plugin/%40vue%2Fcli-service/webpack-logo.png',
     prompts: [
       {
         name: 'mode',
@@ -210,6 +212,7 @@ module.exports = api => {
     command: 'vue-cli-service inspect',
     description: 'vue-webpack.tasks.inspect.description',
     link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md#inspecting-the-projects-webpack-config',
+    icon: '/_plugin/%40vue%2Fcli-service/webpack-inspect-logo.png',
     prompts: [
       {
         name: 'mode',

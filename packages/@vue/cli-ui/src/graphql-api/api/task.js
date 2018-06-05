@@ -3,6 +3,7 @@ const { createSchema, validateSync } = require('@vue/cli-shared-utils')
 const schema = joi => ({
   description: joi.string(),
   link: joi.string().uri(),
+  icon: joi.string(),
   prompts: joi.array(),
   views: joi.array().items(joi.object({
     id: joi.string().required(),

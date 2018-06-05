@@ -11,7 +11,7 @@
   >
     <div class="content">
       <ItemLogo
-        :icon="iconData.icon"
+        :image="logo ? logo : iconData.icon"
         :class="iconData.class"
         v-tooltip="status"
       />
@@ -56,6 +56,10 @@ export default {
 
     iconData () {
       return icons[this.task.status]
+    },
+
+    logo () {
+      return this.task.icon || (this.task.plugin && this.task.plugin.logo)
     }
   },
 

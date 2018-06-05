@@ -1,6 +1,7 @@
 const gql = require('graphql-tag')
 // Connectors
 const configurations = require('../connectors/configurations')
+const plugins = require('../connectors/plugins')
 
 exports.types = gql`
 extend type Query {
@@ -20,12 +21,14 @@ type Configuration implements DescribedEntity {
   link: String
   icon: String
   prompts: [Prompt]
+  plugin: Plugin
 }
 `
 
 exports.resolvers = {
   Configuration: {
-    prompts: (configuration, args, context) => configurations.getPrompts(configuration.id, context)
+    prompts: (configuration, args, context) => configurations.getPrompts(configuration.id, context),
+    plugin: (configuration, args, context) => plugins.findOne(configuration.pluginId, context)
   },
 
   Query: {
