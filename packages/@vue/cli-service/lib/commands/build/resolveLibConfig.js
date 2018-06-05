@@ -21,6 +21,7 @@ module.exports = (api, { entry, name }, options) => {
     )
   }
 
+  const isVueEntry = /\.vue$/.test(entry)
   const libName = (
     name ||
     api.service.pkg.name ||
@@ -57,10 +58,11 @@ module.exports = (api, { entry, name }, options) => {
 
     // inject demo page for umd
     if (genHTML) {
+      const template = isVueEntry ? 'demo-lib.html' : 'demo-lib-js.html'
       config
         .plugin('demo-html')
           .use(require('html-webpack-plugin'), [{
-            template: path.resolve(__dirname, './demo-lib.html'),
+            template: path.resolve(__dirname, template),
             inject: false,
             filename: 'demo.html',
             libName
@@ -80,21 +82,22 @@ module.exports = (api, { entry, name }, options) => {
       [entryName]: require.resolve('./entry-lib.js')
     }
 
-    Object.assign(rawConfig.output, {
-      filename: `${entryName}.js`,
-      chunkFilename: `${entryName}.[name].js`,
+    rawConfig.output = Object.assign({
       library: libName,
-      libraryExport: 'default',
+      libraryExport: isVueEntry ? 'default' : undefined,
       libraryTarget: format,
-      // use dynamic publicPath so this can be deployed anywhere
-      // the actual path will be determined at runtime by checking
-      // document.currentScript.src.
-      publicPath: '',
       // preserve UDM header from webpack 3 until webpack provides either
       // libraryTarget: 'esm' or target: 'universal'
       // https://github.com/webpack/webpack/issues/6522
       // https://github.com/webpack/webpack/issues/6525
       globalObject: `typeof self !== 'undefined' ? self : this`
+    }, rawConfig.output, {
+      filename: `${entryName}.js`,
+      chunkFilename: `${entryName}.[name].js`,
+      // use dynamic publicPath so this can be deployed anywhere
+      // the actual path will be determined at runtime by checking
+      // document.currentScript.src.
+      publicPath: ''
     })
 
     return rawConfig
