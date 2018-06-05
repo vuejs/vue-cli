@@ -21,6 +21,7 @@ jobs:
           paths:
             - node_modules/
             - ~/.cache/yarn
+            - ~/.cache/Cypress
       - persist_to_workspace:
           root: ~/project
           paths:
