@@ -14,4 +14,3 @@
 
 exports.chalk = require('chalk')
 exports.execa = require('execa')
-exports.cmdShim = require('util').promisify(require('cmd-shim'))

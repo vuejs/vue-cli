@@ -14,7 +14,6 @@ const { clearConsole } = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const { formatFeatures } = require('./util/features')
-const setupDevProject = require('./util/setupDevProject')
 const fetchRemotePreset = require('./util/fetchRemotePreset')
 
 const {
@@ -134,7 +133,7 @@ module.exports = class Creator extends EventEmitter {
     this.emit('creation', { event: 'plugins-install' })
     if (isTestOrDebug) {
       // in development, avoid installation process
-      await setupDevProject(context)
+      await require('./util/setupDevProject')(context)
     } else {
       await installDeps(context, packageManager, cliOptions.registry)
     }
