@@ -112,7 +112,9 @@ export default {
 @import "~@/style/imports"
 
 .project-nav
-  background $vue-ui-color-dark
+  background $vue-ui-color-light-neutral
+  .vue-ui-dark-mode &
+    background $vue-ui-color-dark
 
   .content
     v-box()
@@ -130,19 +132,14 @@ export default {
       display block !important
 
     >>> .vue-ui-button
-      button-colors(rgba($vue-ui-color-light, .7), transparent)
       border-radius 0
       padding-left 0
       padding-right @padding-left
       h-box()
       box-center()
       width 100%
-
-      &:hover, &:active
-        $bg = darken($vue-ui-color-dark, 70%)
-        button-colors($vue-ui-color-light, $bg)
-        &.selected
-          button-colors(lighten($vue-ui-color-primary, 40%), $bg)
+      &.selected
+        button-colors($vue-ui-color-primary, transparent)
 
   &.wide
     >>> .vue-ui-button

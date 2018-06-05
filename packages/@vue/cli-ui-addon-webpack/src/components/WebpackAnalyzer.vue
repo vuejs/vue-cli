@@ -320,6 +320,8 @@ export default {
     padding $padding-item
     background $vue-ui-color-light-neutral
     border-radius $br
+    .vue-ui-dark-mode &
+      background $vue-ui-color-dark
 
   .content
     display flex

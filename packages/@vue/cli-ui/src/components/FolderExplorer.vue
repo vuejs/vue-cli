@@ -229,7 +229,6 @@ export default {
 
 .toolbar
   padding $padding-item
-  background $md-white
   h-box()
   align-items center
 

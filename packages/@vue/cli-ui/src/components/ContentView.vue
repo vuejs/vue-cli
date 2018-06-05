@@ -38,11 +38,15 @@ export default {
   .content
     height 100%
     background $color-background-light
+    .vue-ui-dark-mode &
+      background lighten($vue-ui-color-darker, 1%)
     .wrapper
       background $md-white
       position relative
       overflow-x hidden
       overflow-y auto
+      .vue-ui-dark-mode &
+        background $vue-ui-color-darker
 
   &.limit-width
     .wrapper

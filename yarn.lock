@@ -1139,9 +1139,9 @@
   dependencies:
     lodash "^4.17.4"
 
-"@vue/ui@^0.2.5":
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.2.8.tgz#11cd83cb691e045ce0925f6562267ebc4394b4c2"
+"@vue/ui@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.3.0.tgz#6c1cb1e785293af9c736965f3b2ccc84a4bf8523"
   dependencies:
     focus-visible "^4.1.0"
     material-design-icons "^3.0.1"

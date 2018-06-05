@@ -75,10 +75,14 @@ export default {
   .vue-progress-path
     >>> .background
       stroke rgba($vue-ui-color-dark, .1)
+      .vue-ui-dark-mode &
+        stroke $vue-ui-color-darker
 
   .operations
     color $vue-ui-color-dark
     padding-bottom 12px
+    .vue-ui-dark-mode &
+      color lighten($vue-ui-color-dark, 60%)
     &:first-letter
       text-transform uppercase
 

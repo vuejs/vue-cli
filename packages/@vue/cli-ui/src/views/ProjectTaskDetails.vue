@@ -310,6 +310,9 @@ export default {
   h-box()
   box-center()
   border-radius $br
+  .vue-ui-dark-mode &
+    background $vue-ui-color-dark
+    color $vue-ui-color-light
 
 .content
   flex auto 1 1
@@ -342,12 +345,16 @@ export default {
     margin-right 4px
     >>> svg
       fill $vue-ui-color-dark
+      .vue-ui-dark-mode &
+        fill $vue-ui-color-light-neutral
 
   .name
     font-size 22px
     color $vue-ui-color-dark
     position relative
     top -1px
+    .vue-ui-dark-mode &
+      color $vue-ui-color-light-neutral
 
   .description
     color $color-text-light

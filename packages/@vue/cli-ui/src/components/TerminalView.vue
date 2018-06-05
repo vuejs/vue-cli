@@ -41,7 +41,7 @@ Terminal.applyAddon(webLinks)
 
 const defaultTheme = {
   foreground: '#000',
-  background: '#dbebec',
+  background: '#e4f5ef',
   cursor: 'rgba(0, 0, 0, .4)',
   selection: 'rgba(0, 0, 0, 0.3)',
   black: '#000000',
@@ -210,6 +210,8 @@ export default {
   v-box()
   align-items stretch
   background $vue-ui-color-light-neutral
+  .vue-ui-dark-mode &
+    background $vue-ui-color-dark
 
   .view
     flex 100% 1 1

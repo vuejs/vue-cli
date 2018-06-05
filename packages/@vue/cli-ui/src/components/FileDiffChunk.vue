@@ -39,5 +39,8 @@ export default {
       box-center()
       color darken($vue-ui-color-light-neutral, 30%)
       letter-spacing 4px
+      .vue-ui-dark-mode &
+        background lighten($vue-ui-color-darker, 1%)
+        color $vue-ui-color-dark-neutral
 
 </style>

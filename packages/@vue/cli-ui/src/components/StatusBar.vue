@@ -49,6 +49,14 @@
       </div>
 
       <div
+        class="section action dark-mode"
+        v-tooltip="$t('components.status-bar.dark-mode')"
+        @click="toggleDarkMode()"
+      >
+        <VueIcon icon="invert_colors"/>
+      </div>
+
+      <div
         class="section action bug-report"
         @click="onBugReportClick()"
       >
@@ -77,7 +85,8 @@ export default {
   data () {
     return {
       showLogs: false,
-      consoleLogLast: null
+      consoleLogLast: null,
+      darkMode: this.loadDarkMode()
     }
   },
 
@@ -92,6 +101,13 @@ export default {
           this.consoleLogLast = data.consoleLogAdded
         }
       }
+    }
+  },
+
+  watch: {
+    darkMode: {
+      handler: 'applyDarkMode',
+      immediate: true
     }
   },
 
@@ -134,6 +150,25 @@ export default {
         '_blank'
       )
       win.focus()
+    },
+
+    loadDarkMode () {
+      const raw = localStorage.getItem('vue-ui-dark-mode')
+      return (raw === 'true')
+    },
+
+    applyDarkMode () {
+      localStorage.setItem('vue-ui-dark-mode', this.darkMode.toString())
+      const el = document.getElementsByTagName('html')[0]
+      if (this.darkMode) {
+        el.classList.add('vue-ui-dark-mode')
+      } else {
+        el.classList.remove('vue-ui-dark-mode')
+      }
+    },
+
+    toggleDarkMode () {
+      this.darkMode = !this.darkMode
     }
   }
 }
@@ -146,6 +181,8 @@ export default {
   position relative
   z-index 1
   box-shadow 0 -2px 10px rgba(black, .05)
+  .vue-ui-dark-mode &
+    box-shadow 0 -2px 10px rgba(black, .2)
 
   .content
     h-box()
@@ -153,6 +190,8 @@ export default {
     background $vue-ui-color-light
     font-size $padding-item
     height 28px
+    .vue-ui-dark-mode &
+      background $vue-ui-color-darker
 
   .section
     h-box()
@@ -165,12 +204,16 @@ export default {
     &:hover
       opacity 1
       background lighten($vue-ui-color-light-neutral, 30%)
+      .vue-ui-dark-mode &
+        background $vue-ui-color-dark
 
     > .vue-ui-icon + *
       margin-left 4px
 
     .label
       color lighten($vue-ui-color-dark, 20%)
+      .vue-ui-dark-mode &
+        color lighten($vue-ui-color-dark-neutral, 20%)
 
     &.action
       user-select none

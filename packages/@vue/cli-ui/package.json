@@ -49,7 +49,7 @@
     "@vue/cli-plugin-eslint": "^3.0.0-beta.15",
     "@vue/cli-service": "^3.0.0-beta.15",
     "@vue/eslint-config-standard": "^3.0.0-beta.15",
-    "@vue/ui": "^0.2.5",
+    "@vue/ui": "^0.3.0",
     "ansi_up": "^2.0.2",
     "cross-env": "^5.1.5",
     "eslint": "^4.16.0",
