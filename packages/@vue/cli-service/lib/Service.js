@@ -196,14 +196,14 @@ module.exports = class Service {
     const target = process.env.VUE_CLI_BUILD_TARGET
     const exceptionTargets = ['lib', 'wc', 'wc-async']
     if (
+      !process.env.VUE_CLI_TEST &&
       !exceptionTargets.includes(target) &&
       config.output.publicPath !== this.projectOptions.baseUrl
     ) {
-      error(
+      throw new Error(
         `Do not modify webpack output.publicPath directly. ` +
         `Use the "baseUrl" option in vue.config.js instead.`
       )
-      process.exit(1)
     }
 
     return config
