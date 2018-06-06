@@ -130,7 +130,7 @@ function writeData ({ config, data, changedFields }, context) {
   }
 }
 
-async function getPrompts (id, context) {
+async function getPromptTabs (id, context) {
   const config = findOne(id, context)
   if (config) {
     const data = readData(config, context)
@@ -143,13 +143,25 @@ async function getPrompts (id, context) {
       cwd: cwd.get(),
       data
     })
+    let tabs = configData.tabs
+    if (!tabs) {
+      tabs = [
+        {
+          id: '__default',
+          label: 'Default',
+          prompts: configData.prompts
+        }
+      ]
+    }
     await prompts.reset()
-    configData.prompts.forEach(prompts.add)
+    for (const tab of tabs) {
+      tab.prompts = tab.prompts.map(prompts.add)
+    }
     if (configData.answers) {
       await prompts.setAnswers(configData.answers)
     }
     await prompts.start()
-    return prompts.list()
+    return tabs
   }
   return []
 }
@@ -222,7 +234,7 @@ function cancel (id, context) {
 module.exports = {
   list,
   findOne,
-  getPrompts,
+  getPromptTabs,
   save,
   cancel
 }

@@ -2,7 +2,9 @@ import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
 
 export default function ({
   field,
-  query
+  query,
+  variables = null,
+  updateQuery = null
 }) {
   // @vue/component
   return {
@@ -32,6 +34,15 @@ export default function ({
       }
     },
 
+    watch: {
+      hasPromptsChanged: {
+        handler (value) {
+          this.$emit('has-changes', value)
+        },
+        immediate: true
+      }
+    },
+
     methods: {
       async answerPrompt ({ prompt, value }) {
         await this.$apollo.mutate({
@@ -43,13 +54,17 @@ export default function ({
             }
           },
           update: (store, { data: { promptAnswer } }) => {
-            let variables = this.$apollo.queries[field].options.variables || undefined
-            if (typeof variables === 'function') {
-              variables = variables.call(this)
+            let vars = variables || this.$apollo.queries[field].options.variables || undefined
+            if (typeof vars === 'function') {
+              vars = vars.call(this)
             }
-            const data = store.readQuery({ query, variables })
-            data[field].prompts = promptAnswer
-            store.writeQuery({ query, variables, data })
+            const data = store.readQuery({ query, variables: vars })
+            if (updateQuery) {
+              updateQuery.call(this, data, promptAnswer)
+            } else {
+              data[field].prompts = promptAnswer
+            }
+            store.writeQuery({ query, variables: vars, data })
           }
         })
       }

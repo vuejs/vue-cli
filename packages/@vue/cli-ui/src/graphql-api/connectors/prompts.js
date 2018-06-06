@@ -171,7 +171,9 @@ function list () {
 }
 
 function add (data) {
-  prompts.push(generatePrompt(data))
+  const prompt = generatePrompt(data)
+  prompts.push(prompt)
+  return prompt
 }
 
 async function start () {
