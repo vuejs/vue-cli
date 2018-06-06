@@ -1,30 +1,3 @@
-const path = require('path')
-const fs = require('fs')
-
-function readAppManifest (cwd) {
-  const manifestPath = path.join(cwd, 'public/manifest.json')
-  if (fs.existsSync(manifestPath)) {
-    try {
-      return JSON.parse(fs.readFileSync(manifestPath, { encoding: 'utf8' }))
-    } catch (e) {
-      console.log(`Can't read JSON in ${manifestPath}`)
-    }
-  }
-}
-
-function updateAppManifest (cwd, handler) {
-  const manifestPath = path.join(cwd, 'public/manifest.json')
-  if (fs.existsSync(manifestPath)) {
-    try {
-      const manifest = JSON.parse(fs.readFileSync(manifestPath, { encoding: 'utf8' }))
-      handler(manifest)
-      fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), { encoding: 'utf8' })
-    } catch (e) {
-      console.log(`Can't update JSON in ${manifestPath}`)
-    }
-  }
-}
-
 module.exports = api => {
   // Config file
   api.describeConfig({
@@ -33,10 +6,14 @@ module.exports = api => {
     description: 'pwa.config.pwa.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa#configuration',
     files: {
-      js: ['vue.config.js']
+      vue: {
+        js: ['vue.config.js']
+      },
+      manifest: {
+        json: ['public/manifest.json']
+      }
     },
     onRead: ({ data, cwd }) => {
-      const manifest = readAppManifest(cwd)
       return {
         prompts: [
           {
@@ -46,7 +23,7 @@ module.exports = api => {
             description: 'pwa.config.pwa.workboxPluginMode.description',
             link: 'https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#which_plugin_to_use',
             default: 'GenerateSW',
-            value: data.pwa && data.pwa.workboxPluginMode,
+            value: data.vue && data.vue.pwa && data.vue.pwa.workboxPluginMode,
             choices: [
               {
                 name: 'GenerateSW',
@@ -63,7 +40,7 @@ module.exports = api => {
             type: 'input',
             message: 'pwa.config.pwa.name.message',
             description: 'pwa.config.pwa.name.description',
-            value: data.pwa && data.pwa.name
+            value: data.vue && data.vue.pwa && data.vue.pwa.name
           },
           {
             name: 'themeColor',
@@ -71,7 +48,7 @@ module.exports = api => {
             message: 'pwa.config.pwa.themeColor.message',
             description: 'pwa.config.pwa.themeColor.description',
             default: '#4DBA87',
-            value: data.pwa && data.pwa.themeColor
+            value: data.vue && data.vue.pwa && data.vue.pwa.themeColor
           },
           {
             name: 'backgroundColor',
@@ -79,7 +56,7 @@ module.exports = api => {
             message: 'pwa.config.pwa.backgroundColor.message',
             description: 'pwa.config.pwa.backgroundColor.description',
             default: '#000000',
-            value: manifest && manifest.background_color,
+            value: data.manifest && data.manifest.background_color,
             skipSave: true
           },
           {
@@ -88,7 +65,7 @@ module.exports = api => {
             message: 'pwa.config.pwa.msTileColor.message',
             description: 'pwa.config.pwa.msTileColor.description',
             default: '#000000',
-            value: data.pwa && data.pwa.msTileColor
+            value: data.vue && data.vue.pwa && data.vue.pwa.msTileColor
           },
           {
             name: 'appleMobileWebAppStatusBarStyle',
@@ -96,7 +73,7 @@ module.exports = api => {
             message: 'pwa.config.pwa.appleMobileWebAppStatusBarStyle.message',
             description: 'pwa.config.pwa.appleMobileWebAppStatusBarStyle.description',
             default: 'default',
-            value: data.pwa && data.pwa.appleMobileWebAppStatusBarStyle
+            value: data.vue && data.vue.pwa && data.vue.pwa.appleMobileWebAppStatusBarStyle
           }
         ]
       }
@@ -106,29 +83,29 @@ module.exports = api => {
       for (const prompt of prompts.filter(p => !p.raw.skipSave)) {
         result[`pwa.${prompt.id}`] = await api.getAnswer(prompt.id)
       }
-      api.setData(result)
+      api.setData('vue', result)
 
       // Update app manifest
 
       const name = result['pwa.name']
       if (name) {
-        updateAppManifest(cwd, manifest => {
-          manifest.name = name
-          manifest.short_name = name
+        api.setData('manifest', {
+          name,
+          short_name: name
         })
       }
 
       const themeColor = result['pwa.themeColor']
       if (themeColor) {
-        updateAppManifest(cwd, manifest => {
-          manifest.theme_color = themeColor
+        api.setData('manifest', {
+          theme_color: themeColor
         })
       }
 
       const backgroundColor = await api.getAnswer('backgroundColor')
       if (backgroundColor) {
-        updateAppManifest(cwd, manifest => {
-          manifest.background_color = backgroundColor
+        api.setData('manifest', {
+          background_color: backgroundColor
         })
       }
     }
