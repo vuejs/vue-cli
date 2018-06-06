@@ -312,7 +312,8 @@
       "actions": {
         "cancel": "Cancel changes",
         "save": "Save changes",
-        "more-info": "More info"
+        "more-info": "More info",
+        "refresh": "Refresh"
       }
     },
     "project-tasks": {
@@ -419,13 +420,16 @@
         "groups": {
           "strongly-recommended": "Strongly recommended",
           "recommended": "Recommended"
-        }
-      },
-      "eslint-extra": {
-        "description": "Extra ESLint settings",
-        "lintOnSave": {
-          "message": "Lint on save",
-          "description": "Automatically lint source files when saved"
+        },
+        "vue": {
+          "label": "Vue"
+        },
+        "extra": {
+          "label": "Extra",
+          "lintOnSave": {
+            "message": "Lint on save",
+            "description": "Automatically lint source files when saved"
+          }
         }
       }
     },
