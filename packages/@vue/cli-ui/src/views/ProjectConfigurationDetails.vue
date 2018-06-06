@@ -47,7 +47,15 @@
       />
 
       <VueButton
-        :disabled="!hasPromptsChanged"
+        v-if="configuration && !hasPromptsChanged"
+        icon-left="refresh"
+        class="big primary"
+        :label="$t('views.project-configuration-details.actions.refresh')"
+        @click="refetch()"
+      />
+
+      <VueButton
+        v-else
         icon-left="save"
         class="primary big"
         :label="$t('views.project-configuration-details.actions.save')"
@@ -137,7 +145,7 @@ export default {
         }
       })
 
-      this.$apollo.queries.configuration.refetch()
+      this.refetch()
     },
 
     async save () {
@@ -148,6 +156,10 @@ export default {
         }
       })
 
+      this.refetch()
+    },
+
+    refetch () {
       this.$apollo.queries.configuration.refetch()
     }
   }
