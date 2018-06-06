@@ -84,13 +84,14 @@ module.exports = (api, options) => {
       webpackConfig.entryPoints.clear()
 
       const pages = Object.keys(multiPageConfig)
+      const normalizePageConfig = c => typeof c === 'string' ? { entry: c } : c
 
       pages.forEach(name => {
         const {
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`
-        } = multiPageConfig[name]
+        } = normalizePageConfig(multiPageConfig[name])
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
@@ -107,7 +108,9 @@ module.exports = (api, options) => {
       })
 
       pages.forEach(name => {
-        const { filename = `${name}.html` } = multiPageConfig[name]
+        const {
+          filename = `${name}.html`
+        } = normalizePageConfig(multiPageConfig[name])
         webpackConfig
           .plugin(`preload-${name}`)
             .use(PreloadPlugin, [{
@@ -148,16 +151,18 @@ module.exports = (api, options) => {
     if (isProd) {
       webpackConfig
         .optimization.splitChunks({
-          chunks: 'all',
-          name: (m, chunks, cacheGroup) => `chunk-${cacheGroup}`,
           cacheGroups: {
             vendors: {
+              name: 'chunk-vendors',
               test: /[\\/]node_modules[\\/]/,
-              priority: -10
+              priority: -10,
+              chunks: 'initial'
             },
             common: {
+              name: 'chunk-common',
               minChunks: 2,
               priority: -20,
+              chunks: 'initial',
               reuseExistingChunk: true
             }
           }
