@@ -107,9 +107,9 @@ api.describeConfig({
 
 If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
 
-#### Config file
+#### Config files
 
-By default, a configuration UI might read and write to a configuration file, for example `.eslintrc.js`.
+By default, a configuration UI might read and write to one or more configuration files, for example both `.eslintrc.js` and `vue.config.js`.
 
 You can provide what are the possible files to be detected in the user project:
 
@@ -118,17 +118,22 @@ api.describeConfig({
   /* ... */
   // All possible files for this config
   files: {
-    json: ['.eslintrc', '.eslintrc.json'],
-    js: ['.eslintrc.js'],
-    // Will read from `package.json`
-    package: 'eslintConfig'
+    // eslintrc.js
+    eslint: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      // Will read from `package.json`
+      package: 'eslintConfig'
+    },
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
   },
 })
 ```
 
-Supported types: `json`, `yaml`, `js`, `package`.
-
-**⚠️ Currently, only 1 file can be read and written to at a time.**
+Supported types: `json`, `yaml`, `js`, `package`. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
 
 #### Display config prompts
 
@@ -148,6 +153,124 @@ api.describeConfig({
 Those prompts will be displayed in the configuration details pane.
 
 See [Prompts](#prompts) for more info.
+
+The `data` object contains the JSON result of each config file content.
+
+For example, let's say the user has the following `vue.config.js` in his project:
+
+```js
+module.exports = {
+  lintOnSave: false
+}
+```
+
+We declare the config file in our plugin like this:
+
+```js
+api.describeConfig({
+  /* ... */
+  // All possible files for this config
+  files: {
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
+  },
+})
+```
+
+Then the `data` object will be:
+
+```js
+{
+  // File
+  vue: {
+    // File data
+    lintOnSave: false
+  }
+}
+```
+
+Multiple files example: if we add the following `eslintrc.js` file in the user project:
+
+```js
+module.exports = {
+  root: true,
+  extends: [
+    'plugin:vue/essential',
+    '@vue/standard'
+  ]
+}
+```
+
+And change the `files` option in our plugin to this:
+
+```js
+api.describeConfig({
+  /* ... */
+  // All possible files for this config
+  files: {
+    // eslintrc.js
+    eslint: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      // Will read from `package.json`
+      package: 'eslintConfig'
+    },
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
+  },
+})
+```
+
+Then the `data` object will be:
+
+```js
+{
+  eslint: {
+    root: true,
+    extends: [
+      'plugin:vue/essential',
+      '@vue/standard'
+    ]
+  },
+  vue: {
+    lintOnSave: false
+  }
+}
+```
+
+#### Configuration tabs
+
+You can organize the prompts into several tabs:
+
+```js
+api.describeConfig({
+  /* ... */
+  onRead: ({ data, cwd }) => ({
+    tabs: [
+      {
+        id: 'tab1',
+        label: 'My tab',
+        // Optional
+        icon: 'application_settings',
+        prompts: [
+          // Prompt objects
+        ]
+      },
+      {
+        id: 'tab2',
+        label: 'My other tab',
+        prompts: [
+          // Prompt objects
+        ]
+      }
+    ]
+  })
+})
+```
 
 #### Save config changes
 
