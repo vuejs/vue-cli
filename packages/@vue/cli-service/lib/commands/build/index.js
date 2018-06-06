@@ -71,6 +71,7 @@ module.exports = (api, options) => {
     }
 
     // resolve raw webpack config
+    process.env.VUE_CLI_BUILD_TARGET = args.target
     let webpackConfig
     if (args.target === 'lib') {
       webpackConfig = require('./resolveLibConfig')(api, args, options)

@@ -191,6 +191,21 @@ module.exports = class Service {
         config = merge(config, fn)
       }
     })
+
+    // check if the user has manually mutated output.publicPath
+    const target = process.env.VUE_CLI_BUILD_TARGET
+    const exceptionTargets = ['lib', 'wc', 'wc-async']
+    if (
+      !exceptionTargets.includes(target) &&
+      config.output.publicPath !== this.projectOptions.baseUrl
+    ) {
+      error(
+        `Do not modify webpack output.publicPath directly. ` +
+        `Use the "baseUrl" option in vue.config.js instead.`
+      )
+      process.exit(1)
+    }
+
     return config
   }
 
