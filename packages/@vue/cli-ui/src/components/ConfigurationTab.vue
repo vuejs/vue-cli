@@ -23,7 +23,14 @@ export default {
         }
       },
       updateQuery (data, prompts) {
-        data.configuration.tabs.find(t => t.id === this.tab.id).prompts = prompts
+        const result = {}
+        for (const prompt of prompts) {
+          const list = result[prompt.tabId] || (result[prompt.tabId] = [])
+          list.push(prompt)
+        }
+        for (const tabId in result) {
+          data.configuration.tabs[tabId].prompts = result[tabId]
+        }
       }
     })
   ],

@@ -107,6 +107,7 @@ function generatePrompt (data) {
     value: null,
     valueChanged: false,
     error: null,
+    tabId: data.tabId || null,
     raw: data
   }
 }

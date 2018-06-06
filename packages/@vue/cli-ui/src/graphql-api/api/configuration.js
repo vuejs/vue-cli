@@ -6,12 +6,12 @@ const schema = createSchema(joi => ({
   description: joi.string(),
   link: joi.string().uri(),
   icon: joi.string(),
-  files: joi.object({
+  files: joi.object().pattern(/^/, joi.object({
     json: joi.array().items(joi.string()),
     js: joi.array().items(joi.string()),
     yaml: joi.array().items(joi.string()),
     package: joi.string()
-  }),
+  })),
   onRead: joi.func().required(),
   onWrite: joi.func().required()
 }))

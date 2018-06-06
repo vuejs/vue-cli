@@ -167,4 +167,7 @@ export default {
     height 0
     overflow-x hidden
     overflow-y auto
+
+  .tabs
+    margin $padding-item 0
 </style>
