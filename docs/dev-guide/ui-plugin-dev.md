@@ -279,7 +279,7 @@ Use the `onWrite` hook to write the data to the configuration file (or execute a
 ```js
 api.describeConfig({
   /* ... */
-  onWrite: ({ prompts, answers, data, file, cwd, api }) => {
+  onWrite: ({ prompts, answers, data, files, cwd, api }) => {
     // ...
   }
 })
@@ -289,8 +289,8 @@ Arguments:
 
 - `prompts`: current prompts runtime objects (see below)
 - `answers`: answers data from the user inputs
-- `data`: read-only initial data read from the file
-- `file`: descriptor of the found file (`{ type: 'json', path: '...' }`)
+- `data`: read-only initial data read from the config files
+- `files`: descriptors of the found files (`{ type: 'json', path: '...' }`)
 - `cwd`: current working directory
 - `api`: `onWrite API` (see below)
 
@@ -313,6 +313,7 @@ Prompts runtime objects:
   // true if changed by user
   valueChanged: false,
   error: null,
+  tabId: null,
   // Original inquirer prompt object
   raw: data
 }
@@ -320,8 +321,8 @@ Prompts runtime objects:
 
 `onWrite` API:
 
-- `assignData(newData)`: use `Object.assign` to update the config data before writing.
-- `setData(newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
+- `assignData(fileId, newData)`: use `Object.assign` to update the config data before writing.
+- `setData(fileId, newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
 - `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provided (for example `JSON.parse`).
 
 Example (from the ESLint plugin):
@@ -336,7 +337,7 @@ api.describeConfig({
     for (const prompt of prompts) {
       result[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
     }
-    api.setData(result)
+    api.setData('eslint', result)
   }
 })
 ```
