@@ -66,7 +66,7 @@ function getDefaultFile (fileDescriptor, context) {
 
 function readFile (config, fileDescriptor, context) {
   const file = findFile(fileDescriptor, context)
-  let fileData
+  let fileData = {}
   if (file) {
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
