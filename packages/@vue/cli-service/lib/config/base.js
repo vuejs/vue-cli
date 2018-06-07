@@ -16,7 +16,7 @@ module.exports = (api, options) => {
         .publicPath(options.baseUrl)
 
     webpackConfig.resolve
-      .set('symlinks', true)
+      .set('symlinks', false)
       .extensions
         .merge(['.js', '.jsx', '.vue', '.json'])
         .end()
@@ -35,7 +35,6 @@ module.exports = (api, options) => {
         )
 
     webpackConfig.resolveLoader
-      .set('symlinks', true)
       .modules
         .add('node_modules')
         .add(api.resolve('node_modules'))
