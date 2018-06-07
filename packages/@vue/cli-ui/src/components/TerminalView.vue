@@ -35,12 +35,13 @@
 import { Terminal } from 'xterm'
 import * as fit from 'xterm/dist/addons/fit/fit'
 import * as webLinks from 'xterm/dist/addons/webLinks/webLinks'
+import DARK_MODE from '../graphql/darkMode.gql'
 
 Terminal.applyAddon(fit)
 Terminal.applyAddon(webLinks)
 
 const defaultTheme = {
-  foreground: '#000',
+  foreground: '#2c3e50',
   background: '#e4f5ef',
   cursor: 'rgba(0, 0, 0, .4)',
   selection: 'rgba(0, 0, 0, 0.3)',
@@ -60,6 +61,16 @@ const defaultTheme = {
   white: '#d0d0d0',
   brightBlack: '#808080',
   brightWhite: '#ffffff'
+}
+
+const darkTheme = {
+  ...defaultTheme,
+  foreground: '#fff',
+  background: '#2c3e50',
+  cursor: 'rgba(255, 255, 255, .4)',
+  selection: 'rgba(255, 255, 255, 0.3)',
+  magenta: '#e83030',
+  brightMagenta: '#e83030'
 }
 
 export default {
@@ -105,6 +116,20 @@ export default {
     }
   },
 
+  apollo: {
+    darkMode: DARK_MODE
+  },
+
+  computed: {
+    theme () {
+      if (this.darkMode) {
+        return darkTheme
+      } else {
+        return defaultTheme
+      }
+    }
+  },
+
   watch: {
     cols (c) {
       this.$_terminal.resize(c, this.rows)
@@ -114,7 +139,16 @@ export default {
       this.$_terminal.resize(this.cols, r)
     },
 
-    content: 'setContent'
+    content: 'setContent',
+
+    theme: {
+      handler (value) {
+        if (this.$_terminal) {
+          this.$_terminal._setTheme(this.theme)
+        }
+      },
+      immediate: true
+    }
   },
 
   mounted () {
@@ -134,7 +168,7 @@ export default {
       let term = this.$_terminal = new Terminal({
         cols: this.cols,
         rows: this.rows,
-        theme: defaultTheme,
+        theme: this.theme,
         ...this.options
       })
       webLinks.webLinksInit(term, this.handleLink)
