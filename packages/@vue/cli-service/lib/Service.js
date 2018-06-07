@@ -53,12 +53,12 @@ module.exports = class Service {
     this.initialized = true
     this.mode = mode
 
-    // load base .env
-    this.loadEnv()
     // load mode .env
     if (mode) {
       this.loadEnv(mode)
     }
+    // load base .env
+    this.loadEnv()
 
     // load user config
     const userOptions = this.loadUserOptions()
@@ -106,8 +106,8 @@ module.exports = class Service {
       }
     }
 
-    load(basePath)
     load(localPath)
+    load(basePath)
   }
 
   resolvePlugins (inlinePlugins, useBuiltIn) {
