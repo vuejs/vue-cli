@@ -84,6 +84,14 @@ module.exports = (api, options) => {
             limit: inlineLimit,
             name: getAssetPath(options, `img/[name].[hash:8].[ext]`)
           })
+    
+    // GraphQL Loader ------------------
+    webpackConfig.module
+      .rule('graphql')
+      .test(/\.graphql$/)
+      .use('graphql-tag/loader')
+        .loader('graphql-tag/loader')
+        .end()
 
     // do not base64-inline SVGs.
     // https://github.com/facebookincubator/create-react-app/pull/1180
