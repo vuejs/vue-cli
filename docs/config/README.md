@@ -168,7 +168,7 @@ module.exports = {
 }
 ```
 
-#### Modifying Loader with GraphQL example
+#### Adding a new loader example
 
 ``` js
 // vue.config.js
