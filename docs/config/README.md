@@ -319,7 +319,6 @@ Sometimes you may want to pass options to the pre-processor's webpack loader. Yo
 
 ``` js
 // vue.config.js
-
 module.exports = {
   css: {
     loaderOptions: {
