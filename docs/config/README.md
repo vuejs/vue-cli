@@ -168,6 +168,23 @@ module.exports = {
 }
 ```
 
+#### Adding a new loader example
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    // GraphQL Loader
+    config.module
+      .rule('graphql')
+      .test(/\.graphql$/)
+      .use('graphql-tag/loader')
+        .loader('graphql-tag/loader')
+        .end()
+  }
+}
+```
+
 #### Replace existing Base Loader
 
 If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), for example using `vue-svg-loader` to inline SVG files instead of loading the file:
