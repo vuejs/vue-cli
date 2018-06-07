@@ -50,6 +50,13 @@ module.exports = {
 
   // CSS related options
   css: {
+    //
+    // By defualt only files ending with *.modules.[ext] are loaded as
+    // CSS modules. Setting this to true enables CSS modules for all style
+    // file types.
+    // This option does not affect *.vue files.
+    modules: false,
+
     // extract CSS in components into a single CSS file (only in production)
     // can also be an object of options to pass to extract-text-webpack-plugin
     extract: true,
@@ -59,11 +66,13 @@ module.exports = {
 
     // pass custom options to pre-processor loaders. e.g. to pass options to
     // sass-loader, use { sass: { ... } }
-    loaderOptions: {},
-
-    // Enable CSS modules for all css / pre-processor files.
-    // This option does not affect *.vue files.
-    modules: false
+    loaderOptions: {
+      css: {},
+      postcss: {},
+      less: {},
+      sass: {},
+      stylus: {}
+    }
   },
 
   // use thread-loader for babel & TS in production build
@@ -113,6 +122,10 @@ module.exports = {
 
 The object will be merged into the final webpack config using [webpack-merge](https://github.com/survivejs/webpack-merge).
 
+::: warning
+Some webpack options are set based on values in `vue.config.js` and should not be mutated directly. For example, instead of modifying `output.path`, you should use the `outputDir` option in `vue.config.js`; instead of modifying `output.publicPath`, you should use the `baseUrl` option in `vue.config.js`. This is because the values in `vue.config.js` will be used in multiple places inside the config to ensure everything works properly together.
+:::
+
 If you need conditional behavior based on the environment, or want to directly mutate the config, use a function (which will be lazy evaluated after the env variables are set). The function receives the resolved config as the argument. Inside the function, you can either mutate the config directly, OR return an object which will be merged:
 
 ``` js
@@ -134,41 +147,29 @@ The internal webpack config is maintained using [webpack-chain](https://github.c
 
 This allows us finer-grained control over the internal config. Here are some examples:
 
-#### Transpiling a Dependency Module
-
-By default the Babel configuration skips
+#### Modifying Options of a Loader
 
 ``` js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
-    config.module
-      .rule('js')
-        .include
-          .add(/some-module-to-transpile/)
-  }
-}
-```
-
-#### Modifying Loader Options
-
-``` js
-// vue.config.js
-module.exports = {
-  chainWebpack: config => {
-    config.module
-      .rule('scss')
-      .use('sass-loader')
-      .tap(options =>
-        merge(options, {
-          includePaths: [path.resolve(__dirname, 'node_modules')],
+    config
+      .rule('vue')
+      .use('vue-loader')
+        .loader('vue-loader')
+        .tap(options => {
+          // modify the options...
+          return options
         })
-      )
   }
 }
 ```
 
-#### Adding a new loader example
+::: tip
+For CSS related loaders, it's recommended to use [css.loaderOptions](#passing-options-to-pre-processor-loaders) instead of directly targeting loaders via chaining. This is because there are multiple rules for each CSS file type and `css.loaderOptions` ensures you can affect all rules in one single place.
+:::
+
+#### Adding a New Loader
 
 ``` js
 // vue.config.js
@@ -185,7 +186,7 @@ module.exports = {
 }
 ```
 
-#### Replace existing Base Loader
+#### Replacing Loaders of a Rule
 
 If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), for example using `vue-svg-loader` to inline SVG files instead of loading the file:
 
@@ -193,15 +194,22 @@ If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cl
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
-    config.module
-      .rule('svg')
-      .use('file-loader')
+    const svgRule = config.module.rule('svg')
+
+    // clear all existing loaders.
+    // if you don't do this, the loader below will be appended to
+    // existing loaders of the rule.
+    svgRule.uses.clear()
+
+    // add replacement loader(s)
+    svgRule
+      .use('vue-svg-loader')
         .loader('vue-svg-loader')
   }
 }
 ```
 
-#### Modifying Plugin Options
+#### Modifying Options of a Plugin
 
 ``` js
 // vue.config.js
@@ -242,7 +250,9 @@ Since `@vue/cli-service` abstracts away the webpack config, it may be more diffi
 
 `vue-cli-service` exposes the `inspect` command for inspecting the resolved webpack config. The global `vue` binary also provides the `inspect` command, and it simply proxies to `vue-cli-service inspect` in your project.
 
-The command prints to stdout by default, so you can redirect that into a file for easier inspection:
+The command will print the resolved webpack config to stdout, which also contains hints on how to access rules and plugins via chaining.
+
+You can redirect the output into a file for easier inspection:
 
 ``` bash
 vue inspect > output.js
@@ -250,11 +260,25 @@ vue inspect > output.js
 
 Note the output is not a valid webpack config file, it's a serialized format only meant for inspection.
 
-You can also inspect a certain path of the config to narrow it down:
+You can also inspect a subset of the config by specifying a path:
 
 ``` bash
 # only inspect the first rule
 vue inspect module.rules.0
+```
+
+Or, target a named rule or plugin:
+
+``` bash
+vue inspect --rule vue
+vue inspect --plugin html
+```
+
+Finally, you can list all named rules and plugins:
+
+``` bash
+vue inspect --rules
+vue inspect --plugins
 ```
 
 ### Using Resolved Config as a File
@@ -274,6 +298,10 @@ Vue CLI projects comes with support for [PostCSS](http://postcss.org/), [CSS Mod
 ### PostCSS
 
 Vue CLI uses PostCSS internally, and enables [autoprefixer](https://github.com/postcss/autoprefixer) by default. You can configure PostCSS via `.postcssrc` or any config source supported by [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config).
+
+You can also configure `postcss-loader` via `css.loaderOptions.postcss` in `vue.config.js`.
+
+The [autoprefixer](https://github.com/postcss/autoprefixer) plugin is enabled by default. To configure the browser targets, use the [browserslist](../guide/browser-compatibility.html#browserslist) field in `package.json`.
 
 ### CSS Modules
 
@@ -295,7 +323,20 @@ import styles from './foo.css?module'
 import sassStyles from './foo.scss?module'
 ```
 
-If you wish to customize the generated CSS modules class names, you can do so via the `css.localIdentName` option in `vue.config.js`.
+If you wish to customize the generated CSS modules class names, you can do so via `css.loaderOptions.css` in `vue.config.js`. All `css-loader` options are supported here, for example `localIdentName` and `camelCase`:
+
+``` js
+// vue.config.js
+module.exports = {
+  css: {
+    loaderOptions: {
+      css: {
+        camelCase: 'only'
+      }
+    }
+  }
+}
+```
 
 ### Pre-Processors
 
@@ -324,21 +365,26 @@ const fs = require('fs')
 module.exports = {
   css: {
     loaderOptions: {
+      // pass options to sass-loader
       sass: {
-        data: fs.readFileSync('src/variables.scss', 'utf-8')
+        // @/ is an alias to src/
+        // so this assumes you have a file named `src/variables.scss`
+        data: `@import "@/variables.scss";`
       }
     }
   }
 }
 ```
 
+Loaders can be configured via `loaderOptions` include:
+
+- [css-loader](https://github.com/webpack-contrib/css-loader)
+- [postcss-loader](https://github.com/postcss/postcss-loader)
+- [sass-loader](https://github.com/webpack-contrib/sass-loader)
+- [less-loader](https://github.com/webpack-contrib/less-loader)
+- [stylus-loader](https://github.com/shama/stylus-loader)
+
 This is preferred over manually tapping into specific loaders, because these options will be shared across all rules that are related to it.
-
-## browserslist
-
-You will notice a `browserslist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by `babel-preset-env` and `autoprefixer` to automatically determine the JavaScript polyfills and CSS vendor prefixes needed.
-
-See [here](https://github.com/ai/browserslist) for how to specify browser ranges.
 
 ## Dev Server
 
@@ -401,9 +447,15 @@ module.exports = {
 
 ## Babel
 
-Babel can be configured via `.babelrc` or the `babel` field in `package.json`.
+Babel can be configured via `babel.config.js`.
+
+::: tip
+Vue CLI uses `babel.config.js` which is a new config format in Babel 7. Unlike `.babelrc` or the `babel` field in `package.json`, this config file does not use a file-location based resolution, and is applied consistently to any file under project root, including dependencies inside `node_modules`. It is recommended to always use `babel.config.js` instead of other formats in Vue CLI projects.
+:::
 
 All Vue CLI apps use `@vue/babel-preset-app`, which includes `babel-preset-env`, JSX support and optimized configuration for minimal bundle size overhead. See [its docs](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) for details and preset options.
+
+Also see the [Polyfills](../guide/browser-compatibility.md#polyfills) section in guide.
 
 ## ESLint
 
@@ -436,3 +488,7 @@ See [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/pack
 ### Nightwatch
 
 See [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch) for more details.
+
+## Browser Targets
+
+See the [Browser Compatibility](../guide/browser-compatibility.md#browserslist) section in guide.

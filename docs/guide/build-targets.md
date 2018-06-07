@@ -1,8 +1,10 @@
 # Build Targets
 
+When you run `vue-cli-service build`, you can specify different build targets via the `--target` option. This allows you to use the same code base to produce different builds for different use cases.
+
 ## App
 
-App mode is the default mode. In this mode:
+App is the default build target. In this mode:
 
 - `index.html` with asset and resource hints injection
 - vendor libraries split into a separate chunk for better caching

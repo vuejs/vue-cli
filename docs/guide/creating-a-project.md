@@ -32,6 +32,10 @@ The default setup is great for quickly prototyping a new project, while the manu
 
 If you chose to manually select features, at the end of the prompts you also have the option to save your selections as a preset so that you can reuse it in the future. We will discuss presets and plugins in the next section.
 
+::: tip
+During the project creation process, you may get prompted to use the [Taobao npm registry mirror](https://npm.taobao.org/) for faster dependency installation. You choice will be saved in a file called `~/.vuerc` for future uses. If you wish you change this later, you can do so by editing `~/.vuerc`.
+:::
+
 The `vue create` command has a number of options and you can explore them all by running:
 
 ``` bash

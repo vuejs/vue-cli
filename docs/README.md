@@ -1,30 +1,30 @@
-# Introduction
+---
+home: true
+heroImage: /logo.png
+actionText: Get Started →
+actionLink: /guide/
+features:
+- title: Feature Rich
+  details: Out-of-the-box support for Babel, TypeScript, ESLint, PostCSS, PWA, Unit Testing & End-to-end Testing.
+- title: Extensible
+  details: The plugin system allows the community to build and share reusable solutions to common needs.
+- title: No Need to Eject
+  details: Vue CLI is fully configurable without the need for ejecting. This allows your project to stay up-to-date for the long run.
+- title: GUI on top of the CLI
+  details: Create, develop and manage your projects through an accompanying graphical user interface.
+- title: Instant Prototyping
+  details: Instantly prototype new ideas with a single Vue file.
+- title: Future Ready
+  details: Effortlessly ship native ES2015 code for modern browsers, or build your vue components as native web components.
+footer: MIT Licensed | Copyright © 2018-present Evan You
+---
 
-Vue CLI is a full system for rapid Vue.js development, providing:
+## Getting Started
 
-- Interactive project scaffolding via `@vue/cli`.
-- Zero config rapid prototyping via `@vue/cli` + `@vue/cli-service-global`.
-- A runtime dependency (`@vue/cli-service`) that is:
-  - Upgradeable;
-  - Built on top of webpack, with sensible defaults;
-  - Configurable via in-project config file;
-  - Extensible via plugins
-- A rich collection of official plugins integrating the best tools in the frontend ecosystem.
+``` bash
+npm install -g @vue/cli
+# OR
+yarn global add @vue/cli
 
-Vue CLI aims to be the standard tooling baseline for the Vue ecosystem. It ensures the various build tools work smoothly together with sensible defaults so you can focus on writing your app instead of spending days wrangling with configurations. At the same time, it still offers the flexibility to tweak the config of each tool without the need for ejecting.
-
-- Overview
-- CLI
-  - Creating a Project
-  - Plugins and Presets
-  - Instant Prototyping
-  - CLI UI
-- Development
-  - The CLI Service
-  - Browser Compatibility
-  - HTML and static assets
-  - Mode and Environment Variables
-  - Git Hooks
-  - Building as a Library
-  - Building as Web Components
-  - Deployment
+vue create my-project
+```
