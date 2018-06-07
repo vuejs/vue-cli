@@ -319,13 +319,12 @@ Sometimes you may want to pass options to the pre-processor's webpack loader. Yo
 
 ``` js
 // vue.config.js
-const fs = require('fs')
 
 module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        data: fs.readFileSync('src/variables.scss', 'utf-8')
+        data: '@import "src/style/base.scss";'
       }
     }
   }
