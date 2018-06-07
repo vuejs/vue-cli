@@ -269,6 +269,15 @@ module.exports = class Service {
     ensureSlash(resolved, 'baseUrl')
     removeSlash(resolved, 'outputDir')
 
+    // deprecation warning
+    // TODO remove in final release
+    if (resolved.css && resolved.css.localIdentName) {
+      warn(
+        `css.localIdentName has been deprecated. ` +
+        `All css-loader options (except "modules") are now supported via css.loaderOptions.css.`
+      )
+    }
+
     // validate options
     validate(resolved, msg => {
       error(

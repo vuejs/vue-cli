@@ -27,10 +27,10 @@ const findRule = (config, lang, index = 3) => {
     return rule.test.test(`.${lang}`)
   })
   // all CSS rules have 4 oneOf rules:
-  // - <style lang="module"> in Vue files
-  // - <style> in Vue files
-  // - *.modules.css imports from JS
-  // - *.css imports from JS
+  // 0 - <style lang="module"> in Vue files
+  // 1 - <style> in Vue files
+  // 2 - *.modules.css imports from JS
+  // 3 - *.css imports from JS
   return baseRule.oneOf[index]
 }
 
@@ -132,17 +132,28 @@ test('css.sourceMap', () => {
   })
 })
 
-test('css.localIdentName', () => {
+test('css-loader options', () => {
   const localIdentName = '[name]__[local]--[hash:base64:5]'
   const config = genConfig({
     vue: {
       css: {
-        localIdentName: localIdentName
+        loaderOptions: {
+          css: {
+            localIdentName,
+            camelCase: 'only'
+          }
+        }
       }
     }
   })
   LANGS.forEach(lang => {
-    expect(findOptions(config, lang, 'css', 0).localIdentName).toBe(localIdentName)
+    const vueOptions = findOptions(config, lang, 'css', 0)
+    expect(vueOptions.localIdentName).toBe(localIdentName)
+    expect(vueOptions.camelCase).toBe('only')
+
+    const extOptions = findOptions(config, lang, 'css', 2)
+    expect(extOptions.localIdentName).toBe(localIdentName)
+    expect(extOptions.camelCase).toBe('only')
   })
 })
 
