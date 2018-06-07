@@ -194,10 +194,9 @@ module.exports = class Service {
 
     // check if the user has manually mutated output.publicPath
     const target = process.env.VUE_CLI_BUILD_TARGET
-    const exceptionTargets = ['lib', 'wc', 'wc-async']
     if (
       !process.env.VUE_CLI_TEST &&
-      !exceptionTargets.includes(target) &&
+      (target && target !== 'app') &&
       config.output.publicPath !== this.projectOptions.baseUrl
     ) {
       throw new Error(
