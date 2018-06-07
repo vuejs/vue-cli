@@ -78,6 +78,8 @@
 import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
 import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
+import DARK_MODE from '../graphql/darkMode.gql'
+import DARK_MODE_SET from '../graphql/darkModeSet.gql'
 
 let lastRoute
 
@@ -85,14 +87,14 @@ export default {
   data () {
     return {
       showLogs: false,
-      consoleLogLast: null,
-      darkMode: this.loadDarkMode()
+      consoleLogLast: null
     }
   },
 
   apollo: {
     projectCurrent: PROJECT_CURRENT,
     consoleLogLast: CONSOLE_LOG_LAST,
+    darkMode: DARK_MODE,
 
     $subscribe: {
       consoleLogAdded: {
@@ -104,11 +106,8 @@ export default {
     }
   },
 
-  watch: {
-    darkMode: {
-      handler: 'applyDarkMode',
-      immediate: true
-    }
+  created () {
+    this.loadDarkMode()
   },
 
   methods: {
@@ -154,21 +153,27 @@ export default {
 
     loadDarkMode () {
       const raw = localStorage.getItem('vue-ui-dark-mode')
-      return (raw === 'true')
+      this.applyDarkMode(raw === 'true')
     },
 
-    applyDarkMode () {
-      localStorage.setItem('vue-ui-dark-mode', this.darkMode.toString())
+    async applyDarkMode (enabled) {
+      localStorage.setItem('vue-ui-dark-mode', enabled.toString())
       const el = document.getElementsByTagName('html')[0]
-      if (this.darkMode) {
+      if (enabled) {
         el.classList.add('vue-ui-dark-mode')
       } else {
         el.classList.remove('vue-ui-dark-mode')
       }
+      await this.$apollo.mutate({
+        mutation: DARK_MODE_SET,
+        variables: {
+          enabled
+        }
+      })
     },
 
     toggleDarkMode () {
-      this.darkMode = !this.darkMode
+      this.applyDarkMode(!this.darkMode)
     }
   }
 }
