@@ -49,6 +49,10 @@ ansi-colors('blue', $md-blue)
 ansi-colors('magenta', $vue-ui-color-accent)
 ansi-colors('cyan', $vue-ui-color-info)
 ansi-colors('white', $vue-ui-color-light)
+.vue-ui-dark-mode
+  ansi-colors('black', $vue-ui-color-dark-neutral)
+  ansi-colors('magenta', lighten($vue-ui-color-accent, 60%))
+  ansi-colors('white', $vue-ui-color-light-neutral)
 
 .vue-ui-icon.separator
   width 6px
