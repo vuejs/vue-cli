@@ -2,8 +2,8 @@
 
 ## Installation
 
-::: tip
-Vue CLI requires [Node.js](https://nodejs.org/) version 8+. You can manage multiple versions of Node on the same machine with [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
+::: tip Node Version Requirement
+Vue CLI requires [Node.js](https://nodejs.org/) version 8 or above (8.10.0+ recommended). You can manage multiple versions of Node on the same machine with [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
 :::
 
 ``` bash
@@ -32,8 +32,10 @@ The default setup is great for quickly prototyping a new project, while the manu
 
 If you chose to manually select features, at the end of the prompts you also have the option to save your selections as a preset so that you can reuse it in the future. We will discuss presets and plugins in the next section.
 
-::: tip
-During the project creation process, you may get prompted to use the [Taobao npm registry mirror](https://npm.taobao.org/) for faster dependency installation. You choice will be saved in a file called `~/.vuerc` for future uses. If you wish you change this later, you can do so by editing `~/.vuerc`.
+::: tip ~/.vuerc
+Saved presets will be stored in a JSON file named `.vuerc` in your user home directory. If you wish to modify saved presets / options, you can do so by editing this file.
+
+During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npm.taobao.org/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
 :::
 
 The `vue create` command has a number of options and you can explore them all by running:

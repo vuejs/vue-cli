@@ -17,7 +17,7 @@ Vue CLI is a full system for rapid Vue.js development, providing:
 
 Vue CLI aims to be the standard tooling baseline for the Vue ecosystem. It ensures the various build tools work smoothly together with sensible defaults so you can focus on writing your app instead of spending days wrangling with configurations. At the same time, it still offers the flexibility to tweak the config of each tool without the need for ejecting.
 
-## Understanding the Architecture
+## Components
 
 There are several moving parts of Vue CLI - if you look at the [source code](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue), you will find that it is a monorepo containing a number of separately published packages.
 

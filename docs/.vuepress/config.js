@@ -74,6 +74,8 @@ module.exports = {
                 '/guide/cli-service',
                 '/guide/browser-compatibility',
                 '/guide/html-and-static-assets',
+                '/guide/css',
+                '/guide/webpack',
                 '/guide/mode-and-env',
                 '/guide/build-targets',
                 '/guide/deployment'
