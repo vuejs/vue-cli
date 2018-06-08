@@ -282,6 +282,14 @@ Alternatively, the user can skip the prompts and directly initialize the plugin 
 vue invoke my-plugin --mode awesome
 ```
 
+## Distributing the Plugin
+
+For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
+
+- Discoverable by `@vue/cli-service`;
+- Discoverable by other developers via searching;
+- Installable via `vue add <name>` or `vue invoke <name>`.
+
 ## Note on Development of Core Plugins
 
 ::: tip Note

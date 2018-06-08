@@ -8,13 +8,20 @@ The file `public/index.html` is a template that will be processed with [html-web
 
 ### Interpolation
 
-Since the index file is used as a template, you can use the [lodash template](https://lodash.com/docs/4.17.10#template) syntax to interpolate values in it. In addition to the [default values exposed by `html-webpack-plugin`](https://github.com/jantimon/html-webpack-plugin#writing-your-own-templates), all [client-side env variables](./mode-and-env.md#using-env-variables-in-client-side-code) are also available directly. For example, to use the `BASE_URL` value:
+Since the index file is used as a template, you can use the [lodash template](https://lodash.com/docs/4.17.10#template) syntax to interpolate values in it:
+
+- `<%= VALUE %>` for unescaped interpolation;
+- `<%- VALUE %>` for HTML-escaped interpolation;
+- `<% expression %>` for JavaScript control flows.
+
+In addition to the [default values exposed by `html-webpack-plugin`](https://github.com/jantimon/html-webpack-plugin#writing-your-own-templates), all [client-side env variables](./mode-and-env.md#using-env-variables-in-client-side-code) are also available directly. For example, to use the `BASE_URL` value:
 
 ``` html
 <link rel="icon" href="<%= BASE_URL %>favicon.ico">
 ```
 
-See also: [baseUrl](../config/#baseurl)
+See also:
+- [baseUrl](../config/#baseurl)
 
 ### Preload
 
@@ -31,6 +38,25 @@ The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vu
 By default, a Vue CLI app will automatically generate prefetch hints for all JavaScript files generated for async chunks (as a result of [on-demand code splitting via dynamic `import()`](https://webpack.js.org/guides/code-splitting/#dynamic-imports)).
 
 The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('prefetch')`.
+
+Example:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    // remove the prefetch plugin
+    config.plugins.delete('prefetch')
+
+    // or:
+    // modify its options:
+    config.plugin('prefetch').tap(options => {
+      options.fileBlackList.push([/myasyncRoute(.)+?\.js$/])
+      return options
+    })
+  }
+}
+```
 
 ::: tip
 Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links.
