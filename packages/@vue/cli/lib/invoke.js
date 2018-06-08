@@ -105,7 +105,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   })
 
   log()
-  logWithSpinner('🚀', `Invoking generator for ${plugin.id}...`)
+  log(`🚀  Invoking generator for ${plugin.id}...`)
   await generator.generate({
     extractConfigFiles: true,
     checkExisting: true
@@ -118,7 +118,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
 
   if (!isTestOrDebug && depsChanged) {
-    logWithSpinner('📦', `Installing additional dependencies...`)
+    log(`📦  Installing additional dependencies...`)
     const packageManager =
       loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
     await installDeps(context, packageManager)

@@ -28,7 +28,9 @@ function resolveFallback (request, options) {
   return filename
 }
 
-const resolve = semver.satisfies(process.version, '>=8.10.0') ? require.resolve : resolveFallback
+const resolve = semver.satisfies(process.version, '>=10.0.0')
+  ? require.resolve
+  : resolveFallback
 
 exports.resolveModule = function (request, context) {
   let resolvedPath

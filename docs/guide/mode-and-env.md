@@ -1,15 +1,8 @@
-## Environment Variables and Modes
-
-- [Overview](#overview)
-- [Modes](#modes)
-- [Using Env Variables in Client-side Code](#using-env-variables-in-client-side-code)
-- [Local Only Variables](#local-only-variables)
-
-### Overview
+# Environment Variables and Modes
 
 You can specify env variables by placing the following files in your project root:
 
-``` sh
+``` bash
 .env                # loaded in all cases
 .env.local          # loaded in all cases, ignored by git
 .env.[mode]         # only loaded in specified mode
@@ -25,7 +18,7 @@ VUE_APP_SECRET=secret
 
 Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
 
-### Modes
+## Modes
 
 **Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
 
@@ -43,7 +36,28 @@ You can overwrite the default mode used for a command by passing the `--mode` op
 "dev-build": "vue-cli-service build --mode development",
 ```
 
-### Using Env Variables in Client-side Code
+## Example: Staging Mode
+
+Assuming we have an app with the following `.env` file:
+
+```
+VUE_APP_TITLE=My App
+```
+
+And the following `.env.staging` file:
+
+```
+NODE_ENV=production
+VUE_APP_TITLE=My App (staging)
+```
+
+- `vue-cli-service build` builds a production app, loading `.env`, `.env.production` and `.env.production.local` if they are present;
+
+- `vue-cli-service build --mode staging` builds a production app in staging mode, using `.env`, `.env.staging` and `.env.staging.local` if they are present.
+
+In both cases, the app is built as a production app because of the `NODE_ENV`, but in the staging version, `process.env.VUE_APP_TITLE` is overwritten with a different value.
+
+## Using Env Variables in Client-side Code
 
 Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
 
@@ -58,21 +72,9 @@ In addition to `VUE_APP_*` variables, there are also two special variables that 
 - `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#modes) the app is running in.
 - `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
 
-### Env Variables in Index HTML
+All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#interpolation).
 
-All resolved env variables will be available inside `public/index.html` via [lodash template interpolation](https://lodash.com/docs/4.17.5#template):
-
-- `<%= VAR %>` for unescaped interpolation;
-- `<%- VAR %>` for HTML-escaped interpolation;
-- `<% expression %>` for JavaScript control flows.
-
-For example, to reference static assets copied from the root of `public`, you will need to use the `BASE_URL` variable:
-
-``` html
-<link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
-```
-
-### Local Only Variables
+## Local Only Variables
 
 Sometimes you might have env variables that should not be committed into the codebase, especially if your project is hosted in a public repository. In that case you should use an `.env.local` file instead. Local env files are ignored in `.gitignore` by default.
 

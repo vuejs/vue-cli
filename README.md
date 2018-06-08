@@ -6,17 +6,9 @@
 
 Most of the planned features are in place but there may still be bugs. API may still change until we reach RC phase. Do not use in production yet unless you are adventurous.
 
-## Quickstart
+## Documentation
 
-``` sh
-npm install -g @vue/cli
-# or
-yarn global add @vue/cli
-
-vue create my-project
-```
-
-For a detailed guide with recipes for common tasks, detailed usage for each plugin, please see the [full documentation](https://github.com/vuejs/vue-cli/blob/dev/docs/README.md).
+Docs are available at https://cli.vuejs.org/ - we are still working on refining it and contributions are welcome!
 
 ## Contributing
 

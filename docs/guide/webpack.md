@@ -1,13 +1,8 @@
-## Configuring webpack
+# Working with Webpack
 
-- [Basic Configuration](#basic-configuration)
-- [Chaining](#chaining-advanced)
-- [Inspecting the Config](#inspecting-the-projects-webpack-config)
-- [Using Resolved Config as a File](#using-resolved-config-as-a-file)
+## Simple Configuration
 
-### Basic Configuration
-
-The easiest way to tweak the webpack config is provide an object to the `configureWebpack` option in `vue.config.js`:
+The easiest way to tweak the webpack config is providing an object to the `configureWebpack` option in `vue.config.js`:
 
 ``` js
 // vue.config.js
@@ -21,6 +16,10 @@ module.exports = {
 ```
 
 The object will be merged into the final webpack config using [webpack-merge](https://github.com/survivejs/webpack-merge).
+
+::: warning
+Some webpack options are set based on values in `vue.config.js` and should not be mutated directly. For example, instead of modifying `output.path`, you should use the `outputDir` option in `vue.config.js`; instead of modifying `output.publicPath`, you should use the `baseUrl` option in `vue.config.js`. This is because the values in `vue.config.js` will be used in multiple places inside the config to ensure everything works properly together.
+:::
 
 If you need conditional behavior based on the environment, or want to directly mutate the config, use a function (which will be lazy evaluated after the env variables are set). The function receives the resolved config as the argument. Inside the function, you can either mutate the config directly, OR return an object which will be merged:
 
@@ -37,47 +36,56 @@ module.exports = {
 }
 ```
 
-### Chaining (Advanced)
+## Chaining (Advanced)
 
 The internal webpack config is maintained using [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). The library provides an abstraction over the raw webpack config, with the ability to define named loader rules and named plugins, and later "tap" into those rules and modify their options.
 
-This allows us finer-grained control over the internal config. Here are some examples:
+This allows us finer-grained control over the internal config. Below you will see some examples of common modifications done via the `chainWebpack` option in `vue.config.js`.
 
-#### Transpiling a Dependency Module
+::: tip
+[vue inspect](#inspecting-the-project-s-webpack-config) will be extremely helpful when you are trying to access specific loaders via chaining.
+:::
 
-By default the Babel configuration skips
-
-``` js
-// vue.config.js
-module.exports = {
-  chainWebpack: config => {
-    config.module
-      .rule('js')
-        .include
-          .add(/some-module-to-transpile/)
-  }
-}
-```
-
-#### Modifying Loader Options
+### Modifying Options of a Loader
 
 ``` js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
-    config.module
-      .rule('scss')
-      .use('sass-loader')
-      .tap(options =>
-        merge(options, {
-          includePaths: [path.resolve(__dirname, 'node_modules')],
+    config
+      .rule('vue')
+      .use('vue-loader')
+        .loader('vue-loader')
+        .tap(options => {
+          // modify the options...
+          return options
         })
-      )
   }
 }
 ```
 
-#### Replace existing Base Loader
+::: tip
+For CSS related loaders, it's recommended to use [css.loaderOptions](../config/#css-loaderoptions) instead of directly targeting loaders via chaining. This is because there are multiple rules for each CSS file type and `css.loaderOptions` ensures you can affect all rules in one single place.
+:::
+
+### Adding a New Loader
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    // GraphQL Loader
+    config.module
+      .rule('graphql')
+      .test(/\.graphql$/)
+      .use('graphql-tag/loader')
+        .loader('graphql-tag/loader')
+        .end()
+  }
+}
+```
+
+### Replacing Loaders of a Rule
 
 If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), for example using `vue-svg-loader` to inline SVG files instead of loading the file:
 
@@ -85,15 +93,22 @@ If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cl
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
-    config.module
-      .rule('svg')
-      .use('file-loader')
+    const svgRule = config.module.rule('svg')
+
+    // clear all existing loaders.
+    // if you don't do this, the loader below will be appended to
+    // existing loaders of the rule.
+    svgRule.uses.clear()
+
+    // add replacement loader(s)
+    svgRule
+      .use('vue-svg-loader')
         .loader('vue-svg-loader')
   }
 }
 ```
 
-#### Modifying Plugin Options
+### Modifying Options of a Plugin
 
 ``` js
 // vue.config.js
@@ -128,28 +143,44 @@ module.exports = {
 
 You can confirm that this change has taken place by examining the vue webpack config with the `vue inspect` utility, which we will discuss next.
 
-### Inspecting the Project's Webpack Config
+## Inspecting the Project's Webpack Config
 
 Since `@vue/cli-service` abstracts away the webpack config, it may be more difficult to understand what is included in the config, especially when you are trying to make tweaks yourself.
 
 `vue-cli-service` exposes the `inspect` command for inspecting the resolved webpack config. The global `vue` binary also provides the `inspect` command, and it simply proxies to `vue-cli-service inspect` in your project.
 
-The command prints to stdout by default, so you can redirect that into a file for easier inspection:
+The command will print the resolved webpack config to stdout, which also contains hints on how to access rules and plugins via chaining.
 
-``` sh
+You can redirect the output into a file for easier inspection:
+
+``` bash
 vue inspect > output.js
 ```
 
 Note the output is not a valid webpack config file, it's a serialized format only meant for inspection.
 
-You can also inspect a certain path of the config to narrow it down:
+You can also inspect a subset of the config by specifying a path:
 
-``` sh
+``` bash
 # only inspect the first rule
 vue inspect module.rules.0
 ```
 
-### Using Resolved Config as a File
+Or, target a named rule or plugin:
+
+``` bash
+vue inspect --rule vue
+vue inspect --plugin html
+```
+
+Finally, you can list all named rules and plugins:
+
+``` bash
+vue inspect --rules
+vue inspect --plugins
+```
+
+## Using Resolved Config as a File
 
 Some external tools may need access to the resolved webpack config as a file, for example IDEs or command line tools that expects a webpack config path. In that case you can use the following path:
 

@@ -14,10 +14,10 @@ const schema = createSchema(joi => joi.object({
   // css
   css: joi.object({
     modules: joi.boolean(),
-    localIdentName: joi.string(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
+      css: joi.object(),
       sass: joi.object(),
       less: joi.object(),
       stylus: joi.object(),

@@ -1,13 +1,10 @@
+---
+sidebarDepth: 3
+---
+
 # Plugin Development Guide
 
 ## Core Concepts
-
-- [Creator](#creator)
-- [Service](#service)
-- [CLI Plugin](#cli-plugin)
-- [Service Plugin](#service-plugin)
-- [Generator](#generator)
-- [Prompts](#prompts)
 
 There are two major parts of the system:
 
@@ -281,13 +278,23 @@ module.exports = api => {
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 
-``` sh
+``` bash
 vue invoke my-plugin --mode awesome
 ```
 
+## Distributing the Plugin
+
+For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
+
+- Discoverable by `@vue/cli-service`;
+- Discoverable by other developers via searching;
+- Installable via `vue add <name>` or `vue invoke <name>`.
+
 ## Note on Development of Core Plugins
 
-> This section only applies if you are working on a built-in plugin inside this very repository.
+::: tip Note
+This section only applies if you are working on a built-in plugin inside the `vuejs/vue-cli` repository itself.
+:::
 
 A plugin with a generator that injects additional dependencies other than packages in this repo (e.g. `chai` is injected by `@vue/cli-plugin-unit-mocha/generator/index.js`) should have those dependencies listed in its own `devDependencies` field. This ensures that:
 

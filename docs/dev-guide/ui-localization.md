@@ -1,6 +1,6 @@
-# Localization
+# UI Localization
 
-# Translate the UI
+## Translate the UI
 
 Follow those simple steps to propose a new language for the CLI UI!
 

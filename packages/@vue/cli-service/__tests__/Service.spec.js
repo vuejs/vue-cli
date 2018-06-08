@@ -26,10 +26,11 @@ beforeEach(() => {
 })
 
 test('env loading', () => {
-  fs.writeFileSync('/.env', `FOO=1\nBAR=2`)
-  fs.writeFileSync('/.env.local', `FOO=3\nBAZ=4`)
+  process.env.FOO = 0
+  fs.writeFileSync('/.env.local', `FOO=1\nBAR=2`)
+  fs.writeFileSync('/.env', `BAR=3\nBAZ=4`)
   createMockService()
-  expect(process.env.FOO).toBe('3')
+  expect(process.env.FOO).toBe('0')
   expect(process.env.BAR).toBe('2')
   expect(process.env.BAZ).toBe('4')
 })
@@ -38,7 +39,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.0.0-beta.15',
+      '@vue/cli-plugin-babel': '^3.0.0-beta.16',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })

@@ -17,7 +17,6 @@ module.exports = (api, options) => {
       modules = false,
       extract = true,
       sourceMap = false,
-      localIdentName = '[name]_[local]_[hash:base64:5]',
       loaderOptions = {}
     } = options.css || {}
 
@@ -79,7 +78,7 @@ module.exports = (api, options) => {
             })
         }
 
-        const cssLoaderOptions = {
+        const cssLoaderOptions = Object.assign({
           minimize: isProd,
           sourceMap,
           importLoaders: (
@@ -87,13 +86,18 @@ module.exports = (api, options) => {
             hasPostCSSConfig +
             !!loader
           )
-        }
+        }, loaderOptions.css)
+
         if (modules) {
+          const {
+            localIdentName = '[name]_[local]_[hash:base64:5]'
+          } = loaderOptions.css || {}
           Object.assign(cssLoaderOptions, {
             modules,
             localIdentName
           })
         }
+
         rule
           .use('css-loader')
           .loader('css-loader')
