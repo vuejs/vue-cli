@@ -4,6 +4,11 @@ module.exports = {
       lang: 'en-US',
       title: 'Vue CLI',
       description: '🛠️ Standard Tooling for Vue.js Development'
+    },
+    '/zh_CN': {
+      lang: '简体中文',
+      title: 'Vue CLI',
+      description: '🛠️ 标准的 Vue.js 开发工具'
     }
   },
   serviceWorker: true,
