@@ -2,13 +2,40 @@
 
 Vue CLI projects comes with support for [PostCSS](http://postcss.org/), [CSS Modules](https://github.com/css-modules/css-modules) and pre-processors including [Sass](https://sass-lang.com/), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
 
+## Pre-Processors
+
+You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, the internal webpack config is still pre-configured to handle all of them. You just need to manually install the corresponding webpack loaders:
+
+``` bash
+# Sass
+npm install -D sass-loader node-sass
+
+# Less
+npm install -D less-loader less
+
+# Stylus
+npm install -D stylus-loader stylus
+```
+
+Then you can import the corresponding file types, or use them in `*.vue` files with:
+
+``` vue
+<style lang="scss">
+$color = red;
+</style>
+```
+
 ## PostCSS
 
-Vue CLI uses PostCSS internally, and enables [autoprefixer](https://github.com/postcss/autoprefixer) by default. You can configure PostCSS via `.postcssrc` or any config source supported by [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config).
+Vue CLI uses PostCSS internally.
 
-You can also configure `postcss-loader` via `css.loaderOptions.postcss` in `vue.config.js`.
+You can configure PostCSS via `.postcssrc` or any config source supported by [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config), and configure [postcss-loader](https://github.com/postcss/postcss-loader) via `css.loaderOptions.postcss` in `vue.config.js`.
 
 The [autoprefixer](https://github.com/postcss/autoprefixer) plugin is enabled by default. To configure the browser targets, use the [browserslist](../guide/browser-compatibility.html#browserslist) field in `package.json`.
+
+::: tip Note on Vendor-prefixed CSS Rules
+In the production build, Vue CLI optimizes your CSS and will drop unnecessary vendor-prefixed CSS rules based on your browser targets. With `autoprefixer` enabled by default, you should always use only non-prefixed CSS rules.
+:::
 
 ## CSS Modules
 
@@ -22,12 +49,15 @@ import styles from './foo.module.css'
 import sassStyles from './foo.module.scss'
 ```
 
-Alternatively, you can import a file explicitly with a `?module` resourceQuery so that you can drop the `.module` in the filename:
+If you want to drop the `.module` in the filenames, set `css.modules` to `true` in `vue.config.js`:
 
 ``` js
-import styles from './foo.css?module'
-// works for all supported pre-processors as well
-import sassStyles from './foo.scss?module'
+// vue.config.js
+module.exports = {
+  css: {
+    modules: true
+  }
+}
 ```
 
 If you wish to customize the generated CSS modules class names, you can do so via `css.loaderOptions.css` in `vue.config.js`. All `css-loader` options are supported here, for example `localIdentName` and `camelCase`:
@@ -38,27 +68,12 @@ module.exports = {
   css: {
     loaderOptions: {
       css: {
+        localIdentName: '[name]-[hash]',
         camelCase: 'only'
       }
     }
   }
 }
-```
-
-## Pre-Processors
-
-You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, you can also just manually install the corresponding webpack loaders. The loaders are pre-configured and will automatically be picked up. For example, to add Sass to an existing project, simply run:
-
-``` bash
-npm install -D sass-loader node-sass
-```
-
-Then you can import `.scss` files, or use it in `*.vue` files with:
-
-``` vue
-<style lang="scss">
-$color = red;
-</style>
 ```
 
 ## Passing Options to Pre-Processor Loaders
@@ -91,4 +106,6 @@ Loaders can be configured via `loaderOptions` include:
 - [less-loader](https://github.com/webpack-contrib/less-loader)
 - [stylus-loader](https://github.com/shama/stylus-loader)
 
-This is preferred over manually tapping into specific loaders, because these options will be shared across all rules that are related to it.
+::: tip
+This is preferred over manually tapping into specific loaders using `chainWebpack`, because these options need to be applied in multiple locations where the corresponding loader is used.
+:::
