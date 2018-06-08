@@ -116,6 +116,17 @@ program
     loadCommand('init', '@vue/cli-init')
   })
 
+program
+  .command('config')
+  .description('inspect and modify the config')
+  .option('get <path>')
+  .option('set <path> <value>')
+  .option('delete <path>', 'delete preset from config')
+  .option('edit', 'open config with default editor')
+  .action((cmd) => {
+    require('../lib/config')(cleanArgs(cmd))
+  })
+
 // output help information on unknown commands
 program
   .arguments('<command>')
