@@ -53,12 +53,12 @@ module.exports = class Service {
     this.initialized = true
     this.mode = mode
 
-    // load base .env
-    this.loadEnv()
     // load mode .env
     if (mode) {
       this.loadEnv(mode)
     }
+    // load base .env
+    this.loadEnv()
 
     // load user config
     const userOptions = this.loadUserOptions()
@@ -106,8 +106,8 @@ module.exports = class Service {
       }
     }
 
-    load(basePath)
     load(localPath)
+    load(basePath)
   }
 
   resolvePlugins (inlinePlugins, useBuiltIn) {
@@ -191,6 +191,20 @@ module.exports = class Service {
         config = merge(config, fn)
       }
     })
+
+    // check if the user has manually mutated output.publicPath
+    const target = process.env.VUE_CLI_BUILD_TARGET
+    if (
+      !process.env.VUE_CLI_TEST &&
+      (target && target !== 'app') &&
+      config.output.publicPath !== this.projectOptions.baseUrl
+    ) {
+      throw new Error(
+        `Do not modify webpack output.publicPath directly. ` +
+        `Use the "baseUrl" option in vue.config.js instead.`
+      )
+    }
+
     return config
   }
 
@@ -253,6 +267,15 @@ module.exports = class Service {
     }
     ensureSlash(resolved, 'baseUrl')
     removeSlash(resolved, 'outputDir')
+
+    // deprecation warning
+    // TODO remove in final release
+    if (resolved.css && resolved.css.localIdentName) {
+      warn(
+        `css.localIdentName has been deprecated. ` +
+        `All css-loader options (except "modules") are now supported via css.loaderOptions.css.`
+      )
+    }
 
     // validate options
     validate(resolved, msg => {

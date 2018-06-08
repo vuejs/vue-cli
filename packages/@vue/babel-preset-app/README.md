@@ -4,7 +4,7 @@ This is the default Babel preset used in all Vue CLI projects.
 
 ## Included
 
-- [babel-preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env)
+- [@babel/preset-env](https://new.babeljs.io/docs/en/next/babel-preset-env.html)
   - `modules: false`
     - auto set to `'commonjs'` in Jest tests
   - [`useBuiltIns: 'usage'`](#usebuiltins)
@@ -58,7 +58,7 @@ Note that the usage detection does not apply to your dependencies (which are exc
 
 3. **If the dependency ships ES5 code, but uses ES6+ features without explicitly listing polyfill requirements (e.g. Vuetify):** Use `useBuiltIns: 'entry'` and then add `import '@babel/polyfill'` to your entry file. This will import **ALL** polyfills based on your `browserslist` targets so that you don't need to worry about dependency polyfills anymore, but will likely increase your final bundle size with some unused polyfills.
 
-See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins) for more details.
+See [@babel/preset-env docs](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) for more details.
 
 ### polyfills
 

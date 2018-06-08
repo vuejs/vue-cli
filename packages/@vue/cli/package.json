@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "3.0.0-beta.15",
+  "version": "3.0.0-beta.16",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -27,9 +27,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.0-beta.15",
-    "@vue/cli-ui": "^3.0.0-beta.15",
-    "@vue/cli-ui-addon-webpack": "^3.0.0-beta.15",
+    "@vue/cli-shared-utils": "^3.0.0-beta.16",
+    "@vue/cli-ui": "^3.0.0-beta.16",
+    "@vue/cli-ui-addon-webpack": "^3.0.0-beta.16",
     "chalk": "^2.3.0",
     "cmd-shim": "^2.0.2",
     "commander": "^2.12.2",
@@ -41,7 +41,7 @@
     "fs-extra": "^6.0.0",
     "globby": "^8.0.1",
     "import-global": "^0.1.0",
-    "inquirer": "^4.0.1",
+    "inquirer": "^6.0.0",
     "isbinaryfile": "^3.0.2",
     "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.10.0",

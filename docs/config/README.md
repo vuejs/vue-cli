@@ -4,389 +4,303 @@ sidebar: auto
 
 # Configuration Reference
 
-## ~/.vuerc
+## Global CLI Config
+
+Some global configurations for `@vue/cli`, such as your preferred package manager and your locally saved presets, are stored in a JSON file named `.vuerc` in your home directory. You can edit this file directory with your editor of choice to change the saved options.
+
+## Target Browsers
+
+See the [Browser Compatibility](../guide/browser-compatibility.md#browserslist) section in guide.
 
 ## vue.config.js
 
-Here are all the available options with default values (all optional):
+`vue.config.js` is an optional config file that will be automatically loaded by `@vue/cli-service` if it's present in your project root (next to `package.json`). You can also use the `vue` field in `package.json`, but do note in that case you will be limited to JSON-compatible values only.
 
-``` js
-module.exports = {
-  // Project deployment base
-  // By default we assume your app will be deployed at the root of a domain,
-  // e.g. https://www.my-app.com/
-  // If your app is deployed at a sub-path, you will need to specify that
-  // sub-path here. For example, if your app is deployed at
-  // https://www.foobar.com/my-app/
-  // then change this to '/my-app/'
-  baseUrl: '/',
-
-  // where to output built files
-  outputDir: 'dist',
-
-  // where to put static assets (js/css/img/font/...)
-  assetsDir: '',
-
-  // whether to use eslint-loader for lint on save.
-  // valid values: true | false | 'error'
-  // when set to 'error', lint errors will cause compilation to fail.
-  lintOnSave: true,
-
-  // use the full build with in-browser compiler?
-  // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
-  runtimeCompiler: false,
-
-  // babel-loader skips `node_modules` deps by default.
-  // explicitly transpile a dependency with this option.
-  transpileDependencies: [/* string or regex */],
-
-  // generate sourceMap for production build?
-  productionSourceMap: true,
-
-  // tweak internal webpack configuration.
-  // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-  chainWebpack: () => {},
-  configureWebpack: () => {},
-
-  // CSS related options
-  css: {
-    // extract CSS in components into a single CSS file (only in production)
-    // can also be an object of options to pass to extract-text-webpack-plugin
-    extract: true,
-
-    // enable CSS source maps?
-    sourceMap: false,
-
-    // pass custom options to pre-processor loaders. e.g. to pass options to
-    // sass-loader, use { sass: { ... } }
-    loaderOptions: {},
-
-    // Enable CSS modules for all css / pre-processor files.
-    // This option does not affect *.vue files.
-    modules: false
-  },
-
-  // use thread-loader for babel & TS in production build
-  // enabled by default if the machine has more than 1 cores
-  parallel: require('os').cpus().length > 1,
-
-  // options for the PWA plugin.
-  // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
-  pwa: {},
-
-  // configure webpack-dev-server behavior
-  devServer: {
-    open: process.platform === 'darwin',
-    disableHostCheck: false,
-    host: '0.0.0.0',
-    port: 8080,
-    https: false,
-    hotOnly: false,
-    // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
-    proxy: null, // string | Object
-    before: app => {}
-  },
-
-  // options for 3rd party plugins
-  pluginOptions: {
-    // ...
-  }
-}
-```
-
-## webpack
-
-### Basic Configuration
-
-The easiest way to tweak the webpack config is provide an object to the `configureWebpack` option in `vue.config.js`:
+The file should export an object containing options:
 
 ``` js
 // vue.config.js
 module.exports = {
-  configureWebpack: {
-    plugins: [
-      new MyAwesomeWebpackPlugin()
-    ]
-  }
+  // options...
 }
 ```
 
-The object will be merged into the final webpack config using [webpack-merge](https://github.com/survivejs/webpack-merge).
+### baseUrl
 
-If you need conditional behavior based on the environment, or want to directly mutate the config, use a function (which will be lazy evaluated after the env variables are set). The function receives the resolved config as the argument. Inside the function, you can either mutate the config directly, OR return an object which will be merged:
+- Type: `string`
+- Default: `'/'`
 
-``` js
-// vue.config.js
-module.exports = {
-  configureWebpack: config => {
-    if (process.env.NODE_ENV === 'production') {
-      // mutate config for production...
-    } else {
-      // mutate for development...
-    }
+  The base URL your application will be deployed at. By default Vue CLI assumes your app will be deployed at the root of a domain, e.g. `https://www.my-app.com/`. If your app is deployed at a sub-path, you will need to specify that sub-path using this option. For example, if your app is deployed at `https://www.foobar.com/my-app/`, set `baseUrl` to `'/my-app/'`.
+
+  Setting this value correctly is necessary for your static assets to be loaded properly in production.
+
+  This value is also respected during development. If you want your dev server to be served at root instead, you can use a conditional value:
+
+  ``` js
+  module.exports = {
+    baseUrl: process.env.NODE_ENV === 'production'
+      ? '/production-sub-path/'
+      : '/'
   }
-}
-```
+  ```
 
-### Chaining (Advanced)
+  The value can also be set to an empty string (`''`) so that all assets are linked using relative paths, so that the bundle can be used in a file system based environment like a Cordova hybrid app. The caveat is that this will force the generated CSS files to always be placed at the root of the output directory to ensure urls in your CSS work correctly.
 
-The internal webpack config is maintained using [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). The library provides an abstraction over the raw webpack config, with the ability to define named loader rules and named plugins, and later "tap" into those rules and modify their options.
+  ::: tip
+  Always use `baseUrl` instead of modifying webpack `output.publicPath`.
+  :::
 
-This allows us finer-grained control over the internal config. Here are some examples:
+### outputDir
 
-#### Transpiling a Dependency Module
+- Type: `string`
+- Default: `'dist'`
 
-By default the Babel configuration skips
+  The directory where the production build files will be generated in when running `vue-cli-service build`. Note the target directory will be removed before building (this behavior can be disabled by passing `--no-clean` when building).
 
-``` js
-// vue.config.js
-module.exports = {
-  chainWebpack: config => {
-    config.module
-      .rule('js')
-        .include
-          .add(/some-module-to-transpile/)
-  }
-}
-```
+  ::: tip
+  Always use `outputDir` instead of modifying webpack `output.path`.
+  :::
 
-#### Modifying Loader Options
+### assetsDir
 
-``` js
-// vue.config.js
-module.exports = {
-  chainWebpack: config => {
-    config.module
-      .rule('scss')
-      .use('sass-loader')
-      .tap(options =>
-        merge(options, {
-          includePaths: [path.resolve(__dirname, 'node_modules')],
-        })
-      )
-  }
-}
-```
+- Type: `string`
+- Default: `''`
 
-#### Replace existing Base Loader
+  A directory to nest generated static assets (js, css, img, fonts) under.
 
-If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), for example using `vue-svg-loader` to inline SVG files instead of loading the file:
+### pages
 
-``` js
-// vue.config.js
-module.exports = {
-  chainWebpack: config => {
-    config.module
-      .rule('svg')
-      .use('file-loader')
-        .loader('vue-svg-loader')
-  }
-}
-```
+- Type: `Object`
+- Default: `undefined`
 
-#### Modifying Plugin Options
+  Build the app in multi-page mode. Each "page" should have a corresponding JavaScript entry file. The value should be an object where the key is the name of the entry, and the value is either:
 
-``` js
-// vue.config.js
-module.exports = {
-  chainWebpack: config => {
-    config
-      .plugin('html')
-      .tap(args => {
-        return [/* new args to pass to html-webpack-plugin's constructor */]
-      })
-  }
-}
-```
+  - An object that specifies its `entry`, `template` and `filename`;
+  - Or a string specifying its `entry`.
 
-You will need to familiarize yourself with [webpack-chain's API](https://github.com/mozilla-neutrino/webpack-chain#getting-started) and [read some source code](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config) in order to understand how to leverage the full power of this option, but it gives you a more expressive and safer way to modify the webpack config than directly mutation values.
-
-For example, say you want to change the default location of `index.html` from `/Users/username/proj/public/index.html` to `/Users/username/proj/app/templates/index.html`. By referencing [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) you can see a list of options you can pass in. To change our template path we can pass in a new template path with the following config:
-
-``` js
-// vue.config.js
-module.exports = {
-  chainWebpack: config => {
-    config
-      .plugin('html')
-      .tap(args => {
-        args[0].template = '/Users/username/proj/app/templates/index.html'
-        return args
-      })
-  }
-}
-```
-
-You can confirm that this change has taken place by examining the vue webpack config with the `vue inspect` utility, which we will discuss next.
-
-### Inspecting the Project's Webpack Config
-
-Since `@vue/cli-service` abstracts away the webpack config, it may be more difficult to understand what is included in the config, especially when you are trying to make tweaks yourself.
-
-`vue-cli-service` exposes the `inspect` command for inspecting the resolved webpack config. The global `vue` binary also provides the `inspect` command, and it simply proxies to `vue-cli-service inspect` in your project.
-
-The command prints to stdout by default, so you can redirect that into a file for easier inspection:
-
-``` bash
-vue inspect > output.js
-```
-
-Note the output is not a valid webpack config file, it's a serialized format only meant for inspection.
-
-You can also inspect a certain path of the config to narrow it down:
-
-``` bash
-# only inspect the first rule
-vue inspect module.rules.0
-```
-
-### Using Resolved Config as a File
-
-Some external tools may need access to the resolved webpack config as a file, for example IDEs or command line tools that expects a webpack config path. In that case you can use the following path:
-
-```
-<projectRoot>/node_modules/@vue/cli-service/webpack.config.js
-```
-
-This file dynamically resolves and exports the exact same webpack config used in `vue-cli-service` commands, including those from plugins and even your custom configurations.
-
-## CSS
-
-Vue CLI projects comes with support for [PostCSS](http://postcss.org/), [CSS Modules](https://github.com/css-modules/css-modules) and pre-processors including [Sass](https://sass-lang.com/), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
-
-### PostCSS
-
-Vue CLI uses PostCSS internally, and enables [autoprefixer](https://github.com/postcss/autoprefixer) by default. You can configure PostCSS via `.postcssrc` or any config source supported by [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config).
-
-### CSS Modules
-
-You can [use CSS Modules in `*.vue` files](https://vue-loader.vuejs.org/en/features/css-modules.html) out of the box with `<style module>`.
-
-To import CSS or other pre-processor files as CSS Modules in JavaScript, the filename should end with `.module.(css|less|sass|scss|styl)`:
-
-``` js
-import styles from './foo.module.css'
-// works for all supported pre-processors as well
-import sassStyles from './foo.module.scss'
-```
-
-Alternatively, you can import a file explicitly with a `?module` resourceQuery so that you can drop the `.module` in the filename:
-
-``` js
-import styles from './foo.css?module'
-// works for all supported pre-processors as well
-import sassStyles from './foo.scss?module'
-```
-
-If you wish to customize the generated CSS modules class names, you can do so via the `css.localIdentName` option in `vue.config.js`.
-
-### Pre-Processors
-
-You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, you can also just manually install the corresponding webpack loaders. The loaders are pre-configured and will automatically be picked up. For example, to add Sass to an existing project, simply run:
-
-``` bash
-npm install -D sass-loader node-sass
-```
-
-Then you can import `.scss` files, or use it in `*.vue` files with:
-
-``` vue
-<style lang="scss">
-$color = red;
-</style>
-```
-
-### Passing Options to Pre-Processor Loaders
-
-Sometimes you may want to pass options to the pre-processor's webpack loader. You can do that using the `css.loaderOptions` option in `vue.config.js`. For example, to pass some shared global variables to all your Sass styles:
-
-``` js
-// vue.config.js
-const fs = require('fs')
-
-module.exports = {
-  css: {
-    loaderOptions: {
-      sass: {
-        data: fs.readFileSync('src/variables.scss', 'utf-8')
-      }
-    }
-  }
-}
-```
-
-This is preferred over manually tapping into specific loaders, because these options will be shared across all rules that are related to it.
-
-## browserslist
-
-You will notice a `browserslist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by `babel-preset-env` and `autoprefixer` to automatically determine the JavaScript polyfills and CSS vendor prefixes needed.
-
-See [here](https://github.com/ai/browserslist) for how to specify browser ranges.
-
-## Dev Server
-
-`vue-cli-service serve` starts a dev server based on [webpack-dev-server](https://github.com/webpack/webpack-dev-server). It comes with hot-module-replacement (HMR) out of the box.
-
-You can configure the dev server's behavior using the `devServer` option in `vue.config.js`:
-
-``` js
-module.exports = {
-  devServer: {
-    open: process.platform === 'darwin',
-    host: '0.0.0.0',
-    port: 8080,
-    https: false,
-    hotOnly: false,
-    proxy: null, // string | Object
-    before: app => {
-      // app is an express instance
-    }
-  }
-}
-```
-
-In addition to these default values, [all options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are also supported.
-
-### Configuring Proxy
-
-If your frontend app and the backend API server are not running on the same host, you will need to proxy API requests to the API server during development. This is configurable via the `devServer.proxy` option in `vue.config.js`.
-
-`devServer.proxy` can be a string pointing to the development API server:
-
-``` js
-module.exports = {
-  devServer: {
-    proxy: 'http://localhost:4000'
-  }
-}
-```
-
-This will tell the dev server to proxy any unknown requests (requests that did not match a static file) to `http://localhost:4000`.
-
-If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
-
-``` js
-module.exports = {
-  devServer: {
-    proxy: {
-      '/api': {
-        target: '<url>',
-        ws: true,
-        changeOrigin: true
+  ``` js
+  module.exports = {
+    pages: {
+      index: {
+        // entry for the page
+        entry: 'src/index/main.js',
+        // the source template
+        template: 'public/index.html',
+        // output as dist/index.html
+        filename: 'index.html'
       },
-      '/foo': {
-        target: '<other_url>'
+      // when using the entry-only string format,
+      // template is inferred to be `public/subpage.html`
+      // and falls back to `public/index.html` if not found.
+      // Output filename is inferred to be `subpage.html`.
+      subpage: 'src/subpage/main.js'
+    }
+  }
+  ```
+
+  ::: tip
+  When building in multi-page mode, the webpack config will contain different plugins (there will be multiple instances of `html-webpack-plugin` and `preload-webpack-plugin`). Make sure to run `vue inspect` if you are trying to modify the options for those plugins.
+  :::
+
+### lintOnSave
+
+- Type: `boolean`
+- Default: `true`
+
+  Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
+
+### runtimeCompiler
+
+- Type: `boolean`
+- Default: `false`
+
+  Whether to use the build of Vue core that includes the runtime compiler. Setting it to `true` will allow you to use the `template` option in Vue components, but will incur around an extra 10kb payload for your app.
+
+  See also: [Runtime + Compiler vs. Runtime only](https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only).
+
+### transpileDependencies
+
+- Type: `Array<string | RegExp>`
+- Default: `[]`
+
+  By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly trasnpile a dependency with Babel, you can list it in this option.
+
+### productionSourceMap
+
+- Type: `boolean`
+- Default: `true`
+
+  Setting this to `false` can speed up production builds if you don't need source maps for production.
+
+### configureWebpack
+
+- Type: `Object | Function`
+
+  If the value is an Object, it will be merged into the final config using [webpack-merge](https://github.com/survivejs/webpack-merge).
+
+  If the value is a function, it will receive the resolved config as the argument. The function can either mutate the config and return nothing, OR return a cloned or merged version of the config.
+
+  See also: [Working with Webpack > Simple Configuration](../guide/webpack.md#simple-configuration)
+
+### chainWebpack
+
+- Type: `Function`
+
+  A function that will receive an instance of `ChainableConfig` powered by [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). Allows for more fine-grained modification of the internal webpack config.
+
+  See also: [Working with Webpack > Chaining](../guide/webpack.md#chaining-advanced)
+
+### css.modules
+
+- Type: `boolean`
+- Default: `false`
+
+  By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `true` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
+
+  See also: [Working with CSS > CSS Modules](../guide/css.md#css-modules)
+
+### css.extract
+
+- Type: `boolean`
+- Default: `true` (in production mode)
+
+  Whether to extract CSS in your components into a standalone CSS files (instead of inlined in JavaScript and injected dynamically).
+
+  This is also disabled by default when building as web components (styles are inlined and injected into shadowRoot).
+
+  When building as a library, you can also set this to `false` to avoid your users having to import the CSS themselves.
+
+### css.sourceMap
+
+- Type: `boolean`
+- Default: `false`
+
+  Whether to enable source maps for CSS. Setting this to `true` may affect build performance.
+
+### css.loaderOptions
+
+- Type: `Object`
+- Default: `{}`
+
+  Pass options to CSS-related loaders. For example:
+
+  ``` js
+  module.exports = {
+    css: {
+      loaderOptions: {
+        css: {
+          // options here will be passed to css-loader
+        },
+        postcss: {
+          // options here will be passed to postcss-loader
+        }
       }
     }
   }
-}
-```
+  ```
+
+  Supported loaders are:
+
+  - [css-loader](https://github.com/webpack-contrib/css-loader)
+  - [postcss-loader](https://github.com/postcss/postcss-loader)
+  - [sass-loader](https://github.com/webpack-contrib/sass-loader)
+  - [less-loader](https://github.com/webpack-contrib/less-loader)
+  - [stylus-loader](https://github.com/shama/stylus-loader)
+
+  See also: [Passing Options to Pre-Processor Loaders](../guide/css.md#passing-options-to-pre-processor-loaders)
+
+  ::: tip
+  This is preferred over manually tapping into specific loaders using `chainWebpack`, because these options need to be applied in multiple locations where the corresponding loader is used.
+  :::
+
+### devServer
+
+- Type: `Object`
+
+  [All options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are supported. Note that:
+
+  - Some values like `host`, `port` and `https` may be overwritten by command line flags.
+
+  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [baseUrl](#baseurl) for the dev server to function properly.
+
+### devServer.proxy
+
+- Type: `string | Object`
+
+  If your frontend app and the backend API server are not running on the same host, you will need to proxy API requests to the API server during development. This is configurable via the `devServer.proxy` option in `vue.config.js`.
+
+  `devServer.proxy` can be a string pointing to the development API server:
+
+  ``` js
+  module.exports = {
+    devServer: {
+      proxy: 'http://localhost:4000'
+    }
+  }
+  ```
+
+  This will tell the dev server to proxy any unknown requests (requests that did not match a static file) to `http://localhost:4000`.
+
+  If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
+
+  ``` js
+  module.exports = {
+    devServer: {
+      proxy: {
+        '/api': {
+          target: '<url>',
+          ws: true,
+          changeOrigin: true
+        },
+        '/foo': {
+          target: '<other_url>'
+        }
+      }
+    }
+  }
+  ```
+
+### parallel
+
+- Type: `boolean`
+- Default: `require('os').cpus().length > 1`
+
+  Whether to use `thread-loader` for Babel or TypeScript transpilation.
+
+### pwa
+
+- Type: `Object`
+
+  Pass options to the [PWA Plugin](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa).
+
+### pluginOptions
+
+- Type: `Object`
+
+  This is an object that doesn't go through any schema validation, so it can be used to pass arbitrary options to 3rd party plugins. For example:
+
+  ``` js
+  module.exports = {
+    pluginOptions: {
+      foo: {
+        // plugins can access these options as
+        // `options.pluginOptions.foo`.
+      }
+    }
+  }
+  ```
 
 ## Babel
 
-Babel can be configured via `.babelrc` or the `babel` field in `package.json`.
+Babel can be configured via `babel.config.js`.
+
+::: tip
+Vue CLI uses `babel.config.js` which is a new config format in Babel 7. Unlike `.babelrc` or the `babel` field in `package.json`, this config file does not use a file-location based resolution, and is applied consistently to any file under project root, including dependencies inside `node_modules`. It is recommended to always use `babel.config.js` instead of other formats in Vue CLI projects.
+:::
 
 All Vue CLI apps use `@vue/babel-preset-app`, which includes `babel-preset-env`, JSX support and optimized configuration for minimal bundle size overhead. See [its docs](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) for details and preset options.
+
+Also see the [Polyfills](../guide/browser-compatibility.md#polyfills) section in guide.
 
 ## ESLint
 

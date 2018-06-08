@@ -812,7 +812,7 @@ If you use the `sharedData` option, the shared data can be updated by assigning 
 <script>
 export default {
   sharedData: {
-    // Will sync the the 'my-message' shared data on the server
+    // Will sync the 'my-message' shared data on the server
     message: 'my-message'
   }
 }

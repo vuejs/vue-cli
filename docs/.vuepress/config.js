@@ -3,7 +3,7 @@ module.exports = {
     '/': {
       lang: 'en-US',
       title: 'Vue CLI',
-      description: 'Standard Tooling for Vue.js Projects'
+      description: '🛠️ Standard Tooling for Vue.js Development'
     }
   },
   serviceWorker: true,
@@ -74,6 +74,8 @@ module.exports = {
                 '/guide/cli-service',
                 '/guide/browser-compatibility',
                 '/guide/html-and-static-assets',
+                '/guide/css',
+                '/guide/webpack',
                 '/guide/mode-and-env',
                 '/guide/build-targets',
                 '/guide/deployment'
