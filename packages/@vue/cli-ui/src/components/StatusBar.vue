@@ -58,17 +58,17 @@
 
       <div
         class="section action bug-report"
+        v-tooltip="$t('components.status-bar.report-bug')"
         @click="onBugReportClick()"
       >
         <VueIcon icon="bug_report"/>
-        <span>{{ $t('components.status-bar.report-bug') }}</span>
       </div>
       <div
         class="section action translate"
+        v-tooltip="$t('components.status-bar.translate')"
         @click="onTranslateClick()"
       >
         <VueIcon icon="g_translate"/>
-        <span>{{ $t('components.status-bar.translate') }}</span>
       </div>
     </div>
   </div>
@@ -191,7 +191,7 @@ export default {
     h-box()
     align-items center
     background $vue-ui-color-light
-    font-size $padding-item
+    font-size 12px
     height 28px
     .vue-ui-dark-mode &
       background $vue-ui-color-darker
