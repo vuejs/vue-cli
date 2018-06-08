@@ -1,3 +1,78 @@
+<a name="3.0.0-beta.16"></a>
+# [3.0.0-beta.16](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2018-06-08)
+
+
+### Bug Fixes
+
+* avoid injecting polyfills when targeting node ([586c8aa](https://github.com/vuejs/vue-cli/commit/586c8aa))
+* avoid util.promisify when resolving webpack.config.js ([89a0e65](https://github.com/vuejs/vue-cli/commit/89a0e65)), closes [#1473](https://github.com/vuejs/vue-cli/issues/1473)
+* bail when registry ping fails ([be5526e](https://github.com/vuejs/vue-cli/commit/be5526e)), closes [#1427](https://github.com/vuejs/vue-cli/issues/1427)
+* fine tune chunk splitting ([4db901c](https://github.com/vuejs/vue-cli/commit/4db901c)), closes [#1488](https://github.com/vuejs/vue-cli/issues/1488)
+* fix invoke output ([d65a251](https://github.com/vuejs/vue-cli/commit/d65a251))
+* **ui:** top bar children margin ([cd88b47](https://github.com/vuejs/vue-cli/commit/cd88b47))
+* only provide baseUrl fix if baseUrl provided ([#1421](https://github.com/vuejs/vue-cli/issues/1421)) ([af1151a](https://github.com/vuejs/vue-cli/commit/af1151a))
+* **build:** default to development mode in build --watch ([#1430](https://github.com/vuejs/vue-cli/issues/1430)) ([3193b0d](https://github.com/vuejs/vue-cli/commit/3193b0d))
+* **env:** preserve existing env vars so load in reverse order. ([#1503](https://github.com/vuejs/vue-cli/issues/1503)) ([7c1ef24](https://github.com/vuejs/vue-cli/commit/7c1ef24))
+* **serve:** make sockjs url fixed with host ([#1476](https://github.com/vuejs/vue-cli/issues/1476)) ([2cbe373](https://github.com/vuejs/vue-cli/commit/2cbe373))
+* **ui:** check current project still exists ([251509c](https://github.com/vuejs/vue-cli/commit/251509c))
+* **ui:** correct i18n mistake ([#1445](https://github.com/vuejs/vue-cli/issues/1445)) ([dc07315](https://github.com/vuejs/vue-cli/commit/dc07315))
+* **ui:** int loading z-index ([68f273a](https://github.com/vuejs/vue-cli/commit/68f273a))
+* Remove duplicated "the" ([#1493](https://github.com/vuejs/vue-cli/issues/1493)) ([6e32164](https://github.com/vuejs/vue-cli/commit/6e32164))
+* **ui:** limit description length in plugin search ([588ad75](https://github.com/vuejs/vue-cli/commit/588ad75))
+* **ui:** progress screen z-index ([0366ec3](https://github.com/vuejs/vue-cli/commit/0366ec3))
+* **ui:** tests ([bfebc6d](https://github.com/vuejs/vue-cli/commit/bfebc6d))
+* **ui:** yarn link [@vue](https://github.com/vue)/ui ([145492b](https://github.com/vuejs/vue-cli/commit/145492b))
+* pwa plugin should be ignored when target is not app ([85e6e5e](https://github.com/vuejs/vue-cli/commit/85e6e5e)), closes [#1497](https://github.com/vuejs/vue-cli/issues/1497)
+* resolve.symlinks to false so that node_modules exclusion works ([5b4df14](https://github.com/vuejs/vue-cli/commit/5b4df14))
+* should not inject babel-core shim if babel plugin is not used ([a91d022](https://github.com/vuejs/vue-cli/commit/a91d022)), closes [#1424](https://github.com/vuejs/vue-cli/issues/1424)
+* use fallback module resolve for Node version < 10 ([12d51fd](https://github.com/vuejs/vue-cli/commit/12d51fd)), closes [#1486](https://github.com/vuejs/vue-cli/issues/1486)
+
+
+### Code Refactoring
+
+* **ui:** Config & task icons ([#1450](https://github.com/vuejs/vue-cli/issues/1450)) ([1c8f195](https://github.com/vuejs/vue-cli/commit/1c8f195))
+
+
+### Features
+
+* allow configuring css-loader options via css.loaderOptions.css ([7d06f09](https://github.com/vuejs/vue-cli/commit/7d06f09)), closes [#1484](https://github.com/vuejs/vue-cli/issues/1484)
+* allow configuring postcss-loader via css.loaderOptions.postcss ([0ba111e](https://github.com/vuejs/vue-cli/commit/0ba111e))
+* allow using relative baseUrl ([dc38211](https://github.com/vuejs/vue-cli/commit/dc38211))
+* bail when user directly mutate output.publicPath ([1732007](https://github.com/vuejs/vue-cli/commit/1732007))
+* **xdg-compliance:** rc file location hierarchy ([#1326](https://github.com/vuejs/vue-cli/issues/1326)) ([ec87266](https://github.com/vuejs/vue-cli/commit/ec87266)), closes [#1325](https://github.com/vuejs/vue-cli/issues/1325)
+* bump TypeScript to 2.9 ([7b90fdc](https://github.com/vuejs/vue-cli/commit/7b90fdc))
+* ui tweaks & fixes ([#1409](https://github.com/vuejs/vue-cli/issues/1409)) ([7354525](https://github.com/vuejs/vue-cli/commit/7354525))
+* upgrade jest to 23.1.0 ([7e38f98](https://github.com/vuejs/vue-cli/commit/7e38f98))
+* **build:** support named exports when building --target lib with js/ts entry ([1dc47eb](https://github.com/vuejs/vue-cli/commit/1dc47eb)), closes [#1436](https://github.com/vuejs/vue-cli/issues/1436)
+* **cli-service:** support --no-clean flag ([#1457](https://github.com/vuejs/vue-cli/issues/1457)) ([c19bbff](https://github.com/vuejs/vue-cli/commit/c19bbff)), closes [#1446](https://github.com/vuejs/vue-cli/issues/1446)
+* **e2e-cypress:** upgrade cypress to 3.0 ([a81f7ad](https://github.com/vuejs/vue-cli/commit/a81f7ad)), closes [#1477](https://github.com/vuejs/vue-cli/issues/1477)
+* **lint:** default to lint tsx files  ([#1460](https://github.com/vuejs/vue-cli/issues/1460)) ([838f6a2](https://github.com/vuejs/vue-cli/commit/838f6a2))
+* **ui:** Display cli-service in plugins view (so it can be upgraded) ([#1422](https://github.com/vuejs/vue-cli/issues/1422)) ([f42632b](https://github.com/vuejs/vue-cli/commit/f42632b))
+* **ui:** update all plugin to wanted version button ([#1456](https://github.com/vuejs/vue-cli/issues/1456)) ([98b6d26](https://github.com/vuejs/vue-cli/commit/98b6d26))
+
+
+### BREAKING CHANGES
+
+* css.localIdentName has been deprecated. Use
+css.loaderOptions.css.localIdentName instead.
+* **e2e-cypress:** Cypress has been upgraded to 3.0. See changelog at
+https://docs.cypress.io/guides/references/changelog.html
+* **build:** When building a js/ts entry file with --target lib, the
+library now exposes a Module with both default and named exports. This means
+in the UMD build, the default export now needs to be accessed as
+`window.yourLib.default`, and in the CommonJS build as
+`const yourLib = require('yourLib').default`. If you don't have named exports
+and want to retain the previous behavior, you can configure webpack to use
+`output.libraryExport: 'default'` in `vue.config.js`.
+* **ui:** - `file-icon` for the configurations is removed
+- Configuration objects `icon` option changed and is now working differently: you can either use a material icon code or a custom image (see Public static files in the UI Plugin docs).
+- Task objects have a new `icon` option wich works exactly the same
+- By default, if no icon is provided for either the config or the task, the corresponding vue-cli plugin logo will be used instead (if any).
+* jest is upgraded to 23.1.0 with minor breaking changes
+but should not affect normal test cases
+
+
+
 <a name="3.0.0-beta.15"></a>
 # [3.0.0-beta.15](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2018-05-30)
 
