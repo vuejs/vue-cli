@@ -81,6 +81,7 @@ export default {
   .operations
     color $vue-ui-color-dark
     padding-bottom 12px
+    text-align center
     .vue-ui-dark-mode &
       color lighten($vue-ui-color-dark, 60%)
     &:first-letter

@@ -198,7 +198,8 @@ export default {
 
   methods: {
     getColors (index) {
-      return colors[index % colors.length]
+      const list = colors[this.darkMode ? 'dark' : 'light']
+      return list[index % list.length]
     },
 
     getChunk (id) {
