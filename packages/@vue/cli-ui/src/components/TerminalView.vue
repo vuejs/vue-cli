@@ -35,7 +35,6 @@
 import { Terminal } from 'xterm'
 import * as fit from 'xterm/dist/addons/fit/fit'
 import * as webLinks from 'xterm/dist/addons/webLinks/webLinks'
-import DARK_MODE from '../graphql/darkMode.gql'
 
 Terminal.applyAddon(fit)
 Terminal.applyAddon(webLinks)
@@ -114,10 +113,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-
-  apollo: {
-    darkMode: DARK_MODE
   },
 
   computed: {

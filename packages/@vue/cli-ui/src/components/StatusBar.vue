@@ -78,7 +78,6 @@
 import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
 import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
-import DARK_MODE from '../graphql/darkMode.gql'
 import DARK_MODE_SET from '../graphql/darkModeSet.gql'
 
 let lastRoute
@@ -94,7 +93,6 @@ export default {
   apollo: {
     projectCurrent: PROJECT_CURRENT,
     consoleLogLast: CONSOLE_LOG_LAST,
-    darkMode: DARK_MODE,
 
     $subscribe: {
       consoleLogAdded: {
