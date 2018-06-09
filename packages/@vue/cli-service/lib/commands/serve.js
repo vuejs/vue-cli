@@ -82,8 +82,8 @@ module.exports = (api, options) => {
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
-      const public = projectDevServerOptions.public
-      const sockjsUrl = public ? `//${public}/sockjs-node` : url.format({
+      const publicOpt = projectDevServerOptions.public
+      const sockjsUrl = publicOpt ? `//${publicOpt}/sockjs-node` : url.format({
         protocol,
         port,
         hostname: urls.lanUrlForConfig || 'localhost',
