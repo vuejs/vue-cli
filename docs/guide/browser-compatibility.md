@@ -4,7 +4,7 @@
 
 You will notice a `browserslist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by [@babel/preset-env][babel-preset-env] and [autoprefixer][autoprefixer] to automatically determine the JavaScript features that need to be transpiled and the CSS vendor prefixes needed.
 
-See [here](browserslist) for how to specify browser ranges.
+See [here][browserslist] for how to specify browser ranges.
 
 ## Polyfills
 
