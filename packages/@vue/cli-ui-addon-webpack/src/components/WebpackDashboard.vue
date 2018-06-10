@@ -114,6 +114,8 @@ export default {
         .value
           color $vue-ui-color-dark
           font-size 24px
+          .vue-ui-dark-mode &
+            color $vue-ui-color-light
 
           .secondary
             opacity .75
@@ -124,6 +126,8 @@ export default {
     padding $padding-item
     background $vue-ui-color-light-neutral
     border-radius $br
+    .vue-ui-dark-mode &
+      background $vue-ui-color-dark
 
   .pane-toolbar
     margin-bottom $padding-item

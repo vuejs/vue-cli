@@ -111,7 +111,8 @@
         "empty": "No logs yet"
       },
       "report-bug": "Report bug",
-      "translate": "Help translate"
+      "translate": "Help translate",
+      "dark-mode": "Toggle dark mode"
     },
     "terminal-view": {
       "buttons": {

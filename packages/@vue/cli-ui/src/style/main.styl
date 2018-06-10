@@ -17,7 +17,6 @@ h2
 
 .actions-bar
   padding $padding-item
-  background $md-white
   h-box()
   box-center()
   position relative
@@ -50,6 +49,10 @@ ansi-colors('blue', $md-blue)
 ansi-colors('magenta', $vue-ui-color-accent)
 ansi-colors('cyan', $vue-ui-color-info)
 ansi-colors('white', $vue-ui-color-light)
+.vue-ui-dark-mode
+  ansi-colors('black', $vue-ui-color-dark-neutral)
+  ansi-colors('magenta', lighten($vue-ui-color-accent, 60%))
+  ansi-colors('white', $vue-ui-color-light-neutral)
 
 .vue-ui-icon.separator
   width 6px
@@ -59,6 +62,8 @@ ansi-colors('white', $vue-ui-color-light)
   margin $padding-item
   svg
     fill rgba($vue-ui-color-dark, .2)
+    .vue-ui-dark-mode &
+      fill rgba($vue-ui-color-light, .2)
 
 .ais-index
   height 100%
@@ -82,9 +87,14 @@ ansi-colors('white', $vue-ui-color-light)
     color darken($vue-ui-color-primary, 10%)
     padding 0 2px
     border-radius $br
+    .vue-ui-dark-mode &
+      background $vue-ui-color-dark
+      color $vue-ui-color-primary
 
 .ais-logo
   max-width 150px
+  .vue-ui-dark-mode &
+    filter brightness(200%)
 
 .no-padding-x
   padding-left 0

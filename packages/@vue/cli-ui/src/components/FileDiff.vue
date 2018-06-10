@@ -113,15 +113,18 @@ status-color($color)
       fill $color
 
 .file-diff
-  background $vue-ui-color-light
   border solid 1px $vue-ui-color-light-neutral
   margin $padding-item
+  .vue-ui-dark-mode &
+    border-color $vue-ui-color-dark
 
   .toolbar
     padding $padding-item
     background $color-background-light
     h-box()
     align-items center
+    .vue-ui-dark-mode &
+      background $vue-ui-color-dark
 
     >>> > *
       space-between-x($padding-item)

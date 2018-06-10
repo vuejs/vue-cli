@@ -92,6 +92,9 @@ export default {
     h-box()
     background $color-background-light
     color rgba($vue-ui-color-dark, .4)
+    .vue-ui-dark-mode &
+      background darken($vue-ui-color-dark, 10%)
+      color $vue-ui-color-light
 
     .ln
       text-align right
@@ -112,11 +115,21 @@ export default {
 
   &.type-add
     background lighten($vue-ui-color-success, 80%)
+    .vue-ui-dark-mode &
+      background darken($vue-ui-color-success, 70%)
     .lines
       background lighten($vue-ui-color-success, 60%)
+      .vue-ui-dark-mode &
+       background darken($vue-ui-color-success, 60%)
 
   &.type-del
     background lighten($vue-ui-color-danger, 80%)
+    .vue-ui-dark-mode &
+      background darken($vue-ui-color-danger, 70%)
+
     .lines
       background lighten($vue-ui-color-danger, 60%)
+      .vue-ui-dark-mode &
+        background darken($vue-ui-color-danger, 60%)
+
 </style>

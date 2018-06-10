@@ -83,6 +83,8 @@ export default {
   .header,
   >>> .tabs
     background $vue-ui-color-light-neutral
+    .vue-ui-dark-mode &
+      background $vue-ui-color-dark
 
   >>> .tabs-content
     height 0
@@ -123,6 +125,8 @@ export default {
     $max-width = 1200px
     .shell
       background $md-white
+      .vue-ui-dark-mode &
+        background $vue-ui-color-darker
     .header .content,
     >>> .vue-ui-tab
       max-width $max-width

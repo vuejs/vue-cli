@@ -81,6 +81,9 @@ export default {
   height 32px
   z-index 1
   box-shadow 0 2px 10px rgba(black, .05)
+  .vue-ui-dark-mode &
+    background $vue-ui-color-darker
+    box-shadow 0 2px 10px rgba(black, .2)
 
   &,
   .actions
