@@ -1039,6 +1039,18 @@ There are some builtin icons:
 - `'done'`
 - `'error'`
 
+## Other plugins
+
+### hasPlugin
+
+Returns `true` if the project uses the plugin.
+
+```js
+api.hasPlugin('eslint')
+api.hasPlugin('apollo')
+api.hasPlugin('vue-cli-plugin-apollo')
+```
+
 ## Hooks
 
 Hooks allows to react to certain cli-ui events.

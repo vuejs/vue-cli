@@ -5,6 +5,7 @@ const views = require('../connectors/views')
 // Utils
 const ipc = require('../utils/ipc')
 const { notify } = require('../utils/notification')
+const { matchesPluginId } = require('@vue/cli-shared-utils')
 // Validators
 const { validateConfiguration } = require('./configuration')
 const { validateDescribeTask, validateAddTask } = require('./task')
@@ -13,11 +14,12 @@ const { validateView, validateBadge } = require('./view')
 const { validateNotify } = require('./notify')
 
 class PluginApi {
-  constructor (context) {
+  constructor ({ plugins }, context) {
     // Context
     this.context = context
     this.pluginId = null
     this.project = null
+    this.plugins = plugins
     // Hooks
     this.projectOpenHooks = []
     this.pluginReloadHooks = []
@@ -282,6 +284,14 @@ class PluginApi {
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
+  }
+
+  /**
+   * Indicates if a specific plugin is used by the project
+   * @param {string} id Plugin id or short id
+   */
+  hasPlugin (id) {
+    return this.plugins.some(p => matchesPluginId(id, p.id))
   }
 
   /* Namespaced */

@@ -101,7 +101,9 @@ function resetPluginApi (context) {
   }
   sharedData.unWatchAll()
 
-  pluginApi = new PluginApi(context)
+  pluginApi = new PluginApi({
+    plugins
+  }, context)
   // Run Plugin API
   plugins.forEach(plugin => runPluginApi(plugin.id, context))
   runPluginApi(cwd.get(), context, 'vue-cli-ui')

@@ -2,6 +2,9 @@
 module.exports = api => {
   if (!process.env.VUE_CLI_UI_DEV) return
 
+  console.log('has(eslint)', api.hasPlugin('eslint'))
+  console.log('has(typescript)', api.hasPlugin('typescript'))
+
   // Add dynamic components in dev mode (webpack dashboard & analyzer)
   api.addClientAddon({
     id: 'vue-webpack',
