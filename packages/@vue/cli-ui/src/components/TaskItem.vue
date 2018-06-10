@@ -14,6 +14,7 @@
         :image="logo ? logo : iconData.icon"
         :class="iconData.class"
         v-tooltip="status"
+        color-bullet
       />
 
       <ListItemInfo
