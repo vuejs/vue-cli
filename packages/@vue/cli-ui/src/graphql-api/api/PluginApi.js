@@ -4,11 +4,13 @@ const sharedData = require('../connectors/shared-data')
 const views = require('../connectors/views')
 // Utils
 const ipc = require('../utils/ipc')
+const { notify } = require('../utils/notification')
 // Validators
 const { validateConfiguration } = require('./configuration')
 const { validateDescribeTask, validateAddTask } = require('./task')
 const { validateClientAddon } = require('./client-addon')
 const { validateView, validateBadge } = require('./view')
+const { validateNotify } = require('./notify')
 
 class PluginApi {
   constructor (context) {
@@ -262,6 +264,24 @@ class PluginApi {
    */
   get db () {
     return this.context.db
+  }
+
+  /**
+   * Display a notification in the user OS
+   * @param {object} options Notification options
+   */
+  notify (options) {
+    try {
+      validateNotify(options)
+      notify(options)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'notify' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
   }
 
   /* Namespaced */

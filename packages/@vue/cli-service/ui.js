@@ -1,6 +1,9 @@
 module.exports = api => {
   const { setSharedData, removeSharedData } = api.namespace('webpack-dashboard-')
 
+  let firstRun = true
+  let hadFailed = false
+
   function resetSharedData (key) {
     setSharedData(`${key}-status`, null)
     setSharedData(`${key}-progress`, 0)
@@ -15,6 +18,33 @@ module.exports = api => {
       const type = message.webpackDashboardData.type
       for (const data of message.webpackDashboardData.value) {
         setSharedData(`${type}-${data.type}`, data.value)
+
+        if (type === 'serve' && data.type === 'status') {
+          if (data.value === 'Failed') {
+            api.notify({
+              title: 'Build failed',
+              message: 'The build has errors.',
+              icon: 'error'
+            })
+            hadFailed = true
+          } else if (data.value === 'Success') {
+            if (hadFailed) {
+              api.notify({
+                title: 'Build fixed',
+                message: 'The build succeeded.',
+                icon: 'done'
+              })
+              hadFailed = false
+            } else if (firstRun) {
+              api.notify({
+                title: 'App ready',
+                message: 'The build succeeded.',
+                icon: 'done'
+              })
+              firstRun = false
+            }
+          }
+        }
       }
     }
   }
@@ -107,6 +137,8 @@ module.exports = api => {
       // Data
       resetSharedData('serve')
       removeSharedData('serve-url')
+      firstRun = true
+      hadFailed = false
     },
     onRun: () => {
       api.ipcOn(onWebpackMessage)

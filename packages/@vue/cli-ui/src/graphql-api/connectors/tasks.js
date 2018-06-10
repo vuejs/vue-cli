@@ -1,7 +1,5 @@
-const path = require('path')
 const execa = require('execa')
 const terminate = require('terminate')
-const notifier = require('node-notifier')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -14,6 +12,7 @@ const views = require('./views')
 // Utils
 const { getCommand } = require('../utils/command')
 const { log } = require('../utils/logger')
+const { notify } = require('../utils/notification')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -329,10 +328,10 @@ async function run (id, context) {
           message: `Task ${task.id} ended with error code ${code}`,
           type: 'error'
         }, context)
-        notifier.notify({
+        notify({
           title: `Task error`,
           message: `Task ${task.id} ended with error code ${code}`,
-          icon: path.resolve(__dirname, '../../assets/error.png')
+          icon: 'error'
         })
       } else {
         updateOne({
@@ -343,10 +342,10 @@ async function run (id, context) {
           message: `Task ${task.id} completed`,
           type: 'done'
         }, context)
-        notifier.notify({
+        notify({
           title: `Task completed`,
           message: `Task ${task.id} completed`,
-          icon: path.resolve(__dirname, '../../assets/done.png')
+          icon: 'done'
         })
       }
     }

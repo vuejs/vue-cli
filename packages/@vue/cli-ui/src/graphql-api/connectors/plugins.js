@@ -16,7 +16,6 @@ const {
   updatePackage
 } = require('@vue/cli/lib/util/installDeps')
 const invoke = require('@vue/cli/lib/invoke')
-const notifier = require('node-notifier')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -36,6 +35,7 @@ const { getCommand } = require('../utils/command')
 const { resolveModuleRoot } = require('../utils/resolve-path')
 const ipc = require('../utils/ipc')
 const { log } = require('../utils/logger')
+const { notify } = require('../utils/notification')
 
 const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
@@ -264,10 +264,10 @@ function install (id, context) {
     await initPrompts(id, context)
     installationStep = 'config'
 
-    notifier.notify({
+    notify({
       title: `Plugin installed`,
       message: `Plugin ${id} installed, next step is configuration`,
-      icon: path.resolve(__dirname, '../../assets/done.png')
+      icon: 'done'
     })
 
     return getInstallation(context)
@@ -297,10 +297,10 @@ function uninstall (id, context) {
     currentPluginId = null
     installationStep = null
 
-    notifier.notify({
+    notify({
       title: `Plugin uninstalled`,
       message: `Plugin ${id} uninstalled`,
-      icon: path.resolve(__dirname, '../../assets/done.png')
+      icon: 'done'
     })
 
     return getInstallation(context)
@@ -329,10 +329,10 @@ function runInvoke (id, context) {
     runPluginApi(id, context)
     installationStep = 'diff'
 
-    notifier.notify({
+    notify({
       title: `Plugin invoke sucess`,
       message: `Plugin ${id} invoked successfully`,
-      icon: path.resolve(__dirname, '../../assets/done.png')
+      icon: 'done'
     })
 
     return getInstallation(context)
@@ -377,10 +377,10 @@ function update (id, context, notify = true) {
     }, context)
 
     if (notify) {
-      notifier.notify({
+      notify({
         title: `Plugin updated`,
         message: `Plugin ${id} was successfully updated`,
-        icon: path.resolve(__dirname, '../../assets/done.png')
+        icon: 'done'
       })
     }
 
@@ -399,10 +399,10 @@ async function updateAll (context) {
     }
   }
 
-  notifier.notify({
+  notify({
     title: `Plugins updated`,
     message: `${updatedPlugins.length} plugin(s) were successfully updated`,
-    icon: path.resolve(__dirname, '../../assets/done.png')
+    icon: 'done'
   })
 
   return updatedPlugins

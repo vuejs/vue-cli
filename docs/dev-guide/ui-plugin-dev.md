@@ -966,6 +966,23 @@ api.db.get('posts')
 const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
 
+### Notification
+
+You can display notifications using the user OS notification system:
+
+```js
+api.notify({
+  title: 'Some title',
+  message: 'Some message',
+  icon: 'path-to-icon.png'
+})
+```
+
+There are some builtin icons:
+
+- `'done'`
+- `'error'`
+
 ### Localization
 
 You can put locale files compatible with [vue-i18n](https://github.com/kazupon/vue-i18n) in a `locales` folder at the root of your plugin. They will be automatically loaded into the client when the project is opened. You can then use `$t` to translate strings in your components and other vue-i18n helpers. Also, the strings used in the UI API (like `describeTask`) will go through vue-i18n as well to you can localize them.
