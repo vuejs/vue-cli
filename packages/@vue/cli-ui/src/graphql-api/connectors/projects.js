@@ -276,7 +276,7 @@ async function create (input, context) {
     answers.packageManager = input.packageManager
 
     // Config files
-    if ((index = answers.features.includes('use-config-files')) !== -1) {
+    if ((index = answers.features.indexOf('use-config-files')) !== -1) {
       answers.features.splice(index, 1)
       answers.useConfigFiles = 'files'
     }
