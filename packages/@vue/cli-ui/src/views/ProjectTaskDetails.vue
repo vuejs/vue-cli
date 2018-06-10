@@ -84,7 +84,7 @@
           :rows="24"
           auto-size
           :options="{
-            scrollback: 1000,
+            scrollback: 5000,
             disableStdin: true,
             useFlowControl: true
           }"
