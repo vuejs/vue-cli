@@ -1,5 +1,6 @@
 const { log, error, openBrowser } = require('@vue/cli-shared-utils')
 const { portfinder, server } = require('@vue/cli-ui/server')
+const shortid = require('shortid')
 
 async function ui (options = {}, context = process.cwd()) {
   let port = options.port
@@ -16,6 +17,11 @@ async function ui (options = {}, context = process.cwd()) {
   // Dev mode
   if (options.dev) {
     process.env.VUE_CLI_UI_DEV = true
+  }
+
+  if (!process.env.VUE_CLI_IPC) {
+    // Prevent IPC id conflicts
+    process.env.VUE_CLI_IPC = `vue-cli-${shortid()}`
   }
 
   if (!options.quiet) log(`🚀  Starting GUI...`)
