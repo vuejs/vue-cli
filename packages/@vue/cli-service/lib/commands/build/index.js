@@ -1,7 +1,6 @@
 const defaults = {
   clean: true,
-  target: 'app',
-  entry: 'src/App.vue'
+  target: 'app'
 }
 
 const buildModes = {
@@ -23,11 +22,14 @@ module.exports = (api, options) => {
       '--watch': `watch for changes`
     }
   }, async function build (args) {
-    args.entry = args.entry || args._[0]
     for (const key in defaults) {
       if (args[key] == null) {
         args[key] = defaults[key]
       }
+    }
+    args.entry = args.entry || args._[0]
+    if (args.target !== 'app') {
+      args.entry = args.entry || 'src/App.vue'
     }
 
     const fs = require('fs-extra')
@@ -82,6 +84,9 @@ module.exports = (api, options) => {
       webpackConfig = require('./resolveWcConfig')(api, args, options)
     } else {
       webpackConfig = api.resolveWebpackConfig()
+      if (args.entry && !options.pages) {
+        webpackConfig.entry = { app: api.resolve(args.entry) }
+      }
     }
 
     // apply inline dest path after user configureWebpack hooks
