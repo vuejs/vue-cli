@@ -1078,7 +1078,3 @@ api.describeConfig({
   icon: '/_plugin/my-package/my-logo.png'
 })
 ```
-
-## Localization
-
-See [UI Localization](./ui-localization.md).
