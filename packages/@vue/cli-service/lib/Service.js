@@ -81,15 +81,6 @@ module.exports = class Service {
   }
 
   loadEnv (mode) {
-    if (mode) {
-      // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
-      // is production or test. However this can be overwritten in .env files.
-      process.env.NODE_ENV = process.env.BABEL_ENV =
-        (mode === 'production' || mode === 'test')
-          ? mode
-          : 'development'
-    }
-
     const logger = debug('vue:env')
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
@@ -108,6 +99,19 @@ module.exports = class Service {
 
     load(localPath)
     load(basePath)
+
+    // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
+    // is production or test. However the value in .env files will take higher
+    // priority.
+    const defaultNodeEnv = (mode === 'production' || mode === 'test')
+      ? mode
+      : 'development'
+    if (process.env.NODE_ENV == null) {
+      process.env.NODE_ENV = defaultNodeEnv
+    }
+    if (process.env.BABEL_ENV == null) {
+      process.env.BABEL_ENV = defaultNodeEnv
+    }
   }
 
   resolvePlugins (inlinePlugins, useBuiltIn) {

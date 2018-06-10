@@ -7,8 +7,9 @@ const inquirer = require('inquirer')
 const isBinary = require('isbinaryfile')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
-const { installDeps } = require('./util/installDeps')
 const { loadModule } = require('./util/module')
+const { installDeps } = require('./util/installDeps')
+const normalizeFilePaths = require('./util/normalizeFilePaths')
 const {
   log,
   error,
@@ -33,7 +34,7 @@ async function readFiles (context) {
       ? fs.readFileSync(name)
       : fs.readFileSync(name, 'utf-8')
   }
-  return res
+  return normalizeFilePaths(res)
 }
 
 function getPkg (context) {
