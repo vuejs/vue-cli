@@ -42,10 +42,12 @@ function checkFiles (folder, recursive = false) {
     const fullPath = path.join(folder, file)
     if (file === 'ui.js') {
       checkLinks(fullPath)
-    } else if (file === 'ui' && fs.statSync(fullPath).isDirectory()) {
-      checkLinks(path.join(fullPath, 'index.js'))
-    } else if (recursive) {
-      checkFiles(fullPath)
+    } else if (fs.statSync(fullPath).isDirectory()) {
+      if (file === 'ui') {
+        checkLinks(path.join(fullPath, 'index.js'))
+      } else if (recursive) {
+        checkFiles(fullPath)
+      }
     }
   }
 }
