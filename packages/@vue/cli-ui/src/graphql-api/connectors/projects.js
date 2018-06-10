@@ -283,9 +283,9 @@ async function create (input, context) {
 
     const cliOptions = {git: true}
     // Git
-    if (input.skipGit) {
+    if (!input.enableGit) {
       if (!input.gitCommit) {
-        cliOptions.git = 'false'
+        cliOptions.git = false
       } else {
         cliOptions.git = input.gitCommit
       }

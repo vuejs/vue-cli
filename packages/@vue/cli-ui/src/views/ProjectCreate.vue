@@ -90,7 +90,7 @@
                   </VueSwitch>
                   <VueInput
                     v-model="formData.gitCommitMessage"
-                    v-show="formData.git"
+                    v-show="!formData.git"
                     :placeholder="$t('views.project-create.tabs.details.form.options.gitPlaceholder')"
                   />
                 </VueFormField>
@@ -399,7 +399,7 @@ function formDataFactory () {
   return {
     folder: '',
     force: false,
-    git: false,
+    git: true,
     gitCommitMessage: '',
     packageManager: undefined,
     selectedPreset: null,
@@ -525,7 +525,7 @@ export default {
             input: {
               folder: this.formData.folder,
               force: this.formData.force,
-              skipGit: this.formData.git,
+              enableGit: this.formData.git,
               gitCommit: this.formData.gitCommitMessage,
               packageManager: this.formData.packageManager,
               preset: this.formData.selectedPreset,

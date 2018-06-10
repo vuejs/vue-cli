@@ -199,7 +199,7 @@
             "options": {
               "label": "Additional options",
               "description": "Overwrite target folder if it exists",
-              "git": "Use custom first initial commit message or skip git initialization",
+              "git": "Initialize git repository (recommended)",
               "gitPlaceholder": "Initial commit message (optional)"
             }
           },

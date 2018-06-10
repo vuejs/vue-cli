@@ -37,7 +37,7 @@ input ProjectCreateInput {
   remote: Boolean
   clone: Boolean
   save: String
-  skipGit: Boolean!
+  enableGit: Boolean!
   gitCommit: String
 }
 
