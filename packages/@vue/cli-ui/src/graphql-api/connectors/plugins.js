@@ -359,7 +359,7 @@ async function initPrompts (id, context) {
   await prompts.start()
 }
 
-function update (id, context, notify = true) {
+function update (id, context, multi = false) {
   return progress.wrap('plugin-update', context, async setProgress => {
     setProgress({
       status: 'plugin-update',
@@ -376,12 +376,13 @@ function update (id, context, notify = true) {
       type: 'info'
     }, context)
 
-    if (notify) {
+    if (!multi) {
       notify({
         title: `Plugin updated`,
         message: `Plugin ${id} was successfully updated`,
         icon: 'done'
       })
+      resetPluginApi(context)
     }
 
     currentPluginId = null
@@ -395,7 +396,7 @@ async function updateAll (context) {
   for (const plugin of plugins) {
     const version = await getVersion(plugin, context)
     if (version.current !== version.wanted) {
-      updatedPlugins.push(await update(plugin.id, context, false))
+      updatedPlugins.push(await update(plugin.id, context, true))
     }
   }
 
@@ -404,6 +405,7 @@ async function updateAll (context) {
     message: `${updatedPlugins.length} plugin(s) were successfully updated`,
     icon: 'done'
   })
+  resetPluginApi(context)
 
   return updatedPlugins
 }
