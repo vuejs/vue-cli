@@ -12,7 +12,7 @@
 
     <div class="links vue-ui-grid default-gap">
       <VueButton href="https://github.com/vuejs/vue-cli" target="_blank">Repository</VueButton>
-      <VueButton href="https://github.com/vuejs/vue-cli/tree/dev/docs#table-of-contents" target="_blank">Documentation</VueButton>
+      <VueButton href="https://cli.vuejs.org" target="_blank">Documentation</VueButton>
       <VueButton href="https://vuejs.org/v2/guide/" target="_blank">Vue.js Guide</VueButton>
       <VueButton href="https://vuejs.org/v2/api/" target="_blank">Vue.js API reference</VueButton>
       <VueButton href="https://forum.vuejs.org/" target="_blank">Vue.js Forums</VueButton>
