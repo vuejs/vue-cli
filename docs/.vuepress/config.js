@@ -33,7 +33,8 @@ module.exports = {
             text: 'Dev Guide',
             items: [
               { text: 'Plugin Dev Guide', link: '/dev-guide/plugin-dev.md' },
-              { text: 'UI Plugin Dev Guide', link: '/dev-guide/ui-plugin-dev.md' },
+              { text: 'UI Plugin Dev Guide', link: '/dev-guide/ui-info.md' },
+              { text: 'UI Plugin API', link: '/dev-guide/ui-api.md' },
               { text: 'UI Localization', link: '/dev-guide/ui-localization.md' }
             ]
           },
@@ -84,7 +85,8 @@ module.exports = {
           ],
           '/dev-guide/': [
             '/dev-guide/plugin-dev.md',
-            '/dev-guide/ui-plugin-dev.md',
+            '/dev-guide/ui-info.md',
+            '/dev-guide/ui-api.md',
             '/dev-guide/ui-localization.md'
           ]
         }
