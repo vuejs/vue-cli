@@ -7,11 +7,13 @@ module.exports = {
     apolloEngine: false,
     graphqlTimeout: 1000000
   },
+
   configureWebpack: {
     resolve: {
       symlinks: false
     }
   },
+
   chainWebpack: config => {
     config.module.rule('stylus').oneOf('vue').use('postcss-loader')
       .tap(options =>
@@ -21,5 +23,7 @@ module.exports = {
           }
         })
       )
-  }
+  },
+
+  lintOnSave: undefined
 }

@@ -16,6 +16,7 @@ extend type Mutation {
   taskRun (id: ID!): Task
   taskStop (id: ID!): Task
   taskLogsClear (id: ID!): Task
+  taskOpen (id: ID!): Boolean
 }
 
 extend type Subscription {
@@ -79,7 +80,8 @@ exports.resolvers = {
   Mutation: {
     taskRun: (root, { id }, context) => tasks.run(id, context),
     taskStop: (root, { id }, context) => tasks.stop(id, context),
-    taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context)
+    taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context),
+    taskOpen: (root, { id }, context) => tasks.open(id, context)
   },
 
   Subscription: {

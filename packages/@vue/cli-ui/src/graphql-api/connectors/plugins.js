@@ -118,12 +118,14 @@ function resetPluginApi (context) {
     if (!project) return
     if (projectId !== project.id) {
       projectId = project.id
-      log('Hook onProjectOpen', pluginApi.projectOpenHooks.length, 'handlers')
-      pluginApi.projectOpenHooks.forEach(fn => fn(project, projects.getLast(context)))
+      callHook('projectOpen', [project, projects.getLast(context)], context)
       pluginApi.project = project
     } else {
-      log('Hook onPluginReload', pluginApi.pluginReloadHooks.length, 'handlers')
-      pluginApi.pluginReloadHooks.forEach(fn => fn(project))
+      callHook('pluginReload', [project], context)
+
+      // View open hook
+      const currentView = views.getCurrent()
+      if (currentView) views.open(currentView.id)
     }
   })
 }
@@ -145,6 +147,12 @@ function runPluginApi (id, context, fileName = 'ui') {
     const folder = fs.existsSync(id) ? id : getPath(id)
     locales.loadFolder(folder, context)
   } catch (e) {}
+}
+
+function callHook (id, args, context) {
+  const fns = pluginApi.hooks[id]
+  log(`Hook ${id}`, fns.length, 'handlers')
+  fns.forEach(fn => fn(...args))
 }
 
 function findOne (id, context) {
@@ -472,5 +480,6 @@ module.exports = {
   getApi,
   finishInstall,
   callAction,
+  callHook,
   serve
 }

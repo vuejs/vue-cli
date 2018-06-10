@@ -1,0 +1,3 @@
+mutation taskOpen ($id: ID!) {
+  taskOpen (id: $id)
+}

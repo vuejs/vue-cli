@@ -7,7 +7,7 @@
   >
     <div class="content">
       <VueGroup
-        v-model="currentView"
+        v-model="currentViewName"
         class="vertical small-indicator left-indicator primary"
         indicator
       >
@@ -30,6 +30,7 @@ import VIEWS from '../graphql/views.gql'
 import VIEW_ADDED from '../graphql/viewAdded.gql'
 import VIEW_REMOVED from '../graphql/viewRemoved.gql'
 import VIEW_CHANGED from '../graphql/viewChanged.gql'
+import VIEW_OPEN from '../graphql/viewOpen.gql'
 
 export default {
   data () {
@@ -90,12 +91,16 @@ export default {
   },
 
   computed: {
-    currentView: {
+    currentView () {
+      const currentRoute = this.$route
+      return this.views.find(
+        item => isIncludedRoute(currentRoute, this.$router.resolve({ name: item.name }).route)
+      )
+    },
+
+    currentViewName: {
       get () {
-        const currentRoute = this.$route
-        const view = this.views.find(
-          item => isIncludedRoute(currentRoute, this.$router.resolve({ name: item.name }).route)
-        )
+        const view = this.currentView
         return view && view.name
       },
       set (name) {
@@ -103,6 +108,22 @@ export default {
           this.$router.push({ name })
         }
       }
+    }
+  },
+
+  watch: {
+    currentView: {
+      handler (value, oldValue) {
+        if (!value) return
+        if (oldValue && value.id === oldValue.id) return
+        this.$apollo.mutate({
+          mutation: VIEW_OPEN,
+          variables: {
+            id: value.id
+          }
+        })
+      },
+      immediate: true
     }
   }
 }

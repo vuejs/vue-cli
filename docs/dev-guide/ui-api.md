@@ -1075,6 +1075,66 @@ api.onPluginReload((project) => {
 })
 ```
 
+### onConfigRead
+
+Called when a configuration screen is open or refreshed.
+
+```js
+api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
+  console.log(config.id)
+})
+```
+
+### onConfigWrite
+
+Called when the user saves in a configuration screen.
+
+```js
+api.onConfigWrite(({ config, data, changedFields, cwd }) => {
+  // ...
+})
+```
+
+### onTaskOpen
+
+Called when the user open a task details pane.
+
+```js
+api.onTaskOpen(({ task, cwd }) => {
+  console.log(task.id)
+})
+```
+
+### onTaskRun
+
+Called when the user run a task.
+
+```js
+api.onTaskRun(({ task, args, child, cwd }) => {
+  // ...
+})
+```
+
+### onTaskExit
+
+Called when a task exists. It can be called both called on success or failure.
+
+```js
+api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
+  // ...
+})
+```
+
+### onViewOpen
+
+Called when the users open a view (like 'Plugins', 'Configurations' or 'Tasks').
+
+```js
+api.onViewOpen(({ view, cwd }) => {
+  console.log(view.id)
+})
+```
+
 ## Public static files
 
 You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).

@@ -39,4 +39,24 @@ module.exports = api => {
 
     return 'meow'
   })
+
+  // Hooks
+  api.onViewOpen(({ view }) => {
+    console.log('onViewOpen', view.id)
+  })
+  api.onTaskOpen(({ task }) => {
+    console.log('onTaskOpen', task.id)
+  })
+  api.onTaskRun(({ task }) => {
+    console.log('onTaskRun', task.id)
+  })
+  api.onTaskExit(({ task }) => {
+    console.log('onTaskExit', task.id)
+  })
+  api.onConfigRead(({ config }) => {
+    console.log('onConfigRead', config.id)
+  })
+  api.onConfigWrite(({ config }) => {
+    console.log('onConfigWrite', config.id)
+  })
 }

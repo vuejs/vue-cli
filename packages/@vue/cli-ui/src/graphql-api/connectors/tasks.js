@@ -348,6 +348,15 @@ async function run (id, context) {
           icon: 'done'
         })
       }
+
+      plugins.callHook('taskExit', [{
+        task,
+        args,
+        child,
+        cwd: cwd.get(),
+        signal,
+        code
+      }], context)
     }
 
     child.on('exit', onExit)
@@ -360,6 +369,13 @@ async function run (id, context) {
         cwd: cwd.get()
       })
     }
+
+    plugins.callHook('taskRun', [{
+      task,
+      args,
+      child,
+      cwd: cwd.get()
+    }], context)
   }
   return task
 }
@@ -394,6 +410,15 @@ function clearLogs (id, context) {
   return task
 }
 
+function open (id, context) {
+  const task = findOne(id, context)
+  plugins.callHook('taskOpen', [{
+    task,
+    cwd: cwd.get()
+  }], context)
+  return true
+}
+
 module.exports = {
   list,
   findOne,
@@ -401,5 +426,6 @@ module.exports = {
   run,
   stop,
   updateOne,
-  clearLogs
+  clearLogs,
+  open
 }

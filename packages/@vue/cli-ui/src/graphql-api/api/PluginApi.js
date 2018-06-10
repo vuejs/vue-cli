@@ -21,8 +21,16 @@ class PluginApi {
     this.project = null
     this.plugins = plugins
     // Hooks
-    this.projectOpenHooks = []
-    this.pluginReloadHooks = []
+    this.hooks = {
+      projectOpen: [],
+      pluginReload: [],
+      configRead: [],
+      configWrite: [],
+      taskRun: [],
+      taskExit: [],
+      taskOpen: [],
+      viewOpen: []
+    }
     // Data
     this.configurations = []
     this.describedTasks = []
@@ -43,7 +51,7 @@ class PluginApi {
       cb(this.project)
       return
     }
-    this.projectOpenHooks.push(cb)
+    this.hooks.projectOpen.push(cb)
   }
 
   /**
@@ -52,7 +60,61 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onPluginReload (cb) {
-    this.pluginReloadHooks.push(cb)
+    this.hooks.pluginReload.push(cb)
+  }
+
+  /**
+   * Register an handler called when a config is red.
+   *
+   * @param {function} cb Handler
+   */
+  onConfigRead (cb) {
+    this.hooks.configRead.push(cb)
+  }
+
+  /**
+   * Register an handler called when a config is written.
+   *
+   * @param {function} cb Handler
+   */
+  onConfigWrite (cb) {
+    this.hooks.configWrite.push(cb)
+  }
+
+  /**
+   * Register an handler called when a task is run.
+   *
+   * @param {function} cb Handler
+   */
+  onTaskRun (cb) {
+    this.hooks.taskRun.push(cb)
+  }
+
+  /**
+   * Register an handler called when a task has exited.
+   *
+   * @param {function} cb Handler
+   */
+  onTaskExit (cb) {
+    this.hooks.taskExit.push(cb)
+  }
+
+  /**
+   * Register an handler called when the user opens one task details.
+   *
+   * @param {function} cb Handler
+   */
+  onTaskOpen (cb) {
+    this.hooks.taskOpen.push(cb)
+  }
+
+  /**
+   * Register an handler called when a view is open.
+   *
+   * @param {function} cb Handler
+   */
+  onViewOpen (cb) {
+    this.hooks.viewOpen.push(cb)
   }
 
   /**

@@ -156,18 +156,18 @@ async function getPromptTabs (id, context) {
     }
 
     // API
-    const configData = await config.onRead({
+    const onReadData = await config.onRead({
       cwd: cwd.get(),
       data
     })
 
-    let tabs = configData.tabs
+    let tabs = onReadData.tabs
     if (!tabs) {
       tabs = [
         {
           id: '__default',
           label: 'Default',
-          prompts: configData.prompts
+          prompts: onReadData.prompts
         }
       ]
     }
@@ -178,10 +178,19 @@ async function getPromptTabs (id, context) {
         tabId: tab.id
       }))
     }
-    if (configData.answers) {
-      await prompts.setAnswers(configData.answers)
+    if (onReadData.answers) {
+      await prompts.setAnswers(onReadData.answers)
     }
     await prompts.start()
+
+    plugins.callHook('configRead', [{
+      config,
+      data,
+      onReadData,
+      tabs,
+      cwd: cwd.get()
+    }], context)
+
     return tabs
   }
   return []
@@ -242,6 +251,14 @@ async function save (id, context) {
       })
 
       writeData({ config, data, changedFields }, context)
+
+      plugins.callHook('configWrite', [{
+        config,
+        data,
+        changedFields,
+        cwd: cwd.get()
+      }], context)
+
       current = {}
     }
   }

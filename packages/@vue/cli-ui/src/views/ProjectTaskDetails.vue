@@ -141,6 +141,7 @@ import TASK_RUN from '../graphql/taskRun.gql'
 import TASK_STOP from '../graphql/taskStop.gql'
 import TASK_LOGS_CLEAR from '../graphql/taskLogsClear.gql'
 import TASK_LOG_ADDED from '../graphql/taskLogAdded.gql'
+import TASK_OPEN from '../graphql/taskOpen.gql'
 
 export default {
   name: 'ProjectTaskDetails',
@@ -251,10 +252,24 @@ export default {
       this.showParameters = false
       this.currentView = '_output'
       this.$_init = false
+      this.open()
     }
   },
 
+  mounted () {
+    this.open()
+  },
+
   methods: {
+    open () {
+      this.$apollo.mutate({
+        mutation: TASK_OPEN,
+        variables: {
+          id: this.id
+        }
+      })
+    },
+
     runTask () {
       this.$apollo.mutate({
         mutation: TASK_RUN,

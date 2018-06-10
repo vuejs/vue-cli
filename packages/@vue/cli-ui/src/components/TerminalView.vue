@@ -24,7 +24,7 @@
     </div>
 
     <div class="view">
-      <div ref="render" class="xterm-render"></div>
+      <div ref="render" class="xterm-render"/>
     </div>
 
     <resize-observer v-if="autoSize" @notify="fit"/>
