@@ -198,7 +198,9 @@
             },
             "options": {
               "label": "Additional options",
-              "description": "Overwrite target folder if it exists"
+              "description": "Overwrite target folder if it exists",
+              "git": "Use custom first initial commit message or skip git initialization",
+              "gitPlaceholder": "Initial commit message (optional)"
             }
           },
           "buttons": {

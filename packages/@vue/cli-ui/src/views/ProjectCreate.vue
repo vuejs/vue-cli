@@ -82,6 +82,17 @@
                   >
                     {{ $t('views.project-create.tabs.details.form.options.description') }}
                   </VueSwitch>
+                  <VueSwitch
+                    v-model="formData.git"
+                    class="extend-left git"
+                  >
+                    {{ $t('views.project-create.tabs.details.form.options.git') }}
+                  </VueSwitch>
+                  <VueInput
+                    v-model="formData.gitCommitMessage"
+                    v-show="formData.git"
+                    :placeholder="$t('views.project-create.tabs.details.form.options.gitPlaceholder')"
+                  />
                 </VueFormField>
               </div>
             </div>
@@ -388,6 +399,8 @@ function formDataFactory () {
   return {
     folder: '',
     force: false,
+    git: false,
+    gitCommitMessage: '',
     packageManager: undefined,
     selectedPreset: null,
     remotePreset: {
@@ -512,6 +525,8 @@ export default {
             input: {
               folder: this.formData.folder,
               force: this.formData.force,
+              skipGit: this.formData.git,
+              gitCommit: this.formData.gitCommitMessage,
               packageManager: this.formData.packageManager,
               preset: this.formData.selectedPreset,
               remote: this.formData.remotePreset.url,
