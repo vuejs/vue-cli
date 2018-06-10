@@ -70,7 +70,10 @@ function setConnected (value) {
 }
 
 wsClient.on('connected', () => setConnected(true))
-wsClient.on('reconnected', () => setConnected(true))
+wsClient.on('reconnected', async () => {
+  await resetApollo()
+  setConnected(true)
+})
 // Offline
 wsClient.on('disconnected', () => setConnected(false))
 wsClient.on('error', () => setConnected(false))
