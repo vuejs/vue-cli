@@ -1,4 +1,4 @@
-# Plugin Info
+# UI Plugin Info
 
 When used in the UI, your plugin can show additional information to make it more discoverable and recognizable.
 

@@ -506,6 +506,90 @@ In addition to those, the UI supports special types that only works with it:
 
 - `color`: displays a color picker.
 
+### Switch example
+
+```js
+{
+  name: 'open',
+  type: 'confirm',
+  default: false,
+  description: 'Open the app in the browser'
+}
+```
+
+### Select example
+
+```js
+{
+  name: 'mode',
+  type: 'list',
+  default: 'development',
+  choices: [
+    {
+      name: 'Development mode',
+      value: 'development'
+    },
+    {
+      name: 'Production mode',
+      value: 'production'
+    },
+    {
+      name: 'Test mode',
+      value: 'test'
+    }
+  ],
+  description: 'Build mode',
+  link: 'https://link-to-docs'
+}
+```
+
+### Input example
+
+```js
+{
+  name: 'host',
+  type: 'input',
+  default: '0.0.0.0',
+  description: 'Host for the development server'
+}
+```
+
+### Checkbox example
+
+Displays multiple switches.
+
+```js
+{
+  name: 'lintOn',
+  message: 'Pick additional lint features:',
+  when: answers => answers.features.includes('linter'),
+  type: 'checkbox',
+  choices: [
+    {
+      name: 'Lint on save',
+      value: 'save',
+      checked: true
+    },
+    {
+      name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
+      value: 'commit'
+    }
+  ]
+}
+```
+
+### Color picker example
+
+```js
+{
+  name: 'themeColor',
+  type: 'color',
+  message: 'Theme color',
+  description: 'This is used to change the system UI color around the app',
+  default: '#4DBA87'
+}
+```
+
 ### Prompts for invocation
 
 In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
@@ -959,7 +1043,9 @@ There are some builtin icons:
 
 Hooks allows to react to certain cli-ui events.
 
-`onProjectOpen`: Called when the plugin is loaded for the first time for the current project.
+### onProjectOpen
+
+Called when the plugin is loaded for the first time for the current project.
 
 ```js
 api.onProjectOpen((project, previousProject) => {
@@ -967,7 +1053,9 @@ api.onProjectOpen((project, previousProject) => {
 })
 ```
 
-`onPluginReload`: Called when the plugin is reloaded.
+### onPluginReload
+
+Called when the plugin is reloaded.
 
 ```js
 api.onPluginReload((project) => {
