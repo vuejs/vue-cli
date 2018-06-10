@@ -9,6 +9,15 @@ const pkgCache = new LRU({
 
 const cwd = require('./cwd')
 
+function isDirectory (file) {
+  try {
+    return fs.statSync(file.path).isDirectory()
+  } catch (e) {
+    console.warn(e.message)
+  }
+  return false
+}
+
 async function list (base, context) {
   const files = await fs.readdir(base, 'utf8')
   return files.map(
@@ -17,7 +26,7 @@ async function list (base, context) {
       name: file
     })
   ).filter(
-    file => fs.statSync(file.path).isDirectory()
+    file => isDirectory(file)
   )
 }
 
@@ -46,7 +55,12 @@ function openParent (file, context) {
 }
 
 function isPackage (file, context) {
-  return fs.existsSync(path.join(file, 'package.json'))
+  try {
+    return fs.existsSync(path.join(file, 'package.json'))
+  } catch (e) {
+    console.warn(e.message)
+  }
+  return false
 }
 
 function readPackage (file, context, force = false) {
