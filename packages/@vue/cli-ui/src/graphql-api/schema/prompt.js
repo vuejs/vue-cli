@@ -21,6 +21,7 @@ type Prompt implements DescribedEntity {
   value: String
   valueChanged: Boolean
   error: PromptError
+  tabId: String
 }
 
 input PromptInput {

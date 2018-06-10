@@ -107,9 +107,9 @@ api.describeConfig({
 
 If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
 
-#### Config file
+#### Config files
 
-By default, a configuration UI might read and write to a configuration file, for example `.eslintrc.js`.
+By default, a configuration UI might read and write to one or more configuration files, for example both `.eslintrc.js` and `vue.config.js`.
 
 You can provide what are the possible files to be detected in the user project:
 
@@ -118,17 +118,22 @@ api.describeConfig({
   /* ... */
   // All possible files for this config
   files: {
-    json: ['.eslintrc', '.eslintrc.json'],
-    js: ['.eslintrc.js'],
-    // Will read from `package.json`
-    package: 'eslintConfig'
+    // eslintrc.js
+    eslint: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      // Will read from `package.json`
+      package: 'eslintConfig'
+    },
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
   },
 })
 ```
 
-Supported types: `json`, `yaml`, `js`, `package`.
-
-**⚠️ Currently, only 1 file can be read and written to at a time.**
+Supported types: `json`, `yaml`, `js`, `package`. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
 
 #### Display config prompts
 
@@ -149,6 +154,124 @@ Those prompts will be displayed in the configuration details pane.
 
 See [Prompts](#prompts) for more info.
 
+The `data` object contains the JSON result of each config file content.
+
+For example, let's say the user has the following `vue.config.js` in his project:
+
+```js
+module.exports = {
+  lintOnSave: false
+}
+```
+
+We declare the config file in our plugin like this:
+
+```js
+api.describeConfig({
+  /* ... */
+  // All possible files for this config
+  files: {
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
+  },
+})
+```
+
+Then the `data` object will be:
+
+```js
+{
+  // File
+  vue: {
+    // File data
+    lintOnSave: false
+  }
+}
+```
+
+Multiple files example: if we add the following `eslintrc.js` file in the user project:
+
+```js
+module.exports = {
+  root: true,
+  extends: [
+    'plugin:vue/essential',
+    '@vue/standard'
+  ]
+}
+```
+
+And change the `files` option in our plugin to this:
+
+```js
+api.describeConfig({
+  /* ... */
+  // All possible files for this config
+  files: {
+    // eslintrc.js
+    eslint: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      // Will read from `package.json`
+      package: 'eslintConfig'
+    },
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
+  },
+})
+```
+
+Then the `data` object will be:
+
+```js
+{
+  eslint: {
+    root: true,
+    extends: [
+      'plugin:vue/essential',
+      '@vue/standard'
+    ]
+  },
+  vue: {
+    lintOnSave: false
+  }
+}
+```
+
+#### Configuration tabs
+
+You can organize the prompts into several tabs:
+
+```js
+api.describeConfig({
+  /* ... */
+  onRead: ({ data, cwd }) => ({
+    tabs: [
+      {
+        id: 'tab1',
+        label: 'My tab',
+        // Optional
+        icon: 'application_settings',
+        prompts: [
+          // Prompt objects
+        ]
+      },
+      {
+        id: 'tab2',
+        label: 'My other tab',
+        prompts: [
+          // Prompt objects
+        ]
+      }
+    ]
+  })
+})
+```
+
 #### Save config changes
 
 Use the `onWrite` hook to write the data to the configuration file (or execute any nodejs code):
@@ -156,7 +279,7 @@ Use the `onWrite` hook to write the data to the configuration file (or execute a
 ```js
 api.describeConfig({
   /* ... */
-  onWrite: ({ prompts, answers, data, file, cwd, api }) => {
+  onWrite: ({ prompts, answers, data, files, cwd, api }) => {
     // ...
   }
 })
@@ -166,8 +289,8 @@ Arguments:
 
 - `prompts`: current prompts runtime objects (see below)
 - `answers`: answers data from the user inputs
-- `data`: read-only initial data read from the file
-- `file`: descriptor of the found file (`{ type: 'json', path: '...' }`)
+- `data`: read-only initial data read from the config files
+- `files`: descriptors of the found files (`{ type: 'json', path: '...' }`)
 - `cwd`: current working directory
 - `api`: `onWrite API` (see below)
 
@@ -190,6 +313,7 @@ Prompts runtime objects:
   // true if changed by user
   valueChanged: false,
   error: null,
+  tabId: null,
   // Original inquirer prompt object
   raw: data
 }
@@ -197,8 +321,8 @@ Prompts runtime objects:
 
 `onWrite` API:
 
-- `assignData(newData)`: use `Object.assign` to update the config data before writing.
-- `setData(newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
+- `assignData(fileId, newData)`: use `Object.assign` to update the config data before writing.
+- `setData(fileId, newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
 - `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provided (for example `JSON.parse`).
 
 Example (from the ESLint plugin):
@@ -213,7 +337,7 @@ api.describeConfig({
     for (const prompt of prompts) {
       result[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
     }
-    api.setData(result)
+    api.setData('eslint', result)
   }
 })
 ```

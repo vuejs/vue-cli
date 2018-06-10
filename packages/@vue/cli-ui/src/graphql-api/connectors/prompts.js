@@ -107,6 +107,7 @@ function generatePrompt (data) {
     value: null,
     valueChanged: false,
     error: null,
+    tabId: data.tabId || null,
     raw: data
   }
 }
@@ -171,7 +172,9 @@ function list () {
 }
 
 function add (data) {
-  prompts.push(generatePrompt(data))
+  const prompt = generatePrompt(data)
+  prompts.push(prompt)
+  return prompt
 }
 
 async function start () {
