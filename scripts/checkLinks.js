@@ -15,7 +15,7 @@ async function checkLink (file, link, n) {
     if (result.statusCode !== 200) {
       throw new Error('error')
     } else {
-      console.log('[OK]', link, result.statusCode)
+      // console.log('[OK]', link, result.statusCode)
     }
   } catch (e) {
     console.warn('[!!]', link, `${file}:${parseInt(n) + 1}`)
