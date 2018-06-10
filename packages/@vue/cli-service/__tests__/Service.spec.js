@@ -10,13 +10,13 @@ const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
 
-const createMockService = (plugins = [], init = true) => {
+const createMockService = (plugins = [], init = true, mode) => {
   const service = new Service('/', {
     plugins,
     useBuiltIn: false
   })
   if (init) {
-    service.init()
+    service.init(mode)
   }
   return service
 }
@@ -30,9 +30,33 @@ test('env loading', () => {
   fs.writeFileSync('/.env.local', `FOO=1\nBAR=2`)
   fs.writeFileSync('/.env', `BAR=3\nBAZ=4`)
   createMockService()
+
   expect(process.env.FOO).toBe('0')
   expect(process.env.BAR).toBe('2')
   expect(process.env.BAZ).toBe('4')
+
+  delete process.env.FOO
+  delete process.env.BAR
+  delete process.env.BAZ
+  fs.unlinkSync('/.env.local')
+  fs.unlinkSync('/.env')
+})
+
+test('env loading for custom mode', () => {
+  const prevNodeEnv = process.env.NODE_ENV
+  delete process.env.NODE_ENV
+
+  fs.writeFileSync('/.env', 'FOO=1')
+  fs.writeFileSync('/.env.staging', 'FOO=2\nNODE_ENV=production')
+  createMockService([], true, 'staging')
+
+  expect(process.env.FOO).toBe('2')
+  expect(process.env.NODE_ENV).toBe('production')
+
+  delete process.env.FOO
+  process.env.NODE_ENV = prevNodeEnv
+  fs.unlinkSync('/.env')
+  fs.unlinkSync('/.env.staging')
 })
 
 test('loading plugins from package.json', () => {

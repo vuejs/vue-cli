@@ -1,15 +1,12 @@
-const fs = require('fs')
-const path = require('path')
 const extendJSConfig = require('./extendJSConfig')
 const stringifyJS = require('./stringifyJS')
 
 function makeJSTransform (filename) {
-  return function transformToJS (value, checkExisting, context) {
-    const absolutePath = path.resolve(context, filename)
-    if (checkExisting && fs.existsSync(absolutePath)) {
+  return function transformToJS (value, checkExisting, files) {
+    if (checkExisting && files[filename]) {
       return {
         filename,
-        content: extendJSConfig(value, fs.readFileSync(absolutePath, 'utf-8'))
+        content: extendJSConfig(value, files[filename])
       }
     } else {
       return {
@@ -21,11 +18,10 @@ function makeJSTransform (filename) {
 }
 
 function makeJSONTransform (filename) {
-  return function transformToJSON (value, checkExisting, context) {
+  return function transformToJSON (value, checkExisting, files) {
     let existing = {}
-    const absolutePath = path.resolve(context, filename)
-    if (checkExisting && fs.existsSync(absolutePath)) {
-      existing = JSON.parse(fs.readFileSync(absolutePath, 'utf-8'))
+    if (checkExisting && files[filename]) {
+      existing = JSON.parse(files[filename])
     }
     value = Object.assign(existing, value)
     return {
@@ -36,12 +32,12 @@ function makeJSONTransform (filename) {
 }
 
 function makeMutliExtensionJSONTransform (filename, preferJS) {
-  return function transformToMultiExtensions (value, checkExisting, context) {
+  return function transformToMultiExtensions (value, checkExisting, files) {
     function defaultTransform () {
       if (preferJS) {
-        return makeJSTransform(`${filename}.js`)(value, false, context)
+        return makeJSTransform(`${filename}.js`)(value, false, files)
       } else {
-        return makeJSONTransform(filename)(value, false, context)
+        return makeJSONTransform(filename)(value, false, files)
       }
     }
 
@@ -49,17 +45,16 @@ function makeMutliExtensionJSONTransform (filename, preferJS) {
       return defaultTransform()
     }
 
-    const absolutePath = path.resolve(context, filename)
-    if (fs.existsSync(absolutePath)) {
-      return makeJSONTransform(filename)(value, checkExisting, context)
-    } else if (fs.existsSync(`${absolutePath}.json`)) {
-      return makeJSONTransform(`${filename}.json`)(value, checkExisting, context)
-    } else if (fs.existsSync(`${absolutePath}.js`)) {
-      return makeJSTransform(`${filename}.js`)(value, checkExisting, context)
-    } else if (fs.existsSync(`${absolutePath}.yaml`)) {
-      return transformYAML(value, `${filename}.yaml`, fs.readFileSync(`${absolutePath}.yaml`, 'utf-8'))
-    } else if (fs.existsSync(`${absolutePath}.yml`)) {
-      return transformYAML(value, `${filename}.yml`, fs.readFileSync(`${absolutePath}.yml`, 'utf-8'))
+    if (files[filename]) {
+      return makeJSONTransform(filename)(value, checkExisting, files)
+    } else if (files[`${filename}.json`]) {
+      return makeJSONTransform(`${filename}.json`)(value, checkExisting, files)
+    } else if (files[`${filename}.js`]) {
+      return makeJSTransform(`${filename}.js`)(value, checkExisting, files)
+    } else if (files[`${filename}.yaml`]) {
+      return transformYAML(value, `${filename}.yaml`, files[`${filename}.yaml`])
+    } else if (files[`${filename}.yml`]) {
+      return transformYAML(value, `${filename}.yml`, files[`${filename}.yml`])
     } else {
       return defaultTransform()
     }

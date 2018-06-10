@@ -36,13 +36,19 @@ module.exports = api => {
   }
 
   if (!api.hasPlugin('typescript')) {
+    jestConfig.transform['^.+\\.jsx?$'] = 'babel-jest'
     if (api.hasPlugin('babel')) {
-      jestConfig.transform['^.+\\.jsx?$'] = 'babel-jest'
       api.extendPackage({
         devDependencies: {
           'babel-jest': '^23.0.1',
           // this is for now necessary to force babel-jest and vue-jest to use babel 7
           'babel-core': '7.0.0-bridge.0'
+        }
+      })
+    } else {
+      api.extendPackage({
+        babel: {
+          plugins: ['transform-es2015-modules-commonjs']
         }
       })
     }

@@ -1,10 +1,10 @@
 const ejs = require('ejs')
-const slash = require('slash')
 const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const configTransforms = require('./util/configTransforms')
+const normalizeFilePaths = require('./util/normalizeFilePaths')
 const injectImportsAndOptions = require('./util/injectImportsAndOptions')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 
@@ -82,7 +82,7 @@ module.exports = class Generator {
         const res = transform(
           value,
           checkExisting,
-          this.context
+          this.files
         )
         const { content, filename } = res
         this.files[filename] = content
@@ -141,20 +141,20 @@ module.exports = class Generator {
     for (const middleware of this.fileMiddlewares) {
       await middleware(files, ejs.render)
     }
+
+    // normalize file paths on windows
+    // all paths are converted to use / instead of \
+    normalizeFilePaths(files)
+
+    // handle imports and root option injections
     Object.keys(files).forEach(file => {
-      // normalize paths
-      const normalized = slash(file)
-      if (file !== normalized) {
-        files[normalized] = files[file]
-        delete files[file]
-      }
-      // handle imports and root option injections
-      files[normalized] = injectImportsAndOptions(
-        files[normalized],
-        this.imports[normalized],
-        this.rootOptions[normalized]
+      files[file] = injectImportsAndOptions(
+        files[file],
+        this.imports[file],
+        this.rootOptions[file]
       )
     })
+
     for (const postProcess of this.postProcessFilesCbs) {
       await postProcess(files)
     }
