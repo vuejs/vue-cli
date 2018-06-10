@@ -39,7 +39,42 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 ### GitLab Pages
 
-> TODO | Open to contribution.
+As described by [GitLab Pages documentation](https://docs.gitlab.com/ee/user/project/pages/), everything happens with a `.gitlab-ci.yml` file placed in the root of your repository. This working example will get you started:
+
+```yaml
+# .gitlab-ci.yml file to be placed in the root of your repository
+
+pages: # the job must be named pages
+  image: node:latest
+  stage: deploy
+  script:
+    - npm install --silent
+    - npm run build
+    - mv public public-vue # GitLab Pages hooks on the public folder
+    - mv dist public # rename the dist folder (result of npm run build)
+  artifacts:
+    paths:
+      - public # artifact path must be /public for GitLab Pages to pick it up
+  only:
+    - master
+```
+
+Typically, your static website will be hosted on https://yourUserName.gitlab.io/yourProjectName, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
+
+```javascript
+// vue.config.js file to be place in the root of your repository
+// make sure you update `yourProjectName` with the name of your GitLab project
+
+module.exports = {
+  baseUrl: process.env.NODE_ENV === 'production'
+    ? '/yourProjectName/'
+    : '/'
+}
+```
+
+Please read through the docs on [GitLab Pages domains](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) for more info about the URL where your project website will be hosted. Be aware you can also [use a custom domain](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages).
+
+Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to your repository. A GitLab CI pipeline will be triggered: when successful, visit your project's `Settings > Pages` to see your website link, and click on it.
 
 ### Netlify
 
