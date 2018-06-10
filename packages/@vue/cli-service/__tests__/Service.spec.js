@@ -23,6 +23,11 @@ const createMockService = (plugins = [], init = true, mode) => {
 
 beforeEach(() => {
   mockPkg({})
+  delete process.env.NODE_ENV
+  delete process.env.BABEL_ENV
+  delete process.env.FOO
+  delete process.env.BAR
+  delete process.env.BAZ
 })
 
 test('env loading', () => {
@@ -35,17 +40,12 @@ test('env loading', () => {
   expect(process.env.BAR).toBe('2')
   expect(process.env.BAZ).toBe('4')
 
-  delete process.env.FOO
-  delete process.env.BAR
-  delete process.env.BAZ
   fs.unlinkSync('/.env.local')
   fs.unlinkSync('/.env')
 })
 
 test('env loading for custom mode', () => {
-  const prevNodeEnv = process.env.NODE_ENV
-  delete process.env.NODE_ENV
-
+  process.env.VUE_CLI_TEST_TESTING_ENV = true
   fs.writeFileSync('/.env', 'FOO=1')
   fs.writeFileSync('/.env.staging', 'FOO=2\nNODE_ENV=production')
   createMockService([], true, 'staging')
@@ -53,8 +53,7 @@ test('env loading for custom mode', () => {
   expect(process.env.FOO).toBe('2')
   expect(process.env.NODE_ENV).toBe('production')
 
-  delete process.env.FOO
-  process.env.NODE_ENV = prevNodeEnv
+  process.env.VUE_CLI_TEST_TESTING_ENV = false
   fs.unlinkSync('/.env')
   fs.unlinkSync('/.env.staging')
 })

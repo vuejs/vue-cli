@@ -103,14 +103,22 @@ module.exports = class Service {
     // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
     // is production or test. However the value in .env files will take higher
     // priority.
-    const defaultNodeEnv = (mode === 'production' || mode === 'test')
-      ? mode
-      : 'development'
-    if (process.env.NODE_ENV == null) {
-      process.env.NODE_ENV = defaultNodeEnv
-    }
-    if (process.env.BABEL_ENV == null) {
-      process.env.BABEL_ENV = defaultNodeEnv
+    if (mode) {
+      // always set NODE_ENV during tests
+      // as that is necessary for tests to not be affected by each other
+      const shouldForceDefaultEnv = (
+        process.env.VUE_CLI_TEST &&
+        !process.env.VUE_CLI_TEST_TESTING_ENV
+      )
+      const defaultNodeEnv = (mode === 'production' || mode === 'test')
+        ? mode
+        : 'development'
+      if (shouldForceDefaultEnv || process.env.NODE_ENV == null) {
+        process.env.NODE_ENV = defaultNodeEnv
+      }
+      if (shouldForceDefaultEnv || process.env.BABEL_ENV == null) {
+        process.env.BABEL_ENV = defaultNodeEnv
+      }
     }
   }
 
