@@ -497,6 +497,14 @@
           "description": "Style for the web app status bar on iOS"
         }
       }
+    },
+    "suggestions": {
+      "open-vue": {
+        "label": "Open vue config"
+      },
+      "open-manifest": {
+        "label": "Open manifest"
+      }
     }
   },
   "cypress": {

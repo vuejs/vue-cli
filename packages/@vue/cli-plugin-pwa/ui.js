@@ -1,7 +1,9 @@
 module.exports = api => {
+  const CONFIG = 'pwa'
+
   // Config file
   api.describeConfig({
-    id: 'pwa',
+    id: CONFIG,
     name: 'PWA',
     description: 'pwa.config.pwa.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa#configuration',
@@ -110,4 +112,60 @@ module.exports = api => {
       }
     }
   })
+
+  const OPEN_VUE = 'vue-pwa-open-vue'
+  const OPEN_MANIFEST = 'vue-pwa-open-manifest'
+
+  api.onViewOpen(({ view }) => {
+    if (view.id !== 'vue-project-configurations') {
+      removeSuggestions()
+    }
+  })
+
+  api.onConfigRead(({ config }) => {
+    if (config.id === CONFIG) {
+      if (config.foundFiles.vue) {
+        api.addSuggestion({
+          id: OPEN_VUE,
+          type: 'action',
+          label: 'pwa.suggestions.open-vue.label',
+          handler () {
+            const file = config.foundFiles.vue.path
+            console.log('open', file)
+            const launch = require('launch-editor')
+            launch(file)
+            return {
+              keep: true
+            }
+          }
+        })
+      } else {
+        api.removeSuggestion(OPEN_VUE)
+      }
+      if (config.foundFiles.manifest) {
+        api.addSuggestion({
+          id: OPEN_MANIFEST,
+          type: 'action',
+          label: 'pwa.suggestions.open-manifest.label',
+          handler () {
+            const file = config.foundFiles.manifest.path
+            console.log('open', file)
+            const launch = require('launch-editor')
+            launch(file)
+            return {
+              keep: true
+            }
+          }
+        })
+      } else {
+        api.removeSuggestion(OPEN_MANIFEST)
+      }
+    } else {
+      removeSuggestions()
+    }
+  })
+
+  function removeSuggestions () {
+    [OPEN_VUE, OPEN_MANIFEST].forEach(id => api.removeSuggestion(id))
+  }
 }
