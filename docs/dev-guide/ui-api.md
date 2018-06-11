@@ -1039,16 +1039,23 @@ There are some builtin icons:
 - `'done'`
 - `'error'`
 
-## Other plugins
+## Progress screen
 
-### hasPlugin
-
-Returns `true` if the project uses the plugin.
+You can display a progress screen with some text and a progress bar:
 
 ```js
-api.hasPlugin('eslint')
-api.hasPlugin('apollo')
-api.hasPlugin('vue-cli-plugin-apollo')
+api.setProgress({
+  status: 'Upgrading...',
+  error: null,
+  info: 'Step 2 of 4',
+  progress: 0.4 // from 0 to 1, -1 means hidden progress bar
+})
+```
+
+Remove the progress screen:
+
+```js
+api.removeProgress()
 ```
 
 ## Hooks
@@ -1133,6 +1140,84 @@ Called when the users open a view (like 'Plugins', 'Configurations' or 'Tasks').
 api.onViewOpen(({ view, cwd }) => {
   console.log(view.id)
 })
+```
+
+## Suggestions
+
+Suggestions are buttons meant to propose an action to the user. They are displayed in the top bar. For example, we can have a button that suggest installing vue-router if the package isn't detected in the app.
+
+```js
+api.addSuggestion({
+  id: 'my-suggestion',
+  type: 'action', // Required (more types in the future)
+  label: 'Add vue-router',
+  // This will be displayed in a details modal
+  message: 'A longer message for the modal',
+  link: 'http://link-to-docs-in-the-modal',
+  // Function called when suggestion is activated by user
+  async handler () {
+    // ...
+    return {
+      // By default removes the button
+      keep: false
+    }
+  }
+})
+```
+
+Then you can remove the suggestion:
+
+```js
+api.removeSuggestion('my-suggestion')
+```
+
+Typically, you will use hooks to display the suggestion in the right context:
+
+```js
+const ROUTER = 'vue-router-add'
+
+api.onViewOpen(({ view }) => {
+  if (view.id === 'vue-project-plugins') {
+    if (!api.hasPlugin('vue-router')) {
+      api.addSuggestion({
+        id: ROUTER,
+        type: 'action',
+        label: 'cli-service.suggestions.vue-router-add.label',
+        message: 'cli-service.suggestions.vue-router-add.message',
+        link: 'https://router.vuejs.org/',
+        async handler () {
+          await install(api, 'vue-router')
+        }
+      })
+    }
+  } else {
+    api.removeSuggestion(ROUTER)
+  }
+})
+```
+
+In this example we only display the vue-router suggestion in the plugins view and if the project doesn't have vue-router installed already.
+
+Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
+
+## Other methods
+
+### hasPlugin
+
+Returns `true` if the project uses the plugin.
+
+```js
+api.hasPlugin('eslint')
+api.hasPlugin('apollo')
+api.hasPlugin('vue-cli-plugin-apollo')
+```
+
+### getCwd
+
+Retrieve the current working directory.
+
+```js
+api.getCwd()
 ```
 
 ## Public static files
