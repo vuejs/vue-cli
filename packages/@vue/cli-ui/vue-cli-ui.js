@@ -15,8 +15,8 @@ module.exports = api => {
   api.addView({
     id: 'vue-webpack-test-view',
     name: 'test-webpack-route',
-    icon: 'pets',
-    // icon: 'http://localhost:4000/_plugin/%40vue%2Fcli-service/webpack-icon.svg',
+    // icon: 'pets',
+    icon: 'http://localhost:4000/public/webpack-logo.png',
     tooltip: 'Test view from webpack addon'
   })
 

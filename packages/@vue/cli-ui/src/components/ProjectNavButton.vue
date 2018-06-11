@@ -11,10 +11,11 @@
       <VueGroupButton
         class="flat big"
         :class="{
-          'icon-button': !$responsive.wide
+          'icon-button': !$responsive.wide,
+          'has-image-icon': imageIcon
         }"
         :value="view.name"
-        :icon-left="!imageIcon && view.icon"
+        :icon-left="!imageIcon ? view.icon : null"
       >
         <img
           v-if="imageIcon"
@@ -127,6 +128,20 @@ $bg-dark = $vue-ui-color-dark
   .image-icon
     max-width 24px
     max-height @width
+    .wide &
+      margin-right 6px
+      position relative
+      left -2px
+
+  .vue-ui-group-button.has-image-icon
+    >>> .default-slot
+      display flex
+      align-items center
+      overflow visible !important
+      .label
+        display block
+        max-width 150px
+        ellipsis()
 
 .badges
   margin ($padding-item/2) 0
