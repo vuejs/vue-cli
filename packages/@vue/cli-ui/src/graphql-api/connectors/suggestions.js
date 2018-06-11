@@ -1,5 +1,7 @@
 // Subs
 const channels = require('../channels')
+// Connectors
+const { log } = require('../utils/logger')
 
 const suggestions = []
 
@@ -25,17 +27,22 @@ function add (suggestion, context) {
     suggestionAdded: suggestion
   })
 
+  log('Suggestion added', suggestion.id)
+
   return suggestion
 }
 
 function remove (id, context) {
   const suggestion = findOne(id)
+  if (!suggestion) return
   const index = suggestions.indexOf(suggestion)
   suggestions.splice(index, 1)
 
   context.pubsub.publish(channels.SUGGESTION_REMOVED, {
     suggestionRemoved: suggestion
   })
+
+  log('Suggestion removed', suggestion.id)
 
   return suggestion
 }
@@ -54,6 +61,8 @@ function update (data, context) {
   context.pubsub.publish(channels.SUGGESTION_UPDATED, {
     suggestionUpdated: suggestion
   })
+
+  log('Suggestion updated', suggestion.id)
 
   return suggestion
 }

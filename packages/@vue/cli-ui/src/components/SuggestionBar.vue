@@ -5,12 +5,18 @@
   >
     <ApolloSubscribeToMore
       :document="require('../graphql/suggestionAdded.gql')"
-      :updateQuery="(previousResult, { subscriptionData }) => ({
-        suggestions: [
-          ...previousResult.suggestions,
-          subscriptionData.data.suggestionAdded
-        ]
-      })"
+      :updateQuery="(previousResult, { subscriptionData }) => {
+        const newSuggestion = subscriptionData.data.suggestionAdded
+        if (previousResult.suggestions.find(s => s.id === newSuggestion.id)) {
+          return previousResult
+        }
+        return {
+          suggestions: [
+            ...previousResult.suggestions,
+            newSuggestion
+          ]
+        }
+      }"
     />
 
     <ApolloSubscribeToMore
