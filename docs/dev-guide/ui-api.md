@@ -16,7 +16,7 @@ module.exports = api => {
 }
 ```
 
-**⚠️ The files will be reloaded when feetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left in the UI.**
+**⚠️ The files will be reloaded when fetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left in the UI.**
 
 Here is an example folder structure for a vue-cli plugin using the UI API:
 
