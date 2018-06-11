@@ -18,7 +18,7 @@
     "docs:build": "vuepress build docs"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged && yarn run check-links",
+    "pre-commit": "lint-staged",
     "commit-msg": "node scripts/verifyCommitMsg.js"
   },
   "jest": {

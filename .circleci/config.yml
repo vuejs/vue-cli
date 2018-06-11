@@ -47,6 +47,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: yarn lint
+      - run: yarn check-links
       - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app
 
   group-4:
