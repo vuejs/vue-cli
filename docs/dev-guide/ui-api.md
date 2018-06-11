@@ -1165,6 +1165,8 @@ api.addSuggestion({
 })
 ```
 
+![UI Suggestion](/suggestion.png)
+
 Then you can remove the suggestion:
 
 ```js
