@@ -36,7 +36,7 @@ We've pre-configured Cypress to place most of the e2e testing related files unde
 
 ## Environment Variables
 
-Cypress doesn't load .env files for your test files the same way as `vue-cli` does for your [application code](https://github.com/vuejs/vue-cli/blob/dev/docs/env.md#using-env-variables-in-client-side-code). Cypress supports a few ways to [define env variables](https://docs.cypress.io/guides/guides/environment-variables.html#) but the easiest one is to use .json files (either `cypress.json` or `cypress.env.json`) to define environment variables. Keep in mind those variables are accessible via `Cypress.env` function instead of regular `process.env` object.
+Cypress doesn't load .env files for your test files the same way as `vue-cli` does for your [application code](https://cli.vuejs.org/guide/mode-and-env.html#using-env-variables-in-client-side-code). Cypress supports a few ways to [define env variables](https://docs.cypress.io/guides/guides/environment-variables.html#) but the easiest one is to use .json files (either `cypress.json` or `cypress.env.json`) to define environment variables. Keep in mind those variables are accessible via `Cypress.env` function instead of regular `process.env` object.
 
 ## Installing in an Already Created Project
 

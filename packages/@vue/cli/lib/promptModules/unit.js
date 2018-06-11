@@ -4,7 +4,7 @@ module.exports = cli => {
     value: 'unit',
     short: 'Unit',
     description: 'Add a Unit Testing solution like Jest or Mocha',
-    link: 'https://github.com/vuejs/vue-cli/tree/dev/docs#unit-testing',
+    link: 'https://cli.vuejs.org/config/#unit-testing',
     plugins: ['unit-jest', 'unit-mocha']
   })
 
