@@ -28,6 +28,7 @@ const clientAddons = require('./client-addons')
 const views = require('./views')
 const locales = require('./locales')
 const sharedData = require('./shared-data')
+const suggestions = require('./suggestions')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
@@ -101,10 +102,13 @@ function resetPluginApi (context) {
   }
   sharedData.unWatchAll()
 
+  suggestions.clear(context)
+
   pluginApi = new PluginApi({
     plugins
   }, context)
   // Run Plugin API
+  runPluginApi(path.resolve(__dirname, '../../../'), context, 'ui-defaults')
   plugins.forEach(plugin => runPluginApi(plugin.id, context))
   runPluginApi(cwd.get(), context, 'vue-cli-ui')
   // Add client addons

@@ -2,6 +2,10 @@
 const logs = require('../connectors/logs')
 const sharedData = require('../connectors/shared-data')
 const views = require('../connectors/views')
+const suggestions = require('../connectors/suggestions')
+const folders = require('../connectors/folders')
+const cwd = require('../connectors/cwd')
+const progress = require('../connectors/progress')
 // Utils
 const ipc = require('../utils/ipc')
 const { notify } = require('../utils/notification')
@@ -12,6 +16,8 @@ const { validateDescribeTask, validateAddTask } = require('./task')
 const { validateClientAddon } = require('./client-addon')
 const { validateView, validateBadge } = require('./view')
 const { validateNotify } = require('./notify')
+const { validateSuggestion } = require('./suggestion')
+const { validateProgress } = require('./progress')
 
 class PluginApi {
   constructor ({ plugins }, context) {
@@ -353,7 +359,48 @@ class PluginApi {
    * @param {string} id Plugin id or short id
    */
   hasPlugin (id) {
+    if (['vue-router', 'vuex'].includes(id)) {
+      const folder = cwd.get()
+      const pkg = folders.readPackage(folder, this.context, true)
+      return (pkg.dependencies[id] || pkg.devDependencies[id])
+    }
     return this.plugins.some(p => matchesPluginId(id, p.id))
+  }
+
+  /**
+   * Display the progress screen.
+   *
+   * @param {object} options Progress options
+   */
+  setProgress (options) {
+    try {
+      validateProgress(options)
+      progress.set({
+        ...options,
+        id: '__plugins__'
+      }, this.context)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'setProgress' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
+  }
+
+  /**
+   * Remove the progress screen.
+   */
+  removeProgress () {
+    progress.remove('__plugins__', this.context)
+  }
+
+  /**
+   * Get current working directory.
+   */
+  getCwd () {
+    return cwd.get()
   }
 
   /* Namespaced */
@@ -455,6 +502,34 @@ class PluginApi {
   }
 
   /**
+   * Add a suggestion for the user.
+   *
+   * @param {object} options Suggestion
+   */
+  addSuggestion (options) {
+    try {
+      validateSuggestion(options)
+      suggestions.add(options, this.context)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'addSuggestion' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
+  }
+
+  /**
+   * Remove a suggestion
+   *
+   * @param {string} id Id of the suggestion
+   */
+  removeSuggestion (id) {
+    suggestions.remove(id, this.context)
+  }
+
+  /**
    * Create a namespaced version of:
    *   - getSharedData
    *   - setSharedData
@@ -474,7 +549,12 @@ class PluginApi {
       onAction: (id, cb) => this.onAction(namespace + id, cb),
       callAction: (id, params) => this.callAction(namespace + id, params),
       storageGet: (id) => this.storageGet(namespace + id),
-      storageSet: (id, value) => this.storageSet(namespace + id, value)
+      storageSet: (id, value) => this.storageSet(namespace + id, value),
+      addSuggestion: (options) => {
+        options.id = namespace + options.id
+        return this.addSuggestion(options)
+      },
+      removeSuggestion: (id) => this.removeSuggestion(namespace + id)
     }
   }
 }

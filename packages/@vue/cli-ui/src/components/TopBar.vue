@@ -25,9 +25,15 @@
         icon-left="home"
       />
     </VueDropdown>
+
     <portal-target name="top-title" class="title">Vue</portal-target>
+
     <AppLoading/>
+
     <div class="vue-ui-spacer"/>
+
+    <SuggestionBar/>
+
     <portal-target name="top-actions" class="actions"/>
   </div>
 </template>

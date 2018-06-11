@@ -77,6 +77,10 @@ export default {
         const key = `mixins.progress.${status}`
         message = this.$t(key, values)
         message = (message !== key && message)
+        if (!message) {
+          message = this.$t(status, values)
+          message = (message !== status && message)
+        }
       }
       return message || status || ''
     }

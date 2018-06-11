@@ -1,0 +1,7 @@
+#import "./suggestionFragment.gql"
+
+subscription suggestionRemoved {
+  suggestionRemoved {
+    ...suggestion
+  }
+}
