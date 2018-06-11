@@ -281,7 +281,7 @@ async function create (input, context) {
       answers.useConfigFiles = 'files'
     }
 
-    const createOptions = {git: true}
+    const createOptions = {}
     // Git
     if (input.enableGit && input.gitCommitMessage) {
       createOptions.git = input.gitCommitMessage
