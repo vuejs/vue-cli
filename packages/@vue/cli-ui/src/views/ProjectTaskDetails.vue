@@ -36,7 +36,7 @@
 
         <div
           class="command"
-          v-tooltip="$t('views.project-task-details.command')"
+          v-tooltip="`${$t('views.project-task-details.command')}:<br><code>${task.command}</code>`"
         >
           {{ task.command }}
         </div>
@@ -320,11 +320,12 @@ export default {
   font-size 12px
   background $vue-ui-color-light-neutral
   color $vue-ui-color-dark
-  padding 0 16px
+  padding 10px 16px
   height 32px
-  h-box()
-  box-center()
   border-radius $br
+  max-width 20vw
+  ellipsis()
+  box-sizing border-box
   .vue-ui-dark-mode &
     background $vue-ui-color-dark
     color $vue-ui-color-light
