@@ -27,54 +27,58 @@
     />
 
     <template slot-scope="{ result: { data } }" v-if="data">
-      <VueButton
+      <VueDropdown
         v-for="suggestion of data.suggestions"
         :key="suggestion.id"
-        :label="$t(suggestion.label)"
-        :loading="suggestion.busy"
-        class="suggestion round"
-        v-tooltip="$t('components.suggestion-bar.suggestion')"
-        @click="select(suggestion)"
-      />
-    </template>
-
-    <VueModal
-      v-if="showDetails"
-      :title="$t(currentSuggestion.label)"
-      class="medium"
-      @close="showDetails = false"
-    >
-      <div class="default-body">
-        <div
-          v-if="currentSuggestion.message"
-          class="info message"
-          v-html="$t(currentSuggestion.message)"
+        :disabled="!suggestion.message && !suggestion.link"
+        class="suggestion"
+        placement="bottom-end"
+      >
+        <VueButton
+          slot="trigger"
+          :label="$t(suggestion.label)"
+          :loading="suggestion.busy"
+          class="round"
+          v-tooltip="$t('components.suggestion-bar.suggestion')"
+          @click="if (!suggestion.message && !suggestion.link) activate(suggestion)"
         />
-        <div
-          v-if="currentSuggestion.link"
-          class="info links"
-        >
-          <a :href="currentSuggestion.link" target="_blank">
-            {{ $t('components.list-item-info.more-info') }}
-          </a>
+
+        <div class="suggestion-details">
+          <div class="info label">
+            {{ $t(suggestion.label) }}
+          </div>
+
+          <div
+            v-if="suggestion.message"
+            class="info message"
+            v-html="$t(suggestion.message)"
+          />
+
+          <div class="actions-bar">
+            <VueButton
+              :href="suggestion.link"
+              :label="$t('components.list-item-info.more-info')"
+              target="_blank"
+              class="flat"
+              icon-right="open_in_new"
+            />
+            <div class="vue-ui-spacer"/>
+            <VueButton
+              :label="$t('components.suggestion-bar.modal.cancel')"
+              icon-left="close"
+              v-close-popover
+            />
+            <VueButton
+              class="primary"
+              :label="$t('components.suggestion-bar.modal.continue')"
+              icon-left="done"
+              v-close-popover
+              @click="activate(suggestion)"
+            />
+          </div>
         </div>
-      </div>
-
-      <div slot="footer" class="actions">
-        <VueButton
-          class="big"
-          :label="$t('components.suggestion-bar.modal.cancel')"
-          icon="close"
-          @click="showDetails = false"
-        />
-        <VueButton
-          class="primary big"
-          :label="$t('components.suggestion-bar.modal.continue')"
-          icon="done"
-          @click="activate(currentSuggestion)"
-        />
-      </div>
-    </VueModal>
+      </VueDropdown>
+    </template>
   </ApolloQuery>
 </template>
 
@@ -82,23 +86,7 @@
 import SUGGESTION_ACTIVATE from '../graphql/suggestionActivate.gql'
 
 export default {
-  data () {
-    return {
-      currentSuggestion: null,
-      showDetails: false
-    }
-  },
-
   methods: {
-    select (suggestion) {
-      if (suggestion.message || suggestion.link) {
-        this.currentSuggestion = suggestion
-        this.showDetails = true
-      } else {
-        this.activate(suggestion)
-      }
-    },
-
     async activate (suggestion) {
       this.showDetails = false
       await this.$apollo.mutate({
@@ -121,7 +109,19 @@ export default {
   &:not(:first-child)
     margin-left $padding-item
 
-.info
-  &:not(:last-child)
-    margin-bottom $padding-item
+.suggestion-details
+  padding ($padding-item * 2 - 8px) ($padding-item * 2)
+  box-sizing border-box
+  width 440px
+
+  .label
+    font-size 20px
+
+  .actions-bar
+    padding 0
+    margin-top ($padding-item * 3)
+
+  .info
+    &:not(:last-child)
+      margin-bottom $padding-item
 </style>

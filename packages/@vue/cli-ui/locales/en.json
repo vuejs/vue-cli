@@ -353,11 +353,11 @@
     "suggestions": {
       "vue-router-add": {
         "label": "Add vue-router",
-        "message": "Add support for multiple pages into the app."
+        "message": "Official library to support multiple virtual pages in a Single-Page App. Each route renders a different component."
       },
       "vuex-add": {
         "label": "Add vuex",
-        "message": "Centralized State Management solution for large-scale apps."
+        "message": "Official centralized State Management solution for large-scale apps. Very useful if multiple components need to access the same data."
       },
       "progress": "Installing {arg0}..."
     }
