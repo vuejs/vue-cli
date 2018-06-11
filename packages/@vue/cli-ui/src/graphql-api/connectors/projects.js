@@ -281,6 +281,14 @@ async function create (input, context) {
       answers.useConfigFiles = 'files'
     }
 
+    const createOptions = {}
+    // Git
+    if (input.enableGit && input.gitCommitMessage) {
+      createOptions.git = input.gitCommitMessage
+    } else {
+      createOptions.git = input.enableGit
+    }
+
     // Preset
     answers.preset = input.preset
     if (input.save) {
@@ -306,7 +314,7 @@ async function create (input, context) {
     })
 
     // Create
-    await creator.create({ git: true }, preset)
+    await creator.create(createOptions, preset)
     removeCreator()
 
     notify({
