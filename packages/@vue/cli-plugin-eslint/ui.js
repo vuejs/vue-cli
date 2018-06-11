@@ -1,7 +1,9 @@
 module.exports = api => {
+  const CONFIG = 'eslintrc'
+
   // Config file
   api.describeConfig({
-    id: 'eslintrc',
+    id: CONFIG,
     name: 'ESLint configuration',
     description: 'eslint.config.eslint.description',
     link: 'https://github.com/vuejs/eslint-plugin-vue',
@@ -226,4 +228,37 @@ module.exports = api => {
       if (answers.noFix) args.push('--no-fix')
     }
   })
+
+  const OPEN_ESLINTRC = 'vue-eslint-open-eslintrc'
+
+  api.onViewOpen(({ view }) => {
+    if (view.id !== 'vue-project-configurations') {
+      removeSuggestions()
+    }
+  })
+
+  api.onConfigRead(({ config }) => {
+    if (config.id === CONFIG) {
+      api.addSuggestion({
+        id: OPEN_ESLINTRC,
+        type: 'action',
+        label: 'eslint.suggestions.open-eslintrc.label',
+        handler () {
+          const file = config.foundFiles.eslint.path
+          console.log('open', file)
+          const launch = require('launch-editor')
+          launch(file)
+          return {
+            keep: true
+          }
+        }
+      })
+    } else {
+      removeSuggestions()
+    }
+  })
+
+  function removeSuggestions () {
+    [OPEN_ESLINTRC].forEach(id => api.removeSuggestion(id))
+  }
 }

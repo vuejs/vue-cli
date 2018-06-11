@@ -461,6 +461,11 @@
         "description": "Lints and fixes files",
         "noFix": "Do not fix errors"
       }
+    },
+    "suggestions": {
+      "open-eslintrc": {
+        "label": "Open eslintrc"
+      }
     }
   },
   "pwa": {
