@@ -3,11 +3,7 @@ module.exports = api => {
     if (process.env.NODE_ENV === 'test') {
       webpackConfig.merge({
         target: 'node',
-        devtool: 'inline-cheap-module-source-map',
-        externals: [
-          require('webpack-node-externals')(),
-          'vue-server-renderer'
-        ]
+        devtool: 'inline-cheap-module-source-map'
       })
 
       // when target === 'node', vue-loader will attempt to generate
