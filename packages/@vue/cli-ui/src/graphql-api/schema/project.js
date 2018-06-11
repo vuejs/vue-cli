@@ -38,7 +38,7 @@ input ProjectCreateInput {
   clone: Boolean
   save: String
   enableGit: Boolean!
-  gitCommit: String
+  gitCommitMessage: String
 }
 
 input ProjectImportInput {
