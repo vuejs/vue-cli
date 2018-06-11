@@ -60,7 +60,7 @@
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "rimraf": "^2.6.2",
-    "vuepress": "^0.10.0",
+    "vuepress": "^0.10.1",
     "vuepress-theme-vue": "^1.0.3",
     "yorkie": "^1.0.2"
   },
