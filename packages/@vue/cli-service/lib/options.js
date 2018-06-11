@@ -55,7 +55,7 @@ exports.defaults = () => ({
   assetsDir: '',
 
   // boolean, use full build?
-  compiler: false,
+  runtimeCompiler: false,
 
   // deps to transpile
   transpileDependencies: [/* string or regex */],
