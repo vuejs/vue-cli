@@ -106,7 +106,7 @@
     <VueModal
       v-if="showParameters"
       :title="$t('views.project-task-details.parameters')"
-      class="medium"
+      class="medium anchor"
       @close="showParameters = false"
     >
       <div class="default-body">
