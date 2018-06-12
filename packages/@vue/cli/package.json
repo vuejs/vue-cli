@@ -48,6 +48,7 @@
     "klaw-sync": "^3.0.2",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.0",
+    "opn": "^5.3.0",
     "recast": "^0.13.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",

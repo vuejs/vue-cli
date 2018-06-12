@@ -1,5 +1,6 @@
 const fs = require('fs')
 const homedir = require('os').homedir()
+const opn = require('opn')
 const { error } = require('@vue/cli-shared-utils')
 
 async function config (options) {
@@ -21,6 +22,11 @@ async function config (options) {
       if (err) error(err)
       console.log(`You have removed the preset: ${options.delete}`)
     })
+  }
+
+  if (options.edit) {
+    opn(path, { app: process.env.EDITOR })
+    process.exit()
   }
 }
 
