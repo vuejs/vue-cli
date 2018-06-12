@@ -119,10 +119,10 @@ program
 program
   .command('config')
   .description('inspect and modify the config')
-  .option('get <path>')
-  .option('set <path> <value>')
-  .option('delete <path>', 'delete preset from config')
-  .option('edit', 'open config with default editor')
+  .option('-g, --get <path>')
+  .option('-s, --set <path> <value>')
+  .option('-d, --delete <path>', 'delete preset from config')
+  .option('-e, --edit', 'open config with default editor')
   .action((cmd) => {
     require('../lib/config')(cleanArgs(cmd))
   })
