@@ -117,14 +117,14 @@ program
   })
 
 program
-  .command('config')
+  .command('config [value]')
   .description('inspect and modify the config')
-  .option('-g, --get <path>')
-  .option('-s, --set <path> <value>')
+  .option('-g, --get <path>', 'get value from preset')
+  .option('-s, --set <path> <value>', 'set preset value')
   .option('-d, --delete <path>', 'delete preset from config')
   .option('-e, --edit', 'open config with default editor')
-  .action((cmd) => {
-    require('../lib/config')(cleanArgs(cmd))
+  .action((value, cmd) => {
+    require('../lib/config')(value, cleanArgs(cmd))
   })
 
 // output help information on unknown commands
