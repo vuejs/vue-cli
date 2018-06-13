@@ -48,7 +48,7 @@ pages: # the job must be named pages
   image: node:latest
   stage: deploy
   script:
-    - npm install --silent
+    - npm ci
     - npm run build
     - mv public public-vue # GitLab Pages hooks on the public folder
     - mv dist public # rename the dist folder (result of npm run build)
