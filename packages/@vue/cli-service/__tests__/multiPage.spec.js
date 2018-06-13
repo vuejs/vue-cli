@@ -2,8 +2,8 @@ jest.setTimeout(50000)
 
 const path = require('path')
 const portfinder = require('portfinder')
-const { defaultPreset } = require('@vue/cli/lib/options')
 const { createServer } = require('http-server')
+const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
@@ -65,7 +65,7 @@ test('serve w/ multi page', async () => {
   )
 })
 
-let server, browser, page
+let server, browser
 test('build w/ multi page', async () => {
   const project = await create('e2e-multi-page-build', defaultPreset)
 
@@ -149,7 +149,7 @@ test('build w/ multi page', async () => {
   const url = `http://localhost:${port}/`
   const launched = await launchPuppeteer(url)
   browser = launched.browser
-  page = launched.page
+  const page = launched.page
 
   const getH1Text = async () => page.evaluate(() => {
     return document.querySelector('h1').textContent
