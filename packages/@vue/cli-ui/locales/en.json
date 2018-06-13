@@ -410,6 +410,7 @@
       "gzip": "Gzip",
       "help": "<b>Stats:</b> size from webpack stats data.<br><b>Parsed:</b> size from extracted source (after minification plugins). More accurate.<br><b>Gzip:</b> size of gzipped extracted source."
     },
+    "modern-mode": "Show modern build",
     "tasks": {
       "serve": {
         "description": "Compiles and hot-reloads for development",
@@ -431,7 +432,11 @@
           "wc-async": "Async web component"
         },
         "name": "Name for library or web-component mode (default: 'name' in package.json or entry filename)",
-        "watch": "Watch for changes"
+        "watch": "Watch for changes",
+        "modern": {
+          "label": "Modern mode",
+          "description": "Build app targeting modern browsers with auto fallback"
+        }
       },
       "inspect": {
         "description": "Inspect the resolved webpack config",

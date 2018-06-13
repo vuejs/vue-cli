@@ -48,7 +48,8 @@ module.exports = (api, options) => {
       process.env.VUE_CLI_MODERN_MODE = true
       delete process.env.VUE_CLI_MODERN_BUILD
       await build(Object.assign({}, args, {
-        modernBuild: false
+        modernBuild: false,
+        keepAlive: true
       }), api, options)
 
       process.env.VUE_CLI_MODERN_BUILD = true
@@ -158,7 +159,9 @@ async function build (args, api, options) {
     const DashboardPlugin = require('../../webpack/DashboardPlugin')
     modifyConfig(webpackConfig, config => {
       config.plugins.push(new DashboardPlugin({
-        type: 'build'
+        type: 'build',
+        modernBuild: args.modernBuild,
+        keepAlive: args.keepAlive
       }))
     })
   }

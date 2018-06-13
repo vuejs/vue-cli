@@ -4,6 +4,13 @@
       <VueIcon icon="donut_large"/>
       <div class="title">{{ $t('vue-webpack.analyzer.title') }}</div>
 
+      <VueSwitch
+        v-if="modernMode"
+        v-model="showModernBuild"
+      >
+        {{ $t('vue-webpack.modern-mode') }}
+      </VueSwitch>
+
       <template v-if="currentTree">
         <VueButton
           icon-left="arrow_upward"
@@ -22,6 +29,7 @@
           class="separator"
         />
       </template>
+
       <VueSelect
         v-model="selectedChunk"
         :disabled="Object.keys(modulesTrees).length === 0"
@@ -33,11 +41,13 @@
           :label="`${$t('vue-webpack.analyzer.chunk')} ${getChunkName(key)}`"
         />
       </VueSelect>
+
       <VueSelect v-model="sizeField">
         <VueSelectButton value="stats" :label="`${$t('vue-webpack.sizes.stats')}`"/>
         <VueSelectButton value="parsed" :label="`${$t('vue-webpack.sizes.parsed')}`"/>
         <VueSelectButton value="gzip" :label="`${$t('vue-webpack.sizes.gzip')}`"/>
       </VueSelect>
+
       <VueButton
         class="icon-button"
         icon-left="help"

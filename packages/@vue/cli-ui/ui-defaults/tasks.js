@@ -1,8 +1,12 @@
+const path = require('path')
+const fs = require('fs-extra')
+
 module.exports = api => {
   const { setSharedData, removeSharedData } = api.namespace('webpack-dashboard-')
 
   let firstRun = true
   let hadFailed = false
+  let modernMode = false
 
   function resetSharedData (key) {
     setSharedData(`${key}-status`, null)
@@ -13,35 +17,52 @@ module.exports = api => {
     setSharedData(`${key}-problems`, null)
   }
 
-  function onWebpackMessage ({ data: message }) {
+  async function onWebpackMessage ({ data: message }) {
     if (message.webpackDashboardData) {
       const type = message.webpackDashboardData.type
       for (const data of message.webpackDashboardData.value) {
-        setSharedData(`${type}-${data.type}`, data.value)
+        if (data.type === 'stats') {
+          // Stats are read from a file
+          const statsFile = path.resolve(process.cwd(), `.stats-${type}.json`)
+          const value = await fs.readJson(statsFile)
+          setSharedData(`${type}-${data.type}`, value)
+          await fs.remove(statsFile)
+        } else if (type.indexOf('build') !== -1 && modernMode && data.type === 'progress') {
+          // Progress is shared between 'build' and 'build-modern'
+          // 'build' first and then 'build-modern'
+          const value = type === 'build' ? data.value / 2 : (data.value + 1) / 2
+          // We display the same progress bar for both
+          for (const t of ['build', 'build-modern']) {
+            setSharedData(`${t}-${data.type}`, value)
+          }
+        } else {
+          setSharedData(`${type}-${data.type}`, data.value)
 
-        if (type === 'serve' && data.type === 'status') {
-          if (data.value === 'Failed') {
-            api.notify({
-              title: 'Build failed',
-              message: 'The build has errors.',
-              icon: 'error'
-            })
-            hadFailed = true
-          } else if (data.value === 'Success') {
-            if (hadFailed) {
+          // Notifications
+          if (type === 'serve' && data.type === 'status') {
+            if (data.value === 'Failed') {
               api.notify({
-                title: 'Build fixed',
-                message: 'The build succeeded.',
-                icon: 'done'
+                title: 'Build failed',
+                message: 'The build has errors.',
+                icon: 'error'
               })
-              hadFailed = false
-            } else if (firstRun) {
-              api.notify({
-                title: 'App ready',
-                message: 'The build succeeded.',
-                icon: 'done'
-              })
-              firstRun = false
+              hadFailed = true
+            } else if (data.value === 'Success') {
+              if (hadFailed) {
+                api.notify({
+                  title: 'Build fixed',
+                  message: 'The build succeeded.',
+                  icon: 'done'
+                })
+                hadFailed = false
+              } else if (firstRun) {
+                api.notify({
+                  title: 'App ready',
+                  message: 'The build succeeded.',
+                  icon: 'done'
+                })
+                firstRun = false
+              }
             }
           }
         }
@@ -51,7 +72,7 @@ module.exports = api => {
 
   // Init data
   api.onProjectOpen(() => {
-    for (const key of ['serve', 'build']) {
+    for (const key of ['serve', 'build', 'build-modern']) {
       resetSharedData(key)
     }
   })
@@ -156,6 +177,14 @@ module.exports = api => {
     icon: '/public/webpack-logo.png',
     prompts: [
       {
+        name: 'modern',
+        type: 'confirm',
+        default: false,
+        message: 'vue-webpack.tasks.build.modern.label',
+        description: 'vue-webpack.tasks.build.modern.description',
+        link: 'https://cli.vuejs.org/guide/browser-compatibility.html#modern-mode'
+      },
+      {
         name: 'mode',
         type: 'list',
         default: 'production',
@@ -225,10 +254,13 @@ module.exports = api => {
       if (answers.target) args.push('--target', answers.target)
       if (answers.name) args.push('--port', answers.name)
       if (answers.watch) args.push('--watch')
+      if (answers.modern) args.push('--modern')
+      setSharedData('modern-mode', modernMode = !!answers.modern)
       args.push('--dashboard')
 
       // Data
       resetSharedData('build')
+      resetSharedData('build-modern')
     },
     onRun: () => {
       api.ipcOn(onWebpackMessage)

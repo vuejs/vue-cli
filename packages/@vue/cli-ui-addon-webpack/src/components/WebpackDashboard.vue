@@ -19,11 +19,20 @@
           class="separator"
         />
       </template>
+
+      <VueSwitch
+        v-if="modernMode"
+        v-model="showModernBuild"
+      >
+        {{ $t('vue-webpack.modern-mode') }}
+      </VueSwitch>
+
       <VueSelect v-model="sizeField">
         <VueSelectButton value="stats" :label="`${$t('vue-webpack.sizes.stats')}`"/>
         <VueSelectButton value="parsed" :label="`${$t('vue-webpack.sizes.parsed')}`"/>
         <VueSelectButton value="gzip" :label="`${$t('vue-webpack.sizes.gzip')}`"/>
       </VueSelect>
+
       <VueButton
         class="icon-button"
         icon-left="help"
@@ -67,12 +76,6 @@ export default {
     SpeedStats,
     AssetList,
     ModuleList
-  },
-
-  sharedData () {
-    return {
-      serveUrl: `webpack-dashboard-serve-url`
-    }
   }
 }
 </script>
