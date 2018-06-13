@@ -34,7 +34,7 @@
 
     <template slot-scope="{ result: { data } }" v-if="data">
       <VueDropdown
-        v-for="suggestion of data.suggestions"
+        v-for="suggestion of withBuiltins(data.suggestions)"
         :key="suggestion.id"
         :disabled="!suggestion.message && !suggestion.link"
         class="suggestion"
@@ -59,6 +59,13 @@
             class="info message"
             v-html="$t(suggestion.message)"
           />
+
+          <div
+            v-if="suggestion.image"
+            class="info image"
+          >
+            <img :src="suggestion.image" alt="image">
+          </div>
 
           <div class="actions-bar">
             <VueButton
@@ -94,15 +101,54 @@ import SUGGESTION_ACTIVATE from '../graphql/suggestionActivate.gql'
 export default {
   methods: {
     async activate (suggestion) {
-      this.showDetails = false
-      await this.$apollo.mutate({
-        mutation: SUGGESTION_ACTIVATE,
-        variables: {
-          input: {
-            id: suggestion.id
+      if (suggestion.actionLink) {
+        const win = window.open(
+          suggestion.actionLink,
+          '_blank'
+        )
+        win.focus()
+      } else {
+        await this.$apollo.mutate({
+          mutation: SUGGESTION_ACTIVATE,
+          variables: {
+            input: {
+              id: suggestion.id
+            }
           }
+        })
+      }
+    },
+
+    // Builtin suggestions
+    withBuiltins (suggestions) {
+      let list = suggestions
+
+      // Install devtools
+      if (!Object.prototype.hasOwnProperty.call(window, '__VUE_DEVTOOLS_GLOBAL_HOOK__')) {
+        let devtoolsLink = null
+        if (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)) {
+          devtoolsLink = 'https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd'
+        } else if (/Firefox/.test(navigator.userAgent)) {
+          devtoolsLink = 'https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/'
         }
-      })
+
+        if (devtoolsLink) {
+          list = [
+            ...list,
+            {
+              id: 'vue-devtools',
+              type: 'action',
+              label: 'cli-service.suggestions.vue-devtools.label',
+              message: 'cli-service.suggestions.vue-devtools.message',
+              link: 'https://github.com/vuejs/vue-devtools',
+              image: 'https://raw.githubusercontent.com/vuejs/vue-devtools/master/media/screenshot.png',
+              actionLink: devtoolsLink
+            }
+          ]
+        }
+      }
+
+      return list
     }
   }
 }
@@ -130,4 +176,8 @@ export default {
   .info
     &:not(:last-child)
       margin-bottom $padding-item
+
+    &.image
+      >>> img
+        max-width 100%
 </style>

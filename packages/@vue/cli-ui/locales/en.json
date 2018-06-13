@@ -359,6 +359,10 @@
         "label": "Add vuex",
         "message": "Official centralized State Management solution for large-scale apps. Very useful if multiple components need to access the same data."
       },
+      "vue-devtools": {
+        "label": "Install devtools",
+        "message": "Browser devtools official extension for debugging Vue.js applications where you can inspect your components, vuex store and events."
+      },
       "progress": "Installing {arg0}..."
     }
   },

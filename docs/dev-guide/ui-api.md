@@ -1154,6 +1154,8 @@ api.addSuggestion({
   // This will be displayed in a details modal
   message: 'A longer message for the modal',
   link: 'http://link-to-docs-in-the-modal',
+  // Optional image
+  image: '/_plugin/my-package/screenshot.png',
   // Function called when suggestion is activated by user
   async handler () {
     // ...
@@ -1171,6 +1173,18 @@ Then you can remove the suggestion:
 
 ```js
 api.removeSuggestion('my-suggestion')
+```
+
+You can also open a page instead when the user activates the suggestion with `actionLink`:
+
+```js
+api.addSuggestion({
+  id: 'my-suggestion',
+  type: 'action', // Required 
+  label: 'Add vue-router',
+  // Open a new tab
+  actionLink: 'https://vuejs.org/'
+})
 ```
 
 Typically, you will use hooks to display the suggestion in the right context:
