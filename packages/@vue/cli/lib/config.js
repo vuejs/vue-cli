@@ -1,5 +1,8 @@
 const fs = require('fs')
 const homedir = require('os').homedir()
+const get = require('get-value')
+const unset = require('unset-value')
+const set = require('set-value')
 const opn = require('opn')
 const { error } = require('@vue/cli-shared-utils')
 
@@ -12,14 +15,14 @@ async function config (value, options) {
   }
 
   if (options.get) {
-    console.log(config[options.get])
+    console.log(get(config, options.get))
   }
 
   if (options.delete) {
-    delete config[options.delete]
+    unset(config, options.delete)
     await fs.writeFile(path, JSON.stringify(config, null, 4), 'utf-8', (err) => {
       if (err) error(err)
-      console.log(`You have removed the preset: ${options.delete}`)
+      console.log(`You have removed the option: ${options.delete}`)
     })
   }
 
@@ -29,27 +32,27 @@ async function config (value, options) {
   }
 
   if (options.set && !value) {
-    error(`Make sure you define a value for the preset ${options.set}`)
+    error(`Make sure you define a value for the option ${options.set}`)
   }
 
   if (options.set && value) {
-    config[options.set] = value
+    set(config, options.set, value)
 
     if (value.match('[0-9]')) {
-      config[options.set] = parseInt(value)
+      set(config, options.set, parseInt(value))
     }
 
     if (value === 'true') {
-      config[options.set] = true
+      set(config, options.set, true)
     }
 
     if (value === 'false') {
-      config[options.set] = false
+      set(config, options.set, false)
     }
 
     await fs.writeFile(path, JSON.stringify(config, null, 4), 'utf-8', (err) => {
       if (err) error(err)
-      console.log(`You have updated the preset: ${options.set} to ${value}`)
+      console.log(`You have updated the option: ${options.set} to ${value}`)
     })
   }
 }
