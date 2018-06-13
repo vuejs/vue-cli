@@ -280,23 +280,32 @@ async function run (id, context) {
 
     task.child = child
 
-    child.stdout.on('data', buffer => {
+    const outPipe = logPipe(queue => {
       addLog({
         taskId: task.id,
         type: 'stdout',
-        text: buffer.toString()
+        text: queue
       }, context)
     })
+    child.stdout.on('data', buffer => {
+      outPipe.add(buffer.toString())
+    })
 
-    child.stderr.on('data', buffer => {
+    const errPipe = logPipe(queue => {
       addLog({
         taskId: task.id,
         type: 'stderr',
-        text: buffer.toString()
+        text: queue
       }, context)
+    })
+    child.stderr.on('data', buffer => {
+      errPipe.add(buffer.toString())
     })
 
     const onExit = async (code, signal) => {
+      outPipe.flush()
+      errPipe.flush()
+
       log('Task exit', command, args, 'code:', code, 'signal:', signal)
 
       // Plugin API
@@ -417,6 +426,29 @@ function open (id, context) {
     cwd: cwd.get()
   }], context)
   return true
+}
+
+function logPipe (action) {
+  let queue = ''
+  let size = 0
+  let time = Date.now()
+
+  return {
+    add: (string) => {
+      queue += string
+      size++
+
+      if (size === 20 || Date.now() > time + 100) {
+        action(queue)
+        queue = ''
+        size = 0
+        time = Date.now()
+      }
+    },
+    flush: () => {
+      if (size) action(queue)
+    }
+  }
 }
 
 module.exports = {
