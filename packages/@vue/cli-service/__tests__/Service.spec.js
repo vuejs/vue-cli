@@ -147,6 +147,9 @@ test('api: defaultModes', () => {
 
   createMockService([plugin1], false /* init */).run('foo')
 
+  delete process.env.NODE_ENV
+  delete process.env.BABEL_ENV
+
   const plugin2 = {
     id: 'test-defaultModes',
     apply: api => {
