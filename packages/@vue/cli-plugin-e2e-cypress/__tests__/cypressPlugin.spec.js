@@ -19,4 +19,8 @@ if (!process.env.APPVEYOR) {
 
     await project.run(`vue-cli-service test:e2e --headless`)
   })
+} else {
+  test('should work', () => {
+    // empty spec to avoid jest bailing
+  })
 }
