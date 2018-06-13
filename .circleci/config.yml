@@ -15,7 +15,7 @@ jobs:
             - v1-vue-cli-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - v1-vue-cli-{{ .Branch }}-
             - v1-vue-cli
-      - run: yarn
+      - run: yarn --network-timeout 600000
       - save_cache:
           key: v1-vue-cli-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
