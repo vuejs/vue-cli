@@ -246,13 +246,13 @@ A prompt module should export a function that receives a [PromptModuleAPI][promp
 ``` js
 module.exports = api => {
   // a feature object should be a valid inquirer choice object
-  cli.injectFeature({
+  api.injectFeature({
     name: 'Some great feature',
     value: 'my-feature'
   })
 
   // injectPrompt expects a valid inquirer prompt object
-  cli.injectPrompt({
+  api.injectPrompt({
     name: 'someFlag',
     // make sure your prompt only shows up if user has picked your feature
     when: answers => answers.features.include('my-feature'),
@@ -262,7 +262,7 @@ module.exports = api => {
 
   // when all prompts are done, inject your plugin into the options that
   // will be passed on to Generators
-  cli.onPromptComplete((answers, options) => {
+  api.onPromptComplete((answers, options) => {
     if (answers.features.includes('my-feature')) {
       options.plugins['vue-cli-plugin-my-feature'] = {
         someFlag: answers.someFlag
