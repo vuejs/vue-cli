@@ -17,6 +17,7 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service serve [options] [entry]',
     options: {
       '--open': `open browser on server start`,
+      '--copy': `copy url to clipboard on server start`,
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
