@@ -42,7 +42,7 @@ See [@babel-preset/env docs](https://new.babeljs.io/docs/en/next/babel-preset-en
 
 ## Modern Mode
 
-With Babel we are able to leverage all the newest language features in ES2015+, but that also means we have to ship transpiled and polyfilled bundles in order to support older browsers. These transpiled bundles often more verbose than the original native ES2015+ code, and also parses and runs slower. Given that today a good majority of the modern browsers have decent support for native ES2015, it is a waste that we have to ship heavier and less efficient code to those browsers just because we have to support older ones.
+With Babel we are able to leverage all the newest language features in ES2015+, but that also means we have to ship transpiled and polyfilled bundles in order to support older browsers. These transpiled bundles are often more verbose than the original native ES2015+ code, and also parse and run slower. Given that today a good majority of the modern browsers have decent support for native ES2015, it is a waste that we have to ship heavier and less efficient code to those browsers just because we have to support older ones.
 
 Vue CLI offers a "Modern Mode" to help you solve this problem. When building for production with the following command:
 
