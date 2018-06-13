@@ -46,8 +46,20 @@ exports.loadModule = function (request, context, force = false) {
   const resolvedPath = exports.resolveModule(request, context)
   if (resolvedPath) {
     if (force) {
-      delete require.cache[resolvedPath]
+      clearRequireCache(resolvedPath)
     }
     return require(resolvedPath)
+  }
+}
+
+function clearRequireCache (id, map = new Map()) {
+  const module = require.cache[id]
+  if (module) {
+    map.set(id, true)
+    // Clear children modules
+    module.children.forEach(child => {
+      if (!map.get(child.id)) clearRequireCache(child.id, map)
+    })
+    delete require.cache[id]
   }
 }
