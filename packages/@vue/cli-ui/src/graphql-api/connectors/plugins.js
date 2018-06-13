@@ -138,7 +138,11 @@ function runPluginApi (id, context, fileName = 'ui') {
   let module
   try {
     module = loadModule(`${id}/${fileName}`, cwd.get(), true)
-  } catch (e) {}
+  } catch (e) {
+    if (process.env.VUE_CLI_DEBUG) {
+      console.error(e)
+    }
+  }
   if (module) {
     pluginApi.pluginId = id
     module(pluginApi)
