@@ -44,6 +44,7 @@ module.exports = (api, options) => {
         clean: false
       }), api, options)
     } else {
+      delete process.env.VUE_CLI_MODERN_BUILD
       return build(args, api, options)
     }
   })
