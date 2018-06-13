@@ -1,10 +1,10 @@
-<template>
+<template functional>
   <div class="module-list-item">
     <div class="content">
-      <div class="info name">{{ module.name }}</div>
-      <div class="info size">{{ module.size | size('B') }}</div>
+      <div class="info name">{{ props.module.name }}</div>
+      <div class="info size">{{ props.module.size | size('B') }}</div>
       <div class="info">
-        <VueLoadingBar :value="module.ratio" class="primary"/>
+        <VueLoadingBar :value="props.module.ratio" class="primary"/>
       </div>
     </div>
   </div>
