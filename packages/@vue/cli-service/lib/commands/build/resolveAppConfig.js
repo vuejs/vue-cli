@@ -26,7 +26,7 @@ module.exports = (api, args, options) => {
     }
   }
 
-  const rawConfig = config.toConfig()
+  const rawConfig = api.resolveWebpackConfig(config)
 
   // respect inline entry
   if (args.entry && !options.pages) {
