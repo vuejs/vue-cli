@@ -2,7 +2,8 @@ jest.setTimeout(process.env.APPVEYOR ? 850000 : 50000)
 
 const create = require('@vue/cli-test-utils/createTestProject')
 
-// temporarily disabled on AppVeyor due to upstream issue
+// temporarily disabled on AppVeyor
+// due to Cypress upstream issue
 // https://github.com/cypress-io/cypress/issues/1841
 if (!process.env.APPVEYOR) {
   test('cypress', async () => {

@@ -15,7 +15,8 @@
     "boot": "node scripts/bootstrap.js",
     "release": "yarn clean && node scripts/release.js",
     "docs": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "patch-chromedriver": "node scripts/patchChromedriver.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
