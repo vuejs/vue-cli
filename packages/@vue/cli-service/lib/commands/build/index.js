@@ -43,6 +43,7 @@ module.exports = (api, options) => {
       args.entry = args.entry || 'src/App.vue'
     }
 
+    process.env.VUE_CLI_BUILD_TARGET = args.target
     if (args.modern && args.target === 'app') {
       process.env.VUE_CLI_MODERN_MODE = true
       delete process.env.VUE_CLI_MODERN_BUILD
@@ -59,8 +60,9 @@ module.exports = (api, options) => {
       delete process.env.VUE_CLI_MODERN_MODE
       delete process.env.VUE_CLI_MODERN_BUILD
     } else {
-      return build(args, api, options)
+      await build(args, api, options)
     }
+    delete process.env.VUE_CLI_BUILD_TARGET
   })
 }
 
@@ -100,7 +102,6 @@ async function build (args, api, options) {
   const isLegacyBuild = args.target === 'app' && args.modern && !args.modernBuild
 
   // resolve raw webpack config
-  process.env.VUE_CLI_BUILD_TARGET = args.target
   let webpackConfig
   if (args.target === 'lib') {
     webpackConfig = require('./resolveLibConfig')(api, args, options)

@@ -5,7 +5,7 @@ const path = require('path')
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     // only apply when there's no alternative target
-    if (process.env.VUE_CLI_TARGET) {
+    if (process.env.VUE_CLI_BUILD_TARGET && process.env.VUE_CLI_BUILD_TARGET !== 'app') {
       return
     }
 

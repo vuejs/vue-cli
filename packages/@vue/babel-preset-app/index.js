@@ -59,7 +59,7 @@ module.exports = (context, options = {}) => {
   // useBuiltIns: 'usage' we won't be running Babel on these deps, they need to
   // be force-included.
   let polyfills
-  const buildTarget = process.env.VUE_CLI_TARGET || 'app'
+  const buildTarget = process.env.VUE_CLI_BUILD_TARGET || 'app'
   if (
     buildTarget === 'app' &&
     useBuiltIns === 'usage' &&
