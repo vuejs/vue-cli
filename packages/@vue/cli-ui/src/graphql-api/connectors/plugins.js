@@ -16,7 +16,6 @@ const {
   updatePackage
 } = require('@vue/cli/lib/util/installDeps')
 const invoke = require('@vue/cli/lib/invoke')
-const notifier = require('node-notifier')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -29,6 +28,7 @@ const clientAddons = require('./client-addons')
 const views = require('./views')
 const locales = require('./locales')
 const sharedData = require('./shared-data')
+const suggestions = require('./suggestions')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
@@ -36,6 +36,7 @@ const { getCommand } = require('../utils/command')
 const { resolveModuleRoot } = require('../utils/resolve-path')
 const ipc = require('../utils/ipc')
 const { log } = require('../utils/logger')
+const { notify } = require('../utils/notification')
 
 const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
@@ -101,8 +102,13 @@ function resetPluginApi (context) {
   }
   sharedData.unWatchAll()
 
-  pluginApi = new PluginApi(context)
+  suggestions.clear(context)
+
+  pluginApi = new PluginApi({
+    plugins
+  }, context)
   // Run Plugin API
+  runPluginApi(path.resolve(__dirname, '../../../'), context, 'ui-defaults')
   plugins.forEach(plugin => runPluginApi(plugin.id, context))
   runPluginApi(cwd.get(), context, 'vue-cli-ui')
   // Add client addons
@@ -116,12 +122,14 @@ function resetPluginApi (context) {
     if (!project) return
     if (projectId !== project.id) {
       projectId = project.id
-      log('Hook onProjectOpen', pluginApi.projectOpenHooks.length, 'handlers')
-      pluginApi.projectOpenHooks.forEach(fn => fn(project, projects.getLast(context)))
+      callHook('projectOpen', [project, projects.getLast(context)], context)
       pluginApi.project = project
     } else {
-      log('Hook onPluginReload', pluginApi.pluginReloadHooks.length, 'handlers')
-      pluginApi.pluginReloadHooks.forEach(fn => fn(project))
+      callHook('pluginReload', [project], context)
+
+      // View open hook
+      const currentView = views.getCurrent()
+      if (currentView) views.open(currentView.id)
     }
   })
 }
@@ -130,7 +138,11 @@ function runPluginApi (id, context, fileName = 'ui') {
   let module
   try {
     module = loadModule(`${id}/${fileName}`, cwd.get(), true)
-  } catch (e) {}
+  } catch (e) {
+    if (process.env.VUE_CLI_DEBUG) {
+      console.error(e)
+    }
+  }
   if (module) {
     pluginApi.pluginId = id
     module(pluginApi)
@@ -143,6 +155,12 @@ function runPluginApi (id, context, fileName = 'ui') {
     const folder = fs.existsSync(id) ? id : getPath(id)
     locales.loadFolder(folder, context)
   } catch (e) {}
+}
+
+function callHook (id, args, context) {
+  const fns = pluginApi.hooks[id]
+  log(`Hook ${id}`, fns.length, 'handlers')
+  fns.forEach(fn => fn(...args))
 }
 
 function findOne (id, context) {
@@ -264,10 +282,10 @@ function install (id, context) {
     await initPrompts(id, context)
     installationStep = 'config'
 
-    notifier.notify({
+    notify({
       title: `Plugin installed`,
       message: `Plugin ${id} installed, next step is configuration`,
-      icon: path.resolve(__dirname, '../../assets/done.png')
+      icon: 'done'
     })
 
     return getInstallation(context)
@@ -297,10 +315,10 @@ function uninstall (id, context) {
     currentPluginId = null
     installationStep = null
 
-    notifier.notify({
+    notify({
       title: `Plugin uninstalled`,
       message: `Plugin ${id} uninstalled`,
-      icon: path.resolve(__dirname, '../../assets/done.png')
+      icon: 'done'
     })
 
     return getInstallation(context)
@@ -329,10 +347,10 @@ function runInvoke (id, context) {
     runPluginApi(id, context)
     installationStep = 'diff'
 
-    notifier.notify({
+    notify({
       title: `Plugin invoke sucess`,
       message: `Plugin ${id} invoked successfully`,
-      icon: path.resolve(__dirname, '../../assets/done.png')
+      icon: 'done'
     })
 
     return getInstallation(context)
@@ -359,7 +377,7 @@ async function initPrompts (id, context) {
   await prompts.start()
 }
 
-function update (id, context, notify = true) {
+function update (id, context, multi = false) {
   return progress.wrap('plugin-update', context, async setProgress => {
     setProgress({
       status: 'plugin-update',
@@ -376,12 +394,13 @@ function update (id, context, notify = true) {
       type: 'info'
     }, context)
 
-    if (notify) {
-      notifier.notify({
+    if (!multi) {
+      notify({
         title: `Plugin updated`,
         message: `Plugin ${id} was successfully updated`,
-        icon: path.resolve(__dirname, '../../assets/done.png')
+        icon: 'done'
       })
+      resetPluginApi(context)
     }
 
     currentPluginId = null
@@ -395,15 +414,16 @@ async function updateAll (context) {
   for (const plugin of plugins) {
     const version = await getVersion(plugin, context)
     if (version.current !== version.wanted) {
-      updatedPlugins.push(await update(plugin.id, context, false))
+      updatedPlugins.push(await update(plugin.id, context, true))
     }
   }
 
-  notifier.notify({
+  notify({
     title: `Plugins updated`,
     message: `${updatedPlugins.length} plugin(s) were successfully updated`,
-    icon: path.resolve(__dirname, '../../assets/done.png')
+    icon: 'done'
   })
+  resetPluginApi(context)
 
   return updatedPlugins
 }
@@ -468,5 +488,6 @@ module.exports = {
   getApi,
   finishInstall,
   callAction,
+  callHook,
   serve
 }

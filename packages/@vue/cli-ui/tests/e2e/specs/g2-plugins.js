@@ -1,7 +1,7 @@
 describe('Plugins', () => {
   it('Should display the plugins', () => {
     cy.visit('/')
-    cy.get('.project-plugin-item').should('have.length', 3)
+    cy.get('.project-plugin-item').should('have.length', 4)
   })
 
   it('Should add a plugin', () => {

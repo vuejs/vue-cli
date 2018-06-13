@@ -52,4 +52,6 @@ export default {
   overflow-x hidden
   overflow-y auto
   background $color-background-light
+  .vue-ui-dark-mode &
+    background lighten($vue-ui-color-darker, 1%)
 </style>

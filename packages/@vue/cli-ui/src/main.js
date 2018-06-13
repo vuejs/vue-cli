@@ -14,6 +14,7 @@ import Responsive from './util/responsive'
 import SharedData from './util/shared-data'
 import PluginAction from './util/plugin-action'
 import gql from 'graphql-tag'
+import ClientState from './mixins/ClientState'
 
 window.gql = gql
 
@@ -43,6 +44,8 @@ Vue.use(PluginAction)
 for (const key in Filters) {
   Vue.filter(key, Filters[key])
 }
+
+Vue.mixin(ClientState)
 
 Vue.config.productionTip = false
 

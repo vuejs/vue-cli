@@ -123,7 +123,7 @@ module.exports = {
 - Type: `Array<string | RegExp>`
 - Default: `[]`
 
-  By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly trasnpile a dependency with Babel, you can list it in this option.
+  By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly transpile a dependency with Babel, you can list it in this option.
 
 ### productionSourceMap
 

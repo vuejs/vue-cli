@@ -5,8 +5,13 @@ query configuration ($id: ID!) {
   configuration(id: $id) {
     ...configuration
     link
-    prompts {
-      ...prompt
+    tabs {
+      id
+      label
+      icon
+      prompts {
+        ...prompt
+      }
     }
   }
 }

@@ -12,12 +12,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v1-vue-{{ .Branch }}-
-            - v1-vue-
-      - run: yarn
+            - v1-vue-cli-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v1-vue-cli-{{ .Branch }}-
+            - v1-vue-cli
+      - run: yarn --network-timeout 600000
       - save_cache:
-          key: v1-vue-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: v1-vue-cli-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules/
             - ~/.cache
@@ -47,6 +47,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: yarn lint
+      - run: yarn check-links
       - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app
 
   group-4:

@@ -1,0 +1,3 @@
+query darkMode {
+  darkMode @client
+}

@@ -1,6 +1,6 @@
 # UI Localization
 
-## Translate the UI
+## Translate the standard UI
 
 Follow those simple steps to propose a new language for the CLI UI!
 
@@ -17,3 +17,40 @@ Follow those simple steps to propose a new language for the CLI UI!
 The English reference locale is [here](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-ui/locales/en.json).
 
 Take a look at [the french localization package](https://github.com/Akryum/vue-cli-locale-fr) as an example.
+
+## Translate your plugin
+
+You can put locale files compatible with [vue-i18n](https://github.com/kazupon/vue-i18n) in a `locales` folder at the root of your plugin. They will be automatically loaded into the client when the project is opened. You can then use `$t` to translate strings in your components and other vue-i18n helpers. Also, the strings used in the UI API (like `describeTask`) will go through vue-i18n as well to you can localize them.
+
+Example `locales` folder:
+
+```
+vue-cli-plugin/locales/en.json
+vue-cli-plugin/locales/fr.json
+```
+
+Example usage in API:
+
+```js
+api.describeConfig({
+  // vue-i18n path
+  description: 'my-plugin.config.foo'
+})
+```
+
+Example usage in components:
+
+```html
+<VueButton>{{ $t('my-plugin.actions.bar') }}</VueButton>
+```
+
+You can also load the locale files in a client addon if you prefer, using the `ClientAddonApi`:
+
+```js
+// Load the locale files (uses vue-i18n)
+const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
+locales.keys().forEach(key => {
+  const locale = key.match(/([a-z0-9]+)\./i)[1]
+  ClientAddonApi.addLocalization(locale, locales(key))
+})
+```

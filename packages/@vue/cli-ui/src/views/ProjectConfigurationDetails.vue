@@ -1,11 +1,32 @@
 <template>
   <div class="project-configuration-details">
-    <div class="content">
-      <PromptsList
-        :prompts="visiblePrompts"
-        @answer="answerPrompt"
-      />
-    </div>
+    <template v-if="configuration">
+      <div v-if="configuration.tabs.length > 1" class="tabs">
+        <VueGroup
+          v-model="currentTab"
+          class="tabs-selector"
+        >
+          <VueGroupButton
+            v-for="tab of configuration.tabs"
+            :key="tab.id"
+            :value="tab.id"
+            :icon-left="tab.icon"
+            :label="$t(tab.label)"
+          />
+        </VueGroup>
+      </div>
+
+      <div class="content">
+        <ConfigurationTab
+          v-for="tab of configuration.tabs"
+          v-show="tab.id === currentTab"
+          :key="tab.id"
+          :configuration="configuration"
+          :tab="tab"
+          @has-changes="value => tabsHaveChanges[tab.id] = value"
+        />
+      </div>
+    </template>
 
     <div class="actions-bar space-between">
       <VueButton
@@ -26,7 +47,15 @@
       />
 
       <VueButton
-        :disabled="!hasPromptsChanged"
+        v-if="configuration && !hasPromptsChanged"
+        icon-left="refresh"
+        class="big primary"
+        :label="$t('views.project-configuration-details.actions.refresh')"
+        @click="refetch()"
+      />
+
+      <VueButton
+        v-else
         icon-left="save"
         class="primary big"
         :label="$t('views.project-configuration-details.actions.save')"
@@ -37,20 +66,11 @@
 </template>
 
 <script>
-import Prompts from '../mixins/Prompts'
-
 import CONFIGURATION from '../graphql/configuration.gql'
 import CONFIGURATION_SAVE from '../graphql/configurationSave.gql'
 import CONFIGURATION_CANCEL from '../graphql/configurationCancel.gql'
 
 export default {
-  mixins: [
-    Prompts({
-      field: 'configuration',
-      query: CONFIGURATION
-    })
-  ],
-
   metaInfo () {
     return {
       title: this.configuration && `${this.configuration.name} - ${this.$t('views.project-configurations.title')}`
@@ -66,7 +86,9 @@ export default {
 
   data () {
     return {
-      configuration: null
+      configuration: null,
+      currentTab: '__default',
+      tabsHaveChanges: {}
     }
   },
 
@@ -77,11 +99,44 @@ export default {
         return {
           id: this.id
         }
+      },
+      async result ({ data, loading }) {
+        if (!this.$_init && !loading && data && data.configuration) {
+          this.$_init = true
+          this.tabsHaveChanges = data.configuration.tabs.reduce((obj, tab) => {
+            obj[tab.id] = false
+            return obj
+          }, {})
+          await this.$nextTick()
+          this.currentTab = data.configuration.tabs[0].id
+        }
       }
     }
   },
 
+  computed: {
+    hasPromptsChanged () {
+      for (const key in this.tabsHaveChanges) {
+        if (this.tabsHaveChanges[key]) return true
+      }
+      return false
+    }
+  },
+
+  watch: {
+    id: 'init'
+  },
+
+  created () {
+    this.init()
+  },
+
   methods: {
+    init (tab) {
+      this.currentTab = '__default'
+      this.$_init = false
+    },
+
     async cancel () {
       await this.$apollo.mutate({
         mutation: CONFIGURATION_CANCEL,
@@ -90,7 +145,7 @@ export default {
         }
       })
 
-      this.$apollo.queries.configuration.refetch()
+      this.refetch()
     },
 
     async save () {
@@ -101,6 +156,10 @@ export default {
         }
       })
 
+      this.refetch()
+    },
+
+    refetch () {
       this.$apollo.queries.configuration.refetch()
     }
   }
@@ -120,4 +179,7 @@ export default {
     height 0
     overflow-x hidden
     overflow-y auto
+
+  .tabs
+    margin $padding-item 0
 </style>

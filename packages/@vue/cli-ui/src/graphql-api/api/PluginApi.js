@@ -2,23 +2,41 @@
 const logs = require('../connectors/logs')
 const sharedData = require('../connectors/shared-data')
 const views = require('../connectors/views')
+const suggestions = require('../connectors/suggestions')
+const folders = require('../connectors/folders')
+const cwd = require('../connectors/cwd')
+const progress = require('../connectors/progress')
 // Utils
 const ipc = require('../utils/ipc')
+const { notify } = require('../utils/notification')
+const { matchesPluginId } = require('@vue/cli-shared-utils')
 // Validators
 const { validateConfiguration } = require('./configuration')
 const { validateDescribeTask, validateAddTask } = require('./task')
 const { validateClientAddon } = require('./client-addon')
 const { validateView, validateBadge } = require('./view')
+const { validateNotify } = require('./notify')
+const { validateSuggestion } = require('./suggestion')
+const { validateProgress } = require('./progress')
 
 class PluginApi {
-  constructor (context) {
+  constructor ({ plugins }, context) {
     // Context
     this.context = context
     this.pluginId = null
     this.project = null
+    this.plugins = plugins
     // Hooks
-    this.projectOpenHooks = []
-    this.pluginReloadHooks = []
+    this.hooks = {
+      projectOpen: [],
+      pluginReload: [],
+      configRead: [],
+      configWrite: [],
+      taskRun: [],
+      taskExit: [],
+      taskOpen: [],
+      viewOpen: []
+    }
     // Data
     this.configurations = []
     this.describedTasks = []
@@ -39,7 +57,7 @@ class PluginApi {
       cb(this.project)
       return
     }
-    this.projectOpenHooks.push(cb)
+    this.hooks.projectOpen.push(cb)
   }
 
   /**
@@ -48,7 +66,61 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onPluginReload (cb) {
-    this.pluginReloadHooks.push(cb)
+    this.hooks.pluginReload.push(cb)
+  }
+
+  /**
+   * Register an handler called when a config is red.
+   *
+   * @param {function} cb Handler
+   */
+  onConfigRead (cb) {
+    this.hooks.configRead.push(cb)
+  }
+
+  /**
+   * Register an handler called when a config is written.
+   *
+   * @param {function} cb Handler
+   */
+  onConfigWrite (cb) {
+    this.hooks.configWrite.push(cb)
+  }
+
+  /**
+   * Register an handler called when a task is run.
+   *
+   * @param {function} cb Handler
+   */
+  onTaskRun (cb) {
+    this.hooks.taskRun.push(cb)
+  }
+
+  /**
+   * Register an handler called when a task has exited.
+   *
+   * @param {function} cb Handler
+   */
+  onTaskExit (cb) {
+    this.hooks.taskExit.push(cb)
+  }
+
+  /**
+   * Register an handler called when the user opens one task details.
+   *
+   * @param {function} cb Handler
+   */
+  onTaskOpen (cb) {
+    this.hooks.taskOpen.push(cb)
+  }
+
+  /**
+   * Register an handler called when a view is open.
+   *
+   * @param {function} cb Handler
+   */
+  onViewOpen (cb) {
+    this.hooks.viewOpen.push(cb)
   }
 
   /**
@@ -264,6 +336,73 @@ class PluginApi {
     return this.context.db
   }
 
+  /**
+   * Display a notification in the user OS
+   * @param {object} options Notification options
+   */
+  notify (options) {
+    try {
+      validateNotify(options)
+      notify(options)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'notify' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
+  }
+
+  /**
+   * Indicates if a specific plugin is used by the project
+   * @param {string} id Plugin id or short id
+   */
+  hasPlugin (id) {
+    if (['vue-router', 'vuex'].includes(id)) {
+      const folder = cwd.get()
+      const pkg = folders.readPackage(folder, this.context, true)
+      return (pkg.dependencies[id] || pkg.devDependencies[id])
+    }
+    return this.plugins.some(p => matchesPluginId(id, p.id))
+  }
+
+  /**
+   * Display the progress screen.
+   *
+   * @param {object} options Progress options
+   */
+  setProgress (options) {
+    try {
+      validateProgress(options)
+      progress.set({
+        ...options,
+        id: '__plugins__'
+      }, this.context)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'setProgress' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
+  }
+
+  /**
+   * Remove the progress screen.
+   */
+  removeProgress () {
+    progress.remove('__plugins__', this.context)
+  }
+
+  /**
+   * Get current working directory.
+   */
+  getCwd () {
+    return cwd.get()
+  }
+
   /* Namespaced */
 
   /**
@@ -363,6 +502,34 @@ class PluginApi {
   }
 
   /**
+   * Add a suggestion for the user.
+   *
+   * @param {object} options Suggestion
+   */
+  addSuggestion (options) {
+    try {
+      validateSuggestion(options)
+      suggestions.add(options, this.context)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'addSuggestion' options are invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid options: ${e.message}`))
+    }
+  }
+
+  /**
+   * Remove a suggestion
+   *
+   * @param {string} id Id of the suggestion
+   */
+  removeSuggestion (id) {
+    suggestions.remove(id, this.context)
+  }
+
+  /**
    * Create a namespaced version of:
    *   - getSharedData
    *   - setSharedData
@@ -382,7 +549,12 @@ class PluginApi {
       onAction: (id, cb) => this.onAction(namespace + id, cb),
       callAction: (id, params) => this.callAction(namespace + id, params),
       storageGet: (id) => this.storageGet(namespace + id),
-      storageSet: (id, value) => this.storageSet(namespace + id, value)
+      storageSet: (id, value) => this.storageSet(namespace + id, value),
+      addSuggestion: (options) => {
+        options.id = namespace + options.id
+        return this.addSuggestion(options)
+      },
+      removeSuggestion: (id) => this.removeSuggestion(namespace + id)
     }
   }
 }

@@ -60,4 +60,8 @@ export default {
   &.type-dim
     .counter
       background $md-grey
+
+  .vue-ui-dark-mode &
+    .counter
+      color white
 </style>

@@ -3,14 +3,16 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - yarn
+  - yarn patch-chromedriver
+  - yarn --network-timeout 600000
 
 test_script:
   - git --version
   - node --version
   - yarn --version
   - yarn test
-  - cd "packages/@vue/cli-ui" && yarn test
+  # ui tests temporarily disabled due to Cypress 3.0 issue on windows
+  # - cd "packages/@vue/cli-ui" && yarn test
 
 cache:
   - node_modules -> yarn.lock

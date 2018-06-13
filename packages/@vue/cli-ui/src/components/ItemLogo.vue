@@ -14,7 +14,7 @@
         icon="done"
       />
       <img
-        v-else-if="!isMaterialIcon && !error"
+        v-else-if="displayImage"
         class="image"
         :src="image"
         :key="image"
@@ -26,6 +26,11 @@
         :icon="error || !image ? fallbackIcon : image"
       />
     </div>
+
+    <div
+      v-if="displayImage && colorBullet"
+      class="color-bullet"
+    />
   </div>
 </template>
 
@@ -45,6 +50,11 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    },
+
+    colorBullet: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -58,6 +68,10 @@ export default {
   computed: {
     isMaterialIcon () {
       return /^[a-z0-9_]+$/.test(this.image)
+    },
+
+    displayImage () {
+      return !this.isMaterialIcon && !this.error
     }
   },
 
@@ -80,6 +94,7 @@ export default {
 
 .item-logo
   margin-right $padding-item
+  position relative
   .wrapper
     h-box()
     box-center()
@@ -97,6 +112,19 @@ export default {
       height @width
       >>> svg
         fill rgba($color-text-light, .3)
+
+  .color-bullet
+    position absolute
+    width 8px
+    height @width
+    border-radius 50%
+    right -1px
+    bottom @right
+    background white
+    border solid 2px $vue-ui-color-light-neutral
+    visibility hidden
+    .vue-ui-dark-mode &
+      border-color $vue-ui-color-dark
 
   &.vuejs
     .wrapper
@@ -128,14 +156,23 @@ export default {
     .vue-ui-icon
       >>> svg
         fill $vue-ui-color-danger
+    .color-bullet
+      visibility visible
+      background $vue-ui-color-danger
   &.warning
     .vue-ui-icon
       >>> svg
         fill $vue-ui-color-warning
+    .color-bullet
+      visibility visible
+      background $vue-ui-color-warning
   &.info
     .vue-ui-icon
       >>> svg
         fill $vue-ui-color-info
+    .color-bullet
+      visibility visible
+      background $vue-ui-color-info
   &.success
     .vue-ui-icon
       >>> svg

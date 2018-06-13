@@ -2,8 +2,6 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { entry, name }, options) => {
-  // setting this disables app-only configs
-  process.env.VUE_CLI_TARGET = 'lib'
   // inline all static asset files since there is no publicPath handling
   process.env.VUE_CLI_INLINE_LIMIT = Infinity
 

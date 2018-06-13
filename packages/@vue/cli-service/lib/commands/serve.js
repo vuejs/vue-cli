@@ -17,6 +17,7 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service serve [options] [entry]',
     options: {
       '--open': `open browser on server start`,
+      '--copy': `copy url to clipboard on server start`,
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
@@ -82,7 +83,8 @@ module.exports = (api, options) => {
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
-      const sockjsUrl = url.format({
+      const publicOpt = projectDevServerOptions.public
+      const sockjsUrl = publicOpt ? `//${publicOpt}/sockjs-node` : url.format({
         protocol,
         port,
         hostname: urls.lanUrlForConfig || 'localhost',

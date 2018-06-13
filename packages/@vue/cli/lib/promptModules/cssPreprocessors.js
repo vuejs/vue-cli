@@ -3,7 +3,7 @@ module.exports = cli => {
     name: 'CSS Pre-processors',
     value: 'css-preprocessor',
     description: 'Add support for CSS pre-processors like SASS, Less or Stylus',
-    link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/css.md'
+    link: 'https://cli.vuejs.org/guide/css.html'
   })
 
   cli.injectPrompt({

@@ -24,7 +24,7 @@
     </div>
 
     <div class="view">
-      <div ref="render" class="xterm-render"></div>
+      <div ref="render" class="xterm-render"/>
     </div>
 
     <resize-observer v-if="autoSize" @notify="fit"/>
@@ -40,8 +40,8 @@ Terminal.applyAddon(fit)
 Terminal.applyAddon(webLinks)
 
 const defaultTheme = {
-  foreground: '#000',
-  background: '#dbebec',
+  foreground: '#2c3e50',
+  background: '#e4f5ef',
   cursor: 'rgba(0, 0, 0, .4)',
   selection: 'rgba(0, 0, 0, 0.3)',
   black: '#000000',
@@ -60,6 +60,16 @@ const defaultTheme = {
   white: '#d0d0d0',
   brightBlack: '#808080',
   brightWhite: '#ffffff'
+}
+
+const darkTheme = {
+  ...defaultTheme,
+  foreground: '#fff',
+  background: '#2c3e50',
+  cursor: 'rgba(255, 255, 255, .4)',
+  selection: 'rgba(255, 255, 255, 0.3)',
+  magenta: '#e83030',
+  brightMagenta: '#e83030'
 }
 
 export default {
@@ -105,6 +115,16 @@ export default {
     }
   },
 
+  computed: {
+    theme () {
+      if (this.darkMode) {
+        return darkTheme
+      } else {
+        return defaultTheme
+      }
+    }
+  },
+
   watch: {
     cols (c) {
       this.$_terminal.resize(c, this.rows)
@@ -114,7 +134,16 @@ export default {
       this.$_terminal.resize(this.cols, r)
     },
 
-    content: 'setContent'
+    content: 'setContent',
+
+    theme: {
+      handler (value) {
+        if (this.$_terminal) {
+          this.$_terminal._setTheme(this.theme)
+        }
+      },
+      immediate: true
+    }
   },
 
   mounted () {
@@ -134,7 +163,7 @@ export default {
       let term = this.$_terminal = new Terminal({
         cols: this.cols,
         rows: this.rows,
-        theme: defaultTheme,
+        theme: this.theme,
         ...this.options
       })
       webLinks.webLinksInit(term, this.handleLink)
@@ -210,6 +239,8 @@ export default {
   v-box()
   align-items stretch
   background $vue-ui-color-light-neutral
+  .vue-ui-dark-mode &
+    background $vue-ui-color-dark
 
   .view
     flex 100% 1 1

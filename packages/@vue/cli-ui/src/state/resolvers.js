@@ -16,6 +16,13 @@ export default {
       }
       cache.writeData({ data })
       return null
+    },
+    darkModeSet: (root, { enabled }, { cache }) => {
+      const data = {
+        darkMode: enabled
+      }
+      cache.writeData({ data })
+      return null
     }
   }
 }

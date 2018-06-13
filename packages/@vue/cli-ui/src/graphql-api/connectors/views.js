@@ -3,6 +3,8 @@ const cwd = require('./cwd')
 // Subs
 const channels = require('../channels')
 
+let currentView
+
 function createViewsSet () {
   // Builtin views
   return [
@@ -116,6 +118,17 @@ function removeBadge ({ viewId, badgeId }, context) {
   }
 }
 
+function open (id, context) {
+  const view = findOne(id)
+  currentView = view
+  const plugins = require('./plugins')
+  plugins.callHook('viewOpen', [{
+    view,
+    cwd: cwd.get()
+  }], context)
+  return true
+}
+
 module.exports = {
   list,
   findOne,
@@ -123,5 +136,7 @@ module.exports = {
   remove,
   update,
   addBadge,
-  removeBadge
+  removeBadge,
+  open,
+  getCurrent: () => currentView
 }

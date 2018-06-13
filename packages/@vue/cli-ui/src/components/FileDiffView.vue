@@ -240,7 +240,6 @@ export default {
 
   .toolbar
     padding $padding-item
-    background $md-white
     h-box()
     align-items center
 
@@ -249,8 +248,10 @@ export default {
 
     .file-count
       padding 3px 6px
-      background darken(@background, 3%)
+      background darken($vue-ui-color-light, 3%)
       border-radius $br
+      .vue-ui-dark-mode &
+        background $vue-ui-color-dark
 
   .list
     flex 100% 1 1

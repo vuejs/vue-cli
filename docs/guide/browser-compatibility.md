@@ -4,7 +4,7 @@
 
 You will notice a `browserslist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by [@babel/preset-env][babel-preset-env] and [autoprefixer][autoprefixer] to automatically determine the JavaScript features that need to be transpiled and the CSS vendor prefixes needed.
 
-See [here](browserslist) for how to specify browser ranges.
+See [here][browserslist] for how to specify browser ranges.
 
 ## Polyfills
 
@@ -42,7 +42,25 @@ See [@babel-preset/env docs](https://new.babeljs.io/docs/en/next/babel-preset-en
 
 ## Modern Mode
 
-> TODO
+With Babel we are able to leverage all the newest language features in ES2015+, but that also means we have to ship transpiled and polyfilled bundles in order to support older browsers. These transpiled bundles are often more verbose than the original native ES2015+ code, and also parse and run slower. Given that today a good majority of the modern browsers have decent support for native ES2015, it is a waste that we have to ship heavier and less efficient code to those browsers just because we have to support older ones.
+
+Vue CLI offers a "Modern Mode" to help you solve this problem. When building for production with the following command:
+
+``` bash
+vue-cli-service build --modern
+```
+
+Vue CLI will produce two versions of your app: one modern bundle targeting modern browsers that support [ES modules](https://jakearchibald.com/2017/es-modules-in-browsers/), and one legacy bundle targeting older browsers that do not.
+
+The cool part though is that there are no special deployment requirements. The generated HTML file automatically employs the techniques discussed in [Phillip Walton's excellent post](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/):
+
+- The modern bundle is loaded with `<script type="module">`, in browsers that support it; they are also preloaded using `<link rel="modulepreload">` instead.
+
+- The legacy bundle is loaded with `<script nomodule>`, which is ignored by browsers that support ES modules.
+
+- A fix for `<script nomodule>` in Safari 10 is also automatically injected.
+
+For a Hello World app, the modern bundle is already 16% smaller. In production, the modern bundle will typically result in significantly faster parsing and evaluation, improving your app's loading performance.
 
 [autoprefixer]: https://github.com/postcss/autoprefixer
 [babel-preset-env]: https://new.babeljs.io/docs/en/next/babel-preset-env.html

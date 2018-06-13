@@ -27,21 +27,17 @@ function findOne (id, context) {
   )
 }
 
-function findFile (config, context) {
-  if (!config.files) {
-    return null
-  }
-
-  if (config.files.package) {
+function findFile (fileDescriptor, context) {
+  if (fileDescriptor.package) {
     const pkg = folders.readPackage(cwd.get(), context)
-    const data = pkg[config.files.package]
+    const data = pkg[fileDescriptor.package]
     if (data) {
       return { type: 'package', path: path.join(cwd.get(), 'package.json') }
     }
   }
 
   for (const type of fileTypes) {
-    const files = config.files[type]
+    const files = fileDescriptor[type]
     if (files) {
       for (const file of files) {
         const resolvedFile = path.resolve(cwd.get(), file)
@@ -53,16 +49,12 @@ function findFile (config, context) {
   }
 }
 
-function getDefaultFile (config, context) {
-  if (!config.files) {
-    return null
-  }
-
-  const keys = Object.keys(config.files)
+function getDefaultFile (fileDescriptor, context) {
+  const keys = Object.keys(fileDescriptor)
   if (keys.length) {
     for (const key of keys) {
       if (key !== 'package') {
-        const file = config.files[key][0]
+        const file = fileDescriptor[key][0]
         return {
           type: key,
           path: path.resolve(cwd.get(), file)
@@ -72,65 +64,88 @@ function getDefaultFile (config, context) {
   }
 }
 
-function readData (config, context) {
-  const file = findFile(config, context)
-  config.file = file
+function readFile (config, fileDescriptor, context) {
+  const file = findFile(fileDescriptor, context)
+  let fileData = {}
   if (file) {
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
-      return pkg[config.files.package]
+      fileData = pkg[config.files.package]
     } else if (file.type === 'js') {
-      return loadModule(file.path, cwd.get(), true)
+      fileData = loadModule(file.path, cwd.get(), true)
     } else {
       const rawContent = fs.readFileSync(file.path, { encoding: 'utf8' })
       if (file.type === 'json') {
-        return JSON.parse(rawContent)
+        fileData = JSON.parse(rawContent)
       } else if (file.type === 'yaml') {
-        return yaml.safeLoad(rawContent)
+        fileData = yaml.safeLoad(rawContent)
       }
     }
   }
-  return {}
+  return {
+    file,
+    fileData
+  }
+}
+
+function readData (config, context) {
+  const data = {}
+  config.foundFiles = {}
+  if (!config.files) return data
+  for (const fileId in config.files) {
+    const fileDescriptor = config.files[fileId]
+    const { file, fileData } = readFile(config, fileDescriptor, context)
+    config.foundFiles[fileId] = file
+    data[fileId] = fileData
+  }
+  return data
+}
+
+function writeFile (config, fileId, data, changedFields, context) {
+  const fileDescriptor = config.files[fileId]
+  let file = findFile(fileDescriptor, context)
+
+  if (!file) {
+    file = getDefaultFile(fileDescriptor, context)
+  }
+
+  if (!file) return
+
+  log('Config write', config.id, data, changedFields, file.path)
+  fs.ensureFileSync(file.path)
+  let rawContent
+  if (file.type === 'package') {
+    const pkg = folders.readPackage(cwd.get(), context)
+    pkg[config.files.package] = data
+    rawContent = JSON.stringify(pkg, null, 2)
+  } else {
+    if (file.type === 'json') {
+      rawContent = JSON.stringify(data, null, 2)
+    } else if (file.type === 'yaml') {
+      rawContent = yaml.safeDump(data)
+    } else if (file.type === 'js') {
+      let source = fs.readFileSync(file.path, { encoding: 'utf8' })
+      if (!source.trim()) {
+        rawContent = `module.exports = ${stringifyJS(data, null, 2)}`
+      } else {
+        const changedData = changedFields.reduce((obj, field) => {
+          obj[field] = data[field]
+          return obj
+        }, {})
+        rawContent = extendJSConfig(changedData, source)
+      }
+    }
+  }
+  fs.writeFileSync(file.path, rawContent, { encoding: 'utf8' })
 }
 
 function writeData ({ config, data, changedFields }, context) {
-  let file = findFile(config, context)
-
-  if (!file) {
-    file = getDefaultFile(config, context)
-  }
-
-  if (file) {
-    log('Config write', config.id, data, changedFields, file.path)
-    fs.ensureFileSync(file.path)
-    let rawContent
-    if (file.type === 'package') {
-      const pkg = folders.readPackage(cwd.get(), context)
-      pkg[config.files.package] = data
-      rawContent = JSON.stringify(pkg, null, 2)
-    } else {
-      if (file.type === 'json') {
-        rawContent = JSON.stringify(data, null, 2)
-      } else if (file.type === 'yaml') {
-        rawContent = yaml.safeDump(data)
-      } else if (file.type === 'js') {
-        let source = fs.readFileSync(file.path, { encoding: 'utf8' })
-        if (!source.trim()) {
-          rawContent = `module.exports = ${stringifyJS(data, null, 2)}`
-        } else {
-          const changedData = changedFields.reduce((obj, field) => {
-            obj[field] = data[field]
-            return obj
-          }, {})
-          rawContent = extendJSConfig(changedData, source)
-        }
-      }
-    }
-    fs.writeFileSync(file.path, rawContent, { encoding: 'utf8' })
+  for (const fileId in data) {
+    writeFile(config, fileId, data[fileId], changedFields[fileId], context)
   }
 }
 
-async function getPrompts (id, context) {
+async function getPromptTabs (id, context) {
   const config = findOne(id, context)
   if (config) {
     const data = readData(config, context)
@@ -139,17 +154,44 @@ async function getPrompts (id, context) {
       config,
       data
     }
-    const configData = await config.onRead({
+
+    // API
+    const onReadData = await config.onRead({
       cwd: cwd.get(),
       data
     })
+
+    let tabs = onReadData.tabs
+    if (!tabs) {
+      tabs = [
+        {
+          id: '__default',
+          label: 'Default',
+          prompts: onReadData.prompts
+        }
+      ]
+    }
     await prompts.reset()
-    configData.prompts.forEach(prompts.add)
-    if (configData.answers) {
-      await prompts.setAnswers(configData.answers)
+    for (const tab of tabs) {
+      tab.prompts = tab.prompts.map(data => prompts.add({
+        ...data,
+        tabId: tab.id
+      }))
+    }
+    if (onReadData.answers) {
+      await prompts.setAnswers(onReadData.answers)
     }
     await prompts.start()
-    return prompts.list()
+
+    plugins.callHook('configRead', [{
+      config,
+      data,
+      onReadData,
+      tabs,
+      cwd: cwd.get()
+    }], context)
+
+    return tabs
   }
   return []
 }
@@ -160,32 +202,35 @@ async function save (id, context) {
     if (current.config === config) {
       const answers = prompts.getAnswers()
       let data = clone(current.data)
-      const changedFields = []
+      const changedFields = {}
+      const getChangedFields = fileId => changedFields[fileId] || (changedFields[fileId] = [])
+
+      // API
       await config.onWrite({
         prompts: prompts.list(),
         answers,
         data: current.data,
-        file: config.file,
+        files: config.foundFiles,
         cwd: cwd.get(),
         api: {
-          assignData: newData => {
-            changedFields.push(...Object.keys(newData))
-            Object.assign(data, newData)
+          assignData: (fileId, newData) => {
+            getChangedFields(fileId).push(...Object.keys(newData))
+            Object.assign(data[fileId], newData)
           },
-          setData: newData => {
+          setData: (fileId, newData) => {
             Object.keys(newData).forEach(key => {
               let field = key
               const dotIndex = key.indexOf('.')
               if (dotIndex !== -1) {
                 field = key.substr(0, dotIndex)
               }
-              changedFields.push(field)
+              getChangedFields(fileId).push(field)
 
               const value = newData[key]
               if (typeof value === 'undefined') {
-                remove(data, key)
+                remove(data[fileId], key)
               } else {
-                set(data, key, value)
+                set(data[fileId], key, value)
               }
             })
           },
@@ -204,7 +249,16 @@ async function save (id, context) {
           }
         }
       })
+
       writeData({ config, data, changedFields }, context)
+
+      plugins.callHook('configWrite', [{
+        config,
+        data,
+        changedFields,
+        cwd: cwd.get()
+      }], context)
+
       current = {}
     }
   }
@@ -222,7 +276,7 @@ function cancel (id, context) {
 module.exports = {
   list,
   findOne,
-  getPrompts,
+  getPromptTabs,
   save,
   cancel
 }

@@ -1,7 +1,9 @@
 const ipc = require('node-ipc')
 
+const defaultId = process.env.VUE_CLI_IPC || 'vue-cli'
+
 exports.IpcMessenger = class IpcMessenger {
-  constructor (id = 'vue-cli') {
+  constructor (id = defaultId) {
     ipc.config.id = this.id = id
     ipc.config.retry = 1500
     ipc.config.silent = true

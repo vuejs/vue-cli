@@ -11,6 +11,8 @@
     <div v-if="ready" class="content">
       <router-view/>
     </div>
+
+    <ProgressScreen progress-id="__plugins__"/>
   </div>
 </template>
 

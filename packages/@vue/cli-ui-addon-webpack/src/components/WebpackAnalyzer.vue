@@ -198,7 +198,8 @@ export default {
 
   methods: {
     getColors (index) {
-      return colors[index % colors.length]
+      const list = colors[this.darkMode ? 'dark' : 'light']
+      return list[index % list.length]
     },
 
     getChunk (id) {
@@ -320,6 +321,8 @@ export default {
     padding $padding-item
     background $vue-ui-color-light-neutral
     border-radius $br
+    .vue-ui-dark-mode &
+      background $vue-ui-color-dark
 
   .content
     display flex

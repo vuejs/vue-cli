@@ -1,58 +1,12 @@
-# UI Plugin Development Guide
-
-This guide will walk you through the development of cli-ui specific features for your vue-cli plugins.
-
-## Plugin Info
-
-When used in the UI, your plugin can show additional information to make it more discoverable and recognizable.
-
-### Logo
-
-You can put a `logo.png` file in the root directory of the folder that will be published on npm. It will be displayed in several places:
- - When searching for a plugin to install
- - In the installed plugin list
-
-![Plugins](/plugins.png)
-
-The logo should be a square non-transparent image (ideally 84x84).
-
-### Discoverability
-
-For better discoverability when a user searches for your plugin, put keywords describing your plugin in the `description` field of the plugin `package.json` file.
-
-Example:
-
-```json
-{
-  "name": "vue-cli-plugin-apollo",
-  "version": "0.7.7",
-  "description": "vue-cli 3 plugin to add Apollo and GraphQL"
-}
-```
-
-You should add the url to the plugin website or repository in the `homepage` or `repository` field so that a 'More info' button will be displayed in your plugin description:
-
-```json
-{
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Akryum/vue-cli-plugin-apollo.git"
-  },
-  "homepage": "https://github.com/Akryum/vue-cli-plugin-apollo#readme"
-}
-```
-
-![Plugin search item](/plugin-search-item.png)
-
-## UI API
+# UI API
 
 The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
 
 ![UI Plugin architecture](/vue-cli-ui-schema.png)
 
-### UI files
+## UI files
 
-Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. It will also try to load a `vue-cli-ui.js` file in the user project root so the UI can be manually extended on a per-project basis (also useful to quickly prototype a plugin).
+Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. It will also try to load a `vue-cli-ui.js` file in the user project root so the UI can be manually extended on a per-project basis (also useful to quickly prototype a plugin). Note that you can also use folders (for example `ui/index.js`).
 
 The file should export a function which gets the api object as argument:
 
@@ -62,9 +16,21 @@ module.exports = api => {
 }
 ```
 
-**⚠️ The files will be reloaded when feetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left.**
+**⚠️ The files will be reloaded when fetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left in the UI.**
 
-### Dev mode
+Here is an example folder structure for a vue-cli plugin using the UI API:
+
+```
+- vue-cli-plugin-test
+  - package.json
+  - index.js
+  - generator.js
+  - prompts.js
+  - ui.js
+  - logo.png
+```
+
+## Dev mode
 
 While building your plugin, you may want to run the cli-ui in Dev mode, so it will output useful logs to you:
 
@@ -72,7 +38,13 @@ While building your plugin, you may want to run the cli-ui in Dev mode, so it wi
 vue ui --dev
 ```
 
-### Project configurations
+Or:
+
+```
+vue ui -D
+```
+
+## Project configurations
 
 ![Configuration ui](/config-ui.png)
 
@@ -93,7 +65,7 @@ api.describeConfig({
 })
 ```
 
-#### Config icon
+### Config icon
 
 It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
 
@@ -107,9 +79,9 @@ api.describeConfig({
 
 If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
 
-#### Config file
+### Config files
 
-By default, a configuration UI might read and write to a configuration file, for example `.eslintrc.js`.
+By default, a configuration UI might read and write to one or more configuration files, for example both `.eslintrc.js` and `vue.config.js`.
 
 You can provide what are the possible files to be detected in the user project:
 
@@ -118,19 +90,24 @@ api.describeConfig({
   /* ... */
   // All possible files for this config
   files: {
-    json: ['.eslintrc', '.eslintrc.json'],
-    js: ['.eslintrc.js'],
-    // Will read from `package.json`
-    package: 'eslintConfig'
+    // eslintrc.js
+    eslint: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      // Will read from `package.json`
+      package: 'eslintConfig'
+    },
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
   },
 })
 ```
 
-Supported types: `json`, `yaml`, `js`, `package`.
+Supported types: `json`, `yaml`, `js`, `package`. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
 
-**⚠️ Currently, only 1 file can be read and written to at a time.**
-
-#### Display config prompts
+### Display config prompts
 
 Use the `onRead` hook to return a list of prompts to be displayed for the configuration:
 
@@ -149,14 +126,132 @@ Those prompts will be displayed in the configuration details pane.
 
 See [Prompts](#prompts) for more info.
 
-#### Save config changes
+The `data` object contains the JSON result of each config file content.
+
+For example, let's say the user has the following `vue.config.js` in his project:
+
+```js
+module.exports = {
+  lintOnSave: false
+}
+```
+
+We declare the config file in our plugin like this:
+
+```js
+api.describeConfig({
+  /* ... */
+  // All possible files for this config
+  files: {
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
+  },
+})
+```
+
+Then the `data` object will be:
+
+```js
+{
+  // File
+  vue: {
+    // File data
+    lintOnSave: false
+  }
+}
+```
+
+Multiple files example: if we add the following `eslintrc.js` file in the user project:
+
+```js
+module.exports = {
+  root: true,
+  extends: [
+    'plugin:vue/essential',
+    '@vue/standard'
+  ]
+}
+```
+
+And change the `files` option in our plugin to this:
+
+```js
+api.describeConfig({
+  /* ... */
+  // All possible files for this config
+  files: {
+    // eslintrc.js
+    eslint: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      // Will read from `package.json`
+      package: 'eslintConfig'
+    },
+    // vue.config.js
+    vue: {
+      js: ['vue.config.js']
+    }
+  },
+})
+```
+
+Then the `data` object will be:
+
+```js
+{
+  eslint: {
+    root: true,
+    extends: [
+      'plugin:vue/essential',
+      '@vue/standard'
+    ]
+  },
+  vue: {
+    lintOnSave: false
+  }
+}
+```
+
+### Configuration tabs
+
+You can organize the prompts into several tabs:
+
+```js
+api.describeConfig({
+  /* ... */
+  onRead: ({ data, cwd }) => ({
+    tabs: [
+      {
+        id: 'tab1',
+        label: 'My tab',
+        // Optional
+        icon: 'application_settings',
+        prompts: [
+          // Prompt objects
+        ]
+      },
+      {
+        id: 'tab2',
+        label: 'My other tab',
+        prompts: [
+          // Prompt objects
+        ]
+      }
+    ]
+  })
+})
+```
+
+### Save config changes
 
 Use the `onWrite` hook to write the data to the configuration file (or execute any nodejs code):
 
 ```js
 api.describeConfig({
   /* ... */
-  onWrite: ({ prompts, answers, data, file, cwd, api }) => {
+  onWrite: ({ prompts, answers, data, files, cwd, api }) => {
     // ...
   }
 })
@@ -166,8 +261,8 @@ Arguments:
 
 - `prompts`: current prompts runtime objects (see below)
 - `answers`: answers data from the user inputs
-- `data`: read-only initial data read from the file
-- `file`: descriptor of the found file (`{ type: 'json', path: '...' }`)
+- `data`: read-only initial data read from the config files
+- `files`: descriptors of the found files (`{ type: 'json', path: '...' }`)
 - `cwd`: current working directory
 - `api`: `onWrite API` (see below)
 
@@ -190,6 +285,7 @@ Prompts runtime objects:
   // true if changed by user
   valueChanged: false,
   error: null,
+  tabId: null,
   // Original inquirer prompt object
   raw: data
 }
@@ -197,8 +293,8 @@ Prompts runtime objects:
 
 `onWrite` API:
 
-- `assignData(newData)`: use `Object.assign` to update the config data before writing.
-- `setData(newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
+- `assignData(fileId, newData)`: use `Object.assign` to update the config data before writing.
+- `setData(fileId, newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
 - `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provided (for example `JSON.parse`).
 
 Example (from the ESLint plugin):
@@ -213,12 +309,12 @@ api.describeConfig({
     for (const prompt of prompts) {
       result[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
     }
-    api.setData(result)
+    api.setData('eslint', result)
   }
 })
 ```
 
-### Project tasks
+## Project tasks
 
 ![Tasks ui](/tasks-ui.png)
 
@@ -236,7 +332,7 @@ api.describeTask({
 })
 ```
 
-#### Task icon
+### Task icon
 
 It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
 
@@ -250,7 +346,7 @@ api.describeTask({
 
 If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
 
-#### Tasks parameters
+### Tasks parameters
 
 You can add prompts to modify the command arguments. They will be displayed in a 'Parameters' modal.
 
@@ -294,7 +390,7 @@ api.describeTask({
 
 See [Prompts](#prompts) for more info.
 
-#### Task hooks
+### Task hooks
 
 Several hooks are available:
 
@@ -328,7 +424,7 @@ api.describeTask({
 })
 ```
 
-#### Task views
+### Task views
 
 You can display custom views in the task details pane using the `ClientAddon` API:
 
@@ -358,7 +454,7 @@ api.describeTask({
 See [Client addon](#client-addon) for more info.
 
 
-#### Add new tasks
+### Add new tasks
 
 You can also add entirely new tasks which aren't in the `package.json` scripts with `api.addTask` instead of `api.describeTask`. Those tasks will only appear in the cli UI.
 
@@ -386,7 +482,7 @@ api.addTask({
 
 **⚠️ The `command` will run a node context. This means you can call node bin commands like you would normally do in the `package.json` scripts.**
 
-### Prompts
+## Prompts
 
 The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) objects.
 
@@ -410,17 +506,101 @@ In addition to those, the UI supports special types that only works with it:
 
 - `color`: displays a color picker.
 
-#### Prompts for invocation
+### Switch example
+
+```js
+{
+  name: 'open',
+  type: 'confirm',
+  default: false,
+  description: 'Open the app in the browser'
+}
+```
+
+### Select example
+
+```js
+{
+  name: 'mode',
+  type: 'list',
+  default: 'development',
+  choices: [
+    {
+      name: 'Development mode',
+      value: 'development'
+    },
+    {
+      name: 'Production mode',
+      value: 'production'
+    },
+    {
+      name: 'Test mode',
+      value: 'test'
+    }
+  ],
+  description: 'Build mode',
+  link: 'https://link-to-docs'
+}
+```
+
+### Input example
+
+```js
+{
+  name: 'host',
+  type: 'input',
+  default: '0.0.0.0',
+  description: 'Host for the development server'
+}
+```
+
+### Checkbox example
+
+Displays multiple switches.
+
+```js
+{
+  name: 'lintOn',
+  message: 'Pick additional lint features:',
+  when: answers => answers.features.includes('linter'),
+  type: 'checkbox',
+  choices: [
+    {
+      name: 'Lint on save',
+      value: 'save',
+      checked: true
+    },
+    {
+      name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
+      value: 'commit'
+    }
+  ]
+}
+```
+
+### Color picker example
+
+```js
+{
+  name: 'themeColor',
+  type: 'color',
+  message: 'Theme color',
+  description: 'This is used to change the system UI color around the app',
+  default: '#4DBA87'
+}
+```
+
+### Prompts for invocation
 
 In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
 
-**⚠️ Currently, the inquirer types which aren't supported (see above) whill not work properly in the UI.**
+**⚠️ Currently, the inquirer types which aren't supported (see above) will not work properly in the UI.**
 
-### Client addon
+## Client addon
 
 A Client addon is a JS bundle which is dynamically loaded into the cli-ui. It is useful to load custom components and routes.
 
-#### Create a client addon
+### Create a client addon
 
 The recommended way to create a Client addon is by creating a new project using vue-cli 3. You can either do this in a subfolder of your plugin or in a different npm package.
 
@@ -459,7 +639,7 @@ Then modify the `.eslintrc.json` file to add some allowed global objects:
 
 You can now run the `serve` script in development and the `build` one when you are ready to publish your plugin.
 
-#### ClientAddonApi
+### ClientAddonApi
 
 Open the `main.js` file in the client addon sources and remove all the code.
 
@@ -502,7 +682,7 @@ locales.keys().forEach(key => {
 The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
 
 In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent. You can also translate the strings with [vue-i18n](https://github.com/kazupon/vue-i18n) which is included.
-#### Register the client addon
+### Register the client addon
 
 Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
 
@@ -516,7 +696,7 @@ api.addClientAddon({
 
 This will use the nodejs `require.resolve` API to find the folder and serve the `index.js` file built from the client addon.
 
-Or specify an url when developping the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
+Or specify an url when developing the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
 
 ```js
 // Useful for dev
@@ -528,7 +708,7 @@ api.addClientAddon({
 })
 ```
 
-#### Use the client addon
+### Use the client addon
 
 You can now use the client addon in the views. For example, you can specify a view in a described task:
 
@@ -567,7 +747,7 @@ ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 
 ![Task view example](/task-view.png)
 
-### Custom views
+## Custom views
 
 You can add a new view below the standard 'Project plugins', 'Project configuration' and 'Project tasks' ones using the `api.addView` method:
 
@@ -607,7 +787,7 @@ ClientAddonApi.addRoutes('vue-webpack', [
 
 ![Custom view example](/custom-view.png)
 
-### Shared data
+## Shared data
 
 Use Shared data to communicate info with custom components in an easy way.
 
@@ -697,7 +877,7 @@ export default {
 
 This is very usefull if you create a settings component for example.
 
-### Plugin actions
+## Plugin actions
 
 Plugin actions are calls sent between the cli-ui (browser) and plugins (nodejs).
 
@@ -755,7 +935,7 @@ export default {
 }
 ```
 
-### Inter-process communication (IPC)
+## Inter-process communication (IPC)
 
 IPC stands for Inter-Process Communication. This system allows you to easily send messages from child processes (for example, tasks!). And it's pretty fast and lightweight.
 
@@ -821,7 +1001,7 @@ api.ipcSend({
 })
 ```
 
-### Local storage
+## Local storage
 
 A plugin can save and load data from the local [lowdb](https://github.com/typicode/lowdb) database used by the ui server.
 
@@ -842,52 +1022,49 @@ api.db.get('posts')
 const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
 
-### Localization
+## Notification
 
-You can put locale files compatible with [vue-i18n](https://github.com/kazupon/vue-i18n) in a `locales` folder at the root of your plugin. They will be automatically loaded into the client when the project is opened. You can then use `$t` to translate strings in your components and other vue-i18n helpers. Also, the strings used in the UI API (like `describeTask`) will go through vue-i18n as well to you can localize them.
-
-Example `locales` folder:
-
-```
-vue-cli-plugin/locales/en.json
-vue-cli-plugin/locales/fr.json
-```
-
-Example usage in API:
+You can display notifications using the user OS notification system:
 
 ```js
-api.describeConfig({
-  // vue-i18n path
-  description: 'my-plugin.config.foo'
+api.notify({
+  title: 'Some title',
+  message: 'Some message',
+  icon: 'path-to-icon.png'
 })
 ```
 
-Example usage in components:
+There are some builtin icons:
 
-```html
-<VueButton>{{ $t('my-plugin.actions.bar') }}</VueButton>
-```
+- `'done'`
+- `'error'`
 
-You can also load the locale files in a client addon if you prefer, using the `ClientAddonApi`:
+## Progress screen
+
+You can display a progress screen with some text and a progress bar:
 
 ```js
-// Load the locale files (uses vue-i18n)
-const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
-locales.keys().forEach(key => {
-  const locale = key.match(/([a-z0-9]+)\./i)[1]
-  ClientAddonApi.addLocalization(locale, locales(key))
+api.setProgress({
+  status: 'Upgrading...',
+  error: null,
+  info: 'Step 2 of 4',
+  progress: 0.4 // from 0 to 1, -1 means hidden progress bar
 })
 ```
 
-#### Help translate the main UI!
+Remove the progress screen:
 
-See [how to help translating the main UI](./ui-localization.md).
+```js
+api.removeProgress()
+```
 
-### Hooks
+## Hooks
 
 Hooks allows to react to certain cli-ui events.
 
-`onProjectOpen`: Called when the plugin is loaded for the first time for the current project.
+### onProjectOpen
+
+Called when the plugin is loaded for the first time for the current project.
 
 ```js
 api.onProjectOpen((project, previousProject) => {
@@ -895,7 +1072,9 @@ api.onProjectOpen((project, previousProject) => {
 })
 ```
 
-`onPluginReload`: Called when the plugin is reloaded.
+### onPluginReload
+
+Called when the plugin is reloaded.
 
 ```js
 api.onPluginReload((project) => {
@@ -903,7 +1082,161 @@ api.onPluginReload((project) => {
 })
 ```
 
-### Public static files
+### onConfigRead
+
+Called when a configuration screen is open or refreshed.
+
+```js
+api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
+  console.log(config.id)
+})
+```
+
+### onConfigWrite
+
+Called when the user saves in a configuration screen.
+
+```js
+api.onConfigWrite(({ config, data, changedFields, cwd }) => {
+  // ...
+})
+```
+
+### onTaskOpen
+
+Called when the user open a task details pane.
+
+```js
+api.onTaskOpen(({ task, cwd }) => {
+  console.log(task.id)
+})
+```
+
+### onTaskRun
+
+Called when the user run a task.
+
+```js
+api.onTaskRun(({ task, args, child, cwd }) => {
+  // ...
+})
+```
+
+### onTaskExit
+
+Called when a task exists. It can be called both called on success or failure.
+
+```js
+api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
+  // ...
+})
+```
+
+### onViewOpen
+
+Called when the users open a view (like 'Plugins', 'Configurations' or 'Tasks').
+
+```js
+api.onViewOpen(({ view, cwd }) => {
+  console.log(view.id)
+})
+```
+
+## Suggestions
+
+Suggestions are buttons meant to propose an action to the user. They are displayed in the top bar. For example, we can have a button that suggest installing vue-router if the package isn't detected in the app.
+
+```js
+api.addSuggestion({
+  id: 'my-suggestion',
+  type: 'action', // Required (more types in the future)
+  label: 'Add vue-router',
+  // This will be displayed in a details modal
+  message: 'A longer message for the modal',
+  link: 'http://link-to-docs-in-the-modal',
+  // Optional image
+  image: '/_plugin/my-package/screenshot.png',
+  // Function called when suggestion is activated by user
+  async handler () {
+    // ...
+    return {
+      // By default removes the button
+      keep: false
+    }
+  }
+})
+```
+
+![UI Suggestion](/suggestion.png)
+
+Then you can remove the suggestion:
+
+```js
+api.removeSuggestion('my-suggestion')
+```
+
+You can also open a page instead when the user activates the suggestion with `actionLink`:
+
+```js
+api.addSuggestion({
+  id: 'my-suggestion',
+  type: 'action', // Required 
+  label: 'Add vue-router',
+  // Open a new tab
+  actionLink: 'https://vuejs.org/'
+})
+```
+
+Typically, you will use hooks to display the suggestion in the right context:
+
+```js
+const ROUTER = 'vue-router-add'
+
+api.onViewOpen(({ view }) => {
+  if (view.id === 'vue-project-plugins') {
+    if (!api.hasPlugin('vue-router')) {
+      api.addSuggestion({
+        id: ROUTER,
+        type: 'action',
+        label: 'cli-service.suggestions.vue-router-add.label',
+        message: 'cli-service.suggestions.vue-router-add.message',
+        link: 'https://router.vuejs.org/',
+        async handler () {
+          await install(api, 'vue-router')
+        }
+      })
+    }
+  } else {
+    api.removeSuggestion(ROUTER)
+  }
+})
+```
+
+In this example we only display the vue-router suggestion in the plugins view and if the project doesn't have vue-router installed already.
+
+Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
+
+## Other methods
+
+### hasPlugin
+
+Returns `true` if the project uses the plugin.
+
+```js
+api.hasPlugin('eslint')
+api.hasPlugin('apollo')
+api.hasPlugin('vue-cli-plugin-apollo')
+```
+
+### getCwd
+
+Retrieve the current working directory.
+
+```js
+api.getCwd()
+```
+
+## Public static files
 
 You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).
 

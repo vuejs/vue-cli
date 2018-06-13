@@ -49,18 +49,26 @@
       </div>
 
       <div
+        class="section action dark-mode"
+        v-tooltip="$t('components.status-bar.dark-mode')"
+        @click="toggleDarkMode()"
+      >
+        <VueIcon icon="invert_colors"/>
+      </div>
+
+      <div
         class="section action bug-report"
+        v-tooltip="$t('components.status-bar.report-bug')"
         @click="onBugReportClick()"
       >
         <VueIcon icon="bug_report"/>
-        <span>{{ $t('components.status-bar.report-bug') }}</span>
       </div>
       <div
         class="section action translate"
+        v-tooltip="$t('components.status-bar.translate')"
         @click="onTranslateClick()"
       >
         <VueIcon icon="g_translate"/>
-        <span>{{ $t('components.status-bar.translate') }}</span>
       </div>
     </div>
   </div>
@@ -70,6 +78,7 @@
 import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
 import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
+import DARK_MODE_SET from '../graphql/darkModeSet.gql'
 
 let lastRoute
 
@@ -93,6 +102,10 @@ export default {
         }
       }
     }
+  },
+
+  created () {
+    this.loadDarkMode()
   },
 
   methods: {
@@ -130,10 +143,35 @@ export default {
 
     onTranslateClick () {
       const win = window.open(
-        'https://github.com/vuejs/vue-cli/tree/dev/docs/localization.md',
+        'https://cli.vuejs.org/dev-guide/ui-plugin-dev.html#localization',
         '_blank'
       )
       win.focus()
+    },
+
+    loadDarkMode () {
+      const raw = localStorage.getItem('vue-ui-dark-mode')
+      this.applyDarkMode(raw === 'true')
+    },
+
+    async applyDarkMode (enabled) {
+      localStorage.setItem('vue-ui-dark-mode', enabled.toString())
+      const el = document.getElementsByTagName('html')[0]
+      if (enabled) {
+        el.classList.add('vue-ui-dark-mode')
+      } else {
+        el.classList.remove('vue-ui-dark-mode')
+      }
+      await this.$apollo.mutate({
+        mutation: DARK_MODE_SET,
+        variables: {
+          enabled
+        }
+      })
+    },
+
+    toggleDarkMode () {
+      this.applyDarkMode(!this.darkMode)
     }
   }
 }
@@ -146,13 +184,17 @@ export default {
   position relative
   z-index 1
   box-shadow 0 -2px 10px rgba(black, .05)
+  .vue-ui-dark-mode &
+    box-shadow 0 -2px 10px rgba(black, .2)
 
   .content
     h-box()
     align-items center
     background $vue-ui-color-light
-    font-size $padding-item
+    font-size 12px
     height 28px
+    .vue-ui-dark-mode &
+      background $vue-ui-color-darker
 
   .section
     h-box()
@@ -165,12 +207,16 @@ export default {
     &:hover
       opacity 1
       background lighten($vue-ui-color-light-neutral, 30%)
+      .vue-ui-dark-mode &
+        background $vue-ui-color-dark
 
     > .vue-ui-icon + *
       margin-left 4px
 
     .label
       color lighten($vue-ui-color-dark, 20%)
+      .vue-ui-dark-mode &
+        color lighten($vue-ui-color-dark-neutral, 20%)
 
     &.action
       user-select none

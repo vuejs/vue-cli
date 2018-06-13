@@ -2,6 +2,9 @@
 module.exports = api => {
   if (!process.env.VUE_CLI_UI_DEV) return
 
+  console.log('has(eslint)', api.hasPlugin('eslint'))
+  console.log('has(typescript)', api.hasPlugin('typescript'))
+
   // Add dynamic components in dev mode (webpack dashboard & analyzer)
   api.addClientAddon({
     id: 'vue-webpack',
@@ -12,8 +15,8 @@ module.exports = api => {
   api.addView({
     id: 'vue-webpack-test-view',
     name: 'test-webpack-route',
-    icon: 'pets',
-    // icon: 'http://localhost:4000/_plugin/%40vue%2Fcli-service/webpack-icon.svg',
+    // icon: 'pets',
+    icon: 'http://localhost:4000/public/webpack-logo.png',
     tooltip: 'Test view from webpack addon'
   })
 
@@ -35,5 +38,25 @@ module.exports = api => {
     }, 1000)
 
     return 'meow'
+  })
+
+  // Hooks
+  api.onViewOpen(({ view }) => {
+    console.log('onViewOpen', view.id)
+  })
+  api.onTaskOpen(({ task }) => {
+    console.log('onTaskOpen', task.id)
+  })
+  api.onTaskRun(({ task }) => {
+    console.log('onTaskRun', task.id)
+  })
+  api.onTaskExit(({ task }) => {
+    console.log('onTaskExit', task.id)
+  })
+  api.onConfigRead(({ config }) => {
+    console.log('onConfigRead', config.id)
+  })
+  api.onConfigWrite(({ config }) => {
+    console.log('onConfigWrite', config.id)
   })
 }

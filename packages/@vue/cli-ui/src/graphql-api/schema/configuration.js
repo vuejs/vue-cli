@@ -20,14 +20,21 @@ type Configuration implements DescribedEntity {
   description: String
   link: String
   icon: String
-  prompts: [Prompt]
   plugin: Plugin
+  tabs: [ConfigurationTab]!
+}
+
+type ConfigurationTab {
+  id: ID!
+  label: String!
+  icon: String
+  prompts: [Prompt]
 }
 `
 
 exports.resolvers = {
   Configuration: {
-    prompts: (configuration, args, context) => configurations.getPrompts(configuration.id, context),
+    tabs: (configuration, args, context) => configurations.getPromptTabs(configuration.id, context),
     plugin: (configuration, args, context) => plugins.findOne(configuration.pluginId, context)
   },
 

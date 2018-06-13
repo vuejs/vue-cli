@@ -5,23 +5,11 @@ const cloneDeep = require('lodash.clonedeep')
 const { error } = require('@vue/cli-shared-utils/lib/logger')
 const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
 const { exit } = require('@vue/cli-shared-utils/lib/exit')
-
-const xdgConfigPath = () => {
-  const xdgConfigHome = process.env.XDG_CONFIG_HOME
-  if (xdgConfigHome) {
-    const rcDir = path.join(xdgConfigHome, 'vue')
-    if (!fs.existsSync(rcDir)) {
-      fs.mkdirSync(rcDir, 0o700)
-    }
-    return path.join(rcDir, '.vuerc')
-  }
-
-  return undefined
-}
+const { xdgConfigPath } = require('./util/xdgConfig')
 
 const rcPath = exports.rcPath = (
   process.env.VUE_CLI_CONFIG_PATH ||
-  xdgConfigPath() ||
+  xdgConfigPath('.vuerc') ||
   path.join(os.homedir(), '.vuerc')
 )
 

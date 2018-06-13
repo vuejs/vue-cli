@@ -48,17 +48,43 @@ module.exports = (context, options = {}) => {
     decoratorsLegacy
   } = options
 
-  const targets = process.env.VUE_CLI_BABEL_TARGET_NODE
-    ? { node: 'current' }
-    : rawTargets
+  // resolve targets
+  let targets
+  if (process.env.VUE_CLI_BABEL_TARGET_NODE) {
+    // running tests in Node.js
+    targets = { node: 'current' }
+  } else if (process.env.VUE_CLI_BUILD_TARGET === 'wc' || process.env.VUE_CLI_BUILD_TARGET === 'wc-async') {
+    // targeting browsers that at least support ES2015 classes
+    // https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/plugins.json#L52-L61
+    targets = {
+      browsers: [
+        'Chrome >= 49',
+        'Firefox >= 45',
+        'Safari >= 10',
+        'Edge >= 13',
+        'iOS >= 10',
+        'Electron >= 0.36'
+      ]
+    }
+  } else if (process.env.VUE_CLI_MODERN_BUILD) {
+    // targeting browsers that support <script type="module">
+    targets = { esmodules: true }
+  } else {
+    targets = rawTargets
+  }
 
   // included-by-default polyfills. These are common polyfills that 3rd party
   // dependencies may rely on (e.g. Vuex relies on Promise), but since with
   // useBuiltIns: 'usage' we won't be running Babel on these deps, they need to
   // be force-included.
   let polyfills
-  const buildTarget = process.env.VUE_CLI_TARGET || 'app'
-  if (buildTarget === 'app' && useBuiltIns === 'usage' && !process.env.VUE_CLI_BABEL_TARGET_NODE) {
+  const buildTarget = process.env.VUE_CLI_BUILD_TARGET || 'app'
+  if (
+    buildTarget === 'app' &&
+    useBuiltIns === 'usage' &&
+    !process.env.VUE_CLI_BABEL_TARGET_NODE &&
+    !process.env.VUE_CLI_MODERN_BUILD
+  ) {
     polyfills = getPolyfills(targets, userPolyfills || defaultPolyfills, {
       ignoreBrowserslistConfig,
       configPath

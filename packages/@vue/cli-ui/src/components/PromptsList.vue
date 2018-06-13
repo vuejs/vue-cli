@@ -83,4 +83,6 @@ export default {
   font-size 1.6em
   font-weight lighter
   color $vue-ui-color-accent
+  .vue-ui-dark-mode &
+    color lighten($vue-ui-color-accent, 60%)
 </style>

@@ -1,7 +1,5 @@
-const path = require('path')
 const execa = require('execa')
 const terminate = require('terminate')
-const notifier = require('node-notifier')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -14,6 +12,7 @@ const views = require('./views')
 // Utils
 const { getCommand } = require('../utils/command')
 const { log } = require('../utils/logger')
+const { notify } = require('../utils/notification')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -281,23 +280,32 @@ async function run (id, context) {
 
     task.child = child
 
-    child.stdout.on('data', buffer => {
+    const outPipe = logPipe(queue => {
       addLog({
         taskId: task.id,
         type: 'stdout',
-        text: buffer.toString()
+        text: queue
       }, context)
     })
+    child.stdout.on('data', buffer => {
+      outPipe.add(buffer.toString())
+    })
 
-    child.stderr.on('data', buffer => {
+    const errPipe = logPipe(queue => {
       addLog({
         taskId: task.id,
         type: 'stderr',
-        text: buffer.toString()
+        text: queue
       }, context)
+    })
+    child.stderr.on('data', buffer => {
+      errPipe.add(buffer.toString())
     })
 
     const onExit = async (code, signal) => {
+      outPipe.flush()
+      errPipe.flush()
+
       log('Task exit', command, args, 'code:', code, 'signal:', signal)
 
       // Plugin API
@@ -329,10 +337,10 @@ async function run (id, context) {
           message: `Task ${task.id} ended with error code ${code}`,
           type: 'error'
         }, context)
-        notifier.notify({
+        notify({
           title: `Task error`,
           message: `Task ${task.id} ended with error code ${code}`,
-          icon: path.resolve(__dirname, '../../assets/error.png')
+          icon: 'error'
         })
       } else {
         updateOne({
@@ -343,12 +351,21 @@ async function run (id, context) {
           message: `Task ${task.id} completed`,
           type: 'done'
         }, context)
-        notifier.notify({
+        notify({
           title: `Task completed`,
           message: `Task ${task.id} completed`,
-          icon: path.resolve(__dirname, '../../assets/done.png')
+          icon: 'done'
         })
       }
+
+      plugins.callHook('taskExit', [{
+        task,
+        args,
+        child,
+        cwd: cwd.get(),
+        signal,
+        code
+      }], context)
     }
 
     child.on('exit', onExit)
@@ -361,6 +378,13 @@ async function run (id, context) {
         cwd: cwd.get()
       })
     }
+
+    plugins.callHook('taskRun', [{
+      task,
+      args,
+      child,
+      cwd: cwd.get()
+    }], context)
   }
   return task
 }
@@ -395,6 +419,38 @@ function clearLogs (id, context) {
   return task
 }
 
+function open (id, context) {
+  const task = findOne(id, context)
+  plugins.callHook('taskOpen', [{
+    task,
+    cwd: cwd.get()
+  }], context)
+  return true
+}
+
+function logPipe (action) {
+  let queue = ''
+  let size = 0
+  let time = Date.now()
+
+  return {
+    add: (string) => {
+      queue += string
+      size++
+
+      if (size === 20 || Date.now() > time + 100) {
+        action(queue)
+        queue = ''
+        size = 0
+        time = Date.now()
+      }
+    },
+    flush: () => {
+      if (size) action(queue)
+    }
+  }
+}
+
 module.exports = {
   list,
   findOne,
@@ -402,5 +458,6 @@ module.exports = {
   run,
   stop,
   updateOne,
-  clearLogs
+  clearLogs,
+  open
 }

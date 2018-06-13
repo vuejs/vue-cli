@@ -120,6 +120,8 @@ export default {
   grid-template-columns 1fr
   grid-template-rows auto 1fr
   grid-template-areas "toolbar" "logs"
+  .vue-ui-dark-mode &
+    background $vue-ui-color-darker
 
   .toolbar
     grid-area toolbar

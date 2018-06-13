@@ -36,7 +36,7 @@
 
         <div
           class="command"
-          v-tooltip="$t('views.project-task-details.command')"
+          v-tooltip="`${$t('views.project-task-details.command')}:<br><code>${task.command}</code>`"
         >
           {{ task.command }}
         </div>
@@ -84,7 +84,7 @@
           :rows="24"
           auto-size
           :options="{
-            scrollback: 1000,
+            scrollback: 5000,
             disableStdin: true,
             useFlowControl: true
           }"
@@ -106,7 +106,7 @@
     <VueModal
       v-if="showParameters"
       :title="$t('views.project-task-details.parameters')"
-      class="medium"
+      class="medium anchor"
       @close="showParameters = false"
     >
       <div class="default-body">
@@ -141,6 +141,7 @@ import TASK_RUN from '../graphql/taskRun.gql'
 import TASK_STOP from '../graphql/taskStop.gql'
 import TASK_LOGS_CLEAR from '../graphql/taskLogsClear.gql'
 import TASK_LOG_ADDED from '../graphql/taskLogAdded.gql'
+import TASK_OPEN from '../graphql/taskOpen.gql'
 
 export default {
   name: 'ProjectTaskDetails',
@@ -251,10 +252,24 @@ export default {
       this.showParameters = false
       this.currentView = '_output'
       this.$_init = false
+      this.open()
     }
   },
 
+  mounted () {
+    this.open()
+  },
+
   methods: {
+    open () {
+      this.$apollo.mutate({
+        mutation: TASK_OPEN,
+        variables: {
+          id: this.id
+        }
+      })
+    },
+
     runTask () {
       this.$apollo.mutate({
         mutation: TASK_RUN,
@@ -305,11 +320,15 @@ export default {
   font-size 12px
   background $vue-ui-color-light-neutral
   color $vue-ui-color-dark
-  padding 0 16px
+  padding 10px 16px
   height 32px
-  h-box()
-  box-center()
   border-radius $br
+  max-width 20vw
+  ellipsis()
+  box-sizing border-box
+  .vue-ui-dark-mode &
+    background $vue-ui-color-dark
+    color $vue-ui-color-light
 
 .content
   flex auto 1 1
@@ -342,12 +361,16 @@ export default {
     margin-right 4px
     >>> svg
       fill $vue-ui-color-dark
+      .vue-ui-dark-mode &
+        fill $vue-ui-color-light-neutral
 
   .name
     font-size 22px
     color $vue-ui-color-dark
     position relative
     top -1px
+    .vue-ui-dark-mode &
+      color $vue-ui-color-light-neutral
 
   .description
     color $color-text-light

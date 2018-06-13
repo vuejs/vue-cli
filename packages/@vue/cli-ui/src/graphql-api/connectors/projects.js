@@ -7,7 +7,6 @@ const { getFeatures } = require('@vue/cli/lib/util/features')
 const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
-const notifier = require('node-notifier')
 // Connectors
 const progress = require('./progress')
 const cwd = require('./cwd')
@@ -19,6 +18,7 @@ const locales = require('./locales')
 const getContext = require('../context')
 // Utils
 const { log } = require('../utils/logger')
+const { notify } = require('../utils/notification')
 
 const PROGRESS_ID = 'project-create'
 
@@ -276,9 +276,17 @@ async function create (input, context) {
     answers.packageManager = input.packageManager
 
     // Config files
-    if ((index = answers.features.includes('use-config-files')) !== -1) {
+    if ((index = answers.features.indexOf('use-config-files')) !== -1) {
       answers.features.splice(index, 1)
       answers.useConfigFiles = 'files'
+    }
+
+    const createOptions = {}
+    // Git
+    if (input.enableGit && input.gitCommitMessage) {
+      createOptions.git = input.gitCommitMessage
+    } else {
+      createOptions.git = input.enableGit
     }
 
     // Preset
@@ -306,13 +314,13 @@ async function create (input, context) {
     })
 
     // Create
-    await creator.create({ git: true }, preset)
+    await creator.create(createOptions, preset)
     removeCreator()
 
-    notifier.notify({
+    notify({
       title: `Project created`,
       message: `Project ${cwd.get()} created`,
-      icon: path.resolve(__dirname, '../../assets/done.png')
+      icon: 'done'
     })
 
     return importProject({

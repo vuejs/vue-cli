@@ -9,6 +9,10 @@ extend type Query {
   views: [View]
 }
 
+extend type Mutation {
+  viewOpen (id: ID!): Boolean
+}
+
 extend type Subscription {
   viewAdded: View
   viewRemoved: View
@@ -45,6 +49,10 @@ enum ViewBadgeType {
 exports.resolvers = {
   Query: {
     views: (root, args, context) => views.list(context)
+  },
+
+  Mutation: {
+    viewOpen: (root, { id }, context) => views.open(id, context)
   },
 
   Subscription: {
