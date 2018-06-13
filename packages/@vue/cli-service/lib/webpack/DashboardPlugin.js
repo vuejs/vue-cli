@@ -9,7 +9,7 @@ const webpack = require('webpack')
 const { IpcMessenger } = require('@vue/cli-shared-utils')
 const { analyzeBundle } = require('./analyzeBundle')
 
-const ID = 'DashboardPlugin'
+const ID = 'vue-cli-dashboard-plugin'
 const ONE_SECOND = 1000
 const FILENAME_QUERY_REGEXP = /\?.*$/
 

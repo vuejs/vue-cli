@@ -9,6 +9,14 @@ const buildModes = {
   'wc-async': 'web component (async)'
 }
 
+const modifyConfig = (config, fn) => {
+  if (Array.isArray(config)) {
+    config.forEach(c => fn(c))
+  } else {
+    fn(config)
+  }
+}
+
 module.exports = (api, options) => {
   api.registerCommand('build', {
     description: 'build for production',
@@ -19,6 +27,8 @@ module.exports = (api, options) => {
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
       '--no-clean': `do not remove the dist directory before building the project`,
+      '--report': `generate report.html to help analyze bundle content`,
+      '--report-json': 'generate report.json to help analyze bundle content',
       '--watch': `watch for changes`
     }
   }, async (args) => {
@@ -43,8 +53,8 @@ module.exports = (api, options) => {
         modern: true,
         clean: false
       }), api, options)
-    } else {
       delete process.env.VUE_CLI_MODERN_BUILD
+    } else {
       return build(args, api, options)
     }
   })
@@ -83,6 +93,7 @@ async function build (args, api, options) {
   }
 
   const targetDir = api.resolve(args.dest || options.outputDir)
+  const isLegacyBuild = args.target === 'app' && options.modernMode && !args.modern
 
   // resolve raw webpack config
   process.env.VUE_CLI_BUILD_TARGET = args.target
@@ -101,14 +112,9 @@ async function build (args, api, options) {
   // apply inline dest path after user configureWebpack hooks
   // so it takes higher priority
   if (args.dest) {
-    const applyDest = config => {
+    modifyConfig(webpackConfig, config => {
       config.output.path = targetDir
-    }
-    if (Array.isArray(webpackConfig)) {
-      webpackConfig.forEach(applyDest)
-    } else {
-      applyDest(webpackConfig)
-    }
+    })
   }
 
   // grab the actual output path and check for common mis-configuration
@@ -118,40 +124,59 @@ async function build (args, api, options) {
       : webpackConfig
   ).output.path
 
-  if (args.watch) {
-    webpackConfig.watch = true
-  }
-
   if (!args.dest && actualTargetDir !== api.resolve(options.outputDir)) {
     // user directly modifies output.path in configureWebpack or chainWebpack.
     // this is not supported because there's no way for us to give copy
     // plugin the correct value this way.
-    console.error(chalk.red(
+    throw new Error(
       `\n\nConfiguration Error: ` +
       `Avoid modifying webpack output.path directly. ` +
       `Use the "outputDir" option instead.\n`
-    ))
-    process.exit(1)
+    )
   }
 
   if (actualTargetDir === api.service.context) {
-    console.error(chalk.red(
+    throw new Error(
       `\n\nConfiguration Error: ` +
       `Do not set output directory to project root.\n`
-    ))
-    process.exit(1)
+    )
   }
 
-  if (args.clean) {
-    await fs.remove(targetDir)
+  if (args.watch) {
+    modifyConfig(webpackConfig, config => {
+      config.watch = true
+    })
   }
 
   // Expose advanced stats
   if (args.dashboard) {
     const DashboardPlugin = require('../../webpack/DashboardPlugin')
-    ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
-      type: 'build'
-    }))
+    modifyConfig(webpackConfig, config => {
+      config.plugins.push(new DashboardPlugin({
+        type: 'build'
+      }))
+    })
+  }
+
+  if (args.report || args['report-json']) {
+    const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+    modifyConfig(webpackConfig, config => {
+      const bundleName = args.target !== 'app'
+        ? config.output.filename.replace(/\.js$/, '-')
+        : isLegacyBuild ? 'legacy-' : ''
+      config.plugins.push(new BundleAnalyzerPlugin({
+        logLevel: 'warn',
+        openAnalyzer: false,
+        analyzerMode: args.report ? 'static' : 'disabled',
+        reportFilename: `${bundleName}report.html`,
+        statsFilename: `${bundleName}report.json`,
+        generateStatsFile: !!args['report-json']
+      }))
+    })
+  }
+
+  if (args.clean) {
+    await fs.remove(targetDir)
   }
 
   return new Promise((resolve, reject) => {
@@ -171,7 +196,7 @@ async function build (args, api, options) {
           targetDir
         )
         log(formatStats(stats, targetDirShort, api))
-        if (args.target === 'app' && !(options.modernMode && !args.modern)) {
+        if (args.target === 'app' && !isLegacyBuild) {
           if (!args.watch) {
             done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
           } else {
