@@ -594,7 +594,7 @@ Displays multiple switches.
 
 In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
 
-**⚠️ Currently, the inquirer types which aren't supported (see above) whill not work properly in the UI.**
+**⚠️ Currently, the inquirer types which aren't supported (see above) will not work properly in the UI.**
 
 ## Client addon
 
@@ -696,7 +696,7 @@ api.addClientAddon({
 
 This will use the nodejs `require.resolve` API to find the folder and serve the `index.js` file built from the client addon.
 
-Or specify an url when developping the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
+Or specify an url when developing the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
 
 ```js
 // Useful for dev
