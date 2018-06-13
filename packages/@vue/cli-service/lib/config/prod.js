@@ -1,10 +1,11 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'production') {
+      const isLegacyBundle = options.modernMode && !process.env.VUE_CLI_MODERN_BUILD
       const getAssetPath = require('../util/getAssetPath')
       const filename = getAssetPath(
         options,
-        `js/[name].[chunkhash:8].js`,
+        `js/[name]${isLegacyBundle ? `-legacy` : ``}.[chunkhash:8].js`,
         true /* placeAtRootIfRelative */
       )
 

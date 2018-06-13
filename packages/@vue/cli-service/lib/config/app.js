@@ -10,6 +10,29 @@ module.exports = (api, options) => {
     }
 
     const isProd = process.env.NODE_ENV === 'production'
+    const isLegacyBundle = options.modernMode && !process.env.VUE_CLI_MODERN_BUILD
+
+    // code splitting
+    if (isProd) {
+      webpackConfig
+        .optimization.splitChunks({
+          cacheGroups: {
+            vendors: {
+              name: `chunk-vendors`,
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+              chunks: 'initial'
+            },
+            common: {
+              name: `chunk-common`,
+              minChunks: 2,
+              priority: -20,
+              chunks: 'initial',
+              reuseExistingChunk: true
+            }
+          }
+        })
+    }
 
     // HTML plugin
     const resolveClientEnv = require('../util/resolveClientEnv')
@@ -38,7 +61,9 @@ module.exports = (api, options) => {
         minify: {
           removeComments: true,
           collapseWhitespace: true,
-          removeAttributeQuotes: true
+          removeAttributeQuotes: true,
+          collapseBooleanAttributes: true,
+          removeScriptTypeAttributes: true
           // more options:
           // https://github.com/kangax/html-minifier#options-quick-reference
         },
@@ -64,21 +89,23 @@ module.exports = (api, options) => {
         .plugin('html')
           .use(HTMLPlugin, [htmlOptions])
 
-      // inject preload/prefetch to HTML
-      webpackConfig
-        .plugin('preload')
-          .use(PreloadPlugin, [{
-            rel: 'preload',
-            include: 'initial',
-            fileBlacklist: [/\.map$/, /hot-update\.js$/]
-          }])
+      if (!isLegacyBundle) {
+        // inject preload/prefetch to HTML
+        webpackConfig
+          .plugin('preload')
+            .use(PreloadPlugin, [{
+              rel: 'preload',
+              include: 'initial',
+              fileBlacklist: [/\.map$/, /hot-update\.js$/]
+            }])
 
-      webpackConfig
-        .plugin('prefetch')
-          .use(PreloadPlugin, [{
-            rel: 'prefetch',
-            include: 'asyncChunks'
-          }])
+        webpackConfig
+          .plugin('prefetch')
+            .use(PreloadPlugin, [{
+              rel: 'prefetch',
+              include: 'asyncChunks'
+            }])
+      }
     } else {
       // multi-page setup
       webpackConfig.entryPoints.clear()
@@ -107,37 +134,39 @@ module.exports = (api, options) => {
             .use(HTMLPlugin, [pageHtmlOptions])
       })
 
-      pages.forEach(name => {
-        const {
-          filename = `${name}.html`
-        } = normalizePageConfig(multiPageConfig[name])
-        webpackConfig
-          .plugin(`preload-${name}`)
-            .use(PreloadPlugin, [{
-              rel: 'preload',
-              includeHtmlNames: [filename],
-              include: {
-                type: 'initial',
-                entries: [name]
-              },
-              fileBlacklist: [/\.map$/, /hot-update\.js$/]
-            }])
+      if (!isLegacyBundle) {
+        pages.forEach(name => {
+          const {
+            filename = `${name}.html`
+          } = normalizePageConfig(multiPageConfig[name])
+          webpackConfig
+            .plugin(`preload-${name}`)
+              .use(PreloadPlugin, [{
+                rel: 'preload',
+                includeHtmlNames: [filename],
+                include: {
+                  type: 'initial',
+                  entries: [name]
+                },
+                fileBlacklist: [/\.map$/, /hot-update\.js$/]
+              }])
 
-        webpackConfig
-          .plugin(`prefetch-${name}`)
-            .use(PreloadPlugin, [{
-              rel: 'prefetch',
-              includeHtmlNames: [filename],
-              include: {
-                type: 'asyncChunks',
-                entries: [name]
-              }
-            }])
-      })
+          webpackConfig
+            .plugin(`prefetch-${name}`)
+              .use(PreloadPlugin, [{
+                rel: 'prefetch',
+                includeHtmlNames: [filename],
+                include: {
+                  type: 'asyncChunks',
+                  entries: [name]
+                }
+              }])
+        })
+      }
     }
 
     // copy static assets in public/
-    if (fs.existsSync(api.resolve('public'))) {
+    if (!isLegacyBundle && fs.existsSync(api.resolve('public'))) {
       webpackConfig
         .plugin('copy')
           .use(require('copy-webpack-plugin'), [[{
@@ -145,28 +174,6 @@ module.exports = (api, options) => {
             to: api.resolve(options.outputDir),
             ignore: ['index.html', '.DS_Store']
           }]])
-    }
-
-    // code splitting
-    if (isProd) {
-      webpackConfig
-        .optimization.splitChunks({
-          cacheGroups: {
-            vendors: {
-              name: 'chunk-vendors',
-              test: /[\\/]node_modules[\\/]/,
-              priority: -10,
-              chunks: 'initial'
-            },
-            common: {
-              name: 'chunk-common',
-              minChunks: 2,
-              priority: -20,
-              chunks: 'initial',
-              reuseExistingChunk: true
-            }
-          }
-        })
     }
   })
 }

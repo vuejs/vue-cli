@@ -50,7 +50,9 @@ module.exports = (context, options = {}) => {
 
   const targets = process.env.VUE_CLI_BABEL_TARGET_NODE
     ? { node: 'current' }
-    : rawTargets
+    : process.env.VUE_CLI_MODERN_BUILD
+      ? { esmodules: true }
+      : rawTargets
 
   // included-by-default polyfills. These are common polyfills that 3rd party
   // dependencies may rely on (e.g. Vuex relies on Promise), but since with
@@ -58,7 +60,12 @@ module.exports = (context, options = {}) => {
   // be force-included.
   let polyfills
   const buildTarget = process.env.VUE_CLI_TARGET || 'app'
-  if (buildTarget === 'app' && useBuiltIns === 'usage' && !process.env.VUE_CLI_BABEL_TARGET_NODE) {
+  if (
+    buildTarget === 'app' &&
+    useBuiltIns === 'usage' &&
+    !process.env.VUE_CLI_BABEL_TARGET_NODE &&
+    !process.env.VUE_CLI_MODERN_BUILD
+  ) {
     polyfills = getPolyfills(targets, userPolyfills || defaultPolyfills, {
       ignoreBrowserslistConfig,
       configPath
