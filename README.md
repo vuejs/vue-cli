@@ -2,9 +2,9 @@
 
 > This is the branch for `@vue/cli` 3.0.
 
-## Status: beta
+## Status: RC
 
-Most of the planned features are in place but there may still be bugs. API may still change until we reach RC phase. Do not use in production yet unless you are adventurous.
+Core features are ready and the API is now considered stable. There may still be small bugs but the CLI is now ready for non-mission-critical use cases.
 
 ## Documentation
 
