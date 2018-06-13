@@ -24,6 +24,7 @@ module.exports = (api, options) => {
     options: {
       '--mode': `specify env mode (default: production)`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
+      '--modern': `build app targeting modern browsers with auto fallback`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
       '--no-clean': `do not remove the dist directory before building the project`,
@@ -42,17 +43,20 @@ module.exports = (api, options) => {
       args.entry = args.entry || 'src/App.vue'
     }
 
-    if (options.modernMode && args.target === 'app') {
+    if (args.modern && args.target === 'app') {
+      process.env.VUE_CLI_MODERN_MODE = true
       delete process.env.VUE_CLI_MODERN_BUILD
       await build(Object.assign({}, args, {
-        modern: false
+        modernBuild: false
       }), api, options)
 
       process.env.VUE_CLI_MODERN_BUILD = true
       await build(Object.assign({}, args, {
-        modern: true,
+        modernBuild: true,
         clean: false
       }), api, options)
+
+      delete process.env.VUE_CLI_MODERN_MODE
       delete process.env.VUE_CLI_MODERN_BUILD
     } else {
       return build(args, api, options)
@@ -77,8 +81,8 @@ async function build (args, api, options) {
   log()
   const mode = api.service.mode
   if (args.target === 'app') {
-    const bundleTag = options.modernMode
-      ? args.modern
+    const bundleTag = args.modern
+      ? args.modernBuild
         ? `modern bundle `
         : `legacy bundle `
       : ``
@@ -93,7 +97,7 @@ async function build (args, api, options) {
   }
 
   const targetDir = api.resolve(args.dest || options.outputDir)
-  const isLegacyBuild = args.target === 'app' && options.modernMode && !args.modern
+  const isLegacyBuild = args.target === 'app' && args.modern && !args.modernBuild
 
   // resolve raw webpack config
   process.env.VUE_CLI_BUILD_TARGET = args.target

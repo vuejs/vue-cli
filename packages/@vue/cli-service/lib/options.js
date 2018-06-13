@@ -4,7 +4,6 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string().allow(''),
   outputDir: joi.string(),
   assetsDir: joi.string(),
-  modernMode: joi.boolean(),
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
@@ -54,9 +53,6 @@ exports.defaults = () => ({
 
   // where to put static assets (js/css/img/font/...)
   assetsDir: '',
-
-  // ship minimally-transpiled ES2015 along with a legacy bundle
-  modernMode: false,
 
   // boolean, use full build?
   runtimeCompiler: false,

@@ -10,7 +10,7 @@ module.exports = (api, options) => {
     }
 
     const isProd = process.env.NODE_ENV === 'production'
-    const isLegacyBundle = options.modernMode && !process.env.VUE_CLI_MODERN_BUILD
+    const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
 
     // code splitting
     if (isProd) {

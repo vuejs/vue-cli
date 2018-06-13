@@ -1,7 +1,7 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'production') {
-      const isLegacyBundle = options.modernMode && !process.env.VUE_CLI_MODERN_BUILD
+      const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
       const getAssetPath = require('../util/getAssetPath')
       const filename = getAssetPath(
         options,

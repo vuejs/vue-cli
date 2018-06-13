@@ -12,13 +12,7 @@ let server, browser
 test('modern mode', async () => {
   const project = await create('modern-mode', defaultPreset)
 
-  await project.write('vue.config.js', `
-    module.exports = {
-      modernMode: true
-    }
-  `)
-
-  const { stdout } = await project.run('vue-cli-service build')
+  const { stdout } = await project.run('vue-cli-service build --modern')
   expect(stdout).toMatch('Build complete.')
 
   // assert correct bundle files

@@ -10,10 +10,9 @@ module.exports = (api, args, options) => {
     })
   }
 
-  if (options.modernMode) {
+  if (args.modern) {
     const ModernModePlugin = require('../../webpack/ModernModePlugin')
-    const isModernBuild = !!process.env.VUE_CLI_MODERN_BUILD
-    if (!isModernBuild) {
+    if (!args.modernBuild) {
       // Inject plugin to extract build stats and write to disk
       config
         .plugin('modern-mode-legacy')
