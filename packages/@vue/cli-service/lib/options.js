@@ -61,7 +61,7 @@ exports.defaults = () => ({
   transpileDependencies: [/* string or regex */],
 
   // sourceMap for production build?
-  productionSourceMap: true,
+  productionSourceMap: !process.env.VUE_CLI_TEST,
 
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores

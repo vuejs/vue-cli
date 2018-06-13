@@ -19,7 +19,7 @@ async function makeProjectMultiPage (project) {
       chainWebpack: config => {
         const splitOptions = config.optimization.get('splitChunks')
         config.optimization.splitChunks(Object.assign({}, splitOptions, {
-          minSize: 10000
+          minSize: 100
         }))
       }
     }
