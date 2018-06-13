@@ -55,16 +55,26 @@ Usage: vue-cli-service build [options] [entry|pattern]
 
 Options:
 
-  --mode    specify env mode (default: production)
-  --dest    specify output directory (default: dist)
-  --target  app | lib | wc | wc-async (default: app)
-  --name    name for lib or web-component mode (default: "name" in package.json or entry filename)
-  --watch   watch for changes
+  --mode        specify env mode (default: production)
+  --dest        specify output directory (default: dist)
+  --modern      build app targeting modern browsers with auto fallback
+  --target      app | lib | wc | wc-async (default: app)
+  --name        name for lib or web-component mode (default: "name" in package.json or entry filename)
+  --no-clean    do not remove the dist directory before building the project
+  --report      generate report.html to help analyze bundle content
+  --report-json generate report.json to help analyze bundle content
+  --watch       watch for changes
 ```
 
 `vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
 
-It is also possible to build any component(s) inside your project as a library or as web components. See [Build Targets](./build-targets.md) for more details.
+There are a few useful flags:
+
+- `--modern` builds your app using [Modern Mode](./browser-compatibility.md#modern-mode), shipping native ES2015 code to modern browsers that support it, with auto fallback to a legacy bundle.
+
+- `--target` allows you to build any component(s) inside your project as a library or as web components. See [Build Targets](./build-targets.md) for more details.
+
+- `--report` and `--report-json` will generate reports based on your build stats that can help you analyze the size of the modules included in your bundle.
 
 ## vue-cli-service inspect
 
