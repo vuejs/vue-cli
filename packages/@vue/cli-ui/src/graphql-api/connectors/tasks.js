@@ -429,25 +429,37 @@ function open (id, context) {
 }
 
 function logPipe (action) {
+  const maxTime = 100
+
   let queue = ''
   let size = 0
   let time = Date.now()
+  let timeout
+
+  const add = (string) => {
+    queue += string
+    size++
+
+    if (size === 20 || Date.now() > time + maxTime) {
+      flush()
+    } else {
+      clearTimeout(timeout)
+      setTimeout(flush, maxTime)
+    }
+  }
+
+  const flush = () => {
+    clearTimeout(timeout)
+    if (!size) return
+    action(queue)
+    queue = ''
+    size = 0
+    time = Date.now()
+  }
 
   return {
-    add: (string) => {
-      queue += string
-      size++
-
-      if (size === 20 || Date.now() > time + 100) {
-        action(queue)
-        queue = ''
-        size = 0
-        time = Date.now()
-      }
-    },
-    flush: () => {
-      if (size) action(queue)
-    }
+    add,
+    flush
   }
 }
 
