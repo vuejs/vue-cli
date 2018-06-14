@@ -16,7 +16,6 @@ const locales = require('./connectors/locales')
 require('./utils/ipc')
 
 process.env.VUE_CLI_API_MODE = true
-console.log(process.env)
 
 const resolvers = [{
   JSON: GraphQLJSON,
