@@ -1,3 +1,20 @@
+<a name="3.0.0-rc.2"></a>
+# [3.0.0-rc.2](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.1...v3.0.0-rc.2) (2018-06-14)
+
+
+### Bug Fixes
+
+* **ui:** sharedData watchers ([f486d7e](https://github.com/vuejs/vue-cli/commit/f486d7e))
+* **ui:** wrong NODE_ENV value if undefined ([09b72eb](https://github.com/vuejs/vue-cli/commit/09b72eb))
+* **ui:** wwebpack dashboard performance improvements ([9f5dda4](https://github.com/vuejs/vue-cli/commit/9f5dda4))
+
+
+### Features
+
+* **ui:** modern build mode ([dbf7231](https://github.com/vuejs/vue-cli/commit/dbf7231))
+
+
+
 <a name="3.0.0-rc.1"></a>
 # [3.0.0-rc.1](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.16...v3.0.0-rc.1) (2018-06-13)
 
