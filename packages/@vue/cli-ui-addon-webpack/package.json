@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui-addon-webpack",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0-rc.2",
   "files": [
     "dist"
   ],
@@ -11,10 +11,10 @@
     "prepublishOnly": "yarn run lint --no-fix && yarn run build"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.1",
-    "@vue/cli-plugin-eslint": "^3.0.0-rc.1",
-    "@vue/cli-service": "^3.0.0-rc.1",
-    "@vue/eslint-config-standard": "^3.0.0-rc.1",
+    "@vue/cli-plugin-babel": "^3.0.0-rc.2",
+    "@vue/cli-plugin-eslint": "^3.0.0-rc.2",
+    "@vue/cli-service": "^3.0.0-rc.2",
+    "@vue/eslint-config-standard": "^3.0.0-rc.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "vue-progress-path": "^0.0.2",
