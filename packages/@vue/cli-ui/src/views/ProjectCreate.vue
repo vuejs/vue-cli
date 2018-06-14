@@ -49,6 +49,24 @@
                         }"
                       />
                     </div>
+
+                    <ApolloQuery
+                      v-if="formData.folder"
+                      :query="require('../graphql/folderExists.gql')"
+                      :variables="{
+                        file: `${cwd}/${formData.folder}`
+                      }"
+                      fetch-policy="no-cache"
+                    >
+                      <div
+                        slot-scope="{ result: { data } }"
+                        v-if="data && data.folderExists"
+                        class="vue-ui-text warning banner"
+                      >
+                        <VueIcon icon="warning" class="big"/>
+                        <span>{{ $t('views.project-create.tabs.details.form.folder.folder-exists') }}</span>
+                      </div>
+                    </ApolloQuery>
                   </div>
                 </VueFormField>
 
@@ -84,7 +102,9 @@
                   </VueSwitch>
                 </VueFormField>
 
-                <VueFormField>
+                <VueFormField
+                  :title="$t('views.project-create.tabs.details.form.options.git-title')"
+                >
                   <VueSwitch
                     v-model="formData.enableGit"
                     class="extend-left git"
@@ -567,6 +587,9 @@ export default {
   max-width 400px
   width 100%
   margin 42px auto
+
+  .vue-ui-text.banner
+    margin-top 6px
 
 .project-path
   h-box()

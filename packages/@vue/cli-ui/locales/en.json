@@ -190,7 +190,8 @@
               "label": "Project folder",
               "placeholder": "my-app",
               "tooltip": "Change base folder",
-              "action": "Select this folder"
+              "action": "Select this folder",
+              "folder-exists": "This folder already exists"
             },
             "manager": {
               "label": "Package manager",
@@ -199,6 +200,7 @@
             "options": {
               "label": "Additional options",
               "force": "Overwrite target folder if it exists",
+              "git-title": "Git repository",
               "git": "Initialize git repository (recommended)",
               "git-commit-message": "Initial commit message (optional)"
             }

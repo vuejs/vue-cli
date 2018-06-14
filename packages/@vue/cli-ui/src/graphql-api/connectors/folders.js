@@ -10,10 +10,11 @@ const pkgCache = new LRU({
 const cwd = require('./cwd')
 
 function isDirectory (file) {
+  file = file.replace(/\\/g, path.sep)
   try {
-    return fs.statSync(file.path).isDirectory()
+    return fs.statSync(file).isDirectory()
   } catch (e) {
-    console.warn(e.message)
+    if (process.env.VUE_APP_CLI_UI_DEV) console.warn(e.message)
   }
   return false
 }
@@ -26,7 +27,7 @@ async function list (base, context) {
       name: file
     })
   ).filter(
-    file => isDirectory(file)
+    file => isDirectory(file.path)
   )
 }
 
@@ -110,6 +111,7 @@ async function deleteFolder (file) {
 }
 
 module.exports = {
+  isDirectory,
   getCurrent,
   list,
   open,

@@ -7,6 +7,7 @@ exports.types = gql`
 extend type Query {
   folderCurrent: Folder
   foldersFavorite: [Folder]
+  folderExists (file: String!): Boolean
 }
 
 extend type Mutation {
@@ -34,7 +35,8 @@ exports.resolvers = {
 
   Query: {
     folderCurrent: (root, args, context) => folders.getCurrent(args, context),
-    foldersFavorite: (root, args, context) => folders.listFavorite(context)
+    foldersFavorite: (root, args, context) => folders.listFavorite(context),
+    folderExists: (root, { file }, context) => folders.isDirectory(file)
   },
 
   Mutation: {
