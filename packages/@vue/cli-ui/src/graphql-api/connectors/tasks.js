@@ -429,7 +429,7 @@ function open (id, context) {
 }
 
 function logPipe (action) {
-  const maxTime = 100
+  const maxTime = 300
 
   let queue = ''
   let size = 0
@@ -440,11 +440,11 @@ function logPipe (action) {
     queue += string
     size++
 
-    if (size === 20 || Date.now() > time + maxTime) {
+    if (size === 50 || Date.now() > time + maxTime) {
       flush()
     } else {
       clearTimeout(timeout)
-      setTimeout(flush, maxTime)
+      timeout = setTimeout(flush, maxTime)
     }
   }
 
