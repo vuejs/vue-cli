@@ -43,7 +43,6 @@ export default {
     grid-template-columns auto 300px
     grid-template-rows auto
     grid-template-areas "info input"
-    grid-gap $padding-item
     padding $padding-item
 
     > .list-item-info
@@ -54,4 +53,7 @@ export default {
       v-box()
       align-items stretch
       justify-content center
+
+  .list-item-info
+    margin-right ($padding-item * 2)
 </style>
