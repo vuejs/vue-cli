@@ -3,6 +3,7 @@ const invoke = require('@vue/cli/lib/invoke')
 
 const ROUTER = 'vue-router-add'
 const VUEX = 'vuex-add'
+const VUE_CONFIG_OPEN = 'vue-config-open'
 
 module.exports = api => {
   api.onViewOpen(({ view }) => {
@@ -35,6 +36,33 @@ module.exports = api => {
     } else {
       [ROUTER, VUEX].forEach(id => api.removeSuggestion(id))
     }
+
+    if (view.id !== 'vue-project-configurations') {
+      api.removeSuggestion(VUE_CONFIG_OPEN)
+    }
+  })
+
+  api.onConfigRead(({ config }) => {
+    if (config.id === 'vue-cli') {
+      if (config.foundFiles.vue) {
+        api.addSuggestion({
+          id: VUE_CONFIG_OPEN,
+          type: 'action',
+          label: 'vue-webpack.suggestions.vue-config-open',
+          handler () {
+            const file = config.foundFiles.vue.path
+            console.log('open', file)
+            const launch = require('launch-editor')
+            launch(file)
+            return {
+              keep: true
+            }
+          }
+        })
+        return
+      }
+    }
+    api.removeSuggestion(VUE_CONFIG_OPEN)
   })
 }
 

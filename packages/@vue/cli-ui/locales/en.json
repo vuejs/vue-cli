@@ -443,6 +443,56 @@
         "mode": "Specify env mode",
         "verbose": "Show full function definitions in output"
       }
+    },
+    "config": {
+      "vue-cli": {
+        "description": "Configure your Vue project",
+        "groups": {
+          "general": "General settings",
+          "css": "CSS settings"
+        },
+        "baseUrl": {
+          "label": "Base URL",
+          "description": "The base URL your application will be deployed at, for example '/my-app/'. Use an empty string ('') so that all assets are linked using relative paths."
+        },
+        "outputDir": {
+          "label": "Output directory",
+          "description": "The directory where the production build files will be generated"
+        },
+        "assetsDir": {
+          "label": "Assets directory",
+          "description": "A directory to nest generated static assets (js, css, img, fonts) under."
+        },
+        "runtimeCompiler": {
+          "label": "Enable runtime compiler",
+          "description": "This will allow you to use the template option in Vue components, but will incur around an extra 10kb payload for your app."
+        },
+        "productionSourceMap": {
+          "label": "Enable Production Source Maps",
+          "description": "Disabling this can speed up production builds if you don't need source maps for production"
+        },
+        "parallel": {
+          "label": "Parallel compilation",
+          "description": "Whether to use multiple processors to compile Babel or Typescript."
+        },
+        "css": {
+          "modules": {
+            "label": "Enable CSS Modules",
+            "description": "By default, only files that ends in *.module.[ext] are treated as CSS modules. Enabling this will treat all style files as CSS modules."
+          },
+          "extract": {
+            "label": "Extract CSS",
+            "description": "Whether to extract CSS in your components into a standalone CSS files (instead of inlined in JavaScript and injected dynamically)."
+          },
+          "sourceMap": {
+            "label": "Enable CSS Source Maps",
+            "description": "Whether to enable source maps for CSS. Enabling this may affect build performance."
+          }
+        }
+      }
+    },
+    "suggestions": {
+      "vue-config-open": "Open vue config"
     }
   },
   "eslint": {
