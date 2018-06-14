@@ -13,7 +13,7 @@
             icon="subject"
           >
             <div class="content vue-ui-disable-scroll">
-              <div class="project-details vue-ui-grid col-1 big-gap">
+              <div class="project-details vue-ui-grid col-1">
                 <VueFormField
                   :title="$t('views.project-create.tabs.details.form.folder.label')"
                 >
@@ -587,6 +587,7 @@ export default {
   max-width 400px
   width 100%
   margin 42px auto
+  grid-gap ($padding-item * 3)
 
   .vue-ui-text.banner
     margin-top 6px
