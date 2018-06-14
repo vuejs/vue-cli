@@ -19,7 +19,7 @@
       >
         <img
           v-if="imageIcon"
-          :src="view.icon"
+          :src="imageSrc(view.icon)"
           class="image-icon"
         >
 
@@ -71,6 +71,15 @@ export default {
 
     imageIcon () {
       return this.view.icon && this.view.icon.indexOf('.') !== -1
+    }
+  },
+
+  methods: {
+    imageSrc (url) {
+      if (process.env.VUE_APP_CLI_UI_DEV && url.charAt(0) === '/') {
+        return `http://localhost:4000${url}`
+      }
+      return url
     }
   }
 }

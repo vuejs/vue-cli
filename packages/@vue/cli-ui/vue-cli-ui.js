@@ -1,6 +1,6 @@
 // This file will be loaded when the project is opened
 module.exports = api => {
-  if (!process.env.VUE_CLI_UI_DEV) return
+  if (!process.env.VUE_APP_CLI_UI_DEV) return
 
   console.log('has(eslint)', api.hasPlugin('eslint'))
   console.log('has(typescript)', api.hasPlugin('typescript'))
@@ -16,7 +16,7 @@ module.exports = api => {
     id: 'vue-webpack-test-view',
     name: 'test-webpack-route',
     // icon: 'pets',
-    icon: 'http://localhost:4000/public/webpack-logo.png',
+    icon: '/public/webpack-logo.png',
     tooltip: 'Test view from webpack addon'
   })
 

@@ -47,7 +47,7 @@ function _loadFolder (root, context) {
 
 function loadFolder (root, context) {
   const folder = path.join(root, './locales')
-  if (process.env.VUE_CLI_UI_DEV && !watchedTrees.get(root) && fs.existsSync(folder)) {
+  if (process.env.VUE_APP_CLI_UI_DEV && !watchedTrees.get(root) && fs.existsSync(folder)) {
     watchedTrees.set(root, true)
     const watch = require('watch')
     watch.watchTree(folder, () => {

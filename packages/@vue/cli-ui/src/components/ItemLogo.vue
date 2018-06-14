@@ -16,8 +16,8 @@
       <img
         v-else-if="displayImage"
         class="image"
-        :src="image"
-        :key="image"
+        :src="imageUrl"
+        :key="imageUrl"
         @load="loaded = true"
         @error="error = true"
       >
@@ -72,6 +72,14 @@ export default {
 
     displayImage () {
       return !this.isMaterialIcon && !this.error
+    },
+
+    imageUrl () {
+      // Fix images in development
+      if (process.env.VUE_APP_CLI_UI_DEV && this.image.charAt(0) === '/') {
+        return `http://localhost:4000${this.image}`
+      }
+      return this.image
     }
   },
 

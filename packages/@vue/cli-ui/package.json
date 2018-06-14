@@ -5,7 +5,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "graphql-api": "cross-env VUE_CLI_DEBUG=true VUE_CLI_UI_DEV=true VUE_CLI_IPC=vue-cli-dev vue-cli-service graphql-api",
+    "graphql-api": "cross-env VUE_CLI_DEBUG=true VUE_APP_CLI_UI_DEV=true VUE_CLI_IPC=vue-cli-dev vue-cli-service graphql-api",
     "run-graphql-api": "vue-cli-service run-graphql-api",
     "test-graphql-api": "cross-env VUE_CLI_UI_TEST=true VUE_APP_GRAPHQL_PORT=4040 VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql VUE_CLI_IPC=vue-cli-test yarn run graphql-api",
     "prepublishOnly": "yarn run lint --no-fix && yarn run build",
