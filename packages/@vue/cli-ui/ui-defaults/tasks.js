@@ -23,7 +23,7 @@ module.exports = api => {
       for (const data of message.webpackDashboardData.value) {
         if (data.type === 'stats') {
           // Stats are read from a file
-          const statsFile = path.resolve(process.cwd(), `.stats-${type}.json`)
+          const statsFile = path.resolve(process.cwd(), `./node_modules/.stats-${type}.json`)
           const value = await fs.readJson(statsFile)
           setSharedData(`${type}-${data.type}`, value)
           await fs.remove(statsFile)

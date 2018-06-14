@@ -176,7 +176,7 @@ class DashboardPlugin {
         }
       ])
 
-      const statsFile = path.resolve(process.cwd(), `.stats-${this.type}.json`)
+      const statsFile = path.resolve(process.cwd(), `./node_modules/.stats-${this.type}.json`)
       fs.writeJson(statsFile, {
         errors: hasErrors,
         warnings: stats.hasWarnings(),
