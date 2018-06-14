@@ -1,0 +1,67 @@
+# Browser Compatibility
+
+## browserslist
+
+You will notice a `browserslist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by [@babel/preset-env][babel-preset-env] and [autoprefixer][autoprefixer] to automatically determine the JavaScript features that need to be transpiled and the CSS vendor prefixes needed.
+
+See [here][browserslist] for how to specify browser ranges.
+
+## Polyfills
+
+A default Vue CLI project uses [@vue/babel-preset-app][babel-preset-env], which uses `@babel/preset-env` and the `browserslist` config to determine the Polyfills needed for your project.
+
+By default, it passes [`useBuiltIns: 'usage'`](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) to `@babel/preset-env` which automatically detects the polyfills needed based on the language features used in your source code. This ensures only the minimum amount of polyfills are included in your final bundle. However, this also means **if one of your dependencies has specific requirements on polyfills, by default Babel won't be able to detect it.**
+
+If one of your dependencies need polyfills, you have a few options:
+
+1. **If the dependency is written in an ES version that your target environments do not support:** Add that dependency to the [`transpileDependencies`](../config/#transpiledependencies) option in `vue.config.js`. This would enable both syntax transforms and usage-based polyfill detection for that dependency.
+
+2. **If the dependency ships ES5 code and explicitly lists the polyfills needed:** you can pre-include the needed polyfills using the [polyfills](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app#polyfills) option for `@vue/babel-preset-app`. **Note that `es6.promise` is included by default because it's very common for libs to depend on Promises.**
+
+    ``` js
+    // babel.config.js
+    module.exports = {
+      presets: [
+        ['@vue/app', {
+          polyfills: [
+            'es6.promise',
+            'es6.symbol'
+          ]
+        }]
+      ]
+    }
+    ```
+
+    ::: tip
+    It's recommended to add polyfills this way instead of directly importing them in your source code, because polyfills listed here can be automatically excluded if your `browserslist` targets don't need them.
+    :::
+
+3. **If the dependency ships ES5 code, but uses ES6+ features without explicitly listing polyfill requirements (e.g. Vuetify):** Use `useBuiltIns: 'entry'` and then add `import '@babel/polyfill'` to your entry file. This will import **ALL** polyfills based on your `browserslist` targets so that you don't need to worry about dependency polyfills anymore, but will likely increase your final bundle size with some unused polyfills.
+
+See [@babel-preset/env docs](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) for more details.
+
+## Modern Mode
+
+With Babel we are able to leverage all the newest language features in ES2015+, but that also means we have to ship transpiled and polyfilled bundles in order to support older browsers. These transpiled bundles are often more verbose than the original native ES2015+ code, and also parse and run slower. Given that today a good majority of the modern browsers have decent support for native ES2015, it is a waste that we have to ship heavier and less efficient code to those browsers just because we have to support older ones.
+
+Vue CLI offers a "Modern Mode" to help you solve this problem. When building for production with the following command:
+
+``` bash
+vue-cli-service build --modern
+```
+
+Vue CLI will produce two versions of your app: one modern bundle targeting modern browsers that support [ES modules](https://jakearchibald.com/2017/es-modules-in-browsers/), and one legacy bundle targeting older browsers that do not.
+
+The cool part though is that there are no special deployment requirements. The generated HTML file automatically employs the techniques discussed in [Phillip Walton's excellent post](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/):
+
+- The modern bundle is loaded with `<script type="module">`, in browsers that support it; they are also preloaded using `<link rel="modulepreload">` instead.
+
+- The legacy bundle is loaded with `<script nomodule>`, which is ignored by browsers that support ES modules.
+
+- A fix for `<script nomodule>` in Safari 10 is also automatically injected.
+
+For a Hello World app, the modern bundle is already 16% smaller. In production, the modern bundle will typically result in significantly faster parsing and evaluation, improving your app's loading performance.
+
+[autoprefixer]: https://github.com/postcss/autoprefixer
+[babel-preset-env]: https://new.babeljs.io/docs/en/next/babel-preset-env.html
+[browserslist]: https://github.com/ai/browserslist
