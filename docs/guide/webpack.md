@@ -52,7 +52,7 @@ This allows us finer-grained control over the internal config. Below you will se
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
-    config
+    config.module
       .rule('vue')
       .use('vue-loader')
         .loader('vue-loader')
