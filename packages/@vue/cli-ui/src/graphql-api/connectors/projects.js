@@ -246,6 +246,7 @@ async function create (input, context) {
     })
 
     const targetDir = path.join(cwd.get(), input.folder)
+    cwd.set(targetDir, context)
     creator.context = targetDir
 
     const inCurrent = input.folder === '.'
