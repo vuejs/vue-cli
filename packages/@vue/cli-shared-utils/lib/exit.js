@@ -1,4 +1,4 @@
-exports.exitProcess = true
+exports.exitProcess = !process.env.VUE_CLI_API_MODE
 
 exports.exit = function (code) {
   if (exports.exitProcess) {

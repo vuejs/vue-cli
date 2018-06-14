@@ -2,7 +2,6 @@ const { withFilter } = require('graphql-subscriptions')
 const path = require('path')
 const globby = require('globby')
 const merge = require('lodash.merge')
-const exit = require('@vue/cli-shared-utils/lib/exit')
 const GraphQLJSON = require('graphql-type-json')
 // Channels for subscriptions
 const channels = require('./channels')
@@ -16,10 +15,8 @@ const locales = require('./connectors/locales')
 // Start ipc server
 require('./utils/ipc')
 
-// Prevent code from exiting server process
-exit.exitProcess = false
-
 process.env.VUE_CLI_API_MODE = true
+console.log(process.env)
 
 const resolvers = [{
   JSON: GraphQLJSON,
