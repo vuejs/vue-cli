@@ -143,7 +143,7 @@ export default {
 
     onTranslateClick () {
       const win = window.open(
-        'https://cli.vuejs.org/dev-guide/ui-plugin-dev.html#localization',
+        'https://cli.vuejs.org/dev-guide/ui-localization.html',
         '_blank'
       )
       win.focus()
