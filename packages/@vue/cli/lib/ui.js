@@ -12,6 +12,7 @@ async function ui (options = {}, context = process.cwd()) {
   process.env.VUE_APP_CLI_UI_URL = ''
 
   // Optimize express
+  const nodeEnv = process.env.NODE_ENV
   process.env.NODE_ENV = 'production'
 
   // Dev mode
@@ -48,7 +49,11 @@ async function ui (options = {}, context = process.cwd()) {
 
   server(opts, () => {
     // Reset for yarn/npm to work correctly
-    process.env.NODE_ENV = undefined
+    if (typeof nodeEnv === 'undefined') {
+      delete process.env.NODE_ENV
+    } else {
+      process.env.NODE_ENV = nodeEnv
+    }
 
     // Open browser
     const url = `http://localhost:${port}`
