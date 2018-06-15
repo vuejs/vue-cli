@@ -112,7 +112,8 @@
       },
       "report-bug": "Report bug",
       "translate": "Help translate",
-      "dark-mode": "Toggle dark mode"
+      "dark-mode": "Toggle dark mode",
+      "reset-plugin-api": "Refresh plugins API"
     },
     "suggestion-bar": {
       "suggestion": "Suggestion",

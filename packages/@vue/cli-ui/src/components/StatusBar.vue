@@ -70,6 +70,13 @@
       >
         <VueIcon icon="g_translate"/>
       </div>
+      <div
+        class="section action reset-plugin-api"
+        v-tooltip="$t('components.status-bar.reset-plugin-api')"
+        @click="resetPluginApi()"
+      >
+        <VueIcon icon="cached"/>
+      </div>
     </div>
   </div>
 </template>
@@ -79,6 +86,8 @@ import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import CONSOLE_LOG_LAST from '../graphql/consoleLogLast.gql'
 import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
 import DARK_MODE_SET from '../graphql/darkModeSet.gql'
+import PLUGIN_RESET_API from '../graphql/pluginResetApi.gql'
+import { resetApollo } from '../vue-apollo'
 
 let lastRoute
 
@@ -174,6 +183,14 @@ export default {
 
     toggleDarkMode () {
       this.applyDarkMode(!this.darkMode)
+    },
+
+    async resetPluginApi () {
+      await this.$apollo.mutate({
+        mutation: PLUGIN_RESET_API
+      })
+
+      await resetApollo()
     }
   }
 }

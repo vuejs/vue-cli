@@ -69,7 +69,7 @@ export default {
         }
       })
 
-      resetApollo()
+      await resetApollo()
     }
   }
 }

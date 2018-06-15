@@ -132,6 +132,8 @@ function resetPluginApi (context) {
       if (currentView) views.open(currentView.id)
     }
   })
+
+  return true
 }
 
 function runPluginApi (id, context, fileName = 'ui') {
