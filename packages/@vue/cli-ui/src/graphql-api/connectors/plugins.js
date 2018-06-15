@@ -76,7 +76,7 @@ function findPlugins (deps) {
   )
 }
 
-function list (file, context) {
+function list (file, context, resetApi = true) {
   const pkg = folders.readPackage(file, context)
   plugins = []
   plugins = plugins.concat(findPlugins(pkg.devDependencies || {}))
@@ -90,7 +90,7 @@ function list (file, context) {
     plugins.unshift(service)
   }
 
-  resetPluginApi(context)
+  if (resetApi) resetPluginApi(context)
   return plugins
 }
 
@@ -379,7 +379,7 @@ async function initPrompts (id, context) {
   await prompts.start()
 }
 
-function update (id, context, multi = false) {
+function update (id, context) {
   return progress.wrap('plugin-update', context, async setProgress => {
     setProgress({
       status: 'plugin-update',
@@ -396,14 +396,12 @@ function update (id, context, multi = false) {
       type: 'info'
     }, context)
 
-    if (!multi) {
-      notify({
-        title: `Plugin updated`,
-        message: `Plugin ${id} was successfully updated`,
-        icon: 'done'
-      })
-      resetPluginApi(context)
-    }
+    notify({
+      title: `Plugin updated`,
+      message: `Plugin ${id} was successfully updated`,
+      icon: 'done'
+    })
+    resetPluginApi(context)
 
     currentPluginId = null
     return findOne(id)
@@ -411,23 +409,43 @@ function update (id, context, multi = false) {
 }
 
 async function updateAll (context) {
-  const plugins = await list(cwd.get(), context)
-  let updatedPlugins = []
-  for (const plugin of plugins) {
-    const version = await getVersion(plugin, context)
-    if (version.current !== version.wanted) {
-      updatedPlugins.push(await update(plugin.id, context, true))
+  return progress.wrap('plugins-update', context, async setProgress => {
+    const plugins = await list(cwd.get(), context, false)
+    let updatedPlugins = []
+    for (const plugin of plugins) {
+      const version = await getVersion(plugin, context)
+      if (version.current !== version.wanted) {
+        updatedPlugins.push(plugin)
+      }
     }
-  }
 
-  notify({
-    title: `Plugins updated`,
-    message: `${updatedPlugins.length} plugin(s) were successfully updated`,
-    icon: 'done'
+    if (!updatedPlugins.length) {
+      notify({
+        title: `No updates available`,
+        message: `No plugin to update in the version ranges declared in package.json`,
+        icon: 'done'
+      })
+      return []
+    }
+
+    setProgress({
+      status: 'plugins-update',
+      args: [updatedPlugins.length]
+    })
+
+    await updatePackage(cwd.get(), getCommand(), null, updatedPlugins.map(
+      p => p.id
+    ).join(' '))
+
+    notify({
+      title: `Plugins updated`,
+      message: `${updatedPlugins.length} plugin(s) were successfully updated`,
+      icon: 'done'
+    })
+    resetPluginApi(context)
+
+    return updatedPlugins
   })
-  resetPluginApi(context)
-
-  return updatedPlugins
 }
 
 function getApi () {

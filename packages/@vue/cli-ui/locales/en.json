@@ -154,7 +154,8 @@
       "plugin-install": "Installing {arg0}...",
       "plugin-uninstall": "Uninstalling {arg0}...",
       "plugin-invoke": "Invoking {arg0}...",
-      "plugin-update": "Updating {arg0}..."
+      "plugin-update": "Updating {arg0}...",
+      "plugins-update": "Updating {arg0} plugins..."
     }
   },
   "types": {
