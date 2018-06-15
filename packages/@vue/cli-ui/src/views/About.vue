@@ -57,7 +57,7 @@ export default {
 
 .about
   padding 42px
-  max-width 900px
+  max-width 840px
   margin 0 auto
   box-sizing border-box
 

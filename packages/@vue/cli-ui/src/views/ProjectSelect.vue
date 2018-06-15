@@ -56,6 +56,15 @@
         </div>
       </VueTab>
     </StepWizard>
+
+    <div class="top-menu">
+      <VueButton
+        :to="{ name: 'about' }"
+        class="flat icon-button"
+        icon-left="help"
+        v-tooltip="$t('views.about.title')"
+      />
+    </div>
   </div>
 </template>
 
@@ -119,4 +128,9 @@ export default {
 
 .project-select
   height 100%
+
+.top-menu
+  position fixed
+  top $padding-item
+  right $padding-item
 </style>
