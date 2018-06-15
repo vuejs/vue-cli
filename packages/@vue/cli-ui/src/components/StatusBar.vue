@@ -11,9 +11,8 @@
         v-tooltip="$t('components.status-bar.project.tooltip')"
         @click="onProjectClick()"
       >
-        <VueIcon icon="work"/>
-        <span v-if="projectCurrent">{{ projectCurrent.name }}</span>
-        <span v-else class="label">{{ $t('components.status-bar.project.empty') }}</span>
+        <VueIcon icon="home"/>
+        <span v-if="!projectCurrent" class="label">{{ $t('components.status-bar.project.empty') }}</span>
       </div>
 
       <ApolloQuery

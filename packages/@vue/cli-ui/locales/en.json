@@ -100,8 +100,8 @@
     },
     "status-bar": {
       "project": {
-        "tooltip": "Current project<br><i>Click to toggle Project Manager</i>",
-        "empty": "No project"
+        "tooltip": "Click to toggle Project Manager",
+        "empty": "No project open"
       },
       "path": {
         "tooltip": "Current Working Folder"
