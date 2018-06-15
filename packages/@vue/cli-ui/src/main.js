@@ -15,6 +15,7 @@ import SharedData from './util/shared-data'
 import PluginAction from './util/plugin-action'
 import gql from 'graphql-tag'
 import ClientState from './mixins/ClientState'
+import SetSize from './util/set-size'
 
 window.gql = gql
 
@@ -46,6 +47,8 @@ for (const key in Filters) {
 }
 
 Vue.mixin(ClientState)
+
+Vue.directive('set-size', SetSize)
 
 Vue.config.productionTip = false
 
