@@ -19,7 +19,7 @@
       <div class="actions">
         <VueButton
           class="icon-button"
-          icon-left="delete"
+          icon-left="close"
           v-tooltip="$t('components.project-select-list-item.tooltips.delete')"
           data-testid="delete-button"
           @click.stop="$emit('remove')"

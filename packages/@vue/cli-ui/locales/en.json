@@ -80,7 +80,7 @@
     "project-select-list-item": {
       "tooltips": {
         "favorite": "Toggle favorite",
-        "delete": "Delete"
+        "delete": "Remove from list"
       }
     },
     "project-plugin-item": {
