@@ -1,7 +1,7 @@
 const path = require('path')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name }) => {
+module.exports = (api, { target, entry, name }, config) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -40,7 +40,7 @@ module.exports = (api, { target, entry, name }) => {
   const dynamicEntry = resolveEntry(prefix, libName, resolvedFiles, isAsync)
 
   function genConfig (minify, genHTML) {
-    const config = api.resolveChainableWebpackConfig()
+    if (!config) config = api.resolveChainableWebpackConfig()
 
     // make sure not to transpile wc-wrapper
     config.module

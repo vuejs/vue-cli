@@ -1,5 +1,5 @@
-module.exports = (api, args, options) => {
-  const config = api.resolveChainableWebpackConfig()
+module.exports = (api, args, options, config) => {
+  if (!config) config = api.resolveChainableWebpackConfig()
   const targetDir = api.resolve(args.dest || options.outputDir)
 
   // respect inline build destination in copy plugin
