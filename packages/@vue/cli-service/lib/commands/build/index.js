@@ -69,7 +69,7 @@ const initiateBuild = async (args, api, options, config) => {
     delete process.env.VUE_CLI_MODERN_MODE
     delete process.env.VUE_CLI_MODERN_BUILD
   } else {
-    await build(args, api, options)
+    await build(args, api, options, config)
   }
   delete process.env.VUE_CLI_BUILD_TARGET
 }
