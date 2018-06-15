@@ -1,7 +1,7 @@
 const path = require('path')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name }, config) => {
+module.exports = (api, { target, entry, name }, options, config) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -41,7 +41,6 @@ module.exports = (api, { target, entry, name }, config) => {
 
   function genConfig (minify, genHTML) {
     if (!config) config = api.resolveChainableWebpackConfig()
-
     // make sure not to transpile wc-wrapper
     config.module
       .rule('js')
