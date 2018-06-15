@@ -210,7 +210,7 @@ export default {
     align-items center
     background $vue-ui-color-light
     font-size 12px
-    height 28px
+    height 34px
     .vue-ui-dark-mode &
       background $vue-ui-color-darker
 
@@ -218,7 +218,7 @@ export default {
     h-box()
     align-items center
     opacity .8
-    padding 0 8px
+    padding 0 11px
     height 100%
     cursor default
 
