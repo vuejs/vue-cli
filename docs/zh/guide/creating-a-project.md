@@ -22,7 +22,7 @@ yarn global add @vue/cli
 vue create hello-world
 ```
 
-你会被提示选取一个 preset。你可以选默认的包含了基本的 Babel + ESLint 设置的 preset，也可以选“手动选择特性”来选去你所需要的特性。
+你会被提示选取一个 preset。你可以选默认的包含了基本的 Babel + ESLint 设置的 preset，也可以选“手动选择特性”来选取需要的特性。
 
 ![CLI 预览](/cli-new-project.png)
 
@@ -30,27 +30,27 @@ vue create hello-world
 
 ![CLI 预览](/cli-select-features.png)
 
-如果你决定手动选择特性，就可以在提示符的最后选择你需要的选项，以组成一个将来可复用的 preset。我们会在下一个章节讨论 preset 和插件。
+如果你决定手动选择特性，在操作提示的最后你可以选择将已选项保存为一个将来可复用的 preset。我们会在下一个章节讨论 preset 和插件。
 
 ::: tip ~/.vuerc
 被保存的 preset 将会存在用户的 home 目录下一个名为 `.vuerc` 的 JSON 文件里。如果你想要修改被保存的 preset / 选项，可以编辑这个文件。
 
-在项目创建的过程中，你也会被提示选择喜欢的包管理器或使用[淘宝 npm 镜像源](https://npm.taobao.org/)以得到更快的依赖安装。这些选择也将会存入 `~/.vuerc`。
+在项目创建的过程中，你也会被提示选择喜欢的包管理器或使用[淘宝 npm 镜像源](https://npm.taobao.org/)以更快地安装依赖。这些选择也将会存入 `~/.vuerc`。
 :::
 
-这个 `vue create` 命令有一些可选项，你可以通过运行以下命令进行探索：
+`vue create` 命令有一些可选项，你可以通过运行以下命令进行探索：
 
 ``` bash
 vue create --help
 ```
 
 ```
-Usage: create [options] <app-name>
+用法：create [options] <app-name>
 
 创建一个由 `vue-cli-service` 提供支持的新项目
 
 
-Options:
+选项：
 
   -p, --preset <presetName>       忽略提示符并使用已保存的或远程的预设选项
   -d, --default                   忽略提示符并使用默认预设选项
@@ -78,7 +78,7 @@ vue ui
 
 ## 拉取 2.x 模板 (旧版本)
 
-Vue CLI 3 和旧版使用了相同的 `vue` 命令，所以 Vue CLI 2 (`vue-cli`) 被覆盖了。如果你仍然需要使用旧版本的 `vue init` 功能，你可以全局安装一个桥：
+Vue CLI 3 和旧版使用了相同的 `vue` 命令，所以 Vue CLI 2 (`vue-cli`) 被覆盖了。如果你仍然需要使用旧版本的 `vue init` 功能，你可以全局安装一个桥接工具：
 
 ``` bash
 npm install -g @vue/cli-init
