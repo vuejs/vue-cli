@@ -118,6 +118,8 @@ import { size } from '../filters'
 import DonutModule from './DonutModule.vue'
 
 export default {
+  clientState: true,
+
   mixins: [
     Dashboard
   ],

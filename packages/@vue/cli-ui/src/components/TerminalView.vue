@@ -73,6 +73,8 @@ const darkTheme = {
 }
 
 export default {
+  clientState: true,
+
   props: {
     cols: {
       type: Number,
@@ -136,21 +138,12 @@ export default {
 
     content: 'setContent',
 
-    theme: {
-      handler (value) {
-        if (this.$_terminal) {
-          this.$_terminal._setTheme(this.theme)
-        }
-      },
-      immediate: true
-    }
-  },
-
-  mounted () {
-    this.initTerminal()
-
-    if (this.autoSize) {
-      this.$nextTick(this.fit)
+    darkMode (value, oldValue) {
+      if (typeof oldValue === 'undefined') {
+        this.initTerminal()
+      } else if (this.$_terminal) {
+        this.$_terminal._setTheme(this.theme)
+      }
     }
   },
 
@@ -171,6 +164,10 @@ export default {
 
       term.on('blur', () => this.$emit('blur'))
       term.on('focus', () => this.$emit('focus'))
+
+      if (this.autoSize) {
+        this.$nextTick(this.fit)
+      }
     },
 
     setContent (value, ln = true) {

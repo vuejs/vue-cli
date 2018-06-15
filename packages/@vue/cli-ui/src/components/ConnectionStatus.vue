@@ -24,6 +24,12 @@
   </ApolloQuery>
 </template>
 
+<script>
+export default {
+  clientState: true
+}
+</script>
+
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 

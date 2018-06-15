@@ -83,6 +83,8 @@ import DARK_MODE_SET from '../graphql/darkModeSet.gql'
 let lastRoute
 
 export default {
+  clientState: true,
+
   data () {
     return {
       showLogs: false,
