@@ -115,6 +115,7 @@ export default {
       width 100%
       height @width
       transform scale(0)
+      border-radius 50%
     .vue-ui-icon
       width 24px
       height @width
@@ -145,13 +146,13 @@ export default {
 
   &.loaded
     .image
-      animation zoom .1s
+      animation zoom .5s $ease
       transform none
 
   &.selected,
   &.error
     .wrapper
-      animation zoom .1s
+      animation zoom .5s $ease
 
   &.selected
     .wrapper

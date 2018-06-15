@@ -137,9 +137,9 @@ export default {
 
 .suggestion-enter-active,
 .suggestion-leave-active
-  transition all 1.5s cubic-bezier(0.075, 0.820, 0.165, 1.000)
+  transition all 1.5s $ease
   >>> .vue-ui-button
-    transition all 1.5s cubic-bezier(0.075, 0.820, 0.165, 1.000)
+    transition all 1.5s $ease
     .content
       transition all .2s
 
