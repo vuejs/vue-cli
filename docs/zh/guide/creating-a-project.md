@@ -1,87 +1,87 @@
-# Creating a Project
+# 创建一个项目
 
-## Installation
+## 安装
 
-::: tip Node Version Requirement
-Vue CLI requires [Node.js](https://nodejs.org/) version 8 or above (8.10.0+ recommended). You can manage multiple versions of Node on the same machine with [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
+::: tip Node 版本要求
+Vue CLI 需要 [Node.js](https://nodejs.org/) v8 或更高版本 (推荐 8.10.0+)。你可以使用 [nvm](https://github.com/creationix/nvm) 或 [nvm-windows](https://github.com/coreybutler/nvm-windows) 在同一台机器上同时管理多个 Node 版本。
 :::
 
 ``` bash
 npm install -g @vue/cli
-# OR
+# 或者
 yarn global add @vue/cli
 ```
 
-After installation, you will have access to the `vue` binary in your command line. You can verify that it is properly installed by simply running `vue`, which should present you with a help message listing all available commands.
+安装好之后，你就可以在命令后中访问 `vue` 命令了。运行 `vue` 会看到所有可用的命令构成的一段帮助信息，你可以通过它来确认安装是否成功。
 
 ## vue create
 
-To create a new project, run:
+运行以下命令来创建一个新项目：
 
 ``` bash
 vue create hello-world
 ```
 
-You will be prompted to pick a preset. You can either choose the default preset which comes with a basic Babel + ESLint setup, or select "Manually select features" to pick the features you need.
+你会被提示选取一个 preset。你可以选默认的包含了基本的 Babel + ESLint 设置的 preset，也可以选“手动选择特性”来选取需要的特性。
 
-![CLI preview](/cli-new-project.png)
+![CLI 预览](/cli-new-project.png)
 
-The default setup is great for quickly prototyping a new project, while the manual setup provides more options that are likely needed for more production-oriented projects.
+这个默认的设置非常适合快速创建一个新项目的原型，而手动设置则提供了更多的选项，它们是面向生产的项目更加需要的。
 
-![CLI preview](/cli-select-features.png)
+![CLI 预览](/cli-select-features.png)
 
-If you chose to manually select features, at the end of the prompts you also have the option to save your selections as a preset so that you can reuse it in the future. We will discuss presets and plugins in the next section.
+如果你决定手动选择特性，在操作提示的最后你可以选择将已选项保存为一个将来可复用的 preset。我们会在下一个章节讨论 preset 和插件。
 
 ::: tip ~/.vuerc
-Saved presets will be stored in a JSON file named `.vuerc` in your user home directory. If you wish to modify saved presets / options, you can do so by editing this file.
+被保存的 preset 将会存在用户的 home 目录下一个名为 `.vuerc` 的 JSON 文件里。如果你想要修改被保存的 preset / 选项，可以编辑这个文件。
 
-During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npm.taobao.org/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
+在项目创建的过程中，你也会被提示选择喜欢的包管理器或使用[淘宝 npm 镜像源](https://npm.taobao.org/)以更快地安装依赖。这些选择也将会存入 `~/.vuerc`。
 :::
 
-The `vue create` command has a number of options and you can explore them all by running:
+`vue create` 命令有一些可选项，你可以通过运行以下命令进行探索：
 
 ``` bash
 vue create --help
 ```
 
 ```
-Usage: create [options] <app-name>
+用法：create [options] <app-name>
 
-create a new project powered by vue-cli-service
+创建一个由 `vue-cli-service` 提供支持的新项目
 
 
-Options:
+选项：
 
-  -p, --preset <presetName>       Skip prompts and use saved or remote preset
-  -d, --default                   Skip prompts and use default preset
-  -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
-  -m, --packageManager <command>  Use specified npm client when installing dependencies
-  -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
-  -g, --git [message|false]       Force / skip git intialization, optionally specify initial commit message
-  -f, --force                     Overwrite target directory if it exists
-  -c, --clone                     Use git clone when fetching remote preset
-  -x, --proxy                     Use specified proxy when creating project
-  -h, --help                      output usage information
+  -p, --preset <presetName>       忽略提示符并使用已保存的或远程的预设选项
+  -d, --default                   忽略提示符并使用默认预设选项
+  -i, --inlinePreset <json>       忽略提示符并使用内联的 JSON 字符串预设选项
+  -m, --packageManager <command>  在安装依赖时使用指定的 npm 客户端
+  -r, --registry <url>            在安装依赖时使用指定的 npm registry (仅用于 npm 客户端)
+  -g, --git [message]             强制 / 跳过 git 初始化，并可选的指定初始化提交信息
+  -f, --force                     覆写目标目录可能存在的配置
+  -c, --clone                     使用 git clone 获取远程预设选项
+  -x, --proxy                     使用指定的代理创建项目
+  -h, --help                      输出使用帮助信息
 ```
 
-## Using the GUI
+## 使用图形化界面
 
-You can also create and manage projects using a graphical interface with the `vue ui` command:
+你也可以通过 `vue ui` 命令以图形化界面创建和管理项目：
 
 ``` bash
 vue ui
 ```
 
-The above command will open a browser window with a GUI that guides you through the project creation process.
+上述命令会打开一个浏览器窗口，并以图形化界面将你引导至项目创建的流程。
 
-![UI preview](/ui-new-project.png)
+![图形化界面预览](/ui-new-project.png)
 
-## Pulling 2.x Templates (Legacy)
+## 拉取 2.x 模板 (旧版本)
 
-Vue CLI 3 uses the same `vue` binary, so it overwrites Vue CLI 2 (`vue-cli`). If you still need the legacy `vue init` functionality, you can install a global bridge:
+Vue CLI 3 和旧版使用了相同的 `vue` 命令，所以 Vue CLI 2 (`vue-cli`) 被覆盖了。如果你仍然需要使用旧版本的 `vue init` 功能，你可以全局安装一个桥接工具：
 
 ``` bash
 npm install -g @vue/cli-init
-# vue init now works exactly the same as vue-cli@2.x
+# `vue init` 的运行效果将会跟 `vue-cli@2.x` 相同
 vue init webpack my-project
 ```
