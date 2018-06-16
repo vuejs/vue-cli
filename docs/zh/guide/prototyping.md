@@ -1,29 +1,29 @@
-# Instant Prototyping
+# 快速原型开发
 
-You can rapidly prototype with just a single `*.vue` file with the `vue serve` and `vue build` commands, but they require an additional global addon to be installed first:
+你可以使用 `vue serve` 和 `vue build` 命令对单个 `*.vue` 文件进行快速原型开发，不过这需要先额外安装一个全局的扩展：
 
 ``` bash
 npm install -g @vue/cli-service-global
 ```
 
-The drawback of `vue serve` is that it relies on globally installed dependencies which may be inconsistent on different machines. Therefore this is only recommended for rapid prototyping.
+`vue serve` 的缺点就是它需要安装全局依赖，这使得它在不同机器上的一致性不能得到保证。因此这只适用于快速原型开发。
 
 ### vue serve
 
 ```
 Usage: serve [options] [entry]
 
-serve a .js or .vue file in development mode with zero config
+在开发环境模式下零配置服务一个 .js 或 .vue 文件
 
 
 Options:
 
-  -o, --open  Open browser
-  -c, --copy  Copy local url to clipboard
-  -h, --help  output usage information
+  -o, --open  打开浏览器
+  -c, --copy  将本地 URL 复制到剪切板
+  -h, --help  输出使用信息
 ```
 
-All you need is an `App.vue` file:
+你所需要的仅仅是一个 `App.vue` 文件：
 
 ``` vue
 <template>
@@ -31,40 +31,40 @@ All you need is an `App.vue` file:
 </template>
 ```
 
-Then in the directory with the `App.vue` file, run:
+然后在这个 `App.vue` 文件所在的目录下运行：
 
 ``` bash
 vue serve
 ```
 
-`vue serve` uses the same default setup (webpack, babel, postcss & eslint) as projects created by `vue create`. It automatically infers the entry file in the current directory - the entry can be one of `main.js`, `index.js`, `App.vue` or `app.vue`. You can also explicitly specify the entry file:
+`vue serve` 使用了和 `vue create` 创建的项目相同的默认设置 (webpack、Babel、PostCSS 和 ESLint)。它会在当前目录自动推导入口文件——入口可以是 `main.js`、`index.js`、`App.vue` 或 `app.vue` 中的一个。你也可以显式地指定入口文件：
 
 ``` bash
 vue serve MyComponent.vue
 ```
 
-If needed, you can also provide an `index.html`, `package.json`, install and use local dependencies, or even configure babel, postcss & eslint with corresponding config files.
+如果需要，你还可以提供一个 `index.html`、`package.json`、安装并使用本地依赖、甚至通过相应的配置文件配置 Babel、PostCSS 和 ESLint。
 
 ### vue build
 
 ```
 Usage: build [options] [entry]
 
-build a .js or .vue file in production mode with zero config
+在生产环境模式下零配置构建一个 .js 或 .vue 文件
 
 
 Options:
 
-  -t, --target <target>  Build target (app | lib | wc | wc-async, default: app)
-  -n, --name <name>      name for lib or web-component (default: entry filename)
-  -d, --dest <dir>       output directory (default: dist)
-  -h, --help             output usage information
+  -t, --target <target>  构建目标 (app | lib | wc | wc-async, 默认值：app)
+  -n, --name <name>      库的名字或 web component 的名字 (默认值：入口文件名)
+  -d, --dest <dir>       输出目录 (默认值：dist)
+  -h, --help             输出使用信息
 ```
 
-You can also build the target file into a production bundle for deployment with `vue build`:
+你也可以使用 `vue build` 将目标文件构建成为一个生产环境的包，并用作部署：
 
 ``` bash
 vue build MyComponent.vue
 ```
 
-`vue build` also provides the ability to build the component as a library or a web component. See [Build Targets](./build-targets.md) for more details.
+`vue build` 也提供了将组件构建成为一个库或一个 web component 的能力。查阅[构建目标](./build-targets.md)了解更多。
