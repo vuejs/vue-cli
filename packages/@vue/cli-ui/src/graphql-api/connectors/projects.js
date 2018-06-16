@@ -178,6 +178,7 @@ function removeCreator (context) {
     installProgress.removeListener('log', onInstallLog)
     creator = null
   }
+  return true
 }
 
 async function getCreation (context) {
@@ -426,5 +427,7 @@ module.exports = {
   open,
   remove,
   resetCwd,
-  setFavorite
+  setFavorite,
+  initCreator,
+  removeCreator
 }

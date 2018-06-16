@@ -30,7 +30,7 @@
             icon-left="add"
             :label="$route.query.hideTabs ? $t('views.project-create.tabs.details.form.folder.action') : $t('views.project-select.buttons.create')"
             class="big primary create-project"
-            :to="{ name: 'project-create' }"
+            @click="createProject()"
           />
         </div>
       </VueTab>
@@ -70,6 +70,7 @@
 
 <script>
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
+import PROJECT_INIT_CREATION from '../graphql/projectInitCreation.gql'
 import PROJECT_IMPORT from '../graphql/projectImport.gql'
 
 export default {
@@ -101,6 +102,14 @@ export default {
   },
 
   methods: {
+    async createProject () {
+      await this.$apollo.mutate({
+        mutation: PROJECT_INIT_CREATION
+      })
+
+      this.$router.push({ name: 'project-create' })
+    },
+
     async importProject () {
       await this.$apollo.mutate({
         mutation: PROJECT_IMPORT,

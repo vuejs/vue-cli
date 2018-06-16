@@ -362,7 +362,6 @@
           :label="$t('views.project-create.tabs.details.modal.buttons.clear')"
           icon-left="delete_forever"
           class="danger"
-          @click="reset()"
         />
       </div>
     </VueModal>
@@ -425,6 +424,7 @@ import PROJECT_CREATION from '../graphql/projectCreation.gql'
 import FEATURE_SET_ENABLED from '../graphql/featureSetEnabled.gql'
 import PRESET_APPLY from '../graphql/presetApply.gql'
 import PROJECT_CREATE from '../graphql/projectCreate.gql'
+import PROJECT_CANCEL_CREATION from '../graphql/projectCancelCreation.gql'
 
 function formDataFactory () {
   return {
@@ -510,11 +510,11 @@ export default {
     }
   },
 
-  methods: {
-    reset () {
-      formData = formDataFactory()
-    },
+  beforeDestroy () {
+    this.cancel()
+  },
 
+  methods: {
     async selectPreset (id) {
       if (id === 'remote') {
         this.showRemotePreset = true
@@ -571,7 +571,6 @@ export default {
             }
           }
         })
-        this.reset()
         this.$router.push({ name: 'project-home' })
         await this.$nextTick()
       } catch (e) {
@@ -579,6 +578,13 @@ export default {
         console.error(e)
         this.debug = `ERROR: ${e}`
       }
+    },
+
+    async cancel () {
+      formData = formDataFactory()
+      await this.$apollo.mutate({
+        mutation: PROJECT_CANCEL_CREATION
+      })
     }
   }
 }

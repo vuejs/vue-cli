@@ -11,6 +11,8 @@ extend type Query {
 }
 
 extend type Mutation {
+  projectInitCreation: ProjectCreation
+  projectCancelCreation: Boolean
   projectCreate (input: ProjectCreateInput!): Project!
   projectImport (input: ProjectImportInput!): Project!
   projectOpen (id: ID!): Project!
@@ -80,6 +82,8 @@ exports.resolvers = {
   },
 
   Mutation: {
+    projectInitCreation: (root, args, context) => projects.initCreator(context),
+    projectCancelCreation: (root, args, context) => projects.removeCreator(context),
     projectCreate: (root, { input }, context) => projects.create(input, context),
     projectImport: (root, { input }, context) => projects.import(input, context),
     projectOpen: (root, { id }, context) => projects.open(id, context),
