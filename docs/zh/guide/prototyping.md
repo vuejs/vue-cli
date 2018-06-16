@@ -56,7 +56,7 @@ Usage: build [options] [entry]
 Options:
 
   -t, --target <target>  构建目标 (app | lib | wc | wc-async, 默认值：app)
-  -n, --name <name>      库的名字或 web component 的名字 (默认值：入口文件名)
+  -n, --name <name>      库的名字或 Web Components 组件的名字 (默认值：入口文件名)
   -d, --dest <dir>       输出目录 (默认值：dist)
   -h, --help             输出使用信息
 ```
@@ -67,4 +67,4 @@ Options:
 vue build MyComponent.vue
 ```
 
-`vue build` 也提供了将组件构建成为一个库或一个 web component 的能力。查阅[构建目标](./build-targets.md)了解更多。
+`vue build` 也提供了将组件构建成为一个库或一个 Web Components 组件的能力。查阅[构建目标](./build-targets.md)了解更多。
