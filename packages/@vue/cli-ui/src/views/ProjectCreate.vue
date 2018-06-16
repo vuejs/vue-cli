@@ -50,6 +50,14 @@
                       />
                     </div>
 
+                    <div
+                      v-if="formData.folder && !folderNameValid"
+                      class="vue-ui-text danger banner"
+                    >
+                      <VueIcon icon="error" class="big"/>
+                      <span>{{ $t('views.project-create.tabs.details.form.folder.folder-name-invalid') }}</span>
+                    </div>
+
                     <ApolloQuery
                       v-if="formData.folder"
                       :query="require('../graphql/folderExists.gql')"
@@ -477,8 +485,13 @@ export default {
   },
 
   computed: {
+    folderNameValid () {
+      const name = this.formData.folder
+      return !name.match(/[/@\s+%:]/) && encodeURIComponent(name) === name
+    },
+
     detailsValid () {
-      return !!this.formData.folder
+      return !!this.formData.folder && this.folderNameValid
     },
 
     presetValid () {

@@ -193,7 +193,8 @@
               "placeholder": "my-app",
               "tooltip": "Change base folder",
               "action": "Select this folder",
-              "folder-exists": "This folder already exists"
+              "folder-exists": "This folder already exists",
+              "folder-name-invalid": "Folder name invalid"
             },
             "manager": {
               "label": "Package manager",
