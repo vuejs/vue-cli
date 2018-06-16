@@ -1,10 +1,13 @@
-<template>
-  <div class="folder-explorer-item">
-    <VueIcon :icon="folder.isPackage ? 'folder' : 'folder_open'" class="folder-icon big"/>
+<template functional>
+  <div
+    class="folder-explorer-item"
+    @click="listeners.select()"
+  >
+    <VueIcon :icon="props.folder.isPackage ? 'folder' : 'folder_open'" class="folder-icon big"/>
     <div class="folder-name">
-      {{ folder.name }}
+      {{ props.folder.name }}
       <img
-        v-if="folder.isVueProject"
+        v-if="props.folder.isVueProject"
         class="vue-ui-project-icon"
         src="~@/assets/logo.png"
       >

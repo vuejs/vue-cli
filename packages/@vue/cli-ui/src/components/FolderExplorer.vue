@@ -88,13 +88,13 @@
       />
     </div>
 
-    <div class="folders">
+    <div ref="folders" class="folders">
       <template v-if="folderCurrent.children">
         <FolderExplorerItem
           v-for="folder of folderCurrent.children"
           :key="folder.name"
           :folder="folder"
-          @click.native="openFolder(folder.path)"
+          @select="openFolder(folder.path)"
         />
       </template>
     </div>
@@ -123,7 +123,11 @@ export default {
   apollo: {
     folderCurrent: {
       query: FOLDER_CURRENT,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      async result () {
+        await this.$nextTick()
+        this.$refs.folders.scrollTop = 0
+      }
     },
 
     foldersFavorite: FOLDERS_FAVORITE
