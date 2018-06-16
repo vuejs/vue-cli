@@ -70,7 +70,7 @@ function readFile (config, fileDescriptor, context) {
   if (file) {
     if (file.type === 'package') {
       const pkg = folders.readPackage(cwd.get(), context)
-      fileData = pkg[config.files.package]
+      fileData = pkg[fileDescriptor.package]
     } else if (file.type === 'js') {
       fileData = loadModule(file.path, cwd.get(), true)
     } else {
@@ -116,7 +116,7 @@ function writeFile (config, fileId, data, changedFields, context) {
   let rawContent
   if (file.type === 'package') {
     const pkg = folders.readPackage(cwd.get(), context)
-    pkg[config.files.package] = data
+    pkg[fileDescriptor.package] = data
     rawContent = JSON.stringify(pkg, null, 2)
   } else {
     if (file.type === 'json') {
