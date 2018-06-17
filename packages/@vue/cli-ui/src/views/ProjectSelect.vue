@@ -65,6 +65,27 @@
         v-tooltip="$t('views.about.title')"
       />
     </div>
+
+    <VueModal
+      v-if="showNoModulesModal"
+      :title="$t('views.project-select.import.no-modules.title')"
+      class="small no-modules-modal"
+      @close="showNoModulesModal = false"
+    >
+      <div class="default-body">
+        <div class="message">
+          {{ $t('views.project-select.import.no-modules.message') }}
+        </div>
+      </div>
+
+      <div slot="footer" class="actions">
+        <VueButton
+          class="primary big"
+          :label="$t('views.project-select.import.no-modules.close')"
+          @click="showNoModulesModal = false"
+        />
+      </div>
+    </VueModal>
   </div>
 </template>
 
@@ -86,7 +107,8 @@ export default {
     return {
       folderCurrent: {},
       tab: undefined,
-      hideTabs: !!this.$route.query.hideTabs
+      hideTabs: !!this.$route.query.hideTabs,
+      showNoModulesModal: false
     }
   },
 
@@ -111,16 +133,22 @@ export default {
     },
 
     async importProject () {
-      await this.$apollo.mutate({
-        mutation: PROJECT_IMPORT,
-        variables: {
-          input: {
-            path: this.folderCurrent.path
+      try {
+        await this.$apollo.mutate({
+          mutation: PROJECT_IMPORT,
+          variables: {
+            input: {
+              path: this.folderCurrent.path
+            }
           }
-        }
-      })
+        })
 
-      this.$router.push({ name: 'project-home' })
+        this.$router.push({ name: 'project-home' })
+      } catch (e) {
+        if (e.graphQLErrors && e.graphQLErrors.some(e => e.message === 'NO_MODULES')) {
+          this.showNoModulesModal = true
+        }
+      }
     }
   }
 }

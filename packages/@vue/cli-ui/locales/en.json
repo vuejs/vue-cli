@@ -191,6 +191,13 @@
       "buttons": {
         "create": "Create a new project here",
         "import": "Import this folder"
+      },
+      "import": {
+        "no-modules": {
+          "title": "Missing modules",
+          "message": "It seems the project is missing the 'node_modules' folder. Please check you installed the dependencies before importing.",
+          "close": "Got it"
+        }
       }
     },
     "project-create": {

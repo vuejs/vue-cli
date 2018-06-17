@@ -332,6 +332,10 @@ async function create (input, context) {
 }
 
 async function importProject (input, context) {
+  if (!fs.existsSync(path.join(input.path, 'node_modules'))) {
+    throw new Error('NO_MODULES')
+  }
+
   const project = {
     id: shortId.generate(),
     path: input.path,
