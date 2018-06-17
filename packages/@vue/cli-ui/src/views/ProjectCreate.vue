@@ -554,8 +554,25 @@ export default {
   },
 
   watch: {
-    'formData.remotePreset.url' (value) {
+    'formData.remotePreset.url' () {
       this.debouncedCheckRemotePreset()
+    },
+
+    'formData.remotePreset.clone' () {
+      this.debouncedCheckRemotePreset()
+    },
+
+    remoteNotGithub (value) {
+      if (value) {
+        this.$_oldClone = this.formData.remotePreset.clone
+        this.formData.remotePreset.clone = value
+      } else {
+        this.formData.remotePreset.clone = this.$_oldClone
+      }
+
+      if (!value) {
+        this.checkRemotePreset()
+      }
     }
   },
 
@@ -655,10 +672,6 @@ export default {
       if (!this.formData.remotePreset.url) {
         this.remotePresetValid = false
         return
-      }
-
-      if (this.remoteNotGithub) {
-        this.formData.remotePreset.clone = true
       }
 
       if (this.formData.remotePreset.clone) {
