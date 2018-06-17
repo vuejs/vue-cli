@@ -127,7 +127,11 @@
     </div>
 
     <div ref="folders" class="folders">
-      <template v-if="folderCurrent.children">
+      <VueLoadingIndicator
+        v-if="loading"
+        class="overlay"
+      />
+      <template v-else-if="folderCurrent.children">
         <FolderExplorerItem
           v-for="folder of folderCurrent.children"
           v-if="showHidden || !folder.hidden"
@@ -153,6 +157,7 @@ const SHOW_HIDDEN = 'vue-ui.show-hidden-folders'
 export default {
   data () {
     return {
+      loading: 0,
       error: false,
       editingPath: false,
       editedPath: '',
@@ -166,6 +171,7 @@ export default {
     folderCurrent: {
       query: FOLDER_CURRENT,
       fetchPolicy: 'network-only',
+      loadingKey: 'loading',
       async result () {
         await this.$nextTick()
         this.$refs.folders.scrollTop = 0
@@ -374,4 +380,5 @@ export default {
     flex 100% 1 1
     overflow-x hidden
     overflow-y auto
+    position relative
 </style>

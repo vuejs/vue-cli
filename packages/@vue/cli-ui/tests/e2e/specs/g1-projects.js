@@ -19,7 +19,7 @@ describe('Vue project manager', () => {
     cy.get('.change-folder').click()
     cy.get('.create').within(() => {
       cy.get('.folder-explorer').should('be.visible')
-      cy.get('.current-path').click()
+      cy.get('.edit-path-button').click()
       cy.get('.path-input input').clear().type(Cypress.env('cwd') + '{enter}')
       cy.get('.create-project').click()
     })
@@ -71,7 +71,7 @@ describe('Vue project manager', () => {
     cy.get('.tab-button').eq(2).click()
     cy.get('.import').within(() => {
       cy.get('.folder-explorer').should('be.visible')
-      cy.get('.current-path').click()
+      cy.get('.edit-path-button').click()
       cy.get('.path-input input').clear().type(Cypress.env('cwd') + '{enter}')
       cy.get(`.folder-explorer-item:contains('cli-ui-test')`).click()
       cy.get('.import-project').should('not.have.class', 'disabled').click()

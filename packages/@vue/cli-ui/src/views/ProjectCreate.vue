@@ -418,6 +418,7 @@
 
 <script>
 import Prompts from '../mixins/Prompts'
+import { isValidName } from '../util/folders'
 
 import CWD from '../graphql/cwd.gql'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
@@ -486,8 +487,7 @@ export default {
 
   computed: {
     folderNameValid () {
-      const name = this.formData.folder
-      return !name.match(/[/@\s+%:]/) && encodeURIComponent(name) === name
+      return isValidName(this.formData.folder)
     },
 
     detailsValid () {
