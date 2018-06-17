@@ -42,18 +42,22 @@
             v-if="data"
             class="path-value"
           >
-            <VueButton
+            <div
               v-for="(slice, index) of slicePath(data.cwd)"
               :key="index"
-              class="path-folder flat"
-              :icon-left="!slice.name ? 'folder' : null"
-              :class="{
-                'icon-button': !slice.name
-              }"
-              @click="openFolder(slice.path)"
+              class="path-part"
             >
-              {{ slice.name }}
-            </VueButton>
+              <VueButton
+                class="path-folder flat"
+                :icon-left="!slice.name ? 'folder' : null"
+                :class="{
+                  'icon-button': !slice.name
+                }"
+                @click="openFolder(slice.path)"
+              >
+                {{ slice.name }}
+              </VueButton>
+            </div>
           </div>
           <VueButton
             class="edit-path-button icon-button"
@@ -412,21 +416,15 @@ export default {
     h-box()
     align-items stretch
 
+  .path-part
+    &:not(:first-child)
+      border-left 2px solid
+      border-left-color $vue-ui-color-light
+      .vue-ui-dark-mode &
+        border-left-color $vue-ui-color-darker
+
   .path-folder
     padding 0 9px
-    &:not(:first-child)
-      position relative
-      &::before
-        display block
-        content ''
-        position absolute
-        top 0
-        left -1px
-        height 100%
-        width 2px
-        background $vue-ui-color-light
-        .vue-ui-dark-mode &
-          background $vue-ui-color-darker
 
   .edit-path-button
     margin-left 4px
