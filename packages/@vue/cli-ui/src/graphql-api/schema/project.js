@@ -36,7 +36,7 @@ input ProjectCreateInput {
   force: Boolean!
   packageManager: PackageManager
   preset: String!
-  remote: Boolean
+  remote: String
   clone: Boolean
   save: String
   enableGit: Boolean!

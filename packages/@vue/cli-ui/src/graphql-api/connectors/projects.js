@@ -302,9 +302,9 @@ async function create (input, context) {
       info: 'Resolving preset...'
     })
     let preset
-    if (input.remote) {
+    if (input.preset === '__remote__' && input.remote) {
       // vue create foo --preset bar
-      preset = await creator.resolvePreset(input.preset, input.clone)
+      preset = await creator.resolvePreset(input.remote, input.clone)
     } else if (input.preset === 'default') {
       // vue create foo --default
       preset = defaults.presets.default

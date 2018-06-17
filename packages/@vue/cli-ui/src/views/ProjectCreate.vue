@@ -176,8 +176,9 @@
 
               <ProjectPresetItem
                 :preset="remotePresetInfo"
-                :selected="formData.selectedPreset === 'remote'"
-                @click.native="selectPreset('remote')"
+                :selected="formData.selectedPreset === '__remote__'"
+                :description="formData.remotePreset.url"
+                @click.native="selectPreset('__remote__')"
               />
             </div>
 
@@ -202,6 +203,7 @@
                 icon-left="done"
                 :label="$t('views.project-create.tabs.presets.buttons.create')"
                 class="big primary next"
+                :disabled="!formData.selectedPreset"
                 @click="createWithoutSaving()"
               />
             </div>
@@ -327,16 +329,49 @@
     <VueModal
       v-if="showRemotePreset"
       :title="$t('views.project-create.tabs.presets.modal.title')"
-      class="medium"
-      @close="showRemotePreset = false"
+      class="small remove-preset-modal"
+      @close="closeRemotePresetModal()"
     >
-      <div class="default-body">
-        <div class="vue-ui-empty">
-          <VueIcon icon="cake" class="large"/>
-          <div>
-            {{ $t('views.project-create.tabs.presets.modal.body') }}
-          </div>
-        </div>
+      <div class="default-body vue-ui-grid big-gap col-1">
+        <VueFormField
+          :title="$t('views.project-create.tabs.presets.remote.url.title')"
+          :subtitle="$t('views.project-create.tabs.presets.remote.url.subtitle')"
+        >
+          <VueInput
+            v-model="formData.remotePreset.url"
+            icon-left="language"
+            v-focus
+          />
+        </VueFormField>
+
+        <VueFormField
+          :title="$t('views.project-create.tabs.presets.remote.options')"
+        >
+          <VueSwitch
+            v-model="formData.remotePreset.clone"
+            class="extend-left"
+            :disabled="remoteNotGithub"
+          >
+            {{ $t('views.project-create.tabs.presets.remote.clone') }}
+          </VueSwitch>
+        </VueFormField>
+      </div>
+
+      <div slot="footer" class="actions space-between">
+        <VueButton
+          :label="$t('views.project-create.tabs.presets.remote.cancel')"
+          class="flat"
+          @click="closeRemotePresetModal(true)"
+        />
+
+        <VueButton
+          :label="$t('views.project-create.tabs.presets.remote.done')"
+          :disabled="!formData.remotePreset.url || !remotePresetValid"
+          :loading-secondary="remotePresetValid === null"
+          icon-left="done"
+          class="primary"
+          @click="closeRemotePresetModal()"
+        />
       </div>
     </VueModal>
 
@@ -420,6 +455,7 @@
 <script>
 import Prompts from '../mixins/Prompts'
 import { isValidName } from '../util/folders'
+import debounce from 'lodash.debounce'
 
 import CWD from '../graphql/cwd.gql'
 import PROJECT_CREATION from '../graphql/projectCreation.gql'
@@ -470,6 +506,7 @@ export default {
       showCancel: false,
       showRemotePreset: false,
       showSavePreset: false,
+      remotePresetValid: false,
       debug: ''
     }
   },
@@ -508,7 +545,22 @@ export default {
         name: 'views.project-create.tabs.presets.remote.name',
         description: 'views.project-create.tabs.presets.remote.description'
       }
+    },
+
+    remoteNotGithub () {
+      const { url } = this.formData.remotePreset
+      return url && /^(gitlab|bitbucket):/.test(url)
     }
+  },
+
+  watch: {
+    'formData.remotePreset.url' (value) {
+      this.debouncedCheckRemotePreset()
+    }
+  },
+
+  created () {
+    this.debouncedCheckRemotePreset = debounce(this.checkRemotePreset, 1000)
   },
 
   beforeDestroy () {
@@ -517,12 +569,12 @@ export default {
 
   methods: {
     async selectPreset (id) {
-      if (id === 'remote') {
+      this.formData.selectedPreset = id
+
+      if (id === '__remote__') {
         this.showRemotePreset = true
         return
       }
-
-      this.formData.selectedPreset = id
 
       await this.$apollo.mutate({
         mutation: PRESET_APPLY,
@@ -586,6 +638,39 @@ export default {
       await this.$apollo.mutate({
         mutation: PROJECT_CANCEL_CREATION
       })
+    },
+
+    closeRemotePresetModal (clear = false) {
+      if (clear) {
+        this.formData.remotePreset.url = ''
+      }
+
+      this.showRemotePreset = false
+      if (!this.formData.remotePreset.url) {
+        this.formData.selectedPreset = null
+      }
+    },
+
+    async checkRemotePreset () {
+      if (!this.formData.remotePreset.url) {
+        this.remotePresetValid = false
+        return
+      }
+
+      if (this.remoteNotGithub) {
+        this.formData.remotePreset.clone = true
+      }
+
+      if (this.formData.remotePreset.clone) {
+        this.remotePresetValid = true
+      } else {
+        this.remotePresetValid = null
+
+        const url = `https://raw.githubusercontent.com/${this.formData.remotePreset.url}/master/preset.json`
+
+        const response = await fetch(url)
+        this.remotePresetValid = response.ok
+      }
     }
   }
 }
