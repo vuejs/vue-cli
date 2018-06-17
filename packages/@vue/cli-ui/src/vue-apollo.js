@@ -47,6 +47,16 @@ export const apolloProvider = new VueApollo({
         mod
       }
     })
+  },
+  errorHandler (error) {
+    console.log('%cAn error occured', 'background: red; color: white; padding: 4px; border-radius: 4px;font-weight: bold;')
+    console.log(error.message)
+    if (error.graphQLErrors) {
+      console.log(error.graphQLErrors)
+    }
+    if (error.networkError) {
+      console.log(error.networkError)
+    }
   }
 })
 
