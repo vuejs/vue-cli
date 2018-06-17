@@ -44,7 +44,8 @@
           "refresh": "Refresh"
         },
         "placeholder": "Enter the full path to a folder",
-        "empty": "No favorite folders yet."
+        "empty": "No favorite folders yet.",
+        "show-hidden": "Show hidden folders"
       }
     },
     "list-item-info": {
