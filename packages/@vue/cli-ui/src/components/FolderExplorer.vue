@@ -20,6 +20,7 @@
           v-model="editedPath"
           :placeholder="$t('components.folder-explorer.toolbar.placeholder')"
           icon-right="edit"
+          v-focus
           @keyup.esc="editingPath = false"
           @keyup.enter="submitPathEdit()"
         />
@@ -162,6 +163,7 @@
           <VueInput
             v-model="newFolderName"
             icon-left="folder"
+            v-focus
             @keyup.enter="createFolder()"
           />
         </VueFormField>

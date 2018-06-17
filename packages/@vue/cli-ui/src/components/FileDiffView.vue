@@ -41,7 +41,7 @@
           icon-left="vertical_align_bottom"
           :label="$t('components.file-diff-view.actions.commit')"
           class="big primary"
-          @click="openCommitModal()"
+          @click="showCommitModal = true"
         />
         <VueButton
           :label="$t('components.file-diff-view.actions.skip')"
@@ -84,9 +84,9 @@
           :subtitle="$t('components.file-diff-view.modals.commit.subtitle')"
         >
           <VueInput
-            ref="commitMessageInput"
             v-model="commitMessage"
             icon-left="local_offer"
+            v-focus
             @keyup.enter="commitMessage && commit()"
           />
         </VueFormField>
@@ -195,13 +195,6 @@ export default {
 
     refresh () {
       this.$apollo.queries.fileDiffs.refetch()
-    },
-
-    openCommitModal () {
-      this.showCommitModal = true
-      requestAnimationFrame(() => {
-        this.$refs.commitMessageInput.focus()
-      })
     },
 
     async commit () {

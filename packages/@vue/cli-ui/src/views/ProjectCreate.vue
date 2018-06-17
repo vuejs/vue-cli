@@ -380,6 +380,7 @@
           <VueInput
             v-model="formData.save"
             icon-left="local_offer"
+            v-focus
           />
         </VueFormField>
       </div>
