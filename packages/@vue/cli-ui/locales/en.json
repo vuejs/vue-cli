@@ -46,6 +46,16 @@
         "placeholder": "Enter the full path to a folder",
         "empty": "No favorite folders yet.",
         "show-hidden": "Show hidden folders"
+      },
+      "new-folder": {
+        "action": "New folder",
+        "title": "Create new folder",
+        "field": {
+          "title": "New folder",
+          "subtitle": "You can use the folder separator to create multiple nested folders at once."
+        },
+        "cancel": "Cancel",
+        "create": "Create"
       }
     },
     "list-item-info": {

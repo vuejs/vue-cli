@@ -14,6 +14,7 @@ extend type Mutation {
   folderOpen (path: String!): Folder
   folderOpenParent: Folder
   folderSetFavorite (path: String!, favorite: Boolean!): Folder
+  folderCreate(name: String!): Folder
 }
 
 type Folder {
@@ -47,6 +48,7 @@ exports.resolvers = {
     folderSetFavorite: (root, args, context) => folders.setFavorite({
       file: args.path,
       favorite: args.favorite
-    }, context)
+    }, context),
+    folderCreate: (root, { name }, context) => folders.create(name, context)
   }
 }

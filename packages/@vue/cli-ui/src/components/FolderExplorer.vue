@@ -116,6 +116,12 @@
           class="icon-button"
         />
 
+        <VueDropdownButton
+          :label="$t('components.folder-explorer.new-folder.action')"
+          icon-left="create_new_folder"
+          @click="showNewFolder = true"
+        />
+
         <VueSwitch
           icon="visibility"
           v-model="showHidden"
@@ -141,16 +147,55 @@
         />
       </template>
     </div>
+
+    <VueModal
+      v-if="showNewFolder"
+      :title="$t('components.folder-explorer.new-folder.title')"
+      class="small new-folder-modal"
+      @close="showNewFolder = false"
+    >
+      <div class="default-body">
+        <VueFormField
+          :title="$t('components.folder-explorer.new-folder.field.title')"
+          :subtitle="$t('components.folder-explorer.new-folder.field.subtitle')"
+        >
+          <VueInput
+            v-model="newFolderName"
+            icon-left="folder"
+            @keyup.enter="createFolder()"
+          />
+        </VueFormField>
+      </div>
+
+      <div slot="footer" class="actions space-between">
+        <VueButton
+          :label="$t('components.folder-explorer.new-folder.cancel')"
+          class="flat close"
+          @click="showNewFolder = false"
+        />
+
+        <VueButton
+          :label="$t('components.folder-explorer.new-folder.create')"
+          icon-left="create_new_folder"
+          class="primary save"
+          :disabled="!newFolderValid"
+          @click="createFolder()"
+        />
+      </div>
+    </VueModal>
   </div>
 </template>
 
 <script>
+import { isValidMultiName } from '../util/folders'
+
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
 import FOLDERS_FAVORITE from '../graphql/foldersFavorite.gql'
 import FOLDER_OPEN from '../graphql/folderOpen.gql'
 import FOLDER_OPEN_PARENT from '../graphql/folderOpenParent.gql'
 import FOLDER_SET_FAVORITE from '../graphql/folderSetFavorite.gql'
 import PROJECT_CWD_RESET from '../graphql/projectCwdReset.gql'
+import FOLDER_CREATE from '../graphql/folderCreate.gql'
 
 const SHOW_HIDDEN = 'vue-ui.show-hidden-folders'
 
@@ -163,7 +208,9 @@ export default {
       editedPath: '',
       folderCurrent: {},
       foldersFavorite: [],
-      showHidden: localStorage.getItem(SHOW_HIDDEN) === 'true'
+      showHidden: localStorage.getItem(SHOW_HIDDEN) === 'true',
+      showNewFolder: false,
+      newFolderName: ''
     }
   },
 
@@ -179,6 +226,12 @@ export default {
     },
 
     foldersFavorite: FOLDERS_FAVORITE
+  },
+
+  computed: {
+    newFolderValid () {
+      return isValidMultiName(this.newFolderName)
+    }
   },
 
   watch: {
@@ -311,6 +364,22 @@ export default {
       if (startIndex < path.length) addPart(path.length)
 
       return parts
+    },
+
+    async createFolder () {
+      if (!this.newFolderValid) return
+
+      const result = await this.$apollo.mutate({
+        mutation: FOLDER_CREATE,
+        variables: {
+          name: this.newFolderName
+        }
+      })
+
+      this.openFolder(result.data.folderCreate.path)
+
+      this.newFolderName = ''
+      this.showNewFolder = false
     }
   }
 }

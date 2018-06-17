@@ -135,6 +135,12 @@ async function deleteFolder (file) {
   await fs.remove(file)
 }
 
+function createFolder (name, context) {
+  const file = path.join(cwd.get(), name)
+  fs.mkdirpSync(file)
+  return generateFolder(file, context)
+}
+
 module.exports = {
   isDirectory,
   getCurrent,
@@ -148,5 +154,6 @@ module.exports = {
   isFavorite,
   listFavorite,
   setFavorite,
-  delete: deleteFolder
+  delete: deleteFolder,
+  create: createFolder
 }
