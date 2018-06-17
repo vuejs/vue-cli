@@ -107,8 +107,15 @@ function writePackage ({ file, data }, context) {
 function isVueProject (file, context) {
   if (!isPackage(file)) return false
 
-  const pkg = readPackage(file, context)
-  return Object.keys(pkg.devDependencies || {}).includes('@vue/cli-service')
+  try {
+    const pkg = readPackage(file, context)
+    return Object.keys(pkg.devDependencies || {}).includes('@vue/cli-service')
+  } catch (e) {
+    if (process.env.VUE_APP_CLI_UI_DEV) {
+      console.log(e)
+    }
+  }
+  return false
 }
 
 function listFavorite (context) {
