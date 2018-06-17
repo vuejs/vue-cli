@@ -63,6 +63,13 @@
         </template>
       </ApolloQuery>
 
+      <VueIcon
+        v-if="error"
+        icon="error"
+        class="error-icon big"
+        v-tooltip="error.message"
+      />
+
       <VueButton
         class="icon-button"
         icon-left="refresh"
@@ -101,13 +108,6 @@
           {{ $t('components.folder-explorer.toolbar.empty') }}
         </div>
       </VueDropdown>
-
-      <VueIcon
-        v-if="error"
-        icon="error"
-        class="error-icon big"
-        v-tooltip="error.message"
-      />
 
       <VueDropdown placement="bottom-end">
         <VueButton
