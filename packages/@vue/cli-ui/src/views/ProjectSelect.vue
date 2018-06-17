@@ -57,7 +57,16 @@
       </VueTab>
     </StepWizard>
 
-    <div class="top-menu">
+    <div class="top-menu left">
+      <VueButton
+        v-if="projectCurrent"
+        :to="{ name: 'home' }"
+        class="flat icon-button"
+        icon-left="arrow_back"
+      />
+    </div>
+
+    <div class="top-menu right">
       <VueButton
         :to="{ name: 'about' }"
         class="flat icon-button"
@@ -93,6 +102,7 @@
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
 import PROJECT_INIT_CREATION from '../graphql/projectInitCreation.gql'
 import PROJECT_IMPORT from '../graphql/projectImport.gql'
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 
 export default {
   name: 'ProjectSelect',
@@ -113,7 +123,8 @@ export default {
   },
 
   apollo: {
-    folderCurrent: FOLDER_CURRENT
+    folderCurrent: FOLDER_CURRENT,
+    projectCurrent: PROJECT_CURRENT
   },
 
   mounted () {
@@ -169,5 +180,8 @@ export default {
 .top-menu
   position fixed
   top $padding-item
-  right $padding-item
+  &.left
+    left $padding-item
+  &.right
+    right $padding-item
 </style>
