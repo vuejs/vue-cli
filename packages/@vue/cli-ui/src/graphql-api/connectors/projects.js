@@ -274,16 +274,15 @@ async function create (input, context) {
     await prompts.reset()
     let index
 
-    // Package Manager
-    answers.packageManager = input.packageManager
-
     // Config files
     if ((index = answers.features.indexOf('use-config-files')) !== -1) {
       answers.features.splice(index, 1)
       answers.useConfigFiles = 'files'
     }
 
-    const createOptions = {}
+    const createOptions = {
+      packageManager: input.packageManager
+    }
     // Git
     if (input.enableGit && input.gitCommitMessage) {
       createOptions.git = input.gitCommitMessage
