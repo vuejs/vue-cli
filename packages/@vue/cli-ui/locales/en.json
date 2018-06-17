@@ -610,7 +610,7 @@
   "jest": {
     "tasks": {
       "test": {
-        "description": "Run unit tests with Jestks",
+        "description": "Run unit tests with Jest",
         "watch": "Watch files for changes and rerun tests related to changed files",
         "notify": "Display a notification after each run",
         "update": "Re-record every snapshot that fails during this test run"
