@@ -3,6 +3,8 @@ const stringifyJS = require('./stringifyJS')
 const { loadModule } = require('./module')
 const merge = require('deepmerge')
 
+const isObject = val => val && typeof val === 'object'
+
 function makeJSTransform (filename) {
   return function transformToJS (value, checkExisting, files, context) {
     if (checkExisting && files[filename]) {
@@ -12,7 +14,15 @@ function makeJSTransform (filename) {
         const originalData = loadModule(filename, context, true)
         // We merge only the modified keys
         Object.keys(value).forEach(key => {
-          changedData[key] = merge(originalData[key], value[key])
+          const originalValue = originalData[key]
+          const newValue = value[key]
+          if (Array.isArray(newValue)) {
+            changedData[key] = newValue
+          } else if (isObject(originalValue) && isObject(newValue)) {
+            changedData[key] = merge(originalValue, newValue)
+          } else {
+            changedData[key] = newValue
+          }
         })
       } catch (e) {
         changedData = value
