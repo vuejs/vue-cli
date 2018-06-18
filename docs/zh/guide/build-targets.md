@@ -1,23 +1,23 @@
-# Build Targets
+# 构建目标
 
-When you run `vue-cli-service build`, you can specify different build targets via the `--target` option. This allows you to use the same code base to produce different builds for different use cases.
+当你运行 `vue-cli-service build` 时，你可以通过 `--target` 选项指定不同的构建目标。它允许你将相同的源代码根据不同的用例生成不同的构建。
 
-## App
+## 应用
 
-App is the default build target. In this mode:
+应用模式是默认的模式。在这个模式中：
 
-- `index.html` with asset and resource hints injection
-- vendor libraries split into a separate chunk for better caching
-- static assets under 10kb are inlined into JavaScript
-- static assets in `public` are copied into output directory
+- `index.html` 会带有注入的资源和资源暗示
+- 供应的库会被分到一个独立包以便更好的缓存
+- 小于 10kb 的静态资源会被内联在 JavaScript 中
+- `public` 中的静态资源会被复制到输出目录中
 
-## Library
+## 库
 
 ::: tip Note on Vue Dependency
-In lib mode, Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
+在库模式中，Vue 是*外置的*。这意味着包中不会有 Vue，甚至你在代码中导入了 Vue。如果这个库会通过一个打包器使用，它将会在打包器内尝试作为一个依赖加载 Vue；否则就会回退到一个全局的 `Vue` 变量。
 :::
 
-You can build a single entry as a library using
+你可以通过下面的命令对一个单独的入口构建为一个库：
 
 ```
 vue-cli-service build --target lib --name myLib [entry]
@@ -32,17 +32,17 @@ dist/myLib.common.js     20.57 kb                 10.09 kb
 dist/myLib.css           0.33 kb                  0.23 kb
 ```
 
-The entry can be either a `.js` or a `.vue` file. If no entry is specified, `src/App.vue` will be used.
+这个入口可以是一个 `.js` 或一个 `.vue` 文件。如果没有指定入口，则会使用 `src/App.vue`。
 
-A lib build outputs:
+构建一个库会输出：
 
-- `dist/myLib.common.js`: A CommonJS bundle for consuming via bundlers (unfortunately, webpack currently does not support ES modules output format for bundles yet)
+- `dist/myLib.common.js`：一个用来被打包器消费的 CommonJS 包 (不幸的是，webpack 目前还并没有支持 ES modules 输出格式的包)
 
-- `dist/myLib.umd.js`: A UMD bundle for consuming directly in browsers or with AMD loaders
+- `dist/myLib.umd.js`：一个用来直接在浏览器中或通过 AMD loader 消费的 UMD 包
 
-- `dist/myLib.umd.min.js`: Minified version of the UMD build.
+- `dist/myLib.umd.min.js`：压缩后的 UMD 构建版本
 
-- `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
+- `dist/myLib.css`：提取出来的 CSS 文件 (可以通过在 `vue.config.js` 中设置 `css: { extract: false }` 强制内联)
 
 ### Vue vs. JS/TS Entry Files
 
@@ -60,7 +60,7 @@ module.exports = {
 }
 ```
 
-## Web Component
+## Web Components
 
 ::: tip Note on Compatibility
 Web Component mode does not support IE11 and below. [More details](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
@@ -70,39 +70,39 @@ Web Component mode does not support IE11 and below. [More details](https://githu
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
 :::
 
-You can build a single entry as a library using
+你可以通过下面的命令对一个单独的入口构建为一个库：
 
 ```
 vue-cli-service build --target wc --name my-element [entry]
 ```
 
-This will produce a single JavaScript file (and its minified version) with everything inlined. The script, when included on a page, registers the `<my-element>` custom element, which wraps the target Vue component using `@vue/web-component-wrapper`. The wrapper automatically proxies properties, attributes, events and slots. See the [docs for `@vue/web-component-wrapper`](https://github.com/vuejs/vue-web-component-wrapper) for more details.
+这将会产生一个单独的 JavaScript 文件 (及其压缩后的版本) 将所有的东西都内联起来。当这个脚本被引入网页时，会注册自定义组件 `<my-element>`，其使用 `@vue/web-component-wrapper` 包裹了目标的 Vue 组件。这个包裹器会自动代理属性、特性、事件和插槽。请查阅 [`@vue/web-component-wrapper` 的文档](https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-web-component-wrapper/README.md)了解更多细节。
 
-**Note the bundle relies on `Vue` being globally available on the page.**
+**注意这个包依赖了在页面上全局可用的 `Vue`。**
 
-This mode allows consumers of your component to use the Vue component as a normal DOM element:
+这个模式允许你的组件的消费者以一个普通 DOM 元素的方式使用这个 Vue 组件：
 
 ``` html
 <script src="https://unpkg.com/vue"></script>
 <script src="path/to/my-element.js"></script>
 
-<!-- use in plain HTML, or in any other framework -->
+<!-- 可在普通 HTML 中或者其它任何框架中使用 -->
 <my-element></my-element>
 ```
 
-### Bundle that Registers Multiple Web Components
+### 注册多个 Web Components 的包
 
-When building a web component bundle, you can also target multiple components by using a glob as entry:
+当你构建一个 Web Components 组件包的时候，你也可以使用一个 glob 表达式作为入口指定多个组件目标：
 
 ```
 vue-cli-service build --target wc --name foo 'src/components/*.vue'
 ```
 
-When building multiple web components, `--name` will be used as the prefix and the custom element name will be inferred from the component filename. For example, with `--name foo` and a component named `HelloWorld.vue`, the resulting custom element will be registered as `<foo-hello-world>`.
+当你构建多个 web component 时，`--name` 将会用于设置前缀，同时自定义元素的名称会由组件的文件名推导得出。比如一个名为 `HelloWorld.vue` 的组件携带 `--name foo` 将会生成的自定义元素名为 `<foo-hello-world>`。
 
-### Async Web Component
+### 异步 Web Components
 
-When targeting multiple web components, the bundle may become quite large, and the user may only use a few of the components your bundle registers. The async web component mode produces a code-split bundle with a small entry file that provides the shared runtime between all the components, and registers all the custom elements upfront. The actual implementation of a component is then fetched on-demand only when an instance of the corresponding custom element is used on the page:
+当指定多个 Web Components 组件作为目标时，这个包可能会变得非常大，并且用户可能只想使用你的包中注册的一部分组件。这时异步 Web Components 模式会生成一个分割代码的包，带一个只提供所有组件共享的运行时，并预先注册所有的自定义组件小入口文件。一个组件真正的实现只会在页面中用到自定义元素相应的一个实例时按需获取：
 
 ```
 vue-cli-service build --target wc-async --name foo 'src/components/*.vue'
@@ -119,12 +119,12 @@ dist/foo.0.js        17.27 kb                    8.83 kb
 dist/foo.1.js        5.24 kb                     1.64 kb
 ```
 
-Now on the page, the user only needs to include Vue and the entry file:
+现在用户在该页面上只需要引入 Vue 和这个入口文件即可：
 
 ``` html
 <script src="https://unpkg.com/vue"></script>
 <script src="path/to/foo.min.js"></script>
 
-<!-- foo-one's implementation chunk is auto fetched when it's used -->
+<!-- foo-one 的实现块会在用到的时候自动获取 -->
 <foo-one></foo-one>
 ```
