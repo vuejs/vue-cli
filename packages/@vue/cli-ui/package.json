@@ -42,7 +42,7 @@
     "terminate": "^2.1.0",
     "vue-cli-plugin-apollo": "^0.13.4",
     "watch": "^1.0.2",
-    "winattr": "^2.0.0"
+    "@akryum/winattr": "^3.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.3",

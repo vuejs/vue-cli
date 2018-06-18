@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 const LRU = require('lru-cache')
-const winattr = require('winattr')
+const winattr = require('@akryum/winattr')
 
 const hiddenPrefix = '.'
 const isPlatformWindows = process.platform.indexOf('win') === 0
@@ -40,17 +40,25 @@ async function list (base, context) {
 }
 
 function isHidden (file) {
-  const prefixed = path.basename(file).charAt(0) === hiddenPrefix
-  const result = {
-    unix: prefixed,
-    windows: false
-  }
+  try {
+    const prefixed = path.basename(file).charAt(0) === hiddenPrefix
+    const result = {
+      unix: prefixed,
+      windows: false
+    }
 
-  if (isPlatformWindows) {
-    result.windows = winattr.getSync(file).hidden
-  }
+    if (isPlatformWindows) {
+      const windowsFile = file.replace(/\\/g, '\\\\')
+      result.windows = winattr.getSync(windowsFile).hidden
+    }
 
-  return (!isPlatformWindows && result.unix) || (isPlatformWindows && result.windows)
+    return (!isPlatformWindows && result.unix) || (isPlatformWindows && result.windows)
+  } catch (e) {
+    if (process.env.VUE_APP_CLI_UI_DEV) {
+      console.log('file:', file)
+      console.error(e)
+    }
+  }
 }
 
 function generateFolder (file, context) {
