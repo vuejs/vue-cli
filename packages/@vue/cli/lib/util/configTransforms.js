@@ -1,12 +1,26 @@
 const extendJSConfig = require('./extendJSConfig')
 const stringifyJS = require('./stringifyJS')
+const { loadModule } = require('./module')
+const merge = require('deepmerge')
 
 function makeJSTransform (filename) {
-  return function transformToJS (value, checkExisting, files) {
+  return function transformToJS (value, checkExisting, files, context) {
     if (checkExisting && files[filename]) {
+      // Merge data
+      let changedData = {}
+      try {
+        const originalData = loadModule(filename, context, true)
+        // We merge only the modified keys
+        Object.keys(value).forEach(key => {
+          changedData[key] = merge(originalData[key], value[key])
+        })
+      } catch (e) {
+        changedData = value
+      }
+      // Write
       return {
         filename,
-        content: extendJSConfig(value, files[filename])
+        content: extendJSConfig(changedData, files[filename])
       }
     } else {
       return {
@@ -23,7 +37,7 @@ function makeJSONTransform (filename) {
     if (checkExisting && files[filename]) {
       existing = JSON.parse(files[filename])
     }
-    value = Object.assign(existing, value)
+    value = merge(existing, value)
     return {
       filename,
       content: JSON.stringify(value, null, 2)
@@ -32,10 +46,10 @@ function makeJSONTransform (filename) {
 }
 
 function makeMutliExtensionJSONTransform (filename, preferJS) {
-  return function transformToMultiExtensions (value, checkExisting, files) {
+  return function transformToMultiExtensions (value, checkExisting, files, context) {
     function defaultTransform () {
       if (preferJS) {
-        return makeJSTransform(`${filename}.js`)(value, false, files)
+        return makeJSTransform(`${filename}.js`)(value, false, files, context)
       } else {
         return makeJSONTransform(filename)(value, false, files)
       }
@@ -50,7 +64,7 @@ function makeMutliExtensionJSONTransform (filename, preferJS) {
     } else if (files[`${filename}.json`]) {
       return makeJSONTransform(`${filename}.json`)(value, checkExisting, files)
     } else if (files[`${filename}.js`]) {
-      return makeJSTransform(`${filename}.js`)(value, checkExisting, files)
+      return makeJSTransform(`${filename}.js`)(value, checkExisting, files, context)
     } else if (files[`${filename}.yaml`]) {
       return transformYAML(value, `${filename}.yaml`, files[`${filename}.yaml`])
     } else if (files[`${filename}.yml`]) {
@@ -66,7 +80,7 @@ function transformYAML (value, filename, source) {
   const existing = yaml.safeLoad(source)
   return {
     filename,
-    content: yaml.safeDump(Object.assign(existing, value))
+    content: yaml.safeDump(merge(existing, value))
   }
 }
 
