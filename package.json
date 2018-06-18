@@ -14,6 +14,7 @@
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js",
     "release": "yarn clean && node scripts/release.js",
+    "changelog": "node scripts/genChangelog.js run",
     "docs": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "patch-chromedriver": "node scripts/patchChromedriver.js"
