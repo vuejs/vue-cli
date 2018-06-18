@@ -23,9 +23,8 @@ module.exports = (api, options) => {
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`
     }
-  }, async function (args) {
-    await serve(args, api, options)
-    return
+  }, function (args) {
+    return serve(args, api, options)
   })
 }
 
