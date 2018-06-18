@@ -12,21 +12,25 @@ const defaults = {
 }
 
 module.exports = (api, options) => {
-  api.registerCommand('serve', {
-    description: 'start development server',
-    usage: 'vue-cli-service serve [options] [entry]',
-    options: {
-      '--open': `open browser on server start`,
-      '--copy': `copy url to clipboard on server start`,
-      '--mode': `specify env mode (default: development)`,
-      '--host': `specify host (default: ${defaults.host})`,
-      '--port': `specify port (default: ${defaults.port})`,
-      '--https': `use https (default: ${defaults.https})`
+  api.registerCommand(
+    'serve',
+    {
+      description: 'start development server',
+      usage: 'vue-cli-service serve [options] [entry]',
+      options: {
+        '--open': `open browser on server start`,
+        '--copy': `copy url to clipboard on server start`,
+        '--mode': `specify env mode (default: development)`,
+        '--host': `specify host (default: ${defaults.host})`,
+        '--port': `specify port (default: ${defaults.port})`,
+        '--https': `use https (default: ${defaults.https})`
+      }
+    },
+    async function (args) {
+      await serve(args, api, options)
+      return
     }
-  }, async function (args) {
-    await serve(args, api, options)
-    return
-  })
+  )
 }
 
 async function serve (args, api, options, config) {
@@ -50,14 +54,16 @@ async function serve (args, api, options, config) {
   const projectDevServerOptions = options.devServer || {}
 
   // resolve webpack config
-  const webpackConfig = config.toConfig() || api.resolveWebpackConfig()
+  const webpackConfig = config ? config.toConfig() : api.resolveWebpackConfig()
 
   // expose advanced stats
   if (args.dashboard) {
     const DashboardPlugin = require('../webpack/DashboardPlugin')
-            ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
-      type: 'serve'
-    }))
+    ;(webpackConfig.plugins = webpackConfig.plugins || []).push(
+      new DashboardPlugin({
+        type: 'serve'
+      })
+    )
   }
 
   // entry arg
@@ -71,16 +77,19 @@ async function serve (args, api, options, config) {
   // resolve server options
   const useHttps = args.https || projectDevServerOptions.https || defaults.https
   const protocol = useHttps ? 'https' : 'http'
-  const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
-  portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
+  const host =
+    args.host ||
+    process.env.HOST ||
+    projectDevServerOptions.host ||
+    defaults.host
+  portfinder.basePort =
+    args.port ||
+    process.env.PORT ||
+    projectDevServerOptions.port ||
+    defaults.port
   const port = await portfinder.getPortPromise()
 
-  const urls = prepareURLs(
-    protocol,
-    host,
-    port,
-    options.baseUrl
-  )
+  const urls = prepareURLs(protocol, host, port, options.baseUrl)
 
   const proxySettings = prepareProxy(
     projectDevServerOptions.proxy,
@@ -90,20 +99,24 @@ async function serve (args, api, options, config) {
   // inject dev & hot-reload middleware entries
   if (!isProduction) {
     const publicOpt = projectDevServerOptions.public
-    const sockjsUrl = publicOpt ? `//${publicOpt}/sockjs-node` : url.format({
-      protocol,
-      port,
-      hostname: urls.lanUrlForConfig || 'localhost',
-      pathname: '/sockjs-node'
-    })
+    const sockjsUrl = publicOpt
+      ? `//${publicOpt}/sockjs-node`
+      : url.format({
+        protocol,
+        port,
+        hostname: urls.lanUrlForConfig || 'localhost',
+        pathname: '/sockjs-node'
+      })
 
     const devClients = [
       // dev server client
       require.resolve(`webpack-dev-server/client`) + `?${sockjsUrl}`,
       // hmr client
-      require.resolve(projectDevServerOptions.hotOnly
-        ? 'webpack/hot/only-dev-server'
-        : 'webpack/hot/dev-server')
+      require.resolve(
+        projectDevServerOptions.hotOnly
+          ? 'webpack/hot/only-dev-server'
+          : 'webpack/hot/dev-server'
+      )
       // TODO custom overlay client
       // `@vue/cli-overlay/dist/client`
     ]
@@ -118,41 +131,52 @@ async function serve (args, api, options, config) {
   const compiler = webpack(webpackConfig)
 
   // create server
-  const server = new WebpackDevServer(compiler, Object.assign({
-    clientLogLevel: 'none',
-    historyApiFallback: {
-      disableDotRule: true,
-      rewrites: [
-        { from: /./, to: path.posix.join(options.baseUrl, 'index.html') }
-      ]
-    },
-    contentBase: api.resolve('public'),
-    watchContentBase: !isProduction,
-    hot: !isProduction,
-    quiet: true,
-    compress: isProduction,
-    publicPath: options.baseUrl,
-    overlay: isProduction // TODO disable this
-      ? false
-      : { warnings: false, errors: true }
-  }, projectDevServerOptions, {
-    https: useHttps,
-    proxy: proxySettings,
-    before (app) {
-      // launch editor support.
-      // this works with vue-devtools & @vue/cli-overlay
-      app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
-        `To specify an editor, sepcify the EDITOR env variable or ` +
-                    `add "editor" field to your Vue project config.\n`
-      )))
-      // allow other plugins to register middlewares, e.g. PWA
-      api.service.devServerConfigFns.forEach(fn => fn(app))
-      // apply in project middlewares
-      projectDevServerOptions.before && projectDevServerOptions.before(app)
-    }
-  }))
-
-        ;['SIGINT', 'SIGTERM'].forEach(signal => {
+  const server = new WebpackDevServer(
+    compiler,
+    Object.assign(
+      {
+        clientLogLevel: 'none',
+        historyApiFallback: {
+          disableDotRule: true,
+          rewrites: [
+            { from: /./, to: path.posix.join(options.baseUrl, 'index.html') }
+          ]
+        },
+        contentBase: api.resolve('public'),
+        watchContentBase: !isProduction,
+        hot: !isProduction,
+        quiet: true,
+        compress: isProduction,
+        publicPath: options.baseUrl,
+        overlay: isProduction // TODO disable this
+          ? false
+          : { warnings: false, errors: true }
+      },
+      projectDevServerOptions,
+      {
+        https: useHttps,
+        proxy: proxySettings,
+        before (app) {
+          // launch editor support.
+          // this works with vue-devtools & @vue/cli-overlay
+          app.use(
+            '/__open-in-editor',
+            launchEditorMiddleware(() =>
+              console.log(
+                `To specify an editor, sepcify the EDITOR env variable or ` +
+                  `add "editor" field to your Vue project config.\n`
+              )
+            )
+          )
+          // allow other plugins to register middlewares, e.g. PWA
+          api.service.devServerConfigFns.forEach(fn => fn(app))
+          // apply in project middlewares
+          projectDevServerOptions.before && projectDevServerOptions.before(app)
+        }
+      }
+    )
+  )
+  ;['SIGINT', 'SIGTERM'].forEach(signal => {
     process.on(signal, () => {
       server.close(() => {
         process.exit(0)
@@ -188,11 +212,13 @@ async function serve (args, api, options, config) {
       }
 
       console.log()
-      console.log([
-        `  App running at:`,
-        `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`,
-        `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
-      ].join('\n'))
+      console.log(
+        [
+          `  App running at:`,
+          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`,
+          `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
+        ].join('\n')
+      )
       console.log()
 
       if (isFirstCompile) {
@@ -201,7 +227,9 @@ async function serve (args, api, options, config) {
         if (!isProduction) {
           const buildCommand = hasYarn() ? `yarn build` : `npm run build`
           console.log(`  Note that the development build is not optimized.`)
-          console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
+          console.log(
+            `  To create a production build, run ${chalk.cyan(buildCommand)}.`
+          )
         } else {
           console.log(`  App is served in production mode.`)
           console.log(`  Note this is for preview or E2E testing only.`)
@@ -246,7 +274,7 @@ async function serve (args, api, options, config) {
 function addDevClientToEntry (config, devClient) {
   const { entry } = config
   if (typeof entry === 'object' && !Array.isArray(entry)) {
-    Object.keys(entry).forEach((key) => {
+    Object.keys(entry).forEach(key => {
       entry[key] = devClient.concat(entry[key])
     })
   } else if (typeof entry === 'function') {
