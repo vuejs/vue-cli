@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-babel",
-  "version": "3.0.0-rc.2",
+  "version": "3.0.0-rc.3",
   "description": "babel plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-babel#readme",
   "dependencies": {
     "@babel/core": "7.0.0-beta.47",
-    "@vue/babel-preset-app": "^3.0.0-rc.2",
+    "@vue/babel-preset-app": "^3.0.0-rc.3",
     "babel-loader": "^8.0.0-0"
   },
   "publishConfig": {
