@@ -26,6 +26,7 @@ type Suggestion {
   label: String!
   message: String
   link: String
+  actionLink: String
   busy: Boolean!
 }
 
