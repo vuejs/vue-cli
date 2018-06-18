@@ -8,7 +8,7 @@ const {
   getPluginLink
 } = require('@vue/cli-shared-utils')
 const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
-const { resolveModule, loadModule } = require('@vue/cli/lib/util/module')
+const { resolveModule, loadModule, clearModule } = require('@vue/cli/lib/util/module')
 const {
   progress: installProgress,
   installPackage,
@@ -340,6 +340,9 @@ function runInvoke (id, context) {
       status: 'plugin-invoke',
       args: [id]
     })
+
+    clearModule('@vue/cli-service/webpack.config.js', cwd.get())
+
     currentPluginId = id
     // Allow plugins that don't have a generator
     if (resolveModule(`${id}/generator`, cwd.get())) {

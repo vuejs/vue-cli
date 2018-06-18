@@ -7,6 +7,7 @@ const { getFeatures } = require('@vue/cli/lib/util/features')
 const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
+const { clearModule } = require('@vue/cli/lib/util/module')
 // Connectors
 const progress = require('./progress')
 const cwd = require('./cwd')
@@ -249,6 +250,9 @@ async function create (input, context) {
     const targetDir = path.join(cwd.get(), input.folder)
     cwd.set(targetDir, context)
     creator.context = targetDir
+
+    process.env.VUE_CLI_CONTEXT = targetDir
+    clearModule('@vue/cli-service/webpack.config.js', targetDir)
 
     const inCurrent = input.folder === '.'
     const name = inCurrent ? path.relative('../', process.cwd()) : input.folder
