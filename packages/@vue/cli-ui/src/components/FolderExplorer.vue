@@ -138,11 +138,14 @@
     </div>
 
     <div ref="folders" class="folders">
-      <VueLoadingIndicator
-        v-if="loading"
-        class="overlay"
-      />
-      <template v-else-if="folderCurrent.children">
+      <transition name="vue-ui-fade">
+        <VueLoadingBar
+          v-if="loading"
+          class="ghost primary"
+          unknown
+        />
+      </transition>
+      <template v-if="folderCurrent && folderCurrent.children">
         <FolderExplorerItem
           v-for="folder of folderCurrent.children"
           v-if="showHidden || !folder.hidden"
@@ -261,6 +264,7 @@ export default {
     async openFolder (path) {
       this.editingPath = false
       this.error = null
+      this.loading++
       try {
         await this.$apollo.mutate({
           mutation: FOLDER_OPEN,
@@ -274,11 +278,13 @@ export default {
       } catch (e) {
         this.error = e
       }
+      this.loading--
     },
 
     async openParentFolder (folder) {
       this.editingPath = false
       this.error = null
+      this.loading++
       try {
         await this.$apollo.mutate({
           mutation: FOLDER_OPEN_PARENT,
@@ -289,6 +295,7 @@ export default {
       } catch (e) {
         this.error = e
       }
+      this.loading--
     },
 
     async toggleFavorite () {
