@@ -25,7 +25,8 @@ async function readFiles (context) {
     cwd: context,
     onlyFiles: true,
     gitignore: true,
-    ignore: ['**/node_modules/**']
+    ignore: ['**/node_modules/**', '**/.git/**'],
+    dot: true
   })
   const res = {}
   for (const file of files) {
