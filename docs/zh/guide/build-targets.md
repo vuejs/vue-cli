@@ -13,8 +13,8 @@
 
 ## 库
 
-::: tip Note on Vue Dependency
-在库模式中，Vue 是*外置的*。这意味着包中不会有 Vue，甚至你在代码中导入了 Vue。如果这个库会通过一个打包器使用，它将会在打包器内尝试作为一个依赖加载 Vue；否则就会回退到一个全局的 `Vue` 变量。
+::: tip 注意对 Vue 的依赖
+在库模式中，Vue 是*外置的*。这意味着包中不会有 Vue，即便你在代码中导入了 Vue。如果这个库会通过一个打包器使用，它将会在打包器内尝试作为一个依赖加载 Vue；否则就会回退到一个全局的 `Vue` 变量。
 :::
 
 你可以通过下面的命令对一个单独的入口构建为一个库：
@@ -44,11 +44,11 @@ dist/myLib.css           0.33 kb                  0.23 kb
 
 - `dist/myLib.css`：提取出来的 CSS 文件 (可以通过在 `vue.config.js` 中设置 `css: { extract: false }` 强制内联)
 
-### Vue vs. JS/TS Entry Files
+### Vue vs. JS/TS 入口文件
 
-When using a `.vue` file as entry, your library will directly expose the Vue component itself, because the component is always the default export.
+当使用一个 `.vue` 文件作为入口时，你的库会直接暴露这个 Vue 组件本身，因为组件始终是默认导出的内容。
 
-However, when you are using a `.js` or `.ts` file as your entry, it may contain named exports, so your library will be exposed as a Module. This means the default export of your library must be accessed as `window.yourLib.default` in UMD builds, or as `const myLib = require('mylib').default` in CommonJS builds. If you don't have any named exports and wish to directly expose the default export, you can use the following webpack configuration in `vue.config.js`:
+然而，当你使用一个 `.js` 或 `.ts` 文件作为入口时，它可能会包含具名导出，所以库会暴露为一个模块。也就是说你的库必须在 UMD 构建中通过 `window.yourLib.default` 访问，或在 CommonJS 构建中通过 `const myLib = require('mylib').default` 访问。如果你没有任何具名导出并希望直接暴露默认导出，你可以在 `vue.config.js` 中使用以下 webpack 配置：
 
 ``` js
 module.exports = {
@@ -62,12 +62,12 @@ module.exports = {
 
 ## Web Components
 
-::: tip Note on Compatibility
-Web Component mode does not support IE11 and below. [More details](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
+::: tip 兼容性提示
+Web Components 模式不支持 IE11 及更低版本。[更多细节](https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-web-component-wrapper/README.md#兼容性)
 :::
 
-::: tip Note on Vue Dependency
-In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
+::: tip 注意对 Vue 的依赖
+在 Web Components 模式中，Vue 是*外置的*。这意味着包中不会有 Vue，即便你在代码中导入了 Vue。这里的包会假设 `Vue` 在页面中作为一个全局变量已经可用。
 :::
 
 你可以通过下面的命令对一个单独的入口构建为一个库：
