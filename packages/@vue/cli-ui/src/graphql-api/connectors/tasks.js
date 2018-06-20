@@ -288,6 +288,8 @@ async function run (id, context) {
       text: chalk.grey(`$ ${command} ${args.join(' ')}`)
     }, context)
 
+    task.time = Date.now()
+
     process.env.VUE_CLI_CONTEXT = cwd.get()
 
     const child = execa(command, args, {
@@ -324,6 +326,14 @@ async function run (id, context) {
       errPipe.flush()
 
       log('Task exit', command, args, 'code:', code, 'signal:', signal)
+
+      const duration = Date.now() - task.time
+      const seconds = Math.round(duration / 10) / 100
+      addLog({
+        taskId: task.id,
+        type: 'stdout',
+        text: chalk.grey(`Total task duration: ${seconds}s`)
+      }, context)
 
       // Plugin API
       if (task.onExit) {
@@ -370,7 +380,7 @@ async function run (id, context) {
         }, context)
         notify({
           title: `Task completed`,
-          message: `Task ${task.id} completed`,
+          message: `Task ${task.id} completed in ${seconds}s.`,
           icon: 'done'
         })
       }
