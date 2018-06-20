@@ -65,7 +65,7 @@ const defaultTheme = {
 const darkTheme = {
   ...defaultTheme,
   foreground: '#fff',
-  background: '#304051',
+  background: '#2c3e50',
   cursor: 'rgba(255, 255, 255, .4)',
   selection: 'rgba(255, 255, 255, 0.3)',
   magenta: '#e83030',
