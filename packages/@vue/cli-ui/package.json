@@ -17,6 +17,7 @@
     "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui && yarn run test:run"
   },
   "dependencies": {
+    "@akryum/winattr": "^3.0.0",
     "@vue/cli-shared-utils": "^3.0.0-rc.3",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
@@ -41,8 +42,7 @@
     "shortid": "^2.2.8",
     "terminate": "^2.1.0",
     "vue-cli-plugin-apollo": "^0.13.4",
-    "watch": "^1.0.2",
-    "@akryum/winattr": "^3.0.0"
+    "watch": "^1.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.3",
