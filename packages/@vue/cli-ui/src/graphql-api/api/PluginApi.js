@@ -362,7 +362,7 @@ class PluginApi {
     if (['vue-router', 'vuex'].includes(id)) {
       const folder = cwd.get()
       const pkg = folders.readPackage(folder, this.context, true)
-      return (pkg.dependencies[id] || pkg.devDependencies[id])
+      return ((pkg.dependencies && pkg.dependencies[id]) || (pkg.devDependencies && pkg.devDependencies[id]))
     }
     return this.plugins.some(p => matchesPluginId(id, p.id))
   }
