@@ -252,7 +252,7 @@ async function run (id, context) {
     const dedupedArgs = []
     for (let i = args.length - 1; i >= 0; i--) {
       const arg = args[i]
-      if (arg.indexOf('--') === 0) {
+      if (typeof arg === 'string' && arg.indexOf('--') === 0) {
         if (dedupedArgs.indexOf(arg) === -1) {
           dedupedArgs.push(arg)
         } else {
