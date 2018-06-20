@@ -96,7 +96,7 @@ module.exports = api => {
     defaultView: 'vue-webpack-dashboard'
   }
   api.describeTask({
-    match: /vue-cli-service serve/,
+    match: /vue-cli-service serve(\s+--\S+(\s+\S+)?)*$/,
     description: 'vue-webpack.tasks.serve.description',
     link: 'https://cli.vuejs.org/guide/cli-service.html#vue-cli-service-serve',
     icon: '/public/webpack-logo.png',
@@ -171,7 +171,7 @@ module.exports = api => {
     ...views
   })
   api.describeTask({
-    match: /vue-cli-service build/,
+    match: /vue-cli-service build(\s+--\S+(\s+\S+)?)*$/,
     description: 'vue-webpack.tasks.build.description',
     link: 'https://cli.vuejs.org/guide/cli-service.html#vue-cli-service-build',
     icon: '/public/webpack-logo.png',
