@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (api, { entry, name }, options) => {
+module.exports = (api, { entry, name }, options, config) => {
   // inline all static asset files since there is no publicPath handling
   process.env.VUE_CLI_INLINE_LIMIT = Infinity
 
@@ -27,7 +27,7 @@ module.exports = (api, { entry, name }, options) => {
   )
 
   function genConfig (format, postfix = format, genHTML) {
-    const config = api.resolveChainableWebpackConfig()
+    if (!config) config = api.resolveChainableWebpackConfig()
 
     // adjust css output name so they write to the same file
     if (config.plugins.has('extract-css')) {

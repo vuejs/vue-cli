@@ -33,41 +33,48 @@ module.exports = (api, options) => {
       '--watch': `watch for changes`
     }
   }, async (args) => {
-    for (const key in defaults) {
-      if (args[key] == null) {
-        args[key] = defaults[key]
-      }
-    }
-    args.entry = args.entry || args._[0]
-    if (args.target !== 'app') {
-      args.entry = args.entry || 'src/App.vue'
-    }
-
-    process.env.VUE_CLI_BUILD_TARGET = args.target
-    if (args.modern && args.target === 'app') {
-      process.env.VUE_CLI_MODERN_MODE = true
-      delete process.env.VUE_CLI_MODERN_BUILD
-      await build(Object.assign({}, args, {
-        modernBuild: false,
-        keepAlive: true
-      }), api, options)
-
-      process.env.VUE_CLI_MODERN_BUILD = true
-      await build(Object.assign({}, args, {
-        modernBuild: true,
-        clean: false
-      }), api, options)
-
-      delete process.env.VUE_CLI_MODERN_MODE
-      delete process.env.VUE_CLI_MODERN_BUILD
-    } else {
-      await build(args, api, options)
-    }
-    delete process.env.VUE_CLI_BUILD_TARGET
-  })
+    await initiateBuild(args, api, options)
+    return
+  }
+  )
 }
 
-async function build (args, api, options) {
+const initiateBuild = async (args, api, options, config) => {
+  for (const key in defaults) {
+    if (args[key] == null) {
+      args[key] = defaults[key]
+    }
+  }
+  args.entry = args.entry || args._[0]
+  if (args.target !== 'app') {
+    args.entry = args.entry || 'src/App.vue'
+  }
+
+  process.env.VUE_CLI_BUILD_TARGET = args.target
+  if (args.modern && args.target === 'app') {
+    process.env.VUE_CLI_MODERN_MODE = true
+    delete process.env.VUE_CLI_MODERN_BUILD
+    await build(
+      Object.assign({}, args, {
+        modernBuild: false,
+        keepAlive: true
+      }), api, options, config)
+
+    process.env.VUE_CLI_MODERN_BUILD = true
+    await build(Object.assign({}, args, {
+      modernBuild: true,
+      clean: false
+    }), api, options, config)
+
+    delete process.env.VUE_CLI_MODERN_MODE
+    delete process.env.VUE_CLI_MODERN_BUILD
+  } else {
+    await build(args, api, options, config)
+  }
+  delete process.env.VUE_CLI_BUILD_TARGET
+}
+
+async function build (args, api, options, config) {
   const fs = require('fs-extra')
   const path = require('path')
   const chalk = require('chalk')
@@ -105,14 +112,14 @@ async function build (args, api, options) {
   // resolve raw webpack config
   let webpackConfig
   if (args.target === 'lib') {
-    webpackConfig = require('./resolveLibConfig')(api, args, options)
+    webpackConfig = require('./resolveLibConfig')(api, args, options, config)
   } else if (
     args.target === 'wc' ||
     args.target === 'wc-async'
   ) {
-    webpackConfig = require('./resolveWcConfig')(api, args, options)
+    webpackConfig = require('./resolveWcConfig')(api, args, options, config)
   } else {
-    webpackConfig = require('./resolveAppConfig')(api, args, options)
+    webpackConfig = require('./resolveAppConfig')(api, args, options, config)
   }
 
   // apply inline dest path after user configureWebpack hooks
@@ -136,15 +143,15 @@ async function build (args, api, options) {
     // plugin the correct value this way.
     throw new Error(
       `\n\nConfiguration Error: ` +
-      `Avoid modifying webpack output.path directly. ` +
-      `Use the "outputDir" option instead.\n`
+        `Avoid modifying webpack output.path directly. ` +
+        `Use the "outputDir" option instead.\n`
     )
   }
 
   if (actualTargetDir === api.service.context) {
     throw new Error(
       `\n\nConfiguration Error: ` +
-      `Do not set output directory to project root.\n`
+        `Do not set output directory to project root.\n`
     )
   }
 
@@ -235,3 +242,4 @@ async function build (args, api, options) {
 module.exports.defaultModes = {
   build: 'production'
 }
+module.exports.build = initiateBuild
