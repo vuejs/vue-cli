@@ -1,3 +1,4 @@
+const path = require('path')
 // Connectors
 const logs = require('../connectors/logs')
 const sharedData = require('../connectors/shared-data')
@@ -10,6 +11,7 @@ const progress = require('../connectors/progress')
 const ipc = require('../utils/ipc')
 const { notify } = require('../utils/notification')
 const { matchesPluginId } = require('@vue/cli-shared-utils')
+const { log } = require('../utils/logger')
 // Validators
 const { validateConfiguration } = require('./configuration')
 const { validateDescribeTask, validateAddTask } = require('./task')
@@ -403,6 +405,21 @@ class PluginApi {
     return cwd.get()
   }
 
+  /**
+   * Resolves a file relative to current working directory
+   * @param {string} file Path to file relative to project
+   */
+  resolve (file) {
+    return path.resolve(cwd.get(), file)
+  }
+
+  /**
+   * Get currently open project
+   */
+  getProject () {
+    return this.project
+  }
+
   /* Namespaced */
 
   /**
@@ -498,6 +515,7 @@ class PluginApi {
    * @param {any} value Value to be stored (must be serializable in JSON)
    */
   storageSet (id, value) {
+    log('Storage set', id, value)
     this.db.set(id, value).write()
   }
 

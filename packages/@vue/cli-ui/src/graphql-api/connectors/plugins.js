@@ -122,8 +122,8 @@ function resetPluginApi (context) {
     if (!project) return
     if (projectId !== project.id) {
       projectId = project.id
-      callHook('projectOpen', [project, projects.getLast(context)], context)
       pluginApi.project = project
+      callHook('projectOpen', [project, projects.getLast(context)], context)
     } else {
       callHook('pluginReload', [project], context)
 

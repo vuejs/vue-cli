@@ -1236,6 +1236,22 @@ Retrieve the current working directory.
 api.getCwd()
 ```
 
+### resolve
+
+Resolves a file within the current project.
+
+```js
+api.resolve('src/main.js')
+```
+
+### getProject
+
+Get currently open project.
+
+```js
+api.getProject()
+```
+
 ## Public static files
 
 You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).
