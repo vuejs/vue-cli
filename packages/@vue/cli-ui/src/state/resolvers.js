@@ -22,6 +22,12 @@ export default {
         darkMode: enabled
       }
       cache.writeData({ data })
+      const el = document.getElementsByTagName('html')[0]
+      if (enabled) {
+        el.classList.add('vue-ui-dark-mode')
+      } else {
+        el.classList.remove('vue-ui-dark-mode')
+      }
       return null
     }
   }

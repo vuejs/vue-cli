@@ -166,12 +166,6 @@ export default {
 
     async applyDarkMode (enabled) {
       localStorage.setItem('vue-ui-dark-mode', enabled.toString())
-      const el = document.getElementsByTagName('html')[0]
-      if (enabled) {
-        el.classList.add('vue-ui-dark-mode')
-      } else {
-        el.classList.remove('vue-ui-dark-mode')
-      }
       await this.$apollo.mutate({
         mutation: DARK_MODE_SET,
         variables: {

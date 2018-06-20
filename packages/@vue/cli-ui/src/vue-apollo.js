@@ -7,6 +7,7 @@ import clientStateResolvers from './state/resolvers'
 // import CONNECTED from './graphql/connected.gql'
 import CONNECTED_SET from './graphql/connectedSet.gql'
 import LOADING_CHANGE from './graphql/loadingChange.gql'
+import DARK_MODE_SET from './graphql/darkModeSet.gql'
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -67,6 +68,13 @@ export async function resetApollo () {
   } catch (e) {
     // Potential errors
   }
+  const raw = localStorage.getItem('vue-ui-dark-mode')
+  apolloClient.mutate({
+    mutation: DARK_MODE_SET,
+    variables: {
+      enabled: raw === 'true'
+    }
+  })
 }
 
 /* Connected state */
