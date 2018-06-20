@@ -2,19 +2,48 @@ const path = require('path')
 const fs = require('fs-extra')
 
 module.exports = api => {
-  const { setSharedData, removeSharedData } = api.namespace('webpack-dashboard-')
+  const { getSharedData, setSharedData, removeSharedData, watchSharedData } = api.namespace('webpack-dashboard-')
 
   let firstRun = true
   let hadFailed = false
   let modernMode = false
 
-  function resetSharedData (key) {
-    setSharedData(`${key}-status`, null)
-    setSharedData(`${key}-progress`, 0)
-    setSharedData(`${key}-operations`, null)
-    setSharedData(`${key}-stats`, null)
-    setSharedData(`${key}-sizes`, null)
-    setSharedData(`${key}-problems`, null)
+  const fields = {
+    status: null,
+    progress: 0,
+    operations: null,
+    stats: null,
+    sizes: null,
+    problems: null,
+    url: null
+  }
+  function setupSharedData (mode) {
+    resetSharedData(mode)
+    for (const field in fields) {
+      const id = `${mode}-${field}`
+      watchSharedData(id, (value) => {
+        const project = api.getProject()
+        if (project) {
+          setSharedData(`${project.id}-${id}`, value)
+        }
+      })
+    }
+  }
+
+  function resetSharedData (mode) {
+    for (const field in fields) {
+      const id = `${mode}-${field}`
+      setSharedData(id, getSharedDataInitialValue(id, field))
+    }
+  }
+
+  function getSharedDataInitialValue (id, field) {
+    const project = api.getProject()
+    if (project) {
+      const data = getSharedData(`${project.id}-${id}`)
+      if (data != null) return data.value
+    }
+    return fields[field]
   }
 
   async function onWebpackMessage ({ data: message }) {
@@ -73,7 +102,7 @@ module.exports = api => {
   // Init data
   api.onProjectOpen(() => {
     for (const key of ['serve', 'build', 'build-modern']) {
-      resetSharedData(key)
+      setupSharedData(key)
     }
   })
 
