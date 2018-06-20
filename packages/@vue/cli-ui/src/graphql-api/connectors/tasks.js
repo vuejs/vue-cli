@@ -1,5 +1,6 @@
 const execa = require('execa')
 const terminate = require('terminate')
+const chalk = require('chalk')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -10,7 +11,6 @@ const plugins = require('./plugins')
 const prompts = require('./prompts')
 const views = require('./views')
 // Utils
-const { getCommand } = require('../utils/command')
 const { log } = require('../utils/logger')
 const { notify } = require('../utils/notification')
 
@@ -62,7 +62,7 @@ function list (context) {
           index: list.findIndex(t => t.id === id),
           prompts: [],
           views: [],
-          fullCommand: true,
+          uiOnly: true,
           ...task
         }
       }
@@ -220,8 +220,8 @@ async function run (id, context) {
 
     // Answers
     const answers = prompts.getAnswers()
-    let args = task.fullCommand ? [] : ['run', task.name]
-    let command = task.fullCommand ? task.command : getCommand()
+    let args = []
+    let command = task.command
 
     // Process command containing args
     if (command.indexOf(' ')) {
@@ -248,6 +248,25 @@ async function run (id, context) {
       })
     }
 
+    // Deduplicate arguments
+    const dedupedArgs = []
+    for (let i = args.length - 1; i >= 0; i--) {
+      const arg = args[i]
+      if (arg.indexOf('--') === 0) {
+        if (dedupedArgs.indexOf(arg) === -1) {
+          dedupedArgs.push(arg)
+        } else {
+          const value = args[i + 1]
+          if (value && value.indexOf('--') !== 0) {
+            dedupedArgs.pop()
+          }
+        }
+      } else {
+        dedupedArgs.push(arg)
+      }
+    }
+    args = dedupedArgs.reverse()
+
     if (command === 'npm') {
       args.splice(0, 0, '--')
     }
@@ -263,13 +282,11 @@ async function run (id, context) {
       type: 'info'
     }, context)
 
-    if (task.fullCommand) {
-      addLog({
-        taskId: task.id,
-        type: 'stdout',
-        text: `$ ${command} ${args.join(' ')}`
-      }, context)
-    }
+    addLog({
+      taskId: task.id,
+      type: 'stdout',
+      text: chalk.grey(`$ ${command} ${args.join(' ')}`)
+    }, context)
 
     process.env.VUE_CLI_CONTEXT = cwd.get()
 
