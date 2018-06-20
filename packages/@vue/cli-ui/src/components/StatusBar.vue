@@ -48,6 +48,7 @@
       </div>
 
       <div
+        v-if="enableDarkModeButton"
         class="section action dark-mode"
         v-tooltip="$t('components.status-bar.dark-mode')"
         @click="toggleDarkMode()"
@@ -87,6 +88,7 @@ import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
 import DARK_MODE_SET from '../graphql/darkModeSet.gql'
 import PLUGIN_RESET_API from '../graphql/pluginResetApi.gql'
 import { resetApollo } from '../vue-apollo'
+import { getForcedTheme } from '../util/theme'
 
 let lastRoute
 
@@ -96,7 +98,8 @@ export default {
   data () {
     return {
       showLogs: false,
-      consoleLogLast: null
+      consoleLogLast: null,
+      enableDarkModeButton: getForcedTheme() == null
     }
   },
 
@@ -112,10 +115,6 @@ export default {
         }
       }
     }
-  },
-
-  created () {
-    this.loadDarkMode()
   },
 
   methods: {
@@ -157,11 +156,6 @@ export default {
         '_blank'
       )
       win.focus()
-    },
-
-    loadDarkMode () {
-      const raw = localStorage.getItem('vue-ui-dark-mode')
-      this.applyDarkMode(raw === 'true')
     },
 
     async applyDarkMode (enabled) {
