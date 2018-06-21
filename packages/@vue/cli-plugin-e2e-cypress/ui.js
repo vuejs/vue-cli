@@ -1,14 +1,14 @@
 module.exports = api => {
   api.describeTask({
     match: /vue-cli-service test:e2e/,
-    description: 'cypress.tasks.test.description',
+    description: 'org.vue.cypress.tasks.test.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress#injected-commands',
     prompts: [
       {
         name: 'headless',
         type: 'confirm',
         default: false,
-        description: 'cypress.tasks.test.headless'
+        description: 'org.vue.cypress.tasks.test.headless'
       },
       {
         name: 'mode',
@@ -28,13 +28,13 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'cypress.tasks.test.mode'
+        description: 'org.vue.cypress.tasks.test.mode'
       },
       {
         name: 'url',
         type: 'input',
         default: '',
-        description: 'cypress.tasks.test.url'
+        description: 'org.vue.cypress.tasks.test.url'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

@@ -17,7 +17,7 @@
           v-if="!props.asset.secondary && props.asset.big"
           icon="warning"
           class="icon"
-          v-tooltip="parent.$t('vue-webpack.dashboard.asset-list.size-warning')"
+          v-tooltip="parent.$t('org.vue.vue-webpack.dashboard.asset-list.size-warning')"
         />
       </div>
     </div>

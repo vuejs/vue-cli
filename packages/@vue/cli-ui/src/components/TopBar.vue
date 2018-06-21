@@ -2,7 +2,7 @@
   <div class="top-bar">
     <VueDropdown
       v-if="$responsive.wide"
-      :label="projectCurrent ? projectCurrent.name : $t('components.status-bar.project.empty')"
+      :label="projectCurrent ? projectCurrent.name : $t('org.vue.components.status-bar.project.empty')"
       class="current-project"
       icon-right="arrow_drop_down"
       button-class="flat round"
@@ -15,13 +15,13 @@
         @click="openProject(project)"
       />
 
-      <div v-if="!favoriteProjects.length" class="vue-ui-empty">{{ $t('components.top-bar.no-favorites') }}</div>
+      <div v-if="!favoriteProjects.length" class="vue-ui-empty">{{ $t('org.vue.components.top-bar.no-favorites') }}</div>
 
       <div class="dropdown-separator"/>
 
       <VueDropdownButton
         :to="{ name: 'project-select' }"
-        :label="$t('views.project-select.title')"
+        :label="$t('org.vue.views.project-select.title')"
         icon-left="home"
       />
     </VueDropdown>

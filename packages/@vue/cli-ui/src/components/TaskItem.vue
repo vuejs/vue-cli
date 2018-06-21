@@ -52,7 +52,7 @@ export default {
 
   computed: {
     status () {
-      return this.$t(`types.task.status.${this.task.status}`)
+      return this.$t(`org.vue.types.task.status.${this.task.status}`)
     },
 
     iconData () {

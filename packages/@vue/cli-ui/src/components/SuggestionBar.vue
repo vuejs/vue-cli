@@ -76,8 +76,8 @@ export default {
             {
               id: 'vue-devtools',
               type: 'action',
-              label: 'cli-service.suggestions.vue-devtools.label',
-              message: 'cli-service.suggestions.vue-devtools.message',
+              label: 'org.vue.cli-service.suggestions.vue-devtools.label',
+              message: 'org.vue.cli-service.suggestions.vue-devtools.message',
               link: 'https://github.com/vuejs/vue-devtools',
               image: 'https://raw.githubusercontent.com/vuejs/vue-devtools/master/media/screenshot.png',
               actionLink: devtoolsLink

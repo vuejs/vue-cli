@@ -1,14 +1,14 @@
 <template>
   <div class="about page">
-    <h1>{{ $t('views.about.title') }}</h1>
+    <h1>{{ $t('org.vue.views.about.title') }}</h1>
 
-    <p class="description" v-html="$t('views.about.description')"/>
+    <p class="description" v-html="$t('org.vue.views.about.description')"/>
 
-    <blockquote class="quote" v-text="$t('views.about.quote')"/>
+    <blockquote class="quote" v-text="$t('org.vue.views.about.quote')"/>
 
     <p>- <a href="https://github.com/Akryum" target="_blank">Guillaume Chau</a></p>
 
-    <h2>{{ $t('views.about.links') }}</h2>
+    <h2>{{ $t('org.vue.views.about.links') }}</h2>
 
     <div class="links vue-ui-grid default-gap">
       <VueButton href="https://github.com/vuejs/vue-cli" target="_blank">Repository</VueButton>
@@ -24,7 +24,7 @@
         :to="previousRoute"
         class="primary big"
         left-icon="arrow_back"
-        :label="$t('views.about.back')"
+        :label="$t('org.vue.views.about.back')"
       />
     </div>
   </div>
@@ -34,7 +34,7 @@
 export default {
   metaInfo () {
     return {
-      title: this.$t('views.about.title')
+      title: this.$t('org.vue.views.about.title')
     }
   },
 

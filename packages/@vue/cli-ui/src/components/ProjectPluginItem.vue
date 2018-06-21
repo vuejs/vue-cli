@@ -14,12 +14,12 @@
         <span slot="description" class="plugin-description">
           <template v-if="pluginDetails">
             <span class="info version">
-              <span class="label">{{ $t('components.project-plugin-item.version') }}</span>
+              <span class="label">{{ $t('org.vue.components.project-plugin-item.version') }}</span>
               <span class="value">{{ pluginDetails.version.current }}</span>
             </span>
 
             <span class="info latest">
-              <span class="label">{{ $t('components.project-plugin-item.latest') }}</span>
+              <span class="label">{{ $t('org.vue.components.project-plugin-item.latest') }}</span>
               <VueIcon
                 v-if="pluginDetails.version.current !== pluginDetails.version.latest"
                 icon="warning"
@@ -34,7 +34,7 @@
               icon="star"
               class="top medium"
             />
-            {{ $t('components.project-plugin-item.official') }}
+            {{ $t('org.vue.components.project-plugin-item.official') }}
           </span>
 
           <span v-if="plugin.installed" class="info">
@@ -42,7 +42,7 @@
               icon="check_circle"
               class="top medium"
             />
-            {{ $t('components.project-plugin-item.installed') }}
+            {{ $t('org.vue.components.project-plugin-item.installed') }}
           </span>
 
           <span v-if="pluginDetails && pluginDetails.description" class="package-description">
@@ -55,7 +55,7 @@
         v-if="pluginDetails && pluginDetails.version.current !== pluginDetails.version.wanted"
         icon-left="file_download"
         class="icon-button"
-        v-tooltip="$t('components.project-plugin-item.actions.update', { target: plugin.id })"
+        v-tooltip="$t('org.vue.components.project-plugin-item.actions.update', { target: plugin.id })"
         :loading-left="updating"
         @click="updatePlugin()"
       />

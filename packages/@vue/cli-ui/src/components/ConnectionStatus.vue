@@ -12,11 +12,11 @@
         >
           <div class="content disconnected">
             <VueIcon icon="cloud_off" class="medium"/>
-            <span>{{ $t('components.connection-status.disconnected') }}</span>
+            <span>{{ $t('org.vue.components.connection-status.disconnected') }}</span>
           </div>
           <div class="content connected">
             <VueIcon icon="wifi" class="medium"/>
-            <span>{{ $t('components.connection-status.connected') }}</span>
+            <span>{{ $t('org.vue.components.connection-status.connected') }}</span>
           </div>
         </div>
       </transition>

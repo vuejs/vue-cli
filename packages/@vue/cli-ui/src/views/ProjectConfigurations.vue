@@ -1,7 +1,7 @@
 <template>
   <div class="project-configurations page">
     <ContentView
-      :title="$t('views.project-configurations.title')"
+      :title="$t('org.vue.views.project-configurations.title')"
       class="limit-width"
     >
       <ApolloQuery
@@ -41,7 +41,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('views.project-configurations.title')
+      title: this.$t('org.vue.views.project-configurations.title')
     }
   },
 

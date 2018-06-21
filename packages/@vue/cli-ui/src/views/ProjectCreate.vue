@@ -2,24 +2,24 @@
   <div class="project-create page">
     <div class="content">
       <StepWizard
-        :title="$t('views.project-create.title')"
+        :title="$t('org.vue.views.project-create.title')"
         class="frame"
       >
         <template slot-scope="{ next, previous }">
           <VueTab
             id="details"
             class="details"
-            :label="$t('views.project-create.tabs.details.title')"
+            :label="$t('org.vue.views.project-create.tabs.details.title')"
             icon="subject"
           >
             <div class="content vue-ui-disable-scroll">
               <div class="project-details vue-ui-grid col-1">
                 <VueFormField
-                  :title="$t('views.project-create.tabs.details.form.folder.label')"
+                  :title="$t('org.vue.views.project-create.tabs.details.form.folder.label')"
                 >
                   <VueInput
                     v-model="formData.folder"
-                    :placeholder="$t('views.project-create.tabs.details.form.folder.placeholder')"
+                    :placeholder="$t('org.vue.views.project-create.tabs.details.form.folder.placeholder')"
                     icon-left="folder"
                     class="big app-name"
                   />
@@ -39,7 +39,7 @@
                       <VueButton
                         icon-left="edit"
                         class="icon-button change-folder"
-                        v-tooltip="$t('views.project-create.tabs.details.form.folder.tooltip')"
+                        v-tooltip="$t('org.vue.views.project-create.tabs.details.form.folder.tooltip')"
                         :to="{
                           name: 'project-select',
                           query: {
@@ -55,7 +55,7 @@
                       class="vue-ui-text danger banner"
                     >
                       <VueIcon icon="error" class="big"/>
-                      <span>{{ $t('views.project-create.tabs.details.form.folder.folder-name-invalid') }}</span>
+                      <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-name-invalid') }}</span>
                     </div>
 
                     <ApolloQuery
@@ -72,21 +72,21 @@
                         class="vue-ui-text warning banner"
                       >
                         <VueIcon icon="warning" class="big"/>
-                        <span>{{ $t('views.project-create.tabs.details.form.folder.folder-exists') }}</span>
+                        <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-exists') }}</span>
                       </div>
                     </ApolloQuery>
                   </div>
                 </VueFormField>
 
                 <VueFormField
-                  :title="$t('views.project-create.tabs.details.form.manager.label')"
+                  :title="$t('org.vue.views.project-create.tabs.details.form.manager.label')"
                 >
                   <VueSelect
                     v-model="formData.packageManager"
                   >
                     <VueSelectButton
                       :value="undefined"
-                      :label="$t('views.project-create.tabs.details.form.manager.default')"
+                      :label="$t('org.vue.views.project-create.tabs.details.form.manager.default')"
                     />
                     <VueSelectButton
                       value="npm"
@@ -100,29 +100,29 @@
                 </VueFormField>
 
                 <VueFormField
-                  :title="$t('views.project-create.tabs.details.form.options.label')"
+                  :title="$t('org.vue.views.project-create.tabs.details.form.options.label')"
                 >
                   <VueSwitch
                     v-model="formData.force"
                     class="extend-left force"
                   >
-                    {{ $t('views.project-create.tabs.details.form.options.force') }}
+                    {{ $t('org.vue.views.project-create.tabs.details.form.options.force') }}
                   </VueSwitch>
                 </VueFormField>
 
                 <VueFormField
-                  :title="$t('views.project-create.tabs.details.form.options.git-title')"
+                  :title="$t('org.vue.views.project-create.tabs.details.form.options.git-title')"
                 >
                   <VueSwitch
                     v-model="formData.enableGit"
                     class="extend-left git"
                   >
-                    {{ $t('views.project-create.tabs.details.form.options.git') }}
+                    {{ $t('org.vue.views.project-create.tabs.details.form.options.git') }}
                   </VueSwitch>
                   <VueInput
                     v-model="formData.gitCommitMessage"
                     v-show="formData.enableGit"
-                    :placeholder="$t('views.project-create.tabs.details.form.options.git-commit-message')"
+                    :placeholder="$t('org.vue.views.project-create.tabs.details.form.options.git-commit-message')"
                   />
                 </VueFormField>
               </div>
@@ -131,14 +131,14 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="close"
-                :label="$t('views.project-create.tabs.details.buttons.cancel')"
+                :label="$t('org.vue.views.project-create.tabs.details.buttons.cancel')"
                 class="big close"
                 @click="showCancel = true"
               />
 
               <VueButton
                 icon-right="arrow_forward"
-                :label="$t('views.project-create.tabs.details.buttons.next')"
+                :label="$t('org.vue.views.project-create.tabs.details.buttons.next')"
                 class="big primary next"
                 :disabled="!detailsValid"
                 @click="next()"
@@ -149,7 +149,7 @@
           <VueTab
             id="presets"
             class="presets"
-            :label="$t('views.project-create.tabs.presets.title')"
+            :label="$t('org.vue.views.project-create.tabs.presets.title')"
             icon="check_circle"
             :disabled="!detailsValid"
             lazy
@@ -157,11 +157,11 @@
             <div class="content vue-ui-disable-scroll">
               <div class="vue-ui-text info banner">
                 <VueIcon icon="info" class="big"/>
-                <span>{{ $t('views.project-create.tabs.presets.description') }}</span>
+                <span>{{ $t('org.vue.views.project-create.tabs.presets.description') }}</span>
               </div>
 
               <div class="cta-text">
-                {{ $t('views.project-create.tabs.presets.select') }}
+                {{ $t('org.vue.views.project-create.tabs.presets.select') }}
               </div>
 
               <template v-if="projectCreation">
@@ -185,7 +185,7 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="arrow_back"
-                :label="$t('views.project-create.tabs.presets.buttons.previous')"
+                :label="$t('org.vue.views.project-create.tabs.presets.buttons.previous')"
                 class="big previous"
                 @click="previous()"
               />
@@ -193,7 +193,7 @@
               <VueButton
                 v-if="manual"
                 icon-right="arrow_forward"
-                :label="$t('views.project-create.tabs.presets.buttons.next')"
+                :label="$t('org.vue.views.project-create.tabs.presets.buttons.next')"
                 class="big primary next"
                 :disabled="!presetValid"
                 @click="next()"
@@ -201,7 +201,7 @@
               <VueButton
                 v-else
                 icon-left="done"
-                :label="$t('views.project-create.tabs.presets.buttons.create')"
+                :label="$t('org.vue.views.project-create.tabs.presets.buttons.create')"
                 class="big primary next"
                 :disabled="!formData.selectedPreset"
                 @click="createWithoutSaving()"
@@ -212,7 +212,7 @@
           <VueTab
             id="features"
             class="features"
-            :label="$t('views.project-create.tabs.features.title')"
+            :label="$t('org.vue.views.project-create.tabs.features.title')"
             icon="device_hub"
             :disabled="!detailsValid || !presetValid || !manual"
             lazy
@@ -220,11 +220,11 @@
             <div class="content vue-ui-disable-scroll">
               <div class="vue-ui-text info banner">
                 <VueIcon icon="info" class="big"/>
-                <span>{{ $t('views.project-create.tabs.features.description') }}</span>
+                <span>{{ $t('org.vue.views.project-create.tabs.features.description') }}</span>
               </div>
 
               <div class="cta-text">
-                {{ $t('views.project-create.tabs.features.enable') }}
+                {{ $t('org.vue.views.project-create.tabs.features.enable') }}
               </div>
 
               <template v-if="projectCreation">
@@ -240,7 +240,7 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="arrow_back"
-                :label="$t('views.project-create.tabs.features.buttons.previous')"
+                :label="$t('org.vue.views.project-create.tabs.features.buttons.previous')"
                 class="big previous"
                 @click="previous()"
               />
@@ -248,14 +248,14 @@
               <VueButton
                 v-if="visiblePrompts.length"
                 icon-right="arrow_forward"
-                :label="$t('views.project-create.tabs.features.buttons.next')"
+                :label="$t('org.vue.views.project-create.tabs.features.buttons.next')"
                 class="big primary next"
                 @click="next()"
               />
               <VueButton
                 v-else
                 icon-left="done"
-                :label="$t('views.project-create.tabs.features.buttons.create')"
+                :label="$t('org.vue.views.project-create.tabs.features.buttons.create')"
                 class="big primary next"
                 @click="showSavePreset = true"
               />
@@ -293,7 +293,7 @@
           <VueTab
             id="config"
             class="config"
-            :label="$t('views.project-create.tabs.configuration.title')"
+            :label="$t('org.vue.views.project-create.tabs.configuration.title')"
             icon="settings_applications"
             :disabled="!detailsValid || !presetValid || !manual || !visiblePrompts.length"
             lazy
@@ -308,14 +308,14 @@
             <div class="actions-bar">
               <VueButton
                 icon-left="arrow_back"
-                :label="$t('views.project-create.tabs.configuration.buttons.previous')"
+                :label="$t('org.vue.views.project-create.tabs.configuration.buttons.previous')"
                 class="big previous"
                 @click="previous()"
               />
 
               <VueButton
                 icon-left="done"
-                :label="$t('views.project-create.tabs.configuration.buttons.create')"
+                :label="$t('org.vue.views.project-create.tabs.configuration.buttons.create')"
                 class="big primary next"
                 :disabled="!configurationValid"
                 @click="showSavePreset = true"
@@ -328,14 +328,14 @@
 
     <VueModal
       v-if="showRemotePreset"
-      :title="$t('views.project-create.tabs.presets.modal.title')"
+      :title="$t('org.vue.views.project-create.tabs.presets.modal.title')"
       class="small remove-preset-modal"
       @close="closeRemotePresetModal()"
     >
       <div class="default-body vue-ui-grid big-gap col-1">
         <VueFormField
-          :title="$t('views.project-create.tabs.presets.remote.url.title')"
-          :subtitle="$t('views.project-create.tabs.presets.remote.url.subtitle')"
+          :title="$t('org.vue.views.project-create.tabs.presets.remote.url.title')"
+          :subtitle="$t('org.vue.views.project-create.tabs.presets.remote.url.subtitle')"
         >
           <VueInput
             v-model="formData.remotePreset.url"
@@ -345,27 +345,27 @@
         </VueFormField>
 
         <VueFormField
-          :title="$t('views.project-create.tabs.presets.remote.options')"
+          :title="$t('org.vue.views.project-create.tabs.presets.remote.options')"
         >
           <VueSwitch
             v-model="formData.remotePreset.clone"
             class="extend-left"
             :disabled="remoteNotGithub"
           >
-            {{ $t('views.project-create.tabs.presets.remote.clone') }}
+            {{ $t('org.vue.views.project-create.tabs.presets.remote.clone') }}
           </VueSwitch>
         </VueFormField>
       </div>
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          :label="$t('views.project-create.tabs.presets.remote.cancel')"
+          :label="$t('org.vue.views.project-create.tabs.presets.remote.cancel')"
           class="flat"
           @click="closeRemotePresetModal(true)"
         />
 
         <VueButton
-          :label="$t('views.project-create.tabs.presets.remote.done')"
+          :label="$t('org.vue.views.project-create.tabs.presets.remote.done')"
           :disabled="!formData.remotePreset.url || !remotePresetValid"
           :loading-secondary="remotePresetValid === null"
           icon-left="done"
@@ -377,24 +377,24 @@
 
     <VueModal
       v-if="showCancel"
-      :title="$t('views.project-create.tabs.details.modal.title')"
+      :title="$t('org.vue.views.project-create.tabs.details.modal.title')"
       class="small"
       @close="showCancel = false"
     >
       <div class="default-body">
-        {{ $t('views.project-create.tabs.details.modal.body') }}
+        {{ $t('org.vue.views.project-create.tabs.details.modal.body') }}
       </div>
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          :label="$t('views.project-create.tabs.details.modal.buttons.back')"
+          :label="$t('org.vue.views.project-create.tabs.details.modal.buttons.back')"
           class="flat"
           @click="showCancel = false"
         />
 
         <VueButton
           :to="{ name: 'project-select' }"
-          :label="$t('views.project-create.tabs.details.modal.buttons.clear')"
+          :label="$t('org.vue.views.project-create.tabs.details.modal.buttons.clear')"
           icon-left="delete_forever"
           class="danger"
         />
@@ -403,14 +403,14 @@
 
     <VueModal
       v-if="showSavePreset"
-      :title="$t('views.project-create.tabs.configuration.modal.title')"
+      :title="$t('org.vue.views.project-create.tabs.configuration.modal.title')"
       class="medium save-preset-modal"
       @close="showSavePreset = false"
     >
       <div class="default-body">
         <VueFormField
-          :title="$t('views.project-create.tabs.configuration.modal.body.title')"
-          :subtitle="$t('views.project-create.tabs.configuration.modal.body.subtitle')"
+          :title="$t('org.vue.views.project-create.tabs.configuration.modal.body.title')"
+          :subtitle="$t('org.vue.views.project-create.tabs.configuration.modal.body.subtitle')"
         >
           <VueInput
             v-model="formData.save"
@@ -422,7 +422,7 @@
 
       <div slot="footer" class="actions end">
         <VueButton
-          :label="$t('views.project-create.tabs.configuration.modal.buttons.cancel')"
+          :label="$t('org.vue.views.project-create.tabs.configuration.modal.buttons.cancel')"
           class="flat close"
           @click="showSavePreset = false"
         />
@@ -430,13 +430,13 @@
         <div class="vue-ui-spacer"/>
 
         <VueButton
-          :label="$t('views.project-create.tabs.configuration.modal.buttons.continue')"
+          :label="$t('org.vue.views.project-create.tabs.configuration.modal.buttons.continue')"
           class="flat continue"
           @click="createWithoutSaving()"
         />
 
         <VueButton
-          :label="$t('views.project-create.tabs.configuration.modal.buttons.create')"
+          :label="$t('org.vue.views.project-create.tabs.configuration.modal.buttons.create')"
           icon-left="save"
           class="primary save"
           :disabled="!formData.save"
@@ -494,7 +494,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('views.project-create.title')
+      title: this.$t('org.vue.views.project-create.title')
     }
   },
 
@@ -542,8 +542,8 @@ export default {
 
     remotePresetInfo () {
       return {
-        name: 'views.project-create.tabs.presets.remote.name',
-        description: 'views.project-create.tabs.presets.remote.description'
+        name: 'org.vue.views.project-create.tabs.presets.remote.name',
+        description: 'org.vue.views.project-create.tabs.presets.remote.description'
       }
     },
 

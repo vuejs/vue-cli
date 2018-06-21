@@ -1,13 +1,13 @@
 <template>
   <div class="project-plugins page">
     <ContentView
-      :title="$t('views.project-plugins.title')"
+      :title="$t('org.vue.views.project-plugins.title')"
       class="limit-width"
     >
       <template slot="actions">
         <VueButton
           icon-left="add"
-          :label="$t('views.project-plugins.button')"
+          :label="$t('org.vue.views.project-plugins.button')"
           class="primary round"
           :to="{ name: 'project-plugins-add' }"
           data-testid="add-plugin"
@@ -22,7 +22,7 @@
 
           <VueDropdownButton
             icon-left="file_download"
-            :label="$t('views.project-plugins.update-all')"
+            :label="$t('org.vue.views.project-plugins.update-all')"
             @click="updateAll()"
           />
         </VueDropdown>
@@ -32,7 +32,7 @@
         :query="require('../graphql/projectPlugins.gql')"
       >
         <template slot-scope="{ result: { data, loading } }">
-          <div class="cta-text">{{ $t('views.project-plugins.heading') }}</div>
+          <div class="cta-text">{{ $t('org.vue.views.project-plugins.heading') }}</div>
 
           <VueLoadingIndicator
             v-if="loading && !data"
@@ -63,7 +63,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('views.project-plugins.title')
+      title: this.$t('org.vue.views.project-plugins.title')
     }
   },
 

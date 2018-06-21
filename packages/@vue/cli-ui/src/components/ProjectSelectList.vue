@@ -19,7 +19,7 @@
                   class="cta-text"
                   :class="favorite ? 'favorite' : 'other'"
                 >
-                  {{ $t(`components.project-select-list.titles.${favorite ? 'favorite' : 'other'}`) }}
+                  {{ $t(`org.vue.components.project-select-list.titles.${favorite ? 'favorite' : 'other'}`) }}
                 </div>
 
                 <ListSort
@@ -45,7 +45,7 @@
           </div>
           <div v-else class="vue-ui-empty">
             <VueIcon icon="attach_file" class="empty-icon"/>
-            <div>{{ $t('components.project-select-list.empty') }}</div>
+            <div>{{ $t('org.vue.components.project-select-list.empty') }}</div>
           </div>
         </template>
       </template>

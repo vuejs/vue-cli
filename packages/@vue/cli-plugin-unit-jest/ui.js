@@ -1,24 +1,24 @@
 module.exports = api => {
   api.describeTask({
     match: /vue-cli-service test:unit/,
-    description: 'jest.tasks.test.description',
+    description: 'org.vue.jest.tasks.test.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest#injected-commands',
     prompts: [
       {
         name: 'watch',
         type: 'confirm',
-        description: 'jest.tasks.test.watch'
+        description: 'org.vue.jest.tasks.test.watch'
       },
       {
         name: 'notify',
         type: 'confirm',
-        description: 'jest.tasks.test.notify',
+        description: 'org.vue.jest.tasks.test.notify',
         when: answers => answers.watch
       },
       {
         name: 'update',
         type: 'confirm',
-        description: 'jest.tasks.test.update'
+        description: 'org.vue.jest.tasks.test.update'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

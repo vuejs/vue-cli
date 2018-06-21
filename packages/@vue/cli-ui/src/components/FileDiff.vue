@@ -24,7 +24,7 @@
         v-if="!fileDiff.deleted"
         icon-left="edit"
         class="icon-button"
-        v-tooltip="$t('components.file-diff.actions.open')"
+        v-tooltip="$t('org.vue.components.file-diff.actions.open')"
         @click.stop="openInEditor()"
       />
 
@@ -37,7 +37,7 @@
     <div v-if="!collapsed" class="content">
       <div v-if="fileDiff.binary" class="is-binary">
         <VueIcon icon="memory" class="icon"/>
-        <span>{{ $t('components.file-diff.binary') }}</span>
+        <span>{{ $t('org.vue.components.file-diff.binary') }}</span>
       </div>
       <template v-else>
         <FileDiffChunk

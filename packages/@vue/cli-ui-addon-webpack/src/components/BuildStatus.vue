@@ -3,47 +3,47 @@
     <div class="content">
       <div class="info-block status">
         <div class="label">
-          {{ $t('vue-webpack.dashboard.build-status.labels.status') }}
+          {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.status') }}
         </div>
-        <div class="value">{{ $t(`vue-webpack.dashboard.webpack-status.${status || 'Idle'}`) }}</div>
+        <div class="value">{{ $t(`org.vue.vue-webpack.dashboard.webpack-status.${status || 'Idle'}`) }}</div>
       </div>
       <div class="info-block errors">
         <div class="label">
-          {{ $t('vue-webpack.dashboard.build-status.labels.errors') }}
+          {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.errors') }}
         </div>
         <div class="value">{{ errors.length }}</div>
       </div>
       <div class="info-block warnings">
         <div class="label">
-          {{ $t('vue-webpack.dashboard.build-status.labels.warnings') }}
+          {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.warnings') }}
         </div>
         <div class="value">{{ warnings.length }}</div>
       </div>
       <div class="info-block assets">
         <div class="label">
-          {{ $t('vue-webpack.dashboard.build-status.labels.assets') }}
+          {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.assets') }}
         </div>
         <div class="value">
           {{ assetsTotalSize | size('B') }}
           <span class="secondary">
-            ({{ $t(`vue-webpack.sizes.${sizeField}`) }})
+            ({{ $t(`org.vue.vue-webpack.sizes.${sizeField}`) }})
           </span>
         </div>
       </div>
       <div class="info-block modules">
         <div class="label">
-          {{ $t('vue-webpack.dashboard.build-status.labels.modules') }}
+          {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.modules') }}
         </div>
         <div class="value">
           {{ modulesTotalSize | size('B') }}
           <span class="secondary">
-            ({{ $t(`vue-webpack.sizes.${sizeField}`) }})
+            ({{ $t(`org.vue.vue-webpack.sizes.${sizeField}`) }})
           </span>
         </div>
       </div>
       <div class="info-block dep-modules">
         <div class="label">
-          {{ $t('vue-webpack.dashboard.build-status.labels.deps') }}
+          {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.deps') }}
         </div>
         <div class="value">
           {{ depModulesTotalSize | size('B') }}
@@ -88,7 +88,7 @@ export default {
 
   sharedData () {
     return {
-      status: `webpack-dashboard-${this.mode}-status`
+      status: `org.vue.webpack.${this.mode}-status`
     }
   }
 }

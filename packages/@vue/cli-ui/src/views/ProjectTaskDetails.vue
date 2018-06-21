@@ -12,7 +12,7 @@
           v-if="task.status !== 'running'"
           icon-left="play_arrow"
           class="primary"
-          :label="$t('views.project-task-details.actions.play')"
+          :label="$t('org.vue.views.project-task-details.actions.play')"
           data-testid="run-task"
           @click="runTask()"
         />
@@ -20,7 +20,7 @@
           v-else
           icon-left="stop"
           class="primary"
-          :label="$t('views.project-task-details.actions.stop')"
+          :label="$t('org.vue.views.project-task-details.actions.stop')"
           data-testid="stop-task"
           @click="stopTask()"
         />
@@ -30,13 +30,13 @@
           icon-left="settings"
           class="icon-button primary"
           :disabled="task.status === 'running'"
-          v-tooltip="$t('views.project-task-details.parameters')"
+          v-tooltip="$t('org.vue.views.project-task-details.parameters')"
           @click="showParameters = true"
         />
 
         <div
           class="command"
-          v-tooltip="`${$t('views.project-task-details.command')}:<br><code>${task.command}</code>`"
+          v-tooltip="`${$t('org.vue.views.project-task-details.command')}:<br><code>${task.command}</code>`"
         >
           {{ task.command }}
         </div>
@@ -47,7 +47,7 @@
           target="_blank"
           icon-left="open_in_new"
           class="icon-button"
-          v-tooltip="$t('views.project-task-details.more-info')"
+          v-tooltip="$t('org.vue.views.project-task-details.more-info')"
         />
 
         <div class="vue-ui-spacer"/>
@@ -58,7 +58,7 @@
           class="views"
         >
           <VueGroupButton
-            :label="$t('views.project-task-details.output')"
+            :label="$t('org.vue.views.project-task-details.output')"
             icon-left="dvr"
             value="_output"
           />
@@ -88,7 +88,7 @@
             disableStdin: true,
             useFlowControl: true
           }"
-          :title="$t('views.project-task-details.output')"
+          :title="$t('org.vue.views.project-task-details.output')"
           toolbar
           open-links
           @clear="clearLogs()"
@@ -105,7 +105,7 @@
 
     <VueModal
       v-if="showParameters"
-      :title="$t('views.project-task-details.parameters')"
+      :title="$t('org.vue.views.project-task-details.parameters')"
       class="medium anchor"
       @close="showParameters = false"
     >
@@ -117,14 +117,14 @@
 
         <div class="vue-ui-text info banner">
           <VueIcon icon="info" class="big"/>
-          <span>{{ $t('views.project-task-details.parameters-info') }}</span>
+          <span>{{ $t('org.vue.views.project-task-details.parameters-info') }}</span>
         </div>
       </div>
 
       <div slot="footer" class="actions">
         <VueButton
           class="primary big"
-          :label="$t('views.project-task-details.actions.close')"
+          :label="$t('org.vue.views.project-task-details.actions.close')"
           @click="showParameters = false"
         />
       </div>
@@ -161,7 +161,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.task && `${this.task.name} - ${this.$t('views.project-tasks.title')}`
+      title: this.task && `${this.task.name} - ${this.$t('org.vue.views.project-tasks.title')}`
     }
   },
 
