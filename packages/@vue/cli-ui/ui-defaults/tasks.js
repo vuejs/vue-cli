@@ -112,19 +112,19 @@ module.exports = api => {
   const views = {
     views: [
       {
-        id: 'vue-webpack-dashboard',
+        id: 'org.vue.webpack.views.dashboard',
         label: 'org.vue.vue-webpack.dashboard.title',
         icon: 'dashboard',
-        component: 'vue-webpack-dashboard'
+        component: 'org.vue.webpack.components.dashboard'
       },
       {
-        id: 'vue-webpack-analyzer',
+        id: 'org.vue.webpack.views.analyzer',
         label: 'org.vue.vue-webpack.analyzer.title',
         icon: 'donut_large',
-        component: 'vue-webpack-analyzer'
+        component: 'org.vue.webpack.components.analyzer'
       }
     ],
-    defaultView: 'vue-webpack-dashboard'
+    defaultView: 'org.vue.webpack.views.dashboard'
   }
   api.describeTask({
     match: /vue-cli-service serve(\s+--\S+(\s+\S+)?)*$/,
@@ -343,7 +343,7 @@ module.exports = api => {
 
   // Webpack dashboard
   api.addClientAddon({
-    id: 'vue-webpack',
+    id: 'org.vue.webpack.client-addon',
     path: '@vue/cli-ui-addon-webpack/dist'
   })
 

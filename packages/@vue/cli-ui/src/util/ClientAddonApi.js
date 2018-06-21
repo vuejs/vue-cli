@@ -93,5 +93,6 @@ export default class ClientAddonApi {
 }
 
 export function toComponentId (id) {
+  id = id.replace(/\./g, '-')
   return `client-addon--${id}`
 }
