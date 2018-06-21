@@ -30,18 +30,20 @@ module.exports = api => {
     }
   }
 
-  function resetSharedData (mode) {
+  function resetSharedData (mode, clear = false) {
     for (const field in fields) {
       const id = `${mode}-${field}`
-      setSharedData(id, getSharedDataInitialValue(id, field))
+      setSharedData(id, getSharedDataInitialValue(id, field, clear))
     }
   }
 
-  function getSharedDataInitialValue (id, field) {
-    const project = api.getProject()
-    if (project) {
-      const data = getSharedData(`${project.id}-${id}`)
-      if (data != null) return data.value
+  function getSharedDataInitialValue (id, field, clear) {
+    if (!clear) {
+      const project = api.getProject()
+      if (project) {
+        const data = getSharedData(`${project.id}-${id}`)
+        if (data != null) return data.value
+      }
     }
     return fields[field]
   }
@@ -185,8 +187,7 @@ module.exports = api => {
       args.push('--dashboard')
 
       // Data
-      resetSharedData('serve')
-      removeSharedData('serve-url')
+      resetSharedData('serve', true)
       firstRun = true
       hadFailed = false
     },
@@ -288,8 +289,8 @@ module.exports = api => {
       args.push('--dashboard')
 
       // Data
-      resetSharedData('build')
-      resetSharedData('build-modern')
+      resetSharedData('build', true)
+      resetSharedData('build-modern', true)
     },
     onRun: () => {
       api.ipcOn(onWebpackMessage)
