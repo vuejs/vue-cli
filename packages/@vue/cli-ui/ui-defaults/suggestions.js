@@ -1,9 +1,9 @@
 const { loadModule } = require('@vue/cli/lib/util/module')
 const invoke = require('@vue/cli/lib/invoke')
 
-const ROUTER = 'vue-router-add'
-const VUEX = 'vuex-add'
-const VUE_CONFIG_OPEN = 'vue-config-open'
+const ROUTER = 'org.vue.vue-router-add'
+const VUEX = 'org.vue.vuex-add'
+const VUE_CONFIG_OPEN = 'org.vue.vue-config-open'
 
 module.exports = api => {
   api.onViewOpen(({ view }) => {
@@ -12,8 +12,8 @@ module.exports = api => {
         api.addSuggestion({
           id: ROUTER,
           type: 'action',
-          label: 'cli-service.suggestions.vue-router-add.label',
-          message: 'cli-service.suggestions.vue-router-add.message',
+          label: 'org.vue.cli-service.suggestions.vue-router-add.label',
+          message: 'org.vue.cli-service.suggestions.vue-router-add.message',
           link: 'https://router.vuejs.org/',
           async handler () {
             await install(api, 'vue-router')
@@ -25,8 +25,8 @@ module.exports = api => {
         api.addSuggestion({
           id: VUEX,
           type: 'action',
-          label: 'cli-service.suggestions.vuex-add.label',
-          message: 'cli-service.suggestions.vuex-add.message',
+          label: 'org.vue.cli-service.suggestions.vuex-add.label',
+          message: 'org.vue.cli-service.suggestions.vuex-add.message',
           link: 'https://vuex.vuejs.org/',
           async handler () {
             await install(api, 'vuex')
@@ -43,12 +43,12 @@ module.exports = api => {
   })
 
   api.onConfigRead(({ config }) => {
-    if (config.id === 'vue-cli') {
+    if (config.id === 'org.vue.vue-cli') {
       if (config.foundFiles.vue) {
         api.addSuggestion({
           id: VUE_CONFIG_OPEN,
           type: 'action',
-          label: 'vue-webpack.suggestions.vue-config-open',
+          label: 'org.vue.vue-webpack.suggestions.vue-config-open',
           handler () {
             const file = config.foundFiles.vue.path
             console.log('open', file)
@@ -68,7 +68,7 @@ module.exports = api => {
 
 async function install (api, id) {
   api.setProgress({
-    status: 'cli-service.suggestions.progress',
+    status: 'org.vue.cli-service.suggestions.progress',
     args: [id],
     progress: -1
   })

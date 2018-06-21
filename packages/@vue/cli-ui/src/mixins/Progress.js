@@ -74,7 +74,7 @@ export default {
             values[`arg${i}`] = this.progress.args[i]
           }
         }
-        const key = `mixins.progress.${status}`
+        const key = `org.vue.mixins.progress.${status}`
         message = this.$t(key, values)
         message = (message !== key && message)
         if (!message) {

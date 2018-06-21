@@ -9,7 +9,7 @@
       <VueButton
         class="icon-button go-up"
         icon-left="keyboard_arrow_up"
-        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.parent-folder')"
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.parent-folder')"
         @click="openParentFolder"
       />
 
@@ -18,7 +18,7 @@
           ref="pathInput"
           class="path-input"
           v-model="editedPath"
-          :placeholder="$t('components.folder-explorer.toolbar.placeholder')"
+          :placeholder="$t('org.vue.components.folder-explorer.toolbar.placeholder')"
           icon-right="edit"
           v-focus
           @keyup.esc="editingPath = false"
@@ -62,7 +62,7 @@
           <VueButton
             class="edit-path-button icon-button"
             icon-left="edit"
-            v-tooltip="$t('components.folder-explorer.toolbar.tooltips.edit-path')"
+            v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.edit-path')"
             @click="openPathEdit()"
           />
         </template>
@@ -78,14 +78,14 @@
       <VueButton
         class="icon-button"
         icon-left="refresh"
-        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.refresh')"
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.refresh')"
         @click="refreshFolder"
       />
 
       <VueButton
         class="icon-button favorite-button"
         :icon-left="folderCurrent.favorite ? 'star' : 'star_border'"
-        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.favorite')"
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite')"
         @click="toggleFavorite()"
       />
 
@@ -96,7 +96,7 @@
           slot="trigger"
           icon-left="arrow_drop_down"
           class="icon-button"
-          v-tooltip="$t('components.folder-explorer.toolbar.tooltips.favorite-folders')"
+          v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite-folders')"
         />
 
         <template v-if="foldersFavorite.length">
@@ -110,7 +110,7 @@
         </template>
 
         <div v-else class="vue-ui-empty">
-          {{ $t('components.folder-explorer.toolbar.empty') }}
+          {{ $t('org.vue.components.folder-explorer.toolbar.empty') }}
         </div>
       </VueDropdown>
 
@@ -122,7 +122,7 @@
         />
 
         <VueDropdownButton
-          :label="$t('components.folder-explorer.new-folder.action')"
+          :label="$t('org.vue.components.folder-explorer.new-folder.action')"
           icon-left="create_new_folder"
           @click="showNewFolder = true"
         />
@@ -132,7 +132,7 @@
           v-model="showHidden"
           class="extend-left"
         >
-          {{ $t('components.folder-explorer.toolbar.show-hidden') }}
+          {{ $t('org.vue.components.folder-explorer.toolbar.show-hidden') }}
         </VueSwitch>
       </VueDropdown>
     </div>
@@ -158,14 +158,14 @@
 
     <VueModal
       v-if="showNewFolder"
-      :title="$t('components.folder-explorer.new-folder.title')"
+      :title="$t('org.vue.components.folder-explorer.new-folder.title')"
       class="small new-folder-modal"
       @close="showNewFolder = false"
     >
       <div class="default-body">
         <VueFormField
-          :title="$t('components.folder-explorer.new-folder.field.title')"
-          :subtitle="$t('components.folder-explorer.new-folder.field.subtitle')"
+          :title="$t('org.vue.components.folder-explorer.new-folder.field.title')"
+          :subtitle="$t('org.vue.components.folder-explorer.new-folder.field.subtitle')"
         >
           <VueInput
             v-model="newFolderName"
@@ -178,13 +178,13 @@
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          :label="$t('components.folder-explorer.new-folder.cancel')"
+          :label="$t('org.vue.components.folder-explorer.new-folder.cancel')"
           class="flat close"
           @click="showNewFolder = false"
         />
 
         <VueButton
-          :label="$t('components.folder-explorer.new-folder.create')"
+          :label="$t('org.vue.components.folder-explorer.new-folder.create')"
           icon-left="create_new_folder"
           class="primary save"
           :disabled="!newFolderValid"

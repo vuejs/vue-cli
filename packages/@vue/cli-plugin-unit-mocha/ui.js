@@ -1,14 +1,14 @@
 module.exports = api => {
   api.describeTask({
     match: /vue-cli-service test:unit/,
-    description: 'mocha.tasks.test.description',
+    description: 'org.vue.mocha.tasks.test.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha#injected-commands',
     prompts: [
       {
         name: 'watch',
         type: 'confirm',
         default: false,
-        description: 'mocha.tasks.test.watch'
+        description: 'org.vue.mocha.tasks.test.watch'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

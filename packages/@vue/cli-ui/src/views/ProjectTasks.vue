@@ -1,7 +1,7 @@
 <template>
   <div class="project-tasks page">
     <ContentView
-      :title="$t('views.project-tasks.title')"
+      :title="$t('org.vue.views.project-tasks.title')"
     >
       <ApolloQuery
         :query="require('../graphql/tasks.gql')"
@@ -42,7 +42,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('views.project-tasks.title')
+      title: this.$t('org.vue.views.project-tasks.title')
     }
   },
 

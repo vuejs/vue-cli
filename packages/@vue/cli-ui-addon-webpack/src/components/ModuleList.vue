@@ -2,7 +2,7 @@
   <div class="module-list list-block">
     <div class="content">
       <div class="title">
-        {{ $t('vue-webpack.dashboard.module-list.title') }}
+        {{ $t('org.vue.vue-webpack.dashboard.module-list.title') }}
       </div>
 
       <VueIcon

@@ -2,14 +2,14 @@
   <div class="vue-webpack-dashboard">
     <div class="pane-toolbar">
       <VueIcon icon="dashboard"/>
-      <div class="title">{{ $t('vue-webpack.dashboard.title') }}</div>
+      <div class="title">{{ $t('org.vue.vue-webpack.dashboard.title') }}</div>
 
       <template
         v-if="mode === 'serve'"
       >
         <VueButton
           icon-left="open_in_browser"
-          :label="$t('vue-webpack.dashboard.open-app')"
+          :label="$t('org.vue.vue-webpack.dashboard.open-app')"
           :disabled="!serveUrl"
           :href="serveUrl"
           target="_blank"
@@ -24,19 +24,19 @@
         v-if="modernMode"
         v-model="showModernBuild"
       >
-        {{ $t('vue-webpack.modern-mode') }}
+        {{ $t('org.vue.vue-webpack.modern-mode') }}
       </VueSwitch>
 
       <VueSelect v-model="sizeField">
-        <VueSelectButton value="stats" :label="`${$t('vue-webpack.sizes.stats')}`"/>
-        <VueSelectButton value="parsed" :label="`${$t('vue-webpack.sizes.parsed')}`"/>
-        <VueSelectButton value="gzip" :label="`${$t('vue-webpack.sizes.gzip')}`"/>
+        <VueSelectButton value="stats" :label="`${$t('org.vue.vue-webpack.sizes.stats')}`"/>
+        <VueSelectButton value="parsed" :label="`${$t('org.vue.vue-webpack.sizes.parsed')}`"/>
+        <VueSelectButton value="gzip" :label="`${$t('org.vue.vue-webpack.sizes.gzip')}`"/>
       </VueSelect>
 
       <VueButton
         class="icon-button"
         icon-left="help"
-        v-tooltip="$t('vue-webpack.sizes.help')"
+        v-tooltip="$t('org.vue.vue-webpack.sizes.help')"
       />
     </div>
 

@@ -64,6 +64,7 @@ export const apolloProvider = new VueApollo({
 })
 
 export async function resetApollo () {
+  console.log('[UI] Apollo store reset')
   try {
     await apolloClient.resetStore()
   } catch (e) {

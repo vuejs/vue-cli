@@ -1,24 +1,24 @@
 module.exports = api => {
   api.describeTask({
     match: /vue-cli-service test:e2e/,
-    description: 'nightwatch.tasks.test.description',
+    description: 'org.vue.nightwatch.tasks.test.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch#injected-commands',
     prompts: [
       {
         name: 'url',
         type: 'input',
         default: '',
-        description: 'nightwatch.tasks.test.url'
+        description: 'org.vue.nightwatch.tasks.test.url'
       }, {
         name: 'config',
         type: 'input',
         default: '',
-        description: 'nightwatch.tasks.test.config'
+        description: 'org.vue.nightwatch.tasks.test.config'
       }, {
         name: 'env',
         type: 'input',
         default: 'chrome',
-        description: 'nightwatch.tasks.test.env'
+        description: 'org.vue.nightwatch.tasks.test.env'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

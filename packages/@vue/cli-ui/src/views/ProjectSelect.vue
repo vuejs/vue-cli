@@ -2,13 +2,13 @@
   <div class="project-select page">
     <StepWizard
       :tab-id.sync="tab"
-      :title="$route.query.hideTabs ? $t('views.project-create.title') : $t('views.project-select.title')"
+      :title="$route.query.hideTabs ? $t('org.vue.views.project-create.title') : $t('org.vue.views.project-select.title')"
       :hide-tabs="hideTabs"
       class="frame"
     >
       <VueTab
         id="existing"
-        :label="$t('views.project-select.tabs.projects')"
+        :label="$t('org.vue.views.project-select.tabs.projects')"
         icon="storage"
         class="select"
       >
@@ -17,7 +17,7 @@
 
       <VueTab
         id="create"
-        :label="$t('views.project-select.tabs.create')"
+        :label="$t('org.vue.views.project-select.tabs.create')"
         icon="add_box"
         class="create"
       >
@@ -28,7 +28,7 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="add"
-            :label="$route.query.hideTabs ? $t('views.project-create.tabs.details.form.folder.action') : $t('views.project-select.buttons.create')"
+            :label="$route.query.hideTabs ? $t('org.vue.views.project-create.tabs.details.form.folder.action') : $t('org.vue.views.project-select.buttons.create')"
             class="big primary create-project"
             @click="createProject()"
           />
@@ -37,7 +37,7 @@
 
       <VueTab
         id="import"
-        :label="$t('views.project-select.tabs.import')"
+        :label="$t('org.vue.views.project-select.tabs.import')"
         icon="unarchive"
         class="import"
       >
@@ -48,7 +48,7 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="unarchive"
-            :label="$route.query.action || $t('views.project-select.buttons.import')"
+            :label="$route.query.action || $t('org.vue.views.project-select.buttons.import')"
             class="big primary import-project"
             :disabled="!folderCurrent.isVueProject"
             @click="importProject()"
@@ -71,26 +71,26 @@
         :to="{ name: 'about' }"
         class="flat icon-button"
         icon-left="help"
-        v-tooltip="$t('views.about.title')"
+        v-tooltip="$t('org.vue.views.about.title')"
       />
     </div>
 
     <VueModal
       v-if="showNoModulesModal"
-      :title="$t('views.project-select.import.no-modules.title')"
+      :title="$t('org.vue.views.project-select.import.no-modules.title')"
       class="small no-modules-modal"
       @close="showNoModulesModal = false"
     >
       <div class="default-body">
         <div class="message">
-          {{ $t('views.project-select.import.no-modules.message') }}
+          {{ $t('org.vue.views.project-select.import.no-modules.message') }}
         </div>
       </div>
 
       <div slot="footer" class="actions">
         <VueButton
           class="primary big"
-          :label="$t('views.project-select.import.no-modules.close')"
+          :label="$t('org.vue.views.project-select.import.no-modules.close')"
           @click="showNoModulesModal = false"
         />
       </div>
@@ -109,7 +109,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('views.project-select.title')
+      title: this.$t('org.vue.views.project-select.title')
     }
   },
 

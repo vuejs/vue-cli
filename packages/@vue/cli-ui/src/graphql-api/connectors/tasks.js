@@ -175,7 +175,7 @@ function updateViewBadges ({ task, data }, context) {
         badge: {
           id: 'vue-task-error',
           type: 'error',
-          label: 'components.view-badge.labels.tasks.error',
+          label: 'org.vue.components.view-badge.labels.tasks.error',
           priority: 3
         }
       }, context)
@@ -185,7 +185,7 @@ function updateViewBadges ({ task, data }, context) {
         badge: {
           id: 'vue-task-running',
           type: 'info',
-          label: 'components.view-badge.labels.tasks.running',
+          label: 'org.vue.components.view-badge.labels.tasks.running',
           priority: 2
         }
       }, context)
@@ -195,7 +195,7 @@ function updateViewBadges ({ task, data }, context) {
         badge: {
           id: 'vue-task-done',
           type: 'success',
-          label: 'components.view-badge.labels.tasks.done',
+          label: 'org.vue.components.view-badge.labels.tasks.done',
           priority: 1,
           hidden: true
         }

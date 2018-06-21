@@ -52,7 +52,6 @@ class DashboardPlugin {
     let assetSources = new Map()
 
     if (!sendData) {
-      ipc.connect()
       sendData = data => ipc.send({
         webpackDashboardData: {
           type: this.type,

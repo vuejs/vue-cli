@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 
 module.exports = api => {
-  const { getSharedData, setSharedData, removeSharedData, watchSharedData } = api.namespace('webpack-dashboard-')
+  const { getSharedData, setSharedData, removeSharedData, watchSharedData } = api.namespace('org.vue.webpack.')
 
   let firstRun = true
   let hadFailed = false
@@ -30,18 +30,20 @@ module.exports = api => {
     }
   }
 
-  function resetSharedData (mode) {
+  function resetSharedData (mode, clear = false) {
     for (const field in fields) {
       const id = `${mode}-${field}`
-      setSharedData(id, getSharedDataInitialValue(id, field))
+      setSharedData(id, getSharedDataInitialValue(id, field, clear))
     }
   }
 
-  function getSharedDataInitialValue (id, field) {
-    const project = api.getProject()
-    if (project) {
-      const data = getSharedData(`${project.id}-${id}`)
-      if (data != null) return data.value
+  function getSharedDataInitialValue (id, field, clear) {
+    if (!clear) {
+      const project = api.getProject()
+      if (project) {
+        const data = getSharedData(`${project.id}-${id}`)
+        if (data != null) return data.value
+      }
     }
     return fields[field]
   }
@@ -111,13 +113,13 @@ module.exports = api => {
     views: [
       {
         id: 'vue-webpack-dashboard',
-        label: 'vue-webpack.dashboard.title',
+        label: 'org.vue.vue-webpack.dashboard.title',
         icon: 'dashboard',
         component: 'vue-webpack-dashboard'
       },
       {
         id: 'vue-webpack-analyzer',
-        label: 'vue-webpack.analyzer.title',
+        label: 'org.vue.vue-webpack.analyzer.title',
         icon: 'donut_large',
         component: 'vue-webpack-analyzer'
       }
@@ -126,7 +128,7 @@ module.exports = api => {
   }
   api.describeTask({
     match: /vue-cli-service serve(\s+--\S+(\s+\S+)?)*$/,
-    description: 'vue-webpack.tasks.serve.description',
+    description: 'org.vue.vue-webpack.tasks.serve.description',
     link: 'https://cli.vuejs.org/guide/cli-service.html#vue-cli-service-serve',
     icon: '/public/webpack-logo.png',
     prompts: [
@@ -134,7 +136,7 @@ module.exports = api => {
         name: 'open',
         type: 'confirm',
         default: false,
-        description: 'vue-webpack.tasks.serve.open'
+        description: 'org.vue.vue-webpack.tasks.serve.open'
       },
       {
         name: 'mode',
@@ -154,25 +156,25 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'vue-webpack.tasks.serve.mode'
+        description: 'org.vue.vue-webpack.tasks.serve.mode'
       },
       {
         name: 'host',
         type: 'input',
         default: '0.0.0.0',
-        description: 'vue-webpack.tasks.serve.host'
+        description: 'org.vue.vue-webpack.tasks.serve.host'
       },
       {
         name: 'port',
         type: 'input',
         default: 8080,
-        description: 'vue-webpack.tasks.serve.port'
+        description: 'org.vue.vue-webpack.tasks.serve.port'
       },
       {
         name: 'https',
         type: 'confirm',
         default: false,
-        description: 'vue-webpack.tasks.serve.https'
+        description: 'org.vue.vue-webpack.tasks.serve.https'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
@@ -185,8 +187,7 @@ module.exports = api => {
       args.push('--dashboard')
 
       // Data
-      resetSharedData('serve')
-      removeSharedData('serve-url')
+      resetSharedData('serve', true)
       firstRun = true
       hadFailed = false
     },
@@ -201,7 +202,7 @@ module.exports = api => {
   })
   api.describeTask({
     match: /vue-cli-service build(\s+--\S+(\s+\S+)?)*$/,
-    description: 'vue-webpack.tasks.build.description',
+    description: 'org.vue.vue-webpack.tasks.build.description',
     link: 'https://cli.vuejs.org/guide/cli-service.html#vue-cli-service-build',
     icon: '/public/webpack-logo.png',
     prompts: [
@@ -209,8 +210,8 @@ module.exports = api => {
         name: 'modern',
         type: 'confirm',
         default: false,
-        message: 'vue-webpack.tasks.build.modern.label',
-        description: 'vue-webpack.tasks.build.modern.description',
+        message: 'org.vue.vue-webpack.tasks.build.modern.label',
+        description: 'org.vue.vue-webpack.tasks.build.modern.description',
         link: 'https://cli.vuejs.org/guide/browser-compatibility.html#modern-mode'
       },
       {
@@ -231,13 +232,13 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'vue-webpack.tasks.build.mode'
+        description: 'org.vue.vue-webpack.tasks.build.mode'
       },
       {
         name: 'dest',
         type: 'input',
         default: 'dist',
-        description: 'vue-webpack.tasks.build.dest'
+        description: 'org.vue.vue-webpack.tasks.build.dest'
       },
       {
         name: 'target',
@@ -245,35 +246,35 @@ module.exports = api => {
         default: 'app',
         choices: [
           {
-            name: 'vue-webpack.tasks.build.target.app',
+            name: 'org.vue.vue-webpack.tasks.build.target.app',
             value: 'app'
           },
           {
-            name: 'vue-webpack.tasks.build.target.lib',
+            name: 'org.vue.vue-webpack.tasks.build.target.lib',
             value: 'lib'
           },
           {
-            name: 'vue-webpack.tasks.build.target.wc',
+            name: 'org.vue.vue-webpack.tasks.build.target.wc',
             value: 'wc'
           },
           {
-            name: 'vue-webpack.tasks.build.target.wc-async',
+            name: 'org.vue.vue-webpack.tasks.build.target.wc-async',
             value: 'wc-async'
           }
         ],
-        description: 'vue-webpack.tasks.build.target.description'
+        description: 'org.vue.vue-webpack.tasks.build.target.description'
       },
       {
         name: 'name',
         type: 'input',
         default: '',
-        description: 'vue-webpack.tasks.build.name'
+        description: 'org.vue.vue-webpack.tasks.build.name'
       },
       {
         name: 'watch',
         type: 'confirm',
         default: false,
-        description: 'vue-webpack.tasks.build.watch'
+        description: 'org.vue.vue-webpack.tasks.build.watch'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
@@ -288,8 +289,8 @@ module.exports = api => {
       args.push('--dashboard')
 
       // Data
-      resetSharedData('build')
-      resetSharedData('build-modern')
+      resetSharedData('build', true)
+      resetSharedData('build-modern', true)
     },
     onRun: () => {
       api.ipcOn(onWebpackMessage)
@@ -303,7 +304,7 @@ module.exports = api => {
   api.addTask({
     name: 'inspect',
     command: 'vue-cli-service inspect',
-    description: 'vue-webpack.tasks.inspect.description',
+    description: 'org.vue.vue-webpack.tasks.inspect.description',
     link: 'https://cli.vuejs.org/guide/webpack.html#inspecting-the-project-s-webpack-config',
     icon: '/public/webpack-inspect-logo.png',
     prompts: [
@@ -325,13 +326,13 @@ module.exports = api => {
             value: 'test'
           }
         ],
-        description: 'vue-webpack.tasks.inspect.mode'
+        description: 'org.vue.vue-webpack.tasks.inspect.mode'
       },
       {
         name: 'verbose',
         type: 'confirm',
         default: false,
-        description: 'vue-webpack.tasks.inspect.verbose'
+        description: 'org.vue.vue-webpack.tasks.inspect.verbose'
       }
     ],
     onBeforeRun: ({ answers, args }) => {

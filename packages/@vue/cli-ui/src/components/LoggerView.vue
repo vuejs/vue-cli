@@ -5,12 +5,12 @@
         icon="dvr"
       />
       <div class="title">
-        {{ $t('components.logger-view.title') }}
+        {{ $t('org.vue.components.logger-view.title') }}
       </div>
       <VueButton
         class="icon-button flat"
         icon-left="delete_forever"
-        v-tooltip="$t('components.logger-view.buttons.clear')"
+        v-tooltip="$t('org.vue.components.logger-view.buttons.clear')"
         @click="clearLogs()"
       />
       <VueIcon
@@ -20,13 +20,13 @@
       <VueButton
         class="icon-button flat"
         icon-left="subdirectory_arrow_left"
-        v-tooltip="$t('components.logger-view.buttons.scroll')"
+        v-tooltip="$t('org.vue.components.logger-view.buttons.scroll')"
         @click="scrollToBottom()"
       />
       <VueButton
         class="icon-button flat"
         icon-left="close"
-        v-tooltip="$t('components.logger-view.buttons.close')"
+        v-tooltip="$t('org.vue.components.logger-view.buttons.close')"
         @click="close()"
       />
     </div>
@@ -55,7 +55,7 @@
             class="vue-ui-empty"
           >
             <VueIcon icon="wifi" class="large"/>
-            <div>{{ $t('components.logger-view.empty') }}</div>
+            <div>{{ $t('org.vue.components.logger-view.empty') }}</div>
           </div>
         </template>
       </template>
