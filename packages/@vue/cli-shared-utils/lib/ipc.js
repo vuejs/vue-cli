@@ -1,10 +1,18 @@
 const ipc = require('node-ipc')
 
-const defaultId = process.env.VUE_CLI_IPC || 'vue-cli'
+const DEFAULT_ID = process.env.VUE_CLI_IPC || 'vue-cli'
+const DEFAULT_IDLE_TIMEOUT = 3000
+const DEFAULT_OPTIONS = {
+  networkId: DEFAULT_ID,
+  autoConnect: true,
+  disconnectOnIdle: false,
+  idleTimeout: DEFAULT_IDLE_TIMEOUT
+}
 
 exports.IpcMessenger = class IpcMessenger {
-  constructor (id = defaultId) {
-    ipc.config.id = this.id = id
+  constructor (options = {}) {
+    options = Object.assign({}, DEFAULT_OPTIONS, options)
+    ipc.config.id = this.id = options.networkId
     ipc.config.retry = 1500
     ipc.config.silent = true
 
@@ -12,10 +20,12 @@ exports.IpcMessenger = class IpcMessenger {
     this.connecting = false
     this.disconnecting = false
     this.queue = null
+    this.options = options
 
     this.listeners = []
 
     this.disconnectTimeout = 15000
+    this.idleTimer = null
 
     // Prevent forced process exit
     // (or else ipc messages may not be sent before kill)
@@ -29,8 +39,18 @@ exports.IpcMessenger = class IpcMessenger {
   send (data, type = 'message') {
     if (this.connected) {
       ipc.of[this.id].emit(type, data)
+
+      clearTimeout(this.idleTimer)
+      if (this.options.disconnectOnIdle) {
+        this.idleTimer = setTimeout(() => {
+          this.disconnect()
+        }, this.options.idleTimeout)
+      }
     } else {
       this.queue.push(data)
+      if (this.options.autoConnect && !this.connecting) {
+        this.connect()
+      }
     }
   }
 

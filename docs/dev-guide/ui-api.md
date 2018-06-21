@@ -949,9 +949,6 @@ const { IpcMessenger } = require('@vue/cli-shared-utils')
 // Create a new IpcMessenger instance
 const ipc = new IpcMessenger()
 
-// Connect to the vue-cli IPC network
-ipc.connect()
-
 function sendMessage (data) {
   // Send a message to the cli-ui server
   ipc.send({
@@ -976,6 +973,42 @@ function cleanup () {
   // Disconnect from the IPC network
   ipc.disconnect()
 }
+```
+
+Manual connection:
+
+```js
+const ipc = new IpcMessenger({
+  autoConnect: false
+})
+
+// This message will be queued
+ipc.send({ ... })
+
+ipc.connect()
+```
+
+Auto disconnect on idle (after some time without sending any message):
+
+```js
+const ipc = new IpcMessenger({
+  disconnectOnIdle: true,
+  idleTimeout: 3000 // Default
+})
+
+ipc.send({ ... })
+
+setTimeout(() => {
+  console.log(ipc.connected) // false
+}, 3000)
+```
+
+Connect to another IPC network:
+
+```js
+const ipc = new IpcMessenger({
+  networkId: 'my-ipc-network'
+})
 ```
 
 In a vue-cli plugin `ui.js` file, you can use the `ipcOn`, `ipcOff` and `ipcSend` methods:
