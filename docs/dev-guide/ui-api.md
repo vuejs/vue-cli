@@ -55,7 +55,7 @@ First you need to pass some informations:
 ```js
 api.describeConfig({
   // Unique ID for the config
-  id: 'eslintrc',
+  id: 'org.vue.eslintrc',
   // Displayed name
   name: 'ESLint configuration',
   // Shown below the name
@@ -64,6 +64,10 @@ api.describeConfig({
   link: 'https://eslint.org'
 })
 ```
+
+::: danger
+Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
 
 ### Config icon
 
@@ -613,7 +617,7 @@ const { clientAddonConfig } = require('@vue/cli-ui')
 
 module.exports = {
   ...clientAddonConfig({
-    id: '<client-addon-id>',
+    id: 'org.vue.webpack.client-addon',
     // Development port (default 8042)
     port: 8042
   })
@@ -622,7 +626,9 @@ module.exports = {
 
 The `clientAddonConfig` method will generate the needed vue-cli configuration. Among other things, it disables CSS extraction and outputs the code to `./dist/index.js` in the client addon folder.
 
-**⚠️ Don't forget to replace `<client-addon-id>` in the `id` field with the id of your new client addon!**
+::: danger
+Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
 
 Then modify the `.eslintrc.json` file to add some allowed global objects:
 
@@ -660,14 +666,14 @@ Vue.use(VueProgress, {
 
 // Register a custom component
 // (works like 'Vue.component')
-ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
+ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 
 // Add routes to vue-router under a /addon/<id> parent route.
 // For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
 // will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
 // Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
-ClientAddonApi.addRoutes('vue-webpack', [
-  { path: '', name: 'test-webpack-route', component: TestView }
+ClientAddonApi.addRoutes('org.vue.webpack', [
+  { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
 ])
 
 // You can translate your plugin components
@@ -679,16 +685,21 @@ locales.keys().forEach(key => {
 })
 ```
 
+::: danger
+Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
+
 The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
 
 In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent. You can also translate the strings with [vue-i18n](https://github.com/kazupon/vue-i18n) which is included.
+
 ### Register the client addon
 
 Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
 
 ```js
 api.addClientAddon({
-  id: 'vue-webpack',
+  id: 'org.vue.webpack.client-addon',
   // Folder containing the built JS files
   path: '@vue/cli-ui-addon-webpack/dist'
 })
@@ -702,7 +713,7 @@ Or specify an url when developing the plugin (ideally you want to do this in the
 // Useful for dev
 // Will override path if already defined in a plugin
 api.addClientAddon({
-  id: 'vue-webpack',
+  id: 'org.vue.webpack.client-addon',
   // Use the same port you configured earlier
   url: 'http://localhost:8042/index.js'
 })
@@ -720,21 +731,21 @@ api.describeTask({
   views: [
     {
       // Unique ID
-      id: 'vue-webpack-dashboard-client-addon',
+      id: 'org.vue.webpack.views.dashboard',
       // Button label
       label: 'Dashboard',
       // Button icon (material-icons)
       icon: 'dashboard',
       // Dynamic component to load, registered using ClientAddonApi
-      component: 'vue-webpack-dashboard'
+      component: 'org.vue.webpack.components.dashboard'
     }
   ],
   // Default selected view when displaying the task details (by default it's the output)
-  defaultView: 'vue-webpack-dashboard-client-addon'
+  defaultView: 'org.vue.webpack.views.dashboard'
 })
 ```
 
-Here is the client addon code that register the `'vue-webpack-dashboard'` component (like we saw earlier):
+Here is the client addon code that register the `'org.vue.webpack.components.dashboard'` component (like we saw earlier):
 
 ```js
 /* In `main.js` */
@@ -742,7 +753,7 @@ Here is the client addon code that register the `'vue-webpack-dashboard'` compon
 import WebpackDashboard from './components/WebpackDashboard.vue'
 // Register a custom component
 // (works like 'Vue.component')
-ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
+ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 ```
 
 ![Task view example](/task-view.png)
@@ -754,11 +765,11 @@ You can add a new view below the standard 'Project plugins', 'Project configurat
 ```js
 api.addView({
   // Unique id
-  id: 'vue-webpack-test-view',
+  id: 'org.vue.webpack.views.test',
 
   // Route name (from vue-router)
   // Use the same name used in the 'ClientAddonApi.addRoutes' method (see above in the Client addon section)
-  name: 'test-webpack-route',
+  name: 'org.vue.webpack.routes.test',
 
   // Button icon (material-icons)
   icon: 'pets',
@@ -770,7 +781,7 @@ api.addView({
 })
 ```
 
-Here is the code in the client addon that register the `'test-webpack-route'` (like we saw earlier):
+Here is the code in the client addon that register the `'org.vue.webpack.routes.test'` (like we saw earlier):
 
 ```js
 /* In `main.js` */
@@ -780,8 +791,8 @@ import TestView from './components/TestView.vue'
 // For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
 // will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
 // Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
-ClientAddonApi.addRoutes('vue-webpack', [
-  { path: '', name: 'test-webpack-route', component: TestView }
+ClientAddonApi.addRoutes('org.vue.webpack', [
+  { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
 ])
 ```
 
@@ -797,24 +808,24 @@ In the plugin `ui.js` (nodejs):
 
 ```js
 // Set or update
-api.setSharedData('my-variable', 'some-data')
+api.setSharedData('com.my-name.my-variable', 'some-data')
 
 // Get
-const sharedData = api.getSharedData('my-variable')
+const sharedData = api.getSharedData('com.my-name.my-variable')
 if (sharedData) {
   console.log(sharedData.value)
 }
 
 // Remove
-api.removeSharedData('my-variable')
+api.removeSharedData('com.my-name.my-variable')
 
 // Watch for changes
 const watcher = (value, id) => {
   console.log(value, id)
 }
-api.watchSharedData('my-variable', watcher)
+api.watchSharedData('com.my-name.my-variable', watcher)
 // Unwatch
-api.unwatchSharedData('my-variable', watcher)
+api.unwatchSharedData('com.my-name.my-variable', watcher)
 
 // Namespaced versions
 const {
@@ -823,8 +834,12 @@ const {
   removeSharedData,
   watchSharedData,
   unwatchSharedData
-} = api.namespace('webpack-dashboard-')
+} = api.namespace('com.my-name.')
 ```
+
+::: danger
+Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
 
 In the custom component:
 
@@ -834,26 +849,24 @@ export default {
   // Sync Shared data
   sharedData () {
     return {
-      // You can use `status` in template
-      status: `webpack-dashboard-${this.mode}-status`
+      // You can use `myVariable` in template
+      myVariable: 'com.my-name.my-variable'
       // You can also map namespaced Shared data
-      ...mapSharedData('webpack-dashboard-', {
-        status: `${this.mode}-status`,
-        progress: `${this.mode}-progress`,
-        operations: `${this.mode}-operations`
+      ...mapSharedData('com.my-name.', {
+        myVariable2: 'my-variable2'
       })
     }
   },
 
   // Manual methods
   async created () {
-    const value = await this.$getSharedData('my-variable')
+    const value = await this.$getSharedData('com.my-name.my-variable')
 
-    this.$watchSharedData(`my-variable`, value => {
+    this.$watchSharedData(`com.my-name.my-variable`, value => {
       console.log(value)
     })
 
-    await this.$setSharedData('my-variable', 'new-value')
+    await this.$setSharedData('com.my-name.my-variable', 'new-value')
   }
 }
 ```
@@ -869,13 +882,13 @@ If you use the `sharedData` option, the shared data can be updated by assigning 
 export default {
   sharedData: {
     // Will sync the 'my-message' shared data on the server
-    message: 'my-message'
+    message: 'com.my-name.my-message'
   }
 }
 </script>
 ```
 
-This is very usefull if you create a settings component for example.
+This is very useful if you create a settings component for example.
 
 ## Plugin actions
 
@@ -887,7 +900,7 @@ In the `ui.js` file in the plugin (nodejs), you can use two methods from `Plugin
 
 ```js
 // Call an action
-api.callAction('other-action', { foo: 'bar' }).then(results => {
+api.callAction('com.my-name.other-action', { foo: 'bar' }).then(results => {
   console.log(results)
 }).catch(errors => {
   console.error(errors)
@@ -896,15 +909,19 @@ api.callAction('other-action', { foo: 'bar' }).then(results => {
 
 ```js
 // Listen for an action
-api.onAction('test-action', params => {
+api.onAction('com.my-name.test-action', params => {
   console.log('test-action called', params)
 })
 ```
 
+::: danger
+Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
+
 You can use namespaced versions with `api.namespace` (similar to Shared data):
 
 ```js
-const { onAction, callAction } = api.namespace('vue-webpack-')
+const { onAction, callAction } = api.namespace('com.my-name.')
 ```
 
 In the client addon components (browser), you have access to `$onPluginActionCalled`, `$onPluginActionResolved` and `$callPluginAction`:
@@ -927,7 +944,7 @@ export default {
   methods: {
     testPluginAction () {
       // Call a plugin action
-      this.$callPluginAction('test-action', {
+      this.$callPluginAction('com.my-name.test-action', {
         meow: 'meow'
       })
     }
@@ -952,7 +969,7 @@ const ipc = new IpcMessenger()
 function sendMessage (data) {
   // Send a message to the cli-ui server
   ipc.send({
-    webpackDashboardData: {
+    'com.my-name.some-data': {
       type: 'build',
       value: data
     }
@@ -1007,7 +1024,7 @@ Connect to another IPC network:
 
 ```js
 const ipc = new IpcMessenger({
-  networkId: 'my-ipc-network'
+  networkId: 'com.my-name.my-ipc-network'
 })
 ```
 
@@ -1015,8 +1032,8 @@ In a vue-cli plugin `ui.js` file, you can use the `ipcOn`, `ipcOff` and `ipcSend
 
 ```js
 function onWebpackMessage ({ data: message }) {
-  if (message.webpackDashboardData) {
-    console.log(message.webpackDashboardData)
+  if (message['com.my-name.some-data']) {
+    console.log(message['com.my-name.some-data'])
   }
 }
 
@@ -1040,10 +1057,10 @@ A plugin can save and load data from the local [lowdb](https://github.com/typico
 
 ```js
 // Store a value into the local DB
-api.storageSet('my-plugin.an-id', { some: 'value' })
+api.storageSet('com.my-name.an-id', { some: 'value' })
 
 // Retrieve a value from the local DB
-console.log(api.storageGet('my-plugin.an-id'))
+console.log(api.storageGet('com.my-name.an-id'))
 
 // Full lowdb instance
 api.db.get('posts')
@@ -1054,6 +1071,10 @@ api.db.get('posts')
 // Namespaced helpers
 const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
+
+::: danger
+Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
 
 ## Notification
 
@@ -1181,7 +1202,7 @@ Suggestions are buttons meant to propose an action to the user. They are display
 
 ```js
 api.addSuggestion({
-  id: 'my-suggestion',
+  id: 'com.my-name.my-suggestion',
   type: 'action', // Required (more types in the future)
   label: 'Add vue-router',
   // This will be displayed in a details modal
@@ -1200,19 +1221,23 @@ api.addSuggestion({
 })
 ```
 
+::: danger
+Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
+
 ![UI Suggestion](/suggestion.png)
 
 Then you can remove the suggestion:
 
 ```js
-api.removeSuggestion('my-suggestion')
+api.removeSuggestion('com.my-name.my-suggestion')
 ```
 
 You can also open a page instead when the user activates the suggestion with `actionLink`:
 
 ```js
 api.addSuggestion({
-  id: 'my-suggestion',
+  id: 'com.my-name.my-suggestion',
   type: 'action', // Required 
   label: 'Add vue-router',
   // Open a new tab
@@ -1231,8 +1256,8 @@ api.onViewOpen(({ view }) => {
       api.addSuggestion({
         id: ROUTER,
         type: 'action',
-        label: 'cli-service.suggestions.vue-router-add.label',
-        message: 'cli-service.suggestions.vue-router-add.message',
+        label: 'org.vue.cli-service.suggestions.vue-router-add.label',
+        message: 'org.vue.cli-service.suggestions.vue-router-add.message',
         link: 'https://router.vuejs.org/',
         async handler () {
           await install(api, 'vue-router')
@@ -1291,12 +1316,12 @@ You may need to expose some static files over the cli-ui builtin HTTP server (ty
 
 Any file in an optional `ui-public` folder in the root of the plugin package folder will be exposed to the `/_plugin/:id/*` HTTP route.
 
-For example, if you put a `my-logo.png` file into the `my-package/ui-public/` folder, it will be available with the `/_plugin/my-package/my-logo.png` URL when the cli-ui loads the plugin.
+For example, if you put a `my-logo.png` file into the `vue-cli-plugin-hello/ui-public/` folder, it will be available with the `/_plugin/vue-cli-plugin-hello/my-logo.png` URL when the cli-ui loads the plugin.
 
 ```js
 api.describeConfig({
   /* ... */
   // Custom image
-  icon: '/_plugin/my-package/my-logo.png'
+  icon: '/_plugin/vue-cli-plugin-hello/my-logo.png'
 })
 ```

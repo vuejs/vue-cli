@@ -34,14 +34,18 @@ Example usage in API:
 ```js
 api.describeConfig({
   // vue-i18n path
-  description: 'my-plugin.config.foo'
+  description: 'com.my-name.my-plugin.config.foo'
 })
 ```
+
+::: danger
+Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+:::
 
 Example usage in components:
 
 ```html
-<VueButton>{{ $t('my-plugin.actions.bar') }}</VueButton>
+<VueButton>{{ $t('com.my-name.my-plugin.actions.bar') }}</VueButton>
 ```
 
 You can also load the locale files in a client addon if you prefer, using the `ClientAddonApi`:
