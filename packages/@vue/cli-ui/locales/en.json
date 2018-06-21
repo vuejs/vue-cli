@@ -613,7 +613,9 @@
         "tasks": {
           "test": {
             "description": "Run e2e tests with nightwatch",
-            "url": "Run e2e tests against given url instead of auto-starting dev server"
+            "url": "Run e2e tests against given url instead of auto-starting dev server",
+            "config": "Use custom nightwatch config file (overrides internals)",
+            "env": "Comma-delimited browser envs to run in"
           }
         }
       },

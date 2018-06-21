@@ -9,10 +9,22 @@ module.exports = api => {
         type: 'input',
         default: '',
         description: 'org.vue.nightwatch.tasks.test.url'
+      }, {
+        name: 'config',
+        type: 'input',
+        default: '',
+        description: 'org.vue.nightwatch.tasks.test.config'
+      }, {
+        name: 'env',
+        type: 'input',
+        default: 'chrome',
+        description: 'org.vue.nightwatch.tasks.test.env'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
       if (answers.url) args.push('--url', answers.url)
+      if (answers.config) args.push('--config', answers.config)
+      if (answers.env) args.push('--env', answers.env)
     }
   })
 }
