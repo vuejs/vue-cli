@@ -102,6 +102,7 @@ function resetPluginApi (context) {
   }
   sharedData.unWatchAll()
 
+  clientAddons.clear(context)
   suggestions.clear(context)
 
   pluginApi = new PluginApi({
