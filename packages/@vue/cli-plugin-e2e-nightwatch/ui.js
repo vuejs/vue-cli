@@ -9,10 +9,22 @@ module.exports = api => {
         type: 'input',
         default: '',
         description: 'nightwatch.tasks.test.url'
+      }, {
+        name: 'config',
+        type: 'input',
+        default: '',
+        description: 'Use custom nightwatch config file (overrides internals)'
+      }, {
+        name: 'env',
+        type: 'input',
+        default: 'chrome',
+        description: 'Comma-delimited browser envs to run in'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
       if (answers.url) args.push('--url', answers.url)
+      if (answers.config) args.push('--config', answers.config)
+      if (answers.env) args.push('--env', answers.env)
     }
   })
 }
