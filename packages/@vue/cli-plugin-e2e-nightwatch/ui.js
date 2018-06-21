@@ -13,12 +13,12 @@ module.exports = api => {
         name: 'config',
         type: 'input',
         default: '',
-        description: 'Use custom nightwatch config file (overrides internals)'
+        description: 'nightwatch.tasks.test.config'
       }, {
         name: 'env',
         type: 'input',
         default: 'chrome',
-        description: 'Comma-delimited browser envs to run in'
+        description: 'nightwatch.tasks.test.env'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
