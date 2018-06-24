@@ -23,7 +23,7 @@ npm run serve
 yarn serve
 ```
 
-如果你可以使用 [npx](https://github.com/zkat/npx) (捆绑在最新版的 npm 中)，也可以直接这样调用命令：
+如果你可以使用 [npx](https://github.com/zkat/npx) (最新版的 npm 应该已经自带)，也可以直接这样调用命令：
 
 ``` bash
 npx vue-cli-service serve
@@ -41,12 +41,12 @@ npx vue-cli-service serve
   --mode    指定环境模式 (默认值：development)
   --host    指定 host (默认值：0.0.0.0)
   --port    指定 port (默认值：8080)
-  --https   use https (默认值：false)
+  --https   使用 https (默认值：false)
 ```
 
 `serve` 命令会启动一个开发服务器 (基于 [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) 并附带开箱即用的 Hot-Module-Replacement (HMR)。
 
-除了通过命令行标记，你也可以使用 `vue.config.js` 里的 [devServer](../config/#devserver) 字段配置开发服务器。
+除了通过命令行参数，你也可以使用 `vue.config.js` 里的 [devServer](../config/#devserver) 字段配置开发服务器。
 
 ## vue-cli-service build
 
@@ -66,11 +66,11 @@ npx vue-cli-service serve
   --watch       监听文件变化
 ```
 
-`vue-cli-service build` 会在 `dist/` 目录产生一个为生产环境准备的包，带有 JS/CSS/HTML 的压缩，和为更好的缓存而做的自动的 vendor chunk splitting。它的 chunk manifest 会内联在 HTML 里。
+`vue-cli-service build` 会在 `dist/` 目录产生一个可用于生产环境的包，带有 JS/CSS/HTML 的压缩，和为更好的缓存而做的自动的 vendor chunk splitting。它的 chunk manifest 会内联在 HTML 里。
 
-这里还有一些有用的命令标记：
+这里还有一些有用的命令参数：
 
-- `--modern` 使用[现代模式](./browser-compatibility.md#现代模式)构建应用，为现代浏览器交付原生支持的 ES2015 代码，并生成一个自动回退的旧版本的包。
+- `--modern` 使用[现代模式](./browser-compatibility.md#现代模式)构建应用，为现代浏览器交付原生支持的 ES2015 代码，并生成一个兼容老浏览器的包用来自动回退。
 
 - `--target` 允许你将项目中的任何组件以一个库或 Web Components 组件的方式进行构建。更多细节请查阅[构建目标](./build-targets.md)。
 
@@ -88,7 +88,7 @@ npx vue-cli-service serve
 
 你可以使用 `vue-cli-service inspect` 来审查一个 Vue CLI 项目的 webpack config。更多细节请查阅[审查 webpack config](./webpack.md#审查项目的-webpack-config)。
 
-## 检查所有的可用命令
+## 查看所有的可用命令
 
 有些 CLI 插件会向 `vue-cli-service` 注入额外的命令。例如 `@vue/cli-plugin-eslint` 会注入 `vue-cli-service lint` 命令。你可以允许以下命令查看所有注入的命令：
 
@@ -108,9 +108,9 @@ npx vue-cli-service help [command]
 
 - `thread-loader` 会在多核 CPU 的机器上为 Babel/TypeScript 转译开启。
 
-## Git Hooks
+## Git Hook
 
-在安装之后，`@vue/cli-service` 也会安装 [yorkie](https://github.com/yyx990803/yorkie)，它会让你在 `package.json` 的 `gitHooks` 字段中方便地指定 Git hooks：
+在安装之后，`@vue/cli-service` 也会安装 [yorkie](https://github.com/yyx990803/yorkie)，它会让你在 `package.json` 的 `gitHooks` 字段中方便地指定 Git hook：
 
 ``` json
 {
