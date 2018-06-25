@@ -37,7 +37,7 @@ The CLI Service is built on top of [webpack](http://webpack.js.org/) and [webpac
 
 If you are familiar with [create-react-app](https://github.com/facebookincubator/create-react-app), `@vue/cli-service` is roughly the equivalent of `react-scripts`, although the feature set is different.
 
-The section on [CLI Service](./cli-service.md) covers its detailed usage.
+The section on [CLI Service](./cli-service.md) covers it's detailed usage.
 
 ### CLI Plugins
 
