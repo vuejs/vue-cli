@@ -1,6 +1,6 @@
-# Working with Webpack
+# 使用 Webpack
 
-## Simple Configuration
+## 简单的配置方式
 
 调整 webpack 配置最简单的方式就是在 `vue.config.js` 中的 `configureWebpack` 选项提供一个对象：
 
