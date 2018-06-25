@@ -2,26 +2,26 @@
 sidebar: auto
 ---
 
-# Configuration Reference
+# 配置参考
 
-## Global CLI Config
+## 全局 CLI Config
 
-Some global configurations for `@vue/cli`, such as your preferred package manager and your locally saved presets, are stored in a JSON file named `.vuerc` in your home directory. You can edit this file directory with your editor of choice to change the saved options.
+有些针对 `@vue/cli` 的全局 config，例如你惯用的包管理器和你本地保存的 preset，都保存在 home 目录下一个名叫 `.vuerc` 的 JSON 文件。你可以用编辑器直接编辑这个文件来更改已保存的选项。
 
-## Target Browsers
+## 目标浏览器
 
-See the [Browser Compatibility](../guide/browser-compatibility.md#browserslist) section in guide.
+查阅指南中的[浏览器兼容性](../guide/browser-compatibility.md#browserslist)章节。
 
 ## vue.config.js
 
-`vue.config.js` is an optional config file that will be automatically loaded by `@vue/cli-service` if it's present in your project root (next to `package.json`). You can also use the `vue` field in `package.json`, but do note in that case you will be limited to JSON-compatible values only.
+`vue.config.js` 是一个可选的 config 文件，如果项目的 (和 `package.json` 同级的) 根目录中存在这个文件，那么它会被 `@vue/cli-service` 自动加载。你也可以使用 `package.json` 中的 `vue` 字段，但是注意这种写法需要你严格遵照 JSON 的格式来写。
 
-The file should export an object containing options:
+这个文件应该导出一个包含了选项的对象：
 
 ``` js
 // vue.config.js
 module.exports = {
-  // options...
+  // 选项...
 }
 ```
 
@@ -30,11 +30,11 @@ module.exports = {
 - Type: `string`
 - Default: `'/'`
 
-  The base URL your application will be deployed at. By default Vue CLI assumes your app will be deployed at the root of a domain, e.g. `https://www.my-app.com/`. If your app is deployed at a sub-path, you will need to specify that sub-path using this option. For example, if your app is deployed at `https://www.foobar.com/my-app/`, set `baseUrl` to `'/my-app/'`.
+  应用会被部署到的地方的基础 URL。默认情况下 Vue CLI 假设应用会被部署在一个域名的根，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `baseUrl` 为 `/my-app/`。
 
-  Setting this value correctly is necessary for your static assets to be loaded properly in production.
+  你有必要为生产环境中静态资源的加载正确地设置这个值。
 
-  This value is also respected during development. If you want your dev server to be served at root instead, you can use a conditional value:
+  这个值在开发环境下同样生效。如果你想把开发服务器架设在根路径取而代之，你可以使用一个条件式的值：
 
   ``` js
   module.exports = {
@@ -44,10 +44,10 @@ module.exports = {
   }
   ```
 
-  The value can also be set to an empty string (`''`) so that all assets are linked using relative paths, so that the bundle can be used in a file system based environment like a Cordova hybrid app. The caveat is that this will force the generated CSS files to always be placed at the root of the output directory to ensure urls in your CSS work correctly.
+  这个值也可以被设置为空字符串 (`''`) 这样所有的资源都会被链接为相对路径，这样打出来的包可以用在类似 Cordova hybrid 应用的文件系统中。需要注意的生成的 CSS 文件要始终放在输出路径的根部，以确保 CSS 中的 URL 正常工作。
 
-  ::: tip
-  Always use `baseUrl` instead of modifying webpack `output.publicPath`.
+  ::: tip 提示
+  请始终使用 `baseUrl` 而不要修改 webpack 的 `output.publicPath`。
   :::
 
 ### outputDir
@@ -55,10 +55,10 @@ module.exports = {
 - Type: `string`
 - Default: `'dist'`
 
-  The directory where the production build files will be generated in when running `vue-cli-service build`. Note the target directory will be removed before building (this behavior can be disabled by passing `--no-clean` when building).
+  当运行 `vue-cli-service build` 时生成的生产环境构建文件的目录。注意目标目录在构建之前会被清除 (构建时传入 `--no-clean` 可以将该清除行为关闭)。
 
-  ::: tip
-  Always use `outputDir` instead of modifying webpack `output.path`.
+  ::: tip 提示
+  情始终使用 `outputDir` 而不要修改 webpack 的 `output.path`。
   :::
 
 ### assetsDir
@@ -66,40 +66,40 @@ module.exports = {
 - Type: `string`
 - Default: `''`
 
-  A directory to nest generated static assets (js, css, img, fonts) under.
+  放置生成的静态资源 (js、css、img、fonts) 的目录。
 
 ### pages
 
 - Type: `Object`
 - Default: `undefined`
 
-  Build the app in multi-page mode. Each "page" should have a corresponding JavaScript entry file. The value should be an object where the key is the name of the entry, and the value is either:
+  在多页面模式下构建应用。每个“page”应该有一个对应的 JavaScript 入口文件。其值应该是一个对象，对象的 key 是入口的名字，value 是：
 
-  - An object that specifies its `entry`, `template` and `filename`;
-  - Or a string specifying its `entry`.
+  - 一个指定了 `entry`, `template` 和 `filename` 的对象；
+  - 或一个指定其 `entry` 的字符串。
 
   ``` js
   module.exports = {
     pages: {
       index: {
-        // entry for the page
+        // page 的入口
         entry: 'src/index/main.js',
-        // the source template
+        // 模板来源
         template: 'public/index.html',
-        // output as dist/index.html
+        // 在 dist/index.html 的输出
         filename: 'index.html'
       },
-      // when using the entry-only string format,
-      // template is inferred to be `public/subpage.html`
-      // and falls back to `public/index.html` if not found.
-      // Output filename is inferred to be `subpage.html`.
+      // 当使用只有入口字符串格式时，
+      // 模板会被推导为 `public/subpage.html`
+      // 并且如果找不到的话，就回退到 `public/index.html`。
+      // 输出文件名会被推导为 `subpage.html`。
       subpage: 'src/subpage/main.js'
     }
   }
   ```
 
-  ::: tip
-  When building in multi-page mode, the webpack config will contain different plugins (there will be multiple instances of `html-webpack-plugin` and `preload-webpack-plugin`). Make sure to run `vue inspect` if you are trying to modify the options for those plugins.
+  ::: tip 提示
+  当在多页面模式下构建时，webpack config 会包含不一样的插件 (这时会存在多个 `html-webpack-plugin` 和 `preload-webpack-plugin` 的实例)。如果你试图修改这些插件的选项，请确认运行 `vue inspect`。
   :::
 
 ### lintOnSave
@@ -107,99 +107,99 @@ module.exports = {
 - Type: `boolean`
 - Default: `true`
 
-  Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
+  是否在开发环境下通过 [eslint-loader](https://github.com/webpack-contrib/eslint-loader) 在每次保存时 lint 代码。这个值会在 [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) 被安装之后生效。
 
 ### runtimeCompiler
 
 - Type: `boolean`
 - Default: `false`
 
-  Whether to use the build of Vue core that includes the runtime compiler. Setting it to `true` will allow you to use the `template` option in Vue components, but will incur around an extra 10kb payload for your app.
+  是否使用包含运行时编译器的 Vue 构建版本。设置为 `true` 后你就可以在 Vue 组件中使用 `template` 选项了，但是这会让你的应用额外增加 10kb 左右。
 
-  See also: [Runtime + Compiler vs. Runtime only](https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only).
+  更多细节可查阅：[Runtime + Compiler vs. Runtime only](https://cn.vuejs.org/v2/guide/installation.html#运行时-编译器-vs-只包含运行时).
 
 ### transpileDependencies
 
 - Type: `Array<string | RegExp>`
 - Default: `[]`
 
-  By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly transpile a dependency with Babel, you can list it in this option.
+  默认情况下 `babel-loader` 会忽略所有 `node_modules` 中的文件。如果你想要通过 Babel 显性地转译一个依赖，可以在这个选项中列出来。
 
 ### productionSourceMap
 
 - Type: `boolean`
 - Default: `true`
 
-  Setting this to `false` can speed up production builds if you don't need source maps for production.
+  如果你不需要生产环境的 source map，可以将其设置为 `false` 以加速生产环境构建。
 
 ### configureWebpack
 
 - Type: `Object | Function`
 
-  If the value is an Object, it will be merged into the final config using [webpack-merge](https://github.com/survivejs/webpack-merge).
+  如果这个值是一个对象，则会通过 [webpack-merge](https://github.com/survivejs/webpack-merge) 合并到最终的 config 中。
 
-  If the value is a function, it will receive the resolved config as the argument. The function can either mutate the config and return nothing, OR return a cloned or merged version of the config.
+  如果这个值是一个函数，则会接收被解析的 config 作为参数。该函数及可以修改 config 并不返回任何东西，也可以返回一个被克隆或合并过的 config 版本。
 
-  See also: [Working with Webpack > Simple Configuration](../guide/webpack.md#simple-configuration)
+  更多细节可查阅：[webpack 相关工作 > 简单的配置方式](../guide/webpack.md#简单的配置方式)
 
 ### chainWebpack
 
 - Type: `Function`
 
-  A function that will receive an instance of `ChainableConfig` powered by [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). Allows for more fine-grained modification of the internal webpack config.
+  是一个函数，会接收一个基于 [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain) 的 `ChainableConfig` 实例。允许对内部的 webpack config 进行更细粒度的修改。
 
-  See also: [Working with Webpack > Chaining](../guide/webpack.md#chaining-advanced)
+  更多细节可查阅：[webpack 相关工作 > 链式操作](../guide/webpack.md#链式操作-高级)
 
 ### css.modules
 
 - Type: `boolean`
 - Default: `false`
 
-  By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `true` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
+  默认情况下，只有 `*.module.[ext]` 结尾的文件才会被视作 CSS Modules。设置为 `true` 后你就可以去掉文件名中的 `.module` 并将所有的 `*.(css|scss|sass|less|styl(us)?)` 文件视为 CSS Modules。
 
-  See also: [Working with CSS > CSS Modules](../guide/css.md#css-modules)
+  更多细节可查阅：[CSS 相关工作 > CSS Modules](../guide/css.md#css-modules)
 
 ### css.extract
 
 - Type: `boolean`
 - Default: `true` (in production mode)
 
-  Whether to extract CSS in your components into a standalone CSS files (instead of inlined in JavaScript and injected dynamically).
+  是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (取代在 JavaScript 中 inline 且动态注入的)。
 
-  This is also disabled by default when building as web components (styles are inlined and injected into shadowRoot).
+  同样当构建 Web Components 组件时它会默认被禁用 (样式是 inline 的并注入到了 shadowRoot 中)。
 
-  When building as a library, you can also set this to `false` to avoid your users having to import the CSS themselves.
+  当作为一个库构建时，你也可以将其设置为 `false` 免得用户自己导入 CSS。
 
 ### css.sourceMap
 
 - Type: `boolean`
 - Default: `false`
 
-  Whether to enable source maps for CSS. Setting this to `true` may affect build performance.
+  是否为 CSS 开启 source map。设置为 `true` 之后可能会影响构建的性能。
 
 ### css.loaderOptions
 
 - Type: `Object`
 - Default: `{}`
 
-  Pass options to CSS-related loaders. For example:
+  向 CSS 相关的 loader 传递选项。例如：
 
   ``` js
   module.exports = {
     css: {
       loaderOptions: {
         css: {
-          // options here will be passed to css-loader
+          // 这里的选项会传递给 css-loader
         },
         postcss: {
-          // options here will be passed to postcss-loader
+          // 这里的选项会传递给 postcss-loader
         }
       }
     }
   }
   ```
 
-  Supported loaders are:
+  支持的 loader 有：
 
   - [css-loader](https://github.com/webpack-contrib/css-loader)
   - [postcss-loader](https://github.com/postcss/postcss-loader)
@@ -207,29 +207,29 @@ module.exports = {
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
 
-  See also: [Passing Options to Pre-Processor Loaders](../guide/css.md#passing-options-to-pre-processor-loaders)
+  更多细节可查阅：[向预处理器 Loader 传递选项](../guide/css.html#向预处理器-loader-传递选项)
 
-  ::: tip
-  This is preferred over manually tapping into specific loaders using `chainWebpack`, because these options need to be applied in multiple locations where the corresponding loader is used.
+  ::: tip 提示
+  我们倾向于使用 `chainWebpack` 手动修改指定的 loader，因为这些选项需要同时应用在相应 loader 出现的多个地方。
   :::
 
 ### devServer
 
 - Type: `Object`
 
-  [All options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are supported. Note that:
+  [所有 `webpack-dev-server` 的选项](https://webpack.js.org/configuration/dev-server/)都支持。注意：
 
-  - Some values like `host`, `port` and `https` may be overwritten by command line flags.
+  - 有些值像 `host`、`port` 和 `https` 可能会被命令行参数覆写。
 
-  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [baseUrl](#baseurl) for the dev server to function properly.
+  - 有些值像 `publicPath` 和 `historyApiFallback` 不应该被修改，因为它们需要和开发服务器的 [baseUrl](#baseurl) 同步以保障正常的工作。
 
 ### devServer.proxy
 
 - Type: `string | Object`
 
-  If your frontend app and the backend API server are not running on the same host, you will need to proxy API requests to the API server during development. This is configurable via the `devServer.proxy` option in `vue.config.js`.
+  如果你的前端应用和后端 API 服务器没有运行在同一个主机上，你需要在开发环境下将 API 请求代理到 API 服务器。这个问题可以通过 `vue.config.js` 中的 `devServer.proxy` 选项来配置。
 
-  `devServer.proxy` can be a string pointing to the development API server:
+  `devServer.proxy` 可以是一个指向开发环境 API 服务器的字符串：
 
   ``` js
   module.exports = {
@@ -239,9 +239,9 @@ module.exports = {
   }
   ```
 
-  This will tell the dev server to proxy any unknown requests (requests that did not match a static file) to `http://localhost:4000`.
+  这会告诉开发服务器将任何未知请求 (没有匹配到静态文件的请求) 代理到`http://localhost:4000`。
 
-  If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
+  如果你想要更多的代理控制行为，也可以使用一个 `path: options` 成对的对象。完整的选项可以咨询 [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) 。
 
   ``` js
   module.exports = {
@@ -265,26 +265,25 @@ module.exports = {
 - Type: `boolean`
 - Default: `require('os').cpus().length > 1`
 
-  Whether to use `thread-loader` for Babel or TypeScript transpilation.
+  是否为 Babel 或 TypeScript 使用 `thread-loader`。
 
 ### pwa
 
 - Type: `Object`
 
-  Pass options to the [PWA Plugin](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa).
+  向 [PWA 插件](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa)传递选项。
 
 ### pluginOptions
 
 - Type: `Object`
 
-  This is an object that doesn't go through any schema validation, so it can be used to pass arbitrary options to 3rd party plugins. For example:
+  这是一个不进行任何 schema 验证的对象，因此它可以用来传递任何第三方插件选项。例如：
 
   ``` js
   module.exports = {
     pluginOptions: {
       foo: {
-        // plugins can access these options as
-        // `options.pluginOptions.foo`.
+        // 插件可以作为 `options.pluginOptions.foo` 访问这些选项。
       }
     }
   }
@@ -292,44 +291,44 @@ module.exports = {
 
 ## Babel
 
-Babel can be configured via `babel.config.js`.
+Babel 可以通过 `babel.config.js` 进行配置。
 
 ::: tip
-Vue CLI uses `babel.config.js` which is a new config format in Babel 7. Unlike `.babelrc` or the `babel` field in `package.json`, this config file does not use a file-location based resolution, and is applied consistently to any file under project root, including dependencies inside `node_modules`. It is recommended to always use `babel.config.js` instead of other formats in Vue CLI projects.
+Vue CLI 使用了 Babel 7 中的新 config 格式 `babel.config.js`。和 `.babelrc` 或 `package.json` 中的 `babel` 字段不同，这个 config 文件不会使用基于文件位置的方案，而是会一致地运用到项目根以下的所有文件，包括 `node_modules` 内部的依赖。我们推荐在 Vue CLI 项目中始终使用 `babel.config.js` 取代其它格式。
 :::
 
-All Vue CLI apps use `@vue/babel-preset-app`, which includes `babel-preset-env`, JSX support and optimized configuration for minimal bundle size overhead. See [its docs](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) for details and preset options.
+所有的 Vue CLI 应用都使用 `@vue/babel-preset-app`，它包含了 `babel-preset-env`、JSX 支持以及为最小化包体积优化过的配置。通过[它的文档](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app)可以查阅到更多细节和 preset 选项。
 
-Also see the [Polyfills](../guide/browser-compatibility.md#polyfills) section in guide.
+同时查阅指南中的 [Polyfill](../guide/browser-compatibility.md#polyfill) 章节。
 
 ## ESLint
 
-ESLint can be configured via `.eslintrc` or `eslintConfig` field in `package.json`.
+ESLint 可以通过 `.eslintrc` 或 `pacakge.json` 中的 `eslintConfig` 字段来配置。
 
-See [@vue/cli-plugin-eslint](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) for more details.
+更多细节可查阅 [@vue/cli-plugin-eslint](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint)。
 
 ## TypeScript
 
-TypeScript can be configured via `tsconfig.json`.
+TypeScript 可以通过 `tsconfig.json` 来配置。
 
-See [@vue/cli-plugin-typescript](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript) for more details.
+更多细节可查阅 [@vue/cli-plugin-typescript](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript)。
 
-## Unit Testing
+## 单元测试
 
 ### Jest
 
-See [@vue/cli-plugin-unit-jest](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest) for more details.
+更多细节可查阅 [@vue/cli-plugin-unit-jest](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest)。
 
-### Mocha (via `mocha-webpack`)
+### Mocha (配合 `mocha-webpack`)
 
-See [@vue/cli-plugin-unit-mocha](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha) for more details.
+更多细节可查阅 [@vue/cli-plugin-unit-mocha](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha)。
 
-## E2E Testing
+## E2E 测试
 
 ### Cypress
 
-See [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress) for more details.
+更多细节可查阅 [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress)。
 
 ### Nightwatch
 
-See [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch) for more details.
+更多细节可查阅 [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch)。
