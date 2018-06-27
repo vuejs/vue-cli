@@ -4,17 +4,17 @@
 
 ### Index 文件
 
-`public/index.html` 文件是一个会被 [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) 处理的模板。在构建过程中，资源链接会被自动注入。额外的，Vue CLI 也会自动注入资源提示 (`preload/prefetch`、manifest/icon 链接 (当用到 PWA 插件时) 以及构建过程中处理的 JavaScript 和 CSS 文件的资源链接。
+`public/index.html` 文件是一个会被 [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) 处理的模板。在构建过程中，资源链接会被自动注入。另外，Vue CLI 也会自动注入 resource hint (`preload/prefetch`、manifest 和图标链接 (当用到 PWA 插件时) 以及构建过程中处理的 JavaScript 和 CSS 文件的资源链接。
 
-### 可插入内容
+### 插值
 
 因为 index 文件被用作模板，所以你可以使用 [lodash template](https://lodash.com/docs/4.17.10#template) 语法插入内容：
 
-- `<%= VALUE %>` 用来做不转义插入；
-- `<%- VALUE %>` 用来做 HTML 转义插入；
+- `<%= VALUE %>` 用来做不转义插值；
+- `<%- VALUE %>` 用来做 HTML 转义插值；
 - `<% expression %>` 用来描述 JavaScript 流程控制。
 
-额外的对于[被 `html-webpack-plugin` 暴露的默认值](https://github.com/jantimon/html-webpack-plugin#writing-your-own-templates)来说，所有[客户端环境变量](./mode-and-env.md#using-env-variables-in-client-side-code)也可以直接使用。例如，`BASE_URL` 的用法：
+除了[被 `html-webpack-plugin` 暴露的默认值](https://github.com/jantimon/html-webpack-plugin#writing-your-own-templates)之外，所有[客户端环境变量](./mode-and-env.md#using-env-variables-in-client-side-code)也可以直接使用。例如，`BASE_URL` 的用法：
 
 ``` html
 <link rel="icon" href="<%= BASE_URL %>favicon.ico">
@@ -25,7 +25,7 @@
 
 ### Preload
 
-[`<link rel="preload">`](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Preloading_content) 是一种资源提示，用来指定页面加载后很快会被用到的资源，所以在页面加载的过程中，我们希望在浏览器开始主体渲染之前尽早 preload。
+[`<link rel="preload">`](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Preloading_content) 是一种 resource hint，用来指定页面加载后很快会被用到的资源，所以在页面加载的过程中，我们希望在浏览器开始主体渲染之前尽早 preload。
 
 默认情况下，一个 Vue CLI 应用会为所有初始化渲染需要的文件自动生成 preload 提示。
 
@@ -33,7 +33,7 @@
 
 ### Prefetch
 
-[`<link rel="prefetch">`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ) 是一种资源提示，用来告诉浏览器在页面加载完成后，利用空闲时间提前获取用户未来可能会访问的内容。
+[`<link rel="prefetch">`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ) 是一种 resource hint，用来告诉浏览器在页面加载完成后，利用空闲时间提前获取用户未来可能会访问的内容。
 
 默认情况下，一个 Vue CLI 应用会为所有作为 async chunk 生成的 JavaScript 文件 ([通过动态 `import()` 按需 code splitting](https://webpack.js.org/guides/code-splitting/#dynamic-imports) 的产物) 自动生成 prefetch 提示。
 
@@ -59,12 +59,12 @@ module.exports = {
 ```
 
 ::: tip 提示
-Prefetch 链接将会消耗带宽。如果你的应用很大且有很多 async chunk，而用户主要使用的是移动端且在意带宽，那么你可能需要关掉 prefetch 链接。
+Prefetch 链接将会消耗带宽。如果你的应用很大且有很多 async chunk，而用户主要使用的是对带宽较敏感的移动端，那么你可能需要关掉 prefetch 链接。
 :::
 
 ### 构建一个多页应用
 
-不是每个应用都需要是一个单页应用。Vue CLI 支持使用 [`vue.config.js` 中的 `pages` 选项](../config/#pages)构建一个多页面的应用。构建好的应用将会在不同的入口之间高效共享通用的 chunk 以优化加载性能。
+不是每个应用都需要是一个单页应用。Vue CLI 支持使用 [`vue.config.js` 中的 `pages` 选项](../config/#pages)构建一个多页面的应用。构建好的应用将会在不同的入口之间高效共享通用的 chunk 以获得最佳的加载性能。
 
 ## 处理静态资源
 
@@ -74,7 +74,7 @@ Prefetch 链接将会消耗带宽。如果你的应用很大且有很多 async c
 
 - 放置在 `public` 目录下或通过绝对路径被引用。这类资源将会直接被拷贝，而不会经过 webpack 的处理。
 
-### 相对路径导入
+### 从相对路径导入
 
 当你在 JavaScript、CSS 或 `*.vue` 文件中使用相对路径 (必须以 `.` 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 `<img src="...">`、`background: url(...)` 和 CSS `@import` 的资源 URL **都会被解析为一个模块依赖**。
 
@@ -91,21 +91,21 @@ For example, `url(./image.png)` will be translated into `require('./image.png')`
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-在其内部，我们通过 `file-loader` 用哈希版本和正确的公共基础路径来决定最终的文件路径，再用 `url-loader` 将小于 10kb 的资源有条件的内联，以减少 HTTP 请求的数量。
+在其内部，我们通过 `file-loader` 用版本哈希值和正确的公共基础路径来决定最终的文件路径，再用 `url-loader` 将小于 10kb 的资源内联，以减少 HTTP 请求的数量。
 
 ### URL 转换规则
 
-- 如果 URL 是一个绝对路径 (例如 `/images/foo.png`)，它将会被保留为原有的样子。
+- 如果 URL 是一个绝对路径 (例如 `/images/foo.png`)，它将会被保留不变。
 
 - 如果 URL 以 `.` 开头，它会作为一个相对模块请求被解释且基于你的文件系统中的目录结构进行解析。
 
-- 如果 URL 以 `~` 开头，其后的任何内容都会作为一个模块请求被解释。这意味着你甚至可以引用 node 模块中的资源：
+- 如果 URL 以 `~` 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：
 
   ``` html
   <img src="~/some-npm-package/foo.png">
   ```
 
-- 如果 URL 以 `@` 开头，它也会作为一个模块请求被解释。它的用处在于 Vue CLI 默认会设置一个指向 `<projectRoot>/src` 的别名 `@`。
+- 如果 URL 以 `@` 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 `<projectRoot>/src` 的别名 `@`。
 
 ### `public` 文件夹
 
@@ -115,9 +115,9 @@ h('img', { attrs: { src: require('./image.png') }})
 
 - 脚本和样式表会被压缩且打包在一起，从而避免额外的网络请求。
 - 文件丢失会直接在编译时报错，而不是到了用户端才产生 404 错误。
-- 最终生成的文件名包含了内容哈希，因此你不必担心浏览器会缓存它们到老版本。
+- 最终生成的文件名包含了内容哈希，因此你不必担心浏览器会缓存它们的老版本。
 
-`public` 目录提供的是一个**逃生通道**，当你通过绝对路径引用它时，你需要留意你的应用将会部署到哪里。如果你的应用没有部署在域名的根部，那么你需要为你的 URL 配置 [baseUrl](../config/#baseurl) 前缀：
+`public` 目录提供的是一个**应急手段**，当你通过绝对路径引用它时，留意应用将会部署到哪里。如果你的应用没有部署在域名的根部，那么你需要为你的 URL 配置 [baseUrl](../config/#baseurl) 前缀：
 
 - 在 `public/index.html` 或其它通过 `html-webpack-plugin` 用作模板的 HTML 文件中，你需要通过 `<%= BASE_URL %>` 设置链接前缀：
 
