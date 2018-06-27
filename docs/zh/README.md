@@ -15,7 +15,7 @@ features:
 - title: 即刻创建原型
   details: 用单个 Vue 文件即刻实践新的灵感。
 - title: 面向未来
-  details: 为现代浏览器轻松产出原生的 ES2015 代码，或将你的 Vue 组件构建为原生的 Web Components。
+  details: 为现代浏览器轻松产出原生的 ES2015 代码，或将你的 Vue 组件构建为原生的 Web Components 组件。
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
 

@@ -1,69 +1,69 @@
-# Plugins and Presets
+# 插件和 Preset
 
-## Plugins
+## 插件
 
-Vue CLI uses a plugin-based architecture. If you inspect a newly created project's `package.json`, you will find dependencies that start with `@vue/cli-plugin-`. Plugins can modify the internal webpack configuration and inject commands to `vue-cli-service`. Most of the features listed during the project creation process are implemented as plugins.
+Vue CLI 使用了一套基于插件的架构。如果你查阅一个新创建项目的 `package.json`，就会发现依赖都是以 `@vue/cli-plugin-` 开头的。插件可以修改 webpack 的内部配置，也可以向 `vue-cli-service` 注入命令。在项目创建的过程中，绝大部分列出的特性都是通过插件来实现的。
 
-The plugin based architecture makes Vue CLI flexible and extensible. If you are interested in developing a plugin, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
+基于插件的架构使得 Vue CLI 灵活且可扩展。如果你对开发一个插件感兴趣，请翻阅[插件开发指南](../dev-guide/plugin-dev.md)。
 
-### Installing Plugins in an Existing Project
+### 在现有的项目中安装插件
 
-Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:
+每个 CLI 插件都会包含一个 (用来创建文件的) 生成器和一个 (用来调整 webpack 核心配置和注入命令的) 运行时插件。当你使用 `vue create` 来创建一个新项目的时候，有些插件会根据你选择的特性被预安装好。如果你想在一个已经被创建好的项目中安装一个插件，可以使用 `vue add` 命令：
 
 ``` bash
 vue add @vue/eslint
 ```
 
-::: tip
-`vue add` is specifically designed for installing and invoking Vue CLI plugins. It is not meant as a replacement for normal npm packages. For normal npm packages, you should still use your package manager of choice.
+::: tip 提示
+`vue add` 的设计意图是为了安装和调用 Vue CLI 插件。这不意味着替换掉普通的 npm 包。对于这些普通的 npm 包，你仍然需要选用包管理器。
 :::
 
-::: warning
-It is recommended to commit your project's current state before running `vue add`, since the command will invoke the plugin's file generator and potentially make changes to your existing files.
+::: warning 警告
+我们推荐在运行 `vue add` 之前将项目的最新状态提交，因为该命令可能调用插件的文件生成器并很有可能更改你现有的文件。
 :::
 
-The command resolves `@vue/eslint` to the full package name `@vue/cli-plugin-eslint`, installs it from npm, and invokes its generator.
+这个命令将 `@vue/eslint` 解析为完整的包名 `@vue/cli-plugin-eslint`，然后从 npm 安装它，调用它的生成器。
 
 ``` bash
-# these are equivalent to the previous usage
+# 这个和之前的用法等价
 vue add @vue/cli-plugin-eslint
 ```
 
-Without the `@vue` prefix, the command will resolve to an unscoped package instead. For example, to install the 3rd party plugin `vue-cli-plugin-apollo`:
+如果不带 `@vue` 前缀，该命令会换作解析一个 unscoped 的包。例如以下命令会安装第三方插件 `vue-cli-plugin-apollo`：
 
 ``` bash
-# installs and invokes vue-cli-plugin-apollo
+# 安装并调用 vue-cli-plugin-apollo
 vue add apollo
 ```
 
-You can also use 3rd party plugins under a specific scope. For example, if a plugin is named `@foo/vue-cli-plugin-bar`, you can add it with:
+你也可以基于一个指定的 scope 使用第三方插件。例如如果一个插件名为 `@foo/vue-cli-plugin-bar`，你可以这样添加它：
 
 ``` bash
 vue add @foo/bar
 ```
 
-You can pass generator options to the installed plugin (this will skip the prompts):
+你可以向被安装的插件传递生成器选项 (这样做会跳过命令提示)：
 
 ``` bash
 vue add @vue/eslint --config airbnb --lintOn save
 ```
 
-`vue-router` and `vuex` are special cases - they do not have their own plugins, but you can add them nonetheless:
+`vue-router` 和 `vuex` 的情况比较特殊——它们并没有自己的插件，但是你仍然可以这样添加它们：
 
 ``` bash
 vue add router
 vue add vuex
 ```
 
-If a plugin is already installed, you can skip the installation and only invoke its generator with the `vue invoke` command. The command takes the same arguments as `vue add`.
+如果一个插件已经被安装，你可以使用 `vue invoke` 命令跳过安装过程，只调用它的生成器。这个命令会接受和 `vue add` 相同的参数。
 
-## Presets
+## Preset
 
-A Vue CLI preset is a JSON object that contains pre-defined options and plugins for creating a new project so that the user don't have to go through the prompts to select them.
+一个 Vue CLI preset 是一个包含创建新项目所需预定义选项和插件的 JSON 对象，让用户无需在命令提示中选择它们。
 
-Presets saved during `vue create` are stored in a configuration file in your user home directory (`~/.vuerc`). You can directly edit this file to tweak / add / delete the saved presets.
+在 `vue create` 过程中保存的 preset 会被放在你的 home 目录下的一个配置文件中 (`~/.vuerc`)。你可以通过直接编辑这个文件来调整、添加、删除保存好的 preset。
 
-Here's an example preset:
+这里有一个 preset 的示例：
 
 ``` json
 {
@@ -81,7 +81,7 @@ Here's an example preset:
 }
 ```
 
-The preset data is used by plugin generators to generate corresponding project files. In addition to the above fields, you can also add additional configuration for integrated tools:
+Preset 的数据会被插件生成器用来生成相应的项目文件。除了上述这些字段，你也可以为集成工具添加配置：
 
 ``` json
 {
@@ -96,63 +96,63 @@ The preset data is used by plugin generators to generate corresponding project f
 }
 ```
 
-These additional configurations will be merged into `package.json` or corresponding config files, depending on the value of `useConfigFiles`. For example, with `"useConfigFiles": true`, the value of `configs.vue` will be merged into `vue.config.js`.
+这些额外的配置将会根据 `useConfigFiles` 的值被合并到 `package.json` 或相应的配置文件中。例如，当 `"useConfigFiles": true` 的时候，`configs` 的值将会被合并到 `vue.config.js` 中。
 
-### Preset Plugin Versioning
+### Preset 插件的版本管理
 
-You can explicitly specify versions of the plugins being used:
+你可以显式地指定用到的插件的版本：
 
 ``` json
 {
   "plugins": {
     "@vue/cli-plugin-eslint": {
       "version": "^3.0.0",
-      // ... other options for this plugin
+      // ... 该插件的其它选项
     }
   }
 }
 ```
 
-Note this is not required for official plugins - when omitted, the CLI will automatically use the latest version available in the registry. However, **it is recommended to provide a explicit version range for any 3rd party plugins listed in a preset**.
+注意对于官方插件来说这不是必须的——当被忽略时，CLI 会自动使用 registry 中最新的版本。不过**我们推荐为 preset 列出的所有第三方插件提供显式的版本范围**。
 
-### Allowing Plugin Prompts
+### 允许插件的命令提示
 
-Each plugin can inject its own prompts during the project creation process, however when you are using a preset, those prompts will be skipped because Vue CLI assumes all the plugin options are already declared in the preset.
+每个插件在项目创建的过程中都可以注入它自己的命令提示，不过当你使用了一个 preset，这些命令提示就会被跳过，因为 Vue CLI 假设所有的插件选项都已经在 preset 中声明过了。
 
-In some cases you may want the preset to only declare the desired plugins, while leaving some flexibility by letting the user go through the prompts injected by the plugins.
+在有些情况下你可能希望 preset 只声明需要的插件，同时让用户通过插件注入的命令提示来保留一些灵活性。
 
-For such scenarios you can specify `"prompts": true` in a plugin's options to allow its prompts to be injected:
+对于这种场景你可以在插件选项中指定 `"prompts": true` 来允许注入命令提示：
 
 ``` json
 {
   "plugins": {
     "@vue/cli-plugin-eslint": {
-      // let the users pick their own ESLint config
+      // 让用户选取他们自己的 ESLint config
       "prompts": true
     }
   }
 }
 ```
 
-### Remote Presets
+### 远程 Preset
 
-You can share a preset with other developers by publishing it in a git repo. The repo should contain a `preset.json` file containing the preset data. You can then use the `--preset` option to use the remote preset when creating a project:
+你可以通过发布 git repo 将一个 preset 分享给其他开发者。这个 repo 应该包含一个包含了 preset 数据的 `preset.json` 文件。然后你就可以在创建项目的时候通过 `--preset` 选项使用这个远程的 preset 了：
 
 ``` bash
-# use preset from GitHub repo
+# 从 GitHub repo 使用 preset
 vue create --preset username/repo my-project
 ```
 
-GitLab and BitBucket are also supported. Make sure to use the `--clone` option if fetching from private repos:
+GitLab 和 BitBucket 也是支持的。如果要从私有 repo 获取，请确保使用 `--clone` 选项：
 
 ``` bash
 vue create --preset gitlab:username/repo --clone my-project
 vue create --preset bitbucket:username/repo --clone my-project
 ```
 
-### Local Filesystem Preset
+### 加载文件系统中的 Preset
 
-When developing a remote preset, it can be tedious to have to repeatedly push the preset to a remote repo to test it. To simplify the workflow, the `--preset` flag also accepts local `.json` files:
+当开发一个远程 preset 的时候，你必须不厌其烦的向远程 repo 发出 push 进行反复测试。为了简化这个流程，`--preset` 标记也支持本地的 `.json` 文件：
 
 ``` bash
 vue create --preset local.json my-project
