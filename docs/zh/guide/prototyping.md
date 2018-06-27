@@ -13,7 +13,7 @@ npm install -g @vue/cli-service-global
 ```
 Usage: serve [options] [entry]
 
-在开发环境模式下零配置架设一个 .js 或 .vue 文件
+在开发环境模式下零配置为 .js 或 .vue 文件启动一个服务器
 
 
 Options:
