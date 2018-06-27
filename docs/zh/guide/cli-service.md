@@ -44,7 +44,7 @@ npx vue-cli-service serve
   --https   使用 https (默认值：false)
 ```
 
-`serve` 命令会启动一个开发服务器 (基于 [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) 并附带开箱即用的 Hot-Module-Replacement (HMR)。
+`serve` 命令会启动一个开发服务器 (基于 [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) 并附带开箱即用的模块热重载 (Hot-Module-Replacement)。
 
 除了通过命令行参数，你也可以使用 `vue.config.js` 里的 [devServer](../config/#devserver) 字段配置开发服务器。
 
