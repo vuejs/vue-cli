@@ -1,22 +1,22 @@
-# UI Plugin Info
+# UI 插件信息
 
-When used in the UI, your plugin can show additional information to make it more discoverable and recognizable.
+你的插件在其 UI 中使用时，可以展示不同的附加信息，使其可被进一步发现和识别。
 
 ## Logo
 
-You can put a `logo.png` file in the root directory of the folder that will be published on npm. It will be displayed in several places:
- - When searching for a plugin to install
- - In the installed plugin list
+你可以在将要发布到 npm 上的目录的根上放置一个 `logo.png`。它会展示在以下几个地方：
+- 搜索插件以安装时
+- 在已安装的插件列表中
 
-![Plugins](/plugins.png)
+![插件](/plugins.png)
 
-The logo should be a square non-transparent image (ideally 84x84).
+这个 logo 应该是一个不透明的正方形图 (最好 84x84).
 
-## Discoverability
+## 可被发现
 
-For better discoverability when a user searches for your plugin, put keywords describing your plugin in the `description` field of the plugin `package.json` file.
+为了提升你的插件在搜索时的可见度，请将描述插件的关键字放到插件的 `package.json` 文件的 `description` 字段。
 
-Example:
+示例：
 
 ```json
 {
@@ -26,7 +26,7 @@ Example:
 }
 ```
 
-You should add the url to the plugin website or repository in the `homepage` or `repository` field so that a 'More info' button will be displayed in your plugin description:
+你应该将插件网站的 URL 或仓库添加添加到 `homepage` 或 `repository` 字段，这样“More Info”按钮就会在你的插件描述中展示出来。
 
 ```json
 {
@@ -38,4 +38,4 @@ You should add the url to the plugin website or repository in the `homepage` or 
 }
 ```
 
-![Plugin search item](/plugin-search-item.png)
+![搜索到的插件项目](/plugin-search-item.png)
