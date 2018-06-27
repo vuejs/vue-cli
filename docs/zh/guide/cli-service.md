@@ -1,10 +1,10 @@
-# CLI Service
+# CLI 服务
 
-## Using the Binary
+## 使用命令
 
-Inside a Vue CLI project, `@vue/cli-service` installs a binary named `vue-cli-service`. You can access the binary directly as `vue-cli-service` in npm scripts, or as `./node_modules/.bin/vue-cli-service` from the terminal.
+在一个 Vue CLI 项目中，`@vue/cli-service` 安装了一个名为 `vue-cli-service` 的命令。你可以在 npm scripts 中以 `vue-cli-service`、或者从终端中以 `./node_modules/.bin/vue-cli-service` 访问这个命令。
 
-This is what you will see in the `package.json` of a project using the default preset:
+这是你使用默认 preset 的项目的 `package.json`：
 
 ``` json
 {
@@ -15,7 +15,7 @@ This is what you will see in the `package.json` of a project using the default p
 }
 ```
 
-You can invoke these scripts using either npm or Yarn:
+你可以通过 npm 或 Yarn 调用这些 script：
 
 ``` bash
 npm run serve
@@ -23,7 +23,7 @@ npm run serve
 yarn serve
 ```
 
-If you have [npx](https://github.com/zkat/npx) available (should be bundled with an update-to-date version of npm), you can also invoke the binary directly with:
+如果你可以使用 [npx](https://github.com/zkat/npx) (最新版的 npm 应该已经自带)，也可以直接这样调用命令：
 
 ``` bash
 npx vue-cli-service serve
@@ -32,85 +32,85 @@ npx vue-cli-service serve
 ## vue-cli-service serve
 
 ```
-Usage: vue-cli-service serve [options]
+用法：vue-cli-service serve [options]
 
-Options:
+选项：
 
-  --open    open browser on server start
-  --copy    copy url to clipboard on server start
-  --mode    specify env mode (default: development)
-  --host    specify host (default: 0.0.0.0)
-  --port    specify port (default: 8080)
-  --https   use https (default: false)
+  --open    在服务器启动时打开浏览器
+  --copy    在服务器启动时将 URL 复制到剪切版
+  --mode    指定环境模式 (默认值：development)
+  --host    指定 host (默认值：0.0.0.0)
+  --port    指定 port (默认值：8080)
+  --https   使用 https (默认值：false)
 ```
 
-The `serve` command starts a dev server (based on [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) that comes with Hot-Module-Replacement (HMR) working out of the box.
+`serve` 命令会启动一个开发服务器 (基于 [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) 并附带开箱即用的模块热重载 (Hot-Module-Replacement)。
 
-In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
+除了通过命令行参数，你也可以使用 `vue.config.js` 里的 [devServer](../config/#devserver) 字段配置开发服务器。
 
 ## vue-cli-service build
 
 ```
-Usage: vue-cli-service build [options] [entry|pattern]
+用法：vue-cli-service build [options] [entry|pattern]
 
-Options:
+选项：
 
-  --mode        specify env mode (default: production)
-  --dest        specify output directory (default: dist)
-  --modern      build app targeting modern browsers with auto fallback
-  --target      app | lib | wc | wc-async (default: app)
-  --name        name for lib or web-component mode (default: "name" in package.json or entry filename)
-  --no-clean    do not remove the dist directory before building the project
-  --report      generate report.html to help analyze bundle content
-  --report-json generate report.json to help analyze bundle content
-  --watch       watch for changes
+  --mode        指定环境模式 (默认值：production)
+  --dest        指定输出目录 (默认值：dist)
+  --modern      面向现代浏览器不带自动回退地构建应用
+  --target      app | lib | wc | wc-async (默认值：app)
+  --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
+  --no-clean    在构建项目之前不清除目标目录
+  --report      生成 report.html 以帮助分析包内容
+  --report-json 生成 report.json 以帮助分析包内容
+  --watch       监听文件变化
 ```
 
-`vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
+`vue-cli-service build` 会在 `dist/` 目录产生一个可用于生产环境的包，带有 JS/CSS/HTML 的压缩，和为更好的缓存而做的自动的 vendor chunk splitting。它的 chunk manifest 会内联在 HTML 里。
 
-There are a few useful flags:
+这里还有一些有用的命令参数：
 
-- `--modern` builds your app using [Modern Mode](./browser-compatibility.md#modern-mode), shipping native ES2015 code to modern browsers that support it, with auto fallback to a legacy bundle.
+- `--modern` 使用[现代模式](./browser-compatibility.md#现代模式)构建应用，为现代浏览器交付原生支持的 ES2015 代码，并生成一个兼容老浏览器的包用来自动回退。
 
-- `--target` allows you to build any component(s) inside your project as a library or as web components. See [Build Targets](./build-targets.md) for more details.
+- `--target` 允许你将项目中的任何组件以一个库或 Web Components 组件的方式进行构建。更多细节请查阅[构建目标](./build-targets.md)。
 
-- `--report` and `--report-json` will generate reports based on your build stats that can help you analyze the size of the modules included in your bundle.
+- `--report` 和 `--report-json` 会根据构建统计生成报告，它会帮助你分析包中包含的模块们的大小。
 
 ## vue-cli-service inspect
 
 ```
-Usage: vue-cli-service inspect [options] [...paths]
+用法：vue-cli-service inspect [options] [...paths]
 
-Options:
+选项：
 
-  --mode    specify env mode (default: development)
+  --mode    指定环境模式 (默认值：development)
 ```
 
-You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue CLI project. See [Inspecting Webpack Config](./webpack.md#inspecting-the-project-s-webpack-config) for more details.
+你可以使用 `vue-cli-service inspect` 来审查一个 Vue CLI 项目的 webpack config。更多细节请查阅[审查 webpack config](./webpack.md#审查项目的-webpack-config)。
 
-## Checking All Available Commands
+## 查看所有的可用命令
 
-Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
+有些 CLI 插件会向 `vue-cli-service` 注入额外的命令。例如 `@vue/cli-plugin-eslint` 会注入 `vue-cli-service lint` 命令。你可以允许以下命令查看所有注入的命令：
 
 ``` bash
 npx vue-cli-service help
 ```
 
-You can also learn about the available options of each command with:
+你也可以这样学习每个命令可用的选项：
 
 ``` bash
 npx vue-cli-service help [command]
 ```
 
-## Caching and Parallelization
+## 缓存和并行处理
 
-- `cache-loader` is enabled for Vue/Babel/TypeScript compilations by default. Files are cached inside `node_modules/.cache` - if running into compilation issues, always try deleting the cache directory first.
+- `cache-loader` 会默认为 Vue/Babel/TypeScript 编译开启。文件会缓存在 `node_modules/.cache` 中——如果你遇到了编译方面的问题，记得先删掉缓存目录之后再试试看。
 
-- `thread-loader` will be enabled for Babel/TypeScript transpilation when the machine has more than 1 CPU cores.
+- `thread-loader` 会在多核 CPU 的机器上为 Babel/TypeScript 转译开启。
 
-## Git Hooks
+## Git Hook
 
-When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx990803/yorkie), which allows you to easily specify Git hooks using the `gitHooks` field in your `package.json`:
+在安装之后，`@vue/cli-service` 也会安装 [yorkie](https://github.com/yyx990803/yorkie)，它会让你在 `package.json` 的 `gitHooks` 字段中方便地指定 Git hook：
 
 ``` json
 {
@@ -121,11 +121,11 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 ```
 
 ::: warning
-`yorkie` is a fork of [`husky`](https://github.com/typicode/husky) and is not compatible with the latter.
+`yorkie` fork 自 [`husky`](https://github.com/typicode/husky) 且并不和之后的版本兼容。
 :::
 
-## Configuration without Ejecting
+## 配置时无需 Eject
 
-Projects created via `vue create` are ready to go without the need for additional configuration. The plugins are designed to work with one another so in most cases, all you need to do is pick the features you want during the interactive prompts.
+通过 `vue create` 创建的项目无需额外的配置就已经可以跑起来了。插件的设计也是可以相互共存的，所以绝大多数情况下，你只需要在交互式命令提示中选取需要的功能即可。
 
-However, we also understand that it's impossible to cater to every possible need, and the need of a project may also change over time. Projects created by Vue CLI allows you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.
+不过我们也知道满足每一个需求是不太可能的，而且一个项目的需求也会不断改变。通过 Vue CLI 创建的项目让你无需 eject 就能够配置工具的几乎每个角落。更多细节请查阅[配置参考](../config/)。
