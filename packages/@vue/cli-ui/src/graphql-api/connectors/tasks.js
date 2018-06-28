@@ -225,9 +225,9 @@ async function run (id, context) {
 
     // Process command containing args
     if (command.indexOf(' ')) {
-      const parts = command.split(' ')
+      const parts = command.split(/\s+|=/)
       command = parts.shift()
-      args = [...parts, ...args]
+      args = parts
     }
 
     // Output colors
