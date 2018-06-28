@@ -141,7 +141,7 @@ export default {
     fileDiffs: {
       query: FILE_DIFFS,
       loadingKey: 'loading',
-      fetchPolicy: 'cahe-and-network',
+      fetchPolicy: 'network-only',
       result () {
         this.fileDiffs.forEach(fileDiff => {
           if (typeof this.collapsed[fileDiff.id] === 'undefined' && (
