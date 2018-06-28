@@ -43,7 +43,7 @@ class ModernModePlugin {
           a.attributes.crossorigin = 'use-credentials'
         })
 
-        // inject Safari 10 nomdoule fix
+        // inject Safari 10 nomodule fix
         data.body.push({
           tagName: 'script',
           closeTag: true,
