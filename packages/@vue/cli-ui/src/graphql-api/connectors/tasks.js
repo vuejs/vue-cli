@@ -292,10 +292,17 @@ async function run (id, context) {
 
     process.env.VUE_CLI_CONTEXT = cwd.get()
 
+    const nodeEnv = process.env.NODE_ENV
+    delete process.env.NODE_ENV
+
     const child = execa(command, args, {
       cwd: cwd.get(),
       stdio: ['inherit', 'pipe', 'pipe']
     })
+
+    if (typeof nodeEnv !== 'undefined') {
+      process.env.NODE_ENV = nodeEnv
+    }
 
     task.child = child
 
