@@ -16,8 +16,8 @@ export default {
 
   sharedData () {
     return {
-      serveUrl: `webpack-dashboard-serve-url`,
-      modernMode: `webpack-dashboard-modern-mode`
+      serveUrl: `org.vue.webpack.serve-url`,
+      modernMode: `org.vue.webpack.modern-mode`
     }
   },
 
@@ -53,7 +53,7 @@ export default {
 
   methods: {
     syncMode (mode) {
-      this.$watchSharedData(`webpack-dashboard-${mode}-stats`, value => {
+      this.$watchSharedData(`org.vue.webpack.${mode}-stats`, value => {
         this.$store.commit('stats', {
           mode,
           value

@@ -50,7 +50,7 @@ export default {
   },
 
   sharedData () {
-    return mapSharedData('webpack-dashboard-', {
+    return mapSharedData('org.vue.webpack.', {
       status: `${this.mode}-status`,
       progress: `${this.mode}-progress`,
       operations: `${this.mode}-operations`

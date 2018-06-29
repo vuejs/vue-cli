@@ -1,5 +1,6 @@
 const execa = require('execa')
 const terminate = require('terminate')
+const chalk = require('chalk')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -10,7 +11,6 @@ const plugins = require('./plugins')
 const prompts = require('./prompts')
 const views = require('./views')
 // Utils
-const { getCommand } = require('../utils/command')
 const { log } = require('../utils/logger')
 const { notify } = require('../utils/notification')
 
@@ -62,7 +62,7 @@ function list (context) {
           index: list.findIndex(t => t.id === id),
           prompts: [],
           views: [],
-          fullCommand: true,
+          uiOnly: true,
           ...task
         }
       }
@@ -175,7 +175,7 @@ function updateViewBadges ({ task, data }, context) {
         badge: {
           id: 'vue-task-error',
           type: 'error',
-          label: 'components.view-badge.labels.tasks.error',
+          label: 'org.vue.components.view-badge.labels.tasks.error',
           priority: 3
         }
       }, context)
@@ -185,7 +185,7 @@ function updateViewBadges ({ task, data }, context) {
         badge: {
           id: 'vue-task-running',
           type: 'info',
-          label: 'components.view-badge.labels.tasks.running',
+          label: 'org.vue.components.view-badge.labels.tasks.running',
           priority: 2
         }
       }, context)
@@ -195,7 +195,7 @@ function updateViewBadges ({ task, data }, context) {
         badge: {
           id: 'vue-task-done',
           type: 'success',
-          label: 'components.view-badge.labels.tasks.done',
+          label: 'org.vue.components.view-badge.labels.tasks.done',
           priority: 1,
           hidden: true
         }
@@ -220,14 +220,14 @@ async function run (id, context) {
 
     // Answers
     const answers = prompts.getAnswers()
-    let args = task.fullCommand ? [] : ['run', task.name]
-    let command = task.fullCommand ? task.command : getCommand()
+    let args = []
+    let command = task.command
 
     // Process command containing args
     if (command.indexOf(' ')) {
-      const parts = command.split(' ')
+      const parts = command.split(/\s+|=/)
       command = parts.shift()
-      args = [...parts, ...args]
+      args = parts
     }
 
     // Output colors
@@ -248,6 +248,25 @@ async function run (id, context) {
       })
     }
 
+    // Deduplicate arguments
+    const dedupedArgs = []
+    for (let i = args.length - 1; i >= 0; i--) {
+      const arg = args[i]
+      if (typeof arg === 'string' && arg.indexOf('--') === 0) {
+        if (dedupedArgs.indexOf(arg) === -1) {
+          dedupedArgs.push(arg)
+        } else {
+          const value = args[i + 1]
+          if (value && value.indexOf('--') !== 0) {
+            dedupedArgs.pop()
+          }
+        }
+      } else {
+        dedupedArgs.push(arg)
+      }
+    }
+    args = dedupedArgs.reverse()
+
     if (command === 'npm') {
       args.splice(0, 0, '--')
     }
@@ -263,20 +282,27 @@ async function run (id, context) {
       type: 'info'
     }, context)
 
-    if (task.fullCommand) {
-      addLog({
-        taskId: task.id,
-        type: 'stdout',
-        text: `$ ${command} ${args.join(' ')}`
-      }, context)
-    }
+    addLog({
+      taskId: task.id,
+      type: 'stdout',
+      text: chalk.grey(`$ ${command} ${args.join(' ')}`)
+    }, context)
+
+    task.time = Date.now()
 
     process.env.VUE_CLI_CONTEXT = cwd.get()
+
+    const nodeEnv = process.env.NODE_ENV
+    delete process.env.NODE_ENV
 
     const child = execa(command, args, {
       cwd: cwd.get(),
       stdio: ['inherit', 'pipe', 'pipe']
     })
+
+    if (typeof nodeEnv !== 'undefined') {
+      process.env.NODE_ENV = nodeEnv
+    }
 
     task.child = child
 
@@ -307,6 +333,14 @@ async function run (id, context) {
       errPipe.flush()
 
       log('Task exit', command, args, 'code:', code, 'signal:', signal)
+
+      const duration = Date.now() - task.time
+      const seconds = Math.round(duration / 10) / 100
+      addLog({
+        taskId: task.id,
+        type: 'stdout',
+        text: chalk.grey(`Total task duration: ${seconds}s`)
+      }, context)
 
       // Plugin API
       if (task.onExit) {
@@ -353,7 +387,7 @@ async function run (id, context) {
         }, context)
         notify({
           title: `Task completed`,
-          message: `Task ${task.id} completed`,
+          message: `Task ${task.id} completed in ${seconds}s.`,
           icon: 'done'
         })
       }

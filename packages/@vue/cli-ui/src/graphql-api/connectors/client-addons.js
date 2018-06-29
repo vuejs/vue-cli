@@ -39,6 +39,12 @@ function remove (id, context) {
   if (index !== -1) addons.splice(index, 1)
 }
 
+function clear (context) {
+  for (const addon of addons) {
+    remove(addon.id, context)
+  }
+}
+
 function getUrl (addon, context) {
   return addon.url || `${baseUrl}/_addon/${addon.id}/index.js`
 }
@@ -64,5 +70,6 @@ module.exports = {
   remove,
   findOne,
   getUrl,
-  serve
+  serve,
+  clear
 }

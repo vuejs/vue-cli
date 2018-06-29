@@ -39,7 +39,7 @@ export default {
     generateLabel (choice) {
       let label = this.$t(choice.name)
       if (choice.isDefault) {
-        label += ` (${this.$t('components.prompt-list.default')})`
+        label += ` (${this.$t('org.vue.components.prompt-list.default')})`
       }
       return label
     }

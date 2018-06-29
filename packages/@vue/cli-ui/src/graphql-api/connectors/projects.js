@@ -107,8 +107,8 @@ async function initCreator (context) {
   // Presets
   const manualPreset = {
     id: '__manual__',
-    name: 'views.project-create.tabs.presets.manual.name',
-    description: 'views.project-create.tabs.presets.manual.description',
+    name: 'org.vue.views.project-create.tabs.presets.manual.name',
+    description: 'org.vue.views.project-create.tabs.presets.manual.description',
     link: null,
     features: []
   }
@@ -122,7 +122,7 @@ async function initCreator (context) {
         )
         const info = {
           id: key,
-          name: key === 'default' ? 'views.project-create.tabs.presets.default-preset' : key,
+          name: key === 'default' ? 'org.vue.views.project-create.tabs.presets.default-preset' : key,
           features,
           link: null,
           raw: preset
@@ -149,8 +149,8 @@ async function initCreator (context) {
     ),
     {
       id: 'use-config-files',
-      name: 'views.project-create.tabs.features.userConfigFiles.name',
-      description: 'views.project-create.tabs.features.userConfigFiles.description',
+      name: 'org.vue.views.project-create.tabs.features.userConfigFiles.name',
+      description: 'org.vue.views.project-create.tabs.features.userConfigFiles.description',
       link: null,
       plugins: null,
       enabled: false

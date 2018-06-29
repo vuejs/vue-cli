@@ -209,7 +209,6 @@ module.exports = (api, options) => {
           // Send final app URL
           if (args.dashboard) {
             const ipc = new IpcMessenger()
-            ipc.connect()
             ipc.send({
               vueServe: {
                 url: urls.localUrlForBrowser

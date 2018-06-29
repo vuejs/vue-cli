@@ -20,7 +20,7 @@
             <div class="actions">
               <VueButton
                 icon-left="close"
-                :label="$t('components.progress-screen.close')"
+                :label="$t('org.vue.components.progress-screen.close')"
                 @click="close()"
               />
             </div>

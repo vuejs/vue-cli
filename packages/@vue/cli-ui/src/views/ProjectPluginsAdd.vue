@@ -1,7 +1,7 @@
 <template>
   <div class="project-plugins-add page">
     <div class="content">
-      <portal to="top-title">{{ $t('views.project-plugins-add.title') }}</portal>
+      <portal to="top-title">{{ $t('org.vue.views.project-plugins-add.title') }}</portal>
       <StepWizard
         class="frame"
         :tab-id.sync="tabId"
@@ -9,7 +9,7 @@
         <template slot-scope="{ next, previous }">
           <VueTab
             id="search"
-            :label="$t('views.project-plugins-add.tabs.search.label')"
+            :label="$t('org.vue.views.project-plugins-add.tabs.search.label')"
             icon="search"
             disabled
           >
@@ -38,7 +38,7 @@
               >
                 <InstantSearchInput
                   ref="searchInput"
-                  :placeholder="$t('views.project-plugins-add.tabs.search.search-input')"
+                  :placeholder="$t('org.vue.views.project-plugins-add.tabs.search.search-input')"
                 />
                 <ais-results ref="results">
                   <PackageSearchItem
@@ -51,7 +51,7 @@
                 <ais-no-results>
                   <div class="vue-ui-empty">
                     <VueIcon icon="search" class="huge"/>
-                    <div>{{ $t('views.project-plugins-add.tabs.search.not-found') }}</div>
+                    <div>{{ $t('org.vue.views.project-plugins-add.tabs.search.not-found') }}</div>
                   </div>
                 </ais-no-results>
                 <InstantSearchPagination @page-change="scrollResultsToTop()"/>
@@ -61,7 +61,7 @@
             <div class="actions-bar no-padding-x">
               <VueButton
                 icon-left="close"
-                :label="$t('views.project-plugins-add.tabs.search.buttons.cancel')"
+                :label="$t('org.vue.views.project-plugins-add.tabs.search.buttons.cancel')"
                 class="big"
                 @click="close()"
               />
@@ -72,7 +72,7 @@
 
               <VueButton
                 icon-left="file_download"
-                :label="$t('views.project-plugins-add.tabs.search.buttons.install', { target: selectedId || $t('views.project-plugins-add.plugin') })"
+                :label="$t('org.vue.views.project-plugins-add.tabs.search.buttons.install', { target: selectedId || $t('org.vue.views.project-plugins-add.plugin') })"
                 class="big primary"
                 :disabled="!selectedId"
                 data-testid="download-plugin"
@@ -83,13 +83,13 @@
 
           <VueTab
             id="config"
-            :label="$t('views.project-plugins-add.tabs.configuration.label')"
+            :label="$t('org.vue.views.project-plugins-add.tabs.configuration.label')"
             icon="settings_applications"
             disabled
             lazy
           >
             <div class="content vue-ui-disable-scroll">
-              <div class="cta-text">{{ $t('views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}</div>
+              <div class="cta-text">{{ $t('org.vue.views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}</div>
               <PromptsList
                 :prompts="visiblePrompts"
                 @answer="answerPrompt"
@@ -99,14 +99,14 @@
             <div class="actions-bar no-padding-x">
               <VueButton
                 icon-left="arrow_back"
-                :label="$t('views.project-plugins-add.tabs.configuration.buttons.cancel')"
+                :label="$t('org.vue.views.project-plugins-add.tabs.configuration.buttons.cancel')"
                 class="big"
                 @click="showCancelInstall = true"
               />
 
               <VueButton
                 icon-left="done"
-                :label="$t('views.project-plugins-add.tabs.configuration.buttons.finish')"
+                :label="$t('org.vue.views.project-plugins-add.tabs.configuration.buttons.finish')"
                 class="big primary"
                 :disabled="!configurationValid"
                 data-testid="finish-install"
@@ -117,7 +117,7 @@
 
           <VueTab
             id="diff"
-            :label="$t('views.project-plugins-add.tabs.diff.label')"
+            :label="$t('org.vue.views.project-plugins-add.tabs.diff.label')"
             icon="note_add"
             disabled
             lazy
@@ -132,17 +132,17 @@
 
     <VueModal
       v-if="showCancelInstall"
-      :title="$t('views.project-plugins-add.modal.title', { target: pluginId })"
+      :title="$t('org.vue.views.project-plugins-add.modal.title', { target: pluginId })"
       class="medium"
       @close="showCancelInstall = false"
     >
       <div class="default-body">
-        {{ $t('views.project-plugins-add.modal.body', { target: pluginId }) }}
+        {{ $t('org.vue.views.project-plugins-add.modal.body', { target: pluginId }) }}
       </div>
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          :label="$t('views.project-plugins-add.modal.buttons.back')"
+          :label="$t('org.vue.views.project-plugins-add.modal.buttons.back')"
           class="flat"
           @click="showCancelInstall = false"
         />
@@ -150,13 +150,13 @@
         <div class="vue-ui-spacer"/>
 
         <VueButton
-          :label="$t('views.project-plugins-add.modal.buttons.cancel')"
+          :label="$t('org.vue.views.project-plugins-add.modal.buttons.cancel')"
           class="flat"
           @click="cancelInstall()"
         />
 
         <VueButton
-          :label="$t('views.project-plugins-add.modal.buttons.uninstall')"
+          :label="$t('org.vue.views.project-plugins-add.modal.buttons.uninstall')"
           icon-left="delete_forever"
           class="danger"
           @click="uninstallPlugin()"
@@ -191,7 +191,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('views.project-plugins-add.title')
+      title: this.$t('org.vue.views.project-plugins-add.title')
     }
   },
 

@@ -64,6 +64,7 @@ export default {
         {
           document: VIEW_REMOVED,
           updateQuery: (previousResult, { subscriptionData }) => {
+            if (!previousResult.views) return { views: [] }
             const index = previousResult.views.findIndex(r => r.id === subscriptionData.data.viewRemoved.id)
             if (index === -1) return previousResult
             const views = previousResult.views.slice()
@@ -77,6 +78,11 @@ export default {
           document: VIEW_CHANGED,
           updateQuery: (previousResult, { subscriptionData }) => {
             const view = subscriptionData.data.viewChanged
+            if (!previousResult.views) {
+              return {
+                views: [view]
+              }
+            }
             const index = previousResult.views.findIndex(r => r.id === view.id)
             if (index === -1) return previousResult
             const views = previousResult.views.slice()

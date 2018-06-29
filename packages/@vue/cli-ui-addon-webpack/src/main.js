@@ -7,11 +7,11 @@ Vue.use(VueProgress, {
   defaultShape: 'circle'
 })
 
-ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
-ClientAddonApi.component('vue-webpack-analyzer', WebpackAnalyzer)
+ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
+ClientAddonApi.component('org.vue.webpack.components.analyzer', WebpackAnalyzer)
 
-ClientAddonApi.addRoutes('vue-webpack', [
-  { path: '', name: 'test-webpack-route', component: TestView }
+ClientAddonApi.addRoutes('org.vue.webpack', [
+  { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
 ])
 
 // Locales

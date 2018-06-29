@@ -9,18 +9,18 @@
           'icon-button': !$responsive.wide
         }"
       >
-        <span v-if="$responsive.wide" class="label">{{ $t('components.project-nav.tooltips.more') }}</span>
+        <span v-if="$responsive.wide" class="label">{{ $t('org.vue.components.project-nav.tooltips.more') }}</span>
       </VueButton>
 
       <VueDropdownButton
         icon-left="home"
         :to="{ name: 'project-select' }"
-        :label="$t('views.project-select.title')"
+        :label="$t('org.vue.views.project-select.title')"
       />
       <VueDropdownButton
         icon-left="info"
         :to="{ name: 'about' }"
-        :label="$t('views.about.title')"
+        :label="$t('org.vue.views.about.title')"
       />
     </VueDropdown>
   </div>

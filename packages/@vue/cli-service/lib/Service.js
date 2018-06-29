@@ -157,8 +157,8 @@ module.exports = class Service {
   async run (name, args = {}, rawArgv = []) {
     // resolve mode
     // prioritize inline --mode
-    // fallback to resolved default modes from plugins
-    const mode = name === 'build' && args.watch ? 'development' : args.mode || this.modes[name]
+    // fallback to resolved default modes from plugins or development if --watch is defined
+    const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
 
     // load env variables, load user config, apply plugins
     this.init(mode)

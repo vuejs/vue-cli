@@ -8,17 +8,17 @@
     <div class="content">
       <div
         class="section action current-project"
-        v-tooltip="$t('components.status-bar.project.tooltip')"
+        v-tooltip="$t('org.vue.components.status-bar.project.tooltip')"
         @click="onProjectClick()"
       >
         <VueIcon icon="home"/>
-        <span v-if="!projectCurrent" class="label">{{ $t('components.status-bar.project.empty') }}</span>
+        <span v-if="!projectCurrent" class="label">{{ $t('org.vue.components.status-bar.project.empty') }}</span>
       </div>
 
       <ApolloQuery
         :query="require('@/graphql/cwd.gql')"
         class="section current-path"
-        v-tooltip="$t('components.status-bar.path.tooltip')"
+        v-tooltip="$t('org.vue.components.status-bar.path.tooltip')"
         @click.native="onCwdClick()"
       >
         <ApolloSubscribeToMore
@@ -36,7 +36,7 @@
 
       <div
         class="section action console-log"
-        v-tooltip="$t('components.status-bar.log.tooltip')"
+        v-tooltip="$t('org.vue.components.status-bar.log.tooltip')"
         @click="onConsoleClick()"
       >
         <VueIcon icon="dvr"/>
@@ -44,12 +44,13 @@
           v-if="consoleLogLast"
           :message="consoleLogLast"
         />
-        <div v-else class="last-message">{{ $t('components.status-bar.log.empty') }}</div>
+        <div v-else class="last-message">{{ $t('org.vue.components.status-bar.log.empty') }}</div>
       </div>
 
       <div
+        v-if="enableDarkModeButton"
         class="section action dark-mode"
-        v-tooltip="$t('components.status-bar.dark-mode')"
+        v-tooltip="$t('org.vue.components.status-bar.dark-mode')"
         @click="toggleDarkMode()"
       >
         <VueIcon icon="invert_colors"/>
@@ -57,21 +58,21 @@
 
       <div
         class="section action bug-report"
-        v-tooltip="$t('components.status-bar.report-bug')"
+        v-tooltip="$t('org.vue.components.status-bar.report-bug')"
         @click="onBugReportClick()"
       >
         <VueIcon icon="bug_report"/>
       </div>
       <div
         class="section action translate"
-        v-tooltip="$t('components.status-bar.translate')"
+        v-tooltip="$t('org.vue.components.status-bar.translate')"
         @click="onTranslateClick()"
       >
         <VueIcon icon="g_translate"/>
       </div>
       <div
         class="section action reset-plugin-api"
-        v-tooltip="$t('components.status-bar.reset-plugin-api')"
+        v-tooltip="$t('org.vue.components.status-bar.reset-plugin-api')"
         @click="resetPluginApi()"
       >
         <VueIcon icon="cached"/>
@@ -87,6 +88,7 @@ import CONSOLE_LOG_ADDED from '../graphql/consoleLogAdded.gql'
 import DARK_MODE_SET from '../graphql/darkModeSet.gql'
 import PLUGIN_RESET_API from '../graphql/pluginResetApi.gql'
 import { resetApollo } from '../vue-apollo'
+import { getForcedTheme } from '../util/theme'
 
 let lastRoute
 
@@ -96,7 +98,8 @@ export default {
   data () {
     return {
       showLogs: false,
-      consoleLogLast: null
+      consoleLogLast: null,
+      enableDarkModeButton: getForcedTheme() == null
     }
   },
 
@@ -112,10 +115,6 @@ export default {
         }
       }
     }
-  },
-
-  created () {
-    this.loadDarkMode()
   },
 
   methods: {
@@ -159,19 +158,8 @@ export default {
       win.focus()
     },
 
-    loadDarkMode () {
-      const raw = localStorage.getItem('vue-ui-dark-mode')
-      this.applyDarkMode(raw === 'true')
-    },
-
     async applyDarkMode (enabled) {
       localStorage.setItem('vue-ui-dark-mode', enabled.toString())
-      const el = document.getElementsByTagName('html')[0]
-      if (enabled) {
-        el.classList.add('vue-ui-dark-mode')
-      } else {
-        el.classList.remove('vue-ui-dark-mode')
-      }
       await this.$apollo.mutate({
         mutation: DARK_MODE_SET,
         variables: {

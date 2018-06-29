@@ -25,13 +25,13 @@ test('modern mode', async () => {
   // assert correct asset links
   const index = await project.read('dist/index.html')
 
-  // should use <script type="module"> for modern bundle
-  expect(index).toMatch(/<script type=module src=\/js\/chunk-vendors\.\w{8}\.js>/)
-  expect(index).toMatch(/<script type=module src=\/js\/app\.\w{8}\.js>/)
+  // should use <script type="module" crossorigin=use-credentials> for modern bundle
+  expect(index).toMatch(/<script type=module src=\/js\/chunk-vendors\.\w{8}\.js crossorigin=use-credentials>/)
+  expect(index).toMatch(/<script type=module src=\/js\/app\.\w{8}\.js crossorigin=use-credentials>/)
 
-  // should use <link rel="modulepreload"> for modern bundle
-  expect(index).toMatch(/<link [^>]*js\/chunk-vendors\.\w{8}\.js rel=modulepreload>/)
-  expect(index).toMatch(/<link [^>]*js\/app\.\w{8}\.js rel=modulepreload>/)
+  // should use <link rel="modulepreload" crossorigin=use-credentials> for modern bundle
+  expect(index).toMatch(/<link [^>]*js\/chunk-vendors\.\w{8}\.js rel=modulepreload crossorigin=use-credentials>/)
+  expect(index).toMatch(/<link [^>]*js\/app\.\w{8}\.js rel=modulepreload crossorigin=use-credentials>/)
 
   // should use <script nomodule> for legacy bundle
   expect(index).toMatch(/<script src=\/js\/chunk-vendors-legacy\.\w{8}\.js nomodule>/)
