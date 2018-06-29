@@ -1,4 +1,4 @@
-# Webpack 相关工作
+# 配合 webpack
 
 ## 简单的配置方式
 
@@ -18,10 +18,10 @@ module.exports = {
 该对象将会被 [webpack-merge](https://github.com/survivejs/webpack-merge) 合并入最终的 webpack 配置。
 
 ::: warning 警告
-有些 webpack 选项是基于 `vue.config.js` 中的值设置的，所以不能直接修改。例如对于 `output.path` 你应该换做修改 `vue.config.js` 中的 `outputDir` 选项；对于 `output.publicPath` 你应该换做修改 `vue.config.js` 中的 `baseUrl` 选项。这样做是因为 `vue.config.js` 中的值会被用在配置里的多个地方，以确保所有的部分都能正常工作在一起。
+有些 webpack 选项是基于 `vue.config.js` 中的值设置的，所以不能直接修改。例如你应该修改 `vue.config.js` 中的 `outputDir` 选项而不是修改 `output.path`；你应该修改 `vue.config.js` 中的 `baseUrl` 选项而不是修改 `output.publicPath`。这样做是因为 `vue.config.js` 中的值会被用在配置里的多个地方，以确保所有的部分都能正常工作在一起。
 :::
 
-如果你需要有条件的基于环境配置行为，或者想要直接修改配置，那就换成一个函数 (该函数会在环境变量被设置之后懒执行)。该方法的第一个参数会收到已经解析好的配置。在函数内，你可以直接修改配置，或者返回一个将会被合并的对象：
+如果你需要基于环境有条件地配置行为，或者想要直接修改配置，那就换成一个函数 (该函数会在环境变量被设置之后懒执行)。该方法的第一个参数会收到已经解析好的配置。在函数内，你可以直接修改配置，或者返回一个将会被合并的对象：
 
 ``` js
 // vue.config.js
@@ -99,7 +99,7 @@ module.exports = {
     // 如果你不这样做，接下来的 loader 会附加在该规则现有的 loader 之后。
     svgRule.uses.clear()
 
-    // add replacement loader(s)
+    // 添加要替换的 loader
     svgRule
       .use('vue-svg-loader')
         .loader('vue-svg-loader')
@@ -122,9 +122,9 @@ module.exports = {
 }
 ```
 
-你需要熟悉 [webpack-chain 的 API](https://github.com/mozilla-neutrino/webpack-chain#getting-started) 并[阅读一些源码](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config)以便了解如何权衡这个选项的全部能量，但是它给了你比直接修改 webpack 配置中的值更生动且安全的方式。
+你需要熟悉 [webpack-chain 的 API](https://github.com/mozilla-neutrino/webpack-chain#getting-started) 并[阅读一些源码](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config)以便了解如何最大程度利用好这个选项，但是比起直接修改 webpack 配置，它的表达能力更强，也更为安全。
 
-比方说你想要将 `index.html` 默认的路径从 */Users/username/proj/public/index.html* 改为 */Users/username/proj/app/templates/index.html*。通过参考 [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) 你能看到一个可以传入的选项列表。我们可以下列配置传入一个新的模板路径来改变它：
+比方说你想要将 `index.html` 默认的路径从 */Users/username/proj/public/index.html* 改为 */Users/username/proj/app/templates/index.html*。通过参考 [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) 你能看到一个可以传入的选项列表。我们可以在下列配置中传入一个新的模板路径来改变它：
 
 ``` js
 // vue.config.js
@@ -140,15 +140,15 @@ module.exports = {
 }
 ```
 
-你可以通过我们接下来要讨论的 **`vue inspect`** 实用工具来确认变更。
+你可以通过接下来要讨论的工具 **`vue inspect`** 来确认变更。
 
 ## 审查项目的 webpack 配置
 
-因为 `@vue/cli-service` 抽象了 webpack 配置，所以理解配置中包含的东西会比较困难，尤其是当你打算自行对其调整的时候。
+因为 `@vue/cli-service` 对 webpack 配置进行了抽象，所以理解配置中包含的东西会比较困难，尤其是当你打算自行对其调整的时候。
 
 `vue-cli-service` 暴露了 `inspect` 命令用于审查解析好的 webpack 配置。那个全局的 `vue` 可执行程序同样提供了 `inspect` 命令，这个命令只是简单的把 `vue-cli-service inspect` 代理到了你的项目中。
 
-该命令会讲解析出来的 webpack 配置、包括链式访问规则和插件的提示打印到 stdout。
+该命令会将解析出来的 webpack 配置、包括链式访问规则和插件的提示打印到 stdout。
 
 你可以将其输出重定向到一个文件以便进行查阅：
 
@@ -158,7 +158,7 @@ vue inspect > output.js
 
 注意它输出的并不是一个有效的 webpack 配置文件，而是一个用于审查的被序列化的格式。
 
-你也可以通过指定一个路径来缩小配置的审查范围：
+你也可以通过指定一个路径来审查配置的一小部分：
 
 ``` bash
 # 只审查第一条规则
