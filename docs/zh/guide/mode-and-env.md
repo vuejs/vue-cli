@@ -18,7 +18,7 @@ VUE_APP_SECRET=secret
 
 被载入的变量将会对 `vue-cli-service` 的所有命令、插件和依赖可用。
 
-## Modes
+## 模式
 
 **模式**是 Vue CLI 项目中一个重要的概念。默认情况下，一个 Vue CLI 项目有三个模式：
 
@@ -26,11 +26,11 @@ VUE_APP_SECRET=secret
 - `production` 模式用于 `vue-cli-service build` 和 `vue-cli-service test:e2e`
 - `test` 模式用于 `vue-cli-service test:unit`
 
-注意模式不同于 `NODE_ENV`，因为一个模式可以包含多个环境变量。说到这里，每个模式都会将 `NODE_ENV` 的值设置为模式的名称——比如在 development 模式下 `NODE_ENV` 的值会被设置为 `"development"`。
+注意模式不同于 `NODE_ENV`，一个模式可以包含多个环境变量。也就是说，每个模式都会将 `NODE_ENV` 的值设置为模式的名称——比如在 development 模式下 `NODE_ENV` 的值会被设置为 `"development"`。
 
-你可以通过为 `.env` 文件增加后缀来设置某个模式下的环境变量。比如，如果你在项目根目录创建一个名为 `.env.development` 的文件，那么在这个文件里声明过的变量就只会在 development 模式下被载入。
+你可以通过为 `.env` 文件增加后缀来设置某个模式下特有的环境变量。比如，如果你在项目根目录创建一个名为 `.env.development` 的文件，那么在这个文件里声明过的变量就只会在 development 模式下被载入。
 
-你可以通过传递 `--mode` 选项标记为命令行覆写默认的模式。例如，如果你想要在构建命令中使用开发环境变量，请在你的 `package.json` 脚本中加入：
+你可以通过传递 `--mode` 选项参数为命令行覆写默认的模式。例如，如果你想要在构建命令中使用开发环境变量，请在你的 `package.json` 脚本中加入：
 
 ```
 "dev-build": "vue-cli-service build --mode development",
@@ -72,7 +72,7 @@ console.log(process.env.VUE_APP_SECRET)
 - `NODE_ENV` - 会是 `"development"`、`"production"` 或 `"test"` 中的一个。具体的值取决于应用运行的[模式](#模式)。
 - `BASE_URL` - 会和 `vue.config.js` 中的 `baseUrl` 选项相符，即你的应用会部署到的基础路径。
 
-所有解析出来的环境变量都可以在 `public/index.html` 中以 [HTML 可插入内容](./html-and-static-assets.md#可插入内容)中介绍的方式使用。
+所有解析出来的环境变量都可以在 `public/index.html` 中以 [HTML 插值](./html-and-static-assets.md#插值)中介绍的方式使用。
 
 ## 只在本地有效的变量
 
