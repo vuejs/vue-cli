@@ -1,4 +1,4 @@
-# CSS 相关工作
+# 配合 CSS
 
 Vue CLI 项目天生支持 [PostCSS](http://postcss.org/)、[CSS Modules](https://github.com/css-modules/css-modules) 和包含 [Sass](https://sass-lang.com/)、[Less](http://lesscss.org/)、[Stylus](http://stylus-lang.com/) 在内的预处理器。
 
@@ -17,7 +17,7 @@ npm install -D less-loader less
 npm install -D stylus-loader stylus
 ```
 
-然后你就可以导入相应的文件类型，或在 `*.vue` 文件中这样使用它：
+然后你就可以导入相应的文件类型，或在 `*.vue` 文件中这样来使用：
 
 ``` vue
 <style lang="scss">
@@ -31,10 +31,10 @@ Vue CLI 内部使用了 PostCSS。
 
 你可以通过 `.postcssrc` 或任何 [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config) 支持的配置源来配置 PostCSS。也可以通过 `vue.config.js` 中的 `css.loaderOptions.postcss` 配置 [postcss-loader](https://github.com/postcss/postcss-loader)。
 
-我们默认开启了 [autoprefixer](https://github.com/postcss/autoprefixer)。如果要配置浏览目标，可使用 `package.json` 的 [browserslist](../guide/browser-compatibility.html#browserslist) 字段。
+我们默认开启了 [autoprefixer](https://github.com/postcss/autoprefixer)。如果要配置目标浏览器，可使用 `package.json` 的 [browserslist](../guide/browser-compatibility.html#browserslist) 字段。
 
 ::: tip 关于 CSS 中浏览器前缀规则的注意事项
-在生产环境构建中，Vue CLI 会优化 CSS 并基于浏览器目标抛弃不必要的浏览器前缀规则。因为默认开启了 `autoprefixer`，你只使用无前缀的 CSS 规则即可。
+在生产环境构建中，Vue CLI 会优化 CSS 并基于目标浏览器抛弃不必要的浏览器前缀规则。因为默认开启了 `autoprefixer`，你只使用无前缀的 CSS 规则即可。
 :::
 
 ## CSS Modules
@@ -60,7 +60,7 @@ module.exports = {
 }
 ```
 
-如果你希望自定义生成的 CSS Modules 的类名，可以通过 `vue.config.js` 中的 `css.loaderOptions.css` 选项来实现。所有的 `css-loader` 选项在这里都是支持的，例如 `localIdentName` 和 `camelCase`：
+如果你希望自定义生成的 CSS Modules 模块的类名，可以通过 `vue.config.js` 中的 `css.loaderOptions.css` 选项来实现。所有的 `css-loader` 选项在这里都是支持的，例如 `localIdentName` 和 `camelCase`：
 
 ``` js
 // vue.config.js
