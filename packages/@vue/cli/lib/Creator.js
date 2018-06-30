@@ -185,12 +185,13 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
+    // generate README.md
+    stopSpinner()
     log()
     logWithSpinner('📄', 'Generating README.md...')
     await writeFileTree(context, {
       'README.md': generateReadme(generator.pkg, packageManager)
     })
-    stopSpinner()
 
     // log instructions
     stopSpinner()
