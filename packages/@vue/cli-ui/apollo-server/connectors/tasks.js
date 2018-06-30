@@ -225,7 +225,7 @@ async function run (id, context) {
 
     // Process command containing args
     if (command.indexOf(' ')) {
-      const parts = command.split(/\s+|=/)
+      const parts = command.split(/\s+/)
       command = parts.shift()
       args = parts
     }
