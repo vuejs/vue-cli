@@ -4,17 +4,17 @@ sidebar: auto
 
 # 配置参考
 
-## 全局 CLI Config
+## 全局 CLI 配置
 
-有些针对 `@vue/cli` 的全局 config，例如你惯用的包管理器和你本地保存的 preset，都保存在 home 目录下一个名叫 `.vuerc` 的 JSON 文件。你可以用编辑器直接编辑这个文件来更改已保存的选项。
+有些针对 `@vue/cli` 的全局配置，例如你惯用的包管理器和你本地保存的 preset，都保存在 home 目录下一个名叫 `.vuerc` 的 JSON 文件。你可以用编辑器直接编辑这个文件来更改已保存的选项。
 
 ## 目标浏览器
 
-查阅指南中的[浏览器兼容性](../guide/browser-compatibility.md#browserslist)章节。
+请查阅指南中的[浏览器兼容性](../guide/browser-compatibility.md#browserslist)章节。
 
 ## vue.config.js
 
-`vue.config.js` 是一个可选的 config 文件，如果项目的 (和 `package.json` 同级的) 根目录中存在这个文件，那么它会被 `@vue/cli-service` 自动加载。你也可以使用 `package.json` 中的 `vue` 字段，但是注意这种写法需要你严格遵照 JSON 的格式来写。
+`vue.config.js` 是一个可选的配置文件，如果项目的 (和 `package.json` 同级的) 根目录中存在这个文件，那么它会被 `@vue/cli-service` 自动加载。你也可以使用 `package.json` 中的 `vue` 字段，但是注意这种写法需要你严格遵照 JSON 的格式来写。
 
 这个文件应该导出一个包含了选项的对象：
 
@@ -32,9 +32,9 @@ module.exports = {
 
   应用会被部署到的地方的基础 URL。默认情况下 Vue CLI 假设应用会被部署在一个域名的根，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `baseUrl` 为 `/my-app/`。
 
-  你有必要为生产环境中静态资源的加载正确地设置这个值。
+  你必须正确地设置这个值以使生产环境中静态资源加载正确。
 
-  这个值在开发环境下同样生效。如果你想把开发服务器架设在根路径取而代之，你可以使用一个条件式的值：
+  这个值在开发环境下同样生效。如果你想把开发服务器架设在根路径，你可以使用一个条件式的值：
 
   ``` js
   module.exports = {
@@ -55,10 +55,10 @@ module.exports = {
 - Type: `string`
 - Default: `'dist'`
 
-  当运行 `vue-cli-service build` 时生成的生产环境构建文件的目录。注意目标目录在构建之前会被清除 (构建时传入 `--no-clean` 可以将该清除行为关闭)。
+  当运行 `vue-cli-service build` 时生成的生产环境构建文件的目录。注意目标目录在构建之前会被清除 (构建时传入 `--no-clean` 可关闭该行为)。
 
   ::: tip 提示
-  情始终使用 `outputDir` 而不要修改 webpack 的 `output.path`。
+  请始终使用 `outputDir` 而不要修改 webpack 的 `output.path`。
   :::
 
 ### assetsDir
@@ -73,7 +73,7 @@ module.exports = {
 - Type: `Object`
 - Default: `undefined`
 
-  在多页面模式下构建应用。每个“page”应该有一个对应的 JavaScript 入口文件。其值应该是一个对象，对象的 key 是入口的名字，value 是：
+  在 multi-page 模式下构建应用。每个“page”应该有一个对应的 JavaScript 入口文件。其值应该是一个对象，对象的 key 是入口的名字，value 是：
 
   - 一个指定了 `entry`, `template` 和 `filename` 的对象；
   - 或一个指定其 `entry` 的字符串。
@@ -89,7 +89,7 @@ module.exports = {
         // 在 dist/index.html 的输出
         filename: 'index.html'
       },
-      // 当使用只有入口字符串格式时，
+      // 当使用只有入口的字符串格式时，
       // 模板会被推导为 `public/subpage.html`
       // 并且如果找不到的话，就回退到 `public/index.html`。
       // 输出文件名会被推导为 `subpage.html`。
@@ -99,7 +99,7 @@ module.exports = {
   ```
 
   ::: tip 提示
-  当在多页面模式下构建时，webpack config 会包含不一样的插件 (这时会存在多个 `html-webpack-plugin` 和 `preload-webpack-plugin` 的实例)。如果你试图修改这些插件的选项，请确认运行 `vue inspect`。
+  当在 multi-page 模式下构建时，webpack 配置会包含不一样的插件 (这时会存在多个 `html-webpack-plugin` 和 `preload-webpack-plugin` 的实例)。如果你试图修改这些插件的选项，请确认运行 `vue inspect`。
   :::
 
 ### lintOnSave
@@ -116,14 +116,14 @@ module.exports = {
 
   是否使用包含运行时编译器的 Vue 构建版本。设置为 `true` 后你就可以在 Vue 组件中使用 `template` 选项了，但是这会让你的应用额外增加 10kb 左右。
 
-  更多细节可查阅：[Runtime + Compiler vs. Runtime only](https://cn.vuejs.org/v2/guide/installation.html#运行时-编译器-vs-只包含运行时).
+  更多细节可查阅：[Runtime + Compiler vs. Runtime only](https://cn.vuejs.org/v2/guide/installation.html#运行时-编译器-vs-只包含运行时)。
 
 ### transpileDependencies
 
 - Type: `Array<string | RegExp>`
 - Default: `[]`
 
-  默认情况下 `babel-loader` 会忽略所有 `node_modules` 中的文件。如果你想要通过 Babel 显性地转译一个依赖，可以在这个选项中列出来。
+  默认情况下 `babel-loader` 会忽略所有 `node_modules` 中的文件。如果你想要通过 Babel 显式转译一个依赖，可以在这个选项中列出来。
 
 ### productionSourceMap
 
@@ -136,35 +136,35 @@ module.exports = {
 
 - Type: `Object | Function`
 
-  如果这个值是一个对象，则会通过 [webpack-merge](https://github.com/survivejs/webpack-merge) 合并到最终的 config 中。
+  如果这个值是一个对象，则会通过 [webpack-merge](https://github.com/survivejs/webpack-merge) 合并到最终的配置中。
 
-  如果这个值是一个函数，则会接收被解析的 config 作为参数。该函数及可以修改 config 并不返回任何东西，也可以返回一个被克隆或合并过的 config 版本。
+  如果这个值是一个函数，则会接收被解析的配置作为参数。该函数及可以修改配置并不返回任何东西，也可以返回一个被克隆或合并过的配置版本。
 
-  更多细节可查阅：[webpack 相关工作 > 简单的配置方式](../guide/webpack.md#简单的配置方式)
+  更多细节可查阅：[配合 webpack > 简单的配置方式](../guide/webpack.md#简单的配置方式)
 
 ### chainWebpack
 
 - Type: `Function`
 
-  是一个函数，会接收一个基于 [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain) 的 `ChainableConfig` 实例。允许对内部的 webpack config 进行更细粒度的修改。
+  是一个函数，会接收一个基于 [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain) 的 `ChainableConfig` 实例。允许对内部的 webpack 配置进行更细粒度的修改。
 
-  更多细节可查阅：[webpack 相关工作 > 链式操作](../guide/webpack.md#链式操作-高级)
+  更多细节可查阅：[配合 webpack > 链式操作](../guide/webpack.md#链式操作-高级)
 
 ### css.modules
 
 - Type: `boolean`
 - Default: `false`
 
-  默认情况下，只有 `*.module.[ext]` 结尾的文件才会被视作 CSS Modules。设置为 `true` 后你就可以去掉文件名中的 `.module` 并将所有的 `*.(css|scss|sass|less|styl(us)?)` 文件视为 CSS Modules。
+  默认情况下，只有 `*.module.[ext]` 结尾的文件才会被视作 CSS Modules 模块。设置为 `true` 后你就可以去掉文件名中的 `.module` 并将所有的 `*.(css|scss|sass|less|styl(us)?)` 文件视为 CSS Modules 模块。
 
-  更多细节可查阅：[CSS 相关工作 > CSS Modules](../guide/css.md#css-modules)
+  更多细节可查阅：[配合 CSS > CSS Modules](../guide/css.md#css-modules)
 
 ### css.extract
 
 - Type: `boolean`
 - Default: `true` (in production mode)
 
-  是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (取代在 JavaScript 中 inline 且动态注入的)。
+  是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
 
   同样当构建 Web Components 组件时它会默认被禁用 (样式是 inline 的并注入到了 shadowRoot 中)。
 
@@ -241,7 +241,7 @@ module.exports = {
 
   这会告诉开发服务器将任何未知请求 (没有匹配到静态文件的请求) 代理到`http://localhost:4000`。
 
-  如果你想要更多的代理控制行为，也可以使用一个 `path: options` 成对的对象。完整的选项可以咨询 [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) 。
+  如果你想要更多的代理控制行为，也可以使用一个 `path: options` 成对的对象。完整的选项可以查阅 [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) 。
 
   ``` js
   module.exports = {
@@ -294,7 +294,7 @@ module.exports = {
 Babel 可以通过 `babel.config.js` 进行配置。
 
 ::: tip
-Vue CLI 使用了 Babel 7 中的新 config 格式 `babel.config.js`。和 `.babelrc` 或 `package.json` 中的 `babel` 字段不同，这个 config 文件不会使用基于文件位置的方案，而是会一致地运用到项目根以下的所有文件，包括 `node_modules` 内部的依赖。我们推荐在 Vue CLI 项目中始终使用 `babel.config.js` 取代其它格式。
+Vue CLI 使用了 Babel 7 中的新配置格式 `babel.config.js`。和 `.babelrc` 或 `package.json` 中的 `babel` 字段不同，这个配置文件不会使用基于文件位置的方案，而是会一致地运用到项目根目录以下的所有文件，包括 `node_modules` 内部的依赖。我们推荐在 Vue CLI 项目中始终使用 `babel.config.js` 取代其它格式。
 :::
 
 所有的 Vue CLI 应用都使用 `@vue/babel-preset-app`，它包含了 `babel-preset-env`、JSX 支持以及为最小化包体积优化过的配置。通过[它的文档](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app)可以查阅到更多细节和 preset 选项。
