@@ -9,14 +9,10 @@ const descriptions = {
 
 function printScripts (pkg, packageManager) {
   return Object.keys(pkg.scripts).map(key => {
-    const text = descriptions[key]
-
-    if (text) {
-      return [
-        `\n### ${text}`,
-        `${packageManager} run ${key}\n`
-      ].join('\n')
-    }
+    return [
+      `\n### ${descriptions[key]}`,
+      `${packageManager} run ${key}\n`
+    ].join('\n')
   }).join('')
 }
 
