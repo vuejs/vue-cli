@@ -2,7 +2,8 @@
   "name": "@vue/cli-ui-addon-webpack",
   "version": "3.0.0-rc.3",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",

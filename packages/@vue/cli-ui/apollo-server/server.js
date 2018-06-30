@@ -5,8 +5,8 @@ const fallback = require('express-history-api-fallback')
 const clientAddons = require('./connectors/client-addons')
 const plugins = require('./connectors/plugins')
 
-const distPath = path.resolve(__dirname, '../../dist')
-const publicPath = path.resolve(__dirname, '../../ui-public')
+const distPath = path.resolve(__dirname, '../dist')
+const publicPath = path.resolve(__dirname, '../ui-public')
 
 module.exports = app => {
   app.use(express.static(distPath))

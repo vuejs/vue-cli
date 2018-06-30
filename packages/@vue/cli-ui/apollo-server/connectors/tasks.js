@@ -11,8 +11,8 @@ const plugins = require('./plugins')
 const prompts = require('./prompts')
 const views = require('./views')
 // Utils
-const { log } = require('../utils/logger')
-const { notify } = require('../utils/notification')
+const { log } = require('../util/logger')
+const { notify } = require('../util/notification')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'

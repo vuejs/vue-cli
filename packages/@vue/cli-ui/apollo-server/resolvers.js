@@ -13,7 +13,7 @@ const clientAddons = require('./connectors/client-addons')
 const sharedData = require('./connectors/shared-data')
 const locales = require('./connectors/locales')
 // Start ipc server
-require('./utils/ipc')
+require('./util/ipc')
 
 process.env.VUE_CLI_API_MODE = true
 

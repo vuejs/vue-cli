@@ -1,7 +1,7 @@
 // Subs
 const channels = require('../channels')
 // Connectors
-const { log } = require('../utils/logger')
+const { log } = require('../util/logger')
 
 const suggestions = []
 

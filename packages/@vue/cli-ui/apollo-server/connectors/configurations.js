@@ -9,8 +9,8 @@ const plugins = require('./plugins')
 const folders = require('./folders')
 const prompts = require('./prompts')
 // Utils
-const { get, set, remove } = require('../../util/object')
-const { log } = require('../utils/logger')
+const { get, set, remove } = require('../../src/util/object')
+const { log } = require('../util/logger')
 const { loadModule } = require('@vue/cli/lib/util/module')
 const extendJSConfig = require('@vue/cli/lib/util/extendJSConfig')
 

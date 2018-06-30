@@ -32,11 +32,11 @@ const suggestions = require('./suggestions')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
-const { getCommand } = require('../utils/command')
-const { resolveModuleRoot } = require('../utils/resolve-path')
-const ipc = require('../utils/ipc')
-const { log } = require('../utils/logger')
-const { notify } = require('../utils/notification')
+const { getCommand } = require('../util/command')
+const { resolveModuleRoot } = require('../util/resolve-path')
+const ipc = require('../util/ipc')
+const { log } = require('../util/logger')
+const { notify } = require('../util/notification')
 
 const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
@@ -109,7 +109,7 @@ function resetPluginApi (context) {
     plugins
   }, context)
   // Run Plugin API
-  runPluginApi(path.resolve(__dirname, '../../../'), context, 'ui-defaults')
+  runPluginApi(path.resolve(__dirname, '../../'), context, 'ui-defaults')
   plugins.forEach(plugin => runPluginApi(plugin.id, context))
   runPluginApi(cwd.get(), context, 'vue-cli-ui')
   // Add client addons

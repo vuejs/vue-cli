@@ -1,6 +1,6 @@
 // Utils
-const ObjectUtil = require('../../util/object')
-const { log } = require('../utils/logger')
+const ObjectUtil = require('../../src/util/object')
+const { log } = require('../util/logger')
 
 let answers = {}
 let prompts = []

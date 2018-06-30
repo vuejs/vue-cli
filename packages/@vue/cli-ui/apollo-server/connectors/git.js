@@ -1,6 +1,6 @@
 const execa = require('execa')
 const path = require('path')
-const parseDiff = require('../utils/parse-diff')
+const parseDiff = require('../util/parse-diff')
 // Connectors
 const cwd = require('./cwd')
 

@@ -5,17 +5,27 @@
     "serve": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4000/graphql vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "graphql-api": "cross-env VUE_APP_CLI_UI_DEV=true VUE_APP_GRAPHQL_PORT=4000 vue-cli-service graphql-api",
-    "run-graphql-api": "cross-env VUE_CLI_DEBUG=true VUE_CLI_IPC=vue-cli-dev vue-cli-service run-graphql-api",
-    "test-graphql-api": "cross-env VUE_CLI_UI_TEST=true VUE_APP_GRAPHQL_PORT=4040 VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql VUE_CLI_IPC=vue-cli-test vue-cli-service graphql-api",
+    "apollo": "cross-env VUE_APP_CLI_UI_DEV=true VUE_APP_GRAPHQL_PORT=4000 vue-cli-service apollo:watch",
+    "apollo:run": "cross-env VUE_CLI_DEBUG=true VUE_CLI_IPC=vue-cli-dev vue-cli-service apollo:run",
+    "apollo:run:test": "cross-env VUE_CLI_UI_TEST=true VUE_APP_GRAPHQL_PORT=4040 VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql VUE_CLI_IPC=vue-cli-test vue-cli-service apollo:watch",
     "prepublishOnly": "yarn run lint --no-fix && yarn run build",
     "test:e2e:dev": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql vue-cli-service test:e2e --mode development",
     "test:e2e:run": "vue-cli-service test:e2e --mode production --headless --url=http://localhost:4040",
-    "test:e2e": "yarn run test:clear && start-server-and-test test-graphql-api http://localhost:4040 test:e2e:dev",
-    "test:run": "yarn run test:clear && start-server-and-test test-graphql-api http://localhost:4040 test:e2e:run",
+    "test:e2e": "yarn run test:clear && start-server-and-test apollo:run:test http://localhost:4040 test:e2e:dev",
+    "test:run": "yarn run test:clear && start-server-and-test apollo:run:test http://localhost:4040 test:e2e:run",
     "test:clear": "rimraf ../../test/cli-ui-test && rimraf ./live-test",
     "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui && yarn run test:run"
   },
+  "files": [
+    "apollo-server",
+    "dist",
+    "locales",
+    "src",
+    "ui-defaults",
+    "ui-public",
+    "index.js",
+    "server.js"
+  ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
     "@vue/cli-shared-utils": "^3.0.0-rc.3",
@@ -41,7 +51,7 @@
     "semver": "^5.5.0",
     "shortid": "^2.2.8",
     "terminate": "^2.1.0",
-    "vue-cli-plugin-apollo": "^0.13.4",
+    "vue-cli-plugin-apollo": "^0.14.5",
     "watch": "^1.0.2"
   },
   "devDependencies": {

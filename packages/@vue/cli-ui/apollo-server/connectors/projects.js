@@ -18,8 +18,8 @@ const locales = require('./locales')
 // Context
 const getContext = require('../context')
 // Utils
-const { log } = require('../utils/logger')
-const { notify } = require('../utils/notification')
+const { log } = require('../util/logger')
+const { notify } = require('../util/notification')
 
 const PROGRESS_ID = 'project-create'
 
@@ -409,7 +409,7 @@ function setFavorite ({ id, favorite }, context) {
 
 // Open last project
 async function autoOpenLastProject () {
-  const context = getContext(null)
+  const context = getContext()
   const id = context.db.get('config.lastOpenProject').value()
   if (id) {
     try {

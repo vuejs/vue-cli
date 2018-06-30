@@ -8,10 +8,10 @@ const folders = require('../connectors/folders')
 const cwd = require('../connectors/cwd')
 const progress = require('../connectors/progress')
 // Utils
-const ipc = require('../utils/ipc')
-const { notify } = require('../utils/notification')
+const ipc = require('../util/ipc')
+const { notify } = require('../util/notification')
 const { matchesPluginId } = require('@vue/cli-shared-utils')
-const { log } = require('../utils/logger')
+const { log } = require('../util/logger')
 // Validators
 const { validateConfiguration } = require('./configuration')
 const { validateDescribeTask, validateAddTask } = require('./task')

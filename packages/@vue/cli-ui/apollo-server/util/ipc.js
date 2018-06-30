@@ -1,6 +1,6 @@
 const ipc = require('node-ipc')
 // Utils
-const { log, dumpObject } = require('../utils/logger')
+const { log, dumpObject } = require('../util/logger')
 
 ipc.config.id = process.env.VUE_CLI_IPC || 'vue-cli'
 ipc.config.retry = 1500

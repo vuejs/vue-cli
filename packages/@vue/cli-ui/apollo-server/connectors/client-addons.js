@@ -2,7 +2,7 @@ const path = require('path')
 // Subs
 const channels = require('../channels')
 // Utils
-const { resolveModuleRoot } = require('../utils/resolve-path')
+const { resolveModuleRoot } = require('../util/resolve-path')
 
 let addons = []
 

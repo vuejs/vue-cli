@@ -7,7 +7,7 @@ const channels = require('../channels')
 // Context
 const getContext = require('../context')
 // Utils
-const { log } = require('../utils/logger')
+const { log } = require('../util/logger')
 
 let locales
 const watchedTrees = new Map()
@@ -31,7 +31,7 @@ function add (locale, context) {
 function reset (context) {
   locales = []
   // Load builtin locales
-  const folder = path.resolve(__dirname, '../../../')
+  const folder = path.resolve(__dirname, '../../')
   loadFolder(folder, context)
 }
 

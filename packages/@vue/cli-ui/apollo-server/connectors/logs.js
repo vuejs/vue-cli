@@ -40,7 +40,7 @@ exports.clear = function (context) {
 
 // Init
 {
-  const context = getContext(null)
+  const context = getContext()
   events.on('log', log => {
     exports.add(log, context)
   })

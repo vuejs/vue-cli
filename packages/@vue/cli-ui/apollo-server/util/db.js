@@ -8,7 +8,7 @@ const { xdgConfigPath } = require('@vue/cli/lib/util/xdgConfig')
 let folder
 
 if (process.env.VUE_CLI_UI_TEST) {
-  folder = '../../../live-test'
+  folder = '../../live-test'
   // Clean DB
   fs.removeSync(path.resolve(__dirname, folder))
 } else {

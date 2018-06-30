@@ -1,7 +1,7 @@
 // Subscriptions channels
 const channels = require('../channels')
 // Utils
-const { log } = require('../utils/logger')
+const { log } = require('../util/logger')
 
 const sharedData = new Map()
 let watchers = new Map()

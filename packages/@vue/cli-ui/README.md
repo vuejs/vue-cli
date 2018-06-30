@@ -9,7 +9,7 @@ yarn run serve
 In another terminal:
 
 ```
-yarn run graphql-api
+yarn run apollo
 ```
 
 You also need to build `@vue/cli-ui-addon-webpack`.
