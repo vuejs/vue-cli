@@ -2,7 +2,7 @@ const { clientAddonConfig } = require('@vue/cli-ui')
 
 module.exports = {
   ...clientAddonConfig({
-    id: 'vue-webpack'
+    id: 'org.vue.webpack.client-addon'
     // port: 8042
   })
 }

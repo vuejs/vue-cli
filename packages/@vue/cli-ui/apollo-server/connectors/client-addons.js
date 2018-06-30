@@ -53,15 +53,18 @@ function serve (req, res) {
   const { id, 0: file } = req.params
   const addon = findOne(decodeURIComponent(id))
   if (addon && addon.path) {
-    const basePath = resolveModuleRoot(require.resolve(addon.path))
+    const resolvedPath = require.resolve(addon.path)
+    const basePath = resolveModuleRoot(resolvedPath)
     if (basePath) {
       res.sendFile(path.join(basePath, file))
-      return
+    } else {
+      res.status(404)
+      res.send(`File not found (resolved: ${resolvedPath}`)
     }
+  } else {
+    res.status(404)
+    res.send(`Addon ${id} not found in loaded addons. Try opening a vue-cli project first?`)
   }
-
-  res.status(404)
-  res.send(`Addon ${id} not found in loaded addons. Try opening a vue-cli project first?`)
 }
 
 module.exports = {
