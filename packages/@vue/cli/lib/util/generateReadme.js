@@ -1,35 +1,30 @@
-const textsForScripts = {
-  build: {
-    command: 'run build',
-    description: 'Build for production'
-  },
-  serve: {
-    command: 'run serve',
-    description: 'Start local server with hot reload'
-  },
-  test: {
-    command: 'run test',
-    description: 'Start local server with hot reload'
-  }
+const descriptions = {
+  build: 'Compiles and minifies for production',
+  serve: 'Compiles and hot-reloads for development',
+  lint: 'Lints and fixes files',
+  test: 'Run your tests',
+  'test:e2e': 'Run your tests end-to-end',
+  'test:unit': 'Run your unit tests'
 }
 
-function getScripts (pkg, packageManager) {
+function printScripts (pkg, packageManager) {
   return Object.keys(pkg.scripts).map(key => {
-    const text = textsForScripts[key]
+    const text = descriptions[key]
 
     if (text) {
-      return `
-### ${text.description}
-${packageManager} ${text.command}
-`
+      return [
+        `\n### ${text}`,
+        `${packageManager} run ${key}\n`
+      ].join('\n')
     }
   }).join('')
 }
 
 module.exports = function generateReadme (pkg, packageManager) {
-  return `# ${pkg.name}
-
-## Build setup
-${packageManager} install
-${getScripts(pkg, packageManager)}`
+  return [
+    `# ${pkg.name}\n`,
+    '## Project setup',
+    `${packageManager} install`,
+    printScripts(pkg, packageManager)
+  ].join('\n')
 }
