@@ -7,8 +7,8 @@ module.exports = api => {
 
   // Add dynamic components in dev mode (webpack dashboard & analyzer)
   api.addClientAddon({
-    id: 'vue-webpack',
-    url: 'http://localhost:8042/index.js'
+    id: 'org.vue.webpack.client-addon.dev',
+    url: 'http://localhost:8096/index.js'
   })
 
   // Add a test page below 'plugins', 'configurations' and 'tasks' on the left sidebar
