@@ -7,13 +7,23 @@
         </div>
         <div class="value">{{ $t(`org.vue.vue-webpack.dashboard.webpack-status.${status || 'Idle'}`) }}</div>
       </div>
-      <div class="info-block errors">
+      <div
+        class="info-block errors"
+        :class="{
+          emphasize: errors.length
+        }"
+      >
         <div class="label">
           {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.errors') }}
         </div>
         <div class="value">{{ errors.length }}</div>
       </div>
-      <div class="info-block warnings">
+      <div
+        class="info-block warnings"
+        :class="{
+          emphasize: warnings.length
+        }"
+      >
         <div class="label">
           {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.warnings') }}
         </div>
@@ -103,4 +113,13 @@ export default {
     display grid
     grid-template-columns repeat(3, 1fr)
     grid-gap $padding-item
+
+  .info-block
+    &.emphasize
+      .value
+        font-weight bold
+      &.errors .value
+        color $vue-ui-color-danger !important
+      &.warnings .value
+        color $vue-ui-color-warning !important
 </style>
