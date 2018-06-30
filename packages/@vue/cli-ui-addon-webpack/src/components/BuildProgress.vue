@@ -1,31 +1,69 @@
 <template>
-  <div class="build-progress">
+  <div
+    class="build-progress"
+    :class="{
+      [`mode-${mode}`]: true
+    }"
+  >
     <div class="content">
-      <loading-progress
-        :progress="progress"
-        size="128"
-        counter-clockwise
-      />
+      <div class="progress-wrapper">
+        <transition-group
+          name="vue-ui-fade"
+          class="progress-bars"
+        >
+          <div
+            v-for="(key, index) of Object.keys(progress)"
+            :key="key"
+            class="progress-bar-wrapper"
+          >
+            <loading-progress
+              :key="key"
+              :progress="progress[key]"
+              :size="128 - 16 * index"
+              class="progress-bar"
+              counter-clockwise
+              :class="{
+                'disable-animation': progress[key] === 0,
+                [`mode-${key}`]: true
+              }"
+            />
+          </div>
+        </transition-group>
 
-      <div class="progress">
-        {{ typeof progress === 'number' ? Math.round(progress * 100) : 0 }}
+        <div class="progress">
+          <div
+            class="progress-animation"
+            :class="{
+               active: status && status !== 'Idle'
+            }"
+          >
+            <div
+              v-for="n in 4"
+              :key="n"
+              class="animation"
+              :style="{
+                'animation-delay': `${n * 0.25}s`
+              }"
+            />
+          </div>
+        </div>
+
+        <transition duration="500">
+          <div v-if="status === 'Success'" class="status-icon done">
+            <div class="wrapper">
+              <VueIcon icon="check_circle"/>
+            </div>
+          </div>
+        </transition>
+
+        <transition duration="500">
+          <div v-if="status === 'Failed'" class="status-icon error">
+            <div class="wrapper">
+              <VueIcon icon="error"/>
+            </div>
+          </div>
+        </transition>
       </div>
-
-      <transition duration="500">
-        <div v-if="status === 'Success'" class="status-icon done">
-          <div class="wrapper">
-            <VueIcon icon="check_circle"/>
-          </div>
-        </div>
-      </transition>
-
-      <transition duration="500">
-        <div v-if="status === 'Failed'" class="status-icon error">
-          <div class="wrapper">
-            <VueIcon icon="error"/>
-          </div>
-        </div>
-      </transition>
 
       <div class="operations">
         <span v-if="operations">{{ operations }}</span>
@@ -43,18 +81,23 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  computed: {
-    ...mapGetters([
-      'mode'
-    ])
-  },
-
   sharedData () {
     return mapSharedData('org.vue.webpack.', {
       status: `${this.mode}-status`,
-      progress: `${this.mode}-progress`,
+      rawProgress: `${this.mode}-progress`,
       operations: `${this.mode}-operations`
     })
+  },
+
+  computed: {
+    ...mapGetters([
+      'mode'
+    ]),
+
+    progress () {
+      const raw = this.rawProgress
+      return raw && Object.keys(raw).length ? raw : { unknown: 0 }
+    }
   }
 }
 </script>
@@ -87,6 +130,12 @@ export default {
     &:first-letter
       text-transform uppercase
 
+  .progress-wrapper
+    width 178px
+    height @width
+    position relative
+
+  .progress-bar-wrapper,
   .progress,
   .status-icon
     h-box()
@@ -96,12 +145,36 @@ export default {
     top 0
     left 0
     width 100%
-    height 178px
+    height @width
 
-  .progress
-    color lighten($vue-ui-color-dark, 60%)
-    font-weight lighter
-    font-size 42px
+  .progress-bar
+    &.disable-animation
+      >>> path
+        transition none
+    &.mode-build-modern
+      >>> .progress
+        stroke $vue-ui-color-info
+
+  .progress-animation
+    display grid
+    $size = 12px
+    grid-template-columns repeat(2, $size)
+    grid-template-rows repeat(2, $size)
+    grid-template-areas "z1 z4" "z2 z3"
+    grid-gap 12px
+    .animation
+      width 100%
+      height @width
+      border-radius 50%
+      background rgba(black, .1)
+      transition background .15s
+      for n in (1..4)
+        &:nth-child({n})
+          grid-area 'z%s' % n
+    &.active
+      .animation
+        background $vue-ui-color-primary
+        animation progress 1s infinite
 
   .status-icon
     .wrapper
@@ -161,4 +234,25 @@ export default {
         opacity 0
     &.v-leave-to
       opacity 0
+
+  &.mode-build-modern
+    .progress-animation.active
+      .animation
+        background $vue-ui-color-info
+
+    .status-icon
+      &.done
+        .wrapper::before
+          background $vue-ui-color-info
+        >>> svg
+          fill $vue-ui-color-info
+
+@keyframes progress
+  0%,
+  30%
+    transform none
+  50%
+    transform scale(1.5)
+  80%
+    transform none
 </style>

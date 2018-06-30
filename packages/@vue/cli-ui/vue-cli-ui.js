@@ -5,12 +5,6 @@ module.exports = api => {
   console.log('has(eslint)', api.hasPlugin('eslint'))
   console.log('has(typescript)', api.hasPlugin('typescript'))
 
-  // Add dynamic components in dev mode (webpack dashboard & analyzer)
-  api.addClientAddon({
-    id: 'org.vue.webpack.client-addon.dev',
-    url: 'http://localhost:8096/index.js'
-  })
-
   // Add a test page below 'plugins', 'configurations' and 'tasks' on the left sidebar
   api.addView({
     id: 'org.vue.webpack.views.test',

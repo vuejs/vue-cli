@@ -6,38 +6,57 @@ module.exports = api => {
 
   let firstRun = true
   let hadFailed = false
-  let modernMode = false
 
+  // Specific to each modes (serve, build, ...)
   const fields = {
     status: null,
-    progress: 0,
+    progress: {},
     operations: null,
     stats: null,
     sizes: null,
     problems: null,
     url: null
   }
+
+  // Common fields for all mode
+  const commonFields = {
+    'modern-mode': false
+  }
+
+  // Called when opening a project
   function setupSharedData (mode) {
     resetSharedData(mode)
     for (const field in fields) {
       const id = `${mode}-${field}`
-      watchSharedData(id, (value) => {
-        const project = api.getProject()
-        if (project) {
-          setSharedData(`${project.id}-${id}`, value)
-        }
-      })
+      watchData(id)
+    }
+  }
+
+  // Called when opening a project
+  function setupCommonData () {
+    for (const field in commonFields) {
+      setSharedData(field, getSharedDataInitialValue(field, commonFields[field]))
+      watchData(field)
     }
   }
 
   function resetSharedData (mode, clear = false) {
     for (const field in fields) {
       const id = `${mode}-${field}`
-      setSharedData(id, getSharedDataInitialValue(id, field, clear))
+      setSharedData(id, getSharedDataInitialValue(id, fields[field], clear))
     }
   }
 
-  function getSharedDataInitialValue (id, field, clear) {
+  function watchData (id) {
+    watchSharedData(id, (value) => {
+      const project = api.getProject()
+      if (project) {
+        setSharedData(`${project.id}-${id}`, value)
+      }
+    })
+  }
+
+  function getSharedDataInitialValue (id, defaultValue, clear) {
     if (!clear) {
       const project = api.getProject()
       if (project) {
@@ -45,29 +64,50 @@ module.exports = api => {
         if (data != null) return data.value
       }
     }
-    return fields[field]
+    return defaultValue
   }
 
   async function onWebpackMessage ({ data: message }) {
     if (message.webpackDashboardData) {
+      const modernMode = getSharedData('modern-mode').value
       const type = message.webpackDashboardData.type
+
       for (const data of message.webpackDashboardData.value) {
+        const id = `${type}-${data.type}`
+
         if (data.type === 'stats') {
           // Stats are read from a file
           const statsFile = path.resolve(process.cwd(), `./node_modules/.stats-${type}.json`)
           const value = await fs.readJson(statsFile)
-          setSharedData(`${type}-${data.type}`, value)
+          setSharedData(id, value)
           await fs.remove(statsFile)
-        } else if (type.indexOf('build') !== -1 && modernMode && data.type === 'progress') {
-          // Progress is shared between 'build' and 'build-modern'
-          // 'build' first and then 'build-modern'
-          const value = type === 'build' ? data.value / 2 : (data.value + 1) / 2
-          // We display the same progress bar for both
-          for (const t of ['build', 'build-modern']) {
-            setSharedData(`${t}-${data.type}`, value)
+        } else if (data.type === 'progress') {
+          if (type === 'serve' || !modernMode) {
+            setSharedData(id, {
+              [type]: data.value
+            })
+          } else {
+            // Display two progress bars
+            const progress = getSharedData(id).value
+            progress[type] = data.value
+            for (const t of ['build', 'build-modern']) {
+              setSharedData(`${t}-${data.type}`, {
+                build: progress.build || 0,
+                'build-modern': progress['build-modern'] || 0
+              })
+            }
           }
         } else {
-          setSharedData(`${type}-${data.type}`, data.value)
+          // Don't display success until both build and build-modern are done
+          if (type !== 'serve' && modernMode && data.type === 'status' && data.value === 'Success') {
+            if (type === 'build-modern') {
+              for (const t of ['build', 'build-modern']) {
+                setSharedData(`${t}-status`, data.value)
+              }
+            }
+          } else {
+            setSharedData(id, data.value)
+          }
 
           // Notifications
           if (type === 'serve' && data.type === 'status') {
@@ -106,6 +146,7 @@ module.exports = api => {
     for (const key of ['serve', 'build', 'build-modern']) {
       setupSharedData(key)
     }
+    setupCommonData()
   })
 
   // Tasks
@@ -285,7 +326,7 @@ module.exports = api => {
       if (answers.name) args.push('--port', answers.name)
       if (answers.watch) args.push('--watch')
       if (answers.modern) args.push('--modern')
-      setSharedData('modern-mode', modernMode = !!answers.modern)
+      setSharedData('modern-mode', !!answers.modern)
       args.push('--dashboard')
 
       // Data
@@ -341,11 +382,19 @@ module.exports = api => {
     }
   })
 
-  // Webpack dashboard
-  api.addClientAddon({
-    id: 'org.vue.webpack.client-addon',
-    path: '@vue/cli-ui-addon-webpack/dist'
-  })
+  if (process.env.VUE_APP_CLI_UI_DEV) {
+    // Add dynamic components in dev mode (webpack dashboard & analyzer)
+    api.addClientAddon({
+      id: 'org.vue.webpack.client-addon.dev',
+      url: 'http://localhost:8096/index.js'
+    })
+  } else {
+    // Webpack dashboard
+    api.addClientAddon({
+      id: 'org.vue.webpack.client-addon',
+      path: '@vue/cli-ui-addon-webpack/dist'
+    })
+  }
 
   // Open app button
   api.ipcOn(({ data }) => {
