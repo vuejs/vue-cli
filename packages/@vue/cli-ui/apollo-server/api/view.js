@@ -4,7 +4,8 @@ const viewSchema = createSchema(joi => ({
   id: joi.string().required(),
   name: joi.string().required().description('route name (vue-router)'),
   icon: joi.string().required(),
-  tooltip: joi.string().required()
+  tooltip: joi.string().required(),
+  projectTypes: joi.array().items(joi.string())
 }))
 
 const badgeSchema = createSchema(joi => ({
