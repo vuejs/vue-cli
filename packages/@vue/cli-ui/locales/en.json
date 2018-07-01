@@ -148,7 +148,8 @@
           }
         },
         "top-bar": {
-          "no-favorites": "No favorite projects"
+          "no-favorites": "No favorite projects",
+          "favorite-projects": "Favorite projects"
         },
         "view-badge": {
           "labels": {
