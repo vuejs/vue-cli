@@ -27,10 +27,16 @@ extend type Mutation {
 type Project {
   id: ID!
   name: String!
+  type: ProjectType
   path: String!
   favorite: Int
   plugins: [Plugin]
   tasks: [Task]
+}
+
+enum ProjectType {
+  vue
+  unknown
 }
 
 input ProjectCreateInput {
@@ -74,6 +80,7 @@ type Feature implements DescribedEntity {
 
 exports.resolvers = {
   Project: {
+    type: (project, args, context) => projects.getType(project),
     plugins: (project, args, context) => plugins.list(project.path, context),
     tasks: (project, args, context) => tasks.list({ file: project.path, api: false }, context)
   },

@@ -25,6 +25,7 @@ type View {
   icon: String!
   tooltip: String
   badges: [ViewBadge]
+  projectTypes: [ProjectType]
 }
 
 type ViewBadge {

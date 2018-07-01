@@ -105,21 +105,25 @@ function resetPluginApi (context) {
   clientAddons.clear(context)
   suggestions.clear(context)
 
-  pluginApi = new PluginApi({
-    plugins
-  }, context)
-  // Run Plugin API
-  runPluginApi(path.resolve(__dirname, '../../'), context, 'ui-defaults')
-  plugins.forEach(plugin => runPluginApi(plugin.id, context))
-  runPluginApi(cwd.get(), context, 'vue-cli-ui')
-  // Add client addons
-  pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
-  // Add views
-  pluginApi.views.forEach(view => views.add(view, context))
-
   setTimeout(() => {
     const projects = require('./projects')
     const project = projects.getCurrent(context)
+
+    pluginApi = new PluginApi({
+      plugins
+    }, context)
+
+    if (projects.getType(project) !== 'vue') return
+
+    // Run Plugin API
+    runPluginApi(path.resolve(__dirname, '../../'), context, 'ui-defaults')
+    plugins.forEach(plugin => runPluginApi(plugin.id, context))
+    runPluginApi(cwd.get(), context, 'vue-cli-ui')
+    // Add client addons
+    pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
+    // Add views
+    pluginApi.views.forEach(view => views.add(view, context))
+
     if (!project) return
     projectId = project.id
     pluginApi.project = project

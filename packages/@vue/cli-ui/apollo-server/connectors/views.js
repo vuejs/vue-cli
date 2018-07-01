@@ -24,7 +24,8 @@ function createViewsSet () {
       id: 'vue-project-tasks',
       name: 'project-tasks',
       icon: 'assignment',
-      tooltip: 'org.vue.components.project-nav.tooltips.tasks'
+      tooltip: 'org.vue.components.project-nav.tooltips.tasks',
+      projectTypes: ['vue', 'unknown']
     }
   ]
 }

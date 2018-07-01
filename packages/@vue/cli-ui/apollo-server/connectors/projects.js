@@ -342,7 +342,8 @@ async function importProject (input, context) {
   const project = {
     id: shortId.generate(),
     path: input.path,
-    favorite: 0
+    favorite: 0,
+    type: folders.isVueProject(input.path) ? 'vue' : 'unknown'
   }
   const packageData = folders.readPackage(project.path, context)
   project.name = packageData.name
@@ -407,6 +408,10 @@ function setFavorite ({ id, favorite }, context) {
   return findOne(id, context)
 }
 
+function getType (project) {
+  return !project.type ? 'vue' : project.type
+}
+
 // Open last project
 async function autoOpenLastProject () {
   const context = getContext()
@@ -436,5 +441,6 @@ module.exports = {
   resetCwd,
   setFavorite,
   initCreator,
-  removeCreator
+  removeCreator,
+  getType
 }

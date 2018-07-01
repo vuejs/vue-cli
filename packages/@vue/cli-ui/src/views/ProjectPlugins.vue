@@ -4,7 +4,7 @@
       :title="$t('org.vue.views.project-plugins.title')"
       class="limit-width"
     >
-      <template slot="actions">
+      <template v-if="projectCurrent.type === 'vue'" slot="actions">
         <VueButton
           icon-left="add"
           :label="$t('org.vue.views.project-plugins.button')"
@@ -29,6 +29,7 @@
       </template>
 
       <ApolloQuery
+        v-if="projectCurrent.type === 'vue'"
         :query="require('../graphql/projectPlugins.gql')"
       >
         <template slot-scope="{ result: { data, loading } }">
@@ -57,6 +58,7 @@
 
 <script>
 import PLUGINS_UPDATE from '../graphql/pluginsUpdate.gql'
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 
 export default {
   name: 'ProjectPlugins',
@@ -65,6 +67,10 @@ export default {
     return {
       title: this.$t('org.vue.views.project-plugins.title')
     }
+  },
+
+  apollo: {
+    projectCurrent: PROJECT_CURRENT
   },
 
   methods: {
