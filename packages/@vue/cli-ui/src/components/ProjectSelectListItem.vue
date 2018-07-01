@@ -10,6 +10,7 @@
           @click.stop="$emit('favorite')"
         />
       </div>
+
       <div class="info">
         <ListItemInfo
           :description="project.path"
@@ -24,6 +25,7 @@
           </div>
         </ListItemInfo>
       </div>
+
       <div class="actions">
         <VueButton
           v-if="project.homepage"
@@ -34,6 +36,14 @@
           v-tooltip="project.homepage"
           @click.stop
         />
+
+        <VueButton
+          class="icon-button"
+          icon-left="open_in_browser"
+          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.open-in-editor')"
+          @click.stop="openInEditor()"
+        />
+
         <VueButton
           class="icon-button"
           icon-left="close"
@@ -47,11 +57,26 @@
 </template>
 
 <script>
+import OPEN_IN_EDITOR from '../graphql/fileOpenInEditor.gql'
+
 export default {
   props: {
     project: {
       type: Object,
       required: true
+    }
+  },
+
+  methods: {
+    async openInEditor () {
+      await this.$apollo.mutate({
+        mutation: OPEN_IN_EDITOR,
+        variables: {
+          input: {
+            file: this.project.path
+          }
+        }
+      })
     }
   }
 }

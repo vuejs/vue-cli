@@ -10,7 +10,7 @@ async function openInEditor (input, context) {
   if (input.gitPath) {
     query = await git.resolveFile(input.file, context)
   } else {
-    path.resolve(cwd.get(), input.file)
+    query = path.resolve(cwd.get(), input.file)
   }
   if (input.line) {
     query += `:${input.line}`

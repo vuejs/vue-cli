@@ -18,6 +18,12 @@
         </VueSwitch>
 
         <VueDropdownButton
+          :label="$t('org.vue.components.project-select-list-item.tooltips.open-in-editor')"
+          icon-left="open_in_browser"
+          @click="openInEditor(projectCurrent)"
+        />
+
+        <VueDropdownButton
           v-if="projectCurrent.homepage"
           :href="projectCurrent.homepage"
           :label="$t('org.vue.components.top-bar.homepage')"
@@ -72,6 +78,7 @@ import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import PROJECTS from '../graphql/projects.gql'
 import PROJECT_OPEN from '../graphql/projectOpen.gql'
 import PROJECT_SET_FAVORITE from '../graphql/projectSetFavorite.gql'
+import OPEN_IN_EDITOR from '../graphql/fileOpenInEditor.gql'
 
 export default {
   apollo: {
@@ -112,6 +119,17 @@ export default {
           }
         })
       }
+    },
+
+    async openInEditor (project) {
+      await this.$apollo.mutate({
+        mutation: OPEN_IN_EDITOR,
+        variables: {
+          input: {
+            file: project.path
+          }
+        }
+      })
     }
   }
 }

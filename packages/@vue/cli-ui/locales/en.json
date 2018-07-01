@@ -93,7 +93,8 @@
         "project-select-list-item": {
           "tooltips": {
             "favorite": "Toggle favorite",
-            "delete": "Remove from list"
+            "delete": "Remove from list",
+            "open-in-editor": "Open in editor"
           }
         },
         "project-plugin-item": {
