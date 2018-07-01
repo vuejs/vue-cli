@@ -26,6 +26,15 @@
       </div>
       <div class="actions">
         <VueButton
+          v-if="project.homepage"
+          :href="project.homepage"
+          target="_blank"
+          class="icon-button"
+          icon-left="open_in_new"
+          v-tooltip="project.homepage"
+          @click.stop
+        />
+        <VueButton
           class="icon-button"
           icon-left="close"
           v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.delete')"

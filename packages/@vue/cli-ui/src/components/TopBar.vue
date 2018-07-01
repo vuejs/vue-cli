@@ -16,6 +16,14 @@
         >
           {{ $t('org.vue.components.project-select-list-item.tooltips.favorite') }}
         </VueSwitch>
+
+        <VueDropdownButton
+          v-if="projectCurrent.homepage"
+          :href="projectCurrent.homepage"
+          :label="$t('org.vue.components.top-bar.homepage')"
+          target="_blank"
+          icon-left="open_in_new"
+        />
       </template>
 
       <div class="dropdown-separator"/>

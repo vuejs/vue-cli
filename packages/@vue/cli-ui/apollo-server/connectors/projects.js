@@ -8,6 +8,7 @@ const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
 const { clearModule } = require('@vue/cli/lib/util/module')
+const parseGitConfig = require('parse-git-config')
 // Connectors
 const progress = require('./progress')
 const cwd = require('./cwd')
@@ -20,6 +21,7 @@ const getContext = require('../context')
 // Utils
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
+const { getHttpsGitURL } = require('../util/strings')
 
 const PROGRESS_ID = 'project-create'
 
@@ -414,6 +416,20 @@ function getType (project) {
   return !project.type ? 'vue' : project.type
 }
 
+function getHomepage (project, context) {
+  const gitConfigPath = path.join(project.path, '.git', 'config')
+  if (fs.existsSync(gitConfigPath)) {
+    const gitConfig = parseGitConfig.sync({ path: gitConfigPath })
+    const gitRemoteUrl = gitConfig['remote "origin"']
+    if (gitRemoteUrl) {
+      return getHttpsGitURL(gitRemoteUrl.url)
+    }
+  }
+
+  const pkg = folders.readPackage(project.path, context)
+  return pkg.homepage
+}
+
 // Open last project
 async function autoOpenLastProject () {
   const context = getContext()
@@ -446,5 +462,6 @@ module.exports = {
   setFavorite,
   initCreator,
   removeCreator,
-  getType
+  getType,
+  getHomepage
 }
