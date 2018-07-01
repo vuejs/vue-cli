@@ -23,6 +23,17 @@ module.exports = api => {
     'modern-mode': false
   }
 
+  // Init data
+  api.onProjectOpen(setup)
+  api.onPluginReload(setup)
+
+  function setup () {
+    for (const key of ['serve', 'build', 'build-modern']) {
+      setupSharedData(key)
+    }
+    setupCommonData()
+  }
+
   // Called when opening a project
   function setupSharedData (mode) {
     resetSharedData(mode)
@@ -140,14 +151,6 @@ module.exports = api => {
       }
     }
   }
-
-  // Init data
-  api.onProjectOpen(() => {
-    for (const key of ['serve', 'build', 'build-modern']) {
-      setupSharedData(key)
-    }
-    setupCommonData()
-  })
 
   // Tasks
   const views = {

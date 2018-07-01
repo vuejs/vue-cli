@@ -121,9 +121,9 @@ function resetPluginApi (context) {
     const projects = require('./projects')
     const project = projects.getCurrent(context)
     if (!project) return
+    projectId = project.id
+    pluginApi.project = project
     if (projectId !== project.id) {
-      projectId = project.id
-      pluginApi.project = project
       callHook('projectOpen', [project, projects.getLast(context)], context)
     } else {
       callHook('pluginReload', [project], context)
