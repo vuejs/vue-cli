@@ -239,10 +239,13 @@ export default {
   computed: {
     currentViewComponent () {
       if (this.currentView !== '_output') {
-        const id = this.task.views.find(
+        const view = this.task.views.find(
           view => view.id === this.currentView
-        ).component
-        return id
+        )
+        if (view) {
+          const id = view.component
+          return id
+        }
       }
     }
   },
