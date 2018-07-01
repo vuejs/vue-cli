@@ -96,7 +96,7 @@ export default {
 
     progress () {
       const raw = this.rawProgress
-      return raw && Object.keys(raw).length ? raw : { unknown: 0 }
+      return raw && Object.keys(raw).length ? raw : { [this.mode]: 0 }
     }
   }
 }
