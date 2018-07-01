@@ -43,8 +43,10 @@ export default {
       if (Array.isArray(parent)) {
         parent.push(child)
         return parent
+      } else if (parent) {
+        return [parent, child]
       }
-      return [parent, child]
+      return child
     }
   }
 }
