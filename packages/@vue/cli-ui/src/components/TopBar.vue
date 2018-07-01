@@ -62,6 +62,8 @@ export default {
 
   methods: {
     async openProject (project) {
+      this.$bus('quickOpenProject', project)
+
       await this.$apollo.mutate({
         mutation: PROJECT_OPEN,
         variables: {

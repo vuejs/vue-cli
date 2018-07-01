@@ -5,6 +5,7 @@ const channels = require('../channels')
 // Connectors
 const tasks = require('../connectors/tasks')
 const plugins = require('../connectors/plugins')
+const projects = require('../connectors/projects')
 
 exports.types = gql`
 extend type Query {
@@ -37,6 +38,7 @@ type Task implements DescribedEntity {
   views: [TaskView]
   defaultView: String
   plugin: Plugin
+  project: Project
 }
 
 enum TaskStatus {
@@ -69,7 +71,8 @@ type TaskView {
 exports.resolvers = {
   Task: {
     prompts: (task, args, context) => tasks.getPrompts(task.id, context),
-    plugin: (task, args, context) => plugins.findOne(task.pluginId, context)
+    plugin: (task, args, context) => plugins.findOne(task.pluginId, context),
+    project: (task, args, context) => projects.findByPath(task.path, context)
   },
 
   Query: {

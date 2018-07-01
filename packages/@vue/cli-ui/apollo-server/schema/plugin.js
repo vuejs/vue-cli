@@ -2,11 +2,13 @@ const gql = require('graphql-tag')
 // Subs
 const channels = require('../channels')
 // Connectors
+const cwd = require('../connectors/cwd')
 const plugins = require('../connectors/plugins')
 
 exports.types = gql`
 extend type Query {
   pluginInstallation: PluginInstallation
+  plugins: [Plugin]
   plugin (id: ID!): Plugin
 }
 
@@ -73,6 +75,7 @@ exports.resolvers = {
 
   Query: {
     pluginInstallation: (root, args, context) => plugins.getInstallation(context),
+    plugins: (root, args, context) => plugins.list(cwd.get(), context),
     plugin: (root, { id }, context) => plugins.findOne(id, context)
   },
 

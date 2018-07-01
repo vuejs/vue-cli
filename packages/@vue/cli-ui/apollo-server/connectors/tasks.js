@@ -50,6 +50,7 @@ function list ({ file = null, api = true } = {}, context) {
           index: list.findIndex(t => t.id === id),
           prompts: [],
           views: [],
+          path: file,
           ...moreData
         }
       }
@@ -65,6 +66,7 @@ function list ({ file = null, api = true } = {}, context) {
             index: list.findIndex(t => t.id === id),
             prompts: [],
             views: [],
+            path: file,
             uiOnly: true,
             ...task
           }

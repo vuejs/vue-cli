@@ -9,7 +9,7 @@
       >
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
-            v-if="loading && !data"
+            v-if="loading && (!data || !data.tasks)"
             class="overlay"
           />
 
@@ -34,10 +34,13 @@
 import RestoreRoute from '../mixins/RestoreRoute'
 
 import TASK_CHANGED from '../graphql/taskChanged.gql'
+import TASKS from '../graphql/tasks.gql'
 
 export default {
   mixins: [
-    RestoreRoute()
+    RestoreRoute({
+      baseRoute: { name: 'project-tasks' }
+    })
   ],
 
   metaInfo () {
@@ -54,8 +57,20 @@ export default {
     }
   },
 
+  bus: {
+    quickOpenProject (project) {
+      this.$apollo.getClient().writeQuery({
+        query: TASKS,
+        data: {
+          tasks: null
+        }
+      })
+    }
+  },
+
   methods: {
     generateItems (tasks) {
+      if (!tasks) return []
       return tasks.map(
         task => ({
           route: {

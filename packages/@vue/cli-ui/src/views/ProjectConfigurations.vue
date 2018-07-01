@@ -10,7 +10,7 @@
       >
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
-            v-if="loading && !data"
+            v-if="loading && (!data || !data.configurations)"
             class="overlay"
           />
 
@@ -34,9 +34,13 @@
 <script>
 import RestoreRoute from '../mixins/RestoreRoute'
 
+import CONFIGS from '../graphql/configurations.gql'
+
 export default {
   mixins: [
-    RestoreRoute()
+    RestoreRoute({
+      baseRoute: { name: 'project-configurations' }
+    })
   ],
 
   metaInfo () {
@@ -45,8 +49,20 @@ export default {
     }
   },
 
+  bus: {
+    quickOpenProject (project) {
+      this.$apollo.getClient().writeQuery({
+        query: CONFIGS,
+        data: {
+          configurations: null
+        }
+      })
+    }
+  },
+
   methods: {
     generateItems (configurations) {
+      if (!configurations) return []
       return configurations.map(
         configuration => ({
           route: {

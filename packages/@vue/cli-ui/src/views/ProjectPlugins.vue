@@ -4,7 +4,7 @@
       :title="$t('org.vue.views.project-plugins.title')"
       class="limit-width"
     >
-      <template v-if="projectCurrent.type === 'vue'" slot="actions">
+      <template slot="actions">
         <VueButton
           icon-left="add"
           :label="$t('org.vue.views.project-plugins.button')"
@@ -29,20 +29,19 @@
       </template>
 
       <ApolloQuery
-        v-if="projectCurrent.type === 'vue'"
-        :query="require('../graphql/projectPlugins.gql')"
+        :query="require('../graphql/plugins.gql')"
       >
         <template slot-scope="{ result: { data, loading } }">
           <div class="cta-text">{{ $t('org.vue.views.project-plugins.heading') }}</div>
 
           <VueLoadingIndicator
-            v-if="loading && !data"
+            v-if="loading && (!data || !data.plugins)"
             class="overlay"
           />
 
           <div v-else-if="data" class="plugins">
             <ProjectPluginItem
-              v-for="plugin of data.projectCurrent.plugins"
+              v-for="plugin of data.plugins"
               :key="plugin.id"
               :plugin="plugin"
             />
@@ -59,6 +58,7 @@
 <script>
 import PLUGINS_UPDATE from '../graphql/pluginsUpdate.gql'
 import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
+import PLUGINS from '../graphql/plugins.gql'
 
 export default {
   name: 'ProjectPlugins',
@@ -71,6 +71,17 @@ export default {
 
   apollo: {
     projectCurrent: PROJECT_CURRENT
+  },
+
+  bus: {
+    quickOpenProject (project) {
+      this.$apollo.getClient().writeQuery({
+        query: PLUGINS,
+        data: {
+          plugins: null
+        }
+      })
+    }
   },
 
   methods: {

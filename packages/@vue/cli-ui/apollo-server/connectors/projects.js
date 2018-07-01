@@ -38,6 +38,14 @@ function list (context) {
   return projects
 }
 
+function findOne (id, context) {
+  return context.db.get('projects').find({ id }).value()
+}
+
+function findByPath (file, context) {
+  return context.db.get('projects').find({ path: file }).value()
+}
+
 function autoClean (projects, context) {
   let result = []
   for (const project of projects) {
@@ -352,9 +360,7 @@ async function importProject (input, context) {
 }
 
 async function open (id, context) {
-  const project = context.db.get('projects').find({
-    id
-  }).value()
+  const project = findOne(id, context)
 
   if (!project) {
     log('Project not found', id)
@@ -399,10 +405,6 @@ function resetCwd (context) {
   }
 }
 
-function findOne (id, context) {
-  return context.db.get('projects').find({ id }).value()
-}
-
 function setFavorite ({ id, favorite }, context) {
   context.db.get('projects').find({ id }).assign({ favorite }).write()
   return findOne(id, context)
@@ -429,6 +431,8 @@ autoOpenLastProject()
 
 module.exports = {
   list,
+  findOne,
+  findByPath,
   getCurrent,
   getLast,
   getCreation,

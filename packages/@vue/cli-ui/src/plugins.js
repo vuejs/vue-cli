@@ -10,6 +10,7 @@ import PluginAction from './util/plugin-action'
 import ClientState from './mixins/ClientState'
 import SetSize from './util/set-size'
 import Focus from './util/focus'
+import Bus from './util/bus'
 
 Vue.use(InstantSearch)
 Vue.use(VueMeta)
@@ -33,6 +34,7 @@ Vue.use(VueUi)
 Vue.use(PortalVue)
 Vue.use(SharedData)
 Vue.use(PluginAction)
+Vue.use(Bus)
 
 for (const key in Filters) {
   Vue.filter(key, Filters[key])
