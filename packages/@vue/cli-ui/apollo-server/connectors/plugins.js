@@ -236,14 +236,14 @@ async function getDescription ({ id }, context) {
 async function getLogo ({ id }, context) {
   const cached = logoCache.get(id)
   if (cached) {
-    return `data:image/png;base64,${cached}`
+    return cached
   }
   const folder = getPath(id)
   const file = path.join(folder, 'logo.png')
   if (fs.existsSync(file)) {
-    const data = fs.readFileSync(file, { encoding: 'base64' })
+    const data = `/_plugin-logo/${encodeURIComponent(id)}`
     logoCache.set(id, data)
-    return `data:image/png;base64,${data}`
+    return data
   }
   return null
 }
@@ -488,16 +488,25 @@ async function callAction ({ id, params }, context) {
   return { id, params, results, errors }
 }
 
-function serve (req, res) {
-  const { id, 0: file } = req.params
-  const basePath = id === '.' ? cwd.get() : getPath(decodeURIComponent(id))
+function serveFile (projectId, file, res) {
+  const basePath = projectId === '.' ? cwd.get() : getPath(decodeURIComponent(projectId))
   if (basePath) {
-    res.sendFile(path.join(basePath, 'ui-public', file))
+    res.sendFile(path.join(basePath, file))
     return
   }
 
   res.status(404)
-  res.send(`Addon ${id} not found in loaded addons. Try opening a vue-cli project first?`)
+  res.send(`Addon ${projectId} not found in loaded addons. Try opening a vue-cli project first?`)
+}
+
+function serve (req, res) {
+  const { id, 0: file } = req.params
+  serveFile(id, path.join('ui-public', file), res)
+}
+
+function serveLogo (req, res) {
+  const { id } = req.params
+  serveFile(id, 'logo.png', res)
 }
 
 module.exports = {
@@ -517,5 +526,6 @@ module.exports = {
   finishInstall,
   callAction,
   callHook,
-  serve
+  serve,
+  serveLogo
 }

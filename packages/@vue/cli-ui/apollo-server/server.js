@@ -12,6 +12,7 @@ module.exports = app => {
   app.use(express.static(distPath))
   app.use('/public', express.static(publicPath))
   app.use('/_plugin/:id/*', plugins.serve)
+  app.use('/_plugin-logo/:id', plugins.serveLogo)
   app.use('/_addon/:id/*', clientAddons.serve)
   app.use(fallback(path.join(distPath, 'index.html')))
 }
