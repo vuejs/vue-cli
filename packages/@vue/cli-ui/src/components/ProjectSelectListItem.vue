@@ -33,7 +33,7 @@
           target="_blank"
           class="icon-button"
           icon-left="open_in_new"
-          v-tooltip="project.homepage"
+          v-tooltip="$t('org.vue.components.top-bar.homepage')"
           @click.stop
         />
 
