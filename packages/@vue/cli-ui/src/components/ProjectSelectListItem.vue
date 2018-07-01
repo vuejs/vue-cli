@@ -12,9 +12,17 @@
       </div>
       <div class="info">
         <ListItemInfo
-          :name="project.name"
           :description="project.path"
-        />
+        >
+          <div slot="name" class="name">
+            <span>{{ project.name }}</span>
+
+            <ProjectTasksDropdown
+              class="bullet-menu"
+              :tasks="project.tasks"
+            />
+          </div>
+        </ListItemInfo>
       </div>
       <div class="actions">
         <VueButton
@@ -66,6 +74,13 @@ export default {
 
   >>> > *
     space-between-x($padding-item)
+
+.name
+  h-box()
+  align-items center
+
+.bullet-menu
+  margin-left 6px
 
 .project-select-list-item
   &.open

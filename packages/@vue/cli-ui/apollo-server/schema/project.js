@@ -2,6 +2,7 @@ const gql = require('graphql-tag')
 // Connectors
 const projects = require('../connectors/projects')
 const plugins = require('../connectors/plugins')
+const tasks = require('../connectors/tasks')
 
 exports.types = gql`
 extend type Query {
@@ -29,6 +30,7 @@ type Project {
   path: String!
   favorite: Int
   plugins: [Plugin]
+  tasks: [Task]
 }
 
 input ProjectCreateInput {
@@ -72,7 +74,8 @@ type Feature implements DescribedEntity {
 
 exports.resolvers = {
   Project: {
-    plugins: (project, args, context) => plugins.list(project.path, context)
+    plugins: (project, args, context) => plugins.list(project.path, context),
+    tasks: (project, args, context) => tasks.list({ file: project.path, api: false }, context)
   },
 
   Query: {

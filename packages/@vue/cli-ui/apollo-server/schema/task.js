@@ -73,7 +73,7 @@ exports.resolvers = {
   },
 
   Query: {
-    tasks: (root, args, context) => tasks.list(context),
+    tasks: (root, args, context) => tasks.list(undefined, context),
     task: (root, { id }, context) => tasks.findOne(id, context)
   },
 

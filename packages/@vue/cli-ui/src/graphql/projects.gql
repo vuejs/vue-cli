@@ -3,5 +3,10 @@
 query projects {
   projects {
     ...project
+    tasks {
+      id
+      name
+      status
+    }
   }
 }

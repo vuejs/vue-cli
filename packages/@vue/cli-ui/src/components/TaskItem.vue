@@ -22,6 +22,8 @@
         :description="(task.status === 'idle' && $t(task.description)) || status"
         :selected="selected"
       />
+
+      <slot/>
     </div>
   </div>
 </template>

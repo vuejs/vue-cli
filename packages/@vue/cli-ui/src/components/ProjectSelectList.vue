@@ -4,7 +4,7 @@
       :query="require('@/graphql/projects.gql')"
       fetch-policy="network-only"
     >
-      <template slot-scope="{ result: { data } }">
+      <template slot-scope="{ result: { data, loading } }">
         <template v-if="data">
           <div v-if="data.projects.length">
             <ListFilter
@@ -48,6 +48,11 @@
             <div>{{ $t('org.vue.components.project-select-list.empty') }}</div>
           </div>
         </template>
+
+        <VueLoadingIndicator
+          v-else-if="loading"
+          class="overlay"
+        />
       </template>
     </ApolloQuery>
   </div>
@@ -119,4 +124,6 @@ export default {
 .project-select-list
   height 100%
   overflow-y auto
+  position relative
+  min-height 400px
 </style>

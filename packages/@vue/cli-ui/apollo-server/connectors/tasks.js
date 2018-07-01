@@ -19,8 +19,8 @@ const VIEW_ID = 'vue-project-tasks'
 
 const tasks = new Map()
 
-function getTasks () {
-  const file = cwd.get()
+function getTasks (file = null) {
+  if (!file) file = cwd.get()
   let list = tasks.get(file)
   if (!list) {
     list = []
@@ -29,20 +29,20 @@ function getTasks () {
   return list
 }
 
-function list (context) {
-  let list = getTasks()
-  const file = cwd.get()
+function list ({ file = null, api = true } = {}, context) {
+  if (!file) file = cwd.get()
+  let list = getTasks(file)
   const pkg = folders.readPackage(file, context)
   if (pkg.scripts) {
     const existing = new Map()
 
     // Get current valid tasks in project `package.json`
-    const currentTasks = Object.keys(pkg.scripts).map(
+    let currentTasks = Object.keys(pkg.scripts).map(
       name => {
         const id = `${file}:${name}`
         existing.set(id, true)
         const command = pkg.scripts[name]
-        const moreData = plugins.getApi().getDescribedTask(command)
+        const moreData = api ? plugins.getApi().getDescribedTask(command) : null
         return {
           id,
           name,
@@ -53,20 +53,24 @@ function list (context) {
           ...moreData
         }
       }
-    ).concat(plugins.getApi().addedTasks.map(
-      task => {
-        const id = `${file}:${task.name}`
-        existing.set(id, true)
-        return {
-          id,
-          index: list.findIndex(t => t.id === id),
-          prompts: [],
-          views: [],
-          uiOnly: true,
-          ...task
+    )
+
+    if (api) {
+      currentTasks = currentTasks.concat(plugins.getApi().addedTasks.map(
+        task => {
+          const id = `${file}:${task.name}`
+          existing.set(id, true)
+          return {
+            id,
+            index: list.findIndex(t => t.id === id),
+            prompts: [],
+            views: [],
+            uiOnly: true,
+            ...task
+          }
         }
-      }
-    ))
+      ))
+    }
 
     // Process existing tasks
     const existingTasks = currentTasks.filter(
@@ -113,9 +117,10 @@ function list (context) {
 }
 
 function findOne (id, context) {
-  return getTasks().find(
-    t => t.id === id
-  )
+  for (const [, list] of tasks) {
+    const result = list.find(t => t.id === id)
+    if (result) return result
+  }
 }
 
 function getSavedData (id, context) {
