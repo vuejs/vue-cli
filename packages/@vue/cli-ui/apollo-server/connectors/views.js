@@ -11,7 +11,7 @@ function createViewsSet () {
     {
       id: 'vue-project-plugins',
       name: 'project-plugins',
-      icon: 'widgets',
+      icon: 'extension',
       tooltip: 'org.vue.components.project-nav.tooltips.plugins'
     },
     {

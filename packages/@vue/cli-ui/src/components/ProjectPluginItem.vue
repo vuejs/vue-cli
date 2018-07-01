@@ -3,7 +3,7 @@
     <div class="content">
       <ItemLogo
         :image="pluginLogo && pluginLogo.logo"
-        fallback-icon="widgets"
+        fallback-icon="extension"
       />
 
       <ListItemInfo

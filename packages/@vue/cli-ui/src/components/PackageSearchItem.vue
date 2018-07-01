@@ -8,6 +8,7 @@
     <ItemLogo
       :image="logoUrl"
       :selected="selected"
+      fallback-icon="extension"
     />
 
     <ListItemInfo
