@@ -34,7 +34,7 @@
     &,
     &:hover
       background lighten($vue-ui-color-dark, 10%) !important
-      color $md-white
+      color $md-white !important
       /deep/ > .content > .button-icon
         svg
           fill @color
