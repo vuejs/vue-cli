@@ -30,22 +30,28 @@
           v-for="task of tasks"
           :key="task.id"
           :task="task"
+          @click.native="openTask(task)"
         >
           <VueButton
             v-if="task.status !== 'running'"
             icon-left="play_arrow"
             class="icon-button"
             v-tooltip="$t('org.vue.views.project-task-details.actions.play')"
-            @click="runTask(task)"
+            @click.stop="openTask(task, true)"
           />
           <VueButton
             v-else
             icon-left="stop"
             class="icon-button"
             v-tooltip="$t('org.vue.views.project-task-details.actions.stop')"
-            @click="stopTask(task)"
+            @click.stop="stopTask(task)"
           />
         </TaskItem>
+
+        <VueLoadingIndicator
+          v-if="loading"
+          class="overlay"
+        />
       </div>
     </div>
   </VueDropdown>
@@ -55,6 +61,8 @@
 import TASK_CHANGED from '../graphql/taskChanged.gql'
 import TASK_RUN from '../graphql/taskRun.gql'
 import TASK_STOP from '../graphql/taskStop.gql'
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
+import PROJECT_OPEN from '../graphql/projectOpen.gql'
 
 export default {
   props: {
@@ -69,7 +77,15 @@ export default {
     }
   },
 
+  data () {
+    return {
+      loading: false
+    }
+  },
+
   apollo: {
+    projectCurrent: PROJECT_CURRENT,
+
     $subscribe: {
       taskChanged: {
         query: TASK_CHANGED
@@ -99,13 +115,31 @@ export default {
   },
 
   methods: {
-    runTask (task) {
-      this.$apollo.mutate({
-        mutation: TASK_RUN,
-        variables: {
-          id: task.id
-        }
+    async openTask (task, run = false) {
+      this.loading = true
+
+      if (task.project.id !== this.projectCurrent.id) {
+        await this.$apollo.mutate({
+          mutation: PROJECT_OPEN,
+          variables: {
+            id: task.project.id
+          }
+        })
+      }
+
+      this.$router.push({
+        name: 'project-tasks',
+        query: { id: task.id }
       })
+
+      if (run) {
+        await this.$apollo.mutate({
+          mutation: TASK_RUN,
+          variables: {
+            id: task.id
+          }
+        })
+      }
     },
 
     stopTask (task) {

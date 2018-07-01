@@ -7,6 +7,9 @@ query projects {
       id
       name
       status
+      project {
+        id
+      }
     }
   }
 }

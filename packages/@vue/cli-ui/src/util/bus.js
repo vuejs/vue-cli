@@ -41,10 +41,19 @@ export default {
 
     Vue.config.optionMergeStrategies.bus = (parent, child, vm) => {
       if (Array.isArray(parent)) {
-        parent.push(child)
-        return parent
-      } else if (parent) {
+        if (Array.isArray(child)) {
+          return parent.concat(child)
+        } else {
+          parent.push(child)
+          return parent
+        }
+      } else if (Array.isArray(child)) {
+        child.push(parent)
+        return child
+      } else if (parent && child) {
         return [parent, child]
+      } else if (parent) {
+        return parent
       }
       return child
     }
