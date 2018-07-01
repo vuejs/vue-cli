@@ -32,7 +32,7 @@ npx vue-cli-service serve
 ## vue-cli-service serve
 
 ```
-Usage: vue-cli-service serve [options]
+Usage: vue-cli-service serve [options] [entry]
 
 Options:
 
