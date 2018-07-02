@@ -160,7 +160,6 @@ export default {
 
   mounted () {
     requestAnimationFrame(() => {
-      this.$refs.searchInput.focus()
       this.checkTab()
     })
   },

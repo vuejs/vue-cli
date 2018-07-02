@@ -113,6 +113,12 @@ export default {
     }
   },
 
+  mounted () {
+    requestAnimationFrame(() => {
+      this.$refs.searchInput.focus()
+    })
+  },
+
   methods: {
     close () {
       this.$emit('close')
