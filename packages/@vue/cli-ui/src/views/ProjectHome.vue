@@ -6,10 +6,13 @@
     }"
   >
     <TopBar />
-    <ProjectNav/>
 
-    <div v-if="ready" class="content">
-      <router-view/>
+    <div class="panes">
+      <ProjectNav/>
+
+      <div v-if="ready" class="content vue-ui-disable-scroll">
+        <router-view/>
+      </div>
     </div>
 
     <ProgressScreen progress-id="__plugins__"/>
@@ -41,22 +44,28 @@ export default {
 @import "~@/style/imports"
 
 .project-home
-  display grid
-  grid-template-columns 46px 1fr
-  grid-template-rows auto 1fr
-  grid-template-areas "topbar topbar" "side-left content"
+  display flex
+  flex-direction column
 
   &.wide
-    grid-template-columns 180px 1fr
+    .project-nav
+      width 180px
 
-.top-bar
-  grid-area topbar
+.panes
+  flex auto 1 1
+  height 100%
+  display flex
+
+.top-bar,
+.project-nav
+  flex auto 0 0
 
 .project-nav
-  grid-area side-left
+  width 46px
 
 .content
-  grid-area content
+  flex auto 1 1
+  width 0
   overflow-x hidden
   overflow-y auto
 
