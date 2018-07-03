@@ -1,6 +1,6 @@
 # UI API
 
-这个 cli-ui 暴露一个 API，允许增加项目配置和任务，也可以分享数据和在进程见进行交流。
+这个 cli-ui 暴露一个 API，允许增强项目的配置和任务，也可以分享数据和在进程间进行交流。
 
 ![UI 插件架构](/vue-cli-ui-schema.png)
 
@@ -8,7 +8,7 @@
 
 在每个安装好的 vue-cli 插件里，cli-ui 都会尝试从其插件的根目录加载一个可选的 `ui.js` 文件。你也可以在用户项目的根目录尝试加载一个 `vue-cli-ui.js` 文件以使得 UI 可以基于每个项目的基础进行手动扩展 (对于快速创建插件原型来说也非常有用)。注意你也可以使用文件夹 (例如 `ui/index.js`)。
 
-该文件应该导出一个函数，函数会以 API 对象作为第一个形参：
+该文件应该导出一个函数，函数会以 API 对象作为第一个参数：
 
 ```js
 module.exports = api => {
@@ -17,10 +17,10 @@ module.exports = api => {
 ```
 
 ::: warning 警告
-当在“项目插件 (Project plugins)”试图中获取插件列表时，这些文件将会被重新加载。点击 UI 左侧边栏导航“项目插件 (Project plugins)”按钮可以运用更改。
+当试图在“项目插件 (Project plugins)”中获取插件列表时，这些文件将会被重新加载。点击 UI 左侧边栏导航“项目插件 (Project plugins)”按钮可以应用更改。
 :::
 
-这里是一个 vue-cli 插件使用 UI API 的文件夹结构示例：
+这里是一个使用 UI API 的 vue-cli 插件的文件夹结构示例：
 
 ```
 - vue-cli-plugin-test
@@ -79,7 +79,7 @@ api.describeConfig({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (查阅 [logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (见 [Logo](#logo))。
 
 ### 配置文件
 
@@ -259,9 +259,9 @@ api.describeConfig({
 })
 ```
 
-形参：
+参数：
 
-- `prompts`: 当前提示符们的运行时对象 (马上有详细解释)
+- `prompts`: 当前提示符们的运行时对象 (见下方)
 - `answers`: 来自用户输入的回答数据
 - `data`: 从配置文件读取的只读的初始化数据
 - `files`: 被找到的文件的描述器 (`{ type: 'json', path: '...' }`)
@@ -288,7 +288,7 @@ api.describeConfig({
   valueChanged: false,
   error: null,
   tabId: null,
-  // 原始的询问提示符对象
+  // 原始的 inquirer 提示符对象
   raw: data
 }
 ```
