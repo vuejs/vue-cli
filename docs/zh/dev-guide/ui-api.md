@@ -1,24 +1,26 @@
 # UI API
 
-The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
+这个 cli-ui 暴露一个 API，允许增强项目的配置和任务，也可以分享数据和在进程间进行交流。
 
-![UI Plugin architecture](/vue-cli-ui-schema.png)
+![UI 插件架构](/vue-cli-ui-schema.png)
 
-## UI files
+## UI 文件
 
-Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. It will also try to load a `vue-cli-ui.js` file in the user project root so the UI can be manually extended on a per-project basis (also useful to quickly prototype a plugin). Note that you can also use folders (for example `ui/index.js`).
+在每个安装好的 vue-cli 插件里，cli-ui 都会尝试从其插件的根目录加载一个可选的 `ui.js` 文件。你也可以在用户项目的根目录尝试加载一个 `vue-cli-ui.js` 文件以使得 UI 可以基于每个项目的基础进行手动扩展 (对于快速创建插件原型来说也非常有用)。注意你也可以使用文件夹 (例如 `ui/index.js`)。
 
-The file should export a function which gets the api object as argument:
+该文件应该导出一个函数，函数会以 API 对象作为第一个参数：
 
 ```js
 module.exports = api => {
-  // Use the API here...
+  // 在这里使用 API...
 }
 ```
 
-**⚠️ The files will be reloaded when fetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left in the UI.**
+::: warning 警告
+当试图在“项目插件 (Project plugins)”中获取插件列表时，这些文件将会被重新加载。点击 UI 左侧边栏导航“项目插件 (Project plugins)”按钮可以应用更改。
+:::
 
-Here is an example folder structure for a vue-cli plugin using the UI API:
+这里是一个使用 UI API 的 vue-cli 插件的文件夹结构示例：
 
 ```
 - vue-cli-plugin-test
@@ -30,71 +32,71 @@ Here is an example folder structure for a vue-cli plugin using the UI API:
   - logo.png
 ```
 
-## Dev mode
+## 开发模式
 
-While building your plugin, you may want to run the cli-ui in Dev mode, so it will output useful logs to you:
+当构建你自己的插件时，你可能想在开发环境下运行 cli-ui，所以这样运行会输出较为实用的日志：
 
 ```
 vue ui --dev
 ```
 
-Or:
+或：
 
 ```
 vue ui -D
 ```
 
-## Project configurations
+## 项目配置
 
-![Configuration ui](/config-ui.png)
+![配置 UI](/config-ui.png)
 
-You can add a project configuration with the `api.describeConfig` method.
+你可以通过 `api.describeConfig` 方法添加一个项目配置。
 
-First you need to pass some informations:
+首先你需要传入一些信息：
 
 ```js
 api.describeConfig({
-  // Unique ID for the config
+  // 唯一的配置 ID
   id: 'eslintrc',
-  // Displayed name
+  // 展示名称
   name: 'ESLint configuration',
-  // Shown below the name
+  // 展示在名称下方的描述
   description: 'Error checking & Code quality',
-  // "More info" link
+  // “更多信息 (More info)”链接
   link: 'https://eslint.org'
 })
 ```
 
-### Config icon
+### 配置图标
 
-It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
+可以是一个 [Material 图标](https://material.io/tools/icons)代码或一个自定义的图片 (查阅[公共静态文件](#公共静态文件))：
 
 ```js
 api.describeConfig({
   /* ... */
-  // Config icon
+  // 配置图标
   icon: 'application_settings'
 })
 ```
 
-If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
+如果你没有定义图标，那就展示该插件可能存在的 logo (见 [Logo](#logo))。
 
-### Config files
+### 配置文件
 
-By default, a configuration UI might read and write to one or more configuration files, for example both `.eslintrc.js` and `vue.config.js`.
+默认情况下，配置 UI 可能会读写一个或多个配置文件，例如 `.eslintrc` 和 `vue.config.js`。
 
-You can provide what are the possible files to be detected in the user project:
+你可以提供可能需要在用户项目中检测的文件：
 
 ```js
 api.describeConfig({
   /* ... */
-  // All possible files for this config
+  // 该配置所有可能的文件
   files: {
     // eslintrc.js
     eslint: {
       js: ['.eslintrc.js'],
       json: ['.eslintrc', '.eslintrc.json'],
-      // Will read from `package.json`
+      // 会从 `package.json` 读取
       package: 'eslintConfig'
     },
     // vue.config.js
@@ -105,30 +107,30 @@ api.describeConfig({
 })
 ```
 
-Supported types: `json`, `yaml`, `js`, `package`. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
+支持的类型有：`json`、`yaml`、`js`、`package`。这个顺序是很重要的：如果这项配置不存在，则会创建列表中的第一个文件。
 
-### Display config prompts
+### 展示配置提示符
 
-Use the `onRead` hook to return a list of prompts to be displayed for the configuration:
+使用 `onRead` 钩子来返回一个提示符列表，用以配置展示：
 
 ```js
 api.describeConfig({
   /* ... */
   onRead: ({ data, cwd }) => ({
     prompts: [
-      // Prompt objects
+      // 提示符对象
     ]
   })
 })
 ```
 
-Those prompts will be displayed in the configuration details pane.
+这些提示符会展示在配置的详情面板中。
 
-See [Prompts](#prompts) for more info.
+查阅[提示符](#提示符)了解更多信息。
 
-The `data` object contains the JSON result of each config file content.
+这个 `data` 对象包含了每个配置文件内容的 JSON 结果。
 
-For example, let's say the user has the following `vue.config.js` in his project:
+例如，假设用户在其项目中的 `vue.config.js` 有以下内容：
 
 ```js
 module.exports = {
@@ -136,12 +138,12 @@ module.exports = {
 }
 ```
 
-We declare the config file in our plugin like this:
+我们在插件中像这样声明配置文件：
 
 ```js
 api.describeConfig({
   /* ... */
-  // All possible files for this config
+  // 该配置所有可能的文件
   files: {
     // vue.config.js
     vue: {
@@ -151,19 +153,19 @@ api.describeConfig({
 })
 ```
 
-Then the `data` object will be:
+则这个 `data` 对象会是：
 
 ```js
 {
-  // File
+  // 文件
   vue: {
-    // File data
+    // 文件数据
     lintOnSave: false
   }
 }
 ```
 
-Multiple files example: if we add the following `eslintrc.js` file in the user project:
+多个文件的例子：如果我们在用户的项目中添加以下 `eslintrc.js` 文件：
 
 ```js
 module.exports = {
@@ -175,18 +177,18 @@ module.exports = {
 }
 ```
 
-And change the `files` option in our plugin to this:
+那么在我们的插件中将 `files` 选项改变成为：
 
 ```js
 api.describeConfig({
   /* ... */
-  // All possible files for this config
+  // 该配置所有可能的文件
   files: {
     // eslintrc.js
     eslint: {
       js: ['.eslintrc.js'],
       json: ['.eslintrc', '.eslintrc.json'],
-      // Will read from `package.json`
+      // 会从 `package.json` 读取
       package: 'eslintConfig'
     },
     // vue.config.js
@@ -197,7 +199,7 @@ api.describeConfig({
 })
 ```
 
-Then the `data` object will be:
+则这个 `data` 对象会是：
 
 ```js
 {
@@ -214,9 +216,9 @@ Then the `data` object will be:
 }
 ```
 
-### Configuration tabs
+### 配置选项卡
 
-You can organize the prompts into several tabs:
+你可以将这些提示符组织成为几个选项卡：
 
 ```js
 api.describeConfig({
@@ -226,17 +228,17 @@ api.describeConfig({
       {
         id: 'tab1',
         label: 'My tab',
-        // Optional
+        // 可选的
         icon: 'application_settings',
         prompts: [
-          // Prompt objects
+          // 提示符对象们
         ]
       },
       {
         id: 'tab2',
         label: 'My other tab',
         prompts: [
-          // Prompt objects
+          // 提示符对象们
         ]
       }
     ]
@@ -244,9 +246,9 @@ api.describeConfig({
 })
 ```
 
-### Save config changes
+### 保存配置变更
 
-Use the `onWrite` hook to write the data to the configuration file (or execute any nodejs code):
+使用 `onWrite` 钩子将数据写入配置文件 (或者执行任何 Node.js 代码)：
 
 ```js
 api.describeConfig({
@@ -257,16 +259,16 @@ api.describeConfig({
 })
 ```
 
-Arguments:
+参数：
 
-- `prompts`: current prompts runtime objects (see below)
-- `answers`: answers data from the user inputs
-- `data`: read-only initial data read from the config files
-- `files`: descriptors of the found files (`{ type: 'json', path: '...' }`)
-- `cwd`: current working directory
-- `api`: `onWrite API` (see below)
+- `prompts`: 当前提示符们的运行时对象 (见下方)
+- `answers`: 来自用户输入的回答数据
+- `data`: 从配置文件读取的只读的初始化数据
+- `files`: 被找到的文件的描述器 (`{ type: 'json', path: '...' }`)
+- `cwd`: 当前工作目录
+- `api`: `onWrite API` (见下方)
 
-Prompts runtime objects:
+提示符的运行时对象：
 
 ```js
 {
@@ -280,31 +282,31 @@ Prompts runtime objects:
   choices: null,
   visible: true,
   enabled: true,
-  // Current value (not filtered)
+  // 当前值 (未被过滤的)
   value: null,
-  // true if changed by user
+  // 如果用户修改过了则为 true
   valueChanged: false,
   error: null,
   tabId: null,
-  // Original inquirer prompt object
+  // 原始的 inquirer 提示符对象
   raw: data
 }
 ```
 
 `onWrite` API:
 
-- `assignData(fileId, newData)`: use `Object.assign` to update the config data before writing.
-- `setData(fileId, newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
-- `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provided (for example `JSON.parse`).
+- `assignData(fileId, newData)`: 在写入前使用 `Object.assign` 来更新配置文件。
+- `setData(fileId, newData)`: `newData` 的每个 key 在写入之前都将会被深设置在配置数据上 (或当值为 `undefined` 时被移除)。
+- `async getAnswer(id, mapper)`: 为一个给定的提示符 id 获取答复并通过可能提供了的 `mapper` 函数 (例如 `JSON.parse`) 进行 map 处理。
 
-Example (from the ESLint plugin):
+示例 (来自 ESLint 插件)：
 
 ```js
 api.describeConfig({
   // ...
 
   onWrite: async ({ api, prompts }) => {
-    // Update ESLint rules
+    // 更新 ESLint 规则
     const result = {}
     for (const prompt of prompts) {
       result[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
@@ -1180,7 +1182,7 @@ You can also open a page instead when the user activates the suggestion with `ac
 ```js
 api.addSuggestion({
   id: 'my-suggestion',
-  type: 'action', // Required 
+  type: 'action', // Required
   label: 'Add vue-router',
   // Open a new tab
   actionLink: 'https://vuejs.org/'
