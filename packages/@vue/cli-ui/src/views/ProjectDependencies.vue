@@ -5,6 +5,12 @@
       class="limit-width"
     >
       <template slot="actions">
+        <VueInput
+          v-model="search"
+          icon-left="search"
+          class="round"
+        />
+
         <VueButton
           icon-left="add"
           :label="$t('org.vue.views.project-dependencies.actions.install')"
@@ -36,32 +42,38 @@
             class="overlay"
           />
 
-          <template v-else-if="data && data.dependencies">
-            <ListFilter
-              v-for="type of ['dependencies', 'devDependencies']"
-              :key="type"
-              :list="data.dependencies"
-              :filter="item => item.type === type"
-            >
-              <template slot-scope="{ list }">
-                <div class="cta-text">{{ $t(`org.vue.views.project-dependencies.heading.${type}`) }}</div>
+          <ListFilter
+            v-else-if="data && data.dependencies"
+            :list="data.dependencies"
+            :filter="item => !search || item.id.includes(search)"
+          >
+            <template slot-scope="{ list }">
+              <ListFilter
+                v-for="type of ['dependencies', 'devDependencies']"
+                :key="type"
+                :list="list"
+                :filter="item => item.type === type"
+              >
+                <template slot-scope="{ list }" v-if="list.length">
+                  <div class="cta-text">{{ $t(`org.vue.views.project-dependencies.heading.${type}`) }}</div>
 
-                <ListSort
-                  :list="list"
-                  :compare="(a, b) => a.id.localeCompare(b.id)"
-                >
-                  <template slot-scope="{ list }">
-                    <ProjectDependencyItem
-                      v-for="dependency of list"
-                      :key="dependency.id"
-                      :dependency="dependency"
-                      @uninstall="openConfirmUninstall(dependency.id)"
-                    />
-                  </template>
-                </ListSort>
-              </template>
-            </ListFilter>
-          </template>
+                  <ListSort
+                    :list="list"
+                    :compare="(a, b) => a.id.localeCompare(b.id)"
+                  >
+                    <template slot-scope="{ list }">
+                      <ProjectDependencyItem
+                        v-for="dependency of list"
+                        :key="dependency.id"
+                        :dependency="dependency"
+                        @uninstall="openConfirmUninstall(dependency.id)"
+                      />
+                    </template>
+                  </ListSort>
+                </template>
+              </ListFilter>
+            </template>
+          </ListFilter>
         </template>
       </ApolloQuery>
     </ContentView>
@@ -136,7 +148,8 @@ export default {
       showInstallModal: false,
       installType: 'dependencies',
       selectedId: null,
-      showUninstallModal: false
+      showUninstallModal: false,
+      search: ''
     }
   },
 
