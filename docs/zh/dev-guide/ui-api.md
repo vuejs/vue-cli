@@ -46,7 +46,7 @@ vue ui --dev
 vue ui -D
 ```
 
-## 项目配置
+## 项目的配置
 
 ![配置 UI](/config-ui.png)
 
@@ -69,7 +69,7 @@ api.describeConfig({
 
 ### 配置图标
 
-可以是一个 [Material 图标](https://material.io/tools/icons)代码或一个自定义的图片 (查阅[公共静态文件](#公共静态文件))：
+可以是一个 [Material 图标](https://material.io/tools/icons)代码或一个自定义的图片 (详见[公共静态文件](#公共静态文件))：
 
 ```js
 api.describeConfig({
@@ -79,7 +79,7 @@ api.describeConfig({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
 
 ### 配置文件
 
@@ -261,12 +261,12 @@ api.describeConfig({
 
 参数：
 
-- `prompts`: 当前提示符们的运行时对象 (见下方)
+- `prompts`: 当前提示符们的运行时对象 (详见下方)
 - `answers`: 来自用户输入的回答数据
 - `data`: 从配置文件读取的只读的初始化数据
 - `files`: 被找到的文件的描述器 (`{ type: 'json', path: '...' }`)
 - `cwd`: 当前工作目录
-- `api`: `onWrite API` (见下方)
+- `api`: `onWrite API` (详见下方)
 
 提示符的运行时对象：
 
@@ -316,41 +316,41 @@ api.describeConfig({
 })
 ```
 
-## Project tasks
+## 项目的任务
 
-![Tasks ui](/tasks-ui.png)
+![任务 UI](/tasks-ui.png)
 
-Tasks are generated from the `scripts` field in the project `package.json` file.
+任务是从项目 `package.json` 文件的 `scripts` 字段生成的。
 
-You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method:
+因为有 `api.describeTask` 方法，你可以为任务“增强”额外的信息和钩子：
 
 ```js
 api.describeTask({
-  // RegExp executed on script commands to select which task will be described here
+  // 执行在每个脚本命令上以选择要被描述的任务
   match: /vue-cli-service serve/,
   description: 'Compiles and hot-reloads for development',
-  // "More info" link
+  // “More info”链接
   link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve'
 })
 ```
 
-### Task icon
+### 任务图标
 
-It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
+可以是一个 [Material 图标](https://material.io/tools/icons)代码或一个自定义的图片 (详见[公共静态文件](#公共静态文件))：
 
 ```js
 api.describeTask({
   /* ... */
-  // Task icon
+  // 任务图标
   icon: 'application_settings'
 })
 ```
 
-If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
 
-### Tasks parameters
+### 任务参数
 
-You can add prompts to modify the command arguments. They will be displayed in a 'Parameters' modal.
+你可以添加提示符来修改命令参数。它们会展示在一个“参数”模态框中。
 
 Example:
 
@@ -358,7 +358,7 @@ Example:
 api.describeTask({
   // ...
 
-  // Optional parameters (inquirer prompts)
+  // 选填参数 (inquirer 提示符)
   prompts: [
     {
       name: 'open',
@@ -390,87 +390,87 @@ api.describeTask({
 })
 ```
 
-See [Prompts](#prompts) for more info.
+详见[提示符](#提示符)。
 
-### Task hooks
+### 任务钩子
 
-Several hooks are available:
+有一些钩子是可用的：
 
 - `onBeforeRun`
 - `onRun`
 - `onExit`
 
-For example, you can use the answers to the prompts (see above) to add new arguments to the command:
+例如，你可以将 (上述) 提示符的回答作为一个新参数添加到命令上：
 
 ```js
 api.describeTask({
   // ...
 
-  // Hooks
-  // Modify arguments here
+  // 钩子
+  // 在这里修改参数
   onBeforeRun: async ({ answers, args }) => {
-    // Args
+    // 参数
     if (answers.open) args.push('--open')
     if (answers.mode) args.push('--mode', answers.mode)
     args.push('--dashboard')
   },
-  // Immediatly after running the task
+  // 任务运行之后立即执行
   onRun: async ({ args, child, cwd }) => {
-    // child: node child process
-    // cwd: process working directory
+    // child: Node 子进程
+    // cwd: 进程所在目录
   },
   onExit: async ({ args, child, cwd, code, signal }) => {
-    // code: exit code
-    // signal: kill signal used if any
+    // code: 退出代号
+    // signal: 可能会被使用的杀进程信号
   }
 })
 ```
 
-### Task views
+### 任务视图
 
-You can display custom views in the task details pane using the `ClientAddon` API:
+你可以在任务详情面板中使用 `ClientAddon` API 展示自定义视图：
 
 ```js
 api.describeTask({
   // ...
 
-  // Additional views (for example the webpack dashboard)
-  // By default, there is the 'output' view which displays the terminal output
+  // 额外的视图 (例如 webpack 仪表盘)
+  // 默认情况下，这里是展示终端输出的 `output` 视图
   views: [
     {
-      // Unique ID
+      // 唯一 ID
       id: 'vue-webpack-dashboard-client-addon',
-      // Button label
+      // 按钮文字
       label: 'Dashboard',
-      // Button icon
+      // 按钮图标
       icon: 'dashboard',
-      // Dynamic component to load (see 'Client addon' section below)
+      // 要加载的动态组件 (详见下述“客户端 addon”章节)
       component: 'vue-webpack-dashboard'
     }
   ],
-  // Default selected view when displaying the task details (by default it's the output)
+  // 展示任务详情时默认选择的视图 (默认是 `output`)
   defaultView: 'vue-webpack-dashboard-client-addon'
 })
 ```
 
-See [Client addon](#client-addon) for more info.
+详见[客户端 addon](#客户端-addon)。
 
 
-### Add new tasks
+### 新增任务
 
-You can also add entirely new tasks which aren't in the `package.json` scripts with `api.addTask` instead of `api.describeTask`. Those tasks will only appear in the cli UI.
+你也可以不使用 `api.describeTask`，而是通过 `api.addTask` 添加一个 `package.json` 脚本中没有的全新任务。这些任务只会出现在 cli UI 中。
 
-**You need to provide a `command` option instead of `match`.**
+**你需要提供一个 `command` 选项替代掉 `match` 选项。**
 
-Example:
+示例：
 
 ```js
 api.addTask({
-  // Required
+  // 必填
   name: 'inspect',
   command: 'vue-cli-service inspect',
-  // Optional
-  // The rest is like `describeTask` without the `match` option
+  // 选填
+  // 其余部分类似 `describeTask` 但是没有 `match` 选项
   description: '...',
   link: 'https://github.com/vuejs/vue-cli/...',
   prompts: [ /* ... */ ],
@@ -482,7 +482,9 @@ api.addTask({
 })
 ```
 
-**⚠️ The `command` will run a node context. This means you can call node bin commands like you would normally do in the `package.json` scripts.**
+::: warning 警告
+`command` 将会运行一个 Node 上下文。也就是说你可以像在 `package.json` 脚本中一样调用 Node 的 bin 命令。
+:::
 
 ## Prompts
 
