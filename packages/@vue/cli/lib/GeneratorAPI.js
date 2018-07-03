@@ -138,10 +138,10 @@ class GeneratorAPI {
           let filename = path.basename(rawPath)
           // dotfiles are ignored when published to npm, therefore in templates
           // we need to use underscore instead (e.g. "_gitignore")
-          if (filename.charAt(0) === '_' && filename.chatAt(1) !== '_') {
+          if (filename.charAt(0) === '_' && filename.charAt(1) !== '_') {
             filename = `.${filename.slice(1)}`
           }
-          if (filename.charAt(0) === '_' && filename.chatAt(1) === '_') {
+          if (filename.charAt(0) === '_' && filename.charAt(1) === '_') {
             filename = `${filename.slice(1)}`
           }
           const targetPath = path.join(path.dirname(rawPath), filename)
