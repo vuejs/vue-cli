@@ -3,6 +3,14 @@
     <ContentView
       :title="$t('org.vue.views.project-tasks.title')"
     >
+      <template slot="actions">
+        <VueInput
+          v-model="search"
+          icon-left="search"
+          class="round"
+        />
+      </template>
+
       <ApolloQuery
         :query="require('../graphql/tasks.gql')"
         class="fill-height"
@@ -50,6 +58,12 @@ export default {
     }
   },
 
+  data () {
+    return {
+      search: ''
+    }
+  },
+
   apollo: {
     $subscribe: {
       taskChanged: {
@@ -72,7 +86,9 @@ export default {
   methods: {
     generateItems (tasks) {
       if (!tasks) return []
-      return tasks.map(
+      return tasks.filter(
+        item => !this.search || item.name.includes(this.search)
+      ).map(
         task => ({
           route: {
             name: 'project-task-details',

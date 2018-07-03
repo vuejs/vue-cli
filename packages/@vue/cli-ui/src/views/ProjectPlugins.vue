@@ -5,6 +5,12 @@
       class="limit-width"
     >
       <template slot="actions">
+        <VueInput
+          v-model="search"
+          icon-left="search"
+          class="round"
+        />
+
         <VueButton
           icon-left="add"
           :label="$t('org.vue.views.project-plugins.button')"
@@ -39,13 +45,20 @@
             class="overlay"
           />
 
-          <div v-else-if="data" class="plugins">
-            <ProjectPluginItem
-              v-for="plugin of data.plugins"
-              :key="plugin.id"
-              :plugin="plugin"
-            />
-          </div>
+          <ListFilter
+            v-else-if="data"
+            class="plugins"
+            :list="data.plugins"
+            :filter="item => !search || item.id.includes(search)"
+          >
+            <template slot-scope="{ list }">
+              <ProjectPluginItem
+                v-for="plugin of list"
+                :key="plugin.id"
+                :plugin="plugin"
+              />
+            </template>
+          </ListFilter>
         </template>
       </ApolloQuery>
     </ContentView>
@@ -66,6 +79,12 @@ export default {
   metaInfo () {
     return {
       title: this.$t('org.vue.views.project-plugins.title')
+    }
+  },
+
+  data () {
+    return {
+      search: ''
     }
   },
 

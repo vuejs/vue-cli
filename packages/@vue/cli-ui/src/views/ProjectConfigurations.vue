@@ -4,6 +4,14 @@
       :title="$t('org.vue.views.project-configurations.title')"
       class="limit-width"
     >
+      <template slot="actions">
+        <VueInput
+          v-model="search"
+          icon-left="search"
+          class="round"
+        />
+      </template>
+
       <ApolloQuery
         :query="require('../graphql/configurations.gql')"
         class="fill-height"
@@ -49,6 +57,12 @@ export default {
     }
   },
 
+  data () {
+    return {
+      search: ''
+    }
+  },
+
   bus: {
     quickOpenProject (project) {
       this.$apollo.getClient().writeQuery({
@@ -63,7 +77,11 @@ export default {
   methods: {
     generateItems (configurations) {
       if (!configurations) return []
-      return configurations.map(
+
+      const reg = this.search && new RegExp(this.search, 'i')
+      return configurations.filter(
+        item => !reg || item.name.match(reg) || item.description.match(reg)
+      ).map(
         configuration => ({
           route: {
             name: 'project-configuration-details',
