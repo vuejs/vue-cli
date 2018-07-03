@@ -4,6 +4,7 @@ const channels = require('../channels')
 // Connectors
 const cwd = require('../connectors/cwd')
 const plugins = require('../connectors/plugins')
+const dependencies = require('../connectors/dependencies')
 
 exports.types = gql`
 extend type Query {
@@ -68,8 +69,8 @@ type PluginActionResult {
 
 exports.resolvers = {
   Plugin: {
-    version: (plugin, args, context) => plugins.getVersion(plugin, context),
-    description: (plugin, args, context) => plugins.getDescription(plugin, context),
+    version: (plugin, args, context) => dependencies.getVersion(plugin, context),
+    description: (plugin, args, context) => dependencies.getDescription(plugin, context),
     logo: (plugin, args, context) => plugins.getLogo(plugin, context)
   },
 

@@ -15,6 +15,7 @@
           >
             <NpmPackageSearch
               filters="computedKeywords:vue-cli-plugin"
+              try-logos
               @close="close()"
               @install="installPlugin"
             />
@@ -251,11 +252,6 @@ export default {
         // eslint-disable-next-line no-console
         console.error(e)
       }
-    },
-
-    scrollResultsToTop () {
-      const vm = this.$refs.results
-      if (vm) vm.$el.scrollTop = 0
     }
   }
 }

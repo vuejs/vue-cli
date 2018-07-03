@@ -28,21 +28,24 @@
           ref="searchInput"
           :placeholder="$t('org.vue.views.project-plugins-add.tabs.search.search-input')"
         />
-        <ais-results ref="results">
-          <PackageSearchItem
-            slot-scope="{ result }"
-            :pkg="result"
-            :selected="selectedIdModel === result.name"
-            @click.native="selectedIdModel = result.name"
-          />
-        </ais-results>
-        <ais-no-results>
-          <div class="vue-ui-empty">
-            <VueIcon icon="search" class="huge"/>
-            <div>{{ $t('org.vue.views.project-plugins-add.tabs.search.not-found') }}</div>
-          </div>
-        </ais-no-results>
-        <InstantSearchPagination @page-change="scrollResultsToTop()"/>
+        <div ref="resultsBox" class="ais-results-box">
+          <ais-results>
+            <PackageSearchItem
+              slot-scope="{ result }"
+              :pkg="result"
+              :selected="selectedIdModel === result.name"
+              :try-logo="tryLogos"
+              @click.native="selectedIdModel = result.name"
+            />
+          </ais-results>
+          <ais-no-results>
+            <div class="vue-ui-empty">
+              <VueIcon icon="search" class="huge"/>
+              <div>{{ $t('org.vue.views.project-plugins-add.tabs.search.not-found') }}</div>
+            </div>
+          </ais-no-results>
+          <InstantSearchPagination @page-change="scrollResultsToTop()"/>
+        </div>
       </ais-index>
     </div>
 
@@ -60,7 +63,7 @@
 
       <VueButton
         icon-left="file_download"
-        :label="$t('org.vue.views.project-plugins-add.tabs.search.buttons.install', { target: selectedIdModel || $t('org.vue.views.project-plugins-add.plugin') })"
+        :label="selectedIdModel ? $t('org.vue.views.project-plugins-add.tabs.search.buttons.install', { target: selectedIdModel }) : $t('org.vue.views.project-plugins-add.tabs.search.buttons.default-install')"
         class="big primary"
         :disabled="!selectedIdModel"
         data-testid="download-plugin"
@@ -86,6 +89,11 @@ export default {
     pageSize: {
       type: Number,
       default: 20
+    },
+
+    tryLogos: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -126,6 +134,11 @@ export default {
 
     install () {
       this.$emit('install', this.selectedIdModel)
+    },
+
+    scrollResultsToTop () {
+      const el = this.$refs.resultsBox
+      if (el) el.scrollTop = 0
     }
   }
 }
@@ -136,9 +149,13 @@ export default {
 
 .npm-package-search
   height 100%
-  display grid
-  grid-template-columns 1fr
-  grid-template-rows 1fr auto
+  display flex
+  flex-direction column
+
+.content
+  flex 100% 1 1
+  height 0
+  overflow hidden
 
 .algolia
   position absolute

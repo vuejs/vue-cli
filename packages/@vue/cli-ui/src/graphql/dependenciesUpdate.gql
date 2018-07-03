@@ -1,0 +1,8 @@
+mutation dependenciesUpdate {
+  dependenciesUpdate {
+    id
+    version {
+      current
+    }
+  }
+}

@@ -58,6 +58,7 @@ export default {
 @import "~@/style/imports"
 
 .instant-search-pagination
+  margin $padding-item 0
   .content
     h-box()
     box-center()
