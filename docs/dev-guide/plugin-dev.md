@@ -235,6 +235,30 @@ export default {
 <%# END_REPLACE %>
 ```
 
+#### Edge cases
+
+If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored:
+```
+# dotfile templates have to use an underscore instead of the dot:
+
+/generator/template/_env
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+.env
+```
+Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
+```
+# such templates have to use two underscores instead of the dot:
+
+/generator/template/__variables.scss
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+_variables.scss
+```
+
+
 ### Prompts
 
 #### Prompts for Built-in Plugins
