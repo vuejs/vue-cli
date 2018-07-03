@@ -69,14 +69,12 @@ module.exports = (api, projectOptions) => {
 }
 ```
 
-#### Specifying Mode for Commands
+#### 为命令指定模式
 
 <!-- 对于环境变量来说，有一个值得注意的重要的事情，就是了解它们何时被解析。一般情况下，像 `vue-cli-service serve` 或 `vue-cli-service build` 这样的命令会始终调用 `api.setMode()` 作为它的第一件事。然而，这也意味着这些环境变量可能在 service 插件被调用的时候还不可用： -->
-> Note: the way plugins set modes has been changed in beta.10.
+> 注意：插件设置模式的方式从 beta.10 开始已经改变了。
 
-If a plugin-registered command needs to run in a specific default mode,
-the plugin needs to expose it via `module.exports.defaultModes` in the form
-of `{ [commandName]: mode }`:
+如果一个已注册的插件命令需要运行在特定的默认模式下，则该插件需要通过 `module.exports.defaultModes` 以 `{ [commandName]: mode }` 的形式来暴露：
 
 ``` js
 module.exports = api => {
@@ -90,7 +88,7 @@ module.exports.defaultModes = {
 }
 ```
 
-This is because the command's expected mode needs to be known before loading environment variables, which in turn needs to happen before loading user options / applying the plugins.
+这是因为我们需要在加载环境变量之前知道该命令的预期模式，所以需要提前加载用户选项/应用插件。
 
 #### 在插件中解析 webpack 配置
 
@@ -106,7 +104,7 @@ module.exports = api => {
   })
 }
 
-// make sure to specify the default mode for correct env variables
+// 请确保为正确的环境变量指定默认模式
 module.exports.defaultModes = {
   'my-build': 'production'
 }
