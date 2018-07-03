@@ -9,7 +9,7 @@ sidebarDepth: 3
 系统里有两个主要的部分：
 
 - `@vue/cli`：全局安装的，暴露 `vue create <app>` 命令；
-- `@vue/cli-service`：本地安装，暴露 `vue-cli-service` 命令。
+- `@vue/cli-service`：局部安装，暴露 `vue-cli-service` 命令。
 
 两者皆应用了基于插件的架构。
 
@@ -23,7 +23,7 @@ sidebarDepth: 3
 
 ### CLI 插件
 
-CLI 插件是一个可以为 `@vue/cli` 项目添加额外特性的 npm 包。它应该始终包含一个 [Service 插件](#service-插件)作为其主要导出，且可选的包含一个 [Generator](#generator) 和一个 [Prompt 文件](#prompts-for-3rd-party-plugins)。
+CLI 插件是一个可以为 `@vue/cli` 项目添加额外特性的 npm 包。它应该始终包含一个 [Service 插件](#service-插件)作为其主要导出，且可选的包含一个 [Generator](#generator) 和一个 [Prompt 文件](#第三方插件的提示符)。
 
 一个典型的 CLI 插件的目录结构看起来是这样的：
 
@@ -42,13 +42,13 @@ Service 插件会在一个 Service 实例被创建时自动加载——比如每
 
 注意我们这里讨论的“service 插件”的概念要比发布为一个 npm 包的“CLI 插件”的要更窄。前者涉及一个会被 `@vue/cli-service` 在初始化时加载的模块，也经常是后者的一部分。
 
-额外的，`@vue/cli-service` 的[内建 command][commands] 和[配置模块][config]也是全部以 service 插件实现的。
+此外，`@vue/cli-service` 的[内建命令][commands]和[配置模块][config]也是全部以 service 插件实现的。
 
 一个 service 插件应该导出一个函数，这个函数接受两个参数：
 
-- 一个 [PluginAPI][plugin-api] 示例
+- 一个 [PluginAPI][plugin-api] 实例
 
-- 一个包含 `vue.config.js` 内指定的项目本地选项的对象，或者在 `package.json` 内的 `vue-cli` 字段。
+- 一个包含 `vue.config.js` 内指定的项目本地选项的对象，或者在 `package.json` 内的 `vue` 字段。
 
 这个 API 允许 service 插件针对不同的环境扩展/修改内部的 webpack 配置，并向 `vue-cli-service` 注入额外的命令。例如：
 
@@ -94,7 +94,7 @@ This is because the command's expected mode needs to be known before loading env
 
 #### 在插件中解析 webpack 配置
 
-一个插件可以通过调用 `api.resolveWebpackConfig()` 取回解析好的 webpack 配置。每次调用都会新生成一个 webpack 配置用于在未来修改。
+一个插件可以通过调用 `api.resolveWebpackConfig()` 取回解析好的 webpack 配置。每次调用都会新生成一个 webpack 配置用来在需要时进一步修改。
 
 ``` js
 module.exports = api => {
@@ -144,17 +144,17 @@ module.exports = {
 
 一个发布为 npm 包的 CLI 插件可以包含一个 `generator.js` 或 `generator/index.js` 文件。插件内的 generator 将会在两种场景下被调用：
 
-- 在一个项目的初始化创建过程中，如果 CLI 插件作为项目创建预设选项的一部分被安装。
+- 在一个项目的初始化创建过程中，如果 CLI 插件作为项目创建 preset 的一部分被安装。
 
 - 插件在项目创建好之后通过 `vue invoke` 独立调用时被安装。
 
-这里的 [GeneratorAPI][generator-api] 允许一个 generator 向 `package.json`  注入额外的依赖或字段，并向项目中添加文件。
+这里的 [GeneratorAPI][generator-api] 允许一个 generator 向 `package.json` 注入额外的依赖或字段，并向项目中添加文件。
 
 一个 generator 应该导出一个函数，这个函数接收三个参数：
 
 1. 一个 `GeneratorAPI` 实例：
 
-2. 这个插件的 generator 选项。这些选项会在项目创建提示符过程中被解析，或从一个保存在 `~/.vuerc` 中的预设选项中加载。例如，如果保存好的 `~/.vuerc` 像如下的这样：
+2. 这个插件的 generator 选项。这些选项会在项目创建提示符过程中被解析，或从一个保存在 `~/.vuerc` 中的 preset 中加载。例如，如果保存好的 `~/.vuerc` 像如下的这样：
 
     ``` json
     {
@@ -168,17 +168,17 @@ module.exports = {
     }
     ```
 
-    如果用户使用 `foo` 预设选项创建了一个项目，那么 `@vue/cli-plugin-foo` 的 generator 就会收到 `{ option: 'bar' }` 作为第二个参数。
+    如果用户使用 preset `foo` 创建了一个项目，那么 `@vue/cli-plugin-foo` 的 generator 就会收到 `{ option: 'bar' }` 作为第二个参数。
 
     对于一个第三方插件来说，该选项将会解析自提示符或用户执行 `vue invoke` 时的命令行参数中 (详见[第三方插件的提示符](#第三方插件的提示符))。
 
-3. 整个预设选项 (`presets.foo`) 将会作为第三个参数传入。
+3. 整个 preset (`presets.foo`) 将会作为第三个参数传入。
 
 **示例：**
 
 ``` js
 module.exports = (api, options, rootOptions) => {
-  // 修改 `package.json` 字段
+  // 修改 `package.json` 里的字段
   api.extendPackage({
     scripts: {
       test: 'vue-cli-service test'
@@ -189,16 +189,16 @@ module.exports = (api, options, rootOptions) => {
   api.render('./template')
 
   if (options.foo) {
-    // 有条件的生成文件
+    // 有条件地生成文件
   }
 }
 ```
 
-#### 生成器模板
+#### Generator 的模板处理
 
-当你调用 `api.render('./template')` 时，该生成器将会使用 [EJS](https://github.com/mde/ejs) 渲染 `./template` 中的文件 (相对于生成器文件路径进行解析)
+当你调用 `api.render('./template')` 时，该 generator 将会使用 [EJS](https://github.com/mde/ejs) 渲染 `./template` 中的文件 (相对于 generator 中的文件路径进行解析)
 
-额外的，你可以使用 YAML 前置元信息继承并替换已有的模板文件的一部分：
+此外，你可以使用 YAML 前置元信息继承并替换已有的模板文件的一部分：
 
 ``` ejs
 ---
@@ -252,10 +252,10 @@ module.exports = api => {
     value: 'my-feature'
   })
 
-  // injectPrompt 的预期是一个有效的 inquirer 提示符对象
+  // injectPrompt 期望接收一个有效的 inquirer 提示符对象
   api.injectPrompt({
     name: 'someFlag',
-    // 确认你的提示符只在用户已经选取了你的特性的时候展示
+    // 确认提示符只在用户已经选取了特性的时候展示
     when: answers => answers.features.include('my-feature'),
     message: 'Do you want to turn on flag foo?',
     type: 'confirm'
@@ -301,7 +301,7 @@ vue invoke my-plugin --mode awesome
 
 1. 这个包始终存在于该仓库的根 `node_modules` 中，因此我们不必在每次测试的时候重新安装它们。
 
-2. `yarn.lock` 会保持其一致性，因此 CI 程序可以更好的利用缓存。
+2. `yarn.lock` 会保持其一致性，因此 CI 程序可以更好地利用缓存。
 
 [creator-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/Creator.js
 [service-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/Service.js
