@@ -1,0 +1,6 @@
+fragment dependency on Dependency {
+  id
+  type
+  installed
+  website
+}

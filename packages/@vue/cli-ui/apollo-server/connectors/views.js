@@ -15,6 +15,13 @@ function createViewsSet () {
       tooltip: 'org.vue.components.project-nav.tooltips.plugins'
     },
     {
+      id: 'vue-project-dependencies',
+      name: 'project-dependencies',
+      icon: 'widgets',
+      tooltip: 'org.vue.components.project-nav.tooltips.dependencies',
+      projectTypes: ['vue', 'unknown']
+    },
+    {
       id: 'vue-project-configurations',
       name: 'project-configurations',
       icon: 'settings_applications',

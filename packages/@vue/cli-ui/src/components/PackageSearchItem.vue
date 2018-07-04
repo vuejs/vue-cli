@@ -63,6 +63,11 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    },
+
+    tryLogo: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -91,13 +96,15 @@ export default {
       this.logoUrl = this.pkg.owner.avatar
 
       // Try to load the logo.png file inside the package
-      const name = this.pkg.name
-      const img = new Image()
-      img.onload = () => {
-        if (name !== this.pkg.name) return
-        this.logoUrl = img.src
+      if (this.tryLogo) {
+        const name = this.pkg.name
+        const img = new Image()
+        img.onload = () => {
+          if (name !== this.pkg.name) return
+          this.logoUrl = img.src
+        }
+        img.src = `https://unpkg.com/${name}/logo.png`
       }
-      img.src = `https://unpkg.com/${name}/logo.png`
     }
   }
 }

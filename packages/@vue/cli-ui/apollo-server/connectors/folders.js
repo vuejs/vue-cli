@@ -109,6 +109,12 @@ function writePackage ({ file, data }, context) {
   fs.outputJsonSync(path.join(file, 'package.json'), data, {
     spaces: 2
   })
+  invalidatePackage(file)
+  return true
+}
+
+function invalidatePackage (file, context) {
+  pkgCache.del(file)
   return true
 }
 
@@ -165,6 +171,7 @@ module.exports = {
   isPackage,
   readPackage,
   writePackage,
+  invalidatePackage,
   isVueProject,
   isFavorite,
   listFavorite,

@@ -1,21 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 const LRU = require('lru-cache')
-const semver = require('semver')
-const {
-  isPlugin,
-  isOfficialPlugin,
-  getPluginLink
-} = require('@vue/cli-shared-utils')
-const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
-const { resolveModule, loadModule, clearModule } = require('@vue/cli/lib/util/module')
-const {
-  progress: installProgress,
-  installPackage,
-  uninstallPackage,
-  updatePackage
-} = require('@vue/cli/lib/util/installDeps')
-const invoke = require('@vue/cli/lib/invoke')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -29,11 +14,24 @@ const views = require('./views')
 const locales = require('./locales')
 const sharedData = require('./shared-data')
 const suggestions = require('./suggestions')
+const dependencies = require('./dependencies')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
+const {
+  isPlugin,
+  isOfficialPlugin,
+  getPluginLink
+} = require('@vue/cli-shared-utils')
+const { resolveModule, loadModule, clearModule } = require('@vue/cli/lib/util/module')
+const {
+  progress: installProgress,
+  installPackage,
+  uninstallPackage,
+  updatePackage
+} = require('@vue/cli/lib/util/installDeps')
+const invoke = require('@vue/cli/lib/invoke')
 const { getCommand } = require('../util/command')
-const { resolveModuleRoot } = require('../util/resolve-path')
 const ipc = require('../util/ipc')
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
@@ -42,10 +40,6 @@ const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
 
 // Caches
-const metadataCache = new LRU({
-  max: 200,
-  maxAge: 1000 * 60 * 30
-})
 const logoCache = new LRU({
   max: 50
 })
@@ -57,24 +51,6 @@ let plugins = []
 let pluginApi
 let installationStep
 let projectId
-
-function getPath (id) {
-  return resolveModuleRoot(resolveModule(id, cwd.get()), id)
-}
-
-function findPlugins (deps) {
-  return Object.keys(deps).filter(
-    id => isPlugin(id) || id === CLI_SERVICE
-  ).map(
-    id => ({
-      id,
-      versionRange: deps[id],
-      official: isOfficialPlugin(id) || id === CLI_SERVICE,
-      installed: fs.existsSync(getPath(id)),
-      website: getPluginLink(id)
-    })
-  )
-}
 
 function list (file, context, resetApi = true) {
   const pkg = folders.readPackage(file, context)
@@ -92,6 +68,26 @@ function list (file, context, resetApi = true) {
 
   if (resetApi) resetPluginApi(context)
   return plugins
+}
+
+function findOne (id, context) {
+  return plugins.find(
+    p => p.id === id
+  )
+}
+
+function findPlugins (deps) {
+  return Object.keys(deps).filter(
+    id => isPlugin(id) || id === CLI_SERVICE
+  ).map(
+    id => ({
+      id,
+      versionRange: deps[id],
+      official: isOfficialPlugin(id) || id === CLI_SERVICE,
+      installed: fs.existsSync(dependencies.getPath(id)),
+      website: getPluginLink(id)
+    })
+  )
 }
 
 function resetPluginApi (context) {
@@ -159,7 +155,7 @@ function runPluginApi (id, context, fileName = 'ui') {
 
   // Locales
   try {
-    const folder = fs.existsSync(id) ? id : getPath(id)
+    const folder = fs.existsSync(id) ? id : dependencies.getPath(id)
     locales.loadFolder(folder, context)
   } catch (e) {}
 }
@@ -170,75 +166,12 @@ function callHook (id, args, context) {
   fns.forEach(fn => fn(...args))
 }
 
-function findOne (id, context) {
-  return plugins.find(
-    p => p.id === id
-  )
-}
-
-function readPackage (id, context) {
-  return folders.readPackage(getPath(id), context)
-}
-
-async function getMetadata (id, context) {
-  let metadata = metadataCache.get(id)
-  if (metadata) {
-    return metadata
-  }
-
-  const res = await getPackageVersion(id)
-  if (res.statusCode === 200) {
-    metadata = res.body
-  }
-
-  if (metadata) {
-    metadataCache.set(id, metadata)
-    return metadata
-  }
-}
-
-async function getVersion ({ id, installed, versionRange }, context) {
-  let current
-  if (installed) {
-    const pkg = readPackage(id, context)
-    current = pkg.version
-  } else {
-    current = null
-  }
-  let latest, wanted
-  const metadata = await getMetadata(id, context)
-  if (metadata) {
-    latest = metadata['dist-tags'].latest
-
-    const versions = Object.keys(metadata.versions)
-    wanted = semver.maxSatisfying(versions, versionRange)
-  }
-
-  if (!latest) latest = current
-  if (!wanted) wanted = current
-
-  return {
-    current,
-    latest,
-    wanted,
-    range: versionRange
-  }
-}
-
-async function getDescription ({ id }, context) {
-  const metadata = await getMetadata(id, context)
-  if (metadata) {
-    return metadata.description
-  }
-  return null
-}
-
 async function getLogo ({ id }, context) {
   const cached = logoCache.get(id)
   if (cached) {
     return cached
   }
-  const folder = getPath(id)
+  const folder = dependencies.getPath(id)
   const file = path.join(folder, 'logo.png')
   if (fs.existsSync(file)) {
     const data = `/_plugin-logo/${encodeURIComponent(id)}`
@@ -376,7 +309,7 @@ function finishInstall (context) {
 async function initPrompts (id, context) {
   await prompts.reset()
   try {
-    let data = require(path.join(getPath(id), 'prompts'))
+    let data = require(path.join(dependencies.getPath(id), 'prompts'))
     if (typeof data === 'function') {
       data = await data()
     }
@@ -395,9 +328,9 @@ function update (id, context) {
     })
     currentPluginId = id
     const plugin = findOne(id, context)
-    const { current, wanted } = await getVersion(plugin, context)
+    const { current, wanted } = await dependencies.getVersion(plugin, context)
+
     await updatePackage(cwd.get(), getCommand(), null, id)
-    resetPluginApi(context)
 
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
@@ -409,7 +342,9 @@ function update (id, context) {
       message: `Plugin ${id} was successfully updated`,
       icon: 'done'
     })
+
     resetPluginApi(context)
+    dependencies.invalidatePackage(id, context)
 
     currentPluginId = null
     return findOne(id)
@@ -418,12 +353,13 @@ function update (id, context) {
 
 async function updateAll (context) {
   return progress.wrap('plugins-update', context, async setProgress => {
-    const plugins = await list(cwd.get(), context, false)
+    const plugins = list(cwd.get(), context, false)
     let updatedPlugins = []
     for (const plugin of plugins) {
-      const version = await getVersion(plugin, context)
+      const version = await dependencies.getVersion(plugin, context)
       if (version.current !== version.wanted) {
         updatedPlugins.push(plugin)
+        dependencies.invalidatePackage(plugin.id, context)
       }
     }
 
@@ -450,6 +386,7 @@ async function updateAll (context) {
       message: `${updatedPlugins.length} plugin(s) were successfully updated`,
       icon: 'done'
     })
+
     resetPluginApi(context)
 
     return updatedPlugins
@@ -489,7 +426,7 @@ async function callAction ({ id, params }, context) {
 }
 
 function serveFile (projectId, file, res) {
-  const basePath = projectId === '.' ? cwd.get() : getPath(decodeURIComponent(projectId))
+  const basePath = projectId === '.' ? cwd.get() : dependencies.getPath(decodeURIComponent(projectId))
   if (basePath) {
     res.sendFile(path.join(basePath, file))
     return
@@ -512,8 +449,6 @@ function serveLogo (req, res) {
 module.exports = {
   list,
   findOne,
-  getVersion,
-  getDescription,
   getLogo,
   getInstallation,
   install,

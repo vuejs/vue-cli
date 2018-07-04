@@ -1,6 +1,11 @@
 <template>
   <div class="project-plugin-item list-item">
     <div class="content">
+      <div
+        v-if="!visible"
+        v-observe-visibility="visibilityChanged"
+      />
+
       <ItemLogo
         :image="pluginLogo && pluginLogo.logo"
         fallback-icon="extension"
@@ -12,22 +17,20 @@
         show-description
       >
         <span slot="description" class="plugin-description">
-          <template v-if="pluginDetails">
-            <span class="info version">
-              <span class="label">{{ $t('org.vue.components.project-plugin-item.version') }}</span>
-              <span class="value">{{ pluginDetails.version.current }}</span>
-            </span>
+          <span class="info version">
+            <span class="label">{{ $t('org.vue.components.project-plugin-item.version') }}</span>
+            <span class="value">{{ pluginDetails && pluginDetails.version.current }}</span>
+          </span>
 
-            <span class="info latest">
-              <span class="label">{{ $t('org.vue.components.project-plugin-item.latest') }}</span>
-              <VueIcon
-                v-if="pluginDetails.version.current !== pluginDetails.version.latest"
-                icon="warning"
-                class="top medium"
-              />
-              <span class="value">{{ pluginDetails.version.latest }}</span>
-            </span>
-          </template>
+          <span class="info latest">
+            <span class="label">{{ $t('org.vue.components.project-plugin-item.latest') }}</span>
+            <VueIcon
+              v-if="pluginDetails && pluginDetails.version.current !== pluginDetails.version.latest"
+              icon="warning"
+              class="top medium"
+            />
+            <span class="value">{{ pluginDetails && pluginDetails.version.latest }}</span>
+          </span>
 
           <span v-if="plugin.official" class="info">
             <VueIcon
@@ -80,7 +83,8 @@ export default {
     return {
       pluginDetails: null,
       pluginLogo: null,
-      updating: false
+      updating: false,
+      visible: false
     }
   },
 
@@ -91,6 +95,9 @@ export default {
         return {
           id: this.plugin.id
         }
+      },
+      skip () {
+        return !this.visible
       }
     },
 
@@ -119,6 +126,12 @@ export default {
         console.error(e)
       }
       this.updating = false
+    },
+
+    visibilityChanged (isVisible) {
+      if (!this.visible) {
+        this.visible = isVisible
+      }
     }
   }
 }
@@ -151,8 +164,20 @@ export default {
     >>> > *
       space-between-x(4px)
 
+  .description
+    height 21px
+
+  .version,
+  .latest
+    min-width 130px
+
   .package-description
     font-style italic
     opacity .7
+    display inline-block
+    max-width 300px
+    ellipsis()
+    position relative
+    top 4px
 
 </style>

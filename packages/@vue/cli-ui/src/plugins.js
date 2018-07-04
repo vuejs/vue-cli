@@ -3,6 +3,7 @@ import VueUi from '@vue/ui'
 import InstantSearch from 'vue-instantsearch'
 import VueMeta from 'vue-meta'
 import PortalVue from 'portal-vue'
+import VueObserveVisibility from 'vue-observe-visibility'
 import * as Filters from './filters'
 import Responsive from './util/responsive'
 import SharedData from './util/shared-data'
@@ -32,6 +33,7 @@ Vue.use(Responsive, {
 })
 Vue.use(VueUi)
 Vue.use(PortalVue)
+Vue.use(VueObserveVisibility)
 Vue.use(SharedData)
 Vue.use(PluginAction)
 Vue.use(Bus)
