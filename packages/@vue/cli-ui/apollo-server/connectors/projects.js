@@ -258,15 +258,6 @@ async function create (input, context) {
     })
 
     const targetDir = path.join(cwd.get(), input.folder)
-    cwd.set(targetDir, context)
-    creator.context = targetDir
-
-    process.env.VUE_CLI_CONTEXT = targetDir
-    clearModule('@vue/cli-service/webpack.config.js', targetDir)
-
-    const inCurrent = input.folder === '.'
-    const name = inCurrent ? path.relative('../', process.cwd()) : input.folder
-    creator.name = name
 
     // Delete existing folder
     if (fs.existsSync(targetDir)) {
@@ -282,6 +273,16 @@ async function create (input, context) {
         throw new Error(`Folder ${targetDir} already exists`)
       }
     }
+
+    cwd.set(targetDir, context)
+    creator.context = targetDir
+
+    process.env.VUE_CLI_CONTEXT = targetDir
+    clearModule('@vue/cli-service/webpack.config.js', targetDir)
+
+    const inCurrent = input.folder === '.'
+    const name = inCurrent ? path.relative('../', process.cwd()) : input.folder
+    creator.name = name
 
     // Answers
     const answers = prompts.getAnswers()
