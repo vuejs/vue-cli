@@ -7,12 +7,12 @@ const defaults = {
   appleMobileWebAppCapable: 'no',
   appleMobileWebAppStatusBarStyle: 'default',
   iconVersion: '',
+  manifestPath: 'manifest.json',
 }
 
 const defaultIconPaths = {
   favicon32: 'img/icons/favicon-32x32.png',
   favicon16: 'img/icons/favicon-16x16.png',
-  manifest: 'manifest.json',
   appleTouchIcon: 'img/icons/apple-touch-icon-152x152.png',
   maskIcon: 'img/icons/safari-pinned-tab.svg',
   msTileImage: 'img/icons/msapplication-icon-144x144.png'
@@ -65,7 +65,7 @@ module.exports = class HtmlPwaPlugin {
           // Add to home screen for Android and modern mobile browsers
           makeTag('link', {
             rel: 'manifest',
-            href: `${publicPath}${iconPaths.manifest}${iconVersionStr}`
+            href: `${publicPath}${manifestPath}${iconVersionStr}`
           }),
           makeTag('meta', {
             name: 'theme-color',
