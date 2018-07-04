@@ -69,6 +69,10 @@ module.exports = {
 - Default: `''`
 
   A directory to nest generated static assets (js, css, img, fonts) under.
+  
+  ::: tip
+  `assetsDir` is ignored when overwriting the filename or chunkFilename from the generated assets.
+  :::
 
 ### pages
 
