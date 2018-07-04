@@ -125,7 +125,7 @@ module.exports = (api, options) => {
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign({}, htmlOptions, {
           chunks: ['chunk-vendors', 'chunk-common', name],
-          template: fs.existsSync(template) ? template : defaultHtmlPath,
+          template: fs.existsSync(template) ? template : (fs.existsSync(htmlPath) ? htmlPath : defaultHtmlPath),
           filename
         })
 
