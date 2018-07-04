@@ -6,8 +6,8 @@ const defaults = {
   msTileColor: '#000000',
   appleMobileWebAppCapable: 'no',
   appleMobileWebAppStatusBarStyle: 'default',
-  iconVersion: '',
-  manifestPath: 'manifest.json',
+  assetsVersion: '',
+  manifestPath: 'manifest.json'
 }
 
 const defaultIconPaths = {
@@ -40,12 +40,13 @@ module.exports = class HtmlPwaPlugin {
           msTileColor,
           appleMobileWebAppCapable,
           appleMobileWebAppStatusBarStyle,
-          iconVersion,
+          assetsVersion,
+          manifestPath,
           iconPaths
         } = this.options
         const { publicPath } = compiler.options.output
 
-        const iconVersionStr = iconVersion ? `?v=${iconVersion}` : ''
+        const assetsVersionStr = assetsVersion ? `?v=${assetsVersion}` : ''
 
         data.head.push(
           // Favicons
@@ -53,19 +54,19 @@ module.exports = class HtmlPwaPlugin {
             rel: 'icon',
             type: 'image/png',
             sizes: '32x32',
-            href: `${publicPath}${iconPaths.favicon32}${iconVersionStr}`
+            href: `${publicPath}${iconPaths.favicon32}${assetsVersionStr}`
           }),
           makeTag('link', {
             rel: 'icon',
             type: 'image/png',
             sizes: '16x16',
-            href: `${publicPath}${iconPaths.favicon16}${iconVersionStr}`
+            href: `${publicPath}${iconPaths.favicon16}${assetsVersionStr}`
           }),
 
           // Add to home screen for Android and modern mobile browsers
           makeTag('link', {
             rel: 'manifest',
-            href: `${publicPath}${manifestPath}${iconVersionStr}`
+            href: `${publicPath}${manifestPath}${assetsVersionStr}`
           }),
           makeTag('meta', {
             name: 'theme-color',
@@ -87,18 +88,18 @@ module.exports = class HtmlPwaPlugin {
           }),
           makeTag('link', {
             rel: 'apple-touch-icon',
-            href: `${publicPath}${iconPaths.appleTouchIcon}${iconVersionStr}`
+            href: `${publicPath}${iconPaths.appleTouchIcon}${assetsVersionStr}`
           }),
           makeTag('link', {
             rel: 'mask-icon',
-            href: `${publicPath}${iconPaths.maskIcon}${iconVersionStr}`,
+            href: `${publicPath}${iconPaths.maskIcon}${assetsVersionStr}`,
             color: themeColor
           }),
 
           // Add to home screen for Windows
           makeTag('meta', {
             name: 'msapplication-TileImage',
-            content: `${publicPath}${iconPaths.msTileImage}${iconVersionStr}`
+            content: `${publicPath}${iconPaths.msTileImage}${assetsVersionStr}`
           }),
           makeTag('meta', {
             name: 'msapplication-TileColor',

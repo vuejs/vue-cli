@@ -53,11 +53,11 @@ file, or the `"vue"` field in `package.json`.
 
   - Default: `'default'`
 
-- **pwa.iconVersion**
+- **pwa.assetsVersion**
   
   - Default: `''`
 
-    This option is used if you need to add a version to your icons, against browser’s cache. This will append `?v=<pwa.iconVersion>` to the URLs of the icons.
+    This option is used if you need to add a version to your incons and manifest, against browser’s cache. This will append `?v=<pwa.assetsVersion>` to the URLs of the icons and manifest.
 
 - **pwa.manifestPath**
 
