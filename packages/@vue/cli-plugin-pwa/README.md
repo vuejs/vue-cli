@@ -53,6 +53,29 @@ file, or the `"vue"` field in `package.json`.
 
   - Default: `'default'`
 
+- **pwa.iconVersion**
+  
+  - Default: ''
+
+    This option is used if you need to add a version to your icons, against browser’s cache. This will append `?v=<pwa.iconVersion>` to the URLs of the icons.
+
+- **pwa.iconPaths**
+
+  - Defaults:
+
+    ```js
+    {
+      favicon32: 'img/icons/favicon-32x32.png',
+      favicon16: 'img/icons/favicon-16x16.png',
+      manifest: 'manifest.json',
+      appleTouchIcon: 'img/icons/apple-touch-icon-152x152.png',
+      maskIcon: 'img/icons/safari-pinned-tab.svg',
+      msTileImage: 'img/icons/msapplication-icon-144x144.png'
+    }
+    ```
+
+    Change these values to use different paths for your icons.
+
 ### Example Configuration
 
 ```js

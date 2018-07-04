@@ -5,12 +5,24 @@ const defaults = {
   themeColor: '#4DBA87', // The Vue color
   msTileColor: '#000000',
   appleMobileWebAppCapable: 'no',
-  appleMobileWebAppStatusBarStyle: 'default'
+  appleMobileWebAppStatusBarStyle: 'default',
+  iconVersion: '',
+}
+
+const defaultIconPaths = {
+  favicon32: 'img/icons/favicon-32x32.png',
+  favicon16: 'img/icons/favicon-16x16.png',
+  manifest: 'manifest.json',
+  appleTouchIcon: 'img/icons/apple-touch-icon-152x152.png',
+  maskIcon: 'img/icons/safari-pinned-tab.svg',
+  msTileImage: 'img/icons/msapplication-icon-144x144.png'
 }
 
 module.exports = class HtmlPwaPlugin {
   constructor (options = {}) {
-    this.options = Object.assign({}, defaults, options)
+    const iconPaths = Object.assign({}, defaultIconPaths, options.iconPaths)
+    delete options.iconPaths
+    this.options = Object.assign({iconPaths: iconPaths}, defaults, options)
   }
 
   apply (compiler) {
@@ -22,8 +34,18 @@ module.exports = class HtmlPwaPlugin {
       })
 
       compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, (data, cb) => {
-        const { name, themeColor, msTileColor, appleMobileWebAppCapable, appleMobileWebAppStatusBarStyle } = this.options
+        const {
+          name,
+          themeColor,
+          msTileColor,
+          appleMobileWebAppCapable,
+          appleMobileWebAppStatusBarStyle,
+          iconVersion,
+          iconPaths
+        } = this.options
         const { publicPath } = compiler.options.output
+
+        const iconVersionStr = iconVersion ? `?v=${iconVersion}` : ''
 
         data.head.push(
           // Favicons
@@ -31,19 +53,19 @@ module.exports = class HtmlPwaPlugin {
             rel: 'icon',
             type: 'image/png',
             sizes: '32x32',
-            href: `${publicPath}img/icons/favicon-32x32.png`
+            href: `${publicPath}${iconPaths.favicon32}${iconVersionStr}`
           }),
           makeTag('link', {
             rel: 'icon',
             type: 'image/png',
             sizes: '16x16',
-            href: `${publicPath}img/icons/favicon-16x16.png`
+            href: `${publicPath}${iconPaths.favicon16}${iconVersionStr}`
           }),
 
           // Add to home screen for Android and modern mobile browsers
           makeTag('link', {
             rel: 'manifest',
-            href: `${publicPath}manifest.json`
+            href: `${publicPath}${iconPaths.manifest}${iconVersionStr}`
           }),
           makeTag('meta', {
             name: 'theme-color',
@@ -65,18 +87,18 @@ module.exports = class HtmlPwaPlugin {
           }),
           makeTag('link', {
             rel: 'apple-touch-icon',
-            href: `${publicPath}img/icons/apple-touch-icon-152x152.png`
+            href: `${publicPath}${iconPaths.appleTouchIcon}${iconVersionStr}`
           }),
           makeTag('link', {
             rel: 'mask-icon',
-            href: `${publicPath}img/icons/safari-pinned-tab.svg`,
+            href: `${publicPath}${iconPaths.maskIcon}${iconVersionStr}`,
             color: themeColor
           }),
 
           // Add to home screen for Windows
           makeTag('meta', {
             name: 'msapplication-TileImage',
-            content: `${publicPath}img/icons/msapplication-icon-144x144.png`
+            content: `${publicPath}${iconPaths.msTileImage}${iconVersionStr}`
           }),
           makeTag('meta', {
             name: 'msapplication-TileColor',
