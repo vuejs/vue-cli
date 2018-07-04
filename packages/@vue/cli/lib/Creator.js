@@ -15,6 +15,7 @@ const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const { formatFeatures } = require('./util/features')
 const fetchRemotePreset = require('./util/fetchRemotePreset')
+const generateReadme = require('./util/generateReadme')
 
 const {
   defaults,
@@ -183,6 +184,14 @@ module.exports = class Creator extends EventEmitter {
         gitCommitFailed = true
       }
     }
+
+    // generate README.md
+    stopSpinner()
+    log()
+    logWithSpinner('📄', 'Generating README.md...')
+    await writeFileTree(context, {
+      'README.md': generateReadme(generator.pkg, packageManager)
+    })
 
     // log instructions
     stopSpinner()
