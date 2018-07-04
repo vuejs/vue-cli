@@ -111,7 +111,7 @@ module.exports = {
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
   
-  When set to `true`, eslint-loader will only emit warnings during webpack's compilation process in order not to break the flow during development. If you want it to emit errors instead (i.e. when building for production), set it like this: `lintOnSave: 'error'`
+  When set to `true`, eslint-loader will only emit warnings during webpack's compilation process in order not to break the flow during development. If you want it to emit errors instead (i.e. when building for production), set it like this: `lintOnSave: 'error'`.
 
 ### runtimeCompiler
 
