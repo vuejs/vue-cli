@@ -235,9 +235,9 @@ export default {
 <%# END_REPLACE %>
 ```
 
-#### Edge cases
+#### Filename edge cases
 
-If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored:
+If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
 ```
 # dotfile templates have to use an underscore instead of the dot:
 
