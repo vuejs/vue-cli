@@ -102,7 +102,7 @@ module.exports = (context, options = {}) => {
     loose,
     modules,
     targets,
-    useBuiltIns,
+    useBuiltIns: process.env.VUE_CLI_MODERN_BUILD ? false : useBuiltIns,
     ignoreBrowserslistConfig,
     configPath,
     include,
