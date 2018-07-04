@@ -13,7 +13,7 @@ Welcome to Your Vue.js + TypeScript App
 <script lang="ts">
 <%_ if (!options.classComponent) { _%>
 import Vue from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import HelloWorld from '@/components/HelloWorld';
 
 export default Vue.extend({
   name: 'app',
@@ -23,7 +23,7 @@ export default Vue.extend({
 });
 <%_ } else { _%>
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import HelloWorld from '@/components/HelloWorld';
 
 @Component({
   components: {
