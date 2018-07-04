@@ -55,6 +55,7 @@ export default {
   flex auto 1 1
   height 100%
   display flex
+  overflow hidden
 
 .top-bar,
 .project-nav
