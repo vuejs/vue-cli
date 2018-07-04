@@ -11,7 +11,10 @@ function printScripts (pkg, packageManager) {
   return Object.keys(pkg.scripts).map(key => {
     return [
       `\n### ${descriptions[key]}`,
-      `${packageManager} run ${key}\n`
+      '```',
+      `${packageManager} run ${key}`,
+      '```',
+      ''
     ].join('\n')
   }).join('')
 }
@@ -20,7 +23,9 @@ module.exports = function generateReadme (pkg, packageManager) {
   return [
     `# ${pkg.name}\n`,
     '## Project setup',
+    '```',
     `${packageManager} install`,
+    '```',
     printScripts(pkg, packageManager)
   ].join('\n')
 }
