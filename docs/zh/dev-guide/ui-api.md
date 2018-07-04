@@ -484,31 +484,31 @@ api.addTask({
 
 **⚠️ The `command` will run a node context. This means you can call node bin commands like you would normally do in the `package.json` scripts.**
 
-## Prompts
+## 提示符
 
-The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) objects.
+提示符对象必须是合法的 [inquirer](https://github.com/SBoudrias/Inquirer.js) 对象。
 
-However, you can add the following additional fields (which are optional and only used by the UI):
+不过你也可以添加下列额外的字段 (只会被 UI 使用的可选项)：
 
 ```js
 {
   /* ... */
-  // Used to group the prompts into sections
+  // 用来将提示符按章节分组
   group: 'Strongly recommended',
-  // Additional description
+  // 附加描述
   description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
-  // "More info" link
+  // “More info”链接
   link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
 }
 ```
 
-Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+支持的 inquirer 类型有：`checkbox`、`confirm`、`input`、`password`、`list`、`rawlist`。
 
-In addition to those, the UI supports special types that only works with it:
+此外，UI 还支持了仅在这里工作的特殊类型：
 
-- `color`: displays a color picker.
+- `color`：展示一个取色器。
 
-### Switch example
+### Switch 示例
 
 ```js
 {
@@ -519,7 +519,7 @@ In addition to those, the UI supports special types that only works with it:
 }
 ```
 
-### Select example
+### Select 示例
 
 ```js
 {
@@ -545,7 +545,7 @@ In addition to those, the UI supports special types that only works with it:
 }
 ```
 
-### Input example
+### Input 示例
 
 ```js
 {
@@ -556,9 +556,9 @@ In addition to those, the UI supports special types that only works with it:
 }
 ```
 
-### Checkbox example
+### Checkbox 示例
 
-Displays multiple switches.
+展示多个 switch。
 
 ```js
 {
@@ -580,7 +580,7 @@ Displays multiple switches.
 }
 ```
 
-### Color picker example
+### 取色器示例
 
 ```js
 {
@@ -592,11 +592,13 @@ Displays multiple switches.
 }
 ```
 
-### Prompts for invocation
+### 提示符的改进
 
-In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
+在 vue-cli 插件中，你可能已经有一个 `prompts.js` 文件，在 (用 CLI 或 UI) 安装该插件的时候询问用户一些问题。你可以向那些提示符对象额外添加只支持 UI 的上述字段，这样的话如果用户使用 UI 的话可以看到更多的信息。
 
-**⚠️ Currently, the inquirer types which aren't supported (see above) will not work properly in the UI.**
+::: warning 警告
+目前，那些不支持的 inquirer 类型不会在 UI 中正常工作。
+:::
 
 ## Client addon
 
@@ -684,6 +686,7 @@ locales.keys().forEach(key => {
 The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
 
 In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent. You can also translate the strings with [vue-i18n](https://github.com/kazupon/vue-i18n) which is included.
+
 ### Register the client addon
 
 Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
