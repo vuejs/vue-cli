@@ -29,10 +29,10 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
 
     const nonDuplicates = i => {
       return !importDeclarations.some(node => {
-        let result = node.source.raw === i.source.raw && node.specifiers.length === i.specifiers.length
+        const result = node.source.raw === i.source.raw && node.specifiers.length === i.specifiers.length
 
         return result && node.specifiers.every((item, index) => {
-          return i.specifiers[index].local.name == item.local.name
+          return i.specifiers[index].local.name === item.local.name
         })
       })
     }
@@ -50,12 +50,17 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
         if (node.callee.name === 'Vue') {
           const options = node.arguments[0]
           if (options && options.type === 'ObjectExpression') {
-            const props = options.properties
+            const nonDuplicates = i => {
+              return !options.properties.slice(0, -1).some(p => {
+                return p.value.type === 'Identifier' && i[0].key.name === p.key.name &&
+                  i[0].value.name === p.value.name
+              })
+            }
             // inject at index length - 1 as it's usually the render fn
             options.properties = [
-              ...props.slice(0, props.length - 1),
-              ...([].concat(...injections.map(toProperty))),
-              ...props.slice(props.length - 1)
+              ...options.properties.slice(0, -1),
+              ...([].concat(...injections.map(toProperty).filter(nonDuplicates))),
+              ...options.properties.slice(-1)
             ]
           }
         }
