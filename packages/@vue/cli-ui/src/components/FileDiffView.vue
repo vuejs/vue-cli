@@ -3,7 +3,7 @@
     <div class="toolbar">
       <VueIcon icon="cached"/>
       <div class="title">{{ $t('org.vue.components.file-diff-view.files-changed') }}</div>
-      <div class="file-count">{{ fileDiffs.length }}</div>
+      <div class="file-count">{{ fileDiffs && fileDiffs.length }}</div>
       <div class="vue-ui-spacer"/>
       <VueInput
         v-model="search"
@@ -22,21 +22,28 @@
       />
     </div>
     <div class="list">
-      <FileDiff
-        v-for="fileDiff of filteredList"
-        :key="fileDiff.id"
-        :file-diff="fileDiff"
-        :collapsed="!!collapsed[fileDiff.id]"
-        @update:collapsed="value => $set(collapsed, fileDiff.id, value)"
-      />
+      <div v-if="error || !fileDiffs" class="vue-ui-empty">
+        <VueIcon icon="error" class="empty-icon"/>
+        <span>{{ $t('org.vue.components.file-diff-view.error') }}</span>
+      </div>
 
-      <div v-if="!filteredList.length" class="vue-ui-empty">
+      <div v-else-if="!filteredList.length" class="vue-ui-empty">
         <VueIcon icon="check_circle" class="empty-icon"/>
         <span>{{ $t('org.vue.components.file-diff-view.empty') }}</span>
       </div>
+
+      <template v-else>
+        <FileDiff
+          v-for="fileDiff of filteredList"
+          :key="fileDiff.id"
+          :file-diff="fileDiff"
+          :collapsed="!!collapsed[fileDiff.id]"
+          @update:collapsed="value => $set(collapsed, fileDiff.id, value)"
+        />
+      </template>
     </div>
     <div class="actions-bar">
-      <template v-if="fileDiffs.length">
+      <template v-if="!error && fileDiffs && fileDiffs.length">
         <VueButton
           icon-left="vertical_align_bottom"
           :label="$t('org.vue.components.file-diff-view.actions.commit')"
@@ -133,7 +140,8 @@ export default {
       search: '',
       loading: 0,
       commitMessage: '',
-      showCommitModal: false
+      showCommitModal: false,
+      error: null
     }
   },
 
@@ -142,7 +150,16 @@ export default {
       query: FILE_DIFFS,
       loadingKey: 'loading',
       fetchPolicy: 'network-only',
-      result () {
+      error (error) {
+        this.error = error
+      },
+      result (result) {
+        if (result.errors && result.errors.length) {
+          this.error = result.errors[0]
+          return
+        }
+
+        this.error = null
         this.fileDiffs.forEach(fileDiff => {
           if (typeof this.collapsed[fileDiff.id] === 'undefined' && (
             fileDiff.binary ||
@@ -158,12 +175,14 @@ export default {
 
   computed: {
     allCollapsed () {
+      if (!this.fileDiffs) return false
       return !this.fileDiffs.find(
         fileDiff => !this.collapsed[fileDiff.id]
       )
     },
 
     filteredList () {
+      if (!this.fileDiffs) return []
       const search = this.search.trim()
       if (search) {
         const reg = new RegExp(search.replace(/\s+/g, '.*'), 'i')
