@@ -41,6 +41,7 @@
 
 <script>
 import RestoreRoute from '../mixins/RestoreRoute'
+import { generateSearchRegex } from '../util/search'
 
 import CONFIGS from '../graphql/configurations.gql'
 
@@ -78,7 +79,7 @@ export default {
     generateItems (configurations) {
       if (!configurations) return []
 
-      const reg = this.search && new RegExp(this.search, 'i')
+      const reg = generateSearchRegex(this.search)
       return configurations.filter(
         item => !reg || item.name.match(reg) || item.description.match(reg)
       ).map(

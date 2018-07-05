@@ -7,10 +7,18 @@
       <template slot-scope="{ result: { data, loading } }">
         <template v-if="data">
           <div v-if="data.projects.length">
+            <div class="toolbar">
+              <VueInput
+                v-model="search"
+                icon-left="search"
+                class="round"
+              />
+            </div>
+
             <ListFilter
               v-for="favorite of [true, false]"
               :key="favorite"
-              :list="data.projects"
+              :list="filterProjects(data.projects)"
               :filter="item => !!item.favorite === favorite"
             >
               <template slot-scope="{ list }">
@@ -59,6 +67,8 @@
 </template>
 
 <script>
+import { generateSearchRegex } from '../util/search'
+
 import PROJECTS from '../graphql/projects.gql'
 import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import PROJECT_OPEN from '../graphql/projectOpen.gql'
@@ -66,6 +76,12 @@ import PROJECT_REMOVE from '../graphql/projectRemove.gql'
 import PROJECT_SET_FAVORITE from '../graphql/projectSetFavorite.gql'
 
 export default {
+  data () {
+    return {
+      search: ''
+    }
+  },
+
   apollo: {
     projectCurrent: PROJECT_CURRENT
   },
@@ -113,6 +129,16 @@ export default {
 
     compareProjects (a, b) {
       return a.name.localeCompare(b.name)
+    },
+
+    filterProjects (projects) {
+      const reg = generateSearchRegex(this.search)
+      if (reg) {
+        return projects.filter(
+          p => reg.test(p.path)
+        )
+      }
+      return projects
     }
   }
 }
@@ -126,4 +152,9 @@ export default {
   overflow-y auto
   position relative
   min-height 400px
+
+.toolbar
+  h-box()
+  box-center()
+  margin-bottom $padding-item
 </style>
