@@ -96,10 +96,15 @@ function findPlugins (deps, file) {
       versionRange: deps[id],
       official: isOfficialPlugin(id) || id === CLI_SERVICE,
       installed: fs.existsSync(dependencies.getPath({ id, file })),
-      website: getPluginLink(id),
+      website: getLink(id),
       baseDir: file
     })
   )
+}
+
+function getLink (id) {
+  if (id === CLI_SERVICE) return 'https://cli.vuejs.org/'
+  return getPluginLink(id)
 }
 
 function getPlugins (file) {
