@@ -11,6 +11,8 @@ if (process.env.VUE_CLI_UI_TEST) {
   folder = '../../live-test'
   // Clean DB
   fs.removeSync(path.resolve(__dirname, folder))
+} else if (process.env.VUE_APP_CLI_UI_DEV) {
+  folder = '../../live'
 } else {
   folder = process.env.VUE_CLI_UI_DB_PATH ||
     xdgConfigPath('.vue-cli-ui') ||
