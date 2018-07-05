@@ -30,6 +30,7 @@ const {
   warn,
   error,
   hasGit,
+  hasProjectGit,
   hasYarn,
   logWithSpinner,
   stopSpinner,
@@ -443,17 +444,9 @@ module.exports = class Creator extends EventEmitter {
       return false
     }
     if (cliOptions.git) {
-      return cliOptions.git !== 'false'
+      return cliOptions.git !== 'false' && cliOptions.git !== false
     }
-    // check if we are in a git repo already
-    try {
-      await this.run('git', ['status'])
-    } catch (e) {
-      // if git status failed, let's create a fresh repo
-      return true
-    }
-    // if git status worked, it means we are already in a git repo
-    // so don't init again.
-    return false
+
+    return !hasProjectGit(this.context)
   }
 }

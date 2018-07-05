@@ -3,8 +3,12 @@ const path = require('path')
 const parseDiff = require('../util/parse-diff')
 // Connectors
 const cwd = require('./cwd')
+// Utils
+const { hasProjectGit } = require('@vue/cli-shared-utils')
 
 async function getNewFiles (context) {
+  if (!hasProjectGit(cwd.get())) return []
+
   const { stdout } = await execa('git', [
     'ls-files',
     '-o',
@@ -20,6 +24,8 @@ async function getNewFiles (context) {
 }
 
 async function getDiffs (context) {
+  if (!hasProjectGit(cwd.get())) return []
+
   const newFiles = await getNewFiles(context)
   await execa('git', ['add', '-N', '*'], {
     cwd: cwd.get()
@@ -40,6 +46,8 @@ async function getDiffs (context) {
 }
 
 async function commit (message, context) {
+  if (!hasProjectGit(cwd.get())) return false
+
   await execa('git', ['add', '*'], {
     cwd: cwd.get()
   })
@@ -50,6 +58,8 @@ async function commit (message, context) {
 }
 
 async function reset (context) {
+  if (!hasProjectGit(cwd.get())) return false
+
   await execa('git', ['reset'], {
     cwd: cwd.get()
   })
@@ -57,6 +67,8 @@ async function reset (context) {
 }
 
 async function getRoot (context) {
+  if (!hasProjectGit(cwd.get())) return cwd.get()
+
   const { stdout } = await execa('git', [
     'rev-parse',
     '--show-toplevel'

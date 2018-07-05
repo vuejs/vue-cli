@@ -13,8 +13,8 @@ const normalizeFilePaths = require('./util/normalizeFilePaths')
 const {
   log,
   error,
-  hasYarn,
-  hasGit,
+  hasProjectYarn,
+  hasProjectGit,
   logWithSpinner,
   stopSpinner,
   resolvePluginId
@@ -122,7 +122,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   if (!isTestOrDebug && depsChanged) {
     log(`📦  Installing additional dependencies...`)
     const packageManager =
-      loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
+      loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
     await installDeps(context, packageManager)
   }
 
@@ -137,7 +137,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
 
   log()
   log(`   Successfully invoked generator for plugin: ${chalk.cyan(plugin.id)}`)
-  if (!process.env.VUE_CLI_TEST && hasGit()) {
+  if (!process.env.VUE_CLI_TEST && hasProjectGit(context)) {
     const { stdout } = await execa('git', [
       'ls-files',
       '--exclude-standard',
@@ -157,14 +157,14 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
         )
       )
       log()
+      log(
+        `   You should review these changes with ${chalk.cyan(
+          `git diff`
+        )} and commit them.`
+      )
+      log()
     }
   }
-  log(
-    `   You should review these changes with ${chalk.cyan(
-      `git diff`
-    )} and commit them.`
-  )
-  log()
 
   generator.printExitLogs()
 }

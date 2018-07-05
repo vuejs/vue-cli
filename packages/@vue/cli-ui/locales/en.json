@@ -16,6 +16,7 @@
           "files-changed": "Files changed",
           "search-file": "Search file",
           "empty": "No change found",
+          "error": "Couldn't get file changes",
           "modals": {
             "commit": {
               "title": "Commit changes",

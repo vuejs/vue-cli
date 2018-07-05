@@ -1,6 +1,6 @@
 const {
   info,
-  hasYarn,
+  hasProjectYarn,
   openBrowser,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
@@ -193,7 +193,7 @@ module.exports = (api, options) => {
           isFirstCompile = false
 
           if (!isProduction) {
-            const buildCommand = hasYarn() ? `yarn build` : `npm run build`
+            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
           } else {
