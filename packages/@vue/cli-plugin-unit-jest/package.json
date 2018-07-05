@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.20",
-    "ts-jest": "^22.4.6"
+    "ts-jest": "^23.0.0"
   }
 }

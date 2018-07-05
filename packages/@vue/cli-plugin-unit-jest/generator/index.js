@@ -57,7 +57,7 @@ module.exports = api => {
     jestConfig.transform['^.+\\.tsx?$'] = 'ts-jest'
     api.extendPackage({
       devDependencies: {
-        'ts-jest': '^22.4.6'
+        'ts-jest': '^23.0.0'
       }
     })
     if (api.hasPlugin('babel')) {
