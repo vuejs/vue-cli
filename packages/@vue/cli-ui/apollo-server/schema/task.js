@@ -71,7 +71,7 @@ type TaskView {
 exports.resolvers = {
   Task: {
     prompts: (task, args, context) => tasks.getPrompts(task.id, context),
-    plugin: (task, args, context) => plugins.findOne(task.pluginId, context),
+    plugin: (task, args, context) => plugins.findOne({ id: task.pluginId, file: task.path }, context),
     project: (task, args, context) => projects.findByPath(task.path, context)
   },
 

@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const LRU = require('lru-cache')
+const chalk = require('chalk')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -47,14 +48,13 @@ const logoCache = new LRU({
 // Local
 let currentPluginId
 let eventsInstalled = false
-let plugins = []
-let pluginApi
 let installationStep
-let projectId
+let pluginsStore = new Map()
+let pluginApiInstances = new Map()
 
-function list (file, context, resetApi = true) {
+async function list (file, context, resetApi = true) {
   const pkg = folders.readPackage(file, context)
-  plugins = []
+  let plugins = []
   plugins = plugins.concat(findPlugins(pkg.devDependencies || {}))
   plugins = plugins.concat(findPlugins(pkg.dependencies || {}))
 
@@ -66,11 +66,14 @@ function list (file, context, resetApi = true) {
     plugins.unshift(service)
   }
 
-  if (resetApi) resetPluginApi(context)
+  pluginsStore.set(file, plugins)
+
+  if (resetApi || !pluginApiInstances.get(file)) await resetPluginApi({ file }, context)
   return plugins
 }
 
-function findOne (id, context) {
+function findOne ({ id, file }, context) {
+  const plugins = getPlugins(file)
   return plugins.find(
     p => p.id === id
   )
@@ -90,54 +93,77 @@ function findPlugins (deps) {
   )
 }
 
-function resetPluginApi (context) {
-  // Clean up
-  if (pluginApi) {
-    pluginApi.views.forEach(r => views.remove(r.id, context))
-    pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
-  }
-  sharedData.unWatchAll()
-
-  clientAddons.clear(context)
-  suggestions.clear(context)
-
-  setTimeout(() => {
-    const projects = require('./projects')
-    const project = projects.getCurrent(context)
-
-    pluginApi = new PluginApi({
-      plugins
-    }, context)
-
-    if (projects.getType(project) !== 'vue') return
-
-    // Run Plugin API
-    runPluginApi(path.resolve(__dirname, '../../'), context, 'ui-defaults')
-    plugins.forEach(plugin => runPluginApi(plugin.id, context))
-    runPluginApi(cwd.get(), context, 'vue-cli-ui')
-    // Add client addons
-    pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
-    // Add views
-    pluginApi.views.forEach(view => views.add(view, context))
-
-    if (!project) return
-    projectId = project.id
-    pluginApi.project = project
-    if (projectId !== project.id) {
-      callHook('projectOpen', [project, projects.getLast(context)], context)
-    } else {
-      callHook('pluginReload', [project], context)
-
-      // View open hook
-      const currentView = views.getCurrent()
-      if (currentView) views.open(currentView.id)
-    }
-  })
-
-  return true
+function getPlugins (file) {
+  const plugins = pluginsStore.get(file)
+  if (!plugins) return []
+  return plugins
 }
 
-function runPluginApi (id, context, fileName = 'ui') {
+function resetPluginApi ({ file }, context) {
+  return new Promise((resolve, reject) => {
+    let pluginApi = pluginApiInstances.get(file)
+    let projectId
+
+    // Clean up
+    if (pluginApi) {
+      projectId = pluginApi.project && pluginApi.project.id
+      pluginApi.views.forEach(r => views.remove(r.id, context))
+      pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
+    }
+    sharedData.unWatchAll()
+
+    clientAddons.clear(context)
+    suggestions.clear(context)
+
+    // Cyclic dependency with projects connector
+    setTimeout(() => {
+      const projects = require('./projects')
+      const project = projects.getCurrent(context)
+      const plugins = getPlugins(file)
+
+      pluginApi = new PluginApi({
+        plugins,
+        file
+      }, context)
+      pluginApiInstances.set(file, pluginApi)
+
+      if (projects.getType(project) !== 'vue') return
+
+      // Run Plugin API
+      runPluginApi(path.resolve(__dirname, '../../'), pluginApi, context, 'ui-defaults')
+      plugins.forEach(plugin => runPluginApi(plugin.id, pluginApi, context))
+      runPluginApi(cwd.get(), pluginApi, context, 'vue-cli-ui')
+      // Add client addons
+      pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
+      // Add views
+      pluginApi.views.forEach(view => views.add(view, context))
+
+      if (!project) return
+      pluginApi.project = project
+      if (projectId !== project.id) {
+        callHook({
+          id: 'projectOpen',
+          args: [project, projects.getLast(context)],
+          file
+        }, context)
+      } else {
+        callHook({
+          id: 'pluginReload',
+          args: [project],
+          file
+        }, context)
+
+        // View open hook
+        const currentView = views.getCurrent()
+        if (currentView) views.open(currentView.id)
+      }
+
+      resolve(true)
+    })
+  })
+}
+
+function runPluginApi (id, pluginApi, context, fileName = 'ui') {
   let module
   try {
     module = loadModule(`${id}/${fileName}`, cwd.get(), true)
@@ -149,7 +175,7 @@ function runPluginApi (id, context, fileName = 'ui') {
   if (module) {
     pluginApi.pluginId = id
     module(pluginApi)
-    log('Plugin API loaded for', id)
+    log('Plugin API loaded for', id, chalk.grey(pluginApi.cwd))
     pluginApi.pluginId = null
   }
 
@@ -160,7 +186,14 @@ function runPluginApi (id, context, fileName = 'ui') {
   } catch (e) {}
 }
 
-function callHook (id, args, context) {
+function getApi (folder) {
+  const pluginApi = pluginApiInstances.get(folder)
+  if (!pluginApi) throw new Error(`No plugin API available for ${folder}`)
+  return pluginApi
+}
+
+function callHook ({ id, args, file }, context) {
+  const pluginApi = getApi(file)
   const fns = pluginApi.hooks[id]
   log(`Hook ${id}`, fns.length, 'handlers')
   fns.forEach(fn => fn(...args))
@@ -287,7 +320,7 @@ function runInvoke (id, context) {
       await invoke(id, prompts.getAnswers(), cwd.get())
     }
     // Run plugin api
-    runPluginApi(id, context)
+    runPluginApi(id, getApi(cwd.get()), context)
     installationStep = 'diff'
 
     notify({
@@ -327,7 +360,7 @@ function update (id, context) {
       args: [id]
     })
     currentPluginId = id
-    const plugin = findOne(id, context)
+    const plugin = findOne({ id, file: cwd.get() }, context)
     const { current, wanted } = await dependencies.getVersion(plugin, context)
 
     await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
@@ -343,11 +376,11 @@ function update (id, context) {
       icon: 'done'
     })
 
-    resetPluginApi(context)
+    await resetPluginApi({ file: cwd.get() }, context)
     dependencies.invalidatePackage(id, context)
 
     currentPluginId = null
-    return findOne(id)
+    return findOne({ id, file: cwd.get() }, context)
   })
 }
 
@@ -387,17 +420,15 @@ async function updateAll (context) {
       icon: 'done'
     })
 
-    resetPluginApi(context)
+    await resetPluginApi({ file: cwd.get() }, context)
 
     return updatedPlugins
   })
 }
 
-function getApi () {
-  return pluginApi
-}
+async function callAction ({ id, params, file = cwd.get() }, context) {
+  const pluginApi = getApi(file)
 
-async function callAction ({ id, params }, context) {
   context.pubsub.publish(channels.PLUGIN_ACTION_CALLED, {
     pluginActionCalled: { id, params }
   })

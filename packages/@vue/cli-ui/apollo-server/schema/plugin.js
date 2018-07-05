@@ -77,7 +77,7 @@ exports.resolvers = {
   Query: {
     pluginInstallation: (root, args, context) => plugins.getInstallation(context),
     plugins: (root, args, context) => plugins.list(cwd.get(), context),
-    plugin: (root, { id }, context) => plugins.findOne(id, context)
+    plugin: (root, { id }, context) => plugins.findOne({ id, file: cwd.get() }, context)
   },
 
   Mutation: {
@@ -88,7 +88,7 @@ exports.resolvers = {
     pluginUpdate: (root, { id }, context) => plugins.update(id, context),
     pluginActionCall: (root, args, context) => plugins.callAction(args, context),
     pluginsUpdate: (root, args, context) => plugins.updateAll(context),
-    pluginResetApi: (root, args, context) => plugins.resetPluginApi(context)
+    pluginResetApi: (root, args, context) => plugins.resetPluginApi({ file: cwd.get() }, context)
   },
 
   Subscription: {

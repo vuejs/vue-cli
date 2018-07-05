@@ -1,5 +1,6 @@
 const gql = require('graphql-tag')
 // Connectors
+const cwd = require('../connectors/cwd')
 const configurations = require('../connectors/configurations')
 const plugins = require('../connectors/plugins')
 
@@ -35,7 +36,7 @@ type ConfigurationTab {
 exports.resolvers = {
   Configuration: {
     tabs: (configuration, args, context) => configurations.getPromptTabs(configuration.id, context),
-    plugin: (configuration, args, context) => plugins.findOne(configuration.pluginId, context)
+    plugin: (configuration, args, context) => plugins.findOne({ id: configuration.pluginId, file: cwd.get() }, context)
   },
 
   Query: {

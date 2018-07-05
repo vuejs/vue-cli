@@ -5,7 +5,6 @@ const sharedData = require('../connectors/shared-data')
 const views = require('../connectors/views')
 const suggestions = require('../connectors/suggestions')
 const folders = require('../connectors/folders')
-const cwd = require('../connectors/cwd')
 const progress = require('../connectors/progress')
 // Utils
 const ipc = require('../util/ipc')
@@ -22,12 +21,13 @@ const { validateSuggestion } = require('./suggestion')
 const { validateProgress } = require('./progress')
 
 class PluginApi {
-  constructor ({ plugins }, context) {
+  constructor ({ plugins, file }, context) {
     // Context
     this.context = context
     this.pluginId = null
     this.project = null
     this.plugins = plugins
+    this.cwd = file
     // Hooks
     this.hooks = {
       projectOpen: [],
@@ -362,8 +362,7 @@ class PluginApi {
    */
   hasPlugin (id) {
     if (['vue-router', 'vuex'].includes(id)) {
-      const folder = cwd.get()
-      const pkg = folders.readPackage(folder, this.context, true)
+      const pkg = folders.readPackage(this.cwd, this.context, true)
       return ((pkg.dependencies && pkg.dependencies[id]) || (pkg.devDependencies && pkg.devDependencies[id]))
     }
     return this.plugins.some(p => matchesPluginId(id, p.id))
@@ -402,7 +401,7 @@ class PluginApi {
    * Get current working directory.
    */
   getCwd () {
-    return cwd.get()
+    return this.cwd()
   }
 
   /**
@@ -410,7 +409,7 @@ class PluginApi {
    * @param {string} file Path to file relative to project
    */
   resolve (file) {
-    return path.resolve(cwd.get(), file)
+    return path.resolve(this.cwd, file)
   }
 
   /**

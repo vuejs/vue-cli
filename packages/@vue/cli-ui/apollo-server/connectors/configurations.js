@@ -18,7 +18,7 @@ const fileTypes = ['js', 'json', 'yaml']
 let current = {}
 
 function list (context) {
-  return plugins.getApi().configurations
+  return plugins.getApi(cwd.get()).configurations
 }
 
 function findOne (id, context) {
@@ -183,13 +183,17 @@ async function getPromptTabs (id, context) {
     }
     await prompts.start()
 
-    plugins.callHook('configRead', [{
-      config,
-      data,
-      onReadData,
-      tabs,
-      cwd: cwd.get()
-    }], context)
+    plugins.callHook({
+      id: 'configRead',
+      args: [{
+        config,
+        data,
+        onReadData,
+        tabs,
+        cwd: cwd.get()
+      }],
+      file: cwd.get()
+    }, context)
 
     return tabs
   }
@@ -252,12 +256,16 @@ async function save (id, context) {
 
       writeData({ config, data, changedFields }, context)
 
-      plugins.callHook('configWrite', [{
-        config,
-        data,
-        changedFields,
-        cwd: cwd.get()
-      }], context)
+      plugins.callHook({
+        id: 'configWrite',
+        args: [{
+          config,
+          data,
+          changedFields,
+          cwd: cwd.get()
+        }],
+        file: cwd.get()
+      }, context)
 
       current = {}
     }

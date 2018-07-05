@@ -130,10 +130,14 @@ function open (id, context) {
   const view = findOne(id)
   currentView = view
   const plugins = require('./plugins')
-  plugins.callHook('viewOpen', [{
-    view,
-    cwd: cwd.get()
-  }], context)
+  plugins.callHook({
+    id: 'viewOpen',
+    args: [{
+      view,
+      cwd: cwd.get()
+    }],
+    file: cwd.get()
+  }, context)
   return true
 }
 

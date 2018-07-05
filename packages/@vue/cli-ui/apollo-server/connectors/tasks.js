@@ -29,12 +29,14 @@ function getTasks (file = null) {
   return list
 }
 
-function list ({ file = null, api = true } = {}, context) {
+async function list ({ file = null, api = true } = {}, context) {
   if (!file) file = cwd.get()
   let list = getTasks(file)
   const pkg = folders.readPackage(file, context)
   if (pkg.scripts) {
     const existing = new Map()
+
+    await plugins.list(file, context, false)
 
     // Get current valid tasks in project `package.json`
     let currentTasks = Object.keys(pkg.scripts).map(
@@ -42,7 +44,7 @@ function list ({ file = null, api = true } = {}, context) {
         const id = `${file}:${name}`
         existing.set(id, true)
         const command = pkg.scripts[name]
-        const moreData = api ? plugins.getApi().getDescribedTask(command) : null
+        const moreData = api ? plugins.getApi(file).getDescribedTask(command) : null
         return {
           id,
           name,
@@ -57,7 +59,7 @@ function list ({ file = null, api = true } = {}, context) {
     )
 
     if (api) {
-      currentTasks = currentTasks.concat(plugins.getApi().addedTasks.map(
+      currentTasks = currentTasks.concat(plugins.getApi(file).addedTasks.map(
         task => {
           const id = `${file}:${task.name}`
           existing.set(id, true)
@@ -399,14 +401,18 @@ async function run (id, context) {
         })
       }
 
-      plugins.callHook('taskExit', [{
-        task,
-        args,
-        child,
-        cwd: cwd.get(),
-        signal,
-        code
-      }], context)
+      plugins.callHook({
+        id: 'taskExit',
+        args: [{
+          task,
+          args,
+          child,
+          cwd: cwd.get(),
+          signal,
+          code
+        }],
+        file: cwd.get()
+      }, context)
     }
 
     child.on('exit', onExit)
@@ -420,12 +426,16 @@ async function run (id, context) {
       })
     }
 
-    plugins.callHook('taskRun', [{
-      task,
-      args,
-      child,
-      cwd: cwd.get()
-    }], context)
+    plugins.callHook({
+      id: 'taskRun',
+      args: [{
+        task,
+        args,
+        child,
+        cwd: cwd.get()
+      }],
+      file: cwd.get()
+    }, context)
   }
   return task
 }
@@ -462,10 +472,14 @@ function clearLogs (id, context) {
 
 function open (id, context) {
   const task = findOne(id, context)
-  plugins.callHook('taskOpen', [{
-    task,
-    cwd: cwd.get()
-  }], context)
+  plugins.callHook({
+    id: 'taskOpen',
+    args: [{
+      task,
+      cwd: cwd.get()
+    }],
+    file: cwd.get()
+  }, context)
   return true
 }
 

@@ -1,15 +1,11 @@
 #import "./projectFragment.gql"
+#import "./taskFragment.gql"
 
 query projects {
   projects {
     ...project
     tasks {
-      id
-      name
-      status
-      project {
-        id
-      }
+      ...task
     }
   }
 }

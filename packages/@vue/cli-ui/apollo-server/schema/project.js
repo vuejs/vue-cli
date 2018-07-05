@@ -84,7 +84,7 @@ exports.resolvers = {
   Project: {
     type: (project, args, context) => projects.getType(project),
     plugins: (project, args, context) => plugins.list(project.path, context),
-    tasks: (project, args, context) => tasks.list({ file: project.path, api: false }, context),
+    tasks: (project, args, context) => tasks.list({ file: project.path }, context),
     homepage: (project, args, context) => projects.getHomepage(project, context)
   },
 
