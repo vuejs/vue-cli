@@ -383,6 +383,11 @@ async function open (id, context) {
   // Load plugins
   plugins.list(project.path, context)
 
+  // Date
+  context.db.get('projects').find({ id }).assign({
+    openDate: Date.now()
+  }).write()
+
   // Save for next time
   context.db.set('config.lastOpenProject', id).write()
 

@@ -7,6 +7,8 @@
       icon-right="arrow_drop_down"
       button-class="flat round"
     >
+      <!-- Current project options -->
+
       <template v-if="projectCurrent">
         <VueSwitch
           :value="projectCurrent.favorite"
@@ -34,6 +36,8 @@
 
       <div class="dropdown-separator"/>
 
+      <!-- Favorites -->
+
       <div v-if="!favoriteProjects.length" class="vue-ui-empty">{{ $t('org.vue.components.top-bar.no-favorites') }}</div>
 
       <template v-else>
@@ -46,6 +50,24 @@
           :key="project.id"
           :label="project.name"
           icon-left="star"
+          @click="openProject(project)"
+        />
+      </template>
+
+      <!-- Recents -->
+
+      <template v-if="recentProjects.length">
+        <div class="dropdown-separator"/>
+
+        <div class="section-title">
+          {{ $t('org.vue.components.top-bar.recent-projects') }}
+        </div>
+
+        <VueDropdownButton
+          v-for="project of recentProjects"
+          :key="project.id"
+          :label="project.name"
+          icon-left="restore"
           @click="openProject(project)"
         />
       </template>
@@ -92,6 +114,13 @@ export default {
       return this.projects.filter(
         p => p.favorite && (!this.projectCurrent || this.projectCurrent.id !== p.id)
       )
+    },
+
+    recentProjects () {
+      if (!this.projects) return []
+      return this.projects.filter(
+        p => !p.favorite && (!this.projectCurrent || this.projectCurrent.id !== p.id)
+      ).sort((a, b) => b.openDate - a.openDate).slice(0, 3)
     }
   },
 

@@ -163,6 +163,7 @@
         "top-bar": {
           "no-favorites": "No favorite projects",
           "favorite-projects": "Favorite projects",
+          "recent-projects": "Recent projects",
           "homepage": "Home page"
         },
         "view-badge": {

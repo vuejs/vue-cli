@@ -33,6 +33,7 @@ type Project {
   plugins: [Plugin]
   tasks: [Task]
   homepage: String
+  openDate: JSON
 }
 
 enum ProjectType {
