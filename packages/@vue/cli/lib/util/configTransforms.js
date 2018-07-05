@@ -94,10 +94,18 @@ function transformYAML (value, filename, source) {
   }
 }
 
+function transformBrowserslist (value, filename, source) {
+  return {
+    filename: `.browserslistrc`,
+    content: value.join('\n')
+  }
+}
+
 module.exports = {
   vue: makeJSTransform('vue.config.js'),
   babel: makeJSTransform('babel.config.js'),
   postcss: makeMutliExtensionJSONTransform('.postcssrc', true),
   eslintConfig: makeMutliExtensionJSONTransform('.eslintrc', true),
-  jest: makeJSTransform('jest.config.js')
+  jest: makeJSTransform('jest.config.js'),
+  browserslist: transformBrowserslist
 }
