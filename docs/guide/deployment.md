@@ -92,7 +92,66 @@ See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin
 
 ### Firebase
 
-> TODO | Open to contribution.
+Create a new Firebase project on your [Firebase console](https://console.firebase.google.com). Please refer to this [documentation](https://firebase.google.com/docs/web/setup) on how to setup your project.
+
+Make sure you have installed [firebase-tools](https://github.com/firebase/firebase-tools) globally:
+
+```
+npm install -g firebase-tools
+```
+
+From the root of your project, initialize `firebase` using the command:
+
+```
+firebase init
+```
+
+Firebase will ask some questions on how to setup your project.
+
+- Choose which Firebase CLI features you want to setup your project. Make sure to select `hosting`.
+- Select the default Firebase project for your project.
+- Set your `public` directory to `dist` (or where your build's output is) which will be uploaded to Firebase Hosting.
+
+```javascript
+// firebase.json
+
+{
+  "hosting": {
+    "public": "app"
+  }
+}
+```
+
+- Select `yes` to configure your project as a single-page app. This will create an `index.html` and on your `dist` folder and configure your `hosting` information.
+
+```javascript
+// firebase.json
+
+{
+  "hosting": {
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+```
+
+Run `npm run build` to build your project.
+
+To deploy your project on Firebase Hosting, run the command:
+
+```
+firebase deploy --only hosting
+```
+
+If you want other Firebase CLI features you use on your project to be deployed, run `firebase deploy` without the `--only` option.
+
+You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
+
+Please refer on the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 
 ### Now
 
