@@ -29,6 +29,8 @@ test('polyfill detection', () => {
   }))
   // default includes
   expect(code).toMatch(`import "core-js/modules/es6.promise"`)
+  // promise polyfill alone doesn't work in IE, needs this as well. fix: #1642
+  expect(code).toMatch(`import "core-js/modules/es6.array.iterator"`)
   // usage-based detection
   expect(code).toMatch(`import "core-js/modules/es6.map"`)
 })

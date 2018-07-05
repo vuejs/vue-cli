@@ -1,7 +1,10 @@
 const path = require('path')
 
 const defaultPolyfills = [
-  'es6.promise'
+  'es6.promise',
+  // promise polyfill alone doesn't work in IE,
+  // needs this as well. see: #1642
+  'es6.array.iterator'
 ]
 
 function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
