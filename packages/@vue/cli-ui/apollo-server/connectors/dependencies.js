@@ -150,7 +150,7 @@ function install ({ id, type }, context) {
       status: 'dependency-install',
       args: [id]
     })
-    await installPackage(cwd.get(), getCommand(), null, id, type === 'devDependencies')
+    await installPackage(cwd.get(), getCommand(cwd.get()), null, id, type === 'devDependencies')
 
     logs.add({
       message: `Dependency ${id} installed`,
@@ -178,7 +178,7 @@ function uninstall ({ id }, context) {
 
     const dep = findOne(id, context)
 
-    await uninstallPackage(cwd.get(), getCommand(), null, id)
+    await uninstallPackage(cwd.get(), getCommand(cwd.get()), null, id)
 
     logs.add({
       message: `Dependency ${id} uninstalled`,
@@ -204,7 +204,7 @@ function update ({ id }, context) {
 
     const dep = findOne(id, context)
     const { current, wanted } = await getVersion(dep, context)
-    await updatePackage(cwd.get(), getCommand(), null, id)
+    await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
 
     logs.add({
       message: `Dependency ${id} updated from ${current} to ${wanted}`,
@@ -249,7 +249,7 @@ function updateAll (context) {
       args: [updatedDeps.length]
     })
 
-    await updatePackage(cwd.get(), getCommand(), null, updatedDeps.map(
+    await updatePackage(cwd.get(), getCommand(cwd.get()), null, updatedDeps.map(
       p => p.id
     ).join(' '))
 

@@ -217,7 +217,7 @@ function install (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockInstall(id, context)
     } else {
-      await installPackage(cwd.get(), getCommand(), null, id)
+      await installPackage(cwd.get(), getCommand(cwd.get()), null, id)
     }
     await initPrompts(id, context)
     installationStep = 'config'
@@ -250,7 +250,7 @@ function uninstall (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockUninstall(id, context)
     } else {
-      await uninstallPackage(cwd.get(), getCommand(), null, id)
+      await uninstallPackage(cwd.get(), getCommand(cwd.get()), null, id)
     }
     currentPluginId = null
     installationStep = null
@@ -330,7 +330,7 @@ function update (id, context) {
     const plugin = findOne(id, context)
     const { current, wanted } = await dependencies.getVersion(plugin, context)
 
-    await updatePackage(cwd.get(), getCommand(), null, id)
+    await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
 
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
@@ -377,7 +377,7 @@ async function updateAll (context) {
       args: [updatedPlugins.length]
     })
 
-    await updatePackage(cwd.get(), getCommand(), null, updatedPlugins.map(
+    await updatePackage(cwd.get(), getCommand(cwd.get()), null, updatedPlugins.map(
       p => p.id
     ).join(' '))
 

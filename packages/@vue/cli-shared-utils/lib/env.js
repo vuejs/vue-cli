@@ -1,35 +1,41 @@
 const { execSync } = require('child_process')
 
-let _hasYarn
-let _hasGit
+const _hasYarn = new Map()
+const _hasGit = new Map()
 
 // env detection
-exports.hasYarn = () => {
+exports.hasYarn = (context = undefined) => {
   if (process.env.VUE_CLI_TEST) {
     return true
   }
-  if (_hasYarn != null) {
-    return _hasYarn
+  if (_hasYarn.has(context)) {
+    return _hasYarn.get(context)
   }
+  let result
   try {
     execSync('yarnpkg --version', { stdio: 'ignore' })
-    return (_hasYarn = true)
+    result = true
   } catch (e) {
-    return (_hasYarn = false)
+    result = false
   }
+  _hasYarn.set(context, result)
+  return result
 }
 
-exports.hasGit = () => {
+exports.hasGit = (context = undefined) => {
   if (process.env.VUE_CLI_TEST) {
     return true
   }
-  if (_hasGit != null) {
-    return _hasGit
+  if (_hasGit.has(context)) {
+    return _hasGit.get(context)
   }
+  let result
   try {
-    execSync('git --version', { stdio: 'ignore' })
-    return (_hasGit = true)
+    execSync('git --version', { stdio: 'ignore', cwd: context })
+    result = true
   } catch (e) {
-    return (_hasGit = false)
+    result = false
   }
+  _hasGit.set(context, result)
+  return result
 }
