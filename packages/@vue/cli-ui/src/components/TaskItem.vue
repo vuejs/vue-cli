@@ -11,7 +11,7 @@
   >
     <div class="content">
       <ItemLogo
-        :image="logo ? logo : iconData.icon"
+        :image="logo ? `${logo}?project=${task.project.id}` : iconData.icon"
         :class="iconData.class"
         v-tooltip="status"
         color-bullet

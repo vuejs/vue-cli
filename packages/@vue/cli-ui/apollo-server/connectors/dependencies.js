@@ -40,10 +40,10 @@ function list (file, context) {
   const pkg = folders.readPackage(file, context)
   dependencies = []
   dependencies = dependencies.concat(
-    findDependencies(pkg.devDependencies || {}, 'devDependencies', context)
+    findDependencies(pkg.devDependencies || {}, 'devDependencies', file, context)
   )
   dependencies = dependencies.concat(
-    findDependencies(pkg.dependencies || {}, 'dependencies', context)
+    findDependencies(pkg.dependencies || {}, 'dependencies', file, context)
   )
   return dependencies
 }
@@ -54,35 +54,37 @@ function findOne (id, context) {
   )
 }
 
-function findDependencies (deps, type, context) {
+function findDependencies (deps, type, file, context) {
   return Object.keys(deps).filter(
     id => !isPlugin(id) && id !== CLI_SERVICE
   ).map(
     id => ({
       id,
       versionRange: deps[id],
-      installed: fs.existsSync(getPath(id)),
-      website: getLink(id, context),
-      type
+      installed: fs.existsSync(getPath({ id, file })),
+      website: getLink({ id, file }, context),
+      type,
+      baseFir: file
     })
   )
 }
 
-function getPath (id) {
-  return resolveModuleRoot(resolveModule(path.join(id, 'package.json'), cwd.get()), id)
+function getPath ({ id, file = cwd.get() }) {
+  const filePath = resolveModule(path.join(id, 'package.json'), file)
+  return resolveModuleRoot(filePath, id)
 }
 
-function readPackage (id, context) {
+function readPackage ({ id, file }, context) {
   try {
-    return folders.readPackage(getPath(id), context)
+    return folders.readPackage(getPath({ id, file }), context)
   } catch (e) {
     console.log(e)
   }
   return {}
 }
 
-function invalidatePackage (id, context) {
-  return folders.invalidatePackage(getPath(id), context)
+function invalidatePackage ({ id, file }, context) {
+  return folders.invalidatePackage(getPath({ id, file }), context)
 }
 
 async function getMetadata (id, context) {
@@ -116,10 +118,10 @@ async function getMetadata (id, context) {
   }
 }
 
-async function getVersion ({ id, installed, versionRange }, context) {
+async function getVersion ({ id, installed, versionRange, baseDir }, context) {
   let current
   if (installed) {
-    const pkg = readPackage(id, context)
+    const pkg = readPackage({ id, file: baseDir }, context)
     current = pkg.version
   } else {
     current = null
@@ -152,8 +154,8 @@ async function getDescription ({ id }, context) {
   return null
 }
 
-function getLink (id, context) {
-  const pkg = readPackage(id, context)
+function getLink ({ id, file }, context) {
+  const pkg = readPackage({ id, file }, context)
   return pkg.homepage ||
     (pkg.repository && pkg.repository.url) ||
     `https://www.npmjs.com/package/${id.replace(`/`, `%2F`)}`

@@ -53,7 +53,7 @@ function unwatch (id, handler) {
   }
 }
 
-function unWatchAll () {
+function unWatchAll (context) {
   watchers = new Map()
 }
 

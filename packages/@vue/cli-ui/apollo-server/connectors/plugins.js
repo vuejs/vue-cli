@@ -2,6 +2,8 @@ const path = require('path')
 const fs = require('fs')
 const LRU = require('lru-cache')
 const chalk = require('chalk')
+// Context
+const getContext = require('../context')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -52,11 +54,11 @@ let installationStep
 let pluginsStore = new Map()
 let pluginApiInstances = new Map()
 
-async function list (file, context, resetApi = true) {
+async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
   const pkg = folders.readPackage(file, context)
   let plugins = []
-  plugins = plugins.concat(findPlugins(pkg.devDependencies || {}))
-  plugins = plugins.concat(findPlugins(pkg.dependencies || {}))
+  plugins = plugins.concat(findPlugins(pkg.devDependencies || {}, file))
+  plugins = plugins.concat(findPlugins(pkg.dependencies || {}, file))
 
   // Put cli service at the top
   const index = plugins.findIndex(p => p.id === CLI_SERVICE)
@@ -68,18 +70,24 @@ async function list (file, context, resetApi = true) {
 
   pluginsStore.set(file, plugins)
 
-  if (resetApi || !pluginApiInstances.get(file)) await resetPluginApi({ file }, context)
+  log('Plugins found:', plugins.length, chalk.grey(file))
+
+  if (resetApi || (autoLoadApi && !pluginApiInstances.has(file))) {
+    await resetPluginApi({ file, lightApi }, context)
+  }
   return plugins
 }
 
 function findOne ({ id, file }, context) {
   const plugins = getPlugins(file)
-  return plugins.find(
+  const plugin = plugins.find(
     p => p.id === id
   )
+  if (!plugin) log('Plugin Not found', id, chalk.grey(file))
+  return plugin
 }
 
-function findPlugins (deps) {
+function findPlugins (deps, file) {
   return Object.keys(deps).filter(
     id => isPlugin(id) || id === CLI_SERVICE
   ).map(
@@ -87,8 +95,9 @@ function findPlugins (deps) {
       id,
       versionRange: deps[id],
       official: isOfficialPlugin(id) || id === CLI_SERVICE,
-      installed: fs.existsSync(dependencies.getPath(id)),
-      website: getPluginLink(id)
+      installed: fs.existsSync(dependencies.getPath({ id, file })),
+      website: getPluginLink(id),
+      baseDir: file
     })
   )
 }
@@ -99,8 +108,10 @@ function getPlugins (file) {
   return plugins
 }
 
-function resetPluginApi ({ file }, context) {
+function resetPluginApi ({ file, lightApi }, context) {
   return new Promise((resolve, reject) => {
+    log('Plugin API reloading...', chalk.grey(file))
+
     let pluginApi = pluginApiInstances.get(file)
     let projectId
 
@@ -110,24 +121,29 @@ function resetPluginApi ({ file }, context) {
       pluginApi.views.forEach(r => views.remove(r.id, context))
       pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
     }
-    sharedData.unWatchAll()
-
-    clientAddons.clear(context)
-    suggestions.clear(context)
+    if (!lightApi) {
+      sharedData.unWatchAll(context)
+      clientAddons.clear(context)
+      suggestions.clear(context)
+    }
 
     // Cyclic dependency with projects connector
     setTimeout(() => {
       const projects = require('./projects')
-      const project = projects.getCurrent(context)
+      const project = projects.findByPath(file, context)
       const plugins = getPlugins(file)
+
+      if (project && projects.getType(project, context) !== 'vue') {
+        resolve(false)
+        return
+      }
 
       pluginApi = new PluginApi({
         plugins,
-        file
+        file,
+        project
       }, context)
       pluginApiInstances.set(file, pluginApi)
-
-      if (projects.getType(project) !== 'vue') return
 
       // Run Plugin API
       runPluginApi(path.resolve(__dirname, '../../'), pluginApi, context, 'ui-defaults')
@@ -138,8 +154,11 @@ function resetPluginApi ({ file }, context) {
       // Add views
       pluginApi.views.forEach(view => views.add(view, context))
 
-      if (!project) return
-      pluginApi.project = project
+      if (!project || lightApi) {
+        resolve(true)
+        return
+      }
+
       if (projectId !== project.id) {
         callHook({
           id: 'projectOpen',
@@ -166,7 +185,7 @@ function resetPluginApi ({ file }, context) {
 function runPluginApi (id, pluginApi, context, fileName = 'ui') {
   let module
   try {
-    module = loadModule(`${id}/${fileName}`, cwd.get(), true)
+    module = loadModule(`${id}/${fileName}`, pluginApi.cwd, true)
   } catch (e) {
     if (process.env.VUE_CLI_DEBUG) {
       console.error(e)
@@ -181,14 +200,13 @@ function runPluginApi (id, pluginApi, context, fileName = 'ui') {
 
   // Locales
   try {
-    const folder = fs.existsSync(id) ? id : dependencies.getPath(id)
+    const folder = fs.existsSync(id) ? id : dependencies.getPath({ id, file: pluginApi.cwd })
     locales.loadFolder(folder, context)
   } catch (e) {}
 }
 
 function getApi (folder) {
   const pluginApi = pluginApiInstances.get(folder)
-  if (!pluginApi) throw new Error(`No plugin API available for ${folder}`)
   return pluginApi
 }
 
@@ -199,12 +217,13 @@ function callHook ({ id, args, file }, context) {
   fns.forEach(fn => fn(...args))
 }
 
-async function getLogo ({ id }, context) {
+async function getLogo (plugin, context) {
+  const { id, baseDir } = plugin
   const cached = logoCache.get(id)
   if (cached) {
     return cached
   }
-  const folder = dependencies.getPath(id)
+  const folder = dependencies.getPath({ id, file: baseDir })
   const file = path.join(folder, 'logo.png')
   if (fs.existsSync(file)) {
     const data = `/_plugin-logo/${encodeURIComponent(id)}`
@@ -342,7 +361,7 @@ function finishInstall (context) {
 async function initPrompts (id, context) {
   await prompts.reset()
   try {
-    let data = require(path.join(dependencies.getPath(id), 'prompts'))
+    let data = require(path.join(dependencies.getPath({ id, file: cwd.get() }), 'prompts'))
     if (typeof data === 'function') {
       data = await data()
     }
@@ -386,7 +405,7 @@ function update (id, context) {
 
 async function updateAll (context) {
   return progress.wrap('plugins-update', context, async setProgress => {
-    const plugins = list(cwd.get(), context, false)
+    const plugins = list(cwd.get(), context, { resetApi: false })
     let updatedPlugins = []
     for (const plugin of plugins) {
       const version = await dependencies.getVersion(plugin, context)
@@ -456,25 +475,35 @@ async function callAction ({ id, params, file = cwd.get() }, context) {
   return { id, params, results, errors }
 }
 
-function serveFile (projectId, file, res) {
-  const basePath = projectId === '.' ? cwd.get() : dependencies.getPath(decodeURIComponent(projectId))
+function serveFile ({ pluginId, projectId = null, file }, res) {
+  let baseFile = cwd.get()
+  if (projectId) {
+    const projects = require('./projects')
+    const project = projects.findOne(projectId, getContext())
+    if (project) {
+      baseFile = project.path
+    }
+  }
+
+  const basePath = pluginId === '.' ? baseFile : dependencies.getPath({ id: decodeURIComponent(pluginId), file: baseFile })
   if (basePath) {
     res.sendFile(path.join(basePath, file))
     return
   }
 
   res.status(404)
-  res.send(`Addon ${projectId} not found in loaded addons. Try opening a vue-cli project first?`)
+  res.send(`Addon ${pluginId} not found in loaded addons. Try opening a vue-cli project first?`)
 }
 
 function serve (req, res) {
-  const { id, 0: file } = req.params
-  serveFile(id, path.join('ui-public', file), res)
+  const { pluginId, 0: file } = req.params
+  serveFile({ pluginId, file: path.join('ui-public', file) }, res)
 }
 
 function serveLogo (req, res) {
-  const { id } = req.params
-  serveFile(id, 'logo.png', res)
+  const { id: pluginId } = req.params
+  const { project: projectId } = req.query
+  serveFile({ pluginId, projectId, file: 'logo.png' }, res)
 }
 
 module.exports = {

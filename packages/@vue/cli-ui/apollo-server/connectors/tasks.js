@@ -10,6 +10,7 @@ const logs = require('./logs')
 const plugins = require('./plugins')
 const prompts = require('./prompts')
 const views = require('./views')
+const projects = require('./projects')
 // Utils
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
@@ -36,7 +37,11 @@ async function list ({ file = null, api = true } = {}, context) {
   if (pkg.scripts) {
     const existing = new Map()
 
-    await plugins.list(file, context, false)
+    if (projects.getType(file, context) === 'vue') {
+      await plugins.list(file, context, { resetApi: false, lightApi: true })
+    }
+
+    const pluginApi = api && plugins.getApi(file)
 
     // Get current valid tasks in project `package.json`
     let currentTasks = Object.keys(pkg.scripts).map(
@@ -44,7 +49,7 @@ async function list ({ file = null, api = true } = {}, context) {
         const id = `${file}:${name}`
         existing.set(id, true)
         const command = pkg.scripts[name]
-        const moreData = api ? plugins.getApi(file).getDescribedTask(command) : null
+        const moreData = pluginApi ? pluginApi.getDescribedTask(command) : null
         return {
           id,
           name,
@@ -58,7 +63,7 @@ async function list ({ file = null, api = true } = {}, context) {
       }
     )
 
-    if (api) {
+    if (api && pluginApi) {
       currentTasks = currentTasks.concat(plugins.getApi(file).addedTasks.map(
         task => {
           const id = `${file}:${task.name}`

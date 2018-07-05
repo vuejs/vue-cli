@@ -82,7 +82,7 @@ type Feature implements DescribedEntity {
 
 exports.resolvers = {
   Project: {
-    type: (project, args, context) => projects.getType(project),
+    type: (project, args, context) => projects.getType(project, context),
     plugins: (project, args, context) => plugins.list(project.path, context),
     tasks: (project, args, context) => tasks.list({ file: project.path }, context),
     homepage: (project, args, context) => projects.getHomepage(project, context)

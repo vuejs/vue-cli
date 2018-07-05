@@ -418,7 +418,11 @@ function setFavorite ({ id, favorite }, context) {
   return findOne(id, context)
 }
 
-function getType (project) {
+function getType (project, context) {
+  if (typeof project === 'string') {
+    project = findByPath(project, context)
+  }
+  if (!project) return 'unknown'
   return !project.type ? 'vue' : project.type
 }
 

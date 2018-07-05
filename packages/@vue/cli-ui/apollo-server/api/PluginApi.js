@@ -21,11 +21,11 @@ const { validateSuggestion } = require('./suggestion')
 const { validateProgress } = require('./progress')
 
 class PluginApi {
-  constructor ({ plugins, file }, context) {
+  constructor ({ plugins, file, project }, context) {
     // Context
     this.context = context
     this.pluginId = null
-    this.project = null
+    this.project = project
     this.plugins = plugins
     this.cwd = file
     // Hooks
