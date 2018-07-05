@@ -87,7 +87,7 @@ module.exports = (api, options) => {
       const sockjsUrl = publicOpt ? `//${publicOpt}/sockjs-node` : url.format({
         protocol,
         port,
-        hostname: urls.lanUrlForConfig || 'localhost',
+        hostname: host || 'localhost',
         pathname: '/sockjs-node'
       })
 
