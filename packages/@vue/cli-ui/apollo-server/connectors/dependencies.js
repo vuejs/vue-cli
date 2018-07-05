@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
 const semver = require('semver')
+const execa = require('execa')
 // Connectors
 const cwd = require('./cwd')
 const folders = require('./folders')
@@ -10,7 +11,7 @@ const logs = require('./logs')
 // Context
 const getContext = require('../context')
 // Utils
-const { isPlugin } = require('@vue/cli-shared-utils')
+const { isPlugin, hasYarn } = require('@vue/cli-shared-utils')
 const { resolveModule } = require('@vue/cli/lib/util/module')
 const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
 const {
@@ -84,6 +85,37 @@ function invalidatePackage (id, context) {
   return folders.invalidatePackage(getPath(id), context)
 }
 
+async function getMetadata (id, context) {
+  let metadata = metadataCache.get(id)
+  if (metadata) {
+    return metadata
+  }
+
+  if (hasYarn()) {
+    try {
+      const { stdout } = await execa('yarn', ['info', id, '--json'], {
+        cwd: cwd.get()
+      })
+      metadata = JSON.parse(stdout).data
+    } catch (e) {
+      // yarn info failed
+      console.log(e)
+    }
+  }
+
+  if (!metadata) {
+    const res = await getPackageVersion(id)
+    if (res.statusCode === 200) {
+      metadata = res.body
+    }
+  }
+
+  if (metadata) {
+    metadataCache.set(id, metadata)
+    return metadata
+  }
+}
+
 async function getVersion ({ id, installed, versionRange }, context) {
   let current
   if (installed) {
@@ -97,7 +129,7 @@ async function getVersion ({ id, installed, versionRange }, context) {
   if (metadata) {
     latest = metadata['dist-tags'].latest
 
-    const versions = Object.keys(metadata.versions)
+    const versions = Array.isArray(metadata.versions) ? metadata.versions : Object.keys(metadata.versions)
     wanted = semver.maxSatisfying(versions, versionRange)
   }
 
@@ -118,23 +150,6 @@ async function getDescription ({ id }, context) {
     return metadata.description
   }
   return null
-}
-
-async function getMetadata (id, context) {
-  let metadata = metadataCache.get(id)
-  if (metadata) {
-    return metadata
-  }
-
-  const res = await getPackageVersion(id)
-  if (res.statusCode === 200) {
-    metadata = res.body
-  }
-
-  if (metadata) {
-    metadataCache.set(id, metadata)
-    return metadata
-  }
 }
 
 function getLink (id, context) {
