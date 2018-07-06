@@ -16,6 +16,8 @@ fs.writeFileSync(path.resolve(templateDir, 'entry.js'), `
 import foo from 'foo'
 
 new Vue({
+  p: p(),
+  baz,
   render: h => h(App)
 }).$mount('#app')
 `.trim())
@@ -454,7 +456,58 @@ test('api: addEntryImport & addEntryInjection', async () => {
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\s+import bar from 'bar'/)
-  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+p: p\(\),\s+baz,\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
+})
+
+test('api: addEntryDuplicateImport', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.js', `import foo from 'foo'`)
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/^import foo from 'foo'\s+new Vue/)
+})
+
+test('api: addEntryDuplicateInjection', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectRootOptions('main.js', 'baz')
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/{\s+p: p\(\),\s+baz,\s+render/)
+})
+
+test('api: addEntryDuplicateNonIdentifierInjection', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectRootOptions('main.js', 'p: p()')
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/{\s+p: p\(\),\s+baz,\s+render/)
 })
 
 test('extract config files', async () => {

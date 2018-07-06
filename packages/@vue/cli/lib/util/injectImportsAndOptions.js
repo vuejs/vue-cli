@@ -52,8 +52,8 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
           if (options && options.type === 'ObjectExpression') {
             const nonDuplicates = i => {
               return !options.properties.slice(0, -1).some(p => {
-                return p.value.type === 'Identifier' && i[0].key.name === p.key.name &&
-                  i[0].value.name === p.value.name
+                return p.key.name === i[0].key.name &&
+                  recast.print(p.value).code === recast.print(i[0].value).code
               })
             }
             // inject at index length - 1 as it's usually the render fn
