@@ -386,3 +386,7 @@ module.exports = {
   }
 }
 ```
+
+::: warning
+[Modern Mode](https://cli.vuejs.org/guide/browser-compatibility.html#modern-mode) will not work when the `html-webpack-plugin` is disabled.
+:::
