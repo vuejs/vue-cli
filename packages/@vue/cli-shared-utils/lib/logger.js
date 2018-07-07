@@ -70,3 +70,8 @@ exports.clearConsole = title => {
 if (process.env.VUE_CLI_TEST) {
   require('./_silence')('logs', exports)
 }
+
+// disable emojis in output
+if (process.argv.includes('--no-emoji') || process.argv.includes('-N')) {
+  require('./_removeEmoji')(exports)
+}

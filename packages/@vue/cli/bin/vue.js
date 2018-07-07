@@ -126,6 +126,9 @@ program
     loadCommand('init', '@vue/cli-init')
   })
 
+program
+  .option('-N, --no-emoji', 'remove emoji from output')
+
 // output help information on unknown commands
 program
   .arguments('<command>')

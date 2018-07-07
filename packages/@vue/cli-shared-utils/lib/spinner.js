@@ -47,3 +47,8 @@ exports.resumeSpinner = () => {
 if (process.env.VUE_CLI_TEST) {
   require('./_silence')('spinner', exports)
 }
+
+// disable emojis in output
+if (process.argv.includes('--no-emoji') || process.argv.includes('-N')) {
+  require('./_removeEmoji')(exports)
+}
