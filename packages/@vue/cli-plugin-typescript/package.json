@@ -22,7 +22,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/node": "^10.5.1",
+    "@types/node": "^10.5.2",
     "@vue/cli-shared-utils": "^3.0.0-rc.3",
     "fork-ts-checker-webpack-plugin": "^0.4.2",
     "globby": "^8.0.1",
