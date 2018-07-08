@@ -42,7 +42,7 @@ module.exports = (context, options = {}) => {
     modules = false,
     targets: rawTargets,
     spec,
-    ignoreBrowserslistConfig,
+    ignoreBrowserslistConfig = !!process.env.VUE_CLI_MODERN_BUILD,
     configPath,
     include,
     exclude,
