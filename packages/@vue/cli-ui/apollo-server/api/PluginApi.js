@@ -21,13 +21,14 @@ const { validateSuggestion } = require('./suggestion')
 const { validateProgress } = require('./progress')
 
 class PluginApi {
-  constructor ({ plugins, file, project }, context) {
+  constructor ({ plugins, file, project, lightMode = false }, context) {
     // Context
     this.context = context
     this.pluginId = null
     this.project = project
     this.plugins = plugins
     this.cwd = file
+    this.lightMode = lightMode
     // Hooks
     this.hooks = {
       projectOpen: [],
@@ -55,6 +56,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onProjectOpen (cb) {
+    if (this.lightMode) return
     if (this.project) {
       cb(this.project)
       return
@@ -68,6 +70,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onPluginReload (cb) {
+    if (this.lightMode) return
     this.hooks.pluginReload.push(cb)
   }
 
@@ -77,6 +80,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onConfigRead (cb) {
+    if (this.lightMode) return
     this.hooks.configRead.push(cb)
   }
 
@@ -86,6 +90,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onConfigWrite (cb) {
+    if (this.lightMode) return
     this.hooks.configWrite.push(cb)
   }
 
@@ -95,6 +100,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onTaskRun (cb) {
+    if (this.lightMode) return
     this.hooks.taskRun.push(cb)
   }
 
@@ -104,6 +110,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onTaskExit (cb) {
+    if (this.lightMode) return
     this.hooks.taskExit.push(cb)
   }
 
@@ -113,6 +120,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onTaskOpen (cb) {
+    if (this.lightMode) return
     this.hooks.taskOpen.push(cb)
   }
 
@@ -122,6 +130,7 @@ class PluginApi {
    * @param {function} cb Handler
    */
   onViewOpen (cb) {
+    if (this.lightMode) return
     this.hooks.viewOpen.push(cb)
   }
 
@@ -131,6 +140,7 @@ class PluginApi {
    * @param {object} options Configuration description
    */
   describeConfig (options) {
+    if (this.lightMode) return
     try {
       validateConfiguration(options)
       this.configurations.push({
@@ -221,6 +231,7 @@ class PluginApi {
    *   }
    */
   addClientAddon (options) {
+    if (this.lightMode) return
     try {
       validateClientAddon(options)
       if (options.url && options.path) {
@@ -248,6 +259,7 @@ class PluginApi {
    * @param {object} options ProjectView options
    */
   addView (options) {
+    if (this.lightMode) return
     try {
       validateView(options)
       this.views.push({
@@ -272,6 +284,7 @@ class PluginApi {
    * @param {object} options Badge options
    */
   addViewBadge (viewId, options) {
+    if (this.lightMode) return
     try {
       validateBadge(options)
       views.addBadge({ viewId, badge: options }, this.context)
@@ -374,6 +387,7 @@ class PluginApi {
    * @param {object} options Progress options
    */
   setProgress (options) {
+    if (this.lightMode) return
     try {
       validateProgress(options)
       progress.set({
@@ -524,6 +538,7 @@ class PluginApi {
    * @param {object} options Suggestion
    */
   addSuggestion (options) {
+    if (this.lightMode) return
     try {
       validateSuggestion(options)
       suggestions.add(options, this.context)

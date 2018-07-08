@@ -146,7 +146,8 @@ function resetPluginApi ({ file, lightApi }, context) {
       pluginApi = new PluginApi({
         plugins,
         file,
-        project
+        project,
+        lightMode: lightApi
       }, context)
       pluginApiInstances.set(file, pluginApi)
 
