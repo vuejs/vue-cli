@@ -11,7 +11,7 @@ module.exports = (api, {
     api.extendPackage({
       dependencies: {
         'vue-class-component': '^6.0.0',
-        'vue-property-decorator': '^6.0.0'
+        'vue-property-decorator': '^7.0.0'
       }
     })
   }
@@ -58,7 +58,7 @@ module.exports = (api, {
   if (hasMocha) {
     api.extendPackage({
       devDependencies: {
-        '@types/mocha': '^2.2.46',
+        '@types/mocha': '^5.2.4',
         '@types/chai': '^4.1.0'
       }
     })
@@ -68,7 +68,7 @@ module.exports = (api, {
   if (hasJest) {
     api.extendPackage({
       devDependencies: {
-        '@types/jest': '^22.0.1'
+        '@types/jest': '^23.1.4'
       }
     })
   }

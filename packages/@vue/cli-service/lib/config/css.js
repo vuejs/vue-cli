@@ -79,7 +79,6 @@ module.exports = (api, options) => {
         }
 
         const cssLoaderOptions = Object.assign({
-          minimize: isProd,
           sourceMap,
           importLoaders: (
             1 + // stylePostLoader injected by vue-loader
@@ -149,9 +148,9 @@ module.exports = (api, options) => {
       }
       webpackConfig
         .plugin('optimize-css')
-          .use(require('optimize-css-assets-webpack-plugin'), [{
-            canPrint: false,
-            cssProcessorOptions
+          .use(require('@intervolga/optimize-cssnano-plugin'), [{
+            sourceMap: options.productionSourceMap && sourceMap,
+            cssnanoOptions: cssProcessorOptions
           }])
     }
   })

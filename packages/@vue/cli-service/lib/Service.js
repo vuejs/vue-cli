@@ -40,7 +40,7 @@ module.exports = class Service {
     if (inlinePkg) {
       return inlinePkg
     } else if (fs.existsSync(path.join(this.context, 'package.json'))) {
-      return readPkg.sync(this.context)
+      return readPkg.sync({ cwd: this.context })
     } else {
       return {}
     }

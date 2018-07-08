@@ -59,7 +59,7 @@
     "inquirer": "^6.0.0",
     "jest": "^23.1.0",
     "lerna": "^2.8.0",
-    "lint-staged": "^6.0.1",
+    "lint-staged": "^7.2.0",
     "memfs": "^2.8.0",
     "puppeteer": "^1.0.0",
     "request": "^2.83.0",
