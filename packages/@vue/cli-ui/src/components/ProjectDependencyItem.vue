@@ -8,6 +8,7 @@
 
       <ItemLogo
         :image="image || 'widgets'"
+        class="identicon"
       />
 
       <ListItemInfo

@@ -143,6 +143,15 @@ export default {
       height @width
       position relative
       top 3px
+      border-radius 0
+
+  &.identicon
+    .wrapper
+      background white
+    .image
+      width 60%
+      height @width
+      border-radius 0
 
   &.loaded
     .image
