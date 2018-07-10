@@ -8,7 +8,7 @@ You can put a `logo.png` file in the root directory of the folder that will be p
  - When searching for a plugin to install
  - In the installed plugin list
 
-![Plugins](/plugins.png)
+![Plugins](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/plugins.png)
 
 The logo should be a square non-transparent image (ideally 84x84).
 
@@ -38,4 +38,4 @@ You should add the url to the plugin website or repository in the `homepage` or 
 }
 ```
 
-![Plugin search item](/plugin-search-item.png)
+![Plugin search item](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/plugin-search-item.png)

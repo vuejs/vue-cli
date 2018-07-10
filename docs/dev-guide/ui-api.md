@@ -2,7 +2,7 @@
 
 The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
 
-![UI Plugin architecture](/vue-cli-ui-schema.png)
+![UI Plugin architecture](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/vue-cli-ui-schema.png)
 
 ## UI files
 
@@ -46,7 +46,7 @@ vue ui -D
 
 ## Project configurations
 
-![Configuration ui](/config-ui.png)
+![Configuration ui](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/config-ui.png)
 
 You can add a project configuration with the `api.describeConfig` method.
 
@@ -320,7 +320,7 @@ api.describeConfig({
 
 ## Project tasks
 
-![Tasks ui](/tasks-ui.png)
+![Tasks ui](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/tasks-ui.png)
 
 Tasks are generated from the `scripts` field in the project `package.json` file.
 
@@ -756,7 +756,7 @@ import WebpackDashboard from './components/WebpackDashboard.vue'
 ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 ```
 
-![Task view example](/task-view.png)
+![Task view example](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/task-view.png)
 
 ## Custom views
 
@@ -796,7 +796,7 @@ ClientAddonApi.addRoutes('org.vue.webpack', [
 ])
 ```
 
-![Custom view example](/custom-view.png)
+![Custom view example](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/custom-view.png)
 
 ## Shared data
 
@@ -1225,7 +1225,7 @@ api.addSuggestion({
 Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-![UI Suggestion](/suggestion.png)
+![UI Suggestion](https://raw.githubusercontent.com/vuejs/vue-cli/dev/docs/.vuepress/public/suggestion.png)
 
 Then you can remove the suggestion:
 
@@ -1238,7 +1238,7 @@ You can also open a page instead when the user activates the suggestion with `ac
 ```js
 api.addSuggestion({
   id: 'com.my-name.my-suggestion',
-  type: 'action', // Required 
+  type: 'action', // Required
   label: 'Add vue-router',
   // Open a new tab
   actionLink: 'https://vuejs.org/'
