@@ -4,6 +4,8 @@ sidebarDepth: 0
 
 # Overview
 
+<Bit/>
+
 Vue CLI is a full system for rapid Vue.js development, providing:
 
 - Interactive project scaffolding via `@vue/cli`.

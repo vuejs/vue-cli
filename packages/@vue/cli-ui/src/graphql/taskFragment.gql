@@ -9,4 +9,7 @@ fragment task on Task {
     id
     logo
   }
+  project {
+    id
+  }
 }

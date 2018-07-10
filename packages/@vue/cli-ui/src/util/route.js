@@ -1,20 +1,20 @@
 const trailingSlashRE = /\/?$/
 
-export function isSameRoute (a, b) {
+export function isSameRoute (a, b, checkQuery = true) {
   if (!b) {
     return false
   } else if (a.path && b.path) {
     return (
       a.path.replace(trailingSlashRE, '') === b.path.replace(trailingSlashRE, '') &&
       a.hash === b.hash &&
-      isObjectEqual(a.query, b.query)
+      (!checkQuery || isObjectEqual(a.query, b.query))
     )
   } else if (a.name && b.name) {
     return (
       a.name === b.name &&
       a.hash === b.hash &&
-      isObjectEqual(a.query, b.query) &&
-      isObjectEqual(a.params, b.params)
+      isObjectEqual(a.params, b.params) &&
+      (!checkQuery || isObjectEqual(a.query, b.query))
     )
   } else {
     return false

@@ -7,6 +7,11 @@
       :document="require('../graphql/suggestionAdded.gql')"
       :updateQuery="(previousResult, { subscriptionData }) => {
         const newSuggestion = subscriptionData.data.suggestionAdded
+        if (!previousResult.suggestions) {
+          return {
+            suggestions: [newSuggestion]
+          }
+        }
         if (previousResult.suggestions.find(s => s.id === newSuggestion.id)) {
           return previousResult
         }
@@ -26,9 +31,9 @@
     <ApolloSubscribeToMore
       :document="require('../graphql/suggestionRemoved.gql')"
       :updateQuery="(previousResult, { subscriptionData }) => ({
-        suggestions: previousResult.suggestions.filter(
+        suggestions: previousResult.suggestions ? previousResult.suggestions.filter(
           s => s.id !== subscriptionData.data.suggestionRemoved.id
-        )
+        ) : []
       })"
     />
 
@@ -71,8 +76,8 @@ export default {
             {
               id: 'vue-devtools',
               type: 'action',
-              label: 'cli-service.suggestions.vue-devtools.label',
-              message: 'cli-service.suggestions.vue-devtools.message',
+              label: 'org.vue.cli-service.suggestions.vue-devtools.label',
+              message: 'org.vue.cli-service.suggestions.vue-devtools.message',
               link: 'https://github.com/vuejs/vue-devtools',
               image: 'https://raw.githubusercontent.com/vuejs/vue-devtools/master/media/screenshot.png',
               actionLink: devtoolsLink

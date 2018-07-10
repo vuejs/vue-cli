@@ -8,7 +8,7 @@
       <VueButton
         class="icon-button"
         icon-left="delete_forever"
-        v-tooltip="$t('components.terminal-view.buttons.clear')"
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.clear')"
         @click="clear(); $emit('clear')"
       />
       <VueIcon
@@ -18,7 +18,7 @@
       <VueButton
         class="icon-button"
         icon-left="subdirectory_arrow_left"
-        v-tooltip="$t('components.terminal-view.buttons.scroll')"
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.scroll')"
         @click="scrollToBottom()"
       />
     </div>
@@ -65,7 +65,7 @@ const defaultTheme = {
 const darkTheme = {
   ...defaultTheme,
   foreground: '#fff',
-  background: '#304051',
+  background: '#2c3e50',
   cursor: 'rgba(255, 255, 255, .4)',
   selection: 'rgba(255, 255, 255, 0.3)',
   magenta: '#e83030',

@@ -2,25 +2,25 @@
   <div class="vue-webpack-analyzer">
     <div class="pane-toolbar">
       <VueIcon icon="donut_large"/>
-      <div class="title">{{ $t('vue-webpack.analyzer.title') }}</div>
+      <div class="title">{{ $t('org.vue.vue-webpack.analyzer.title') }}</div>
 
       <VueSwitch
-        v-if="modernMode"
+        v-if="mode !== 'serve' && modernMode"
         v-model="showModernBuild"
       >
-        {{ $t('vue-webpack.modern-mode') }}
+        {{ $t('org.vue.vue-webpack.modern-mode') }}
       </VueSwitch>
 
       <template v-if="currentTree">
         <VueButton
           icon-left="arrow_upward"
-          :label="$t('vue-webpack.analyzer.go-up')"
+          :label="$t('org.vue.vue-webpack.analyzer.go-up')"
           :disabled="currentTree === rootTree"
           @click="goToParent()"
         />
         <VueButton
           icon-left="home"
-          :label="$t('vue-webpack.analyzer.go-home')"
+          :label="$t('org.vue.vue-webpack.analyzer.go-home')"
           :disabled="currentTree === rootTree"
           @click="goToHome()"
         />
@@ -38,20 +38,20 @@
           v-for="(chunk, key) of modulesTrees"
           :key="key"
           :value="key"
-          :label="`${$t('vue-webpack.analyzer.chunk')} ${getChunkName(key)}`"
+          :label="`${$t('org.vue.vue-webpack.analyzer.chunk')} ${getChunkName(key)}`"
         />
       </VueSelect>
 
       <VueSelect v-model="sizeField">
-        <VueSelectButton value="stats" :label="`${$t('vue-webpack.sizes.stats')}`"/>
-        <VueSelectButton value="parsed" :label="`${$t('vue-webpack.sizes.parsed')}`"/>
-        <VueSelectButton value="gzip" :label="`${$t('vue-webpack.sizes.gzip')}`"/>
+        <VueSelectButton value="stats" :label="`${$t('org.vue.vue-webpack.sizes.stats')}`"/>
+        <VueSelectButton value="parsed" :label="`${$t('org.vue.vue-webpack.sizes.parsed')}`"/>
+        <VueSelectButton value="gzip" :label="`${$t('org.vue.vue-webpack.sizes.gzip')}`"/>
       </VueSelect>
 
       <VueButton
         class="icon-button"
         icon-left="help"
-        v-tooltip="$t('vue-webpack.sizes.help')"
+        v-tooltip="$t('org.vue.vue-webpack.sizes.help')"
       />
     </div>
 
@@ -89,19 +89,19 @@
             class="stats size"
             :class="{ selected: sizeField === 'stats' }"
           >
-            {{ $t('vue-webpack.sizes.stats') }}: {{ describedModule.size.stats | size('B')}}
+            {{ $t('org.vue.vue-webpack.sizes.stats') }}: {{ describedModule.size.stats | size('B')}}
           </div>
           <div
             class="parsed size"
             :class="{ selected: sizeField === 'parsed' }"
           >
-            {{ $t('vue-webpack.sizes.parsed') }}: {{ describedModule.size.parsed | size('B')}}
+            {{ $t('org.vue.vue-webpack.sizes.parsed') }}: {{ describedModule.size.parsed | size('B')}}
           </div>
           <div
             class="gzip size"
             :class="{ selected: sizeField === 'gzip' }"
           >
-            {{ $t('vue-webpack.sizes.gzip') }}: {{ describedModule.size.gzip | size('B')}}
+            {{ $t('org.vue.vue-webpack.sizes.gzip') }}: {{ describedModule.size.gzip | size('B')}}
           </div>
         </div>
       </div>

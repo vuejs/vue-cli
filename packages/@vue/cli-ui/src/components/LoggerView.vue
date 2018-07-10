@@ -1,16 +1,16 @@
 <template>
   <div class="logger-view">
-    <div class="toolbar">
+    <div class="pane-toolbar">
       <VueIcon
         icon="dvr"
       />
       <div class="title">
-        {{ $t('components.logger-view.title') }}
+        {{ $t('org.vue.components.logger-view.title') }}
       </div>
       <VueButton
         class="icon-button flat"
         icon-left="delete_forever"
-        v-tooltip="$t('components.logger-view.buttons.clear')"
+        v-tooltip="$t('org.vue.components.logger-view.buttons.clear')"
         @click="clearLogs()"
       />
       <VueIcon
@@ -20,13 +20,13 @@
       <VueButton
         class="icon-button flat"
         icon-left="subdirectory_arrow_left"
-        v-tooltip="$t('components.logger-view.buttons.scroll')"
+        v-tooltip="$t('org.vue.components.logger-view.buttons.scroll')"
         @click="scrollToBottom()"
       />
       <VueButton
         class="icon-button flat"
         icon-left="close"
-        v-tooltip="$t('components.logger-view.buttons.close')"
+        v-tooltip="$t('org.vue.components.logger-view.buttons.close')"
         @click="close()"
       />
     </div>
@@ -55,7 +55,7 @@
             class="vue-ui-empty"
           >
             <VueIcon icon="wifi" class="large"/>
-            <div>{{ $t('components.logger-view.empty') }}</div>
+            <div>{{ $t('org.vue.components.logger-view.empty') }}</div>
           </div>
         </template>
       </template>
@@ -123,19 +123,8 @@ export default {
   .vue-ui-dark-mode &
     background $vue-ui-color-darker
 
-  .toolbar
+  .pane-toolbar
     grid-area toolbar
-    h-box()
-    align-items center
-    padding 6px 6px 6px $padding-item
-    > :not(.separator)
-      space-between-x(6px)
-    > * + .separator
-      margin-left 6px
-    .title
-      flex 100% 1 1
-      width 0
-      ellipsis()
 
   .logs
     grid-area logs

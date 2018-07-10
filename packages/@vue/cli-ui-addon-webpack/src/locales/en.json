@@ -1,5 +1,9 @@
 {
-  "vue-webpack": {
-    "test-view": "I'm a custom view"
+  "org": {
+    "vue": {
+      "vue-webpack": {
+        "test-view": "I'm a custom view"
+      }
+    }
   }
 }

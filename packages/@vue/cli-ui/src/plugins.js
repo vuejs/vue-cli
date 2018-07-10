@@ -3,6 +3,7 @@ import VueUi from '@vue/ui'
 import InstantSearch from 'vue-instantsearch'
 import VueMeta from 'vue-meta'
 import PortalVue from 'portal-vue'
+import VueObserveVisibility from 'vue-observe-visibility'
 import * as Filters from './filters'
 import Responsive from './util/responsive'
 import SharedData from './util/shared-data'
@@ -10,6 +11,7 @@ import PluginAction from './util/plugin-action'
 import ClientState from './mixins/ClientState'
 import SetSize from './util/set-size'
 import Focus from './util/focus'
+import Bus from './util/bus'
 
 Vue.use(InstantSearch)
 Vue.use(VueMeta)
@@ -31,8 +33,10 @@ Vue.use(Responsive, {
 })
 Vue.use(VueUi)
 Vue.use(PortalVue)
+Vue.use(VueObserveVisibility)
 Vue.use(SharedData)
 Vue.use(PluginAction)
+Vue.use(Bus)
 
 for (const key in Filters) {
   Vue.filter(key, Filters[key])

@@ -2,7 +2,7 @@
   <div class="speed-stats">
     <div class="content">
       <div class="title">
-        {{ $t('vue-webpack.dashboard.speed-stats.title') }}
+        {{ $t('org.vue.vue-webpack.dashboard.speed-stats.title') }}
       </div>
 
       <VueIcon

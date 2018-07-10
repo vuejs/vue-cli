@@ -14,7 +14,7 @@
           :label="$t(suggestion.label)"
           :loading="suggestion.busy"
           class="round"
-          v-tooltip="$t('components.suggestion-bar.suggestion')"
+          v-tooltip="$t('org.vue.components.suggestion-bar.suggestion')"
           @click="onTriggerClick()"
         />
 
@@ -39,20 +39,20 @@
           <div class="actions-bar">
             <VueButton
               :href="suggestion.link"
-              :label="$t('components.list-item-info.more-info')"
+              :label="$t('org.vue.components.list-item-info.more-info')"
               target="_blank"
               class="flat"
               icon-right="open_in_new"
             />
             <div class="vue-ui-spacer"/>
             <VueButton
-              :label="$t('components.suggestion-bar.modal.cancel')"
+              :label="$t('org.vue.components.suggestion-bar.modal.cancel')"
               icon-left="close"
               v-close-popover
             />
             <VueButton
               class="primary"
-              :label="$t('components.suggestion-bar.modal.continue')"
+              :label="$t('org.vue.components.suggestion-bar.modal.continue')"
               icon-left="done"
               v-close-popover
               @click="activate(suggestion)"
@@ -110,7 +110,7 @@ export default {
 .suggestion-details
   padding ($padding-item * 2 - 8px) ($padding-item * 2)
   box-sizing border-box
-  width 440px
+  width 440px !important
 
   .label
     font-size 20px

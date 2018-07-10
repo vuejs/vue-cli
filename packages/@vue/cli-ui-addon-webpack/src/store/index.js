@@ -8,7 +8,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state () {
     return {
-      sizeField: localStorage.getItem('vue-webpack.sizeField') || 'parsed',
+      sizeField: localStorage.getItem('org.vue.vue-webpack.sizeField') || 'parsed',
       mode: 'serve',
       showModernBuild: true,
       serve: {
@@ -49,7 +49,7 @@ const store = new Vuex.Store({
   mutations: {
     sizeField (state, value) {
       state.sizeField = value
-      localStorage.setItem('vue-webpack.sizeField', value)
+      localStorage.setItem('org.vue.vue-webpack.sizeField', value)
     },
 
     mode (state, value) {

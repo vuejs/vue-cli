@@ -7,6 +7,8 @@ import clientStateResolvers from './state/resolvers'
 // import CONNECTED from './graphql/connected.gql'
 import CONNECTED_SET from './graphql/connectedSet.gql'
 import LOADING_CHANGE from './graphql/loadingChange.gql'
+import DARK_MODE_SET from './graphql/darkModeSet.gql'
+import { getForcedTheme } from './util/theme'
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -62,11 +64,13 @@ export const apolloProvider = new VueApollo({
 })
 
 export async function resetApollo () {
+  console.log('[UI] Apollo store reset')
   try {
     await apolloClient.resetStore()
   } catch (e) {
     // Potential errors
   }
+  loadDarkMode()
 }
 
 /* Connected state */
@@ -88,3 +92,23 @@ wsClient.on('reconnected', async () => {
 // Offline
 wsClient.on('disconnected', () => setConnected(false))
 wsClient.on('error', () => setConnected(false))
+
+/* Dark mode */
+
+function loadDarkMode () {
+  let enabled, forcedTheme
+  if ((forcedTheme = getForcedTheme())) {
+    enabled = forcedTheme === 'dark'
+  } else {
+    const raw = localStorage.getItem('vue-ui-dark-mode')
+    enabled = raw === 'true'
+  }
+  apolloClient.mutate({
+    mutation: DARK_MODE_SET,
+    variables: {
+      enabled
+    }
+  })
+}
+
+loadDarkMode()

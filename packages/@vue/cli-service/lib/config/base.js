@@ -44,7 +44,7 @@ module.exports = (api, options) => {
     webpackConfig.module
       .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
 
-    // js is handled by cli-plugin-bable ---------------------------------------
+    // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
     const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {

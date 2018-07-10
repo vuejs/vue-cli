@@ -52,7 +52,6 @@ class DashboardPlugin {
     let assetSources = new Map()
 
     if (!sendData) {
-      ipc.connect()
       sendData = data => ipc.send({
         webpackDashboardData: {
           type: this.type,
@@ -101,6 +100,10 @@ class DashboardPlugin {
         {
           type: 'status',
           value: 'Compiling'
+        },
+        {
+          type: 'progress',
+          value: 0
         }
       ])
     })
@@ -168,7 +171,7 @@ class DashboardPlugin {
         },
         {
           type: 'progress',
-          value: 0
+          value: 1
         },
         {
           type: 'operations',

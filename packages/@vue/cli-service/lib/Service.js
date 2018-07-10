@@ -40,7 +40,7 @@ module.exports = class Service {
     if (inlinePkg) {
       return inlinePkg
     } else if (fs.existsSync(path.join(this.context, 'package.json'))) {
-      return readPkg.sync(this.context)
+      return readPkg.sync({ cwd: this.context })
     } else {
       return {}
     }
@@ -157,8 +157,8 @@ module.exports = class Service {
   async run (name, args = {}, rawArgv = []) {
     // resolve mode
     // prioritize inline --mode
-    // fallback to resolved default modes from plugins
-    const mode = name === 'build' && args.watch ? 'development' : args.mode || this.modes[name]
+    // fallback to resolved default modes from plugins or development if --watch is defined
+    const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
 
     // load env variables, load user config, apply plugins
     this.init(mode)

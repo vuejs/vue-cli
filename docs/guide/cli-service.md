@@ -23,7 +23,7 @@ npm run serve
 yarn serve
 ```
 
-If you have [npx](https://github.com/zkat/npx) available (should be bundled with an update-to-date version of npm), you can also invoke the binary directly with:
+If you have [npx](https://github.com/zkat/npx) available (should be bundled with an up-to-date version of npm), you can also invoke the binary directly with:
 
 ``` bash
 npx vue-cli-service serve
@@ -32,7 +32,7 @@ npx vue-cli-service serve
 ## vue-cli-service serve
 
 ```
-Usage: vue-cli-service serve [options]
+Usage: vue-cli-service serve [options] [entry]
 
 Options:
 

@@ -6,7 +6,7 @@ const { resolveModule, loadModule } = require('./util/module')
 const {
   log,
   error,
-  hasYarn,
+  hasProjectYarn,
   stopSpinner,
   resolvePluginId
 } = require('@vue/cli-shared-utils')
@@ -26,7 +26,7 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log(`📦  Installing ${chalk.cyan(packageName)}...`)
   log()
 
-  const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
+  const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
   await installPackage(context, packageManager, null, packageName)
 
   stopSpinner()
