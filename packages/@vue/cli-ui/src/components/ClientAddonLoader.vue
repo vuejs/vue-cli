@@ -8,8 +8,11 @@ export default {
       query: CLIENT_ADDONS,
       fetchPolicy: 'no-cache',
       manual: true,
-      result ({ data: { clientAddons } }) {
-        clientAddons.forEach(this.loadAddon)
+      result ({ data: { clientAddons }, stale }) {
+        if (!stale) {
+          clientAddons.forEach(this.loadAddon)
+          this.$_lastRead = Date.now()
+        }
       }
     },
 
@@ -17,10 +20,16 @@ export default {
       clientAddonAdded: {
         query: CLIENT_ADDON_ADDED,
         result ({ data }) {
-          this.loadAddon(data.clientAddonAdded)
+          if (this.$_lastRead && Date.now() - this.$_lastRead > 1000) {
+            this.loadAddon(data.clientAddonAdded)
+          }
         }
       }
     }
+  },
+
+  created () {
+    this.$_lastRead = null
   },
 
   methods: {

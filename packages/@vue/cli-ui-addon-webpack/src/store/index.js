@@ -8,12 +8,16 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state () {
     return {
-      sizeField: localStorage.getItem('vue-webpack.sizeField') || 'parsed',
+      sizeField: localStorage.getItem('org.vue.vue-webpack.sizeField') || 'parsed',
       mode: 'serve',
+      showModernBuild: true,
       serve: {
         stats: null
       },
       build: {
+        stats: null
+      },
+      'build-modern': {
         stats: null
       }
     }
@@ -21,8 +25,13 @@ const store = new Vuex.Store({
 
   getters: {
     sizeField: state => state.sizeField,
-    mode: state => state.mode,
-    stats: state => state[state.mode].stats,
+    mode: state => {
+      if (state.mode === 'build' && state.showModernBuild) {
+        return 'build-modern'
+      }
+      return state.mode
+    },
+    stats: (state, getters) => state[getters.mode].stats,
     errors: (state, getters) => (getters.stats && getters.stats.data.errors) || [],
     warnings: (state, getters) => (getters.stats && getters.stats.data.warnings) || [],
     assets: (state, getters) => (getters.stats && getters.stats.data.assets) || [],
@@ -40,11 +49,15 @@ const store = new Vuex.Store({
   mutations: {
     sizeField (state, value) {
       state.sizeField = value
-      localStorage.setItem('vue-webpack.sizeField', value)
+      localStorage.setItem('org.vue.vue-webpack.sizeField', value)
     },
 
     mode (state, value) {
       state.mode = value
+    },
+
+    showModernBuild (state, value) {
+      state.showModernBuild = value
     },
 
     stats (state, { mode, value }) {

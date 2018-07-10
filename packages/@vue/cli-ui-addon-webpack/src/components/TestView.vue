@@ -1,6 +1,6 @@
 <template>
   <div class="test-view">
-    <h1>{{ $t('vue-webpack.test-view') }}</h1>
+    <h1>{{ $t('org.vue.vue-webpack.test-view') }}</h1>
     <p>A vue-cli plugin created me! I am a dynamically loaded component paired with a custom route.</p>
     <div class="section">
       <VueInput

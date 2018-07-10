@@ -9,7 +9,7 @@
       <VueButton
         class="icon-button go-up"
         icon-left="keyboard_arrow_up"
-        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.parent-folder')"
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.parent-folder')"
         @click="openParentFolder"
       />
 
@@ -18,8 +18,9 @@
           ref="pathInput"
           class="path-input"
           v-model="editedPath"
-          :placeholder="$t('components.folder-explorer.toolbar.placeholder')"
-          icon-left="edit"
+          :placeholder="$t('org.vue.components.folder-explorer.toolbar.placeholder')"
+          icon-right="edit"
+          v-focus
           @keyup.esc="editingPath = false"
           @keyup.enter="submitPathEdit()"
         />
@@ -29,8 +30,7 @@
         v-else
         :query="require('@/graphql/cwd.gql')"
         class="current-path"
-        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.edit-path')"
-        @click.native="openPathEdit()"
+        @dblclick.native="openPathEdit()"
       >
         <ApolloSubscribeToMore
           :document="require('@/graphql/cwdChanged.gql')"
@@ -38,7 +38,33 @@
         />
 
         <template slot-scope="{ result: { data } }">
-          <span v-if="data">{{ data.cwd }}</span>
+          <div
+            v-if="data"
+            class="path-value"
+          >
+            <div
+              v-for="(slice, index) of slicePath(data.cwd)"
+              :key="index"
+              class="path-part"
+            >
+              <VueButton
+                class="path-folder flat"
+                :icon-left="!slice.name ? 'folder' : null"
+                :class="{
+                  'icon-button': !slice.name
+                }"
+                @click="openFolder(slice.path)"
+              >
+                {{ slice.name }}
+              </VueButton>
+            </div>
+          </div>
+          <VueButton
+            class="edit-path-button icon-button"
+            icon-left="edit"
+            v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.edit-path')"
+            @click="openPathEdit()"
+          />
         </template>
       </ApolloQuery>
 
@@ -46,12 +72,20 @@
         v-if="error"
         icon="error"
         class="error-icon big"
+        v-tooltip="error.message"
+      />
+
+      <VueButton
+        class="icon-button"
+        icon-left="refresh"
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.refresh')"
+        @click="refreshFolder"
       />
 
       <VueButton
         class="icon-button favorite-button"
         :icon-left="folderCurrent.favorite ? 'star' : 'star_border'"
-        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.favorite')"
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite')"
         @click="toggleFavorite()"
       />
 
@@ -62,7 +96,7 @@
           slot="trigger"
           icon-left="arrow_drop_down"
           class="icon-button"
-          v-tooltip="$t('components.folder-explorer.toolbar.tooltips.favorite-folders')"
+          v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite-folders')"
         />
 
         <template v-if="foldersFavorite.length">
@@ -76,57 +110,147 @@
         </template>
 
         <div v-else class="vue-ui-empty">
-          {{ $t('components.folder-explorer.toolbar.empty') }}
+          {{ $t('org.vue.components.folder-explorer.toolbar.empty') }}
         </div>
       </VueDropdown>
 
-      <VueButton
-        class="icon-button"
-        icon-left="refresh"
-        v-tooltip="$t('components.folder-explorer.toolbar.tooltips.refresh')"
-        @click="refreshFolder"
-      />
+      <VueDropdown placement="bottom-end">
+        <VueButton
+          slot="trigger"
+          icon-left="more_vert"
+          class="icon-button"
+        />
+
+        <VueDropdownButton
+          :label="$t('org.vue.components.folder-explorer.new-folder.action')"
+          icon-left="create_new_folder"
+          @click="showNewFolder = true"
+        />
+
+        <VueSwitch
+          icon="visibility"
+          v-model="showHidden"
+          class="extend-left"
+        >
+          {{ $t('org.vue.components.folder-explorer.toolbar.show-hidden') }}
+        </VueSwitch>
+      </VueDropdown>
     </div>
 
-    <div class="folders">
-      <template v-if="folderCurrent.children">
+    <div ref="folders" class="folders">
+      <transition name="vue-ui-fade">
+        <VueLoadingBar
+          v-if="loading"
+          class="ghost primary"
+          unknown
+        />
+      </transition>
+      <template v-if="folderCurrent && folderCurrent.children">
         <FolderExplorerItem
           v-for="folder of folderCurrent.children"
+          v-if="showHidden || !folder.hidden"
           :key="folder.name"
           :folder="folder"
-          @click.native="openFolder(folder.path)"
+          @select="openFolder(folder.path)"
         />
       </template>
     </div>
+
+    <VueModal
+      v-if="showNewFolder"
+      :title="$t('org.vue.components.folder-explorer.new-folder.title')"
+      class="small new-folder-modal"
+      @close="showNewFolder = false"
+    >
+      <div class="default-body">
+        <VueFormField
+          :title="$t('org.vue.components.folder-explorer.new-folder.field.title')"
+          :subtitle="$t('org.vue.components.folder-explorer.new-folder.field.subtitle')"
+        >
+          <VueInput
+            v-model="newFolderName"
+            icon-left="folder"
+            v-focus
+            @keyup.enter="createFolder()"
+          />
+        </VueFormField>
+      </div>
+
+      <div slot="footer" class="actions space-between">
+        <VueButton
+          :label="$t('org.vue.components.folder-explorer.new-folder.cancel')"
+          class="flat close"
+          @click="showNewFolder = false"
+        />
+
+        <VueButton
+          :label="$t('org.vue.components.folder-explorer.new-folder.create')"
+          icon-left="create_new_folder"
+          class="primary save"
+          :disabled="!newFolderValid"
+          @click="createFolder()"
+        />
+      </div>
+    </VueModal>
   </div>
 </template>
 
 <script>
+import { isValidMultiName } from '../util/folders'
+
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
 import FOLDERS_FAVORITE from '../graphql/foldersFavorite.gql'
 import FOLDER_OPEN from '../graphql/folderOpen.gql'
 import FOLDER_OPEN_PARENT from '../graphql/folderOpenParent.gql'
 import FOLDER_SET_FAVORITE from '../graphql/folderSetFavorite.gql'
 import PROJECT_CWD_RESET from '../graphql/projectCwdReset.gql'
+import FOLDER_CREATE from '../graphql/folderCreate.gql'
+
+const SHOW_HIDDEN = 'vue-ui.show-hidden-folders'
 
 export default {
   data () {
     return {
+      loading: 0,
       error: false,
       editingPath: false,
       editedPath: '',
       folderCurrent: {},
-      foldersFavorite: []
+      foldersFavorite: [],
+      showHidden: localStorage.getItem(SHOW_HIDDEN) === 'true',
+      showNewFolder: false,
+      newFolderName: ''
     }
   },
 
   apollo: {
     folderCurrent: {
       query: FOLDER_CURRENT,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      loadingKey: 'loading',
+      async result () {
+        await this.$nextTick()
+        this.$refs.folders.scrollTop = 0
+      }
     },
 
     foldersFavorite: FOLDERS_FAVORITE
+  },
+
+  computed: {
+    newFolderValid () {
+      return isValidMultiName(this.newFolderName)
+    }
+  },
+
+  watch: {
+    showHidden (value) {
+      if (value) {
+        localStorage.setItem(SHOW_HIDDEN, 'true')
+      } else {
+        localStorage.removeItem(SHOW_HIDDEN)
+      }
+    }
   },
 
   beforeRouteLeave (to, from, next) {
@@ -139,7 +263,8 @@ export default {
   methods: {
     async openFolder (path) {
       this.editingPath = false
-      this.error = false
+      this.error = null
+      this.loading++
       try {
         await this.$apollo.mutate({
           mutation: FOLDER_OPEN,
@@ -151,13 +276,15 @@ export default {
           }
         })
       } catch (e) {
-        this.error = true
+        this.error = e
       }
+      this.loading--
     },
 
     async openParentFolder (folder) {
       this.editingPath = false
-      this.error = false
+      this.error = null
+      this.loading++
       try {
         await this.$apollo.mutate({
           mutation: FOLDER_OPEN_PARENT,
@@ -166,8 +293,9 @@ export default {
           }
         })
       } catch (e) {
-        this.error = true
+        this.error = e
       }
+      this.loading--
     },
 
     async toggleFavorite () {
@@ -219,6 +347,52 @@ export default {
       this.$apollo.mutate({
         mutation: PROJECT_CWD_RESET
       })
+    },
+
+    slicePath (path) {
+      const parts = []
+      let startIndex = 0
+      let index
+
+      const findSeparator = () => {
+        index = path.indexOf('/', startIndex)
+        if (index === -1) index = path.indexOf('\\', startIndex)
+        return index !== -1
+      }
+
+      const addPart = index => {
+        const folder = path.substring(startIndex, index)
+        const slice = path.substring(0, index + 1)
+        parts.push({
+          name: folder,
+          path: slice
+        })
+      }
+
+      while (findSeparator()) {
+        addPart(index)
+        startIndex = index + 1
+      }
+
+      if (startIndex < path.length) addPart(path.length)
+
+      return parts
+    },
+
+    async createFolder () {
+      if (!this.newFolderValid) return
+
+      const result = await this.$apollo.mutate({
+        mutation: FOLDER_CREATE,
+        variables: {
+          name: this.newFolderName
+        }
+      })
+
+      this.openFolder(result.data.folderCreate.path)
+
+      this.newFolderName = ''
+      this.showNewFolder = false
     }
   }
 }
@@ -228,7 +402,7 @@ export default {
 @import "~@/style/imports"
 
 .toolbar
-  padding $padding-item
+  padding $padding-item 0
   h-box()
   align-items center
 
@@ -237,8 +411,30 @@ export default {
 
 .current-path
   flex 100% 1 1
-  ellipsis()
-  cursor pointer
+  h-box()
+  align-items stretch
+  border-radius $br
+  background $vue-ui-color-light-neutral
+  .vue-ui-dark-mode &
+    background $vue-ui-color-dark
+
+  .path-value
+    flex auto 1 1
+    h-box()
+    align-items stretch
+
+  .path-part
+    &:not(:first-child)
+      border-left 2px solid
+      border-left-color $vue-ui-color-light
+      .vue-ui-dark-mode &
+        border-left-color $vue-ui-color-darker
+
+  .path-folder
+    padding 0 9px
+
+  .edit-path-button
+    margin-left 4px
 
 .path-edit
   flex 100% 1 1
@@ -260,8 +456,5 @@ export default {
     flex 100% 1 1
     overflow-x hidden
     overflow-y auto
-
-  &.error
-    .current-path
-      color $vue-ui-color-danger
+    position relative
 </style>

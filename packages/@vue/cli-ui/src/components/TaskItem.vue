@@ -11,7 +11,7 @@
   >
     <div class="content">
       <ItemLogo
-        :image="logo ? logo : iconData.icon"
+        :image="logo ? `${logo}?project=${task.project.id}` : iconData.icon"
         :class="iconData.class"
         v-tooltip="status"
         color-bullet
@@ -22,6 +22,8 @@
         :description="(task.status === 'idle' && $t(task.description)) || status"
         :selected="selected"
       />
+
+      <slot/>
     </div>
   </div>
 </template>
@@ -52,7 +54,7 @@ export default {
 
   computed: {
     status () {
-      return this.$t(`types.task.status.${this.task.status}`)
+      return this.$t(`org.vue.types.task.status.${this.task.status}`)
     },
 
     iconData () {

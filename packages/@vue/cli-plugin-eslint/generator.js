@@ -16,17 +16,17 @@ module.exports = (api, { config, lintOn = [] }) => {
   if (config === 'airbnb') {
     eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^3.0.0-rc.1'
+      '@vue/eslint-config-airbnb': '^3.0.0-rc.3'
     })
   } else if (config === 'standard') {
     eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^3.0.0-rc.1'
+      '@vue/eslint-config-standard': '^3.0.0-rc.3'
     })
   } else if (config === 'prettier') {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^3.0.0-rc.1'
+      '@vue/eslint-config-prettier': '^3.0.0-rc.3'
     })
   } else {
     // default
@@ -37,7 +37,7 @@ module.exports = (api, { config, lintOn = [] }) => {
   if (api.hasPlugin('typescript')) {
     eslintConfig.extends.push('@vue/typescript')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-typescript': '^3.0.0-rc.1'
+      '@vue/eslint-config-typescript': '^3.0.0-rc.3'
     })
   }
 
@@ -49,7 +49,7 @@ module.exports = (api, { config, lintOn = [] }) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^6.0.0'
+      'lint-staged': '^7.2.0'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'

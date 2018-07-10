@@ -74,7 +74,7 @@ ansi-colors('white', $vue-ui-color-light)
   v-box()
   align-items stretch
 
-.ais-results
+.ais-results-box
   flex 100% 1 1
   height 0
   overflow-x hidden
@@ -150,8 +150,10 @@ ansi-colors('white', $vue-ui-color-light)
 
 .dropdown-separator
   height 1px
-  background rgba($vue-ui-color-dark, .1)
   margin ($padding-item / 2) 0
+  background rgba($vue-ui-color-dark, .05)
+  .vue-ui-dark-mode &
+    background rgba($vue-ui-color-dark-neutral, .2)
 
 .vue-ui-modal
   &.anchor

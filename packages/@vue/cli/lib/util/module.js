@@ -52,6 +52,13 @@ exports.loadModule = function (request, context, force = false) {
   }
 }
 
+exports.clearModule = function (request, context) {
+  const resolvedPath = exports.resolveModule(request, context)
+  if (resolvedPath) {
+    clearRequireCache(resolvedPath)
+  }
+}
+
 function clearRequireCache (id, map = new Map()) {
   const module = require.cache[id]
   if (module) {

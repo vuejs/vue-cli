@@ -37,20 +37,17 @@ export default {
 @import "~@/style/imports"
 
 .app
-  display grid
-  grid-template-columns 1fr
-  grid-template-rows auto 1fr auto
-  grid-template-areas "connection" "content" "status"
+  display flex
+  flex-direction column
 
-.connection-status
-  grid-area connection
+.connection-status,
+.status-bar
+  flex auto 0 0
 
 .content
-  grid-area content
+  flex auto 1 1
+  height 100%
   overflow hidden
-
-.status-bar
-  grid-area status
 
 .app-init-loading
   z-index 100000

@@ -38,9 +38,12 @@ class ModernModePlugin {
       compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, async (data, cb) => {
         // use <script type="module"> for modern assets
         const modernAssets = data.body.filter(a => a.tagName === 'script')
-        modernAssets.forEach(a => { a.attributes.type = 'module' })
+        modernAssets.forEach(a => {
+          a.attributes.type = 'module'
+          a.attributes.crossorigin = 'use-credentials'
+        })
 
-        // inject Safari 10 nomdoule fix
+        // inject Safari 10 nomodule fix
         data.body.push({
           tagName: 'script',
           closeTag: true,
@@ -62,7 +65,7 @@ class ModernModePlugin {
         data.html = data.html
           // use <link rel="modulepreload"> instead of <link rel="preload">
           // for modern assets
-          .replace(/(<link as=script .*?)rel=preload>/g, '$1rel=modulepreload>')
+          .replace(/(<link as=script .*?)rel=preload>/g, '$1rel=modulepreload crossorigin=use-credentials>')
           .replace(/\snomodule="">/g, ' nomodule>')
       })
     })

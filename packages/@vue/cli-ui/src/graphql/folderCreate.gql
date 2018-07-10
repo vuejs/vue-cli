@@ -1,0 +1,7 @@
+#import "./folderCurrentFragment.gql"
+
+mutation folderCreate ($name: String!) {
+  folderCreate (name: $name) {
+    ...folderCurrent
+  }
+}

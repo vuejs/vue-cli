@@ -12,17 +12,23 @@
         >
           <div class="content disconnected">
             <VueIcon icon="cloud_off" class="medium"/>
-            <span>{{ $t('components.connection-status.disconnected') }}</span>
+            <span>{{ $t('org.vue.components.connection-status.disconnected') }}</span>
           </div>
           <div class="content connected">
             <VueIcon icon="wifi" class="medium"/>
-            <span>{{ $t('components.connection-status.connected') }}</span>
+            <span>{{ $t('org.vue.components.connection-status.connected') }}</span>
           </div>
         </div>
       </transition>
     </template>
   </ApolloQuery>
 </template>
+
+<script>
+export default {
+  clientState: true
+}
+</script>
 
 <style lang="stylus" scoped>
 @import "~@/style/imports"
@@ -36,6 +42,7 @@
   left 0
   width 100%
   height 100%
+  z-index 90000
 
 .banner
   background $vue-ui-color-danger

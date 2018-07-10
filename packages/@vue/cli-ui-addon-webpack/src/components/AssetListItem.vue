@@ -1,23 +1,23 @@
-<template>
+<template functional>
   <div
     :class="{
-      big: asset.big,
-      secondary: asset.secondary
+      big: props.asset.big,
+      secondary: props.asset.secondary
     }"
     class="asset-list-item"
   >
     <div class="content">
-      <div class="info name">{{ asset.name }}</div>
-      <div class="info size">{{ asset.size | size('B') }}</div>
-      <div class="info speed global">{{ asset.speeds.global.totalDownloadTime | round(100) }}s</div>
-      <div class="info speed 3gs">{{ asset.speeds['3gs'].totalDownloadTime | round(100) }}s</div>
-      <div class="info speed 3gf">{{ asset.speeds['3gf'].totalDownloadTime | round(100) }}s</div>
+      <div class="info name">{{ props.asset.name }}</div>
+      <div class="info size">{{ props.asset.size | size('B') }}</div>
+      <div class="info speed global">{{ props.asset.speeds.global.totalDownloadTime | round(100) }}s</div>
+      <div class="info speed 3gs">{{ props.asset.speeds['3gs'].totalDownloadTime | round(100) }}s</div>
+      <div class="info speed 3gf">{{ props.asset.speeds['3gf'].totalDownloadTime | round(100) }}s</div>
       <div class="info warning">
         <VueIcon
-          v-if="!asset.secondary && asset.big"
+          v-if="!props.asset.secondary && props.asset.big"
           icon="warning"
           class="icon"
-          v-tooltip="$t('vue-webpack.dashboard.asset-list.size-warning')"
+          v-tooltip="parent.$t('org.vue.vue-webpack.dashboard.asset-list.size-warning')"
         />
       </div>
     </div>

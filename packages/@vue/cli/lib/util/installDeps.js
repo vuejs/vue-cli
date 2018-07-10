@@ -242,7 +242,7 @@ exports.updatePackage = async function (targetDir, command, cliRegistry, package
 
   await addRegistryToArgs(command, args, cliRegistry)
 
-  args.push(packageName)
+  packageName.split(' ').forEach(name => args.push(name))
 
   debug(`command: `, command)
   debug(`args: `, args)

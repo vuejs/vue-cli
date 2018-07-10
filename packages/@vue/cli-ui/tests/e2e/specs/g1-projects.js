@@ -11,6 +11,7 @@ describe('Vue project manager', () => {
   })
 
   it('Creates a new project (manual)', () => {
+    cy.viewport(1400, 800)
     cy.visit('/project/select')
     cy.get('.tab-button').eq(1).click()
     cy.get('.folder-explorer').should('be.visible')
@@ -18,7 +19,7 @@ describe('Vue project manager', () => {
     cy.get('.change-folder').click()
     cy.get('.create').within(() => {
       cy.get('.folder-explorer').should('be.visible')
-      cy.get('.current-path').click()
+      cy.get('.edit-path-button').click()
       cy.get('.path-input input').clear().type(Cypress.env('cwd') + '{enter}')
       cy.get('.create-project').click()
     })
@@ -51,7 +52,7 @@ describe('Vue project manager', () => {
     })
     cy.get('.loading-screen .vue-ui-loading-indicator').should('be.visible')
     cy.get('.project-home', { timeout: 250000 }).should('be.visible')
-    cy.get('.current-project').should('have.text', 'cli-ui-test')
+    cy.get('.top-bar .current-project').should('contain', 'cli-ui-test')
   })
 
   it('Favorites the project', () => {
@@ -63,18 +64,19 @@ describe('Vue project manager', () => {
   })
 
   it('Imports a project', () => {
+    cy.viewport(1400, 800)
     cy.visit('/project/select')
     cy.get('.project-select-list-item').eq(0).get('[data-testid="delete-button"]').click()
     cy.get('.project-select-list-item').should('not.exist')
     cy.get('.tab-button').eq(2).click()
     cy.get('.import').within(() => {
       cy.get('.folder-explorer').should('be.visible')
-      cy.get('.current-path').click()
+      cy.get('.edit-path-button').click()
       cy.get('.path-input input').clear().type(Cypress.env('cwd') + '{enter}')
       cy.get(`.folder-explorer-item:contains('cli-ui-test')`).click()
       cy.get('.import-project').should('not.have.class', 'disabled').click()
     })
     cy.get('.project-home').should('be.visible')
-    cy.get('.current-project').should('have.text', 'cli-ui-test')
+    cy.get('.top-bar .current-project').should('contain', 'cli-ui-test')
   })
 })

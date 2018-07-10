@@ -9,5 +9,7 @@ fragment folderCurrent on Folder {
     path
     isPackage
     isVueProject
+    hidden
+    favorite
   }
 }

@@ -2,13 +2,13 @@
   <div class="project-select page">
     <StepWizard
       :tab-id.sync="tab"
-      :title="$route.query.hideTabs ? $t('views.project-create.title') : $t('views.project-select.title')"
+      :title="$route.query.hideTabs ? $t('org.vue.views.project-create.title') : $t('org.vue.views.project-select.title')"
       :hide-tabs="hideTabs"
       class="frame"
     >
       <VueTab
         id="existing"
-        :label="$t('views.project-select.tabs.projects')"
+        :label="$t('org.vue.views.project-select.tabs.projects')"
         icon="storage"
         class="select"
       >
@@ -17,7 +17,7 @@
 
       <VueTab
         id="create"
-        :label="$t('views.project-select.tabs.create')"
+        :label="$t('org.vue.views.project-select.tabs.create')"
         icon="add_box"
         class="create"
       >
@@ -28,16 +28,16 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="add"
-            :label="$route.query.hideTabs ? $t('views.project-create.tabs.details.form.folder.action') : $t('views.project-select.buttons.create')"
+            :label="$route.query.hideTabs ? $t('org.vue.views.project-create.tabs.details.form.folder.action') : $t('org.vue.views.project-select.buttons.create')"
             class="big primary create-project"
-            :to="{ name: 'project-create' }"
+            @click="createProject()"
           />
         </div>
       </VueTab>
 
       <VueTab
         id="import"
-        :label="$t('views.project-select.tabs.import')"
+        :label="$t('org.vue.views.project-select.tabs.import')"
         icon="unarchive"
         class="import"
       >
@@ -48,27 +48,68 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="unarchive"
-            :label="$route.query.action || $t('views.project-select.buttons.import')"
+            :label="$route.query.action || $t('org.vue.views.project-select.buttons.import')"
             class="big primary import-project"
-            :disabled="!folderCurrent.isVueProject"
+            :disabled="!folderCurrent.isPackage"
             @click="importProject()"
           />
         </div>
       </VueTab>
     </StepWizard>
+
+    <div class="top-menu left">
+      <VueButton
+        v-if="projectCurrent"
+        :to="{ name: 'home' }"
+        class="flat icon-button"
+        icon-left="arrow_back"
+      />
+    </div>
+
+    <div class="top-menu right">
+      <VueButton
+        :to="{ name: 'about' }"
+        class="flat icon-button"
+        icon-left="help"
+        v-tooltip="$t('org.vue.views.about.title')"
+      />
+    </div>
+
+    <VueModal
+      v-if="showNoModulesModal"
+      :title="$t('org.vue.views.project-select.import.no-modules.title')"
+      class="small no-modules-modal"
+      @close="showNoModulesModal = false"
+    >
+      <div class="default-body">
+        <div class="message">
+          {{ $t('org.vue.views.project-select.import.no-modules.message') }}
+        </div>
+      </div>
+
+      <div slot="footer" class="actions">
+        <VueButton
+          class="primary big"
+          :label="$t('org.vue.views.project-select.import.no-modules.close')"
+          @click="showNoModulesModal = false"
+        />
+      </div>
+    </VueModal>
   </div>
 </template>
 
 <script>
 import FOLDER_CURRENT from '../graphql/folderCurrent.gql'
+import PROJECT_INIT_CREATION from '../graphql/projectInitCreation.gql'
 import PROJECT_IMPORT from '../graphql/projectImport.gql'
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 
 export default {
   name: 'ProjectSelect',
 
   metaInfo () {
     return {
-      title: this.$t('views.project-select.title')
+      title: this.$t('org.vue.views.project-select.title')
     }
   },
 
@@ -76,12 +117,14 @@ export default {
     return {
       folderCurrent: {},
       tab: undefined,
-      hideTabs: !!this.$route.query.hideTabs
+      hideTabs: !!this.$route.query.hideTabs,
+      showNoModulesModal: false
     }
   },
 
   apollo: {
-    folderCurrent: FOLDER_CURRENT
+    folderCurrent: FOLDER_CURRENT,
+    projectCurrent: PROJECT_CURRENT
   },
 
   mounted () {
@@ -92,17 +135,31 @@ export default {
   },
 
   methods: {
-    async importProject () {
+    async createProject () {
       await this.$apollo.mutate({
-        mutation: PROJECT_IMPORT,
-        variables: {
-          input: {
-            path: this.folderCurrent.path
-          }
-        }
+        mutation: PROJECT_INIT_CREATION
       })
 
-      this.$router.push({ name: 'project-home' })
+      this.$router.push({ name: 'project-create' })
+    },
+
+    async importProject () {
+      try {
+        await this.$apollo.mutate({
+          mutation: PROJECT_IMPORT,
+          variables: {
+            input: {
+              path: this.folderCurrent.path
+            }
+          }
+        })
+
+        this.$router.push({ name: 'project-home' })
+      } catch (e) {
+        if (e.graphQLErrors && e.graphQLErrors.some(e => e.message === 'NO_MODULES')) {
+          this.showNoModulesModal = true
+        }
+      }
     }
   }
 }
@@ -119,4 +176,12 @@ export default {
 
 .project-select
   height 100%
+
+.top-menu
+  position fixed
+  top $padding-item
+  &.left
+    left $padding-item
+  &.right
+    right $padding-item
 </style>

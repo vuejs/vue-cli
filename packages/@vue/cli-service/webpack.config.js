@@ -3,7 +3,7 @@
 
 let service = process.VUE_CLI_SERVICE
 
-if (!service) {
+if (!service || process.env.VUE_CLI_API_MODE) {
   const Service = require('./lib/Service')
   service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
   service.init(process.env.VUE_CLI_MODE || process.env.NODE_ENV)

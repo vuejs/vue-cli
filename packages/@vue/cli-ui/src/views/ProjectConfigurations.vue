@@ -1,16 +1,24 @@
 <template>
   <div class="project-configurations page">
     <ContentView
-      :title="$t('views.project-configurations.title')"
+      :title="$t('org.vue.views.project-configurations.title')"
       class="limit-width"
     >
+      <template slot="actions">
+        <VueInput
+          v-model="search"
+          icon-left="search"
+          class="round"
+        />
+      </template>
+
       <ApolloQuery
         :query="require('../graphql/configurations.gql')"
         class="fill-height"
       >
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
-            v-if="loading && !data"
+            v-if="loading && (!data || !data.configurations)"
             class="overlay"
           />
 
@@ -33,21 +41,48 @@
 
 <script>
 import RestoreRoute from '../mixins/RestoreRoute'
+import { generateSearchRegex } from '../util/search'
+
+import CONFIGS from '../graphql/configurations.gql'
 
 export default {
   mixins: [
-    RestoreRoute()
+    RestoreRoute({
+      baseRoute: { name: 'project-configurations' }
+    })
   ],
 
   metaInfo () {
     return {
-      title: this.$t('views.project-configurations.title')
+      title: this.$t('org.vue.views.project-configurations.title')
+    }
+  },
+
+  data () {
+    return {
+      search: ''
+    }
+  },
+
+  bus: {
+    quickOpenProject (project) {
+      this.$apollo.getClient().writeQuery({
+        query: CONFIGS,
+        data: {
+          configurations: null
+        }
+      })
     }
   },
 
   methods: {
     generateItems (configurations) {
-      return configurations.map(
+      if (!configurations) return []
+
+      const reg = generateSearchRegex(this.search)
+      return configurations.filter(
+        item => !reg || item.name.match(reg) || item.description.match(reg)
+      ).map(
         configuration => ({
           route: {
             name: 'project-configuration-details',

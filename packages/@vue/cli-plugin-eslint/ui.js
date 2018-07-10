@@ -1,11 +1,11 @@
 module.exports = api => {
-  const CONFIG = 'eslintrc'
+  const CONFIG = 'org.vue.eslintrc'
 
   // Config file
   api.describeConfig({
     id: CONFIG,
     name: 'ESLint configuration',
-    description: 'eslint.config.eslint.description',
+    description: 'org.vue.eslint.config.eslint.description',
     link: 'https://github.com/vuejs/eslint-plugin-vue',
     files: {
       eslint: {
@@ -21,13 +21,13 @@ module.exports = api => {
       tabs: [
         {
           id: 'vue',
-          label: 'eslint.config.eslint.vue.label',
+          label: 'org.vue.eslint.config.eslint.vue.label',
           prompts: [
             {
               name: 'vue/attribute-hyphenation',
               type: 'list',
               message: 'Attribute hyphenation',
-              group: 'eslint.config.eslint.groups.strongly-recommended',
+              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
               description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
               default: JSON.stringify('off'),
@@ -51,7 +51,7 @@ module.exports = api => {
               name: 'vue/html-end-tags',
               type: 'confirm',
               message: 'Template end tags style',
-              group: 'eslint.config.eslint.groups.strongly-recommended',
+              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
               description: 'End tag on Void elements, end tags and self-closing opening tags',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-end-tags.md',
               default: false,
@@ -63,7 +63,7 @@ module.exports = api => {
               name: 'vue/html-indent',
               type: 'list',
               message: 'Template indentation',
-              group: 'eslint.config.eslint.groups.strongly-recommended',
+              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
               description: 'Enforce indentation in template',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-indent.md',
               default: JSON.stringify('off'),
@@ -95,7 +95,7 @@ module.exports = api => {
               name: 'vue/html-self-closing',
               type: 'confirm',
               message: 'Template tag self-closing style',
-              group: 'eslint.config.eslint.groups.strongly-recommended',
+              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
               description: 'Self-close any component or non-Void element tags',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-self-closing.md',
               default: false,
@@ -107,7 +107,7 @@ module.exports = api => {
               name: 'vue/require-default-prop',
               type: 'confirm',
               message: 'Require default in required props',
-              group: 'eslint.config.eslint.groups.strongly-recommended',
+              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
               description: 'This rule requires default value to be set for each props that are not marked as `required`',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/require-default-prop.md',
               default: false,
@@ -119,7 +119,7 @@ module.exports = api => {
               name: 'vue/require-prop-types',
               type: 'confirm',
               message: 'Require types for props',
-              group: 'eslint.config.eslint.groups.strongly-recommended',
+              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
               description: 'In committed code, prop definitions should always be as detailed as possible, specifying at least type(s)',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/require-prop-types.md',
               default: false,
@@ -131,7 +131,7 @@ module.exports = api => {
               name: 'vue/attributes-order',
               type: 'confirm',
               message: 'Attribute order',
-              group: 'eslint.config.eslint.groups.recommended',
+              group: 'org.vue.eslint.config.eslint.groups.recommended',
               description: 'This rule aims to enforce ordering of component attributes (the default order is specified in the Vue style guide)',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attributes-order.md',
               default: false,
@@ -143,7 +143,7 @@ module.exports = api => {
               name: 'vue/html-quotes',
               type: 'list',
               message: 'Attribute quote style',
-              group: 'eslint.config.eslint.groups.recommended',
+              group: 'org.vue.eslint.config.eslint.groups.recommended',
               description: 'Enforce style of the attribute quotes in templates',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-quotes.md',
               default: JSON.stringify('off'),
@@ -167,7 +167,7 @@ module.exports = api => {
               name: 'vue/order-in-components',
               type: 'confirm',
               message: 'Component options order',
-              group: 'eslint.config.eslint.groups.recommended',
+              group: 'org.vue.eslint.config.eslint.groups.recommended',
               description: 'This rule aims to enforce ordering of component options (the default order is specified in the Vue style guide)',
               link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/order-in-components.md',
               default: false,
@@ -179,13 +179,13 @@ module.exports = api => {
         },
         {
           id: 'extra',
-          label: 'eslint.config.eslint.extra.label',
+          label: 'org.vue.eslint.config.eslint.extra.label',
           prompts: [
             {
               name: 'lintOnSave',
               type: 'confirm',
-              message: 'eslint.config.eslint.extra.lintOnSave.message',
-              description: 'eslint.config.eslint.extra.lintOnSave.description',
+              message: 'org.vue.eslint.config.eslint.extra.lintOnSave.message',
+              description: 'org.vue.eslint.config.eslint.extra.lintOnSave.description',
               link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#configuration',
               default: true,
               value: data.vue && data.vue.lintOnSave
@@ -214,14 +214,14 @@ module.exports = api => {
   // Tasks
   api.describeTask({
     match: /vue-cli-service lint/,
-    description: 'eslint.tasks.lint.description',
+    description: 'org.vue.eslint.tasks.lint.description',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#injected-commands',
     prompts: [
       {
         name: 'noFix',
         type: 'confirm',
         default: false,
-        description: 'eslint.tasks.lint.noFix'
+        description: 'org.vue.eslint.tasks.lint.noFix'
       }
     ],
     onBeforeRun: ({ answers, args }) => {
@@ -229,7 +229,7 @@ module.exports = api => {
     }
   })
 
-  const OPEN_ESLINTRC = 'vue-eslint-open-eslintrc'
+  const OPEN_ESLINTRC = 'org.vue.eslint.open-eslintrc'
 
   api.onViewOpen(({ view }) => {
     if (view.id !== 'vue-project-configurations') {
@@ -242,7 +242,7 @@ module.exports = api => {
       api.addSuggestion({
         id: OPEN_ESLINTRC,
         type: 'action',
-        label: 'eslint.suggestions.open-eslintrc.label',
+        label: 'org.vue.eslint.suggestions.open-eslintrc.label',
         handler () {
           const file = config.foundFiles.eslint.path
           console.log('open', file)

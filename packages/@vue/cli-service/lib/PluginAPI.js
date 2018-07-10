@@ -18,6 +18,13 @@ class PluginAPI {
   }
 
   /**
+   * Current working directory.
+   */
+  getCwd () {
+    return this.service.context
+  }
+
+  /**
    * Resolve path for a project.
    *
    * @param {string} _path - Relative path from project root

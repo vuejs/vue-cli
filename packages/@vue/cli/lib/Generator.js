@@ -82,7 +82,8 @@ module.exports = class Generator {
         const res = transform(
           value,
           checkExisting,
-          this.files
+          this.files,
+          this.context
         )
         const { content, filename } = res
         this.files[filename] = content

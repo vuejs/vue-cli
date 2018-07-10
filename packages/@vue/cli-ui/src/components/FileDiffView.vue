@@ -2,17 +2,17 @@
   <div class="file-diff-view">
     <div class="toolbar">
       <VueIcon icon="cached"/>
-      <div class="title">{{ $t('components.file-diff-view.files-changed') }}</div>
-      <div class="file-count">{{ fileDiffs.length }}</div>
+      <div class="title">{{ $t('org.vue.components.file-diff-view.files-changed') }}</div>
+      <div class="file-count">{{ fileDiffs && fileDiffs.length }}</div>
       <div class="vue-ui-spacer"/>
       <VueInput
         v-model="search"
         icon-left="search"
-        :placeholder="$t('components.file-diff-view.search-file')"
+        :placeholder="$t('org.vue.components.file-diff-view.search-file')"
       />
       <VueButton
         :icon-left="allCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up'"
-        :label="$t(`components.file-diff-view.actions.${allCollapsed ? 'expand-all' : 'collapse-all'}`)"
+        :label="$t(`org.vue.components.file-diff-view.actions.${allCollapsed ? 'expand-all' : 'collapse-all'}`)"
         @click="setCollapsedToAll(!allCollapsed)"
       />
       <VueButton
@@ -22,29 +22,36 @@
       />
     </div>
     <div class="list">
-      <FileDiff
-        v-for="fileDiff of filteredList"
-        :key="fileDiff.id"
-        :file-diff="fileDiff"
-        :collapsed="!!collapsed[fileDiff.id]"
-        @update:collapsed="value => $set(collapsed, fileDiff.id, value)"
-      />
-
-      <div v-if="!filteredList.length" class="vue-ui-empty">
-        <VueIcon icon="check_circle" class="empty-icon"/>
-        <span>{{ $t('components.file-diff-view.empty') }}</span>
+      <div v-if="error || !fileDiffs" class="vue-ui-empty">
+        <VueIcon icon="error" class="empty-icon"/>
+        <span>{{ $t('org.vue.components.file-diff-view.error') }}</span>
       </div>
+
+      <div v-else-if="!filteredList.length" class="vue-ui-empty">
+        <VueIcon icon="check_circle" class="empty-icon"/>
+        <span>{{ $t('org.vue.components.file-diff-view.empty') }}</span>
+      </div>
+
+      <template v-else>
+        <FileDiff
+          v-for="fileDiff of filteredList"
+          :key="fileDiff.id"
+          :file-diff="fileDiff"
+          :collapsed="!!collapsed[fileDiff.id]"
+          @update:collapsed="value => $set(collapsed, fileDiff.id, value)"
+        />
+      </template>
     </div>
     <div class="actions-bar">
-      <template v-if="fileDiffs.length">
+      <template v-if="!error && fileDiffs && fileDiffs.length">
         <VueButton
           icon-left="vertical_align_bottom"
-          :label="$t('components.file-diff-view.actions.commit')"
+          :label="$t('org.vue.components.file-diff-view.actions.commit')"
           class="big primary"
-          @click="openCommitModal()"
+          @click="showCommitModal = true"
         />
         <VueButton
-          :label="$t('components.file-diff-view.actions.skip')"
+          :label="$t('org.vue.components.file-diff-view.actions.skip')"
           class="big"
           data-testid="skip-button"
           @click="skip()"
@@ -53,12 +60,12 @@
       <template v-else>
         <VueButton
           icon-left="done"
-          :label="$t('components.file-diff-view.actions.continue')"
+          :label="$t('org.vue.components.file-diff-view.actions.continue')"
           class="big primary"
           @click="skip()"
         />
         <VueButton
-          :label="$t('components.file-diff-view.actions.refresh')"
+          :label="$t('org.vue.components.file-diff-view.actions.refresh')"
           class="big"
           @click="refresh()"
         />
@@ -74,19 +81,19 @@
 
     <VueModal
       v-if="showCommitModal"
-      :title="$t('components.file-diff-view.modals.commit.title')"
+      :title="$t('org.vue.components.file-diff-view.modals.commit.title')"
       class="medium"
       @close="showCommitModal = false"
     >
       <div class="default-body">
         <VueFormField
-          :title="$t('components.file-diff-view.modals.commit.input')"
-          :subtitle="$t('components.file-diff-view.modals.commit.subtitle')"
+          :title="$t('org.vue.components.file-diff-view.modals.commit.input')"
+          :subtitle="$t('org.vue.components.file-diff-view.modals.commit.subtitle')"
         >
           <VueInput
-            ref="commitMessageInput"
             v-model="commitMessage"
             icon-left="local_offer"
+            v-focus
             @keyup.enter="commitMessage && commit()"
           />
         </VueFormField>
@@ -94,12 +101,12 @@
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          :label="$t('components.file-diff-view.modals.commit.actions.cancel')"
+          :label="$t('org.vue.components.file-diff-view.modals.commit.actions.cancel')"
           class="flat"
           @click="showCommitModal = false"
         />
         <VueButton
-          :label="$t('components.file-diff-view.modals.commit.actions.commit')"
+          :label="$t('org.vue.components.file-diff-view.modals.commit.actions.commit')"
           class="primary"
           icon-left="vertical_align_bottom"
           :disabled="!commitMessage"
@@ -133,7 +140,8 @@ export default {
       search: '',
       loading: 0,
       commitMessage: '',
-      showCommitModal: false
+      showCommitModal: false,
+      error: null
     }
   },
 
@@ -141,8 +149,17 @@ export default {
     fileDiffs: {
       query: FILE_DIFFS,
       loadingKey: 'loading',
-      fetchPolicy: 'cahe-and-network',
-      result () {
+      fetchPolicy: 'network-only',
+      error (error) {
+        this.error = error
+      },
+      result (result) {
+        if (result.errors && result.errors.length) {
+          this.error = result.errors[0]
+          return
+        }
+
+        this.error = null
         this.fileDiffs.forEach(fileDiff => {
           if (typeof this.collapsed[fileDiff.id] === 'undefined' && (
             fileDiff.binary ||
@@ -158,12 +175,14 @@ export default {
 
   computed: {
     allCollapsed () {
+      if (!this.fileDiffs) return false
       return !this.fileDiffs.find(
         fileDiff => !this.collapsed[fileDiff.id]
       )
     },
 
     filteredList () {
+      if (!this.fileDiffs) return []
       const search = this.search.trim()
       if (search) {
         const reg = new RegExp(search.replace(/\s+/g, '.*'), 'i')
@@ -195,13 +214,6 @@ export default {
 
     refresh () {
       this.$apollo.queries.fileDiffs.refetch()
-    },
-
-    openCommitModal () {
-      this.showCommitModal = true
-      requestAnimationFrame(() => {
-        this.$refs.commitMessageInput.focus()
-      })
     },
 
     async commit () {

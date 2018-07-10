@@ -473,7 +473,11 @@ test('extract config files', async () => {
     },
     jest: {
       foo: 'bar'
-    }
+    },
+    browserslist: [
+      '> 1%',
+      'not <= IE8'
+    ]
   }
 
   const generator = new Generator('/', { plugins: [
@@ -495,4 +499,5 @@ test('extract config files', async () => {
   expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
+  expect(fs.readFileSync('/.browserslistrc', 'utf-8')).toMatch('> 1%\nnot <= IE8')
 })

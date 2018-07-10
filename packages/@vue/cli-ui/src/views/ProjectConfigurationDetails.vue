@@ -33,7 +33,7 @@
         :disabled="!hasPromptsChanged"
         icon-left="cancel"
         class="big"
-        :label="$t('views.project-configuration-details.actions.cancel')"
+        :label="$t('org.vue.views.project-configuration-details.actions.cancel')"
         @click="cancel()"
       />
 
@@ -41,7 +41,7 @@
         v-if="configuration && configuration.link"
         icon-right="open_in_new"
         class="big flat success"
-        :label="$t('views.project-configuration-details.actions.more-info')"
+        :label="$t('org.vue.views.project-configuration-details.actions.more-info')"
         :href="configuration.link"
         target="_blank"
       />
@@ -50,7 +50,7 @@
         v-if="configuration && !hasPromptsChanged"
         icon-left="refresh"
         class="big primary"
-        :label="$t('views.project-configuration-details.actions.refresh')"
+        :label="$t('org.vue.views.project-configuration-details.actions.refresh')"
         @click="refetch()"
       />
 
@@ -58,7 +58,7 @@
         v-else
         icon-left="save"
         class="primary big"
-        :label="$t('views.project-configuration-details.actions.save')"
+        :label="$t('org.vue.views.project-configuration-details.actions.save')"
         @click="save()"
       />
     </div>
@@ -73,7 +73,7 @@ import CONFIGURATION_CANCEL from '../graphql/configurationCancel.gql'
 export default {
   metaInfo () {
     return {
-      title: this.configuration && `${this.configuration.name} - ${this.$t('views.project-configurations.title')}`
+      title: this.configuration && `${this.configuration.name} - ${this.$t('org.vue.views.project-configurations.title')}`
     }
   },
 

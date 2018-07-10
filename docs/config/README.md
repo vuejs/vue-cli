@@ -4,6 +4,8 @@ sidebar: auto
 
 # Configuration Reference
 
+<Bit/>
+
 ## Global CLI Config
 
 Some global configurations for `@vue/cli`, such as your preferred package manager and your locally saved presets, are stored in a JSON file named `.vuerc` in your home directory. You can edit this file directory with your editor of choice to change the saved options.
@@ -67,6 +69,10 @@ module.exports = {
 - Default: `''`
 
   A directory to nest generated static assets (js, css, img, fonts) under.
+  
+  ::: tip
+  `assetsDir` is ignored when overwriting the filename or chunkFilename from the generated assets.
+  :::
 
 ### pages
 
@@ -104,10 +110,12 @@ module.exports = {
 
 ### lintOnSave
 
-- Type: `boolean`
+- Type: `boolean | 'error'`
 - Default: `true`
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
+  
+  When set to `true`, eslint-loader will only emit warnings during webpack's compilation process in order not to break the flow during development. If you want it to emit errors instead (i.e. when building for production), set it like this: `lintOnSave: 'error'`.
 
 ### runtimeCompiler
 

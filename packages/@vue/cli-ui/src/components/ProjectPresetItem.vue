@@ -18,7 +18,7 @@
 
       <ListItemInfo
         :name="$t(preset.name)"
-        :description="$t(preset.description)"
+        :description="description || $t(preset.description)"
         :link="preset.link"
         :selected="selected"
       />
@@ -37,6 +37,11 @@ export default {
     selected: {
       type: Boolean,
       required: true
+    },
+
+    description: {
+      type: String,
+      default: null
     }
   }
 }

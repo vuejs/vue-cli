@@ -8,7 +8,7 @@
       <VueButton
         class="icon-button"
         icon-left="delete_forever"
-        v-tooltip="$t('components.terminal-view.buttons.clear')"
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.clear')"
         @click="clear(); $emit('clear')"
       />
       <VueIcon
@@ -18,7 +18,7 @@
       <VueButton
         class="icon-button"
         icon-left="subdirectory_arrow_left"
-        v-tooltip="$t('components.terminal-view.buttons.scroll')"
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.scroll')"
         @click="scrollToBottom()"
       />
     </div>
@@ -73,6 +73,8 @@ const darkTheme = {
 }
 
 export default {
+  clientState: true,
+
   props: {
     cols: {
       type: Number,
@@ -136,21 +138,12 @@ export default {
 
     content: 'setContent',
 
-    theme: {
-      handler (value) {
-        if (this.$_terminal) {
-          this.$_terminal._setTheme(this.theme)
-        }
-      },
-      immediate: true
-    }
-  },
-
-  mounted () {
-    this.initTerminal()
-
-    if (this.autoSize) {
-      this.$nextTick(this.fit)
+    darkMode (value, oldValue) {
+      if (typeof oldValue === 'undefined') {
+        this.initTerminal()
+      } else if (this.$_terminal) {
+        this.$_terminal._setTheme(this.theme)
+      }
     }
   },
 
@@ -171,6 +164,10 @@ export default {
 
       term.on('blur', () => this.$emit('blur'))
       term.on('focus', () => this.$emit('focus'))
+
+      if (this.autoSize) {
+        this.$nextTick(this.fit)
+      }
     },
 
     setContent (value, ln = true) {

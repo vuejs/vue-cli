@@ -20,7 +20,7 @@
 
       <div v-if="!prompts.length" class="vue-ui-empty">
         <VueIcon icon="check_circle" class="empty-icon"/>
-        <span>{{ $t('components.prompts-list.empty') }}</span>
+        <span>{{ $t('org.vue.components.prompts-list.empty') }}</span>
       </div>
     </div>
   </div>

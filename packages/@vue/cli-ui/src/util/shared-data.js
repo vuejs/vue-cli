@@ -32,6 +32,14 @@ export default {
         }
       },
 
+      beforeCreate () {
+        Object.defineProperty(this, '$sharedData', {
+          get: () => this.$data.$sharedData,
+          enumerable: true,
+          configurable: true
+        })
+      },
+
       created () {
         const options = this.$options.sharedData
         if (options) {
@@ -48,6 +56,11 @@ export default {
           } else {
             this.$syncSharedData(options)
           }
+          // Force watchers to re-evaluate
+          // Because we just added the proxies to this.$data.$sharedData[key]
+          this._watchers.forEach(watcher => {
+            watcher.update()
+          })
         }
       },
 

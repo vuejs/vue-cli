@@ -16,8 +16,8 @@
       <img
         v-else-if="displayImage"
         class="image"
-        :src="image"
-        :key="image"
+        :src="imageUrl"
+        :key="imageUrl"
         @load="loaded = true"
         @error="error = true"
       >
@@ -72,6 +72,14 @@ export default {
 
     displayImage () {
       return !this.isMaterialIcon && !this.error
+    },
+
+    imageUrl () {
+      // Fix images in development
+      if (process.env.VUE_APP_CLI_UI_DEV && this.image.charAt(0) === '/') {
+        return `http://localhost:4000${this.image}`
+      }
+      return this.image
     }
   },
 
@@ -107,6 +115,7 @@ export default {
       width 100%
       height @width
       transform scale(0)
+      border-radius 50%
     .vue-ui-icon
       width 24px
       height @width
@@ -134,16 +143,28 @@ export default {
       height @width
       position relative
       top 3px
+      border-radius 0
+
+  &.identicon
+    filter brightness(90%) contrast(115%)
+    .vue-ui-dark-mode &
+      filter invert(100%) brightness(180%) contrast(70%)
+    .wrapper
+      background white
+    .image
+      width 60%
+      height @width
+      border-radius 0
 
   &.loaded
     .image
-      animation zoom .1s
+      animation zoom .5s $ease
       transform none
 
   &.selected,
   &.error
     .wrapper
-      animation zoom .1s
+      animation zoom .5s $ease
 
   &.selected
     .wrapper

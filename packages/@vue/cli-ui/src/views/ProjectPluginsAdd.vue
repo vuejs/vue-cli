@@ -1,7 +1,7 @@
 <template>
   <div class="project-plugins-add page">
     <div class="content">
-      <portal to="top-title">{{ $t('views.project-plugins-add.title') }}</portal>
+      <portal to="top-title">{{ $t('org.vue.views.project-plugins-add.title') }}</portal>
       <StepWizard
         class="frame"
         :tab-id.sync="tabId"
@@ -9,87 +9,27 @@
         <template slot-scope="{ next, previous }">
           <VueTab
             id="search"
-            :label="$t('views.project-plugins-add.tabs.search.label')"
+            :label="$t('org.vue.views.project-plugins-add.tabs.search.label')"
             icon="search"
             disabled
           >
-            <div class="content vue-ui-disable-scroll">
-              <ais-index
-                app-id="OFCNCOG2CU"
-                api-key="db283631f89b5b8a10707311f911fd00"
-                index-name="npm-search"
-                :query-parameters="{
-                  hitsPerPage: 20,
-                  attributesToRetrieve: [
-                    'name',
-                    'description',
-                    'repository',
-                    'homepage',
-                    'version',
-                    'owner',
-                    'humanDownloadsLast30Days'
-                  ],
-                  attributesToHighlight: [
-                    'name',
-                    'description'
-                  ],
-                  filters: `computedKeywords:vue-cli-plugin`
-                }"
-              >
-                <InstantSearchInput
-                  ref="searchInput"
-                  :placeholder="$t('views.project-plugins-add.tabs.search.search-input')"
-                />
-                <ais-results ref="results">
-                  <PackageSearchItem
-                    slot-scope="{ result }"
-                    :pkg="result"
-                    :selected="selectedId === result.name"
-                    @click.native="selectedId = result.name"
-                  />
-                </ais-results>
-                <ais-no-results>
-                  <div class="vue-ui-empty">
-                    <VueIcon icon="search" class="huge"/>
-                    <div>{{ $t('views.project-plugins-add.tabs.search.not-found') }}</div>
-                  </div>
-                </ais-no-results>
-                <InstantSearchPagination @page-change="scrollResultsToTop()"/>
-              </ais-index>
-            </div>
-
-            <div class="actions-bar no-padding-x">
-              <VueButton
-                icon-left="close"
-                :label="$t('views.project-plugins-add.tabs.search.buttons.cancel')"
-                class="big"
-                @click="close()"
-              />
-
-              <div class="algolia">
-                <img class="ais-logo" src="~@/assets/search-by-algolia.svg">
-              </div>
-
-              <VueButton
-                icon-left="file_download"
-                :label="$t('views.project-plugins-add.tabs.search.buttons.install', { target: selectedId || $t('views.project-plugins-add.plugin') })"
-                class="big primary"
-                :disabled="!selectedId"
-                data-testid="download-plugin"
-                @click="installPlugin()"
-              />
-            </div>
+            <NpmPackageSearch
+              filters="computedKeywords:vue-cli-plugin"
+              try-logos
+              @close="close()"
+              @install="installPlugin"
+            />
           </VueTab>
 
           <VueTab
             id="config"
-            :label="$t('views.project-plugins-add.tabs.configuration.label')"
+            :label="$t('org.vue.views.project-plugins-add.tabs.configuration.label')"
             icon="settings_applications"
             disabled
             lazy
           >
             <div class="content vue-ui-disable-scroll">
-              <div class="cta-text">{{ $t('views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}</div>
+              <div class="cta-text">{{ $t('org.vue.views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}</div>
               <PromptsList
                 :prompts="visiblePrompts"
                 @answer="answerPrompt"
@@ -99,14 +39,14 @@
             <div class="actions-bar no-padding-x">
               <VueButton
                 icon-left="arrow_back"
-                :label="$t('views.project-plugins-add.tabs.configuration.buttons.cancel')"
+                :label="$t('org.vue.views.project-plugins-add.tabs.configuration.buttons.cancel')"
                 class="big"
                 @click="showCancelInstall = true"
               />
 
               <VueButton
                 icon-left="done"
-                :label="$t('views.project-plugins-add.tabs.configuration.buttons.finish')"
+                :label="$t('org.vue.views.project-plugins-add.tabs.configuration.buttons.finish')"
                 class="big primary"
                 :disabled="!configurationValid"
                 data-testid="finish-install"
@@ -117,7 +57,7 @@
 
           <VueTab
             id="diff"
-            :label="$t('views.project-plugins-add.tabs.diff.label')"
+            :label="$t('org.vue.views.project-plugins-add.tabs.diff.label')"
             icon="note_add"
             disabled
             lazy
@@ -132,17 +72,17 @@
 
     <VueModal
       v-if="showCancelInstall"
-      :title="$t('views.project-plugins-add.modal.title', { target: pluginId })"
+      :title="$t('org.vue.views.project-plugins-add.modal.title', { target: pluginId })"
       class="medium"
       @close="showCancelInstall = false"
     >
       <div class="default-body">
-        {{ $t('views.project-plugins-add.modal.body', { target: pluginId }) }}
+        {{ $t('org.vue.views.project-plugins-add.modal.body', { target: pluginId }) }}
       </div>
 
       <div slot="footer" class="actions space-between">
         <VueButton
-          :label="$t('views.project-plugins-add.modal.buttons.back')"
+          :label="$t('org.vue.views.project-plugins-add.modal.buttons.back')"
           class="flat"
           @click="showCancelInstall = false"
         />
@@ -150,13 +90,13 @@
         <div class="vue-ui-spacer"/>
 
         <VueButton
-          :label="$t('views.project-plugins-add.modal.buttons.cancel')"
+          :label="$t('org.vue.views.project-plugins-add.modal.buttons.cancel')"
           class="flat"
           @click="cancelInstall()"
         />
 
         <VueButton
-          :label="$t('views.project-plugins-add.modal.buttons.uninstall')"
+          :label="$t('org.vue.views.project-plugins-add.modal.buttons.uninstall')"
           icon-left="delete_forever"
           class="danger"
           @click="uninstallPlugin()"
@@ -191,14 +131,13 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('views.project-plugins-add.title')
+      title: this.$t('org.vue.views.project-plugins-add.title')
     }
   },
 
   data () {
     return {
       tabId: 'search',
-      selectedId: null,
       showCancelInstall: false,
       pluginInstallation: null
     }
@@ -207,7 +146,7 @@ export default {
   apollo: {
     pluginInstallation: {
       query: PLUGIN_INSTALLATION,
-      fetchPolicy: 'netork-only',
+      fetchPolicy: 'network-only',
       result () {
         this.checkTab()
       }
@@ -222,7 +161,6 @@ export default {
 
   mounted () {
     requestAnimationFrame(() => {
-      this.$refs.searchInput.focus()
       this.checkTab()
     })
   },
@@ -253,12 +191,12 @@ export default {
       }
     },
 
-    async installPlugin () {
+    async installPlugin (id) {
       try {
         await this.$apollo.mutate({
           mutation: PLUGIN_INSTALL,
           variables: {
-            id: this.selectedId
+            id
           }
         })
         this.tabId = 'config'
@@ -269,7 +207,6 @@ export default {
     },
 
     cancelInstall () {
-      this.selectedId = null
       this.tabId = 'search'
       this.showCancelInstall = false
     },
@@ -315,11 +252,6 @@ export default {
         // eslint-disable-next-line no-console
         console.error(e)
       }
-    },
-
-    scrollResultsToTop () {
-      const vm = this.$refs.results
-      if (vm) vm.$el.scrollTop = 0
     }
   }
 }
@@ -337,15 +269,4 @@ export default {
 .content
   grid-area content
   overflow hidden
-
-.algolia
-  position absolute
-  margin 0 auto
-  top 0
-  left 0
-  width 100%
-  height 100%
-  pointer-events none
-  h-box()
-  box-center()
 </style>

@@ -29,7 +29,7 @@ export default {
           list.push(prompt)
         }
         for (const tabId in result) {
-          data.configuration.tabs[tabId].prompts = result[tabId]
+          data.configuration.tabs.find(t => t.id === tabId).prompts = result[tabId]
         }
       }
     })
