@@ -11,7 +11,7 @@ module.exports = (api, options) => {
       '--verbose': 'show full function definitions in output'
     }
   }, args => {
-    const get = require('get-value')
+    const { get } = require('@vue/cli-shared-utils')
     const { toString } = require('webpack-chain')
     const config = api.resolveWebpackConfig()
     const { _: paths, verbose } = args

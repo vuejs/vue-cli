@@ -3,6 +3,7 @@
   'exit',
   'ipc',
   'logger',
+  'object',
   'openBrowser',
   'pluginResolution',
   'request',

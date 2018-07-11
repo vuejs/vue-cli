@@ -126,6 +126,18 @@ program
     loadCommand('init', '@vue/cli-init')
   })
 
+program
+  .command('config [value]')
+  .description('inspect and modify the config')
+  .option('-g, --get <path>', 'get value from option')
+  .option('-s, --set <path> <value>', 'set option value')
+  .option('-d, --delete <path>', 'delete option from config')
+  .option('-e, --edit', 'open config with default editor')
+  .option('--json', 'outputs JSON result only')
+  .action((value, cmd) => {
+    require('../lib/config')(value, cleanArgs(cmd))
+  })
+
 // output help information on unknown commands
 program
   .arguments('<command>')

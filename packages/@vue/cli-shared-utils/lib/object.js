@@ -26,7 +26,7 @@ exports.get = function (target, path) {
   return obj[fields[l - 1]]
 }
 
-exports.remove = function (target, path) {
+exports.unset = function (target, path) {
   const fields = path.split('.')
   let obj = target
   const l = fields.length
