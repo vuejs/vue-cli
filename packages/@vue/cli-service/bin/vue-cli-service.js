@@ -1,4 +1,11 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --max_old_space_size=4096
+
+/**
+ * --max_old_space_size to increase V8 default heap size.
+ * Temporary workaround for memory leaks in webpack and high memory usage
+ * from file watching & sourcemap generation.
+ * https://github.com/vuejs/vue-cli/issues/1453
+ */
 
 const semver = require('semver')
 const { error } = require('@vue/cli-shared-utils')
