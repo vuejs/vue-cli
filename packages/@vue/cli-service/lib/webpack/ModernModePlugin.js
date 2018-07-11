@@ -37,7 +37,7 @@ class ModernModePlugin {
     compiler.hooks.compilation.tap(ID, compilation => {
       compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, async (data, cb) => {
         // use <script type="module"> for modern assets
-        const modernAssets = data.body.filter(a => a.tagName === 'script')
+        const modernAssets = data.body.filter(a => a.tagName === 'script' && a.attributes)
         modernAssets.forEach(a => {
           a.attributes.type = 'module'
           a.attributes.crossorigin = 'use-credentials'
@@ -54,7 +54,7 @@ class ModernModePlugin {
         const htmlName = path.basename(data.plugin.options.filename)
         const tempFilename = path.join(this.targetDir, `legacy-assets-${htmlName}.json`)
         const legacyAssets = JSON.parse(await fs.readFile(tempFilename, 'utf-8'))
-          .filter(a => a.tagName === 'script')
+          .filter(a => a.tagName === 'script' && a.attributes)
         legacyAssets.forEach(a => { a.attributes.nomodule = '' })
         data.body.push(...legacyAssets)
         await fs.remove(tempFilename)
