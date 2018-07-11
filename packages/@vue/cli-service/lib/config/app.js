@@ -115,6 +115,7 @@ module.exports = (api, options) => {
 
       pages.forEach(name => {
         const {
+          title,
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`
@@ -126,7 +127,8 @@ module.exports = (api, options) => {
         const pageHtmlOptions = Object.assign({}, htmlOptions, {
           chunks: ['chunk-vendors', 'chunk-common', name],
           template: fs.existsSync(template) ? template : (fs.existsSync(htmlPath) ? htmlPath : defaultHtmlPath),
-          filename
+          filename,
+          title
         })
 
         webpackConfig

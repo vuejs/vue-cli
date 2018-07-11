@@ -118,7 +118,7 @@ export default {
     async openTask (task, run = false) {
       this.loading = true
 
-      if (task.project.id !== this.projectCurrent.id) {
+      if (!this.projectCurrent || task.project.id !== this.projectCurrent.id) {
         await this.$apollo.mutate({
           mutation: PROJECT_OPEN,
           variables: {

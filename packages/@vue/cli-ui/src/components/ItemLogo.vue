@@ -143,6 +143,18 @@ export default {
       height @width
       position relative
       top 3px
+      border-radius 0
+
+  &.identicon
+    filter brightness(90%) contrast(115%)
+    .vue-ui-dark-mode &
+      filter invert(100%) brightness(180%) contrast(70%)
+    .wrapper
+      background white
+    .image
+      width 60%
+      height @width
+      border-radius 0
 
   &.loaded
     .image

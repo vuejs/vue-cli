@@ -81,7 +81,7 @@ module.exports = {
 
   Build the app in multi-page mode. Each "page" should have a corresponding JavaScript entry file. The value should be an object where the key is the name of the entry, and the value is either:
 
-  - An object that specifies its `entry`, `template` and `filename`;
+  - An object that specifies its `entry`, `template`, `filename` and `title`;
   - Or a string specifying its `entry`.
 
   ``` js
@@ -93,7 +93,10 @@ module.exports = {
         // the source template
         template: 'public/index.html',
         // output as dist/index.html
-        filename: 'index.html'
+        filename: 'index.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'Index Page'
       },
       // when using the entry-only string format,
       // template is inferred to be `public/subpage.html`
