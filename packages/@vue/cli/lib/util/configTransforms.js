@@ -49,9 +49,9 @@ const transformLines = {
   read: ({ source }) => source.split('\n'),
   write: ({ value, existing }) => {
     if (existing) {
-      // Dedupe
-      existing = existing.filter((item, index) => existing.indexOf(item) === index)
       value = existing.concat(value)
+      // Dedupe
+      value = value.filter((item, index) => value.indexOf(item) === index)
     }
     return value.join('\n')
   }
