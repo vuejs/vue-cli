@@ -57,6 +57,20 @@ vue add vuex
 
 If a plugin is already installed, you can skip the installation and only invoke its generator with the `vue invoke` command. The command takes the same arguments as `vue add`.
 
+::: tip
+If for some reason your plugins are listed in a `package.json` file other than the one located in your project, you can set the `vueCli.resolvePlugins` option in the project `package.json` with the path to the folder containing the other `package.json` file.
+
+For example, if you have a `.config/package.json` file:
+
+```json
+{
+  "vueCli": {
+    "resolvePlugins": ".config"
+  }
+}
+```
+:::
+
 ## Presets
 
 A Vue CLI preset is a JSON object that contains pre-defined options and plugins for creating a new project so that the user don't have to go through the prompts to select them.
