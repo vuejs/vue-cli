@@ -8,7 +8,8 @@ const isBinary = require('isbinaryfile')
 const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
 const stringifyJS = require('./util/stringifyJS')
-const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
+const { warn, getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
+const ConfigTransform = require('./ConfigTransform')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -79,6 +80,38 @@ class GeneratorAPI {
    */
   hasPlugin (id) {
     return this.generator.hasPlugin(id)
+  }
+
+  /**
+   * Configure how config files are extracted.
+   *
+   * @param {string} key - Config key in package.json
+   * @param {object} options - Options
+   * @param {object} options.file - File descriptor
+   * Used to search for existing file.
+   * Each key is a file type (possible values: ['js', 'json', 'yaml', 'lines']).
+   * The value is a list of filenames.
+   * Example:
+   * {
+   *   js: ['.eslintrc.js'],
+   *   json: ['.eslintrc.json', '.eslintrc']
+   * }
+   * By default, the first filename will be used to create the config file.
+   */
+  addConfigTransform (key, options) {
+    const hasReserved = Object.keys(this.generator.reservedConfigTransforms).includes(key)
+    if (
+      hasReserved ||
+      !options ||
+      !options.file
+    ) {
+      if (hasReserved) {
+        warn(`Reserved config transform '${key}'`)
+      }
+      return
+    }
+
+    this.generator.configTransforms[key] = new ConfigTransform(options)
   }
 
   /**

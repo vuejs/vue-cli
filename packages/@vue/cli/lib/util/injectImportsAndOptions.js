@@ -14,17 +14,30 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
 
   if (hasImports) {
     const toImport = i => recast.parse(`${i}\n`).program.body[0]
+    const importDeclarations = []
     let lastImportIndex = -1
+
     recast.types.visit(ast, {
       visitImportDeclaration ({ node }) {
         lastImportIndex = ast.program.body.findIndex(n => n === node)
+        importDeclarations.push(node)
         return false
       }
     })
     // avoid blank line after the previous import
     delete ast.program.body[lastImportIndex].loc
 
-    const newImports = imports.map(toImport)
+    const nonDuplicates = i => {
+      return !importDeclarations.some(node => {
+        const result = node.source.raw === i.source.raw && node.specifiers.length === i.specifiers.length
+
+        return result && node.specifiers.every((item, index) => {
+          return i.specifiers[index].local.name === item.local.name
+        })
+      })
+    }
+
+    const newImports = imports.map(toImport).filter(nonDuplicates)
     ast.program.body.splice(lastImportIndex + 1, 0, ...newImports)
   }
 
@@ -37,12 +50,17 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
         if (node.callee.name === 'Vue') {
           const options = node.arguments[0]
           if (options && options.type === 'ObjectExpression') {
-            const props = options.properties
+            const nonDuplicates = i => {
+              return !options.properties.slice(0, -1).some(p => {
+                return p.key.name === i[0].key.name &&
+                  recast.print(p.value).code === recast.print(i[0].value).code
+              })
+            }
             // inject at index length - 1 as it's usually the render fn
             options.properties = [
-              ...props.slice(0, props.length - 1),
-              ...([].concat(...injections.map(toProperty))),
-              ...props.slice(props.length - 1)
+              ...options.properties.slice(0, -1),
+              ...([].concat(...injections.map(toProperty).filter(nonDuplicates))),
+              ...options.properties.slice(-1)
             ]
           }
         }

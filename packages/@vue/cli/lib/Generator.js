@@ -3,10 +3,10 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
-const configTransforms = require('./util/configTransforms')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const injectImportsAndOptions = require('./util/injectImportsAndOptions')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
 const logTypes = {
@@ -15,6 +15,46 @@ const logTypes = {
   done: logger.done,
   warn: logger.warn,
   error: logger.error
+}
+
+const defaultConfigTransforms = {
+  babel: new ConfigTransform({
+    file: {
+      js: ['babel.config.js']
+    }
+  }),
+  postcss: new ConfigTransform({
+    file: {
+      js: ['.postcssrc.js'],
+      json: ['.postcssrc.json', '.postcssrc'],
+      yaml: ['.postcssrc.yaml', '.postcssrc.yml']
+    }
+  }),
+  eslintConfig: new ConfigTransform({
+    file: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      yaml: ['.eslintrc.yaml', '.eslintrc.yml']
+    }
+  }),
+  jest: new ConfigTransform({
+    file: {
+      js: ['jest.config.js']
+    }
+  }),
+  browserslist: new ConfigTransform({
+    file: {
+      lines: ['.browserslistrc']
+    }
+  })
+}
+
+const reservedConfigTransforms = {
+  vue: new ConfigTransform({
+    file: {
+      js: ['vue.config.js']
+    }
+  })
 }
 
 module.exports = class Generator {
@@ -32,8 +72,10 @@ module.exports = class Generator {
     this.imports = {}
     this.rootOptions = {}
     this.completeCbs = completeCbs
+    this.configTransforms = {}
+    this.defaultConfigTransforms = defaultConfigTransforms
+    this.reservedConfigTransforms = reservedConfigTransforms
     this.invoking = invoking
-
     // for conflict resolution
     this.depSources = {}
     // virtual file tree
@@ -70,6 +112,11 @@ module.exports = class Generator {
   }
 
   extractConfigFiles (extractAll, checkExisting) {
+    const configTransforms = Object.assign({},
+      defaultConfigTransforms,
+      this.configTransforms,
+      reservedConfigTransforms
+    )
     const extract = key => {
       if (
         configTransforms[key] &&
@@ -78,8 +125,8 @@ module.exports = class Generator {
         !this.originalPkg[key]
       ) {
         const value = this.pkg[key]
-        const transform = configTransforms[key]
-        const res = transform(
+        const configTransform = configTransforms[key]
+        const res = configTransform.transform(
           value,
           checkExisting,
           this.files,

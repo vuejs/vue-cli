@@ -50,7 +50,7 @@
     "parse-git-config": "^2.0.2",
     "portfinder": "^1.0.13",
     "semver": "^5.5.0",
-    "shortid": "^2.2.8",
+    "shortid": "^2.2.11",
     "terminate": "^2.1.0",
     "vue-cli-plugin-apollo": "^0.14.6",
     "watch": "^1.0.2"

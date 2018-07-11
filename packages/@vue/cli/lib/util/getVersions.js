@@ -18,7 +18,8 @@ module.exports = async function getVersions () {
     const lastChecked = (await fs.stat(fsCachePath)).mtimeMs
     const daysPassed = (Date.now() - lastChecked) / (60 * 60 * 1000 * 24)
     if (daysPassed > 7) {
-      await getAndCacheLatestVersion(current)
+      const cachedCurrent = await fs.readFile(fsCachePath, 'utf-8')
+      await getAndCacheLatestVersion(cachedCurrent)
     }
     latest = await fs.readFile(fsCachePath, 'utf-8')
   } else {

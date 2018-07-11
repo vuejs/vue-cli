@@ -81,7 +81,7 @@ module.exports = {
 
   Build the app in multi-page mode. Each "page" should have a corresponding JavaScript entry file. The value should be an object where the key is the name of the entry, and the value is either:
 
-  - An object that specifies its `entry`, `template` and `filename`;
+  - An object that specifies its `entry`, `template`, `filename` and `title`;
   - Or a string specifying its `entry`.
 
   ``` js
@@ -93,7 +93,10 @@ module.exports = {
         // the source template
         template: 'public/index.html',
         // output as dist/index.html
-        filename: 'index.html'
+        filename: 'index.html',
+        // when using title option,
+        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'Index Page'
       },
       // when using the entry-only string format,
       // template is inferred to be `public/subpage.html`
@@ -341,3 +344,52 @@ See [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/pack
 ### Nightwatch
 
 See [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch) for more details.
+
+## Example Configurations
+### Disable Hashed Filenames
+While generated static asset filenames contain a hash to [ensure the browser picks up changed files](https://webpack.js.org/guides/caching/#output-filenames) this can be disabled. One common scenario for this is when integrating Vue with a backend that dictates a code structure other than what Vue CLI generates, such as with WordPress or Laravel. To disable the hashed filenames, the following can be added to `[vue.config.js](https://cli.vuejs.org/config/#vue-config-js)`:
+
+
+``` js
+// vue.config.js
+module.exports = {
+    chainWebpack: (config) => {
+    config.module
+      .rule('images')
+      .use('url-loader')
+      .tap(options => Object.assign({}, options, { name: 'img/[name].[ext]' }));
+  },
+  css: {
+    extract: {
+      filename: '/css/[name].css',
+      chunkFilename: '/css/[name].css',
+    },
+  },
+  configureWebpack: {
+    output: {
+      filename: 'js/[name].js',
+      chunkFilename: 'js/[name].js',
+    },
+  },
+};
+```
+::: tip
+When manually overwriting `filename` or `chunkFilename`, `assetsDir` does not need to be included in their path values.
+:::
+### Disable Generating index.html
+When using Vue CLI with an existing backend, you may need to disable the generation of `index.html` so that they generated assets can be used with another default document. To do so, the following can be added to `[vue.config.js](https://cli.vuejs.org/config/#vue-config-js)`:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.plugins.delete('html')
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+  }
+}
+```
+
+::: warning
+[Modern Mode](https://cli.vuejs.org/guide/browser-compatibility.html#modern-mode) will not work when the `html-webpack-plugin` is disabled.
+:::

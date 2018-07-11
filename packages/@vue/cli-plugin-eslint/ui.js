@@ -11,6 +11,7 @@ module.exports = api => {
       eslint: {
         js: ['.eslintrc.js'],
         json: ['.eslintrc', '.eslintrc.json'],
+        yaml: ['.eslintrc.yaml', '.eslintrc.yml'],
         package: 'eslintConfig'
       },
       vue: {
