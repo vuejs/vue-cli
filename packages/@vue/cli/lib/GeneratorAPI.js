@@ -99,8 +99,7 @@ class GeneratorAPI {
    * By default, the first filename will be used to create the config file.
    */
   addConfigTransform (key, options) {
-    const reserved = ['vue']
-    const hasReserved = reserved.includes(key)
+    const hasReserved = Object.keys(this.generator.reservedConfigTransforms).includes(key)
     if (
       hasReserved ||
       !options ||

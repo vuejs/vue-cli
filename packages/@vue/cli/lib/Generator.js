@@ -73,6 +73,8 @@ module.exports = class Generator {
     this.rootOptions = {}
     this.completeCbs = completeCbs
     this.configTransforms = {}
+    this.defaultConfigTransforms = defaultConfigTransforms
+    this.reservedConfigTransforms = reservedConfigTransforms
     this.invoking = invoking
     // for conflict resolution
     this.depSources = {}
