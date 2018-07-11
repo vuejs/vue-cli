@@ -376,7 +376,7 @@ module.exports = {
 ::: tip
 When manually overwriting `filename` or `chunkFilename`, `assetsDir` does not need to be included in their path values.
 :::
-## Disable Generating index.html
+### Disable Generating index.html
 When using Vue CLI with an existing backend, you may need to disable the generation of `index.html` so that they generated assets can be used with another default document. To do so, the following can be added to `[vue.config.js](https://cli.vuejs.org/config/#vue-config-js)`:
 
 ``` js
