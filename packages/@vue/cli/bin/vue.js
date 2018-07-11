@@ -133,6 +133,7 @@ program
   .option('-s, --set <path> <value>', 'set option value')
   .option('-d, --delete <path>', 'delete option from config')
   .option('-e, --edit', 'open config with default editor')
+  .option('--json', 'outputs JSON result only')
   .action((value, cmd) => {
     require('../lib/config')(value, cleanArgs(cmd))
   })
