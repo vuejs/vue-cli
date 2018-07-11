@@ -1,0 +1,162 @@
+@import "imports"
+
+html,
+body,
+#app,
+.page
+  height 100%
+
+h2
+  line-height 32px
+
+.empty-icon
+  display block
+  margin 24px auto
+  width 48px
+  height @width
+
+.actions-bar
+  padding $padding-item
+  h-box()
+  box-center()
+  position relative
+
+  > *
+    space-between-x($padding-item)
+
+  &.space-between
+    justify-content space-between
+  &.center
+    justify-content center
+  &.start
+    justify-content flex-start
+  &.end
+    justify-content flex-end
+  &.fill
+    > *
+      flex auto 1 1
+      width 0
+
+.cta-text
+  margin $padding-item
+  color $color-text-light
+  font-size 18px
+
+.list-item
+  list-item()
+
+ansi-colors('black', $vue-ui-color-dark)
+ansi-colors('red', $vue-ui-color-danger)
+ansi-colors('green', $vue-ui-color-primary)
+ansi-colors('yellow', $vue-ui-color-warning)
+ansi-colors('blue', $md-blue)
+ansi-colors('magenta', $vue-ui-color-accent)
+ansi-colors('cyan', $vue-ui-color-info)
+ansi-colors('white', $vue-ui-color-light)
+.vue-ui-dark-mode
+  ansi-colors('black', $vue-ui-color-dark-neutral)
+  ansi-colors('magenta', lighten($vue-ui-color-accent, 60%))
+  ansi-colors('white', $vue-ui-color-light-neutral)
+
+.vue-ui-icon.separator
+  width 6px
+  height @width
+  h-box()
+  box-center()
+  margin $padding-item
+  svg
+    fill rgba($vue-ui-color-dark, .2)
+    .vue-ui-dark-mode &
+      fill rgba($vue-ui-color-light, .2)
+
+.ais-index
+  height 100%
+  v-box()
+  align-items stretch
+
+.ais-results-box
+  flex 100% 1 1
+  height 0
+  overflow-x hidden
+  overflow-y auto
+  margin $padding-item 0
+
+.ais-no-results
+  margin-top 42px
+
+.ais-highlight
+  em
+    font-style normal
+    background lighten($vue-ui-color-primary, 80%)
+    color darken($vue-ui-color-primary, 10%)
+    padding 0 2px
+    border-radius $br
+    .vue-ui-dark-mode &
+      background $vue-ui-color-dark
+      color $vue-ui-color-primary
+
+.ais-logo
+  max-width 150px
+  .vue-ui-dark-mode &
+    filter brightness(200%)
+
+.no-padding-x
+  padding-left 0
+  padding-right 0
+.no-padding-y
+  padding-top 0
+  padding-bottom 0
+.no-margin-x
+  margin-left 0
+  margin-right 0
+.no-margin-y
+  margin-top 0
+  margin-bottom 0
+
+.fill-height
+  height 100%
+
+.blank-icon
+  width 24px
+  height @width
+  display block
+  margin auto
+  svg
+    fill rgba($vue-ui-color-dark, .3)
+
+.pane-toolbar
+  h-box()
+  align-items center
+  padding 6px 6px 6px $padding-item
+  > :not(.separator)
+    space-between-x(6px)
+  > * + .separator
+    margin-left 6px
+  .title
+    flex 100% 1 1
+    width 0
+    ellipsis()
+
+  > .vue-ui-switch,
+  > .vue-ui-button:not(.icon-button),
+  .dropdown-trigger > .vue-ui-button:not(.icon-button)
+    padding 0 8px
+
+  > .vue-ui-switch
+    font-size 14px
+    &:not(.selected)
+      .wrapper
+        background rgba($vue-ui-color-dark, .2)
+
+.dropdown-separator
+  height 1px
+  margin ($padding-item / 2) 0
+  background rgba($vue-ui-color-dark, .05)
+  .vue-ui-dark-mode &
+    background rgba($vue-ui-color-dark-neutral, .2)
+
+.vue-ui-modal
+  &.anchor
+    align-items flex-start
+    .shell
+      margin-top 42px

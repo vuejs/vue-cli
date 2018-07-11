@@ -1,0 +1,7 @@
+#import "./localeFragment.gql"
+
+subscription localeAdded {
+  localeAdded {
+    ...locale
+  }
+}

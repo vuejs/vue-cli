@@ -2,8 +2,6 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { entry, name }, options) => {
-  // setting this disables app-only configs
-  process.env.VUE_CLI_TARGET = 'lib'
   // inline all static asset files since there is no publicPath handling
   process.env.VUE_CLI_INLINE_LIMIT = Infinity
 
@@ -21,6 +19,7 @@ module.exports = (api, { entry, name }, options) => {
     )
   }
 
+  const isVueEntry = /\.vue$/.test(entry)
   const libName = (
     name ||
     api.service.pkg.name ||
@@ -31,7 +30,7 @@ module.exports = (api, { entry, name }, options) => {
     const config = api.resolveChainableWebpackConfig()
 
     // adjust css output name so they write to the same file
-    if (options.css.extract !== false) {
+    if (config.plugins.has('extract-css')) {
       config
         .plugin('extract-css')
           .tap(args => {
@@ -57,10 +56,11 @@ module.exports = (api, { entry, name }, options) => {
 
     // inject demo page for umd
     if (genHTML) {
+      const template = isVueEntry ? 'demo-lib.html' : 'demo-lib-js.html'
       config
         .plugin('demo-html')
           .use(require('html-webpack-plugin'), [{
-            template: path.resolve(__dirname, './demo-lib.html'),
+            template: path.resolve(__dirname, template),
             inject: false,
             filename: 'demo.html',
             libName
@@ -80,12 +80,18 @@ module.exports = (api, { entry, name }, options) => {
       [entryName]: require.resolve('./entry-lib.js')
     }
 
-    Object.assign(rawConfig.output, {
+    rawConfig.output = Object.assign({
+      library: libName,
+      libraryExport: isVueEntry ? 'default' : undefined,
+      libraryTarget: format,
+      // preserve UDM header from webpack 3 until webpack provides either
+      // libraryTarget: 'esm' or target: 'universal'
+      // https://github.com/webpack/webpack/issues/6522
+      // https://github.com/webpack/webpack/issues/6525
+      globalObject: `typeof self !== 'undefined' ? self : this`
+    }, rawConfig.output, {
       filename: `${entryName}.js`,
       chunkFilename: `${entryName}.[name].js`,
-      library: libName,
-      libraryExport: 'default',
-      libraryTarget: format,
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
       // document.currentScript.src.

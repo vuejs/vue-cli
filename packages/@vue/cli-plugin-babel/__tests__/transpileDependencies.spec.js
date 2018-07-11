@@ -1,9 +1,17 @@
 jest.setTimeout(30000)
 
+const fs = require('fs-extra')
+const path = require('path')
 const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 
 let project
+
+async function readVendorFile () {
+  const files = await fs.readdir(path.join(project.dir, 'dist/js'))
+  const filename = files.find(f => /chunk-vendors\.[^.]+\.js$/.test(f))
+  return project.read(`dist/js/${filename}`)
+}
 
 beforeAll(async () => {
   project = await create('babel-transpile-deps', defaultPreset)
@@ -31,7 +39,7 @@ beforeAll(async () => {
 
   let $mainjs = await project.read('src/main.js')
 
-  $mainjs = `import test from 'external-dep'\n${$mainjs}\nconsole.log(test())`
+  $mainjs = `import test from 'external-dep'\n${$mainjs}\ntest()`
 
   await project.write(
     'src/main.js',
@@ -40,14 +48,8 @@ beforeAll(async () => {
 })
 
 test('dep from node_modules should not been transpiled', async () => {
-  const { stdout } = await project.run('vue-cli-service build')
-
-  let $vendorjs = stdout.match(/(js\/vendors~app\.[^.]+\.js)/)[1]
-
-  $vendorjs = `dist/${$vendorjs}`
-  $vendorjs = await project.read($vendorjs)
-
-  expect($vendorjs).toMatch('() => "__TEST__"')
+  await project.run('vue-cli-service build')
+  expect(await readVendorFile()).toMatch('() => "__TEST__"')
 })
 
 test('dep from node_modules should been transpiled', async () => {
@@ -55,13 +57,6 @@ test('dep from node_modules should been transpiled', async () => {
     'vue.config.js',
     `module.exports = { transpileDependencies: ['external-dep'] }`
   )
-
-  const { stdout } = await project.run('vue-cli-service build')
-
-  let $vendorjs = stdout.match(/(js\/vendors~app\.[^.]+\.js)/)[1]
-
-  $vendorjs = `dist/${$vendorjs}`
-  $vendorjs = await project.read($vendorjs)
-
-  expect($vendorjs).toMatch('return "__TEST__"')
+  await project.run('vue-cli-service build')
+  expect(await readVendorFile()).toMatch('return "__TEST__"')
 })

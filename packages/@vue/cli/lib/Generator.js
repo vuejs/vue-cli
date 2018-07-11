@@ -1,9 +1,9 @@
 const ejs = require('ejs')
-const slash = require('slash')
 const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
+const normalizeFilePaths = require('./util/normalizeFilePaths')
 const injectImportsAndOptions = require('./util/injectImportsAndOptions')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
@@ -19,22 +19,42 @@ const logTypes = {
 
 const defaultConfigTransforms = {
   babel: new ConfigTransform({
-    file: 'babel.config',
-    types: ['js']
+    file: {
+      js: ['babel.config.js']
+    }
   }),
   postcss: new ConfigTransform({
-    file: '.postcssrc',
-    types: ['js', 'json', 'yaml', 'bare']
+    file: {
+      js: ['.postcssrc.js'],
+      json: ['.postcssrc.json', '.postcssrc'],
+      yaml: ['.postcssrc.yaml', '.postcssrc.yml']
+    }
   }),
   eslintConfig: new ConfigTransform({
-    file: '.eslintrc',
-    types: ['js', 'json', 'yaml', 'bare']
+    file: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      yaml: ['.eslintrc.yaml', '.eslintrc.yml']
+    }
   }),
-  jest: new ConfigTransform({ file: 'jest.config', types: ['js'] })
+  jest: new ConfigTransform({
+    file: {
+      js: ['jest.config.js']
+    }
+  }),
+  browserslist: new ConfigTransform({
+    file: {
+      lines: ['.browserslistrc']
+    }
+  })
 }
 
 const reservedConfigTransforms = {
-  vue: new ConfigTransform({ file: 'vue.config', types: ['js'] })
+  vue: new ConfigTransform({
+    file: {
+      js: ['vue.config.js']
+    }
+  })
 }
 
 module.exports = class Generator {
@@ -107,6 +127,7 @@ module.exports = class Generator {
         const res = configTransform.transform(
           value,
           checkExisting,
+          this.files,
           this.context
         )
         const { content, filename } = res
@@ -166,20 +187,20 @@ module.exports = class Generator {
     for (const middleware of this.fileMiddlewares) {
       await middleware(files, ejs.render)
     }
+
+    // normalize file paths on windows
+    // all paths are converted to use / instead of \
+    normalizeFilePaths(files)
+
+    // handle imports and root option injections
     Object.keys(files).forEach(file => {
-      // normalize paths
-      const normalized = slash(file)
-      if (file !== normalized) {
-        files[normalized] = files[file]
-        delete files[file]
-      }
-      // handle imports and root option injections
-      files[normalized] = injectImportsAndOptions(
-        files[normalized],
-        this.imports[normalized],
-        this.rootOptions[normalized]
+      files[file] = injectImportsAndOptions(
+        files[file],
+        this.imports[file],
+        this.rootOptions[file]
       )
     })
+
     for (const postProcess of this.postProcessFilesCbs) {
       await postProcess(files)
     }

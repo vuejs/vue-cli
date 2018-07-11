@@ -16,6 +16,8 @@ fs.writeFileSync(path.resolve(templateDir, 'entry.js'), `
 import foo from 'foo'
 
 new Vue({
+  p: p(),
+  baz,
   render: h => h(App)
 }).$mount('#app')
 `.trim())
@@ -454,7 +456,58 @@ test('api: addEntryImport & addEntryInjection', async () => {
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\s+import bar from 'bar'/)
-  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+p: p\(\),\s+baz,\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
+})
+
+test('api: addEntryDuplicateImport', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.js', `import foo from 'foo'`)
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/^import foo from 'foo'\s+new Vue/)
+})
+
+test('api: addEntryDuplicateInjection', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectRootOptions('main.js', 'baz')
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/{\s+p: p\(\),\s+baz,\s+render/)
+})
+
+test('api: addEntryDuplicateNonIdentifierInjection', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectRootOptions('main.js', 'p: p()')
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/{\s+p: p\(\),\s+baz,\s+render/)
 })
 
 test('api: addConfigTransform', async () => {
@@ -469,8 +522,9 @@ test('api: addConfigTransform', async () => {
       id: 'test',
       apply: api => {
         api.addConfigTransform('fooConfig', {
-          file: 'foo.config',
-          types: ['json']
+          file: {
+            json: ['foo.config.json']
+          }
         })
         api.extendPackage(configs)
       }
@@ -497,16 +551,12 @@ test('api: addConfigTransform (multiple)', async () => {
     {
       id: 'test',
       apply: api => {
-        api.addConfigTransform('bazConfig', [
-          {
-            file: '.bazrc',
-            types: ['js', 'bare']
-          },
-          {
-            file: 'baz.config',
-            types: ['json']
+        api.addConfigTransform('bazConfig', {
+          file: {
+            js: ['.bazrc.js'],
+            json: ['.bazrc', 'baz.config.json']
           }
-        ])
+        })
         api.extendPackage(configs)
       }
     }
@@ -532,7 +582,11 @@ test('api: addConfigTransform transform vue warn', async () => {
     {
       id: 'test',
       apply: api => {
-        api.addConfigTransform('vue', [{ file: 'vue.config', types: ['js'] }])
+        api.addConfigTransform('vue', {
+          file: {
+            js: ['vue.config.js']
+          }
+        })
         api.extendPackage(configs)
       }
     }
@@ -544,7 +598,7 @@ test('api: addConfigTransform transform vue warn', async () => {
 
   expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
   expect(logs.warn.some(([msg]) => {
-    return msg.match(/do not override vue config transform/)
+    return msg.match(/Reserved config transform 'vue'/)
   })).toBe(true)
 })
 
@@ -564,7 +618,11 @@ test('extract config files', async () => {
     },
     jest: {
       foo: 'bar'
-    }
+    },
+    browserslist: [
+      '> 1%',
+      'not <= IE8'
+    ]
   }
 
   const generator = new Generator('/', { plugins: [
@@ -586,4 +644,5 @@ test('extract config files', async () => {
   expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
+  expect(fs.readFileSync('/.browserslistrc', 'utf-8')).toMatch('> 1%\nnot <= IE8')
 })

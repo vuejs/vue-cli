@@ -2,7 +2,7 @@ module.exports = api => {
   api.render('./template')
 
   const devDependencies = {
-    '@vue/test-utils': '^1.0.0-beta.16',
+    '@vue/test-utils': '^1.0.0-beta.20',
     'chai': '^4.1.2'
   }
 

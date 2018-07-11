@@ -1,0 +1,4 @@
+fragment pluginActionCall on PluginActionCall {
+  id
+  params
+}

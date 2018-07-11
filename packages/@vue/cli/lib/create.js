@@ -3,8 +3,9 @@ const path = require('path')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
 const Creator = require('./Creator')
-const clearConsole = require('./util/clearConsole')
-const { error, stopSpinner } = require('@vue/cli-shared-utils')
+const { clearConsole } = require('./util/clearConsole')
+const { getPromptModules } = require('./util/createTools')
+const { error, stopSpinner, exit } = require('@vue/cli-shared-utils')
 const validateProjectName = require('validate-npm-package-name')
 
 async function create (projectName, options) {
@@ -22,7 +23,7 @@ async function create (projectName, options) {
     result.errors && result.errors.forEach(err => {
       console.error(chalk.red(err))
     })
-    process.exit(1)
+    exit(1)
   }
 
   if (fs.existsSync(targetDir)) {
@@ -57,25 +58,14 @@ async function create (projectName, options) {
         if (!action) {
           return
         } else if (action === 'overwrite') {
+          console.log(`\nRemoving ${chalk.cyan(targetDir)}...`)
           await fs.remove(targetDir)
         }
       }
     }
   }
 
-  const promptModules = [
-    'babel',
-    'typescript',
-    'pwa',
-    'router',
-    'vuex',
-    'cssPreprocessors',
-    'linter',
-    'unit',
-    'e2e'
-  ].map(file => require(`./promptModules/${file}`))
-
-  const creator = new Creator(name, targetDir, promptModules)
+  const creator = new Creator(name, targetDir, getPromptModules())
   await creator.create(options)
 }
 

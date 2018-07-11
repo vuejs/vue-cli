@@ -1,6 +1,6 @@
 {
   "name": "@vue/babel-preset-app",
-  "version": "3.0.0-beta.11",
+  "version": "3.0.0-rc.3",
   "description": "babel-preset-app for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -27,7 +27,7 @@
     "@babel/preset-stage-2": "7.0.0-beta.47",
     "@babel/runtime": "7.0.0-beta.47",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
-    "babel-plugin-dynamic-import-node": "^1.2.0",
+    "babel-plugin-dynamic-import-node": "^2.0.0",
     "babel-plugin-transform-vue-jsx": "^4.0.1"
   }
 }

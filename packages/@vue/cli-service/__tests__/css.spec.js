@@ -22,12 +22,15 @@ const genConfig = (pkg = {}, env) => {
   return config
 }
 
-const findRule = (config, lang, index = 2) => {
+const findRule = (config, lang, index = 3) => {
   const baseRule = config.module.rules.find(rule => {
     return rule.test.test(`.${lang}`)
   })
-  // all CSS rules have oneOf with two child rules, one for <style lang="module">
-  // and one for normal imports
+  // all CSS rules have 4 oneOf rules:
+  // 0 - <style lang="module"> in Vue files
+  // 1 - <style> in Vue files
+  // 2 - *.modules.css imports from JS
+  // 3 - *.css imports from JS
   return baseRule.oneOf[index]
 }
 
@@ -53,7 +56,6 @@ test('default loaders', () => {
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
-      minimize: false,
       sourceMap: false,
       importLoaders: lang === 'css' ? 2 : 3
     })
@@ -68,7 +70,6 @@ test('production defaults', () => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'css')).toEqual({
-      minimize: true,
       sourceMap: false,
       importLoaders: lang === 'css' ? 2 : 3
     })
@@ -76,19 +77,26 @@ test('production defaults', () => {
 })
 
 test('CSS Modules rules', () => {
-  const config = genConfig()
+  const config = genConfig({
+    vue: {
+      css: {
+        modules: true
+      }
+    }
+  })
   LANGS.forEach(lang => {
     const expected = {
       importLoaders: lang === 'css' ? 1 : 2, // no postcss-loader
       localIdentName: `[name]_[local]_[hash:base64:5]`,
-      minimize: false,
       sourceMap: false,
       modules: true
     }
-    // module-query rules
+    // vue-modules rules
     expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
-    // module-ext rules
-    expect(findOptions(config, lang, 'css', 1)).toEqual(expected)
+    // normal-modules rules
+    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
+    // normal rules
+    expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
   })
 })
 
@@ -121,17 +129,28 @@ test('css.sourceMap', () => {
   })
 })
 
-test('css.localIdentName', () => {
+test('css-loader options', () => {
   const localIdentName = '[name]__[local]--[hash:base64:5]'
   const config = genConfig({
     vue: {
       css: {
-        localIdentName: localIdentName
+        loaderOptions: {
+          css: {
+            localIdentName,
+            camelCase: 'only'
+          }
+        }
       }
     }
   })
   LANGS.forEach(lang => {
-    expect(findOptions(config, lang, 'css', 0).localIdentName).toBe(localIdentName)
+    const vueOptions = findOptions(config, lang, 'css', 0)
+    expect(vueOptions.localIdentName).toBe(localIdentName)
+    expect(vueOptions.camelCase).toBe('only')
+
+    const extOptions = findOptions(config, lang, 'css', 2)
+    expect(extOptions.localIdentName).toBe(localIdentName)
+    expect(extOptions.camelCase).toBe('only')
   })
 })
 

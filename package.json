@@ -9,10 +9,15 @@
     "test": "node scripts/test.js",
     "pretest": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/*",
+    "check-links": "node scripts/checkLinks.js",
     "clean": "rimraf packages/test/*",
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js",
-    "release": "yarn clean && node scripts/release.js"
+    "release": "yarn clean && node scripts/release.js",
+    "changelog": "node scripts/genChangelog.js run",
+    "docs": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "patch-chromedriver": "node scripts/patchChromedriver.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
@@ -32,7 +37,7 @@
     ]
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,vue}": [
       "eslint --fix",
       "git add"
     ],
@@ -43,19 +48,26 @@
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
+    "conventional-changelog": "^1.1.24",
     "debug": "^3.1.0",
     "eslint": "^4.16.0",
+    "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-vue-libs": "^2.1.0",
+    "execa": "^0.10.0",
     "globby": "^8.0.1",
     "http-server": "^0.11.1",
-    "jest": "^22.1.4",
+    "inquirer": "^6.0.0",
+    "jest": "^23.1.0",
     "lerna": "^2.8.0",
-    "lint-staged": "^6.0.1",
+    "lint-staged": "^7.2.0",
     "memfs": "^2.8.0",
     "puppeteer": "^1.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "rimraf": "^2.6.2",
+    "semver": "^5.5.0",
+    "vuepress": "^0.11.0",
+    "vuepress-theme-vue": "^1.0.3",
     "yorkie": "^1.0.2"
   },
   "resolutions": {

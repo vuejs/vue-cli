@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-init",
-  "version": "3.0.0-beta.11",
+  "version": "3.0.0-rc.3",
   "description": "init addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-init#readme",
   "dependencies": {
-    "execa": "^0.9.0",
+    "execa": "^0.10.0",
     "vue-cli": "^2.9.2"
   }
 }

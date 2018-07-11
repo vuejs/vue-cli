@@ -2,7 +2,10 @@ module.exports = cli => {
   cli.injectFeature({
     name: 'E2E Testing',
     value: 'e2e',
-    short: 'E2E'
+    short: 'E2E',
+    description: 'Add an End-to-End testing solution to the app like Cypress or Nightwatch',
+    link: 'https://github.com/vuejs/vue-cli/tree/dev/docs#e2e-testing',
+    plugins: ['e2e-cypress', 'e2e-nightwatch']
   })
 
   cli.injectPrompt({

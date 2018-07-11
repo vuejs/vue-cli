@@ -1,0 +1,7 @@
+#import "./configurationFragment.gql"
+
+query configurations {
+  configurations {
+    ...configuration
+  }
+}

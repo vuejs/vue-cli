@@ -1,0 +1,3 @@
+mutation fileOpenInEditor ($input: OpenInEditorInput!) {
+  fileOpenInEditor (input: $input)
+}

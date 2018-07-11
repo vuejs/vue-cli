@@ -23,11 +23,11 @@ module.exports = (api, options) => {
   </div>
 </template>
         `.trim())
-        console.log(files[`src/App.vue`])
       }
     })
 
     if (api.hasPlugin('typescript')) {
+      /* eslint-disable-next-line node/no-extraneous-require */
       const convertFiles = require('@vue/cli-plugin-typescript/generator/convert')
       convertFiles(api)
     }

@@ -1,0 +1,10 @@
+fragment suggestion on Suggestion {
+  id
+  type
+  importance
+  label
+  message
+  link
+  actionLink
+  busy
+}

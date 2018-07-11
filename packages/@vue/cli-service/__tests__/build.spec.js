@@ -26,7 +26,7 @@ test('build', async () => {
   const index = await project.read('dist/index.html')
   // should split and preload app.js & vendor.js
   expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js rel=preload>/)
-  expect(index).toMatch(/<link [^>]+js\/vendors~app[^>]+\.js rel=preload>/)
+  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js rel=preload>/)
   // should preload css
   expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload>/)
 

@@ -1,0 +1,10 @@
+fragment configuration on Configuration {
+  id
+  name
+  description
+  icon
+  plugin {
+    id
+    logo
+  }
+}

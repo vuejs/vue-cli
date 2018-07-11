@@ -1,0 +1,4 @@
+fragment locale on Locale {
+  lang
+  strings
+}

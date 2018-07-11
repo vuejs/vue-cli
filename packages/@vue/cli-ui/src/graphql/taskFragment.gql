@@ -1,0 +1,15 @@
+fragment task on Task {
+  id
+  status
+  name
+  command
+  description
+  icon
+  plugin {
+    id
+    logo
+  }
+  project {
+    id
+  }
+}

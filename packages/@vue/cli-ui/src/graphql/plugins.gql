@@ -1,0 +1,7 @@
+#import "./pluginFragment.gql"
+
+query plugins {
+  plugins {
+    ...plugin
+  }
+}

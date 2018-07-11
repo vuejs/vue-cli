@@ -1,0 +1,4 @@
+fragment promptError on PromptError {
+  message
+  link
+}

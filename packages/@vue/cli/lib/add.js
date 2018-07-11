@@ -2,11 +2,11 @@ const chalk = require('chalk')
 const invoke = require('./invoke')
 const { loadOptions } = require('./options')
 const { installPackage } = require('./util/installDeps')
-const { resolveModule } = require('./util/module')
+const { resolveModule, loadModule } = require('./util/module')
 const {
   log,
   error,
-  hasYarn,
+  hasProjectYarn,
   stopSpinner,
   resolvePluginId
 } = require('@vue/cli-shared-utils')
@@ -26,7 +26,7 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log(`📦  Installing ${chalk.cyan(packageName)}...`)
   log()
 
-  const packageManager = loadOptions().packageManager || (hasYarn() ? 'yarn' : 'npm')
+  const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
   await installPackage(context, packageManager, null, packageName)
 
   stopSpinner()
@@ -46,14 +46,14 @@ async function add (pluginName, options = {}, context = process.cwd()) {
 async function addRouter (context) {
   invoke.runGenerator(context, {
     id: 'core:router',
-    apply: require('@vue/cli-service/generator/router')
+    apply: loadModule('@vue/cli-service/generator/router', context)
   })
 }
 
 async function addVuex (context) {
   invoke.runGenerator(context, {
     id: 'core:vuex',
-    apply: require('@vue/cli-service/generator/vuex')
+    apply: loadModule('@vue/cli-service/generator/vuex', context)
   })
 }
 

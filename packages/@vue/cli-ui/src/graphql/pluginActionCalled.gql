@@ -1,0 +1,7 @@
+#import "./pluginActionCallFragment.gql"
+
+subscription pluginActionCalled {
+  pluginActionCalled {
+    ...pluginActionCall
+  }
+}

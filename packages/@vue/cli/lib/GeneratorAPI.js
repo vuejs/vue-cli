@@ -86,30 +86,33 @@ class GeneratorAPI {
    * Configure how config files are extracted.
    *
    * @param {string} key - Config key in package.json
-   * @param {object[]} configs - List of config descriptions.
-   *   The first config description will be used to generate a config file if
-   *   an existing config is not found. Existing configs are searched for
-   *   using the provided config descriptions in their listed order.
-   * @param {string} configs[].file - File name without extension
-   * @param {string[]} configs[].types - List of file types.
-   *   Can include one or more of: 'js', 'json', 'yaml', 'bare'.
-   *   The first file type will be used when an existing config is not found.
+   * @param {object} options - Options
+   * @param {object} options.file - File descriptor
+   * Used to search for existing file.
+   * Each key is a file type (possible values: ['js', 'json', 'yaml', 'lines']).
+   * The value is a list of filenames.
+   * Example:
+   * {
+   *   js: ['.eslintrc.js'],
+   *   json: ['.eslintrc.json', '.eslintrc']
+   * }
+   * By default, the first filename will be used to create the config file.
    */
-  addConfigTransform (key, configs) {
+  addConfigTransform (key, options) {
     const reserved = ['vue']
     const hasReserved = reserved.includes(key)
     if (
       hasReserved ||
-      !configs ||
-      (configs && configs.length === 0)
+      !options ||
+      !options.file
     ) {
       if (hasReserved) {
-        warn(`do not override vue config transform`)
+        warn(`Reserved config transform '${key}'`)
       }
       return
     }
 
-    this.generator.configTransforms[key] = new ConfigTransform(configs)
+    this.generator.configTransforms[key] = new ConfigTransform(options)
   }
 
   /**
@@ -169,8 +172,11 @@ class GeneratorAPI {
           let filename = path.basename(rawPath)
           // dotfiles are ignored when published to npm, therefore in templates
           // we need to use underscore instead (e.g. "_gitignore")
-          if (filename.charAt(0) === '_') {
+          if (filename.charAt(0) === '_' && filename.charAt(1) !== '_') {
             filename = `.${filename.slice(1)}`
+          }
+          if (filename.charAt(0) === '_' && filename.charAt(1) === '_') {
+            filename = `${filename.slice(1)}`
           }
           const targetPath = path.join(path.dirname(rawPath), filename)
           const sourcePath = path.resolve(source, rawPath)
@@ -327,6 +333,13 @@ function renderFile (name, data, ejsOptions) {
       } else {
         finalTemplate = finalTemplate.replace(parsed.replace, content.trim())
       }
+    }
+    if (parsed.when) {
+      finalTemplate = (
+        `<%_ if (${parsed.when}) { _%>` +
+          finalTemplate +
+        `<%_ } _%>`
+      )
     }
   }
 

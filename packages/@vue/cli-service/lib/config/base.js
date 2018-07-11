@@ -1,21 +1,23 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
+    const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
     const getAssetPath = require('../util/getAssetPath')
-    const inlineLimit = 10000
+    const inlineLimit = 4096
 
     webpackConfig
+      .mode('development')
       .context(api.service.context)
       .entry('app')
         .add('./src/main.js')
         .end()
       .output
         .path(api.resolve(options.outputDir))
-        .filename('[name].js')
+        .filename(isLegacyBundle ? '[name]-legacy.js' : '[name].js')
         .publicPath(options.baseUrl)
 
     webpackConfig.resolve
-      .set('symlinks', true)
+      .set('symlinks', false)
       .extensions
         .merge(['.js', '.jsx', '.vue', '.json'])
         .end()
@@ -26,10 +28,14 @@ module.exports = (api, options) => {
         .end()
       .alias
         .set('@', api.resolve('src'))
-        .set('vue$', options.compiler ? 'vue/dist/vue.esm.js' : 'vue/dist/vue.runtime.esm.js')
+        .set(
+          'vue$',
+          options.runtimeCompiler
+            ? 'vue/dist/vue.esm.js'
+            : 'vue/dist/vue.runtime.esm.js'
+        )
 
     webpackConfig.resolveLoader
-      .set('symlinks', true)
       .modules
         .add('node_modules')
         .add(api.resolve('node_modules'))
@@ -38,12 +44,15 @@ module.exports = (api, options) => {
     webpackConfig.module
       .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
 
-    // js is handled by cli-plugin-bable ---------------------------------------
+    // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-
-    const { genCacheConfig } = require('@vue/cli-shared-utils')
-    const vueLoaderCacheConfig = genCacheConfig(api, options, 'vue-loader')
+    const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
+      'vue-loader': require('vue-loader/package.json').version,
+      /* eslint-disable-next-line node/no-extraneous-require */
+      '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
+      'vue-template-compiler': require('vue-template-compiler/package.json').version
+    })
 
     webpackConfig.module
       .rule('vue')
@@ -139,7 +148,7 @@ module.exports = (api, options) => {
     webpackConfig
       .plugin('define')
         .use(require('webpack/lib/DefinePlugin'), [
-          resolveClientEnv(options.baseUrl)
+          resolveClientEnv(options)
         ])
 
     webpackConfig

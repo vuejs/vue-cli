@@ -1,6 +1,6 @@
 const chalk = require('chalk')
 const execa = require('execa')
-const request = require('./request')
+const { request } = require('@vue/cli-shared-utils')
 const inquirer = require('inquirer')
 const registries = require('./registries')
 const { loadOptions, saveOptions } = require('../options')
@@ -36,18 +36,29 @@ module.exports = async function shouldUseTaobao () {
 
   const userCurrent = (await execa(`npm`, ['config', 'get', 'registry'])).stdout
   const defaultRegistry = registries.npm
+
   if (removeSlash(userCurrent) !== removeSlash(defaultRegistry)) {
     // user has configured custom regsitry, respect that
     return save(false)
   }
-  const faster = await Promise.race([
-    ping(defaultRegistry),
-    ping(registries.taobao)
-  ])
+
+  let faster
+  try {
+    faster = await Promise.race([
+      ping(defaultRegistry),
+      ping(registries.taobao)
+    ])
+  } catch (e) {
+    return save(false)
+  }
 
   if (faster !== registries.taobao) {
     // default is already faster
     return save(false)
+  }
+
+  if (process.env.VUE_CLI_API_MODE) {
+    return save(true)
   }
 
   // ask and save preference
@@ -56,7 +67,7 @@ module.exports = async function shouldUseTaobao () {
       name: 'useTaobaoRegistry',
       type: 'confirm',
       message: chalk.yellow(
-        ` Your connection to the the default npm registry seems to be slow.\n` +
+        ` Your connection to the default npm registry seems to be slow.\n` +
           `   Use ${chalk.cyan(registries.taobao)} for faster installation?`
       )
     }

@@ -1,15 +1,6 @@
-const chalk = require('chalk')
-
-function removeArg (rawArgs, arg) {
-  const matchRE = new RegExp(`^--${arg}`)
-  const equalRE = new RegExp(`^--${arg}=`)
-  const i = rawArgs.findIndex(arg => matchRE.test(arg))
-  if (i > -1) {
-    rawArgs.splice(i, equalRE.test(rawArgs[i]) ? 1 : 2)
-  }
-}
-
 module.exports = (api, options) => {
+  const { info, chalk, execa } = require('@vue/cli-shared-utils')
+
   api.registerCommand('test:e2e', {
     description: 'run e2e tests with Cypress',
     usage: 'vue-cli-service test:e2e [options]',
@@ -23,11 +14,10 @@ module.exports = (api, options) => {
       `All Cypress CLI options are also supported:\n` +
       chalk.yellow(`https://docs.cypress.io/guides/guides/command-line.html#cypress-run`)
   }, async (args, rawArgs) => {
-    removeArg(rawArgs, 'headless')
+    removeArg(rawArgs, 'headless', 0)
     removeArg(rawArgs, 'mode')
     removeArg(rawArgs, 'url')
 
-    const { info } = require('@vue/cli-shared-utils')
     info(`Starting e2e tests...`)
 
     const { url, server } = args.url
@@ -40,7 +30,6 @@ module.exports = (api, options) => {
       ...rawArgs
     ]
 
-    const execa = require('execa')
     const cypressBinPath = require.resolve('cypress/bin/cypress')
     const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
     if (server) {
@@ -67,4 +56,13 @@ module.exports = (api, options) => {
 
 module.exports.defaultModes = {
   'test:e2e': 'production'
+}
+
+function removeArg (rawArgs, arg, offset = 1) {
+  const matchRE = new RegExp(`^--${arg}`)
+  const equalRE = new RegExp(`^--${arg}=`)
+  const i = rawArgs.findIndex(arg => matchRE.test(arg))
+  if (i > -1) {
+    rawArgs.splice(i, offset + (equalRE.test(rawArgs[i]) ? 0 : 1))
+  }
 }

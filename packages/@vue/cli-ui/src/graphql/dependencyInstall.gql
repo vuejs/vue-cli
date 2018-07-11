@@ -1,0 +1,7 @@
+#import "./dependencyFragment.gql"
+
+mutation dependencyInstall ($input: DependencyInstall!) {
+  dependencyInstall (input: $input) {
+    ...dependency
+  }
+}

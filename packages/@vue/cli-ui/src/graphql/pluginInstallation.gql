@@ -1,0 +1,7 @@
+#import "./pluginInstallationFragment.gql"
+
+query pluginInstallation {
+  pluginInstallation {
+    ...pluginInstallation
+  }
+}

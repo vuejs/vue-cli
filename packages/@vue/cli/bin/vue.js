@@ -1,20 +1,28 @@
 #!/usr/bin/env node
 
+// Check node version before requiring/doing anything else
+// The user may be on a very old node version
+
+const chalk = require('chalk')
+const semver = require('semver')
+const requiredVersion = require('../package.json').engines.node
+
+function checkNodeVersion (wanted, id) {
+  if (!semver.satisfies(process.version, wanted)) {
+    console.log(chalk.red(
+      'You are using Node ' + process.version + ', but this version of ' + id +
+      'requires Node ' + wanted + '.\nPlease upgrade your Node version.'
+    ))
+    process.exit(1)
+  }
+}
+
+checkNodeVersion(requiredVersion, 'vue-cli')
+
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
-const chalk = require('chalk')
-const semver = require('semver')
 const minimist = require('minimist')
-const requiredVersion = require('../package.json').engines.node
-
-if (!semver.satisfies(process.version, requiredVersion)) {
-  console.log(chalk.red(
-    `You are using Node ${process.version}, but this version of vue-cli ` +
-    `requires Node ${requiredVersion}.\nPlease upgrade your Node version.`
-  ))
-  process.exit(1)
-}
 
 // enter debug mode when creating test repo
 if (
@@ -82,6 +90,7 @@ program
   .command('serve [entry]')
   .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
+  .option('-c, --copy', 'Copy local url to clipboard')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
   })
@@ -97,9 +106,22 @@ program
   })
 
 program
+  .command('ui')
+  .option('-p, --port <port>', 'Port used for the UI server (by default search for awailable port)')
+  .option('-D, --dev', 'Run in dev mode')
+  .option('--quiet', `Don't output starting messages`)
+  .option('--headless', `Don't open browser on start and output port`)
+  .description('start and open the vue-cli ui')
+  .action((cmd) => {
+    checkNodeVersion('>=8.6', 'vue ui')
+    require('../lib/ui')(cleanArgs(cmd))
+  })
+
+program
   .command('init <template> <app-name>')
   .description('generate a project from a remote template (legacy API, requires @vue/cli-init)')
   .option('-c, --clone', 'Use git clone when fetching remote template')
+  .option('--offline', 'Use cached template')
   .action(() => {
     loadCommand('init', '@vue/cli-init')
   })
@@ -123,17 +145,7 @@ program.on('--help', () => {
 program.commands.forEach(c => c.on('--help', () => console.log()))
 
 // enhance common error messages
-const enhanceErrorMessages = (methodName, log) => {
-  program.Command.prototype[methodName] = function (...args) {
-    if (methodName === 'unknownOption' && this._allowUnknownOption) {
-      return
-    }
-    this.outputHelp()
-    console.log(`  ` + chalk.red(log(...args)))
-    console.log()
-    process.exit(1)
-  }
-}
+const enhanceErrorMessages = require('../lib/util/enhanceErrorMessages')
 
 enhanceErrorMessages('missingArgument', argName => {
   return `Missing required argument ${chalk.yellow(`<${argName}>`)}.`

@@ -1,0 +1,15 @@
+fragment view on View {
+  id
+  name
+  icon
+  tooltip
+  badges {
+    id
+    type
+    count
+    label
+    priority
+    hidden
+  }
+  projectTypes
+}

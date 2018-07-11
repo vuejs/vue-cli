@@ -14,18 +14,23 @@ module.exports = (api, options) => {
     const getAssetPath = require('../util/getAssetPath')
 
     const {
+      modules = false,
       extract = true,
       sourceMap = false,
-      localIdentName = '[name]_[local]_[hash:base64:5]',
       loaderOptions = {}
     } = options.css || {}
 
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
     const shouldExtract = isProd && extract !== false && !shadowMode
+    const filename = getAssetPath(
+      options,
+      `css/[name].[contenthash:8].css`,
+      true /* placeAtRootIfRelative */
+    )
     const extractOptions = Object.assign({
-      filename: getAssetPath(options, `css/[name].[contenthash:8].css`),
-      chunkFilename: getAssetPath(options, 'css/[name].[id].[contenthash:8].css')
+      filename,
+      chunkFilename: filename
     }, extract && typeof extract === 'object' ? extract : {})
 
     // check if the project has a valid postcss config
@@ -43,15 +48,20 @@ module.exports = (api, options) => {
       const baseRule = webpackConfig.module.rule(lang).test(test)
 
       // rules for <style lang="module">
-      const modulesRule = baseRule.oneOf('modules-query').resourceQuery(/module/)
-      applyLoaders(modulesRule, true)
+      const vueModulesRule = baseRule.oneOf('vue-modules').resourceQuery(/module/)
+      applyLoaders(vueModulesRule, true)
+
+      // rules for <style>
+      const vueNormalRule = baseRule.oneOf('vue').resourceQuery(/\?vue/)
+      applyLoaders(vueNormalRule, false)
 
       // rules for *.module.* files
-      const modulesExtRule = baseRule.oneOf('modules-ext').test(/\.module\.\w+$/)
-      applyLoaders(modulesExtRule, true)
+      const extModulesRule = baseRule.oneOf('normal-modules').test(/\.module\.\w+$/)
+      applyLoaders(extModulesRule, true)
 
+      // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      applyLoaders(normalRule, false)
+      applyLoaders(normalRule, modules)
 
       function applyLoaders (rule, modules) {
         if (shouldExtract) {
@@ -68,21 +78,25 @@ module.exports = (api, options) => {
             })
         }
 
-        const cssLoaderOptions = {
-          minimize: isProd,
+        const cssLoaderOptions = Object.assign({
           sourceMap,
           importLoaders: (
             1 + // stylePostLoader injected by vue-loader
             hasPostCSSConfig +
             !!loader
           )
-        }
+        }, loaderOptions.css)
+
         if (modules) {
+          const {
+            localIdentName = '[name]_[local]_[hash:base64:5]'
+          } = loaderOptions.css || {}
           Object.assign(cssLoaderOptions, {
             modules,
             localIdentName
           })
         }
+
         rule
           .use('css-loader')
           .loader('css-loader')
@@ -92,7 +106,7 @@ module.exports = (api, options) => {
           rule
             .use('postcss-loader')
             .loader('postcss-loader')
-            .options({ sourceMap })
+            .options(Object.assign({ sourceMap }, loaderOptions.postcss))
         }
 
         if (loader) {
@@ -134,9 +148,9 @@ module.exports = (api, options) => {
       }
       webpackConfig
         .plugin('optimize-css')
-          .use(require('optimize-css-assets-webpack-plugin'), [{
-            canPrint: false,
-            cssProcessorOptions
+          .use(require('@intervolga/optimize-cssnano-plugin'), [{
+            sourceMap: options.productionSourceMap && sourceMap,
+            cssnanoOptions: cssProcessorOptions
           }])
     }
   })

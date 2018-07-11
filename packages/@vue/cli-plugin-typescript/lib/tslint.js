@@ -4,6 +4,7 @@ module.exports = function lint (args = {}, api, silent) {
   const path = require('path')
   const globby = require('globby')
   const tslint = require('tslint')
+  /* eslint-disable-next-line node/no-extraneous-require */
   const vueCompiler = require('vue-template-compiler')
 
   const options = {
@@ -74,7 +75,7 @@ module.exports = function lint (args = {}, api, silent) {
 
   const files = args._ && args._.length
     ? args._
-    : ['src/**/*.ts', 'src/**/*.vue', 'tests/**/*.ts']
+    : ['src/**/*.ts', 'src/**/*.vue', 'src/**/*.tsx', 'tests/**/*.ts', 'tests/**/*.tsx']
 
   const stripTsExtension = str => str.replace(/\.vue\.ts\b/g, '.vue')
 

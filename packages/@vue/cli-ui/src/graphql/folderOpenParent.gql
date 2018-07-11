@@ -1,0 +1,7 @@
+#import "./folderCurrentFragment.gql"
+
+mutation folderOpenParent {
+  folderOpenParent {
+    ...folderCurrent
+  }
+}

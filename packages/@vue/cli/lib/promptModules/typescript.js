@@ -2,14 +2,18 @@ module.exports = cli => {
   cli.injectFeature({
     name: 'TypeScript',
     value: 'ts',
-    short: 'TS'
+    short: 'TS',
+    description: 'Add support for the TypeScript language',
+    link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript',
+    plugins: ['typescript']
   })
 
   cli.injectPrompt({
     name: 'tsClassComponent',
     when: answers => answers.features.includes('ts'),
     type: 'confirm',
-    message: 'Use class-style component syntax?'
+    message: 'Use class-style component syntax?',
+    default: true
   })
 
   cli.injectPrompt({

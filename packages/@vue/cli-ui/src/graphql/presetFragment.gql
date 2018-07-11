@@ -1,0 +1,6 @@
+fragment preset on Preset {
+  id
+  name
+  description
+  link
+}

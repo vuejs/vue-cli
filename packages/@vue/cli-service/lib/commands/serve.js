@@ -1,7 +1,8 @@
 const {
   info,
-  hasYarn,
-  openBrowser
+  hasProjectYarn,
+  openBrowser,
+  IpcMessenger
 } = require('@vue/cli-shared-utils')
 
 const defaults = {
@@ -16,6 +17,7 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service serve [options] [entry]',
     options: {
       '--open': `open browser on server start`,
+      '--copy': `copy url to clipboard on server start`,
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
@@ -28,6 +30,8 @@ module.exports = (api, options) => {
     // are running it in a mode with a production env, e.g. in E2E tests.
     const isProduction = process.env.NODE_ENV === 'production'
 
+    const path = require('path')
+    const url = require('url')
     const chalk = require('chalk')
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
@@ -42,6 +46,15 @@ module.exports = (api, options) => {
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
 
+    // expose advanced stats
+    if (args.dashboard) {
+      const DashboardPlugin = require('../webpack/DashboardPlugin')
+      ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
+        type: 'serve'
+      }))
+    }
+
+    // entry arg
     const entry = args._[0]
     if (entry) {
       webpackConfig.entry = {
@@ -49,11 +62,38 @@ module.exports = (api, options) => {
       }
     }
 
+    // resolve server options
+    const useHttps = args.https || projectDevServerOptions.https || defaults.https
+    const protocol = useHttps ? 'https' : 'http'
+    const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
+    portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
+    const port = await portfinder.getPortPromise()
+
+    const urls = prepareURLs(
+      protocol,
+      host,
+      port,
+      options.baseUrl
+    )
+
+    const proxySettings = prepareProxy(
+      projectDevServerOptions.proxy,
+      api.resolve('public')
+    )
+
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
+      const publicOpt = projectDevServerOptions.public
+      const sockjsUrl = publicOpt ? `//${publicOpt}/sockjs-node` : url.format({
+        protocol,
+        port,
+        hostname: urls.lanUrlForConfig || 'localhost',
+        pathname: '/sockjs-node'
+      })
+
       const devClients = [
         // dev server client
-        require.resolve(`webpack-dev-server/client`),
+        require.resolve(`webpack-dev-server/client`) + `?${sockjsUrl}`,
         // hmr client
         require.resolve(projectDevServerOptions.hotOnly
           ? 'webpack/hot/only-dev-server'
@@ -71,35 +111,21 @@ module.exports = (api, options) => {
     // create compiler
     const compiler = webpack(webpackConfig)
 
-    // resolve server options
-    const useHttps = args.https || projectDevServerOptions.https || defaults.https
-    const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
-    portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
-    const port = await portfinder.getPortPromise()
-
-    const urls = prepareURLs(
-      useHttps ? 'https' : 'http',
-      host,
-      port
-    )
-
-    const proxySettings = prepareProxy(
-      projectDevServerOptions.proxy,
-      api.resolve('public')
-    )
-
     // create server
     const server = new WebpackDevServer(compiler, Object.assign({
       clientLogLevel: 'none',
       historyApiFallback: {
-        disableDotRule: true
+        disableDotRule: true,
+        rewrites: [
+          { from: /./, to: path.posix.join(options.baseUrl, 'index.html') }
+        ]
       },
       contentBase: api.resolve('public'),
       watchContentBase: !isProduction,
       hot: !isProduction,
       quiet: true,
       compress: isProduction,
-      publicPath: '/',
+      publicPath: options.baseUrl,
       overlay: isProduction // TODO disable this
         ? false
         : { warnings: false, errors: true }
@@ -149,10 +175,16 @@ module.exports = (api, options) => {
           return
         }
 
+        let copied = ''
+        if (isFirstCompile && args.copy) {
+          require('clipboardy').write(urls.localUrlForBrowser)
+          copied = chalk.dim('(copied to clipboard)')
+        }
+
         console.log()
         console.log([
           `  App running at:`,
-          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)}`,
+          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`,
           `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
         ].join('\n'))
         console.log()
@@ -161,7 +193,7 @@ module.exports = (api, options) => {
           isFirstCompile = false
 
           if (!isProduction) {
-            const buildCommand = hasYarn() ? `yarn build` : `npm run build`
+            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
           } else {
@@ -172,6 +204,16 @@ module.exports = (api, options) => {
 
           if (args.open || projectDevServerOptions.open) {
             openBrowser(urls.localUrlForBrowser)
+          }
+
+          // Send final app URL
+          if (args.dashboard) {
+            const ipc = new IpcMessenger()
+            ipc.send({
+              vueServe: {
+                url: urls.localUrlForBrowser
+              }
+            })
           }
 
           // resolve returned Promise

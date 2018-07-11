@@ -1,0 +1,7 @@
+#import "./projectCreationFragment.gql"
+
+query projectCreation {
+  projectCreation {
+    ...projectCreation
+  }
+}

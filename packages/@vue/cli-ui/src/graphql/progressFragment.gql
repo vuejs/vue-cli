@@ -1,0 +1,8 @@
+fragment progress on Progress {
+  id
+  status
+  info
+  error
+  progress
+  args
+}

@@ -57,3 +57,13 @@ test('should respect jest.config.js testMatch config', async () => {
   expect(result.stdout).toMatch('testMatch: custom-test-directory/my.spec.js')
   expect(result.stdout).toMatch('No tests found')
 })
+
+test('should work without Babel', async () => {
+  const project = await create('jest-without-babel', {
+    plugins: {
+      '@vue/cli-plugin-unit-jest': {}
+    },
+    useConfigFiles: true
+  })
+  await project.run(`vue-cli-service test:unit`)
+})

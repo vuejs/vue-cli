@@ -4,9 +4,12 @@ const path = require('path')
 const cloneDeep = require('lodash.clonedeep')
 const { error } = require('@vue/cli-shared-utils/lib/logger')
 const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
+const { exit } = require('@vue/cli-shared-utils/lib/exit')
+const { xdgConfigPath } = require('./util/xdgConfig')
 
 const rcPath = exports.rcPath = (
   process.env.VUE_CLI_CONFIG_PATH ||
+  xdgConfigPath('.vuerc') ||
   path.join(os.homedir(), '.vuerc')
 )
 
@@ -67,7 +70,7 @@ exports.loadOptions = () => {
         `Please fix/delete it and re-run vue-cli in manual mode.\n` +
         `(${e.message})`,
       )
-      process.exit(1)
+      exit(1)
     }
     validate(cachedOptions, schema, () => {
       error(

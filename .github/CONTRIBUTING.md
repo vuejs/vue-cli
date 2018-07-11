@@ -52,4 +52,4 @@ Note that `jest --onlyChanged` isn't always accurate because some tests spawn ch
 
 ### Plugin Development
 
-See [dedicated section in docs](https://github.com/vuejs/vue-cli/tree/dev/docs/plugin-dev.md).
+See [dedicated section in docs](https://github.com/vuejs/vue-cli/blob/dev/docs/dev-guide/plugin-dev.md).

@@ -1,3 +1,4 @@
+const EventEmitter = require('events')
 const fs = require('fs-extra')
 const chalk = require('chalk')
 const debug = require('debug')
@@ -9,12 +10,12 @@ const sortObject = require('./util/sortObject')
 const { loadModule } = require('./util/module')
 const getVersions = require('./util/getVersions')
 const { installDeps } = require('./util/installDeps')
-const clearConsole = require('./util/clearConsole')
+const { clearConsole } = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
-const formatFeatures = require('./util/formatFeatures')
-const setupDevProject = require('./util/setupDevProject')
+const { formatFeatures } = require('./util/features')
 const fetchRemotePreset = require('./util/fetchRemotePreset')
+const generateReadme = require('./util/generateReadme')
 
 const {
   defaults,
@@ -29,15 +30,19 @@ const {
   warn,
   error,
   hasGit,
+  hasProjectGit,
   hasYarn,
   logWithSpinner,
-  stopSpinner
+  stopSpinner,
+  exit
 } = require('@vue/cli-shared-utils')
 
 const isManualMode = answers => answers.preset === '__manual__'
 
-module.exports = class Creator {
+module.exports = class Creator extends EventEmitter {
   constructor (name, context, promptModules) {
+    super()
+
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
     const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
@@ -54,27 +59,28 @@ module.exports = class Creator {
     promptModules.forEach(m => m(promptAPI))
   }
 
-  async create (cliOptions = {}) {
+  async create (cliOptions = {}, preset = null) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
     const { run, name, context, createCompleteCbs } = this
 
-    let preset
-    if (cliOptions.preset) {
-      // vue create foo --preset bar
-      preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
-    } else if (cliOptions.default) {
-      // vue create foo --default
-      preset = defaults.presets.default
-    } else if (cliOptions.inlinePreset) {
-      // vue create foo --inlinePreset {...}
-      try {
-        preset = JSON.parse(cliOptions.inlinePreset)
-      } catch (e) {
-        error(`CLI inline preset is not valid JSON: ${cliOptions.inlinePreset}`)
-        process.exit(1)
+    if (!preset) {
+      if (cliOptions.preset) {
+        // vue create foo --preset bar
+        preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
+      } else if (cliOptions.default) {
+        // vue create foo --default
+        preset = defaults.presets.default
+      } else if (cliOptions.inlinePreset) {
+        // vue create foo --inlinePreset {...}
+        try {
+          preset = JSON.parse(cliOptions.inlinePreset)
+        } catch (e) {
+          error(`CLI inline preset is not valid JSON: ${cliOptions.inlinePreset}`)
+          exit(1)
+        }
+      } else {
+        preset = await this.promptAndResolvePreset()
       }
-    } else {
-      preset = await this.promptAndResolvePreset()
     }
 
     // clone before mutating
@@ -92,6 +98,7 @@ module.exports = class Creator {
 
     await clearConsole()
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
+    this.emit('creation', { event: 'creating' })
 
     // get latest CLI version
     const { latest } = await getVersions()
@@ -117,6 +124,7 @@ module.exports = class Creator {
     const shouldInitGit = await this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
+      this.emit('creation', { event: 'git-init' })
       await run('git init')
     }
 
@@ -124,9 +132,10 @@ module.exports = class Creator {
     stopSpinner()
     log(`⚙  Installing CLI plugins. This might take a while...`)
     log()
+    this.emit('creation', { event: 'plugins-install' })
     if (isTestOrDebug) {
       // in development, avoid installation process
-      await setupDevProject(context)
+      await require('./util/setupDevProject')(context)
     } else {
       await installDeps(context, packageManager, cliOptions.registry)
     }
@@ -134,6 +143,7 @@ module.exports = class Creator {
     // run generator
     log()
     log(`🚀  Invoking generators...`)
+    this.emit('creation', { event: 'invoking-generators' })
     const plugins = await this.resolvePlugins(preset.plugins)
     const generator = new Generator(context, {
       pkg,
@@ -146,6 +156,7 @@ module.exports = class Creator {
 
     // install additional deps (injected by generators)
     log(`📦  Installing additional dependencies...`)
+    this.emit('creation', { event: 'deps-install' })
     log()
     if (!isTestOrDebug) {
       await installDeps(context, packageManager, cliOptions.registry)
@@ -154,6 +165,7 @@ module.exports = class Creator {
     // run complete cbs if any (injected by generators)
     log()
     logWithSpinner('⚓', `Running completion hooks...`)
+    this.emit('creation', { event: 'completion-hooks' })
     for (const cb of createCompleteCbs) {
       await cb()
     }
@@ -174,6 +186,14 @@ module.exports = class Creator {
       }
     }
 
+    // generate README.md
+    stopSpinner()
+    log()
+    logWithSpinner('📄', 'Generating README.md...')
+    await writeFileTree(context, {
+      'README.md': generateReadme(generator.pkg, packageManager)
+    })
+
     // log instructions
     stopSpinner()
     log()
@@ -184,6 +204,7 @@ module.exports = class Creator {
       chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
     )
     log()
+    this.emit('creation', { event: 'done' })
 
     if (gitCommitFailed) {
       warn(
@@ -200,10 +221,12 @@ module.exports = class Creator {
     return execa(command, args, { cwd: this.context })
   }
 
-  async promptAndResolvePreset () {
+  async promptAndResolvePreset (answers = null) {
     // prompt
-    await clearConsole(true)
-    const answers = await inquirer.prompt(this.resolveFinalPrompts())
+    if (!answers) {
+      await clearConsole(true)
+      answers = await inquirer.prompt(this.resolveFinalPrompts())
+    }
     debug('vue-cli:answers')(answers)
 
     if (answers.packageManager) {
@@ -246,6 +269,7 @@ module.exports = class Creator {
       preset = await fs.readJson(name)
     } else if (name.includes('/')) {
       logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
+      this.emit('creation', { event: 'fetch-remote-preset' })
       try {
         preset = await fetchRemotePreset(name, clone)
         stopSpinner()
@@ -272,7 +296,7 @@ module.exports = class Creator {
         log(`you don't seem to have any saved preset.`)
         log(`run vue-cli in manual mode to create a preset.`)
       }
-      process.exit(1)
+      exit(1)
     }
     return preset
   }
@@ -300,9 +324,13 @@ module.exports = class Creator {
     return plugins
   }
 
-  resolveIntroPrompts () {
+  getPresets () {
     const savedOptions = loadOptions()
-    const presets = Object.assign({}, savedOptions.presets, defaults.presets)
+    return Object.assign({}, savedOptions.presets, defaults.presets)
+  }
+
+  resolveIntroPrompts () {
+    const presets = this.getPresets()
     const presetChoices = Object.keys(presets).map(name => {
       return {
         name: `${name} (${formatFeatures(presets[name])})`,
@@ -416,17 +444,9 @@ module.exports = class Creator {
       return false
     }
     if (cliOptions.git) {
-      return cliOptions.git !== 'false'
+      return cliOptions.git !== 'false' && cliOptions.git !== false
     }
-    // check if we are in a git repo already
-    try {
-      await this.run('git', ['status'])
-    } catch (e) {
-      // if git status failed, let's create a fresh repo
-      return true
-    }
-    // if git status worked, it means we are already in a git repo
-    // so don't init again.
-    return false
+
+    return !hasProjectGit(this.context)
   }
 }

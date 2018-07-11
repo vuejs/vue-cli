@@ -17,10 +17,9 @@ const renamedArgs = {
 
 module.exports = function lint (args = {}, api) {
   const path = require('path')
-  const chalk = require('chalk')
   const cwd = api.resolve('.')
   const { CLIEngine } = require('eslint')
-  const { log, done } = require('@vue/cli-shared-utils')
+  const { log, done, exit, chalk } = require('@vue/cli-shared-utils')
 
   const files = args._ && args._.length ? args._ : ['src', 'tests', '*.js']
   const extensions = require('./eslintOptions').extensions(api)
@@ -70,7 +69,7 @@ module.exports = function lint (args = {}, api) {
     if (isWarningsExceeded) {
       log(`Eslint found too many warnings (maximum: ${argsConfig.maxWarnings}).`)
     }
-    process.exit(1)
+    exit(1)
   }
 }
 

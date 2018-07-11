@@ -1,0 +1,20 @@
+list-item()
+  user-select none
+  cursor pointer
+
+  &.selected
+    background rgba($vue-ui-color-primary, .05)
+
+  &:hover
+    background rgba($vue-ui-color-primary, .03)
+
+
+ansi-colors($name, $color)
+  .ansi-{$name}-fg
+    color $color
+  .ansi-{$name}-bg
+    background $color
+  .ansi-bright-{$name}-fg
+    color lighten($color, 10%)
+  .ansi-bright-{$name}-bg
+    background lighten($color, 10%)

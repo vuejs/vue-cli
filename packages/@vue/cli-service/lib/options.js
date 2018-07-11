@@ -1,24 +1,27 @@
 const { createSchema, validate } = require('@vue/cli-shared-utils')
 
 const schema = createSchema(joi => joi.object({
-  baseUrl: joi.string(),
+  baseUrl: joi.string().allow(''),
   outputDir: joi.string(),
   assetsDir: joi.string(),
-  compiler: joi.boolean(),
+  runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
+  pages: joi.object(),
 
   // css
   css: joi.object({
-    localIdentName: joi.string(),
+    modules: joi.boolean(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
+      css: joi.object(),
       sass: joi.object(),
       less: joi.object(),
-      stylus: joi.object()
+      stylus: joi.object(),
+      postcss: joi.object()
     })
   }),
 
@@ -52,20 +55,24 @@ exports.defaults = () => ({
   assetsDir: '',
 
   // boolean, use full build?
-  compiler: false,
+  runtimeCompiler: false,
 
   // deps to transpile
   transpileDependencies: [/* string or regex */],
 
   // sourceMap for production build?
-  productionSourceMap: true,
+  productionSourceMap: !process.env.VUE_CLI_TEST,
 
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
   parallel: require('os').cpus().length > 1,
 
+  // multi-page config
+  pages: undefined,
+
   css: {
     // extract: true,
+    // modules: false,
     // localIdentName: '[name]_[local]_[hash:base64:5]',
     // sourceMap: false,
     // loaderOptions: {}

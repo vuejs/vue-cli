@@ -10,35 +10,59 @@ const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
 
-const createMockService = (plugins = [], init = true) => {
+const createMockService = (plugins = [], init = true, mode) => {
   const service = new Service('/', {
     plugins,
     useBuiltIn: false
   })
   if (init) {
-    service.init()
+    service.init(mode)
   }
   return service
 }
 
 beforeEach(() => {
   mockPkg({})
+  delete process.env.NODE_ENV
+  delete process.env.BABEL_ENV
+  delete process.env.FOO
+  delete process.env.BAR
+  delete process.env.BAZ
 })
 
 test('env loading', () => {
-  fs.writeFileSync('/.env', `FOO=1\nBAR=2`)
-  fs.writeFileSync('/.env.local', `FOO=3\nBAZ=4`)
+  process.env.FOO = 0
+  fs.writeFileSync('/.env.local', `FOO=1\nBAR=2`)
+  fs.writeFileSync('/.env', `BAR=3\nBAZ=4`)
   createMockService()
-  expect(process.env.FOO).toBe('3')
+
+  expect(process.env.FOO).toBe('0')
   expect(process.env.BAR).toBe('2')
   expect(process.env.BAZ).toBe('4')
+
+  fs.unlinkSync('/.env.local')
+  fs.unlinkSync('/.env')
+})
+
+test('env loading for custom mode', () => {
+  process.env.VUE_CLI_TEST_TESTING_ENV = true
+  fs.writeFileSync('/.env', 'FOO=1')
+  fs.writeFileSync('/.env.staging', 'FOO=2\nNODE_ENV=production')
+  createMockService([], true, 'staging')
+
+  expect(process.env.FOO).toBe('2')
+  expect(process.env.NODE_ENV).toBe('production')
+
+  process.env.VUE_CLI_TEST_TESTING_ENV = false
+  fs.unlinkSync('/.env')
+  fs.unlinkSync('/.env.staging')
 })
 
 test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.0.0-beta.11',
+      '@vue/cli-plugin-babel': '^3.0.0-rc.3',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -122,6 +146,9 @@ test('api: defaultModes', () => {
   }
 
   createMockService([plugin1], false /* init */).run('foo')
+
+  delete process.env.NODE_ENV
+  delete process.env.BABEL_ENV
 
   const plugin2 = {
     id: 'test-defaultModes',

@@ -1,0 +1,7 @@
+#import "./progressFragment.gql"
+
+subscription progressChanged ($id: ID!) {
+  progressChanged (id: $id) {
+    ...progress
+  }
+}

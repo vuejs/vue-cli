@@ -1,12 +1,3 @@
-function removeArg (rawArgs, arg) {
-  const matchRE = new RegExp(`^--${arg}`)
-  const equalRE = new RegExp(`^--${arg}=`)
-  const i = rawArgs.findIndex(arg => matchRE.test(arg))
-  if (i > -1) {
-    rawArgs.splice(i, equalRE.test(rawArgs[i]) ? 1 : 2)
-  }
-}
-
 module.exports = (api, options) => {
   api.registerCommand('test:e2e', {
     description: 'run e2e tests with nightwatch',
@@ -78,4 +69,13 @@ module.exports = (api, options) => {
 
 module.exports.defaultModes = {
   'test:e2e': 'production'
+}
+
+function removeArg (rawArgs, arg, offset = 1) {
+  const matchRE = new RegExp(`^--${arg}`)
+  const equalRE = new RegExp(`^--${arg}=`)
+  const i = rawArgs.findIndex(arg => matchRE.test(arg))
+  if (i > -1) {
+    rawArgs.splice(i, offset + (equalRE.test(rawArgs[i]) ? 0 : 1))
+  }
 }
