@@ -1,8 +1,6 @@
 const fs = require('fs')
 const homedir = require('os').homedir()
-const get = require('get-value')
-const unset = require('unset-value')
-const set = require('set-value')
+const { get, set, unset } = require('@vue/cli-shared-utils')
 const opn = require('opn')
 const { error } = require('@vue/cli-shared-utils')
 

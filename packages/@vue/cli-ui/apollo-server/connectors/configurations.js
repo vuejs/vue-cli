@@ -9,7 +9,7 @@ const plugins = require('./plugins')
 const folders = require('./folders')
 const prompts = require('./prompts')
 // Utils
-const { get, set, remove } = require('../../src/util/object')
+const { get, set, unset } = require('@vue/cli-shared-utils')
 const { log } = require('../util/logger')
 const { loadModule } = require('@vue/cli/lib/util/module')
 const extendJSConfig = require('@vue/cli/lib/util/extendJSConfig')
@@ -232,7 +232,7 @@ async function save (id, context) {
 
               const value = newData[key]
               if (typeof value === 'undefined') {
-                remove(data[fileId], key)
+                unset(data[fileId], key)
               } else {
                 set(data[fileId], key, value)
               }

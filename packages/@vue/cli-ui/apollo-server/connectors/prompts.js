@@ -1,5 +1,5 @@
 // Utils
-const ObjectUtil = require('../../src/util/object')
+const { get, set, unset } = require('@vue/cli-shared-utils')
 const { log } = require('../util/logger')
 
 let answers = {}
@@ -85,11 +85,11 @@ async function getChoices (prompt) {
 }
 
 function setAnswer (id, value) {
-  ObjectUtil.set(answers, id, value)
+  set(answers, id, value)
 }
 
 function removeAnswer (id) {
-  ObjectUtil.remove(answers, id)
+  unset(answers, id)
 }
 
 function generatePrompt (data) {
@@ -159,7 +159,7 @@ function getAnswers () {
 }
 
 function getAnswer (id) {
-  return ObjectUtil.get(answers, id)
+  return get(answers, id)
 }
 
 async function reset () {
