@@ -22,7 +22,7 @@ module.exports = class HtmlPwaPlugin {
   constructor (options = {}) {
     const iconPaths = Object.assign({}, defaultIconPaths, options.iconPaths)
     delete options.iconPaths
-    this.options = Object.assign({iconPaths: iconPaths}, defaults, options)
+    this.options = Object.assign({ iconPaths: iconPaths }, defaults, options)
   }
 
   apply (compiler) {
