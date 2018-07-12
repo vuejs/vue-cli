@@ -1,19 +1,5 @@
 # Creating a Project
 
-## Installation
-
-::: tip Node Version Requirement
-Vue CLI requires [Node.js](https://nodejs.org/) version 8 or above (8.10.0+ recommended). You can manage multiple versions of Node on the same machine with [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
-:::
-
-``` bash
-npm install -g @vue/cli
-# OR
-yarn global add @vue/cli
-```
-
-After installation, you will have access to the `vue` binary in your command line. You can verify that it is properly installed by simply running `vue`, which should present you with a help message listing all available commands.
-
 ## vue create
 
 To create a new project, run:
