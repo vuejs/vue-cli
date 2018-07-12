@@ -29,6 +29,14 @@ If you have [npx](https://github.com/zkat/npx) available (should be bundled with
 npx vue-cli-service serve
 ```
 
+::: tip
+You can run scripts with additional features using the GUI with the `vue ui` command.
+:::
+
+Here is the Webpack Analyzer from the GUI in action:
+
+![UI Webpack Analyzer](/ui-analyzer.png)
+
 ## vue-cli-service serve
 
 ```

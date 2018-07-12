@@ -6,6 +6,10 @@ Vue CLI uses a plugin-based architecture. If you inspect a newly created project
 
 The plugin based architecture makes Vue CLI flexible and extensible. If you are interested in developing a plugin, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
 
+::: tip
+You can install and manage Plugins using the GUI with the `vue ui` command.
+:::
+
 ### Installing Plugins in an Existing Project
 
 Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:

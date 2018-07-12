@@ -24,7 +24,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
     <p>Vue CLI is fully configurable without the need for ejecting. This allows your project to stay up-to-date for the long run.</p>
   </div>
   <div class="feature">
-    <h2>GUI on top of the CLI</h2>
+    <h2>Graphical User Interface</h2>
     <p>Create, develop and manage your projects through an accompanying graphical user interface.</p>
   </div>
   <div class="feature">
@@ -39,10 +39,18 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
 
 ## Getting Started
 
+Install:
+
 ``` bash
 npm install -g @vue/cli
 # OR
 yarn global add @vue/cli
+```
 
+Create a project:
+
+``` bash
 vue create my-project
+# OR
+vue ui
 ```

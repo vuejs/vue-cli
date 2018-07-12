@@ -2,7 +2,7 @@ module.exports = {
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue CLI',
+      title: 'Vue CLI 3',
       description: '🛠️ Standard Tooling for Vue.js Development'
     }
   },
@@ -30,7 +30,7 @@ module.exports = {
             link: '/config/'
           },
           {
-            text: 'Dev Guide',
+            text: 'Plugin Dev Guide',
             items: [
               { text: 'Plugin Dev Guide', link: '/dev-guide/plugin-dev.md' },
               { text: 'UI Plugin Info', link: '/dev-guide/ui-info.md' },
@@ -59,20 +59,21 @@ module.exports = {
         sidebar: {
           '/guide/': [
             '/guide/',
+            '/guide/installation',
             {
-              title: 'CLI',
+              title: 'Basics',
               collapsable: false,
               children: [
-                '/guide/creating-a-project',
                 '/guide/prototyping',
-                '/guide/plugins-and-presets'
+                '/guide/creating-a-project',
+                '/guide/plugins-and-presets',
+                '/guide/cli-service'
               ]
             },
             {
               title: 'Development',
               collapsable: false,
               children: [
-                '/guide/cli-service',
                 '/guide/browser-compatibility',
                 '/guide/html-and-static-assets',
                 '/guide/css',
@@ -85,9 +86,15 @@ module.exports = {
           ],
           '/dev-guide/': [
             '/dev-guide/plugin-dev.md',
-            '/dev-guide/ui-info.md',
-            '/dev-guide/ui-api.md',
-            '/dev-guide/ui-localization.md'
+            {
+              title: 'UI Development',
+              collapsable: false,
+              children: [
+                '/dev-guide/ui-info.md',
+                '/dev-guide/ui-api.md',
+                '/dev-guide/ui-localization.md'
+              ]
+            }
           ]
         }
       }
