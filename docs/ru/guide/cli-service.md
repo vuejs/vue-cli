@@ -52,9 +52,9 @@ npx vue-cli-service serve
   --https   использовать https (по умолчанию: false)
 ```
 
-The `serve` command starts a dev server (based on [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) that comes with Hot-Module-Replacement (HMR) working out of the box.
+Команда `serve` запускает сервер разработки (основанный на [webpack-dev-server](https://github.com/webpack/webpack-dev-server)), который подставляется с функцией горячей замены модулей (HMR) из коробки.
 
-In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
+В дополнение к флагам командной строки, вы также можете настроить сервер разработки с помощью поля [devServer](../config/#devserver) в файле `vue.config.js`.
 
 ## vue-cli-service build
 
@@ -74,15 +74,15 @@ In addition to the command line flags, you can also configure the dev server usi
   --watch       отслеживать изменения
 ```
 
-`vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
+`vue-cli-service build` создаёт готовую для production сборку в каталоге `dist/`, с минификацией для JS / CSS / HTML и автоматическим разделением вендорного чанка для лучшего кэширования. Манифест чанка вставляется инлайн в HTML.
 
-There are a few useful flags:
+Есть несколько полезных флагов:
 
-- `--modern` собирает ваше приложение используя [Современный режим](./browser-compatibility.md#современный-режим), shipping native ES2015 code to modern browsers that support it, with auto fallback to a legacy bundle.
+- `--modern` собирает ваше приложение используя [Современный режим](./browser-compatibility.md#современный-режим), поставляет нативный код ES2015 в современные браузеры, которые поддерживают его, а также автоматический fallback на сборку для старых браузеров.
 
-- `--target` allows you to build any component(s) inside your project as a library or as web components. See [Build Targets](./build-targets.md) for more details.
+- `--target` позволяет вам создавать любые компоненты внутри вашего проекта в виде библиотек или веб-компонентов. Подробнее в разделе [Цели сборки](./build-targets.md).
 
-- `--report` and `--report-json` will generate reports based on your build stats that can help you analyze the size of the modules included in your bundle.
+- `--report` и `--report-json` будут генерировать отчёты на основе собранной статистики сборки, которые помогут вам анализировать размеры модулей, используемых в сборке.
 
 ## vue-cli-service inspect
 
@@ -94,17 +94,17 @@ There are a few useful flags:
   --mode    определить режим сборки (по умолчанию: development)
 ```
 
-You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue CLI project. See [Inspecting Webpack Config](./webpack.md#inspecting-the-project-s-webpack-config) for more details.
+Вы можете использовать `vue-cli-service inspect` для проверки конфигурации webpack внутри проекта Vue CLI. Подробнее в разделе [просмотр конфигурации Webpack](./webpack.md#просмотр-конфигурации-webpack-проекта).
 
-## Проверка всех доступных команд
+## Список всех доступных команд
 
-Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
+Некоторые плагины CLI добавляют собственные команды в `vue-cli-service`. Например, `@vue/cli-plugin-eslint` внедряет команду `vue-cli-service lint`. Вы можете посмотреть весь список команд запустив:
 
 ``` bash
 npx vue-cli-service help
 ```
 
-You can also learn about the available options of each command with:
+Вы также можете узнать о доступных параметрах каждой команды с помощью:
 
 ``` bash
 npx vue-cli-service help [command]
@@ -112,13 +112,13 @@ npx vue-cli-service help [command]
 
 ## Кэширование и параллелизация
 
-- `cache-loader` is enabled for Vue/Babel/TypeScript compilations by default. Files are cached inside `node_modules/.cache` - if running into compilation issues, always try deleting the cache directory first.
+- `cache-loader` используется для компиляции Vue / Babel / TypeScript по умолчанию. Файлы кэшируются внутри `node_modules/.cache` — если при запуске возникают проблемы в компиляции, сначала попробуйте удалить каталог кэша.
 
-- `thread-loader` will be enabled for Babel/TypeScript transpilation when the machine has more than 1 CPU cores.
+- `thread-loader` будет использован для транспиляции Babel / TypeScript когда в системе доступно более 1 процессорного ядра.
 
 ## Git хуки
 
-When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx990803/yorkie), which allows you to easily specify Git hooks using the `gitHooks` field in your `package.json`:
+После установки `@vue/cli-service` также добавляется [yorkie](https://github.com/yyx990803/yorkie), который позволяет легко указывать Git хуки используя поле `gitHooks` в файле `package.json`:
 
 ``` json
 {
@@ -129,11 +129,11 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 ```
 
 ::: warning Предупреждение
-`yorkie` is a fork of [`husky`](https://github.com/typicode/husky) and is not compatible with the latter.
+`yorkie` — это форк [`husky`](https://github.com/typicode/husky) без совместимости с ним.
 :::
 
 ## Конфигурация без извлечения
 
-Projects created via `vue create` are ready to go without the need for additional configuration. The plugins are designed to work with one another so in most cases, all you need to do is pick the features you want during the interactive prompts.
+Проекты созданные с помощью `vue create` уже готовы к работе без необходимости дополнительной настройки. Плагины предназначены для работы друг с другом, поэтому в большинстве случаев всё что вам нужно сделать — это выбрать необходимые функции во время интерактивных запросов выбора.
 
-However, we also understand that it's impossible to cater to every possible need, and the need of a project may also change over time. Projects created by Vue CLI allows you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.
+Однако, мы также понимаем, что невозможно удовлетворить все возможные потребности, как и потребности проекта могут изменяться с течением времени. Проекты созданные Vue CLI позволяют настраивать практически все аспекты без необходимости извлечения конфигурации. Подробную информацию можно найти в разделе [Конфигурация](../config/).

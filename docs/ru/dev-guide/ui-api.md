@@ -1,10 +1,10 @@
-# API плагина в UI
+# API плагина для UI
 
 The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
 
 ![UI Plugin architecture](/vue-cli-ui-schema.png)
 
-## UI files
+## Файлы UI
 
 Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. Note that you can also use folders (for example `ui/index.js`).
 
@@ -12,7 +12,7 @@ The file should export a function which gets the api object as argument:
 
 ```js
 module.exports = api => {
-  // Use the API here...
+  // Используйте API здесь...
 }
 ```
 
@@ -30,7 +30,7 @@ Here is an example folder structure for a vue-cli plugin using the UI API:
   - logo.png
 ```
 
-### Project local plugins
+### Локальные плагины проекта
 
 If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.ui` option in your `package.json` file:
 
@@ -44,7 +44,7 @@ If you need access to the plugin API in your project and don't want to create a 
 
 Each file will need to export a function taking the plugin API as the first argument.
 
-## Dev mode
+## Режим разработки
 
 While building your plugin, you may want to run the cli-ui in Dev mode, so it will output useful logs to you:
 
@@ -52,13 +52,13 @@ While building your plugin, you may want to run the cli-ui in Dev mode, so it wi
 vue ui --dev
 ```
 
-Or:
+Или:
 
 ```
 vue ui -D
 ```
 
-## Project configurations
+## Конфигурации проекта
 
 ![Configuration ui](/config-ui.png)
 
@@ -83,7 +83,7 @@ api.describeConfig({
 Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-### Config icon
+### Конфигурация иконки
 
 It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
 
@@ -97,7 +97,7 @@ api.describeConfig({
 
 If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
 
-### Config files
+### Файлы конфигураций
 
 By default, a configuration UI might read and write to one or more configuration files, for example both `.eslintrc.js` and `vue.config.js`.
 
@@ -232,7 +232,7 @@ Then the `data` object will be:
 }
 ```
 
-### Configuration tabs
+### Вкладки конфигурации
 
 You can organize the prompts into several tabs:
 
@@ -262,7 +262,7 @@ api.describeConfig({
 })
 ```
 
-### Save config changes
+### Сохранение изменений конфигурации
 
 Use the `onWrite` hook to write the data to the configuration file (or execute any nodejs code):
 

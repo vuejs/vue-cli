@@ -75,9 +75,9 @@ vue add vuex
 ```
 :::
 
-### Project local plugin
+### Локальный плагин проекта
 
-If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.service` option in your `package.json` file:
+Если требуется доступ к API плагина в вашем проекте и вы не хотите создавать полноценный плагин для этого, можно использовать опцию `vuePlugins.service` в файле `package.json`:
 
 ```json
 {
@@ -87,9 +87,9 @@ If you need access to the plugin API in your project and don't want to create a 
 }
 ```
 
-Each file will need to export a function taking the plugin API as the first argument. For more information about the plugin API, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
+Каждому файлу необходимо экспортировать функцию, принимающую API плагина первым аргументом. Для получения дополнительной информации об API плагина, ознакомьтесь с [руководством по разработке плагинов](../dev-guide/plugin-dev.md).
 
-You can also add files that will behave like UI plugins with the `vuePlugins.ui` option:
+Вы можете добавить файлы, которые будут вести себя как плагины UI опцией `vuePlugins.ui`:
 
 ```json
 {
@@ -99,7 +99,7 @@ You can also add files that will behave like UI plugins with the `vuePlugins.ui`
 }
 ```
 
-For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
+Для получения дополнительной информации, ознакомьтесь с [API плагина для UI](../dev-guide/ui-api.md).
 
 ## Пресеты настроек
 
