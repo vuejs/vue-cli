@@ -6,7 +6,7 @@ The cli-ui exposes an API that allows augmenting the project configurations and 
 
 ## UI files
 
-Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. It will also try to load a `vue-cli-ui.js` file in the user project root so the UI can be manually extended on a per-project basis (also useful to quickly prototype a plugin). Note that you can also use folders (for example `ui/index.js`).
+Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. Note that you can also use folders (for example `ui/index.js`).
 
 The file should export a function which gets the api object as argument:
 
@@ -29,6 +29,20 @@ Here is an example folder structure for a vue-cli plugin using the UI API:
   - ui.js
   - logo.png
 ```
+
+### Project local plugins
+
+If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.ui` option in your `package.json` file:
+
+```json
+{
+  "vuePlugins": {
+    "ui": ["my-ui.js"]
+  }
+}
+```
+
+Each file will need to export a function taking the plugin API as the first argument.
 
 ## Dev mode
 

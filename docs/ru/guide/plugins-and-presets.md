@@ -62,18 +62,44 @@ vue add vuex
 Если плагин уже установлен, вы можете пропустить установку и только вызвать его генератор с помощью команды `vue invoke`. Команда принимает такие же аргументы, как и `vue add`.
 
 ::: tip Совет
-Если по какой-либо причине ваши плагины перечислены в файле `package.json`, отличном от файла, расположенного в вашем проекте, вы можете установить опцию `vueCli.resolvePlugins` в файле `package.json` проекта с указанием пути к каталогу, содержащему другой файл `package.json`.
+Если по какой-либо причине ваши плагины перечислены в файле `package.json`, отличном от файла, расположенного в вашем проекте, вы можете установить опцию `vuePlugins.resolveFrom` в файле `package.json` проекта с указанием пути к каталогу, содержащему другой файл `package.json`.
 
 Например, если у вас есть файл `.config/package.json`:
 
 ```json
 {
-  "vueCli": {
-    "resolvePlugins": ".config"
+  "vuePlugins": {
+    "resolveFrom": ".config"
   }
 }
 ```
 :::
+
+### Project local plugin
+
+If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.service` option in your `package.json` file:
+
+```json
+{
+  "vuePlugins": {
+    "service": ["my-commands.js"]
+  }
+}
+```
+
+Each file will need to export a function taking the plugin API as the first argument. For more information about the plugin API, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
+
+You can also add files that will behave like UI plugins with the `vuePlugins.ui` option:
+
+```json
+{
+  "vuePlugins": {
+    "ui": ["my-ui.js"]
+  }
+}
+```
+
+For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
 
 ## Пресеты настроек
 
