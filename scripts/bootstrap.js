@@ -50,6 +50,6 @@ files.forEach(pkg => {
 
   const npmIgnorePath = path.join(packagesDir, pkg, `.npmignore`)
   if (!fs.existsSync(npmIgnorePath)) {
-    fs.writeFileSync(npmIgnorePath, `__tests__/\n__mocks__/`)
+    fs.writeFileSync(npmIgnorePath, `__tests__\n__mocks__`)
   }
 })
