@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const execa = require('execa')
 const chalk = require('chalk')
@@ -43,7 +43,11 @@ function getPkg (context) {
   if (!fs.existsSync(pkgPath)) {
     throw new Error(`package.json not found in ${chalk.yellow(context)}`)
   }
-  return loadModule(pkgPath, context, true)
+  const pkg = fs.readJsonSync(pkgPath)
+  if (pkg.vueCli && pkg.vueCli.resolvePlugins) {
+    return getPkg(path.resolve(context, pkg.vueCli.resolvePlugins))
+  }
+  return pkg
 }
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
