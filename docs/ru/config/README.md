@@ -1,0 +1,401 @@
+---
+sidebar: auto
+---
+
+# Конфигурация
+
+<Bit/>
+
+## Глобальная конфигурация CLI
+
+Некоторые глобальные настройки для `@vue/cli`, такие как предпочитаемый менеджер пакетов и ваши локальные пресеты настроек, сохранены в JSON-файле `.vuerc` в вашем домашнем каталоге. Вы можете использовать любой редактор для изменения этих настроек.
+
+Также можно воспользоваться командой `vue config` для изучения или изменения глобальной конфигурации CLI.
+
+## Целевые браузеры
+
+Подробнее в разделе [совместимость с браузерами](../guide/browser-compatibility.md#browserslist).
+
+## vue.config.js
+
+`vue.config.js` — опциональный файл конфигурации, которую автоматически загружает `@vue/cli-service` если находит его в корневом каталоге вашего проекта (рядом с файлом `package.json`). Вы также можете использовать поле `vue` в `package.json`, но, обратите внимание, в таком случае вы будете ограничены только JSON-совместимыми значениями.
+
+Файл должен экспортировать объект с настройками:
+
+``` js
+// vue.config.js
+module.exports = {
+  // настройки...
+}
+```
+
+### baseUrl
+
+- Тип: `string`
+- По умолчанию: `'/'`
+
+  Базовый URL вашего приложения по которому оно будет опубликовано. По умолчанию Vue CLI считает, что публикация будет выполнена в корень домена, например `https://www.my-app.com/`. Если приложение публикуется в под-каталог, то необходимо указать этот путь с помощью этой опции. Например, если приложение будет публиковаться по адресу `https://www.foobar.com/my-app/`, установите `baseUrl` в значение `'/my-app/'`.
+
+  Правильная установка этого значения необходима для корректной загрузки ваших статических ресурсов в production.
+
+  Опция может быть полезна и на этапе разработки. Если вы хотите запускать сервер разработки из корня сайта, то можно устанавливать значение по условию:
+
+  ``` js
+  module.exports = {
+    baseUrl: process.env.NODE_ENV === 'production'
+      ? '/production-sub-path/'
+      : '/'
+  }
+  ```
+
+  Значение также может быть пустой строкой (`''`), чтобы все ресурсы подключались через относительные пути, что позволит в таком случае использовать эту сборку в окружении файловой системы, например в гибридном приложении Cordova. Но в таком случае это ограничит расположение сгенерированных CSS файлов только корневым каталогом сборки, чтобы гарантировать правильность работы ссылок в вашем CSS.
+
+  ::: tip Совет
+  Всегда используйте `baseUrl` вместо изменения опции webpack `output.publicPath`.
+  :::
+
+### outputDir
+
+- Тип: `string`
+- По умолчанию: `'dist'`
+
+  Каталог, в котором будут создаваться файлы сборки для production при запуске `vue-cli-service build`. Обратите внимание, что этот каталог удаляется перед каждым началом сборки (это поведение можно отключить передав опцию `--no-clean` в команду сборки).
+
+  ::: tip Совет
+  Всегда используйте `outputDir` вместо изменения опции webpack `output.path`.
+  :::
+
+### assetsDir
+
+- Тип: `string`
+- По умолчанию: `''`
+
+  Каталог для хранения сгенерированных статических ресурсов (js, css, img, fonts).
+
+  ::: tip Совет
+  `assetsDir` игнорируется при перезаписи опций имени файла (filename) или имени чанков (chunkFilename) сгенерированных ресурсов.
+  :::
+
+### pages
+
+- Тип: `Object`
+- По умолчанию: `undefined`
+
+  Сборка приложения в многостраничном режиме (MPA). У каждой «страницы» должна быть соответствующая точка входа (entry) в виде JavaScript-файла. Значение может быть объектом, где ключ — имя точки входа, а значение:
+
+  - объектом, который определяет свои `entry`, `template`, `filename` и `title`;
+  - или строкой, определяющая свою `entry`.
+
+  ``` js
+  module.exports = {
+    pages: {
+      index: {
+        // точка входа для страницы
+        entry: 'src/index/main.js',
+        // исходный шаблон
+        template: 'public/index.html',
+        // в результате будет dist/index.html
+        filename: 'index.html',
+        // когда используется опция title, то <title> в шаблоне
+        // должен быть <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'Index Page'
+      },
+      // когда используется строковый формат точки входа, то
+      // шаблон будет определяться как `public/subpage.html`,
+      // а если таковой не будет найден, то `public/index.html`.
+      // Выходное имя файла будет определено как `subpage.html`.
+      subpage: 'src/subpage/main.js'
+    }
+  }
+  ```
+
+  ::: tip Совет
+  При сборке в многостраничном режиме, конфигурация webpack будет содержать разные плагины (будут несколько экземпляров `html-webpack-plugin` и `preload-webpack-plugin`). Чтобы убедиться в корректности, проверяйте конфигурацию командой `vue inspect` если вы изменяете настройки для этих плагинов.
+  :::
+
+### lintOnSave
+
+- Тип: `boolean | 'error'`
+- По умолчанию: `true`
+
+  Выполнять ли линтинг кода при сохранении во время разработки с помощью [eslint-loader](https://github.com/webpack-contrib/eslint-loader). Это значение действует только при установленном плагине [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint).
+
+  Когда установлено в значение `true`, eslint-loader будет выдавать только предупреждения во время процесса компиляции webpack, чтобы не прерывать вас во время разработки. Если вы хотите, чтобы генерировались ошибки (наприменр, при сборке для production), установите его в значение: `lintOnSave: 'error'`.
+
+### runtimeCompiler
+
+- Тип: `boolean`
+- По умолчанию: `false`
+
+  Использование сборки Vue которая содержит компилятор шаблонов. Установка значения в `true` позволит вам использовать опцию `template` в компонентах Vue, но дополнительно добавит 10КБайт кода в ваше приложение.
+
+  См. также: [Runtime + Компилятор vs. Runtime-only](https://ru.vuejs.org/v2/guide/installation.html#Runtime-Компилятор-vs-Runtime-only).
+
+### transpileDependencies
+
+- Тип: `Array<string | RegExp>`
+- По умолчанию: `[]`
+
+  По умолчанию `babel-loader` игнорирует все файлы из `node_modules`. Если вы хотите явно транспилировать зависимость с помощью Babel, то вы можете перечислить её в этой опции.
+
+### productionSourceMap
+
+- Тип: `boolean`
+- По умолчанию: `true`
+
+  Установив в значение `false` можно ускорить сборку для production, если вам не требуются source maps для production.
+
+### configureWebpack
+
+- Тип: `Object | Function`
+
+  Если значение объект — он будет объединён в финальную конфигурацию с помощью [webpack-merge](https://github.com/survivejs/webpack-merge).
+
+  Если значение функция — она получит итоговую конфигурацию в качестве аргумента. Функция может либо изменить конфигурацию, либо ничего не возвращать, ИЛИ вернуть клонированную или объединённую версию конфигурации.
+
+  См. также: [Работа с Webpack — Простая конфигурация](../guide/webpack.md#простая-конфигурация)
+
+### chainWebpack
+
+- Тип: `Function`
+
+  Функция, которая получает экземпляр `ChainableConfig` с помощью [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). Позволяет производить более тонкую настройку внутренней конфигурации webpack.
+
+  См. также: [Работа с Webpack — Chaining (Продвинутый вариант)](../guide/webpack.md#chaining-продвинутый-вариант)
+
+### css.modules
+
+- Тип: `boolean`
+- По умолчанию: `false`
+
+  По умолчанию, только файлы заканчивающиеся на `*.module.[ext]` обрабатываются как CSS модули. Установка в значение `true` позволит вам убрать `.module` из имён файлов и обрабатывать все `*.(css|scss|sass|less|styl(us)?)` файлы как CSS модули.
+
+  См. также: [Работа с CSS — CSS модули](../guide/css.md#css-модуnи)
+
+### css.extract
+
+- Тип: `boolean`
+- По умолчанию: `true` (в режиме production)
+
+  Извлечение CSS из ваших компонентов в отдельные CSS файлы (вместо инлайна в JavaScript и динамического внедрения).
+
+  Это также отключается по умолчанию при сборке веб-компонентов (в этом случае инлайн стили внедряются в shadowRoot).
+
+  При сборке библиотеки вы можете также установить значение в `false` чтобы вашим пользователям не приходилось импортировать CSS самостоятельно.
+
+### css.sourceMap
+
+- Тип: `boolean`
+- По умолчанию: `false`
+
+  Использование source maps для CSS. Установка этого значения в `true` может повлиять на производительность сборки.
+
+### css.loaderOptions
+
+- Тип: `Object`
+- По умолчанию: `{}`
+
+  Передача настроек в загрузчики относящиеся к CSS. Например:
+
+  ``` js
+  module.exports = {
+    css: {
+      loaderOptions: {
+        css: {
+          // эти настройки будут переданы в css-loader
+        },
+        postcss: {
+          // эти настройки будут переданы в postcss-loader
+        }
+      }
+    }
+  }
+  ```
+
+  Поддерживаемые загрузчики:
+
+  - [css-loader](https://github.com/webpack-contrib/css-loader)
+  - [postcss-loader](https://github.com/postcss/postcss-loader)
+  - [sass-loader](https://github.com/webpack-contrib/sass-loader)
+  - [less-loader](https://github.com/webpack-contrib/less-loader)
+  - [stylus-loader](https://github.com/shama/stylus-loader)
+
+  См. также: [Передача настроек в загрузчики пре-процессоров](../guide/css.md#передача-настроек-в-загрузчики-пре-процессоров)
+
+  ::: tip Совет
+  Такой способ предпочтительнее, чем вручную менять конкретные загрузчики через `chainWebpack`, поскольку эти параметры применяются в нескольких местах, где используется соответствующий загрузчик.
+  :::
+
+### devServer
+
+- Тип: `Object`
+
+  [Все настройки для `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) поддерживаются, но обратите внимание:
+
+  - Некоторые значения, такие как `host`, `port` и `https` могут перезаписываться флагами командной строки.
+
+  - Некоторые значения, такие как `publicPath` и `historyApiFallback` нельзя изменять, поскольку они должны быть синхронизированы с [baseUrl](#baseurl) для правильной работы сервера разработки.
+
+### devServer.proxy
+
+- Тип: `string | Object`
+
+  Если ваше фронтенд приложение и бэкенд сервер API не работают на одном хосте, то вам понадобится на этапе разработки проксировать запросы к API. Это можно настроить с помощью опции `devServer.proxy` в файле `vue.config.js`.
+
+  `devServer.proxy` может быть строкой, указывающий на API сервера разработки:
+
+  ``` js
+  module.exports = {
+    devServer: {
+      proxy: 'http://localhost:4000'
+    }
+  }
+  ```
+
+  Это скажет серверу разработки проксировать любые неизвестные запросы (запросы, которые не соответствуют статическому файлу) на адрес `http://localhost:4000`.
+
+  Если вам нужно больше контроля поведения прокси-сервера, вы также можете использовать объект с парами опций `path: options`. См. полный список опций [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config):
+
+  ``` js
+  module.exports = {
+    devServer: {
+      proxy: {
+        '/api': {
+          target: '<url>',
+          ws: true,
+          changeOrigin: true
+        },
+        '/foo': {
+          target: '<other_url>'
+        }
+      }
+    }
+  }
+  ```
+
+### parallel
+
+- Тип: `boolean`
+- По умолчанию: `require('os').cpus().length > 1`
+
+  Использовать ли `thread-loader` для транспиляции Babel или TypeScript.
+
+### pwa
+
+- Тип: `Object`
+
+  Передача настроек в [Плагин PWA](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa).
+
+### pluginOptions
+
+- Тип: `Object`
+
+  Этот объект не проходит никакой валидации своей структуры, поэтому его можно использовать для передачи произвольных параметров сторонним плагинам. Например:
+
+  ``` js
+  module.exports = {
+    pluginOptions: {
+      foo: {
+        // плагины могут получить доступ к этим настройкам
+        // через `options.pluginOptions.foo`.
+      }
+    }
+  }
+  ```
+
+## Babel
+
+Babel может быть настроен через `babel.config.js`.
+
+::: tip Совет
+Vue CLI использует `babel.config.js` — новый формат конфигурации Babel 7. В отличие от `.babelrc` или поля `babel` в `package.json`, этот файл конфигурации не использует разрешение на основе расположения файлов в проекте и последовательно применяется к каждому файлу, включая зависимости внутри `node_modules`. В проектах Vue CLI рекомендуется всегда использовать `babel.config.js` вместо других форматов.
+:::
+
+Все приложения Vue CLI используют `@vue/babel-preset-app`, который включает в себя `babel-preset-env`, поддержку JSX и оптимизированную конфигурацию для получения итоговой сборки минимального размера. Подробнее [в его документации](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) и опциях пресета.
+
+Подробнее в разделе [Полифилы](../guide/browser-compatibility.md#поnифиnы) этого руководства.
+
+## ESLint
+
+ESLint может быть настроен через `.eslintrc` или поле `eslintConfig` в файле `package.json`.
+
+Подробнее на странице плагина [@vue/cli-plugin-eslint](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint).
+
+## TypeScript
+
+TypeScript может быть настроен через `tsconfig.json`.
+
+Подробнее на странице плагина [@vue/cli-plugin-typescript](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript).
+
+## Модульное тестирование
+
+### Jest
+
+Подробнее на странице плагина [@vue/cli-plugin-unit-jest](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest).
+
+### Mocha (через `mocha-webpack`)
+
+Подробнее на странице плагина [@vue/cli-plugin-unit-mocha](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha).
+
+## E2E тестирование
+
+### Cypress
+
+Подробнее на странице плагина [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress).
+
+### Nightwatch
+
+Подробнее на странице плагина [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch).
+
+## Примеры конфигураций
+
+### Отключение хэшей в именах файлов
+
+Для статических ресурсов сгенерированные имена файлов содержат хэш, [чтобы браузер загружал изменившиеся файлы](https://webpack.js.org/guides/caching/#output-filenames), но это можно отключить. Одним из популярных сценариев необходимости подобного может быть интеграция Vue с бэкендом, который диктует структуру кода, отличную от генерируемой Vue CLI, например в WordPress или Laravel. Для отключения хэшей в именах файлов добавьте следующее в [`vue.config.js`](#vue-config-js):
+
+``` js
+// vue.config.js
+module.exports = {
+    chainWebpack: (config) => {
+    config.module
+      .rule('images')
+      .use('url-loader')
+      .tap(options => Object.assign({}, options, { name: 'img/[name].[ext]' }));
+  },
+  css: {
+    extract: {
+      filename: '/css/[name].css',
+      chunkFilename: '/css/[name].css',
+    },
+  },
+  configureWebpack: {
+    output: {
+      filename: 'js/[name].js',
+      chunkFilename: 'js/[name].js',
+    },
+  },
+};
+```
+
+::: tip Совет
+При перезаписи вручную `filename` или `chunkFilename`, значение опции `assetsDir` не нужно добавлять в их значения путей.
+:::
+
+### Отключение генерации index.html
+
+При использовании Vue CLI с существующим бэкендом, вам может потребоваться отключить генерацию `index.html`, чтобы сгенерированные ресурсы могли быть использованы с другим документом по умолчанию. Для этого добавьте следующее в файл [`vue.config.js`](#vue-config-js):
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.plugins.delete('html')
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+  }
+}
+```
+
+::: warning Предупреждение
+[Современный режим](../guide/browser-compatibility.md#современный-режим) не будет работать, если отключить плагин `html-webpack-plugin`.
+:::
