@@ -1,4 +1,4 @@
-# 3.0.0-rc.4 (2018-07-13)
+# [3.0.0-rc.4](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.3...v3.0.0-rc.4) (2018-07-13)
 
 ## babel-preset-app
 
