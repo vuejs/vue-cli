@@ -59,29 +59,29 @@ program
 
 program
   .command('add <plugin> [pluginOptions]')
-  .allowUnknownOption()
   .description('install a plugin and invoke its generator in an already created project')
+  .allowUnknownOption()
   .action((plugin) => {
     require('../lib/add')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
   .command('invoke <plugin> [pluginOptions]')
-  .allowUnknownOption()
   .description('invoke the generator of a plugin in an already created project')
+  .allowUnknownOption()
   .action((plugin) => {
     require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
   .command('inspect [paths...]')
+  .description('inspect the webpack config in a project with vue-cli-service')
   .option('--mode <mode>')
   .option('--rule <ruleName>', 'inspect a specific module rule')
   .option('--plugin <pluginName>', 'inspect a specific plugin')
   .option('--rules', 'list all module rule names')
   .option('--plugins', 'list all plugin names')
   .option('-v --verbose', 'Show full function definitions in output')
-  .description('inspect the webpack config in a project with vue-cli-service')
   .action((paths, cmd) => {
     require('../lib/inspect')(paths, cleanArgs(cmd))
   })
@@ -97,21 +97,21 @@ program
 
 program
   .command('build [entry]')
+  .description('build a .js or .vue file in production mode with zero config')
   .option('-t, --target <target>', 'Build target (app | lib | wc | wc-async, default: app)')
   .option('-n, --name <name>', 'name for lib or web-component mode (default: entry filename)')
   .option('-d, --dest <dir>', 'output directory (default: dist)')
-  .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
   })
 
 program
   .command('ui')
+  .description('start and open the vue-cli ui')
   .option('-p, --port <port>', 'Port used for the UI server (by default search for awailable port)')
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
   .option('--headless', `Don't open browser on start and output port`)
-  .description('start and open the vue-cli ui')
   .action((cmd) => {
     checkNodeVersion('>=8.6', 'vue ui')
     require('../lib/ui')(cleanArgs(cmd))
