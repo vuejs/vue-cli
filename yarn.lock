@@ -1041,6 +1041,14 @@
     source-map "^0.5.6"
     vue-template-es2015-compiler "^1.6.0"
 
+"@vue/conventional-changelog@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@vue/conventional-changelog/-/conventional-changelog-0.1.0.tgz#f3f7e19e4f8b32b1b589f6f3b1b720256a333d88"
+  dependencies:
+    compare-func "^1.3.2"
+    execa "^0.10.0"
+    q "^1.5.1"
+
 "@vue/preload-webpack-plugin@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@vue/preload-webpack-plugin/-/preload-webpack-plugin-1.0.0.tgz#08f156532909824da2aad258e151742d1e8f822e"
@@ -2994,7 +3002,7 @@ commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
 
-compare-func@^1.3.1:
+compare-func@^1.3.1, compare-func@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/compare-func/-/compare-func-1.3.2.tgz#99dd0ba457e1f9bc722b12c08ec33eeab31fa648"
   dependencies:
