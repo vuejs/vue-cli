@@ -4,6 +4,9 @@ defaults: &defaults
   working_directory: ~/project/vue
   docker:
     - image: vuejs/ci
+  branches:
+    ignore:
+      - docs
 
 jobs:
   install:

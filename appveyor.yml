@@ -18,3 +18,7 @@ cache:
   - node_modules -> yarn.lock
 
 build: off
+
+branches:
+  except:
+    - docs
