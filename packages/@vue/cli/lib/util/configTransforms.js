@@ -1,6 +1,6 @@
 const extendJSConfig = require('./extendJSConfig')
 const stringifyJS = require('./stringifyJS')
-const { loadModule } = require('./module')
+const { loadModule } = require('@vue/cli-shared-utils')
 const merge = require('deepmerge')
 
 const isObject = val => val && typeof val === 'object'

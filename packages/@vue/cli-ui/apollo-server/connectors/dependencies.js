@@ -11,8 +11,7 @@ const logs = require('./logs')
 // Context
 const getContext = require('../context')
 // Utils
-const { isPlugin, hasYarn } = require('@vue/cli-shared-utils')
-const { resolveModule } = require('@vue/cli/lib/util/module')
+const { isPlugin, hasYarn, resolveModule } = require('@vue/cli-shared-utils')
 const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
 const {
   progress: installProgress,

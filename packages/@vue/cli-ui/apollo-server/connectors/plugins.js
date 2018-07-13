@@ -24,9 +24,11 @@ const PluginApi = require('../api/PluginApi')
 const {
   isPlugin,
   isOfficialPlugin,
-  getPluginLink
+  getPluginLink,
+  resolveModule,
+  loadModule,
+  clearModule
 } = require('@vue/cli-shared-utils')
-const { resolveModule, loadModule, clearModule } = require('@vue/cli/lib/util/module')
 const {
   progress: installProgress,
   installPackage,

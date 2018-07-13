@@ -75,6 +75,22 @@ For example, if you have a `.config/package.json` file:
 ```
 :::
 
+### Project local plugin
+
+If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.service` option in your `package.json` file:
+
+```json
+{
+  "vuePlugins": {
+    "service": ["my-commands.js"]
+  }
+}
+```
+
+Each file will need to export a function taking the plugin API as the first argument. For more information about the plugin API, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
+
+You can also create a `vue-cli-ui.js` file that will behave like a UI plugin. For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
+
 ## Presets
 
 A Vue CLI preset is a JSON object that contains pre-defined options and plugins for creating a new project so that the user don't have to go through the prompts to select them.

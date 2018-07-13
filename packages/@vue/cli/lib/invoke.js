@@ -7,7 +7,6 @@ const inquirer = require('inquirer')
 const isBinary = require('isbinaryfile')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
-const { loadModule } = require('./util/module')
 const { installDeps } = require('./util/installDeps')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const {
@@ -17,7 +16,8 @@ const {
   hasProjectGit,
   logWithSpinner,
   stopSpinner,
-  resolvePluginId
+  resolvePluginId,
+  loadModule
 } = require('@vue/cli-shared-utils')
 
 async function readFiles (context) {

@@ -27,6 +27,7 @@
     "ora": "^2.1.0",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
+    "semver": "^5.5.0",
     "string.prototype.padstart": "^3.0.0"
   },
   "publishConfig": {

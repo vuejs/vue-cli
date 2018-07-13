@@ -7,7 +7,6 @@ const inquirer = require('inquirer')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
-const { loadModule } = require('./util/module')
 const getVersions = require('./util/getVersions')
 const { installDeps } = require('./util/installDeps')
 const { clearConsole } = require('./util/clearConsole')
@@ -34,7 +33,8 @@ const {
   hasYarn,
   logWithSpinner,
   stopSpinner,
-  exit
+  exit,
+  loadModule
 } = require('@vue/cli-shared-utils')
 
 const isManualMode = answers => answers.preset === '__manual__'

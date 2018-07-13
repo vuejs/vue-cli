@@ -2,13 +2,14 @@ const chalk = require('chalk')
 const invoke = require('./invoke')
 const { loadOptions } = require('./options')
 const { installPackage } = require('./util/installDeps')
-const { resolveModule, loadModule } = require('./util/module')
 const {
   log,
   error,
   hasProjectYarn,
   stopSpinner,
-  resolvePluginId
+  resolvePluginId,
+  resolveModule,
+  loadModule
 } = require('@vue/cli-shared-utils')
 
 async function add (pluginName, options = {}, context = process.cwd()) {
