@@ -36,11 +36,15 @@ module.exports = class Service {
     }, {})
   }
 
-  resolvePkg (inlinePkg) {
+  resolvePkg (inlinePkg, context = this.context) {
     if (inlinePkg) {
       return inlinePkg
-    } else if (fs.existsSync(path.join(this.context, 'package.json'))) {
-      return readPkg.sync({ cwd: this.context })
+    } else if (fs.existsSync(path.join(context, 'package.json'))) {
+      const pkg = readPkg.sync({ cwd: context })
+      if (pkg.vuePlugins && pkg.vuePlugins.resolveFrom) {
+        return this.resolvePkg(null, path.resolve(context, pkg.vuePlugins.resolveFrom))
+      }
+      return pkg
     } else {
       return {}
     }
