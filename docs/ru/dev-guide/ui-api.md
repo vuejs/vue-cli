@@ -80,7 +80,7 @@ api.describeConfig({
 ```
 
 ::: danger Внимание!
-Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 ### Конфигурация иконки
@@ -614,11 +614,11 @@ In your vue-cli plugin, you may already have a `prompts.js` file which asks the 
 
 **⚠️ Currently, the inquirer types which aren't supported (see above) will not work properly in the UI.**
 
-## Client addon
+## Клиентское дополнение
 
 A Client addon is a JS bundle which is dynamically loaded into the cli-ui. It is useful to load custom components and routes.
 
-### Create a client addon
+### Создание клиентского дополнения
 
 The recommended way to create a Client addon is by creating a new project using vue-cli 3. You can either do this in a subfolder of your plugin or in a different npm package.
 
@@ -641,7 +641,7 @@ module.exports = {
 The `clientAddonConfig` method will generate the needed vue-cli configuration. Among other things, it disables CSS extraction and outputs the code to `./dist/index.js` in the client addon folder.
 
 ::: danger Внимание!
-Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 Then modify the `.eslintrc.json` file to add some allowed global objects:
@@ -700,14 +700,14 @@ locales.keys().forEach(key => {
 ```
 
 ::: danger Внимание!
-Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
 
 In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent. You can also translate the strings with [vue-i18n](https://github.com/kazupon/vue-i18n) which is included.
 
-### Register the client addon
+### Регистрация клиентского дополнения
 
 Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
 
@@ -733,7 +733,7 @@ api.addClientAddon({
 })
 ```
 
-### Use the client addon
+### Использование клиентского дополнения
 
 You can now use the client addon in the views. For example, you can specify a view in a described task:
 
@@ -772,7 +772,7 @@ ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboar
 
 ![Task view example](/task-view.png)
 
-## Custom views
+## Пользовательские страницы
 
 You can add a new view below the standard 'Project plugins', 'Project configuration' and 'Project tasks' ones using the `api.addView` method:
 
@@ -812,7 +812,7 @@ ClientAddonApi.addRoutes('org.vue.webpack', [
 
 ![Custom view example](/custom-view.png)
 
-## Shared data
+## Общие данные
 
 Use Shared data to communicate info with custom components in an easy way.
 
@@ -852,7 +852,7 @@ const {
 ```
 
 ::: danger Внимание!
-Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 In the custom component:
@@ -904,7 +904,7 @@ export default {
 
 This is very useful if you create a settings component for example.
 
-## Plugin actions
+## Действия плагина
 
 Plugin actions are calls sent between the cli-ui (browser) and plugins (nodejs).
 
@@ -929,7 +929,7 @@ api.onAction('com.my-name.test-action', params => {
 ```
 
 ::: danger Внимание!
-Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 You can use namespaced versions with `api.namespace` (similar to Shared data):
@@ -966,7 +966,7 @@ export default {
 }
 ```
 
-## Inter-process communication (IPC)
+## Коммуникация между процессами (IPC)
 
 IPC stands for Inter-Process Communication. This system allows you to easily send messages from child processes (for example, tasks!). And it's pretty fast and lightweight.
 
@@ -1065,7 +1065,7 @@ api.ipcSend({
 })
 ```
 
-## Local storage
+## Локальное хранилище
 
 A plugin can save and load data from the local [lowdb](https://github.com/typicode/lowdb) database used by the ui server.
 
@@ -1087,10 +1087,10 @@ const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
 
 ::: danger Внимание!
-Make sure to namespace the ids correctly, since they must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-## Notification
+## Уведомления
 
 You can display notifications using the user OS notification system:
 
@@ -1107,7 +1107,7 @@ There are some builtin icons:
 - `'done'`
 - `'error'`
 
-## Progress screen
+## Экран прогресса
 
 You can display a progress screen with some text and a progress bar:
 
@@ -1126,7 +1126,7 @@ Remove the progress screen:
 api.removeProgress()
 ```
 
-## Hooks
+## Хуки
 
 Hooks allows to react to certain cli-ui events.
 
@@ -1210,7 +1210,7 @@ api.onViewOpen(({ view, cwd }) => {
 })
 ```
 
-## Suggestions
+## Подсказки
 
 Suggestions are buttons meant to propose an action to the user. They are displayed in the top bar. For example, we can have a button that suggest installing vue-router if the package isn't detected in the app.
 
@@ -1236,7 +1236,7 @@ api.addSuggestion({
 ```
 
 ::: danger Внимание!
-Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 ![UI Suggestion](/suggestion.png)
@@ -1288,7 +1288,7 @@ In this example we only display the vue-router suggestion in the plugins view an
 
 Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
 
-## Other methods
+## Другие методы
 
 ### hasPlugin
 
@@ -1324,7 +1324,7 @@ Get currently open project.
 api.getProject()
 ```
 
-## Public static files
+## Публичные статические файлы
 
 You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).
 
