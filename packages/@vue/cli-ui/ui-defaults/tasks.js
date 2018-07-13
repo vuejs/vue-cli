@@ -205,13 +205,13 @@ module.exports = api => {
       {
         name: 'host',
         type: 'input',
-        default: '0.0.0.0',
+        default: '',
         description: 'org.vue.vue-webpack.tasks.serve.host'
       },
       {
         name: 'port',
         type: 'input',
-        default: 8080,
+        default: undefined,
         description: 'org.vue.vue-webpack.tasks.serve.port'
       },
       {
