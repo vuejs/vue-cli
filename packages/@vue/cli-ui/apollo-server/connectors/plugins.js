@@ -55,9 +55,18 @@ let eventsInstalled = false
 let installationStep
 let pluginsStore = new Map()
 let pluginApiInstances = new Map()
+let pkgStore = new Map()
 
 async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
-  const pkg = folders.readPackage(file, context)
+  let pkg = folders.readPackage(file, context)
+  let pkgContext = cwd.get()
+  // Custom package.json location
+  if (pkg.vuePlugins && pkg.vuePlugins.resolveFrom) {
+    pkgContext = path.resolve(cwd.get(), pkg.vuePlugins.resolveFrom)
+    pkg = folders.readPackage(pkgContext, context)
+  }
+  pkgStore.set(file, { pkgContext, pkg })
+
   let plugins = []
   plugins = plugins.concat(findPlugins(pkg.devDependencies || {}, file))
   plugins = plugins.concat(findPlugins(pkg.dependencies || {}, file))
@@ -156,7 +165,16 @@ function resetPluginApi ({ file, lightApi }, context) {
       // Run Plugin API
       runPluginApi(path.resolve(__dirname, '../../'), pluginApi, context, 'ui-defaults')
       plugins.forEach(plugin => runPluginApi(plugin.id, pluginApi, context))
-      runPluginApi(cwd.get(), pluginApi, context, 'vue-cli-ui')
+      // Local plugins
+      const { pkg, pkgContext } = pkgStore.get(file)
+      if (pkg.vuePlugins && pkg.vuePlugins.ui) {
+        const files = pkg.vuePlugins.ui
+        if (Array.isArray(files)) {
+          for (const file of files) {
+            runPluginApi(pkgContext, pluginApi, context, file)
+          }
+        }
+      }
       // Add client addons
       pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
       // Add views
@@ -190,20 +208,25 @@ function resetPluginApi ({ file, lightApi }, context) {
   })
 }
 
-function runPluginApi (id, pluginApi, context, fileName = 'ui') {
+function runPluginApi (id, pluginApi, context, filename = 'ui') {
   let module
   try {
-    module = loadModule(`${id}/${fileName}`, pluginApi.cwd, true)
+    module = loadModule(`${id}/${filename}`, pluginApi.cwd, true)
   } catch (e) {
     if (process.env.VUE_CLI_DEBUG) {
       console.error(e)
     }
   }
   if (module) {
-    pluginApi.pluginId = id
-    module(pluginApi)
-    log('Plugin API loaded for', id, chalk.grey(pluginApi.cwd))
-    pluginApi.pluginId = null
+    if (typeof module !== 'function') {
+      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, filename !== 'ui' ? `${id}/${filename}` : id, chalk.grey(pluginApi.cwd))
+    } else {
+      const name = filename !== 'ui' ? `${id}/${filename}` : id
+      log('Plugin API loaded for', name, chalk.grey(pluginApi.cwd))
+      pluginApi.pluginId = id
+      module(pluginApi)
+      pluginApi.pluginId = null
+    }
   }
 
   // Locales

@@ -89,7 +89,17 @@ If you need access to the plugin API in your project and don't want to create a 
 
 Each file will need to export a function taking the plugin API as the first argument. For more information about the plugin API, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
 
-You can also create a `vue-cli-ui.js` file that will behave like a UI plugin. For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
+You can also add files that will behave like UI plugins with the `vuePlugins.ui` option:
+
+```json
+{
+  "vuePlugins": {
+    "ui": ["my-ui.js"]
+  }
+}
+```
+
+For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
 
 ## Presets
 

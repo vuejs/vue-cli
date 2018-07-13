@@ -110,5 +110,8 @@
       "vue-cli-service lint",
       "git add"
     ]
+  },
+  "vuePlugins": {
+    "ui": ["ui-dev.js"]
   }
 }
