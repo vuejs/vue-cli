@@ -326,7 +326,7 @@ api.describeConfig({
 
 ```js
 api.describeTask({
-  // 执行在每个脚本命令上以选择要被描述的任务
+  // 用于匹配脚本命令的 RegExp 对象，来选择要被描述的任务
   match: /vue-cli-service serve/,
   description: 'Compiles and hot-reloads for development',
   // “More info”链接
@@ -420,7 +420,7 @@ api.describeTask({
     // cwd: 进程所在目录
   },
   onExit: async ({ args, child, cwd, code, signal }) => {
-    // code: 退出代号
+    // code: 退出码
     // signal: 可能会被使用的杀进程信号
   }
 })
