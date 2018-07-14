@@ -132,7 +132,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
-      before (app) {
+      before (app, server) {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay
         app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
@@ -140,9 +140,9 @@ module.exports = (api, options) => {
           `add "editor" field to your Vue project config.\n`
         )))
         // allow other plugins to register middlewares, e.g. PWA
-        api.service.devServerConfigFns.forEach(fn => fn(app))
+        api.service.devServerConfigFns.forEach(fn => fn(app, server))
         // apply in project middlewares
-        projectDevServerOptions.before && projectDevServerOptions.before(app)
+        projectDevServerOptions.before && projectDevServerOptions.before(app, server)
       }
     }))
 
