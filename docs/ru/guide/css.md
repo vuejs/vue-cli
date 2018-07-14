@@ -39,7 +39,7 @@ Vue CLI использует PostCSS внутри себя.
 
 ## CSS модули
 
-Вы можете [использовать CSS модули в файлах `*.vue`](https://vue-loader.vuejs.org/ru/guide/css-modules.html) из коробки с помощью `<style module>`.
+[CSS модули в файлах `*.vue`](https://vue-loader.vuejs.org/ru/guide/css-modules.html) доступны из коробки с помощью `<style module>`.
 
 Для импорта CSS или других файлов пре-процессоров в качестве CSS модулей в JavaScript, необходимо чтобы имя файла заканчивалось на `.module.(css|less|sass|scss|styl)`:
 

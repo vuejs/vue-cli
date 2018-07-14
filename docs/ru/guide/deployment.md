@@ -19,23 +19,23 @@ serve -s dist
 
 ### Маршрутизация через `history.pushState`
 
-If you are using Vue Router in `history` mode, a simple static file server will fail. For example, if you used Vue Router with a route for `/todos/42`, the dev server has been configured to respond to `localhost:3000/todos/42` properly, but a simple static server serving a production build will respond with a 404 instead.
+Если вы используете Vue Router в режиме `history`, простой статический файловый сервер не подойдёт. Например, если вы использовали Vue Router для маршрута `/todos/42`, то сервер разработки уже был настроен для корректного ответа на запрос `localhost:3000/todos/42`, но простой статический сервер используемый в production сборке будет отвечать ошибкой 404.
 
-To fix that, you will need to configure your production server to fallback to `index.html` for any requests that do not match a static file. The Vue Router docs provides [configuration instructions for common server setups](https://router.vuejs.org/ru/guide/essentials/history-mode.html).
+Чтобы это исправить, вам необходимо настроить production сервер так, чтобы он возвращал `index.html` для любых запросов, которые не соответствуют статическим файлам. В документации Vue Router есть [инструкции по конфигурации различных серверов](https://router.vuejs.org/ru/guide/essentials/history-mode.html).
 
 ### CORS
 
-If your static frontend is deployed to a different domain from your backend API, you will need to properly configure [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+Если ваш статический фронтенд публикуется на домен, отличный от домена API бэкенда, то вам необходимо правильно сконфигурировать [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
 ### PWA
 
-If you are using the PWA plugin, your app must be served over HTTPS so that [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) can be properly registered.
+Если вы используете плагин PWA, ваше приложение необходимо публиковать по HTTPS адресу, чтобы [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) смог корректно зарегистрироваться.
 
 ## Руководства для платформ
 
 ### GitHub Pages
 
-> TODO | Open to contribution.
+> TODO | Присылайте пулл-реквесты.
 
 ### GitLab Pages
 
@@ -59,7 +59,7 @@ pages: # the job must be named pages
     - master
 ```
 
-Typically, your static website will be hosted on https://yourUserName.gitlab.io/yourProjectName, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
+Typically, your static website will be hosted on `https://yourUserName.gitlab.io/yourProjectName`, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
 
 ```javascript
 // vue.config.js file to be place in the root of your repository
@@ -78,17 +78,17 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 ### Netlify
 
-> TODO | Open to contribution.
+> TODO | Присылайте пулл-реквесты.
 
-Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
+Также посмотрите [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
 ### Amazon S3
 
-See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
+Плагин [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
 
 ### Azure
 
-> TODO | Open to contribution.
+> TODO | Присылайте пулл-реквесты.
 
 ### Firebase
 
@@ -155,16 +155,16 @@ Please refer on the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-> TODO | Open to contribution.
+> TODO | Присылайте пулл-реквесты.
 
 ### Stdlib
 
-> TODO | Open to contribution.
+> TODO | Присылайте пулл-реквесты.
 
 ### Heroku
 
-> TODO | Open to contribution.
+> TODO | Присылайте пулл-реквесты.
 
 ### Surge
 
-> TODO | Open to contribution.
+> TODO | Присылайте пулл-реквесты.

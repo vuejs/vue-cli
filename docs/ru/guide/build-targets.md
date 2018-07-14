@@ -8,7 +8,7 @@
 
 - `index.html` с внедрением ресурсов и подсказок для пред-загрузки
 - сторонние библиотеки разделяются на отдельные чанки для лучшего кэширования
-- статические ресурсы менее 10КБ будут вставлены инлайн в JavaScript
+- статические ресурсы менее 10КБайт будут вставлены инлайн в JavaScript
 - статические ресурсы в `public` будут скопированы в каталог сборки
 
 ## Библиотека (Library)
@@ -17,7 +17,7 @@
 В режиме библиотеки Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
 :::
 
-You can build a single entry as a library using
+Вы можете запустить сборку одной точки входа в качестве библиотеки с помощью:
 
 ```
 vue-cli-service build --target lib --name myLib [entry]
@@ -32,9 +32,9 @@ dist/myLib.common.js     20.57 kb                 10.09 kb
 dist/myLib.css           0.33 kb                  0.23 kb
 ```
 
-The entry can be either a `.js` or a `.vue` file. If no entry is specified, `src/App.vue` will be used.
+Точка входа может быть `.js` или `.vue` файлом. Если точка входа не указана, то будет использоваться `src/App.vue`.
 
-A lib build outputs:
+Сборка библиотеки сгенерирует:
 
 - `dist/myLib.common.js`: A CommonJS bundle for consuming via bundlers (unfortunately, webpack currently does not support ES modules output format for bundles yet)
 
@@ -44,7 +44,7 @@ A lib build outputs:
 
 - `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
-### Vue vs. JS/TS Entry Files
+### Vue vs. JS / TS файлы точек входа
 
 When using a `.vue` file as entry, your library will directly expose the Vue component itself, because the component is always the default export.
 
@@ -70,7 +70,7 @@ module.exports = {
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
 :::
 
-You can build a single entry as a library using
+Вы можете запустить сборку одной точки входа в качестве веб-компонента с помощью:
 
 ```
 vue-cli-service build --target wc --name my-element [entry]
@@ -92,7 +92,7 @@ This mode allows consumers of your component to use the Vue component as a norma
 
 ### Сборка, регистрирующая несколько веб-компонентов
 
-При создании сборки веб-компонентов, вы также можете указать несколько компонентов с помощью glob в качестве входной точки:
+При создании веб-компонентов можно также указать несколько компонентов с помощью glob в качестве входной точки:
 
 ```
 vue-cli-service build --target wc --name foo 'src/components/*.vue'

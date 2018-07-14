@@ -1,30 +1,30 @@
 # Переменные окружения и режимы работы
 
-You can specify env variables by placing the following files in your project root:
+Вы можете указать переменные окружения в специальных файлах в корне вашего проекта:
 
 ``` bash
-.env                # loaded in all cases
-.env.local          # loaded in all cases, ignored by git
-.env.[mode]         # only loaded in specified mode
-.env.[mode].local   # only loaded in specified mode, ignored by git
+.env                # загружается во всех случаях
+.env.local          # загружается во всех случаях, игнорируется git
+.env.[mode]         # загружается только в указанном режиме
+.env.[mode].local   # загружается только в указанном режиме, игнорируется git
 ```
 
-An env file simply contains key=value pairs of environment variables:
+Такой env-файл просто содержит пары ключ=значение требуемых переменных окружения:
 
 ```
 FOO=bar
 VUE_APP_SECRET=secret
 ```
 
-Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
+Загруженные переменные будут доступны для всех команд `vue-cli-service`, плагинов и зависимостей.
 
 ## Режимы работы
 
-**Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
+**Режим работы** — важная часть проектов Vue CLI. По умолчанию, есть три режима работы:
 
-- `development` is used by `vue-cli-service serve`
-- `production` is used by `vue-cli-service build` and `vue-cli-service test:e2e`
-- `test` is used by `vue-cli-service test:unit`
+- `development` используется `vue-cli-service serve`
+- `production` используется `vue-cli-service build` и `vue-cli-service test:e2e`
+- `test` используется `vue-cli-service test:unit`
 
 Note that a mode is different from `NODE_ENV`, as a mode can contain multiple environment variables. That said, each mode does set `NODE_ENV` to the same value by default - for example, `NODE_ENV` will be set to `"development"` in development mode.
 
@@ -75,7 +75,7 @@ In addition to `VUE_APP_*` variables, there are also two special variables that 
 All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#interpolation).
 
 ::: tip Совет
-Вы можете добавлять вычисляемые переменные окружения в файле `vue.config.js`. Он по-прежнему должны начинаться с префикса `VUE_APP_`. Это может быть полезным для получени информации о версии `process.env.VUE_APP_VERSION = require('./package.json').version`
+Можно добавлять вычисляемые переменные окружения в `vue.config.js`. Они по-прежнему должны именоваться начиная с префикса `VUE_APP_`. Они могут быть полезны например для получения информации о версии `process.env.VUE_APP_VERSION = require('./package.json').version`
 :::
 
 ## Переменные только для локального окружения
