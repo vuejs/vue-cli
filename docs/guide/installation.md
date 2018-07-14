@@ -9,7 +9,7 @@ If you have the previous `vue-cli` (1.x or 2.x) package installed globally, you 
 Vue CLI requires [Node.js](https://nodejs.org/) version 8.9 or above (8.11.0+ recommended). You can manage multiple versions of Node on the same machine with [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
 :::
 
-To install the new package, use on of those commands:
+To install the new package, use one of those commands:
 
 ``` bash
 npm install -g @vue/cli
