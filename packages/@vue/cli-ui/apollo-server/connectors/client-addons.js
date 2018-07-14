@@ -56,7 +56,7 @@ function serve (req, res) {
     const resolvedPath = require.resolve(addon.path)
     const basePath = resolveModuleRoot(resolvedPath)
     if (basePath) {
-      res.sendFile(path.join(basePath, file))
+      res.sendFile(path.join(basePath, file), { maxAge: 0 })
     } else {
       res.status(404)
       res.send(`File not found (resolved: ${resolvedPath}`)

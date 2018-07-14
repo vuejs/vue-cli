@@ -518,7 +518,7 @@ function serveFile ({ pluginId, projectId = null, file }, res) {
 
   const basePath = pluginId === '.' ? baseFile : dependencies.getPath({ id: decodeURIComponent(pluginId), file: baseFile })
   if (basePath) {
-    res.sendFile(path.join(basePath, file))
+    res.sendFile(path.join(basePath, file), { maxAge: 0 })
     return
   }
 
