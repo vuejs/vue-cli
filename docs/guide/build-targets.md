@@ -70,7 +70,7 @@ Web Component mode does not support IE11 and below. [More details](https://githu
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
 :::
 
-You can build a single entry as a library using
+You can build a single entry as a web component using
 
 ```
 vue-cli-service build --target wc --name my-element [entry]
