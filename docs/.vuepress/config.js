@@ -11,7 +11,7 @@ module.exports = {
   themeConfig: {
     repo: 'vuejs/vue-cli',
     docsDir: 'docs',
-    docsBranch: 'dev',
+    docsBranch: 'docs',
     editLinks: true,
     sidebarDepth: 3,
     locales: {
