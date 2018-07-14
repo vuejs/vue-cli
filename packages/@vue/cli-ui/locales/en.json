@@ -194,7 +194,7 @@
           "dependency-install": "Installing {arg0}...",
           "dependency-uninstall": "Uninstalling {arg0}...",
           "dependency-update": "Updating {arg0}...",
-          "dependencies-update": "Updating {arg0} plugins..."
+          "dependencies-update": "Updating {arg0} packages..."
         }
       },
       "types": {
