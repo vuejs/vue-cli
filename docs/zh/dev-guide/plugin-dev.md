@@ -260,7 +260,7 @@ module.exports = api => {
   })
 
   // 当所有的提示符都完成之后，将你的插件注入到
-  // 即将传递给 Generator 的选项中
+  // 即将传递给 Generator 的 options 中
   api.onPromptComplete((answers, options) => {
     if (answers.features.includes('my-feature')) {
       options.plugins['vue-cli-plugin-my-feature'] = {
@@ -275,7 +275,7 @@ module.exports = api => {
 
 第三方插件通常会在一个项目创建完毕后被手动安装，且用户将会通过调用 `vue invoke` 来初始化这个插件。如果这个插件在其根目录包含一个 `prompt.js`，那么它将会在被调用的时候使用。这个文件应该导出一个用于 Inquirer.js 的[问题](https://github.com/SBoudrias/Inquirer.js#question)的数组。这些被解析的答案对象会作为选项被传递给插件的 generator。
 
-或者，用户可以通过在命令行传递选项来忽略提示符直接初始化插件，比如：
+或者，用户可以通过在命令行传递选项来跳过提示符直接初始化插件，比如：
 
 ``` bash
 vue invoke my-plugin --mode awesome
@@ -283,11 +283,11 @@ vue invoke my-plugin --mode awesome
 
 ## 发布插件
 
-为了让一个 CLI 插件能够被其它开发者使用，你最好遵循 `vue-cli-plugin-<name>` 的命名约定将其发布到 npm 上。插件遵循命名约定之后就可以：
+为了让一个 CLI 插件能够被其它开发者使用，你必须遵循 `vue-cli-plugin-<name>` 的命名约定将其发布到 npm 上。插件遵循命名约定之后就可以：
 
-- 能够被 `@vue/cli-service` 发现；
-- 能够被其它开发者搜索到；
-- 能够通过 `vue add <name>` 或 `vue invoke <name>` 安装下来。
+- 被 `@vue/cli-service` 发现；
+- 被其它开发者搜索到；
+- 通过 `vue add <name>` 或 `vue invoke <name>` 安装下来。
 
 ## 开发核心插件的注意事项
 
