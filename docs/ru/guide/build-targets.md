@@ -119,12 +119,12 @@ dist/foo.0.js        17.27 kb                    8.83 kb
 dist/foo.1.js        5.24 kb                     1.64 kb
 ```
 
-Now on the page, the user only needs to include Vue and the entry file:
+Теперь на странице пользователю необходимо только подключить Vue и файл точки входа:
 
 ``` html
 <script src="https://unpkg.com/vue"></script>
 <script src="path/to/foo.min.js"></script>
 
-<!-- foo-one's implementation chunk is auto fetched when it's used -->
+<!-- чанк с реализацией foo-one загрузится автоматически когда потребуется -->
 <foo-one></foo-one>
 ```
