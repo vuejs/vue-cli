@@ -273,7 +273,7 @@ module.exports = api => {
 
 #### 第三方插件的提示符
 
-第三方插件通常会在一个项目创建完毕后被手动安装，且用户将会通过调用 `vue invoke` 来初始化这个插件。如果这个插件在其根目录包含一个 `prompt.js`，那么它将会在被调用的时候使用。这个文件应该导出一个用于 Inquirer.js 的[问题](https://github.com/SBoudrias/Inquirer.js#question)的数组。这些被解析的答案对象会作为选项被传递给插件的 generator。
+第三方插件通常会在一个项目创建完毕后被手动安装，且用户将会通过调用 `vue invoke` 来初始化这个插件。如果这个插件在其根目录包含一个 `prompt.js`，那么它将会用在该插件被初始化调用的时候。这个文件应该导出一个用于 Inquirer.js 的[问题](https://github.com/SBoudrias/Inquirer.js#question)的数组。这些被解析的答案对象会作为选项被传递给插件的 generator。
 
 或者，用户可以通过在命令行传递选项来跳过提示符直接初始化插件，比如：
 
