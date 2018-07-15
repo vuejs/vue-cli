@@ -516,10 +516,14 @@ function serveFile ({ pluginId, projectId = null, file }, res) {
     }
   }
 
-  const basePath = pluginId === '.' ? baseFile : dependencies.getPath({ id: decodeURIComponent(pluginId), file: baseFile })
-  if (basePath) {
-    res.sendFile(path.join(basePath, file), { maxAge: 0 })
-    return
+  if (pluginId) {
+    const basePath = pluginId === '.' ? baseFile : dependencies.getPath({ id: decodeURIComponent(pluginId), file: baseFile })
+    if (basePath) {
+      res.sendFile(path.join(basePath, file))
+      return
+    }
+  } else {
+    console.log('serve issue', 'pluginId:', pluginId, 'projectId:', projectId, 'file:', file)
   }
 
   res.status(404)
@@ -527,7 +531,7 @@ function serveFile ({ pluginId, projectId = null, file }, res) {
 }
 
 function serve (req, res) {
-  const { pluginId, 0: file } = req.params
+  const { id: pluginId, 0: file } = req.params
   serveFile({ pluginId, file: path.join('ui-public', file) }, res)
 }
 
