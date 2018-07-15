@@ -436,7 +436,7 @@ function update (id, context) {
 
 async function updateAll (context) {
   return progress.wrap('plugins-update', context, async setProgress => {
-    const plugins = list(cwd.get(), context, { resetApi: false })
+    const plugins = await list(cwd.get(), context, { resetApi: false })
     let updatedPlugins = []
     for (const plugin of plugins) {
       const version = await dependencies.getVersion(plugin, context)

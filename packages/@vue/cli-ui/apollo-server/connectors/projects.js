@@ -380,7 +380,7 @@ async function open (id, context) {
   // Reset locales
   locales.reset(context)
   // Load plugins
-  plugins.list(project.path, context)
+  await plugins.list(project.path, context)
 
   // Date
   context.db.get('projects').find({ id }).assign({
