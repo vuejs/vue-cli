@@ -427,7 +427,7 @@ function update (id, context) {
     })
 
     await resetPluginApi({ file: cwd.get() }, context)
-    dependencies.invalidatePackage(id, context)
+    dependencies.invalidatePackage({ id }, context)
 
     currentPluginId = null
     return findOne({ id, file: cwd.get() }, context)
@@ -442,7 +442,7 @@ async function updateAll (context) {
       const version = await dependencies.getVersion(plugin, context)
       if (version.current !== version.wanted) {
         updatedPlugins.push(plugin)
-        dependencies.invalidatePackage(plugin.id, context)
+        dependencies.invalidatePackage({ id: plugin.id }, context)
       }
     }
 

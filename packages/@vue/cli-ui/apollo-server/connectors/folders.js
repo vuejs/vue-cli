@@ -112,7 +112,7 @@ function writePackage ({ file, data }, context) {
   fs.outputJsonSync(path.join(file, 'package.json'), data, {
     spaces: 2
   })
-  invalidatePackage(file)
+  invalidatePackage(file, context)
   return true
 }
 
