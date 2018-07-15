@@ -167,4 +167,24 @@ Please refer on the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Surge
 
-> TODO | Open to contribution.
+To deploy with [Surge](http://surge.sh/) the steps are very straightforward. 
+
+First you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
+
+```
+npm install --global surge
+```
+
+Then cd into the `dist/` folder of your project and then run `surge` and follow the screen prompt. It will ask you to set up email and password if it is the first time you are using Surge. Confirm the project folder and type in your preferred domain and watch your project being deployed such as below.
+
+```   
+            project: /Users/user/Documents/myawesomeproject/dist/
+         domain: myawesomeproject.surge.sh
+         upload: [====================] 100% eta: 0.0s (31 files, 494256 bytes)
+            CDN: [====================] 100%
+             IP: **.**.***.***
+
+   Success! - Published to myawesomeproject.surge.sh
+```
+
+Verify your project is successfully published by Surge by visiting `myawesomeproject.surge.sh`, vola! For more setup details such as custom domains, you can visit [Surge's help page](https://surge.sh/help/).
