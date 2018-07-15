@@ -427,7 +427,7 @@ function update (id, context) {
     })
 
     await resetPluginApi({ file: cwd.get() }, context)
-    dependencies.invalidatePackage(id, context)
+    dependencies.invalidatePackage({ id }, context)
 
     currentPluginId = null
     return findOne({ id, file: cwd.get() }, context)
@@ -436,13 +436,13 @@ function update (id, context) {
 
 async function updateAll (context) {
   return progress.wrap('plugins-update', context, async setProgress => {
-    const plugins = list(cwd.get(), context, { resetApi: false })
+    const plugins = await list(cwd.get(), context, { resetApi: false })
     let updatedPlugins = []
     for (const plugin of plugins) {
       const version = await dependencies.getVersion(plugin, context)
       if (version.current !== version.wanted) {
         updatedPlugins.push(plugin)
-        dependencies.invalidatePackage(plugin.id, context)
+        dependencies.invalidatePackage({ id: plugin.id }, context)
       }
     }
 
@@ -516,10 +516,14 @@ function serveFile ({ pluginId, projectId = null, file }, res) {
     }
   }
 
-  const basePath = pluginId === '.' ? baseFile : dependencies.getPath({ id: decodeURIComponent(pluginId), file: baseFile })
-  if (basePath) {
-    res.sendFile(path.join(basePath, file))
-    return
+  if (pluginId) {
+    const basePath = pluginId === '.' ? baseFile : dependencies.getPath({ id: decodeURIComponent(pluginId), file: baseFile })
+    if (basePath) {
+      res.sendFile(path.join(basePath, file))
+      return
+    }
+  } else {
+    console.log('serve issue', 'pluginId:', pluginId, 'projectId:', projectId, 'file:', file)
   }
 
   res.status(404)
@@ -527,7 +531,7 @@ function serveFile ({ pluginId, projectId = null, file }, res) {
 }
 
 function serve (req, res) {
-  const { pluginId, 0: file } = req.params
+  const { id: pluginId, 0: file } = req.params
   serveFile({ pluginId, file: path.join('ui-public', file) }, res)
 }
 

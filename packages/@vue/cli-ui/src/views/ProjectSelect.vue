@@ -51,6 +51,7 @@
             :label="$route.query.action || $t('org.vue.views.project-select.buttons.import')"
             class="big primary import-project"
             :disabled="!folderCurrent.isPackage"
+            :loading="busy"
             @click="importProject()"
           />
         </div>
@@ -118,7 +119,8 @@ export default {
       folderCurrent: {},
       tab: undefined,
       hideTabs: !!this.$route.query.hideTabs,
-      showNoModulesModal: false
+      showNoModulesModal: false,
+      busy: false
     }
   },
 
@@ -144,6 +146,8 @@ export default {
     },
 
     async importProject () {
+      this.busy = true
+      await this.$nextTick()
       try {
         await this.$apollo.mutate({
           mutation: PROJECT_IMPORT,
@@ -159,6 +163,7 @@ export default {
         if (e.graphQLErrors && e.graphQLErrors.some(e => e.message === 'NO_MODULES')) {
           this.showNoModulesModal = true
         }
+        this.busy = false
       }
     }
   }

@@ -2,7 +2,6 @@ const path = require('path')
 const fs = require('fs-extra')
 const LRU = require('lru-cache')
 const winattr = require('@akryum/winattr')
-const readPkg = require('read-pkg')
 
 const hiddenPrefix = '.'
 const isPlatformWindows = process.platform.indexOf('win') === 0
@@ -101,8 +100,9 @@ function readPackage (file, context, force = false) {
       return cachedValue
     }
   }
-  if (fs.existsSync(path.join(file, 'package.json'))) {
-    const pkg = readPkg.sync({ cwd: file })
+  const pkgFile = path.join(file, 'package.json')
+  if (fs.existsSync(pkgFile)) {
+    const pkg = fs.readJsonSync(pkgFile)
     pkgCache.set(file, pkg)
     return pkg
   }
@@ -112,7 +112,7 @@ function writePackage ({ file, data }, context) {
   fs.outputJsonSync(path.join(file, 'package.json'), data, {
     spaces: 2
   })
-  invalidatePackage(file)
+  invalidatePackage(file, context)
   return true
 }
 

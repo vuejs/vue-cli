@@ -233,7 +233,7 @@ function update ({ id }, context) {
       icon: 'done'
     })
 
-    invalidatePackage(id)
+    invalidatePackage({ id }, context)
 
     return findOne(id)
   })
@@ -247,7 +247,7 @@ function updateAll (context) {
       const version = await getVersion(dep, context)
       if (version.current !== version.wanted) {
         updatedDeps.push(dep)
-        invalidatePackage(dep.id, context)
+        invalidatePackage({ id: dep.id }, context)
       }
     }
 

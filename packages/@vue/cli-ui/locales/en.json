@@ -194,7 +194,7 @@
           "dependency-install": "Installing {arg0}...",
           "dependency-uninstall": "Uninstalling {arg0}...",
           "dependency-update": "Updating {arg0}...",
-          "dependencies-update": "Updating {arg0} plugins..."
+          "dependencies-update": "Updating {arg0} packages..."
         }
       },
       "types": {
@@ -292,7 +292,7 @@
                   "subtitle": "Git repo, for example 'username/repo'. You can also prefix with 'gitlab:' or 'bitbucket:'."
                 },
                 "options": "Other options",
-                "clone": "Private repository",
+                "clone": "Cloner/Private repository",
                 "cancel": "Cancel",
                 "done": "Done"
               },
