@@ -25,7 +25,10 @@ class ModernModePlugin {
         // get stats, write to disk
         await fs.ensureDir(this.targetDir)
         const htmlName = path.basename(data.plugin.options.filename)
-        const tempFilename = path.join(this.targetDir, `legacy-assets-${htmlName}.json`)
+        // Watch out for output files in sub directories
+        const htmlPath = path.dirname(data.plugin.options.filename)
+        const tempFilename = path.join(this.targetDir, htmlPath, `legacy-assets-${htmlName}.json`)
+        await fs.mkdirp(path.dirname(tempFilename))
         await fs.writeFile(tempFilename, JSON.stringify(data.body))
         cb()
       })
@@ -52,7 +55,9 @@ class ModernModePlugin {
 
         // inject links for legacy assets as <script nomodule>
         const htmlName = path.basename(data.plugin.options.filename)
-        const tempFilename = path.join(this.targetDir, `legacy-assets-${htmlName}.json`)
+        // Watch out for output files in sub directories
+        const htmlPath = path.dirname(data.plugin.options.filename)
+        const tempFilename = path.join(this.targetDir, htmlPath, `legacy-assets-${htmlName}.json`)
         const legacyAssets = JSON.parse(await fs.readFile(tempFilename, 'utf-8'))
           .filter(a => a.tagName === 'script' && a.attributes)
         legacyAssets.forEach(a => { a.attributes.nomodule = '' })
