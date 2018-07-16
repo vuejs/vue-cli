@@ -35,7 +35,23 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 ### GitHub Pages
 
-> TODO | Open to contribution.
+There are a few different ways to deploy as described by [GitHub Pages documentation](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/).  One way is to publish using a `/docs` folder on `master` branch.
+
+Create an initial `vue.config.js` file to [update the `outputDir`](https://cli.vuejs.org/config/#outputdir) value to match `docs`. Typically, your static website will be hosted on https://yourUserName.github.io/yourProjectName, so you will also want to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
+
+  ```javascript
+  // vue.config.js file to be place in the root of your repository
+  // make sure you update `yourProjectName` with the name of your GitHub project
+
+  module.exports = {
+    baseUrl: process.env.NODE_ENV === 'production'
+      ? '/yourProjectName/'
+      : '/',
+    outputDir: 'docs'
+  }
+  ```
+
+Generate the production build in `docs` directory with `npm run build`. Commit the `vue.config.js` file and the built files `docs/*`, then push to your repository's `master` branch. On GitHub, configure your repository's setting to [Publish your GitHub Pages site from a `docs` folder on your `master` branch](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch)
 
 ### GitLab Pages
 
