@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.0.0-rc.4",
+  "version": "3.0.0-rc.5",
   "scripts": {
     "serve": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4000/graphql vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^3.0.0-rc.4",
+    "@vue/cli-shared-utils": "^3.0.0-rc.5",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
     "deepmerge": "^2.1.1",
@@ -56,11 +56,11 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.4",
-    "@vue/cli-plugin-e2e-cypress": "^3.0.0-rc.4",
-    "@vue/cli-plugin-eslint": "^3.0.0-rc.4",
-    "@vue/cli-service": "^3.0.0-rc.4",
-    "@vue/eslint-config-standard": "^3.0.0-rc.4",
+    "@vue/cli-plugin-babel": "^3.0.0-rc.5",
+    "@vue/cli-plugin-e2e-cypress": "^3.0.0-rc.5",
+    "@vue/cli-plugin-eslint": "^3.0.0-rc.5",
+    "@vue/cli-service": "^3.0.0-rc.5",
+    "@vue/eslint-config-standard": "^3.0.0-rc.5",
     "@vue/ui": "^0.4.6",
     "ansi_up": "^3.0.0",
     "cross-env": "^5.1.5",

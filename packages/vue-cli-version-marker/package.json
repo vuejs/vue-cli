@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-version-marker",
-  "version": "3.0.0-rc.4",
+  "version": "3.0.0-rc.5",
   "description": "version marker for @vue/cli",
   "author": "Evan You",
   "license": "MIT"
