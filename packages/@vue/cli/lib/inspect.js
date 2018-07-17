@@ -10,7 +10,11 @@ module.exports = function inspect (paths, args) {
     servicePath = resolve.sync('@vue/cli-service', { basedir: cwd })
   } catch (e) {
     const { error } = require('@vue/cli-shared-utils')
-    error(`Failed to locate @vue/cli-service. Make sure you are in the right directory.`)
+    error(
+      `Failed to locate @vue/cli-service.\n` +
+      `Note that \`vue inspect\` is an alias of \`vue-cli-service inspect\`\n` +
+      `and can only be used in a project where @vue/cli-service is locally installed.`
+    )
     process.exit(1)
   }
   const binPath = path.resolve(servicePath, '../../bin/vue-cli-service.js')
