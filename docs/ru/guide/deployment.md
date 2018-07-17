@@ -12,8 +12,8 @@ The `dist` directory is meant to be served by an HTTP server, so it will not wor
 
 ``` bash
 npm install -g serve
-# -s flag means serve it in Single-Page Application mode
-# which deals with the routing problem below
+# флаг -s означает запуск serve в режиме Single-Page Application
+# который решает проблему маршрутизации, описанную ниже
 serve -s dist
 ```
 
@@ -35,7 +35,53 @@ serve -s dist
 
 ### GitHub Pages
 
-> TODO | Присылайте пулл-реквесты.
+1. Установите корректное значение `baseUrl` в `vue.config.js`.
+
+    Если вы публикуете по адресу `https://<USERNAME>.github.io/`, вы можете опустить `baseUrl`, так как оно по умолчанию `"/"`.
+
+    Если вы публикуете по адресу `https://<USERNAME>.github.io/<REPO>/`, (т.е. ваш репозиторий находится по адресу `https://github.com/<USERNAME>/<REPO>`), установите `baseUrl` в значение `"/<REPO>/"`. Например, если ваш репозиторий называется "my-project", то ваш `vue.config.js` будет выглядеть примерно так:
+
+    ``` js
+    module.exports = {
+      baseUrl: process.env.NODE_ENV === 'production'
+        ? '/my-project/'
+        : '/'
+    }
+    ```
+
+2. Внутри вашего проекта создайте `deploy.sh` со следующим содержимым (при необходимости расскоментировав подсвеченные строки) и запустите его для публикации:
+
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
+
+    # остановить публикацию при ошибках
+    set -e
+
+    # сборка
+    npm run docs:build
+
+    # переход в каталог сборки
+    cd docs/.vuepress/dist
+
+    # если вы публикуете на пользовательский домен
+    # echo 'www.example.com' > CNAME
+
+    git init
+    git add -A
+    git commit -m 'deploy'
+
+    # если вы публикуете по адресу https://<USERNAME>.github.io
+    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+
+    # если вы публикуете по адресу https://<USERNAME>.github.io/<REPO>
+    # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
+
+    cd -
+    ```
+
+    ::: tip Совет
+    Вы также можете запустить скрипт выше в вашей конфигурации CI чтобы включить автоматическую публикацию на каждый push в репозиторий.
+    :::
 
 ### GitLab Pages
 
@@ -78,17 +124,18 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 ### Netlify
 
-> TODO | Присылайте пулл-реквесты.
+1. На сайте Netlify добавьте новый проект из GitHub со следующими настройками:
+
+    - **Build Command:** `npm run build` или `yarn build`
+    - **Publish directory:** `dist`
+
+2. Нажмите кнопку публикации!
 
 Также посмотрите [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
 ### Amazon S3
 
 Плагин [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
-
-### Azure
-
-> TODO | Присылайте пулл-реквесты.
 
 ### Firebase
 
@@ -167,4 +214,24 @@ Please refer on the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Surge
 
-> TODO | Присылайте пулл-реквесты.
+Публикация с помощью [Surge](http://surge.sh/) очень проста.
+
+Сначала, вам потребуется собрать проект командой `npm run build`. И, если вы не установили утилиту Surge для командной строки, то вы можете сделать это командой:
+
+```
+npm install --global surge
+```
+
+Затем перейдите в каталог `dist/` вашего проекта, запустите `surge` и следуйте подсказкам на экране. Вас попросят указать электронную почту и пароль, если вы впервые используете Surge. Подтвердите каталог проекта, введите нужный домер и посмотрите как публикуется ваш проект, как примерно выглядит ниже.
+
+```
+            project: /Users/user/Documents/myawesomeproject/dist/
+         domain: myawesomeproject.surge.sh
+         upload: [====================] 100% eta: 0.0s (31 files, 494256 bytes)
+            CDN: [====================] 100%
+             IP: **.**.***.***
+
+   Success! - Published to myawesomeproject.surge.sh
+```
+
+Убедитесь, что ваш проект успешно опубликован с помощью Surge открыв в браузере `myawesomeproject.surge.sh`! Дополнительные сведения о настройке, такие как конфигурация пользовательских доменов, можно найти на [странице справки Surge](https://surge.sh/help/).
