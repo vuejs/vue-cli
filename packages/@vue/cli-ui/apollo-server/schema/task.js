@@ -18,6 +18,8 @@ extend type Mutation {
   taskStop (id: ID!): Task
   taskLogsClear (id: ID!): Task
   taskOpen (id: ID!): Boolean
+  taskSaveParameters (id: ID!): [Prompt]
+  taskRestoreParameters (id: ID!): [Prompt]
 }
 
 extend type Subscription {
@@ -84,7 +86,9 @@ exports.resolvers = {
     taskRun: (root, { id }, context) => tasks.run(id, context),
     taskStop: (root, { id }, context) => tasks.stop(id, context),
     taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context),
-    taskOpen: (root, { id }, context) => tasks.open(id, context)
+    taskOpen: (root, { id }, context) => tasks.open(id, context),
+    taskSaveParameters: (root, { id }, context) => tasks.saveParameters({ id }, context),
+    taskRestoreParameters: (root, { id }, context) => tasks.restoreParameters({ id }, context)
   },
 
   Subscription: {

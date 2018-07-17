@@ -1,0 +1,7 @@
+#import "./promptFragment.gql"
+
+mutation taskRestoreParameters ($id: ID!) {
+  taskRestoreParameters (id: $id) {
+    ...prompt
+  }
+}

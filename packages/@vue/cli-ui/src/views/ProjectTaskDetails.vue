@@ -108,25 +108,20 @@
       v-if="showParameters"
       :title="$t('org.vue.views.project-task-details.parameters')"
       class="medium anchor"
-      @close="showParameters = false"
+      @close="restoreParameters()"
     >
       <div class="default-body">
         <PromptsList
           :prompts="visiblePrompts"
           @answer="answerPrompt"
         />
-
-        <div class="vue-ui-text info banner">
-          <VueIcon icon="info" class="big"/>
-          <span>{{ $t('org.vue.views.project-task-details.parameters-info') }}</span>
-        </div>
       </div>
 
       <div slot="footer" class="actions">
         <VueButton
           class="primary big"
-          :label="$t('org.vue.views.project-task-details.actions.close')"
-          @click="showParameters = false"
+          :label="$t('org.vue.views.project-task-details.actions.save')"
+          @click="saveParameters()"
         />
       </div>
     </VueModal>
@@ -143,6 +138,8 @@ import TASK_STOP from '../graphql/taskStop.gql'
 import TASK_LOGS_CLEAR from '../graphql/taskLogsClear.gql'
 import TASK_LOG_ADDED from '../graphql/taskLogAdded.gql'
 import TASK_OPEN from '../graphql/taskOpen.gql'
+import TASK_SAVE_PARAMETERS from '../graphql/taskSaveParameters.gql'
+import TASK_RESTORE_PARAMETERS from '../graphql/taskRestoreParameters.gql'
 
 export default {
   name: 'ProjectTaskDetails',
@@ -299,6 +296,26 @@ export default {
           id: this.id
         }
       })
+    },
+
+    async saveParameters () {
+      await this.$apollo.mutate({
+        mutation: TASK_SAVE_PARAMETERS,
+        variables: {
+          id: this.id
+        }
+      })
+      this.showParameters = false
+    },
+
+    async restoreParameters () {
+      await this.$apollo.mutate({
+        mutation: TASK_RESTORE_PARAMETERS,
+        variables: {
+          id: this.id
+        }
+      })
+      this.showParameters = false
     }
   }
 }

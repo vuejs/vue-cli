@@ -133,9 +133,12 @@ function findOne (id, context) {
 }
 
 function getSavedData (id, context) {
-  return context.db.get('tasks').find({
+  let data = context.db.get('tasks').find({
     id
   }).value()
+  // Clone
+  data = JSON.parse(JSON.stringify(data))
+  return data
 }
 
 function updateSavedData (data, context) {
@@ -147,17 +150,7 @@ function updateSavedData (data, context) {
 }
 
 async function getPrompts (id, context) {
-  const task = findOne(id, context)
-  if (task) {
-    await prompts.reset()
-    task.prompts.forEach(prompts.add)
-    const data = getSavedData(id, context)
-    if (data) {
-      await prompts.setAnswers(data.answers)
-    }
-    await prompts.start()
-    return prompts.list()
-  }
+  return restoreParameters({ id }, context)
 }
 
 function updateOne (data, context) {
@@ -247,12 +240,6 @@ async function run (id, context) {
     // Output colors
     // See: https://www.npmjs.com/package/supports-color
     process.env.FORCE_COLOR = 1
-
-    // Save parameters
-    updateSavedData({
-      id,
-      answers
-    }, context)
 
     // Plugin API
     if (task.onBeforeRun) {
@@ -523,6 +510,34 @@ function logPipe (action) {
   }
 }
 
+function saveParameters ({ id }, context) {
+  // Answers
+  const answers = prompts.getAnswers()
+
+  // Save parameters
+  updateSavedData({
+    id,
+    answers
+  }, context)
+
+  return prompts.list()
+}
+
+async function restoreParameters ({ id }, context) {
+  const task = findOne(id, context)
+  if (task) {
+    await prompts.reset()
+    task.prompts.forEach(prompts.add)
+    const data = getSavedData(id, context)
+    if (data) {
+      await prompts.setAnswers(data.answers)
+    }
+    await prompts.start()
+  }
+
+  return prompts.list()
+}
+
 module.exports = {
   list,
   findOne,
@@ -531,5 +546,7 @@ module.exports = {
   stop,
   updateOne,
   clearLogs,
-  open
+  open,
+  saveParameters,
+  restoreParameters
 }
