@@ -16,6 +16,7 @@
           data-testid="run-task"
           @click="runTask()"
         />
+
         <VueButton
           v-else
           icon-left="stop"
@@ -25,43 +26,14 @@
           @click="stopTask()"
         />
 
-        <VueDropdown
-          v-if="task.prompts.length"
-          placement="bottom"
-        >
-          <VueButton
-            slot="trigger"
-            icon-left="settings"
-            class="icon-button primary"
-            :disabled="task.status === 'running'"
-            v-tooltip="$t('org.vue.views.project-task-details.parameters')"
-            @click="showParameters = true"
-          />
-
-          <div class="task-settings">
-            <div class="pane-toolbar">
-              <VueIcon icon="settings"/>
-              <div class="title">{{ $t('org.vue.views.project-task-details.parameters') }}</div>
-              <VueButton
-                class="icon-button flat"
-                icon-left="close"
-                v-tooltip="$t('org.vue.views.project-task-details.actions.close')"
-                v-close-popover
-              />
-            </div>
-
-            <PromptsList
-              :prompts="visiblePrompts"
-              class="prompts"
-              @answer="answerPrompt"
-            />
-
-            <div class="vue-ui-text info banner">
-              <VueIcon icon="info" class="big"/>
-              <span>{{ $t('org.vue.views.project-task-details.parameters-info') }}</span>
-            </div>
-          </div>
-        </VueDropdown>
+        <VueButton
+          slot="trigger"
+          icon-left="settings"
+          class="icon-button primary"
+          :disabled="task.status === 'running'"
+          v-tooltip="$t('org.vue.views.project-task-details.parameters')"
+          @click="showParameters = true"
+        />
 
         <div
           class="command"
@@ -131,6 +103,33 @@
         />
       </div>
     </template>
+
+    <VueModal
+      v-if="showParameters"
+      :title="$t('org.vue.views.project-task-details.parameters')"
+      class="medium anchor"
+      @close="showParameters = false"
+    >
+      <div class="default-body">
+        <PromptsList
+          :prompts="visiblePrompts"
+          @answer="answerPrompt"
+        />
+
+        <div class="vue-ui-text info banner">
+          <VueIcon icon="info" class="big"/>
+          <span>{{ $t('org.vue.views.project-task-details.parameters-info') }}</span>
+        </div>
+      </div>
+
+      <div slot="footer" class="actions">
+        <VueButton
+          class="primary big"
+          :label="$t('org.vue.views.project-task-details.actions.close')"
+          @click="showParameters = false"
+        />
+      </div>
+    </VueModal>
   </div>
 </template>
 
