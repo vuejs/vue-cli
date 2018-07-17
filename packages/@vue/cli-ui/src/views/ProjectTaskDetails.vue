@@ -74,7 +74,7 @@
         </VueGroup>
       </div>
 
-      <div class="content">
+      <div v-if="displayPriority >= 2" class="content">
         <TerminalView
           ref="terminal"
           :class="{
@@ -130,6 +130,7 @@
 
 <script>
 import Prompts from '../mixins/Prompts'
+import DisplayPriority from '../mixins/DisplayPriority'
 
 import TASK from '../graphql/task.gql'
 import TASK_LOGS from '../graphql/taskLogs.gql'
@@ -154,7 +155,8 @@ export default {
     Prompts({
       field: 'task',
       query: TASK
-    })
+    }),
+    DisplayPriority(2)
   ],
 
   metaInfo () {
@@ -192,6 +194,9 @@ export default {
           await this.$nextTick()
           this.currentView = data.task.defaultView
         }
+      },
+      skip () {
+        return this.displayPriority < 1
       }
     },
 
@@ -212,6 +217,9 @@ export default {
             data.taskLogs.logs.forEach(terminal.addLog)
           }
         }
+      },
+      skip () {
+        return this.displayPriority < 2
       }
     },
 
@@ -229,6 +237,9 @@ export default {
             const terminal = this.$refs.terminal
             terminal.addLog(data.taskLogAdded)
           }
+        },
+        skip () {
+          return this.displayPriority < 2
         }
       }
     }
@@ -254,6 +265,7 @@ export default {
       this.currentView = '_output'
       this.$_init = false
       this.open()
+      this.runDisplayPriority()
     }
   },
 
