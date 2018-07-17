@@ -35,7 +35,23 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 ### GitHub Pages
 
-> TODO | Open to contribution.
+Есть несколько способ публикации, описанных в [документации GitHub Pages](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/). Один из способов — публикация с использованием каталога `/docs` на ветке `master`.
+
+Создайте файл `vue.config.js` чтобы установить опцию [`outputDir`](https://cli.vuejs.org/config/#outputdir) в значение `docs`. Обычно, ваш статический веб-сайт будет располагаться по адресу `https://yourUserName.github.io/yourProjectName`, поэтому вы также заходите обновить значение опции [`BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) для соответствия:
+
+  ```javascript
+  // файл vue.config.js должен располагаться в корне вашего репозитория
+  // убедитесь что обновили `yourProjectName` именем вашего проекта GitHub
+
+  module.exports = {
+    baseUrl: process.env.NODE_ENV === 'production'
+      ? '/yourProjectName/'
+      : '/',
+    outputDir: 'docs'
+  }
+  ```
+
+Сгенерируйте сборку для production в каталоге `docs` командой `npm run build`. Закоммитьте файл `vue.config.js` и собранные файлы `docs/*`, затем сделайте push в ваш репозиторий на ветку `master`. В GitHub настройте для вашего репозитория [публикацию вашего сайта в GitHub Pages из каталога `docs` на ветке `master`](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch)
 
 ### GitLab Pages
 
@@ -167,4 +183,24 @@ Please refer on the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Surge
 
-> TODO | Open to contribution.
+Публикация с помощью [Surge](http://surge.sh/) очень проста. 
+
+Сначала, вам потребуется собрать проект командой `npm run build`. И, если вы не установили утилиту Surge для командной строки, то вы можете сделать это командой:
+
+```
+npm install --global surge
+```
+
+Затем перейдите в каталог `dist/` вашего проекта, запустите `surge` и следуйте подсказкам на экране. Вас попросят указать электронную почту и пароль, если вы впервые используете Surge. Подтвердите каталог проекта, введите нужный домер и посмотрите как публикуется ваш проект, как примерно выглядит ниже.
+
+```   
+            project: /Users/user/Documents/myawesomeproject/dist/
+         domain: myawesomeproject.surge.sh
+         upload: [====================] 100% eta: 0.0s (31 files, 494256 bytes)
+            CDN: [====================] 100%
+             IP: **.**.***.***
+
+   Success! - Published to myawesomeproject.surge.sh
+```
+
+Убедитесь, что ваш проект успешно опубликован с помощью Surge открыв в браузере `myawesomeproject.surge.sh`! Дополнительные сведения о настройке, такие как конфигурация пользовательских доменов, можно найти на [странице справки Surge](https://surge.sh/help/).
