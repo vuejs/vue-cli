@@ -415,7 +415,7 @@ class PluginApi {
    * Get current working directory.
    */
   getCwd () {
-    return this.cwd()
+    return this.cwd
   }
 
   /**
