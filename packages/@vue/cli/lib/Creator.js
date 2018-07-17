@@ -265,7 +265,9 @@ module.exports = class Creator extends EventEmitter {
     let preset
     const savedPresets = loadOptions().presets || {}
 
-    if (name.endsWith('.json')) {
+    if (name in savedPresets) {
+      preset = savedPresets[name]
+    } else if (name.endsWith('.json')) {
       preset = await fs.readJson(name)
     } else if (name.includes('/')) {
       logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
@@ -278,8 +280,6 @@ module.exports = class Creator extends EventEmitter {
         error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
         throw e
       }
-    } else {
-      preset = savedPresets[name]
     }
 
     // use default preset if user has not overwritten it
