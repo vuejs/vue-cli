@@ -170,6 +170,14 @@ module.exports = class Creator extends EventEmitter {
       await cb()
     }
 
+    // generate README.md
+    stopSpinner()
+    log()
+    logWithSpinner('📄', 'Generating README.md...')
+    await writeFileTree(context, {
+      'README.md': generateReadme(generator.pkg, packageManager)
+    })
+
     // commit initial state
     let gitCommitFailed = false
     if (shouldInitGit) {
@@ -185,14 +193,6 @@ module.exports = class Creator extends EventEmitter {
         gitCommitFailed = true
       }
     }
-
-    // generate README.md
-    stopSpinner()
-    log()
-    logWithSpinner('📄', 'Generating README.md...')
-    await writeFileTree(context, {
-      'README.md': generateReadme(generator.pkg, packageManager)
-    })
 
     // log instructions
     stopSpinner()

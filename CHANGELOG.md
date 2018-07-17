@@ -1,3 +1,29 @@
+# [3.0.0-rc.5](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.4...v3.0.0-rc.5) (2018-07-16)
+
+## cli-service
+
+#### Bug Fixes
+
+* **build:** modern plugin when building multi page applications with output in sub directories ([#1866](https://github.com/vuejs/vue-cli/issues/1866)) ([d3d827c](https://github.com/vuejs/vue-cli/commit/d3d827c))
+
+## cli-ui
+
+#### Bug Fixes
+
+* clearer clone preset option ([d589d35](https://github.com/vuejs/vue-cli/commit/d589d35))
+* invalidatePackage arguments ([8a09624](https://github.com/vuejs/vue-cli/commit/8a09624))
+* plugin file serve issue ([51afe59](https://github.com/vuejs/vue-cli/commit/51afe59))
+* remove read-pkg ([7ebaa8a](https://github.com/vuejs/vue-cli/commit/7ebaa8a))
+* typo ([5983842](https://github.com/vuejs/vue-cli/commit/5983842))
+* update all plugins ([4f910b1](https://github.com/vuejs/vue-cli/commit/4f910b1))
+* **deps:** read-pkg not in direct deps, closes [#1846](https://github.com/vuejs/vue-cli/issues/1846) ([9e0b0e1](https://github.com/vuejs/vue-cli/commit/9e0b0e1))
+* **serve:** force disable HTTP cache ([1ffcb21](https://github.com/vuejs/vue-cli/commit/1ffcb21))
+#### Features
+
+* **project-import:** loading on import button ([25171a5](https://github.com/vuejs/vue-cli/commit/25171a5))
+
+
+
 # [3.0.0-rc.4](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.3...v3.0.0-rc.4) (2018-07-13)
 
 ## babel-preset-app
@@ -456,7 +482,7 @@ but should not affect normal test cases
 
 
 
-# [3.0.0-beta.15](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2018-05-30)
+# [3.0.0-beta.15](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.12...v3.0.0-beta.15) (2018-05-30)
 
 ## cli
 
@@ -486,6 +512,7 @@ but should not affect normal test cases
 
 * **cli-service:** make devBaseUrl work properly in serve command ([#1405](https://github.com/vuejs/vue-cli/issues/1405)) ([04600e6](https://github.com/vuejs/vue-cli/commit/04600e6))
 * **unit-mocha:** ensure correct mode for webpack config ([e17f78c](https://github.com/vuejs/vue-cli/commit/e17f78c)), closes [#1389](https://github.com/vuejs/vue-cli/issues/1389)
+* fix caching dependency (close [#1384](https://github.com/vuejs/vue-cli/issues/1384)) ([9846cd5](https://github.com/vuejs/vue-cli/commit/9846cd5))
 #### Features
 
 * respect baseUrl during development ([a9e1286](https://github.com/vuejs/vue-cli/commit/a9e1286))
@@ -494,7 +521,15 @@ but should not affect normal test cases
 
 #### Bug Fixes
 
+* **ui:** add missing dependency ([3bcc511](https://github.com/vuejs/vue-cli/commit/3bcc511))
+* **ui:** fix beta.12 feedback ([#1386](https://github.com/vuejs/vue-cli/issues/1386)) ([a3b2be8](https://github.com/vuejs/vue-cli/commit/a3b2be8))
 * UI fixes ([#1397](https://github.com/vuejs/vue-cli/issues/1397)) ([4f39461](https://github.com/vuejs/vue-cli/commit/4f39461))
+
+## docs
+
+#### Features
+
+* add --copy option for vue-cli-service serve ([#1355](https://github.com/vuejs/vue-cli/issues/1355)) ([5e95b3d](https://github.com/vuejs/vue-cli/commit/5e95b3d))
 
 
 ### BREAKING CHANGES
@@ -502,29 +537,6 @@ but should not affect normal test cases
 * `devBaseUrl` option has been removed. `baseUrl` now works for
 both development and production. To use different paths for prod/dev, use
 conditional values based on `process.env.NODE_ENV` in `vue.config.js`.
-
-
-
-# [3.0.0-beta.14](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.12...v3.0.0-beta.14) (2018-05-29)
-
-## cli-service
-
-#### Bug Fixes
-
-* fix caching dependency (close [#1384](https://github.com/vuejs/vue-cli/issues/1384)) ([9846cd5](https://github.com/vuejs/vue-cli/commit/9846cd5))
-
-## cli-ui
-
-#### Bug Fixes
-
-* **ui:** add missing dependency ([3bcc511](https://github.com/vuejs/vue-cli/commit/3bcc511))
-* **ui:** fix beta.12 feedback ([#1386](https://github.com/vuejs/vue-cli/issues/1386)) ([a3b2be8](https://github.com/vuejs/vue-cli/commit/a3b2be8))
-
-## docs
-
-#### Features
-
-* add --copy option for vue-cli-service serve ([#1355](https://github.com/vuejs/vue-cli/issues/1355)) ([5e95b3d](https://github.com/vuejs/vue-cli/commit/5e95b3d))
 
 
 
