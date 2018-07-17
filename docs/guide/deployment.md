@@ -35,23 +35,53 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 ### GitHub Pages
 
-Есть несколько способ публикации, описанных в [документации GitHub Pages](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/). Один из способов — публикация с использованием каталога `/docs` на ветке `master`.
+1. Set correct `baseUrl` in `vue.config.js`.
 
-Создайте файл `vue.config.js` чтобы установить опцию [`outputDir`](https://cli.vuejs.org/config/#outputdir) в значение `docs`. Обычно, ваш статический веб-сайт будет располагаться по адресу `https://yourUserName.github.io/yourProjectName`, поэтому вы также заходите обновить значение опции [`BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) для соответствия:
+    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `baseUrl` as it defaults to `"/"`.
 
-  ```javascript
-  // файл vue.config.js должен располагаться в корне вашего репозитория
-  // убедитесь что обновили `yourProjectName` именем вашего проекта GitHub
+    If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `baseUrl` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
-  module.exports = {
-    baseUrl: process.env.NODE_ENV === 'production'
-      ? '/yourProjectName/'
-      : '/',
-    outputDir: 'docs'
-  }
-  ```
+    ``` js
+    module.exports = {
+      baseUrl: process.env.NODE_ENV === 'production'
+        ? '/my-project/'
+        : '/'
+    }
+    ```
 
-Сгенерируйте сборку для production в каталоге `docs` командой `npm run build`. Закоммитьте файл `vue.config.js` и собранные файлы `docs/*`, затем сделайте push в ваш репозиторий на ветку `master`. В GitHub настройте для вашего репозитория [публикацию вашего сайта в GitHub Pages из каталога `docs` на ветке `master`](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch)
+2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
+
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
+
+    # abort on errors
+    set -e
+
+    # build
+    npm run docs:build
+
+    # navigate into the build output directory
+    cd docs/.vuepress/dist
+
+    # if you are deploying to a custom domain
+    # echo 'www.example.com' > CNAME
+
+    git init
+    git add -A
+    git commit -m 'deploy'
+
+    # if you are deploying to https://<USERNAME>.github.io
+    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+
+    # if you are deploying to https://<USERNAME>.github.io/<REPO>
+    # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
+
+    cd -
+    ```
+
+    ::: tip
+    You can also run the above script in your CI setup to enable automatic deployment on each push.
+    :::
 
 ### GitLab Pages
 
@@ -94,17 +124,18 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 ### Netlify
 
-> TODO | Open to contribution.
+1. On Netlify, setup up a new project from GitHub with the following settings:
+
+    - **Build Command:** `npm run build` or `yarn build`
+    - **Publish directory:** `dist`
+
+2. Hit the deploy button!
 
 Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
 ### Amazon S3
 
 See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
-
-### Azure
-
-> TODO | Open to contribution.
 
 ### Firebase
 
@@ -167,7 +198,7 @@ If you want other Firebase CLI features you use on your project to be deployed, 
 
 You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
 
-Please refer on the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
+Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 
 ### Now
 
@@ -183,17 +214,17 @@ Please refer on the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Surge
 
-Публикация с помощью [Surge](http://surge.sh/) очень проста. 
+To deploy with [Surge](http://surge.sh/) the steps are very straightforward.
 
-Сначала, вам потребуется собрать проект командой `npm run build`. И, если вы не установили утилиту Surge для командной строки, то вы можете сделать это командой:
+First you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
 
 ```
 npm install --global surge
 ```
 
-Затем перейдите в каталог `dist/` вашего проекта, запустите `surge` и следуйте подсказкам на экране. Вас попросят указать электронную почту и пароль, если вы впервые используете Surge. Подтвердите каталог проекта, введите нужный домер и посмотрите как публикуется ваш проект, как примерно выглядит ниже.
+Then cd into the `dist/` folder of your project and then run `surge` and follow the screen prompt. It will ask you to set up email and password if it is the first time you are using Surge. Confirm the project folder and type in your preferred domain and watch your project being deployed such as below.
 
-```   
+```
             project: /Users/user/Documents/myawesomeproject/dist/
          domain: myawesomeproject.surge.sh
          upload: [====================] 100% eta: 0.0s (31 files, 494256 bytes)
@@ -203,4 +234,4 @@ npm install --global surge
    Success! - Published to myawesomeproject.surge.sh
 ```
 
-Убедитесь, что ваш проект успешно опубликован с помощью Surge открыв в браузере `myawesomeproject.surge.sh`! Дополнительные сведения о настройке, такие как конфигурация пользовательских доменов, можно найти на [странице справки Surge](https://surge.sh/help/).
+Verify your project is successfully published by Surge by visiting `myawesomeproject.surge.sh`, vola! For more setup details such as custom domains, you can visit [Surge's help page](https://surge.sh/help/).

@@ -108,9 +108,9 @@ Internally, we use `file-loader` to determine the final file location with versi
 
 ### The `public` Folder
 
-Any static assets placed in the `public` folder will simply be copied and not go through webpack. You need to reference to them using absolute paths.
+Any static assets placed in the `public` folder will simply be copied and not go through webpack. You need to reference them using absolute paths.
 
-Note we recommended importing assets as part of your module dependency graph so that they will go through webpack with the following benefits:
+Note we recommend importing assets as part of your module dependency graph so that they will go through webpack with the following benefits:
 
 - Scripts and stylesheets get minified and bundled together to avoid extra network requests.
 - Missing files cause compilation errors instead of 404 errors for your users.

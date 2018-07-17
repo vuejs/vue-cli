@@ -16,6 +16,7 @@
           data-testid="run-task"
           @click="runTask()"
         />
+
         <VueButton
           v-else
           icon-left="stop"
@@ -25,43 +26,14 @@
           @click="stopTask()"
         />
 
-        <VueDropdown
-          v-if="task.prompts.length"
-          placement="bottom"
-        >
-          <VueButton
-            slot="trigger"
-            icon-left="settings"
-            class="icon-button primary"
-            :disabled="task.status === 'running'"
-            v-tooltip="$t('org.vue.views.project-task-details.parameters')"
-            @click="showParameters = true"
-          />
-
-          <div class="task-settings">
-            <div class="pane-toolbar">
-              <VueIcon icon="settings"/>
-              <div class="title">{{ $t('org.vue.views.project-task-details.parameters') }}</div>
-              <VueButton
-                class="icon-button flat"
-                icon-left="close"
-                v-tooltip="$t('org.vue.views.project-task-details.actions.close')"
-                v-close-popover
-              />
-            </div>
-
-            <PromptsList
-              :prompts="visiblePrompts"
-              class="prompts"
-              @answer="answerPrompt"
-            />
-
-            <div class="vue-ui-text info banner">
-              <VueIcon icon="info" class="big"/>
-              <span>{{ $t('org.vue.views.project-task-details.parameters-info') }}</span>
-            </div>
-          </div>
-        </VueDropdown>
+        <VueButton
+          slot="trigger"
+          icon-left="settings"
+          class="icon-button primary"
+          :disabled="task.status === 'running'"
+          v-tooltip="$t('org.vue.views.project-task-details.parameters')"
+          @click="showParameters = true"
+        />
 
         <div
           class="command"
@@ -102,7 +74,7 @@
         </VueGroup>
       </div>
 
-      <div class="content">
+      <div v-if="displayPriority >= 2" class="content">
         <TerminalView
           ref="terminal"
           :class="{
@@ -131,11 +103,34 @@
         />
       </div>
     </template>
+
+    <VueModal
+      v-if="showParameters"
+      :title="$t('org.vue.views.project-task-details.parameters')"
+      class="medium anchor"
+      @close="restoreParameters()"
+    >
+      <div class="default-body">
+        <PromptsList
+          :prompts="visiblePrompts"
+          @answer="answerPrompt"
+        />
+      </div>
+
+      <div slot="footer" class="actions">
+        <VueButton
+          class="primary big"
+          :label="$t('org.vue.views.project-task-details.actions.save')"
+          @click="saveParameters()"
+        />
+      </div>
+    </VueModal>
   </div>
 </template>
 
 <script>
 import Prompts from '../mixins/Prompts'
+import DisplayPriority from '../mixins/DisplayPriority'
 
 import TASK from '../graphql/task.gql'
 import TASK_LOGS from '../graphql/taskLogs.gql'
@@ -144,6 +139,8 @@ import TASK_STOP from '../graphql/taskStop.gql'
 import TASK_LOGS_CLEAR from '../graphql/taskLogsClear.gql'
 import TASK_LOG_ADDED from '../graphql/taskLogAdded.gql'
 import TASK_OPEN from '../graphql/taskOpen.gql'
+import TASK_SAVE_PARAMETERS from '../graphql/taskSaveParameters.gql'
+import TASK_RESTORE_PARAMETERS from '../graphql/taskRestoreParameters.gql'
 
 export default {
   name: 'ProjectTaskDetails',
@@ -158,7 +155,8 @@ export default {
     Prompts({
       field: 'task',
       query: TASK
-    })
+    }),
+    DisplayPriority(2)
   ],
 
   metaInfo () {
@@ -196,6 +194,9 @@ export default {
           await this.$nextTick()
           this.currentView = data.task.defaultView
         }
+      },
+      skip () {
+        return this.displayPriority < 1
       }
     },
 
@@ -216,6 +217,9 @@ export default {
             data.taskLogs.logs.forEach(terminal.addLog)
           }
         }
+      },
+      skip () {
+        return this.displayPriority < 2
       }
     },
 
@@ -233,6 +237,9 @@ export default {
             const terminal = this.$refs.terminal
             terminal.addLog(data.taskLogAdded)
           }
+        },
+        skip () {
+          return this.displayPriority < 2
         }
       }
     }
@@ -258,6 +265,7 @@ export default {
       this.currentView = '_output'
       this.$_init = false
       this.open()
+      this.runDisplayPriority()
     }
   },
 
@@ -300,6 +308,26 @@ export default {
           id: this.id
         }
       })
+    },
+
+    async saveParameters () {
+      await this.$apollo.mutate({
+        mutation: TASK_SAVE_PARAMETERS,
+        variables: {
+          id: this.id
+        }
+      })
+      this.showParameters = false
+    },
+
+    async restoreParameters () {
+      await this.$apollo.mutate({
+        mutation: TASK_RESTORE_PARAMETERS,
+        variables: {
+          id: this.id
+        }
+      })
+      this.showParameters = false
     }
   }
 }

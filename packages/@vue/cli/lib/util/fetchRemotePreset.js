@@ -1,4 +1,6 @@
-module.exports = function fetchRemotePreset (name, clone) {
+const fs = require('fs-extra')
+
+module.exports = async function fetchRemotePreset (name, clone) {
   // github shorthand fastpath
   if (!clone && /^[\w_-]+\/[\w_-]+$/.test(name)) {
     const { request } = require('@vue/cli-shared-utils')
@@ -11,6 +13,12 @@ module.exports = function fetchRemotePreset (name, clone) {
   const path = require('path')
   const download = require('download-git-repo')
   const tmpdir = path.join(os.tmpdir(), 'vue-cli')
+
+  // clone will fail if tmpdir already exists
+  // https://github.com/flipxfx/download-git-repo/issues/41
+  if (clone) {
+    await fs.remove(tmpdir)
+  }
 
   return new Promise((resolve, reject) => {
     download(name, tmpdir, { clone }, err => {
