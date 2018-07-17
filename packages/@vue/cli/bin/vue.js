@@ -49,7 +49,7 @@ program
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
   .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
-  .option('-g, --git [message]', 'Force / skip git intialization, optionally specify initial commit message')
+  .option('-g, --git [message]', 'Force / skip git initialization, optionally specify initial commit message')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
