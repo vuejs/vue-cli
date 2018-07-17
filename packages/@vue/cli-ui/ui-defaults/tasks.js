@@ -198,6 +198,10 @@ module.exports = api => {
           {
             name: 'test',
             value: 'test'
+          },
+          {
+            name: '(unset)',
+            value: ''
           }
         ],
         description: 'org.vue.vue-webpack.tasks.serve.mode'
@@ -274,6 +278,10 @@ module.exports = api => {
           {
             name: 'test',
             value: 'test'
+          },
+          {
+            name: '(unset)',
+            value: ''
           }
         ],
         description: 'org.vue.vue-webpack.tasks.build.mode'
@@ -368,6 +376,10 @@ module.exports = api => {
           {
             name: 'test',
             value: 'test'
+          },
+          {
+            name: '(unset)',
+            value: ''
           }
         ],
         description: 'org.vue.vue-webpack.tasks.inspect.mode'
