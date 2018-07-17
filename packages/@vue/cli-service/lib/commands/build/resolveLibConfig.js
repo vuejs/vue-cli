@@ -88,7 +88,7 @@ module.exports = (api, { entry, name }, options) => {
       // libraryTarget: 'esm' or target: 'universal'
       // https://github.com/webpack/webpack/issues/6522
       // https://github.com/webpack/webpack/issues/6525
-      globalObject: `typeof self !== 'undefined' ? self : this`
+      globalObject: `(typeof self !== 'undefined' ? self : this)`
     }, rawConfig.output, {
       filename: `${entryName}.js`,
       chunkFilename: `${entryName}.[name].js`,
