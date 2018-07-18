@@ -14,6 +14,7 @@ const ConfigTransform = require('./ConfigTransform')
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
 const isObject = val => val && typeof val === 'object'
+const mergeArrayWithDedupe = (a, b) => Array.from(new Set([...a, ...b]))
 
 class GeneratorAPI {
   /**
@@ -140,9 +141,9 @@ class GeneratorAPI {
       } else if (!(key in pkg)) {
         pkg[key] = value
       } else if (Array.isArray(value) && Array.isArray(existing)) {
-        pkg[key] = existing.concat(value)
+        pkg[key] = mergeArrayWithDedupe(existing, value)
       } else if (isObject(value) && isObject(existing)) {
-        pkg[key] = merge(existing, value)
+        pkg[key] = merge(existing, value, { arrayMerge: mergeArrayWithDedupe })
       } else {
         pkg[key] = value
       }

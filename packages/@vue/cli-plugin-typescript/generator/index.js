@@ -73,6 +73,18 @@ module.exports = (api, {
     })
   }
 
+  const hasESLint = api.hasPlugin('eslint')
+  if (hasESLint) {
+    api.extendPackage({
+      devDependencies: {
+        '@vue/eslint-config-typescript': '^3.0.0-rc.5'
+      },
+      eslintConfig: {
+        extends: ['@vue/typescript']
+      }
+    })
+  }
+
   api.render('./template', {
     isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,
     hasMocha,
