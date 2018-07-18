@@ -1,6 +1,6 @@
 # @vue/babel-preset-app
 
-This is the default Babel preset used in all Vue CLI projects.
+This is the default Babel preset used in all Vue CLI projects. **Note: this preset is meant to be used exclusively in projects created via Vue CLI and does not consider external use cases.**
 
 ## Included
 
