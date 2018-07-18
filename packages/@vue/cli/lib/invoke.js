@@ -84,8 +84,14 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   // resolve options if no command line options are passed, and the plugin
   // contains a prompt module.
   if (!Object.keys(options).length) {
-    const pluginPrompts = loadModule(`${id}/prompts`, context)
+    let pluginPrompts = loadModule(`${id}/prompts`, context)
     if (pluginPrompts) {
+      if (typeof pluginPrompts === 'function') {
+        pluginPrompts = pluginPrompts(pkg)
+      }
+      if (typeof pluginPrompts.getPrompts === 'function') {
+        pluginPrompts = pluginPrompts.getPrompts(pkg)
+      }
       options = await inquirer.prompt(pluginPrompts)
     }
   }
