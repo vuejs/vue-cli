@@ -8,6 +8,8 @@ To create a new project, run:
 vue create hello-world
 ```
 
+NOTE: The create script may behave unpredictably in git bash. If so, run it in Windows command prompt or other applicable terminal.
+
 You will be prompted to pick a preset. You can either choose the default preset which comes with a basic Babel + ESLint setup, or select "Manually select features" to pick the features you need.
 
 ![CLI preview](/cli-new-project.png)
@@ -43,7 +45,7 @@ Options:
   -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
   -m, --packageManager <command>  Use specified npm client when installing dependencies
   -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
-  -g, --git [message|false]       Force / skip git intialization, optionally specify initial commit message
+  -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
   -f, --force                     Overwrite target directory if it exists
   -c, --clone                     Use git clone when fetching remote preset
   -x, --proxy                     Use specified proxy when creating project
