@@ -67,8 +67,10 @@ module.exports = (api, options) => {
           // more options:
           // https://github.com/kangax/html-minifier#options-quick-reference
         },
-        // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-        chunksSortMode: 'dependency'
+        // default sort mode uses toposort which cannot handle cyclic deps
+        // in certain cases, and in webpack 4, chunk order in HTML doesn't
+        // matter anyway
+        chunksSortMode: 'none'
       })
     }
 
