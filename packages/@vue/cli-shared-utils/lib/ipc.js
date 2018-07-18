@@ -36,7 +36,14 @@ exports.IpcMessenger = class IpcMessenger {
     this._reset()
   }
 
+  checkConnection () {
+    if (!ipc.of[this.id]) {
+      this.connected = false
+    }
+  }
+
   send (data, type = 'message') {
+    this.checkConnection()
     if (this.connected) {
       ipc.of[this.id].emit(type, data)
 
@@ -55,6 +62,7 @@ exports.IpcMessenger = class IpcMessenger {
   }
 
   connect () {
+    this.checkConnection()
     if (this.connected || this.connecting) return
     this.connecting = true
     this.disconnecting = false
@@ -69,6 +77,7 @@ exports.IpcMessenger = class IpcMessenger {
   }
 
   disconnect () {
+    this.checkConnection()
     if (!this.connected || this.disconnecting) return
     this.disconnecting = true
     this.connecting = false

@@ -66,7 +66,6 @@ exports.hasProjectGit = (cwd) => {
   } catch (e) {
     result = false
   }
-  console.log('hasProjectGit', cwd, result)
   _gitProjects.set(cwd, result)
   return result
 }

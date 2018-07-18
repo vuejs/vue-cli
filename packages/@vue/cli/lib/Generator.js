@@ -3,6 +3,7 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
+const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const injectImportsAndOptions = require('./util/injectImportsAndOptions')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
@@ -86,10 +87,12 @@ module.exports = class Generator {
     this.exitLogs = []
 
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
-    const rootOptions = cliService && cliService.options
+    const rootOptions = cliService
+      ? cliService.options
+      : inferRootOptions(pkg)
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
-      const api = new GeneratorAPI(id, this, options, rootOptions || {})
+      const api = new GeneratorAPI(id, this, options, rootOptions)
       apply(api, options, rootOptions)
     })
   }
