@@ -307,10 +307,7 @@ module.exports = class Creator extends EventEmitter {
     rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'])
     const plugins = []
     for (const id of Object.keys(rawPlugins)) {
-      const apply = loadModule(`${id}/generator`, this.context)
-      if (!apply) {
-        throw new Error(`Failed to resolve plugin: ${id}`)
-      }
+      const apply = loadModule(`${id}/generator`, this.context) || (() => {})
       let options = rawPlugins[id] || {}
       if (options.prompts) {
         const prompts = loadModule(`${id}/prompts`, this.context)
