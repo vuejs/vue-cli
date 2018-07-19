@@ -1,15 +1,13 @@
 const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
-const globby = require('globby')
 const merge = require('deepmerge')
 const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
-const yaml = require('yaml-front-matter')
 const mergeDeps = require('./util/mergeDeps')
 const stringifyJS = require('./util/stringifyJS')
-const { warn, getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
+const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -107,6 +105,7 @@ class GeneratorAPI {
       !options.file
     ) {
       if (hasReserved) {
+        const { warn } = require('@vue/cli-shared-utils')
         warn(`Reserved config transform '${key}'`)
       }
       return
@@ -167,6 +166,7 @@ class GeneratorAPI {
       source = path.resolve(baseDir, source)
       this._injectFileMiddleware(async (files) => {
         const data = this._resolveData(additionalData)
+        const globby = require('globby')
         const _files = await globby(['**/*'], { cwd: source })
         for (const rawPath of _files) {
           let filename = path.basename(rawPath)
@@ -311,6 +311,7 @@ function renderFile (name, data, ejsOptions) {
   //   - !!js/regexp /foo/
   //   - !!js/regexp /bar/
   // ---
+  const yaml = require('yaml-front-matter')
   const parsed = yaml.loadFront(template)
   const content = parsed.__content
   let finalTemplate = content.trim() + `\n`
