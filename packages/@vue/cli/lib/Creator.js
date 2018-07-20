@@ -440,7 +440,7 @@ module.exports = class Creator extends EventEmitter {
     if (!hasGit()) {
       return false
     }
-    if (cliOptions.git) {
+    if (typeof cliOptions.git !== 'undefined') {
       return cliOptions.git !== 'false' && cliOptions.git !== false
     }
 
