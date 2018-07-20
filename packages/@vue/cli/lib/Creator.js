@@ -440,10 +440,15 @@ module.exports = class Creator extends EventEmitter {
     if (!hasGit()) {
       return false
     }
-    if (typeof cliOptions.git !== 'undefined') {
-      return cliOptions.git !== 'false' && cliOptions.git !== false
+    // --git
+    if (cliOptions.forceGit) {
+      return true
     }
-
+    // --no-git
+    if (cliOptions.git === false || cliOptions.git === 'false') {
+      return false
+    }
+    // default: true unless already in a git repo
     return !hasProjectGit(this.context)
   }
 }

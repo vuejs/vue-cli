@@ -49,13 +49,18 @@ program
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
   .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
-  .option('-g, --git [message]', 'Force git initialization with optional initial commit message')
+  .option('-g, --git [message]', 'Force git initialization with initial commit message')
   .option('-n, --no-git', 'Skip git initialization')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
   .action((name, cmd) => {
-    require('../lib/create')(name, cleanArgs(cmd))
+    const options = cleanArgs(cmd)
+    // --no-git makes commander to default git to true
+    if (process.argv.includes('-g') || process.argv.includes('--git')) {
+      options.forceGit = true
+    }
+    require('../lib/create')(name, options)
   })
 
 program
