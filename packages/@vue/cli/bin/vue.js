@@ -49,7 +49,8 @@ program
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
   .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
-  .option('-g, --git [message]', 'Force git initialization, optionally specify initial commit message (pass false to skip)')
+  .option('-g, --git [message]', 'Force git initialization with optional initial commit message')
+  .option('-n, --no-git', 'Skip git initialization')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
@@ -187,7 +188,7 @@ function cleanArgs (cmd) {
     const key = o.long.replace(/^--/, '')
     // if an option is not present and Command has a method with the same name
     // it should not be copied
-    if (typeof cmd[key] !== 'function') {
+    if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {
       args[key] = cmd[key]
     }
   })
