@@ -10,7 +10,7 @@ const url = require('url')
 const chalk = require('chalk')
 const address = require('address')
 
-module.exports = function prepareUrls (protocol, host, port, pathname = '/') {
+module.exports = function prepareUrls (protocol, host, port, pathname = '/', networkInterface) {
   const formatUrl = hostname =>
     url.format({
       protocol,
@@ -32,7 +32,7 @@ module.exports = function prepareUrls (protocol, host, port, pathname = '/') {
     prettyHost = 'localhost'
     try {
       // This can only return an IPv4 address
-      lanUrlForConfig = address.ip()
+      lanUrlForConfig = address.ip(networkInterface)
       if (lanUrlForConfig) {
         // Check if the address is a private ip
         // https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
