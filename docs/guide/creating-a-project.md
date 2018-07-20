@@ -8,7 +8,9 @@ To create a new project, run:
 vue create hello-world
 ```
 
-NOTE: The create script may behave unpredictably in git bash. If so, run it in Windows command prompt or other applicable terminal.
+::: warning
+If you are on Windows using Git Bash with minTTY, the interactive prompts will not work. You must launch the command as `winpty vue.cmd create hello-world`.
+:::
 
 You will be prompted to pick a preset. You can either choose the default preset which comes with a basic Babel + ESLint setup, or select "Manually select features" to pick the features you need.
 
