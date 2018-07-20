@@ -34,7 +34,7 @@ const resolvers = [{
     cwd: () => cwd.get(),
     progress: (root, { id }, context) => progress.get(id, context),
     clientAddons: (root, args, context) => clientAddons.list(context),
-    sharedData: (root, { id }, context) => sharedData.get(id, context),
+    sharedData: (root, args, context) => sharedData.get(args, context),
     locales: (root, args, context) => locales.list(context)
   },
 
@@ -69,7 +69,7 @@ const resolvers = [{
     sharedDataUpdated: {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SHARED_DATA_UPDATED),
-        (payload, vars) => payload.sharedDataUpdated.id === vars.id
+        (payload, vars) => payload.sharedDataUpdated.id === vars.id && payload.sharedDataUpdated.projectId === vars.projectId
       )
     },
     localeAdded: {

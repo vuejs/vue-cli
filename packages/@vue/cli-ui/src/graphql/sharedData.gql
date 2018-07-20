@@ -1,7 +1,7 @@
 #import "./sharedDataFragment.gql"
 
-query sharedData ($id: ID!) {
-  sharedData (id: $id) {
+query sharedData ($id: ID!, $projectId: ID!) {
+  sharedData (id: $id, projectId: $projectId) {
     ...sharedData
   }
 }

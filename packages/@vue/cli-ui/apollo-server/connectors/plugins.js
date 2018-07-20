@@ -133,12 +133,12 @@ function resetPluginApi ({ file, lightApi }, context) {
 
     // Clean up
     if (pluginApi) {
-      projectId = pluginApi.project && pluginApi.project.id
+      projectId = pluginApi.project.id
       pluginApi.views.forEach(r => views.remove(r.id, context))
       pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
     }
     if (!lightApi) {
-      sharedData.unWatchAll(context)
+      if (projectId) sharedData.unWatchAll({ projectId }, context)
       clientAddons.clear(context)
       suggestions.clear(context)
     }
@@ -147,6 +147,12 @@ function resetPluginApi ({ file, lightApi }, context) {
     setTimeout(() => {
       const projects = require('./projects')
       const project = projects.findByPath(file, context)
+
+      if (!project) {
+        resolve(false)
+        return
+      }
+
       const plugins = getPlugins(file)
 
       if (project && projects.getType(project, context) !== 'vue') {
@@ -180,7 +186,7 @@ function resetPluginApi ({ file, lightApi }, context) {
       // Add views
       pluginApi.views.forEach(view => views.add(view, context))
 
-      if (!project || lightApi) {
+      if (lightApi) {
         resolve(true)
         return
       }

@@ -442,7 +442,7 @@ class PluginApi {
    * @returns {any} Shared data value
    */
   getSharedData (id) {
-    return sharedData.get(id, this.context)
+    return sharedData.get({ id, projectId: this.project.id }, this.context)
   }
 
   /**
@@ -452,7 +452,7 @@ class PluginApi {
    * @param {any} value Value of the Shared data
    */
   setSharedData (id, value) {
-    sharedData.set({ id, value }, this.context)
+    sharedData.set({ id, projectId: this.project.id, value }, this.context)
   }
 
   /**
@@ -461,7 +461,7 @@ class PluginApi {
    * @param {string} id Id of the Shared data
    */
   removeSharedData (id) {
-    sharedData.remove(id, this.context)
+    sharedData.remove({ id, projectId: this.project.id }, this.context)
   }
 
   /**
@@ -471,7 +471,7 @@ class PluginApi {
    * @param {function} handler Callback
    */
   watchSharedData (id, handler) {
-    sharedData.watch(id, handler)
+    sharedData.watch({ id, projectId: this.project.id }, handler)
   }
 
   /**
@@ -481,7 +481,7 @@ class PluginApi {
    * @param {function} handler Callback
    */
   unwatchSharedData (id, handler) {
-    sharedData.unwatch(id, handler)
+    sharedData.unwatch({ id, projectId: this.project.id }, handler)
   }
 
   /**
