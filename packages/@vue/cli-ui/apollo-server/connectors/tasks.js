@@ -137,7 +137,7 @@ function getSavedData (id, context) {
     id
   }).value()
   // Clone
-  data = JSON.parse(JSON.stringify(data))
+  if (data != null) data = JSON.parse(JSON.stringify(data))
   return data
 }
 
@@ -149,7 +149,7 @@ function updateSavedData (data, context) {
   }
 }
 
-async function getPrompts (id, context) {
+function getPrompts (id, context) {
   return restoreParameters({ id }, context)
 }
 
