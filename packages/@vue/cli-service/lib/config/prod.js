@@ -11,7 +11,7 @@ module.exports = (api, options) => {
 
       webpackConfig
         .mode('production')
-        .devtool('source-map')
+        .devtool(options.productionSourceMap ? 'source-map' : false)
         .output
           .filename(filename)
           .chunkFilename(filename)
