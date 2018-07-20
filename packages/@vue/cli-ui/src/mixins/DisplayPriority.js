@@ -8,11 +8,11 @@ export default function (count = 1) {
     },
 
     mounted () {
-      this.runDislayPriority()
+      this.runDisplayPriority()
     },
 
     methods: {
-      runDislayPriority () {
+      runDisplayPriority () {
         const step = () => {
           requestAnimationFrame(() => {
             this.displayPriority++
