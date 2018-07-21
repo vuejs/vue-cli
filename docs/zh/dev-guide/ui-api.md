@@ -758,76 +758,76 @@ ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 
 ![任务视图示例](/task-view.png)
 
-## Custom views
+## 自定义视图
 
-You can add a new view below the standard 'Project plugins', 'Project configuration' and 'Project tasks' ones using the `api.addView` method:
+你可以使用 `api.addView` 方法在标准的“Project plugins”、“Project configuration”和“Project tasks”之下添加一个新的视图：
 
 ```js
 api.addView({
-  // Unique id
+  // 唯一的 id
   id: 'vue-webpack-test-view',
 
-  // Route name (from vue-router)
-  // Use the same name used in the 'ClientAddonApi.addRoutes' method (see above in the Client addon section)
+  // 路由名称 (来自 Vue Router)
+  // 使用 'ClientAddonApi.addRoutes' 方法中相同的名字 (详见之前的客户端 addon 章节)
   name: 'test-webpack-route',
 
-  // Button icon (material-icons)
+  // 按钮图标 (material-icons)
   icon: 'pets',
-  // You can also specify a custom image (see Public static files section below):
+  // 你也可以指定一个自定义图片 (详见之前的公共静态文件章节)：
   // icon: 'http://localhost:4000/_plugin/%40vue%2Fcli-service/webpack-icon.svg',
 
-  // Button tooltip
+  // 按钮的提示文字
   tooltip: 'Test view from webpack addon'
 })
 ```
 
-Here is the code in the client addon that register the `'test-webpack-route'` (like we saw earlier):
+这里是注册了 `'test-webpack-route'` 的客户端 addon 里的代码 (之前已经见过了)：
 
 ```js
-/* In `main.js` */
-// Import the component
+/* 在 `main.js` 里 */
+// 导入组件
 import TestView from './components/TestView.vue'
-// Add routes to vue-router under a /addon/<id> parent route.
-// For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
-// will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
-// Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
+// 在 vue-router 中为 /addon/<id> 添加子路由
+// 例如，addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
+// 将为 Vue Router 添加 /addon/foo/ 和 /addon/foo/bar 路由。
+// 我们这里创建一个新的 '/addon/vue-webpack/' 路由，并命名为 'test-webpack-route'。
 ClientAddonApi.addRoutes('vue-webpack', [
   { path: '', name: 'test-webpack-route', component: TestView }
 ])
 ```
 
-![Custom view example](/custom-view.png)
+![自定义视图示例](/custom-view.png)
 
-## Shared data
+## 共享的数据
 
-Use Shared data to communicate info with custom components in an easy way.
+一种简易的自定义组件之间通过共享的数据互通信息的方式。
 
-> For example, the Webpack dashboard shares the build stats between the UI client and the UI server using this API.
+> 例如，webpack 仪表盘在 UI 客户端和 UI 服务端之间通过这个 API 共享了构建的统计信息。
 
-In the plugin `ui.js` (nodejs):
+在插件 `ui.js` (Node.js) 中：
 
 ```js
-// Set or update
+// 设置或更新
 api.setSharedData('my-variable', 'some-data')
 
-// Get
+// 获取
 const sharedData = api.getSharedData('my-variable')
 if (sharedData) {
   console.log(sharedData.value)
 }
 
-// Remove
+// 移除
 api.removeSharedData('my-variable')
 
-// Watch for changes
+// 侦听变化
 const watcher = (value, id) => {
   console.log(value, id)
 }
 api.watchSharedData('my-variable', watcher)
-// Unwatch
+// 取消侦听
 api.unwatchSharedData('my-variable', watcher)
 
-// Namespaced versions
+// 带命名空间的版本
 const {
   setSharedData,
   getSharedData,
@@ -837,17 +837,17 @@ const {
 } = api.namespace('webpack-dashboard-')
 ```
 
-In the custom component:
+在其自定义组件中：
 
 ```js
-// Vue component
+// Vue 组件
 export default {
-  // Sync Shared data
+  // 同步共享的数据
   sharedData () {
     return {
-      // You can use `status` in template
+      // 你可以在模板中使用 `status`
       status: `webpack-dashboard-${this.mode}-status`
-      // You can also map namespaced Shared data
+      // 也可以映射带命名空间的共享数据
       ...mapSharedData('webpack-dashboard-', {
         status: `${this.mode}-status`,
         progress: `${this.mode}-progress`,
@@ -856,7 +856,7 @@ export default {
     }
   },
 
-  // Manual methods
+  // 手动方法
   async created () {
     const value = await this.$getSharedData('my-variable')
 
@@ -869,7 +869,7 @@ export default {
 }
 ```
 
-If you use the `sharedData` option, the shared data can be updated by assigning a new value to the corresponding property.
+如果你使用了 `sharedData` 选项，共享的数据就可以一个相应的属性被赋值时进行更新。
 
 ```html
 <template>
@@ -879,25 +879,25 @@ If you use the `sharedData` option, the shared data can be updated by assigning 
 <script>
 export default {
   sharedData: {
-    // Will sync the 'my-message' shared data on the server
+    // 将会在服务端同步 'my-message' 共享的数据
     message: 'my-message'
   }
 }
 </script>
 ```
 
-This is very usefull if you create a settings component for example.
+例如在创建一个设置组件时，这个特性是非常有用的。
 
-## Plugin actions
+## 插件的 action
 
-Plugin actions are calls sent between the cli-ui (browser) and plugins (nodejs).
+插件的 action 就是在 cli-ui (浏览器) 和插件 (Node.js) 直接的调用。
 
-> For example, you might have a button in a custom component (see [Client addon](#client-addon)) which calls some nodejs code on the server using this API.
+> 例如，你可能有一个自定义组件里的按钮 (详见[客户端 addon](#客户端-addon))，这个按钮会通过这个 API 向服务端调用一些 Node.js 代码。
 
-In the `ui.js` file in the plugin (nodejs), you can use two methods from `PluginApi`:
+在插件 (Node.js) 的 `ui.js` 文件里，你可以从 `PluginApi` 使用两个方法：
 
 ```js
-// Call an action
+// 调用一个 action
 api.callAction('other-action', { foo: 'bar' }).then(results => {
   console.log(results)
 }).catch(errors => {
@@ -906,38 +906,38 @@ api.callAction('other-action', { foo: 'bar' }).then(results => {
 ```
 
 ```js
-// Listen for an action
+// 监听一个 action
 api.onAction('test-action', params => {
   console.log('test-action called', params)
 })
 ```
 
-You can use namespaced versions with `api.namespace` (similar to Shared data):
+你可以通过 `api.namespace` 使用带命名空间的版本 (类似共享的数据)：
 
 ```js
 const { onAction, callAction } = api.namespace('vue-webpack-')
 ```
 
-In the client addon components (browser), you have access to `$onPluginActionCalled`, `$onPluginActionResolved` and `$callPluginAction`:
+在客户端 addon 组件 (浏览器) 中，你可以访问 `$onPluginActionCalled`、`$onPluginActionResolved` 和 `$callPluginAction`：
 
 ```js
-// Vue component
+// Vue 组件
 export default {
   created () {
     this.$onPluginActionCalled(action => {
-      // When the action is called
-      // before being run
+      // 当 action 被调用时
+      // 且在运行之前
       console.log('called', action)
     })
     this.$onPluginActionResolved(action => {
-      // After the action is run and completed
+      // 当 action 运行完毕之后
       console.log('resolved', action)
     })
   },
 
   methods: {
     testPluginAction () {
-      // Call a plugin action
+      // 调用一个插件的 action
       this.$callPluginAction('test-action', {
         meow: 'meow'
       })
@@ -946,25 +946,25 @@ export default {
 }
 ```
 
-## Inter-process communication (IPC)
+## 进程间通信 (IPC)
 
-IPC stands for Inter-Process Communication. This system allows you to easily send messages from child processes (for example, tasks!). And it's pretty fast and lightweight.
+IPC 就是进程间通信 (Inter-Process Communication) 的缩写。该系统允许你轻松的从子进程 (例如任务) 发送消息，并且轻量快速。
 
-> To display the data in the webpack dashboard UI, the `serve` and `build` commands from `@vue/cli-service` send IPC messages to the cli-ui nodejs server when the `--dashboard` argument is passed in.
+> 为了在 webpack 仪表盘 UI 上展示数据，`@vue/cli-service` 的 `serve` 和 `build` 命令会在 `--dashboard` 参数被传入时向 cli-ui Node.js 服务器发送 IPC 消息。
 
-In you process code (which can be a Webpack plugin or a nodejs task script), you can use the `IpcMessenger` class from `@vue/cli-shared-utils`:
+在进程代码中 (可以是一个 webpack 插件或一个 Node.js 的任务脚步)，你可以使用 `@vue/cli-shared-utils` 中的 `IpcMessenger` 类：
 
 ```js
 const { IpcMessenger } = require('@vue/cli-shared-utils')
 
-// Create a new IpcMessenger instance
+// 创建一个新的 IpcMessenger 实例
 const ipc = new IpcMessenger()
 
-// Connect to the vue-cli IPC network
+// 连接到 vue-cli IPC 网络
 ipc.connect()
 
 function sendMessage (data) {
-  // Send a message to the cli-ui server
+  // 发送一条消息给 cli-ui 服务器
   ipc.send({
     webpackDashboardData: {
       type: 'build',
@@ -977,19 +977,19 @@ function messageHandler (data) {
   console.log(data)
 }
 
-// Listen for message
+// 监听消息
 ipc.on(messageHandler)
 
-// Don't listen anymore
+// 不再监听
 ipc.off(messageHandler)
 
 function cleanup () {
-  // Disconnect from the IPC network
+  // 从 IPC 网络断开连接
   ipc.disconnect()
 }
 ```
 
-In a vue-cli plugin `ui.js` file, you can use the `ipcOn`, `ipcOff` and `ipcSend` methods:
+在一个 vue-cli 插件的 `ui.js` 文件中，你可以使用 `ipcOn`、`ipcOff` 和 `ipcSend` 方法：
 
 ```js
 function onWebpackMessage ({ data: message }) {
@@ -998,13 +998,13 @@ function onWebpackMessage ({ data: message }) {
   }
 }
 
-// Listen for any IPC message
+// 监听任何 IPC 消息
 api.ipcOn(onWebpackMessage)
 
-// Don't listen anymore
+// 不监听任何消息
 api.ipcOff(onWebpackMessage)
 
-// Send a message to all connected IpcMessenger instances
+// 向所有已连接的 IpcMessenger 实例发送一条消息
 api.ipcSend({
   webpackDashboardMessage: {
     foo: 'bar'
@@ -1012,30 +1012,30 @@ api.ipcSend({
 })
 ```
 
-## Local storage
+## 本地存储
 
-A plugin can save and load data from the local [lowdb](https://github.com/typicode/lowdb) database used by the ui server.
+一个插件可以从 UI 服务器本地的 [lowdb](https://github.com/typicode/lowdb) 数据库保存和加载数据。
 
 ```js
-// Store a value into the local DB
+// 向本地的数据库存入一个值
 api.storageSet('my-plugin.an-id', { some: 'value' })
 
-// Retrieve a value from the local DB
+// 从本地的数据库取回一个值
 console.log(api.storageGet('my-plugin.an-id'))
 
-// Full lowdb instance
+// 完整的 lowdb 实例
 api.db.get('posts')
   .find({ title: 'low!' })
   .assign({ title: 'hi!'})
   .write()
 
-// Namespaced helpers
+// 带命名空间的辅助函数
 const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
 
 ## Notification
 
-You can display notifications using the user OS notification system:
+你可以基于用户操作系统的通知系统展示通知：
 
 ```js
 api.notify({
@@ -1045,25 +1045,25 @@ api.notify({
 })
 ```
 
-There are some builtin icons:
+这里有一些内建的图标；
 
 - `'done'`
 - `'error'`
 
-## Progress screen
+## 进度界面
 
-You can display a progress screen with some text and a progress bar:
+你可以用一些文字或进度条来展示进度界面：
 
 ```js
 api.setProgress({
   status: 'Upgrading...',
   error: null,
   info: 'Step 2 of 4',
-  progress: 0.4 // from 0 to 1, -1 means hidden progress bar
+  progress: 0.4 // 从 0 到 1, -1 表示隐藏进度条
 })
 ```
 
-Remove the progress screen:
+移除进度界面：
 
 ```js
 api.removeProgress()
