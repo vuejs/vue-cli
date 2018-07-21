@@ -1,22 +1,22 @@
 # UI 本地化
 
-## 翻译标准的 UI
+## 标准 UI
 
-遵循这些步骤为 CLI UI 提出一门新语言！
+请遵循下列简单步骤来为 CLI UI 提交一种其它语言的翻译！
 
-1. 运行 `navigator.languages` 或 `navigator.language` 为新的地区获取语言代号。*例如：`'fr'`。*
+1. 运行 `navigator.languages` 或 `navigator.language` 为新的地区获取语言代码。*例如：`'fr'`。*
 
-2. 搜索 NPM 确认名为 `vue-cli-locale-<language code>` 的包是否已经存在。如果存在，则请通过 PR 为它贡献！如果没找到，则创建一个新的名为 `vue-cli-locale-<language code>` 的地区的包。*例如：`vue-cli-locale-fr`.*
+2. 搜索 npm 确认名为 `vue-cli-locale-<language code>` 的包是否已经存在。如果存在，则请通过 PR 为它贡献！如果没找到，则创建一个新的名为 `vue-cli-locale-<language code>` 的地区的包。*例如：`vue-cli-locale-fr`.*
 
-3. 将地区的 JSON 文件放置在一个 `locales` 文件夹并将这个文件命名为语言代号。*例如：`locales/fr.json`。*
+3. 将地区的 JSON 文件放置在一个 `locales` 文件夹并将这个文件命名为语言代码。*例如：`locales/fr.json`。*
 
 4. 在 `package.json` 文件中，设置 `unpkg` 字段为地区文件的路径。*例如：`"unpkg": "./locales/fr.json"`。*
 
-5. 将包发布到 NPM 上。
+5. 将包发布到 npm 上。
 
-英文引用的地区[在这里](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-ui/locales)。
+可以参考[这里](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-ui/locales)的英文地区文件。
 
-作为示例，参考一份[法国本地化的包](https://github.com/Akryum/vue-cli-locale-fr)。
+作为示例，参考一份[法语的包](https://github.com/Akryum/vue-cli-locale-fr)。
 
 ## 翻译插件
 
@@ -29,7 +29,7 @@ vue-cli-plugin/locales/en.json
 vue-cli-plugin/locales/fr.json
 ```
 
-API 的用法示例
+API 的用法示例：
 
 ```js
 api.describeConfig({
@@ -44,7 +44,7 @@ api.describeConfig({
 <VueButton>{{ $t('my-plugin.actions.bar') }}</VueButton>
 ```
 
-如果你愿意的话，可以使用 `ClientAddonApi` 在一个客户端 addon 加载地区文件
+如果你愿意的话，可以使用 `ClientAddonApi` 在一个客户端 addon 加载地区文件：
 
 ```js
 // 加载本地文件 (使用 vue-i18n)
