@@ -772,13 +772,13 @@ api.addView({
 })
 ```
 
-这里是注册了 `'test-webpack-route'` 的客户端 addon 里的代码：
+这里是注册了 `'test-webpack-route'` 的客户端 addon 里的代码 (之前已经见过了)：
 
 ```js
 /* 在 `main.js` 里 */
 // 导入组件
 import TestView from './components/TestView.vue'
-// 为 Vue Router 添加一个基于 /addon/<id> 的路由。
+// 在 vue-router 中为 /addon/<id> 添加子路由
 // 例如，addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
 // 将为 Vue Router 添加 /addon/foo/ 和 /addon/foo/bar 路由。
 // 我们这里创建一个新的 '/addon/vue-webpack/' 路由，并命名为 'test-webpack-route'。
@@ -1008,7 +1008,7 @@ api.ipcSend({
 一个插件可以从 UI 服务器本地的 [lowdb](https://github.com/typicode/lowdb) 数据库保存和加载数据。
 
 ```js
-// 向本地的数据库保存一个值
+// 向本地的数据库存入一个值
 api.storageSet('my-plugin.an-id', { some: 'value' })
 
 // 从本地的数据库取回一个值
@@ -1026,7 +1026,7 @@ const { storageGet, storageSet } = api.namespace('my-plugin.')
 
 ## Notification
 
-你可以基于用户操作系统的 notification 系统展示 notification：
+你可以基于用户操作系统的通知系统展示通知：
 
 ```js
 api.notify({
