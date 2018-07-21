@@ -1063,23 +1063,23 @@ Remove the progress screen:
 api.removeProgress()
 ```
 
-## Hooks
+## 钩子
 
-Hooks allows to react to certain cli-ui events.
+钩子可以用来响应某些 cli-ui 的事件。
 
 ### onProjectOpen
 
-Called when the plugin is loaded for the first time for the current project.
+当插件在当前项目中第一次被加载时触发。
 
 ```js
 api.onProjectOpen((project, previousProject) => {
-  // Reset data
+  // 重置数据
 })
 ```
 
 ### onPluginReload
 
-Called when the plugin is reloaded.
+当插件被重新加载时触发。
 
 ```js
 api.onPluginReload((project) => {
@@ -1089,7 +1089,7 @@ api.onPluginReload((project) => {
 
 ### onConfigRead
 
-Called when a configuration screen is open or refreshed.
+当一个配置界面被打开或刷新时触发。
 
 ```js
 api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
@@ -1099,7 +1099,7 @@ api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
 
 ### onConfigWrite
 
-Called when the user saves in a configuration screen.
+当用户在保存界面里保存时触发。
 
 ```js
 api.onConfigWrite(({ config, data, changedFields, cwd }) => {
@@ -1109,7 +1109,7 @@ api.onConfigWrite(({ config, data, changedFields, cwd }) => {
 
 ### onTaskOpen
 
-Called when the user open a task details pane.
+当用户打开一项任务的详情面板时触发。
 
 ```js
 api.onTaskOpen(({ task, cwd }) => {
@@ -1119,7 +1119,7 @@ api.onTaskOpen(({ task, cwd }) => {
 
 ### onTaskRun
 
-Called when the user run a task.
+当用户运行一项任务时触发。
 
 ```js
 api.onTaskRun(({ task, args, child, cwd }) => {
@@ -1129,7 +1129,7 @@ api.onTaskRun(({ task, args, child, cwd }) => {
 
 ### onTaskExit
 
-Called when a task exists. It can be called both called on success or failure.
+当一项任务退出时触发。不论任务成功或失败它都会触发。
 
 ```js
 api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
@@ -1139,7 +1139,7 @@ api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
 
 ### onViewOpen
 
-Called when the users open a view (like 'Plugins', 'Configurations' or 'Tasks').
+当用户打开一个视图 (如 'Plugins'、'Configurations' 或 'Tasks') 时触发。
 
 ```js
 api.onViewOpen(({ view, cwd }) => {
@@ -1147,52 +1147,52 @@ api.onViewOpen(({ view, cwd }) => {
 })
 ```
 
-## Suggestions
+## 建议
 
-Suggestions are buttons meant to propose an action to the user. They are displayed in the top bar. For example, we can have a button that suggest installing vue-router if the package isn't detected in the app.
+这里的建议是指为用户提议执行 action 的按钮。它们展示在界面的顶栏上。例如我们可以放一个按钮，在应用里没有检测到 Vue Router 包的时候建议将其安装。
 
 ```js
 api.addSuggestion({
   id: 'my-suggestion',
-  type: 'action', // Required (more types in the future)
+  type: 'action', // 必填 (未来会加入更多类型)
   label: 'Add vue-router',
-  // This will be displayed in a details modal
+  // 该消息会展示在一个详情模态框里
   message: 'A longer message for the modal',
   link: 'http://link-to-docs-in-the-modal',
-  // Optional image
+  // 可选的图片
   image: '/_plugin/my-package/screenshot.png',
-  // Function called when suggestion is activated by user
+  // 当该项建议被用户激活时调用的函数
   async handler () {
     // ...
     return {
-      // By default removes the button
+      // 默认移除这个按钮
       keep: false
     }
   }
 })
 ```
 
-![UI Suggestion](/suggestion.png)
+![UI 建议](/suggestion.png)
 
-Then you can remove the suggestion:
+之后你可以移除这项建议：
 
 ```js
 api.removeSuggestion('my-suggestion')
 ```
 
-You can also open a page instead when the user activates the suggestion with `actionLink`:
+你也可以给建议附带 `actionLink`，当用户激活它时，会换做打开一个页面：
 
 ```js
 api.addSuggestion({
   id: 'my-suggestion',
   type: 'action', // Required
   label: 'Add vue-router',
-  // Open a new tab
+  // 打开一个新标签
   actionLink: 'https://vuejs.org/'
 })
 ```
 
-Typically, you will use hooks to display the suggestion in the right context:
+通常情况下，你会选择适当的上下文用钩子来展示建议：
 
 ```js
 const ROUTER = 'vue-router-add'
@@ -1217,15 +1217,17 @@ api.onViewOpen(({ view }) => {
 })
 ```
 
-In this example we only display the vue-router suggestion in the plugins view and if the project doesn't have vue-router installed already.
+在这个例子中，如果 Vue Router 没有安装好，我们只会在插件视图中展示安装 Vue Router 的建议。
 
-Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
+::: tip 注意
+`addSuggestion` 和 `removeSuggestion` 可以通过 `api.namespace()` 指定命名空间。
+:::
 
-## Other methods
+## 其它方法
 
 ### hasPlugin
 
-Returns `true` if the project uses the plugin.
+如果项目使用了该插件则返回 `true`。
 
 ```js
 api.hasPlugin('eslint')
@@ -1235,24 +1237,24 @@ api.hasPlugin('vue-cli-plugin-apollo')
 
 ### getCwd
 
-Retrieve the current working directory.
+获取当前工作目录。
 
 ```js
 api.getCwd()
 ```
 
-## Public static files
+## 公共静态文件
 
-You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).
+你可能需要在 cli-ui 内建的 HTTP 服务器上暴露一些静态文件 (通常是为自定义视图指定图标)。
 
-Any file in an optional `ui-public` folder in the root of the plugin package folder will be exposed to the `/_plugin/:id/*` HTTP route.
+在插件包跟目录里可选的放置一个 `ui-public` 文件夹，这个文件夹里的任何文件都会暴露至 `/_plugin/:id/*` 的 HTTP 路由。
 
-For example, if you put a `my-logo.png` file into the `my-package/ui-public/` folder, it will be available with the `/_plugin/my-package/my-logo.png` URL when the cli-ui loads the plugin.
+例如，如果你将 `my-logo.png` 文件放置到 `my-package/ui-public` 文件夹，那么 cli-ui 加载插件的时候可以通过 `/_plugin/my-package/my-logo.png` 这个 URL 来访问它。
 
 ```js
 api.describeConfig({
   /* ... */
-  // Custom image
+  // 自定义图片
   icon: '/_plugin/my-package/my-logo.png'
 })
 ```
