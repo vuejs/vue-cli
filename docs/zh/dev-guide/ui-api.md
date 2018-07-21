@@ -602,17 +602,17 @@ api.addTask({
 目前，那些不支持的 inquirer 类型不会在 UI 中正常工作。
 :::
 
-## Client addon
+## 客户端 addon
 
-A Client addon is a JS bundle which is dynamically loaded into the cli-ui. It is useful to load custom components and routes.
+客户端 addon 是一个动态加载到 cli-ui 中的 JS 包。用于加载自定义组件和路由。
 
-### Create a client addon
+### 创建一个客户端 addon
 
-The recommended way to create a Client addon is by creating a new project using vue-cli 3. You can either do this in a subfolder of your plugin or in a different npm package.
+推荐的创建一个客户端 addon 的方式是通过 vue-cli 3 创建一个新项目。你也可以在插件的子目录或不同的 npm 包中这样做。
 
-Install `@vue/cli-ui` as a dev dependency.
+作为开发依赖安装 `@vue/cli-ui`。
 
-Then add a `vue.config.js` file with the following content:
+然后添加一个 `vue.config.js` 文件并附带以下内容：
 
 ```js
 const { clientAddonConfig } = require('@vue/cli-ui')
@@ -620,17 +620,19 @@ const { clientAddonConfig } = require('@vue/cli-ui')
 module.exports = {
   ...clientAddonConfig({
     id: '<client-addon-id>',
-    // Development port (default 8042)
+    // 开发环境端口 (默认值 8042)
     port: 8042
   })
 }
 ```
 
-The `clientAddonConfig` method will generate the needed vue-cli configuration. Among other things, it disables CSS extraction and outputs the code to `./dist/index.js` in the client addon folder.
+这个 `clientAddonConfig` 方法将会生成需要的 vue-cli 配置。除此之外，它会禁用 CSS extraction 并将代码输出到在客户端 addon 目录的 `./dist/index.js`。
 
-**⚠️ Don't forget to replace `<client-addon-id>` in the `id` field with the id of your new client addon!**
+::: warning 警告
+不要忘记将 `id` 字段替换里的 `<client-addon-id>` 为你的新客户端 addon 的 id！
+:::
 
-Then modify the `.eslintrc.json` file to add some allowed global objects:
+然后修改 `.eslintrc.json` 文件以添加一些允许的全局对象：
 
 ```json
 {
@@ -643,41 +645,43 @@ Then modify the `.eslintrc.json` file to add some allowed global objects:
 }
 ```
 
-You can now run the `serve` script in development and the `build` one when you are ready to publish your plugin.
+你现在可以在开发环境下运行 `serve` 脚本，也可以在准备发布时运行 `build` 脚本。
 
 ### ClientAddonApi
 
-Open the `main.js` file in the client addon sources and remove all the code.
+在客户端 addon 资源中打开 `main.js` 文件并删除所有代码。
 
-**⚠️ Don't import Vue in the client addon sources, use the global `Vue` object from the browser `window`.**
+::: warning 警告
+别在客户端 addon 源文件总导入 Vue ，请从浏览器 `window` 使用全局的 `Vue` 对象。
+:::
 
-Here is an example of code for `main.js`:
+这里是一个 `main.js` 的示例代码：
 
 ```js
 import VueProgress from 'vue-progress-path'
 import WebpackDashboard from './components/WebpackDashboard.vue'
 import TestView from './components/TestView.vue'
 
-// You can install additional vue plugins
-// using the global 'Vue' variable
+// 你可以安装额外的 Vue 插件
+// 使用全局的 'Vue' 变量
 Vue.use(VueProgress, {
   defaultShape: 'circle'
 })
 
-// Register a custom component
-// (works like 'Vue.component')
+// 注册一个自定义组件
+// (工作原理类似 'Vue.component')
 ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 
-// Add routes to vue-router under a /addon/<id> parent route.
-// For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
-// will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
-// Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
+// 在 vue-router 中为 /addon/<id> 添加子路由。
+// 例如，addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
+// 将会向路由器添加 /addon/foo/ 和 /addon/foo/bar。
+// 我们在此用 'test-webpack-route' 名称创建一个新的 '/addon/vue-webpack/' 路由
 ClientAddonApi.addRoutes('vue-webpack', [
   { path: '', name: 'test-webpack-route', component: TestView }
 ])
 
-// You can translate your plugin components
-// Load the locale files (uses vue-i18n)
+// 你可以翻译插件组件
+// (通过使用 vue-i18n) 加载语言文件
 const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
 locales.keys().forEach(key => {
   const locale = key.match(/([a-z0-9]+)\./i)[1]
@@ -685,74 +689,74 @@ locales.keys().forEach(key => {
 })
 ```
 
-The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
+cli-ui 在 `window` 作用域内注册了 `Vue` 和 `ClientAddonApi` 作为全局变量。
 
-In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent. You can also translate the strings with [vue-i18n](https://github.com/kazupon/vue-i18n) which is included.
+你可以在自己的组件里使用 [@vue/ui](https://github.com/vuejs/ui) 和 [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) 所有的组件和 CSS class 以保持样式和体验的一致性。你也可以用内置的 [vue-i18n](https://github.com/kazupon/vue-i18n) 翻译字符串。
 
-### Register the client addon
+### 注册客户端 addon
 
-Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
+回到 `ui.js` 文件，使用 `api.addClientAddon` 方法并带一个指向构建后的文件夹的 require 字符串：
 
 ```js
 api.addClientAddon({
   id: 'vue-webpack',
-  // Folder containing the built JS files
+  // 包含构建出来的 JS 文件的文件夹
   path: '@vue/cli-ui-addon-webpack/dist'
 })
 ```
 
-This will use the nodejs `require.resolve` API to find the folder and serve the `index.js` file built from the client addon.
+这会使用 Node.js 的 `require.resolve` API 查找文件夹并为从客户端 addon 构建的文件 `index.js` 启动一个服务器。
 
-Or specify an url when developing the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
+或者当开发插件时指定一个 URL (理想中你需要在 Vue 的测试项目的 `vue-cli-ui.js` 中做这些)
 
 ```js
-// Useful for dev
-// Will override path if already defined in a plugin
+// 用于开发环境
+// 如果已经在插件中定义过，则会覆写路径
 api.addClientAddon({
   id: 'vue-webpack',
-  // Use the same port you configured earlier
+  // 使用你之前配置过低同样的端口
   url: 'http://localhost:8042/index.js'
 })
 ```
 
-### Use the client addon
+### 使用客户端 addon
 
-You can now use the client addon in the views. For example, you can specify a view in a described task:
+现在你可以在这些视图中使用客户端 addon 了。例如，你可以在一个被描述的任务中指定一个视图：
 
 ```js
 api.describeTask({
   /* ... */
-  // Additional views (for example the webpack dashboard)
-  // By default, there is the 'output' view which displays the terminal output
+  // 额外的视图 (例如 webpack dashboard)
+  // 默认情况下，这是展示终端输出的 'output' 视图
   views: [
     {
-      // Unique ID
+      // 唯一的 ID
       id: 'vue-webpack-dashboard-client-addon',
-      // Button label
+      // 按钮文字
       label: 'Dashboard',
-      // Button icon (material-icons)
+      // 按钮图标 (material-icons)
       icon: 'dashboard',
-      // Dynamic component to load, registered using ClientAddonApi
+      // 加载的动态组件，会用 ClientAddonApi 进行注册
       component: 'vue-webpack-dashboard'
     }
   ],
-  // Default selected view when displaying the task details (by default it's the output)
+  // 展示任务详情时默认选择的视图 (默认情况下就是 output)
   defaultView: 'vue-webpack-dashboard-client-addon'
 })
 ```
 
-Here is the client addon code that register the `'vue-webpack-dashboard'` component (like we saw earlier):
+这是一个客户端 addon 代码，注册了 `'vue-webpack-dashboard' 组件 (像我们之前看到的一样)：
 
 ```js
-/* In `main.js` */
-// Import the component
+/* 在 `main.js` 中 */
+// 导入组件
 import WebpackDashboard from './components/WebpackDashboard.vue'
-// Register a custom component
-// (works like 'Vue.component')
+// 注册自定义组件
+// (工作原理类似 'Vue.component')
 ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 ```
 
-![Task view example](/task-view.png)
+![任务视图示例](/task-view.png)
 
 ## Custom views
 
