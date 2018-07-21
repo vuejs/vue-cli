@@ -1,6 +1,6 @@
 # UI API
 
-这个 cli-ui 暴露一个 API，允许增强项目的配置和任务，也可以分享数据和在进程间进行交流。
+这个 cli-ui 暴露一个 API，允许增强项目的配置和任务，也可以分享数据和在进程间进行通信。
 
 ![UI 插件架构](/vue-cli-ui-schema.png)
 
@@ -46,7 +46,7 @@ vue ui --dev
 vue ui -D
 ```
 
-## 项目配置
+## 项目的配置
 
 ![配置 UI](/config-ui.png)
 
@@ -69,7 +69,7 @@ api.describeConfig({
 
 ### 配置图标
 
-可以是一个 [Material 图标](https://material.io/tools/icons)代码或一个自定义的图片 (查阅[公共静态文件](#公共静态文件))：
+可以是一个 [Material 图标](https://material.io/tools/icons)代码或一个自定义的图片 (详见[公共静态文件](#公共静态文件))：
 
 ```js
 api.describeConfig({
@@ -79,7 +79,7 @@ api.describeConfig({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
 
 ### 配置文件
 
@@ -261,12 +261,12 @@ api.describeConfig({
 
 参数：
 
-- `prompts`: 当前提示符们的运行时对象 (见下方)
+- `prompts`: 当前提示符们的运行时对象 (详见下方)
 - `answers`: 来自用户输入的回答数据
 - `data`: 从配置文件读取的只读的初始化数据
 - `files`: 被找到的文件的描述器 (`{ type: 'json', path: '...' }`)
 - `cwd`: 当前工作目录
-- `api`: `onWrite API` (见下方)
+- `api`: `onWrite API` (详见下方)
 
 提示符的运行时对象：
 
@@ -316,41 +316,41 @@ api.describeConfig({
 })
 ```
 
-## Project tasks
+## 项目的任务
 
-![Tasks ui](/tasks-ui.png)
+![任务 UI](/tasks-ui.png)
 
-Tasks are generated from the `scripts` field in the project `package.json` file.
+任务是从项目 `package.json` 文件的 `scripts` 字段生成的。
 
-You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method:
+因为有 `api.describeTask` 方法，你可以为任务“增强”额外的信息和钩子：
 
 ```js
 api.describeTask({
-  // RegExp executed on script commands to select which task will be described here
+  // 用于匹配脚本命令的 RegExp 对象，来选择要被描述的任务
   match: /vue-cli-service serve/,
   description: 'Compiles and hot-reloads for development',
-  // "More info" link
+  // “More info”链接
   link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve'
 })
 ```
 
-### Task icon
+### 任务图标
 
-It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
+可以是一个 [Material 图标](https://material.io/tools/icons)代码或一个自定义的图片 (详见[公共静态文件](#公共静态文件))：
 
 ```js
 api.describeTask({
   /* ... */
-  // Task icon
+  // 任务图标
   icon: 'application_settings'
 })
 ```
 
-If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
 
-### Tasks parameters
+### 任务参数
 
-You can add prompts to modify the command arguments. They will be displayed in a 'Parameters' modal.
+你可以添加提示符来修改命令参数。它们会展示在一个“参数”模态框中。
 
 Example:
 
@@ -358,7 +358,7 @@ Example:
 api.describeTask({
   // ...
 
-  // Optional parameters (inquirer prompts)
+  // 选填参数 (inquirer 提示符)
   prompts: [
     {
       name: 'open',
@@ -390,87 +390,87 @@ api.describeTask({
 })
 ```
 
-See [Prompts](#prompts) for more info.
+详见[提示符](#提示符)。
 
-### Task hooks
+### 任务钩子
 
-Several hooks are available:
+有一些钩子是可用的：
 
 - `onBeforeRun`
 - `onRun`
 - `onExit`
 
-For example, you can use the answers to the prompts (see above) to add new arguments to the command:
+例如，你可以将 (上述) 提示符的回答作为一个新参数添加到命令上：
 
 ```js
 api.describeTask({
   // ...
 
-  // Hooks
-  // Modify arguments here
+  // 钩子
+  // 在这里修改参数
   onBeforeRun: async ({ answers, args }) => {
-    // Args
+    // 参数
     if (answers.open) args.push('--open')
     if (answers.mode) args.push('--mode', answers.mode)
     args.push('--dashboard')
   },
-  // Immediatly after running the task
+  // 任务运行之后立即执行
   onRun: async ({ args, child, cwd }) => {
-    // child: node child process
-    // cwd: process working directory
+    // child: Node 子进程
+    // cwd: 进程所在目录
   },
   onExit: async ({ args, child, cwd, code, signal }) => {
-    // code: exit code
-    // signal: kill signal used if any
+    // code: 退出码
+    // signal: 可能会被使用的杀进程信号
   }
 })
 ```
 
-### Task views
+### 任务视图
 
-You can display custom views in the task details pane using the `ClientAddon` API:
+你可以在任务详情面板中使用 `ClientAddon` API 展示自定义视图：
 
 ```js
 api.describeTask({
   // ...
 
-  // Additional views (for example the webpack dashboard)
-  // By default, there is the 'output' view which displays the terminal output
+  // 额外的视图 (例如 webpack 仪表盘)
+  // 默认情况下，这里是展示终端输出的 `output` 视图
   views: [
     {
-      // Unique ID
+      // 唯一 ID
       id: 'vue-webpack-dashboard-client-addon',
-      // Button label
+      // 按钮文字
       label: 'Dashboard',
-      // Button icon
+      // 按钮图标
       icon: 'dashboard',
-      // Dynamic component to load (see 'Client addon' section below)
+      // 要加载的动态组件 (详见下述“客户端 addon”章节)
       component: 'vue-webpack-dashboard'
     }
   ],
-  // Default selected view when displaying the task details (by default it's the output)
+  // 展示任务详情时默认选择的视图 (默认是 `output`)
   defaultView: 'vue-webpack-dashboard-client-addon'
 })
 ```
 
-See [Client addon](#client-addon) for more info.
+详见[客户端 addon](#客户端-addon)。
 
 
-### Add new tasks
+### 新增任务
 
-You can also add entirely new tasks which aren't in the `package.json` scripts with `api.addTask` instead of `api.describeTask`. Those tasks will only appear in the cli UI.
+你也可以不使用 `api.describeTask`，而是通过 `api.addTask` 添加一个 `package.json` 脚本中没有的全新任务。这些任务只会出现在 cli UI 中。
 
-**You need to provide a `command` option instead of `match`.**
+**你需要提供一个 `command` 选项替代掉 `match` 选项。**
 
-Example:
+示例：
 
 ```js
 api.addTask({
-  // Required
+  // 必填
   name: 'inspect',
   command: 'vue-cli-service inspect',
-  // Optional
-  // The rest is like `describeTask` without the `match` option
+  // 选填
+  // 其余部分类似 `describeTask` 但是没有 `match` 选项
   description: '...',
   link: 'https://github.com/vuejs/vue-cli/...',
   prompts: [ /* ... */ ],
@@ -482,33 +482,35 @@ api.addTask({
 })
 ```
 
-**⚠️ The `command` will run a node context. This means you can call node bin commands like you would normally do in the `package.json` scripts.**
+::: warning 警告
+`command` 将会运行一个 Node 上下文。也就是说你可以像在 `package.json` 脚本中一样调用 Node 的 bin 命令。
+:::
 
-## Prompts
+## 提示符
 
-The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) objects.
+提示符对象必须是合法的 [inquirer](https://github.com/SBoudrias/Inquirer.js) 对象。
 
-However, you can add the following additional fields (which are optional and only used by the UI):
+不过你也可以添加下列额外的字段 (只会被 UI 使用的可选项)：
 
 ```js
 {
   /* ... */
-  // Used to group the prompts into sections
+  // 用来将提示符按章节分组
   group: 'Strongly recommended',
-  // Additional description
+  // 附加描述
   description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
-  // "More info" link
+  // “More info”链接
   link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
 }
 ```
 
-Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+支持的 inquirer 类型有：`checkbox`、`confirm`、`input`、`password`、`list`、`rawlist`。
 
-In addition to those, the UI supports special types that only works with it:
+此外，UI 还支持了仅在这里工作的特殊类型：
 
-- `color`: displays a color picker.
+- `color`：展示一个取色器。
 
-### Switch example
+### Switch 示例
 
 ```js
 {
@@ -519,7 +521,7 @@ In addition to those, the UI supports special types that only works with it:
 }
 ```
 
-### Select example
+### Select 示例
 
 ```js
 {
@@ -545,7 +547,7 @@ In addition to those, the UI supports special types that only works with it:
 }
 ```
 
-### Input example
+### Input 示例
 
 ```js
 {
@@ -556,9 +558,9 @@ In addition to those, the UI supports special types that only works with it:
 }
 ```
 
-### Checkbox example
+### Checkbox 示例
 
-Displays multiple switches.
+展示多个 switch。
 
 ```js
 {
@@ -580,7 +582,7 @@ Displays multiple switches.
 }
 ```
 
-### Color picker example
+### 取色器示例
 
 ```js
 {
@@ -592,11 +594,13 @@ Displays multiple switches.
 }
 ```
 
-### Prompts for invocation
+### 提示符的改进
 
-In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
+在 vue-cli 插件中，你可能已经有一个 `prompts.js` 文件，在 (用 CLI 或 UI) 安装该插件的时候询问用户一些问题。你可以向那些提示符对象额外添加只支持 UI 的上述字段，这样的话如果用户使用 UI 的话可以看到更多的信息。
 
-**⚠️ Currently, the inquirer types which aren't supported (see above) will not work properly in the UI.**
+::: warning 警告
+目前，那些不支持的 inquirer 类型不会在 UI 中正常工作。
+:::
 
 ## 客户端 addon
 
@@ -1065,23 +1069,23 @@ Remove the progress screen:
 api.removeProgress()
 ```
 
-## Hooks
+## 钩子
 
-Hooks allows to react to certain cli-ui events.
+钩子可以用来响应某些 cli-ui 的事件。
 
 ### onProjectOpen
 
-Called when the plugin is loaded for the first time for the current project.
+当插件在当前项目中第一次被加载时触发。
 
 ```js
 api.onProjectOpen((project, previousProject) => {
-  // Reset data
+  // 重置数据
 })
 ```
 
 ### onPluginReload
 
-Called when the plugin is reloaded.
+当插件被重新加载时触发。
 
 ```js
 api.onPluginReload((project) => {
@@ -1091,7 +1095,7 @@ api.onPluginReload((project) => {
 
 ### onConfigRead
 
-Called when a configuration screen is open or refreshed.
+当一个配置界面被打开或刷新时触发。
 
 ```js
 api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
@@ -1101,7 +1105,7 @@ api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
 
 ### onConfigWrite
 
-Called when the user saves in a configuration screen.
+当用户在保存界面里保存时触发。
 
 ```js
 api.onConfigWrite(({ config, data, changedFields, cwd }) => {
@@ -1111,7 +1115,7 @@ api.onConfigWrite(({ config, data, changedFields, cwd }) => {
 
 ### onTaskOpen
 
-Called when the user open a task details pane.
+当用户打开一项任务的详情面板时触发。
 
 ```js
 api.onTaskOpen(({ task, cwd }) => {
@@ -1121,7 +1125,7 @@ api.onTaskOpen(({ task, cwd }) => {
 
 ### onTaskRun
 
-Called when the user run a task.
+当用户运行一项任务时触发。
 
 ```js
 api.onTaskRun(({ task, args, child, cwd }) => {
@@ -1131,7 +1135,7 @@ api.onTaskRun(({ task, args, child, cwd }) => {
 
 ### onTaskExit
 
-Called when a task exists. It can be called both called on success or failure.
+当一项任务退出时触发。不论任务成功或失败它都会触发。
 
 ```js
 api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
@@ -1141,7 +1145,7 @@ api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
 
 ### onViewOpen
 
-Called when the users open a view (like 'Plugins', 'Configurations' or 'Tasks').
+当用户打开一个视图 (如 'Plugins'、'Configurations' 或 'Tasks') 时触发。
 
 ```js
 api.onViewOpen(({ view, cwd }) => {
@@ -1149,52 +1153,52 @@ api.onViewOpen(({ view, cwd }) => {
 })
 ```
 
-## Suggestions
+## 建议
 
-Suggestions are buttons meant to propose an action to the user. They are displayed in the top bar. For example, we can have a button that suggest installing vue-router if the package isn't detected in the app.
+这里的建议是指为用户提议执行 action 的按钮。它们展示在界面的顶栏上。例如我们可以放一个按钮，在应用里没有检测到 Vue Router 包的时候建议将其安装。
 
 ```js
 api.addSuggestion({
   id: 'my-suggestion',
-  type: 'action', // Required (more types in the future)
+  type: 'action', // 必填 (未来会加入更多类型)
   label: 'Add vue-router',
-  // This will be displayed in a details modal
+  // 该消息会展示在一个详情模态框里
   message: 'A longer message for the modal',
   link: 'http://link-to-docs-in-the-modal',
-  // Optional image
+  // 可选的图片
   image: '/_plugin/my-package/screenshot.png',
-  // Function called when suggestion is activated by user
+  // 当该项建议被用户激活时调用的函数
   async handler () {
     // ...
     return {
-      // By default removes the button
+      // 默认移除这个按钮
       keep: false
     }
   }
 })
 ```
 
-![UI Suggestion](/suggestion.png)
+![UI 建议](/suggestion.png)
 
-Then you can remove the suggestion:
+之后你可以移除这项建议：
 
 ```js
 api.removeSuggestion('my-suggestion')
 ```
 
-You can also open a page instead when the user activates the suggestion with `actionLink`:
+你也可以给建议附带 `actionLink`，当用户激活它时，会换做打开一个页面：
 
 ```js
 api.addSuggestion({
   id: 'my-suggestion',
   type: 'action', // Required
   label: 'Add vue-router',
-  // Open a new tab
+  // 打开一个新标签
   actionLink: 'https://vuejs.org/'
 })
 ```
 
-Typically, you will use hooks to display the suggestion in the right context:
+通常情况下，你会选择适当的上下文用钩子来展示建议：
 
 ```js
 const ROUTER = 'vue-router-add'
@@ -1219,15 +1223,17 @@ api.onViewOpen(({ view }) => {
 })
 ```
 
-In this example we only display the vue-router suggestion in the plugins view and if the project doesn't have vue-router installed already.
+在这个例子中，如果 Vue Router 没有安装好，我们只会在插件视图中展示安装 Vue Router 的建议。
 
-Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
+::: tip 注意
+`addSuggestion` 和 `removeSuggestion` 可以通过 `api.namespace()` 指定命名空间。
+:::
 
-## Other methods
+## 其它方法
 
 ### hasPlugin
 
-Returns `true` if the project uses the plugin.
+如果项目使用了该插件则返回 `true`。
 
 ```js
 api.hasPlugin('eslint')
@@ -1237,24 +1243,24 @@ api.hasPlugin('vue-cli-plugin-apollo')
 
 ### getCwd
 
-Retrieve the current working directory.
+获取当前工作目录。
 
 ```js
 api.getCwd()
 ```
 
-## Public static files
+## 公共静态文件
 
-You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).
+你可能需要在 cli-ui 内建的 HTTP 服务器上暴露一些静态文件 (通常是为自定义视图指定图标)。
 
-Any file in an optional `ui-public` folder in the root of the plugin package folder will be exposed to the `/_plugin/:id/*` HTTP route.
+在插件包跟目录里可选的放置一个 `ui-public` 文件夹，这个文件夹里的任何文件都会暴露至 `/_plugin/:id/*` 的 HTTP 路由。
 
-For example, if you put a `my-logo.png` file into the `my-package/ui-public/` folder, it will be available with the `/_plugin/my-package/my-logo.png` URL when the cli-ui loads the plugin.
+例如，如果你将 `my-logo.png` 文件放置到 `my-package/ui-public` 文件夹，那么 cli-ui 加载插件的时候可以通过 `/_plugin/my-package/my-logo.png` 这个 URL 来访问它。
 
 ```js
 api.describeConfig({
   /* ... */
-  // Custom image
+  // 自定义图片
   icon: '/_plugin/my-package/my-logo.png'
 })
 ```
