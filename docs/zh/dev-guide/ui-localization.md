@@ -1,53 +1,53 @@
-# UI Localization
+# UI 本地化
 
-## Translate the standard UI
+## 标准 UI
 
-Follow those simple steps to propose a new language for the CLI UI!
+请遵循下列简单步骤来为 CLI UI 提交一种其它语言的翻译！
 
-1. Run `navigator.languages` or `navigator.language` to get the language code for the new locale. *For example: `'fr'`.*
+1. 运行 `navigator.languages` 或 `navigator.language` 为新的地区获取语言代码。*例如：`'fr'`。*
 
-2. Search NPM to see if a package called `vue-cli-locale-<language code>` doesn't already exist. If it does, please contribute to it by submitting PRs! If you don't find any, create a new package called `vue-cli-locale-<language code>`. *For example: `vue-cli-locale-fr`*
+2. 搜索 npm 确认名为 `vue-cli-locale-<language code>` 的包是否已经存在。如果存在，则请通过 PR 为它贡献！如果没找到，则创建一个新的名为 `vue-cli-locale-<language code>` 的地区的包。*例如：`vue-cli-locale-fr`.*
 
-3. Put the locale JSON file in a `locales` folder and give it the name of the language code. *For example: `locales/fr.json`*
+3. 将地区的 JSON 文件放置在一个 `locales` 文件夹并将这个文件命名为语言代码。*例如：`locales/fr.json`。*
 
-4. In the `package.json` file, set the `unpkg` field to the path to the locale file. *For example: `"unpkg": "./locales/fr.json"`*
+4. 在 `package.json` 文件中，设置 `unpkg` 字段为地区文件的路径。*例如：`"unpkg": "./locales/fr.json"`。*
 
-5. Publish the package on NPM.
+5. 将包发布到 npm 上。
 
-The English reference locale is [here](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-ui/locales/en.json).
+可以参考[这里](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-ui/locales)的英文地区文件。
 
-Take a look at [the french localization package](https://github.com/Akryum/vue-cli-locale-fr) as an example.
+作为示例，参考一份[法语的包](https://github.com/Akryum/vue-cli-locale-fr)。
 
-## Translate your plugin
+## 翻译插件
 
-You can put locale files compatible with [vue-i18n](https://github.com/kazupon/vue-i18n) in a `locales` folder at the root of your plugin. They will be automatically loaded into the client when the project is opened. You can then use `$t` to translate strings in your components and other vue-i18n helpers. Also, the strings used in the UI API (like `describeTask`) will go through vue-i18n as well to you can localize them.
+你也可以在插件的根目录的 `locales` 文件夹放置与 [vue-i18n](https://github.com/kazupon/vue-i18n) 兼容的地区文件。这样做会在项目打开的时候自动加载，然后你可以使用 `$t` 在你的组件和 vue-i18n 辅助函数里翻译字符串。同样的 UI API (像 `describeTask`) 用到的字符串将会进入 vue-i18n，这样你就可以对它们做本地化。
 
-Example `locales` folder:
+示例 `locales` 文件夹：
 
 ```
 vue-cli-plugin/locales/en.json
 vue-cli-plugin/locales/fr.json
 ```
 
-Example usage in API:
+API 的用法示例：
 
 ```js
 api.describeConfig({
-  // vue-i18n path
+  // vue-i18n 路径
   description: 'my-plugin.config.foo'
 })
 ```
 
-Example usage in components:
+在组件中使用的示例：
 
 ```html
 <VueButton>{{ $t('my-plugin.actions.bar') }}</VueButton>
 ```
 
-You can also load the locale files in a client addon if you prefer, using the `ClientAddonApi`:
+如果你愿意的话，可以使用 `ClientAddonApi` 在一个客户端 addon 加载地区文件：
 
 ```js
-// Load the locale files (uses vue-i18n)
+// 加载本地文件 (使用 vue-i18n)
 const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
 locales.keys().forEach(key => {
   const locale = key.match(/([a-z0-9]+)\./i)[1]
