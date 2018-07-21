@@ -622,7 +622,7 @@ module.exports = {
 }
 ```
 
-这个 `clientAddonConfig` 方法将会生成需要的 vue-cli 配置。在其余的部分中，它禁用了 CSS extraction 并将代码输出到在客户端 addon 目录的 `./dist/index.js`。
+这个 `clientAddonConfig` 方法将会生成需要的 vue-cli 配置。除此之外，它会禁用 CSS extraction 并将代码输出到在客户端 addon 目录的 `./dist/index.js`。
 
 ::: warning 警告
 不要忘记将 `id` 字段替换里的 `<client-addon-id>` 为你的新客户端 addon 的 id！
@@ -641,7 +641,7 @@ module.exports = {
 }
 ```
 
-你现在可以在开发环境下运行 `serce` 脚本，也可以当你准备发布插件时运行 `build` 脚本。
+你现在可以在开发环境下运行 `serve` 脚本，也可以在准备发布时运行 `build` 脚本。
 
 ### ClientAddonApi
 
@@ -668,7 +668,7 @@ Vue.use(VueProgress, {
 // (工作原理类似 'Vue.component')
 ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 
-// 为 vue-router 添加基于 /addon/<id> 位置的路由。
+// 在 vue-router 中为 /addon/<id> 添加子路由。
 // 例如，addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
 // 将会向路由器添加 /addon/foo/ 和 /addon/foo/bar。
 // 我们在此用 'test-webpack-route' 名称创建一个新的 '/addon/vue-webpack/' 路由
@@ -677,7 +677,7 @@ ClientAddonApi.addRoutes('vue-webpack', [
 ])
 
 // 你可以翻译插件组件
-// (通过使用 vue-i18n) 加载这个语言文件
+// (通过使用 vue-i18n) 加载语言文件
 const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
 locales.keys().forEach(key => {
   const locale = key.match(/([a-z0-9]+)\./i)[1]
@@ -687,11 +687,11 @@ locales.keys().forEach(key => {
 
 cli-ui 在 `window` 作用域内注册了 `Vue` 和 `ClientAddonApi` 作为全局变量。
 
-你在自己的组件里可以使用[@vue/ui](https://github.com/vuejs/ui) 和 [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) 所有的组件和 CSS class 以保持视图和体验的一致性。你也可以用内置的 [vue-i18n](https://github.com/kazupon/vue-i18n) 翻译字符串。
+你可以在自己的组件里使用 [@vue/ui](https://github.com/vuejs/ui) 和 [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) 所有的组件和 CSS class 以保持样式和体验的一致性。你也可以用内置的 [vue-i18n](https://github.com/kazupon/vue-i18n) 翻译字符串。
 
 ### 注册客户端 addon
 
-回到 `ui.js` 文件，使用 `api.addClientAddon` 方法并带一个指向构建文件夹的 require string：
+回到 `ui.js` 文件，使用 `api.addClientAddon` 方法并带一个指向构建后的文件夹的 require 字符串：
 
 ```js
 api.addClientAddon({
@@ -710,7 +710,7 @@ api.addClientAddon({
 // 如果已经在插件中定义过，则会覆写路径
 api.addClientAddon({
   id: 'vue-webpack',
-  // 使用你早些配置过低同样的端口
+  // 使用你之前配置过低同样的端口
   url: 'http://localhost:8042/index.js'
 })
 ```
@@ -732,7 +732,7 @@ api.describeTask({
       label: 'Dashboard',
       // 按钮图标 (material-icons)
       icon: 'dashboard',
-      // 加载的动态组件，使用 ClientAddonApi 注册的
+      // 加载的动态组件，会用 ClientAddonApi 进行注册
       component: 'vue-webpack-dashboard'
     }
   ],
