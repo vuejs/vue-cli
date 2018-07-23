@@ -83,7 +83,7 @@ module.exports = {
 
   Build the app in multi-page mode. Each "page" should have a corresponding JavaScript entry file. The value should be an object where the key is the name of the entry, and the value is either:
 
-  - An object that specifies its `entry`, `template`, `filename` and `title`;
+  - An object that specifies its `entry`, `template`, `filename`, `title` and `chunks` (all optional except `entry`);
   - Or a string specifying its `entry`.
 
   ``` js
@@ -98,7 +98,10 @@ module.exports = {
         filename: 'index.html',
         // when using title option,
         // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'Index Page'
+        title: 'Index Page',
+        // chunks to include on this page, by default includes
+        // extracted common chunks and vendor chunks.
+        chunks: ['chunk-vendors', 'chunk-common', 'index']
       },
       // when using the entry-only string format,
       // template is inferred to be `public/subpage.html`

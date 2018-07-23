@@ -120,14 +120,15 @@ module.exports = (api, options) => {
           title,
           entry,
           template = `public/${name}.html`,
-          filename = `${name}.html`
+          filename = `${name}.html`,
+          chunks
         } = normalizePageConfig(multiPageConfig[name])
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign({}, htmlOptions, {
-          chunks: ['chunk-vendors', 'chunk-common', name],
+          chunks: chunks || ['chunk-vendors', 'chunk-common', name],
           template: fs.existsSync(template) ? template : (fs.existsSync(htmlPath) ? htmlPath : defaultHtmlPath),
           filename,
           title
