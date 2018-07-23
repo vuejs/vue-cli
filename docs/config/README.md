@@ -71,7 +71,7 @@ module.exports = {
 - Default: `''`
 
   A directory to nest generated static assets (js, css, img, fonts) under.
-  
+
   ::: tip
   `assetsDir` is ignored when overwriting the filename or chunkFilename from the generated assets.
   :::
@@ -119,7 +119,7 @@ module.exports = {
 - Default: `true`
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
-  
+
   When set to `true`, eslint-loader will only emit warnings during webpack's compilation process in order not to break the flow during development. If you want it to emit errors instead (i.e. when building for production), set it like this: `lintOnSave: 'error'`.
 
 ### runtimeCompiler
@@ -144,6 +144,13 @@ module.exports = {
 - Default: `true`
 
   Setting this to `false` can speed up production builds if you don't need source maps for production.
+
+### corsUseCredentials
+
+- Type: `boolean`
+- Default: `false`
+
+  In modern mode, the generated HTML will include `<script type="module">`, which is [loaded with CORS always enabled](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). By default, it is treated as `crossorigin="anonymous"`, setting this option to `true` will use `crossorigin="use-credentials"` instead.
 
 ### configureWebpack
 
@@ -182,7 +189,7 @@ module.exports = {
   This is also disabled by default when building as web components (styles are inlined and injected into shadowRoot).
 
   When building as a library, you can also set this to `false` to avoid your users having to import the CSS themselves.
-  
+
   Extracting CSS is always disabled in `development` since it breaks Hot Module Replacement.
 
 ### css.sourceMap

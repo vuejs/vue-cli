@@ -10,6 +10,7 @@ const schema = createSchema(joi => joi.object({
   parallel: joi.boolean(),
   devServer: joi.object(),
   pages: joi.object(),
+  corsUseCredentials: joi.boolean(),
 
   // css
   css: joi.object({
@@ -69,6 +70,10 @@ exports.defaults = () => ({
 
   // multi-page config
   pages: undefined,
+
+  // <script type="module" crossorigin="use-credentials">
+  // #1656, #1867
+  corsUseCredentials: false,
 
   css: {
     // extract: true,

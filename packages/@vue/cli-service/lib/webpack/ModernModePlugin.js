@@ -5,13 +5,14 @@ const path = require('path')
 const safariFix = `!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();`
 
 class ModernModePlugin {
-  constructor (targetDir, isModern) {
+  constructor ({ targetDir, corsUseCredentials, isModernBuild }) {
     this.targetDir = targetDir
-    this.isModern = isModern
+    this.corsUseCredentials = corsUseCredentials
+    this.isModernBuild = isModernBuild
   }
 
   apply (compiler) {
-    if (!this.isModern) {
+    if (!this.isModernBuild) {
       this.applyLegacy(compiler)
     } else {
       this.applyModern(compiler)
@@ -43,7 +44,9 @@ class ModernModePlugin {
         const modernAssets = data.body.filter(a => a.tagName === 'script' && a.attributes)
         modernAssets.forEach(a => {
           a.attributes.type = 'module'
-          a.attributes.crossorigin = 'use-credentials'
+          if (this.corsUseCredentials) {
+            a.attributes.crossorigin = 'use-credentials'
+          }
         })
 
         // inject Safari 10 nomodule fix
@@ -70,7 +73,9 @@ class ModernModePlugin {
         data.html = data.html
           // use <link rel="modulepreload"> instead of <link rel="preload">
           // for modern assets
-          .replace(/(<link as=script .*?)rel=preload>/g, '$1rel=modulepreload crossorigin=use-credentials>')
+          .replace(/(<link as=script .*?)rel=preload>/g, this.corsUseCredentials
+            ? '$1rel=modulepreload crossorigin=use-credentials>'
+            : '$1rel=modulepreload>')
           .replace(/\snomodule="">/g, ' nomodule>')
       })
     })
