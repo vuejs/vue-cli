@@ -18,6 +18,13 @@ VUE_APP_SECRET=secret
 
 Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
 
+::: tip Env Loading Priorities
+
+An env file for a specific mode (e.g. `.env.production`) will take higher priority than a generic one (e.g. `.env`).
+
+In addition, environment variables that already exist when Vue CLI is bootstrapped have the highest priority and will not be overwritten by `.env` files. If you have a default `NODE_ENV` in your environment, you might want to consider removing it.
+:::
+
 ## Modes
 
 **Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
