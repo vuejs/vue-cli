@@ -7,6 +7,12 @@ module.exports = (api, {
     lintOn = lintOn.split(',')
   }
 
+  api.extendPackage({
+    devDependencies: {
+      typescript: '^2.9.0'
+    }
+  })
+
   if (classComponent) {
     api.extendPackage({
       dependencies: {
