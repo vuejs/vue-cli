@@ -21,7 +21,8 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
-      '--https': `use https (default: ${defaults.https})`
+      '--https': `use https (default: ${defaults.https})`,
+      '--interface': `specify network interface`
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -68,12 +69,14 @@ module.exports = (api, options) => {
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
     const port = await portfinder.getPortPromise()
+    const networkInterface = args.interface || process.env.INTERFACE || projectDevServerOptions.interface
 
     const urls = prepareURLs(
       protocol,
       host,
       port,
-      options.baseUrl
+      options.baseUrl,
+      networkInterface
     )
 
     const proxySettings = prepareProxy(
