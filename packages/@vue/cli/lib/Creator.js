@@ -141,7 +141,6 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run generator
-    log()
     log(`🚀  Invoking generators...`)
     this.emit('creation', { event: 'invoking-generators' })
     const plugins = await this.resolvePlugins(preset.plugins)
@@ -163,7 +162,6 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run complete cbs if any (injected by generators)
-    log()
     logWithSpinner('⚓', `Running completion hooks...`)
     this.emit('creation', { event: 'completion-hooks' })
     for (const cb of createCompleteCbs) {

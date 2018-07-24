@@ -6,7 +6,6 @@ const {
   log,
   error,
   hasProjectYarn,
-  stopSpinner,
   resolvePluginId,
   resolveModule,
   loadModule
@@ -30,9 +29,6 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
   await installPackage(context, packageManager, null, packageName)
 
-  stopSpinner()
-
-  log()
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()
 
