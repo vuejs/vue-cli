@@ -58,8 +58,16 @@ module.exports = {
 }
 ```
 
+When the prefetch plugin is disabled, you can manually select specific chunks to prefetch using webpack's inline comments:
+
+``` js
+import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
+```
+
+webpack's runtime will inject prefetch links when the parent chunk is loaded.
+
 ::: tip
-Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links.
+Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
 :::
 
 ### Building a Multi-Page App
