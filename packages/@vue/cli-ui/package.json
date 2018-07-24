@@ -9,6 +9,8 @@
     "apollo:run": "cross-env VUE_CLI_DEBUG=true VUE_CLI_IPC=vue-cli-dev vue-cli-service apollo:run",
     "apollo:run:test": "cross-env VUE_CLI_UI_TEST=true VUE_APP_GRAPHQL_PORT=4040 VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql VUE_CLI_IPC=vue-cli-test vue-cli-service apollo:watch",
     "prepublishOnly": "yarn run lint --no-fix && yarn run build",
+    "storybook": "vue-cli-service storybook -p 6006 -c config/storybook",
+    "build:storybook": "vue-cli-service build:storybook -c config/storybook",
     "test:e2e:dev": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql vue-cli-service test:e2e --mode development",
     "test:e2e:run": "vue-cli-service test:e2e --mode production --headless --url=http://localhost:4040",
     "test:e2e": "yarn run test:clear && start-server-and-test apollo:run:test http://localhost:4040 test:e2e:dev",
@@ -16,16 +18,6 @@
     "test:clear": "rimraf ../../test/cli-ui-test && rimraf ./live-test",
     "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui && yarn run test:run"
   },
-  "files": [
-    "apollo-server",
-    "dist",
-    "locales",
-    "src",
-    "ui-defaults",
-    "ui-public",
-    "index.js",
-    "server.js"
-  ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
     "@vue/cli-shared-utils": "^3.0.0-rc.5",
@@ -56,6 +48,8 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^4.0.0-alpha.14",
+    "@storybook/addon-links": "^4.0.0-alpha.14",
     "@vue/cli-plugin-babel": "^3.0.0-rc.5",
     "@vue/cli-plugin-e2e-cypress": "^3.0.0-rc.5",
     "@vue/cli-plugin-eslint": "^3.0.0-rc.5",
@@ -75,6 +69,7 @@
     "stylus-loader": "^3.0.1",
     "vue": "^2.5.16",
     "vue-apollo": "^3.0.0-beta.17",
+    "vue-cli-plugin-storybook": "^0.3.0",
     "vue-color": "^2.4.6",
     "vue-i18n": "^8.0.0",
     "vue-instantsearch": "^1.5.1",
@@ -88,7 +83,21 @@
     "> 1%",
     "last 2 versions"
   ],
-  "main": "index.js",
+  "vuePlugins": {
+    "ui": [
+      "ui-dev.js"
+    ]
+  },
+  "files": [
+    "apollo-server",
+    "dist",
+    "locales",
+    "src",
+    "ui-defaults",
+    "ui-public",
+    "index.js",
+    "server.js"
+  ],
   "license": "MIT",
   "author": "Guillaume Chau",
   "engines": {
@@ -110,9 +119,5 @@
       "git add"
     ]
   },
-  "vuePlugins": {
-    "ui": [
-      "ui-dev.js"
-    ]
-  }
+  "main": "index.js"
 }
