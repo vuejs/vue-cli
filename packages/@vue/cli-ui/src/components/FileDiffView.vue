@@ -62,6 +62,7 @@
           icon-left="done"
           :label="$t('org.vue.components.file-diff-view.actions.continue')"
           class="big primary"
+          data-testid="skip-button"
           @click="skip()"
         />
         <VueButton
