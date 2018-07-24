@@ -21,7 +21,8 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
-      '--https': `use https (default: ${defaults.https})`
+      '--https': `use https (default: ${defaults.https})`,
+      '--public': `specify the public network URL for the HMR client`
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -68,6 +69,7 @@ module.exports = (api, options) => {
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
     const port = await portfinder.getPortPromise()
+    const publicUrl = args.public || projectDevServerOptions.public
 
     const urls = prepareURLs(
       protocol,
@@ -83,8 +85,7 @@ module.exports = (api, options) => {
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
-      const publicOpt = projectDevServerOptions.public
-      const sockjsUrl = publicOpt ? `//${publicOpt}/sockjs-node` : url.format({
+      const sockjsUrl = publicUrl ? `//${publicUrl}/sockjs-node` : url.format({
         protocol,
         port,
         hostname: urls.lanUrlForConfig || 'localhost',
@@ -181,11 +182,14 @@ module.exports = (api, options) => {
           copied = chalk.dim('(copied to clipboard)')
         }
 
+        const networkUrl = publicUrl
+          ? (protocol + '://' + publicUrl).replace(/([^/])$/, '$1/')
+          : urls.lanUrlForTerminal
         console.log()
         console.log([
           `  App running at:`,
           `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`,
-          `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
+          `  - Network: ${chalk.cyan(networkUrl)}`
         ].join('\n'))
         console.log()
 
