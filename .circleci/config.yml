@@ -75,6 +75,13 @@ jobs:
       - store_artifacts:
           path: packages/@vue/cli-ui/tests/e2e/screenshots
 
+  cli-ui-chromatic:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: cd packages/@vue/cli-ui && yarn chromatic
+
 workflows:
   version: 2
   test:
@@ -98,6 +105,10 @@ workflows:
           requires:
             - install
       - cli-ui:
+          <<: *filters
+          requires:
+            - install
+      - cli-ui-chromatic:
           <<: *filters
           requires:
             - install
