@@ -16,8 +16,11 @@ module.exports = function lint (args = {}, api, silent) {
     rulesDirectory: args['rules-dir']
   }
 
-  // hack to make tslint --fix work for *.vue files
-  // this works because (luckily) tslint lints synchronously
+  // hack to make tslint --fix work for *.vue files:
+  // we save the non-script parts to a cache right before
+  // linting the file, and patch fs.writeFileSync to combine the fixed script
+  // back with the non-script parts.
+  // this works because (luckily) tslint lints synchronously.
   const vueFileCache = new Map()
   const writeFileSync = fs.writeFileSync
 
@@ -50,17 +53,29 @@ module.exports = function lint (args = {}, api, silent) {
   const program = tslint.Linter.createProgram(api.resolve('tsconfig.json'))
 
   // patch getSourceFile for *.vue files
-  const getSourceFile = program.getSourceFile
-  program.getSourceFile = function (file, languageVersion, onError) {
-    if (isVueFile(file)) {
-      const script = parseTSFromVueFile(file)
-      return ts.createSourceFile(file, script, languageVersion, true)
-    } else {
-      return getSourceFile.call(this, file, languageVersion, onError)
+  // so that it returns the <script> block only
+  const patchProgram = program => {
+    const getSourceFile = program.getSourceFile
+    program.getSourceFile = function (file, languageVersion, onError) {
+      if (isVueFile(file)) {
+        const script = parseTSFromVueFile(file)
+        return ts.createSourceFile(file, script, languageVersion, true)
+      } else {
+        return getSourceFile.call(this, file, languageVersion, onError)
+      }
     }
   }
 
+  patchProgram(program)
+
   const linter = new tslint.Linter(options, program)
+
+  // patch linter.updateProgram to ensure every program has correct getSourceFile
+  const updateProgram = linter.updateProgram
+  linter.updateProgram = function (...args) {
+    updateProgram.call(this, ...args)
+    patchProgram(this.program)
+  }
 
   const config = tslint.Configuration.findConfiguration(api.resolve('tslint.json')).results
   // create a patched config that disables the blank lines rule,
