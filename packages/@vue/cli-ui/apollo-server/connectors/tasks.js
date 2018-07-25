@@ -298,7 +298,8 @@ async function run (id, context) {
 
     const child = execa(command, args, {
       cwd: cwd.get(),
-      stdio: ['inherit', 'pipe', 'pipe']
+      stdio: ['inherit', 'pipe', 'pipe'],
+      shell: true
     })
 
     if (typeof nodeEnv !== 'undefined') {
@@ -409,6 +410,28 @@ async function run (id, context) {
 
     child.on('exit', onExit)
 
+    child.on('error', error => {
+      updateOne({
+        id: task.id,
+        status: 'error'
+      }, context)
+      logs.add({
+        message: `Error while running task ${task.id} with message'${error.message}'`,
+        type: 'error'
+      }, context)
+      notify({
+        title: `Task error`,
+        message: `Error while running task ${task.id} with message'${error.message}'`,
+        icon: 'error'
+      })
+      addLog({
+        taskId: task.id,
+        type: 'stdout',
+        text: chalk.red(`Error while running task ${task.id} with message '${error.message}'`)
+      }, context)
+      console.error(error)
+    })
+
     // Plugin API
     if (task.onRun) {
       await task.onRun({
@@ -436,7 +459,15 @@ function stop (id, context) {
   const task = findOne(id, context)
   if (task && task.status === 'running' && task.child) {
     task._terminating = true
-    terminate(task.child.pid)
+    try {
+      terminate(task.child.pid)
+    } catch (e) {
+      console.error(e)
+      updateOne({
+        id: task.id,
+        status: 'terminated'
+      }, context)
+    }
   }
   return task
 }
