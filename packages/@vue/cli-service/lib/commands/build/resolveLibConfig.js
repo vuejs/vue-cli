@@ -75,6 +75,9 @@ module.exports = (api, { entry, name }, options) => {
       .alias
         .set('~entry', fullEntryPath)
 
+    // set output target before user configureWebpack hooks are applied
+    config.output.libraryTarget(format)
+
     // set entry/output after user configureWebpack hooks are applied
     const rawConfig = api.resolveWebpackConfig(config)
 
