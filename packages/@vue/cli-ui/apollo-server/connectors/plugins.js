@@ -249,6 +249,7 @@ function getApi (folder) {
 
 function callHook ({ id, args, file }, context) {
   const pluginApi = getApi(file)
+  if (!pluginApi) return
   const fns = pluginApi.hooks[id]
   log(`Hook ${id}`, fns.length, 'handlers')
   fns.forEach(fn => fn(...args))
