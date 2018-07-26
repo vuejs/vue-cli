@@ -23,7 +23,5 @@ module.exports = {
           }
         })
       )
-  },
-
-  lintOnSave: undefined
+  }
 }
