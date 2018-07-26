@@ -74,15 +74,24 @@ module.exports = (api, options) => {
       })
 
       // keep chunk ids stable so async chunks have consistent hash (#1916)
+      const seen = new Set()
+      const nameLength = 4
       webpackConfig
         .plugin('named-chunks')
           .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
             if (chunk.name) {
               return chunk.name
             }
-            return `chunk-` + Array.from(chunk.modulesIterable, m => {
-              return m.id
-            }).join('_')
+            const modules = Array.from(chunk.modulesIterable)
+            if (modules.length > 1) {
+              const hash = require('hash-sum')
+              const joinedHash = hash(modules.map(m => m.id).join('_'))
+              let len = nameLength
+              while (seen.has(joinedHash.substr(0, len))) len++
+              return `chunk-${joinedHash.substr(0, len)}`
+            } else {
+              return modules[0].id
+            }
           }])
     }
 
