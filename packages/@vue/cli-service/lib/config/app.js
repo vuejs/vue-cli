@@ -72,6 +72,18 @@ module.exports = (api, options) => {
         // matter anyway
         chunksSortMode: 'none'
       })
+
+      // keep chunk ids stable so async chunks have consistent hash (#1916)
+      webpackConfig
+        .plugin('named-chunks')
+          .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
+            if (chunk.name) {
+              return chunk.name
+            }
+            return `chunk-` + Array.from(chunk.modulesIterable, m => {
+              return m.id
+            }).join('_')
+          }])
     }
 
     // resolve HTML file(s)

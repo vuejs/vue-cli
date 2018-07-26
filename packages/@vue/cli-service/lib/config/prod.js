@@ -19,7 +19,9 @@ module.exports = (api, options) => {
       // keep module.id stable when vendor modules does not change
       webpackConfig
         .plugin('hash-module-ids')
-          .use(require('webpack/lib/HashedModuleIdsPlugin'))
+          .use(require('webpack/lib/HashedModuleIdsPlugin'), [{
+            hashDigest: 'hex'
+          }])
 
       // disable optimization during tests to speed things up
       if (process.env.VUE_CLI_TEST) {
