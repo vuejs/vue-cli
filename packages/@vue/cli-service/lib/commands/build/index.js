@@ -61,6 +61,14 @@ module.exports = (api, options) => {
       delete process.env.VUE_CLI_MODERN_MODE
       delete process.env.VUE_CLI_MODERN_BUILD
     } else {
+      if (args.modern) {
+        const { warn } = require('@vue/cli-shared-utils')
+        warn(
+          `Modern mode only works with default target (app). ` +
+          `For libraries or web components, use the browserslist ` +
+          `config to specify target browsers.`
+        )
+      }
       await build(args, api, options)
     }
     delete process.env.VUE_CLI_BUILD_TARGET
