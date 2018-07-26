@@ -5,8 +5,7 @@ module.exports = (api, options) => {
       const getAssetPath = require('../util/getAssetPath')
       const filename = getAssetPath(
         options,
-        `js/[name]${isLegacyBundle ? `-legacy` : ``}.[chunkhash:8].js`,
-        true /* placeAtRootIfRelative */
+        `js/[name]${isLegacyBundle ? `-legacy` : ``}.[chunkhash:8].js`
       )
 
       webpackConfig

@@ -48,7 +48,7 @@ module.exports = {
   }
   ```
 
-  The value can also be set to an empty string (`''`) so that all assets are linked using relative paths, so that the bundle can be used in a file system based environment like a Cordova hybrid app. The caveat is that this will force the generated CSS files to always be placed at the root of the output directory to ensure urls in your CSS work correctly.
+  The value can also be set to an empty string (`''`) so that all assets are linked using relative paths, so that the bundle can be used in a file system based environment like a Cordova hybrid app. **Note that this will force the generated CSS files to always be placed at the root of the output directory to ensure urls in your CSS work correctly.**
 
   ::: tip
   Always use `baseUrl` instead of modifying webpack `output.publicPath`.
