@@ -99,8 +99,8 @@ test('build w/ multi page', async () => {
   expect(index).not.toMatch(/<link [^>]*js\/foo[^>]*\.js rel=preload>/)
   expect(index).not.toMatch(/<link [^>]*js\/bar[^>]*\.js rel=preload>/)
   // should prefetch async chunk js and css
-  expect(index).toMatch(/<link [^>]*css\/0\.\w+\.css rel=prefetch>/)
-  expect(index).toMatch(/<link [^>]*js\/0\.\w+\.js rel=prefetch>/)
+  expect(index).toMatch(/<link [^>]*css\/chunk-\w+\.\w+\.css rel=prefetch>/)
+  expect(index).toMatch(/<link [^>]*js\/chunk-\w+\.\w+\.js rel=prefetch>/)
   // should load correct page js
   expect(index).toMatch(/<script [^>]*src=\/js\/index\.\w+\.js>/)
   expect(index).not.toMatch(/<script [^>]*src=\/js\/foo\.\w+\.js>/)
@@ -114,8 +114,8 @@ test('build w/ multi page', async () => {
   expect(foo).not.toMatch(/<link [^>]*js\/bar[^>]*\.js rel=preload>/)
   // should not prefetch async chunk js and css because it's not used by
   // this entry
-  expect(foo).not.toMatch(/<link [^>]*css\/0\.\w+\.css rel=prefetch>/)
-  expect(foo).not.toMatch(/<link [^>]*js\/0\.\w+\.js rel=prefetch>/)
+  expect(foo).not.toMatch(/<link [^>]*css\/chunk-\w+\.\w+\.css rel=prefetch>/)
+  expect(foo).not.toMatch(/<link [^>]*js\/chunk-\w+\.\w+\.js rel=prefetch>/)
   // should load correct page js
   expect(foo).not.toMatch(/<script [^>]*src=\/js\/index\.\w+\.js>/)
   expect(foo).toMatch(/<script [^>]*src=\/js\/foo\.\w+\.js>/)
@@ -128,8 +128,8 @@ test('build w/ multi page', async () => {
   expect(bar).not.toMatch(/<link [^>]*js\/foo[^>]*\.js rel=preload>/)
   expect(bar).toMatch(/<link [^>]*js\/bar[^>]*\.js rel=preload>/)
   // should prefetch async chunk js and css
-  expect(bar).toMatch(/<link [^>]*css\/0\.\w+\.css rel=prefetch>/)
-  expect(bar).toMatch(/<link [^>]*js\/0\.\w+\.js rel=prefetch>/)
+  expect(bar).toMatch(/<link [^>]*css\/chunk-\w+\.\w+\.css rel=prefetch>/)
+  expect(bar).toMatch(/<link [^>]*js\/chunk-\w+\.\w+\.js rel=prefetch>/)
   // should load correct page js
   expect(bar).not.toMatch(/<script [^>]*src=\/js\/index\.\w+\.js>/)
   expect(bar).not.toMatch(/<script [^>]*src=\/js\/foo\.\w+\.js>/)
