@@ -1,3 +1,116 @@
+# [3.0.0-rc.6](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.5...v3.0.0-rc.6) (2018-07-26)
+
+## cli
+
+#### Bug Fixes
+
+* infer rootOptions for late invoked generators ([ce58549](https://github.com/vuejs/vue-cli/commit/ce58549)), closes [#1820](https://github.com/vuejs/vue-cli/issues/1820)
+* plugin generator should be optional ([75eb5b1](https://github.com/vuejs/vue-cli/commit/75eb5b1)), closes [#1896](https://github.com/vuejs/vue-cli/issues/1896)
+* README.md not in initial commit, closes [#1869](https://github.com/vuejs/vue-cli/issues/1869) ([fde3c0e](https://github.com/vuejs/vue-cli/commit/fde3c0e))
+* **create:** clear tmpdir before cloning remote preset, fix [#1878](https://github.com/vuejs/vue-cli/issues/1878) ([#1880](https://github.com/vuejs/vue-cli/issues/1880)) ([a1097f2](https://github.com/vuejs/vue-cli/commit/a1097f2))
+* **create:** Commands added by plugin (through preset) won't have description in README' ([#1910](https://github.com/vuejs/vue-cli/issues/1910)) ([e9d01eb](https://github.com/vuejs/vue-cli/commit/e9d01eb))
+* **create:** fix force git init ([967f99a](https://github.com/vuejs/vue-cli/commit/967f99a))
+* **create:** fix shouldInitGit check ([#1901](https://github.com/vuejs/vue-cli/issues/1901)) ([7e6c37c](https://github.com/vuejs/vue-cli/commit/7e6c37c))
+* **create:** prioritize preset name present in ~/.vuerc ([#1874](https://github.com/vuejs/vue-cli/issues/1874)) ([87a6272](https://github.com/vuejs/vue-cli/commit/87a6272)), closes [#1871](https://github.com/vuejs/vue-cli/issues/1871)
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* **pwa:** wrong config, closes [#1890](https://github.com/vuejs/vue-cli/issues/1890) ([f4aa40d](https://github.com/vuejs/vue-cli/commit/f4aa40d))
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **typescript:** fix ts + modern mode ([d6d2af5](https://github.com/vuejs/vue-cli/commit/d6d2af5)), closes [#1577](https://github.com/vuejs/vue-cli/issues/1577)
+* **typescript:** default esModuleInterop to true ([a352bdc](https://github.com/vuejs/vue-cli/commit/a352bdc)), closes [#1895](https://github.com/vuejs/vue-cli/issues/1895)
+#### Documentation
+
+* mention ts peer dep change ([9bb74bc](https://github.com/vuejs/vue-cli/commit/9bb74bc))
+#### Features
+
+* **plugin-api:** prompts.js can now export a function which receives package info ([e33b04c](https://github.com/vuejs/vue-cli/commit/e33b04c))
+* **typescript:** make typescript a peer dep so user can specify its version ([f278faf](https://github.com/vuejs/vue-cli/commit/f278faf))
+
+## cli-plugin-unit-jest
+
+#### Features
+
+* **unit-jest:** run jest in the same process ([cd88cfa](https://github.com/vuejs/vue-cli/commit/cd88cfa))
+
+## cli-service
+
+#### Bug Fixes
+
+* disable chunk sorting in html-webpack-plugin ([744c375](https://github.com/vuejs/vue-cli/commit/744c375)), closes [#1669](https://github.com/vuejs/vue-cli/issues/1669)
+* **build:** avoid default import warning when lib entry has no default export ([d26cb86](https://github.com/vuejs/vue-cli/commit/d26cb86)), closes [#1641](https://github.com/vuejs/vue-cli/issues/1641)
+* **build:** ensure consistent chunk id for async chunks ([db26361](https://github.com/vuejs/vue-cli/commit/db26361)), closes [#1916](https://github.com/vuejs/vue-cli/issues/1916)
+* **build:** fix global object when building as lib with async chunks ([369f972](https://github.com/vuejs/vue-cli/commit/369f972)), closes [#1607](https://github.com/vuejs/vue-cli/issues/1607)
+* **build:** respect productionSourceMap option for all targets ([dcf9931](https://github.com/vuejs/vue-cli/commit/dcf9931)), closes [#1898](https://github.com/vuejs/vue-cli/issues/1898)
+* **dev-server:** pass 2nd argument to devServer.before ([#1854](https://github.com/vuejs/vue-cli/issues/1854)) ([8cdc9d1](https://github.com/vuejs/vue-cli/commit/8cdc9d1)), closes [#1833](https://github.com/vuejs/vue-cli/issues/1833)
+* **web-component:** fix multiple wc-async bundles on the same page ([10aa996](https://github.com/vuejs/vue-cli/commit/10aa996)), closes [#1150](https://github.com/vuejs/vue-cli/issues/1150)
+#### Features
+
+* add corsUseCredentials option ([30215c2](https://github.com/vuejs/vue-cli/commit/30215c2)), closes [#1867](https://github.com/vuejs/vue-cli/issues/1867)
+* Add link to Vue News to bootstrapped component ([#1920](https://github.com/vuejs/vue-cli/issues/1920)) ([098b63e](https://github.com/vuejs/vue-cli/commit/098b63e))
+* demonstrate route-level code splitting in generated file ([7d46db9](https://github.com/vuejs/vue-cli/commit/7d46db9)), closes [#1928](https://github.com/vuejs/vue-cli/issues/1928)
+* **build:** set output target before configureWebpack, close [#1941](https://github.com/vuejs/vue-cli/issues/1941) ([#1943](https://github.com/vuejs/vue-cli/issues/1943)) ([6c966f4](https://github.com/vuejs/vue-cli/commit/6c966f4))
+* **serve:** allow specifying public network url via command line ([ccc90c9](https://github.com/vuejs/vue-cli/commit/ccc90c9))
+
+## cli-shared-utils
+
+#### Bug Fixes
+
+* **ipc:** check connection ([9a8f49e](https://github.com/vuejs/vue-cli/commit/9a8f49e))
+#### Performance Improvements
+
+* improve CLI startup performance ([4b4e460](https://github.com/vuejs/vue-cli/commit/4b4e460))
+
+## cli-ui
+
+#### Bug Fixes
+
+* **plugin api:** cwd is not a function [#1876](https://github.com/vuejs/vue-cli/issues/1876) ([#1877](https://github.com/vuejs/vue-cli/issues/1877)) ([24edd93](https://github.com/vuejs/vue-cli/commit/24edd93))
+* **plugin api:** task hooks (non-vue cli project) ([0ee1983](https://github.com/vuejs/vue-cli/commit/0ee1983))
+* **suggestions:** refresh list when locale changes ([c5ac93e](https://github.com/vuejs/vue-cli/commit/c5ac93e))
+* **task:** shell mode (fix `cd`) + more robust error handing ([8e6622f](https://github.com/vuejs/vue-cli/commit/8e6622f))
+* **task parameters:** revert to a modal ([d442de2](https://github.com/vuejs/vue-cli/commit/d442de2))
+* **tasks:** parameters ([3936dfc](https://github.com/vuejs/vue-cli/commit/3936dfc))
+* **tasks:** unset options ([4feddbd](https://github.com/vuejs/vue-cli/commit/4feddbd))
+* typo ([ca7ad70](https://github.com/vuejs/vue-cli/commit/ca7ad70))
+#### Features
+
+* **task:** save/restore params ([d30475b](https://github.com/vuejs/vue-cli/commit/d30475b))
+#### Performance Improvements
+
+* **task:** better perceived perf with display priority ([7761808](https://github.com/vuejs/vue-cli/commit/7761808))
+
+## docs
+
+#### Bug Fixes
+
+* vuepress docs branch ([cc9a6c2](https://github.com/vuejs/vue-cli/commit/cc9a6c2))
+#### Features
+
+* **build:** allow specifying chunks in multi-page mode ([8415622](https://github.com/vuejs/vue-cli/commit/8415622)), closes [#1923](https://github.com/vuejs/vue-cli/issues/1923)
+
+## eslint-config-typescript
+
+#### Bug Fixes
+
+* **typescript:** avoid error when using ts + eslint + e2e-nightwatch ([87ad7fc](https://github.com/vuejs/vue-cli/commit/87ad7fc)), closes [#1922](https://github.com/vuejs/vue-cli/issues/1922)
+* temporarily disable space-infix-ops for eslint + TS ([fe11774](https://github.com/vuejs/vue-cli/commit/fe11774)), closes [#1672](https://github.com/vuejs/vue-cli/issues/1672)
+
+
+### BREAKING CHANGES
+
+* `typescript` is now a peer dependency of
+`@vue/cli-plugin-typescript`. If you are upgrading from a previous version, you
+will need to explicitly install `typescript` in your project.
+
+
+
 # [3.0.0-rc.5](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.4...v3.0.0-rc.5) (2018-07-16)
 
 ## cli-service
@@ -482,7 +595,7 @@ but should not affect normal test cases
 
 
 
-# [3.0.0-beta.15](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.12...v3.0.0-beta.15) (2018-05-30)
+# [3.0.0-beta.15](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2018-05-30)
 
 ## cli
 
@@ -512,7 +625,6 @@ but should not affect normal test cases
 
 * **cli-service:** make devBaseUrl work properly in serve command ([#1405](https://github.com/vuejs/vue-cli/issues/1405)) ([04600e6](https://github.com/vuejs/vue-cli/commit/04600e6))
 * **unit-mocha:** ensure correct mode for webpack config ([e17f78c](https://github.com/vuejs/vue-cli/commit/e17f78c)), closes [#1389](https://github.com/vuejs/vue-cli/issues/1389)
-* fix caching dependency (close [#1384](https://github.com/vuejs/vue-cli/issues/1384)) ([9846cd5](https://github.com/vuejs/vue-cli/commit/9846cd5))
 #### Features
 
 * respect baseUrl during development ([a9e1286](https://github.com/vuejs/vue-cli/commit/a9e1286))
@@ -521,15 +633,7 @@ but should not affect normal test cases
 
 #### Bug Fixes
 
-* **ui:** add missing dependency ([3bcc511](https://github.com/vuejs/vue-cli/commit/3bcc511))
-* **ui:** fix beta.12 feedback ([#1386](https://github.com/vuejs/vue-cli/issues/1386)) ([a3b2be8](https://github.com/vuejs/vue-cli/commit/a3b2be8))
 * UI fixes ([#1397](https://github.com/vuejs/vue-cli/issues/1397)) ([4f39461](https://github.com/vuejs/vue-cli/commit/4f39461))
-
-## docs
-
-#### Features
-
-* add --copy option for vue-cli-service serve ([#1355](https://github.com/vuejs/vue-cli/issues/1355)) ([5e95b3d](https://github.com/vuejs/vue-cli/commit/5e95b3d))
 
 
 ### BREAKING CHANGES
@@ -537,6 +641,29 @@ but should not affect normal test cases
 * `devBaseUrl` option has been removed. `baseUrl` now works for
 both development and production. To use different paths for prod/dev, use
 conditional values based on `process.env.NODE_ENV` in `vue.config.js`.
+
+
+
+# [3.0.0-beta.14](https://github.com/vuejs/vue-cli/compare/v3.0.0-beta.12...v3.0.0-beta.14) (2018-05-29)
+
+## cli-service
+
+#### Bug Fixes
+
+* fix caching dependency (close [#1384](https://github.com/vuejs/vue-cli/issues/1384)) ([9846cd5](https://github.com/vuejs/vue-cli/commit/9846cd5))
+
+## cli-ui
+
+#### Bug Fixes
+
+* **ui:** add missing dependency ([3bcc511](https://github.com/vuejs/vue-cli/commit/3bcc511))
+* **ui:** fix beta.12 feedback ([#1386](https://github.com/vuejs/vue-cli/issues/1386)) ([a3b2be8](https://github.com/vuejs/vue-cli/commit/a3b2be8))
+
+## docs
+
+#### Features
+
+* add --copy option for vue-cli-service serve ([#1355](https://github.com/vuejs/vue-cli/issues/1355)) ([5e95b3d](https://github.com/vuejs/vue-cli/commit/5e95b3d))
 
 
 
