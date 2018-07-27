@@ -103,6 +103,7 @@ module.exports = (api, options) => {
               const joinedHash = hash(modules.map(m => m.id).join('_'))
               let len = nameLength
               while (seen.has(joinedHash.substr(0, len))) len++
+              seen.add(joinedHash.substr(0, len))
               return `chunk-${joinedHash.substr(0, len)}`
             } else {
               return modules[0].id
