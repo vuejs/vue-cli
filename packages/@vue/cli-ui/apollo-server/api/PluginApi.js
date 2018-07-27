@@ -374,6 +374,7 @@ class PluginApi {
    * @param {string} id Plugin id or short id
    */
   hasPlugin (id) {
+    if (id === 'router') id = 'vue-router'
     if (['vue-router', 'vuex'].includes(id)) {
       const pkg = folders.readPackage(this.cwd, this.context, true)
       return ((pkg.dependencies && pkg.dependencies[id]) || (pkg.devDependencies && pkg.devDependencies[id]))
