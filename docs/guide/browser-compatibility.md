@@ -8,7 +8,7 @@ See [here][browserslist] for how to specify browser ranges.
 
 ## Polyfills
 
-A default Vue CLI project uses [@vue/babel-preset-app][babel-preset-env], which uses `@babel/preset-env` and the `browserslist` config to determine the Polyfills needed for your project.
+A default Vue CLI project uses [@vue/babel-preset-app][babel-preset-app], which uses `@babel/preset-env` and the `browserslist` config to determine the Polyfills needed for your project.
 
 By default, it passes [`useBuiltIns: 'usage'`](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) to `@babel/preset-env` which automatically detects the polyfills needed based on the language features used in your source code. This ensures only the minimum amount of polyfills are included in your final bundle. However, this also means **if one of your dependencies has specific requirements on polyfills, by default Babel won't be able to detect it.**
 
@@ -68,4 +68,5 @@ For a Hello World app, the modern bundle is already 16% smaller. In production, 
 
 [autoprefixer]: https://github.com/postcss/autoprefixer
 [babel-preset-env]: https://new.babeljs.io/docs/en/next/babel-preset-env.html
+[babel-preset-app]: https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app
 [browserslist]: https://github.com/ai/browserslist
