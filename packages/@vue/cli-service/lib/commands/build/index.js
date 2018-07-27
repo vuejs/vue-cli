@@ -226,7 +226,7 @@ async function build (args, api, options) {
             isFreshBuild
           ) {
             console.log(
-              chalk.gray(`Tip: the direcotry is meant to be served by an HTTP server, and will not work if\n` +
+              chalk.gray(`Tip: the directory is meant to be served by an HTTP server, and will not work if\n` +
               `you open it directly over file:// protocol. To preview it locally, use an HTTP\n` +
               `server like the ${chalk.yellow(`serve`)} package on npm.\n`)
             )
