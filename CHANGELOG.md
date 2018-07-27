@@ -1,3 +1,23 @@
+# [3.0.0-rc.7](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.6...v3.0.0-rc.7) (2018-07-27)
+
+## cli
+
+#### Features
+
+* store rc file in AppData on windows ([e970b1a](https://github.com/vuejs/vue-cli/commit/e970b1a)), closes [#1957](https://github.com/vuejs/vue-cli/issues/1957)
+
+## cli-service
+
+#### Bug Fixes
+
+* fix absolute path for outputDir option ([e7602ab](https://github.com/vuejs/vue-cli/commit/e7602ab))
+* make sure router.js passes airbnb lint ([e27e679](https://github.com/vuejs/vue-cli/commit/e27e679)), closes [#1956](https://github.com/vuejs/vue-cli/issues/1956)
+#### Features
+
+* support specifying index output path via indexPath option ([b9ecb90](https://github.com/vuejs/vue-cli/commit/b9ecb90))
+
+
+
 # [3.0.0-rc.6](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.5...v3.0.0-rc.6) (2018-07-26)
 
 ## cli
