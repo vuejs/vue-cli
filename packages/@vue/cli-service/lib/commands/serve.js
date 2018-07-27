@@ -32,7 +32,6 @@ module.exports = (api, options) => {
     const isProduction = process.env.NODE_ENV === 'production'
 
     const path = require('path')
-    const url = require('url')
     const chalk = require('chalk')
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
@@ -69,7 +68,12 @@ module.exports = (api, options) => {
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
     const port = await portfinder.getPortPromise()
-    const publicUrl = args.public || projectDevServerOptions.public
+    const rawPublicUrl = args.public || projectDevServerOptions.public
+    const publicUrl = rawPublicUrl
+      ? /^[a-zA-Z]+:\/\//.test(rawPublicUrl)
+        ? rawPublicUrl
+        : `${protocol}://${rawPublicUrl}`
+      : null
 
     const urls = prepareURLs(
       protocol,
@@ -85,16 +89,12 @@ module.exports = (api, options) => {
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
-      const sockjsUrl = publicUrl ? `//${publicUrl}/sockjs-node` : url.format({
-        protocol,
-        port,
-        hostname: urls.lanUrlForConfig || 'localhost',
-        pathname: '/sockjs-node'
-      })
-
+      const sockjsUrl = publicUrl
+        ? `?${publicUrl}/sockjs-node`
+        : ``
       const devClients = [
         // dev server client
-        require.resolve(`webpack-dev-server/client`) + `?${sockjsUrl}`,
+        require.resolve(`webpack-dev-server/client`) + sockjsUrl,
         // hmr client
         require.resolve(projectDevServerOptions.hotOnly
           ? 'webpack/hot/only-dev-server'
@@ -183,7 +183,7 @@ module.exports = (api, options) => {
         }
 
         const networkUrl = publicUrl
-          ? (protocol + '://' + publicUrl).replace(/([^/])$/, '$1/')
+          ? publicUrl.replace(/([^/])$/, '$1/')
           : urls.lanUrlForTerminal
         console.log()
         console.log([
