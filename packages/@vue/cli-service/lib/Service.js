@@ -336,6 +336,6 @@ function ensureSlash (config, key) {
 
 function removeSlash (config, key) {
   if (typeof config[key] === 'string') {
-    config[key] = config[key].replace(/^\/|\/$/g, '')
+    config[key] = config[key].replace(/\/$/g, '')
   }
 }

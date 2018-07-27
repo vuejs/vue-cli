@@ -91,7 +91,7 @@ test('handle option baseUrl and outputDir correctly', () => {
   })
   const service = createMockService()
   expect(service.projectOptions.baseUrl).toBe('https://foo.com/bar/')
-  expect(service.projectOptions.outputDir).toBe('public')
+  expect(service.projectOptions.outputDir).toBe('/public')
 })
 
 test('load project options from vue.config.js', () => {
