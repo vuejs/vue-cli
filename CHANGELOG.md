@@ -1,3 +1,50 @@
+# [3.0.0-rc.8](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.7...v3.0.0-rc.8) (2018-07-27)
+
+## babel-preset-app
+
+#### Code Refactoring
+
+* **babel:** use individual plugins instead of stage presets ([da833d6](https://github.com/vuejs/vue-cli/commit/da833d6))
+
+## cli
+
+#### Bug Fixes
+
+* revert windows config path change, close [#1961](https://github.com/vuejs/vue-cli/issues/1961) ([b60dd4b](https://github.com/vuejs/vue-cli/commit/b60dd4b))
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* do not default emitDecoratorMetadata to true ([aea4cfe](https://github.com/vuejs/vue-cli/commit/aea4cfe)), closes [#1708](https://github.com/vuejs/vue-cli/issues/1708)
+* fix tslint on vue file with no script ([6b91a13](https://github.com/vuejs/vue-cli/commit/6b91a13))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* **jest:** fix jest tests due to jsdom 11.12.0 ([7d65353](https://github.com/vuejs/vue-cli/commit/7d65353)), closes [#1960](https://github.com/vuejs/vue-cli/issues/1960)
+
+## cli-service
+
+#### Bug Fixes
+
+* avoid hash collisions ([#1959](https://github.com/vuejs/vue-cli/issues/1959)) ([4b5a634](https://github.com/vuejs/vue-cli/commit/4b5a634))
+* fix hmr in docker + support devServer.public with protocol ([da38ed4](https://github.com/vuejs/vue-cli/commit/da38ed4))
+#### Features
+
+* **serve:** detect and add tip when running inside container ([ed0315a](https://github.com/vuejs/vue-cli/commit/ed0315a))
+
+
+### BREAKING CHANGES
+
+* **babel:** @vue/babel-preset-app no longer includes @babel/preset-stage-2.
+Now the only pre stage-3 proposals included are dynamic import, decorators and
+class properties. This is because Babel 7 will be removing stage presets
+altogether.
+
+
+
 # [3.0.0-rc.7](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.6...v3.0.0-rc.7) (2018-07-27)
 
 ## cli
