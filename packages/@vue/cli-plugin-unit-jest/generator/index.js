@@ -32,7 +32,9 @@ module.exports = api => {
     ],
     'testMatch': [
       '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
-    ]
+    ],
+    // https://github.com/facebook/jest/issues/6766
+    'testURL': 'http://localhost/'
   }
 
   if (!api.hasPlugin('typescript')) {
