@@ -5,10 +5,7 @@ const { exit } = require('@vue/cli-shared-utils/lib/exit')
 const { error } = require('@vue/cli-shared-utils/lib/logger')
 const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
 
-const rcPath = exports.rcPath = (
-  process.env.VUE_CLI_CONFIG_PATH ||
-  getRcPath('.vuerc')
-)
+const rcPath = exports.rcPath = getRcPath('.vuerc')
 
 const presetSchema = createSchema(joi => joi.object().keys({
   useConfigFiles: joi.boolean(),

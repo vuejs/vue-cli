@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const os = require('os')
 const path = require('path')
 
@@ -7,37 +7,41 @@ const xdgConfigPath = file => {
   if (xdgConfigHome) {
     const rcDir = path.join(xdgConfigHome, 'vue')
     if (!fs.existsSync(rcDir)) {
-      fs.mkdirSync(rcDir, 0o700)
+      fs.ensureDirSync(rcDir, 0o700)
     }
     return path.join(rcDir, file)
   }
 }
 
-const windowsConfigPath = file => {
+// migration for 3.0.0-rc.7
+// we introduced a change storing .vuerc in AppData, but the benefit isn't
+// really obvious so we are reverting it to keep consistency across OSes
+const migrateWindowsConfigPath = file => {
   if (process.platform !== 'win32') {
     return
   }
   const appData = process.env.APPDATA
   if (appData) {
     const rcDir = path.join(appData, 'vue')
-    if (!fs.existsSync(rcDir)) {
-      fs.mkdirSync(rcDir)
+    const rcFile = path.join(rcDir, file)
+    const properRcFile = path.join(os.homedir(), file)
+    if (fs.existsSync(rcFile)) {
+      try {
+        if (fs.existsSync(properRcFile)) {
+          fs.removeSync(rcFile)
+        } else {
+          fs.moveSync(rcFile, properRcFile)
+        }
+      } catch (e) {}
     }
-    const rcPath = path.join(rcDir, file)
-    // migration for < 3.0.0-rc.7
-    const oldRcFile = path.join(os.homedir(), file)
-    if (fs.existsSync(oldRcFile)) {
-      fs.writeFileSync(rcPath, fs.readFileSync(oldRcFile))
-      const chalk = require('chalk')
-      console.log(`Detected ${chalk.cyan(file)} in ${chalk.cyan(path.dirname(oldRcFile))}...`)
-      console.log(`Migrated to ${chalk.cyan(rcPath)}.`)
-    }
-    return rcPath
   }
 }
 
-exports.getRcPath = file => (
-  xdgConfigPath(file) ||
-  windowsConfigPath(file) ||
-  path.join(os.homedir(), file)
-)
+exports.getRcPath = file => {
+  migrateWindowsConfigPath(file)
+  return (
+    process.env.VUE_CLI_CONFIG_PATH ||
+    xdgConfigPath(file) ||
+    path.join(os.homedir(), file)
+  )
+}
