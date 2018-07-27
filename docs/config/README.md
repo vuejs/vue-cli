@@ -70,11 +70,18 @@ module.exports = {
 - Type: `string`
 - Default: `''`
 
-  A directory to nest generated static assets (js, css, img, fonts) under.
+  A directory (relative to `outputDir`) to nest generated static assets (js, css, img, fonts) under.
 
   ::: tip
   `assetsDir` is ignored when overwriting the filename or chunkFilename from the generated assets.
   :::
+
+### indexPath
+
+- Type: `string`
+- Default: `'index.html'`
+
+  Specify the output path for the generated `index.html` (relative to `outputDir`). Can also be an absolute path.
 
 ### pages
 

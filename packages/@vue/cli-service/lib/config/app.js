@@ -2,6 +2,16 @@
 const fs = require('fs')
 const path = require('path')
 
+// ensure the filename passed to html-webpack-plugin is a relative path
+// because it cannot correctly handle absolute paths
+function ensureRelative (outputDir, _path) {
+  if (path.isAbsolute(_path)) {
+    return path.relative(outputDir, _path)
+  } else {
+    return _path
+  }
+}
+
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     // only apply when there's no alternative target
@@ -11,6 +21,7 @@ module.exports = (api, options) => {
 
     const isProd = process.env.NODE_ENV === 'production'
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
+    const outputDir = api.resolve(options.outputDir)
 
     // code splitting
     if (isProd) {
@@ -54,6 +65,10 @@ module.exports = (api, options) => {
           }
         }, resolveClientEnv(options, true /* raw */))
       }
+    }
+
+    if (options.indexPath) {
+      htmlOptions.filename = ensureRelative(outputDir, options.indexPath)
     }
 
     if (isProd) {
@@ -151,7 +166,7 @@ module.exports = (api, options) => {
         const pageHtmlOptions = Object.assign({}, htmlOptions, {
           chunks: chunks || ['chunk-vendors', 'chunk-common', name],
           template: fs.existsSync(template) ? template : (fs.existsSync(htmlPath) ? htmlPath : defaultHtmlPath),
-          filename,
+          filename: ensureRelative(outputDir, filename),
           title
         })
 
@@ -162,9 +177,10 @@ module.exports = (api, options) => {
 
       if (!isLegacyBundle) {
         pages.forEach(name => {
-          const {
-            filename = `${name}.html`
-          } = normalizePageConfig(multiPageConfig[name])
+          const filename = ensureRelative(
+            outputDir,
+            normalizePageConfig(multiPageConfig[name]).filename || `${name}.html`
+          )
           webpackConfig
             .plugin(`preload-${name}`)
               .use(PreloadPlugin, [{
@@ -192,12 +208,13 @@ module.exports = (api, options) => {
     }
 
     // copy static assets in public/
-    if (!isLegacyBundle && fs.existsSync(api.resolve('public'))) {
+    const publicDir = api.resolve('public')
+    if (!isLegacyBundle && fs.existsSync(publicDir)) {
       webpackConfig
         .plugin('copy')
           .use(require('copy-webpack-plugin'), [[{
-            from: api.resolve('public'),
-            to: api.resolve(options.outputDir),
+            from: publicDir,
+            to: outputDir,
             ignore: ['index.html', '.DS_Store']
           }]])
     }
