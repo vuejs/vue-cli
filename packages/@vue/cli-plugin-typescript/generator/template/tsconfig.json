@@ -8,7 +8,6 @@
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     <%_ } _%>
     "esModuleInterop": true,
     "sourceMap": true,
