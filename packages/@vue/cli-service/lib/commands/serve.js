@@ -29,6 +29,7 @@ module.exports = (api, options) => {
 
     // although this is primarily a dev server, it is possible that we
     // are running it in a mode with a production env, e.g. in E2E tests.
+    const isInContainer = checkInContainer()
     const isProduction = process.env.NODE_ENV === 'production'
 
     const path = require('path')
@@ -185,12 +186,17 @@ module.exports = (api, options) => {
         const networkUrl = publicUrl
           ? publicUrl.replace(/([^/])$/, '$1/')
           : urls.lanUrlForTerminal
+
         console.log()
-        console.log([
-          `  App running at:`,
-          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`,
-          `  - Network: ${chalk.cyan(networkUrl)}`
-        ].join('\n'))
+        console.log(`  App running at:`)
+        console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
+        if (!isInContainer) {
+          console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
+        } else {
+          console.log()
+          console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
+          console.log(chalk.yellow(`  Access the dev server via ${protocol}://localhost:<your container's external mapped port>.`))
+        }
         console.log()
 
         if (isFirstCompile) {
@@ -251,6 +257,15 @@ function addDevClientToEntry (config, devClient) {
     config.entry = entry(devClient)
   } else {
     config.entry = devClient.concat(entry)
+  }
+}
+
+// https://stackoverflow.com/a/20012536
+function checkInContainer () {
+  const fs = require('fs')
+  if (fs.existsSync(`/proc/1/cgroup`)) {
+    const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
+    return /:\/(lxc|docker)\//.test(content)
   }
 }
 
