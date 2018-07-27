@@ -83,7 +83,7 @@ module.exports = (api, {
   if (hasESLint) {
     api.extendPackage({
       devDependencies: {
-        '@vue/eslint-config-typescript': '^3.0.0-rc.7'
+        '@vue/eslint-config-typescript': '^3.0.0-rc.8'
       },
       eslintConfig: {
         extends: ['@vue/typescript']
