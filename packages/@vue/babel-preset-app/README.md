@@ -2,26 +2,40 @@
 
 This is the default Babel preset used in all Vue CLI projects. **Note: this preset is meant to be used exclusively in projects created via Vue CLI and does not consider external use cases.**
 
-## Included
+## Included Features
 
-- [@babel/preset-env](https://new.babeljs.io/docs/en/next/babel-preset-env.html)
-  - `modules: false`
-    - auto set to `'commonjs'` in Jest tests
-  - [`useBuiltIns: 'usage'`](#usebuiltins)
-  - `targets` is determined:
-    - using `browserslist` field in `package.json` when building for browsers
-    - set to `{ node: 'current' }` when running unit tests in Node.js
+### [@babel/preset-env](https://new.babeljs.io/docs/en/next/babel-preset-env.html)
+
+`preset-env` automatically determines the transforms and polyfills to apply based on your browser target. See [Browser Compatibility](https://cli.vuejs.org/guide/browser-compatibility.html) section in docs for more details.
+
+- `modules: false`
+  - auto set to `'commonjs'` in Jest tests
+- [`useBuiltIns: 'usage'`](#usebuiltins)
+- `targets` is determined:
+  - using `browserslist` field in `package.json` when building for browsers
+  - set to `{ node: 'current' }` when running unit tests in Node.js
 - Includes `Promise` polyfill by default so that they are usable even in non-transpiled dependencies (only for environments that need it)
-- [@babel/plugin-transform-runtime](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-runtime)
-  - Only enabled for helpers since polyfills are handled by `babel-preset-env`
-- [dynamic import syntax](https://github.com/tc39/proposal-dynamic-import)
-- [Object rest spread](https://github.com/tc39/proposal-object-rest-spread)
-- [babel-preset-stage-2](https://github.com/babel/babel/tree/master/packages/babel-preset-stage-2)
-- Vue JSX support
-  - [@babel/plugin-syntax-jsx](https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx)
-  - [babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
-  - ~~[babel-plugin-jsx-event-modifiers](https://github.com/nickmessing/babel-plugin-jsx-event-modifiers)~~ (temporarily disabled until fixed for Babel 7)
-  - ~~[babel-plugin-jsx-v-model](https://github.com/nickmessing/babel-plugin-jsx-v-model)~~ (temporarily disabled until fixed for Babel 7)
+
+### Stage 3 or Below
+
+Only the following stage 3 or below features are supported (object reset spread is supported as part of `preset-env`):
+
+- [Dynamic Import Syntax](https://github.com/tc39/proposal-dynamic-import)
+- [Proposal Class Properties](https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties.html)
+- [Proposal Decorators (legacy)](https://babeljs.io/docs/en/next/babel-plugin-proposal-decorators.html)
+
+If you need additional stage 3 or below features, you need to install and configure it yourself.
+
+### Vue JSX support
+
+- [@babel/plugin-syntax-jsx](https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx)
+- [babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
+- ~~[babel-plugin-jsx-event-modifiers](https://github.com/nickmessing/babel-plugin-jsx-event-modifiers)~~ (temporarily disabled until fixed for Babel 7)
+- ~~[babel-plugin-jsx-v-model](https://github.com/nickmessing/babel-plugin-jsx-v-model)~~ (temporarily disabled until fixed for Babel 7)
+
+### [@babel/plugin-transform-runtime](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-runtime)
+
+`transform-runtime` avoids inlining helpers in every file. This is enabled for helpers only, since polyfills are handled by `babel-preset-env`.
 
 ## Options
 
