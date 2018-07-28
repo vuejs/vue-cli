@@ -101,7 +101,10 @@ test('invoke with ts', async () => {
 
   const updatedESLintrc = parseJS(await project.read('.eslintrc.js'))
   expect(updatedESLintrc).toEqual(Object.assign({}, baseESLintConfig, {
-    extends: ['plugin:vue/essential', 'eslint:recommended', '@vue/typescript']
+    extends: ['plugin:vue/essential', 'eslint:recommended', '@vue/typescript'],
+    parserOptions: {
+      parser: 'typescript-eslint-parser'
+    }
   }))
 })
 
