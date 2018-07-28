@@ -32,6 +32,7 @@ module.exports = (api, options) => {
     const isInContainer = checkInContainer()
     const isProduction = process.env.NODE_ENV === 'production'
 
+    const url = require('url')
     const path = require('path')
     const chalk = require('chalk')
     const webpack = require('webpack')
@@ -91,8 +92,19 @@ module.exports = (api, options) => {
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
       const sockjsUrl = publicUrl
+        // explicitly configured via devServer.public
         ? `?${publicUrl}/sockjs-node`
-        : ``
+        : isInContainer
+          // can't infer public netowrk url if inside a container...
+          // use client-side inference (note this would break with non-root baseUrl)
+          ? ``
+          // otherwise infer the url
+          : `?` + url.format({
+            protocol,
+            port,
+            hostname: urls.lanUrlForConfig || 'localhost',
+            pathname: '/sockjs-node'
+          })
       const devClients = [
         // dev server client
         require.resolve(`webpack-dev-server/client`) + sockjsUrl,
@@ -195,7 +207,16 @@ module.exports = (api, options) => {
         } else {
           console.log()
           console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
-          console.log(chalk.yellow(`  Access the dev server via ${protocol}://localhost:<your container's external mapped port>.`))
+          if (!publicUrl && options.baseUrl && options.baseUrl !== '/') {
+            console.log()
+            console.log(chalk.yellow(`  Since you are using a non-root baseUrl, the hot-reload socket`))
+            console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
+            console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
+            console.log()
+          }
+          console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
+            `${protocol}://localhost:<your container's external mapped port>${options.baseUrl}`
+          )}`))
         }
         console.log()
 
