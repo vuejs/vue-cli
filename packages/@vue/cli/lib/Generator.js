@@ -93,7 +93,7 @@ module.exports = class Generator {
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
       const api = new GeneratorAPI(id, this, options, rootOptions)
-      apply(api, options, rootOptions)
+      apply(api, options, rootOptions, invoking)
     })
   }
 

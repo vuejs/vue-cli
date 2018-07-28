@@ -2,7 +2,7 @@ module.exports = (api, {
   classComponent,
   tsLint,
   lintOn = []
-}) => {
+}, _, invoking) => {
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
@@ -58,43 +58,28 @@ module.exports = (api, {
     })
   }
 
-  // inject necessary typings for other plugins
+  // late invoke compat
+  if (invoking) {
+    if (api.hasPlugin('unit-mocha')) {
+      // eslint-disable-next-line node/no-extraneous-require
+      require('@vue/cli-plugin-unit-mocha/generator').applyTS(api)
+    }
 
-  const hasMocha = api.hasPlugin('unit-mocha')
-  if (hasMocha) {
-    api.extendPackage({
-      devDependencies: {
-        '@types/mocha': '^5.2.4',
-        '@types/chai': '^4.1.0'
-      }
-    })
-  }
+    if (api.hasPlugin('unit-jest')) {
+      // eslint-disable-next-line node/no-extraneous-require
+      require('@vue/cli-plugin-unit-jest/generator').applyTS(api)
+    }
 
-  const hasJest = api.hasPlugin('unit-jest')
-  if (hasJest) {
-    api.extendPackage({
-      devDependencies: {
-        '@types/jest': '^23.1.4'
-      }
-    })
-  }
-
-  const hasESLint = api.hasPlugin('eslint')
-  if (hasESLint) {
-    api.extendPackage({
-      devDependencies: {
-        '@vue/eslint-config-typescript': '^3.0.0-rc.8'
-      },
-      eslintConfig: {
-        extends: ['@vue/typescript']
-      }
-    })
+    if (api.hasPlugin('eslint')) {
+      // eslint-disable-next-line node/no-extraneous-require
+      require('@vue/cli-plugin-eslint/generator').applyTS(api)
+    }
   }
 
   api.render('./template', {
     isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,
-    hasMocha,
-    hasJest
+    hasMocha: api.hasPlugin('unit-mocha'),
+    hasJest: api.hasPlugin('unit-jest')
   })
 
   require('./convert')(api, { tsLint })
