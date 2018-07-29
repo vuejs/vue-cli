@@ -1,3 +1,29 @@
+# [3.0.0-rc.9](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.8...v3.0.0-rc.9) (2018-07-29)
+
+## cli
+
+#### Bug Fixes
+
+* Typo. ([#1968](https://github.com/vuejs/vue-cli/issues/1968)) ([ee85f7c](https://github.com/vuejs/vue-cli/commit/ee85f7c))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* improve jest/mocha add compat with typescript ([252dd3d](https://github.com/vuejs/vue-cli/commit/252dd3d))
+
+## cli-service
+
+#### Bug Fixes
+
+* **serve:** use explicit sockjs url unless inside a container ([cf6290f](https://github.com/vuejs/vue-cli/commit/cf6290f)), closes [#1974](https://github.com/vuejs/vue-cli/issues/1974)
+* typo ([#1965](https://github.com/vuejs/vue-cli/issues/1965)) ([ae1817a](https://github.com/vuejs/vue-cli/commit/ae1817a))
+#### Features
+
+* hasPlugin matches router or vuex ([1c5fdd0](https://github.com/vuejs/vue-cli/commit/1c5fdd0))
+
+
+
 # [3.0.0-rc.8](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.7...v3.0.0-rc.8) (2018-07-27)
 
 ## babel-preset-app
