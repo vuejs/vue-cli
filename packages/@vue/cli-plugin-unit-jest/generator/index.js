@@ -1,5 +1,8 @@
-module.exports = api => {
-  api.render('./template')
+module.exports = (api, _, __, invoking) => {
+  api.render('./template', {
+    hasTS: api.hasPlugin('typescript')
+  })
+
   api.extendPackage({
     scripts: {
       'test:unit': 'vue-cli-service test:unit'
@@ -60,7 +63,7 @@ module.exports = api => {
       })
     }
   } else {
-    applyTS(api)
+    applyTS(api, invoking)
   }
 
   if (api.hasPlugin('eslint')) {
@@ -68,8 +71,7 @@ module.exports = api => {
   }
 }
 
-const applyTS = module.exports.applyTS = api => {
-  // TODO inject type into tsconfig.json
+const applyTS = module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     jest: {
       moduleFileExtensions: ['ts', 'tsx'],
@@ -87,6 +89,22 @@ const applyTS = module.exports.applyTS = api => {
       devDependencies: {
         // this is for now necessary to force ts-jest and vue-jest to use babel 7
         'babel-core': '7.0.0-bridge.0'
+      }
+    })
+  }
+  // inject jest type to tsconfig.json
+  if (invoking) {
+    api.render(files => {
+      const tsconfig = files['tsconfig.json']
+      if (tsconfig) {
+        const parsed = JSON.parse(tsconfig)
+        if (
+          parsed.compilerOptions.types &&
+          !parsed.compilerOptions.types.includes('jest')
+        ) {
+          parsed.compilerOptions.types.push('jest')
+        }
+        files['tsconfig.json'] = JSON.stringify(parsed, null, 2)
       }
     })
   }

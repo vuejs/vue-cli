@@ -1,4 +1,4 @@
-<%_ if (!hasTS) { _%>
+<%_ if (hasTS) { _%>
 import { shallowMount } from '@vue/test-utils'
 import HelloWorld from '@/components/HelloWorld.vue'
 
