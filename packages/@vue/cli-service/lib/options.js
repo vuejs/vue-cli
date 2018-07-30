@@ -3,9 +3,9 @@ const { createSchema, validate } = require('@vue/cli-shared-utils')
 const schema = createSchema(joi => joi.object({
   baseUrl: joi.string().allow(''),
   outputDir: joi.string(),
-  filenameHashing: joi.boolean(),
   assetsDir: joi.string(),
   indexPath: joi.string(),
+  filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
@@ -54,14 +54,14 @@ exports.defaults = () => ({
   // where to output built files
   outputDir: 'dist',
 
-  // whether filename will contain hash part
-  filenameHashing: true,
-
   // where to put static assets (js/css/img/font/...)
   assetsDir: '',
 
   // filename for index.html (relative to outputDir)
   indexPath: 'index.html',
+
+  // whether filename will contain hash part
+  filenameHashing: true,
 
   // boolean, use full build?
   runtimeCompiler: false,
