@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.0.0-rc.9",
+  "version": "3.0.0-rc.10",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "bin": {
@@ -22,8 +22,8 @@
   "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-service#readme",
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
-    "@vue/cli-overlay": "^3.0.0-rc.9",
-    "@vue/cli-shared-utils": "^3.0.0-rc.9",
+    "@vue/cli-overlay": "^3.0.0-rc.10",
+    "@vue/cli-shared-utils": "^3.0.0-rc.10",
     "@vue/preload-webpack-plugin": "^1.0.0",
     "@vue/web-component-wrapper": "^1.2.0",
     "acorn": "^5.7.1",
