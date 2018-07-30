@@ -1,7 +1,93 @@
-module.exports = api => {
-  const CONFIG = 'org.vue.eslintrc'
+const rules = require('eslint-plugin-vue').rules
 
-  // Config file
+const CONFIG = 'org.vue.eslintrc'
+const OPEN_ESLINTRC = 'org.vue.eslint.open-eslintrc'
+
+const CATEGORIES = [
+  'base',
+  'essential',
+  'strongly-recommended',
+  'recommended'
+]
+
+const DEFAULT_CATEGORY = 'essential'
+
+const defaultChoices = [
+  {
+    name: 'Off',
+    value: JSON.stringify('off')
+  },
+  {
+    name: 'Error',
+    value: JSON.stringify('error')
+  },
+  {
+    name: 'Warning',
+    value: JSON.stringify('warning')
+  }
+]
+
+function getEslintConfigName (eslint) {
+  let config = eslint.extends
+
+  if (eslint.extends instanceof Array) {
+    config = eslint.extends.find(configName => configName.startsWith('plugin:vue/'))
+  }
+
+  return config
+}
+
+// Sets default value regarding selected global config
+function getDefaultValue (rule, data) {
+  const { category: ruleCategory } = rule.meta.docs
+  const currentCategory = getEslintConfigName(data.eslint)
+
+  if (!currentCategory) return 'off'
+
+  return CATEGORIES.indexOf(ruleCategory) <= CATEGORIES.indexOf(currentCategory.split('/')[1])
+    ? 'error'
+    : 'off'
+}
+
+function getEslintPrompts (data) {
+  const allRules = Object.keys(rules)
+    .map(ruleKey => ({
+      ...rules[ruleKey],
+      name: `vue/${ruleKey}`
+    }))
+
+  return CATEGORIES
+    .map(category =>
+      allRules.filter(rule =>
+        rule.meta.docs.category === category
+      )
+    )
+    .reduce((acc, rulesArr) => [...acc, ...rulesArr], [])
+    .map(rule => {
+      const value = data.eslint &&
+        data.eslint.rules &&
+        data.eslint.rules[rule.name]
+
+      return {
+        name: rule.name,
+        type: 'list',
+        message: rule.name,
+        group: `org.vue.eslint.config.eslint.groups.${rule.meta.docs.category}`,
+        description: rule.meta.docs.description,
+        link: rule.meta.docs.url,
+        default: JSON.stringify(getDefaultValue(rule, data)),
+        value: JSON.stringify(value),
+        choices: !value || ['off', 'error', 'warning'].indexOf(value) > -1
+          ? defaultChoices
+          : [...defaultChoices, {
+            name: 'Custom',
+            value: JSON.stringify(value)
+          }]
+      }
+    })
+}
+
+module.exports = api => {
   api.describeConfig({
     id: CONFIG,
     name: 'ESLint configuration',
@@ -21,186 +107,54 @@ module.exports = api => {
     onRead: ({ data }) => ({
       tabs: [
         {
-          id: 'vue',
-          label: 'org.vue.eslint.config.eslint.vue.label',
-          prompts: [
-            {
-              name: 'vue/attribute-hyphenation',
-              type: 'list',
-              message: 'Attribute hyphenation',
-              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
-              description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
-              default: JSON.stringify('off'),
-              choices: [
-                {
-                  name: 'Off',
-                  value: JSON.stringify('off')
-                },
-                {
-                  name: 'Never',
-                  value: JSON.stringify(['error', 'never'])
-                },
-                {
-                  name: 'Always',
-                  value: JSON.stringify(['error', 'always'])
-                }
-              ],
-              value: data.eslint && data.eslint.rules && JSON.stringify(data.eslint.rules['vue/attribute-hyphenation'])
-            },
-            {
-              name: 'vue/html-end-tags',
-              type: 'confirm',
-              message: 'Template end tags style',
-              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
-              description: 'End tag on Void elements, end tags and self-closing opening tags',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-end-tags.md',
-              default: false,
-              value: data.eslint && data.eslint.rules && data.eslint.rules['vue/html-end-tags'] === 'error',
-              filter: input => JSON.stringify(input ? 'error' : 'off'),
-              transformer: input => input === JSON.stringify('error')
-            },
-            {
-              name: 'vue/html-indent',
-              type: 'list',
-              message: 'Template indentation',
-              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
-              description: 'Enforce indentation in template',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-indent.md',
-              default: JSON.stringify('off'),
-              choices: [
-                {
-                  name: 'Off',
-                  value: JSON.stringify('off')
-                },
-                {
-                  name: 'Tabs',
-                  value: JSON.stringify(['error', 'tab'])
-                },
-                {
-                  name: '2 spaces',
-                  value: JSON.stringify(['error', 2])
-                },
-                {
-                  name: '4 spaces',
-                  value: JSON.stringify(['error', 4])
-                },
-                {
-                  name: '8 spaces',
-                  value: JSON.stringify(['error', 8])
-                }
-              ],
-              value: data.eslint && data.eslint.rules && JSON.stringify(data.eslint.rules['vue/html-indent'])
-            },
-            {
-              name: 'vue/html-self-closing',
-              type: 'confirm',
-              message: 'Template tag self-closing style',
-              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
-              description: 'Self-close any component or non-Void element tags',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-self-closing.md',
-              default: false,
-              value: data.eslint && data.eslint.rules && data.eslint.rules['vue/html-self-closing'] === 'error',
-              filter: input => JSON.stringify(input ? 'error' : 'off'),
-              transformer: input => input === JSON.stringify('error')
-            },
-            {
-              name: 'vue/require-default-prop',
-              type: 'confirm',
-              message: 'Require default in required props',
-              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
-              description: 'This rule requires default value to be set for each props that are not marked as `required`',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/require-default-prop.md',
-              default: false,
-              value: data.eslint && data.eslint.rules && data.eslint.rules['vue/require-default-prop'] === 'error',
-              filter: input => JSON.stringify(input ? 'error' : 'off'),
-              transformer: input => input === JSON.stringify('error')
-            },
-            {
-              name: 'vue/require-prop-types',
-              type: 'confirm',
-              message: 'Require types for props',
-              group: 'org.vue.eslint.config.eslint.groups.strongly-recommended',
-              description: 'In committed code, prop definitions should always be as detailed as possible, specifying at least type(s)',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/require-prop-types.md',
-              default: false,
-              value: data.eslint && data.eslint.rules && data.eslint.rules['vue/require-prop-types'] === 'error',
-              filter: input => JSON.stringify(input ? 'error' : 'off'),
-              transformer: input => input === JSON.stringify('error')
-            },
-            {
-              name: 'vue/attributes-order',
-              type: 'confirm',
-              message: 'Attribute order',
-              group: 'org.vue.eslint.config.eslint.groups.recommended',
-              description: 'This rule aims to enforce ordering of component attributes (the default order is specified in the Vue style guide)',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attributes-order.md',
-              default: false,
-              value: data.eslint && data.eslint.rules && data.eslint.rules['vue/attributes-order'] === 'error',
-              filter: input => JSON.stringify(input ? 'error' : 'off'),
-              transformer: input => input === JSON.stringify('error')
-            },
-            {
-              name: 'vue/html-quotes',
-              type: 'list',
-              message: 'Attribute quote style',
-              group: 'org.vue.eslint.config.eslint.groups.recommended',
-              description: 'Enforce style of the attribute quotes in templates',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/html-quotes.md',
-              default: JSON.stringify('off'),
-              choices: [
-                {
-                  name: 'Off',
-                  value: JSON.stringify('off')
-                },
-                {
-                  name: 'Double quotes',
-                  value: JSON.stringify(['error', 'double'])
-                },
-                {
-                  name: 'Single quotes',
-                  value: JSON.stringify(['error', 'single'])
-                }
-              ],
-              value: data.eslint && data.eslint.rules && JSON.stringify(data.eslint.rules['vue/html-quotes'])
-            },
-            {
-              name: 'vue/order-in-components',
-              type: 'confirm',
-              message: 'Component options order',
-              group: 'org.vue.eslint.config.eslint.groups.recommended',
-              description: 'This rule aims to enforce ordering of component options (the default order is specified in the Vue style guide)',
-              link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/order-in-components.md',
-              default: false,
-              value: data.eslint && data.eslint.rules && data.eslint.rules['vue/order-in-components'] === 'error',
-              filter: input => JSON.stringify(input ? 'error' : 'off'),
-              transformer: input => input === JSON.stringify('error')
-            }
-          ]
-        },
-        {
-          id: 'extra',
-          label: 'org.vue.eslint.config.eslint.extra.label',
+          id: 'general',
+          label: 'org.vue.eslint.config.eslint.general.label',
           prompts: [
             {
               name: 'lintOnSave',
               type: 'confirm',
-              message: 'org.vue.eslint.config.eslint.extra.lintOnSave.message',
-              description: 'org.vue.eslint.config.eslint.extra.lintOnSave.description',
+              message: 'org.vue.eslint.config.eslint.general.lintOnSave.message',
+              description: 'org.vue.eslint.config.eslint.general.lintOnSave.description',
               link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#configuration',
               default: true,
               value: data.vue && data.vue.lintOnSave
+            },
+            {
+              name: 'config',
+              type: 'list',
+              message: 'org.vue.eslint.config.eslint.general.config.message',
+              description: 'org.vue.eslint.config.eslint.general.config.description',
+              link: 'https://github.com/vuejs/eslint-plugin-vue',
+              default: `plugin:vue/${DEFAULT_CATEGORY}`,
+              choices: CATEGORIES.map(category => ({
+                name: `org.vue.eslint.config.eslint.groups.${category}`,
+                value: `plugin:vue/${category}`
+              })),
+              value: getEslintConfigName(data.eslint)
             }
           ]
+        },
+        {
+          id: 'rules',
+          label: 'org.vue.eslint.config.eslint.rules.label',
+          prompts: getEslintPrompts(data)
         }
       ]
     }),
-    onWrite: async ({ api, prompts }) => {
-      const eslintData = {}
+    onWrite: async ({ data, api, prompts }) => {
+      const eslintData = { ...data.eslint }
       const vueData = {}
       for (const prompt of prompts) {
         // eslintrc
-        if (prompt.id.indexOf('vue/') === 0) {
+        if (prompt.id === 'config') {
+          if (eslintData.extends instanceof Array) {
+            const vueEslintConfig = eslintData.extends.find(config => config.indexOf('plugin:vue/') === 0)
+            const index = eslintData.extends.indexOf(vueEslintConfig)
+            eslintData.extends[index] = JSON.parse(prompt.value)
+          } else {
+            eslintData.extends = JSON.parse(prompt.value)
+          }
+        } else if (prompt.id.indexOf('vue/') === 0) {
           eslintData[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
         } else {
           // vue.config.js
@@ -229,8 +183,6 @@ module.exports = api => {
       if (answers.noFix) args.push('--no-fix')
     }
   })
-
-  const OPEN_ESLINTRC = 'org.vue.eslint.open-eslintrc'
 
   api.onViewOpen(({ view }) => {
     if (view.id !== 'vue-project-configurations') {

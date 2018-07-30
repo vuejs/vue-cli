@@ -12,7 +12,7 @@
     </div>
     <div v-if="description || link || showDescription" class="description">
       <slot name="description">
-        <span v-html="description"/>
+        {{ description }}
       </slot>
       <a
         v-if="link"

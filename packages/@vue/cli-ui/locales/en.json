@@ -580,18 +580,26 @@
           "eslint": {
             "description": "Error checking & Code quality",
             "groups": {
+              "base": "Base",
+              "essential": "Essential",
               "strongly-recommended": "Strongly recommended",
-              "recommended": "Recommended"
+              "recommended": "Recommended",
+              "use-with-caution": "Use with caution",
+              "undefined": "Uncategorized"
             },
-            "vue": {
-              "label": "Vue"
-            },
-            "extra": {
-              "label": "Extra",
+            "general": {
+              "label": "General",
               "lintOnSave": {
                 "message": "Lint on save",
                 "description": "Automatically lint source files when saved"
+              },
+              "config": {
+                "message": "Select config",
+                "description": "Select pre-defined configuration"
               }
+            },
+            "rules": {
+              "label": "Rules"
             }
           }
         },
