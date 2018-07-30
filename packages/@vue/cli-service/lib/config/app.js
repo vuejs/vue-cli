@@ -82,10 +82,18 @@ module.exports = (api, options) => {
           // more options:
           // https://github.com/kangax/html-minifier#options-quick-reference
         },
-        // default sort mode uses toposort which cannot handle cyclic deps
+        // #1669 default sort mode uses toposort which cannot handle cyclic deps
         // in certain cases, and in webpack 4, chunk order in HTML doesn't
         // matter anyway
-        chunksSortMode: 'none'
+        chunksSortMode: (a, b) => {
+          if (a.entry !== b.entry) {
+            // make sure entry is loaded last so user CSS can override
+            // vendor CSS
+            return b.entry ? -1 : 1
+          } else {
+            return 0
+          }
+        }
       })
 
       // keep chunk ids stable so async chunks have consistent hash (#1916)
