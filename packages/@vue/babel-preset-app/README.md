@@ -76,7 +76,7 @@ See [@babel/preset-env docs](https://new.babeljs.io/docs/en/next/babel-preset-en
 
 ### polyfills
 
-- Default: `['es6.promise']`
+- Default: `['es6.promise', 'es6.array.iterator']`
 
 A list of [core-js](https://github.com/zloirock/core-js) polyfills to pre-include when using `useBuiltIns: 'usage'`. **These polyfills are automatically excluded if they are not needed for your target environments**.
 
