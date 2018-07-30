@@ -5,6 +5,10 @@ import Home from './views/Home.vue'
 Vue.use(Router)
 
 export default new Router({
+  <%_ if (historyMode) { _%>
+  mode: 'history',
+  base: process.env.BASE_URL,
+  <%_ } _%>
   routes: [
     {
       path: '/',

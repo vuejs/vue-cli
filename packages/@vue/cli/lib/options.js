@@ -10,6 +10,7 @@ const rcPath = exports.rcPath = getRcPath('.vuerc')
 const presetSchema = createSchema(joi => joi.object().keys({
   useConfigFiles: joi.boolean(),
   router: joi.boolean(),
+  routerHistoryMode: joi.boolean(),
   vuex: joi.boolean(),
   cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
   plugins: joi.object().required(),
