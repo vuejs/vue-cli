@@ -16,17 +16,17 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   if (config === 'airbnb') {
     eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^3.0.0-rc.9'
+      '@vue/eslint-config-airbnb': '^3.0.0-rc.10'
     })
   } else if (config === 'standard') {
     eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^3.0.0-rc.9'
+      '@vue/eslint-config-standard': '^3.0.0-rc.10'
     })
   } else if (config === 'prettier') {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^3.0.0-rc.9'
+      '@vue/eslint-config-prettier': '^3.0.0-rc.10'
     })
   } else {
     // default
@@ -87,7 +87,7 @@ const applyTS = module.exports.applyTS = api => {
       }
     },
     devDependencies: {
-      '@vue/eslint-config-typescript': '^3.0.0-rc.9'
+      '@vue/eslint-config-typescript': '^3.0.0-rc.10'
     }
   })
 }
