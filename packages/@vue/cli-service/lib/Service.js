@@ -297,7 +297,7 @@ module.exports = class Service {
       resovledFrom = 'inline options'
     }
 
-    // normlaize some options
+    // normalize some options
     if (typeof resolved.baseUrl === 'string') {
       resolved.baseUrl = resolved.baseUrl.replace(/^\.\//, '')
     }

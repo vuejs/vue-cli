@@ -82,7 +82,10 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: getAssetPath(options, `img/[name].[hash:8].[ext]`)
+            name: getAssetPath(
+              options,
+              `img/[name]${options.filenameHashing ? '.[hash:8]' : ''}.[ext]`
+            )
           })
 
     // do not base64-inline SVGs.
@@ -93,7 +96,10 @@ module.exports = (api, options) => {
         .use('file-loader')
           .loader('file-loader')
           .options({
-            name: getAssetPath(options, `img/[name].[hash:8].[ext]`)
+            name: getAssetPath(
+              options,
+              `img/[name]${options.filenameHashing ? '.[hash:8]' : ''}.[ext]`
+            )
           })
 
     webpackConfig.module
@@ -103,7 +109,10 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: getAssetPath(options, `media/[name].[hash:8].[ext]`)
+            name: getAssetPath(
+              options,
+              `media/[name]${options.filenameHashing ? '.[hash:8]' : ''}.[ext]`
+            )
           })
 
     webpackConfig.module
@@ -113,7 +122,10 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: getAssetPath(options, `fonts/[name].[hash:8].[ext]`)
+            name: getAssetPath(
+              options,
+              `fonts/[name]${options.filenameHashing ? '.[hash:8]' : ''}.[ext]`
+            )
           })
 
     // Other common pre-processors ---------------------------------------------

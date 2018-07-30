@@ -25,7 +25,7 @@ module.exports = (api, options) => {
     const shouldExtract = isProd && extract !== false && !shadowMode
     const filename = getAssetPath(
       options,
-      `css/[name].[contenthash:8].css`,
+      `css/[name]${options.filenameHashing ? '.[contenthash:8]' : ''}.css`,
       true /* placeAtRootIfRelative */
     )
     const extractOptions = Object.assign({
