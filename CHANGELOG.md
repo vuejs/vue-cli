@@ -1,3 +1,31 @@
+# [3.0.0-rc.10](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.9...v3.0.0-rc.10) (2018-07-30)
+
+## cli
+
+#### Features
+
+* add create option for router history mode ([6392a60](https://github.com/vuejs/vue-cli/commit/6392a60))
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **tslint:** should only lint <script lang="ts"> ([2a21612](https://github.com/vuejs/vue-cli/commit/2a21612)), closes [#1984](https://github.com/vuejs/vue-cli/issues/1984)
+#### Features
+
+* **typescript:** upgrade default TS version to 3.0 ([483a082](https://github.com/vuejs/vue-cli/commit/483a082))
+
+## cli-service
+
+#### Bug Fixes
+
+* ensure entry chunk is placed last for CSS overrides ([352d3bb](https://github.com/vuejs/vue-cli/commit/352d3bb))
+#### Features
+
+* add filenameHashing option ([#1980](https://github.com/vuejs/vue-cli/issues/1980)) ([ce7b394](https://github.com/vuejs/vue-cli/commit/ce7b394))
+
+
+
 # [3.0.0-rc.9](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.8...v3.0.0-rc.9) (2018-07-29)
 
 ## cli
