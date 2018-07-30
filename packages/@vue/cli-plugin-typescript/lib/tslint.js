@@ -27,8 +27,11 @@ module.exports = function lint (args = {}, api, silent) {
   const patchWriteFile = () => {
     fs.writeFileSync = (file, content, options) => {
       if (isVueFile(file)) {
-        const { before, after } = vueFileCache.get(path.normalize(file))
-        content = `${before}\n${content.trim()}\n${after}`
+        const parts = vueFileCache.get(path.normalize(file))
+        if (parts) {
+          const { before, after } = parts
+          content = `${before}\n${content.trim()}\n${after}`
+        }
       }
       return writeFileSync(file, content, options)
     }
@@ -41,13 +44,13 @@ module.exports = function lint (args = {}, api, silent) {
   const parseTSFromVueFile = file => {
     const content = fs.readFileSync(file, 'utf-8')
     const { script } = vueCompiler.parseComponent(content, { pad: 'line' })
-    if (script) {
+    if (script && script.lang === 'ts') {
       vueFileCache.set(file, {
         before: content.slice(0, script.start),
         after: content.slice(script.end)
       })
+      return script.content
     }
-    return script && script.content
   }
 
   const program = tslint.Linter.createProgram(api.resolve('tsconfig.json'))
