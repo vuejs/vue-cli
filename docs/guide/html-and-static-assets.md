@@ -70,6 +70,32 @@ webpack's runtime will inject prefetch links when the parent chunk is loaded.
 Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
 :::
 
+### Disable Index Generation
+
+When using Vue CLI with an existing backend, you may need to disable the generation of `index.html` so that the generated assets can be used in a server-rendered page. To do so, the following can be added to [`vue.config.js`](#vue-config-js):
+
+``` js
+// vue.config.js
+module.exports = {
+  // disable hashes in filenames
+  filenameHashing: false,
+  // delete HTML related webpack plugins
+  chainWebpack: config => {
+    config.plugins.delete('html')
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+  }
+}
+```
+
+However, this is not really recommended because:
+
+- Hard-coded file names makes it more difficult to implement efficient cache control.
+- Hard-coded file names also do not play well with code-splitting, which generates additional JavaScript files with varying filenames.
+- Hard-coded file names do not work with [Modern Mode](../guide/browser-compatibility.md#modern-mode).
+
+Instead, you should consider using the [indexPath](../config/#indexpath) option to use the generated HTML as a view template in your server-side framework.
+
 ### Building a Multi-Page App
 
 Not every app has to be an SPA. Vue CLI supports building a multi-paged app using the [`pages` option in `vue.config.js`](../config/#pages). The built app will efficiently share common chunks between multiple entries for optimal loading performance.
