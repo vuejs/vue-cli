@@ -1,4 +1,14 @@
 module.exports = (api, options) => {
+  // pre-rc7 warning
+  try {
+    require('typescript/package.json')
+  } catch (e) {
+    throw new Error(
+      `"typescript" is now a peer dependency of "@vue/cli-plugin-typescript".\n` +
+      `To fix the build, explicitly install typescript in your project.`
+    )
+  }
+
   const fs = require('fs')
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
 
