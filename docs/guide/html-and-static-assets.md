@@ -72,7 +72,7 @@ Prefetch links will consume bandwidth. If you have a large app with many async c
 
 ### Disable Index Generation
 
-When using Vue CLI with an existing backend, you may need to disable the generation of `index.html` so that the generated assets can be used in a server-rendered page. To do so, the following can be added to [`vue.config.js`](#vue-config-js):
+When using Vue CLI with an existing backend, you may need to disable the generation of `index.html` so that the generated assets can be used in a server-rendered page. To do so, the following can be added to [`vue.config.js`](../config/#vue-config-js):
 
 ``` js
 // vue.config.js
