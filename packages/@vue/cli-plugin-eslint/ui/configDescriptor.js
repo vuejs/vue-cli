@@ -4,7 +4,8 @@ const CATEGORIES = [
   'base',
   'essential',
   'strongly-recommended',
-  'recommended'
+  'recommended',
+  'uncategorized'
 ]
 
 const DEFAULT_CATEGORY = 'essential'
@@ -35,7 +36,7 @@ function getEslintConfigName (eslint) {
     config = eslint.extends.find(configName => configName.startsWith('plugin:vue/'))
   }
 
-  return config
+  return config && config.startsWith('plugin:vue/') ? config : null
 }
 
 // Sets default value regarding selected global config
@@ -43,7 +44,7 @@ function getDefaultValue (rule, data) {
   const { category: ruleCategory } = rule.meta.docs
   const currentCategory = getEslintConfigName(data.eslint)
 
-  if (!currentCategory) return RULE_SETTING_OFF
+  if (!currentCategory || ruleCategory === undefined) return RULE_SETTING_OFF
 
   return CATEGORIES.indexOf(ruleCategory) <= CATEGORIES.indexOf(currentCategory.split('/')[1])
     ? RULE_SETTING_ERROR
@@ -60,7 +61,10 @@ function getEslintPrompts (data, rules) {
   return CATEGORIES
     .map(category =>
       allRules.filter(rule =>
-        rule.meta.docs.category === category
+        rule.meta.docs.category === category || (
+          category === 'uncategorized' &&
+          rule.meta.docs.category === undefined
+        )
       )
     )
     .reduce((acc, rulesArr) => [...acc, ...rulesArr], [])
@@ -73,7 +77,7 @@ function getEslintPrompts (data, rules) {
         name: rule.name,
         type: 'list',
         message: rule.name,
-        group: `org.vue.eslint.config.eslint.groups.${rule.meta.docs.category}`,
+        group: `org.vue.eslint.config.eslint.groups.${rule.meta.docs.category || 'uncategorized'}`,
         description: rule.meta.docs.description,
         link: rule.meta.docs.url,
         default: JSON.stringify(getDefaultValue(rule, data)),
@@ -113,7 +117,7 @@ function onRead ({ data, cwd }) {
             description: 'org.vue.eslint.config.eslint.general.config.description',
             link: 'https://github.com/vuejs/eslint-plugin-vue',
             default: `plugin:vue/${DEFAULT_CATEGORY}`,
-            choices: CATEGORIES.map(category => ({
+            choices: CATEGORIES.filter(category => category !== 'uncategorized').map(category => ({
               name: `org.vue.eslint.config.eslint.groups.${category}`,
               value: `plugin:vue/${category}`
             })),
@@ -154,7 +158,7 @@ async function onWrite ({ data, api, prompts }) {
   api.setData('vue', vueData)
 }
 
-module.exports = {
+const config = {
   id: CONFIG,
   name: 'ESLint configuration',
   description: 'org.vue.eslint.config.eslint.description',
@@ -172,4 +176,11 @@ module.exports = {
   },
   onRead,
   onWrite
+}
+
+module.exports = {
+  config,
+  getEslintConfigName,
+  getDefaultValue,
+  getEslintPrompts
 }

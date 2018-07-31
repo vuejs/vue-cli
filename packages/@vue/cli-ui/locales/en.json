@@ -585,7 +585,7 @@
               "strongly-recommended": "Strongly recommended",
               "recommended": "Recommended",
               "use-with-caution": "Use with caution",
-              "undefined": "Uncategorized"
+              "uncategorized": "Uncategorized"
             },
             "setting": {
               "off": "Off",

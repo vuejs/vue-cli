@@ -1,4 +1,4 @@
-module.exports = {
+const task = {
   match: /vue-cli-service lint/,
   description: 'org.vue.eslint.tasks.lint.description',
   link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint#injected-commands',
@@ -13,4 +13,8 @@ module.exports = {
   onBeforeRun: ({ answers, args }) => {
     if (answers.noFix) args.push('--no-fix')
   }
+}
+
+module.exports = {
+  task
 }

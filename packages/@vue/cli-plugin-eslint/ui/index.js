@@ -5,8 +5,8 @@ const CONFIG = 'org.vue.eslintrc'
 const OPEN_ESLINTRC = 'org.vue.eslint.open-eslintrc'
 
 module.exports = api => {
-  api.describeConfig(configDescriptor)
-  api.describeTask(taskDescriptor)
+  api.describeConfig(configDescriptor.config)
+  api.describeTask(taskDescriptor.task)
 
   api.onViewOpen(({ view }) => {
     if (view.id !== 'vue-project-configurations') {
