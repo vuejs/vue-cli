@@ -54,7 +54,7 @@ jobs:
           at: ~/
       - run: yarn lint
       - run: yarn check-links
-      - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app
+      - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app --ci
 
   group-4:
     <<: *defaults
