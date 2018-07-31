@@ -1,5 +1,3 @@
-const rules = require('eslint-plugin-vue').rules
-
 const CONFIG = 'org.vue.eslintrc'
 
 const CATEGORIES = [
@@ -52,7 +50,7 @@ function getDefaultValue (rule, data) {
     : RULE_SETTING_OFF
 }
 
-function getEslintPrompts (data) {
+function getEslintPrompts (data, rules) {
   const allRules = Object.keys(rules)
     .map(ruleKey => ({
       ...rules[ruleKey],
@@ -90,24 +88,10 @@ function getEslintPrompts (data) {
     })
 }
 
-module.exports = {
-  id: CONFIG,
-  name: 'ESLint configuration',
-  description: 'org.vue.eslint.config.eslint.description',
-  link: 'https://github.com/vuejs/eslint-plugin-vue',
-  files: {
-    eslint: {
-      js: ['.eslintrc.js'],
-      json: ['.eslintrc', '.eslintrc.json'],
-      yaml: ['.eslintrc.yaml', '.eslintrc.yml'],
-      package: 'eslintConfig'
-    },
-    vue: {
-      js: ['vue.config.js']
-    }
-  },
+function onRead ({ data, cwd }) {
+  const rules = require(`${cwd}/node_modules/eslint-plugin-vue`).rules
 
-  onRead: ({ data }) => ({
+  return {
     tabs: [
       {
         id: 'general',
@@ -140,32 +124,52 @@ module.exports = {
       {
         id: 'rules',
         label: 'org.vue.eslint.config.eslint.rules.label',
-        prompts: getEslintPrompts(data)
+        prompts: getEslintPrompts(data, rules)
       }
     ]
-  }),
-
-  onWrite: async ({ data, api, prompts }) => {
-    const eslintData = { ...data.eslint }
-    const vueData = {}
-    for (const prompt of prompts) {
-      // eslintrc
-      if (prompt.id === 'config') {
-        if (eslintData.extends instanceof Array) {
-          const vueEslintConfig = eslintData.extends.find(config => config.indexOf('plugin:vue/') === 0)
-          const index = eslintData.extends.indexOf(vueEslintConfig)
-          eslintData.extends[index] = JSON.parse(prompt.value)
-        } else {
-          eslintData.extends = JSON.parse(prompt.value)
-        }
-      } else if (prompt.id.indexOf('vue/') === 0) {
-        eslintData[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
-      } else {
-        // vue.config.js
-        vueData[prompt.id] = await api.getAnswer(prompt.id)
-      }
-    }
-    api.setData('eslint', eslintData)
-    api.setData('vue', vueData)
   }
+}
+
+async function onWrite ({ data, api, prompts }) {
+  const eslintData = { ...data.eslint }
+  const vueData = {}
+  for (const prompt of prompts) {
+    // eslintrc
+    if (prompt.id === 'config') {
+      if (eslintData.extends instanceof Array) {
+        const vueEslintConfig = eslintData.extends.find(config => config.indexOf('plugin:vue/') === 0)
+        const index = eslintData.extends.indexOf(vueEslintConfig)
+        eslintData.extends[index] = JSON.parse(prompt.value)
+      } else {
+        eslintData.extends = JSON.parse(prompt.value)
+      }
+    } else if (prompt.id.indexOf('vue/') === 0) {
+      eslintData[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
+    } else {
+      // vue.config.js
+      vueData[prompt.id] = await api.getAnswer(prompt.id)
+    }
+  }
+  api.setData('eslint', eslintData)
+  api.setData('vue', vueData)
+}
+
+module.exports = {
+  id: CONFIG,
+  name: 'ESLint configuration',
+  description: 'org.vue.eslint.config.eslint.description',
+  link: 'https://github.com/vuejs/eslint-plugin-vue',
+  files: {
+    eslint: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      yaml: ['.eslintrc.yaml', '.eslintrc.yml'],
+      package: 'eslintConfig'
+    },
+    vue: {
+      js: ['vue.config.js']
+    }
+  },
+  onRead,
+  onWrite
 }
