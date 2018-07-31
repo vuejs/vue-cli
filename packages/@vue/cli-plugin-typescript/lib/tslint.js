@@ -44,7 +44,7 @@ module.exports = function lint (args = {}, api, silent) {
   const parseTSFromVueFile = file => {
     const content = fs.readFileSync(file, 'utf-8')
     const { script } = vueCompiler.parseComponent(content, { pad: 'line' })
-    if (script && script.lang === 'ts') {
+    if (script && /^tsx?$/.test(script.lang)) {
       vueFileCache.set(file, {
         before: content.slice(0, script.start),
         after: content.slice(script.end)
