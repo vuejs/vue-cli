@@ -1,5 +1,5 @@
 const configDescriptor = require('../ui/configDescriptor')
-const { getEslintConfigName, getDefaultValue } = configDescriptor
+const { getEslintConfigName, getDefaultValue, getEslintPrompts } = configDescriptor
 
 describe('getEslintConfigName', () => {
   describe('for "extend" of string type', () => {
@@ -74,5 +74,86 @@ describe('getDefaultValue', () => {
     expect(getResult('plugin:vue/essential', undefined)).toBe('off')
     expect(getResult('plugin:vue/strongly-recommended', undefined)).toBe('off')
     expect(getResult('plugin:vue/recommended', undefined)).toBe('off')
+  })
+})
+
+describe('getEslintPrompts', () => {
+  // project configuration
+  const data = {
+    eslint: {
+      extends: 'plugin:vue/recommended',
+      rules: {
+        'vue/lorem': ['error', ['asd']], // custom setting
+        'vue/ipsum': 'warning'
+      }
+    }
+  }
+
+  // all rules
+  const rules = {
+    'lorem': {
+      meta: {
+        docs: {
+          category: undefined,
+          description: 'Lorem description',
+          url: 'http://test.com/lorem'
+        }
+      }
+    },
+    'ipsum': {
+      meta: {
+        docs: {
+          category: 'recommended',
+          description: 'Ipsum description',
+          url: 'http://test.com/ipsum'
+        }
+      }
+    },
+    'dolor': {
+      meta: {
+        docs: {
+          category: 'base',
+          description: 'Dolor description',
+          url: 'http://test.com/dolor'
+        }
+      }
+    }
+  }
+
+  const prompts = getEslintPrompts(data, rules)
+
+  it('generates an array', () => {
+    expect(prompts).toMatchSnapshot()
+  })
+
+  it('creates an array with three settings', () => {
+    expect(prompts).toHaveLength(3)
+  })
+
+  it('creates an array which order matches eslint categories', () => {
+    expect(prompts[0].name).toBe('vue/dolor')
+    expect(prompts[1].name).toBe('vue/ipsum')
+    expect(prompts[2].name).toBe('vue/lorem')
+  })
+
+  it('doesn\'t set value on prompt item, if the rule wasn\'t set in project\'s eslint config', () => {
+    expect(prompts[0].value).toBe(undefined)
+  })
+
+  it('sets value on prompt item, if the rule was set in project\'s eslint config', () => {
+    expect(prompts[1].value).toBe('"warning"')
+    expect(prompts[2].value).toBe('["error",["asd"]]')
+  })
+
+  it('generates an extra choice for rules that have a custom setting', () => {
+    expect(prompts[0].choices).toHaveLength(3)
+    expect(prompts[1].choices).toHaveLength(3)
+    expect(prompts[2].choices).toHaveLength(4)
+  })
+
+  it('sets a default value to "ERROR" for rule that belong to the choosen config', () => {
+    expect(prompts[0].default).toBe('"error"')
+    expect(prompts[1].default).toBe('"error"')
+    expect(prompts[2].default).toBe('"off"')
   })
 })

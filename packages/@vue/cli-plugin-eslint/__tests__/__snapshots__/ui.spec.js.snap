@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+Array [
+  Object {
+    "choices": Array [
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.off",
+        "value": "\\"off\\"",
+      },
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.error",
+        "value": "\\"error\\"",
+      },
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.warning",
+        "value": "\\"warning\\"",
+      },
+    ],
+    "default": "\\"error\\"",
+    "description": "Dolor description",
+    "group": "org.vue.eslint.config.eslint.groups.base",
+    "link": "http://test.com/dolor",
+    "message": "vue/dolor",
+    "name": "vue/dolor",
+    "type": "list",
+    "value": undefined,
+  },
+  Object {
+    "choices": Array [
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.off",
+        "value": "\\"off\\"",
+      },
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.error",
+        "value": "\\"error\\"",
+      },
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.warning",
+        "value": "\\"warning\\"",
+      },
+    ],
+    "default": "\\"error\\"",
+    "description": "Ipsum description",
+    "group": "org.vue.eslint.config.eslint.groups.recommended",
+    "link": "http://test.com/ipsum",
+    "message": "vue/ipsum",
+    "name": "vue/ipsum",
+    "type": "list",
+    "value": "\\"warning\\"",
+  },
+  Object {
+    "choices": Array [
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.off",
+        "value": "\\"off\\"",
+      },
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.error",
+        "value": "\\"error\\"",
+      },
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.warning",
+        "value": "\\"warning\\"",
+      },
+      Object {
+        "name": "org.vue.eslint.config.eslint.setting.custom",
+        "value": "[\\"error\\",[\\"asd\\"]]",
+      },
+    ],
+    "default": "\\"off\\"",
+    "description": "Lorem description",
+    "group": "org.vue.eslint.config.eslint.groups.uncategorized",
+    "link": "http://test.com/lorem",
+    "message": "vue/lorem",
+    "name": "vue/lorem",
+    "type": "list",
+    "value": "[\\"error\\",[\\"asd\\"]]",
+  },
+]
+`;
