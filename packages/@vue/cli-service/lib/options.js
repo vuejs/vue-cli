@@ -17,8 +17,7 @@ const schema = createSchema(joi => joi.object({
   // css
   css: joi.object({
     modules: joi.boolean(),
-    extract: joi.alternatives().try(joi.boolean(), joi.object()),
-    alwaysExtract: joi.boolean(),
+    extract: joi.alternatives().try(joi.boolean(), joi.object(), joi.string().allow('production')),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
       css: joi.object(),

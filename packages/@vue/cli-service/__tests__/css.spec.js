@@ -113,16 +113,16 @@ test('css.extract', () => {
   })
 })
 
-test('css.alwaysExtract', () => {
+test('css.extract when development', () => {
   const config = genConfig({
     vue: {
       css: {
-        alwaysExtract: true
+        extract: 'production'
       }
     }
   }, 'development')
   LANGS.forEach(lang => {
-    expect(findLoaders(config, lang)).toContain(extractLoaderPath)
+    expect(findLoaders(config, lang)).not.toContain(extractLoaderPath)
   })
 })
 
