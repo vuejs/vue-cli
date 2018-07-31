@@ -209,6 +209,13 @@ module.exports = {
 
   Extracting CSS is always disabled in `development` since it breaks Hot Module Replacement.
 
+### css.alwaysExtract
+
+- Type: `boolean`
+- Default: `false`
+
+  Overrides `css.extract` and other checks determining if CSS should be extracted in to standalone file. 
+
 ### css.sourceMap
 
 - Type: `boolean`

@@ -16,13 +16,14 @@ module.exports = (api, options) => {
     const {
       modules = false,
       extract = true,
+      alwaysExtract = false,
       sourceMap = false,
       loaderOptions = {}
     } = options.css || {}
 
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
-    const shouldExtract = isProd && extract !== false && !shadowMode
+    const shouldExtract = (isProd && extract !== false && !shadowMode) || alwaysExtract
     const filename = getAssetPath(
       options,
       `css/[name]${options.filenameHashing ? '.[contenthash:8]' : ''}.css`,
