@@ -51,7 +51,8 @@ module.exports = {
     // or:
     // modify its options:
     config.plugin('prefetch').tap(options => {
-      options.fileBlackList.push([/myasyncRoute(.)+?\.js$/])
+      options[0].fileBlacklist = options[0].fileBlacklist || []
+      options[0].fileBlacklist.push([/myasyncRoute(.)+?\.js$/])
       return options
     })
   }
