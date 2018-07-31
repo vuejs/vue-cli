@@ -587,6 +587,12 @@
               "use-with-caution": "Use with caution",
               "undefined": "Uncategorized"
             },
+            "setting": {
+              "off": "Off",
+              "error": "Error",
+              "warning": "Warning",
+              "custom": "Custom"
+            },
             "general": {
               "label": "General",
               "lintOnSave": {
