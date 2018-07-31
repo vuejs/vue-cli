@@ -22,6 +22,7 @@
     --bail, -b    bail after first test failure
     --require, -r require the given module before running tests
     --include     include the given module into test bundle
+    --inspect-brk Enable inspector to debug the tests
   ```
 
   Default files matches are: any files in `tests/unit` that end in `.spec.(ts|js)`.
