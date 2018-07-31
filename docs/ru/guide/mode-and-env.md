@@ -26,7 +26,7 @@ VUE_APP_SECRET=secret
 
 ## Режимы работы
 
-**Режим работы** — важная часть проектов Vue CLI. По умолчанию, есть три режима работы:
+**Режимы работы** — важная часть проектов Vue CLI. По умолчанию, есть три режима работы:
 
 - `development` используется `vue-cli-service serve`
 - `production` используется `vue-cli-service build` и `vue-cli-service test:e2e`

@@ -129,7 +129,7 @@ npx vue-cli-service help [command]
 ```
 
 ::: warning Предупреждение
-`yorkie` — это форк [`husky`](https://github.com/typicode/husky) без совместимости с ним.
+`yorkie` — это форк [`husky`](https://github.com/typicode/husky) без обратной совместимости с ним.
 :::
 
 ## Конфигурация без извлечения

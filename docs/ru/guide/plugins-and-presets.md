@@ -171,7 +171,7 @@ vue add vuex
 {
   "plugins": {
     "@vue/cli-plugin-eslint": {
-      // разрешаем пользователям выбирать свою конфигурацию ESLint
+      // разрешаем пользователю выбрать свою конфигурацию ESLint
       "prompts": true
     }
   }

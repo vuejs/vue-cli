@@ -4,11 +4,11 @@
 
 ### Стартовый файл
 
-Файл `public/index.html` — шаблон, который будет обрабатываться [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin). На этапе сборки, ссылки на все ресурсы будут внедряться автоматически. Кроме того, также Vue CLI автоматически внедряет подсказки для ресурсов (`preload/prefetch`), ссылки на манифест/иконки (когда используется плагин PWA), и ссылки на ресурсы для файлов JavaScript и CSS, созданных во время сборки.
+Файл `public/index.html` — шаблон, который будет обрабатываться [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin). На этапе сборки, ссылки на все ресурсы будут внедряться автоматически. Кроме того, Vue CLI автоматически внедряет подсказки для ресурсов (`preload/prefetch`), ссылки на манифест/иконки (когда используется PWA-плагин), и ссылки на ресурсы для файлов JavaScript и CSS, созданных во время сборки.
 
 ### Интерполяции
 
-Поскольку стартовый файл используется в качестве шаблона, вы можете использотвать синтаксис [lodash template](https://lodash.com/docs/4.17.10#template) для интерполяции значений в нём:
+Поскольку стартовый файл используется в качестве шаблона, можно использовать синтаксис [шаблонов lodash](https://lodash.com/docs/4.17.10#template) для интерполяции значений в нём:
 
 - `<%= VALUE %>` для неэкранированной подстановки;
 - `<%- VALUE %>` для экранированного HTML-кода;
@@ -25,19 +25,19 @@
 
 ### Preload
 
-[`<link rel="preload">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Preloading_content) is a type of resource hint that is used to specify resources that your pages will need very soon after loading, which you therefore want to start preloading early in the lifecycle of a page load, before the browser's main rendering machinery kicks in.
+[`<link rel="preload">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Preloading_content) — это подсказки для ресурсов, которые потребуются на странице вскоре после загрузки, поэтому вы хотите начать предварительную загрузку заранее, на этапе загрузки страницы, до того как браузер займётся рендерингом страницы.
 
-By default, a Vue CLI app will automatically generate preload hints for all files that are needed for the initial rendering the your app.
+По умолчанию приложение Vue CLI автоматически генерирует preload-подсказки для всех файлов, которые необходимы при первоначальном рендеринге вашего приложения.
 
-The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('preload')`.
+Эти подсказки внедряются [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) и могут быть изменены / удалены с помощью `chainWebpack` через `config.plugin('preload')`.
 
 ### Prefetch
 
-[`<link rel="prefetch">`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ) is a type of resource hint that tells the browser to prefetch content that the user may visit in the near future in the browser's idle time, after the page finishes loading.
+[`<link rel="prefetch">`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ) — это подсказки для ресурсов, которые сообщают браузеру предварительно загрузить контент, который пользователь может посетить в ближайшем будущем, пока браузер находится в режиме ожидания после загрузки страницы.
 
-By default, a Vue CLI app will automatically generate prefetch hints for all JavaScript files generated for async chunks (as a result of [on-demand code splitting via dynamic `import()`](https://webpack.js.org/guides/code-splitting/#dynamic-imports)).
+По умолчанию приложение Vue CLI автометически генерирует prefetch-подсказки для всех JavaScript-файлов, сгенерированных для асинхронных фрагментов (в результате [разделения кода с помощью динамическим импортов `import()`](https://webpack.js.org/guides/code-splitting/#dynamic-imports)).
 
-The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('prefetch')`.
+Эти подсказки внедряются [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) и могут быть изменены / удалены с помощью `chainWebpack` через `config.plugin('prefetch')`.
 
 Например:
 
@@ -94,11 +94,11 @@ module.exports = {
 - Жёстко заданные имена файлов плохо работают с разделением кода, что генерирует дополнительные файлы JavaScript с различными именами файлов.
 - Жёстко заданные имена файлов не работают с [современным режимом](../guide/browser-compatibility.md#современный-режим).
 
-Вместо этого вы должны использовать опцию [indexPath](../config/#indexpath), чтобы использовать сгенерированный HTML в качестве шаблона в вашем фреймворке на стороне сервера.
+Вместо этого вы должны использовать опцию [indexPath](../config/#indexpath), чтобы указать сгенерированный HTML в качестве шаблона вашего фреймворке на стороне сервера.
 
 ### Создание многостраничного приложения
 
-Не каждое приложение должно быть SPA. Vue CLI поддерживает создание много-страничных приложений с помощью [опции `pages` в `vue.config.js`](../config/#pages). Код приложения будет эффективно переиспользоваться между его частями для оптимизации скорости загрузки приложения.
+Не каждое приложение должно быть одностраничным (SPA). Vue CLI поддерживает создание много-страничных приложений с помощью [опции `pages` в `vue.config.js`](../config/#pages). Код приложения будет эффективно переиспользоваться между его частями для оптимизации скорости загрузки.
 
 ## Обработка статических ресурсов
 
@@ -142,23 +142,23 @@ h('img', { attrs: { src: require('./image.png') }})
 
 ### Каталог `public`
 
-Any static assets placed in the `public` folder will simply be copied and not go through webpack. You need to reference to them using absolute paths.
+Любые статические ресурсы в каталоге `public` просто копируются в каталог итоговой сборки и не будут обрабатываться webpack. Вы должны ссылаться на них, используя абсолютные пути.
 
-Note we recommended importing assets as part of your module dependency graph so that they will go through webpack with the following benefits:
+Обратите внимание, что мы рекомендуем импортировать ресурсы как часть дерева зависимостей модуля, чтобы они обрабатывались webpack со следующими преимуществами:
 
-- Scripts and stylesheets get minified and bundled together to avoid extra network requests.
-- Missing files cause compilation errors instead of 404 errors for your users.
-- Result filenames include content hashes so you don’t need to worry about browsers caching their old versions.
+- Скрипты и стили минифицируются и объединяются, для уменьшения количества сетевых запросов.
+- Недостающие файлы вызывают ошибку сборки вместо ошибок 404 для пользователей.
+- Имена файлов в результате будут с хэшем, поэтому не нужно беспокоиться о том, что браузеры используют старые версии из кэша.
 
-The `public` directory is provided as an **escape hatch**, and when you reference it via absolute path, you need to take into account where your app will be deployed. If your app is not deployed at the root of a domain, you will need to prefix your URLs with the [baseUrl](../config/#baseurl):
+Каталог `public` предоставляется для **крайних случаев**, поэтому, когда вы ссылаетесь на него по абсолютному пути, необходимо учитывать, где будет опубликовано ваше приложение. Если публикуется не в корне домена, нужно указывать префикс для URL-адресов с помощью [baseUrl](../config/#baseurl):
 
-- In `public/index.html` or other HTML files used as templates by `html-webpack-plugin`, you need to prefix the link with `<%= BASE_URL %>`:
+- В `public/index.html` или других HTML-файлах, используемых `html-webpack-plugin` в качестве шаблонов, необходимо добавлять префикс в ссылки с помощью `<%= BASE_URL %>`:
 
   ``` html
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   ```
 
-- В шаблонах потребуется сначала передать base URL в ваш компонент:
+- В шаблонах потребуется сначала передать `BASE_URL` в компонент:
 
   ``` js
   data () {
@@ -168,7 +168,7 @@ The `public` directory is provided as an **escape hatch**, and when you referenc
   }
   ```
 
-  Затем:
+  А затем использовать в шаблоне:
 
   ``` html
   <img :src="`${baseUrl}my-image.png`">
@@ -178,4 +178,4 @@ The `public` directory is provided as an **escape hatch**, and when you referenc
 
 - Вам требуется файл с определённым именем в каталоге сборки.
 - У вас тысячи изображений и необходимо динамически ссылаться на их пути.
-- Какая-нибудь библиотека несовместима с Webpack и у вас нет другого варианта, кроме как подключать её через тег `<script>`.
+- Какая-нибудь библиотека несовместима с Webpack и у вас нет другого варианта, кроме как подключения её через тег `<script>`.
