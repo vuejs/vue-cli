@@ -83,7 +83,9 @@ const applyTS = module.exports.applyTS = api => {
     eslintConfig: {
       extends: ['@vue/typescript'],
       parserOptions: {
-        parser: 'typescript-eslint-parser'
+        parser: 'typescript-eslint-parser',
+        // un-set ecmaVersion in case it was set because of babel before (see eslintOptions.js)
+        ecmaVersion: undefined
       }
     },
     devDependencies: {
