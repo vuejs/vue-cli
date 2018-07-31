@@ -122,10 +122,6 @@ describe('getEslintPrompts', () => {
 
   const prompts = getEslintPrompts(data, rules)
 
-  it('generates an array', () => {
-    expect(prompts).toMatchSnapshot()
-  })
-
   it('creates an array with three settings', () => {
     expect(prompts).toHaveLength(3)
   })
