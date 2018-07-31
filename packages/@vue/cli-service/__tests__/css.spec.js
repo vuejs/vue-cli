@@ -113,6 +113,19 @@ test('css.extract', () => {
   })
 })
 
+test('css.extract when development', () => {
+  const config = genConfig({
+    vue: {
+      css: {
+        extract: 'production'
+      }
+    }
+  }, 'development')
+  LANGS.forEach(lang => {
+    expect(findLoaders(config, lang)).not.toContain(extractLoaderPath)
+  })
+})
+
 test('css.sourceMap', () => {
   const config = genConfig({
     postcss: {},

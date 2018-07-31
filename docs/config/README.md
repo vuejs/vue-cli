@@ -198,8 +198,8 @@ module.exports = {
 
 ### css.extract
 
-- Type: `boolean`
-- Default: `true` (in production mode, always `false` otherwise)
+- Type: `boolean | string`
+- Default: `'production'`
 
   Whether to extract CSS in your components into a standalone CSS files (instead of inlined in JavaScript and injected dynamically).
 
@@ -207,7 +207,7 @@ module.exports = {
 
   When building as a library, you can also set this to `false` to avoid your users having to import the CSS themselves.
 
-  Extracting CSS is always disabled in `development` since it breaks Hot Module Replacement.
+  Extracting CSS is disabled by default in `development` since it breaks Hot Module Replacement, can be enabled by setting this to `true`.
 
 ### css.sourceMap
 
