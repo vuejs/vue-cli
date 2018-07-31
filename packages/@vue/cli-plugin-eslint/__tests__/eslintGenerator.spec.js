@@ -12,7 +12,8 @@ test('base', async () => {
     'plugin:vue/essential', 'eslint:recommended'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    ecmaVersion: 2017
   })
 })
 
@@ -31,7 +32,8 @@ test('airbnb', async () => {
     '@vue/airbnb'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    ecmaVersion: 2017
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-airbnb')
 })
@@ -51,7 +53,8 @@ test('standard', async () => {
     '@vue/standard'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    ecmaVersion: 2017
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-standard')
 })
@@ -71,7 +74,8 @@ test('prettier', async () => {
     '@vue/prettier'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    ecmaVersion: 2017
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
 })
