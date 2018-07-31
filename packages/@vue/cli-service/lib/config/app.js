@@ -48,6 +48,31 @@ module.exports = (api, options) => {
     // HTML plugin
     const resolveClientEnv = require('../util/resolveClientEnv')
 
+    // #1669 html-webpack-plugin's default sort uses toposort which cannot
+    // handle cyclic deps in certain cases. Monkey patch it to handle the case
+    // before we can upgrade to its 4.0 version (incompatible with preload atm)
+    const chunkSorters = require('html-webpack-plugin/lib/chunksorter')
+    const depSort = chunkSorters.dependency
+    chunkSorters.auto = chunkSorters.dependency = (chunks, ...args) => {
+      try {
+        return depSort(chunks, ...args)
+      } catch (e) {
+        // fallback to a manual sort if that happens...
+        return chunks.sort((a, b) => {
+          // make sure user entry is loaded last so user CSS can override
+          // vendor CSS
+          if (a.id === 'app') {
+            return 1
+          } else if (b.id === 'app') {
+            return -1
+          } else if (a.entry !== b.entry) {
+            return b.entry ? -1 : 1
+          }
+          return 0
+        })
+      }
+    }
+
     const htmlOptions = {
       templateParameters: (compilation, assets, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
@@ -81,18 +106,6 @@ module.exports = (api, options) => {
           removeScriptTypeAttributes: true
           // more options:
           // https://github.com/kangax/html-minifier#options-quick-reference
-        },
-        // #1669 default sort mode uses toposort which cannot handle cyclic deps
-        // in certain cases, and in webpack 4, chunk order in HTML doesn't
-        // matter anyway
-        chunksSortMode: (a, b) => {
-          if (a.entry !== b.entry) {
-            // make sure entry is loaded last so user CSS can override
-            // vendor CSS
-            return b.entry ? -1 : 1
-          } else {
-            return 0
-          }
         }
       })
 
