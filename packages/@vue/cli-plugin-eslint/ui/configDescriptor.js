@@ -29,6 +29,10 @@ const defaultChoices = [
   }
 ]
 
+function escapeHTML (text) {
+  return text.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 function getEslintConfigName (eslint) {
   let config = eslint.extends
 
@@ -78,7 +82,7 @@ function getEslintPrompts (data, rules) {
         type: 'list',
         message: rule.name,
         group: `org.vue.eslint.config.eslint.groups.${rule.meta.docs.category || 'uncategorized'}`,
-        description: rule.meta.docs.description,
+        description: escapeHTML(rule.meta.docs.description),
         link: rule.meta.docs.url,
         default: JSON.stringify(getDefaultValue(rule, data)),
         value: JSON.stringify(value),
