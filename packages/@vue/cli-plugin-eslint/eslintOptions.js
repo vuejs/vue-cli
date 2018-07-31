@@ -10,7 +10,8 @@ exports.config = api => {
   }
   if (!api.hasPlugin('typescript')) {
     config.parserOptions = {
-      parser: 'babel-eslint'
+      parser: 'babel-eslint',
+      ecmaVersion: 2017,
     }
   }
   return config
