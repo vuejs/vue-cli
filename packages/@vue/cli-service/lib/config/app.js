@@ -2,6 +2,16 @@
 const fs = require('fs')
 const path = require('path')
 
+// ensure the filename passed to html-webpack-plugin is a relative path
+// because it cannot correctly handle absolute paths
+function ensureRelative (outputDir, _path) {
+  if (path.isAbsolute(_path)) {
+    return path.relative(outputDir, _path)
+  } else {
+    return _path
+  }
+}
+
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     // only apply when there's no alternative target
@@ -11,6 +21,7 @@ module.exports = (api, options) => {
 
     const isProd = process.env.NODE_ENV === 'production'
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
+    const outputDir = api.resolve(options.outputDir)
 
     // code splitting
     if (isProd) {
@@ -56,6 +67,10 @@ module.exports = (api, options) => {
       }
     }
 
+    if (options.indexPath) {
+      htmlOptions.filename = ensureRelative(outputDir, options.indexPath)
+    }
+
     if (isProd) {
       Object.assign(htmlOptions, {
         minify: {
@@ -67,11 +82,41 @@ module.exports = (api, options) => {
           // more options:
           // https://github.com/kangax/html-minifier#options-quick-reference
         },
-        // default sort mode uses toposort which cannot handle cyclic deps
+        // #1669 default sort mode uses toposort which cannot handle cyclic deps
         // in certain cases, and in webpack 4, chunk order in HTML doesn't
         // matter anyway
-        chunksSortMode: 'none'
+        chunksSortMode: (a, b) => {
+          if (a.entry !== b.entry) {
+            // make sure entry is loaded last so user CSS can override
+            // vendor CSS
+            return b.entry ? -1 : 1
+          } else {
+            return 0
+          }
+        }
       })
+
+      // keep chunk ids stable so async chunks have consistent hash (#1916)
+      const seen = new Set()
+      const nameLength = 4
+      webpackConfig
+        .plugin('named-chunks')
+          .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
+            if (chunk.name) {
+              return chunk.name
+            }
+            const modules = Array.from(chunk.modulesIterable)
+            if (modules.length > 1) {
+              const hash = require('hash-sum')
+              const joinedHash = hash(modules.map(m => m.id).join('_'))
+              let len = nameLength
+              while (seen.has(joinedHash.substr(0, len))) len++
+              seen.add(joinedHash.substr(0, len))
+              return `chunk-${joinedHash.substr(0, len)}`
+            } else {
+              return modules[0].id
+            }
+          }])
     }
 
     // resolve HTML file(s)
@@ -120,16 +165,17 @@ module.exports = (api, options) => {
           title,
           entry,
           template = `public/${name}.html`,
-          filename = `${name}.html`
+          filename = `${name}.html`,
+          chunks
         } = normalizePageConfig(multiPageConfig[name])
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign({}, htmlOptions, {
-          chunks: ['chunk-vendors', 'chunk-common', name],
+          chunks: chunks || ['chunk-vendors', 'chunk-common', name],
           template: fs.existsSync(template) ? template : (fs.existsSync(htmlPath) ? htmlPath : defaultHtmlPath),
-          filename,
+          filename: ensureRelative(outputDir, filename),
           title
         })
 
@@ -140,9 +186,10 @@ module.exports = (api, options) => {
 
       if (!isLegacyBundle) {
         pages.forEach(name => {
-          const {
-            filename = `${name}.html`
-          } = normalizePageConfig(multiPageConfig[name])
+          const filename = ensureRelative(
+            outputDir,
+            normalizePageConfig(multiPageConfig[name]).filename || `${name}.html`
+          )
           webpackConfig
             .plugin(`preload-${name}`)
               .use(PreloadPlugin, [{
@@ -170,12 +217,13 @@ module.exports = (api, options) => {
     }
 
     // copy static assets in public/
-    if (!isLegacyBundle && fs.existsSync(api.resolve('public'))) {
+    const publicDir = api.resolve('public')
+    if (!isLegacyBundle && fs.existsSync(publicDir)) {
       webpackConfig
         .plugin('copy')
           .use(require('copy-webpack-plugin'), [[{
-            from: api.resolve('public'),
-            to: api.resolve(options.outputDir),
+            from: publicDir,
+            to: outputDir,
             ignore: ['index.html', '.DS_Store']
           }]])
     }

@@ -109,6 +109,9 @@ module.exports = (api, { target, entry, name }) => {
     }
 
     Object.assign(rawConfig.output, {
+      // to ensure that multiple copies of async wc bundles can co-exist
+      // on the same page.
+      jsonpFunction: libName.replace(/-\w/g, c => c.charAt(1).toUpperCase()) + '_jsonp',
       filename: `${entryName}.js`,
       chunkFilename: `${libName}.[name]${minify ? `.min` : ``}.js`,
       // use dynamic publicPath so this can be deployed anywhere

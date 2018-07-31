@@ -49,12 +49,18 @@ program
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
   .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
-  .option('-g, --git [message]', 'Force / skip git initialization, optionally specify initial commit message')
+  .option('-g, --git [message]', 'Force git initialization with initial commit message')
+  .option('-n, --no-git', 'Skip git initialization')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
   .action((name, cmd) => {
-    require('../lib/create')(name, cleanArgs(cmd))
+    const options = cleanArgs(cmd)
+    // --no-git makes commander to default git to true
+    if (process.argv.includes('-g') || process.argv.includes('--git')) {
+      options.forceGit = true
+    }
+    require('../lib/create')(name, options)
   })
 
 program
@@ -108,7 +114,7 @@ program
 program
   .command('ui')
   .description('start and open the vue-cli ui')
-  .option('-p, --port <port>', 'Port used for the UI server (by default search for awailable port)')
+  .option('-p, --port <port>', 'Port used for the UI server (by default search for available port)')
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
   .option('--headless', `Don't open browser on start and output port`)
@@ -187,7 +193,7 @@ function cleanArgs (cmd) {
     const key = o.long.replace(/^--/, '')
     // if an option is not present and Command has a method with the same name
     // it should not be copied
-    if (typeof cmd[key] !== 'function') {
+    if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {
       args[key] = cmd[key]
     }
   })

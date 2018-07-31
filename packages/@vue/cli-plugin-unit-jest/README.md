@@ -15,6 +15,16 @@
 
   All [Jest command line options](https://facebook.github.io/jest/docs/en/cli.html) are also supported.
 
+## Debugging Tests
+
+Note that directly running `jest` will fail because the Babel preset requires hints to make your code work in Node.js, so you must run your tests with `vue-cli-service test:unit`.
+
+If you want to debug your tests via the Node inspector, you can run the following:
+
+``` sh
+node --inspect-brk ./node_modules/.bin/vue-cli-service test:unit
+```
+
 ## Configuration
 
 Jest can be configured via `jest.config.js` in your project root, or the `jest` field in `package.json`.

@@ -297,7 +297,7 @@ module.exports = class Service {
       resovledFrom = 'inline options'
     }
 
-    // normlaize some options
+    // normalize some options
     if (typeof resolved.baseUrl === 'string') {
       resolved.baseUrl = resolved.baseUrl.replace(/^\.\//, '')
     }
@@ -336,6 +336,6 @@ function ensureSlash (config, key) {
 
 function removeSlash (config, key) {
   if (typeof config[key] === 'string') {
-    config[key] = config[key].replace(/^\/|\/$/g, '')
+    config[key] = config[key].replace(/\/$/g, '')
   }
 }

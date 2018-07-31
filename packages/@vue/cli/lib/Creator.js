@@ -141,7 +141,6 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run generator
-    log()
     log(`🚀  Invoking generators...`)
     this.emit('creation', { event: 'invoking-generators' })
     const plugins = await this.resolvePlugins(preset.plugins)
@@ -163,7 +162,6 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run complete cbs if any (injected by generators)
-    log()
     logWithSpinner('⚓', `Running completion hooks...`)
     this.emit('creation', { event: 'completion-hooks' })
     for (const cb of createCompleteCbs) {
@@ -307,10 +305,7 @@ module.exports = class Creator extends EventEmitter {
     rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'])
     const plugins = []
     for (const id of Object.keys(rawPlugins)) {
-      const apply = loadModule(`${id}/generator`, this.context)
-      if (!apply) {
-        throw new Error(`Failed to resolve plugin: ${id}`)
-      }
+      const apply = loadModule(`${id}/generator`, this.context) || (() => {})
       let options = rawPlugins[id] || {}
       if (options.prompts) {
         const prompts = loadModule(`${id}/prompts`, this.context)
@@ -443,10 +438,15 @@ module.exports = class Creator extends EventEmitter {
     if (!hasGit()) {
       return false
     }
-    if (cliOptions.git) {
-      return cliOptions.git !== 'false' && cliOptions.git !== false
+    // --git
+    if (cliOptions.forceGit) {
+      return true
     }
-
+    // --no-git
+    if (cliOptions.git === false || cliOptions.git === 'false') {
+      return false
+    }
+    // default: true unless already in a git repo
     return !hasProjectGit(this.context)
   }
 }

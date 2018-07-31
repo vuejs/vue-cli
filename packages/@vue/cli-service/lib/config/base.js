@@ -5,6 +5,13 @@ module.exports = (api, options) => {
     const getAssetPath = require('../util/getAssetPath')
     const inlineLimit = 4096
 
+    const genAssetSubPath = dir => {
+      return getAssetPath(
+        options,
+        `${dir}/[name]${options.filenameHashing ? '.[hash:8]' : ''}.[ext]`
+      )
+    }
+
     webpackConfig
       .mode('development')
       .context(api.service.context)
@@ -82,7 +89,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: getAssetPath(options, `img/[name].[hash:8].[ext]`)
+            name: genAssetSubPath('img')
           })
 
     // do not base64-inline SVGs.
@@ -93,7 +100,7 @@ module.exports = (api, options) => {
         .use('file-loader')
           .loader('file-loader')
           .options({
-            name: getAssetPath(options, `img/[name].[hash:8].[ext]`)
+            name: genAssetSubPath('img')
           })
 
     webpackConfig.module
@@ -103,7 +110,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: getAssetPath(options, `media/[name].[hash:8].[ext]`)
+            name: genAssetSubPath('media')
           })
 
     webpackConfig.module
@@ -113,7 +120,7 @@ module.exports = (api, options) => {
           .loader('url-loader')
           .options({
             limit: inlineLimit,
-            name: getAssetPath(options, `fonts/[name].[hash:8].[ext]`)
+            name: genAssetSubPath('fonts')
           })
 
     // Other common pre-processors ---------------------------------------------

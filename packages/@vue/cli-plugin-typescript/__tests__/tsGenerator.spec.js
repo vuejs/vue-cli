@@ -34,7 +34,6 @@ test('classComponent', async () => {
   expect(pkg.dependencies).toHaveProperty('vue-property-decorator')
 
   expect(files['tsconfig.json']).toMatch(`"experimentalDecorators": true`)
-  expect(files['tsconfig.json']).toMatch(`"emitDecoratorMetadata": true`)
   expect(files['src/App.vue']).toMatch(
     `export default class App extends Vue {`
   )
@@ -117,11 +116,11 @@ test('compat with unit-mocha', async () => {
   const { pkg } = await generateWithPlugin([
     {
       id: '@vue/cli-plugin-unit-mocha',
-      apply: () => {},
+      apply: require('@vue/cli-plugin-unit-mocha/generator'),
       options: {}
     },
     {
-      id: 'ts',
+      id: '@vue/cli-plugin-typescript',
       apply: require('../generator'),
       options: {
         lint: true,
@@ -138,11 +137,11 @@ test('compat with unit-jest', async () => {
   const { pkg } = await generateWithPlugin([
     {
       id: '@vue/cli-plugin-unit-jest',
-      apply: () => {},
+      apply: require('@vue/cli-plugin-unit-jest/generator'),
       options: {}
     },
     {
-      id: 'ts',
+      id: '@vue/cli-plugin-typescript',
       apply: require('../generator'),
       options: {
         lint: true,

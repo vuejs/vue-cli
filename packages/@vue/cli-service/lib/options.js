@@ -4,12 +4,15 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string().allow(''),
   outputDir: joi.string(),
   assetsDir: joi.string(),
+  indexPath: joi.string(),
+  filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
   pages: joi.object(),
+  corsUseCredentials: joi.boolean(),
 
   // css
   css: joi.object({
@@ -54,6 +57,12 @@ exports.defaults = () => ({
   // where to put static assets (js/css/img/font/...)
   assetsDir: '',
 
+  // filename for index.html (relative to outputDir)
+  indexPath: 'index.html',
+
+  // whether filename will contain hash part
+  filenameHashing: true,
+
   // boolean, use full build?
   runtimeCompiler: false,
 
@@ -69,6 +78,10 @@ exports.defaults = () => ({
 
   // multi-page config
   pages: undefined,
+
+  // <script type="module" crossorigin="use-credentials">
+  // #1656, #1867
+  corsUseCredentials: false,
 
   css: {
     // extract: true,

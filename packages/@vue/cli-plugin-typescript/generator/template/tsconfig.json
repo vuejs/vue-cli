@@ -8,9 +8,8 @@
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     <%_ } _%>
-    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [

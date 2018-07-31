@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-init",
-  "version": "3.0.0-rc.5",
+  "version": "3.0.0-rc.10",
   "description": "init addon for vue-cli",
   "main": "index.js",
   "publishConfig": {

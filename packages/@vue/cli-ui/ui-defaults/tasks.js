@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 
 module.exports = api => {
-  const { getSharedData, setSharedData, removeSharedData, watchSharedData } = api.namespace('org.vue.webpack.')
+  const { getSharedData, setSharedData, removeSharedData } = api.namespace('org.vue.webpack.')
 
   let firstRun = true
   let hadFailed = false
@@ -37,17 +37,12 @@ module.exports = api => {
   // Called when opening a project
   function setupSharedData (mode) {
     resetSharedData(mode)
-    for (const field in fields) {
-      const id = `${mode}-${field}`
-      watchData(id)
-    }
   }
 
   // Called when opening a project
   function setupCommonData () {
     for (const field in commonFields) {
       setSharedData(field, getSharedDataInitialValue(field, commonFields[field]))
-      watchData(field)
     }
   }
 
@@ -58,22 +53,10 @@ module.exports = api => {
     }
   }
 
-  function watchData (id) {
-    watchSharedData(id, (value) => {
-      const project = api.getProject()
-      if (project) {
-        setSharedData(`${project.id}-${id}`, value)
-      }
-    })
-  }
-
   function getSharedDataInitialValue (id, defaultValue, clear) {
     if (!clear) {
-      const project = api.getProject()
-      if (project) {
-        const data = getSharedData(`${project.id}-${id}`)
-        if (data != null) return data.value
-      }
+      const data = getSharedData(id)
+      if (data != null) return data.value
     }
     return defaultValue
   }

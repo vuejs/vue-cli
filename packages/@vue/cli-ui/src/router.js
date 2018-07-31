@@ -21,6 +21,7 @@ import About from './views/About.vue'
 import NotFound from './views/NotFound.vue'
 
 import PROJECT_CURRENT from './graphql/projectCurrent.gql'
+import CURRENT_PROJECT_ID_SET from './graphql/currentProjectIdSet.gql'
 
 Vue.use(Router)
 
@@ -131,6 +132,13 @@ router.beforeEach(async (to, from, next) => {
     if (!result.data.projectCurrent) {
       next({ name: 'project-select' })
       return
+    } else {
+      await apolloClient.mutate({
+        mutation: CURRENT_PROJECT_ID_SET,
+        variables: {
+          projectId: result.data.projectCurrent.id
+        }
+      })
     }
   }
   next()

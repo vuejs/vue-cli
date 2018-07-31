@@ -246,7 +246,6 @@ module.exports = api => {
         label: 'org.vue.eslint.suggestions.open-eslintrc.label',
         handler () {
           const file = config.foundFiles.eslint.path
-          console.log('open', file)
           const launch = require('launch-editor')
           launch(file)
           return {

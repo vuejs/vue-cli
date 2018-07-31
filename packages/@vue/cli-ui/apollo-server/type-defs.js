@@ -63,13 +63,13 @@ type Query {
   progress (id: ID!): Progress
   cwd: String!
   clientAddons: [ClientAddon]
-  sharedData (id: ID!): SharedData
+  sharedData (id: ID!, projectId: ID!): SharedData
   locales: [Locale]
 }
 
 type Mutation {
   fileOpenInEditor (input: OpenInEditorInput!): Boolean
-  sharedDataUpdate (id: ID!, value: JSON!): SharedData
+  sharedDataUpdate (id: ID!, projectId: ID!, value: JSON!): SharedData
 }
 
 type Subscription {
@@ -77,7 +77,7 @@ type Subscription {
   progressRemoved (id: ID!): ID
   cwdChanged: String!
   clientAddonAdded: ClientAddon
-  sharedDataUpdated (id: ID!): SharedData
+  sharedDataUpdated (id: ID!, projectId: ID!): SharedData
   localeAdded: Locale
 }
 `]

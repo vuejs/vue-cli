@@ -121,13 +121,14 @@ module.exports = (context, options = {}) => {
   // pass options along to babel-preset-env
   presets.push([require('@babel/preset-env'), envOptions])
 
-  // stage 2. This includes some important transforms, e.g. dynamic import
-  // and rest object spread.
-  presets.push([require('@babel/preset-stage-2'), {
-    loose,
-    useBuiltIns: useBuiltIns !== false,
-    decoratorsLegacy: decoratorsLegacy !== false
-  }])
+  // additional <= stage-3 plugins
+  // Babel 7 is removing stgage presets altogether because people are using
+  // too much unstable proposals. Let's be conservative in the defaults here.
+  plugins.push(
+    require('@babel/plugin-syntax-dynamic-import'),
+    [require('@babel/plugin-proposal-decorators'), { legacy: decoratorsLegacy !== false }],
+    [require('@babel/plugin-proposal-class-properties'), { loose }],
+  )
 
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {

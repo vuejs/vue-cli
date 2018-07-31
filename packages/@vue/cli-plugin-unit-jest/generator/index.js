@@ -1,42 +1,52 @@
-module.exports = api => {
-  api.render('./template')
+module.exports = (api, _, __, invoking) => {
+  api.render('./template', {
+    hasTS: api.hasPlugin('typescript')
+  })
+
   api.extendPackage({
     scripts: {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
       '@vue/test-utils': '^1.0.0-beta.20'
+    },
+    jest: {
+      'moduleFileExtensions': [
+        'js',
+        'jsx',
+        'json',
+        // tell Jest to handle *.vue files
+        'vue'
+      ],
+      'transform': {
+        // process *.vue files with vue-jest
+        '^.+\\.vue$': 'vue-jest',
+        '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
+      },
+      // support the same @ -> src alias mapping in source code
+      'moduleNameMapper': {
+        '^@/(.*)$': '<rootDir>/src/$1'
+      },
+      // serializer for snapshots
+      'snapshotSerializers': [
+        'jest-serializer-vue'
+      ],
+      'testMatch': [
+        '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
+      ],
+      // https://github.com/facebook/jest/issues/6766
+      'testURL': 'http://localhost/'
     }
   })
 
-  const jestConfig = {
-    'moduleFileExtensions': [
-      'js',
-      'jsx',
-      'json',
-      // tell Jest to handle *.vue files
-      'vue'
-    ],
-    'transform': {
-      // process *.vue files with vue-jest
-      '^.+\\.vue$': 'vue-jest',
-      '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
-    },
-    // support the same @ -> src alias mapping in source code
-    'moduleNameMapper': {
-      '^@/(.*)$': '<rootDir>/src/$1'
-    },
-    // serializer for snapshots
-    'snapshotSerializers': [
-      'jest-serializer-vue'
-    ],
-    'testMatch': [
-      '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
-    ]
-  }
-
   if (!api.hasPlugin('typescript')) {
-    jestConfig.transform['^.+\\.jsx?$'] = 'babel-jest'
+    api.extendPackage({
+      jest: {
+        transform: {
+          '^.+\\.jsx?$': 'babel-jest'
+        }
+      }
+    })
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
@@ -53,33 +63,60 @@ module.exports = api => {
       })
     }
   } else {
-    jestConfig.moduleFileExtensions.unshift('ts', 'tsx')
-    jestConfig.transform['^.+\\.tsx?$'] = 'ts-jest'
-    api.extendPackage({
-      devDependencies: {
-        'ts-jest': '^23.0.0'
-      }
-    })
-    if (api.hasPlugin('babel')) {
-      api.extendPackage({
-        devDependencies: {
-          // this is for now necessary to force ts-jest and vue-jest to use babel 7
-          'babel-core': '7.0.0-bridge.0'
-        }
-      })
-    }
+    applyTS(api, invoking)
   }
-
-  api.extendPackage({ jest: jestConfig })
 
   if (api.hasPlugin('eslint')) {
-    api.render(files => {
-      files['tests/unit/.eslintrc.js'] = api.genJSConfig({
-        env: { jest: true },
-        rules: {
-          'import/no-extraneous-dependencies': 'off'
-        }
-      })
+    applyESLint(api)
+  }
+}
+
+const applyTS = module.exports.applyTS = (api, invoking) => {
+  api.extendPackage({
+    jest: {
+      moduleFileExtensions: ['ts', 'tsx'],
+      transform: {
+        '^.+\\.tsx?$': 'ts-jest'
+      }
+    },
+    devDependencies: {
+      '@types/jest': '^23.1.4',
+      'ts-jest': '^23.0.0'
+    }
+  })
+  if (api.hasPlugin('babel')) {
+    api.extendPackage({
+      devDependencies: {
+        // this is for now necessary to force ts-jest and vue-jest to use babel 7
+        'babel-core': '7.0.0-bridge.0'
+      }
     })
   }
+  // inject jest type to tsconfig.json
+  if (invoking) {
+    api.render(files => {
+      const tsconfig = files['tsconfig.json']
+      if (tsconfig) {
+        const parsed = JSON.parse(tsconfig)
+        if (
+          parsed.compilerOptions.types &&
+          !parsed.compilerOptions.types.includes('jest')
+        ) {
+          parsed.compilerOptions.types.push('jest')
+        }
+        files['tsconfig.json'] = JSON.stringify(parsed, null, 2)
+      }
+    })
+  }
+}
+
+const applyESLint = module.exports.applyESLint = api => {
+  api.render(files => {
+    files['tests/unit/.eslintrc.js'] = api.genJSConfig({
+      env: { jest: true },
+      rules: {
+        'import/no-extraneous-dependencies': 'off'
+      }
+    })
+  })
 }

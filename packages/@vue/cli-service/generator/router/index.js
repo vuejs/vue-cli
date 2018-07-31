@@ -6,7 +6,9 @@ module.exports = (api, options) => {
       'vue-router': '^3.0.1'
     }
   })
-  api.render('./template')
+  api.render('./template', {
+    historyMode: options.routerHistoryMode
+  })
 
   if (api.invoking) {
     api.postProcessFiles(files => {

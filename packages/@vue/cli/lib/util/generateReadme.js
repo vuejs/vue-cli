@@ -8,7 +8,8 @@ const descriptions = {
 }
 
 function printScripts (pkg, packageManager) {
-  return Object.keys(pkg.scripts).map(key => {
+  return Object.keys(pkg.scripts || {}).map(key => {
+    if (!descriptions[key]) return ''
     return [
       `\n### ${descriptions[key]}`,
       '```',

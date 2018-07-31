@@ -1,7 +1,7 @@
-const request = require('request-promise-native')
-
 exports.request = {
   get (uri) {
+    // lazy require
+    const request = require('request-promise-native')
     const reqOpts = {
       method: 'GET',
       resolveWithFullResponse: true,

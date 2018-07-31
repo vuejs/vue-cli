@@ -62,7 +62,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.0.0-rc.5',
+      '@vue/cli-plugin-babel': '^3.0.0-rc.10',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -91,7 +91,7 @@ test('handle option baseUrl and outputDir correctly', () => {
   })
   const service = createMockService()
   expect(service.projectOptions.baseUrl).toBe('https://foo.com/bar/')
-  expect(service.projectOptions.outputDir).toBe('public')
+  expect(service.projectOptions.outputDir).toBe('/public')
 })
 
 test('load project options from vue.config.js', () => {

@@ -6,7 +6,6 @@ const {
   log,
   error,
   hasProjectYarn,
-  stopSpinner,
   resolvePluginId,
   resolveModule,
   loadModule
@@ -30,9 +29,6 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
   await installPackage(context, packageManager, null, packageName)
 
-  stopSpinner()
-
-  log()
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()
 
@@ -45,9 +41,16 @@ async function add (pluginName, options = {}, context = process.cwd()) {
 }
 
 async function addRouter (context) {
+  const inquirer = require('inquirer')
+  const options = await inquirer.prompt([{
+    name: 'routerHistoryMode',
+    type: 'confirm',
+    message: `Use history mode for router? ${chalk.yellow(`(Requires proper server setup for index fallback in production)`)}`
+  }])
   invoke.runGenerator(context, {
     id: 'core:router',
-    apply: loadModule('@vue/cli-service/generator/router', context)
+    apply: loadModule('@vue/cli-service/generator/router', context),
+    options
   })
 }
 

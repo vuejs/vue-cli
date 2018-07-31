@@ -3,6 +3,11 @@ const stringifyJS = require('./stringifyJS')
 const { loadModule } = require('@vue/cli-shared-utils')
 const merge = require('deepmerge')
 
+const mergeArrayWithDedupe = (a, b) => Array.from(new Set([...a, ...b]))
+const mergeOptions = {
+  arrayMerge: mergeArrayWithDedupe
+}
+
 const isObject = val => val && typeof val === 'object'
 
 const transformJS = {
@@ -20,10 +25,10 @@ const transformJS = {
       Object.keys(value).forEach(key => {
         const originalValue = existing[key]
         const newValue = value[key]
-        if (Array.isArray(newValue)) {
-          changedData[key] = newValue
+        if (Array.isArray(originalValue) && Array.isArray(newValue)) {
+          changedData[key] = mergeArrayWithDedupe(originalValue, newValue)
         } else if (isObject(originalValue) && isObject(newValue)) {
-          changedData[key] = merge(originalValue, newValue)
+          changedData[key] = merge(originalValue, newValue, mergeOptions)
         } else {
           changedData[key] = newValue
         }
@@ -37,12 +42,18 @@ const transformJS = {
 
 const transformJSON = {
   read: ({ source }) => JSON.parse(source),
-  write: ({ value, existing }) => JSON.stringify(merge(existing, value), null, 2)
+  write: ({ value, existing }) => {
+    return JSON.stringify(merge(existing, value, mergeOptions), null, 2)
+  }
 }
 
 const transformYAML = {
   read: ({ source }) => require('js-yaml').safeLoad(source),
-  write: ({ value, existing }) => require('js-yaml').safeDump(merge(existing, value))
+  write: ({ value, existing }) => {
+    return require('js-yaml').safeDump(merge(existing, value, mergeOptions), {
+      skipInvalid: true
+    })
+  }
 }
 
 const transformLines = {

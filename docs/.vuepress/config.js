@@ -5,6 +5,11 @@ module.exports = {
       title: 'Vue CLI 3',
       description: '🛠️ Standard Tooling for Vue.js Development'
     },
+    '/zh/': {
+      lang: 'zh-CN',
+      title: 'Vue CLI',
+      description: '🛠️ Vue.js 开发的标准工具'
+    },
     '/ru/': {
       lang: 'ru',
       title: 'Vue CLI 3',
@@ -100,6 +105,82 @@ module.exports = {
                 '/dev-guide/ui-localization.md'
               ]
             }
+          ]
+        }
+      },
+      '/zh/': {
+        label: '简体中文',
+        selectText: '选择语言',
+        lastUpdated: '上次编辑时间',
+        editLinkText: '在 GitHub 上编辑此页',
+        nav: [
+          {
+            text: '指南',
+            link: '/zh/guide/'
+          },
+          {
+            text: '配置参考',
+            link: '/zh/config/'
+          },
+          {
+            text: '开发指南',
+            items: [
+              { text: 'Plugin Dev Guide', link: '/zh/dev-guide/plugin-dev.md' },
+              { text: 'UI Plugin Info', link: '/zh/dev-guide/ui-info.md' },
+              { text: 'UI Plugin API', link: '/zh/dev-guide/ui-api.md' },
+              { text: 'UI Localization', link: '/zh/dev-guide/ui-localization.md' }
+            ]
+          },
+          {
+            text: '插件',
+            items: [
+              { text: 'Babel', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-babel/README.md' },
+              { text: 'Typescript', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-typescript/README.md' },
+              { text: 'ESLint', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-eslint/README.md' },
+              { text: 'PWA', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-pwa/README.md' },
+              { text: 'Jest', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-unit-jest/README.md' },
+              { text: 'Mocha', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-unit-mocha/README.md' },
+              { text: 'Cypress', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-e2e-cypress/README.md' },
+              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli-plugin-e2e-nightwatch/README.md' }
+            ]
+          },
+          {
+            text: '更新记录',
+            link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
+          }
+        ],
+        sidebar: {
+          '/zh/guide/': [
+            '/zh/guide/',
+            {
+              title: 'CLI',
+              collapsable: false,
+              children: [
+                '/zh/guide/creating-a-project',
+                '/zh/guide/prototyping',
+                '/zh/guide/plugins-and-presets'
+              ]
+            },
+            {
+              title: '开发',
+              collapsable: false,
+              children: [
+                '/zh/guide/cli-service',
+                '/zh/guide/browser-compatibility',
+                '/zh/guide/html-and-static-assets',
+                '/zh/guide/css',
+                '/zh/guide/webpack',
+                '/zh/guide/mode-and-env',
+                '/zh/guide/build-targets',
+                '/zh/guide/deployment'
+              ]
+            }
+          ],
+          '/zh/dev-guide/': [
+            '/zh/dev-guide/plugin-dev.md',
+            '/zh/dev-guide/ui-info.md',
+            '/zh/dev-guide/ui-api.md',
+            '/zh/dev-guide/ui-localization.md'
           ]
         }
       },

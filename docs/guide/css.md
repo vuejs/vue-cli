@@ -25,6 +25,34 @@ $color = red;
 </style>
 ```
 
+### Automatic imports
+
+If you want to automatically import files (for colors, variables, mixins...), you can use the [style-resources-loader](https://github.com/yenshih/style-resources-loader). Here is an example for stylus that imports `./src/styles/imports.styl` in every SFC and every stylus files:
+
+```js
+// vue.config.js
+const path = require('path')
+
+module.exports = {
+  chainWebpack: config => {
+    const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
+    types.forEach(type => addStyleResource(config.module.rule('stylus').oneOf(type)))
+  },
+}
+
+function addStyleResource (rule) {
+  rule.use('style-resource')
+    .loader('style-resources-loader')
+    .options({
+      patterns: [
+        path.resolve(__dirname, './src/styles/imports.styl'),
+      ],
+    })
+}
+```
+
+You can also use the [vue-cli-plugin-style-resources-loader](https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader).
+
 ## PostCSS
 
 Vue CLI uses PostCSS internally.

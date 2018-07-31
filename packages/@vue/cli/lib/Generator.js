@@ -93,7 +93,7 @@ module.exports = class Generator {
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
       const api = new GeneratorAPI(id, this, options, rootOptions)
-      apply(api, options, rootOptions)
+      apply(api, options, rootOptions, invoking)
     })
   }
 
@@ -213,6 +213,11 @@ module.exports = class Generator {
   }
 
   hasPlugin (_id) {
+    if (_id === 'router') _id = 'vue-router'
+    if (['vue-router', 'vuex'].includes(_id)) {
+      const pkg = this.pkg
+      return ((pkg.dependencies && pkg.dependencies[_id]) || (pkg.devDependencies && pkg.devDependencies[_id]))
+    }
     return [
       ...this.plugins.map(p => p.id),
       ...Object.keys(this.pkg.devDependencies || {}),
