@@ -1,7 +1,6 @@
 const CONFIG = 'org.vue.eslintrc'
 
 const CATEGORIES = [
-  'base',
   'essential',
   'strongly-recommended',
   'recommended',

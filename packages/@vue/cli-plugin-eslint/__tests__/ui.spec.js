@@ -112,9 +112,18 @@ describe('getEslintPrompts', () => {
     'dolor': {
       meta: {
         docs: {
-          category: 'base',
+          category: 'strongly-recommended',
           description: 'Dolor description',
           url: 'http://test.com/dolor'
+        }
+      }
+    },
+    'sit': {
+      meta: {
+        docs: {
+          category: 'base',
+          description: 'Sit description',
+          url: 'http://test.com/sit'
         }
       }
     }
@@ -122,7 +131,7 @@ describe('getEslintPrompts', () => {
 
   const prompts = getEslintPrompts(data, rules)
 
-  it('creates an array with three settings', () => {
+  it('creates an array with 3 settings, leaving out category "base"', () => {
     expect(prompts).toHaveLength(3)
   })
 
@@ -147,7 +156,7 @@ describe('getEslintPrompts', () => {
     expect(prompts[2].choices).toHaveLength(4)
   })
 
-  it('sets a default value to "ERROR" for rule that belong to the choosen config', () => {
+  it('sets a default value to "ERROR" for rule that belong to the chosen config', () => {
     expect(prompts[0].default).toBe('"error"')
     expect(prompts[1].default).toBe('"error"')
     expect(prompts[2].default).toBe('"off"')
