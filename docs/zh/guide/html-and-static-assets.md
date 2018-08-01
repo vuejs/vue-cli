@@ -58,9 +58,43 @@ module.exports = {
 }
 ```
 
+当 prefetch 插件被禁用时，你可以通过 webpack 的内联注释手动选定要提前获取的代码区块：
+
+``` js
+import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
+```
+
+webpack 的运行时会在父级区块被加载之后注入 prefetch 链接。
+
 ::: tip 提示
-Prefetch 链接将会消耗带宽。如果你的应用很大且有很多 async chunk，而用户主要使用的是对带宽较敏感的移动端，那么你可能需要关掉 prefetch 链接。
+Prefetch 链接将会消耗带宽。如果你的应用很大且有很多 async chunk，而用户主要使用的是对带宽较敏感的移动端，那么你可能需要关掉 prefetch 链接并手动选择要提前获取的代码区块。
 :::
+
+### 不生成 index
+
+当基于已有的后端使用 Vue CLI 时，你可能不需要生成 `index.html`，这样生成的资源可以用于一个服务端渲染的页面。这时可以向 [`vue.config.js`](../config/#vue-config-js) 加入下列代码：
+
+``` js
+// vue.config.js
+module.exports = {
+  // 去掉文件名中的 hash
+  filenameHashing: false,
+  // 删除 HTML 相关的 webpack 插件
+  chainWebpack: config => {
+    config.plugins.delete('html')
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+  }
+}
+```
+
+然而这样做并不是很推荐，因为：
+
+- 硬编码的文件名不利于实现高效率的缓存控制。
+- 硬编码的文件名也无法很好的进行 code-splitting (代码分段)，因为无法用变化的文件名生成额外的 JavaScript 文件。
+- 硬编码的文件名无法在[现代模式](../guide/browser-compatibility.md#现代模式)下工作。
+
+你应该考虑换用 [indexPath](../config/#indexpath) 选项将生成的 HTML 用作一个服务端框架的视图模板。
 
 ### 构建一个多页应用
 
