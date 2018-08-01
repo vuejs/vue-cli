@@ -52,7 +52,7 @@ webpack 内部的配置是通过 [webpack-chain](https://github.com/mozilla-neut
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
-    config
+    config.module
       .rule('vue')
       .use('vue-loader')
         .loader('vue-loader')

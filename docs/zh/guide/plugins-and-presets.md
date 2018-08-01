@@ -6,6 +6,10 @@ Vue CLI 使用了一套基于插件的架构。如果你查阅一个新创建项
 
 基于插件的架构使得 Vue CLI 灵活且可扩展。如果你对开发一个插件感兴趣，请翻阅[插件开发指南](../dev-guide/plugin-dev.md)。
 
+::: tip
+你可以通过 `vue ui` 命令使用 GUI 安装和管理插件。
+:::
+
 ### 在现有的项目中安装插件
 
 每个 CLI 插件都会包含一个 (用来创建文件的) 生成器和一个 (用来调整 webpack 核心配置和注入命令的) 运行时插件。当你使用 `vue create` 来创建一个新项目的时候，有些插件会根据你选择的特性被预安装好。如果你想在一个已经被创建好的项目中安装一个插件，可以使用 `vue add` 命令：
@@ -56,6 +60,46 @@ vue add vuex
 ```
 
 如果一个插件已经被安装，你可以使用 `vue invoke` 命令跳过安装过程，只调用它的生成器。这个命令会接受和 `vue add` 相同的参数。
+
+::: tip 提示
+如果出于一些原因你的插件列在了该项目之外的其它 `package.json` 文件里，你可以在自己项目的 `package.json` 里设置 `vuePlugins.resolveFrom` 选项指向包含其它 `package.json` 的文件夹。
+
+例如，如果你有一个 `.config/package.json` 文件：
+
+```json
+{
+  "vuePlugins": {
+    "resolveFrom": ".config"
+  }
+}
+```
+:::
+
+### 项目本地的插件
+
+如果你需要在项目里直接访问插件 API 而不需要创建一个完整的插件，你可以在 `package.json` 文件中使用 `vuePlugins.service` 选项：
+
+```json
+{
+  "vuePlugins": {
+    "service": ["my-commands.js"]
+  }
+}
+```
+
+每个文件都需要暴露一个函数，将插件 API 作为第一个参数携带。关于插件 API 的更多信息可以查阅[插件开发指南](../dev-guide/plugin-dev.md)。
+
+你也可以通过 `vuePlugins.ui` 选项添加像 UI 插件一样工作的文件：
+
+```json
+{
+  "vuePlugins": {
+    "ui": ["my-ui.js"]
+  }
+}
+```
+
+更多信息请阅读 [UI 插件 API](../dev-guide/ui-api.md)。
 
 ## Preset
 
