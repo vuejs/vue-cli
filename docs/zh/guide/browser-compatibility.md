@@ -2,13 +2,13 @@
 
 ## browserslist
 
-你会发现 `package.json` 文件里有一个 `browserlist` 字段，指定里项目的目标浏览器的范围。这个值会被 [@babel/preset-env][babel-preset-env] 和 [Autoprefixer][autoprefixer] 用来确定需要转译的 JavaScript 特性和需要添加的 CSS 浏览器前缀。
+你会发现有 `package.json` 文件里的 `browserlist` 字段 (或一个单独的 `.browserslistrc` 文件)，指定了项目的目标浏览器的范围。这个值会被 [@babel/preset-env][babel-preset-env] 和 [Autoprefixer][autoprefixer] 用来确定需要转译的 JavaScript 特性和需要添加的 CSS 浏览器前缀。
 
 现在查阅[这里][browserslist]了解如何指定浏览器范围。
 
 ## Polyfill
 
-一个默认的 Vue CLI 项目会使用 [@vue/babel-preset-app][babel-preset-env]，它通过 `@babel/preset-env` 和 `browserslist` 配置来决定项目需要的 polyfill。
+一个默认的 Vue CLI 项目会使用 [@vue/babel-preset-app][babel-preset-app]，它通过 `@babel/preset-env` 和 `browserslist` 配置来决定项目需要的 polyfill。
 
 默认情况下，它会把 [`useBuiltIns: 'usage'`](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) 传递给 `@babel/preset-env`，这样它会根据源代码中出现的语言特性自动检测需要的 polyfill。这确保了最终包里 polyfill 数量的最小化。然而，这也意味着**如果其中一个依赖需要特殊的 polyfill，默认情况下 Babel 无法将其检测出来。**
 
@@ -62,6 +62,17 @@ Vue CLI 会产生两个应用的版本：一个现代版的包，面向支持 [E
 
 对于一个 Hello World 应用来说，现代版的包已经小了 16%。在生产环境下，现代版的包通常都会表现出显著的解析速度和运算速度，从而改善应用的加载性能。
 
+::: tip 提示
+`<script type="module">` [需要配合始终开启的 CORS 进行加载](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors)。这意味着你的服务器必须返回诸如 `Access-Control-Allow-Origin: *` 的有效的 CORS 头。如果你想要通过认证来获取脚本，可使用 [corsUseCredentials](../config/#corsusecredentials) 选项。
+
+同时，现代浏览器使用一段内联脚本来避免 Safari 10 重复加载脚本包，所以如果你在使用一套严格的 CSP，你需要这样显性地允许内联脚本：
+
+```
+Content-Security-Policy: script-src 'self' 'sha256-4RS22DYeB7U14dra4KcQYxmwt5HkOInieXK1NUMBmQI='
+```
+:::
+
 [autoprefixer]: https://github.com/postcss/autoprefixer
 [babel-preset-env]: https://new.babeljs.io/docs/en/next/babel-preset-env.html
+[babel-preset-app]: https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app
 [browserslist]: https://github.com/ai/browserslist
