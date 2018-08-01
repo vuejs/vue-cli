@@ -31,11 +31,61 @@ serve -s dist
 
 如果你使用了 PWA 插件，那么应用必须架设在 HTTPS 上，这样 [Service Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API) 才能被正确注册。
 
+<!-- @todo: translation -->
+
 ## Platform Guides
+
+(暂未翻译，此部分英文文档处于开放贡献中)
 
 ### GitHub Pages
 
-> TODO | Open to contribution.
+1. Set correct `baseUrl` in `vue.config.js`.
+
+    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+
+    If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `baseUrl` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
+
+    ``` js
+    module.exports = {
+      baseUrl: process.env.NODE_ENV === 'production'
+        ? '/my-project/'
+        : '/'
+    }
+    ```
+
+2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
+
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
+
+    # abort on errors
+    set -e
+
+    # build
+    npm run docs:build
+
+    # navigate into the build output directory
+    cd docs/.vuepress/dist
+
+    # if you are deploying to a custom domain
+    # echo 'www.example.com' > CNAME
+
+    git init
+    git add -A
+    git commit -m 'deploy'
+
+    # if you are deploying to https://<USERNAME>.github.io
+    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+
+    # if you are deploying to https://<USERNAME>.github.io/<REPO>
+    # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
+
+    cd -
+    ```
+
+    ::: tip
+    You can also run the above script in your CI setup to enable automatic deployment on each push.
+    :::
 
 ### GitLab Pages
 
@@ -78,7 +128,12 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 ### Netlify
 
-> TODO | Open to contribution.
+1. On Netlify, setup up a new project from GitHub with the following settings:
+
+    - **Build Command:** `npm run build` or `yarn build`
+    - **Publish directory:** `dist`
+
+2. Hit the deploy button!
 
 Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
@@ -86,13 +141,68 @@ Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli
 
 See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
 
-### Azure
-
-> TODO | Open to contribution.
-
 ### Firebase
 
-> TODO | Open to contribution.
+Create a new Firebase project on your [Firebase console](https://console.firebase.google.com). Please refer to this [documentation](https://firebase.google.com/docs/web/setup) on how to setup your project.
+
+Make sure you have installed [firebase-tools](https://github.com/firebase/firebase-tools) globally:
+
+```
+npm install -g firebase-tools
+```
+
+From the root of your project, initialize `firebase` using the command:
+
+```
+firebase init
+```
+
+Firebase will ask some questions on how to setup your project.
+
+- Choose which Firebase CLI features you want to setup your project. Make sure to select `hosting`.
+- Select the default Firebase project for your project.
+- Set your `public` directory to `dist` (or where your build's output is) which will be uploaded to Firebase Hosting.
+
+```javascript
+// firebase.json
+
+{
+  "hosting": {
+    "public": "app"
+  }
+}
+```
+
+- Select `yes` to configure your project as a single-page app. This will create an `index.html` and on your `dist` folder and configure your `hosting` information.
+
+```javascript
+// firebase.json
+
+{
+  "hosting": {
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+```
+
+Run `npm run build` to build your project.
+
+To deploy your project on Firebase Hosting, run the command:
+
+```
+firebase deploy --only hosting
+```
+
+If you want other Firebase CLI features you use on your project to be deployed, run `firebase deploy` without the `--only` option.
+
+You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
+
+Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 
 ### Now
 
@@ -108,4 +218,24 @@ See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin
 
 ### Surge
 
-> TODO | Open to contribution.
+To deploy with [Surge](http://surge.sh/) the steps are very straightforward.
+
+First you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
+
+```
+npm install --global surge
+```
+
+Then cd into the `dist/` folder of your project and then run `surge` and follow the screen prompt. It will ask you to set up email and password if it is the first time you are using Surge. Confirm the project folder and type in your preferred domain and watch your project being deployed such as below.
+
+```
+            project: /Users/user/Documents/myawesomeproject/dist/
+         domain: myawesomeproject.surge.sh
+         upload: [====================] 100% eta: 0.0s (31 files, 494256 bytes)
+            CDN: [====================] 100%
+             IP: **.**.***.***
+
+   Success! - Published to myawesomeproject.surge.sh
+```
+
+Verify your project is successfully published by Surge by visiting `myawesomeproject.surge.sh`, vola! For more setup details such as custom domains, you can visit [Surge's help page](https://surge.sh/help/).
