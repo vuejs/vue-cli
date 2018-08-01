@@ -65,7 +65,7 @@ module.exports = {
 ```
 
 ::: tip 提示
-对于 CSS 相关 loader 来说，我们推荐使用 [css.loasderOptions](../config/#css-loaderoptions) 而不是直接链式指定 loader。这是因为每种 CSS 文件类型都有多个规则，而 `css.loaderOptions` 可以确保你通过一个地方影响所有的规则。
+对于 CSS 相关 loader 来说，我们推荐使用 [css.loaderOptions](../config/#css-loaderoptions) 而不是直接链式指定 loader。这是因为每种 CSS 文件类型都有多个规则，而 `css.loaderOptions` 可以确保你通过一个地方影响所有的规则。
 :::
 
 ### 添加一个新的 Loader
