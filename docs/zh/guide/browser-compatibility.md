@@ -62,6 +62,10 @@ Vue CLI 会产生两个应用的版本：一个现代版的包，面向支持 [E
 
 对于一个 Hello World 应用来说，现代版的包已经小了 16%。在生产环境下，现代版的包通常都会表现出显著的解析速度和运算速度，从而改善应用的加载性能。
 
+::: 提示
+`<script type="module">` 必须使用 [CORS](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors) 方式加载，这意味着我们的服务器必须返回正确的 CORS 头信息例如 `Access-Control-Allow-Origin: *`。 如果你需要携带认证信息获取脚本， 使用 [corsUseCredentials](../config/#corsusecredentials) 方式。
+:::
+
 [autoprefixer]: https://github.com/postcss/autoprefixer
 [babel-preset-env]: https://new.babeljs.io/docs/en/next/babel-preset-env.html
 [browserslist]: https://github.com/ai/browserslist
