@@ -96,7 +96,8 @@ function getEslintPrompts (data, rules) {
 }
 
 function onRead ({ data, cwd }) {
-  const rules = require(`${cwd}/node_modules/eslint-plugin-vue`).rules
+  const { loadModule } = require('@vue/cli-shared-utils')
+  const rules = loadModule('eslint-plugin-vue', cwd, true).rules
 
   return {
     tabs: [
