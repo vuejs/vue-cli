@@ -25,9 +25,10 @@ module.exports = (api, options) => {
       ? { url: args.url }
       : await api.service.run('serve')
 
+    const configs = typeof args.config === 'string' ? args.config.split(',') : []
     const cyArgs = [
       args.headless ? 'run' : 'open', // open or run
-      '--config', [`baseUrl=${url}`, ... args.config && args.config.split(',') || []].join(','),
+      '--config', [`baseUrl=${url}`, ...configs].join(','),
       ...rawArgs
     ]
 
