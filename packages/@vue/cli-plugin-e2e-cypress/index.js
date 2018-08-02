@@ -17,6 +17,7 @@ module.exports = (api, options) => {
     removeArg(rawArgs, 'headless', 0)
     removeArg(rawArgs, 'mode')
     removeArg(rawArgs, 'url')
+    removeArg(rawArgs, 'config')
 
     info(`Starting e2e tests...`)
 
@@ -26,7 +27,7 @@ module.exports = (api, options) => {
 
     const cyArgs = [
       args.headless ? 'run' : 'open', // open or run
-      '--config', `baseUrl=${url}`,
+      '--config', [`baseUrl=${url}`, ... args.config && args.config.split(',') || []].join(','),
       ...rawArgs
     ]
 
