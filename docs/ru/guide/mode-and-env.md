@@ -5,21 +5,21 @@
 ``` bash
 .env                # загружается во всех случаях
 .env.local          # загружается во всех случаях, игнорируется git
-.env.[mode]         # загружается только в указанном режиме
-.env.[mode].local   # загружается только в указанном режиме, игнорируется git
+.env.[mode]         # загружается только в указанном режиме работы
+.env.[mode].local   # загружается только в указанном режиме работы, игнорируется git
 ```
 
-Такой env-файл просто содержит пары ключ=значение требуемых переменных окружения:
+Такой `.env` файл просто содержит пары ключ=значение требуемых переменных окружения:
 
 ```
 FOO=bar
 VUE_APP_SECRET=secret
 ```
 
-Загруженные переменные будут доступны для всех команд `vue-cli-service`, плагинов и зависимостей.
+Эти переменные будут доступны для всех команд `vue-cli-service`, плагинов и зависимостей.
 
 ::: tip Приоритет загрузки переменных окружения
-Файл env для определённого режима работы (например, `.env.production`) будет иметь более высокий приоритет, чем общий файл (например, `.env`).
+Файл с переменными для определённого режима работы (например, `.env.production`) имеет более высокий приоритет, чем общий файл (например, `.env`).
 
 Кроме того, переменные окружения, которые уже существуют при загрузке Vue CLI будут иметь наивысший приоритет и не будут перезаписаны значениями из файлов `.env`. Если в окружении по умолчанию указывается `NODE_ENV`, то лучше удалить его.
 :::
@@ -65,23 +65,23 @@ In both cases, the app is built as a production app because of the `NODE_ENV`, b
 
 ## Использование переменных окружения в клиентском коде
 
-Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
+Только переменные с префиксом `VUE_APP_` статически внедряются в клиентскую сборку используя `webpack.DefinePlugin`. К ним можно получить доступ из кода вашего приложения:
 
 ``` js
 console.log(process.env.VUE_APP_SECRET)
 ```
 
-During build, `process.env.VUE_APP_SECRET` will be replaced by the corresponding value. In the case of `VUE_APP_SECRET=secret`, it will be replaced by `"secret"`.
+На этапе сборки `process.env.VUE_APP_SECRET` будет заменяться соответствующим значением. Когда в файле указано `VUE_APP_SECRET=secret` — после сборки значением будет `"secret"`.
 
 In addition to `VUE_APP_*` variables, there are also two special variables that will always be available in your app code:
 
-- `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#modes) the app is running in.
+- `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#режимы-работы) the app is running in.
 - `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
 
-All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#interpolation).
+All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#интерпоnяции).
 
 ::: tip Совет
-Можно добавлять вычисляемые переменные окружения в `vue.config.js`. Они по-прежнему должны именоваться начиная с префикса `VUE_APP_`. Они могут быть полезны например для получения информации о версии `process.env.VUE_APP_VERSION = require('./package.json').version`
+Можно добавлять вычисляемые переменные окружения в `vue.config.js`. Они по-прежнему должны именоваться с префикса `VUE_APP_`. Это может пригодиться например для получения информации о версии `process.env.VUE_APP_VERSION = require('./package.json').version`
 :::
 
 ## Переменные только для локального окружения

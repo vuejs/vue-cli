@@ -1,6 +1,6 @@
 # API плагина для UI
 
-The cli-ui exposes an API that allows augmenting the project configurations and tasks, as well as sharing data and communicating with other processes.
+С помощью API `cli-ui` возможно дополнять конфигурацию и задачи проекта, а также обмениваться данными и взамодействовать с другими процессами.
 
 ![UI Plugin architecture](/vue-cli-ui-schema.png)
 
@@ -79,8 +79,8 @@ api.describeConfig({
 })
 ```
 
-::: danger Внимание!
-Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+::: danger Убедитесь!
+В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 ### Конфигурация иконки
@@ -640,8 +640,8 @@ module.exports = {
 
 The `clientAddonConfig` method will generate the needed vue-cli configuration. Among other things, it disables CSS extraction and outputs the code to `./dist/index.js` in the client addon folder.
 
-::: danger Внимание!
-Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+::: danger Убедитесь!
+В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 Then modify the `.eslintrc.json` file to add some allowed global objects:
@@ -699,8 +699,8 @@ locales.keys().forEach(key => {
 })
 ```
 
-::: danger Внимание!
-Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+::: danger Убедитесь!
+В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
@@ -851,8 +851,8 @@ const {
 } = api.namespace('com.my-name.')
 ```
 
-::: danger Внимание!
-Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+::: danger Убедитесь!
+В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 In the custom component:
@@ -928,8 +928,8 @@ api.onAction('com.my-name.test-action', params => {
 })
 ```
 
-::: danger Внимание!
-Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+::: danger Убедитесь!
+В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 You can use namespaced versions with `api.namespace` (similar to Shared data):
@@ -1086,41 +1086,41 @@ api.db.get('posts')
 const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
 
-::: danger Внимание!
-Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+::: danger Убедитесь!
+В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 ## Уведомления
 
-You can display notifications using the user OS notification system:
+Можно показывать уведомления через систему уведомлений операционной системы:
 
 ```js
 api.notify({
-  title: 'Some title',
-  message: 'Some message',
+  title: 'Какой-то заголовок',
+  message: 'Сообщение пользователю',
   icon: 'path-to-icon.png'
 })
 ```
 
-There are some builtin icons:
+Есть несколько встроенных иконок:
 
 - `'done'`
 - `'error'`
 
 ## Экран прогресса
 
-You can display a progress screen with some text and a progress bar:
+Можно показывать экран прогресса с текстом и индикатором:
 
 ```js
 api.setProgress({
-  status: 'Upgrading...',
+  status: 'Обновление...',
   error: null,
-  info: 'Step 2 of 4',
-  progress: 0.4 // from 0 to 1, -1 means hidden progress bar
+  info: 'Шаг 2 из 4',
+  progress: 0.4 // значение от 0 до 1, -1 означает скрытый индикатор прогресса
 })
 ```
 
-Remove the progress screen:
+Удаление экрана прогресса:
 
 ```js
 api.removeProgress()
@@ -1128,31 +1128,31 @@ api.removeProgress()
 
 ## Хуки
 
-Hooks allows to react to certain cli-ui events.
+Хуки позволяют реагировать на определённые события в интерфейсе `cli-ui`.
 
 ### onProjectOpen
 
-Called when the plugin is loaded for the first time for the current project.
+Вызывается когда плагин был загружен впервые для текущего проекта.
 
 ```js
 api.onProjectOpen((project, previousProject) => {
-  // Reset data
+  // Сброс данных
 })
 ```
 
 ### onPluginReload
 
-Called when the plugin is reloaded.
+Вызывается при перезагрузке плагина.
 
 ```js
 api.onPluginReload((project) => {
-  console.log('plugin reloaded')
+  console.log('плагин перезагружен')
 })
 ```
 
 ### onConfigRead
 
-Called when a configuration screen is open or refreshed.
+Вызывается при открытии или обновлении экрана конфигурации.
 
 ```js
 api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
@@ -1162,7 +1162,7 @@ api.onConfigRead(({ config, data, onReadData, tabs, cwd }) => {
 
 ### onConfigWrite
 
-Called when the user saves in a configuration screen.
+Вызывается при сохранении настроек пользователем на экране конфигурации.
 
 ```js
 api.onConfigWrite(({ config, data, changedFields, cwd }) => {
@@ -1172,7 +1172,7 @@ api.onConfigWrite(({ config, data, changedFields, cwd }) => {
 
 ### onTaskOpen
 
-Called when the user open a task details pane.
+Вызывается при открытии пользователем вкладки с детализацией задачи.
 
 ```js
 api.onTaskOpen(({ task, cwd }) => {
@@ -1182,7 +1182,7 @@ api.onTaskOpen(({ task, cwd }) => {
 
 ### onTaskRun
 
-Called when the user run a task.
+Вызывается при запуске задачи пользователем.
 
 ```js
 api.onTaskRun(({ task, args, child, cwd }) => {
@@ -1192,7 +1192,7 @@ api.onTaskRun(({ task, args, child, cwd }) => {
 
 ### onTaskExit
 
-Called when a task exists. It can be called both called on success or failure.
+Вызывается при завершении задачи. Вызывается и при успешном выполнении, и при ошибке.
 
 ```js
 api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
@@ -1202,7 +1202,7 @@ api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
 
 ### onViewOpen
 
-Called when the users open a view (like 'Plugins', 'Configurations' or 'Tasks').
+Вызывается при открытии страницы (например 'Плагины', 'Конфигурации' или 'Задачи').
 
 ```js
 api.onViewOpen(({ view, cwd }) => {
@@ -1235,8 +1235,8 @@ api.addSuggestion({
 })
 ```
 
-::: danger Внимание!
-Убедитесь, что правильно указали пространство имён, так как оно должно быть уникальным для всех плагинов. Рекомендуется использовать [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+::: danger Убедитесь!
+В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
 ![UI Suggestion](/suggestion.png)
@@ -1286,13 +1286,13 @@ api.onViewOpen(({ view }) => {
 
 In this example we only display the vue-router suggestion in the plugins view and if the project doesn't have vue-router installed already.
 
-Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
+Примечание: `addSuggestion` и `removeSuggestion` can be namespaced with `api.namespace()`.
 
 ## Другие методы
 
 ### hasPlugin
 
-Returns `true` if the project uses the plugin.
+Возвращает `true` если проект использует плагин.
 
 ```js
 api.hasPlugin('eslint')
@@ -1318,7 +1318,7 @@ api.resolve('src/main.js')
 
 ### getProject
 
-Get currently open project.
+Получает текущий открытый проект.
 
 ```js
 api.getProject()
