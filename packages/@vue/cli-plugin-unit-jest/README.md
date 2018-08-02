@@ -22,7 +22,11 @@ Note that directly running `jest` will fail because the Babel preset requires hi
 If you want to debug your tests via the Node inspector, you can run the following:
 
 ``` sh
+# macOS or linux
 node --inspect-brk ./node_modules/.bin/vue-cli-service test:unit
+
+# Windows
+node --inspect-brk ./node_modules/@vue/cli-service/bin/vue-cli-service.js test:unit
 ```
 
 ## Configuration

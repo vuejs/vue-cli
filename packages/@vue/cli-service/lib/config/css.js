@@ -12,17 +12,17 @@ const findExisting = (context, files) => {
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const getAssetPath = require('../util/getAssetPath')
+    const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
+    const isProd = process.env.NODE_ENV === 'production'
 
     const {
       modules = false,
-      extract = true,
+      extract = isProd,
       sourceMap = false,
       loaderOptions = {}
     } = options.css || {}
 
-    const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
-    const isProd = process.env.NODE_ENV === 'production'
-    const shouldExtract = isProd && extract !== false && !shadowMode
+    const shouldExtract = extract !== false && !shadowMode
     const filename = getAssetPath(
       options,
       `css/[name]${options.filenameHashing ? '.[contenthash:8]' : ''}.css`,
