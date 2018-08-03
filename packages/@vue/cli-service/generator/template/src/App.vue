@@ -2,9 +2,14 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <%_ if (!rootOptions.bare) { _%>
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <%_ } else { _%>
+    <h1>Welcome to Your Vue.js App</h1>
+    <%_ } _%>
   </div>
 </template>
+  <%_ if (!rootOptions.bare) { _%>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
@@ -16,6 +21,7 @@ export default {
   }
 }
 </script>
+  <%_ } _%>
 <%_ } else { _%>
 <template>
   <div id="app">
@@ -27,8 +33,9 @@ export default {
   </div>
 </template>
 <%_ } _%>
-
+<%_ if (!rootOptions.bare) { _%>
 <%_ if (rootOptions.cssPreprocessor !== 'stylus') { _%>
+
 <style<%-
   rootOptions.cssPreprocessor
     ? ` lang="${
@@ -98,4 +105,5 @@ export default {
       color #42b983
 <%_ } _%>
 </style>
+<%_ } _%>
 <%_ } _%>

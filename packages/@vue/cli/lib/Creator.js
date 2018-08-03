@@ -87,6 +87,7 @@ module.exports = class Creator extends EventEmitter {
     preset = cloneDeep(preset)
     // inject core service
     preset.plugins['@vue/cli-service'] = Object.assign({
+      bare: cliOptions.bare,
       projectName: name
     }, preset)
 
