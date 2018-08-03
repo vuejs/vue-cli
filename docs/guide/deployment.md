@@ -202,7 +202,32 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-> TODO | Open to contribution.
+Install [Now Desktop](https://zeit.co/download) or install the CLI:
+
+```bash
+npm install -g now
+```
+
+Let's install the static file server [serve](https://github.com/zeit/serve):
+
+```bash
+npm install --save serve
+```
+
+Then you need to add the `now-start` property to your `package.json` file. The command specified inside will be run on now when the deployment is about to start.
+
+```json
+"scripts": {
+  ...
+  "now-start": "serve -s ./dist"
+}
+```
+
+Deploy on [▲ZEIT now](https://zeit.co/now) by running this command:
+
+```bash
+now
+```
 
 ### Stdlib
 
