@@ -13,7 +13,8 @@ module.exports = ({ types }) => {
 
         const { polyfills } = state.opts
         const { createImport } = require('@babel/preset-env/lib/utils')
-        polyfills.forEach(p => {
+        // imports are injected in reverse order
+        polyfills.slice().reverse().forEach(p => {
           createImport(path, p)
         })
       }
