@@ -14,10 +14,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "node"<%_ if (hasMocha) { _%>,
+      "node"<% if (hasMocha || hasJest) { %>,<% } %>
+      <%_ if (hasMocha) { _%>
       "mocha",
       "chai"
-      <%_ } else if (hasJest) { _%>,
+      <%_ } else if (hasJest) { _%>
       "jest"
       <%_ } _%>
     ],
