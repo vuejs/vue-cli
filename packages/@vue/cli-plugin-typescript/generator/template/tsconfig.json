@@ -10,6 +10,7 @@
     "experimentalDecorators": true,
     <%_ } _%>
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
