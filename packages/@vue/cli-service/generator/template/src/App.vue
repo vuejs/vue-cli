@@ -1,7 +1,7 @@
 <%_ if (!rootOptions.router) { _%>
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <img alt="Vue logo" src="./assets/logo.png">
     <%_ if (!rootOptions.bare) { _%>
     <HelloWorld msg="Welcome to Your Vue.js App"/>
     <%_ } else { _%>
