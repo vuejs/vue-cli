@@ -42,11 +42,15 @@ module.exports = (api, options) => {
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
 
-    // load user devServer options
-    const projectDevServerOptions = options.devServer || {}
-
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
+
+    // load user devServer options with higher priority than devServer
+    // in webpck config
+    const projectDevServerOptions = Object.assign(
+      webpackConfig.devServer || {},
+      options.devServer
+    )
 
     // expose advanced stats
     if (args.dashboard) {

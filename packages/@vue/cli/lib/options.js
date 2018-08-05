@@ -8,6 +8,7 @@ const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
 const rcPath = exports.rcPath = getRcPath('.vuerc')
 
 const presetSchema = createSchema(joi => joi.object().keys({
+  bare: joi.boolean(),
   useConfigFiles: joi.boolean(),
   router: joi.boolean(),
   routerHistoryMode: joi.boolean(),

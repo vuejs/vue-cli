@@ -54,6 +54,7 @@ program
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
+  .option('-b, --bare', 'Scaffold project without beginner instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
     // --no-git makes commander to default git to true

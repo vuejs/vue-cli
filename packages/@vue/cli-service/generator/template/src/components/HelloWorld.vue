@@ -1,3 +1,4 @@
+<%_ if (!rootOptions.bare) { _%>
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
@@ -82,4 +83,5 @@ li
 a
   color #42b983
 </style>
+<%_ } _%>
 <%_ } _%>

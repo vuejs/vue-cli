@@ -110,10 +110,11 @@ test('tsconfig.json should be valid json', async () => {
   expect(() => {
     JSON.parse(files['tsconfig.json'])
   }).not.toThrow()
+  expect(files['tsconfig.json']).not.toMatch('"  ')
 })
 
 test('compat with unit-mocha', async () => {
-  const { pkg } = await generateWithPlugin([
+  const { pkg, files } = await generateWithPlugin([
     {
       id: '@vue/cli-plugin-unit-mocha',
       apply: require('@vue/cli-plugin-unit-mocha/generator'),
@@ -131,10 +132,12 @@ test('compat with unit-mocha', async () => {
 
   expect(pkg.devDependencies).toHaveProperty('@types/mocha')
   expect(pkg.devDependencies).toHaveProperty('@types/chai')
+
+  expect(files['tsconfig.json']).not.toMatch('"  ')
 })
 
 test('compat with unit-jest', async () => {
-  const { pkg } = await generateWithPlugin([
+  const { pkg, files } = await generateWithPlugin([
     {
       id: '@vue/cli-plugin-unit-jest',
       apply: require('@vue/cli-plugin-unit-jest/generator'),
@@ -151,4 +154,6 @@ test('compat with unit-jest', async () => {
   ])
 
   expect(pkg.devDependencies).toHaveProperty('@types/jest')
+
+  expect(files['tsconfig.json']).not.toMatch('"  ')
 })

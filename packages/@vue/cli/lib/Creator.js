@@ -88,7 +88,9 @@ module.exports = class Creator extends EventEmitter {
     // inject core service
     preset.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
-    }, preset)
+    }, preset, {
+      bare: cliOptions.bare
+    })
 
     const packageManager = (
       cliOptions.packageManager ||
