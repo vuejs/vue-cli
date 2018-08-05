@@ -38,9 +38,9 @@ module.exports = {
 
 ## Chaining (Продвинутый вариант)
 
-The internal webpack config is maintained using [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). The library provides an abstraction over the raw webpack config, with the ability to define named loader rules and named plugins, and later "tap" into those rules and modify their options.
+Внутренняя конфигурация webpack поддерживается с помощью [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). Библиотека предоставляет абстракцию над обычной конфигурацией webpack, позволяя определять именованные правила для загрузчиков и именованные плагины, а затем выбирать эти правила по имени и изменять их параметры.
 
-This allows us finer-grained control over the internal config. Below you will see some examples of common modifications done via the `chainWebpack` option in `vue.config.js`.
+Это позволяет осуществлять более тонкий контроль над встроенной конфигурацией. Ниже вы увидите примеры изменений, выполненных с помощью опции `chainWebpack` в `vue.config.js`.
 
 ::: tip Совет
 Команда [vue inspect](#inspecting-the-project-s-webpack-config) будет крайне полезна, когда вы будете пробовать добраться до определённого загрузчика в цепочке.
@@ -65,7 +65,7 @@ module.exports = {
 ```
 
 ::: tip Совет
-For CSS related loaders, it's recommended to use [css.loaderOptions](../config/#css-loaderoptions) instead of directly targeting loaders via chaining. This is because there are multiple rules for each CSS file type and `css.loaderOptions` ensures you can affect all rules in one single place.
+Для загрузчиков связанных с CSS, рекомендуется использовать [css.loaderOptions](../config/#css-loaderoptions) вместо изменения напрямую через chaining. Это связано с тем, что для каждого типа CSS файлов существуют несколько правил, а `css.loaderOptions` гарантирует, что вы сможете повлиять на все эти правила в одном месте.
 :::
 
 ### Добавление нового загрузчика
