@@ -202,7 +202,41 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-> TODO | Open to contribution.
+### Now
+
+1. Install the Now CLI globally: `npm install -g now`
+
+2. Add a `now.json` file to your project root:
+
+    ```json
+    {
+      "name": "my-example-app",
+      "type": "static",
+      "static": {
+        "public": "dist"
+      },
+      "alias": "vue-example",
+      "files": [
+        "dist"
+      ]
+    }
+    ```
+
+    Modify `name` and `alias` accordingly.
+
+3. Adding a deployment script in `package.json`:
+
+    ```json
+    "deploy": "npm run build && now && now alias"
+    ```
+
+    If you want to deploy publicly by default, you can change the deployment script to the following one:
+
+    ```json
+    "deploy": "npm run build && now --public && now alias"
+    ```
+
+    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
 
 ### Stdlib
 
