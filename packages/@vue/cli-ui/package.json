@@ -41,7 +41,6 @@
     "graphql-type-json": "^0.2.1",
     "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.12.0",
-    "launch-editor": "^2.2.1",
     "lodash.merge": "^4.6.1",
     "lowdb": "^1.0.0",
     "lru-cache": "^4.1.3",

@@ -25,6 +25,7 @@
     "node-ipc": "^9.1.1",
     "opn": "^5.3.0",
     "ora": "^2.1.0",
+    "launch-editor": "^2.2.1",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "semver": "^5.5.0",
