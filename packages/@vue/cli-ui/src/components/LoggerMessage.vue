@@ -12,17 +12,12 @@
   >
     <div v-if="message.type !== 'log'" class="type">{{ message.type }}</div>
     <div v-if="message.tag" class="tag">{{ message.tag }}</div>
-    <div class="message" v-html="formattedMessage"/>
+    <div class="message" v-html="ansiColors(message.message)"/>
     <div class="date">{{ message.date | date }}</div>
   </div>
 </template>
 
 <script>
-import AU from 'ansi_up'
-
-const ansiUp = new AU()
-ansiUp.use_classes = true
-
 export default {
   props: {
     message: {
@@ -33,12 +28,6 @@ export default {
     pre: {
       type: Boolean,
       default: false
-    }
-  },
-
-  computed: {
-    formattedMessage () {
-      return ansiUp.ansi_to_html(this.message.message)
     }
   }
 }

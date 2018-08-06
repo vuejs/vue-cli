@@ -7,12 +7,12 @@
   >
     <div class="name">
       <slot name="name">
-        {{ name }}
+        <span v-html="ansiColors(name)"/>
       </slot>
     </div>
     <div v-if="description || link || showDescription" class="description">
       <slot name="description">
-        <span v-html="description"/>
+        <span v-html="ansiColors(description)"/>
       </slot>
       <a
         v-if="link"
