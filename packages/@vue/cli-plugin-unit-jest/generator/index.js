@@ -56,10 +56,12 @@ module.exports = (api, _, __, invoking) => {
         }
       })
     } else {
-      api.extendPackage({
-        babel: {
+      // Jest's shipped babel-jest still uses babel 6,
+      // so we cannot use extendPackage which renders babel.config.js.
+      api.render(files => {
+        files['.babelrc'] = JSON.stringify({
           plugins: ['transform-es2015-modules-commonjs']
-        }
+        }, null, 2)
       })
     }
   } else {
