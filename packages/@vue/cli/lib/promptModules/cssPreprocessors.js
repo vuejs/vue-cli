@@ -6,11 +6,14 @@ module.exports = cli => {
     link: 'https://cli.vuejs.org/guide/css.html'
   })
 
+  const notice = 'PostCSS, Autoprefixer and CSS Modules are supported by default'
+
   cli.injectPrompt({
     name: 'cssPreprocessor',
     when: answers => answers.features.includes('css-preprocessor'),
     type: 'list',
-    message: 'Pick a CSS pre-processor (PostCSS, Autoprefixer and CSS Modules are supported by default):',
+    message: `Pick a CSS pre-processor${process.env.VUE_CLI_API_MODE ? '' : ` (${notice})`}:`,
+    description: `${notice}.`,
     choices: [
       {
         name: 'SCSS/SASS',
