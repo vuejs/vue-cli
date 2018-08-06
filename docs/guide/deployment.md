@@ -213,7 +213,13 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
       "name": "my-example-app",
       "type": "static",
       "static": {
-        "public": "dist"
+        "public": "dist",
+        "rewrites": [
+          {
+            "source": "**",
+            "destination": "/index.html"
+          }
+        ]
       },
       "alias": "vue-example",
       "files": [
@@ -222,7 +228,7 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
     }
     ```
 
-    Modify `name` and `alias` accordingly.
+    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
 
 3. Adding a deployment script in `package.json`:
 
