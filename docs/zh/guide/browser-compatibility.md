@@ -2,7 +2,7 @@
 
 ## browserslist
 
-你会发现有 `package.json` 文件里的 `browserlist` 字段 (或一个单独的 `.browserslistrc` 文件)，指定了项目的目标浏览器的范围。这个值会被 [@babel/preset-env][babel-preset-env] 和 [Autoprefixer][autoprefixer] 用来确定需要转译的 JavaScript 特性和需要添加的 CSS 浏览器前缀。
+你会发现有 `package.json` 文件里的 `browserslist` 字段 (或一个单独的 `.browserslistrc` 文件)，指定了项目的目标浏览器的范围。这个值会被 [@babel/preset-env][babel-preset-env] 和 [Autoprefixer][autoprefixer] 用来确定需要转译的 JavaScript 特性和需要添加的 CSS 浏览器前缀。
 
 现在查阅[这里][browserslist]了解如何指定浏览器范围。
 
