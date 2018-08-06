@@ -60,7 +60,7 @@ function findDependencies (deps, type, file, context) {
     id => ({
       id,
       versionRange: deps[id],
-      installed: fs.existsSync(getPath({ id, file })),
+      installed: isInstalled({ id, file }),
       website: getLink({ id, file }, context),
       type,
       baseFir: file
@@ -70,7 +70,13 @@ function findDependencies (deps, type, file, context) {
 
 function getPath ({ id, file = cwd.get() }) {
   const filePath = resolveModule(path.join(id, 'package.json'), file)
+  if (!filePath) return
   return resolveModuleRoot(filePath, id)
+}
+
+function isInstalled ({ id, file = cwd.get() }) {
+  const resolvedPath = getPath({ id, file })
+  return resolvedPath && fs.existsSync(resolvedPath)
 }
 
 function readPackage ({ id, file }, context) {
