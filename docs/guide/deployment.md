@@ -202,55 +202,41 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-1. Install the Now CLI globally:
-`npm install -g now`
+### Now
 
-2. Add a `now.json` file to your project root and paste the following content into it:
-```json
-{
-  "name": "my-example-app",
-  "type": "static",
-  "static": {
-    "public": "dist"
-  },
-  "alias": "vue-example",
-  "files": [
-    "dist"
-  ]
-}
-```
+1. Install the Now CLI globally: `npm install -g now`
 
-The `name` property specifies the name of our deployment (The name which will show up in your Now dashboard and which will be referred to by the cli).
+2. Add a `now.json` file to your project root:
 
-`"type": "static"` means, that we don't require to start any Node.js script or similar, as we are deploying only static files.
+    ```json
+    {
+      "name": "my-example-app",
+      "type": "static",
+      "static": {
+        "public": "dist"
+      },
+      "alias": "vue-example",
+      "files": [
+        "dist"
+      ]
+    }
+    ```
 
-```json
-"static": {
-  "public": "dist"
-},
-```
-these three lines further specify, which folder our static deployment should point to by default. As we'll see later on, we are uploading our dist folder, and the above code tells Now to use the dist folder as web root folder to serve content from (otherwise, if you access the url, you will see a directory listing and if entering that directory, your application won't load correctly, as the paths are set absolutely)
+    Modify `name` and `alias` accordingly.
 
-`alias` is the domain name, which our application will be accessible with later on (without this option, with each deployment, our app would get a new domain name with a unique hash like `https://my-example-app-edezthzxfo.now.sh/`. This "hash" after the our selected `name` changes each time you deploy to Now. That's why we added the alias option, which maps the dynamic domain name to something like `https://vue-example.now.sh` automatically so that we don't have to write down the complete hash each time.
+3. Adding a deployment script in `package.json`:
 
-`files` specifies the files and directories, which we want to deploy. In our case, the complete `dist` folder.
+    ```json
+    "deploy": "npm run build && now && now alias"
+    ```
 
-3. Adding a deployment script:
-Open your package.json and inside `scripts`, add the following script:
-```json
-"deploy": "npm run build && now && now alias"
-```
+    If you want to deploy publicly by default, you can change the deployment script to the following one:
 
-If you by default want to deploy publicly, you can change the deployment script to the following one:
-```json
-"deploy": "npm run build && now --public && now alias"
-```
+    ```json
+    "deploy": "npm run build && now --public && now alias"
+    ```
 
-The deploy script runs the build command, publishes the deployment and assigns the dynamic address to our alias, so you don't have to write down the hash each time.
-
-If you use the Now CLI for the first time, you will be prompted to log in with your eMail-Address, as soon as you run the deployment command.
-
-Now, the only thing left to do is to run `npm run deploy` in your command line and if everything has been set up correctly, you will get back a URL, which you can use to access your application.
+    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
 
 ### Stdlib
 
