@@ -79,7 +79,6 @@ Prefetch 链接将会消耗带宽。如果你的应用很大且有很多 async c
 
 当你在 JavaScript、CSS 或 `*.vue` 文件中使用相对路径 (必须以 `.` 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 `<img src="...">`、`background: url(...)` 和 CSS `@import` 的资源 URL **都会被解析为一个模块依赖**。
 
-For example, `url(./image.png)` will be translated into `require('./image.png')`, and
 例如，`url(./image.png)` 会被翻译为 `require('./image.png')`，而：
 
 ``` html
