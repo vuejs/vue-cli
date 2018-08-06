@@ -7,7 +7,7 @@ module.exports = {
     },
     '/zh/': {
       lang: 'zh-CN',
-      title: 'Vue CLI',
+      title: 'Vue CLI 3',
       description: '🛠️ Vue.js 开发的标准工具'
     },
   },
@@ -118,12 +118,12 @@ module.exports = {
             link: '/zh/config/'
           },
           {
-            text: '开发指南',
+            text: '插件开发指南',
             items: [
-              { text: 'Plugin Dev Guide', link: '/zh/dev-guide/plugin-dev.md' },
-              { text: 'UI Plugin Info', link: '/zh/dev-guide/ui-info.md' },
-              { text: 'UI Plugin API', link: '/zh/dev-guide/ui-api.md' },
-              { text: 'UI Localization', link: '/zh/dev-guide/ui-localization.md' }
+              { text: '插件开发指南', link: '/zh/dev-guide/plugin-dev.md' },
+              { text: 'UI 插件信息', link: '/zh/dev-guide/ui-info.md' },
+              { text: 'UI 插件 API', link: '/zh/dev-guide/ui-api.md' },
+              { text: 'UI 本地化', link: '/zh/dev-guide/ui-localization.md' }
             ]
           },
           {
@@ -147,20 +147,21 @@ module.exports = {
         sidebar: {
           '/zh/guide/': [
             '/zh/guide/',
+            '/zh/guide/installation',
             {
-              title: 'CLI',
+              title: '基础',
               collapsable: false,
               children: [
-                '/zh/guide/creating-a-project',
                 '/zh/guide/prototyping',
-                '/zh/guide/plugins-and-presets'
+                '/zh/guide/creating-a-project',
+                '/zh/guide/plugins-and-presets',
+                '/zh/guide/cli-service'
               ]
             },
             {
               title: '开发',
               collapsable: false,
               children: [
-                '/zh/guide/cli-service',
                 '/zh/guide/browser-compatibility',
                 '/zh/guide/html-and-static-assets',
                 '/zh/guide/css',
@@ -173,9 +174,15 @@ module.exports = {
           ],
           '/zh/dev-guide/': [
             '/zh/dev-guide/plugin-dev.md',
-            '/zh/dev-guide/ui-info.md',
-            '/zh/dev-guide/ui-api.md',
-            '/zh/dev-guide/ui-localization.md'
+            {
+              title: 'UI 开发',
+              collapsable: false,
+              children: [
+                '/zh/dev-guide/ui-info.md',
+                '/zh/dev-guide/ui-api.md',
+                '/zh/dev-guide/ui-localization.md'
+              ]
+            }
           ]
         }
       }

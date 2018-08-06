@@ -8,6 +8,8 @@ sidebar: auto
 
 有些针对 `@vue/cli` 的全局配置，例如你惯用的包管理器和你本地保存的 preset，都保存在 home 目录下一个名叫 `.vuerc` 的 JSON 文件。你可以用编辑器直接编辑这个文件来更改已保存的选项。
 
+你也可以使用 `vue config` 命令来审查或修改全局的 CLI 配置。
+
 ## 目标浏览器
 
 请查阅指南中的[浏览器兼容性](../guide/browser-compatibility.md#browserslist)章节。
@@ -44,7 +46,7 @@ module.exports = {
   }
   ```
 
-  这个值也可以被设置为空字符串 (`''`) 这样所有的资源都会被链接为相对路径，这样打出来的包可以用在类似 Cordova hybrid 应用的文件系统中。需要注意的生成的 CSS 文件要始终放在输出路径的根部，以确保 CSS 中的 URL 正常工作。
+  这个值也可以被设置为空字符串 (`''`) 这样所有的资源都会被链接为相对路径，这样打出来的包可以用在类似 Cordova hybrid 应用的文件系统中。**注意：生成的 CSS 文件要始终放在输出路径的根部，以确保 CSS 中的 URL 正常工作。**
 
   ::: tip 提示
   请始终使用 `baseUrl` 而不要修改 webpack 的 `output.publicPath`。
@@ -66,7 +68,25 @@ module.exports = {
 - Type: `string`
 - Default: `''`
 
-  放置生成的静态资源 (js、css、img、fonts) 的目录。
+  放置生成的静态资源 (js、css、img、fonts) 的 (相对于 `outputDir` 的) 目录。
+
+  ::: tip 提示
+  从生成的资源覆写 filename 或 chunkFilename 时，`assetsDir` 会被忽略。
+  :::
+
+### indexPath
+
+- Type: `string`
+- Default: `'index.html'`
+
+  指定生成的 `index.html` 的输出路径 (相对于 `outputDir`)。也可以是一个绝对路径。
+
+### filenameHashing
+
+- Type: `boolean`
+- Default: `true`
+
+  默认情况下，生成的静态资源在它们的文件名中包含了 hash 以便更好的控制缓存。然而，这也要求 index 的 HTML 是被 Vue CLI 自动生成的。如果你无法使用 Vue CLI 生成的 index HTML，你可以通过将这个选项设为 `false` 来关闭文件名哈希。
 
 ### pages
 
@@ -75,7 +95,7 @@ module.exports = {
 
   在 multi-page 模式下构建应用。每个“page”应该有一个对应的 JavaScript 入口文件。其值应该是一个对象，对象的 key 是入口的名字，value 是：
 
-  - 一个指定了 `entry`, `template` 和 `filename` 的对象；
+  - 一个指定了 `entry`, `template`, `filename`, `title` 和 `chunks` 的对象 (除了 `entry` 之外都是可选的)；
   - 或一个指定其 `entry` 的字符串。
 
   ``` js
@@ -87,7 +107,13 @@ module.exports = {
         // 模板来源
         template: 'public/index.html',
         // 在 dist/index.html 的输出
-        filename: 'index.html'
+        filename: 'index.html',
+        // 当使用 title 选项时，
+        // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'Index Page',
+        // 在这个页面中包含的块，默认情况下会包含
+        // 提取出来的通用 chunk 和 vendor chunk。
+        chunks: ['chunk-vendors', 'chunk-common', 'index']
       },
       // 当使用只有入口的字符串格式时，
       // 模板会被推导为 `public/subpage.html`
@@ -104,10 +130,12 @@ module.exports = {
 
 ### lintOnSave
 
-- Type: `boolean`
+- Type: `boolean` | `error`
 - Default: `true`
 
   是否在开发环境下通过 [eslint-loader](https://github.com/webpack-contrib/eslint-loader) 在每次保存时 lint 代码。这个值会在 [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) 被安装之后生效。
+
+  设置为 `true` 时，eslint-loader 在 webpack 的编译过程中只会触发警告，以避免中断开发流程。如果你希望换做触发错误 (例如在为生成环境构建时)，可以这样设置：`lintOnSave: 'error'`。
 
 ### runtimeCompiler
 
@@ -131,6 +159,13 @@ module.exports = {
 - Default: `true`
 
   如果你不需要生产环境的 source map，可以将其设置为 `false` 以加速生产环境构建。
+
+### corsUseCredentials
+
+- Type: `boolean`
+- Default: `false`
+
+  在现代模式下，生成的 HTML 会包含 `<script type="module">`，这需要[始终开启 CORS 才能被载入](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors)。默认情况下，它被处理为 `crossorigin="anonymous"`，将这个选项设置为 `true` 后则会换用 `crossorigin="use-credentials"`。
 
 ### configureWebpack
 
@@ -161,14 +196,16 @@ module.exports = {
 
 ### css.extract
 
-- Type: `boolean`
-- Default: `true` (in production mode)
+- Type: `boolean | Object`
+- Default: 生产环境下是 `true`，开发环境下是 `false`
 
   是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
 
-  同样当构建 Web Components 组件时它会默认被禁用 (样式是 inline 的并注入到了 shadowRoot 中)。
+  同样当构建 Web Components 组件时它总是会被禁用 (样式是 inline 的并注入到了 shadowRoot 中)。
 
   当作为一个库构建时，你也可以将其设置为 `false` 免得用户自己导入 CSS。
+
+  提取 CSS 在开发环境模式下是默认不开启的，因为它和 CSS 热重载不兼容。然而，你仍然可以将这个值显性地设置为 `true` 在所有情况下都强制提取。
 
 ### css.sourceMap
 
