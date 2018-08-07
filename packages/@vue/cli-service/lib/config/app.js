@@ -94,7 +94,7 @@ module.exports = (api, options) => {
 
     if (isProd) {
       // handle indexPath
-      if (options.indexPath) {
+      if (options.indexPath !== 'index.html') {
         // why not set filename for html-webpack-plugin?
         // 1. It cannot handle absolute paths
         // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
