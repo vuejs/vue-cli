@@ -136,7 +136,8 @@ status-color($color)
     .name
       flex auto 1 0
       font-family $font-mono
-      font-size 12px
+      font-size 14px
+      font-weight bold
       ellipsis()
       &.from-file
         text-decoration line-through
