@@ -73,7 +73,7 @@
     "start-server-and-test": "^1.4.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vue-apollo": "^3.0.0-beta.17",
     "vue-color": "^2.4.6",
     "vue-i18n": "^8.0.0",
@@ -81,7 +81,7 @@
     "vue-meta": "^1.5.0",
     "vue-observe-visibility": "^0.4.1",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.5.16",
+    "vue-template-compiler": "^2.5.17",
     "xterm": "^3.2.0"
   },
   "browserslist": [
