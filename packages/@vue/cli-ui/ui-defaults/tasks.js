@@ -317,7 +317,7 @@ module.exports = api => {
       if (answers.mode) args.push('--mode', answers.mode)
       if (answers.dest) args.push('--dest', answers.dest)
       if (answers.target) args.push('--target', answers.target)
-      if (answers.name) args.push('--port', answers.name)
+      if (answers.name) args.push('--name', answers.name)
       if (answers.watch) args.push('--watch')
       if (answers.modern) args.push('--modern')
       setSharedData('modern-mode', !!answers.modern)
