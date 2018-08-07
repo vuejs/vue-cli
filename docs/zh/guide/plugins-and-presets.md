@@ -87,7 +87,7 @@ vue add vuex
 }
 ```
 
-每个文件都需要暴露一个函数，将插件 API 作为第一个参数携带。关于插件 API 的更多信息可以查阅[插件开发指南](../dev-guide/plugin-dev.md)。
+每个文件都需要暴露一个函数，接受插件 API 作为第一个参数。关于插件 API 的更多信息可以查阅[插件开发指南](../dev-guide/plugin-dev.md)。
 
 你也可以通过 `vuePlugins.ui` 选项添加像 UI 插件一样工作的文件：
 

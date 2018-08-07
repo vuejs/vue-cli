@@ -27,7 +27,7 @@ $color = red;
 
 ### 自动化导入
 
-如果你想自动化导入文件 (用于颜色、变量、mixin……)，你可以使用 [style-resources-loader](https://github.com/yenshih/style-resources-loader)。这里有一个关于 stylus 的在每个单文件组件和 stylus 文件中导入 `./src/styles/imports.styl` 的例子：
+如果你想自动化导入文件 (用于颜色、变量、mixin……)，你可以使用 [style-resources-loader](https://github.com/yenshih/style-resources-loader)。这里有一个关于 Stylus 的在每个单文件组件和 Stylus 文件中导入 `./src/styles/imports.styl` 的例子：
 
 ```js
 // vue.config.js
