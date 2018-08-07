@@ -6,7 +6,7 @@
 
 ## UI 文件
 
-在每个安装好的 vue-cli 插件里，cli-ui 都会尝试从其插件的根目录加载一个可选的 `ui.js` 文件。你也可以在用户项目的根目录尝试加载一个 `vue-cli-ui.js` 文件以使得 UI 可以基于每个项目的基础进行手动扩展 (对于快速创建插件原型来说也非常有用)。注意你也可以使用文件夹 (例如 `ui/index.js`)。
+在每个安装好的 vue-cli 插件里，cli-ui 都会尝试从其插件的根目录加载一个可选的 `ui.js` 文件。注意你也可以使用文件夹 (例如 `ui/index.js`)。
 
 该文件应该导出一个函数，函数会以 API 对象作为第一个参数：
 
@@ -31,6 +31,20 @@ module.exports = api => {
   - ui.js
   - logo.png
 ```
+
+### 项目本地的插件
+
+如果你需要在项目里访问插件 API 而不需要创建一个完整的插件，你可以在 `package.json` 文件中使用 `vuePlugins.ui` 选项：
+
+```json
+{
+  "vuePlugins": {
+    "ui": ["my-ui.js"]
+  }
+}
+```
+
+每个文件都需要暴露一个函数，将插件 API 作为第一个参数携带。
 
 ## 开发模式
 
@@ -57,7 +71,7 @@ vue ui -D
 ```js
 api.describeConfig({
   // 唯一的配置 ID
-  id: 'eslintrc',
+  id: 'org.vue.eslintrc',
   // 展示名称
   name: 'ESLint configuration',
   // 展示在名称下方的描述
@@ -66,6 +80,10 @@ api.describeConfig({
   link: 'https://eslint.org'
 })
 ```
+
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
+:::
 
 ### 配置图标
 
@@ -619,7 +637,7 @@ const { clientAddonConfig } = require('@vue/cli-ui')
 
 module.exports = {
   ...clientAddonConfig({
-    id: '<client-addon-id>',
+    id: 'org.vue.webpack.client-addon',
     // 开发环境端口 (默认值 8042)
     port: 8042
   })
@@ -628,8 +646,8 @@ module.exports = {
 
 这个 `clientAddonConfig` 方法将会生成需要的 vue-cli 配置。除此之外，它会禁用 CSS extraction 并将代码输出到在客户端 addon 目录的 `./dist/index.js`。
 
-::: warning 警告
-不要忘记将 `id` 字段替换里的 `<client-addon-id>` 为你的新客户端 addon 的 id！
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
 :::
 
 然后修改 `.eslintrc.json` 文件以添加一些允许的全局对象：
@@ -670,14 +688,14 @@ Vue.use(VueProgress, {
 
 // 注册一个自定义组件
 // (工作原理类似 'Vue.component')
-ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
+ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 
 // 在 vue-router 中为 /addon/<id> 添加子路由。
 // 例如，addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
 // 将会向路由器添加 /addon/foo/ 和 /addon/foo/bar。
 // 我们在此用 'test-webpack-route' 名称创建一个新的 '/addon/vue-webpack/' 路由
-ClientAddonApi.addRoutes('vue-webpack', [
-  { path: '', name: 'test-webpack-route', component: TestView }
+ClientAddonApi.addRoutes('org.vue.webpack', [
+  { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
 ])
 
 // 你可以翻译插件组件
@@ -689,6 +707,10 @@ locales.keys().forEach(key => {
 })
 ```
 
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
+:::
+
 cli-ui 在 `window` 作用域内注册了 `Vue` 和 `ClientAddonApi` 作为全局变量。
 
 你可以在自己的组件里使用 [@vue/ui](https://github.com/vuejs/ui) 和 [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) 所有的组件和 CSS class 以保持样式和体验的一致性。你也可以用内置的 [vue-i18n](https://github.com/kazupon/vue-i18n) 翻译字符串。
@@ -699,7 +721,7 @@ cli-ui 在 `window` 作用域内注册了 `Vue` 和 `ClientAddonApi` 作为全�
 
 ```js
 api.addClientAddon({
-  id: 'vue-webpack',
+  id: 'org.vue.webpack.client-addon',
   // 包含构建出来的 JS 文件的文件夹
   path: '@vue/cli-ui-addon-webpack/dist'
 })
@@ -713,7 +735,7 @@ api.addClientAddon({
 // 用于开发环境
 // 如果已经在插件中定义过，则会覆写路径
 api.addClientAddon({
-  id: 'vue-webpack',
+  id: 'org.vue.webpack.client-addon',
   // 使用你之前配置过低同样的端口
   url: 'http://localhost:8042/index.js'
 })
@@ -731,21 +753,21 @@ api.describeTask({
   views: [
     {
       // 唯一的 ID
-      id: 'vue-webpack-dashboard-client-addon',
+      id: 'org.vue.webpack.views.dashboard',
       // 按钮文字
       label: 'Dashboard',
       // 按钮图标 (material-icons)
       icon: 'dashboard',
       // 加载的动态组件，会用 ClientAddonApi 进行注册
-      component: 'vue-webpack-dashboard'
+      component: 'org.vue.webpack.components.dashboard'
     }
   ],
   // 展示任务详情时默认选择的视图 (默认情况下就是 output)
-  defaultView: 'vue-webpack-dashboard-client-addon'
+  defaultView: 'org.vue.webpack.views.dashboard'
 })
 ```
 
-这是一个客户端 addon 代码，注册了 `'vue-webpack-dashboard' 组件 (像我们之前看到的一样)：
+这是一个客户端 addon 代码，注册了 `'org.vue.webpack.components.dashboard' 组件 (像我们之前看到的一样)：
 
 ```js
 /* 在 `main.js` 中 */
@@ -753,7 +775,7 @@ api.describeTask({
 import WebpackDashboard from './components/WebpackDashboard.vue'
 // 注册自定义组件
 // (工作原理类似 'Vue.component')
-ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
+ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 ```
 
 ![任务视图示例](/task-view.png)
@@ -765,11 +787,11 @@ ClientAddonApi.component('vue-webpack-dashboard', WebpackDashboard)
 ```js
 api.addView({
   // 唯一的 id
-  id: 'vue-webpack-test-view',
+  id: 'org.vue.webpack.views.test',
 
   // 路由名称 (来自 Vue Router)
   // 使用 'ClientAddonApi.addRoutes' 方法中相同的名字 (详见之前的客户端 addon 章节)
-  name: 'test-webpack-route',
+  name: 'org.vue.webpack.routes.test',
 
   // 按钮图标 (material-icons)
   icon: 'pets',
@@ -781,7 +803,7 @@ api.addView({
 })
 ```
 
-这里是注册了 `'test-webpack-route'` 的客户端 addon 里的代码 (之前已经见过了)：
+这里是注册了 `'org.vue.webpack.routes.test'` 的客户端 addon 里的代码 (之前已经见过了)：
 
 ```js
 /* 在 `main.js` 里 */
@@ -791,8 +813,8 @@ import TestView from './components/TestView.vue'
 // 例如，addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
 // 将为 Vue Router 添加 /addon/foo/ 和 /addon/foo/bar 路由。
 // 我们这里创建一个新的 '/addon/vue-webpack/' 路由，并命名为 'test-webpack-route'。
-ClientAddonApi.addRoutes('vue-webpack', [
-  { path: '', name: 'test-webpack-route', component: TestView }
+ClientAddonApi.addRoutes('org.vue.webpack', [
+  { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
 ])
 ```
 
@@ -808,24 +830,24 @@ ClientAddonApi.addRoutes('vue-webpack', [
 
 ```js
 // 设置或更新
-api.setSharedData('my-variable', 'some-data')
+api.setSharedData('com.my-name.my-variable', 'some-data')
 
 // 获取
-const sharedData = api.getSharedData('my-variable')
+const sharedData = api.getSharedData('com.my-name.my-variable')
 if (sharedData) {
   console.log(sharedData.value)
 }
 
 // 移除
-api.removeSharedData('my-variable')
+api.removeSharedData('com.my-name.my-variable')
 
 // 侦听变化
 const watcher = (value, id) => {
   console.log(value, id)
 }
-api.watchSharedData('my-variable', watcher)
+api.watchSharedData('com.my-name.my-variable', watcher)
 // 取消侦听
-api.unwatchSharedData('my-variable', watcher)
+api.unwatchSharedData('com.my-name.my-variable', watcher)
 
 // 带命名空间的版本
 const {
@@ -834,8 +856,12 @@ const {
   removeSharedData,
   watchSharedData,
   unwatchSharedData
-} = api.namespace('webpack-dashboard-')
+} = api.namespace('com.my-name.')
 ```
+
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
+:::
 
 在其自定义组件中：
 
@@ -845,26 +871,24 @@ export default {
   // 同步共享的数据
   sharedData () {
     return {
-      // 你可以在模板中使用 `status`
-      status: `webpack-dashboard-${this.mode}-status`
+      // 你可以在模板中使用 `myVariable`
+      myVariable: 'com.my-name.my-variable'
       // 也可以映射带命名空间的共享数据
-      ...mapSharedData('webpack-dashboard-', {
-        status: `${this.mode}-status`,
-        progress: `${this.mode}-progress`,
-        operations: `${this.mode}-operations`
+      ...mapSharedData('com.my-name.', {
+        myVariable2: 'my-variable2'
       })
     }
   },
 
   // 手动方法
   async created () {
-    const value = await this.$getSharedData('my-variable')
+    const value = await this.$getSharedData('com.my-name.my-variable')
 
-    this.$watchSharedData(`my-variable`, value => {
+    this.$watchSharedData(`com.my-name.my-variable`, value => {
       console.log(value)
     })
 
-    await this.$setSharedData('my-variable', 'new-value')
+    await this.$setSharedData('com.my-name.my-variable', 'new-value')
   }
 }
 ```
@@ -880,7 +904,7 @@ export default {
 export default {
   sharedData: {
     // 将会在服务端同步 'my-message' 共享的数据
-    message: 'my-message'
+    message: 'com.my-name.my-message'
   }
 }
 </script>
@@ -898,7 +922,7 @@ export default {
 
 ```js
 // 调用一个 action
-api.callAction('other-action', { foo: 'bar' }).then(results => {
+api.callAction('com.my-name.other-action', { foo: 'bar' }).then(results => {
   console.log(results)
 }).catch(errors => {
   console.error(errors)
@@ -907,15 +931,19 @@ api.callAction('other-action', { foo: 'bar' }).then(results => {
 
 ```js
 // 监听一个 action
-api.onAction('test-action', params => {
+api.onAction('com.my-name.test-action', params => {
   console.log('test-action called', params)
 })
 ```
 
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
+:::
+
 你可以通过 `api.namespace` 使用带命名空间的版本 (类似共享的数据)：
 
 ```js
-const { onAction, callAction } = api.namespace('vue-webpack-')
+const { onAction, callAction } = api.namespace('com.my-name.')
 ```
 
 在客户端 addon 组件 (浏览器) 中，你可以访问 `$onPluginActionCalled`、`$onPluginActionResolved` 和 `$callPluginAction`：
@@ -938,7 +966,7 @@ export default {
   methods: {
     testPluginAction () {
       // 调用一个插件的 action
-      this.$callPluginAction('test-action', {
+      this.$callPluginAction('com.my-name.test-action', {
         meow: 'meow'
       })
     }
@@ -960,13 +988,10 @@ const { IpcMessenger } = require('@vue/cli-shared-utils')
 // 创建一个新的 IpcMessenger 实例
 const ipc = new IpcMessenger()
 
-// 连接到 vue-cli IPC 网络
-ipc.connect()
-
 function sendMessage (data) {
   // 发送一条消息给 cli-ui 服务器
   ipc.send({
-    webpackDashboardData: {
+    'com.my-name.some-data': {
       type: 'build',
       value: data
     }
@@ -989,12 +1014,48 @@ function cleanup () {
 }
 ```
 
+手动连接：
+
+```js
+const ipc = new IpcMessenger({
+  autoConnect: false
+})
+
+// 这条消息会被放入队列
+ipc.send({ ... })
+
+ipc.connect()
+```
+
+闲时自动断开连接 (在没有任何消息一段时间之后)：
+
+```js
+const ipc = new IpcMessenger({
+  disconnectOnIdle: true,
+  idleTimeout: 3000 // 默认值
+})
+
+ipc.send({ ... })
+
+setTimeout(() => {
+  console.log(ipc.connected) // false
+}, 3000)
+```
+
+连接到另一个 IPC 网络：
+
+```js
+const ipc = new IpcMessenger({
+  networkId: 'com.my-name.my-ipc-network'
+})
+```
+
 在一个 vue-cli 插件的 `ui.js` 文件中，你可以使用 `ipcOn`、`ipcOff` 和 `ipcSend` 方法：
 
 ```js
 function onWebpackMessage ({ data: message }) {
-  if (message.webpackDashboardData) {
-    console.log(message.webpackDashboardData)
+  if (message['com.my-name.some-data']) {
+    console.log(message['com.my-name.some-data'])
   }
 }
 
@@ -1018,10 +1079,10 @@ api.ipcSend({
 
 ```js
 // 向本地的数据库存入一个值
-api.storageSet('my-plugin.an-id', { some: 'value' })
+api.storageSet('com.my-name.an-id', { some: 'value' })
 
 // 从本地的数据库取回一个值
-console.log(api.storageGet('my-plugin.an-id'))
+console.log(api.storageGet('com.my-name.an-id'))
 
 // 完整的 lowdb 实例
 api.db.get('posts')
@@ -1032,6 +1093,10 @@ api.db.get('posts')
 // 带命名空间的辅助函数
 const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
+
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
+:::
 
 ## Notification
 
@@ -1159,7 +1224,7 @@ api.onViewOpen(({ view, cwd }) => {
 
 ```js
 api.addSuggestion({
-  id: 'my-suggestion',
+  id: 'com.my-name.my-suggestion',
   type: 'action', // 必填 (未来会加入更多类型)
   label: 'Add vue-router',
   // 该消息会展示在一个详情模态框里
@@ -1178,19 +1243,23 @@ api.addSuggestion({
 })
 ```
 
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
+:::
+
 ![UI 建议](/suggestion.png)
 
 之后你可以移除这项建议：
 
 ```js
-api.removeSuggestion('my-suggestion')
+api.removeSuggestion('com.my-name.my-suggestion')
 ```
 
 你也可以给建议附带 `actionLink`，当用户激活它时，会换做打开一个页面：
 
 ```js
 api.addSuggestion({
-  id: 'my-suggestion',
+  id: 'com.my-name.my-suggestion',
   type: 'action', // Required
   label: 'Add vue-router',
   // 打开一个新标签
@@ -1209,8 +1278,8 @@ api.onViewOpen(({ view }) => {
       api.addSuggestion({
         id: ROUTER,
         type: 'action',
-        label: 'cli-service.suggestions.vue-router-add.label',
-        message: 'cli-service.suggestions.vue-router-add.message',
+        label: 'org.vue.cli-service.suggestions.vue-router-add.label',
+        message: 'org.vue.cli-service.suggestions.vue-router-add.message',
         link: 'https://router.vuejs.org/',
         async handler () {
           await install(api, 'vue-router')
@@ -1249,18 +1318,34 @@ api.hasPlugin('vue-cli-plugin-apollo')
 api.getCwd()
 ```
 
+### resolve
+
+在当前工程下解析一个文件：
+
+```js
+api.resolve('src/main.js')
+```
+
+### getProject
+
+得出当前打开的工程。
+
+```js
+api.getProject()
+```
+
 ## 公共静态文件
 
 你可能需要在 cli-ui 内建的 HTTP 服务器上暴露一些静态文件 (通常是为自定义视图指定图标)。
 
 在插件包跟目录里可选的放置一个 `ui-public` 文件夹，这个文件夹里的任何文件都会暴露至 `/_plugin/:id/*` 的 HTTP 路由。
 
-例如，如果你将 `my-logo.png` 文件放置到 `my-package/ui-public` 文件夹，那么 cli-ui 加载插件的时候可以通过 `/_plugin/my-package/my-logo.png` 这个 URL 来访问它。
+例如，如果你将 `my-logo.png` 文件放置到 `vue-cli-plugin-hello/ui-public/` 文件夹，那么 cli-ui 加载插件的时候可以通过 `/_plugin/vue-cli-plugin-hello/my-logo.png` 这个 URL 来访问它。
 
 ```js
 api.describeConfig({
   /* ... */
   // 自定义图片
-  icon: '/_plugin/my-package/my-logo.png'
+  icon: '/_plugin/vue-cli-plugin-hello/my-logo.png'
 })
 ```
