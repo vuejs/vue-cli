@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.0.0-rc.10",
+  "version": "3.0.0-rc.11",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "bin": {
@@ -22,8 +22,8 @@
   "homepage": "https://cli.vuejs.org/",
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
-    "@vue/cli-overlay": "^3.0.0-rc.10",
-    "@vue/cli-shared-utils": "^3.0.0-rc.10",
+    "@vue/cli-overlay": "^3.0.0-rc.11",
+    "@vue/cli-shared-utils": "^3.0.0-rc.11",
     "@vue/preload-webpack-plugin": "^1.0.0",
     "@vue/web-component-wrapper": "^1.2.0",
     "acorn": "^5.7.1",
@@ -75,8 +75,8 @@
   "devDependencies": {
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.17",
+    "vuex": "^3.0.1"
   },
   "publishConfig": {
     "access": "public"

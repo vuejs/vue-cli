@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-shared-utils",
-  "version": "3.0.0-rc.10",
+  "version": "3.0.0-rc.11",
   "description": "shared utilities for vue-cli packages",
   "main": "index.js",
   "repository": {
@@ -22,10 +22,10 @@
     "chalk": "^2.4.1",
     "execa": "^0.10.0",
     "joi": "^13.0.0",
+    "launch-editor": "^2.2.1",
     "node-ipc": "^9.1.1",
     "opn": "^5.3.0",
     "ora": "^2.1.0",
-    "launch-editor": "^2.2.1",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "semver": "^5.5.0",
