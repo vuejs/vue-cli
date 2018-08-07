@@ -62,7 +62,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.0.0-rc.10',
+      '@vue/cli-plugin-babel': '^3.0.0-rc.11',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
