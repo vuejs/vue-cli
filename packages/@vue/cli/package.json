@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli#readme",
+  "homepage": "https://cli.vuejs.org/",
   "publishConfig": {
     "access": "public"
   },

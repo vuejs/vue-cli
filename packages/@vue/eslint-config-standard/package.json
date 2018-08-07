@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/eslint-config-standard#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/eslint-config-standard#readme",
   "dependencies": {
     "eslint-config-standard": "^12.0.0-alpha.0",
     "eslint-plugin-import": "^2.11.0",

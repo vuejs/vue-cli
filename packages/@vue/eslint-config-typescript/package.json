@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/eslint-config-typescript#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/eslint-config-typescript#readme",
   "dependencies": {
     "eslint-plugin-typescript": "^0.12.0",
     "typescript-eslint-parser": "^17.0.1"
