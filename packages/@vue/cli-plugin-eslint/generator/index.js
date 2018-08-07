@@ -1,9 +1,12 @@
+const fs = require('fs')
+const path = require('path')
+
 module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
 
-  const eslintConfig = require('./eslintOptions').config(api)
+  const eslintConfig = require('../eslintOptions').config(api)
 
   const pkg = {
     scripts: {
@@ -20,21 +23,40 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     }
   }
 
+  const injectEditorConfig = (config) => {
+    const filePath = api.resolve('.editorconfig')
+    if (fs.existsSync(filePath)) {
+      // Append to existing .editorconfig
+      api.render(files => {
+        const configPath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
+        const editorconfig = fs.readFileSync(configPath, 'utf-8')
+
+        files['.editorconfig'] += `\n${editorconfig}`
+      })
+    } else {
+      api.render(`./template/${config}`)
+    }
+  }
+
   if (config === 'airbnb') {
     eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-airbnb': '^3.0.5'
     })
+    injectEditorConfig('airbnb')
   } else if (config === 'standard') {
     eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-standard': '^3.0.5'
     })
+    injectEditorConfig('standard')
   } else if (config === 'prettier') {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-prettier': '^3.0.5'
     })
+    // prettier & default config do not have any style rules
+    // so no need to generate an editorconfig file
   } else {
     // default
     eslintConfig.extends.push('eslint:recommended')
@@ -80,7 +102,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   // lint & fix after create to ensure files adhere to chosen config
   if (config && config !== 'base') {
     api.onCreateComplete(() => {
-      require('./lint')({ silent: true }, api)
+      require('../lint')({ silent: true }, api)
     })
   }
 }

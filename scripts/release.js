@@ -35,6 +35,7 @@ const execa = require('execa')
 const semver = require('semver')
 const inquirer = require('inquirer')
 const { syncDeps } = require('./syncDeps')
+const { buildEditorConfig } = require('./buildEditorConfig')
 
 const curVersion = require('../lerna.json').version
 
@@ -79,6 +80,9 @@ const release = async () => {
       skipPrompt: true
     })
     delete process.env.PREFIX
+
+    buildEditorConfig()
+
     await execa('git', ['add', '-A'], { stdio: 'inherit' })
     await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
   }
