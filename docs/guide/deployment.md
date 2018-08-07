@@ -202,8 +202,6 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-### Now
-
 1. Install the Now CLI globally: `npm install -g now`
 
 2. Add a `now.json` file to your project root:
