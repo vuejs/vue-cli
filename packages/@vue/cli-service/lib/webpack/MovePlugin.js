@@ -8,7 +8,9 @@ module.exports = class MovePlugin {
 
   apply (compiler) {
     compiler.hooks.done.tap('move-plugin', () => {
-      fs.moveSync(this.from, this.to, { overwrite: true })
+      if (fs.existsSync(this.from)) {
+        fs.moveSync(this.from, this.to, { overwrite: true })
+      }
     })
   }
 }
