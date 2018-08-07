@@ -92,11 +92,20 @@ module.exports = (api, options) => {
       }
     }
 
-    if (options.indexPath) {
-      htmlOptions.filename = ensureRelative(outputDir, options.indexPath)
-    }
-
     if (isProd) {
+      // handle indexPath
+      if (options.indexPath) {
+        // why not set filename for html-webpack-plugin?
+        // 1. It cannot handle absolute paths
+        // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
+        webpackConfig
+          .plugin('move-index')
+          .use(require('../webpack/MovePlugin'), [
+            path.resolve(outputDir, 'index.html'),
+            path.resolve(outputDir, options.indexPath)
+          ])
+      }
+
       Object.assign(htmlOptions, {
         minify: {
           removeComments: true,
@@ -138,6 +147,7 @@ module.exports = (api, options) => {
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
+    const publicCopyIgnore = ['index.html', '.DS_Store']
 
     if (!multiPageConfig) {
       // default, single page setup.
@@ -184,10 +194,21 @@ module.exports = (api, options) => {
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
+        // resolve page index template
+        const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
+        if (hasDedicatedTemplate) {
+          publicCopyIgnore.push(template)
+        }
+        const templatePath = hasDedicatedTemplate
+          ? template
+          : fs.existsSync(htmlPath)
+            ? htmlPath
+            : defaultHtmlPath
+
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign({}, htmlOptions, {
           chunks: chunks || ['chunk-vendors', 'chunk-common', name],
-          template: fs.existsSync(template) ? template : (fs.existsSync(htmlPath) ? htmlPath : defaultHtmlPath),
+          template: templatePath,
           filename: ensureRelative(outputDir, filename),
           title
         })
@@ -237,7 +258,7 @@ module.exports = (api, options) => {
           .use(require('copy-webpack-plugin'), [[{
             from: publicDir,
             to: outputDir,
-            ignore: ['index.html', '.DS_Store']
+            ignore: publicCopyIgnore
           }]])
     }
   })
