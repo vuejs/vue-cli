@@ -82,7 +82,7 @@ console.log(process.env.VUE_APP_SECRET)
 所有解析出来的环境变量都可以在 `public/index.html` 中以 [HTML 插值](./html-and-static-assets.md#插值)中介绍的方式使用。
 
 ::: tip 提示
-你可以在 `vue.config.js` 文件中计算环境变量。它们仍然需要以 `VUE_APP_` 前缀开头。这可以用于版本信息 `process.env.VUE_APP_VERSION = require('./package.json').version`
+你可以在 `vue.config.js` 文件中计算环境变量。它们仍然需要以 `VUE_APP_` 前缀开头。这可以用于版本信息 `process.env.VUE_APP_VERSION = require('./package.json').version`。
 :::
 
 ## 只在本地有效的变量
