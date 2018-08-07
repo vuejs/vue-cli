@@ -12499,19 +12499,9 @@ vue-jest@^2.6.0:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-loader@^15.2.4:
-  version "15.2.6"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.2.6.tgz#4ad4e56a0ca1fd89ebc4220f9e3bd4723097b397"
-  dependencies:
-    "@vue/component-compiler-utils" "^2.0.0"
-    hash-sum "^1.0.2"
-    loader-utils "^1.1.0"
-    vue-hot-reload-api "^2.3.0"
-    vue-style-loader "^4.1.0"
-
-vue-loader@^15.2.7:
-  version "15.2.7"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.2.7.tgz#c1d40dae7407c2fc2215522d3b7cef736f568051"
+vue-loader@15.3.0, vue-loader@^15.2.4, vue-loader@^15.3.0:
+  version "15.3.0"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.3.0.tgz#b474d10a4e93d934a78c147fc3e314b370e9fc54"
   dependencies:
     "@vue/component-compiler-utils" "^2.0.0"
     hash-sum "^1.0.2"

@@ -75,6 +75,7 @@
     "fs-monkey": "0.3.1",
     "babel-core": "7.0.0-bridge.0",
     "vue": "2.5.17",
+    "vue-loader": "15.3.0",
     "vue-template-compiler": "2.5.17",
     "vue-server-renderer": "2.5.17"
   }
