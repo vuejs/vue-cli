@@ -67,8 +67,8 @@
     "request-promise-native": "^1.0.5",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
-    "vuepress": "^0.11.0",
-    "vuepress-theme-vue": "^1.0.3",
+    "vuepress": "^0.14.0",
+    "vuepress-theme-vue": "^1.1.0",
     "yorkie": "^1.0.2"
   },
   "resolutions": {
