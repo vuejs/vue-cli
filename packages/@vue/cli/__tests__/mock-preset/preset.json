@@ -1,0 +1,5 @@
+{
+  "plugins": {
+    "@vue/cli-plugin-babel": {}
+  }
+}

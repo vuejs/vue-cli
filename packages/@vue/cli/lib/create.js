@@ -13,9 +13,10 @@ async function create (projectName, options) {
     process.env.HTTP_PROXY = options.proxy
   }
 
+  const cwd = options.cwd || process.cwd()
   const inCurrent = projectName === '.'
-  const name = inCurrent ? path.relative('../', process.cwd()) : projectName
-  const targetDir = path.resolve(projectName || '.')
+  const name = inCurrent ? path.relative('../', cwd) : projectName
+  const targetDir = path.resolve(cwd, projectName || '.')
 
   const result = validateProjectName(name)
   if (!result.validForNewPackages) {
@@ -70,7 +71,7 @@ async function create (projectName, options) {
 }
 
 module.exports = (...args) => {
-  create(...args).catch(err => {
+  return create(...args).catch(err => {
     stopSpinner(false) // do not persist
     error(err)
     process.exit(1)

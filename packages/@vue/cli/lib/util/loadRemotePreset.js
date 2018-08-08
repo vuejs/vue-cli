@@ -1,14 +1,7 @@
 const fs = require('fs-extra')
+const loadPresetFromDir = require('./loadPresetFromDir')
 
 module.exports = async function fetchRemotePreset (name, clone) {
-  // github shorthand fastpath
-  if (!clone && /^[\w_-]+\/[\w_-]+$/.test(name)) {
-    const { request } = require('@vue/cli-shared-utils')
-    return request.get(`https://raw.githubusercontent.com/${name}/master/preset.json`)
-      .then(res => res.body)
-  }
-
-  // fallback to full download
   const os = require('os')
   const path = require('path')
   const download = require('download-git-repo')
@@ -20,16 +13,12 @@ module.exports = async function fetchRemotePreset (name, clone) {
     await fs.remove(tmpdir)
   }
 
-  return new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     download(name, tmpdir, { clone }, err => {
       if (err) return reject(err)
-      let preset
-      try {
-        preset = require(path.join(tmpdir, 'preset.json'))
-      } catch (e) {
-        return reject(e)
-      }
-      resolve(preset)
+      resolve()
     })
   })
+
+  return await loadPresetFromDir(tmpdir)
 }
