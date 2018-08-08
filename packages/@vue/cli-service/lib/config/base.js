@@ -3,7 +3,7 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
     const getAssetPath = require('../util/getAssetPath')
-    const inlineLimit = 4096
+    const inlineLimit = 10240
 
     const genAssetSubPath = dir => {
       return getAssetPath(
