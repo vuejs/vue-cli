@@ -47,6 +47,17 @@ exports.validate = (options, cb) => {
   validate(options, schema, cb)
 }
 
+// #2110
+// https://github.com/nodejs/node/issues/19022
+// in some cases cpus() returns undefined, and may simply throw in the future
+function hasMultipleCores () {
+  try {
+    return require('os').cpus().length > 1
+  } catch (e) {
+    return false
+  }
+}
+
 exports.defaults = () => ({
   // project deployment base
   baseUrl: '/',
@@ -74,7 +85,7 @@ exports.defaults = () => ({
 
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
-  parallel: require('os').cpus().length > 1,
+  parallel: hasMultipleCores(),
 
   // multi-page config
   pages: undefined,
