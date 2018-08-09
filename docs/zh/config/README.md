@@ -262,7 +262,7 @@ module.exports = {
   更多细节可查阅：[向预处理器 Loader 传递选项](../guide/css.html#向预处理器-loader-传递选项)
 
   ::: tip 提示
-  我们倾向于使用 `chainWebpack` 手动修改指定的 loader，因为这些选项需要同时应用在相应 loader 出现的多个地方。
+  相比于使用 `chainWebpack` 手动指定 loader 更推荐上面这样做，因为这些选项需要应用在使用了相应 loader 的多个地方。
   :::
 
 ### devServer
