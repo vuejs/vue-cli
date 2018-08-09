@@ -13349,9 +13349,9 @@ ylru@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ylru/-/ylru-1.2.1.tgz#f576b63341547989c1de7ba288760923b27fe84f"
 
-yorkie@^1.0.2, yorkie@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/yorkie/-/yorkie-1.0.3.tgz#5c05db48c012def99c29b79685b6ba2e40c8c671"
+yorkie@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/yorkie/-/yorkie-2.0.0.tgz#92411912d435214e12c51c2ae1093e54b6bb83d9"
   dependencies:
     execa "^0.8.0"
     is-ci "^1.0.10"
