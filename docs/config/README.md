@@ -162,12 +162,16 @@ module.exports = {
 
   Setting this to `false` can speed up production builds if you don't need source maps for production.
 
-### corsUseCredentials
+### crossorigin
 
-- Type: `boolean`
-- Default: `false`
+- Type: `string`
+- Default: `undefined`
 
-  In modern mode, the generated HTML will include `<script type="module">`, which is [loaded with CORS always enabled](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). By default, it is treated as `crossorigin="anonymous"`, setting this option to `true` will use `crossorigin="use-credentials"` instead.
+  Configure the `crossorigin` attribute on `<link rel="stylesheet">` and `<script>` tags in generated HTML.
+
+  Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (`public/index.html`) are not affected.
+
+  See also: [CROS setting attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
 
 ### configureWebpack
 

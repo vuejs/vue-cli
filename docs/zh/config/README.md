@@ -160,12 +160,16 @@ module.exports = {
 
   如果你不需要生产环境的 source map，可以将其设置为 `false` 以加速生产环境构建。
 
-### corsUseCredentials
+### crossorigin
 
-- Type: `boolean`
-- Default: `false`
+- Type: `string`
+- Default: `undefined`
 
-  在现代模式下，生成的 HTML 会包含 `<script type="module">`，这需要[始终开启 CORS 才能被载入](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors)。默认情况下，它被处理为 `crossorigin="anonymous"`，将这个选项设置为 `true` 后则会换用 `crossorigin="use-credentials"`。
+  设置生成的 HTML 中 `<link rel="stylesheet">` 和 `<script>` 标签的 `crossorigin` 属性。
+
+  需要注意的是该选项仅影响由 `html-webpack-plugin` 在构建时注入的标签 - 直接写在模版 (`public/index.html`) 中的标签不受影响。
+
+  更多细节可查阅: [CROS setting attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
 
 ### configureWebpack
 

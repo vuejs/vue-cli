@@ -250,6 +250,16 @@ module.exports = (api, options) => {
       }
     }
 
+    // CORS and Subresource Integrity
+    if (options.crossorigin != null || options.integreity) {
+      webpackConfig
+        .plugin('cors')
+          .use(require('../webpack/CorsPlugin'), [{
+            crossorigin: options.crossorigin,
+            integreity: options.integreity
+          }])
+    }
+
     // copy static assets in public/
     const publicDir = api.resolve('public')
     if (!isLegacyBundle && fs.existsSync(publicDir)) {

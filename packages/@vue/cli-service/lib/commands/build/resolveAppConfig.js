@@ -1,7 +1,6 @@
 module.exports = (api, args, options) => {
   const config = api.resolveChainableWebpackConfig()
   const targetDir = api.resolve(args.dest || options.outputDir)
-  const { corsUseCredentials } = options
 
   // respect inline build destination in copy plugin
   if (args.dest && config.plugins.has('copy')) {
@@ -19,7 +18,6 @@ module.exports = (api, args, options) => {
         .plugin('modern-mode-legacy')
         .use(ModernModePlugin, [{
           targetDir,
-          corsUseCredentials,
           isModernBuild: false
         }])
     } else {
@@ -28,7 +26,6 @@ module.exports = (api, args, options) => {
         .plugin('modern-mode-modern')
         .use(ModernModePlugin, [{
           targetDir,
-          corsUseCredentials,
           isModernBuild: true
         }])
     }

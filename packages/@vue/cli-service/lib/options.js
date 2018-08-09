@@ -12,7 +12,7 @@ const schema = createSchema(joi => joi.object({
   parallel: joi.boolean(),
   devServer: joi.object(),
   pages: joi.object(),
-  corsUseCredentials: joi.boolean(),
+  crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
 
   // css
   css: joi.object({
@@ -91,8 +91,11 @@ exports.defaults = () => ({
   pages: undefined,
 
   // <script type="module" crossorigin="use-credentials">
-  // #1656, #1867
-  corsUseCredentials: false,
+  // #1656, #1867, #2025
+  crossorigin: undefined,
+
+  // subresource integrity
+  integreity: false,
 
   css: {
     // extract: true,

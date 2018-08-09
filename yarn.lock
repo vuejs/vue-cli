@@ -1045,9 +1045,9 @@
     execa "^0.10.0"
     q "^1.5.1"
 
-"@vue/preload-webpack-plugin@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@vue/preload-webpack-plugin/-/preload-webpack-plugin-1.0.0.tgz#08f156532909824da2aad258e151742d1e8f822e"
+"@vue/preload-webpack-plugin@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@vue/preload-webpack-plugin/-/preload-webpack-plugin-1.1.0.tgz#d768dba004261c029b53a77c5ea2d5f9ee4f3cce"
 
 "@vue/test-utils@^1.0.0-beta.20":
   version "1.0.0-beta.21"

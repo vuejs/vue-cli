@@ -24,7 +24,7 @@
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
     "@vue/cli-overlay": "^3.0.0-rc.11",
     "@vue/cli-shared-utils": "^3.0.0-rc.11",
-    "@vue/preload-webpack-plugin": "^1.0.0",
+    "@vue/preload-webpack-plugin": "^1.1.0",
     "@vue/web-component-wrapper": "^1.2.0",
     "acorn": "^5.7.1",
     "address": "^1.0.3",

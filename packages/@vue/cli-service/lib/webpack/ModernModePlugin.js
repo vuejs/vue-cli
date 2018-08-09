@@ -5,9 +5,8 @@ const path = require('path')
 const safariFix = `!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();`
 
 class ModernModePlugin {
-  constructor ({ targetDir, corsUseCredentials, isModernBuild }) {
+  constructor ({ targetDir, isModernBuild }) {
     this.targetDir = targetDir
-    this.corsUseCredentials = corsUseCredentials
     this.isModernBuild = isModernBuild
   }
 
@@ -41,11 +40,19 @@ class ModernModePlugin {
     compiler.hooks.compilation.tap(ID, compilation => {
       compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, async (data, cb) => {
         // use <script type="module"> for modern assets
-        const modernAssets = data.body.filter(a => a.tagName === 'script' && a.attributes)
-        modernAssets.forEach(a => {
-          a.attributes.type = 'module'
-          if (this.corsUseCredentials) {
-            a.attributes.crossorigin = 'use-credentials'
+        data.body.forEach(tag => {
+          if (tag.tagName === 'script' && tag.attributes) {
+            tag.attributes.type = 'module'
+          }
+        })
+
+        // use <link rel="modulepreload"> instead of <link rel="preload">
+        // for modern assets
+        data.head.forEach(tag => {
+          if (tag.tagName === 'link' &&
+              tag.attributes.rel === 'preload' &&
+              tag.attributes.as === 'script') {
+            tag.attributes.rel = 'modulepreload'
           }
         })
 
@@ -70,13 +77,7 @@ class ModernModePlugin {
       })
 
       compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tap(ID, data => {
-        data.html = data.html
-          // use <link rel="modulepreload"> instead of <link rel="preload">
-          // for modern assets
-          .replace(/(<link as=script .*?)rel=preload>/g, this.corsUseCredentials
-            ? '$1rel=modulepreload crossorigin=use-credentials>'
-            : '$1rel=modulepreload>')
-          .replace(/\snomodule="">/g, ' nomodule>')
+        data.html = data.html.replace(/\snomodule="">/g, ' nomodule>')
       })
     })
   }

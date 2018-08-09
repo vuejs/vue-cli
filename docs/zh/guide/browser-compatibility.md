@@ -63,7 +63,7 @@ Vue CLI 会产生两个应用的版本：一个现代版的包，面向支持 [E
 对于一个 Hello World 应用来说，现代版的包已经小了 16%。在生产环境下，现代版的包通常都会表现出显著的解析速度和运算速度，从而改善应用的加载性能。
 
 ::: tip 提示
-`<script type="module">` [需要配合始终开启的 CORS 进行加载](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors)。这意味着你的服务器必须返回诸如 `Access-Control-Allow-Origin: *` 的有效的 CORS 头。如果你想要通过认证来获取脚本，可使用 [corsUseCredentials](../config/#corsusecredentials) 选项。
+`<script type="module">` [需要配合始终开启的 CORS 进行加载](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors)。这意味着你的服务器必须返回诸如 `Access-Control-Allow-Origin: *` 的有效的 CORS 头。如果你想要通过认证来获取脚本，可使将 [crossorigin](../config/#crossorigin) 选项设置为 `use-credentials`。
 
 同时，现代浏览器使用一段内联脚本来避免 Safari 10 重复加载脚本包，所以如果你在使用一套严格的 CSP，你需要这样显性地允许内联脚本：
 
