@@ -1,3 +1,49 @@
+# [3.0.0-rc.12](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.11...v3.0.0-rc.12) (2018-08-09)
+
+## cli
+
+#### Features
+
+* support generator.js and prompts.js in preset ([3b21fad](https://github.com/vuejs/vue-cli/commit/3b21fad))
+
+## cli-service
+
+#### Bug Fixes
+
+* avoid os.cpus() error in certain envs ([327d041](https://github.com/vuejs/vue-cli/commit/327d041)), closes [#2110](https://github.com/vuejs/vue-cli/issues/2110)
+#### Code Refactoring
+
+* use better modern mode and cors implementation ([7b39bed](https://github.com/vuejs/vue-cli/commit/7b39bed))
+#### Features
+
+* support Subresource Integrity via `integrity` option ([55043d3](https://github.com/vuejs/vue-cli/commit/55043d3))
+
+## cli-service-global
+
+#### Bug Fixes
+
+* install vue-template-compiler for global service ([c42cb94](https://github.com/vuejs/vue-cli/commit/c42cb94))
+
+## cli-ui
+
+#### Bug Fixes
+
+* **build:** wrong arg name, closes [#2067](https://github.com/vuejs/vue-cli/issues/2067) ([fe66a44](https://github.com/vuejs/vue-cli/commit/fe66a44))
+
+## other
+
+#### Bug Fixes
+
+* ensure consistent build hash with different project locations ([9e4d62c](https://github.com/vuejs/vue-cli/commit/9e4d62c))
+
+
+### BREAKING CHANGES
+
+* The `corsUseCredentials` option has been replaced by the new
+`crossorigin` option.
+
+
+
 # [3.0.0-rc.11](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.10...v3.0.0-rc.11) (2018-08-07)
 
 ## babel-preset-app
