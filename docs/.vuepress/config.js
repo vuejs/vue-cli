@@ -25,6 +25,12 @@ module.exports = {
         selectText: 'Languages',
         lastUpdated: 'Last Updated',
         editLinkText: 'Edit this page on GitHub',
+        serviceWorker: {
+          updatePopup: {
+            message: "New content is available.",
+            buttonText: "Refresh"
+          }
+        },
         nav: [
           {
             text: 'Guide',
@@ -108,6 +114,12 @@ module.exports = {
         selectText: '选择语言',
         lastUpdated: '上次编辑时间',
         editLinkText: '在 GitHub 上编辑此页',
+        serviceWorker: {
+          updatePopup: {
+            message: "发现新内容可用",
+            buttonText: "刷新"
+          }
+        },
         nav: [
           {
             text: '指南',
