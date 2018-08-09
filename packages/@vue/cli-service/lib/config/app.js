@@ -251,12 +251,13 @@ module.exports = (api, options) => {
     }
 
     // CORS and Subresource Integrity
-    if (options.crossorigin != null || options.integreity) {
+    if (options.crossorigin != null || options.integrity) {
       webpackConfig
         .plugin('cors')
           .use(require('../webpack/CorsPlugin'), [{
             crossorigin: options.crossorigin,
-            integreity: options.integreity
+            integrity: options.integrity,
+            baseUrl: options.baseUrl
           }])
     }
 

@@ -9,36 +9,32 @@ const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 let server, browser, page
 test('build', async () => {
-  const project = await create('e2e-build', defaultPreset)
+  const project = await create('e2e-build-cors', defaultPreset)
 
-  // test public copy
-  project.write('public/foo.js', '1')
+  await project.write('vue.config.js', `
+    module.exports = {
+      crossorigin: '',
+      integrity: true
+    }
+  `)
 
   const { stdout } = await project.run('vue-cli-service build')
   expect(stdout).toMatch('Build complete.')
 
-  expect(project.has('dist/index.html')).toBe(true)
-  expect(project.has('dist/favicon.ico')).toBe(true)
-  expect(project.has('dist/js')).toBe(true)
-  expect(project.has('dist/css')).toBe(true)
-  expect(project.has('dist/foo.js')).toBe(true)
-
   const index = await project.read('dist/index.html')
-  // should split and preload app.js & vendor.js
-  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js rel=preload as=script>/)
-  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js rel=preload as=script>/)
-  // should preload css
-  expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload as=style>/)
 
-  // should inject scripts
-  expect(index).toMatch(/<script src=\/js\/chunk-vendors\.\w{8}\.js>/)
-  expect(index).toMatch(/<script src=\/js\/app\.\w{8}\.js>/)
-  // should inject css
-  expect(index).toMatch(/<link href=\/css\/app\.\w{8}\.css rel=stylesheet>/)
+  // preload disabled due to chrome bug
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=677022
+  // expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js rel=preload as=script crossorigin>/)
+  // expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js rel=preload as=script crossorigin>/)
+  // expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload as=style crossorigin>/)
 
-  // should reference favicon with correct base URL
-  expect(index).toMatch(/<link rel=icon href=\/favicon.ico>/)
+  // should apply crossorigin and add integrity to scripts and css
+  expect(index).toMatch(/<script src=\/js\/chunk-vendors\.\w{8}\.js crossorigin integrity=sha384-.{64}>/)
+  expect(index).toMatch(/<script src=\/js\/app\.\w{8}\.js crossorigin integrity=sha384-.{64}>/)
+  expect(index).toMatch(/<link href=\/css\/app\.\w{8}\.css rel=stylesheet crossorigin integrity=sha384-.{64}>/)
 
+  // verify integrity is correct by actually running it
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
 

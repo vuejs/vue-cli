@@ -13,6 +13,7 @@ const schema = createSchema(joi => joi.object({
   devServer: joi.object(),
   pages: joi.object(),
   crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
+  integrity: joi.boolean(),
 
   // css
   css: joi.object({

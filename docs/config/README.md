@@ -173,6 +173,17 @@ module.exports = {
 
   See also: [CROS setting attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
 
+### integrity
+
+- Type: `boolean`
+- Default: `false`
+
+  Set to `true` to enable [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) (SRI) on `<link rel="stylesheet">` and `<script>` tags in generated HTML. If you are hosting your built files on a CDN, it is a good idea to enable this for additional security.
+
+  Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (`public/index.html`) are not affected.
+
+  Also, when SRI is enabled, preload resource hints are disabled due to a [bug in Chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=677022) which causes the resources to be downloaded twice.
+
 ### configureWebpack
 
 - Type: `Object | Function`

@@ -57,6 +57,7 @@
     "semver": "^5.5.0",
     "slash": "^2.0.0",
     "source-map-url": "^0.4.0",
+    "ssri": "^6.0.0",
     "string.prototype.padend": "^3.0.0",
     "thread-loader": "^1.1.5",
     "uglifyjs-webpack-plugin": "^1.2.7",
