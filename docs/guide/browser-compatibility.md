@@ -10,6 +10,8 @@ See [here][browserslist] for how to specify browser ranges.
 
 A default Vue CLI project uses [@vue/babel-preset-app][babel-preset-app], which uses `@babel/preset-env` and the `browserslist` config to determine the Polyfills needed for your project.
 
+### useBuiltIns: 'usage'
+
 By default, it passes [`useBuiltIns: 'usage'`](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) to `@babel/preset-env` which automatically detects the polyfills needed based on the language features used in your source code. This ensures only the minimum amount of polyfills are included in your final bundle. However, this also means **if one of your dependencies has specific requirements on polyfills, by default Babel won't be able to detect it.**
 
 If one of your dependencies need polyfills, you have a few options:
@@ -39,6 +41,10 @@ If one of your dependencies need polyfills, you have a few options:
 3. **If the dependency ships ES5 code, but uses ES6+ features without explicitly listing polyfill requirements (e.g. Vuetify):** Use `useBuiltIns: 'entry'` and then add `import '@babel/polyfill'` to your entry file. This will import **ALL** polyfills based on your `browserslist` targets so that you don't need to worry about dependency polyfills anymore, but will likely increase your final bundle size with some unused polyfills.
 
 See [@babel-preset/env docs](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) for more details.
+
+### Polyfills when Building as Library or Web Components
+
+When using Vue CLI to [build a library or Web Components](./build-targets.md), it is recommended to pass `useBuiltIns: false` to `@vue/babel-preset-app` to disable automatic polyfill injection. This ensures you don't include unnecessary polyfills in your code, as it should be the responsibility of the consuming app to include polyfills.
 
 ## Modern Mode
 
