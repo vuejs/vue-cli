@@ -82,8 +82,7 @@ module.exports = (api, options) => {
           sourceMap,
           importLoaders: (
             1 + // stylePostLoader injected by vue-loader
-            hasPostCSSConfig +
-            !!loader
+            hasPostCSSConfig
           )
         }, loaderOptions.css)
 

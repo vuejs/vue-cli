@@ -52,7 +52,7 @@ module.exports = api => {
           handler () {
             const file = config.foundFiles.vue.path
             console.log('open', file)
-            const launch = require('launch-editor')
+            const { launch } = require('@vue/cli-shared-utils')
             launch(file)
             return {
               keep: true

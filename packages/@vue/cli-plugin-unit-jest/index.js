@@ -14,13 +14,6 @@ module.exports = api => {
     process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true
     require('jest').run(rawArgv)
   })
-
-  // TODO remove in RC
-  api.registerCommand('test', (args, rawArgv) => {
-    const { warn } = require('@vue/cli-shared-utils')
-    warn(`Deprecation Warning: "vue-cli-service test" has been renamed to "vue-cli-service test:unit".`)
-    return api.service.run('test:unit', args, rawArgv)
-  })
 }
 
 module.exports.defaultModes = {

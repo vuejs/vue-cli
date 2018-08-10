@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-eslint",
-  "version": "3.0.0-rc.10",
+  "version": "3.0.0-rc.12",
   "description": "eslint plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -17,16 +17,15 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-eslint#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-eslint#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.0-rc.10",
+    "@vue/cli-shared-utils": "^3.0.0-rc.12",
     "babel-eslint": "^8.2.5",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-vue": "^4.5.0",
-    "launch-editor": "^2.2.1"
+    "eslint-plugin-vue": "^4.5.0"
   }
 }

@@ -25,6 +25,34 @@ $color = red;
 </style>
 ```
 
+### 自动化导入
+
+如果你想自动化导入文件 (用于颜色、变量、mixin……)，你可以使用 [style-resources-loader](https://github.com/yenshih/style-resources-loader)。这里有一个关于 Stylus 的在每个单文件组件和 Stylus 文件中导入 `./src/styles/imports.styl` 的例子：
+
+```js
+// vue.config.js
+const path = require('path')
+
+module.exports = {
+  chainWebpack: config => {
+    const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
+    types.forEach(type => addStyleResource(config.module.rule('stylus').oneOf(type)))
+  },
+}
+
+function addStyleResource (rule) {
+  rule.use('style-resource')
+    .loader('style-resources-loader')
+    .options({
+      patterns: [
+        path.resolve(__dirname, './src/styles/imports.styl'),
+      ],
+    })
+}
+```
+
+你也可以选择使用 [vue-cli-plugin-style-resources-loader](https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader)。
+
 ## PostCSS
 
 Vue CLI 内部使用了 PostCSS。
@@ -82,8 +110,6 @@ module.exports = {
 
 ``` js
 // vue.config.js
-const fs = require('fs')
-
 module.exports = {
   css: {
     loaderOptions: {

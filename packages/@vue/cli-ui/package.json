@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.0.0-rc.10",
+  "version": "3.0.0-rc.12",
   "scripts": {
     "serve": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4000/graphql vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^3.0.0-rc.10",
+    "@vue/cli-shared-utils": "^3.0.0-rc.12",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
     "deepmerge": "^2.1.1",
@@ -41,7 +41,6 @@
     "graphql-type-json": "^0.2.1",
     "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.12.0",
-    "launch-editor": "^2.2.1",
     "lodash.merge": "^4.6.1",
     "lowdb": "^1.0.0",
     "lru-cache": "^4.1.3",
@@ -49,6 +48,7 @@
     "node-notifier": "^5.2.1",
     "parse-git-config": "^2.0.2",
     "portfinder": "^1.0.13",
+    "prismjs": "^1.15.0",
     "semver": "^5.5.0",
     "shortid": "^2.2.11",
     "terminate": "^2.1.0",
@@ -56,11 +56,11 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.10",
-    "@vue/cli-plugin-e2e-cypress": "^3.0.0-rc.10",
-    "@vue/cli-plugin-eslint": "^3.0.0-rc.10",
-    "@vue/cli-service": "^3.0.0-rc.10",
-    "@vue/eslint-config-standard": "^3.0.0-rc.10",
+    "@vue/cli-plugin-babel": "^3.0.0-rc.12",
+    "@vue/cli-plugin-e2e-cypress": "^3.0.0-rc.12",
+    "@vue/cli-plugin-eslint": "^3.0.0-rc.12",
+    "@vue/cli-service": "^3.0.0-rc.12",
+    "@vue/eslint-config-standard": "^3.0.0-rc.12",
     "@vue/ui": "^0.4.6",
     "ansi_up": "^3.0.0",
     "cross-env": "^5.1.5",
@@ -73,7 +73,7 @@
     "start-server-and-test": "^1.4.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vue-apollo": "^3.0.0-beta.17",
     "vue-color": "^2.4.6",
     "vue-i18n": "^8.0.0",
@@ -81,7 +81,7 @@
     "vue-meta": "^1.5.0",
     "vue-observe-visibility": "^0.4.1",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.5.16",
+    "vue-template-compiler": "^2.5.17",
     "xterm": "^3.2.0"
   },
   "browserslist": [

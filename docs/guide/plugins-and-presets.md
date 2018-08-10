@@ -180,7 +180,13 @@ For such scenarios you can specify `"prompts": true` in a plugin's options to al
 
 ### Remote Presets
 
-You can share a preset with other developers by publishing it in a git repo. The repo should contain a `preset.json` file containing the preset data. You can then use the `--preset` option to use the remote preset when creating a project:
+You can share a preset with other developers by publishing it in a git repo. The repo can contain the following files:
+
+- `preset.json`: the main file containing the preset data (required).
+- `generator.js`: a [Generator](../dev-guide/plugin-dev.md#generator) that can inject or modify files in the project.
+- `prompts.js`: a [prompts file](../dev-guide/plugin-dev.md#prompts-for-3rd-party-plugins) that can collect options for the generator.
+
+Once the repo is published, you can then use the `--preset` option to use the remote preset when creating a project:
 
 ``` bash
 # use preset from GitHub repo
@@ -196,8 +202,12 @@ vue create --preset bitbucket:username/repo --clone my-project
 
 ### Local Filesystem Preset
 
-When developing a remote preset, it can be tedious to have to repeatedly push the preset to a remote repo to test it. To simplify the workflow, the `--preset` flag also accepts local `.json` files:
+When developing a remote preset, it can be tedious to have to repeatedly push the preset to a remote repo to test it. To simplify the workflow, you can directly work with local presets. Vue CLI will load local presets if the value for the `--preset` option is a relative or absolute file path, or ends with `.json`:
 
 ``` bash
-vue create --preset local.json my-project
+# ./my-preset should be a directory containing preset.json
+vue create --preset ./my-preset my-project
+
+# or directly use a json file in cwd:
+vue create --preset my-preset.json
 ```

@@ -12,6 +12,7 @@ import ClientState from './mixins/ClientState'
 import SetSize from './util/set-size'
 import Focus from './util/focus'
 import Bus from './util/bus'
+import AnsiColors from './util/ansi-colors'
 
 Vue.use(InstantSearch)
 Vue.use(VueMeta)
@@ -37,6 +38,7 @@ Vue.use(VueObserveVisibility)
 Vue.use(SharedData)
 Vue.use(PluginAction)
 Vue.use(Bus)
+Vue.use(AnsiColors)
 
 for (const key in Filters) {
   Vue.filter(key, Filters[key])

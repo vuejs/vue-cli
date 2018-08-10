@@ -1,6 +1,6 @@
 {
   "name": "@vue/babel-preset-app",
-  "version": "3.0.0-rc.10",
+  "version": "3.0.0-rc.12",
   "description": "babel-preset-app for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/babel-preset-app#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/babel-preset-app#readme",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "7.0.0-beta.47",
     "@babel/plugin-proposal-decorators": "7.0.0-beta.47",

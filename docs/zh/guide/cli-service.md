@@ -29,10 +29,18 @@ yarn serve
 npx vue-cli-service serve
 ```
 
+::: tip 提示
+你可以通过 `vue ui` 命令使用 GUI 运行更多的特性脚本。
+:::
+
+这里有一个 GUI 的 webpack Analyzer：
+
+![UI webpack Analyzer](/ui-analyzer.png)
+
 ## vue-cli-service serve
 
 ```
-用法：vue-cli-service serve [options]
+用法：vue-cli-service serve [options] [entry]
 
 选项：
 

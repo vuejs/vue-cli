@@ -15,7 +15,7 @@ sidebarDepth: 3
 
 ### Creator
 
-[Creator][creator-class] 是调用 `vue create <app>` 时创建的类。负责偏好提示符、调用 generator 和安装依赖。
+[Creator][creator-class] 是调用 `vue create <app>` 时创建的类。负责偏好对话、调用 generator 和安装依赖。
 
 ### Service
 
@@ -23,7 +23,7 @@ sidebarDepth: 3
 
 ### CLI 插件
 
-CLI 插件是一个可以为 `@vue/cli` 项目添加额外特性的 npm 包。它应该始终包含一个 [Service 插件](#service-插件)作为其主要导出，且可选的包含一个 [Generator](#generator) 和一个 [Prompt 文件](#第三方插件的提示符)。
+CLI 插件是一个可以为 `@vue/cli` 项目添加额外特性的 npm 包。它应该始终包含一个 [Service 插件](#service-插件)作为其主要导出，且可选的包含一个 [Generator](#generator) 和一个 [Prompt 文件](#第三方插件的对话)。
 
 一个典型的 CLI 插件的目录结构看起来是这样的：
 
@@ -152,7 +152,7 @@ module.exports = {
 
 1. 一个 `GeneratorAPI` 实例：
 
-2. 这个插件的 generator 选项。这些选项会在项目创建提示符过程中被解析，或从一个保存在 `~/.vuerc` 中的 preset 中加载。例如，如果保存好的 `~/.vuerc` 像如下的这样：
+2. 这个插件的 generator 选项。这些选项会在项目创建对话过程中被解析，或从一个保存在 `~/.vuerc` 中的 preset 中加载。例如，如果保存好的 `~/.vuerc` 像如下的这样：
 
     ``` json
     {
@@ -168,7 +168,7 @@ module.exports = {
 
     如果用户使用 preset `foo` 创建了一个项目，那么 `@vue/cli-plugin-foo` 的 generator 就会收到 `{ option: 'bar' }` 作为第二个参数。
 
-    对于一个第三方插件来说，该选项将会解析自提示符或用户执行 `vue invoke` 时的命令行参数中 (详见[第三方插件的提示符](#第三方插件的提示符))。
+    对于一个第三方插件来说，该选项将会解析自对话或用户执行 `vue invoke` 时的命令行参数中 (详见[第三方插件的对话](#第三方插件的对话))。
 
 3. 整个 preset (`presets.foo`) 将会作为第三个参数传入。
 
@@ -234,13 +234,40 @@ export default {
 <%# END_REPLACE %>
 ```
 
-### 提示符
+#### 文件名的极端情况
 
-#### 内建插件的提示符
+如果你想要渲染一个以点开头的模板文件 (例如 `.env`)，则需要遵循一个特殊的命名约定，因为以点开头的文件会在插件发布到 npm 的时候被忽略：
 
-只有内建插件可以定制创建新项目时的初始化提示符，且这些提示符模块放置在 [`@vue/cli` 包的内部][prompt-modules]。
+```
+# 以点开头的模板需要使用下划线取代那个点：
 
-一个提示符模块应该导出一个函数，这个函数接收一个 [PromptModuleAPI][prompt-api] 实例。这些提示符的底层使用 [inquirer](https://github.com/SBoudrias/Inquirer.js) 进行展示：
+/generator/template/_env
+
+# 调用 api.render('./template') 会在项目目录中渲染成为：
+
+.env
+```
+
+同时这也意味着当你想渲染以下划线开头的文件时，同样需要遵循一个特殊的命名约定：
+
+```
+# 这种模板需要使用两个下划线来取代单个下划线：
+
+/generator/template/__variables.scss
+
+# 调用 api.render('./template') 会在项目目录中渲染成为：
+
+_variables.scss
+```
+
+
+### Prompts
+
+#### 内建插件的对话
+
+只有内建插件可以定制创建新项目时的初始化对话，且这些对话模块放置在 [`@vue/cli` 包的内部][prompt-modules]。
+
+一个对话模块应该导出一个函数，这个函数接收一个 [PromptModuleAPI][prompt-api] 实例。这些对话的底层使用 [inquirer](https://github.com/SBoudrias/Inquirer.js) 进行展示：
 
 ``` js
 module.exports = api => {
@@ -250,16 +277,16 @@ module.exports = api => {
     value: 'my-feature'
   })
 
-  // injectPrompt 期望接收一个有效的 inquirer 提示符对象
+  // injectPrompt 期望接收一个有效的 inquirer 对话对象
   api.injectPrompt({
     name: 'someFlag',
-    // 确认提示符只在用户已经选取了特性的时候展示
+    // 确认对话只在用户已经选取了特性的时候展示
     when: answers => answers.features.include('my-feature'),
     message: 'Do you want to turn on flag foo?',
     type: 'confirm'
   })
 
-  // 当所有的提示符都完成之后，将你的插件注入到
+  // 当所有的对话都完成之后，将你的插件注入到
   // 即将传递给 Generator 的 options 中
   api.onPromptComplete((answers, options) => {
     if (answers.features.includes('my-feature')) {
@@ -271,11 +298,11 @@ module.exports = api => {
 }
 ```
 
-#### 第三方插件的提示符
+#### 第三方插件的对话
 
 第三方插件通常会在一个项目创建完毕后被手动安装，且用户将会通过调用 `vue invoke` 来初始化这个插件。如果这个插件在其根目录包含一个 `prompt.js`，那么它将会用在该插件被初始化调用的时候。这个文件应该导出一个用于 Inquirer.js 的[问题](https://github.com/SBoudrias/Inquirer.js#question)的数组。这些被解析的答案对象会作为选项被传递给插件的 generator。
 
-或者，用户可以通过在命令行传递选项来跳过提示符直接初始化插件，比如：
+或者，用户可以通过在命令行传递选项来跳过对话直接初始化插件，比如：
 
 ``` bash
 vue invoke my-plugin --mode awesome

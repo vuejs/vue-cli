@@ -63,7 +63,7 @@ The cool part though is that there are no special deployment requirements. The g
 For a Hello World app, the modern bundle is already 16% smaller. In production, the modern bundle will typically result in significantly faster parsing and evaluation, improving your app's loading performance.
 
 ::: tip
-`<script type="module">` is loaded [with CORS always enabled](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). This means your server must return valid CORS headers such as `Access-Control-Allow-Origin: *`. If you want to fetch the scripts with credentials, use the [corsUseCredentials](../config/#corsusecredentials) option.
+`<script type="module">` is loaded [with CORS always enabled](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). This means your server must return valid CORS headers such as `Access-Control-Allow-Origin: *`. If you want to fetch the scripts with credentials, set the [crossorigin](../config/#crossorigin) option to `use-credentials`.
 
 Also, modern mode uses an inline script to avoid Safari 10 loading both bundles, so if you are using a strict CSP, you will need to explicitly allow the inline script with:
 

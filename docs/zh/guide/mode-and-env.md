@@ -18,6 +18,13 @@ VUE_APP_SECRET=secret
 
 被载入的变量将会对 `vue-cli-service` 的所有命令、插件和依赖可用。
 
+::: tip 环境加载属性
+
+为一个特定模式准备的环境文件的 (例如 `.env.production`) 将会比一般的环境文件 (例如 `.env`) 拥有更高的优先级。
+
+此外，Vue CLI 启动时已经存在的环境变量拥有最高优先级，并不会被 `.env` 文件覆写。如果在环境中有默认的 `NODE_ENV`，你可能需要考虑移除它。
+:::
+
 ## 模式
 
 **模式**是 Vue CLI 项目中一个重要的概念。默认情况下，一个 Vue CLI 项目有三个模式：
@@ -73,6 +80,10 @@ console.log(process.env.VUE_APP_SECRET)
 - `BASE_URL` - 会和 `vue.config.js` 中的 `baseUrl` 选项相符，即你的应用会部署到的基础路径。
 
 所有解析出来的环境变量都可以在 `public/index.html` 中以 [HTML 插值](./html-and-static-assets.md#插值)中介绍的方式使用。
+
+::: tip 提示
+你可以在 `vue.config.js` 文件中计算环境变量。它们仍然需要以 `VUE_APP_` 前缀开头。这可以用于版本信息 `process.env.VUE_APP_VERSION = require('./package.json').version`。
+:::
 
 ## 只在本地有效的变量
 

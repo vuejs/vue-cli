@@ -81,6 +81,7 @@ async function build (args, api, options) {
   const chalk = require('chalk')
   const webpack = require('webpack')
   const formatStats = require('./formatStats')
+  const validateWebpackConfig = require('../../util/validateWebpackConfig')
   const {
     log,
     done,
@@ -123,37 +124,15 @@ async function build (args, api, options) {
     webpackConfig = require('./resolveAppConfig')(api, args, options)
   }
 
+  // check for common config errors
+  validateWebpackConfig(webpackConfig, api, options, args.target)
+
   // apply inline dest path after user configureWebpack hooks
   // so it takes higher priority
   if (args.dest) {
     modifyConfig(webpackConfig, config => {
       config.output.path = targetDir
     })
-  }
-
-  // grab the actual output path and check for common mis-configuration
-  const actualTargetDir = (
-    Array.isArray(webpackConfig)
-      ? webpackConfig[0]
-      : webpackConfig
-  ).output.path
-
-  if (!args.dest && actualTargetDir !== api.resolve(options.outputDir)) {
-    // user directly modifies output.path in configureWebpack or chainWebpack.
-    // this is not supported because there's no way for us to give copy
-    // plugin the correct value this way.
-    throw new Error(
-      `\n\nConfiguration Error: ` +
-      `Avoid modifying webpack output.path directly. ` +
-      `Use the "outputDir" option instead.\n`
-    )
-  }
-
-  if (actualTargetDir === api.service.context) {
-    throw new Error(
-      `\n\nConfiguration Error: ` +
-      `Do not set output directory to project root.\n`
-    )
   }
 
   if (args.watch) {

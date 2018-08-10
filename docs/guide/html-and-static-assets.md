@@ -51,7 +51,8 @@ module.exports = {
     // or:
     // modify its options:
     config.plugin('prefetch').tap(options => {
-      options.fileBlackList.push([/myasyncRoute(.)+?\.js$/])
+      options[0].fileBlacklist = options[0].fileBlacklist || []
+      options[0].fileBlacklist.push([/myasyncRoute(.)+?\.js$/])
       return options
     })
   }
@@ -124,7 +125,22 @@ will be compiled into:
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-Internally, we use `file-loader` to determine the final file location with version hashes and correct public base paths, and use `url-loader` to conditionally inline assets that are smaller than 10kb, reducing the amount of HTTP requests.
+Internally, we use `file-loader` to determine the final file location with version hashes and correct public base paths, and use `url-loader` to conditionally inline assets that are smaller than 4kb, reducing the amount of HTTP requests.
+
+You can adjust the inline file size limit via [chainWebpack](../config/#chainwebpack). For example, to set the limit to 10kb instead:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('images')
+        .use('url-loader')
+          .loader('url-loader')
+          .tap(options => Object.assign(options, { limit: 10240 }))
+  }
+}
+```
 
 ### URL Transform Rules
 

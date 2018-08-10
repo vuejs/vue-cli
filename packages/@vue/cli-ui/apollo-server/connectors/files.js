@@ -1,4 +1,4 @@
-const launch = require('launch-editor')
+const { launch } = require('@vue/cli-shared-utils')
 const path = require('path')
 // Connectors
 const cwd = require('./cwd')
@@ -22,9 +22,7 @@ async function openInEditor (input, context) {
     message: `Opening file '${query}' in code editor...`,
     type: 'info'
   }, context)
-  launch(query, (fileName, errorMessage) => {
-    console.error(`Unable to open '${fileName}'`, errorMessage)
-  })
+  launch(query)
   return true
 }
 

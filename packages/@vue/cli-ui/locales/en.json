@@ -236,7 +236,7 @@
               "form": {
                 "folder": {
                   "label": "Project folder",
-                  "placeholder": "my-app",
+                  "placeholder": "Type a name",
                   "tooltip": "Change base folder",
                   "action": "Select this folder",
                   "folder-exists": "This folder already exists",

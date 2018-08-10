@@ -34,14 +34,18 @@ API 的用法示例：
 ```js
 api.describeConfig({
   // vue-i18n 路径
-  description: 'my-plugin.config.foo'
+  description: 'com.my-name.my-plugin.config.foo'
 })
 ```
+
+::: danger 危险
+请确定为 id 设置正确的命名空间，因为它需要跨所有插件保持唯一。我们推荐使用[反向域名记号 (reverse domain name notation)](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)。
+:::
 
 在组件中使用的示例：
 
 ```html
-<VueButton>{{ $t('my-plugin.actions.bar') }}</VueButton>
+<VueButton>{{ $t('com.my-name.my-plugin.actions.bar') }}</VueButton>
 ```
 
 如果你愿意的话，可以使用 `ClientAddonApi` 在一个客户端 addon 加载地区文件：

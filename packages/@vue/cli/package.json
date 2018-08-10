@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "3.0.0-rc.10",
+  "version": "3.0.0-rc.12",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -18,14 +18,14 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli#readme",
+  "homepage": "https://cli.vuejs.org/",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.0-rc.10",
-    "@vue/cli-ui": "^3.0.0-rc.10",
-    "@vue/cli-ui-addon-webpack": "^3.0.0-rc.10",
+    "@vue/cli-shared-utils": "^3.0.0-rc.12",
+    "@vue/cli-ui": "^3.0.0-rc.12",
+    "@vue/cli-ui-addon-webpack": "^3.0.0-rc.12",
     "chalk": "^2.4.1",
     "cmd-shim": "^2.0.2",
     "commander": "^2.16.0",
@@ -42,7 +42,6 @@
     "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.12.0",
     "klaw-sync": "^4.0.0",
-    "launch-editor": "^2.2.1",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.0",
     "recast": "^0.15.2",

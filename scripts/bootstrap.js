@@ -38,7 +38,7 @@ files.forEach(pkg => {
       'bugs': {
         'url': 'https://github.com/vuejs/vue-cli/issues'
       },
-      'homepage': `https://github.com/vuejs/vue-cli/packages/@vue/${pkg}#readme`
+      'homepage': `https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/${pkg}#readme`
     }
     fs.writeFileSync(pkgPath, JSON.stringify(json, null, 2))
   }

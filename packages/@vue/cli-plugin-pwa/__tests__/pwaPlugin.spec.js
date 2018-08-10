@@ -1,4 +1,4 @@
-jest.setTimeout(40000)
+jest.setTimeout(50000)
 
 const path = require('path')
 const portfinder = require('portfinder')
@@ -30,10 +30,10 @@ test('pwa', async () => {
   const index = await project.read('dist/index.html')
 
   // should split and preload app.js & vendor.js
-  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js rel=preload>/)
-  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js rel=preload>/)
+  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js rel=preload as=script>/)
+  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js rel=preload as=script>/)
   // should preload css
-  expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload>/)
+  expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload as=style>/)
 
   // PWA specific directives
   expect(index).toMatch(`<link rel=manifest href=/manifest.json>`)
@@ -66,6 +66,10 @@ test('pwa', async () => {
 })
 
 afterAll(async () => {
-  await browser.close()
-  server.close()
+  if (browser) {
+    await browser.close()
+  }
+  if (server) {
+    server.close()
+  }
 })

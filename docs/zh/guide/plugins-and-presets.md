@@ -6,6 +6,10 @@ Vue CLI 使用了一套基于插件的架构。如果你查阅一个新创建项
 
 基于插件的架构使得 Vue CLI 灵活且可扩展。如果你对开发一个插件感兴趣，请翻阅[插件开发指南](../dev-guide/plugin-dev.md)。
 
+::: tip
+你可以通过 `vue ui` 命令使用 GUI 安装和管理插件。
+:::
+
 ### 在现有的项目中安装插件
 
 每个 CLI 插件都会包含一个 (用来创建文件的) 生成器和一个 (用来调整 webpack 核心配置和注入命令的) 运行时插件。当你使用 `vue create` 来创建一个新项目的时候，有些插件会根据你选择的特性被预安装好。如果你想在一个已经被创建好的项目中安装一个插件，可以使用 `vue add` 命令：
@@ -56,6 +60,46 @@ vue add vuex
 ```
 
 如果一个插件已经被安装，你可以使用 `vue invoke` 命令跳过安装过程，只调用它的生成器。这个命令会接受和 `vue add` 相同的参数。
+
+::: tip 提示
+如果出于一些原因你的插件列在了该项目之外的其它 `package.json` 文件里，你可以在自己项目的 `package.json` 里设置 `vuePlugins.resolveFrom` 选项指向包含其它 `package.json` 的文件夹。
+
+例如，如果你有一个 `.config/package.json` 文件：
+
+```json
+{
+  "vuePlugins": {
+    "resolveFrom": ".config"
+  }
+}
+```
+:::
+
+### 项目本地的插件
+
+如果你需要在项目里直接访问插件 API 而不需要创建一个完整的插件，你可以在 `package.json` 文件中使用 `vuePlugins.service` 选项：
+
+```json
+{
+  "vuePlugins": {
+    "service": ["my-commands.js"]
+  }
+}
+```
+
+每个文件都需要暴露一个函数，接受插件 API 作为第一个参数。关于插件 API 的更多信息可以查阅[插件开发指南](../dev-guide/plugin-dev.md)。
+
+你也可以通过 `vuePlugins.ui` 选项添加像 UI 插件一样工作的文件：
+
+```json
+{
+  "vuePlugins": {
+    "ui": ["my-ui.js"]
+  }
+}
+```
+
+更多信息请阅读 [UI 插件 API](../dev-guide/ui-api.md)。
 
 ## Preset
 
@@ -136,7 +180,13 @@ Preset 的数据会被插件生成器用来生成相应的项目文件。除了�
 
 ### 远程 Preset
 
-你可以通过发布 git repo 将一个 preset 分享给其他开发者。这个 repo 应该包含一个包含了 preset 数据的 `preset.json` 文件。然后你就可以在创建项目的时候通过 `--preset` 选项使用这个远程的 preset 了：
+你可以通过发布 git repo 将一个 preset 分享给其他开发者。这个 repo 应该包含以下文件：
+
+- `preset.json`: 包含 preset 数据的主要文件（必需）。
+- `generator.js`: 一个可以注入或是修改项目中文件的 [Generator](../dev-guide/plugin-dev.md#generator)。
+- `prompts.js` 一个可以通过命令行对话为 generator 收集选项的 [prompts 文件](../dev-guide/plugin-dev.md#第三方插件的对话)。
+
+发布 repo 后，你就可以在创建项目的时候通过 `--preset` 选项使用这个远程的 preset 了：
 
 ``` bash
 # 从 GitHub repo 使用 preset
@@ -152,8 +202,12 @@ vue create --preset bitbucket:username/repo --clone my-project
 
 ### 加载文件系统中的 Preset
 
-当开发一个远程 preset 的时候，你必须不厌其烦的向远程 repo 发出 push 进行反复测试。为了简化这个流程，`--preset` 标记也支持本地的 `.json` 文件：
+当开发一个远程 preset 的时候，你必须不厌其烦的向远程 repo 发出 push 进行反复测试。为了简化这个流程，你也可以直接在本地测试 preset。如果 `--preset` 选项的值是一个相对或绝对文件路径，或是以 `.json` 结尾，则 Vue CLI 会加载本地的 preset：
 
 ``` bash
-vue create --preset local.json my-project
+# ./my-preset 应当是一个包含 preset.json 的文件夹
+vue create --preset ./my-preset my-project
+
+# 或者，直接使用当前工作目录下的 json 文件：
+vue create --preset my-preset.json
 ```

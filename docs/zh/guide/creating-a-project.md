@@ -1,19 +1,5 @@
 # 创建一个项目
 
-## 安装
-
-::: tip Node 版本要求
-Vue CLI 需要 [Node.js](https://nodejs.org/) v8 或更高版本 (推荐 8.10.0+)。你可以使用 [nvm](https://github.com/creationix/nvm) 或 [nvm-windows](https://github.com/coreybutler/nvm-windows) 在同一台机器上同时管理多个 Node 版本。
-:::
-
-``` bash
-npm install -g @vue/cli
-# 或者
-yarn global add @vue/cli
-```
-
-安装好之后，你就可以在命令后中访问 `vue` 命令了。运行 `vue` 会看到所有可用的命令构成的一段帮助信息，你可以通过它来确认安装是否成功。
-
 ## vue create
 
 运行以下命令来创建一个新项目：
@@ -21,6 +7,10 @@ yarn global add @vue/cli
 ``` bash
 vue create hello-world
 ```
+
+::: warning 警告
+如果你在 Windows 上通过 minTTY 使用 Git Bash，交互提示符并不工作。你必须通过 `winpty vue.cmd create hello-world` 启动这个命令。
+:::
 
 你会被提示选取一个 preset。你可以选默认的包含了基本的 Babel + ESLint 设置的 preset，也可以选“手动选择特性”来选取需要的特性。
 
@@ -58,9 +48,11 @@ vue create --help
   -m, --packageManager <command>  在安装依赖时使用指定的 npm 客户端
   -r, --registry <url>            在安装依赖时使用指定的 npm registry (仅用于 npm 客户端)
   -g, --git [message]             强制 / 跳过 git 初始化，并可选的指定初始化提交信息
+  -n, --no-git                    跳过 git 初始化
   -f, --force                     覆写目标目录可能存在的配置
   -c, --clone                     使用 git clone 获取远程预设选项
   -x, --proxy                     使用指定的代理创建项目
+  -b, --bare                      创建项目时省略默认组件中的新手指导信息
   -h, --help                      输出使用帮助信息
 ```
 

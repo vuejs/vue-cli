@@ -1,3 +1,149 @@
+# [3.0.0-rc.12](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.11...v3.0.0-rc.12) (2018-08-09)
+
+## cli
+
+#### Features
+
+* support generator.js and prompts.js in preset ([3b21fad](https://github.com/vuejs/vue-cli/commit/3b21fad))
+
+## cli-service
+
+#### Bug Fixes
+
+* avoid os.cpus() error in certain envs ([327d041](https://github.com/vuejs/vue-cli/commit/327d041)), closes [#2110](https://github.com/vuejs/vue-cli/issues/2110)
+#### Code Refactoring
+
+* use better modern mode and cors implementation ([7b39bed](https://github.com/vuejs/vue-cli/commit/7b39bed))
+#### Features
+
+* support Subresource Integrity via `integrity` option ([55043d3](https://github.com/vuejs/vue-cli/commit/55043d3))
+
+## cli-service-global
+
+#### Bug Fixes
+
+* install vue-template-compiler for global service ([c42cb94](https://github.com/vuejs/vue-cli/commit/c42cb94))
+
+## cli-ui
+
+#### Bug Fixes
+
+* **build:** wrong arg name, closes [#2067](https://github.com/vuejs/vue-cli/issues/2067) ([fe66a44](https://github.com/vuejs/vue-cli/commit/fe66a44))
+
+## other
+
+#### Bug Fixes
+
+* ensure consistent build hash with different project locations ([9e4d62c](https://github.com/vuejs/vue-cli/commit/9e4d62c))
+
+
+### BREAKING CHANGES
+
+* The `corsUseCredentials` option has been replaced by the new
+`crossorigin` option.
+
+
+
+# [3.0.0-rc.11](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.10...v3.0.0-rc.11) (2018-08-07)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* fix Promise.finally missing in Firefox ([b20f624](https://github.com/vuejs/vue-cli/commit/b20f624)), closes [#2012](https://github.com/vuejs/vue-cli/issues/2012)
+
+## cli
+
+#### Bug Fixes
+
+* temporarily avoid chalk color in options ([#2042](https://github.com/vuejs/vue-cli/issues/2042)) ([31710fe](https://github.com/vuejs/vue-cli/commit/31710fe))
+#### Features
+
+* **create:** more descriptions and links ([9f9ddb1](https://github.com/vuejs/vue-cli/commit/9f9ddb1))
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* babel cache should take browserslist into account ([356eef6](https://github.com/vuejs/vue-cli/commit/356eef6))
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* **e2e-cypress:** merge --config option for cypress ([#2048](https://github.com/vuejs/vue-cli/issues/2048)) ([d210e78](https://github.com/vuejs/vue-cli/commit/d210e78)), closes [#2047](https://github.com/vuejs/vue-cli/issues/2047)
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* **cli-plugin-eslint:** remove base rules from ui ([#2029](https://github.com/vuejs/vue-cli/issues/2029)) ([1e10161](https://github.com/vuejs/vue-cli/commit/1e10161))
+* eslint plugin module loading in workspaces ([185ae6d](https://github.com/vuejs/vue-cli/commit/185ae6d))
+#### Features
+
+* rework eslint configuration tab to display all rules ([#2008](https://github.com/vuejs/vue-cli/issues/2008)) ([7953d83](https://github.com/vuejs/vue-cli/commit/7953d83))
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **tslint:** also lint tsx blocks ([55f4c5f](https://github.com/vuejs/vue-cli/commit/55f4c5f))
+* **typescript:** explicitly enable allowSyntheticDefaultImports ([350f77b](https://github.com/vuejs/vue-cli/commit/350f77b))
+* **typescript:** prevent compilation error when using src attribute on sfc ([#2068](https://github.com/vuejs/vue-cli/issues/2068)) ([7706dcf](https://github.com/vuejs/vue-cli/commit/7706dcf))
+* **typescript:** tsconfig whitespace ([#2046](https://github.com/vuejs/vue-cli/issues/2046)) ([437f56c](https://github.com/vuejs/vue-cli/commit/437f56c))
+* **typescript:** use esnext in lib ([#2045](https://github.com/vuejs/vue-cli/issues/2045)) ([5838096](https://github.com/vuejs/vue-cli/commit/5838096))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* **jest:** make sure jest tests work without babel ([99761b3](https://github.com/vuejs/vue-cli/commit/99761b3)), closes [#2040](https://github.com/vuejs/vue-cli/issues/2040)
+
+## cli-plugin-unit-mocha
+
+#### Features
+
+* **service:** Enable inspector debugging for unit test by mocha ([#2013](https://github.com/vuejs/vue-cli/issues/2013)) ([2243515](https://github.com/vuejs/vue-cli/commit/2243515))
+
+## cli-service
+
+#### Bug Fixes
+
+* **css:** fix importLoaders which only applies to plain CSS imports ([4220835](https://github.com/vuejs/vue-cli/commit/4220835)), closes [#2055](https://github.com/vuejs/vue-cli/issues/2055)
+* **pwa:** workaround index sw manifest path when using relative indexPath ([68aaa8f](https://github.com/vuejs/vue-cli/commit/68aaa8f)), closes [#2007](https://github.com/vuejs/vue-cli/issues/2007)
+* avoid crashing when adding router via UI ([128d9d9](https://github.com/vuejs/vue-cli/commit/128d9d9)), closes [#2034](https://github.com/vuejs/vue-cli/issues/2034)
+* defensive html chunk sorting ([495c25a](https://github.com/vuejs/vue-cli/commit/495c25a)), closes [#1993](https://github.com/vuejs/vue-cli/issues/1993)
+* make vue-template-compiler a peer dep to allow version pinning ([fd839b5](https://github.com/vuejs/vue-cli/commit/fd839b5)), closes [#2086](https://github.com/vuejs/vue-cli/issues/2086)
+#### Features
+
+* respect devServer field in webpack config as well ([3894a4a](https://github.com/vuejs/vue-cli/commit/3894a4a)), closes [#2053](https://github.com/vuejs/vue-cli/issues/2053)
+* support --bare flag when creating new projects ([c6ca93e](https://github.com/vuejs/vue-cli/commit/c6ca93e)), closes [#2030](https://github.com/vuejs/vue-cli/issues/2030)
+
+## cli-ui
+
+#### Bug Fixes
+
+* **deps:** more robust isInstalled ([9079d3e](https://github.com/vuejs/vue-cli/commit/9079d3e))
+* **filediff:** expand all don't expand files collapsed by default (like yarn.lock) ([3bda824](https://github.com/vuejs/vue-cli/commit/3bda824))
+* change new project folder input placeholder, closes [#2069](https://github.com/vuejs/vue-cli/issues/2069) ([4c8c3e9](https://github.com/vuejs/vue-cli/commit/4c8c3e9))
+#### Features
+
+* support ANSI colors in ListItemInfo ([8c96c15](https://github.com/vuejs/vue-cli/commit/8c96c15))
+* **file-diff:** syntax highlighting, better background colors ([196c84c](https://github.com/vuejs/vue-cli/commit/196c84c))
+
+## docs
+
+#### Features
+
+* allow enfoce extract css in development ([686ec25](https://github.com/vuejs/vue-cli/commit/686ec25)), closes [#2002](https://github.com/vuejs/vue-cli/issues/2002)
+
+
+### BREAKING CHANGES
+
+* setting css.extract to true will now force extraction in development
+
+
+
 # [3.0.0-rc.10](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.9...v3.0.0-rc.10) (2018-07-30)
 
 ## cli

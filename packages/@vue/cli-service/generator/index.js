@@ -7,10 +7,10 @@ module.exports = (api, options) => {
       'build': 'vue-cli-service build'
     },
     dependencies: {
-      'vue': '^2.5.16'
+      'vue': '^2.5.17'
     },
     devDependencies: {
-      'vue-template-compiler': '^2.5.16'
+      'vue-template-compiler': '^2.5.17'
     },
     'postcss': {
       'plugins': {

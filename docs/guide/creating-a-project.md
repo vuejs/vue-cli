@@ -48,10 +48,12 @@ Options:
   -m, --packageManager <command>  Use specified npm client when installing dependencies
   -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
   -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
+  -n, --no-git                    Skip git initialization
   -f, --force                     Overwrite target directory if it exists
   -c, --clone                     Use git clone when fetching remote preset
-  -x, --proxy                     Use specified proxy when creating project
-  -h, --help                      output usage information
+  -x, --proxy                     Use specified proxy when creating project   
+  -b, --bare                      Scaffold project without beginner instructions
+  -h, --help                      Output usage information
 ```
 
 ## Using the GUI

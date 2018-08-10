@@ -1,4 +1,5 @@
-@import "imports"
+@import '~prismjs/themes/prism.css'
+@import 'imports'
 
 html,
 body,
@@ -160,3 +161,26 @@ ansi-colors('white', $vue-ui-color-light)
     align-items flex-start
     .shell
       margin-top 42px
+
+// Syntax highlighting
+.token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string
+  background none !important
+
+.vue-ui-dark-mode
+  .token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol, .token.deleted
+    color lighten(#905, 40%)
+  
+  .token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted
+    color lighten(#690, 40%)
+
+  .token.atrule, .token.attr-value, .token.keyword
+    color lighten(#07a, 40%)
+
+  .token.function, .token.class-name
+    color lighten(#dd4a68, 30%)
+
+  .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string
+    color lighten(#9a6e3a, 20%)
+  
+  .token.punctuation
+    color lighten(#999, 20%)

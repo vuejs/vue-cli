@@ -67,12 +67,16 @@
     "request-promise-native": "^1.0.5",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
-    "vuepress": "^0.11.0",
-    "vuepress-theme-vue": "^1.0.3",
-    "yorkie": "^1.0.2"
+    "vuepress": "^0.14.0",
+    "vuepress-theme-vue": "^1.1.0",
+    "yorkie": "^2.0.0"
   },
   "resolutions": {
     "fs-monkey": "0.3.1",
-    "babel-core": "7.0.0-bridge.0"
+    "babel-core": "7.0.0-bridge.0",
+    "vue": "2.5.17",
+    "vue-loader": "15.3.0",
+    "vue-template-compiler": "2.5.17",
+    "vue-server-renderer": "2.5.17"
   }
 }

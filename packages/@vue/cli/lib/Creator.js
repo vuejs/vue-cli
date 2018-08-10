@@ -1,9 +1,9 @@
-const EventEmitter = require('events')
-const fs = require('fs-extra')
+const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
 const inquirer = require('inquirer')
+const EventEmitter = require('events')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
@@ -13,7 +13,8 @@ const { clearConsole } = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
 const { formatFeatures } = require('./util/features')
-const fetchRemotePreset = require('./util/fetchRemotePreset')
+const loadLocalPreset = require('./util/loadLocalPreset')
+const loadRemotePreset = require('./util/loadRemotePreset')
 const generateReadme = require('./util/generateReadme')
 
 const {
@@ -113,8 +114,13 @@ module.exports = class Creator extends EventEmitter {
     }
     const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
-      pkg.devDependencies[dep] = preset.plugins[dep].version ||
+      if (preset.plugins[dep]._isPreset) {
+        return
+      }
+      pkg.devDependencies[dep] = (
+        preset.plugins[dep].version ||
         (/^@vue/.test(dep) ? `^${latest}` : `latest`)
+      )
     })
     // write package.json
     await writeFileTree(context, {
@@ -267,13 +273,13 @@ module.exports = class Creator extends EventEmitter {
 
     if (name in savedPresets) {
       preset = savedPresets[name]
-    } else if (name.endsWith('.json')) {
-      preset = await fs.readJson(name)
+    } else if (name.endsWith('.json') || /^[./\\]/.test(name)) {
+      preset = await loadLocalPreset(path.resolve(name))
     } else if (name.includes('/')) {
       logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
       this.emit('creation', { event: 'fetch-remote-preset' })
       try {
-        preset = await fetchRemotePreset(name, clone)
+        preset = await loadRemotePreset(name, clone)
         stopSpinner()
       } catch (e) {
         stopSpinner()
@@ -312,7 +318,8 @@ module.exports = class Creator extends EventEmitter {
       if (options.prompts) {
         const prompts = loadModule(`${id}/prompts`, this.context)
         if (prompts) {
-          console.log(`\n${chalk.cyan(id)}`)
+          log()
+          log(`${chalk.cyan(options._isPreset ? `Preset options:` : id)}`)
           options = await inquirer.prompt(prompts)
         }
       }

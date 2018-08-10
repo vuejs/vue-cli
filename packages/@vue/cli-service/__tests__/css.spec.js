@@ -57,7 +57,7 @@ test('default loaders', () => {
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
-      importLoaders: lang === 'css' ? 2 : 3
+      importLoaders: 2
     })
   })
   // sass indented syntax
@@ -71,7 +71,7 @@ test('production defaults', () => {
     expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
-      importLoaders: lang === 'css' ? 2 : 3
+      importLoaders: 2
     })
   })
 })
@@ -86,7 +86,7 @@ test('CSS Modules rules', () => {
   })
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: lang === 'css' ? 1 : 2, // no postcss-loader
+      importLoaders: 1, // no postcss-loader
       localIdentName: `[name]_[local]_[hash:base64:5]`,
       sourceMap: false,
       modules: true

@@ -7,6 +7,7 @@
   'object',
   'openBrowser',
   'pluginResolution',
+  'launch',
   'request',
   'spinner',
   'validate'

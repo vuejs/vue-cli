@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "3.0.0-rc.10",
+  "version": "3.0.0-rc.12",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -17,14 +17,14 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-typescript#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-typescript#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@types/node": "^10.5.2",
-    "@vue/cli-shared-utils": "^3.0.0-rc.10",
-    "fork-ts-checker-webpack-plugin": "^0.4.3",
+    "@vue/cli-shared-utils": "^3.0.0-rc.12",
+    "fork-ts-checker-webpack-plugin": "^0.4.4",
     "globby": "^8.0.1",
     "ts-loader": "^4.4.2",
     "tslint": "^5.10.0"

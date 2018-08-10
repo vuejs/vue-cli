@@ -22,7 +22,11 @@ Loaded variables will become available to all `vue-cli-service` commands, plugin
 
 An env file for a specific mode (e.g. `.env.production`) will take higher priority than a generic one (e.g. `.env`).
 
-In addition, environment variables that already exist when Vue CLI is bootstrapped have the highest priority and will not be overwritten by `.env` files. If you have a default `NODE_ENV` in your environment, you might want to consider removing it.
+In addition, environment variables that already exist when Vue CLI is bootstrapped have the highest priority and will not be overwritten by `.env` files.
+:::
+
+::: warning NODE_ENV
+If you have a default `NODE_ENV` in your environment, you should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands.
 :::
 
 ## Modes

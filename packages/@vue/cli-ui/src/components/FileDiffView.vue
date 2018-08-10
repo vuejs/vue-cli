@@ -208,7 +208,9 @@ export default {
     setCollapsedToAll (value) {
       const map = {}
       this.fileDiffs.forEach(fileDiff => {
-        map[fileDiff.id] = value
+        map[fileDiff.id] = value ||
+          defaultCollapsed.includes(fileDiff.from) ||
+          defaultCollapsed.includes(fileDiff.to)
       })
       this.collapsed = map
     },
