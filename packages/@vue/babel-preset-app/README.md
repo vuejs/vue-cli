@@ -39,6 +39,8 @@ If you need additional stage 3 or below features, you need to install and config
 
 ## Options
 
+- All options from [@babel/preset-env](https://babeljs.io/docs/en/next/babel-preset-env.html) are supported, with some of them having smarter defaults.
+
 ### modules
 
 - Default:
@@ -63,6 +65,8 @@ Explicitly set `targets` option for `babel-preset-env`. See [babel-preset-env do
 Explicitly set `useBuiltIns` option for `babel-preset-env`.
 
 The default value is `'usage'`, which adds imports to polyfills based on the usage in transpiled code. For example, if you use `Object.assign` in your code, the corresponding polyfill will be auto-imported if your target environment does not supports it.
+
+If you are building a library or web component instead of an app, you probably want to set this to `false` and let the consuming app be responsible for the polyfills.
 
 Note that the usage detection does not apply to your dependencies (which are excluded by `cli-plugin-babel` by default). If one of your dependencies need polyfills, you have a few options:
 

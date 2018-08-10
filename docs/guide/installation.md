@@ -1,6 +1,6 @@
 # Installation
 
-::: danger
+::: warning Warning regarding Previous Versions
 The package name changed from `vue-cli` to `@vue/cli`.
 If you have the previous `vue-cli` (1.x or 2.x) package installed globally, you need to uninstall it first with `npm uninstall vue-cli -g` or `yarn global remove vue-cli`.
 :::

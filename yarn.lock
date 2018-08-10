@@ -12581,9 +12581,9 @@ vuepress-theme-vue@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/vuepress-theme-vue/-/vuepress-theme-vue-1.1.0.tgz#8b109e3db8cad7b18459f4d77076808110c2bcaa"
 
-vuepress@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/vuepress/-/vuepress-0.14.0.tgz#4281d0576651de05ad07cb5e8982052f8db9d14d"
+vuepress@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/vuepress/-/vuepress-0.14.1.tgz#4b3fc46601ce2fd8ff2265a2e39098b9f9580c58"
   dependencies:
     "@babel/core" "7.0.0-beta.47"
     "@vue/babel-preset-app" "3.0.0-beta.11"

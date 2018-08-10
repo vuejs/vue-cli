@@ -151,10 +151,10 @@ module.exports = {
 - If the URL starts with `~`, anything after it is interpreted as a module request. This means you can even reference assets inside node modules:
 
   ``` html
-  <img src="~/some-npm-package/foo.png">
+  <img src="~some-npm-package/foo.png">
   ```
 
-- If the URL starts with `@`, it's also interpreted as a module request. This is useful because Vue CLI by default aliases `@` to `<projectRoot>/src`.
+- If the URL starts with `@`, it's also interpreted as a module request. This is useful because Vue CLI by default aliases `@` to `<projectRoot>/src`. **(templates only)**
 
 ### The `public` Folder
 
