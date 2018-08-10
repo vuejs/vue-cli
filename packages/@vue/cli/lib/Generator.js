@@ -58,6 +58,13 @@ const reservedConfigTransforms = {
   })
 }
 
+const ensureEOL = str => {
+  if (str.charAt(str.length - 1) !== '\n') {
+    return str + '\n'
+  }
+  return str
+}
+
 module.exports = class Generator {
   constructor (context, {
     pkg = {},
@@ -109,7 +116,7 @@ module.exports = class Generator {
     await this.resolveFiles()
     // set package.json
     this.sortPkg()
-    this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
+    this.files['package.json'] = JSON.stringify(this.pkg, null, 2) + '\n'
     // write/update file tree to disk
     await writeFileTree(this.context, this.files, initialFiles)
   }
@@ -136,7 +143,7 @@ module.exports = class Generator {
           this.context
         )
         const { content, filename } = res
-        this.files[filename] = content
+        this.files[filename] = ensureEOL(content)
         delete this.pkg[key]
       }
     }
