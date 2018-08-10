@@ -175,7 +175,7 @@ module.exports = {
 
   Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (`public/index.html`) are not affected.
 
-  See also: [CROS setting attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
+  See also: [CORS setting attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
 
 ### integrity
 
