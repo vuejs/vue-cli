@@ -41,9 +41,13 @@ module.exports = (api, options) => {
     const prepareURLs = require('../util/prepareURLs')
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
+    const validateWebpackConfig = require('../util/validateWebpackConfig')
 
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
+
+    // check for common config errors
+    validateWebpackConfig(webpackConfig, api, options)
 
     // load user devServer options with higher priority than devServer
     // in webpck config
