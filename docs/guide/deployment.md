@@ -23,6 +23,27 @@ If you are using Vue Router in `history` mode, a simple static file server will 
 
 To fix that, you will need to configure your production server to fallback to `index.html` for any requests that do not match a static file. The Vue Router docs provides [configuration instructions for common server setups](https://router.vuejs.org/guide/essentials/history-mode.html).
 
+#### `nginx` config to `history.pushState`
+
+    ``` js
+    // vue.config.js
+    module.exports = {
+      assetsDir: 'static'
+    }
+    ```
+
+    ``` nginx
+    server {
+      location /static/ {
+        alias /dist/static/;
+      }
+      location / {
+        root /dist/;
+        rewrite / /index.html break;
+      }
+    }
+    ```
+
 ### CORS
 
 If your static frontend is deployed to a different domain from your backend API, you will need to properly configure [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
