@@ -96,7 +96,7 @@ exports.defaults = () => ({
   crossorigin: undefined,
 
   // subresource integrity
-  integreity: false,
+  integrity: false,
 
   css: {
     // extract: true,
