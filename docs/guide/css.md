@@ -2,6 +2,10 @@
 
 Vue CLI projects comes with support for [PostCSS](http://postcss.org/), [CSS Modules](https://github.com/css-modules/css-modules) and pre-processors including [Sass](https://sass-lang.com/), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
 
+## Referencing Assets
+
+All compiled CSS are processed by [css-loader](https://github.com/webpack-contrib/css-loader), which parses `url()` and resolves them as module requests. This means you can refer to assets using relative paths based on the local file structure. Note if you want to reference a file inside an npm dependency or via webpack alias, the path must be prefixed with `~` to avoid ambiguity. See [Static Asset Handling](./html-and-static-assets.md#static-assets-handling) for more details.
+
 ## Pre-Processors
 
 You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, the internal webpack config is still pre-configured to handle all of them. You just need to manually install the corresponding webpack loaders:

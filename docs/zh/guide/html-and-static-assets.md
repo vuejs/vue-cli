@@ -139,7 +139,7 @@ h('img', { attrs: { src: require('./image.png') }})
   <img src="~/some-npm-package/foo.png">
   ```
 
-- 如果 URL 以 `@` 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 `<projectRoot>/src` 的别名 `@`。
+- 如果 URL 以 `@` 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 `<projectRoot>/src` 的别名 `@`。**(仅作用于模版中)**
 
 ### `public` 文件夹
 

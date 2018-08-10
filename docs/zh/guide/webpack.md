@@ -1,4 +1,4 @@
-# 配合 webpack
+# webpack 相关
 
 ## 简单的配置方式
 
