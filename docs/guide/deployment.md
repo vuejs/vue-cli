@@ -25,24 +25,25 @@ To fix that, you will need to configure your production server to fallback to `i
 
 #### `nginx` config to `history.pushState`
 
-    ``` js
-    // vue.config.js
-    module.exports = {
-      assetsDir: 'static'
-    }
-    ```
+``` js
+// vue.config.js
+module.exports = {
+  assetsDir: 'static'
+}
+```
 
-    ``` nginx
-    server {
-      location /static/ {
-        alias /dist/static/;
-      }
-      location / {
-        root /dist/;
-        rewrite / /index.html break;
-      }
-    }
-    ```
+``` nginx
+# nginx conf
+server {
+  location /static/ {
+    alias /dist/static/;
+  }
+  location / {
+    root /dist/;
+    rewrite / /index.html break;
+  }
+}
+```
 
 ### CORS
 
