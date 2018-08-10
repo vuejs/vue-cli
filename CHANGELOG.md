@@ -1,3 +1,13 @@
+# [3.0.0](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.12...v3.0.0) (2018-08-10)
+
+## other
+
+#### Bug Fixes
+
+* avoid adding githooks if created as sub dir in existing git repo ([ba75e29](https://github.com/vuejs/vue-cli/commit/ba75e29)), closes [#2131](https://github.com/vuejs/vue-cli/issues/2131)
+
+
+
 # [3.0.0-rc.12](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.11...v3.0.0-rc.12) (2018-08-09)
 
 ## cli
