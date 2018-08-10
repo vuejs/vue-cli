@@ -51,7 +51,8 @@ module.exports = {
     // ИЛИ
     // изменяем его настройки:
     config.plugin('prefetch').tap(options => {
-      options.fileBlackList.push([/myasyncRoute(.)+?\.js$/])
+      options[0].fileBlacklist = options[0].fileBlacklist || []
+      options[0].fileBlacklist.push([/myasyncRoute(.)+?\.js$/])
       return options
     })
   }
@@ -124,7 +125,22 @@ module.exports = {
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-Внутри используется `file-loader` для определения конечного расположения файла с хэшем версии и правильный путь относительно корня, а также `url-loader` для встраивания ресурсов инлайн чей размер  меньше 10КБайт, что уменьшит количество HTTP-запросов к серверу.
+Внутри используется `file-loader` для определения конечного расположения файла с хэшем версии и правильный путь относительно корня, а также `url-loader` для встраивания ресурсов инлайн чей размер  меньше 4 КБайт, чтобы уменьшить количество HTTP-запросов к серверу.
+
+Изменить размер можно через [chainWebpack](../config/#chainwebpack). Например, чтобы установить лимит в 10 КБайт:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('images')
+        .use('url-loader')
+          .loader('url-loader')
+          .tap(options => Object.assign(options, { limit: 10240 }))
+  }
+}
+```
 
 ### Правила преобразования URL
 

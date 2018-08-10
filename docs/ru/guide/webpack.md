@@ -87,7 +87,7 @@ module.exports = {
 
 ### Замена загрузчиков для правила
 
-Если вы хотите заменить существующий [базовый загрузчик](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), например использовать `vue-svg-loader` для вставки SVG-файлов инлайн вместо загрузки обычными файлами:
+Если вы хотите заменить существующий [базовый загрузчик](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), например воспользоваться `vue-svg-loader` для вставки SVG-файлов инлайн вместо загрузки обычными файлами:
 
 ``` js
 // vue.config.js
@@ -182,10 +182,10 @@ vue inspect --plugins
 
 ## Использование файла итоговой конфигурации
 
-Некоторым внешним инструментам может потребоваться файл итоговой конфигурации webpack, например для IDE или утилит командной строки, которым необходимо указать путь до конфигурации webpack. В этом случае вы можете использовать следующий путь:
+Некоторым инструментам может потребоваться файл итоговой конфигурации webpack, например для IDE или утилит командной строки, которым необходимо указывать путь до конфигурации webpack. В таком случае вы можете использовать следующий путь:
 
 ```
 <projectRoot>/node_modules/@vue/cli-service/webpack.config.js
 ```
 
-This file dynamically resolves and exports the exact same webpack config used in `vue-cli-service` commands, including those from plugins and even your custom configurations.
+Этот файл динамически разрешается и экспортирует ту же конфигурацию webpack, которая используется в командах `vue-cli-service`, в том числе из плагинов и даже ваших пользовательских конфигураций.

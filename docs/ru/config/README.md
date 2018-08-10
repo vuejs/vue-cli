@@ -80,14 +80,14 @@ module.exports = {
 
 - Тип: `string`
 - По умолчанию: `'index.html'`
-  
+
   Путь к сгенерированному `index.html` (относительно `outputDir`). Также можно указать абсолютный путь.
 
 ### filenameHashing
 
 - Тип: `boolean`
 - По умолчанию: `true`
-  
+
   По умолчанию генерируемые статические ресурсы содержат хэши в именах файлов для лучшего управления кэшированием. Однако для этого требуется чтобы индексный HTML автоматически генерировался Vue CLI. Если вы не можете использовать индексный HTML, генерируемый CLI, вы можете отключить хэширование в именах файлов, установив этот параметр в значение `false`.
 
 ### pages
@@ -162,12 +162,27 @@ module.exports = {
 
   Установив в значение `false` можно ускорить сборку для production, если вам не требуются source maps для production.
 
-### corsUseCredentials
+### crossorigin
+
+- Тип: `string`
+- По умолчанию: `undefined`
+
+  Настройка атрибута `crossorigin` на тегах `<link rel="stylesheet">` и `<script>` в сгенерированном HTML.
+
+  Обратите внимание, это повлияет только на теги внедряемые `html-webpack-plugin` — теги добавленные непосредственно в шаблон (`public/index.html`) не затрагиваются.
+
+  См. также: [настройка атрибутов CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
+
+### integrity
 
 - Тип: `boolean`
 - По умолчанию: `false`
 
-  В современном режиме сгенерированный HTML включает в себя `<script type="module">`, который [загружается всегда с помощью CORS](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). По умолчанию он обрабатывается как `crossorigin="anonymous"`, но установив значение опции в `true` будет использоваться `crossorigin="use-credentials"`.
+  Установите в значение `true` чтобы использовать [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) (SRI) на тегах `<link rel="stylesheet">` и `<script>` в сгенерированном HTML. Если файлы сборки будут размещены на CDN, то рекомендуется включить опцию для дополнительной безопасности.
+
+  Обратите внимание, это повлияет только на теги внедряемые `html-webpack-plugin` — теги добавленные непосредственно в шаблон (`public/index.html`) не затрагиваются.
+
+  Кроме того, когда включён SRI, подсказки ресурсов для предзагрузки отключены из-за [ошибки в Chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=677022), которая заставляет ресурсы загружаться дважды.
 
 ### configureWebpack
 

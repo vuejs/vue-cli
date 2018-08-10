@@ -202,7 +202,45 @@ Please refer on the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-> TODO | Присылайте пулл-реквесты.
+1. Установите глобально Now CLI: `npm install -g now`
+
+2. Добавьте файл `now.json` в корневой каталог проекта:
+
+    ```json
+    {
+      "name": "my-example-app",
+      "type": "static",
+      "static": {
+        "public": "dist",
+        "rewrites": [
+          {
+            "source": "**",
+            "destination": "/index.html"
+          }
+        ]
+      },
+      "alias": "vue-example",
+      "files": [
+        "dist"
+      ]
+    }
+    ```
+
+    Можно детальнее настроить статическую публикацию, обратившись к [документации Now](https://zeit.co/docs/deployment-types/static).
+
+3. Добавьте скрипт для публикации в `package.json`:
+
+    ```json
+    "deploy": "npm run build && now && now alias"
+    ```
+
+    Если вы хотите по умолчанию публиковать публично, то измените команду на следующую:
+
+    ```json
+    "deploy": "npm run build && now --public && now alias"
+    ```
+
+    Это автоматически установит псевдоним сайта на последнюю публикацию. Теперь просто запустите команду `npm run deploy` для публикации приложения.
 
 ### Stdlib
 
