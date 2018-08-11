@@ -133,13 +133,34 @@ module.exports = {
 - Type: `boolean` | `'error'`
 - Default: `true`
 
-  ::: tip
-  如果你想要让 lint 错误在开发时直接显示在浏览器中，将这个选项设置为 `'error'`。
-  :::
-
   是否在开发环境下通过 [eslint-loader](https://github.com/webpack-contrib/eslint-loader) 在每次保存时 lint 代码。这个值会在 [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) 被安装之后生效。
 
-  设置为 `true` 时，eslint-loader 在 webpack 的编译过程中会触发输出到控制台的警告，以避免中断开发流程。如果设置为 `'error'`，则 lint 错误会在开发时直接显示在浏览器中。另外构建时如果存在 lint 错误会导致构建失败。
+  设置为 `true` 时，`eslint-loader` 会将 lint 错误输出为编译警告。默认情况下，警告仅仅会被输出到命令行，且不会使得编译失败。
+
+  如果你希望让 lint 错误在开发时直接显示在浏览器中，你可以使用 `lintOnSave: 'error'`。这会强制 `eslint-loader` 将 lint 错误输出为编译错误，同时也意味着 lint 错误将会导致编译失败。
+
+  或者，你也可以通过设置让浏览器 overlay 同时显示警告和错误：
+
+  ``` js
+  // vue.config.js
+  module.exports = {
+    devServer: {
+      overlay: {
+        warnings: true,
+        errors: true
+      }
+    }
+  }
+  ```
+
+  当 `lintOnSave` 是一个 truthy 的值时，`eslint-loader` 在开发和生产构建下都会被启用。如果你想要在生产构建时禁用 `eslint-loader`，你可以用如下配置：
+
+  ``` js
+  // vue.config.js
+  module.exports = {
+    lintOnSave: process.env.NODE_ENV !== 'production'
+  }
+  ```
 
 ### runtimeCompiler
 
