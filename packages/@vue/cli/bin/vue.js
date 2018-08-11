@@ -61,7 +61,7 @@ program
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
       options.forceGit = true
     }
-    require('../lib/create')(name, options)
+    require('../lib/commands/create')(name, options)
   })
 
 program
@@ -69,7 +69,7 @@ program
   .description('install a plugin and invoke its generator in an already created project')
   .allowUnknownOption()
   .action((plugin) => {
-    require('../lib/add')(plugin, minimist(process.argv.slice(3)))
+    require('../lib/commands/add')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
@@ -77,7 +77,7 @@ program
   .description('invoke the generator of a plugin in an already created project')
   .allowUnknownOption()
   .action((plugin) => {
-    require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
+    require('../lib/commands/invoke')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
@@ -90,7 +90,7 @@ program
   .option('--plugins', 'list all plugin names')
   .option('-v --verbose', 'Show full function definitions in output')
   .action((paths, cmd) => {
-    require('../lib/inspect')(paths, cleanArgs(cmd))
+    require('../lib/commands/inspect')(paths, cleanArgs(cmd))
   })
 
 program
@@ -121,7 +121,7 @@ program
   .option('--headless', `Don't open browser on start and output port`)
   .action((cmd) => {
     checkNodeVersion('>=8.6', 'vue ui')
-    require('../lib/ui')(cleanArgs(cmd))
+    require('../lib/commands/ui')(cleanArgs(cmd))
   })
 
 program
@@ -142,7 +142,7 @@ program
   .option('-e, --edit', 'open config with default editor')
   .option('--json', 'outputs JSON result only')
   .action((value, cmd) => {
-    require('../lib/config')(value, cleanArgs(cmd))
+    require('../lib/commands/config')(value, cleanArgs(cmd))
   })
 
 // output help information on unknown commands
