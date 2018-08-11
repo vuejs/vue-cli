@@ -6,9 +6,9 @@
 
 ## Файлы UI
 
-Inside each installed vue-cli plugins, the cli-ui will try to load an optional `ui.js` file in the root folder of the plugin. Note that you can also use folders (for example `ui/index.js`).
+Внутри каждого установленного vue-cli плагина cli-ui попытается загрузить опциональный файл `ui.js` из корневого каталога плагина. Обратите внимание, также можно использовать каталоги (например, `ui/index.js`).
 
-The file should export a function which gets the api object as argument:
+Файл должен экспортировать функцию, которая получает объект `api` в качестве аргумента:
 
 ```js
 module.exports = api => {
@@ -16,9 +16,9 @@ module.exports = api => {
 }
 ```
 
-**⚠️ The files will be reloaded when fetching the plugin list in the 'Project plugins' view. To apply changes, click on the 'Project plugins' button in the navigation sidebar on the left in the UI.**
+**⚠️ Файлы будут перезагружены при получении списка плагинов на странице «Project plugins». Чтобы применить изменения, нажмите кнопку «Project plugins» в боковой панели слева в UI.**
 
-Here is an example folder structure for a vue-cli plugin using the UI API:
+Вот пример структуры каталога для vue-cli плагина, использующего UI API:
 
 ```
 - vue-cli-plugin-test
@@ -32,7 +32,7 @@ Here is an example folder structure for a vue-cli plugin using the UI API:
 
 ### Локальные плагины проекта
 
-If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.ui` option in your `package.json` file:
+Если необходим доступ к API плагина в вашем проекте и вы не хотите создавать полноценный плагин для этого, вы можете использовать опцию `vuePlugins.ui` в файле `package.json`:
 
 ```json
 {
@@ -42,11 +42,11 @@ If you need access to the plugin API in your project and don't want to create a 
 }
 ```
 
-Each file will need to export a function taking the plugin API as the first argument.
+Каждый файл должен экспортировать функцию, получающую API плагина первым аргументом.
 
 ## Режим разработки
 
-While building your plugin, you may want to run the cli-ui in Dev mode, so it will output useful logs to you:
+При разработке плагина может потребоваться запустить cli-ui в режиме разработки, чтобы использовать логи с полезной информацией:
 
 ```
 vue ui --dev
@@ -62,19 +62,19 @@ vue ui -D
 
 ![Configuration ui](/config-ui.png)
 
-You can add a project configuration with the `api.describeConfig` method.
+Вы можете добавить конфигурацию проекта с помощью метода `api.describeConfig`.
 
-First you need to pass some informations:
+Сначала вам нужно передать некоторую информацию:
 
 ```js
 api.describeConfig({
-  // Unique ID for the config
+  // Уникальный ID для конфигурации
   id: 'org.vue.eslintrc',
-  // Displayed name
-  name: 'ESLint configuration',
-  // Shown below the name
-  description: 'Error checking & Code quality',
-  // "More info" link
+  // Отображаемое имя
+  name: 'Конфигурация ESLint',
+  // Показывается под названием
+  description: 'Проверка ошибок & качество кода',
+  // Ссылка "More info"
   link: 'https://eslint.org'
 })
 ```
@@ -85,34 +85,34 @@ api.describeConfig({
 
 ### Конфигурация иконки
 
-It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
+Может быть кодом [иконки из Material](https://material.io/tools/icons) или пользовательским изображением (см. [Публичные статические файлы](#пубnичные-статические-файnы)):
 
 ```js
 api.describeConfig({
   /* ... */
-  // Config icon
+  // Конфигурация иконки
   icon: 'application_settings'
 })
 ```
 
-If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
+Если не указать иконку, будет отображаться логотип плагина, если таковой есть (см. [Логотип](./ui-info.md#логотип)).
 
 ### Файлы конфигураций
 
-By default, a configuration UI might read and write to one or more configuration files, for example both `.eslintrc.js` and `vue.config.js`.
+По умолчанию конфигурация UI может читать и записывать в один или несколько файлов, например как в `.eslintrc.js` так и в `vue.config.js`.
 
-You can provide what are the possible files to be detected in the user project:
+Вы можете указать, какие файлы обнаруживать в проекте пользователя:
 
 ```js
 api.describeConfig({
   /* ... */
-  // All possible files for this config
+  // Все возможные файлы для этой конфигурации
   files: {
     // eslintrc.js
     eslint: {
       js: ['.eslintrc.js'],
       json: ['.eslintrc', '.eslintrc.json'],
-      // Will read from `package.json`
+      // Будет читать из `package.json`
       package: 'eslintConfig'
     },
     // vue.config.js
@@ -123,30 +123,30 @@ api.describeConfig({
 })
 ```
 
-Supported types: `json`, `yaml`, `js`, `package`. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
+Поддерживаемые типы: `json`, `yaml`, `js`, `package`. Порядок важен: первое имя файла в списке будет использоваться для создания файла конфигурации, если он не существует.
 
-### Display config prompts
+### Отображение подсказок конфигурации
 
-Use the `onRead` hook to return a list of prompts to be displayed for the configuration:
+Используйте хук `onRead` чтобы вернуть список подсказок, которые будут отображаться для конфигурации:
 
 ```js
 api.describeConfig({
   /* ... */
   onRead: ({ data, cwd }) => ({
     prompts: [
-      // Prompt objects
+      // объекты подсказок
     ]
   })
 })
 ```
 
-Those prompts will be displayed in the configuration details pane.
+Эти подсказки будут отображаться на панели конфигурации.
 
-See [Prompts](#prompts) for more info.
+Для получения дополнительной информации см. [Интерактивные подсказки](#интерактивные-подсказки).
 
-The `data` object contains the JSON result of each config file content.
+Объект `data` содержит JSON с результатом контента каждого файла конфигурации.
 
-For example, let's say the user has the following `vue.config.js` in his project:
+Например, допустим, что у пользователя есть следующий `vue.config.js` в проекте:
 
 ```js
 module.exports = {
@@ -154,12 +154,12 @@ module.exports = {
 }
 ```
 
-We declare the config file in our plugin like this:
+Мы объявляем конфигурационный файл в плагине следующим образом:
 
 ```js
 api.describeConfig({
   /* ... */
-  // All possible files for this config
+  // Все возможные файлы в этой конфигурации
   files: {
     // vue.config.js
     vue: {
@@ -169,19 +169,19 @@ api.describeConfig({
 })
 ```
 
-Then the `data` object will be:
+Объект `data` будет:
 
 ```js
 {
-  // File
+  // Файл
   vue: {
-    // File data
+    // Данные файла
     lintOnSave: false
   }
 }
 ```
 
-Multiple files example: if we add the following `eslintrc.js` file in the user project:
+Пример с несколькими файлами: если мы добавим файл `eslintrc.js` в проект пользователя:
 
 ```js
 module.exports = {
@@ -193,18 +193,18 @@ module.exports = {
 }
 ```
 
-And change the `files` option in our plugin to this:
+И изменим опцию `files` в нашем плагине на это:
 
 ```js
 api.describeConfig({
   /* ... */
-  // All possible files for this config
+  // Все возможные файлы в этой конфигурации
   files: {
     // eslintrc.js
     eslint: {
       js: ['.eslintrc.js'],
       json: ['.eslintrc', '.eslintrc.json'],
-      // Will read from `package.json`
+      // Будет читать из `package.json`
       package: 'eslintConfig'
     },
     // vue.config.js
@@ -215,7 +215,7 @@ api.describeConfig({
 })
 ```
 
-Then the `data` object will be:
+Объект `data` будет:
 
 ```js
 {
@@ -234,7 +234,7 @@ Then the `data` object will be:
 
 ### Вкладки конфигурации
 
-You can organize the prompts into several tabs:
+Вы можете организовать подсказки на нескольких вкладках:
 
 ```js
 api.describeConfig({
@@ -243,18 +243,18 @@ api.describeConfig({
     tabs: [
       {
         id: 'tab1',
-        label: 'My tab',
-        // Optional
+        label: 'Моя вкладка',
+        // Опционально
         icon: 'application_settings',
         prompts: [
-          // Prompt objects
+          // Объекты подсказок
         ]
       },
       {
         id: 'tab2',
-        label: 'My other tab',
+        label: 'Моя вторая вкладка',
         prompts: [
-          // Prompt objects
+          // Объекты подсказок
         ]
       }
     ]
@@ -264,7 +264,7 @@ api.describeConfig({
 
 ### Сохранение изменений конфигурации
 
-Use the `onWrite` hook to write the data to the configuration file (or execute any nodejs code):
+Используйте хук `onWrite` для записи данных в файл (или выполнения любого кода nodejs):
 
 ```js
 api.describeConfig({
@@ -275,16 +275,16 @@ api.describeConfig({
 })
 ```
 
-Arguments:
+Аргументы:
 
-- `prompts`: current prompts runtime objects (see below)
-- `answers`: answers data from the user inputs
-- `data`: read-only initial data read from the config files
-- `files`: descriptors of the found files (`{ type: 'json', path: '...' }`)
-- `cwd`: current working directory
-- `api`: `onWrite API` (see below)
+- `prompts`: текущие объекты подсказок для runtime (см. ниже)
+- `answers`: данные ответов от пользовательского ввода
+- `data`: начальные данные только для чтения, считанные из файлов конфигурации
+- `files`: дескрипторы найденных файлов (`{ type: 'json', path: '...' }`)
+- `cwd`: текущий рабочий каталог
+- `api`: `onWrite API` (см. ниже)
 
-Prompts runtime objects:
+Объекты подсказок для runtime:
 
 ```js
 {
@@ -298,31 +298,31 @@ Prompts runtime objects:
   choices: null,
   visible: true,
   enabled: true,
-  // Current value (not filtered)
+  // Текущее значение (не фильтруется)
   value: null,
-  // true if changed by user
+  // true если было изменено пользователем
   valueChanged: false,
   error: null,
   tabId: null,
-  // Original inquirer prompt object
+  // Оригинальный объект подсказок inquirer
   raw: data
 }
 ```
 
 `onWrite` API:
 
-- `assignData(fileId, newData)`: use `Object.assign` to update the config data before writing.
-- `setData(fileId, newData)`: each key of `newData` will be deeply set (or removed if `undefined` value) to the config data before writing.
-- `async getAnswer(id, mapper)`: retrieve answer for a given prompt id and map it through `mapper` function if provided (for example `JSON.parse`).
+- `assignData(fileId, newData)`: использует `Object.assign` для обновление данных конфигурации перед записью.
+- `setData(fileId, newData)`: каждый ключ из `newData` будет установлен (или удалён если значение `undefined`) в данные конфигурации перед записью.
+- `async getAnswer(id, mapper)`: получает ответ для заданного id подсказки и обрабатывает его с помощью функции `mapper`, если она предоставлена (например, `JSON.parse`).
 
-Example (from the ESLint plugin):
+Пример (из плагина для ESLint):
 
 ```js
 api.describeConfig({
   // ...
 
   onWrite: async ({ api, prompts }) => {
-    // Update ESLint rules
+    // Обновление правил ESLint
     const result = {}
     for (const prompt of prompts) {
       result[`rules.${prompt.id}`] = await api.getAnswer(prompt.id, JSON.parse)
@@ -332,41 +332,40 @@ api.describeConfig({
 })
 ```
 
-## Project tasks
-
+## Задачи проекта
 ![Tasks ui](/tasks-ui.png)
 
-Tasks are generated from the `scripts` field in the project `package.json` file.
+Задачи создаются из поля `scripts` файла `package.json` проекта.
 
-You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method:
+Можно «расширять» задачи дополнительной информацией и хуками через `api.describeTask`:
 
 ```js
 api.describeTask({
-  // RegExp executed on script commands to select which task will be described here
+  // RegExp выполняется по командам скриптов для определения задачи описываемой здесь
   match: /vue-cli-service serve/,
-  description: 'Compiles and hot-reloads for development',
-  // "More info" link
+  description: 'Компиляция и горячая замена модулей для разработки',
+  // Ссылка "More info"
   link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve'
 })
 ```
 
-### Task icon
+### Иконка задачи
 
-It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
+Может быть кодом [иконки из Material](https://material.io/tools/icons) или пользовательским изображением (см. [Публичные статические файлы](#пубnичные-статические-файnы)):
 
 ```js
 api.describeTask({
   /* ... */
-  // Task icon
+  // Иконка задачи
   icon: 'application_settings'
 })
 ```
 
-If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
+Если не указать иконку, будет отображаться логотип плагина, если таковой есть (см. [Логотип](./ui-info.md#логотип)).
 
-### Tasks parameters
+### Параметры задачи
 
-You can add prompts to modify the command arguments. They will be displayed in a 'Parameters' modal.
+Вы можете добавлять подсказки для изменения аргументов команды. Они будут отображаться в модальном окне «Parameters».
 
 Например:
 
@@ -374,13 +373,13 @@ You can add prompts to modify the command arguments. They will be displayed in a
 api.describeTask({
   // ...
 
-  // Optional parameters (inquirer prompts)
+  // Опциональные параметры (подсказки inquirer)
   prompts: [
     {
       name: 'open',
       type: 'confirm',
       default: false,
-      description: 'Open browser on server start'
+      description: 'Открывать браузер при старте сервера'
     },
     {
       name: 'mode',
@@ -400,93 +399,93 @@ api.describeTask({
           value: 'test'
         }
       ],
-      description: 'Specify env mode'
+      description: 'Указать режим env'
     }
   ]
 })
 ```
 
-See [Prompts](#prompts) for more info.
+См. [Интерактивные подсказки](#интерактивные-подсказки) для более подробной информации.
 
-### Task hooks
+### Хуки задачи
 
-Several hooks are available:
+Доступно несколько хуков:
 
 - `onBeforeRun`
 - `onRun`
 - `onExit`
 
-For example, you can use the answers to the prompts (see above) to add new arguments to the command:
+Например, использовать ответы подсказок (см. выше) для добавления аргументов в команду:
 
 ```js
 api.describeTask({
   // ...
 
-  // Hooks
-  // Modify arguments here
+  // Хуки
+  // Изменяем аргументы здесь
   onBeforeRun: async ({ answers, args }) => {
-    // Args
+    // Аргументы
     if (answers.open) args.push('--open')
     if (answers.mode) args.push('--mode', answers.mode)
     args.push('--dashboard')
   },
-  // Immediatly after running the task
+  // Сразу после запуска задачи
   onRun: async ({ args, child, cwd }) => {
-    // child: node child process
-    // cwd: process working directory
+    // child: дочерний процесс node
+    // cwd: рабочий каталог процесса
   },
   onExit: async ({ args, child, cwd, code, signal }) => {
-    // code: exit code
-    // signal: kill signal used if any
+    // code: код выхода
+    // signal: сигнал kill, если использовался
   }
 })
 ```
 
-### Task views
+### Страницы задачи
 
-You can display custom views in the task details pane using the `ClientAddon` API:
+Вы можете отображать пользовательские представления в панели сведений задачи с помощью `ClientAddon` API:
 
 ```js
 api.describeTask({
   // ...
 
-  // Additional views (for example the webpack dashboard)
-  // By default, there is the 'output' view which displays the terminal output
+  // Дополнительные представления (например для панели webpack)
+  // По умолчанию есть представление 'output' которое отображает вывод терминала
   views: [
     {
-      // Unique ID
+      // Уникальный ID
       id: 'vue-webpack-dashboard-client-addon',
-      // Button label
+      // Текст кнопки
       label: 'Dashboard',
-      // Button icon
+      // Иконка кнопки
       icon: 'dashboard',
-      // Dynamic component to load (see 'Client addon' section below)
+      // Динамический компонент для загрузки (см. секцию "Клиентское дополнение" ниже)
       component: 'vue-webpack-dashboard'
     }
   ],
-  // Default selected view when displaying the task details (by default it's the output)
+  // Стартовый вид отображения сведений о задаче (по умолчанию это output)
   defaultView: 'vue-webpack-dashboard-client-addon'
 })
 ```
 
-See [Client addon](#client-addon) for more info.
+См. [Клиентское дополнение](#кnиентское-допоnнение) для более подробной информации.
 
 
-### Add new tasks
+### Добавление новых задач
 
-You can also add entirely new tasks which aren't in the `package.json` scripts with `api.addTask` instead of `api.describeTask`. Those tasks will only appear in the cli UI.
+Также можно добавлять совершенно новые задачи, которые не указаны в `package.json` с помощью `api.addTask` вместо `api.describeTask`. Эти задачи будут отображаться только в пользовательском интерфейсе cli UI.
 
-**You need to provide a `command` option instead of `match`.**
+**Вам необходимо указать опцию `command` вместо `match`.**
 
 Например:
 
 ```js
 api.addTask({
-  // Required
+  // Обязательно
   name: 'inspect',
   command: 'vue-cli-service inspect',
-  // Optional
-  // The rest is like `describeTask` without the `match` option
+  // Опционально
+  // Остальное похоже на `describeTask` без опции `match`
   description: '...',
   link: 'https://github.com/vuejs/vue-cli/...',
   prompts: [ /* ... */ ],
@@ -498,44 +497,44 @@ api.addTask({
 })
 ```
 
-**⚠️ The `command` will run a node context. This means you can call node bin commands like you would normally do in the `package.json` scripts.**
+**⚠️ `command` запускается в контексте node. Это означает, что вы можете использовать команды к бинарникам node как обычно, будто из скриптов `package.json`.**
 
-## Prompts
+## Интерактивные подсказки
 
-The prompt objects must be valid [inquirer](https://github.com/SBoudrias/Inquirer.js) objects.
+Объекты подсказок должен быть корректными объектами [inquirer](https://github.com/SBoudrias/Inquirer.js).
 
-However, you can add the following additional fields (which are optional and only used by the UI):
+Однако, вы можете добавить следующие дополнительные поля (которые являются опциональными и используются только пользовательским интерфейсом):
 
 ```js
 {
   /* ... */
-  // Used to group the prompts into sections
-  group: 'Strongly recommended',
-  // Additional description
-  description: 'Enforce attribute naming style in template (`my-prop` or `myProp`)',
-  // "More info" link
+  // Используется для группировки подсказок на разделы
+  group: 'Настоятельно рекомендуется',
+  // Дополнительное описание
+  description: 'Принудительный стиль именования атрибутов в шаблоне (`my-prop` или `myProp`)',
+  // Ссылка "More info"
   link: 'https://github.com/vuejs/eslint-plugin-vue/blob/master/docs/rules/attribute-hyphenation.md',
 }
 ```
 
-Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+Поддерживаемые inquirer типы: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
 
-In addition to those, the UI supports special types that only works with it:
+В дополнение к ним пользовательский интерфейс поддерживает специальные типы, которые работают только с ним:
 
-- `color`: displays a color picker.
+- `color`: интерфейс выбора цвета.
 
-### Switch example
+### Пример с переключателем
 
 ```js
 {
   name: 'open',
   type: 'confirm',
   default: false,
-  description: 'Open the app in the browser'
+  description: 'Открыть приложение в браузере'
 }
 ```
 
-### Select example
+### Пример со списком вариантов
 
 ```js
 {
@@ -544,87 +543,87 @@ In addition to those, the UI supports special types that only works with it:
   default: 'development',
   choices: [
     {
-      name: 'Development mode',
+      name: 'Режим разработки',
       value: 'development'
     },
     {
-      name: 'Production mode',
+      name: 'Режим production',
       value: 'production'
     },
     {
-      name: 'Test mode',
+      name: 'Режим тестирования',
       value: 'test'
     }
   ],
-  description: 'Build mode',
+  description: 'Режим сборки',
   link: 'https://link-to-docs'
 }
 ```
 
-### Input example
+### Пример с полем ввода
 
 ```js
 {
   name: 'host',
   type: 'input',
   default: '0.0.0.0',
-  description: 'Host for the development server'
+  description: 'Хост для сервера разработки'
 }
 ```
 
-### Checkbox example
+### Пример с чекбоксом
 
-Displays multiple switches.
+Отображает несколько переключателей.
 
 ```js
 {
   name: 'lintOn',
-  message: 'Pick additional lint features:',
+  message: 'Выберите дополнительные возможности линтинга:',
   when: answers => answers.features.includes('linter'),
   type: 'checkbox',
   choices: [
     {
-      name: 'Lint on save',
+      name: 'Линтинг при сохранении',
       value: 'save',
       checked: true
     },
     {
-      name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
+      name: 'Линтинг и исправление при коммите' + (hasGit() ? '' : chalk.red(' (требуется Git)')),
       value: 'commit'
     }
   ]
 }
 ```
 
-### Color picker example
+### Пример с выбором цвета
 
 ```js
 {
   name: 'themeColor',
   type: 'color',
-  message: 'Theme color',
-  description: 'This is used to change the system UI color around the app',
+  message: 'Цвет темы',
+  description: 'Используется для изменения цвета интерфейса системы вокруг приложения',
   default: '#4DBA87'
 }
 ```
 
-### Prompts for invocation
+### Подсказки для вызова
 
-In your vue-cli plugin, you may already have a `prompts.js` file which asks the user a few questions when installing the plugin (with the CLI or the UI). You can add the additional UI-only fields (see above) to those prompt objects as well so they will provide more information if the user is using the UI.
+В плагине vue-cli может быть файл `prompts.js`, который задаёт пользователю несколько вопросов при установке плагина (через CLI или UI). Можно добавить дополнительные поля только для UI (см. выше) к этим объектам подсказок, чтобы они предоставили больше информации, если пользователь использует UI.
 
-**⚠️ Currently, the inquirer types which aren't supported (see above) will not work properly in the UI.**
+**⚠️ В настоящее время типы inquirer, которые не поддерживаются (см. выше), не будут работать в UI.**
 
 ## Клиентское дополнение
 
-A Client addon is a JS bundle which is dynamically loaded into the cli-ui. It is useful to load custom components and routes.
+Клиентское дополнение — это сборка JS, которая динамически загружается в cli-ui. Она полезна для загрузки пользовательских компонентов и маршрутов.
 
 ### Создание клиентского дополнения
 
-The recommended way to create a Client addon is by creating a new project using vue-cli 3. You can either do this in a subfolder of your plugin or in a different npm package.
+Рекомендуемый способ создания клиентского дополнения — создать новый проект с помощью vue-cli 3. Вы можете либо сделать это в подкаталоге вашего плагина, либо в другом npm пакете.
 
-Install `@vue/cli-ui` as a dev dependency.
+Установите `@vue/cli-ui` в качестве зависимости для разработки (dev dependency).
 
-Then add a `vue.config.js` file with the following content:
+Затем добавьте файл `vue.config.js` со следующим содержимым:
 
 ```js
 const { clientAddonConfig } = require('@vue/cli-ui')
@@ -632,19 +631,19 @@ const { clientAddonConfig } = require('@vue/cli-ui')
 module.exports = {
   ...clientAddonConfig({
     id: 'org.vue.webpack.client-addon',
-    // Development port (default 8042)
+    // Порт разработки (по умолчанию 8042)
     port: 8042
   })
 }
 ```
 
-The `clientAddonConfig` method will generate the needed vue-cli configuration. Among other things, it disables CSS extraction and outputs the code to `./dist/index.js` in the client addon folder.
+Метод `clientAddonConfig` генерирует необходимую конфигурацию vue-cli. Кроме того, он отключает извлечение CSS и выводит код в `./dist/index.js` в папку клиентского дополнения.
 
 ::: danger Убедитесь!
 В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-Then modify the `.eslintrc.json` file to add some allowed global objects:
+Затем измените файл `.eslintrc.json`, чтобы добавить несколько глобальных объектов:
 
 ```json
 {
@@ -657,41 +656,41 @@ Then modify the `.eslintrc.json` file to add some allowed global objects:
 }
 ```
 
-You can now run the `serve` script in development and the `build` one when you are ready to publish your plugin.
+Теперь можно запустить скрипт `serve` для разработки и `build`, когда будете готовы опубликовать свой плагин.
 
 ### ClientAddonApi
 
-Open the `main.js` file in the client addon sources and remove all the code.
+Откройте файл `main.js` в исходном коде клиентского дополнения и удалите весь код.
 
-**⚠️ Don't import Vue in the client addon sources, use the global `Vue` object from the browser `window`.**
+**⚠️ Не импортируйте Vue в исходном коде клиентского дополнения, используйте глобальный объект `Vue` из `window` браузера.**
 
-Here is an example of code for `main.js`:
+Вот пример кода для `main.js`:
 
 ```js
 import VueProgress from 'vue-progress-path'
 import WebpackDashboard from './components/WebpackDashboard.vue'
 import TestView from './components/TestView.vue'
 
-// You can install additional vue plugins
-// using the global 'Vue' variable
+// Вы можете устанавливать дополнительные Vue-плагины
+// используя глобальную переменную 'Vue'
 Vue.use(VueProgress, {
   defaultShape: 'circle'
 })
 
-// Register a custom component
-// (works like 'Vue.component')
+// Регистрировать пользовательские компоненты
+// (работает аналогично 'Vue.component')
 ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 
-// Add routes to vue-router under a /addon/<id> parent route.
-// For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
-// will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
-// Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
+// Добавлять маршруты во vue-router в соответствии с родительским маршрутом /addon/<id>.
+// Например, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
+// будет добавлять маршруты /addon/foo/ и the /addon/foo/bar во vue-router.
+// Здесь мы создаём новый маршрут '/addon/vue-webpack/' с именем 'test-webpack-route'
 ClientAddonApi.addRoutes('org.vue.webpack', [
   { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
 ])
 
-// You can translate your plugin components
-// Load the locale files (uses vue-i18n)
+// Вы можете переводить компоненты своего плагина
+// Загрузите файлы локализаций (используется vue-i18n)
 const locales = require.context('./locales', true, /[a-z0-9]+\.json$/i)
 locales.keys().forEach(key => {
   const locale = key.match(/([a-z0-9]+)\./i)[1]
@@ -703,70 +702,70 @@ locales.keys().forEach(key => {
 В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-The cli-ui registers `Vue` and `ClientAddonApi` as global variables in the `window` scope.
+Cli-ui регистрирует `Vue` и `ClientAddonApi` в качестве глобальных переменных в области видимости `window`.
 
-In your components, you can use all the components and the CSS classes of [@vue/ui](https://github.com/vuejs/ui) and [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components) in order to keep the look and feel consistent. You can also translate the strings with [vue-i18n](https://github.com/kazupon/vue-i18n) which is included.
+В ваших компонентах можно использовать все компоненты и CSS классы [@vue/ui](https://github.com/vuejs/ui) и [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components), чтобы обеспечить одинаковый внешний вид. Также можно переводить тексты с помощью [vue-i18n](https://github.com/kazupon/vue-i18n) который включён.
 
 ### Регистрация клиентского дополнения
 
-Back to the `ui.js` file, use the `api.addClientAddon` method with a require query to the built folder:
+Возвращаясь к `ui.js` файлу, используйте метод `api.addClientAddon` с строкой запроса к встроенному каталогу:
 
 ```js
 api.addClientAddon({
   id: 'org.vue.webpack.client-addon',
-  // Folder containing the built JS files
+  // Каталог содержащий все собранные JS файлы
   path: '@vue/cli-ui-addon-webpack/dist'
 })
 ```
 
-This will use the nodejs `require.resolve` API to find the folder and serve the `index.js` file built from the client addon.
+Это будет использовать Node.js API `require.resolve` для поиска каталога в файловой системе и использования файла `index.js`, созданного из клиентского дополнения.
 
-Or specify an url when developing the plugin (ideally you want to do this in the `vue-cli-ui.js` file in your test vue project):
+Или укажите URL-адрес при разработке плагина (в идеале вы захотите сделать это в файле `vue-cli-ui.js` в вашем тестовом проекте vue):
 
 ```js
-// Useful for dev
-// Will override path if already defined in a plugin
+// Полезно для разработки
+// Перезапишет путь, если он уже определён в плагине
 api.addClientAddon({
   id: 'org.vue.webpack.client-addon',
-  // Use the same port you configured earlier
+  // Используйте тот же порт, который указали ранее
   url: 'http://localhost:8042/index.js'
 })
 ```
 
 ### Использование клиентского дополнения
 
-You can now use the client addon in the views. For example, you can specify a view in a described task:
+Теперь можно использовать клиентское дополнение в представлениях. Например, вы можете указать представление в описании задачи:
 
 ```js
 api.describeTask({
   /* ... */
-  // Additional views (for example the webpack dashboard)
-  // By default, there is the 'output' view which displays the terminal output
+  // Дополнительные представления (например для панели webpack)
+  // По умолчанию есть представление 'output', которое отображает вывод терминала
   views: [
     {
-      // Unique ID
+      // Уникальный ID
       id: 'org.vue.webpack.views.dashboard',
-      // Button label
+      // Текст кнопки
       label: 'Dashboard',
-      // Button icon (material-icons)
+      // Иконка кнопки (material-icons)
       icon: 'dashboard',
-      // Dynamic component to load, registered using ClientAddonApi
+      // Динамический компонент для загрузки, зарегистрированный через ClientAddonApi
       component: 'org.vue.webpack.components.dashboard'
     }
   ],
-  // Default selected view when displaying the task details (by default it's the output)
+  // Стартовое представление при отображении сведений о задаче (по умолчанию output)
   defaultView: 'org.vue.webpack.views.dashboard'
 })
 ```
 
-Here is the client addon code that register the `'org.vue.webpack.components.dashboard'` component (like we saw earlier):
+Вот код клиентского дополнения, который регистрирует компонент `'org.vue.webpack.components.dashboard'` (как мы видели ранее):
 
 ```js
-/* In `main.js` */
-// Import the component
+/* В `main.js` */
+// Импортируем компонент
 import WebpackDashboard from './components/WebpackDashboard.vue'
-// Register a custom component
-// (works like 'Vue.component')
+// Регистрируем пользовательский компонент
+// (работает аналогично 'Vue.component')
 ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 ```
 
@@ -908,7 +907,7 @@ This is very useful if you create a settings component for example.
 
 Plugin actions are calls sent between the cli-ui (browser) and plugins (nodejs).
 
-> For example, you might have a button in a custom component (see [Client addon](#client-addon)) which calls some nodejs code on the server using this API.
+> For example, you might have a button in a custom component (см. [Клиентское дополнение](#кnиентское-допоnнение)) which calls some nodejs code on the server using this API.
 
 In the `ui.js` file in the plugin (nodejs), you can use two methods from `PluginApi`:
 
@@ -1202,7 +1201,7 @@ api.onTaskExit(({ task, args, child, signal, code, cwd }) => {
 
 ### onViewOpen
 
-Вызывается при открытии страницы (например 'Плагины', 'Конфигурации' или 'Задачи').
+Вызывается при открытии страницы (например «Плагины», «Конфигурации» или «Задачи»).
 
 ```js
 api.onViewOpen(({ view, cwd }) => {
@@ -1210,25 +1209,25 @@ api.onViewOpen(({ view, cwd }) => {
 })
 ```
 
-## Подсказки
+## Предположения
 
-Suggestions are buttons meant to propose an action to the user. They are displayed in the top bar. For example, we can have a button that suggest installing vue-router if the package isn't detected in the app.
+Предположения — это кнопки, предназначенные чтобы предложить действия пользователю. Они отображаются в верхней панели. Например, у нас может быть кнопка, предлагающая установить vue-router, если пакет не был обнаружен в приложении.
 
 ```js
 api.addSuggestion({
   id: 'com.my-name.my-suggestion',
-  type: 'action', // Required (more types in the future)
+  type: 'action', // Обязательно (больше типов в будущем)
   label: 'Add vue-router',
-  // This will be displayed in a details modal
+  // Это будет показано в модальном окне подробностей
   message: 'A longer message for the modal',
   link: 'http://link-to-docs-in-the-modal',
-  // Optional image
+  // Опциональное изображение
   image: '/_plugin/my-package/screenshot.png',
-  // Function called when suggestion is activated by user
+  // Функция вызывается когда предположение активируется пользователем
   async handler () {
     // ...
     return {
-      // By default removes the button
+      // По умолчанию удаляет кнопку
       keep: false
     }
   }
@@ -1241,25 +1240,25 @@ api.addSuggestion({
 
 ![UI Suggestion](/suggestion.png)
 
-Then you can remove the suggestion:
+Затем вы можете удалить предположение:
 
 ```js
 api.removeSuggestion('com.my-name.my-suggestion')
 ```
 
-You can also open a page instead when the user activates the suggestion with `actionLink`:
+Можно открыть страницу, когда пользователь активирует предположение, через `actionLink`:
 
 ```js
 api.addSuggestion({
   id: 'com.my-name.my-suggestion',
-  type: 'action', // Required
+  type: 'action', // Обязательно
   label: 'Add vue-router',
-  // Open a new tab
+  // Открыть новую вкладку
   actionLink: 'https://vuejs.org/'
 })
 ```
 
-Typically, you will use hooks to display the suggestion in the right context:
+Как правило, лучше использовать хуки для показа предположений в правильном контексте:
 
 ```js
 const ROUTER = 'vue-router-add'
@@ -1284,9 +1283,9 @@ api.onViewOpen(({ view }) => {
 })
 ```
 
-In this example we only display the vue-router suggestion in the plugins view and if the project doesn't have vue-router installed already.
+В этом примере мы отображаем только предположение vue-router в представлении плагинов, только если в проекте нет уже установленного vue-router.
 
-Примечание: `addSuggestion` и `removeSuggestion` can be namespaced with `api.namespace()`.
+Примечание: `addSuggestion` и `removeSuggestion` могут задаваться к пространству имён с помощью `api.namespace()`.
 
 ## Другие методы
 
@@ -1302,7 +1301,7 @@ api.hasPlugin('vue-cli-plugin-apollo')
 
 ### getCwd
 
-Retrieve the current working directory.
+Возвращает текущий рабочий каталог.
 
 ```js
 api.getCwd()
@@ -1310,7 +1309,7 @@ api.getCwd()
 
 ### resolve
 
-Resolves a file within the current project.
+Разрешает файл внутри текущего проекта.
 
 ```js
 api.resolve('src/main.js')
@@ -1326,11 +1325,11 @@ api.getProject()
 
 ## Публичные статические файлы
 
-You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).
+Вам может потребоваться предоставлять некоторые статические файлы поверх встроенного HTTP-сервера cli-ui (обычно, чтобы указать значок для пользовательского представления).
 
-Any file in an optional `ui-public` folder in the root of the plugin package folder will be exposed to the `/_plugin/:id/*` HTTP route.
+Любой файл в опциональном каталоге `ui-public` в корневом каталоге пакета плагина станет доступен по HTTP-маршруту `/_plugin/:id/*`.
 
-For example, if you put a `my-logo.png` file into the `vue-cli-plugin-hello/ui-public/` folder, it will be available with the `/_plugin/vue-cli-plugin-hello/my-logo.png` URL when the cli-ui loads the plugin.
+Например, если поместить файл `my-logo.png` в `vue-cli-plugin-hello/ui-public/`, он будет доступен по URL `/_plugin/vue-cli-plugin-hello/my-logo.png`, когда cli-ui загружает плагин.
 
 ```js
 api.describeConfig({
