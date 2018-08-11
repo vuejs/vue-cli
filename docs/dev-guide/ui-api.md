@@ -95,7 +95,7 @@ api.describeConfig({
 })
 ```
 
-If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
+If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](./ui-info.md#logo)).
 
 ### Config files
 
