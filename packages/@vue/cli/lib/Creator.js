@@ -46,8 +46,9 @@ module.exports = class Creator extends EventEmitter {
 
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
-    const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
+    const { presetPrompt, featurePrompt, ecosystemPrompt } = this.resolveIntroPrompts()
     this.presetPrompt = presetPrompt
+    this.ecosystemPrompt = ecosystemPrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
     this.injectedPrompts = []
@@ -353,6 +354,23 @@ module.exports = class Creator extends EventEmitter {
         }
       ]
     }
+    const ecosystemPrompt = {
+      name: 'ecosystem',
+      when: isManualMode,
+      type: 'list',
+      message: 'Check the ecosystem for your project:',
+      choices: [
+        {
+          name: 'Vue',
+          value: 'vue'
+        },
+        {
+          name: 'React',
+          value: 'react'
+        }
+      ],
+      pageSize: 10
+    }
     const featurePrompt = {
       name: 'features',
       when: isManualMode,
@@ -363,6 +381,7 @@ module.exports = class Creator extends EventEmitter {
     }
     return {
       presetPrompt,
+      ecosystemPrompt,
       featurePrompt
     }
   }
@@ -435,6 +454,7 @@ module.exports = class Creator extends EventEmitter {
     })
     const prompts = [
       this.presetPrompt,
+      this.ecosystemPrompt,
       this.featurePrompt,
       ...this.injectedPrompts,
       ...this.outroPrompts
