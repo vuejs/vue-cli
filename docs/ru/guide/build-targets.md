@@ -14,7 +14,7 @@
 ## Библиотека (Library)
 
 ::: tip Примечание о зависимости Vue
-В режиме библиотеки Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
+В режиме библиотеки Vue *экстернализируется*. Это означает, что сборка не будет содержать Vue даже если ваш код его импортирует. Если библиотека используется через сборщик, он должен попытаться загрузить Vue в качестве зависимости через сборщик; в противном случае, он должен вернуться к глобальной переменной `Vue`.
 :::
 
 Вы можете запустить сборку одной точки входа в качестве библиотеки с помощью:
@@ -36,19 +36,19 @@ dist/myLib.css           0.33 kb                  0.23 kb
 
 Сборка библиотеки сгенерирует:
 
-- `dist/myLib.common.js`: A CommonJS bundle for consuming via bundlers (unfortunately, webpack currently does not support ES modules output format for bundles yet)
+- `dist/myLib.common.js`: сборка CommonJS для использования в сборщиках (к сожалению, webpack в настоящее время пока ещё не поддерживает формат ES-модулей для сборок)
 
-- `dist/myLib.umd.js`: A UMD bundle for consuming directly in browsers or with AMD loaders
+- `dist/myLib.umd.js`: сборка UMD для использования в браузерах или с AMD загрузчиками
 
-- `dist/myLib.umd.min.js`: Minified version of the UMD build.
+- `dist/myLib.umd.min.js`: Минифицированная версия UMD сборки.
 
-- `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
+- `dist/myLib.css`: Извлечённый CSS файл (можно принудительно вставлять стили инлайн, установив `css: { extract: false }` в `vue.config.js`)
 
 ### Vue vs. JS / TS файлы точек входа
 
-When using a `.vue` file as entry, your library will directly expose the Vue component itself, because the component is always the default export.
+При использовании `.vue` файла в качестве точки входа, библиотека будет экспортировать сам компонент Vue, потому что компонент всегда имеет экспорт по умолчанию (export default).
 
-However, when you are using a `.js` or `.ts` file as your entry, it may contain named exports, so your library will be exposed as a Module. This means the default export of your library must be accessed as `window.yourLib.default` in UMD builds, or as `const myLib = require('mylib').default` in CommonJS builds. If you don't have any named exports and wish to directly expose the default export, you can use the following webpack configuration in `vue.config.js`:
+Однако, когда используется `.js` или `.ts` файл в качестве точки входа, он может содержать именованные экспорты, поэтому библиотека будет использоваться как модуль. Это означает, что экспорт библиотеки по умолчанию должен быть доступен как `window.yourLib.default` в UMD сборках, или как `const myLib = require('mylib').default` в CommonJS сборках. Если у вас нет именованных экспортов и вы хотите использовать экспорт по умолчанию (default export), вы можете использовать следующую конфигурацию webpack в `vue.config.js`:
 
 ``` js
 module.exports = {
@@ -67,7 +67,7 @@ module.exports = {
 :::
 
 ::: tip Примечание зависимости Vue
-In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
+В режиме веб-компонентов Vue *экстернализируется.* Это означает, что сборка не будет содержать Vue даже если ваш код его импортирует. Сборка будет подразумевать, что `Vue` доступен на странице в качестве глобальной переменной.
 :::
 
 Вы можете запустить сборку одной точки входа в качестве веб-компонента с помощью:
@@ -76,35 +76,35 @@ In web component mode, Vue is *externalized.* This means the bundle will not bun
 vue-cli-service build --target wc --name my-element [entry]
 ```
 
-Note that the entry should be a `*.vue` file. Vue CLI will automatically wrap and register the component as a Web Component for you, and there's no need to do this yourself in `main.js`. You can use `main.js` as a demo app solely for development.
+Обратите внимание, что точка входа должна быть `*.vue` файлом. Vue CLI автоматически обернёт и зарегистрирует компонент как веб-компонент за вас, и нет необходимости делать это самостоятельно в `main.js`. Можно использовать `main.js` в качестве демо-приложения исключительно для разработки.
 
-The build will produce a single JavaScript file (and its minified version) with everything inlined. The script, when included on a page, registers the `<my-element>` custom element, which wraps the target Vue component using `@vue/web-component-wrapper`. The wrapper automatically proxies properties, attributes, events and slots. See the [docs for `@vue/web-component-wrapper`](https://github.com/vuejs/vue-web-component-wrapper) for more details.
+Сборка создаст один файл JavaScript (и его минифицированную версию) содержащий всё необходимое. Скрипт, когда добавлен на странице, зарегистрирует пользовательский элемент `<my-element>`, который оборачивает компонент Vue с помощью `@vue/web-component-wrapper`. Обёртка автоматически проксирует свойства, атрибуты, события и слоты. Подробнее можно узнать в [документации `@vue/web-component-wrapper`](https://github.com/vuejs/vue-web-component-wrapper).
 
-**Note the bundle relies on `Vue` being globally available on the page.**
+**Обратите внимание, что сборка зависит от `Vue` глобально доступного на странице.**
 
-This mode allows consumers of your component to use the Vue component as a normal DOM element:
+Этот режим позволяет использовать компонент Vue как обычный элемент DOM:
 
 ``` html
 <script src="https://unpkg.com/vue"></script>
 <script src="path/to/my-element.js"></script>
 
-<!-- use in plain HTML, or in any other framework -->
+<!-- используем в простом HTML, или в любых других фреймворках -->
 <my-element></my-element>
 ```
 
 ### Сборка, регистрирующая несколько веб-компонентов
 
-При создании веб-компонентов можно также указать несколько компонентов с помощью glob в качестве входной точки:
+При сборке веб-компонентов можно также указать несколько компонентов с помощью выражения в качестве входной точки:
 
 ```
 vue-cli-service build --target wc --name foo 'src/components/*.vue'
 ```
 
-When building multiple web components, `--name` will be used as the prefix and the custom element name will be inferred from the component filename. For example, with `--name foo` and a component named `HelloWorld.vue`, the resulting custom element will be registered as `<foo-hello-world>`.
+При сборке нескольких веб-компонентов `--name` будет использовано в качестве префикса, а имя пользовательского элемента будет определяться именем файла компонента. Например, для `--name foo` и компонента `HelloWorld.vue`, итоговый пользовательский элемент будет зарегистрирован как `<foo-hello-world>`.
 
 ### Асинхронный веб-компонент (Async Web Component)
 
-When targeting multiple web components, the bundle may become quite large, and the user may only use a few of the components your bundle registers. The async web component mode produces a code-split bundle with a small entry file that provides the shared runtime between all the components, and registers all the custom elements upfront. The actual implementation of a component is then fetched on-demand only when an instance of the corresponding custom element is used on the page:
+При указании нескольких веб-компонентов, сборка может стать довольно большой, а пользователь использовать только некоторые из компонентов, которые регистрирует сборка. Режим асинхронных веб-компонентов создаёт сборку, разделённую на части, с маленьким файлом точки входа, который обеспечивает общий runtime между всеми компонентами, и заранее регистрирует все пользовательские элементы. Фактическая реализация компонента загружается по требованию, только когда экземпляр соответствующего пользовательского элемента используется на странице:
 
 ```
 vue-cli-service build --target wc-async --name foo 'src/components/*.vue'
@@ -127,6 +127,6 @@ dist/foo.1.js        5.24 kb                     1.64 kb
 <script src="https://unpkg.com/vue"></script>
 <script src="path/to/foo.min.js"></script>
 
-<!-- чанк с реализацией foo-one загрузится автоматически когда потребуется -->
+<!-- фрагмент с реализацией foo-one загрузится автоматически когда потребуется -->
 <foo-one></foo-one>
 ```

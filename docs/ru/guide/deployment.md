@@ -2,26 +2,26 @@
 
 ## Общие рекомендации
 
-If you are using Vue CLI along with a backend framework that handles static assets as part of its deployment, all you need to do is making sure Vue CLI generates the built files in the correct location, and then follow the deployment instruction of your backend framework.
+Если вы используете Vue CLI с бэкенд фреймворком, который обрабатывает статические ресурсы, как часть своей публикации, всё что вам нужно сделать, это убедиться, что Vue CLI генерирует файлы сборки в правильном месте, а затем следуйте инструкциям по публикации вашего бэкенд фреймворка.
 
-If you are developing your frontend app separately from your backend - i.e. your backend exposes an API for your frontend to talk to, then your frontend is essentially a purely static app. You can deploy the built content in the `dist` directory to any static file server, but make sure to set the correct [baseUrl](../config/#baseurl).
+Если вы разрабатываете фронтенд вашего приложения отдельно от бэкенда — т.е. ваш бэкенд предоставляет только API с которым вы работаете, то по сути ваш фронтенд является чисто статическим приложением. Вы можете публиковать собранный контент в каталоге `dist` на любой статический файловый сервер, главное не забудьте установить правильный [baseUrl](../config/#baseurl).
 
 ### Локальный предпросмотр
 
-The `dist` directory is meant to be served by an HTTP server, so it will not work if you open `dist/index.html` directly over `file://` protocol. The easiest way to preview your production build locally is using a Node.js static file server, for example [serve](https://github.com/zeit/serve):
+Каталог `dist` предназначен для обслуживания HTTP-сервером, поэтому не будет работать если напрямую открыть `dist/index.html` через `file://` протокол. Самый простой способ предпросмотра вашей сборки для production локально — использовать статический файловый сервер Node.js, например [serve](https://github.com/zeit/serve):
 
 ``` bash
 npm install -g serve
-# флаг -s означает запуск serve в режиме Single-Page Application
+# флаг -s означает запуск serve в режиме одностраничного приложения (SPA)
 # который решает проблему маршрутизации, описанную ниже
 serve -s dist
 ```
 
 ### Маршрутизация через `history.pushState`
 
-Если вы используете Vue Router в режиме `history`, простой статический файловый сервер не подойдёт. Например, если вы использовали Vue Router для маршрута `/todos/42`, то сервер разработки уже был настроен для корректного ответа на запрос `localhost:3000/todos/42`, но простой статический сервер используемый в production сборке будет отвечать ошибкой 404.
+Если вы используете Vue Router в режиме `history`, простой статический файловый сервер не подойдёт. Например, если вы использовали Vue Router для маршрута `/todos/42`, то сервер разработки уже был настроен для корректного ответа на запрос `localhost:3000/todos/42`, но простой статический сервер используемый с production сборкой будет отвечать ошибкой 404.
 
-Чтобы это исправить, вам необходимо настроить production сервер так, чтобы он возвращал `index.html` для любых запросов, не соответствующих статическим файлам. В документации Vue Router есть [инструкции по конфигурации различных серверов](https://router.vuejs.org/ru/guide/essentials/history-mode.html).
+Чтобы это исправить, необходимо настроить production сервер так, чтобы `index.html` возвращался для любых запросов, не соответствующих статическим файлам. В документации Vue Router есть [примеры конфигурации различных серверов](https://router.vuejs.org/ru/guide/essentials/history-mode.html).
 
 ### CORS
 
@@ -85,31 +85,31 @@ serve -s dist
 
 ### GitLab Pages
 
-As described by [GitLab Pages documentation](https://docs.gitlab.com/ee/user/project/pages/), everything happens with a `.gitlab-ci.yml` file placed in the root of your repository. This working example will get you started:
+Как описано в [документамции GitLab Pages](https://docs.gitlab.com/ee/user/project/pages/), всё происходит с файлом `.gitlab-ci.yml`, расположенным в корневом каталоге проекта. Вы можете начать с этого рабочего примера:
 
 ```yaml
-# .gitlab-ci.yml file to be placed in the root of your repository
+# .gitlab-ci.yml файл расположен в корневом каталоге репозитория
 
-pages: # the job must be named pages
+pages: # задание должно быть именованными страницами
   image: node:latest
   stage: deploy
   script:
     - npm ci
     - npm run build
-    - mv public public-vue # GitLab Pages hooks on the public folder
-    - mv dist public # rename the dist folder (result of npm run build)
+    - mv public public-vue # GitLab Pages хук для каталога public
+    - mv dist public # переименование каталога dist (результат команды npm run build)
   artifacts:
     paths:
-      - public # artifact path must be /public for GitLab Pages to pick it up
+      - public # путь к артифакту должен быть /public для GitLab Pages
   only:
     - master
 ```
 
-Typically, your static website will be hosted on `https://yourUserName.gitlab.io/yourProjectName`, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
+Как правило, по адресу `https://yourUserName.gitlab.io/yourProjectName` будет располагаться статический веб-сайт, поэтому вы также захотите создать файл `vue.config.js` для указания [значения `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl), соответствующего ему:
 
 ```javascript
-// vue.config.js file to be place in the root of your repository
-// make sure you update `yourProjectName` with the name of your GitLab project
+// файл vue.config.js расположен в корне вашего репозитория
+// убедитесь, что обновили `yourProjectName` на имя вашего проекта GitLab
 
 module.exports = {
   baseUrl: process.env.NODE_ENV === 'production'
@@ -118,9 +118,9 @@ module.exports = {
 }
 ```
 
-Please read through the docs on [GitLab Pages domains](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) for more info about the URL where your project website will be hosted. Be aware you can also [use a custom domain](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages).
+Изучите документацию по настройке [домена в GitLab Pages](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) для получения дополнительной информации об URL-адресе, где ваш веб-сайт будет размещён. Имейте ввиду, что можно также [использовать собственный домен](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages).
 
-Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to your repository. A GitLab CI pipeline will be triggered: when successful, visit your project's `Settings > Pages` to see your website link, and click on it.
+Закоммитьте оба файла `.gitlab-ci.yml` и `vue.config.js` перед push в ваш репозиторий. Будет запущен GitLab CI pipeline: при успешном выполнении, откройте `Settings > Pages` в вашем проекте, чтобы увидеть ссылку на свой сайт и нажмите на неё.
 
 ### Netlify
 
@@ -139,25 +139,25 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 ### Firebase
 
-Create a new Firebase project on your [Firebase console](https://console.firebase.google.com). Please refer to this [documentation](https://firebase.google.com/docs/web/setup) on how to setup your project.
+Создайте новый проект Firebase в [консоли Firebase](https://console.firebase.google.com). Рекомендуем изучить [документацию](https://firebase.google.com/docs/web/setup) о том, как настроить проект.
 
-Make sure you have installed [firebase-tools](https://github.com/firebase/firebase-tools) globally:
+Убедитесь, что у вас глобально установлены [firebase-tools](https://github.com/firebase/firebase-tools):
 
 ```
 npm install -g firebase-tools
 ```
 
-From the root of your project, initialize `firebase` using the command:
+Из корня вашего проекта инициализируйте `firebase` с помощью команды:
 
 ```
 firebase init
 ```
 
-Firebase will ask some questions on how to setup your project.
+Firebase задаст несколько вопросов о том, как настроить проект.
 
-- Choose which Firebase CLI features you want to setup your project. Make sure to select `hosting`.
-- Select the default Firebase project for your project.
-- Set your `public` directory to `dist` (or where your build's output is) which will be uploaded to Firebase Hosting.
+- Выберите функции Firebase CLI, которые хотите настроить для проекта. Убедитесь, что выбрали `hosting`.
+- Выберите проект Firebase по умолчанию для вашего проекта.
+- Установите каталог `public` в значение `dist` (или куда генерируется итоговая сборка), который будет загружаться на Firebase Hosting.
 
 ```javascript
 // firebase.json
@@ -169,7 +169,7 @@ Firebase will ask some questions on how to setup your project.
 }
 ```
 
-- Select `yes` to configure your project as a single-page app. This will create an `index.html` and on your `dist` folder and configure your `hosting` information.
+- Выберите `yes` чтобы настроить проект как одностраничное приложение. Это создаст `index.html` и в вашем каталоге `dist` и добавит настройки в `hosting`.
 
 ```javascript
 // firebase.json
@@ -186,19 +186,19 @@ Firebase will ask some questions on how to setup your project.
 }
 ```
 
-Run `npm run build` to build your project.
+Запустите `npm run build` для сборки вашего проекта.
 
-To deploy your project on Firebase Hosting, run the command:
+Для публикации вашего проекта на Firebase Hosting выполните команду:
 
 ```
 firebase deploy --only hosting
 ```
 
-If you want other Firebase CLI features you use on your project to be deployed, run `firebase deploy` without the `--only` option.
+Если вы хотите использовать другие возможности Firebase CLI, которые вы используете в своём проекте для публикации, запустите `firebase deploy` без опции `--only`.
 
-You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
+Теперь можно открыть проект по адресу `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
 
-Please refer on the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
+Обратитесь к [документации Firebase](https://firebase.google.com/docs/hosting/deploying) для получения более подробной информации.
 
 ### Now
 

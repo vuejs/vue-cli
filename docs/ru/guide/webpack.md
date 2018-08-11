@@ -18,10 +18,10 @@ module.exports = {
 Объект будет объединён в итоговую конфигурацию webpack с помощью [webpack-merge](https://github.com/survivejs/webpack-merge).
 
 ::: warning Предупреждение
-Некоторые параметры webpack устанавливаются на основе значений из `vue.config.js` и не должны изменяться напрямую. Например, вместо изменения `output.path` нужно использовать опцию `outputDir` в `vue.config.js`; а вместо `output.publicPath` нужно использовать опцию `baseUrl` в `vue.config.js`. Это связано с тем, что значения из `vue.config.js` будут использоваться в нескольких местах внутри конфигурации и необходимо гарантировать что всё вместе будет работать правильно.
+Некоторые параметры webpack устанавливаются на основе значений из `vue.config.js` и не должны изменяться напрямую. Например, вместо изменения `output.path` нужно использовать опцию `outputDir` в `vue.config.js`; а вместо `output.publicPath` нужно использовать опцию `baseUrl` в `vue.config.js`. Это связано с тем, что значения из `vue.config.js` используются в нескольких местах внутри конфигурации и необходимо гарантировать что всё вместе будет работать правильно.
 :::
 
-Если необходимо условное поведение, в зависимости от окружения, или вы хотите напрямую изменять конфигурацию — используйте функцию (она будет лениво выполняться уже после установки переменных окружения). Функция принимает итоговую конфигурацию в качестве аргумента. Внутри функции можно напрямую изменить конфигурацию, ИЛИ вернуть объект, который будет объединён:
+Если необходимо условное поведение, в зависимости от окружения, или вы хотите напрямую изменять конфигурацию — используйте функцию (будет лениво выполняться после установки переменных окружения). Она получает итоговую конфигурацию в качестве аргумента. Внутри функции можно напрямую изменить конфигурацию, ИЛИ вернуть объект для объединения:
 
 ``` js
 // vue.config.js
@@ -38,12 +38,12 @@ module.exports = {
 
 ## Chaining (Продвинутый вариант)
 
-Внутренняя конфигурация webpack поддерживается с помощью [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). Библиотека предоставляет абстракцию над обычной конфигурацией webpack, позволяя определять именованные правила для загрузчиков и именованные плагины, а затем выбирать эти правила по имени и изменять их параметры.
+Внутренняя конфигурация webpack поддерживается с использованием [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). Библиотека предоставляет абстракцию над обычной конфигурацией webpack, добавляет возможность задавать именованные правила для загрузчиков и плагинов, а затем выбирать эти правила по имени и изменять их параметры.
 
 Это позволяет осуществлять более тонкий контроль над встроенной конфигурацией. Ниже вы увидите примеры изменений, выполненных с помощью опции `chainWebpack` в `vue.config.js`.
 
 ::: tip Совет
-Команда [vue inspect](#inspecting-the-project-s-webpack-config) будет крайне полезна, когда вы будете пробовать добраться до определённого загрузчика в цепочке.
+Команда [vue inspect](#inspecting-the-project-s-webpack-config) пригодится, когда вы будете пробовать добраться до определённого загрузчика в цепочке.
 :::
 
 ### Изменение настроек загрузчика
@@ -123,9 +123,9 @@ module.exports = {
 }
 ```
 
-You will need to familiarize yourself with [webpack-chain's API](https://github.com/mozilla-neutrino/webpack-chain#getting-started) and [read some source code](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config) in order to understand how to leverage the full power of this option, but it gives you a more expressive and safer way to modify the webpack config than directly mutation values.
+Вам потребуется ознакомиться с [API webpack-chain](https://github.com/mozilla-neutrino/webpack-chain#getting-started) и [изучить исходный код](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config) чтобы понять как использовать всю мощь этой опции, но она даст вам более выразительный и безопасный способ изменения конфигурации webpack в отличие от изменения значений напрямую.
 
-For example, say you want to change the default location of `index.html` from `/Users/username/proj/public/index.html` to `/Users/username/proj/app/templates/index.html`. By referencing [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) you can see a list of options you can pass in. To change our template path we can pass in a new template path with the following config:
+Например, предположим, необходимо изменить местоположение `index.html` по умолчанию с `/Users/test/proj/public/index.html` на `/Users/test/proj/app/templates/index.html`. По ссылке [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) перечислен список параметров, которые можем передавать. Чтобы изменить шаблон, передадим новый путь к шаблону следующей конфигурацией:
 
 ``` js
 // vue.config.js
@@ -134,39 +134,39 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        args[0].template = '/Users/username/proj/app/templates/index.html'
+        args[0].template = '/Users/test/proj/app/templates/index.html'
         return args
       })
   }
 }
 ```
 
-You can confirm that this change has taken place by examining the vue webpack config with the `vue inspect` utility, which we will discuss next.
+Вы можете убедиться, что изменение произошло, изучив конфигурацию webpack с помощью команды `vue inspect`, о которой мы поговорим дальше.
 
 ## Просмотр конфигурации Webpack проекта
 
-Since `@vue/cli-service` abstracts away the webpack config, it may be more difficult to understand what is included in the config, especially when you are trying to make tweaks yourself.
+Поскольку `@vue/cli-service` абстрагируется от конфигурации webpack, может быть сложнее понять, что включено в конфигурацию, особенно когда вносите изменения самостоятельно.
 
-`vue-cli-service` exposes the `inspect` command for inspecting the resolved webpack config. The global `vue` binary also provides the `inspect` command, and it simply proxies to `vue-cli-service inspect` in your project.
+`vue-cli-service` предоставляет команду `inspect` для проверки итоговой конфигурации webpack. Глобальный бинарник `vue` также предоставляет команду `inspect`, которая просто проксируется в `vue-cli-service inspect` вашего проекта.
 
-The command will print the resolved webpack config to stdout, which also contains hints on how to access rules and plugins via chaining.
+Команда выведет в stdout итоговую конфигурацию webpack, которая будет также снабжена подсказками, как обращаться к правилам и плагинам через chaining.
 
-You can redirect the output into a file for easier inspection:
+Вы можете перенаправить вывод в файл для более удобного изучения:
 
 ``` bash
 vue inspect > output.js
 ```
 
-Note the output is not a valid webpack config file, it's a serialized format only meant for inspection.
+Обратите внимание, что вывод не является файлом рабочей конфигурации webpack, это только сериализованный формат предназначенный для проверки.
 
-You can also inspect a subset of the config by specifying a path:
+Вы также можете указать подмножество конфигурации для проверки, указав путь:
 
 ``` bash
 # показать только первое правило
 vue inspect module.rules.0
 ```
 
-Or, target a named rule or plugin:
+Или указать именованное правило или плагин:
 
 ``` bash
 vue inspect --rule vue

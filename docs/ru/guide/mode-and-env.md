@@ -21,7 +21,7 @@ VUE_APP_SECRET=secret
 ::: tip Приоритет загрузки переменных окружения
 Файл с переменными для определённого режима работы (например, `.env.production`) имеет более высокий приоритет, чем общий файл (например, `.env`).
 
-Кроме того, переменные окружения, которые уже существуют при загрузке Vue CLI будут иметь наивысший приоритет и не будут перезаписаны значениями из файлов `.env`.
+Кроме того, переменные окружения, которые уже существуют при загрузке Vue CLI имеют наивысший приоритет и не будут перезаписаны значениями из файлов `.env`.
 :::
 
 ::: warning Предупреждение об использовании NODE_ENV
@@ -36,36 +36,36 @@ VUE_APP_SECRET=secret
 - `production` используется `vue-cli-service build` и `vue-cli-service test:e2e`
 - `test` используется `vue-cli-service test:unit`
 
-Note that a mode is different from `NODE_ENV`, as a mode can contain multiple environment variables. That said, each mode does set `NODE_ENV` to the same value by default - for example, `NODE_ENV` will be set to `"development"` in development mode.
+Обратите внимание, что режим работы отличается от `NODE_ENV`, поскольку режим может устанавливать несколько переменных окружения. Тем не менее, каждый режим устанавливает `NODE_ENV` в такое же значение по умолчанию — например, `NODE_ENV` будет установлен в `"development"` в режиме разработки.
 
-You can set environment variables only available to a certain mode by postfixing the `.env` file. For example, if you create a file named `.env.development` in your project root, then the variables declared in that file will only be loaded in development mode.
+Вы можете установить переменные окружения только для определённого режима работы с помощью постфикса `.env` файла. Например, если создать файл с именем `.env.development` в корне вашего проекта, тогда переменные объявленные в нём будут загружаться только в режиме development.
 
-You can overwrite the default mode used for a command by passing the `--mode` option flag. For example, if you want to use development variables in the build command, add this to your `package.json` scripts:
+Вы можете переопределить режим по умолчанию для команды, с помощью опции `--mode`. Например, если необходимо использовать переменные для разрабтки в команде сборки, добавьте это в свои скрипты `package.json`:
 
 ```
 "dev-build": "vue-cli-service build --mode development",
 ```
 
-## Пример: Staging Mode
+## Пример: режим Staging
 
-Assuming we have an app with the following `.env` file:
+Предположим, что у нас есть приложение с `.env` файлом:
 
 ```
 VUE_APP_TITLE=My App
 ```
 
-And the following `.env.staging` file:
+И следующий `.env.staging` файл:
 
 ```
 NODE_ENV=production
 VUE_APP_TITLE=My App (staging)
 ```
 
-- `vue-cli-service build` builds a production app, loading `.env`, `.env.production` and `.env.production.local` if they are present;
+- `vue-cli-service build` собирает приложение для production, загружает `.env`, `.env.production` и `.env.production.local` если они присутствуют;
 
-- `vue-cli-service build --mode staging` builds a production app in staging mode, using `.env`, `.env.staging` and `.env.staging.local` if they are present.
+- `vue-cli-service build --mode staging` собирает приложение для production в режиме staging, используя `.env`, `.env.staging` и `.env.staging.local` если они присутствуют.
 
-In both cases, the app is built as a production app because of the `NODE_ENV`, but in the staging version, `process.env.VUE_APP_TITLE` is overwritten with a different value.
+В обоих случаях приложение собирается для production из-за установленного `NODE_ENV`, но в режиме staging, `process.env.VUE_APP_TITLE` будет перезаписываться другим значением.
 
 ## Использование переменных окружения в клиентском коде
 
@@ -77,12 +77,12 @@ console.log(process.env.VUE_APP_SECRET)
 
 На этапе сборки `process.env.VUE_APP_SECRET` будет заменяться соответствующим значением. Когда в файле указано `VUE_APP_SECRET=secret` — после сборки значением будет `"secret"`.
 
-In addition to `VUE_APP_*` variables, there are also two special variables that will always be available in your app code:
+В дополнение к переменным `VUE_APP_*` также есть две специальные переменные, которые всегда доступны в коде вашего приложения:
 
-- `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#режимы-работы) the app is running in.
-- `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
+- `NODE_ENV` — значение будет `"development"`, `"production"` или `"test"` в зависимости от [режима работы](#режимы-работы) в котором работает приложение.
+- `BASE_URL` — соответствует опции `baseUrl` в `vue.config.js` и определяет базовый путь по которому опубликовано ваше приложение.
 
-All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#интерпоnяции).
+Все разрешённые переменные окружения также будут доступны внутри `public/index.html` как обсуждалось ранее в разделе [HTML - Интерполяции](./html-and-static-assets.md#интерпоnяции).
 
 ::: tip Совет
 Можно добавлять вычисляемые переменные окружения в `vue.config.js`. Они по-прежнему должны именоваться с префикса `VUE_APP_`. Это может пригодиться например для получения информации о версии `process.env.VUE_APP_VERSION = require('./package.json').version`
@@ -90,6 +90,6 @@ All resolved env variables will be available inside `public/index.html` as discu
 
 ## Переменные только для локального окружения
 
-Sometimes you might have env variables that should not be committed into the codebase, especially if your project is hosted in a public repository. In that case you should use an `.env.local` file instead. Local env files are ignored in `.gitignore` by default.
+Иногда необходимы переменные окружения, которые не должны быть привязаны к кодовой базе, особенно если ваш проект размещается в публичном репозитории. В таком случае вы должны использовать файл `.env.local`. Локальные env-файлы добавлены в `.gitignore` по умолчанию.
 
-`.local` can also be appended to mode-specific env files, for example `.env.development.local` will be loaded during development, and is ignored by git.
+`.local` также могут добавляться к env-файлам специфичным для режима работы, например `.env.development.local` будет загружен во время разработки, и будет игнорироваться git.
