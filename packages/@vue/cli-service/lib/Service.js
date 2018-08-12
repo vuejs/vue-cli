@@ -298,10 +298,10 @@ module.exports = class Service {
     }
 
     // normalize some options
+    ensureSlash(resolved, 'baseUrl')
     if (typeof resolved.baseUrl === 'string') {
       resolved.baseUrl = resolved.baseUrl.replace(/^\.\//, '')
     }
-    ensureSlash(resolved, 'baseUrl')
     removeSlash(resolved, 'outputDir')
 
     // deprecation warning
