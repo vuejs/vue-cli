@@ -8,7 +8,7 @@ App is the default build target. In this mode:
 
 - `index.html` with asset and resource hints injection
 - vendor libraries split into a separate chunk for better caching
-- static assets under 10kb are inlined into JavaScript
+- static assets under 4kb are inlined into JavaScript
 - static assets in `public` are copied into output directory
 
 ## Library
