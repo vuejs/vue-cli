@@ -273,7 +273,7 @@ module.exports = class Creator extends EventEmitter {
 
     if (name in savedPresets) {
       preset = savedPresets[name]
-    } else if (name.endsWith('.json') || /^[./\\]/.test(name)) {
+    } else if (name.endsWith('.json') || /^\./.test(name) || path.isAbsolute(name)) {
       preset = await loadLocalPreset(path.resolve(name))
     } else if (name.includes('/')) {
       logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)

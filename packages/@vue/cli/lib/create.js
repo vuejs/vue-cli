@@ -74,6 +74,8 @@ module.exports = (...args) => {
   return create(...args).catch(err => {
     stopSpinner(false) // do not persist
     error(err)
-    process.exit(1)
+    if (!process.env.VUE_CLI_TEST) {
+      process.exit(1)
+    }
   })
 }
