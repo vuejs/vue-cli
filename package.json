@@ -34,7 +34,8 @@
       "/temp/",
       "/scripts/",
       ".*.helper.js"
-    ]
+    ],
+    "testMatch": ["**/*.spec.js"]
   },
   "lint-staged": {
     "*.{js,vue}": [
