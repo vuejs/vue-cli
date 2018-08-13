@@ -54,10 +54,6 @@ module.exports = {
   Always use `baseUrl` instead of modifying webpack `output.publicPath`.
   :::
 
-  ::: tip
-  To have a relative `baseUrl` do not forget to prefix it with `./`. If the publicPath would be `foo/bar`, use `bsreUrl:"./foo/bar"`.
-  :::
-
 ### outputDir
 
 - Type: `string`
