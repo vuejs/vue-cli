@@ -29,7 +29,7 @@
       "<rootDir>/scripts/testSetup.js"
     ],
     "testMatch": [
-      "**/*.spec.js"
+      "**/__tests__/**/*.spec.js"
     ]
   },
   "lint-staged": {
