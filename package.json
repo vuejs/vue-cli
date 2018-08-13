@@ -28,14 +28,9 @@
     "setupFiles": [
       "<rootDir>/scripts/testSetup.js"
     ],
-    "testPathIgnorePatterns": [
-      "/template/",
-      "/packages/test/",
-      "/temp/",
-      "/scripts/",
-      ".*.helper.js"
-    ],
-    "testMatch": ["**/*.spec.js"]
+    "testMatch": [
+      "**/*.spec.js"
+    ]
   },
   "lint-staged": {
     "*.{js,vue}": [
@@ -63,6 +58,7 @@
     "lerna": "^2.8.0",
     "lint-staged": "^7.2.0",
     "memfs": "^2.8.0",
+    "minimist": "^1.2.0",
     "puppeteer": "^1.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
