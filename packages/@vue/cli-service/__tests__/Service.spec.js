@@ -94,6 +94,26 @@ test('handle option baseUrl and outputDir correctly', () => {
   expect(service.projectOptions.outputDir).toBe('/public')
 })
 
+test('normalize baseUrl when relative', () => {
+  mockPkg({
+    vue: {
+      baseUrl: './foo/bar'
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.baseUrl).toBe('foo/bar/')
+})
+
+test('keep baseUrl when empty', () => {
+  mockPkg({
+    vue: {
+      baseUrl: ''
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.baseUrl).toBe('')
+})
+
 test('load project options from vue.config.js', () => {
   process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
   fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
