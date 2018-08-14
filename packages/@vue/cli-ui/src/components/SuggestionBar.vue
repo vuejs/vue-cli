@@ -41,7 +41,7 @@
       <transition-group name="suggestion" class="suggestions">
         <SuggestionBarItem
           v-for="suggestion of withBuiltins(data.suggestions)"
-          :key="suggestion.id"
+          :key="`${$i18n.locale}:${suggestion.id}`"
           :suggestion="suggestion"
         />
       </transition-group>

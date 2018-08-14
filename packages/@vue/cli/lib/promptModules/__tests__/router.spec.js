@@ -11,11 +11,16 @@ test('router', async () => {
       message: 'features',
       choices: ['Router'],
       check: [0]
+    },
+    {
+      message: 'history mode',
+      confirm: true
     }
   ]
 
   const expectedOptions = {
     router: true,
+    routerHistoryMode: true,
     plugins: {}
   }
 

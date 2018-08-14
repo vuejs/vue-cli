@@ -11,7 +11,7 @@ function checkNodeVersion (wanted, id) {
   if (!semver.satisfies(process.version, wanted)) {
     console.log(chalk.red(
       'You are using Node ' + process.version + ', but this version of ' + id +
-      'requires Node ' + wanted + '.\nPlease upgrade your Node version.'
+      ' requires Node ' + wanted + '.\nPlease upgrade your Node version.'
     ))
     process.exit(1)
   }
@@ -49,39 +49,46 @@ program
   .option('-i, --inlinePreset <json>', 'Skip prompts and use inline JSON string as preset')
   .option('-m, --packageManager <command>', 'Use specified npm client when installing dependencies')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
-  .option('-g, --git [message]', 'Force / skip git intialization, optionally specify initial commit message')
+  .option('-g, --git [message]', 'Force git initialization with initial commit message')
+  .option('-n, --no-git', 'Skip git initialization')
   .option('-f, --force', 'Overwrite target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
+  .option('-b, --bare', 'Scaffold project without beginner instructions')
   .action((name, cmd) => {
-    require('../lib/create')(name, cleanArgs(cmd))
+    const options = cleanArgs(cmd)
+    // --no-git makes commander to default git to true
+    if (process.argv.includes('-g') || process.argv.includes('--git')) {
+      options.forceGit = true
+    }
+    require('../lib/create')(name, options)
   })
 
 program
   .command('add <plugin> [pluginOptions]')
-  .allowUnknownOption()
   .description('install a plugin and invoke its generator in an already created project')
+  .allowUnknownOption()
   .action((plugin) => {
     require('../lib/add')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
   .command('invoke <plugin> [pluginOptions]')
-  .allowUnknownOption()
   .description('invoke the generator of a plugin in an already created project')
+  .allowUnknownOption()
   .action((plugin) => {
     require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
   })
 
 program
   .command('inspect [paths...]')
+  .description('inspect the webpack config in a project with vue-cli-service')
   .option('--mode <mode>')
   .option('--rule <ruleName>', 'inspect a specific module rule')
   .option('--plugin <pluginName>', 'inspect a specific plugin')
   .option('--rules', 'list all module rule names')
   .option('--plugins', 'list all plugin names')
   .option('-v --verbose', 'Show full function definitions in output')
-  .description('inspect the webpack config in a project with vue-cli-service')
   .action((paths, cmd) => {
     require('../lib/inspect')(paths, cleanArgs(cmd))
   })
@@ -97,21 +104,21 @@ program
 
 program
   .command('build [entry]')
+  .description('build a .js or .vue file in production mode with zero config')
   .option('-t, --target <target>', 'Build target (app | lib | wc | wc-async, default: app)')
   .option('-n, --name <name>', 'name for lib or web-component mode (default: entry filename)')
   .option('-d, --dest <dir>', 'output directory (default: dist)')
-  .description('build a .js or .vue file in production mode with zero config')
   .action((entry, cmd) => {
     loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
   })
 
 program
   .command('ui')
-  .option('-p, --port <port>', 'Port used for the UI server (by default search for awailable port)')
+  .description('start and open the vue-cli ui')
+  .option('-p, --port <port>', 'Port used for the UI server (by default search for available port)')
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
   .option('--headless', `Don't open browser on start and output port`)
-  .description('start and open the vue-cli ui')
   .action((cmd) => {
     checkNodeVersion('>=8.6', 'vue ui')
     require('../lib/ui')(cleanArgs(cmd))
@@ -121,8 +128,21 @@ program
   .command('init <template> <app-name>')
   .description('generate a project from a remote template (legacy API, requires @vue/cli-init)')
   .option('-c, --clone', 'Use git clone when fetching remote template')
+  .option('--offline', 'Use cached template')
   .action(() => {
     loadCommand('init', '@vue/cli-init')
+  })
+
+program
+  .command('config [value]')
+  .description('inspect and modify the config')
+  .option('-g, --get <path>', 'get value from option')
+  .option('-s, --set <path> <value>', 'set option value')
+  .option('-d, --delete <path>', 'delete option from config')
+  .option('-e, --edit', 'open config with default editor')
+  .option('--json', 'outputs JSON result only')
+  .action((value, cmd) => {
+    require('../lib/config')(value, cleanArgs(cmd))
   })
 
 // output help information on unknown commands
@@ -174,7 +194,7 @@ function cleanArgs (cmd) {
     const key = o.long.replace(/^--/, '')
     // if an option is not present and Command has a method with the same name
     // it should not be copied
-    if (typeof cmd[key] !== 'function') {
+    if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {
       args[key] = cmd[key]
     }
   })

@@ -1,103 +1,76 @@
 const extendJSConfig = require('./extendJSConfig')
 const stringifyJS = require('./stringifyJS')
-const { loadModule } = require('./module')
+const { loadModule } = require('@vue/cli-shared-utils')
 const merge = require('deepmerge')
+
+const mergeArrayWithDedupe = (a, b) => Array.from(new Set([...a, ...b]))
+const mergeOptions = {
+  arrayMerge: mergeArrayWithDedupe
+}
 
 const isObject = val => val && typeof val === 'object'
 
-function makeJSTransform (filename) {
-  return function transformToJS (value, checkExisting, files, context) {
-    if (checkExisting && files[filename]) {
-      // Merge data
-      let changedData = {}
-      try {
-        const originalData = loadModule(filename, context, true)
-        // We merge only the modified keys
-        Object.keys(value).forEach(key => {
-          const originalValue = originalData[key]
-          const newValue = value[key]
-          if (Array.isArray(newValue)) {
-            changedData[key] = newValue
-          } else if (isObject(originalValue) && isObject(newValue)) {
-            changedData[key] = merge(originalValue, newValue)
-          } else {
-            changedData[key] = newValue
-          }
-        })
-      } catch (e) {
-        changedData = value
-      }
-      // Write
-      return {
-        filename,
-        content: extendJSConfig(changedData, files[filename])
-      }
+const transformJS = {
+  read: ({ filename, context }) => {
+    try {
+      return loadModule(filename, context, true)
+    } catch (e) {
+      return null
+    }
+  },
+  write: ({ value, existing, source }) => {
+    if (existing) {
+      // We merge only the modified keys
+      const changedData = {}
+      Object.keys(value).forEach(key => {
+        const originalValue = existing[key]
+        const newValue = value[key]
+        if (Array.isArray(originalValue) && Array.isArray(newValue)) {
+          changedData[key] = mergeArrayWithDedupe(originalValue, newValue)
+        } else if (isObject(originalValue) && isObject(newValue)) {
+          changedData[key] = merge(originalValue, newValue, mergeOptions)
+        } else {
+          changedData[key] = newValue
+        }
+      })
+      return extendJSConfig(changedData, source)
     } else {
-      return {
-        filename,
-        content: `module.exports = ${stringifyJS(value, null, 2)}`
-      }
+      return `module.exports = ${stringifyJS(value, null, 2)}`
     }
   }
 }
 
-function makeJSONTransform (filename) {
-  return function transformToJSON (value, checkExisting, files) {
-    let existing = {}
-    if (checkExisting && files[filename]) {
-      existing = JSON.parse(files[filename])
-    }
-    value = merge(existing, value)
-    return {
-      filename,
-      content: JSON.stringify(value, null, 2)
-    }
+const transformJSON = {
+  read: ({ source }) => JSON.parse(source),
+  write: ({ value, existing }) => {
+    return JSON.stringify(merge(existing, value, mergeOptions), null, 2)
   }
 }
 
-function makeMutliExtensionJSONTransform (filename, preferJS) {
-  return function transformToMultiExtensions (value, checkExisting, files, context) {
-    function defaultTransform () {
-      if (preferJS) {
-        return makeJSTransform(`${filename}.js`)(value, false, files, context)
-      } else {
-        return makeJSONTransform(filename)(value, false, files)
-      }
-    }
-
-    if (!checkExisting) {
-      return defaultTransform()
-    }
-
-    if (files[filename]) {
-      return makeJSONTransform(filename)(value, checkExisting, files)
-    } else if (files[`${filename}.json`]) {
-      return makeJSONTransform(`${filename}.json`)(value, checkExisting, files)
-    } else if (files[`${filename}.js`]) {
-      return makeJSTransform(`${filename}.js`)(value, checkExisting, files, context)
-    } else if (files[`${filename}.yaml`]) {
-      return transformYAML(value, `${filename}.yaml`, files[`${filename}.yaml`])
-    } else if (files[`${filename}.yml`]) {
-      return transformYAML(value, `${filename}.yml`, files[`${filename}.yml`])
-    } else {
-      return defaultTransform()
-    }
+const transformYAML = {
+  read: ({ source }) => require('js-yaml').safeLoad(source),
+  write: ({ value, existing }) => {
+    return require('js-yaml').safeDump(merge(existing, value, mergeOptions), {
+      skipInvalid: true
+    })
   }
 }
 
-function transformYAML (value, filename, source) {
-  const yaml = require('js-yaml')
-  const existing = yaml.safeLoad(source)
-  return {
-    filename,
-    content: yaml.safeDump(merge(existing, value))
+const transformLines = {
+  read: ({ source }) => source.split('\n'),
+  write: ({ value, existing }) => {
+    if (existing) {
+      value = existing.concat(value)
+      // Dedupe
+      value = value.filter((item, index) => value.indexOf(item) === index)
+    }
+    return value.join('\n')
   }
 }
 
 module.exports = {
-  vue: makeJSTransform('vue.config.js'),
-  babel: makeJSTransform('babel.config.js'),
-  postcss: makeMutliExtensionJSONTransform('.postcssrc', true),
-  eslintConfig: makeMutliExtensionJSONTransform('.eslintrc', true),
-  jest: makeJSTransform('jest.config.js')
+  js: transformJS,
+  json: transformJSON,
+  yaml: transformYAML,
+  lines: transformLines
 }

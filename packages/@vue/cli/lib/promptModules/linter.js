@@ -17,6 +17,7 @@ module.exports = cli => {
     when: answers => answers.features.includes('linter'),
     type: 'list',
     message: 'Pick a linter / formatter config:',
+    description: 'Checking code errors and enforcing an homogeoneous code style is recommended.',
     choices: answers => [
       ...(
         answers.features.includes('ts')

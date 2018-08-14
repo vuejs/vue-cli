@@ -1,11 +1,12 @@
 const execa = require('execa')
 const cc = require('conventional-changelog')
+const config = require('@vue/conventional-changelog')
 
 const gen = module.exports = version => {
   const fileStream = require('fs').createWriteStream(`CHANGELOG.md`)
 
   cc({
-    preset: 'angular',
+    config,
     releaseCount: 0,
     pkg: {
       transform (pkg) {

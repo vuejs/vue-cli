@@ -61,6 +61,14 @@ module.exports = (api, options) => {
       delete process.env.VUE_CLI_MODERN_MODE
       delete process.env.VUE_CLI_MODERN_BUILD
     } else {
+      if (args.modern) {
+        const { warn } = require('@vue/cli-shared-utils')
+        warn(
+          `Modern mode only works with default target (app). ` +
+          `For libraries or web components, use the browserslist ` +
+          `config to specify target browsers.`
+        )
+      }
       await build(args, api, options)
     }
     delete process.env.VUE_CLI_BUILD_TARGET
@@ -73,6 +81,7 @@ async function build (args, api, options) {
   const chalk = require('chalk')
   const webpack = require('webpack')
   const formatStats = require('./formatStats')
+  const validateWebpackConfig = require('../../util/validateWebpackConfig')
   const {
     log,
     done,
@@ -115,37 +124,15 @@ async function build (args, api, options) {
     webpackConfig = require('./resolveAppConfig')(api, args, options)
   }
 
+  // check for common config errors
+  validateWebpackConfig(webpackConfig, api, options, args.target)
+
   // apply inline dest path after user configureWebpack hooks
   // so it takes higher priority
   if (args.dest) {
     modifyConfig(webpackConfig, config => {
       config.output.path = targetDir
     })
-  }
-
-  // grab the actual output path and check for common mis-configuration
-  const actualTargetDir = (
-    Array.isArray(webpackConfig)
-      ? webpackConfig[0]
-      : webpackConfig
-  ).output.path
-
-  if (!args.dest && actualTargetDir !== api.resolve(options.outputDir)) {
-    // user directly modifies output.path in configureWebpack or chainWebpack.
-    // this is not supported because there's no way for us to give copy
-    // plugin the correct value this way.
-    throw new Error(
-      `\n\nConfiguration Error: ` +
-      `Avoid modifying webpack output.path directly. ` +
-      `Use the "outputDir" option instead.\n`
-    )
-  }
-
-  if (actualTargetDir === api.service.context) {
-    throw new Error(
-      `\n\nConfiguration Error: ` +
-      `Do not set output directory to project root.\n`
-    )
   }
 
   if (args.watch) {
@@ -188,6 +175,7 @@ async function build (args, api, options) {
   }
 
   return new Promise((resolve, reject) => {
+    const isFreshBuild = !fs.existsSync(api.resolve('node_modules/.cache'))
     webpack(webpackConfig, (err, stats) => {
       stopSpinner(false)
       if (err) {
@@ -206,18 +194,21 @@ async function build (args, api, options) {
         log(formatStats(stats, targetDirShort, api))
         if (args.target === 'app' && !isLegacyBuild) {
           if (!args.watch) {
-            done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.\n`)
+            done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.`)
+            info(`Check out deployment instructions at ${chalk.cyan(`https://cli.vuejs.org/guide/deployment.html`)}\n`)
           } else {
             done(`Build complete. Watching for changes...`)
           }
           if (
             options.baseUrl === '/' &&
             // only log the tips if this is the first build
-            !fs.existsSync(api.resolve('node_modules/.cache'))
+            isFreshBuild
           ) {
-            info(`The app is built assuming that it will be deployed at the root of a domain.`)
-            info(`If you intend to deploy it under a subpath, update the ${chalk.green('baseUrl')} option`)
-            info(`in your project config (${chalk.cyan(`vue.config.js`)} or ${chalk.green('"vue"')} field in ${chalk.cyan(`package.json`)}).\n`)
+            console.log(
+              chalk.gray(`Tip: the directory is meant to be served by an HTTP server, and will not work if\n` +
+              `you open it directly over file:// protocol. To preview it locally, use an HTTP\n` +
+              `server like the ${chalk.yellow(`serve`)} package on npm.\n`)
+            )
           }
         }
       }

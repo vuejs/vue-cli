@@ -8,7 +8,7 @@ App is the default build target. In this mode:
 
 - `index.html` with asset and resource hints injection
 - vendor libraries split into a separate chunk for better caching
-- static assets under 10kb are inlined into JavaScript
+- static assets under 4kb are inlined into JavaScript
 - static assets in `public` are copied into output directory
 
 ## Library
@@ -70,13 +70,15 @@ Web Component mode does not support IE11 and below. [More details](https://githu
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
 :::
 
-You can build a single entry as a library using
+You can build a single entry as a web component using
 
 ```
 vue-cli-service build --target wc --name my-element [entry]
 ```
 
-This will produce a single JavaScript file (and its minified version) with everything inlined. The script, when included on a page, registers the `<my-element>` custom element, which wraps the target Vue component using `@vue/web-component-wrapper`. The wrapper automatically proxies properties, attributes, events and slots. See the [docs for `@vue/web-component-wrapper`](https://github.com/vuejs/vue-web-component-wrapper) for more details.
+Note that the entry should be a `*.vue` file. Vue CLI will automatically wrap and register the component as a Web Component for you, and there's no need to do this yourself in `main.js`. You can use `main.js` as a demo app solely for development.
+
+The build will produce a single JavaScript file (and its minified version) with everything inlined. The script, when included on a page, registers the `<my-element>` custom element, which wraps the target Vue component using `@vue/web-component-wrapper`. The wrapper automatically proxies properties, attributes, events and slots. See the [docs for `@vue/web-component-wrapper`](https://github.com/vuejs/vue-web-component-wrapper) for more details.
 
 **Note the bundle relies on `Vue` being globally available on the page.**
 

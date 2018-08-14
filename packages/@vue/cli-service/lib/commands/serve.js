@@ -1,6 +1,6 @@
 const {
   info,
-  hasYarn,
+  hasProjectYarn,
   openBrowser,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
@@ -21,17 +21,19 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
-      '--https': `use https (default: ${defaults.https})`
+      '--https': `use https (default: ${defaults.https})`,
+      '--public': `specify the public network URL for the HMR client`
     }
   }, async function serve (args) {
     info('Starting development server...')
 
     // although this is primarily a dev server, it is possible that we
     // are running it in a mode with a production env, e.g. in E2E tests.
+    const isInContainer = checkInContainer()
     const isProduction = process.env.NODE_ENV === 'production'
 
-    const path = require('path')
     const url = require('url')
+    const path = require('path')
     const chalk = require('chalk')
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
@@ -39,12 +41,20 @@ module.exports = (api, options) => {
     const prepareURLs = require('../util/prepareURLs')
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
-
-    // load user devServer options
-    const projectDevServerOptions = options.devServer || {}
+    const validateWebpackConfig = require('../util/validateWebpackConfig')
 
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
+
+    // check for common config errors
+    validateWebpackConfig(webpackConfig, api, options)
+
+    // load user devServer options with higher priority than devServer
+    // in webpck config
+    const projectDevServerOptions = Object.assign(
+      webpackConfig.devServer || {},
+      options.devServer
+    )
 
     // expose advanced stats
     if (args.dashboard) {
@@ -68,6 +78,12 @@ module.exports = (api, options) => {
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
     const port = await portfinder.getPortPromise()
+    const rawPublicUrl = args.public || projectDevServerOptions.public
+    const publicUrl = rawPublicUrl
+      ? /^[a-zA-Z]+:\/\//.test(rawPublicUrl)
+        ? rawPublicUrl
+        : `${protocol}://${rawPublicUrl}`
+      : null
 
     const urls = prepareURLs(
       protocol,
@@ -83,17 +99,23 @@ module.exports = (api, options) => {
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
-      const publicOpt = projectDevServerOptions.public
-      const sockjsUrl = publicOpt ? `//${publicOpt}/sockjs-node` : url.format({
-        protocol,
-        port,
-        hostname: urls.lanUrlForConfig || 'localhost',
-        pathname: '/sockjs-node'
-      })
-
+      const sockjsUrl = publicUrl
+        // explicitly configured via devServer.public
+        ? `?${publicUrl}/sockjs-node`
+        : isInContainer
+          // can't infer public netowrk url if inside a container...
+          // use client-side inference (note this would break with non-root baseUrl)
+          ? ``
+          // otherwise infer the url
+          : `?` + url.format({
+            protocol,
+            port,
+            hostname: urls.lanUrlForConfig || 'localhost',
+            pathname: '/sockjs-node'
+          })
       const devClients = [
         // dev server client
-        require.resolve(`webpack-dev-server/client`) + `?${sockjsUrl}`,
+        require.resolve(`webpack-dev-server/client`) + sockjsUrl,
         // hmr client
         require.resolve(projectDevServerOptions.hotOnly
           ? 'webpack/hot/only-dev-server'
@@ -132,7 +154,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
-      before (app) {
+      before (app, server) {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay
         app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
@@ -140,9 +162,9 @@ module.exports = (api, options) => {
           `add "editor" field to your Vue project config.\n`
         )))
         // allow other plugins to register middlewares, e.g. PWA
-        api.service.devServerConfigFns.forEach(fn => fn(app))
+        api.service.devServerConfigFns.forEach(fn => fn(app, server))
         // apply in project middlewares
-        projectDevServerOptions.before && projectDevServerOptions.before(app)
+        projectDevServerOptions.before && projectDevServerOptions.before(app, server)
       }
     }))
 
@@ -181,19 +203,36 @@ module.exports = (api, options) => {
           copied = chalk.dim('(copied to clipboard)')
         }
 
+        const networkUrl = publicUrl
+          ? publicUrl.replace(/([^/])$/, '$1/')
+          : urls.lanUrlForTerminal
+
         console.log()
-        console.log([
-          `  App running at:`,
-          `  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`,
-          `  - Network: ${chalk.cyan(urls.lanUrlForTerminal)}`
-        ].join('\n'))
+        console.log(`  App running at:`)
+        console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
+        if (!isInContainer) {
+          console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
+        } else {
+          console.log()
+          console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
+          if (!publicUrl && options.baseUrl && options.baseUrl !== '/') {
+            console.log()
+            console.log(chalk.yellow(`  Since you are using a non-root baseUrl, the hot-reload socket`))
+            console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
+            console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
+            console.log()
+          }
+          console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
+            `${protocol}://localhost:<your container's external mapped port>${options.baseUrl}`
+          )}`))
+        }
         console.log()
 
         if (isFirstCompile) {
           isFirstCompile = false
 
           if (!isProduction) {
-            const buildCommand = hasYarn() ? `yarn build` : `npm run build`
+            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
           } else {
@@ -247,6 +286,15 @@ function addDevClientToEntry (config, devClient) {
     config.entry = entry(devClient)
   } else {
     config.entry = devClient.concat(entry)
+  }
+}
+
+// https://stackoverflow.com/a/20012536
+function checkInContainer () {
+  const fs = require('fs')
+  if (fs.existsSync(`/proc/1/cgroup`)) {
+    const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
+    return /:\/(lxc|docker)\//.test(content)
   }
 }
 

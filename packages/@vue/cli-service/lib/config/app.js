@@ -2,6 +2,16 @@
 const fs = require('fs')
 const path = require('path')
 
+// ensure the filename passed to html-webpack-plugin is a relative path
+// because it cannot correctly handle absolute paths
+function ensureRelative (outputDir, _path) {
+  if (path.isAbsolute(_path)) {
+    return path.relative(outputDir, _path)
+  } else {
+    return _path
+  }
+}
+
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     // only apply when there's no alternative target
@@ -11,6 +21,7 @@ module.exports = (api, options) => {
 
     const isProd = process.env.NODE_ENV === 'production'
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
+    const outputDir = api.resolve(options.outputDir)
 
     // code splitting
     if (isProd) {
@@ -37,6 +48,31 @@ module.exports = (api, options) => {
     // HTML plugin
     const resolveClientEnv = require('../util/resolveClientEnv')
 
+    // #1669 html-webpack-plugin's default sort uses toposort which cannot
+    // handle cyclic deps in certain cases. Monkey patch it to handle the case
+    // before we can upgrade to its 4.0 version (incompatible with preload atm)
+    const chunkSorters = require('html-webpack-plugin/lib/chunksorter')
+    const depSort = chunkSorters.dependency
+    chunkSorters.auto = chunkSorters.dependency = (chunks, ...args) => {
+      try {
+        return depSort(chunks, ...args)
+      } catch (e) {
+        // fallback to a manual sort if that happens...
+        return chunks.sort((a, b) => {
+          // make sure user entry is loaded last so user CSS can override
+          // vendor CSS
+          if (a.id === 'app') {
+            return 1
+          } else if (b.id === 'app') {
+            return -1
+          } else if (a.entry !== b.entry) {
+            return b.entry ? -1 : 1
+          }
+          return 0
+        })
+      }
+    }
+
     const htmlOptions = {
       templateParameters: (compilation, assets, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
@@ -57,6 +93,19 @@ module.exports = (api, options) => {
     }
 
     if (isProd) {
+      // handle indexPath
+      if (options.indexPath !== 'index.html') {
+        // why not set filename for html-webpack-plugin?
+        // 1. It cannot handle absolute paths
+        // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
+        webpackConfig
+          .plugin('move-index')
+          .use(require('../webpack/MovePlugin'), [
+            path.resolve(outputDir, 'index.html'),
+            path.resolve(outputDir, options.indexPath)
+          ])
+      }
+
       Object.assign(htmlOptions, {
         minify: {
           removeComments: true,
@@ -66,10 +115,30 @@ module.exports = (api, options) => {
           removeScriptTypeAttributes: true
           // more options:
           // https://github.com/kangax/html-minifier#options-quick-reference
-        },
-        // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-        chunksSortMode: 'dependency'
+        }
       })
+
+      // keep chunk ids stable so async chunks have consistent hash (#1916)
+      const seen = new Set()
+      const nameLength = 4
+      webpackConfig
+        .plugin('named-chunks')
+          .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
+            if (chunk.name) {
+              return chunk.name
+            }
+            const modules = Array.from(chunk.modulesIterable)
+            if (modules.length > 1) {
+              const hash = require('hash-sum')
+              const joinedHash = hash(modules.map(m => m.id).join('_'))
+              let len = nameLength
+              while (seen.has(joinedHash.substr(0, len))) len++
+              seen.add(joinedHash.substr(0, len))
+              return `chunk-${joinedHash.substr(0, len)}`
+            } else {
+              return modules[0].id
+            }
+          }])
     }
 
     // resolve HTML file(s)
@@ -78,6 +147,7 @@ module.exports = (api, options) => {
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
+    const publicCopyIgnore = ['index.html', '.DS_Store']
 
     if (!multiPageConfig) {
       // default, single page setup.
@@ -115,18 +185,32 @@ module.exports = (api, options) => {
 
       pages.forEach(name => {
         const {
+          title,
           entry,
           template = `public/${name}.html`,
-          filename = `${name}.html`
+          filename = `${name}.html`,
+          chunks
         } = normalizePageConfig(multiPageConfig[name])
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
+        // resolve page index template
+        const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
+        if (hasDedicatedTemplate) {
+          publicCopyIgnore.push(template)
+        }
+        const templatePath = hasDedicatedTemplate
+          ? template
+          : fs.existsSync(htmlPath)
+            ? htmlPath
+            : defaultHtmlPath
+
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign({}, htmlOptions, {
-          chunks: ['chunk-vendors', 'chunk-common', name],
-          template: fs.existsSync(template) ? template : defaultHtmlPath,
-          filename
+          chunks: chunks || ['chunk-vendors', 'chunk-common', name],
+          template: templatePath,
+          filename: ensureRelative(outputDir, filename),
+          title
         })
 
         webpackConfig
@@ -136,9 +220,10 @@ module.exports = (api, options) => {
 
       if (!isLegacyBundle) {
         pages.forEach(name => {
-          const {
-            filename = `${name}.html`
-          } = normalizePageConfig(multiPageConfig[name])
+          const filename = ensureRelative(
+            outputDir,
+            normalizePageConfig(multiPageConfig[name]).filename || `${name}.html`
+          )
           webpackConfig
             .plugin(`preload-${name}`)
               .use(PreloadPlugin, [{
@@ -165,14 +250,26 @@ module.exports = (api, options) => {
       }
     }
 
+    // CORS and Subresource Integrity
+    if (options.crossorigin != null || options.integrity) {
+      webpackConfig
+        .plugin('cors')
+          .use(require('../webpack/CorsPlugin'), [{
+            crossorigin: options.crossorigin,
+            integrity: options.integrity,
+            baseUrl: options.baseUrl
+          }])
+    }
+
     // copy static assets in public/
-    if (!isLegacyBundle && fs.existsSync(api.resolve('public'))) {
+    const publicDir = api.resolve('public')
+    if (!isLegacyBundle && fs.existsSync(publicDir)) {
       webpackConfig
         .plugin('copy')
           .use(require('copy-webpack-plugin'), [[{
-            from: api.resolve('public'),
-            to: api.resolve(options.outputDir),
-            ignore: ['index.html', '.DS_Store']
+            from: publicDir,
+            to: outputDir,
+            ignore: publicCopyIgnore
           }]])
     }
   })

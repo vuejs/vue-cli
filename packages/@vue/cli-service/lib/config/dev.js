@@ -1,6 +1,6 @@
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
       webpackConfig
         .devtool('cheap-module-eval-source-map')
         .output

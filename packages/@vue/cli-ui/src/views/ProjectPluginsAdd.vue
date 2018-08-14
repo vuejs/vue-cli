@@ -13,72 +13,12 @@
             icon="search"
             disabled
           >
-            <div class="content vue-ui-disable-scroll">
-              <ais-index
-                app-id="OFCNCOG2CU"
-                api-key="db283631f89b5b8a10707311f911fd00"
-                index-name="npm-search"
-                :query-parameters="{
-                  hitsPerPage: 20,
-                  attributesToRetrieve: [
-                    'name',
-                    'description',
-                    'repository',
-                    'homepage',
-                    'version',
-                    'owner',
-                    'humanDownloadsLast30Days'
-                  ],
-                  attributesToHighlight: [
-                    'name',
-                    'description'
-                  ],
-                  filters: `computedKeywords:vue-cli-plugin`
-                }"
-              >
-                <InstantSearchInput
-                  ref="searchInput"
-                  :placeholder="$t('org.vue.views.project-plugins-add.tabs.search.search-input')"
-                />
-                <ais-results ref="results">
-                  <PackageSearchItem
-                    slot-scope="{ result }"
-                    :pkg="result"
-                    :selected="selectedId === result.name"
-                    @click.native="selectedId = result.name"
-                  />
-                </ais-results>
-                <ais-no-results>
-                  <div class="vue-ui-empty">
-                    <VueIcon icon="search" class="huge"/>
-                    <div>{{ $t('org.vue.views.project-plugins-add.tabs.search.not-found') }}</div>
-                  </div>
-                </ais-no-results>
-                <InstantSearchPagination @page-change="scrollResultsToTop()"/>
-              </ais-index>
-            </div>
-
-            <div class="actions-bar no-padding-x">
-              <VueButton
-                icon-left="close"
-                :label="$t('org.vue.views.project-plugins-add.tabs.search.buttons.cancel')"
-                class="big"
-                @click="close()"
-              />
-
-              <div class="algolia">
-                <img class="ais-logo" src="~@/assets/search-by-algolia.svg">
-              </div>
-
-              <VueButton
-                icon-left="file_download"
-                :label="$t('org.vue.views.project-plugins-add.tabs.search.buttons.install', { target: selectedId || $t('org.vue.views.project-plugins-add.plugin') })"
-                class="big primary"
-                :disabled="!selectedId"
-                data-testid="download-plugin"
-                @click="installPlugin()"
-              />
-            </div>
+            <NpmPackageSearch
+              filters="computedKeywords:vue-cli-plugin"
+              try-logos
+              @close="close()"
+              @install="installPlugin"
+            />
           </VueTab>
 
           <VueTab
@@ -198,7 +138,6 @@ export default {
   data () {
     return {
       tabId: 'search',
-      selectedId: null,
       showCancelInstall: false,
       pluginInstallation: null
     }
@@ -207,7 +146,7 @@ export default {
   apollo: {
     pluginInstallation: {
       query: PLUGIN_INSTALLATION,
-      fetchPolicy: 'netork-only',
+      fetchPolicy: 'network-only',
       result () {
         this.checkTab()
       }
@@ -222,7 +161,6 @@ export default {
 
   mounted () {
     requestAnimationFrame(() => {
-      this.$refs.searchInput.focus()
       this.checkTab()
     })
   },
@@ -253,12 +191,12 @@ export default {
       }
     },
 
-    async installPlugin () {
+    async installPlugin (id) {
       try {
         await this.$apollo.mutate({
           mutation: PLUGIN_INSTALL,
           variables: {
-            id: this.selectedId
+            id
           }
         })
         this.tabId = 'config'
@@ -269,7 +207,6 @@ export default {
     },
 
     cancelInstall () {
-      this.selectedId = null
       this.tabId = 'search'
       this.showCancelInstall = false
     },
@@ -315,11 +252,6 @@ export default {
         // eslint-disable-next-line no-console
         console.error(e)
       }
-    },
-
-    scrollResultsToTop () {
-      const vm = this.$refs.results
-      if (vm) vm.$el.scrollTop = 0
     }
   }
 }
@@ -337,15 +269,4 @@ export default {
 .content
   grid-area content
   overflow hidden
-
-.algolia
-  position absolute
-  margin 0 auto
-  top 0
-  left 0
-  width 100%
-  height 100%
-  pointer-events none
-  h-box()
-  box-center()
 </style>

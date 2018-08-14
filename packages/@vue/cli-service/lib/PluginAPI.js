@@ -18,6 +18,13 @@ class PluginAPI {
   }
 
   /**
+   * Current working directory.
+   */
+  getCwd () {
+    return this.service.context
+  }
+
+  /**
    * Resolve path for a project.
    *
    * @param {string} _path - Relative path from project root
@@ -34,6 +41,11 @@ class PluginAPI {
    * @return {boolean}
    */
   hasPlugin (id) {
+    if (id === 'router') id = 'vue-router'
+    if (['vue-router', 'vuex'].includes(id)) {
+      const pkg = this.service.pkg
+      return ((pkg.dependencies && pkg.dependencies[id]) || (pkg.devDependencies && pkg.devDependencies[id]))
+    }
     return this.service.plugins.some(p => matchesPluginId(id, p.id))
   }
 

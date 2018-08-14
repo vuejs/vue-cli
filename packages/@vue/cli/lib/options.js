@@ -1,21 +1,17 @@
 const fs = require('fs')
-const os = require('os')
-const path = require('path')
 const cloneDeep = require('lodash.clonedeep')
+const { getRcPath } = require('./util/rcPath')
+const { exit } = require('@vue/cli-shared-utils/lib/exit')
 const { error } = require('@vue/cli-shared-utils/lib/logger')
 const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
-const { exit } = require('@vue/cli-shared-utils/lib/exit')
-const { xdgConfigPath } = require('./util/xdgConfig')
 
-const rcPath = exports.rcPath = (
-  process.env.VUE_CLI_CONFIG_PATH ||
-  xdgConfigPath('.vuerc') ||
-  path.join(os.homedir(), '.vuerc')
-)
+const rcPath = exports.rcPath = getRcPath('.vuerc')
 
 const presetSchema = createSchema(joi => joi.object().keys({
+  bare: joi.boolean(),
   useConfigFiles: joi.boolean(),
   router: joi.boolean(),
+  routerHistoryMode: joi.boolean(),
   vuex: joi.boolean(),
   cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
   plugins: joi.object().required(),

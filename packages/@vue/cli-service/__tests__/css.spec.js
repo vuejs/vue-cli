@@ -56,9 +56,8 @@ test('default loaders', () => {
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
-      minimize: false,
       sourceMap: false,
-      importLoaders: lang === 'css' ? 2 : 3
+      importLoaders: 2
     })
   })
   // sass indented syntax
@@ -71,9 +70,8 @@ test('production defaults', () => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'css')).toEqual({
-      minimize: true,
       sourceMap: false,
-      importLoaders: lang === 'css' ? 2 : 3
+      importLoaders: 2
     })
   })
 })
@@ -88,9 +86,8 @@ test('CSS Modules rules', () => {
   })
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: lang === 'css' ? 1 : 2, // no postcss-loader
+      importLoaders: 1, // no postcss-loader
       localIdentName: `[name]_[local]_[hash:base64:5]`,
-      minimize: false,
       sourceMap: false,
       modules: true
     }

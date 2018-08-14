@@ -23,16 +23,24 @@ npm run serve
 yarn serve
 ```
 
-If you have [npx](https://github.com/zkat/npx) available (should be bundled with an update-to-date version of npm), you can also invoke the binary directly with:
+If you have [npx](https://github.com/zkat/npx) available (should be bundled with an up-to-date version of npm), you can also invoke the binary directly with:
 
 ``` bash
 npx vue-cli-service serve
 ```
 
+::: tip
+You can run scripts with additional features using the GUI with the `vue ui` command.
+:::
+
+Here is the Webpack Analyzer from the GUI in action:
+
+![UI Webpack Analyzer](/ui-analyzer.png)
+
 ## vue-cli-service serve
 
 ```
-Usage: vue-cli-service serve [options]
+Usage: vue-cli-service serve [options] [entry]
 
 Options:
 
@@ -44,7 +52,7 @@ Options:
   --https   use https (default: false)
 ```
 
-The `serve` command starts a dev server (based on [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) that comes with Hot-Module-Replacement (HMR) working out of the box.
+The `vue-cli-service serve` command starts a dev server (based on [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) that comes with Hot-Module-Replacement (HMR) working out of the box.
 
 In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
 

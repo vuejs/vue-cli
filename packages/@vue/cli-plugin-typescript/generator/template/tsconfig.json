@@ -8,16 +8,17 @@
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     <%_ } _%>
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "node"<%_ if (hasMocha) { _%>,
+      "node"<% if (hasMocha || hasJest) { %>,<% } %>
+      <%_ if (hasMocha) { _%>
       "mocha",
       "chai"
-      <%_ } else if (hasJest) { _%>,
+      <%_ } else if (hasJest) { _%>
       "jest"
       <%_ } _%>
     ],
@@ -27,7 +28,7 @@
       ]
     },
     "lib": [
-      "es2015",
+      "esnext",
       "dom",
       "dom.iterable",
       "scripthost"

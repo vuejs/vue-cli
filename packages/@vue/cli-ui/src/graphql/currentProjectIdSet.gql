@@ -1,0 +1,3 @@
+mutation currentProjectIdSet ($projectId: ID!) {
+  currentProjectIdSet(projectId: $projectId) @client
+}

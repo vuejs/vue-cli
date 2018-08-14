@@ -18,6 +18,17 @@ VUE_APP_SECRET=secret
 
 Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
 
+::: tip Env Loading Priorities
+
+An env file for a specific mode (e.g. `.env.production`) will take higher priority than a generic one (e.g. `.env`).
+
+In addition, environment variables that already exist when Vue CLI is bootstrapped have the highest priority and will not be overwritten by `.env` files.
+:::
+
+::: warning NODE_ENV
+If you have a default `NODE_ENV` in your environment, you should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands.
+:::
+
 ## Modes
 
 **Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
@@ -73,6 +84,10 @@ In addition to `VUE_APP_*` variables, there are also two special variables that 
 - `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
 
 All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#interpolation).
+
+::: tip
+You can have computed env vars in your `vue.config.js` file. They still need to be prefixed with `VUE_APP_`. This is useful for version info `process.env.VUE_APP_VERSION = require('./package.json').version`
+:::
 
 ## Local Only Variables
 

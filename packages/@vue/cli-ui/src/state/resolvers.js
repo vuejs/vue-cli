@@ -9,6 +9,7 @@ export default {
       cache.writeData({ data })
       return null
     },
+
     loadingChange: (root, { mod }, { cache }) => {
       const { loading } = cache.readQuery({ query: LOADING })
       const data = {
@@ -17,6 +18,7 @@ export default {
       cache.writeData({ data })
       return null
     },
+
     darkModeSet: (root, { enabled }, { cache }) => {
       const data = {
         darkMode: enabled
@@ -28,6 +30,14 @@ export default {
       } else {
         el.classList.remove('vue-ui-dark-mode')
       }
+      return null
+    },
+
+    currentProjectIdSet: (root, { projectId }, { cache }) => {
+      const data = {
+        currentProjectId: projectId
+      }
+      cache.writeData({ data })
       return null
     }
   }

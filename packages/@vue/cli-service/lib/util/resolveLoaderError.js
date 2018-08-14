@@ -27,7 +27,7 @@ exports.transformer = error => {
         })
       }
     }
-    // no match, unknown webpack error withotu a message.
+    // no match, unknown webpack error without a message.
     // friendly-error-webpack-plugin fails to handle this.
     if (!error.message) {
       return Object.assign({}, error, {

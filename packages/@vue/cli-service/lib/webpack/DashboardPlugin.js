@@ -100,6 +100,10 @@ class DashboardPlugin {
         {
           type: 'status',
           value: 'Compiling'
+        },
+        {
+          type: 'progress',
+          value: 0
         }
       ])
     })
@@ -167,7 +171,7 @@ class DashboardPlugin {
         },
         {
           type: 'progress',
-          value: 0
+          value: 1
         },
         {
           type: 'operations',

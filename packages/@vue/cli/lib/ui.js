@@ -30,20 +30,19 @@ async function ui (options = {}, context = process.cwd()) {
   const opts = {
     port,
     graphqlPath: '/graphql',
-    graphqlSubscriptionsPath: '/graphql',
-    graphqlPlaygroundPath: '/graphql-playground',
-    graphqlCors: '*',
-    mock: false,
-    apolloEngine: false,
+    subscriptionsPath: '/graphql',
+    enableMocks: false,
+    enableEngine: false,
+    cors: '*',
     timeout: 1000000,
     quiet: true,
     paths: {
-      typeDefs: require.resolve('@vue/cli-ui/src/graphql-api/type-defs.js'),
-      resolvers: require.resolve('@vue/cli-ui/src/graphql-api/resolvers.js'),
-      context: require.resolve('@vue/cli-ui/src/graphql-api/context.js'),
-      pubsub: require.resolve('@vue/cli-ui/src/graphql-api/pubsub.js'),
-      server: require.resolve('@vue/cli-ui/src/graphql-api/server.js'),
-      directives: require.resolve('@vue/cli-ui/src/graphql-api/directives.js')
+      typeDefs: require.resolve('@vue/cli-ui/apollo-server/type-defs.js'),
+      resolvers: require.resolve('@vue/cli-ui/apollo-server/resolvers.js'),
+      context: require.resolve('@vue/cli-ui/apollo-server/context.js'),
+      pubsub: require.resolve('@vue/cli-ui/apollo-server/pubsub.js'),
+      server: require.resolve('@vue/cli-ui/apollo-server/server.js'),
+      directives: require.resolve('@vue/cli-ui/apollo-server/directives.js')
     }
   }
 

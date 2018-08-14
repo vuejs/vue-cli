@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-mocha",
-  "version": "3.0.0-rc.3",
+  "version": "3.0.0",
   "description": "mocha unit testing plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -19,16 +19,16 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-unit-mocha#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-unit-mocha#readme",
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.0-rc.3",
-    "jsdom": "^11.10.0",
+    "@vue/cli-shared-utils": "^3.0.0",
+    "jsdom": "^11.11.0",
     "jsdom-global": "^3.0.2",
-    "mocha": "^5.1.1",
+    "mocha": "^5.2.0",
     "mocha-webpack": "^2.0.0-beta.0"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.0.0-beta.16",
+    "@vue/test-utils": "^1.0.0-beta.20",
     "chai": "^4.1.2"
   },
   "publishConfig": {

@@ -34,10 +34,10 @@ export default {
     &::after
       content '•••'
       height 44px
-      background lighten($vue-ui-color-light-neutral, 30%)
+      background $md-grey-100
       h-box()
       box-center()
-      color darken($vue-ui-color-light-neutral, 30%)
+      color $md-grey-300
       letter-spacing 4px
       .vue-ui-dark-mode &
         background lighten($vue-ui-color-darker, 1%)

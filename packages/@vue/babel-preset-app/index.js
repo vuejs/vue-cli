@@ -1,7 +1,13 @@
 const path = require('path')
 
 const defaultPolyfills = [
-  'es6.promise'
+  // promise polyfill alone doesn't work in IE,
+  // needs this as well. see: #1642
+  'es6.array.iterator',
+  // this is required for webpack code splitting, vuex etc.
+  'es6.promise',
+  // #2012 es6.promise replaces native Promise in FF and causes missing finally
+  'es7.promise.finally'
 ]
 
 function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
@@ -39,7 +45,7 @@ module.exports = (context, options = {}) => {
     modules = false,
     targets: rawTargets,
     spec,
-    ignoreBrowserslistConfig,
+    ignoreBrowserslistConfig = !!process.env.VUE_CLI_MODERN_BUILD,
     configPath,
     include,
     exclude,
@@ -118,13 +124,14 @@ module.exports = (context, options = {}) => {
   // pass options along to babel-preset-env
   presets.push([require('@babel/preset-env'), envOptions])
 
-  // stage 2. This includes some important transforms, e.g. dynamic import
-  // and rest object spread.
-  presets.push([require('@babel/preset-stage-2'), {
-    loose,
-    useBuiltIns: useBuiltIns !== false,
-    decoratorsLegacy: decoratorsLegacy !== false
-  }])
+  // additional <= stage-3 plugins
+  // Babel 7 is removing stgage presets altogether because people are using
+  // too much unstable proposals. Let's be conservative in the defaults here.
+  plugins.push(
+    require('@babel/plugin-syntax-dynamic-import'),
+    [require('@babel/plugin-proposal-decorators'), { legacy: decoratorsLegacy !== false }],
+    [require('@babel/plugin-proposal-class-properties'), { loose }],
+  )
 
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {

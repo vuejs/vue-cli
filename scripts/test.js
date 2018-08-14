@@ -1,6 +1,4 @@
-const execa = require('execa')
 const minimist = require('minimist')
-
 const rawArgs = process.argv.slice(2)
 const args = minimist(rawArgs)
 
@@ -12,18 +10,13 @@ if (args.p) {
   rawArgs.splice(i, 2)
 }
 
-;(async () => {
-  const jestArgs = [
-    '--env', 'node',
-    '--runInBand',
-    ...rawArgs,
-    ...(regex ? [regex] : [])
-  ]
-  console.log(`running jest with args: ${jestArgs.join(' ')}`)
-  await execa('jest', jestArgs, {
-    stdio: 'inherit'
-  })
-})().catch(err => {
-  err
-  process.exit(1)
-})
+const jestArgs = [
+  '--env', 'node',
+  '--runInBand',
+  ...rawArgs,
+  ...(regex ? [regex] : [])
+]
+
+console.log(`running jest with args: ${jestArgs.join(' ')}`)
+
+require('jest').run(jestArgs)

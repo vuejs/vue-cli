@@ -1,0 +1,7 @@
+#import "./dependencyFragment.gql"
+
+query dependencies {
+  dependencies {
+    ...dependency
+  }
+}

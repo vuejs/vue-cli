@@ -12,20 +12,20 @@ const findExisting = (context, files) => {
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const getAssetPath = require('../util/getAssetPath')
+    const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
+    const isProd = process.env.NODE_ENV === 'production'
 
     const {
       modules = false,
-      extract = true,
+      extract = isProd,
       sourceMap = false,
       loaderOptions = {}
     } = options.css || {}
 
-    const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
-    const isProd = process.env.NODE_ENV === 'production'
-    const shouldExtract = isProd && extract !== false && !shadowMode
+    const shouldExtract = extract !== false && !shadowMode
     const filename = getAssetPath(
       options,
-      `css/[name].[contenthash:8].css`,
+      `css/[name]${options.filenameHashing ? '.[contenthash:8]' : ''}.css`,
       true /* placeAtRootIfRelative */
     )
     const extractOptions = Object.assign({
@@ -79,12 +79,10 @@ module.exports = (api, options) => {
         }
 
         const cssLoaderOptions = Object.assign({
-          minimize: isProd,
           sourceMap,
           importLoaders: (
             1 + // stylePostLoader injected by vue-loader
-            hasPostCSSConfig +
-            !!loader
+            hasPostCSSConfig
           )
         }, loaderOptions.css)
 
@@ -149,9 +147,9 @@ module.exports = (api, options) => {
       }
       webpackConfig
         .plugin('optimize-css')
-          .use(require('optimize-css-assets-webpack-plugin'), [{
-            canPrint: false,
-            cssProcessorOptions
+          .use(require('@intervolga/optimize-cssnano-plugin'), [{
+            sourceMap: options.productionSourceMap && sourceMap,
+            cssnanoOptions: cssProcessorOptions
           }])
     }
   })

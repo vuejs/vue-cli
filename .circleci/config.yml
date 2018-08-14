@@ -5,6 +5,12 @@ defaults: &defaults
   docker:
     - image: vuejs/ci
 
+workflow_filters: &filters
+  filters:
+    branches:
+      ignore:
+      - docs
+
 jobs:
   install:
     <<: *defaults
@@ -73,19 +79,25 @@ workflows:
   version: 2
   test:
     jobs:
-      - install
+      - install:
+          <<: *filters
       - group-1:
+          <<: *filters
           requires:
             - install
       - group-2:
+          <<: *filters
           requires:
             - install
       - group-3:
+          <<: *filters
           requires:
             - install
       - group-4:
+          <<: *filters
           requires:
             - install
       - cli-ui:
+          <<: *filters
           requires:
             - install

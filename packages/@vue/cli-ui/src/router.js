@@ -3,19 +3,25 @@ import Router from 'vue-router'
 import { apolloClient } from './vue-apollo'
 
 import ProjectHome from './views/ProjectHome.vue'
+
 import ProjectPlugins from './views/ProjectPlugins.vue'
 import ProjectPluginsAdd from './views/ProjectPluginsAdd.vue'
 import ProjectConfigurations from './views/ProjectConfigurations.vue'
 import ProjectConfigurationDetails from './views/ProjectConfigurationDetails.vue'
 import ProjectTasks from './views/ProjectTasks.vue'
 import ProjectTaskDetails from './views/ProjectTaskDetails.vue'
+import ProjectDependencies from './views/ProjectDependencies.vue'
+
 import ProjectSelect from './views/ProjectSelect.vue'
 import ProjectCreate from './views/ProjectCreate.vue'
+
 import FileDiffView from './components/FileDiffView.vue'
+
 import About from './views/About.vue'
 import NotFound from './views/NotFound.vue'
 
 import PROJECT_CURRENT from './graphql/projectCurrent.gql'
+import CURRENT_PROJECT_ID_SET from './graphql/currentProjectIdSet.gql'
 
 Vue.use(Router)
 
@@ -70,6 +76,11 @@ const router = new Router({
               props: true
             }
           ]
+        },
+        {
+          path: 'dependencies',
+          name: 'project-dependencies',
+          component: ProjectDependencies
         }
       ]
     },
@@ -121,6 +132,13 @@ router.beforeEach(async (to, from, next) => {
     if (!result.data.projectCurrent) {
       next({ name: 'project-select' })
       return
+    } else {
+      await apolloClient.mutate({
+        mutation: CURRENT_PROJECT_ID_SET,
+        variables: {
+          projectId: result.data.projectCurrent.id
+        }
+      })
     }
   }
   next()

@@ -6,6 +6,10 @@ Vue CLI uses a plugin-based architecture. If you inspect a newly created project
 
 The plugin based architecture makes Vue CLI flexible and extensible. If you are interested in developing a plugin, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
 
+::: tip
+You can install and manage Plugins using the GUI with the `vue ui` command.
+:::
+
 ### Installing Plugins in an Existing Project
 
 Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:
@@ -56,6 +60,46 @@ vue add vuex
 ```
 
 If a plugin is already installed, you can skip the installation and only invoke its generator with the `vue invoke` command. The command takes the same arguments as `vue add`.
+
+::: tip
+If for some reason your plugins are listed in a `package.json` file other than the one located in your project, you can set the `vuePlugins.resolveFrom` option in the project `package.json` with the path to the folder containing the other `package.json` file.
+
+For example, if you have a `.config/package.json` file:
+
+```json
+{
+  "vuePlugins": {
+    "resolveFrom": ".config"
+  }
+}
+```
+:::
+
+### Project local plugin
+
+If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.service` option in your `package.json` file:
+
+```json
+{
+  "vuePlugins": {
+    "service": ["my-commands.js"]
+  }
+}
+```
+
+Each file will need to export a function taking the plugin API as the first argument. For more information about the plugin API, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
+
+You can also add files that will behave like UI plugins with the `vuePlugins.ui` option:
+
+```json
+{
+  "vuePlugins": {
+    "ui": ["my-ui.js"]
+  }
+}
+```
+
+For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
 
 ## Presets
 
@@ -136,7 +180,13 @@ For such scenarios you can specify `"prompts": true` in a plugin's options to al
 
 ### Remote Presets
 
-You can share a preset with other developers by publishing it in a git repo. The repo should contain a `preset.json` file containing the preset data. You can then use the `--preset` option to use the remote preset when creating a project:
+You can share a preset with other developers by publishing it in a git repo. The repo can contain the following files:
+
+- `preset.json`: the main file containing the preset data (required).
+- `generator.js`: a [Generator](../dev-guide/plugin-dev.md#generator) that can inject or modify files in the project.
+- `prompts.js`: a [prompts file](../dev-guide/plugin-dev.md#prompts-for-3rd-party-plugins) that can collect options for the generator.
+
+Once the repo is published, you can then use the `--preset` option to use the remote preset when creating a project:
 
 ``` bash
 # use preset from GitHub repo
@@ -152,8 +202,12 @@ vue create --preset bitbucket:username/repo --clone my-project
 
 ### Local Filesystem Preset
 
-When developing a remote preset, it can be tedious to have to repeatedly push the preset to a remote repo to test it. To simplify the workflow, the `--preset` flag also accepts local `.json` files:
+When developing a remote preset, it can be tedious to have to repeatedly push the preset to a remote repo to test it. To simplify the workflow, you can directly work with local presets. Vue CLI will load local presets if the value for the `--preset` option is a relative or absolute file path, or ends with `.json`:
 
 ``` bash
-vue create --preset local.json my-project
+# ./my-preset should be a directory containing preset.json
+vue create --preset ./my-preset my-project
+
+# or directly use a json file in cwd:
+vue create --preset my-preset.json
 ```

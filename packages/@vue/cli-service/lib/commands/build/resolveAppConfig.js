@@ -16,12 +16,18 @@ module.exports = (api, args, options) => {
       // Inject plugin to extract build stats and write to disk
       config
         .plugin('modern-mode-legacy')
-        .use(ModernModePlugin, [targetDir, false])
+        .use(ModernModePlugin, [{
+          targetDir,
+          isModernBuild: false
+        }])
     } else {
       // Inject plugin to read non-modern build stats and inject HTML
       config
         .plugin('modern-mode-modern')
-        .use(ModernModePlugin, [targetDir, true])
+        .use(ModernModePlugin, [{
+          targetDir,
+          isModernBuild: true
+        }])
     }
   }
 

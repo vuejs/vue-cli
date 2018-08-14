@@ -1,6 +1,6 @@
 <template>
   <div class="logger-view">
-    <div class="toolbar">
+    <div class="pane-toolbar">
       <VueIcon
         icon="dvr"
       />
@@ -123,19 +123,8 @@ export default {
   .vue-ui-dark-mode &
     background $vue-ui-color-darker
 
-  .toolbar
+  .pane-toolbar
     grid-area toolbar
-    h-box()
-    align-items center
-    padding 6px 6px 6px $padding-item
-    > :not(.separator)
-      space-between-x(6px)
-    > * + .separator
-      margin-left 6px
-    .title
-      flex 100% 1 1
-      width 0
-      ellipsis()
 
   .logs
     grid-area logs

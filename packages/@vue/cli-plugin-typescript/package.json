@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "3.0.0-rc.3",
+  "version": "3.0.0",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -17,24 +17,27 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-typescript#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-typescript#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@types/node": "^9.3.0",
-    "@vue/cli-shared-utils": "^3.0.0-rc.3",
-    "fork-ts-checker-webpack-plugin": "^0.4.1",
+    "@types/node": "^10.5.2",
+    "@vue/cli-shared-utils": "^3.0.0",
+    "fork-ts-checker-webpack-plugin": "^0.4.4",
     "globby": "^8.0.1",
-    "ts-loader": "^4.3.1",
-    "tslint": "^5.10.0",
-    "typescript": "~2.9.0"
+    "ts-loader": "^4.4.2",
+    "tslint": "^5.10.0"
+  },
+  "peerDependencies": {
+    "typescript": ">=2"
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",
-    "@types/jest": "^22.0.1",
-    "@types/mocha": "^2.2.46",
-    "vue-class-component": "^6.0.0",
-    "vue-property-decorator": "^6.0.0"
+    "@types/jest": "^23.1.4",
+    "@types/mocha": "^5.2.4",
+    "typescript": "^3.0.0",
+    "vue-class-component": "^6.2.0",
+    "vue-property-decorator": "^7.0.0"
   }
 }

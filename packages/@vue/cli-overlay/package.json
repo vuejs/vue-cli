@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-overlay",
-  "version": "3.0.0-rc.3",
+  "version": "3.0.0",
   "description": "error overlay & dev server middleware for vue-cli",
   "main": "dist/client.js",
   "files": [
@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-overlay#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-overlay#readme",
   "publishConfig": {
     "access": "public"
   }

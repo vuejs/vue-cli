@@ -83,13 +83,13 @@ module.exports = api => {
     onWrite: async ({ api, prompts, cwd }) => {
       const result = {}
       for (const prompt of prompts.filter(p => !p.raw.skipSave)) {
-        result[`org.vue.pwa.${prompt.id}`] = await api.getAnswer(prompt.id)
+        result[`pwa.${prompt.id}`] = await api.getAnswer(prompt.id)
       }
       api.setData('vue', result)
 
       // Update app manifest
 
-      const name = result['org.vue.pwa.name']
+      const name = result['name']
       if (name) {
         api.setData('manifest', {
           name,
@@ -97,7 +97,7 @@ module.exports = api => {
         })
       }
 
-      const themeColor = result['org.vue.pwa.themeColor']
+      const themeColor = result['themeColor']
       if (themeColor) {
         api.setData('manifest', {
           theme_color: themeColor
@@ -131,8 +131,7 @@ module.exports = api => {
           label: 'org.vue.pwa.suggestions.open-vue.label',
           handler () {
             const file = config.foundFiles.vue.path
-            console.log('open', file)
-            const launch = require('launch-editor')
+            const { launch } = require('@vue/cli-shared-utils')
             launch(file)
             return {
               keep: true
@@ -149,8 +148,7 @@ module.exports = api => {
           label: 'org.vue.pwa.suggestions.open-manifest.label',
           handler () {
             const file = config.foundFiles.manifest.path
-            console.log('open', file)
-            const launch = require('launch-editor')
+            const { launch } = require('@vue/cli-shared-utils')
             launch(file)
             return {
               keep: true

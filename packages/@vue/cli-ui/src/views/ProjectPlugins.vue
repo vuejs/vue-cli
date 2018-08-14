@@ -5,6 +5,12 @@
       class="limit-width"
     >
       <template slot="actions">
+        <VueInput
+          v-model="search"
+          icon-left="search"
+          class="round"
+        />
+
         <VueButton
           icon-left="add"
           :label="$t('org.vue.views.project-plugins.button')"
@@ -29,23 +35,30 @@
       </template>
 
       <ApolloQuery
-        :query="require('../graphql/projectPlugins.gql')"
+        :query="require('../graphql/plugins.gql')"
       >
         <template slot-scope="{ result: { data, loading } }">
           <div class="cta-text">{{ $t('org.vue.views.project-plugins.heading') }}</div>
 
           <VueLoadingIndicator
-            v-if="loading && !data"
+            v-if="loading && (!data || !data.plugins)"
             class="overlay"
           />
 
-          <div v-else-if="data" class="plugins">
-            <ProjectPluginItem
-              v-for="plugin of data.projectCurrent.plugins"
-              :key="plugin.id"
-              :plugin="plugin"
-            />
-          </div>
+          <ListFilter
+            v-else-if="data"
+            class="plugins"
+            :list="data.plugins"
+            :filter="item => !search || item.id.includes(search)"
+          >
+            <template slot-scope="{ list }">
+              <ProjectPluginItem
+                v-for="plugin of list"
+                :key="plugin.id"
+                :plugin="plugin"
+              />
+            </template>
+          </ListFilter>
         </template>
       </ApolloQuery>
     </ContentView>
@@ -57,6 +70,8 @@
 
 <script>
 import PLUGINS_UPDATE from '../graphql/pluginsUpdate.gql'
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
+import PLUGINS from '../graphql/plugins.gql'
 
 export default {
   name: 'ProjectPlugins',
@@ -64,6 +79,27 @@ export default {
   metaInfo () {
     return {
       title: this.$t('org.vue.views.project-plugins.title')
+    }
+  },
+
+  data () {
+    return {
+      search: ''
+    }
+  },
+
+  apollo: {
+    projectCurrent: PROJECT_CURRENT
+  },
+
+  bus: {
+    quickOpenProject (project) {
+      this.$apollo.getClient().writeQuery({
+        query: PLUGINS,
+        data: {
+          plugins: null
+        }
+      })
     }
   },
 

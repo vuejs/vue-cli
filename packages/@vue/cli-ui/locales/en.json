@@ -16,6 +16,7 @@
           "files-changed": "Files changed",
           "search-file": "Search file",
           "empty": "No change found",
+          "error": "Couldn't get file changes",
           "modals": {
             "commit": {
               "title": "Commit changes",
@@ -78,6 +79,7 @@
         "project-nav": {
           "tooltips": {
             "plugins": "Plugins",
+            "dependencies": "Dependencies",
             "configuration": "Configuration",
             "tasks": "Tasks",
             "more": "More"
@@ -93,7 +95,8 @@
         "project-select-list-item": {
           "tooltips": {
             "favorite": "Toggle favorite",
-            "delete": "Remove from list"
+            "delete": "Remove from list",
+            "open-in-editor": "Open in editor"
           }
         },
         "project-plugin-item": {
@@ -103,6 +106,22 @@
           "installed": "Installed",
           "actions": {
             "update": "Update {target}"
+          }
+        },
+        "project-dependency-item": {
+          "version": "version",
+          "wanted": "wanted",
+          "latest": "latest",
+          "installed": "Installed",
+          "actions": {
+            "update": "Update {target}",
+            "uninstall": "Uninstall {target}"
+          }
+        },
+        "project-tasks-dropdown": {
+          "tooltips": {
+            "tasks": "Tasks",
+            "running-tasks": "{count} running task(s)"
           }
         },
         "prompt-list": {
@@ -142,7 +161,10 @@
           }
         },
         "top-bar": {
-          "no-favorites": "No favorite projects"
+          "no-favorites": "No favorite projects",
+          "favorite-projects": "Favorite projects",
+          "recent-projects": "Recent projects",
+          "homepage": "Home page"
         },
         "view-badge": {
           "labels": {
@@ -168,7 +190,11 @@
           "plugin-uninstall": "Uninstalling {arg0}...",
           "plugin-invoke": "Invoking {arg0}...",
           "plugin-update": "Updating {arg0}...",
-          "plugins-update": "Updating {arg0} plugins..."
+          "plugins-update": "Updating {arg0} plugins...",
+          "dependency-install": "Installing {arg0}...",
+          "dependency-uninstall": "Uninstalling {arg0}...",
+          "dependency-update": "Updating {arg0}...",
+          "dependencies-update": "Updating {arg0} packages..."
         }
       },
       "types": {
@@ -210,7 +236,7 @@
               "form": {
                 "folder": {
                   "label": "Project folder",
-                  "placeholder": "my-app",
+                  "placeholder": "Type a name",
                   "tooltip": "Change base folder",
                   "action": "Select this folder",
                   "folder-exists": "This folder already exists",
@@ -266,7 +292,7 @@
                   "subtitle": "Git repo, for example 'username/repo'. You can also prefix with 'gitlab:' or 'bitbucket:'."
                 },
                 "options": "Other options",
-                "clone": "Private repository",
+                "clone": "Cloner/Private repository",
                 "cancel": "Cancel",
                 "done": "Done"
               },
@@ -323,7 +349,8 @@
               "not-found": "No results found",
               "buttons": {
                 "cancel": "Cancel",
-                "install": "Install {target}"
+                "install": "Install {target}",
+                "default-install": "Install"
               }
             },
             "configuration": {
@@ -366,13 +393,33 @@
           "actions": {
             "play": "Run task",
             "stop": "Stop task",
-            "close": "Close"
+            "close": "Close",
+            "save": "Save"
           },
           "command": "Script command",
           "parameters": "Parameters",
-          "parameters-info": "Parameters will be saved when the task is run.",
           "more-info": "More Info",
           "output": "Output"
+        },
+        "project-dependencies": {
+          "title": "Project dependencies",
+          "heading": {
+            "dependencies": "Main dependencies",
+            "devDependencies": "Development dependencies"
+          },
+          "actions": {
+            "install": "Install dependency",
+            "update-all": "Update all dependencies"
+          },
+          "install": {
+            "title": "Install new dependency"
+          },
+          "uninstall": {
+            "title": "Confirm uninstall",
+            "body": "Are you sure you want to uninstall {id}?",
+            "cancel": "Cancel",
+            "uninstall": "Uninstall {id}"
+          }
         },
         "about": {
           "title": "About",
@@ -533,18 +580,31 @@
           "eslint": {
             "description": "Error checking & Code quality",
             "groups": {
+              "base": "Base",
+              "essential": "Essential",
               "strongly-recommended": "Strongly recommended",
-              "recommended": "Recommended"
+              "recommended": "Recommended",
+              "uncategorized": "Uncategorized"
             },
-            "vue": {
-              "label": "Vue"
+            "setting": {
+              "off": "Off",
+              "error": "Error",
+              "warning": "Warning",
+              "custom": "Custom"
             },
-            "extra": {
-              "label": "Extra",
+            "general": {
+              "label": "General",
               "lintOnSave": {
                 "message": "Lint on save",
                 "description": "Automatically lint source files when saved"
+              },
+              "config": {
+                "message": "Select config",
+                "description": "Select pre-defined configuration"
               }
+            },
+            "rules": {
+              "label": "Rules"
             }
           }
         },

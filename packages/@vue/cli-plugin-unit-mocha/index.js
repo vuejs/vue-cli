@@ -28,7 +28,8 @@ module.exports = api => {
       '--timeout, -t': 'timeout threshold in milliseconds',
       '--bail, -b': 'bail after first test failure',
       '--require, -r': 'require the given module before running tests',
-      '--include': 'include the given module into test bundle'
+      '--include': 'include the given module into test bundle',
+      '--inspect-brk': 'Enable inspector to debug the tests'
     },
     details: (
       `The above list only includes the most commonly used options.\n` +
@@ -36,6 +37,11 @@ module.exports = api => {
       `http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html`
     )
   }, (args, rawArgv) => {
+    const inspectPos = rawArgv.indexOf('--inspect-brk')
+    let nodeArgs = []
+    if (inspectPos !== -1) {
+      nodeArgs = rawArgv.splice(inspectPos, inspectPos + 1)
+    }
     // for @vue/babel-preset-app
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     // start runner
@@ -43,6 +49,8 @@ module.exports = api => {
     const bin = require.resolve('mocha-webpack/bin/mocha-webpack')
     const hasInlineFilesGlob = args._ && args._.length
     const argv = [
+      ...nodeArgs,
+      bin,
       '--recursive',
       '--require',
       require.resolve('./setup.js'),
@@ -57,7 +65,7 @@ module.exports = api => {
     ]
 
     return new Promise((resolve, reject) => {
-      const child = execa(bin, argv, { stdio: 'inherit' })
+      const child = execa('node', argv, { stdio: 'inherit' })
       child.on('error', reject)
       child.on('exit', code => {
         if (code !== 0) {
@@ -67,13 +75,6 @@ module.exports = api => {
         }
       })
     })
-  })
-
-  // TODO remove in RC
-  api.registerCommand('test', (args, rawArgv) => {
-    const { warn } = require('@vue/cli-shared-utils')
-    warn(`Deprecation Warning: "vue-cli-service test" has been renamed to "vue-cli-service test:unit".`)
-    return api.service.run('test:unit', args, rawArgv)
   })
 }
 

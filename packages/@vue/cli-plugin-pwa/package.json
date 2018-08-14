@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-pwa",
-  "version": "3.0.0-rc.3",
+  "version": "3.0.0",
   "description": "pwa plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -17,13 +17,13 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-plugin-pwa#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-pwa#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "launch-editor": "^2.2.1",
-    "workbox-webpack-plugin": "^3.2.0"
+    "@vue/cli-shared-utils": "^3.0.0",
+    "workbox-webpack-plugin": "^3.3.1"
   },
   "devDependencies": {
     "register-service-worker": "^1.0.0"

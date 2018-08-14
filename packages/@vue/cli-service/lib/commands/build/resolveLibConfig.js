@@ -12,7 +12,9 @@ module.exports = (api, { entry, name }, options) => {
     process.exit(1)
   }
 
-  if (!fs.existsSync(api.resolve(entry))) {
+  const fullEntryPath = api.resolve(entry)
+
+  if (!fs.existsSync(fullEntryPath)) {
     abort(
       `Failed to resolve lib entry: ${entry}${entry === `src/App.vue` ? ' (default)' : ''}. ` +
       `Make sure to specify the correct entry file.`
@@ -71,13 +73,26 @@ module.exports = (api, { entry, name }, options) => {
     const entryName = `${libName}.${postfix}`
     config.resolve
       .alias
-        .set('~entry', api.resolve(entry))
+        .set('~entry', fullEntryPath)
+
+    // set output target before user configureWebpack hooks are applied
+    config.output.libraryTarget(format)
 
     // set entry/output after user configureWebpack hooks are applied
     const rawConfig = api.resolveWebpackConfig(config)
 
+    let realEntry = require.resolve('./entry-lib.js')
+
+    // avoid importing default if user entry file does not have default export
+    if (!isVueEntry) {
+      const entryContent = fs.readFileSync(fullEntryPath, 'utf-8')
+      if (!/\b(export\s+default|export\s{[^}]+as\s+default)\b/.test(entryContent)) {
+        realEntry = require.resolve('./entry-lib-no-default.js')
+      }
+    }
+
     rawConfig.entry = {
-      [entryName]: require.resolve('./entry-lib.js')
+      [entryName]: realEntry
     }
 
     rawConfig.output = Object.assign({
@@ -88,7 +103,7 @@ module.exports = (api, { entry, name }, options) => {
       // libraryTarget: 'esm' or target: 'universal'
       // https://github.com/webpack/webpack/issues/6522
       // https://github.com/webpack/webpack/issues/6525
-      globalObject: `typeof self !== 'undefined' ? self : this`
+      globalObject: `(typeof self !== 'undefined' ? self : this)`
     }, rawConfig.output, {
       filename: `${entryName}.js`,
       chunkFilename: `${entryName}.[name].js`,

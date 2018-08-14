@@ -51,16 +51,51 @@ module.exports = {
     // or:
     // modify its options:
     config.plugin('prefetch').tap(options => {
-      options.fileBlackList.push([/myasyncRoute(.)+?\.js$/])
+      options[0].fileBlacklist = options[0].fileBlacklist || []
+      options[0].fileBlacklist.push([/myasyncRoute(.)+?\.js$/])
       return options
     })
   }
 }
 ```
 
+When the prefetch plugin is disabled, you can manually select specific chunks to prefetch using webpack's inline comments:
+
+``` js
+import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
+```
+
+webpack's runtime will inject prefetch links when the parent chunk is loaded.
+
 ::: tip
-Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links.
+Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
 :::
+
+### Disable Index Generation
+
+When using Vue CLI with an existing backend, you may need to disable the generation of `index.html` so that the generated assets can be used in a server-rendered page. To do so, the following can be added to [`vue.config.js`](../config/#vue-config-js):
+
+``` js
+// vue.config.js
+module.exports = {
+  // disable hashes in filenames
+  filenameHashing: false,
+  // delete HTML related webpack plugins
+  chainWebpack: config => {
+    config.plugins.delete('html')
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+  }
+}
+```
+
+However, this is not really recommended because:
+
+- Hard-coded file names makes it more difficult to implement efficient cache control.
+- Hard-coded file names also do not play well with code-splitting, which generates additional JavaScript files with varying filenames.
+- Hard-coded file names do not work with [Modern Mode](../guide/browser-compatibility.md#modern-mode).
+
+Instead, you should consider using the [indexPath](../config/#indexpath) option to use the generated HTML as a view template in your server-side framework.
 
 ### Building a Multi-Page App
 
@@ -90,7 +125,22 @@ will be compiled into:
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-Internally, we use `file-loader` to determine the final file location with version hashes and correct public base paths, and use `url-loader` to conditionally inline assets that are smaller than 10kb, reducing the amount of HTTP requests.
+Internally, we use `file-loader` to determine the final file location with version hashes and correct public base paths, and use `url-loader` to conditionally inline assets that are smaller than 4kb, reducing the amount of HTTP requests.
+
+You can adjust the inline file size limit via [chainWebpack](../config/#chainwebpack). For example, to set the limit to 10kb instead:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('images')
+        .use('url-loader')
+          .loader('url-loader')
+          .tap(options => Object.assign(options, { limit: 10240 }))
+  }
+}
+```
 
 ### URL Transform Rules
 
@@ -101,16 +151,16 @@ Internally, we use `file-loader` to determine the final file location with versi
 - If the URL starts with `~`, anything after it is interpreted as a module request. This means you can even reference assets inside node modules:
 
   ``` html
-  <img src="~/some-npm-package/foo.png">
+  <img src="~some-npm-package/foo.png">
   ```
 
-- If the URL starts with `@`, it's also interpreted as a module request. This is useful because Vue CLI by default aliases `@` to `<projectRoot>/src`.
+- If the URL starts with `@`, it's also interpreted as a module request. This is useful because Vue CLI by default aliases `@` to `<projectRoot>/src`. **(templates only)**
 
 ### The `public` Folder
 
-Any static assets placed in the `public` folder will simply be copied and not go through webpack. You need to reference to them using absolute paths.
+Any static assets placed in the `public` folder will simply be copied and not go through webpack. You need to reference them using absolute paths.
 
-Note we recommended importing assets as part of your module dependency graph so that they will go through webpack with the following benefits:
+Note we recommend importing assets as part of your module dependency graph so that they will go through webpack with the following benefits:
 
 - Scripts and stylesheets get minified and bundled together to avoid extra network requests.
 - Missing files cause compilation errors instead of 404 errors for your users.

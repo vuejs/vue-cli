@@ -1,19 +1,5 @@
 # Creating a Project
 
-## Installation
-
-::: tip Node Version Requirement
-Vue CLI requires [Node.js](https://nodejs.org/) version 8 or above (8.10.0+ recommended). You can manage multiple versions of Node on the same machine with [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
-:::
-
-``` bash
-npm install -g @vue/cli
-# OR
-yarn global add @vue/cli
-```
-
-After installation, you will have access to the `vue` binary in your command line. You can verify that it is properly installed by simply running `vue`, which should present you with a help message listing all available commands.
-
 ## vue create
 
 To create a new project, run:
@@ -21,6 +7,10 @@ To create a new project, run:
 ``` bash
 vue create hello-world
 ```
+
+::: warning
+If you are on Windows using Git Bash with minTTY, the interactive prompts will not work. You must launch the command as `winpty vue.cmd create hello-world`.
+:::
 
 You will be prompted to pick a preset. You can either choose the default preset which comes with a basic Babel + ESLint setup, or select "Manually select features" to pick the features you need.
 
@@ -57,11 +47,13 @@ Options:
   -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
   -m, --packageManager <command>  Use specified npm client when installing dependencies
   -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
-  -g, --git [message|false]       Force / skip git intialization, optionally specify initial commit message
+  -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
+  -n, --no-git                    Skip git initialization
   -f, --force                     Overwrite target directory if it exists
   -c, --clone                     Use git clone when fetching remote preset
-  -x, --proxy                     Use specified proxy when creating project
-  -h, --help                      output usage information
+  -x, --proxy                     Use specified proxy when creating project   
+  -b, --bare                      Scaffold project without beginner instructions
+  -h, --help                      Output usage information
 ```
 
 ## Using the GUI

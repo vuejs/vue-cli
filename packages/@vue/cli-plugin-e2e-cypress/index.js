@@ -17,6 +17,7 @@ module.exports = (api, options) => {
     removeArg(rawArgs, 'headless', 0)
     removeArg(rawArgs, 'mode')
     removeArg(rawArgs, 'url')
+    removeArg(rawArgs, 'config')
 
     info(`Starting e2e tests...`)
 
@@ -24,9 +25,10 @@ module.exports = (api, options) => {
       ? { url: args.url }
       : await api.service.run('serve')
 
+    const configs = typeof args.config === 'string' ? args.config.split(',') : []
     const cyArgs = [
       args.headless ? 'run' : 'open', // open or run
-      '--config', `baseUrl=${url}`,
+      '--config', [`baseUrl=${url}`, ...configs].join(','),
       ...rawArgs
     ]
 

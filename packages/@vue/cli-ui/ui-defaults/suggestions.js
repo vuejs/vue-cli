@@ -1,4 +1,4 @@
-const { loadModule } = require('@vue/cli/lib/util/module')
+const { loadModule } = require('@vue/cli-shared-utils')
 const invoke = require('@vue/cli/lib/invoke')
 
 const ROUTER = 'org.vue.vue-router-add'
@@ -52,7 +52,7 @@ module.exports = api => {
           handler () {
             const file = config.foundFiles.vue.path
             console.log('open', file)
-            const launch = require('launch-editor')
+            const { launch } = require('@vue/cli-shared-utils')
             launch(file)
             return {
               keep: true

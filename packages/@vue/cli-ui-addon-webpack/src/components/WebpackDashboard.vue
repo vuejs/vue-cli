@@ -21,7 +21,7 @@
       </template>
 
       <VueSwitch
-        v-if="modernMode"
+        v-if="mode !== 'serve' && modernMode"
         v-model="showModernBuild"
       >
         {{ $t('org.vue.vue-webpack.modern-mode') }}

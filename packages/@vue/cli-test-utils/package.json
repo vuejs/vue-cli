@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-test-utils",
-  "version": "3.0.0-rc.3",
+  "version": "3.0.0",
   "description": "test utilities for vue-cli packages",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/vuejs/vue-cli/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/packages/@vue/cli-test-utils#readme",
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-test-utils#readme",
   "publishConfig": {
     "access": "public"
   },

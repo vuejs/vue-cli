@@ -37,6 +37,7 @@ module.exports = (api, options) => {
               cache: true,
               cacheIdentifier,
               emitWarning: options.lintOnSave !== 'error',
+              emitError: options.lintOnSave === 'error',
               formatter: require('eslint/lib/formatters/codeframe')
             })
     })

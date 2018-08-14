@@ -8,7 +8,7 @@ module.exports = (api, options) => {
         .test(/\.jsx?$/)
         .exclude
           .add(filepath => {
-            // always trasnpile js in vue files
+            // always transpile js in vue files
             if (/\.vue\.jsx?$/.test(filepath)) {
               return false
             }
@@ -30,8 +30,12 @@ module.exports = (api, options) => {
             '@babel/core': require('@babel/core/package.json').version,
             '@vue/babel-preset-app': require('@vue/babel-preset-app').version,
             'babel-loader': require('babel-loader/package.json').version,
-            modern: !!process.env.VUE_CLI_MODERN_BUILD
-          }, 'babel.config.js'))
+            modern: !!process.env.VUE_CLI_MODERN_BUILD,
+            browserslist: api.service.pkg.browserslist
+          }, [
+            'babel.config.js',
+            '.browserslistrc'
+          ]))
           .end()
 
     if (useThreads) {

@@ -2,13 +2,15 @@
 
 ## browserslist
 
-You will notice a `browserslist` field in `package.json` specifying a range of browsers the project is targeting. This value will be used by [@babel/preset-env][babel-preset-env] and [autoprefixer][autoprefixer] to automatically determine the JavaScript features that need to be transpiled and the CSS vendor prefixes needed.
+You will notice a `browserslist` field in `package.json` (or a separate `.browserslistrc` file) specifying a range of browsers the project is targeting. This value will be used by [@babel/preset-env][babel-preset-env] and [autoprefixer][autoprefixer] to automatically determine the JavaScript features that need to be transpiled and the CSS vendor prefixes needed.
 
 See [here][browserslist] for how to specify browser ranges.
 
 ## Polyfills
 
-A default Vue CLI project uses [@vue/babel-preset-app][babel-preset-env], which uses `@babel/preset-env` and the `browserslist` config to determine the Polyfills needed for your project.
+A default Vue CLI project uses [@vue/babel-preset-app][babel-preset-app], which uses `@babel/preset-env` and the `browserslist` config to determine the Polyfills needed for your project.
+
+### useBuiltIns: 'usage'
 
 By default, it passes [`useBuiltIns: 'usage'`](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) to `@babel/preset-env` which automatically detects the polyfills needed based on the language features used in your source code. This ensures only the minimum amount of polyfills are included in your final bundle. However, this also means **if one of your dependencies has specific requirements on polyfills, by default Babel won't be able to detect it.**
 
@@ -40,6 +42,10 @@ If one of your dependencies need polyfills, you have a few options:
 
 See [@babel-preset/env docs](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) for more details.
 
+### Polyfills when Building as Library or Web Components
+
+When using Vue CLI to [build a library or Web Components](./build-targets.md), it is recommended to pass `useBuiltIns: false` to `@vue/babel-preset-app` to disable automatic polyfill injection. This ensures you don't include unnecessary polyfills in your code, as it should be the responsibility of the consuming app to include polyfills.
+
 ## Modern Mode
 
 With Babel we are able to leverage all the newest language features in ES2015+, but that also means we have to ship transpiled and polyfilled bundles in order to support older browsers. These transpiled bundles are often more verbose than the original native ES2015+ code, and also parse and run slower. Given that today a good majority of the modern browsers have decent support for native ES2015, it is a waste that we have to ship heavier and less efficient code to those browsers just because we have to support older ones.
@@ -62,6 +68,17 @@ The cool part though is that there are no special deployment requirements. The g
 
 For a Hello World app, the modern bundle is already 16% smaller. In production, the modern bundle will typically result in significantly faster parsing and evaluation, improving your app's loading performance.
 
+::: tip
+`<script type="module">` is loaded [with CORS always enabled](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). This means your server must return valid CORS headers such as `Access-Control-Allow-Origin: *`. If you want to fetch the scripts with credentials, set the [crossorigin](../config/#crossorigin) option to `use-credentials`.
+
+Also, modern mode uses an inline script to avoid Safari 10 loading both bundles, so if you are using a strict CSP, you will need to explicitly allow the inline script with:
+
+```
+Content-Security-Policy: script-src 'self' 'sha256-4RS22DYeB7U14dra4KcQYxmwt5HkOInieXK1NUMBmQI='
+```
+:::
+
 [autoprefixer]: https://github.com/postcss/autoprefixer
 [babel-preset-env]: https://new.babeljs.io/docs/en/next/babel-preset-env.html
+[babel-preset-app]: https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app
 [browserslist]: https://github.com/ai/browserslist

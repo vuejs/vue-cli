@@ -3,10 +3,11 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
-const configTransforms = require('./util/configTransforms')
+const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const injectImportsAndOptions = require('./util/injectImportsAndOptions')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
 const logTypes = {
@@ -15,6 +16,53 @@ const logTypes = {
   done: logger.done,
   warn: logger.warn,
   error: logger.error
+}
+
+const defaultConfigTransforms = {
+  babel: new ConfigTransform({
+    file: {
+      js: ['babel.config.js']
+    }
+  }),
+  postcss: new ConfigTransform({
+    file: {
+      js: ['.postcssrc.js'],
+      json: ['.postcssrc.json', '.postcssrc'],
+      yaml: ['.postcssrc.yaml', '.postcssrc.yml']
+    }
+  }),
+  eslintConfig: new ConfigTransform({
+    file: {
+      js: ['.eslintrc.js'],
+      json: ['.eslintrc', '.eslintrc.json'],
+      yaml: ['.eslintrc.yaml', '.eslintrc.yml']
+    }
+  }),
+  jest: new ConfigTransform({
+    file: {
+      js: ['jest.config.js']
+    }
+  }),
+  browserslist: new ConfigTransform({
+    file: {
+      lines: ['.browserslistrc']
+    }
+  })
+}
+
+const reservedConfigTransforms = {
+  vue: new ConfigTransform({
+    file: {
+      js: ['vue.config.js']
+    }
+  })
+}
+
+const ensureEOL = str => {
+  if (str.charAt(str.length - 1) !== '\n') {
+    return str + '\n'
+  }
+  return str
 }
 
 module.exports = class Generator {
@@ -32,8 +80,10 @@ module.exports = class Generator {
     this.imports = {}
     this.rootOptions = {}
     this.completeCbs = completeCbs
+    this.configTransforms = {}
+    this.defaultConfigTransforms = defaultConfigTransforms
+    this.reservedConfigTransforms = reservedConfigTransforms
     this.invoking = invoking
-
     // for conflict resolution
     this.depSources = {}
     // virtual file tree
@@ -44,11 +94,13 @@ module.exports = class Generator {
     this.exitLogs = []
 
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
-    const rootOptions = cliService && cliService.options
+    const rootOptions = cliService
+      ? cliService.options
+      : inferRootOptions(pkg)
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
-      const api = new GeneratorAPI(id, this, options, rootOptions || {})
-      apply(api, options, rootOptions)
+      const api = new GeneratorAPI(id, this, options, rootOptions)
+      apply(api, options, rootOptions, invoking)
     })
   }
 
@@ -64,12 +116,17 @@ module.exports = class Generator {
     await this.resolveFiles()
     // set package.json
     this.sortPkg()
-    this.files['package.json'] = JSON.stringify(this.pkg, null, 2)
+    this.files['package.json'] = JSON.stringify(this.pkg, null, 2) + '\n'
     // write/update file tree to disk
     await writeFileTree(this.context, this.files, initialFiles)
   }
 
   extractConfigFiles (extractAll, checkExisting) {
+    const configTransforms = Object.assign({},
+      defaultConfigTransforms,
+      this.configTransforms,
+      reservedConfigTransforms
+    )
     const extract = key => {
       if (
         configTransforms[key] &&
@@ -78,15 +135,15 @@ module.exports = class Generator {
         !this.originalPkg[key]
       ) {
         const value = this.pkg[key]
-        const transform = configTransforms[key]
-        const res = transform(
+        const configTransform = configTransforms[key]
+        const res = configTransform.transform(
           value,
           checkExisting,
           this.files,
           this.context
         )
         const { content, filename } = res
-        this.files[filename] = content
+        this.files[filename] = ensureEOL(content)
         delete this.pkg[key]
       }
     }
@@ -163,6 +220,11 @@ module.exports = class Generator {
   }
 
   hasPlugin (_id) {
+    if (_id === 'router') _id = 'vue-router'
+    if (['vue-router', 'vuex'].includes(_id)) {
+      const pkg = this.pkg
+      return ((pkg.dependencies && pkg.dependencies[_id]) || (pkg.devDependencies && pkg.devDependencies[_id]))
+    }
     return [
       ...this.plugins.map(p => p.id),
       ...Object.keys(this.pkg.devDependencies || {}),

@@ -13,6 +13,7 @@
       >
         <ProjectNavButton
           v-for="view of views"
+          v-if="hasProjectType(view)"
           :key="view.id"
           :view="view"
         />
@@ -26,6 +27,7 @@
 <script>
 import { isSameRoute, isIncludedRoute } from '../util/route'
 
+import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
 import VIEWS from '../graphql/views.gql'
 import VIEW_ADDED from '../graphql/viewAdded.gql'
 import VIEW_REMOVED from '../graphql/viewRemoved.gql'
@@ -40,6 +42,8 @@ export default {
   },
 
   apollo: {
+    projectCurrent: PROJECT_CURRENT,
+
     views: {
       query: VIEWS,
       subscribeToMore: [
@@ -122,6 +126,8 @@ export default {
       handler (value, oldValue) {
         if (!value) return
         if (oldValue && value.id === oldValue.id) return
+
+        this.checkProjectType()
         this.$apollo.mutate({
           mutation: VIEW_OPEN,
           variables: {
@@ -130,6 +136,29 @@ export default {
         })
       },
       immediate: true
+    },
+
+    projectCurrent: {
+      handler: 'checkProjectType',
+      immediate: true
+    }
+  },
+
+  methods: {
+    hasProjectType (view) {
+      return (!view.projectTypes && this.projectCurrent.type === 'vue') ||
+        (view.projectTypes && view.projectTypes.includes(this.projectCurrent.type))
+    },
+
+    checkProjectType () {
+      if (!this.currentView) return
+
+      if (!this.hasProjectType(this.currentView)) {
+        const view = this.views.find(v => this.hasProjectType(v))
+        if (view) {
+          this.currentViewName = view.name
+        }
+      }
     }
   }
 }

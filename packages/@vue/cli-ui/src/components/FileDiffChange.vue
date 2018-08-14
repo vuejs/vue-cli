@@ -19,7 +19,7 @@
         {{ ln2 }}
       </div>
     </div>
-    <div class="content">{{ change.content }}</div>
+    <div class="content" v-html="change.content"/>
   </div>
 </template>
 
@@ -114,21 +114,21 @@ export default {
     white-space pre
 
   &.type-add
-    background lighten($vue-ui-color-success, 80%)
+    background desaturate(lighten($vue-ui-color-success, 90%), 30%)
     .vue-ui-dark-mode &
-      background darken($vue-ui-color-success, 70%)
+      background desaturate(darken($vue-ui-color-success, 60%), 50%)
     .lines
-      background lighten($vue-ui-color-success, 60%)
+      background lighten($vue-ui-color-success, 80%)
       .vue-ui-dark-mode &
        background darken($vue-ui-color-success, 60%)
 
   &.type-del
-    background lighten($vue-ui-color-danger, 80%)
+    background desaturate(lighten($vue-ui-color-danger, 90%), 30%)
     .vue-ui-dark-mode &
-      background darken($vue-ui-color-danger, 70%)
+      background desaturate(darken($vue-ui-color-danger, 60%), 50%)
 
     .lines
-      background lighten($vue-ui-color-danger, 60%)
+      background lighten($vue-ui-color-danger, 80%)
       .vue-ui-dark-mode &
         background darken($vue-ui-color-danger, 60%)
 

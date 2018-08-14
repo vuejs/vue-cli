@@ -8,6 +8,8 @@ Uses TypeScript + `ts-loader` + [fork-ts-checker-webpack-plugin](https://github.
 
 TypeScript can be configured via `tsconfig.json`.
 
+Since `3.0.0-rc.6`, `typescript` is now a peer dependency of this package, so you can use a specific version of TypeScript by updating your project's `package.json`.
+
 This plugin can be used alongside `@vue/cli-plugin-babel`. When used with Babel, this plugin will output ES2015 and delegate the rest to Babel for auto polyfill based on browser targets.
 
 ## Injected Commands

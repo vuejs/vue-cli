@@ -16,6 +16,7 @@
           data-testid="run-task"
           @click="runTask()"
         />
+
         <VueButton
           v-else
           icon-left="stop"
@@ -26,7 +27,7 @@
         />
 
         <VueButton
-          v-if="task.prompts.length"
+          slot="trigger"
           icon-left="settings"
           class="icon-button primary"
           :disabled="task.status === 'running'"
@@ -73,7 +74,7 @@
         </VueGroup>
       </div>
 
-      <div class="content">
+      <div v-if="displayPriority >= 2" class="content">
         <TerminalView
           ref="terminal"
           :class="{
@@ -107,25 +108,20 @@
       v-if="showParameters"
       :title="$t('org.vue.views.project-task-details.parameters')"
       class="medium anchor"
-      @close="showParameters = false"
+      @close="restoreParameters()"
     >
       <div class="default-body">
         <PromptsList
           :prompts="visiblePrompts"
           @answer="answerPrompt"
         />
-
-        <div class="vue-ui-text info banner">
-          <VueIcon icon="info" class="big"/>
-          <span>{{ $t('org.vue.views.project-task-details.parameters-info') }}</span>
-        </div>
       </div>
 
       <div slot="footer" class="actions">
         <VueButton
           class="primary big"
-          :label="$t('org.vue.views.project-task-details.actions.close')"
-          @click="showParameters = false"
+          :label="$t('org.vue.views.project-task-details.actions.save')"
+          @click="saveParameters()"
         />
       </div>
     </VueModal>
@@ -134,6 +130,7 @@
 
 <script>
 import Prompts from '../mixins/Prompts'
+import DisplayPriority from '../mixins/DisplayPriority'
 
 import TASK from '../graphql/task.gql'
 import TASK_LOGS from '../graphql/taskLogs.gql'
@@ -142,6 +139,8 @@ import TASK_STOP from '../graphql/taskStop.gql'
 import TASK_LOGS_CLEAR from '../graphql/taskLogsClear.gql'
 import TASK_LOG_ADDED from '../graphql/taskLogAdded.gql'
 import TASK_OPEN from '../graphql/taskOpen.gql'
+import TASK_SAVE_PARAMETERS from '../graphql/taskSaveParameters.gql'
+import TASK_RESTORE_PARAMETERS from '../graphql/taskRestoreParameters.gql'
 
 export default {
   name: 'ProjectTaskDetails',
@@ -156,7 +155,8 @@ export default {
     Prompts({
       field: 'task',
       query: TASK
-    })
+    }),
+    DisplayPriority(2)
   ],
 
   metaInfo () {
@@ -194,6 +194,9 @@ export default {
           await this.$nextTick()
           this.currentView = data.task.defaultView
         }
+      },
+      skip () {
+        return this.displayPriority < 1
       }
     },
 
@@ -214,6 +217,9 @@ export default {
             data.taskLogs.logs.forEach(terminal.addLog)
           }
         }
+      },
+      skip () {
+        return this.displayPriority < 2
       }
     },
 
@@ -231,6 +237,9 @@ export default {
             const terminal = this.$refs.terminal
             terminal.addLog(data.taskLogAdded)
           }
+        },
+        skip () {
+          return this.displayPriority < 2
         }
       }
     }
@@ -239,10 +248,13 @@ export default {
   computed: {
     currentViewComponent () {
       if (this.currentView !== '_output') {
-        const id = this.task.views.find(
+        const view = this.task.views.find(
           view => view.id === this.currentView
-        ).component
-        return id
+        )
+        if (view) {
+          const id = view.component
+          return id
+        }
       }
     }
   },
@@ -253,6 +265,7 @@ export default {
       this.currentView = '_output'
       this.$_init = false
       this.open()
+      this.runDisplayPriority()
     }
   },
 
@@ -295,6 +308,26 @@ export default {
           id: this.id
         }
       })
+    },
+
+    async saveParameters () {
+      await this.$apollo.mutate({
+        mutation: TASK_SAVE_PARAMETERS,
+        variables: {
+          id: this.id
+        }
+      })
+      this.showParameters = false
+    },
+
+    async restoreParameters () {
+      await this.$apollo.mutate({
+        mutation: TASK_RESTORE_PARAMETERS,
+        variables: {
+          id: this.id
+        }
+      })
+      this.showParameters = false
     }
   }
 }
@@ -375,4 +408,12 @@ export default {
   .description
     color $color-text-light
     margin-left $padding-item
+
+.task-settings
+  padding $padding-item
+  box-sizing border-box
+  width 700px
+  .prompts
+    max-height 500px
+    overflow-y auto
 </style>
