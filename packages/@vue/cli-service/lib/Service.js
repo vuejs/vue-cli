@@ -216,6 +216,7 @@ module.exports = class Service {
     }
     // get raw config
     let config = chainableConfig.toConfig()
+    const original = config
     // apply raw config fns
     this.webpackRawConfigFns.forEach(fn => {
       if (typeof fn === 'function') {
@@ -227,6 +228,16 @@ module.exports = class Service {
         config = merge(config, fn)
       }
     })
+
+    // #2206 If config is merged by merge-webpack, it discards the __ruleNames
+    // information injected by webpack-chain. Restore the info so that
+    // vue inspect works properly.
+    if (config !== original) {
+      cloneRuleNames(
+        config.module.rules,
+        original.module.rules
+      )
+    }
 
     // check if the user has manually mutated output.publicPath
     const target = process.env.VUE_CLI_BUILD_TARGET
@@ -298,10 +309,10 @@ module.exports = class Service {
     }
 
     // normalize some options
-    ensureSlash(resolved, 'baseUrl')
     if (typeof resolved.baseUrl === 'string') {
       resolved.baseUrl = resolved.baseUrl.replace(/^\.\//, '')
     }
+    ensureSlash(resolved, 'baseUrl')
     removeSlash(resolved, 'outputDir')
 
     // deprecation warning
@@ -338,4 +349,17 @@ function removeSlash (config, key) {
   if (typeof config[key] === 'string') {
     config[key] = config[key].replace(/\/$/g, '')
   }
+}
+
+function cloneRuleNames (to, from) {
+  from.forEach((r, i) => {
+    if (to[i]) {
+      Object.defineProperty(to[i], '__ruleNames', {
+        value: r.__ruleNames
+      })
+      if (to[i].oneOf && r.oneOf) {
+        cloneRuleNames(to[i].oneOf, r.oneOf)
+      }
+    }
+  })
 }
