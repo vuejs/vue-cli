@@ -234,8 +234,8 @@ module.exports = class Service {
     // vue inspect works properly.
     if (config !== original) {
       cloneRuleNames(
-        config.module.rules,
-        original.module.rules
+        config.module && config.module.rules,
+        original.module && original.module.rules
       )
     }
 
@@ -352,14 +352,15 @@ function removeSlash (config, key) {
 }
 
 function cloneRuleNames (to, from) {
+  if (!to || !from) {
+    return
+  }
   from.forEach((r, i) => {
     if (to[i]) {
       Object.defineProperty(to[i], '__ruleNames', {
         value: r.__ruleNames
       })
-      if (to[i].oneOf && r.oneOf) {
-        cloneRuleNames(to[i].oneOf, r.oneOf)
-      }
+      cloneRuleNames(to[i].oneOf, r.oneOf)
     }
   })
 }

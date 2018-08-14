@@ -233,6 +233,28 @@ test('api: configureWebpack returning object', () => {
   expect(config.output.path).toBe('test-dist-3')
 })
 
+test('api: configureWebpack preserve ruleNames', () => {
+  const service = createMockService([
+    {
+      id: 'babel',
+      apply: require('@vue/cli-plugin-babel')
+    },
+    {
+      id: 'test',
+      apply: api => {
+        api.configureWebpack({
+          module: {
+            rules: []
+          }
+        })
+      }
+    }
+  ])
+
+  const config = service.resolveWebpackConfig()
+  expect(config.module.rules[0].__ruleNames).toEqual(['js'])
+})
+
 test('api: configureDevServer', () => {
   const cb = () => {}
   const service = createMockService([{
