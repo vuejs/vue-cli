@@ -344,7 +344,7 @@ module.exports = {
 - Type: `boolean`
 - Default: `require('os').cpus().length > 1`
 
-  Whether to use `thread-loader` for Babel or TypeScript transpilation.
+  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores.
 
 ### pwa
 
