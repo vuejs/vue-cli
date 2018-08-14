@@ -17,7 +17,7 @@ afterEach(async () => {
 test('build as lib', async () => {
   const project = await create('build-lib', defaultPreset)
 
-  const { stdout } = await project.run('vue-cli-service build --target lib --name testLib src/components/HelloWorld.vue')
+  const { stdout } = await project.run('vue-cli-service build --target lib --name testLib src/components/TheHelloWorld.vue')
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)

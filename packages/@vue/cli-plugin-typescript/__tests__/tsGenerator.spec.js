@@ -37,8 +37,8 @@ test('classComponent', async () => {
   expect(files['src/App.vue']).toMatch(
     `export default class App extends Vue {`
   )
-  expect(files['src/components/HelloWorld.vue']).toMatch(
-    `export default class HelloWorld extends Vue {`
+  expect(files['src/components/TheHelloWorld.vue']).toMatch(
+    `export default class TheHelloWorld extends Vue {`
   )
 })
 

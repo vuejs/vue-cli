@@ -13,21 +13,21 @@ Welcome to Your Vue.js + TypeScript App
 <script lang="ts">
 <%_ if (!options.classComponent) { _%>
 import Vue from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import TheHelloWorld from './components/TheHelloWorld.vue';
 
 export default Vue.extend({
   name: 'app',
   components: {
-    HelloWorld
+    TheHelloWorld
   }
 });
 <%_ } else { _%>
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import TheHelloWorld from './components/TheHelloWorld.vue';
 
 @Component({
   components: {
-    HelloWorld,
+    TheHelloWorld,
   },
 })
 export default class App extends Vue {}

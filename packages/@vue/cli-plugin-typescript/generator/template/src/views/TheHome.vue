@@ -1,5 +1,5 @@
 ---
-extend: '@vue/cli-service/generator/router/template/src/views/Home.vue'
+extend: '@vue/cli-service/generator/router/template/src/views/TheHome.vue'
 when: 'rootOptions.router'
 replace:
   - !!js/regexp /Welcome to Your Vue\.js App/
@@ -14,21 +14,21 @@ Welcome to Your Vue.js + TypeScript App
 <script lang="ts">
 <%_ if (!options.classComponent) { _%>
 import Vue from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import TheHelloWorld from '@/components/TheHelloWorld.vue'; // @ is an alias to /src
 
 export default Vue.extend({
-  name: 'home',
+  name: 'TheHome',
   components: {
-    HelloWorld,
+    TheHelloWorld,
   },
 });
 <%_ } else { _%>
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import TheHelloWorld from '@/components/TheHelloWorld.vue'; // @ is an alias to /src
 
 @Component({
   components: {
-    HelloWorld,
+    TheHelloWorld,
   },
 })
 export default class Home extends Vue {}

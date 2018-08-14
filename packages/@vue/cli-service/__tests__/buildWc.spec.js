@@ -44,12 +44,12 @@ test('build as wc', async () => {
   expect(h1Text).toMatch('Welcome to Your Vue.js App')
 
   const childStyleCount = await page.evaluate(() => {
-    return document.querySelector('build-wc-hello-world').shadowRoot.querySelectorAll('style').length
+    return document.querySelector('build-wc-the-hello-world').shadowRoot.querySelectorAll('style').length
   })
   expect(childStyleCount).toBe(1)
 
   const h3Text = await page.evaluate(() => {
-    return document.querySelector('build-wc-hello-world').shadowRoot.querySelector('h3').textContent
+    return document.querySelector('build-wc-the-hello-world').shadowRoot.querySelector('h3').textContent
   })
   expect(h3Text).toMatch('Installed CLI Plugins')
 })
