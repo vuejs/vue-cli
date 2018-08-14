@@ -10,8 +10,12 @@ const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 let server, browser, page
 
 afterEach(async () => {
-  await browser.close()
-  server.close()
+  if (browser) {
+    await browser.close()
+  }
+  if (server) {
+    server.close()
+  }
 })
 
 test('build as lib', async () => {

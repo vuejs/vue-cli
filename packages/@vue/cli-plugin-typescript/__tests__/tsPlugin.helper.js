@@ -62,7 +62,11 @@ exports.assertBuild = async (name, options, customAssert) => {
   })
 
   afterAll(async () => {
-    await browser.close()
-    server.close()
+    if (browser) {
+      await browser.close()
+    }
+    if (server) {
+      server.close()
+    }
   })
 }
