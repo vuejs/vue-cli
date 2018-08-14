@@ -30,7 +30,7 @@ test('base', async () => {
   // eslint
   expect(files['tests/unit/.eslintrc.js']).toMatch('jest: true')
 
-  const spec = files['tests/unit/HelloWorld.spec.js']
+  const spec = files['tests/unit/TheHelloWorld.spec.js']
   expect(spec).toMatch(`expect(wrapper.text()).toMatch(msg)`)
 })
 

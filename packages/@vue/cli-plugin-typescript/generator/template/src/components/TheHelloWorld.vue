@@ -1,5 +1,5 @@
 ---
-extend: '@vue/cli-service/generator/template/src/components/HelloWorld.vue'
+extend: '@vue/cli-service/generator/template/src/components/TheHelloWorld.vue'
 replace: !!js/regexp /<script>[^]*?<\/script>/
 ---
 <script lang="ts">
@@ -7,7 +7,7 @@ replace: !!js/regexp /<script>[^]*?<\/script>/
 import Vue from 'vue';
 
 export default Vue.extend({
-  name: 'HelloWorld',
+  name: 'TheHelloWorld',
   props: {
     msg: String,
   },
@@ -16,7 +16,7 @@ export default Vue.extend({
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class HelloWorld extends Vue {
+export default class TheHelloWorld extends Vue {
   @Prop() private msg!: string;
 }
 <%_ } _%>

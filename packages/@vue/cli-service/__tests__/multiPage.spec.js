@@ -41,8 +41,8 @@ async function makeProjectMultiPage (project) {
   `)
   const app = await project.read('src/App.vue')
   await project.write('src/App.vue', app.replace(
-    `import HelloWorld from './components/HelloWorld.vue'`,
-    `const HelloWorld = () => import('./components/HelloWorld.vue')`
+    `import TheHelloWorld from './components/TheHelloWorld.vue'`,
+    `const TheHelloWorld = () => import('./components/TheHelloWorld.vue')`
   ))
 }
 

@@ -19,7 +19,7 @@ test('base', async () => {
   expect(pkg.devDependencies).toHaveProperty('@vue/test-utils')
   expect(files['tests/unit/.eslintrc.js']).toMatch('mocha: true')
 
-  const spec = files['tests/unit/HelloWorld.spec.js']
+  const spec = files['tests/unit/TheHelloWorld.spec.js']
   expect(spec).toMatch(`import { expect } from 'chai'`)
   expect(spec).toMatch(`expect(wrapper.text()).to.include(msg)`)
 })
