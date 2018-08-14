@@ -164,7 +164,7 @@ Firebase will ask some questions on how to setup your project.
 
 {
   "hosting": {
-    "public": "app"
+    "public": "dist"
   }
 }
 ```
