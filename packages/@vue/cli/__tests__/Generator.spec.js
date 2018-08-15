@@ -649,7 +649,7 @@ test('extract config files', async () => {
   const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
   expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(js(configs.vue))
   expect(fs.readFileSync('/babel.config.js', 'utf-8')).toMatch(js(configs.babel))
-  expect(fs.readFileSync('/.postcssrc.js', 'utf-8')).toMatch(js(configs.postcss))
+  expect(fs.readFileSync('/postcss.config.js', 'utf-8')).toMatch(js(configs.postcss))
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
   expect(fs.readFileSync('/.browserslistrc', 'utf-8')).toMatch('> 1%\nnot <= IE8')

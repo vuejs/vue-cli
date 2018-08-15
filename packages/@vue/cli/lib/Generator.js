@@ -26,7 +26,7 @@ const defaultConfigTransforms = {
   }),
   postcss: new ConfigTransform({
     file: {
-      js: ['.postcssrc.js'],
+      js: ['postcss.config.js'],
       json: ['.postcssrc.json', '.postcssrc'],
       yaml: ['.postcssrc.yaml', '.postcssrc.yml']
     }
