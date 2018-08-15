@@ -164,7 +164,7 @@ Firebase задаст несколько вопросов о том, как на
 
 {
   "hosting": {
-    "public": "app"
+    "public": "dist"
   }
 }
 ```
