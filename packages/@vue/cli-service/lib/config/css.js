@@ -51,6 +51,20 @@ module.exports = (api, options) => {
       '.postcssrc.json'
     ]))
 
+    // if building for production but not extracting CSS, we need to minimize
+    // the embbeded inline CSS as they will not be going through the optimizing
+    // plugin.
+    const needInlineMinification = isProd && !shouldExtract
+
+    const cssnanoOptions = {
+      safe: true,
+      autoprefixer: { disable: true },
+      mergeLonghand: false
+    }
+    if (options.productionSourceMap && sourceMap) {
+      cssnanoOptions.map = { inline: false }
+    }
+
     function createCSSRule (lang, test, loader, options) {
       const baseRule = webpackConfig.module.rule(lang).test(test)
 
@@ -92,7 +106,8 @@ module.exports = (api, options) => {
           sourceMap,
           importLoaders: (
             1 + // stylePostLoader injected by vue-loader
-            hasPostCSSConfig
+            (hasPostCSSConfig ? 1 : 0) +
+            (needInlineMinification ? 1 : 0)
           )
         }, loaderOptions.css)
 
@@ -110,6 +125,15 @@ module.exports = (api, options) => {
           .use('css-loader')
           .loader('css-loader')
           .options(cssLoaderOptions)
+
+        if (needInlineMinification) {
+          rule
+            .use('cssnano')
+            .loader('postcss-loader')
+            .options({
+              plugins: [require('cssnano')(cssnanoOptions)]
+            })
+        }
 
         if (hasPostCSSConfig) {
           rule
@@ -143,24 +167,16 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('extract-css')
           .use(require('mini-css-extract-plugin'), [extractOptions])
-    }
 
-    if (isProd) {
-      // optimize CSS (dedupe)
-      const cssProcessorOptions = {
-        safe: true,
-        autoprefixer: { disable: true },
-        mergeLonghand: false
+      // minify extracted CSS
+      if (isProd) {
+        webpackConfig
+          .plugin('optimize-css')
+            .use(require('@intervolga/optimize-cssnano-plugin'), [{
+              sourceMap: options.productionSourceMap && sourceMap,
+              cssnanoOptions
+            }])
       }
-      if (options.productionSourceMap && sourceMap) {
-        cssProcessorOptions.map = { inline: false }
-      }
-      webpackConfig
-        .plugin('optimize-css')
-          .use(require('@intervolga/optimize-cssnano-plugin'), [{
-            sourceMap: options.productionSourceMap && sourceMap,
-            cssnanoOptions: cssProcessorOptions
-          }])
     }
   })
 }
