@@ -3,9 +3,11 @@ module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
 
   api.chainWebpack(config => {
-    config.entry('app')
-      .clear()
-      .add('./src/main.ts')
+    if (!options.pages) {
+      config.entry('app')
+        .clear()
+        .add('./src/main.ts')
+    }
 
     config.resolve
       .extensions
