@@ -175,7 +175,6 @@ async function build (args, api, options) {
   }
 
   return new Promise((resolve, reject) => {
-    const isFreshBuild = !fs.existsSync(api.resolve('node_modules/.cache'))
     webpack(webpackConfig, (err, stats) => {
       stopSpinner(false)
       if (err) {
@@ -198,17 +197,6 @@ async function build (args, api, options) {
             info(`Check out deployment instructions at ${chalk.cyan(`https://cli.vuejs.org/guide/deployment.html`)}\n`)
           } else {
             done(`Build complete. Watching for changes...`)
-          }
-          if (
-            options.baseUrl === '/' &&
-            // only log the tips if this is the first build
-            isFreshBuild
-          ) {
-            console.log(
-              chalk.gray(`Tip: the directory is meant to be served by an HTTP server, and will not work if\n` +
-              `you open it directly over file:// protocol. To preview it locally, use an HTTP\n` +
-              `server like the ${chalk.yellow(`serve`)} package on npm.\n`)
-            )
           }
         }
       }

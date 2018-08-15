@@ -25,13 +25,20 @@ module.exports = (api, options) => {
     const shouldExtract = extract !== false && !shadowMode
     const filename = getAssetPath(
       options,
-      `css/[name]${options.filenameHashing ? '.[contenthash:8]' : ''}.css`,
-      true /* placeAtRootIfRelative */
+      `css/[name]${options.filenameHashing ? '.[contenthash:8]' : ''}.css`
     )
     const extractOptions = Object.assign({
       filename,
       chunkFilename: filename
     }, extract && typeof extract === 'object' ? extract : {})
+
+    // use relative publicPath in extracted CSS based on extract location
+    const cssPublicPath = '../'.repeat(
+      extractOptions.filename
+        .replace(/^\.[\/\\]/, '')
+        .split(/[\/\\]/g)
+        .length - 1
+    )
 
     // check if the project has a valid postcss config
     // if it doesn't, don't use postcss-loader for direct style imports
@@ -68,6 +75,9 @@ module.exports = (api, options) => {
           rule
             .use('extract-css-loader')
             .loader(require('mini-css-extract-plugin').loader)
+            .options({
+              publicPath: cssPublicPath
+            })
         } else {
           rule
             .use('vue-style-loader')
