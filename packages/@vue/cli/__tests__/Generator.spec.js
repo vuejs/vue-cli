@@ -22,6 +22,7 @@ new Vue({
 }).$mount('#app')
 `.trim())
 
+// replace stubs
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
 ---
 extend: '${path.resolve(templateDir, 'bar/bar.js')}'
@@ -50,6 +51,11 @@ baz($1)
 qux($1)
 <%# END_REPLACE %>
 `.trim())
+
+// dotfile stubs
+fs.ensureDirSync(path.resolve(templateDir, '_vscode'))
+fs.writeFileSync(path.resolve(templateDir, '_vscode/config.json'), `{}`)
+fs.writeFileSync(path.resolve(templateDir, '_gitignore'), 'foo')
 
 test('api: extendPackage', async () => {
   const generator = new Generator('/', {
@@ -343,6 +349,8 @@ test('api: render fs directory', async () => {
   expect(fs.readFileSync('/bar/bar.js', 'utf-8')).toMatch('bar(2)')
   expect(fs.readFileSync('/replace.js', 'utf-8')).toMatch('baz(2)')
   expect(fs.readFileSync('/multi-replace.js', 'utf-8')).toMatch('baz(1)\nqux(2)')
+  expect(fs.readFileSync('/.gitignore', 'utf-8')).toMatch('foo')
+  expect(fs.readFileSync('/.vscode/config.json', 'utf-8')).toMatch('{}')
 })
 
 test('api: render object', async () => {

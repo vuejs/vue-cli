@@ -169,16 +169,17 @@ class GeneratorAPI {
         const globby = require('globby')
         const _files = await globby(['**/*'], { cwd: source })
         for (const rawPath of _files) {
-          let filename = path.basename(rawPath)
-          // dotfiles are ignored when published to npm, therefore in templates
-          // we need to use underscore instead (e.g. "_gitignore")
-          if (filename.charAt(0) === '_' && filename.charAt(1) !== '_') {
-            filename = `.${filename.slice(1)}`
-          }
-          if (filename.charAt(0) === '_' && filename.charAt(1) === '_') {
-            filename = `${filename.slice(1)}`
-          }
-          const targetPath = path.join(path.dirname(rawPath), filename)
+          const targetPath = rawPath.split(path.sep).map(filename => {
+            // dotfiles are ignored when published to npm, therefore in templates
+            // we need to use underscore instead (e.g. "_gitignore")
+            if (filename.charAt(0) === '_' && filename.charAt(1) !== '_') {
+              return `.${filename.slice(1)}`
+            }
+            if (filename.charAt(0) === '_' && filename.charAt(1) === '_') {
+              return `${filename.slice(1)}`
+            }
+            return filename
+          }).join(path.sep)
           const sourcePath = path.resolve(source, rawPath)
           const content = renderFile(sourcePath, data, ejsOptions)
           // only set file if it's not all whitespace, or is a Buffer (binary files)
