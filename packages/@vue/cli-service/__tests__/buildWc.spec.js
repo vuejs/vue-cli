@@ -90,6 +90,10 @@ test('build as single wc', async () => {
 })
 
 afterEach(async () => {
-  await browser.close()
-  server.close()
+  if (browser) {
+    await browser.close()
+  }
+  if (server) {
+    server.close()
+  }
 })

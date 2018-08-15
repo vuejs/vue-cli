@@ -24,7 +24,7 @@ module.exports = (api, options) => {
     } else if (args.rules) {
       res = config.module.rules.map(r => r.__ruleNames[0])
     } else if (args.plugins) {
-      res = config.plugins.map(p => p.__pluginName)
+      res = config.plugins.map(p => p.__pluginName || p.constructor.name)
     } else if (paths.length > 1) {
       res = {}
       paths.forEach(path => {

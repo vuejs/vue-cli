@@ -194,7 +194,7 @@ module.exports = {
 
   需要注意的是该选项仅影响由 `html-webpack-plugin` 在构建时注入的标签 - 直接写在模版 (`public/index.html`) 中的标签不受影响。
 
-  更多细节可查阅: [CROS setting attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
+  更多细节可查阅: [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
 
 ### integrity
 
@@ -342,7 +342,7 @@ module.exports = {
 - Type: `boolean`
 - Default: `require('os').cpus().length > 1`
 
-  是否为 Babel 或 TypeScript 使用 `thread-loader`。
+  是否为 Babel 或 TypeScript 使用 `thread-loader`。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建。
 
 ### pwa
 

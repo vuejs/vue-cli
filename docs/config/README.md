@@ -196,7 +196,7 @@ module.exports = {
 
   Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (`public/index.html`) are not affected.
 
-  See also: [CORS setting attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
+  See also: [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
 
 ### integrity
 
@@ -344,7 +344,7 @@ module.exports = {
 - Type: `boolean`
 - Default: `require('os').cpus().length > 1`
 
-  Whether to use `thread-loader` for Babel or TypeScript transpilation.
+  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores.
 
 ### pwa
 

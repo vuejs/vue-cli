@@ -28,12 +28,8 @@
     "setupFiles": [
       "<rootDir>/scripts/testSetup.js"
     ],
-    "testPathIgnorePatterns": [
-      "/template/",
-      "/packages/test/",
-      "/temp/",
-      "/scripts/",
-      ".*.helper.js"
+    "testMatch": [
+      "**/__tests__/**/*.spec.js"
     ]
   },
   "lint-staged": {
@@ -60,8 +56,9 @@
     "inquirer": "^6.0.0",
     "jest": "^23.1.0",
     "lerna": "^2.8.0",
-    "lint-staged": "^7.2.0",
+    "lint-staged": "^7.2.2",
     "memfs": "^2.8.0",
+    "minimist": "^1.2.0",
     "puppeteer": "^1.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
