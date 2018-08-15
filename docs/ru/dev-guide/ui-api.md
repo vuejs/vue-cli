@@ -1,6 +1,6 @@
 # API плагина для UI
 
-С помощью API `cli-ui` возможно дополнять конфигурацию и задачи проекта, а также обмениваться данными и взамодействовать с другими процессами.
+С помощью API `cli-ui` возможно дополнять конфигурацию и задачи проекта, а также обмениваться данными и взаимодействовать с другими процессами.
 
 ![UI Plugin architecture](/vue-cli-ui-schema.png)
 
@@ -16,7 +16,7 @@ module.exports = api => {
 }
 ```
 
-**⚠️ Файлы будут перезагружены при получении списка плагинов на странице «Project plugins». Чтобы применить изменения, нажмите кнопку «Project plugins» в боковой панели слева в UI.**
+**⚠️ Файлы будут перезагружены при получении списка плагинов на странице «Плагины проекта». Чтобы применить изменения, нажмите кнопку «Плагины проекта» в боковой панели слева в UI.**
 
 Вот пример структуры каталога для vue-cli плагина, использующего UI API:
 
@@ -365,7 +365,7 @@ api.describeTask({
 
 ### Параметры задачи
 
-Вы можете добавлять подсказки для изменения аргументов команды. Они будут отображаться в модальном окне «Parameters».
+Вы можете добавлять подсказки для изменения аргументов команды. Они будут отображаться в модальном окне «Параметры».
 
 Например:
 
@@ -702,13 +702,13 @@ locales.keys().forEach(key => {
 В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-Cli-ui регистрирует `Vue` и `ClientAddonApi` в качестве глобальных переменных в области видимости `window`.
+Также cli-ui регистрирует `Vue` и `ClientAddonApi` глобальными переменными в `window`.
 
-В ваших компонентах можно использовать все компоненты и CSS классы [@vue/ui](https://github.com/vuejs/ui) и [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components), чтобы обеспечить одинаковый внешний вид. Также можно переводить тексты с помощью [vue-i18n](https://github.com/kazupon/vue-i18n) который включён.
+В компонентах можно использовать все компоненты и CSS классы [@vue/ui](https://github.com/vuejs/ui) и [@vue/cli-ui](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui/src/components), чтобы обеспечить одинаковый внешний вид. Переводить тексты можно с помощью [vue-i18n](https://github.com/kazupon/vue-i18n), который используется по умолчанию.
 
 ### Регистрация клиентского дополнения
 
-Возвращаясь к `ui.js` файлу, используйте метод `api.addClientAddon` с строкой запроса к встроенному каталогу:
+Возвращаясь к файлу `ui.js`, используйте метод `api.addClientAddon` с строкой запроса к встроенному каталогу:
 
 ```js
 api.addClientAddon({
@@ -718,7 +718,7 @@ api.addClientAddon({
 })
 ```
 
-Это будет использовать Node.js API `require.resolve` для поиска каталога в файловой системе и использования файла `index.js`, созданного из клиентского дополнения.
+Будет использован Node.js API `require.resolve` для поиска каталога в файловой системе и использоваться файл `index.js`, созданный из клиентского дополнения.
 
 Или укажите URL-адрес при разработке плагина (в идеале вы захотите сделать это в файле `vue-cli-ui.js` в вашем тестовом проекте vue):
 
@@ -773,37 +773,37 @@ ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboar
 
 ## Пользовательские страницы
 
-You can add a new view below the standard 'Project plugins', 'Project configuration' and 'Project tasks' ones using the `api.addView` method:
+Можно добавить новую страницу под стандартными «Плагины проекта», «Конфигурация проекта» и «Задачи проекта» с помощью метода `api.addView`:
 
 ```js
 api.addView({
-  // Unique id
+  // Уникальный ID
   id: 'org.vue.webpack.views.test',
 
-  // Route name (from vue-router)
-  // Use the same name used in the 'ClientAddonApi.addRoutes' method (see above in the Client addon section)
+  // Имя маршрута (из vue-router)
+  // Использует то же имя, как и в методе 'ClientAddonApi.addRoutes' (см. выше в разлеле клиентское дополнение)
   name: 'org.vue.webpack.routes.test',
 
-  // Button icon (material-icons)
+  // Иконка кнопки (material-icons)
   icon: 'pets',
-  // You can also specify a custom image (see Public static files section below):
+  // Можно указать собственное изображение (см. ниже раздел публичных статичных файлов):
   // icon: 'http://localhost:4000/_plugin/%40vue%2Fcli-service/webpack-icon.svg',
 
-  // Button tooltip
-  tooltip: 'Test view from webpack addon'
+  // Подсказка для кнопки
+  tooltip: 'Тестовая страница из дополнения webpack'
 })
 ```
 
-Here is the code in the client addon that register the `'org.vue.webpack.routes.test'` (like we saw earlier):
+Вот пример кода в клиентском дополнении, который регистрирует `'org.vue.webpack.routes.test'` (как мы видели ранее):
 
 ```js
-/* In `main.js` */
-// Import the component
+/* В `main.js` */
+// Импортируем компонент
 import TestView from './components/TestView.vue'
-// Add routes to vue-router under a /addon/<id> parent route.
-// For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
-// will add the /addon/foo/ and the /addon/foo/bar routes to vue-router.
-// Here we create a new '/addon/vue-webpack/' route with the 'test-webpack-route' name
+// Добавляем маршруты в vue-router под родительским маршрутом /addon/<id>.
+// Например, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
+// добавит маршруты /addon/foo/ и /addon/foo/bar во vue-router.
+// Теперь создаём новый маршрут '/addon/vue-webpack/' с именем 'test-webpack-route'
 ClientAddonApi.addRoutes('org.vue.webpack', [
   { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
 ])
@@ -813,34 +813,34 @@ ClientAddonApi.addRoutes('org.vue.webpack', [
 
 ## Общие данные
 
-Use Shared data to communicate info with custom components in an easy way.
+Используйте общие данные для обмена информацией с пользовательскими компонентами.
 
-> For example, the Webpack dashboard shares the build stats between the UI client and the UI server using this API.
+> Например, панель Webpack предоставляет данные статистики сборки как UI-клиенту так и UI-серверу с помощью этого API.
 
-In the plugin `ui.js` (nodejs):
+В файле `ui.js` плагина (Node.js):
 
 ```js
-// Set or update
+// Установка или обновление
 api.setSharedData('com.my-name.my-variable', 'some-data')
 
-// Get
+// Получение
 const sharedData = api.getSharedData('com.my-name.my-variable')
 if (sharedData) {
   console.log(sharedData.value)
 }
 
-// Remove
+// Удаление
 api.removeSharedData('com.my-name.my-variable')
 
-// Watch for changes
+// Отслеживание изменений
 const watcher = (value, id) => {
   console.log(value, id)
 }
 api.watchSharedData('com.my-name.my-variable', watcher)
-// Unwatch
+// Прекращение отслеживания изменений
 api.unwatchSharedData('com.my-name.my-variable', watcher)
 
-// Namespaced versions
+// Версии для пространства имён
 const {
   setSharedData,
   getSharedData,
@@ -854,24 +854,24 @@ const {
 В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-In the custom component:
+В пользовательском компоненте:
 
 ```js
-// Vue component
+// Компонент Vue
 export default {
-  // Sync Shared data
+  // Синхронизируем общие данные
   sharedData () {
     return {
-      // You can use `myVariable` in template
+      // Можно использовать `myVariable` в шаблоне
       myVariable: 'com.my-name.my-variable'
-      // You can also map namespaced Shared data
+      // Можно указывать общие данные нужного пространства имён
       ...mapSharedData('com.my-name.', {
         myVariable2: 'my-variable2'
       })
     }
   },
 
-  // Manual methods
+  // Ручные методы
   async created () {
     const value = await this.$getSharedData('com.my-name.my-variable')
 
@@ -884,7 +884,7 @@ export default {
 }
 ```
 
-If you use the `sharedData` option, the shared data can be updated by assigning a new value to the corresponding property.
+При использовании опции `sharedData` общие данные можно обновлять просто присвоением нового значения соответствующему свойству.
 
 ```html
 <template>
@@ -894,25 +894,25 @@ If you use the `sharedData` option, the shared data can be updated by assigning 
 <script>
 export default {
   sharedData: {
-    // Will sync the 'my-message' shared data on the server
+    // Синхронизирует общие данные 'my-message' на сервере
     message: 'com.my-name.my-message'
   }
 }
 </script>
 ```
 
-This is very useful if you create a settings component for example.
+Это очень удобно, например при создании компонента настроек.
 
 ## Действия плагина
 
-Plugin actions are calls sent between the cli-ui (browser) and plugins (nodejs).
+Действия плагина — это вызовы между cli-ui (браузером) и плагинами (nodejs).
 
-> For example, you might have a button in a custom component (см. [Клиентское дополнение](#кnиентское-допоnнение)) which calls some nodejs code on the server using this API.
+> Например, может быть кнопка в пользовательском компоненте (см. [клиентское дополнение](#кnиентское-допоnнение)), которая вызывает некоторый код nodejs на сервере с помощью этого API.
 
-In the `ui.js` file in the plugin (nodejs), you can use two methods from `PluginApi`:
+В файле `ui.js` в плагине (nodejs), вы можете использовать два метода из `PluginApi`:
 
 ```js
-// Call an action
+// Вызов действия
 api.callAction('com.my-name.other-action', { foo: 'bar' }).then(results => {
   console.log(results)
 }).catch(errors => {
@@ -921,7 +921,7 @@ api.callAction('com.my-name.other-action', { foo: 'bar' }).then(results => {
 ```
 
 ```js
-// Listen for an action
+// Отслеживание действия
 api.onAction('com.my-name.test-action', params => {
   console.log('test-action called', params)
 })
@@ -931,32 +931,32 @@ api.onAction('com.my-name.test-action', params => {
 В правильно указанном пространстве имён; оно должно быть уникальным для всех плагинов. Рекомендуется применять [нотацию перевёрнутого доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
 :::
 
-You can use namespaced versions with `api.namespace` (similar to Shared data):
+Можно указывать версии для пространства имён через `api.namespace` (как и в общих данных):
 
 ```js
 const { onAction, callAction } = api.namespace('com.my-name.')
 ```
 
-In the client addon components (browser), you have access to `$onPluginActionCalled`, `$onPluginActionResolved` and `$callPluginAction`:
+В клиентском дополнении (браузере) можно получить доступ к `$onPluginActionCalled`, `$onPluginActionResolved` и `$callPluginAction`:
 
 ```js
-// Vue component
+// Компонент Vue
 export default {
   created () {
     this.$onPluginActionCalled(action => {
-      // When the action is called
-      // before being run
+      // Когда действие вызывается
+      // до того как будет выполнено
       console.log('called', action)
     })
     this.$onPluginActionResolved(action => {
-      // After the action is run and completed
+      // После того как действие запущено и завершено
       console.log('resolved', action)
     })
   },
 
   methods: {
     testPluginAction () {
-      // Call a plugin action
+      // Вызов действия плагина
       this.$callPluginAction('com.my-name.test-action', {
         meow: 'meow'
       })
@@ -967,20 +967,20 @@ export default {
 
 ## Коммуникация между процессами (IPC)
 
-IPC stands for Inter-Process Communication. This system allows you to easily send messages from child processes (for example, tasks!). And it's pretty fast and lightweight.
+IPC означает коммуникацию между процессами. Эта система позволяет легко отправлять сообщения из дочерних процессов (например, задач!). И это довольно быстро и просто.
 
-> To display the data in the webpack dashboard UI, the `serve` and `build` commands from `@vue/cli-service` send IPC messages to the cli-ui nodejs server when the `--dashboard` argument is passed in.
+> Для отображения данных в UI на панели управления webpack, команды `serve` и `build` из `@vue/cli-service` отправляют IPC-сообщения на сервер cli-ui nodejs, когда передаётся аргумент `--dashboard`.
 
-In you process code (which can be a Webpack plugin or a nodejs task script), you can use the `IpcMessenger` class from `@vue/cli-shared-utils`:
+В коде процесса (который может быть Webpack-плагином или скриптом задачи для nodejs), можно использовать класс `IpcMessenger` из `@vue/cli-shared-utils`:
 
 ```js
 const { IpcMessenger } = require('@vue/cli-shared-utils')
 
-// Create a new IpcMessenger instance
+// Создание нового экземпляра IpcMessenger
 const ipc = new IpcMessenger()
 
 function sendMessage (data) {
-  // Send a message to the cli-ui server
+  // Отправка сообщения на сервер cli-ui
   ipc.send({
     'com.my-name.some-data': {
       type: 'build',
@@ -993,37 +993,37 @@ function messageHandler (data) {
   console.log(data)
 }
 
-// Listen for message
+// Отслеживание сообщения
 ipc.on(messageHandler)
 
-// Don't listen anymore
+// Прекращение отслеживания
 ipc.off(messageHandler)
 
 function cleanup () {
-  // Disconnect from the IPC network
+  // Отключение от сети IPC
   ipc.disconnect()
 }
 ```
 
-Manual connection:
+Подключение вручную:
 
 ```js
 const ipc = new IpcMessenger({
   autoConnect: false
 })
 
-// This message will be queued
+// Это сообщение будет добавлено в очередь
 ipc.send({ ... })
 
 ipc.connect()
 ```
 
-Auto disconnect on idle (after some time without sending any message):
+Автоотключение при простое (спустя некоторое время без отправляемых сообщений):
 
 ```js
 const ipc = new IpcMessenger({
   disconnectOnIdle: true,
-  idleTimeout: 3000 // Default
+  idleTimeout: 3000 // По умолчанию
 })
 
 ipc.send({ ... })
@@ -1033,7 +1033,7 @@ setTimeout(() => {
 }, 3000)
 ```
 
-Connect to another IPC network:
+Подключение к другой IPC-сети:
 
 ```js
 const ipc = new IpcMessenger({
@@ -1041,7 +1041,7 @@ const ipc = new IpcMessenger({
 })
 ```
 
-In a vue-cli plugin `ui.js` file, you can use the `ipcOn`, `ipcOff` and `ipcSend` methods:
+В файле `ui.js` плагина vue-cli, можно использовать методы `ipcOn`, `ipcOff` и `ipcSend`:
 
 ```js
 function onWebpackMessage ({ data: message }) {
@@ -1050,13 +1050,13 @@ function onWebpackMessage ({ data: message }) {
   }
 }
 
-// Listen for any IPC message
+// Отслеживание любого IPC-сообщения
 api.ipcOn(onWebpackMessage)
 
-// Don't listen anymore
+// Прекращение отслеживания
 api.ipcOff(onWebpackMessage)
 
-// Send a message to all connected IpcMessenger instances
+// Отправка сообщения во все подключённые экземпляры IpcMessenger
 api.ipcSend({
   webpackDashboardMessage: {
     foo: 'bar'
@@ -1066,22 +1066,22 @@ api.ipcSend({
 
 ## Локальное хранилище
 
-A plugin can save and load data from the local [lowdb](https://github.com/typicode/lowdb) database used by the ui server.
+Плагин может сохранять и загружать данные из локальной базы данных [lowdb](https://github.com/typicode/lowdb), используемой сервером UI.
 
 ```js
-// Store a value into the local DB
+// Сохранение значения в локальной базе данных
 api.storageSet('com.my-name.an-id', { some: 'value' })
 
-// Retrieve a value from the local DB
+// Получение значения из локальной базы данных
 console.log(api.storageGet('com.my-name.an-id'))
 
-// Full lowdb instance
+// Полноценный экземпляр lowdb
 api.db.get('posts')
   .find({ title: 'low!' })
   .assign({ title: 'hi!'})
   .write()
 
-// Namespaced helpers
+// Использование версий для пространства имён
 const { storageGet, storageSet } = api.namespace('my-plugin.')
 ```
 
