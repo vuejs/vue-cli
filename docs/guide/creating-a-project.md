@@ -58,7 +58,7 @@ Options:
 
 ## Using the GUI
 
-You can also create and manage projects using a graphical interface with the `vue ui` command:
+You can also create and manage projects using the graphical interface provided by [Vue UI](https://github.com/vuejs/ui). After a successful [installation of Vue UI](https://github.com/vuejs/ui#installation), you can open the GUI with the command: 
 
 ``` bash
 vue ui
