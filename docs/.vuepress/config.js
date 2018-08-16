@@ -10,6 +10,11 @@ module.exports = {
       title: 'Vue CLI 3',
       description: '🛠️ Vue.js 开发的标准工具'
     },
+    '/ru/': {
+      lang: 'ru',
+      title: 'Vue CLI 3',
+      description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
+    }
   },
   serviceWorker: true,
   theme: 'vue',
@@ -193,6 +198,95 @@ module.exports = {
                 '/zh/dev-guide/ui-info.md',
                 '/zh/dev-guide/ui-api.md',
                 '/zh/dev-guide/ui-localization.md'
+              ]
+            }
+          ]
+        }
+      },
+      '/ru/': {
+        label: 'Русский',
+        selectText: 'Переводы',
+        lastUpdated: 'Последнее обновление',
+        editLinkText: 'Изменить эту страницу на GitHub',
+        serviceWorker: {
+          updatePopup: {
+            message: 'Доступно обновление контента',
+            buttonText: 'Обновить'
+          }
+        },
+        nav: [
+          {
+            text: 'Руководство',
+            link: '/ru/guide/'
+          },
+          {
+            text: 'Конфигурация',
+            link: '/ru/config/'
+          },
+          {
+            text: 'Создание плагинов',
+            items: [
+              { text: 'Руководство по разработке', link: '/ru/dev-guide/plugin-dev.md' },
+              { text: 'Информация о плагине в UI', link: '/ru/dev-guide/ui-info.md' },
+              { text: 'API плагина в UI', link: '/ru/dev-guide/ui-api.md' },
+              { text: 'Локализация в UI', link: '/ru/dev-guide/ui-localization.md' }
+            ]
+          },
+          {
+            text: 'Плагины',
+            items: [
+              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
+              { text: 'Typescript', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript' },
+              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' },
+              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa' },
+              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest' },
+              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha' },
+              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress' },
+              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch' }
+            ]
+          },
+          {
+            text: 'История изменений',
+            link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
+          }
+        ],
+        sidebar: {
+          '/ru/guide/': [
+            '/ru/guide/',
+            '/ru/guide/installation',
+            {
+              title: 'Основы',
+              collapsable: false,
+              children: [
+                '/ru/guide/prototyping',
+                '/ru/guide/creating-a-project',
+                '/ru/guide/plugins-and-presets',
+                '/ru/guide/cli-service'
+              ]
+            },
+            {
+              title: 'Разработка',
+              collapsable: false,
+              children: [
+                '/ru/guide/browser-compatibility',
+                '/ru/guide/html-and-static-assets',
+                '/ru/guide/css',
+                '/ru/guide/webpack',
+                '/ru/guide/mode-and-env',
+                '/ru/guide/build-targets',
+                '/ru/guide/deployment'
+              ]
+            }
+          ],
+          '/ru/dev-guide/': [
+            '/ru/dev-guide/plugin-dev.md',
+            {
+              title: 'Разработка UI',
+              collapsable: false,
+              children: [
+                '/ru/dev-guide/ui-info.md',
+                '/ru/dev-guide/ui-api.md',
+                '/ru/dev-guide/ui-localization.md'
               ]
             }
           ]
