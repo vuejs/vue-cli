@@ -12,6 +12,19 @@ module.exports = (api, options) => {
       )
     }
 
+    const genUrlLoaderOptions = dir => {
+      return {
+        limit: inlineLimit,
+        // use explicit fallback to avoid regression in url-loader>=1.1.0
+        fallback: {
+          loader: 'file-loader',
+          options: {
+            name: genAssetSubPath(dir)
+          }
+        }
+      }
+    }
+
     webpackConfig
       .mode('development')
       .context(api.service.context)
@@ -87,10 +100,7 @@ module.exports = (api, options) => {
         .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
         .use('url-loader')
           .loader('url-loader')
-          .options({
-            limit: inlineLimit,
-            name: genAssetSubPath('img')
-          })
+          .options(genUrlLoaderOptions('img'))
 
     // do not base64-inline SVGs.
     // https://github.com/facebookincubator/create-react-app/pull/1180
@@ -108,20 +118,14 @@ module.exports = (api, options) => {
         .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
         .use('url-loader')
           .loader('url-loader')
-          .options({
-            limit: inlineLimit,
-            name: genAssetSubPath('media')
-          })
+          .options(genUrlLoaderOptions('media'))
 
     webpackConfig.module
       .rule('fonts')
         .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
         .use('url-loader')
           .loader('url-loader')
-          .options({
-            limit: inlineLimit,
-            name: genAssetSubPath('fonts')
-          })
+          .options(genUrlLoaderOptions('fonts'))
 
     // Other common pre-processors ---------------------------------------------
 
