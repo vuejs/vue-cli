@@ -1,3 +1,50 @@
+# [3.0.1](https://github.com/vuejs/vue-cli/compare/v3.0.0...v3.0.1) (2018-08-16)
+
+## cli
+
+#### Bug Fixes
+
+* fix local preset inference on Windows ([f83f31a](https://github.com/vuejs/vue-cli/commit/f83f31a))
+* temporary fix core-js dep for vue ui ([6d64750](https://github.com/vuejs/vue-cli/commit/6d64750)), closes [#2215](https://github.com/vuejs/vue-cli/issues/2215)
+* **generator:** handle directories starting with dot ([1892bcc](https://github.com/vuejs/vue-cli/commit/1892bcc)), closes [#2222](https://github.com/vuejs/vue-cli/issues/2222)
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* **eslint:** lint command should also lint config files starting with dot ([8189f20](https://github.com/vuejs/vue-cli/commit/8189f20)), closes [#2228](https://github.com/vuejs/vue-cli/issues/2228)
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **typescript:** fix typescript + multi-page build ([7e1862f](https://github.com/vuejs/vue-cli/commit/7e1862f)), closes [#2179](https://github.com/vuejs/vue-cli/issues/2179) [#2193](https://github.com/vuejs/vue-cli/issues/2193)
+
+## cli-service
+
+#### Bug Fixes
+
+* allow relative baseUrl other than ./ ([#2168](https://github.com/vuejs/vue-cli/issues/2168)) ([d14d4e6](https://github.com/vuejs/vue-cli/commit/d14d4e6))
+* inspect --plugins should log plugin names from webpack-merge ([#2201](https://github.com/vuejs/vue-cli/issues/2201)) ([69a4fb3](https://github.com/vuejs/vue-cli/commit/69a4fb3))
+* minify embedded CSS with extract: false ([a2c767e](https://github.com/vuejs/vue-cli/commit/a2c767e)), closes [#2214](https://github.com/vuejs/vue-cli/issues/2214)
+* preserve rule names when configureWebpack is present ([2257034](https://github.com/vuejs/vue-cli/commit/2257034)), closes [#2206](https://github.com/vuejs/vue-cli/issues/2206)
+* work around url-loader 1.1.0 regression ([1f0c8e9](https://github.com/vuejs/vue-cli/commit/1f0c8e9)), closes [#2242](https://github.com/vuejs/vue-cli/issues/2242)
+
+## docs
+
+#### Bug Fixes
+
+* fix css output location for relative baseUrl + more details in docs ([1e7fa2c](https://github.com/vuejs/vue-cli/commit/1e7fa2c))
+* **eslint:** always emit error when lintOnSave === error + improve docs ([d96a794](https://github.com/vuejs/vue-cli/commit/d96a794)), closes [#2162](https://github.com/vuejs/vue-cli/issues/2162)
+
+## other
+
+#### Bug Fixes
+
+* upgrade lint-staged to v7.2.2 ([#2183](https://github.com/vuejs/vue-cli/issues/2183)) ([4a035e2](https://github.com/vuejs/vue-cli/commit/4a035e2)), closes [#2165](https://github.com/vuejs/vue-cli/issues/2165)
+
+
+
 # [3.0.0](https://github.com/vuejs/vue-cli/compare/v3.0.0-rc.12...v3.0.0) (2018-08-10)
 
 ## other
