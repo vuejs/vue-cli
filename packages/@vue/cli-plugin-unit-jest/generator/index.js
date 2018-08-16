@@ -43,7 +43,7 @@ module.exports = (api, _, __, invoking) => {
     api.extendPackage({
       jest: {
         transform: {
-          '^.+\\.jsx?$': 'babel-jest'
+          '^.+\\.(jsx?)$': 'babel-jest'
         }
       }
     })
