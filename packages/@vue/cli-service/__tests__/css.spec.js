@@ -54,6 +54,7 @@ test('default loaders', () => {
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
+    expect(findOptions(config, lang, 'postcss').plugins).toBeFalsy()
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
@@ -69,6 +70,7 @@ test('production defaults', () => {
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
+    expect(findOptions(config, lang, 'postcss').plugins).toBeFalsy()
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
       importLoaders: 2
@@ -109,7 +111,30 @@ test('css.extract', () => {
     }
   }, 'production')
   LANGS.forEach(lang => {
-    expect(findLoaders(config, lang)).not.toContain(extractLoaderPath)
+    const loader = lang === 'css' ? [] : LOADERS[lang]
+    // when extract is false in production, even without postcss config,
+    // an instance of postcss-loader is injected for inline minification.
+    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
+    expect(findOptions(config, lang, 'css').importLoaders).toBe(2)
+    expect(findOptions(config, lang, 'postcss').plugins).toBeTruthy()
+  })
+
+  const config2 = genConfig({
+    postcss: {},
+    vue: {
+      css: {
+        extract: false
+      }
+    }
+  }, 'production')
+  LANGS.forEach(lang => {
+    const loader = lang === 'css' ? [] : LOADERS[lang]
+    // if postcss config is present, two postcss-loaders will be used becasue it
+    // does not support mixing config files with loader options.
+    expect(findLoaders(config2, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
+    expect(findOptions(config2, lang, 'css').importLoaders).toBe(3)
+    // minification loader should be injected before the user-facing postcss-loader
+    expect(findOptions(config2, lang, 'postcss').plugins).toBeTruthy()
   })
 })
 

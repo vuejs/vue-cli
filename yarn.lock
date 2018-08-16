@@ -7082,7 +7082,7 @@ jest-util@^23.4.0:
     slash "^1.0.0"
     source-map "^0.6.0"
 
-jest-validate@^23.0.0, jest-validate@^23.4.0:
+jest-validate@^23.4.0:
   version "23.4.0"
   resolved "https://registry.yarnpkg.com/jest-validate/-/jest-validate-23.4.0.tgz#d96eede01ef03ac909c009e9c8e455197d48c201"
   dependencies:
@@ -7605,34 +7605,6 @@ linkify-it@^2.0.0:
   resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-2.0.3.tgz#d94a4648f9b1c179d64fa97291268bdb6ce9434f"
   dependencies:
     uc.micro "^1.0.1"
-
-lint-staged@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-7.2.0.tgz#bdf4bb7f2f37fe689acfaec9999db288a5b26888"
-  dependencies:
-    app-root-path "^2.0.1"
-    chalk "^2.3.1"
-    commander "^2.14.1"
-    cosmiconfig "^5.0.2"
-    debug "^3.1.0"
-    dedent "^0.7.0"
-    execa "^0.9.0"
-    find-parent-dir "^0.3.0"
-    is-glob "^4.0.0"
-    is-windows "^1.0.2"
-    jest-validate "^23.0.0"
-    listr "^0.14.1"
-    lodash "^4.17.5"
-    log-symbols "^2.2.0"
-    micromatch "^3.1.8"
-    npm-which "^3.0.1"
-    p-map "^1.1.1"
-    path-is-inside "^1.0.2"
-    pify "^3.0.0"
-    please-upgrade-node "^3.0.2"
-    staged-git-files "1.1.1"
-    string-argv "^0.0.2"
-    stringify-object "^3.2.2"
 
 lint-staged@^7.2.2:
   version "7.2.2"

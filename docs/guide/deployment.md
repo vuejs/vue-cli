@@ -8,7 +8,7 @@ If you are developing your frontend app separately from your backend - i.e. your
 
 ### Previewing Locally
 
-The `dist` directory is meant to be served by an HTTP server, so it will not work if you open `dist/index.html` directly over `file://` protocol. The easiest way to preview your production build locally is using a Node.js static file server, for example [serve](https://github.com/zeit/serve):
+The `dist` directory is meant to be served by an HTTP server (unless you've configured `baseUrl` to be a relative value), so it will not work if you open `dist/index.html` directly over `file://` protocol. The easiest way to preview your production build locally is using a Node.js static file server, for example [serve](https://github.com/zeit/serve):
 
 ``` bash
 npm install -g serve

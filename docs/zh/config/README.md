@@ -32,9 +32,19 @@ module.exports = {
 - Type: `string`
 - Default: `'/'`
 
-  部署应用时的基本 URL。默认情况下，Vue CLI 会假设你的应用是被部署在一个域名的根路径上，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `baseUrl` 为 `/my-app/`。
+  部署应用时的基本 URL。用法和 webpack 本身的 `output.publicPath` 一致，但是 Vue CLI 在一些其他地方也需要用到这个值，所以**请始终使用 `baseUrl` 而不要直接修改 webpack 的 `output.publicPath`**。
 
-  你必须正确地设置这个值以使生产环境中静态资源加载正确。
+  默认情况下，Vue CLI 会假设你的应用是被部署在一个域名的根路径上，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `baseUrl` 为 `/my-app/`。
+
+  这个值也可以被设置为空字符串 (`''`) 或是相对路径 (`'./'`)，这样所有的资源都会被链接为相对路径，这样打出来的包可以被部署在任意路径，也可以用在类似 Cordova hybrid 应用的文件系统中。
+
+  ::: warning 相对 baseUrl 的限制
+  相对路径的 `baseUrl` 有一些使用上的限制。在以下情况下，应当避免使用相对 `baseUrl`:
+
+  - 当使用基于 HTML5 `history.pushState` 的路由时；
+
+  - 当使用 `pages` 选项构建多页面应用时。
+  :::
 
   这个值在开发环境下同样生效。如果你想把开发服务器架设在根路径，你可以使用一个条件式的值：
 
@@ -45,12 +55,6 @@ module.exports = {
       : '/'
   }
   ```
-
-  这个值也可以被设置为空字符串 (`''`) 这样所有的资源都会被链接为相对路径，这样打出来的包可以用在类似 Cordova hybrid 应用的文件系统中。**注意：生成的 CSS 文件要始终放在输出路径的根部，以确保 CSS 中的 URL 正常工作。**
-
-  ::: tip 提示
-  请始终使用 `baseUrl` 而不要修改 webpack 的 `output.publicPath`。
-  :::
 
 ### outputDir
 
