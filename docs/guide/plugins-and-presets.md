@@ -103,7 +103,7 @@ For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
 
 ## Presets
 
-A Vue CLI preset is a JSON object that contains pre-defined options and plugins for creating a new project so that the user don't have to go through the prompts to select them.
+A Vue CLI preset is a JSON object that contains pre-defined options and plugins for creating a new project so that the user doesn't have to go through the prompts to select them.
 
 Presets saved during `vue create` are stored in a configuration file in your user home directory (`~/.vuerc`). You can directly edit this file to tweak / add / delete the saved presets.
 
