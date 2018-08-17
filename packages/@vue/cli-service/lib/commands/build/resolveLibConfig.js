@@ -2,9 +2,6 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { entry, name }, options) => {
-  // inline all static asset files since there is no publicPath handling
-  process.env.VUE_CLI_INLINE_LIMIT = Infinity
-
   const { log, error } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
