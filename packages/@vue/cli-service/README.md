@@ -2,4 +2,4 @@
 
 > service for vue-cli
 
-[Full Docs](https://github.com/vuejs/vue-cli/tree/dev/docs)
+[Full Docs](https://cli.vuejs.org/)
