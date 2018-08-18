@@ -25,10 +25,7 @@ module.exports = (api, _, __, invoking) => {
 const applyESLint = module.exports.applyESLint = api => {
   api.render(files => {
     files['tests/unit/.eslintrc.js'] = api.genJSConfig({
-      env: { mocha: true },
-      rules: {
-        'import/no-extraneous-dependencies': 'off'
-      }
+      env: { mocha: true }
     })
   })
 }
