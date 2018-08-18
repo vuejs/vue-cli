@@ -25,7 +25,7 @@ npm install -D stylus-loader stylus
 
 ``` vue
 <style lang="scss">
-$color = red;
+$color: red;
 </style>
 ```
 
