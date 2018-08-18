@@ -25,7 +25,7 @@ Then you can import the corresponding file types, or use them in `*.vue` files w
 
 ``` vue
 <style lang="scss">
-$color = red;
+$color: red;
 </style>
 ```
 
