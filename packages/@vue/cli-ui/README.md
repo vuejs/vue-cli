@@ -24,3 +24,20 @@ And then in another terminal, you should serve cli-ui:
 ```
 yarn run serve
 ```
+
+#### Testing
+
+Before running E2E tests, you should start a new local testing apollo server with the following command:
+
+```
+yarn run test:e2e
+```
+
+Then in another terminal:
+
+```
+yarn run test:e2e:dev
+```
+
+This will open a new [Cypress](https://www.cypress.io/) window.
+You can now run all or specific integration tests.
