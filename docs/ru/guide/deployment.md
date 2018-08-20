@@ -58,10 +58,10 @@ serve -s dist
     set -e
 
     # сборка
-    npm run docs:build
+    npm run build
 
     # переход в каталог сборки
-    cd docs/.vuepress/dist
+    cd dist
 
     # если вы публикуете на пользовательский домен
     # echo 'www.example.com' > CNAME
