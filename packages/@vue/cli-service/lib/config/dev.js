@@ -10,6 +10,11 @@ module.exports = (api, options) => {
         .plugin('hmr')
           .use(require('webpack/lib/HotModuleReplacementPlugin'))
 
+      // https://github.com/webpack/webpack/issues/6642
+      webpackConfig
+        .output
+          .globalObject('this')
+
       webpackConfig
         .plugin('no-emit-on-errors')
           .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
