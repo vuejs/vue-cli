@@ -70,6 +70,11 @@ Web Component mode does not support IE11 and below. [More details](https://githu
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
 :::
 
+::: tip `--name` naming rule
+`--name` must contain at least one **hyphen** when building a **single web component**.For example, if there is only one Vue component in the path that matches `[entry]` param, `--name` must be named like `A-B` or `A-B-C`.
+If you try to build a single web component with an illegal string for `--name`, you'll failed and get the tip `ERROR  --name must contain a hyphen when building a single web component.` from Vue-CLI.
+:::
+
 You can build a single entry as a web component using
 
 ```
