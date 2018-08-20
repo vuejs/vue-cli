@@ -273,3 +273,36 @@ npm install --global surge
 ```
 
 Убедитесь, что ваш проект успешно опубликован с помощью Surge открыв в браузере `myawesomeproject.surge.sh`! Дополнительные сведения о настройке, такие как конфигурация пользовательских доменов, можно найти на [странице справки Surge](https://surge.sh/help/).
+
+### Bitbucket Cloud
+
+1. Как описывается в [документации Bitbucket](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) вам необходимо создать репозиторий названный в точности `<USERNAME>.bitbucket.io`.
+
+2. Возможно публиковать в подкаталог, например, если требуется иметь несколько веб-сайтов. В этом случае укажите корректный `baseUrl` в файле `vue.config.js`.
+
+    Если публикуете по адресу `https://<USERNAME>.bitbucket.io/`, установку `baseUrl` можно опустить, поскольку значение по умолчанию `"/"`.
+
+    Если публикуете по адресу `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, нужно задать `baseUrl` в значение `"/<SUBFOLDER>/"`. В этом случае структура каталогов должна отражать структуру URL-адресов, например, репозиторий должен иметь каталог `/<SUBFOLDER>`.
+
+3. В проекте создайте `deploy.sh` с указанным содержимым и запустите его для публикации:
+
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
+
+    # остановиться при ошибках
+    set -e
+
+    # сборка
+    npm run build
+
+    # переход в каталог итоговой сборки
+    cd dist
+
+    git init
+    git add -A
+    git commit -m 'deploy'
+
+    git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
+
+    cd -
+    ```
