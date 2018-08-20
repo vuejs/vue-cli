@@ -304,7 +304,7 @@ module.exports = {
         editLinkText: 'Edite esta página no GitHub',
         serviceWorker: {
           updatePopup: {
-            message: "Conteúdo novo disponível",
+            message: "Novo conteúdo disponível",
             buttonText: "Atualizar"
           }
         },

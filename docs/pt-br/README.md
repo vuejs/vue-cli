@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: /logo.png
-actionText: Comece Agora →
+actionText: Começar →
 actionLink: /guide/
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
