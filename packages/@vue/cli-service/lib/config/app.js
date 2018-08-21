@@ -189,7 +189,8 @@ module.exports = (api, options) => {
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`,
-          chunks
+          chunks,
+          templateParameters
         } = normalizePageConfig(multiPageConfig[name])
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
@@ -210,7 +211,10 @@ module.exports = (api, options) => {
           chunks: chunks || ['chunk-vendors', 'chunk-common', name],
           template: templatePath,
           filename: ensureRelative(outputDir, filename),
-          title
+          title,
+          templateParameters: (compilation, assets, pluginOptions) => {
+            return Object.assign(htmlOptions.templateParameters(compilation, assets, pluginOptions), templateParameters)
+          }
         })
 
         webpackConfig
