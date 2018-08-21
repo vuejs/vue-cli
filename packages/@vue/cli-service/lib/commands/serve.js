@@ -242,7 +242,10 @@ module.exports = (api, options) => {
           console.log()
 
           if (args.open || projectDevServerOptions.open) {
-            openBrowser(urls.localUrlForBrowser)
+            const pageUri = ( projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string' )
+              ? projectDevServerOptions.openPage
+              : ''
+            openBrowser(urls.localUrlForBrowser + pageUri)
           }
 
           // Send final app URL
