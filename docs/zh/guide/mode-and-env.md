@@ -22,7 +22,11 @@ VUE_APP_SECRET=secret
 
 为一个特定模式准备的环境文件的 (例如 `.env.production`) 将会比一般的环境文件 (例如 `.env`) 拥有更高的优先级。
 
-此外，Vue CLI 启动时已经存在的环境变量拥有最高优先级，并不会被 `.env` 文件覆写。如果在环境中有默认的 `NODE_ENV`，你可能需要考虑移除它。
+此外，Vue CLI 启动时已经存在的环境变量拥有最高优先级，并不会被 `.env` 文件覆写。
+:::
+
+::: warning NODE_ENV
+如果在环境中有默认的 `NODE_ENV`，你应该移除它或在运行 `vue-cli-service` 命令的时候明确地设置 `NODE_ENV`。
 :::
 
 ## 模式

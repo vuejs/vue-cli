@@ -97,7 +97,7 @@ api.describeConfig({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](./ui-info.md#logo))。
 
 ### 配置文件
 
@@ -364,7 +364,7 @@ api.describeTask({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](./ui-info.md#logo))。
 
 ### 任务参数
 
