@@ -6,10 +6,11 @@ Before starting a local cli-ui instance,
 consider following the [contributing guide](https://github.com/vuejs/vue-cli/blob/dev/.github/CONTRIBUTING.md)
 in order to download all required dependencies of vue-cli's packages.
 
-Just after, you should build `@vue/cli-ui-addon-webpack` by running:
+Just after, you should build once then serve `@vue/cli-ui-addon-webpack` by running:
 ```bash
 cd ../cli-ui-addon-webpack
-yarn build
+yarn build # just do once
+yarn serve
 ```
 
 Then you start the ui server (based on Apollo):
