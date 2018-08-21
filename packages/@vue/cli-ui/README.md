@@ -6,13 +6,13 @@ Before starting a local cli-ui instance,
 consider following the [contributing guide](https://github.com/vuejs/vue-cli/blob/dev/.github/CONTRIBUTING.md)
 in order to download all required dependencies of vue-cli's packages.
 
-Just after, you should serve `@vue/cli-ui-addon-webpack` by running:
+Just after, you should build `@vue/cli-ui-addon-webpack` by running:
 ```bash
 cd ../cli-ui-addon-webpack
-yarn serve
+yarn build
 ```
 
-Then you should open a new terminal and start the ui server (based on Apollo):
+Then you start the ui server (based on Apollo):
 
 ```
 cd ../cli-ui
@@ -27,16 +27,10 @@ yarn run serve
 
 #### Testing
 
-Before running E2E tests, you should start a new local testing apollo server with the following command:
+For running E2E tests, you just need to run:
 
 ```
 yarn run test:e2e
-```
-
-Then in another terminal:
-
-```
-yarn run test:e2e:dev
 ```
 
 This will open a new [Cypress](https://www.cypress.io/) window.
