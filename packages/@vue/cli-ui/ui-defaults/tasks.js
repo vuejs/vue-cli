@@ -71,7 +71,7 @@ module.exports = api => {
 
         if (data.type === 'stats') {
           // Stats are read from a file
-          const statsFile = path.resolve(process.cwd(), `./node_modules/.stats-${type}.json`)
+          const statsFile = path.resolve(api.getCwd(), `./node_modules/.stats-${type}.json`)
           const value = await fs.readJson(statsFile)
           setSharedData(id, value)
           await fs.remove(statsFile)

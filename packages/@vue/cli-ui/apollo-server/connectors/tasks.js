@@ -292,8 +292,9 @@ async function run (id, context) {
 
     task.time = Date.now()
 
+    // Task env
     process.env.VUE_CLI_CONTEXT = cwd.get()
-
+    process.env.VUE_CLI_PROJECT_ID = projects.getCurrent(context).id
     const nodeEnv = process.env.NODE_ENV
     delete process.env.NODE_ENV
 
