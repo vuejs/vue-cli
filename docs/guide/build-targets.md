@@ -130,3 +130,22 @@ Now on the page, the user only needs to include Vue and the entry file:
 <!-- foo-one's implementation chunk is auto fetched when it's used -->
 <foo-one></foo-one>
 ```
+
+
+## Using vuex in builds
+
+When building a [Webcomponent](#web-component) or [Library](#library), the entry point is not `main.js`, but an `entry-wc.js` file, generated here: [https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js)
+
+So to use vuex in web component target, you need to initialize the store in `App.vue`: 
+
+``` js
+import store from './store'
+
+// ...
+
+export default {
+  store,
+  name: 'App',
+  // ...
+}
+```
