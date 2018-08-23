@@ -2,7 +2,6 @@ const execa = require('execa')
 const path = require('path')
 const fs = require('fs-extra')
 const parseDiff = require('../util/parse-diff')
-const { highlightCode } = require('../util/highlight')
 // Connectors
 const cwd = require('./cwd')
 // Utils
@@ -27,6 +26,8 @@ async function getNewFiles (context) {
 
 async function getDiffs (context) {
   if (!hasProjectGit(cwd.get())) return []
+
+  const { highlightCode } = require('../util/highlight')
 
   const newFiles = await getNewFiles(context)
   await execa('git', ['add', '-N', '*'], {
