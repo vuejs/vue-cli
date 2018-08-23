@@ -55,6 +55,7 @@ module.exports = class Creator extends EventEmitter {
     this.injectedPrompts = []
     this.promptCompleteCbs = []
     this.afterInvokeCbs = []
+    this.afterAnyInvokeCbs = []
 
     this.run = this.run.bind(this)
 
@@ -64,7 +65,7 @@ module.exports = class Creator extends EventEmitter {
 
   async create (cliOptions = {}, preset = null) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-    const { run, name, context, afterInvokeCbs } = this
+    const { run, name, context, afterInvokeCbs, afterAnyInvokeCbs } = this
 
     if (!preset) {
       if (cliOptions.preset) {
@@ -187,7 +188,8 @@ module.exports = class Creator extends EventEmitter {
     const generator = new Generator(context, {
       pkg,
       plugins,
-      afterInvokeCbs
+      afterInvokeCbs,
+      afterAnyInvokeCbs
     })
     await generator.generate({
       extractConfigFiles: preset.useConfigFiles
@@ -205,6 +207,9 @@ module.exports = class Creator extends EventEmitter {
     logWithSpinner('⚓', `Running completion hooks...`)
     this.emit('creation', { event: 'completion-hooks' })
     for (const cb of afterInvokeCbs) {
+      await cb()
+    }
+    for (const cb of afterAnyInvokeCbs) {
       await cb()
     }
 

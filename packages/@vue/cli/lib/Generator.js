@@ -6,7 +6,7 @@ const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const runCodemod = require('./util/runCodemod')
-const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+const { toShortPluginId, matchesPluginId, loadModule } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
@@ -69,17 +69,21 @@ module.exports = class Generator {
   constructor (context, {
     pkg = {},
     plugins = [],
+    otherPlugins = [],
     afterInvokeCbs = [],
+    afterAnyInvokeCbs = [],
     files = {},
     invoking = false
   } = {}) {
     this.context = context
     this.plugins = plugins
+    this.otherPlugins = otherPlugins
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
     this.imports = {}
     this.rootOptions = {}
-    this.afterInvokeCbs = afterInvokeCbs
+    this.afterInvokeCbs = []
+    this.afterAnyInvokeCbs = afterAnyInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
     this.reservedConfigTransforms = reservedConfigTransforms
@@ -93,14 +97,33 @@ module.exports = class Generator {
     // exit messages
     this.exitLogs = []
 
+    const pluginIds = plugins.map(p => p.id)
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService
       ? cliService.options
       : inferRootOptions(pkg)
+
+    // apply hooks from all plugins
+    otherPlugins.forEach(id => {
+      const api = new GeneratorAPI(id, this, {}, rootOptions)
+      const pluginGenerator = loadModule(`${id}/generator`, context)
+      if (pluginGenerator && pluginGenerator.hooks) {
+        pluginGenerator.hooks(api, {}, rootOptions, pluginIds)
+      }
+    })
+
+    // reset nonAny hooks
+    this.afterInvokeCbs = afterInvokeCbs
+    this.postProcessFilesCbs = []
+
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
       const api = new GeneratorAPI(id, this, options, rootOptions)
       apply(api, options, rootOptions, invoking)
+
+      if (apply.hooks) {
+        apply.hooks(api, options, rootOptions, pluginIds)
+      }
     })
   }
 
@@ -245,8 +268,7 @@ module.exports = class Generator {
   hasPlugin (_id) {
     return [
       ...this.plugins.map(p => p.id),
-      ...Object.keys(this.pkg.devDependencies || {}),
-      ...Object.keys(this.pkg.dependencies || {})
+      ...this.otherPlugins
     ].some(id => matchesPluginId(_id, id))
   }
 

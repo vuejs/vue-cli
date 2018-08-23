@@ -288,6 +288,16 @@ class GeneratorAPI {
   }
 
   /**
+   * Push a callback to be called when the files have been written to disk
+   * from non invoked plugins
+   *
+   * @param {function} cb
+   */
+  afterAnyInvoke (cb) {
+    this.generator.afterAnyInvokeCbs.push(cb)
+  }
+
+  /**
    * Add a message to be printed when the generator exits (after any other standard messages).
    *
    * @param {} msg String or value to print after the generation is completed

@@ -9,6 +9,7 @@ const {
   hasProjectGit,
   logWithSpinner,
   stopSpinner,
+  isPlugin,
   resolvePluginId,
   loadModule
 } = require('@vue/cli-shared-utils')
@@ -104,11 +105,21 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
 async function runGenerator (context, plugin, pkg = getPkg(context)) {
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
   const afterInvokeCbs = []
+  const afterAnyInvokeCbs = []
+
+  // load all the other plugins
+  const otherPlugins = Object.keys(pkg.dependencies)
+    .concat(Object.keys(pkg.devDependencies))
+    .filter(isPlugin)
+    .filter(id => id !== plugin.id)
+
   const generator = new Generator(context, {
     pkg,
     plugins: [plugin],
+    otherPlugins,
     files: await readFiles(context),
     afterInvokeCbs,
+    afterAnyInvokeCbs,
     invoking: true
   })
 
@@ -135,6 +146,15 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   if (afterInvokeCbs.length) {
     logWithSpinner('⚓', `Running completion hooks...`)
     for (const cb of afterInvokeCbs) {
+      await cb()
+    }
+    stopSpinner()
+    log()
+  }
+
+  if (afterAnyInvokeCbs.length) {
+    logWithSpinner('⚓', `Running completion hooks from other plugins...`)
+    for (const cb of afterAnyInvokeCbs) {
       await cb()
     }
     stopSpinner()
