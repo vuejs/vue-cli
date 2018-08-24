@@ -110,7 +110,7 @@ module.exports = {
 
 ## Passing Options to Pre-Processor Loaders
 
-Sometimes you may want to pass options to the pre-processor's webpack loader. You can do that using the `css.loaderOptions` option in `vue.config.js`. For example, to pass some shared global variables to all your Sass styles:
+Sometimes you may want to pass options to the pre-processor's webpack loader. You can do that using the `css.loaderOptions` option in `vue.config.js`. For example, to pass some shared global variables to all your Sass/Less styles:
 
 ``` js
 // vue.config.js
@@ -122,6 +122,14 @@ module.exports = {
         // @/ is an alias to src/
         // so this assumes you have a file named `src/variables.scss`
         data: `@import "@/variables.scss";`
+      },
+      // pass Less.js Options to less-loader
+      less:{
+        // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
+        // `primary` is global variables field name
+        globalVars: {
+          primary:'#fff'
+        }
       }
     }
   }
