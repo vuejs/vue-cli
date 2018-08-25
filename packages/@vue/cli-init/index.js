@@ -1,8 +1,13 @@
 const execa = require('execa')
 const binPath = require.resolve('vue-cli/bin/vue-init')
 
-execa(
-  binPath,
-  process.argv.slice(process.argv.indexOf('init') + 1),
-  { stdio: 'inherit' }
-)
+const argv = process.argv
+const initIndex = argv.indexOf('init')
+
+if (initIndex > -1) {
+  execa(
+    binPath,
+    argv.slice(initIndex + 1),
+    { stdio: 'inherit' }
+  )
+}
