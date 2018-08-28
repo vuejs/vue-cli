@@ -22,6 +22,7 @@ module.exports = (api, options) => {
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
+      '--stdin': `close when stdin ends`,
       '--public': `specify the public network URL for the HMR client`
     }
   }, async function serve (args) {
@@ -175,6 +176,16 @@ module.exports = (api, options) => {
         })
       })
     })
+
+    if (args.stdin) {
+      process.stdin.on('end', () => {
+        server.close(() => {
+          process.exit(0)
+        })
+      })
+
+      process.stdin.resume()
+    }
 
     // on appveyor, killing the process with SIGTERM causes execa to
     // throw error
