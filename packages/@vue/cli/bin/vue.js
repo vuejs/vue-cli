@@ -145,6 +145,13 @@ program
     require('../lib/config')(value, cleanArgs(cmd))
   })
 
+program
+  .command('upgrade [semverLevel]')
+  .description('upgrade vue cli service / plugins (default semverLevel: minor)')
+  .action((semverLevel, cmd) => {
+    loadCommand('upgrade', '@vue/cli-upgrade')(semverLevel, cleanArgs(cmd))
+  })
+
 // output help information on unknown commands
 program
   .arguments('<command>')
@@ -186,12 +193,16 @@ if (!process.argv.slice(2).length) {
   program.outputHelp()
 }
 
+function camelize (str) {
+  return str.replace(/-(\w)/g, (_, c) => c ? c.toUpperCase() : '')
+}
+
 // commander passes the Command object itself as options,
 // extract only actual options into a fresh object.
 function cleanArgs (cmd) {
   const args = {}
   cmd.options.forEach(o => {
-    const key = o.long.replace(/^--/, '')
+    const key = camelize(o.long.replace(/^--/, ''))
     // if an option is not present and Command has a method with the same name
     // it should not be copied
     if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {
