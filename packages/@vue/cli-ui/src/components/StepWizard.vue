@@ -106,9 +106,9 @@ export default {
       overflow-y auto
 
     > .actions-bar
-      justify-content space-between
-      &.center
-        justify-content center
+      justify-content center
+      .vue-ui-button:not(.icon-button)
+        min-width 190px
 
   .title
     padding $padding-item

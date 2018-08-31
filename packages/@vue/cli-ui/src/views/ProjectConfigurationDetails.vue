@@ -28,15 +28,7 @@
       </div>
     </template>
 
-    <div class="actions-bar space-between">
-      <VueButton
-        :disabled="!hasPromptsChanged"
-        icon-left="cancel"
-        class="big"
-        :label="$t('org.vue.views.project-configuration-details.actions.cancel')"
-        @click="cancel()"
-      />
-
+    <div class="actions-bar">
       <VueButton
         v-if="configuration && configuration.link"
         icon-right="open_in_new"
@@ -44,6 +36,16 @@
         :label="$t('org.vue.views.project-configuration-details.actions.more-info')"
         :href="configuration.link"
         target="_blank"
+      />
+
+      <div class="vue-ui-spacer"/>
+
+      <VueButton
+        :disabled="!hasPromptsChanged"
+        icon-left="cancel"
+        class="big"
+        :label="$t('org.vue.views.project-configuration-details.actions.cancel')"
+        @click="cancel()"
       />
 
       <VueButton

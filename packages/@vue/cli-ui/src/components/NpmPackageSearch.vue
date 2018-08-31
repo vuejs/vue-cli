@@ -49,17 +49,19 @@
       </ais-index>
     </div>
 
-    <div class="actions-bar no-padding-x space-between">
+    <div class="actions-bar no-padding-x">
+      <div class="algolia">
+        <img class="ais-logo" src="~@/assets/search-by-algolia.svg">
+      </div>
+
+      <div class="vue-ui-spacer"/>
+
       <VueButton
         icon-left="close"
         :label="$t('org.vue.views.project-plugins-add.tabs.search.buttons.cancel')"
         class="big"
         @click="close()"
       />
-
-      <div class="algolia">
-        <img class="ais-logo" src="~@/assets/search-by-algolia.svg">
-      </div>
 
       <VueButton
         icon-left="file_download"
@@ -158,13 +160,9 @@ export default {
   overflow hidden
 
 .algolia
-  position absolute
-  margin 0 auto
-  top 0
-  left 0
-  width 100%
+  width 200px
   height 100%
-  pointer-events none
+  margin-left $padding-item
   h-box()
   box-center()
 </style>

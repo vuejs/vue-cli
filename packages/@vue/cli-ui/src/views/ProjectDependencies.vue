@@ -116,7 +116,7 @@
         {{ $t('org.vue.views.project-dependencies.uninstall.body', { id: selectedId }) }}
       </div>
 
-      <div slot="footer" class="actions space-between">
+      <div slot="footer" class="actions end">
         <VueButton
           :label="$t('org.vue.views.project-dependencies.uninstall.cancel')"
           class="flat"
