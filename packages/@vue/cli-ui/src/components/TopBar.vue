@@ -5,7 +5,7 @@
       :label="projectCurrent ? projectCurrent.name : $t('org.vue.components.status-bar.project.empty')"
       class="current-project"
       icon-right="arrow_drop_down"
-      button-class="flat round"
+      button-class="round"
     >
       <!-- Current project options -->
 
