@@ -2,11 +2,11 @@ const getModulePath = function (identifier) {
   return identifier.replace(/.*!/, '').replace(/\\/g, '/')
 }
 
-export function filterModules (modules) {
+exports.filterModules = function (modules) {
   return modules.filter(module => module.name.indexOf('(webpack)') === -1)
 }
 
-export function buildSortedModules (modules, sizeField) {
+exports.buildSortedModules = function (modules, sizeField) {
   let list = modules.slice()
   if (list.length) {
     list = list.map(module => {
@@ -22,7 +22,7 @@ export function buildSortedModules (modules, sizeField) {
   return list
 }
 
-export function buildDepModules (modules) {
+exports.buildDepModules = function (modules) {
   const deps = new Map()
   for (const module of modules) {
     const path = getModulePath(module.identifier)
@@ -66,7 +66,6 @@ export function buildDepModules (modules) {
     gzip: 400
   }
   fullPath: '/node_modules',
-  parent: undefined,
   children: [
     {
       id: 'vuex',
@@ -86,14 +85,13 @@ export function buildDepModules (modules) {
       children: [
         ...
       ],
-      parent: ...
     },
     ...
   ]
 }
 */
 
-export function buildModulesTrees (modules) {
+exports.buildModulesTrees = function (modules, sizeType) {
   const trees = {}
 
   for (const module of modules) {
@@ -127,8 +125,7 @@ export function buildModulesTrees (modules) {
               gzip: 0
             },
             fullPath: fullPath.join('/'),
-            children: {},
-            parent: subtree
+            children: {}
           }
         }
         child.size.stats += module.size.stats
@@ -149,14 +146,14 @@ export function buildModulesTrees (modules) {
     while ((keys = Object.keys(tree.children)).length !== 0 && keys.length === 1) {
       tree = tree.children[keys[0]]
     }
-    walkTreeToSortChildren(tree)
+    walkTreeToSortChildren(tree, sizeType)
     trees[n] = tree
   }
 
   return trees
 }
 
-function walkTreeToSortChildren (tree) {
+function walkTreeToSortChildren (tree, sizeType) {
   let size = {
     stats: 0,
     parsed: 0,
@@ -164,7 +161,7 @@ function walkTreeToSortChildren (tree) {
   }
   tree.children = Object.keys(tree.children).map(
     key => tree.children[key]
-  ).sort((a, b) => b.size.stats - a.size.stats)
+  ).sort((a, b) => b.size[sizeType] - a.size[sizeType])
   for (const child of tree.children) {
     child.previousSize = {
       stats: size.stats,
@@ -174,6 +171,6 @@ function walkTreeToSortChildren (tree) {
     size.stats += child.size.stats
     size.parsed += child.size.parsed
     size.gzip += child.size.gzip
-    walkTreeToSortChildren(child)
+    walkTreeToSortChildren(child, sizeType)
   }
 }
