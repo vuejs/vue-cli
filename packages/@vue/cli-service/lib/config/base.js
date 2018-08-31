@@ -37,7 +37,6 @@ module.exports = (api, options) => {
         .publicPath(options.baseUrl)
 
     webpackConfig.resolve
-      .set('symlinks', false)
       .extensions
         .merge(['.js', '.jsx', '.vue', '.json'])
         .end()
