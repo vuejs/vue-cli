@@ -64,7 +64,7 @@ vue ui -D
 
 You can add a project configuration with the `api.describeConfig` method.
 
-First you need to pass some informations:
+First you need to pass some information:
 
 ```js
 api.describeConfig({
@@ -119,7 +119,7 @@ api.describeConfig({
     vue: {
       js: ['vue.config.js']
     }
-  },
+  }
 })
 ```
 
@@ -165,7 +165,7 @@ api.describeConfig({
     vue: {
       js: ['vue.config.js']
     }
-  },
+  }
 })
 ```
 
@@ -186,10 +186,7 @@ Multiple files example: if we add the following `eslintrc.js` file in the user p
 ```js
 module.exports = {
   root: true,
-  extends: [
-    'plugin:vue/essential',
-    '@vue/standard'
-  ]
+  extends: ['plugin:vue/essential', '@vue/standard']
 }
 ```
 
@@ -211,7 +208,7 @@ api.describeConfig({
     vue: {
       js: ['vue.config.js']
     }
-  },
+  }
 })
 ```
 
@@ -471,7 +468,6 @@ api.describeTask({
 
 See [Client addon](#client-addon) for more info.
 
-
 ### Add new tasks
 
 You can also add entirely new tasks which aren't in the `package.json` scripts with `api.addTask` instead of `api.describeTask`. Those tasks will only appear in the cli UI.
@@ -489,11 +485,15 @@ api.addTask({
   // The rest is like `describeTask` without the `match` option
   description: '...',
   link: 'https://github.com/vuejs/vue-cli/...',
-  prompts: [ /* ... */ ],
+  prompts: [
+    /* ... */
+  ],
   onBeforeRun: () => {},
   onRun: () => {},
   onExit: () => {},
-  views: [ /* ... */ ],
+  views: [
+    /* ... */
+  ],
   defaultView: '...'
 })
 ```
@@ -680,7 +680,10 @@ Vue.use(VueProgress, {
 
 // Register a custom component
 // (works like 'Vue.component')
-ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
+ClientAddonApi.component(
+  'org.vue.webpack.components.dashboard',
+  WebpackDashboard
+)
 
 // Add routes to vue-router under a /addon/<id> parent route.
 // For example, addRoutes('foo', [ { path: '' }, { path: 'bar' } ])
@@ -767,7 +770,10 @@ Here is the client addon code that register the `'org.vue.webpack.components.das
 import WebpackDashboard from './components/WebpackDashboard.vue'
 // Register a custom component
 // (works like 'Vue.component')
-ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
+ClientAddonApi.component(
+  'org.vue.webpack.components.dashboard',
+  WebpackDashboard
+)
 ```
 
 ![Task view example](/task-view.png)
@@ -914,11 +920,14 @@ In the `ui.js` file in the plugin (nodejs), you can use two methods from `Plugin
 
 ```js
 // Call an action
-api.callAction('com.my-name.other-action', { foo: 'bar' }).then(results => {
-  console.log(results)
-}).catch(errors => {
-  console.error(errors)
-})
+api
+  .callAction('com.my-name.other-action', { foo: 'bar' })
+  .then(results => {
+    console.log(results)
+  })
+  .catch(errors => {
+    console.error(errors)
+  })
 ```
 
 ```js
@@ -943,7 +952,7 @@ In the client addon components (browser), you have access to `$onPluginActionCal
 ```js
 // Vue component
 export default {
-  created () {
+  created() {
     this.$onPluginActionCalled(action => {
       // When the action is called
       // before being run
@@ -956,7 +965,7 @@ export default {
   },
 
   methods: {
-    testPluginAction () {
+    testPluginAction() {
       // Call a plugin action
       this.$callPluginAction('com.my-name.test-action', {
         meow: 'meow'
@@ -980,7 +989,7 @@ const { IpcMessenger } = require('@vue/cli-shared-utils')
 // Create a new IpcMessenger instance
 const ipc = new IpcMessenger()
 
-function sendMessage (data) {
+function sendMessage(data) {
   // Send a message to the cli-ui server
   ipc.send({
     'com.my-name.some-data': {
@@ -990,7 +999,7 @@ function sendMessage (data) {
   })
 }
 
-function messageHandler (data) {
+function messageHandler(data) {
   console.log(data)
 }
 
@@ -1000,7 +1009,7 @@ ipc.on(messageHandler)
 // Don't listen anymore
 ipc.off(messageHandler)
 
-function cleanup () {
+function cleanup() {
   // Disconnect from the IPC network
   ipc.disconnect()
 }
@@ -1045,7 +1054,7 @@ const ipc = new IpcMessenger({
 In a vue-cli plugin `ui.js` file, you can use the `ipcOn`, `ipcOff` and `ipcSend` methods:
 
 ```js
-function onWebpackMessage ({ data: message }) {
+function onWebpackMessage({ data: message }) {
   if (message['com.my-name.some-data']) {
     console.log(message['com.my-name.some-data'])
   }
@@ -1077,9 +1086,10 @@ api.storageSet('com.my-name.an-id', { some: 'value' })
 console.log(api.storageGet('com.my-name.an-id'))
 
 // Full lowdb instance
-api.db.get('posts')
+api.db
+  .get('posts')
   .find({ title: 'low!' })
-  .assign({ title: 'hi!'})
+  .assign({ title: 'hi!' })
   .write()
 
 // Namespaced helpers
@@ -1145,7 +1155,7 @@ api.onProjectOpen((project, previousProject) => {
 Called when the plugin is reloaded.
 
 ```js
-api.onPluginReload((project) => {
+api.onPluginReload(project => {
   console.log('plugin reloaded')
 })
 ```
@@ -1225,7 +1235,7 @@ api.addSuggestion({
   // Optional image
   image: '/_plugin/my-package/screenshot.png',
   // Function called when suggestion is activated by user
-  async handler () {
+  async handler() {
     // ...
     return {
       // By default removes the button
@@ -1252,7 +1262,7 @@ You can also open a page instead when the user activates the suggestion with `ac
 ```js
 api.addSuggestion({
   id: 'com.my-name.my-suggestion',
-  type: 'action', // Required 
+  type: 'action', // Required
   label: 'Add vue-router',
   // Open a new tab
   actionLink: 'https://vuejs.org/'
@@ -1273,7 +1283,7 @@ api.onViewOpen(({ view }) => {
         label: 'org.vue.cli-service.suggestions.vue-router-add.label',
         message: 'org.vue.cli-service.suggestions.vue-router-add.message',
         link: 'https://router.vuejs.org/',
-        async handler () {
+        async handler() {
           await install(api, 'vue-router')
         }
       })
