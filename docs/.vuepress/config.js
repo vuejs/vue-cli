@@ -17,6 +17,9 @@ module.exports = {
     }
   },
   serviceWorker: true,
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png' }],
+  ],
   theme: 'vue',
   themeConfig: {
     repo: 'vuejs/vue-cli',

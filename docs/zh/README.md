@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /logo.png
+heroImage: /favicon.png
 actionText: 起步 →
 actionLink: /zh/guide/
 features:
