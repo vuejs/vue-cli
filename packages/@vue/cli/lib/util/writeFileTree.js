@@ -19,9 +19,9 @@ module.exports = async function writeFileTree (dir, files, previousFiles) {
   if (previousFiles) {
     await deleteRemovedFiles(dir, files, previousFiles)
   }
-  return Promise.all(Object.keys(files).map(async (name) => {
+  Object.keys(files).forEach((name) => {
     const filePath = path.join(dir, name)
-    await fs.ensureDir(path.dirname(filePath))
-    await fs.writeFile(filePath, files[name])
-  }))
+    fs.ensureDirSync(path.dirname(filePath))
+    fs.writeFileSync(filePath, files[name])
+  })
 }
