@@ -25,6 +25,6 @@ describe('Tasks', () => {
     cy.get('.task-item:contains("build").status-running')
     cy.wait(500)
     cy.get('.build-progress .done', { timeout: 250000 }).should('be.visible')
-    cy.get('.task-item:contains("build").status-done', { timeout: 3000 })
+    cy.get('.task-item:contains("build").status-done', { timeout: 25000 })
   })
 })

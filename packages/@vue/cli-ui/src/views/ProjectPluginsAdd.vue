@@ -80,18 +80,15 @@
         {{ $t('org.vue.views.project-plugins-add.modal.body', { target: pluginId }) }}
       </div>
 
-      <div slot="footer" class="actions space-between">
+      <div slot="footer" class="actions end">
         <VueButton
           :label="$t('org.vue.views.project-plugins-add.modal.buttons.back')"
           class="flat"
           @click="showCancelInstall = false"
         />
 
-        <div class="vue-ui-spacer"/>
-
         <VueButton
           :label="$t('org.vue.views.project-plugins-add.modal.buttons.cancel')"
-          class="flat"
           @click="cancelInstall()"
         />
 

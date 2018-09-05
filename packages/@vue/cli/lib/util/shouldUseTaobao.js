@@ -38,7 +38,7 @@ module.exports = async function shouldUseTaobao () {
   const defaultRegistry = registries.npm
 
   if (removeSlash(userCurrent) !== removeSlash(defaultRegistry)) {
-    // user has configured custom regsitry, respect that
+    // user has configured custom registry, respect that
     return save(false)
   }
 

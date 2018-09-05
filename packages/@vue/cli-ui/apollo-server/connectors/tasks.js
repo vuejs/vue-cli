@@ -17,6 +17,7 @@ const { notify } = require('../util/notification')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
+const WIN_ENOENT_THRESHOLD = 500 // ms
 
 const tasks = new Map()
 
@@ -291,8 +292,9 @@ async function run (id, context) {
 
     task.time = Date.now()
 
+    // Task env
     process.env.VUE_CLI_CONTEXT = cwd.get()
-
+    process.env.VUE_CLI_PROJECT_ID = projects.getCurrent(context).id
     const nodeEnv = process.env.NODE_ENV
     delete process.env.NODE_ENV
 
@@ -411,6 +413,11 @@ async function run (id, context) {
     child.on('exit', onExit)
 
     child.on('error', error => {
+      const duration = Date.now() - task.time
+      // hackish workaround for https://github.com/vuejs/vue-cli/issues/2096
+      if (process.platform === 'win32' && error.code === 'ENOENT' && duration > WIN_ENOENT_THRESHOLD) {
+        return onExit(null)
+      }
       updateOne({
         id: task.id,
         status: 'error'

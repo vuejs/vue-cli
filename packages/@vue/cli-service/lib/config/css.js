@@ -33,12 +33,15 @@ module.exports = (api, options) => {
     }, extract && typeof extract === 'object' ? extract : {})
 
     // use relative publicPath in extracted CSS based on extract location
-    const cssPublicPath = '../'.repeat(
-      extractOptions.filename
-        .replace(/^\.[\/\\]/, '')
-        .split(/[\/\\]/g)
-        .length - 1
-    )
+    const cssPublicPath = process.env.VUE_CLI_BUILD_TARGET === 'lib'
+      // in lib mode, CSS is extracted to dist root.
+      ? './'
+      : '../'.repeat(
+        extractOptions.filename
+            .replace(/^\.[\/\\]/, '')
+            .split(/[\/\\]/g)
+            .length - 1
+      )
 
     // check if the project has a valid postcss config
     // if it doesn't, don't use postcss-loader for direct style imports

@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
@@ -17,7 +19,13 @@ module.exports = (api, options) => {
               return true
             }
             // check if this is something the user explicitly wants to transpile
-            if (options.transpileDependencies.some(dep => filepath.match(dep))) {
+            if (options.transpileDependencies.some(dep => {
+              if (typeof dep === 'string') {
+                return filepath.includes(path.normalize(dep))
+              } else {
+                return filepath.match(dep)
+              }
+            })) {
               return false
             }
             // Don't transpile node_modules

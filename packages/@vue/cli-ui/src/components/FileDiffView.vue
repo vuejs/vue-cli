@@ -67,6 +67,7 @@
         />
         <VueButton
           :label="$t('org.vue.components.file-diff-view.actions.refresh')"
+          icon-left="refresh"
           class="big"
           @click="refresh()"
         />
@@ -100,7 +101,7 @@
         </VueFormField>
       </div>
 
-      <div slot="footer" class="actions space-between">
+      <div slot="footer" class="actions center">
         <VueButton
           :label="$t('org.vue.components.file-diff-view.modals.commit.actions.cancel')"
           class="flat"
@@ -273,4 +274,8 @@ export default {
     height 0
     overflow-x hidden
     overflow-y auto
+
+  .actions-bar
+    .vue-ui-button
+      min-width 190px
 </style>

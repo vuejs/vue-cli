@@ -52,7 +52,7 @@
     "semver": "^5.5.0",
     "shortid": "^2.2.11",
     "terminate": "^2.1.0",
-    "vue-cli-plugin-apollo": "^0.14.6",
+    "vue-cli-plugin-apollo": "^0.16.3",
     "watch": "^1.0.2"
   },
   "devDependencies": {
@@ -61,7 +61,7 @@
     "@vue/cli-plugin-eslint": "^3.0.1",
     "@vue/cli-service": "^3.0.1",
     "@vue/eslint-config-standard": "^3.0.0",
-    "@vue/ui": "^0.4.6",
+    "@vue/ui": "^0.5.5",
     "ansi_up": "^3.0.0",
     "cross-env": "^5.1.5",
     "eslint": "^4.16.0",

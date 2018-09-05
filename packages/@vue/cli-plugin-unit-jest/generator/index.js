@@ -115,10 +115,7 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
 const applyESLint = module.exports.applyESLint = api => {
   api.render(files => {
     files['tests/unit/.eslintrc.js'] = api.genJSConfig({
-      env: { jest: true },
-      rules: {
-        'import/no-extraneous-dependencies': 'off'
-      }
+      env: { jest: true }
     })
   })
 }

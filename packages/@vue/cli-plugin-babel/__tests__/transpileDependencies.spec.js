@@ -26,6 +26,16 @@ beforeAll(async () => {
     `const test = () => "__TEST__";\nexport default test`
   )
 
+  await project.write(
+    'node_modules/@scope/external-dep/package.json',
+    `{ "name": "@scope/external-dep", "version": "1.0.0", "main": "index.js" }`
+  )
+
+  await project.write(
+    'node_modules/@scope/external-dep/index.js',
+    `const test = () => "__SCOPE_TEST__";\nexport default test`
+  )
+
   let $packageJson = await project.read('package.json')
 
   $packageJson = JSON.parse($packageJson)
@@ -39,7 +49,12 @@ beforeAll(async () => {
 
   let $mainjs = await project.read('src/main.js')
 
-  $mainjs = `import test from 'external-dep'\n${$mainjs}\ntest()`
+  $mainjs = `
+  import test from 'external-dep'
+  import scopeTest from '@scope/external-dep'
+  ${$mainjs}
+  test()
+  scopeTest()`
 
   await project.write(
     'src/main.js',
@@ -59,4 +74,6 @@ test('dep from node_modules should been transpiled', async () => {
   )
   await project.run('vue-cli-service build')
   expect(await readVendorFile()).toMatch('return "__TEST__"')
+
+  expect(await readVendorFile()).toMatch('return "__SCOPE_TEST__"')
 })

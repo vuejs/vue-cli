@@ -28,15 +28,12 @@
       </div>
     </template>
 
-    <div class="actions-bar space-between">
-      <VueButton
-        :disabled="!hasPromptsChanged"
-        icon-left="cancel"
-        class="big"
-        :label="$t('org.vue.views.project-configuration-details.actions.cancel')"
-        @click="cancel()"
-      />
+    <VueLoadingIndicator
+      v-else
+      class="loading"
+    />
 
+    <div class="actions-bar">
       <VueButton
         v-if="configuration && configuration.link"
         icon-right="open_in_new"
@@ -44,6 +41,16 @@
         :label="$t('org.vue.views.project-configuration-details.actions.more-info')"
         :href="configuration.link"
         target="_blank"
+      />
+
+      <div class="vue-ui-spacer"/>
+
+      <VueButton
+        :disabled="!hasPromptsChanged"
+        icon-left="cancel"
+        class="big"
+        :label="$t('org.vue.views.project-configuration-details.actions.cancel')"
+        @click="cancel()"
       />
 
       <VueButton
@@ -100,6 +107,7 @@ export default {
           id: this.id
         }
       },
+      manual: true,
       async result ({ data, loading }) {
         if (!this.$_init && !loading && data && data.configuration) {
           this.$_init = true
@@ -107,6 +115,7 @@ export default {
             obj[tab.id] = false
             return obj
           }, {})
+          this.configuration = data.configuration
           await this.$nextTick()
           this.currentTab = data.configuration.tabs[0].id
         }
@@ -134,6 +143,7 @@ export default {
   methods: {
     init (tab) {
       this.currentTab = '__default'
+      this.configuration = null
       this.$_init = false
     },
 
@@ -174,9 +184,12 @@ export default {
   align-items stretch
   height 100%
 
-  .content
+  .content,
+  .loading
     flex 100% 1 1
     height 0
+
+  .content
     overflow-x hidden
     overflow-y auto
 

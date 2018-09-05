@@ -14,7 +14,6 @@
       <ApolloQuery
         :query="require('../graphql/tasks.gql')"
         class="fill-height"
-        @result="onResult"
       >
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
@@ -99,15 +98,6 @@ export default {
           task
         })
       )
-    },
-
-    onResult ({ loading }) {
-      if (!loading && this.$route.query.id) {
-        this.$router.replace({
-          name: 'project-task-details',
-          params: { id: this.$route.query.id }
-        })
-      }
     }
   }
 }

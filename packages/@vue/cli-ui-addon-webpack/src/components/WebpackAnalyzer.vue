@@ -74,6 +74,7 @@
               v-for="(module, index) of currentTree.children"
               :key="module.id"
               :module="module"
+              :parent-module="currentTree"
               :colors="getColors(index)"
               :depth="0"
               :parent-ratio="1"
@@ -144,7 +145,8 @@ export default {
       injection: {
         hoverModule: null
       },
-      currentTree: null
+      currentTree: null,
+      currentParent: null
     }
   },
 
@@ -209,6 +211,16 @@ export default {
   },
 
   methods: {
+    syncMode (mode) {
+      Dashboard.methods.syncMode.call(this, mode)
+      this.$watchSharedData(`org.vue.webpack.${mode}-stats-analyzer`, value => {
+        this.$store.commit('analyzer', {
+          mode,
+          value
+        })
+      })
+    },
+
     getColors (index) {
       const list = colors[this.darkMode ? 'dark' : 'light']
       return list[index % list.length]
@@ -299,19 +311,21 @@ export default {
 
     onDonutClick () {
       if (this.hoverModule && this.hoverModule.children.length) {
+        this.currentParent = this.currentTree
         this.currentTree = this.hoverModule
         this.hoverModule = null
       }
     },
 
     goToParent () {
-      if (this.currentTree && this.currentTree.parent) {
-        this.currentTree = this.currentTree.parent
+      if (this.currentParent) {
+        this.currentTree = this.currentParent
       }
     },
 
     goToHome () {
       this.currentTree = this.rootTree
+      this.currentParent = null
     }
   }
 }

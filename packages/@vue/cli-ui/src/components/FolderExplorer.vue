@@ -176,7 +176,7 @@
         </VueFormField>
       </div>
 
-      <div slot="footer" class="actions space-between">
+      <div slot="footer" class="actions end">
         <VueButton
           :label="$t('org.vue.components.folder-explorer.new-folder.cancel')"
           class="flat close"

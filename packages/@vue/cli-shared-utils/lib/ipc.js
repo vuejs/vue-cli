@@ -6,8 +6,11 @@ const DEFAULT_OPTIONS = {
   networkId: DEFAULT_ID,
   autoConnect: true,
   disconnectOnIdle: false,
-  idleTimeout: DEFAULT_IDLE_TIMEOUT
+  idleTimeout: DEFAULT_IDLE_TIMEOUT,
+  namespaceOnProject: true
 }
+
+const PROJECT_ID = process.env.VUE_CLI_PROJECT_ID
 
 exports.IpcMessenger = class IpcMessenger {
   constructor (options = {}) {
@@ -45,6 +48,13 @@ exports.IpcMessenger = class IpcMessenger {
   send (data, type = 'message') {
     this.checkConnection()
     if (this.connected) {
+      if (this.options.namespaceOnProject && PROJECT_ID) {
+        data = {
+          _projectId: PROJECT_ID,
+          _data: data
+        }
+      }
+
       ipc.of[this.id].emit(type, data)
 
       clearTimeout(this.idleTimer)
@@ -118,6 +128,15 @@ exports.IpcMessenger = class IpcMessenger {
   }
 
   _onMessage (data) {
-    this.listeners.forEach(fn => fn(data))
+    this.listeners.forEach(fn => {
+      if (this.options.namespaceOnProject && data._projectId) {
+        if (data._projectId === PROJECT_ID) {
+          data = data._data
+        } else {
+          return
+        }
+      }
+      fn(data)
+    })
   }
 }

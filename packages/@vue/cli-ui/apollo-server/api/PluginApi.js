@@ -318,8 +318,19 @@ class PluginApi {
    * @param {function} cb Callback with 'data' param
    */
   ipcOn (cb) {
-    this.ipcHandlers.push(cb)
-    return ipc.on(cb)
+    const handler = cb._handler = ({ data, emit }) => {
+      if (data._projectId) {
+        if (data._projectId === this.project.id) {
+          data = data._data
+        } else {
+          return
+        }
+      }
+      // eslint-disable-next-line standard/no-callback-literal
+      cb({ data, emit })
+    }
+    this.ipcHandlers.push(handler)
+    return ipc.on(handler)
   }
 
   /**
@@ -328,9 +339,11 @@ class PluginApi {
    * @param {any} cb Callback to be removed
    */
   ipcOff (cb) {
-    const index = this.ipcHandlers.indexOf(cb)
+    const handler = cb._handler
+    if (!handler) return
+    const index = this.ipcHandlers.indexOf(handler)
     if (index !== -1) this.ipcHandlers.splice(index, 1)
-    ipc.off(cb)
+    ipc.off(handler)
   }
 
   /**

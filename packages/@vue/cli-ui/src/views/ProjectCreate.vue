@@ -357,7 +357,7 @@
         </VueFormField>
       </div>
 
-      <div slot="footer" class="actions space-between">
+      <div slot="footer" class="actions end">
         <VueButton
           :label="$t('org.vue.views.project-create.tabs.presets.remote.cancel')"
           class="flat"
@@ -385,7 +385,7 @@
         {{ $t('org.vue.views.project-create.tabs.details.modal.body') }}
       </div>
 
-      <div slot="footer" class="actions space-between">
+      <div slot="footer" class="actions end">
         <VueButton
           :label="$t('org.vue.views.project-create.tabs.details.modal.buttons.back')"
           class="flat"
@@ -427,11 +427,9 @@
           @click="showSavePreset = false"
         />
 
-        <div class="vue-ui-spacer"/>
-
         <VueButton
           :label="$t('org.vue.views.project-create.tabs.configuration.modal.buttons.continue')"
-          class="flat continue"
+          class="continue"
           @click="createWithoutSaving()"
         />
 

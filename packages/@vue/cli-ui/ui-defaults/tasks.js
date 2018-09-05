@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
+const { processStats } = require('./utils/stats')
 
 module.exports = api => {
   const { getSharedData, setSharedData, removeSharedData } = api.namespace('org.vue.webpack.')
@@ -71,9 +72,11 @@ module.exports = api => {
 
         if (data.type === 'stats') {
           // Stats are read from a file
-          const statsFile = path.resolve(process.cwd(), `./node_modules/.stats-${type}.json`)
+          const statsFile = path.resolve(api.getCwd(), `./node_modules/.stats-${type}.json`)
           const value = await fs.readJson(statsFile)
-          setSharedData(id, value)
+          const { stats, analyzer } = processStats(value)
+          setSharedData(id, stats)
+          setSharedData(`${id}-analyzer`, analyzer)
           await fs.remove(statsFile)
         } else if (data.type === 'progress') {
           if (type === 'serve' || !modernMode) {
