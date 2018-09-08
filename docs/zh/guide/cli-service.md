@@ -98,7 +98,7 @@ npx vue-cli-service serve
 
 ## 查看所有的可用命令
 
-有些 CLI 插件会向 `vue-cli-service` 注入额外的命令。例如 `@vue/cli-plugin-eslint` 会注入 `vue-cli-service lint` 命令。你可以允许以下命令查看所有注入的命令：
+有些 CLI 插件会向 `vue-cli-service` 注入额外的命令。例如 `@vue/cli-plugin-eslint` 会注入 `vue-cli-service lint` 命令。你可以运行以下命令查看所有注入的命令：
 
 ``` bash
 npx vue-cli-service help
