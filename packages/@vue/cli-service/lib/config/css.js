@@ -60,9 +60,10 @@ module.exports = (api, options) => {
     const needInlineMinification = isProd && !shouldExtract
 
     const cssnanoOptions = {
-      safe: true,
-      autoprefixer: { disable: true },
-      mergeLonghand: false
+      preset: ['default', {
+        mergeLonghand: false,
+        cssDeclarationSorter: false
+      }]
     }
     if (options.productionSourceMap && sourceMap) {
       cssnanoOptions.map = { inline: false }
