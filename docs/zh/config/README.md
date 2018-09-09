@@ -340,6 +340,16 @@ module.exports = {
     }
   }
   ```
+  如果你要本地代理https, 需要将devServer.public设置成本地代理域名地址, wss才能正常工作。
+  ```js
+  module.exports = {
+    devServer: {
+      public: '<url>',
+      disableHostCheck: true
+    }
+  }
+  ```
+  详情可以查阅[sockjs-node (Not Found) #1472](https://github.com/vuejs/vue-cli/issues/1472) 以及[Use devServer.public to build sockjsUrl, if defined. #1526](https://github.com/vuejs/vue-cli/pull/1526)。
 
 ### parallel
 
