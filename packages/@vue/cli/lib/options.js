@@ -19,7 +19,7 @@ const presetSchema = createSchema(joi => joi.object().keys({
 }))
 
 const schema = createSchema(joi => joi.object().keys({
-  packageManager: joi.string().only(['yarn', 'npm']),
+  packageManager: joi.string().only(['yarn', 'npm', 'pnpm']),
   useTaobaoRegistry: joi.boolean(),
   presets: joi.object().pattern(/^/, presetSchema)
 }))
