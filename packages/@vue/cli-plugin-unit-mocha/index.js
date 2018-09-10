@@ -15,6 +15,12 @@ module.exports = api => {
             options.optimizeSSR = false
             return options
           })
+
+      const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
+      // mocha-webpack cannot deal with the query parameter in filename
+      webpackConfig
+        .output
+        .filename(isLegacyBundle ? '[name]-legacy.js?' : '[name].js')
     }
   })
 
