@@ -242,7 +242,7 @@ module.exports = (api, options) => {
           console.log()
 
           if (args.open || projectDevServerOptions.open) {
-            const pageUri = ( projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string' )
+            const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
               ? projectDevServerOptions.openPage
               : ''
             openBrowser(urls.localUrlForBrowser + pageUri)
