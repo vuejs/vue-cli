@@ -84,6 +84,7 @@ module.exports = (api, options) => {
         ? rawPublicUrl
         : `${protocol}://${rawPublicUrl}`
       : null
+    const contentBase = args.contentBase || projectDevServerOptions.contentBase || api.resolve('public')
 
     const urls = prepareURLs(
       protocol,
@@ -142,7 +143,7 @@ module.exports = (api, options) => {
           { from: /./, to: path.posix.join(options.baseUrl, 'index.html') }
         ]
       },
-      contentBase: api.resolve('public'),
+      contentBase: contentBase,
       watchContentBase: !isProduction,
       hot: !isProduction,
       quiet: true,
