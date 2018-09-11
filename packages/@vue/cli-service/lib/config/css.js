@@ -130,20 +130,21 @@ module.exports = (api, options) => {
           .loader('css-loader')
           .options(cssLoaderOptions)
 
-        if (needInlineMinification) {
-          rule
-            .use('cssnano')
-            .loader('postcss-loader')
-            .options({
-              plugins: [require('cssnano')(cssnanoOptions)]
-            })
-        }
-
         if (hasPostCSSConfig) {
           rule
             .use('postcss-loader')
             .loader('postcss-loader')
             .options(Object.assign({ sourceMap }, loaderOptions.postcss))
+        }
+
+        if (needInlineMinification) {
+          rule
+            .use('cssnano')
+            .loader('postcss-loader')
+            .options({
+              sourceMap,
+              plugins: [require('cssnano')(cssnanoOptions)]
+            })
         }
 
         if (loader) {
