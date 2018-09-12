@@ -262,6 +262,7 @@ module.exports = (api, options) => {
           .use(require('copy-webpack-plugin'), [[{
             from: publicDir,
             to: outputDir,
+            toType: 'dir',
             ignore: publicCopyIgnore
           }]])
     }
