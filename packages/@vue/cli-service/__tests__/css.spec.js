@@ -133,10 +133,8 @@ test('css.extract', () => {
     // does not support mixing config files with loader options.
     expect(findLoaders(config2, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
     expect(findOptions(config2, lang, 'css').importLoaders).toBe(3)
-    // minification loader should be injected after the user-facing postcss-loader
-    const rule = findRule(config2, lang)
-    const postcssUse = rule.use.slice().reverse().find(({ loader }) => loader === 'postcss-loader')
-    expect(postcssUse.options.plugins).toBeTruthy()
+    // minification loader should be injected before the user-facing postcss-loader
+    expect(findOptions(config2, lang, 'postcss').plugins).toBeTruthy()
   })
 })
 

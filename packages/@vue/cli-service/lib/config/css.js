@@ -130,13 +130,6 @@ module.exports = (api, options) => {
           .loader('css-loader')
           .options(cssLoaderOptions)
 
-        if (hasPostCSSConfig) {
-          rule
-            .use('postcss-loader')
-            .loader('postcss-loader')
-            .options(Object.assign({ sourceMap }, loaderOptions.postcss))
-        }
-
         if (needInlineMinification) {
           rule
             .use('cssnano')
@@ -145,6 +138,13 @@ module.exports = (api, options) => {
               sourceMap,
               plugins: [require('cssnano')(cssnanoOptions)]
             })
+        }
+
+        if (hasPostCSSConfig) {
+          rule
+            .use('postcss-loader')
+            .loader('postcss-loader')
+            .options(Object.assign({ sourceMap }, loaderOptions.postcss))
         }
 
         if (loader) {
