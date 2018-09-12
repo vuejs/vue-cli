@@ -1,3 +1,20 @@
+# [3.0.3](https://github.com/vuejs/vue-cli/compare/v3.0.2...v3.0.3) (2018-09-12)
+
+## cli-plugin-unit-mocha
+
+#### Bug Fixes
+
+* revert file name hashing in dev mode ([0909bc8](https://github.com/vuejs/vue-cli/commit/0909bc8)), closes [#2492](https://github.com/vuejs/vue-cli/issues/2492) [/github.com/webpack/webpack-dev-server/issues/377#issuecomment-241258405](https://github.com//github.com/webpack/webpack-dev-server/issues/377/issues/issuecomment-241258405)
+
+## cli-service
+
+#### Bug Fixes
+
+* fix ESDIR errors when outputDir contains dots ([1682ff7](https://github.com/vuejs/vue-cli/commit/1682ff7)), closes [#2414](https://github.com/vuejs/vue-cli/issues/2414)
+* hash module ids in anonymous chunks, avoid ENAMETOOLONG error ([69cec80](https://github.com/vuejs/vue-cli/commit/69cec80)), closes [#2490](https://github.com/vuejs/vue-cli/issues/2490)
+
+
+
 # [3.0.2](https://github.com/vuejs/vue-cli/compare/v3.0.1...v3.0.2) (2018-09-11)
 
 ## cli
