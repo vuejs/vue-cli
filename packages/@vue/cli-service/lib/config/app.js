@@ -125,9 +125,12 @@ module.exports = (api, options) => {
             if (chunk.name) {
               return chunk.name
             }
-            return `chunk-` + Array.from(chunk.modulesIterable, m => {
-              return m.id
-            }).join('_')
+
+            const hash = require('hash-sum')
+            const joinedHash = hash(
+              Array.from(chunk.modulesIterable, m => m.id).join('_')
+            )
+            return `chunk-` + joinedHash
           }])
     }
 
