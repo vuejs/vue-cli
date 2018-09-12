@@ -33,7 +33,7 @@ module.exports = (api, options) => {
         .end()
       .output
         .path(api.resolve(options.outputDir))
-        .filename(isLegacyBundle ? '[name]-legacy.js?[hash:8]' : '[name].js?[hash:8]')
+        .filename(isLegacyBundle ? '[name]-legacy.js' : '[name].js')
         .publicPath(options.baseUrl)
 
     webpackConfig.resolve
