@@ -1,6 +1,6 @@
 {
   "name": "@vue/eslint-config-prettier",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "eslint-config-prettier for vue-cli",
   "main": "index.js",
   "publishConfig": {
