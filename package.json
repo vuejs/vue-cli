@@ -13,7 +13,7 @@
     "clean": "rimraf packages/test/*",
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js",
-    "release": "yarn clean && node scripts/release.js",
+    "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
     "changelog": "node scripts/genChangelog.js run",
     "docs": "vuepress dev docs",
     "docs:build": "vuepress build docs",
