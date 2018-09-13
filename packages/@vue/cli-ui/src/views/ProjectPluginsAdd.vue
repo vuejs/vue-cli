@@ -255,8 +255,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-plugins-add
   display grid
   grid-template-columns 1fr

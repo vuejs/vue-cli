@@ -34,8 +34,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .logger-message
   h-box()
   align-items baseline

@@ -53,8 +53,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .about
   padding 42px
   max-width 840px

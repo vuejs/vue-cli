@@ -46,8 +46,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .nav-list
   overflow-x hidden
   overflow-y auto

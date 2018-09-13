@@ -55,8 +55,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .instant-search-pagination
   margin $padding-item 0
   .content

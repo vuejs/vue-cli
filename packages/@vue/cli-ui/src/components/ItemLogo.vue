@@ -98,8 +98,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .item-logo
   margin-right $padding-item
   position relative

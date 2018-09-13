@@ -38,8 +38,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .folder-explorer-item
   padding $padding-item
   h-box()

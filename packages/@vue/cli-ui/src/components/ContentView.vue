@@ -25,8 +25,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .content-view
   height 100%
 

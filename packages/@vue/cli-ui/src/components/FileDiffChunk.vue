@@ -22,8 +22,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .file-diff-chunk
   .changes
     overflow-x auto

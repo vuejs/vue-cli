@@ -111,8 +111,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .package-search-item
   padding $padding-item
   h-box()

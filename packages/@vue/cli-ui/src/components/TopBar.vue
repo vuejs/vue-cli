@@ -173,8 +173,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .top-bar
   background $vue-ui-color-light
   padding $padding-item

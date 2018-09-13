@@ -83,8 +83,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .content
   padding $padding-item
   display grid
