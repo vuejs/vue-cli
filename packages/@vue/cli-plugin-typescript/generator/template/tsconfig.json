@@ -14,7 +14,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "node"<% if (hasMocha || hasJest) { %>,<% } %>
+      "webpack-env"<% if (hasMocha || hasJest) { %>,<% } %>
       <%_ if (hasMocha) { _%>
       "mocha",
       "chai"
