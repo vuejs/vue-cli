@@ -248,7 +248,96 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Heroku
 
-> TODO | Open to contribution.
+#### Creating Heroku app
+
+To deploy with [Heroku](https://www.heroku.com/), first you would need to sign up for a Heroku account [here](https://www.heroku.com/) and [install Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).
+
+Now, you can create a Heroku app:
+
+```bash
+heroku create <YOUR-PROJECT-NAME-HERE>
+```
+
+After this step you will get a URL to your project as `https://<YOUR-PROJECT-NAME-HERE>.herokuapp.com`. You can try to follow the link and check if a temporary Heroku landing page is working.
+
+Now, in order to avoid having Heroku install unnecessary development dependencies when deploying later, you can set the `NODE_ENV` setting to `production`:
+
+```bash
+heroku config:set NODE_ENV=production --app <YOUR-PROJECT-NAME-HERE>
+```
+
+#### Creating a mini web-server with Express
+
+Since Vue is a frontend library, the easiest way to host it and do things like serve up assets is to create a simple Express script that Heroku can use to start a mini-web server. If you need more information about Express, you can find it [here](https://expressjs.com/).
+
+First, add Express to your project:
+
+```bash
+npm install express
+```
+
+Now, create a `server.js` file in your project root and add the following code to it:
+
+```js
+var express = require('express');
+var path = require('path');
+var serveStatic = require('serve-static');
+app = express();
+app.use(serveStatic(__dirname + '/dist'));
+var port = process.env.PORT || 5555;
+app.listen(port);
+```
+
+This will run a server at `localhost:5555` hosting your project `dist` folder. You can try to run it locally:
+
+```bash
+npm run build
+node server.js
+```
+
+Check [http://localhost:5555](http://localhost:5555) and make sure your app loads. This is the actual site Heroku will serve up.
+
+Now we need to create a `start` script in the `package.json` to start the node server, because Heroku will [automatically look for this script](https://devcenter.heroku.com/articles/deploying-nodejs#specifying-a-start-script) when looking for how to run a node.js app.
+
+```js
+{
+  //package.json
+  "name": "vue-rx-presentatopn",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test": "vue-cli-service test",
+    "lint": "vue-cli-service lint",
+    "start": "node server.js" <--- ADD THIS LINE HERE
+  },
+```
+
+#### Adding Your Heroku Remote Repository
+
+Heroku allows us to push to a remote repository. So, first you need to init a git repo in your project:
+
+```bash
+git init
+```
+
+And now add Heroku remote repository:
+
+```bash
+heroku git:remote --app <YOUR-PROJECT-NAME-HERE>
+```
+
+Remove the `dist` folder from `.gitignore`. You need this to always keep a pristine copy of what you’ve deployed to Heroku. After this you can commit your files and deploy to Heroku via pushing to `master`:
+
+```bash
+git add . && git commit -a -m "Adding project files"
+git push heroku master
+```
+
+This will take your committed code, push it to Heroku’s remote repository, run `start` command in `package.json` which will serve up your freshly built `dist` directory.
+
+After successful deployment, check your project at `https://<YOUR-PROJECT-NAME-HERE>.herokuapp.com`.
 
 ### Surge
 
