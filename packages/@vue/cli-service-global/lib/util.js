@@ -6,15 +6,15 @@ exports.toPlugin = id => ({ id, apply: require(id) })
 // Based on https://stackoverflow.com/questions/27367261/check-if-file-exists-case-sensitive
 // Case checking is required, to avoid errors raised by case-sensitive-paths-webpack-plugin
 function fileExistsWithCaseSync (filepath) {
-  const dir = path.dirname(filepath)
+  const { base, dir, root } = path.parse(filepath)
 
-  if (dir === '/' || dir === '.') {
+  if (dir === root || dir === '.') {
     return true
   }
 
   try {
     const filenames = fs.readdirSync(dir)
-    if (!filenames.includes(path.basename(filepath))) {
+    if (!filenames.includes(base)) {
       return false
     }
   } catch (e) {
