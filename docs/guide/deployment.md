@@ -314,7 +314,7 @@ Now we need to create a `start` script in the `package.json` to start the node s
   },
 ```
 
-#### Adding Your Heroku Remote Repository
+#### Adding Heroku Remote Repository
 
 Heroku allows us to push to a remote repository. So, first you need to init a git repo in your project:
 
