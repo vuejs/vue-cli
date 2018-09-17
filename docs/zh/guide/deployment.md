@@ -8,7 +8,7 @@
 
 ### 本地预览
 
-`dist` 目录需要启动一个 HTTP 服务器来访问，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
+`dist` 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 `baseUrl` 配置为了一个相对的值)，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
 
 ``` bash
 npm install -g serve
@@ -168,7 +168,7 @@ Firebase will ask some questions on how to setup your project.
 
 {
   "hosting": {
-    "public": "app"
+    "public": "dist"
   }
 }
 ```
@@ -206,7 +206,45 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-> TODO | Open to contribution.
+1. Install the Now CLI globally: `npm install -g now`
+
+2. Add a `now.json` file to your project root:
+
+    ```json
+    {
+      "name": "my-example-app",
+      "type": "static",
+      "static": {
+        "public": "dist",
+        "rewrites": [
+          {
+            "source": "**",
+            "destination": "/index.html"
+          }
+        ]
+      },
+      "alias": "vue-example",
+      "files": [
+        "dist"
+      ]
+    }
+    ```
+
+    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+
+3. Adding a deployment script in `package.json`:
+
+    ```json
+    "deploy": "npm run build && now && now alias"
+    ```
+
+    If you want to deploy publicly by default, you can change the deployment script to the following one:
+
+    ```json
+    "deploy": "npm run build && now --public && now alias"
+    ```
+
+    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
 
 ### Stdlib
 
