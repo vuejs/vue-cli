@@ -239,3 +239,36 @@ Then cd into the `dist/` folder of your project and then run `surge` and follow 
 ```
 
 Verify your project is successfully published by Surge by visiting `myawesomeproject.surge.sh`, vola! For more setup details such as custom domains, you can visit [Surge's help page](https://surge.sh/help/).
+
+### Bitbucket Cloud
+
+1. As described in the [Bitbucket documentation](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) you need to create a repository named exactly `<USERNAME>.bitbucket.io`.
+
+2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case set correct `baseUrl` in `vue.config.js`.
+
+    If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+
+    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `baseUrl` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
+
+3. Inside your project, create `deploy.sh` with the following content and run it to deploy:
+
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
+
+    # abort on errors
+    set -e
+
+    # build
+    npm run build
+
+    # navigate into the build output directory
+    cd dist
+
+    git init
+    git add -A
+    git commit -m 'deploy'
+
+    git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
+
+    cd -
+    ```
