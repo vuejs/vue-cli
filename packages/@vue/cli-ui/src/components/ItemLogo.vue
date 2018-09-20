@@ -113,6 +113,8 @@ export default {
     background rgba(black, .03)
     border-radius 50%
     overflow hidden
+    .vue-ui-dark-mode &
+      background rgba(white, .07)
     .image
       width 100%
       height @width
@@ -122,7 +124,7 @@ export default {
       width 24px
       height @width
       >>> svg
-        fill rgba($color-text-light, .3)
+        fill $color-text-light
 
   .color-bullet
     position absolute
