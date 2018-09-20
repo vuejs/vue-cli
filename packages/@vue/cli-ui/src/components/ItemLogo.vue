@@ -103,10 +103,12 @@ export default {
 .item-logo
   margin-right $padding-item
   position relative
+  width 42px
+  height @width
   .wrapper
     h-box()
     box-center()
-    width 42px
+    width 100%
     height @width
     background rgba(black, .03)
     border-radius 50%

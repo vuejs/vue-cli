@@ -88,9 +88,13 @@
         </div>
       </div>
 
-      <div slot="footer" class="actions">
+      <div slot="footer" class="actions center">
         <VueButton
-          class="primary big"
+          :label="$t('org.vue.views.project-select.import.force')"
+          @click="importProject(true)"
+        />
+        <VueButton
+          class="primary"
           :label="$t('org.vue.views.project-select.import.no-modules.close')"
           @click="showNoModulesModal = false"
         />
@@ -145,7 +149,8 @@ export default {
       this.$router.push({ name: 'project-create' })
     },
 
-    async importProject () {
+    async importProject (force = false) {
+      this.showNoModulesModal = false
       this.busy = true
       await this.$nextTick()
       try {
@@ -153,7 +158,8 @@ export default {
           mutation: PROJECT_IMPORT,
           variables: {
             input: {
-              path: this.folderCurrent.path
+              path: this.folderCurrent.path,
+              force
             }
           }
         })

@@ -128,6 +128,8 @@ function resetPluginApi ({ file, lightApi }, context) {
   return new Promise((resolve, reject) => {
     log('Plugin API reloading...', chalk.grey(file))
 
+    const widgets = require('./widgets')
+
     let pluginApi = pluginApiInstances.get(file)
     let projectId
 
@@ -141,6 +143,7 @@ function resetPluginApi ({ file, lightApi }, context) {
       if (projectId) sharedData.unWatchAll({ projectId }, context)
       clientAddons.clear(context)
       suggestions.clear(context)
+      widgets.reset(context)
     }
 
     // Cyclic dependency with projects connector
@@ -182,9 +185,17 @@ function resetPluginApi ({ file, lightApi }, context) {
         }
       }
       // Add client addons
-      pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
+      pluginApi.clientAddons.forEach(options => {
+        clientAddons.add(options, context)
+      })
       // Add views
-      pluginApi.views.forEach(view => views.add(view, context))
+      pluginApi.views.forEach(view => {
+        views.add(view, context)
+      })
+      // Register widgets
+      pluginApi.widgetDefs.forEach(definition => {
+        widgets.registerDefinition({ definition }, context)
+      })
 
       if (lightApi) {
         resolve(true)
@@ -208,6 +219,9 @@ function resetPluginApi ({ file, lightApi }, context) {
         const currentView = views.getCurrent()
         if (currentView) views.open(currentView.id)
       }
+
+      // Load widgets for current project
+      widgets.load(context)
 
       resolve(true)
     })

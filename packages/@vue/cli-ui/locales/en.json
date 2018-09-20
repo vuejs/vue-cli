@@ -1,6 +1,9 @@
 {
   "org": {
     "vue": {
+      "common": {
+        "close": "Close"
+      },
       "components": {
         "connection-status": {
           "disconnected": "Disconnected from UI server",
@@ -78,6 +81,7 @@
         },
         "project-nav": {
           "tooltips": {
+            "dashboard": "Dashboard",
             "plugins": "Plugins",
             "dependencies": "Dependencies",
             "configuration": "Configuration",
@@ -174,6 +178,18 @@
               "done": "Done status"
             }
           }
+        },
+        "widget": {
+          "remove": "Remove widget"
+        },
+        "widget-add-pane": {
+          "title": "Add widgets"
+        },
+        "widget-add-item": {
+          "add": "Add widget",
+          "details": {
+            "title": "Widget details"
+          }
         }
       },
       "mixins": {
@@ -225,7 +241,8 @@
               "title": "Missing modules",
               "message": "It seems the project is missing the 'node_modules' folder. Please check you installed the dependencies before importing.",
               "close": "Got it"
-            }
+            },
+            "force": "Import anyway"
           }
         },
         "project-create": {
@@ -420,6 +437,11 @@
             "cancel": "Cancel",
             "uninstall": "Uninstall {id}"
           }
+        },
+        "project-dashboard": {
+          "title": "Project dashboard",
+          "cutomize": "Customize",
+          "done": "Done"
         },
         "about": {
           "title": "About",
@@ -695,6 +717,41 @@
             "description": "Run unit tests with Mocha",
             "watch": "Watch files for changes and rerun tests related to changed files"
           }
+        }
+      },
+      "widgets": {
+        "welcome": {
+          "title": "Welcome tips",
+          "description": "Some tips to help you get started",
+          "content": {
+            "title": "Welcome to your new project!",
+            "tip1": "You are looking at the project dashboard where your can put widgets. Use the 'Customize' button to add more! Everything is automatically saved.",
+            "tip2": "On the left are the different available pages. 'Plugins' let you add new Vue CLI plugins, 'Dependencies' for managing the packages, 'Configuration' to configure the tools and 'Tasks' to run scripts (for example webpack).",
+            "tip3": "Return to the project manager with the dropdown at the top left of the screen or the home button in the status bar at the bottom.",
+            "ok": "Understood"
+          }
+        },
+        "kill-port": {
+          "title": "Kill port",
+          "description": "Kill processes using a specific network port",
+          "input": {
+            "placeholder": "Enter a network port, ex. 8080"
+          },
+          "kill": "Kill",
+          "status": {
+            "idle": "Ready to kill",
+            "killing": "Killing procress...",
+            "killed": "Killed successfully!",
+            "error": "Couldn't kill process"
+          }
+        },
+        "plugin-updates": {
+          "title": "Plugin updates",
+          "description": "Monitor plugin updates"
+        },
+        "dependency-updates": {
+          "title": "Dependency updates",
+          "description": "Monitor dependencies updates"
         }
       }
     }

@@ -19,6 +19,7 @@ const { validateView, validateBadge } = require('./view')
 const { validateNotify } = require('./notify')
 const { validateSuggestion } = require('./suggestion')
 const { validateProgress } = require('./progress')
+const { validateWidget } = require('./widget')
 
 class PluginApi {
   constructor ({ plugins, file, project, lightMode = false }, context) {
@@ -48,6 +49,7 @@ class PluginApi {
     this.views = []
     this.actions = new Map()
     this.ipcHandlers = []
+    this.widgetDefs = []
   }
 
   /**
@@ -576,6 +578,26 @@ class PluginApi {
   }
 
   /**
+   * Register a widget for project dashboard
+   *
+   * @param {object} def Widget definition
+   */
+  registerWidget (def) {
+    if (this.lightMode) return
+    try {
+      validateWidget(def)
+      this.widgetDefs.push(def)
+    } catch (e) {
+      logs.add({
+        type: 'error',
+        tag: 'PluginApi',
+        message: `(${this.pluginId || 'unknown plugin'}) 'registerWidget' widget definition is invalid\n${e.message}`
+      }, this.context)
+      console.error(new Error(`Invalid definition: ${e.message}`))
+    }
+  }
+
+  /**
    * Create a namespaced version of:
    *   - getSharedData
    *   - setSharedData
@@ -600,7 +622,11 @@ class PluginApi {
         options.id = namespace + options.id
         return this.addSuggestion(options)
       },
-      removeSuggestion: (id) => this.removeSuggestion(namespace + id)
+      removeSuggestion: (id) => this.removeSuggestion(namespace + id),
+      registerWidget: (def) => {
+        def.id = namespace + def.id
+        return this.registerWidget(def)
+      }
     }
   }
 }

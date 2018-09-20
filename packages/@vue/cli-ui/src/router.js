@@ -4,6 +4,7 @@ import { apolloClient } from './vue-apollo'
 
 import ProjectHome from './views/ProjectHome.vue'
 
+import ProjectDashboard from './views/ProjectDashboard.vue'
 import ProjectPlugins from './views/ProjectPlugins.vue'
 import ProjectPluginsAdd from './views/ProjectPluginsAdd.vue'
 import ProjectConfigurations from './views/ProjectConfigurations.vue'
@@ -39,7 +40,12 @@ const router = new Router({
         {
           path: '',
           name: 'project-home',
-          redirect: { name: 'project-plugins' }
+          redirect: { name: 'project-dashboard' }
+        },
+        {
+          path: 'dashboard',
+          name: 'project-dashboard',
+          component: ProjectDashboard
         },
         {
           path: 'plugins',

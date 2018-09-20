@@ -1,0 +1,16 @@
+fragment widget on Widget {
+  id
+  definition {
+    id
+    title
+    icon
+    component
+    canAddMore
+  }
+  x
+  y
+  width
+  height
+  config
+  configured
+}

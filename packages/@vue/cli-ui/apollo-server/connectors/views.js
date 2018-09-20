@@ -9,6 +9,12 @@ function createViewsSet () {
   // Builtin views
   return [
     {
+      id: 'vue-project-dashboard',
+      name: 'project-dashboard',
+      icon: 'dashboard',
+      tooltip: 'org.vue.components.project-nav.tooltips.dashboard'
+    },
+    {
       id: 'vue-project-plugins',
       name: 'project-plugins',
       icon: 'extension',
@@ -17,7 +23,7 @@ function createViewsSet () {
     {
       id: 'vue-project-dependencies',
       name: 'project-dependencies',
-      icon: 'widgets',
+      icon: 'collections_bookmark',
       tooltip: 'org.vue.components.project-nav.tooltips.dependencies',
       projectTypes: ['vue', 'unknown']
     },
