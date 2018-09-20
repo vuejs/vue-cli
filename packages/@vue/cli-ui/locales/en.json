@@ -439,7 +439,7 @@
           }
         },
         "project-dashboard": {
-          "title": "Project dashboard",
+          "title": "Project dashboard (WIP)",
           "cutomize": "Customize",
           "done": "Done"
         },
@@ -735,7 +735,7 @@
           "title": "Kill port",
           "description": "Kill processes using a specific network port",
           "input": {
-            "placeholder": "Enter a network port, ex. 8080"
+            "placeholder": "Enter a network port"
           },
           "kill": "Kill",
           "status": {
@@ -745,13 +745,39 @@
             "error": "Couldn't kill process"
           }
         },
+        "status-widget": {
+          "last-updated": "Updated",
+          "check": "Check for updates",
+          "more-info": "Details"
+        },
         "plugin-updates": {
           "title": "Plugin updates",
-          "description": "Monitor plugin updates"
+          "description": "Monitor plugin updates",
+          "messages": {
+            "ok": "All plugins up-to-date",
+            "loading": "Checking for updates...",
+            "attention": "{n} plugin updates available"
+          },
+          "page": "Go to Plugins"
         },
         "dependency-updates": {
           "title": "Dependency updates",
-          "description": "Monitor dependencies updates"
+          "description": "Monitor dependencies updates",
+          "messages": {
+            "ok": "All dependencies up-to-date",
+            "loading": "Checking for updates...",
+            "attention": "{n} dependency updates available"
+          },
+          "page": "Go to Dependencies"
+        },
+        "vulnerability": {
+          "title": "Vulnerability check",
+          "description": "Check for known vulnerabilities in your project dependencies",
+          "messages": {
+            "ok": "No vulnerability found",
+            "loading": "Checking security reports...",
+            "attention": "{n} vulnerabilities found"
+          }
         }
       }
     }

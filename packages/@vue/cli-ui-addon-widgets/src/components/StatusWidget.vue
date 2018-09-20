@@ -1,27 +1,58 @@
 <template>
   <div class="status-widget">
-    <div class="icon-wrapper">
-      <ItemLogo
-        :image="icon"
-        class="icon"
-        :class="iconClass"
-      />
-      <VueIcon
-        v-if="secondaryIcon"
-        :icon="secondaryIcon"
-        class="secondary-icon"
-      />
+    <div class="header">
+      <div class="icon-wrapper">
+        <ItemLogo
+          :image="icon"
+          class="icon"
+          :class="iconClass"
+        />
+      </div>
+
+      <div class="info">
+        <div class="title" v-html="title"/>
+        <div
+          v-if="status.lastUpdate"
+          class="last-updated"
+        >
+          <div class="label">
+            {{ $t('org.vue.widgets.status-widget.last-updated') }}
+          </div>
+          <VueTimeago
+            :datetime="status.lastUpdate"
+            :auto-update="60"
+          />
+          <VueButton
+            v-if="status.status !== 'loading'"
+            v-tooltip="$t('org.vue.widgets.status-widget.check')"
+            icon-left="cached"
+            class="icon-button flat check-button"
+            @click="$emit('check')"
+          />
+        </div>
+      </div>
     </div>
 
-    <div class="info">
-      <div class="title" v-html="title"/>
-      <div class="description" v-html="description"/>
+    <div class="actions">
+      <slot name="actions">
+        <VueButton
+          v-if="status.status === 'attention'"
+          :label="$t('org.vue.widgets.status-widget.more-info')"
+          icon-left="add_circle"
+          @click="widget.openDetails()"
+        />
+        <slot name="more-actions"/>
+      </slot>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  inject: [
+    'widget'
+  ],
+
   props: {
     icon: {
       type: String,
@@ -33,18 +64,13 @@ export default {
       default: undefined
     },
 
-    secondaryIcon: {
-      type: String,
-      default: undefined
-    },
-
     title: {
       type: String,
       required: true
     },
 
-    description: {
-      type: String,
+    status: {
+      type: Object,
       required: true
     }
   }
@@ -54,10 +80,40 @@ export default {
 <style lang="stylus" scoped>
 @import "~@vue/cli-ui/src/style/imports"
 
-.status-widget
+.header
   h-box()
-  box-center()
+  align-items center
+  padding $padding-item
 
 .icon-wrapper
   position relative
+  top -2px
+  .icon
+    width 48px
+    height @width
+    >>> .vue-ui-icon
+      width 32px
+      height @width
+
+.title
+  font-size 24px
+  font-weight lighter
+
+.last-updated
+  color $color-text-light
+  h-box()
+  .label
+    margin-right 4px
+
+.check-button
+  margin-left 4px
+  position relative
+  top -4px
+
+.actions
+  h-box()
+  box-center()
+  /deep/ > *
+    &:not(:last-child)
+      margin-right ($padding-item / 2)
 </style>

@@ -72,6 +72,7 @@ export default {
     return {
       widget: {
         data: this.widget,
+        openDetails: this.openDetails,
         remove: this.remove
       }
     }
@@ -134,6 +135,10 @@ export default {
         width: `${GRID_SIZE * this.widget.width}px`,
         height: `${GRID_SIZE * this.widget.height}px`
       }
+    },
+
+    openDetails () {
+      // TODO
     },
 
     remove () {
@@ -296,7 +301,7 @@ export default {
     .icon
       margin-right ($padding-item / 2)
       >>> svg
-        fill rgba(@color, .75)
+        fill @color
 
 .remove-button
   position absolute

@@ -19,6 +19,7 @@ module.exports = api => {
     id: 'welcome',
     title: 'org.vue.widgets.welcome.title',
     description: 'org.vue.widgets.welcome.description',
+    icon: 'mood',
     component: 'org.vue.widgets.components.welcome',
     minWidth: 3,
     minHeight: 4,
@@ -33,6 +34,7 @@ module.exports = api => {
     id: 'kill-port',
     title: 'org.vue.widgets.kill-port.title',
     description: 'org.vue.widgets.kill-port.description',
+    icon: 'flash_on',
     component: 'org.vue.widgets.components.kill-port',
     minWidth: 2,
     minHeight: 1,
@@ -56,11 +58,12 @@ module.exports = api => {
 
   // Plugin updates
 
-  setSharedData('plugin-updates.status', { status: 'no-update' })
+  setSharedData('plugin-updates.status', { status: 'ok', lastUpdate: Date.now() })
   registerWidget({
     id: 'plugin-updates',
     title: 'org.vue.widgets.plugin-updates.title',
     description: 'org.vue.widgets.plugin-updates.description',
+    icon: 'extension',
     component: 'org.vue.widgets.components.plugin-updates',
     minWidth: 2,
     minHeight: 1,
@@ -71,15 +74,33 @@ module.exports = api => {
 
   // Depdency updates
 
+  setSharedData('dependency-updates.status', { status: 'ok', lastUpdate: Date.now() })
   registerWidget({
     id: 'dependency-updates',
     title: 'org.vue.widgets.dependency-updates.title',
     description: 'org.vue.widgets.dependency-updates.description',
+    icon: 'collections_bookmark',
     component: 'org.vue.widgets.components.dependency-updates',
     minWidth: 2,
     minHeight: 1,
     maxWidth: 2,
     maxHeight: 1,
-    maxCount: 3
+    maxCount: 1
+  })
+
+  // Vulnerability check
+
+  setSharedData('vulnerability.status', { status: 'ok', lastUpdate: Date.now() })
+  registerWidget({
+    id: 'vulnerability',
+    title: 'org.vue.widgets.vulnerability.title',
+    description: 'org.vue.widgets.vulnerability.description',
+    icon: 'verified_user',
+    component: 'org.vue.widgets.components.vulnerability',
+    minWidth: 2,
+    minHeight: 1,
+    maxWidth: 2,
+    maxHeight: 1,
+    maxCount: 1
   })
 }

@@ -3841,7 +3841,7 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.0.0"
     whatwg-url "^6.4.0"
 
-date-fns@^1.27.2:
+date-fns@^1.27.2, date-fns@^1.29.0:
   version "1.29.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.29.0.tgz#12e609cdcb935127311d04d33334e2960a2a54e6"
 
@@ -12746,6 +12746,12 @@ vue-template-compiler@2.5.17, vue-template-compiler@^2.5.16, vue-template-compil
 vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
+
+vue-timeago@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/vue-timeago/-/vue-timeago-5.0.0.tgz#e9633c28f923b380518f91305a6477e2712f1c0a"
+  dependencies:
+    date-fns "^1.29.0"
 
 vue@2.5.17, vue@^2.5.16, vue@^2.5.17:
   version "2.5.17"

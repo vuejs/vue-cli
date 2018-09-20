@@ -11,9 +11,9 @@
           v-if="status === 'killing'"
           class="icon"
         />
-        <VueIcon
+        <ItemLogo
           v-else
-          :icon="icon"
+          :image="icon"
           class="icon large"
         />
         <div class="info">
@@ -106,24 +106,28 @@ export default {
   justify-content space-between
 
 .status
-  color $vue-ui-color-primary
+  h-box()
+  align-items center
   .icon
-    position relative
-    left (-($padding-item * 2))
-    margin-right (-($padding-item * 2) + 4px)
-    >>> svg
-      fill @color
+    width 48px
+    height @width
+    >>> .vue-ui-icon
+      width 32px
+      height @width
   .info
     font-size 24px
     font-weight lighter
 
+.status-killed
+  .status
+    .icon >>> svg
+      fill $vue-ui-color-success !important
+
 .status-error
   .status
-    color $vue-ui-color-danger
     .icon >>> svg
-      fill @color
+      fill $vue-ui-color-danger !important
 
-.status,
 .actions
   h-box()
   box-center()
