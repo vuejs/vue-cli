@@ -788,6 +788,13 @@
             "task": "Select a task"
           },
           "page": "Go to Task"
+        },
+        "news": {
+          "title": "News",
+          "description": "Read news feed",
+          "prompts": {
+            "url": "RSS feed URL"
+          }
         }
       }
     }

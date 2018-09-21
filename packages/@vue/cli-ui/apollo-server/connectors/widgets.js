@@ -159,7 +159,9 @@ function add ({ definitionId }, context) {
 
   // Default config
   if (definition.defaultConfig) {
-    widget.config = definition.defaultConfig()
+    widget.config = definition.defaultConfig({
+      definition
+    })
   }
 
   updateCount(definitionId, 1)
@@ -227,6 +229,7 @@ function move (input, context) {
     widget.y = input.y
     const definition = findDefinition(widget, context)
     widget.width = input.width
+    widget.height = input.height
     if (widget.width < definition.minWidth) widget.width = definition.minWidth
     if (widget.width > definition.maxWidth) widget.width = definition.maxWidth
     if (widget.height < definition.minHeight) widget.height = definition.minHeight

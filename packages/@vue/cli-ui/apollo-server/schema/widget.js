@@ -27,6 +27,10 @@ type WidgetDefinition {
   component: String!
   canAddMore: Boolean!
   hasConfigPrompts: Boolean!
+  minWidth: Int!
+  minHeight: Int!
+  maxWidth: Int!
+  maxHeight: Int!
 }
 
 type Widget {

@@ -9,6 +9,10 @@ fragment widget on Widget {
     component
     canAddMore
     hasConfigPrompts
+    minWidth
+    minHeight
+    maxWidth
+    maxHeight
   }
   x
   y

@@ -135,4 +135,60 @@ module.exports = api => {
       }
     }
   })
+
+  // News
+
+  registerWidget({
+    id: 'news',
+    title: 'org.vue.widgets.news.title',
+    description: 'org.vue.widgets.news.description',
+    icon: 'rss_feed',
+    component: 'org.vue.widgets.components.news',
+    minWidth: 2,
+    minHeight: 1,
+    maxWidth: 3,
+    maxHeight: 5,
+    defaultConfig: () => ({
+      url: 'https://vuenews.fireside.fm/rss'
+    }),
+    onConfigOpen: async ({ context }) => {
+      return {
+        prompts: [
+          {
+            name: 'url',
+            type: 'input',
+            message: 'org.vue.widgets.news.prompts.url'
+          }
+        ]
+      }
+    }
+  })
+
+  // Nuxt
+
+  registerWidget({
+    id: 'nuxt',
+    title: 'Nuxt status',
+    description: 'Is the next version of nuxt released yet?',
+    icon: 'https://avatars2.githubusercontent.com/u/23360933?s=200&v=4',
+    component: 'org.vue.widgets.components.nuxt',
+    minWidth: 2,
+    minHeight: 1,
+    maxWidth: 2,
+    maxHeight: 1,
+    defaultConfig: () => ({
+      released: false
+    }),
+    onConfigOpen: async ({ context }) => {
+      return {
+        prompts: [
+          {
+            name: 'released',
+            type: 'confirm',
+            message: 'For real?'
+          }
+        ]
+      }
+    }
+  })
 }
