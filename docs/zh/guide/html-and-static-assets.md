@@ -125,7 +125,22 @@ module.exports = {
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-在其内部，我们通过 `file-loader` 用版本哈希值和正确的公共基础路径来决定最终的文件路径，再用 `url-loader` 将小于 10kb 的资源内联，以减少 HTTP 请求的数量。
+在其内部，我们通过 `file-loader` 用版本哈希值和正确的公共基础路径来决定最终的文件路径，再用 `url-loader` 将小于 4kb 的资源内联，以减少 HTTP 请求的数量。
+
+你可以通过 [chainWebpack](../config/#chainwebpack) 调整内联文件的大小限制。例如，下列代码会将其限制设置为 10kb：
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('images')
+        .use('url-loader')
+          .loader('url-loader')
+          .tap(options => Object.assign(options, { limit: 10240 }))
+  }
+}
+```
 
 ### URL 转换规则
 
@@ -136,7 +151,7 @@ h('img', { attrs: { src: require('./image.png') }})
 - 如果 URL 以 `~` 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：
 
   ``` html
-  <img src="~/some-npm-package/foo.png">
+  <img src="~some-npm-package/foo.png">
   ```
 
 - 如果 URL 以 `@` 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 `<projectRoot>/src` 的别名 `@`。**(仅作用于模版中)**
