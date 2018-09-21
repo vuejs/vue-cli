@@ -180,7 +180,9 @@
           }
         },
         "widget": {
-          "remove": "Remove widget"
+          "remove": "Remove widget",
+          "configure": "Configure",
+          "save": "Save"
         },
         "widget-add-pane": {
           "title": "Add widgets"
@@ -778,6 +780,14 @@
             "loading": "Checking security reports...",
             "attention": "{n} vulnerabilities found"
           }
+        },
+        "run-task": {
+          "title": "Run task",
+          "description": "Shortcut to run a task",
+          "prompts": {
+            "task": "Select a task"
+          },
+          "page": "Go to Task"
         }
       }
     }

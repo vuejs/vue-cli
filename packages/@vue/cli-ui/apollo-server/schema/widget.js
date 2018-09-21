@@ -26,6 +26,7 @@ type WidgetDefinition {
   screenshot: String
   component: String!
   canAddMore: Boolean!
+  hasConfigPrompts: Boolean!
 }
 
 type Widget {

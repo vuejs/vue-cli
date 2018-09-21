@@ -103,4 +103,36 @@ module.exports = api => {
     maxHeight: 1,
     maxCount: 1
   })
+
+  // Run task
+
+  setSharedData('run-task.status', { status: 'ok', lastUpdate: Date.now() })
+  registerWidget({
+    id: 'run-task',
+    title: 'org.vue.widgets.run-task.title',
+    description: 'org.vue.widgets.run-task.description',
+    icon: 'assignment',
+    component: 'org.vue.widgets.components.run-task',
+    minWidth: 2,
+    minHeight: 1,
+    maxWidth: 2,
+    maxHeight: 1,
+    needsUserConfig: true,
+    onConfigOpen: async ({ context }) => {
+      const tasks = require('@vue/cli-ui/apollo-server/connectors/tasks')
+      return {
+        prompts: [
+          {
+            name: 'task',
+            type: 'list',
+            message: 'org.vue.widgets.run-task.prompts.task',
+            choices: (await tasks.list(undefined, context)).map(task => ({
+              name: task.name,
+              value: task.id
+            }))
+          }
+        ]
+      }
+    }
+  })
 }

@@ -1,4 +1,6 @@
 const shortid = require('shortid')
+// Conncetors
+const prompts = require('./prompts')
 // Utils
 const { log } = require('../util/logger')
 
@@ -30,6 +32,7 @@ function getDefaultWidgets () {
 let widgetDefs = new Map()
 let widgetCount = new Map()
 let widgets = []
+let currentWidget
 
 let loadPromise, loadResolve
 
@@ -47,6 +50,7 @@ function reset (context) {
 }
 
 function registerDefinition ({ definition }, context) {
+  definition.hasConfigPrompts = !!definition.onConfigOpen
   widgetDefs.set(definition.id, definition)
 }
 
@@ -233,20 +237,37 @@ function move (input, context) {
   return widgets
 }
 
-function openConfig ({ id }, context) {
-  // const widget = findById({ id }, context)
-  // TODO
+async function openConfig ({ id }, context) {
+  const widget = findById({ id }, context)
+  const definition = findDefinition(widget, context)
+  console.log('openConfig', widget, definition)
+  if (definition.onConfigOpen) {
+    const result = await definition.onConfigOpen({
+      widget,
+      definition,
+      context
+    })
+    console.log(result)
+    await prompts.reset(widget.config || {})
+    result.prompts.forEach(prompts.add)
+    await prompts.start()
+    currentWidget = widget
+  }
+  console.log(widget, prompts.list())
+  return widget
 }
 
 function getConfigPrompts ({ id }, context) {
-  // const widget = findById({ id }, context)
-  // TODO
+  return currentWidget && currentWidget.id === id ? prompts.list() : []
 }
 
 function saveConfig ({ id }, context) {
-  // const widget = findById({ id }, context)
-  // TODO
+  const widget = findById({ id }, context)
+  widget.config = prompts.getAnswers()
+  widget.configured = true
   save(context)
+  currentWidget = null
+  return widget
 }
 
 function resetConfig ({ id }, context) {

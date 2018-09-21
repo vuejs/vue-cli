@@ -18,12 +18,12 @@ const schema = createSchema(joi => ({
   defaultWidth: joi.number(),
   defaultHeight: joi.number(),
   // Config
-  configPrompts: joi.func(),
   defaultConfig: joi.func(),
   needsUserConfig: joi.boolean(),
   // Hooks
   onAdded: joi.func(),
   onRemoved: joi.func(),
+  onConfigOpen: joi.func(),
   onConfigChanged: joi.func()
 }))
 

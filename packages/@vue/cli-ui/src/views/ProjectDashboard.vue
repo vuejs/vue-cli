@@ -61,6 +61,12 @@
 
 <script>
 export default {
+  metaInfo () {
+    return {
+      title: this.$t('org.vue.views.project-dashboard.title')
+    }
+  },
+
   data () {
     return {
       customizeMode: false

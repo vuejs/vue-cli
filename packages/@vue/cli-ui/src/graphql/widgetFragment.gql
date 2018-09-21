@@ -1,3 +1,5 @@
+#import "./promptFragment.gql"
+
 fragment widget on Widget {
   id
   definition {
@@ -6,6 +8,7 @@ fragment widget on Widget {
     icon
     component
     canAddMore
+    hasConfigPrompts
   }
   x
   y
@@ -13,4 +16,7 @@ fragment widget on Widget {
   height
   config
   configured
+  prompts {
+    ...prompt
+  }
 }

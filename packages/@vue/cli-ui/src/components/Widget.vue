@@ -15,11 +15,30 @@
           <div class="content-wrapper">
             <div class="header">
               <div class="title">{{ $t(widget.definition.title) }}</div>
+              <VueButton
+                v-if="widget.definition.hasConfigPrompts"
+                icon-left="settings"
+                class="icon-button flat primary"
+                v-tooltip="$t('org.vue.components.widget.configure')"
+                @click="openConfig()"
+              />
             </div>
-            <div class="content">
+
+            <div v-if="widget.configured" class="content">
               <ClientAddonComponent
                 :name="widget.definition.component"
                 class="view"
+              />
+            </div>
+
+            <div v-else class="content not-configured">
+              <VueIcon
+                icon="settings"
+                class="icon huge"
+              />
+              <VueButton
+                :label="$t('org.vue.components.widget.configure')"
+                @click="openConfig()"
               />
             </div>
           </div>
@@ -55,28 +74,67 @@
       >
         <div class="backdrop"/>
       </div>
+
+      <VueModal
+        v-if="showConfig"
+        :title="$t('org.vue.components.widget.configure')"
+        class="medium"
+        @close="showConfig = false"
+      >
+        <div class="default-body">
+          <PromptsList
+            :prompts="visiblePrompts"
+            @answer="answerPrompt"
+          />
+        </div>
+
+        <div slot="footer" class="actions">
+          <VueButton
+            class="primary big"
+            :label="$t('org.vue.components.widget.save')"
+            @click="saveConfig()"
+          />
+        </div>
+      </VueModal>
     </div>
   </transition>
 </template>
 
 <script>
+import Prompts from '../mixins/Prompts'
+
 import WIDGET_REMOVE from '../graphql/widgetRemove.gql'
 import WIDGET_MOVE from '../graphql/widgetMove.gql'
 import WIDGETS from '../graphql/widgets.gql'
+import WIDGET_FRAGMENT from '../graphql/widgetFragment.gql'
 import WIDGET_DEFINITION_FRAGMENT from '../graphql/widgetDefinitionFragment.gql'
+import WIDGET_CONFIG_OPEN from '../graphql/widgetConfigOpen.gql'
+import WIDGET_CONFIG_SAVE from '../graphql/widgetConfigSave.gql'
 
 const GRID_SIZE = 200
 
 export default {
   provide () {
     return {
-      widget: {
-        data: this.widget,
-        openDetails: this.openDetails,
-        remove: this.remove
-      }
+      widget: this.injected
     }
   },
+
+  mixins: [
+    Prompts({
+      field: 'widget',
+      update (store, prompts) {
+        store.writeFragment({
+          fragment: WIDGET_FRAGMENT,
+          fragmentName: 'widget',
+          id: this.widget.id,
+          data: {
+            prompts
+          }
+        })
+      }
+    })
+  ],
 
   props: {
     widget: {
@@ -92,7 +150,14 @@ export default {
 
   data () {
     return {
-      moveState: null
+      moveState: null,
+      showConfig: false,
+      injected: {
+        data: this.widget,
+        openConfig: this.openConfig,
+        openDetails: this.openDetails,
+        remove: this.remove
+      }
     }
   },
 
@@ -118,6 +183,14 @@ export default {
     }
   },
 
+  watch: {
+    widget: {
+      handler (value) {
+        this.injected.data = value
+      }
+    }
+  },
+
   beforeDestroy () {
     this.removeMoveListeners()
   },
@@ -135,6 +208,26 @@ export default {
         width: `${GRID_SIZE * this.widget.width}px`,
         height: `${GRID_SIZE * this.widget.height}px`
       }
+    },
+
+    async openConfig () {
+      await this.$apollo.mutate({
+        mutation: WIDGET_CONFIG_OPEN,
+        variables: {
+          id: this.widget.id
+        }
+      })
+      this.showConfig = true
+    },
+
+    async saveConfig () {
+      this.showConfig = false
+      await this.$apollo.mutate({
+        mutation: WIDGET_CONFIG_SAVE,
+        variables: {
+          id: this.widget.id
+        }
+      })
     },
 
     openDetails () {
@@ -254,12 +347,18 @@ export default {
 
 .header
   padding ($padding-item / 2) $padding-item
+  h-box()
 
   .title
+    flex 1
     opacity .5
     color $vue-ui-color-dark-neutral
     .vue-ui-dark-mode &
       color $vue-ui-color-light-neutral
+
+  .icon-button
+    width 20px
+    height @width
 
 .content
   flex 1
@@ -268,6 +367,14 @@ export default {
   width 100%
   height 100%
   box-sizing border-box
+
+.not-configured
+  v-box()
+  box-center()
+  .icon
+    margin-bottom $padding-item
+    >>> svg
+      fill $color-text-light
 
 .customize-overlay
   position absolute
