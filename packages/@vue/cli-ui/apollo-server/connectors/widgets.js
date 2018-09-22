@@ -112,39 +112,7 @@ function canAddMore (definition, context) {
 function add ({ definitionId }, context) {
   const definition = findDefinition({ definitionId }, context)
 
-  // Find next available space
-  const width = definition.defaultWidth || definition.minWidth
-  const height = definition.defaultHeight || definition.minHeight
-  // Mark occupied positions on the grid
-  const grid = new Map()
-  for (const widget of widgets) {
-    for (let x = widget.x; x < widget.x + widget.width; x++) {
-      for (let y = widget.y; y < widget.y + widget.height; y++) {
-        grid.set(`${x}:${y}`, true)
-      }
-    }
-  }
-  // Go through the possible positions
-  let x = 0
-  let y = 0
-  while (true) {
-    // Virtual "line brak"
-    if (x !== 0 && x + width >= 7) {
-      x = 0
-      y++
-    }
-    if (grid.get(`${x}:${y}`)) {
-      x++
-      continue
-    }
-    const { result, testX } = hasEnoughSpace(grid, x, y, width, height)
-    if (!result) {
-      x = testX + 1
-      continue
-    }
-    // Found! :)
-    break
-  }
+  const { x, y, width, height } = findValidPosition(definition)
 
   const widget = {
     id: shortid(),
@@ -187,13 +155,53 @@ function updateCount (definitionId, mod) {
   widgetCount.set(definitionId, getCount(definitionId) + mod)
 }
 
+function findValidPosition (definition, currentWidget = null) {
+  // Find next available space
+  const width = (currentWidget && currentWidget.width) || definition.defaultWidth || definition.minWidth
+  const height = (currentWidget && currentWidget.height) || definition.defaultHeight || definition.minHeight
+  // Mark occupied positions on the grid
+  const grid = new Map()
+  for (const widget of widgets) {
+    if (widget !== currentWidget) {
+      for (let x = widget.x; x < widget.x + widget.width; x++) {
+        for (let y = widget.y; y < widget.y + widget.height; y++) {
+          grid.set(`${x}:${y}`, true)
+        }
+      }
+    }
+  }
+  // Go through the possible positions
+  let x = 0
+  let y = 0
+  while (true) {
+    // Virtual "line brak"
+    if (x !== 0 && x + width >= 7) {
+      x = 0
+      y++
+    }
+    const { result, testX } = hasEnoughSpace(grid, x, y, width, height)
+    if (!result) {
+      x = testX + 1
+      continue
+    }
+    // Found! :)
+    break
+  }
+
+  return {
+    x,
+    y,
+    width,
+    height
+  }
+}
+
 function hasEnoughSpace (grid, x, y, width, height) {
   // Test if enough horizontal available space
   for (let testX = x; testX < x + width; testX++) {
     // Test if enough vertical available space
-    for (let testY = y + 1; testY < y + height; testY++) {
+    for (let testY = y; testY < y + height; testY++) {
       if (grid.get(`${testX}:${testY}`)) {
-        x = testX + 1
         return { result: false, testX }
       }
     }
@@ -234,10 +242,29 @@ function move (input, context) {
     if (widget.width > definition.maxWidth) widget.width = definition.maxWidth
     if (widget.height < definition.minHeight) widget.height = definition.minHeight
     if (widget.height > definition.maxHeight) widget.height = definition.maxHeight
-    // TODO push overlapping widgets
+
+    for (const otherWidget of widgets) {
+      if (otherWidget !== widget) {
+        if (areOverlapping(otherWidget, widget)) {
+          console.log(otherWidget, widget)
+          const otherDefinition = findDefinition(otherWidget, context)
+          Object.assign(otherWidget, findValidPosition(otherDefinition, otherWidget))
+        }
+      }
+    }
+
     save(context)
   }
   return widgets
+}
+
+function areOverlapping (widgetA, widgetB) {
+  return (
+    widgetA.x + widgetA.width - 1 >= widgetB.x &&
+    widgetA.x <= widgetB.x + widgetB.width - 1 &&
+    widgetA.y + widgetA.height - 1 >= widgetB.y &&
+    widgetA.y <= widgetB.y + widgetB.height - 1
+  )
 }
 
 async function openConfig ({ id }, context) {
