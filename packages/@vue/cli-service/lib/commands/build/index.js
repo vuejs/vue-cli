@@ -1,10 +1,11 @@
 const defaults = {
   clean: true,
-  target: 'app'
+  target: 'app',
+  formats: 'commonjs,umd,umd-min'
 }
 
 const buildModes = {
-  lib: 'library (commonjs + umd)',
+  lib: 'library',
   wc: 'web component',
   'wc-async': 'web component (async)'
 }
@@ -26,6 +27,7 @@ module.exports = (api, options) => {
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--modern': `build app targeting modern browsers with auto fallback`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
+      '--formats': `list of output formats for library builds (default: ${defaults.formats})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
       '--no-clean': `do not remove the dist directory before building the project`,
       '--report': `generate report.html to help analyze bundle content`,
@@ -102,7 +104,8 @@ async function build (args, api, options) {
   } else {
     const buildMode = buildModes[args.target]
     if (buildMode) {
-      logWithSpinner(`Building for ${mode} as ${buildMode}...`)
+      const additionalParams = buildMode === 'library' ? ` (${args.formats})` : ``
+      logWithSpinner(`Building for ${mode} as ${buildMode}${additionalParams}...`)
     } else {
       throw new Error(`Unknown build target: ${args.target}`)
     }
