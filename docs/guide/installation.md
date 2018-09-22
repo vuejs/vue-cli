@@ -24,3 +24,7 @@ You can check you have the right version (3.x) with this command:
 ```bash
 vue --version
 ```
+
+# Upgrading generated projects
+
+Once a project is generated, bump everything to the latest version with npm update.
