@@ -5,7 +5,6 @@ import DependencyUpdates from './components/DependencyUpdates.vue'
 import Vulnerability from './components/Vulnerability.vue'
 import RunTask from './components/RunTask.vue'
 import News from './components/News.vue'
-import Nuxt from './components/Nuxt.vue'
 
 ClientAddonApi.component('org.vue.widgets.components.welcome', Welcome)
 ClientAddonApi.component('org.vue.widgets.components.kill-port', KillPort)
@@ -14,4 +13,3 @@ ClientAddonApi.component('org.vue.widgets.components.dependency-updates', Depend
 ClientAddonApi.component('org.vue.widgets.components.vulnerability', Vulnerability)
 ClientAddonApi.component('org.vue.widgets.components.run-task', RunTask)
 ClientAddonApi.component('org.vue.widgets.components.news', News)
-ClientAddonApi.component('org.vue.widgets.components.nuxt', Nuxt)
