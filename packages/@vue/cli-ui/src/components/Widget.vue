@@ -64,7 +64,7 @@
               icon-left="close"
               v-tooltip="$t('org.vue.components.widget.remove')"
               @mousedown.native.stop
-              @click="remove()"
+              @click.stop="remove()"
             />
 
             <template v-if="isSelected">
@@ -548,8 +548,6 @@ export default {
   v-box()
   box-center()
   cursor move
-  &:hover
-    background rgba($vue-ui-color-primary, .2)
 
   /deep/ > *
     transition transform .15s
@@ -570,6 +568,11 @@ export default {
       margin-right ($padding-item / 2)
       >>> svg
         fill @color
+
+.customize-overlay:hover,
+.moving .customize-overlay,
+.resizing .customize-overlay
+  background rgba($vue-ui-color-primary, .2)
 
 .remove-button
   position absolute
