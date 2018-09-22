@@ -146,8 +146,10 @@ module.exports = api => {
     component: 'org.vue.widgets.components.news',
     minWidth: 2,
     minHeight: 1,
-    maxWidth: 3,
-    maxHeight: 5,
+    maxWidth: 6,
+    maxHeight: 6,
+    defaultWidth: 2,
+    defaultHeight: 3,
     defaultConfig: () => ({
       url: 'https://vuenews.fireside.fm/rss'
     }),
