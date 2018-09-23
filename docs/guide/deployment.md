@@ -248,7 +248,43 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Heroku
 
-> TODO | Open to contribution.
+To deploy with [Heroku](https://heroku.com) you need to add a node server to serve your Application. A simple Express server works perfectly. 
+
+Make sure to check your Heroku app settings and add your repository's git URL:
+
+```
+git remote add heroku git_url_here
+```
+
+Run `npm install --save-dev express serve-static`
+
+Proceed to add the express server to your project. Name it `express.js` or the name that suits your needs.
+
+```js
+const express = require('express');
+const serveStatic = require("serve-static")
+const path = require('path');
+app = express();
+app.use(serveStatic(path.join(__dirname, 'dist')));
+const port = process.env.PORT || 80;
+app.listen(port);
+```
+
+Then add the following scripts to your `package.json`:
+
+```
+"postinstall": "npm run build",
+"start": "node express.js",
+```
+
+Heroku will run the `start` script by default once all dependencies are installed. Then, the `postinstall` script will be ran and then your app will be built directly on the server.
+
+Then run : 
+
+```
+git push heroku master
+```
+And Voilá! You have successfully deployed to Heroku. Verify at `yourappname.herokuapp.com`
 
 ### Surge
 
