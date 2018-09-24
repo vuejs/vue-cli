@@ -532,9 +532,9 @@ export default {
     z-index 10000
 
 .widget
-  &:not(.moving)
+  &:not(.moving):not(.resizing)
     .shell
-      transition left .15s, top .15s
+      transition left .15s, top .15s, width .15s, height .15s
 
   &.selected
     .customize-overlay
