@@ -181,7 +181,7 @@
         },
         "widget": {
           "remove": "Remove widget",
-          "configure": "Configure",
+          "configure": "Configure widget",
           "save": "Save"
         },
         "widget-add-pane": {
