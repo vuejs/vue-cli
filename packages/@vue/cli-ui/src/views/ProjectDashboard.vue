@@ -50,10 +50,12 @@
           </div>
         </ApolloQuery>
 
-        <WidgetAddPane
-          v-if="customizeMode"
-          @close="customizeMode = false"
-        />
+        <transition name="sidepane">
+          <WidgetAddPane
+            v-if="customizeMode"
+            @close="customizeMode = false"
+          />
+        </transition>
       </div>
     </ContentView>
   </div>
