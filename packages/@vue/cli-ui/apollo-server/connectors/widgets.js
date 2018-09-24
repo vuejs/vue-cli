@@ -246,7 +246,6 @@ function move (input, context) {
     for (const otherWidget of widgets) {
       if (otherWidget !== widget) {
         if (areOverlapping(otherWidget, widget)) {
-          console.log(otherWidget, widget)
           const otherDefinition = findDefinition(otherWidget, context)
           Object.assign(otherWidget, findValidPosition(otherDefinition, otherWidget))
         }
@@ -270,20 +269,17 @@ function areOverlapping (widgetA, widgetB) {
 async function openConfig ({ id }, context) {
   const widget = findById({ id }, context)
   const definition = findDefinition(widget, context)
-  console.log('openConfig', widget, definition)
   if (definition.onConfigOpen) {
     const result = await definition.onConfigOpen({
       widget,
       definition,
       context
     })
-    console.log(result)
     await prompts.reset(widget.config || {})
     result.prompts.forEach(prompts.add)
     await prompts.start()
     currentWidget = widget
   }
-  console.log(widget, prompts.list())
   return widget
 }
 
