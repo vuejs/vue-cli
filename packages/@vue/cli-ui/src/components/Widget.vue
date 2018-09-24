@@ -435,45 +435,6 @@ $zoom = .7
     /deep/ > *
       transform scale(1/$zoom)
 
-  .resize-handle
-    position absolute
-    width 12px
-    height @width
-    border-radius 50%
-    background rgba($vue-ui-color-primary, .5)
-    &:hover
-      background $vue-ui-color-primary
-    &.top,
-    &.top-left,
-    &.top-right
-      top (-@height / 2)
-    &.bottom,
-    &.bottom-left,
-    &.bottom-right
-      bottom (-@height / 2)
-    &.left,
-    &.top-left,
-    &.bottom-left
-      left (-@width / 2)
-    &.right,
-    &.top-right,
-    &.bottom-right
-      right (-@width / 2)
-    &.top,
-    &.bottom
-      left calc(50% - (@width / 2))
-      cursor ns-resize
-    &.left,
-    &.right
-      top calc(50% - (@height / 2))
-      cursor ew-resize
-    &.top-left,
-    &.bottom-right
-      cursor nwse-resize
-    &.top-right,
-    &.bottom-left
-      cursor nesw-resize
-
 .move-ghost,
 .resize-ghost
   z-index 10000
