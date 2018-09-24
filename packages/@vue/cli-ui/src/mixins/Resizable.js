@@ -10,6 +10,19 @@ export default function ({
       }
     },
 
+    computed: {
+      showResizeHandle () {
+        return this.isSelected && !this.moveState &&
+          this.canBeResized
+      },
+
+      canBeResized () {
+        const { definition } = this[field]
+        return definition.minWidth !== definition.maxWidth ||
+          definition.minHeight !== definition.maxHeight
+      }
+    },
+
     created () {
       this.resizeHandles = [
         'top-left',

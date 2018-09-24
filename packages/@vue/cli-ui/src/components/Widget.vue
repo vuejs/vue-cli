@@ -67,7 +67,7 @@
               @click.stop="remove()"
             />
 
-            <template v-if="isSelected">
+            <template v-if="showResizeHandle">
               <div
                 v-for="handle of resizeHandles"
                 :key="handle"
@@ -141,7 +141,7 @@ const GRID_SIZE = 200
 
 const state = new Vue({
   data: {
-    selectedWidget: null
+    selectedWidgetId: null
   }
 })
 
@@ -237,7 +237,7 @@ export default {
     },
 
     isSelected () {
-      return this.widget === state.selectedWidget
+      return this.widget.id === state.selectedWidgetId
     }
   },
 
@@ -250,7 +250,7 @@ export default {
 
     customizeMode (value) {
       if (!value && this.isSelected) {
-        state.selectedWidget = null
+        state.selectedWidgetId = null
       }
     }
   },
@@ -314,7 +314,7 @@ export default {
     },
 
     select () {
-      state.selectedWidget = this.widget
+      state.selectedWidgetId = this.widget.id
     },
 
     async onMoved () {
@@ -426,6 +426,9 @@ export default {
   v-box()
   box-center()
   cursor move
+  user-select none
+  box-sizing border-box
+  border transparent 1px solid
 
   /deep/ > *
     transition transform .15s
@@ -448,8 +451,7 @@ export default {
         fill @color
 
 .customize-overlay:hover,
-.moving .customize-overlay,
-.resizing .customize-overlay
+.selected .customize-overlay
   background rgba($vue-ui-color-primary, .2)
 
 .remove-button
@@ -510,31 +512,33 @@ export default {
 
 .move-ghost,
 .resize-ghost
+  z-index 10000
   .backdrop
     background rgba($vue-ui-color-accent, .2)
     border-radius ($br / .7)
     .vue-ui-dark-mode &
       background rgba(lighten($vue-ui-color-accent, 60%), .2)
 
-.moving
-  .shell
-    z-index 10001
-    .wrapper
-      box-shadow 0 5px 30px rgba($md-black, .2)
-  .move-ghost
-    z-index 10000
-
+.moving,
 .resizing
   .shell
     z-index 10001
+
+.moving
+  .shell
+    .wrapper
+      box-shadow 0 5px 30px rgba($md-black, .2)
+
+.resizing
+  .shell
     opacity .5
-  .resize-ghost
-    z-index 10000
 
 .widget
+  .shell
+    transition opacity .15s
   &:not(.moving):not(.resizing)
     .shell
-      transition left .15s, top .15s, width .15s, height .15s
+      transition opacity .15s, left .15s, top .15s, width .15s, height .15s
 
   &.selected
     .customize-overlay
