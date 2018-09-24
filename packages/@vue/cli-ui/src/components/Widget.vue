@@ -127,6 +127,7 @@
 import Vue from 'vue'
 import Prompts from '../mixins/Prompts'
 import Movable from '../mixins/Movable'
+import Resizable from '../mixins/Resizable'
 
 import WIDGET_REMOVE from '../graphql/widgetRemove.gql'
 import WIDGET_MOVE from '../graphql/widgetMove.gql'
@@ -169,6 +170,11 @@ export default {
     Movable({
       field: 'widget',
       gridSize: GRID_SIZE
+    }),
+
+    Resizable({
+      field: 'widget',
+      gridSize: GRID_SIZE
     })
   ],
 
@@ -186,7 +192,6 @@ export default {
 
   data () {
     return {
-      resizeState: null,
       showConfig: false,
       injected: {
         data: this.widget,
@@ -250,23 +255,6 @@ export default {
     }
   },
 
-  created () {
-    this.resizeHandles = [
-      'top-left',
-      'top',
-      'top-right',
-      'right',
-      'bottom-right',
-      'bottom',
-      'bottom-left',
-      'left'
-    ]
-  },
-
-  beforeDestroy () {
-    this.removeResizeListeners()
-  },
-
   methods: {
     getPositionStyle (x, y) {
       return {
@@ -325,6 +313,10 @@ export default {
       })
     },
 
+    select () {
+      state.selectedWidget = this.widget
+    },
+
     async onMoved () {
       await this.$apollo.mutate({
         mutation: WIDGET_MOVE,
@@ -340,78 +332,7 @@ export default {
       })
     },
 
-    // Resizing
-
-    select () {
-      state.selectedWidget = this.widget
-    },
-
-    removeResizeListeners () {
-      window.removeEventListener('mousemove', this.onResizeMove)
-      window.removeEventListener('mouseup', this.onResizeEnd)
-    },
-
-    updateResizeState (e) {
-      const mouseDeltaX = (e.clientX - this.$_initalMousePosition.x) / 0.7
-      const mouseDeltaY = (e.clientY - this.$_initalMousePosition.y) / 0.7
-      const handle = this.$_resizeHandle
-      let dX = 0
-      let dY = 0
-      let dWidth = 0
-      let dHeight = 0
-      // TODO
-      if (handle.includes('right')) {
-        dWidth = mouseDeltaX
-      }
-      if (handle.includes('bottom')) {
-        dHeight = mouseDeltaY
-      }
-      let gridDX = Math.round(dX / GRID_SIZE)
-      let gridDY = Math.round(dY / GRID_SIZE)
-      let gridDWidth = Math.round(dWidth / GRID_SIZE)
-      let gridDHeight = Math.round(dHeight / GRID_SIZE)
-      if (this.widget.width + gridDWidth < this.widget.definition.minWidth) {
-        gridDWidth = this.widget.definition.minWidth - this.widget.width
-      }
-      if (this.widget.width + gridDWidth > this.widget.definition.maxWidth) {
-        gridDWidth = this.widget.definition.maxWidth - this.widget.width
-      }
-      if (this.widget.height + gridDHeight < this.widget.definition.minHeight) {
-        gridDHeight = this.widget.definition.minHeight - this.widget.height
-      }
-      if (this.widget.height + gridDHeight > this.widget.definition.maxHeight) {
-        gridDHeight = this.widget.definition.maxHeight - this.widget.height
-      }
-      this.resizeState = {
-        x: this.widget.x + gridDX,
-        y: this.widget.y + gridDY,
-        width: this.widget.width + gridDWidth,
-        height: this.widget.height + gridDHeight,
-        pxX: this.widget.x * GRID_SIZE + dX,
-        pxY: this.widget.y * GRID_SIZE + dY,
-        pxWidth: this.widget.width * GRID_SIZE + dWidth,
-        pxHeight: this.widget.height * GRID_SIZE + dHeight
-      }
-    },
-
-    onResizeStart (e, handle) {
-      this.$_initalMousePosition = {
-        x: e.clientX,
-        y: e.clientY
-      }
-      this.$_resizeHandle = handle
-      this.updateResizeState(e)
-      window.addEventListener('mousemove', this.onResizeMove)
-      window.addEventListener('mouseup', this.onResizeEnd)
-    },
-
-    onResizeMove (e) {
-      this.updateResizeState(e)
-    },
-
-    async onResizeEnd (e) {
-      this.updateResizeState(e)
-      this.removeResizeListeners()
+    async onResized () {
       await this.$apollo.mutate({
         mutation: WIDGET_MOVE,
         variables: {
@@ -424,7 +345,6 @@ export default {
           }
         }
       })
-      this.resizeState = null
     }
   }
 }
