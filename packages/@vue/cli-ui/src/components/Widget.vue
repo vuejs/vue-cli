@@ -11,7 +11,7 @@
     >
       <div
         class="shell"
-        :style="style"
+        :style="mainStyle"
       >
         <div class="wrapper">
           <div class="content-wrapper">
@@ -126,6 +126,7 @@
 <script>
 import Vue from 'vue'
 import Prompts from '../mixins/Prompts'
+import OnGrid from '../mixins/OnGrid'
 import Movable from '../mixins/Movable'
 import Resizable from '../mixins/Resizable'
 
@@ -168,6 +169,11 @@ export default {
       }
     }),
 
+    OnGrid({
+      field: 'widget',
+      gridSize: GRID_SIZE
+    }),
+
     Movable({
       field: 'widget',
       gridSize: GRID_SIZE,
@@ -206,39 +212,6 @@ export default {
   },
 
   computed: {
-    style () {
-      if (this.moveState) {
-        return {
-          ...this.getPositionStyle(this.moveState.pxX, this.moveState.pxY),
-          ...this.getSizeStyle()
-        }
-      }
-      if (this.resizeState) {
-        return {
-          ...this.getPositionStyle(this.resizeState.pxX, this.resizeState.pxY),
-          ...this.getSizeStyle(this.resizeState.pxWidth, this.resizeState.pxHeight)
-        }
-      }
-      return {
-        ...this.getPositionStyle(GRID_SIZE * this.widget.x, GRID_SIZE * this.widget.y),
-        ...this.getSizeStyle()
-      }
-    },
-
-    moveGhostStyle () {
-      return {
-        ...this.getPositionStyle(GRID_SIZE * this.moveState.x, GRID_SIZE * this.moveState.y),
-        ...this.getSizeStyle()
-      }
-    },
-
-    resizeGhostStyle () {
-      return {
-        ...this.getPositionStyle(GRID_SIZE * this.resizeState.x, GRID_SIZE * this.resizeState.y),
-        ...this.getSizeStyle(GRID_SIZE * this.resizeState.width, GRID_SIZE * this.resizeState.height)
-      }
-    },
-
     isSelected () {
       return this.widget.id === state.selectedWidgetId
     }
@@ -259,20 +232,6 @@ export default {
   },
 
   methods: {
-    getPositionStyle (x, y) {
-      return {
-        left: `${x}px`,
-        top: `${y}px`
-      }
-    },
-
-    getSizeStyle (width, height) {
-      return {
-        width: `${width || GRID_SIZE * this.widget.width}px`,
-        height: `${height || GRID_SIZE * this.widget.height}px`
-      }
-    },
-
     async openConfig () {
       await this.$apollo.mutate({
         mutation: WIDGET_CONFIG_OPEN,
