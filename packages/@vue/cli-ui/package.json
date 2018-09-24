@@ -36,7 +36,7 @@
     "express-history-api-fallback": "^2.2.1",
     "fs-extra": "^6.0.1",
     "globby": "^8.0.1",
-    "graphql": "^0.13.2",
+    "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
     "graphql-type-json": "^0.2.1",
     "javascript-stringify": "^1.6.0",
