@@ -1,6 +1,7 @@
 export default function movable ({
   gridSize,
-  field
+  field,
+  zoom
 }) {
   // @vue/component
   return {
@@ -23,8 +24,8 @@ export default function movable ({
       updateMoveState (e) {
         const mouseDeltaX = e.clientX - this.$_initalMousePosition.x
         const mouseDeltaY = e.clientY - this.$_initalMousePosition.y
-        const pxX = this[field].x * gridSize + mouseDeltaX / 0.7
-        const pxY = this[field].y * gridSize + mouseDeltaY / 0.7
+        const pxX = this[field].x * gridSize + mouseDeltaX / zoom
+        const pxY = this[field].y * gridSize + mouseDeltaY / zoom
         let x = Math.round(pxX / gridSize)
         let y = Math.round(pxY / gridSize)
         if (x < 0) x = 0

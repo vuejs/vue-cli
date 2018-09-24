@@ -1,6 +1,7 @@
 export default function ({
   gridSize,
-  field
+  field,
+  zoom
 }) {
   // @vue/component
   return {
@@ -47,8 +48,8 @@ export default function ({
       },
 
       updateResizeState (e) {
-        const mouseDeltaX = (e.clientX - this.$_initalMousePosition.x) / 0.7
-        const mouseDeltaY = (e.clientY - this.$_initalMousePosition.y) / 0.7
+        const mouseDeltaX = (e.clientX - this.$_initalMousePosition.x) / zoom
+        const mouseDeltaY = (e.clientY - this.$_initalMousePosition.y) / zoom
         const handle = this.$_resizeHandle
         let dX = 0
         let dY = 0

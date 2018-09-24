@@ -138,6 +138,7 @@ import WIDGET_CONFIG_OPEN from '../graphql/widgetConfigOpen.gql'
 import WIDGET_CONFIG_SAVE from '../graphql/widgetConfigSave.gql'
 
 const GRID_SIZE = 200
+const ZOOM = 0.7
 
 const state = new Vue({
   data: {
@@ -169,12 +170,14 @@ export default {
 
     Movable({
       field: 'widget',
-      gridSize: GRID_SIZE
+      gridSize: GRID_SIZE,
+      zoom: ZOOM
     }),
 
     Resizable({
       field: 'widget',
-      gridSize: GRID_SIZE
+      gridSize: GRID_SIZE,
+      zoom: ZOOM
     })
   ],
 
@@ -353,6 +356,8 @@ export default {
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 
+$zoom = .7
+
 .shell,
 .move-ghost,
 .resize-ghost
@@ -461,7 +466,7 @@ export default {
 
 .customizing
   .wrapper
-    border-radius ($br / .7)
+    border-radius ($br / $zoom)
 
   .content-wrapper
     opacity .5
@@ -469,7 +474,7 @@ export default {
 
   .customize-overlay
     /deep/ > *
-      transform scale(1/.7)
+      transform scale(1/$zoom)
 
   .resize-handle
     position absolute
@@ -515,7 +520,7 @@ export default {
   z-index 10000
   .backdrop
     background rgba($vue-ui-color-accent, .2)
-    border-radius ($br / .7)
+    border-radius ($br / $zoom)
     .vue-ui-dark-mode &
       background rgba(lighten($vue-ui-color-accent, 60%), .2)
 
@@ -551,6 +556,6 @@ export default {
   &.v-enter,
   &.v-leave-to
     .shell
-      transform scale(.7)
+      transform scale($zoom)
       opacity 0
 </style>
