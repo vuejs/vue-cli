@@ -59,15 +59,19 @@ module.exports = (api, options) => {
       return options
     })
 
-    config
-      .plugin('fork-ts-checker')
-        .use(require('fork-ts-checker-webpack-plugin'), [{
-          vue: true,
-          tslint: options.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
-          formatter: 'codeframe',
-          // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
-          checkSyntacticErrors: useThreads
-        }])
+    if (!process.env.VUE_CLI_TEST) {
+      // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
+      // so temporarily disabled for vue-cli tests
+      config
+        .plugin('fork-ts-checker')
+          .use(require('fork-ts-checker-webpack-plugin'), [{
+            vue: true,
+            tslint: options.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
+            formatter: 'codeframe',
+            // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
+            checkSyntacticErrors: useThreads
+          }])
+    }
   })
 
   if (!api.hasPlugin('eslint')) {
