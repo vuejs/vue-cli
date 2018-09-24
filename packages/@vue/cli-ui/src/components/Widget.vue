@@ -126,6 +126,7 @@
 <script>
 import Vue from 'vue'
 import Prompts from '../mixins/Prompts'
+import Movable from '../mixins/Movable'
 
 import WIDGET_REMOVE from '../graphql/widgetRemove.gql'
 import WIDGET_MOVE from '../graphql/widgetMove.gql'
@@ -163,6 +164,11 @@ export default {
           }
         })
       }
+    }),
+
+    Movable({
+      field: 'widget',
+      gridSize: GRID_SIZE
     })
   ],
 
@@ -180,7 +186,6 @@ export default {
 
   data () {
     return {
-      moveState: null,
       resizeState: null,
       showConfig: false,
       injected: {
@@ -196,7 +201,7 @@ export default {
     style () {
       if (this.moveState) {
         return {
-          ...this.getPositionStyle(this.moveState.x, this.moveState.y),
+          ...this.getPositionStyle(this.moveState.pxX, this.moveState.pxY),
           ...this.getSizeStyle()
         }
       }
@@ -214,7 +219,7 @@ export default {
 
     moveGhostStyle () {
       return {
-        ...this.getPositionStyle(GRID_SIZE * this.moveState.gridX, GRID_SIZE * this.moveState.gridY),
+        ...this.getPositionStyle(GRID_SIZE * this.moveState.x, GRID_SIZE * this.moveState.y),
         ...this.getSizeStyle()
       }
     },
@@ -259,7 +264,6 @@ export default {
   },
 
   beforeDestroy () {
-    this.removeMoveListeners()
     this.removeResizeListeners()
   },
 
@@ -299,7 +303,7 @@ export default {
     },
 
     openDetails () {
-      // TODOnv
+      // TODO
     },
 
     remove () {
@@ -321,64 +325,19 @@ export default {
       })
     },
 
-    // Moving
-
-    removeMoveListeners () {
-      window.removeEventListener('mousemove', this.onMoveUpdate)
-      window.removeEventListener('mouseup', this.onMoveEnd)
-    },
-
-    updateMoveState (e) {
-      const mouseDeltaX = e.clientX - this.$_initalMousePosition.x
-      const mouseDeltaY = e.clientY - this.$_initalMousePosition.y
-      const x = this.$_initialPosition.x + mouseDeltaX / 0.7
-      const y = this.$_initialPosition.y + mouseDeltaY / 0.7
-      let gridX = Math.round(x / GRID_SIZE)
-      let gridY = Math.round(y / GRID_SIZE)
-      if (gridX < 0) gridX = 0
-      if (gridY < 0) gridY = 0
-      this.moveState = {
-        x,
-        y,
-        gridX,
-        gridY
-      }
-    },
-
-    onMoveStart (e) {
-      this.$_initalMousePosition = {
-        x: e.clientX,
-        y: e.clientY
-      }
-      this.$_initialPosition = {
-        x: this.widget.x * GRID_SIZE,
-        y: this.widget.y * GRID_SIZE
-      }
-      this.updateMoveState(e)
-      window.addEventListener('mousemove', this.onMoveUpdate)
-      window.addEventListener('mouseup', this.onMoveEnd)
-    },
-
-    onMoveUpdate (e) {
-      this.updateMoveState(e)
-    },
-
-    async onMoveEnd (e) {
-      this.updateMoveState(e)
-      this.removeMoveListeners()
+    async onMoved () {
       await this.$apollo.mutate({
         mutation: WIDGET_MOVE,
         variables: {
           input: {
             id: this.widget.id,
-            x: this.moveState.gridX,
-            y: this.moveState.gridY,
+            x: this.moveState.x,
+            y: this.moveState.y,
             width: this.widget.width,
             height: this.widget.height
           }
         }
       })
-      this.moveState = null
     },
 
     // Resizing
@@ -466,7 +425,6 @@ export default {
         }
       })
       this.resizeState = null
-      console.log('resize end')
     }
   }
 }
