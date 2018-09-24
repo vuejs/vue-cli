@@ -77,7 +77,7 @@ export default {
   methods: {
     imageSrc (url) {
       if (process.env.VUE_APP_CLI_UI_DEV && url.charAt(0) === '/') {
-        return `http://localhost:4000${url}`
+        return `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}${url}`
       }
       return url
     }

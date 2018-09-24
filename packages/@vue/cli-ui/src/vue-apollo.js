@@ -15,7 +15,7 @@ Vue.use(VueApollo)
 
 let endpoint = process.env.VUE_APP_CLI_UI_URL
 if (typeof endpoint === 'undefined') {
-  endpoint = 'ws://localhost:4000/graphql'
+  endpoint = `ws://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/graphql`
 } else if (endpoint === '') {
   endpoint = window.location.origin.replace('http', 'ws') + '/graphql'
 }
