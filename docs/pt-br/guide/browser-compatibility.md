@@ -1,25 +1,25 @@
-# Browser Compatibility
+# Compatibilidade do navegador
 
 ## browserslist
 
-You will notice a `browserslist` field in `package.json` (or a separate `.browserslistrc` file) specifying a range of browsers the project is targeting. This value will be used by [@babel/preset-env][babel-preset-env] and [autoprefixer][autoprefixer] to automatically determine the JavaScript features that need to be transpiled and the CSS vendor prefixes needed.
+Você observará um campo `browserslist` em` package.json` (ou um arquivo `.browserslistrc` separado) especificando um intervalo de navegadores que o projeto está direcionando. Este valor será usado por [@babel/preset-env][babel-preset-env] e [autoprefixer][autoprefixer] para determinar automaticamente os recursos JavaScript que precisam ser transpilados e os prefixos do fornecedor CSS necessários.
 
-See [here][browserslist] for how to specify browser ranges.
+Veja [aqui][browserslist] para saber como especificar os intervalos do navegador.
 
 ## Polyfills
 
-A default Vue CLI project uses [@vue/babel-preset-app][babel-preset-app], which uses `@babel/preset-env` and the `browserslist` config to determine the Polyfills needed for your project.
+Um projeto padrão do Vue CLI usa [@vue/babel-preset-app][babel-preset-app], que usa `@babel/preset-env` e a configuração `browserslist` para determinar os Polyfills necessários para o seu projeto.
 
 ### useBuiltIns: 'usage'
 
-By default, it passes [`useBuiltIns: 'usage'`](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) to `@babel/preset-env` which automatically detects the polyfills needed based on the language features used in your source code. This ensures only the minimum amount of polyfills are included in your final bundle. However, this also means **if one of your dependencies has specific requirements on polyfills, by default Babel won't be able to detect it.**
+Por padrão, ele passa [`useBuiltIns: 'usage'`] (https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) para `@babel/preset-env` que detecta automaticamente os polyfills necessários com base nos recursos de idioma usados em seu código-fonte. Isso garante que apenas a quantidade mínima de polyfills seja incluída no seu pacote final. No entanto, isso também significa **se uma de suas dependências tiver requisitos específicos em polyfills, por padrão, o Babel não poderá detectá-la.**
 
-If one of your dependencies need polyfills, you have a few options:
+Se uma de suas dependências precisar de polyfills, você tem algumas opções:
 
-1. **If the dependency is written in an ES version that your target environments do not support:** Add that dependency to the [`transpileDependencies`](../config/#transpiledependencies) option in `vue.config.js`. This would enable both syntax transforms and usage-based polyfill detection for that dependency.
+1. **Se a dependência for escrita em uma versão ES que seus ambientes de destino não suportam:** Inclua essa dependência na opção [`transpileDependencies`](../config/#transpileependencies) em `vue.config.js`. Isso habilitaria as transformações de sintaxe e a detecção de polyfill baseada em uso para essa dependência.
 
-2. **If the dependency ships ES5 code and explicitly lists the polyfills needed:** you can pre-include the needed polyfills using the [polyfills](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app#polyfills) option for `@vue/babel-preset-app`. **Note that `es6.promise` is included by default because it's very common for libs to depend on Promises.**
-
+2. **Se a dependência vier com código ES5 e listar explicitamente os polyfills necessários:** você pode pré-incluir os polyfills necessários usando os [polyfills](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app#polyfills) opção para `@vue/babel-preset-app`. **Note que o `es6.promise` é incluído por padrão, porque é muito comum as bibliotecas dependerem do Promises.**
+    
     ``` js
     // babel.config.js
     module.exports = {
@@ -34,44 +34,44 @@ If one of your dependencies need polyfills, you have a few options:
     }
     ```
 
-    ::: tip
-    It's recommended to add polyfills this way instead of directly importing them in your source code, because polyfills listed here can be automatically excluded if your `browserslist` targets don't need them.
+    ::: tip Dica
+    É recomendável adicionar polyfills dessa maneira, em vez de importá-los diretamente em seu código-fonte, porque os polyfills listados aqui podem ser excluídos automaticamente se os destinos de `browserslist` não precisarem deles.
     :::
 
-3. **If the dependency ships ES5 code, but uses ES6+ features without explicitly listing polyfill requirements (e.g. Vuetify):** Use `useBuiltIns: 'entry'` and then add `import '@babel/polyfill'` to your entry file. This will import **ALL** polyfills based on your `browserslist` targets so that you don't need to worry about dependency polyfills anymore, but will likely increase your final bundle size with some unused polyfills.
+3. **Se a dependência fornecer o código ES5, mas usar recursos ES6 + sem listar explicitamente os requisitos de preenchimento (por exemplo, Vuetify):** Use `useBuiltIns: 'entry'` e, em seguida, adicione `import '@babel/polyfill'` ao seu arquivo de entrada. Isso importará **TODOS** os polyfills com base nas segmentações de `browserslist`, para que você não precise mais se preocupar com os polyfills de dependência, mas provavelmente aumentará o tamanho final do pacote com alguns polyfills não utilizados.
 
-See [@babel-preset/env docs](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) for more details.
+Veja [@babel-preset/env docs](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) para mais detalhes.
 
-### Polyfills when Building as Library or Web Components
+### Polyfills ao criar como biblioteca ou componentes da Web
 
-When using Vue CLI to [build a library or Web Components](./build-targets.md), it is recommended to pass `useBuiltIns: false` to `@vue/babel-preset-app` to disable automatic polyfill injection. This ensures you don't include unnecessary polyfills in your code, as it should be the responsibility of the consuming app to include polyfills.
+Ao usar o Vue CLI para [construir uma biblioteca ou Web Components](./build-targets.md), é recomendado passar `useBuiltIns: false` para `@vue/babel-preset-app` para desabilitar a injeção automática de polyfill. Isso garante que você não inclua polyfills desnecessários em seu código, pois deve ser responsabilidade do aplicativo consumidor incluir polyfills.
 
-## Modern Mode
+## Modo moderno
 
-With Babel we are able to leverage all the newest language features in ES2015+, but that also means we have to ship transpiled and polyfilled bundles in order to support older browsers. These transpiled bundles are often more verbose than the original native ES2015+ code, and also parse and run slower. Given that today a good majority of the modern browsers have decent support for native ES2015, it is a waste that we have to ship heavier and less efficient code to those browsers just because we have to support older ones.
+Com o Babel, podemos aproveitar todos os novos recursos de linguagem do ES2015+, mas isso também significa que temos que enviar pacotes transpilados e polyfilled para suportar navegadores mais antigos. Esses pacotes transpilados são geralmente mais detalhados do que o código original nativo do ES2015+, e também são analisados ​​e executados mais lentamente. Dado que hoje uma boa maioria dos navegadores modernos tem um suporte decente para o ES2015 nativo, é um desperdício termos que enviar um código mais pesado e menos eficiente para esses navegadores só porque temos que suportar os mais antigos.
 
-Vue CLI offers a "Modern Mode" to help you solve this problem. When building for production with the following command:
+O Vue CLI oferece um "Modo Moderno" para ajudá-lo a resolver este problema. Ao construir para produção com o seguinte comando:
 
 ``` bash
 vue-cli-service build --modern
 ```
 
-Vue CLI will produce two versions of your app: one modern bundle targeting modern browsers that support [ES modules](https://jakearchibald.com/2017/es-modules-in-browsers/), and one legacy bundle targeting older browsers that do not.
+O Vue CLI produzirá duas versões do seu aplicativo: um pacote moderno direcionado a navegadores modernos que oferecem suporte a [módulos ES](https://jakearchibald.com/2017/es-modules-in-browsers/) e um pacote herdado direcionado a navegadores mais antigos isso não.
 
-The cool part though is that there are no special deployment requirements. The generated HTML file automatically employs the techniques discussed in [Phillip Walton's excellent post](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/):
+A parte legal é que não há requisitos especiais de implantação. O arquivo HTML gerado emprega automaticamente as técnicas discutidas no [excelente post de Phillip Walton](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/):
 
-- The modern bundle is loaded with `<script type="module">`, in browsers that support it; they are also preloaded using `<link rel="modulepreload">` instead.
+- O pacote moderno é carregado com `<script type="module ">`, nos navegadores que o suportam; eles também são pré-carregados usando `<link rel="modulepreload">`.
 
-- The legacy bundle is loaded with `<script nomodule>`, which is ignored by browsers that support ES modules.
+- O pacote herdado é carregado com `<script nomodule>`, que é ignorado pelos navegadores que suportam os módulos ES.
 
-- A fix for `<script nomodule>` in Safari 10 is also automatically injected.
+- Uma correção para o `<script nomodule>` no Safari 10 também é automaticamente injetada.
 
-For a Hello World app, the modern bundle is already 16% smaller. In production, the modern bundle will typically result in significantly faster parsing and evaluation, improving your app's loading performance.
+Para um aplicativo Hello World, o pacote moderno já é 16% menor. Na produção, o pacote moderno normalmente resulta em análise e avaliação significativamente mais rápidas, melhorando o desempenho de carregamento do aplicativo.
 
-::: tip
-`<script type="module">` is loaded [with CORS always enabled](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). This means your server must return valid CORS headers such as `Access-Control-Allow-Origin: *`. If you want to fetch the scripts with credentials, set the [crossorigin](../config/#crossorigin) option to `use-credentials`.
+::: tip Dica
+`<script type="module">` é carregado [com o CORS sempre ativado](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). Isso significa que seu servidor deve retornar cabeçalhos CORS válidos como `Access-Control-Allow-Origin: *`. Se você deseja buscar os scripts com credenciais, defina a opção [crossorigin](../config/#crossorigin) para `use-credentials`.
 
-Also, modern mode uses an inline script to avoid Safari 10 loading both bundles, so if you are using a strict CSP, you will need to explicitly allow the inline script with:
+Além disso, o modo moderno usa um script in-line para evitar que o Safari 10 carregue ambos os pacotes, portanto, se você estiver usando um CSP estrito, será necessário permitir explicitamente o script in-line com:
 
 ```
 Content-Security-Policy: script-src 'self' 'sha256-4RS22DYeB7U14dra4KcQYxmwt5HkOInieXK1NUMBmQI='

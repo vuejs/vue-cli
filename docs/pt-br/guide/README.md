@@ -2,54 +2,54 @@
 sidebarDepth: 0
 ---
 
-# Overview
+# Visão Geral
 
 <Bit/>
 
-::: warning
-This documentation is for `@vue/cli` version **3.x**. For the old `vue-cli`, see [here](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
+::: warning Atenção
+Esta documentação é para a versão `@vue/cli` ** 3.x **. Para o antigo `vue-cli`, veja [aqui](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
 :::
 
-Vue CLI is a full system for rapid Vue.js development, providing:
+O Vue CLI é um sistema completo para o rápido desenvolvimento do Vue.js, fornecendo:
 
-- Interactive project scaffolding via `@vue/cli`.
-- Zero config rapid prototyping via `@vue/cli` + `@vue/cli-service-global`.
-- A runtime dependency (`@vue/cli-service`) that is:
-  - Upgradeable;
-  - Built on top of webpack, with sensible defaults;
-  - Configurable via in-project config file;
-  - Extensible via plugins
-- A rich collection of official plugins integrating the best tools in the frontend ecosystem.
-- A full graphical user interface to create and manage Vue.js projects.
+- Estrutura de projeto interativo via `@vue/cli`.
+- Configuração zero de prototipagem rápida via `@vue/cli` +` @vue/cli-service-global`.
+- Uma dependência de tempo de execução (`@vue/cli-service`) que é:
+   - Atualizável;
+   - Construído em cima de webpack, com padrões sensatos;
+   - Configurável via arquivo de configuração no projeto;
+   - Extensível via plugins
+- Uma rica coleção de plugins oficiais que integram as melhores ferramentas no ecossistema frontend.
+- Uma interface gráfica completa para criar e gerenciar projetos Vue.js.
 
-Vue CLI aims to be the standard tooling baseline for the Vue ecosystem. It ensures the various build tools work smoothly together with sensible defaults so you can focus on writing your app instead of spending days wrangling with configurations. At the same time, it still offers the flexibility to tweak the config of each tool without the need for ejecting.
+O Vue CLI pretende ser a linha de base de ferramentas padrão para o ecossistema Vue. Ele garante que as várias ferramentas de criação funcionem sem problemas, juntamente com padrões sensatos, para que você possa se concentrar em escrever seu aplicativo em vez de gastar dias com configurações. Ao mesmo tempo, ainda oferece a flexibilidade de ajustar a configuração de cada ferramenta sem a necessidade de ejetar.
 
-## Components of the System
+## Componentes do Sistema
 
-There are several moving parts of Vue CLI - if you look at the [source code](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue), you will find that it is a monorepo containing a number of separately published packages.
+Existem várias partes móveis do Vue CLI - se você olhar o [código-fonte](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue), você verá que é um monorepo contendo um número de pacotes publicados separadamente.
 
 ### CLI
 
-The CLI (`@vue/cli`) is a globally installed npm package and provides the `vue` command in your terminal. It provides the ability to quickly scaffold a new project via `vue create`, or instantly prototype new ideas via `vue serve`. You can also manage your projects using a graphical user interface via `vue ui`. We will walk through what it can do in the next few sections of the guide.
+O CLI (`@ vue/cli`) é um pacote npm instalado globalmente e fornece o comando `vue` no seu terminal. Ele fornece a capacidade de organizar rapidamente um novo projeto através do `vue create`, ou prototipar novas idéias instantaneamente via `vue serve`. Você também pode gerenciar seus projetos usando uma interface gráfica do usuário via `vue ui`. Vamos percorrer o que ele pode fazer nas próximas seções do guia.
 
 ### CLI Service
 
-The CLI Service (`@vue/cli-service`) is a development dependency. It's an npm package installed locally into every project created by `@vue/cli`.
+O CLI Service (`@ vue/cli-service`) é uma dependência de desenvolvimento. É um pacote npm instalado localmente em todos os projetos criados pelo `@vue/cli`.
 
-The CLI Service is built on top of [webpack](http://webpack.js.org/) and [webpack-dev-server](https://github.com/webpack/webpack-dev-server). It contains:
+O CLI Service é construído em cima de [webpack](http://webpack.js.org/) e [webpack-dev-server](https://github.com/webpack/webpack-dev-server). Contém:
 
-- The core service that loads other CLI Plugins;
-- An internal webpack config that is optimized for most apps;
-- The `vue-cli-service` binary inside the project, which comes with the basic `serve`, `build` and `inspect` commands.
+- O serviço principal que carrega outros plugins CLI;
+- Uma configuração interna do webpack que é otimizada para a maioria dos aplicativos;
+- O binário `vue-cli-service` dentro do projeto, que vem com os comandos básicos `serve`, `build` e `inspect`.
 
-If you are familiar with [create-react-app](https://github.com/facebookincubator/create-react-app), `@vue/cli-service` is roughly the equivalent of `react-scripts`, although the feature set is different.
+Se você estiver familiarizado com o [create-react-app](https://github.com/facebookincubator/create-react-app), o `@vue/cli-service` é praticamente o equivalente de `react-scripts`, embora o conjunto de recursos é diferente.
 
-The section on [CLI Service](./cli-service.md) covers its detailed usage.
+A seção sobre [CLI Service](./cli-service.md) cobre seu uso detalhado.
 
 ### CLI Plugins
 
-CLI Plugins are npm packages that provide optional features to your Vue CLI projects, such as Babel/TypeScript transpilation, ESLint integration, unit testing, and end-to-end testing. It's easy to spot a Vue CLI plugin as their names start with either `@vue/cli-plugin-` (for built-in plugins) or `vue-cli-plugin-` (for community plugins).
+Os Plug-ins CLI são pacotes npm que fornecem recursos opcionais para seus projetos Vue CLI, como transpilação Babel/TypeScript, integração ESLint, teste de unidade e teste de ponta a ponta. É fácil identificar um plugin Vue CLI como seus nomes começam com `@vue/cli-plugin-` (para plug-ins embutidos) ou `vue-cli-plugin-` (para plugins da comunidade).
 
-When you run the `vue-cli-service` binary inside your project, it automatically resolves and loads all CLI Plugins listed in your project's `package.json`.
+Quando você executa o binário `vue-cli-service` dentro do seu projeto, ele automaticamente resolve e carrega todos os Plugins CLI listados no `package.json` do seu projeto.
 
-Plugins can be included as part of your project creation process or added into the project later. They can also be grouped into reusable presets. We will discuss these in more depth in the [Plugins and Presets](./plugins-and-presets.md) section.
+Plugins podem ser incluídos como parte do processo de criação do projeto ou adicionados ao projeto posteriormente. Eles também podem ser agrupados em predefinições reutilizáveis. Discutiremos isso com mais profundidade na seção [Plugins e Presets](./ plugins-and-presets.md).

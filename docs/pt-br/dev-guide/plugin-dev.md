@@ -316,7 +316,7 @@ Para que um plugin CLI possa ser usado por outros desenvolvedores, ele deve ser 
 
 ## Nota sobre o desenvolvimento de plugins básicos
 
-::: Dica
+::: tip Nota
 Esta seção só se aplica se você estiver trabalhando em um plugin embutido dentro do próprio repositório `vuejs/vue-cli`.
 :::
 
