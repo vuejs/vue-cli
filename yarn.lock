@@ -6352,11 +6352,11 @@ graphql-type-json@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/graphql-type-json/-/graphql-type-json-0.2.1.tgz#d2c177e2f1b17d87f81072cd05311c0754baa420"
 
-graphql@^14.0.2:
-  version "14.0.2"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.0.2.tgz#7dded337a4c3fd2d075692323384034b357f5650"
+graphql@^0.13.2:
+  version "0.13.2"
+  resolved "http://registry.npmjs.org/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
   dependencies:
-    iterall "^1.2.2"
+    iterall "^1.2.1"
 
 gray-matter@^2.0.0:
   version "2.1.1"
@@ -7435,7 +7435,7 @@ items@2.x.x:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
 
-iterall@^1.1.3, iterall@^1.2.1, iterall@^1.2.2:
+iterall@^1.1.3, iterall@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
 
@@ -13094,9 +13094,9 @@ vue-class-component@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.2.0.tgz#7adb1daa9a868c75f30f97f33f4f1b94aee62089"
 
-vue-cli-plugin-apollo@^0.16.3:
-  version "0.16.5"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.16.5.tgz#4844f6eebcde0a64afd96e32374d09fae6147ad3"
+vue-cli-plugin-apollo@^0.16.6:
+  version "0.16.6"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-apollo/-/vue-cli-plugin-apollo-0.16.6.tgz#a6207bb0ac7b8b3d40f3616198080953ad986231"
   dependencies:
     apollo-cache-inmemory "^1.2.10"
     apollo-client "^2.4.2"
@@ -13112,7 +13112,7 @@ vue-cli-plugin-apollo@^0.16.3:
     deepmerge "^2.1.1"
     esm "^3.0.84"
     express "^4.16.3"
-    graphql "^14.0.2"
+    graphql "^0.13.2"
     graphql-subscriptions "^1.0.0"
     nodemon "^1.18.4"
     subscriptions-transport-ws "^0.9.15"
