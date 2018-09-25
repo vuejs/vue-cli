@@ -32,7 +32,7 @@ module.exports = {
 - Type: `string`
 - Default: `'/'`
 
-  部署应用时的基本 URL。用法和 webpack 本身的 `output.publicPath` 一致，但是 Vue CLI 在一些其他地方也需要用到这个值，所以**请始终使用 `baseUrl` 而不要直接修改 webpack 的 `output.publicPath`**。
+  部署应用包时的基本 URL。用法和 webpack 本身的 `output.publicPath` 一致，但是 Vue CLI 在一些其他地方也需要用到这个值，所以**请始终使用 `baseUrl` 而不要直接修改 webpack 的 `output.publicPath`**。
 
   默认情况下，Vue CLI 会假设你的应用是被部署在一个域名的根路径上，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `baseUrl` 为 `/my-app/`。
 
@@ -198,7 +198,7 @@ module.exports = {
 
   需要注意的是该选项仅影响由 `html-webpack-plugin` 在构建时注入的标签 - 直接写在模版 (`public/index.html`) 中的标签不受影响。
 
-  更多细节可查阅: [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
+  更多细节可查阅: [CORS settings attributes](https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_settings_attributes)
 
 ### integrity
 

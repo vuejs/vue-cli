@@ -107,7 +107,6 @@ export default {
           id: this.id
         }
       },
-      manual: true,
       async result ({ data, loading }) {
         if (!this.$_init && !loading && data && data.configuration) {
           this.$_init = true
@@ -115,7 +114,6 @@ export default {
             obj[tab.id] = false
             return obj
           }, {})
-          this.configuration = data.configuration
           await this.$nextTick()
           this.currentTab = data.configuration.tabs[0].id
         }

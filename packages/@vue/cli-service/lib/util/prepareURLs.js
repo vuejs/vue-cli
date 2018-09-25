@@ -54,6 +54,8 @@ module.exports = function prepareUrls (protocol, host, port, pathname = '/') {
     }
   } else {
     prettyHost = host
+    lanUrlForConfig = host
+    lanUrlForTerminal = prettyPrintUrl(lanUrlForConfig)
   }
   const localUrlForTerminal = prettyPrintUrl(prettyHost)
   const localUrlForBrowser = formatUrl(prettyHost)

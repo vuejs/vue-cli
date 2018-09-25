@@ -97,7 +97,7 @@ api.describeConfig({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](./ui-info.md#logo))。
 
 ### 配置文件
 
@@ -364,7 +364,7 @@ api.describeTask({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](./ui-info.md#logo))。
 
 ### 任务参数
 
@@ -980,7 +980,7 @@ IPC 就是进程间通信 (Inter-Process Communication) 的缩写。该系统允
 
 > 为了在 webpack 仪表盘 UI 上展示数据，`@vue/cli-service` 的 `serve` 和 `build` 命令会在 `--dashboard` 参数被传入时向 cli-ui Node.js 服务器发送 IPC 消息。
 
-在进程代码中 (可以是一个 webpack 插件或一个 Node.js 的任务脚步)，你可以使用 `@vue/cli-shared-utils` 中的 `IpcMessenger` 类：
+在进程代码中 (可以是一个 webpack 插件或一个 Node.js 的任务脚本)，你可以使用 `@vue/cli-shared-utils` 中的 `IpcMessenger` 类：
 
 ```js
 const { IpcMessenger } = require('@vue/cli-shared-utils')
