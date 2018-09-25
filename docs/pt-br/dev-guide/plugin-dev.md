@@ -2,80 +2,80 @@
 sidebarDepth: 3
 ---
 
-# Plugin Development Guide
+# Guia de desenvolvimento de plug-ins
 
-## Core Concepts
+## Conceitos Básicos
 
-There are two major parts of the system:
+Existem duas partes principais do sistema:
 
-- `@vue/cli`: globally installed, exposes the `vue create <app>` command;
-- `@vue/cli-service`: locally installed, exposes the `vue-cli-service` commands.
+- `@vue/cli`: instalado globalmente, expõe o comando `vue create <app>`;
+- `@vue/cli-service`: instalado localmente, expõe os comandos `vue-cli-service`.
 
-Both utilize a plugin-based architecture.
+Ambos utilizam uma arquitetura baseada em plugins.
 
 ### Creator
 
-[Creator][creator-class] is the class created when invoking `vue create <app>`. Responsible for prompting for preferences, invoking generators and installing dependencies.
-
+[Creator][creator-class] é a classe criada ao invocar o `vue create <app>`. Responsável por solicitar preferências, invocar generators e instalar dependências.
 ### Service
 
-[Service][service-class] is the class created when invoking `vue-cli-service <command> [...args]`. Responsible for managing the internal webpack configuration, and exposes commands for serving and building the project.
 
-### CLI Plugin
+[Service][service-class] é a classe criada ao invocar `vue-cli-service <command> [...args]`. Responsável pelo gerenciamento da configuração interna do webpack, e expõe comandos para servir e construir o projeto.
 
-A CLI plugin is an npm package that can add additional features to a `@vue/cli` project. It should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a [Generator](#generator) and a [Prompt File](#prompts-for-3rd-party-plugins).
+### Plugin CLI
 
-A typical CLI plugin's folder structure looks like the following:
+Um plugin CLI é um pacote npm que pode adicionar recursos adicionais a um projeto `@vue/cli`. Ele deve sempre conter um [Plugin de serviço](#service-plugin) como sua exportação principal, e pode opcionalmente conter um [Generator](#generator) e um [Arquivo de Prompt](#prompts-for-3rd-party-plugins).
+
+A estrutura de pastas típica de um plugin CLI se parece com o seguinte:
 
 ```
 .
 ├── README.md
-├── generator.js  # generator (optional)
-├── prompts.js    # prompts file (optional)
-├── index.js      # service plugin
+├── generator.js  # generator (opcional)
+├── prompts.js    # arquivos de prompt (opcional)
+├── index.js      # plugin de serviço
 └── package.json
 ```
 
 ### Service Plugin
 
-Service plugins are loaded automatically when a Service instance is created - i.e. every time the `vue-cli-service` command is invoked inside a project.
+Os plugins de serviço são carregados automaticamente quando uma instância de Serviço é criada - ou seja, toda vez que o comando `vue-cli-service` é chamado dentro de um projeto.
 
-Note the concept of a "service plugin" we are discussing here is narrower than that of a "CLI plugin", which is published as an npm package. The former only refers to a module that will be loaded by `@vue/cli-service` when it's initialized, and is usually a part of the latter.
+Note que o conceito de um "plugin de serviço" que estamos discutindo aqui é mais restrito que o de um "plugin CLI", que é publicado como um pacote npm. O primeiro se refere apenas a um módulo que será carregado pelo `@vue/cli-service` quando for inicializado e geralmente é uma parte dele.
 
-In addition, `@vue/cli-service`'s [built-in commands][commands] and [config modules][config] are also all implemented as service plugins.
+Além disso, os [comandos incorporados][@vue/cli-service] do `@ vue/cli-service] e [config modules][config] também são implementados como plugins de serviço.
 
-A service plugin should export a function which receives two arguments:
+Um plugin de serviço deve exportar uma função que recebe dois argumentos:
 
-- A [PluginAPI][plugin-api] instance
+- Uma instância de [PluginAPI][plugin-api]
 
-- An object containing project local options specified in `vue.config.js`, or in the `"vue"` field in `package.json`.
+- Um objeto contendo opções locais do projeto especificadas em `vue.config.js`, ou no campo` "vue" `em` package.json`.
 
-The API allows service plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`. Example:
+A API permite que plugins de serviço estendam/modifiquem a configuração interna do webpack para diferentes ambientes e injetem comandos adicionais no `vue-cli-service`. Exemplo:
 
 ``` js
 module.exports = (api, projectOptions) => {
   api.chainWebpack(webpackConfig => {
-    // modify webpack config with webpack-chain
+    // modificar a configuração do webpack com a webpack-chain
   })
 
   api.configureWebpack(webpackConfig => {
-    // modify webpack config
-    // or return object to be merged with webpack-merge
+    // modificar as configurações do webpack
+    // ou retornar o objeto a ser mesclado com o webpack-merge
   })
 
   api.registerCommand('test', args => {
-    // register `vue-cli-service test`
+    // registrar o comando `vue-cli-service test`
   })
 }
 ```
 
-#### Specifying Mode for Commands
+#### Especificando o modo para comandos
 
-> Note: the way plugins set modes has been changed in beta.10.
+> Nota: o modo como os modos de configuração dos plugins foram alterados no beta.10.
 
-If a plugin-registered command needs to run in a specific default mode,
-the plugin needs to expose it via `module.exports.defaultModes` in the form
-of `{ [commandName]: mode }`:
+Se um comando plugin-register precisar ser executado em um modo padrão específico,
+o plugin precisa expô-lo via `module.exports.defaultModes` no formulário
+de `{[commandName]: mode}`:
 
 ``` js
 module.exports = api => {
@@ -89,11 +89,11 @@ module.exports.defaultModes = {
 }
 ```
 
-This is because the command's expected mode needs to be known before loading environment variables, which in turn needs to happen before loading user options / applying the plugins.
+Isso ocorre porque o modo esperado do comando precisa ser conhecido antes de carregar as variáveis de ambiente, o que, por sua vez, precisa acontecer antes de carregar as opções do usuário/aplicar os plug-ins.
 
-#### Resolving Webpack Config in Plugins
+#### Decidindo o Webpack Config nos Plugins
 
-A plugin can retrieve the resolved webpack config by calling `api.resolveWebpackConfig()`. Every call generates a fresh webpack config which can be further mutated as needed:
+Um plugin pode recuperar a configuração resolvida do webpack chamando o `api.resolveWebpackConfig()`. Cada chamada gera uma configuração nova do webpack que pode ser mutada conforme necessário:
 
 ``` js
 module.exports = api => {
@@ -101,33 +101,33 @@ module.exports = api => {
     const configA = api.resolveWebpackConfig()
     const configB = api.resolveWebpackConfig()
 
-    // mutate configA and configB for different purposes...
+    // mude o configA e o configB para finalidades diferentes...
   })
 }
 
-// make sure to specify the default mode for correct env variables
+// Certifique-se de especificar o modo padrão para as variáveis de env corretas
 module.exports.defaultModes = {
   'my-build': 'production'
 }
 ```
 
-Alternatively, a plugin can also obtain a fresh [chainable config](https://github.com/mozilla-neutrino/webpack-chain) by calling `api.resolveChainableWebpackConfig()`:
+Alternativamente, um plugin também pode obter uma nova [configuração de cadeia](https://github.com/mozilla-neutrino/webpack-chain) chamando `api.resolveChainableWebpackConfig()`:
 
 ``` js
 api.registerCommand('my-build', args => {
   const configA = api.resolveChainableWebpackConfig()
   const configB = api.resolveChainableWebpackConfig()
 
-  // chain-modify configA and configB for different purposes...
+  // modifique configA e configB em cadeia para diferentes propósitos...
 
   const finalConfigA = configA.toConfig()
   const finalConfigB = configB.toConfig()
 })
 ```
 
-#### Custom Options for 3rd Party Plugins
+#### Opções personalizadas para plugins de terceiros
 
-The exports from `vue.config.js` will be [validated against a schema](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/options.js#L3) to avoid typos and wrong config values. However, a 3rd party plugin can still allow the user to configure its behavior via the `pluginOptions` field. For example, with the following `vue.config.js`:
+As exportações do `vue.config.js` serão [validadas em um esquema](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/options.js#L3) para evitar erros de digitação e valores incorretos de configuração. No entanto, um plugin de terceiros ainda pode permitir que o usuário configure seu comportamento através do campo `pluginOptions`. Por exemplo, com o seguinte `vue.config.js`:
 
 ``` js
 module.exports = {
@@ -137,23 +137,23 @@ module.exports = {
 }
 ```
 
-The 3rd party plugin can read `projectOptions.pluginOptions.foo` to determine conditional configurations.
+O plugin de terceiros pode ler `projectOptions.pluginOptions.foo` para determinar configurações condicionais.
 
 ### Generator
 
-A CLI plugin published as a package can contain a `generator.js` or `generator/index.js` file. The generator inside a plugin will be invoked in two possible scenarios:
+O plugin CLI publicado como um pacote pode conter um arquivo `generator.js` ou `generator/index.js`. O generator dentro de um plugin será invocado em dois cenários possíveis:
 
-- During a project's initial creation, if the CLI plugin is installed as part of the project creation preset.
+- Durante a criação inicial de um projeto, se o plug-in da CLI estiver instalado como parte da predefinição de criação do projeto.
 
-- When the plugin is installed after project's creation and invoked individually via `vue invoke`.
+- Quando o plugin é instalado após a criação do projeto e invocado individualmente através do `vue invoke`.
 
-The [GeneratorAPI][generator-api] allows a generator to inject additional dependencies or fields into `package.json` and add files to the project.
+O [GeneratorAPI][generator-api] permite que um generator injete dependências ou campos adicionais no `package.json` e adicione arquivos ao projeto.
 
-A generator should export a function which receives three arguments:
+Um Generator deve exportar uma função que recebe três argumentos:
 
-1. A `GeneratorAPI` instance;
+1. Uma instância do `GeneratorAPI`;
 
-2. The generator options for this plugin. These options are resolved during the prompt phase of project creation, or loaded from a saved preset in `~/.vuerc`. For example, if the saved `~/.vuerc` looks like this:
+2. As opções do gerador para este plugin. Essas opções são resolvidas durante a fase de prompt da criação do projeto ou carregadas a partir de uma predefinição salva em `~/.vuerc`. Por exemplo, se o `~/.vuerc` salvo se parece com isto:
 
     ``` json
     {
@@ -167,37 +167,37 @@ A generator should export a function which receives three arguments:
     }
     ```
 
-    And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
+    E se o usuário criar um projeto usando a predefinição `foo`, o gerador de` @vue/cli-plugin-foo` receberá `{option: 'bar'}` como seu segundo argumento.
 
-    For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd Party Plugins](#prompts-for-3rd-party-plugins)).
+    Para um plugin de terceiros, as opções serão resolvidas a partir dos prompts ou argumentos de linha de comando quando o usuário executar o `vue invoke` (consulte [Prompts para plug-ins de terceiros](#prompts-for-3rd-party-plugins)).
 
-3. The entire preset (`presets.foo`) will be passed as the third argument.
+3. O preset inteiro (`presets.foo`) será passado como o terceiro argumento.
 
 **Example:**
 
 ``` js
 module.exports = (api, options, rootOptions) => {
-  // modify package.json fields
+  // modificar campos package.json
   api.extendPackage({
     scripts: {
       test: 'vue-cli-service test'
     }
   })
 
-  // copy and render all files in ./template with ejs
+  // copie e renderize todos os arquivos em ./template com ejs
   api.render('./template')
 
   if (options.foo) {
-    // conditionally generate files
+    // gerar arquivos condicionalmente
   }
 }
 ```
 
-#### Generator Templating
+#### Templating do Generator
 
-When you call `api.render('./template')`, the generator will render files in `./template` (resolved relative to the generator file) with [EJS](https://github.com/mde/ejs).
+Quando você chama `api.render ('./template')`, o gerador irá renderizar os arquivos em `./Template` (resolvido em relação ao arquivo gerador) com [EJS](https://github.com/mde/ejs).
 
-In addition, you can inherit and replace parts of an existing template file (even from another package) using YAML front-matter:
+Além disso, você pode herdar e substituir partes de um arquivo de modelo existente (mesmo de outro pacote) usando o YAML front-matter:
 
 ``` ejs
 ---
@@ -207,12 +207,12 @@ replace: !!js/regexp /<script>[^]*?<\/script>/
 
 <script>
 export default {
-  // Replace default script
+  // Substituir script padrão
 }
 </script>
 ```
 
-It's also possible to do multiple replaces, although you will need to wrap your replace strings within `<%# REPLACE %>` and `<%# END_REPLACE %>` blocks:
+Também é possível fazer vários substituições, embora você precise incluir as strings de substituição nos blocos `<% # REPLACE %>` e `<% # END_REPLACE %>`:
 
 ``` ejs
 ---
@@ -223,37 +223,37 @@ replace:
 ---
 
 <%# REPLACE %>
-Replace Welcome Message
+Substituir mensagem de boas-vindas
 <%# END_REPLACE %>
 
 <%# REPLACE %>
 <script>
 export default {
-  // Replace default script
+  // Substituir script padrão
 }
 </script>
 <%# END_REPLACE %>
 ```
 
-#### Filename edge cases
+#### Casos de borda de nome de arquivo
 
-If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
+Se você deseja renderizar um arquivo de modelo que começa com um ponto (ou seja, `.env`), você terá que seguir uma convenção de nomenclatura específica, já que os arquivos pontuáveis são ignorados ao publicar seu plug-in no npm:
 ```
-# dotfile templates have to use an underscore instead of the dot:
+# templates dotfile tem que usar um sublinhado ao invés do ponto:
 
 /generator/template/_env
 
-# When calling api.render('./template'), this will be rendered in the project folder as:
+# Ao chamar api.render ('./template'), isso será renderizado na pasta do projeto como:
 
 .env
 ```
-Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
+Consequentemente, isso significa que você também deve seguir uma convenção de nomenclatura especial se desejar renderizar o arquivo cujo nome realmente começa com um sublinhado:
 ```
-# such templates have to use two underscores instead of the dot:
+# esses modelos têm que usar dois sublinhados em vez do ponto:
 
 /generator/template/__variables.scss
 
-# When calling api.render('./template'), this will be rendered in the project folder as:
+# Ao chamar api.render ('./template'), isso será renderizado na pasta do projeto como:
 
 _variables.scss
 ```
@@ -261,31 +261,31 @@ _variables.scss
 
 ### Prompts
 
-#### Prompts for Built-in Plugins
+#### Prompts para Plug-ins internos
 
-Only built-in plugins have the ability to customize the initial prompts when creating a new project, and the prompt modules are located [inside the `@vue/cli` package][prompt-modules].
+Somente plug-ins internos têm a capacidade de personalizar os prompts iniciais ao criar um novo projeto, e os módulos de prompt estão localizados [dentro do pacote `@ vue/cli`][prompt-modules].
 
-A prompt module should export a function that receives a [PromptModuleAPI][prompt-api] instance. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood:
+Um módulo de prompt deve exportar uma função que recebe uma instância [PromptModuleAPI][prompt-api]. Os prompts são apresentados usando [Inquirer](https://github.com/SBoudrias/Inquirer.js) sob o capô:
 
 ``` js
 module.exports = api => {
-  // a feature object should be a valid inquirer choice object
+  // um objeto de recurso deve ser um objeto de escolha de um pesquisador válido
   api.injectFeature({
     name: 'Some great feature',
     value: 'my-feature'
   })
 
-  // injectPrompt expects a valid inquirer prompt object
+  // injectPrompt espera um objeto de prompt de consulta válido
   api.injectPrompt({
     name: 'someFlag',
-    // make sure your prompt only shows up if user has picked your feature
+    // certifique-se de que o seu prompt só apareça se o usuário tiver selecionado seu recurso
     when: answers => answers.features.include('my-feature'),
     message: 'Do you want to turn on flag foo?',
     type: 'confirm'
   })
 
-  // when all prompts are done, inject your plugin into the options that
-  // will be passed on to Generators
+  // quando todos os prompts estiverem prontos, injete seu plugin nas opções que
+  // será repassado para os Geradores
   api.onPromptComplete((answers, options) => {
     if (answers.features.includes('my-feature')) {
       options.plugins['vue-cli-plugin-my-feature'] = {
@@ -296,35 +296,35 @@ module.exports = api => {
 }
 ```
 
-#### Prompts for 3rd Party Plugins
+#### Prompts para Plug-ins de terceiros
 
-3rd party plugins are typically installed manually after a project is already created, and the user will initialize the plugin by calling `vue invoke`. If the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. The resolved answers object will be passed to the plugin's generator as options.
+Plugins de terceiros são tipicamente instalados manualmente depois que um projeto já é criado, e o usuário inicializará o plugin chamando o `vue invoke`. Se o plugin contiver um `prompts.js` em seu diretório raiz, ele será usado durante a invocação. O arquivo deve exportar um array de [Questions](https://github.com/SBoudrias/Inquirer.js#question) que será manipulada pelo Inquirer.js. O objeto de respostas resolvidas será passado para o gerador do plugin como opções.
 
-Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
+Como alternativa, o usuário pode ignorar os prompts e inicializar diretamente o plug-in passando opções por meio da linha de comando, por exemplo:
 
 ``` bash
 vue invoke my-plugin --mode awesome
 ```
 
-## Distributing the Plugin
+## Distribuindo o Plugin
 
-For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
+Para que um plugin CLI possa ser usado por outros desenvolvedores, ele deve ser publicado no npm seguindo a convenção de nomes `vue-cli-plugin- <name>`. Seguir a convenção de nomes permite que seu plugin seja:
 
-- Discoverable by `@vue/cli-service`;
-- Discoverable by other developers via searching;
-- Installable via `vue add <name>` or `vue invoke <name>`.
+- Detectável por `@ vue/cli-service`;
+- Detectável por outros desenvolvedores através de pesquisa;
+- Instalável via `vue add <name>` ou `vue invoke <name>`.
 
-## Note on Development of Core Plugins
+## Nota sobre o desenvolvimento de plugins básicos
 
-::: tip Note
-This section only applies if you are working on a built-in plugin inside the `vuejs/vue-cli` repository itself.
+::: Dica
+Esta seção só se aplica se você estiver trabalhando em um plugin embutido dentro do próprio repositório `vuejs/vue-cli`.
 :::
 
-A plugin with a generator that injects additional dependencies other than packages in this repo (e.g. `chai` is injected by `@vue/cli-plugin-unit-mocha/generator/index.js`) should have those dependencies listed in its own `devDependencies` field. This ensures that:
+Um plugin com um gerador que injeta dependências adicionais além dos pacotes neste repositório (por exemplo, `chai` é injetado por `@vue/cli-plugin-unit-mocha/generator/index.js`) deve ter essas dependências listadas em seu próprio diretório. campo `devDependencies`. Isso garante que:
 
-1. the package always exist in this repo's root `node_modules` so that we don't have to reinstall them on every test.
+1. o pacote sempre existe na raiz deste repositório, node_modules, para que não tenhamos que reinstalá-lo em todos os testes.
 
-2. `yarn.lock` stays consistent so that CI can better use it for inferring caching behavior.
+2. `yarn.lock` permanece consistente para que o CI possa usá-lo melhor para inferir o comportamento do cache.
 
 [creator-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/Creator.js
 [service-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/Service.js
