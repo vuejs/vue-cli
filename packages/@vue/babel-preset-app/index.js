@@ -41,6 +41,7 @@ module.exports = (context, options = {}) => {
   const {
     polyfills: userPolyfills,
     loose = false,
+    debug = false,
     useBuiltIns = 'usage',
     modules = false,
     targets: rawTargets,
@@ -103,6 +104,7 @@ module.exports = (context, options = {}) => {
   const envOptions = {
     spec,
     loose,
+    debug,
     modules,
     targets,
     useBuiltIns,
