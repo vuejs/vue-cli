@@ -116,7 +116,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     if (!config.hasOwnProperty('target')) {
       console.log(
         chalk.red(
-          'When `proxy` in package.json is as an object, each `context` object must have a ' +
+          'When `proxy` in package.json is an object, each `context` object must have a ' +
             '`target` property specified as a url string'
         )
       )

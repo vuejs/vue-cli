@@ -199,7 +199,6 @@ export default {
 
   >>> .trigger
     .vue-ui-button
-      padding 0 !important
       .vue-ui-icon.right
         width 20px
         height @width
