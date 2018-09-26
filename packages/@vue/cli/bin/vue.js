@@ -115,7 +115,7 @@ program
 program
   .command('ui')
   .description('start and open the vue-cli ui')
-  .option('-h, --host <host>', 'Host used for the UI server (default: localhost)')
+  .option('-H, --host <host>', 'Host used for the UI server (default: localhost)')
   .option('-p, --port <port>', 'Port used for the UI server (by default search for available port)')
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
