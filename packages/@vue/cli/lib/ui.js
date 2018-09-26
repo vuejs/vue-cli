@@ -7,7 +7,10 @@ async function ui (options = {}, context = process.cwd()) {
   if (!port) {
     port = await portfinder.getPortPromise()
   }
-
+  let host = options.host
+  if (!host) {
+    host = 'localhost'
+  }
   // Config
   process.env.VUE_APP_CLI_UI_URL = ''
 
@@ -29,6 +32,7 @@ async function ui (options = {}, context = process.cwd()) {
 
   const opts = {
     port,
+    host,
     graphqlPath: '/graphql',
     subscriptionsPath: '/graphql',
     enableMocks: false,
@@ -55,7 +59,7 @@ async function ui (options = {}, context = process.cwd()) {
     }
 
     // Open browser
-    const url = `http://localhost:${port}`
+    const url = `http://${host}:${port}`
     if (!options.quiet) log(`🌠  Ready on ${url}`)
     if (options.headless) {
       console.log(port)
