@@ -1,79 +1,79 @@
-# Creating a Project
+# Criando um Projeto
 
 ## vue create
 
-To create a new project, run:
+Para criar um novo projeto, execute:
 
 ``` bash
 vue create hello-world
 ```
 
-::: warning
-If you are on Windows using Git Bash with minTTY, the interactive prompts will not work. You must launch the command as `winpty vue.cmd create hello-world`.
+::: warning Atenção
+Se você estiver no Windows usando o Git Bash com o minTTY, os prompts interativos não funcionarão. Você deve iniciar o comando como `winpty vue.cmd create hello-world`.
 :::
 
-You will be prompted to pick a preset. You can either choose the default preset which comes with a basic Babel + ESLint setup, or select "Manually select features" to pick the features you need.
+Você será solicitado a escolher uma predefinição. Você pode escolher a predefinição padrão que vem com uma configuração básica do Babel + ESLint ou selecionar "Selecionar recursos manualmente" para selecionar os recursos necessários.
 
-![CLI preview](/cli-new-project.png)
+![Visualização do CLI](/cli-new-project.png)
 
-The default setup is great for quickly prototyping a new project, while the manual setup provides more options that are likely needed for more production-oriented projects.
+A configuração padrão é ótima para prototipar rapidamente um novo projeto, enquanto a configuração manual fornece mais opções que provavelmente são necessárias para mais projetos orientados à produção.
 
-![CLI preview](/cli-select-features.png)
+![Visualização do CLI](/cli-select-features.png)
 
-If you chose to manually select features, at the end of the prompts you also have the option to save your selections as a preset so that you can reuse it in the future. We will discuss presets and plugins in the next section.
+Se você optar por selecionar recursos manualmente, no final dos prompts, também terá a opção de salvar suas seleções como uma predefinição para poder reutilizá-las no futuro. Discutiremos predefinições e plugins na próxima seção.
 
 ::: tip ~/.vuerc
-Saved presets will be stored in a JSON file named `.vuerc` in your user home directory. If you wish to modify saved presets / options, you can do so by editing this file.
+As predefinições salvas serão armazenadas em um arquivo JSON chamado `.vuerc` no diretório inicial do usuário. Se você deseja modificar predefinições/opções salvas, pode fazê-lo editando este arquivo.
 
-During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npm.taobao.org/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
+Durante o processo de criação do projeto, você também pode ser solicitado a selecionar um gerenciador de pacotes preferencial ou usar o [espelho de registro Taobao npm](https://npm.taobao.org/) para uma instalação de dependência mais rápida. Suas escolhas também serão salvas em `~/.vuerc`.
 :::
 
-The `vue create` command has a number of options and you can explore them all by running:
+O comando `vue create` possui várias opções e você pode explorá-las todas executando:
 
 ``` bash
 vue create --help
 ```
 
 ```
-Usage: create [options] <app-name>
+Uso: create [opções] <app-name>
 
-create a new project powered by vue-cli-service
+crie um novo projeto desenvolvido pelo vue-cli-service
 
 
-Options:
+Opções:
 
-  -p, --preset <presetName>       Skip prompts and use saved or remote preset
-  -d, --default                   Skip prompts and use default preset
-  -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
-  -m, --packageManager <command>  Use specified npm client when installing dependencies
-  -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
-  -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
-  -n, --no-git                    Skip git initialization
-  -f, --force                     Overwrite target directory if it exists
-  -c, --clone                     Use git clone when fetching remote preset
-  -x, --proxy                     Use specified proxy when creating project   
-  -b, --bare                      Scaffold project without beginner instructions
-  -h, --help                      Output usage information
+  -p, --preset <presetName>       Ignore os prompts e use a predefinição salva ou remota
+   -d, --default                  Ignora os prompts e usa a predefinição padrão
+   -i, --inlinePreset <json>      Ignora os prompts e usa uma string JSON como predefinida
+   -m, --packageManager <command> Usa o cliente npm especificado ao instalar dependências
+   -r, --registry <url>           Use o registro npm especificado ao instalar dependências (somente para npm)
+   -g, --git [message | false]    Força / ignora a inicialização do git, opcionalmente especifica a mensagem de commit inicial
+   -n, --no-git                   Ignorar a inicialização do git
+   -f, --force                    Sobrescrever o diretório de destino, se existir
+   -c, --clone                    Usa o git clone ao buscar a predefinição remota
+   -x, --proxy                    Use o proxy especificado ao criar o projeto
+   -b, --bare                     Projeto Scaffold sem instruções para iniciantes
+   -h, --help                     Informações de uso de saída
 ```
 
-## Using the GUI
+## Usando a GUI
 
-You can also create and manage projects using a graphical interface with the `vue ui` command:
+Você também pode criar e gerenciar projetos usando uma interface gráfica com o comando `vue ui`:
 
 ``` bash
 vue ui
 ```
 
-The above command will open a browser window with a GUI that guides you through the project creation process.
+O comando acima abrirá uma janela do navegador com uma GUI que o guiará pelo processo de criação do projeto.
 
-![UI preview](/ui-new-project.png)
+![Visualização da interface do usuário](/ui-new-project.png)
 
-## Pulling 2.x Templates (Legacy)
+## Puxando Modelos 2.x (Legado)
 
-Vue CLI 3 uses the same `vue` binary, so it overwrites Vue CLI 2 (`vue-cli`). If you still need the legacy `vue init` functionality, you can install a global bridge:
+O Vue CLI 3 usa o mesmo binário `vue`, então ele sobrescreve o Vue CLI 2 (`vue-cli`). Se você ainda precisa da funcionalidade legada `vue init`, você pode instalar uma ponte global:
 
 ``` bash
 npm install -g @vue/cli-init
-# vue init now works exactly the same as vue-cli@2.x
+# O vue init agora funciona exatamente da mesma maneira que vue-cli@2.x
 vue init webpack my-project
 ```

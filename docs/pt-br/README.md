@@ -1,8 +1,8 @@
 ---
 home: true
-heroImage: /logo.png
+heroImage: /favicon.png
 actionText: Começar →
-actionLink: /guide/
+actionLink: /pt-br/guide/
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
 

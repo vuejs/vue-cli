@@ -1,10 +1,10 @@
 # CLI Service
 
-## Using the Binary
+## Usando o Binário
 
-Inside a Vue CLI project, `@vue/cli-service` installs a binary named `vue-cli-service`. You can access the binary directly as `vue-cli-service` in npm scripts, or as `./node_modules/.bin/vue-cli-service` from the terminal.
+Dentro de um projeto Vue CLI, o `@vue/cli-service` instala um binário chamado `vue-cli-service`. Você pode acessar o binário diretamente como `vue-cli-service` em scripts npm, ou como `./node_modules/.bin/vue-cli-service` do terminal.
 
-This is what you will see in the `package.json` of a project using the default preset:
+Isto é o que você verá no `package.json` de um projeto usando a predefinição padrão:
 
 ``` json
 {
@@ -15,110 +15,110 @@ This is what you will see in the `package.json` of a project using the default p
 }
 ```
 
-You can invoke these scripts using either npm or Yarn:
+Você pode invocar esses scripts usando npm ou Yarn:
 
 ``` bash
 npm run serve
-# OR
+# OU
 yarn serve
 ```
 
-If you have [npx](https://github.com/zkat/npx) available (should be bundled with an up-to-date version of npm), you can also invoke the binary directly with:
+Se você tem [npx](https://github.com/zkat/npx) disponível (deve ser empacotado com uma versão atualizada do npm), você também pode invocar o binário diretamente com:
 
 ``` bash
 npx vue-cli-service serve
 ```
 
-::: tip
-You can run scripts with additional features using the GUI with the `vue ui` command.
+::: tip Dica
+Você pode executar scripts com recursos adicionais usando a GUI com o comando `vue ui`.
 :::
 
-Here is the Webpack Analyzer from the GUI in action:
+Aqui está o Webpack Analyzer da GUI em ação:
 
 ![UI Webpack Analyzer](/ui-analyzer.png)
 
 ## vue-cli-service serve
 
 ```
-Usage: vue-cli-service serve [options] [entry]
+Uso: vue-cli-service serve [opções] [entrada]
 
-Options:
+Opções:
 
-  --open    open browser on server start
-  --copy    copy url to clipboard on server start
-  --mode    specify env mode (default: development)
-  --host    specify host (default: 0.0.0.0)
-  --port    specify port (default: 8080)
-  --https   use https (default: false)
+  --open    abre o navegador no arranque do servidor
+  --copy    copia a url para a área de transferência no arranque do servidor
+  --mode    especifica o modo de ambiente (padrão: desenvolvimento)
+  --host    especifica o host (padrão: 0.0.0.0)
+  --port    especifica a porta (padrão: 8080)
+  --https   uso de https (padrão: false)
 ```
 
-The `vue-cli-service serve` command starts a dev server (based on [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) that comes with Hot-Module-Replacement (HMR) working out of the box.
+O comando `vue-cli-service serve` inicia um servidor dev (baseado no [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) que vem com Hot-Module-Replacement (HMR) trabalhando fora da caixa.
 
-In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
+Além dos flags da linha de comando, você também pode configurar o servidor dev usando o campo [devServer](../config/#devserver) em `vue.config.js`.
 
 ## vue-cli-service build
 
 ```
-Usage: vue-cli-service build [options] [entry|pattern]
+Uso: vue-cli-service build [opções] [entrada|padrão]
 
-Options:
+Opções:
 
-  --mode        specify env mode (default: production)
-  --dest        specify output directory (default: dist)
-  --modern      build app targeting modern browsers with auto fallback
-  --target      app | lib | wc | wc-async (default: app)
-  --name        name for lib or web-component mode (default: "name" in package.json or entry filename)
-  --no-clean    do not remove the dist directory before building the project
-  --report      generate report.html to help analyze bundle content
-  --report-json generate report.json to help analyze bundle content
-  --watch       watch for changes
+  --mode        especifica o modo de ambiente (padrão: desenvolvimento)
+  --dest        especifica o diretório de saída (padrão: dist)
+  --modern      criar aplicativo segmentando navegadores modernos com fallback automático
+  --target      app | lib | wc | wc-async (padrão: app)
+  --name        nome para o modo lib ou web-component (padrão: "name" in package.json ou nome do arquivo de entrada)
+  --no-clean    não remove o diretório dist antes de construir o projeto
+  --report      gera o report.html para ajudar a analisar o conteúdo do pacote
+  --report-json gera o report.json para ajudar a analisar o conteúdo do pacote
+  --watch       observa as mudanças
 ```
 
-`vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
+`vue-cli-service build` produz um pacote pronto para produção no diretório `dist/`, com minificação para divisão de partes JS/CSS/HTML e auto vendor para melhor armazenamento em cache. O manifesto do fragmento é embutido no HTML.
 
-There are a few useful flags:
+Existem algumas bandeiras úteis:
 
-- `--modern` builds your app using [Modern Mode](./browser-compatibility.md#modern-mode), shipping native ES2015 code to modern browsers that support it, with auto fallback to a legacy bundle.
+- `--modern` constrói seu aplicativo usando o [Modo Moderno](./browser-compatibility.md#modern-mode), enviando código ES2015 nativo para navegadores modernos que o suportam, com fallback automático para um pacote herdado.
 
-- `--target` allows you to build any component(s) inside your project as a library or as web components. See [Build Targets](./build-targets.md) for more details.
+- `--target` permite que você construa qualquer componente dentro de seu projeto como uma biblioteca ou como componentes web. Veja [Build Targets](./build-targets.md) para mais detalhes.
 
-- `--report` and `--report-json` will generate reports based on your build stats that can help you analyze the size of the modules included in your bundle.
+- `--report` e` --report-json` geram relatórios baseados nas estatísticas de construção que podem ajudá-lo a analisar o tamanho dos módulos incluídos no seu pacote.
 
 ## vue-cli-service inspect
 
 ```
-Usage: vue-cli-service inspect [options] [...paths]
+Uso: vue-cli-service inspect [opções] [...paths]
 
-Options:
+Opções:
 
-  --mode    specify env mode (default: development)
+  --mode    especifica o modo de ambiente (padrão: desenvolvimento)
 ```
 
-You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue CLI project. See [Inspecting Webpack Config](./webpack.md#inspecting-the-project-s-webpack-config) for more details.
+Você pode usar o `vue-cli-service inspect` para inspecionar a configuração do webpack dentro de um projeto do Vue CLI. Consulte [Inspecting Webpack Config](./webpack.md#inspecting-the-project-s-webpack-config) para mais detalhes.
 
-## Checking All Available Commands
+## Verificando todos os comandos disponíveis
 
-Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
+Alguns plugins CLI irão injetar comandos adicionais no `vue-cli-service`. Por exemplo, `@vue/cli-plugin-eslint` injeta o comando `vue-cli-service lint`. Você pode ver todos os comandos injetados executando:
 
 ``` bash
 npx vue-cli-service help
 ```
 
-You can also learn about the available options of each command with:
+Você também pode aprender sobre as opções disponíveis de cada comando com:
 
 ``` bash
 npx vue-cli-service help [command]
 ```
 
-## Caching and Parallelization
+## Cache e Paralelização
 
-- `cache-loader` is enabled for Vue/Babel/TypeScript compilations by default. Files are cached inside `node_modules/.cache` - if running into compilation issues, always try deleting the cache directory first.
+- `cache-loader` é habilitado para compilações Vue/Babel/TypeScript por padrão. Os arquivos são armazenados em cache dentro de `node_modules/.cache` - se estiver executando em problemas de compilação, sempre tente excluir o diretório de cache primeiro.
 
-- `thread-loader` will be enabled for Babel/TypeScript transpilation when the machine has more than 1 CPU cores.
+- `thread-loader` será habilitado para a transpilação Babel/TypeScript quando a máquina tiver mais de 1 núcleo de CPU.
 
 ## Git Hooks
 
-When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx990803/yorkie), which allows you to easily specify Git hooks using the `gitHooks` field in your `package.json`:
+Quando instalado, o `@vue/cli-service` também instala o [yorkie](https://github.com/yyx990803/yorkie), o que permite que você especifique facilmente os ganchos do Git usando o campo` gitHooks` no seu `package.json`:
 
 ``` json
 {
@@ -128,12 +128,12 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 }
 ```
 
-::: warning
-`yorkie` is a fork of [`husky`](https://github.com/typicode/husky) and is not compatible with the latter.
+::: warning Aviso
+`yorkie` é um fork de [` husky`](https://github.com/typicode/husky) e não é compatível com o último.
 :::
 
-## Configuration without Ejecting
+## Configuração sem Ejetar
 
-Projects created via `vue create` are ready to go without the need for additional configuration. The plugins are designed to work with one another so in most cases, all you need to do is pick the features you want during the interactive prompts.
+Projetos criados via `vue create` estão prontos para serem executados sem a necessidade de configuração adicional. Os plugins são projetados para funcionar uns com os outros, portanto, na maioria dos casos, tudo o que você precisa fazer é escolher os recursos desejados durante os prompts interativos.
 
-However, we also understand that it's impossible to cater to every possible need, and the need of a project may also change over time. Projects created by Vue CLI allows you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.
+No entanto, também entendemos que é impossível atender a todas as necessidades possíveis, e a necessidade de um projeto também pode mudar com o tempo. Os projetos criados pela Vue CLI permitem que você configure quase todos os aspectos do ferramental sem precisar ejetar. Confira a [Referência de configuração](../config/) para mais detalhes.

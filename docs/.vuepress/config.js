@@ -314,19 +314,19 @@ module.exports = {
         nav: [
           {
             text: 'Manual',
-            link: '/guide/'
+            link: '/pt-br/guide/'
           },
           {
             text: 'Configurações',
-            link: '/config/'
+            link: '/pt-br/config/'
           },
           {
             text: 'Manual Plug-in Dev',
             items: [
-              { text: 'Manual Plug-in Dev', link: '/dev-guide/plugin-dev.md' },
-              { text: 'UI Plugin - Info', link: '/dev-guide/ui-info.md' },
-              { text: 'UI Plugin - API', link: '/dev-guide/ui-api.md' },
-              { text: 'UI - Localização', link: '/dev-guide/ui-localization.md' }
+              { text: 'Manual Plug-in Dev', link: '/pt-br/dev-guide/plugin-dev.md' },
+              { text: 'UI Plugin - Info', link: '/pt-br/dev-guide/ui-info.md' },
+              { text: 'UI Plugin - API', link: '/pt-br/dev-guide/ui-api.md' },
+              { text: 'UI - Localização', link: '/pt-br/dev-guide/ui-localization.md' }
             ]
           },
           {
@@ -348,42 +348,42 @@ module.exports = {
           }
         ],
         sidebar: {
-          '/guide/': [
-            '/guide/',
-            '/guide/installation',
+          '/pt-br/guide/': [
+            '/pt-br/guide/',
+            '/pt-br/guide/installation',
             {
               title: 'Introdução',
               collapsable: false,
               children: [
-                '/guide/prototyping',
-                '/guide/creating-a-project',
-                '/guide/plugins-and-presets',
-                '/guide/cli-service'
+                '/pt-br/guide/prototyping',
+                '/pt-br/guide/creating-a-project',
+                '/pt-br/guide/plugins-and-presets',
+                '/pt-br/guide/cli-service'
               ]
             },
             {
               title: 'Desenvolvimento',
               collapsable: false,
               children: [
-                '/guide/browser-compatibility',
-                '/guide/html-and-static-assets',
-                '/guide/css',
-                '/guide/webpack',
-                '/guide/mode-and-env',
-                '/guide/build-targets',
-                '/guide/deployment'
+                '/pt-br/guide/browser-compatibility',
+                '/pt-br/guide/html-and-static-assets',
+                '/pt-br/guide/css',
+                '/pt-br/guide/webpack',
+                '/pt-br/guide/mode-and-env',
+                '/pt-br/guide/build-targets',
+                '/pt-br/guide/deployment'
               ]
             }
           ],
-          '/dev-guide/': [
-            '/dev-guide/plugin-dev.md',
+          '/pt-br/dev-guide/': [
+            '/pt-br/dev-guide/plugin-dev.md',
             {
               title: 'Deselvolvimento de UI',
               collapsable: false,
               children: [
-                '/dev-guide/ui-info.md',
-                '/dev-guide/ui-api.md',
-                '/dev-guide/ui-localization.md'
+                '/pt-br/dev-guide/ui-info.md',
+                '/pt-br/dev-guide/ui-api.md',
+                '/pt-br/dev-guide/ui-localization.md'
               ]
             }
           ]

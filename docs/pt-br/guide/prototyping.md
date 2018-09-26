@@ -1,70 +1,70 @@
-# Instant Prototyping
+# Prototipagem Instantânea
 
-You can rapidly prototype with just a single `*.vue` file with the `vue serve` and `vue build` commands, but they require an additional global addon to be installed first:
+Você pode rapidamente prototipar com apenas um único arquivo `*.vue` com os comandos `vue serve` e`vue build`, mas eles requerem um addon global adicional para ser instalado primeiro:
 
-``` bash
+```bash
 npm install -g @vue/cli-service-global
 ```
 
-The drawback of `vue serve` is that it relies on globally installed dependencies which may be inconsistent on different machines. Therefore this is only recommended for rapid prototyping.
+A desvantagem do `vue serve` é que ele depende de dependências instaladas globalmente, que podem ser inconsistentes em máquinas diferentes. Portanto, isso é recomendado apenas para prototipagem rápida.
 
 ### vue serve
 
 ```
-Usage: serve [options] [entry]
+Uso: serve [opções] [entrada]
 
-serve a .js or .vue file in development mode with zero config
+servir um arquivo .js ou .vue no modo de desenvolvimento com zero config
 
 
-Options:
+Opções:
 
-  -o, --open  Open browser
-  -c, --copy  Copy local url to clipboard
-  -h, --help  output usage information
+   -o, --open  Abrir Navegador
+   -c, --copy  Copiar URL local para a área de transferência
+   -h, --help  exibe informações de uso
 ```
 
-All you need is an `App.vue` file:
+Tudo o que você precisa é de um arquivo `App.vue`:
 
-``` vue
+```vue
 <template>
-  <h1>Hello!</h1>
+   <h1> Olá! </ h1>
 </template>
 ```
 
-Then in the directory with the `App.vue` file, run:
+Então, no diretório com o arquivo `App.vue`, execute:
 
-``` bash
+```bash
 vue serve
 ```
 
-`vue serve` uses the same default setup (webpack, babel, postcss & eslint) as projects created by `vue create`. It automatically infers the entry file in the current directory - the entry can be one of `main.js`, `index.js`, `App.vue` or `app.vue`. You can also explicitly specify the entry file:
+`vue serve` usa a mesma configuração padrão (webpack, babel, postcss & eslint) como projetos criados pelo `vue create`. Ele automaticamente infere o arquivo de entrada no diretório atual - a entrada pode ser uma das seguintes: main.js, index.js, App.vue ou app.vue. Você também pode especificar explicitamente o arquivo de entrada:
 
-``` bash
+```bash
 vue serve MyComponent.vue
 ```
 
-If needed, you can also provide an `index.html`, `package.json`, install and use local dependencies, or even configure babel, postcss & eslint with corresponding config files.
+Se necessário, você também pode fornecer um `index.html`, `package.json`, instalar e usar dependências locais, ou até mesmo configurar o babel, postcss & eslint com arquivos de configuração correspondentes.
 
 ### vue build
 
 ```
-Usage: build [options] [entry]
+Uso: build [opções] [entrada]
 
-build a .js or .vue file in production mode with zero config
+Construa um arquivo .js ou .vue no modo de produção com zero config
 
 
-Options:
+Opções:
 
-  -t, --target <target>  Build target (app | lib | wc | wc-async, default: app)
-  -n, --name <name>      name for lib or web-component (default: entry filename)
-  -d, --dest <dir>       output directory (default: dist)
-  -h, --help             output usage information
+   -t, --target <target>  Construir destino (app | lib | wc | wc-async, padrão: app)
+   -n, --name <nome>      nome para lib ou componente web (padrão: nome do arquivo de entrada)
+   -d, --dest <dir>       diretório de saída (padrão: dist)
+   -h, --help             exibe informações de uso
 ```
 
-You can also build the target file into a production bundle for deployment with `vue build`:
+Você também pode construir o arquivo de destino em um pacote de produção para implementação com o `vue build`:
 
-``` bash
+```bash
 vue build MyComponent.vue
 ```
 
-`vue build` also provides the ability to build the component as a library or a web component. See [Build Targets](./build-targets.md) for more details.
+O `vue build` também fornece a capacidade de construir o componente como uma biblioteca ou um componente da web. Veja [Build Targets](./build-targets.md) para mais detalhes.

@@ -1,70 +1,71 @@
-# Plugins and Presets
+# Plugins e Presets
 
 ## Plugins
 
-Vue CLI uses a plugin-based architecture. If you inspect a newly created project's `package.json`, you will find dependencies that start with `@vue/cli-plugin-`. Plugins can modify the internal webpack configuration and inject commands to `vue-cli-service`. Most of the features listed during the project creation process are implemented as plugins.
+O Vue CLI usa uma arquitetura baseada em plugins. Se você inspecionar `package.json` de um projeto recém-criado, você encontrará dependências que começam com `@vue/cli-plugin-`. Plugins podem modificar a configuração interna do webpack e injetar comandos no `vue-cli-service`. A maioria dos recursos listados durante o processo de criação do projeto é implementada como plug-ins.
 
-The plugin based architecture makes Vue CLI flexible and extensible. If you are interested in developing a plugin, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
+A arquitetura baseada em plugins torna o Vue CLI flexível e extensível. Se você está interessado em desenvolver um plugin, confira o [Plugin Development Guide] (../ dev-guide / plugin-dev.md).
 
-::: tip
-You can install and manage Plugins using the GUI with the `vue ui` command.
+
+::: tip Dica
+Você pode instalar e gerenciar Plugins usando a GUI com o comando `vue ui`.
 :::
 
-### Installing Plugins in an Existing Project
+### Instalando Plugins em um Projeto Existente
 
-Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:
+Cada plugin CLI vem com um generator (que cria arquivos) e um plugin de tempo de execução (que ajusta a configuração do webpack principal e injeta comandos). Quando você usa o `vue create` para criar um novo projeto, alguns plugins serão pré-instalados para você com base na sua seleção de recursos. Caso você queira instalar um plugin em um projeto já criado, você pode fazê-lo com o comando `vue add`:
 
 ``` bash
 vue add @vue/eslint
 ```
 
-::: tip
-`vue add` is specifically designed for installing and invoking Vue CLI plugins. It is not meant as a replacement for normal npm packages. For normal npm packages, you should still use your package manager of choice.
+::: tip Dica
+O `vue add` é especificamente projetado para instalar e invocar plugins do Vue CLI. Não é um substituto para pacotes npm normais. Para pacotes npm normais, você ainda deve usar o gerenciador de pacotes de sua preferência.
 :::
 
-::: warning
-It is recommended to commit your project's current state before running `vue add`, since the command will invoke the plugin's file generator and potentially make changes to your existing files.
+::: warning Aviso
+Recomenda-se realizar o commit do estado atual do seu projeto antes de executar o `vue add`, já que o comando invocará o gerador de arquivos do plugin e possivelmente fará alterações em seus arquivos existentes.
 :::
 
-The command resolves `@vue/eslint` to the full package name `@vue/cli-plugin-eslint`, installs it from npm, and invokes its generator.
+O comando resolve `@vue/eslint` para o nome completo do pacote` @vue/cli-plugin-eslint`, instala-o a partir do npm e invoca seu gerador.
 
 ``` bash
-# these are equivalent to the previous usage
+# estes são equivalentes ao uso anterior
 vue add @vue/cli-plugin-eslint
 ```
 
-Without the `@vue` prefix, the command will resolve to an unscoped package instead. For example, to install the 3rd party plugin `vue-cli-plugin-apollo`:
+Sem o prefixo `@vue`, o comando será resolvido para um pacote sem escopo. Por exemplo, para instalar o plugin de terceiros `vue-cli-plugin-apollo`:
 
 ``` bash
-# installs and invokes vue-cli-plugin-apollo
+# instala e invoca o vue-cli-plugin-apollo
 vue add apollo
 ```
 
-You can also use 3rd party plugins under a specific scope. For example, if a plugin is named `@foo/vue-cli-plugin-bar`, you can add it with:
+Você também pode usar plugins de terceiros em um escopo específico. Por exemplo, se um plugin é chamado `@foo/vue-cli-plugin-bar`, você pode adicioná-lo com:
 
 ``` bash
 vue add @foo/bar
 ```
 
-You can pass generator options to the installed plugin (this will skip the prompts):
+Você pode passar as opções do generator para o plugin instalado (isso irá ignorar os prompts):
 
 ``` bash
 vue add @vue/eslint --config airbnb --lintOn save
 ```
 
-`vue-router` and `vuex` are special cases - they do not have their own plugins, but you can add them nonetheless:
+`vue-router` e` vuex` são casos especiais - eles não possuem seus próprios plugins, mas você pode adicioná-los mesmo assim:
 
 ``` bash
 vue add router
 vue add vuex
 ```
 
-If a plugin is already installed, you can skip the installation and only invoke its generator with the `vue invoke` command. The command takes the same arguments as `vue add`.
+Se um plugin já estiver instalado, você pode pular a instalação e só invocar seu generator com o comando `vue invoke`. O comando usa os mesmos argumentos que o `vue add`.
 
-::: tip
-If for some reason your plugins are listed in a `package.json` file other than the one located in your project, you can set the `vuePlugins.resolveFrom` option in the project `package.json` with the path to the folder containing the other `package.json` file.
+::: tip Dica
+Se por algum motivo seus plugins estiverem listados em um arquivo `package.json` diferente do localizado em seu projeto, você pode definir a opção `vuePlugins.resolveFrom` no projeto `package.json` com o caminho para a pasta que contém o outro arquivo `package.json`.
 
-For example, if you have a `.config/package.json` file:
+Por exemplo, se você tiver um arquivo `.config/package.json`:
 
 ```json
 {
@@ -75,9 +76,9 @@ For example, if you have a `.config/package.json` file:
 ```
 :::
 
-### Project local plugin
+### Plugin local do projeto
 
-If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.service` option in your `package.json` file:
+Se você precisa acessar a API do plugin em seu projeto e não quer criar um plugin completo para isso, você pode usar a opção `vuePlugins.service` no seu arquivo `package.json`:
 
 ```json
 {
@@ -87,9 +88,9 @@ If you need access to the plugin API in your project and don't want to create a 
 }
 ```
 
-Each file will need to export a function taking the plugin API as the first argument. For more information about the plugin API, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
+Cada arquivo precisará exportar uma função usando a API do plug-in como o primeiro argumento. Para obter mais informações sobre a API do plug-in, confira o [Plugin Development Guide](../dev-guide/plugin-dev.md).
 
-You can also add files that will behave like UI plugins with the `vuePlugins.ui` option:
+Você também pode adicionar arquivos que se comportarão como plugins UI com a opção `vuePlugins.ui`:
 
 ```json
 {
@@ -99,15 +100,15 @@ You can also add files that will behave like UI plugins with the `vuePlugins.ui`
 }
 ```
 
-For more information, read the [UI Plugin API](../dev-guide/ui-api.md).
+Para mais informações, leia [UI Plugin API](../dev-guide/ui-api.md).
 
-## Presets
+## Predefinições
 
-A Vue CLI preset is a JSON object that contains pre-defined options and plugins for creating a new project so that the user doesn't have to go through the prompts to select them.
+Uma predefinição do Vue CLI é um objeto JSON que contém opções predefinidas e plugins para criar um novo projeto, de modo que o usuário não precise percorrer os prompts para selecioná-los.
 
-Presets saved during `vue create` are stored in a configuration file in your user home directory (`~/.vuerc`). You can directly edit this file to tweak / add / delete the saved presets.
+As predefinições salvas durante o `vue create` são armazenadas em um arquivo de configuração no diretório inicial do usuário (`~/.vuerc`). Você pode editar diretamente este arquivo para ajustar/adicionar/excluir as predefinições salvas.
 
-Here's an example preset:
+Aqui está um exemplo predefinido:
 
 ``` json
 {
@@ -125,7 +126,7 @@ Here's an example preset:
 }
 ```
 
-The preset data is used by plugin generators to generate corresponding project files. In addition to the above fields, you can also add additional configuration for integrated tools:
+Os dados predefinidos são usados pelos geradores de plugins para gerar arquivos de projeto correspondentes. Além dos campos acima, você também pode adicionar configurações adicionais para ferramentas integradas:
 
 ``` json
 {
@@ -140,38 +141,38 @@ The preset data is used by plugin generators to generate corresponding project f
 }
 ```
 
-These additional configurations will be merged into `package.json` or corresponding config files, depending on the value of `useConfigFiles`. For example, with `"useConfigFiles": true`, the value of `configs.vue` will be merged into `vue.config.js`.
+Estas configurações adicionais serão fundidas em `package.json` ou arquivos de configuração correspondentes, dependendo do valor de `useConfigFiles`. Por exemplo, com `"useConfigFiles": true`, o valor de `configs.vue` será fundido em `vue.config.js`.
 
-### Preset Plugin Versioning
+### Versionamento de plugins predefinidos
 
-You can explicitly specify versions of the plugins being used:
+Você pode especificar explicitamente as versões dos plugins que estão sendo usados:
 
 ``` json
 {
   "plugins": {
     "@vue/cli-plugin-eslint": {
       "version": "^3.0.0",
-      // ... other options for this plugin
+      // ... outras opções para este plugin
     }
   }
 }
 ```
 
-Note this is not required for official plugins - when omitted, the CLI will automatically use the latest version available in the registry. However, **it is recommended to provide a explicit version range for any 3rd party plugins listed in a preset**.
+Observe que isso não é necessário para plug-ins oficiais - quando omitido, a CLI usará automaticamente a versão mais recente disponível no registro. No entanto, **é recomendável fornecer um intervalo de versão explícito para todos os plug-ins de terceiros listados em uma predefinição**.
 
-### Allowing Plugin Prompts
+### Permitindo prompts de plug-in
 
-Each plugin can inject its own prompts during the project creation process, however when you are using a preset, those prompts will be skipped because Vue CLI assumes all the plugin options are already declared in the preset.
+Cada plugin pode injetar seus próprios prompts durante o processo de criação do projeto, no entanto, quando você estiver usando uma predefinição, esses prompts serão ignorados, pois a Vue CLI assume que todas as opções do plug-in já estão declaradas na predefinição.
 
-In some cases you may want the preset to only declare the desired plugins, while leaving some flexibility by letting the user go through the prompts injected by the plugins.
+Em alguns casos, você pode querer que a predefinição declare apenas os plug-ins desejados, deixando alguma flexibilidade, permitindo que o usuário passe pelos prompts injetados pelos plug-ins.
 
-For such scenarios you can specify `"prompts": true` in a plugin's options to allow its prompts to be injected:
+Para tais cenários, você pode especificar `"prompts": true` nas opções de um plugin para permitir que seus prompts sejam injetados:
 
 ``` json
 {
   "plugins": {
     "@vue/cli-plugin-eslint": {
-      // let the users pick their own ESLint config
+      // deixe os usuários escolherem sua própria configuração do ESLint
       "prompts": true
     }
   }
@@ -180,34 +181,34 @@ For such scenarios you can specify `"prompts": true` in a plugin's options to al
 
 ### Remote Presets
 
-You can share a preset with other developers by publishing it in a git repo. The repo can contain the following files:
+Você pode compartilhar uma predefinição com outros desenvolvedores publicando-a em um repositório git. O repositório pode conter os seguintes arquivos:
 
-- `preset.json`: the main file containing the preset data (required).
-- `generator.js`: a [Generator](../dev-guide/plugin-dev.md#generator) that can inject or modify files in the project.
-- `prompts.js`: a [prompts file](../dev-guide/plugin-dev.md#prompts-for-3rd-party-plugins) that can collect options for the generator.
+- `preset.json`: o arquivo principal contendo os dados pré-definidos (requeridos).
+- `generator.js`: um [Generator](../dev-guide/plugin-dev.md#generator) que pode injetar ou modificar arquivos no projeto.
+- `prompts.js`: a [arquivo de prompts](../dev-guide/plugin-dev.md#prompts-for-3rd-party-plugins) que pode coletar opções para o gerador.
 
-Once the repo is published, you can then use the `--preset` option to use the remote preset when creating a project:
+Uma vez que o repositório é publicado, você pode usar a opção `--preset` para usar a predefinição remota ao criar um projeto:
 
 ``` bash
 # use preset from GitHub repo
 vue create --preset username/repo my-project
 ```
 
-GitLab and BitBucket are also supported. Make sure to use the `--clone` option if fetching from private repos:
+O GitLab e o BitBucket também são suportados. Certifique-se de usar a opção `--clone` se buscar de repos privados:
 
 ``` bash
 vue create --preset gitlab:username/repo --clone my-project
 vue create --preset bitbucket:username/repo --clone my-project
 ```
 
-### Local Filesystem Preset
+### Predefinição do sistema de arquivos local
 
-When developing a remote preset, it can be tedious to have to repeatedly push the preset to a remote repo to test it. To simplify the workflow, you can directly work with local presets. Vue CLI will load local presets if the value for the `--preset` option is a relative or absolute file path, or ends with `.json`:
+Ao desenvolver uma predefinição remota, pode ser entediante ter que pressionar repetidamente a predefinição para um repo remoto para testá-la. Para simplificar o fluxo de trabalho, você pode trabalhar diretamente com as predefinições locais. O Vue CLI irá carregar as predefinições locais se o valor para a opção `--preset` for relativo ou absoluto, ou terminar com` .json`:
 
 ``` bash
-# ./my-preset should be a directory containing preset.json
+# ./my-preset deve ser um diretório contendo preset.json
 vue create --preset ./my-preset my-project
 
-# or directly use a json file in cwd:
+# ou use diretamente um arquivo json no cwd:
 vue create --preset my-preset.json
 ```

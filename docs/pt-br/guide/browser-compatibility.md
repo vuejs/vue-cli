@@ -12,7 +12,7 @@ Um projeto padrão do Vue CLI usa [@vue/babel-preset-app][babel-preset-app], que
 
 ### useBuiltIns: 'usage'
 
-Por padrão, ele passa [`useBuiltIns: 'usage'`] (https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) para `@babel/preset-env` que detecta automaticamente os polyfills necessários com base nos recursos de idioma usados em seu código-fonte. Isso garante que apenas a quantidade mínima de polyfills seja incluída no seu pacote final. No entanto, isso também significa **se uma de suas dependências tiver requisitos específicos em polyfills, por padrão, o Babel não poderá detectá-la.**
+Por padrão, ele passa [`useBuiltIns: 'usage'`](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage) para `@babel/preset-env` que detecta automaticamente os polyfills necessários com base nos recursos de idioma usados em seu código-fonte. Isso garante que apenas a quantidade mínima de polyfills seja incluída no seu pacote final. No entanto, isso também significa **se uma de suas dependências tiver requisitos específicos em polyfills, por padrão, o Babel não poderá detectá-la.**
 
 Se uma de suas dependências precisar de polyfills, você tem algumas opções:
 
