@@ -1,55 +1,55 @@
-# Environment Variables and Modes
+# Variáveis e modos de ambiente
 
-You can specify env variables by placing the following files in your project root:
+Você pode especificar variáveis env colocando os seguintes arquivos na raiz do seu projeto:
 
 ``` bash
-.env                # loaded in all cases
-.env.local          # loaded in all cases, ignored by git
-.env.[mode]         # only loaded in specified mode
-.env.[mode].local   # only loaded in specified mode, ignored by git
+.env                # carregado em todos os casos
+.env.local          # carregado em todos os casos, ignorado pelo git
+.env.[mode]         # apenas carregado no modo especificado
+.env.[mode].local   # apenas carregado no modo especificado, ignorado pelo git
 ```
 
-An env file simply contains key=value pairs of environment variables:
+Um arquivo env simplesmente contém pares chave=valor de variáveis de ambiente:
 
 ```
 FOO=bar
 VUE_APP_SECRET=secret
 ```
 
-Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
+As variáveis carregadas ficarão disponíveis para todos os comandos, plugins e dependências do `vue-cli-service`.
 
-::: tip Env Loading Priorities
+::: tip Prioridades de carregamento de Env
 
-An env file for a specific mode (e.g. `.env.production`) will take higher priority than a generic one (e.g. `.env`).
+Um arquivo env para um modo específico (por exemplo, `.env.production`) terá prioridade mais alta do que um genérico (por exemplo, `.env`).
 
-In addition, environment variables that already exist when Vue CLI is bootstrapped have the highest priority and will not be overwritten by `.env` files.
+Além disso, as variáveis de ambiente que já existem quando o Vue CLI é inicializado têm a prioridade mais alta e não serão sobrescritas pelos arquivos `.env`.
 :::
 
 ::: warning NODE_ENV
-If you have a default `NODE_ENV` in your environment, you should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands.
+Se você tem um `NODE_ENV` padrão em seu ambiente, você deve removê-lo ou definir explicitamente `NODE_ENV` ao executar comandos `vue-cli-service`.
 :::
 
-## Modes
+## Modos
 
-**Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
+**Modo** é um conceito importante nos projetos do Vue CLI. Por padrão, existem três modos em um projeto do Vue CLI:
 
-- `development` is used by `vue-cli-service serve`
-- `production` is used by `vue-cli-service build` and `vue-cli-service test:e2e`
-- `test` is used by `vue-cli-service test:unit`
+- `development` é usado por `vue-cli-service serve`
+- `production` é usado por `vue-cli-service build` and `vue-cli-service test:e2e`
+- `test` é usado por `vue-cli-service test:unit`
 
-Note that a mode is different from `NODE_ENV`, as a mode can contain multiple environment variables. That said, each mode does set `NODE_ENV` to the same value by default - for example, `NODE_ENV` will be set to `"development"` in development mode.
+Note que um modo é diferente de `NODE_ENV`, já que um modo pode conter múltiplas variáveis de ambiente. Dito isso, cada modo configura `NODE_ENV` para o mesmo valor por padrão - por exemplo,` NODE_ENV` será configurado para `"development"` no modo de desenvolvimento.
 
-You can set environment variables only available to a certain mode by postfixing the `.env` file. For example, if you create a file named `.env.development` in your project root, then the variables declared in that file will only be loaded in development mode.
+Você pode definir variáveis de ambiente apenas disponíveis para um certo modo, adicionando um sufixo ao arquivo `.env`. Por exemplo, se você criar um arquivo chamado `.env.development` em sua raiz do projeto, as variáveis declaradas nesse arquivo serão carregadas apenas no modo de desenvolvimento.
 
-You can overwrite the default mode used for a command by passing the `--mode` option flag. For example, if you want to use development variables in the build command, add this to your `package.json` scripts:
+Você pode sobrescrever o modo padrão usado para um comando passando o sinalizador de opção `--mode`. Por exemplo, se você quiser usar variáveis de desenvolvimento no comando build, adicione isto aos seus scripts `package.json`:
 
 ```
 "dev-build": "vue-cli-service build --mode development",
 ```
 
-## Example: Staging Mode
+## Exemplo: Modo Staging
 
-Assuming we have an app with the following `.env` file:
+Assumindo que temos um aplicativo com o seguinte arquivo `.env`:
 
 ```
 VUE_APP_TITLE=My App
@@ -62,35 +62,36 @@ NODE_ENV=production
 VUE_APP_TITLE=My App (staging)
 ```
 
-- `vue-cli-service build` builds a production app, loading `.env`, `.env.production` and `.env.production.local` if they are present;
+- `vue-cli-service build` constrói um aplicativo de produção, carregando` .env`, `.env.production` e `.env.production.local` se eles estiverem presentes;
 
-- `vue-cli-service build --mode staging` builds a production app in staging mode, using `.env`, `.env.staging` and `.env.staging.local` if they are present.
+- `vue-cli-service build --mode staging` constrói um aplicativo de produção no modo staging, usando `.env`, `.env.staging` e `.env.staging.local`, se estiverem presentes.
 
-In both cases, the app is built as a production app because of the `NODE_ENV`, but in the staging version, `process.env.VUE_APP_TITLE` is overwritten with a different value.
+Em ambos os casos, o aplicativo é construído como um aplicativo de produção por causa do `NODE_ENV`, mas na versão temporária,` process.env.VUE_APP_TITLE` é sobrescrito com um valor diferente.
 
-## Using Env Variables in Client-side Code
+## Usando variáveis de ambiente no código do lado do cliente
 
-Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
+Somente variáveis que começam com `VUE_APP_` serão incorporadas estaticamente ao pacote do cliente com o `webpack.DefinePlugin`. Você pode acessá-los no código do seu aplicativo:
 
 ``` js
 console.log(process.env.VUE_APP_SECRET)
 ```
 
-During build, `process.env.VUE_APP_SECRET` will be replaced by the corresponding value. In the case of `VUE_APP_SECRET=secret`, it will be replaced by `"secret"`.
+Durante a construção, `process.env.VUE_APP_SECRET` será substituído pelo valor correspondente. No caso de `VUE_APP_SECRET=secret`, ele será substituído por `"secret"`.
 
-In addition to `VUE_APP_*` variables, there are also two special variables that will always be available in your app code:
+Além das variáveis `VUE_APP_*`, existem também duas variáveis especiais que estarão sempre disponíveis no código do aplicativo:
 
-- `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#modes) the app is running in.
-- `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
+- `NODE_ENV` - este será um dos `"development"`, `"production"` ou `"test" `dependendo do [modo](#modos) em que o aplicativo está sendo executado.
 
-All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#interpolation).
+- `BASE_URL` - corresponde à opção `baseUrl` no `vue.config.js` e é o caminho base onde seu aplicativo é implementado.
 
-::: tip
-You can have computed env vars in your `vue.config.js` file. They still need to be prefixed with `VUE_APP_`. This is useful for version info `process.env.VUE_APP_VERSION = require('./package.json').version`
+Todas as variáveis de env resolvidas estarão disponíveis dentro de `public/index.html` como discutido em [HTML - Interpolation](./html-and-static-assets.md#Interpolação).
+
+::: tip Dica
+Você pode ter computado variáveis de ambiente no seu arquivo `vue.config.js`. Elas ainda precisam ser prefixados com `VUE_APP_`. Isso é útil para informações de versão `process.env.VUE_APP_VERSION = require('./package.json').version`
 :::
 
-## Local Only Variables
+## Variáveis Apenas Locais
 
-Sometimes you might have env variables that should not be committed into the codebase, especially if your project is hosted in a public repository. In that case you should use an `.env.local` file instead. Local env files are ignored in `.gitignore` by default.
+Às vezes, você pode ter variáveis de ambiente que não devem ser confirmadas na base de código, especialmente se o seu projeto estiver hospedado em um repositório público. Nesse caso, você deve usar um arquivo `.env.local` em seu lugar. Arquivos env locais são ignorados em `.gitignore` por padrão.
 
-`.local` can also be appended to mode-specific env files, for example `.env.development.local` will be loaded during development, and is ignored by git.
+`.local` também pode ser anexado a arquivos env de modo específico, por exemplo, `.env.development.local` será carregado durante o desenvolvimento e será ignorado pelo git.

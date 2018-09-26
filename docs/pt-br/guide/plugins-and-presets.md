@@ -23,7 +23,7 @@ vue add @vue/eslint
 O `vue add` é especificamente projetado para instalar e invocar plugins do Vue CLI. Não é um substituto para pacotes npm normais. Para pacotes npm normais, você ainda deve usar o gerenciador de pacotes de sua preferência.
 :::
 
-::: warning Aviso
+::: warning Atenção
 Recomenda-se realizar o commit do estado atual do seu projeto antes de executar o `vue add`, já que o comando invocará o gerador de arquivos do plugin e possivelmente fará alterações em seus arquivos existentes.
 :::
 

@@ -1,30 +1,30 @@
-# Build Targets
+# Construir Targets
 
-When you run `vue-cli-service build`, you can specify different build targets via the `--target` option. This allows you to use the same code base to produce different builds for different use cases.
+Quando você executa o `vue-cli-service build`, você pode especificar diferentes destinos de construção através da opção `--target`. Isso permite que você use a mesma base de código para produzir construções diferentes para diferentes casos de uso.
 
 ## App
 
-App is the default build target. In this mode:
+App é o alvo de compilação padrão. Neste modo:
 
-- `index.html` with asset and resource hints injection
-- vendor libraries split into a separate chunk for better caching
-- static assets under 4kb are inlined into JavaScript
-- static assets in `public` are copied into output directory
+- `index.html` com injeção de dicas de recursos e recursos
+- bibliotecas de fornecedores divididas em um bloco separado para melhor armazenamento em cache
+- ativos estáticos abaixo de 4kb são incluídos no JavaScript
+- os recursos estáticos em `public` são copiados no diretório de saída
 
-## Library
+## Biblioteca
 
-::: tip Note on Vue Dependency
-In lib mode, Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
+::: tip Nota sobre Dependência Vue
+No modo lib, o Vue é *externalizado*. Isso significa que o pacote não agrupará o Vue mesmo que seu código importe o Vue. Se o lib for usado através de um bundler, ele tentará carregar o Vue como uma dependência através do bundler; caso contrário, ele retorna a uma variável global `Vue`.
 :::
 
-You can build a single entry as a library using
+Você pode criar uma única entrada como uma biblioteca usando
 
 ```
 vue-cli-service build --target lib --name myLib [entry]
 ```
 
 ```
-File                     Size                     Gzipped
+Arquivo                  Tamanho                  Gzipped
 
 dist/myLib.umd.min.js    13.28 kb                 8.42 kb
 dist/myLib.umd.js        20.95 kb                 10.22 kb
@@ -32,23 +32,23 @@ dist/myLib.common.js     20.57 kb                 10.09 kb
 dist/myLib.css           0.33 kb                  0.23 kb
 ```
 
-The entry can be either a `.js` or a `.vue` file. If no entry is specified, `src/App.vue` will be used.
+A entrada pode ser um arquivo `.js` ou` .vue`. Se nenhuma entrada for especificada, o `src/App.vue` será usado.
 
-A lib build outputs:
+Um lib build produz:
 
-- `dist/myLib.common.js`: A CommonJS bundle for consuming via bundlers (unfortunately, webpack currently does not support ES modules output format for bundles yet)
+- `dist/myLib.common.js`: Um pacote CommonJS para consumir via bundlers (infelizmente, o webpack atualmente não suporta o formato de saída dos módulos ES para pacotes ainda)
 
-- `dist/myLib.umd.js`: A UMD bundle for consuming directly in browsers or with AMD loaders
+- `dist/myLib.umd.js`: Um pacote UMD para consumir diretamente em navegadores ou com loaders AMD
 
-- `dist/myLib.umd.min.js`: Minified version of the UMD build.
+- `dist/myLib.umd.min.js`: Versão reduzida da compilação do UMD.
 
-- `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
+- `dist/myLib.css`: Arquivo CSS extraído (pode ser forçado a ser embutido configurando `css: {extract: false}` em `vue.config.js`)
 
-### Vue vs. JS/TS Entry Files
+### Vue vs. arquivos de entrada do JS/TS
 
-When using a `.vue` file as entry, your library will directly expose the Vue component itself, because the component is always the default export.
+Ao usar um arquivo `.vue` como entrada, sua biblioteca irá expor diretamente o próprio componente Vue, porque o componente é sempre a exportação padrão.
 
-However, when you are using a `.js` or `.ts` file as your entry, it may contain named exports, so your library will be exposed as a Module. This means the default export of your library must be accessed as `window.yourLib.default` in UMD builds, or as `const myLib = require('mylib').default` in CommonJS builds. If you don't have any named exports and wish to directly expose the default export, you can use the following webpack configuration in `vue.config.js`:
+No entanto, quando você está usando um arquivo `.js` ou` .ts` como sua entrada, ele pode conter exportações nomeadas, então sua biblioteca será exposta como um módulo. Isto significa que a exportação padrão de sua biblioteca deve ser acessada como `window.yourLib.default` em compilações do UMD, ou como `const myLib = require('mylib').default` no build CommonJS. Se você não tem nenhuma exportação nomeada e deseja expor diretamente a exportação padrão, você pode usar a seguinte configuração do webpack no `vue.config.js`:
 
 ``` js
 module.exports = {
@@ -60,58 +60,58 @@ module.exports = {
 }
 ```
 
-## Web Component
+## Componente da Web
 
-::: tip Note on Compatibility
-Web Component mode does not support IE11 and below. [More details](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
+::: tip Nota sobre compatibilidade
+O modo Componente da Web não suporta o IE11 e abaixo. [Mais detalhes](https://github.com/vuejs/vue-web-component-wrapper#compatibility)
 :::
 
-::: tip Note on Vue Dependency
-In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
+::: tip Nota sobre Dependência Vue
+No modo lib, o Vue é *externalizado*. Isso significa que o pacote não agrupará o Vue mesmo que seu código importe o Vue. Se o lib for usado através de um bundler, ele tentará carregar o Vue como uma dependência através do bundler; caso contrário, ele retorna a uma variável global `Vue`.
 :::
 
-You can build a single entry as a web component using
+Você pode criar uma única entrada como um componente da Web usando
 
 ```
-vue-cli-service build --target wc --name my-element [entry]
+vue-cli-service build --target wc --name my-element [entrada]
 ```
 
-Note that the entry should be a `*.vue` file. Vue CLI will automatically wrap and register the component as a Web Component for you, and there's no need to do this yourself in `main.js`. You can use `main.js` as a demo app solely for development.
+Note que a entrada deve ser um arquivo `*.vue`. O Vue CLI irá automaticamente quebrar e registrar o componente como um Web Component para você, e não há necessidade de fazer isso sozinho em main.js. Você pode usar o `main.js` como um aplicativo de demonstração apenas para desenvolvimento.
 
-The build will produce a single JavaScript file (and its minified version) with everything inlined. The script, when included on a page, registers the `<my-element>` custom element, which wraps the target Vue component using `@vue/web-component-wrapper`. The wrapper automatically proxies properties, attributes, events and slots. See the [docs for `@vue/web-component-wrapper`](https://github.com/vuejs/vue-web-component-wrapper) for more details.
+A construção produzirá um único arquivo JavaScript (e sua versão reduzida) com tudo embutido. O script, quando incluído em uma página, registra o elemento customizado `<my-element>`, que encapsula o componente Vue de destino usando `@vue/web-component-wrapper`. O wrapper automaticamente faz proxy de propriedades, atributos, eventos e slots. Veja os [docs para `@vue/web-component-wrapper`] (https://github.com/vuejs/vue-web-component-wrapper) para mais detalhes.
 
-**Note the bundle relies on `Vue` being globally available on the page.**
+**Observe que o pacote depende do fato de o `Vue` estar globalmente disponível na página.**
 
-This mode allows consumers of your component to use the Vue component as a normal DOM element:
+Este modo permite que os consumidores do seu componente usem o componente Vue como um elemento DOM normal:
 
 ``` html
 <script src="https://unpkg.com/vue"></script>
 <script src="path/to/my-element.js"></script>
 
-<!-- use in plain HTML, or in any other framework -->
+<!-- usar em HTML simples ou em qualquer outro framework -->
 <my-element></my-element>
 ```
 
-### Bundle that Registers Multiple Web Components
+### Pacote que registra vários componentes da Web
 
-When building a web component bundle, you can also target multiple components by using a glob as entry:
+Ao criar um pacote de componentes da Web, você também pode segmentar vários componentes usando um glob como entrada:
 
 ```
 vue-cli-service build --target wc --name foo 'src/components/*.vue'
 ```
 
-When building multiple web components, `--name` will be used as the prefix and the custom element name will be inferred from the component filename. For example, with `--name foo` and a component named `HelloWorld.vue`, the resulting custom element will be registered as `<foo-hello-world>`.
+Ao construir múltiplos componentes web, `--name` será usado como prefixo e o nome do elemento customizado será inferido a partir do nome do arquivo do componente. Por exemplo, com `--name foo` e um componente chamado `HelloWorld.vue`, o elemento customizado resultante será registrado como `<foo-hello-world>`.
 
-### Async Web Component
+### Componente Web Assíncrono
 
-When targeting multiple web components, the bundle may become quite large, and the user may only use a few of the components your bundle registers. The async web component mode produces a code-split bundle with a small entry file that provides the shared runtime between all the components, and registers all the custom elements upfront. The actual implementation of a component is then fetched on-demand only when an instance of the corresponding custom element is used on the page:
+Ao segmentar vários componentes da Web, o pacote pode se tornar muito grande e o usuário pode usar apenas alguns dos componentes que seu pacote registra. O modo de componente da Web assíncrono produz um pacote de divisão de código com um pequeno arquivo de entrada que fornece o tempo de execução compartilhado entre todos os componentes e registra todos os elementos personalizados antecipadamente. A implementação real de um componente é então buscada sob demanda somente quando uma instância do elemento personalizado correspondente é usada na página:
 
 ```
 vue-cli-service build --target wc-async --name foo 'src/components/*.vue'
 ```
 
 ```
-File                Size                        Gzipped
+Arquivo              Tamanho                     Gzipped
 
 dist/foo.0.min.js    12.80 kb                    8.09 kb
 dist/foo.min.js      7.45 kb                     3.17 kb
@@ -121,12 +121,12 @@ dist/foo.0.js        17.27 kb                    8.83 kb
 dist/foo.1.js        5.24 kb                     1.64 kb
 ```
 
-Now on the page, the user only needs to include Vue and the entry file:
+Agora na página, o usuário só precisa incluir o Vue e o arquivo de entrada:
 
 ``` html
 <script src="https://unpkg.com/vue"></script>
 <script src="path/to/foo.min.js"></script>
 
-<!-- foo-one's implementation chunk is auto fetched when it's used -->
+<!-- A parte de implementação do foo-one é obtido automaticamente quando é usado -->
 <foo-one></foo-one>
 ```

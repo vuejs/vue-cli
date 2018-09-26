@@ -128,8 +128,8 @@ Quando instalado, o `@vue/cli-service` também instala o [yorkie](https://github
 }
 ```
 
-::: warning Aviso
-`yorkie` é um fork de [` husky`](https://github.com/typicode/husky) e não é compatível com o último.
+::: warning Atenção
+`yorkie` é um fork de [`husky`](https://github.com/typicode/husky) e não é compatível com o último.
 :::
 
 ## Configuração sem Ejetar

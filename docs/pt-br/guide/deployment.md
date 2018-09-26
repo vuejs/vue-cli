@@ -1,45 +1,45 @@
 # Deployment
 
-## General Guidelines
+## Diretrizes Gerais
 
-If you are using Vue CLI along with a backend framework that handles static assets as part of its deployment, all you need to do is making sure Vue CLI generates the built files in the correct location, and then follow the deployment instruction of your backend framework.
+Se você estiver usando o Vue CLI juntamente com uma estrutura de backend que manipule ativos estáticos como parte de seu deploy, tudo o que você precisa fazer é garantir que a Vue CLI gere os arquivos criados no local correto e siga as instruções de implantação de sua estrutura de backend.
 
-If you are developing your frontend app separately from your backend - i.e. your backend exposes an API for your frontend to talk to, then your frontend is essentially a purely static app. You can deploy the built content in the `dist` directory to any static file server, but make sure to set the correct [baseUrl](../config/#baseurl).
+Se você estiver desenvolvendo seu aplicativo de front-end separadamente de seu back-end, ou seja, seu back-end expõe uma API para seu front-end para conversar, seu front-end é essencialmente um aplicativo puramente estático. Você pode implantar o conteúdo construído no diretório `dist` em qualquer servidor de arquivos estático, mas certifique-se de definir o [baseUrl](../config/#baseurl) correto .
 
-### Previewing Locally
+### Visualizando localmente
 
-The `dist` directory is meant to be served by an HTTP server (unless you've configured `baseUrl` to be a relative value), so it will not work if you open `dist/index.html` directly over `file://` protocol. The easiest way to preview your production build locally is using a Node.js static file server, for example [serve](https://github.com/zeit/serve):
+O diretório `dist` é destinado a ser servido por um servidor HTTP (a menos que você tenha configurado `baseUrl` para ser um valor relativo), então não funcionará se você abrir `dist/index.html` diretamente sobre o protocolo `file://`. A maneira mais fácil de visualizar sua produção localmente é usando um servidor de arquivos estáticos do Node.js, por exemplo, [serve](https://github.com/zeit/serve):
 
 ``` bash
 npm install -g serve
-# -s flag means serve it in Single-Page Application mode
-# which deals with the routing problem below
+# o sinalizador -s significa servir no modo de aplicativo de página única
+# que lida com o problema de roteamento abaixo
 serve -s dist
 ```
 
-### Routing with `history.pushState`
+### Roteamento com `history.pushState`
 
-If you are using Vue Router in `history` mode, a simple static file server will fail. For example, if you used Vue Router with a route for `/todos/42`, the dev server has been configured to respond to `localhost:3000/todos/42` properly, but a simple static server serving a production build will respond with a 404 instead.
+Se você estiver usando o Vue Router no modo `history`, um servidor de arquivos estático simples falhará. Por exemplo, se você usou o Vue Router com uma rota para `/todos/42`, o servidor dev foi configurado para responder a `localhost:3000/todos/42` corretamente, mas um servidor estático simples servindo uma compilação de produção responderá com um 404 em vez disso.
 
-To fix that, you will need to configure your production server to fallback to `index.html` for any requests that do not match a static file. The Vue Router docs provides [configuration instructions for common server setups](https://router.vuejs.org/guide/essentials/history-mode.html).
+Para corrigir isso, você precisará configurar seu servidor de produção para retornar a `index.html` para quaisquer solicitações que não correspondam a um arquivo estático. A documentação do Vue Router fornece [instruções de configuração para configurações comuns de servidor](https://router.vuejs.org/guide/essentials/history-mode.html).
 
 ### CORS
 
-If your static frontend is deployed to a different domain from your backend API, you will need to properly configure [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+Se sua interface estática for implantada em um domínio diferente da sua API de back-end, você precisará configurar corretamente o [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
 ### PWA
 
-If you are using the PWA plugin, your app must be served over HTTPS so that [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) can be properly registered.
+Se você estiver usando o plug-in do PWA, seu aplicativo deverá ser veiculado por HTTPS para que o [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) possa ser registrado corretamente.
 
-## Platform Guides
+## Guias de Plataforma
 
 ### GitHub Pages
 
-1. Set correct `baseUrl` in `vue.config.js`.
+1. Defina o `baseUrl` correto em `vue.config.js`.
 
-    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+     Se você está implementando em `https://<USERNAME>.github.io/`, você pode omitir `baseUrl` porque o padrão é `"/"`.
 
-    If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `baseUrl` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
+     Se você está implementando para `https://<NOME_DO_PRODUTO>.github.io/<REPO>/`, (ou seja, seu repositório está em `https://github.com/<NOME_DO_PRODUTO>/<REPO>`), configure `baseUrl` para `"/<REPO>/"`. Por exemplo, se o seu nome de repositório é "meu-projeto", seu `vue.config.js` deve ficar assim:
 
     ``` js
     module.exports = {
@@ -49,7 +49,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     }
     ```
 
-2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
+2. Dentro de seu projeto, crie `deploy.sh` com o seguinte conteúdo (com linhas destacadas descomentadas apropriadamente) e execute-o para implementar:
 
     ``` bash{13,20,23}
     #!/usr/bin/env sh
@@ -79,37 +79,37 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     cd -
     ```
 
-    ::: tip
-    You can also run the above script in your CI setup to enable automatic deployment on each push.
+    ::: tip Dica
+    Você também pode executar o script acima em sua configuração de IC para ativar a implantação automática em cada envio.
     :::
 
 ### GitLab Pages
 
-As described by [GitLab Pages documentation](https://docs.gitlab.com/ee/user/project/pages/), everything happens with a `.gitlab-ci.yml` file placed in the root of your repository. This working example will get you started:
+Conforme descrito pela [documentação do GitLab Pages](https://docs.gitlab.com/ee/user/project/pages/), tudo acontece com um arquivo `.gitlab-ci.yml` colocado na raiz do seu repositório. Este exemplo de trabalho irá ajudá-lo:
 
 ```yaml
-# .gitlab-ci.yml file to be placed in the root of your repository
+# arquivo .gitlab-ci.yml a ser colocado na raiz do seu repositório
 
-pages: # the job must be named pages
+pages: # o trabalho deve ser nomeado pages
   image: node:latest
   stage: deploy
   script:
     - npm ci
     - npm run build
-    - mv public public-vue # GitLab Pages hooks on the public folder
-    - mv dist public # rename the dist folder (result of npm run build)
+    - mv public public-vue # hooks do GitLab Pages na pasta public
+    - mv dist public # renomear a pasta dist (resultado da compilação de execução npm)
   artifacts:
     paths:
-      - public # artifact path must be /public for GitLab Pages to pick it up
+      - public # O caminho do artefato deve ser /public para o GitLab Pages pegá-lo
   only:
     - master
 ```
 
-Typically, your static website will be hosted on https://yourUserName.gitlab.io/yourProjectName, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
+Normalmente, seu website estático será hospedado em https://yourUserName.gitlab.io/yourProjectName, portanto, você também desejará criar um arquivo inicial `vue.config.js` para [atualizar o valor `BASE_URL`] (https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) para corresponder:
 
 ```javascript
-// vue.config.js file to be place in the root of your repository
-// make sure you update `yourProjectName` with the name of your GitLab project
+// arquivo vue.config.js a ser colocado na raiz do seu repositório
+// certifique-se de atualizar `yourProjectName` com o nome do seu projeto GitLab
 
 module.exports = {
   baseUrl: process.env.NODE_ENV === 'production'
@@ -118,46 +118,46 @@ module.exports = {
 }
 ```
 
-Please read through the docs on [GitLab Pages domains](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) for more info about the URL where your project website will be hosted. Be aware you can also [use a custom domain](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages).
+Leia a Documentação em [domínios do GitLab Pages](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) para obter mais informações sobre o URL em que o site do seu projeto será hospedado. Esteja ciente de que você também pode [usar um domínio personalizado](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages).
 
-Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to your repository. A GitLab CI pipeline will be triggered: when successful, visit your project's `Settings > Pages` to see your website link, and click on it.
+Confirme os arquivos `.gitlab-ci.yml` e `vue.config.js` antes de enviar para o seu repositório. Um pipeline do GitLab CI será acionado: quando bem-sucedido, visite "Configurações > Páginas" do seu projeto para ver o link do seu site e clique nele.
 
 ### Netlify
 
-1. On Netlify, setup up a new project from GitHub with the following settings:
+1. No Netlify, configure um novo projeto no GitHub com as seguintes configurações:
 
-    - **Build Command:** `npm run build` or `yarn build`
-    - **Publish directory:** `dist`
+     - **Comando de Build:** `npm run build` ou` yarn build`
+     - **Diretório de publicação:** `dist`
 
-2. Hit the deploy button!
+2. Aperte o botão de deploy!
 
-Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
+Também confira [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
 ### Amazon S3
 
-See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
+Veja [vue-cli-plugin-s3-deploy]s(https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
 
 ### Firebase
 
-Create a new Firebase project on your [Firebase console](https://console.firebase.google.com). Please refer to this [documentation](https://firebase.google.com/docs/web/setup) on how to setup your project.
+Crie um novo projeto do Firebase no seu [Firebase console](https://console.firebase.google.com). Consulte esta [documentação](https://firebase.google.com/docs/web/setup) sobre como configurar seu projeto.
 
-Make sure you have installed [firebase-tools](https://github.com/firebase/firebase-tools) globally:
+Certifique-se de ter instalado [firebase-tools](https://github.com/firebase/firebase-tools) globalmente:
 
 ```
 npm install -g firebase-tools
 ```
 
-From the root of your project, initialize `firebase` using the command:
+A partir da raiz do seu projeto, inicialize o `firebase` usando o comando:
 
 ```
 firebase init
 ```
 
-Firebase will ask some questions on how to setup your project.
+O Firebase fará algumas perguntas sobre como configurar seu projeto.
 
-- Choose which Firebase CLI features you want to setup your project. Make sure to select `hosting`.
-- Select the default Firebase project for your project.
-- Set your `public` directory to `dist` (or where your build's output is) which will be uploaded to Firebase Hosting.
+- Escolha quais recursos do Firebase CLI você deseja configurar seu projeto. Certifique-se de selecionar `hosting`.
+- Selecione o projeto padrão do Firebase para o seu projeto.
+- Defina seu diretório `public` como `dist` (ou onde a saída de sua construção é), que será enviada para o Firebase Hosting.
 
 ```javascript
 // firebase.json
@@ -169,7 +169,7 @@ Firebase will ask some questions on how to setup your project.
 }
 ```
 
-- Select `yes` to configure your project as a single-page app. This will create an `index.html` and on your `dist` folder and configure your `hosting` information.
+- Selecione `yes` para configurar seu projeto como um aplicativo de página única. Isto irá criar um `index.html` e na sua pasta` dist` e configurar suas informações `hosting`.
 
 ```javascript
 // firebase.json
@@ -186,25 +186,26 @@ Firebase will ask some questions on how to setup your project.
 }
 ```
 
-Run `npm run build` to build your project.
+Execute `npm run build` para construir seu projeto.
 
-To deploy your project on Firebase Hosting, run the command:
+Para implantar seu projeto no Firebase Hosting, execute o comando:
 
 ```
 firebase deploy --only hosting
 ```
 
-If you want other Firebase CLI features you use on your project to be deployed, run `firebase deploy` without the `--only` option.
+Se você quiser que outros recursos CLI do Firebase que você usa em seu projeto sejam implantados, execute o `firebase deploy` sem a opção` --only`.
 
-You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
+Agora você pode acessar seu projeto em
+`https://<YOUR-PROJECT-ID>.firebaseapp.com`.
 
-Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
+Consulte a [Documentação do Firebase](https://firebase.google.com/docs/hosting/deploying) para mais detalhes.
 
 ### Now
 
-1. Install the Now CLI globally: `npm install -g now`
+1. Instale o Now CLI globalmente: `npm install -g now`
 
-2. Add a `now.json` file to your project root:
+2. Adicione um arquivo `now.json` à raiz do seu projeto:
 
     ```json
     {
@@ -226,41 +227,41 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
     }
     ```
 
-    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+    Você pode personalizar ainda mais o comportamento da veiculação estática consultando a [documentação do Now](https://zeit.co/docs/deployment-types/static).
 
-3. Adding a deployment script in `package.json`:
+3. Adicionando um script de deploy em `package.json`:
 
     ```json
     "deploy": "npm run build && now && now alias"
     ```
 
-    If you want to deploy publicly by default, you can change the deployment script to the following one:
+    Se você deseja implantar publicamente por padrão, você pode alterar o script de implantação para o seguinte:
 
     ```json
     "deploy": "npm run build && now --public && now alias"
     ```
 
-    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+    Isso apontará automaticamente o alias do seu site para a implantação mais recente. Agora, basta executar o `npm run deploy` para implantar seu aplicativo.
 
 ### Stdlib
 
-> TODO | Open to contribution.
+> TODO | Aberto para contribuições.
 
 ### Heroku
 
-> TODO | Open to contribution.
+> TODO | Aberto para contribuições.
 
 ### Surge
 
-To deploy with [Surge](http://surge.sh/) the steps are very straightforward.
+Para implantar com [Surge](http://surge.sh/), as etapas são muito diretas.
 
-First you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
+Primeiro você precisaria construir seu projeto executando `npm run build`. E se você não instalou a ferramenta de linha de comando do Surge, pode simplesmente fazê-lo executando o comando:
 
 ```
 npm install --global surge
 ```
 
-Then cd into the `dist/` folder of your project and then run `surge` and follow the screen prompt. It will ask you to set up email and password if it is the first time you are using Surge. Confirm the project folder and type in your preferred domain and watch your project being deployed such as below.
+Então, vá para a pasta `dist/` do seu projeto e então execute `surge` e siga o prompt da tela. Ele pedirá que você configure o email e a senha se for a primeira vez que estiver usando o Surge. Confirme a pasta do projeto, digite seu domínio preferido e assista ao projeto que está sendo implantado, como abaixo.
 
 ```
             project: /Users/user/Documents/myawesomeproject/dist/
@@ -272,4 +273,37 @@ Then cd into the `dist/` folder of your project and then run `surge` and follow 
    Success! - Published to myawesomeproject.surge.sh
 ```
 
-Verify your project is successfully published by Surge by visiting `myawesomeproject.surge.sh`, vola! For more setup details such as custom domains, you can visit [Surge's help page](https://surge.sh/help/).
+Verifique se o seu projeto foi publicado com sucesso pelo Surge, visitando `myawesomeproject.surge.sh`! Para mais detalhes de configuração, como domínios personalizados, você pode visitar a [página de ajuda do Surge](https://surge.sh/help/).
+
+### Bitbucket Cloud
+
+1. Conforme descrito na [documentação do Bitbucket](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) você precisa criar um repositório com o nome exato <USERNAME>.bitbucket.io`.
+
+2. É possível publicar em uma subpasta do repositório principal, por exemplo, se você quiser ter vários sites. Nesse caso, configure o `baseUrl` correto em` vue.config.js`.
+
+     Se você está implementando em `https://<USERNAME>.bitbucket.io/`, você pode omitir `baseUrl` porque o padrão é` "/" `.
+
+     Se você está implementando em `https://<NOME_DO_PRODUTO>.bitbucket.io/<SUBFOLDER>/`, defina `baseUrl` como `"/<SUBFOLDER>/"`. Neste caso, a estrutura de diretórios do repositório deve refletir a estrutura da URL, por exemplo, o repositório deve ter um diretório `/<SUBFOLDER>`.
+
+3. Dentro de seu projeto, crie `deploy.sh` com o seguinte conteúdo e execute-o para implementar:
+
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
+
+    # abort on errors
+    set -e
+
+    # build
+    npm run build
+
+    # navigate into the build output directory
+    cd dist
+
+    git init
+    git add -A
+    git commit -m 'deploy'
+
+    git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
+
+    cd -
+    ```
