@@ -4,7 +4,7 @@
 
 O Vue CLI usa uma arquitetura baseada em plugins. Se você inspecionar `package.json` de um projeto recém-criado, você encontrará dependências que começam com `@vue/cli-plugin-`. Plugins podem modificar a configuração interna do webpack e injetar comandos no `vue-cli-service`. A maioria dos recursos listados durante o processo de criação do projeto é implementada como plug-ins.
 
-A arquitetura baseada em plugins torna o Vue CLI flexível e extensível. Se você está interessado em desenvolver um plugin, confira o [Plugin Development Guide] (../ dev-guide / plugin-dev.md).
+A arquitetura baseada em plugins torna o Vue CLI flexível e extensível. Se você está interessado em desenvolver um plugin, confira o [Plugin Development Guide](../dev-guide/plugin-dev.md).
 
 
 ::: tip Dica

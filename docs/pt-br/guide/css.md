@@ -62,7 +62,7 @@ O Vue CLI usa o PostCSS internamente.
 
 Você pode configurar o PostCSS via `.postcssrc` ou qualquer fonte de configuração suportada pelo [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config), e configurar o [postcss-loader]( https://github.com/postcss/postcss-loader) via `css.loaderOptions.postcss` no `vue.config.js`.
 
-O plugin [autoprefixer](https://github.com/postcss/autoprefixer) está ativado por padrão. Para configurar os destinos do navegador, use o campo [browserslist](../guides/browser-compatibility.html#browserslist) em `package.json`.
+O plugin [autoprefixer](https://github.com/postcss/autoprefixer) está ativado por padrão. Para configurar os destinos do navegador, use o campo [browserslist](../guide/browser-compatibility.html#browserslist) em `package.json`.
 
 ::: tip Nota sobre regras CSS com prefixos Vendor
 Na criação da produção, o Vue CLI otimiza seu CSS e elimina regras de CSS com prefixos Vendor desnecessários com base nos destinos de seu navegador. Com o `autoprefixer` ativado por padrão, você deve sempre usar apenas regras CSS não prefixadas.

@@ -52,4 +52,4 @@ Os Plug-ins CLI são pacotes npm que fornecem recursos opcionais para seus proje
 
 Quando você executa o binário `vue-cli-service` dentro do seu projeto, ele automaticamente resolve e carrega todos os Plugins CLI listados no `package.json` do seu projeto.
 
-Plugins podem ser incluídos como parte do processo de criação do projeto ou adicionados ao projeto posteriormente. Eles também podem ser agrupados em predefinições reutilizáveis. Discutiremos isso com mais profundidade na seção [Plugins e Presets](./ plugins-and-presets.md).
+Plugins podem ser incluídos como parte do processo de criação do projeto ou adicionados ao projeto posteriormente. Eles também podem ser agrupados em predefinições reutilizáveis. Discutiremos isso com mais profundidade na seção [Plugins e Presets](./plugins-and-presets.md).

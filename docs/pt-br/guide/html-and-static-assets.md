@@ -73,7 +73,7 @@ Os links de prefetch consumirão largura de banda. Se você tiver um aplicativo 
 
 ### Desativar geração de Index
 
-Ao usar o Vue CLI com um backend existente, você pode precisar desativar a geração do `index.html` para que os ativos gerados possam ser usados em uma página renderizada pelo servidor. Para fazer isso, o seguinte pode ser adicionado ao [`vue.config.js`] (../config/#vue-config-js):
+Ao usar o Vue CLI com um backend existente, você pode precisar desativar a geração do `index.html` para que os ativos gerados possam ser usados em uma página renderizada pelo servidor. Para fazer isso, o seguinte pode ser adicionado ao [`vue.config.js`](../config/#vue-config-js):
 
 ``` js
 // vue.config.js
@@ -93,7 +93,7 @@ No entanto, isso não é realmente recomendado porque:
 
 - Nomes de arquivos codificados dificultam a implementação de um controle de cache eficiente.
 - Os nomes de arquivos codificados também não funcionam bem com a divisão de código, que gera arquivos JavaScript adicionais com vários nomes de arquivos.
-- Nomes de arquivos codificados não funcionam com o [Modo Moderno](../guide/brand-compatibility.md#modern-mode).
+- Nomes de arquivos codificados não funcionam com o [Modo Moderno](../guide/browser-compatibility.md#modo-moderno).
 
 Em vez disso, você deve considerar o uso da opção [indexPath](../config/#indexpath) para usar o HTML gerado como um modelo de exibição em sua estrutura do lado do servidor.
 
