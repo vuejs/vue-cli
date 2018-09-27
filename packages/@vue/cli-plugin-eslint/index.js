@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = (api, options) => {
   if (options.lintOnSave) {
     const extensions = require('./eslintOptions').extensions(api)
@@ -22,6 +24,8 @@ module.exports = (api, options) => {
     )
 
     api.chainWebpack(webpackConfig => {
+      webpackConfig.resolveLoader.modules.add(path.join(__dirname, 'node_modules'))
+
       webpackConfig.module
         .rule('eslint')
           .pre()

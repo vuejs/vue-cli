@@ -5,6 +5,8 @@ module.exports = (api, options) => {
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
 
   api.chainWebpack(webpackConfig => {
+    webpackConfig.resolveLoader.modules.add(path.join(__dirname, 'node_modules'))
+
     const jsRule = webpackConfig.module
       .rule('js')
         .test(/\.jsx?$/)
