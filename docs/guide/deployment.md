@@ -248,7 +248,73 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Heroku
 
-> TODO | Open to contribution.
+We need to set our heroku address so create a vue.config.js
+```
+  touch vue.config.js
+  module.exports = {
+     baseUrl: process.env.NODE_ENV === 'production'
+       ? 'https://your.herokuapp.com/'
+       : '/',
+  }
+```
+
+Heroku prefers a start command and needs a server so
+```
+yarn add express
+touch server.js
+```
+fill in server.js with
+```
+  const express = require('express');
+  const path = require('path');
+  const port = process.env.PORT || 3080;
+  const app = express();
+  app.use(express.static(path.join(__dirname, 'dist')));
+  // __dirname will be public on heroku
+  app.listen(port, () => {
+      console.log('heroku app is listening on ' + port); // eslint-disable-line no-console
+  });
+ ```
+ and in your package.json
+ ```
+     "scripts": {
+       "start": "node server.js",
+       "serve": "vue-cli-service serve",
+       "build": "vue-cli-service build",
+       "lint": "vue-cli-service lint",
+       }
+ ```
+ Heroku builds in production mode and prunes dev dependencies so you need to add your cli stuff to the pre-build script in package.json
+ 
+ ```
+      "scripts": {
+       "start": "node server.js",
+       "serve": "vue-cli-service serve",
+       "build": "vue-cli-service build",
+       "lint": "vue-cli-service lint",
+       "heroku-prebuild": "yarn add global @vue/cli-service @vue/cli-plugin-babel @vue/cli-plugin-eslint babel-loader",
+       }
+ ```
+  Alternaitvely you can instruct Heroku to not delete the devDependencies
+ ```
+ heroku config:set NPM_CONFIG_PRODUCTION=false YARN_PRODUCTION=false
+```
+ Heroku also prefers to serve from a public dir so add a postbuild step to copy the dist to public (NOTE: I tried having vue cli compile to public and got errors)
+ 
+ ```
+  "scripts": {
+       "start": "node server.js",
+       "serve": "vue-cli-service serve",
+       "build": "vue-cli-service build",
+       "lint": "vue-cli-service lint",
+       "test": "vue-cli-service test:unit -r mocha-steps 'test/**/*.spec.js'",
+       "docs": "jsdoc ./src/**/*.js -d ./docs",
+       "heroku-prebuild": "yarn add global @vue/cli-service @vue/cli-plugin-babel @vue/cli-plugin-eslint babel-loader",
+       "heroku-postbuild": "yarn build && cp -r dist public"
+    }
+ ```
+ that should be it.
+
 
 ### Surge
 
