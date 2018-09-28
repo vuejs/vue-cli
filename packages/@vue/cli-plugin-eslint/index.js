@@ -24,7 +24,7 @@ module.exports = (api, options) => {
     )
 
     api.chainWebpack(webpackConfig => {
-      webpackConfig.resolveLoader.modules.add(path.join(__dirname, 'node_modules'))
+      webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
       webpackConfig.module
         .rule('eslint')
