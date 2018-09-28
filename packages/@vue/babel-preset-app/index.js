@@ -135,11 +135,9 @@ module.exports = (context, options = {}) => {
 
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {
-    polyfill: false,
     regenerator: useBuiltIns !== 'usage',
-    useBuiltIns: useBuiltIns !== false,
-    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
-    moduleName: path.dirname(require.resolve('@babel/runtime/package.json'))
+    corejs: useBuiltIns !== false ? false : 2,
+    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES
   }])
 
   return {
