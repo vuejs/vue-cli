@@ -1,4 +1,4 @@
-module.exports = function sortObject (obj, keyOrder) {
+module.exports = function sortObject (obj, keyOrder, dontSortByUnicode) {
   if (!obj) return
   const res = {}
 
@@ -11,7 +11,7 @@ module.exports = function sortObject (obj, keyOrder) {
 
   const keys = Object.keys(obj)
 
-  keys.sort()
+  !dontSortByUnicode && keys.sort()
   keys.forEach(key => {
     res[key] = obj[key]
   })
