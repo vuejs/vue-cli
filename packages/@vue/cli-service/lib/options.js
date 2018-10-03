@@ -11,6 +11,7 @@ const schema = createSchema(joi => joi.object({
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
+  relativeSockJsUrl: joi.boolean(),
   pages: joi.object(),
   crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
   integrity: joi.boolean(),
@@ -119,5 +120,8 @@ exports.defaults = () => ({
     proxy: null, // string | Object
     before: app => {}
   */
-  }
+  },
+
+  // whether to allow the HMR URL to be relative
+  relativeSockJsUrl: false
 })

@@ -84,6 +84,7 @@ module.exports = (api, options) => {
         ? rawPublicUrl
         : `${protocol}://${rawPublicUrl}`
       : null
+    const relativeSockJsUrl = options.relativeSockJsUrl
 
     const urls = prepareURLs(
       protocol,
@@ -99,20 +100,21 @@ module.exports = (api, options) => {
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
-      const sockjsUrl = publicUrl
+      const sockjsUrl = relativeSockJsUrl ? '?/sockjs-node'
+        : publicUrl
         // explicitly configured via devServer.public
-        ? `?${publicUrl}/sockjs-node`
-        : isInContainer
+          ? `?${publicUrl}/sockjs-node`
+          : isInContainer
           // can't infer public netowrk url if inside a container...
           // use client-side inference (note this would break with non-root baseUrl)
-          ? ``
+            ? ``
           // otherwise infer the url
-          : `?` + url.format({
-            protocol,
-            port,
-            hostname: urls.lanUrlForConfig || 'localhost',
-            pathname: '/sockjs-node'
-          })
+            : `?` + url.format({
+              protocol,
+              port,
+              hostname: urls.lanUrlForConfig || 'localhost',
+              pathname: '/sockjs-node'
+            })
       const devClients = [
         // dev server client
         require.resolve(`webpack-dev-server/client`) + sockjsUrl,
