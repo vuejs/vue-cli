@@ -84,7 +84,7 @@ module.exports = (api, options) => {
         ? rawPublicUrl
         : `${protocol}://${rawPublicUrl}`
       : null
-    const relativeSockJsUrl = options.relativeSockJsUrl
+    const relativeSockJsUrl = options.relativeSockJsUrl || defaults.relativeSockJsUrl
 
     const urls = prepareURLs(
       protocol,
