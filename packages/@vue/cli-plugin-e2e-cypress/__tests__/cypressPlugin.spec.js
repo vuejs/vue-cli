@@ -13,6 +13,9 @@ if (!process.env.APPVEYOR) {
       }
     })
 
+    const pkg = JSON.parse(await project.read('package.json'))
+    expect(pkg.devDependencies).toHaveProperty('@cypress/webpack-preprocessor')
+
     const config = JSON.parse(await project.read('cypress.json'))
     config.video = false
     await project.write('cypress.json', JSON.stringify(config))
