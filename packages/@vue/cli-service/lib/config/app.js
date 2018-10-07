@@ -24,7 +24,7 @@ module.exports = (api, options) => {
     const outputDir = api.resolve(options.outputDir)
 
     // code splitting
-    if (isProd) {
+    if (isProd && !process.env.CYPRESS_ENV) {
       webpackConfig
         .optimization.splitChunks({
           cacheGroups: {
