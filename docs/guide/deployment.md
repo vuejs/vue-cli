@@ -10,7 +10,7 @@ If you are developing your frontend app separately from your backend - i.e. your
 
 The `dist` directory is meant to be served by an HTTP server (unless you've configured `baseUrl` to be a relative value), so it will not work if you open `dist/index.html` directly over `file://` protocol. The easiest way to preview your production build locally is using a Node.js static file server, for example [serve](https://github.com/zeit/serve):
 
-```bash
+``` bash
 npm install -g serve
 # -s flag means serve it in Single-Page Application mode
 # which deals with the routing problem below
@@ -37,49 +37,51 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 1. Set correct `baseUrl` in `vue.config.js`.
 
-   If you are deploying to `https://<USERNAME>.github.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `baseUrl` as it defaults to `"/"`.
 
-   If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `baseUrl` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
+    If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `baseUrl` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
-   ```js
-   module.exports = {
-     baseUrl: process.env.NODE_ENV === 'production' ? '/my-project/' : '/',
-   };
-   ```
+    ``` js
+    module.exports = {
+      baseUrl: process.env.NODE_ENV === 'production'
+        ? '/my-project/'
+        : '/'
+    }
+    ```
 
 2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
 
-   ```bash{13,20,23}
-   #!/usr/bin/env sh
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
 
-   # abort on errors
-   set -e
+    # abort on errors
+    set -e
 
-   # build
-   npm run build
+    # build
+    npm run build
 
-   # navigate into the build output directory
-   cd dist
+    # navigate into the build output directory
+    cd dist
 
-   # if you are deploying to a custom domain
-   # echo 'www.example.com' > CNAME
+    # if you are deploying to a custom domain
+    # echo 'www.example.com' > CNAME
 
-   git init
-   git add -A
-   git commit -m 'deploy'
+    git init
+    git add -A
+    git commit -m 'deploy'
 
-   # if you are deploying to https://<USERNAME>.github.io
-   # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+    # if you are deploying to https://<USERNAME>.github.io
+    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
 
-   # if you are deploying to https://<USERNAME>.github.io/<REPO>
-   # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
+    # if you are deploying to https://<USERNAME>.github.io/<REPO>
+    # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
 
-   cd -
-   ```
+    cd -
+    ```
 
-   ::: tip
-   You can also run the above script in your CI setup to enable automatic deployment on each push.
-   :::
+    ::: tip
+    You can also run the above script in your CI setup to enable automatic deployment on each push.
+    :::
 
 ### GitLab Pages
 
@@ -110,8 +112,10 @@ Typically, your static website will be hosted on https://yourUserName.gitlab.io/
 // make sure you update `yourProjectName` with the name of your GitLab project
 
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ? '/yourProjectName/' : '/',
-};
+  baseUrl: process.env.NODE_ENV === 'production'
+    ? '/yourProjectName/'
+    : '/'
+}
 ```
 
 Please read through the docs on [GitLab Pages domains](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) for more info about the URL where your project website will be hosted. Be aware you can also [use a custom domain](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages).
@@ -122,8 +126,8 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 1. On Netlify, setup up a new project from GitHub with the following settings:
 
-   - **Build Command:** `npm run build` or `yarn build`
-   - **Publish directory:** `dist`
+    - **Build Command:** `npm run build` or `yarn build`
+    - **Publish directory:** `dist`
 
 2. Hit the deploy button!
 
@@ -202,39 +206,41 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 2. Add a `now.json` file to your project root:
 
-   ```json
-   {
-     "name": "my-example-app",
-     "type": "static",
-     "static": {
-       "public": "dist",
-       "rewrites": [
-         {
-           "source": "**",
-           "destination": "/index.html"
-         }
-       ]
-     },
-     "alias": "vue-example",
-     "files": ["dist"]
-   }
-   ```
+    ```json
+    {
+      "name": "my-example-app",
+      "type": "static",
+      "static": {
+        "public": "dist",
+        "rewrites": [
+          {
+            "source": "**",
+            "destination": "/index.html"
+          }
+        ]
+      },
+      "alias": "vue-example",
+      "files": [
+        "dist"
+      ]
+    }
+    ```
 
-   You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
 
 3. Adding a deployment script in `package.json`:
 
-   ```json
-   "deploy": "npm run build && now && now alias"
-   ```
+    ```json
+    "deploy": "npm run build && now && now alias"
+    ```
 
-   If you want to deploy publicly by default, you can change the deployment script to the following one:
+    If you want to deploy publicly by default, you can change the deployment script to the following one:
 
-   ```json
-   "deploy": "npm run build && now --public && now alias"
-   ```
+    ```json
+    "deploy": "npm run build && now --public && now alias"
+    ```
 
-   This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
 
 ### Stdlib
 
@@ -267,7 +273,7 @@ Since Vue is a frontend library, the easiest way to host it and do things like s
 First, add Express to your project:
 
 ```bash
-npm install express connect-history-api-fallback
+npm install express
 ```
 
 Now, create a `server.js` file in your project root and add the following code to it:
@@ -278,13 +284,10 @@ var history = require('connect-history-api-fallback');
 var path = require('path');
 var serveStatic = require('serve-static');
 var app = express();
-
-app.use(history({ verbose: true }));
+ app.use(history({ verbose: true }));
 app.use(serveStatic(path.join(__dirname, '/dist')));
-
-var port = process.env.PORT || 5555;
-
-app.listen(port, () => {
+ var port = process.env.PORT || 5555;
+ app.listen(port, () => {
   console.log('Server started at http://localhost:5555');
 });
 ```
@@ -372,29 +375,29 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
 2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case set correct `baseUrl` in `vue.config.js`.
 
-   If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+    If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `baseUrl` as it defaults to `"/"`.
 
-   If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `baseUrl` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
+    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `baseUrl` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
 
 3. Inside your project, create `deploy.sh` with the following content and run it to deploy:
 
-   ```bash{13,20,23}
-   #!/usr/bin/env sh
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
 
-   # abort on errors
-   set -e
+    # abort on errors
+    set -e
 
-   # build
-   npm run build
+    # build
+    npm run build
 
-   # navigate into the build output directory
-   cd dist
+    # navigate into the build output directory
+    cd dist
 
-   git init
-   git add -A
-   git commit -m 'deploy'
+    git init
+    git add -A
+    git commit -m 'deploy'
 
-   git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
+    git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
 
-   cd -
-   ```
+    cd -
+    ```
