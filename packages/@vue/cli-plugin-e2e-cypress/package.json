@@ -22,6 +22,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@cypress/webpack-preprocessor": "^3.0.0",
     "@vue/cli-shared-utils": "^3.0.4",
     "cypress": "^3.0.2",
     "eslint-plugin-cypress": "^2.0.1"
