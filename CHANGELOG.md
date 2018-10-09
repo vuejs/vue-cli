@@ -1,3 +1,46 @@
+# [3.0.5](https://github.com/vuejs/vue-cli/compare/v3.0.4...v3.0.5) (2018-10-09)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* only enable helper aliasing when `useBuiltIns` equals `usage` ([da64938](https://github.com/vuejs/vue-cli/commit/da64938)), closes [#2637](https://github.com/vuejs/vue-cli/issues/2637)
+
+## cli
+
+#### Bug Fixes
+
+* **preset:** plugin invoke order don't sort by unicode order ([#2656](https://github.com/vuejs/vue-cli/issues/2656)) ([f99796e](https://github.com/vuejs/vue-cli/commit/f99796e))
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* also look up loaders in local `node_modules` in case deps are not hoisted ([fed948a](https://github.com/vuejs/vue-cli/commit/fed948a)), closes [#2599](https://github.com/vuejs/vue-cli/issues/2599)
+* plugin sub `node_module` directory should have higher priority in `resolveLoader.modules` ([47a28e0](https://github.com/vuejs/vue-cli/commit/47a28e0))
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* [@cypress](https://github.com/cypress)/webpack-preprocessor is both a peer dep and a dev dep ([6fd5e5d](https://github.com/vuejs/vue-cli/commit/6fd5e5d))
+* fix eslint errors when using airbnb config ([35e8d83](https://github.com/vuejs/vue-cli/commit/35e8d83)), closes [#2667](https://github.com/vuejs/vue-cli/issues/2667)
+
+## cli-service
+
+#### Bug Fixes
+
+* build --target lib should merge externals in vue.config.js ([#2653](https://github.com/vuejs/vue-cli/issues/2653)) ([20dd09d](https://github.com/vuejs/vue-cli/commit/20dd09d)), closes [#2646](https://github.com/vuejs/vue-cli/issues/2646)
+* fix test issues for cypress GUI ([ab0503b](https://github.com/vuejs/vue-cli/commit/ab0503b))
+
+## cli-service-global
+
+#### Bug Fixes
+
+* **cli-service-global:** fix eslint-loader config (close [#2654](https://github.com/vuejs/vue-cli/issues/2654)) ([#2655](https://github.com/vuejs/vue-cli/issues/2655)) ([2b104b4](https://github.com/vuejs/vue-cli/commit/2b104b4))
+
+
+
 # [3.0.4](https://github.com/vuejs/vue-cli/compare/v3.0.3...v3.0.4) (2018-09-25)
 
 ## cli
