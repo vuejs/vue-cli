@@ -263,12 +263,7 @@ module.exports = (api, options) => {
           resolve({
             server,
             url: urls.localUrlForBrowser,
-            networkUrl: url.format({
-              protocol,
-              hostname: urls.lanUrlForConfig,
-              port: port,
-              pathname: options.baseUrl || '/'
-            })
+            networkUrl: urls.lanUrlForBrowser
           })
         } else if (process.env.VUE_CLI_TEST) {
           // signal for test to check HMR
