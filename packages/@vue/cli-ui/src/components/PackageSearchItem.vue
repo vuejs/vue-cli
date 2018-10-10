@@ -37,7 +37,7 @@
         </span>
         <span v-if="official" class="info">
           <VueIcon icon="star" class="top medium"/>
-          <span>Official</span>
+          <span>{{ $t('org.vue.components.project-plugin-item.official') }}</span>
         </span>
         <span class="info downloads">
           <VueIcon class="medium" icon="file_download"/>
