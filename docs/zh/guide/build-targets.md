@@ -17,6 +17,11 @@
 在库模式中，Vue 是*外置的*。这意味着包中不会有 Vue，即便你在代码中导入了 Vue。如果这个库会通过一个打包器使用，它将尝试通过打包器以依赖的方式加载 Vue；否则就会回退到一个全局的 `Vue` 变量。
 :::
 
+::: tip 关于 IE 兼容性的体型
+在库模式中，项目的 `publicPath` 是根据主文件的加载路径[动态设置]((https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/commands/build/setPublicPath.js))的（用以支持动态的资源加载能力）。但是这个功能用到了 `document.currentScript`，而 IE 浏览器并不支持这一特性。所以如果你的库需要支持 IE 的话，请自行在项目中引入 [current-script-polyfill](https://www.npmjs.com/package/current-script-polyfill)。
+:::
+
+
 你可以通过下面的命令将一个单独的入口构建为一个库：
 
 ```
