@@ -6,7 +6,11 @@ test('should work', async () => {
   const project = await create('e2e-cypress', {
     plugins: {
       '@vue/cli-plugin-babel': {},
-      '@vue/cli-plugin-e2e-cypress': {}
+      '@vue/cli-plugin-e2e-cypress': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'save'
+      }
     }
   })
 
