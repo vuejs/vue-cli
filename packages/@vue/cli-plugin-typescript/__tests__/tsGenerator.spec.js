@@ -39,7 +39,7 @@ test('extend "types" option in tsconfig.json', async () => {
     }
   ])
 
-  expect(files['tsconfig.json']).toMatch(`"types": [\s+"node"`)
+  expect(files['tsconfig.json']).toMatch(/"types": \[\s+"node"/)
 })
 
 test('classComponent', async () => {
