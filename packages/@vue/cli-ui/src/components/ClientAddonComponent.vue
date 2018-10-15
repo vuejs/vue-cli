@@ -39,8 +39,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .loading
   v-box()
   box-center()

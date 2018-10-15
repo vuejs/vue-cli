@@ -73,8 +73,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .loading-screen
   position absolute
   z-index 900

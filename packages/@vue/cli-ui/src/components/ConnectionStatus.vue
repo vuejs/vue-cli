@@ -31,8 +31,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .content
   display flex
   align-items center

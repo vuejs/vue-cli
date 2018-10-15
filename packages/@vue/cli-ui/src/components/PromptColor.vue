@@ -53,8 +53,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .color-preview
   padding-left $padding-item
 

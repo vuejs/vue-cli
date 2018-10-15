@@ -41,8 +41,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-home
   display flex
   flex-direction column
