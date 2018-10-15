@@ -1,5 +1,5 @@
 module.exports = options => ({
-  uglifyOptions: {
+  terserOptions: {
     compress: {
       // turn off flags with small gains to speed up minification
       arrows: false,
