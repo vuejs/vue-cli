@@ -24,6 +24,7 @@
   "dependencies": {
     "@types/webpack-env": "^1.13.6",
     "@vue/cli-shared-utils": "^3.0.5",
+    "find-up": "^3.0.0",
     "fork-ts-checker-webpack-plugin": "^0.4.10",
     "globby": "^8.0.1",
     "ts-loader": "^5.2.2",
