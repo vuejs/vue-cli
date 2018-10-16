@@ -55,6 +55,7 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
+    "@vue/cli": "^3.0.5",
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-e2e-cypress": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
