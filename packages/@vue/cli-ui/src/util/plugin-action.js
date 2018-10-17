@@ -1,6 +1,6 @@
-import PLUGIN_ACTION_CALL from '../graphql/pluginActionCall.gql'
-import PLUGIN_ACTION_CALLED from '../graphql/pluginActionCalled.gql'
-import PLUGIN_ACTION_RESOLVED from '../graphql/pluginActionResolved.gql'
+import PLUGIN_ACTION_CALL from '@/graphql/plugin/pluginActionCall.gql'
+import PLUGIN_ACTION_CALLED from '@/graphql/plugin/pluginActionCalled.gql'
+import PLUGIN_ACTION_RESOLVED from '@/graphql/plugin/pluginActionResolved.gql'
 
 let uid = 0
 

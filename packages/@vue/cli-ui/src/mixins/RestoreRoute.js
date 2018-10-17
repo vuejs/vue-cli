@@ -1,6 +1,6 @@
 import { isSameRoute } from '../util/route'
 
-import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
+import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
 
 export default function ({
   baseRoute = null

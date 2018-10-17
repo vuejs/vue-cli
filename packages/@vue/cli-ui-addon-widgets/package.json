@@ -1,5 +1,5 @@
 {
-  "name": "cli-ui-addon-widgets",
+  "name": "@vue/cli-ui-addon-widgets",
   "version": "3.0.3",
   "files": [
     "dist",

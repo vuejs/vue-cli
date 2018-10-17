@@ -1,4 +1,4 @@
-import LOADING from '../graphql/loading.gql'
+import LOADING from '@/graphql/loading/loading.gql'
 
 export default {
   Mutation: {

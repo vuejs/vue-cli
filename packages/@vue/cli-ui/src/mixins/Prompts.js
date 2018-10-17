@@ -1,4 +1,4 @@
-import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
+import PROMPT_ANSWER from '@/graphql/prompt/promptAnswer.gql'
 
 export default function ({
   field,

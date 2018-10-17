@@ -1,0 +1,10 @@
+#import "../version/versionFragment.gql"
+
+mutation pluginUpdate ($id: ID!) {
+  pluginUpdate (id: $id) {
+    id
+    version {
+      ...version
+    }
+  }
+}
