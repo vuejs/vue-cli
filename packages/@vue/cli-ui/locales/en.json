@@ -441,7 +441,7 @@
           }
         },
         "project-dashboard": {
-          "title": "Project dashboard (WIP)",
+          "title": "Project dashboard",
           "cutomize": "Customize",
           "done": "Done"
         },
