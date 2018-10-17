@@ -30,25 +30,34 @@ export default {
 .content-view
   height 100%
 
+  .content,
   .wrapper
     width 100%
     height 100%
     box-sizing border-box
 
   .content
-    height 100%
-    background $color-background-light
+    background darken($vue-ui-color-light-neutral, 12%)
     .vue-ui-dark-mode &
-      background lighten($vue-ui-color-darker, 1%)
+      background lighten($vue-ui-color-darker, 6%)
     .wrapper
-      background $md-white
+      background darken($vue-ui-color-light-neutral, 8%)
       position relative
       overflow-x hidden
       overflow-y auto
       .vue-ui-dark-mode &
-        background $vue-ui-color-darker
+        background lighten($vue-ui-color-dark, 3%)
+
+  &.list
+    .wrapper
+      background $vue-ui-color-light-neutral
+      .vue-ui-dark-mode &
+        background lighten($vue-ui-color-darker, 9%)
 
   &.limit-width
     .wrapper
       max-width 1200px
+      margin auto
+      @media (min-width 1200px)
+        border-radius $br $br 0 0
 </style>

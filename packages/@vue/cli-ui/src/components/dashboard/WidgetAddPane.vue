@@ -68,8 +68,11 @@ export default {
 .widget-add-pane
   position relative
   z-index 1
-  box-shadow 0 0 10px rgba(black, .1)
   v-box()
+  box-shadow 0 0 10px rgba(black, .1)
+  background $vue-ui-color-light
+  .vue-ui-dark-mode &
+    background $vue-ui-color-darker
 
 .toolbar
   h-box()

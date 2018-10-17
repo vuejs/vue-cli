@@ -1,6 +1,8 @@
 <template>
   <div class="nav-list vue-ui-disable-scroll">
     <div class="content">
+      <slot name="before"/>
+
       <div
         v-for="item of items"
         :key="item.id"
@@ -11,6 +13,8 @@
           :selected="item.route === currentRoute"
         />
       </div>
+
+      <slot name="after"/>
     </div>
   </div>
 </template>
@@ -51,7 +55,7 @@ export default {
 .nav-list
   overflow-x hidden
   overflow-y auto
-  background $color-background-light
+  background $vue-ui-color-light-neutral
   .vue-ui-dark-mode &
-    background lighten($vue-ui-color-darker, 1%)
+    background lighten($vue-ui-color-darker, 9%)
 </style>

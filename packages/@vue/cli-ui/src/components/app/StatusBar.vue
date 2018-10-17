@@ -188,33 +188,30 @@ export default {
 
 .status-bar
   position relative
-  z-index 1
-  box-shadow 0 -2px 10px rgba(black, .05)
+  z-index 101
+  box-shadow 0 -2px 10px rgba(black, .1)
   .vue-ui-dark-mode &
     box-shadow 0 -2px 10px rgba(black, .2)
 
   .content
     h-box()
     align-items center
-    background $vue-ui-color-light
+    background $vue-ui-color-primary
     font-size 12px
     height 34px
-    .vue-ui-dark-mode &
-      background $vue-ui-color-darker
+    color $vue-ui-color-light
+    >>> .vue-ui-icon svg
+      fill @color
 
   .section
     h-box()
     align-items center
-    opacity .8
     padding 0 11px
     height 100%
     cursor default
 
     &:hover
-      opacity 1
-      background lighten($vue-ui-color-light-neutral, 30%)
-      .vue-ui-dark-mode &
-        background $vue-ui-color-dark
+      background lighten($vue-ui-color-primary, 30%)
 
     > .vue-ui-icon + *
       margin-left 4px

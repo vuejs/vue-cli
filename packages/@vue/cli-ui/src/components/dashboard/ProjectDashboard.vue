@@ -95,7 +95,7 @@ export default {
   transition transform .15s
 
 .widget-add-pane
-  width 300px
+  width 360px
 
 .customizing
   .widgets-wrapper

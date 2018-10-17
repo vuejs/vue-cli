@@ -3,14 +3,6 @@
     <ContentView
       :title="$t('org.vue.views.project-tasks.title')"
     >
-      <template slot="actions">
-        <VueInput
-          v-model="search"
-          icon-left="search"
-          class="round"
-        />
-      </template>
-
       <ApolloQuery
         :query="require('@/graphql/task/tasks.gql')"
         class="fill-height"
@@ -26,6 +18,17 @@
             :items="generateItems(data.tasks)"
             class="tasks"
           >
+            <div
+              slot="before"
+              class="list-header"
+            >
+              <VueInput
+                v-model="search"
+                icon-left="search"
+                class="search round"
+              />
+            </div>
+
             <TaskItem
               slot-scope="{ item, selected }"
               :task="item.task"

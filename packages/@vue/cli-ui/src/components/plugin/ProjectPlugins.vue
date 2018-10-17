@@ -2,7 +2,7 @@
   <div class="project-plugins page">
     <ContentView
       :title="$t('org.vue.views.project-plugins.title')"
-      class="limit-width"
+      class="limit-width list"
     >
       <template slot="actions">
         <VueInput

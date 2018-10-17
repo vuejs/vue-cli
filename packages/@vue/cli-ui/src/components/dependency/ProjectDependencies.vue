@@ -2,7 +2,7 @@
   <div class="project-dependencies page">
     <ContentView
       :title="$t('org.vue.views.project-dependencies.title')"
-      class="limit-width"
+      class="limit-width list"
     >
       <template slot="actions">
         <VueInput

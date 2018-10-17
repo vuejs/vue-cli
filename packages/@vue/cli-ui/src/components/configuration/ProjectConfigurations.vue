@@ -4,14 +4,6 @@
       :title="$t('org.vue.views.project-configurations.title')"
       class="limit-width"
     >
-      <template slot="actions">
-        <VueInput
-          v-model="search"
-          icon-left="search"
-          class="round"
-        />
-      </template>
-
       <ApolloQuery
         :query="require('@/graphql/configuration/configurations.gql')"
         class="fill-height"
@@ -27,6 +19,17 @@
             :items="generateItems(data.configurations)"
             class="configurations"
           >
+            <div
+              slot="before"
+              class="list-header"
+            >
+              <VueInput
+                v-model="search"
+                icon-left="search"
+                class="search round"
+              />
+            </div>
+
             <ConfigurationItem
               slot-scope="{ item, selected }"
               :configuration="item.configuration"

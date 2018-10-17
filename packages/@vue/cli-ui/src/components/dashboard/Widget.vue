@@ -13,7 +13,7 @@
         class="shell"
         :style="mainStyle"
       >
-        <div class="wrapper">
+        <div class="wrapper card">
           <div class="content-wrapper">
             <div class="header">
               <div class="title">{{ $t(widget.definition.title) }}</div>
@@ -324,13 +324,6 @@ $zoom = .7
   padding ($padding-item / 2)
   box-sizing border-box
 
-.wrapper
-  border rgba($vue-ui-color-primary, .2) solid 1px
-  background $vue-ui-color-light
-  border-radius $br
-  .vue-ui-dark-mode &
-    background $vue-ui-color-darker
-
 .wrapper,
 .content-wrapper,
 .move-ghost .backdrop,
@@ -348,7 +341,8 @@ $zoom = .7
   transition box-shadow .15s
 
 .header
-  padding ($padding-item / 2) $padding-item
+  $small-padding = ($padding-item / 1.5)
+  padding $small-padding $small-padding $small-padding $padding-item
   h-box()
 
   .title
@@ -428,8 +422,7 @@ $zoom = .7
     border-radius ($br / $zoom)
 
   .content-wrapper
-    opacity .5
-    filter blur(8px)
+    opacity .15
 
   .customize-overlay
     /deep/ > *
@@ -472,7 +465,7 @@ $zoom = .7
   &.v-enter-active,
   &.v-leave-active
     .shell
-      transition transform .15s, opacity .15s
+      transition transform .15s, opacity .15s !important
   &.v-enter,
   &.v-leave-to
     .shell

@@ -181,6 +181,9 @@ export default {
   v-box()
   align-items stretch
   height 100%
+  background $vue-ui-color-light
+  .vue-ui-dark-mode &
+    background $vue-ui-color-darker
 
   .content,
   .loading

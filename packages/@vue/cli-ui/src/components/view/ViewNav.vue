@@ -5,6 +5,10 @@
       wide: $responsive.wide
     }"
   >
+    <div class="header">
+      <ProjectQuickDropdown/>
+    </div>
+
     <div class="content">
       <VueGroup
         v-model="currentViewName"
@@ -168,9 +172,18 @@ export default {
 @import "~@/style/imports"
 
 .project-nav
-  background $vue-ui-color-light-neutral
+  background $vue-ui-color-light
+  box-shadow 2px 0 10px rgba(black, .1)
+  position relative
+  z-index 100
   .vue-ui-dark-mode &
-    background $vue-ui-color-dark
+    background $vue-ui-color-darker
+
+  .header
+    padding $padding-item
+    display flex
+    .project-quick-dropdown
+      flex 1
 
   .content
     v-box()

@@ -17,8 +17,8 @@
 
     <div class="actions">
       <VueButton
-        class="primary"
-        :label="$t('org.vue.components.widget-add-item.add')"
+        class="primary icon-button"
+        v-tooltip="$t('org.vue.components.widget-add-item.add')"
         icon-left="add"
         @click="add()"
       />
@@ -31,7 +31,13 @@
       @close="showDetails = false"
     >
       <div class="default-body">
-        TODO
+        <div class="name">
+          {{ $t(definition.title) }}
+        </div>
+        <div
+          class="description"
+          v-html="$t(definition.description)"
+        />
       </div>
 
       <div slot="footer" class="actions">
@@ -94,17 +100,25 @@ export default {
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 
-.widget-add-item
-  padding $padding-item
+.widget-add-item,
+.actions
+  h-box()
+  box-center()
 
 .info
+  flex 1
+  overflow hidden
+  padding $padding-item
   h-box()
 
   .list-item-info
     flex 1
+    overflow hidden
+
+    >>> .description
+      flex 1
+      ellipsis()
 
 .actions
-  h-box()
-  box-center()
-  margin-top $padding-item
+  margin-right $padding-item
 </style>

@@ -47,6 +47,22 @@ h2
 .list-item
   list-item()
 
+.list-header
+  padding $padding-item
+  display flex
+  align-items center
+  justify-content center
+
+  .search
+    flex 1
+
+.card
+  background $vue-ui-color-light
+  border-radius ($br * 2)
+  box-shadow 0 4px 15px rgba(black, .1)
+  .vue-ui-dark-mode &
+    background $vue-ui-color-darker
+
 ansi-colors('black', $vue-ui-color-dark)
 ansi-colors('red', $vue-ui-color-danger)
 ansi-colors('green', $vue-ui-color-primary)
@@ -223,4 +239,3 @@ ansi-colors('white', $vue-ui-color-light)
   &.top-right,
   &.bottom-left
     cursor nesw-resize
-

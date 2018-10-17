@@ -57,7 +57,7 @@ export default {
 .news-item
   padding ($padding-item / 2) $padding-item
   &:not(:last-child)
-    border-bottom rgba($vue-ui-color-primary, .3) solid 1px
+    border-bottom rgba($vue-ui-color-primary, .2) solid 1px
 
 .title
   margin-bottom ($padding-item /2)

@@ -1,12 +1,12 @@
 <template>
-  <div class="terminal-view">
+  <div class="terminal-view card">
     <div v-if="toolbar" class="pane-toolbar">
       <VueIcon
         icon="dvr"
       />
       <div class="title">{{ title }}</div>
       <VueButton
-        class="icon-button"
+        class="icon-button flat"
         icon-left="delete_forever"
         v-tooltip="$t('org.vue.components.terminal-view.buttons.clear')"
         @click="clear(); $emit('clear')"
@@ -16,7 +16,7 @@
         class="separator"
       />
       <VueButton
-        class="icon-button"
+        class="icon-button flat"
         icon-left="subdirectory_arrow_left"
         v-tooltip="$t('org.vue.components.terminal-view.buttons.scroll')"
         @click="scrollToBottom()"
@@ -41,7 +41,7 @@ Terminal.applyAddon(webLinks)
 
 const defaultTheme = {
   foreground: '#2c3e50',
-  background: '#e4f5ef',
+  background: '#fff',
   cursor: 'rgba(0, 0, 0, .4)',
   selection: 'rgba(0, 0, 0, 0.3)',
   black: '#000000',
@@ -65,7 +65,7 @@ const defaultTheme = {
 const darkTheme = {
   ...defaultTheme,
   foreground: '#fff',
-  background: '#2c3e50',
+  background: '#1d2935',
   cursor: 'rgba(255, 255, 255, .4)',
   selection: 'rgba(255, 255, 255, 0.3)',
   magenta: '#e83030',
@@ -142,7 +142,7 @@ export default {
       if (typeof oldValue === 'undefined') {
         this.initTerminal()
       } else if (this.$_terminal) {
-        this.$_terminal._setTheme(this.theme)
+        this.$_terminal.setOption('theme', this.theme)
       }
     }
   },
@@ -235,9 +235,6 @@ export default {
 .terminal-view
   v-box()
   align-items stretch
-  background $vue-ui-color-light-neutral
-  .vue-ui-dark-mode &
-    background $vue-ui-color-dark
 
   .view
     flex 100% 1 1

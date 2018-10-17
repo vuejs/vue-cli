@@ -5,13 +5,12 @@
       wide: $responsive.wide
     }"
   >
-    <TopBar />
-
     <div class="panes">
       <ViewNav/>
 
       <div v-if="ready" class="content vue-ui-disable-scroll">
-        <router-view/>
+        <TopBar />
+        <router-view class="router-view"/>
       </div>
     </div>
 
@@ -49,7 +48,7 @@ export default {
 
   &.wide
     .project-nav
-      width 180px
+      width 220px
 
 .panes
   flex auto 1 1
@@ -69,5 +68,13 @@ export default {
   width 0
   overflow-x hidden
   overflow-y auto
+  display flex
+  flex-direction column
 
+.top-bar
+  flex auto 0 0
+
+.router-view
+  flex 1
+  height 0
 </style>
