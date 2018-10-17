@@ -25,6 +25,7 @@ type WidgetDefinition {
   icon: String
   screenshot: String
   component: String!
+  detailsComponent: String
   canAddMore: Boolean!
   hasConfigPrompts: Boolean!
   minWidth: Int!

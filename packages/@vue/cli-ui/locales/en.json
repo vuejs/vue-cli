@@ -749,8 +749,9 @@
         },
         "status-widget": {
           "last-updated": "Updated",
+          "never": "Not updated yet",
           "check": "Check for updates",
-          "more-info": "Details"
+          "more-info": "Open details"
         },
         "plugin-updates": {
           "title": "Plugin updates",

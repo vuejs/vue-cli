@@ -8,6 +8,7 @@ const schema = createSchema(joi => ({
   screenshot: joi.string(),
   link: joi.string(),
   component: joi.string().required(),
+  detailsComponent: joi.string(),
   // Maximum number of instances
   maxCount: joi.number(),
   // Size

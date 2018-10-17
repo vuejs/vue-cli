@@ -58,7 +58,10 @@ module.exports = api => {
 
   // Plugin updates
 
-  setSharedData('plugin-updates.status', { status: 'ok', lastUpdate: Date.now() })
+  setSharedData('plugin-updates.status', {
+    status: 'ok',
+    lastUpdate: Date.now()
+  })
   registerWidget({
     id: 'plugin-updates',
     title: 'org.vue.widgets.plugin-updates.title',
@@ -74,7 +77,10 @@ module.exports = api => {
 
   // Depdency updates
 
-  setSharedData('dependency-updates.status', { status: 'ok', lastUpdate: Date.now() })
+  setSharedData('dependency-updates.status', {
+    status: 'loading',
+    lastUpdate: null
+  })
   registerWidget({
     id: 'dependency-updates',
     title: 'org.vue.widgets.dependency-updates.title',
@@ -90,13 +96,18 @@ module.exports = api => {
 
   // Vulnerability check
 
-  setSharedData('vulnerability.status', { status: 'ok', lastUpdate: Date.now() })
+  setSharedData('vulnerability.status', {
+    status: 'attention',
+    lastUpdate: Date.now(),
+    count: 3
+  })
   registerWidget({
     id: 'vulnerability',
     title: 'org.vue.widgets.vulnerability.title',
     description: 'org.vue.widgets.vulnerability.description',
     icon: 'verified_user',
     component: 'org.vue.widgets.components.vulnerability',
+    detailsComponent: 'org.vue.widgets.components.vulnerability-details',
     minWidth: 2,
     minHeight: 1,
     maxWidth: 2,

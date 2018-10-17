@@ -2,7 +2,8 @@
   <div
     class="project-dashboard page"
     :class="{
-      customizing: customizeMode
+      customizing: customizeMode,
+      'widget-details-shown': injected.isWidgetDetailsShown
     }"
   >
     <ContentView
@@ -27,6 +28,7 @@
 
       <div class="panes fill-height">
         <ApolloQuery
+          ref="widgets"
           :query="require('@/graphql/widget/widgets.gql')"
           class="widgets"
         >
@@ -62,7 +64,21 @@
 </template>
 
 <script>
+import OnWindowResize from '@/mixins/OnWindowResize'
+
+const PADDING = 8
+
 export default {
+  provide () {
+    return {
+      dashboard: this.injected
+    }
+  },
+
+  mixins: [
+    OnWindowResize()
+  ],
+
   metaInfo () {
     return {
       title: this.$t('org.vue.views.project-dashboard.title')
@@ -71,7 +87,25 @@ export default {
 
   data () {
     return {
-      customizeMode: false
+      customizeMode: false,
+      injected: {
+        width: 0,
+        height: 0,
+        left: 0,
+        top: 0,
+        isWidgetDetailsShown: false
+      }
+    }
+  },
+
+  methods: {
+    onWindowResize () {
+      const el = this.$refs.widgets.$el
+      const bounds = el.getBoundingClientRect()
+      this.injected.width = bounds.width - PADDING * 2
+      this.injected.height = bounds.height - PADDING * 2
+      this.injected.left = bounds.left
+      this.injected.top = bounds.top
     }
   }
 }
@@ -100,4 +134,10 @@ export default {
 .customizing
   .widgets-wrapper
     transform scale(.7)
+
+.widget-details-shown
+  .widgets
+    overflow hidden
+  .widgets-wrapper > .widget /deep/ > .shell
+    opacity 0
 </style>

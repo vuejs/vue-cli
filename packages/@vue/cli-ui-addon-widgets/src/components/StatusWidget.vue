@@ -11,17 +11,22 @@
 
       <div class="info">
         <div class="title" v-html="title"/>
-        <div
-          v-if="status.lastUpdate"
-          class="last-updated"
-        >
-          <div class="label">
-            {{ $t('org.vue.widgets.status-widget.last-updated') }}
+        <div class="last-updated">
+          <template v-if="status.lastUpdate">
+            <div class="label">
+              {{ $t('org.vue.widgets.status-widget.last-updated') }}
+            </div>
+            <VueTimeago
+              :datetime="status.lastUpdate"
+              :auto-update="60"
+            />
+          </template>
+          <div
+            v-else
+            class="label"
+          >
+            {{ $t('org.vue.widgets.status-widget.never') }}
           </div>
-          <VueTimeago
-            :datetime="status.lastUpdate"
-            :auto-update="60"
-          />
           <VueButton
             v-if="status.status !== 'loading'"
             v-tooltip="$t('org.vue.widgets.status-widget.check')"

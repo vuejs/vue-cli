@@ -234,4 +234,8 @@ export default {
     .logger-message
       font-size .9em
       padding-right 0
+
+    .last-message >>> .message
+      > span
+        color $vue-ui-color-light
 </style>

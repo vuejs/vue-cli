@@ -6,17 +6,22 @@
         customizing: customizeMode,
         moving: moveState,
         resizing: resizeState,
-        selected: isSelected
+        selected: isSelected,
+        'details-shown': showDetails,
+        details
       }"
     >
       <div
+        ref="shell"
         class="shell"
-        :style="mainStyle"
+        :style="shellStyle || (!details && mainStyle)"
       >
         <div class="wrapper card">
           <div class="content-wrapper">
             <div class="header">
               <div class="title">{{ $t(widget.definition.title) }}</div>
+
+              <!-- Settings button -->
               <VueButton
                 v-if="widget.definition.hasConfigPrompts"
                 icon-left="settings"
@@ -24,11 +29,19 @@
                 v-tooltip="$t('org.vue.components.widget.configure')"
                 @click="openConfig()"
               />
+
+              <!-- Close button -->
+              <VueButton
+                v-if="details"
+                icon-left="close"
+                class="icon-button flat primary"
+                @click="$emit('close')"
+              />
             </div>
 
             <div v-if="widget.configured" class="content">
               <ClientAddonComponent
-                :name="widget.definition.component"
+                :name="component"
                 class="view"
               />
             </div>
@@ -119,6 +132,13 @@
           />
         </div>
       </VueModal>
+
+      <WidgetDetailsView
+        v-if="!details && showDetails"
+        :widget="widget"
+        :shell-origin="shellOrigin"
+        @close="closeDetails()"
+      />
     </div>
   </transition>
 </template>
@@ -153,6 +173,10 @@ export default {
       widget: this.injected
     }
   },
+
+  inject: [
+    'dashboard'
+  ],
 
   mixins: [
     Prompts({
@@ -196,24 +220,44 @@ export default {
     customizeMode: {
       type: Boolean,
       default: false
+    },
+
+    details: {
+      type: Boolean,
+      default: false
+    },
+
+    shellStyle: {
+      type: Object,
+      default: null
     }
   },
 
   data () {
     return {
       showConfig: false,
+      showDetails: false,
       injected: {
         data: this.widget,
         openConfig: this.openConfig,
         openDetails: this.openDetails,
+        closeDetails: this.closeDetails,
         remove: this.remove
-      }
+      },
+      shellOrigin: null
     }
   },
 
   computed: {
     isSelected () {
       return this.widget.id === state.selectedWidgetId
+    },
+
+    component () {
+      if (this.details) {
+        return this.widget.definition.detailsComponent
+      }
+      return this.widget.definition.component
     }
   },
 
@@ -225,10 +269,26 @@ export default {
     },
 
     customizeMode (value) {
-      if (!value && this.isSelected) {
+      if (value) {
+        if (this.showDetails) this.closeDetails()
+      } else if (this.isSelected) {
         state.selectedWidgetId = null
       }
-    }
+    },
+
+    'dashboard.width': 'updateShellOrigin',
+    'dashboard.height': 'updateShellOrigin',
+    'widget.x': 'updateShellOrigin',
+    'widget.y': 'updateShellOrigin',
+    'widget.width': 'updateShellOrigin',
+    'widget.height': 'updateShellOrigin'
+  },
+
+  mounted () {
+    // Wait for animation
+    setTimeout(() => {
+      this.updateShellOrigin()
+    }, 150)
   },
 
   methods: {
@@ -253,7 +313,15 @@ export default {
     },
 
     openDetails () {
-      // TODO
+      if (this.widget.definition.detailsComponent) {
+        this.showDetails = true
+        this.dashboard.isWidgetDetailsShown = true
+      }
+    },
+
+    closeDetails () {
+      this.showDetails = false
+      this.dashboard.isWidgetDetailsShown = false
     },
 
     remove () {
@@ -307,6 +375,15 @@ export default {
           }
         }
       })
+    },
+
+    updateShellOrigin () {
+      const el = this.$refs.shell
+      const bounds = el.getBoundingClientRect()
+      this.shellOrigin = {
+        x: bounds.left + bounds.width / 2 - this.dashboard.left,
+        y: bounds.top + bounds.height / 2 - this.dashboard.top
+      }
     }
   }
 }
@@ -453,22 +530,29 @@ $zoom = .7
 
 .widget
   .shell
-    transition opacity .15s
+    transition opacity .15s, transform .15s
   &:not(.moving):not(.resizing)
     .shell
-      transition opacity .15s, left .15s, top .15s, width .15s, height .15s
+      transition opacity .15s, left .15s, top .15s, width .15s, height .15s, transform .15s
 
   &.selected
     .customize-overlay
       border $vue-ui-color-primary solid 1px
 
-  &.v-enter-active,
-  &.v-leave-active
+  &.moving
     .shell
-      transition transform .15s, opacity .15s !important
+      transform scale(1.08)
+
+  &.details-shown
+    > .shell
+      transform scale(1.2)
+
   &.v-enter,
   &.v-leave-to
     .shell
-      transform scale($zoom)
+      transform scale(.9)
       opacity 0
+    &.details
+      .shell
+        transform scale(.4)
 </style>
