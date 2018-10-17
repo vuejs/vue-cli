@@ -24,8 +24,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .view-badge
   .content
     font-size 12px

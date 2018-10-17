@@ -39,6 +39,7 @@ module.exports = (context, options = {}) => {
   const {
     polyfills: userPolyfills,
     loose = false,
+    debug = false,
     useBuiltIns = 'usage',
     modules = false,
     targets: rawTargets,
@@ -101,6 +102,7 @@ module.exports = (context, options = {}) => {
   const envOptions = {
     spec,
     loose,
+    debug,
     modules,
     targets,
     useBuiltIns,
@@ -135,6 +137,7 @@ module.exports = (context, options = {}) => {
   plugins.push([require('@babel/plugin-transform-runtime'), {
     regenerator: useBuiltIns !== 'usage',
     corejs: useBuiltIns !== false ? false : 2,
+    helpers: useBuiltIns === 'usage',
     useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES
   }])
 

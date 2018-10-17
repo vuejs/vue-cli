@@ -165,8 +165,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-nav
   background $vue-ui-color-light-neutral
   .vue-ui-dark-mode &

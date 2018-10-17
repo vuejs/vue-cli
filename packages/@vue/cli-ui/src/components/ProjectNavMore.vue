@@ -27,8 +27,6 @@
 </template>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-nav-more
   .vue-ui-dropdown.open .dropdown-trigger .vue-ui-button
     &,

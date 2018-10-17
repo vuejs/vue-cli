@@ -1,4 +1,5 @@
 // https://docs.cypress.io/guides/guides/plugins-guide.html
+/* eslint-disable import/no-extraneous-dependencies, global-require */
 const webpack = require('@cypress/webpack-preprocessor')
 
 module.exports = (on, config) => {

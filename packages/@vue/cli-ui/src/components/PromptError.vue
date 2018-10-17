@@ -19,8 +19,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .prompt-error
   padding 0 $padding-item $padding-item
 

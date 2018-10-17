@@ -27,6 +27,9 @@ module.exports = function generateReadme (pkg, packageManager) {
     '```',
     `${packageManager} install`,
     '```',
-    printScripts(pkg, packageManager)
+    printScripts(pkg, packageManager),
+    '### Customize configuration',
+    'See [Configuration Reference](https://cli.vuejs.org/config/).',
+    ''
   ].join('\n')
 }

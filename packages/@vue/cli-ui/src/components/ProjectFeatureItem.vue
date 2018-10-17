@@ -32,8 +32,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-feature-item
   .vue-ui-switch
     padding $padding-item

@@ -155,8 +155,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 bullet-color($color)
   .bullet
     background-color $color

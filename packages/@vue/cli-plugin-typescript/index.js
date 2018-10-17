@@ -5,7 +5,7 @@ module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
 
   api.chainWebpack(config => {
-    config.resolveLoader.modules.add(path.join(__dirname, 'node_modules'))
+    config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
     if (!options.pages) {
       config.entry('app')

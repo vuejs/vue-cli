@@ -48,8 +48,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-preset-item
   padding $padding-item
   padding-left 0

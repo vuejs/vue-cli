@@ -334,8 +334,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-task-details
   v-box()
   align-items stretch
