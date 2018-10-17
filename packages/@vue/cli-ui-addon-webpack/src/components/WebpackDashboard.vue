@@ -40,7 +40,7 @@
       />
     </div>
 
-    <div class="content vue-ui-grid default-gap">
+    <div class="content vue-ui-grid">
       <BuildStatus />
       <BuildProgress />
       <SpeedStats class="span-2"/>
@@ -90,6 +90,7 @@ export default {
 .vue-webpack-dashboard
   .content
     grid-template-columns 9fr 4fr
+    grid-gap $padding-item
 
     >>>
       .title
