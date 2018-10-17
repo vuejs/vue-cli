@@ -188,7 +188,7 @@ export default {
 
 .status-bar
   position relative
-  z-index 101
+  z-index 2
   box-shadow 0 -2px 10px rgba(black, .1)
   .vue-ui-dark-mode &
     box-shadow 0 -2px 10px rgba(black, .2)

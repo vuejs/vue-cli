@@ -175,7 +175,7 @@ export default {
   background $vue-ui-color-light
   box-shadow 2px 0 10px rgba(black, .1)
   position relative
-  z-index 100
+  z-index 1
   .vue-ui-dark-mode &
     background $vue-ui-color-darker
 
