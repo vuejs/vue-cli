@@ -22,9 +22,9 @@
   position relative
   height 32px
   z-index 1
-  background darken($vue-ui-color-light-neutral, 12%)
+  background $content-bg-secondary-light
   .vue-ui-dark-mode &
-    background lighten($vue-ui-color-darker, 6%)
+    background $content-bg-secondary-dark
 
   &,
   .actions

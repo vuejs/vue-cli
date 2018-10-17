@@ -37,22 +37,22 @@ export default {
     box-sizing border-box
 
   .content
-    background darken($vue-ui-color-light-neutral, 12%)
+    background $content-bg-secondary-light
     .vue-ui-dark-mode &
-      background lighten($vue-ui-color-darker, 6%)
+      background $content-bg-secondary-dark
     .wrapper
-      background darken($vue-ui-color-light-neutral, 8%)
+      background $content-bg-primary-light
       position relative
       overflow-x hidden
       overflow-y auto
       .vue-ui-dark-mode &
-        background lighten($vue-ui-color-dark, 3%)
+        background $content-bg-primary-dark
 
   &.list
     .wrapper
-      background $vue-ui-color-light-neutral
+      background $content-bg-list-light
       .vue-ui-dark-mode &
-        background lighten($vue-ui-color-darker, 9%)
+        background $content-bg-list-dark
 
   &.limit-width
     .wrapper

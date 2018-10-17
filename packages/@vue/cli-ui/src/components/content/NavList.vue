@@ -55,7 +55,7 @@ export default {
 .nav-list
   overflow-x hidden
   overflow-y auto
-  background $vue-ui-color-light-neutral
+  background $content-bg-list-light
   .vue-ui-dark-mode &
-    background lighten($vue-ui-color-darker, 9%)
+    background $content-bg-list-dark
 </style>

@@ -82,9 +82,9 @@ export default {
 
   .header,
   >>> .tabs
-    background $vue-ui-color-light-neutral
+    background $content-bg-primary-light
     .vue-ui-dark-mode &
-      background $vue-ui-color-dark
+      background $content-bg-primary-dark
 
   >>> .tabs-content
     height 0
