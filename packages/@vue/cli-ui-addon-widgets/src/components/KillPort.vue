@@ -115,8 +115,7 @@ export default {
       width 32px
       height @width
   .info
-    font-size 24px
-    font-weight lighter
+    font-size 18px
 
 .status-killed
   .status

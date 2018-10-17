@@ -342,7 +342,7 @@ $zoom = .7
 
 .header
   $small-padding = ($padding-item / 1.5)
-  padding $small-padding $small-padding $small-padding $padding-item
+  padding $small-padding $small-padding ($small-padding / 2) $padding-item
   h-box()
 
   .title

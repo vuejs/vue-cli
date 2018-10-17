@@ -96,8 +96,7 @@ export default {
       height @width
 
 .title
-  font-size 24px
-  font-weight lighter
+  font-size 18px
 
 .last-updated
   color $color-text-light

@@ -93,7 +93,11 @@ export default {
 @import "~@vue/cli-ui/src/style/imports"
 
 .info
-  padding ($padding-item + 9px) $padding-item
+  margin 5px 0 6px
+  padding $padding-item
+
+  >>> .name
+    font-size 18px
 
 .actions
   h-box()
