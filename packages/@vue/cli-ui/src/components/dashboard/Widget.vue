@@ -21,6 +21,20 @@
             <div class="header">
               <div class="title">{{ $t(widget.definition.title) }}</div>
 
+              <!-- Custom actions -->
+              <template v-if="widget.configured">
+                <VueButton
+                  v-for="action of headerActions"
+                  v-if="!action.hidden"
+                  :key="action.id"
+                  :icon-left="action.icon"
+                  :disabled="action.disabled"
+                  class="icon-button flat primary"
+                  v-tooltip="$t(action.tooltip)"
+                  @click="action.onCalled()"
+                />
+              </template>
+
               <!-- Settings button -->
               <VueButton
                 v-if="widget.definition.hasConfigPrompts"
@@ -247,13 +261,19 @@ export default {
       showConfig: false,
       showDetails: false,
       injected: {
+        // State
         data: this.widget,
+        isDetails: this.details,
+        // Actions
         openConfig: this.openConfig,
         openDetails: this.openDetails,
         closeDetails: this.closeDetails,
+        addHeaderAction: this.addHeaderAction,
+        removeHeaderAction: this.removeHeaderAction,
         remove: this.remove
       },
-      shellOrigin: null
+      shellOrigin: null,
+      headerActions: []
     }
   },
 
@@ -393,7 +413,37 @@ export default {
         x: bounds.left + bounds.width / 2 - this.dashboard.left,
         y: bounds.top + bounds.height / 2 - this.dashboard.top
       }
+    },
+
+    addHeaderAction (action) {
+      this.removeHeaderAction(action.id)
+      // Optional props should still be reactive
+      if (!action.tooltip) action.tooltip = null
+      if (!action.disabled) action.disabled = false
+      if (!action.hidden) action.hidden = false
+      // Transform the function props into getters
+      transformToGetter(action, 'tooltip')
+      transformToGetter(action, 'disabled')
+      transformToGetter(action, 'hidden')
+      this.headerActions.push(action)
+    },
+
+    removeHeaderAction (id) {
+      const index = this.headerActions.findIndex(a => a.id === id)
+      if (index !== -1) this.headerActions.splice(index, 1)
     }
+  }
+}
+
+function transformToGetter (obj, field) {
+  const value = obj[field]
+  if (typeof value === 'function') {
+    delete obj[field]
+    Object.defineProperty(obj, field, {
+      get: value,
+      enumerable: true,
+      configurable: true
+    })
   }
 }
 </script>

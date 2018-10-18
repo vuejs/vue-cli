@@ -68,13 +68,27 @@ export default {
 
   watch: {
     'widget.data.config.url': {
-      handler: 'fetchFeed',
+      handler () {
+        this.fetchFeed()
+      },
       immediate: true
     }
   },
 
+  created () {
+    this.widget.addHeaderAction({
+      id: 'refresh',
+      icon: 'refresh',
+      tooltip: 'org.vue.widgets.news.refresh',
+      disabled: () => this.loading,
+      onCalled: () => {
+        this.fetchFeed(true)
+      }
+    })
+  },
+
   methods: {
-    async fetchFeed () {
+    async fetchFeed (force = false) {
       if (!navigator.onLine) {
         this.loading = false
         this.error = 'offline'
@@ -85,7 +99,8 @@ export default {
       this.error = false
       try {
         const { results, errors } = await this.$callPluginAction('org.vue.widgets.actions.fetch-news', {
-          url: this.widget.data.config.url
+          url: this.widget.data.config.url,
+          force
         })
         if (errors.length && errors[0]) throw new Error(errors[0])
 

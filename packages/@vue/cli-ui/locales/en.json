@@ -794,6 +794,7 @@
         "news": {
           "title": "News feed",
           "description": "Read news feed",
+          "refresh": "Force refresh",
           "prompts": {
             "url": "RSS feed URL"
           },
