@@ -1,5 +1,12 @@
 <template>
-  <div class="news">
+  <div
+    class="news"
+    :class="{
+      details: widget.isDetails,
+      small,
+      'has-item-selected': selectedItem
+    }"
+  >
     <div
       v-if="loading"
       class="loading"
@@ -15,19 +22,51 @@
     </div>
     <div
       v-else
-      class="feed"
+      class="panes"
     >
-      <NewsItem
-        v-for="(item, index) of feed.items"
-        :key="index"
-        :item="item"
-      />
+      <div class="feed">
+        <NewsItem
+          v-for="(item, index) of feed.items"
+          :key="index"
+          :item="item"
+          :class="{
+            selected: selectedItem === item
+          }"
+          @click.native="selectedItem = item"
+        />
+      </div>
+
+      <transition>
+        <div
+          v-if="selectedItem"
+          class="item-details"
+        >
+          <div v-if="small" class="back">
+            <VueButton
+              icon-left="arrow_back"
+              :label="$t('org.vue.common.back')"
+              @click="selectedItem = null"
+            />
+          </div>
+
+          <NewsItemDetails
+            v-if="selectedItem"
+            :item="selectedItem"
+          />
+        </div>
+
+        <div v-else-if="!small" class="select-tip vue-ui-empty">
+          <VueIcon icon="rss_feed" class="huge"/>
+          <div>{{ $t('org.vue.widgets.news.select-tip') }}</div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
 import NewsItem from './NewsItem.vue'
+import NewsItemDetails from './NewsItemDetails.vue'
 
 const ERRORS = {
   'fetch': {
@@ -43,7 +82,8 @@ const ERRORS = {
 
 export default {
   components: {
-    NewsItem
+    NewsItem,
+    NewsItemDetails
   },
 
   inject: [
@@ -54,7 +94,8 @@ export default {
     return {
       loading: false,
       feed: null,
-      error: null
+      error: null,
+      selectedItem: null
     }
   },
 
@@ -63,6 +104,10 @@ export default {
       if (this.error) {
         return ERRORS[this.error]
       }
+    },
+
+    small () {
+      return !this.widget.isDetails && this.widget.data.width < 4
     }
   },
 
@@ -89,6 +134,8 @@ export default {
 
   methods: {
     async fetchFeed (force = false) {
+      this.selectedItem = null
+
       if (!navigator.onLine) {
         this.loading = false
         this.error = 'offline'
@@ -122,6 +169,7 @@ export default {
 @import "~@vue/cli-ui/src/style/imports"
 
 .loading,
+.panes,
 .feed
   height 100%
 
@@ -129,13 +177,64 @@ export default {
   h-box()
   box-center()
 
+.panes
+  display flex
+  align-items stretch
+
 .feed
   overflow-x hidden
   overflow-y auto
+
+.item-details,
+.select-tip
+  flex 1
+
+.item-details
+  .back
+    padding $padding-item
+
+.select-tip
+  v-box()
+  box-center()
 
 .error
   height 100%
   v-box()
   box-center()
   padding-bottom 42px
+
+.news
+  &:not(.small)
+    .feed
+      width 400px
+      background $color-background-light
+
+  &.small
+    .panes
+      position relative
+
+    .feed
+      transition transform .3s cubic-bezier(0,1,.32,1)
+
+    .item-details
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      overflow-y auto
+      transition transform .15s ease-out
+      background $vue-ui-color-light
+      .vue-ui-dark-mode &
+        background $vue-ui-color-darker
+      &.v-enter-active,
+      &.v-enter-leave
+        transition transform .3s cubic-bezier(0,1,.32,1)
+      &.v-enter,
+      &.v-leave-to
+        transform translateX(100%)
+
+    &.has-item-selected
+      .feed
+        transform translateX(-100%)
 </style>

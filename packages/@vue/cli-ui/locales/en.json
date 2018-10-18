@@ -2,7 +2,8 @@
   "org": {
     "vue": {
       "common": {
-        "close": "Close"
+        "close": "Close",
+        "back": "Go back"
       },
       "components": {
         "connection-status": {
@@ -795,8 +796,9 @@
           "title": "News feed",
           "description": "Read news feed",
           "refresh": "Force refresh",
+          "select-tip": "Select an item on the left",
           "prompts": {
-            "url": "RSS feed URL"
+            "url": "RSS feed URL or GitHub repository"
           },
           "errors": {
             "fetch": "Couldn't fetch feed",

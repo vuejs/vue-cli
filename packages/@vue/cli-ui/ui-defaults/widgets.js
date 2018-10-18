@@ -193,7 +193,13 @@ module.exports = api => {
       if (cached) return cached
     }
 
-    const result = await parser.parseURL(params.url)
+    let url = params.url
+    // GitHub repo
+    if (url.match(/^\w+\/\w+$/)) {
+      url = `https://github.com/${url}/releases.atom`
+    }
+
+    const result = await parser.parseURL(url)
     newsCache[params.url] = result
     return result
   })

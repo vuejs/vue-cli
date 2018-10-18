@@ -1,40 +1,18 @@
 <template>
-  <div class="news-item">
+  <div class="news-item list-item">
     <div class="info">
       <div class="head">
         <div class="title">
           <a
             :href="item.link"
             target="_blank"
+            @click.stop
           >
             {{ item.title }}
           </a>
         </div>
-        <div class="snippet">{{ item.contentSnippet }}</div>
+        <div class="snippet">{{ snippet }}</div>
         <div class="date">{{ item.pubDate | date }}</div>
-      </div>
-
-      <div
-        v-if="item.enclosure"
-        class="media"
-      >
-        <img
-          v-if="item.enclosure.type.indexOf('image/') === 0"
-          :src="item.enclosure.url"
-          class="image media-content"
-        />
-
-        <audio
-          v-if="item.enclosure.type.indexOf('audio/') === 0"
-          :src="item.enclosure.url"
-          controls
-        />
-
-        <video
-          v-if="item.enclosure.type.indexOf('video/') === 0"
-          :src="item.enclosure.url"
-          controls
-        />
       </div>
     </div>
   </div>
@@ -47,6 +25,16 @@ export default {
       type: Object,
       required: true
     }
+  },
+
+  computed: {
+    snippet () {
+      const text = this.item.contentSnippet
+      if (text.length > 200) {
+        return text.substr(0, 197) + '...'
+      }
+      return text
+    }
   }
 }
 </script>
@@ -55,9 +43,7 @@ export default {
 @import "~@vue/cli-ui/src/style/imports"
 
 .news-item
-  padding ($padding-item / 2) $padding-item
-  &:not(:last-child)
-    border-bottom rgba($vue-ui-color-primary, .2) solid 1px
+  padding ($padding-item / 2) $padding-item $padding-item
 
 .title
   margin-bottom ($padding-item /2)
@@ -68,11 +54,4 @@ export default {
 
 .date
   opacity .5
-
-.media
-  margin-top ($padding-item / 2)
-
-.media-content
-  max-width 100%
-  max-height 100px
 </style>
