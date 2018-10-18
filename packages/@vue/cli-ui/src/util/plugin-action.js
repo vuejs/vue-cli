@@ -8,21 +8,24 @@ export default {
   install (Vue) {
     Vue.mixin({
       methods: {
-        $callPluginAction (id, params) {
-          return this.$apollo.mutate({
+        async $callPluginAction (id, params) {
+          const result = await this.$apollo.mutate({
             mutation: PLUGIN_ACTION_CALL,
             variables: {
               id,
               params
             }
           })
+          return result.data.pluginActionCall
         },
+
         $onPluginActionCalled (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-called-${uid++}`, {
             query: PLUGIN_ACTION_CALLED,
             result: ({ data }) => cb(data.pluginActionCalled)
           })
         },
+
         $onPluginActionResolved (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-resolved-${uid++}`, {
             query: PLUGIN_ACTION_RESOLVED,

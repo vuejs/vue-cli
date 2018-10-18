@@ -16,7 +16,6 @@
     "@vue/cli-plugin-eslint": "^3.0.3",
     "@vue/cli-service": "^3.0.3",
     "@vue/eslint-config-standard": "^3.0.3",
-    "rss-parser": "^3.4.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-template-compiler": "^2.5.17"

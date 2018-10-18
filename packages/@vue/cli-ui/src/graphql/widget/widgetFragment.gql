@@ -14,6 +14,7 @@ fragment widget on Widget {
     minHeight
     maxWidth
     maxHeight
+    openDetailsButton
   }
   x
   y

@@ -182,7 +182,8 @@
         "widget": {
           "remove": "Remove widget",
           "configure": "Configure widget",
-          "save": "Save"
+          "save": "Save",
+          "open-details": "Show more"
         },
         "widget-add-pane": {
           "title": "Add widgets"

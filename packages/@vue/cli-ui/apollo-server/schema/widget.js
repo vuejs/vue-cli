@@ -32,6 +32,7 @@ type WidgetDefinition {
   minHeight: Int!
   maxWidth: Int!
   maxHeight: Int!
+  openDetailsButton: Boolean
 }
 
 type Widget {

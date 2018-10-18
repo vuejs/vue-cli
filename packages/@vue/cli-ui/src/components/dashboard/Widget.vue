@@ -37,6 +37,15 @@
                 class="icon-button flat primary"
                 @click="$emit('close')"
               />
+
+              <!-- Open details button -->
+              <VueButton
+                v-else-if="widget.definition.openDetailsButton"
+                icon-left="zoom_out_map"
+                class="icon-button flat primary"
+                v-tooltip="$t('org.vue.components.widget.open-details')"
+                @click="openDetails()"
+              />
             </div>
 
             <div v-if="widget.configured" class="content">

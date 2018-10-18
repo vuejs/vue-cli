@@ -27,13 +27,7 @@
 </template>
 
 <script>
-import Parser from 'rss-parser'
-
 import NewsItem from './NewsItem.vue'
-
-const parser = new Parser()
-
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'
 
 const ERRORS = {
   'fetch': {
@@ -90,7 +84,12 @@ export default {
       this.loading = true
       this.error = false
       try {
-        this.feed = await parser.parseURL(CORS_PROXY + this.widget.data.config.url)
+        const { results, errors } = await this.$callPluginAction('org.vue.widgets.actions.fetch-news', {
+          url: this.widget.data.config.url
+        })
+        if (errors.length && errors[0]) throw new Error(errors[0])
+
+        this.feed = results[0]
         if (!this.feed.items.length) {
           this.error = 'empty'
         }

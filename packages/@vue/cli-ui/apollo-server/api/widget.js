@@ -2,11 +2,13 @@ const { createSchema, validateSync } = require('@vue/cli-shared-utils')
 
 const schema = createSchema(joi => ({
   id: joi.string().required(),
+  // General
   title: joi.string().required(),
   description: joi.string(),
   icon: joi.string(),
   screenshot: joi.string(),
   link: joi.string(),
+  // Components
   component: joi.string().required(),
   detailsComponent: joi.string(),
   // Maximum number of instances
@@ -21,6 +23,8 @@ const schema = createSchema(joi => ({
   // Config
   defaultConfig: joi.func(),
   needsUserConfig: joi.boolean(),
+  // UI
+  openDetailsButton: joi.boolean(),
   // Hooks
   onAdded: joi.func(),
   onRemoved: joi.func(),

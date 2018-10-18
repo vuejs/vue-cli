@@ -155,12 +155,14 @@ module.exports = api => {
     description: 'org.vue.widgets.news.description',
     icon: 'rss_feed',
     component: 'org.vue.widgets.components.news',
+    detailsComponent: 'org.vue.widgets.components.news',
     minWidth: 2,
     minHeight: 1,
     maxWidth: 6,
     maxHeight: 6,
     defaultWidth: 2,
     defaultHeight: 3,
+    openDetailsButton: true,
     defaultConfig: () => ({
       url: 'https://vuenews.fireside.fm/rss'
     }),
@@ -175,5 +177,24 @@ module.exports = api => {
         ]
       }
     }
+  })
+
+  const newsCache = {}
+  let parser
+
+  onAction('actions.fetch-news', async params => {
+    if (!parser) {
+      const Parser = require('rss-parser')
+      parser = new Parser()
+    }
+
+    if (!params.force) {
+      const cached = newsCache[params.url]
+      if (cached) return cached
+    }
+
+    const result = await parser.parseURL(params.url)
+    newsCache[params.url] = result
+    return result
   })
 }
