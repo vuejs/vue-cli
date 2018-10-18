@@ -144,6 +144,7 @@ export default {
 
       this.loading = true
       this.error = false
+      this.widget.customTitle = null
       try {
         const { results, errors } = await this.$callPluginAction('org.vue.widgets.actions.fetch-news', {
           url: this.widget.data.config.url,

@@ -179,7 +179,7 @@ module.exports = api => {
     }
   })
 
-  const newsCache = {}
+  const newsCache = global['org.vue.newsCache'] = global['org.vue.newsCache'] || {}
   let parser
 
   onAction('actions.fetch-news', async params => {
@@ -195,7 +195,7 @@ module.exports = api => {
 
     let url = params.url
     // GitHub repo
-    if (url.match(/^\w+\/\w+$/)) {
+    if (url.match(/^[\w_.-]+\/[\w_.-]+$/)) {
       url = `https://github.com/${url}/releases.atom`
     }
 
