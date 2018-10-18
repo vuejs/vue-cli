@@ -155,6 +155,8 @@ export default {
         if (!this.feed.items.length) {
           this.error = 'empty'
         }
+
+        this.widget.customTitle = this.feed.title
       } catch (e) {
         this.error = 'fetch'
         console.error(e)
@@ -188,8 +190,11 @@ export default {
 .item-details,
 .select-tip
   flex 1
+  height 100%
 
 .item-details
+  overflow-x hidden
+  overflow-y auto
   .back
     padding $padding-item
 
@@ -221,8 +226,6 @@ export default {
       top 0
       left 0
       width 100%
-      height 100%
-      overflow-y auto
       transition transform .15s ease-out
       background $vue-ui-color-light
       .vue-ui-dark-mode &

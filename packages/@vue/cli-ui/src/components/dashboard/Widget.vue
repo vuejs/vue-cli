@@ -19,7 +19,7 @@
         <div class="wrapper card">
           <div class="content-wrapper">
             <div class="header">
-              <div class="title">{{ $t(widget.definition.title) }}</div>
+              <div class="title">{{ injected.customTitle || $t(widget.definition.title) }}</div>
 
               <!-- Custom actions -->
               <template v-if="widget.configured">
@@ -93,7 +93,7 @@
                 fallback-icon="widgets"
                 class="icon"
               />
-              <div class="title">{{ $t(widget.definition.title) }}</div>
+              <div class="title">{{ injected.customTitle || $t(widget.definition.title) }}</div>
             </div>
             <VueButton
               class="remove-button primary flat icon-button"
@@ -270,7 +270,9 @@ export default {
         closeDetails: this.closeDetails,
         addHeaderAction: this.addHeaderAction,
         removeHeaderAction: this.removeHeaderAction,
-        remove: this.remove
+        remove: this.remove,
+        // Custom
+        customTitle: null
       },
       shellOrigin: null,
       headerActions: []
