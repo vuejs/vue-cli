@@ -26,7 +26,7 @@
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-service": "^3.0.5",
     "chalk": "^2.4.1",
-    "eslint-plugin-vue": "^4.5.0",
+    "eslint-plugin-vue": "^4.7.1",
     "resolve": "^1.8.1",
     "vue": "^2.5.17",
     "vue-template-compiler": "^2.5.17"

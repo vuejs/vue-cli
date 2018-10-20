@@ -1,5 +1,3 @@
-const path = require('path')
-
 const defaultPolyfills = [
   // promise polyfill alone doesn't work in IE,
   // needs this as well. see: #1642
@@ -137,12 +135,10 @@ module.exports = (context, options = {}) => {
 
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {
-    polyfill: false,
     regenerator: useBuiltIns !== 'usage',
-    useBuiltIns: useBuiltIns !== false,
-    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
+    corejs: useBuiltIns !== false ? false : 2,
     helpers: useBuiltIns === 'usage',
-    moduleName: path.dirname(require.resolve('@babel/runtime/package.json'))
+    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES
   }])
 
   return {

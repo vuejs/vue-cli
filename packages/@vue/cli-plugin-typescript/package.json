@@ -24,10 +24,10 @@
   "dependencies": {
     "@types/webpack-env": "^1.13.6",
     "@vue/cli-shared-utils": "^3.0.5",
-    "fork-ts-checker-webpack-plugin": "^0.4.4",
+    "fork-ts-checker-webpack-plugin": "^0.4.10",
     "globby": "^8.0.1",
-    "ts-loader": "^4.4.2",
-    "tslint": "^5.10.0"
+    "ts-loader": "^5.2.2",
+    "tslint": "^5.11.0"
   },
   "peerDependencies": {
     "typescript": ">=2"
