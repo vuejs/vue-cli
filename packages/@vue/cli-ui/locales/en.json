@@ -110,8 +110,10 @@
           "official": "Official",
           "installed": "Installed",
           "actions": {
-            "update": "Update {target}"
-          }
+            "update": "Update {target}",
+            "refresh": "Force Refresh {target}"
+          },
+          "local": "Local"
         },
         "project-dependency-item": {
           "version": "version",
@@ -184,6 +186,7 @@
           "remove": "Remove widget",
           "configure": "Configure widget",
           "save": "Save",
+          "reset-config": "Reset config",
           "open-details": "Show more"
         },
         "widget-add-pane": {
@@ -394,6 +397,15 @@
               "cancel": "Cancel without uninstalling",
               "uninstall": "Uninstall"
             }
+          },
+          "buttons": {
+            "add-local": "Browse local plugin"
+          }
+        },
+        "project-plugin-add-local": {
+          "title": "Add a local plugin",
+          "buttons": {
+            "add": "Add local plugin"
           }
         },
         "project-configurations": {
@@ -446,6 +458,9 @@
           "title": "Project dashboard",
           "cutomize": "Customize",
           "done": "Done"
+        },
+        "settings": {
+          "title": "Settings"
         },
         "about": {
           "title": "About",
@@ -753,7 +768,7 @@
           "last-updated": "Updated",
           "never": "Not updated yet",
           "check": "Check for updates",
-          "more-info": "Open details"
+          "more-info": "More details"
         },
         "plugin-updates": {
           "title": "Plugin updates",
@@ -782,7 +797,13 @@
             "ok": "No vulnerability found",
             "loading": "Checking security reports...",
             "attention": "{n} vulnerabilities found"
-          }
+          },
+          "severity": {
+            "high": "High severity",
+            "medium": "Medium severity",
+            "low": "Low severity"
+          },
+          "direct-dep": "Direct dependency"
         },
         "run-task": {
           "title": "Run task",
