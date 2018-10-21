@@ -73,7 +73,9 @@ export default {
 .media
   margin-top $padding-item
 
-.media-content
+.media-content,
+.content >>> img,
+.content >>> video
   max-width 100%
-  max-height 100px
+  max-height 300px
 </style>
