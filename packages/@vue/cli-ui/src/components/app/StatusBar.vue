@@ -196,22 +196,29 @@ export default {
   .content
     h-box()
     align-items center
-    background $vue-ui-color-primary
     font-size 12px
-    height 34px
+    height 28px
+    background $vue-ui-color-darker
     color $vue-ui-color-light
     >>> .vue-ui-icon svg
       fill @color
+    .vue-ui-dark-mode &
+      background $vue-ui-color-primary
+      color $vue-ui-color-dark
+      >>> .vue-ui-icon svg
+        fill @color
 
   .section
     h-box()
     align-items center
-    padding 0 11px
+    padding 0 8px
     height 100%
     cursor default
 
     &:hover
-      background lighten($vue-ui-color-primary, 30%)
+      background lighten($vue-ui-color-darker, 10%)
+      .vue-ui-dark-mode &
+        background darken($vue-ui-color-primary, 10%)
 
     > .vue-ui-icon + *
       margin-left 4px
@@ -238,4 +245,6 @@ export default {
     .last-message >>> .message
       > span
         color $vue-ui-color-light
+        .vue-ui-dark-mode &
+          color $vue-ui-color-dark
 </style>

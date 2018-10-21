@@ -56,8 +56,9 @@ export default {
 
   &.limit-width
     .wrapper
-      max-width 1200px
-      margin auto
-      @media (min-width 1200px)
-        border-radius $br $br 0 0
+      @media (min-width 1420px)
+        max-width 1200px
+        margin auto
+        $br2 = ($br * 2)
+        border-radius $br2 $br2 0 0
 </style>
