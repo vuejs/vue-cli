@@ -176,6 +176,7 @@ export default {
   box-shadow 2px 0 10px rgba(black, .1)
   position relative
   z-index 2
+  v-box()
   .vue-ui-dark-mode &
     background $vue-ui-color-darker
 
@@ -186,6 +187,7 @@ export default {
       flex 1
 
   .content
+    flex 1
     v-box()
     height 100%
     padding 8px 0
