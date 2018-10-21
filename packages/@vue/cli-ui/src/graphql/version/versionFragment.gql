@@ -3,4 +3,5 @@ fragment version on Version {
   latest
   wanted
   range
+  localPath
 }

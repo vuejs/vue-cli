@@ -18,7 +18,16 @@
               try-logos
               @close="close()"
               @install="installPlugin"
-            />
+            >
+              <template slot="more-actions">
+                <VueButton
+                  icon-left="folder"
+                  :label="$t('org.vue.views.project-plugins-add.buttons.add-local')"
+                  class="big flat"
+                  @click="showLocalAdd = true"
+                />
+              </template>
+            </NpmPackageSearch>
           </VueTab>
 
           <VueTab
@@ -101,6 +110,18 @@
       </div>
     </VueModal>
 
+    <VueModal
+      v-if="showLocalAdd"
+      :title="$t('org.vue.views.project-plugin-add-local.title')"
+      @close="closeLocalAdd()"
+    >
+      <div class="default-body">
+        <ProjectPluginAddLocal
+          @installed="localPluginInstalled"
+        />
+      </div>
+    </VueModal>
+
     <ProgressScreen
       progress-id="plugin-installation"
     />
@@ -115,6 +136,7 @@ import PLUGIN_INSTALL from '@/graphql/plugin/pluginInstall.gql'
 import PLUGIN_UNINSTALL from '@/graphql/plugin/pluginUninstall.gql'
 import PLUGIN_INVOKE from '@/graphql/plugin/pluginInvoke.gql'
 import PLUGIN_FINISH_INSTALL from '@/graphql/plugin/pluginFinishInstall.gql'
+import PROJECT_CWD_RESET from '@/graphql/project/projectCwdReset.gql'
 
 export default {
   name: 'ProjectPluginsAdd',
@@ -136,7 +158,8 @@ export default {
     return {
       tabId: 'search',
       showCancelInstall: false,
-      pluginInstallation: null
+      pluginInstallation: null,
+      showLocalAdd: false
     }
   },
 
@@ -160,6 +183,10 @@ export default {
     requestAnimationFrame(() => {
       this.checkTab()
     })
+  },
+
+  destroyed () {
+    this.closeLocalAdd()
   },
 
   methods: {
@@ -206,6 +233,18 @@ export default {
     cancelInstall () {
       this.tabId = 'search'
       this.showCancelInstall = false
+    },
+
+    localPluginInstalled () {
+      this.closeLocalAdd()
+      this.tabId = 'config'
+    },
+
+    async closeLocalAdd () {
+      this.showLocalAdd = false
+      await this.$apollo.mutate({
+        mutation: PROJECT_CWD_RESET
+      })
     },
 
     async uninstallPlugin () {

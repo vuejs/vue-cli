@@ -343,6 +343,36 @@ function mockInstall (id, context) {
   return true
 }
 
+function installLocal (context) {
+  const projects = require('./projects')
+  const folder = cwd.get()
+  cwd.set(projects.getCurrent(context).path, context)
+  return progress.wrap(PROGRESS_ID, context, async setProgress => {
+    const pkg = loadModule(path.resolve(folder, 'package.json'), cwd.get(), true)
+
+    const id = pkg.name
+
+    setProgress({
+      status: 'plugin-install',
+      args: [id]
+    })
+    currentPluginId = id
+    installationStep = 'install'
+    const idAndRange = `${id}@file:${folder}`
+    await installPackage(cwd.get(), getCommand(cwd.get()), null, idAndRange)
+    await initPrompts(id, context)
+    installationStep = 'config'
+
+    notify({
+      title: `Plugin installed`,
+      message: `Plugin ${id} installed, next step is configuration`,
+      icon: 'done'
+    })
+
+    return getInstallation(context)
+  })
+}
+
 function uninstall (id, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
@@ -568,6 +598,7 @@ module.exports = {
   getLogo,
   getInstallation,
   install,
+  installLocal,
   uninstall,
   update,
   updateAll,

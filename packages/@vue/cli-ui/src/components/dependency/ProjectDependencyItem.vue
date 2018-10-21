@@ -172,6 +172,9 @@ export default {
   .wanted,
   .latest
     min-width 130px
+    .value
+      font-family monospace
+      font-size .9em
 
   .installed
     @media (max-width: 1130px)

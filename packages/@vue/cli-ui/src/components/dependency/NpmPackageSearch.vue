@@ -56,6 +56,8 @@
 
       <div class="vue-ui-spacer"/>
 
+      <slot name="more-actions"/>
+
       <VueButton
         icon-left="close"
         :label="$t('org.vue.views.project-plugins-add.tabs.search.buttons.cancel')"

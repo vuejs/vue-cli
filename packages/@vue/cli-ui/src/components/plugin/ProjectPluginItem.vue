@@ -41,11 +41,22 @@
           </span>
 
           <span v-if="plugin.installed" class="info">
-            <VueIcon
-              icon="check_circle"
-              class="top medium"
-            />
-            {{ $t('org.vue.components.project-plugin-item.installed') }}
+            <template v-if="isLocal">
+              <VueIcon
+                icon="folder"
+                class="top medium"
+              />
+              <span v-tooltip="pluginDetails.version.localPath">
+                {{ $t('org.vue.components.project-plugin-item.local') }}
+              </span>
+            </template>
+            <template v-else>
+              <VueIcon
+                icon="check_circle"
+                class="top medium"
+              />
+              {{ $t('org.vue.components.project-plugin-item.installed') }}
+            </template>
           </span>
 
           <span v-if="pluginDetails && pluginDetails.description" class="package-description">
@@ -55,7 +66,16 @@
       </ListItemInfo>
 
       <VueButton
-        v-if="pluginDetails && pluginDetails.version.current !== pluginDetails.version.wanted"
+        v-if="isLocal"
+        icon-left="cached"
+        class="icon-button"
+        v-tooltip="$t('org.vue.components.project-plugin-item.actions.refresh', { target: plugin.id })"
+        :loading-left="updating"
+        @click="updatePlugin()"
+      />
+
+      <VueButton
+        v-else-if="pluginDetails && pluginDetails.version.current !== pluginDetails.version.wanted"
         icon-left="file_download"
         class="icon-button"
         v-tooltip="$t('org.vue.components.project-plugin-item.actions.update', { target: plugin.id })"
@@ -108,6 +128,12 @@ export default {
           id: this.plugin.id
         }
       }
+    }
+  },
+
+  computed: {
+    isLocal () {
+      return this.pluginDetails && this.pluginDetails.version.localPath
     }
   },
 
@@ -170,6 +196,9 @@ export default {
   .version,
   .latest
     min-width 130px
+    .value
+      font-family monospace
+      font-size .9em
 
   .package-description
     font-style italic

@@ -21,6 +21,7 @@ type Version {
   latest: String
   wanted: String
   range: String
+  localPath: String
 }
 
 type GitHubStats {

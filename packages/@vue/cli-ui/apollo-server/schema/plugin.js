@@ -15,6 +15,7 @@ extend type Query {
 
 extend type Mutation {
   pluginInstall (id: ID!): PluginInstallation
+  pluginInstallLocal: PluginInstallation
   pluginUninstall (id: ID!): PluginInstallation
   pluginInvoke (id: ID!): PluginInstallation
   pluginFinishInstall: PluginInstallation
@@ -82,6 +83,7 @@ exports.resolvers = {
 
   Mutation: {
     pluginInstall: (root, { id }, context) => plugins.install(id, context),
+    pluginInstallLocal: (root, args, context) => plugins.installLocal(context),
     pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
     pluginFinishInstall: (root, args, context) => plugins.finishInstall(context),
