@@ -177,14 +177,27 @@ module.exports = (api, options) => {
       const normalizePageConfig = c => typeof c === 'string' ? { entry: c } : c
 
       pages.forEach(name => {
+        const pageConfig = normalizePageConfig(multiPageConfig[name])
         const {
-          title,
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`,
-          chunks,
-          ...customHtmlOptions
-        } = normalizePageConfig(multiPageConfig[name])
+          chunks = ['chunk-vendors', 'chunk-common', name]
+        } = pageConfig
+
+        // Currently Cypress v3.1.0 comes with a very old version of Node,
+        // which does not support object rest syntax.
+        // (https://github.com/cypress-io/cypress/issues/2253)
+        // So here we have to extract the customHtmlOptions manually.
+        const customHtmlOptions = {}
+        for (const key in pageConfig) {
+          if (
+            !['entry', 'template', 'filename', 'chunks'].includes(key)
+          ) {
+            customHtmlOptions[key] = pageConfig[key]
+          }
+        }
+
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
@@ -202,14 +215,13 @@ module.exports = (api, options) => {
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
           {},
+          customHtmlOptions,
           htmlOptions,
           {
-            chunks: chunks || ['chunk-vendors', 'chunk-common', name],
+            chunks,
             template: templatePath,
-            filename: ensureRelative(outputDir, filename),
-            title
-          },
-          customHtmlOptions
+            filename: ensureRelative(outputDir, filename)
+          }
         )
 
         webpackConfig
