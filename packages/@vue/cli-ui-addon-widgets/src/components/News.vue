@@ -107,7 +107,7 @@ export default {
     },
 
     small () {
-      return !this.widget.isDetails && this.widget.data.width < 4
+      return !this.widget.isDetails && this.widget.data.width < 5
     }
   },
 
@@ -211,9 +211,13 @@ export default {
 
 .news
   &:not(.small)
+    padding ($padding-item / 2) 0 $padding-item $padding-item
     .feed
       width 400px
-      background $color-background-light
+      background lighten($vue-ui-color-light-neutral, 50%)
+      border-radius $br
+      .vue-ui-dark-mode &
+        background $content-bg-list-dark
 
   &.small
     .panes
