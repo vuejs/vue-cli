@@ -48,6 +48,7 @@ export default function ({
       },
 
       updateResizeState (e) {
+        const target = this[field]
         const mouseDeltaX = (e.clientX - this.$_initalMousePosition.x) / zoom
         const mouseDeltaY = (e.clientY - this.$_initalMousePosition.y) / zoom
         const handle = this.$_resizeHandle
@@ -55,38 +56,51 @@ export default function ({
         let dY = 0
         let dWidth = 0
         let dHeight = 0
-        // TODO
-        if (handle.includes('right')) {
+        // Handles
+        if (handle.includes('left')) {
+          dX = mouseDeltaX
+          dWidth = -mouseDeltaX
+        } else if (handle.includes('right')) {
           dWidth = mouseDeltaX
         }
-        if (handle.includes('bottom')) {
+        if (handle.includes('top')) {
+          dY = mouseDeltaY
+          dHeight = -mouseDeltaY
+        } else if (handle.includes('bottom')) {
           dHeight = mouseDeltaY
         }
+        // On-grid diffs
         let gridDX = Math.round(dX / gridSize)
         let gridDY = Math.round(dY / gridSize)
         let gridDWidth = Math.round(dWidth / gridSize)
         let gridDHeight = Math.round(dHeight / gridSize)
-        if (this[field].width + gridDWidth < this[field].definition.minWidth) {
-          gridDWidth = this[field].definition.minWidth - this[field].width
+        // Bounds
+        if (target.width + gridDWidth < target.definition.minWidth) {
+          gridDWidth = target.definition.minWidth - target.width
+          gridDX = target.width - target.definition.minWidth
         }
-        if (this[field].width + gridDWidth > this[field].definition.maxWidth) {
-          gridDWidth = this[field].definition.maxWidth - this[field].width
+        if (target.width + gridDWidth > target.definition.maxWidth) {
+          gridDWidth = target.definition.maxWidth - target.width
+          gridDX = target.width - target.definition.maxWidth
         }
-        if (this[field].height + gridDHeight < this[field].definition.minHeight) {
-          gridDHeight = this[field].definition.minHeight - this[field].height
+        if (target.height + gridDHeight < target.definition.minHeight) {
+          gridDHeight = target.definition.minHeight - target.height
+          gridDY = target.height - target.definition.minHeight
         }
-        if (this[field].height + gridDHeight > this[field].definition.maxHeight) {
-          gridDHeight = this[field].definition.maxHeight - this[field].height
+        if (target.height + gridDHeight > target.definition.maxHeight) {
+          gridDHeight = target.definition.maxHeight - target.height
+          gridDY = target.height - target.definition.maxHeight
         }
+        // Temp. applied state
         this.resizeState = {
-          x: this[field].x + gridDX,
-          y: this[field].y + gridDY,
-          width: this[field].width + gridDWidth,
-          height: this[field].height + gridDHeight,
-          pxX: this[field].x * gridSize + dX,
-          pxY: this[field].y * gridSize + dY,
-          pxWidth: this[field].width * gridSize + dWidth,
-          pxHeight: this[field].height * gridSize + dHeight
+          x: target.x + gridDX,
+          y: target.y + gridDY,
+          width: target.width + gridDWidth,
+          height: target.height + gridDHeight,
+          pxX: target.x * gridSize + dX,
+          pxY: target.y * gridSize + dY,
+          pxWidth: target.width * gridSize + dWidth,
+          pxHeight: target.height * gridSize + dHeight
         }
       },
 
