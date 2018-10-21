@@ -27,13 +27,6 @@
           >
             {{ $t('org.vue.widgets.status-widget.never') }}
           </div>
-          <VueButton
-            v-if="status.status !== 'loading'"
-            v-tooltip="$t('org.vue.widgets.status-widget.check')"
-            icon-left="cached"
-            class="icon-button flat check-button"
-            @click="$emit('check')"
-          />
         </div>
       </div>
     </div>
@@ -78,6 +71,28 @@ export default {
       type: Object,
       required: true
     }
+  },
+
+  created () {
+    this.widget.addHeaderAction({
+      id: 'refresh',
+      icon: 'refresh',
+      tooltip: 'org.vue.widgets.status-widget.check',
+      disabled: () => this.status.status === 'loading',
+      onCalled: () => {
+        this.$emit('check')
+      }
+    })
+
+    this.widget.addHeaderAction({
+      id: 'expand',
+      icon: 'zoom_out_map',
+      tooltip: 'org.vue.components.widget.open-details',
+      hidden: () => this.status.status !== 'attention',
+      onCalled: () => {
+        this.widget.openDetails()
+      }
+    })
   }
 }
 </script>
@@ -89,10 +104,9 @@ export default {
   h-box()
   align-items center
   padding $padding-item
+  margin 4px 0
 
 .icon-wrapper
-  position relative
-  top -2px
   .icon
     width 48px
     height @width
@@ -108,11 +122,6 @@ export default {
   h-box()
   .label
     margin-right 4px
-
-.check-button
-  margin-left 4px
-  position relative
-  top -4px
 
 .actions
   h-box()

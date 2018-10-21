@@ -101,6 +101,47 @@ module.exports = api => {
     lastUpdate: Date.now(),
     count: 3
   })
+  setSharedData('vulnerability.details', {
+    vulnerabilities: [
+      {
+        name: 'bquery',
+        version: '0.1.2',
+        parents: [
+          {
+            name: 'draphql',
+            version: '1.8.7'
+          }
+        ],
+        moreInfo: 'https://vuejs.org/',
+        severity: 'high',
+        message: 'Regular Expression Denial of Service'
+      },
+      {
+        name: 'leff-pad',
+        version: '5.3.9-alpha.1',
+        parents: [
+          {
+            name: 'view-ssr',
+            version: '3.0.0-alpha.12'
+          },
+          {
+            name: 'elpress',
+            version: '1.17.3'
+          }
+        ],
+        moreInfo: 'https://vuejs.org/',
+        severity: 'medium',
+        message: 'Prototype Pollution'
+      },
+      {
+        name: 'yterm',
+        version: '4.6.2',
+        moreInfo: 'https://vuejs.org/',
+        severity: 'low',
+        message: 'Regular Expression Denial of Service'
+      }
+    ]
+  })
   registerWidget({
     id: 'vulnerability',
     title: 'org.vue.widgets.vulnerability.title',
@@ -117,7 +158,6 @@ module.exports = api => {
 
   // Run task
 
-  setSharedData('run-task.status', { status: 'ok', lastUpdate: Date.now() })
   registerWidget({
     id: 'run-task',
     title: 'org.vue.widgets.run-task.title',
