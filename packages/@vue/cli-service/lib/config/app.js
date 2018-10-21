@@ -182,7 +182,8 @@ module.exports = (api, options) => {
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`,
-          chunks
+          chunks,
+          ...customHtmlOptions
         } = normalizePageConfig(multiPageConfig[name])
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
@@ -199,12 +200,17 @@ module.exports = (api, options) => {
             : defaultHtmlPath
 
         // inject html plugin for the page
-        const pageHtmlOptions = Object.assign({}, htmlOptions, {
-          chunks: chunks || ['chunk-vendors', 'chunk-common', name],
-          template: templatePath,
-          filename: ensureRelative(outputDir, filename),
-          title
-        })
+        const pageHtmlOptions = Object.assign(
+          {},
+          htmlOptions,
+          {
+            chunks: chunks || ['chunk-vendors', 'chunk-common', name],
+            template: templatePath,
+            filename: ensureRelative(outputDir, filename),
+            title
+          },
+          customHtmlOptions
+        )
 
         webpackConfig
           .plugin(`html-${name}`)
