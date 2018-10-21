@@ -579,6 +579,7 @@ $zoom = .7
 .resizing
   .shell
     z-index 10001
+    opacity .7
 
 .moving
   .shell
