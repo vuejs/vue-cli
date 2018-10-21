@@ -215,13 +215,13 @@ module.exports = (api, options) => {
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
           {},
-          customHtmlOptions,
           htmlOptions,
           {
             chunks,
             template: templatePath,
             filename: ensureRelative(outputDir, filename)
-          }
+          },
+          customHtmlOptions
         )
 
         webpackConfig
