@@ -66,7 +66,7 @@
         },
         "logger-view": {
           "title": "Logs",
-          "empty": "Not logs yet",
+          "empty": "No logs yet",
           "buttons": {
             "clear": "Clear logs",
             "scroll": "Scroll to bottom",
@@ -292,7 +292,7 @@
                   "subtitle": "Git repo, for example 'username/repo'. You can also prefix with 'gitlab:' or 'bitbucket:'."
                 },
                 "options": "Other options",
-                "clone": "Cloner/Private repository",
+                "clone": "Clone/Private repository",
                 "cancel": "Cancel",
                 "done": "Done"
               },
