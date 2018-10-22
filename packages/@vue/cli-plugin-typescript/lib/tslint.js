@@ -29,6 +29,7 @@ module.exports = function lint (args = {}, api, silent) {
       if (isVueFile(file)) {
         const parts = vueFileCache.get(path.normalize(file))
         if (parts) {
+          parts.content = content;
           const { before, after } = parts
           content = `${before}\n${content.trim()}\n${after}`
         }
@@ -42,12 +43,19 @@ module.exports = function lint (args = {}, api, silent) {
   }
 
   const parseTSFromVueFile = file => {
+    
+    // If the file has already been cached, don't read the file again. Use the cache instead.
+    if (vueFileCache.has(file)) {
+      return vueFileCache.get(file).content;
+    }
+    
     const content = fs.readFileSync(file, 'utf-8')
     const { script } = vueCompiler.parseComponent(content, { pad: 'line' })
     if (script && /^tsx?$/.test(script.lang)) {
       vueFileCache.set(file, {
         before: content.slice(0, script.start),
-        after: content.slice(script.end)
+        after: content.slice(script.end),
+        content: script.content,
       })
       return script.content
     }
