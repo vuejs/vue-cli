@@ -21,6 +21,7 @@ type WidgetDefinition {
   id: ID!
   title: String!
   description: String
+  longDescription: String
   link: String
   icon: String
   screenshot: String

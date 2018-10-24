@@ -31,13 +31,24 @@
       @close="showDetails = false"
     >
       <div class="custom-body">
-        <div class="name">
-          {{ $t(definition.title) }}
+        <div class="details">
+          <ItemLogo
+            :image="definition.icon"
+            fallback-icon="widgets"
+          />
+          <ListItemInfo
+            :name="$t(definition.title)"
+            :description="$t(definition.description)"
+          />
         </div>
-        <div
-          class="description"
-          v-html="$t(definition.description)"
-        />
+
+        <div v-if="definition.longDescription" class="details">
+          <div
+            class="description"
+            v-html="$t(definition.longDescription)"
+          />
+        </div>
+
         <div class="instances">
           {{ $t('org.vue.components.widget-add-item.details.max-instances', {
             count: definition.count,
@@ -143,10 +154,7 @@ export default {
 .custom-body
   padding 0 24px $padding-item
 
-.name
-  font-size 20px
-
-.description
-  opacity .8
-  margin-bottom $padding-item
+  .details
+    display flex
+    margin-bottom $padding-item
 </style>

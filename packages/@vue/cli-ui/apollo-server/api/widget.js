@@ -5,6 +5,7 @@ const schema = createSchema(joi => ({
   // General
   title: joi.string().required(),
   description: joi.string(),
+  longDescription: joi.string(),
   icon: joi.string(),
   screenshot: joi.string(),
   link: joi.string(),
