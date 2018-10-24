@@ -33,7 +33,7 @@
             v-if="suggestion.image"
             class="info image"
           >
-            <img :src="suggestion.image" alt="image">
+            <img :src="image" alt="image">
           </div>
 
           <div class="actions-bar">
@@ -65,6 +65,8 @@
 </template>
 
 <script>
+import { getImageUrl } from '@/util/image'
+
 import SUGGESTION_ACTIVATE from '@/graphql/suggestion/suggestionActivate.gql'
 
 export default {
@@ -72,6 +74,12 @@ export default {
     suggestion: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    image () {
+      return getImageUrl(this.suggestion.image)
     }
   },
 

@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { getImageUrl } from '@/util/image'
+
 export default {
   props: {
     image: {
@@ -75,11 +77,7 @@ export default {
     },
 
     imageUrl () {
-      // Fix images in development
-      if (process.env.VUE_APP_CLI_UI_DEV && this.image.charAt(0) === '/') {
-        return `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}${this.image}`
-      }
-      return this.image
+      return getImageUrl(this.image)
     }
   },
 
