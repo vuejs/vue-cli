@@ -323,6 +323,7 @@ module.exports = {
   load,
   save,
   canAddMore,
+  getCount,
   add,
   remove,
   move,

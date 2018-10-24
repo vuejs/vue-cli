@@ -3,7 +3,8 @@
     "vue": {
       "common": {
         "close": "Close",
-        "back": "Go back"
+        "back": "Go back",
+        "more-info": "More info"
       },
       "components": {
         "connection-status": {
@@ -195,7 +196,9 @@
         "widget-add-item": {
           "add": "Add widget",
           "details": {
-            "title": "Widget details"
+            "title": "Widget details",
+            "max-instances": "Max instance count: {count}/{total}",
+            "unlimited": "unlimited"
           }
         }
       },

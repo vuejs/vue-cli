@@ -30,7 +30,7 @@
       class="medium"
       @close="showDetails = false"
     >
-      <div class="default-body">
+      <div class="custom-body">
         <div class="name">
           {{ $t(definition.title) }}
         </div>
@@ -38,11 +38,26 @@
           class="description"
           v-html="$t(definition.description)"
         />
+        <div class="instances">
+          {{ $t('org.vue.components.widget-add-item.details.max-instances', {
+            count: definition.count,
+            total: definition.maxCount == null ? $t('org.vue.components.widget-add-item.details.unlimited') : definition.maxCount
+          }) }}
+        </div>
       </div>
 
       <div slot="footer" class="actions">
         <VueButton
-          class="primary big"
+          v-if="definition.link"
+          :href="definition.link"
+          :label="$t('org.vue.common.more-info')"
+          target="_blank"
+          class="flat"
+          icon-right="open_in_new"
+        />
+
+        <VueButton
+          class="primary"
           :label="$t('org.vue.components.widget-add-item.add')"
           icon-left="add"
           @click="add()"
@@ -100,25 +115,38 @@ export default {
 <style lang="stylus" scoped>
 @import "~@/style/imports"
 
-.widget-add-item,
-.actions
-  h-box()
-  box-center()
+.widget-add-item
+  .actions
+    margin-right $padding-item
 
-.info
-  flex 1
-  overflow hidden
-  padding $padding-item
-  h-box()
+  &,
+  .actions
+    h-box()
+    box-center()
 
-  .list-item-info
+  .info
     flex 1
     overflow hidden
+    padding $padding-item
+    h-box()
 
-    >>> .description
+    .list-item-info
       flex 1
-      ellipsis()
+      overflow hidden
 
-.actions
-  margin-right $padding-item
+      >>> .description
+        flex 1
+        ellipsis()
+
+// Modal
+
+.custom-body
+  padding 0 24px $padding-item
+
+.name
+  font-size 20px
+
+.description
+  opacity .8
+  margin-bottom $padding-item
 </style>

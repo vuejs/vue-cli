@@ -28,6 +28,8 @@ type WidgetDefinition {
   detailsComponent: String
   canAddMore: Boolean!
   hasConfigPrompts: Boolean!
+  count: Int!
+  maxCount: Int
   minWidth: Int!
   minHeight: Int!
   maxWidth: Int!
@@ -62,7 +64,8 @@ input WidgetMoveInput {
 
 exports.resolvers = {
   WidgetDefinition: {
-    canAddMore: (definition, args, context) => widgets.canAddMore(definition, context)
+    canAddMore: (definition, args, context) => widgets.canAddMore(definition, context),
+    count: (definition, args, context) => widgets.getCount(definition.id)
   },
 
   Widget: {

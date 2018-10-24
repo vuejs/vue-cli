@@ -7,4 +7,6 @@ fragment widgetDefinition on WidgetDefinition {
   screenshot
   component
   canAddMore
+  count
+  maxCount
 }
