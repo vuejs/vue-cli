@@ -198,6 +198,17 @@ export default {
       height 0
       overflow hidden
 
+    >>> .indicator
+      justify-content flex-start
+      margin-left 2px
+
+      .content
+        width 6px
+        height @width !important
+        border-radius 50%
+        border none !important
+        background $vue-ui-color-primary
+
     >>> .v-popover .trigger,
     >>> .vue-ui-dropdown
       display block !important
