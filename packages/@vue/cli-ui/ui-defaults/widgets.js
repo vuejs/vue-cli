@@ -212,7 +212,8 @@ module.exports = api => {
           {
             name: 'url',
             type: 'input',
-            message: 'org.vue.widgets.news.prompts.url'
+            message: 'org.vue.widgets.news.prompts.url',
+            validate: input => !!input
           }
         ]
       }
