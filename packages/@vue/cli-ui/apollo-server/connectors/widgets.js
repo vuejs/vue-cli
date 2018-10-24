@@ -1,5 +1,6 @@
 const shortid = require('shortid')
-// Conncetors
+// Connectors
+const cwd = require('./cwd')
 const prompts = require('./prompts')
 // Utils
 const { log } = require('../util/logger')
@@ -49,8 +50,19 @@ function reset (context) {
   })
 }
 
-function registerDefinition ({ definition }, context) {
+async function registerDefinition ({ definition, project }, context) {
   definition.hasConfigPrompts = !!definition.onConfigOpen
+
+  // Default icon
+  if (!definition.icon) {
+    const plugins = require('./plugins')
+    const plugin = plugins.findOne({ id: definition.pluginId, file: cwd.get() }, context)
+    const logo = await plugins.getLogo(plugin, context)
+    if (logo) {
+      definition.icon = `${logo}?project=${project.id}`
+    }
+  }
+
   widgetDefs.set(definition.id, definition)
 }
 

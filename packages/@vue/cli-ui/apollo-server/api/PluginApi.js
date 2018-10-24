@@ -586,7 +586,10 @@ class PluginApi {
     if (this.lightMode) return
     try {
       validateWidget(def)
-      this.widgetDefs.push(def)
+      this.widgetDefs.push({
+        ...def,
+        pluginId: this.pluginId
+      })
     } catch (e) {
       logs.add({
         type: 'error',

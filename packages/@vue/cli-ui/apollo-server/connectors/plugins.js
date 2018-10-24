@@ -193,9 +193,9 @@ function resetPluginApi ({ file, lightApi }, context) {
         await views.add({ view, project }, context)
       }
       // Register widgets
-      pluginApi.widgetDefs.forEach(definition => {
-        widgets.registerDefinition({ definition }, context)
-      })
+      for (const definition of pluginApi.widgetDefs) {
+        await widgets.registerDefinition({ definition, project }, context)
+      }
 
       if (lightApi) {
         resolve(true)
