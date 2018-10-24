@@ -34,12 +34,19 @@
         />
 
         <template v-else-if="data">
-          <WidgetAddItem
-            v-for="definition of data.widgetDefinitions"
-            v-if="definition.canAddMore"
-            :key="definition.id"
-            :definition="definition"
-          />
+          <ListFilter
+            :list="data.widgetDefinitions"
+            :filter="filterDefinition"
+          >
+            <template slot-scope="{ list }">
+              <WidgetAddItem
+                v-for="definition of list"
+                v-if="definition.canAddMore"
+                :key="definition.id"
+                :definition="definition"
+              />
+            </template>
+          </ListFilter>
         </template>
       </template>
     </ApolloQuery>
@@ -50,13 +57,22 @@
 export default {
   data () {
     return {
-      search: '' // TODO
+      search: ''
     }
   },
 
   methods: {
     close () {
       this.$emit('close')
+    },
+
+    filterDefinition (def) {
+      if (!this.search) return true
+
+      const reg = new RegExp(this.search.replace(/\s+/g, '|'), 'i')
+      return def.title.match(reg) ||
+        (def.description && def.description.match(reg)) ||
+        (def.longDescription && def.longDescription.match(reg))
     }
   }
 }
