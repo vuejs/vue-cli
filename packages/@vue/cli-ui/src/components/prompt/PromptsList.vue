@@ -73,8 +73,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .group
   margin-bottom ($padding-item * 2)
 

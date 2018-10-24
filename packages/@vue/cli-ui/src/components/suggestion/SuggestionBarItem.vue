@@ -113,8 +113,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .suggestion-details
   padding ($padding-item * 2 - 8px) ($padding-item * 2)
   box-sizing border-box

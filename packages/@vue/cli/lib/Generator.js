@@ -179,6 +179,8 @@ module.exports = class Generator {
       'name',
       'version',
       'private',
+      'description',
+      'author',
       'scripts',
       'dependencies',
       'devDependencies',

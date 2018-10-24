@@ -111,8 +111,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .logger-view
   background $vue-ui-color-light
   height 174px

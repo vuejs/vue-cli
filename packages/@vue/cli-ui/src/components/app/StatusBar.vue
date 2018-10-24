@@ -184,8 +184,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .status-bar
   position relative
   z-index 3

@@ -76,8 +76,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .file-diff-change
   font-family $font-mono
   font-size 12px

@@ -230,8 +230,6 @@ export default {
 </style>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .terminal-view
   v-box()
   align-items stretch

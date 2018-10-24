@@ -28,8 +28,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .prompt-confirm
   .vue-ui-switch
     padding $padding-item

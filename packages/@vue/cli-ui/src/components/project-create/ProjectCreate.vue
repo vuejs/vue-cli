@@ -688,8 +688,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-create
   display grid
   grid-template-columns 1fr

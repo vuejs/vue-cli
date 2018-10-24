@@ -34,8 +34,6 @@ export default {
 </script>
 
 <style lang="stylus">
-@import "~@/style/imports"
-
 .prompt
   list-item()
   .prompt-content

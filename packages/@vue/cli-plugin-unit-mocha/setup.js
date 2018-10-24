@@ -1,1 +1,1 @@
-require('jsdom-global')()
+require('jsdom-global')(undefined, { pretendToBeVisual: true })

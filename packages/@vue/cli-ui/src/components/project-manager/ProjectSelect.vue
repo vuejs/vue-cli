@@ -177,8 +177,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .folder-explorer
   height 100%
 

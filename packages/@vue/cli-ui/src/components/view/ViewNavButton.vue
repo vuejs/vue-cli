@@ -88,8 +88,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 $bg = $vue-ui-color-light-neutral
 $bg-dark = $vue-ui-color-dark
 

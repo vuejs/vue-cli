@@ -145,8 +145,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-select-list
   height 100%
   overflow-y auto

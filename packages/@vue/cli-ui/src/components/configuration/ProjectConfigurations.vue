@@ -102,8 +102,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-configurations
   .content-view /deep/ > .content
     overflow-y hidden

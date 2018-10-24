@@ -399,8 +399,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .toolbar
   padding $padding-item 0
   h-box()

@@ -169,8 +169,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-nav
   background $vue-ui-color-light
   box-shadow 2px 0 10px rgba(black, .1)

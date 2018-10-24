@@ -86,7 +86,9 @@ const release = async () => {
   await execa(require.resolve('lerna/bin/lerna'), [
     'publish',
     '--repo-version',
-    version
+    version,
+    '--force-publish',
+    '*'
   ], { stdio: 'inherit' })
 
   require('./genChangelog')(version)

@@ -247,8 +247,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .file-diff-view
   v-box()
   height 100%

@@ -13,6 +13,10 @@ App is the default build target. In this mode:
 
 ## Library
 
+::: tip Note on IE Compatibility
+In lib mode, the public path is [dynamically determined](https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/commands/build/setPublicPath.js) based on the URL from which the main js file is loaded (to enable dynamic assets loading). However, this feature requires `document.currentScript` support, which is missing in IE. So it's recommended to include the [current-script-polyfill](https://www.npmjs.com/package/current-script-polyfill) in the final web page before the library is imported, if IE support is a requirement.
+:::
+
 ::: tip Note on Vue Dependency
 In lib mode, Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
 :::

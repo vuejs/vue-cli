@@ -1,5 +1,3 @@
-const path = require('path')
-
 const defaultPolyfills = [
   // promise polyfill alone doesn't work in IE,
   // needs this as well. see: #1642
@@ -41,6 +39,7 @@ module.exports = (context, options = {}) => {
   const {
     polyfills: userPolyfills,
     loose = false,
+    debug = false,
     useBuiltIns = 'usage',
     modules = false,
     targets: rawTargets,
@@ -103,6 +102,7 @@ module.exports = (context, options = {}) => {
   const envOptions = {
     spec,
     loose,
+    debug,
     modules,
     targets,
     useBuiltIns,
@@ -125,8 +125,8 @@ module.exports = (context, options = {}) => {
   presets.push([require('@babel/preset-env'), envOptions])
 
   // additional <= stage-3 plugins
-  // Babel 7 is removing stgage presets altogether because people are using
-  // too much unstable proposals. Let's be conservative in the defaults here.
+  // Babel 7 is removing stage presets altogether because people are using
+  // too many unstable proposals. Let's be conservative in the defaults here.
   plugins.push(
     require('@babel/plugin-syntax-dynamic-import'),
     [require('@babel/plugin-proposal-decorators'), { legacy: decoratorsLegacy !== false }],
@@ -135,11 +135,10 @@ module.exports = (context, options = {}) => {
 
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {
-    polyfill: false,
     regenerator: useBuiltIns !== 'usage',
-    useBuiltIns: useBuiltIns !== false,
-    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
-    moduleName: path.dirname(require.resolve('@babel/runtime/package.json'))
+    corejs: useBuiltIns !== false ? false : 2,
+    helpers: useBuiltIns === 'usage',
+    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES
   }])
 
   return {

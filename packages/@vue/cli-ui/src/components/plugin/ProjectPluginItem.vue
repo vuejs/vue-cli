@@ -164,8 +164,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-plugin-item
   padding $padding-item
   cursor default

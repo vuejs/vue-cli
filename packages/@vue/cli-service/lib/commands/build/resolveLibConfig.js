@@ -46,6 +46,7 @@ module.exports = (api, { entry, name }, options) => {
     // externalize Vue in case user imports it
     config
       .externals({
+        ...config.get('externals'),
         vue: {
           commonjs: 'vue',
           commonjs2: 'vue',

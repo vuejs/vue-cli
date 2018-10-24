@@ -34,8 +34,6 @@ export default {
 </style>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .app
   display flex
   flex-direction column
