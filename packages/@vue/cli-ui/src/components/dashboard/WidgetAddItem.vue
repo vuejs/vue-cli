@@ -124,8 +124,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .widget-add-item
   .actions
     margin-right $padding-item

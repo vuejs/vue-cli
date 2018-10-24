@@ -451,8 +451,6 @@ function transformToGetter (obj, field) {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 $zoom = .7
 
 .shell,

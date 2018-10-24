@@ -29,8 +29,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .project-plugin-add-local
   width 70vw
   height 70vh

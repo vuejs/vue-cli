@@ -46,8 +46,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .not-found
   v-box()
   box-center()

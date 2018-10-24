@@ -13,8 +13,6 @@
 </template>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .top-bar
   padding $padding-item
   h-box()

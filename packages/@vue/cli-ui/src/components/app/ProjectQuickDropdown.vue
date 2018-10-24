@@ -161,8 +161,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .current-project
   >>> .trigger
     .vue-ui-button

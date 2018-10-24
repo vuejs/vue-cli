@@ -112,8 +112,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .panes
   h-box()
 

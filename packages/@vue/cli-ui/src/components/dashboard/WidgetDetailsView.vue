@@ -41,8 +41,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~@/style/imports"
-
 .widget-details-view
   /deep/ .shell
     position fixed
