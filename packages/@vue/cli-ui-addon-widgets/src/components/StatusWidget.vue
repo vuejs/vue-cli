@@ -1,5 +1,5 @@
 <template>
-  <div class="status-widget">
+  <div v-if="false" class="status-widget">
     <div class="header">
       <div class="icon-wrapper">
         <ItemLogo
@@ -43,6 +43,9 @@
       </slot>
     </div>
   </div>
+  <div v-else class="status-widget soon">
+    <div class="text">Available Soon</div>
+  </div>
 </template>
 
 <script>
@@ -74,25 +77,25 @@ export default {
   },
 
   created () {
-    this.widget.addHeaderAction({
-      id: 'refresh',
-      icon: 'refresh',
-      tooltip: 'org.vue.widgets.status-widget.check',
-      disabled: () => this.status.status === 'loading',
-      onCalled: () => {
-        this.$emit('check')
-      }
-    })
+    // this.widget.addHeaderAction({
+    //   id: 'refresh',
+    //   icon: 'refresh',
+    //   tooltip: 'org.vue.widgets.status-widget.check',
+    //   disabled: () => this.status.status === 'loading',
+    //   onCalled: () => {
+    //     this.$emit('check')
+    //   }
+    // })
 
-    this.widget.addHeaderAction({
-      id: 'expand',
-      icon: 'zoom_out_map',
-      tooltip: 'org.vue.components.widget.open-details',
-      hidden: () => this.status.status !== 'attention',
-      onCalled: () => {
-        this.widget.openDetails()
-      }
-    })
+    // this.widget.addHeaderAction({
+    //   id: 'expand',
+    //   icon: 'zoom_out_map',
+    //   tooltip: 'org.vue.components.widget.open-details',
+    //   hidden: () => this.status.status !== 'attention',
+    //   onCalled: () => {
+    //     this.widget.openDetails()
+    //   }
+    // })
   }
 }
 </script>
@@ -129,4 +132,18 @@ export default {
   /deep/ > *
     &:not(:last-child)
       margin-right ($padding-item / 2)
+
+.soon
+  display flex
+  box-center()
+  height 100%
+
+  .text
+    background $vue-ui-color-primary
+    color $vue-ui-color-light
+    padding 4px 14px
+    border-radius 13px
+    text-transform lowercase
+    font-family monospace
+    opacity .5
 </style>
