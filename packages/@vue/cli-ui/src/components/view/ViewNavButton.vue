@@ -159,6 +159,9 @@ $bg-dark = $vue-ui-color-dark
       .image-icon
         border-radius 50%
 
+    &.selected
+      background rgba($vue-ui-color-primary, .05) !important
+
 .badges
   margin ($padding-item/2) 0
   display grid
