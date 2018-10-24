@@ -147,7 +147,7 @@ function resetPluginApi ({ file, lightApi }, context) {
     }
 
     // Cyclic dependency with projects connector
-    setTimeout(() => {
+    setTimeout(async () => {
       const projects = require('./projects')
       const project = projects.findByPath(file, context)
 
@@ -189,9 +189,9 @@ function resetPluginApi ({ file, lightApi }, context) {
         clientAddons.add(options, context)
       })
       // Add views
-      pluginApi.views.forEach(view => {
-        views.add(view, context)
-      })
+      for (const view of pluginApi.views) {
+        await views.add({ view, project }, context)
+      }
       // Register widgets
       pluginApi.widgetDefs.forEach(definition => {
         widgets.registerDefinition({ definition }, context)

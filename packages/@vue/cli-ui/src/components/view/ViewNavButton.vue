@@ -12,14 +12,15 @@
         class="flat big"
         :class="{
           'icon-button': !$responsive.wide,
-          'has-image-icon': imageIcon
+          'has-image-icon': imageIcon,
+          'default-plugin-icon': defaultPluginIcon
         }"
         :value="view.name"
         :icon-left="!imageIcon ? view.icon : null"
       >
         <img
           v-if="imageIcon"
-          :src="imageSrc(view.icon)"
+          :src="icon"
           class="image-icon"
         >
 
@@ -50,6 +51,8 @@
 </template>
 
 <script>
+import { getImageUrl } from '@/util/image'
+
 export default {
   props: {
     view: {
@@ -70,16 +73,15 @@ export default {
     },
 
     imageIcon () {
-      return this.view.icon && this.view.icon.indexOf('.') !== -1
-    }
-  },
+      return this.view.icon && this.view.icon.includes('/')
+    },
 
-  methods: {
-    imageSrc (url) {
-      if (process.env.VUE_APP_CLI_UI_DEV && url.charAt(0) === '/') {
-        return `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}${url}`
-      }
-      return url
+    icon () {
+      return getImageUrl(this.view.icon)
+    },
+
+    defaultPluginIcon () {
+      return this.imageIcon && this.view.icon.includes('/_plugin-logo/')
     }
   }
 }
@@ -142,15 +144,20 @@ $bg-dark = $vue-ui-color-dark
       position relative
       left -2px
 
-  .vue-ui-group-button.has-image-icon
-    >>> .default-slot
-      display flex
-      align-items center
-      overflow visible !important
-      .label
-        display block
-        max-width 150px
-        ellipsis()
+  .vue-ui-group-button
+    &.has-image-icon
+      >>> .default-slot
+        display flex
+        align-items center
+        overflow visible !important
+        .label
+          display block
+          max-width 150px
+          ellipsis()
+
+    &.default-plugin-icon
+      .image-icon
+        border-radius 50%
 
 .badges
   margin ($padding-item/2) 0
