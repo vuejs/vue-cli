@@ -4,6 +4,7 @@ fragment suggestion on Suggestion {
   importance
   label
   message
+  image
   link
   actionLink
   busy
