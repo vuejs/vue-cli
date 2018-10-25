@@ -15828,11 +15828,12 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-apollo@^3.0.0-beta.17:
-  version "3.0.0-beta.19"
-  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.0-beta.19.tgz#26f5dbb6bd2a2a7f567320d293442d3c7ae70a08"
-  integrity sha512-xmsP7kLKqzmK1ha1E+5PikCh2O5etVCkYt2z1t5muTA2IudEz5OEqA6xLHJGEAGnwBoTzZS+3nYx+OPUBwddtQ==
+vue-apollo@^3.0.0-beta.25:
+  version "3.0.0-beta.25"
+  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.0-beta.25.tgz#05a9a699b2ba6103639e9bd6c3bb88ca04c4b637"
+  integrity sha512-M7/l3h0NlFvaZ/s/wrtRiOt3xXMbaNNuteGaCY+U5D0ABrQqvCgy5mayIZHurQxbloluNkbCt18wRKAgJTAuKA==
   dependencies:
+    chalk "^2.4.1"
     throttle-debounce "^2.0.0"
 
 vue-class-component@^6.2.0:
