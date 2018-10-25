@@ -198,7 +198,7 @@ export default {
 
     >>> .indicator
       justify-content flex-start
-      margin-left 2px
+      margin-left 4px
 
       .content
         width 6px
