@@ -1,5 +1,5 @@
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const LRU = require('lru-cache')
 const chalk = require('chalk')
 // Context
@@ -462,9 +462,13 @@ function update (id, context) {
     })
     currentPluginId = id
     const plugin = findOne({ id, file: cwd.get() }, context)
-    const { current, wanted } = await dependencies.getVersion(plugin, context)
+    const { current, wanted, localPath } = await dependencies.getVersion(plugin, context)
 
-    await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
+    if (localPath) {
+      await updateLocalPackage({ cwd: cwd.get(), id, localPath }, context)
+    } else {
+      await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
+    }
 
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
@@ -483,6 +487,12 @@ function update (id, context) {
     currentPluginId = null
     return findOne({ id, file: cwd.get() }, context)
   })
+}
+
+async function updateLocalPackage ({ id, cwd, localPath }, context) {
+  const from = path.resolve(cwd, localPath)
+  const to = path.resolve(cwd, 'node_modules', ...id.split('/'))
+  await fs.copy(from, to)
 }
 
 async function updateAll (context) {
