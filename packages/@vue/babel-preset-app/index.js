@@ -1,3 +1,5 @@
+const path = require('path')
+
 const defaultPolyfills = [
   // promise polyfill alone doesn't work in IE,
   // needs this as well. see: #1642
@@ -138,7 +140,8 @@ module.exports = (context, options = {}) => {
     regenerator: useBuiltIns !== 'usage',
     corejs: useBuiltIns !== false ? false : 2,
     helpers: useBuiltIns === 'usage',
-    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES
+    useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
+    absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json'))
   }])
 
   return {
