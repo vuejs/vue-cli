@@ -60,7 +60,7 @@ const resolvers = [{
         // Iterator
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_REMOVED),
         // Filter
-        (payload, vars) => payload.progressRemoved.id === vars.id
+        (payload, vars) => payload.progressRemoved === vars.id
       )
     },
     clientAddonAdded: {
