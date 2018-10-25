@@ -1288,6 +1288,58 @@ In this example we only display the vue-router suggestion in the plugins view an
 
 Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
 
+## Widgets
+
+You can register a widget for the project dashboard in your plugin ui file:
+
+```js
+registerWidget({
+  // Unique ID
+  id: 'org.vue.widgets.news',
+  // Basic infos
+  title: 'org.vue.widgets.news.title',
+  description: 'org.vue.widgets.news.description',
+  icon: 'rss_feed',
+  // Main component used to render the widget
+  component: 'org.vue.widgets.components.news',
+  // (Optional) Secondary component for widget 'fullscreen' view
+  detailsComponent: 'org.vue.widgets.components.news',
+  // Size
+  minWidth: 2,
+  minHeight: 1,
+  maxWidth: 6,
+  maxHeight: 6,
+  defaultWidth: 2,
+  defaultHeight: 3,
+  // (Optional) Limit the maximum number of this widget on the dashboard
+  maxCount: 1,
+  // (Optional) Add a 'fullscreen' button in widget header
+  openDetailsButton: true,
+  // (Optional) Default configuration for the widget
+  defaultConfig: () => ({
+    url: 'https://vuenews.fireside.fm/rss'
+  }),
+  // (Optional) Require user to configure widget when added
+  // You shouldn't use `defaultConfig` with this
+  needsUserConfig: true,
+  // (Optional) Display prompts to configure the widget
+  onConfigOpen: async ({ context }) => {
+    return {
+      prompts: [
+        {
+          name: 'url',
+          type: 'input',
+          message: 'org.vue.widgets.news.prompts.url',
+          validate: input => !!input // Required
+        }
+      ]
+    }
+  }
+})
+```
+
+Note: `registerWidget` can be namespaced with `api.namespace()`.
+
 ## Other methods
 
 ### hasPlugin
