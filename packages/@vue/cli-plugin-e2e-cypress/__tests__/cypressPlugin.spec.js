@@ -1,4 +1,4 @@
-jest.setTimeout(process.env.APPVEYOR ? 240000 : 120000)
+jest.setTimeout(120000)
 
 const create = require('@vue/cli-test-utils/createTestProject')
 
@@ -21,5 +21,9 @@ test('should work', async () => {
   config.video = false
   await project.write('cypress.json', JSON.stringify(config))
 
-  await project.run(`vue-cli-service test:e2e --headless`)
+  if (!process.env.APPVEYOR) {
+    await project.run(`vue-cli-service test:e2e --headless`)
+  } else if (!process.env.CI) {
+    await project.run(`vue-cli-service test:e2e`)
+  }
 })
