@@ -169,7 +169,8 @@ function getLocalPath (id, context) {
   )
   const range = deps[id]
   if (range && range.match(/^file:/)) {
-    return range
+    const localPath = range.substr('file:'.length)
+    return path.resolve(cwd.get(), localPath)
   }
   return null
 }
