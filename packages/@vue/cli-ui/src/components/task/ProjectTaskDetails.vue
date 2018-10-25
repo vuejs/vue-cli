@@ -5,6 +5,12 @@
         <VueIcon icon="assignment" class="task-icon big"/>
         <div class="name">{{ task.name }}</div>
         <div class="description">{{ $t(task.description) }}</div>
+        <div
+          class="command"
+          v-tooltip="`${$t('org.vue.views.project-task-details.command')}:<br><code>${task.command}</code>`"
+        >
+          {{ task.command }}
+        </div>
       </div>
 
       <div class="actions-bar">
@@ -29,18 +35,10 @@
         <VueButton
           slot="trigger"
           icon-left="settings"
-          class="icon-button primary"
           :disabled="task.status === 'running'"
-          v-tooltip="$t('org.vue.views.project-task-details.parameters')"
+          :label="$t('org.vue.views.project-task-details.parameters')"
           @click="showParameters = true"
         />
-
-        <div
-          class="command"
-          v-tooltip="`${$t('org.vue.views.project-task-details.command')}:<br><code>${task.command}</code>`"
-        >
-          {{ task.command }}
-        </div>
 
         <VueButton
           v-if="task.link"
@@ -347,14 +345,14 @@ export default {
     margin-top $padding-item
 
 .command
+  flex 1
   font-family $font-mono
   font-size 12px
-  background $vue-ui-color-light-neutral
+  background rgba($vue-ui-color-primary, .2)
   color $vue-ui-color-dark
   padding 10px 16px
   height 32px
   border-radius $br
-  max-width 20vw
   ellipsis()
   box-sizing border-box
   .vue-ui-dark-mode &
@@ -404,6 +402,7 @@ export default {
       color $vue-ui-color-light-neutral
 
   .description
+    flex 1
     color $color-text-light
     margin-left $padding-item
 
