@@ -1,6 +1,12 @@
 <template>
   <div
     class="suggestion-bar-item"
+    :class="{
+      ping
+    }"
+    :style="{
+      animationDelay: `${index * .5 + 1.5}s`
+    }"
     v-set-size="'.wrapper'"
   >
     <div class="wrapper">
@@ -74,6 +80,16 @@ export default {
     suggestion: {
       type: Object,
       required: true
+    },
+
+    index: {
+      type: Number,
+      default: -1
+    },
+
+    ping: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -141,6 +157,9 @@ export default {
     width max-content
     box-sizing border-box
 
+  &.ping:not(.suggestion-leave-active)
+    animation ping .5s ease-in-out
+
 .suggestion-enter-active,
 .suggestion-leave-active
   transition all 1.5s $ease
@@ -163,4 +182,13 @@ export default {
     transform scale(0)
     .content
       opacity 0
+
+@keyframes ping
+  0%,
+  100%
+    transform none
+    filter none
+  25%
+    transform scale(1.1)
+    filter brightness(120%)
 </style>

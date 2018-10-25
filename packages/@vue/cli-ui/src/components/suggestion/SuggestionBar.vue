@@ -38,13 +38,9 @@
     />
 
     <template slot-scope="{ result: { data } }" v-if="data">
-      <transition-group name="suggestion" class="suggestions">
-        <SuggestionBarItem
-          v-for="suggestion of withBuiltins(data.suggestions)"
-          :key="`${$i18n.locale}:${suggestion.id}`"
-          :suggestion="suggestion"
-        />
-      </transition-group>
+      <SuggestionBarList
+        :suggestions="withBuiltins(data.suggestions)"
+      />
     </template>
   </ApolloQuery>
 </template>
