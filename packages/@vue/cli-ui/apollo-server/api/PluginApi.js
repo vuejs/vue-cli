@@ -6,6 +6,7 @@ const views = require('../connectors/views')
 const suggestions = require('../connectors/suggestions')
 const folders = require('../connectors/folders')
 const progress = require('../connectors/progress')
+const app = require('../connectors/app')
 // Utils
 const ipc = require('../util/ipc')
 const { notify } = require('../util/notification')
@@ -598,6 +599,13 @@ class PluginApi {
       }, this.context)
       console.error(new Error(`Invalid definition: ${e.message}`))
     }
+  }
+
+  /**
+   * Request a route to be displayed in the client
+   */
+  requestRoute (route) {
+    app.requestRoute(route, this.context)
   }
 
   /**

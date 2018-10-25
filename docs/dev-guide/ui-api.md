@@ -1376,6 +1376,21 @@ Get currently open project.
 api.getProject()
 ```
 
+### requestRoute
+
+Switch the user on a specific route in the web client.
+
+```js
+api.requestRoute({
+  name: 'foo',
+  params: {
+    id: 'bar'
+  }
+})
+
+api.requestRoute('/foobar')
+```
+
 ## Public static files
 
 You may need to expose some static files over the cli-ui builtin HTTP server (typically if you want to specify an icon to a custom view).

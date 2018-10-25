@@ -74,6 +74,9 @@ const resolvers = [{
     },
     localeAdded: {
       subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.LOCALE_ADDED)
+    },
+    routeRequested: {
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.ROUTE_REQUESTED)
     }
   }
 }]
