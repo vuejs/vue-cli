@@ -7,6 +7,10 @@
         "more-info": "More info"
       },
       "components": {
+        "client-addon-component": {
+          "timeout": "Component load timeout",
+          "timeout-info": "The custom component takes too much time to load, there might be an error"
+        },
         "connection-status": {
           "disconnected": "Disconnected from UI server",
           "connected": "Connected!"
