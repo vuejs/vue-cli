@@ -44,6 +44,7 @@
 
           <div class="actions-bar">
             <VueButton
+              v-if="suggestion.link"
               :href="suggestion.link"
               :label="$t('org.vue.components.list-item-info.more-info')"
               target="_blank"
