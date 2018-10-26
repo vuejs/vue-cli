@@ -38,7 +38,7 @@ module.exports = (api, options) => {
 
     webpackConfig.resolve
       .extensions
-        .merge(['.js', '.jsx', '.vue', '.json'])
+        .merge(['.wasm', '.mjs', '.js', '.jsx', '.vue', '.json'])
         .end()
       .modules
         .add('node_modules')
