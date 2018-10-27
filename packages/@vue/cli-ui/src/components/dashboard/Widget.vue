@@ -599,10 +599,6 @@ $zoom = .7
     .customize-overlay
       border $vue-ui-color-primary solid 1px
 
-  &.moving
-    .shell
-      transform scale(1.08)
-
   &.details-shown
     > .shell
       transform scale(1.2)
