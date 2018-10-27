@@ -64,7 +64,7 @@ vue ui -D
 
 You can add a project configuration with the `api.describeConfig` method.
 
-First you need to pass some informations:
+First you need to pass some information:
 
 ```js
 api.describeConfig({
@@ -430,7 +430,7 @@ api.describeTask({
     if (answers.mode) args.push('--mode', answers.mode)
     args.push('--dashboard')
   },
-  // Immediatly after running the task
+  // Immediately after running the task
   onRun: async ({ args, child, cwd }) => {
     // child: node child process
     // cwd: process working directory
@@ -1252,7 +1252,7 @@ You can also open a page instead when the user activates the suggestion with `ac
 ```js
 api.addSuggestion({
   id: 'com.my-name.my-suggestion',
-  type: 'action', // Required 
+  type: 'action', // Required
   label: 'Add vue-router',
   // Open a new tab
   actionLink: 'https://vuejs.org/'
