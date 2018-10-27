@@ -208,7 +208,10 @@ ansi-colors('white', $vue-ui-color-light)
   width 12px
   height @width
   border-radius 50%
-  background rgba($vue-ui-color-primary, .5)
+  background lighten($vue-ui-color-primary, 40%)
+  .vue-ui-dark-mode &
+    background darken($vue-ui-color-primary, 40%)
+
 
   $halfWidth = @width / 2
   $halfHeight = @height / 2
@@ -218,19 +221,19 @@ ansi-colors('white', $vue-ui-color-light)
   &.top,
   &.top-left,
   &.top-right
-    top $halfHeight
+    top -($halfHeight)
   &.bottom,
   &.bottom-left,
   &.bottom-right
-    bottom $halfHeight
+    bottom -($halfHeight)
   &.left,
   &.top-left,
   &.bottom-left
-    left $halfWidth
+    left -($halfWidth)
   &.right,
   &.top-right,
   &.bottom-right
-    right $halfWidth
+    right -($halfWidth)
   &.top,
   &.bottom
     left 'calc(50% - %s)' % $halfWidth
