@@ -28,7 +28,7 @@
     "jest": "^23.6.0",
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^1.0.0",
-    "vue-jest": "^2.6.0"
+    "vue-jest": "^3.0.0"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.20",
