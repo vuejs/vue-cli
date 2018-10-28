@@ -72,7 +72,6 @@
   "resolutions": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "apollo-utilities": "1.0.21",
     "fs-monkey": "0.3.1",
     "babel-core": "7.0.0-bridge.0",
     "vue": "2.5.17",
