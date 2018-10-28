@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import deepmerge from 'deepmerge'
+import VueTimeago from 'vue-timeago'
 
 Vue.use(VueI18n)
+
+Vue.use(VueTimeago, {
+  name: 'VueTimeago',
+  locale: 'en'
+})
 
 function detectLanguage () {
   try {
@@ -47,6 +53,15 @@ async function autoDetect () {
     if (!ok) {
       console.log(`[UI] No locale package was found for your locale ${codes[0]}.`)
     }
+
+    const dateFnsLocale = i18n.locale.toLowerCase().replace(/-/g, '_')
+    Vue.component('VueTimeago', VueTimeago.createTimeago({
+      name: 'VueTimeago',
+      locale: i18n.locale,
+      locales: {
+        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}`)
+      }
+    }))
   }
 }
 

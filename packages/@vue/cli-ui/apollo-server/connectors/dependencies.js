@@ -125,12 +125,19 @@ async function getMetadata (id, context) {
 
 async function getVersion ({ id, installed, versionRange, baseDir }, context) {
   let current
+
+  // Is local dep
+  const localPath = getLocalPath(id, context)
+
+  // Read module package.json
   if (installed) {
     const pkg = readPackage({ id, file: baseDir }, context)
     current = pkg.version
   } else {
     current = null
   }
+
+  // Metadata
   let latest, wanted
   const metadata = await getMetadata(id, context)
   if (metadata) {
@@ -147,8 +154,25 @@ async function getVersion ({ id, installed, versionRange, baseDir }, context) {
     current,
     latest,
     wanted,
-    range: versionRange
+    range: versionRange,
+    localPath
   }
+}
+
+function getLocalPath (id, context) {
+  const projects = require('./projects')
+  const projectPkg = folders.readPackage(projects.getCurrent(context).path, context, true)
+  const deps = Object.assign(
+    {},
+    projectPkg.dependencies || {},
+    projectPkg.devDependencies || {}
+  )
+  const range = deps[id]
+  if (range && range.match(/^file:/)) {
+    const localPath = range.substr('file:'.length)
+    return path.resolve(cwd.get(), localPath)
+  }
+  return null
 }
 
 async function getDescription ({ id }, context) {
@@ -166,13 +190,21 @@ function getLink ({ id, file }, context) {
     `https://www.npmjs.com/package/${id.replace(`/`, `%2F`)}`
 }
 
-function install ({ id, type }, context) {
+function install ({ id, type, range }, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'dependency-install',
       args: [id]
     })
-    await installPackage(cwd.get(), getCommand(cwd.get()), null, id, type === 'devDependencies')
+
+    let arg
+    if (range) {
+      arg = `${id}@${range}`
+    } else {
+      arg = id
+    }
+
+    await installPackage(cwd.get(), getCommand(cwd.get()), null, arg, type === 'devDependencies')
 
     logs.add({
       message: `Dependency ${id} installed`,

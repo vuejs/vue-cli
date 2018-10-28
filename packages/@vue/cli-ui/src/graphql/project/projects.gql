@@ -1,0 +1,11 @@
+#import "./projectFragment.gql"
+#import "../task/taskFragment.gql"
+
+query projects {
+  projects {
+    ...project
+    tasks {
+      ...task
+    }
+  }
+}

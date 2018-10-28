@@ -19,8 +19,8 @@ window.Vue = Vue
 window.ClientAddonApi = new ClientAddonApi()
 
 const app = new Vue({
-  provide: apolloProvider.provide(),
   router,
+  apolloProvider,
   i18n,
   ...App
 })
