@@ -14,7 +14,7 @@
     "test:e2e:dev": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql vue-cli-service test:e2e --mode development",
     "test:e2e:run": "vue-cli-service test:e2e --mode production --headless --url=http://localhost:4040",
     "test:clear": "rimraf ../../test/cli-ui-test && rimraf ./live-test",
-    "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui && yarn run test:run"
+    "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui-addon-widgets && yarn run build && cd ../cli-ui && yarn run test:run"
   },
   "files": [
     "apollo-server",
