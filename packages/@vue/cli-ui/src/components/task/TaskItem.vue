@@ -7,6 +7,7 @@
         selected
       }
     ]"
+    v-tooltip.right="description"
     @dblclick="runTask()"
   >
     <div class="content">
@@ -19,7 +20,7 @@
 
       <ListItemInfo
         :name="task.name"
-        :description="(task.status === 'idle' && $t(task.description)) || status"
+        :description="description"
         :selected="selected"
       />
 
@@ -63,6 +64,10 @@ export default {
 
     logo () {
       return this.task.icon || (this.task.plugin && this.task.plugin.logo)
+    },
+
+    description () {
+      return (this.task.status === 'idle' && this.$t(this.task.description)) || this.status
     }
   },
 
