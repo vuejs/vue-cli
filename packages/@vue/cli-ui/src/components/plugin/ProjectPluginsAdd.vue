@@ -191,7 +191,7 @@ export default {
 
   methods: {
     close () {
-      this.$router.push({ name: 'project-home' })
+      this.$router.push({ name: 'project-plugins' })
     },
 
     checkTab () {

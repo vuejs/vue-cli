@@ -108,8 +108,12 @@ export default {
           }
         },
         update: (store, { data: { widgetAdd } }) => {
-          const data = store.readQuery({ query: WIDGETS })
-          data.widgets.push(widgetAdd)
+          let data = store.readQuery({ query: WIDGETS })
+          // TODO this is a workaround
+          // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
+          data = {
+            widgets: [...data.widgets, widgetAdd]
+          }
           store.writeQuery({ query: WIDGETS, data })
           store.writeFragment({
             fragment: WIDGET_DEFINITION_FRAGMENT,

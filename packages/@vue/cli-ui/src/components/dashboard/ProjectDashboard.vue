@@ -101,6 +101,7 @@ export default {
   methods: {
     onWindowResize () {
       const el = this.$refs.widgets.$el
+      if (!el) return
       const bounds = el.getBoundingClientRect()
       this.injected.width = bounds.width - PADDING * 2
       this.injected.height = bounds.height - PADDING * 2

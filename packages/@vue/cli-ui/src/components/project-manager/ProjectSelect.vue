@@ -50,7 +50,7 @@
             icon-left="unarchive"
             :label="$route.query.action || $t('org.vue.views.project-select.buttons.import')"
             class="big primary import-project"
-            :disabled="!folderCurrent.isPackage"
+            :disabled="folderCurrent && !folderCurrent.isPackage"
             :loading="busy"
             @click="importProject()"
           />

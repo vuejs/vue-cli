@@ -2,7 +2,6 @@
   <div class="project-select-list">
     <ApolloQuery
       :query="require('@/graphql/project/projects.gql')"
-      fetch-policy="network-only"
     >
       <template slot-scope="{ result: { data, loading } }">
         <template v-if="data">
@@ -107,7 +106,12 @@ export default {
           id: project.id
         },
         update: store => {
-          const data = store.readQuery({ query: PROJECTS })
+          let data = store.readQuery({ query: PROJECTS })
+          // TODO this is a workaround
+          // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
+          data = {
+            projects: [...data.projects]
+          }
           const index = data.projects.findIndex(
             p => p.id === project.id
           )

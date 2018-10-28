@@ -308,7 +308,12 @@ export default {
         update: (store, { data: { folderSetFavorite } }) => {
           store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderSetFavorite } })
 
-          const data = store.readQuery({ query: FOLDERS_FAVORITE })
+          let data = store.readQuery({ query: FOLDERS_FAVORITE })
+          // TODO this is a workaround
+          // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
+          data = {
+            foldersFavorite: data.foldersFavorite.slice()
+          }
           if (folderSetFavorite.favorite) {
             data.foldersFavorite.push(folderSetFavorite)
           } else {

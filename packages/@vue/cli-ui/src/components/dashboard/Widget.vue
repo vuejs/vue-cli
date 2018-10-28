@@ -410,6 +410,7 @@ export default {
 
     updateShellOrigin () {
       const el = this.$refs.shell
+      if (!el) return
       const bounds = el.getBoundingClientRect()
       this.shellOrigin = {
         x: bounds.left + bounds.width / 2 - this.dashboard.left,
