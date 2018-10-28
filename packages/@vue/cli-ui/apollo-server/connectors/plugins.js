@@ -492,6 +492,7 @@ function update (id, context) {
 async function updateLocalPackage ({ id, cwd, localPath }, context) {
   const from = path.resolve(cwd, localPath)
   const to = path.resolve(cwd, 'node_modules', ...id.split('/'))
+  await fs.remove(to)
   await fs.copy(from, to)
 }
 
