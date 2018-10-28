@@ -46,7 +46,7 @@ async function autoDetect () {
     }
 
     if (!ok) {
-      console.log(`[UI] No locale package was found for your locale ${codes[0]}.`)
+      console.log(`[UI] No locale data was found for your locale ${codes[0]}.`)
     }
 
     const dateFnsLocale = i18n.locale.toLowerCase().replace(/-/g, '_')
