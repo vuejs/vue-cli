@@ -4,7 +4,12 @@
       <div class="header">
         <VueIcon icon="assignment" class="task-icon big"/>
         <div class="name">{{ task.name }}</div>
-        <div class="description">{{ $t(task.description) }}</div>
+        <div
+          class="description"
+          v-tooltip="$t(task.description)"
+        >
+          {{ $t(task.description) }}
+        </div>
         <div
           class="command"
           v-tooltip="`${$t('org.vue.views.project-task-details.command')}:<br><code>${task.command}</code>`"
@@ -404,7 +409,8 @@ export default {
   .description
     flex 1
     color $color-text-light
-    margin-left $padding-item
+    margin 0 $padding-item
+    ellipsis()
 
 .task-settings
   padding $padding-item
