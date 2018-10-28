@@ -23,13 +23,8 @@ function detectLanguage () {
 
 async function autoInstallLocale (lang) {
   try {
-    let response = await fetch(`https://unpkg.com/vue-cli-locale-${lang}`)
+    let response = await fetch(`https://unpkg.com/vue-cli-locales/locales/${lang}.json`)
     if (response.ok) {
-      // Redirect
-      const location = response.headers.get('location')
-      if (location) {
-        response = await fetch(`https://unpkg.com${location}`)
-      }
       const data = await response.json()
       mergeLocale(lang, data)
       return true
