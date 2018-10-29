@@ -60,7 +60,7 @@ export default {
 .loading
   v-box()
   box-center()
-  padding 100px
+  padding 42px
 
 .timeout-info
   max-width 200px
