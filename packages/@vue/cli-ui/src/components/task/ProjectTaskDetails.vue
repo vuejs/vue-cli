@@ -19,42 +19,42 @@
       </div>
 
       <div class="actions-bar">
-        <VueButton
-          v-if="task.status !== 'running'"
-          icon-left="play_arrow"
-          class="primary"
-          :label="$t('org.vue.views.project-task-details.actions.play')"
-          data-testid="run-task"
-          @click="runTask()"
-        />
+        <div class="main-actions">
+          <VueButton
+            v-if="task.status !== 'running'"
+            icon-left="play_arrow"
+            class="primary"
+            :label="$t('org.vue.views.project-task-details.actions.play')"
+            data-testid="run-task"
+            @click="runTask()"
+          />
 
-        <VueButton
-          v-else
-          icon-left="stop"
-          class="primary"
-          :label="$t('org.vue.views.project-task-details.actions.stop')"
-          data-testid="stop-task"
-          @click="stopTask()"
-        />
+          <VueButton
+            v-else
+            icon-left="stop"
+            class="primary"
+            :label="$t('org.vue.views.project-task-details.actions.stop')"
+            data-testid="stop-task"
+            @click="stopTask()"
+          />
 
-        <VueButton
-          slot="trigger"
-          icon-left="settings"
-          :disabled="task.status === 'running'"
-          :label="$t('org.vue.views.project-task-details.parameters')"
-          @click="showParameters = true"
-        />
+          <VueButton
+            slot="trigger"
+            icon-left="settings"
+            :disabled="task.status === 'running'"
+            :label="$t('org.vue.views.project-task-details.parameters')"
+            @click="showParameters = true"
+          />
 
-        <VueButton
-          v-if="task.link"
-          :href="task.link"
-          target="_blank"
-          icon-left="open_in_new"
-          class="icon-button"
-          v-tooltip="$t('org.vue.views.project-task-details.more-info')"
-        />
-
-        <div class="vue-ui-spacer"/>
+          <VueButton
+            v-if="task.link"
+            :href="task.link"
+            target="_blank"
+            icon-left="open_in_new"
+            class="icon-button"
+            v-tooltip="$t('org.vue.views.project-task-details.more-info')"
+          />
+        </div>
 
         <VueGroup
           v-if="task.views.length"
@@ -344,7 +344,7 @@ export default {
 
 @media (max-width: 1250px)
   .actions-bar
-    flex-wrap wrap
+    flex-direction column
 
   .views
     margin-top $padding-item
@@ -411,6 +411,13 @@ export default {
     color $color-text-light
     margin 0 $padding-item
     ellipsis()
+
+.main-actions
+  flex 1
+
+  /deep/ > *
+    &:not(:last-child)
+      margin-right $padding-item
 
 .task-settings
   padding $padding-item
