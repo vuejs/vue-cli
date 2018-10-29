@@ -372,8 +372,12 @@ export default {
           id: this.widget.id
         },
         update: (store, { data: { widgetRemove } }) => {
-          const data = store.readQuery({ query: WIDGETS })
-          data.widgets = data.widgets.filter(w => w.id !== this.widget.id)
+          let data = store.readQuery({ query: WIDGETS })
+          // TODO this is a workaround
+          // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
+          data = {
+            widgets: data.widgets.filter(w => w.id !== this.widget.id)
+          }
           store.writeQuery({ query: WIDGETS, data })
           store.writeFragment({
             fragment: WIDGET_DEFINITION_FRAGMENT,
