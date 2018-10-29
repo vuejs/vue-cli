@@ -229,6 +229,8 @@ function resetPluginApi ({ file, lightApi }, context) {
 }
 
 function runPluginApi (id, pluginApi, context, filename = 'ui') {
+  const name = filename !== 'ui' ? `${id}/${filename}` : id
+
   let module
   try {
     module = loadModule(`${id}/${filename}`, pluginApi.cwd, true)
@@ -239,12 +241,23 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
   }
   if (module) {
     if (typeof module !== 'function') {
-      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, filename !== 'ui' ? `${id}/${filename}` : id, chalk.grey(pluginApi.cwd))
+      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
+      logs.add({
+        type: 'error',
+        message: `An error occured while loading ${name}: no function exported`
+      })
     } else {
-      const name = filename !== 'ui' ? `${id}/${filename}` : id
-      log('Plugin API loaded for', name, chalk.grey(pluginApi.cwd))
       pluginApi.pluginId = id
-      module(pluginApi)
+      try {
+        module(pluginApi)
+        log('Plugin API loaded for', name, chalk.grey(pluginApi.cwd))
+      } catch (e) {
+        log(`${chalk.red('ERROR')} while loading plugin API for ${name}:`, e)
+        logs.add({
+          type: 'error',
+          message: `An error occured while loading ${name}: ${e.message}`
+        })
+      }
       pluginApi.pluginId = null
     }
   }
