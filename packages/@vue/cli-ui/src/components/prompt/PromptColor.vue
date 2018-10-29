@@ -62,8 +62,8 @@ export default {
   border-radius 50%
 
 .color-picker
-  width 300px
-  height 370px
+  width 300px !important
+  height 370px !important
   background none
   box-shadow none
   padding ($padding-item - 4px) $padding-item
