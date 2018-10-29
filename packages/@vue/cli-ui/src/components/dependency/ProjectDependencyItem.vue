@@ -8,6 +8,7 @@
 
       <ItemLogo
         :image="image || 'widgets'"
+        fallback-icon="widgets"
         class="identicon"
       />
 
