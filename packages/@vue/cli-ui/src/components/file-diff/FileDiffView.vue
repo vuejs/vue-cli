@@ -4,6 +4,12 @@
       <VueIcon icon="cached"/>
       <div class="title">{{ $t('org.vue.components.file-diff-view.files-changed') }}</div>
       <div class="file-count">{{ fileDiffs && fileDiffs.length }}</div>
+      <transition name="vue-ui-fade">
+        <VueLoadingIndicator
+          v-if="loading && fileDiffs.length"
+          class="small accent"
+        />
+      </transition>
       <div class="vue-ui-spacer"/>
       <VueInput
         v-model="search"
@@ -76,8 +82,8 @@
 
     <transition name="vue-ui-fade">
       <VueLoadingIndicator
-        v-if="loading"
-        class="overlay"
+        v-if="loading && !fileDiffs.length"
+        class="accent big overlay"
       />
     </transition>
 
