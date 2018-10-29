@@ -141,7 +141,12 @@
         @close="showConfig = false"
       >
         <div class="default-body">
+          <VueLoadingIndicator
+            v-if="loadingConfig"
+            class="big accent"
+          />
           <PromptsList
+            v-else
             :prompts="visiblePrompts"
             @answer="answerPrompt"
           />
@@ -151,6 +156,7 @@
           <VueButton
             class="primary big"
             :label="$t('org.vue.components.widget.save')"
+            :disabled="loadingConfig"
             @click="saveConfig()"
           />
         </div>
@@ -259,6 +265,7 @@ export default {
   data () {
     return {
       showConfig: false,
+      loadingConfig: false,
       showDetails: false,
       injected: {
         // State
@@ -324,17 +331,20 @@ export default {
 
   methods: {
     async openConfig () {
+      this.loadingConfig = true
+      this.showConfig = true
       await this.$apollo.mutate({
         mutation: WIDGET_CONFIG_OPEN,
         variables: {
           id: this.widget.id
         }
       })
-      this.showConfig = true
+      this.loadingConfig = false
     },
 
     async saveConfig () {
       this.showConfig = false
+      this.loadingConfig = false
       await this.$apollo.mutate({
         mutation: WIDGET_CONFIG_SAVE,
         variables: {
