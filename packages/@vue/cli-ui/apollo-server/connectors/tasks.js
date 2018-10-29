@@ -113,10 +113,10 @@ async function list ({ file = null, api = true } = {}, context) {
       })
     )
 
-    // Keep existing or ran tasks
+    // Keep existing running tasks
     list = list.filter(
       task => existing.get(task.id) ||
-      task.status !== 'idle'
+      task.status === 'running'
     )
 
     // Add the new tasks
