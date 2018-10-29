@@ -350,6 +350,14 @@ api.describeTask({
 })
 ```
 
+You can also use a function for `match`:
+
+```js
+api.describeTask({
+  match: (command) => /vue-cli-service serve/.test(command),
+})
+```
+
 ### Task icon
 
 It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):

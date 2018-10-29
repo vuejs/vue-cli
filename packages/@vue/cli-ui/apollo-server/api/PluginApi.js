@@ -191,7 +191,7 @@ class PluginApi {
    */
   getDescribedTask (command) {
     return this.describedTasks.find(
-      options => options.match.test(command)
+      options => typeof options.match === 'function' ? options.match(command) : options.match.test(command)
     )
   }
 
