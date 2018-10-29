@@ -3,6 +3,7 @@ const path = require('path')
 const LRU = require('lru-cache')
 const semver = require('semver')
 const execa = require('execa')
+const chalk = require('chalk')
 // Connectors
 const cwd = require('./cwd')
 const folders = require('./folders')
@@ -22,6 +23,7 @@ const {
 const { getCommand } = require('../util/command')
 const { resolveModuleRoot } = require('../util/resolve-path')
 const { notify } = require('../util/notification')
+const { log } = require('../util/logger')
 
 const PROGRESS_ID = 'dependency-installation'
 const CLI_SERVICE = '@vue/cli-service'
@@ -106,20 +108,25 @@ async function getMetadata (id, context) {
       metadata = JSON.parse(stdout).data
     } catch (e) {
       // yarn info failed
-      console.log(e)
     }
   }
 
   if (!metadata) {
-    const res = await getPackageVersion(id)
-    if (res.statusCode === 200) {
-      metadata = res.body
+    try {
+      const res = await getPackageVersion(id)
+      if (res.statusCode === 200) {
+        metadata = res.body
+      }
+    } catch (e) {
+      // No connection?
     }
   }
 
   if (metadata) {
     metadataCache.set(id, metadata)
     return metadata
+  } else {
+    log('Dpendencies', chalk.yellow(`Can't load metadata`), id)
   }
 }
 
