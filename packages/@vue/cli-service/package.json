@@ -29,7 +29,7 @@
     "acorn": "^6.0.2",
     "address": "^1.0.3",
     "autoprefixer": "^8.6.5",
-    "cache-loader": "^1.2.2",
+    "cache-loader": "1.2.2",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "chalk": "^2.4.1",
     "clipboardy": "^1.2.3",
