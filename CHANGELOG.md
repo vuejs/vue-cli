@@ -1,3 +1,13 @@
+# 3.1.1 (2018-10-30)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* add core-js to deps ([29dc6a0](https://github.com/vuejs/vue-cli/commit/29dc6a0))
+
+
+
 # [3.1.0](https://github.com/vuejs/vue-cli/compare/v3.0.5...v3.1.0) (2018-10-30)
 
 ## babel-preset-app
