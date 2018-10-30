@@ -3,6 +3,7 @@ const path = require('path')
 module.exports = (api, options) => {
   if (options.lintOnSave) {
     const extensions = require('./eslintOptions').extensions(api)
+    // Use loadModule to allow users to customize their ESLint dependency version.
     const { loadModule } = require('@vue/cli-shared-utils')
     const cwd = api.getCwd()
     const eslintPkg = loadModule('eslint/package.json', cwd, true)

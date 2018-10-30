@@ -10,7 +10,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       lint: 'vue-cli-service lint'
     },
     eslintConfig,
-    devDependencies: {}
+    // TODO:
+    // Move these dependencies to package.json in v4.
+    // Now in v3 we have to add redundant eslint related dependencies
+    // in order to keep compatibility with v3.0.x users who defaults to ESlint v4.
+    devDependencies: {
+      'eslint': '^5.8.0',
+      'eslint-plugin-vue': '^5.0.0-0'
+    }
   }
 
   if (config === 'airbnb') {
