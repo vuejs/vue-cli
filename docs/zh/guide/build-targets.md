@@ -8,14 +8,19 @@
 
 - `index.html` 会带有注入的资源和 resource hint
 - 第三方库会被分到一个独立包以便更好的缓存
-- 小于 10kb 的静态资源会被内联在 JavaScript 中
+- 小于 4kb 的静态资源会被内联在 JavaScript 中
 - `public` 中的静态资源会被复制到输出目录中
 
 ## 库
 
+::: tip 关于 IE 兼容性的提醒
+在库模式中，项目的 `publicPath` 是根据主文件的加载路径[动态设置]((https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/commands/build/setPublicPath.js))的（用以支持动态的资源加载能力）。但是这个功能用到了 `document.currentScript`，而 IE 浏览器并不支持这一特性。所以如果网站需要支持 IE 的话，建议使用库之前先在页面上引入 [current-script-polyfill](https://www.npmjs.com/package/current-script-polyfill)。
+:::
+
 ::: tip 注意对 Vue 的依赖
 在库模式中，Vue 是*外置的*。这意味着包中不会有 Vue，即便你在代码中导入了 Vue。如果这个库会通过一个打包器使用，它将尝试通过打包器以依赖的方式加载 Vue；否则就会回退到一个全局的 `Vue` 变量。
 :::
+
 
 你可以通过下面的命令将一个单独的入口构建为一个库：
 

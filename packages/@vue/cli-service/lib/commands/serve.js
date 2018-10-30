@@ -297,7 +297,7 @@ function checkInContainer () {
   const fs = require('fs')
   if (fs.existsSync(`/proc/1/cgroup`)) {
     const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
-    return /:\/(lxc|docker)\//.test(content)
+    return /:\/(lxc|docker|kubepods)\//.test(content)
   }
 }
 

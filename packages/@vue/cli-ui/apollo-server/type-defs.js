@@ -21,6 +21,7 @@ type Version {
   latest: String
   wanted: String
   range: String
+  localPath: String
 }
 
 type GitHubStats {
@@ -79,6 +80,7 @@ type Subscription {
   clientAddonAdded: ClientAddon
   sharedDataUpdated (id: ID!, projectId: ID!): SharedData
   localeAdded: Locale
+  routeRequested: JSON!
 }
 `]
 

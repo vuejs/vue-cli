@@ -76,6 +76,21 @@ test('modern mode', async () => {
   expect(await getH1Text()).toMatch('Welcome to Your Vue.js App')
 })
 
+test('no-unsafe-inline', async () => {
+  const project = await create('no-unsafe-inline', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --modern --no-unsafe-inline')
+  expect(stdout).toMatch('Build complete.')
+
+  // should output a seperate safari-nomodule-fix bundle
+  const files = await fs.readdir(path.join(project.dir, 'dist/js'))
+  expect(files.some(f => /^safari-nomodule-fix\.js$/.test(f))).toBe(true)
+
+  // should contain no inline scripts in the output html
+  const index = await project.read('dist/index.html')
+  expect(index).not.toMatch(/[^>]\s*<\/script>/)
+})
+
 afterAll(async () => {
   if (browser) {
     await browser.close()

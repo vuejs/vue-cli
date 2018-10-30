@@ -1,11 +1,11 @@
 describe('Plugins', () => {
   it('Should display the plugins', () => {
-    cy.visit('/')
+    cy.visit('/plugins')
     cy.get('.project-plugin-item').should('have.length', 4)
   })
 
   it('Should add a plugin', () => {
-    cy.visit('/')
+    cy.visit('/plugins')
     cy.get('[data-testid="add-plugin"]').click()
     cy.get('.project-plugins-add').should('be.visible')
     // Search

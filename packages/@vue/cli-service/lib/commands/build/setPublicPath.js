@@ -2,7 +2,7 @@
 
 if (typeof window !== 'undefined') {
   var i
-  if ((i = window.document.currentScript) && (i = i.src.match(/(.+\/)[^/]+\.js$/))) {
+  if ((i = window.document.currentScript) && (i = i.src.match(/(.+\/)[^/]+\.js(\?.*)?$/))) {
     __webpack_public_path__ = i[1] // eslint-disable-line
   }
 }

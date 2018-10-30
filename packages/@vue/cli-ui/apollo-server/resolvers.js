@@ -60,7 +60,7 @@ const resolvers = [{
         // Iterator
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_REMOVED),
         // Filter
-        (payload, vars) => payload.progressRemoved.id === vars.id
+        (payload, vars) => payload.progressRemoved === vars.id
       )
     },
     clientAddonAdded: {
@@ -74,6 +74,9 @@ const resolvers = [{
     },
     localeAdded: {
       subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.LOCALE_ADDED)
+    },
+    routeRequested: {
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.ROUTE_REQUESTED)
     }
   }
 }]

@@ -48,6 +48,7 @@
     "conventional-changelog": "^1.1.24",
     "debug": "^3.1.0",
     "eslint": "^4.16.0",
+    "eslint-plugin-graphql": "^2.1.1",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-vue-libs": "^2.1.0",
     "execa": "^0.10.0",
@@ -69,11 +70,14 @@
     "yorkie": "^2.0.0"
   },
   "resolutions": {
-    "fs-monkey": "0.3.1",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "babel-core": "7.0.0-bridge.0",
     "vue": "2.5.17",
-    "vue-loader": "15.3.0",
     "vue-template-compiler": "2.5.17",
     "vue-server-renderer": "2.5.17"
+  },
+  "dependencies": {
+    "babel-eslint": "^10.0.1"
   }
 }

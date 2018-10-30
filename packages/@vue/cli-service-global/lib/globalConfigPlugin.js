@@ -24,6 +24,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
         config.resolve
           .alias
             .set('core-js', path.dirname(require.resolve('core-js')))
+            .set('regenerator-runtime', path.dirname(require.resolve('regenerator-runtime')))
 
         // ensure loaders can be resolved properly
         // this is done by locating vue's install location (which is a
@@ -107,7 +108,10 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
                   extends: [
                     'plugin:vue/essential',
                     'eslint:recommended'
-                  ]
+                  ],
+                  parserOptions: {
+                    parser: 'babel-eslint'
+                  }
                 }
               }))
 

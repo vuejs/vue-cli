@@ -1,3 +1,100 @@
+# [3.0.5](https://github.com/vuejs/vue-cli/compare/v3.0.4...v3.0.5) (2018-10-09)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* only enable helper aliasing when `useBuiltIns` equals `usage` ([da64938](https://github.com/vuejs/vue-cli/commit/da64938)), closes [#2637](https://github.com/vuejs/vue-cli/issues/2637)
+
+## cli
+
+#### Bug Fixes
+
+* **preset:** plugin invoke order don't sort by unicode order ([#2656](https://github.com/vuejs/vue-cli/issues/2656)) ([f99796e](https://github.com/vuejs/vue-cli/commit/f99796e))
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* also look up loaders in local `node_modules` in case deps are not hoisted ([fed948a](https://github.com/vuejs/vue-cli/commit/fed948a)), closes [#2599](https://github.com/vuejs/vue-cli/issues/2599)
+* plugin sub `node_module` directory should have higher priority in `resolveLoader.modules` ([47a28e0](https://github.com/vuejs/vue-cli/commit/47a28e0))
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* [@cypress](https://github.com/cypress)/webpack-preprocessor is both a peer dep and a dev dep ([6fd5e5d](https://github.com/vuejs/vue-cli/commit/6fd5e5d))
+* fix eslint errors when using airbnb config ([35e8d83](https://github.com/vuejs/vue-cli/commit/35e8d83)), closes [#2667](https://github.com/vuejs/vue-cli/issues/2667)
+
+## cli-service
+
+#### Bug Fixes
+
+* build --target lib should merge externals in vue.config.js ([#2653](https://github.com/vuejs/vue-cli/issues/2653)) ([20dd09d](https://github.com/vuejs/vue-cli/commit/20dd09d)), closes [#2646](https://github.com/vuejs/vue-cli/issues/2646)
+* fix test issues for cypress GUI ([ab0503b](https://github.com/vuejs/vue-cli/commit/ab0503b))
+
+## cli-service-global
+
+#### Bug Fixes
+
+* **cli-service-global:** fix eslint-loader config (close [#2654](https://github.com/vuejs/vue-cli/issues/2654)) ([#2655](https://github.com/vuejs/vue-cli/issues/2655)) ([2b104b4](https://github.com/vuejs/vue-cli/commit/2b104b4))
+
+
+
+# [3.0.4](https://github.com/vuejs/vue-cli/compare/v3.0.3...v3.0.4) (2018-09-25)
+
+## cli
+
+#### Bug Fixes
+
+* show full project name in error message for `vue create .` ([5e261be](https://github.com/vuejs/vue-cli/commit/5e261be))
+* **cli:** make sortObject consistent even when keyOrder is given ([#2326](https://github.com/vuejs/vue-cli/issues/2326)) ([1a83944](https://github.com/vuejs/vue-cli/commit/1a83944))
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* add webpack-preprocessor, fixes babel 7 compatibility issues ([bd32daa](https://github.com/vuejs/vue-cli/commit/bd32daa)), closes [#2538](https://github.com/vuejs/vue-cli/issues/2538) [#2465](https://github.com/vuejs/vue-cli/issues/2465)
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **typescript:** use [@types](https://github.com/types)/webpack-env instead of [@types](https://github.com/types)/node ([a570ba0](https://github.com/vuejs/vue-cli/commit/a570ba0)), closes [#2531](https://github.com/vuejs/vue-cli/issues/2531)
+
+## cli-service
+
+#### Bug Fixes
+
+* revert postcss-loader order change ([b559005](https://github.com/vuejs/vue-cli/commit/b559005))
+* typo in error message ([c46d9cf](https://github.com/vuejs/vue-cli/commit/c46d9cf)), closes [#2517](https://github.com/vuejs/vue-cli/issues/2517)
+
+## cli-service-global
+
+#### Bug Fixes
+
+* `findExisting` should be case sensitive ([7e5382f](https://github.com/vuejs/vue-cli/commit/7e5382f)), closes [#2305](https://github.com/vuejs/vue-cli/issues/2305)
+* fix windows compatibility of fileExistsWithCaseSync ([6b825de](https://github.com/vuejs/vue-cli/commit/6b825de))
+
+## cli-ui
+
+#### Bug Fixes
+
+* `configuration` should be synced regardless of `$_init` ([b1b04b8](https://github.com/vuejs/vue-cli/commit/b1b04b8)), closes [#2521](https://github.com/vuejs/vue-cli/issues/2521) [#2522](https://github.com/vuejs/vue-cli/issues/2522)
+* Removed padding reset from current project dropdown ([#2501](https://github.com/vuejs/vue-cli/issues/2501)) ([2263550](https://github.com/vuejs/vue-cli/commit/2263550))
+* typo in en.json ([#2559](https://github.com/vuejs/vue-cli/issues/2559)) ([b5fe501](https://github.com/vuejs/vue-cli/commit/b5fe501))
+* **ui:** fix plugin installation animation hanging ([5e96de9](https://github.com/vuejs/vue-cli/commit/5e96de9))
+* **ui:** update graphql version to align with vue-cli-plugin-apollo ([444cf86](https://github.com/vuejs/vue-cli/commit/444cf86)), closes [#2574](https://github.com/vuejs/vue-cli/issues/2574) [#2577](https://github.com/vuejs/vue-cli/issues/2577)
+* **ui:** use production mode when testing ([8a97146](https://github.com/vuejs/vue-cli/commit/8a97146))
+
+## other
+
+#### Bug Fixes
+
+* **ci:** add eslint-plugin-graph dep to workspace root, fix ci errors ([ed15d23](https://github.com/vuejs/vue-cli/commit/ed15d23))
+
+
+
 # [3.0.3](https://github.com/vuejs/vue-cli/compare/v3.0.2...v3.0.3) (2018-09-12)
 
 ## cli-plugin-unit-mocha

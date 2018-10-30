@@ -28,8 +28,8 @@ const defaultFilesToLint = [
 module.exports = function lint (args = {}, api) {
   const path = require('path')
   const cwd = api.resolve('.')
-  const { CLIEngine } = require('eslint')
-  const { log, done, exit, chalk } = require('@vue/cli-shared-utils')
+  const { log, done, exit, chalk, loadModule } = require('@vue/cli-shared-utils')
+  const { CLIEngine } = loadModule('eslint', cwd, true)
   const extensions = require('./eslintOptions').extensions(api)
 
   const argsConfig = normalizeConfig(args)

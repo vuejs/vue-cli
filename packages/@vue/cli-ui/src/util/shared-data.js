@@ -1,7 +1,7 @@
-import SHARED_DATA from '../graphql/sharedData.gql'
-import SHARED_DATA_UPDATE from '../graphql/sharedDataUpdate.gql'
-import SHARED_DATA_UPDATED from '../graphql/sharedDataUpdated.gql'
-import CURRENT_PROJECT_ID from '../graphql/currentProjectId.gql'
+import SHARED_DATA from '@/graphql/shared-data/sharedData.gql'
+import SHARED_DATA_UPDATE from '@/graphql/shared-data/sharedDataUpdate.gql'
+import SHARED_DATA_UPDATED from '@/graphql/shared-data/sharedDataUpdated.gql'
+import CURRENT_PROJECT_ID from '@/graphql/project/currentProjectId.gql'
 
 function genQuery (id, projectId) {
   return {

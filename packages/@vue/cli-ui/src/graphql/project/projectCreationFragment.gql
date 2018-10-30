@@ -1,0 +1,15 @@
+#import "../preset/presetFragment.gql"
+#import "../feature/featureFragment.gql"
+#import "../prompt/promptFragment.gql"
+
+fragment projectCreation on ProjectCreation {
+  presets {
+    ...preset
+  }
+  features {
+    ...feature
+  }
+  prompts {
+    ...prompt
+  }
+}

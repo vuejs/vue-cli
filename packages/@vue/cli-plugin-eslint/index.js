@@ -1,6 +1,12 @@
+const path = require('path')
+
 module.exports = (api, options) => {
   if (options.lintOnSave) {
     const extensions = require('./eslintOptions').extensions(api)
+    // Use loadModule to allow users to customize their ESLint dependency version.
+    const { loadModule } = require('@vue/cli-shared-utils')
+    const cwd = api.getCwd()
+    const eslintPkg = loadModule('eslint/package.json', cwd, true)
 
     // eslint-loader doesn't bust cache when eslint config changes
     // so we have to manually generate a cache identifier that takes the config
@@ -9,7 +15,7 @@ module.exports = (api, options) => {
       'eslint-loader',
       {
         'eslint-loader': require('eslint-loader/package.json').version,
-        'eslint': require('eslint/package.json').version
+        'eslint': eslintPkg.version
       },
       [
         '.eslintrc.js',
@@ -22,6 +28,8 @@ module.exports = (api, options) => {
     )
 
     api.chainWebpack(webpackConfig => {
+      webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
+
       webpackConfig.module
         .rule('eslint')
           .pre()
@@ -38,7 +46,7 @@ module.exports = (api, options) => {
               cacheIdentifier,
               emitWarning: options.lintOnSave !== 'error',
               emitError: options.lintOnSave === 'error',
-              formatter: require('eslint/lib/formatters/codeframe')
+              formatter: loadModule('eslint/lib/formatters/codeframe', cwd, true)
             })
     })
   }

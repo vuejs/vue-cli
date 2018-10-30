@@ -5,6 +5,9 @@ module.exports = api => {
   })
 
   api.extendPackage({
+    devDependencies: {
+      '@cypress/webpack-preprocessor': '^3.0.0'
+    },
     scripts: {
       'test:e2e': 'vue-cli-service test:e2e'
     }
