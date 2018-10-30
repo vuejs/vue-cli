@@ -1,5 +1,5 @@
-import CONNECTED from '../graphql/connected.gql'
-import DARK_MODE from '../graphql/darkMode.gql'
+import CONNECTED from '@/graphql/connected/connected.gql'
+import DARK_MODE from '@/graphql/dark-mode/darkMode.gql'
 
 // @vue/component
 export default {

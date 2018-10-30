@@ -7,7 +7,8 @@ module.exports = function extendJSConfig (value, source) {
   const ast = recast.parse(source)
 
   recast.types.visit(ast, {
-    visitAssignmentExpression ({ node }) {
+    visitAssignmentExpression (path) {
+      const { node } = path
       if (
         node.left.type === 'MemberExpression' &&
         node.left.object.name === 'module' &&
@@ -21,6 +22,7 @@ module.exports = function extendJSConfig (value, source) {
         }
         return false
       }
+      this.traverse(path)
     }
   })
 

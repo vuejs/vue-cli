@@ -21,7 +21,7 @@ module.exports = (api, _, __, invoking) => {
       'transform': {
         // process *.vue files with vue-jest
         '^.+\\.vue$': 'vue-jest',
-        '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
+        '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
       },
       // support the same @ -> src alias mapping in source code
       'moduleNameMapper': {
@@ -50,7 +50,7 @@ module.exports = (api, _, __, invoking) => {
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
-          'babel-jest': '^23.0.1',
+          'babel-jest': '^23.6.0',
           // this is for now necessary to force babel-jest and vue-jest to use babel 7
           'babel-core': '7.0.0-bridge.0'
         }

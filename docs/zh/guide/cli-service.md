@@ -52,7 +52,7 @@ npx vue-cli-service serve
   --https   使用 https (默认值：false)
 ```
 
-`serve` 命令会启动一个开发服务器 (基于 [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) 并附带开箱即用的模块热重载 (Hot-Module-Replacement)。
+`vue-cli-service serve` 命令会启动一个开发服务器 (基于 [webpack-dev-server](https://github.com/webpack/webpack-dev-server)) 并附带开箱即用的模块热重载 (Hot-Module-Replacement)。
 
 除了通过命令行参数，你也可以使用 `vue.config.js` 里的 [devServer](../config/#devserver) 字段配置开发服务器。
 
@@ -98,7 +98,7 @@ npx vue-cli-service serve
 
 ## 查看所有的可用命令
 
-有些 CLI 插件会向 `vue-cli-service` 注入额外的命令。例如 `@vue/cli-plugin-eslint` 会注入 `vue-cli-service lint` 命令。你可以允许以下命令查看所有注入的命令：
+有些 CLI 插件会向 `vue-cli-service` 注入额外的命令。例如 `@vue/cli-plugin-eslint` 会注入 `vue-cli-service lint` 命令。你可以运行以下命令查看所有注入的命令：
 
 ``` bash
 npx vue-cli-service help

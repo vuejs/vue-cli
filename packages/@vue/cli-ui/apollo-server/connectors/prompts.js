@@ -162,9 +162,9 @@ function getAnswer (id) {
   return get(answers, id)
 }
 
-async function reset () {
+async function reset (answers = {}) {
   prompts = []
-  await setAnswers({})
+  await setAnswers(answers)
 }
 
 function list () {

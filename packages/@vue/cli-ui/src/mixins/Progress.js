@@ -1,6 +1,6 @@
-import PROGRESS from '../graphql/progress.gql'
-import PROGRESS_CHANGED from '../graphql/progressChanged.gql'
-import PROGRESS_REMOVED from '../graphql/progressRemoved.gql'
+import PROGRESS from '@/graphql/progress/progress.gql'
+import PROGRESS_CHANGED from '@/graphql/progress/progressChanged.gql'
+import PROGRESS_REMOVED from '@/graphql/progress/progressRemoved.gql'
 
 // @vue/component
 export default {

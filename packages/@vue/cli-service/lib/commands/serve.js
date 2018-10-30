@@ -242,7 +242,10 @@ module.exports = (api, options) => {
           console.log()
 
           if (args.open || projectDevServerOptions.open) {
-            openBrowser(urls.localUrlForBrowser)
+            const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
+              ? projectDevServerOptions.openPage
+              : ''
+            openBrowser(urls.localUrlForBrowser + pageUri)
           }
 
           // Send final app URL
@@ -294,7 +297,7 @@ function checkInContainer () {
   const fs = require('fs')
   if (fs.existsSync(`/proc/1/cgroup`)) {
     const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
-    return /:\/(lxc|docker)\//.test(content)
+    return /:\/(lxc|docker|kubepods)\//.test(content)
   }
 }
 

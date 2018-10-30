@@ -1,10 +1,11 @@
-import PROMPT_ANSWER from '../graphql/promptAnswer.gql'
+import PROMPT_ANSWER from '@/graphql/prompt/promptAnswer.gql'
 
 export default function ({
   field,
   query,
   variables = null,
-  updateQuery = null
+  updateQuery = null,
+  update = null
 }) {
   // @vue/component
   return {
@@ -54,6 +55,10 @@ export default function ({
             }
           },
           update: (store, { data: { promptAnswer } }) => {
+            if (update) {
+              update.call(this, store, promptAnswer)
+              return
+            }
             let vars = variables || this.$apollo.queries[field].options.variables || undefined
             if (typeof vars === 'function') {
               vars = vars.call(this)

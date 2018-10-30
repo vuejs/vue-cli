@@ -1,5 +1,5 @@
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const LRU = require('lru-cache')
 const chalk = require('chalk')
 // Context
@@ -128,6 +128,8 @@ function resetPluginApi ({ file, lightApi }, context) {
   return new Promise((resolve, reject) => {
     log('Plugin API reloading...', chalk.grey(file))
 
+    const widgets = require('./widgets')
+
     let pluginApi = pluginApiInstances.get(file)
     let projectId
 
@@ -141,10 +143,11 @@ function resetPluginApi ({ file, lightApi }, context) {
       if (projectId) sharedData.unWatchAll({ projectId }, context)
       clientAddons.clear(context)
       suggestions.clear(context)
+      widgets.reset(context)
     }
 
     // Cyclic dependency with projects connector
-    setTimeout(() => {
+    setTimeout(async () => {
       const projects = require('./projects')
       const project = projects.findByPath(file, context)
 
@@ -182,9 +185,17 @@ function resetPluginApi ({ file, lightApi }, context) {
         }
       }
       // Add client addons
-      pluginApi.clientAddons.forEach(options => clientAddons.add(options, context))
+      pluginApi.clientAddons.forEach(options => {
+        clientAddons.add(options, context)
+      })
       // Add views
-      pluginApi.views.forEach(view => views.add(view, context))
+      for (const view of pluginApi.views) {
+        await views.add({ view, project }, context)
+      }
+      // Register widgets
+      for (const definition of pluginApi.widgetDefs) {
+        await widgets.registerDefinition({ definition, project }, context)
+      }
 
       if (lightApi) {
         resolve(true)
@@ -209,12 +220,17 @@ function resetPluginApi ({ file, lightApi }, context) {
         if (currentView) views.open(currentView.id)
       }
 
+      // Load widgets for current project
+      widgets.load(context)
+
       resolve(true)
     })
   })
 }
 
 function runPluginApi (id, pluginApi, context, filename = 'ui') {
+  const name = filename !== 'ui' ? `${id}/${filename}` : id
+
   let module
   try {
     module = loadModule(`${id}/${filename}`, pluginApi.cwd, true)
@@ -225,12 +241,23 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
   }
   if (module) {
     if (typeof module !== 'function') {
-      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, filename !== 'ui' ? `${id}/${filename}` : id, chalk.grey(pluginApi.cwd))
+      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
+      logs.add({
+        type: 'error',
+        message: `An error occured while loading ${name}: no function exported`
+      })
     } else {
-      const name = filename !== 'ui' ? `${id}/${filename}` : id
-      log('Plugin API loaded for', name, chalk.grey(pluginApi.cwd))
       pluginApi.pluginId = id
-      module(pluginApi)
+      try {
+        module(pluginApi)
+        log('Plugin API loaded for', name, chalk.grey(pluginApi.cwd))
+      } catch (e) {
+        log(`${chalk.red('ERROR')} while loading plugin API for ${name}:`, e)
+        logs.add({
+          type: 'error',
+          message: `An error occured while loading ${name}: ${e.message}`
+        })
+      }
       pluginApi.pluginId = null
     }
   }
@@ -329,6 +356,36 @@ function mockInstall (id, context) {
   return true
 }
 
+function installLocal (context) {
+  const projects = require('./projects')
+  const folder = cwd.get()
+  cwd.set(projects.getCurrent(context).path, context)
+  return progress.wrap(PROGRESS_ID, context, async setProgress => {
+    const pkg = loadModule(path.resolve(folder, 'package.json'), cwd.get(), true)
+
+    const id = pkg.name
+
+    setProgress({
+      status: 'plugin-install',
+      args: [id]
+    })
+    currentPluginId = id
+    installationStep = 'install'
+    const idAndRange = `${id}@file:${folder}`
+    await installPackage(cwd.get(), getCommand(cwd.get()), null, idAndRange)
+    await initPrompts(id, context)
+    installationStep = 'config'
+
+    notify({
+      title: `Plugin installed`,
+      message: `Plugin ${id} installed, next step is configuration`,
+      icon: 'done'
+    })
+
+    return getInstallation(context)
+  })
+}
+
 function uninstall (id, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
@@ -418,9 +475,13 @@ function update (id, context) {
     })
     currentPluginId = id
     const plugin = findOne({ id, file: cwd.get() }, context)
-    const { current, wanted } = await dependencies.getVersion(plugin, context)
+    const { current, wanted, localPath } = await dependencies.getVersion(plugin, context)
 
-    await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
+    if (localPath) {
+      await updateLocalPackage({ cwd: cwd.get(), id, localPath }, context)
+    } else {
+      await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
+    }
 
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
@@ -439,6 +500,13 @@ function update (id, context) {
     currentPluginId = null
     return findOne({ id, file: cwd.get() }, context)
   })
+}
+
+async function updateLocalPackage ({ id, cwd, localPath }, context) {
+  const from = path.resolve(cwd, localPath)
+  const to = path.resolve(cwd, 'node_modules', ...id.split('/'))
+  await fs.remove(to)
+  await fs.copy(from, to)
 }
 
 async function updateAll (context) {
@@ -554,6 +622,7 @@ module.exports = {
   getLogo,
   getInstallation,
   install,
+  installLocal,
   uninstall,
   update,
   updateAll,

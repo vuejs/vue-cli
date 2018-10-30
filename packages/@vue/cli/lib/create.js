@@ -20,7 +20,7 @@ async function create (projectName, options) {
 
   const result = validateProjectName(name)
   if (!result.validForNewPackages) {
-    console.error(chalk.red(`Invalid project name: "${projectName}"`))
+    console.error(chalk.red(`Invalid project name: "${name}"`))
     result.errors && result.errors.forEach(err => {
       console.error(chalk.red(err))
     })

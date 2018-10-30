@@ -1,0 +1,26 @@
+{
+  "name": "@vue/cli-ui-addon-widgets",
+  "version": "3.0.5",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "prepublishOnly": "yarn run lint --no-fix && yarn run build"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-eslint": "^3.0.5",
+    "@vue/cli-service": "^3.0.5",
+    "@vue/eslint-config-standard": "^3.0.5",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue-template-compiler": "^2.5.17"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

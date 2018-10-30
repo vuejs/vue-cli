@@ -12,6 +12,7 @@ fs.ensureDirSync(templateDir)
 fs.writeFileSync(path.resolve(templateDir, 'foo.js'), 'foo(<%- options.n %>)')
 fs.ensureDirSync(path.resolve(templateDir, 'bar'))
 fs.writeFileSync(path.resolve(templateDir, 'bar/bar.js'), 'bar(<%- m %>)')
+fs.writeFileSync(path.resolve(templateDir, 'bar/_bar.js'), '.bar(<%- m %>)')
 fs.writeFileSync(path.resolve(templateDir, 'entry.js'), `
 import foo from 'foo'
 
@@ -347,6 +348,7 @@ test('api: render fs directory', async () => {
 
   expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo(1)')
   expect(fs.readFileSync('/bar/bar.js', 'utf-8')).toMatch('bar(2)')
+  expect(fs.readFileSync('/bar/.bar.js', 'utf-8')).toMatch('.bar(2)')
   expect(fs.readFileSync('/replace.js', 'utf-8')).toMatch('baz(2)')
   expect(fs.readFileSync('/multi-replace.js', 'utf-8')).toMatch('baz(1)\nqux(2)')
   expect(fs.readFileSync('/.gitignore', 'utf-8')).toMatch('foo')
