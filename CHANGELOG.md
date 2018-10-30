@@ -1,3 +1,130 @@
+# [3.1.0](https://github.com/vuejs/vue-cli/compare/v3.0.5...v3.1.0) (2018-10-30)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* add `absoluteRuntime` option to `[@babel](https://github.com/babel)/plugin-transform-runtime` ([1418178](https://github.com/vuejs/vue-cli/commit/1418178))
+#### Features
+
+* **babel:** forward preset-env's debug option ([#2607](https://github.com/vuejs/vue-cli/issues/2607)) ([9357a60](https://github.com/vuejs/vue-cli/commit/9357a60))
+
+## cli
+
+#### Bug Fixes
+
+* **cli:** avoid assertion error when vue.config.js includes assignment expression ([#2770](https://github.com/vuejs/vue-cli/issues/2770)) ([89edf0d](https://github.com/vuejs/vue-cli/commit/89edf0d))
+#### Features
+
+* support for `--registry` option in `vue add` & `vue invoke` commands ([#2698](https://github.com/vuejs/vue-cli/issues/2698)) ([b0f6ed8](https://github.com/vuejs/vue-cli/commit/b0f6ed8)), closes [#1868](https://github.com/vuejs/vue-cli/issues/1868)
+* **ui:** add --host option ([#2568](https://github.com/vuejs/vue-cli/issues/2568)) ([be814b3](https://github.com/vuejs/vue-cli/commit/be814b3))
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* missing comma ([4e90afe](https://github.com/vuejs/vue-cli/commit/4e90afe))
+
+## cli-plugin-e2e-nightwatch
+
+#### Features
+
+* update vue-jest to 3.x along with other dependency updates ([33a3b19](https://github.com/vuejs/vue-cli/commit/33a3b19))
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* **cli-plugin-eslint:** Resolve proper ESLint package ([#2560](https://github.com/vuejs/vue-cli/issues/2560)) ([c500512](https://github.com/vuejs/vue-cli/commit/c500512))
+#### Features
+
+* generate .editorconfig file for each specific eslint config ([6e5cf0e](https://github.com/vuejs/vue-cli/commit/6e5cf0e)), closes [#905](https://github.com/vuejs/vue-cli/issues/905)
+
+## cli-plugin-pwa
+
+#### Bug Fixes
+
+* use relative paths in manifest.json for compatibility with Github Pages ([#2271](https://github.com/vuejs/vue-cli/issues/2271)) ([6d26c75](https://github.com/vuejs/vue-cli/commit/6d26c75))
+
+## cli-plugin-unit-mocha
+
+#### Features
+
+* set pretendToBeVisual option for jsdom-global ([#2573](https://github.com/vuejs/vue-cli/issues/2573)) ([528c465](https://github.com/vuejs/vue-cli/commit/528c465))
+
+## cli-service
+
+#### Bug Fixes
+
+* **cli-service:** fix path RegEx error ([#2830](https://github.com/vuejs/vue-cli/issues/2830)) ([7096bac](https://github.com/vuejs/vue-cli/commit/7096bac))
+* **generator:** Template files for main.js and router when not using a compiler ([#2828](https://github.com/vuejs/vue-cli/issues/2828)) ([21256f5](https://github.com/vuejs/vue-cli/commit/21256f5))
+* **serve:** also detect kubernetes containers ([#2795](https://github.com/vuejs/vue-cli/issues/2795)) ([9a64708](https://github.com/vuejs/vue-cli/commit/9a64708))
+* fix customHtmlOptions overriding ([6708063](https://github.com/vuejs/vue-cli/commit/6708063))
+* fix cypress error caused by object rest syntax ([e929d48](https://github.com/vuejs/vue-cli/commit/e929d48))
+* pin cache-loader to v1.2.2 temporarily ([0763d62](https://github.com/vuejs/vue-cli/commit/0763d62)), closes [#2847](https://github.com/vuejs/vue-cli/issues/2847)
+* **wc:** don't overwrite user-defined externals ([#2831](https://github.com/vuejs/vue-cli/issues/2831)) ([8bf7dfd](https://github.com/vuejs/vue-cli/commit/8bf7dfd))
+* should not throw when a plugin listed in `optionalDependencies` is not installed ([7ea080b](https://github.com/vuejs/vue-cli/commit/7ea080b))
+* should not thrown on Windows when proxy target is an object ([5786e27](https://github.com/vuejs/vue-cli/commit/5786e27)), closes [#2478](https://github.com/vuejs/vue-cli/issues/2478)
+#### Features
+
+* add `--no-unsafe-inline` flag for modern mode ([#2741](https://github.com/vuejs/vue-cli/issues/2741)) ([38efc03](https://github.com/vuejs/vue-cli/commit/38efc03)), closes [#2570](https://github.com/vuejs/vue-cli/issues/2570)
+* allow user to customize html-webpack-plugin option in multi-page mode ([4cabf5e](https://github.com/vuejs/vue-cli/commit/4cabf5e)), closes [#2544](https://github.com/vuejs/vue-cli/issues/2544)
+* build library with specified formats ([#2583](https://github.com/vuejs/vue-cli/issues/2583)) ([1e200c5](https://github.com/vuejs/vue-cli/commit/1e200c5))
+
+## cli-service-global
+
+#### Bug Fixes
+
+* fix regenerator-runtime import for global service ([c6ab80f](https://github.com/vuejs/vue-cli/commit/c6ab80f)), closes [#2648](https://github.com/vuejs/vue-cli/issues/2648)
+
+## cli-ui
+
+#### Bug Fixes
+
+* **client addon:** loading padding ([81ec5c0](https://github.com/vuejs/vue-cli/commit/81ec5c0))
+* **dependencies:** better metadata load error handling ([59e1201](https://github.com/vuejs/vue-cli/commit/59e1201))
+* **dependencies:** list item fallback-icon ([c8a53a4](https://github.com/vuejs/vue-cli/commit/c8a53a4))
+* **local plugin:** remove folder before copying ([7d2d1fb](https://github.com/vuejs/vue-cli/commit/7d2d1fb))
+* **plugin:** catch execution error ([23a05fc](https://github.com/vuejs/vue-cli/commit/23a05fc))
+* **prompts:** color picker size ([f8e42ce](https://github.com/vuejs/vue-cli/commit/f8e42ce))
+* **task:** description overflow ([aca31eb](https://github.com/vuejs/vue-cli/commit/aca31eb))
+* **task:** narrow view port causing misalignment ([86f5bde](https://github.com/vuejs/vue-cli/commit/86f5bde))
+* **task:** remove non-running missing tasks ([da66f93](https://github.com/vuejs/vue-cli/commit/da66f93))
+* **ui:** i18n for 'Official' in plugin search results ([#2705](https://github.com/vuejs/vue-cli/issues/2705)) ([cecece7](https://github.com/vuejs/vue-cli/commit/cecece7))
+* **widget:** not removed (issue with apollo-client) ([8d7bf23](https://github.com/vuejs/vue-cli/commit/8d7bf23))
+#### Features
+
+* **file-diff:** less obnoxious loading UX ([5ff7198](https://github.com/vuejs/vue-cli/commit/5ff7198))
+* **plugin api:** task match can now be a function ([d11290a](https://github.com/vuejs/vue-cli/commit/d11290a))
+* **task:** list item tooltip ([8e3359c](https://github.com/vuejs/vue-cli/commit/8e3359c))
+* **ui:** Redesign, dashboard, local plugins ([#2806](https://github.com/vuejs/vue-cli/issues/2806)) ([a09407d](https://github.com/vuejs/vue-cli/commit/a09407d)), closes [/github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473](https://github.com//github.com/apollographql/apollo-client/issues/4031/issues/issuecomment-433668473)
+* **widget:** better config loading UX ([6f5b0a8](https://github.com/vuejs/vue-cli/commit/6f5b0a8))
+
+## docs
+
+#### Features
+
+* support yarn for adding inline registry ([78c7c12](https://github.com/vuejs/vue-cli/commit/78c7c12)), closes [#2809](https://github.com/vuejs/vue-cli/issues/2809)
+
+## eslint-config-airbnb
+
+#### chore
+
+* update base configs ([683018e](https://github.com/vuejs/vue-cli/commit/683018e))
+
+## other
+
+#### Features
+
+* update to ESLint v5 ([7ccf7b3](https://github.com/vuejs/vue-cli/commit/7ccf7b3)), closes [#2322](https://github.com/vuejs/vue-cli/issues/2322) [#2704](https://github.com/vuejs/vue-cli/issues/2704)
+
+
+### BREAKING CHANGES
+
+* now requires eslint v5 as peer dependency
+
+
+
 # [3.0.5](https://github.com/vuejs/vue-cli/compare/v3.0.4...v3.0.5) (2018-10-09)
 
 ## babel-preset-app
