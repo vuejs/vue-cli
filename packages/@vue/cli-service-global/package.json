@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service-global",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "vue-cli-service global addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
