@@ -155,6 +155,27 @@ program
     loadCommand('upgrade', '@vue/cli-upgrade')(semverLevel, cleanArgs(cmd))
   })
 
+program
+  .command('info')
+  .description('print debugging information about your environment')
+  .action((cmd) => {
+    console.log(chalk.bold('\nEnvironment Info:'))
+    require('envinfo').run(
+      {
+        System: ['OS', 'CPU'],
+        Binaries: ['Node', 'Yarn', 'npm'],
+        Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
+        npmPackages: '/**/{*vue*,@vue/*/}',
+        npmGlobalPackages: ['vue-cli']
+      },
+      {
+        showNotFound: true,
+        duplicates: true,
+        fullTree: true
+      }
+    ).then(console.log)
+  })
+
 // output help information on unknown commands
 program
   .arguments('<command>')
