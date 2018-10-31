@@ -18,6 +18,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     // Now in v3 we have to add redundant eslint related dependencies
     // in order to keep compatibility with v3.0.x users who defaults to ESlint v4.
     devDependencies: {
+      'babel-eslint': '^10.0.1',
       'eslint': '^5.8.0',
       'eslint-plugin-vue': '^5.0.0-0'
     }
