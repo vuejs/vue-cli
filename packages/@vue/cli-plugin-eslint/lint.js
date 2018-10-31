@@ -1,3 +1,5 @@
+const globby = require('globby')
+
 const renamedArrayArgs = {
   ext: 'extensions',
   env: 'envs',
@@ -23,7 +25,7 @@ const defaultFilesToLint = [
   // .eslintrc files (ignored by default)
   '.*.js',
   '{src,tests}/**/.*.js'
-]
+].filter(pattern => globby.sync(pattern).length)
 
 module.exports = function lint (args = {}, api) {
   const path = require('path')
