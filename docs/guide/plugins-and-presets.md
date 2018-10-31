@@ -209,5 +209,5 @@ When developing a remote preset, it can be tedious to have to repeatedly push th
 vue create --preset ./my-preset my-project
 
 # or directly use a json file in cwd:
-vue create --preset my-preset.json
+vue create --preset my-preset.json my-project
 ```
