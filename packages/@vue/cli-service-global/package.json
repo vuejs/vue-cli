@@ -25,6 +25,7 @@
     "@vue/cli-plugin-babel": "^3.1.0",
     "@vue/cli-plugin-eslint": "^3.1.0",
     "@vue/cli-service": "^3.1.0",
+    "babel-eslint": "^10.0.1",
     "chalk": "^2.4.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
