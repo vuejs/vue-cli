@@ -1,4 +1,4 @@
-# 3.1.1 (2018-10-30)
+# [3.1.1](https://github.com/vuejs/vue-cli/compare/v3.1.0...v3.1.1) (2018-10-31)
 
 ## babel-preset-app
 
@@ -6,6 +6,23 @@
 
 * add core-js to deps ([29dc6a0](https://github.com/vuejs/vue-cli/commit/29dc6a0))
 
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* also add babel-eslint to the generated package.json ([353edaa](https://github.com/vuejs/vue-cli/commit/353edaa))
+
+## cli-service
+
+#### Bug Fixes
+
+* add acorn-walk as dependency instead of relying on acorn's internal folder structure ([c138c7d](https://github.com/vuejs/vue-cli/commit/c138c7d)), closes [#2848](https://github.com/vuejs/vue-cli/issues/2848)
+
+## cli-service-global
+
+#### Bug Fixes
+
+* also add babel-eslint to the generated package.json ([353edaa](https://github.com/vuejs/vue-cli/commit/353edaa))
 
 
 # [3.1.0](https://github.com/vuejs/vue-cli/compare/v3.0.5...v3.1.0) (2018-10-30)
