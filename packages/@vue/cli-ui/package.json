@@ -32,7 +32,7 @@
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
     "deepmerge": "^2.1.1",
-    "execa": "^0.10.0",
+    "execa": "^1.0.0",
     "express-history-api-fallback": "^2.2.1",
     "fkill": "^5.3.0",
     "fs-extra": "^6.0.1",

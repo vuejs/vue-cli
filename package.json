@@ -51,7 +51,7 @@
     "eslint-plugin-graphql": "^2.1.1",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-vue-libs": "^2.1.0",
-    "execa": "^0.10.0",
+    "execa": "^1.0.0",
     "globby": "^8.0.1",
     "http-server": "^0.11.1",
     "inquirer": "^6.0.0",
