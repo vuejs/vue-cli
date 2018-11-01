@@ -11,6 +11,7 @@ const url = require('url')
 const path = require('path')
 const chalk = require('chalk')
 const address = require('address')
+const contextMatcher = require('http-proxy-middleware/lib/context-matcher')
 
 const defaultConfig = {
   logLevel: 'silent',
@@ -66,7 +67,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
         }
         if (context) {
           // Explicit context, e.g. /api
-          return pathname.match(context)
+          return contextMatcher.match(context, pathname, req);
         } else {
           // not a static request
           if (req.method !== 'GET') {
@@ -125,7 +126,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
       )
       process.exit(1)
     }
-    const entry = createProxyEntry(config.target, config.onProxyReq, context)
+    const entry = createProxyEntry(config.target, config.onProxyReq, config.context || context)
     return Object.assign({}, defaultConfig, config, entry)
   })
 }
