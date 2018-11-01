@@ -101,7 +101,7 @@ module.exports = {
 
   Build the app in multi-page mode. Each "page" should have a corresponding JavaScript entry file. The value should be an object where the key is the name of the entry, and the value is either:
 
-  - An object that specifies its `entry`, `template`, `filename`, `title` and `chunks` (all optional except `entry`);
+  - An object that specifies its `entry`, `template`, `filename`, `title` and `chunks` (all optional except `entry`). Any other properties added beside those will also be passed directly to `html-webpack-plugin`, allowing user to customize said plugin;
   - Or a string specifying its `entry`.
 
   ``` js
