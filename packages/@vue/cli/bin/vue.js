@@ -166,7 +166,7 @@ program
         Binaries: ['Node', 'Yarn', 'npm'],
         Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
         npmPackages: '/**/{*vue*,@vue/*/}',
-        npmGlobalPackages: ['vue-cli']
+        npmGlobalPackages: ['@vue/cli']
       },
       {
         showNotFound: true,
