@@ -1,3 +1,5 @@
+const globby = require('globby')
+
 const renamedArrayArgs = {
   ext: 'extensions',
   env: 'envs',
@@ -15,16 +17,6 @@ const renamedArgs = {
   config: 'configFile'
 }
 
-const defaultFilesToLint = [
-  'src',
-  'tests',
-  // root config files
-  '*.js',
-  // .eslintrc files (ignored by default)
-  '.*.js',
-  '{src,tests}/**/.*.js'
-]
-
 module.exports = function lint (args = {}, api) {
   const path = require('path')
   const cwd = api.resolve('.')
@@ -38,6 +30,16 @@ module.exports = function lint (args = {}, api) {
     fix: true,
     cwd
   }, argsConfig)
+
+  const defaultFilesToLint = [
+    'src',
+    'tests',
+    // root config files
+    '*.js',
+    // .eslintrc files (ignored by default)
+    '.*.js',
+    '{src,tests}/**/.*.js'
+  ].filter(pattern => globby.sync(path.join(cwd, pattern)).length)
 
   const engine = new CLIEngine(config)
   const files = args._ && args._.length
