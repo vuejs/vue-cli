@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "scripts": {
     "serve": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4030/graphql VUE_APP_GRAPHQL_PORT=4030 vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^3.1.0",
+    "@vue/cli-shared-utils": "^3.1.1",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
     "deepmerge": "^2.1.1",
@@ -58,9 +58,9 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.0",
-    "@vue/cli-plugin-e2e-cypress": "^3.1.0",
-    "@vue/cli-plugin-eslint": "^3.1.0",
-    "@vue/cli-service": "^3.1.0",
+    "@vue/cli-plugin-e2e-cypress": "^3.1.1",
+    "@vue/cli-plugin-eslint": "^3.1.4",
+    "@vue/cli-service": "^3.1.2",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/ui": "^0.5.5",
     "ansi_up": "^3.0.0",
