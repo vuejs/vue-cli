@@ -21,7 +21,7 @@ module.exports = function lint (args = {}, api) {
   const path = require('path')
   const cwd = api.resolve('.')
   const { log, done, exit, chalk, loadModule } = require('@vue/cli-shared-utils')
-  const { CLIEngine } = loadModule('eslint', cwd, true)
+  const { CLIEngine } = loadModule('eslint', cwd, true) || require('eslint')
   const extensions = require('./eslintOptions').extensions(api)
 
   const argsConfig = normalizeConfig(args)

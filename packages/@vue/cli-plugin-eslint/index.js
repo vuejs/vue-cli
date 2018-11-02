@@ -6,7 +6,9 @@ module.exports = (api, options) => {
     // Use loadModule to allow users to customize their ESLint dependency version.
     const { loadModule } = require('@vue/cli-shared-utils')
     const cwd = api.getCwd()
-    const eslintPkg = loadModule('eslint/package.json', cwd, true)
+    const eslintPkg =
+      loadModule('eslint/package.json', cwd, true) ||
+      require('eslint/package.json')
 
     // eslint-loader doesn't bust cache when eslint config changes
     // so we have to manually generate a cache identifier that takes the config
@@ -46,7 +48,9 @@ module.exports = (api, options) => {
               cacheIdentifier,
               emitWarning: options.lintOnSave !== 'error',
               emitError: options.lintOnSave === 'error',
-              formatter: loadModule('eslint/lib/formatters/codeframe', cwd, true)
+              formatter:
+                loadModule('eslint/lib/formatters/codeframe', cwd, true) ||
+                require('eslint/lib/formatters/codeframe')
             })
     })
   }
