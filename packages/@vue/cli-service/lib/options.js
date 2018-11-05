@@ -4,7 +4,7 @@ const schema = createSchema(joi => joi.object({
   baseUrl: joi.string().allow(''),
   outputDir: joi.string(),
   assetsDir: joi.string(),
-  indexPath: joi.string(),
+  indexPath: joi.string().allow(null),
   filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),

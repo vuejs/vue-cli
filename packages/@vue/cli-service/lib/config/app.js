@@ -92,184 +92,187 @@ module.exports = (api, options) => {
       }
     }
 
-    if (isProd) {
-      // handle indexPath
-      if (options.indexPath !== 'index.html') {
-        // why not set filename for html-webpack-plugin?
-        // 1. It cannot handle absolute paths
-        // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
-        webpackConfig
-          .plugin('move-index')
-          .use(require('../webpack/MovePlugin'), [
-            path.resolve(outputDir, 'index.html'),
-            path.resolve(outputDir, options.indexPath)
-          ])
-      }
-
-      Object.assign(htmlOptions, {
-        minify: {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: true,
-          collapseBooleanAttributes: true,
-          removeScriptTypeAttributes: true
-          // more options:
-          // https://github.com/kangax/html-minifier#options-quick-reference
-        }
-      })
-
-      // keep chunk ids stable so async chunks have consistent hash (#1916)
-      webpackConfig
-        .plugin('named-chunks')
-          .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
-            if (chunk.name) {
-              return chunk.name
-            }
-
-            const hash = require('hash-sum')
-            const joinedHash = hash(
-              Array.from(chunk.modulesIterable, m => m.id).join('_')
-            )
-            return `chunk-` + joinedHash
-          }])
-    }
-
-    // resolve HTML file(s)
-    const HTMLPlugin = require('html-webpack-plugin')
-    const PreloadPlugin = require('@vue/preload-webpack-plugin')
-    const multiPageConfig = options.pages
-    const htmlPath = api.resolve('public/index.html')
-    const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
     const publicCopyIgnore = ['index.html', '.DS_Store']
 
-    if (!multiPageConfig) {
-      // default, single page setup.
-      htmlOptions.template = fs.existsSync(htmlPath)
-        ? htmlPath
-        : defaultHtmlPath
+    if (options.indexPath !== null) {
+      if (isProd) {
+        // handle indexPath
+        if (options.indexPath !== 'index.html') {
+          // why not set filename for html-webpack-plugin?
+          // 1. It cannot handle absolute paths
+          // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
+          webpackConfig
+            .plugin('move-index')
+            .use(require('../webpack/MovePlugin'), [
+              path.resolve(outputDir, 'index.html'),
+              path.resolve(outputDir, options.indexPath)
+            ])
+        }
 
-      webpackConfig
-        .plugin('html')
-          .use(HTMLPlugin, [htmlOptions])
+        Object.assign(htmlOptions, {
+          minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeAttributeQuotes: true,
+            collapseBooleanAttributes: true,
+            removeScriptTypeAttributes: true
+            // more options:
+            // https://github.com/kangax/html-minifier#options-quick-reference
+          }
+        })
 
-      if (!isLegacyBundle) {
-        // inject preload/prefetch to HTML
+        // keep chunk ids stable so async chunks have consistent hash (#1916)
         webpackConfig
-          .plugin('preload')
-            .use(PreloadPlugin, [{
-              rel: 'preload',
-              include: 'initial',
-              fileBlacklist: [/\.map$/, /hot-update\.js$/]
-            }])
+          .plugin('named-chunks')
+            .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
+              if (chunk.name) {
+                return chunk.name
+              }
 
-        webpackConfig
-          .plugin('prefetch')
-            .use(PreloadPlugin, [{
-              rel: 'prefetch',
-              include: 'asyncChunks'
+              const hash = require('hash-sum')
+              const joinedHash = hash(
+                Array.from(chunk.modulesIterable, m => m.id).join('_')
+              )
+              return `chunk-` + joinedHash
             }])
       }
-    } else {
-      // multi-page setup
-      webpackConfig.entryPoints.clear()
 
-      const pages = Object.keys(multiPageConfig)
-      const normalizePageConfig = c => typeof c === 'string' ? { entry: c } : c
+      // resolve HTML file(s)
+      const HTMLPlugin = require('html-webpack-plugin')
+      const PreloadPlugin = require('@vue/preload-webpack-plugin')
+      const multiPageConfig = options.pages
+      const htmlPath = api.resolve('public/index.html')
+      const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
 
-      pages.forEach(name => {
-        const pageConfig = normalizePageConfig(multiPageConfig[name])
-        const {
-          entry,
-          template = `public/${name}.html`,
-          filename = `${name}.html`,
-          chunks = ['chunk-vendors', 'chunk-common', name]
-        } = pageConfig
-
-        // Currently Cypress v3.1.0 comes with a very old version of Node,
-        // which does not support object rest syntax.
-        // (https://github.com/cypress-io/cypress/issues/2253)
-        // So here we have to extract the customHtmlOptions manually.
-        const customHtmlOptions = {}
-        for (const key in pageConfig) {
-          if (
-            !['entry', 'template', 'filename', 'chunks'].includes(key)
-          ) {
-            customHtmlOptions[key] = pageConfig[key]
-          }
-        }
-
-        // inject entry
-        webpackConfig.entry(name).add(api.resolve(entry))
-
-        // resolve page index template
-        const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
-        if (hasDedicatedTemplate) {
-          publicCopyIgnore.push(template)
-        }
-        const templatePath = hasDedicatedTemplate
-          ? template
-          : fs.existsSync(htmlPath)
-            ? htmlPath
-            : defaultHtmlPath
-
-        // inject html plugin for the page
-        const pageHtmlOptions = Object.assign(
-          {},
-          htmlOptions,
-          {
-            chunks,
-            template: templatePath,
-            filename: ensureRelative(outputDir, filename)
-          },
-          customHtmlOptions
-        )
+      if (!multiPageConfig) {
+        // default, single page setup.
+        htmlOptions.template = fs.existsSync(htmlPath)
+          ? htmlPath
+          : defaultHtmlPath
 
         webpackConfig
-          .plugin(`html-${name}`)
-            .use(HTMLPlugin, [pageHtmlOptions])
-      })
+          .plugin('html')
+            .use(HTMLPlugin, [htmlOptions])
 
-      if (!isLegacyBundle) {
-        pages.forEach(name => {
-          const filename = ensureRelative(
-            outputDir,
-            normalizePageConfig(multiPageConfig[name]).filename || `${name}.html`
-          )
+        if (!isLegacyBundle) {
+          // inject preload/prefetch to HTML
           webpackConfig
-            .plugin(`preload-${name}`)
+            .plugin('preload')
               .use(PreloadPlugin, [{
                 rel: 'preload',
-                includeHtmlNames: [filename],
-                include: {
-                  type: 'initial',
-                  entries: [name]
-                },
+                include: 'initial',
                 fileBlacklist: [/\.map$/, /hot-update\.js$/]
               }])
 
           webpackConfig
-            .plugin(`prefetch-${name}`)
+            .plugin('prefetch')
               .use(PreloadPlugin, [{
                 rel: 'prefetch',
-                includeHtmlNames: [filename],
-                include: {
-                  type: 'asyncChunks',
-                  entries: [name]
-                }
+                include: 'asyncChunks'
               }])
-        })
-      }
-    }
+        }
+      } else {
+        // multi-page setup
+        webpackConfig.entryPoints.clear()
 
-    // CORS and Subresource Integrity
-    if (options.crossorigin != null || options.integrity) {
-      webpackConfig
-        .plugin('cors')
-          .use(require('../webpack/CorsPlugin'), [{
-            crossorigin: options.crossorigin,
-            integrity: options.integrity,
-            baseUrl: options.baseUrl
-          }])
+        const pages = Object.keys(multiPageConfig)
+        const normalizePageConfig = c => typeof c === 'string' ? { entry: c } : c
+
+        pages.forEach(name => {
+          const pageConfig = normalizePageConfig(multiPageConfig[name])
+          const {
+            entry,
+            template = `public/${name}.html`,
+            filename = `${name}.html`,
+            chunks = ['chunk-vendors', 'chunk-common', name]
+          } = pageConfig
+
+          // Currently Cypress v3.1.0 comes with a very old version of Node,
+          // which does not support object rest syntax.
+          // (https://github.com/cypress-io/cypress/issues/2253)
+          // So here we have to extract the customHtmlOptions manually.
+          const customHtmlOptions = {}
+          for (const key in pageConfig) {
+            if (
+              !['entry', 'template', 'filename', 'chunks'].includes(key)
+            ) {
+              customHtmlOptions[key] = pageConfig[key]
+            }
+          }
+
+          // inject entry
+          webpackConfig.entry(name).add(api.resolve(entry))
+
+          // resolve page index template
+          const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
+          if (hasDedicatedTemplate) {
+            publicCopyIgnore.push(template)
+          }
+          const templatePath = hasDedicatedTemplate
+            ? template
+            : fs.existsSync(htmlPath)
+              ? htmlPath
+              : defaultHtmlPath
+
+          // inject html plugin for the page
+          const pageHtmlOptions = Object.assign(
+            {},
+            htmlOptions,
+            {
+              chunks,
+              template: templatePath,
+              filename: ensureRelative(outputDir, filename)
+            },
+            customHtmlOptions
+          )
+
+          webpackConfig
+            .plugin(`html-${name}`)
+              .use(HTMLPlugin, [pageHtmlOptions])
+        })
+
+        if (!isLegacyBundle) {
+          pages.forEach(name => {
+            const filename = ensureRelative(
+              outputDir,
+              normalizePageConfig(multiPageConfig[name]).filename || `${name}.html`
+            )
+            webpackConfig
+              .plugin(`preload-${name}`)
+                .use(PreloadPlugin, [{
+                  rel: 'preload',
+                  includeHtmlNames: [filename],
+                  include: {
+                    type: 'initial',
+                    entries: [name]
+                  },
+                  fileBlacklist: [/\.map$/, /hot-update\.js$/]
+                }])
+
+            webpackConfig
+              .plugin(`prefetch-${name}`)
+                .use(PreloadPlugin, [{
+                  rel: 'prefetch',
+                  includeHtmlNames: [filename],
+                  include: {
+                    type: 'asyncChunks',
+                    entries: [name]
+                  }
+                }])
+          })
+        }
+      }
+
+      // CORS and Subresource Integrity
+      if (options.crossorigin != null || options.integrity) {
+        webpackConfig
+          .plugin('cors')
+            .use(require('../webpack/CorsPlugin'), [{
+              crossorigin: options.crossorigin,
+              integrity: options.integrity,
+              baseUrl: options.baseUrl
+            }])
+      }
     }
 
     // copy static assets in public/

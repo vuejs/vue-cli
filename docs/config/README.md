@@ -87,6 +87,8 @@ module.exports = {
 
   Specify the output path for the generated `index.html` (relative to `outputDir`). Can also be an absolute path.
 
+  If `null`, the index HTML will not be generated.
+
 ### filenameHashing
 
 - Type: `boolean`
