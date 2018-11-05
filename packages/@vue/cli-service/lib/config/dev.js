@@ -19,7 +19,9 @@ module.exports = (api, options) => {
         .plugin('no-emit-on-errors')
           .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
 
-      if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
+      const getOptionsDevServer = require('../util/getOptionsDevServer')
+
+      if (!process.env.VUE_CLI_TEST && getOptionsDevServer(options).progress !== false) {
         webpackConfig
           .plugin('progress')
           .use(require('webpack/lib/ProgressPlugin'))

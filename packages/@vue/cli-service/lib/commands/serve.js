@@ -42,6 +42,7 @@ module.exports = (api, options) => {
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
     const validateWebpackConfig = require('../util/validateWebpackConfig')
+    const getOptionsDevServer = require('../util/getOptionsDevServer')
 
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
@@ -53,7 +54,7 @@ module.exports = (api, options) => {
     // in webpck config
     const projectDevServerOptions = Object.assign(
       webpackConfig.devServer || {},
-      options.devServer
+      getOptionsDevServer(options)
     )
 
     // expose advanced stats
