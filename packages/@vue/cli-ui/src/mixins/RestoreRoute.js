@@ -39,7 +39,9 @@ export default function ({
     },
 
     beforeRouteLeave (to, from, next) {
-      lastRoute = from
+      if (from.params && Object.keys(from.params).length) {
+        lastRoute = from
+      }
       next()
     },
 
