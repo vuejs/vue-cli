@@ -14,9 +14,6 @@ test('should work', async () => {
     }
   })
 
-  const pkg = JSON.parse(await project.read('package.json'))
-  expect(pkg.devDependencies).toHaveProperty('@cypress/webpack-preprocessor')
-
   const config = JSON.parse(await project.read('cypress.json'))
   config.video = false
   await project.write('cypress.json', JSON.stringify(config))
@@ -39,9 +36,6 @@ test('should work with TS', async () => {
       '@vue/cli-plugin-e2e-cypress': {}
     }
   })
-
-  const pkg = JSON.parse(await project.read('package.json'))
-  expect(pkg.devDependencies).toHaveProperty('@cypress/webpack-preprocessor')
 
   const config = JSON.parse(await project.read('cypress.json'))
   config.video = false
