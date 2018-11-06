@@ -28,8 +28,7 @@ export default function ({
 
     beforeRouteEnter (to, from, next) {
       if (lastRoute) {
-        if (!to.query) {
-          console.log('lastRoute', lastRoute)
+        if (!to.params || !Object.keys(to.params).length) {
           const { name, params, query } = lastRoute
           next({ name, params, query })
           return
@@ -45,15 +44,14 @@ export default function ({
     },
 
     mounted () {
-      this.$nextTick(() => {
+      setTimeout(() => {
         this.$_restoreRouteReady = true
-      })
+      }, 100)
     },
 
     methods: {
       replaceBaseRoute () {
         if (baseRoute && !isSameRoute(this.$route, baseRoute, false)) {
-          console.log('replaceBaseRoute')
           this.$router.replace(baseRoute)
         }
       }
