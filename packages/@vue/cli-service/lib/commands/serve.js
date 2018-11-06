@@ -42,6 +42,7 @@ module.exports = (api, options) => {
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
     const validateWebpackConfig = require('../util/validateWebpackConfig')
+    const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
@@ -89,7 +90,7 @@ module.exports = (api, options) => {
       protocol,
       host,
       port,
-      options.baseUrl
+      isAbsoluteUrl(options.baseUrl) ? '/' : options.baseUrl
     )
 
     const proxySettings = prepareProxy(
