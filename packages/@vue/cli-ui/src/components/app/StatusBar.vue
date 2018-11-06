@@ -40,11 +40,25 @@
         @click="onConsoleClick()"
       >
         <VueIcon icon="dvr"/>
-        <LoggerMessage class="last-message"
-          v-if="consoleLogLast"
-          :message="consoleLogLast"
-        />
-        <div v-else class="last-message">{{ $t('org.vue.components.status-bar.log.empty') }}</div>
+        <transition-group
+          name="slide-up"
+          duration="600"
+          tag="div"
+          class="last-message-container"
+        >
+          <LoggerMessage class="last-message"
+            v-if="consoleLogLast"
+            :key="consoleLogLast.id"
+            :message="consoleLogLast"
+          />
+          <div
+            v-else
+            key="__empty"
+            class="last-message no-log"
+          >
+            {{ $t('org.vue.components.status-bar.log.empty') }}
+          </div>
+        </transition-group>
       </div>
 
       <div
@@ -232,9 +246,20 @@ export default {
 
   .console-log
     &,
-    .last-message
+    .last-message-container
       flex 100% 1 1
       width 0
+
+    .last-message-container
+      overflow hidden
+      height 100%
+      position relative
+
+    .last-message
+      position absolute
+      left 0
+      top 4px
+      width 100%
 
     .logger-message
       font-size .9em
@@ -245,4 +270,8 @@ export default {
         color $vue-ui-color-light
         .vue-ui-dark-mode &
           color $vue-ui-color-dark
+
+    .no-log
+      padding 2px
+      opacity .5
 </style>
