@@ -12,7 +12,7 @@
   >
     <div class="content">
       <ItemLogo
-        :image="logo ? `${logo}?project=${task.project.id}` : iconData.icon"
+        :image="logo ? (isMaterialIcon ? logo : `${logo}?project=${task.project.id}`) : iconData.icon"
         :class="iconData.class"
         v-tooltip="status"
         color-bullet
@@ -64,6 +64,10 @@ export default {
 
     logo () {
       return this.task.icon || (this.task.plugin && this.task.plugin.logo)
+    },
+    
+    isMaterialIcon () {
+      return /^[a-z0-9_]+$/.test(this.logo)
     },
 
     description () {
