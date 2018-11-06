@@ -71,7 +71,7 @@
         class="icon-button"
         v-tooltip="$t('org.vue.components.project-plugin-item.actions.refresh', { target: plugin.id })"
         :loading-left="updating"
-        @click="updatePlugin()"
+        @click="e => updatePlugin(!e.shiftKey)"
       />
 
       <VueButton
@@ -138,13 +138,14 @@ export default {
   },
 
   methods: {
-    async updatePlugin () {
+    async updatePlugin (full = true) {
       this.updating = true
       try {
         this.$apollo.mutate({
           mutation: PLUGIN_UPDATE,
           variables: {
-            id: this.plugin.id
+            id: this.plugin.id,
+            full
           }
         })
       } catch (e) {

@@ -116,7 +116,7 @@
           "installed": "Installed",
           "actions": {
             "update": "Update {target}",
-            "refresh": "Force Refresh {target}"
+            "refresh": "Force Refresh {target}<br><i>Press [Shift] for Quick Refresh (node_modules won't be updated)</i>"
           },
           "local": "Local"
         },

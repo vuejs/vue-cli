@@ -467,7 +467,7 @@ async function initPrompts (id, context) {
   await prompts.start()
 }
 
-function update (id, context) {
+function update ({ id, full }, context) {
   return progress.wrap('plugin-update', context, async setProgress => {
     setProgress({
       status: 'plugin-update',
@@ -478,7 +478,7 @@ function update (id, context) {
     const { current, wanted, localPath } = await dependencies.getVersion(plugin, context)
 
     if (localPath) {
-      await updateLocalPackage({ cwd: cwd.get(), id, localPath }, context)
+      await updateLocalPackage({ cwd: cwd.get(), id, localPath, full }, context)
     } else {
       await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
     }
@@ -502,11 +502,19 @@ function update (id, context) {
   })
 }
 
-async function updateLocalPackage ({ id, cwd, localPath }, context) {
+async function updateLocalPackage ({ id, cwd, localPath, full = true }, context) {
   const from = path.resolve(cwd, localPath)
   const to = path.resolve(cwd, 'node_modules', ...id.split('/'))
-  await fs.remove(to)
-  await fs.copy(from, to)
+  let filterRegEx
+  if (full) {
+    await fs.remove(to)
+    filterRegEx = /\.git/
+  } else {
+    filterRegEx = /(\.git|node_modules)/
+  }
+  await fs.copy(from, to, {
+    filter: (file) => !file.match(filterRegEx)
+  })
 }
 
 async function updateAll (context) {

@@ -19,7 +19,7 @@ extend type Mutation {
   pluginUninstall (id: ID!): PluginInstallation
   pluginInvoke (id: ID!): PluginInstallation
   pluginFinishInstall: PluginInstallation
-  pluginUpdate (id: ID!): Plugin
+  pluginUpdate (id: ID!, full: Boolean = true): Plugin
   pluginActionCall (id: ID!, params: JSON): PluginActionResult
   pluginsUpdate: [Plugin]
   pluginResetApi: Boolean
@@ -87,7 +87,7 @@ exports.resolvers = {
     pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
     pluginFinishInstall: (root, args, context) => plugins.finishInstall(context),
-    pluginUpdate: (root, { id }, context) => plugins.update(id, context),
+    pluginUpdate: (root, { id, full }, context) => plugins.update({ id, full }, context),
     pluginActionCall: (root, args, context) => plugins.callAction(args, context),
     pluginsUpdate: (root, args, context) => plugins.updateAll(context),
     pluginResetApi: (root, args, context) => plugins.resetPluginApi({ file: cwd.get() }, context)
