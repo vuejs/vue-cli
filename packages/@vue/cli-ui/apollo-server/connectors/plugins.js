@@ -371,8 +371,23 @@ function installLocal (context) {
     })
     currentPluginId = id
     installationStep = 'install'
-    const idAndRange = `${id}@file:${folder}`
-    await installPackage(cwd.get(), getCommand(cwd.get()), null, idAndRange)
+
+    // Update package.json
+    {
+      const pkgFile = path.resolve(cwd.get(), 'package.json')
+      const pkg = await fs.readJson(pkgFile)
+      if (!pkg.devDependencies) pkg.devDependencies = {}
+      pkg.devDependencies[id] = `file:${folder}`
+      await fs.writeJson(pkgFile, pkg, {
+        spaces: 2
+      })
+    }
+
+    const from = path.resolve(cwd.get(), folder)
+    const to = path.resolve(cwd.get(), 'node_modules', ...id.split('/'))
+    console.log('copying from', from, 'to', to)
+    await fs.copy(from, to)
+
     await initPrompts(id, context)
     installationStep = 'config'
 
