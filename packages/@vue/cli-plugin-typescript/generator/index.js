@@ -1,7 +1,8 @@
 module.exports = (api, {
   classComponent,
   tsLint,
-  lintOn = []
+  lintOn = [],
+  extendConfig = {}
 }, _, invoking) => {
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
@@ -79,7 +80,8 @@ module.exports = (api, {
   api.render('./template', {
     isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,
     hasMocha: api.hasPlugin('unit-mocha'),
-    hasJest: api.hasPlugin('unit-jest')
+    hasJest: api.hasPlugin('unit-jest'),
+    extendConfig: extendConfig
   })
 
   require('./convert')(api, { tsLint })

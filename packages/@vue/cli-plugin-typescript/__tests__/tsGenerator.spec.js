@@ -19,6 +19,29 @@ test('generate files', async () => {
   expect(files['src/App.vue']).toMatch('<script lang="ts">')
 })
 
+test('extend "types" option in tsconfig.json', async () => {
+  const { files } = await generateWithPlugin([
+    {
+      id: 'core',
+      apply: require('@vue/cli-service/generator'),
+      options: {}
+    },
+    {
+      id: 'ts',
+      apply: require('../generator'),
+      options: {
+        extendConfig: {
+          types: [
+            'node'
+          ]
+        }
+      }
+    }
+  ])
+
+  expect(files['tsconfig.json']).toMatch(/"types": \[\s+"node"/)
+})
+
 test('classComponent', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
