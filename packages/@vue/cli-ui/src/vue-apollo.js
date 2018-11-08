@@ -4,10 +4,9 @@ import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 import clientStateDefaults from './state/defaults'
 import clientStateResolvers from './state/resolvers'
 // GraphQL documents
-// import CONNECTED from './graphql/connected.gql'
-import CONNECTED_SET from './graphql/connectedSet.gql'
-import LOADING_CHANGE from './graphql/loadingChange.gql'
-import DARK_MODE_SET from './graphql/darkModeSet.gql'
+import CONNECTED_SET from '@/graphql/connected/connectedSet.gql'
+import LOADING_CHANGE from '@/graphql/loading/loadingChange.gql'
+import DARK_MODE_SET from '@/graphql/dark-mode/darkModeSet.gql'
 import { getForcedTheme } from './util/theme'
 
 // Install the vue plugin
@@ -15,7 +14,7 @@ Vue.use(VueApollo)
 
 let endpoint = process.env.VUE_APP_CLI_UI_URL
 if (typeof endpoint === 'undefined') {
-  endpoint = 'ws://localhost:4000/graphql'
+  endpoint = `ws://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/graphql`
 } else if (endpoint === '') {
   endpoint = window.location.origin.replace('http', 'ws') + '/graphql'
 }

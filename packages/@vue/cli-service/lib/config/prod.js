@@ -26,10 +26,10 @@ module.exports = (api, options) => {
       if (process.env.VUE_CLI_TEST) {
         webpackConfig.optimization.minimize(false)
       } else {
-        const UglifyPlugin = require('uglifyjs-webpack-plugin')
-        const uglifyOptions = require('./uglifyOptions')
+        const TerserPlugin = require('terser-webpack-plugin')
+        const terserOptions = require('./terserOptions')
         webpackConfig.optimization.minimizer([
-          new UglifyPlugin(uglifyOptions(options))
+          new TerserPlugin(terserOptions(options))
         ])
       }
     }

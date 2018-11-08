@@ -310,7 +310,7 @@ module.exports = class Creator extends EventEmitter {
   // { id: options } => [{ id, apply, options }]
   async resolvePlugins (rawPlugins) {
     // ensure cli-service is invoked first
-    rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'])
+    rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'], true)
     const plugins = []
     for (const id of Object.keys(rawPlugins)) {
       const apply = loadModule(`${id}/generator`, this.context) || (() => {})

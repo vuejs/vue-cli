@@ -46,12 +46,12 @@ Options:
   -d, --default                   Skip prompts and use default preset
   -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
   -m, --packageManager <command>  Use specified npm client when installing dependencies
-  -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
+  -r, --registry <url>            Use specified npm registry when installing dependencies
   -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
   -n, --no-git                    Skip git initialization
   -f, --force                     Overwrite target directory if it exists
   -c, --clone                     Use git clone when fetching remote preset
-  -x, --proxy                     Use specified proxy when creating project   
+  -x, --proxy                     Use specified proxy when creating project
   -b, --bare                      Scaffold project without beginner instructions
   -h, --help                      Output usage information
 ```

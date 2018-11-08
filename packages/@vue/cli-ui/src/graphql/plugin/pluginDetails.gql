@@ -1,0 +1,11 @@
+#import "../version/versionFragment.gql"
+
+query pluginDetails ($id: ID!) {
+  pluginDetails: plugin (id: $id) {
+    id
+    version {
+      ...version
+    }
+    description
+  }
+}

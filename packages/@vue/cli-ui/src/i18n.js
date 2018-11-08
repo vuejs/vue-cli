@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import deepmerge from 'deepmerge'
+import VueTimeago from 'vue-timeago'
 
 Vue.use(VueI18n)
+
+Vue.use(VueTimeago, {
+  name: 'VueTimeago',
+  locale: 'en'
+})
 
 function detectLanguage () {
   try {
@@ -17,13 +23,8 @@ function detectLanguage () {
 
 async function autoInstallLocale (lang) {
   try {
-    let response = await fetch(`https://unpkg.com/vue-cli-locale-${lang}`)
+    let response = await fetch(`https://unpkg.com/vue-cli-locales/locales/${lang}.json`)
     if (response.ok) {
-      // Redirect
-      const location = response.headers.get('location')
-      if (location) {
-        response = await fetch(`https://unpkg.com${location}`)
-      }
       const data = await response.json()
       mergeLocale(lang, data)
       return true
@@ -45,8 +46,17 @@ async function autoDetect () {
     }
 
     if (!ok) {
-      console.log(`[UI] No locale package was found for your locale ${codes[0]}.`)
+      console.log(`[UI] No locale data was found for your locale ${codes[0]}.`)
     }
+
+    const dateFnsLocale = i18n.locale.toLowerCase().replace(/-/g, '_')
+    Vue.component('VueTimeago', VueTimeago.createTimeago({
+      name: 'VueTimeago',
+      locale: i18n.locale,
+      locales: {
+        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}`)
+      }
+    }))
   }
 }
 

@@ -1,0 +1,28 @@
+{
+  "name": "@vue/cli-upgrade",
+  "version": "3.1.1",
+  "description": "utility to upgrade vue cli service / plugins in vue apps",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git"
+  },
+  "keywords": [
+    "vue",
+    "cli",
+    "upgrade",
+    "update"
+  ],
+  "author": "Haoqun Jiang <haoqunjiang+npm@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-upgrade#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "cli-table": "^0.3.1",
+    "execa": "^1.0.0",
+    "inquirer": "^6.0.0"
+  }
+}
