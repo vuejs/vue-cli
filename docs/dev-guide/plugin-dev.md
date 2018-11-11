@@ -60,3 +60,9 @@ module.exports = (api, options) => {
 }
 ```
 
+You can also use `configureWebpack` method to modify the  webpack config or return object to be merged with webpack-merge.
+
+### Add a new cli-service command
+
+With a service plugin you can also register a new cli-service command in addition to standard ones (i.e. `serve` and `build`).
+
