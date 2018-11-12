@@ -298,13 +298,15 @@ module.exports = {
 
 ### devServer
 
-- Type: `Object`
+- Type: `Object | Function`
 
   [All options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are supported. Note that:
 
   - Some values like `host`, `port` and `https` may be overwritten by command line flags.
 
   - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [baseUrl](#baseurl) for the dev server to function properly.
+
+  If the value is a function, it will be called with no arguments, and should return a config object.
 
 ### devServer.proxy
 

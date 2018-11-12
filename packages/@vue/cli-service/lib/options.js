@@ -10,7 +10,7 @@ const schema = createSchema(joi => joi.object({
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
-  devServer: joi.object(),
+  devServer: joi.alternatives().try(joi.object(), joi.func()),
   pages: joi.object(),
   crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
   integrity: joi.boolean(),
