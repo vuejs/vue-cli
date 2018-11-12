@@ -72,17 +72,17 @@ test('should work', async () => {
   let isFirstMsg = true
   server.stdout.on('data', data => {
     data = data.toString()
-    if (data.match(/Compiled with \d warning/)) {
+    if (isFirstMsg) {
       // should fail on start
-      expect(isFirstMsg).toBe(true)
+      expect(data).toMatch(/Compiled with \d warning/)
       isFirstMsg = false
+
       // fix it
-      setTimeout(() => {
-        write('src/App.vue', app)
-      }, process.env.CI ? 1000 : 200)
+      write('src/App.vue', app)
     } else if (data.match(/Compiled successfully/)) {
-      // should compile on 2nd update
-      expect(isFirstMsg).toBe(false)
+      // should compile on the subsequent update
+      // (note: in CI environment this may not be the exact 2nd update,
+      // so we use data.match as a termination condition rather than a test case)
       server.stdin.write('close')
       done()
     }

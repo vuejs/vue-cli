@@ -57,7 +57,7 @@ file, or the `"vue"` field in `package.json`.
   
   - Default: `''`
 
-    This option is used if you need to add a version to your incons and manifest, against browser’s cache. This will append `?v=<pwa.assetsVersion>` to the URLs of the icons and manifest.
+    This option is used if you need to add a version to your icons and manifest, against browser’s cache. This will append `?v=<pwa.assetsVersion>` to the URLs of the icons and manifest.
 
 - **pwa.manifestPath**
 

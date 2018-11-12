@@ -384,7 +384,7 @@ Vue CLI 使用了 Babel 7 中的新配置格式 `babel.config.js`。和 `.babelr
 
 ## ESLint
 
-ESLint 可以通过 `.eslintrc` 或 `pacakge.json` 中的 `eslintConfig` 字段来配置。
+ESLint 可以通过 `.eslintrc` 或 `package.json` 中的 `eslintConfig` 字段来配置。
 
 更多细节可查阅 [@vue/cli-plugin-eslint](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint)。
 

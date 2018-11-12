@@ -55,6 +55,7 @@ input ProjectCreateInput {
 
 input ProjectImportInput {
   path: String!
+  force: Boolean
 }
 
 type Preset implements DescribedEntity {

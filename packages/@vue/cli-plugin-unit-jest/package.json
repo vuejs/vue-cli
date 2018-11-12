@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-jest",
-  "version": "3.0.4",
+  "version": "3.1.1",
   "description": "unit-jest plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -22,13 +22,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.4",
-    "babel-jest": "^23.4.0",
+    "@vue/cli-shared-utils": "^3.1.1",
+    "babel-jest": "^23.6.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "jest": "^23.4.0",
+    "jest": "^23.6.0",
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^1.0.0",
-    "vue-jest": "^2.6.0"
+    "vue-jest": "^3.0.0"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.20",

@@ -1,5 +1,5 @@
 <template>
-  <div class="asset-list list-block">
+  <div class="asset-list card list-block">
     <div class="content">
       <div class="title">
         {{ $t('org.vue.vue-webpack.dashboard.asset-list.title') }}
