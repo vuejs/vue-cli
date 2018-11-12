@@ -15,6 +15,8 @@
 <script>
 import i18n from './i18n'
 
+import ROUTE_REQUESTED from '@/graphql/app/routeRequested.gql'
+
 export default {
   metaInfo: {
     titleTemplate: chunk => chunk ? `[Beta] ${chunk} - Vue CLI` : '[Beta] Vue CLI'
@@ -23,6 +25,17 @@ export default {
   computed: {
     ready () {
       return Object.keys(i18n.getLocaleMessage('en')).length
+    }
+  },
+
+  apollo: {
+    $subscribe: {
+      routeRequested: {
+        query: ROUTE_REQUESTED,
+        result ({ data }) {
+          this.$router.push(data.routeRequested)
+        }
+      }
     }
   }
 }

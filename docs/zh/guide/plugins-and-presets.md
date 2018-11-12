@@ -209,5 +209,5 @@ vue create --preset bitbucket:username/repo --clone my-project
 vue create --preset ./my-preset my-project
 
 # 或者，直接使用当前工作目录下的 json 文件：
-vue create --preset my-preset.json
+vue create --preset my-preset.json my-project
 ```

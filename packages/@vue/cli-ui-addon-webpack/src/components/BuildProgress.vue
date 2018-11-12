@@ -1,6 +1,6 @@
 <template>
   <div
-    class="build-progress"
+    class="build-progress card"
     :class="{
       [`mode-${mode}`]: true
     }"

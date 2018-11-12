@@ -1,5 +1,6 @@
+const util = require('util')
 const execa = require('execa')
-const terminate = require('terminate')
+const terminate = util.promisify(require('terminate'))
 const chalk = require('chalk')
 // Subs
 const channels = require('../channels')
@@ -112,10 +113,10 @@ async function list ({ file = null, api = true } = {}, context) {
       })
     )
 
-    // Keep existing or ran tasks
+    // Keep existing running tasks
     list = list.filter(
       task => existing.get(task.id) ||
-      task.status !== 'idle'
+      task.status === 'running'
     )
 
     // Add the new tasks
@@ -462,19 +463,19 @@ async function run (id, context) {
   return task
 }
 
-function stop (id, context) {
+async function stop (id, context) {
   const task = findOne(id, context)
   if (task && task.status === 'running' && task.child) {
     task._terminating = true
     try {
-      terminate(task.child.pid)
+      await terminate(task.child.pid)
     } catch (e) {
       console.error(e)
-      updateOne({
-        id: task.id,
-        status: 'terminated'
-      }, context)
     }
+    updateOne({
+      id: task.id,
+      status: 'terminated'
+    }, context)
   }
   return task
 }
