@@ -4,7 +4,7 @@ module.exports = (api, options) => {
   if (options.lintOnSave) {
     const extensions = require('./eslintOptions').extensions(api)
     // Use loadModule to allow users to customize their ESLint dependency version.
-    const { loadModule } = require('@vue/cli-shared-utils')
+    const { resolveModule, loadModule } = require('@vue/cli-shared-utils')
     const cwd = api.getCwd()
     const eslintPkg =
       loadModule('eslint/package.json', cwd, true) ||
@@ -48,6 +48,7 @@ module.exports = (api, options) => {
               cacheIdentifier,
               emitWarning: options.lintOnSave !== 'error',
               emitError: options.lintOnSave === 'error',
+              eslintPath: resolveModule('eslint', cwd) || require.resolve('eslint'),
               formatter:
                 loadModule('eslint/lib/formatters/codeframe', cwd, true) ||
                 require('eslint/lib/formatters/codeframe')
