@@ -119,7 +119,7 @@ module.exports = class Creator extends EventEmitter {
       }
       pkg.devDependencies[dep] = (
         preset.plugins[dep].version ||
-        (/^@vue/.test(dep) ? `^${latest}` : `latest`)
+        ((/^@vue/.test(dep) && latest[dep]) ? `^${latest[dep]}` : `latest`)
       )
     })
     // write package.json
