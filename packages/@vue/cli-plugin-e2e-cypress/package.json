@@ -22,12 +22,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@cypress/webpack-preprocessor": "^3.0.0",
     "@vue/cli-shared-utils": "^3.1.1",
     "cypress": "^3.1.0",
     "eslint-plugin-cypress": "^2.0.1"
-  },
-  "peerDependencies": {
-    "@cypress/webpack-preprocessor": "^3.0.0"
   }
 }
