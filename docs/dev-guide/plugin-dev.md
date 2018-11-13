@@ -40,7 +40,7 @@ module.exports = (api, options) => {}
 
 ### Modifying webpack config
 
-The API allows service plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`. For example, here we're modifying webpack config with webpack-chain to include `vue-auto-routing` webpack plugin:
+The API allows service plugins to extend/modify the internal webpack config for different environments. For example, here we're modifying webpack config with webpack-chain to include `vue-auto-routing` webpack plugin:
 
 ```js
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
@@ -64,5 +64,19 @@ You can also use `configureWebpack` method to modify the  webpack config or retu
 
 ### Add a new cli-service command
 
-With a service plugin you can also register a new cli-service command in addition to standard ones (i.e. `serve` and `build`).
+With a service plugin you can also register a new cli-service command in addition to standard ones (i.e. `serve` and `build`) or modify existing ones. Here is an example of creating a simple new command that will print a greeting to developer console:
+
+```js
+  api.registerCommand(
+    'greet',
+    {
+      description: 'Writes a greeting to the console',
+      usage: 'vue-cli-service greet'
+    },
+    () => {
+      console.log(chalk.bold(chalk.blue(`👋  Hello, fellow developer!`)))
+    }
+  )
+```
+
 
