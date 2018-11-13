@@ -79,4 +79,23 @@ With a service plugin you can also register a new cli-service command in additio
   )
 ```
 
+If you want to modify an existing cli-service command, you can retrieve it with `api.service.commands` and add some changes. We're going to print a message to the console again with a port where application is running:
+
+```js
+  const { serve } = api.service.commands
+
+  const serveFn = serve.fn
+
+  serve.fn = (...args) => {
+    return serveFn(...args).then(res => {
+      if (res && res.url) {
+        console.log(
+          chalk.green(`Project is running now at`),
+          chalk.blue(res.url)
+        )
+      }
+    })
+  }
+```
+
 
