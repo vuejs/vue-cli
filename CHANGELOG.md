@@ -1,3 +1,92 @@
+# 3.1.5
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* specify eslintPath for eslint-loader, fixes [#2924](https://github.com/vuejs/vue-cli/issues/2924) ([077343b](https://github.com/vuejs/vue-cli/commit/077343b))
+
+# 3.1.4
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* should fallback to local eslint, fixes instant prototyping, closes [#2866](https://github.com/vuejs/vue-cli/issues/2866) ([becde30](https://github.com/vuejs/vue-cli/commit/becde30))
+
+## cli-service
+
+#### Bug Fixes
+
+* assetsDir can be an empty string, fixes [#2511](https://github.com/vuejs/vue-cli/issues/2511) ([5d49d57](https://github.com/vuejs/vue-cli/commit/5d49d57))
+* do not display absolute baseUrl ([#2900](https://github.com/vuejs/vue-cli/pull/2900)) ([6d35461](https://github.com/vuejs/vue-cli/commit/6d35461))
+
+# 3.1.3
+
+## cli
+
+#### Bug Fixes
+
+* fixes version check
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* add cwd path prefix to globby patterns ([0149444](https://github.com/vuejs/vue-cli/commit/0149444))
+
+## cli-service
+
+#### Bug Fixes
+
+* relax webpack version requirement ([73923de](https://github.com/vuejs/vue-cli/commit/73923de))
+
+## cli-service-global
+
+#### Bug Fixes
+
+* remove extraneous dependency ([7a3de17](https://github.com/vuejs/vue-cli/commit/7a3de17))
+
+# 3.1.2
+
+## cli
+
+### Bug Fixes
+
+* plugin.options can be missing when runGenerator is directly called, fixes [#2906](https://github.com/vuejs/vue-cli/issues/2906) ([d1cd4aa](https://github.com/vuejs/vue-cli/commit/d1cd4aa))
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* remove webpack-preprocessor from cypress config ([#2904](https://github.com/vuejs/vue-cli/pull/2904)), fixes [#2903](https://github.com/vuejs/vue-cli/issues/2903) ([e4e151b](https://github.com/vuejs/vue-cli/commit/e4e151b))
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* check if glob patterns matches any files before linting, closes [#2854](https://github.com/vuejs/vue-cli/issues/2854), [#2860](https://github.com/vuejs/vue-cli/issues/2860) ([ccc146b](https://github.com/vuejs/vue-cli/commit/ccc146))
+
+## cli-service-global
+
+#### Bug Fixes
+
+* should fallback to local eslint, fixes instant prototyping, closes [#2866](https://github.com/vuejs/vue-cli/issues/2866) ([becde30](https://github.com/vuejs/vue-cli/commit/becde30))
+
+## cli-ui
+
+#### Bug Fixes
+
+* remove last route restore ([305c4bf](https://github.com/vuejs/vue-cli/commit/305c4bf))
+* refresh page & switching between views doesn't lose selected item ([11e59f8](https://github.com/vuejs/vue-cli/commit/11e59f8))
+* restore route making a view unnavigable ([1a34618](https://github.com/vuejs/vue-cli/commit/))
+* **plugins:** local install ([bd06cd4](https://github.com/vuejs/vue-cli/commit/bd06cd4))
+
+#### Features
+
+* **plugin:** quick local plugin refresh ([91a4b2e](https://github.com/vuejs/vue-cli/commit/91a4b2e))
+* **status bar:** last log animation ([ebc0ea2](https://github.com/vuejs/vue-cli/commit/ebc0ea2))
+
 # [3.1.1](https://github.com/vuejs/vue-cli/compare/v3.1.0...v3.1.1) (2018-10-31)
 
 ## babel-preset-app
