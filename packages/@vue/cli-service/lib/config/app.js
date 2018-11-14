@@ -183,7 +183,7 @@ module.exports = (api, options) => {
           template = `public/${name}.html`,
           filename = `${name}.html`,
           chunks = ['chunk-vendors', 'chunk-common', name],
-          templateParameters: (compilation, assets, pluginOptions) => {
+          templateParameters = (compilation, assets, pluginOptions) => {
             return Object.assign(htmlOptions.templateParameters(compilation, assets, pluginOptions), templateParameters)
           }
         } = pageConfig
