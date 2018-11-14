@@ -200,6 +200,7 @@ module.exports = (api, options) => {
             customHtmlOptions[key] = pageConfig[key]
           }
         }
+
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
