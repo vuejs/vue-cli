@@ -43,7 +43,7 @@ export default {
   },
 
   created () {
-    const mode = this.mode = this.TaskDetails.task.command.indexOf('vue-cli-service serve') !== -1 ? 'serve' : 'build'
+    const mode = this.mode = this.TaskDetails.task.command.match(/vue-cli-service\s+(\S+)/)[1]
     this.$store.commit('mode', mode)
     if (mode === 'build') {
       this.syncMode('build-modern')

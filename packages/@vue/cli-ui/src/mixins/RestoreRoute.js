@@ -1,6 +1,6 @@
 import { isSameRoute } from '../util/route'
 
-import PROJECT_CURRENT from '../graphql/projectCurrent.gql'
+import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
 
 export default function ({
   baseRoute = null
@@ -15,6 +15,7 @@ export default function ({
 
     watch: {
       projectCurrent (value) {
+        if (!this.$_restoreRouteReady) return
         this.replaceBaseRoute()
       }
     },
@@ -27,7 +28,7 @@ export default function ({
 
     beforeRouteEnter (to, from, next) {
       if (lastRoute) {
-        if (!to.query) {
+        if (!to.params || !Object.keys(to.params).length) {
           const { name, params, query } = lastRoute
           next({ name, params, query })
           return
@@ -38,8 +39,16 @@ export default function ({
     },
 
     beforeRouteLeave (to, from, next) {
-      lastRoute = from
+      if (from.params && Object.keys(from.params).length) {
+        lastRoute = from
+      }
       next()
+    },
+
+    mounted () {
+      setTimeout(() => {
+        this.$_restoreRouteReady = true
+      }, 100)
     },
 
     methods: {

@@ -3,7 +3,7 @@ const { createSchema, validate } = require('@vue/cli-shared-utils')
 const schema = createSchema(joi => joi.object({
   baseUrl: joi.string().allow(''),
   outputDir: joi.string(),
-  assetsDir: joi.string(),
+  assetsDir: joi.string().allow(''),
   indexPath: joi.string(),
   filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),

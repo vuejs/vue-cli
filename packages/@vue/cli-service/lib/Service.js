@@ -159,7 +159,23 @@ module.exports = class Service {
       const projectPlugins = Object.keys(this.pkg.devDependencies || {})
         .concat(Object.keys(this.pkg.dependencies || {}))
         .filter(isPlugin)
-        .map(idToPlugin)
+        .map(id => {
+          if (
+            this.pkg.optionalDependencies &&
+            id in this.pkg.optionalDependencies
+          ) {
+            let apply = () => {}
+            try {
+              apply = require(id)
+            } catch (e) {
+              warn(`Optional dependency ${id} is not installed.`)
+            }
+
+            return { id, apply }
+          } else {
+            return idToPlugin(id)
+          }
+        })
       plugins = builtInPlugins.concat(projectPlugins)
     }
 
@@ -257,7 +273,7 @@ module.exports = class Service {
 
   loadUserOptions () {
     // vue.config.js
-    let fileConfig, pkgConfig, resolved, resovledFrom
+    let fileConfig, pkgConfig, resolved, resolvedFrom
     const configPath = (
       process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
       path.resolve(this.context, 'vue.config.js')
@@ -299,13 +315,13 @@ module.exports = class Service {
         )
       }
       resolved = fileConfig
-      resovledFrom = 'vue.config.js'
+      resolvedFrom = 'vue.config.js'
     } else if (pkgConfig) {
       resolved = pkgConfig
-      resovledFrom = '"vue" field in package.json'
+      resolvedFrom = '"vue" field in package.json'
     } else {
       resolved = this.inlineOptions || {}
-      resovledFrom = 'inline options'
+      resolvedFrom = 'inline options'
     }
 
     // normalize some options
@@ -327,7 +343,7 @@ module.exports = class Service {
     // validate options
     validate(resolved, msg => {
       error(
-        `Invalid options in ${chalk.bold(resovledFrom)}: ${msg}`
+        `Invalid options in ${chalk.bold(resolvedFrom)}: ${msg}`
       )
     })
 

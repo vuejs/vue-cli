@@ -2,7 +2,7 @@
 
 С помощью API `cli-ui` возможно дополнять конфигурацию и задачи проекта, а также обмениваться данными и взаимодействовать с другими процессами.
 
-![UI Plugin architecture](/vue-cli-ui-schema.png)
+![UI Plugin architecture](/ru/vue-cli-ui-schema.png)
 
 ## Файлы UI
 

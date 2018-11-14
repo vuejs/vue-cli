@@ -8,7 +8,7 @@
 
 ### 本地预览
 
-`dist` 目录需要启动一个 HTTP 服务器来访问，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
+`dist` 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 `baseUrl` 配置为了一个相对的值)，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
 
 ``` bash
 npm install -g serve
@@ -168,7 +168,7 @@ Firebase will ask some questions on how to setup your project.
 
 {
   "hosting": {
-    "public": "app"
+    "public": "dist"
   }
 }
 ```
@@ -206,7 +206,45 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-> TODO | Open to contribution.
+1. Install the Now CLI globally: `npm install -g now`
+
+2. Add a `now.json` file to your project root:
+
+    ```json
+    {
+      "name": "my-example-app",
+      "type": "static",
+      "static": {
+        "public": "dist",
+        "rewrites": [
+          {
+            "source": "**",
+            "destination": "/index.html"
+          }
+        ]
+      },
+      "alias": "vue-example",
+      "files": [
+        "dist"
+      ]
+    }
+    ```
+
+    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+
+3. Adding a deployment script in `package.json`:
+
+    ```json
+    "deploy": "npm run build && now && now alias"
+    ```
+
+    If you want to deploy publicly by default, you can change the deployment script to the following one:
+
+    ```json
+    "deploy": "npm run build && now --public && now alias"
+    ```
+
+    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
 
 ### Stdlib
 
@@ -239,3 +277,36 @@ Then cd into the `dist/` folder of your project and then run `surge` and follow 
 ```
 
 Verify your project is successfully published by Surge by visiting `myawesomeproject.surge.sh`, vola! For more setup details such as custom domains, you can visit [Surge's help page](https://surge.sh/help/).
+
+### Bitbucket Cloud
+
+1. As described in the [Bitbucket documentation](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) you need to create a repository named exactly `<USERNAME>.bitbucket.io`.
+
+2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case set correct `baseUrl` in `vue.config.js`.
+
+    If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+
+    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `baseUrl` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
+
+3. Inside your project, create `deploy.sh` with the following content and run it to deploy:
+
+    ``` bash{13,20,23}
+    #!/usr/bin/env sh
+
+    # abort on errors
+    set -e
+
+    # build
+    npm run build
+
+    # navigate into the build output directory
+    cd dist
+
+    git init
+    git add -A
+    git commit -m 'deploy'
+
+    git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
+
+    cd -
+    ```

@@ -1,6 +1,8 @@
-const Prism = require('prismjs')
-const loadLanguages = require('prismjs/components/')
-const path = require('path')
+// Prism don't like cjs with EMS package
+// So we use ES modules for the whole file
+import Prism from 'prismjs'
+import loadLanguages from 'prismjs/components/index.js'
+import path from 'path'
 
 loadLanguages()
 
@@ -19,7 +21,7 @@ const languages = [
   { test: /\.yml$/, lang: 'yaml' }
 ]
 
-exports.highlightCode = function (filename, content, lang = null) {
+export function highlightCode (filename, content, lang = null) {
   let language
   if (lang) {
     language = { lang }

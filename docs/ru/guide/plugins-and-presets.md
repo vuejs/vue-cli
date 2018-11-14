@@ -209,5 +209,5 @@ vue create --preset bitbucket:username/repo --clone my-project
 vue create --preset ./my-preset my-project
 
 # или напрямую использовать json-файл в cwd:
-vue create --preset my-preset.json
+vue create --preset my-preset.json my-project
 ```

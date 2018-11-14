@@ -32,7 +32,7 @@ function set ({ id, projectId, value }, context) {
   })
 
   const watchers = notify({ id, projectId, value }, context)
-  log('SharedData set', id, value, `(${watchers.length} watchers)`)
+  log('SharedData set', id, projectId, value, `(${watchers.length} watchers)`)
   return { id, value }
 }
 
@@ -47,7 +47,7 @@ function remove ({ id, projectId }, context) {
   })
 
   notify({ id, projectId, value: undefined }, context)
-  log('SharedData remove', id)
+  log('SharedData remove', id, projectId)
 }
 
 function watch ({ id, projectId }, handler) {

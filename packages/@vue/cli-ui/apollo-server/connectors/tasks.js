@@ -1,5 +1,6 @@
+const util = require('util')
 const execa = require('execa')
-const terminate = require('terminate')
+const terminate = util.promisify(require('terminate'))
 const chalk = require('chalk')
 // Subs
 const channels = require('../channels')
@@ -17,6 +18,7 @@ const { notify } = require('../util/notification')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
+const WIN_ENOENT_THRESHOLD = 500 // ms
 
 const tasks = new Map()
 
@@ -111,10 +113,10 @@ async function list ({ file = null, api = true } = {}, context) {
       })
     )
 
-    // Keep existing or ran tasks
+    // Keep existing running tasks
     list = list.filter(
       task => existing.get(task.id) ||
-      task.status !== 'idle'
+      task.status === 'running'
     )
 
     // Add the new tasks
@@ -291,8 +293,9 @@ async function run (id, context) {
 
     task.time = Date.now()
 
+    // Task env
     process.env.VUE_CLI_CONTEXT = cwd.get()
-
+    process.env.VUE_CLI_PROJECT_ID = projects.getCurrent(context).id
     const nodeEnv = process.env.NODE_ENV
     delete process.env.NODE_ENV
 
@@ -411,6 +414,11 @@ async function run (id, context) {
     child.on('exit', onExit)
 
     child.on('error', error => {
+      const duration = Date.now() - task.time
+      // hackish workaround for https://github.com/vuejs/vue-cli/issues/2096
+      if (process.platform === 'win32' && error.code === 'ENOENT' && duration > WIN_ENOENT_THRESHOLD) {
+        return onExit(null)
+      }
       updateOne({
         id: task.id,
         status: 'error'
@@ -455,19 +463,19 @@ async function run (id, context) {
   return task
 }
 
-function stop (id, context) {
+async function stop (id, context) {
   const task = findOne(id, context)
   if (task && task.status === 'running' && task.child) {
     task._terminating = true
     try {
-      terminate(task.child.pid)
+      await terminate(task.child.pid)
     } catch (e) {
       console.error(e)
-      updateOne({
-        id: task.id,
-        status: 'terminated'
-      }, context)
     }
+    updateOne({
+      id: task.id,
+      status: 'terminated'
+    }, context)
   }
   return task
 }
