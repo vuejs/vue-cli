@@ -143,13 +143,13 @@ module.exports = {
 
 Убедитесь, что у вас глобально установлены [firebase-tools](https://github.com/firebase/firebase-tools):
 
-```
+```bash
 npm install -g firebase-tools
 ```
 
 Из корня вашего проекта инициализируйте `firebase` с помощью команды:
 
-```
+```bash
 firebase init
 ```
 
@@ -190,7 +190,7 @@ Firebase задаст несколько вопросов о том, как на
 
 Для публикации вашего проекта на Firebase Hosting выполните команду:
 
-```
+```bash
 firebase deploy --only hosting
 ```
 
@@ -202,7 +202,11 @@ firebase deploy --only hosting
 
 ### Now
 
-1. Установите глобально Now CLI: `npm install -g now`
+1. Установите глобально Now CLI:
+
+```bash
+npm install -g now
+```
 
 2. Добавьте файл `now.json` в корневой каталог проекта:
 
@@ -256,7 +260,7 @@ firebase deploy --only hosting
 
 Сначала, вам потребуется собрать проект командой `npm run build`. И, если вы не установили утилиту Surge для командной строки, то вы можете сделать это командой:
 
-```
+```bash
 npm install --global surge
 ```
 

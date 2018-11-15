@@ -143,13 +143,13 @@ Create a new Firebase project on your [Firebase console](https://console.firebas
 
 Make sure you have installed [firebase-tools](https://github.com/firebase/firebase-tools) globally:
 
-```
+```bash
 npm install -g firebase-tools
 ```
 
 From the root of your project, initialize `firebase` using the command:
 
-```
+```bash
 firebase init
 ```
 
@@ -190,7 +190,7 @@ Run `npm run build` to build your project.
 
 To deploy your project on Firebase Hosting, run the command:
 
-```
+```bash
 firebase deploy --only hosting
 ```
 
@@ -202,7 +202,11 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-1. Install the Now CLI globally: `npm install -g now`
+1. Install the Now CLI globally:
+
+```bash
+npm install -g now
+```
 
 2. Add a `now.json` file to your project root:
 
@@ -351,7 +355,7 @@ To deploy with [Surge](http://surge.sh/) the steps are very straightforward.
 
 First you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
 
-```
+```bash
 npm install --global surge
 ```
 
