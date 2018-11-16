@@ -330,12 +330,12 @@ module.exports = {
   module.exports = {
     devServer: {
       proxy: {
-        '/api': {
+        '^/api': {
           target: '<url>',
           ws: true,
           changeOrigin: true
         },
-        '/foo': {
+        '^/foo': {
           target: '<other_url>'
         }
       }
