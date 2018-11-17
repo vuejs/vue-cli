@@ -124,7 +124,7 @@ Here is an example of creating a simple new command that will print a greeting t
 In this example we provided the command name (`'greet`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
 
 :::tip
-You can add new command to the list of project npm tasks inside the `package.json` file [via Generator](#adding-new-npm-task).
+You can add new command to the list of project npm scripts inside the `package.json` file [via Generator](#extending-package).
 :::
 
 If you try to run new command in the project with your plugin installed, you will see the folowing output:
@@ -165,7 +165,7 @@ $ vue-cli-service greet --name 'John Doe'
 👋 Hello, John Doe!
 ```
 
-## Modifying existing cli-service command
+### Modifying existing cli-service command
 
 If you want to modify an existing cli-service command, you can retrieve it with `api.service.commands` and add some changes. We're going to print a message to the console with a port where application is running:
 
@@ -185,6 +185,24 @@ If you want to modify an existing cli-service command, you can retrieve it with 
 
 In the example above we retrieve the `serve` command from the list of existing commands; then we modify its `fn` part (`fn` is the third parameter passed when you create a new command; it specifies the function to run when running the command). With the modification done the console mesage will be printed after `serve` command has run successfully.
 
+### Specifying Mode for Commands
+
+If a plugin-registered command needs to run in a specific default mode, the plugin needs to expose it via `module.exports.defaultModes` in the form of `{ [commandName]: mode }`:
+
+``` js
+module.exports = api => {
+  api.registerCommand('build', () => {
+    // ...
+  })
+}
+
+module.exports.defaultModes = {
+  build: 'production'
+}
+```
+
+This is because the command's expected mode needs to be known before loading environment variables, which in turn needs to happen before loading user options / applying the plugins.
+
 ## Generator
 
 A CLI plugin published as a package can contain a `generator.js` or `generator/index.js` file. The generator inside a plugin will be invoked in two possible scenarios:
@@ -193,7 +211,7 @@ A CLI plugin published as a package can contain a `generator.js` or `generator/i
 
 - When the plugin is installed after project's creation and invoked individually via `vue invoke`.
 
-The [GeneratorAPI]() allows a generator to inject additional dependencies or fields into `package.json` and add files to the project.
+The [GeneratorAPI](generator-api.md) allows a generator to inject additional dependencies or fields into `package.json` and add files to the project.
 
 A generator should export a function which receives three arguments:
 
@@ -201,29 +219,98 @@ A generator should export a function which receives three arguments:
 
 2. The generator options for this plugin. These options are resolved during the prompt phase of project creation, or loaded from a saved preset in `~/.vuerc`. For example, if the saved `~/.vuerc` looks like this:
 
-    ``` json
-    {
-      "presets" : {
-        "foo": {
-          "plugins": {
-            "@vue/cli-plugin-foo": { "option": "bar" }
-          }
-        }
+``` json
+{
+  "presets" : {
+    "foo": {
+      "plugins": {
+        "@vue/cli-plugin-foo": { "option": "bar" }
       }
     }
-    ```
+  }
+}
+```
 
-    And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
+And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
 
-    For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts]()).
+For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd party plugins](#prompts-for-3rd-party-plugins)).
 
 3. The entire preset (`presets.foo`) will be passed as the third argument.
 
-### Adding new npm task
+### Extending package
 
-### Adding dependencies to the project
+If you need to add an additional dependency to the project, create a new npm script or modify `package.json` somehow else, you can use API `extendPackage` method:
+
+```js
+// generator.js
+
+module.exports = api => {
+  api.extendPackage({
+    dependencies: {
+      'vue-router-layout': '^0.1.2'
+    },
+    devDependencies: {
+      'vue-auto-routing': '^0.3.0'
+    },
+    scripts: {
+      greet: 'vue-cli-service greet'
+    }
+  });
+```
+
+In the example above we added one dependency, one dev dependency and the `greet` npm script to execute a [new vue-cli service command](#add-a-new-cli-service-command)
+
+### Changing main file
+
+With generator `onCreateComplete` hook you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc. To do so, let's first create a new content string you plan to add:
+
+```js
+const newLines = `\nimport VueRx from 'vue-rx';\n\nVue.use(VueRx);`;
+```
+
+Then in `onCreateComplete` hook you need to define if you have `main.js` or `main.ts` file (the latter is the case for projects using TypeScript):
+
+```js
+module.exports = (api, options, rootOptions) => {
+  const rxLines = `\nimport VueRx from 'vue-rx';\n\nVue.use(VueRx);`;
+
+  api.onCreateComplete(() => {
+
+    // checking if project uses TypeScript
+    const fs = require('fs');
+    const ext = api.hasPlugin('typescript') ? 'ts' : 'js';
+    const mainPath = api.resolve(`./src/main.${ext}`);
+  });
+};
+```
+
+Then you need to read file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
+
+```js
+  let contentMain = fs.readFileSync(mainPath, { encoding: 'utf-8' });
+  const lines = contentMain.split(/\r?\n/g).reverse();
+```
+
+:::tip
+We need `reverse` because in the next step we will look for the last line of imports and it's easy to find if we reverse the lines order and then check for the first import occurrence
+:::
+
+Now you need to find the last import (first one with the reverted lines) and add our `newLines` to it
+
+```js
+  const lastImportIndex = lines.findIndex(line => line.match(/^import/));
+  lines[lastImportIndex] += newLines;
+```
+
+Finally, you need to reverse lines order back, join them and write the content to the main file:
+
+```js
+  contentMain = lines.reverse().join('\n');
+  fs.writeFileSync(mainPath, contentMain, { encoding: 'utf-8' });
+```
 
 ### Templating
+
 
 ## Prompts
 
