@@ -183,7 +183,7 @@ If you want to modify an existing cli-service command, you can retrieve it with 
   }
 ```
 
-In the example above we retrieve the `serve` command from the list of existing commands; then we modify its `fn` part (`fn` is the third parameter passed when you create a new command; it specifies the function to run when running the command). With the modification done the console mesage will be printed after `serve` command has run successfully.
+In the example above we retrieve the `serve` command from the list of existing commands; then we modify its `fn` part (`fn` is the third parameter passed when you create a new command; it specifies the function to run when running the command). With the modification done the console message will be printed after `serve` command has run successfully.
 
 ### Specifying Mode for Commands
 
@@ -242,7 +242,7 @@ For a 3rd party plugin, the options will be resolved from the prompts or command
 If you need to add an additional dependency to the project, create a new npm script or modify `package.json` somehow else, you can use API `extendPackage` method:
 
 ```js
-// generator.js
+// generator/index.js
 
 module.exports = api => {
   api.extendPackage({
@@ -310,6 +310,85 @@ Finally, you need to reverse lines order back, join them and write the content t
 ```
 
 ### Templating
+
+When you call `api.render('./template')`, the generator will render files in `./template` (resolved relative to the generator file) with [EJS](https://github.com/mde/ejs).
+
+Let's imagine we're creating [vue-cli-auto-routing](https://github.com/ktsn/vue-cli-plugin-auto-routing) plugin and we want to make the following changes to the project on plugin invoke:
+
+- create a `layouts` folder with a default layout file;
+- create a `pages` folder with `about` and `home` pages;
+- add a `router.js` to the `src` folder root
+
+To render this structure, you need to create it first inside the `generator/template` folder:
+
+![Generator structure](/generator-template.png)
+
+After template is created, you should add `api.render` call to the `generator/index.js` file:
+
+```js
+api.render('./template')
+```
+
+In addition, you can inherit and replace parts of an existing template file (even from another package) using YAML front-matter:
+
+``` ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace: !!js/regexp /<script>[^]*?<\/script>/
+---
+
+<script>
+export default {
+  // Replace default script
+}
+</script>
+```
+
+It's also possible to do multiple replaces, although you will need to wrap your replace strings within `<%# REPLACE %>` and `<%# END_REPLACE %>` blocks:
+
+``` ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace:
+  - !!js/regexp /Welcome to Your Vue\.js App/
+  - !!js/regexp /<script>[^]*?<\/script>/
+---
+
+<%# REPLACE %>
+Replace Welcome Message
+<%# END_REPLACE %>
+
+<%# REPLACE %>
+<script>
+export default {
+  // Replace default script
+}
+</script>
+<%# END_REPLACE %>
+```
+
+### Filename edge cases
+
+If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
+```
+# dotfile templates have to use an underscore instead of the dot:
+
+/generator/template/_env
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+.env
+```
+Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
+```
+# such templates have to use two underscores instead of the dot:
+
+/generator/template/__variables.scss
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+_variables.scss
+```
 
 
 ## Prompts
