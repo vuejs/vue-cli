@@ -460,13 +460,11 @@ On plugin invoke user will be prompted with the question about example routes an
 
 If you want to use the result of the user's choice in generator, it will be accessible with the prompt name. We can add a modification to `generator/index.js`:
 
-```js
-module.exports = (api, options) => {
-  if (options.addExample) {
-    api.render('./template');
+  if (options.addExampleRoutes) {
+    api.render('./template', {
+      ...options
+    });
   }
-}
-```
 
 Now template will be rendered only if user agreed to create example routes.
 
