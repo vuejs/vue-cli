@@ -390,12 +390,85 @@ Consequently, this means that you also have to follow a special naming conventio
 _variables.scss
 ```
 
-
 ## Prompts
+
+Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood
 
 ### Prompts for Built-in Plugins
 
+Only built-in plugins have the ability to customize the initial prompts when creating a new project, and the prompt modules are located [inside the `@vue/cli` package][prompt-modules].
+
+A prompt module should export a function that receives a [PromptModuleAPI][prompt-api] instance.
+
+``` js
+module.exports = api => {
+  // a feature object should be a valid inquirer choice object
+  api.injectFeature({
+    name: 'Some great feature',
+    value: 'my-feature'
+  })
+
+  // injectPrompt expects a valid inquirer prompt object
+  api.injectPrompt({
+    name: 'someFlag',
+    // make sure your prompt only shows up if user has picked your feature
+    when: answers => answers.features.include('my-feature'),
+    message: 'Do you want to turn on flag foo?',
+    type: 'confirm'
+  })
+
+  // when all prompts are done, inject your plugin into the options that
+  // will be passed on to Generators
+  api.onPromptComplete((answers, options) => {
+    if (answers.features.includes('my-feature')) {
+      options.plugins['vue-cli-plugin-my-feature'] = {
+        someFlag: answers.someFlag
+      }
+    }
+  })
+}
+```
+
 ### Prompts for 3rd Party Plugins
+
+When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. The resolved answers object will be passed to the plugin's generator as options.
+
+Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
+
+``` bash
+vue invoke my-plugin --mode awesome
+```
+
+Prompt can have [different types](https://github.com/SBoudrias/Inquirer.js#prompt-types) but the most widely used in CLI are `checkbox` and `confirm`. Let's add a `confirm` prompt and then use it in plugin generator to create a condition for [template rendering](#templating).
+
+```js
+// prompts.js
+
+module.exports = [
+  {
+    name: `addExampleRoutes`,
+    type: 'confirm',
+    message: 'Add example routes?',
+    default: false,
+  }
+]
+```
+
+On plugin invoke user will be prompted with the question about example routes and the default answer will be `No`
+
+![Prompts example](/prompts-example.png)
+
+If you want to use the result of the user's choice in generator, it will be accessible with the prompt name. We can add a modification to `generator/index.js`:
+
+```js
+module.exports = (api, options) => {
+  if (options.addExample) {
+    api.render('./template');
+  }
+}
+```
+
+Now template will be rendered only if user agreed to create example routes.
 
 
 
