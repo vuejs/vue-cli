@@ -54,7 +54,7 @@ file, or the `"vue"` field in `package.json`.
   - Default: `'default'`
 
 - **pwa.assetsVersion**
-  
+
   - Default: `''`
 
     This option is used if you need to add a version to your icons and manifest, against browser’s cache. This will append `?v=<pwa.assetsVersion>` to the URLs of the icons and manifest.
@@ -64,6 +64,20 @@ file, or the `"vue"` field in `package.json`.
   - Default: `'manifest.json'`
 
     The path of app’s manifest.
+
+- **pwa.manifestOptions**
+
+  - Default: `{}`
+
+    The object will be merged into the `manifest.json`
+
+    If the following attributes are not defined in A and B, the settings of C will be used instead.
+    If the following attributes are not defined in the object and the `manifest.json`, the options of `pwa` will be used instead.
+      - name: `pwa.name`
+      - short_name: `pwa.name`
+      - start_url: `'.'`
+      - display: `'standalone'`
+      - theme_color: `pwa.themeColor`
 
 - **pwa.iconPaths**
 

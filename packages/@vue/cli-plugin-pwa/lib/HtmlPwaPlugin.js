@@ -1,3 +1,6 @@
+const fs = require('fs')
+const path = require('path')
+
 const ID = 'vue-cli:pwa-html-plugin'
 
 const defaults = {
@@ -7,7 +10,8 @@ const defaults = {
   appleMobileWebAppCapable: 'no',
   appleMobileWebAppStatusBarStyle: 'default',
   assetsVersion: '',
-  manifestPath: 'manifest.json'
+  manifestPath: 'manifest.json',
+  manifestOptions: {}
 }
 
 const defaultIconPaths = {
@@ -108,6 +112,30 @@ module.exports = class HtmlPwaPlugin {
         )
 
         cb(null, data)
+      })
+    })
+
+    compiler.hooks.afterEmit.tap(ID, () => {
+      const publicPath = compiler.options.output.path
+      const {
+        name,
+        themeColor,
+        manifestPath,
+        manifestOptions
+      } = this.options
+      const outputPath = path.resolve(publicPath, manifestPath)
+
+      fs.readFile(outputPath, (err, data) => {
+        const fileJson = err ? {} : JSON.parse(data.toString())
+        const defaultJson = {
+          name,
+          short_name: name,
+          start_url: '.',
+          display: 'standalone',
+          theme_color: themeColor
+        }
+        const json = Object.assign(defaultJson, fileJson, manifestOptions)
+        fs.writeFileSync(outputPath, JSON.stringify(json))
       })
     })
   }
