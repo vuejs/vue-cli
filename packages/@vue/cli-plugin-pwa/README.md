@@ -69,10 +69,9 @@ file, or the `"vue"` field in `package.json`.
 
   - Default: `{}`
 
-    The object will be merged into the `manifest.json`
+    The object will be used to generate the `manifest.json`
 
-    If the following attributes are not defined in A and B, the settings of C will be used instead.
-    If the following attributes are not defined in the object and the `manifest.json`, the options of `pwa` will be used instead.
+    If the following attributes are not defined in the object, the options of `pwa` or default options will be used instead.
       - name: `pwa.name`
       - short_name: `pwa.name`
       - start_url: `'.'`

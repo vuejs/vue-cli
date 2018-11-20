@@ -1,6 +1,3 @@
-const fs = require('fs')
-const path = require('path')
-
 const ID = 'vue-cli:pwa-html-plugin'
 
 const defaults = {
@@ -12,6 +9,24 @@ const defaults = {
   assetsVersion: '',
   manifestPath: 'manifest.json',
   manifestOptions: {}
+}
+
+const defaultManifest = {
+  icons: [
+    {
+      "src": "./img/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  start_url: '.',
+  display: 'standalone',
+  background_color: "#000000"
 }
 
 const defaultIconPaths = {
@@ -113,30 +128,30 @@ module.exports = class HtmlPwaPlugin {
 
         cb(null, data)
       })
+
+
     })
 
-    compiler.hooks.afterEmit.tap(ID, () => {
-      const publicPath = compiler.options.output.path
+    compiler.hooks.emit.tapAsync(ID, (data, cb) => {
       const {
         name,
         themeColor,
         manifestPath,
         manifestOptions
       } = this.options
-      const outputPath = path.resolve(publicPath, manifestPath)
-
-      fs.readFile(outputPath, (err, data) => {
-        const fileJson = err ? {} : JSON.parse(data.toString())
-        const defaultJson = {
-          name,
-          short_name: name,
-          start_url: '.',
-          display: 'standalone',
-          theme_color: themeColor
-        }
-        const json = Object.assign(defaultJson, fileJson, manifestOptions)
-        fs.writeFileSync(outputPath, JSON.stringify(json))
-      })
+      const publicOptions = {
+        name,
+        short_name: name,
+        theme_color: themeColor
+      }
+      const outputManifest = JSON.stringify(
+        Object.assign(publicOptions, defaultManifest, manifestOptions)
+      )
+      data.assets[manifestPath] = {
+        source: () => outputManifest,
+        size: () => outputManifest.length
+      }
+      cb(null, data)
     })
   }
 }
