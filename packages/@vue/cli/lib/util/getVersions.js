@@ -17,7 +17,7 @@ module.exports = async function getVersions () {
     })
   }
 
-  const { latestVersion, lastChecked } = loadOptions()
+  const { latestVersion = local, lastChecked = 0 } = loadOptions()
   const cached = latestVersion
   const daysPassed = (Date.now() - lastChecked) / (60 * 60 * 1000 * 24)
 
