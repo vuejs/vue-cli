@@ -252,7 +252,48 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+1. Create a `server.js` file in the root of your project
+1. Add post install and start scripts to your `package.json` file
+1. You might need to add `es6-promise` as a dev dependency (`npm install --save-dev es6-promise`)
+
+```
+// server.js
+const express = require('express')
+const path = require('path')
+const serveStatic = require('serve-static')
+
+const app = express()
+app.use(serveStatic(path.join(__dirname, '/dist')))
+
+app.use((req, res, next) => {
+  res.status(404)
+
+  if (req.accepts('html')) {
+    res.sendFile(path.join(__dirname, '/dist/index.html'))
+    return
+  }
+
+  if (req.accepts('json')) {
+    res.send({ error: 'Not found' })
+    return
+  }
+
+  res.type('txt').send('Not found')
+})
+
+var port = process.env.PORT || 80
+app.listen(port)
+
+console.log('Your vue app is being hosted on port ' + port)
+```
+
+```
+// package.json
+...
+    "postinstall": "npm run build",
+    "start": "node server.js"
+...
+```
 
 ### Surge
 
