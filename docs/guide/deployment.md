@@ -135,7 +135,79 @@ Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli
 
 ### Amazon S3
 
-See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
+Make sure you have installed [vue-deploy-s3](https://github.com/sumn2u/vue-deploy-s3) globally:
+
+```bash
+npm install -g vue-deploy-s3
+```
+From the root of your project, initialize `vue-deploy-s3` using the command:
+
+```bash
+vue-deploy-s3 setup
+```
+It will automatically create a `deploy.js` file. Now inside `deploy.js` file put your s3 `BUCKETNAME`, along with `ACCESSKEYID`,`SECERETKEY` and `BUCKETREGION`.
+
+```javascript
+/* eslint-env node */
+'use strict';
+
+module.exports = function(deployTarget) {
+  let ENV = {
+    build: {
+        localDir: 'dist/',
+        deleteRemoved: false,
+        s3Params: {
+          Bucket: BUCKETREGION 
+        },
+    },
+    s3:{
+      accessKeyId: ACCESSKEYID,
+      secretAccessKey: SECERETKEY,
+      region: BUCKETREGION,
+      sslEnabled: true,
+      Bucket:BUCKETNAME
+    }
+    // include other plugin configuration that applies to all deploy targets here
+  };
+
+  if (deployTarget === 'development') {
+    ENV.build.environment = 'development';
+    // configure other plugins for development deploy target here
+  }
+
+  if (deployTarget === 'staging') {
+    ENV.build.environment = 'production';
+    // configure other plugins for staging deploy target here
+  }
+
+  if (deployTarget === 'production') {
+    ENV.build.environment = 'production';
+    // configure other plugins for production deploy target here
+  }
+
+  // Note: if you need to build some configuration asynchronously, you can return
+  // a promise that resolves with the ENV object instead of returning the
+  // ENV object synchronously.
+  return ENV;
+};
+```
+Run `npm run build` to build your project.
+
+You can specify different configuration depending your deployment target.
+
+Now to deploy your using development configuration run
+ 
+`vue-deploy-s3 deploy development`
+
+It will upload your assests to the s3 bucket with uniquely generated file name based on your git commit.
+
+In order to get revision of deployed files use list command.
+
+`vue-deploy-s3 list development`
+
+To activate a specific version use the activate command followed by key.
+
+`vue-deploy-s3 activate 6993120 development`
 
 ### Firebase
 
