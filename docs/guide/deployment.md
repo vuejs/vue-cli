@@ -256,7 +256,7 @@ npm install -g now
 1. Add post install and start scripts to your `package.json` file
 1. You might need to add `es6-promise` as a dev dependency (`npm install --save-dev es6-promise`)
 
-```
+```javascript
 // server.js
 const express = require('express')
 const path = require('path')
@@ -287,11 +287,11 @@ app.listen(port)
 console.log('Your vue app is being hosted on port ' + port)
 ```
 
-```
+```json
 // package.json
 ...
-    "postinstall": "npm run build",
-    "start": "node server.js"
+"postinstall": "npm run build",
+"start": "node server.js"
 ...
 ```
 
