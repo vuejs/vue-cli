@@ -254,6 +254,7 @@ npm install -g now
 
 1. Create a `server.js` file in the root of your project
 1. Add post install and start scripts to your `package.json` file
+1. Install expressjs `npm install --save express`
 1. You might need to add `es6-promise` as a dev dependency (`npm install --save-dev es6-promise`)
 
 ```javascript
