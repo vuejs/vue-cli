@@ -245,6 +245,40 @@ npm install -g now
     ```
 
     This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+    
+
+#### Now v2
+
+With version 2 you need to do some changes [docs here](https://zeit.co/docs/v2/deployments/official-builders/static-build-now-static-build)
+
+Note: there seems to be an issue when cypress or `@vue/cli-plugin-e2e-cypress` is installed even as a dev dependency. More details [here](https://spectrum.chat/zeit/general/deploy-vue-vuex-app~be182837-1312-43a6-a7f7-70580958d1f4)
+
+1. `now.json` file is different for version 2:
+
+```
+{
+  "version": 2,
+  "name": "your-app-name-here",
+  "builds": [
+      { "src": "package.json", "use": "@now/static-build" }
+  ],
+  "routes": [
+    { "src": "^/js/(.*)", "dest": "/js/$1" },
+    { "src": "^/css/(.*)", "dest": "/css/$1" },
+    { "src": "^/img/(.*)", "dest": "/img/$1" },
+    { "src": "/.*", "dest": "/index.html" }
+  ]
+}
+```
+
+2. Add `.nowignore` file to your project root: 
+
+```
+node_modules
+dist
+```
+
+3. You can now add the deployment scripts
 
 ### Stdlib
 
