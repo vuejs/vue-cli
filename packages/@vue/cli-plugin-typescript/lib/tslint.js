@@ -80,7 +80,9 @@ module.exports = function lint (args = {}, api, silent) {
     patchProgram(this.program)
   }
 
-  const config = tslint.Configuration.findConfiguration(api.resolve('tslint.json')).results
+  const tslintConfigPath = api.resolve('tslint.json')
+
+  const config = tslint.Configuration.findConfiguration(tslintConfigPath).results
   // create a patched config that disables the blank lines rule,
   // so that we get correct line numbers in error reports for *.vue files.
   const vueConfig = Object.assign(config)
@@ -107,6 +109,14 @@ module.exports = function lint (args = {}, api, silent) {
   const files = args._ && args._.length
     ? args._
     : ['src/**/*.ts', 'src/**/*.vue', 'src/**/*.tsx', 'tests/**/*.ts', 'tests/**/*.tsx']
+
+  // respect linterOptions.exclude from tslint.json
+  if (config.linterOptions && config.linterOptions.exclude) {
+    // use the raw tslint.json data because config contains absolute paths
+    const rawTslintConfig = JSON.parse(fs.readFileSync(tslintConfigPath, 'utf-8'))
+    const excludedGlobs = rawTslintConfig.linterOptions.exclude
+    excludedGlobs.forEach((g) => files.push('!' + g))
+  }
 
   return globby(files, { cwd }).then(files => {
     files.forEach(lint)

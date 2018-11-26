@@ -22,7 +22,10 @@ async function create (projectName, options) {
   if (!result.validForNewPackages) {
     console.error(chalk.red(`Invalid project name: "${name}"`))
     result.errors && result.errors.forEach(err => {
-      console.error(chalk.red(err))
+      console.error(chalk.red.dim('Error: ' + err))
+    })
+    result.warnings && result.warnings.forEach(warn => {
+      console.error(chalk.red.dim('Warning: ' + warn))
     })
     exit(1)
   }
