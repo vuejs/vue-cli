@@ -118,7 +118,12 @@ const release = async () => {
   }, {})
   fs.writeFileSync(versionMarkerPath, JSON.stringify(versionMarkerPkg, null, 2))
 
+  const tagName = `vue-cli-version-marker@${versionMarkerPkg.version}`
+  await execa('git', ['add', '-A'], { stdio: 'inherit' })
+  await execa('git', ['commit', '-m', `chore: ${tagName}`], { stdio: 'inherit' })
   await execa('npm', ['publish'], { stdio: 'inherit', cwd: path.dirname(versionMarkerPath) })
+  await execa('git', ['tag', tagName], { stdio: 'inherit' })
+  await execa('git', ['push', '--tags'], { stdio: 'inherit' })
 }
 
 release().catch(err => {
