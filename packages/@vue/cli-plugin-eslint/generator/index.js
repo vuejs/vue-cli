@@ -54,7 +54,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   } else if (config === 'prettier') {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^4.0.0'
+      '@vue/eslint-config-prettier': '^4.0.1'
     })
     // prettier & default config do not have any style rules
     // so no need to generate an editorconfig file
@@ -117,7 +117,7 @@ const applyTS = module.exports.applyTS = api => {
       }
     },
     devDependencies: {
-      '@vue/eslint-config-typescript': '^3.1.0'
+      '@vue/eslint-config-typescript': '^3.1.1'
     }
   })
 }
