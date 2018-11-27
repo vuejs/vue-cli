@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-version-marker",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "version marker for @vue/cli",
   "author": "Evan You",
   "license": "MIT",
@@ -12,19 +12,19 @@
     "@vue/cli-plugin-babel": "3.2.0",
     "@vue/cli-plugin-e2e-cypress": "3.2.0",
     "@vue/cli-plugin-e2e-nightwatch": "3.2.0",
-    "@vue/cli-plugin-eslint": "3.2.0",
+    "@vue/cli-plugin-eslint": "3.2.1",
     "@vue/cli-plugin-pwa": "3.2.0",
     "@vue/cli-plugin-typescript": "3.2.0",
     "@vue/cli-plugin-unit-jest": "3.2.0",
     "@vue/cli-plugin-unit-mocha": "3.2.0",
-    "@vue/cli-service-global": "3.2.0",
+    "@vue/cli-service-global": "3.2.1",
     "@vue/cli-service": "3.2.0",
     "@vue/cli-shared-utils": "3.2.0",
     "@vue/cli-test-utils": "3.2.0",
-    "@vue/cli-ui-addon-webpack": "3.2.0",
-    "@vue/cli-ui-addon-widgets": "3.2.0",
-    "@vue/cli-ui": "3.2.0",
+    "@vue/cli-ui-addon-webpack": "3.2.1",
+    "@vue/cli-ui-addon-widgets": "3.2.1",
+    "@vue/cli-ui": "3.2.1",
     "@vue/cli-upgrade": "3.2.0",
-    "@vue/cli": "3.2.0"
+    "@vue/cli": "3.2.1"
   }
 }
