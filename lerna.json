@@ -1,9 +1,9 @@
 {
   "npmClient": "yarn",
-  "useWorkspaces": true,
-  "version": "independent",
+  "useWorkspaces": false,
+  "version": "3.1.5",
   "packages": [
-    "packages/@vue/*",
-    "packages/vue-cli-version-marker"
+    "packages/@vue/babel-preset-app",
+    "packages/@vue/cli*"
   ]
 }
