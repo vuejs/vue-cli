@@ -52,7 +52,7 @@
     "rss-parser": "^3.4.3",
     "semver": "^5.5.0",
     "shortid": "^2.2.11",
-    "vue-cli-plugin-apollo": "^0.17.3",
+    "vue-cli-plugin-apollo": "^0.18.1",
     "watch": "^1.0.2"
   },
   "devDependencies": {
