@@ -18,7 +18,7 @@ A CLI plugin is an npm package that can add additional features to a project usi
 Don't overuse vue-cli plugins! If you want just to include a certain dependency, e.g. [Lodash](https://lodash.com/) - it's easier to do it manually with npm than create a specific plugin only to do so.
 :::
 
-CLI Plugin should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a Generator, a Prompt File and a Vue UI integration.
+CLI Plugin should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a [Generator](#generator), a [Prompt File](#prompts) and a [Vue UI integration](TODO).
 
 As a npm package, CLI plugin must have a `package.json` file. It's also recommended to have a plugin description in `README.md` to help others find your plugin on npm
 
@@ -36,7 +36,7 @@ So, typical CLI plugin folder structure looks like the following:
 
 ## Installing plugin locally
 
-In order to check how your CLI plugin works locally, you need to add it to existing project or create a new one just for testing purposes:
+While working on your plugin, you need to test it and check how it works locally on a project using Vue CLI. You can use an existing project or create a new one just for testing purposes
 
 ```bash
 vue create test-app
