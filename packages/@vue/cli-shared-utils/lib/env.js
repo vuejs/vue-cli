@@ -76,3 +76,8 @@ exports.hasProjectGit = (cwd) => {
   _gitProjects.set(cwd, result)
   return result
 }
+
+// OS
+exports.isWindows = process.platform === 'win32'
+exports.isMacintosh = process.platform === 'darwin'
+exports.isLinux = process.platform === 'linux'

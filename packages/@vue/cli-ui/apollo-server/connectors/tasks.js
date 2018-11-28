@@ -1,6 +1,4 @@
-const util = require('util')
 const execa = require('execa')
-const terminate = util.promisify(require('terminate'))
 const chalk = require('chalk')
 // Subs
 const channels = require('../channels')
@@ -15,6 +13,7 @@ const projects = require('./projects')
 // Utils
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
+const { terminate } = require('../util/terminate')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -468,14 +467,21 @@ async function stop (id, context) {
   if (task && task.status === 'running' && task.child) {
     task._terminating = true
     try {
-      await terminate(task.child.pid)
+      const { success, error } = await terminate(task.child, cwd.get())
+      if (success) {
+        updateOne({
+          id: task.id,
+          status: 'terminated'
+        }, context)
+      } else if (error) {
+        throw error
+      } else {
+        throw new Error('Unknown error')
+      }
     } catch (e) {
+      console.log(chalk.red(`Can't terminate process ${task.child.pid}`))
       console.error(e)
     }
-    updateOne({
-      id: task.id,
-      status: 'terminated'
-    }, context)
   }
   return task
 }

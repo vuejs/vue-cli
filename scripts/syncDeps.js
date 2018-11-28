@@ -1,3 +1,4 @@
+/* eslint-disable */
 // make sure generators are using the latest version of plugins,
 // and plugins are using the latest version of deps
 
@@ -147,43 +148,43 @@ async function syncDeps ({ local, version, skipPrompt }) {
     }
   }
 
-  console.log('Syncing local deps...')
-  const updatedRE = new RegExp(`'(${Array.from(updatedDeps).join('|')})': '\\^(\\d+\\.\\d+\\.\\d+[^']*)'`)
-  const paths = await globby(['packages/@vue/**/*.js'])
-  paths
-    .filter(p => !/\/files\//.test(p) && !/\/node_modules/.test(p))
-    .forEach(filePath => {
-      let isUpdated = false
-      const makeReplacer = versionGetter => (_, pkg, curVersion) => {
-        const targetVersion = versionGetter(pkg)
-        if (!targetVersion) return _
-        if (checkUpdate(pkg, filePath, curVersion, targetVersion)) {
-          isUpdated = true
-        }
-        return `'${pkg}': '^${targetVersion}'`
-      }
+  // console.log('Syncing local deps...')
+  // const updatedRE = new RegExp(`'(${Array.from(updatedDeps).join('|')})': '\\^(\\d+\\.\\d+\\.\\d+[^']*)'`)
+  // const paths = await globby(['packages/@vue/**/*.js'])
+  // paths
+  //   .filter(p => !/\/files\//.test(p) && !/\/node_modules/.test(p))
+  //   .forEach(filePath => {
+  //     let isUpdated = false
+  //     const makeReplacer = versionGetter => (_, pkg, curVersion) => {
+  //       const targetVersion = versionGetter(pkg)
+  //       if (!targetVersion) return _
+  //       if (checkUpdate(pkg, filePath, curVersion, targetVersion)) {
+  //         isUpdated = true
+  //       }
+  //       return `'${pkg}': '^${targetVersion}'`
+  //     }
 
-      const localReplacer = makeReplacer(
-        pkg => {
-          try {
-            // inline version takes priority
-            return version || require(`../packages/${pkg}/package.json`).version
-          } catch (e) {}
-        }
-      )
+  //     const localReplacer = makeReplacer(
+  //       pkg => {
+  //         try {
+  //           // inline version takes priority
+  //           return version || require(`../packages/${pkg}/package.json`).version
+  //         } catch (e) {}
+  //       }
+  //     )
 
-      const remoteReplacer = makeReplacer(getRemoteVersionSync)
+  //     const remoteReplacer = makeReplacer(getRemoteVersionSync)
 
-      const updated = fs.readFileSync(filePath, 'utf-8')
-        // update @vue packages in this repo
-        .replace(localPackageRE, localReplacer)
-        // also update vue, vue-template-compiler, vuex, vue-router
-        .replace(updatedRE, remoteReplacer)
+  //     const updated = fs.readFileSync(filePath, 'utf-8')
+  //       // update @vue packages in this repo
+  //       .replace(localPackageRE, localReplacer)
+  //       // also update vue, vue-template-compiler, vuex, vue-router
+  //       .replace(updatedRE, remoteReplacer)
 
-      if (isUpdated) {
-        bufferWrite(filePath, updated)
-      }
-    })
+  //     if (isUpdated) {
+  //       bufferWrite(filePath, updated)
+  //     }
+  //   })
 
   if (!Object.keys(writeCache).length) {
     return console.log(`All packages up-to-date.`)
