@@ -6,7 +6,19 @@ sidebarDepth: 3
 
 ## Getting started
 
-A CLI plugin is an npm package that can add additional features to a `@vue/cli` project. It should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a Generator, a Prompt File and a Vue UI integration.
+A CLI plugin is an npm package that can add additional features to a project using Vue CLI. These features can include:
+
+- changing project webpack config - for example, you can add a new webpack resolve rule for a certain file extension, if your plugin is supposed to work with this type of files. Say, `@vue/cli-plugin-typescript` adds such rule to resolve `.ts` and `.tsx` extensions;
+- adding new vue-cli-service command - for example, `@vue/cli-plugin-unit-jest` adds a new command `test:unit` that allows developer to run unit tests;
+- extending `package.json` - a useful option when your plugin adds some dependencies to the project and you need to add them to package dependencies section;
+- creating new files in the project and/or modifying old ones. Sometimes it's a good idea to create an example component or modify a main file to add some imports;
+- prompting user to select certain options - for example, you can ask user if they want to create the example component mentioned above.
+
+:::tip
+Don't overuse vue-cli plugins! If you want just to include a certain dependency, e.g. [Lodash](https://lodash.com/) - it's easier to do it manually with npm than create a specific plugin only to do so.
+:::
+
+CLI Plugin should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a Generator, a Prompt File and a Vue UI integration.
 
 As a npm package, CLI plugin must have a `package.json` file. It's also recommended to have a plugin description in `README.md` to help others find your plugin on npm
 
