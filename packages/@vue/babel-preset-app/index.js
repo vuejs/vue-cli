@@ -52,6 +52,7 @@ module.exports = (context, options = {}) => {
     exclude,
     shippedProposals,
     forceAllTransforms,
+    decoratorsBeforeExport,
     decoratorsLegacy
   } = options
 
@@ -131,7 +132,10 @@ module.exports = (context, options = {}) => {
   // too many unstable proposals. Let's be conservative in the defaults here.
   plugins.push(
     require('@babel/plugin-syntax-dynamic-import'),
-    [require('@babel/plugin-proposal-decorators'), { legacy: decoratorsLegacy !== false }],
+    [require('@babel/plugin-proposal-decorators'), {
+      decoratorsBeforeExport,
+      legacy: decoratorsLegacy !== false
+    }],
     [require('@babel/plugin-proposal-class-properties'), { loose }],
   )
 

@@ -3,6 +3,7 @@ const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
 const inquirer = require('inquirer')
+const semver = require('semver')
 const EventEmitter = require('events')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
@@ -105,6 +106,7 @@ module.exports = class Creator extends EventEmitter {
 
     // get latest CLI version
     const { latest } = await getVersions()
+    const latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
     // generate package.json with plugin dependencies
     const pkg = {
       name,
@@ -117,9 +119,13 @@ module.exports = class Creator extends EventEmitter {
       if (preset.plugins[dep]._isPreset) {
         return
       }
+
+      // Note: the default creator includes no more than `@vue/cli-*` & `@vue/babel-preset-env`,
+      // so it is fine to only test `@vue` prefix.
+      // Other `@vue/*` packages' version may not be in sync with the cli itself.
       pkg.devDependencies[dep] = (
         preset.plugins[dep].version ||
-        ((/^@vue/.test(dep) && latest[dep]) ? `^${latest[dep]}` : `latest`)
+        ((/^@vue/.test(dep)) ? `^${latestMinor}` : `latest`)
       )
     })
     // write package.json

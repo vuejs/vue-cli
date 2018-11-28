@@ -117,7 +117,7 @@ const applyTS = module.exports.applyTS = api => {
       }
     },
     devDependencies: {
-      '@vue/eslint-config-typescript': '^3.1.0'
+      '@vue/eslint-config-typescript': '^3.2.0'
     }
   })
 }

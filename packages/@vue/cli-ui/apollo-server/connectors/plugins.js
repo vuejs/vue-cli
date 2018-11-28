@@ -453,7 +453,7 @@ function runInvoke (id, context) {
     installationStep = 'diff'
 
     notify({
-      title: `Plugin invoke sucess`,
+      title: `Plugin invoked successfully`,
       message: `Plugin ${id} invoked successfully`,
       icon: 'done'
     })

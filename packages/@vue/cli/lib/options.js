@@ -19,6 +19,8 @@ const presetSchema = createSchema(joi => joi.object().keys({
 }))
 
 const schema = createSchema(joi => joi.object().keys({
+  latestVersion: joi.string().regex(/^\d+\.\d+\.\d+$/),
+  lastChecked: joi.date().timestamp(),
   packageManager: joi.string().only(['yarn', 'npm']),
   useTaobaoRegistry: joi.boolean(),
   presets: joi.object().pattern(/^/, presetSchema)
