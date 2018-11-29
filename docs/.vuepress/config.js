@@ -106,14 +106,6 @@ module.exports = {
           '/dev-guide/': [
             '/dev-guide/plugin-dev.md',
             {
-              title: 'API reference',
-              collapsable: false,
-              children: [
-                '/dev-guide/plugin-api.md',
-                '/dev-guide/generator-api.md',
-              ]
-            },
-            {
               title: 'UI Development',
               collapsable: false,
               children: [
