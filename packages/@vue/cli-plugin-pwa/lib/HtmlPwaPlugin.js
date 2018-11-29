@@ -42,6 +42,7 @@ module.exports = class HtmlPwaPlugin {
           appleMobileWebAppStatusBarStyle,
           assetsVersion,
           manifestPath,
+          manifestCrossOrigin,
           iconPaths
         } = this.options
         const { publicPath } = compiler.options.output
@@ -64,10 +65,10 @@ module.exports = class HtmlPwaPlugin {
           }),
 
           // Add to home screen for Android and modern mobile browsers
-          makeTag('link', {
+          makeTag('link', Object.assign({
             rel: 'manifest',
             href: `${publicPath}${manifestPath}${assetsVersionStr}`
-          }),
+          }, manifestCrossOrigin ? { crossorigin: manifestCrossOrigin } : {})),
           makeTag('meta', {
             name: 'theme-color',
             content: themeColor
