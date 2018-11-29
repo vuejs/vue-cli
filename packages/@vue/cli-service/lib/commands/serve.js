@@ -68,9 +68,10 @@ module.exports = (api, options) => {
     // entry arg
     const entry = args._[0]
     if (entry) {
-      webpackConfig.entry = {
+      // #3031
+      webpackConfig.entry = Object.assign(webpackConfig.entry, {
         app: api.resolve(entry)
-      }
+      })
     }
 
     // resolve server options
