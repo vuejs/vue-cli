@@ -45,11 +45,13 @@
   "devDependencies": {
     "@vue/conventional-changelog": "^0.1.1",
     "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
     "conventional-changelog": "^1.1.24",
     "debug": "^3.1.0",
     "eslint": "^5.0.0",
     "eslint-plugin-graphql": "^2.1.1",
     "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-vue": "^5.0.0-0",
     "eslint-plugin-vue-libs": "^2.1.0",
     "execa": "^1.0.0",
     "globby": "^8.0.1",
@@ -77,8 +79,5 @@
     "vue": "2.5.17",
     "vue-template-compiler": "2.5.17",
     "vue-server-renderer": "2.5.17"
-  },
-  "dependencies": {
-    "babel-eslint": "^10.0.1"
   }
 }
