@@ -4,190 +4,78 @@ sidebarDepth: 3
 
 # Plugin Development Guide
 
-## Getting started
+## Core Concepts
 
-A CLI plugin is an npm package that can add additional features to a `@vue/cli` project. It should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a Generator, a Prompt File and a Vue UI integration.
+There are two major parts of the system:
 
-As a npm package, CLI plugin must have a `package.json` file. It's also recommended to have a plugin description in `README.md` to help others find your plugin on npm
+- `@vue/cli`: globally installed, exposes the `vue create <app>` command;
+- `@vue/cli-service`: locally installed, exposes the `vue-cli-service` commands.
 
-So, typical CLI plugin folder structure looks like the following:
+Both utilize a plugin-based architecture.
+
+### Creator
+
+[Creator][creator-class] is the class created when invoking `vue create <app>`. Responsible for prompting for preferences, invoking generators and installing dependencies.
+
+### Service
+
+[Service][service-class] is the class created when invoking `vue-cli-service <command> [...args]`. Responsible for managing the internal webpack configuration, and exposes commands for serving and building the project.
+
+### CLI Plugin
+
+A CLI plugin is an npm package that can add additional features to a `@vue/cli` project. It should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a [Generator](#generator) and a [Prompt File](#prompts-for-3rd-party-plugins).
+
+A typical CLI plugin's folder structure looks like the following:
 
 ```
 .
 ├── README.md
 ├── generator.js  # generator (optional)
-├── index.js      # service plugin
-├── package.json
 ├── prompts.js    # prompts file (optional)
-└── ui.js         # Vue UI integration (optional)
+├── index.js      # service plugin
+└── package.json
 ```
 
-## Installing plugin locally
+### Service Plugin
 
-In order to check how your CLI plugin works locally, you need to add it to existing project or create a new one just for testing purposes:
+Service plugins are loaded automatically when a Service instance is created - i.e. every time the `vue-cli-service` command is invoked inside a project.
 
-```bash
-vue create test-app
-```
+Note the concept of a "service plugin" we are discussing here is narrower than that of a "CLI plugin", which is published as an npm package. The former only refers to a module that will be loaded by `@vue/cli-service` when it's initialized, and is usually a part of the latter.
 
-To add the plugin, run the following command in the root folder of the project:
-
-```bash
-cd test-app
-npm install --save-dev file:/full/path/to/your/plugin
-vue invoke <your-plugin-name>
-```
-
-You need to repeat these steps every time you make changes to your plugin.
-
-Another way to add a plugin is to leverage the power of Vue UI. You can run it with
-
-```bash
-vue ui
-```
-
-You will have a UI open in browser window on `localhost:8000`. Go to the `Vue Project Manager` tab:
-
-![Vue Project Manager](/ui-project-manager.png)
-
-And look for your test project name there
-
-![UI Plugins List](/ui-select-plugin.png)
-
-Click on your application name, go to the Plugins tab (it has a puzzle icon) and then click the `Add new plugin` button on the top right. In the new view you will see a list of Vue CLI plugins accessible via npm. There is also a `Browse local plugin` button on the bottom of the page
-
-![Browse local plugins](/ui-browse-local-plugin.png)
-
-After you click it, you can easily search for you plugin and add it to the project. After this you will be able to see it in plugins list and apply all changes done to the plugin via simply clicking on `Refresh` icon
-
-![Refresh plugin](/ui-plugin-refresh.png)
-
-
-## Service Plugin
-
-Service plugins are loaded automatically when a Service instance is created - i.e. every time the `vue-cli-service` command is invoked inside a project. It's located in the `index.js` file in CLI plugin root folder.
+In addition, `@vue/cli-service`'s [built-in commands][commands] and [config modules][config] are also all implemented as service plugins.
 
 A service plugin should export a function which receives two arguments:
 
-- A [PluginAPI](plugin-api.md) instance
+- A [PluginAPI][plugin-api] instance
 
 - An object containing project local options specified in `vue.config.js`, or in the `"vue"` field in `package.json`.
 
-The minimal required code in the service plugin file is the following:
+The API allows service plugins to extend/modify the internal webpack config for different environments and inject additional commands to `vue-cli-service`. Example:
 
-```js
-module.exports = () => {}
-```
-
-### Modifying webpack config
-
-The API allows service plugins to extend/modify the internal webpack config for different environments. For example, here we're modifying webpack config with webpack-chain to include `vue-auto-routing` webpack plugin:
-
-```js
-const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
-
-module.exports = (api, options) => {
+``` js
+module.exports = (api, projectOptions) => {
   api.chainWebpack(webpackConfig => {
-    webpackConfig
-      .plugin('vue-auto-routing')
-        .use(VueAutoRoutingPlugin, [
-          {
-            pages: 'src/pages',
-            nested: true
-          }
-        ])
+    // modify webpack config with webpack-chain
+  })
+
+  api.configureWebpack(webpackConfig => {
+    // modify webpack config
+    // or return object to be merged with webpack-merge
+  })
+
+  api.registerCommand('test', args => {
+    // register `vue-cli-service test`
   })
 }
 ```
 
-You can also use `configureWebpack` method to modify the  webpack config or return object to be merged with webpack-merge.
+#### Specifying Mode for Commands
 
-### Add a new cli-service command
+> Note: the way plugins set modes has been changed in beta.10.
 
-With a service plugin you can register a new cli-service command in addition to standard ones (i.e. `serve` and `build`). You can do it with a `registerCommand` API method.
-
-Here is an example of creating a simple new command that will print a greeting to developer console:
-
-```js
-  api.registerCommand(
-    'greet',
-    {
-      description: 'Writes a greeting to the console',
-      usage: 'vue-cli-service greet'
-    },
-    () => {
-      console.log(`👋  Hello`)
-    }
-  )
-```
-
-In this example we provided the command name (`'greet`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
-
-:::tip
-You can add new command to the list of project npm scripts inside the `package.json` file [via Generator](#extending-package).
-:::
-
-If you try to run new command in the project with your plugin installed, you will see the folowing output:
-
-```bash
-$ vue-cli-service greet
-👋 Hello!
-```
-
-You can also specify a list of available options for a new command. Let's add the option `--name` and change the function to print this name if it's provided.
-
-```js
-  const OPTIONS = {
-    '--name': 'specifies a name for greeting'
-  };
-
-  api.registerCommand(
-    'greet',
-    {
-      description: 'Writes a greeting to the console',
-      usage: 'vue-cli-service greet [options]',
-      options: OPTIONS
-    },
-    args => {
-      if (args.name) {
-        console.log(`👋 Hello, ${args.name}!`);
-      } else {
-        console.log(`👋 Hello!`);
-      }
-    }
-  );
-```
-
-Now, if you a `greet` command with a specified `--name` option, this name will be added to console message:
-
-```bash
-$ vue-cli-service greet --name 'John Doe'
-👋 Hello, John Doe!
-```
-
-### Modifying existing cli-service command
-
-If you want to modify an existing cli-service command, you can retrieve it with `api.service.commands` and add some changes. We're going to print a message to the console with a port where application is running:
-
-```js
-  const { serve } = api.service.commands
-
-  const serveFn = serve.fn
-
-  serve.fn = (...args) => {
-    return serveFn(...args).then(res => {
-      if (res && res.url) {
-        console.log(`Project is running now at ${res.url}`)
-      }
-    })
-  }
-```
-
-In the example above we retrieve the `serve` command from the list of existing commands; then we modify its `fn` part (`fn` is the third parameter passed when you create a new command; it specifies the function to run when running the command). With the modification done the console mesage will be printed after `serve` command has run successfully.
-
-### Specifying Mode for Commands
-
-If a plugin-registered command needs to run in a specific default mode, the plugin needs to expose it via `module.exports.defaultModes` in the form of `{ [commandName]: mode }`:
+If a plugin-registered command needs to run in a specific default mode,
+the plugin needs to expose it via `module.exports.defaultModes` in the form
+of `{ [commandName]: mode }`:
 
 ``` js
 module.exports = api => {
@@ -203,7 +91,55 @@ module.exports.defaultModes = {
 
 This is because the command's expected mode needs to be known before loading environment variables, which in turn needs to happen before loading user options / applying the plugins.
 
-## Generator
+#### Resolving Webpack Config in Plugins
+
+A plugin can retrieve the resolved webpack config by calling `api.resolveWebpackConfig()`. Every call generates a fresh webpack config which can be further mutated as needed:
+
+``` js
+module.exports = api => {
+  api.registerCommand('my-build', args => {
+    const configA = api.resolveWebpackConfig()
+    const configB = api.resolveWebpackConfig()
+
+    // mutate configA and configB for different purposes...
+  })
+}
+
+// make sure to specify the default mode for correct env variables
+module.exports.defaultModes = {
+  'my-build': 'production'
+}
+```
+
+Alternatively, a plugin can also obtain a fresh [chainable config](https://github.com/mozilla-neutrino/webpack-chain) by calling `api.resolveChainableWebpackConfig()`:
+
+``` js
+api.registerCommand('my-build', args => {
+  const configA = api.resolveChainableWebpackConfig()
+  const configB = api.resolveChainableWebpackConfig()
+
+  // chain-modify configA and configB for different purposes...
+
+  const finalConfigA = configA.toConfig()
+  const finalConfigB = configB.toConfig()
+})
+```
+
+#### Custom Options for 3rd Party Plugins
+
+The exports from `vue.config.js` will be [validated against a schema](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/options.js#L3) to avoid typos and wrong config values. However, a 3rd party plugin can still allow the user to configure its behavior via the `pluginOptions` field. For example, with the following `vue.config.js`:
+
+``` js
+module.exports = {
+  pluginOptions: {
+    foo: { /* ... */ }
+  }
+}
+```
+
+The 3rd party plugin can read `projectOptions.pluginOptions.foo` to determine conditional configurations.
+
+### Generator
 
 A CLI plugin published as a package can contain a `generator.js` or `generator/index.js` file. The generator inside a plugin will be invoked in two possible scenarios:
 
@@ -211,7 +147,7 @@ A CLI plugin published as a package can contain a `generator.js` or `generator/i
 
 - When the plugin is installed after project's creation and invoked individually via `vue invoke`.
 
-The [GeneratorAPI](generator-api.md) allows a generator to inject additional dependencies or fields into `package.json` and add files to the project.
+The [GeneratorAPI][generator-api] allows a generator to inject additional dependencies or fields into `package.json` and add files to the project.
 
 A generator should export a function which receives three arguments:
 
@@ -219,105 +155,182 @@ A generator should export a function which receives three arguments:
 
 2. The generator options for this plugin. These options are resolved during the prompt phase of project creation, or loaded from a saved preset in `~/.vuerc`. For example, if the saved `~/.vuerc` looks like this:
 
-``` json
-{
-  "presets" : {
-    "foo": {
-      "plugins": {
-        "@vue/cli-plugin-foo": { "option": "bar" }
+    ``` json
+    {
+      "presets" : {
+        "foo": {
+          "plugins": {
+            "@vue/cli-plugin-foo": { "option": "bar" }
+          }
+        }
       }
     }
+    ```
+
+    And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
+
+    For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd Party Plugins](#prompts-for-3rd-party-plugins)).
+
+3. The entire preset (`presets.foo`) will be passed as the third argument.
+
+**Example:**
+
+``` js
+module.exports = (api, options, rootOptions) => {
+  // modify package.json fields
+  api.extendPackage({
+    scripts: {
+      test: 'vue-cli-service test'
+    }
+  })
+
+  // copy and render all files in ./template with ejs
+  api.render('./template')
+
+  if (options.foo) {
+    // conditionally generate files
   }
 }
 ```
 
-And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
+#### Generator Templating
 
-For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd party plugins](#prompts-for-3rd-party-plugins)).
+When you call `api.render('./template')`, the generator will render files in `./template` (resolved relative to the generator file) with [EJS](https://github.com/mde/ejs).
 
-3. The entire preset (`presets.foo`) will be passed as the third argument.
+In addition, you can inherit and replace parts of an existing template file (even from another package) using YAML front-matter:
 
-### Extending package
+``` ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace: !!js/regexp /<script>[^]*?<\/script>/
+---
 
-If you need to add an additional dependency to the project, create a new npm script or modify `package.json` somehow else, you can use API `extendPackage` method:
+<script>
+export default {
+  // Replace default script
+}
+</script>
+```
 
-```js
-// generator.js
+It's also possible to do multiple replaces, although you will need to wrap your replace strings within `<%# REPLACE %>` and `<%# END_REPLACE %>` blocks:
 
+``` ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace:
+  - !!js/regexp /Welcome to Your Vue\.js App/
+  - !!js/regexp /<script>[^]*?<\/script>/
+---
+
+<%# REPLACE %>
+Replace Welcome Message
+<%# END_REPLACE %>
+
+<%# REPLACE %>
+<script>
+export default {
+  // Replace default script
+}
+</script>
+<%# END_REPLACE %>
+```
+
+#### Filename edge cases
+
+If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
+```
+# dotfile templates have to use an underscore instead of the dot:
+
+/generator/template/_env
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+.env
+```
+Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
+```
+# such templates have to use two underscores instead of the dot:
+
+/generator/template/__variables.scss
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+_variables.scss
+```
+
+
+### Prompts
+
+#### Prompts for Built-in Plugins
+
+Only built-in plugins have the ability to customize the initial prompts when creating a new project, and the prompt modules are located [inside the `@vue/cli` package][prompt-modules].
+
+A prompt module should export a function that receives a [PromptModuleAPI][prompt-api] instance. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood:
+
+``` js
 module.exports = api => {
-  api.extendPackage({
-    dependencies: {
-      'vue-router-layout': '^0.1.2'
-    },
-    devDependencies: {
-      'vue-auto-routing': '^0.3.0'
-    },
-    scripts: {
-      greet: 'vue-cli-service greet'
+  // a feature object should be a valid inquirer choice object
+  api.injectFeature({
+    name: 'Some great feature',
+    value: 'my-feature'
+  })
+
+  // injectPrompt expects a valid inquirer prompt object
+  api.injectPrompt({
+    name: 'someFlag',
+    // make sure your prompt only shows up if user has picked your feature
+    when: answers => answers.features.include('my-feature'),
+    message: 'Do you want to turn on flag foo?',
+    type: 'confirm'
+  })
+
+  // when all prompts are done, inject your plugin into the options that
+  // will be passed on to Generators
+  api.onPromptComplete((answers, options) => {
+    if (answers.features.includes('my-feature')) {
+      options.plugins['vue-cli-plugin-my-feature'] = {
+        someFlag: answers.someFlag
+      }
     }
-  });
+  })
+}
 ```
 
-In the example above we added one dependency, one dev dependency and the `greet` npm script to execute a [new vue-cli service command](#add-a-new-cli-service-command)
+#### Prompts for 3rd Party Plugins
 
-### Changing main file
+3rd party plugins are typically installed manually after a project is already created, and the user will initialize the plugin by calling `vue invoke`. If the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. The resolved answers object will be passed to the plugin's generator as options.
 
-With generator `onCreateComplete` hook you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc. To do so, let's first create a new content string you plan to add:
+Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 
-```js
-const newLines = `\nimport VueRx from 'vue-rx';\n\nVue.use(VueRx);`;
+``` bash
+vue invoke my-plugin --mode awesome
 ```
 
-Then in `onCreateComplete` hook you need to define if you have `main.js` or `main.ts` file (the latter is the case for projects using TypeScript):
+## Distributing the Plugin
 
-```js
-module.exports = (api, options, rootOptions) => {
-  const rxLines = `\nimport VueRx from 'vue-rx';\n\nVue.use(VueRx);`;
+For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
 
-  api.onCreateComplete(() => {
+- Discoverable by `@vue/cli-service`;
+- Discoverable by other developers via searching;
+- Installable via `vue add <name>` or `vue invoke <name>`.
 
-    // checking if project uses TypeScript
-    const fs = require('fs');
-    const ext = api.hasPlugin('typescript') ? 'ts' : 'js';
-    const mainPath = api.resolve(`./src/main.${ext}`);
-  });
-};
-```
+## Note on Development of Core Plugins
 
-Then you need to read file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
-
-```js
-  let contentMain = fs.readFileSync(mainPath, { encoding: 'utf-8' });
-  const lines = contentMain.split(/\r?\n/g).reverse();
-```
-
-:::tip
-We need `reverse` because in the next step we will look for the last line of imports and it's easy to find if we reverse the lines order and then check for the first import occurrence
+::: tip Note
+This section only applies if you are working on a built-in plugin inside the `vuejs/vue-cli` repository itself.
 :::
 
-Now you need to find the last import (first one with the reverted lines) and add our `newLines` to it
+A plugin with a generator that injects additional dependencies other than packages in this repo (e.g. `chai` is injected by `@vue/cli-plugin-unit-mocha/generator/index.js`) should have those dependencies listed in its own `devDependencies` field. This ensures that:
 
-```js
-  const lastImportIndex = lines.findIndex(line => line.match(/^import/));
-  lines[lastImportIndex] += newLines;
-```
+1. the package always exist in this repo's root `node_modules` so that we don't have to reinstall them on every test.
 
-Finally, you need to reverse lines order back, join them and write the content to the main file:
+2. `yarn.lock` stays consistent so that CI can better use it for inferring caching behavior.
 
-```js
-  contentMain = lines.reverse().join('\n');
-  fs.writeFileSync(mainPath, contentMain, { encoding: 'utf-8' });
-```
-
-### Templating
-
-
-## Prompts
-
-### Prompts for Built-in Plugins
-
-### Prompts for 3rd Party Plugins
-
-
-
-
+[creator-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/Creator.js
+[service-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/Service.js
+[generator-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/GeneratorAPI.js
+[commands]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/commands
+[config]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/config
+[plugin-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/PluginAPI.js
+[prompt-modules]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/promptModules
+[prompt-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/PromptModuleAPI.js
