@@ -9,14 +9,9 @@ module.exports = cli => {
   })
 
   cli.onPromptComplete((answers, options) => {
-    if (answers.features.includes('ts')) {
-      if (!answers.useTsWithBabel) {
-        return
-      }
-    } else {
-      if (!answers.features.includes('babel')) {
-        return
-      }
+    const tsWithoutBabel = answers.features.includes('ts') && !answers.useTsWithBabel
+    if (tsWithoutBabel || !answers.features.includes('babel')) {
+      return
     }
     options.plugins['@vue/cli-plugin-babel'] = {}
   })
