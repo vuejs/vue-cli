@@ -103,7 +103,7 @@ const release = async () => {
   }
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 
-  // require('./genChangelog')(version)
+  require('./genChangelog')(version)
 
   const packages = JSON.parse(
     (await execa(require.resolve('lerna/cli'), ['list', '--json'])).stdout
@@ -121,9 +121,16 @@ const release = async () => {
   const tagName = `vue-cli-version-marker@${versionMarkerPkg.version}`
   await execa('git', ['add', '-A'], { stdio: 'inherit' })
   await execa('git', ['commit', '-m', `chore: ${tagName}`], { stdio: 'inherit' })
-  // await execa('npm', ['publish'], { stdio: 'inherit', cwd: path.dirname(versionMarkerPath) })
-  // await execa('git', ['tag', tagName], { stdio: 'inherit' })
-  // await execa('git', ['push', '--tags'], { stdio: 'inherit' })
+
+  // Must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
+  await execa(
+    'npm',
+    ['publish', '--registry', 'https://registry.npmjs.org/'],
+    { stdio: 'inherit', cwd: path.dirname(versionMarkerPath) }
+  )
+
+  await execa('git', ['tag', tagName], { stdio: 'inherit' })
+  await execa('git', ['push', '--tags'], { stdio: 'inherit' })
 }
 
 release().catch(err => {
