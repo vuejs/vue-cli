@@ -24,9 +24,11 @@
   "dependencies": {
     "@vue/cli-shared-utils": "^3.2.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^4.19.1",
     "eslint-loader": "^2.1.1",
-    "eslint-plugin-vue": "^4.7.1",
     "globby": "^8.0.1"
+  },
+  "optionalDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-plugin-vue": "^4.7.1"
   }
 }
