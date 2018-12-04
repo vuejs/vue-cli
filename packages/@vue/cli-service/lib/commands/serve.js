@@ -1,4 +1,5 @@
 const {
+  warn,
   info,
   hasProjectYarn,
   openBrowser,
@@ -68,6 +69,11 @@ module.exports = (api, options) => {
     // entry arg
     const entry = args._[0]
     if (entry) {
+      if (webpackConfig.entry.length > 1 || webpackConfig.entry[0] !== 'app') {
+        // #3031
+        warn(`'vue-cli-service serve [entry]' may be not compatible with
+        'pages' of 'vue.config.js' in multi-page mode, avoid using them.`)
+      }
       webpackConfig.entry = {
         app: api.resolve(entry)
       }
