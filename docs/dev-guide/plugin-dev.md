@@ -20,7 +20,7 @@ Don't overuse vue-cli plugins! If you want just to include a certain dependency,
 
 CLI Plugin should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a [Generator](#generator), a [Prompt File](#prompts) and a [Vue UI integration](TODO).
 
-As a npm package, CLI plugin must have a `package.json` file. It's also recommended to have a plugin description in `README.md` to help others find your plugin on npm
+As an npm package, CLI plugin must have a `package.json` file. It's also recommended to have a plugin description in `README.md` to help others find your plugin on npm.
 
 So, typical CLI plugin folder structure looks like the following:
 
