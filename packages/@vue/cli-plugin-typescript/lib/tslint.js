@@ -61,8 +61,8 @@ module.exports = function lint (args = {}, api, silent) {
     const getSourceFile = program.getSourceFile
     program.getSourceFile = function (file, languageVersion, onError) {
       if (isVueFile(file)) {
-        const { content, lang } = parseTSFromVueFile(file) || { content: '', lang: ts.ScriptKind.Unknown }
-        const contentLang = ts.ScriptKind[lang.toUpperCase()] || ts.ScriptKind.Unknown;
+        const { content, lang } = parseTSFromVueFile(file) || { content: '', lang: ts.ScriptKind.JS }
+        const contentLang = ts.ScriptKind[lang.toUpperCase()] || ts.ScriptKind.JS;
         return ts.createSourceFile(file, content, languageVersion, true, contentLang)
       } else {
         return getSourceFile.call(this, file, languageVersion, onError)
