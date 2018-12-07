@@ -49,7 +49,7 @@ module.exports = function lint (args = {}, api, silent) {
         before: content.slice(0, script.start),
         after: content.slice(script.end)
       })
-      return script.content
+      return script
     }
   }
 
@@ -61,8 +61,8 @@ module.exports = function lint (args = {}, api, silent) {
     const getSourceFile = program.getSourceFile
     program.getSourceFile = function (file, languageVersion, onError) {
       if (isVueFile(file)) {
-        const script = parseTSFromVueFile(file) || ''
-        return ts.createSourceFile(file, script, languageVersion, true)
+        const { content, lang } = parseTSFromVueFile(file) || { content: '', lang: ts.ScriptKind.Unknown }
+        return ts.createSourceFile(file, content, languageVersion, true, ts.ScriptKind[lang.toUpperCase()])
       } else {
         return getSourceFile.call(this, file, languageVersion, onError)
       }
