@@ -68,79 +68,7 @@ For a 3rd party plugin, the options will be resolved from the prompts or command
 
 3. The entire preset (`presets.foo`) will be passed as the third argument.
 
-### Extending package
-
-If you need to add an additional dependency to the project, create a new npm script or modify `package.json` somehow else, you can use API `extendPackage` method.
-
-```js
-// generator/index.js
-
-module.exports = api => {
-  api.extendPackage({
-    dependencies: {
-      'vue-router-layout': '^0.1.2'
-    },
-    devDependencies: {
-      'vue-auto-routing': '^0.3.0'
-    },
-    scripts: {
-      greet: 'vue-cli-service greet'
-    }
-  });
-```
-
-In the example above we added one dependency, one dev dependency and the `greet` npm script to execute a [new vue-cli service command](#add-a-new-cli-service-command)
-
-### Changing main file
-
-With generator `onCreateComplete` hook you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc. To do so, let's first create a new content string you plan to add:
-
-```js
-const newLines = `\nimport VueRx from 'vue-rx';\n\nVue.use(VueRx);`;
-```
-
-Then in `onCreateComplete` hook you need to define if you have `main.js` or `main.ts` file (the latter is the case for projects using TypeScript):
-
-```js
-module.exports = (api, options, rootOptions) => {
-  const rxLines = `\nimport VueRx from 'vue-rx';\n\nVue.use(VueRx);`;
-
-  api.onCreateComplete(() => {
-
-    // checking if project uses TypeScript
-    const fs = require('fs');
-    const ext = api.hasPlugin('typescript') ? 'ts' : 'js';
-    const mainPath = api.resolve(`./src/main.${ext}`);
-  });
-};
-```
-
-Then you need to read file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
-
-```js
-  let contentMain = fs.readFileSync(mainPath, { encoding: 'utf-8' });
-  const lines = contentMain.split(/\r?\n/g).reverse();
-```
-
-:::tip
-We need `reverse` because in the next step we will look for the last line of imports and it's easy to find if we reverse the lines order and then check for the first import occurrence
-:::
-
-Now you need to find the last import (first one with the reverted lines) and add our `newLines` to it
-
-```js
-  const lastImportIndex = lines.findIndex(line => line.match(/^import/));
-  lines[lastImportIndex] += newLines;
-```
-
-Finally, you need to reverse lines order back, join them and write the content to the main file:
-
-```js
-  contentMain = lines.reverse().join('\n');
-  fs.writeFileSync(mainPath, contentMain, { encoding: 'utf-8' });
-```
-
-### Templating
+### Creating new templates
 
 When you call `api.render('./template')`, the generator will render files in `./template` (resolved relative to the generator file) with [EJS](https://github.com/mde/ejs).
 
@@ -159,6 +87,8 @@ After template is created, you should add `api.render` call to the `generator/in
 ```js
 api.render('./template')
 ```
+
+### Editing existing templates
 
 In addition, you can inherit and replace parts of an existing template file (even from another package) using YAML front-matter:
 
@@ -196,6 +126,60 @@ export default {
 }
 </script>
 <%# END_REPLACE %>
+```
+
+
+### Extending package
+
+If you need to add an additional dependency to the project, create a new npm script or modify `package.json` somehow else, you can use API `extendPackage` method.
+
+```js
+// generator/index.js
+
+module.exports = api => {
+  api.extendPackage({
+    dependencies: {
+      'vue-router-layout': '^0.1.2'
+    },
+  });
+```
+
+In the example above we added one dependency: `vue-router-layout`. During the plugin invocation this node module will be installed and this dependency will be added to `package.json` file.
+
+### Changing main file
+
+With generator `onCreateComplete` hook you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc.
+
+If you want just to add a new import to the main file, you can use `injectImports` API method. So, let's consider the case where we have created a `router.js` file via [templating](#creating-new-template) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` served for adding new imports to this file:
+
+```js
+api.injectImports(api.entryFile, `import router from './router'`)
+```
+
+Now, when we have a router imported, we can inject router to the Vue instance in the main file. We will use `onCreateComplete` hook that is called when the files have been written to disk
+
+First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
+
+```js
+module.exports = (api, options, rootOptions) => {
+  api.onCreateComplete(() => {
+    const fs = require('fs');
+    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
+    const lines = contentMain.split(/\r?\n/g);
+};
+```
+
+Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
+
+```js
+  const renderIndex = lines.findIndex(line => line.match(/render/));
+  lines[renderIndex] += `\n  router,`
+```
+
+Finally, you need to write the content back to the main file:
+
+```js
+  fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' });
 ```
 
 ### Filename edge cases
