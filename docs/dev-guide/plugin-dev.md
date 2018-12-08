@@ -144,19 +144,34 @@ module.exports = api => {
   });
 ```
 
-In the example above we added one dependency: `vue-router-layout`. During the plugin invocation this node module will be installed and this dependency will be added to `package.json` file.
+In the example above we added one dependency: `vue-router-layout`. During the plugin invocation this npm module will be installed and this dependency will be added to `package.json` file.
+
+With the same API method we can add new npm tasks to the project. To do so, we need to specify task name and a command that should be run in the `scripts` section:
+
+```js
+// generator/index.js
+
+module.exports = api => {
+  api.extendPackage({
+    scripts: {
+      greet: 'vue-cli-service greet'
+    }
+  });
+```
+
+In the example above we're adding a new `greet` task to run a custom vue-cli service command created in [Service section](#add-a-new-cli-service-command)
 
 ### Changing main file
 
 With generator `onCreateComplete` hook you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc.
 
-If you want just to add a new import to the main file, you can use `injectImports` API method. So, let's consider the case where we have created a `router.js` file via [templating](#creating-new-template) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` served for adding new imports to this file:
+If you want just to add a new import to the main file, you can use `injectImports` API method. So, let's consider the case where we have created a `router.js` file via [templating](#creating-new-templates) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` serves for adding new imports to this file:
 
 ```js
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
-Now, when we have a router imported, we can inject router to the Vue instance in the main file. We will use `onCreateComplete` hook that is called when the files have been written to disk
+Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `onCreateComplete` hook that is called when the files have been written to disk
 
 First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
 
@@ -204,7 +219,6 @@ Consequently, this means that you also have to follow a special naming conventio
 
 _variables.scss
 ```
-
 
 ## Service Plugin
 
