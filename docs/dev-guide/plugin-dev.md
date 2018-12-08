@@ -6,7 +6,7 @@ sidebarDepth: 3
 
 ## Getting started
 
-A CLI plugin is an npm package that can add additional features to a project using Vue CLI. These features can include:
+A CLI plugin is an npm package that can add additional features to the project using Vue CLI. These features can include:
 
 - changing project webpack config - for example, you can add a new webpack resolve rule for a certain file extension, if your plugin is supposed to work with this type of files. Say, `@vue/cli-plugin-typescript` adds such rule to resolve `.ts` and `.tsx` extensions;
 - adding new vue-cli-service command - for example, `@vue/cli-plugin-unit-jest` adds a new command `test:unit` that allows developer to run unit tests;
@@ -131,7 +131,7 @@ export default {
 
 ### Extending package
 
-If you need to add an additional dependency to the project, create a new npm script or modify `package.json` somehow else, you can use API `extendPackage` method.
+If you need to add an additional dependency to the project, create a new npm script or modify `package.json` in any other way, you can use API `extendPackage` method.
 
 ```js
 // generator/index.js
@@ -168,6 +168,8 @@ With generator methods you can make changes to the project files. The most usual
 Let's consider the case where we have created a `router.js` file via [templating](#creating-new-templates) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` serves for adding new imports to this file:
 
 ```js
+// generator/index.js
+
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
@@ -176,25 +178,45 @@ Now, when we have a router imported, we can inject this router to the Vue instan
 First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
 
 ```js
-module.exports = (api, options, rootOptions) => {
-  api.onCreateComplete(() => {
-    const fs = require('fs');
-    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
-    const lines = contentMain.split(/\r?\n/g);
+// generator/index.js
+
+api.onCreateComplete(() => {
+  const fs = require('fs');
+  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
+  const lines = contentMain.split(/\r?\n/g);
 };
 ```
 
 Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
 
-```js
+```js{8-9}
+// generator/index.js
+
+api.onCreateComplete(() => {
+  const fs = require('fs');
+  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
+  const lines = contentMain.split(/\r?\n/g);
+
   const renderIndex = lines.findIndex(line => line.match(/render/));
   lines[renderIndex] += `\n  router,`
+};
 ```
 
 Finally, you need to write the content back to the main file:
 
-```js
+```js{11}
+// generator/index.js
+
+api.onCreateComplete(() => {
+  const fs = require('fs');
+  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
+  const lines = contentMain.split(/\r?\n/g);
+
+  const renderIndex = lines.findIndex(line => line.match(/render/));
+  lines[renderIndex] += `\n  router,`
+
   fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' });
+};
 ```
 
 ### Filename edge cases
@@ -368,9 +390,9 @@ Prompts are required to handle user choices when creating a new project or addin
 
 ### Prompts for Built-in Plugins
 
-Only built-in plugins have the ability to customize the initial prompts when creating a new project, and the prompt modules are located [inside the `@vue/cli` package][prompt-modules].
+Only built-in plugins have the ability to customize the initial prompts when creating a new project.
 
-A prompt module should export a function that receives a [PromptModuleAPI][prompt-api] instance.
+A prompt module should export a function that receives a [PromptModuleAPI](prompt-api.md) instance.
 
 ``` js
 module.exports = api => {
@@ -432,11 +454,13 @@ On plugin invoke user will be prompted with the question about example routes an
 
 If you want to use the result of the user's choice in generator, it will be accessible with the prompt name. We can add a modification to `generator/index.js`:
 
+```js
   if (options.addExampleRoutes) {
     api.render('./template', {
       ...options
     });
   }
+```
 
 Now template will be rendered only if user agreed to create example routes.
 
