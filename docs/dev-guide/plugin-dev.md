@@ -163,15 +163,15 @@ In the example above we're adding a new `greet` task to run a custom vue-cli ser
 
 ### Changing main file
 
-With generator `onCreateComplete` hook you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc.
+With generator methods you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc.
 
-If you want just to add a new import to the main file, you can use `injectImports` API method. So, let's consider the case where we have created a `router.js` file via [templating](#creating-new-templates) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` serves for adding new imports to this file:
+Let's consider the case where we have created a `router.js` file via [templating](#creating-new-templates) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` serves for adding new imports to this file:
 
 ```js
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
-Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `onCreateComplete` hook that is called when the files have been written to disk
+Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `onCreateComplete` hook which is to be called when the files have been written to disk
 
 First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
 
@@ -222,6 +222,8 @@ _variables.scss
 
 ## Service Plugin
 
+Service plugin serves for modifying webpack config, creating new vue-cli service commands or changing existing commands (such as `serve` and `build`).
+
 Service plugins are loaded automatically when a Service instance is created - i.e. every time the `vue-cli-service` command is invoked inside a project. It's located in the `index.js` file in CLI plugin root folder.
 
 A service plugin should export a function which receives two arguments:
@@ -238,7 +240,7 @@ module.exports = () => {}
 
 ### Modifying webpack config
 
-The API allows service plugins to extend/modify the internal webpack config for different environments. For example, here we're modifying webpack config with webpack-chain to include `vue-auto-routing` webpack plugin:
+The API allows service plugins to extend/modify the internal webpack config for different environments. For example, here we're modifying webpack config with webpack-chain to include `vue-auto-routing` webpack plugin with given parameters:
 
 ```js
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
@@ -261,7 +263,7 @@ You can also use `configureWebpack` method to modify the  webpack config or retu
 
 ### Add a new cli-service command
 
-With a service plugin you can register a new cli-service command in addition to standard ones (i.e. `serve` and `build`). You can do it with a `registerCommand` API method.
+With service plugin you can register a new cli-service command in addition to standard ones (i.e. `serve` and `build`). You can do it with a `registerCommand` API method.
 
 Here is an example of creating a simple new command that will print a greeting to developer console:
 
@@ -284,7 +286,7 @@ In this example we provided the command name (`'greet`), an object of command op
 You can add new command to the list of project npm scripts inside the `package.json` file [via Generator](#extending-package).
 :::
 
-If you try to run new command in the project with your plugin installed, you will see the folowing output:
+If you try to run a new command in the project with your plugin installed, you will see the following output:
 
 ```bash
 $ vue-cli-service greet
@@ -409,7 +411,7 @@ Alternatively, the user can skip the prompts and directly initialize the plugin 
 vue invoke my-plugin --mode awesome
 ```
 
-Prompt can have [different types](https://github.com/SBoudrias/Inquirer.js#prompt-types) but the most widely used in CLI are `checkbox` and `confirm`. Let's add a `confirm` prompt and then use it in plugin generator to create a condition for [template rendering](#templating).
+Prompt can have [different types](https://github.com/SBoudrias/Inquirer.js#prompt-types) but the most widely used in CLI are `checkbox` and `confirm`. Let's add a `confirm` prompt and then use it in plugin generator to create a condition for [template rendering](#creating-new-templates).
 
 ```js
 // prompts.js
@@ -437,8 +439,6 @@ If you want to use the result of the user's choice in generator, it will be acce
   }
 
 Now template will be rendered only if user agreed to create example routes.
-
-
 
 
 ## Installing plugin locally
