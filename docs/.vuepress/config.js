@@ -27,6 +27,10 @@ module.exports = {
     docsBranch: 'docs',
     editLinks: true,
     sidebarDepth: 3,
+    algolia: {
+      indexName: 'cli_vuejs',
+      apiKey: 'f6df220f7d246aff64a56300b7f19f21',
+    },
     locales: {
       '/': {
         label: 'English',
