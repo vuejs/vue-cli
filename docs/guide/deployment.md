@@ -2,7 +2,7 @@
 
 ## General Guidelines
 
-If you are using Vue CLI along with a backend framework that handles static assets as part of its deployment, all you need to do is making sure Vue CLI generates the built files in the correct location, and then follow the deployment instruction of your backend framework.
+If you are using Vue CLI along with a backend framework that handles static assets as part of its deployment, all you need to do is make sure Vue CLI generates the built files in the correct location, and then follow the deployment instruction of your backend framework.
 
 If you are developing your frontend app separately from your backend - i.e. your backend exposes an API for your frontend to talk to, then your frontend is essentially a purely static app. You can deploy the built content in the `dist` directory to any static file server, but make sure to set the correct [baseUrl](../config/#baseurl).
 
