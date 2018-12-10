@@ -79,6 +79,12 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
       moduleFileExtensions: ['ts', 'tsx'],
       transform: {
         '^.+\\.tsx?$': 'ts-jest'
+      },
+      global: !api.hasPlugin('babel') ? undefined : {
+        'ts-jest': {
+          // we need babel to transpile JSX
+          babelConfig: true
+        }
       }
     },
     devDependencies: {
