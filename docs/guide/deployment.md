@@ -277,8 +277,11 @@ Since Vue is a frontend library, the easiest way to host it and do things like s
 First, add Express to your project:
 
 ```bash
-npm install express
+yarn add express
+yarn add connect-history-api-fallback
 ```
+
+We also need `connect-history-api-fallback` middleware to handle `vue-router` in deployed application.
 
 Now, create a `server.js` file in your project root and add the following code to it:
 
@@ -296,8 +299,6 @@ app.use(serveStatic(path.join(__dirname, '/dist')));
 });
 ```
 
-We need `connect-history-api-fallback` middleware to handle `vue-router` in deployed application.
-
 This will run a server at `localhost:5555` hosting your project `dist` folder. You can try to run it locally:
 
 ```bash
@@ -307,7 +308,9 @@ node server.js
 
 Check [http://localhost:5555](http://localhost:5555) and make sure your app loads. This is the actual site Heroku will serve up.
 
-Now we need to create a `start` script in the `package.json` to start the node server, because Heroku will [automatically look for this script](https://devcenter.heroku.com/articles/deploying-nodejs#specifying-a-start-script) when looking for how to run a node.js app.
+Now we need to create two more scripts to finish the setup:
+- `start` script in the `package.json` to start the node server, because Heroku will [automatically look for this script](https://devcenter.heroku.com/articles/deploying-nodejs#specifying-a-start-script) when looking for how to run a node.js app;
+- `heroku-postbuild` script which heroku will automatically run after installing dependencies but before starting the app.
 
 ```js
 {
@@ -320,7 +323,8 @@ Now we need to create a `start` script in the `package.json` to start the node s
     "build": "vue-cli-service build",
     "test": "vue-cli-service test",
     "lint": "vue-cli-service lint",
-    "start": "node server.js" <--- ADD THIS LINE HERE
+    "start": "node server.js" <--- ADD START SCRIPT HERE
+    "heroku-postbuild": "yarn build" <--- ADD HEROKU POSTBUILD SCRIPT HERE
   },
 ```
 
