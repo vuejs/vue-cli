@@ -342,7 +342,7 @@ And now add Heroku remote repository:
 heroku git:remote --app <YOUR-PROJECT-NAME-HERE>
 ```
 
-Remove the `dist` folder from `.gitignore`. You need this to always keep a pristine copy of what you’ve deployed to Heroku. After this you can commit your files and deploy to Heroku via pushing to `master`:
+After this you can commit your files and deploy to Heroku via pushing to `master`:
 
 ```bash
 git add . && git commit -a -m "Adding project files"
