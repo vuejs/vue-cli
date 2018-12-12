@@ -133,7 +133,7 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
-In order to receive direct hits using `History Pushstate mode` on Vue Router, you need to create a file called `_redirects` under `/public` with the following content:
+In order to receive direct hits using `history mode` on Vue Router, you need to create a file called `_redirects` under `/public` with the following content:
 
 ```
 # Netlify settings for single-page application
