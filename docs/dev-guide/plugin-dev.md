@@ -503,3 +503,47 @@ Click on your application name, go to the Plugins tab (it has a puzzle icon) and
 After you click it, you can easily search for you plugin and add it to the project. After this you will be able to see it in plugins list and apply all changes done to the plugin via simply clicking on `Refresh` icon
 
 ![Refresh plugin](/ui-plugin-refresh.png)
+
+## UI Integration
+
+Vue CLI has a great [UI tool](https://github.com/vuejs/ui) which allows user to scaffold and manage a project with a nice graphical interface. The Vue CLI plugin can be integrated to this interface. UI provides an additional functionality to CLI plugins:
+
+- you can run npm tasks, including plugin-specific ones, directly from the UI;
+- you can display custom configurations for your plugin. For example, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) provides the following configuration screen for Apollo server:
+
+![UI Configuration Screen](/ui-configuration.png)
+- you can add localizations for your plugin if you want to support multiple languages.
+
+All the logic connected to Vue UI should be placed to `ui.js` file in the root folder or in the `ui/index.js`. The file should export a function which gets the api object as argument:
+
+```js
+module.exports = api => {
+  // Use the API here...
+}
+```
+
+### Augment the task in the UI
+
+Let's add a `greet` task created with [Generator](#extending-package) to the UI. Tasks are generated from the `scripts` field in the project `package.json` file. You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method. Let's provide some additional information about our task:
+
+```js
+module.exports = api => {
+  api.describeTask({
+    match: /greet/,
+    description: 'Prints a greeting in the console',
+    link: 'https://cli.vuejs.org/dev-guide/plugin-dev.html#core-concepts'
+  });
+};
+```
+
+Now if you explore your project in the Vue UI, you will find your task added to the `Tasks` section. You can see a name of the task, provided description, a link icon that leads to the provided URL and also an output screen to show the task output:
+
+![UI Greet task](/ui-greet-task.png)
+
+### Display a configuration screen
+
+### Localize the plugin
+
+### Logo and discoverability
+
+## Publish Plugin to npm
