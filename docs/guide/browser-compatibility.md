@@ -78,15 +78,15 @@ Content-Security-Policy: script-src 'self' 'sha256-4RS22DYeB7U14dra4KcQYxmwt5HkO
 ```
 :::
 
-::: tip Detecting the  current mode in config
+::: tip Detecting the Current Mode in Config
 Sometimes you may need to change the webpack config only for the legacy build, or only for the modern build.
 
-Vue-cli uses two environment variables to communicate this:
+Vue CLI uses two environment variables to communicate this:
 
 * `VUE_CLI_MODERN_MODE`: The build was started with the `--modern` flag
 * `VUE_CLI_MODERN_BUILD`: when true, the current config is for the modern build. Otherwise it's for the legacy build.
 
-**Important:** These variables are only accessible when/after `chainWebpack()` and `configureWebpack()` functions are evaluated, (so not directly in the `vue.config.js` module's root scope). That means its also available in i.e. the postcss  config file.
+**Important:** These variables are only accessible when/after `chainWebpack()` and `configureWebpack()` functions are evaluated, (so not directly in the `vue.config.js` module's root scope). That means it's also available in the postcss config file.
 :::
 
 [autoprefixer]: https://github.com/postcss/autoprefixer
