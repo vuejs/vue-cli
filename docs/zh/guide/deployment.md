@@ -33,17 +33,17 @@ serve -s dist
 
 <!-- @todo: translation -->
 
-## Platform Guides
+## 平台指南
 
 (暂未翻译，此部分英文文档处于开放贡献中)
 
-### GitHub Pages
+### GitHub Pages部署
 
-1. Set correct `baseUrl` in `vue.config.js`.
+1. 在`vue.config.js`中正确设置`baseUrl`。
 
-    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+    如果你的部署路径为 `https://<USERNAME>.github.io/`，你可以忽略 `baseUrl`，因为它默认就是 `"/"`。
 
-    If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `baseUrl` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
+    如果你的部署路径为 `https://<USERNAME>.github.io/<REPO>/`，(即：你的GitHub仓库地址为 `https://github.com/<USERNAME>/<REPO>`)， 此时，你需要将 `baseUrl` 设置为 `"/<REPO>/"`。例如：你的Github仓库名字为"my-project"，那么，你的`vue.config.js`应该为下面所示的代码:
 
     ``` js
     module.exports = {
@@ -53,7 +53,7 @@ serve -s dist
     }
     ```
 
-2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
+2. 在你的项目中，新建 `deploy.sh` 并填充下述内容 (突出显示的行未适当注释)，然后运行它来进行部署:
 
     ``` bash{13,20,23}
     #!/usr/bin/env sh
@@ -82,10 +82,8 @@ serve -s dist
 
     cd -
     ```
-
-    ::: tip
-    You can also run the above script in your CI setup to enable automatic deployment on each push.
-    :::
+    
+    你还可以选择在你的CI设置中运行上述脚本，便于在每次推送时启用自动部署。
 
 ### GitLab Pages
 
