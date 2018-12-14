@@ -591,6 +591,10 @@
               "label": "Assets directory",
               "description": "A directory to nest generated static assets (js, css, img, fonts) under."
             },
+            "environmentsDir": {
+              "label": "Environments directory",
+              "description": "The directory where the environment files will be loaded"
+            },
             "runtimeCompiler": {
               "label": "Enable runtime compiler",
               "description": "This will allow you to use the template option in Vue components, but will incur around an extra 10kb payload for your app."

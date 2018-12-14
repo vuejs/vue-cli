@@ -61,16 +61,16 @@ module.exports = class Service {
     this.initialized = true
     this.mode = mode
 
+    // load user config
+    const userOptions = this.loadUserOptions()
+    this.projectOptions = defaultsDeep(userOptions, defaults())
+
     // load mode .env
     if (mode) {
       this.loadEnv(mode)
     }
     // load base .env
     this.loadEnv()
-
-    // load user config
-    const userOptions = this.loadUserOptions()
-    this.projectOptions = defaultsDeep(userOptions, defaults())
 
     debug('vue:project-config')(this.projectOptions)
 
@@ -90,7 +90,9 @@ module.exports = class Service {
 
   loadEnv (mode) {
     const logger = debug('vue:env')
-    const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
+    const baseDir = this.projectOptions
+      ? this.projectOptions.environmentsDir : this.context
+    const basePath = path.resolve(baseDir, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
 
     const load = path => {

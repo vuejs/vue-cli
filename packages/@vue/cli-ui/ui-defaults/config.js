@@ -44,6 +44,16 @@ module.exports = api => {
           link: 'https://cli.vuejs.org/config/#assetsdir'
         },
         {
+          name: 'environmentsDir',
+          type: 'input',
+          default: '',
+          value: data.vue && data.vue.environmentsDir,
+          message: 'org.vue.vue-webpack.config.vue-cli.environmentsDir.label',
+          description: 'org.vue.vue-webpack.config.vue-cli.environmentsDir.description',
+          group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
+          link: 'https://cli.vuejs.org/config/#environmentsdir'
+        },
+        {
           name: 'runtimeCompiler',
           type: 'confirm',
           default: false,

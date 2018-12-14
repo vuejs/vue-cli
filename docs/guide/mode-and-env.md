@@ -1,6 +1,6 @@
 # Environment Variables and Modes
 
-You can specify env variables by placing the following files in your project root:
+You can specify env variables by placing the following files in your project root or customize it using `environmentsDir` option in `vue.config.js`:
 
 ``` bash
 .env                # loaded in all cases

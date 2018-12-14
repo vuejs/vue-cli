@@ -80,6 +80,13 @@ module.exports = {
   `assetsDir` is ignored when overwriting the filename or chunkFilename from the generated assets.
   :::
 
+### environmentsDir
+
+- Type: `string`
+- Default: `''`
+
+  A directory where environment files will be loaded  
+
 ### indexPath
 
 - Type: `string`
