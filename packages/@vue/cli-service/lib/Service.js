@@ -91,7 +91,7 @@ module.exports = class Service {
   loadEnv (mode) {
     const logger = debug('vue:env')
     const baseDir = this.projectOptions
-      ? this.projectOptions.environmentsDir : this.context
+      ? path.posix.join(this.projectOptions.environmentsDir, this.context) : this.context
     const basePath = path.resolve(baseDir, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
 
