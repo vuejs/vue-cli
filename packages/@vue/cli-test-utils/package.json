@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "execa": "^1.0.0",
-    "json-server": "^0.12.2",
+    "json-server": "^0.14.0",
     "puppeteer": "^1.0.0",
-    "strip-ansi": "^3.0.0"
+    "strip-ansi": "^5.0.0"
   }
 }
