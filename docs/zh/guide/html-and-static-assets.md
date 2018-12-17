@@ -21,7 +21,7 @@
 ```
 
 更多内容可以查阅：
-- [baseUrl](../config/#baseurl)
+- [publicPath](../config/#baseurl)
 
 ### Preload
 
@@ -166,7 +166,7 @@ module.exports = {
 - 文件丢失会直接在编译时报错，而不是到了用户端才产生 404 错误。
 - 最终生成的文件名包含了内容哈希，因此你不必担心浏览器会缓存它们的老版本。
 
-`public` 目录提供的是一个**应急手段**，当你通过绝对路径引用它时，留意应用将会部署到哪里。如果你的应用没有部署在域名的根部，那么你需要为你的 URL 配置 [baseUrl](../config/#baseurl) 前缀：
+`public` 目录提供的是一个**应急手段**，当你通过绝对路径引用它时，留意应用将会部署到哪里。如果你的应用没有部署在域名的根部，那么你需要为你的 URL 配置 [publicPath](../config/#baseurl) 前缀：
 
 - 在 `public/index.html` 或其它通过 `html-webpack-plugin` 用作模板的 HTML 文件中，你需要通过 `<%= BASE_URL %>` 设置链接前缀：
 
@@ -179,7 +179,7 @@ module.exports = {
   ``` js
   data () {
     return {
-      baseUrl: process.env.BASE_URL
+      publicPath: process.env.BASE_URL
     }
   }
   ```
@@ -187,7 +187,7 @@ module.exports = {
   然后：
 
   ``` html
-  <img :src="`${baseUrl}my-image.png`">
+  <img :src="`${publicPath}my-image.png`">
   ```
 
 ### 何时使用 `public` 文件夹

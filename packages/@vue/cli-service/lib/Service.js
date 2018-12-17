@@ -260,11 +260,11 @@ module.exports = class Service {
     if (
       !process.env.VUE_CLI_TEST &&
       (target && target !== 'app') &&
-      config.output.publicPath !== this.projectOptions.baseUrl
+      config.output.publicPath !== this.projectOptions.publicPath
     ) {
       throw new Error(
         `Do not modify webpack output.publicPath directly. ` +
-        `Use the "baseUrl" option in vue.config.js instead.`
+        `Use the "publicPath" option in vue.config.js instead.`
       )
     }
 
@@ -324,10 +324,29 @@ module.exports = class Service {
       resolvedFrom = 'inline options'
     }
 
+    if (typeof resolved.baseUrl !== 'undefined') {
+      if (typeof resolved.publicPath !== 'undefined') {
+        warn(
+          `You have set both "baseUrl" and "publicPath" in ${chalk.bold('vue.config.js')}, ` +
+          `in this case, "baseUrl" will be ignored in favor of "publicPath".`
+        )
+      } else {
+        warn(
+          `"baseUrl" option in ${chalk.bold('vue.config.js')} ` +
+          `is deprecated now, please use "publicPath" instead.`
+        )
+        resolved.publicPath = resolved.baseUrl
+      }
+    }
+
+    // if (typeof resolved.publicPath === 'undefined') {
+    //   resolved.publicPath = '/'
+    // }
+
     // normalize some options
-    ensureSlash(resolved, 'baseUrl')
-    if (typeof resolved.baseUrl === 'string') {
-      resolved.baseUrl = resolved.baseUrl.replace(/^\.\//, '')
+    ensureSlash(resolved, 'publicPath')
+    if (typeof resolved.publicPath === 'string') {
+      resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
     }
     removeSlash(resolved, 'outputDir')
 

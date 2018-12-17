@@ -13,14 +13,14 @@ module.exports = api => {
     onRead: ({ data }) => ({
       prompts: [
         {
-          name: 'baseUrl',
+          name: 'publicPath',
           type: 'input',
           default: '/',
-          value: data.vue && data.vue.baseUrl,
-          message: 'org.vue.vue-webpack.config.vue-cli.baseUrl.label',
-          description: 'org.vue.vue-webpack.config.vue-cli.baseUrl.description',
+          value: data.vue && (data.vue.publicPath || data.vue.baseUrl), // fallback to baseUrl for compatibility
+          message: 'org.vue.vue-webpack.config.vue-cli.publicPath.label',
+          description: 'org.vue.vue-webpack.config.vue-cli.publicPath.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#baseurl'
+          link: 'https://cli.vuejs.org/config/#publicPath'
         },
         {
           name: 'outputDir',

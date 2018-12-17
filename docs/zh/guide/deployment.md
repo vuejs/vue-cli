@@ -4,11 +4,11 @@
 
 如果你用 Vue CLI 处理静态资源并和后端框架一起作为部署的一部分，那么你需要的仅仅是确保 Vue CLI 生成的构建文件在正确的位置，并遵循后端框架的发布方式即可。
 
-如果你独立于后端部署前端应用——也就是说后端暴露一个前端可访问的 API，然后前端实际上是纯静态应用。那么你可以将 `dist` 目录里构建的内容部署到任何静态文件服务器中，但要确保正确的 [baseUrl](../config/#baseurl)。
+如果你独立于后端部署前端应用——也就是说后端暴露一个前端可访问的 API，然后前端实际上是纯静态应用。那么你可以将 `dist` 目录里构建的内容部署到任何静态文件服务器中，但要确保正确的 [publicPath](../config/#baseurl)。
 
 ### 本地预览
 
-`dist` 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 `baseUrl` 配置为了一个相对的值)，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
+`dist` 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 `publicPath` 配置为了一个相对的值)，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
 
 ``` bash
 npm install -g serve
@@ -39,15 +39,15 @@ serve -s dist
 
 ### GitHub Pages
 
-1. Set correct `baseUrl` in `vue.config.js`.
+1. Set correct `publicPath` in `vue.config.js`.
 
-    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `publicPath` as it defaults to `"/"`.
 
-    If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `baseUrl` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
+    If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `publicPath` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
     ``` js
     module.exports = {
-      baseUrl: process.env.NODE_ENV === 'production'
+      publicPath: process.env.NODE_ENV === 'production'
         ? '/my-project/'
         : '/'
     }
@@ -116,7 +116,7 @@ Typically, your static website will be hosted on https://yourUserName.gitlab.io/
 // make sure you update `yourProjectName` with the name of your GitLab project
 
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production'
+  publicPath: process.env.NODE_ENV === 'production'
     ? '/yourProjectName/'
     : '/'
 }
@@ -282,11 +282,11 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
 1. As described in the [Bitbucket documentation](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) you need to create a repository named exactly `<USERNAME>.bitbucket.io`.
 
-2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case set correct `baseUrl` in `vue.config.js`.
+2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case set correct `publicPath` in `vue.config.js`.
 
-    If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `baseUrl` as it defaults to `"/"`.
+    If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `publicPath` as it defaults to `"/"`.
 
-    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `baseUrl` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
+    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `publicPath` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
 
 3. Inside your project, create `deploy.sh` with the following content and run it to deploy:
 
