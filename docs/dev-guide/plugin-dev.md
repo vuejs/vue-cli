@@ -512,7 +512,8 @@ Vue CLI has a great [UI tool](https://github.com/vuejs/ui) which allows user to 
 - you can display custom configurations for your plugin. For example, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) provides the following configuration screen for Apollo server:
 
 ![UI Configuration Screen](/ui-configuration.png)
-- you can add localizations for your plugin if you want to support multiple languages.
+- you can add localizations for your plugin if you want to support multiple languages
+- you can make your plugin discoverable in the Vue UI search
 
 All the logic connected to Vue UI should be placed to `ui.js` file in the root folder or in the `ui/index.js`. The file should export a function which gets the api object as argument:
 
@@ -523,6 +524,8 @@ module.exports = api => {
 ```
 
 ### Augment the task in the UI
+
+Vue CLI plugin allows you not only add new npm tasks to the project [via Generator](#extending-package) but also create a view fro them in Vue UI. It's useful when you want to run the the task right from the UI and see it's output there.
 
 Let's add a `greet` task created with [Generator](#extending-package) to the UI. Tasks are generated from the `scripts` field in the project `package.json` file. You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method. Let's provide some additional information about our task:
 
@@ -541,6 +544,71 @@ Now if you explore your project in the Vue UI, you will find your task added to 
 ![UI Greet task](/ui-greet-task.png)
 
 ### Display a configuration screen
+
+Sometimes your project can have custom configuration files for different features or libraries. With Vue CLI plugin you can display this config in Vue UI, change it and save (saving will change the corresponding config file in your project). By default, Vue CLI project has a main configuration screen representing `vue.config.js` settings. If you included ESLint to your project, you will see also a ESLint configuration screen:
+
+![UI Configuration Screen](/ui-configuration-default.png)
+
+Let's build a custom configuration for our plugin. First of all, after you add your plugin to the existing project, there should be a file containing this custom config. This means you need to add this file to `template` folder on the [templating step](#creating-new-templates).
+
+By default, a configuration UI might read and write to the following file types: `json`, `yaml`, `js`, `package`. Let's name our new file `myConfig.js` and place in it the root of `template` folder:
+
+```
+.
+└── generator
+    ├── index.js
+    └── template
+        ├── myConfig.js
+        └── src
+            ├── layouts
+            ├── pages
+            └── router.js
+```
+
+Now you need to add some actual config to this file:
+
+```js
+//myConfig.js
+
+module.exports = {
+  color: 'black',
+};
+```
+
+After your plugin is invoked, the `myConfig.js` file will be rendered in the project root directory. Now let's add a new configuration screen with the `api.describeConfig` method in the `ui.js` file:
+
+First you need to pass some information:
+
+```js
+//ui.js
+
+api.describeConfig({
+  // Unique ID for the config
+  id: 'myConfig',
+  // Displayed name
+  name: 'Greeting configuration',
+  // Shown below the name
+  description: 'This config defines the color of the greeting printed',
+  // "More info" link
+  link: 'https://cli.vuejs.org/dev-guide/ui-api.html#ui-api'
+})
+```
+
+You can also select an icon for your config. It can be either a [Material icon](https://material.io/tools/icons/?style=baseline) code or a custom image (see Public static files).
+
+```js
+//ui.js
+
+api.describeConfig({
+  /* ... */
+  // Config icon
+  icon: 'color_lens'
+})
+```
+
+If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](TODO)).
+
+
 
 ### Localize the plugin
 
