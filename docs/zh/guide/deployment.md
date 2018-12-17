@@ -43,7 +43,7 @@ serve -s dist
 
     如果你的部署路径为 `https://<USERNAME>.github.io/`，你可以忽略 `baseUrl`，因为它默认就是 `"/"`。
 
-    如果你的部署路径为 `https://<USERNAME>.github.io/<REPO>/`，(即：你的GitHub仓库地址为 `https://github.com/<USERNAME>/<REPO>`)， 此时，你需要将 `baseUrl` 设置为 `"/<REPO>/"`。例如：你的Github仓库名字为"my-project"，那么，你的`vue.config.js`应该为下面所示的代码:
+    如果你的部署路径为 `https://<USERNAME>.github.io/<REPO>/`，(即：你的GitHub仓库地址为 `https://github.com/<USERNAME>/<REPO>`)， 此时，你需要将 `baseUrl` 设置为 `"/<REPO>/"`。例如：你的Github仓库名字为"my-project"，那么，你的`vue.config.js`应该是这样:
 
     ``` js
     module.exports = {
@@ -53,7 +53,7 @@ serve -s dist
     }
     ```
 
-2. 在你的项目中，新建 `deploy.sh` 并填充下述内容 (突出显示的行未适当注释)，然后运行它来进行部署:
+2. 在你的项目中，新建 `deploy.sh` 并填充下述内容 (根据情况取消高亮行的注释)，然后运行它来进行部署:
 
     ``` bash{13,20,23}
     #!/usr/bin/env sh
@@ -83,7 +83,9 @@ serve -s dist
     cd -
     ```
     
-    你还可以选择在你的CI设置中运行上述脚本，便于在每次推送时启用自动部署。
+    ::: 提示
+    你还可以选择在你的CI配置中运行上述脚本，便于在每次推送时启用自动部署。
+    :::
 
 ### GitLab Pages
 
