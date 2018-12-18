@@ -512,6 +512,7 @@ Vue CLI has a great [UI tool](https://github.com/vuejs/ui) which allows user to 
 - you can display custom configurations for your plugin. For example, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) provides the following configuration screen for Apollo server:
 
 ![UI Configuration Screen](/ui-configuration.png)
+- when creating the project, you can display [prompts](#prompts) visually
 - you can add localizations for your plugin if you want to support multiple languages
 - you can make your plugin discoverable in the Vue UI search
 
@@ -654,6 +655,8 @@ In the example above we specified the input prompt with the default value of 'wh
 Now let's replace hardcoded `white` value with the property from the config file. In the `onRead` hook `data` object contains the JSON result of each config file content. In our case, the content of `myConfig.js` was
 
 ```js
+//myConfig.js
+
 module.exports = {
   color: 'black',
 };
@@ -686,9 +689,44 @@ onRead: ({ data }) => ({
 }),
 ```
 
-Now on the configuration screen `white` will be replaced with `black`.
+You can see that on the configuration screen `white` is replaced with `black`.
 
+#### Save config changes
 
+We just read the content of `myConfig.js` and used it on the configuration screen. Now let's try to save any changes done in the color input field to the file. We can do it with the `onWrite` hook:
+
+```js
+api.describeConfig({
+  /* ... */
+  onWrite: ({ prompts, api }) => {
+    // ...
+  }
+})
+```
+
+`onWrite` hook can take a lot of [arguments](ui-api.html#save-config-changes) but we will need only two of them: `prompts` and `api`. First one is current prompts runtime objects - we will get a prompt id from it and retrieve an answer with this id. To retrieve the answer we'll use `async getAnswer()` method from the `api`:
+
+```js
+async onWrite({ api, prompts }) {
+  const result = {};
+  for (const prompt of prompts) {
+    result[`${prompt.id}`] = await api.getAnswer(prompt.id);
+  }
+  api.setData('myConfig', result);
+}
+```
+
+Now if you try to change the value in the color input field from `black` to `red` on the config screen and press `Save the changes`, you will observe that `myConfig.js` file in your project has been changed as well:
+
+```js
+//myConfig.js
+
+module.exports = {
+  color: 'red',
+};
+```
+
+### Display prompts
 
 ### Localize the plugin
 
