@@ -594,6 +594,8 @@ api.describeConfig({
 })
 ```
 
+#### Config logo
+
 You can also select an icon for your config. It can be either a [Material icon](https://material.io/tools/icons/?style=baseline) code or a custom image (see Public static files).
 
 ```js
@@ -607,6 +609,84 @@ api.describeConfig({
 ```
 
 If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](TODO)).
+
+#### Config files
+
+Now you need to provide your configuration file to UI: this way you could read its content and save changes to it. You need to choose a name for your config file, select its format and provide a path to the file:
+
+```js
+api.describeConfig({
+  // other config properties
+  files: {
+    myConfig: {
+      js: ['myConfig.js'],
+    }
+  },
+});
+```
+
+There can be more than one file provided. Say, if we have `myConfig.json`, we can provide it with `json: ['myConfig.json']` property. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
+
+#### Display config prompts
+
+We want to display an input field for color property on the configuration screen. To do so, we need a `onRead` hook that will return a list of prompts to be displayed:
+
+```js
+api.describeConfig({
+  // other config properties
+  onRead: ({ data }) => ({
+    prompts: [
+      {
+        name: `color`,
+        type: 'input',
+        message: 'Define the color for greeting message',
+        default: 'white'
+      }
+    ]
+  }),
+});
+```
+
+In the example above we specified the input prompt with the default value of 'white'. This is how our configuration screen will look with all the settings provided above:
+
+![UI Config Start](/ui-config-start.png)
+
+Now let's replace hardcoded `white` value with the property from the config file. In the `onRead` hook `data` object contains the JSON result of each config file content. In our case, the content of `myConfig.js` was
+
+```js
+module.exports = {
+  color: 'black',
+};
+```
+
+So, the `data` object will be
+
+```js
+{
+  // File
+  myConfig: {
+    // File data
+    color: 'black'
+  }
+}
+```
+
+It's easy to see that we need `data.myConfig.color` property. Let's change `onRead` hook:
+
+```js
+onRead: ({ data }) => ({
+  prompts: [
+    {
+      name: `color`,
+      type: 'input',
+      message: 'Define the color for greeting message',
+      default: data.myConfig.color
+    }
+  ]
+}),
+```
+
+Now on the configuration screen `white` will be replaced with `black`.
 
 
 
