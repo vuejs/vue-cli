@@ -728,6 +728,35 @@ module.exports = {
 
 ### Display prompts
 
+If you want, you can display [prompts](#prompts) in the Vue UI as well. If you will install your plugin through the UI, prompts will be shown on the plugin invocation step.
+
+To display a prompt in the UI you need to extend the [inquirer object](#prompts-for-3rd-party-plugins) with additional properties. They are optional and only used by the UI:
+
+```js
+//prompts.js
+
+module.exports = [
+  {
+    //basic propmpt properties
+    name: `addExampleRoutes`,
+    type: 'confirm',
+    message: 'Add example routes?',
+    default: false,
+    //UI-related propmpt properties
+    group: 'Strongly recommended',
+    description: 'Adds example pages, layouts and correct router config',
+    link:
+      'https://github.com/ktsn/vue-cli-plugin-auto-routing/#vue-cli-plugin-auto-routing'
+  }
+];
+```
+
+As a result, you will have this screen on plugin invocation:
+
+![UI Prompts](/ui-prompts.png)
+
+
+
 ### Localize the plugin
 
 ### Logo and discoverability
