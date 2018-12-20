@@ -755,10 +755,50 @@ As a result, you will have this screen on plugin invocation:
 
 ![UI Prompts](/ui-prompts.png)
 
+### Logo
 
+You can put a `logo.png` file in the root directory of the folder that will be published on npm. It will be displayed in several places:
+ - When searching for a plugin to install
+ - In the installed plugin list
 
-### Localize the plugin
+![Plugins](/plugins.png)
 
-### Logo and discoverability
+The logo should be a square non-transparent image (ideally 84x84).
+
+### Discoverability
+
+For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
+
+- Discoverable by `@vue/cli-service`;
+- Discoverable by other developers via searching;
+- Installable via `vue add <name>` or `vue invoke <name>`.
+
+For better discoverability when a user searches for your plugin, put keywords describing your plugin in the `description` field of the plugin `package.json` file.
+
+Example:
+
+```json
+{
+  "name": "vue-cli-plugin-apollo",
+  "version": "0.7.7",
+  "description": "vue-cli 3 plugin to add Apollo and GraphQL"
+}
+```
+
+You should add the url to the plugin website or repository in the `homepage` or `repository` field so that a 'More info' button will be displayed in your plugin description:
+
+```json
+{
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akryum/vue-cli-plugin-apollo.git"
+  },
+  "homepage": "https://github.com/Akryum/vue-cli-plugin-apollo#readme"
+}
+```
+
+![Plugin search item](/plugin-search-item.png)
+
 
 ## Publish Plugin to npm
+
