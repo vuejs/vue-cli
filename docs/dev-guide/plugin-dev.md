@@ -802,3 +802,18 @@ You should add the url to the plugin website or repository in the `homepage` or 
 
 ## Publish Plugin to npm
 
+To publish your plugin, you need to be registered an [npmjs.com](npmjs.com) and you should have `npm` installed globally. If it's your first npm module, please run
+
+```js
+npm login
+```
+
+Enter your username and password. This will store the credentials so you don’t have to enter it for every publish.
+
+:::tip
+Before publishing a plugin, make sure you choose a right name for it! Name convention is `vue-cli-plugin-<name>`. Check [Discoverability](#discoverability) section for more information
+:::
+
+To publish a plugin, go to the plugin root folder and type `npm publish` in the terminal.
+
+After successful publish, you should be able to add your plugin to the project created with Vue CLI with `vue add <plugin-name>` command.
