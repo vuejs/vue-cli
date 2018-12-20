@@ -46,7 +46,7 @@
 
 * assetsDir can be an empty string ([5d49d57](https://github.com/vuejs/vue-cli/commit/5d49d57)), closes [#2511](https://github.com/vuejs/vue-cli/issues/2511)
 * relax webpack version requirement ([73923de](https://github.com/vuejs/vue-cli/commit/73923de)), closes [#2873](https://github.com/vuejs/vue-cli/issues/2873) [#2892](https://github.com/vuejs/vue-cli/issues/2892)
-* **cli-service:** do not display absolute publicPath ([#2900](https://github.com/vuejs/vue-cli/issues/2900)) ([6d35461](https://github.com/vuejs/vue-cli/commit/6d35461))
+* **cli-service:** do not display absolute baseUrl ([#2900](https://github.com/vuejs/vue-cli/issues/2900)) ([6d35461](https://github.com/vuejs/vue-cli/commit/6d35461))
 #### Features
 
 * add support for loading WebAssembly and ES Modules ([#2819](https://github.com/vuejs/vue-cli/issues/2819)) ([2db8d18](https://github.com/vuejs/vue-cli/commit/2db8d18))
@@ -99,7 +99,7 @@
 #### Bug Fixes
 
 * assetsDir can be an empty string, fixes [#2511](https://github.com/vuejs/vue-cli/issues/2511) ([5d49d57](https://github.com/vuejs/vue-cli/commit/5d49d57))
-* do not display absolute publicPath ([#2900](https://github.com/vuejs/vue-cli/pull/2900)) ([6d35461](https://github.com/vuejs/vue-cli/commit/6d35461))
+* do not display absolute baseUrl ([#2900](https://github.com/vuejs/vue-cli/pull/2900)) ([6d35461](https://github.com/vuejs/vue-cli/commit/6d35461))
 
 # 3.1.3
 
@@ -549,7 +549,7 @@
 
 #### Bug Fixes
 
-* allow relative publicPath other than ./ ([#2168](https://github.com/vuejs/vue-cli/issues/2168)) ([d14d4e6](https://github.com/vuejs/vue-cli/commit/d14d4e6))
+* allow relative baseUrl other than ./ ([#2168](https://github.com/vuejs/vue-cli/issues/2168)) ([d14d4e6](https://github.com/vuejs/vue-cli/commit/d14d4e6))
 * inspect --plugins should log plugin names from webpack-merge ([#2201](https://github.com/vuejs/vue-cli/issues/2201)) ([69a4fb3](https://github.com/vuejs/vue-cli/commit/69a4fb3))
 * minify embedded CSS with extract: false ([a2c767e](https://github.com/vuejs/vue-cli/commit/a2c767e)), closes [#2214](https://github.com/vuejs/vue-cli/issues/2214)
 * preserve rule names when configureWebpack is present ([2257034](https://github.com/vuejs/vue-cli/commit/2257034)), closes [#2206](https://github.com/vuejs/vue-cli/issues/2206)
@@ -559,7 +559,7 @@
 
 #### Bug Fixes
 
-* fix css output location for relative publicPath + more details in docs ([1e7fa2c](https://github.com/vuejs/vue-cli/commit/1e7fa2c))
+* fix css output location for relative baseUrl + more details in docs ([1e7fa2c](https://github.com/vuejs/vue-cli/commit/1e7fa2c))
 * **eslint:** always emit error when lintOnSave === error + improve docs ([d96a794](https://github.com/vuejs/vue-cli/commit/d96a794)), closes [#2162](https://github.com/vuejs/vue-cli/issues/2162)
 
 ## other
@@ -1380,7 +1380,7 @@ will need to explicitly install `typescript` in your project.
 
 * fine tune chunk splitting ([4db901c](https://github.com/vuejs/vue-cli/commit/4db901c)), closes [#1488](https://github.com/vuejs/vue-cli/issues/1488)
 * fix invoke output ([d65a251](https://github.com/vuejs/vue-cli/commit/d65a251))
-* only provide publicPath fix if publicPath provided ([#1421](https://github.com/vuejs/vue-cli/issues/1421)) ([af1151a](https://github.com/vuejs/vue-cli/commit/af1151a))
+* only provide baseUrl fix if baseUrl provided ([#1421](https://github.com/vuejs/vue-cli/issues/1421)) ([af1151a](https://github.com/vuejs/vue-cli/commit/af1151a))
 * **build:** default to development mode in build --watch ([#1430](https://github.com/vuejs/vue-cli/issues/1430)) ([3193b0d](https://github.com/vuejs/vue-cli/commit/3193b0d))
 * **env:** preserve existing env vars so load in reverse order. ([#1503](https://github.com/vuejs/vue-cli/issues/1503)) ([7c1ef24](https://github.com/vuejs/vue-cli/commit/7c1ef24))
 * **serve:** make sockjs url fixed with host ([#1476](https://github.com/vuejs/vue-cli/issues/1476)) ([2cbe373](https://github.com/vuejs/vue-cli/commit/2cbe373))
@@ -1390,7 +1390,7 @@ will need to explicitly install `typescript` in your project.
 
 * allow configuring css-loader options via css.loaderOptions.css ([7d06f09](https://github.com/vuejs/vue-cli/commit/7d06f09)), closes [#1484](https://github.com/vuejs/vue-cli/issues/1484)
 * allow configuring postcss-loader via css.loaderOptions.postcss ([0ba111e](https://github.com/vuejs/vue-cli/commit/0ba111e))
-* allow using relative publicPath ([dc38211](https://github.com/vuejs/vue-cli/commit/dc38211))
+* allow using relative baseUrl ([dc38211](https://github.com/vuejs/vue-cli/commit/dc38211))
 * bail when user directly mutate output.publicPath ([1732007](https://github.com/vuejs/vue-cli/commit/1732007))
 * **build:** support named exports when building --target lib with js/ts entry ([1dc47eb](https://github.com/vuejs/vue-cli/commit/1dc47eb)), closes [#1436](https://github.com/vuejs/vue-cli/issues/1436)
 * **cli-service:** support --no-clean flag ([#1457](https://github.com/vuejs/vue-cli/issues/1457)) ([c19bbff](https://github.com/vuejs/vue-cli/commit/c19bbff)), closes [#1446](https://github.com/vuejs/vue-cli/issues/1446)
@@ -1477,7 +1477,7 @@ but should not affect normal test cases
 * fix caching dependency (close [#1384](https://github.com/vuejs/vue-cli/issues/1384)) ([9846cd5](https://github.com/vuejs/vue-cli/commit/9846cd5))
 #### Features
 
-* respect publicPath during development ([a9e1286](https://github.com/vuejs/vue-cli/commit/a9e1286))
+* respect baseUrl during development ([a9e1286](https://github.com/vuejs/vue-cli/commit/a9e1286))
 
 ## cli-ui
 
@@ -1496,7 +1496,7 @@ but should not affect normal test cases
 
 ### BREAKING CHANGES
 
-* `devBaseUrl` option has been removed. `publicPath` now works for
+* `devBaseUrl` option has been removed. `baseUrl` now works for
 both development and production. To use different paths for prod/dev, use
 conditional values based on `process.env.NODE_ENV` in `vue.config.js`.
 
@@ -1943,7 +1943,7 @@ sepcify the default mode for a registered command, the plugins should expose
 * add name to chunk file output ([#1173](https://github.com/vuejs/vue-cli/issues/1173)) ([1fc9593](https://github.com/vuejs/vue-cli/commit/1fc9593))
 * **build:** copy plugin should be loaded in all cases ([87892a5](https://github.com/vuejs/vue-cli/commit/87892a5)), closes [#1073](https://github.com/vuejs/vue-cli/issues/1073)
 * **build-wc:** honor custom component name for single file wc builds ([#1182](https://github.com/vuejs/vue-cli/issues/1182)) ([2b236e0](https://github.com/vuejs/vue-cli/commit/2b236e0)), closes [#1146](https://github.com/vuejs/vue-cli/issues/1146)
-* **cli-service:** should not add a leading slash to publicPath when it is absolute ([#1172](https://github.com/vuejs/vue-cli/issues/1172)) ([abb82ab](https://github.com/vuejs/vue-cli/commit/abb82ab)), closes [#1084](https://github.com/vuejs/vue-cli/issues/1084)
+* **cli-service:** should not add a leading slash to baseUrl when it is absolute ([#1172](https://github.com/vuejs/vue-cli/issues/1172)) ([abb82ab](https://github.com/vuejs/vue-cli/commit/abb82ab)), closes [#1084](https://github.com/vuejs/vue-cli/issues/1084)
 * **serve:** don't set header origin if using an agent ([#1179](https://github.com/vuejs/vue-cli/issues/1179)) ([79bc088](https://github.com/vuejs/vue-cli/commit/79bc088))
 * **ui:** analyze bundle error handling ([d5d0b76](https://github.com/vuejs/vue-cli/commit/d5d0b76))
 * **ui:** DashboardPlugin clean up ([0ac38da](https://github.com/vuejs/vue-cli/commit/0ac38da))
@@ -2333,7 +2333,7 @@ sepcify the default mode for a registered command, the plugins should expose
 #### Bug Fixes
 
 * **dev-server:** dev server behind NAT network ([#868](https://github.com/vuejs/vue-cli/issues/868)) ([bbc931c](https://github.com/vuejs/vue-cli/commit/bbc931c)), closes [#828](https://github.com/vuejs/vue-cli/issues/828)
-* fix publicPath normalization (close [#900](https://github.com/vuejs/vue-cli/issues/900)) ([89982df](https://github.com/vuejs/vue-cli/commit/89982df))
+* fix baseUrl normalization (close [#900](https://github.com/vuejs/vue-cli/issues/900)) ([89982df](https://github.com/vuejs/vue-cli/commit/89982df))
 * fix options for css optimize plugin (close [#918](https://github.com/vuejs/vue-cli/issues/918)) ([7681106](https://github.com/vuejs/vue-cli/commit/7681106))
 * respect --dest when copying static assets (close [#909](https://github.com/vuejs/vue-cli/issues/909)) ([57ce32a](https://github.com/vuejs/vue-cli/commit/57ce32a))
 * respect dotfiles in public dir (fix [#880](https://github.com/vuejs/vue-cli/issues/880)) ([59ac4f4](https://github.com/vuejs/vue-cli/commit/59ac4f4))
