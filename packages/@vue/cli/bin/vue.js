@@ -59,7 +59,7 @@ program
     const options = cleanArgs(cmd)
     if(program.args.length > 1){
       program.outputHelp()
-      console.log(chalk.red.bold('\n Kindly provide only one arguement as the appname'))
+      console.log(chalk.red.bold('\n Kindly provide only one argument as the appname'))
     }  
     // --git makes commander to default git to true
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
