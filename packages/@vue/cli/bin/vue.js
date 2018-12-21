@@ -57,9 +57,8 @@ program
   .option('-b, --bare', 'Scaffold project without beginner instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
-    if(program.args.length > 1){
-      program.outputHelp()
-      console.log(chalk.red.bold('\n Kindly provide only one argument as the appname'))
+    if (program.args.length > 1){
+      console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
     }  
     // --git makes commander to default git to true
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
