@@ -31,7 +31,7 @@ Check if the project has a plugin with given id
 
 ```js
 if (api.hasPlugin('typescript')) {
-  console.log('This project is using TypeScript)
+  console.log('This project is using TypeScript')
 }
 ```
 
