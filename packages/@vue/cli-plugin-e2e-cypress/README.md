@@ -29,6 +29,9 @@ Cypress offers a rich interactive interface for running E2E tests, but currently
 
   - In GUI mode, [all Cypress CLI options for `cypress open` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-open);
   - In `--headless` mode, [all Cypress CLI options for `cypress run` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-run).
+  
+  Examples :
+  - Run Cypress in headless mode for a specific file: `vue-cli-service test:e2e --headless --spec tests/e2e/specs/actions.spec.js`
 
 ## Configuration
 
