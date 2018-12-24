@@ -95,3 +95,40 @@ that will be merged into the webpack config.
 - **Usage**:
 Register a dev serve config function. It will receive the express `app` instance of the dev server.
 
+## resolveWebpackConfig
+
+- **Arguments**
+  - `{ChainableWebpackConfig} [chainableConfig]`
+- **Returns**
+  - `{object}` - raw webpack config
+
+- **Usage**:
+Resolve the final raw webpack config, that will be passed to webpack.
+
+## resolveChainableWebpackConfig
+
+- **Returns**
+  - `{ChainableWebpackConfig}`
+
+- **Usage**:
+Resolve an intermediate chainable webpack config instance, which can be further tweaked before generating the final raw webpack config. You can call this multiple times to generate different branches of the base webpack config.
+
+See [https://github.com/mozilla-neutrino/webpack-chain](https://github.com/mozilla-neutrino/webpack-chain)
+
+## genCacheConfig
+
+- **Arguments**
+  - `id`
+  - `partialIdentifier`
+  - `configFiles`
+- **Returns**
+  - `{object}`
+  ```js
+  {
+    cacheDirectory: string,
+    cacheIdentifier: string }
+  ```
+
+- **Usage**:
+Generate a cache identifier from a number of variables.
+
