@@ -120,3 +120,22 @@ test('should not fix with --no-fix option', async () => {
   // files should not have been fixed
   expect(await read('src/main.js')).not.toMatch(';')
 })
+
+// #3167
+test('should not throw when src folder is ignored by .eslintignore', async () => {
+  const project = await create('eslint-ignore', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      }
+    }
+  })
+
+  const { write, run } = project
+  await write('.eslintignore', 'src\n')
+
+  // should not throw
+  await run('vue-cli-service lint')
+})
