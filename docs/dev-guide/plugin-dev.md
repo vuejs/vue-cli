@@ -294,16 +294,16 @@ With service plugin you can register a new cli-service command in addition to st
 Here is an example of creating a simple new command that will print a greeting to developer console:
 
 ```js
-  api.registerCommand(
-    'greet',
-    {
-      description: 'Writes a greeting to the console',
-      usage: 'vue-cli-service greet'
-    },
-    () => {
-      console.log(`👋  Hello`)
-    }
-  )
+api.registerCommand(
+  'greet',
+  {
+    description: 'Writes a greeting to the console',
+    usage: 'vue-cli-service greet'
+  },
+  () => {
+    console.log(`👋  Hello`)
+  }
+)
 ```
 
 In this example we provided the command name (`'greet'`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
@@ -322,25 +322,21 @@ $ vue-cli-service greet
 You can also specify a list of available options for a new command. Let's add the option `--name` and change the function to print this name if it's provided.
 
 ```js
-  const OPTIONS = {
-    '--name': 'specifies a name for greeting'
-  };
-
-  api.registerCommand(
-    'greet',
-    {
-      description: 'Writes a greeting to the console',
-      usage: 'vue-cli-service greet [options]',
-      options: OPTIONS
-    },
-    args => {
-      if (args.name) {
-        console.log(`👋 Hello, ${args.name}!`);
-      } else {
-        console.log(`👋 Hello!`);
-      }
+api.registerCommand(
+  'greet',
+  {
+    description: 'Writes a greeting to the console',
+    usage: 'vue-cli-service greet [options]',
+    options: '--name': 'specifies a name for greeting'
+  },
+  args => {
+    if (args.name) {
+      console.log(`👋 Hello, ${args.name}!`);
+    } else {
+      console.log(`👋 Hello!`);
     }
-  );
+  }
+);
 ```
 
 Now, if you a `greet` command with a specified `--name` option, this name will be added to console message:
