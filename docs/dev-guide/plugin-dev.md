@@ -730,9 +730,9 @@ module.exports = {
 
 ### Display prompts
 
-If you want, you can display [prompts](#prompts) in the Vue UI as well. If you will install your plugin through the UI, prompts will be shown on the plugin invocation step.
+If you want, you can display [prompts](#prompts) in the Vue UI as well. When installing your plugin through the UI, prompts will be shown on the plugin invocation step.
 
-To display a prompt in the UI you need to extend the [inquirer object](#prompts-for-3rd-party-plugins) with additional properties. They are optional and only used by the UI:
+You can extend the [inquirer object](#prompts-for-3rd-party-plugins) with additional properties. They are optional and only used by the UI:
 
 ```js
 //prompts.js
