@@ -165,7 +165,7 @@ module.exports = api => {
   api.extendPackage({
     dependencies: {
       'vue-router-layout': '^0.1.2'
-    },
+    }
   })
 }
 ```
@@ -211,7 +211,7 @@ api.onCreateComplete(() => {
   const fs = require('fs')
   const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
   const lines = contentMain.split(/\r?\n/g)
-}
+})
 ```
 
 Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
@@ -226,7 +226,7 @@ api.onCreateComplete(() => {
 
   const renderIndex = lines.findIndex(line => line.match(/render/))
   lines[renderIndex] += `\n  router,`
-}
+})
 ```
 
 Finally, you need to write the content back to the main file:
@@ -243,7 +243,7 @@ api.onCreateComplete(() => {
   lines[renderIndex] += `\n  router,`
 
   fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' })
-}
+})
 ```
 
 ## Service Plugin
@@ -327,16 +327,16 @@ api.registerCommand(
   {
     description: 'Writes a greeting to the console',
     usage: 'vue-cli-service greet [options]',
-    options: '--name': 'specifies a name for greeting'
+    options: { '--name': 'specifies a name for greeting' }
   },
   args => {
     if (args.name) {
-      console.log(`👋 Hello, ${args.name}!`)
+      console.log(`👋 Hello, ${args.name}!`);
     } else {
-      console.log(`👋 Hello!`)
+      console.log(`👋 Hello!`);
     }
   }
-)
+);
 ```
 
 Now, if you a `greet` command with a specified `--name` option, this name will be added to console message:
@@ -445,7 +445,7 @@ module.exports = [
     name: `addExampleRoutes`,
     type: 'confirm',
     message: 'Add example routes?',
-    default: false,
+    default: false
   }
 ]
 ```
@@ -574,7 +574,7 @@ Now you need to add some actual config to this file:
 //myConfig.js
 
 module.exports = {
-  color: 'black',
+  color: 'black'
 }
 ```
 
@@ -626,9 +626,9 @@ api.describeConfig({
   // other config properties
   files: {
     myConfig: {
-      js: ['myConfig.js'],
+      js: ['myConfig.js']
     }
-  },
+  }
 })
 ```
 
@@ -650,7 +650,7 @@ api.describeConfig({
         default: 'white'
       }
     ]
-  }),
+  })
 })
 ```
 
@@ -661,10 +661,10 @@ In the example above we specified the input prompt with the default value of 'wh
 Now let's replace hardcoded `white` value with the property from the config file. In the `onRead` hook `data` object contains the JSON result of each config file content. In our case, the content of `myConfig.js` was
 
 ```js
-//myConfig.js
+// myConfig.js
 
 module.exports = {
-  color: 'black',
+  color: 'black'
 }
 ```
 
@@ -725,10 +725,10 @@ async onWrite({ api, prompts }) {
 Now if you try to change the value in the color input field from `black` to `red` on the config screen and press `Save the changes`, you will observe that `myConfig.js` file in your project has been changed as well:
 
 ```js
-//myConfig.js
+// myConfig.js
 
 module.exports = {
-  color: 'red',
+  color: 'red'
 }
 ```
 
@@ -739,7 +739,7 @@ If you want, you can display [prompts](#prompts) in the Vue UI as well. When ins
 You can extend the [inquirer object](#prompts-for-3rd-party-plugins) with additional properties. They are optional and only used by the UI:
 
 ```js
-//prompts.js
+// prompts.js
 
 module.exports = [
   {
