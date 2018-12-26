@@ -451,7 +451,7 @@ module.exports = [
 ]
 ```
 
-On plugin invoke user will be prompted with the question about example routes and the default answer will be `No`
+On plugin invoke user will be prompted with the question about example routes and the default answer will be `No`.
 
 ![Prompts example](/prompts-example.png)
 
