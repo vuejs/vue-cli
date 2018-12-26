@@ -495,7 +495,7 @@ You will have a UI open in browser window on `localhost:8000`. Go to the `Vue Pr
 
 ![Vue Project Manager](/ui-project-manager.png)
 
-And look for your test project name there
+And look for your test project name there:
 
 ![UI Plugins List](/ui-select-plugin.png)
 
