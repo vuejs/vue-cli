@@ -771,7 +771,7 @@ The logo should be a square non-transparent image (ideally 84x84).
 
 ### Discoverability
 
-For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
+For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>` or `@scope/vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
 
 - Discoverable by `@vue/cli-service`;
 - Discoverable by other developers via searching;
