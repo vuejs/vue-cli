@@ -166,7 +166,7 @@ module.exports = api => {
     dependencies: {
       'vue-router-layout': '^0.1.2'
     },
-  });
+  })
 }
 ```
 
@@ -182,7 +182,7 @@ module.exports = api => {
     scripts: {
       greet: 'vue-cli-service greet'
     }
-  });
+  })
 }
 ```
 
@@ -208,10 +208,10 @@ First, we need to read main file content with Node `fs` module (which provides a
 // generator/index.js
 
 api.onCreateComplete(() => {
-  const fs = require('fs');
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
-  const lines = contentMain.split(/\r?\n/g);
-};
+  const fs = require('fs')
+  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+  const lines = contentMain.split(/\r?\n/g)
+}
 ```
 
 Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
@@ -220,13 +220,13 @@ Then we should to find the string containing `render` word (it's usually a part 
 // generator/index.js
 
 api.onCreateComplete(() => {
-  const fs = require('fs');
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
-  const lines = contentMain.split(/\r?\n/g);
+  const fs = require('fs')
+  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+  const lines = contentMain.split(/\r?\n/g)
 
-  const renderIndex = lines.findIndex(line => line.match(/render/));
+  const renderIndex = lines.findIndex(line => line.match(/render/))
   lines[renderIndex] += `\n  router,`
-};
+}
 ```
 
 Finally, you need to write the content back to the main file:
@@ -235,15 +235,15 @@ Finally, you need to write the content back to the main file:
 // generator/index.js
 
 api.onCreateComplete(() => {
-  const fs = require('fs');
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' });
-  const lines = contentMain.split(/\r?\n/g);
+  const fs = require('fs')
+  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+  const lines = contentMain.split(/\r?\n/g)
 
-  const renderIndex = lines.findIndex(line => line.match(/render/));
+  const renderIndex = lines.findIndex(line => line.match(/render/))
   lines[renderIndex] += `\n  router,`
 
-  fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' });
-};
+  fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' })
+}
 ```
 
 ## Service Plugin
@@ -331,12 +331,12 @@ api.registerCommand(
   },
   args => {
     if (args.name) {
-      console.log(`👋 Hello, ${args.name}!`);
+      console.log(`👋 Hello, ${args.name}!`)
     } else {
-      console.log(`👋 Hello!`);
+      console.log(`👋 Hello!`)
     }
   }
-);
+)
 ```
 
 Now, if you a `greet` command with a specified `--name` option, this name will be added to console message:
@@ -460,7 +460,7 @@ If you want to use the result of the user's choice in generator, it will be acce
 if (options.addExampleRoutes) {
   api.render('./template', {
     ...options
-  });
+  })
 }
 ```
 
@@ -538,8 +538,8 @@ module.exports = api => {
     match: /greet/,
     description: 'Prints a greeting in the console',
     link: 'https://cli.vuejs.org/dev-guide/plugin-dev.html#core-concepts'
-  });
-};
+  })
+}
 ```
 
 Now if you explore your project in the Vue UI, you will find your task added to the `Tasks` section. You can see a name of the task, provided description, a link icon that leads to the provided URL and also an output screen to show the task output:
@@ -575,7 +575,7 @@ Now you need to add some actual config to this file:
 
 module.exports = {
   color: 'black',
-};
+}
 ```
 
 After your plugin is invoked, the `myConfig.js` file will be rendered in the project root directory. Now let's add a new configuration screen with the `api.describeConfig` method in the `ui.js` file:
@@ -625,7 +625,7 @@ api.describeConfig({
       js: ['myConfig.js'],
     }
   },
-});
+})
 ```
 
 There can be more than one file provided. Say, if we have `myConfig.json`, we can provide it with `json: ['myConfig.json']` property. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
@@ -647,7 +647,7 @@ api.describeConfig({
       }
     ]
   }),
-});
+})
 ```
 
 In the example above we specified the input prompt with the default value of 'white'. This is how our configuration screen will look with all the settings provided above:
@@ -661,7 +661,7 @@ Now let's replace hardcoded `white` value with the property from the config file
 
 module.exports = {
   color: 'black',
-};
+}
 ```
 
 So, the `data` object will be
@@ -710,11 +710,11 @@ api.describeConfig({
 
 ```js
 async onWrite({ api, prompts }) {
-  const result = {};
+  const result = {}
   for (const prompt of prompts) {
-    result[`${prompt.id}`] = await api.getAnswer(prompt.id);
+    result[`${prompt.id}`] = await api.getAnswer(prompt.id)
   }
-  api.setData('myConfig', result);
+  api.setData('myConfig', result)
 }
 ```
 
@@ -725,7 +725,7 @@ Now if you try to change the value in the color input field from `black` to `red
 
 module.exports = {
   color: 'red',
-};
+}
 ```
 
 ### Display prompts
@@ -750,7 +750,7 @@ module.exports = [
     link:
       'https://github.com/ktsn/vue-cli-plugin-auto-routing/#vue-cli-plugin-auto-routing'
   }
-];
+]
 ```
 
 As a result, you will have this screen on plugin invocation:
