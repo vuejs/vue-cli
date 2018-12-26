@@ -85,7 +85,9 @@ To render this structure, you need to create it first inside the `generator/temp
 After template is created, you should add `api.render` call to the `generator/index.js` file:
 
 ```js
-api.render('./template')
+module.exports = api => {
+  api.render('./template')
+}
 ```
 
 ### Editing existing templates
