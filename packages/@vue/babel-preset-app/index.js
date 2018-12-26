@@ -142,7 +142,10 @@ module.exports = (context, options = {}) => {
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {
     regenerator: useBuiltIns !== 'usage',
-    corejs: useBuiltIns !== false ? false : 2,
+    // use @babel/runtime-corejs2 so that helpers that need polyfillable APIs will reference core-js instead.
+    // if useBuiltIns is not set to 'usage', then it means users would take care of the polyfills on their own,
+    // i.e., core-js 2 is no longer needed
+    corejs: useBuiltIns === 'usage' ? 2 : false,
     helpers: useBuiltIns === 'usage',
     useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
     absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json'))
