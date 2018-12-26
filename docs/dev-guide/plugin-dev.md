@@ -587,15 +587,19 @@ First you need to pass some information:
 
 api.describeConfig({
   // Unique ID for the config
-  id: 'myConfig',
+  id: 'org.ktsn.vue-auto-routing.config',
   // Displayed name
   name: 'Greeting configuration',
   // Shown below the name
   description: 'This config defines the color of the greeting printed',
   // "More info" link
-  link: 'https://cli.vuejs.org/dev-guide/ui-api.html#ui-api'
+  link: 'https://github.com/ktsn/vue-cli-plugin-auto-routing#readme'
 })
 ```
+
+:::danger Warning
+Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)
+:::
 
 #### Config logo
 
