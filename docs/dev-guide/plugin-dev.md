@@ -38,7 +38,7 @@ So, typical CLI plugin folder structure looks like the following:
 
 A Generator part of the CLI plugin is usually needed when you want to extend your package with new dependencies, create new files in your project or edit existing ones.
 
-Inside the CLI plugin the generator should be placed inside a `generator.js` or `generator/index.js` file. It will be invoked in two possible scenarios:
+Inside the CLI plugin the generator should be placed in a `generator.js` or `generator/index.js` file. It will be invoked in two possible scenarios:
 
 - During a project's initial creation, if the CLI plugin is installed as part of the project creation preset.
 
