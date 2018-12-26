@@ -485,7 +485,7 @@ vue invoke <your-plugin-name>
 
 You need to repeat these steps every time you make changes to your plugin.
 
-Another way to add a plugin is to leverage the power of Vue UI. You can run it with
+Another way to add a plugin is to leverage the power of Vue UI. You can run it with:
 
 ```bash
 vue ui
