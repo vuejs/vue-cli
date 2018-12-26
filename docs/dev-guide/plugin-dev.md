@@ -470,7 +470,7 @@ Now template will be rendered only if user agreed to create example routes.
 
 ## Installing plugin locally
 
-While working on your plugin, you need to test it and check how it works locally on a project using Vue CLI. You can use an existing project or create a new one just for testing purposes
+While working on your plugin, you need to test it and check how it works locally on a project using Vue CLI. You can use an existing project or create a new one just for testing purposes:
 
 ```bash
 vue create test-app
