@@ -351,17 +351,17 @@ $ vue-cli-service greet --name 'John Doe'
 If you want to modify an existing cli-service command, you can retrieve it with `api.service.commands` and add some changes. We're going to print a message to the console with a port where application is running:
 
 ```js
-  const { serve } = api.service.commands
+const { serve } = api.service.commands
 
-  const serveFn = serve.fn
+const serveFn = serve.fn
 
-  serve.fn = (...args) => {
-    return serveFn(...args).then(res => {
-      if (res && res.url) {
-        console.log(`Project is running now at ${res.url}`)
-      }
-    })
-  }
+serve.fn = (...args) => {
+  return serveFn(...args).then(res => {
+    if (res && res.url) {
+      console.log(`Project is running now at ${res.url}`)
+    }
+  })
+}
 ```
 
 In the example above we retrieve the `serve` command from the list of existing commands; then we modify its `fn` part (`fn` is the third parameter passed when you create a new command; it specifies the function to run when running the command). With the modification done the console message will be printed after `serve` command has run successfully.
@@ -390,7 +390,9 @@ Prompts are required to handle user choices when creating a new project or addin
 
 ### Prompts for Built-in Plugins
 
+:::tip
 Only built-in plugins have the ability to customize the initial prompts when creating a new project.
+:::
 
 A prompt module should export a function that receives a PromptModuleAPI instance.
 
