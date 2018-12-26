@@ -176,7 +176,7 @@ Let's consider the case where we have created a `router.js` file via [templating
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
-Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `onCreateComplete` hook which is to be called when the files have been written to disk
+Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `onCreateComplete` hook which is to be called when the files have been written to disk.
 
 First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
 
