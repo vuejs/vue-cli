@@ -529,7 +529,7 @@ module.exports = api => {
 
 ### Augment the task in the UI
 
-Vue CLI plugin allows you not only add new npm tasks to the project [via Generator](#extending-package) but also create a view fro them in Vue UI. It's useful when you want to run the the task right from the UI and see it's output there.
+Vue CLI plugin allows you not only add new npm tasks to the project [via Generator](#extending-package) but also create a view for them in Vue UI. It's useful when you want to run the the task right from the UI and see its output there.
 
 Let's add a `greet` task created with [Generator](#extending-package) to the UI. Tasks are generated from the `scripts` field in the project `package.json` file. You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method. Let's provide some additional information about our task:
 
