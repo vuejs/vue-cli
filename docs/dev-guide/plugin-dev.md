@@ -389,7 +389,7 @@ This is because the command's expected mode needs to be known before loading env
 
 ## Prompts
 
-Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood
+Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
 
 ### Prompts for Built-in Plugins
 
