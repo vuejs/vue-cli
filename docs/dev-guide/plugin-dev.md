@@ -742,7 +742,7 @@ module.exports = [
     type: 'confirm',
     message: 'Add example routes?',
     default: false,
-    //UI-related propmpt properties
+    // UI-related prompt properties
     group: 'Strongly recommended',
     description: 'Adds example pages, layouts and correct router config',
     link:
