@@ -148,7 +148,7 @@ module.exports = api => {
 
 In the example above we added one dependency: `vue-router-layout`. During the plugin invocation this npm module will be installed and this dependency will be added to the user `package.json` file.
 
-With the same API method we can add new npm tasks to the project. To do so, we need to specify task name and a command that should be run in the `scripts` section:
+With the same API method we can add new npm tasks to the project. To do so, we need to specify task name and a command that should be run in the `scripts` section of the user `package.json`:
 
 ```js
 // generator/index.js
