@@ -571,7 +571,7 @@ By default, a configuration UI might read and write to the following file types:
 Now you need to add some actual config to this file:
 
 ```js
-//myConfig.js
+// myConfig.js
 
 module.exports = {
   color: 'black'
@@ -583,7 +583,7 @@ After your plugin is invoked, the `myConfig.js` file will be rendered in the pro
 First you need to pass some information:
 
 ```js
-//ui.js
+// ui.js
 
 api.describeConfig({
   // Unique ID for the config
@@ -606,7 +606,7 @@ Make sure to namespace the id correctly, since it must be unique across all plug
 You can also select an icon for your config. It can be either a [Material icon](https://material.io/tools/icons/?style=baseline) code or a custom image (see [Public static files](ui-api.md#public-static-files)).
 
 ```js
-//ui.js
+// ui.js
 
 api.describeConfig({
   /* ... */
@@ -683,6 +683,8 @@ So, the `data` object will be
 It's easy to see that we need `data.myConfig.color` property. Let's change `onRead` hook:
 
 ```js
+// ui.js
+
 onRead: ({ data }) => ({
   prompts: [
     {
@@ -702,6 +704,8 @@ You can see that on the configuration screen `white` is replaced with `black`.
 We just read the content of `myConfig.js` and used it on the configuration screen. Now let's try to save any changes done in the color input field to the file. We can do it with the `onWrite` hook:
 
 ```js
+// ui.js
+
 api.describeConfig({
   /* ... */
   onWrite: ({ prompts, api }) => {
@@ -713,6 +717,8 @@ api.describeConfig({
 `onWrite` hook can take a lot of [arguments](ui-api.html#save-config-changes) but we will need only two of them: `prompts` and `api`. First one is current prompts runtime objects - we will get a prompt id from it and retrieve an answer with this id. To retrieve the answer we'll use `async getAnswer()` method from the `api`:
 
 ```js
+// ui.js
+
 async onWrite({ api, prompts }) {
   const result = {}
   for (const prompt of prompts) {
