@@ -763,6 +763,8 @@ As a result, you will have this screen on plugin invocation:
 You can put a `logo.png` file in the root directory of the folder that will be published on npm. It will be displayed in several places:
  - When searching for a plugin to install
  - In the installed plugin list
+ - In the configurations list (by default)
+ - In the tasks list for augmented tasks (by default)
 
 ![Plugins](/plugins.png)
 
