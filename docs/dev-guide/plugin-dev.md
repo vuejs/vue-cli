@@ -130,6 +130,29 @@ export default {
 <%# END_REPLACE %>
 ```
 
+### Filename edge cases
+
+If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
+```
+# dotfile templates have to use an underscore instead of the dot:
+
+/generator/template/_env
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+.env
+```
+Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
+```
+# such templates have to use two underscores instead of the dot:
+
+/generator/template/__variables.scss
+
+# When calling api.render('./template'), this will be rendered in the project folder as:
+
+_variables.scss
+```
+
 
 ### Extending package
 
@@ -144,6 +167,7 @@ module.exports = api => {
       'vue-router-layout': '^0.1.2'
     },
   });
+}
 ```
 
 In the example above we added one dependency: `vue-router-layout`. During the plugin invocation this npm module will be installed and this dependency will be added to the user `package.json` file.
@@ -220,29 +244,6 @@ api.onCreateComplete(() => {
 
   fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' });
 };
-```
-
-### Filename edge cases
-
-If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
-```
-# dotfile templates have to use an underscore instead of the dot:
-
-/generator/template/_env
-
-# When calling api.render('./template'), this will be rendered in the project folder as:
-
-.env
-```
-Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
-```
-# such templates have to use two underscores instead of the dot:
-
-/generator/template/__variables.scss
-
-# When calling api.render('./template'), this will be rendered in the project folder as:
-
-_variables.scss
 ```
 
 ## Service Plugin
