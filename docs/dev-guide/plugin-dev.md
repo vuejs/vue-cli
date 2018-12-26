@@ -503,7 +503,7 @@ Click on your application name, go to the Plugins tab (it has a puzzle icon) and
 
 ![Browse local plugins](/ui-browse-local-plugin.png)
 
-After you click it, you can easily search for you plugin and add it to the project. After this you will be able to see it in plugins list and apply all changes done to the plugin via simply clicking on `Refresh` icon
+After you click it, you can easily search for you plugin and add it to the project. After this you will be able to see it in plugins list and apply all changes done to the plugin via simply clicking on `Refresh` icon:
 
 ![Refresh plugin](/ui-plugin-refresh.png)
 
