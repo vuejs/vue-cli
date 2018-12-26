@@ -392,7 +392,7 @@ Prompts are required to handle user choices when creating a new project or addin
 
 Only built-in plugins have the ability to customize the initial prompts when creating a new project.
 
-A prompt module should export a function that receives a [PromptModuleAPI](prompt-api.md) instance.
+A prompt module should export a function that receives a PromptModuleAPI instance.
 
 ``` js
 module.exports = api => {

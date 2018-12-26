@@ -27,14 +27,6 @@ Resolve a path for the current project
 - **Usage**:
 Check if the project has a plugin with given id
 
-- **Example**
-
-```js
-if (api.hasPlugin('typescript')) {
-  console.log('This project is using TypeScript')
-}
-```
-
 ## registerCommand
 
 - **Arguments**
@@ -54,20 +46,6 @@ if (api.hasPlugin('typescript')) {
 
 - **Usage**:
 Register a command that will become available as `vue-cli-service [name]`.
-
-- **Example**
-```js
-api.registerCommand(
-  'greet',
-  {
-    description: 'Writes a greeting to the console',
-    usage: 'vue-cli-service greet'
-  },
-  () => {
-    console.log(`👋  Hello`)
-  }
-)
-```
 
 ## chainWebpack
 
