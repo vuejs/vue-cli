@@ -499,7 +499,7 @@ And look for your test project name there:
 
 ![UI Plugins List](/ui-select-plugin.png)
 
-Click on your application name, go to the Plugins tab (it has a puzzle icon) and then click the `Add new plugin` button on the top right. In the new view you will see a list of Vue CLI plugins accessible via npm. There is also a `Browse local plugin` button on the bottom of the page
+Click on your application name, go to the Plugins tab (it has a puzzle icon) and then click the `Add new plugin` button on the top right. In the new view you will see a list of Vue CLI plugins accessible via npm. There is also a `Browse local plugin` button on the bottom of the page:
 
 ![Browse local plugins](/ui-browse-local-plugin.png)
 
