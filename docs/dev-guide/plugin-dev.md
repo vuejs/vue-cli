@@ -457,11 +457,11 @@ On plugin invoke user will be prompted with the question about example routes an
 If you want to use the result of the user's choice in generator, it will be accessible with the prompt name. We can add a modification to `generator/index.js`:
 
 ```js
-  if (options.addExampleRoutes) {
-    api.render('./template', {
-      ...options
-    });
-  }
+if (options.addExampleRoutes) {
+  api.render('./template', {
+    ...options
+  });
+}
 ```
 
 Now template will be rendered only if user agreed to create example routes.
@@ -599,7 +599,7 @@ api.describeConfig({
 
 #### Config logo
 
-You can also select an icon for your config. It can be either a [Material icon](https://material.io/tools/icons/?style=baseline) code or a custom image (see Public static files).
+You can also select an icon for your config. It can be either a [Material icon](https://material.io/tools/icons/?style=baseline) code or a custom image (see [Public static files](ui-api.md#public-static-files)).
 
 ```js
 //ui.js
