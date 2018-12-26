@@ -305,7 +305,7 @@ Here is an example of creating a simple new command that will print a greeting t
   )
 ```
 
-In this example we provided the command name (`'greet`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
+In this example we provided the command name (`'greet'`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
 
 :::tip
 You can add new command to the list of project npm scripts inside the `package.json` file [via Generator](#extending-package).
