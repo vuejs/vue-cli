@@ -8,7 +8,7 @@ Returns a current working directory
 ## resolve
 
 - **Arguments**
-  - `{string} _path` - relative path from project root
+  - `{string} path` - relative path from project root
 
 - **Returns**
   - `{string}`- the resolved absolute path
