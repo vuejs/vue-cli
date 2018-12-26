@@ -42,7 +42,7 @@ Inside the CLI plugin the generator should be placed in a `generator.js` or `gen
 
 - During a project's initial creation, if the CLI plugin is installed as part of the project creation preset.
 
-- When the plugin is installed after project's creation and invoked individually via `vue invoke`.
+- When the plugin is installed after project's creation and invoked individually via `vue add` or `vue invoke`.
 
 A generator should export a function which receives three arguments:
 
