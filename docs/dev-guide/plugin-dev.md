@@ -737,7 +737,7 @@ To display a prompt in the UI you need to extend the [inquirer object](#prompts-
 
 module.exports = [
   {
-    //basic propmpt properties
+    // basic prompt properties
     name: `addExampleRoutes`,
     type: 'confirm',
     message: 'Add example routes?',
