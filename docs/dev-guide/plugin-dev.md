@@ -159,6 +159,7 @@ module.exports = api => {
       greet: 'vue-cli-service greet'
     }
   });
+}
 ```
 
 In the example above we're adding a new `greet` task to run a custom vue-cli service command created in [Service section](#add-a-new-cli-service-command)
