@@ -19,6 +19,14 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, 'vue-cli')
 
+if (semver.satisfies(process.version, '9.x')) {
+  console.log(chalk.red(
+    `You are using Node ${process.version}.\n` +
+    `Node.js 9.x has already reached end-of-life and will not be supported in future major releases.\n` +
+    `It's strongly recommended to upgrade your Node.js version as soon as possible.`
+  ))
+}
+
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
