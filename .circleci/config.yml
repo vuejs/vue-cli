@@ -59,7 +59,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: yarn test -p unit-mocha,unit-jest,e2e-nightwatch,e2e-cypress
+      # e2e-nightwatch was left out due to some unknown issues with selenium and the CI image
+      - run: yarn test -p unit-mocha,unit-jest,e2e-cypress
       - run: yarn test tsPluginE2e
 
   cli-ui:
