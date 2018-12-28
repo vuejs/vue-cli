@@ -34,6 +34,7 @@ enum DependencyType {
 input DependencyInstall {
   id: ID!
   type: DependencyType!
+  range: String
 }
 
 input DependencyUninstall {

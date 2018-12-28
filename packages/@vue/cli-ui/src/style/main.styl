@@ -1,5 +1,5 @@
 @import '~prismjs/themes/prism.css'
-@import 'imports'
+@import 'transitions'
 
 html,
 body,
@@ -9,6 +9,9 @@ body,
 
 h2
   line-height 32px
+
+ul
+  padding-left $padding-item
 
 .empty-icon
   display block
@@ -45,6 +48,22 @@ h2
 
 .list-item
   list-item()
+
+.list-header
+  padding $padding-item
+  display flex
+  align-items center
+  justify-content center
+
+  .search
+    flex 1
+
+.card
+  background $vue-ui-color-light
+  border-radius ($br * 2)
+  box-shadow 0 4px 15px rgba(black, .05)
+  .vue-ui-dark-mode &
+    background $vue-ui-color-darker
 
 ansi-colors('black', $vue-ui-color-dark)
 ansi-colors('red', $vue-ui-color-danger)
@@ -166,7 +185,7 @@ ansi-colors('white', $vue-ui-color-light)
 .vue-ui-dark-mode
   .token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol, .token.deleted
     color lighten(#905, 40%)
-  
+
   .token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted
     color lighten(#690, 40%)
 
@@ -178,6 +197,54 @@ ansi-colors('white', $vue-ui-color-light)
 
   .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string
     color lighten(#9a6e3a, 20%)
-  
+
   .token.punctuation
     color lighten(#999, 20%)
+
+// Resizing
+
+.resize-handle
+  position absolute
+  width 12px
+  height @width
+  border-radius 50%
+  background lighten($vue-ui-color-primary, 40%)
+  .vue-ui-dark-mode &
+    background darken($vue-ui-color-primary, 40%)
+
+
+  $halfWidth = @width / 2
+  $halfHeight = @height / 2
+
+  &:hover
+    background $vue-ui-color-primary
+  &.top,
+  &.top-left,
+  &.top-right
+    top -($halfHeight)
+  &.bottom,
+  &.bottom-left,
+  &.bottom-right
+    bottom -($halfHeight)
+  &.left,
+  &.top-left,
+  &.bottom-left
+    left -($halfWidth)
+  &.right,
+  &.top-right,
+  &.bottom-right
+    right -($halfWidth)
+  &.top,
+  &.bottom
+    left 'calc(50% - %s)' % $halfWidth
+    cursor ns-resize
+  &.left,
+  &.right
+    top 'calc(50% - %s)' % $halfHeight
+    cursor ew-resize
+  &.top-left,
+  &.bottom-right
+    cursor nwse-resize
+  &.top-right,
+  &.bottom-left
+    cursor nesw-resize

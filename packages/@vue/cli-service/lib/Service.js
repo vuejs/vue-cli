@@ -159,7 +159,23 @@ module.exports = class Service {
       const projectPlugins = Object.keys(this.pkg.devDependencies || {})
         .concat(Object.keys(this.pkg.dependencies || {}))
         .filter(isPlugin)
-        .map(idToPlugin)
+        .map(id => {
+          if (
+            this.pkg.optionalDependencies &&
+            id in this.pkg.optionalDependencies
+          ) {
+            let apply = () => {}
+            try {
+              apply = require(id)
+            } catch (e) {
+              warn(`Optional dependency ${id} is not installed.`)
+            }
+
+            return { id, apply }
+          } else {
+            return idToPlugin(id)
+          }
+        })
       plugins = builtInPlugins.concat(projectPlugins)
     }
 

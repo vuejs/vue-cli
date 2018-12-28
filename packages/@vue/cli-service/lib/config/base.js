@@ -33,12 +33,12 @@ module.exports = (api, options) => {
         .end()
       .output
         .path(api.resolve(options.outputDir))
-        .filename(isLegacyBundle ? '[name]-legacy.[hash:8].js' : '[name].[hash:8].js')
+        .filename(isLegacyBundle ? '[name]-legacy.js' : '[name].js')
         .publicPath(options.baseUrl)
 
     webpackConfig.resolve
       .extensions
-        .merge(['.js', '.jsx', '.vue', '.json'])
+        .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
         .end()
       .modules
         .add('node_modules')

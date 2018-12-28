@@ -1,6 +1,9 @@
 {
-  "lerna": "2.5.1",
   "npmClient": "yarn",
-  "useWorkspaces": true,
-  "version": "3.0.1"
+  "useWorkspaces": false,
+  "version": "3.2.1",
+  "packages": [
+    "packages/@vue/babel-preset-app",
+    "packages/@vue/cli*"
+  ]
 }

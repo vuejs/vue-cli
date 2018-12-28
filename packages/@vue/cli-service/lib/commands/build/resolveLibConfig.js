@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (api, { entry, name }, options) => {
+module.exports = (api, { entry, name, formats }, options) => {
   const { log, error } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
@@ -46,6 +46,7 @@ module.exports = (api, { entry, name }, options) => {
     // externalize Vue in case user imports it
     config
       .externals({
+        ...config.get('externals'),
         vue: {
           commonjs: 'vue',
           commonjs2: 'vue',
@@ -113,9 +114,20 @@ module.exports = (api, { entry, name }, options) => {
     return rawConfig
   }
 
-  return [
-    genConfig('commonjs2', 'common'),
-    genConfig('umd', undefined, true),
-    genConfig('umd', 'umd.min')
-  ]
+  const configMap = {
+    commonjs: genConfig('commonjs2', 'common'),
+    umd: genConfig('umd', undefined, true),
+    'umd-min': genConfig('umd', 'umd.min')
+  }
+
+  const formatArray = (formats + '').split(',')
+  const configs = formatArray.map(format => configMap[format])
+  if (configs.indexOf(undefined) !== -1) {
+    const unknownFormats = formatArray.filter(f => configMap[f] === undefined).join(', ')
+    abort(
+      `Unknown library build formats: ${unknownFormats}`
+    )
+  }
+
+  return configs
 }

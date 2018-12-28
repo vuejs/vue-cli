@@ -51,7 +51,10 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
   }
 
   function createProxyEntry (target, usersOnProxyReq, context) {
-    if (process.platform === 'win32') {
+    // #2478
+    // There're a little-known use case that the `target` field is an object rather than a string
+    // https://github.com/chimurai/http-proxy-middleware/blob/master/recipes/https.md
+    if (typeof target === 'string' && process.platform === 'win32') {
       target = resolveLoopback(target)
     }
     return {
@@ -116,7 +119,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     if (!config.hasOwnProperty('target')) {
       console.log(
         chalk.red(
-          'When `proxy` in package.json is as an object, each `context` object must have a ' +
+          'When `proxy` in package.json is an object, each `context` object must have a ' +
             '`target` property specified as a url string'
         )
       )

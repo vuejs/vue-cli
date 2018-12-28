@@ -42,6 +42,7 @@ module.exports = (api, options) => {
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
     const validateWebpackConfig = require('../util/validateWebpackConfig')
+    const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
@@ -89,7 +90,7 @@ module.exports = (api, options) => {
       protocol,
       host,
       port,
-      options.baseUrl
+      isAbsoluteUrl(options.baseUrl) ? '/' : options.baseUrl
     )
 
     const proxySettings = prepareProxy(
@@ -242,7 +243,7 @@ module.exports = (api, options) => {
           console.log()
 
           if (args.open || projectDevServerOptions.open) {
-            const pageUri = ( projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string' )
+            const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
               ? projectDevServerOptions.openPage
               : ''
             openBrowser(urls.localUrlForBrowser + pageUri)
@@ -297,7 +298,7 @@ function checkInContainer () {
   const fs = require('fs')
   if (fs.existsSync(`/proc/1/cgroup`)) {
     const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
-    return /:\/(lxc|docker)\//.test(content)
+    return /:\/(lxc|docker|kubepods)\//.test(content)
   }
 }
 

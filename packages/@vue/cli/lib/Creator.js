@@ -3,6 +3,7 @@ const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
 const inquirer = require('inquirer')
+const semver = require('semver')
 const EventEmitter = require('events')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
@@ -105,6 +106,7 @@ module.exports = class Creator extends EventEmitter {
 
     // get latest CLI version
     const { latest } = await getVersions()
+    const latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
     // generate package.json with plugin dependencies
     const pkg = {
       name,
@@ -117,9 +119,13 @@ module.exports = class Creator extends EventEmitter {
       if (preset.plugins[dep]._isPreset) {
         return
       }
+
+      // Note: the default creator includes no more than `@vue/cli-*` & `@vue/babel-preset-env`,
+      // so it is fine to only test `@vue` prefix.
+      // Other `@vue/*` packages' version may not be in sync with the cli itself.
       pkg.devDependencies[dep] = (
         preset.plugins[dep].version ||
-        (/^@vue/.test(dep) ? `^${latest}` : `latest`)
+        ((/^@vue/.test(dep)) ? `^${latestMinor}` : `latest`)
       )
     })
     // write package.json
@@ -129,7 +135,7 @@ module.exports = class Creator extends EventEmitter {
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
-    const shouldInitGit = await this.shouldInitGit(cliOptions)
+    const shouldInitGit = this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
       this.emit('creation', { event: 'git-init' })
@@ -310,7 +316,7 @@ module.exports = class Creator extends EventEmitter {
   // { id: options } => [{ id, apply, options }]
   async resolvePlugins (rawPlugins) {
     // ensure cli-service is invoked first
-    rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'])
+    rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'], true)
     const plugins = []
     for (const id of Object.keys(rawPlugins)) {
       const apply = loadModule(`${id}/generator`, this.context) || (() => {})
@@ -443,7 +449,7 @@ module.exports = class Creator extends EventEmitter {
     return prompts
   }
 
-  async shouldInitGit (cliOptions) {
+  shouldInitGit (cliOptions) {
     if (!hasGit()) {
       return false
     }

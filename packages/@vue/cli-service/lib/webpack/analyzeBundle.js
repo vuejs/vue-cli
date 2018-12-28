@@ -2,7 +2,7 @@
 // Modified by Guillaume Chau (Akryum)
 
 const acorn = require('acorn')
-const walk = require('acorn/dist/walk')
+const walk = require('acorn-walk')
 const mapValues = require('lodash.mapvalues')
 const transform = require('lodash.transform')
 const zlib = require('zlib')

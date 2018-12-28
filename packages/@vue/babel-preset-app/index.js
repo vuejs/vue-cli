@@ -41,6 +41,7 @@ module.exports = (context, options = {}) => {
   const {
     polyfills: userPolyfills,
     loose = false,
+    debug = false,
     useBuiltIns = 'usage',
     modules = false,
     targets: rawTargets,
@@ -51,6 +52,7 @@ module.exports = (context, options = {}) => {
     exclude,
     shippedProposals,
     forceAllTransforms,
+    decoratorsBeforeExport,
     decoratorsLegacy
   } = options
 
@@ -103,6 +105,7 @@ module.exports = (context, options = {}) => {
   const envOptions = {
     spec,
     loose,
+    debug,
     modules,
     targets,
     useBuiltIns,
@@ -125,21 +128,27 @@ module.exports = (context, options = {}) => {
   presets.push([require('@babel/preset-env'), envOptions])
 
   // additional <= stage-3 plugins
-  // Babel 7 is removing stgage presets altogether because people are using
-  // too much unstable proposals. Let's be conservative in the defaults here.
+  // Babel 7 is removing stage presets altogether because people are using
+  // too many unstable proposals. Let's be conservative in the defaults here.
   plugins.push(
     require('@babel/plugin-syntax-dynamic-import'),
-    [require('@babel/plugin-proposal-decorators'), { legacy: decoratorsLegacy !== false }],
+    [require('@babel/plugin-proposal-decorators'), {
+      decoratorsBeforeExport,
+      legacy: decoratorsLegacy !== false
+    }],
     [require('@babel/plugin-proposal-class-properties'), { loose }],
   )
 
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {
-    polyfill: false,
     regenerator: useBuiltIns !== 'usage',
-    useBuiltIns: useBuiltIns !== false,
+    // use @babel/runtime-corejs2 so that helpers that need polyfillable APIs will reference core-js instead.
+    // if useBuiltIns is not set to 'usage', then it means users would take care of the polyfills on their own,
+    // i.e., core-js 2 is no longer needed.
+    corejs: (useBuiltIns === 'usage' && !process.env.VUE_CLI_MODERN_BUILD) ? 2 : false,
+    helpers: useBuiltIns === 'usage',
     useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
-    moduleName: path.dirname(require.resolve('@babel/runtime/package.json'))
+    absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json'))
   }])
 
   return {

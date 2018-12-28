@@ -24,7 +24,7 @@ module.exports = (api, options) => {
     const outputDir = api.resolve(options.outputDir)
 
     // code splitting
-    if (isProd) {
+    if (isProd && !process.env.CYPRESS_ENV) {
       webpackConfig
         .optimization.splitChunks({
           cacheGroups: {
@@ -125,9 +125,12 @@ module.exports = (api, options) => {
             if (chunk.name) {
               return chunk.name
             }
-            return `chunk-` + Array.from(chunk.modulesIterable, m => {
-              return m.id
-            }).join('_')
+
+            const hash = require('hash-sum')
+            const joinedHash = hash(
+              Array.from(chunk.modulesIterable, m => m.id).join('_')
+            )
+            return `chunk-` + joinedHash
           }])
     }
 
@@ -174,13 +177,27 @@ module.exports = (api, options) => {
       const normalizePageConfig = c => typeof c === 'string' ? { entry: c } : c
 
       pages.forEach(name => {
+        const pageConfig = normalizePageConfig(multiPageConfig[name])
         const {
-          title,
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`,
-          chunks
-        } = normalizePageConfig(multiPageConfig[name])
+          chunks = ['chunk-vendors', 'chunk-common', name]
+        } = pageConfig
+
+        // Currently Cypress v3.1.0 comes with a very old version of Node,
+        // which does not support object rest syntax.
+        // (https://github.com/cypress-io/cypress/issues/2253)
+        // So here we have to extract the customHtmlOptions manually.
+        const customHtmlOptions = {}
+        for (const key in pageConfig) {
+          if (
+            !['entry', 'template', 'filename', 'chunks'].includes(key)
+          ) {
+            customHtmlOptions[key] = pageConfig[key]
+          }
+        }
+
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
@@ -196,12 +213,16 @@ module.exports = (api, options) => {
             : defaultHtmlPath
 
         // inject html plugin for the page
-        const pageHtmlOptions = Object.assign({}, htmlOptions, {
-          chunks: chunks || ['chunk-vendors', 'chunk-common', name],
-          template: templatePath,
-          filename: ensureRelative(outputDir, filename),
-          title
-        })
+        const pageHtmlOptions = Object.assign(
+          {},
+          htmlOptions,
+          {
+            chunks,
+            template: templatePath,
+            filename: ensureRelative(outputDir, filename)
+          },
+          customHtmlOptions
+        )
 
         webpackConfig
           .plugin(`html-${name}`)
@@ -259,6 +280,7 @@ module.exports = (api, options) => {
           .use(require('copy-webpack-plugin'), [[{
             from: publicDir,
             to: outputDir,
+            toType: 'dir',
             ignore: publicCopyIgnore
           }]])
     }

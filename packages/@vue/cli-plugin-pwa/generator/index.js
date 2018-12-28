@@ -1,7 +1,7 @@
 module.exports = api => {
   api.extendPackage({
     dependencies: {
-      'register-service-worker': '^1.0.0'
+      'register-service-worker': '^1.5.2'
     }
   })
   api.injectImports(api.entryFile, `import './registerServiceWorker'`)

@@ -5,6 +5,8 @@ module.exports = (api, options) => {
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
 
   api.chainWebpack(webpackConfig => {
+    webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
+
     const jsRule = webpackConfig.module
       .rule('js')
         .test(/\.jsx?$/)
@@ -36,7 +38,7 @@ module.exports = (api, options) => {
           .loader('cache-loader')
           .options(api.genCacheConfig('babel-loader', {
             '@babel/core': require('@babel/core/package.json').version,
-            '@vue/babel-preset-app': require('@vue/babel-preset-app').version,
+            '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
             'babel-loader': require('babel-loader/package.json').version,
             modern: !!process.env.VUE_CLI_MODERN_BUILD,
             browserslist: api.service.pkg.browserslist
