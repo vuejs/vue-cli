@@ -62,7 +62,9 @@ module.exports = function lint (args = {}, api) {
   // https://github.com/benmosher/eslint-plugin-import/issues/602
   // https://github.com/eslint/eslint/issues/11218
   const processCwd = process.cwd
-  process.cwd = () => cwd
+  if (!api.invoking) {
+    process.cwd = () => cwd
+  }
   const report = engine.executeOnFiles(files)
   process.cwd = processCwd
 
