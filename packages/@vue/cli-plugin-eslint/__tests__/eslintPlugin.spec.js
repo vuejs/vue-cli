@@ -139,3 +139,18 @@ test('should not throw when src folder is ignored by .eslintignore', async () =>
   // should not throw
   await run('vue-cli-service lint')
 })
+
+test('airbnb config + typescript + unit-mocha', async () => {
+  await create('eslint-airbnb-typescript', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {
+        classComponent: true
+      },
+      '@vue/cli-plugin-unit-mocha': {}
+    }
+  })
+})
