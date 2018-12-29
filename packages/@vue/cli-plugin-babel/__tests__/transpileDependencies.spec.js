@@ -77,3 +77,16 @@ test('dep from node_modules should been transpiled', async () => {
 
   expect(await readVendorFile()).toMatch('return "__SCOPE_TEST__"')
 })
+
+// https://github.com/vuejs/vue-cli/issues/3057
+test('only transpile dep with same name specified in transpileDependencies', async () => {
+  await project.write(
+    'vue.config.js',
+    `module.exports = { transpileDependencies: ['babel-transpile-deps'] }`
+  )
+  try {
+    await project.run('vue-cli-service build')
+  } catch (e) {}
+  expect(await readVendorFile()).toMatch('() => "__TEST__"')
+  expect(await readVendorFile()).toMatch('() => "__TEST__"')
+})
