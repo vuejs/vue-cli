@@ -28,7 +28,7 @@
     "babel-eslint": "^10.0.1",
     "chalk": "^2.4.1",
     "resolve": "^1.8.1",
-    "vue": "^2.5.17",
-    "vue-template-compiler": "^2.5.17"
+    "vue": "^2.5.21",
+    "vue-template-compiler": "^2.5.21"
   }
 }

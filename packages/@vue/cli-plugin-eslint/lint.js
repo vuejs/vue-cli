@@ -31,17 +31,27 @@ module.exports = function lint (args = {}, api) {
     cwd
   }, argsConfig)
 
-  const defaultFilesToLint = [
-    'src',
-    'tests',
-    // root config files
-    '*.js',
-    // .eslintrc files (ignored by default)
+  const engine = new CLIEngine(config)
+
+  // .eslintrc.js files (ignored by default)
+  const dotFiles = [
     '.*.js',
     '{src,tests}/**/.*.js'
   ].filter(pattern => globby.sync(path.join(cwd, pattern)).length)
 
-  const engine = new CLIEngine(config)
+  const defaultFilesToLint = [
+    'src',
+    'tests',
+    // root config files
+    '*.js'
+  ]
+    .filter(pattern =>
+      globby
+        .sync(path.join(cwd, pattern))
+        .some(p => !engine.isPathIgnored(p))
+    )
+    .concat(dotFiles)
+
   const files = args._ && args._.length
     ? args._
     : defaultFilesToLint

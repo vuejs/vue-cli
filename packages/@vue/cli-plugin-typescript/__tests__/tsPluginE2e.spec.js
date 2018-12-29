@@ -21,12 +21,14 @@ if (!process.env.APPVEYOR) {
   })
 }
 
-test('nightwatch', async () => {
-  const project = await create('ts-e2e-nightwatch', {
-    plugins: {
-      '@vue/cli-plugin-typescript': {},
-      '@vue/cli-plugin-e2e-nightwatch': {}
-    }
+if (!process.env.CIRCLECI) {
+  test('nightwatch', async () => {
+    const project = await create('ts-e2e-nightwatch', {
+      plugins: {
+        '@vue/cli-plugin-typescript': {},
+        '@vue/cli-plugin-e2e-nightwatch': {}
+      }
+    })
+    await project.run(`vue-cli-service test:e2e`)
   })
-  await project.run(`vue-cli-service test:e2e`)
-})
+}
