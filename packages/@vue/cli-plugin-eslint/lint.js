@@ -56,7 +56,18 @@ module.exports = function lint (args = {}, api) {
     ? args._
     : defaultFilesToLint
 
+  // mock process.cwd before executing
+  // See:
+  // https://github.com/vuejs/vue-cli/issues/2554
+  // https://github.com/benmosher/eslint-plugin-import/issues/602
+  // https://github.com/eslint/eslint/issues/11218
+  const processCwd = process.cwd
+  if (!api.invoking) {
+    process.cwd = () => cwd
+  }
   const report = engine.executeOnFiles(files)
+  process.cwd = processCwd
+
   const formatter = engine.getFormatter(args.format || 'codeframe')
 
   if (config.fix) {
