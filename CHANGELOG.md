@@ -1,3 +1,60 @@
+# [3.2.2](https://github.com/vuejs/vue-cli/compare/v3.2.1...v3.2.2) (2018-12-30)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* skip polyfills for modern mode and fix tests ([e3a58cb](https://github.com/vuejs/vue-cli/commit/e3a58cb))
+* use [@babel](https://github.com/babel)/runtime-corejs2 by default ([9c0adab](https://github.com/vuejs/vue-cli/commit/9c0adab)), closes [#3186](https://github.com/vuejs/vue-cli/issues/3186)
+
+## cli
+
+#### Bug Fixes
+
+* fix cli version check cache ([1f5f7c3](https://github.com/vuejs/vue-cli/commit/1f5f7c3))
+* fix typo ([ae2a9bc](https://github.com/vuejs/vue-cli/commit/ae2a9bc))
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* fix eslint cwd confusion during onCreateComplete hook execution ([#3212](https://github.com/vuejs/vue-cli/issues/3212)) ([90d387f](https://github.com/vuejs/vue-cli/commit/90d387f)), closes [#2554](https://github.com/vuejs/vue-cli/issues/2554) [#3142](https://github.com/vuejs/vue-cli/issues/3142)
+* when lint default paths, don't try to lint non-existent or ignored paths ([d6f6098](https://github.com/vuejs/vue-cli/commit/d6f6098)), closes [#3167](https://github.com/vuejs/vue-cli/issues/3167)
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **typescript:** fix typo in lint command registration ([#3132](https://github.com/vuejs/vue-cli/issues/3132)) ([796c376](https://github.com/vuejs/vue-cli/commit/796c376))
+* when eslint is used, pin ts version to ~3.1.1 ([#3214](https://github.com/vuejs/vue-cli/issues/3214)) ([da6bd75](https://github.com/vuejs/vue-cli/commit/da6bd75))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* **cli-plugin-unit-jest:** When using TS & Babel, make ts-jest use babelConfig  ([#3107](https://github.com/vuejs/vue-cli/issues/3107)) ([c9aaa2f](https://github.com/vuejs/vue-cli/commit/c9aaa2f)), closes [#3100](https://github.com/vuejs/vue-cli/issues/3100)
+
+## cli-plugin-unit-mocha
+
+#### Bug Fixes
+
+* set `url` option for `jsdom-global` ([#3131](https://github.com/vuejs/vue-cli/issues/3131)) ([8d81e51](https://github.com/vuejs/vue-cli/commit/8d81e51)), closes [jsdom/jsdom#2304](https://github.com/jsdom/jsdom/issues/2304)
+
+## cli-service
+
+#### Bug Fixes
+
+* `.wasm` extension should have lower priority when resolving modules ([2ac64d6](https://github.com/vuejs/vue-cli/commit/2ac64d6)), closes [#3023](https://github.com/vuejs/vue-cli/issues/3023)
+* better error message for missing key `entry` in `pages` config ([554670b](https://github.com/vuejs/vue-cli/commit/554670b)), closes [#2816](https://github.com/vuejs/vue-cli/issues/2816)
+* **cli-service:** drop webpack NoEmitOnErrorsPlugin usage ([#3210](https://github.com/vuejs/vue-cli/issues/3210)) ([300efa9](https://github.com/vuejs/vue-cli/commit/300efa9))
+
+## cli-test-utils
+
+#### Bug Fixes
+
+* add missing package ([#2466](https://github.com/vuejs/vue-cli/issues/2466)) ([0ecbb70](https://github.com/vuejs/vue-cli/commit/0ecbb70))
+
+
 # [3.2.1](https://github.com/vuejs/vue-cli/compare/v3.2.0...v3.2.1) (2018-11-27)
 
 ## cli-plugin-eslint
