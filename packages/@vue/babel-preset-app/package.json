@@ -32,6 +32,6 @@
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-transform-vue-jsx": "^4.0.1",
-    "core-js": "^2.6.0"
+    "core-js": "^2.6.1"
   }
 }
