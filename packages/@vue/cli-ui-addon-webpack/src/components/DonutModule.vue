@@ -26,6 +26,7 @@
       class="children"
       :transform="`translate(${size / 2}, ${size / 2})`"
     >
+      <!-- eslint-disable vue/no-use-v-if-with-v-for  -->
       <DonutModule
         v-for="m of module.children"
         v-if="isVisible(getRatio(m, ratio))"
