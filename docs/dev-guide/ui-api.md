@@ -989,7 +989,7 @@ const { IpcMessenger } = require('@vue/cli-shared-utils')
 // Create a new IpcMessenger instance
 const ipc = new IpcMessenger()
 
-function sendMessage(data) {
+function sendMessage (data) {
   // Send a message to the cli-ui server
   ipc.send({
     'com.my-name.some-data': {
