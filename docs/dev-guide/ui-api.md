@@ -952,7 +952,7 @@ In the client addon components (browser), you have access to `$onPluginActionCal
 ```js
 // Vue component
 export default {
-  created() {
+  created () {
     this.$onPluginActionCalled(action => {
       // When the action is called
       // before being run
@@ -965,7 +965,7 @@ export default {
   },
 
   methods: {
-    testPluginAction() {
+    testPluginAction () {
       // Call a plugin action
       this.$callPluginAction('com.my-name.test-action', {
         meow: 'meow'
