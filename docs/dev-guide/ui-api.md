@@ -1235,7 +1235,7 @@ api.addSuggestion({
   // Optional image
   image: '/_plugin/my-package/screenshot.png',
   // Function called when suggestion is activated by user
-  async handler() {
+  async handler () {
     // ...
     return {
       // By default removes the button
@@ -1274,7 +1274,7 @@ Typically, you will use hooks to display the suggestion in the right context:
 ```js
 const ROUTER = 'vue-router-add'
 
-api.onViewOpen (({ view }) => {
+api.onViewOpen(({ view }) => {
   if (view.id === 'vue-project-plugins') {
     if (!api.hasPlugin('vue-router')) {
       api.addSuggestion({
