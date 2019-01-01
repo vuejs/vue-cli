@@ -1283,7 +1283,7 @@ api.onViewOpen(({ view }) => {
         label: 'org.vue.cli-service.suggestions.vue-router-add.label',
         message: 'org.vue.cli-service.suggestions.vue-router-add.message',
         link: 'https://router.vuejs.org/',
-        async handler() {
+        async handler () {
           await install(api, 'vue-router')
         }
       })
