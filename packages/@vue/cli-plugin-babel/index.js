@@ -1,8 +1,20 @@
 const path = require('path')
 
+function genTranspileDepRegex (transpileDependencies) {
+  const deps = transpileDependencies.map(dep => {
+    if (typeof dep === 'string') {
+      return `node_modules/${dep}/`
+    } else if (dep instanceof RegExp) {
+      return dep.source
+    }
+  })
+  return deps.length ? new RegExp(deps.join('|')) : null
+}
+
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
+  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
@@ -21,13 +33,7 @@ module.exports = (api, options) => {
               return true
             }
             // check if this is something the user explicitly wants to transpile
-            if (options.transpileDependencies.some(dep => {
-              if (typeof dep === 'string') {
-                return filepath.includes(path.normalize(dep))
-              } else {
-                return filepath.match(dep)
-              }
-            })) {
+            if (transpileDepRegex && transpileDepRegex.test(filepath)) {
               return false
             }
             // Don't transpile node_modules
