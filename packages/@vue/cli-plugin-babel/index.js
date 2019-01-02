@@ -3,7 +3,7 @@ const path = require('path')
 function genTranspileDepRegex (transpileDependencies) {
   const deps = transpileDependencies.map(dep => {
     if (typeof dep === 'string') {
-      return `node_modules/${dep}/`
+      return path.posix.join('node_modules', dep, '/')
     } else if (dep instanceof RegExp) {
       return dep.source
     }
