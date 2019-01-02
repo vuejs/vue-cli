@@ -11,6 +11,7 @@
     "lint": "vue-cli-service lint",
     "prepublishOnly": "yarn run lint --no-fix && yarn run build"
   },
+  "license": "MIT",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.2",
     "@vue/cli-plugin-eslint": "^3.2.2",
