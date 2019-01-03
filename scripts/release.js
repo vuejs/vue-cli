@@ -103,7 +103,7 @@ const release = async () => {
   }
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 
-  require('./genChangelog')(version)
+  await require('./genChangelog')(version)
 
   const packages = JSON.parse(
     (await execa(require.resolve('lerna/cli'), ['list', '--json'])).stdout
