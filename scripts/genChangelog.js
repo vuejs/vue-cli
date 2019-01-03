@@ -8,7 +8,7 @@ function genNewRelease (version) {
   return new Promise(resolve => {
     const newReleaseStream = cc({
       config,
-      releaseCount: 1,
+      releaseCount: 2,
       pkg: {
         transform (pkg) {
           pkg.version = `v${version}`

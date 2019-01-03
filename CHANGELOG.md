@@ -1,3 +1,25 @@
+# [3.2.3](https://github.com/vuejs/vue-cli/compare/v3.2.2...v3.2.3) (2019-01-03)
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* make cypress config file compatible with eslint-config-airbnb rules ([0fc972e](https://github.com/vuejs/vue-cli/commit/0fc972e))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* fix typo in jest config ([4feaacf](https://github.com/vuejs/vue-cli/commit/4feaacf))
+
+## cli-service
+
+#### Bug Fixes
+
+* fix a regression that `pages` doesn't allow entry-only string format ([a7fa191](https://github.com/vuejs/vue-cli/commit/a7fa191)), closes [#3233](https://github.com/vuejs/vue-cli/issues/3233)
+
+
+
 # [3.2.2](https://github.com/vuejs/vue-cli/compare/v3.2.1...v3.2.2) (2018-12-30)
 
 ## babel-preset-app
