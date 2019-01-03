@@ -11,9 +11,15 @@ const schema = createSchema(joi => joi.object({
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
-  pages: joi.object().pattern(/\w+/, joi.object().keys({
-    entry: joi.string().required()
-  }).unknown(true)),
+  pages: joi.object().pattern(
+    /\w+/,
+    joi.alternatives().try([
+      joi.string(),
+      joi.object().keys({
+        entry: joi.string().required()
+      }).unknown(true)
+    ])
+  ),
   crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
   integrity: joi.boolean(),
 
