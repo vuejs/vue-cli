@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui-addon-widgets",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "files": [
     "dist",
     "src"
@@ -15,7 +15,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.2",
     "@vue/cli-plugin-eslint": "^3.2.2",
-    "@vue/cli-service": "^3.2.2",
+    "@vue/cli-service": "^3.2.3",
     "@vue/eslint-config-standard": "^4.0.0",
     "eslint": "^5.8.0",
     "stylus": "^0.54.5",
