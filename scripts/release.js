@@ -87,8 +87,12 @@ const release = async () => {
 
     // buildEditorConfig()
 
-    await execa('git', ['add', '-A'], { stdio: 'inherit' })
-    await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+    try {
+      await execa('git', ['add', '-A'], { stdio: 'inherit' })
+      await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+    } catch (e) {
+      // if it's a patch release, there may be no local deps to sync
+    }
   }
 
   const lernaArgs = [
