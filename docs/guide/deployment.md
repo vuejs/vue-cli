@@ -122,6 +122,8 @@ Please read through the docs on [GitLab Pages domains](https://docs.gitlab.com/e
 
 Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to your repository. A GitLab CI pipeline will be triggered: when successful, visit your project's `Settings > Pages` to see your website link, and click on it.
 
+If you use GitLab Pages for a group project and getting a 404, you have to rename your project. In GitLabs `Settings > General > Advanced > Rename repository > Path` change the path to `group-name.gitlab.io`. 
+
 ### Netlify
 
 1. On Netlify, setup up a new project from GitHub with the following settings:
