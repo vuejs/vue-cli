@@ -21,7 +21,7 @@ In addition to the [default values exposed by `html-webpack-plugin`](https://git
 ```
 
 See also:
-- [baseUrl](../config/#baseurl)
+- [publicPath](../config/#publicpath)
 
 ### Preload
 
@@ -166,7 +166,7 @@ Note we recommend importing assets as part of your module dependency graph so th
 - Missing files cause compilation errors instead of 404 errors for your users.
 - Result filenames include content hashes so you don’t need to worry about browsers caching their old versions.
 
-The `public` directory is provided as an **escape hatch**, and when you reference it via absolute path, you need to take into account where your app will be deployed. If your app is not deployed at the root of a domain, you will need to prefix your URLs with the [baseUrl](../config/#baseurl):
+The `public` directory is provided as an **escape hatch**, and when you reference it via absolute path, you need to take into account where your app will be deployed. If your app is not deployed at the root of a domain, you will need to prefix your URLs with the [publicPath](../config/#publicpath):
 
 - In `public/index.html` or other HTML files used as templates by `html-webpack-plugin`, you need to prefix the link with `<%= BASE_URL %>`:
 
@@ -179,7 +179,7 @@ The `public` directory is provided as an **escape hatch**, and when you referenc
   ``` js
   data () {
     return {
-      baseUrl: process.env.BASE_URL
+      publicPath: process.env.BASE_URL
     }
   }
   ```
@@ -187,7 +187,7 @@ The `public` directory is provided as an **escape hatch**, and when you referenc
   Then:
 
   ``` html
-  <img :src="`${baseUrl}my-image.png`">
+  <img :src="`${publicPath}my-image.png`">
   ```
 
 ### When to use the `public` folder

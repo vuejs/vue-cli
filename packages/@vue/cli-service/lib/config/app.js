@@ -268,7 +268,7 @@ module.exports = (api, options) => {
           .use(require('../webpack/CorsPlugin'), [{
             crossorigin: options.crossorigin,
             integrity: options.integrity,
-            baseUrl: options.baseUrl
+            publicPath: options.publicPath
           }])
     }
 

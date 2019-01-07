@@ -6,6 +6,8 @@ const fs = require('fs')
 const path = require('path')
 const Service = require('../lib/Service')
 
+const { logs } = require('@vue/cli-shared-utils')
+
 const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
@@ -82,36 +84,59 @@ test('load project options from package.json', () => {
   expect(service.projectOptions.lintOnSave).toBe(true)
 })
 
-test('handle option baseUrl and outputDir correctly', () => {
-  mockPkg({
-    vue: {
-      baseUrl: 'https://foo.com/bar',
-      outputDir: '/public/'
-    }
-  })
-  const service = createMockService()
-  expect(service.projectOptions.baseUrl).toBe('https://foo.com/bar/')
-  expect(service.projectOptions.outputDir).toBe('/public')
-})
-
-test('normalize baseUrl when relative', () => {
+test('deprecate baseUrl', () => {
   mockPkg({
     vue: {
       baseUrl: './foo/bar'
     }
   })
-  const service = createMockService()
-  expect(service.projectOptions.baseUrl).toBe('foo/bar/')
+  createMockService()
+  expect(logs.warn.some(([msg]) => msg.match('is deprecated now, please use "publicPath" instead.')))
 })
 
-test('keep baseUrl when empty', () => {
+test('discard baseUrl if publicPath also exists', () => {
   mockPkg({
     vue: {
-      baseUrl: ''
+      baseUrl: '/foo/barbase/',
+      publicPath: '/foo/barpublic/'
+    }
+  })
+
+  const service = createMockService()
+  expect(logs.warn.some(([msg]) => msg.match('"baseUrl" will be ignored in favor of "publicPath"')))
+  expect(service.projectOptions.publicPath).toBe('/foo/barpublic/')
+})
+
+test('handle option publicPath and outputDir correctly', () => {
+  mockPkg({
+    vue: {
+      publicPath: 'https://foo.com/bar',
+      outputDir: '/public/'
     }
   })
   const service = createMockService()
-  expect(service.projectOptions.baseUrl).toBe('')
+  expect(service.projectOptions.publicPath).toBe('https://foo.com/bar/')
+  expect(service.projectOptions.outputDir).toBe('/public')
+})
+
+test('normalize publicPath when relative', () => {
+  mockPkg({
+    vue: {
+      publicPath: './foo/bar'
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.publicPath).toBe('foo/bar/')
+})
+
+test('keep publicPath when empty', () => {
+  mockPkg({
+    vue: {
+      publicPath: ''
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.publicPath).toBe('')
 })
 
 test('load project options from vue.config.js', () => {
