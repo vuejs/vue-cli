@@ -14,7 +14,7 @@
 ## 库
 
 ::: tip 关于 IE 兼容性的提醒
-在库模式中，项目的 `publicPath` 是根据主文件的加载路径[动态设置]((https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/commands/build/setPublicPath.js))的（用以支持动态的资源加载能力）。但是这个功能用到了 `document.currentScript`，而 IE 浏览器并不支持这一特性。所以如果网站需要支持 IE 的话，建议使用库之前先在页面上引入 [current-script-polyfill](https://www.npmjs.com/package/current-script-polyfill)。
+在库模式中，项目的 `publicPath` 是根据主文件的加载路径[动态设置](https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/commands/build/setPublicPath.js)的（用以支持动态的资源加载能力）。但是这个功能用到了 `document.currentScript`，而 IE 浏览器并不支持这一特性。所以如果网站需要支持 IE 的话，建议使用库之前先在页面上引入 [current-script-polyfill](https://www.npmjs.com/package/current-script-polyfill)。
 :::
 
 ::: tip 注意对 Vue 的依赖
