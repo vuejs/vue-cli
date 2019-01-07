@@ -140,7 +140,7 @@ module.exports = (api, options) => {
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
-    const publicCopyIgnore = ['index.html', '.DS_Store']
+    const publicCopyIgnore = ['.DS_Store']
 
     if (!multiPageConfig) {
       // default, single page setup.
