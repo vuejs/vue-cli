@@ -30,7 +30,7 @@ module.exports = (context, options = {}) => {
 
   // JSX
   if (options.jsx !== false) {
-    presets.push([require('@vue/babel-preset-jsx')])
+    presets.push([require('@vue/babel-preset-jsx'), typeof options.jsx === 'object' ? options.jsx : {}])
   }
 
   const {
