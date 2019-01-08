@@ -106,3 +106,22 @@ test('jsx', () => {
   expect(code).toMatch(`var h = arguments[0]`)
   expect(code).toMatch(`return h("div", ["bar"])`)
 })
+
+test('jsx options', () => {
+  const { code } = babel.transformSync(`
+    export default {
+      render () {
+        return <div>bar</div>
+      }
+    }
+  `.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      jsx: {
+        injectH: false
+      }
+    }]]
+  })
+  expect(code).not.toMatch(`var h = arguments[0]`)
+  expect(code).toMatch(`return h("div", ["bar"])`)
+})
