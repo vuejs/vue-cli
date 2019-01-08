@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.2.3",
+  "version": "3.3.0",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "bin": {
@@ -22,8 +22,8 @@
   "homepage": "https://cli.vuejs.org/",
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
-    "@vue/cli-overlay": "^3.2.0",
-    "@vue/cli-shared-utils": "^3.2.2",
+    "@vue/cli-overlay": "^3.3.0",
+    "@vue/cli-shared-utils": "^3.3.0",
     "@vue/preload-webpack-plugin": "^1.1.0",
     "@vue/web-component-wrapper": "^1.2.0",
     "acorn": "^6.0.4",
