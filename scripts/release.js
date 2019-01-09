@@ -38,7 +38,7 @@ const path = require('path')
 const execa = require('execa')
 const semver = require('semver')
 const inquirer = require('inquirer')
-// const { syncDeps } = require('./syncDeps')
+const { syncDeps } = require('./syncDeps')
 // const { buildEditorConfig } = require('./buildEditorConfig')
 
 const curVersion = require('../lerna.json').version
@@ -78,17 +78,21 @@ const release = async () => {
   }])
 
   if (yes) {
-    // await syncDeps({
-    //   version,
-    //   local: true,
-    //   skipPrompt: true
-    // })
+    await syncDeps({
+      version,
+      local: true,
+      skipPrompt: true
+    })
     delete process.env.PREFIX
 
     // buildEditorConfig()
 
-    await execa('git', ['add', '-A'], { stdio: 'inherit' })
-    // await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+    try {
+      await execa('git', ['add', '-A'], { stdio: 'inherit' })
+      await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+    } catch (e) {
+      // if it's a patch release, there may be no local deps to sync
+    }
   }
 
   const lernaArgs = [
@@ -103,7 +107,7 @@ const release = async () => {
   }
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 
-  // require('./genChangelog')(version)
+  await require('./genChangelog')(version)
 
   const packages = JSON.parse(
     (await execa(require.resolve('lerna/cli'), ['list', '--json'])).stdout
@@ -121,9 +125,16 @@ const release = async () => {
   const tagName = `vue-cli-version-marker@${versionMarkerPkg.version}`
   await execa('git', ['add', '-A'], { stdio: 'inherit' })
   await execa('git', ['commit', '-m', `chore: ${tagName}`], { stdio: 'inherit' })
-  // await execa('npm', ['publish'], { stdio: 'inherit', cwd: path.dirname(versionMarkerPath) })
-  // await execa('git', ['tag', tagName], { stdio: 'inherit' })
-  // await execa('git', ['push', '--tags'], { stdio: 'inherit' })
+
+  // Must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
+  await execa(
+    'npm',
+    ['publish', '--registry', 'https://registry.npmjs.org/'],
+    { stdio: 'inherit', cwd: path.dirname(versionMarkerPath) }
+  )
+
+  await execa('git', ['tag', tagName], { stdio: 'inherit' })
+  await execa('git', ['push', '--tags'], { stdio: 'inherit' })
 }
 
 release().catch(err => {

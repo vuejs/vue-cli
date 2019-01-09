@@ -9,7 +9,7 @@ module.exports = (api, {
 
   api.extendPackage({
     devDependencies: {
-      typescript: '^3.0.0'
+      typescript: api.hasPlugin('eslint') ? '~3.1.1' : '^3.0.0'
     }
   })
 
@@ -40,7 +40,7 @@ module.exports = (api, {
     if (lintOn.includes('commit')) {
       api.extendPackage({
         devDependencies: {
-          'lint-staged': '^7.2.2'
+          'lint-staged': '^8.1.0'
         },
         gitHooks: {
           'pre-commit': 'lint-staged'

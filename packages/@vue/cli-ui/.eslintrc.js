@@ -15,6 +15,9 @@ module.exports = {
   ],
 
   rules: {
-    'vue/html-self-closing': 'error'
+    'vue/html-self-closing': 'error',
+    'vue/no-use-v-if-with-v-for': 'warn',
+    'vue/no-unused-vars': 'warn',
+    'vue/return-in-computed-property': 'warn',
   }
 }

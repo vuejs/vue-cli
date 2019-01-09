@@ -46,7 +46,7 @@ async function getAndCacheLatestVersion (cached) {
   if (res.statusCode === 200) {
     const { version } = res.body
     if (semver.valid(version) && version !== cached) {
-      saveOptions({ lastestVersion: version, lastChecked: Date.now() })
+      saveOptions({ latestVersion: version, lastChecked: Date.now() })
       return version
     }
   }

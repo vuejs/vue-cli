@@ -27,19 +27,19 @@ module.exports = {
 }
 ```
 
-### baseUrl
+### publicPath
 
 - Type: `string`
 - Default: `'/'`
 
-  部署应用包时的基本 URL。用法和 webpack 本身的 `output.publicPath` 一致，但是 Vue CLI 在一些其他地方也需要用到这个值，所以**请始终使用 `baseUrl` 而不要直接修改 webpack 的 `output.publicPath`**。
+  部署应用包时的基本 URL。用法和 webpack 本身的 `output.publicPath` 一致，但是 Vue CLI 在一些其他地方也需要用到这个值，所以**请始终使用 `publicPath` 而不要直接修改 webpack 的 `output.publicPath`**。
 
-  默认情况下，Vue CLI 会假设你的应用是被部署在一个域名的根路径上，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `baseUrl` 为 `/my-app/`。
+  默认情况下，Vue CLI 会假设你的应用是被部署在一个域名的根路径上，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `publicPath` 为 `/my-app/`。
 
   这个值也可以被设置为空字符串 (`''`) 或是相对路径 (`'./'`)，这样所有的资源都会被链接为相对路径，这样打出来的包可以被部署在任意路径，也可以用在类似 Cordova hybrid 应用的文件系统中。
 
-  ::: warning 相对 baseUrl 的限制
-  相对路径的 `baseUrl` 有一些使用上的限制。在以下情况下，应当避免使用相对 `baseUrl`:
+  ::: warning 相对 publicPath 的限制
+  相对路径的 `publicPath` 有一些使用上的限制。在以下情况下，应当避免使用相对 `publicPath`:
 
   - 当使用基于 HTML5 `history.pushState` 的路由时；
 
@@ -50,7 +50,7 @@ module.exports = {
 
   ``` js
   module.exports = {
-    baseUrl: process.env.NODE_ENV === 'production'
+    publicPath: process.env.NODE_ENV === 'production'
       ? '/production-sub-path/'
       : '/'
   }
@@ -302,7 +302,7 @@ module.exports = {
 
   - 有些值像 `host`、`port` 和 `https` 可能会被命令行参数覆写。
 
-  - 有些值像 `publicPath` 和 `historyApiFallback` 不应该被修改，因为它们需要和开发服务器的 [baseUrl](#baseurl) 同步以保障正常的工作。
+  - 有些值像 `publicPath` 和 `historyApiFallback` 不应该被修改，因为它们需要和开发服务器的 [publicPath](#baseurl) 同步以保障正常的工作。
 
 ### devServer.proxy
 

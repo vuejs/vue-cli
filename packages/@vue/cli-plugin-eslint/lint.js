@@ -31,22 +31,43 @@ module.exports = function lint (args = {}, api) {
     cwd
   }, argsConfig)
 
-  const defaultFilesToLint = [
-    'src',
-    'tests',
-    // root config files
-    '*.js',
-    // .eslintrc files (ignored by default)
+  const engine = new CLIEngine(config)
+
+  // .eslintrc.js files (ignored by default)
+  const dotFiles = [
     '.*.js',
     '{src,tests}/**/.*.js'
   ].filter(pattern => globby.sync(path.join(cwd, pattern)).length)
 
-  const engine = new CLIEngine(config)
+  const defaultFilesToLint = [
+    'src',
+    'tests',
+    // root config files
+    '*.js'
+  ]
+    .filter(pattern =>
+      globby
+        .sync(path.join(cwd, pattern))
+        .some(p => !engine.isPathIgnored(p))
+    )
+    .concat(dotFiles)
+
   const files = args._ && args._.length
     ? args._
     : defaultFilesToLint
 
+  // mock process.cwd before executing
+  // See:
+  // https://github.com/vuejs/vue-cli/issues/2554
+  // https://github.com/benmosher/eslint-plugin-import/issues/602
+  // https://github.com/eslint/eslint/issues/11218
+  const processCwd = process.cwd
+  if (!api.invoking) {
+    process.cwd = () => cwd
+  }
   const report = engine.executeOnFiles(files)
+  process.cwd = processCwd
+
   const formatter = engine.getFormatter(args.format || 'codeframe')
 
   if (config.fix) {

@@ -2,6 +2,7 @@ const { createSchema, validate } = require('@vue/cli-shared-utils')
 
 const schema = createSchema(joi => joi.object({
   baseUrl: joi.string().allow(''),
+  publicPath: joi.string().allow(''),
   outputDir: joi.string(),
   assetsDir: joi.string().allow(''),
   indexPath: joi.string(),
@@ -11,7 +12,15 @@ const schema = createSchema(joi => joi.object({
   productionSourceMap: joi.boolean(),
   parallel: joi.boolean(),
   devServer: joi.object(),
-  pages: joi.object(),
+  pages: joi.object().pattern(
+    /\w+/,
+    joi.alternatives().try([
+      joi.string(),
+      joi.object().keys({
+        entry: joi.string().required()
+      }).unknown(true)
+    ])
+  ),
   crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
   integrity: joi.boolean(),
 
@@ -61,7 +70,7 @@ function hasMultipleCores () {
 
 exports.defaults = () => ({
   // project deployment base
-  baseUrl: '/',
+  publicPath: '/',
 
   // where to output built files
   outputDir: 'dist',

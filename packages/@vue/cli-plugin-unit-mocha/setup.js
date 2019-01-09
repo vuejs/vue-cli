@@ -1,1 +1,1 @@
-require('jsdom-global')(undefined, { pretendToBeVisual: true })
+require('jsdom-global')(undefined, { pretendToBeVisual: true, url: 'http://localhost' })

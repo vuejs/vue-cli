@@ -46,7 +46,7 @@ module.exports = (api, options) => {
     // check if the project has a valid postcss config
     // if it doesn't, don't use postcss-loader for direct style imports
     // because otherwise it would throw error when attempting to load postcss config
-    const hasPostCSSConfig = !!(api.service.pkg.postcss || findExisting(api.resolve('.'), [
+    const hasPostCSSConfig = !!(loaderOptions.postcss || api.service.pkg.postcss || findExisting(api.resolve('.'), [
       '.postcssrc',
       '.postcssrc.js',
       'postcss.config.js',

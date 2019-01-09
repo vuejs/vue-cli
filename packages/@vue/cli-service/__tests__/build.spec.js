@@ -13,6 +13,8 @@ test('build', async () => {
 
   // test public copy
   project.write('public/foo.js', '1')
+  // make sure that only /public/index.html is skipped (#3119)
+  project.write('public/subfolder/index.html', '1')
 
   const { stdout } = await project.run('vue-cli-service build')
   expect(stdout).toMatch('Build complete.')
@@ -22,6 +24,7 @@ test('build', async () => {
   expect(project.has('dist/js')).toBe(true)
   expect(project.has('dist/css')).toBe(true)
   expect(project.has('dist/foo.js')).toBe(true)
+  expect(project.has('dist/subfolder/index.html')).toBe(true)
 
   const index = await project.read('dist/index.html')
   // should split and preload app.js & vendor.js

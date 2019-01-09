@@ -88,6 +88,14 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
   })
   if (api.hasPlugin('babel')) {
     api.extendPackage({
+      jest: {
+        globals: {
+          'ts-jest': {
+            // we need babel to transpile JSX
+            babelConfig: true
+          }
+        }
+      },
       devDependencies: {
         // this is for now necessary to force ts-jest and vue-jest to use babel 7
         'babel-core': '7.0.0-bridge.0'
