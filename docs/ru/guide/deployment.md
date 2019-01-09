@@ -133,6 +133,15 @@ module.exports = {
 
 Также посмотрите [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
+Для получения прямых хитов при использовании `режима history` во Vue Router, необходимо создавть файл `_redirects` в каталоге `/public` со следующим содержимым:
+
+```
+# Настройки Netlify для одностраничных приложений (SPA)
+/*    /index.html   200
+```
+
+Подробнее можно изучить в [документации Netlify по перенаправлениям](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
+
 ### Amazon S3
 
 Плагин [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
