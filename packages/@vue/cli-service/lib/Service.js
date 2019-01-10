@@ -209,7 +209,7 @@ module.exports = class Service {
       error(`command "${name}" does not exist.`)
       process.exit(1)
     }
-    if (!command || args.help) {
+    if (!command || args.help || args.h) {
       command = this.commands.help
     } else {
       args._.shift() // remove command itself
