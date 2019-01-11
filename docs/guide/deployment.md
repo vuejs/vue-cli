@@ -261,7 +261,16 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+1. Follow this guide to install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+2. Navigate to the root of your project, use this command `cd <YOUR-PROJECT-FOLDER-HERE>`.
+3. Create a new `Git repository`, use this command `git init`.
+4. Create a new `Heroku` app, use this command `heroku apps:create <YOUR-PROJECT-NAME-HERE>`.
+5. Add [Serve](https://github.com/zeit/serve) as a dependency to your project, use this command `npm install serve --save`
+6. Modify your project's `package.json` file, add these two lines to the `scripts` section:
+    * `"heroku-postbuild": "npm run build"` To tell `Heroku` to build your project in the `dist` folder.
+    * `"start": "serve -s dist"` To tell `Heroku` to use `Serve` to serve your project from the `dist` folder.
+7. Commit your changes to git, use this command `git add . && git commit -a -m "Adding Heroku deployment support"`.
+8. Deploy your app to `Heroku` by pushing your new updates, use this command `git push heroku master`.
 
 ### Surge
 
