@@ -110,7 +110,7 @@ module.exports = {
 
 ## Передача настроек в загрузчики пре-процессоров
 
-Иногда может возникнуть необходимость передать настройки в загрузчик пре-процессора для webpack. Вы можете сделать это с помощью опции `css.loaderOptions` в `vue.config.js`. Например, для передачи глобальных переменных во все стили Sass:
+Иногда может возникнуть необходимость передать настройки в загрузчик пре-процессора для webpack. Вы можете сделать это с помощью опции `css.loaderOptions` в `vue.config.js`. Например, для передачи глобальных переменных во все стили Sass/Less:
 
 ``` js
 // vue.config.js
@@ -122,6 +122,14 @@ module.exports = {
         // @/ это псевдоним к каталогу src/ поэтому предполагается,
         // что у вас в проекте есть файл `src/variables.scss`
         data: `@import "@/variables.scss";`
+      },
+      // передача настроек Less.js в less-loader
+      less:{
+        // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
+        // `primary` — имя поля глобальных переменных
+        globalVars: {
+          primary: '#fff'
+        }
       }
     }
   }
