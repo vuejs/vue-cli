@@ -339,15 +339,13 @@ module.exports = class Service {
       }
     }
 
-    // if (typeof resolved.publicPath === 'undefined') {
-    //   resolved.publicPath = '/'
-    // }
-
     // normalize some options
     ensureSlash(resolved, 'publicPath')
     if (typeof resolved.publicPath === 'string') {
       resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
     }
+    // for compatibility concern, in case some plugins still rely on `baseUrl` option
+    resolved.baseUrl = resolved.publicPath
     removeSlash(resolved, 'outputDir')
 
     // deprecation warning
