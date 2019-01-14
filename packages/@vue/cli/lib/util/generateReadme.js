@@ -3,6 +3,7 @@ const descriptions = {
   serve: 'Compiles and hot-reloads for development',
   lint: 'Lints and fixes files',
   test: 'Run your tests',
+  report: 'Generate bundle report',
   'test:e2e': 'Run your end-to-end tests',
   'test:unit': 'Run your unit tests'
 }
