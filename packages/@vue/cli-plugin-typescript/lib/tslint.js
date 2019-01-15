@@ -117,7 +117,7 @@ module.exports = function lint(args = {}, api, silent) {
   // respect linterOptions.exclude from tslint.json
   if (config.linterOptions && config.linterOptions.exclude) {
     // use the raw tslint.json data because config contains absolute paths
-    const rawTslintConfig = JSON.parse(fs.readFileSync(tslintConfigPath, 'utf-8'))
+    const rawTslintConfig = tslint.Configuration.readConfigurationFile(tslintConfigPath);
     const excludedGlobs = rawTslintConfig.linterOptions.exclude
     excludedGlobs.forEach((g) => files.push('!' + g))
   }
