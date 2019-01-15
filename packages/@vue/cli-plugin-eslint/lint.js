@@ -31,6 +31,10 @@ module.exports = function lint (args = {}, api) {
     cwd
   }, argsConfig)
 
+  const noFixWarnings = (argsConfig.fixWarnings === false)
+  const noFixWarningsPredicate = (lintResult) => lintResult.severity === 2
+  config.fix = config.fix && (noFixWarnings ? noFixWarningsPredicate : true)
+
   const engine = new CLIEngine(config)
 
   // .eslintrc.js files (ignored by default)
