@@ -1,4 +1,4 @@
-module.exports = function lint (args = {}, api, silent) {
+module.exports = function lint(args = {}, api, silent) {
   const cwd = api.resolve('.')
   const fs = require('fs')
   const path = require('path')
@@ -80,7 +80,11 @@ module.exports = function lint (args = {}, api, silent) {
     patchProgram(this.program)
   }
 
-  const tslintConfigPath = api.resolve('tslint.json')
+
+  const tslintConfigPath = tslint.Configuration.CONFIG_FILENAMES
+    .map(filename => api.resolve(filename))
+    .filter(file => !!fs.existsSync(file))
+    .pop();
 
   const config = tslint.Configuration.findConfiguration(tslintConfigPath).results
   // create a patched config that disables the blank lines rule,
