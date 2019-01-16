@@ -1,4 +1,4 @@
-module.exports = function lint(args = {}, api, silent) {
+module.exports = function lint (args = {}, api, silent) {
   const cwd = api.resolve('.')
   const fs = require('fs')
   const path = require('path')
@@ -80,11 +80,9 @@ module.exports = function lint(args = {}, api, silent) {
     patchProgram(this.program)
   }
 
-
   const tslintConfigPath = tslint.Configuration.CONFIG_FILENAMES
     .map(filename => api.resolve(filename))
-    .filter(file => !!fs.existsSync(file))
-    .pop();
+    .find(file => fs.existsSync(file))
 
   const config = tslint.Configuration.findConfiguration(tslintConfigPath).results
   // create a patched config that disables the blank lines rule,
@@ -117,7 +115,7 @@ module.exports = function lint(args = {}, api, silent) {
   // respect linterOptions.exclude from tslint.json
   if (config.linterOptions && config.linterOptions.exclude) {
     // use the raw tslint.json data because config contains absolute paths
-    const rawTslintConfig = tslint.Configuration.readConfigurationFile(tslintConfigPath);
+    const rawTslintConfig = tslint.Configuration.readConfigurationFile(tslintConfigPath)
     const excludedGlobs = rawTslintConfig.linterOptions.exclude
     excludedGlobs.forEach((g) => files.push('!' + g))
   }
