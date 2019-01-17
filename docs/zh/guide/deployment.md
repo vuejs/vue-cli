@@ -84,12 +84,12 @@ serve -s dist
     ```
 
     ::: tip
-    您还可以在 CI 设置中设置上述脚本，以便在每次推送时启用自动部署。
+    您还可以在 CI 设置中配置上述脚本，以便在每次推送时启用自动部署。
     :::
 
 ### GitLab Pages
 
-受到 [GitLab Pages 文档](https://docs.gitlab.com/ee/user/project/pages/) 的启发, 所有的设置都在根目录中的`.gitlab-ci.yml` 文件中。下面的范例是一个很好的入门:
+受到 [GitLab Pages 文档](https://docs.gitlab.com/ee/user/project/pages/) 的启发, 所有的配置都在根目录中的`.gitlab-ci.yml` 文件中。下面的范例是一个很好的入门:
 
 ```yaml
 # .gitlab-ci.yml 文件应放在你仓库的根目录下 
@@ -124,7 +124,7 @@ module.exports = {
 
 请阅读在 [GitLab Pages domains](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) 的文档来学习更多关于项目托管的`URL`知识。注意，你也可以[使用自定义域名](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages)。
 
-在推送到仓库之前提交 `.gitlab-ci.yml` 和 `vue.config.js` 文件.GitLab CI 的管道将会被触发: 当成功时候, 到 `Settings > Pages` 查看关于网站的链接。
+在推送到仓库之前提交 `.gitlab-ci.yml` 和 `vue.config.js` 文件。GitLab CI 的管道将会被触发: 当成功时候, 到 `Settings > Pages` 查看关于网站的链接。
 
 ### Netlify
 
