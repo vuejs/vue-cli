@@ -319,3 +319,90 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
     cd -
     ```
+
+
+### Docker (Nginx)
+
+Deploying your application using nginx inside of docker can be done easily with a minor modification of the nginx configuration.
+
+1. Install [docker](https://www.docker.com/get-started)
+
+2. Create a `Dockerfile` file in the root of your project.
+
+  ```Dockerfile
+  FROM node:10
+  COPY ./ /app
+  WORKDIR /app
+  RUN npm install && npm run build
+
+  FROM nginx
+  RUN mkdir /app
+  COPY --from=0 /app/dist /app
+  COPY nginx.conf /etc/nginx/nginx.conf
+  ```
+
+3. Create a `.dockerignore` file in the root of your project
+
+  Setting up the `.dockerignore` file correctly prevents `node_modules` and any intermediate build artifacts from being copied to the image which can cause issues during building.
+
+  ```gitignore
+  **/node_modules
+  **/dist
+  ```
+
+4. Create a `nginx.conf` file in the root of your project
+
+  This is a simple `nginx` configuration that falls back to the root `index.html` page for `404's`. This is necessary when using `pushState()` based routing.
+
+  ```text
+  user  nginx;
+  worker_processes  1;
+  error_log  /var/log/nginx/error.log warn;
+  pid        /var/run/nginx.pid;
+  events {
+    worker_connections  1024;
+  }
+  http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+    access_log  /var/log/nginx/access.log  main;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+      listen       80;
+      server_name  localhost;
+      location / {
+        root   /app;
+        index  index.html;
+        try_files $uri $uri/ /index.html;
+      }
+      error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+        root   /usr/share/nginx/html;
+      }
+    }
+  }
+  ```
+
+5. Build your docker image
+
+  ```bash
+  docker build . -t my-app
+  # Sending build context to Docker daemon  884.7kB
+  # ...
+  # Successfully built 4b00e5ee82ae
+  # Successfully tagged my-app:latest
+  ```
+
+6. Run your docker image
+
+  This build is based on the official `nginx` image so log redirection has already been set up and self daemonizing has been turned off. Some other default settings have been setup to improve running nginx in a docker container. See the [nginx docker repo](https://hub.docker.com/_/nginx) for more info.
+
+  ```bash
+  docker run -d -p 8080:80 my-app
+  curl localhost:8080
+  # <!DOCTYPE html><html lang=en>...</html>
+  ```
