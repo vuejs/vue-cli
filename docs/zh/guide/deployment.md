@@ -41,9 +41,9 @@ serve -s dist
  
 1. 在 `vue.config.js` 中设置正确的 `publicPath`。
     
-   如果打算将项目部署到 `https://<USERNAME>.github.io/` 上 , `publicPath` 将默认被设为 `"/"`,你可以忽略这个参数。
+   如果打算将项目部署到 `https://<USERNAME>.github.io/` 上 , `publicPath` 将默认被设为 `"/"`，你可以忽略这个参数。
 
-   如果打算将项目部署到 `https://<USERNAME>.github.io/<REPO>/` 上, (换句话说 仓库地址为 `https://github.com/<USERNAME>/<REPO>`), 可将 `publicPath` 设为 `"/<REPO>/"` . 举个例子, 如果仓库名字为 "my-project",  `vue.config.js` 的内容应如下所示:
+   如果打算将项目部署到 `https://<USERNAME>.github.io/<REPO>/` 上, (换句话说 仓库地址为 `https://github.com/<USERNAME>/<REPO>`), 可将 `publicPath` 设为 `"/<REPO>/"` 。 举个例子， 如果仓库名字为 "my-project"，`vue.config.js` 的内容应如下所示:
 
     ``` js
     module.exports = {
@@ -53,12 +53,12 @@ serve -s dist
     }
     ```
 
-2. 在项目目录下, 用以下的代码创建 `deploy.sh`（可以适当地取消注释）并运行它以进行部署：
+2. 在项目目录下， 用以下的代码创建 `deploy.sh`（可以适当地取消注释）并运行它以进行部署：
 
     ``` bash{13,20,23}
     #!/usr/bin/env sh
 
-    # abort on errors
+    # 当发生错误时中止脚本
     set -e
 
     # 构建
@@ -89,12 +89,12 @@ serve -s dist
 
 ### GitLab Pages
 
-受到 [GitLab Pages 文档](https://docs.gitlab.com/ee/user/project/pages/) 的启发, 所有的配置都在根目录中的`.gitlab-ci.yml` 文件中。下面的范例是一个很好的入门:
+根据 [GitLab Pages 文档](https://docs.gitlab.com/ee/user/project/pages/)的描述，所有的配置都在根目录中的`.gitlab-ci.yml` 文件中。下面的范例是一个很好的入门:
 
 ```yaml
 # .gitlab-ci.yml 文件应放在你仓库的根目录下 
 
-pages: # 必须定义一个为 pages 的 job
+pages: # 必须定义一个名为 pages 的 job
   image: node:latest
   stage: deploy
   script:
@@ -109,11 +109,11 @@ pages: # 必须定义一个为 pages 的 job
     - master
 ```
 
-通常, 你的静态页面将托管在 https://yourUserName.gitlab.io/yourProjectName 上, 所以你可以创建一个 initial `vue.config.js` 文件去 [更新 `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) 要匹配的值:
+通常, 你的静态页面将托管在 https://yourUserName.gitlab.io/yourProjectName 上, 所以你可以创建一个 initial `vue.config.js` 文件去 [更新 `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) 要匹配的值 ：
 
 ```javascript
 // vue.config.js 位于仓库的根目录下
-// 确保用用 GitLab 项目的名称更新了 `YourProjectName`
+// 确保用 GitLab 项目的名称替换了 `YourProjectName`
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
@@ -122,36 +122,36 @@ module.exports = {
 }
 ```
 
-请阅读在 [GitLab Pages domains](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) 的文档来学习更多关于项目托管的`URL`知识。注意，你也可以[使用自定义域名](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages)。
+请阅读在 [GitLab Pages domains](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_one.html#gitlab-pages-domain) 的文档来学习更多关于页面部署 URL 的信息。注意，你也可以[使用自定义域名](https://docs.gitlab.com/ee/user/project/pages/getting_started_part_three.html#adding-your-custom-domain-to-gitlab-pages)。
 
 在推送到仓库之前提交 `.gitlab-ci.yml` 和 `vue.config.js` 文件。GitLab CI 的管道将会被触发: 当成功时候, 到 `Settings > Pages` 查看关于网站的链接。
 
 ### Netlify
 
-1. 在Netlify上，使用以下设置从 GitHub 创建新项目:
+1. 在 Netlify 上，使用以下设置从 GitHub 创建新项目:
 
     - **构建命令:** `npm run build` or `yarn build`
     - **发布目录:** `dist`
 
-2. 点击 deploy 按钮!
+2. 点击 deploy 按钮！
 
-也可以查看 [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
+也可以查看 [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda)。
 
 ### Amazon S3
 
-见 [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
+见 [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy)。
 
 ### Firebase
 
-创建一个新的 Firebase 项目 [Firebase console](https://console.firebase.google.com). 请参考[文档](https://firebase.google.com/docs/web/setup) 。
+创建一个新的 Firebase 项目 [Firebase console](https://console.firebase.google.com)。 请参考[文档](https://firebase.google.com/docs/web/setup)。
 
-确保已经全局安装了 [firebase-tools](https://github.com/firebase/firebase-tools) :
+确保已经全局安装了 [firebase-tools](https://github.com/firebase/firebase-tools) ：
 
 ```
 npm install -g firebase-tools
 ```
 
-在项目的根目录下, 用以下命令初始化 `firebase` :
+在项目的根目录下, 用以下命令初始化 `firebase` ：
 
 ```
 firebase init
@@ -159,8 +159,8 @@ firebase init
 
 Firebase 将会询问有关初始化项目的一些问题。
 
-- 选择需要 Firebase CLI 的功能 . 一定要选择 `hosting` .
-- 选择默认的 Firebase 项目.
+- 选择需要 Firebase CLI 的功能。 一定要选择 `hosting` 。
+- 选择默认的 Firebase 项目。
 - 将 `public` 目录设为 `dist` (或构建输出的位置) 这将会上传到 Firebase Hosting。 
 
 ```javascript
@@ -173,7 +173,7 @@ Firebase 将会询问有关初始化项目的一些问题。
 }
 ```
 
-- 选择 `yes` 设置项目为一个单页应用. 这将会创建一个 `index.html` 在`dist` 文件夹并且配置 `hosting` 信息。
+- 选择 `yes` 设置项目为一个单页应用。 这将会创建一个 `index.html` 在 `dist` 文件夹并且配置 `hosting` 信息。
 
 ```javascript
 // firebase.json
@@ -192,15 +192,15 @@ Firebase 将会询问有关初始化项目的一些问题。
 
 执行 `npm run build` 去构建项目。
 
-在 `Firebase Hosting` 部署项目, 执行以下命令:
+在 `Firebase Hosting` 部署项目，执行以下命令 ：
 
 ```
 firebase deploy --only hosting
 ```
 
-如果需要在部署的项目中使用的其他 Firebase CLI 功能, 执行 `firebase deploy` 去掉 `--only` 选项。
+如果需要在部署的项目中使用的其他 Firebase CLI 功能， 执行 `firebase deploy` 去掉 `--only` 参数。
 
-现在可以访问你的项目了 `https://<YOUR-PROJECT-ID>.firebaseapp.com`。
+现在可以到 `https://<YOUR-PROJECT-ID>.firebaseapp.com` 访问你的项目了。
 
 请参考 [Firebase 文档](https://firebase.google.com/docs/hosting/deploying) 来获取更多细节。
 
@@ -208,7 +208,7 @@ firebase deploy --only hosting
 
 1. 全局安装 Now CLI: `npm install -g now`
 
-2. 添加 `now.json` 文件到项目根目录：
+2. 添加 `now.json` 文件到项目根目录 ：
 
     ```json
     {
@@ -238,12 +238,12 @@ firebase deploy --only hosting
     "deploy": "npm run build && now && now alias"
     ```
 
-    如果想要将项目默认公开部署, 部署脚本如下
+    如果想要将项目默认公开部署，部署脚本如下
 
     ```json
     "deploy": "npm run build && now --public && now alias"
     ```
-    
+
     这将自动将站点的别名指向最新的部署。现在，只要运行 `npm run deploy` 就可以部署你的应用。
 
 ### Stdlib
@@ -264,7 +264,7 @@ firebase deploy --only hosting
 npm install --global surge
 ```
 
-然后 cd 进入项目的 `dist /` 文件夹，然后运行 `surge` 并按照屏幕提示操作 。如果是第一次使用Surge，它会要求设置电子邮件和密码。确认项目文件夹以及输入首选域来查看正在部署的项目，如下所示。
+然后 cd 进入项目的 `dist/` 文件夹，然后运行 `surge` 并按照屏幕提示操作 。如果是第一次使用 Surge，它会要求设置电子邮件和密码。确认项目文件夹以及输入首选域来查看正在部署的项目，如下所示。
 
 ```
             project: /Users/user/Documents/myawesomeproject/dist/
@@ -276,24 +276,24 @@ npm install --global surge
    Success! - Published to myawesomeproject.surge.sh
 ```
 
-通过访问 `myawesomeproject.surge.sh` 来确保你的项目已经成功的用 Surge 发布, 有关自定义域名等更多设置详细信息, 可以到 [Surge's help page](https://surge.sh/help/) 查看。
+通过访问 `myawesomeproject.surge.sh` 来确保你的项目已经成功的用 Surge 发布，有关自定义域名等更多设置详细信息，可以到 [Surge's help page](https://surge.sh/help/) 查看。
 
 ### Bitbucket Cloud
 
-1. 如 [Bitbucket 文档](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) 创建一个命名明确的仓库 `<USERNAME>.bitbucket.io`.
+1. 如 [Bitbucket 文档](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) 创建一个命名为 `<USERNAME>.bitbucket.io` 的仓库。
 
-2. 如果你想拥有多个网站 , 想要发布到主仓库的子文件夹中。这种情况下就要在 `vue.config.js` 设置 `publicPath`。
+2. 如果你想拥有多个网站， 想要发布到主仓库的子文件夹中。这种情况下就要在 `vue.config.js` 设置 `publicPath`。
 
-    如果部署到 `https://<USERNAME>.bitbucket.io/`,  `publicPath` 默认将被设为 `"/"`,你可以选择忽略它。
+    如果部署到 `https://<USERNAME>.bitbucket.io/`， `publicPath` 默认将被设为 `"/"`，你可以选择忽略它。
 
-    如果要部署到 `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, 设置 `publicPath` 为 `"/<SUBFOLDER>/"`。在这种情况下，仓库的目录结构应该反映 url 结构, 例如仓库应该有 `/<SUBFOLDER>` 目录.
+    如果要部署到 `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`，设置 `publicPath` 为 `"/<SUBFOLDER>/"`。在这种情况下，仓库的目录结构应该反映 url 结构，例如仓库应该有 `/<SUBFOLDER>` 目录。
 
-3. 在项目中, `deploy.sh `使用以下内容创建并运行它以进行部署：
+3. 在项目中， `deploy.sh` 使用以下内容创建并运行它以进行部署：
 
     ``` bash{13,20,23}
     #!/usr/bin/env sh
 
-    # 中止错误
+    # 当发生错误时中止脚本;
     set -e
 
     # 构建
