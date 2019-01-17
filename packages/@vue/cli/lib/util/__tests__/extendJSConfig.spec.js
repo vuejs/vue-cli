@@ -61,3 +61,21 @@ module.exports = config`
 module.exports = config`
   )
 })
+
+test(`with extra assignment expression`, () => {
+  const value = {
+    foo: true
+  }
+  const source =
+`process.env.VUE_APP_TEST = 'test'
+module.exports = {
+  bar: 123
+}`
+  expect(extend(value, source)).toMatch(
+    `process.env.VUE_APP_TEST = 'test'
+module.exports = {
+  bar: 123,
+  foo: true
+}`
+  )
+})

@@ -50,7 +50,7 @@ module.exports = (api, _, __, invoking) => {
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
-          'babel-jest': '^23.0.1',
+          'babel-jest': '^23.6.0',
           // this is for now necessary to force babel-jest and vue-jest to use babel 7
           'babel-core': '7.0.0-bridge.0'
         }
@@ -88,6 +88,14 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
   })
   if (api.hasPlugin('babel')) {
     api.extendPackage({
+      jest: {
+        globals: {
+          'ts-jest': {
+            // we need babel to transpile JSX
+            babelConfig: true
+          }
+        }
+      },
       devDependencies: {
         // this is for now necessary to force ts-jest and vue-jest to use babel 7
         'babel-core': '7.0.0-bridge.0'

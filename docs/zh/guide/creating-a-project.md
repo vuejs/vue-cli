@@ -9,7 +9,9 @@ vue create hello-world
 ```
 
 ::: warning 警告
-如果你在 Windows 上通过 minTTY 使用 Git Bash，交互提示符并不工作。你必须通过 `winpty vue.cmd create hello-world` 启动这个命令。
+如果你在 Windows 上通过 minTTY 使用 Git Bash，交互提示符并不工作。你必须通过 `winpty vue.cmd create hello-world` 启动这个命令。不过，如果你仍想使用 `vue create hello-world`，则可以通过在 `~/.bashrc` 文件中添加以下行来为命令添加别名。  
+`alias vue='winpty vue.cmd'`  
+你需要重新启动 Git Bash 终端会话以使更新后的 bashrc 文件生效。
 :::
 
 你会被提示选取一个 preset。你可以选默认的包含了基本的 Babel + ESLint 设置的 preset，也可以选“手动选择特性”来选取需要的特性。
@@ -46,7 +48,7 @@ vue create --help
   -d, --default                   忽略提示符并使用默认预设选项
   -i, --inlinePreset <json>       忽略提示符并使用内联的 JSON 字符串预设选项
   -m, --packageManager <command>  在安装依赖时使用指定的 npm 客户端
-  -r, --registry <url>            在安装依赖时使用指定的 npm registry (仅用于 npm 客户端)
+  -r, --registry <url>            在安装依赖时使用指定的 npm registry
   -g, --git [message]             强制 / 跳过 git 初始化，并可选的指定初始化提交信息
   -n, --no-git                    跳过 git 初始化
   -f, --force                     覆写目标目录可能存在的配置

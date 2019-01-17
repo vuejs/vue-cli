@@ -1,4 +1,5 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
+const create = require('@vue/cli-test-utils/createTestProject')
 
 test('base', async () => {
   const { pkg } = await generateWithPlugin({
@@ -135,3 +136,45 @@ test('lint on commit', async () => {
     lintOnSave: false
   })
 })
+
+test('generate .editorconfig for new projects', async () => {
+  const { files } = await generateWithPlugin({
+    id: 'eslint',
+    apply: require('../generator'),
+    options: {
+      config: 'airbnb'
+    }
+  })
+  expect(files['.editorconfig']).toBeTruthy()
+})
+
+test('append to existing .editorconfig', async () => {
+  const { dir, read, write } = await create('eslint-editorconfig', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {}
+    }
+  }, null, true)
+  await write('.editorconfig', 'root = true\n')
+
+  const invoke = require('@vue/cli/lib/invoke')
+  await invoke(`eslint`, { config: 'airbnb' }, dir)
+
+  const editorconfig = await read('.editorconfig')
+  expect(editorconfig).toMatch('root = true')
+  expect(editorconfig).toMatch('[*.{js,jsx,ts,tsx,vue}]')
+})
+
+test('airbnb config + typescript + unit-mocha', async () => {
+  await create('eslint-airbnb-typescript', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {
+        classComponent: true
+      },
+      '@vue/cli-plugin-unit-mocha': {}
+    }
+  })
+}, 30000)

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // make sure generators are using the latest version of plugins,
 // and plugins are using the latest version of deps
 
@@ -166,7 +167,17 @@ async function syncDeps ({ local, version, skipPrompt }) {
       const localReplacer = makeReplacer(
         pkg => {
           try {
-            // inline version takes priority
+            // for eslint-config-* packages, only use version field from package.json
+            // as they're published separately
+            if (pkg.includes('eslint-config')) {
+              return require(`../packages/${pkg}/package.json`).version
+            }
+
+            if (pkg.includes('@vue/cli-plugin')) {
+              return `${semver.major(version)}.${semver.minor(version)}.0`
+            }
+
+            // otherwise, inline version takes priority
             return version || require(`../packages/${pkg}/package.json`).version
           } catch (e) {}
         }

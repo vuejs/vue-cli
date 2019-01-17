@@ -4,11 +4,11 @@
 
 如果你用 Vue CLI 处理静态资源并和后端框架一起作为部署的一部分，那么你需要的仅仅是确保 Vue CLI 生成的构建文件在正确的位置，并遵循后端框架的发布方式即可。
 
-如果你独立于后端部署前端应用——也就是说后端暴露一个前端可访问的 API，然后前端实际上是纯静态应用。那么你可以将 `dist` 目录里构建的内容部署到任何静态文件服务器中，但要确保正确的 [baseUrl](../config/#baseurl)。
+如果你独立于后端部署前端应用——也就是说后端暴露一个前端可访问的 API，然后前端实际上是纯静态应用。那么你可以将 `dist` 目录里构建的内容部署到任何静态文件服务器中，但要确保正确的 [publicPath](../config/#publicpath)。
 
 ### 本地预览
 
-`dist` 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 `baseUrl` 配置为了一个相对的值)，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
+`dist` 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 `publicPath` 配置为了一个相对的值)，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
 
 ``` bash
 npm install -g serve
@@ -39,16 +39,16 @@ serve -s dist
 
 ### GitHub Pages
 
-1. 在 `vue.config.js` 中设置好正确的 `baseUrl` 。
+1. 在 `vue.config.js` 中设置好正确的 `publicPath` 。
 
-    如果你的页面部署在 `https://<USERNAME>.github.io/` 下，你可以不设置 `baseUrl` ，此时 `baseUrl` 的默认值为 `"/"` 。
+    如果你的页面部署在 `https://<USERNAME>.github.io/` 下，你可以不设置 `baseUrl` ，此时 `publicPath` 的默认值为 `"/"` 。
 
-    如果你的页面部署在 `https://<USERNAME>.github.io/<REPO>/`，（例如：你的仓库地址是 `https://github.com/<USERNAME>/<REPO>` ），那么把 `baseUrl`
+    如果你的页面部署在 `https://<USERNAME>.github.io/<REPO>/`，（例如：你的仓库地址是 `https://github.com/<USERNAME>/<REPO>` ），那么把 `publicPath`
     设置为 `"/<REPO>/"` 。举个具体的例子，你有一个名字叫"my-project"的仓库，因此你项目中的 `vue.config.js` 可以像下面的代码：
 
     ``` js
     module.exports = {
-      baseUrl: process.env.NODE_ENV === 'production'
+      publicPath: process.env.NODE_ENV === 'production'
         ? '/my-project/'
         : '/'
     }
@@ -117,7 +117,7 @@ pages: # 必须给页面命名
 // 确保已经用你 GitLab 项目的名字替换下面的 `yourProjectName` 
 
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production'
+  publicPath: process.env.NODE_ENV === 'production'
     ? '/yourProjectName/'
     : '/'
 }
@@ -283,11 +283,11 @@ npm install --global surge
 
 1. 根据 [Bitbucket 文档](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) 的描述，你需要创建一个这样 `<USERNAME>.bitbucket.io` 命名的仓库。
 
-2. 如果你要发布多个页面可以发布在主仓库下子文件夹中，这种情况需要正确的设置 `vue.config.js` 中的 `baseUrl` 。
+2. 如果你要发布多个页面可以发布在主仓库下子文件夹中，这种情况需要正确的设置 `vue.config.js` 中的 `publicPath` 。
 
-    如果你部署项目到 `https://<USERNAME>.bitbucket.io/`, 你可以不设置 `baseUrl` 默认为 `"/"`。
+    如果你部署项目到 `https://<USERNAME>.bitbucket.io/`, 你可以不设置 `publicPath` 默认为 `"/"`。
 
-    如果你部署项目到 `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, 设置 `baseUrl` 为 `"/<SUBFOLDER>/"`。这种情况下目录结构会反映到url的路由，打个比方，你的仓库应该有 `/<SUBFOLDER>` 这样一个文件夹。
+    如果你部署项目到 `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, 设置 `publicPath` 为 `"/<SUBFOLDER>/"`。这种情况下目录结构会反映到url的路由，打个比方，你的仓库应该有 `/<SUBFOLDER>` 这样一个文件夹。
 
 3. 在你的项目目录下创建一个 `deploy.sh` 脚本，内容如下，运行脚本就可以部署到Bitbucket Cloud：
 

@@ -1,5 +1,4 @@
 const execa = require('execa')
-const terminate = require('terminate')
 const chalk = require('chalk')
 // Subs
 const channels = require('../channels')
@@ -14,6 +13,7 @@ const projects = require('./projects')
 // Utils
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
+const { terminate } = require('../util/terminate')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -112,10 +112,10 @@ async function list ({ file = null, api = true } = {}, context) {
       })
     )
 
-    // Keep existing or ran tasks
+    // Keep existing running tasks
     list = list.filter(
       task => existing.get(task.id) ||
-      task.status !== 'idle'
+      task.status === 'running'
     )
 
     // Add the new tasks
@@ -462,18 +462,25 @@ async function run (id, context) {
   return task
 }
 
-function stop (id, context) {
+async function stop (id, context) {
   const task = findOne(id, context)
   if (task && task.status === 'running' && task.child) {
     task._terminating = true
     try {
-      terminate(task.child.pid)
+      const { success, error } = await terminate(task.child, cwd.get())
+      if (success) {
+        updateOne({
+          id: task.id,
+          status: 'terminated'
+        }, context)
+      } else if (error) {
+        throw error
+      } else {
+        throw new Error('Unknown error')
+      }
     } catch (e) {
+      console.log(chalk.red(`Can't terminate process ${task.child.pid}`))
       console.error(e)
-      updateOne({
-        id: task.id,
-        status: 'terminated'
-      }, context)
     }
   }
   return task

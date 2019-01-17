@@ -1,3 +1,5 @@
+const globby = require('globby')
+
 const renamedArrayArgs = {
   ext: 'extensions',
   env: 'envs',
@@ -15,21 +17,11 @@ const renamedArgs = {
   config: 'configFile'
 }
 
-const defaultFilesToLint = [
-  'src',
-  'tests',
-  // root config files
-  '*.js',
-  // .eslintrc files (ignored by default)
-  '.*.js',
-  '{src,tests}/**/.*.js'
-]
-
 module.exports = function lint (args = {}, api) {
   const path = require('path')
   const cwd = api.resolve('.')
-  const { CLIEngine } = require('eslint')
-  const { log, done, exit, chalk } = require('@vue/cli-shared-utils')
+  const { log, done, exit, chalk, loadModule } = require('@vue/cli-shared-utils')
+  const { CLIEngine } = loadModule('eslint', cwd, true) || require('eslint')
   const extensions = require('./eslintOptions').extensions(api)
 
   const argsConfig = normalizeConfig(args)
@@ -40,11 +32,42 @@ module.exports = function lint (args = {}, api) {
   }, argsConfig)
 
   const engine = new CLIEngine(config)
+
+  // .eslintrc.js files (ignored by default)
+  const dotFiles = [
+    '.*.js',
+    '{src,tests}/**/.*.js'
+  ].filter(pattern => globby.sync(path.join(cwd, pattern)).length)
+
+  const defaultFilesToLint = [
+    'src',
+    'tests',
+    // root config files
+    '*.js'
+  ]
+    .filter(pattern =>
+      globby
+        .sync(path.join(cwd, pattern))
+        .some(p => !engine.isPathIgnored(p))
+    )
+    .concat(dotFiles)
+
   const files = args._ && args._.length
     ? args._
     : defaultFilesToLint
 
+  // mock process.cwd before executing
+  // See:
+  // https://github.com/vuejs/vue-cli/issues/2554
+  // https://github.com/benmosher/eslint-plugin-import/issues/602
+  // https://github.com/eslint/eslint/issues/11218
+  const processCwd = process.cwd
+  if (!api.invoking) {
+    process.cwd = () => cwd
+  }
   const report = engine.executeOnFiles(files)
+  process.cwd = processCwd
+
   const formatter = engine.getFormatter(args.format || 'codeframe')
 
   if (config.fix) {

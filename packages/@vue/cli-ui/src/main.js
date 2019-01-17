@@ -19,20 +19,10 @@ window.Vue = Vue
 window.ClientAddonApi = new ClientAddonApi()
 
 const app = new Vue({
-  provide: apolloProvider.provide(),
   router,
+  apolloProvider,
   i18n,
   ...App
 })
 
-async function start () {
-  app.$mount('#app')
-
-  // Restore last route
-  const lastRoute = localStorage.getItem('vue-cli-ui.lastRoute')
-  if (lastRoute) {
-    router.push(lastRoute)
-  }
-}
-
-start()
+app.$mount('#app')

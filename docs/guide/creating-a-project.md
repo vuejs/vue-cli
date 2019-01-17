@@ -10,6 +10,9 @@ vue create hello-world
 
 ::: warning
 If you are on Windows using Git Bash with minTTY, the interactive prompts will not work. You must launch the command as `winpty vue.cmd create hello-world`.
+If you however want to still use the `vue create hello-world` syntax, you can alias the command by adding the following line to your `~/.bashrc` file.  
+`alias vue='winpty vue.cmd'`  
+You will need to restart your Git Bash terminal session to pull in the updated bashrc file.
 :::
 
 You will be prompted to pick a preset. You can either choose the default preset which comes with a basic Babel + ESLint setup, or select "Manually select features" to pick the features you need.
@@ -46,12 +49,12 @@ Options:
   -d, --default                   Skip prompts and use default preset
   -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
   -m, --packageManager <command>  Use specified npm client when installing dependencies
-  -r, --registry <url>            Use specified npm registry when installing dependencies (only for npm)
+  -r, --registry <url>            Use specified npm registry when installing dependencies
   -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
   -n, --no-git                    Skip git initialization
   -f, --force                     Overwrite target directory if it exists
   -c, --clone                     Use git clone when fetching remote preset
-  -x, --proxy                     Use specified proxy when creating project   
+  -x, --proxy                     Use specified proxy when creating project
   -b, --bare                      Scaffold project without beginner instructions
   -h, --help                      Output usage information
 ```

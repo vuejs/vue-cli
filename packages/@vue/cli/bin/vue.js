@@ -19,6 +19,14 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, 'vue-cli')
 
+if (semver.satisfies(process.version, '9.x')) {
+  console.log(chalk.red(
+    `You are using Node ${process.version}.\n` +
+    `Node.js 9.x has already reached end-of-life and will not be supported in future major releases.\n` +
+    `It's strongly recommended to use an active LTS version instead.`
+  ))
+}
+
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
@@ -57,7 +65,7 @@ program
   .option('-b, --bare', 'Scaffold project without beginner instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
-    // --no-git makes commander to default git to true
+    // --git makes commander to default git to true
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
       options.forceGit = true
     }
@@ -67,6 +75,7 @@ program
 program
   .command('add <plugin> [pluginOptions]')
   .description('install a plugin and invoke its generator in an already created project')
+  .option('--registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
   .allowUnknownOption()
   .action((plugin) => {
     require('../lib/add')(plugin, minimist(process.argv.slice(3)))
@@ -75,6 +84,7 @@ program
 program
   .command('invoke <plugin> [pluginOptions]')
   .description('invoke the generator of a plugin in an already created project')
+  .option('--registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
   .allowUnknownOption()
   .action((plugin) => {
     require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
@@ -115,6 +125,7 @@ program
 program
   .command('ui')
   .description('start and open the vue-cli ui')
+  .option('-H, --host <host>', 'Host used for the UI server (default: localhost)')
   .option('-p, --port <port>', 'Port used for the UI server (by default search for available port)')
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
@@ -143,6 +154,34 @@ program
   .option('--json', 'outputs JSON result only')
   .action((value, cmd) => {
     require('../lib/config')(value, cleanArgs(cmd))
+  })
+
+program
+  .command('upgrade [semverLevel]')
+  .description('upgrade vue cli service / plugins (default semverLevel: minor)')
+  .action((semverLevel, cmd) => {
+    loadCommand('upgrade', '@vue/cli-upgrade')(semverLevel, cleanArgs(cmd))
+  })
+
+program
+  .command('info')
+  .description('print debugging information about your environment')
+  .action((cmd) => {
+    console.log(chalk.bold('\nEnvironment Info:'))
+    require('envinfo').run(
+      {
+        System: ['OS', 'CPU'],
+        Binaries: ['Node', 'Yarn', 'npm'],
+        Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
+        npmPackages: '/**/{*vue*,@vue/*/}',
+        npmGlobalPackages: ['@vue/cli']
+      },
+      {
+        showNotFound: true,
+        duplicates: true,
+        fullTree: true
+      }
+    ).then(console.log)
   })
 
 // output help information on unknown commands
@@ -186,12 +225,16 @@ if (!process.argv.slice(2).length) {
   program.outputHelp()
 }
 
+function camelize (str) {
+  return str.replace(/-(\w)/g, (_, c) => c ? c.toUpperCase() : '')
+}
+
 // commander passes the Command object itself as options,
 // extract only actual options into a fresh object.
 function cleanArgs (cmd) {
   const args = {}
   cmd.options.forEach(o => {
-    const key = o.long.replace(/^--/, '')
+    const key = camelize(o.long.replace(/^--/, ''))
     // if an option is not present and Command has a method with the same name
     // it should not be copied
     if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {

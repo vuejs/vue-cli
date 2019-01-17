@@ -4,7 +4,7 @@ module.exports = (api, options) => {
       webpackConfig
         .devtool('cheap-module-eval-source-map')
         .output
-          .publicPath(options.baseUrl)
+          .publicPath(options.publicPath)
 
       webpackConfig
         .plugin('hmr')
@@ -14,10 +14,6 @@ module.exports = (api, options) => {
       webpackConfig
         .output
           .globalObject('this')
-
-      webpackConfig
-        .plugin('no-emit-on-errors')
-          .use(require('webpack/lib/NoEmitOnErrorsPlugin'))
 
       if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
         webpackConfig

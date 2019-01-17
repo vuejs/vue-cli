@@ -1,6 +1,6 @@
 {
   "name": "@vue/eslint-config-prettier",
-  "version": "3.0.5",
+  "version": "4.0.1",
   "description": "eslint-config-prettier for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/eslint-config-prettier#readme",
   "dependencies": {
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.6.2",
-    "prettier": "^1.12.1"
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.15.3"
   }
 }

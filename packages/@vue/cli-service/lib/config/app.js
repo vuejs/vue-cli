@@ -140,7 +140,7 @@ module.exports = (api, options) => {
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
-    const publicCopyIgnore = ['index.html', '.DS_Store']
+    const publicCopyIgnore = ['.DS_Store']
 
     if (!multiPageConfig) {
       // default, single page setup.
@@ -177,13 +177,27 @@ module.exports = (api, options) => {
       const normalizePageConfig = c => typeof c === 'string' ? { entry: c } : c
 
       pages.forEach(name => {
+        const pageConfig = normalizePageConfig(multiPageConfig[name])
         const {
-          title,
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`,
-          chunks
-        } = normalizePageConfig(multiPageConfig[name])
+          chunks = ['chunk-vendors', 'chunk-common', name]
+        } = pageConfig
+
+        // Currently Cypress v3.1.0 comes with a very old version of Node,
+        // which does not support object rest syntax.
+        // (https://github.com/cypress-io/cypress/issues/2253)
+        // So here we have to extract the customHtmlOptions manually.
+        const customHtmlOptions = {}
+        for (const key in pageConfig) {
+          if (
+            !['entry', 'template', 'filename', 'chunks'].includes(key)
+          ) {
+            customHtmlOptions[key] = pageConfig[key]
+          }
+        }
+
         // inject entry
         webpackConfig.entry(name).add(api.resolve(entry))
 
@@ -199,12 +213,16 @@ module.exports = (api, options) => {
             : defaultHtmlPath
 
         // inject html plugin for the page
-        const pageHtmlOptions = Object.assign({}, htmlOptions, {
-          chunks: chunks || ['chunk-vendors', 'chunk-common', name],
-          template: templatePath,
-          filename: ensureRelative(outputDir, filename),
-          title
-        })
+        const pageHtmlOptions = Object.assign(
+          {},
+          htmlOptions,
+          {
+            chunks,
+            template: templatePath,
+            filename: ensureRelative(outputDir, filename)
+          },
+          customHtmlOptions
+        )
 
         webpackConfig
           .plugin(`html-${name}`)
@@ -250,7 +268,7 @@ module.exports = (api, options) => {
           .use(require('../webpack/CorsPlugin'), [{
             crossorigin: options.crossorigin,
             integrity: options.integrity,
-            baseUrl: options.baseUrl
+            publicPath: options.publicPath
           }])
     }
 

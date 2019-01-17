@@ -1,6 +1,6 @@
 <template>
   <div class="vue-webpack-analyzer">
-    <div class="pane-toolbar">
+    <div class="pane-toolbar card">
       <VueIcon icon="donut_large"/>
       <div class="title">{{ $t('org.vue.vue-webpack.analyzer.title') }}</div>
 
@@ -84,7 +84,7 @@
       </template>
 
       <div v-if="describedModule" class="described-module">
-        <div class="wrapper">
+        <div class="wrapper card">
           <div class="path" v-html="modulePath"/>
           <div
             class="stats size"
@@ -345,10 +345,6 @@ export default {
   .pane-toolbar,
   .described-module .wrapper
     padding $padding-item
-    background $vue-ui-color-light-neutral
-    border-radius $br
-    .vue-ui-dark-mode &
-      background $vue-ui-color-dark
 
   .content
     display flex

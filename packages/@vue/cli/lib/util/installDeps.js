@@ -61,16 +61,9 @@ function renderProgressBar (curr, total) {
 }
 
 async function addRegistryToArgs (command, args, cliRegistry) {
-  if (command === 'yarn' && cliRegistry) {
-    throw new Error(
-      `Inline registry is not supported when using yarn. ` +
-      `Please run \`yarn config set registry ${cliRegistry}\` before running @vue/cli.`
-    )
-  }
-
   const altRegistry = (
     cliRegistry || (
-      (command === 'npm' && await shouldUseTaobao())
+      (await shouldUseTaobao(command))
         ? registries.taobao
         : null
     )

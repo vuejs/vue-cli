@@ -3,6 +3,8 @@ const { portfinder, server } = require('@vue/cli-ui/server')
 const shortid = require('shortid')
 
 async function ui (options = {}, context = process.cwd()) {
+  const host = options.host || 'localhost'
+
   let port = options.port
   if (!port) {
     port = await portfinder.getPortPromise()
@@ -28,6 +30,7 @@ async function ui (options = {}, context = process.cwd()) {
   if (!options.quiet) log(`🚀  Starting GUI...`)
 
   const opts = {
+    host,
     port,
     graphqlPath: '/graphql',
     subscriptionsPath: '/graphql',
@@ -55,7 +58,7 @@ async function ui (options = {}, context = process.cwd()) {
     }
 
     // Open browser
-    const url = `http://localhost:${port}`
+    const url = `http://${host}:${port}`
     if (!options.quiet) log(`🌠  Ready on ${url}`)
     if (options.headless) {
       console.log(port)

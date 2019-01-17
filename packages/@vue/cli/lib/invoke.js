@@ -81,9 +81,11 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
     throw new Error(`Plugin ${id} does not have a generator.`)
   }
 
-  // resolve options if no command line options are passed, and the plugin
-  // contains a prompt module.
-  if (!Object.keys(options).length) {
+  // resolve options if no command line options (other than --registry) are passed,
+  // and the plugin contains a prompt module.
+  // eslint-disable-next-line prefer-const
+  let { registry, ...pluginOptions } = options
+  if (!Object.keys(pluginOptions).length) {
     let pluginPrompts = loadModule(`${id}/prompts`, context)
     if (pluginPrompts) {
       if (typeof pluginPrompts === 'function') {
@@ -92,14 +94,17 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
       if (typeof pluginPrompts.getPrompts === 'function') {
         pluginPrompts = pluginPrompts.getPrompts(pkg)
       }
-      options = await inquirer.prompt(pluginPrompts)
+      pluginOptions = await inquirer.prompt(pluginPrompts)
     }
   }
 
   const plugin = {
     id,
     apply: pluginGenerator,
-    options
+    options: {
+      registry,
+      ...pluginOptions
+    }
   }
 
   await runGenerator(context, plugin, pkg)
@@ -134,7 +139,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     log()
     const packageManager =
       loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
-    await installDeps(context, packageManager)
+    await installDeps(context, packageManager, plugin.options && plugin.options.registry)
   }
 
   if (createCompleteCbs.length) {

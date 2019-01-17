@@ -1,7 +1,5 @@
-const fs = require('fs-extra')
-const path = require('path')
 const semver = require('semver')
-const fsCachePath = path.resolve(__dirname, '.version')
+const { loadOptions, saveOptions } = require('../options')
 
 let sessionCached
 
@@ -19,24 +17,19 @@ module.exports = async function getVersions () {
     })
   }
 
-  if (fs.existsSync(fsCachePath)) {
-    const cached = await fs.readFile(fsCachePath, 'utf-8')
-    const lastChecked = (await fs.stat(fsCachePath)).mtimeMs
-    const daysPassed = (Date.now() - lastChecked) / (60 * 60 * 1000 * 24)
-    if (daysPassed > 1) {
-      // if we haven't check for a new version in a day, wait for the check
-      // before proceeding
-      latest = await getAndCacheLatestVersion(cached)
-    } else {
-      // Otherwise, do a check in the background. If the result was updated,
-      // it will be used for the next 24 hours.
-      getAndCacheLatestVersion(cached)
-      latest = cached
-    }
+  const { latestVersion = local, lastChecked = 0 } = loadOptions()
+  const cached = latestVersion
+  const daysPassed = (Date.now() - lastChecked) / (60 * 60 * 1000 * 24)
+
+  if (daysPassed > 1) {
+    // if we haven't check for a new version in a day, wait for the check
+    // before proceeding
+    latest = await getAndCacheLatestVersion(cached)
   } else {
-    // if the cache file doesn't exist, this is likely a fresh install
-    // so no need to check
-    latest = local
+    // Otherwise, do a check in the background. If the result was updated,
+    // it will be used for the next 24 hours.
+    getAndCacheLatestVersion(cached)
+    latest = cached
   }
 
   return (sessionCached = {
@@ -53,7 +46,7 @@ async function getAndCacheLatestVersion (cached) {
   if (res.statusCode === 200) {
     const { version } = res.body
     if (semver.valid(version) && version !== cached) {
-      await fs.writeFile(fsCachePath, version)
+      saveOptions({ latestVersion: version, lastChecked: Date.now() })
       return version
     }
   }

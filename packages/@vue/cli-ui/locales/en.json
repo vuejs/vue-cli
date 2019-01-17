@@ -1,7 +1,16 @@
 {
   "org": {
     "vue": {
+      "common": {
+        "close": "Close",
+        "back": "Go back",
+        "more-info": "More info"
+      },
       "components": {
+        "client-addon-component": {
+          "timeout": "Component load timeout",
+          "timeout-info": "The custom component takes too much time to load, there might be an error"
+        },
         "connection-status": {
           "disconnected": "Disconnected from UI server",
           "connected": "Connected!"
@@ -66,7 +75,7 @@
         },
         "logger-view": {
           "title": "Logs",
-          "empty": "Not logs yet",
+          "empty": "No logs yet",
           "buttons": {
             "clear": "Clear logs",
             "scroll": "Scroll to bottom",
@@ -78,6 +87,7 @@
         },
         "project-nav": {
           "tooltips": {
+            "dashboard": "Dashboard",
             "plugins": "Plugins",
             "dependencies": "Dependencies",
             "configuration": "Configuration",
@@ -105,8 +115,10 @@
           "official": "Official",
           "installed": "Installed",
           "actions": {
-            "update": "Update {target}"
-          }
+            "update": "Update {target}",
+            "refresh": "Force Refresh {target}<br><i>Press [Shift] for Quick Refresh (node_modules won't be updated)</i>"
+          },
+          "local": "Local"
         },
         "project-dependency-item": {
           "version": "version",
@@ -174,6 +186,24 @@
               "done": "Done status"
             }
           }
+        },
+        "widget": {
+          "remove": "Remove widget",
+          "configure": "Configure widget",
+          "save": "Save",
+          "reset-config": "Reset config",
+          "open-details": "Show more"
+        },
+        "widget-add-pane": {
+          "title": "Add widgets"
+        },
+        "widget-add-item": {
+          "add": "Add widget",
+          "details": {
+            "title": "Widget details",
+            "max-instances": "Max instance count: {count}/{total}",
+            "unlimited": "unlimited"
+          }
         }
       },
       "mixins": {
@@ -225,7 +255,8 @@
               "title": "Missing modules",
               "message": "It seems the project is missing the 'node_modules' folder. Please check you installed the dependencies before importing.",
               "close": "Got it"
-            }
+            },
+            "force": "Import anyway"
           }
         },
         "project-create": {
@@ -292,7 +323,7 @@
                   "subtitle": "Git repo, for example 'username/repo'. You can also prefix with 'gitlab:' or 'bitbucket:'."
                 },
                 "options": "Other options",
-                "clone": "Cloner/Private repository",
+                "clone": "Clone/Private repository",
                 "cancel": "Cancel",
                 "done": "Done"
               },
@@ -373,6 +404,15 @@
               "cancel": "Cancel without uninstalling",
               "uninstall": "Uninstall"
             }
+          },
+          "buttons": {
+            "add-local": "Browse local plugin"
+          }
+        },
+        "project-plugin-add-local": {
+          "title": "Add a local plugin",
+          "buttons": {
+            "add": "Add local plugin"
           }
         },
         "project-configurations": {
@@ -420,6 +460,14 @@
             "cancel": "Cancel",
             "uninstall": "Uninstall {id}"
           }
+        },
+        "project-dashboard": {
+          "title": "Project dashboard",
+          "cutomize": "Customize",
+          "done": "Done"
+        },
+        "settings": {
+          "title": "Settings"
         },
         "about": {
           "title": "About",
@@ -533,6 +581,10 @@
             },
             "baseUrl": {
               "label": "Base URL",
+              "description": "The base URL your application will be deployed at, for example '/my-app/'. Use an empty string ('') so that all assets are linked using relative paths."
+            },
+            "publicPath": {
+              "label": "Public Path",
               "description": "The base URL your application will be deployed at, for example '/my-app/'. Use an empty string ('') so that all assets are linked using relative paths."
             },
             "outputDir": {
@@ -694,6 +746,96 @@
           "test": {
             "description": "Run unit tests with Mocha",
             "watch": "Watch files for changes and rerun tests related to changed files"
+          }
+        }
+      },
+      "widgets": {
+        "welcome": {
+          "title": "Welcome tips",
+          "description": "Some tips to help you get started",
+          "content": {
+            "title": "Welcome to your new project!",
+            "tip1": "You are looking at the project dashboard where you can put widgets. Use the 'Customize' button to add more! Everything is automatically saved.",
+            "tip2": "On the left are the different available pages. 'Plugins' let you add new Vue CLI plugins, 'Dependencies' for managing the packages, 'Configuration' to configure the tools and 'Tasks' to run scripts (for example webpack).",
+            "tip3": "Return to the project manager with the dropdown at the top left of the screen or the home button in the status bar at the bottom.",
+            "ok": "Understood"
+          }
+        },
+        "kill-port": {
+          "title": "Kill port",
+          "description": "Kill processes using a specific network port",
+          "input": {
+            "placeholder": "Enter a network port"
+          },
+          "kill": "Kill",
+          "status": {
+            "idle": "Ready to kill",
+            "killing": "Killing procress...",
+            "killed": "Killed successfully!",
+            "error": "Couldn't kill process"
+          }
+        },
+        "status-widget": {
+          "last-updated": "Updated",
+          "never": "Not updated yet",
+          "check": "Check for updates",
+          "more-info": "More details"
+        },
+        "plugin-updates": {
+          "title": "Plugin updates",
+          "description": "Monitor plugin updates",
+          "messages": {
+            "ok": "All plugins up-to-date",
+            "loading": "Checking for updates...",
+            "attention": "{n} plugin updates available"
+          },
+          "page": "Go to Plugins"
+        },
+        "dependency-updates": {
+          "title": "Dependency updates",
+          "description": "Monitor dependencies updates",
+          "messages": {
+            "ok": "All dependencies up-to-date",
+            "loading": "Checking for updates...",
+            "attention": "{n} dependency updates available"
+          },
+          "page": "Go to Dependencies"
+        },
+        "vulnerability": {
+          "title": "Vulnerability check",
+          "description": "Check for known vulnerabilities in your project dependencies",
+          "messages": {
+            "ok": "No vulnerability found",
+            "loading": "Checking security reports...",
+            "attention": "{n} vulnerabilities found"
+          },
+          "severity": {
+            "high": "High severity",
+            "medium": "Medium severity",
+            "low": "Low severity"
+          },
+          "direct-dep": "Direct dependency"
+        },
+        "run-task": {
+          "title": "Run task",
+          "description": "Shortcut to run a task",
+          "prompts": {
+            "task": "Select a task"
+          },
+          "page": "Go to Task"
+        },
+        "news": {
+          "title": "News feed",
+          "description": "Read news feed",
+          "refresh": "Force refresh",
+          "select-tip": "Select an item on the left",
+          "prompts": {
+            "url": "RSS feed URL or GitHub repository"
+          },
+          "errors": {
+            "fetch": "Couldn't fetch feed",
+            "offline": "You are offline",
+            "empty": "Empty feed"
           }
         }
       }

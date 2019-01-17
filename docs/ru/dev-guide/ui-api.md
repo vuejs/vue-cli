@@ -333,6 +333,7 @@ api.describeConfig({
 ```
 
 ## Задачи проекта
+
 ![Tasks ui](/tasks-ui.png)
 
 Задачи создаются из поля `scripts` файла `package.json` проекта.
@@ -346,6 +347,14 @@ api.describeTask({
   description: 'Компиляция и горячая замена модулей для разработки',
   // Ссылка "More info"
   link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve'
+})
+```
+
+Также можно использовать функцию для `match`:
+
+```js
+api.describeTask({
+  match: (command) => /vue-cli-service serve/.test(command),
 })
 ```
 

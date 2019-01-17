@@ -1,6 +1,6 @@
 exports.clientAddonConfig = function ({ id, port = 8042 }) {
   return {
-    baseUrl: process.env.NODE_ENV === 'production'
+    publicPath: process.env.NODE_ENV === 'production'
       ? `/_addon/${id}`
       : `http://localhost:${port}/`,
     configureWebpack: {
@@ -18,6 +18,13 @@ exports.clientAddonConfig = function ({ id, port = 8042 }) {
       config.plugins.delete('html')
       config.plugins.delete('optimize-css')
       config.optimization.splitChunks(false)
+
+      config.module
+        .rule('gql')
+        .test(/\.(gql|graphql)$/)
+        .use('gql-loader')
+        .loader('graphql-tag/loader')
+        .end()
     },
     devServer: {
       headers: {
