@@ -293,7 +293,7 @@ npm install --global surge
     ``` bash{13,20,23}
     #!/usr/bin/env sh
 
-    # 当发生错误时中止脚本;
+    # 当发生错误时中止脚本
     set -e
 
     # 构建
