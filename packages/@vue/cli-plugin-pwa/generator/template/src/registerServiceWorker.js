@@ -2,7 +2,7 @@
 
 import { register } from 'register-service-worker'
 
-if (process.env.NODE_ENV === 'production' || process.env.VUE_APP_ALLOW_LOCAL_SW) {
+if (process.env.NODE_ENV === 'production' || process.env.VUE_APP_ALLOW_LOCAL_SW === 'true') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready () {
       console.log(
