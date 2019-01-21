@@ -1,3 +1,4 @@
+const fs = require('fs')
 const globby = require('globby')
 
 const renamedArrayArgs = {
@@ -35,26 +36,34 @@ module.exports = function lint (args = {}, api) {
   const noFixWarningsPredicate = (lintResult) => lintResult.severity === 2
   config.fix = config.fix && (noFixWarnings ? noFixWarningsPredicate : true)
 
-  const engine = new CLIEngine(config)
+  if (!fs.existsSync(api.resolve('.eslintignore'))) {
+    // .eslintrc.js files (ignored by default)
+    // However, we need to lint & fix them so as to make the default generated project's
+    // code style consistent with user's selected eslint config.
+    // Though, if users provided their own `.eslintignore` file, we don't want to
+    // add our own customized ignore pattern here (in eslint, ignorePattern is
+    // an addition to eslintignore, i.e. it can't be overriden by user),
+    // following the principle of least astonishment.
+    config.ignorePattern = [
+      '!.*.js',
+      '!{src,tests}/**/.*.js'
+    ]
+  }
 
-  // .eslintrc.js files (ignored by default)
-  const dotFiles = [
-    '.*.js',
-    '{src,tests}/**/.*.js'
-  ].filter(pattern => globby.sync(path.join(cwd, pattern)).length)
+  const engine = new CLIEngine(config)
 
   const defaultFilesToLint = [
     'src',
     'tests',
     // root config files
-    '*.js'
+    '*.js',
+    '.*.js'
   ]
     .filter(pattern =>
       globby
         .sync(path.join(cwd, pattern))
         .some(p => !engine.isPathIgnored(p))
     )
-    .concat(dotFiles)
 
   const files = args._ && args._.length
     ? args._
