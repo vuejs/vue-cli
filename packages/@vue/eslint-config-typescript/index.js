@@ -5,7 +5,9 @@ module.exports = {
   // in turn delegates to the parser, specified in `parserOptions.parser`:
   // https://github.com/vuejs/eslint-plugin-vue#what-is-the-use-the-latest-vue-eslint-parser-error
   parserOptions: {
-    parser: require.resolve('typescript-eslint-parser')
+    parser: require.resolve('typescript-eslint-parser'),
+    // #3268
+    jsx: true
   },
   rules: {
     // https://github.com/eslint/typescript-eslint-parser#known-issues
