@@ -32,6 +32,10 @@ module.exports = function lint (args = {}, api) {
     cwd
   }, argsConfig)
 
+  const noFixWarnings = (argsConfig.fixWarnings === false)
+  const noFixWarningsPredicate = (lintResult) => lintResult.severity === 2
+  config.fix = config.fix && (noFixWarnings ? noFixWarningsPredicate : true)
+
   if (!fs.existsSync(api.resolve('.eslintignore'))) {
     // .eslintrc.js files (ignored by default)
     // However, we need to lint & fix them so as to make the default generated project's
