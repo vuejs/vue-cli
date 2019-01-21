@@ -24,7 +24,13 @@ function isDirectory (file) {
 }
 
 async function list (base, context) {
-  const files = await fs.readdir(base, 'utf8')
+  let dir = base
+  if (isPlatformWindows) {
+    if (base.match(/^([A-Z]{1}:)$/)) {
+      dir = path.join(base, '\\')
+    }
+  }
+  const files = await fs.readdir(dir, 'utf8')
   return files.map(
     file => {
       const folderPath = path.join(base, file)
