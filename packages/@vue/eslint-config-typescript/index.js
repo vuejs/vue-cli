@@ -11,7 +11,8 @@ module.exports = {
     // https://typescript-eslint.io/parser
     'no-undef': 'off',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    // https://github.com/typescript-eslint/typescript-eslint/issues/46
+    // '@typescript-eslint/no-unused-vars': 'error',
 
     // temporary fix for https://github.com/vuejs/vue-cli/issues/1922
     // very strange as somehow this rule gets different behaviors depending
