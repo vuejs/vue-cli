@@ -24,7 +24,7 @@ As an npm package, CLI plugin must have a `package.json` file. It's also recomme
 
 So, typical CLI plugin folder structure looks like the following:
 
-```
+```bash
 .
 ├── README.md
 ├── generator.js  # generator (optional)
@@ -133,24 +133,27 @@ export default {
 ### Filename edge cases
 
 If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
-```
+
+```bash
 # dotfile templates have to use an underscore instead of the dot:
 
 /generator/template/_env
 
 # When calling api.render('./template'), this will be rendered in the project folder as:
 
-.env
+/generator/template/.env
 ```
+
 Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
-```
-# such templates have to use two underscores instead of the dot:
+
+```bash
+# such templates have to use two underscores instead of one:
 
 /generator/template/__variables.scss
 
 # When calling api.render('./template'), this will be rendered in the project folder as:
 
-_variables.scss
+/generator/template/_variables.scss
 ```
 
 
@@ -508,7 +511,7 @@ After you click it, you can easily search for you plugin and add it to the proje
 
 ## UI Integration
 
-Vue CLI has a great [UI tool](https://github.com/vuejs/ui) which allows user to scaffold and manage a project with a nice graphical interface. The Vue CLI plugin can be integrated to this interface. UI provides an additional functionality to CLI plugins:
+Vue CLI has a great UI tool which allows user to scaffold and manage a project with a nice graphical interface. The Vue CLI plugin can be integrated to this interface. UI provides an additional functionality to CLI plugins:
 
 - you can run npm tasks, including plugin-specific ones, directly from the UI;
 - you can display custom configurations for your plugin. For example, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) provides the following configuration screen for Apollo server:
@@ -647,14 +650,14 @@ api.describeConfig({
         name: `color`,
         type: 'input',
         message: 'Define the color for greeting message',
-        default: 'white'
+        value: 'white'
       }
     ]
   })
 })
 ```
 
-In the example above we specified the input prompt with the default value of 'white'. This is how our configuration screen will look with all the settings provided above:
+In the example above we specified the input prompt with the value of 'white'. This is how our configuration screen will look with all the settings provided above:
 
 ![UI Config Start](/ui-config-start.png)
 
@@ -691,13 +694,35 @@ onRead: ({ data }) => ({
       name: `color`,
       type: 'input',
       message: 'Define the color for greeting message',
-      default: data.myConfig.color
+      value: data.myConfig && data.myConfig.color
     }
   ]
 }),
 ```
 
+::: tip
+Note that `myConfig` may be undefined if the config file doesn't exist when the screen is loaded.
+:::
+
 You can see that on the configuration screen `white` is replaced with `black`.
+
+We can also provide a default value if the config file is not present:
+
+```js
+// ui.js
+
+onRead: ({ data }) => ({
+  prompts: [
+    {
+      name: `color`,
+      type: 'input',
+      message: 'Define the color for greeting message',
+      value: data.myConfig && data.myConfig.color,
+      default: 'black',
+    }
+  ]
+}),
+```
 
 #### Save config changes
 
@@ -818,7 +843,7 @@ You should add the url to the plugin website or repository in the `homepage` or 
 
 To publish your plugin, you need to be registered an [npmjs.com](npmjs.com) and you should have `npm` installed globally. If it's your first npm module, please run
 
-```js
+```bash
 npm login
 ```
 
@@ -828,6 +853,10 @@ Enter your username and password. This will store the credentials so you don’t
 Before publishing a plugin, make sure you choose a right name for it! Name convention is `vue-cli-plugin-<name>`. Check [Discoverability](#discoverability) section for more information
 :::
 
-To publish a plugin, go to the plugin root folder and type `npm publish` in the terminal.
+To publish a plugin, go to the plugin root folder and run this command in the terminal:
+
+```bash
+npm publish
+```
 
 After successful publish, you should be able to add your plugin to the project created with Vue CLI with `vue add <plugin-name>` command.
