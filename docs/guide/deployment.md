@@ -254,6 +254,36 @@ npm install -g now
     ```
 
     This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+    
+### Now v2
+
+1. Install the Now CLI globally:
+
+```bash
+npm install -g now
+```
+
+2. Add a `now.json` file to your project root:
+```json
+{
+  "version" : 2,
+  "name" : "vue-example-app",
+  "builds" : [
+      {
+          "src" : "package.json",
+          "use": "@now/static-build"
+      }
+  ]
+}
+```
+
+3. Adding a deployment script in `package.json`:
+
+    ```json
+    "now-build": "vue-cli-service build && now"
+    ```
+    Now, just run `now` command to make public build and deploy your app.
+    
 
 ### Stdlib
 
@@ -261,7 +291,87 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+Create account and install [Heroku CLI] (https://devcenter.heroku.com/articles/heroku-cli#download-and-install)
+
+1. Create App on Heroku using CLI
+
+```bash
+heroku create <PROJECT-NAME>
+```
+
+Now You need to setup NODE_ENV. This impacts the default behavior of a variety of node modules, most notably express.
+
+```bash
+heroku config:set NODE_ENV=production --app <PROJECT-NAME>
+```
+
+2. Add server.js file and build Your Project
+
+```bash
+npm install express --save
+```
+or
+
+```bash
+yarn add express
+```
+
+Now add server.js file to your project root folder:
+
+```
+var express = require('express');
+var path = require('path');
+var serveStatic = require('serve-static');
+app = express();
+app.use(serveStatic(__dirname + "/dist"));
+var port = process.env.PORT || 5000;
+app.listen(port);
+console.log('server started '+ port);
+```
+
+Edit your start script in ```package.json``` to start your node server, as Heroku will automatically look for this script when looking for how to run a node.js app.
+
+```
+"start": "node server.js"
+```
+
+3. Add Heroku Remote Repository
+
+Before you can deploy your app to Heroku, you need to initialize a local Git repository and commit your application code to it.
+
+```bash
+cd PROJECT-NAME
+git init
+git add .
+git commit -m "first commit"
+```
+
+You can easily add a remote to your local repository with the heroku git:remote command. All you need is your Heroku app’s name (made in 1st point).
+
+```bash
+heroku git:remote --app <PROJECT-NAME>
+```
+
+Now you can commit project files to repository
+
+```bash
+git add . && git commit -a -m "Adding my project files."
+```
+
+4. Deploy your code!
+
+The only thing you have to do:
+```bash
+git push heroku master
+```
+
+This will take your committed code, push it to Heroku’s remote repository, run ```start``` command in ```package.json``` which will serve up your built dist directory.
+
+After deployment you can check the result:
+
+```
+https://<PROJECT-NAME>.herokuapp.com
+```
 
 ### Surge
 
