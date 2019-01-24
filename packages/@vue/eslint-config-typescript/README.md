@@ -2,7 +2,7 @@
 
 > eslint-config-typescript for vue-cli
 
-See [@typescript-eslint/eslint-plugin](https://typescript-eslint.io) for available rules.
+See [@typescript-eslint/eslint-plugin](https://typescript-eslint.io/eslint-plugin) for available rules.
 
 This config is specifically designed to be used by `vue-cli` setups
 and is not meant for outside use (it can be used but some adaptations

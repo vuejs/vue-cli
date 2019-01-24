@@ -8,14 +8,14 @@ module.exports = {
     parser: require.resolve('@typescript-eslint/parser')
   },
   rules: {
+    // https://typescript-eslint.io/parser
     'no-undef': 'off',
     'no-unused-vars': 'off',
-    // https://github.com/eslint/typescript-eslint-parser/issues/445
-    // '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': 'error',
 
     // temporary fix for https://github.com/vuejs/vue-cli/issues/1922
     // very strange as somehow this rule gets different behaviors depending
-    // on the presence of typescript-eslint-parser...
+    // on the presence of @typescript-eslint/parser...
     'strict': 'off'
   }
 }

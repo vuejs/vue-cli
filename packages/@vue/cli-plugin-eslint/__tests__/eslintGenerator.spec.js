@@ -100,7 +100,7 @@ test('typescript', async () => {
     '@vue/typescript'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'typescript-eslint-parser'
+    parser: '@typescript-eslint/parserr'
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
