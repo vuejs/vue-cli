@@ -34,7 +34,7 @@ module.exports = (api, options) => {
       .output
         .path(api.resolve(options.outputDir))
         .filename(isLegacyBundle ? '[name]-legacy.js' : '[name].js')
-        .publicPath(options.baseUrl)
+        .publicPath(options.publicPath)
 
     webpackConfig.resolve
       .extensions

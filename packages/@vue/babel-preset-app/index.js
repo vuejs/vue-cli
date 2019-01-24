@@ -6,6 +6,9 @@ const defaultPolyfills = [
   'es6.array.iterator',
   // this is required for webpack code splitting, vuex etc.
   'es6.promise',
+  // this is needed for object rest spread support in templates
+  // as vue-template-es2015-compiler 1.8+ compiles it to Object.assign() calls.
+  'es6.object.assign',
   // #2012 es6.promise replaces native Promise in FF and causes missing finally
   'es7.promise.finally'
 ]
@@ -30,12 +33,7 @@ module.exports = (context, options = {}) => {
 
   // JSX
   if (options.jsx !== false) {
-    plugins.push(
-      require('@babel/plugin-syntax-jsx'),
-      require('babel-plugin-transform-vue-jsx')
-      // require('babel-plugin-jsx-event-modifiers'),
-      // require('babel-plugin-jsx-v-model')
-    )
+    presets.push([require('@vue/babel-preset-jsx'), typeof options.jsx === 'object' ? options.jsx : {}])
   }
 
   const {
@@ -125,7 +123,7 @@ module.exports = (context, options = {}) => {
   }
 
   // pass options along to babel-preset-env
-  presets.push([require('@babel/preset-env'), envOptions])
+  presets.unshift([require('@babel/preset-env'), envOptions])
 
   // additional <= stage-3 plugins
   // Babel 7 is removing stage presets altogether because people are using

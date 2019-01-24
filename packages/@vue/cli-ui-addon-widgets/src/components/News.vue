@@ -100,6 +100,7 @@ export default {
   },
 
   computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
     errorData () {
       if (this.error) {
         return ERRORS[this.error]

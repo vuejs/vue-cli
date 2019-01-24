@@ -140,7 +140,7 @@ module.exports = (api, options) => {
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
-    const publicCopyIgnore = ['index.html', '.DS_Store']
+    const publicCopyIgnore = ['.DS_Store']
 
     if (!multiPageConfig) {
       // default, single page setup.
@@ -268,7 +268,7 @@ module.exports = (api, options) => {
           .use(require('../webpack/CorsPlugin'), [{
             crossorigin: options.crossorigin,
             integrity: options.integrity,
-            baseUrl: options.baseUrl
+            publicPath: options.publicPath
           }])
     }
 

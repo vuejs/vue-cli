@@ -163,3 +163,18 @@ test('append to existing .editorconfig', async () => {
   expect(editorconfig).toMatch('root = true')
   expect(editorconfig).toMatch('[*.{js,jsx,ts,tsx,vue}]')
 })
+
+test('airbnb config + typescript + unit-mocha', async () => {
+  await create('eslint-airbnb-typescript', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {
+        classComponent: true
+      },
+      '@vue/cli-plugin-unit-mocha': {}
+    }
+  })
+}, 30000)

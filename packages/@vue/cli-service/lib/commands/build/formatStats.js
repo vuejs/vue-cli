@@ -36,7 +36,7 @@ module.exports = function formatStats (stats, dir, api) {
     })
 
   function formatSize (size) {
-    return (size / 1024).toFixed(2) + ' kb'
+    return (size / 1024).toFixed(2) + ' KiB'
   }
 
   function getGzippedSize (asset) {

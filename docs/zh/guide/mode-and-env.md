@@ -81,7 +81,7 @@ console.log(process.env.VUE_APP_SECRET)
 除了 `VUE_APP_*` 变量之外，在你的应用代码中始终可用的还有两个特殊的变量：
 
 - `NODE_ENV` - 会是 `"development"`、`"production"` 或 `"test"` 中的一个。具体的值取决于应用运行的[模式](#模式)。
-- `BASE_URL` - 会和 `vue.config.js` 中的 `baseUrl` 选项相符，即你的应用会部署到的基础路径。
+- `BASE_URL` - 会和 `vue.config.js` 中的 `publicPath` 选项相符，即你的应用会部署到的基础路径。
 
 所有解析出来的环境变量都可以在 `public/index.html` 中以 [HTML 插值](./html-and-static-assets.md#插值)中介绍的方式使用。
 
