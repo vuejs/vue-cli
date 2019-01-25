@@ -51,7 +51,15 @@ module.exports = (context, options = {}) => {
     shippedProposals,
     forceAllTransforms,
     decoratorsBeforeExport,
-    decoratorsLegacy
+    decoratorsLegacy,
+
+    // Undocumented option of @babel/plugin-transform-runtime.
+    // When enabled, an absolute path is used when importing a runtime helper atfer tranforming.
+    // This ensures the transpiled file always use the runtime version required in this package.
+    // However, this may cause hash inconsitency if the project is moved to another directory.
+    // So here we allow user to explicit disable this option if hash consistency is a requirement
+    // and the runtime version is sure to be correct.
+    absoluteRuntime = path.dirname(require.resolve('@babel/runtime/package.json'))
   } = options
 
   // resolve targets
@@ -146,7 +154,8 @@ module.exports = (context, options = {}) => {
     corejs: (useBuiltIns === 'usage' && !process.env.VUE_CLI_MODERN_BUILD) ? 2 : false,
     helpers: useBuiltIns === 'usage',
     useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
-    absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json'))
+
+    absoluteRuntime
   }])
 
   return {
