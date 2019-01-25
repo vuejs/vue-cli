@@ -391,45 +391,6 @@ This is because the command's expected mode needs to be known before loading env
 
 Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
 
-### Prompts for Built-in Plugins
-
-:::tip
-Only built-in plugins have the ability to customize the initial prompts when creating a new project.
-:::
-
-A prompt module should export a function that receives a PromptModuleAPI instance.
-
-``` js
-module.exports = api => {
-  // a feature object should be a valid inquirer choice object
-  api.injectFeature({
-    name: 'Some great feature',
-    value: 'my-feature'
-  })
-
-  // injectPrompt expects a valid inquirer prompt object
-  api.injectPrompt({
-    name: 'someFlag',
-    // make sure your prompt only shows up if user has picked your feature
-    when: answers => answers.features.include('my-feature'),
-    message: 'Do you want to turn on flag foo?',
-    type: 'confirm'
-  })
-
-  // when all prompts are done, inject your plugin into the options that
-  // will be passed on to Generators
-  api.onPromptComplete((answers, options) => {
-    if (answers.features.includes('my-feature')) {
-      options.plugins['vue-cli-plugin-my-feature'] = {
-        someFlag: answers.someFlag
-      }
-    }
-  })
-}
-```
-
-### Prompts for 3rd Party Plugins
-
 When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. The resolved answers object will be passed to the plugin's generator as options.
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
