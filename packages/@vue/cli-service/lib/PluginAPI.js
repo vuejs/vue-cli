@@ -139,8 +139,7 @@ class PluginAPI {
       partialIdentifier,
       'cli-service': require('../package.json').version,
       'cache-loader': require('cache-loader/package.json').version,
-      env: process.env.NODE_ENV,
-      test: !!process.env.VUE_CLI_TEST,
+      env: process.env,
       config: [
         this.service.projectOptions.chainWebpack,
         this.service.projectOptions.configureWebpack
