@@ -50,6 +50,7 @@ module.exports = (api, { entry, name, formats }, options) => {
         vue: {
           commonjs: 'vue',
           commonjs2: 'vue',
+          amd: 'Vue',
           root: 'Vue'
         }
       })
