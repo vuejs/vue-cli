@@ -19,7 +19,7 @@ module.exports = function inferRootOptions (pkg) {
   }
 
   // cssPreprocessors
-  if ('dart-sass' in deps) {
+  if ('sass' in deps) {
     rootOptions.cssPreprocessor = 'dart-sass'
   } else if ('node-sass' in deps) {
     // TODO: change to 'node-sass' in v4
