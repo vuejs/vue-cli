@@ -71,6 +71,8 @@ function hasMultipleCores () {
 exports.defaults = () => ({
   // project deployment base
   publicPath: '/',
+  // for compatibility concern. TODO: remove in v4.
+  baseUrl: '/',
 
   // where to output built files
   outputDir: 'dist',

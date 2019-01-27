@@ -177,4 +177,4 @@ test('airbnb config + typescript + unit-mocha', async () => {
       '@vue/cli-plugin-unit-mocha': {}
     }
   })
-})
+}, 30000)

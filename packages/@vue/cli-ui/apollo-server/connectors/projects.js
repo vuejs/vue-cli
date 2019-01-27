@@ -281,7 +281,7 @@ async function create (input, context) {
 
     const inCurrent = input.folder === '.'
     const name = inCurrent ? path.relative('../', process.cwd()) : input.folder
-    creator.name = name
+    creator.name = name.toLowerCase()
 
     // Answers
     const answers = prompts.getAnswers()
