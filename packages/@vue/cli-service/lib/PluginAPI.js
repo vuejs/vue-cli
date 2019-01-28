@@ -135,14 +135,22 @@ class PluginAPI {
     const fs = require('fs')
     const cacheDirectory = this.resolve(`node_modules/.cache/${id}`)
 
+    // replace \r\n to \n generate consistent hash
+    const fmtFunc = conf => {
+      if (typeof conf === 'function') {
+        return conf.toString().replace(/\r\n?/g, '\n')
+      }
+      return conf
+    }
+
     const variables = {
       partialIdentifier,
       'cli-service': require('../package.json').version,
       'cache-loader': require('cache-loader/package.json').version,
       env: process.env,
       config: [
-        this.service.projectOptions.chainWebpack,
-        this.service.projectOptions.configureWebpack
+        fmtFunc(this.service.projectOptions.chainWebpack),
+        fmtFunc(this.service.projectOptions.configureWebpack)
       ]
     }
 
@@ -159,7 +167,7 @@ class PluginAPI {
       for (const file of configFiles) {
         const content = readConfig(file)
         if (content) {
-          variables.configFiles = content
+          variables.configFiles = content.replace(/\r\n?/g, '\n')
           break
         }
       }
