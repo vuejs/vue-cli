@@ -13,6 +13,7 @@ const _gitProjects = new LRU({
   max: 10,
   maxAge: 1000
 })
+let _hasPnpm
 
 // env detection
 exports.hasYarn = () => {
@@ -75,6 +76,21 @@ exports.hasProjectGit = (cwd) => {
   }
   _gitProjects.set(cwd, result)
   return result
+}
+
+exports.hasPnpm = () => {
+  if (process.env.VUE_CLI_TEST) {
+    return true
+  }
+  if (_hasPnpm != null) {
+    return _hasPnpm
+  }
+  try {
+    execSync('pnpm --version', { stdio: 'ignore' })
+    return (_hasPnpm = true)
+  } catch (e) {
+    return (_hasPnpm = false)
+  }
 }
 
 // OS

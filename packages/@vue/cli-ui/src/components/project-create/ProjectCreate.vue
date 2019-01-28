@@ -96,6 +96,10 @@
                       value="yarn"
                       label="yarn"
                     />
+                    <VueSelectButton
+                      value="pnpm"
+                      label="pnpm"
+                    />
                   </VueSelect>
                 </VueFormField>
 
