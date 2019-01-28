@@ -45,8 +45,6 @@ if (
 const program = require('commander')
 const loadCommand = require('../lib/util/loadCommand')
 
-const args = process.argv.slice(3)
-
 program
   .version(require('../package').version)
   .usage('<command> [options]')
@@ -68,21 +66,7 @@ program
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
 
-    // Computing argument length excluding options starting with hyphens
-    let argsLength = 0
-    args.map(item => {
-      Object.values(cmd.options).map(option => {
-        if ((option.short === item) || (option.long === item)) {
-          argsLength--
-        }
-      })
-
-      if (!item.startsWith('-')) {
-        argsLength++
-      }
-    })
-    // Validating argument length
-    if (argsLength > 1) {
+    if (minimist(process.argv.slice(3))._.length > 1) {
       console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
     }
     // --git makes commander to default git to true
