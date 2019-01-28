@@ -22,7 +22,7 @@ module.exports = (api, options) => {
     } else if (args.plugin) {
       res = config.plugins.find(p => p.__pluginName === args.plugin)
     } else if (args.rules) {
-      res = config.module.rules.map(r => r.__ruleNames[0])
+      res = config.module.rules.filter(r => r.__ruleNames).map(r => r.__ruleNames[0])
     } else if (args.plugins) {
       res = config.plugins.map(p => p.__pluginName || p.constructor.name)
     } else if (paths.length > 1) {
