@@ -170,7 +170,7 @@ module.exports = (api, options) => {
     const { transformer, formatter } = require('../util/resolveLoaderError')
     webpackConfig
       .plugin('friendly-errors')
-        .use(require('friendly-errors-webpack-plugin'), [{
+        .use(require('@soda/friendly-errors-webpack-plugin'), [{
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]
         }])
