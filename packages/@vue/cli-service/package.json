@@ -22,6 +22,7 @@
   "homepage": "https://cli.vuejs.org/",
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
+    "@soda/friendly-errors-webpack-plugin": "^1.7.1",
     "@vue/cli-overlay": "^3.3.0",
     "@vue/cli-shared-utils": "^3.3.0",
     "@vue/preload-webpack-plugin": "^1.1.0",
@@ -41,7 +42,6 @@
     "debug": "^4.1.1",
     "escape-string-regexp": "^1.0.5",
     "file-loader": "^2.0.0",
-    "friendly-errors-webpack-plugin": "^1.7.0",
     "fs-extra": "^7.0.1",
     "globby": "^8.0.1",
     "hash-sum": "^1.0.2",
