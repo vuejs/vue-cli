@@ -100,7 +100,7 @@ test('typescript', async () => {
     '@vue/typescript'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'typescript-eslint-parser'
+    parser: '@typescript-eslint/parser'
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
@@ -177,4 +177,4 @@ test('airbnb config + typescript + unit-mocha', async () => {
       '@vue/cli-plugin-unit-mocha': {}
     }
   })
-})
+}, 30000)

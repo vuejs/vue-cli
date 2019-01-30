@@ -46,7 +46,7 @@ export default {
 <style scoped<%-
   rootOptions.cssPreprocessor
     ? ` lang="${
-        rootOptions.cssPreprocessor === 'sass'
+        rootOptions.cssPreprocessor.includes('sass')
           ? 'scss'
           : rootOptions.cssPreprocessor
       }"`

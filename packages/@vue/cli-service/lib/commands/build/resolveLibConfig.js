@@ -63,7 +63,8 @@ module.exports = (api, { entry, name, formats }, options) => {
             template: path.resolve(__dirname, template),
             inject: false,
             filename: 'demo.html',
-            libName
+            libName,
+            cssExtract: config.plugins.has('extract-css')
           }])
     }
 

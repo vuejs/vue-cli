@@ -15,6 +15,12 @@ module.exports = (api, options) => {
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
 
+    const defaultSassLoaderOptions = {}
+    try {
+      defaultSassLoaderOptions.implementation = require('sass')
+      defaultSassLoaderOptions.fiber = require('fibers')
+    } catch (e) {}
+
     const {
       modules = false,
       extract = isProd,
@@ -158,8 +164,8 @@ module.exports = (api, options) => {
 
     createCSSRule('css', /\.css$/)
     createCSSRule('postcss', /\.p(ost)?css$/)
-    createCSSRule('scss', /\.scss$/, 'sass-loader', loaderOptions.sass)
-    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign({
+    createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, loaderOptions.sass))
+    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, {
       indentedSyntax: true
     }, loaderOptions.sass))
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)

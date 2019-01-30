@@ -36,9 +36,19 @@ module.exports = (api, options) => {
 
   if (options.cssPreprocessor) {
     const deps = {
+      // TODO: remove 'sass' option in v4 or rename 'dart-sass' to 'sass'
       sass: {
         'node-sass': '^4.9.0',
-        'sass-loader': '^7.0.1'
+        'sass-loader': '^7.1.0'
+      },
+      'node-sass': {
+        'node-sass': '^4.9.0',
+        'sass-loader': '^7.1.0'
+      },
+      'dart-sass': {
+        fibers: '^3.1.1',
+        sass: '^1.16.0',
+        'sass-loader': '^7.1.0'
       },
       less: {
         'less': '^3.0.4',

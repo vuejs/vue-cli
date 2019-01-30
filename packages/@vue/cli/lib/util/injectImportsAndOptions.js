@@ -25,7 +25,9 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
       }
     })
     // avoid blank line after the previous import
-    delete ast.program.body[lastImportIndex].loc
+    if (lastImportIndex !== -1) {
+      delete ast.program.body[lastImportIndex].loc
+    }
 
     const nonDuplicates = i => {
       return !importDeclarations.some(node => {

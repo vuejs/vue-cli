@@ -125,3 +125,16 @@ test('jsx options', () => {
   expect(code).not.toMatch(`var h = arguments[0]`)
   expect(code).toMatch(`return h("div", ["bar"])`)
 })
+
+test('disable absoluteRuntime', () => {
+  const { code } = babel.transformSync(`
+    const a = [...arr]
+  `.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      absoluteRuntime: false
+    }]]
+  })
+
+  expect(code).toMatch('import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray"')
+})
