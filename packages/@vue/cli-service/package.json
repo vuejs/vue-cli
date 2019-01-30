@@ -3,6 +3,7 @@
   "version": "3.3.0",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
+  "typings": "types/index.d.ts",
   "bin": {
     "vue-cli-service": "bin/vue-cli-service.js"
   },
