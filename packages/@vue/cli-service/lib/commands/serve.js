@@ -90,7 +90,7 @@ module.exports = (api, options) => {
       protocol,
       host,
       port,
-      isAbsoluteUrl(options.baseUrl) ? '/' : options.baseUrl
+      isAbsoluteUrl(options.publicPath) ? '/' : options.publicPath
     )
 
     const proxySettings = prepareProxy(
@@ -105,7 +105,7 @@ module.exports = (api, options) => {
         ? `?${publicUrl}/sockjs-node`
         : isInContainer
           // can't infer public netowrk url if inside a container...
-          // use client-side inference (note this would break with non-root baseUrl)
+          // use client-side inference (note this would break with non-root publicPath)
           ? ``
           // otherwise infer the url
           : `?` + url.format({
@@ -140,7 +140,7 @@ module.exports = (api, options) => {
       historyApiFallback: {
         disableDotRule: true,
         rewrites: [
-          { from: /./, to: path.posix.join(options.baseUrl, 'index.html') }
+          { from: /./, to: path.posix.join(options.publicPath, 'index.html') }
         ]
       },
       contentBase: api.resolve('public'),
@@ -148,7 +148,7 @@ module.exports = (api, options) => {
       hot: !isProduction,
       quiet: true,
       compress: isProduction,
-      publicPath: options.baseUrl,
+      publicPath: options.publicPath,
       overlay: isProduction // TODO disable this
         ? false
         : { warnings: false, errors: true }
@@ -216,15 +216,15 @@ module.exports = (api, options) => {
         } else {
           console.log()
           console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
-          if (!publicUrl && options.baseUrl && options.baseUrl !== '/') {
+          if (!publicUrl && options.publicPath && options.publicPath !== '/') {
             console.log()
-            console.log(chalk.yellow(`  Since you are using a non-root baseUrl, the hot-reload socket`))
+            console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
             console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
             console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
             console.log()
           }
           console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
-            `${protocol}://localhost:<your container's external mapped port>${options.baseUrl}`
+            `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
           )}`))
         }
         console.log()

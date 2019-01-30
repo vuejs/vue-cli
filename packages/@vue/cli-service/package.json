@@ -1,8 +1,9 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.2.2",
+  "version": "3.3.0",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
+  "typings": "types/index.d.ts",
   "bin": {
     "vue-cli-service": "bin/vue-cli-service.js"
   },
@@ -22,8 +23,9 @@
   "homepage": "https://cli.vuejs.org/",
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
-    "@vue/cli-overlay": "^3.2.0",
-    "@vue/cli-shared-utils": "^3.2.2",
+    "@soda/friendly-errors-webpack-plugin": "^1.7.1",
+    "@vue/cli-overlay": "^3.3.0",
+    "@vue/cli-shared-utils": "^3.3.0",
     "@vue/preload-webpack-plugin": "^1.1.0",
     "@vue/web-component-wrapper": "^1.2.0",
     "acorn": "^6.0.4",
@@ -41,7 +43,6 @@
     "debug": "^4.1.1",
     "escape-string-regexp": "^1.0.5",
     "file-loader": "^2.0.0",
-    "friendly-errors-webpack-plugin": "^1.7.0",
     "fs-extra": "^7.0.1",
     "globby": "^8.0.1",
     "hash-sum": "^1.0.2",
@@ -65,7 +66,7 @@
     "thread-loader": "^1.2.0",
     "url-loader": "^1.1.2",
     "vue-loader": "^15.4.2",
-    "webpack": "4",
+    "webpack": ">=4 < 4.29",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-chain": "^4.11.0",
     "webpack-dev-server": "^3.1.14",
@@ -76,6 +77,9 @@
     "vue-template-compiler": "^2.0.0"
   },
   "devDependencies": {
+    "fibers": "^3.1.1",
+    "sass": "^1.16.1",
+    "sass-loader": "^7.1.0",
     "vue": "^2.5.21",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.21",

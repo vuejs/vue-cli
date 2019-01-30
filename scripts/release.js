@@ -87,8 +87,12 @@ const release = async () => {
 
     // buildEditorConfig()
 
-    await execa('git', ['add', '-A'], { stdio: 'inherit' })
-    await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+    try {
+      await execa('git', ['add', '-A'], { stdio: 'inherit' })
+      await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+    } catch (e) {
+      // if it's a patch release, there may be no local deps to sync
+    }
   }
 
   const lernaArgs = [
@@ -103,7 +107,7 @@ const release = async () => {
   }
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 
-  require('./genChangelog')(version)
+  await require('./genChangelog')(version)
 
   const packages = JSON.parse(
     (await execa(require.resolve('lerna/cli'), ['list', '--json'])).stdout

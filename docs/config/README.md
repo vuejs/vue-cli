@@ -31,17 +31,21 @@ module.exports = {
 
 ### baseUrl
 
+Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
+
+### publicPath
+
 - Type: `string`
 - Default: `'/'`
 
-  The base URL your application bundle will be deployed at. This is the equivalent of webpack's `output.publicPath`, but Vue CLI also needs this value for other purposes, so you should **always use `baseUrl` instead of modifying webpack `output.publicPath`**.
+  The base URL your application bundle will be deployed at (known as `baseUrl` before Vue CLI 3.3). This is the equivalent of webpack's `output.publicPath`, but Vue CLI also needs this value for other purposes, so you should **always use `publicPath` instead of modifying webpack `output.publicPath`**.
 
-  By default, Vue CLI assumes your app will be deployed at the root of a domain, e.g. `https://www.my-app.com/`. If your app is deployed at a sub-path, you will need to specify that sub-path using this option. For example, if your app is deployed at `https://www.foobar.com/my-app/`, set `baseUrl` to `'/my-app/'`.
+  By default, Vue CLI assumes your app will be deployed at the root of a domain, e.g. `https://www.my-app.com/`. If your app is deployed at a sub-path, you will need to specify that sub-path using this option. For example, if your app is deployed at `https://www.foobar.com/my-app/`, set `publicPath` to `'/my-app/'`.
 
   The value can also be set to an empty string (`''`) or a relative path (`./`) so that all assets are linked using relative paths. This allows the built bundle to be deployed under any public path, or used in a file system based environment like a Cordova hybrid app.
 
-  ::: warning Limitations of relative baseUrl
-  Relative `baseUrl` has some limitations and should be avoided when:
+  ::: warning Limitations of relative publicPath
+  Relative `publicPath` has some limitations and should be avoided when:
 
   - You are using HTML5 `history.pushState` routing;
 
@@ -52,7 +56,7 @@ module.exports = {
 
   ``` js
   module.exports = {
-    baseUrl: process.env.NODE_ENV === 'production'
+    publicPath: process.env.NODE_ENV === 'production'
       ? '/production-sub-path/'
       : '/'
   }
@@ -304,7 +308,7 @@ module.exports = {
 
   - Some values like `host`, `port` and `https` may be overwritten by command line flags.
 
-  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [baseUrl](#baseurl) for the dev server to function properly.
+  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [publicPath](#baseurl) for the dev server to function properly.
 
 ### devServer.proxy
 

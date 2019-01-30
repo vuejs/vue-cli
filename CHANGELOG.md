@@ -1,3 +1,54 @@
+# [3.3.0](https://github.com/vuejs/vue-cli/compare/v3.2.3...v3.3.0) (2019-01-08)
+
+## babel-preset-app
+
+#### Features
+
+* replace babel-plugin-transform-vue-jsx with [@vue](https://github.com/vue)/babel-preset-jsx ([#3218](https://github.com/vuejs/vue-cli/issues/3218)) ([f15dcf7](https://github.com/vuejs/vue-cli/commit/f15dcf7))
+
+## cli-service
+
+#### Bug Fixes
+
+* **cli-service:** fix copy plugin's ignore pattern (fix [#3119](https://github.com/vuejs/vue-cli/issues/3119)) ([#3130](https://github.com/vuejs/vue-cli/issues/3130)) ([8b4471e](https://github.com/vuejs/vue-cli/commit/8b4471e))
+* fix loaderOptions.postcss detection ([#3201](https://github.com/vuejs/vue-cli/issues/3201)) ([d5b5e3b](https://github.com/vuejs/vue-cli/commit/d5b5e3b)), closes [#3194](https://github.com/vuejs/vue-cli/issues/3194)
+
+## cli-ui
+
+#### Bug Fixes
+
+* typo in welcome tips ([#3246](https://github.com/vuejs/vue-cli/issues/3246)) [ci skip] ([4070507](https://github.com/vuejs/vue-cli/commit/4070507))
+
+## docs
+
+#### Features
+
+* deprecate confusing `baseUrl` option, use `publicPath` instead. ([#3143](https://github.com/vuejs/vue-cli/issues/3143)) ([e7af0d8](https://github.com/vuejs/vue-cli/commit/e7af0d8))
+
+
+
+# [3.2.3](https://github.com/vuejs/vue-cli/compare/v3.2.2...v3.2.3) (2019-01-03)
+
+## cli-plugin-e2e-cypress
+
+#### Bug Fixes
+
+* make cypress config file compatible with eslint-config-airbnb rules ([0fc972e](https://github.com/vuejs/vue-cli/commit/0fc972e))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* fix typo in jest config ([4feaacf](https://github.com/vuejs/vue-cli/commit/4feaacf))
+
+## cli-service
+
+#### Bug Fixes
+
+* fix a regression that `pages` doesn't allow entry-only string format ([a7fa191](https://github.com/vuejs/vue-cli/commit/a7fa191)), closes [#3233](https://github.com/vuejs/vue-cli/issues/3233)
+
+
+
 # [3.2.2](https://github.com/vuejs/vue-cli/compare/v3.2.1...v3.2.2) (2018-12-30)
 
 ## babel-preset-app

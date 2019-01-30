@@ -583,6 +583,10 @@
               "label": "Base URL",
               "description": "The base URL your application will be deployed at, for example '/my-app/'. Use an empty string ('') so that all assets are linked using relative paths."
             },
+            "publicPath": {
+              "label": "Public Path",
+              "description": "The base URL your application will be deployed at, for example '/my-app/'. Use an empty string ('') so that all assets are linked using relative paths."
+            },
             "outputDir": {
               "label": "Output directory",
               "description": "The directory where the production build files will be generated"
@@ -751,7 +755,7 @@
           "description": "Some tips to help you get started",
           "content": {
             "title": "Welcome to your new project!",
-            "tip1": "You are looking at the project dashboard where your can put widgets. Use the 'Customize' button to add more! Everything is automatically saved.",
+            "tip1": "You are looking at the project dashboard where you can put widgets. Use the 'Customize' button to add more! Everything is automatically saved.",
             "tip2": "On the left are the different available pages. 'Plugins' let you add new Vue CLI plugins, 'Dependencies' for managing the packages, 'Configuration' to configure the tools and 'Tasks' to run scripts (for example webpack).",
             "tip3": "Return to the project manager with the dropdown at the top left of the screen or the home button in the status bar at the bottom.",
             "ok": "Understood"

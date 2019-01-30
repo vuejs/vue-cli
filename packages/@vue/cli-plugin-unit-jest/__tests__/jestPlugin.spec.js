@@ -67,3 +67,47 @@ test('should work without Babel', async () => {
   })
   await project.run(`vue-cli-service test:unit`)
 })
+
+test('should work with tsx', async () => {
+  const { write, run } = await create('jest-with-tsx', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-typescript': {
+        useTsWithBabel: true,
+        classComponent: true
+      },
+      '@vue/cli-plugin-unit-jest': {}
+    },
+    useConfigFiles: true
+  })
+
+  await write('src/components/HelloWorld.tsx', `
+  import { Component, Prop, Vue } from 'vue-property-decorator';
+
+  @Component
+  export default class HelloWorld extends Vue {
+    @Prop() private msg!: string;
+
+    render () {
+      return <div>{this.msg}</div>
+    }
+  }
+  `)
+
+  await write('tests/unit/example.spec.ts', `
+  import { shallowMount } from '@vue/test-utils'
+  import MyComponent from '@/components/HelloWorld.tsx'
+
+  describe('HelloWorld.tsx', () => {
+    it('renders props.msg when passed', () => {
+      const msg = 'new message'
+      const wrapper = shallowMount(MyComponent, {
+        propsData: { msg }
+      })
+      expect(wrapper.text()).toMatch(msg)
+    })
+  })
+  `)
+
+  await run(`vue-cli-service test:unit`)
+})

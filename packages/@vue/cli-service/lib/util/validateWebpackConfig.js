@@ -28,11 +28,11 @@ module.exports = function validateWebpackConfig (
     )
   }
 
-  if (target === 'app' && singleConfig.output.publicPath !== options.baseUrl) {
+  if (target === 'app' && singleConfig.output.publicPath !== options.publicPath) {
     throw new Error(
       `\n\nConfiguration Error: ` +
       `Avoid modifying webpack output.publicPath directly. ` +
-      `Use the "baseUrl" option instead.\n`
+      `Use the "publicPath" option instead.\n`
     )
   }
 }

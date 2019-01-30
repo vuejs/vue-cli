@@ -89,7 +89,7 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
   if (api.hasPlugin('babel')) {
     api.extendPackage({
       jest: {
-        global: {
+        globals: {
           'ts-jest': {
             // we need babel to transpile JSX
             babelConfig: true
