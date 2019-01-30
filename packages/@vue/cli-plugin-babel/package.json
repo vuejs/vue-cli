@@ -21,6 +21,7 @@
   "dependencies": {
     "@babel/core": "^7.0.0",
     "@vue/babel-preset-app": "^3.3.0",
+    "@vue/cli-shared-utils": "^3.3.0",
     "babel-loader": "^8.0.4"
   },
   "publishConfig": {
