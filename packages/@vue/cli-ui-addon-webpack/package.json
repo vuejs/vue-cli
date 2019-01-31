@@ -1,6 +1,11 @@
 {
   "name": "@vue/cli-ui-addon-webpack",
   "version": "3.4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-ui-addon-webpack"
+  },
   "files": [
     "dist",
     "src"
