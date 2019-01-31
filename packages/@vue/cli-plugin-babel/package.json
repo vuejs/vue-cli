@@ -22,7 +22,8 @@
     "@babel/core": "^7.0.0",
     "@vue/babel-preset-app": "^3.3.0",
     "@vue/cli-shared-utils": "^3.3.0",
-    "babel-loader": "^8.0.5"
+    "babel-loader": "^8.0.5",
+    "webpack": ">=4 < 4.29"
   },
   "publishConfig": {
     "access": "public"
