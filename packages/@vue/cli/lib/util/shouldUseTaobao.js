@@ -1,6 +1,6 @@
 const chalk = require('chalk')
 const execa = require('execa')
-const { request } = require('@vue/cli-shared-utils')
+const { hasYarn, request } = require('@vue/cli-shared-utils')
 const inquirer = require('inquirer')
 const registries = require('./registries')
 const { loadOptions, saveOptions } = require('../options')
@@ -17,7 +17,11 @@ function removeSlash (url) {
 let checked
 let result
 
-module.exports = async function shouldUseTaobao (command = 'npm') {
+module.exports = async function shouldUseTaobao (command) {
+  if (!command) {
+    command = hasYarn() ? 'yarn' : 'npm'
+  }
+
   // ensure this only gets called once.
   if (checked) return result
   checked = true
