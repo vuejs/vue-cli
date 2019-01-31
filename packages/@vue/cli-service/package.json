@@ -26,6 +26,7 @@
     "@soda/friendly-errors-webpack-plugin": "^1.7.1",
     "@vue/cli-overlay": "^3.3.0",
     "@vue/cli-shared-utils": "^3.3.0",
+    "@vue/component-compiler-utils": "^2.5.2",
     "@vue/preload-webpack-plugin": "^1.1.0",
     "@vue/web-component-wrapper": "^1.2.0",
     "acorn": "^6.0.6",
