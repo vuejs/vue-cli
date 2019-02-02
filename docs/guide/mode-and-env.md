@@ -9,10 +9,12 @@ You can specify env variables by placing the following files in your project roo
 .env.[mode].local   # only loaded in specified mode, ignored by git
 ```
 
-An env file simply contains key=value pairs of environment variables:
+An env file simply contains key=value pairs of environment variables (lines not starting with letter or numbers will be ignored):
 
 ```
+# Comment
 FOO=bar
+#OLD_VAR=not_used
 VUE_APP_SECRET=secret
 ```
 
