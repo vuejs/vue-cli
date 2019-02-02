@@ -134,7 +134,7 @@ const release = async () => {
   )
 
   await execa('git', ['tag', tagName], { stdio: 'inherit' })
-  await execa('git', ['push', '--tags'], { stdio: 'inherit' })
+  await execa('git', ['push', '--follow-tags'], { stdio: 'inherit' })
 }
 
 release().catch(err => {
