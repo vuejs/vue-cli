@@ -56,6 +56,8 @@ npx vue-cli-service serve
 
 除了通过命令行参数，你也可以使用 `vue.config.js` 里的 [devServer](../config/#devserver) 字段配置开发服务器。
 
+命令行参数 `[entry]` 将被指定为唯一入口，而非额外的追加入口。尝试使用 `[entry]` 覆盖 `config.pages` 中的 `entry` 将可能引发错误。
+
 ## vue-cli-service build
 
 ```
