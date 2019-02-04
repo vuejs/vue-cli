@@ -50,6 +50,7 @@ module.exports = (api, options) => {
             '@babel/core': require('@babel/core/package.json').version,
             '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
             'babel-loader': require('babel-loader/package.json').version,
+            modern: !!process.env.VUE_CLI_MODERN_BUILD,
             browserslist: api.service.pkg.browserslist
           }, [
             'babel.config.js',

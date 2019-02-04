@@ -147,7 +147,8 @@ class PluginAPI {
       partialIdentifier,
       'cli-service': require('../package.json').version,
       'cache-loader': require('cache-loader/package.json').version,
-      env: process.env,
+      env: process.env.NODE_ENV,
+      test: !!process.env.VUE_CLI_TEST,
       config: [
         fmtFunc(this.service.projectOptions.chainWebpack),
         fmtFunc(this.service.projectOptions.configureWebpack)
@@ -158,7 +159,14 @@ class PluginAPI {
       const readConfig = file => {
         const absolutePath = this.resolve(file)
         if (fs.existsSync(absolutePath)) {
-          return fs.readFileSync(absolutePath, 'utf-8')
+          if (absolutePath.endsWith('.js')) {
+            // should evaluate config scripts to reflect environment variable changes
+            try {
+              return JSON.stringify(require(absolutePath))
+            } catch (e) {
+              return fs.readFileSync(absolutePath, 'utf-8')
+            }
+          }
         }
       }
       if (!Array.isArray(configFiles)) {
