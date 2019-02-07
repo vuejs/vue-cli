@@ -1,6 +1,11 @@
 {
   "name": "@vue/cli-ui",
   "version": "3.4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-ui"
+  },
   "scripts": {
     "serve": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4030/graphql VUE_APP_GRAPHQL_PORT=4030 vue-cli-service serve",
     "build": "vue-cli-service build",
