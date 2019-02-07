@@ -177,7 +177,7 @@ program
         System: ['OS', 'CPU'],
         Binaries: ['Node', 'Yarn', 'npm'],
         Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
-        npmPackages: '/**/{*vue*,@vue/*/}',
+        npmPackages: '/**/{typescript,*vue*,@vue/*/}',
         npmGlobalPackages: ['@vue/cli']
       },
       {

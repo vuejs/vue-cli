@@ -54,7 +54,7 @@
     "eslint-plugin-vue": "^5.0.0",
     "eslint-plugin-vue-libs": "^3.0.0",
     "execa": "^1.0.0",
-    "globby": "^8.0.1",
+    "globby": "^9.0.0",
     "http-server": "^0.11.1",
     "inquirer": "^6.0.0",
     "jest": "^23.1.0",
@@ -76,8 +76,8 @@
     "@babel/preset-env": "^7.0.0",
     "babel-core": "7.0.0-bridge.0",
     "ps-tree": "^1.1.1",
-    "vue": "2.5.21",
-    "vue-template-compiler": "2.5.21",
-    "vue-server-renderer": "2.5.21"
+    "vue": "^2.5.22",
+    "vue-template-compiler": "^2.5.22",
+    "vue-server-renderer": "^2.5.22"
   }
 }

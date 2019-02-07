@@ -1,8 +1,24 @@
 const path = require('path')
+const { isWindows } = require('@vue/cli-shared-utils')
+
+function genTranspileDepRegex (transpileDependencies) {
+  const deps = transpileDependencies.map(dep => {
+    if (typeof dep === 'string') {
+      const depPath = path.join('node_modules', dep, '/')
+      return isWindows
+        ? depPath.replace(/\\/g, '\\\\') // double escape for windows style path
+        : depPath
+    } else if (dep instanceof RegExp) {
+      return dep.source
+    }
+  })
+  return deps.length ? new RegExp(deps.join('|')) : null
+}
 
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && options.parallel
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
+  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
@@ -21,13 +37,7 @@ module.exports = (api, options) => {
               return true
             }
             // check if this is something the user explicitly wants to transpile
-            if (options.transpileDependencies.some(dep => {
-              if (typeof dep === 'string') {
-                return filepath.includes(path.normalize(dep))
-              } else {
-                return filepath.match(dep)
-              }
-            })) {
+            if (transpileDepRegex && transpileDepRegex.test(filepath)) {
               return false
             }
             // Don't transpile node_modules
@@ -40,6 +50,7 @@ module.exports = (api, options) => {
             '@babel/core': require('@babel/core/package.json').version,
             '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
             'babel-loader': require('babel-loader/package.json').version,
+            modern: !!process.env.VUE_CLI_MODERN_BUILD,
             browserslist: api.service.pkg.browserslist
           }, [
             'babel.config.js',
