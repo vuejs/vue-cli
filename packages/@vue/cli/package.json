@@ -1,13 +1,14 @@
 {
   "name": "@vue/cli",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli"
   },
   "keywords": [
     "vue",
@@ -23,10 +24,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.3.0",
-    "@vue/cli-ui": "^3.3.0",
-    "@vue/cli-ui-addon-webpack": "^3.3.0",
-    "@vue/cli-ui-addon-widgets": "^3.3.0",
+    "@vue/cli-shared-utils": "^3.4.0",
+    "@vue/cli-ui": "^3.4.0",
+    "@vue/cli-ui-addon-webpack": "^3.4.0",
+    "@vue/cli-ui-addon-widgets": "^3.4.0",
     "chalk": "^2.4.1",
     "cmd-shim": "^2.0.2",
     "commander": "^2.16.0",
@@ -37,7 +38,7 @@
     "envinfo": "^6.0.1",
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1",
-    "globby": "^8.0.1",
+    "globby": "^9.0.0",
     "import-global": "^0.1.0",
     "inquirer": "^6.0.0",
     "isbinaryfile": "^3.0.2",
@@ -45,7 +46,7 @@
     "js-yaml": "^3.12.0",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.0",
-    "recast": "^0.15.2",
+    "recast": "^0.17.2",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "resolve": "^1.8.1",

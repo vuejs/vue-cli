@@ -113,11 +113,11 @@ const applyTS = module.exports.applyTS = api => {
     eslintConfig: {
       extends: ['@vue/typescript'],
       parserOptions: {
-        parser: 'typescript-eslint-parser'
+        parser: '@typescript-eslint/parser'
       }
     },
     devDependencies: {
-      '@vue/eslint-config-typescript': '^3.2.0'
+      '@vue/eslint-config-typescript': '^4.0.0'
     }
   })
 }

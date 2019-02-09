@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-init",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "init addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-init"
   },
   "keywords": [
     "vue",

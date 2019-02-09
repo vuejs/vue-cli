@@ -9,7 +9,7 @@ module.exports = (api, {
 
   api.extendPackage({
     devDependencies: {
-      typescript: api.hasPlugin('eslint') ? '~3.1.1' : '^3.0.0'
+      typescript: api.hasPlugin('eslint') ? '~3.2.2' : '^3.0.0'
     }
   })
 

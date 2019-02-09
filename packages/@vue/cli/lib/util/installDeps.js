@@ -9,6 +9,8 @@ const debug = require('debug')('vue-cli:install')
 
 const taobaoDistURL = 'https://npm.taobao.org/dist'
 
+const supportPackageManagerList = ['npm', 'yarn']
+
 class InstallProgress extends EventEmitter {
   constructor () {
     super()
@@ -46,6 +48,12 @@ function toStartOfLine (stream) {
     return
   }
   readline.cursorTo(stream, 0)
+}
+
+function checkPackageManagerIsSupported (command) {
+  if (supportPackageManagerList.indexOf(command) === -1) {
+    throw new Error(`Unknown package manager: ${command}`)
+  }
 }
 
 function renderProgressBar (curr, total) {
@@ -164,13 +172,14 @@ function executeCommand (command, args, targetDir) {
 }
 
 exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
+  checkPackageManagerIsSupported(command)
+
   const args = []
+
   if (command === 'npm') {
     args.push('install', '--loglevel', 'error')
   } else if (command === 'yarn') {
     // do nothing
-  } else {
-    throw new Error(`Unknown package manager: ${command}`)
   }
 
   await addRegistryToArgs(command, args, cliRegistry)
@@ -182,13 +191,14 @@ exports.installDeps = async function installDeps (targetDir, command, cliRegistr
 }
 
 exports.installPackage = async function (targetDir, command, cliRegistry, packageName, dev = true) {
+  checkPackageManagerIsSupported(command)
+
   const args = []
+
   if (command === 'npm') {
     args.push('install', '--loglevel', 'error')
   } else if (command === 'yarn') {
     args.push('add')
-  } else {
-    throw new Error(`Unknown package manager: ${command}`)
   }
 
   if (dev) args.push('-D')
@@ -204,13 +214,14 @@ exports.installPackage = async function (targetDir, command, cliRegistry, packag
 }
 
 exports.uninstallPackage = async function (targetDir, command, cliRegistry, packageName) {
+  checkPackageManagerIsSupported(command)
+
   const args = []
+
   if (command === 'npm') {
     args.push('uninstall', '--loglevel', 'error')
   } else if (command === 'yarn') {
     args.push('remove')
-  } else {
-    throw new Error(`Unknown package manager: ${command}`)
   }
 
   await addRegistryToArgs(command, args, cliRegistry)
@@ -224,13 +235,14 @@ exports.uninstallPackage = async function (targetDir, command, cliRegistry, pack
 }
 
 exports.updatePackage = async function (targetDir, command, cliRegistry, packageName) {
+  checkPackageManagerIsSupported(command)
+
   const args = []
+
   if (command === 'npm') {
     args.push('update', '--loglevel', 'error')
   } else if (command === 'yarn') {
     args.push('upgrade')
-  } else {
-    throw new Error(`Unknown package manager: ${command}`)
   }
 
   await addRegistryToArgs(command, args, cliRegistry)

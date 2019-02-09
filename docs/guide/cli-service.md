@@ -67,6 +67,7 @@ Options:
   --dest        specify output directory (default: dist)
   --modern      build app targeting modern browsers with auto fallback
   --target      app | lib | wc | wc-async (default: app)
+  --formats     list of output formats for library builds (default: commonjs,umd,umd-min)
   --name        name for lib or web-component mode (default: "name" in package.json or entry filename)
   --no-clean    do not remove the dist directory before building the project
   --report      generate report.html to help analyze bundle content
@@ -136,4 +137,4 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 
 Projects created via `vue create` are ready to go without the need for additional configuration. The plugins are designed to work with one another so in most cases, all you need to do is pick the features you want during the interactive prompts.
 
-However, we also understand that it's impossible to cater to every possible need, and the need of a project may also change over time. Projects created by Vue CLI allows you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.
+However, we also understand that it's impossible to cater to every possible need, and the need of a project may also change over time. Projects created by Vue CLI allow you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.

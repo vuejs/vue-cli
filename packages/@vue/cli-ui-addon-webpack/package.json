@@ -1,6 +1,11 @@
 {
   "name": "@vue/cli-ui-addon-webpack",
-  "version": "3.3.0",
+  "version": "3.4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-ui-addon-webpack"
+  },
   "files": [
     "dist",
     "src"
@@ -13,9 +18,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.3.0",
-    "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-eslint": "^3.4.0",
+    "@vue/cli-service": "^3.4.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "eslint": "^5.8.0",
     "stylus": "^0.54.5",

@@ -1,11 +1,12 @@
 {
   "name": "@vue/cli-shared-utils",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "shared utilities for vue-cli packages",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-shared-utils"
   },
   "keywords": [
     "vue",

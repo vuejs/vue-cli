@@ -62,7 +62,7 @@ test('default loaders', () => {
     })
   })
   // sass indented syntax
-  expect(findOptions(config, 'sass', 'sass')).toEqual({ indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ indentedSyntax: true, sourceMap: false })
 })
 
 test('production defaults', () => {
@@ -193,8 +193,14 @@ test('css.loaderOptions', () => {
     }
   })
 
-  expect(findOptions(config, 'scss', 'sass')).toEqual({ data, sourceMap: false })
-  expect(findOptions(config, 'sass', 'sass')).toEqual({ data, indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ data, sourceMap: false })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ data, indentedSyntax: true, sourceMap: false })
+})
+
+test('should use dart sass implementation whenever possible', () => {
+  const config = genConfig()
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ fiber: require('fibers'), implementation: require('sass') })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ fiber: require('fibers'), implementation: require('sass') })
 })
 
 test('skip postcss-loader if no postcss config found', () => {

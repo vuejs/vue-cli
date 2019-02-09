@@ -2,17 +2,17 @@ module.exports = {
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Standard Tooling for Vue.js Development'
     },
     '/zh/': {
       lang: 'zh-CN',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Vue.js 开发的标准工具'
     },
     '/ru/': {
       lang: 'ru',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
     }
   },
