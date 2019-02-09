@@ -208,26 +208,30 @@ module.exports = (api, options) => {
           ? publicUrl.replace(/([^/])$/, '$1/')
           : urls.lanUrlForTerminal
 
-        console.log()
-        console.log(`  App running at:`)
-        console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
-        if (!isInContainer) {
-          console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
-        } else {
+        // only display this message once on start up if we're inside a 
+        // container to prevent flooding logs on recompiles
+        if (!isFirstCompile || (isFirstCompile && isInContainer)) {
           console.log()
-          console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
-          if (!publicUrl && options.publicPath && options.publicPath !== '/') {
+          console.log(`  App running at:`)
+          console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
+          if (!isInContainer) {
+            console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
+          } else {
             console.log()
-            console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
-            console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
-            console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
-            console.log()
+            console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
+            if (!publicUrl && options.publicPath && options.publicPath !== '/') {
+              console.log()
+              console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
+              console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
+              console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
+              console.log()
+            }
+            console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
+              `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
+            )}`))
           }
-          console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
-            `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
-          )}`))
+          console.log()
         }
-        console.log()
 
         if (isFirstCompile) {
           isFirstCompile = false
