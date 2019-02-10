@@ -261,7 +261,39 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+Build your vue project by running `npm run build`. To deploy with heroku, you need to create a simple server that would be used to
+serve your built files. To do this, install [Express](https://www.npmjs.com/package/express), a fast, unopinionated, minimalist web framework for node. Create a `server.js` file and input the following:
+```js
+const express = require('express');
+const path = require('path');
+const port = process.env.PORT || 3000;
+const publicDir  = path.resolve(__dirname, "dist");
+
+const app = express();
+app.use(express.static(publicDir));
+app.get("/", (req, res) => {
+    res.sendFile(path.resolve(publicDir, "index.html"))
+})
+
+app.listen(port, () => console.log(`App started on port ${port}`))
+```
+If you are using the [vue-router history mode](https://router.vuejs.org/guide/essentials/history-mode.html#html5-history-mode), you might want to add a catch-all route that sends all requests made to your server to your index.html file. You can do that like so:
+
+```js
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(publicDir, "index.html"))
+})
+```
+
+Next, add a [start script](https://devcenter.heroku.com/articles/deploying-nodejs#specifying-a-start-script) to your `package.json` file. Your start script instructs heroku how to start up your server. Add the following line to the `scripts` field of  your `package.json` file:
+```json
+"start": "node server.js"
+```
+Ensure that your `dist` folder is removed from your `.gitignore` file as we would need to commit the dist folder when deploying to heroku, then commit the changes made your app. Using the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), create a new heroku project with the command :
+`heroku create nameOfProject`.
+Finally, deploy your vue app to heroku with the command:
+`git push heroku master`
+To view your deployed app, type the command `heroku open`, this opens up your deployed vue app in your default browser.
 
 ### Surge
 
