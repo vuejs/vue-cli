@@ -37,7 +37,7 @@ The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vu
 
 By default, a Vue CLI app will automatically generate prefetch hints for all JavaScript files generated for async chunks (as a result of [on-demand code splitting via dynamic `import()`](https://webpack.js.org/guides/code-splitting/#dynamic-imports)).
 
-The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('prefetch')`.
+The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('prefetch-app')`.
 
 Example:
 
@@ -46,11 +46,11 @@ Example:
 module.exports = {
   chainWebpack: config => {
     // remove the prefetch plugin
-    config.plugins.delete('prefetch')
+    config.plugins.delete('prefetch-app')
 
     // or:
     // modify its options:
-    config.plugin('prefetch').tap(options => {
+    config.plugin('prefetch-app').tap(options => {
       options[0].fileBlacklist = options[0].fileBlacklist || []
       options[0].fileBlacklist.push(/myasyncRoute(.)+?\.js$/)
       return options
@@ -84,7 +84,7 @@ module.exports = {
   chainWebpack: config => {
     config.plugins.delete('html')
     config.plugins.delete('preload')
-    config.plugins.delete('prefetch')
+    config.plugins.delete('prefetch-app')
   }
 }
 ```
