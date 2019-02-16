@@ -14,7 +14,7 @@ You can overwrite the default mode used for a command by passing the `--mode` op
 vue-cli-service build --mode development
 ```
 
-When running `vue-cli-service`, environment variables are loaded from all [corresponding files](#environment-variables). If they don't contain a `NODE_ENV` variable, it will be set to the mode. For example, `NODE_ENV` will be set to `"development"` in development mode.
+When running `vue-cli-service`, environment variables are loaded from all [corresponding files](#environment-variables). If they don't contain a `NODE_ENV` variable, it will be set accordingly. For example, `NODE_ENV` will be set to `"production"` in production mode, `"test"` in test mode, and defaults to `"development"` otherwise.
 
 Then `NODE_ENV` will determine the primary mode your app is runnning in - development, production or test - and consequently, what kind of webpack config will be created.
 
