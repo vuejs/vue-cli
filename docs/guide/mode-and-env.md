@@ -1,4 +1,34 @@
-# Environment Variables and Modes
+# Modes and Environment Variables
+
+## Modes
+
+**Mode** is an important concept in Vue CLI projects. By default, there are three modes:
+
+- `development` is used by `vue-cli-service serve`
+- `test` is used by `vue-cli-service test:unit`
+- `production` is used by `vue-cli-service build` and `vue-cli-service test:e2e`
+
+You can overwrite the default mode used for a command by passing the `--mode` option flag. For example, if you want to use development variables in the build command:
+
+```
+vue-cli-service build --mode development
+```
+
+When running `vue-cli-service`, environment variables are loaded from all [corresponding files](#environment-variables). If they don't contain a `NODE_ENV` variable, it will be set accordingly. For example, `NODE_ENV` will be set to `"production"` in production mode, `"test"` in test mode, and defaults to `"development"` otherwise.
+
+Then `NODE_ENV` will determine the primary mode your app is runnning in - development, production or test - and consequently, what kind of webpack config will be created.
+
+With `NODE_ENV` set to "test" for example, Vue CLI creates a webpack config that is intended to be used and optimized for unit tests. It doesn't process images and other assets that are unnecessary for unit tests.
+
+Similarly, `NODE_ENV=development` creates a webpack configuration which enables HMR, doesn't hash assets or create vendor bundles in order to allow for fast re-builds when running a dev server.
+
+When you are running `vue-cli-service build`, your `NODE_ENV` should always be set to "production" to obtain an app ready for deployment, regardless of the environment you're deploying to.
+
+::: warning NODE_ENV
+`NODE_ENV` and Vue CLI's mode are tightly linked. If you have set `NODE_ENV` in your environment outside of `.env` files, it will always determine the mode. You should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands, e.g. `NODE_ENV=production vue-cli-service build`.
+:::
+
+## Environment Variables
 
 You can specify env variables by placing the following files in your project root:
 
@@ -22,32 +52,10 @@ Loaded variables will become available to all `vue-cli-service` commands, plugin
 
 An env file for a specific mode (e.g. `.env.production`) will take higher priority than a generic one (e.g. `.env`).
 
-In addition, environment variables that already exist when Vue CLI is bootstrapped have the highest priority and will not be overwritten by `.env` files.
+In addition, environment variables that already exist when Vue CLI is executed have the highest priority and will not be overwritten by `.env` files.
 :::
 
-::: warning NODE_ENV
-If you have a default `NODE_ENV` in your environment, you should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands.
-:::
-
-## Modes
-
-**Mode** is an important concept in Vue CLI projects. By default, there are three modes in a Vue CLI project:
-
-- `development` is used by `vue-cli-service serve`
-- `production` is used by `vue-cli-service build` and `vue-cli-service test:e2e`
-- `test` is used by `vue-cli-service test:unit`
-
-Note that a mode is different from `NODE_ENV`, as a mode can contain multiple environment variables. That said, each mode does set `NODE_ENV` to the same value by default - for example, `NODE_ENV` will be set to `"development"` in development mode.
-
-You can set environment variables only available to a certain mode by postfixing the `.env` file. For example, if you create a file named `.env.development` in your project root, then the variables declared in that file will only be loaded in development mode.
-
-You can overwrite the default mode used for a command by passing the `--mode` option flag. For example, if you want to use development variables in the build command, add this to your `package.json` scripts:
-
-```
-"dev-build": "vue-cli-service build --mode development",
-```
-
-## Example: Staging Mode
+### Example: Staging Mode
 
 Assuming we have an app with the following `.env` file:
 
@@ -68,7 +76,7 @@ VUE_APP_TITLE=My App (staging)
 
 In both cases, the app is built as a production app because of the `NODE_ENV`, but in the staging version, `process.env.VUE_APP_TITLE` is overwritten with a different value.
 
-## Using Env Variables in Client-side Code
+### Using Env Variables in Client-side Code
 
 Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
 
@@ -97,7 +105,7 @@ module.exports = {
 ```
 :::
 
-## Local Only Variables
+### Local Only Variables
 
 Sometimes you might have env variables that should not be committed into the codebase, especially if your project is hosted in a public repository. In that case you should use an `.env.local` file instead. Local env files are ignored in `.gitignore` by default.
 
