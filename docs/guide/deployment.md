@@ -273,7 +273,7 @@ First you would need to build your project by running `npm run build`. And if yo
 npm install --global surge
 ```
 
-Then cd into the `dist/` folder of your project and then run `surge` and follow the screen prompt. It will ask you to set up email and password if it is the first time you are using Surge. Confirm the project folder and type in your preferred domain and watch your project being deployed such as below.
+Then cd into the `dist/` folder of your project and run `cp index.html 200.html` to support HTML5 history mode. Then run `surge` and follow the screen prompt. It will ask you to set up email and password if it is the first time you are using Surge. Confirm the project folder and type in your preferred domain and watch your project being deployed such as below.
 
 ```
             project: /Users/user/Documents/myawesomeproject/dist/
