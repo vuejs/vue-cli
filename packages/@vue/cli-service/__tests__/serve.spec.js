@@ -93,3 +93,14 @@ test('serve with no public dir', async () => {
     }
   )
 })
+
+test('dart sass', async () => {
+  const project = await create('test-dart-sass', exports.defaultPreset = {
+    useConfigFiles: false,
+    cssPreprocessor: 'dart-sass',
+    plugins: {}
+  })
+
+  // should build successfully
+  await project.run('vue-cli-service build')
+})

@@ -6,6 +6,9 @@ const defaultPolyfills = [
   'es6.array.iterator',
   // this is required for webpack code splitting, vuex etc.
   'es6.promise',
+  // this is needed for object rest spread support in templates
+  // as vue-template-es2015-compiler 1.8+ compiles it to Object.assign() calls.
+  'es6.object.assign',
   // #2012 es6.promise replaces native Promise in FF and causes missing finally
   'es7.promise.finally'
 ]
@@ -30,12 +33,7 @@ module.exports = (context, options = {}) => {
 
   // JSX
   if (options.jsx !== false) {
-    plugins.push(
-      require('@babel/plugin-syntax-jsx'),
-      require('babel-plugin-transform-vue-jsx')
-      // require('babel-plugin-jsx-event-modifiers'),
-      // require('babel-plugin-jsx-v-model')
-    )
+    presets.push([require('@vue/babel-preset-jsx'), typeof options.jsx === 'object' ? options.jsx : {}])
   }
 
   const {
@@ -53,7 +51,15 @@ module.exports = (context, options = {}) => {
     shippedProposals,
     forceAllTransforms,
     decoratorsBeforeExport,
-    decoratorsLegacy
+    decoratorsLegacy,
+
+    // Undocumented option of @babel/plugin-transform-runtime.
+    // When enabled, an absolute path is used when importing a runtime helper atfer tranforming.
+    // This ensures the transpiled file always use the runtime version required in this package.
+    // However, this may cause hash inconsitency if the project is moved to another directory.
+    // So here we allow user to explicit disable this option if hash consistency is a requirement
+    // and the runtime version is sure to be correct.
+    absoluteRuntime = path.dirname(require.resolve('@babel/runtime/package.json'))
   } = options
 
   // resolve targets
@@ -125,7 +131,7 @@ module.exports = (context, options = {}) => {
   }
 
   // pass options along to babel-preset-env
-  presets.push([require('@babel/preset-env'), envOptions])
+  presets.unshift([require('@babel/preset-env'), envOptions])
 
   // additional <= stage-3 plugins
   // Babel 7 is removing stage presets altogether because people are using
@@ -142,10 +148,14 @@ module.exports = (context, options = {}) => {
   // transform runtime, but only for helpers
   plugins.push([require('@babel/plugin-transform-runtime'), {
     regenerator: useBuiltIns !== 'usage',
-    corejs: useBuiltIns !== false ? false : 2,
+    // use @babel/runtime-corejs2 so that helpers that need polyfillable APIs will reference core-js instead.
+    // if useBuiltIns is not set to 'usage', then it means users would take care of the polyfills on their own,
+    // i.e., core-js 2 is no longer needed.
+    corejs: (useBuiltIns === 'usage' && !process.env.VUE_CLI_MODERN_BUILD) ? 2 : false,
     helpers: useBuiltIns === 'usage',
     useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
-    absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json'))
+
+    absoluteRuntime
   }])
 
   return {

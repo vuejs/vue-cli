@@ -1,11 +1,12 @@
 {
   "name": "@vue/cli-upgrade",
-  "version": "3.2.0",
+  "version": "3.4.0",
   "description": "utility to upgrade vue cli service / plugins in vue apps",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-upgrade"
   },
   "keywords": [
     "vue",

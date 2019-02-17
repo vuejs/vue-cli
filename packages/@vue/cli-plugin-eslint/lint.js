@@ -1,3 +1,4 @@
+const fs = require('fs')
 const globby = require('globby')
 
 const renamedArrayArgs = {
@@ -31,22 +32,55 @@ module.exports = function lint (args = {}, api) {
     cwd
   }, argsConfig)
 
+  const noFixWarnings = (argsConfig.fixWarnings === false)
+  const noFixWarningsPredicate = (lintResult) => lintResult.severity === 2
+  config.fix = config.fix && (noFixWarnings ? noFixWarningsPredicate : true)
+
+  if (!fs.existsSync(api.resolve('.eslintignore')) && !config.ignorePattern) {
+    // .eslintrc.js files (ignored by default)
+    // However, we need to lint & fix them so as to make the default generated project's
+    // code style consistent with user's selected eslint config.
+    // Though, if users provided their own `.eslintignore` file, we don't want to
+    // add our own customized ignore pattern here (in eslint, ignorePattern is
+    // an addition to eslintignore, i.e. it can't be overriden by user),
+    // following the principle of least astonishment.
+    config.ignorePattern = [
+      '!.*.js',
+      '!{src,tests}/**/.*.js'
+    ]
+  }
+
+  const engine = new CLIEngine(config)
+
   const defaultFilesToLint = [
     'src',
     'tests',
     // root config files
     '*.js',
-    // .eslintrc files (ignored by default)
-    '.*.js',
-    '{src,tests}/**/.*.js'
-  ].filter(pattern => globby.sync(path.join(cwd, pattern)).length)
+    '.*.js'
+  ]
+    .filter(pattern =>
+      globby
+        .sync(path.join(cwd, pattern))
+        .some(p => !engine.isPathIgnored(p))
+    )
 
-  const engine = new CLIEngine(config)
   const files = args._ && args._.length
     ? args._
     : defaultFilesToLint
 
+  // mock process.cwd before executing
+  // See:
+  // https://github.com/vuejs/vue-cli/issues/2554
+  // https://github.com/benmosher/eslint-plugin-import/issues/602
+  // https://github.com/eslint/eslint/issues/11218
+  const processCwd = process.cwd
+  if (!api.invoking) {
+    process.cwd = () => cwd
+  }
   const report = engine.executeOnFiles(files)
+  process.cwd = processCwd
+
   const formatter = engine.getFormatter(args.format || 'codeframe')
 
   if (config.fix) {

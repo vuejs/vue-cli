@@ -628,7 +628,7 @@ A Client addon is a JS bundle which is dynamically loaded into the cli-ui. It is
 
 ### Create a client addon
 
-The recommended way to create a Client addon is by creating a new project using vue-cli 3. You can either do this in a subfolder of your plugin or in a different npm package.
+The recommended way to create a Client addon is by creating a new project using vue cli. You can either do this in a subfolder of your plugin or in a different npm package.
 
 Install `@vue/cli-ui` as a dev dependency.
 

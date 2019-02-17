@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-overlay",
-  "version": "3.2.0",
+  "version": "3.4.0",
   "description": "error overlay & dev server middleware for vue-cli",
   "main": "dist/client.js",
   "files": [
@@ -8,7 +8,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-overlay"
   },
   "keywords": [
     "vue",

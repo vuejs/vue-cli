@@ -80,7 +80,7 @@ module.exports = (api, options) => {
 
   if (!api.hasPlugin('eslint')) {
     api.registerCommand('lint', {
-      descriptions: 'lint source files with TSLint',
+      description: 'lint source files with TSLint',
       usage: 'vue-cli-service lint [options] [...files]',
       options: {
         '--format [formatter]': 'specify formatter (default: codeFrame)',

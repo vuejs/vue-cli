@@ -61,7 +61,8 @@ module.exports = (api, options) => {
     usage: 'vue-cli-service lint [options] [...files]',
     options: {
       '--format [formatter]': 'specify formatter (default: codeframe)',
-      '--no-fix': 'do not fix errors',
+      '--no-fix': 'do not fix errors or warnings',
+      '--no-fix-warnings': 'fix errors, but do not fix warnings',
       '--max-errors [limit]': 'specify number of errors to make build failed (default: 0)',
       '--max-warnings [limit]': 'specify number of warnings to make build failed (default: Infinity)'
     },

@@ -2,17 +2,17 @@ module.exports = {
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Standard Tooling for Vue.js Development'
     },
     '/zh/': {
       lang: 'zh-CN',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Vue.js 开发的标准工具'
     },
     '/ru/': {
       lang: 'ru',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
     }
   },
@@ -27,6 +27,10 @@ module.exports = {
     docsBranch: 'docs',
     editLinks: true,
     sidebarDepth: 3,
+    algolia: {
+      indexName: 'cli_vuejs',
+      apiKey: 'f6df220f7d246aff64a56300b7f19f21',
+    },
     locales: {
       '/': {
         label: 'English',
@@ -105,6 +109,14 @@ module.exports = {
           ],
           '/dev-guide/': [
             '/dev-guide/plugin-dev.md',
+            {
+              title: 'API reference',
+              collapsable: false,
+              children: [
+                '/dev-guide/plugin-api.md',
+                '/dev-guide/generator-api.md',
+              ]
+            },
             {
               title: 'UI Development',
               collapsable: false,

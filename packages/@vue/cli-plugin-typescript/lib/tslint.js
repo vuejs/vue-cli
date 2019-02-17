@@ -49,7 +49,7 @@ module.exports = function lint (args = {}, api, silent) {
         before: content.slice(0, script.start),
         after: content.slice(script.end)
       })
-      return script.content
+      return script
     }
   }
 
@@ -61,8 +61,9 @@ module.exports = function lint (args = {}, api, silent) {
     const getSourceFile = program.getSourceFile
     program.getSourceFile = function (file, languageVersion, onError) {
       if (isVueFile(file)) {
-        const script = parseTSFromVueFile(file) || ''
-        return ts.createSourceFile(file, script, languageVersion, true)
+        const { content, lang = 'js' } = parseTSFromVueFile(file) || { content: '', lang: 'js' }
+        const contentLang = ts.ScriptKind[lang.toUpperCase()];
+        return ts.createSourceFile(file, content, languageVersion, true, contentLang)
       } else {
         return getSourceFile.call(this, file, languageVersion, onError)
       }
@@ -80,7 +81,9 @@ module.exports = function lint (args = {}, api, silent) {
     patchProgram(this.program)
   }
 
-  const tslintConfigPath = api.resolve('tslint.json')
+  const tslintConfigPath = tslint.Configuration.CONFIG_FILENAMES
+    .map(filename => api.resolve(filename))
+    .find(file => fs.existsSync(file))
 
   const config = tslint.Configuration.findConfiguration(tslintConfigPath).results
   // create a patched config that disables the blank lines rule,
@@ -113,7 +116,7 @@ module.exports = function lint (args = {}, api, silent) {
   // respect linterOptions.exclude from tslint.json
   if (config.linterOptions && config.linterOptions.exclude) {
     // use the raw tslint.json data because config contains absolute paths
-    const rawTslintConfig = JSON.parse(fs.readFileSync(tslintConfigPath, 'utf-8'))
+    const rawTslintConfig = tslint.Configuration.readConfigurationFile(tslintConfigPath)
     const excludedGlobs = rawTslintConfig.linterOptions.exclude
     excludedGlobs.forEach((g) => files.push('!' + g))
   }

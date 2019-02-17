@@ -81,7 +81,7 @@ During build, `process.env.VUE_APP_SECRET` will be replaced by the corresponding
 In addition to `VUE_APP_*` variables, there are also two special variables that will always be available in your app code:
 
 - `NODE_ENV` - this will be one of `"development"`, `"production"` or `"test"` depending on the [mode](#modes) the app is running in.
-- `BASE_URL` - this corresponds to the `baseUrl` option in `vue.config.js` and is the base path your app is deployed at.
+- `BASE_URL` - this corresponds to the `publicPath` option in `vue.config.js` and is the base path your app is deployed at.
 
 All resolved env variables will be available inside `public/index.html` as discussed in [HTML - Interpolation](./html-and-static-assets.md#interpolation).
 

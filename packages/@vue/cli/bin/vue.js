@@ -19,6 +19,14 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, 'vue-cli')
 
+if (semver.satisfies(process.version, '9.x')) {
+  console.log(chalk.red(
+    `You are using Node ${process.version}.\n` +
+    `Node.js 9.x has already reached end-of-life and will not be supported in future major releases.\n` +
+    `It's strongly recommended to use an active LTS version instead.`
+  ))
+}
+
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
@@ -57,6 +65,10 @@ program
   .option('-b, --bare', 'Scaffold project without beginner instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
+
+    if (minimist(process.argv.slice(3))._.length > 1) {
+      console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
+    }
     // --git makes commander to default git to true
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
       options.forceGit = true
@@ -165,7 +177,7 @@ program
         System: ['OS', 'CPU'],
         Binaries: ['Node', 'Yarn', 'npm'],
         Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
-        npmPackages: '/**/{*vue*,@vue/*/}',
+        npmPackages: '/**/{typescript,*vue*,@vue/*/}',
         npmGlobalPackages: ['@vue/cli']
       },
       {

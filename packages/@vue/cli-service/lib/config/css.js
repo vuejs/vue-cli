@@ -15,6 +15,12 @@ module.exports = (api, options) => {
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
 
+    const defaultSassLoaderOptions = {}
+    try {
+      defaultSassLoaderOptions.implementation = require('sass')
+      defaultSassLoaderOptions.fiber = require('fibers')
+    } catch (e) {}
+
     const {
       modules = false,
       extract = isProd,
@@ -46,7 +52,7 @@ module.exports = (api, options) => {
     // check if the project has a valid postcss config
     // if it doesn't, don't use postcss-loader for direct style imports
     // because otherwise it would throw error when attempting to load postcss config
-    const hasPostCSSConfig = !!(api.service.pkg.postcss || findExisting(api.resolve('.'), [
+    const hasPostCSSConfig = !!(loaderOptions.postcss || api.service.pkg.postcss || findExisting(api.resolve('.'), [
       '.postcssrc',
       '.postcssrc.js',
       'postcss.config.js',
@@ -158,8 +164,8 @@ module.exports = (api, options) => {
 
     createCSSRule('css', /\.css$/)
     createCSSRule('postcss', /\.p(ost)?css$/)
-    createCSSRule('scss', /\.scss$/, 'sass-loader', loaderOptions.sass)
-    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign({
+    createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, loaderOptions.sass))
+    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, {
       indentedSyntax: true
     }, loaderOptions.sass))
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)

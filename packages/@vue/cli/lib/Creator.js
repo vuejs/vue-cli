@@ -135,7 +135,7 @@ module.exports = class Creator extends EventEmitter {
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
-    const shouldInitGit = await this.shouldInitGit(cliOptions)
+    const shouldInitGit = this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
       this.emit('creation', { event: 'git-init' })
@@ -449,7 +449,7 @@ module.exports = class Creator extends EventEmitter {
     return prompts
   }
 
-  async shouldInitGit (cliOptions) {
+  shouldInitGit (cliOptions) {
     if (!hasGit()) {
       return false
     }

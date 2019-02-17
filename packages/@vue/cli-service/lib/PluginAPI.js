@@ -135,6 +135,14 @@ class PluginAPI {
     const fs = require('fs')
     const cacheDirectory = this.resolve(`node_modules/.cache/${id}`)
 
+    // replace \r\n to \n generate consistent hash
+    const fmtFunc = conf => {
+      if (typeof conf === 'function') {
+        return conf.toString().replace(/\r\n?/g, '\n')
+      }
+      return conf
+    }
+
     const variables = {
       partialIdentifier,
       'cli-service': require('../package.json').version,
@@ -142,8 +150,8 @@ class PluginAPI {
       env: process.env.NODE_ENV,
       test: !!process.env.VUE_CLI_TEST,
       config: [
-        this.service.projectOptions.chainWebpack,
-        this.service.projectOptions.configureWebpack
+        fmtFunc(this.service.projectOptions.chainWebpack),
+        fmtFunc(this.service.projectOptions.configureWebpack)
       ]
     }
 
@@ -151,7 +159,14 @@ class PluginAPI {
       const readConfig = file => {
         const absolutePath = this.resolve(file)
         if (fs.existsSync(absolutePath)) {
-          return fs.readFileSync(absolutePath, 'utf-8')
+          if (absolutePath.endsWith('.js')) {
+            // should evaluate config scripts to reflect environment variable changes
+            try {
+              return JSON.stringify(require(absolutePath))
+            } catch (e) {
+              return fs.readFileSync(absolutePath, 'utf-8')
+            }
+          }
         }
       }
       if (!Array.isArray(configFiles)) {
@@ -160,7 +175,7 @@ class PluginAPI {
       for (const file of configFiles) {
         const content = readConfig(file)
         if (content) {
-          variables.configFiles = content
+          variables.configFiles = content.replace(/\r\n?/g, '\n')
           break
         }
       }
