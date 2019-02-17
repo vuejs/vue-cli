@@ -56,6 +56,8 @@ The `vue-cli-service serve` command starts a dev server (based on [webpack-dev-s
 
 In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
 
+`[entry]` in the CLI command is defined as *the entry file*, not *an additional entry file*. If you overwrite the entry in the CLI, then the entries from `config.pages` are no longer considered, which may cause an error.
+
 ## vue-cli-service build
 
 ```
