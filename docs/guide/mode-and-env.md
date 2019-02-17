@@ -16,6 +16,8 @@ FOO=bar
 VUE_APP_SECRET=secret
 ```
 
+For more detailed env parsing rules, please refer to [the documentation of `dotenv`](https://github.com/motdotla/dotenv#rules).
+
 Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
 
 ::: tip Env Loading Priorities

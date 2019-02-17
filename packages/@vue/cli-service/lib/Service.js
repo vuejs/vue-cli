@@ -6,7 +6,7 @@ const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
-const loadEnv = require('./util/loadEnv')
+const dotenv = require('dotenv')
 const defaultsDeep = require('lodash.defaultsdeep')
 const { warn, error, isPlugin, loadModule } = require('@vue/cli-shared-utils')
 
@@ -95,7 +95,7 @@ module.exports = class Service {
 
     const load = path => {
       try {
-        const res = loadEnv(path)
+        const res = dotenv.config({ path, debug: process.env.DEBUG })
         logger(path, res)
       } catch (err) {
         // only ignore error if file is not found
