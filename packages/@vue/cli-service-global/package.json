@@ -31,7 +31,7 @@
     "eslint": "^4.19.1",
     "eslint-plugin-vue": "^4.7.1",
     "resolve": "^1.10.0",
-    "vue": "^2.5.22",
-    "vue-template-compiler": "^2.5.22"
+    "vue": "^2.6.6",
+    "vue-template-compiler": "^2.6.6"
   }
 }
