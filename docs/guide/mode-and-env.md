@@ -25,7 +25,7 @@ Similarly, `NODE_ENV=development` creates a webpack configuration which enables 
 When you are running `vue-cli-service build`, your `NODE_ENV` should always be set to "production" to obtain an app ready for deployment, regardless of the environment you're deploying to.
 
 ::: warning NODE_ENV
-`NODE_ENV` and Vue CLI's mode are tightly linked. If you have set `NODE_ENV` in your environment outside of `.env` files, it will always determine the mode. You should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands, e.g. `NODE_ENV=production vue-cli-service build`.
+If you have a default `NODE_ENV` in your environment, you should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands.
 :::
 
 ## Environment Variables
