@@ -303,6 +303,9 @@ function genHistoryApiFallbackRewrites (baseUrl, pages = {}) {
   const path = require('path')
   const multiPageRewrites = Object
     .keys(pages)
+    // sort by length in reversed order to avoid overrides
+    // eg. 'page11' should appear in front of 'page1'
+    .sort((a, b) => b.length - a.length)
     .map(name => ({
       from: new RegExp(`^/${name}`),
       to: path.posix.join(baseUrl, pages[name].filename || `${name}.html`)
