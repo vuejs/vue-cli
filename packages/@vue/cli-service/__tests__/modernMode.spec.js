@@ -22,6 +22,10 @@ test('modern mode', async () => {
   expect(files.some(f => /^chunk-vendors\.\w{8}\.js$/.test(f))).toBe(true)
   expect(files.some(f => /^chunk-vendors-legacy\.\w{8}\.js$/.test(f))).toBe(true)
 
+  // arrow function should be reserved in the modern build
+  const app = await project.read(`dist/js/${files.find(f => /^app\.\w{8}\.js$/.test(f))}`)
+  expect(app).toMatch(/=>/)
+
   // assert correct asset links
   const index = await project.read('dist/index.html')
 
