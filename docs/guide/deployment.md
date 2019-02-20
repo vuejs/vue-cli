@@ -323,7 +323,7 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
 ### Docker (Nginx)
 
-Deploying your application using nginx inside of docker can be done easily with a minor modification of the nginx configuration.
+Deploy your application using nginx inside of a docker container.
 
 1. Install [docker](https://www.docker.com/get-started)
 
@@ -343,7 +343,7 @@ Deploying your application using nginx inside of docker can be done easily with 
 
 3. Create a `.dockerignore` file in the root of your project
 
-    Setting up the `.dockerignore` file correctly prevents `node_modules` and any intermediate build artifacts from being copied to the image which can cause issues during building.
+    Setting up the `.dockerignore` file prevents `node_modules` and any intermediate build artifacts from being copied to the image which can cause issues during building.
 
     ```gitignore
     **/node_modules
@@ -352,7 +352,9 @@ Deploying your application using nginx inside of docker can be done easily with 
 
 4. Create a `nginx.conf` file in the root of your project
 
-    This is a simple `nginx` configuration that falls back to the root `index.html` page for `404's`. This is necessary when using `pushState()` based routing.
+    `Nginx` is an HTTP(s) server that will run in your docker container. It uses a configuration file to determine how to serve content/which ports to listen on/etc. See the [nginx configuration documentation](https://www.nginx.com/resources/wiki/start/topics/examples/full/) for an example of all of the possible configuration options.
+
+    The following is a simple `nginx` configuration that serves your vue project on port `80`. The root `index.html` is served for `page not found` / `404` errors which allows us to use `pushState()` based routing.
 
     ```text
     user  nginx;
@@ -380,7 +382,7 @@ Deploying your application using nginx inside of docker can be done easily with 
           try_files $uri $uri/ /index.html;
         }
         error_page   500 502 503 504  /50x.html;
-          location = /50x.html {
+        location = /50x.html {
           root   /usr/share/nginx/html;
         }
       }
