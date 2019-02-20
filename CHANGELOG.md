@@ -1,3 +1,41 @@
+# [3.4.1](https://github.com/vuejs/vue-cli/compare/v3.4.0...v3.4.1) (2019-02-20)
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* fix hash difference on different terminal sessions ([a2bc927](https://github.com/vuejs/vue-cli/commit/a2bc927)), closes [#3416](https://github.com/vuejs/vue-cli/issues/3416)
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* respect command line --ignore-pattern option ([f819f51](https://github.com/vuejs/vue-cli/commit/f819f51))
+* **cli-plugin-eslint:** make eslint deps optional ([#3068](https://github.com/vuejs/vue-cli/issues/3068)) ([114313c](https://github.com/vuejs/vue-cli/commit/114313c))
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **tslint:** don't reread the input file on ts linting (close [#2786](https://github.com/vuejs/vue-cli/issues/2786)) ([#2787](https://github.com/vuejs/vue-cli/issues/2787)) ([364f28f](https://github.com/vuejs/vue-cli/commit/364f28f))
+
+## cli-service
+
+#### Bug Fixes
+
+* run modern build in separate process ([#3477](https://github.com/vuejs/vue-cli/issues/3477)) ([e0983f4](https://github.com/vuejs/vue-cli/commit/e0983f4)), closes [#3438](https://github.com/vuejs/vue-cli/issues/3438) [#3474](https://github.com/vuejs/vue-cli/issues/3474)
+#### Features
+
+* **cli-service:** add history api fallback for multi-page mode ([#3181](https://github.com/vuejs/vue-cli/issues/3181)) ([ea5d9f7](https://github.com/vuejs/vue-cli/commit/ea5d9f7))
+
+## cli-ui
+
+#### Bug Fixes
+
+* import createTimeAgo from vue-timeago because it isn't a default export ([#3437](https://github.com/vuejs/vue-cli/issues/3437)) ([38aa8d9](https://github.com/vuejs/vue-cli/commit/38aa8d9))
+
+
+
 # [3.4.0](https://github.com/vuejs/vue-cli/compare/v3.3.0...v3.4.0) (2019-01-31)
 
 ## babel-preset-app
