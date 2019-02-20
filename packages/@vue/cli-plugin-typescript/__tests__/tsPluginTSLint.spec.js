@@ -88,3 +88,28 @@ test('should ignore issues in node_modules', async () => {
   await run('vue-cli-service lint')
   expect(await read('node_modules/bad.ts')).toMatch(updatedMain)
 })
+
+test('should be able to fix mixed line endings', async () => {
+  const project = await create('ts-lint-mixed-line-endings', {
+    plugins: {
+      '@vue/cli-plugin-typescript': {
+        tsLint: true
+      }
+    }
+  })
+
+  const { write, run } = project
+
+  const b64 = 'PHRlbXBsYXRlPjwvdGVtcGxhdGU+DQoNCjxzY3JpcHQgbGFuZz0idHMiPg0KZXhwb3J0IGRlZmF1bHQgY2xhc3MgVGVzdCAgew0KICBnZXQgYXNzaWduZWUoKSB7DQogICAgdmFyIGl0ZW1zOnt0ZXh0OnN0cmluZzsgdmFsdWU6c3RyaW5nIHwgbnVtYmVyIHwgbnVsbH1bXSA9IFtdOw0KICAgIHJldHVybiBpdGVtczsNCiAgfQ0KDQp9DQo8L3NjcmlwdD4NCg0K'
+  const buf = Buffer.from(b64, 'base64')
+
+  await write('src/bad.vue', buf)
+
+  // Try twice to fix the file.
+  // For now, it will fail the first time, which corresponds to the behaviour of tslint.
+  try {
+    await run('vue-cli-service lint -- src/bad.vue')
+  } catch (e) { }
+
+  await run('vue-cli-service lint -- src/bad.vue')
+})

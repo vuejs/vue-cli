@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import deepmerge from 'deepmerge'
-import VueTimeago from 'vue-timeago'
+import VueTimeago, { createTimeago } from 'vue-timeago'
 
 Vue.use(VueI18n)
 
@@ -50,7 +50,7 @@ async function autoDetect () {
     }
 
     const dateFnsLocale = i18n.locale.toLowerCase().replace(/-/g, '_')
-    Vue.component('VueTimeago', VueTimeago.createTimeago({
+    Vue.component('VueTimeago', createTimeago({
       name: 'VueTimeago',
       locale: i18n.locale,
       locales: {

@@ -36,7 +36,7 @@ module.exports = function lint (args = {}, api) {
   const noFixWarningsPredicate = (lintResult) => lintResult.severity === 2
   config.fix = config.fix && (noFixWarnings ? noFixWarningsPredicate : true)
 
-  if (!fs.existsSync(api.resolve('.eslintignore'))) {
+  if (!fs.existsSync(api.resolve('.eslintignore')) && !config.ignorePattern) {
     // .eslintrc.js files (ignored by default)
     // However, we need to lint & fix them so as to make the default generated project's
     // code style consistent with user's selected eslint config.

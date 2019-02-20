@@ -33,7 +33,6 @@ module.exports = (api, options) => {
     const isProduction = process.env.NODE_ENV === 'production'
 
     const url = require('url')
-    const path = require('path')
     const chalk = require('chalk')
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
@@ -139,9 +138,7 @@ module.exports = (api, options) => {
       clientLogLevel: 'none',
       historyApiFallback: {
         disableDotRule: true,
-        rewrites: [
-          { from: /./, to: path.posix.join(options.publicPath, 'index.html') }
-        ]
+        rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
       },
       contentBase: api.resolve('public'),
       watchContentBase: !isProduction,
@@ -300,6 +297,23 @@ function checkInContainer () {
     const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
     return /:\/(lxc|docker|kubepods)\//.test(content)
   }
+}
+
+function genHistoryApiFallbackRewrites (baseUrl, pages = {}) {
+  const path = require('path')
+  const multiPageRewrites = Object
+    .keys(pages)
+    // sort by length in reversed order to avoid overrides
+    // eg. 'page11' should appear in front of 'page1'
+    .sort((a, b) => b.length - a.length)
+    .map(name => ({
+      from: new RegExp(`^/${name}`),
+      to: path.posix.join(baseUrl, pages[name].filename || `${name}.html`)
+    }))
+  return [
+    ...multiPageRewrites,
+    { from: /./, to: path.posix.join(baseUrl, 'index.html') }
+  ]
 }
 
 module.exports.defaultModes = {
