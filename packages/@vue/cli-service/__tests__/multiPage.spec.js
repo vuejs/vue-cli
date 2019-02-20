@@ -14,7 +14,8 @@ async function makeProjectMultiPage (project) {
       pages: {
         index: { entry: 'src/main.js' },
         foo: { entry: 'src/foo.js' },
-        bar: { entry: 'src/bar.js' }
+        bar: { entry: 'src/bar.js' },
+        foobar: { entry: 'src/foobar.js' }
       },
       chainWebpack: config => {
         const splitOptions = config.optimization.get('splitChunks')
@@ -39,6 +40,13 @@ async function makeProjectMultiPage (project) {
       render: h => h(App)
     })
   `)
+  await project.write('src/foobar.js', `
+    import Vue from 'vue'
+    new Vue({
+      el: '#app',
+      render: h => h('h1', 'FooBar')
+    })
+  `)
   const app = await project.read('src/App.vue')
   await project.write('src/App.vue', app.replace(
     `import HelloWorld from './components/HelloWorld.vue'`,
@@ -61,6 +69,15 @@ test('serve w/ multi page', async () => {
 
       await page.goto(`${url}/bar.html`)
       expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
+
+      await page.goto(`${url}foo`)
+      expect(await helpers.getText('h1')).toMatch(`Foo`)
+
+      await page.goto(`${url}bar`)
+      expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
+
+      await page.goto(`${url}foobar`)
+      expect(await helpers.getText('h1')).toMatch(`FooBar`)
     }
   )
 })
