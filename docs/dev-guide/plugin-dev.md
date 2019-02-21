@@ -278,12 +278,14 @@ const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
-    webpackConfig.plugin('vue-auto-routing').use(VueAutoRoutingPlugin, [
-      {
-        pages: 'src/pages',
-        nested: true
-      }
-    ])
+    webpackConfig
+      .plugin('vue-auto-routing')
+        .use(VueAutoRoutingPlugin, [
+          {
+            pages: 'src/pages',
+            nested: true
+          }
+        ])
   })
 }
 ```
