@@ -25,6 +25,8 @@ test('modern mode', async () => {
   // arrow function should be reserved in the modern build
   const app = await project.read(`dist/js/${files.find(f => /^app\.\w{8}\.js$/.test(f))}`)
   expect(app).toMatch(/=>/)
+  const legacyApp = await project.read(`dist/js/${files.find(f => /^app-legacy\.\w{8}\.js$/.test(f))}`)
+  expect(legacyApp).not.toMatch(/=>/)
 
   // assert correct asset links
   const index = await project.read('dist/index.html')
