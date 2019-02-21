@@ -50,9 +50,9 @@ A generator should export a function which receives three arguments:
 
 2. The generator options for this plugin. These options are resolved during the [prompt](#prompts) phase of project creation, or loaded from a saved preset in `~/.vuerc`. For example, if the saved `~/.vuerc` looks like this:
 
-``` json
+```json
 {
-  "presets" : {
+  "presets": {
     "foo": {
       "plugins": {
         "@vue/cli-plugin-foo": { "option": "bar" }
@@ -94,7 +94,7 @@ module.exports = api => {
 
 In addition, you can inherit and replace parts of an existing template file (even from another package) using YAML front-matter:
 
-``` ejs
+```ejs
 ---
 extend: '@vue/cli-service/generator/template/src/App.vue'
 replace: !!js/regexp /<script>[^]*?<\/script>/
@@ -109,7 +109,7 @@ export default {
 
 It's also possible to do multiple replaces, although you will need to wrap your replace strings within `<%# REPLACE %>` and `<%# END_REPLACE %>` blocks:
 
-``` ejs
+```ejs
 ---
 extend: '@vue/cli-service/generator/template/src/App.vue'
 replace:
@@ -155,7 +155,6 @@ Consequently, this means that you also have to follow a special naming conventio
 
 /generator/template/_variables.scss
 ```
-
 
 ### Extending package
 
@@ -217,7 +216,7 @@ api.onCreateComplete(() => {
 })
 ```
 
-Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
+Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next line:
 
 ```js{8-9}
 // generator/index.js
@@ -228,7 +227,8 @@ api.onCreateComplete(() => {
   const lines = contentMain.split(/\r?\n/g)
 
   const renderIndex = lines.findIndex(line => line.match(/render/))
-  lines[renderIndex] += `\n  router,`
+
+  lines.splice(renderIndex, 0, `  router,`)
 })
 ```
 
@@ -243,9 +243,11 @@ api.onCreateComplete(() => {
   const lines = contentMain.split(/\r?\n/g)
 
   const renderIndex = lines.findIndex(line => line.match(/render/))
-  lines[renderIndex] += `\n  router,`
+  lines.splice(renderIndex, 0, `  router,`)
 
-  fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' })
+  const newContent = lines.join('\r\n')
+
+  fs.writeFileSync(api.entryFile, newContent, { encoding: 'utf-8' })
 })
 ```
 
@@ -276,19 +278,17 @@ const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
 
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
-    webpackConfig
-      .plugin('vue-auto-routing')
-        .use(VueAutoRoutingPlugin, [
-          {
-            pages: 'src/pages',
-            nested: true
-          }
-        ])
+    webpackConfig.plugin('vue-auto-routing').use(VueAutoRoutingPlugin, [
+      {
+        pages: 'src/pages',
+        nested: true
+      }
+    ])
   })
 }
 ```
 
-You can also use `configureWebpack` method to modify the  webpack config or return object to be merged with webpack-merge.
+You can also use `configureWebpack` method to modify the webpack config or return object to be merged with webpack-merge.
 
 ### Add a new cli-service command
 
@@ -334,12 +334,12 @@ api.registerCommand(
   },
   args => {
     if (args.name) {
-      console.log(`👋 Hello, ${args.name}!`);
+      console.log(`👋 Hello, ${args.name}!`)
     } else {
-      console.log(`👋 Hello!`);
+      console.log(`👋 Hello!`)
     }
   }
-);
+)
 ```
 
 Now, if you a `greet` command with a specified `--name` option, this name will be added to console message:
@@ -373,7 +373,7 @@ In the example above we retrieve the `serve` command from the list of existing c
 
 If a plugin-registered command needs to run in a specific default mode, the plugin needs to expose it via `module.exports.defaultModes` in the form of `{ [commandName]: mode }`:
 
-``` js
+```js
 module.exports = api => {
   api.registerCommand('build', () => {
     // ...
@@ -395,7 +395,7 @@ When user initialize the plugin by calling `vue invoke`, if the plugin contains 
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 
-``` bash
+```bash
 vue invoke my-plugin --mode awesome
 ```
 
@@ -429,7 +429,6 @@ if (options.addExampleRoutes) {
 ```
 
 Now template will be rendered only if user agreed to create example routes.
-
 
 ## Installing plugin locally
 
@@ -478,6 +477,7 @@ Vue CLI has a great UI tool which allows user to scaffold and manage a project w
 - you can display custom configurations for your plugin. For example, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) provides the following configuration screen for Apollo server:
 
 ![UI Configuration Screen](/ui-configuration.png)
+
 - when creating the project, you can display [prompts](#prompts) visually
 - you can add localizations for your plugin if you want to support multiple languages
 - you can make your plugin discoverable in the Vue UI search
@@ -756,10 +756,11 @@ As a result, you will have this screen on plugin invocation:
 ### Logo
 
 You can put a `logo.png` file in the root directory of the folder that will be published on npm. It will be displayed in several places:
- - When searching for a plugin to install
- - In the installed plugin list
- - In the configurations list (by default)
- - In the tasks list for augmented tasks (by default)
+
+- When searching for a plugin to install
+- In the installed plugin list
+- In the configurations list (by default)
+- In the tasks list for augmented tasks (by default)
 
 ![Plugins](/plugins.png)
 
@@ -798,7 +799,6 @@ You should add the url to the plugin website or repository in the `homepage` or 
 ```
 
 ![Plugin search item](/plugin-search-item.png)
-
 
 ## Publish Plugin to npm
 
