@@ -281,9 +281,14 @@ module.exports = class Service {
     if (fs.existsSync(configPath)) {
       try {
         fileConfig = require(configPath)
+
+        if (typeof fileConfig === 'function') {
+          fileConfig = fileConfig()
+        }
+
         if (!fileConfig || typeof fileConfig !== 'object') {
           error(
-            `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
+            `Error loading ${chalk.bold('vue.config.js')}: should export an object or a function that returns object.`
           )
           fileConfig = null
         }
