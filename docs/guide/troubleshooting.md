@@ -1,5 +1,7 @@
 # Troubleshooting
 
+This document covers some common Vue CLI issues and how to resolve them. You should always follow these steps before opening a new issue.
+
 ## Running installation with `sudo` or as `root`
 
 If you install `@vue/cli-service` as `root` user or with `sudo`, there might be issues when running package `postinstall` scripts.
