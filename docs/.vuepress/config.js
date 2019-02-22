@@ -103,7 +103,8 @@ module.exports = {
                 '/guide/webpack',
                 '/guide/mode-and-env',
                 '/guide/build-targets',
-                '/guide/deployment'
+                '/guide/deployment',
+                '/guide/troubleshooting'
               ]
             }
           ],
