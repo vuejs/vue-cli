@@ -29,5 +29,6 @@ module.exports = {
 }
 ```
 
-::: warning
+### Warning
+
 Disabling `resovle.symlinks` may break hot module reloading if your dependencies are installed by third-party npm clients that utilized symbolic links, such as`cnpm` or `pnpm`.
