@@ -197,8 +197,12 @@ module.exports = (api, options) => {
 
         let copied = ''
         if (isFirstCompile && args.copy) {
-          require('clipboardy').write(urls.localUrlForBrowser)
-          copied = chalk.dim('(copied to clipboard)')
+          try {
+            require('clipboardy').writeSync(urls.localUrlForBrowser)
+            copied = chalk.dim('(copied to clipboard)')
+          } catch (_) {
+            /* catch exception if copy to clipboard isn't supported (e.g. WSL), see issue #3476 */
+          }
         }
 
         const networkUrl = publicUrl
