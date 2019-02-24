@@ -28,7 +28,7 @@
     "fork-ts-checker-webpack-plugin": "^0.5.2",
     "globby": "^9.0.0",
     "ts-loader": "^5.3.3",
-    "tslint": "^5.12.1",
+    "tslint": "^5.13.0",
     "webpack": ">=4 < 4.29"
   },
   "peerDependencies": {
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@types/chai": "^4.1.0",
     "@types/jest": "^23.1.4",
-    "@types/mocha": "^5.2.4",
+    "@types/mocha": "^5.2.6",
     "typescript": "~3.2.2",
     "vue-class-component": "^6.2.0",
     "vue-property-decorator": "^7.0.0"

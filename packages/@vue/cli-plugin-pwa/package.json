@@ -28,6 +28,6 @@
     "workbox-webpack-plugin": "^3.6.3"
   },
   "devDependencies": {
-    "register-service-worker": "^1.5.2"
+    "register-service-worker": "^1.6.2"
   }
 }
