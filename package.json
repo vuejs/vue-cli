@@ -62,7 +62,6 @@
     "lint-staged": "^8.1.4",
     "memfs": "^2.15.2",
     "minimist": "^1.2.0",
-    "puppeteer": "^1.12.2",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.7",
     "rimraf": "^2.6.2",
@@ -76,6 +75,7 @@
     "@babel/preset-env": "^7.0.0",
     "babel-core": "7.0.0-bridge.0",
     "ps-tree": "^1.1.1",
+    "puppeteer": "1.11.0",
     "vue": "^2.6.7",
     "vue-template-compiler": "^2.6.7",
     "vue-server-renderer": "^2.6.7"
