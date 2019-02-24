@@ -8,7 +8,7 @@ module.exports = (api, _, __, invoking) => {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
-      '@vue/test-utils': '^1.0.0-beta.20'
+      '@vue/test-utils': '1.0.0-beta.29'
     },
     jest: {
       'moduleFileExtensions': [
