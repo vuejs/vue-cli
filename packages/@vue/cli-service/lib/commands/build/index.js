@@ -58,7 +58,7 @@ module.exports = (api, options) => {
         }), api, options)
         // spawn sub-process of self for modern build
         const { execa } = require('@vue/cli-shared-utils')
-        const cliBin = api.resolve('node_modules/.bin/vue-cli-service')
+        const cliBin = require('path').resolve(__dirname, '../../../bin/vue-cli-service.js')
         await execa(cliBin, ['build', ...rawArgs], {
           stdio: 'inherit',
           env: {
