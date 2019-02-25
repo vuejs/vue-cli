@@ -182,6 +182,8 @@ module.exports = class Generator {
       'description',
       'author',
       'main',
+      'module',
+      'browser',
       'jsDelivr',
       'unpkg',
       'files',
