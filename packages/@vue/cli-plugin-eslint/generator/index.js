@@ -77,8 +77,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       'pre-commit': 'lint-staged'
     }
     pkg['lint-staged'] = {
-      '*.js': ['vue-cli-service lint', 'git add'],
-      '*.vue': ['vue-cli-service lint', 'git add']
+      '*.{js,vue}': ['vue-cli-service lint', 'git add']
     }
   }
 
