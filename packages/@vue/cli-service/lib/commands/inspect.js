@@ -30,7 +30,7 @@ module.exports = (api, options) => {
         res = config.module.rules.map(r => {
           const name = r.__ruleNames ? r.__ruleNames[0] : 'Nameless Rule*'
 
-          hasUnnamedRule = !hasUnnamedRule && !r.__ruleNames
+          hasUnnamedRule = !!hasUnnamedRule || !r.__ruleNames
 
           return name
         })
