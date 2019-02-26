@@ -21,7 +21,7 @@ Note that directly running `jest` will fail because the Babel preset requires hi
 
 If you want to debug your tests via the Node inspector, you can run the following:
 
-``` sh
+```sh
 # macOS or linux
 node --inspect-brk ./node_modules/.bin/vue-cli-service test:unit
 
@@ -35,7 +35,7 @@ Jest can be configured via `jest.config.js` in your project root, or the `jest` 
 
 ## Installing in an Already Created Project
 
-``` sh
+```sh
 vue add @vue/unit-jest
 ```
 
@@ -45,25 +45,26 @@ By default, jest doesn't transform anything from `/nodee_modules`.
 
 Since jest runs in node, we also don't have to transpile anything that uses modern ECMAScript features as Node >=8 already supports these features, so it's a sensible default. cli-plugin-jest also doesn't respect the `transpileDependencies` option in `vue.config.js` for the same reason.
 
-However, we have two cases where we do need to transpile code from `/node_modules` in jest:
+However, we have (at least) three cases where we do need to transpile code from `/node_modules` in jest:
 
 1. Usage of ES6 `import`/`export` statements, which have to be compiled to commonjs `module.exports`
 2. Single File Components (`.vue` files) which have to be run through `vue-jest`
+3. Typescript code
 
 To do this, we need to add an exception to the `tranformIgnorePatterns` option of jest. This is its default value:
 
-```js
-tranformIgnorePatterns: ["/node_modules/"]
+```javascript
+transformIgnorePatterns: ['/node_modules/']
 ```
 
 We have to add exceptions to this pattern with a RegExp negative lookahead:
 
-```js
-tranformIgnorePatterns: ["/node_modules/(?!name-of-lib-o-transform)"]
+```javascript
+transformIgnorePatterns: ['/node_modules/(?!name-of-lib-o-transform)']
 ```
 
 To exclude multiple libraries:
 
-```js
-tranformIgnorePatterns: ["/node_modules/(?!lib-to-transform|other-lib)"]
+```javascript
+transformIgnorePatterns: ['/node_modules/(?!lib-to-transform|other-lib)']
 ```

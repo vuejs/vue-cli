@@ -22,7 +22,7 @@ See the [Browser Compatibility](../guide/browser-compatibility.md#browserslist) 
 
 The file should export an object containing options:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   // options...
@@ -50,15 +50,14 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   - You are using HTML5 `history.pushState` routing;
 
   - You are using the `pages` option to build a multi-paged app.
-  :::
+    :::
 
   This value is also respected during development. If you want your dev server to be served at root instead, you can use a conditional value:
 
-  ``` js
+  ```js
   module.exports = {
-    publicPath: process.env.NODE_ENV === 'production'
-      ? '/production-sub-path/'
-      : '/'
+    publicPath:
+      process.env.NODE_ENV === 'production' ? '/production-sub-path/' : '/',
   }
   ```
 
@@ -108,7 +107,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   - An object that specifies its `entry`, `template`, `filename`, `title` and `chunks` (all optional except `entry`). Any other properties added beside those will also be passed directly to `html-webpack-plugin`, allowing user to customize said plugin;
   - Or a string specifying its `entry`.
 
-  ``` js
+  ```js
   module.exports = {
     pages: {
       index: {
@@ -123,14 +122,14 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
         title: 'Index Page',
         // chunks to include on this page, by default includes
         // extracted common chunks and vendor chunks.
-        chunks: ['chunk-vendors', 'chunk-common', 'index']
+        chunks: ['chunk-vendors', 'chunk-common', 'index'],
       },
       // when using the entry-only string format,
       // template is inferred to be `public/subpage.html`
       // and falls back to `public/index.html` if not found.
       // Output filename is inferred to be `subpage.html`.
-      subpage: 'src/subpage/main.js'
-    }
+      subpage: 'src/subpage/main.js',
+    },
   }
   ```
 
@@ -151,24 +150,24 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   Alternatively, you can configure the overlay to display both warnings and errors:
 
-  ``` js
+  ```js
   // vue.config.js
   module.exports = {
     devServer: {
       overlay: {
         warnings: true,
-        errors: true
-      }
-    }
+        errors: true,
+      },
+    },
   }
   ```
 
   When `lintOnSave` is a truthy value, `eslint-loader` will be applied in both development and production. If you want to disable `eslint-loader` during production build, you can use the following config:
 
-  ``` js
+  ```js
   // vue.config.js
   module.exports = {
-    lintOnSave: process.env.NODE_ENV !== 'production'
+    lintOnSave: process.env.NODE_ENV !== 'production',
   }
   ```
 
@@ -187,11 +186,11 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 - Default: `[]`
 
   By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly transpile a dependency with Babel, you can list it in this option.
-  
-::: warning Jest config
-This option is not resprected by the [cli-unit-jest plugin](#jest), because in jest, we don't have to transpile stuff from `/node_modules` unless it uses non-standard features (node 8> supports the latest ECMAScript features already).
 
-However, jest sometimes has to transpile content from node_modules if the code that's consumed uses ES6 `import`/`export` syntax. In that case, use the `tranformIgnorePatterns` option in `jest.config.js`. 
+::: warning Jest config
+This option is not respected by the [cli-unit-jest plugin](#jest), because in jest, we don't have to transpile code from `/node_modules` unless it uses non-standard features - Node >8.11 supports the latest ECMAScript features already.
+
+However, jest sometimes has to transform content from node_modules if that code uses ES6 `import`/`export` syntax. In that case, use the `tranformIgnorePatterns` option in `jest.config.js`.
 
 See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-unit-jest/README.md) for more information.
 :::
@@ -279,7 +278,7 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   Pass options to CSS-related loaders. For example:
 
-  ``` js
+  ```js
   module.exports = {
     css: {
       loaderOptions: {
@@ -288,9 +287,9 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
         },
         postcss: {
           // options here will be passed to postcss-loader
-        }
-      }
-    }
+        },
+      },
+    },
   }
   ```
 
@@ -326,11 +325,11 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   `devServer.proxy` can be a string pointing to the development API server:
 
-  ``` js
+  ```js
   module.exports = {
     devServer: {
-      proxy: 'http://localhost:4000'
-    }
+      proxy: 'http://localhost:4000',
+    },
   }
   ```
 
@@ -338,20 +337,20 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
 
-  ``` js
+  ```js
   module.exports = {
     devServer: {
       proxy: {
         '^/api': {
           target: '<url>',
           ws: true,
-          changeOrigin: true
+          changeOrigin: true,
         },
         '^/foo': {
-          target: '<other_url>'
-        }
-      }
-    }
+          target: '<other_url>',
+        },
+      },
+    },
   }
   ```
 
@@ -374,14 +373,14 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   This is an object that doesn't go through any schema validation, so it can be used to pass arbitrary options to 3rd party plugins. For example:
 
-  ``` js
+  ```js
   module.exports = {
     pluginOptions: {
       foo: {
         // plugins can access these options as
         // `options.pluginOptions.foo`.
-      }
-    }
+      },
+    },
   }
   ```
 
