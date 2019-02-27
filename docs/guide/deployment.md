@@ -216,44 +216,38 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 ```bash
 npm install -g now
 ```
+or
+```bash
+yarn global add now
+```
 
 2. Add a `now.json` file to your project root:
 
     ```json
-    {
-      "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
-      "alias": "vue-example",
-      "files": [
-        "dist"
-      ]
-    }
+{
+    "version": 2,
+    "name": "vue",
+    "builds": [
+        { "src": "package.json", "use": "@now/static-build" }
+    ],
+    "routes": [
+      {"src": "^/js/(.*)", "dest": "/js/$1"},
+      {"src": "^/css/(.*)", "dest": "/css/$1"},
+      {"src": "^/img/(.*)", "dest": "/img/$1"},
+      {"src": ".*", "dest": "/index.html"}
+    ]
+}
     ```
 
     You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
 
-3. Adding a deployment script in `package.json`:
+3. Adding a build script in `package.json`:
 
     ```json
-    "deploy": "npm run build && now && now alias"
+    "now-build": "npm run build"
     ```
 
-    If you want to deploy publicly by default, you can change the deployment script to the following one:
-
-    ```json
-    "deploy": "npm run build && now --public && now alias"
-    ```
-
-    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+Now, just run `now` or `now --public` to deploy your app.
 
 ### Stdlib
 
