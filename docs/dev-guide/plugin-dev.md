@@ -245,7 +245,7 @@ api.onCreateComplete(() => {
   const renderIndex = lines.findIndex(line => line.match(/render/))
   lines[renderIndex] += `\n  router,`
 
-  fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' })
+  fs.writeFileSync(api.entryFile, lines.join('\n'), { encoding: 'utf-8' })
 })
 ```
 
