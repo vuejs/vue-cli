@@ -7,6 +7,7 @@ const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
+const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
 const { warn, error, isPlugin, loadModule } = require('@vue/cli-shared-utils')
 
@@ -95,8 +96,9 @@ module.exports = class Service {
 
     const load = path => {
       try {
-        const res = dotenv.config({ path, debug: process.env.DEBUG })
-        logger(path, res)
+        const env = dotenv.config({ path, debug: process.env.DEBUG })
+        dotenvExpand(env)
+        logger(path, env)
       } catch (err) {
         // only ignore error if file is not found
         if (err.toString().indexOf('ENOENT') < 0) {
