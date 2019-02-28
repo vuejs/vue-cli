@@ -52,6 +52,8 @@ module.exports = (context, options = {}) => {
     forceAllTransforms,
     decoratorsBeforeExport,
     decoratorsLegacy,
+    // entry file list
+    entryFiles,
 
     // Undocumented option of @babel/plugin-transform-runtime.
     // When enabled, an absolute path is used when importing a runtime helper atfer tranforming.
@@ -103,7 +105,7 @@ module.exports = (context, options = {}) => {
       ignoreBrowserslistConfig,
       configPath
     })
-    plugins.push([require('./polyfillsPlugin'), { polyfills }])
+    plugins.push([require('./polyfillsPlugin'), { polyfills, entryFiles }])
   } else {
     polyfills = []
   }
