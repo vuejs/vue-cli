@@ -10,7 +10,7 @@
     "pretest": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/*",
     "check-links": "node scripts/checkLinks.js",
-    "clean": "rimraf packages/test/*",
+    "clean": "rimraf packages/test/* packages/**/temp/*",
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js",
     "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
