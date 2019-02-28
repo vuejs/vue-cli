@@ -38,7 +38,7 @@
     "@types/chai": "^4.1.0",
     "@types/jest": "^23.1.4",
     "@types/mocha": "^5.2.6",
-    "typescript": "~3.2.2",
+    "typescript": "^3.2.1",
     "vue-class-component": "^6.2.0",
     "vue-property-decorator": "^7.0.0"
   }
