@@ -46,7 +46,7 @@ FOO=bar
 VUE_APP_SECRET=secret
 ```
 
-For more detailed env parsing rules, please refer to [the documentation of `dotenv`](https://github.com/motdotla/dotenv#rules).
+For more detailed env parsing rules, please refer to [the documentation of `dotenv`](https://github.com/motdotla/dotenv#rules). We also use [dotenv-expand](https://github.com/motdotla/dotenv-expand) for variable expansion (available in Vue CLI 3.5+).
 
 Loaded variables will become available to all `vue-cli-service` commands, plugins and dependencies.
 
