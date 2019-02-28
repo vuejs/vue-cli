@@ -1,13 +1,17 @@
 // add polyfill imports to the first file encountered.
-module.exports = ({ types }) => {
+module.exports = ({ types }, { entryFiles = [] }) => {
   let entryFile
   return {
     name: 'vue-cli-inject-polyfills',
     visitor: {
       Program (path, state) {
-        if (!entryFile) {
-          entryFile = state.filename
-        } else if (state.filename !== entryFile) {
+        if (entryFiles.length === 0) {
+          if (!entryFile) {
+            entryFile = state.filename
+          } else if (state.filename !== entryFile) {
+            return
+          }
+        } else if (!entryFiles.includes(state.filename)) {
           return
         }
 

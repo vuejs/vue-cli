@@ -97,3 +97,9 @@ Set to `false` to disable JSX support.
 - Default: `false`.
 
 Setting this to `true` will generate code that is more performant but less spec-compliant.
+
+### entryFiles
+
+- Default: `[]`
+
+Multi page repo use entryFiles to ensure inject polyfills to all entry file.
