@@ -25,7 +25,7 @@ module.exports = (api, options) => {
 
     const jsRule = webpackConfig.module
       .rule('js')
-        .test(/\.jsx?$/)
+        .test(/\.m?jsx?$/)
         .exclude
           .add(filepath => {
             // always transpile js in vue files
