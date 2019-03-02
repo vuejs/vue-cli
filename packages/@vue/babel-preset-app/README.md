@@ -102,4 +102,4 @@ Setting this to `true` will generate code that is more performant but less spec-
 
 - Default: `[]`
 
-Multi page repo use entryFiles to ensure inject polyfills to all entry file.
+Multi page repo use `entryFiles` to ensure inject polyfills to all entry file.
