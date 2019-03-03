@@ -26,15 +26,21 @@ module.exports = function lint (args = {}, api, silent) {
 
   const patchWriteFile = () => {
     fs.writeFileSync = (file, content, options) => {
-      if (isVueFile(file)) {
-        const parts = vueFileCache.get(path.normalize(file))
-        if (parts) {
-          parts.content = content
-          const { before, after } = parts
-          content = `${before}\n${content.trim()}\n${after}`
-        }
+      const parts = vueFileCache.get(path.normalize(file))
+      if (!parts) {
+        return writeFileSync(file, content, options)
       }
-      return writeFileSync(file, content, options)
+
+      // update cached content
+      parts.content = content
+
+      content = content.slice(parts.paddingOffset)
+      // remove one leading and trailing linebreak, if any
+      content = content.replace(/^\r?\n/, '').replace(/\r?\n$/, '')
+
+      const { before, after } = parts
+
+      return writeFileSync(file, `${before}\n${content}\n${after}`, options)
     }
   }
 
@@ -42,22 +48,44 @@ module.exports = function lint (args = {}, api, silent) {
     fs.writeFileSync = writeFileSync
   }
 
+  const padContent = (parts) => {
+    const lineCount = parts.before.split(/\r?\n/g).length
+    const padding = Array(lineCount).join('//\n')
+
+    parts.content = padding + parts.content
+    parts.paddingOffset = padding.length
+  }
+
   const parseTSFromVueFile = file => {
+    file = path.normalize(file)
     // If the file has already been cached, don't read the file again. Use the cache instead.
     if (vueFileCache.has(file)) {
       return vueFileCache.get(file)
     }
 
-    const content = fs.readFileSync(file, 'utf-8')
-    const { script } = vueCompiler.parseComponent(content, { pad: 'line' })
-    if (script && /^tsx?$/.test(script.lang)) {
-      vueFileCache.set(file, {
-        before: content.slice(0, script.start),
-        after: content.slice(script.end),
-        content: script.content
-      })
-      return script
+    const fileContent = fs.readFileSync(file, 'utf-8')
+    const { start, end, content, lang } = vueCompiler.parseComponent(fileContent).script || {}
+    if (!/^tsx?$/.test(lang)) {
+      return { content: '', lang: 'js' }
     }
+
+    const parts = {
+      before: fileContent.slice(0, start),
+      after: fileContent.slice(end),
+      content,
+      lang,
+      paddingOffset: 0
+    }
+    vueFileCache.set(file, parts)
+
+    // FIXME pad script content
+    // this should be done by vueCompiler.parseComponent with options { pad: 'line' },
+    // but it does this only if no lang is set, so it does not work for lang="ts".
+    // https://github.com/vuejs/vue/blob/dev/src/sfc/parser.js#L119
+    // we do it here until upstream dep supports this correctly
+    padContent(parts)
+
+    return parts
   }
 
   const program = tslint.Linter.createProgram(api.resolve('tsconfig.json'))
@@ -68,7 +96,7 @@ module.exports = function lint (args = {}, api, silent) {
     const getSourceFile = program.getSourceFile
     program.getSourceFile = function (file, languageVersion, onError) {
       if (isVueFile(file)) {
-        const { content, lang = 'js' } = parseTSFromVueFile(file) || { content: '', lang: 'js' }
+        const { content, lang } = parseTSFromVueFile(file)
         const contentLang = ts.ScriptKind[lang.toUpperCase()]
         return ts.createSourceFile(file, content, languageVersion, true, contentLang)
       } else {
@@ -93,25 +121,15 @@ module.exports = function lint (args = {}, api, silent) {
     .find(file => fs.existsSync(file))
 
   const config = tslint.Configuration.findConfiguration(tslintConfigPath).results
-  // create a patched config that disables the blank lines rule,
-  // so that we get correct line numbers in error reports for *.vue files.
-  const vueConfig = Object.assign(config)
-  const rules = vueConfig.rules = new Map(vueConfig.rules)
-  const rule = rules.get('no-consecutive-blank-lines')
-  rules.set('no-consecutive-blank-lines', Object.assign({}, rule, {
-    ruleSeverity: 'off'
-  }))
 
   const lint = file => {
     const filePath = api.resolve(file)
-    const isVue = isVueFile(file)
     patchWriteFile()
     linter.lint(
       // append .ts so that tslint apply TS rules
       filePath,
       '',
-      // use Vue config to ignore blank lines
-      isVue ? vueConfig : config
+      config
     )
     restoreWriteFile()
   }
