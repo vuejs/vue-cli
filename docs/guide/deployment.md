@@ -221,25 +221,22 @@ npm install -g now
 
     ```json
     {
+      "version": 2,
       "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
       "alias": "vue-example",
-      "files": [
-        "dist"
+      "builds": [
+        {"src": "package.json", "use": "@now/static-build"}
+      ],
+      "routes": [
+        {"src": "^/js/(.*)", "dest": "/js/$1"},
+        {"src": "^/css/(.*)", "dest": "/css/$1"},
+        {"src": "^/img/(.*)", "dest": "/img/$1"},
+        {"src": ".*", "dest": "/index.html"}
       ]
     }
     ```
 
-    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+    You can further customize the serving behavior by consulting [Now's documentation](https://zeit.co/docs/v2/deployments/configuration/).
 
 3. Adding a deployment script in `package.json`:
 
