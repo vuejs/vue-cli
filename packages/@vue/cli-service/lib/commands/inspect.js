@@ -28,9 +28,9 @@ module.exports = (api, options) => {
         res = config.plugins.find(p => p.__pluginName === args.plugin)
       } else if (args.rules) {
         res = config.module.rules.map(r => {
-          const name = r.__ruleNames ? r.__ruleNames[0] : 'Nameless Rule*'
+          const name = r.__ruleNames ? r.__ruleNames[0] : 'Nameless Rule (*)'
 
-          hasUnnamedRule = !hasUnnamedRule && !r.__ruleNames
+          hasUnnamedRule = hasUnnamedRule || !r.__ruleNames
 
           return name
         })
@@ -52,17 +52,17 @@ module.exports = (api, options) => {
 
       // Log explanation for Nameless Rules
       if (hasUnnamedRule) {
-        console.log('--------')
-        console.log(`* => Rules that are "nameless" were added with ${chalk.green(
+        console.log(`--- ${chalk.green('Footnotes')} ---`)
+        console.log(`*: ${chalk.green(
+          'Nameless Rules'
+        )} were added through the ${chalk.green(
           'configureWebpack()'
-        )} (possibly by a plugin).
-    Run ${chalk.green(
+        )} API (possibly by a plugin) instead of ${chalk.green(
+          'chainWebpack()'
+        )} (recommended).
+    You can run ${chalk.green(
     'vue-cli-service inspect'
-  )} without any arguments to inspect the full config.
-      
-    We recommend using ${chalk.green(
-    'chainWebpack()'
-  )} instead whenever possible`)
+  )} without any arguments to inspect the full config and read these rules' config.`)
       }
     }
   )
