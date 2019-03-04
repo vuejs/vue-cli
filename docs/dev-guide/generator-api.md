@@ -97,6 +97,14 @@ Add a message to be printed when the generator exits (after any other standard m
 - **Usage**:
 Convenience method for generating a JS config file from JSON
 
+## makeJSOnlyValue
+
+- **Arguments**
+  - `{any} str` - JS expression as a string
+
+- **Usage**:
+Turns a string expression into executable JS for .js config files
+
 ## injectImports
 
 - **Arguments**

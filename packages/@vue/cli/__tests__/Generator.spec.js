@@ -656,3 +656,23 @@ test('extract config files', async () => {
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
   expect(fs.readFileSync('/.browserslistrc', 'utf-8')).toMatch('> 1%\nnot <= IE8')
 })
+
+test('generate a JS-Only value from a string', async () => {
+  const jsAsString = 'true ? "alice" : "bob"'
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.extendPackage({
+          testScript: api.makeJSOnlyValue(jsAsString)
+        })
+      }
+    }
+  ] })
+
+  await generator.generate({})
+
+  expect(generator.pkg).toHaveProperty('testScript')
+  expect(typeof generator.pkg.testScript).toBe('function')
+})
