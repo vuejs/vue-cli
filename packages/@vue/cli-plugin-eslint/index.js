@@ -35,8 +35,8 @@ module.exports = (api, options) => {
       )
 
       const { lintOnSave } = options
-      const allWarnings = lintOnSave === true || lintOnSave === 'warnings'
-      const allErrors = lintOnSave === 'errors'
+      const allWarnings = lintOnSave === true || lintOnSave === 'warning'
+      const allErrors = lintOnSave === 'error'
 
       webpackConfig.module
         .rule('eslint')

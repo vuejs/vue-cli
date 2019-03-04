@@ -47,7 +47,7 @@ const schema = createSchema(joi =>
     configureWebpack: joi.alternatives().try(joi.object(), joi.func()),
 
     // known runtime options for built-in plugins
-    lintOnSave: joi.any().valid([true, false, 'error', 'normal']),
+    lintOnSave: joi.any().valid([true, false, 'error', 'warning', 'default']),
     pwa: joi.object(),
 
     // 3rd party plugin options
