@@ -54,7 +54,6 @@ module.exports = (context, options = {}) => {
     decoratorsBeforeExport,
     decoratorsLegacy,
     // entry file list
-    // TODO:
     entryFiles = defaultEntryFiles,
 
     // Undocumented option of @babel/plugin-transform-runtime.
