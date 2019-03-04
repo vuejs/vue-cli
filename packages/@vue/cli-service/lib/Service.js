@@ -270,7 +270,7 @@ module.exports = class Service {
       )
     }
 
-    const entryFiles = Object.values(config.entry).reduce((allEntries, curr) => {
+    const entryFiles = Object.values(config.entry || []).reduce((allEntries, curr) => {
       return allEntries.concat(curr)
     }, [])
     process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
