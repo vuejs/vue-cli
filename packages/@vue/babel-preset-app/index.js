@@ -30,6 +30,7 @@ function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath
 module.exports = (context, options = {}) => {
   const presets = []
   const plugins = []
+  const defaultEntryFiles = JSON.parse(process.env.VUE_CLI_ENTRY_FILES || '[]')
 
   // JSX
   if (options.jsx !== false) {
@@ -53,7 +54,8 @@ module.exports = (context, options = {}) => {
     decoratorsBeforeExport,
     decoratorsLegacy,
     // entry file list
-    entryFiles,
+    // TODO:
+    entryFiles = defaultEntryFiles,
 
     // Undocumented option of @babel/plugin-transform-runtime.
     // When enabled, an absolute path is used when importing a runtime helper atfer tranforming.
