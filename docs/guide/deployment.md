@@ -223,6 +223,7 @@ npm install -g now
     {
       "version": 2,
       "name": "my-vue-project",
+      "alias": "my-vue-project",
       "builds": [{ "src": "package.json", "use": "@now/static-build" }],
       "routes": [
         { "src": "^/js/(.*)", "dest": "/js/$1" },
