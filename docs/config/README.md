@@ -137,18 +137,18 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   When building in multi-page mode, the webpack config will contain different plugins (there will be multiple instances of `html-webpack-plugin` and `preload-webpack-plugin`). Make sure to run `vue inspect` if you are trying to modify the options for those plugins.
   :::
 
-### ^Save
+### lintOnSave
 
-- Type: `boolean | 'default' | 'error'`
+- Type: `boolean | 'warning' | 'default' | 'error'`
 - Default: `true`
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
 
-  When set to `true`, `eslint-loader` will emit lint errors as warnings. By default, warnings are only logged to the terminal and does not fail the compilation, so this is a good default for development.
+  When set to `true` or `'warning'`, `eslint-loader` will emit lint errors as warnings. By default, warnings are only logged to the terminal and does not fail the compilation, so this is a good default for development.
 
   To make lint errors show up in the browser overlay, you can use `lintOnSave: 'default'`. This will force `eslint-loader` to actually emit errors. this also means lint errors will now cause the compilation to fail.
 
-  Setting it to `'errors'` will force eslint-loader to emit warnings as errors as well.
+  Setting it to `'errors'` will force eslint-loader to emit warnings as errors as well, which means warnings will also show up in the overlay.
 
   Alternatively, you can configure the overlay to display both warnings and errors:
 
