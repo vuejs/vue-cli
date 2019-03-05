@@ -221,30 +221,25 @@ npm install -g now
 
     ```json
     {
-      "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
-      "alias": "vue-example",
-      "files": [
-        "dist"
+      "version": 2,
+      "name": "my-vue-project",
+      "builds": [{ "src": "package.json", "use": "@now/static-build" }],
+      "routes": [
+        { "src": "^/js/(.*)", "dest": "/js/$1" },
+        { "src": "^/css/(.*)", "dest": "/css/$1" },
+        { "src": "^/img/(.*)", "dest": "/img/$1" },
+        { "src": ".*", "dest": "/index.html" }
       ]
     }
     ```
 
-    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/v2/deployments/official-builders/static-build-now-static-build/).
 
-3. Adding a deployment script in `package.json`:
+3. Adding a now-build and a deploy script in `package.json`:
 
     ```json
-    "deploy": "npm run build && now && now alias"
+    "now-build": "vue-cli-service build",
+    "deploy": "now --public && now alias"
     ```
 
     If you want to deploy publicly by default, you can change the deployment script to the following one:
@@ -254,6 +249,8 @@ npm install -g now
     ```
 
     This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+
+    * Don't forget to exclude the `node_modules` folder from being uploaded to Now to enable faster deployment. To do that, add a `.nowignore` file to the root of the project directory and add node_modules to it.
 
 ### Stdlib
 
