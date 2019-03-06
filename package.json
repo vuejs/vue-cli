@@ -70,7 +70,7 @@
     "typescript": "^3.3.3333",
     "vuepress": "^0.14.9",
     "vuepress-theme-vue": "^1.1.0",
-    "webpack": "~4.28",
+    "webpack": ">=4 < 4.29",
     "yorkie": "^2.0.0"
   },
   "resolutions": {
