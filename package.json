@@ -55,6 +55,7 @@
     "eslint-plugin-vue-libs": "^3.0.0",
     "execa": "^1.0.0",
     "globby": "^9.0.0",
+    "graphql": "^14.0.2",
     "http-server": "^0.11.1",
     "inquirer": "^6.0.0",
     "jest": "^23.1.0",
@@ -66,8 +67,10 @@
     "request-promise-native": "^1.0.7",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
+    "typescript": "^3.3.3333",
     "vuepress": "^0.14.9",
     "vuepress-theme-vue": "^1.1.0",
+    "webpack": "~4.28",
     "yorkie": "^2.0.0"
   },
   "resolutions": {
