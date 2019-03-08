@@ -50,13 +50,16 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   - You are using HTML5 `history.pushState` routing;
 
   - You are using the `pages` option to build a multi-paged app.
-    :::
+  ::
 
   This value is also respected during development. If you want your dev server to be served at root instead, you can use a conditional value:
 
   ``` js
   module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? 'production-sub-path/' : '/',
+    publicPath: process.env.NODE_ENV === 'production'
+
+      ? 'production-sub-path/' 
+      : '/',
   }
   ```
 
