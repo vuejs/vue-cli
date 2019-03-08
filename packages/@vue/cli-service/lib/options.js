@@ -15,9 +15,14 @@ const schema = createSchema(joi => joi.object({
   pages: joi.object().pattern(
     /\w+/,
     joi.alternatives().try([
-      joi.string(),
+      joi.string().required(),
+      joi.array().items(joi.string().required()),
+
       joi.object().keys({
-        entry: joi.string().required()
+        entry: joi.alternatives().try([
+          joi.string().required(),
+          joi.array().items(joi.string().required())
+        ]).required()
       }).unknown(true)
     ])
   ),
