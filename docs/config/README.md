@@ -22,7 +22,7 @@ See the [Browser Compatibility](../guide/browser-compatibility.md#browserslist) 
 
 The file should export an object containing options:
 
-```js
+``` js
 // vue.config.js
 module.exports = {
   // options...
@@ -50,14 +50,15 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   - You are using HTML5 `history.pushState` routing;
 
   - You are using the `pages` option to build a multi-paged app.
-    :::
+  :::
 
   This value is also respected during development. If you want your dev server to be served at root instead, you can use a conditional value:
 
-  ```js
+  ``` js
   module.exports = {
-    publicPath:
-      process.env.NODE_ENV === 'production' ? '/production-sub-path/' : '/',
+    publicPath: process.env.NODE_ENV === 'production' 
+      ? '/production-sub-path/'
+      : '/'
   }
   ```
 
@@ -107,7 +108,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   - An object that specifies its `entry`, `template`, `filename`, `title` and `chunks` (all optional except `entry`). Any other properties added beside those will also be passed directly to `html-webpack-plugin`, allowing user to customize said plugin;
   - Or a string specifying its `entry`.
 
-  ```js
+  ``` js
   module.exports = {
     pages: {
       index: {
@@ -122,14 +123,14 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
         title: 'Index Page',
         // chunks to include on this page, by default includes
         // extracted common chunks and vendor chunks.
-        chunks: ['chunk-vendors', 'chunk-common', 'index'],
+        chunks: ['chunk-vendors', 'chunk-common', 'index']
       },
       // when using the entry-only string format,
       // template is inferred to be `public/subpage.html`
       // and falls back to `public/index.html` if not found.
       // Output filename is inferred to be `subpage.html`.
-      subpage: 'src/subpage/main.js',
-    },
+      subpage: 'src/subpage/main.js'
+    }
   }
   ```
 
@@ -152,24 +153,24 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   Alternatively, you can configure the overlay to display both warnings and errors:
 
-  ```js
+  ``` js
   // vue.config.js
   module.exports = {
     devServer: {
       overlay: {
         warnings: true,
-        errors: true,
-      },
-    },
+        errors: true
+      }
+    }
   }
   ```
 
   When `lintOnSave` is a truthy value, `eslint-loader` will be applied in both development and production. If you want to disable `eslint-loader` during production build, you can use the following config:
 
-  ```js
+  ``` js
   // vue.config.js
   module.exports = {
-    lintOnSave: process.env.NODE_ENV !== 'production',
+    lintOnSave: process.env.NODE_ENV !== 'production'
   }
   ```
 
@@ -272,7 +273,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   Pass options to CSS-related loaders. For example:
 
-  ```js
+  ``` js
   module.exports = {
     css: {
       loaderOptions: {
@@ -281,9 +282,9 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
         },
         postcss: {
           // options here will be passed to postcss-loader
-        },
-      },
-    },
+        }
+      }
+    }
   }
   ```
 
@@ -319,11 +320,11 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   `devServer.proxy` can be a string pointing to the development API server:
 
-  ```js
+  ``` js
   module.exports = {
     devServer: {
-      proxy: 'http://localhost:4000',
-    },
+      proxy: 'http://localhost:4000'
+    }
   }
   ```
 
@@ -331,20 +332,20 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
 
-  ```js
+  ``` js
   module.exports = {
     devServer: {
       proxy: {
         '^/api': {
           target: '<url>',
           ws: true,
-          changeOrigin: true,
+          changeOrigin: true
         },
         '^/foo': {
-          target: '<other_url>',
-        },
-      },
-    },
+          target: '<other_url>'
+        }
+      }
+    }
   }
   ```
 
@@ -367,14 +368,14 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   This is an object that doesn't go through any schema validation, so it can be used to pass arbitrary options to 3rd party plugins. For example:
 
-  ```js
+  ``` js
   module.exports = {
     pluginOptions: {
       foo: {
         // plugins can access these options as
         // `options.pluginOptions.foo`.
-      },
-    },
+      }
+    }
   }
   ```
 
