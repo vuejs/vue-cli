@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-eslint",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "eslint plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.4.1",
+    "@vue/cli-shared-utils": "^3.5.0",
     "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.2",
     "globby": "^9.0.0",
