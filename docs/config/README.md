@@ -57,7 +57,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   ``` js
   module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
-      ? 'production-sub-path/'
+      ? '/production-sub-path/'
       : '/'
   }
   ```
