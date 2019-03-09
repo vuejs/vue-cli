@@ -18,7 +18,7 @@ This is the default Babel preset used in all Vue CLI projects. **Note: this pres
 
 ### Stage 3 or Below
 
-Only the following stage 3 or below features are supported (object reset spread is supported as part of `preset-env`):
+Only the following stage 3 or below features are supported (object rest spread is supported as part of `preset-env`):
 
 - [Dynamic Import Syntax](https://github.com/tc39/proposal-dynamic-import)
 - [Proposal Class Properties](https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties.html)
@@ -97,3 +97,9 @@ Set to `false` to disable JSX support.
 - Default: `false`.
 
 Setting this to `true` will generate code that is more performant but less spec-compliant.
+
+### entryFiles
+
+- Default: `[]`
+
+Multi page repo use `entryFiles` to ensure inject polyfills to all entry file.

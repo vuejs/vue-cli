@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-test-utils",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "test utilities for vue-cli packages",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1",
     "json-server": "^0.14.0",
-    "puppeteer": "^1.0.0",
+    "puppeteer": "^1.11.0",
     "strip-ansi": "^5.0.0"
   }
 }

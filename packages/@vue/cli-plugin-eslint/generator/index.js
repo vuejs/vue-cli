@@ -71,14 +71,13 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^8.1.0'
+      'lint-staged': '^8.1.4'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
     pkg['lint-staged'] = {
-      '*.js': ['vue-cli-service lint', 'git add'],
-      '*.vue': ['vue-cli-service lint', 'git add']
+      '*.{js,vue}': ['vue-cli-service lint', 'git add']
     }
   }
 

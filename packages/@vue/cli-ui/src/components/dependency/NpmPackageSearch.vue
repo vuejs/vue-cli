@@ -21,6 +21,9 @@
             'name',
             'description'
           ],
+          analyticsTags: [
+            'vue-cli-ui'
+          ],
           filters
         }"
       >

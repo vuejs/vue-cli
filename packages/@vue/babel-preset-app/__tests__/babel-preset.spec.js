@@ -1,9 +1,15 @@
+const path = require('path')
 const babel = require('@babel/core')
 const preset = require('../index')
 const defaultOptions = {
   babelrc: false,
-  presets: [preset]
+  presets: [preset],
+  filename: 'test-entry-file.js'
 }
+
+beforeEach(() => {
+  process.env.VUE_CLI_ENTRY_FILES = JSON.stringify([path.join(process.cwd(), 'test-entry-file.js')])
+})
 
 test('polyfill detection', () => {
   let { code } = babel.transformSync(`
@@ -12,9 +18,10 @@ test('polyfill detection', () => {
     babelrc: false,
     presets: [[preset, {
       targets: { node: 'current' }
-    }]]
+    }]],
+    filename: 'test-entry-file.js'
   })
-  // default i  ncludes
+  // default includes
   expect(code).not.toMatch(`import "core-js/modules/es6.promise"`)
   // usage-based detection
   expect(code).not.toMatch(`import "core-js/modules/es6.map"`)
@@ -25,7 +32,8 @@ test('polyfill detection', () => {
     babelrc: false,
     presets: [[preset, {
       targets: { ie: 9 }
-    }]]
+    }]],
+    filename: 'test-entry-file.js'
   }))
   // default includes
   expect(code).toMatch(`import "core-js/modules/es6.promise"`)
@@ -44,7 +52,8 @@ test('modern mode always skips polyfills', () => {
     presets: [[preset, {
       targets: { ie: 9 },
       useBuiltIns: 'usage'
-    }]]
+    }]],
+    filename: 'test-entry-file.js'
   })
   // default includes
   expect(code).not.toMatch(`import "core-js/modules/es6.promise"`)
@@ -58,7 +67,8 @@ test('modern mode always skips polyfills', () => {
     presets: [[preset, {
       targets: { ie: 9 },
       useBuiltIns: 'entry'
-    }]]
+    }]],
+    filename: 'test-entry-file.js'
   }))
   // default includes
   expect(code).not.toMatch(`import "core-js/modules/es6.promise"`)
@@ -133,7 +143,8 @@ test('disable absoluteRuntime', () => {
     babelrc: false,
     presets: [[preset, {
       absoluteRuntime: false
-    }]]
+    }]],
+    filename: 'test-entry-file.js'
   })
 
   expect(code).toMatch('import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray"')

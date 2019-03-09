@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -24,15 +24,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.4.1",
-    "@vue/cli-ui": "^3.4.1",
-    "@vue/cli-ui-addon-webpack": "^3.4.1",
-    "@vue/cli-ui-addon-widgets": "^3.4.1",
+    "@vue/cli-shared-utils": "^3.5.0",
+    "@vue/cli-ui": "^3.5.0",
+    "@vue/cli-ui-addon-webpack": "^3.5.0",
+    "@vue/cli-ui-addon-widgets": "^3.5.0",
     "chalk": "^2.4.1",
     "cmd-shim": "^2.0.2",
     "commander": "^2.16.0",
     "debug": "^4.1.0",
-    "deepmerge": "^3.0.0",
+    "deepmerge": "^3.2.0",
     "download-git-repo": "^1.0.2",
     "ejs": "^2.6.1",
     "envinfo": "^6.0.1",
@@ -46,9 +46,9 @@
     "js-yaml": "^3.12.0",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.0",
-    "recast": "^0.17.2",
+    "recast": "^0.17.3",
     "request": "^2.87.0",
-    "request-promise-native": "^1.0.5",
+    "request-promise-native": "^1.0.7",
     "resolve": "^1.8.1",
     "semver": "^5.5.0",
     "shortid": "^2.2.11",

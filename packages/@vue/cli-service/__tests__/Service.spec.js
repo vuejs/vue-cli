@@ -64,7 +64,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.4.0',
+      '@vue/cli-plugin-babel': '^3.5.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -142,6 +142,22 @@ test('keep publicPath when empty', () => {
 test('load project options from vue.config.js', () => {
   process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
   fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
+  mockPkg({
+    vue: {
+      lintOnSave: true
+    }
+  })
+  const service = createMockService()
+  fs.unlinkSync('/vue.config.js')
+  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
+  // vue.config.js has higher priority
+  expect(service.projectOptions.lintOnSave).toBe(false)
+})
+
+test('load project options from vue.config.js', () => {
+  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
+  fs.writeFileSync('/vue.config.js', '')  // only to ensure fs.existsSync returns true
+  jest.mock('/vue.config.js', () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
     vue: {
       lintOnSave: true

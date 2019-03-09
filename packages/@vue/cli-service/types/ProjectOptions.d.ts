@@ -56,3 +56,5 @@ export interface ProjectOptions {
 
   pluginOptions?: object;
 }
+
+export type ConfigFunction = () => ProjectOptions
