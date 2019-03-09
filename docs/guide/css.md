@@ -136,7 +136,7 @@ module.exports = {
 }
 ```
 
-Loaders can be configured via `loaderOptions` include:
+Loaders which can be configured via `loaderOptions` include:
 
 - [css-loader](https://github.com/webpack-contrib/css-loader)
 - [postcss-loader](https://github.com/postcss/postcss-loader)
