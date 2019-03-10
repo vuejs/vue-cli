@@ -5,6 +5,7 @@
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
+    "skipLibCheck": true,
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
