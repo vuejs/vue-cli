@@ -261,7 +261,41 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+1. Do the general Heroku setup, by following the instructions on [heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs). In short:
+- Create heroku account https://signup.heroku.com/signup/dc
+- Install the heroku CLI; login; create the heroku project
+```bash
+sudo snap install heroku --classic
+heroku login
+heroku create your-awesome-vue-app-name
+```
+2. Ensure the build and start scripts are configured
+ - This example uses *serve* to expose the /dist directory using the dynamically provided heroku-PORT
+```json
+{
+  "name": "your-awesome-vue-app-name",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "./node_modules/serve/bin/serve.js -s dist/ -l $PORT",
+    "build": "vue-cli-service build",
+    "heroku-postbuild": "yarn build"
+  },
+  "dependencies": {
+    "serve": "^10.1.2",
+    "vue": "^2.6.8"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^3.4.0",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "heroku-run-build-script": true
+}
+```
+
+3. Push your git repo to heroku
+```bash
+git push heroku master
+```
 
 ### Surge
 
