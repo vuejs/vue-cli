@@ -188,6 +188,14 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly transpile a dependency with Babel, you can list it in this option.
 
+::: warning Jest config
+This option is not respected by the [cli-unit-jest plugin](#jest), because in jest, we don't have to transpile code from `/node_modules` unless it uses non-standard features - Node >8.11 supports the latest ECMAScript features already.
+
+However, jest sometimes has to transform content from node_modules if that code uses ES6 `import`/`export` syntax. In that case, use the `tranformIgnorePatterns` option in `jest.config.js`.
+
+See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-unit-jest/README.md) for more information.
+:::
+
 ### productionSourceMap
 
 - Type: `boolean`
