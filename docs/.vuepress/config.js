@@ -20,7 +20,7 @@ module.exports = {
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }],
   ],
-  theme: 'vue',
+  theme: '@vuepress/theme-vue',
   themeConfig: {
     repo: 'vuejs/vue-cli',
     docsDir: 'docs',
