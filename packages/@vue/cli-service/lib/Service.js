@@ -270,10 +270,21 @@ module.exports = class Service {
       )
     }
 
-    const entryFiles = Object.values(config.entry || []).reduce((allEntries, curr) => {
-      return allEntries.concat(curr)
-    }, [])
-    process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
+    if (typeof config.entry !== 'function') {
+      let entryFiles
+      if (typeof config.entry === 'string') {
+        entryFiles = [config.entry]
+      } else if (Array.isArray(config.entry)) {
+        entryFiles = config.entry
+      } else {
+        entryFiles = Object.values(config.entry || []).reduce((allEntries, curr) => {
+          return allEntries.concat(curr)
+        }, [])
+      }
+
+      entryFiles = entryFiles.map(file => path.resolve(this.context, file))
+      process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
+    }
 
     return config
   }

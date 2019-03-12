@@ -253,6 +253,7 @@ test('api: configureWebpack', () => {
   }])
 
   const config = service.resolveWebpackConfig()
+  console.log(process.env.VUE_CLI_ENTRY_FILES)
   expect(config.output.path).toBe('test-dist-2')
 })
 
@@ -294,6 +295,23 @@ test('api: configureWebpack preserve ruleNames', () => {
 
   const config = service.resolveWebpackConfig()
   expect(config.module.rules[0].__ruleNames).toEqual(['js'])
+})
+
+test.only('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
+  const service = createMockService([{
+    id: 'test',
+    apply: api => {
+      api.configureWebpack(config => {
+        config.entry = {
+          page1: './src/page1.js',
+          page2: './src/page2.js'
+        }
+      })
+    }
+  }])
+
+  service.resolveWebpackConfig()
+  expect(process.env.VUE_CLI_ENTRY_FILES).toEqual('["/src/page1.js","/src/page2.js"]')
 })
 
 test('api: configureDevServer', () => {
