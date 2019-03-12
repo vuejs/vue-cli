@@ -311,7 +311,12 @@ test('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
   }])
 
   service.resolveWebpackConfig()
-  expect(process.env.VUE_CLI_ENTRY_FILES).toEqual('["/src/page1.js","/src/page2.js"]')
+  expect(process.env.VUE_CLI_ENTRY_FILES).toEqual(
+    JSON.stringify([
+      path.resolve('/', './src/page1.js'),
+      path.resolve('/', './src/page2.js')
+    ])
+  )
 })
 
 test('api: configureDevServer', () => {
