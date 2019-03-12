@@ -297,7 +297,7 @@ test('api: configureWebpack preserve ruleNames', () => {
   expect(config.module.rules[0].__ruleNames).toEqual(['js'])
 })
 
-test.only('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
+test('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
   const service = createMockService([{
     id: 'test',
     apply: api => {
