@@ -1,3 +1,13 @@
+# [3.5.1](https://github.com/vuejs/vue-cli/compare/v3.5.0...v3.5.1) (2019-03-12)
+
+## cli-service
+
+#### Bug Fixes
+
+* should resolve to full path when setting default entryFiles ([dd37773](https://github.com/vuejs/vue-cli/commit/dd37773)), closes [#3616](https://github.com/vuejs/vue-cli/issues/3616) [#3618](https://github.com/vuejs/vue-cli/issues/3618)
+
+
+
 # [3.5.0](https://github.com/vuejs/vue-cli/compare/v3.4.1...v3.5.0) (2019-03-08)
 
 ## babel-preset-app
