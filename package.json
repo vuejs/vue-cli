@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@vue/conventional-changelog": "^0.1.1",
+    "@vuepress/plugin-pwa": "^1.0.0-alpha.44",
     "@vuepress/theme-vue": "1.0.0-alpha.44",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",

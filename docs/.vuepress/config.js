@@ -16,10 +16,28 @@ module.exports = {
       description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
     }
   },
-  serviceWorker: true,
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }],
   ],
+  plugins: {
+    '@vuepress/pwa': {
+      serviceWorker: true,
+      updatePopup: {
+        '/': {
+          message: "New content is available.",
+          buttonText: "Refresh"
+        },
+        '/zh/': {
+          message: "发现新内容可用",
+          buttonText: "刷新"
+        },
+        '/ru/': {
+          message: 'Доступно обновление контента',
+          buttonText: 'Обновить'
+        }
+      }
+    }
+  },
   theme: '@vuepress/theme-vue',
   themeConfig: {
     repo: 'vuejs/vue-cli',
@@ -37,12 +55,6 @@ module.exports = {
         selectText: 'Languages',
         lastUpdated: 'Last Updated',
         editLinkText: 'Edit this page on GitHub',
-        serviceWorker: {
-          updatePopup: {
-            message: "New content is available.",
-            buttonText: "Refresh"
-          }
-        },
         nav: [
           {
             text: 'Guide',
@@ -135,12 +147,6 @@ module.exports = {
         selectText: '选择语言',
         lastUpdated: '上次编辑时间',
         editLinkText: '在 GitHub 上编辑此页',
-        serviceWorker: {
-          updatePopup: {
-            message: "发现新内容可用",
-            buttonText: "刷新"
-          }
-        },
         nav: [
           {
             text: '指南',
@@ -224,12 +230,6 @@ module.exports = {
         selectText: 'Переводы',
         lastUpdated: 'Последнее обновление',
         editLinkText: 'Изменить эту страницу на GitHub',
-        serviceWorker: {
-          updatePopup: {
-            message: 'Доступно обновление контента',
-            buttonText: 'Обновить'
-          }
-        },
         nav: [
           {
             text: 'Руководство',
