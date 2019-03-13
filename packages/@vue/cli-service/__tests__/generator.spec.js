@@ -43,5 +43,4 @@ test('dart sass', async () => {
 
   expect(files['src/App.vue']).toMatch('<style lang="scss">')
   expect(pkg).toHaveProperty(['devDependencies', 'sass'])
-  expect(pkg).toHaveProperty(['devDependencies', 'fibers'])
 })
