@@ -408,3 +408,24 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
+
+### Render
+
+On Render, create a new Web Service, and give Render’s GitHub app permission to access your new repo.
+
+Use the following values during creation:
+
+ - **Environment:** `Static Site`
+ - **Build Command:** `npm run build` or `yarn build`
+ - **Publish directory:** `dist`
+
+That’s it! Your app will be live on your Render URL as soon as the build finishes.
+
+In order to receive direct hits using `history mode` on Vue Router, you need to add the following redirect rules in the `Redirects` tab under your site.
+
+Select `Redirects`, click on `Add Redirect Rule` button and
+
+ - **Source Path:** `/*`
+ - **Destination Path:** `/index.html`
+ - **Status:** `200`
+
