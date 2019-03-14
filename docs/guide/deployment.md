@@ -411,7 +411,7 @@ Deploy your application using nginx inside of a docker container.
 
 ### Render
 
-On Render, create a new Web Service, and give Render’s GitHub app permission to access your new repo.
+On Render, create a new Web Service, and give Render’s GitHub app permission to access your repo.
 
 Use the following values during creation:
 
