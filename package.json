@@ -62,6 +62,7 @@
     "inquirer": "^6.0.0",
     "jest": "^23.1.0",
     "lerna": "^3.13.0",
+    "lerna-changelog": "^0.8.2",
     "lint-staged": "^8.1.4",
     "memfs": "^2.15.2",
     "minimist": "^1.2.0",
