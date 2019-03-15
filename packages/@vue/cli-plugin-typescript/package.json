@@ -39,7 +39,7 @@
     "@types/jest": "^23.1.4",
     "@types/mocha": "^5.2.6",
     "typescript": "^3.2.1",
-    "vue-class-component": "^6.2.0",
-    "vue-property-decorator": "^7.0.0"
+    "vue-class-component": "^7.0.1",
+    "vue-property-decorator": "^8.0.0"
   }
 }

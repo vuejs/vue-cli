@@ -16490,10 +16490,10 @@ vue-apollo@^3.0.0-beta.25:
     chalk "^2.4.1"
     throttle-debounce "^2.0.0"
 
-vue-class-component@^6.2.0:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.3.2.tgz#e6037e84d1df2af3bde4f455e50ca1b9eec02be6"
-  integrity sha512-cH208IoM+jgZyEf/g7mnFyofwPDJTM/QvBNhYMjqGB8fCsRyTf68rH2ISw/G20tJv+5mIThQ3upKwoL4jLTr1A==
+vue-class-component@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.0.1.tgz#7af2225c600667c7042b60712eefdf41dfc6de63"
+  integrity sha512-YIihdl7YmceEOjSwcxLhCXCNA3TKC2FStuMcjtuzhUAgw5x5d1T5gZTmVQHGyOaQsaKffL4GlZzYN3dlMYl53w==
 
 vue-cli-plugin-apollo@^0.19.1:
   version "0.19.1"
@@ -16658,12 +16658,12 @@ vue-progress-path@^0.0.2:
   resolved "https://registry.yarnpkg.com/vue-progress-path/-/vue-progress-path-0.0.2.tgz#d780fc7a96dbc7f784eb52895aeef7a5f0af6325"
   integrity sha512-olD0dTbxZkwpodYbvPU/O2tJT7CbZt8NHP1ewtM6iXrzsjnfi9KZ6+CsUadsW87jCemSPIu9ez1iHcrvpqIJeg==
 
-vue-property-decorator@^7.0.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-7.3.0.tgz#d50d67f0b0f1c814f9f2fba36d6eeccbcc62dbb6"
-  integrity sha512-HarXfTQ/Nxm4s/APpAaGIGHq5ZzslApImQy8ZrtkfGamw8rUFAVgMS5C50/AQ80+wfw3Wpnf4bNzbmj75m/k2Q==
+vue-property-decorator@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.0.0.tgz#a2e9bb2419b638cbf1614e17b99aa675d6d4e9e4"
+  integrity sha512-aaAO/Wbh+n3sPMOoQ+Rwi9va6vFqZPX13dA8vMycGuS/DOIYC77KxX0gMAPEzzkT4Umya0uSlTvBV5jQvSTyBQ==
   dependencies:
-    vue-class-component "^6.2.0"
+    vue-class-component "^7.0.1"
 
 vue-resize@^0.4.3, vue-resize@^0.4.4:
   version "0.4.5"
