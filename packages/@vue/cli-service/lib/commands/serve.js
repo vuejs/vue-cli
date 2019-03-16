@@ -284,7 +284,7 @@ module.exports = (api, options) => {
 function addDevClientToEntry (config, devClient) {
   if (Array.isArray(config)) {
     return config
-      .filter(c => c.target != 'node')
+      .filter(c => c.target !== 'node')
       .forEach(c => addDevClientToEntry(c, devClient))
   }
 
