@@ -18,8 +18,5 @@
       "PR: Underlying Tools": ":hammer: Underlying Tools"
     },
     "cacheDir": ".changelog"
-  },
-  "publishConfig": {
-    "registry": "http://localhost:4873/"
   }
 }
