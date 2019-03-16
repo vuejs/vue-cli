@@ -282,6 +282,12 @@ module.exports = (api, options) => {
 }
 
 function addDevClientToEntry (config, devClient) {
+  if (Array.isArray(config)) {
+    return config
+      .filter(c => c.target != 'node')
+      .forEach(c => addDevClientToEntry(c, devClient))
+  }
+
   const { entry } = config
   if (typeof entry === 'object' && !Array.isArray(entry)) {
     Object.keys(entry).forEach((key) => {
