@@ -264,7 +264,8 @@ module.exports = (api, options) => {
           // so other commands can do api.service.run('serve').then(...)
           resolve({
             server,
-            url: urls.localUrlForBrowser
+            url: urls.localUrlForBrowser,
+            networkUrl: urls.lanUrlForBrowser
           })
         } else if (process.env.VUE_CLI_TEST) {
           // signal for test to check HMR
