@@ -244,7 +244,7 @@ api.onCreateComplete(() => {
   const lines = contentMain.split(/\r?\n/g)
 
   const renderIndex = lines.findIndex(line => line.match(/render/))
-  lines[renderIndex] += `\n  router,`
+   lines[renderIndex] += `${EOL}  router,`
 
   fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
 })
