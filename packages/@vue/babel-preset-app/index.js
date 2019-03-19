@@ -14,8 +14,8 @@ const defaultPolyfills = [
 ]
 
 function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
-  const { isPluginRequired } = require('@babel/preset-env')
-  const builtInsList = require('@babel/preset-env/data/built-ins.json')
+  const { isPluginRequired } = require('@babel/preset-env/lib/filter-items')
+  const builtInsList = require('@babel/preset-env/data/corejs2-built-ins.json')
   const getTargets = require('@babel/preset-env/lib/targets-parser').default
   const builtInTargets = getTargets(targets, {
     ignoreBrowserslistConfig,
