@@ -261,7 +261,54 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+To deploy with [Heroku](https://heroku.com/), you need to follow the following steps:
+1. Make sure you have `git`, `npm` and `node` installed.
+1. Create a free [Heroku account](https://signup.heroku.com/).
+1. Download the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and [login](https://devcenter.heroku.com/articles/heroku-cli#getting-started).
+1. In your project repository, run:
+    ```bash
+    $ heroku create
+    ```
+    This will add a new remote called `heroku` to your Git remotes.
+4. Install a static file server to your project, for example [Express](https://expressjs.com/):
+    ```bash
+    $ npm i --save express serve-static
+    ```
+5. Configure Express with a `server.js` file:
+    ```javascript 
+    const express = require('express');
+    const serveStatic = require("serve-static")
+    const path = require('path');
+
+    const publicDir = path.resolve(__dirname, "dist");
+
+    // Serve static files in dist/
+    app = express();
+    app.use(serveStatic(publicDir));
+
+    // When using vue-router in history mode, redirect all other routes to index.html
+    app.get("*", (req, res) => {
+    res.sendFile(path.resolve(publicDir, "index.html"))
+    })
+
+    const port = process.env.PORT || 80;
+    app.listen(port);
+    ```
+6. Add a start script in `package.json`:
+    ```json
+    ...
+    "scripts": {
+      "serve": "vue-cli-service serve",
+      "build": "vue-cli-service build",
+      "start": "node server.js" // This script will be invoked by Heroku automatically
+    },
+    ...
+    ```
+7. Deploy using the new Heroku remote:
+    ```bash
+    $ git push heroku master
+    ```
+    The console output should contain a public URL for your app.
 
 ### Surge
 
