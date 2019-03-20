@@ -234,18 +234,19 @@ api.onCreateComplete(() => {
 
 Finally, you need to write the content back to the main file:
 
-```js{11}
+```js{2,11}
 // generator/index.js
 
 api.onCreateComplete(() => {
+  const { EOL } = require('os')
   const fs = require('fs')
   const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
   const lines = contentMain.split(/\r?\n/g)
 
   const renderIndex = lines.findIndex(line => line.match(/render/))
-  lines[renderIndex] += `\n  router,`
+   lines[renderIndex] += `${EOL}  router,`
 
-  fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' })
+  fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
 })
 ```
 
