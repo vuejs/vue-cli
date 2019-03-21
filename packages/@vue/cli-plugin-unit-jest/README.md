@@ -41,7 +41,7 @@ vue add @vue/unit-jest
 
 ## Transform dependencies from `/node_modules`
 
-By default, jest doesn't transform anything from `/nodee_modules`.
+By default, jest doesn't transform anything from `/node_modules`.
 
 Since jest runs in node, we also don't have to transpile anything that uses modern ECMAScript features as Node >=8 already supports these features, so it's a sensible default. cli-plugin-jest also doesn't respect the `transpileDependencies` option in `vue.config.js` for the same reason.
 
