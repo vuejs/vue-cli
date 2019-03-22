@@ -76,7 +76,7 @@
     "yorkie": "^2.0.0"
   },
   "resolutions": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.0.0 <7.4.0",
     "@babel/preset-env": "^7.0.0",
     "babel-core": "7.0.0-bridge.0",
     "ps-tree": "^1.1.1",
