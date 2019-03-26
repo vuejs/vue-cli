@@ -34,5 +34,6 @@
   "devDependencies": {
     "@vue/test-utils": "1.0.0-beta.29",
     "ts-jest": "^23.0.0"
-  }
+  },
+  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }
