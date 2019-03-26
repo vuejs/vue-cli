@@ -74,8 +74,24 @@ file, or the `"vue"` field in `package.json`.
     If the following attributes are not defined in the object, the options of `pwa` or default options will be used instead.
       - name: `pwa.name`
       - short_name: `pwa.name`
-      - start_url: `'.'`
+      - icons:
+        ```js
+        [
+          {
+            src: './img/icons/android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: './img/icons/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+        ```
+      - start_url: `'./index.html'`
       - display: `'standalone'`
+      - background_color: `'#000000'`
       - theme_color: `pwa.themeColor`
 
 - **pwa.iconPaths**

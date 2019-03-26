@@ -6,6 +6,7 @@ module.exports = (api, options) => {
     }
 
     const name = api.service.pkg.name
+    const assetsPublic = api.resolve('public')
     const userOptions = options.pwa || {}
 
     // the pwa plugin hooks on to html-webpack-plugin
@@ -13,7 +14,8 @@ module.exports = (api, options) => {
     webpackConfig
       .plugin('pwa')
         .use(require('./lib/HtmlPwaPlugin'), [Object.assign({
-          name
+          name,
+          assetsPublic
         }, userOptions)])
         .after('html')
 

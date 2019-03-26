@@ -26,6 +26,28 @@ test('pwa', async () => {
   expect(project.has('dist/manifest.json')).toBe(true)
   expect(project.has('dist/img/icons/android-chrome-512x512.png')).toBe(true)
 
+  const manifest = await project.read('dist/manifest.json')
+  expect(JSON.parse(manifest)).toEqual({
+    name: 'pwa-build',
+    short_name: 'pwa-build',
+    theme_color: '#4DBA87',
+    icons: [
+      {
+        src: './img/icons/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png'
+      },
+      {
+        src: './img/icons/android-chrome-512x512.png',
+        sizes: '512x512',
+        type: 'image/png'
+      }
+    ],
+    start_url: './index.html',
+    display: 'standalone',
+    background_color: '#000000'
+  })
+
   // Make sure the base preload/prefetch are not affected
   const index = await project.read('dist/index.html')
 

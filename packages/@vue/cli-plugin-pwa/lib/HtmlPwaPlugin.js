@@ -24,7 +24,7 @@ const defaultManifest = {
       "type": "image/png"
     }
   ],
-  start_url: '.',
+  start_url: './index.html',
   display: 'standalone',
   background_color: "#000000"
 }
@@ -132,20 +132,52 @@ module.exports = class HtmlPwaPlugin {
 
     })
 
+    // generated manifest.json
     compiler.hooks.emit.tapAsync(ID, (data, cb) => {
       const {
         name,
+        assetsPublic,
         themeColor,
         manifestPath,
         manifestOptions
       } = this.options
+
       const publicOptions = {
         name,
         short_name: name,
         theme_color: themeColor
       }
+
+      const manifestFilePath = path.resolve(assetsPublic, manifestPath)
+      let fileManifest
+      try {
+        fileManifest = JSON.parse(
+          fs.readFileSync(manifestFilePath).toString()
+        )
+
+        // Check the generated manifest.json (without file) is identical to the existing one
+        const nofileManifest = Object.assign(publicOptions, defaultManifest, manifestOptions)
+        const isIdentical = !Object.keys(fileManifest).find((key) => {
+          return (
+            JSON.stringify(fileManifest[key]) !==
+            JSON.stringify(nofileManifest[key])
+          )
+        })
+
+        // Throw info or warn
+        setTimeout(() => {
+          if (isIdentical) {
+            info(`You can safely delete the manifest.json redundant file.\nFile Path: ${manifestFilePath}`)
+          } else {
+            warn(`Recommend: Use pwa.manifestOptions instead of ${manifestFilePath}`)
+          }
+        }, 1000)
+      } catch (err) {
+        fileManifest = {}
+      }
+
       const outputManifest = JSON.stringify(
-        Object.assign(publicOptions, defaultManifest, manifestOptions)
+        Object.assign(publicOptions, defaultManifest, fileManifest, manifestOptions)
       )
       data.assets[manifestPath] = {
         source: () => outputManifest,
