@@ -9,7 +9,7 @@ const defaultOptions = {
 
 const genCoreJSImportRegExp = mod => {
   // expected to include a `node_modules` in the import path because we use absolute path for core-js
-  return new RegExp(`import "${['.*node_modules', 'core-js', 'modules', mod].join(`\\${path.sep}`)}`)
+  return new RegExp(`import "${['.*node_modules', 'core-js', 'modules', mod].join(`[${path.sep}]+`)}`)
 }
 
 beforeEach(() => {
