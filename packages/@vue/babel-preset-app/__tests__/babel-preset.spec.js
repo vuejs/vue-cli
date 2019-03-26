@@ -8,6 +8,7 @@ const defaultOptions = {
 }
 
 const genCoreJSImportRegExp = mod => {
+  // expected to include a `node_modules` in the import path because we use absolute path for core-js
   return new RegExp(`import "${['.*node_modules', 'core-js', 'modules', mod].join(`\\${path.sep}`)}`)
 }
 
@@ -26,7 +27,6 @@ test('polyfill detection', () => {
     filename: 'test-entry-file.js'
   })
   // default includes
-  // expected to include a `node_modules` in the import path because we use absolute path for core-js
   expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
   // usage-based detection
   expect(code).not.toMatch(genCoreJSImportRegExp('es6.map'))
