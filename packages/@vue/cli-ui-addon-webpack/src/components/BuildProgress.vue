@@ -119,7 +119,7 @@ export default {
     >>> .background
       stroke rgba($vue-ui-color-dark, .1)
       .vue-ui-dark-mode &
-        stroke $vue-ui-color-darker
+        stroke $vue-ui-color-dark
 
   .operations
     color $vue-ui-color-dark
