@@ -130,10 +130,21 @@ module.exports = (api, options) => {
 
     webpackConfig.module
       .rule('pug')
-      .test(/\.pug$/)
-      .use('pug-plain-loader')
-        .loader('pug-plain-loader')
-        .end()
+        .test(/\.pug$/)
+          .oneOf('pug-vue')
+            .resourceQuery(/vue/)
+            .use('pug-plain-loader')
+              .loader('pug-plain-loader')
+              .end()
+            .end()
+          .oneOf('pug-template')
+            .use('raw')
+              .loader('raw-loader')
+              .end()
+            .use('pug-plain')
+              .loader('pug-plain-loader')
+              .end()
+            .end()
 
     // shims
 
