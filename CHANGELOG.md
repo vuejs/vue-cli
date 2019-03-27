@@ -1,3 +1,20 @@
+# [3.5.3](https://github.com/vuejs/vue-cli/compare/v3.5.2...v3.5.3) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* downgrade [@babel](https://github.com/babel)/preset-env temporarily ([#3716](https://github.com/vuejs/vue-cli/issues/3716)) ([f107623](https://github.com/vuejs/vue-cli/commit/f107623))
+
+## cli-service
+
+#### Bug Fixes
+
+* properly load non-js config files in genCacheConfig ([#3632](https://github.com/vuejs/vue-cli/issues/3632)) ([adac48d](https://github.com/vuejs/vue-cli/commit/adac48d)), closes [#3631](https://github.com/vuejs/vue-cli/issues/3631)
+* set the path of safari-no-module-fix.js correctly ([#3647](https://github.com/vuejs/vue-cli/issues/3647)) ([10296ff](https://github.com/vuejs/vue-cli/commit/10296ff)), closes [#3033](https://github.com/vuejs/vue-cli/issues/3033)
+
+
+
 # [3.5.2](https://github.com/vuejs/vue-cli/compare/v3.5.1...v3.5.2) (2019-03-27)
 
 ## babel-preset-app
