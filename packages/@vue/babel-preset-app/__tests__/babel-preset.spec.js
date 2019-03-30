@@ -153,4 +153,5 @@ test('disable absoluteRuntime', () => {
   })
 
   expect(code).toMatch('import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray"')
+  expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
 })
