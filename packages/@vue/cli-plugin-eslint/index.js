@@ -40,25 +40,26 @@ module.exports = (api, options) => {
 
       webpackConfig.module
         .rule('eslint')
-        .pre()
-        .exclude.add(/node_modules/)
-        .add(require('path').dirname(require.resolve('@vue/cli-service')))
-        .end()
-        .test(/\.(vue|(j|t)sx?)$/)
-        .use('eslint-loader')
-        .loader('eslint-loader')
-        .options({
-          extensions,
-          cache: true,
-          cacheIdentifier,
-          emitWarning: allWarnings,
-          // only emit errors in production mode.
-          emitError: allErrors,
-          eslintPath: resolveModule('eslint', cwd) || require.resolve('eslint'),
-          formatter:
-            loadModule('eslint/lib/formatters/codeframe', cwd, true) ||
-            require('eslint/lib/formatters/codeframe')
-        })
+          .pre()
+          .exclude
+            .add(/node_modules/)
+            .add(require('path').dirname(require.resolve('@vue/cli-service')))
+            .end()
+          .test(/\.(vue|(j|t)sx?)$/)
+          .use('eslint-loader')
+            .loader('eslint-loader')
+            .options({
+              extensions,
+              cache: true,
+              cacheIdentifier,
+              emitWarning: allWarnings,
+              // only emit errors in production mode.
+              emitError: allErrors,
+              eslintPath: resolveModule('eslint', cwd) || require.resolve('eslint'),
+              formatter:
+                loadModule('eslint/lib/formatters/codeframe', cwd, true) ||
+                require('eslint/lib/formatters/codeframe')
+            })
     })
   }
 
