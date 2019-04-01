@@ -40,11 +40,6 @@ module.exports = (api, options) => {
             if (transpileDepRegex && transpileDepRegex.test(filepath)) {
               return false
             }
-            // may need to add polyfills (by preset-env) for babel helpers
-            // https://github.com/babel/babel/issues/7597
-            if (/node_modules\/@babel\/runtime/.test(filepath)) {
-              return false
-            }
             // Don't transpile node_modules
             return /node_modules/.test(filepath)
           })
