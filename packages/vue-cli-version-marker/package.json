@@ -1,15 +1,15 @@
 {
   "name": "vue-cli-version-marker",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "description": "version marker for @vue/cli",
   "author": "Evan You",
   "license": "MIT",
   "main": "package.json",
   "devDependencies": {
-    "@vue/babel-preset-app": "3.5.4",
+    "@vue/babel-preset-app": "3.5.5",
     "@vue/cli-init": "3.5.1",
     "@vue/cli-overlay": "3.5.1",
-    "@vue/cli-plugin-babel": "3.5.4",
+    "@vue/cli-plugin-babel": "3.5.5",
     "@vue/cli-plugin-e2e-cypress": "3.5.1",
     "@vue/cli-plugin-e2e-nightwatch": "3.5.1",
     "@vue/cli-plugin-eslint": "3.5.1",
@@ -17,14 +17,14 @@
     "@vue/cli-plugin-typescript": "3.5.3",
     "@vue/cli-plugin-unit-jest": "3.5.3",
     "@vue/cli-plugin-unit-mocha": "3.5.1",
-    "@vue/cli-service-global": "3.5.4",
+    "@vue/cli-service-global": "3.5.5",
     "@vue/cli-service": "3.5.3",
     "@vue/cli-shared-utils": "3.5.1",
     "@vue/cli-test-utils": "3.5.1",
-    "@vue/cli-ui-addon-webpack": "3.5.4",
-    "@vue/cli-ui-addon-widgets": "3.5.4",
-    "@vue/cli-ui": "3.5.4",
+    "@vue/cli-ui-addon-webpack": "3.5.5",
+    "@vue/cli-ui-addon-widgets": "3.5.5",
+    "@vue/cli-ui": "3.5.5",
     "@vue/cli-upgrade": "3.5.1",
-    "@vue/cli": "3.5.4"
+    "@vue/cli": "3.5.5"
   }
 }
