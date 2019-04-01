@@ -51,7 +51,7 @@ const schema = createSchema(joi => joi.object({
   ),
 
   // known runtime options for built-in plugins
-  lintOnSave: joi.any().valid([true, false, 'error']),
+  lintOnSave: joi.any().valid([true, false, 'error', 'warning', 'default']),
   pwa: joi.object(),
 
   // 3rd party plugin options
@@ -95,7 +95,9 @@ exports.defaults = () => ({
   runtimeCompiler: false,
 
   // deps to transpile
-  transpileDependencies: [/* string or regex */],
+  transpileDependencies: [
+    /* string or regex */
+  ],
 
   // sourceMap for production build?
   productionSourceMap: !process.env.VUE_CLI_TEST,
@@ -126,7 +128,7 @@ exports.defaults = () => ({
   lintOnSave: true,
 
   devServer: {
-  /*
+    /*
     open: process.platform === 'darwin',
     host: '0.0.0.0',
     port: 8080,
