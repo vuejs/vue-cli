@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -25,9 +25,9 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^3.5.1",
-    "@vue/cli-ui": "^3.5.4",
-    "@vue/cli-ui-addon-webpack": "^3.5.4",
-    "@vue/cli-ui-addon-widgets": "^3.5.4",
+    "@vue/cli-ui": "^3.5.5",
+    "@vue/cli-ui-addon-webpack": "^3.5.5",
+    "@vue/cli-ui-addon-widgets": "^3.5.5",
     "chalk": "^2.4.1",
     "cmd-shim": "^2.0.2",
     "commander": "^2.16.0",
