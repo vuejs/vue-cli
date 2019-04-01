@@ -1,3 +1,97 @@
+# [3.5.2](https://github.com/vuejs/vue-cli/compare/v3.5.1...v3.5.2) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* use absolute import path for injected core-js polyfills ([#3710](https://github.com/vuejs/vue-cli/issues/3710)) ([4d6fcf5](https://github.com/vuejs/vue-cli/commit/4d6fcf5)), closes [#3678](https://github.com/vuejs/vue-cli/issues/3678)
+* explicitly set corejs version for [@babel](https://github.com/babel)/preset-env ([#3696](https://github.com/vuejs/vue-cli/issues/3696)) ([156ef21](https://github.com/vuejs/vue-cli/commit/156ef21)), closes [#3695](https://github.com/vuejs/vue-cli/issues/3695)
+
+## docs
+
+#### Features
+
+* add manifest.json, make the website installable ([eda048a](https://github.com/vuejs/vue-cli/commit/eda048a))
+
+
+
+# [3.5.1](https://github.com/vuejs/vue-cli/compare/v3.5.0...v3.5.1) (2019-03-12)
+
+## cli-service
+
+#### Bug Fixes
+
+* should resolve to full path when setting default entryFiles ([dd37773](https://github.com/vuejs/vue-cli/commit/dd37773)), closes [#3616](https://github.com/vuejs/vue-cli/issues/3616) [#3618](https://github.com/vuejs/vue-cli/issues/3618)
+
+
+
+# [3.5.0](https://github.com/vuejs/vue-cli/compare/v3.4.1...v3.5.0) (2019-03-08)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* use an environment variable to determine the entry files to inject default polyfills ([#3565](https://github.com/vuejs/vue-cli/issues/3565)) ([93f57ac](https://github.com/vuejs/vue-cli/commit/93f57ac)), closes [#2983](https://github.com/vuejs/vue-cli/issues/2983)
+#### Features
+
+* add `entryFiles` option, allowing explicit polyfill injection to specified files ([#3470](https://github.com/vuejs/vue-cli/issues/3470)) ([7df0c58](https://github.com/vuejs/vue-cli/commit/7df0c58))
+
+## cli
+
+#### Bug Fixes
+
+* add missing package keys to the sort array (issue [#3509](https://github.com/vuejs/vue-cli/issues/3509)) ([#3510](https://github.com/vuejs/vue-cli/issues/3510)) ([6e9ba9b](https://github.com/vuejs/vue-cli/commit/6e9ba9b))
+
+## cli-plugin-babel
+
+#### Features
+
+* add .mjs files as transpileable files ([#3485](https://github.com/vuejs/vue-cli/issues/3485)) ([8562d3e](https://github.com/vuejs/vue-cli/commit/8562d3e))
+
+## cli-plugin-e2e-nightwatch
+
+#### Bug Fixes
+
+* setting env by `-e` in e2e tests ([#3583](https://github.com/vuejs/vue-cli/issues/3583)) ([9aff29d](https://github.com/vuejs/vue-cli/commit/9aff29d))
+
+## cli-plugin-typescript
+
+#### Features
+
+* loosen the restriction of typescript version ([#3542](https://github.com/vuejs/vue-cli/issues/3542)) ([873ad84](https://github.com/vuejs/vue-cli/commit/873ad84))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* lock `[@vue](https://github.com/vue)/test-utils` version as it's still in beta and may introduce breaking changes ([266090d](https://github.com/vuejs/vue-cli/commit/266090d))
+
+## cli-service
+
+#### Bug Fixes
+
+* fix modern mode in monorepo by resolving in the package scope ([14b2c6e](https://github.com/vuejs/vue-cli/commit/14b2c6e)), closes [/github.com/vuejs/vue-cli/pull/3477#issuecomment-466926461](https://github.com//github.com/vuejs/vue-cli/pull/3477/issues/issuecomment-466926461)
+* **cli-service:** inspect --rules (close [#3334](https://github.com/vuejs/vue-cli/issues/3334)) ([#3378](https://github.com/vuejs/vue-cli/issues/3378)) ([6f93bfe](https://github.com/vuejs/vue-cli/commit/6f93bfe))
+* proxy should warn when array is passed. ([#3525](https://github.com/vuejs/vue-cli/issues/3525)) ([bb4f349](https://github.com/vuejs/vue-cli/commit/bb4f349)), closes [#3524](https://github.com/vuejs/vue-cli/issues/3524)
+#### Features
+
+* allow vue.config.js to return a function ([#3499](https://github.com/vuejs/vue-cli/issues/3499)) ([f5b174f](https://github.com/vuejs/vue-cli/commit/f5b174f)), closes [#3213](https://github.com/vuejs/vue-cli/issues/3213)
+* support environment variable expansion ([#3534](https://github.com/vuejs/vue-cli/issues/3534)) ([bd57f15](https://github.com/vuejs/vue-cli/commit/bd57f15))
+
+## cli-service-global
+
+#### Features
+
+* warn if run instant prototyping in a project directory ([#3508](https://github.com/vuejs/vue-cli/issues/3508)) ([2de215e](https://github.com/vuejs/vue-cli/commit/2de215e)), closes [#2473](https://github.com/vuejs/vue-cli/issues/2473)
+
+## docs
+
+#### Bug Fixes
+
+* **cli-service:** catch exception if "copy to clipboard" fails (issue [#3476](https://github.com/vuejs/vue-cli/issues/3476)) ([#3503](https://github.com/vuejs/vue-cli/issues/3503)) ([fec38f5](https://github.com/vuejs/vue-cli/commit/fec38f5))
+
+
+
 # [3.4.1](https://github.com/vuejs/vue-cli/compare/v3.4.0...v3.4.1) (2019-02-20)
 
 ## cli-plugin-babel

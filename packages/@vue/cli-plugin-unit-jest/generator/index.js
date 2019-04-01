@@ -24,6 +24,7 @@ module.exports = (api, _, __, invoking) => {
         '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$':
           'jest-transform-stub'
       },
+      'transformIgnorePatterns': ['/node_modules/'],
       // support the same @ -> src alias mapping in source code
       moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1'

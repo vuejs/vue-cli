@@ -15,7 +15,7 @@ async function makeProjectMultiPage (project) {
         index: { entry: 'src/main.js' },
         foo: { entry: 'src/foo.js' },
         bar: { entry: 'src/bar.js' },
-        foobar: { entry: 'src/foobar.js' }
+        foobar: { entry: ['src/foobar.js'] }
       },
       chainWebpack: config => {
         const splitOptions = config.optimization.get('splitChunks')

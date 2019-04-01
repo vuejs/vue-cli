@@ -123,7 +123,8 @@ module.exports = (context, options = {}) => {
     include,
     exclude: polyfills.concat(exclude || []),
     shippedProposals,
-    forceAllTransforms
+    forceAllTransforms,
+    corejs: 2
   }
 
   // cli-plugin-jest sets this to true because Jest runs without bundling
