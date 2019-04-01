@@ -37,7 +37,7 @@ module.exports = (api, options) => {
         rawArgs.push('--config', require.resolve('./nightwatch.config.js'))
       }
 
-      if (rawArgs.indexOf('--env') === -1) {
+      if (rawArgs.indexOf('--env') === -1 && rawArgs.indexOf('-e') === -1) {
         rawArgs.push('--env', 'chrome')
       }
 
