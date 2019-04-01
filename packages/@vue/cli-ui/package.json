@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.5.2",
+  "version": "3.5.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -61,10 +61,10 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.5.2",
+    "@vue/cli-plugin-babel": "^3.5.5",
     "@vue/cli-plugin-e2e-cypress": "^3.5.1",
     "@vue/cli-plugin-eslint": "^3.5.1",
-    "@vue/cli-service": "^3.5.2",
+    "@vue/cli-service": "^3.5.3",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/ui": "^0.5.5",
     "ansi_up": "^3.0.0",
