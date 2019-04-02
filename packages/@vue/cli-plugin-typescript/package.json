@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "3.5.1",
+  "version": "3.5.3",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -41,5 +41,6 @@
     "typescript": "^3.2.1",
     "vue-class-component": "^7.0.1",
     "vue-property-decorator": "^8.0.0"
-  }
+  },
+  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }

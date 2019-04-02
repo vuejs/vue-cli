@@ -167,6 +167,9 @@ class PluginAPI {
               return fs.readFileSync(absolutePath, 'utf-8')
             }
           }
+          else {
+            return fs.readFileSync(absolutePath, 'utf-8')
+          }
         }
       }
       if (!Array.isArray(configFiles)) {

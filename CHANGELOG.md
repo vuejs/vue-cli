@@ -1,3 +1,64 @@
+# [3.5.5](https://github.com/vuejs/vue-cli/compare/v3.5.4...v3.5.5) (2019-04-01)
+
+## babel-preset-app
+
+#### Reverts
+
+* "fix: should not add polyfills from transform-runtime plugin ([#3730](https://github.com/vuejs/vue-cli/issues/3730))" ([#3742](https://github.com/vuejs/vue-cli/issues/3742)) ([7228146](https://github.com/vuejs/vue-cli/commit/7228146)), closes [#3741](https://github.com/vuejs/vue-cli/issues/3741)
+
+
+
+# [3.5.4](https://github.com/vuejs/vue-cli/compare/v3.5.3...v3.5.4) (2019-03-31)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* should not add polyfills from transform-runtime plugin ([#3730](https://github.com/vuejs/vue-cli/issues/3730)) ([b987969](https://github.com/vuejs/vue-cli/commit/b987969))
+* should not use abosulte polyfill paths when `absoluteRuntime` is on ([#3732](https://github.com/vuejs/vue-cli/issues/3732)) ([9bdff3b](https://github.com/vuejs/vue-cli/commit/9bdff3b)), closes [#3725](https://github.com/vuejs/vue-cli/issues/3725)
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* **generator:** add core-js as direct dependency of generated projects ([#3736](https://github.com/vuejs/vue-cli/issues/3736)) ([5eb1425](https://github.com/vuejs/vue-cli/commit/5eb1425))
+
+
+
+# [3.5.3](https://github.com/vuejs/vue-cli/compare/v3.5.2...v3.5.3) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* downgrade [@babel](https://github.com/babel)/preset-env temporarily ([#3716](https://github.com/vuejs/vue-cli/issues/3716)) ([f107623](https://github.com/vuejs/vue-cli/commit/f107623))
+
+## cli-service
+
+#### Bug Fixes
+
+* properly load non-js config files in genCacheConfig ([#3632](https://github.com/vuejs/vue-cli/issues/3632)) ([adac48d](https://github.com/vuejs/vue-cli/commit/adac48d)), closes [#3631](https://github.com/vuejs/vue-cli/issues/3631)
+* set the path of safari-no-module-fix.js correctly ([#3647](https://github.com/vuejs/vue-cli/issues/3647)) ([10296ff](https://github.com/vuejs/vue-cli/commit/10296ff)), closes [#3033](https://github.com/vuejs/vue-cli/issues/3033)
+
+
+
+# [3.5.2](https://github.com/vuejs/vue-cli/compare/v3.5.1...v3.5.2) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* use absolute import path for injected core-js polyfills ([#3710](https://github.com/vuejs/vue-cli/issues/3710)) ([4d6fcf5](https://github.com/vuejs/vue-cli/commit/4d6fcf5)), closes [#3678](https://github.com/vuejs/vue-cli/issues/3678)
+* explicitly set corejs version for [@babel](https://github.com/babel)/preset-env ([#3696](https://github.com/vuejs/vue-cli/issues/3696)) ([156ef21](https://github.com/vuejs/vue-cli/commit/156ef21)), closes [#3695](https://github.com/vuejs/vue-cli/issues/3695)
+
+## docs
+
+#### Features
+
+* add manifest.json, make the website installable ([eda048a](https://github.com/vuejs/vue-cli/commit/eda048a))
+
+
+
 # [3.5.1](https://github.com/vuejs/vue-cli/compare/v3.5.0...v3.5.1) (2019-03-12)
 
 ## cli-service

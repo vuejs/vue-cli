@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-jest",
-  "version": "3.5.1",
+  "version": "3.5.3",
   "description": "unit-jest plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -34,5 +34,6 @@
   "devDependencies": {
     "@vue/test-utils": "1.0.0-beta.29",
     "ts-jest": "^23.0.0"
-  }
+  },
+  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }

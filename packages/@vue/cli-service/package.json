@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.5.1",
+  "version": "3.5.3",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
@@ -94,5 +94,6 @@
   },
   "engines": {
     "node": ">=8"
-  }
+  },
+  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }
