@@ -3,7 +3,7 @@ const path = require('path')
 const execa = require('execa')
 
 async function genNewRelease () {
-  const { stdout } = await execa(require.resolve('lerna-changelog/bin/cli'), ['--from', 'v3.5.0'])
+  const { stdout } = await execa(require.resolve('lerna-changelog/bin/cli'))
   return stdout
 }
 
