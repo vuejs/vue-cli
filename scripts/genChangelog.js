@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const execa = require('execa')
 const cc = require('conventional-changelog')
 const config = require('@vue/conventional-changelog')
 
@@ -33,11 +32,13 @@ const gen = (module.exports = async version => {
   fs.writeFileSync(changelogPath, newChangelog)
 
   delete process.env.PREFIX
-  await execa('git', ['add', '-A'], { stdio: 'inherit' })
-  await execa('git', ['commit', '-m', `chore: ${version} changelog [ci skip]`], { stdio: 'inherit' })
 })
 
-if (process.argv[2] === 'run') {
+if (require.main === module) {
   const version = require('../lerna.json').version
-  gen(version)
+
+  gen(version).catch(err => {
+    console.error(err)
+    process.exit(1)
+  })
 }

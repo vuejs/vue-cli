@@ -14,7 +14,7 @@
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js",
     "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
-    "changelog": "node scripts/genChangelog.js run",
+    "version": "node scripts/markVersions.js && node scripts/genChangelog.js && git add packages/vue-cli-version-marker CHANGELOG.md",
     "docs": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "patch-chromedriver": "node scripts/patchChromedriver.js"
