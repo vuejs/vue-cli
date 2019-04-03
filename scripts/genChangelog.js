@@ -1,43 +1,24 @@
 const fs = require('fs')
 const path = require('path')
-const cc = require('conventional-changelog')
-const config = require('@vue/conventional-changelog')
+const execa = require('execa')
 
-function genNewRelease (version) {
-  return new Promise(resolve => {
-    const newReleaseStream = cc({
-      config,
-      releaseCount: 2,
-      pkg: {
-        transform (pkg) {
-          pkg.version = `v${version}`
-          return pkg
-        }
-      }
-    })
-
-    let output = ''
-    newReleaseStream.on('data', buf => {
-      output += buf
-    })
-    newReleaseStream.on('end', () => resolve(output))
-  })
+async function genNewRelease () {
+  const { stdout } = await execa(require.resolve('lerna-changelog/bin/cli'), ['--from', 'v3.5.0'])
+  return stdout
 }
 
-const gen = (module.exports = async version => {
-  const newRelease = await genNewRelease(version)
+const gen = (module.exports = async () => {
+  const newRelease = await genNewRelease()
   const changelogPath = path.resolve(__dirname, '../CHANGELOG.md')
 
-  const newChangelog = newRelease + fs.readFileSync(changelogPath, { encoding: 'utf8' })
+  const newChangelog = newRelease + '\n\n\n' + fs.readFileSync(changelogPath, { encoding: 'utf8' })
   fs.writeFileSync(changelogPath, newChangelog)
 
   delete process.env.PREFIX
 })
 
 if (require.main === module) {
-  const version = require('../lerna.json').version
-
-  gen(version).catch(err => {
+  gen().catch(err => {
     console.error(err)
     process.exit(1)
   })
