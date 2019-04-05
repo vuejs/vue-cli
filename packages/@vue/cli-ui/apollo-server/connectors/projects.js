@@ -295,7 +295,8 @@ async function create (input, context) {
     }
 
     const createOptions = {
-      packageManager: input.packageManager
+      packageManager: input.packageManager,
+      bare: input.bare
     }
     // Git
     if (input.enableGit && input.gitCommitMessage) {
