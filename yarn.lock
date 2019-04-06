@@ -1970,15 +1970,14 @@
     dom-event-types "^1.0.0"
     lodash "^4.17.4"
 
-"@vue/ui@^0.5.5":
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.5.6.tgz#7c39b04a3b08ae3f217d2323987ae13347a90b29"
-  integrity sha512-NmxJsFk8umipCbKLusz6L27DQIicpt8jLOjN1aLjyBIeX3t4H5RFshxH7IUtjDPtgOYGwwq7gy86bmFkDDBsIQ==
+"@vue/ui@^0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.8.2.tgz#371fe1a9a81093b63f4acf1f63aaf676bde746a2"
+  integrity sha512-R6wPk8VIy9GNE7lpdZA4AFpAP3yyAxW2KW4sMilluS609OzAs1y8WG2xiq0buB0MCit9YcL9N0TZR05PYLTx3g==
   dependencies:
-    focus-visible "^4.1.4"
-    material-design-icons "^3.0.1"
+    focus-visible "^4.1.5"
     v-tooltip "^2.0.0-rc.33"
-    vue-resize "^0.4.4"
+    vue-resize "^0.4.5"
 
 "@vue/web-component-wrapper@^1.2.0":
   version "1.2.0"
@@ -6382,7 +6381,7 @@ eslint-plugin-vue@^4.5.0, eslint-plugin-vue@^4.7.1:
   dependencies:
     vue-eslint-parser "^2.0.3"
 
-eslint-plugin-vue@^5.2.2:
+eslint-plugin-vue@^5.0.0, eslint-plugin-vue@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-5.2.2.tgz#86601823b7721b70bc92d54f1728cfc03b36283c"
   integrity sha512-CtGWH7IB0DA6BZOwcV9w9q3Ri6Yuo8qMjx05SmOGJ6X6E0Yo3y9E/gQ5tuNxg2dEt30tRnBoFTbvtmW9iEoyHA==
@@ -7343,7 +7342,7 @@ fn-name@~2.0.1:
   resolved "https://registry.yarnpkg.com/fn-name/-/fn-name-2.0.1.tgz#5214d7537a4d06a4a301c0cc262feb84188002e7"
   integrity sha1-UhTXU3pNBqSjAcDMJi/rhBiAAuc=
 
-focus-visible@^4.1.4:
+focus-visible@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/focus-visible/-/focus-visible-4.1.5.tgz#50b44e2e84c24b831ceca3cce84d57c2b311c855"
   integrity sha512-yo/njtk/BB4Z2euzaZe3CZrg4u5s5uEi7ZwbHBJS2quHx51N0mmcx9nTIiImUGlgy+vf26d0CcQluahBBBL/Fw==
@@ -10896,11 +10895,6 @@ material-colors@^1.0.0:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.6.tgz#6d1958871126992ceecc72f4bcc4d8f010865f46"
   integrity sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==
-
-material-design-icons@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/material-design-icons/-/material-design-icons-3.0.1.tgz#9a71c48747218ebca51e51a66da682038cdcb7bf"
-  integrity sha1-mnHEh0chjrylHlGmbaaCA4zct78=
 
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
@@ -16772,7 +16766,7 @@ vue-property-decorator@^8.0.0:
   dependencies:
     vue-class-component "^7.0.1"
 
-vue-resize@^0.4.3, vue-resize@^0.4.4:
+vue-resize@^0.4.3, vue-resize@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
   integrity sha512-bhP7MlgJQ8TIkZJXAfDf78uJO+mEI3CaLABLjv0WNzr4CcGRGPIAItyWYnP6LsPA4Oq0WE+suidNs6dgpO4RHg==

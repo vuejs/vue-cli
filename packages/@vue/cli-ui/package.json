@@ -66,7 +66,7 @@
     "@vue/cli-plugin-eslint": "^3.5.1",
     "@vue/cli-service": "^3.5.3",
     "@vue/eslint-config-standard": "^4.0.0",
-    "@vue/ui": "^0.5.5",
+    "@vue/ui": "^0.8.2",
     "ansi_up": "^3.0.0",
     "cross-env": "^5.1.5",
     "eslint": "^5.8.0",
