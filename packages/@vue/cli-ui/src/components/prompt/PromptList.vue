@@ -13,7 +13,7 @@
       <div class="prompt-input">
         <VueSelect
           :value="value(prompt.value)"
-          @input="value => answer(value)"
+          @update="value => answer(value)"
         >
           <VueSelectButton
             v-for="(choice, index) of prompt.choices"

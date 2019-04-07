@@ -16,7 +16,7 @@
         <VueInput
           slot="trigger"
           :value="value(prompt.value)"
-          @input="value => answer(value)"
+          @update="value => answer(value)"
         >
           <div slot="right" class="color-preview">
             <div class="color-swatch" :style="{
