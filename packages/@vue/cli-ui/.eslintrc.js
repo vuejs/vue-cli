@@ -7,7 +7,8 @@ module.exports = {
   ],
 
   globals: {
-    ClientAddonApi: false
+    ClientAddonApi: false,
+    name: 'off'
   },
 
   plugins: [
