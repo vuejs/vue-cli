@@ -1,11 +1,12 @@
 {
   "name": "@vue/cli-shared-utils",
-  "version": "3.3.0",
+  "version": "3.5.1",
   "description": "shared utilities for vue-cli packages",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-shared-utils"
   },
   "keywords": [
     "vue",
@@ -26,9 +27,9 @@
     "lru-cache": "^5.1.1",
     "node-ipc": "^9.1.1",
     "opn": "^5.3.0",
-    "ora": "^3.0.0",
+    "ora": "^3.1.0",
     "request": "^2.87.0",
-    "request-promise-native": "^1.0.5",
+    "request-promise-native": "^1.0.7",
     "semver": "^5.5.0",
     "string.prototype.padstart": "^3.0.0"
   },

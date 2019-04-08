@@ -36,7 +36,7 @@ module.exports = (api, options) => {
       '--report-json': 'generate report.json to help analyze bundle content',
       '--watch': `watch for changes`
     }
-  }, async (args) => {
+  }, async (args, rawArgs) => {
     for (const key in defaults) {
       if (args[key] == null) {
         args[key] = defaults[key]
@@ -50,20 +50,29 @@ module.exports = (api, options) => {
     process.env.VUE_CLI_BUILD_TARGET = args.target
     if (args.modern && args.target === 'app') {
       process.env.VUE_CLI_MODERN_MODE = true
-      delete process.env.VUE_CLI_MODERN_BUILD
-      await build(Object.assign({}, args, {
-        modernBuild: false,
-        keepAlive: true
-      }), api, options)
-
-      process.env.VUE_CLI_MODERN_BUILD = true
-      await build(Object.assign({}, args, {
-        modernBuild: true,
-        clean: false
-      }), api, options)
-
+      if (!process.env.VUE_CLI_MODERN_BUILD) {
+        // main-process for legacy build
+        await build(Object.assign({}, args, {
+          modernBuild: false,
+          keepAlive: true
+        }), api, options)
+        // spawn sub-process of self for modern build
+        const { execa } = require('@vue/cli-shared-utils')
+        const cliBin = require('path').resolve(__dirname, '../../../bin/vue-cli-service.js')
+        await execa(cliBin, ['build', ...rawArgs], {
+          stdio: 'inherit',
+          env: {
+            VUE_CLI_MODERN_BUILD: true
+          }
+        })
+      } else {
+        // sub-process for modern build
+        await build(Object.assign({}, args, {
+          modernBuild: true,
+          clean: false
+        }), api, options)
+      }
       delete process.env.VUE_CLI_MODERN_MODE
-      delete process.env.VUE_CLI_MODERN_BUILD
     } else {
       if (args.modern) {
         const { warn } = require('@vue/cli-shared-utils')

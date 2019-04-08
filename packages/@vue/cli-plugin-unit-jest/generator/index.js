@@ -8,7 +8,7 @@ module.exports = (api, _, __, invoking) => {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
-      '@vue/test-utils': '^1.0.0-beta.20'
+      '@vue/test-utils': '1.0.0-beta.29'
     },
     jest: {
       'moduleFileExtensions': [
@@ -23,6 +23,7 @@ module.exports = (api, _, __, invoking) => {
         '^.+\\.vue$': 'vue-jest',
         '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
       },
+      'transformIgnorePatterns': ['/node_modules/'],
       // support the same @ -> src alias mapping in source code
       'moduleNameMapper': {
         '^@/(.*)$': '<rootDir>/src/$1'

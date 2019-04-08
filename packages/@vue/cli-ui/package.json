@@ -1,6 +1,11 @@
 {
   "name": "@vue/cli-ui",
-  "version": "3.3.0",
+  "version": "3.5.5",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-ui"
+  },
   "scripts": {
     "serve": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4030/graphql VUE_APP_GRAPHQL_PORT=4030 vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -28,15 +33,15 @@
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^3.3.0",
+    "@vue/cli-shared-utils": "^3.5.1",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
-    "deepmerge": "^3.0.0",
+    "deepmerge": "^3.2.0",
     "execa": "^1.0.0",
     "express-history-api-fallback": "^2.2.1",
     "fkill": "^5.3.0",
     "fs-extra": "^7.0.1",
-    "globby": "^8.0.1",
+    "globby": "^9.0.0",
     "graphql-tag": "^2.9.2",
     "graphql-type-json": "^0.2.1",
     "javascript-stringify": "^1.6.0",
@@ -45,23 +50,23 @@
     "lowdb": "^1.0.0",
     "lru-cache": "^5.1.1",
     "node-ipc": "^9.1.1",
-    "node-notifier": "^5.2.1",
+    "node-notifier": "^5.4.0",
     "parse-git-config": "^2.0.2",
     "portfinder": "^1.0.13",
     "prismjs": "^1.15.0",
     "rss-parser": "^3.4.3",
     "semver": "^5.5.0",
     "shortid": "^2.2.11",
-    "vue-cli-plugin-apollo": "^0.18.1",
+    "vue-cli-plugin-apollo": "^0.19.1",
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.3.0",
-    "@vue/cli-plugin-e2e-cypress": "^3.3.0",
-    "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
+    "@vue/cli-plugin-babel": "^3.5.5",
+    "@vue/cli-plugin-e2e-cypress": "^3.5.1",
+    "@vue/cli-plugin-eslint": "^3.5.1",
+    "@vue/cli-service": "^3.5.3",
     "@vue/eslint-config-standard": "^4.0.0",
-    "@vue/ui": "^0.5.5",
+    "@vue/ui": "^0.8.2",
     "ansi_up": "^3.0.0",
     "cross-env": "^5.1.5",
     "eslint": "^5.8.0",
@@ -73,17 +78,17 @@
     "start-server-and-test": "^1.4.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue": "^2.5.21",
+    "vue": "^2.6.7",
     "vue-apollo": "^3.0.0-beta.25",
     "vue-color": "^2.4.6",
-    "vue-i18n": "^8.0.0",
+    "vue-i18n": "^8.8.2",
     "vue-instantsearch": "^1.5.1",
     "vue-meta": "^1.5.0",
     "vue-observe-visibility": "^0.4.1",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.5.21",
+    "vue-template-compiler": "^2.6.7",
     "vue-timeago": "^5.0.0",
-    "xterm": "^3.2.0"
+    "xterm": "^3.11.0"
   },
   "browserslist": [
     "> 1%",
@@ -115,5 +120,6 @@
     "ui": [
       "ui-dev.js"
     ]
-  }
+  },
+  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }

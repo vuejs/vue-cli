@@ -13,7 +13,7 @@
         :value="projectCurrent.favorite"
         :icon="projectCurrent.favorite ? 'star' : 'star_border'"
         class="extend-left"
-        @input="toggleCurrentFavorite()"
+        @update="toggleCurrentFavorite()"
       >
         {{ $t('org.vue.components.project-select-list-item.tooltips.favorite') }}
       </VueSwitch>

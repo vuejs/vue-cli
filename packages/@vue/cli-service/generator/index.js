@@ -9,7 +9,7 @@ module.exports = (api, options) => {
       'build': 'vue-cli-service build'
     },
     dependencies: {
-      'vue': '^2.5.21'
+      'vue': '^2.6.6'
     },
     devDependencies: {
       'vue-template-compiler': '^2.5.21'
@@ -47,7 +47,7 @@ module.exports = (api, options) => {
       },
       'dart-sass': {
         fibers: '^3.1.1',
-        sass: '^1.16.0',
+        sass: '^1.17.2',
         'sass-loader': '^7.1.0'
       },
       less: {

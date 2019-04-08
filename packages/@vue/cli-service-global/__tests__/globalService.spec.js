@@ -22,7 +22,7 @@ import App from './Other.vue'
 new Vue({ render: h => h(App) }).$mount('#app')
 `.trim()
 
-beforeAll(async () => {
+beforeEach(async () => {
   await fs.ensureDir(cwd)
   await write('App.vue', entryVue)
   await write('Other.vue', entryVue)
@@ -73,6 +73,35 @@ test('global build', async () => {
   })
 
   expect(h1Text).toMatch('hi')
+})
+
+test('warn if run plain `vue build` or `vue serve` alongside a `package.json` file', async () => {
+  await write('package.json', `{
+    "name": "hello-world",
+    "version": "1.0.0",
+    "scripts": {
+      "serve": "vue-cli-service serve",
+      "build": "vue-cli-service build"
+    }
+  }`)
+
+  // Warn if a package.json with corresponding `script` field exists
+  const { stdout } = await execa(binPath, ['build'], { cwd })
+  expect(stdout).toMatch(/Did you mean .*(yarn|npm run) build/)
+
+  await fs.unlink(path.join(cwd, 'App.vue'))
+
+  // Fail if no entry file exists, also show a hint for npm scripts
+  expect(() => {
+    execa.sync(binPath, ['build'], { cwd })
+  }).toThrow(/Did you mean .*(yarn|npm run) build/)
+
+  expect(() => {
+    execa.sync(binPath, ['serve'], { cwd })
+  }).toThrow(/Did you mean .*(yarn|npm run) serve/)
+
+  // clean up, otherwise this file will affect other tests
+  await fs.unlink(path.join(cwd, 'package.json'))
 })
 
 afterAll(async () => {

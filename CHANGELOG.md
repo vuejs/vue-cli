@@ -1,3 +1,272 @@
+# [3.5.5](https://github.com/vuejs/vue-cli/compare/v3.5.4...v3.5.5) (2019-04-01)
+
+## babel-preset-app
+
+#### Reverts
+
+* "fix: should not add polyfills from transform-runtime plugin ([#3730](https://github.com/vuejs/vue-cli/issues/3730))" ([#3742](https://github.com/vuejs/vue-cli/issues/3742)) ([7228146](https://github.com/vuejs/vue-cli/commit/7228146)), closes [#3741](https://github.com/vuejs/vue-cli/issues/3741)
+
+
+
+# [3.5.4](https://github.com/vuejs/vue-cli/compare/v3.5.3...v3.5.4) (2019-03-31)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* should not add polyfills from transform-runtime plugin ([#3730](https://github.com/vuejs/vue-cli/issues/3730)) ([b987969](https://github.com/vuejs/vue-cli/commit/b987969))
+* should not use abosulte polyfill paths when `absoluteRuntime` is on ([#3732](https://github.com/vuejs/vue-cli/issues/3732)) ([9bdff3b](https://github.com/vuejs/vue-cli/commit/9bdff3b)), closes [#3725](https://github.com/vuejs/vue-cli/issues/3725)
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* **generator:** add core-js as direct dependency of generated projects ([#3736](https://github.com/vuejs/vue-cli/issues/3736)) ([5eb1425](https://github.com/vuejs/vue-cli/commit/5eb1425))
+
+
+
+# [3.5.3](https://github.com/vuejs/vue-cli/compare/v3.5.2...v3.5.3) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* downgrade [@babel](https://github.com/babel)/preset-env temporarily ([#3716](https://github.com/vuejs/vue-cli/issues/3716)) ([f107623](https://github.com/vuejs/vue-cli/commit/f107623))
+
+## cli-service
+
+#### Bug Fixes
+
+* properly load non-js config files in genCacheConfig ([#3632](https://github.com/vuejs/vue-cli/issues/3632)) ([adac48d](https://github.com/vuejs/vue-cli/commit/adac48d)), closes [#3631](https://github.com/vuejs/vue-cli/issues/3631)
+* set the path of safari-no-module-fix.js correctly ([#3647](https://github.com/vuejs/vue-cli/issues/3647)) ([10296ff](https://github.com/vuejs/vue-cli/commit/10296ff)), closes [#3033](https://github.com/vuejs/vue-cli/issues/3033)
+
+
+
+# [3.5.2](https://github.com/vuejs/vue-cli/compare/v3.5.1...v3.5.2) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* use absolute import path for injected core-js polyfills ([#3710](https://github.com/vuejs/vue-cli/issues/3710)) ([4d6fcf5](https://github.com/vuejs/vue-cli/commit/4d6fcf5)), closes [#3678](https://github.com/vuejs/vue-cli/issues/3678)
+* explicitly set corejs version for [@babel](https://github.com/babel)/preset-env ([#3696](https://github.com/vuejs/vue-cli/issues/3696)) ([156ef21](https://github.com/vuejs/vue-cli/commit/156ef21)), closes [#3695](https://github.com/vuejs/vue-cli/issues/3695)
+
+## docs
+
+#### Features
+
+* add manifest.json, make the website installable ([eda048a](https://github.com/vuejs/vue-cli/commit/eda048a))
+
+
+
+# [3.5.1](https://github.com/vuejs/vue-cli/compare/v3.5.0...v3.5.1) (2019-03-12)
+
+## cli-service
+
+#### Bug Fixes
+
+* should resolve to full path when setting default entryFiles ([dd37773](https://github.com/vuejs/vue-cli/commit/dd37773)), closes [#3616](https://github.com/vuejs/vue-cli/issues/3616) [#3618](https://github.com/vuejs/vue-cli/issues/3618)
+
+
+
+# [3.5.0](https://github.com/vuejs/vue-cli/compare/v3.4.1...v3.5.0) (2019-03-08)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* use an environment variable to determine the entry files to inject default polyfills ([#3565](https://github.com/vuejs/vue-cli/issues/3565)) ([93f57ac](https://github.com/vuejs/vue-cli/commit/93f57ac)), closes [#2983](https://github.com/vuejs/vue-cli/issues/2983)
+#### Features
+
+* add `entryFiles` option, allowing explicit polyfill injection to specified files ([#3470](https://github.com/vuejs/vue-cli/issues/3470)) ([7df0c58](https://github.com/vuejs/vue-cli/commit/7df0c58))
+
+## cli
+
+#### Bug Fixes
+
+* add missing package keys to the sort array (issue [#3509](https://github.com/vuejs/vue-cli/issues/3509)) ([#3510](https://github.com/vuejs/vue-cli/issues/3510)) ([6e9ba9b](https://github.com/vuejs/vue-cli/commit/6e9ba9b))
+
+## cli-plugin-babel
+
+#### Features
+
+* add .mjs files as transpileable files ([#3485](https://github.com/vuejs/vue-cli/issues/3485)) ([8562d3e](https://github.com/vuejs/vue-cli/commit/8562d3e))
+
+## cli-plugin-e2e-nightwatch
+
+#### Bug Fixes
+
+* setting env by `-e` in e2e tests ([#3583](https://github.com/vuejs/vue-cli/issues/3583)) ([9aff29d](https://github.com/vuejs/vue-cli/commit/9aff29d))
+
+## cli-plugin-typescript
+
+#### Features
+
+* loosen the restriction of typescript version ([#3542](https://github.com/vuejs/vue-cli/issues/3542)) ([873ad84](https://github.com/vuejs/vue-cli/commit/873ad84))
+
+## cli-plugin-unit-jest
+
+#### Bug Fixes
+
+* lock `[@vue](https://github.com/vue)/test-utils` version as it's still in beta and may introduce breaking changes ([266090d](https://github.com/vuejs/vue-cli/commit/266090d))
+
+## cli-service
+
+#### Bug Fixes
+
+* fix modern mode in monorepo by resolving in the package scope ([14b2c6e](https://github.com/vuejs/vue-cli/commit/14b2c6e)), closes [/github.com/vuejs/vue-cli/pull/3477#issuecomment-466926461](https://github.com//github.com/vuejs/vue-cli/pull/3477/issues/issuecomment-466926461)
+* **cli-service:** inspect --rules (close [#3334](https://github.com/vuejs/vue-cli/issues/3334)) ([#3378](https://github.com/vuejs/vue-cli/issues/3378)) ([6f93bfe](https://github.com/vuejs/vue-cli/commit/6f93bfe))
+* proxy should warn when array is passed. ([#3525](https://github.com/vuejs/vue-cli/issues/3525)) ([bb4f349](https://github.com/vuejs/vue-cli/commit/bb4f349)), closes [#3524](https://github.com/vuejs/vue-cli/issues/3524)
+#### Features
+
+* allow vue.config.js to return a function ([#3499](https://github.com/vuejs/vue-cli/issues/3499)) ([f5b174f](https://github.com/vuejs/vue-cli/commit/f5b174f)), closes [#3213](https://github.com/vuejs/vue-cli/issues/3213)
+* support environment variable expansion ([#3534](https://github.com/vuejs/vue-cli/issues/3534)) ([bd57f15](https://github.com/vuejs/vue-cli/commit/bd57f15))
+
+## cli-service-global
+
+#### Features
+
+* warn if run instant prototyping in a project directory ([#3508](https://github.com/vuejs/vue-cli/issues/3508)) ([2de215e](https://github.com/vuejs/vue-cli/commit/2de215e)), closes [#2473](https://github.com/vuejs/vue-cli/issues/2473)
+
+## docs
+
+#### Bug Fixes
+
+* **cli-service:** catch exception if "copy to clipboard" fails (issue [#3476](https://github.com/vuejs/vue-cli/issues/3476)) ([#3503](https://github.com/vuejs/vue-cli/issues/3503)) ([fec38f5](https://github.com/vuejs/vue-cli/commit/fec38f5))
+
+
+
+# [3.4.1](https://github.com/vuejs/vue-cli/compare/v3.4.0...v3.4.1) (2019-02-20)
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* fix hash difference on different terminal sessions ([a2bc927](https://github.com/vuejs/vue-cli/commit/a2bc927)), closes [#3416](https://github.com/vuejs/vue-cli/issues/3416)
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* respect command line --ignore-pattern option ([f819f51](https://github.com/vuejs/vue-cli/commit/f819f51))
+* **cli-plugin-eslint:** make eslint deps optional ([#3068](https://github.com/vuejs/vue-cli/issues/3068)) ([114313c](https://github.com/vuejs/vue-cli/commit/114313c))
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* **tslint:** don't reread the input file on ts linting (close [#2786](https://github.com/vuejs/vue-cli/issues/2786)) ([#2787](https://github.com/vuejs/vue-cli/issues/2787)) ([364f28f](https://github.com/vuejs/vue-cli/commit/364f28f))
+
+## cli-service
+
+#### Bug Fixes
+
+* run modern build in separate process ([#3477](https://github.com/vuejs/vue-cli/issues/3477)) ([e0983f4](https://github.com/vuejs/vue-cli/commit/e0983f4)), closes [#3438](https://github.com/vuejs/vue-cli/issues/3438) [#3474](https://github.com/vuejs/vue-cli/issues/3474)
+#### Features
+
+* **cli-service:** add history api fallback for multi-page mode ([#3181](https://github.com/vuejs/vue-cli/issues/3181)) ([ea5d9f7](https://github.com/vuejs/vue-cli/commit/ea5d9f7))
+
+## cli-ui
+
+#### Bug Fixes
+
+* import createTimeAgo from vue-timeago because it isn't a default export ([#3437](https://github.com/vuejs/vue-cli/issues/3437)) ([38aa8d9](https://github.com/vuejs/vue-cli/commit/38aa8d9))
+
+
+
+# [3.4.0](https://github.com/vuejs/vue-cli/compare/v3.3.0...v3.4.0) (2019-01-31)
+
+## babel-preset-app
+
+#### Features
+
+* **babel:** include es6.object.assign by default ([#3281](https://github.com/vuejs/vue-cli/issues/3281)) ([8dcfc18](https://github.com/vuejs/vue-cli/commit/8dcfc18))
+* expose `absoluteRuntime` option, closes [#2807](https://github.com/vuejs/vue-cli/issues/2807) ([d5ed280](https://github.com/vuejs/vue-cli/commit/d5ed280))
+
+## cli
+
+#### Bug Fixes
+
+* fix injectImports when there's no pre-existing import declarations ([108d801](https://github.com/vuejs/vue-cli/commit/108d801)), closes [#2925](https://github.com/vuejs/vue-cli/issues/2925)
+* should check yarn when no pacakage manager specified ([6a75056](https://github.com/vuejs/vue-cli/commit/6a75056)), closes [#3393](https://github.com/vuejs/vue-cli/issues/3393)
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* add webpack to plugins' dependencies, fix yarn peer dep warnings ([6e5e117](https://github.com/vuejs/vue-cli/commit/6e5e117))
+* **cli-plugin-babel:** transpileDependencies should only match packages inside `node_modules`, close [#3057](https://github.com/vuejs/vue-cli/issues/3057) ([#3229](https://github.com/vuejs/vue-cli/issues/3229)) ([fb71653](https://github.com/vuejs/vue-cli/commit/fb71653))
+* take all env variables into account in `genCacheConfig` ([047872c](https://github.com/vuejs/vue-cli/commit/047872c)), closes [#3275](https://github.com/vuejs/vue-cli/issues/3275)
+
+## cli-plugin-eslint
+
+#### Bug Fixes
+
+* only add custom ignorePattern when no .eslintignore exists ([#3325](https://github.com/vuejs/vue-cli/issues/3325)) ([febd386](https://github.com/vuejs/vue-cli/commit/febd386)), closes [#3243](https://github.com/vuejs/vue-cli/issues/3243)
+#### Features
+
+* add `--no-fix-warnings` option ([#3307](https://github.com/vuejs/vue-cli/issues/3307)) ([2b6dba3](https://github.com/vuejs/vue-cli/commit/2b6dba3))
+
+## cli-plugin-typescript
+
+#### Bug Fixes
+
+* fix linting of tsx script in .vue file ([#3097](https://github.com/vuejs/vue-cli/issues/3097)) ([f3fe8b3](https://github.com/vuejs/vue-cli/commit/f3fe8b3))
+#### Features
+
+* support yml, yaml and json tslint configuration files ([#3305](https://github.com/vuejs/vue-cli/issues/3305)) ([596a49d](https://github.com/vuejs/vue-cli/commit/596a49d))
+
+## cli-plugin-unit-mocha
+
+#### Bug Fixes
+
+* apply a workaround for the prettier / jsdom-global bug ([bca6edc](https://github.com/vuejs/vue-cli/commit/bca6edc))
+
+## cli-service
+
+#### Bug Fixes
+
+* add [@vue](https://github.com/vue)/component-compiler-utils to dependencies, fix yarn pnp compatibility ([3d6eab9](https://github.com/vuejs/vue-cli/commit/3d6eab9))
+* copy `publicPath` option to `baseUrl`, fix plugin compatibility ([27ffd28](https://github.com/vuejs/vue-cli/commit/27ffd28))
+* do not add link tag to demo page when css extract is false ([#3351](https://github.com/vuejs/vue-cli/issues/3351)) ([9029ad1](https://github.com/vuejs/vue-cli/commit/9029ad1))
+* fix reference of friendly-errors-webpack-plugin in config ([486a921](https://github.com/vuejs/vue-cli/commit/486a921))
+* genCacheConfig return different result because linebreak ([#3372](https://github.com/vuejs/vue-cli/issues/3372)) ([ab13dfe](https://github.com/vuejs/vue-cli/commit/ab13dfe))
+* pin webpack version, fixes [#3335](https://github.com/vuejs/vue-cli/issues/3335) ([0a0a65f](https://github.com/vuejs/vue-cli/commit/0a0a65f))
+* should respect root `parallel` option in terser plugin ([702a2c9](https://github.com/vuejs/vue-cli/commit/702a2c9))
+* use a custom fork of friendly-errors-webpack-plugin ([28933c8](https://github.com/vuejs/vue-cli/commit/28933c8)), closes [/github.com/geowarin/friendly-errors-webpack-plugin/pull/82#issuecomment-454808535](https://github.com//github.com/geowarin/friendly-errors-webpack-plugin/pull/82/issues/issuecomment-454808535) [#2244](https://github.com/vuejs/vue-cli/issues/2244) [#3003](https://github.com/vuejs/vue-cli/issues/3003)
+* use the correct size unit (KiB) ([1553757](https://github.com/vuejs/vue-cli/commit/1553757)), closes [#3283](https://github.com/vuejs/vue-cli/issues/3283)
+#### Features
+
+* add typings for vue.config.js options ([#3387](https://github.com/vuejs/vue-cli/issues/3387)) ([b61ea45](https://github.com/vuejs/vue-cli/commit/b61ea45))
+* support dart-sass as default sass implementation ([#3321](https://github.com/vuejs/vue-cli/issues/3321)) ([9c1e797](https://github.com/vuejs/vue-cli/commit/9c1e797))
+* support use -h show detailed usage of command ([67cff95](https://github.com/vuejs/vue-cli/commit/67cff95))
+
+## cli-shared-utils
+
+#### Bug Fixes
+
+* add timeout for requests ([09be0f2](https://github.com/vuejs/vue-cli/commit/09be0f2)), closes [#3076](https://github.com/vuejs/vue-cli/issues/3076)
+
+## cli-ui
+
+#### Bug Fixes
+
+* **cli-ui:** folder list when root windows ([#3331](https://github.com/vuejs/vue-cli/issues/3331)) ([d047aca](https://github.com/vuejs/vue-cli/commit/d047aca))
+#### Features
+
+* **ui:** enforce package.json npm rules ([#3232](https://github.com/vuejs/vue-cli/issues/3232)) ([11d17d9](https://github.com/vuejs/vue-cli/commit/11d17d9))
+
+## eslint-config-typescript
+
+#### Bug Fixes
+
+* force enable `jsx` in parserOptions, fixes [#3268](https://github.com/vuejs/vue-cli/issues/3268) ([85c5973](https://github.com/vuejs/vue-cli/commit/85c5973))
+#### Features
+
+* update eslint-config-typescript to use [@typescript-eslint](https://github.com/typescript-eslint) ([#3359](https://github.com/vuejs/vue-cli/issues/3359)) ([189ea54](https://github.com/vuejs/vue-cli/commit/189ea54))
+
+
+
 # [3.3.0](https://github.com/vuejs/vue-cli/compare/v3.2.3...v3.3.0) (2019-01-08)
 
 ## babel-preset-app

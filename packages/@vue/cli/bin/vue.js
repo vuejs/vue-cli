@@ -63,8 +63,13 @@ program
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
+  .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
+
+    if (minimist(process.argv.slice(3))._.length > 1) {
+      console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
+    }
     // --git makes commander to default git to true
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
       options.forceGit = true
@@ -173,7 +178,7 @@ program
         System: ['OS', 'CPU'],
         Binaries: ['Node', 'Yarn', 'npm'],
         Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
-        npmPackages: '/**/{*vue*,@vue/*/}',
+        npmPackages: '/**/{typescript,*vue*,@vue/*/}',
         npmGlobalPackages: ['@vue/cli']
       },
       {

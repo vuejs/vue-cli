@@ -64,7 +64,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.3.0',
+      '@vue/cli-plugin-babel': '^3.5.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -142,6 +142,22 @@ test('keep publicPath when empty', () => {
 test('load project options from vue.config.js', () => {
   process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
   fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
+  mockPkg({
+    vue: {
+      lintOnSave: true
+    }
+  })
+  const service = createMockService()
+  fs.unlinkSync('/vue.config.js')
+  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
+  // vue.config.js has higher priority
+  expect(service.projectOptions.lintOnSave).toBe(false)
+})
+
+test('load project options from vue.config.js', () => {
+  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
+  fs.writeFileSync('/vue.config.js', '')  // only to ensure fs.existsSync returns true
+  jest.mock('/vue.config.js', () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
     vue: {
       lintOnSave: true
@@ -237,6 +253,7 @@ test('api: configureWebpack', () => {
   }])
 
   const config = service.resolveWebpackConfig()
+  console.log(process.env.VUE_CLI_ENTRY_FILES)
   expect(config.output.path).toBe('test-dist-2')
 })
 
@@ -278,6 +295,28 @@ test('api: configureWebpack preserve ruleNames', () => {
 
   const config = service.resolveWebpackConfig()
   expect(config.module.rules[0].__ruleNames).toEqual(['js'])
+})
+
+test('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
+  const service = createMockService([{
+    id: 'test',
+    apply: api => {
+      api.configureWebpack(config => {
+        config.entry = {
+          page1: './src/page1.js',
+          page2: './src/page2.js'
+        }
+      })
+    }
+  }])
+
+  service.resolveWebpackConfig()
+  expect(process.env.VUE_CLI_ENTRY_FILES).toEqual(
+    JSON.stringify([
+      path.resolve('/', './src/page1.js'),
+      path.resolve('/', './src/page2.js')
+    ])
+  )
 })
 
 test('api: configureDevServer', () => {

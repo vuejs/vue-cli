@@ -100,7 +100,7 @@ test('typescript', async () => {
     '@vue/typescript'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'typescript-eslint-parser'
+    parser: '@typescript-eslint/parser'
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
@@ -129,8 +129,7 @@ test('lint on commit', async () => {
   expect(pkg.gitHooks['pre-commit']).toBe('lint-staged')
   expect(pkg.devDependencies).toHaveProperty('lint-staged')
   expect(pkg['lint-staged']).toEqual({
-    '*.js': ['vue-cli-service lint', 'git add'],
-    '*.vue': ['vue-cli-service lint', 'git add']
+    '*.{js,vue}': ['vue-cli-service lint', 'git add']
   })
   expect(pkg.vue).toEqual({
     lintOnSave: false

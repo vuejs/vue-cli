@@ -1,6 +1,6 @@
 {
   "name": "@vue/babel-preset-app",
-  "version": "3.3.0",
+  "version": "3.5.5",
   "description": "babel-preset-app for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/babel-preset-app"
   },
   "keywords": [
     "vue",
@@ -21,18 +22,18 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/babel-preset-app#readme",
   "dependencies": {
+    "@babel/helper-module-imports": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-decorators": "^7.1.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-jsx": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.4.0",
+    "@babel/preset-env": "^7.0.0 < 7.4.0",
     "@babel/runtime": "^7.0.0",
     "@babel/runtime-corejs2": "^7.2.0",
-    "@vue/babel-preset-jsx": "^1.0.0-beta.1",
-    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "@vue/babel-preset-jsx": "^1.0.0-beta.2",
     "babel-plugin-dynamic-import-node": "^2.2.0",
-    "babel-plugin-transform-vue-jsx": "^4.0.1",
-    "core-js": "^2.6.1"
-  }
+    "core-js": "^2.6.5"
+  },
+  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }

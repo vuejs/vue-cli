@@ -71,14 +71,13 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^8.1.0'
+      'lint-staged': '^8.1.4'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
     pkg['lint-staged'] = {
-      '*.js': ['vue-cli-service lint', 'git add'],
-      '*.vue': ['vue-cli-service lint', 'git add']
+      '*.{js,vue}': ['vue-cli-service lint', 'git add']
     }
   }
 
@@ -113,11 +112,11 @@ const applyTS = module.exports.applyTS = api => {
     eslintConfig: {
       extends: ['@vue/typescript'],
       parserOptions: {
-        parser: 'typescript-eslint-parser'
+        parser: '@typescript-eslint/parser'
       }
     },
     devDependencies: {
-      '@vue/eslint-config-typescript': '^3.2.0'
+      '@vue/eslint-config-typescript': '^4.0.0'
     }
   })
 }

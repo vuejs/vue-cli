@@ -6,7 +6,8 @@ const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
-const loadEnv = require('./util/loadEnv')
+const dotenv = require('dotenv')
+const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
 const { warn, error, isPlugin, loadModule } = require('@vue/cli-shared-utils')
 
@@ -95,8 +96,9 @@ module.exports = class Service {
 
     const load = path => {
       try {
-        const res = loadEnv(path)
-        logger(path, res)
+        const env = dotenv.config({ path, debug: process.env.DEBUG })
+        dotenvExpand(env)
+        logger(path, env)
       } catch (err) {
         // only ignore error if file is not found
         if (err.toString().indexOf('ENOENT') < 0) {
@@ -268,6 +270,22 @@ module.exports = class Service {
       )
     }
 
+    if (typeof config.entry !== 'function') {
+      let entryFiles
+      if (typeof config.entry === 'string') {
+        entryFiles = [config.entry]
+      } else if (Array.isArray(config.entry)) {
+        entryFiles = config.entry
+      } else {
+        entryFiles = Object.values(config.entry || []).reduce((allEntries, curr) => {
+          return allEntries.concat(curr)
+        }, [])
+      }
+
+      entryFiles = entryFiles.map(file => path.resolve(this.context, file))
+      process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
+    }
+
     return config
   }
 
@@ -281,9 +299,14 @@ module.exports = class Service {
     if (fs.existsSync(configPath)) {
       try {
         fileConfig = require(configPath)
+
+        if (typeof fileConfig === 'function') {
+          fileConfig = fileConfig()
+        }
+
         if (!fileConfig || typeof fileConfig !== 'object') {
           error(
-            `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
+            `Error loading ${chalk.bold('vue.config.js')}: should export an object or a function that returns object.`
           )
           fileConfig = null
         }

@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service-global",
-  "version": "3.3.0",
+  "version": "3.5.5",
   "description": "vue-cli-service global addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-service-global"
   },
   "keywords": [
     "vue",
@@ -21,14 +22,17 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-build#readme",
   "dependencies": {
-    "@vue/babel-preset-app": "^3.3.0",
-    "@vue/cli-plugin-babel": "^3.3.0",
-    "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
+    "@vue/babel-preset-app": "^3.5.5",
+    "@vue/cli-plugin-babel": "^3.5.5",
+    "@vue/cli-plugin-eslint": "^3.5.1",
+    "@vue/cli-service": "^3.5.3",
     "babel-eslint": "^10.0.1",
-    "chalk": "^2.4.1",
-    "resolve": "^1.9.0",
-    "vue": "^2.5.21",
-    "vue-template-compiler": "^2.5.21"
-  }
+    "chalk": "^2.4.2",
+    "eslint": "^4.19.1",
+    "eslint-plugin-vue": "^4.7.1",
+    "resolve": "^1.10.0",
+    "vue": "^2.6.6",
+    "vue-template-compiler": "^2.6.6"
+  },
+  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }
