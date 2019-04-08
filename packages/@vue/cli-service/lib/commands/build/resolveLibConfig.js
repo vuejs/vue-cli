@@ -28,6 +28,16 @@ module.exports = (api, { entry, name, formats }, options) => {
   function genConfig (format, postfix = format, genHTML) {
     const config = api.resolveChainableWebpackConfig()
 
+    const browserslist = require('browserslist')
+    const targets = browserslist(undefined, { path: fullEntryPath })
+    const supportsIE = targets.some(agent => agent.includes('ie'))
+
+    const webpack = require('webpack')
+    config.plugin('need-current-script-polyfill')
+      .use(webpack.DefinePlugin, [{
+        'process.env.NEED_CURRENTSCRIPT_POLYFILL': JSON.stringify(supportsIE)
+      }])
+
     // adjust css output name so they write to the same file
     if (config.plugins.has('extract-css')) {
       config
