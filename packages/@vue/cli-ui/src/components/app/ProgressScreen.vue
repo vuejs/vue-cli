@@ -32,9 +32,11 @@
             </div>
 
             <div class="secondary-info">
-              <div v-if="progress.info" class="info">
-                {{ progress.info }}
-              </div>
+              <div
+                v-if="progress.info"
+                class="info"
+                v-html="ansiColors(progress.info)"
+              />
 
               <VueLoadingBar
                 v-if="progress.progress !== -1"

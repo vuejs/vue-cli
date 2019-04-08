@@ -280,6 +280,7 @@
                 "options": {
                   "label": "Additional options",
                   "force": "Overwrite target folder if it exists",
+                  "bare": "Scaffold project without beginner instructions",
                   "git-title": "Git repository",
                   "git": "Initialize git repository (recommended)",
                   "git-commit-message": "Initial commit message (optional)"

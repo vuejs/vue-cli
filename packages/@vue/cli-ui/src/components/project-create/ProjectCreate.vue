@@ -108,6 +108,13 @@
                   >
                     {{ $t('org.vue.views.project-create.tabs.details.form.options.force') }}
                   </VueSwitch>
+
+                  <VueSwitch
+                    v-model="formData.bare"
+                    class="extend-left bare"
+                  >
+                    {{ $t('org.vue.views.project-create.tabs.details.form.options.bare') }}
+                  </VueSwitch>
                 </VueFormField>
 
                 <VueFormField
@@ -466,6 +473,7 @@ function formDataFactory () {
   return {
     folder: '',
     force: false,
+    bare: false,
     enableGit: true,
     gitCommitMessage: '',
     packageManager: undefined,
@@ -629,6 +637,7 @@ export default {
             input: {
               folder: this.formData.folder,
               force: this.formData.force,
+              bare: this.formData.bare,
               enableGit: this.formData.enableGit,
               gitCommitMessage: this.formData.gitCommitMessage,
               packageManager: this.formData.packageManager,

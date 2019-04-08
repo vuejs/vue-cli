@@ -44,6 +44,7 @@ enum ProjectType {
 input ProjectCreateInput {
   folder: String!
   force: Boolean!
+  bare: Boolean!
   packageManager: PackageManager
   preset: String!
   remote: String

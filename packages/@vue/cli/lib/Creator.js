@@ -210,11 +210,13 @@ module.exports = class Creator extends EventEmitter {
     stopSpinner()
     log()
     log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
-    log(
-      `👉  Get started with the following commands:\n\n` +
-      (this.context === process.cwd() ? `` : chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`)) +
-      chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
-    )
+    if (!cliOptions.skipGetStarted) {
+      log(
+        `👉  Get started with the following commands:\n\n` +
+        (this.context === process.cwd() ? `` : chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`)) +
+        chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
+      )
+    }
     log()
     this.emit('creation', { event: 'done' })
 
