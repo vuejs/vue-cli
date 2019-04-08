@@ -11,6 +11,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint src apollo-server",
     "apollo": "cross-env VUE_APP_CLI_UI_DEV=true VUE_APP_GRAPHQL_PORT=4030 vue-cli-service apollo:watch",
+    "apollo:debug": "cross-env VUE_CLI_DEBUG=true yarn run apollo",
     "apollo:run": "cross-env VUE_CLI_PLUGIN_DEV=true VUE_CLI_IPC=vue-cli-dev vue-cli-service apollo:run",
     "apollo:run:test": "cross-env VUE_CLI_DEBUG=true VUE_CLI_UI_TEST=true VUE_APP_GRAPHQL_PORT=4040 VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql VUE_CLI_IPC=vue-cli-test vue-cli-service apollo:watch --mode production",
     "prepublishOnly": "yarn run lint --no-fix && yarn run build",
