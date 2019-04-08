@@ -11,8 +11,13 @@ module.exports = function loadCommand (commandName, moduleName) {
       } catch (err2) {
         if (isNotFoundError(err2)) {
           const chalk = require('chalk')
-          const { hasYarn } = require('@vue/cli-shared-utils')
-          const installCommand = hasYarn() ? `yarn global add` : `npm install -g`
+          const { hasYarn, hasPnpm } = require('@vue/cli-shared-utils')
+          let installCommand = `npm install -g`
+          if (hasYarn()) {
+            installCommand = `yarn global add`
+          } else if (hasPnpm()) {
+            installCommand = `pnpm install -g`
+          }
           console.log()
           console.log(
             `  Command ${chalk.cyan(`vue ${commandName}`)} requires a global addon to be installed.\n` +

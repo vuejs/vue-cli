@@ -2,6 +2,7 @@ const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
+const semver = require('semver')
 
 let _hasYarn
 const _yarnProjects = new LRU({
@@ -13,6 +14,7 @@ const _gitProjects = new LRU({
   max: 10,
   maxAge: 1000
 })
+let _hasPnpm
 
 // env detection
 exports.hasYarn = () => {
@@ -75,6 +77,25 @@ exports.hasProjectGit = (cwd) => {
   }
   _gitProjects.set(cwd, result)
   return result
+}
+
+exports.hasPnpm = () => {
+  if (process.env.VUE_CLI_TEST) {
+    return true
+  }
+  if (_hasPnpm != null) {
+    return _hasPnpm
+  }
+  try {
+    const pnpmVersion = execSync('pnpm --version').toString()
+    // there's a critical bug in pnpm 2
+    // https://github.com/pnpm/pnpm/issues/1678#issuecomment-469981972
+    // so we only support pnpm >= 3.0.0
+    _hasPnpm = semver.gte(pnpmVersion, '3.0.0')
+    return _hasPnpm
+  } catch (e) {
+    return (_hasPnpm = false)
+  }
 }
 
 // OS

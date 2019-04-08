@@ -9,7 +9,7 @@ const debug = require('debug')('vue-cli:install')
 
 const taobaoDistURL = 'https://npm.taobao.org/dist'
 
-const supportPackageManagerList = ['npm', 'yarn']
+const supportPackageManagerList = ['npm', 'yarn', 'pnpm']
 
 class InstallProgress extends EventEmitter {
   constructor () {
@@ -176,7 +176,7 @@ exports.installDeps = async function installDeps (targetDir, command, cliRegistr
 
   const args = []
 
-  if (command === 'npm') {
+  if (command === 'npm' || command === 'pnpm') {
     args.push('install', '--loglevel', 'error')
   } else if (command === 'yarn') {
     // do nothing
@@ -195,7 +195,7 @@ exports.installPackage = async function (targetDir, command, cliRegistry, packag
 
   const args = []
 
-  if (command === 'npm') {
+  if (command === 'npm' || command === 'pnpm') {
     args.push('install', '--loglevel', 'error')
   } else if (command === 'yarn') {
     args.push('add')
@@ -218,7 +218,7 @@ exports.uninstallPackage = async function (targetDir, command, cliRegistry, pack
 
   const args = []
 
-  if (command === 'npm') {
+  if (command === 'npm' || command === 'pnpm') {
     args.push('uninstall', '--loglevel', 'error')
   } else if (command === 'yarn') {
     args.push('remove')
@@ -239,7 +239,7 @@ exports.updatePackage = async function (targetDir, command, cliRegistry, package
 
   const args = []
 
-  if (command === 'npm') {
+  if (command === 'npm' || command === 'pnpm') {
     args.push('update', '--loglevel', 'error')
   } else if (command === 'yarn') {
     args.push('upgrade')

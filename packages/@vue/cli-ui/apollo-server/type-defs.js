@@ -8,6 +8,7 @@ scalar JSON
 enum PackageManager {
   npm
   yarn
+  pnpm
 }
 
 interface DescribedEntity {
