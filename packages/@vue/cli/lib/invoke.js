@@ -84,8 +84,14 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   // resolve options if no command line options (other than --registry) are passed,
   // and the plugin contains a prompt module.
   // eslint-disable-next-line prefer-const
-  let { registry, ...pluginOptions } = options
-  if (!Object.keys(pluginOptions).length) {
+  let { registry, $inlineOptions, ...pluginOptions } = options
+  if ($inlineOptions) {
+    try {
+      pluginOptions = JSON.parse($inlineOptions)
+    } catch (e) {
+      throw new Error(`Couldn't parse inline options JSON: ${e.message}`)
+    }
+  } else if (!Object.keys(pluginOptions).length) {
     let pluginPrompts = loadModule(`${id}/prompts`, context)
     if (pluginPrompts) {
       if (typeof pluginPrompts === 'function') {
