@@ -27,7 +27,8 @@ const {
   getPluginLink,
   resolveModule,
   loadModule,
-  clearModule
+  clearModule,
+  execa
 } = require('@vue/cli-shared-utils')
 const {
   progress: installProgress,
@@ -35,7 +36,6 @@ const {
   uninstallPackage,
   updatePackage
 } = require('@vue/cli/lib/util/installDeps')
-const invoke = require('@vue/cli/lib/invoke')
 const { getCommand } = require('../util/command')
 const ipc = require('../util/ipc')
 const { log } = require('../util/logger')
@@ -446,7 +446,32 @@ function runInvoke (id, context) {
     currentPluginId = id
     // Allow plugins that don't have a generator
     if (resolveModule(`${id}/generator`, cwd.get())) {
-      await invoke(id, prompts.getAnswers(), cwd.get())
+      const child = execa('vue', [
+        'invoke',
+        id,
+        '--$inlineOptions',
+        JSON.stringify(prompts.getAnswers())
+      ], {
+        cwd: cwd.get(),
+        stdio: ['inherit', 'pipe', 'inherit']
+      })
+
+      const onData = buffer => {
+        const text = buffer.toString().trim()
+        if (text) {
+          setProgress({
+            info: text
+          })
+          logs.add({
+            type: 'info',
+            message: text
+          }, context)
+        }
+      }
+
+      child.stdout.on('data', onData)
+
+      await child
     }
     // Run plugin api
     runPluginApi(id, getApi(cwd.get()), context)
