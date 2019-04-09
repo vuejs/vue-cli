@@ -4,6 +4,8 @@ import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 import clientStateDefaults from './state/defaults'
 import clientStateResolvers from './state/resolvers'
 // GraphQL documents
+import PROJECT_CURRENT from './graphql/project/projectCurrent.gql'
+import CURRENT_PROJECT_ID_SET from './graphql/project/currentProjectIdSet.gql'
 import CONNECTED_SET from '@/graphql/connected/connectedSet.gql'
 import LOADING_CHANGE from '@/graphql/loading/loadingChange.gql'
 import DARK_MODE_SET from '@/graphql/dark-mode/darkModeSet.gql'
@@ -25,9 +27,13 @@ const options = {
   persisting: false,
   websocketsOnly: true,
   clientState: {
-    defaults: clientStateDefaults,
+    defaults: clientStateDefaults(),
     resolvers: clientStateResolvers
   }
+  // resolvers: clientStateResolvers,
+  // onCacheInit: cache => {
+  //   cache.writeData(clientStateDefaults())
+  // }
 }
 
 // Create apollo client
@@ -64,11 +70,26 @@ export const apolloProvider = new VueApollo({
 
 export async function resetApollo () {
   console.log('[UI] Apollo store reset')
+
+  const { data: { projectCurrent } } = await apolloClient.query({
+    query: PROJECT_CURRENT,
+    fetchPolicy: 'network-only'
+  })
+  const projectId = projectCurrent.id
+
   try {
     await apolloClient.resetStore()
   } catch (e) {
     // Potential errors
   }
+
+  await apolloClient.mutate({
+    mutation: CURRENT_PROJECT_ID_SET,
+    variables: {
+      projectId
+    }
+  })
+
   loadDarkMode()
 }
 
