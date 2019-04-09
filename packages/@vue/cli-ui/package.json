@@ -59,6 +59,7 @@
     "semver": "^5.5.0",
     "shortid": "^2.2.11",
     "vue-cli-plugin-apollo": "^0.19.1",
+    "vue-virtual-scroller": "^1.0.0-rc.2",
     "watch": "^1.0.2"
   },
   "devDependencies": {

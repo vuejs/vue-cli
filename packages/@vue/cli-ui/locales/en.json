@@ -4,7 +4,9 @@
       "common": {
         "close": "Close",
         "back": "Go back",
-        "more-info": "More info"
+        "more-info": "More info",
+        "show-more": "Show more",
+        "show-less": "Show less"
       },
       "components": {
         "client-addon-component": {
@@ -811,15 +813,22 @@
           "description": "Check for known vulnerabilities in your project dependencies",
           "messages": {
             "ok": "No vulnerability found",
-            "loading": "Checking security reports...",
-            "attention": "{n} vulnerabilities found"
+            "loading": "Auditing project security...",
+            "attention": "{n} vulnerabilities found",
+            "error": "Couldn't check for vulnerability"
           },
           "severity": {
+            "critical": "Critical severity",
             "high": "High severity",
-            "medium": "Medium severity",
+            "moderate": "Medium severity",
             "low": "Low severity"
           },
-          "direct-dep": "Direct dependency"
+          "direct-dep": "Direct dependency",
+          "versions": {
+            "vulnerable": "Vulnerable versions:",
+            "patched": "Patched versions:"
+          },
+          "recheck": "Check again"
         },
         "run-task": {
           "title": "Run task",
