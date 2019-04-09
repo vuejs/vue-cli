@@ -20,6 +20,14 @@ exports.auditProject = async function (cwd) {
         reject: false
       })
 
+      if (child.stderr) {
+        const errLines = child.stderr.split('\n').map(l => l.trim()).filter(l => l)
+        const error = errLines.find(l => l.startsWith('Error:'))
+        if (error) {
+          throw new Error(error.substr('Error:'.length).trim())
+        }
+      }
+
       const data = child.stdout
 
       let auditAdvisories = []
