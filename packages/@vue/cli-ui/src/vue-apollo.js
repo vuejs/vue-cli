@@ -3,6 +3,7 @@ import VueApollo from 'vue-apollo'
 import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 import clientStateDefaults from './state/defaults'
 import clientStateResolvers from './state/resolvers'
+import clientStateTypeDefs from './state/typeDefs'
 // GraphQL documents
 import PROJECT_CURRENT from './graphql/project/projectCurrent.gql'
 import CURRENT_PROJECT_ID_SET from './graphql/project/currentProjectIdSet.gql'
@@ -26,14 +27,11 @@ const options = {
   wsEndpoint: endpoint,
   persisting: false,
   websocketsOnly: true,
-  clientState: {
-    defaults: clientStateDefaults(),
-    resolvers: clientStateResolvers
+  typeDefs: clientStateTypeDefs,
+  resolvers: clientStateResolvers,
+  onCacheInit: cache => {
+    cache.writeData({ data: clientStateDefaults() })
   }
-  // resolvers: clientStateResolvers,
-  // onCacheInit: cache => {
-  //   cache.writeData(clientStateDefaults())
-  // }
 }
 
 // Create apollo client
