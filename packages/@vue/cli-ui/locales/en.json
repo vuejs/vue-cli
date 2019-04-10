@@ -434,7 +434,8 @@
           }
         },
         "project-tasks": {
-          "title": "Project tasks"
+          "title": "Project tasks",
+          "refresh": "Refresh tasks"
         },
         "project-task-details": {
           "actions": {
