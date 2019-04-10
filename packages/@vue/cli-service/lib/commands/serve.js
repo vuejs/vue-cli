@@ -76,8 +76,12 @@ module.exports = (api, options) => {
     const useHttps = args.https || projectDevServerOptions.https || defaults.https
     const protocol = useHttps ? 'https' : 'http'
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
-    portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
-    const port = await portfinder.getPortPromise()
+    let port = args.port || process.env.PORT || projectDevServerOptions.port
+    // just use portfinder when user not set port
+    if (!port) {
+      portfinder.basePort = defaults.port
+      port = await portfinder.getPortPromise()
+    }
     const rawPublicUrl = args.public || projectDevServerOptions.public
     const publicUrl = rawPublicUrl
       ? /^[a-zA-Z]+:\/\//.test(rawPublicUrl)
