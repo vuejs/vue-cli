@@ -1,5 +1,6 @@
 const {
   info,
+  error,
   hasProjectYarn,
   openBrowser,
   IpcMessenger
@@ -77,8 +78,10 @@ module.exports = (api, options) => {
     const protocol = useHttps ? 'https' : 'http'
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     let port = args.port || process.env.PORT || projectDevServerOptions.port
+    let hasUserGivenPort = true
     // just use portfinder when user not set port
     if (!port) {
+      hasUserGivenPort = false
       portfinder.basePort = defaults.port
       port = await portfinder.getPortPromise()
     }
@@ -280,6 +283,14 @@ module.exports = (api, options) => {
         if (err) {
           reject(err)
         }
+      }).on('error', err => {
+        if (hasUserGivenPort && err.code === 'EADDRINUSE') {
+          console.log()
+          error(`Address already in use ${err.address}:${err.port}.`)
+          info(`You can change the port by ${chalk.cyan('--port')} option or ${chalk.cyan('vue.config.js')} or ${chalk.cyan('package.json')}.`)
+          process.exit(1)
+        }
+        reject(err)
       })
     })
   })
