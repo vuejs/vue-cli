@@ -9,7 +9,7 @@ const severity = {
 
 exports.auditProject = async function (cwd) {
   try {
-    if (hasProjectYarn) {
+    if (hasProjectYarn(cwd)) {
       const child = await execa('yarn', [
         'audit',
         '--json',
