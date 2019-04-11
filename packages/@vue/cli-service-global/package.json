@@ -31,8 +31,8 @@
     "eslint": "^4.19.1",
     "eslint-plugin-vue": "^4.7.1",
     "resolve": "^1.10.0",
-    "vue": "^2.6.6",
-    "vue-template-compiler": "^2.6.6"
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10"
   },
   "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
 }
