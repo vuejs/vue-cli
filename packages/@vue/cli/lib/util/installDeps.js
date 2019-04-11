@@ -182,6 +182,10 @@ exports.installDeps = async function installDeps (targetDir, command, cliRegistr
     // do nothing
   }
 
+  if (command === 'pnpm') {
+    args.push('--shamefully-flatten')
+  }
+
   await addRegistryToArgs(command, args, cliRegistry)
 
   debug(`command: `, command)
