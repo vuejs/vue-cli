@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (api, { entry, name, formats }, options) => {
+module.exports = (api, { entry, name, formats, filename }, options) => {
   const { log, error } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
@@ -24,16 +24,26 @@ module.exports = (api, { entry, name, formats }, options) => {
     api.service.pkg.name ||
     path.basename(entry).replace(/\.(jsx?|vue)$/, '')
   )
-
+  filename = filename || libName
   function genConfig (format, postfix = format, genHTML) {
     const config = api.resolveChainableWebpackConfig()
+
+    const browserslist = require('browserslist')
+    const targets = browserslist(undefined, { path: fullEntryPath })
+    const supportsIE = targets.some(agent => agent.includes('ie'))
+
+    const webpack = require('webpack')
+    config.plugin('need-current-script-polyfill')
+      .use(webpack.DefinePlugin, [{
+        'process.env.NEED_CURRENTSCRIPT_POLYFILL': JSON.stringify(supportsIE)
+      }])
 
     // adjust css output name so they write to the same file
     if (config.plugins.has('extract-css')) {
       config
         .plugin('extract-css')
           .tap(args => {
-            args[0].filename = `${libName}.css`
+            args[0].filename = `${filename}.css`
             return args
           })
     }
@@ -64,12 +74,13 @@ module.exports = (api, { entry, name, formats }, options) => {
             inject: false,
             filename: 'demo.html',
             libName,
+            assetsFileName: filename,
             cssExtract: config.plugins.has('extract-css')
           }])
     }
 
     // resolve entry/output
-    const entryName = `${libName}.${postfix}`
+    const entryName = `${filename}.${postfix}`
     config.resolve
       .alias
         .set('~entry', fullEntryPath)

@@ -33,6 +33,7 @@ const {
   hasGit,
   hasProjectGit,
   hasYarn,
+  hasPnpm,
   logWithSpinner,
   stopSpinner,
   exit,
@@ -97,7 +98,8 @@ module.exports = class Creator extends EventEmitter {
     const packageManager = (
       cliOptions.packageManager ||
       loadOptions().packageManager ||
-      (hasYarn() ? 'yarn' : 'npm')
+      (hasYarn() ? 'yarn' : null) ||
+      (hasPnpm() ? 'pnpm' : 'npm')
     )
 
     await clearConsole()
@@ -214,7 +216,7 @@ module.exports = class Creator extends EventEmitter {
       log(
         `👉  Get started with the following commands:\n\n` +
         (this.context === process.cwd() ? `` : chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`)) +
-        chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
+        chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : packageManager === 'pnpm' ? 'pnpm run serve' : 'npm run serve'}`)
       )
     }
     log()
@@ -410,23 +412,36 @@ module.exports = class Creator extends EventEmitter {
 
     // ask for packageManager once
     const savedOptions = loadOptions()
-    if (!savedOptions.packageManager && hasYarn()) {
+    if (!savedOptions.packageManager && (hasYarn() || hasPnpm())) {
+      const packageManagerChoices = []
+
+      if (hasYarn()) {
+        packageManagerChoices.push({
+          name: 'Use Yarn',
+          value: 'yarn',
+          short: 'Yarn'
+        })
+      }
+
+      if (hasPnpm()) {
+        packageManagerChoices.push({
+          name: 'Use PNPM',
+          value: 'pnpm',
+          short: 'PNPM'
+        })
+      }
+
+      packageManagerChoices.push({
+        name: 'Use NPM',
+        value: 'npm',
+        short: 'NPM'
+      })
+
       outroPrompts.push({
         name: 'packageManager',
         type: 'list',
         message: 'Pick the package manager to use when installing dependencies:',
-        choices: [
-          {
-            name: 'Use Yarn',
-            value: 'yarn',
-            short: 'Yarn'
-          },
-          {
-            name: 'Use NPM',
-            value: 'npm',
-            short: 'NPM'
-          }
-        ]
+        choices: packageManagerChoices
       })
     }
 
