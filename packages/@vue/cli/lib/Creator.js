@@ -192,6 +192,13 @@ module.exports = class Creator extends EventEmitter {
       'README.md': generateReadme(generator.pkg, packageManager)
     })
 
+    // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
+    if (packageManager === 'pnpm') {
+      await writeFileTree(context, {
+        '.npmrc': 'shamefully-flatten=true\n'
+      })
+    }
+
     // commit initial state
     let gitCommitFailed = false
     if (shouldInitGit) {
