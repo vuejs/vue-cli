@@ -175,7 +175,8 @@
         "terminal-view": {
           "buttons": {
             "clear": "Clear console",
-            "scroll": "Scroll to bottom"
+            "scroll": "Scroll to bottom",
+            "content-copy": "Copy content"
           }
         },
         "top-bar": {
