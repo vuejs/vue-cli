@@ -235,7 +235,7 @@ module.exports = (api, options) => {
           isFirstCompile = false
 
           if (!isProduction) {
-            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm() ? `pnpm run build` : `npm run build`
+            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
           } else {
