@@ -253,7 +253,6 @@ test('api: configureWebpack', () => {
   }])
 
   const config = service.resolveWebpackConfig()
-  console.log(process.env.VUE_CLI_ENTRY_FILES)
   expect(config.output.path).toBe('test-dist-2')
 })
 
