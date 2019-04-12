@@ -156,6 +156,11 @@ You can redirect the output into a file for easier inspection:
 ``` bash
 vue inspect > output.js
 ```
+By default inspect will out put the development config. To see the production configuration
+
+``` bash
+vue inspect --mode production > output.prod.js
+```
 
 Note the output is not a valid webpack config file, it's a serialized format only meant for inspection.
 
