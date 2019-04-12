@@ -1953,13 +1953,13 @@
     dom-event-types "^1.0.0"
     lodash "^4.17.4"
 
-"@vue/ui@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.9.0.tgz#e05a7c240b41fc7bd99f12e2a954cf9da8cf555a"
-  integrity sha512-ya3IXee7ucEt60m8p9v8qWgrbdtM6/gK8ytwMjGN3sZ6GgD/3ZiN6QPCvtLmVtdBFZo2HNNJWobBXPyDNT6yOA==
+"@vue/ui@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.9.1.tgz#96edb2acfa2c6bebbe7bf43e31d056af8e57595a"
+  integrity sha512-Lv4KDarWazIvurlcvbbIczMc1P67HML5kuFwAgUiI72lz4tvVcq6AGDwjzO8ShSRkaed/Gn+aPWp/Vsr90CNSg==
   dependencies:
     focus-visible "^4.1.5"
-    v-tooltip "^2.0.0-rc.33"
+    v-tooltip "^2.0.1"
     vue-resize "^0.4.5"
 
 "@vue/web-component-wrapper@^1.2.0":
@@ -16686,7 +16686,7 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
-v-tooltip@^2.0.0-rc.33:
+v-tooltip@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-2.0.1.tgz#ba959552651dfa33210170ac9cfcce3525abe797"
   integrity sha512-Ifby9zx34MtzZRSYlr+tFQjXxHd8NZG9YoEHdeSQb8qwFGRQZhc8JVnxKBKUDGFowLUEzfX4e3mVmqrLw7b5oQ==
