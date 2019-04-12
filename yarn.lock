@@ -16687,11 +16687,11 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
 v-tooltip@^2.0.0-rc.33:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-2.0.0.tgz#022c9019198119cd735f9f09d7208043c651bdae"
-  integrity sha512-AXUUA7G06AiGmmxh+Om0/kgw52OTNzNxAXxomgH+ehPVr5GRJKp9b8lxJBWwQkUcdULYOE5u8Nf2IQ1gIJeP3g==
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-2.0.1.tgz#ba959552651dfa33210170ac9cfcce3525abe797"
+  integrity sha512-Ifby9zx34MtzZRSYlr+tFQjXxHd8NZG9YoEHdeSQb8qwFGRQZhc8JVnxKBKUDGFowLUEzfX4e3mVmqrLw7b5oQ==
   dependencies:
-    lodash.merge "^4.6.1"
+    lodash "^4.17.11"
     popper.js "^1.15.0"
     vue-resize "^0.4.5"
 
