@@ -112,7 +112,7 @@ export default {
     padding $padding-item
     font-size 24px
     text-align center
-    font-weight lighter
+    font-weight 300
 
   &.hide-tabs
     >>> .tabs

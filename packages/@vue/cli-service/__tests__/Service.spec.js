@@ -64,7 +64,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.5.0',
+      '@vue/cli-plugin-babel': '^3.6.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -253,7 +253,6 @@ test('api: configureWebpack', () => {
   }])
 
   const config = service.resolveWebpackConfig()
-  console.log(process.env.VUE_CLI_ENTRY_FILES)
   expect(config.output.path).toBe('test-dist-2')
 })
 

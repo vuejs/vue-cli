@@ -45,7 +45,8 @@ async function list ({ file = null, api = true } = {}, context) {
     const pluginApi = api && plugins.getApi(file)
 
     // Get current valid tasks in project `package.json`
-    let currentTasks = Object.keys(pkg.scripts).map(
+    const scriptKeys = Object.keys(pkg.scripts)
+    let currentTasks = scriptKeys.map(
       name => {
         const id = `${file}:${name}`
         existing.set(id, true)
@@ -120,6 +121,14 @@ async function list ({ file = null, api = true } = {}, context) {
 
     // Add the new tasks
     list = list.concat(newTasks)
+
+    // Sort
+    const getSortScore = task => {
+      const index = scriptKeys.indexOf(task.name)
+      if (index !== -1) return index
+      return Infinity
+    }
+    list = list.sort((a, b) => getSortScore(a) - getSortScore(b))
 
     tasks.set(file, list)
   }

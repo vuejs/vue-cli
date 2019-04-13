@@ -1,3 +1,14 @@
+/** @typedef {'warn' | 'error' | 'info' | 'done'} LogType */
+
+/**
+ * @typedef Log
+ * @prop {string} id
+ * @prop {string} date
+ * @prop {LogType} type
+ * @prop {string} tag
+ * @prop {string} message
+ */
+
 const shortId = require('shortid')
 const { events } = require('@vue/cli-shared-utils/lib/logger')
 const { generateTitle } = require('@vue/cli/lib/util/clearConsole')
@@ -6,9 +17,15 @@ const channels = require('../channels')
 // Context
 const getContext = require('../context')
 
+/** @type {Log []} */
 let logs = []
 
+/**
+ * @param {Log} log
+ * @param {any} context
+ */
 exports.add = function (log, context) {
+  /** @type {Log} */
   const item = {
     id: shortId.generate(),
     date: new Date().toISOString(),

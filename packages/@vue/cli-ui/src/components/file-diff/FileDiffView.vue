@@ -133,6 +133,7 @@ import GIT_COMMIT from '@/graphql/git/gitCommit.gql'
 
 const defaultCollapsed = [
   'yarn.lock',
+  'pnpm-lock.yaml',
   'package-lock.json'
 ]
 

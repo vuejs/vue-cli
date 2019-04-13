@@ -1,3 +1,126 @@
+
+## 3.6.0 (2019-04-13)
+
+#### :rocket: New Feature
+* `@vue/cli-ui`
+  * [#3688](https://github.com/vuejs/vue-cli/pull/3688) add "copy content to clipboard" button on terminal component ([@pikax](https://github.com/pikax))
+  * [c81e6c](https://github.com/vuejs/vue-cli/commit/c81e6c21a20d66bfa66a664d94ec3ccc81c54d38) **project create**: bare option ([@Akryum](https://github.com/Akryum))
+  * [08de713](https://github.com/vuejs/vue-cli/commit/08de713598530bbc85282c6853bffebb912142a3) **plugin add**: feature icons ([@Akryum](https://github.com/Akryum))
+  * [fbfbd29](https://github.com/vuejs/vue-cli/commit/fbfbd29be5b3c2f07adb1c8db45ba18cd28468a5) vulnerability audit widget ([@Akryum](https://github.com/Akryum))
+  * [40d9346](https://github.com/vuejs/vue-cli/commit/40d9346914b3416bf3e6265fd020f6be768c9543) **api**: save shared data to disk ([@Akryum](https://github.com/Akryum))
+  * [ca2bdad](https://github.com/vuejs/vue-cli/commit/ca2bdadb028ee0496e1cf64cca4be2a6cb591547) **tasks**: refresh button ([@Akryum](https://github.com/Akryum))
+* `@vue/cli-service`
+  * [#3703](https://github.com/vuejs/vue-cli/pull/3703) add `--filename` option to specify the output file name ([@NickeyLin](https://github.com/NickeyLin))
+  * [#3760](https://github.com/vuejs/vue-cli/pull/3760) bundle currentScript polyfill by default if library needs IE support ([@sodatea](https://github.com/sodatea))
+  * [#3595](https://github.com/vuejs/vue-cli/pull/3595) support multi-main entry in pages config ([@sodatea](https://github.com/sodatea))
+  * [#3663](https://github.com/vuejs/vue-cli/pull/3663) support pug as html template ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#3568](https://github.com/vuejs/vue-cli/pull/3568) add makeJSOnlyValue to generator API. Provides convenien… ([@steveworkman](https://github.com/steveworkman))
+  * [#3643](https://github.com/vuejs/vue-cli/pull/3643) do not write undefined fields to config files ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#1531](https://github.com/vuejs/vue-cli/pull/1531) support PNPM as a package manager ([@robertkruis](https://github.com/robertkruis))
+  * [#3790](https://github.com/vuejs/vue-cli/pull/3790) fix PNPM compatibility issues during scaffolding ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`, `@vue/cli-service`
+  * [#3572](https://github.com/vuejs/vue-cli/pull/3572) add 3rd option to `lintOnSave` to support 'default' behaviour (Closes [#3552](https://github.com/vuejs/vue-cli/issues/3552)) ([@LinusBorg](https://github.com/LinusBorg))
+* `@vue/cli-plugin-unit-jest`
+  * [#3589](https://github.com/vuejs/vue-cli/pull/3589) add jest typeahead plugin ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-ui`
+  * [8c3ff11](https://github.com/vuejs/vue-cli/commit/8c3ff1165384bf4bafca39a267e3da3d9821abdb) **project create**: run vue create in child process, closes #3664 ([@Akryum](https://github.com/Akryum))
+  * [dac7a4b](https://github.com/vuejs/vue-cli/commit/dac7a4bf743a42befb119c1b0ab7992c73fec766) **project manager**: ake open in editor button more discoverable ([@Akryum](https://github.com/Akryum))
+  * [fd9cb16](https://github.com/vuejs/vue-cli/commit/fd9cb1628e04cd30a01cab0b5591bab7669768d7) **widget**: make resize handles more visible ([@Akryum](https://github.com/Akryum))
+  * [c4bd1ab](https://github.com/vuejs/vue-cli/commit/c4bd1abea80fbd30d359812da8f88b12e9fca48b) set cache-control header on static files ([@Akryum](https://github.com/Akryum))
+
+#### :house: Internal
+* `@vue/cli-service`
+  * [#2405](https://github.com/vuejs/vue-cli/pull/2405) remove unused `placeAtRootIfRelative` parameter ([@dailyvuejs](https://github.com/dailyvuejs))
+  * [#3707](https://github.com/vuejs/vue-cli/pull/3707) more accurate vim swap file ignore ([@Newbrict](https://github.com/Newbrict))
+  * [#3709](https://github.com/vuejs/vue-cli/pull/3709) use high resolution version of favicon.ico ([@phanan](https://github.com/phanan))
+  * [#3628](https://github.com/vuejs/vue-cli/pull/3628) make `fibers` opt-in for dart sass ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#3778](https://github.com/vuejs/vue-cli/pull/3778) **refactor(plugin)**: invoke is now done in child process ([@Akryum](https://github.com/Akryum))
+  * [4f0286c](https://github.com/vuejs/vue-cli/commit/4f0286c5535e87d5303feed52ba662082ef0296b) **perf(webpack dashboard)**: cleaning the analyzer data ([@Akryum](https://github.com/Akryum))
+  * [ecd64c4](https://github.com/vuejs/vue-cli/commit/ecd64c43a620a3573ee37e933cac0e8429f009c1) **perf(task details)**: better defering ([@Akryum](https://github.com/Akryum))
+  * [13199f5](https://github.com/vuejs/vue-cli/commit/13199f52e1e227bc1a720fb95c913564b8241e88) **tasks**: sort ([@Akryum](https://github.com/Akryum))
+
+* Other
+  * [#3650](https://github.com/vuejs/vue-cli/pull/3650) workflow: use lerna-changelog ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 10
+- Carlos Rodrigues ([@pikax](https://github.com/pikax))
+- Dimitar Dimitrov ([@Newbrict](https://github.com/Newbrict))
+- Guillaume Chau ([@Akryum](https://github.com/Akryum))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Nick ([@NickeyLin](https://github.com/NickeyLin))
+- Phan An ([@phanan](https://github.com/phanan))
+- Steve Workman ([@steveworkman](https://github.com/steveworkman))
+- Thorsten Lünborg ([@LinusBorg](https://github.com/LinusBorg))
+- [@dailyvuejs](https://github.com/dailyvuejs)
+- [@robertkruis](https://github.com/robertkruis)
+
+
+# [3.5.5](https://github.com/vuejs/vue-cli/compare/v3.5.4...v3.5.5) (2019-04-01)
+
+## babel-preset-app
+
+#### Reverts
+
+* "fix: should not add polyfills from transform-runtime plugin ([#3730](https://github.com/vuejs/vue-cli/issues/3730))" ([#3742](https://github.com/vuejs/vue-cli/issues/3742)) ([7228146](https://github.com/vuejs/vue-cli/commit/7228146)), closes [#3741](https://github.com/vuejs/vue-cli/issues/3741)
+
+
+
+# [3.5.4](https://github.com/vuejs/vue-cli/compare/v3.5.3...v3.5.4) (2019-03-31)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* should not add polyfills from transform-runtime plugin ([#3730](https://github.com/vuejs/vue-cli/issues/3730)) ([b987969](https://github.com/vuejs/vue-cli/commit/b987969))
+* should not use abosulte polyfill paths when `absoluteRuntime` is on ([#3732](https://github.com/vuejs/vue-cli/issues/3732)) ([9bdff3b](https://github.com/vuejs/vue-cli/commit/9bdff3b)), closes [#3725](https://github.com/vuejs/vue-cli/issues/3725)
+
+## cli-plugin-babel
+
+#### Bug Fixes
+
+* **generator:** add core-js as direct dependency of generated projects ([#3736](https://github.com/vuejs/vue-cli/issues/3736)) ([5eb1425](https://github.com/vuejs/vue-cli/commit/5eb1425))
+
+
+
+# [3.5.3](https://github.com/vuejs/vue-cli/compare/v3.5.2...v3.5.3) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* downgrade [@babel](https://github.com/babel)/preset-env temporarily ([#3716](https://github.com/vuejs/vue-cli/issues/3716)) ([f107623](https://github.com/vuejs/vue-cli/commit/f107623))
+
+## cli-service
+
+#### Bug Fixes
+
+* properly load non-js config files in genCacheConfig ([#3632](https://github.com/vuejs/vue-cli/issues/3632)) ([adac48d](https://github.com/vuejs/vue-cli/commit/adac48d)), closes [#3631](https://github.com/vuejs/vue-cli/issues/3631)
+* set the path of safari-no-module-fix.js correctly ([#3647](https://github.com/vuejs/vue-cli/issues/3647)) ([10296ff](https://github.com/vuejs/vue-cli/commit/10296ff)), closes [#3033](https://github.com/vuejs/vue-cli/issues/3033)
+
+
+
+# [3.5.2](https://github.com/vuejs/vue-cli/compare/v3.5.1...v3.5.2) (2019-03-27)
+
+## babel-preset-app
+
+#### Bug Fixes
+
+* use absolute import path for injected core-js polyfills ([#3710](https://github.com/vuejs/vue-cli/issues/3710)) ([4d6fcf5](https://github.com/vuejs/vue-cli/commit/4d6fcf5)), closes [#3678](https://github.com/vuejs/vue-cli/issues/3678)
+* explicitly set corejs version for [@babel](https://github.com/babel)/preset-env ([#3696](https://github.com/vuejs/vue-cli/issues/3696)) ([156ef21](https://github.com/vuejs/vue-cli/commit/156ef21)), closes [#3695](https://github.com/vuejs/vue-cli/issues/3695)
+
+## docs
+
+#### Features
+
+* add manifest.json, make the website installable ([eda048a](https://github.com/vuejs/vue-cli/commit/eda048a))
+
+
+
 # [3.5.1](https://github.com/vuejs/vue-cli/compare/v3.5.0...v3.5.1) (2019-03-12)
 
 ## cli-service

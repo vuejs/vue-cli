@@ -106,7 +106,10 @@ module.exports = (context, options = {}) => {
       ignoreBrowserslistConfig,
       configPath
     })
-    plugins.push([require('./polyfillsPlugin'), { polyfills, entryFiles }])
+    plugins.push([
+      require('./polyfillsPlugin'),
+      { polyfills, entryFiles, useAbsolutePath: !!absoluteRuntime }
+    ])
   } else {
     polyfills = []
   }

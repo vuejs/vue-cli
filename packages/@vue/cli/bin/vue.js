@@ -63,6 +63,7 @@ program
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
+  .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
 

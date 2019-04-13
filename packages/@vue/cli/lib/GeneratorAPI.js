@@ -241,6 +241,16 @@ class GeneratorAPI {
   }
 
   /**
+   * Turns a string expression into executable JS for JS configs.
+   * @param {*} str JS expression as a string
+   */
+  makeJSOnlyValue (str) {
+    const fn = () => {}
+    fn.__expression = str
+    return fn
+  }
+
+  /**
    * Add import statements to a file.
    */
   injectImports (file, imports) {

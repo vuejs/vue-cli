@@ -132,3 +132,45 @@ test('build as lib with webpackConfiguration depending on target (js)', async ()
   const commonContent = await project.read('dist/testLib.common.js')
   expect(commonContent).not.toContain(`foo: 'bar'`)
 })
+
+test('build as lib with --filename option', async () => {
+  const project = await create('build-lib-filename-option', defaultPreset)
+  await project.write('src/main.js', `
+      export default { foo: 1 }
+      export const bar = 2
+    `)
+  const { stdout } = await project.run('vue-cli-service build --target lib --name testLib --filename test-lib src/main.js')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/test-lib.common.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.min.js')).toBe(true)
+
+  const port = await portfinder.getPortPromise()
+  server = createServer({ root: path.join(project.dir, 'dist') })
+
+  await new Promise((resolve, reject) => {
+    server.listen(port, err => {
+      if (err) return reject(err)
+      resolve()
+    })
+  })
+
+  const launched = await launchPuppeteer(`http://localhost:${port}/demo.html`)
+  browser = launched.browser
+  page = launched.page
+
+  expect(await page.evaluate(() => {
+    return window.document.title
+  })).toBe('testLib demo')
+
+  // should expose a module with default and named exports
+  expect(await page.evaluate(() => {
+    return window.testLib.default.foo
+  })).toBe(1)
+
+  expect(await page.evaluate(() => {
+    return window.testLib.bar
+  })).toBe(2)
+})
