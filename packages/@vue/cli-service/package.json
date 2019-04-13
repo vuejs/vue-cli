@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
@@ -25,8 +25,8 @@
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
     "@soda/friendly-errors-webpack-plugin": "^1.7.1",
-    "@vue/cli-overlay": "^3.5.1",
-    "@vue/cli-shared-utils": "^3.5.1",
+    "@vue/cli-overlay": "^3.6.0",
+    "@vue/cli-shared-utils": "^3.6.0",
     "@vue/component-compiler-utils": "^2.6.0",
     "@vue/preload-webpack-plugin": "^1.1.0",
     "@vue/web-component-wrapper": "^1.2.0",

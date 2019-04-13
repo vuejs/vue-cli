@@ -1,3 +1,50 @@
+
+## Unreleased (2019-04-13)
+
+#### :rocket: New Feature
+* `@vue/cli-ui`
+  * [#3688](https://github.com/vuejs/vue-cli/pull/3688) feat(ui): add copyContent to clipboard button on terminal component ([@pikax](https://github.com/pikax))
+* `@vue/cli-service`
+  * [#3703](https://github.com/vuejs/vue-cli/pull/3703) feat(cli-service): add --filename option to specify the output file name ([@NickeyLin](https://github.com/NickeyLin))
+  * [#3760](https://github.com/vuejs/vue-cli/pull/3760) feat: bundle currentScript polyfill by default if library needs IE support ([@sodatea](https://github.com/sodatea))
+  * [#3595](https://github.com/vuejs/vue-cli/pull/3595) feat: support multi-main entry in pages config ([@sodatea](https://github.com/sodatea))
+  * [#3663](https://github.com/vuejs/vue-cli/pull/3663) feat: support pug as html template ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#3568](https://github.com/vuejs/vue-cli/pull/3568) feat(cli): Added makeJSOnlyValue to generator API. Provides convenien… ([@steveworkman](https://github.com/steveworkman))
+  * [#3643](https://github.com/vuejs/vue-cli/pull/3643) feat: do not write undefined fields to config files ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#1531](https://github.com/vuejs/vue-cli/pull/1531) feat: support PNPM as a package manager ([@robertkruis](https://github.com/robertkruis))
+* `@vue/cli-plugin-eslint`, `@vue/cli-service`
+  * [#3572](https://github.com/vuejs/vue-cli/pull/3572) Add 3rd option to `lintOnSave` to support 'default' behaviour (Closes [#3552](https://github.com/vuejs/vue-cli/issues/3552)) ([@LinusBorg](https://github.com/LinusBorg))
+* `@vue/cli-plugin-unit-jest`
+  * [#3589](https://github.com/vuejs/vue-cli/pull/3589) feat: add jest typeahead plugin ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#3790](https://github.com/vuejs/vue-cli/pull/3790) fix pnpm compatibility issues during scaffolding ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-service`
+  * [#2405](https://github.com/vuejs/vue-cli/pull/2405) refactor: remove unused `placeAtRootIfRelative` parameter ([@dailyvuejs](https://github.com/dailyvuejs))
+  * [#3707](https://github.com/vuejs/vue-cli/pull/3707) chore: more accurate vim swap file ignore ([@Newbrict](https://github.com/Newbrict))
+  * [#3709](https://github.com/vuejs/vue-cli/pull/3709) chore: use high resolution version of favicon.ico ([@phanan](https://github.com/phanan))
+  * [#3628](https://github.com/vuejs/vue-cli/pull/3628) feat: make `fibers` opt-in for dart sass ([@sodatea](https://github.com/sodatea))
+* Other
+  * [#3650](https://github.com/vuejs/vue-cli/pull/3650) workflow: use lerna-changelog ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 10
+- Carlos Rodrigues ([@pikax](https://github.com/pikax))
+- Dimitar Dimitrov ([@Newbrict](https://github.com/Newbrict))
+- Guillaume Chau ([@Akryum](https://github.com/Akryum))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Nick ([@NickeyLin](https://github.com/NickeyLin))
+- Phan An ([@phanan](https://github.com/phanan))
+- Steve Workman ([@steveworkman](https://github.com/steveworkman))
+- Thorsten Lünborg ([@LinusBorg](https://github.com/LinusBorg))
+- [@dailyvuejs](https://github.com/dailyvuejs)
+- [@robertkruis](https://github.com/robertkruis)
+
+
 # [3.5.5](https://github.com/vuejs/vue-cli/compare/v3.5.4...v3.5.5) (2019-04-01)
 
 ## babel-preset-app
