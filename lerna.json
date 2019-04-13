@@ -16,7 +16,6 @@
       "PR: Internal": ":house: Internal",
       "PR: Underlying Tools": ":hammer: Underlying Tools"
     },
-    "cacheDir": ".changelog",
-    "nextVersionFromMetadata": true
+    "cacheDir": ".changelog"
   }
 }
