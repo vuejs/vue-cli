@@ -14,6 +14,7 @@ const projects = require('./projects')
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
 const { terminate } = require('../util/terminate')
+const { parseArgs } = require('../util/parse-args')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -237,15 +238,7 @@ async function run (id, context) {
 
     // Answers
     const answers = prompts.getAnswers()
-    let args = []
-    let command = task.command
-
-    // Process command containing args
-    if (command.indexOf(' ')) {
-      const parts = command.split(/\s+/)
-      command = parts.shift()
-      args = parts
-    }
+    let [command, ...args] = parseArgs(task.command)
 
     // Output colors
     // See: https://www.npmjs.com/package/supports-color
@@ -253,6 +246,13 @@ async function run (id, context) {
 
     // Plugin API
     if (task.onBeforeRun) {
+      if (!answers.$_overrideArgs) {
+        const origPush = args.push.bind(args)
+        args.push = (...items) => {
+          if (items.length && args.indexOf(items[0]) !== -1) return items.length
+          return origPush(...items)
+        }
+      }
       await task.onBeforeRun({
         answers,
         args
@@ -581,6 +581,15 @@ async function restoreParameters ({ id }, context) {
   const task = findOne(id, context)
   if (task) {
     await prompts.reset()
+    if (task.prompts.length) {
+      prompts.add({
+        name: '$_overrideArgs',
+        type: 'confirm',
+        default: false,
+        message: 'org.vue.views.project-task-details.override-args.message',
+        description: 'org.vue.views.project-task-details.override-args.description'
+      })
+    }
     task.prompts.forEach(prompts.add)
     const data = getSavedData(id, context)
     if (data) {

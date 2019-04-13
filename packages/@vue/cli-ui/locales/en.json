@@ -448,7 +448,11 @@
           "command": "Script command",
           "parameters": "Parameters",
           "more-info": "More Info",
-          "output": "Output"
+          "output": "Output",
+          "override-args": {
+            "message": "Override hard-coded arguments",
+            "description": "If enabled, hard-coded arguments in the package.json file will be replaced with the value defined below"
+          }
         },
         "project-dependencies": {
           "title": "Project dependencies",
