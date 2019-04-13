@@ -451,7 +451,7 @@
           "output": "Output",
           "override-args": {
             "message": "Override hard-coded arguments",
-            "description": "If enabled, hard-coded arguments in the package.json file will be replaced with the value defined below"
+            "description": "If enabled, hard-coded arguments in your package.json file will be replaced with the values defined below"
           }
         },
         "project-dependencies": {
