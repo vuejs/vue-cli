@@ -12,10 +12,10 @@ if (process.env.VUE_CLI_UI_TEST) {
 } else if (process.env.VUE_APP_CLI_UI_DEV) {
   folder = path.resolve(__dirname, '../../live')
 } else {
-  folder = (
-    path.resolve(__dirname, process.env.VUE_CLI_UI_DB_PATH) ||
+  folder =
+    (process.env.VUE_CLI_UI_DB_PATH &&
+      path.resolve(__dirname, process.env.VUE_CLI_UI_DB_PATH)) ||
     getRcPath('.vue-cli-ui')
-  )
 }
 
 fs.ensureDirSync(path.resolve(__dirname, folder))
