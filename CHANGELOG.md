@@ -1,4 +1,21 @@
 
+## 3.6.1 (2019-04-13)
+
+#### :bug: Bug Fix
+* `@vue/cli-ui`
+  * [#3801](https://github.com/vuejs/vue-cli/pull/3801) fix: fix ERR_INVALID_ARG_TYPE error when launching `vue ui` ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#3444](https://github.com/vuejs/vue-cli/pull/3444) Add notes for multi-page apps on references to 'prefetch' plugin ([@bengallienne](https://github.com/bengallienne))
+* [#3656](https://github.com/vuejs/vue-cli/pull/3656) docs: adjust plugin dev guide example to write modified contents, Closes [#3655](https://github.com/vuejs/vue-cli/issues/3655) ([@akrawchyk](https://github.com/akrawchyk))
+
+#### Committers: 3
+- Andrew Krawchyk ([@akrawchyk](https://github.com/akrawchyk))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- [@bengallienne](https://github.com/bengallienne)
+
+
+
 ## 3.6.0 (2019-04-13)
 
 #### :rocket: New Feature

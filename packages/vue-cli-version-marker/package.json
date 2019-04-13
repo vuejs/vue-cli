@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-version-marker",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "version marker for @vue/cli",
   "author": "Evan You",
   "license": "MIT",
@@ -23,8 +23,8 @@
     "@vue/cli-test-utils": "3.6.0",
     "@vue/cli-ui-addon-webpack": "3.6.0",
     "@vue/cli-ui-addon-widgets": "3.6.0",
-    "@vue/cli-ui": "3.6.0",
+    "@vue/cli-ui": "3.6.1",
     "@vue/cli-upgrade": "3.6.0",
-    "@vue/cli": "3.6.0"
+    "@vue/cli": "3.6.1"
   }
 }
