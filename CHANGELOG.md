@@ -1,34 +1,49 @@
 
-## Unreleased (2019-04-13)
+## 3.6.0 (2019-04-13)
 
 #### :rocket: New Feature
 * `@vue/cli-ui`
-  * [#3688](https://github.com/vuejs/vue-cli/pull/3688) feat(ui): add copyContent to clipboard button on terminal component ([@pikax](https://github.com/pikax))
+  * [#3688](https://github.com/vuejs/vue-cli/pull/3688) add "copy content to clipboard" button on terminal component ([@pikax](https://github.com/pikax))
+  * [c81e6c](https://github.com/vuejs/vue-cli/commit/c81e6c21a20d66bfa66a664d94ec3ccc81c54d38) **project create**: bare option ([@Akryum](https://github.com/Akryum))
+  * [08de713](https://github.com/vuejs/vue-cli/commit/08de713598530bbc85282c6853bffebb912142a3) **plugin add**: feature icons ([@Akryum](https://github.com/Akryum))
+  * [fbfbd29](https://github.com/vuejs/vue-cli/commit/fbfbd29be5b3c2f07adb1c8db45ba18cd28468a5) vulnerability audit widget ([@Akryum](https://github.com/Akryum))
+  * [40d9346](https://github.com/vuejs/vue-cli/commit/40d9346914b3416bf3e6265fd020f6be768c9543) **api**: save shared data to disk ([@Akryum](https://github.com/Akryum))
+  * [ca2bdad](https://github.com/vuejs/vue-cli/commit/ca2bdadb028ee0496e1cf64cca4be2a6cb591547) **tasks**: refresh button ([@Akryum](https://github.com/Akryum))
 * `@vue/cli-service`
-  * [#3703](https://github.com/vuejs/vue-cli/pull/3703) feat(cli-service): add --filename option to specify the output file name ([@NickeyLin](https://github.com/NickeyLin))
-  * [#3760](https://github.com/vuejs/vue-cli/pull/3760) feat: bundle currentScript polyfill by default if library needs IE support ([@sodatea](https://github.com/sodatea))
-  * [#3595](https://github.com/vuejs/vue-cli/pull/3595) feat: support multi-main entry in pages config ([@sodatea](https://github.com/sodatea))
-  * [#3663](https://github.com/vuejs/vue-cli/pull/3663) feat: support pug as html template ([@sodatea](https://github.com/sodatea))
+  * [#3703](https://github.com/vuejs/vue-cli/pull/3703) add `--filename` option to specify the output file name ([@NickeyLin](https://github.com/NickeyLin))
+  * [#3760](https://github.com/vuejs/vue-cli/pull/3760) bundle currentScript polyfill by default if library needs IE support ([@sodatea](https://github.com/sodatea))
+  * [#3595](https://github.com/vuejs/vue-cli/pull/3595) support multi-main entry in pages config ([@sodatea](https://github.com/sodatea))
+  * [#3663](https://github.com/vuejs/vue-cli/pull/3663) support pug as html template ([@sodatea](https://github.com/sodatea))
 * `@vue/cli`
-  * [#3568](https://github.com/vuejs/vue-cli/pull/3568) feat(cli): Added makeJSOnlyValue to generator API. Provides convenien… ([@steveworkman](https://github.com/steveworkman))
-  * [#3643](https://github.com/vuejs/vue-cli/pull/3643) feat: do not write undefined fields to config files ([@sodatea](https://github.com/sodatea))
+  * [#3568](https://github.com/vuejs/vue-cli/pull/3568) add makeJSOnlyValue to generator API. Provides convenien… ([@steveworkman](https://github.com/steveworkman))
+  * [#3643](https://github.com/vuejs/vue-cli/pull/3643) do not write undefined fields to config files ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli`
-  * [#1531](https://github.com/vuejs/vue-cli/pull/1531) feat: support PNPM as a package manager ([@robertkruis](https://github.com/robertkruis))
+  * [#1531](https://github.com/vuejs/vue-cli/pull/1531) support PNPM as a package manager ([@robertkruis](https://github.com/robertkruis))
+  * [#3790](https://github.com/vuejs/vue-cli/pull/3790) fix PNPM compatibility issues during scaffolding ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-plugin-eslint`, `@vue/cli-service`
-  * [#3572](https://github.com/vuejs/vue-cli/pull/3572) Add 3rd option to `lintOnSave` to support 'default' behaviour (Closes [#3552](https://github.com/vuejs/vue-cli/issues/3552)) ([@LinusBorg](https://github.com/LinusBorg))
+  * [#3572](https://github.com/vuejs/vue-cli/pull/3572) add 3rd option to `lintOnSave` to support 'default' behaviour (Closes [#3552](https://github.com/vuejs/vue-cli/issues/3552)) ([@LinusBorg](https://github.com/LinusBorg))
 * `@vue/cli-plugin-unit-jest`
-  * [#3589](https://github.com/vuejs/vue-cli/pull/3589) feat: add jest typeahead plugin ([@sodatea](https://github.com/sodatea))
+  * [#3589](https://github.com/vuejs/vue-cli/pull/3589) add jest typeahead plugin ([@sodatea](https://github.com/sodatea))
 
 #### :bug: Bug Fix
-* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli`
-  * [#3790](https://github.com/vuejs/vue-cli/pull/3790) fix pnpm compatibility issues during scaffolding ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [8c3ff11](https://github.com/vuejs/vue-cli/commit/8c3ff1165384bf4bafca39a267e3da3d9821abdb) **project create**: run vue create in child process, closes #3664 ([@Akryum](https://github.com/Akryum))
+  * [dac7a4b](https://github.com/vuejs/vue-cli/commit/dac7a4bf743a42befb119c1b0ab7992c73fec766) **project manager**: ake open in editor button more discoverable ([@Akryum](https://github.com/Akryum))
+  * [fd9cb16](https://github.com/vuejs/vue-cli/commit/fd9cb1628e04cd30a01cab0b5591bab7669768d7) **widget**: make resize handles more visible ([@Akryum](https://github.com/Akryum))
+  * [c4bd1ab](https://github.com/vuejs/vue-cli/commit/c4bd1abea80fbd30d359812da8f88b12e9fca48b) set cache-control header on static files ([@Akryum](https://github.com/Akryum))
 
 #### :house: Internal
 * `@vue/cli-service`
-  * [#2405](https://github.com/vuejs/vue-cli/pull/2405) refactor: remove unused `placeAtRootIfRelative` parameter ([@dailyvuejs](https://github.com/dailyvuejs))
-  * [#3707](https://github.com/vuejs/vue-cli/pull/3707) chore: more accurate vim swap file ignore ([@Newbrict](https://github.com/Newbrict))
-  * [#3709](https://github.com/vuejs/vue-cli/pull/3709) chore: use high resolution version of favicon.ico ([@phanan](https://github.com/phanan))
-  * [#3628](https://github.com/vuejs/vue-cli/pull/3628) feat: make `fibers` opt-in for dart sass ([@sodatea](https://github.com/sodatea))
+  * [#2405](https://github.com/vuejs/vue-cli/pull/2405) remove unused `placeAtRootIfRelative` parameter ([@dailyvuejs](https://github.com/dailyvuejs))
+  * [#3707](https://github.com/vuejs/vue-cli/pull/3707) more accurate vim swap file ignore ([@Newbrict](https://github.com/Newbrict))
+  * [#3709](https://github.com/vuejs/vue-cli/pull/3709) use high resolution version of favicon.ico ([@phanan](https://github.com/phanan))
+  * [#3628](https://github.com/vuejs/vue-cli/pull/3628) make `fibers` opt-in for dart sass ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#3778](https://github.com/vuejs/vue-cli/pull/3778) **refactor(plugin)**: invoke is now done in child process ([@Akryum](https://github.com/Akryum))
+  * [4f0286c](https://github.com/vuejs/vue-cli/commit/4f0286c5535e87d5303feed52ba662082ef0296b) **perf(webpack dashboard)**: cleaning the analyzer data ([@Akryum](https://github.com/Akryum))
+  * [ecd64c4](https://github.com/vuejs/vue-cli/commit/ecd64c43a620a3573ee37e933cac0e8429f009c1) **perf(task details)**: better defering ([@Akryum](https://github.com/Akryum))
+  * [13199f5](https://github.com/vuejs/vue-cli/commit/13199f52e1e227bc1a720fb95c913564b8241e88) **tasks**: sort ([@Akryum](https://github.com/Akryum))
+
 * Other
   * [#3650](https://github.com/vuejs/vue-cli/pull/3650) workflow: use lerna-changelog ([@sodatea](https://github.com/sodatea))
 
