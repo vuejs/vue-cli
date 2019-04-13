@@ -12,6 +12,8 @@ const files = require('./connectors/files')
 const clientAddons = require('./connectors/client-addons')
 const sharedData = require('./connectors/shared-data')
 const locales = require('./connectors/locales')
+// Utils
+const stats = require('./util/stats')
 // Start ipc server
 require('./util/ipc')
 
@@ -69,7 +71,13 @@ const resolvers = [{
     sharedDataUpdated: {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SHARED_DATA_UPDATED),
-        (payload, vars) => payload.sharedDataUpdated.id === vars.id && payload.sharedDataUpdated.projectId === vars.projectId
+        (payload, vars) => {
+          const result = payload.sharedDataUpdated.id === vars.id && payload.sharedDataUpdated.projectId === vars.projectId
+          if (result) {
+            stats.get(`shared-data_${vars.projectId}`, vars.id).value++
+          }
+          return result
+        }
       )
     },
     localeAdded: {

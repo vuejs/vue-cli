@@ -5,6 +5,7 @@ const { log } = require('../util/logger')
 const path = require('path')
 const fs = require('fs-extra')
 const { rcFolder } = require('../util/rcFolder')
+const stats = require('../util/stats')
 
 /**
  * @typedef SharedData
@@ -67,12 +68,16 @@ async function set ({ id, projectId, value, disk = false }, context) {
     updated: new Date()
   })
 
+  const stat = stats.get(`shared-data_${projectId}`, id)
+  stat.value = 0
   context.pubsub.publish(channels.SHARED_DATA_UPDATED, {
     sharedDataUpdated: { id, projectId, value }
   })
 
   const watchers = notify({ id, projectId, value }, context)
-  log('SharedData set', id, projectId, value, `(${watchers.length} watchers)`)
+
+  setTimeout(() => log('SharedData set', id, projectId, value, `(${watchers.length} watchers, ${stat.value} subscriptions)`))
+
   return { id, value }
 }
 
