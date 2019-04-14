@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^3.6.0",
-    "@vue/cli-ui": "^3.6.1",
+    "@vue/cli-ui": "^3.6.2",
     "@vue/cli-ui-addon-webpack": "^3.6.0",
     "@vue/cli-ui-addon-widgets": "^3.6.0",
     "chalk": "^2.4.1",

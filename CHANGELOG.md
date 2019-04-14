@@ -1,4 +1,15 @@
 
+## 3.6.2 (2019-04-14)
+
+#### :bug: Bug Fix
+* `@vue/cli-ui`, `@vue/cli`
+  * [#3806](https://github.com/vuejs/vue-cli/pull/3806) fix vue add/invoke bug when user does not have yarn installed ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 3.6.1 (2019-04-13)
 
 #### :bug: Bug Fix
