@@ -43,6 +43,7 @@
     "fkill": "^6.1.0",
     "fs-extra": "^7.0.1",
     "globby": "^9.0.0",
+    "graphql": "^14.2.1",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tag": "^2.9.2",
     "graphql-type-json": "^0.2.4",
