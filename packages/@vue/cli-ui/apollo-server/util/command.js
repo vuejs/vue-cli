@@ -10,5 +10,5 @@ exports.getCommand = function (cwd = undefined) {
   if (!cwd) {
     return loadOptions().packageManager || (hasYarn() ? 'yarn' : hasPnpm3OrLater() ? 'pnpm' : 'npm')
   }
-  return hasProjectYarn(cwd) ? 'yarn' : hasProjectPnpm() ? 'pnpm' : 'npm'
+  return hasProjectYarn(cwd) ? 'yarn' : hasProjectPnpm(cwd) ? 'pnpm' : 'npm'
 }
