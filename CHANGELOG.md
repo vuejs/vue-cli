@@ -4,10 +4,16 @@
 #### :bug: Bug Fix
 * `@vue/cli-ui`, `@vue/cli`
   * [#3806](https://github.com/vuejs/vue-cli/pull/3806) fix vue add/invoke bug when user does not have yarn installed ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [022e17d](https://github.com/vuejs/vue-cli/commit/022e17da5725742b0f425c0976b090bd1ce6581f) `--dev` shouldn't try to load dev assets, closes #3802 ([@Akryum](https://github.com/Akryum))
 
-#### Committers: 1
+#### :rocket: New Feature
+* `@vue/cli-ui`
+  * [bbe4002](https://github.com/vuejs/vue-cli/commit/bbe4002480b46c8ce3721afe1285fea4f7bba3bf) **tasks**: override args switch, closes #3236 ([@Akryum](https://github.com/Akryum))
+
+#### Committers: 2
 - Haoqun Jiang ([@sodatea](https://github.com/sodatea))
-
+- Guillaume Chau ([@Akryum](https://github.com/Akryum))
 
 
 ## 3.6.1 (2019-04-13)
