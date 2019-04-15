@@ -166,7 +166,9 @@ export default {
       width 100%
       height @width
       border-radius 50%
-      background $vue-ui-color-dark
+      background rgba(black, .1)
+      .vue-ui-dark-mode &
+        background: $vue-ui-color-dark
       transition background .15s
       for n in (1..4)
         &:nth-child({n})
