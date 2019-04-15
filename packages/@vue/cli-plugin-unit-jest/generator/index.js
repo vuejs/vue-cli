@@ -37,8 +37,8 @@ module.exports = (api, _, __, invoking) => {
       // https://github.com/facebook/jest/issues/6766
       testURL: 'http://localhost/',
       watchPlugins: [
-        require.resolve('jest-watch-typeahead/filename'),
-        require.resolve('jest-watch-typeahead/testname')
+        'jest-watch-typeahead/filename',
+        'jest-watch-typeahead/testname'
       ]
     }
   })
