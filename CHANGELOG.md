@@ -1,4 +1,18 @@
 
+## 3.6.3 (2019-04-16)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-unit-jest`
+  * [#3815](https://github.com/vuejs/vue-cli/pull/3815) fix: jest typeahead config ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli-ui-addon-webpack`
+  * [#3717](https://github.com/vuejs/vue-cli/pull/3717) Fixed progress-path background color for dark mode ([@ajerez](https://github.com/ajerez))
+
+#### Committers: 2
+- Alberto Jerez ([@ajerez](https://github.com/ajerez))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+
+
+
 ## 3.6.2 (2019-04-14)
 
 #### :bug: Bug Fix
