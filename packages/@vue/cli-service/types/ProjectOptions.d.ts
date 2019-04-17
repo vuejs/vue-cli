@@ -31,6 +31,7 @@ interface CSSOptions {
 
 export interface ProjectOptions {
   publicPath?: string;
+  publicDir?: string;
   outputDir?: string;
   assetsDir?: string;
   indexPath?: string;

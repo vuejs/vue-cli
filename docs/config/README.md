@@ -70,8 +70,8 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   If present, the contents of this directory will be copied to `outputDir` to be served as public static files.
 
   ::: tip
-  Vue CLI tries to find template sources in this directory by default, it checks for `<publicDir>/index.html` or
-  `<publicDir>/<pageName>.html` in multi-page mode. Template sources are ignored automatically while static files are being copied to `outputDir`.
+  Vue CLI tries to find template sources in this directory by default, it checks for `<publicDir>/index.html` or `<publicDir>/<pageName>.html` in multi-page mode.
+  Template sources are ignored automatically while static files are being copied to `outputDir`.
   :::
 
 ### outputDir
