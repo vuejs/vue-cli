@@ -62,6 +62,18 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   }
   ```
 
+### publicDir
+
+- Type: `string`
+- Default: `'public'`
+
+  If present, the contents of this directory will be copied to `outputDir` to be served as public static files.
+
+  ::: tip
+  Vue CLI tries to find template sources in this directory by default, it checks for `<publicDir>/index.html` or
+  `<publicDir>/<pageName>.html` in multi-page mode. Template sources are ignored automatically while static files are being copied to `outputDir`.
+  :::
+
 ### outputDir
 
 - Type: `string`
@@ -111,24 +123,22 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   ``` js
   module.exports = {
     pages: {
-      index: {
-        // entry for the page
-        entry: 'src/index/main.js',
-        // the source template
-        template: 'public/index.html',
-        // output as dist/index.html
+      home: {
+        // Entry file for this page
+        entry: 'src/home/main.js',
+        // The source template, defaults to "<publicDir>/<pageName>.html"
+        template: 'public/home.html',
+        // Name of the generated file on `outputDir`, defaults to "<pageName>.html"
         filename: 'index.html',
-        // when using title option,
-        // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-        title: 'Index Page',
-        // chunks to include on this page, by default includes
-        // extracted common chunks and vendor chunks.
-        chunks: ['chunk-vendors', 'chunk-common', 'index']
+        // The page title. To use it in your template your title tag needs to be:
+        // <title><%= htmlWebpackPlugin.options.title %></title>
+        title: 'Home Page',
+        // Chunks to include on this page,
+        // by default includes its own chunk after the common and vendor chunks.
+        chunks: ['chunk-vendors', 'chunk-common', 'home']
       },
-      // when using the entry-only string format,
-      // template is inferred to be `public/subpage.html`
-      // and falls back to `public/index.html` if not found.
-      // Output filename is inferred to be `subpage.html`.
+      // Alternatively you can specify only the page entry,
+      // all other options will use their defaults as described above.
       subpage: 'src/subpage/main.js'
     }
   }
@@ -212,7 +222,7 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   Configure the `crossorigin` attribute on `<link rel="stylesheet">` and `<script>` tags in generated HTML.
 
-  Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (`public/index.html`) are not affected.
+  Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (e.g. `public/index.html`) are not affected.
 
   See also: [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
 
@@ -223,7 +233,7 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   Set to `true` to enable [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) (SRI) on `<link rel="stylesheet">` and `<script>` tags in generated HTML. If you are hosting your built files on a CDN, it is a good idea to enable this for additional security.
 
-  Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (`public/index.html`) are not affected.
+  Note that this only affects tags injected by `html-webpack-plugin` - tags directly added in the source template (e.g. `public/index.html`) are not affected.
 
   Also, when SRI is enabled, preload resource hints are disabled due to a [bug in Chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=677022) which causes the resources to be downloaded twice.
 

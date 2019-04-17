@@ -21,6 +21,7 @@ module.exports = (api, options) => {
 
     const isProd = process.env.NODE_ENV === 'production'
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
+    const publicDir = api.resolve(options.publicDir)
     const outputDir = api.resolve(options.outputDir)
 
     // code splitting
@@ -138,7 +139,7 @@ module.exports = (api, options) => {
     const HTMLPlugin = require('html-webpack-plugin')
     const PreloadPlugin = require('@vue/preload-webpack-plugin')
     const multiPageConfig = options.pages
-    const htmlPath = api.resolve('public/index.html')
+    const htmlPath = api.resolve(`${publicDir}/index.html`)
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
     const publicCopyIgnore = ['.DS_Store']
 
@@ -180,7 +181,7 @@ module.exports = (api, options) => {
         const pageConfig = normalizePageConfig(multiPageConfig[name])
         const {
           entry,
-          template = `public/${name}.html`,
+          template = `${publicDir}/${name}.html`,
           filename = `${name}.html`,
           chunks = ['chunk-vendors', 'chunk-common', name]
         } = pageConfig
@@ -273,8 +274,6 @@ module.exports = (api, options) => {
           }])
     }
 
-    // copy static assets in public/
-    const publicDir = api.resolve('public')
     if (!isLegacyBundle && fs.existsSync(publicDir)) {
       webpackConfig
         .plugin('copy')
