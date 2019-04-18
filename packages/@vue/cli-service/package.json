@@ -38,6 +38,7 @@
     "cache-loader": "^2.0.1",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chalk": "^2.4.2",
+    "cli-highlight": "^2.1.0",
     "clipboardy": "^2.0.0",
     "cliui": "^5.0.0",
     "copy-webpack-plugin": "^4.6.0",
