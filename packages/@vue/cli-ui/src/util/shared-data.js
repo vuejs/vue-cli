@@ -43,21 +43,21 @@ export default {
         })
       },
 
-      created () {
+      async created () {
         const options = this.$options.sharedData
         if (options) {
           if (typeof options === 'function') {
             let smartQueries
-            this.$watch(options.bind(this), result => {
+            this.$watch(options.bind(this), async result => {
               if (smartQueries) {
                 smartQueries.forEach(s => s.destroy())
               }
-              smartQueries = this.$syncSharedData(result)
+              smartQueries = await this.$syncSharedData(result)
             }, {
               immediate: true
             })
           } else {
-            this.$syncSharedData(options)
+            await this.$syncSharedData(options)
           }
           // Force watchers to re-evaluate
           // Because we just added the proxies to this.$data.$sharedData[key]
@@ -69,15 +69,24 @@ export default {
 
       methods: {
         $getProjectId () {
-          const client = this.$apollo.getClient()
-          const result = client.readQuery({
-            query: CURRENT_PROJECT_ID
+          return new Promise((resolve) => {
+            const client = this.$apollo.getClient()
+            const observable = client.watchQuery({
+              query: CURRENT_PROJECT_ID
+            })
+            const sub = observable.subscribe({
+              next ({ data }) {
+                if (data.currentProjectId) {
+                  sub.unsubscribe()
+                  resolve(data.currentProjectId)
+                }
+              }
+            })
           })
-          return result.currentProjectId
         },
 
         async $getSharedData (id) {
-          const projectId = this.$getProjectId()
+          const projectId = await this.$getProjectId()
           const result = await this.$apollo.query({
             query: SHARED_DATA,
             variables: {
@@ -88,8 +97,8 @@ export default {
           return result.sharedData.value
         },
 
-        $watchSharedData (id, cb) {
-          const projectId = this.$getProjectId()
+        async $watchSharedData (id, cb) {
+          const projectId = await this.$getProjectId()
           return this.$apollo.addSmartQuery(id, {
             ...genQuery(id, projectId),
             manual: true,
@@ -99,8 +108,8 @@ export default {
           })
         },
 
-        $setSharedData (id, value) {
-          const projectId = this.$getProjectId()
+        async $setSharedData (id, value) {
+          const projectId = await this.$getProjectId()
           return this.$apollo.mutate({
             mutation: SHARED_DATA_UPDATE,
             variables: {
@@ -111,9 +120,7 @@ export default {
           })
         },
 
-        $syncSharedData (options) {
-          const projectId = this.$getProjectId()
-          const smartQueries = []
+        async $syncSharedData (options) {
           for (const key in options) {
             const id = options[key]
             this.$set(this.$data.$sharedData, key, null)
@@ -127,6 +134,11 @@ export default {
               enumerable: true,
               configurable: true
             })
+          }
+          const projectId = await this.$getProjectId()
+          const smartQueries = []
+          for (const key in options) {
+            const id = options[key]
             const smartQuery = this.$apollo.addSmartQuery(key, {
               ...genQuery(id, projectId),
               update: undefined,

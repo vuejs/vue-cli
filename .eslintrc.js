@@ -8,6 +8,9 @@ module.exports = {
   env: {
     "jest": true
   },
+  globals: {
+    name: 'off'
+  },
   rules: {
     "indent": ["error", 2, {
       "MemberExpression": "off"

@@ -3,7 +3,7 @@ module.exports = (api, options = {}) => {
   api.injectRootOptions(api.entryFile, `router`)
   api.extendPackage({
     dependencies: {
-      'vue-router': '^3.0.1'
+      'vue-router': '^3.0.3'
     }
   })
   api.render('./template', {

@@ -54,7 +54,7 @@ async function autoDetect () {
       name: 'VueTimeago',
       locale: i18n.locale,
       locales: {
-        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}`)
+        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}/index.js`)
       }
     }))
   }

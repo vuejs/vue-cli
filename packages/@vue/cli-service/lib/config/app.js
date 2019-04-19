@@ -199,7 +199,8 @@ module.exports = (api, options) => {
         }
 
         // inject entry
-        webpackConfig.entry(name).add(api.resolve(entry))
+        const entries = Array.isArray(entry) ? entry : [entry]
+        webpackConfig.entry(name).merge(entries.map(e => api.resolve(e)))
 
         // resolve page index template
         const hasDedicatedTemplate = fs.existsSync(api.resolve(template))

@@ -1,6 +1,6 @@
 <template>
   <div class="app-loading">
-    <transition name="vue-ui-fade">
+    <transition name="vue-ui-fade" appear>
       <VueLoadingIndicator
         v-if="loading"
         class="primary"

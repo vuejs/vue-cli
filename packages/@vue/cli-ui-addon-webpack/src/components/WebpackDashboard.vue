@@ -96,7 +96,7 @@ export default {
       .title
         color lighten($vue-ui-color-dark, 60%)
         font-size 20px
-        font-weight lighter
+        font-weight 300
         text-align center
         margin-bottom $padding-item
 
@@ -108,7 +108,7 @@ export default {
       .info-block
         v-box()
         box-center()
-        font-weight lighter
+        font-weight 300
         text-align center
 
         .label

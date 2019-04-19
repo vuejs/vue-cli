@@ -11,32 +11,35 @@ module.exports = (api, _, __, invoking) => {
       '@vue/test-utils': '1.0.0-beta.29'
     },
     jest: {
-      'moduleFileExtensions': [
+      moduleFileExtensions: [
         'js',
         'jsx',
         'json',
         // tell Jest to handle *.vue files
         'vue'
       ],
-      'transform': {
+      transform: {
         // process *.vue files with vue-jest
         '^.+\\.vue$': 'vue-jest',
-        '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
+        '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$':
+          'jest-transform-stub'
       },
       'transformIgnorePatterns': ['/node_modules/'],
       // support the same @ -> src alias mapping in source code
-      'moduleNameMapper': {
+      moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1'
       },
       // serializer for snapshots
-      'snapshotSerializers': [
-        'jest-serializer-vue'
-      ],
-      'testMatch': [
+      snapshotSerializers: ['jest-serializer-vue'],
+      testMatch: [
         '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
       ],
       // https://github.com/facebook/jest/issues/6766
-      'testURL': 'http://localhost/'
+      testURL: 'http://localhost/',
+      watchPlugins: [
+        'jest-watch-typeahead/filename',
+        'jest-watch-typeahead/testname'
+      ]
     }
   })
 
@@ -60,9 +63,13 @@ module.exports = (api, _, __, invoking) => {
       // Jest's shipped babel-jest still uses babel 6,
       // so we cannot use extendPackage which renders babel.config.js.
       api.render(files => {
-        files['.babelrc'] = JSON.stringify({
-          plugins: ['transform-es2015-modules-commonjs']
-        }, null, 2)
+        files['.babelrc'] = JSON.stringify(
+          {
+            plugins: ['transform-es2015-modules-commonjs']
+          },
+          null,
+          2
+        )
       })
     }
   } else {
@@ -74,7 +81,7 @@ module.exports = (api, _, __, invoking) => {
   }
 }
 
-const applyTS = module.exports.applyTS = (api, invoking) => {
+const applyTS = (module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     jest: {
       moduleFileExtensions: ['ts', 'tsx'],
@@ -119,12 +126,12 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
       }
     })
   }
-}
+})
 
-const applyESLint = module.exports.applyESLint = api => {
+const applyESLint = (module.exports.applyESLint = api => {
   api.render(files => {
     files['tests/unit/.eslintrc.js'] = api.genJSConfig({
       env: { jest: true }
     })
   })
-}
+})

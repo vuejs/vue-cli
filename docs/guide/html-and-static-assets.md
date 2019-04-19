@@ -39,6 +39,10 @@ By default, a Vue CLI app will automatically generate prefetch hints for all Jav
 
 The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('prefetch')`.
 
+::: tip Note for multi page setups
+When using a multipage setup, the plugin name above should be changed to match the structure 'prefetch-{pagename}', for example 'prefetch-app'.
+:::
+
 Example:
 
 ``` js

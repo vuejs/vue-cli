@@ -7,7 +7,8 @@ module.exports = {
   ],
 
   globals: {
-    ClientAddonApi: false
+    ClientAddonApi: false,
+    name: 'off'
   },
 
   plugins: [
@@ -19,5 +20,9 @@ module.exports = {
     'vue/no-use-v-if-with-v-for': 'warn',
     'vue/no-unused-vars': 'warn',
     'vue/return-in-computed-property': 'warn',
+  },
+
+  parserOptions: {
+    parser: 'babel-eslint'
   }
 }

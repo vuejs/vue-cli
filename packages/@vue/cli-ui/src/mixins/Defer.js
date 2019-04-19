@@ -1,4 +1,4 @@
-export default function (count = 1) {
+export default function (count = 10) {
   // @vue/component
   return {
     data () {
@@ -13,6 +13,7 @@ export default function (count = 1) {
 
     methods: {
       runDisplayPriority () {
+        this.displayPriority = 0
         const step = () => {
           requestAnimationFrame(() => {
             this.displayPriority++
@@ -22,6 +23,10 @@ export default function (count = 1) {
           })
         }
         step()
+      },
+
+      defer (priority) {
+        return this.displayPriority >= priority
       }
     }
   }
