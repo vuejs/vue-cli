@@ -2,7 +2,23 @@
 const channels = require('../channels')
 // Utils
 const { log } = require('../util/logger')
+const path = require('path')
+const fs = require('fs-extra')
+const { rcFolder } = require('../util/rcFolder')
+const stats = require('../util/stats')
 
+/**
+ * @typedef SharedData
+ * @prop {string} id
+ * @prop {any} value
+ * @prop {Date} updated
+ * @prop {boolean} disk
+ */
+
+const rootFolder = path.resolve(rcFolder, 'shared-data')
+fs.ensureDirSync(rootFolder)
+
+/** @type {Map<string, Map<string, SharedData>>} */
 const sharedData = new Map()
 let watchers = new Map()
 
@@ -10,35 +26,74 @@ function get ({ id, projectId }, context) {
   const store = sharedData.get(projectId)
   if (!store) return null
 
-  const value = store.get(id)
-  if (typeof value === 'undefined') return null
-
-  return {
-    id,
-    value
+  let data = store.get(id)
+  if (data == null) {
+    if (fs.existsSync(path.resolve(rootFolder, projectId, `${id}.json`))) {
+      data = {
+        id,
+        updated: new Date(),
+        disk: true
+      }
+    }
   }
+
+  if (data && data.disk) {
+    data.value = readOnDisk({ id, projectId }, context)
+  }
+
+  return data
 }
 
-function set ({ id, projectId, value }, context) {
+async function readOnDisk ({ id, projectId }, context) {
+  const file = path.resolve(rootFolder, projectId, `${id}.json`)
+  if (await fs.exists(file)) {
+    return fs.readJson(file)
+  }
+  return null
+}
+
+async function set ({ id, projectId, value, disk = false }, context) {
+  if (disk) {
+    await writeOnDisk({ id, projectId, value }, context)
+  }
   let store = sharedData.get(projectId)
   if (!store) {
     store = new Map()
     sharedData.set(projectId, store)
   }
-  store.set(id, value)
+  store.set(id, {
+    id,
+    ...(disk ? {} : { value }),
+    disk,
+    updated: new Date()
+  })
 
+  const stat = stats.get(`shared-data_${projectId}`, id)
+  stat.value = 0
   context.pubsub.publish(channels.SHARED_DATA_UPDATED, {
     sharedDataUpdated: { id, projectId, value }
   })
 
   const watchers = notify({ id, projectId, value }, context)
-  log('SharedData set', id, projectId, value, `(${watchers.length} watchers)`)
+
+  setTimeout(() => log('SharedData set', id, projectId, value, `(${watchers.length} watchers, ${stat.value} subscriptions)`))
+
   return { id, value }
 }
 
-function remove ({ id, projectId }, context) {
+async function writeOnDisk ({ id, projectId, value }, context) {
+  const projectFolder = path.resolve(rootFolder, projectId)
+  await fs.ensureDir(projectFolder)
+  await fs.writeJson(path.resolve(projectFolder, `${id}.json`), value)
+}
+
+async function remove ({ id, projectId }, context) {
   const store = sharedData.get(projectId)
   if (store) {
+    const data = store.get(id)
+    if (data && data.disk) {
+      fs.remove(path.resolve(rootFolder, projectId, `${id}.json`))
+    }
     store.delete(id)
   }
 

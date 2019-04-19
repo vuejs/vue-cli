@@ -4,7 +4,9 @@
       "common": {
         "close": "Close",
         "back": "Go back",
-        "more-info": "More info"
+        "more-info": "More info",
+        "show-more": "Show more",
+        "show-less": "Show less"
       },
       "components": {
         "client-addon-component": {
@@ -118,7 +120,11 @@
             "update": "Update {target}",
             "refresh": "Force Refresh {target}<br><i>Press [Shift] for Quick Refresh (node_modules won't be updated)</i>"
           },
-          "local": "Local"
+          "local": "Local",
+          "features": {
+            "generator": "This plugin has a generator and can modify your project files and add new files for you.",
+            "ui-integration": "This plugin includes additional UI features like enhanced tasks, configuration screens, dashboard widgets..."
+          }
         },
         "project-dependency-item": {
           "version": "version",
@@ -169,7 +175,8 @@
         "terminal-view": {
           "buttons": {
             "clear": "Clear console",
-            "scroll": "Scroll to bottom"
+            "scroll": "Scroll to bottom",
+            "content-copy": "Copy content"
           }
         },
         "top-bar": {
@@ -280,6 +287,7 @@
                 "options": {
                   "label": "Additional options",
                   "force": "Overwrite target folder if it exists",
+                  "bare": "Scaffold project without beginner instructions",
                   "git-title": "Git repository",
                   "git": "Initialize git repository (recommended)",
                   "git-commit-message": "Initial commit message (optional)"
@@ -427,7 +435,8 @@
           }
         },
         "project-tasks": {
-          "title": "Project tasks"
+          "title": "Project tasks",
+          "refresh": "Refresh tasks"
         },
         "project-task-details": {
           "actions": {
@@ -439,7 +448,11 @@
           "command": "Script command",
           "parameters": "Parameters",
           "more-info": "More Info",
-          "output": "Output"
+          "output": "Output",
+          "override-args": {
+            "message": "Override hard-coded arguments",
+            "description": "If enabled, hard-coded arguments in your package.json file will be replaced with the values defined below"
+          }
         },
         "project-dependencies": {
           "title": "Project dependencies",
@@ -770,7 +783,7 @@
           "kill": "Kill",
           "status": {
             "idle": "Ready to kill",
-            "killing": "Killing procress...",
+            "killing": "Killing process...",
             "killed": "Killed successfully!",
             "error": "Couldn't kill process"
           }
@@ -806,15 +819,22 @@
           "description": "Check for known vulnerabilities in your project dependencies",
           "messages": {
             "ok": "No vulnerability found",
-            "loading": "Checking security reports...",
-            "attention": "{n} vulnerabilities found"
+            "loading": "Auditing project security...",
+            "attention": "{n} vulnerabilities found",
+            "error": "Couldn't check for vulnerability"
           },
           "severity": {
+            "critical": "Critical severity",
             "high": "High severity",
-            "medium": "Medium severity",
+            "moderate": "Medium severity",
             "low": "Low severity"
           },
-          "direct-dep": "Direct dependency"
+          "direct-dep": "Direct dependency",
+          "versions": {
+            "vulnerable": "Vulnerable versions:",
+            "patched": "Patched versions:"
+          },
+          "recheck": "Check again"
         },
         "run-task": {
           "title": "Run task",

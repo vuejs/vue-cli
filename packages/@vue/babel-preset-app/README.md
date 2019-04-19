@@ -88,7 +88,7 @@ Use this option when you have 3rd party dependencies that are not processed by B
 
 - Default: `true`.
 
-Set to `false` to disable JSX support.
+Set to `false` to disable JSX support. Or you can toggle [@vue/babel-preset-jsx](https://github.com/vuejs/jsx/tree/dev/packages/babel-preset-jsx) features here.
 
 ### loose
 

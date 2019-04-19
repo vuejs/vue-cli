@@ -28,8 +28,14 @@ exports.processStats = function (stats) {
     data: {
       errors: stats.data.errors,
       warnings: stats.data.warnings,
-      assets: stats.data.assets,
-      chunks: stats.data.chunks
+      assets: stats.data.assets.map(a => ({
+        name: a.name,
+        size: a.size
+      })),
+      chunks: stats.data.chunks.map(c => ({
+        id: c.id,
+        names: c.names
+      }))
     },
     computed: {
       modulesPerSizeType

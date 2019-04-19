@@ -2,6 +2,11 @@ const path = require('path')
 const fs = require('fs-extra')
 const { processStats } = require('./utils/stats')
 
+/** @typedef {import('../apollo-server/api/PluginApi')} PluginApi */
+
+/**
+ * @param {PluginApi} api
+ */
 module.exports = api => {
   const { getSharedData, setSharedData, removeSharedData } = api.namespace('org.vue.webpack.')
 
@@ -13,7 +18,6 @@ module.exports = api => {
     status: null,
     progress: {},
     operations: null,
-    stats: null,
     sizes: null,
     problems: null,
     url: null
@@ -75,8 +79,8 @@ module.exports = api => {
           const statsFile = path.resolve(api.getCwd(), `./node_modules/.stats-${type}.json`)
           const value = await fs.readJson(statsFile)
           const { stats, analyzer } = processStats(value)
-          setSharedData(id, stats)
-          setSharedData(`${id}-analyzer`, analyzer)
+          setSharedData(id, stats, { disk: true })
+          setSharedData(`${id}-analyzer`, analyzer, { disk: true })
           await fs.remove(statsFile)
         } else if (data.type === 'progress') {
           if (type === 'serve' || !modernMode) {

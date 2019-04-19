@@ -16,7 +16,7 @@ test('default', async () => {
     },
     {
       message: 'package manager',
-      choices: ['Yarn', 'NPM'],
+      choices: ['Yarn', 'PNPM', 'NPM'],
       choose: 0
     }
   ]

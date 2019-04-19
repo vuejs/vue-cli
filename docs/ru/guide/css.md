@@ -121,7 +121,7 @@ module.exports = {
       sass: {
         // @/ это псевдоним к каталогу src/ поэтому предполагается,
         // что у вас в проекте есть файл `src/variables.scss`
-        data: `@import "@/variables.scss";`
+        data: `@import "~@/variables.scss";`
       },
       // передача настроек Less.js в less-loader
       less:{

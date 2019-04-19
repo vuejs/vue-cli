@@ -13,7 +13,7 @@
         :value="projectCurrent.favorite"
         :icon="projectCurrent.favorite ? 'star' : 'star_border'"
         class="extend-left"
-        @input="toggleCurrentFavorite()"
+        @update="toggleCurrentFavorite()"
       >
         {{ $t('org.vue.components.project-select-list-item.tooltips.favorite') }}
       </VueSwitch>
@@ -89,7 +89,6 @@ import PROJECTS from '@/graphql/project/projects.gql'
 import PROJECT_OPEN from '@/graphql/project/projectOpen.gql'
 import PROJECT_SET_FAVORITE from '@/graphql/project/projectSetFavorite.gql'
 import OPEN_IN_EDITOR from '@/graphql/file/fileOpenInEditor.gql'
-import CURRENT_PROJECT_ID_SET from '@/graphql/project/currentProjectIdSet.gql'
 
 export default {
   apollo: {
@@ -125,13 +124,6 @@ export default {
       })
 
       await resetApollo()
-
-      await this.$apollo.mutate({
-        mutation: CURRENT_PROJECT_ID_SET,
-        variables: {
-          projectId: project.id
-        }
-      })
     },
 
     async toggleCurrentFavorite () {

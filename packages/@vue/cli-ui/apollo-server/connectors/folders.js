@@ -18,7 +18,7 @@ function isDirectory (file) {
   try {
     return fs.statSync(file).isDirectory()
   } catch (e) {
-    if (process.env.VUE_APP_CLI_UI_DEV) console.warn(e.message)
+    if (process.env.VUE_APP_CLI_UI_DEBUG) console.warn(e.message)
   }
   return false
 }
@@ -60,7 +60,7 @@ function isHidden (file) {
 
     return (!isPlatformWindows && result.unix) || (isPlatformWindows && result.windows)
   } catch (e) {
-    if (process.env.VUE_APP_CLI_UI_DEV) {
+    if (process.env.VUE_APP_CLI_UI_DEBUG) {
       console.log('file:', file)
       console.error(e)
     }
@@ -134,7 +134,7 @@ function isVueProject (file, context) {
     const pkg = readPackage(file, context)
     return Object.keys(pkg.devDependencies || {}).includes('@vue/cli-service')
   } catch (e) {
-    if (process.env.VUE_APP_CLI_UI_DEV) {
+    if (process.env.VUE_APP_CLI_UI_DEBUG) {
       console.log(e)
     }
   }
