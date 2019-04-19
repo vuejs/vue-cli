@@ -21,8 +21,7 @@ module.exports = (api, options) => {
     },
     browserslist: [
       '> 1%',
-      'last 2 versions',
-      'not ie <= 8'
+      'last 2 versions'
     ]
   })
 
