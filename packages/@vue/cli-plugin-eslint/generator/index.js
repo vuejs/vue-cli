@@ -13,7 +13,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       lint: 'vue-cli-service lint'
     },
     eslintConfig,
-    devDependencies: {}
+    devDependencies: {
+      'eslint': '^5.16.0',
+      'eslint-plugin-vue': '^5.0.0'
+    }
+  }
+
+  if (!api.hasPlugin('typescript')) {
+    pkg.devDependencies['babel-eslint'] = '^10.0.1'
   }
 
   const injectEditorConfig = (config) => {
