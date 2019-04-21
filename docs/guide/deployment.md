@@ -261,7 +261,60 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+1. Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+
+2. Set config var values.
+```
+  heroku config:set NODE_ENV=production PORT=1337
+```
+3. Install [Express](https://expressjs.com/en/starter/static-files.html) to be used for '/dist' static file server.
+```
+  npm install express
+```
+4. Create `serve.js` file in root directory.
+```
+  touch server.js
+```
+5. Add to `server.js`.
+```
+  const express = require('express')
+  const path = require('path')
+  const serveStatic = require('serve-static')
+
+  let app = express()
+  app.use(serveStatic(path.join(__dirname, '/dist')))
+
+  const port = process.env.PORT || 8080
+  app.listen(port, () => {
+    console.log('Listening on port ' + port)
+  })
+
+```
+6. Add to `package.json` script section.
+```
+    "start": "node server.js",
+    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
+```
+  Vue-cli 3 app script section will end up looking like this:
+```
+    "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "inspect": "vue-cli-service inspect > inspect.js",
+    "start": "node server.js",
+    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
+    },
+ ```
+ 7. Check `.gitignore` for:
+  ```
+    node_modules 
+    /dist
+  ```
+ 8. Commit changes and provision your app.
+  ```
+    git push heroku master
+  ```
 
 ### Surge
 
