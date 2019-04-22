@@ -170,6 +170,21 @@ test('load project options from vue.config.js', () => {
   expect(service.projectOptions.lintOnSave).toBe(false)
 })
 
+test('api: assertVersion', () => {
+  const plugin = {
+    id: 'test-assertVersion',
+    apply: api => {
+      expect(() => api.assertVersion(3)).not.toThrow()
+      expect(() => api.assertVersion('3')).not.toThrow()
+      expect(() => api.assertVersion('>= 3')).not.toThrow()
+
+      expect(() => api.assertVersion(3.1)).toThrow('Expected string or integer value')
+      expect(() => api.assertVersion('^100')).toThrow('Require @vue/cli-service "^100"')
+    }
+  }
+  createMockService([plugin], true /* init */)
+})
+
 test('api: registerCommand', () => {
   let args
   const service = createMockService([{
