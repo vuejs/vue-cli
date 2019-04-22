@@ -131,7 +131,7 @@ class PluginAPI {
   /**
    * Generate a cache identifier from a number of variables
    */
-  genCacheConfig (id, partialIdentifier, configFiles) {
+  genCacheConfig (id, partialIdentifier, configFiles = []) {
     const fs = require('fs')
     const cacheDirectory = this.resolve(`node_modules/.cache/${id}`)
 
@@ -155,31 +155,38 @@ class PluginAPI {
       ]
     }
 
-    if (configFiles) {
-      const readConfig = file => {
-        const absolutePath = this.resolve(file)
-        if (fs.existsSync(absolutePath)) {
-          if (absolutePath.endsWith('.js')) {
-            // should evaluate config scripts to reflect environment variable changes
-            try {
-              return JSON.stringify(require(absolutePath))
-            } catch (e) {
-              return fs.readFileSync(absolutePath, 'utf-8')
-            }
-          } else {
-            return fs.readFileSync(absolutePath, 'utf-8')
-          }
-        }
+    if (!Array.isArray(configFiles)) {
+      configFiles = [configFiles]
+    }
+    configFiles = configFiles.concat([
+      'package-lock.json',
+      'yarn.lock',
+      'pnpm-lock.yaml'
+    ])
+
+    const readConfig = file => {
+      const absolutePath = this.resolve(file)
+      if (!fs.existsSync(absolutePath)) {
+        return
       }
-      if (!Array.isArray(configFiles)) {
-        configFiles = [configFiles]
-      }
-      for (const file of configFiles) {
-        const content = readConfig(file)
-        if (content) {
-          variables.configFiles = content.replace(/\r\n?/g, '\n')
-          break
+
+      if (absolutePath.endsWith('.js')) {
+        // should evaluate config scripts to reflect environment variable changes
+        try {
+          return JSON.stringify(require(absolutePath))
+        } catch (e) {
+          return fs.readFileSync(absolutePath, 'utf-8')
         }
+      } else {
+        return fs.readFileSync(absolutePath, 'utf-8')
+      }
+    }
+
+    for (const file of configFiles) {
+      const content = readConfig(file)
+      if (content) {
+        variables.configFiles = content.replace(/\r\n?/g, '\n')
+        break
       }
     }
 
