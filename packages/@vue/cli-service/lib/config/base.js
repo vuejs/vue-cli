@@ -86,7 +86,7 @@ module.exports = (api, options) => {
           .loader('vue-loader')
           .options(Object.assign({
             compilerOptions: {
-              preserveWhitespace: false
+              whitespace: 'condense'
             }
           }, vueLoaderCacheConfig))
 
