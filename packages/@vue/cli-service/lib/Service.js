@@ -55,7 +55,7 @@ module.exports = class Service {
     }
   }
 
-  init (command, mode = process.env.VUE_CLI_MODE) {
+  init (mode = process.env.VUE_CLI_MODE, command = '') {
     if (this.initialized) {
       return
     }
@@ -64,7 +64,7 @@ module.exports = class Service {
 
     // load mode .env
     if (mode) {
-      this.loadEnv(command, mode)
+      this.loadEnv(mode, command)
     }
     // load base .env
     this.loadEnv(command)
@@ -89,7 +89,7 @@ module.exports = class Service {
     }
   }
 
-  loadEnv (command, mode) {
+  loadEnv (mode, command) {
     const logger = debug('vue:env')
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
@@ -210,7 +210,7 @@ module.exports = class Service {
     const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
 
     // load env variables, load user config, apply plugins
-    this.init(name, mode)
+    this.init(mode, name)
 
     args._ = args._ || []
     let command = this.commands[name]
