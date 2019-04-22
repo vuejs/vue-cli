@@ -24,26 +24,24 @@ module.exports = (api, options) => {
     const outputDir = api.resolve(options.outputDir)
 
     // code splitting
-    if (isProd && !process.env.CYPRESS_ENV) {
-      webpackConfig
-        .optimization.splitChunks({
-          cacheGroups: {
-            vendors: {
-              name: `chunk-vendors`,
-              test: /[\\/]node_modules[\\/]/,
-              priority: -10,
-              chunks: 'initial'
-            },
-            common: {
-              name: `chunk-common`,
-              minChunks: 2,
-              priority: -20,
-              chunks: 'initial',
-              reuseExistingChunk: true
-            }
+    webpackConfig
+      .optimization.splitChunks({
+        cacheGroups: {
+          vendors: {
+            name: `chunk-vendors`,
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            chunks: 'initial'
+          },
+          common: {
+            name: `chunk-common`,
+            minChunks: 2,
+            priority: -20,
+            chunks: 'initial',
+            reuseExistingChunk: true
           }
-        })
-    }
+        }
+      })
 
     // HTML plugin
     const resolveClientEnv = require('../util/resolveClientEnv')
