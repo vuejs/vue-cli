@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -153,6 +155,9 @@ module.exports = (api, options) => {
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).
         setImmediate: false,
+        // process is injected via EnvironmentPlugin, although some 3rd party
+        // libraries may require a mock to work properly (#934)
+        process: 'mock',
         // prevent webpack from injecting mocks to Node native modules
         // that does not make sense for the client
         dgram: 'empty',
@@ -164,8 +169,8 @@ module.exports = (api, options) => {
 
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
-      .plugin('define')
-        .use(require('webpack/lib/DefinePlugin'), [
+      .plugin('process-env')
+        .use(webpack.EnvironmentPlugin, [
           resolveClientEnv(options)
         ])
 
