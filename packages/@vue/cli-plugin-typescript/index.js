@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = (api, options) => {
   const fs = require('fs')
-  const useThreads = process.env.NODE_ENV === 'production' && options.parallel
+  const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
 
   api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
