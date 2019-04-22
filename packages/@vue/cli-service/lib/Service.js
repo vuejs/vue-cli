@@ -55,7 +55,7 @@ module.exports = class Service {
     }
   }
 
-  init (mode = process.env.VUE_CLI_MODE) {
+  init (command, mode = process.env.VUE_CLI_MODE) {
     if (this.initialized) {
       return
     }
@@ -64,10 +64,10 @@ module.exports = class Service {
 
     // load mode .env
     if (mode) {
-      this.loadEnv(mode)
+      this.loadEnv(command, mode)
     }
     // load base .env
-    this.loadEnv()
+    this.loadEnv(command)
 
     // load user config
     const userOptions = this.loadUserOptions()
@@ -89,7 +89,7 @@ module.exports = class Service {
     }
   }
 
-  loadEnv (mode) {
+  loadEnv (command, mode) {
     const logger = debug('vue:env')
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
@@ -111,8 +111,8 @@ module.exports = class Service {
     load(basePath)
 
     // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
-    // is production or test. However the value in .env files will take higher
-    // priority.
+    // is production or test or running build command.
+    // However the value in .env files will take higher priority.
     if (mode) {
       // always set NODE_ENV during tests
       // as that is necessary for tests to not be affected by each other
@@ -120,9 +120,16 @@ module.exports = class Service {
         process.env.VUE_CLI_TEST &&
         !process.env.VUE_CLI_TEST_TESTING_ENV
       )
-      const defaultNodeEnv = (mode === 'production' || mode === 'test')
-        ? mode
-        : 'development'
+
+      let defaultNodeEnv
+      if (mode === 'production' || mode === 'test') {
+        defaultNodeEnv = mode
+      } else if (command === 'build') {
+        defaultNodeEnv = 'production'
+      } else {
+        defaultNodeEnv = 'development'
+      }
+
       if (shouldForceDefaultEnv || process.env.NODE_ENV == null) {
         process.env.NODE_ENV = defaultNodeEnv
       }
@@ -203,7 +210,7 @@ module.exports = class Service {
     const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
 
     // load env variables, load user config, apply plugins
-    this.init(mode)
+    this.init(name, mode)
 
     args._ = args._ || []
     let command = this.commands[name]
