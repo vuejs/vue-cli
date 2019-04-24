@@ -42,6 +42,10 @@ For a CLI plugin to be usable in a Vue CLI project, it must follow the name conv
 - Discoverable by other developers via searching;
 - Installable via `vue add <name>` or `vue invoke <name>`.
 
+:::warning Warning
+Make sure to name the plugin correctly, otherwise it will be impossible to install it via `vue add` command or find it with Vue UI plugins search!
+:::
+
 For better discoverability when a user searches for your plugin, put keywords describing your plugin in the `description` field of the plugin `package.json` file.
 
 Example:
