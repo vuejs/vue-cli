@@ -36,7 +36,7 @@ So, typical CLI plugin folder structure looks like the following:
 
 ## Naming and discoverability
 
-For a CLI plugin to be usable by other developers, it must be published on [npm](https://www.npmjs.com/) following the name convention `vue-cli-plugin-<name>` or `@scope/vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
+For a CLI plugin to be usable in a Vue CLI project, it must follow the name convention `vue-cli-plugin-<name>` or `@scope/vue-cli-plugin-<name>`. It allows your plugin to be:
 
 - Discoverable by `@vue/cli-service`;
 - Discoverable by other developers via searching;
