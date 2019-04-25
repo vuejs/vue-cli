@@ -90,8 +90,8 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
       }
     },
     devDependencies: {
-      '@types/jest': '^23.1.4',
-      'ts-jest': '^23.0.0'
+      '@types/jest': '^24.0.11',
+      'ts-jest': '^24.0.2'
     }
   })
   if (api.hasPlugin('babel')) {
