@@ -290,24 +290,7 @@ We will also use [Express](https://expressjs.com/) to serve the static (dist) fi
     app.listen(port);
     ```
 
-
-3. Edit your `package.json` and define the Node.js and NPM versions that your Heroku app will use. To do this, add an `engine` section in your `package.json` file.
-
-    ```json
-    {
-      ...
-      "engine": {
-        "node": "^10.0.0",
-        "npm": "^6.0.0"
-      }
-      ...
-    }
-    ```
-
-    _Feel free to use the version that matches your local installation or your preferred version._
-
-
-4. Also in your `package.json` file, add a `start` script.
+3. In your `package.json` file, add a `start` script.
 
     ```json
     {
@@ -319,9 +302,9 @@ We will also use [Express](https://expressjs.com/) to serve the static (dist) fi
     }
     ```
 
-5. Push your code to your Heroku Git repository.
+4. Push your code to your Heroku Git repository.
 
-6. You may also push your code to your Github repository and link it your Heroku app to deploy from there. Just go to the **Deploy** tab of your Heroku app, and choose **Github** in the deployment method.
+5. You may also push your code to your Github repository and link it your Heroku app to deploy from there. Just go to the **Deploy** tab of your Heroku app, and choose **Github** in the deployment method.
 
 ### Surge
 
