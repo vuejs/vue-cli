@@ -93,7 +93,9 @@ exports.hasPnpm3OrLater = () => {
     return _hasPnpm3orLater
   }
   try {
-    const pnpmVersion = execSync('pnpm --version').toString()
+    const pnpmVersion = execSync('pnpm --version', {
+      stdio: ['pipe', 'pipe', 'ignore']
+    }).toString()
     // there's a critical bug in pnpm 2
     // https://github.com/pnpm/pnpm/issues/1678#issuecomment-469981972
     // so we only support pnpm >= 3.0.0
