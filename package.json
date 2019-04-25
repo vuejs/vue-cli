@@ -58,7 +58,7 @@
     "graphql": "^14.2.1",
     "http-server": "^0.11.1",
     "inquirer": "^6.0.0",
-    "jest": "^23.1.0",
+    "jest": "^24.7.1",
     "lerna": "^3.13.2",
     "lerna-changelog": "^0.8.2",
     "lint-staged": "^8.1.5",
