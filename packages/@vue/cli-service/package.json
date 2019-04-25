@@ -42,7 +42,7 @@
     "clipboardy": "^2.0.0",
     "cliui": "^5.0.0",
     "copy-webpack-plugin": "^4.6.0",
-    "css-loader": "^1.0.1",
+    "css-loader": "^2.1.1",
     "cssnano": "^4.1.10",
     "current-script-polyfill": "^1.0.0",
     "debug": "^4.1.1",
