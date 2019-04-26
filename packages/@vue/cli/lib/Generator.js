@@ -97,10 +97,22 @@ module.exports = class Generator {
     const rootOptions = cliService
       ? cliService.options
       : inferRootOptions(pkg)
-    // apply generators from plugins
-    plugins.forEach(({ id, apply, options }) => {
-      const api = new GeneratorAPI(id, this, options, rootOptions)
-      apply(api, options, rootOptions, invoking)
+
+    this.rootOptions = rootOptions
+  }
+
+  initPlugins () {
+    const { rootOptions, invoking } = this
+    return new Promise((resolve, reject) => {
+      const arrP = []
+      // apply generators from plugins
+      this.plugins.forEach(({ id, apply, options }) => {
+        const api = new GeneratorAPI(id, this, options, rootOptions)
+        const fn = apply(api, options, rootOptions, invoking)
+        arrP.push(fn)
+      })
+
+      Promise.all(arrP).then(resolve).catch(reject)
     })
   }
 
@@ -108,6 +120,8 @@ module.exports = class Generator {
     extractConfigFiles = false,
     checkExisting = false
   } = {}) {
+    await this.initPlugins()
+
     // save the file system before applying plugin for comparison
     const initialFiles = Object.assign({}, this.files)
     // extract configs from package.json into dedicated files.

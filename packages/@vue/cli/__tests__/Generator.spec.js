@@ -242,7 +242,7 @@ test('api: extendPackage merge dependencies', async () => {
 })
 
 test('api: warn invalid dep range', async () => {
-  new Generator('/', { plugins: [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -255,6 +255,8 @@ test('api: warn invalid dep range', async () => {
     }
   ] })
 
+  await generator.generate()
+
   expect(logs.warn.some(([msg]) => {
     return (
       msg.match(/invalid version range for dependency "foo"/) &&
@@ -264,7 +266,7 @@ test('api: warn invalid dep range', async () => {
 })
 
 test('api: extendPackage dependencies conflict', async () => {
-  new Generator('/', { plugins: [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -287,6 +289,8 @@ test('api: extendPackage dependencies conflict', async () => {
     }
   ] })
 
+  await generator.generate()
+
   expect(logs.warn.some(([msg]) => {
     return (
       msg.match(/conflicting versions for project dependency "foo"/) &&
@@ -298,7 +302,7 @@ test('api: extendPackage dependencies conflict', async () => {
 })
 
 test('api: extendPackage merge warn nonstrictly semver deps', async () => {
-  new Generator('/', { plugins: [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test3',
       apply: api => {
@@ -320,6 +324,8 @@ test('api: extendPackage merge warn nonstrictly semver deps', async () => {
       }
     }
   ] })
+
+  await generator.generate()
 
   expect(logs.warn.some(([msg]) => {
     return (
@@ -422,10 +428,10 @@ test('api: hasPlugin', () => {
   ] })
 })
 
-test('api: onCreateComplete', () => {
+test('api: onCreateComplete', async () => {
   const fn = () => {}
   const cbs = []
-  new Generator('/', {
+  const generator = new Generator('/', {
     plugins: [
       {
         id: 'test',
@@ -436,6 +442,9 @@ test('api: onCreateComplete', () => {
     ],
     completeCbs: cbs
   })
+
+  await generator.generate()
+
   expect(cbs).toContain(fn)
 })
 
