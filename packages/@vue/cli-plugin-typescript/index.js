@@ -37,7 +37,11 @@ module.exports = (api, options) => {
 
     if (useThreads) {
       addLoader({
-        loader: 'thread-loader'
+        loader: 'thread-loader',
+        options:
+          typeof options.parallel === 'number'
+            ? { workers: options.parallel }
+            : {}
       })
     }
 
