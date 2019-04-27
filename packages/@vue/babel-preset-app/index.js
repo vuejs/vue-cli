@@ -165,17 +165,21 @@ module.exports = (context, options = {}) => {
     absoluteRuntime
   }])
 
-  // until one of the two issues is resolved:
+  // use @babel/runtime-corejs2 so that helpers that need polyfillable APIs will reference core-js instead.
+  // if useBuiltIns is not set to 'usage', then it means users would take care of the polyfills on their own,
+  // i.e., core-js is no longer needed.
+  // this extra plugin can be removed once one of the two issues resolves:
   // https://github.com/babel/babel/issues/7597
   // https://github.com/babel/babel/issues/9903
-  // we need to alias @babel/runtime to @babel/runtime-corejs2 for compatibility
-  const runtimeCoreJs2Path = path.dirname(require.resolve('@babel/runtime-corejs2/package.json'))
-  plugins.push([require('babel-plugin-module-resolver'), {
-    alias: {
-      '@babel/runtime': '@babel/runtime-corejs2',
-      [runtimePath]: runtimeCoreJs2Path
-    }
-  }])
+  if (useBuiltIns === 'usage' && !process.env.VUE_CLI_MODERN_BUILD) {
+    const runtimeCoreJs2Path = path.dirname(require.resolve('@babel/runtime-corejs2/package.json'))
+    plugins.push([require('babel-plugin-module-resolver'), {
+      alias: {
+        '@babel/runtime': '@babel/runtime-corejs2',
+        [runtimePath]: runtimeCoreJs2Path
+      }
+    }])
+  }
 
   return {
     presets,
