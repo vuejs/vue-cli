@@ -1,7 +1,7 @@
 import ChainableWebpackConfig from 'webpack-chain'
 import { WebpackOptions } from 'webpack/declarations/WebpackOptions'
 
-type PageEntry = string;
+type PageEntry = string | string[];
 
 interface PageConfig {
   entry: PageEntry;
@@ -51,7 +51,7 @@ export interface ProjectOptions {
   chainWebpack?: (config: ChainableWebpackConfig) => void;
   configureWebpack?: WebpackOptions | ((config: WebpackOptions) => (WebpackOptions | void));
 
-  lintOnSave?: boolean | 'error';
+  lintOnSave?: boolean | 'default' | 'warning' | 'error';
   pwa?: object;
 
   pluginOptions?: object;
