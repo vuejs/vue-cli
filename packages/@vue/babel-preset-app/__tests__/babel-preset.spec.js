@@ -107,7 +107,7 @@ test('async/await', () => {
   // should use regenerator runtime
   expect(code).toMatch(`import "regenerator-runtime/runtime"`)
   // should use required helper instead of inline
-  expect(code).toMatch(/import _asyncToGenerator from ".*runtime\/helpers\/esm\/asyncToGenerator\"/)
+  expect(code).toMatch(/import _asyncToGenerator from ".*runtime-corejs2\/helpers\/esm\/asyncToGenerator\"/)
 })
 
 test('jsx', () => {
@@ -152,6 +152,6 @@ test('disable absoluteRuntime', () => {
     filename: 'test-entry-file.js'
   })
 
-  expect(code).toMatch('import _toConsumableArray from "@babel/runtime/helpers/esm/toConsumableArray"')
+  expect(code).toMatch('import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray"')
   expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
 })

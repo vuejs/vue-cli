@@ -37,6 +37,7 @@ module.exports = (context, options = {}) => {
     presets.push([require('@vue/babel-preset-jsx'), typeof options.jsx === 'object' ? options.jsx : {}])
   }
 
+  const runtimePath = path.dirname(require.resolve('@babel/runtime/package.json'))
   const {
     polyfills: userPolyfills,
     loose = false,
@@ -62,7 +63,7 @@ module.exports = (context, options = {}) => {
     // However, this may cause hash inconsitency if the project is moved to another directory.
     // So here we allow user to explicit disable this option if hash consistency is a requirement
     // and the runtime version is sure to be correct.
-    absoluteRuntime = path.dirname(require.resolve('@babel/runtime/package.json'))
+    absoluteRuntime = runtimePath
   } = options
 
   // resolve targets
@@ -162,6 +163,18 @@ module.exports = (context, options = {}) => {
     useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
 
     absoluteRuntime
+  }])
+
+  // until one of the two issues is resolved:
+  // https://github.com/babel/babel/issues/7597
+  // https://github.com/babel/babel/issues/9903
+  // we need to alias @babel/runtime to @babel/runtime-corejs2 for compatibility
+  const runtimeCoreJs2Path = path.dirname(require.resolve('@babel/runtime-corejs2/package.json'))
+  plugins.push([require('babel-plugin-module-resolver'), {
+    alias: {
+      '@babel/runtime': '@babel/runtime-corejs2',
+      [runtimePath]: runtimeCoreJs2Path
+    }
   }])
 
   return {
