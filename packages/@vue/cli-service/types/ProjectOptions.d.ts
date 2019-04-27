@@ -38,7 +38,7 @@ export interface ProjectOptions {
   runtimeCompiler?: boolean;
   transpileDependencies?: Array<string | RegExp>;
   productionSourceMap?: boolean;
-  parallel?: boolean;
+  parallel?: boolean | number;
   devServer?: object;
   pages?: {
     [key: string]: PageEntry | PageConfig;
