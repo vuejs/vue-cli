@@ -1,5 +1,6 @@
 const path = require('path')
 const hash = require('hash-sum')
+const semver = require('semver')
 const { matchesPluginId } = require('@vue/cli-shared-utils')
 
 // Note: if a plugin-registered command needs to run in a specific default mode,
@@ -15,6 +16,29 @@ class PluginAPI {
   constructor (id, service) {
     this.id = id
     this.service = service
+  }
+
+  get version () {
+    return require('../package.json').version
+  }
+
+  assertVersion (range) {
+    if (typeof range === 'number') {
+      console.log(range, Number.isInteger(range))
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.version, range)) return
+
+    throw new Error(
+      `Require @vue/cli-service "${range}", but was loaded with "${this.version}".`
+    )
   }
 
   /**
