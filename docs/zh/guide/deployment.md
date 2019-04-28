@@ -310,3 +310,93 @@ npm install --global surge
 
     cd -
     ```
+
+### Docker(Nginix)
+    
+使用docker容器里面的nginx部署你的应用
+    
+1. 安装 [docker](https://www.docker.com/get-started)
+
+2. 在项目的根目录新建一个`Dockerfile`文件.
+
+    ```Dockerfile
+    FROM node:10
+    COPY ./ /app
+    WORKDIR /app
+    RUN npm install && npm run build
+
+    FROM nginx
+    RUN mkdir /app
+    COPY --from=0 /app/dist /app
+    COPY nginx.conf /etc/nginx/nginx.conf
+    ```
+
+3. 在项目的根目录新建一个 `.dockerignore` 文件
+
+    设置 `.dockerignore`是为了阻止`node_modules`和中间生成的文件被拷贝到docker image中，因为它们会在docker build时引起问题。
+
+    ```gitignore
+    **/node_modules
+    **/dist
+    ```
+
+4. 在项目的根目录新建一个`nginx.conf`
+
+    `Nginx`是一个运行在你docker容器中的HTTP(s)服务器。Nginx使用一个配置文件来确定其如何提供内容、监听哪个端口等等。查看 [nginx配置文档](https://www.nginx.com/resources/wiki/start/topics/examples/full/)，里面有例子展示了各种可能的配置选项。
+
+    下面是一个简单的`nginx`配置，可以在80端口下监听你的vue项目。根目录下的`index.html`用于`page not found` / `404`错误，这些错误是由我们使用基于路由的`pushState()`方法引起的。
+
+    ```text
+    user  nginx;
+    worker_processes  1;
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+    events {
+      worker_connections  1024;
+    }
+    http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+      access_log  /var/log/nginx/access.log  main;
+      sendfile        on;
+      keepalive_timeout  65;
+      server {
+        listen       80;
+        server_name  localhost;
+        location / {
+          root   /app;
+          index  index.html;
+          try_files $uri $uri/ /index.html;
+        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+          root   /usr/share/nginx/html;
+        }
+      }
+    }
+    ```
+
+5. 构建你的 docker image
+
+    ```bash
+    docker build . -t my-app
+    # Sending build context to Docker daemon  884.7kB
+    # ...
+    # Successfully built 4b00e5ee82ae
+    # Successfully tagged my-app:latest
+    ```
+
+6. 运行你的 docker image
+
+    这个构建是基于官方的`nginx`镜像，因此已经设置了日志重定向，并且已经关闭掉守护进程模式。还设置了一些其他的默认配置来优化运行在docker容器中的nginx。更多信息请查看 [nginx docker repo](https://hub.docker.com/_/nginx)。
+
+    ```bash
+    docker run -d -p 8080:80 my-app
+    curl localhost:8080
+    # <!DOCTYPE html><html lang=en>...</html>
+    ```
+
+
