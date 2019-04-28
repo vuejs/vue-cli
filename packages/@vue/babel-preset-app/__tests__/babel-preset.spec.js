@@ -45,7 +45,7 @@ test('polyfill detection', () => {
   // promise polyfill alone doesn't work in IE, needs this as well. fix: #1642
   expect(code).toMatch(genCoreJSImportRegExp('es6.array.iterator'))
   // usage-based detection
-  expect(code).toMatch(/import _Map from ".*runtime-corejs2\/core-js\/map"/)
+  expect(code).toMatch(/import "core-js\/modules\/es6.map"/)
 })
 
 test('modern mode always skips polyfills', () => {
@@ -63,7 +63,7 @@ test('modern mode always skips polyfills', () => {
   // default includes
   expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
   // usage-based detection
-  expect(code).not.toMatch(/import _Map from ".*runtime-corejs2\/core-js\/map"/)
+  expect(code).not.toMatch(/import "core-js\/modules\/es6.map"/)
 
   ;({ code } = babel.transformSync(`
     const a = new Map()
@@ -78,7 +78,7 @@ test('modern mode always skips polyfills', () => {
   // default includes
   expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
   // usage-based detection
-  expect(code).not.toMatch(/import _Map from ".*runtime-corejs2\/core-js\/map"/)
+  expect(code).not.toMatch(/import "core-js\/modules\/es6.map"/)
   delete process.env.VUE_CLI_MODERN_BUILD
 })
 
@@ -153,5 +153,5 @@ test('disable absoluteRuntime', () => {
   })
 
   expect(code).toMatch('import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray"')
-  // expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
+  expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
 })

@@ -33,7 +33,7 @@
     "@babel/runtime-corejs2": "^7.2.0",
     "@vue/babel-preset-jsx": "^1.0.0-beta.3",
     "babel-plugin-dynamic-import-node": "^2.2.0",
+    "babel-plugin-module-resolver": "3.2.0",
     "core-js": "^2.6.5"
-  },
-  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
+  }
 }
