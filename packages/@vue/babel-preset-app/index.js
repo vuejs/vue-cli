@@ -3,19 +3,19 @@ const path = require('path')
 const defaultPolyfills = [
   // promise polyfill alone doesn't work in IE,
   // needs this as well. see: #1642
-  'es6.array.iterator',
+  'es.array.iterator',
   // this is required for webpack code splitting, vuex etc.
-  'es6.promise',
+  'es.promise',
   // this is needed for object rest spread support in templates
   // as vue-template-es2015-compiler 1.8+ compiles it to Object.assign() calls.
-  'es6.object.assign',
+  'es.object.assign',
   // #2012 es6.promise replaces native Promise in FF and causes missing finally
-  'es7.promise.finally'
+  'es.promise.finally'
 ]
 
 function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
   const { isPluginRequired } = require('@babel/preset-env')
-  const builtInsList = require('@babel/preset-env/data/built-ins.json')
+  const builtInsList = require('core-js-compat/data')
   const getTargets = require('@babel/preset-env/lib/targets-parser').default
   const builtInTargets = getTargets(targets, {
     ignoreBrowserslistConfig,
@@ -116,6 +116,7 @@ module.exports = (context, options = {}) => {
   }
 
   const envOptions = {
+    corejs: 3,
     spec,
     loose,
     debug,
@@ -165,18 +166,18 @@ module.exports = (context, options = {}) => {
     absoluteRuntime
   }])
 
-  // use @babel/runtime-corejs2 so that helpers that need polyfillable APIs will reference core-js instead.
+  // use @babel/runtime-corejs3 so that helpers that need polyfillable APIs will reference core-js instead.
   // if useBuiltIns is not set to 'usage', then it means users would take care of the polyfills on their own,
-  // i.e., core-js is no longer needed.
+  // i.e., core-js 3 is no longer needed.
   // this extra plugin can be removed once one of the two issues resolves:
   // https://github.com/babel/babel/issues/7597
   // https://github.com/babel/babel/issues/9903
   if (useBuiltIns === 'usage' && !process.env.VUE_CLI_MODERN_BUILD) {
-    const runtimeCoreJs2Path = path.dirname(require.resolve('@babel/runtime-corejs2/package.json'))
+    const runtimeCoreJs3Path = path.dirname(require.resolve('@babel/runtime-corejs3/package.json'))
     plugins.push([require('babel-plugin-module-resolver'), {
       alias: {
-        '@babel/runtime': '@babel/runtime-corejs2',
-        [runtimePath]: runtimeCoreJs2Path
+        '@babel/runtime': '@babel/runtime-corejs3',
+        [runtimePath]: runtimeCoreJs3Path
       }
     }])
   }

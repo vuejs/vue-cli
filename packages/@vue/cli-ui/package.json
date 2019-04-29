@@ -71,6 +71,7 @@
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/ui": "^0.9.1",
     "ansi_up": "^3.0.0",
+    "core-js": "^3.0.1",
     "cross-env": "^5.1.5",
     "eslint": "^5.16.0",
     "eslint-plugin-graphql": "^3.0.3",
