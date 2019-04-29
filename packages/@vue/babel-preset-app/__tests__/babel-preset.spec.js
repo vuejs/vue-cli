@@ -27,9 +27,9 @@ test('polyfill detection', () => {
     filename: 'test-entry-file.js'
   })
   // default includes
-  expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
+  expect(code).not.toMatch(genCoreJSImportRegExp('es.promise'))
   // usage-based detection
-  expect(code).not.toMatch(genCoreJSImportRegExp('es6.map'))
+  expect(code).not.toMatch(genCoreJSImportRegExp('es.map'))
 
   ;({ code } = babel.transformSync(`
     const a = new Map()
@@ -41,11 +41,11 @@ test('polyfill detection', () => {
     filename: 'test-entry-file.js'
   }))
   // default includes
-  expect(code).toMatch(genCoreJSImportRegExp('es6.promise'))
+  expect(code).toMatch(genCoreJSImportRegExp('es.promise'))
   // promise polyfill alone doesn't work in IE, needs this as well. fix: #1642
-  expect(code).toMatch(genCoreJSImportRegExp('es6.array.iterator'))
+  expect(code).toMatch(genCoreJSImportRegExp('es.array.iterator'))
   // usage-based detection
-  expect(code).toMatch(/import _Map from ".*runtime-corejs2\/core-js\/map"/)
+  expect(code).toMatch('import "core-js/modules/es.map"')
 })
 
 test('modern mode always skips polyfills', () => {
@@ -61,9 +61,9 @@ test('modern mode always skips polyfills', () => {
     filename: 'test-entry-file.js'
   })
   // default includes
-  expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
+  expect(code).not.toMatch(genCoreJSImportRegExp('es.promise'))
   // usage-based detection
-  expect(code).not.toMatch(/import _Map from ".*runtime-corejs2\/core-js\/map"/)
+  expect(code).not.toMatch(/import _Map from ".*runtime-corejs3\/core-js\/map"/)
 
   ;({ code } = babel.transformSync(`
     const a = new Map()
@@ -76,9 +76,9 @@ test('modern mode always skips polyfills', () => {
     filename: 'test-entry-file.js'
   }))
   // default includes
-  expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
+  expect(code).not.toMatch(genCoreJSImportRegExp('es.promise'))
   // usage-based detection
-  expect(code).not.toMatch(/import _Map from ".*runtime-corejs2\/core-js\/map"/)
+  expect(code).not.toMatch(/import _Map from ".*runtime-corejs3\/core-js\/map"/)
   delete process.env.VUE_CLI_MODERN_BUILD
 })
 
@@ -103,11 +103,11 @@ test('async/await', () => {
     }
     hello()
   `.trim(), defaultOptions)
-  expect(code).toMatch(genCoreJSImportRegExp('es6.promise'))
+  expect(code).toMatch(genCoreJSImportRegExp('es.promise'))
   // should use regenerator runtime
   expect(code).toMatch(`import "regenerator-runtime/runtime"`)
   // should use required helper instead of inline
-  expect(code).toMatch(/import _asyncToGenerator from ".*runtime-corejs2\/helpers\/esm\/asyncToGenerator\"/)
+  expect(code).toMatch(/import _asyncToGenerator from ".*runtime-corejs3\/helpers\/esm\/asyncToGenerator\"/)
 })
 
 test('jsx', () => {
@@ -152,6 +152,6 @@ test('disable absoluteRuntime', () => {
     filename: 'test-entry-file.js'
   })
 
-  expect(code).toMatch('import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray"')
+  expect(code).toMatch('import _toConsumableArray from "@babel/runtime-corejs3/helpers/esm/toConsumableArray"')
   // expect(code).not.toMatch(genCoreJSImportRegExp('es6.promise'))
 })
