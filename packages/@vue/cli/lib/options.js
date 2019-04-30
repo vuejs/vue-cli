@@ -13,7 +13,6 @@ const presetSchema = createSchema(joi => joi.object().keys({
   router: joi.boolean(),
   routerHistoryMode: joi.boolean(),
   vuex: joi.boolean(),
-  // TODO: remove 'sass' or make it equivalent to 'dart-sass' in v4
   cssPreprocessor: joi.string().only(['sass', 'dart-sass', 'node-sass', 'less', 'stylus']),
   plugins: joi.object().required(),
   configs: joi.object()
