@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-upgrade",
-  "version": "3.7.0",
+  "version": "4.0.0-alpha.0",
   "description": "utility to upgrade vue cli service / plugins in vue apps",
   "main": "index.js",
   "repository": {
