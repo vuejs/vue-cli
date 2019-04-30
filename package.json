@@ -45,7 +45,9 @@
   "devDependencies": {
     "@vuepress/plugin-pwa": "^1.0.0-alpha.47",
     "@vuepress/theme-vue": "1.0.0-alpha.44",
+    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.7.1",
     "chromedriver": "^74.0.0",
     "debug": "^4.1.0",
     "eslint": "^5.16.0",
