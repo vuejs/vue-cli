@@ -2,7 +2,7 @@ const { withFilter } = require('graphql-subscriptions')
 const path = require('path')
 const globby = require('globby')
 const merge = require('lodash.merge')
-const GraphQLJSON = require('graphql-type-json')
+const { GraphQLJSON } = require('graphql-type-json')
 // Channels for subscriptions
 const channels = require('./channels')
 // Connectors
