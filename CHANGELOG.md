@@ -1,7 +1,6 @@
-
 ## 3.7.0 (2019-04-28)
 
-#### :rocket: New Feature
+#### :rocket: New Features
 * `@vue/cli-service`
   * [#3861](https://github.com/vuejs/vue-cli/pull/3861) feat: add `.version` field and `assertVersion` helper to plugin api ([@sodatea](https://github.com/sodatea))
   * [#3847](https://github.com/vuejs/vue-cli/pull/3847) feat: add types for new `lintOnSave` options and multi-page entries ([@sodatea](https://github.com/sodatea))
@@ -59,7 +58,7 @@
 * `@vue/cli-ui`
   * [022e17d](https://github.com/vuejs/vue-cli/commit/022e17da5725742b0f425c0976b090bd1ce6581f) `--dev` shouldn't try to load dev assets, closes #3802 ([@Akryum](https://github.com/Akryum))
 
-#### :rocket: New Feature
+#### :rocket: New Features
 * `@vue/cli-ui`
   * [bbe4002](https://github.com/vuejs/vue-cli/commit/bbe4002480b46c8ce3721afe1285fea4f7bba3bf) **tasks**: override args switch, closes #3236 ([@Akryum](https://github.com/Akryum))
 
@@ -87,7 +86,7 @@
 
 ## 3.6.0 (2019-04-13)
 
-#### :rocket: New Feature
+#### :rocket: New Features
 * `@vue/cli-ui`
   * [#3688](https://github.com/vuejs/vue-cli/pull/3688) add "copy content to clipboard" button on terminal component ([@pikax](https://github.com/pikax))
   * [c81e6c](https://github.com/vuejs/vue-cli/commit/c81e6c21a20d66bfa66a664d94ec3ccc81c54d38) **project create**: bare option ([@Akryum](https://github.com/Akryum))
