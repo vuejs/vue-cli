@@ -174,11 +174,11 @@ test('api: assertVersion', () => {
   const plugin = {
     id: 'test-assertVersion',
     apply: api => {
-      expect(() => api.assertVersion(3)).not.toThrow()
-      expect(() => api.assertVersion('3')).not.toThrow()
-      expect(() => api.assertVersion('>= 3')).not.toThrow()
+      expect(() => api.assertVersion(4)).not.toThrow()
+      expect(() => api.assertVersion('4')).not.toThrow()
+      expect(() => api.assertVersion('>= 4')).not.toThrow()
 
-      expect(() => api.assertVersion(3.1)).toThrow('Expected string or integer value')
+      expect(() => api.assertVersion(4.1)).toThrow('Expected string or integer value')
       expect(() => api.assertVersion('^100')).toThrow('Require @vue/cli-service "^100"')
     }
   }
