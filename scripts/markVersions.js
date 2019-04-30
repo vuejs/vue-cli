@@ -17,9 +17,13 @@ async function markVersions () {
   const curVersion = marker.version
   const mainVersion = require('../lerna.json').version
 
-  const releaseType = semver.diff(curVersion, mainVersion) || 'patch'
+  if (semver.prerelease(mainVersion)) {
+    marker.version = mainVersion
+  } else {
+    const releaseType = semver.diff(curVersion, mainVersion) || 'patch'
+    marker.version = semver.inc(marker.version, releaseType)
+  }
 
-  marker.version = semver.inc(marker.version, releaseType)
   marker.devDependencies = packages.reduce((prev, pkg) => {
     prev[pkg.name] = pkg.version
     return prev
