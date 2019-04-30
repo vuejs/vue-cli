@@ -25,14 +25,6 @@ async function markVersions () {
     return prev
   }, {})
   fs.writeFileSync(markerPath, JSON.stringify(marker, null, 2))
-
-  // publish separately
-  // must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
-  await execa(
-    'npm',
-    ['publish', '--registry', 'https://registry.npmjs.org/'],
-    { stdio: 'inherit', cwd: path.dirname(markerPath) }
-  )
 }
 
 markVersions().catch(err => {

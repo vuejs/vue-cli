@@ -112,6 +112,26 @@ const release = async () => {
   }
 
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
+
+  // publish version marker after all other packages are published
+  await execa(
+    'npm',
+    [
+      'publish',
+      '--dist-tag',
+      distTag,
+      // must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
+      '--registry',
+      'https://registry.npmjs.org/'
+    ],
+    {
+      stdio: 'inherit',
+      cwd: require('path').resolve(
+        __dirname,
+        '../packages/vue-cli-version-marker'
+      )
+    }
+  )
 }
 
 release().catch(err => {
