@@ -118,7 +118,7 @@ const release = async () => {
     'npm',
     [
       'publish',
-      '--dist-tag',
+      '--tag',
       distTag,
       // must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
       '--registry',
