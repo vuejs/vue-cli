@@ -108,8 +108,13 @@ module.exports = class Creator extends EventEmitter {
     this.emit('creation', { event: 'creating' })
 
     // get latest CLI version
-    const { latest } = await getVersions()
-    const latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+    const { current, latest } = await getVersions()
+    let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+
+    // if using `next` branch of cli
+    if (semver.gt(current, latest) && semver.prerelease(current)) {
+      latestMinor = current
+    }
     // generate package.json with plugin dependencies
     const pkg = {
       name,
