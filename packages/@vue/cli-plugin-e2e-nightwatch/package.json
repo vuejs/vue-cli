@@ -23,11 +23,16 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.7.0",
-    "chromedriver": "^2.46.0",
+    "@vue/cli-shared-utils": "^3.6.0",
     "deepmerge": "^3.2.0",
     "execa": "^1.0.0",
     "nightwatch": "^1.0.18",
     "selenium-server": "^3.141.59"
+  },
+  "devDependencies": {
+    "chromedriver": "^74.0.0"
+  },
+  "peerDependencies": {
+    "chromedriver": "*"
   }
 }
