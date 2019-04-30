@@ -27,8 +27,8 @@
     "@vue/cli-shared-utils": "^3.7.0",
     "fork-ts-checker-webpack-plugin": "^1.2.0",
     "globby": "^9.2.0",
-    "ts-loader": "^5.3.3",
-    "tslint": "^5.15.0",
+    "ts-loader": "^5.4.4",
+    "tslint": "^5.16.0",
     "webpack": ">=4 < 4.29"
   },
   "peerDependencies": {
@@ -38,7 +38,7 @@
     "@types/chai": "^4.1.0",
     "@types/jest": "^24.0.11",
     "@types/mocha": "^5.2.6",
-    "typescript": "^3.4.3",
+    "typescript": "^3.4.5",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0"
   }

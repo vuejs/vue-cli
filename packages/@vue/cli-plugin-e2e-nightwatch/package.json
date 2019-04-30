@@ -26,7 +26,7 @@
     "@vue/cli-shared-utils": "^3.6.0",
     "deepmerge": "^3.2.0",
     "execa": "^1.0.0",
-    "nightwatch": "^1.0.18",
+    "nightwatch": "^1.0.19",
     "selenium-server": "^3.141.59"
   },
   "devDependencies": {
