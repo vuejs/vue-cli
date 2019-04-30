@@ -23,6 +23,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@babel/core": "^7.4.4",
     "@babel/plugin-transform-modules-commonjs": "^7.4.4",
     "@vue/cli-shared-utils": "^3.6.0",
     "babel-core": "7.0.0-bridge.0",

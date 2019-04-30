@@ -46,6 +46,7 @@
     "@vuepress/plugin-pwa": "^1.0.0-alpha.47",
     "@vuepress/theme-vue": "1.0.0-alpha.44",
     "babel-eslint": "^10.0.1",
+    "chromedriver": "^74.0.0",
     "debug": "^4.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-graphql": "^3.0.3",
