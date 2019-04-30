@@ -175,7 +175,7 @@ test('api: assertVersion', () => {
     id: 'test-assertVersion',
     apply: api => {
       expect(() => api.assertVersion(4)).not.toThrow()
-      expect(() => api.assertVersion('4')).not.toThrow()
+      expect(() => api.assertVersion('^4.0.0-0')).not.toThrow()
       expect(() => api.assertVersion('>= 4')).not.toThrow()
 
       expect(() => api.assertVersion(4.1)).toThrow('Expected string or integer value')
