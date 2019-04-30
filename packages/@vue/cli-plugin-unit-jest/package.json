@@ -23,9 +23,10 @@
     "access": "public"
   },
   "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
     "@vue/cli-shared-utils": "^3.6.0",
+    "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^24.7.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "jest": "^24.7.1",
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^2.0.0",

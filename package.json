@@ -45,7 +45,6 @@
   "devDependencies": {
     "@vuepress/plugin-pwa": "^1.0.0-alpha.47",
     "@vuepress/theme-vue": "1.0.0-alpha.44",
-    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "debug": "^4.1.0",
     "eslint": "^5.16.0",
@@ -74,7 +73,6 @@
     "yorkie": "^2.0.0"
   },
   "resolutions": {
-    "babel-core": "7.0.0-bridge.0",
     "puppeteer": "1.11.0",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
