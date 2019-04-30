@@ -54,14 +54,22 @@ module.exports = (api, _, __, invoking) => {
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
-          'babel-jest': '^24.7.1'
+          'babel-jest': '^23.6.0',
+          // this is for now necessary to force babel-jest and vue-jest to use babel 7
+          'babel-core': '7.0.0-bridge.0'
         }
       })
     } else {
-      api.extendPackage({
-        babel: {
-          plugins: ['transform-es2015-modules-commonjs']
-        }
+      // Jest's shipped babel-jest still uses babel 6,
+      // so we cannot use extendPackage which renders babel.config.js.
+      api.render(files => {
+        files['.babelrc'] = JSON.stringify(
+          {
+            plugins: ['transform-es2015-modules-commonjs']
+          },
+          null,
+          2
+        )
       })
     }
   } else {

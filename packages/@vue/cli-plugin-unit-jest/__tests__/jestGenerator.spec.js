@@ -25,6 +25,8 @@ test('base', async () => {
 
   // should inject babel-jest
   expect(pkg.devDependencies).toHaveProperty('babel-jest')
+  // babel-core 6 -> 7 shim
+  expect(pkg.devDependencies).toHaveProperty('babel-core')
   // eslint
   expect(files['tests/unit/.eslintrc.js']).toMatch('jest: true')
 
