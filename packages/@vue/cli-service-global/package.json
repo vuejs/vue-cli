@@ -33,6 +33,5 @@
     "resolve": "^1.10.0",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10"
-  },
-  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
+  }
 }
