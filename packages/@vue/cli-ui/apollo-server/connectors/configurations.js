@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const yaml = require('js-yaml')
 const clone = require('clone')
-const stringifyJS = require('javascript-stringify').stringify
+const stringifyJS = require('javascript-stringify')
 // Connectors
 const cwd = require('./cwd')
 const plugins = require('./plugins')

@@ -42,7 +42,7 @@
     "import-global": "^0.1.0",
     "inquirer": "^6.3.1",
     "isbinaryfile": "^3.0.2",
-    "javascript-stringify": "^2.0.0",
+    "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.13.1",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.0",
