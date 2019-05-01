@@ -471,7 +471,7 @@ module.exports = pkg => {
     prompts.push({
       type: 'confirm',
       name: 'useESLintPluginVueI18n',
-      message: 'ESLint plugin for Vue I18n ?'
+      message: 'Use ESLint plugin for Vue I18n ?'
     })
   }
 
