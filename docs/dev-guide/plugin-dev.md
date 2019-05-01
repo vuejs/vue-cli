@@ -102,7 +102,7 @@ A generator should export a function which receives three arguments:
 
 And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
 
-For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd party plugins](#prompts-for-3rd-party-plugins)).
+For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts](#prompts)).
 
 3. The entire preset (`presets.foo`) will be passed as the third argument.
 
