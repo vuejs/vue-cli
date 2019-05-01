@@ -16,12 +16,18 @@ exports.generateTitle = async function (checkUpdate) {
   }
   if (checkUpdate && semver.gt(latest, current)) {
     if (process.env.VUE_CLI_API_MODE) {
-      title += chalk.green(` 🌟️ Update available: ${latest}`)
+      title += chalk.green(` 🌟️ New version available: ${latest}`)
     } else {
-      title += chalk.green(`
-┌────────────────────${`─`.repeat(latest.length)}──┐
-│  Update available: ${latest}  │
-└────────────────────${`─`.repeat(latest.length)}──┘`)
+      const upgradeMessage = `New version available ${chalk.magenta(current)} → ${chalk.green(latest)}\n` +
+        `Run ${chalk.yellow(`npm i -g ${require('../../package.json').name}`)} to update!`
+      const upgradeBox = require('boxen')(upgradeMessage, {
+        align: 'center',
+        borderColor: 'green',
+        dimBorder: true,
+        padding: 1
+      })
+
+      title += `\n${upgradeBox}\n`
     }
   }
 

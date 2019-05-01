@@ -28,6 +28,7 @@
     "@vue/cli-ui": "^4.0.0-alpha.0",
     "@vue/cli-ui-addon-webpack": "^4.0.0-alpha.0",
     "@vue/cli-ui-addon-widgets": "^4.0.0-alpha.0",
+    "boxen": "^3.2.0",
     "chalk": "^2.4.1",
     "cmd-shim": "^2.0.2",
     "commander": "^2.20.0",
