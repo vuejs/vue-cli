@@ -526,7 +526,7 @@ However, you can add the following additional fields (which are optional and onl
 }
 ```
 
-Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`, `editor`.
 
 In addition to those, the UI supports special types that only works with it:
 
