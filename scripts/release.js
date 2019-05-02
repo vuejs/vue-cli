@@ -93,17 +93,45 @@ const release = async () => {
     }
   }
 
-  const lernaArgs = [
-    'publish',
-    version
-  ]
   const releaseType = semver.diff(curVersion, version)
 
+  let distTag = 'latest'
+  if (releaseType.startsWith('pre')) {
+    distTag = 'next'
+  }
+
+  const lernaArgs = [
+    'publish',
+    version,
+    '--dist-tag',
+    distTag
+  ]
   // keep packages' minor version in sync
   if (releaseType !== 'patch') {
     lernaArgs.push('--force-publish')
   }
+
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
+
+  // publish version marker after all other packages are published
+  await execa(
+    'npm',
+    [
+      'publish',
+      '--tag',
+      distTag,
+      // must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
+      '--registry',
+      'https://registry.npmjs.org/'
+    ],
+    {
+      stdio: 'inherit',
+      cwd: require('path').resolve(
+        __dirname,
+        '../packages/vue-cli-version-marker'
+      )
+    }
+  )
 }
 
 release().catch(err => {

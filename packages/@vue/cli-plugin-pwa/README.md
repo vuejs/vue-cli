@@ -71,6 +71,19 @@ file, or the `"vue"` field in `package.json`.
 
     The path of app’s manifest.
 
+- **pwa.manifestOptions**
+
+  - Default: `{}`
+
+    The object will be used to generate the `manifest.json`
+
+    If the following attributes are not defined in the object, the options of `pwa` or default options will be used instead.
+      - name: `pwa.name`
+      - short_name: `pwa.name`
+      - start_url: `'.'`
+      - display: `'standalone'`
+      - theme_color: `pwa.themeColor`
+
 - **pwa.iconPaths**
 
   - Defaults:

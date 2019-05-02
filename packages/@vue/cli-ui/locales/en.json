@@ -783,7 +783,7 @@
           "kill": "Kill",
           "status": {
             "idle": "Ready to kill",
-            "killing": "Killing procress...",
+            "killing": "Killing process...",
             "killed": "Killed successfully!",
             "error": "Couldn't kill process"
           }

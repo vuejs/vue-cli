@@ -64,7 +64,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.6.0',
+      '@vue/cli-plugin-babel': '^4.0.0-alpha.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -168,6 +168,21 @@ test('load project options from vue.config.js', () => {
   delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
   // vue.config.js has higher priority
   expect(service.projectOptions.lintOnSave).toBe(false)
+})
+
+test('api: assertVersion', () => {
+  const plugin = {
+    id: 'test-assertVersion',
+    apply: api => {
+      expect(() => api.assertVersion(4)).not.toThrow()
+      expect(() => api.assertVersion('^4.0.0-0')).not.toThrow()
+      // expect(() => api.assertVersion('>= 4')).not.toThrow()
+
+      expect(() => api.assertVersion(4.1)).toThrow('Expected string or integer value')
+      expect(() => api.assertVersion('^100')).toThrow('Require @vue/cli-service "^100"')
+    }
+  }
+  createMockService([plugin], true /* init */)
 })
 
 test('api: registerCommand', () => {

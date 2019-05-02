@@ -21,8 +21,7 @@ module.exports = (api, options) => {
     },
     browserslist: [
       '> 1%',
-      'last 2 versions',
-      'not ie <= 8'
+      'last 2 versions'
     ]
   })
 
@@ -36,17 +35,16 @@ module.exports = (api, options) => {
 
   if (options.cssPreprocessor) {
     const deps = {
-      // TODO: remove 'sass' option in v4 or rename 'dart-sass' to 'sass'
       sass: {
-        'node-sass': '^4.9.0',
+        sass: '^1.19.0',
         'sass-loader': '^7.1.0'
       },
       'node-sass': {
-        'node-sass': '^4.9.0',
+        'node-sass': '^4.12.0',
         'sass-loader': '^7.1.0'
       },
       'dart-sass': {
-        sass: '^1.18.0',
+        sass: '^1.19.0',
         'sass-loader': '^7.1.0'
       },
       less: {

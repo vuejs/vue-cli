@@ -17,6 +17,7 @@ module.exports = (api, options) => {
       const chalk = require('chalk')
       const { get } = require('@vue/cli-shared-utils')
       const { toString } = require('webpack-chain')
+      const { highlight } = require('cli-highlight')
       const config = api.resolveWebpackConfig()
       const { _: paths, verbose } = args
 
@@ -48,7 +49,7 @@ module.exports = (api, options) => {
       }
 
       const output = toString(res, { verbose })
-      console.log(output)
+      console.log(highlight(output, { language: 'js' }))
 
       // Log explanation for Nameless Rules
       if (hasUnnamedRule) {

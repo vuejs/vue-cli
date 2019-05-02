@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-jest",
-  "version": "3.6.0",
+  "version": "4.0.0-alpha.0",
   "description": "unit-jest plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,10 +23,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.6.0",
-    "babel-jest": "^23.6.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "jest": "^23.6.0",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@vue/cli-shared-utils": "^4.0.0-alpha.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^2.0.0",
     "jest-watch-typeahead": "^0.3.0",
@@ -34,7 +36,6 @@
   },
   "devDependencies": {
     "@vue/test-utils": "1.0.0-beta.29",
-    "ts-jest": "^23.0.0"
-  },
-  "gitHead": "0dc793497281718762a5477a3de4a7ee439cdda6"
+    "ts-jest": "^24.0.2"
+  }
 }

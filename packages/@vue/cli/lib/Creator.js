@@ -91,9 +91,10 @@ module.exports = class Creator extends EventEmitter {
     // inject core service
     preset.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
-    }, preset, {
-      bare: cliOptions.bare
-    })
+    }, preset)
+    if (cliOptions.bare) {
+      preset.plugins['@vue/cli-service'].bare = true
+    }
 
     const packageManager = (
       cliOptions.packageManager ||
@@ -107,8 +108,13 @@ module.exports = class Creator extends EventEmitter {
     this.emit('creation', { event: 'creating' })
 
     // get latest CLI version
-    const { latest } = await getVersions()
-    const latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+    const { current, latest } = await getVersions()
+    let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+
+    // if using `next` branch of cli
+    if (semver.gt(current, latest) && semver.prerelease(current)) {
+      latestMinor = current
+    }
     // generate package.json with plugin dependencies
     const pkg = {
       name,

@@ -1,6 +1,6 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 
-test('node sass (legacy)', async () => {
+test('sass (default)', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
       id: '@vue/cli-service',
@@ -12,7 +12,7 @@ test('node sass (legacy)', async () => {
   ])
 
   expect(files['src/App.vue']).toMatch('<style lang="scss">')
-  expect(pkg).toHaveProperty(['devDependencies', 'node-sass'])
+  expect(pkg).toHaveProperty(['devDependencies', 'sass'])
 })
 
 test('node sass', async () => {

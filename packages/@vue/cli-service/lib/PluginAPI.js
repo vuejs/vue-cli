@@ -1,5 +1,6 @@
 const path = require('path')
 const hash = require('hash-sum')
+const semver = require('semver')
 const { matchesPluginId } = require('@vue/cli-shared-utils')
 
 // Note: if a plugin-registered command needs to run in a specific default mode,
@@ -15,6 +16,29 @@ class PluginAPI {
   constructor (id, service) {
     this.id = id
     this.service = service
+  }
+
+  get version () {
+    return require('../package.json').version
+  }
+
+  assertVersion (range) {
+    if (typeof range === 'number') {
+      console.log(range, Number.isInteger(range))
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.version, range)) return
+
+    throw new Error(
+      `Require @vue/cli-service "${range}", but was loaded with "${this.version}".`
+    )
   }
 
   /**
@@ -131,7 +155,7 @@ class PluginAPI {
   /**
    * Generate a cache identifier from a number of variables
    */
-  genCacheConfig (id, partialIdentifier, configFiles) {
+  genCacheConfig (id, partialIdentifier, configFiles = []) {
     const fs = require('fs')
     const cacheDirectory = this.resolve(`node_modules/.cache/${id}`)
 
@@ -155,31 +179,38 @@ class PluginAPI {
       ]
     }
 
-    if (configFiles) {
-      const readConfig = file => {
-        const absolutePath = this.resolve(file)
-        if (fs.existsSync(absolutePath)) {
-          if (absolutePath.endsWith('.js')) {
-            // should evaluate config scripts to reflect environment variable changes
-            try {
-              return JSON.stringify(require(absolutePath))
-            } catch (e) {
-              return fs.readFileSync(absolutePath, 'utf-8')
-            }
-          } else {
-            return fs.readFileSync(absolutePath, 'utf-8')
-          }
-        }
+    if (!Array.isArray(configFiles)) {
+      configFiles = [configFiles]
+    }
+    configFiles = configFiles.concat([
+      'package-lock.json',
+      'yarn.lock',
+      'pnpm-lock.yaml'
+    ])
+
+    const readConfig = file => {
+      const absolutePath = this.resolve(file)
+      if (!fs.existsSync(absolutePath)) {
+        return
       }
-      if (!Array.isArray(configFiles)) {
-        configFiles = [configFiles]
-      }
-      for (const file of configFiles) {
-        const content = readConfig(file)
-        if (content) {
-          variables.configFiles = content.replace(/\r\n?/g, '\n')
-          break
+
+      if (absolutePath.endsWith('.js')) {
+        // should evaluate config scripts to reflect environment variable changes
+        try {
+          return JSON.stringify(require(absolutePath))
+        } catch (e) {
+          return fs.readFileSync(absolutePath, 'utf-8')
         }
+      } else {
+        return fs.readFileSync(absolutePath, 'utf-8')
+      }
+    }
+
+    for (const file of configFiles) {
+      const content = readConfig(file)
+      if (content) {
+        variables.configFiles = content.replace(/\r\n?/g, '\n')
+        break
       }
     }
 
