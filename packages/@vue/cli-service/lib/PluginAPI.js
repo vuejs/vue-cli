@@ -24,7 +24,6 @@ class PluginAPI {
 
   assertVersion (range) {
     if (typeof range === 'number') {
-      console.log(range, Number.isInteger(range))
       if (!Number.isInteger(range)) {
         throw new Error('Expected string or integer value.')
       }
