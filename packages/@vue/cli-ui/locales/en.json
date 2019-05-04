@@ -712,6 +712,10 @@
             "appleMobileWebAppStatusBarStyle": {
               "message": "Apple mobile status bar style",
               "description": "Style for the web app status bar on iOS"
+            },
+            "manifestCrossorigin": {
+              "message": "Attribute value for manifest.json link tag's crossorigin attribute",
+              "description": "Value for `crossoriging` attribute in manifest link tag in the generated HTML, you may need to set this if your pwa is behind an authenticated proxy"
             }
           }
         },
