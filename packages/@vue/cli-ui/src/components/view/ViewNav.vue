@@ -222,16 +222,17 @@ export default {
         button-colors($vue-ui-color-primary, transparent)
 
   &.wide
-    >>> .vue-ui-button
-      justify-content flex-start
-      padding-left $padding-item
-      padding-right @padding-left
-      > .content
-        width 100%
-        text-align left
-        > .default-slot
-          flex auto 1 1
-          width 0
-          ellipsis()
-          padding 4px 0
+    .content
+      >>> .vue-ui-button
+        justify-content flex-start
+        padding-left $padding-item
+        padding-right @padding-left
+        > .content
+          width 100%
+          text-align left
+          > .default-slot
+            flex auto 1 1
+            width 0
+            ellipsis()
+            padding 4px 0
 </style>
