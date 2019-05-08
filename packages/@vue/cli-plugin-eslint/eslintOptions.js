@@ -1,4 +1,4 @@
-exports.config = api => {
+exports.config = (api, _config) => {
   const config = {
     root: true,
     env: { node: true },
@@ -8,6 +8,22 @@ exports.config = api => {
       'no-debugger': makeJSOnlyValue(`process.env.NODE_ENV === 'production' ? 'error' : 'off'`)
     }
   }
+  if (_config === 'airbnb') {
+    config.rules['no-param-reassign'] = ['error', {
+      props: true,
+      ignorePropertyModificationsFor: [
+        'state', // for vuex state
+        'acc', // for reduce accumulators
+        'e', // for e.returnvalue
+        'ctx', // for Koa routing
+        'req', // for Express requests
+        'request', // for Express requests
+        'res', // for Express responses
+        'response', // for Express responses
+        '$scope', // for Angular 1 scopes
+      ]
+    }]
+  } 
   if (!api.hasPlugin('typescript')) {
     config.parserOptions = {
       parser: 'babel-eslint'

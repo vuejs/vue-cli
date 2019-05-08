@@ -6,7 +6,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     lintOn = lintOn.split(',')
   }
 
-  const eslintConfig = require('../eslintOptions').config(api)
+  const eslintConfig = require('../eslintOptions').config(api, config)
 
   const pkg = {
     scripts: {
