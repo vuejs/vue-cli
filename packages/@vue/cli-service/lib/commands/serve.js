@@ -19,6 +19,7 @@ module.exports = (api, options) => {
     options: {
       '--open': `open browser on server start`,
       '--copy': `copy url to clipboard on server start`,
+      '--noinstructions': `disable logging instructions on first compilation complete and on every HMR recompilation`,
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
@@ -206,43 +207,47 @@ module.exports = (api, options) => {
           }
         }
 
-        const networkUrl = publicUrl
-          ? publicUrl.replace(/([^/])$/, '$1/')
-          : urls.lanUrlForTerminal
-
-        console.log()
-        console.log(`  App running at:`)
-        console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
-        if (!isInContainer) {
-          console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
-        } else {
+        if(!args.noinstructions) {
+          const networkUrl = publicUrl
+            ? publicUrl.replace(/([^/])$/, '$1/')
+            : urls.lanUrlForTerminal
+          
           console.log()
-          console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
-          if (!publicUrl && options.publicPath && options.publicPath !== '/') {
+          console.log(`  App running at:`)
+          console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
+          if (!isInContainer) {
+            console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
+          } else {
             console.log()
-            console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
-            console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
-            console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
-            console.log()
+            console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
+            if (!publicUrl && options.publicPath && options.publicPath !== '/') {
+              console.log()
+              console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
+              console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
+              console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
+              console.log()
+            }
+            console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
+              `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
+            )}`))
           }
-          console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
-            `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
-          )}`))
+          console.log()
         }
-        console.log()
 
         if (isFirstCompile) {
           isFirstCompile = false
 
-          if (!isProduction) {
-            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
-            console.log(`  Note that the development build is not optimized.`)
-            console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
-          } else {
-            console.log(`  App is served in production mode.`)
-            console.log(`  Note this is for preview or E2E testing only.`)
+          if(!args.noinstructions) {
+            if (!isProduction) {
+              const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
+              console.log(`  Note that the development build is not optimized.`)
+              console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
+            } else {
+              console.log(`  App is served in production mode.`)
+              console.log(`  Note this is for preview or E2E testing only.`)
+            }
+            console.log()
           }
-          console.log()
 
           if (args.open || projectDevServerOptions.open) {
             const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
