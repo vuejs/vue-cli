@@ -77,11 +77,11 @@ test('loading plugins from package.json', () => {
 test('load project options from package.json', () => {
   mockPkg({
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   })
   const service = createMockService()
-  expect(service.projectOptions.lintOnSave).toBe(true)
+  expect(service.projectOptions.lintOnSave).toBe('default')
 })
 
 test('deprecate baseUrl', () => {
@@ -144,7 +144,7 @@ test('load project options from vue.config.js', () => {
   fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
   mockPkg({
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   })
   const service = createMockService()
@@ -160,7 +160,7 @@ test('load project options from vue.config.js', () => {
   jest.mock('/vue.config.js', () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   })
   const service = createMockService()

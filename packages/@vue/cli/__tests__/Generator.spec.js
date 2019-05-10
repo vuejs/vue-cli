@@ -584,7 +584,7 @@ test('api: addConfigTransform (multiple)', async () => {
 test('api: addConfigTransform transform vue warn', async () => {
   const configs = {
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   }
 
