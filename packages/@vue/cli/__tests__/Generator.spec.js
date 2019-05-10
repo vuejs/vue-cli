@@ -606,7 +606,7 @@ test('api: addConfigTransform transform vue warn', async () => {
     extractConfigFiles: true
   })
 
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(`module.exports = {\n  lintOnSave: 'default'\n}`)
   expect(logs.warn.some(([msg]) => {
     return msg.match(/Reserved config transform 'vue'/)
   })).toBe(true)
