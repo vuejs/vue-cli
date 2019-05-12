@@ -431,6 +431,11 @@ function setFavorite ({ id, favorite }, context) {
   return findOne(id, context)
 }
 
+function rename ({ id, name }, context) {
+  context.db.get('projects').find({ id }).assign({ name }).write()
+  return findOne(id, context)
+}
+
 function getType (project, context) {
   if (typeof project === 'string') {
     project = findByPath(project, context)
@@ -483,6 +488,7 @@ module.exports = {
   remove,
   resetCwd,
   setFavorite,
+  rename,
   initCreator,
   removeCreator,
   getType,
