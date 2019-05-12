@@ -27,7 +27,7 @@
 
         <VueDropdownButton
           :label="$t('org.vue.components.project-rename.title')"
-          icon-left="local_offer"
+          icon-left="edit"
           @click="showRename = true"
         />
 

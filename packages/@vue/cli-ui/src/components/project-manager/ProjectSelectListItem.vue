@@ -46,7 +46,7 @@
 
         <VueButton
           class="icon-button"
-          icon-left="local_offer"
+          icon-left="edit"
           v-tooltip="$t('org.vue.components.project-rename.title')"
           @click.stop="showRename = true"
         />
