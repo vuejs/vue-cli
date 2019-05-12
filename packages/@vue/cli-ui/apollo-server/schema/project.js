@@ -20,6 +20,7 @@ extend type Mutation {
   projectRemove (id: ID!): Boolean!
   projectCwdReset: String
   projectSetFavorite (id: ID!, favorite: Int!): Project!
+  projectRename (id: ID!, name: String!): Project!
   presetApply (id: ID!): ProjectCreation
   featureSetEnabled (id: ID!, enabled: Boolean): Feature
 }
@@ -105,6 +106,7 @@ exports.resolvers = {
     projectRemove: (root, { id }, context) => projects.remove(id, context),
     projectCwdReset: (root, args, context) => projects.resetCwd(context),
     projectSetFavorite: (root, args, context) => projects.setFavorite(args, context),
+    projectRename: (root, args, context) => projects.rename(args, context),
     presetApply: (root, { id }, context) => projects.applyPreset(id, context),
     featureSetEnabled: (root, args, context) => projects.setFeatureEnabled(args, context)
   }
