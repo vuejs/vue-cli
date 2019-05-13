@@ -197,10 +197,10 @@ program
 program
   .arguments('<command>')
   .action((cmd) => {
-    suggestCommands(cmd)
     program.outputHelp()
     console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     console.log()
+    suggestCommands(cmd)
   })
 
 // add some useful info on help
@@ -242,7 +242,7 @@ function suggestCommands (cmd) {
 
   const suggestion = didYouMean(cmd, availableCommands)
   if (suggestion) {
-    console.log(chalk.cyan(`Warning: ${chalk.yellow(`Did you mean ${suggestion} ?`)}`))
+    console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
   }
 }
 
