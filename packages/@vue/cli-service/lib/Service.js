@@ -55,7 +55,7 @@ module.exports = class Service {
     }
   }
 
-  init (mode = process.env.VUE_CLI_MODE) {
+  init (mode = process.env.VUE_CLI_MODE, extraEnv = []) {
     if (this.initialized) {
       return
     }
@@ -64,7 +64,7 @@ module.exports = class Service {
 
     // load mode .env
     if (mode) {
-      this.loadEnv(mode)
+      this.loadEnv(mode, extraEnv)
     }
     // load base .env
     this.loadEnv()
@@ -89,7 +89,7 @@ module.exports = class Service {
     }
   }
 
-  loadEnv (mode) {
+  loadEnv (mode, extraEnv = []) {
     const logger = debug('vue:env')
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
@@ -109,6 +109,9 @@ module.exports = class Service {
 
     load(localPath)
     load(basePath)
+    extraEnv.forEach((v) => {
+      load(`.env.${v}`)
+    })
 
     // by default, NODE_ENV and BABEL_ENV are set to "development" unless mode
     // is production or test. However the value in .env files will take higher
@@ -201,9 +204,11 @@ module.exports = class Service {
     // prioritize inline --mode
     // fallback to resolved default modes from plugins or development if --watch is defined
     const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
+    // add --extra-env=extra1+extra2 likely to load more env configs in .env.extra1 and .env.extra2
+    const extraEnv = (args['extra-env'] || '').split('+')
 
     // load env variables, load user config, apply plugins
-    this.init(mode)
+    this.init(mode, extraEnv)
 
     args._ = args._ || []
     let command = this.commands[name]
