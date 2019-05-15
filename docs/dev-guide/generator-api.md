@@ -20,6 +20,25 @@ The version string for the **global** `@vue/cli` version that is invoking the pl
   Nothing happens if the provided version is satified. Otherwise, an error will be thrown.
 
 
+## serviceVersion
+
+Type: `string`
+
+The version string for the **project local** `@vue/cli-service` version that is invoking the plugin.
+
+
+## assertServiceVersion
+
+- **Arguments**
+  - `{integer | string} range` - a semver range that `@vue/cli-service` needs to satisfy
+
+- **Usage**
+
+  This API exposes a simple way to declare the required project local `@vue/cli-service` version.
+
+  Nothing happens if the provided version is satified. Otherwise, an error will be thrown.
+
+
 ## resolve
 
 - **Arguments**
