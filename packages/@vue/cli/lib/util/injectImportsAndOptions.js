@@ -10,67 +10,61 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
   }
 
   const j = require('jscodeshift')
+  const root = j(source)
 
   if (hasImports) {
-    const root = j(source)
-
-    const stringToNode = i => j(`${i}\n`).nodes()[0].program.body[0]
-    const nodeToHash = node => JSON.stringify({
-      specifiers: node.specifiers.map(s => s.local.name),
-      source: node.source.raw
+    const toASTNode = i => j(`${i}\n`).nodes()[0].program.body[0]
+    const toHash = importASTNode => JSON.stringify({
+      specifiers: importASTNode.specifiers.map(s => s.local.name),
+      source: importASTNode.source.raw
     })
 
     const importSet = new Set()
     root.find(j.ImportDeclaration)
-      .forEach(p => importSet.add(nodeToHash(p.value)))
-    const nonDuplicates = node => !importSet.has(nodeToHash(node))
+      .forEach(({ node }) => importSet.add(toHash(node)))
+    const nonDuplicates = node => !importSet.has(toHash(node))
 
-    const importNodes = imports.map(stringToNode).filter(nonDuplicates)
+    const importASTNodes = imports.map(toASTNode).filter(nonDuplicates)
 
     if (importSet.size) {
       root.find(j.ImportDeclaration)
         .at(-1)
         // a tricky way to avoid blank line after the previous import
-        .forEach(p => delete p.value.loc)
-        .insertAfter(importNodes)
+        .forEach(({ node }) => delete node.loc)
+        .insertAfter(importASTNodes)
     } else {
       // no pre-existing import declarations
-      root.get().node.program.body.unshift(...importNodes)
+      root.get().node.program.body.unshift(...importASTNodes)
     }
-
-    source = root.toSource()
   }
-
-  const recast = require('recast')
-  const ast = recast.parse(source)
 
   if (hasInjections) {
     const toProperty = i => {
-      return recast.parse(`({${i}})`).program.body[0].expression.properties
+      return j(`({${i}})`).nodes()[0].program.body[0].expression.properties
     }
-    recast.types.visit(ast, {
-      visitNewExpression ({ node }) {
-        if (node.callee.name === 'Vue') {
-          const options = node.arguments[0]
-          if (options && options.type === 'ObjectExpression') {
-            const nonDuplicates = i => {
-              return !options.properties.slice(0, -1).some(p => {
-                return p.key.name === i[0].key.name &&
-                  recast.print(p.value).code === recast.print(i[0].value).code
-              })
-            }
-            // inject at index length - 1 as it's usually the render fn
-            options.properties = [
-              ...options.properties.slice(0, -1),
-              ...([].concat(...injections.map(toProperty).filter(nonDuplicates))),
-              ...options.properties.slice(-1)
-            ]
+
+    root
+      .find(j.NewExpression, {
+        callee: { name: 'Vue' }
+      })
+      .forEach(({ node }) => {
+        const options = node.arguments[0]
+        if (options && options.type === 'ObjectExpression') {
+          const nonDuplicates = i => {
+            return !options.properties.slice(0, -1).some(p => {
+              return p.key.name === i[0].key.name &&
+                j(p.value).toSource() === j(i[0].value).toSource()
+            })
           }
+          // inject at index length - 1 as it's usually the render fn
+          options.properties = [
+            ...options.properties.slice(0, -1),
+            ...([].concat(...injections.map(toProperty).filter(nonDuplicates))),
+            ...options.properties.slice(-1)
+          ]
         }
-        return false
-      }
-    })
+      })
   }
 
-  return recast.print(ast).code
+  return root.toSource()
 }
