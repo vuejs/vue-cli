@@ -9,39 +9,41 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
     return source
   }
 
-  const recast = require('recast')
-  const ast = recast.parse(source)
+  const j = require('jscodeshift')
 
   if (hasImports) {
-    const toImport = i => recast.parse(`${i}\n`).program.body[0]
-    const importDeclarations = []
-    let lastImportIndex = -1
+    const root = j(source)
 
-    recast.types.visit(ast, {
-      visitImportDeclaration ({ node }) {
-        lastImportIndex = ast.program.body.findIndex(n => n === node)
-        importDeclarations.push(node)
-        return false
-      }
+    const stringToNode = i => j(`${i}\n`).nodes()[0].program.body[0]
+    const nodeToHash = node => JSON.stringify({
+      specifiers: node.specifiers.map(s => s.local.name),
+      source: node.source.raw
     })
-    // avoid blank line after the previous import
-    if (lastImportIndex !== -1) {
-      delete ast.program.body[lastImportIndex].loc
+
+    const importSet = new Set()
+    root.find(j.ImportDeclaration)
+      .forEach(p => importSet.add(nodeToHash(p.value)))
+    const nonDuplicates = node => !importSet.has(nodeToHash(node))
+
+    const importNodes = imports.map(stringToNode).filter(nonDuplicates)
+
+    if (importSet.size) {
+      root.find(j.ImportDeclaration)
+        .at(-1)
+        // a tricky way to avoid blank line after the previous import
+        .forEach(n => delete n.value.loc)
+        .insertAfter(importNodes)
+    } else {
+      // no pre-existing import declarations
+      const { body } = root.get().node.program
+      body.unshift.apply(body, importNodes)
     }
 
-    const nonDuplicates = i => {
-      return !importDeclarations.some(node => {
-        const result = node.source.raw === i.source.raw && node.specifiers.length === i.specifiers.length
-
-        return result && node.specifiers.every((item, index) => {
-          return i.specifiers[index].local.name === item.local.name
-        })
-      })
-    }
-
-    const newImports = imports.map(toImport).filter(nonDuplicates)
-    ast.program.body.splice(lastImportIndex + 1, 0, ...newImports)
+    source = root.toSource()
   }
+
+  const recast = require('recast')
+  const ast = recast.parse(source)
 
   if (hasInjections) {
     const toProperty = i => {
