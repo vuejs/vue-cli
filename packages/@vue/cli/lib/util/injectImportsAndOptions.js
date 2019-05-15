@@ -31,7 +31,7 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
       root.find(j.ImportDeclaration)
         .at(-1)
         // a tricky way to avoid blank line after the previous import
-        .forEach(n => delete n.value.loc)
+        .forEach(p => delete p.value.loc)
         .insertAfter(importNodes)
     } else {
       // no pre-existing import declarations
