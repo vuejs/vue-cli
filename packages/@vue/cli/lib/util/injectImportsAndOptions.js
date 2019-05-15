@@ -35,8 +35,7 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
         .insertAfter(importNodes)
     } else {
       // no pre-existing import declarations
-      const { body } = root.get().node.program
-      body.unshift.apply(body, importNodes)
+      root.get().node.program.body.unshift(...importNodes)
     }
 
     source = root.toSource()
