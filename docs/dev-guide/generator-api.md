@@ -1,5 +1,25 @@
 # Generator API
 
+## version
+
+Type: `string`
+
+The version string for the **global** `@vue/cli` version that is invoking the plugin.
+
+
+## assertVersion
+
+- **Arguments**
+  - `{integer | string} range` - a semver range that `@vue/cli` needs to satisfy
+
+- **Usage**
+
+  While api.version can be useful in general, it's sometimes nice to just declare your version.
+  This API exposes a simple way to do that.
+
+  Nothing happens if the provided version is satified. Otherwise, an error will be thrown.
+
+
 ## resolve
 
 - **Arguments**

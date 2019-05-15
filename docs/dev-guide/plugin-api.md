@@ -7,7 +7,7 @@ Type: `string`
 The version string for the `@vue/cli-service` version that is loading the plugin.
 
 
-## assertVersion(range)
+## assertVersion
 
 - **Arguments**
   - `{integer | string} range` - a semver range that `@vue/cli-service` needs to satisfy

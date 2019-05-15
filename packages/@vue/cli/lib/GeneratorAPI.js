@@ -4,6 +4,7 @@ const path = require('path')
 const merge = require('deepmerge')
 const resolve = require('resolve')
 const isBinary = require('isbinaryfile')
+const semver = require('semver')
 const mergeDeps = require('./util/mergeDeps')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
@@ -69,6 +70,28 @@ class GeneratorAPI {
    */
   resolve (_path) {
     return path.resolve(this.generator.context, _path)
+  }
+
+  get version () {
+    return require('../package.json').version
+  }
+
+  assertVersion (range) {
+    if (typeof range === 'number') {
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.version, range)) return
+
+    throw new Error(
+      `Require @vue/cli "${range}", but was invoked by "${this.version}".`
+    )
   }
 
   /**
