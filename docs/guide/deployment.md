@@ -217,24 +217,56 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 npm install -g now
 ```
 
+or
+
+```bash
+yarn global add now
+```
+
 2. Add a `now.json` file to your project root:
 
     ```json
     {
       "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
+      "version": 2,
+      "builds": [
+        {
+          "src": "package.json",
+          "use": "@now/static-build",
+          "config": {
+            "distDir": "dist"
           }
-        ]
-      },
-      "alias": "vue-example",
-      "files": [
-        "dist"
+        }
+      ],
+      "routes": [
+        {
+          "src": "^/js/(.*)",
+          "headers": {
+            "cache-control": "max-age=31536000,immutable"
+          },
+          "dest": "/js/$1"
+        },
+        {
+          "src": "^/css/(.*)",
+          "headers": {
+            "cache-control": "max-age=31536000,immutable"
+          },
+          "dest": "/css/$1"
+        },
+        {
+          "src": "^/img/(.*)",
+          "headers": {
+            "cache-control": "max-age=31536000,immutable"
+          },
+          "dest": "/img/$1"
+        },
+        {
+          "src": ".*",
+          "headers": {
+            "cache-control": "max-age=0,must-revalidate"
+          },
+          "dest": "/index.html"
+        }
       ]
     }
     ```
@@ -244,16 +276,22 @@ npm install -g now
 3. Adding a deployment script in `package.json`:
 
     ```json
-    "deploy": "npm run build && now && now alias"
+    "now-dev": "vue-cli-service serve  --port=$PORT",
+    "now-build": "vue-cli-service build",
     ```
 
-    If you want to deploy publicly by default, you can change the deployment script to the following one:
+4. Develop locally:
 
-    ```json
-    "deploy": "npm run build && now --public && now alias"
+    ```bash
+    now dev
     ```
+    
+5. Push online:
 
-    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+    ```bash
+    now
+    ```
+    
 
 ### Stdlib
 
