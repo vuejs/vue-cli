@@ -13,21 +13,20 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
   const root = j(source)
 
   if (hasImports) {
-    const toASTNode = i => j(`${i}\n`).nodes()[0].program.body[0]
-    const toHash = importASTNode => JSON.stringify({
-      specifiers: importASTNode.specifiers.map(s => s.local.name),
-      source: importASTNode.source.raw
+    const toImportAST = i => j(`${i}\n`).nodes()[0].program.body[0]
+    const toImportHash = node => JSON.stringify({
+      specifiers: node.specifiers.map(s => s.local.name),
+      source: node.source.raw
     })
 
-    const importSet = new Set()
-    root.find(j.ImportDeclaration)
-      .forEach(({ node }) => importSet.add(toHash(node)))
-    const nonDuplicates = node => !importSet.has(toHash(node))
+    const declarations = root.find(j.ImportDeclaration)
+    const importSet = new Set(declarations.nodes().map(toImportHash))
+    const nonDuplicates = node => !importSet.has(toImportHash(node))
 
-    const importASTNodes = imports.map(toASTNode).filter(nonDuplicates)
+    const importASTNodes = imports.map(toImportAST).filter(nonDuplicates)
 
-    if (importSet.size) {
-      root.find(j.ImportDeclaration)
+    if (declarations.length) {
+      declarations
         .at(-1)
         // a tricky way to avoid blank line after the previous import
         .forEach(({ node }) => delete node.loc)
@@ -39,31 +38,24 @@ module.exports = function injectImportsAndOptions (source, imports, injections) 
   }
 
   if (hasInjections) {
-    const toProperty = i => {
-      return j(`({${i}})`).nodes()[0].program.body[0].expression.properties
+    const toPropertyAST = i => {
+      return j(`({${i}})`).nodes()[0].program.body[0].expression.properties[0]
     }
 
-    root
+    const options = root
       .find(j.NewExpression, {
-        callee: { name: 'Vue' }
+        callee: { name: 'Vue' },
+        arguments: [{ type: 'ObjectExpression' }]
       })
-      .forEach(({ node }) => {
-        const options = node.arguments[0]
-        if (options && options.type === 'ObjectExpression') {
-          const nonDuplicates = i => {
-            return !options.properties.slice(0, -1).some(p => {
-              return p.key.name === i[0].key.name &&
-                j(p.value).toSource() === j(i[0].value).toSource()
-            })
-          }
-          // inject at index length - 1 as it's usually the render fn
-          options.properties = [
-            ...options.properties.slice(0, -1),
-            ...([].concat(...injections.map(toProperty).filter(nonDuplicates))),
-            ...options.properties.slice(-1)
-          ]
-        }
-      })
+      .map(path => path.get('arguments', 0))
+    const { properties } = options.get().node
+
+    const toPropertyHash = p => `${p.key.name}: ${j(p.value).toSource()}`
+    const propertySet = new Set(properties.map(toPropertyHash))
+    const nonDuplicates = p => !propertySet.has(toPropertyHash(p))
+
+    // inject at index length - 1 as it's usually the render fn
+    properties.splice(-1, 0, ...injections.map(toPropertyAST).filter(nonDuplicates))
   }
 
   return root.toSource()
