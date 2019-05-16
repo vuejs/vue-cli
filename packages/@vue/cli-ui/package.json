@@ -60,7 +60,8 @@
     "rss-parser": "^3.7.0",
     "semver": "^6.0.0",
     "shortid": "^2.2.11",
-    "vue-cli-plugin-apollo": "^0.19.2",
+    "typescript": "^3.4.5",
+    "vue-cli-plugin-apollo": "^0.20.0",
     "watch": "^1.0.2"
   },
   "devDependencies": {
