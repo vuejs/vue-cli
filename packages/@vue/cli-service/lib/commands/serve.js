@@ -135,7 +135,7 @@ module.exports = (api, options) => {
 
     // create server
     const server = new WebpackDevServer(compiler, Object.assign({
-      clientLogLevel: 'none',
+      clientLogLevel: 'silent',
       historyApiFallback: {
         disableDotRule: true,
         rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
