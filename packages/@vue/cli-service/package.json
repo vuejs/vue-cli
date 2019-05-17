@@ -75,7 +75,7 @@
     "webpack": ">=4 < 4.29",
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-chain": "^6.0.0",
-    "webpack-dev-server": "^3.3.1",
+    "webpack-dev-server": "^3.4.1",
     "webpack-merge": "^4.2.1",
     "yorkie": "^2.0.0"
   },
