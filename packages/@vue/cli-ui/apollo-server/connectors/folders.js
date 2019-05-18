@@ -132,7 +132,7 @@ function isVueProject (file, context) {
 
   try {
     const pkg = readPackage(file, context)
-    return Object.keys(pkg.devDependencies || {}).includes('@vue/cli-service')
+    return pkg.vuedesk || Object.keys(pkg.devDependencies || {}).includes('@vue/cli-service')
   } catch (e) {
     if (process.env.VUE_APP_CLI_UI_DEBUG) {
       console.log(e)
