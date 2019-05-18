@@ -198,12 +198,6 @@ function resetPluginApi ({ file, lightApi }, context) {
       plugins.forEach(plugin => runPluginApi(plugin.id, pluginApi, context))
       // Project package.json data
       const { pkg, pkgContext } = pkgStore.get(file)
-      // Vuedesk
-      if (pkg.vuedesk) {
-        pkg.vuedesk.plugins.map(id => `@vue/cli-plugin-${id}`).forEach(id => {
-          runPluginApi(id, pluginApi, context)
-        })
-      }
       // Local plugins
       if (pkg.vuePlugins && pkg.vuePlugins.ui) {
         const files = pkg.vuePlugins.ui
