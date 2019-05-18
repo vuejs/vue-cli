@@ -60,6 +60,13 @@ module.exports = (api, options) => {
         .add(api.resolve('node_modules'))
         .add(resolveLocal('node_modules'))
 
+    if (process.env.VUEDESK_NODE_MODULES) {
+      webpackConfig.resolve.modules
+        .add(process.env.VUEDESK_NODE_MODULES)
+      webpackConfig.resolveLoader.modules
+        .add(process.env.VUEDESK_NODE_MODULES)
+    }
+
     webpackConfig.module
       .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
 

@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const debug = require('debug')
 const chalk = require('chalk')
@@ -38,6 +38,19 @@ module.exports = class Service {
     this.modes = this.plugins.reduce((modes, { apply: { defaultModes }}) => {
       return Object.assign(modes, defaultModes)
     }, {})
+
+    // Fix babel preset resolution
+    if (process.env.VUEDESK_NODE_MODULES) {
+      fs.ensureDirSync(path.resolve(context, 'node_modules/@vue'))
+      const link = path.resolve(context, 'node_modules/@vue/babel-preset-app')
+      if (!fs.existsSync(link)) {
+        fs.symlinkSync(
+          path.resolve(process.env.VUEDESK_NODE_MODULES, '@vue/babel-preset-app'),
+          link,
+          'dir'
+        )
+      }
+    }
   }
 
   resolvePkg (inlinePkg, context = this.context) {
@@ -179,6 +192,17 @@ module.exports = class Service {
           }
         })
       plugins = builtInPlugins.concat(projectPlugins)
+    }
+
+    // Vuedesk
+    if (this.pkg.vuedesk) {
+      for (const shortId of this.pkg.vuedesk.plugins) {
+        const id = `@vue/cli-plugin-${shortId}`
+        plugins.push({
+          id,
+          apply: loadModule(id, process.env.VUEDESK_NODE_MODULES)
+        })
+      }
     }
 
     // Local plugins
