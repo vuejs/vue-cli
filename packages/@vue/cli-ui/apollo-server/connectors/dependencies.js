@@ -131,6 +131,17 @@ async function getMetadata (id, context) {
 }
 
 async function getVersion ({ id, installed, versionRange, baseDir }, context) {
+  if (id === 'vuedesk-build-bundle') {
+    const pkg = folders.readPackage(baseDir, context)
+    return {
+      current: pkg.vuedesk.version,
+      latest: null, // @TODO
+      wanted: pkg.vuedesk.version,
+      range: pkg.vuedesk.version,
+      localPath: null
+    }
+  }
+
   let current
 
   // Is local dep

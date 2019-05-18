@@ -43,6 +43,7 @@ const { notify } = require('../util/notification')
 
 const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
+const VUEDESK_BUILD_BUNDLE = 'vuedesk-build-bundle'
 
 // Caches
 const logoCache = new LRU({
@@ -71,8 +72,29 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
   plugins = plugins.concat(findPlugins(pkg.devDependencies || {}, file))
   plugins = plugins.concat(findPlugins(pkg.dependencies || {}, file))
 
+  if (pkg.vuedesk) {
+    plugins.push({
+      id: VUEDESK_BUILD_BUNDLE,
+      versionRange: pkg.vuedesk.version,
+      official: true,
+      installed: true,
+      website: null,
+      baseDir: file
+    })
+
+    plugins = plugins.concat(pkg.vuedesk.plugins.map(id => ({
+      id: `@vue/cli-plugin-${id}`,
+      versionRange: pkg.vuedesk.version,
+      official: true,
+      installed: true,
+      website: null,
+      baseDir: file,
+      hidden: true
+    })))
+  }
+
   // Put cli service at the top
-  const index = plugins.findIndex(p => p.id === CLI_SERVICE)
+  const index = plugins.findIndex(p => [CLI_SERVICE, VUEDESK_BUILD_BUNDLE].includes(p.id))
   if (index !== -1) {
     const service = plugins[index]
     plugins.splice(index, 1)
@@ -86,7 +108,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
   if (resetApi || (autoLoadApi && !pluginApiInstances.has(file))) {
     await resetPluginApi({ file, lightApi }, context)
   }
-  return plugins
+  return plugins.filter(p => !p.hidden)
 }
 
 function findOne ({ id, file }, context) {
@@ -174,8 +196,15 @@ function resetPluginApi ({ file, lightApi }, context) {
       // Run Plugin API
       runPluginApi(path.resolve(__dirname, '../../'), pluginApi, context, 'ui-defaults')
       plugins.forEach(plugin => runPluginApi(plugin.id, pluginApi, context))
-      // Local plugins
+      // Project package.json data
       const { pkg, pkgContext } = pkgStore.get(file)
+      // Vuedesk
+      if (pkg.vuedesk) {
+        pkg.vuedesk.plugins.map(id => `@vue/cli-plugin-${id}`).forEach(id => {
+          runPluginApi(id, pluginApi, context)
+        })
+      }
+      // Local plugins
       if (pkg.vuePlugins && pkg.vuePlugins.ui) {
         const files = pkg.vuePlugins.ui
         if (Array.isArray(files)) {
@@ -284,6 +313,11 @@ function callHook ({ id, args, file }, context) {
 
 async function getLogo (plugin, context) {
   const { id, baseDir } = plugin
+
+  if (id === VUEDESK_BUILD_BUNDLE) {
+    return '/public/vuedesk-bundle.png'
+  }
+
   const cached = logoCache.get(id)
   if (cached) {
     return cached
