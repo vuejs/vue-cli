@@ -14,19 +14,19 @@ const defaults = {
 const defaultManifest = {
   icons: [
     {
-      "src": "./img/icons/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      'src': './img/icons/android-chrome-192x192.png',
+      'sizes': '192x192',
+      'type': 'image/png'
     },
     {
-      "src": "./img/icons/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      'src': './img/icons/android-chrome-512x512.png',
+      'sizes': '512x512',
+      'type': 'image/png'
     }
   ],
   start_url: '.',
   display: 'standalone',
-  background_color: "#000000"
+  background_color: '#000000'
 }
 
 const defaultIconPaths = {
@@ -128,8 +128,6 @@ module.exports = class HtmlPwaPlugin {
 
         cb(null, data)
       })
-
-
     })
 
     compiler.hooks.emit.tapAsync(ID, (data, cb) => {
