@@ -11,9 +11,10 @@ module.exports = (api, options) => {
           .use(require('webpack/lib/HotModuleReplacementPlugin'))
 
       // https://github.com/webpack/webpack/issues/6642
+      // https://github.com/vuejs/vue-cli/issues/3539
       webpackConfig
         .output
-          .globalObject('this')
+          .globalObject(`(typeof self !== 'undefined' ? self : this)`)
 
       if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
         webpackConfig
