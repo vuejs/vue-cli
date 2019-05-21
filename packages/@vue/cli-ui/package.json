@@ -41,7 +41,7 @@
     "execa": "^1.0.0",
     "express-history-api-fallback": "^2.2.1",
     "fkill": "^6.1.0",
-    "fs-extra": "^8.0.1",
+    "fs-extra": "^7.0.1",
     "globby": "^9.2.0",
     "graphql": "^14.2.1",
     "graphql-subscriptions": "^1.1.0",

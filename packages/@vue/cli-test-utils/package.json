@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "execa": "^1.0.0",
-    "fs-extra": "^8.0.1",
+    "fs-extra": "^7.0.1",
     "json-server": "^0.14.0",
     "puppeteer": "^1.11.0",
     "strip-ansi": "^5.2.0"
