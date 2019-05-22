@@ -42,7 +42,7 @@
     "globby": "^9.2.0",
     "import-global": "^0.1.0",
     "inquirer": "^6.3.1",
-    "isbinaryfile": "^3.0.2",
+    "isbinaryfile": "^4.0.0",
     "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.13.1",
     "jscodeshift": "^0.6.4",
