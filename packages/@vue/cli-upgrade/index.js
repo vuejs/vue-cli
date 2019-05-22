@@ -120,6 +120,7 @@ module.exports = async function vueCliUpgrade (semverLevel = 'minor') {
   }
 
   console.log('These packages can be upgraded:\n')
+  // TODO: alternative: https://github.com/angular/angular-cli/blob/34a55c96b2ed38b226879913839b97c601387653/packages/schematics/update/update/index.ts#L490-L509
   console.log(table.toString())
   console.log(
     `\nView complete changelog at ${chalk.blue(

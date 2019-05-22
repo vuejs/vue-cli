@@ -166,10 +166,12 @@ program
   })
 
 program
-  .command('upgrade [semverLevel]')
-  .description('upgrade vue cli service / plugins (default semverLevel: minor)')
-  .action((semverLevel, cmd) => {
-    loadCommand('upgrade', '@vue/cli-upgrade')(semverLevel, cleanArgs(cmd))
+  .command('upgrade [package-name]')
+  .description('upgrade vue cli service / plugins')
+  .option('-t, --to <version>', 'upgrade to a version that is not latest')
+  .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
+  .action((packageName, cmd) => {
+    require('../lib/upgrade')(packageName, cleanArgs(cmd))
   })
 
 program
