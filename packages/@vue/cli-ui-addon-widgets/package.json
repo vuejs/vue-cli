@@ -26,7 +26,7 @@
     "eslint": "^5.16.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.6.10"
   },
   "publishConfig": {
     "access": "public"

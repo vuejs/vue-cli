@@ -27,7 +27,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-progress-path": "^0.0.2",
-    "vue-template-compiler": "^2.5.21",
+    "vue-template-compiler": "^2.6.10",
     "vuex": "^3.0.1"
   },
   "browserslist": [
