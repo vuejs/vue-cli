@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name }) => {
+module.exports = (api, { target, _: resolvedFiles, name }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -15,12 +15,6 @@ module.exports = (api, { target, entry, name }) => {
 
   const isAsync = /async/.test(target)
 
-  // generate dynamic entry based on glob files
-  const resolvedFiles = require('globby').sync([entry], { cwd: api.resolve('.') })
-
-  if (!resolvedFiles.length) {
-    abort(`entry pattern "${entry}" did not match any files.`)
-  }
   let libName
   let prefix
   if (resolvedFiles.length === 1) {
@@ -46,8 +40,8 @@ module.exports = (api, { target, entry, name }) => {
     // make sure not to transpile wc-wrapper
     config.module
       .rule('js')
-        .exclude
-          .add(/vue-wc-wrapper/)
+      .exclude
+      .add(/vue-wc-wrapper/)
 
     // only minify min entry
     if (!minify) {
@@ -63,34 +57,34 @@ module.exports = (api, { target, entry, name }) => {
 
     config
       .plugin('web-component-options')
-        .use(webpack.EnvironmentPlugin, [{
-          CUSTOM_ELEMENT_NAME: libName
-        }])
+      .use(webpack.EnvironmentPlugin, [{
+        CUSTOM_ELEMENT_NAME: libName
+      }])
 
     // enable shadow mode in vue-loader
     config.module
       .rule('vue')
-        .use('vue-loader')
-          .tap(options => {
-            options.shadowMode = true
-            return options
-          })
+      .use('vue-loader')
+      .tap(options => {
+        options.shadowMode = true
+        return options
+      })
 
     if (genHTML) {
       config
         .plugin('demo-html')
-          .use(require('html-webpack-plugin'), [{
-            template: path.resolve(__dirname, `./demo-wc.html`),
-            inject: false,
-            filename: 'demo.html',
-            libName,
-            components:
-              prefix === ''
-                ? [libName]
-                : resolvedFiles.map(file => {
-                  return fileToComponentName(prefix, file).kebabName
-                })
-          }])
+        .use(require('html-webpack-plugin'), [{
+          template: path.resolve(__dirname, `./demo-wc.html`),
+          inject: false,
+          filename: 'demo.html',
+          libName,
+          components:
+            prefix === ''
+              ? [libName]
+              : resolvedFiles.map(file => {
+                return fileToComponentName(prefix, file).kebabName
+              })
+        }])
     }
 
     // set entry/output last so it takes higher priority than user
@@ -99,7 +93,7 @@ module.exports = (api, { target, entry, name }) => {
     // set proxy entry for *.vue files
     config.resolve
       .alias
-        .set('~root', api.resolve('.'))
+      .set('~root', api.resolve('.'))
 
     const rawConfig = api.resolveWebpackConfig(config)
 
