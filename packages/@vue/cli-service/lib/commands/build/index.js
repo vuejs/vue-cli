@@ -123,7 +123,12 @@ async function build (args, api, options) {
     }
   }
 
-  const targetDir = api.resolve(args.dest || options.outputDir)
+  if (args.dest) {
+    // Override outputDir before resolving webpack config as config relies on it (#2327)
+    options.outputDir = args.dest
+  }
+
+  const targetDir = api.resolve(options.outputDir)
   const isLegacyBuild = args.target === 'app' && args.modern && !args.modernBuild
 
   // resolve raw webpack config
@@ -141,14 +146,6 @@ async function build (args, api, options) {
 
   // check for common config errors
   validateWebpackConfig(webpackConfig, api, options, args.target)
-
-  // apply inline dest path after user configureWebpack hooks
-  // so it takes higher priority
-  if (args.dest) {
-    modifyConfig(webpackConfig, config => {
-      config.output.path = targetDir
-    })
-  }
 
   if (args.watch) {
     modifyConfig(webpackConfig, config => {
