@@ -24,6 +24,7 @@ if (typeof endpoint === 'undefined') {
 
 // Config
 const options = {
+  inMemoryCacheOptions: {},
   wsEndpoint: endpoint,
   persisting: false,
   websocketsOnly: true,
