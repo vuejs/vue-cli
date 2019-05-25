@@ -7,7 +7,8 @@ const defaults = {
   appleMobileWebAppCapable: 'no',
   appleMobileWebAppStatusBarStyle: 'default',
   assetsVersion: '',
-  manifestPath: 'manifest.json'
+  manifestPath: 'manifest.json',
+  manifestCrossorigin: undefined
 }
 
 const defaultIconPaths = {
@@ -42,7 +43,8 @@ module.exports = class HtmlPwaPlugin {
           appleMobileWebAppStatusBarStyle,
           assetsVersion,
           manifestPath,
-          iconPaths
+          iconPaths,
+          manifestCrossorigin
         } = this.options
         const { publicPath } = compiler.options.output
 
@@ -64,10 +66,17 @@ module.exports = class HtmlPwaPlugin {
           }),
 
           // Add to home screen for Android and modern mobile browsers
-          makeTag('link', {
-            rel: 'manifest',
-            href: `${publicPath}${manifestPath}${assetsVersionStr}`
-          }),
+          makeTag('link', manifestCrossorigin
+            ? {
+              rel: 'manifest',
+              href: `${publicPath}${manifestPath}${assetsVersionStr}`,
+              crossorigin: manifestCrossorigin
+            }
+            : {
+              rel: 'manifest',
+              href: `${publicPath}${manifestPath}${assetsVersionStr}`
+            }
+          ),
           makeTag('meta', {
             name: 'theme-color',
             content: themeColor

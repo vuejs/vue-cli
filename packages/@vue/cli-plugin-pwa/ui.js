@@ -76,6 +76,28 @@ module.exports = api => {
             description: 'org.vue.pwa.config.pwa.appleMobileWebAppStatusBarStyle.description',
             default: 'default',
             value: data.vue && data.vue.pwa && data.vue.pwa.appleMobileWebAppStatusBarStyle
+          },
+          {
+            name: 'manifestCrossorigin',
+            type: 'list',
+            message: 'org.vue.pwa.config.pwa.manifestCrossorigin.message',
+            description: 'org.vue.pwa.config.pwa.manifestCrossorigin.description',
+            default: undefined,
+            value: data.vue && data.vue.pwa && data.vue.pwa.manifestCrossorigin,
+            choices: [
+              {
+                name: 'none',
+                value: undefined
+              },
+              {
+                name: 'anonymous',
+                value: 'anonymous'
+              },
+              {
+                name: 'use-credentials',
+                value: 'use-credentials'
+              }
+            ]
           }
         ]
       }
