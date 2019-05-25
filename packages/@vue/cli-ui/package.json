@@ -35,6 +35,7 @@
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
     "@vue/cli-shared-utils": "^3.7.0",
+    "apollo-client": "^2.6.0",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
     "deepmerge": "^3.2.0",
