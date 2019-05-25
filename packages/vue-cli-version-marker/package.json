@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-version-marker",
-  "version": "3.8.1",
+  "version": "3.8.2",
   "description": "version marker for @vue/cli",
   "author": "Evan You",
   "license": "MIT",
@@ -25,6 +25,6 @@
     "@vue/cli-ui-addon-widgets": "3.8.0",
     "@vue/cli-ui": "3.8.0",
     "@vue/cli-upgrade": "3.8.0",
-    "@vue/cli": "3.8.0"
+    "@vue/cli": "3.8.2"
   }
 }
