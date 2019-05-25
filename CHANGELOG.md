@@ -1,45 +1,48 @@
 
 ## 4.0.0-alpha.1 (2019-05-25)
 
-#### :rocket: New Features
-* `@vue/cli-plugin-pwa`, `@vue/cli-ui`
-  * [#3939](https://github.com/vuejs/vue-cli/pull/3939) feat(HtmlPwaPlugin): adds 'manifestCrossorigin' option ([@BigsonLvrocha](https://github.com/BigsonLvrocha))
-* `@vue/cli-ui`
-  * [#3929](https://github.com/vuejs/vue-cli/pull/3929) Feat prompt editor ([@Akryum](https://github.com/Akryum))
-  * [#3955](https://github.com/vuejs/vue-cli/pull/3955) Feat rename project ([@Akryum](https://github.com/Akryum))
-* `@vue/cli-service`
-  * [#4011](https://github.com/vuejs/vue-cli/pull/4011) Enable HMR when extracting CSS in dev ([@achretien](https://github.com/achretien))
-* `@vue/cli`
-  * [#3860](https://github.com/vuejs/vue-cli/pull/3860) feat(cli): suggest matching commands if the user mistypes ([@jamesgeorge007](https://github.com/jamesgeorge007))
-
 #### :boom: Breaking Changes
 * `@vue/cli-plugin-eslint`, `@vue/cli-service-global`, `@vue/cli-service`, `@vue/cli-ui-addon-widgets`, `@vue/cli`
   * [#3975](https://github.com/vuejs/vue-cli/pull/3975) chore!: change default value of `lintOnSave` option ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#3943](https://github.com/vuejs/vue-cli/pull/3943) chore: upgrade webpack-chain to v6 ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-plugin-typescript`
   * [#3909](https://github.com/vuejs/vue-cli/pull/3909) chore: prefer .tsx? files over .jsx? file extensions ([@LinusBorg](https://github.com/LinusBorg))
+
+Most of the following new features and bugfixes also applies to v3.8.0
+
+#### :rocket: New Features
+* `@vue/cli-plugin-pwa`, `@vue/cli-ui`
+  * [#3939](https://github.com/vuejs/vue-cli/pull/3939) add 'manifestCrossorigin' option ([@BigsonLvrocha](https://github.com/BigsonLvrocha))
+* `@vue/cli-ui`
+  * [#3929](https://github.com/vuejs/vue-cli/pull/3929) add support for inquirer type `editor` ([@Akryum](https://github.com/Akryum))
+  * [#3955](https://github.com/vuejs/vue-cli/pull/3955) allow rename (nickname) a project ([@Akryum](https://github.com/Akryum))
+* `@vue/cli-service`
+  * [#4011](https://github.com/vuejs/vue-cli/pull/4011) enable HMR when extracting CSS in dev ([@achretien](https://github.com/achretien))
+* `@vue/cli`
+  * [#3860](https://github.com/vuejs/vue-cli/pull/3860) suggest matching commands if the user mistypes ([@jamesgeorge007](https://github.com/jamesgeorge007))
 
 #### :bug: Bug Fix
 * `@vue/cli-upgrade`
   * [#4036](https://github.com/vuejs/vue-cli/pull/4036) fix: add missing dependencies to @vue/cli-upgrade ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-service`
-  * [#4034](https://github.com/vuejs/vue-cli/pull/4034) fix: fix dev mode compatibility with workers ([@sodatea](https://github.com/sodatea))
+  * [#4034](https://github.com/vuejs/vue-cli/pull/4034) fix bundles' compatibility with workers for those built in development mode ([@sodatea](https://github.com/sodatea))
   * [#4025](https://github.com/vuejs/vue-cli/pull/4025) fix: update the css-loader runtime path for css-loader v2 ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-ui`
-  * [#3992](https://github.com/vuejs/vue-cli/pull/3992) fix(cli-ui): update dependencies and fix peer dependency warnings ([@sodatea](https://github.com/sodatea))
-  * [#3966](https://github.com/vuejs/vue-cli/pull/3966) fix(cli-ui): fix detectLanguage function ([@maple3142](https://github.com/maple3142))
+  * [#3992](https://github.com/vuejs/vue-cli/pull/3992) update dependencies and fix peer dependency warnings ([@sodatea](https://github.com/sodatea))
+  * [#3966](https://github.com/vuejs/vue-cli/pull/3966) fix `detectLanguage` function ([@maple3142](https://github.com/maple3142))
 
 #### :house: Internal
 * `@vue/cli-service`
-  * [#4018](https://github.com/vuejs/vue-cli/pull/4018) hotfix for #4016 ([@svtfrancisco](https://github.com/svtfrancisco))
+  * [#4018](https://github.com/vuejs/vue-cli/pull/4018) set `clientLogLevel` to `silent` instead of `none` ([@svtfrancisco](https://github.com/svtfrancisco)
 * `@vue/cli`
-  * [#4003](https://github.com/vuejs/vue-cli/pull/4003) refactor: replace recast with jscodeshift for `injectImportsAndOptions` ([@sodatea](https://github.com/sodatea))
+  * [#4003](https://github.com/vuejs/vue-cli/pull/4003) refactor: replace recast with jscodeshift for `injectImportsAndOptions`, fixes [#3309](https://github.com/vuejs/vue-cli/issues/3309) ([@sodatea](https://github.com/sodatea))
 
 #### :hammer: Underlying Tools
 * `@vue/cli-service`
-  * [#4020](https://github.com/vuejs/vue-cli/pull/4020) chore: upgrade webpack-dev-server to 3.4.1 ([@beardedpayton](https://github.com/beardedpayton))
-  * [#3943](https://github.com/vuejs/vue-cli/pull/3943) chore: upgrade webpack-chain to v6 ([@sodatea](https://github.com/sodatea))
+  * [#4020](https://github.com/vuejs/vue-cli/pull/4020) upgrade webpack-dev-server to 3.4.1 ([@beardedpayton](https://github.com/beardedpayton))
 * `@vue/babel-preset-app`
-  * [#3978](https://github.com/vuejs/vue-cli/pull/3978) feat(babel-preset-app): Bump jsx dependency version ([@LinusBorg](https://github.com/LinusBorg))
+  * [#3978](https://github.com/vuejs/vue-cli/pull/3978) bump jsx dependency version ([@LinusBorg](https://github.com/LinusBorg))
 
 #### Committers: 9
 - Francisco ([@svtfrancisco](https://github.com/svtfrancisco))
