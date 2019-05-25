@@ -52,7 +52,7 @@
     "request": "^2.87.0",
     "request-promise-native": "^1.0.7",
     "resolve": "^1.10.1",
-    "semver": "^6.0.0",
+    "semver": "^6.1.0",
     "shortid": "^2.2.11",
     "slash": "^3.0.0",
     "validate-npm-package-name": "^3.0.0",

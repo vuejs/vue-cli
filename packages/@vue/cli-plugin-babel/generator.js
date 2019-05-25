@@ -10,7 +10,7 @@ module.exports = api => {
       presets: ['@vue/app']
     },
     dependencies: {
-      'core-js': '^3.0.1'
+      'core-js': '^3.1.2'
     }
   })
 }
