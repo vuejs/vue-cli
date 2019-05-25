@@ -102,6 +102,8 @@ const release = async () => {
   // keep packages' minor version in sync
   if (releaseType !== 'patch') {
     lernaArgs.push('--force-publish')
+  } else {
+    lernaArgs.push('--force-publish=@vue/cli')
   }
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 }
