@@ -46,7 +46,7 @@ vue add apollo
 vue add @foo/bar
 ```
 
-你可以向已安装的插件传递生成器选项 (这样做会跳过命令提示)：
+你可以向被安装的插件传递生成器选项 (这样做会跳过命令提示)：
 
 ``` bash
 vue add @vue/eslint --config airbnb --lintOn save
