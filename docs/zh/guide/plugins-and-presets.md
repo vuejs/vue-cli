@@ -1,10 +1,10 @@
-# 插件和 Preset
+# 插件和预设配置
 
 ## 插件
 
-Vue CLI 使用了一套基于插件的架构。如果你查阅一个新创建项目的 `package.json`，就会发现依赖都是以 `@vue/cli-plugin-` 开头的。插件可以修改 webpack 的内部配置，也可以向 `vue-cli-service` 注入命令。在项目创建的过程中，绝大部分列出的特性都是通过插件来实现的。
+Vue CLI 使用了一套基于插件的架构。如果你查阅一个新创建项目的 `package.json`，就会发现依赖都是以 `@vue/cli-plugin-` 开头的。插件可以修改内部的 webpack 配置，也可以向 `vue-cli-service` 注入命令。在项目创建的过程中列出的特性，绝大部分都是通过插件来实现的。
 
-基于插件的架构使得 Vue CLI 灵活且可扩展。如果你对开发一个插件感兴趣，请翻阅[插件开发指南](../dev-guide/plugin-dev.md)。
+基于插件的架构使得 Vue CLI 灵活且可扩展。如果你对开发插件感兴趣，请翻阅[插件开发指南](../dev-guide/plugin-dev.md)。
 
 ::: tip
 你可以通过 `vue ui` 命令使用 GUI 安装和管理插件。
@@ -19,11 +19,11 @@ vue add @vue/eslint
 ```
 
 ::: tip 提示
-`vue add` 的设计意图是为了安装和调用 Vue CLI 插件。这不意味着替换掉普通的 npm 包。对于这些普通的 npm 包，你仍然需要选用包管理器。
+`vue add` 的设计意图是为了安装和调用 Vue CLI 插件。对于普通的 npm 包而言，这不意味有一个替代（命令）。对于这些普通的 npm 包，你仍然需要（根据所选的 npm 包）使用包管理器。
 :::
 
 ::: warning 警告
-我们推荐在运行 `vue add` 之前将项目的最新状态提交，因为该命令可能调用插件的文件生成器并很有可能更改你现有的文件。
+我们推荐在运行 `vue add` 之前将项目的最新状态提交，因为该命令将会调用插件的文件生成器并很有可能更改你现有的文件。
 :::
 
 这个命令将 `@vue/eslint` 解析为完整的包名 `@vue/cli-plugin-eslint`，然后从 npm 安装它，调用它的生成器。
@@ -46,7 +46,7 @@ vue add apollo
 vue add @foo/bar
 ```
 
-你可以向被安装的插件传递生成器选项 (这样做会跳过命令提示)：
+你可以向已安装的插件传递生成器选项 (这样做会跳过命令提示)：
 
 ``` bash
 vue add @vue/eslint --config airbnb --lintOn save
@@ -101,13 +101,13 @@ vue add vuex
 
 更多信息请阅读 [UI 插件 API](../dev-guide/ui-api.md)。
 
-## Preset
+## 预设配置
 
-一个 Vue CLI preset 是一个包含创建新项目所需预定义选项和插件的 JSON 对象，让用户无需在命令提示中选择它们。
+Vue CLI 预设配置是一个包含创建新项目所需的预定义选项和插件的 JSON 对象，让用户无需在命令提示中选择它们。
 
-在 `vue create` 过程中保存的 preset 会被放在你的 home 目录下的一个配置文件中 (`~/.vuerc`)。你可以通过直接编辑这个文件来调整、添加、删除保存好的 preset。
+在 `vue create` 过程中保存的预设配置会被放在你的 home 目录下的一个配置文件中 (`~/.vuerc`)。你可以通过直接编辑这个文件来调整、添加、删除保存好的配置。
 
-这里有一个 preset 的示例：
+这里有一个预设配置的示例：
 
 ``` json
 {
@@ -125,7 +125,7 @@ vue add vuex
 }
 ```
 
-Preset 的数据会被插件生成器用来生成相应的项目文件。除了上述这些字段，你也可以为集成工具添加配置：
+预设配置的数据会被插件生成器用来生成相应的项目文件。除了上述这些字段，你也可以为集成工具添加配置：
 
 ``` json
 {
@@ -142,7 +142,7 @@ Preset 的数据会被插件生成器用来生成相应的项目文件。除了�
 
 这些额外的配置将会根据 `useConfigFiles` 的值被合并到 `package.json` 或相应的配置文件中。例如，当 `"useConfigFiles": true` 的时候，`configs` 的值将会被合并到 `vue.config.js` 中。
 
-### Preset 插件的版本管理
+### 预设配置插件的版本管理
 
 你可以显式地指定用到的插件的版本：
 
@@ -157,13 +157,13 @@ Preset 的数据会被插件生成器用来生成相应的项目文件。除了�
 }
 ```
 
-注意对于官方插件来说这不是必须的——当被忽略时，CLI 会自动使用 registry 中最新的版本。不过**我们推荐为 preset 列出的所有第三方插件提供显式的版本范围**。
+注意对于官方插件来说这不是必须的——当被忽略时，CLI 会自动使用 registry 中最新的版本。不过**我们推荐为预设配置所列出的所有第三方插件，提供明确的版本范围**。
 
 ### 允许插件的命令提示
 
-每个插件在项目创建的过程中都可以注入它自己的命令提示，不过当你使用了一个 preset，这些命令提示就会被跳过，因为 Vue CLI 假设所有的插件选项都已经在 preset 中声明过了。
+每个插件在项目创建的过程中都可以注入它自己的命令提示，不过当你使用了预设配置，这些命令提示就会被跳过，因为 Vue CLI 假设所有的插件选项都已经在预设配置中声明过了。
 
-在有些情况下你可能希望 preset 只声明需要的插件，同时让用户通过插件注入的命令提示来保留一些灵活性。
+在有些情况下你可能希望预设配置只声明需要的插件，同时让用户通过插件注入的命令提示来保留一些灵活性。
 
 对于这种场景你可以在插件选项中指定 `"prompts": true` 来允许注入命令提示：
 
@@ -171,25 +171,25 @@ Preset 的数据会被插件生成器用来生成相应的项目文件。除了�
 {
   "plugins": {
     "@vue/cli-plugin-eslint": {
-      // 让用户选取他们自己的 ESLint config
+      // 让用户选取他们自己的 ESLint 配置
       "prompts": true
     }
   }
 }
 ```
 
-### 远程 Preset
+### 远程预设
 
-你可以通过发布 git repo 将一个 preset 分享给其他开发者。这个 repo 应该包含以下文件：
+你可以通过发布 git repo 将一个预设配置分享给其他开发者。这个 repo 应该包含以下文件：
 
-- `preset.json`: 包含 preset 数据的主要文件（必需）。
+- `preset.json`: 包含预设配置数据的主要文件（必需）。
 - `generator.js`: 一个可以注入或是修改项目中文件的 [Generator](../dev-guide/plugin-dev.md#generator)。
-- `prompts.js` 一个可以通过命令行对话为 generator 收集选项的 [prompts 文件](../dev-guide/plugin-dev.md#第三方插件的对话)。
+- `prompts.js` 一个可以为 generator 收集选项的 [prompts 文件](../dev-guide/plugin-dev.md#prompts)。
 
-发布 repo 后，你就可以在创建项目的时候通过 `--preset` 选项使用这个远程的 preset 了：
+发布 repo 后，你就可以在创建项目的时候通过 `--preset` 选项使用这个远程的预设配置了：
 
 ``` bash
-# 从 GitHub repo 使用 preset
+# 从 GitHub repo 使用预设配置
 vue create --preset username/repo my-project
 ```
 
@@ -198,11 +198,14 @@ GitLab 和 BitBucket 也是支持的。如果要从私有 repo 获取，请确�
 ``` bash
 vue create --preset gitlab:username/repo --clone my-project
 vue create --preset bitbucket:username/repo --clone my-project
+# 自托管的 repo
+vue create --preset gitlab:my-gitlab-server.com:group/projectname --clone my-project
+vue create --preset direct:ssh://git@my-gitlab-server.com/group/projectname.git --clone my-project
 ```
 
-### 加载文件系统中的 Preset
+### 加载文件系统中的预设配置
 
-当开发一个远程 preset 的时候，你必须不厌其烦的向远程 repo 发出 push 进行反复测试。为了简化这个流程，你也可以直接在本地测试 preset。如果 `--preset` 选项的值是一个相对或绝对文件路径，或是以 `.json` 结尾，则 Vue CLI 会加载本地的 preset：
+当开发远程预设配置的时候，重复地将预设配置 push 到远程 repo 中进行测试，会显得冗烦。为了简化这个流程，你也可以直接在本地测试预设配置。如果 `--preset` 选项的值是一个相对或绝对文件路径，或是以 `.json` 结尾，则 Vue CLI 会加载本地的预设配置：
 
 ``` bash
 # ./my-preset 应当是一个包含 preset.json 的文件夹
