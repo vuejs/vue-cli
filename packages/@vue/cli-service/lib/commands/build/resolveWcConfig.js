@@ -46,8 +46,8 @@ module.exports = (api, { target, entry, name }) => {
     // make sure not to transpile wc-wrapper
     config.module
       .rule('js')
-        .exclude
-          .add(/vue-wc-wrapper/)
+      .exclude
+      .add(/vue-wc-wrapper/)
 
     // only minify min entry
     if (!minify) {
@@ -58,39 +58,39 @@ module.exports = (api, { target, entry, name }) => {
     config
       .externals({
         ...config.get('externals'),
-        vue: 'Vue'
+        vue: process.env.VUE_EXTERNAL_NAME || 'Vue'
       })
 
     config
       .plugin('web-component-options')
-        .use(webpack.EnvironmentPlugin, [{
-          CUSTOM_ELEMENT_NAME: libName
-        }])
+      .use(webpack.EnvironmentPlugin, [{
+        CUSTOM_ELEMENT_NAME: libName
+      }])
 
     // enable shadow mode in vue-loader
     config.module
       .rule('vue')
-        .use('vue-loader')
-          .tap(options => {
-            options.shadowMode = true
-            return options
-          })
+      .use('vue-loader')
+      .tap(options => {
+        options.shadowMode = true
+        return options
+      })
 
     if (genHTML) {
       config
         .plugin('demo-html')
-          .use(require('html-webpack-plugin'), [{
-            template: path.resolve(__dirname, `./demo-wc.html`),
-            inject: false,
-            filename: 'demo.html',
-            libName,
-            components:
-              prefix === ''
-                ? [libName]
-                : resolvedFiles.map(file => {
-                  return fileToComponentName(prefix, file).kebabName
-                })
-          }])
+        .use(require('html-webpack-plugin'), [{
+          template: path.resolve(__dirname, `./demo-wc.html`),
+          inject: false,
+          filename: 'demo.html',
+          libName,
+          components:
+            prefix === ''
+              ? [libName]
+              : resolvedFiles.map(file => {
+                return fileToComponentName(prefix, file).kebabName
+              })
+        }])
     }
 
     // set entry/output last so it takes higher priority than user
@@ -99,7 +99,7 @@ module.exports = (api, { target, entry, name }) => {
     // set proxy entry for *.vue files
     config.resolve
       .alias
-        .set('~root', api.resolve('.'))
+      .set('~root', api.resolve('.'))
 
     const rawConfig = api.resolveWebpackConfig(config)
 
