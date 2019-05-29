@@ -84,14 +84,14 @@ module.exports = {
           {
             text: 'Plugins',
             items: [
-              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
-              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript' },
-              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' },
-              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa' },
-              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest' },
-              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha' },
-              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress' },
-              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch' }
+              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-babel' },
+              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-typescript' },
+              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-eslint' },
+              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-pwa' },
+              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-unit-jest' },
+              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-unit-mocha' },
+              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-e2e-cypress' },
+              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-e2e-nightwatch' }
             ]
           },
           {
@@ -259,14 +259,14 @@ module.exports = {
           {
             text: 'Плагины',
             items: [
-              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
-              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript' },
-              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' },
-              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa' },
-              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest' },
-              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha' },
-              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress' },
-              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch' }
+              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-babel' },
+              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-typescript' },
+              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-eslint' },
+              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-pwa' },
+              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-unit-jest' },
+              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-unit-mocha' },
+              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-e2e-cypress' },
+              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/v3/packages/%40vue/cli-plugin-e2e-nightwatch' }
             ]
           },
           {
