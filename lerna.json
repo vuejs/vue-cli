@@ -4,7 +4,8 @@
   "version": "4.0.0-alpha.1",
   "packages": [
     "packages/@vue/babel-preset-app",
-    "packages/@vue/cli*"
+    "packages/@vue/cli*",
+    "packages/vue-cli-version-marker"
   ],
   "changelog": {
     "repo": "vuejs/vue-cli",

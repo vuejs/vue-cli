@@ -6,25 +6,6 @@
   "license": "MIT",
   "main": "package.json",
   "devDependencies": {
-    "@vue/babel-preset-app": "4.0.0-alpha.1",
-    "@vue/cli-init": "4.0.0-alpha.1",
-    "@vue/cli-overlay": "4.0.0-alpha.1",
-    "@vue/cli-plugin-babel": "4.0.0-alpha.1",
-    "@vue/cli-plugin-e2e-cypress": "4.0.0-alpha.1",
-    "@vue/cli-plugin-e2e-nightwatch": "4.0.0-alpha.1",
-    "@vue/cli-plugin-eslint": "4.0.0-alpha.1",
-    "@vue/cli-plugin-pwa": "4.0.0-alpha.1",
-    "@vue/cli-plugin-typescript": "4.0.0-alpha.1",
-    "@vue/cli-plugin-unit-jest": "4.0.0-alpha.1",
-    "@vue/cli-plugin-unit-mocha": "4.0.0-alpha.1",
-    "@vue/cli-service-global": "4.0.0-alpha.1",
-    "@vue/cli-service": "4.0.0-alpha.1",
-    "@vue/cli-shared-utils": "4.0.0-alpha.1",
-    "@vue/cli-test-utils": "4.0.0-alpha.1",
-    "@vue/cli-ui-addon-webpack": "4.0.0-alpha.1",
-    "@vue/cli-ui-addon-widgets": "4.0.0-alpha.1",
-    "@vue/cli-ui": "4.0.0-alpha.1",
-    "@vue/cli-upgrade": "4.0.0-alpha.1",
     "@vue/cli": "4.0.0-alpha.1"
   }
 }
