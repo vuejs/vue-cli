@@ -43,25 +43,7 @@ async function assertUpdates (project) {
 
   const eslintrc = parseJS(await project.read('.eslintrc.js'))
   expect(eslintrc).toEqual(Object.assign({}, baseESLintConfig, {
-    extends: ['plugin:vue/essential', '@vue/airbnb'],
-    rules: {
-      'no-console': 'off',
-      'no-debugger': 'off',
-      'no-param-reassign': ['error', {
-        props: true,
-        ignorePropertyModificationsFor: [
-          'state', // for vuex state
-          'acc', // for reduce accumulators
-          'e', // for e.returnvalue
-          'ctx', // for Koa routing
-          'req', // for Express requests
-          'request', // for Express requests
-          'res', // for Express responses
-          'response', // for Express responses
-          '$scope' // for Angular 1 scopes
-        ]
-      }]
-    }
+    extends: ['plugin:vue/essential', '@vue/airbnb']
   }))
 
   const lintedMain = await project.read('src/main.js')
