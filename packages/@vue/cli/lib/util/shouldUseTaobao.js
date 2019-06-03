@@ -40,6 +40,11 @@ module.exports = async function shouldUseTaobao (command) {
 
   const userCurrent = (await execa(command, ['config', 'get', 'registry'])).stdout
   const defaultRegistry = registries[command]
+  const taobaoRegistry = registries.taobao
+
+  if (removeSlash(userCurrent) === removeSlash(taobaoRegistry)) {
+    return save(true)
+  }
 
   if (removeSlash(userCurrent) !== removeSlash(defaultRegistry)) {
     // user has configured custom registry, respect that
