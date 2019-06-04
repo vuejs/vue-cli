@@ -9,6 +9,7 @@
 const url = require('url')
 const chalk = require('chalk')
 const address = require('address')
+const defaultGateway = require('default-gateway')
 
 module.exports = function prepareUrls (protocol, host, port, pathname = '/') {
   const formatUrl = hostname =>
@@ -33,7 +34,8 @@ module.exports = function prepareUrls (protocol, host, port, pathname = '/') {
     prettyHost = 'localhost'
     try {
       // This can only return an IPv4 address
-      lanUrlForConfig = address.ip()
+      const result = defaultGateway.v4.sync()
+      lanUrlForConfig = address.ip(result && result.interface)
       if (lanUrlForConfig) {
         // Check if the address is a private ip
         // https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
