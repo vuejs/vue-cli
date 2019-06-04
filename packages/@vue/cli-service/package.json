@@ -46,6 +46,7 @@
     "cssnano": "^4.1.10",
     "current-script-polyfill": "^1.0.0",
     "debug": "^4.1.1",
+    "default-gateway": "^4.2.0",
     "dotenv": "^8.0.0",
     "dotenv-expand": "^5.1.0",
     "file-loader": "^3.0.1",
