@@ -320,6 +320,40 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
     cd -
     ```
 
+### GitHub Pages through Travis CI
+
+Deploy to GitHub Pages automatically using Travis CI.
+
+1. Set correct `publicPath` in `vue.config.js` as explained above.
+
+2. Install the Travis CLI client: `gem install travis && travis --login`
+
+3. Generate a GitHub [access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+   with repo permissions.
+
+4. Create a `.travis.yml` file in the root of your project.
+
+    ```yaml
+    language: node_js
+   node_js:
+     - "node"
+
+   cache: npm
+
+   script: npm run build
+
+   deploy:
+     provider: pages
+     skip_cleanup: true
+     github_token: $GITHUB_TOKEN
+     local_dir: dist
+     on:
+       branch: master
+    ```
+5. Grant the Travis job access to your repository: `travis set GITHUB_TOKEN=xxx`
+   (`xxx` is the personal access token from step 3.)
+
+6. Push the `.travis.yml` file to your repository to trigger the first build.
 
 ### Docker (Nginx)
 
