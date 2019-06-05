@@ -81,7 +81,7 @@
     "vue-template-compiler": "^2.0.0"
   },
   "devDependencies": {
-    "fibers": "^3.1.1",
+    "fibers": "^4.0.0",
     "sass": "^1.17.2",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.7",
