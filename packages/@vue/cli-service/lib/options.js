@@ -10,14 +10,22 @@ const schema = createSchema(joi => joi.object({
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
-  parallel: joi.boolean(),
+  parallel: joi.alternatives().try([
+    joi.boolean(),
+    joi.number().integer()
+  ]),
   devServer: joi.object(),
   pages: joi.object().pattern(
     /\w+/,
     joi.alternatives().try([
-      joi.string(),
+      joi.string().required(),
+      joi.array().items(joi.string().required()),
+
       joi.object().keys({
-        entry: joi.string().required()
+        entry: joi.alternatives().try([
+          joi.string().required(),
+          joi.array().items(joi.string().required())
+        ]).required()
       }).unknown(true)
     ])
   ),
@@ -46,7 +54,7 @@ const schema = createSchema(joi => joi.object({
   ),
 
   // known runtime options for built-in plugins
-  lintOnSave: joi.any().valid([true, false, 'error']),
+  lintOnSave: joi.any().valid([true, false, 'error', 'warning', 'default']),
   pwa: joi.object(),
 
   // 3rd party plugin options
@@ -90,7 +98,9 @@ exports.defaults = () => ({
   runtimeCompiler: false,
 
   // deps to transpile
-  transpileDependencies: [/* string or regex */],
+  transpileDependencies: [
+    /* string or regex */
+  ],
 
   // sourceMap for production build?
   productionSourceMap: !process.env.VUE_CLI_TEST,
@@ -118,10 +128,10 @@ exports.defaults = () => ({
   },
 
   // whether to use eslint-loader
-  lintOnSave: true,
+  lintOnSave: 'default',
 
   devServer: {
-  /*
+    /*
     open: process.platform === 'darwin',
     host: '0.0.0.0',
     port: 8080,

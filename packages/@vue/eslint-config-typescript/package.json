@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/eslint-config-typescript#readme",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^1.4.1",
-    "@typescript-eslint/parser": "^1.4.1"
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "@typescript-eslint/parser": "^1.7.0"
   }
 }

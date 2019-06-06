@@ -13,6 +13,8 @@ import SetSize from './util/set-size'
 import Focus from './util/focus'
 import Bus from './util/bus'
 import AnsiColors from './util/ansi-colors'
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 Vue.use(InstantSearch)
 Vue.use(VueMeta)
@@ -48,3 +50,5 @@ Vue.mixin(ClientState)
 
 Vue.directive('set-size', SetSize)
 Vue.directive('focus', Focus)
+
+Vue.use(VueVirtualScroller)

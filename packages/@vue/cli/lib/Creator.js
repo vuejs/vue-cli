@@ -33,6 +33,7 @@ const {
   hasGit,
   hasProjectGit,
   hasYarn,
+  hasPnpm3OrLater,
   logWithSpinner,
   stopSpinner,
   exit,
@@ -90,14 +91,16 @@ module.exports = class Creator extends EventEmitter {
     // inject core service
     preset.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
-    }, preset, {
-      bare: cliOptions.bare
-    })
+    }, preset)
+    if (cliOptions.bare) {
+      preset.plugins['@vue/cli-service'].bare = true
+    }
 
     const packageManager = (
       cliOptions.packageManager ||
       loadOptions().packageManager ||
-      (hasYarn() ? 'yarn' : 'npm')
+      (hasYarn() ? 'yarn' : null) ||
+      (hasPnpm3OrLater() ? 'pnpm' : 'npm')
     )
 
     await clearConsole()
@@ -105,8 +108,13 @@ module.exports = class Creator extends EventEmitter {
     this.emit('creation', { event: 'creating' })
 
     // get latest CLI version
-    const { latest } = await getVersions()
-    const latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+    const { current, latest } = await getVersions()
+    let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+
+    // if using `next` branch of cli
+    if (semver.gt(current, latest) && semver.prerelease(current)) {
+      latestMinor = current
+    }
     // generate package.json with plugin dependencies
     const pkg = {
       name,
@@ -190,6 +198,13 @@ module.exports = class Creator extends EventEmitter {
       'README.md': generateReadme(generator.pkg, packageManager)
     })
 
+    // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
+    if (packageManager === 'pnpm') {
+      await writeFileTree(context, {
+        '.npmrc': 'shamefully-flatten=true\n'
+      })
+    }
+
     // commit initial state
     let gitCommitFailed = false
     if (shouldInitGit) {
@@ -214,7 +229,7 @@ module.exports = class Creator extends EventEmitter {
       log(
         `👉  Get started with the following commands:\n\n` +
         (this.context === process.cwd() ? `` : chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`)) +
-        chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : 'npm run serve'}`)
+        chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : packageManager === 'pnpm' ? 'pnpm run serve' : 'npm run serve'}`)
       )
     }
     log()
@@ -410,23 +425,36 @@ module.exports = class Creator extends EventEmitter {
 
     // ask for packageManager once
     const savedOptions = loadOptions()
-    if (!savedOptions.packageManager && hasYarn()) {
+    if (!savedOptions.packageManager && (hasYarn() || hasPnpm3OrLater())) {
+      const packageManagerChoices = []
+
+      if (hasYarn()) {
+        packageManagerChoices.push({
+          name: 'Use Yarn',
+          value: 'yarn',
+          short: 'Yarn'
+        })
+      }
+
+      if (hasPnpm3OrLater()) {
+        packageManagerChoices.push({
+          name: 'Use PNPM',
+          value: 'pnpm',
+          short: 'PNPM'
+        })
+      }
+
+      packageManagerChoices.push({
+        name: 'Use NPM',
+        value: 'npm',
+        short: 'NPM'
+      })
+
       outroPrompts.push({
         name: 'packageManager',
         type: 'list',
         message: 'Pick the package manager to use when installing dependencies:',
-        choices: [
-          {
-            name: 'Use Yarn',
-            value: 'yarn',
-            short: 'Yarn'
-          },
-          {
-            name: 'Use NPM',
-            value: 'npm',
-            short: 'NPM'
-          }
-        ]
+        choices: packageManagerChoices
       })
     }
 

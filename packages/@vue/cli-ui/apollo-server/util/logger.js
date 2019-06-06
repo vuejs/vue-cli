@@ -1,7 +1,7 @@
 const chalk = require('chalk')
 
 exports.log = (...args) => {
-  if (!process.env.VUE_APP_CLI_UI_DEV) return
+  if (!process.env.VUE_APP_CLI_UI_DEBUG) return
   const date = new Date()
   const timestamp = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}.${date.getSeconds().toString().padStart(2, '0')}`
   const first = args.shift()
@@ -15,7 +15,7 @@ const simpleTypes = [
 ]
 
 exports.dumpObject = (obj) => {
-  if (!process.env.VUE_APP_CLI_UI_DEV) return
+  if (!process.env.VUE_APP_CLI_UI_DEBUG) return
   const result = {}
   Object.keys(obj).forEach(key => {
     const value = obj[key]

@@ -6,9 +6,7 @@ module.exports = (api, options) => {
     // Use loadModule to allow users to customize their ESLint dependency version.
     const { resolveModule, loadModule } = require('@vue/cli-shared-utils')
     const cwd = api.getCwd()
-    const eslintPkg =
-      loadModule('eslint/package.json', cwd, true) ||
-      require('eslint/package.json')
+    const eslintPkg = loadModule('eslint/package.json', cwd, true)
 
     // eslint-loader doesn't bust cache when eslint config changes
     // so we have to manually generate a cache identifier that takes the config
@@ -17,7 +15,7 @@ module.exports = (api, options) => {
       'eslint-loader',
       {
         'eslint-loader': require('eslint-loader/package.json').version,
-        'eslint': eslintPkg.version
+        eslint: eslintPkg.version
       },
       [
         '.eslintrc.js',
@@ -30,14 +28,20 @@ module.exports = (api, options) => {
     )
 
     api.chainWebpack(webpackConfig => {
-      webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
+      webpackConfig.resolveLoader.modules.prepend(
+        path.join(__dirname, 'node_modules')
+      )
+
+      const { lintOnSave } = options
+      const allWarnings = lintOnSave === true || lintOnSave === 'warning'
+      const allErrors = lintOnSave === 'error'
 
       webpackConfig.module
         .rule('eslint')
           .pre()
           .exclude
             .add(/node_modules/)
-            .add(require('path').dirname(require.resolve('@vue/cli-service')))
+            .add(path.dirname(require.resolve('@vue/cli-service')))
             .end()
           .test(/\.(vue|(j|t)sx?)$/)
           .use('eslint-loader')
@@ -46,28 +50,34 @@ module.exports = (api, options) => {
               extensions,
               cache: true,
               cacheIdentifier,
-              emitWarning: options.lintOnSave !== 'error',
-              emitError: options.lintOnSave === 'error',
-              eslintPath: resolveModule('eslint', cwd) || require.resolve('eslint'),
-              formatter:
-                loadModule('eslint/lib/formatters/codeframe', cwd, true) ||
-                require('eslint/lib/formatters/codeframe')
+              emitWarning: allWarnings,
+              // only emit errors in production mode.
+              emitError: allErrors,
+              eslintPath: resolveModule('eslint', cwd),
+              formatter: loadModule('eslint/lib/formatters/codeframe', cwd, true)
             })
     })
   }
 
-  api.registerCommand('lint', {
-    description: 'lint and fix source files',
-    usage: 'vue-cli-service lint [options] [...files]',
-    options: {
-      '--format [formatter]': 'specify formatter (default: codeframe)',
-      '--no-fix': 'do not fix errors or warnings',
-      '--no-fix-warnings': 'fix errors, but do not fix warnings',
-      '--max-errors [limit]': 'specify number of errors to make build failed (default: 0)',
-      '--max-warnings [limit]': 'specify number of warnings to make build failed (default: Infinity)'
+  api.registerCommand(
+    'lint',
+    {
+      description: 'lint and fix source files',
+      usage: 'vue-cli-service lint [options] [...files]',
+      options: {
+        '--format [formatter]': 'specify formatter (default: codeframe)',
+        '--no-fix': 'do not fix errors or warnings',
+        '--no-fix-warnings': 'fix errors, but do not fix warnings',
+        '--max-errors [limit]':
+          'specify number of errors to make build failed (default: 0)',
+        '--max-warnings [limit]':
+          'specify number of warnings to make build failed (default: Infinity)'
+      },
+      details:
+        'For more options, see https://eslint.org/docs/user-guide/command-line-interface#options'
     },
-    details: 'For more options, see https://eslint.org/docs/user-guide/command-line-interface#options'
-  }, args => {
-    require('./lint')(args, api)
-  })
+    args => {
+      require('./lint')(args, api)
+    }
+  )
 }

@@ -28,9 +28,9 @@ module.exports = (api, options) => {
       } else {
         const TerserPlugin = require('terser-webpack-plugin')
         const terserOptions = require('./terserOptions')
-        webpackConfig.optimization.minimizer([
-          new TerserPlugin(terserOptions(options))
-        ])
+        webpackConfig.optimization
+          .minimizer('terser')
+            .use(TerserPlugin, [terserOptions(options)])
       }
     }
   })

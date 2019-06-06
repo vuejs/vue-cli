@@ -16,7 +16,7 @@ function genTranspileDepRegex (transpileDependencies) {
 }
 
 module.exports = (api, options) => {
-  const useThreads = process.env.NODE_ENV === 'production' && options.parallel
+  const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
   const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
@@ -59,9 +59,13 @@ module.exports = (api, options) => {
           .end()
 
     if (useThreads) {
-      jsRule
+      const threadLoaderConfig = jsRule
         .use('thread-loader')
           .loader('thread-loader')
+
+      if (typeof options.parallel === 'number') {
+        threadLoaderConfig.options({ workers: options.parallel })
+      }
     }
 
     jsRule

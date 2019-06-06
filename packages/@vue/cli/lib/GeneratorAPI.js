@@ -3,7 +3,7 @@ const ejs = require('ejs')
 const path = require('path')
 const merge = require('deepmerge')
 const resolve = require('resolve')
-const isBinary = require('isbinaryfile')
+const { isBinaryFileSync } = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
@@ -241,6 +241,16 @@ class GeneratorAPI {
   }
 
   /**
+   * Turns a string expression into executable JS for JS configs.
+   * @param {*} str JS expression as a string
+   */
+  makeJSOnlyValue (str) {
+    const fn = () => {}
+    fn.__expression = str
+    return fn
+  }
+
+  /**
    * Add import statements to a file.
    */
   injectImports (file, imports) {
@@ -298,7 +308,7 @@ function extractCallDir () {
 const replaceBlockRE = /<%# REPLACE %>([^]*?)<%# END_REPLACE %>/g
 
 function renderFile (name, data, ejsOptions) {
-  if (isBinary.sync(name)) {
+  if (isBinaryFileSync(name)) {
     return fs.readFileSync(name) // return buffer
   }
   const template = fs.readFileSync(name, 'utf-8')

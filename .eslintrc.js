@@ -8,12 +8,16 @@ module.exports = {
   env: {
     "jest": true
   },
+  globals: {
+    name: 'off'
+  },
   rules: {
     "indent": ["error", 2, {
       "MemberExpression": "off"
     }],
     "node/no-extraneous-require": ["error", {
       "allowModules": [
+        "@vue/cli-service",
         "@vue/cli-test-utils"
       ]
     }]

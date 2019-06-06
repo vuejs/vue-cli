@@ -22,6 +22,7 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 `.trim())
+fs.writeFileSync(path.resolve(templateDir, 'empty-entry.js'), `;`)
 
 // replace stubs
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
@@ -465,8 +466,26 @@ test('api: addEntryImport & addEntryInjection', async () => {
   ] })
 
   await generator.generate()
-  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\s+import bar from 'bar'/)
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\r?\nimport bar from 'bar'/)
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+p: p\(\),\s+baz,\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
+})
+
+test('api: injectImports to empty file', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.js', `import foo from 'foo'`)
+        api.injectImports('main.js', `import bar from 'bar'`)
+        api.render({
+          'main.js': path.join(templateDir, 'empty-entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\r?\nimport bar from 'bar'/)
 })
 
 test('api: addEntryDuplicateImport', async () => {
@@ -584,7 +603,7 @@ test('api: addConfigTransform (multiple)', async () => {
 test('api: addConfigTransform transform vue warn', async () => {
   const configs = {
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   }
 
@@ -606,7 +625,7 @@ test('api: addConfigTransform transform vue warn', async () => {
     extractConfigFiles: true
   })
 
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(`module.exports = {\n  lintOnSave: 'default'\n}`)
   expect(logs.warn.some(([msg]) => {
     return msg.match(/Reserved config transform 'vue'/)
   })).toBe(true)
@@ -655,4 +674,24 @@ test('extract config files', async () => {
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
   expect(fs.readFileSync('/.browserslistrc', 'utf-8')).toMatch('> 1%\nnot <= IE8')
+})
+
+test('generate a JS-Only value from a string', async () => {
+  const jsAsString = 'true ? "alice" : "bob"'
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.extendPackage({
+          testScript: api.makeJSOnlyValue(jsAsString)
+        })
+      }
+    }
+  ] })
+
+  await generator.generate({})
+
+  expect(generator.pkg).toHaveProperty('testScript')
+  expect(typeof generator.pkg.testScript).toBe('function')
 })

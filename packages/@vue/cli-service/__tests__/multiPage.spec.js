@@ -2,7 +2,7 @@ jest.setTimeout(80000)
 
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
@@ -15,7 +15,7 @@ async function makeProjectMultiPage (project) {
         index: { entry: 'src/main.js' },
         foo: { entry: 'src/foo.js' },
         bar: { entry: 'src/bar.js' },
-        foobar: { entry: 'src/foobar.js' }
+        foobar: { entry: ['src/foobar.js'] }
       },
       chainWebpack: config => {
         const splitOptions = config.optimization.get('splitChunks')

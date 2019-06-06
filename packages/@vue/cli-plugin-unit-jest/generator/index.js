@@ -11,32 +11,35 @@ module.exports = (api, _, __, invoking) => {
       '@vue/test-utils': '1.0.0-beta.29'
     },
     jest: {
-      'moduleFileExtensions': [
+      moduleFileExtensions: [
         'js',
         'jsx',
         'json',
         // tell Jest to handle *.vue files
         'vue'
       ],
-      'transform': {
+      transform: {
         // process *.vue files with vue-jest
         '^.+\\.vue$': 'vue-jest',
-        '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
+        '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$':
+          'jest-transform-stub'
       },
       'transformIgnorePatterns': ['/node_modules/'],
       // support the same @ -> src alias mapping in source code
-      'moduleNameMapper': {
+      moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1'
       },
       // serializer for snapshots
-      'snapshotSerializers': [
-        'jest-serializer-vue'
-      ],
-      'testMatch': [
+      snapshotSerializers: ['jest-serializer-vue'],
+      testMatch: [
         '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
       ],
       // https://github.com/facebook/jest/issues/6766
-      'testURL': 'http://localhost/'
+      testURL: 'http://localhost/',
+      watchPlugins: [
+        'jest-watch-typeahead/filename',
+        'jest-watch-typeahead/testname'
+      ]
     }
   })
 
@@ -51,18 +54,21 @@ module.exports = (api, _, __, invoking) => {
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
-          'babel-jest': '^23.6.0',
-          // this is for now necessary to force babel-jest and vue-jest to use babel 7
-          'babel-core': '7.0.0-bridge.0'
+          'babel-jest': '^24.8.0',
+          '@babel/core': '^7.4.5'
         }
       })
     } else {
-      // Jest's shipped babel-jest still uses babel 6,
-      // so we cannot use extendPackage which renders babel.config.js.
+      // ts-jest still does not support babel.config.js
+      // https://github.com/kulshekhar/ts-jest/issues/933
       api.render(files => {
-        files['.babelrc'] = JSON.stringify({
-          plugins: ['transform-es2015-modules-commonjs']
-        }, null, 2)
+        files['.babelrc'] = JSON.stringify(
+          {
+            plugins: ['@babel/plugin-transform-modules-commonjs']
+          },
+          null,
+          2
+        )
       })
     }
   } else {
@@ -74,7 +80,7 @@ module.exports = (api, _, __, invoking) => {
   }
 }
 
-const applyTS = module.exports.applyTS = (api, invoking) => {
+const applyTS = (module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     jest: {
       moduleFileExtensions: ['ts', 'tsx'],
@@ -83,8 +89,8 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
       }
     },
     devDependencies: {
-      '@types/jest': '^23.1.4',
-      'ts-jest': '^23.0.0'
+      '@types/jest': '^24.0.11',
+      'ts-jest': '^24.0.2'
     }
   })
   if (api.hasPlugin('babel')) {
@@ -99,6 +105,7 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
       },
       devDependencies: {
         // this is for now necessary to force ts-jest and vue-jest to use babel 7
+        '@babel/core': '^7.4.5',
         'babel-core': '7.0.0-bridge.0'
       }
     })
@@ -119,12 +126,12 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
       }
     })
   }
-}
+})
 
-const applyESLint = module.exports.applyESLint = api => {
+const applyESLint = (module.exports.applyESLint = api => {
   api.render(files => {
     files['tests/unit/.eslintrc.js'] = api.genJSConfig({
       env: { jest: true }
     })
   })
-}
+})

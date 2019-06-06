@@ -18,7 +18,7 @@ A CLI plugin is an npm package that can add additional features to the project u
 Don't overuse vue-cli plugins! If you want just to include a certain dependency, e.g. [Lodash](https://lodash.com/) - it's easier to do it manually with npm than create a specific plugin only to do so.
 :::
 
-CLI Plugin should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a [Generator](#generator), a [Prompt File](#prompts) and a [Vue UI integration](#ui-integrtion).
+CLI Plugin should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a [Generator](#generator), a [Prompt File](#prompts) and a [Vue UI integration](#ui-integration).
 
 As an npm package, CLI plugin must have a `package.json` file. It's also recommended to have a plugin description in `README.md` to help others find your plugin on npm.
 
@@ -33,6 +33,44 @@ So, typical CLI plugin folder structure looks like the following:
 ├── prompts.js    # prompts file (optional)
 └── ui.js         # Vue UI integration (optional)
 ```
+
+## Naming and discoverability
+
+For a CLI plugin to be usable in a Vue CLI project, it must follow the name convention `vue-cli-plugin-<name>` or `@scope/vue-cli-plugin-<name>`. It allows your plugin to be:
+
+- Discoverable by `@vue/cli-service`;
+- Discoverable by other developers via searching;
+- Installable via `vue add <name>` or `vue invoke <name>`.
+
+:::warning Warning
+Make sure to name the plugin correctly, otherwise it will be impossible to install it via `vue add` command or find it with Vue UI plugins search!
+:::
+
+For better discoverability when a user searches for your plugin, put keywords describing your plugin in the `description` field of the plugin `package.json` file.
+
+Example:
+
+```json
+{
+  "name": "vue-cli-plugin-apollo",
+  "version": "0.7.7",
+  "description": "vue-cli plugin to add Apollo and GraphQL"
+}
+```
+
+You should add the url to the plugin website or repository in the `homepage` or `repository` field so that a 'More info' button will be displayed in your plugin description:
+
+```json
+{
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akryum/vue-cli-plugin-apollo.git"
+  },
+  "homepage": "https://github.com/Akryum/vue-cli-plugin-apollo#readme"
+}
+```
+
+![Plugin search item](/plugin-search-item.png)
 
 ## Generator
 
@@ -64,7 +102,7 @@ A generator should export a function which receives three arguments:
 
 And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
 
-For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd party plugins](#prompts-for-3rd-party-plugins)).
+For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts](#prompts)).
 
 3. The entire preset (`presets.foo`) will be passed as the third argument.
 
@@ -234,18 +272,19 @@ api.onCreateComplete(() => {
 
 Finally, you need to write the content back to the main file:
 
-```js{11}
+```js{2,11}
 // generator/index.js
 
 api.onCreateComplete(() => {
+  const { EOL } = require('os')
   const fs = require('fs')
   const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
   const lines = contentMain.split(/\r?\n/g)
 
   const renderIndex = lines.findIndex(line => line.match(/render/))
-  lines[renderIndex] += `\n  router,`
+   lines[renderIndex] += `${EOL}  router,`
 
-  fs.writeFileSync(api.entryFile, contentMain, { encoding: 'utf-8' })
+  fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
 })
 ```
 
@@ -391,7 +430,56 @@ This is because the command's expected mode needs to be known before loading env
 
 Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
 
-When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. The resolved answers object will be passed to the plugin's generator as options.
+When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. 
+
+You should export directly array of questions, or export function that return those.
+
+e.g. directly array of questions:
+```js
+// prompts.js
+
+module.exports = [
+  {
+    type: 'input',
+    name: 'locale',
+    message: 'The locale of project localization.',
+    validate: input => !!input,
+    default: 'en'
+  }, 
+  // ...
+]
+```
+
+e.g. function that return array of questions:
+```js
+// prompts.js
+
+// pass `package.json` of project to function argument
+module.exports = pkg => {
+  const prompts = [
+    {
+      type: 'input',
+      name: 'locale',
+      message: 'The locale of project localization.',
+      validate: input => !!input,
+      default: 'en'
+    }
+  ]
+
+  // add dynamically propmpt
+  if ('@vue/cli-plugin-eslint' in (pkg.devDependencies || {})) {
+    prompts.push({
+      type: 'confirm',
+      name: 'useESLintPluginVueI18n',
+      message: 'Use ESLint plugin for Vue I18n ?'
+    })
+  }
+
+  return prompts
+}
+```
+
+The resolved answers object will be passed to the plugin's generator as options.
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 
@@ -764,41 +852,6 @@ You can put a `logo.png` file in the root directory of the folder that will be p
 ![Plugins](/plugins.png)
 
 The logo should be a square non-transparent image (ideally 84x84).
-
-### Discoverability
-
-For a CLI plugin to be usable by other developers, it must be published on npm following the name convention `vue-cli-plugin-<name>` or `@scope/vue-cli-plugin-<name>`. Following the name convention allows your plugin to be:
-
-- Discoverable by `@vue/cli-service`;
-- Discoverable by other developers via searching;
-- Installable via `vue add <name>` or `vue invoke <name>`.
-
-For better discoverability when a user searches for your plugin, put keywords describing your plugin in the `description` field of the plugin `package.json` file.
-
-Example:
-
-```json
-{
-  "name": "vue-cli-plugin-apollo",
-  "version": "0.7.7",
-  "description": "vue-cli plugin to add Apollo and GraphQL"
-}
-```
-
-You should add the url to the plugin website or repository in the `homepage` or `repository` field so that a 'More info' button will be displayed in your plugin description:
-
-```json
-{
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Akryum/vue-cli-plugin-apollo.git"
-  },
-  "homepage": "https://github.com/Akryum/vue-cli-plugin-apollo#readme"
-}
-```
-
-![Plugin search item](/plugin-search-item.png)
-
 
 ## Publish Plugin to npm
 

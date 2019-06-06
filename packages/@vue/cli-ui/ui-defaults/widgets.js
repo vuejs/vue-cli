@@ -96,51 +96,16 @@ module.exports = api => {
 
   // Vulnerability check
 
+  let lastAudit = null
   setSharedData('vulnerability.status', {
-    status: 'attention',
-    lastUpdate: Date.now(),
-    count: 3
+    status: 'loading',
+    lastUpdate: lastAudit,
+    count: 0,
+    message: null
   })
   setSharedData('vulnerability.details', {
-    vulnerabilities: [
-      {
-        name: 'bquery',
-        version: '0.1.2',
-        parents: [
-          {
-            name: 'draphql',
-            version: '1.8.7'
-          }
-        ],
-        moreInfo: 'https://vuejs.org/',
-        severity: 'high',
-        message: 'Regular Expression Denial of Service'
-      },
-      {
-        name: 'leff-pad',
-        version: '5.3.9-alpha.1',
-        parents: [
-          {
-            name: 'view-ssr',
-            version: '3.0.0-alpha.12'
-          },
-          {
-            name: 'elpress',
-            version: '1.17.3'
-          }
-        ],
-        moreInfo: 'https://vuejs.org/',
-        severity: 'medium',
-        message: 'Prototype Pollution'
-      },
-      {
-        name: 'yterm',
-        version: '4.6.2',
-        moreInfo: 'https://vuejs.org/',
-        severity: 'low',
-        message: 'Regular Expression Denial of Service'
-      }
-    ]
+    vulnerabilities: [],
+    summary: {}
   })
   registerWidget({
     id: 'vulnerability',
@@ -155,6 +120,24 @@ module.exports = api => {
     maxHeight: 1,
     maxCount: 1
   })
+  async function checkVulnerability (params) {
+    setSharedData('vulnerability.status', {
+      status: 'loading',
+      lastUpdate: lastAudit,
+      count: 0,
+      message: null
+    })
+
+    const { auditProject } = require('./utils/audit')
+    const { status, details } = await auditProject(api.getCwd())
+
+    status.lastUpdate = lastAudit = Date.now()
+
+    setSharedData('vulnerability.status', status)
+    setSharedData('vulnerability.details', details)
+  }
+  onAction('actions.check-vunerability', checkVulnerability)
+  checkVulnerability()
 
   // Run task
 

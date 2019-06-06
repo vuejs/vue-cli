@@ -49,6 +49,27 @@
         </span>
       </template>
     </ListItemInfo>
+
+    <div
+      v-if="hasGenerator"
+      class="feature"
+      v-tooltip="$t('org.vue.components.project-plugin-item.features.generator')"
+    >
+      <VueIcon
+        icon="note_add"
+        class="big"
+      />
+    </div>
+    <div
+      v-if="hasUiIntegration"
+      class="feature"
+      v-tooltip="$t('org.vue.components.project-plugin-item.features.ui-integration')"
+    >
+      <VueIcon
+        icon="brush"
+        class="big"
+      />
+    </div>
   </div>
 </template>
 
@@ -65,7 +86,7 @@ export default {
       default: false
     },
 
-    tryLogo: {
+    loadMetadata: {
       type: Boolean,
       default: false
     }
@@ -73,7 +94,9 @@ export default {
 
   data () {
     return {
-      logoUrl: null
+      logoUrl: null,
+      hasGenerator: false,
+      hasUiIntegration: false
     }
   },
 
@@ -85,25 +108,38 @@ export default {
 
   watch: {
     'pkg.name': {
-      handler: 'updateLogo',
+      handler: 'updateMetadata',
       immediate: true
     }
   },
 
   methods: {
-    updateLogo () {
+    updateMetadata () {
+      const name = this.pkg.name
+
+      this.hasUiIntegration = false
+      this.hasGenerator = false
       // By default, show the npm user avatar
       this.logoUrl = this.pkg.owner.avatar
 
       // Try to load the logo.png file inside the package
-      if (this.tryLogo) {
-        const name = this.pkg.name
+      if (this.loadMetadata) {
         const img = new Image()
         img.onload = () => {
           if (name !== this.pkg.name) return
           this.logoUrl = img.src
         }
         img.src = `https://unpkg.com/${name}/logo.png`
+
+        fetch(`https://unpkg.com/${name}/ui`).then(response => {
+          if (name !== this.pkg.name) return
+          this.hasUiIntegration = response.ok
+        })
+
+        fetch(`https://unpkg.com/${name}/generator`).then(response => {
+          if (name !== this.pkg.name) return
+          this.hasGenerator = response.ok
+        })
       }
     }
   }
@@ -147,4 +183,10 @@ export default {
     &.owner
       .vue-ui-icon
         margin-right 2px
+
+  .feature
+    margin-right 12px
+    opacity .3
+    &:hover
+      opacity 1
 </style>

@@ -100,6 +100,7 @@ module.exports = (api, options) => {
             .use('extract-css-loader')
             .loader(require('mini-css-extract-plugin').loader)
             .options({
+              hmr: !isProd,
               publicPath: cssPublicPath
             })
         } else {

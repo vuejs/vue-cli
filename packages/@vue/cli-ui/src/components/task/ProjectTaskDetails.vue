@@ -77,7 +77,11 @@
         </VueGroup>
       </div>
 
-      <div v-if="displayPriority >= 2" class="content">
+      <div v-if="!defer(3)" class="content placeholder-content">
+        <div class="view card"/>
+      </div>
+
+      <div v-else class="content">
         <TerminalView
           ref="terminal"
           :class="{
@@ -133,7 +137,7 @@
 
 <script>
 import Prompts from '@/mixins/Prompts'
-import DisplayPriority from '@/mixins/DisplayPriority'
+import Defer from '@/mixins/Defer'
 
 import TASK from '@/graphql/task/task.gql'
 import TASK_LOGS from '@/graphql/task/taskLogs.gql'
@@ -159,7 +163,7 @@ export default {
       field: 'task',
       query: TASK
     }),
-    DisplayPriority(2)
+    Defer()
   ],
 
   metaInfo () {
@@ -199,7 +203,7 @@ export default {
         }
       },
       skip () {
-        return this.displayPriority < 1
+        return !this.defer(2)
       }
     },
 
@@ -222,7 +226,7 @@ export default {
         }
       },
       skip () {
-        return this.displayPriority < 2
+        return !this.defer(3)
       }
     },
 
@@ -242,7 +246,7 @@ export default {
           }
         },
         skip () {
-          return this.displayPriority < 2
+          return !this.defer(3)
         }
       }
     }
@@ -259,6 +263,7 @@ export default {
           return id
         }
       }
+      return null
     }
   },
 
@@ -370,6 +375,7 @@ export default {
   margin 0 $padding-item $padding-item
   position relative
 
+.placeholder-content .view,
 .terminal-view
   position absolute
   top 0

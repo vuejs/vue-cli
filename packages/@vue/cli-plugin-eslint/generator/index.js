@@ -13,15 +13,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       lint: 'vue-cli-service lint'
     },
     eslintConfig,
-    // TODO:
-    // Move these dependencies to package.json in v4.
-    // Now in v3 we have to add redundant eslint related dependencies
-    // in order to keep compatibility with v3.0.x users who defaults to ESlint v4.
     devDependencies: {
-      'babel-eslint': '^10.0.1',
-      'eslint': '^5.8.0',
+      'eslint': '^5.16.0',
       'eslint-plugin-vue': '^5.0.0'
     }
+  }
+
+  if (!api.hasPlugin('typescript')) {
+    pkg.devDependencies['babel-eslint'] = '^10.0.1'
   }
 
   const injectEditorConfig = (config) => {
@@ -71,7 +70,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^8.1.4'
+      'lint-staged': '^8.1.5'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'

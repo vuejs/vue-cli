@@ -1,6 +1,7 @@
 const {
   info,
   hasProjectYarn,
+  hasProjectPnpm,
   openBrowser,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
@@ -135,7 +136,7 @@ module.exports = (api, options) => {
 
     // create server
     const server = new WebpackDevServer(compiler, Object.assign({
-      clientLogLevel: 'none',
+      clientLogLevel: 'silent',
       historyApiFallback: {
         disableDotRule: true,
         rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
@@ -163,7 +164,9 @@ module.exports = (api, options) => {
         api.service.devServerConfigFns.forEach(fn => fn(app, server))
         // apply in project middlewares
         projectDevServerOptions.before && projectDevServerOptions.before(app, server)
-      }
+      },
+      // avoid opening browser
+      open: false
     }))
 
     ;['SIGINT', 'SIGTERM'].forEach(signal => {
@@ -234,7 +237,7 @@ module.exports = (api, options) => {
           isFirstCompile = false
 
           if (!isProduction) {
-            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : `npm run build`
+            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
           } else {

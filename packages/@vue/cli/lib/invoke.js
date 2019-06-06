@@ -4,7 +4,7 @@ const execa = require('execa')
 const chalk = require('chalk')
 const globby = require('globby')
 const inquirer = require('inquirer')
-const isBinary = require('isbinaryfile')
+const { isBinaryFileSync } = require('isbinaryfile')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
 const { installDeps } = require('./util/installDeps')
@@ -14,6 +14,7 @@ const {
   error,
   hasProjectYarn,
   hasProjectGit,
+  hasProjectPnpm,
   logWithSpinner,
   stopSpinner,
   resolvePluginId,
@@ -31,7 +32,7 @@ async function readFiles (context) {
   const res = {}
   for (const file of files) {
     const name = path.resolve(context, file)
-    res[file] = isBinary.sync(name)
+    res[file] = isBinaryFileSync(name)
       ? fs.readFileSync(name)
       : fs.readFileSync(name, 'utf-8')
   }
@@ -84,8 +85,14 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   // resolve options if no command line options (other than --registry) are passed,
   // and the plugin contains a prompt module.
   // eslint-disable-next-line prefer-const
-  let { registry, ...pluginOptions } = options
-  if (!Object.keys(pluginOptions).length) {
+  let { registry, $inlineOptions, ...pluginOptions } = options
+  if ($inlineOptions) {
+    try {
+      pluginOptions = JSON.parse($inlineOptions)
+    } catch (e) {
+      throw new Error(`Couldn't parse inline options JSON: ${e.message}`)
+    }
+  } else if (!Object.keys(pluginOptions).length) {
     let pluginPrompts = loadModule(`${id}/prompts`, context)
     if (pluginPrompts) {
       if (typeof pluginPrompts === 'function') {
@@ -138,7 +145,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     log(`📦  Installing additional dependencies...`)
     log()
     const packageManager =
-      loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
+      loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm')
     await installDeps(context, packageManager, plugin.options && plugin.options.registry)
   }
 
