@@ -5,10 +5,10 @@ Vue CLI uses a plugin-based architecture. If you inspect a newly created project
 This section contains documentation for core Vue CLI plugins:
 
 - [Babel](babel.md)
-- TypeScript
-- ESLint
+- [TypeScript](typescript.md)
+- [ESLint](eslint.md)
 - [PWA](pwa.md)
-- Jest
-- Mocha
-- Cypress
-- Nightwatch
+- [Jest](jest.md)
+- [Mocha](mocha.md)
+- [Cypress](cypress.md)
+- [Nightwatch](nightwatch.md)

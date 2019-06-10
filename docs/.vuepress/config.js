@@ -139,10 +139,21 @@ module.exports = {
               ]
             }
           ],
-          '/core-plugins/': [
-            '/core-plugins/pwa.md',
-            '/core-plugins/babel.md'
-          ]
+          '/core-plugins/': [{
+            title: 'Core Vue CLI Plugins',
+            collapsable: false,
+            children: [
+              '/core-plugins/babel.md',
+              '/core-plugins/typescript.md',
+              '/core-plugins/eslint.md',
+              '/core-plugins/pwa.md',
+              '/core-plugins/jest.md',
+              '/core-plugins/mocha.md',
+              '/core-plugins/cypress.md',
+              '/core-plugins/nightwatch.md'
+            ]
+          }],
+
         }
       },
       '/zh/': {
