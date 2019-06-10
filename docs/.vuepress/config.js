@@ -140,7 +140,8 @@ module.exports = {
             }
           ],
           '/core-plugins/': [
-            '/core-plugins/pwa.md'
+            '/core-plugins/pwa.md',
+            '/core-plugins/babel.md'
           ]
         }
       },

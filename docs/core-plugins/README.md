@@ -4,7 +4,7 @@ Vue CLI uses a plugin-based architecture. If you inspect a newly created project
 
 This section contains documentation for core Vue CLI plugins:
 
-- Babel
+- [Babel](babel.md)
 - TypeScript
 - ESLint
 - [PWA](pwa.md)
