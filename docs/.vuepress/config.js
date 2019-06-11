@@ -147,10 +147,10 @@ module.exports = {
               '/core-plugins/typescript.md',
               '/core-plugins/eslint.md',
               '/core-plugins/pwa.md',
-              '/core-plugins/jest.md',
-              '/core-plugins/mocha.md',
-              '/core-plugins/cypress.md',
-              '/core-plugins/nightwatch.md'
+              '/core-plugins/unit-jest.md',
+              '/core-plugins/unit-mocha.md',
+              '/core-plugins/e2e-cypress.md',
+              '/core-plugins/e2e-nightwatch.md'
             ]
           }],
 

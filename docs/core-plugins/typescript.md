@@ -1,6 +1,6 @@
 # @vue/cli-plugin-typescript
 
-> TypeScript plugin for Vue CLI
+> typescript plugin for vue-cli
 
 Uses TypeScript + `ts-loader` + [fork-ts-checker-webpack-plugin](https://github.com/Realytics/fork-ts-checker-webpack-plugin) for faster off-thread type checking.
 

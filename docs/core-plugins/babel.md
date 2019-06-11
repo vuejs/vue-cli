@@ -1,6 +1,6 @@
 # @vue/cli-plugin-babel
 
-> Babel plugin for Vue CLI
+> babel plugin for vue-cli
 
 ## Configuration
 

@@ -1,6 +1,6 @@
 # @vue/cli-plugin-pwa
 
-> Progressive Web Application plugin for Vue CLI
+> pwa plugin for vue-cli
 
 The service worker added with this plugin is only enabled in the production environment (e.g. only if you run `npm run build` or `yarn build`). Enabling service worker in a development mode is not a recommended practice, because it can lead to the situation when previously cached assets are used and the latest local changes are not included.
 
@@ -10,7 +10,8 @@ If you need to test a service worker locally, build the application and run a si
 
 ## Configuration
 
-Configuration is handled via the `pwa` property of either the `vue.config.js` file, or the `"vue"` field in `package.json`.
+Configuration is handled via the `pwa` property of either the `vue.config.js`
+file, or the `"vue"` field in `package.json`.
 
 - **pwa.workboxPluginMode**
 
@@ -69,6 +70,19 @@ Configuration is handled via the `pwa` property of either the `vue.config.js` fi
   - Default: `'manifest.json'`
 
     The path of app’s manifest.
+
+- **pwa.manifestOptions**
+
+  - Default: `{}`
+
+    The object will be used to generate the `manifest.json`
+
+    If the following attributes are not defined in the object, the options of `pwa` or default options will be used instead.
+      - name: `pwa.name`
+      - short_name: `pwa.name`
+      - start_url: `'.'`
+      - display: `'standalone'`
+      - theme_color: `pwa.themeColor`
 
 - **pwa.iconPaths**
 

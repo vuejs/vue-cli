@@ -1,6 +1,6 @@
 # @vue/cli-plugin-unit-jest
 
-> unit-jest plugin for Vue CLI
+> unit-jest plugin for vue-cli
 
 ## Injected Commands
 

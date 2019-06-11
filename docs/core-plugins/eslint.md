@@ -1,6 +1,6 @@
 # @vue/cli-plugin-eslint
 
-> ESLint plugin for Vue CLI
+> eslint plugin for vue-cli
 
 ## Injected Commands
 

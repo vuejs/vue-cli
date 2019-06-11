@@ -1,6 +1,6 @@
 # @vue/cli-plugin-unit-mocha
 
-> unit-mocha plugin for Vue CLI
+> unit-mocha plugin for vue-cli
 
 ## Injected Commands
 
