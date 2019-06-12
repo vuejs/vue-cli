@@ -86,6 +86,10 @@ module.exports = (api, options) => {
         : `${protocol}://${rawPublicUrl}`
       : null
 
+    const openOption = projectDevServerOptions.open
+    // always disable dev-server open option and handle it ourself
+    projectDevServerOptions.open = false
+
     const urls = prepareURLs(
       protocol,
       host,
@@ -246,7 +250,7 @@ module.exports = (api, options) => {
           }
           console.log()
 
-          if (args.open || projectDevServerOptions.open) {
+          if (args.open || openOption) {
             const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
               ? projectDevServerOptions.openPage
               : ''
