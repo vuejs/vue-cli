@@ -14,11 +14,10 @@
     "sync": "node scripts/syncDeps.js",
     "boot": "node scripts/bootstrap.js",
     "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
-    "version": "node scripts/genChangelog.js && git add CHANGELOG.md",
+    "version": "node scripts/genChangelog.js && node scripts/genDocs.js && git add CHANGELOG.md && git add docs",
     "docs": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "patch-chromedriver": "node scripts/patchChromedriver.js",
-    "gen-docs": "node scripts/genDocs.js"
+    "patch-chromedriver": "node scripts/patchChromedriver.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
