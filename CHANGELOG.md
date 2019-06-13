@@ -1,3 +1,19 @@
+
+## 3.8.3 (2019-06-13)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4083](https://github.com/vuejs/vue-cli/pull/4083) fix: display correct address when multiple network adapters present ([@sodatea](https://github.com/sodatea))
+  * [#4095](https://github.com/vuejs/vue-cli/pull/4095) fix: fix resolve project local plugin's file path ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#3924](https://github.com/vuejs/vue-cli/pull/3924) docs: add more explanation at prompts ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+
+
 ## 3.8.2 (2019-05-26)
 
 #### :bug: Bug Fix
