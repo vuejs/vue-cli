@@ -261,8 +261,9 @@ npm install -g now
 
 ### Heroku
 
-Create a `static.json` file:
+1. [install HerokU CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
+2. Create a `static.json` file:
 ```json
 {
   "root": "dist",
@@ -273,10 +274,14 @@ Create a `static.json` file:
 }
 ```
 
+3. Add `static.json` file to git
 ```bash
 git add static.json
 git commit -m "add static configuration"
+```
 
+4. Deploy to Heroku
+```bash
 heroku login
 heroku create
 heroku buildpacks:add heroku/nodejs
