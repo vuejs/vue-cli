@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service-global",
-  "version": "3.8.0",
+  "version": "3.8.3",
   "description": "vue-cli-service global addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -25,7 +25,7 @@
     "@vue/babel-preset-app": "^3.8.0",
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
-    "@vue/cli-service": "^3.8.0",
+    "@vue/cli-service": "^3.8.3",
     "babel-eslint": "^10.0.1",
     "chalk": "^2.4.2",
     "eslint": "^4.19.1",

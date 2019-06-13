@@ -189,7 +189,7 @@ module.exports = class Service {
       }
       plugins = plugins.concat(files.map(file => ({
         id: `local:${file}`,
-        apply: loadModule(file, this.pkgContext)
+        apply: loadModule(`./${file}`, this.pkgContext)
       })))
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.8.0",
+  "version": "3.8.3",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
@@ -46,6 +46,7 @@
     "cssnano": "^4.1.10",
     "current-script-polyfill": "^1.0.0",
     "debug": "^4.1.1",
+    "default-gateway": "^4.2.0",
     "dotenv": "^7.0.0",
     "dotenv-expand": "^5.1.0",
     "escape-string-regexp": "^1.0.5",
