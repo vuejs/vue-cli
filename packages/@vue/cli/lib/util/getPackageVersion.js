@@ -1,10 +1,9 @@
 const { request } = require('@vue/cli-shared-utils')
+const { getRegistry } = require('./packageManager')
 
 module.exports = async function getPackageVersion (id, range = '', registry) {
   if (!registry) {
-    registry = (await require('./shouldUseTaobao')())
-      ? `https://registry.npm.taobao.org`
-      : `https://registry.npmjs.org`
+    registry = await getRegistry()
   }
 
   let result

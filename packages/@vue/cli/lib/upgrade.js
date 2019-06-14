@@ -49,13 +49,9 @@ async function runMigrator (packageName, options, context) {
   const pluginMigrator = loadModule(`${packageName}/migrator`, context)
   if (!pluginMigrator) { return }
 
-  const { registry } = options
   const plugin = {
     packageName,
-    apply: migrator,
-    options: {
-      registry
-    }
+    apply: migrator
   }
 
   const pkg = getPackageJson(context)
@@ -86,7 +82,7 @@ async function runMigrator (packageName, options, context) {
     log(`📦  Installing additional dependencies...`)
     log()
     const packageManager = getCommand(context)
-    await installDeps(context, packageManager, plugin.options && plugin.options.registry)
+    await installDeps(context, packageManager)
   }
 
   if (createCompleteCbs.length) {
@@ -146,7 +142,7 @@ async function upgradeSinglePackage (packageName, options, context) {
       logWithSpinner(`Getting max satisfying version of ${packageName}@${options.to}`)
     }
 
-    targetVersion = await getVersion(packageName, targetVersion, options.registry, context)
+    targetVersion = await getVersion(packageName, targetVersion, context)
     stopSpinner()
   }
 
@@ -166,7 +162,7 @@ async function upgradeSinglePackage (packageName, options, context) {
 
   // TODO: integrate getCommand into installPackage
   const command = getCommand(context)
-  await installPackage(context, command, options.registry, packageName)
+  await installPackage(context, command, packageName)
   await runMigrator(packageName, { installed }, context)
 }
 

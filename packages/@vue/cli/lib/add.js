@@ -28,7 +28,7 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log()
 
   const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm')
-  await installPackage(context, packageManager, options.registry, packageName)
+  await installPackage(context, packageManager, packageName)
 
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()

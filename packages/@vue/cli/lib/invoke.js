@@ -127,7 +127,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     log()
     const packageManager =
       loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm')
-    await installDeps(context, packageManager, plugin.options && plugin.options.registry)
+    await installDeps(context, packageManager)
   }
 
   if (createCompleteCbs.length) {

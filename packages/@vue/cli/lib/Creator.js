@@ -159,7 +159,7 @@ module.exports = class Creator extends EventEmitter {
       // in development, avoid installation process
       await require('./util/setupDevProject')(context)
     } else {
-      await installDeps(context, packageManager, cliOptions.registry)
+      await installDeps(context, packageManager)
     }
 
     // run generator
@@ -180,7 +180,7 @@ module.exports = class Creator extends EventEmitter {
     this.emit('creation', { event: 'deps-install' })
     log()
     if (!isTestOrDebug) {
-      await installDeps(context, packageManager, cliOptions.registry)
+      await installDeps(context, packageManager)
     }
 
     // run complete cbs if any (injected by generators)

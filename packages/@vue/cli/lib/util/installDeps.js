@@ -3,7 +3,7 @@ const chalk = require('chalk')
 const execa = require('execa')
 const readline = require('readline')
 const registries = require('./registries')
-const shouldUseTaobao = require('./shouldUseTaobao')
+const { getRegistry } = require('./packageManager')
 
 const debug = require('debug')('vue-cli:install')
 
@@ -68,14 +68,8 @@ function renderProgressBar (curr, total) {
   process.stderr.write(`[${complete}${incomplete}]${bar}`)
 }
 
-async function addRegistryToArgs (command, args, cliRegistry) {
-  const altRegistry = (
-    cliRegistry || (
-      (await shouldUseTaobao(command))
-        ? registries.taobao
-        : null
-    )
-  )
+async function addRegistryToArgs (command, args) {
+  const altRegistry = await getRegistry({ packageManager: command })
 
   if (altRegistry) {
     args.push(`--registry=${altRegistry}`)
@@ -171,7 +165,7 @@ function executeCommand (command, args, targetDir) {
   })
 }
 
-exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
+exports.installDeps = async function installDeps (targetDir, command) {
   checkPackageManagerIsSupported(command)
 
   const args = []
@@ -186,7 +180,7 @@ exports.installDeps = async function installDeps (targetDir, command, cliRegistr
     args.push('--shamefully-flatten')
   }
 
-  await addRegistryToArgs(command, args, cliRegistry)
+  await addRegistryToArgs(command, args)
 
   debug(`command: `, command)
   debug(`args: `, args)
@@ -194,7 +188,7 @@ exports.installDeps = async function installDeps (targetDir, command, cliRegistr
   await executeCommand(command, args, targetDir)
 }
 
-exports.installPackage = async function (targetDir, command, cliRegistry, packageName, dev = true) {
+exports.installPackage = async function (targetDir, command, packageName, dev = true) {
   checkPackageManagerIsSupported(command)
 
   const args = []
@@ -207,7 +201,7 @@ exports.installPackage = async function (targetDir, command, cliRegistry, packag
 
   if (dev) args.push('-D')
 
-  await addRegistryToArgs(command, args, cliRegistry)
+  await addRegistryToArgs(command, args)
 
   args.push(packageName)
 
@@ -217,7 +211,7 @@ exports.installPackage = async function (targetDir, command, cliRegistry, packag
   await executeCommand(command, args, targetDir)
 }
 
-exports.uninstallPackage = async function (targetDir, command, cliRegistry, packageName) {
+exports.uninstallPackage = async function (targetDir, command, packageName) {
   checkPackageManagerIsSupported(command)
 
   const args = []
@@ -228,7 +222,7 @@ exports.uninstallPackage = async function (targetDir, command, cliRegistry, pack
     args.push('remove')
   }
 
-  await addRegistryToArgs(command, args, cliRegistry)
+  await addRegistryToArgs(command, args)
 
   args.push(packageName)
 
@@ -238,7 +232,7 @@ exports.uninstallPackage = async function (targetDir, command, cliRegistry, pack
   await executeCommand(command, args, targetDir)
 }
 
-exports.updatePackage = async function (targetDir, command, cliRegistry, packageName) {
+exports.updatePackage = async function (targetDir, command, packageName) {
   checkPackageManagerIsSupported(command)
 
   const args = []
@@ -249,7 +243,7 @@ exports.updatePackage = async function (targetDir, command, cliRegistry, package
     args.push('upgrade')
   }
 
-  await addRegistryToArgs(command, args, cliRegistry)
+  await addRegistryToArgs(command, args)
 
   packageName.split(' ').forEach(name => args.push(name))
 
