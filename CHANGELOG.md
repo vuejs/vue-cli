@@ -94,6 +94,19 @@ Most of the following new features and bugfixes also applies to v3.8.0
 - 毛呆 ([@aweikalee](https://github.com/aweikalee))
 
 
+## 3.8.4 (2019-06-15)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#4148](https://github.com/vuejs/vue-cli/pull/4148) fix: fix config merging during `vue invoke` in Node.js v12 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#4150](https://github.com/vuejs/vue-cli/pull/4150) chore: upgrade default-gateway to 5.0.2 ([@zrh122](https://github.com/zrh122))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- [@zrh122](https://github.com/zrh122)
+
+
 ## 3.8.3 (2019-06-13)
 
 #### :bug: Bug Fix
