@@ -94,6 +94,40 @@ Most of the following new features and bugfixes also applies to v3.8.0
 - 毛呆 ([@aweikalee](https://github.com/aweikalee))
 
 
+## 3.8.4 (2019-06-15)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#4148](https://github.com/vuejs/vue-cli/pull/4148) fix: fix config merging during `vue invoke` in Node.js v12 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#4150](https://github.com/vuejs/vue-cli/pull/4150) chore: upgrade default-gateway to 5.0.2 ([@zrh122](https://github.com/zrh122))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- [@zrh122](https://github.com/zrh122)
+
+
+## 3.8.3 (2019-06-13)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4079](https://github.com/vuejs/vue-cli/pull/4079) fix: avoid opening browser twice ([@xovel](https://github.com/xovel))
+  * [#4083](https://github.com/vuejs/vue-cli/pull/4083) fix: display correct address when multiple network adapters present ([@sodatea](https://github.com/sodatea))
+  * [#4095](https://github.com/vuejs/vue-cli/pull/4095) fix: fix resolve project local plugin's file path ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [1ff22d2](https://github.com/vuejs/vue-cli/commit/1ff22d2a51bfd62f851a8baae2027ae5e18488ea) fix: keep double quotes in script command ([@Akryum](https://github.com/Akryum))
+
+
+#### :memo: Documentation
+* [#3924](https://github.com/vuejs/vue-cli/pull/3924) docs: add more explanation at prompts ([@kazupon](https://github.com/kazupon))
+
+#### Committers: 2
+- Guillaume Chau ([@Akryum](https://github.com/Akryum))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+- Sanapoint 顼轩 ([@xovel](https://github.com/xovel))
+
+
 ## 3.8.2 (2019-05-26)
 
 #### :bug: Bug Fix

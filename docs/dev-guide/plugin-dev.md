@@ -102,7 +102,7 @@ A generator should export a function which receives three arguments:
 
 And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
 
-For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd party plugins](#prompts-for-3rd-party-plugins)).
+For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts](#prompts)).
 
 3. The entire preset (`presets.foo`) will be passed as the third argument.
 
@@ -430,7 +430,56 @@ This is because the command's expected mode needs to be known before loading env
 
 Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
 
-When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. The resolved answers object will be passed to the plugin's generator as options.
+When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. 
+
+You should export directly array of questions, or export function that return those.
+
+e.g. directly array of questions:
+```js
+// prompts.js
+
+module.exports = [
+  {
+    type: 'input',
+    name: 'locale',
+    message: 'The locale of project localization.',
+    validate: input => !!input,
+    default: 'en'
+  }, 
+  // ...
+]
+```
+
+e.g. function that return array of questions:
+```js
+// prompts.js
+
+// pass `package.json` of project to function argument
+module.exports = pkg => {
+  const prompts = [
+    {
+      type: 'input',
+      name: 'locale',
+      message: 'The locale of project localization.',
+      validate: input => !!input,
+      default: 'en'
+    }
+  ]
+
+  // add dynamically propmpt
+  if ('@vue/cli-plugin-eslint' in (pkg.devDependencies || {})) {
+    prompts.push({
+      type: 'confirm',
+      name: 'useESLintPluginVueI18n',
+      message: 'Use ESLint plugin for Vue I18n ?'
+    })
+  }
+
+  return prompts
+}
+```
+
+The resolved answers object will be passed to the plugin's generator as options.
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 

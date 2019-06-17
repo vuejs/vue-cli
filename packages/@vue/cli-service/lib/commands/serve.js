@@ -164,7 +164,9 @@ module.exports = (api, options) => {
         api.service.devServerConfigFns.forEach(fn => fn(app, server))
         // apply in project middlewares
         projectDevServerOptions.before && projectDevServerOptions.before(app, server)
-      }
+      },
+      // avoid opening browser
+      open: false
     }))
 
     ;['SIGINT', 'SIGTERM'].forEach(signal => {
