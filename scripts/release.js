@@ -36,8 +36,17 @@ process.env.VUE_CLI_RELEASE = true
 const execa = require('execa')
 const semver = require('semver')
 const inquirer = require('inquirer')
+const minimist = require('minimist')
 const { syncDeps } = require('./syncDeps')
 // const { buildEditorConfig } = require('./buildEditorConfig')
+
+const cliOptions = minimist(process.argv)
+if (cliOptions['local-registry']) {
+  inquirer.prompt = () => ({
+    bump: 'minor',
+    yes: true
+  })
+}
 
 const curVersion = require('../lerna.json').version
 
@@ -96,7 +105,7 @@ const release = async () => {
   const releaseType = semver.diff(curVersion, version)
 
   let distTag = 'latest'
-  if (releaseType.startsWith('pre')) {
+  if (releaseType.startsWith('pre') && !cliOptions['local-registry']) {
     distTag = 'next'
   }
 
@@ -109,6 +118,10 @@ const release = async () => {
   // keep packages' minor version in sync
   if (releaseType !== 'patch') {
     lernaArgs.push('--force-publish')
+  }
+
+  if (cliOptions['local-registry']) {
+    lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push')
   }
 
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
