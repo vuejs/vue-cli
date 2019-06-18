@@ -29,7 +29,8 @@
     "globby": "^9.2.0",
     "ts-loader": "^5.3.3",
     "tslint": "^5.15.0",
-    "webpack": ">=4 < 4.29"
+    "webpack": ">=4 < 4.29",
+    "yorkie": "^2.0.0"
   },
   "peerDependencies": {
     "typescript": ">=2"
