@@ -128,8 +128,18 @@ async function runMigrator (packageName, options, context) {
 }
 
 async function upgradeSinglePackage (packageName, options, context) {
-  // FIXME: properly implement this
-  const required = require(`${context}/package.json`).devDependencies[packageName]
+  const pkg = getPackageJson(context)
+  let depEntry, required
+  for (const depType of ['dependencies', 'devDependencies', 'optionalDependencies']) {
+    if (pkg[depType] && pkg[depType][packageName]) {
+      depEntry = depType
+      required = pkg[depType][packageName]
+      break
+    }
+  }
+  if (!required) {
+    throw new Error(`Can't find ${chalk.yellow(packageName)} in ${chalk.yellow('package.json')}`)
+  }
   const installed = getInstalledVersion(packageName)
 
   let targetVersion = options.to || 'latest'
@@ -151,8 +161,8 @@ async function upgradeSinglePackage (packageName, options, context) {
 
     const newRange = tryGetNewerRange(`^${targetVersion}`, required)
     if (newRange !== required) {
-      // TODO:
-      // extendPackage({ devDependencies: { packageName: newRange } })
+      pkg[depEntry][packageName] = newRange
+      fs.writeFileSync(path.resolve(context, 'package.json'), JSON.stringify(pkg, null, 2))
       log(`${chalk.green('✔')}  Updated version range in ${chalk.yellow('package.json')}`)
     }
     return
