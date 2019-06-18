@@ -44,8 +44,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
-    "@vuepress/plugin-pwa": "^1.0.0-alpha.48",
-    "@vuepress/theme-vue": "^1.0.0-alpha.48",
+    "@vuepress/plugin-pwa": "^1.0.1",
+    "@vuepress/theme-vue": "^1.0.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
@@ -72,7 +72,7 @@
     "rimraf": "^2.6.2",
     "semver": "^6.1.0",
     "typescript": "^3.4.5",
-    "vuepress": "1.0.0-alpha.47",
+    "vuepress": "^1.0.1",
     "webpack": ">=4 < 4.29",
     "yorkie": "^2.0.0"
   },
