@@ -316,6 +316,23 @@ vue invoke my-plugin --mode awesome
 - 被其它开发者搜索到；
 - 通过 `vue add <name>` 或 `vue invoke <name>` 安装下来。
 
+### 本地测试插件
+
+当你进行插件开发的时候，需要在本地对插件进行测试，你可以使用已有的Vue Cli项目或者新建一个项目来进行：
+
+```bash
+vue create test-app
+```
+
+然后，在项目的根目录，使用下面的命令添加需要测试的本地插件：
+
+```bash
+npm install --save-dev file:/full/path/to/your/plugin
+vue invoke <your-plugin-name>
+```
+
+当对插件进行了修改之后，你需要重复上面的步骤来使变动生效
+
 ## 开发核心插件的注意事项
 
 ::: tip 注意
