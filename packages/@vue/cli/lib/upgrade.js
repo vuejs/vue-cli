@@ -2,8 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const execa = require('execa')
-const globby = require('globby')
-const { isBinaryFileSync } = require('isbinaryfile')
 const {
   log,
   error,
@@ -18,30 +16,14 @@ const {
 } = require('@vue/cli-shared-utils')
 
 const Migrator = require('./Migrator')
+
 const { getCommand, getVersion } = require('./util/packageManager')
+const { installDeps, installPackage } = require('./util/installDeps')
+
 const getPackageJson = require('./util/getPackageJson')
 const getInstalledVersion = require('./util/getInstalledVersion')
 const tryGetNewerRange = require('./util/tryGetNewerRange')
-const { installDeps, installPackage } = require('./util/installDeps')
-const normalizeFilePaths = require('./util/normalizeFilePaths')
-
-async function readFiles (context) {
-  const files = await globby(['**'], {
-    cwd: context,
-    onlyFiles: true,
-    gitignore: true,
-    ignore: ['**/node_modules/**', '**/.git/**'],
-    dot: true
-  })
-  const res = {}
-  for (const file of files) {
-    const name = path.resolve(context, file)
-    res[file] = isBinaryFileSync(name)
-      ? fs.readFileSync(name)
-      : fs.readFileSync(name, 'utf-8')
-  }
-  return normalizeFilePaths(res)
-}
+const readFiles = require('./util/readFiles')
 
 async function runMigrator (packageName, options, context) {
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
@@ -170,9 +152,7 @@ async function upgradeSinglePackage (packageName, options, context) {
 
   log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
 
-  // TODO: integrate getCommand into installPackage
-  const command = getCommand(context)
-  await installPackage(context, command, packageName)
+  await installPackage(context, getCommand(context), packageName)
   await runMigrator(packageName, { installed }, context)
 }
 
