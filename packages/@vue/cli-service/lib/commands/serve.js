@@ -92,6 +92,7 @@ module.exports = (api, options) => {
       port,
       isAbsoluteUrl(options.publicPath) ? '/' : options.publicPath
     )
+    const localUrlForBrowser = publicUrl || urls.localUrlForBrowser
 
     const proxySettings = prepareProxy(
       projectDevServerOptions.proxy,
@@ -201,7 +202,7 @@ module.exports = (api, options) => {
         let copied = ''
         if (isFirstCompile && args.copy) {
           try {
-            require('clipboardy').writeSync(urls.localUrlForBrowser)
+            require('clipboardy').writeSync(localUrlForBrowser)
             copied = chalk.dim('(copied to clipboard)')
           } catch (_) {
             /* catch exception if copy to clipboard isn't supported (e.g. WSL), see issue #3476 */
@@ -250,7 +251,7 @@ module.exports = (api, options) => {
             const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
               ? projectDevServerOptions.openPage
               : ''
-            openBrowser(urls.localUrlForBrowser + pageUri)
+            openBrowser(localUrlForBrowser + pageUri)
           }
 
           // Send final app URL
@@ -258,7 +259,7 @@ module.exports = (api, options) => {
             const ipc = new IpcMessenger()
             ipc.send({
               vueServe: {
-                url: urls.localUrlForBrowser
+                url: localUrlForBrowser
               }
             })
           }
@@ -267,7 +268,7 @@ module.exports = (api, options) => {
           // so other commands can do api.service.run('serve').then(...)
           resolve({
             server,
-            url: urls.localUrlForBrowser
+            url: localUrlForBrowser
           })
         } else if (process.env.VUE_CLI_TEST) {
           // signal for test to check HMR
