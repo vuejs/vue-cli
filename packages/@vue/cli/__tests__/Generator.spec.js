@@ -23,6 +23,19 @@ new Vue({
 }).$mount('#app')
 `.trim())
 fs.writeFileSync(path.resolve(templateDir, 'empty-entry.js'), `;`)
+fs.writeFileSync(path.resolve(templateDir, 'hello.vue'), `
+<template>
+  <p>Hello, {{ msg }}</p>
+</template>
+<script>
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String
+  }
+}
+</script>
+`)
 
 // replace stubs
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
@@ -503,6 +516,25 @@ test('api: addEntryDuplicateImport', async () => {
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/^import foo from 'foo'\s+new Vue/)
+})
+
+test('api: injectImport for .vue files', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('hello.vue', `import foo from 'foo'`)
+        api.render({
+          'hello.vue': path.join(templateDir, 'hello.vue')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  const content = fs.readFileSync('/hello.vue', 'utf-8')
+  expect(content).toMatch(/import foo from 'foo'/)
+  expect(content).toMatch(/<template>([\s\S]*)<\/template>/)
 })
 
 test('api: addEntryDuplicateInjection', async () => {
