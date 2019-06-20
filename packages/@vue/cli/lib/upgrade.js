@@ -5,9 +5,10 @@ const execa = require('execa')
 const {
   log,
   error,
+  done,
+
   logWithSpinner,
   stopSpinner,
-  failSpinner,
 
   isPlugin,
   loadModule,
@@ -156,43 +157,68 @@ async function upgradeSinglePackage (packageName, options, context) {
   await runMigrator(packageName, { installed }, context)
 }
 
-async function upgradeAll (context) {
+async function getUpgradable (context) {
   // get current deps
   // filter @vue/cli-service, @vue/cli-plugin-* & vue-cli-plugin-*
   const pkg = getPackageJson(context)
-  const upgradable = {
-    dependencies: {},
-    devDependencies: {},
-    optionalDependencies: {}
-  }
+  const upgradable = []
 
-  logWithSpinner('Gathering update information...')
-  for (const depType of Object.keys(upgradable)) {
-    for (const [packageName, range] of Object.entries(pkg[depType] || {})) {
-      if (packageName !== '@vue/cli-service' && !isPlugin(packageName)) {
+  for (const depType of ['dependencies', 'devDependencies', 'optionalDependencies']) {
+    for (const [name, range] of Object.entries(pkg[depType] || {})) {
+      if (name !== '@vue/cli-service' && !isPlugin(name)) {
         continue
       }
 
-      const latest = await getVersion(packageName, 'latest', undefined, context)
+      const installed = await getInstalledVersion(name)
+      const wanted = await getVersion(name, range, context)
+      const latest = await getVersion(name, 'latest', context)
       const latestRange = `^${latest}`
 
-      if (range !== latestRange) {
-        upgradable[depType][packageName] = latestRange
+      if (installed !== latest || range !== latestRange) {
+        upgradable.push({ name, installed, wanted, latest })
       }
     }
   }
 
-  // TODO: format the output
-  // https://github.com/angular/angular-cli/blob/34a55c96b2ed38b226879913839b97c601387653/packages/schematics/update/update/index.ts#L490-L509
-  log(upgradable)
+  return upgradable
+}
 
+async function checkForUpdates (context) {
+  logWithSpinner('Gathering pacakage information...')
+  const upgradable = await getUpgradable(context)
+  stopSpinner()
+
+  if (!upgradable.length) {
+    done('Seems all plugins are up to date. Good work!')
+    return
+  }
+
+  // format the output
+  // adapted from @angular/cli
+  const names = upgradable.map(dep => dep.name)
+  let namePad = Math.max(...names.map(x => x.length)) + 2
+  if (!Number.isFinite(namePad)) {
+    namePad = 30
+  }
+  const pads = [namePad, 12, 12, 12, 0]
+  console.log(
+    '  ' +
+    ['Name', 'Installed', 'Wanted', 'Latest', 'Command to upgrade'].map((x, i) => x.padEnd(pads[i])).join('')
+  )
+  // eslint-disable-next-line no-return-assign
+  console.log((' ' + '-'.repeat(pads.reduce((s, x) => s += x, 0) + 20)))
+  for (const p of upgradable) {
+    const fields = [p.name, p.installed, p.wanted, p.latest, `vue upgrade ${p.name}`]
+    console.log('  ' + fields.map((x, i) => x.padEnd(pads[i])).join(''))
+  }
+
+  return upgradable
+}
+
+async function upgradeAll (context) {
   // TODO: upgrade all (interactive)
   // for patch & minor versions, upgrade directly
   // for major versions, prompt before upgrading
-
-  failSpinner()
-
-  return Promise.reject()
 }
 
 async function upgrade (packageName, options, context = process.cwd()) {
@@ -202,7 +228,11 @@ async function upgrade (packageName, options, context = process.cwd()) {
       process.exit(1)
     }
 
-    return upgradeAll(context)
+    if (options.all) {
+      return upgradeAll(context)
+    }
+
+    return checkForUpdates(context)
   }
 
   return upgradeSinglePackage(packageName, options, context)
