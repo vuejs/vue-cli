@@ -47,6 +47,7 @@
     "js-yaml": "^3.13.1",
     "jscodeshift": "^0.6.4",
     "lodash.clonedeep": "^4.5.0",
+    "lru-cache": "^5.1.1",
     "minimist": "^1.2.0",
     "recast": "^0.18.1",
     "request": "^2.87.0",

@@ -1,6 +1,8 @@
 const execa = require('execa')
 const minimist = require('minimist')
 const semver = require('semver')
+const LRU = require('lru-cache')
+
 const {
   hasYarn,
   hasProjectYarn,
@@ -43,12 +45,23 @@ async function getRegistry ({ cwd, packageManager } = {}) {
   return stdout
 }
 
-// TODO: add cache
+const metadataCache = new LRU({
+  max: 200,
+  maxAge: 1000 * 60 * 30 // 30 min.
+})
+
 async function getMetadata (packageName, { field = '', packageManager, cwd } = {}) {
   if (!packageManager) {
     packageManager = getCommand(cwd)
   }
   const registry = await getRegistry({ cwd, packageManager })
+
+  const metadataKey = `${packageManager}-${registry}-${packageName}`
+  let metadata = metadataCache.get(metadataKey)
+
+  if (metadata) {
+    return metadata
+  }
 
   const { stdout } = await execa(
     packageManager,
@@ -59,13 +72,16 @@ async function getMetadata (packageName, { field = '', packageManager, cwd } = {
       '--json',
       '--registry',
       registry
-    ])
-  const metadata = JSON.parse(stdout)
+    ]
+  )
 
+  metadata = JSON.parse(stdout)
   if (packageManager === 'yarn') {
     // `yarn info` outputs messages in the form of `{"type": "inspect", data: {}}`
-    return metadata.data
+    metadata = metadata.data
   }
+
+  metadataCache.set(metadataKey, metadata)
   return metadata
 }
 
