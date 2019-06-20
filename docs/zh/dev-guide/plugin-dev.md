@@ -318,7 +318,7 @@ vue invoke my-plugin --mode awesome
 
 ### 本地测试插件
 
-当你进行插件开发的时候，需要在本地对插件进行测试，你可以使用已有的Vue Cli项目或者新建一个项目来进行：
+当你进行插件开发的时候，需要在本地对插件进行测试，你可以使用已有的 Vue CLI 项目或者新建一个项目来进行：
 
 ```bash
 vue create test-app
