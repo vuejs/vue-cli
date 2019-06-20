@@ -18,7 +18,7 @@ const {
 const Migrator = require('./Migrator')
 
 const { getCommand, getVersion } = require('./util/packageManager')
-const { installDeps, installPackage } = require('./util/installDeps')
+const { installDeps, updatePackage } = require('./util/installDeps')
 
 const getPackageJson = require('./util/getPackageJson')
 const getInstalledVersion = require('./util/getInstalledVersion')
@@ -152,7 +152,7 @@ async function upgradeSinglePackage (packageName, options, context) {
 
   log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
 
-  await installPackage(context, getCommand(context), packageName)
+  await updatePackage(context, getCommand(context), `${packageName}@^${targetVersion}`)
   await runMigrator(packageName, { installed }, context)
 }
 
@@ -182,12 +182,13 @@ async function upgradeAll (context) {
     }
   }
 
+  // TODO: format the output
+  // https://github.com/angular/angular-cli/blob/34a55c96b2ed38b226879913839b97c601387653/packages/schematics/update/update/index.ts#L490-L509
+  log(upgradable)
+
   // TODO: upgrade all (interactive)
   // for patch & minor versions, upgrade directly
   // for major versions, prompt before upgrading
-
-  // TODO: format the output https://github.com/angular/angular-cli/blob/34a55c96b2ed38b226879913839b97c601387653/packages/schematics/update/update/index.ts#L490-L509
-  log(upgradable)
 
   failSpinner()
 
