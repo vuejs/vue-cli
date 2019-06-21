@@ -5,7 +5,7 @@ const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
-const injectImportsAndOptions = require('./util/injectImportsAndOptions')
+const runCodemod = require('./util/runCodemod')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
@@ -215,11 +215,25 @@ module.exports = class Generator {
 
     // handle imports and root option injections
     Object.keys(files).forEach(file => {
-      files[file] = injectImportsAndOptions(
-        files[file],
-        this.imports[file],
-        this.rootOptions[file]
-      )
+      let imports = this.imports[file]
+      imports = imports instanceof Set ? Array.from(imports) : imports
+      if (imports && imports.length > 0) {
+        files[file] = runCodemod(
+          require('./util/codemods/injectImports'),
+          { path: file, source: files[file] },
+          { imports }
+        )
+      }
+
+      let injections = this.rootOptions[file]
+      injections = injections instanceof Set ? Array.from(injections) : injections
+      if (injections && injections.length > 0) {
+        files[file] = runCodemod(
+          require('./util/codemods/injectOptions'),
+          { path: file, source: files[file] },
+          { injections }
+        )
+      }
     })
 
     for (const postProcess of this.postProcessFilesCbs) {
