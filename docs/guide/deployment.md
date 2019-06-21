@@ -285,7 +285,7 @@ git commit -m "add static configuration"
 heroku login
 heroku create
 heroku buildpacks:add heroku/nodejs
-heroku buildpacks:add https://github.com/hone/heroku-buildpack-static
+heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
 git push heroku master
 ```
 
