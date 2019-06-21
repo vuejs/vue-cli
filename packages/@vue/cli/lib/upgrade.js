@@ -203,10 +203,10 @@ async function checkForUpdates (context) {
   const pads = [namePad, 12, 12, 12, 0]
   console.log(
     '  ' +
-    ['Name', 'Installed', 'Wanted', 'Latest', 'Command to upgrade'].map((x, i) => x.padEnd(pads[i])).join('')
+    ['Name', 'Installed', 'Wanted', 'Latest', 'Command to upgrade'].map(
+      (x, i) => chalk.underline(x.padEnd(pads[i]))
+    ).join('')
   )
-  // eslint-disable-next-line no-return-assign
-  console.log((' ' + '-'.repeat(pads.reduce((s, x) => s += x, 0) + 20)))
   for (const p of upgradable) {
     const fields = [p.name, p.installed, p.wanted, p.latest, `vue upgrade ${p.name}`]
     console.log('  ' + fields.map((x, i) => x.padEnd(pads[i])).join(''))
