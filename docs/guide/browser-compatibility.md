@@ -90,7 +90,7 @@ Vue CLI uses two environment variables to communicate this:
 :::
 
 ::: warning Caveat: Adjusting webpack plugins
-Some Plugins, i.e. `html-webpack-plugin`, `preload-plugin` etc. are only included in the config for modern mode. Trying to tap into their options in the legacy config can s an error as the plugins don't exist.
+Some Plugins, i.e. `html-webpack-plugin`, `preload-plugin` etc. are only included in the config for modern mode. Trying to tap into their options in the legacy config can throw an error as the plugins don't exist.
 
 Use the above tip about *Detecting the Current Mode* to manipulate plugins in the right mode only, and/or check if the plugin actually exists in the current mode's config before trying to tap into their options.
 :::
