@@ -261,7 +261,7 @@ npm install -g now
 
 ### Heroku
 
-1. [install HerokU CLI](https://devcenter.heroku.com/articles/heroku-cli)
+1. [Install Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
 2. Create a `static.json` file:
 ```json
