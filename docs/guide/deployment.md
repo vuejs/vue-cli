@@ -261,7 +261,35 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+1. [Install Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+
+2. Create a `static.json` file:
+```json
+{
+  "root": "dist",
+  "clean_urls": true,
+  "routes": {
+    "/**": "index.html"
+  }
+}
+```
+
+3. Add `static.json` file to git
+```bash
+git add static.json
+git commit -m "add static configuration"
+```
+
+4. Deploy to Heroku
+```bash
+heroku login
+heroku create
+heroku buildpacks:add heroku/nodejs
+heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
+git push heroku master
+```
+
+More info: https://gist.github.com/hone/24b06869b4c1eca701f9
 
 ### Surge
 
