@@ -21,7 +21,7 @@ test('router', async () => {
   const expectedOptions = {
     plugins: {
       '@vue/cli-plugin-router': {
-        routerHistoryMode: true
+        historyMode: true
       }
     }
   }
