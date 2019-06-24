@@ -99,6 +99,10 @@ module.exports = class Generator {
       : inferRootOptions(pkg)
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
+      if(!apply) {
+        logTypes.error(`This error may occur when your node_modules do not contain any 
+        actual Vue CLI plugins. Please run npm install and try again.`)
+      }
       const api = new GeneratorAPI(id, this, options, rootOptions)
       apply(api, options, rootOptions, invoking)
     })
