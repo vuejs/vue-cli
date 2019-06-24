@@ -29,7 +29,9 @@ test('serve', async () => {
 
 test('serve with router', async () => {
   const project = await create('e2e-serve-router', Object.assign({}, defaultPreset, {
-    router: true
+    plugins: {
+      '@vue/cli-plugin-router': {}
+    }
   }))
 
   await serve(

@@ -25,10 +25,6 @@ module.exports = (api, options) => {
     ]
   })
 
-  if (options.router) {
-    require('./router')(api, options)
-  }
-
   if (options.vuex) {
     require('./vuex')(api, options)
   }

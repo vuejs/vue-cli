@@ -14,9 +14,6 @@ const {
 
 async function add (pluginName, options = {}, context = process.cwd()) {
   // special internal "plugins"
-  if (/^(@vue\/)?router$/.test(pluginName)) {
-    return addRouter(context)
-  }
   if (/^(@vue\/)?vuex$/.test(pluginName)) {
     return addVuex(context)
   }
@@ -39,20 +36,6 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   } else {
     log(`Plugin ${packageName} does not have a generator to invoke`)
   }
-}
-
-async function addRouter (context) {
-  const inquirer = require('inquirer')
-  const options = await inquirer.prompt([{
-    name: 'routerHistoryMode',
-    type: 'confirm',
-    message: `Use history mode for router? ${chalk.yellow(`(Requires proper server setup for index fallback in production)`)}`
-  }])
-  invoke.runGenerator(context, {
-    id: 'core:router',
-    apply: loadModule('@vue/cli-service/generator/router', context),
-    options
-  })
 }
 
 async function addVuex (context) {

@@ -8,11 +8,6 @@ module.exports = function inferRootOptions (pkg) {
   // projectName
   rootOptions.projectName = pkg.name
 
-  // router
-  if ('vue-router' in deps) {
-    rootOptions.router = true
-  }
-
   // vuex
   if ('vuex' in deps) {
     rootOptions.vuex = true

@@ -243,8 +243,7 @@ module.exports = class Generator {
   }
 
   hasPlugin (_id) {
-    if (_id === 'router') _id = 'vue-router'
-    if (['vue-router', 'vuex'].includes(_id)) {
+    if (['vuex'].includes(_id)) {
       const pkg = this.pkg
       return ((pkg.dependencies && pkg.dependencies[_id]) || (pkg.devDependencies && pkg.devDependencies[_id]))
     }

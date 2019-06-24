@@ -64,8 +64,7 @@ class PluginAPI {
    * @return {boolean}
    */
   hasPlugin (id) {
-    if (id === 'router') id = 'vue-router'
-    if (['vue-router', 'vuex'].includes(id)) {
+    if (['vuex'].includes(id)) {
       const pkg = this.service.pkg
       return ((pkg.dependencies && pkg.dependencies[id]) || (pkg.devDependencies && pkg.devDependencies[id]))
     }
