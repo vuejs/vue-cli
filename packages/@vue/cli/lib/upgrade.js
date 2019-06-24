@@ -33,22 +33,24 @@ async function runMigrator (packageName, options, context) {
   if (!pluginMigrator) { return }
 
   const plugin = {
-    packageName,
-    apply: migrator
+    id: packageName,
+    apply: pluginMigrator,
+    installed: options.installed
   }
 
   const pkg = getPackageJson(context)
   const createCompleteCbs = []
   const migrator = new Migrator(context, {
+    plugin: plugin,
+
     pkg,
-    plugins: [plugin],
     files: await readFiles(context),
     completeCbs: createCompleteCbs,
     invoking: true
   })
 
   log(`🚀  Running migrator of ${packageName}`)
-  await migrator.migrate({
+  await migrator.generate({
     extractConfigFiles: true,
     checkExisting: true
   })

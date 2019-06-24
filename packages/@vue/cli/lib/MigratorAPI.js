@@ -17,6 +17,7 @@ class MigratorAPI extends GeneratorAPI {
   }
 
   fromVersion (range) {
+    console.log('fromVersion', range)
     return semver.satisfies(this.installedVersion, range)
   }
 }
