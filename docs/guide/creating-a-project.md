@@ -8,6 +8,12 @@ To create a new project, run:
 vue create hello-world
 ```
 
+A new project can also be generated inside an existing directory, like so:
+
+``` bash
+vue create .
+```
+
 ::: warning
 If you are on Windows using Git Bash with minTTY, the interactive prompts will not work. You must launch the command as `winpty vue.cmd create hello-world`.
 If you however want to still use the `vue create hello-world` syntax, you can alias the command by adding the following line to your `~/.bashrc` file.
