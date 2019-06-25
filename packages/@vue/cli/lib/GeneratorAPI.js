@@ -72,11 +72,11 @@ class GeneratorAPI {
     return path.resolve(this.generator.context, _path)
   }
 
-  get version () {
+  get cliVersion () {
     return require('../package.json').version
   }
 
-  assertVersion (range) {
+  assertCliVersion (range) {
     if (typeof range === 'number') {
       if (!Number.isInteger(range)) {
         throw new Error('Expected string or integer value.')
@@ -87,14 +87,14 @@ class GeneratorAPI {
       throw new Error('Expected string or integer value.')
     }
 
-    if (semver.satisfies(this.version, range)) return
+    if (semver.satisfies(this.cliVersion, range)) return
 
     throw new Error(
-      `Require global @vue/cli "${range}", but was invoked by "${this.version}".`
+      `Require global @vue/cli "${range}", but was invoked by "${this.cliVersion}".`
     )
   }
 
-  get serviceVersion () {
+  get cliServiceVersion () {
     const servicePkg = loadModule(
       '@vue/cli-service/package.json',
       this.generator.context
@@ -103,7 +103,7 @@ class GeneratorAPI {
     return servicePkg.version
   }
 
-  assertServiceVersion (range) {
+  assertCliServiceVersion (range) {
     if (typeof range === 'number') {
       if (!Number.isInteger(range)) {
         throw new Error('Expected string or integer value.')
@@ -114,10 +114,10 @@ class GeneratorAPI {
       throw new Error('Expected string or integer value.')
     }
 
-    if (semver.satisfies(this.serviceVersion, range)) return
+    if (semver.satisfies(this.cliServiceVersion, range)) return
 
     throw new Error(
-      `Require @vue/cli-service "${range}", but was loaded with "${this.serviceVersion}".`
+      `Require @vue/cli-service "${range}", but was loaded with "${this.cliServiceVersion}".`
     )
   }
 
