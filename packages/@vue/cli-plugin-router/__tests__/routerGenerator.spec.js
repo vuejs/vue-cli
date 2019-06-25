@@ -8,8 +8,8 @@ test('base', async () => {
     options: {}
   })
 
-  expect(files['src/router.js']).toBeTruthy()
-  expect(files['src/router.js']).not.toMatch('history')
+  expect(files['src/router/index.js']).toBeTruthy()
+  expect(files['src/router/index.js']).not.toMatch('history')
   expect(files['src/views/About.vue']).toBeTruthy()
   expect(files['src/views/Home.vue']).toBeTruthy()
   expect(files['src/App.vue']).toMatch('<router-link to="/">Home</router-link>')
@@ -28,8 +28,8 @@ test('history mode', async () => {
     }
   })
 
-  expect(files['src/router.js']).toBeTruthy()
-  expect(files['src/router.js']).toMatch('history')
+  expect(files['src/router/index.js']).toBeTruthy()
+  expect(files['src/router/index.js']).toMatch('history')
   expect(files['src/views/About.vue']).toBeTruthy()
   expect(files['src/views/Home.vue']).toBeTruthy()
   expect(files['src/App.vue']).toMatch('<router-link to="/">Home</router-link>')
@@ -53,8 +53,8 @@ test('use with Babel', async () => {
     }
   ])
 
-  expect(files['src/router.js']).toBeTruthy()
-  expect(files['src/router.js']).toMatch('component: () => import')
+  expect(files['src/router/index.js']).toBeTruthy()
+  expect(files['src/router/index.js']).toMatch('component: () => import')
   expect(files['src/views/About.vue']).toBeTruthy()
   expect(files['src/views/Home.vue']).toBeTruthy()
   expect(files['src/App.vue']).toMatch('<router-link to="/">Home</router-link>')
