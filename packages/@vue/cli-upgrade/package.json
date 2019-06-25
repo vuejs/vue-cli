@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-upgrade",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.0-alpha.1",
   "description": "utility to upgrade vue cli service / plugins in vue apps",
   "main": "index.js",
   "repository": {
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-upgrade#readme",
   "dependencies": {
+    "@vue/cli-shared-utils": "^4.0.0-alpha.1",
     "chalk": "^2.4.1",
     "cli-table": "^0.3.1",
     "execa": "^1.0.0",

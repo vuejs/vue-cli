@@ -4,7 +4,7 @@ const execa = require('execa')
 const chalk = require('chalk')
 const globby = require('globby')
 const inquirer = require('inquirer')
-const isBinary = require('isbinaryfile')
+const { isBinaryFileSync } = require('isbinaryfile')
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
 const { installDeps } = require('./util/installDeps')
@@ -32,7 +32,7 @@ async function readFiles (context) {
   const res = {}
   for (const file of files) {
     const name = path.resolve(context, file)
-    res[file] = isBinary.sync(name)
+    res[file] = isBinaryFileSync(name)
       ? fs.readFileSync(name)
       : fs.readFileSync(name, 'utf-8')
   }

@@ -54,8 +54,8 @@ module.exports = (api, _, __, invoking) => {
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
-          'babel-jest': '^24.7.1',
-          '@babel/core': '^7.4.4'
+          'babel-jest': '^24.8.0',
+          '@babel/core': '^7.4.5'
         }
       })
     } else {
@@ -105,7 +105,7 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
       },
       devDependencies: {
         // this is for now necessary to force ts-jest and vue-jest to use babel 7
-        '@babel/core': '^7.4.4',
+        '@babel/core': '^7.4.5',
         'babel-core': '7.0.0-bridge.0'
       }
     })

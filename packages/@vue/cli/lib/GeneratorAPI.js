@@ -3,7 +3,7 @@ const ejs = require('ejs')
 const path = require('path')
 const merge = require('deepmerge')
 const resolve = require('resolve')
-const isBinary = require('isbinaryfile')
+const { isBinaryFileSync } = require('isbinaryfile')
 const semver = require('semver')
 const mergeDeps = require('./util/mergeDeps')
 const stringifyJS = require('./util/stringifyJS')
@@ -358,7 +358,7 @@ function extractCallDir () {
 const replaceBlockRE = /<%# REPLACE %>([^]*?)<%# END_REPLACE %>/g
 
 function renderFile (name, data, ejsOptions) {
-  if (isBinary.sync(name)) {
+  if (isBinaryFileSync(name)) {
     return fs.readFileSync(name) // return buffer
   }
   const template = fs.readFileSync(name, 'utf-8')

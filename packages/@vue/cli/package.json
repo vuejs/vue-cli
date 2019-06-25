@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.0-alpha.1",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -24,10 +24,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^4.0.0-alpha.0",
-    "@vue/cli-ui": "^4.0.0-alpha.0",
-    "@vue/cli-ui-addon-webpack": "^4.0.0-alpha.0",
-    "@vue/cli-ui-addon-widgets": "^4.0.0-alpha.0",
+    "@vue/cli-shared-utils": "^4.0.0-alpha.1",
+    "@vue/cli-ui": "^4.0.0-alpha.1",
+    "@vue/cli-ui-addon-webpack": "^4.0.0-alpha.1",
+    "@vue/cli-ui-addon-widgets": "^4.0.0-alpha.1",
     "chalk": "^2.4.1",
     "cmd-shim": "^2.0.2",
     "commander": "^2.20.0",
@@ -42,19 +42,21 @@
     "globby": "^9.2.0",
     "import-global": "^0.1.0",
     "inquirer": "^6.3.1",
-    "isbinaryfile": "^3.0.2",
+    "isbinaryfile": "^4.0.0",
     "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.13.1",
+    "jscodeshift": "^0.6.4",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.0",
-    "recast": "^0.17.6",
+    "recast": "^0.18.1",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.7",
     "resolve": "^1.10.1",
-    "semver": "^6.0.0",
+    "semver": "^6.1.0",
     "shortid": "^2.2.11",
     "slash": "^3.0.0",
     "validate-npm-package-name": "^3.0.0",
+    "vue-jscodeshift-adapter": "2.0.2",
     "yaml-front-matter": "^3.4.1"
   },
   "engines": {
