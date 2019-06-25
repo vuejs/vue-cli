@@ -1,13 +1,13 @@
 # Generator API
 
-## version
+## cliVersion
 
 Type: `string`
 
 The version string for the **global** `@vue/cli` version that is invoking the plugin.
 
 
-## assertVersion
+## assertCliVersion
 
 - **Arguments**
   - `{integer | string} range` - a semver range that `@vue/cli` needs to satisfy
@@ -20,14 +20,14 @@ The version string for the **global** `@vue/cli` version that is invoking the pl
   Nothing happens if the provided version is satified. Otherwise, an error will be thrown.
 
 
-## serviceVersion
+## cliServiceVersion
 
 Type: `string`
 
 The version string for the **project local** `@vue/cli-service` version that is invoking the plugin.
 
 
-## assertServiceVersion
+## assertCliServiceVersion
 
 - **Arguments**
   - `{integer | string} range` - a semver range that `@vue/cli-service` needs to satisfy
