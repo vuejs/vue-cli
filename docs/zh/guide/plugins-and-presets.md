@@ -52,13 +52,6 @@ vue add @foo/bar
 vue add @vue/eslint --config airbnb --lintOn save
 ```
 
-`vue-router` 和 `vuex` 的情况比较特殊——它们并没有自己的插件，但是你仍然可以这样添加它们：
-
-``` bash
-vue add router
-vue add vuex
-```
-
 如果一个插件已经被安装，你可以使用 `vue invoke` 命令跳过安装过程，只调用它的生成器。这个命令会接受和 `vue add` 相同的参数。
 
 ::: tip 提示
@@ -112,7 +105,6 @@ vue add vuex
 ``` json
 {
   "useConfigFiles": true,
-  "router": true,
   "vuex": true,
   "cssPreprocessor": "sass",
   "plugins": {
@@ -120,7 +112,8 @@ vue add vuex
     "@vue/cli-plugin-eslint": {
       "config": "airbnb",
       "lintOn": ["save", "commit"]
-    }
+    },
+    "@vue/cli-plugin-router": {}
   }
 }
 ```

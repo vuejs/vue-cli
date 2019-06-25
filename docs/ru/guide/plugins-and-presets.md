@@ -52,13 +52,6 @@ vue add @foo/bar
 vue add @vue/eslint --config airbnb --lintOn save
 ```
 
-Добавление `vue-router` и `vuex` — особый случай, у них нет собственных плагинов, но вы тем не менее можете их добавить:
-
-``` bash
-vue add router
-vue add vuex
-```
-
 Если плагин уже установлен, вы можете пропустить установку и только вызвать его генератор с помощью команды `vue invoke`. Команда принимает такие же аргументы, как и `vue add`.
 
 ::: tip Совет
@@ -112,7 +105,6 @@ vue add vuex
 ``` json
 {
   "useConfigFiles": true,
-  "router": true,
   "vuex": true,
   "cssPreprocessor": "sass",
   "plugins": {
@@ -120,7 +112,8 @@ vue add vuex
     "@vue/cli-plugin-eslint": {
       "config": "airbnb",
       "lintOn": ["save", "commit"]
-    }
+    },
+    "@vue/cli-plugin-router": {}
   }
 }
 ```

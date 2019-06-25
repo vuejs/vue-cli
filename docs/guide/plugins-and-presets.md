@@ -52,13 +52,6 @@ You can pass generator options to the installed plugin (this will skip the promp
 vue add @vue/eslint --config airbnb --lintOn save
 ```
 
-`vue-router` and `vuex` are special cases - they do not have their own plugins, but you can add them nonetheless:
-
-``` bash
-vue add router
-vue add vuex
-```
-
 If a plugin is already installed, you can skip the installation and only invoke its generator with the `vue invoke` command. The command takes the same arguments as `vue add`.
 
 ::: tip
@@ -112,7 +105,6 @@ Here's an example preset:
 ``` json
 {
   "useConfigFiles": true,
-  "router": true,
   "vuex": true,
   "cssPreprocessor": "sass",
   "plugins": {
@@ -120,7 +112,8 @@ Here's an example preset:
     "@vue/cli-plugin-eslint": {
       "config": "airbnb",
       "lintOn": ["save", "commit"]
-    }
+    },
+    "@vue/cli-plugin-router": {}
   }
 }
 ```
