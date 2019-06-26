@@ -56,7 +56,7 @@
     "shortid": "^2.2.11",
     "slash": "^3.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "vue-jscodeshift-adapter": "2.0.2",
+    "vue-jscodeshift-adapter": "^2.0.2",
     "yaml-front-matter": "^3.4.1"
   },
   "engines": {

@@ -6,6 +6,7 @@ const resolve = require('resolve')
 const { isBinaryFileSync } = require('isbinaryfile')
 const semver = require('semver')
 const mergeDeps = require('./util/mergeDeps')
+const runCodemod = require('./util/runCodemod')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
 const { getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
@@ -298,6 +299,22 @@ class GeneratorAPI {
     const fn = () => {}
     fn.__expression = str
     return fn
+  }
+
+  /**
+   * Run codemod on a script file or the script part of a .vue file
+   * @param {string} file the path to the file to transform
+   * @param {Codemod} codemod the codemod module to run
+   * @param {object} options additional options for the codemod
+   */
+  transformScript (file, codemod, options) {
+    this._injectFileMiddleware(files => {
+      files[file] = runCodemod(
+        codemod,
+        { path: this.resolve(file), source: files[file] },
+        options
+      )
+    })
   }
 
   /**
