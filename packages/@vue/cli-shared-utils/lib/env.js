@@ -27,15 +27,13 @@ exports.hasYarn = () => {
     execSync('yarnpkg --version', { stdio: 'ignore' })
     return (_hasYarn = true)
   } catch (e) {
-    _hasYarn = false
   }
   try {
     execSync('yarn --version', { stdio: 'ignore' })
     return (_hasYarn = true)
   } catch (e) {
-    _hasYarn = false
+    return (_hasYarn = false)
   }
-  return _hasYarn
 }
 
 exports.hasProjectYarn = (cwd) => {
