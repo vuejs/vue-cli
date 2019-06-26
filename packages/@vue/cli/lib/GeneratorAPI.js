@@ -4,10 +4,11 @@ const path = require('path')
 const merge = require('deepmerge')
 const resolve = require('resolve')
 const { isBinaryFileSync } = require('isbinaryfile')
+const semver = require('semver')
 const mergeDeps = require('./util/mergeDeps')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
-const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
+const { getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -69,6 +70,55 @@ class GeneratorAPI {
    */
   resolve (_path) {
     return path.resolve(this.generator.context, _path)
+  }
+
+  get cliVersion () {
+    return require('../package.json').version
+  }
+
+  assertCliVersion (range) {
+    if (typeof range === 'number') {
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.cliVersion, range)) return
+
+    throw new Error(
+      `Require global @vue/cli "${range}", but was invoked by "${this.cliVersion}".`
+    )
+  }
+
+  get cliServiceVersion () {
+    const servicePkg = loadModule(
+      '@vue/cli-service/package.json',
+      this.generator.context
+    )
+
+    return servicePkg.version
+  }
+
+  assertCliServiceVersion (range) {
+    if (typeof range === 'number') {
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.cliServiceVersion, range)) return
+
+    throw new Error(
+      `Require @vue/cli-service "${range}", but was loaded with "${this.cliServiceVersion}".`
+    )
   }
 
   /**
