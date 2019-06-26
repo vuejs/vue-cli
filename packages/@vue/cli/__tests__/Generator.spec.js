@@ -727,3 +727,36 @@ test('generate a JS-Only value from a string', async () => {
   expect(generator.pkg).toHaveProperty('testScript')
   expect(typeof generator.pkg.testScript).toBe('function')
 })
+
+test('run a codemod on the entry file', async () => {
+  // A test codemod that tranforms `new Vue` to `new TestVue`
+  const codemod = (fileInfo, api) => {
+    const j = api.jscodeshift
+    return j(fileInfo.source)
+        .find(j.NewExpression, {
+          callee: { name: 'Vue' },
+          arguments: [{ type: 'ObjectExpression' }]
+        })
+        .replaceWith(({ node }) => {
+          node.callee.name = 'TestVue'
+          return node
+        })
+        .toSource()
+  }
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+
+        api.transformScript('main.js', codemod)
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new TestVue/)
+})
