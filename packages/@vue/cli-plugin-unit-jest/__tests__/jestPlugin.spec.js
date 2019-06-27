@@ -4,7 +4,7 @@ const createTestProject = require('@vue/cli-test-utils/createTestProject')
 jest.setTimeout(20000)
 
 const create = (name, preset) => {
-  return createTestProject(name, preset, path.resolve(__dirname, '../../../../tests'))
+  return createTestProject(name, preset, path.resolve(__dirname, '../../../../../tests'))
 }
 
 test('should work', async () => {

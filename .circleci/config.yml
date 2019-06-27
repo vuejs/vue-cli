@@ -68,6 +68,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run: mkdir ../tests
       - run: ./scripts/local-registry.sh
       - run: yarn test -p unit-jest
 
