@@ -89,27 +89,27 @@ workflows:
     jobs:
       - install:
           <<: *filters
-      - group-1:
-          <<: *filters
-          requires:
-            - install
-      - group-2:
-          <<: *filters
-          requires:
-            - install
-      - group-3:
-          <<: *filters
-          requires:
-            - install
-      - group-4:
-          <<: *filters
-          requires:
-            - install
+      # - group-1:
+      #     <<: *filters
+      #     requires:
+      #       - install
+      # - group-2:
+      #     <<: *filters
+      #     requires:
+      #       - install
+      # - group-3:
+      #     <<: *filters
+      #     requires:
+      #       - install
+      # - group-4:
+      #     <<: *filters
+      #     requires:
+      #       - install
       - tests-after-publish:
           <<: *filters
           requires:
             - install
-      - cli-ui:
-          <<: *filters
-          requires:
-            - install
+      # - cli-ui:
+      #     <<: *filters
+      #     requires:
+      #       - install
