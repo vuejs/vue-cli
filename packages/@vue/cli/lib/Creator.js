@@ -63,7 +63,7 @@ module.exports = class Creator extends EventEmitter {
   }
 
   async create (cliOptions = {}, preset = null) {
-    // const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
+    const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
     const { run, name, context, createCompleteCbs } = this
 
     if (!preset) {
@@ -209,10 +209,10 @@ module.exports = class Creator extends EventEmitter {
     let gitCommitFailed = false
     if (shouldInitGit) {
       await run('git add -A')
-      // if (isTestOrDebug) {
-      await run('git', ['config', 'user.name', 'test'])
-      await run('git', ['config', 'user.email', 'test@test.com'])
-      // }
+      if (isTestOrDebug) {
+        await run('git', ['config', 'user.name', 'test'])
+        await run('git', ['config', 'user.email', 'test@test.com'])
+      }
       const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
       try {
         await run('git', ['commit', '-m', msg])
