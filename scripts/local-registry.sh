@@ -11,7 +11,7 @@ function startLocalRegistry {
   # Start local registry
   tmp_registry_log=`mktemp`
   echo "Registry output file: $tmp_registry_log"
-  (cd && nohup npx $default_verdaccio_package -c ./verdaccio.yaml &>$tmp_registry_log &)
+  (cd && nohup npx $default_verdaccio_package -c ${CIRCLE_WORKING_DIRECTORY}/scripts/verdaccio.yaml &>$tmp_registry_log &)
   # Wait for Verdaccio to boot
   grep -q 'http address' <(tail -f $tmp_registry_log)
 
