@@ -45,7 +45,9 @@ function stopLocalRegistry {
 }
 
 function publishToLocalRegistry {
-  startLocalRegistry
   git clean -df
   yarn release --local-registry
 }
+
+startLocalRegistry
+publishToLocalRegistry
