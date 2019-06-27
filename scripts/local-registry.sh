@@ -19,6 +19,10 @@ function startLocalRegistry {
   npm set registry "$custom_registry_url"
   yarn config set registry "$custom_registry_url"
 
+  # set git user
+  git config --global user.email "user@example.com"
+  git config --global user.name "user"
+
   # Login so we can publish packages
   (cd && npx npm-auth-to-token@1 -u user -p password -e user@example.com -r "$custom_registry_url")
 }

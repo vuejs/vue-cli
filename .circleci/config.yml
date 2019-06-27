@@ -68,8 +68,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: ./scripts/local-registry.sh
-      - run: yarn release --local-registry
+      - run: |
+          ./scripts/local-registry.sh
+          yarn release --local-registry
       - run: yarn test -p unit-jest
 
   cli-ui:
