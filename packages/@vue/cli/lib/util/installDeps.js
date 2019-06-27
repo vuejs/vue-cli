@@ -171,7 +171,7 @@ function executeCommand (command, args, targetDir) {
   })
 }
 
-exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
+exports.installDeps = async function (targetDir, command, cliRegistry) {
   checkPackageManagerIsSupported(command)
 
   const args = []
