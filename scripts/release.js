@@ -121,7 +121,7 @@ const release = async () => {
   }
 
   if (cliOptions['local-registry']) {
-    lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push')
+    lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push', '--yes')
   }
 
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
