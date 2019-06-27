@@ -99,9 +99,14 @@ function executeCommand (command, args, targetDir) {
       }
     }
 
+    const stdio = ['inherit', apiMode ? 'pipe' : 'inherit', !apiMode && command === 'yarn' ? 'pipe' : 'inherit']
+    if (process.env.VUE_CLI_TEST) {
+      stdio[0] = stdio[1] = 'ignore'
+    }
+
     const child = execa(command, args, {
       cwd: targetDir,
-      stdio: ['inherit', apiMode ? 'pipe' : 'inherit', !apiMode && command === 'yarn' ? 'pipe' : 'inherit']
+      stdio
     })
 
     if (apiMode) {
