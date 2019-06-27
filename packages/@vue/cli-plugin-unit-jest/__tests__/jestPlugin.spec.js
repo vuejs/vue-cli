@@ -7,6 +7,10 @@ const create = (name, preset) => {
   return createTestProject(name, preset, path.resolve(__dirname, '../../../../../tests'))
 }
 
+beforeEach(() => {
+  process.env.VUE_CLI_TEST = false
+})
+
 test('should work', async () => {
   const project = await create('unit-jest', {
     plugins: {
