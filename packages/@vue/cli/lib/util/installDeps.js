@@ -188,6 +188,10 @@ exports.installDeps = async function installDeps (targetDir, command, cliRegistr
 
   await addRegistryToArgs(command, args, cliRegistry)
 
+  if (process.env.VUE_CLI_TEST) {
+    args.push('--silent', '--prefer-offline')
+  }
+
   debug(`command: `, command)
   debug(`args: `, args)
 
@@ -210,6 +214,10 @@ exports.installPackage = async function (targetDir, command, cliRegistry, packag
   await addRegistryToArgs(command, args, cliRegistry)
 
   args.push(packageName)
+
+  if (process.env.VUE_CLI_TEST) {
+    args.push('--silent', '--prefer-offline')
+  }
 
   debug(`command: `, command)
   debug(`args: `, args)

@@ -1,15 +1,6 @@
-const path = require('path')
-const createTestProject = require('@vue/cli-test-utils/createTestProject')
+jest.setTimeout(200000)
 
-jest.setTimeout(20000)
-
-const create = (name, preset) => {
-  return createTestProject(name, preset, path.resolve(__dirname, '../../../../../tests'))
-}
-
-beforeEach(() => {
-  process.env.VUE_CLI_TEST = false
-})
+const create = require('@vue/cli-test-utils/createTestProject')
 
 test('should work', async () => {
   const project = await create('unit-jest', {

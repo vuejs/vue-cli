@@ -155,12 +155,12 @@ module.exports = class Creator extends EventEmitter {
     log(`⚙  Installing CLI plugins. This might take a while...`)
     log()
     this.emit('creation', { event: 'plugins-install' })
-    if (isTestOrDebug) {
-      // in development, avoid installation process
-      await require('./util/setupDevProject')(context)
-    } else {
-      await installDeps(context, packageManager, cliOptions.registry)
-    }
+    // if (isTestOrDebug) {
+    //   // in development, avoid installation process
+    //   await require('./util/setupDevProject')(context)
+    // } else {
+    await installDeps(context, packageManager, cliOptions.registry)
+    // }
 
     // run generator
     log(`🚀  Invoking generators...`)
@@ -179,9 +179,9 @@ module.exports = class Creator extends EventEmitter {
     log(`📦  Installing additional dependencies...`)
     this.emit('creation', { event: 'deps-install' })
     log()
-    if (!isTestOrDebug) {
-      await installDeps(context, packageManager, cliOptions.registry)
-    }
+    // if (!isTestOrDebug) {
+    await installDeps(context, packageManager, cliOptions.registry)
+    // }
 
     // run complete cbs if any (injected by generators)
     logWithSpinner('⚓', `Running completion hooks...`)

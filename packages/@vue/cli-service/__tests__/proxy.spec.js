@@ -1,4 +1,4 @@
-jest.setTimeout(30000)
+jest.setTimeout(300000)
 
 const request = require('request-promise-native')
 const { defaultPreset } = require('@vue/cli/lib/options')

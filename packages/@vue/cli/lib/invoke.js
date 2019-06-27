@@ -118,7 +118,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
 }
 
 async function runGenerator (context, plugin, pkg = getPkg(context)) {
-  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
+  // const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
   const createCompleteCbs = []
   const generator = new Generator(context, {
     pkg,
@@ -141,7 +141,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     JSON.stringify(newDeps) !== JSON.stringify(pkg.dependencies) ||
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
 
-  if (!isTestOrDebug && depsChanged) {
+  if (depsChanged) {
     log(`📦  Installing additional dependencies...`)
     log()
     const packageManager =
