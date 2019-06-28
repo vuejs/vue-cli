@@ -26,7 +26,8 @@
     "@vue/cli-shared-utils": "^4.0.0-alpha.1",
     "eslint-loader": "^2.1.2",
     "globby": "^9.2.0",
-    "webpack": ">=4 < 4.29"
+    "webpack": ">=4 < 4.29",
+    "yorkie": "^2.0.0"
   },
   "peerDependencies": {
     "eslint": ">= 1.6.0"

@@ -23,6 +23,19 @@ new Vue({
 }).$mount('#app')
 `.trim())
 fs.writeFileSync(path.resolve(templateDir, 'empty-entry.js'), `;`)
+fs.writeFileSync(path.resolve(templateDir, 'hello.vue'), `
+<template>
+  <p>Hello, {{ msg }}</p>
+</template>
+<script>
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String
+  }
+}
+</script>
+`)
 
 // replace stubs
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
@@ -505,6 +518,25 @@ test('api: addEntryDuplicateImport', async () => {
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/^import foo from 'foo'\s+new Vue/)
 })
 
+test('api: injectImport for .vue files', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('hello.vue', `import foo from 'foo'`)
+        api.render({
+          'hello.vue': path.join(templateDir, 'hello.vue')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  const content = fs.readFileSync('/hello.vue', 'utf-8')
+  expect(content).toMatch(/import foo from 'foo'/)
+  expect(content).toMatch(/<template>([\s\S]*)<\/template>/)
+})
+
 test('api: addEntryDuplicateInjection', async () => {
   const generator = new Generator('/', { plugins: [
     {
@@ -694,4 +726,37 @@ test('generate a JS-Only value from a string', async () => {
 
   expect(generator.pkg).toHaveProperty('testScript')
   expect(typeof generator.pkg.testScript).toBe('function')
+})
+
+test('run a codemod on the entry file', async () => {
+  // A test codemod that tranforms `new Vue` to `new TestVue`
+  const codemod = (fileInfo, api) => {
+    const j = api.jscodeshift
+    return j(fileInfo.source)
+        .find(j.NewExpression, {
+          callee: { name: 'Vue' },
+          arguments: [{ type: 'ObjectExpression' }]
+        })
+        .replaceWith(({ node }) => {
+          node.callee.name = 'TestVue'
+          return node
+        })
+        .toSource()
+  }
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+
+        api.transformScript('main.js', codemod)
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new TestVue/)
 })
