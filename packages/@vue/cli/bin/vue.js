@@ -167,7 +167,7 @@ program
 
 program
   .command('upgrade [package-name]')
-  .description('upgrade vue cli service / plugins')
+  .description('(experimental) upgrade vue cli service / plugins')
   .option('-t, --to <version>', 'upgrade <package-name> to a version that is not latest')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
   .action((packageName, cmd) => {
