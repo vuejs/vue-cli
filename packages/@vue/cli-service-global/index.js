@@ -8,7 +8,7 @@ const babelPlugin = toPlugin('@vue/cli-plugin-babel')
 const eslintPlugin = toPlugin('@vue/cli-plugin-eslint')
 const globalConfigPlugin = require('./lib/globalConfigPlugin')
 
-const context = process.cwd()
+let context = process.cwd()
 
 function warnAboutNpmScript (cmd) {
   const packageJsonPath = path.join(context, 'package.json')
@@ -42,8 +42,17 @@ function resolveEntry (entry, cmd) {
     'main.js',
     'index.js',
     'App.vue',
-    'app.vue'
+    'app.vue',
+    'src/main.js',
+    'src/index.js',
+    'src/App.vue',
+    'src/app.vue'
   ])
+
+  if (entry && entry.includes('src/')) {
+    entry = entry.slice(4)
+    context = context + '/src'
+  }
 
   if (!entry) {
     console.log(chalk.red(`Failed to locate entry file in ${chalk.yellow(context)}.`))
