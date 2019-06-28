@@ -27,8 +27,6 @@ const tryGetNewerRange = require('./util/tryGetNewerRange')
 const readFiles = require('./util/readFiles')
 
 async function runMigrator (packageName, options, context) {
-  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-
   const pluginMigrator = loadModule(`${packageName}/migrator`, context)
   if (!pluginMigrator) { return }
 
@@ -61,8 +59,7 @@ async function runMigrator (packageName, options, context) {
     JSON.stringify(newDeps) !== JSON.stringify(pkg.dependencies) ||
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
 
-  // TODO:
-
+  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
   if (!isTestOrDebug && depsChanged) {
     log(`📦  Installing additional dependencies...`)
     log()
@@ -114,6 +111,8 @@ async function runMigrator (packageName, options, context) {
 
 async function upgradeSinglePackage (packageName, options, context) {
   const pkg = getPackageJson(context)
+
+  // TODO: allow packageName to be a shorthand
   let depEntry, required
   for (const depType of ['dependencies', 'devDependencies', 'optionalDependencies']) {
     if (pkg[depType] && pkg[depType][packageName]) {

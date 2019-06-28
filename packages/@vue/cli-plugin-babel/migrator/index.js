@@ -1,5 +1,5 @@
 module.exports = (api) => {
-  if (api.fromVersion('<=3.5.4')) {
+  if (api.fromVersion('<=3.5.3')) {
     // add core-js@2 as dependency
     api.extendPackage({
       dependencies: {

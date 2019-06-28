@@ -112,7 +112,7 @@ module.exports = class Creator extends EventEmitter {
     let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
 
     // if using `next` branch of cli
-    if (semver.gt(current, latest) && semver.prerelease(current)) {
+    if (semver.gte(current, latest) && semver.prerelease(current)) {
       latestMinor = current
     }
     // generate package.json with plugin dependencies
@@ -136,6 +136,7 @@ module.exports = class Creator extends EventEmitter {
         ((/^@vue/.test(dep)) ? `^${latestMinor}` : `latest`)
       )
     })
+
     // write package.json
     await writeFileTree(context, {
       'package.json': JSON.stringify(pkg, null, 2)
@@ -155,7 +156,8 @@ module.exports = class Creator extends EventEmitter {
     log(`⚙  Installing CLI plugins. This might take a while...`)
     log()
     this.emit('creation', { event: 'plugins-install' })
-    if (isTestOrDebug) {
+
+    if (isTestOrDebug && !process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
       // in development, avoid installation process
       await require('./util/setupDevProject')(context)
     } else {
