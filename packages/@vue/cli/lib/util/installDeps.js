@@ -24,7 +24,7 @@ const packageManagerConfig = {
     installPackage: ['install', '--loglevel', 'error'],
     uninstallPackage: ['uninstall', '--loglevel', 'error'],
     updatePackage: ['update', '--loglevel', 'error']
-  }, 
+  },
 
   yarn: {
     installDeps: [],
@@ -191,7 +191,7 @@ function executeCommand (command, args, targetDir) {
 exports.installDeps = async function installDeps (targetDir, command) {
   checkPackageManagerIsSupported(command)
 
-  const args = packageManagerConfig[command].installDeps;
+  const args = packageManagerConfig[command].installDeps
 
   await addRegistryToArgs(command, args)
 
@@ -204,7 +204,7 @@ exports.installDeps = async function installDeps (targetDir, command) {
 exports.installPackage = async function (targetDir, command, packageName, dev = true) {
   checkPackageManagerIsSupported(command)
 
-  const args = packageManagerConfig[command].installPackage;
+  const args = packageManagerConfig[command].installPackage
 
   if (dev) args.push('-D')
 
@@ -221,7 +221,7 @@ exports.installPackage = async function (targetDir, command, packageName, dev = 
 exports.uninstallPackage = async function (targetDir, command, packageName) {
   checkPackageManagerIsSupported(command)
 
-  const args = packageManagerConfig[command].uninstallPackage;
+  const args = packageManagerConfig[command].uninstallPackage
 
   await addRegistryToArgs(command, args)
 
@@ -236,7 +236,7 @@ exports.uninstallPackage = async function (targetDir, command, packageName) {
 exports.updatePackage = async function (targetDir, command, packageName) {
   checkPackageManagerIsSupported(command)
 
-  const args = packageManagerConfig[command].updatePackage;
+  const args = packageManagerConfig[command].updatePackage
 
   await addRegistryToArgs(command, args)
 
