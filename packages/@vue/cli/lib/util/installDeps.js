@@ -11,6 +11,29 @@ const taobaoDistURL = 'https://npm.taobao.org/dist'
 
 const supportPackageManagerList = ['npm', 'yarn', 'pnpm']
 
+const packageManagerConfig = {
+  npm: {
+    installDeps: ['install', '--loglevel', 'error'],
+    installPackage: ['install', '--loglevel', 'error'],
+    uninstallPackage: ['uninstall', '--loglevel', 'error'],
+    updatePackage: ['update', '--loglevel', 'error']
+  },
+
+  pnpm: {
+    installDeps: ['install', '--loglevel', 'error', '--shamefully-flatten'],
+    installPackage: ['install', '--loglevel', 'error'],
+    uninstallPackage: ['uninstall', '--loglevel', 'error'],
+    updatePackage: ['update', '--loglevel', 'error']
+  }, 
+
+  yarn: {
+    installDeps: [],
+    installPackage: ['add'],
+    uninstallPackage: ['remove'],
+    updatePackage: ['upgrade']
+  }
+}
+
 class InstallProgress extends EventEmitter {
   constructor () {
     super()
@@ -174,17 +197,7 @@ function executeCommand (command, args, targetDir) {
 exports.installDeps = async function installDeps (targetDir, command, cliRegistry) {
   checkPackageManagerIsSupported(command)
 
-  const args = []
-
-  if (command === 'npm' || command === 'pnpm') {
-    args.push('install', '--loglevel', 'error')
-  } else if (command === 'yarn') {
-    // do nothing
-  }
-
-  if (command === 'pnpm') {
-    args.push('--shamefully-flatten')
-  }
+  const args = packageManagerConfig[command].installDeps;
 
   await addRegistryToArgs(command, args, cliRegistry)
 
@@ -197,13 +210,7 @@ exports.installDeps = async function installDeps (targetDir, command, cliRegistr
 exports.installPackage = async function (targetDir, command, cliRegistry, packageName, dev = true) {
   checkPackageManagerIsSupported(command)
 
-  const args = []
-
-  if (command === 'npm' || command === 'pnpm') {
-    args.push('install', '--loglevel', 'error')
-  } else if (command === 'yarn') {
-    args.push('add')
-  }
+  const args = packageManagerConfig[command].installPackage;
 
   if (dev) args.push('-D')
 
@@ -220,13 +227,7 @@ exports.installPackage = async function (targetDir, command, cliRegistry, packag
 exports.uninstallPackage = async function (targetDir, command, cliRegistry, packageName) {
   checkPackageManagerIsSupported(command)
 
-  const args = []
-
-  if (command === 'npm' || command === 'pnpm') {
-    args.push('uninstall', '--loglevel', 'error')
-  } else if (command === 'yarn') {
-    args.push('remove')
-  }
+  const args = packageManagerConfig[command].uninstallPackage;
 
   await addRegistryToArgs(command, args, cliRegistry)
 
@@ -241,13 +242,7 @@ exports.uninstallPackage = async function (targetDir, command, cliRegistry, pack
 exports.updatePackage = async function (targetDir, command, cliRegistry, packageName) {
   checkPackageManagerIsSupported(command)
 
-  const args = []
-
-  if (command === 'npm' || command === 'pnpm') {
-    args.push('update', '--loglevel', 'error')
-  } else if (command === 'yarn') {
-    args.push('upgrade')
-  }
+  const args = packageManagerConfig[command].updatePackage;
 
   await addRegistryToArgs(command, args, cliRegistry)
 
