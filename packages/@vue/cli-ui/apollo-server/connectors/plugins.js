@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const LRU = require('lru-cache')
 const chalk = require('chalk')
+const shallowEqualArrays = require('shallow-equal/arrays')
 // Context
 const getContext = require('../context')
 // Subs
@@ -99,6 +100,11 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
     const service = plugins[index]
     plugins.splice(index, 1)
     plugins.unshift(service)
+  }
+
+  const oldPlugins = getPlugins(file)
+  if (oldPlugins && shallowEqualArrays(plugins, oldPlugins)) {
+    return oldPlugins
   }
 
   pluginsStore.set(file, plugins)

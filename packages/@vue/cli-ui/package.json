@@ -59,6 +59,7 @@
     "prismjs": "^1.16.0",
     "rss-parser": "^3.7.0",
     "semver": "^6.0.0",
+    "shallow-equal": "^1.1.0",
     "shortid": "^2.2.11",
     "vue-cli-plugin-apollo": "^0.19.2",
     "watch": "^1.0.2"
