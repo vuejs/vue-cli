@@ -9,7 +9,7 @@ module.exports = (api, {
 
   api.extendPackage({
     devDependencies: {
-      typescript: '^3.4.3'
+      typescript: '^3.4.5'
     }
   })
 

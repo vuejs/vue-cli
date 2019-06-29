@@ -93,16 +93,24 @@ const release = async () => {
     }
   }
 
-  const lernaArgs = [
-    'publish',
-    version
-  ]
   const releaseType = semver.diff(curVersion, version)
 
+  let distTag = 'latest'
+  if (releaseType.startsWith('pre')) {
+    distTag = 'next'
+  }
+
+  const lernaArgs = [
+    'publish',
+    version,
+    '--dist-tag',
+    distTag
+  ]
   // keep packages' minor version in sync
   if (releaseType !== 'patch') {
     lernaArgs.push('--force-publish')
   }
+
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 }
 

@@ -52,6 +52,11 @@ export default {
       align-items stretch
       justify-content center
 
+    &.vertical
+      grid-template-columns auto
+      grid-template-areas "info" "input"
+      grid-gap $padding-item
+
   .list-item-info
     margin-right ($padding-item * 2)
 </style>

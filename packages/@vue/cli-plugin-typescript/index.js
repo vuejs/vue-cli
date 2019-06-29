@@ -15,7 +15,8 @@ module.exports = (api, options) => {
 
     config.resolve
       .extensions
-        .merge(['.ts', '.tsx'])
+        .prepend('.ts')
+        .prepend('.tsx')
 
     const tsRule = config.module.rule('ts').test(/\.ts$/)
     const tsxRule = config.module.rule('tsx').test(/\.tsx$/)

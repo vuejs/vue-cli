@@ -128,7 +128,7 @@ exports.defaults = () => ({
   },
 
   // whether to use eslint-loader
-  lintOnSave: true,
+  lintOnSave: 'default',
 
   devServer: {
     /*

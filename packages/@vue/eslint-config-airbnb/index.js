@@ -23,6 +23,14 @@ module.exports = {
       jsx: 'never',
       ts: 'never',
       tsx: 'never'
+    }],
+    'no-param-reassign': ['error', {
+      props: true,
+      ignorePropertyModificationsFor: [
+        'state', // for vuex state
+        'acc', // for reduce accumulators
+        'e' // for e.returnvalue
+      ]
     }]
   }
 }

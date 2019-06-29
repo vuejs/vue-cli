@@ -17,6 +17,7 @@ module.exports = {
     }],
     "node/no-extraneous-require": ["error", {
       "allowModules": [
+        "@vue/cli-service",
         "@vue/cli-test-utils"
       ]
     }]
