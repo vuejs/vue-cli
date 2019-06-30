@@ -76,10 +76,6 @@ module.exports = (api, {
       // eslint-disable-next-line node/no-extraneous-require
       require('@vue/cli-plugin-eslint/generator').applyTS(api)
     }
-
-    if (convertJsToTs) {
-      require('./convert')(api, { tsLint })
-    }
   }
 
   api.render('./template', {
@@ -87,4 +83,6 @@ module.exports = (api, {
     hasMocha: api.hasPlugin('unit-mocha'),
     hasJest: api.hasPlugin('unit-jest')
   })
+
+  require('./convert')(api, { tsLint }, convertJsToTs)
 }
