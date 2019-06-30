@@ -1,7 +1,9 @@
 module.exports = (api, {
   classComponent,
   tsLint,
-  lintOn = []
+  lintOn = [],
+  convertJsToTs,
+  allowJs
 }, _, invoking) => {
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
@@ -74,6 +76,10 @@ module.exports = (api, {
       // eslint-disable-next-line node/no-extraneous-require
       require('@vue/cli-plugin-eslint/generator').applyTS(api)
     }
+
+    if (convertJsToTs) {
+      require('./convert')(api, { tsLint })
+    }
   }
 
   api.render('./template', {
@@ -81,6 +87,4 @@ module.exports = (api, {
     hasMocha: api.hasPlugin('unit-mocha'),
     hasJest: api.hasPlugin('unit-jest')
   })
-
-  require('./convert')(api, { tsLint })
 }

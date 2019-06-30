@@ -36,6 +36,18 @@ const prompts = module.exports = [
         value: 'commit'
       }
     ]
+  },
+  {
+    name: `convertJsToTs`,
+    type: `confirm`,
+    message: `Convert all .js files to .ts?`,
+    default: false
+  },
+  {
+    name: `allowJs`,
+    type: `confirm`,
+    message: `Allow .js files to be compiled?`,
+    default: false
   }
 ]
 
