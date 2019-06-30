@@ -20,11 +20,14 @@ const Migrator = require('./Migrator')
 
 const { getCommand, getVersion } = require('./util/packageManager')
 const { installDeps, updatePackage } = require('./util/installDeps')
+const { linkPackage } = require('./util/linkBin')
 
 const getPackageJson = require('./util/getPackageJson')
 const getInstalledVersion = require('./util/getInstalledVersion')
 const tryGetNewerRange = require('./util/tryGetNewerRange')
 const readFiles = require('./util/readFiles')
+
+const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
 async function runMigrator (packageName, options, context) {
   const pluginMigrator = loadModule(`${packageName}/migrator`, context)
@@ -59,7 +62,6 @@ async function runMigrator (packageName, options, context) {
     JSON.stringify(newDeps) !== JSON.stringify(pkg.dependencies) ||
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
 
-  const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
   if (!isTestOrDebug && depsChanged) {
     log(`📦  Installing additional dependencies...`)
     log()
@@ -154,7 +156,13 @@ async function upgradeSinglePackage (packageName, options, context) {
 
   log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
 
-  await updatePackage(context, getCommand(context), `${packageName}@^${targetVersion}`)
+  if (isTestOrDebug) {
+    // link packages in current repo for test
+    await linkPackage(path.resolve(__dirname, `../../../${packageName}`), path.join(context, 'node_modules', packageName))
+  } else {
+    await updatePackage(context, getCommand(context), `${packageName}@^${targetVersion}`)
+  }
+
   await runMigrator(packageName, { installed }, context)
 }
 
@@ -173,9 +181,8 @@ async function getUpgradable (context) {
       const installed = await getInstalledVersion(name)
       const wanted = await getVersion(name, range, context)
       const latest = await getVersion(name, 'latest', context)
-      const latestRange = `^${latest}`
 
-      if (installed !== latest || range !== latestRange) {
+      if (installed !== latest) {
         upgradable.push({ name, installed, wanted, latest })
       }
     }

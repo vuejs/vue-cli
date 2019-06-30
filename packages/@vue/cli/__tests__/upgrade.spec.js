@@ -14,7 +14,7 @@ beforeAll(() => {
 
 test('upgrade: plugin-babel v3.5', async () => {
   process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN = true
-  const project = await create('plugin-babel-old', {
+  const project = await create('plugin-babel-legacy', {
     plugins: {
       '@vue/cli-plugin-babel': {
         version: '3.5.3'
@@ -25,8 +25,13 @@ test('upgrade: plugin-babel v3.5', async () => {
   const pkg = JSON.parse(await project.read('package.json'))
   expect(pkg.dependencies).not.toHaveProperty('core-js')
 
-  // await project.run(`${require.resolve('../bin/vue')} upgrade @vue/cli-plugin-babel`)
+  // TODO: use short id
+  await project.run(`${require.resolve('../bin/vue')} upgrade @vue/cli-plugin-babel`)
 
-  // const updatedPkg = JSON.parse(await project.read('package.json'))
-  // expect(updatedPkg.dependencies).toHaveProperty('core-js')
+  const updatedPkg = JSON.parse(await project.read('package.json'))
+  expect(updatedPkg.dependencies).toHaveProperty('core-js')
+})
+
+test('upgrade: plugin-babel with core-js 2', async () => {
+  // TODO:
 })
