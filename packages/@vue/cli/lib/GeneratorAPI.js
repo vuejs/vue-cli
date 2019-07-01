@@ -173,8 +173,9 @@ class GeneratorAPI {
    * files are written to disk.
    *
    * @param {object | () => object} fields - Fields to merge.
+   * @param {boolean} forceNewVersion - Ignore version conflicts when updating dependency version
    */
-  extendPackage (fields) {
+  extendPackage (fields, forceNewVersion) {
     const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
     for (const key in toMerge) {
@@ -186,7 +187,8 @@ class GeneratorAPI {
           this.id,
           existing || {},
           value,
-          this.generator.depSources
+          this.generator.depSources,
+          forceNewVersion
         )
       } else if (!(key in pkg)) {
         pkg[key] = value

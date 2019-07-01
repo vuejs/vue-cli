@@ -6,7 +6,7 @@ const tryGetNewerRange = require('./tryGetNewerRange')
 const extractSemver = r => r.replace(/^.+#semver:/, '')
 const injectSemver = (r, v) => semver.validRange(r) ? v : r.replace(/#semver:.+$/, `#semver:${v}`)
 
-module.exports = function resolveDeps (generatorId, to, from, sources) {
+module.exports = function resolveDeps (generatorId, to, from, sources, forceNewVersion) {
   const res = Object.assign({}, to)
   for (const name in from) {
     const r1 = to[name]
@@ -42,7 +42,7 @@ module.exports = function resolveDeps (generatorId, to, from, sources) {
         sources[name] = generatorId
       }
       // warn incompatible version requirements
-      if (!semver.validRange(r1semver) || !semver.validRange(r2semver) || !semver.intersects(r1semver, r2semver)) {
+      if (!forceNewVersion && !semver.validRange(r1semver) || !semver.validRange(r2semver) || !semver.intersects(r1semver, r2semver)) {
         warn(
           `conflicting versions for project dependency "${name}":\n\n` +
           `- ${r1} injected by generator "${sourceGeneratorId}"\n` +
