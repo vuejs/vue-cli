@@ -220,13 +220,27 @@ async function checkForUpdates (context) {
     console.log('  ' + fields.map((x, i) => x.padEnd(pads[i])).join(''))
   }
 
+  console.log(`Run ${chalk.yellow('vue upgrade --all')} to upgrade all the above plugins`)
+
   return upgradable
 }
 
 async function upgradeAll (context) {
-  // TODO: upgrade all (interactive)
+  // TODO: should confirm for major version upgrades
   // for patch & minor versions, upgrade directly
   // for major versions, prompt before upgrading
+  const upgradable = await getUpgradable(context)
+
+  if (!upgradable.length) {
+    done('Seems all plugins are up to date. Good work!')
+    return
+  }
+
+  for (const p of upgradable) {
+    await upgradeSinglePackage(p.name, { to: p.latest }, context)
+  }
+
+  done('All plugins are up to date!')
 }
 
 async function upgrade (packageName, options, context = process.cwd()) {
