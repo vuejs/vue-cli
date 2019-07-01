@@ -5,7 +5,7 @@ const create = require('@vue/cli-test-utils/createTestProject')
 
 jest.setTimeout(200000)
 
-const outsideTestFolder = path.resolve(__dirname, '../../../../../tests')
+const outsideTestFolder = path.resolve(__dirname, '../../../../../vue-upgrade-tests')
 
 beforeAll(() => {
   if (!fs.existsSync(outsideTestFolder)) {
