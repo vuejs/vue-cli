@@ -11,6 +11,7 @@ const {
   stopSpinner,
 
   isPlugin,
+  resolvePluginId,
   loadModule,
 
   hasProjectGit
@@ -111,7 +112,8 @@ async function runMigrator (packageName, options, context) {
   migrator.printExitLogs()
 }
 
-async function upgradeSinglePackage (packageName, options, context) {
+async function upgradeSinglePackage (pluginId, options, context) {
+  const packageName = resolvePluginId(pluginId)
   const pkg = getPackageJson(context)
 
   // TODO: allow packageName to be a shorthand

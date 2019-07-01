@@ -25,8 +25,7 @@ test('upgrade: plugin-babel v3.5', async () => {
   const pkg = JSON.parse(await project.read('package.json'))
   expect(pkg.dependencies).not.toHaveProperty('core-js')
 
-  // TODO: use short id
-  await project.run(`${require.resolve('../bin/vue')} upgrade @vue/cli-plugin-babel`)
+  await project.run(`${require.resolve('../bin/vue')} upgrade @vue/babel`)
 
   const updatedPkg = JSON.parse(await project.read('package.json'))
   expect(updatedPkg.dependencies).toHaveProperty('core-js')
