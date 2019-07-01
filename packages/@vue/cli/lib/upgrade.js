@@ -116,7 +116,6 @@ async function upgradeSinglePackage (pluginId, options, context) {
   const packageName = resolvePluginId(pluginId)
   const pkg = getPackageJson(context)
 
-  // TODO: allow packageName to be a shorthand
   let depEntry, required
   for (const depType of ['dependencies', 'devDependencies', 'optionalDependencies']) {
     if (pkg[depType] && pkg[depType][packageName]) {
