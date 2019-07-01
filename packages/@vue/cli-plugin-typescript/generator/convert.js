@@ -21,8 +21,11 @@ module.exports = (api, { tsLint = false } = {}, convertAllFiles = true) => {
       }
     } else {
       // rename only main file to main.ts
-      const content = files[api.entryFile]
       const tsFile = api.entryFile.replace(jsRE, '.ts')
+      let content = files[api.entryFile]
+      if (tsLint) {
+        content = convertLintFlags(content)
+      }
       files[tsFile] = content
       delete files[api.entryFile]
     }
