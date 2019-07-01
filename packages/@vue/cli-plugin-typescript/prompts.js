@@ -41,7 +41,7 @@ const prompts = module.exports = [
     name: `convertJsToTs`,
     type: `confirm`,
     message: `Convert all .js files to .ts?`,
-    default: false
+    default: true
   },
   {
     name: `allowJs`,
