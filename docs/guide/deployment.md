@@ -156,7 +156,7 @@ More information on [Netlify redirects documentation](https://www.netlify.com/do
 
 That’s it! Your app will be live on your Render URL as soon as the build finishes.
 
-In order to receive direct hits using history mode on Vue Router, you need to add the following rewrite rule in the Redirects/Rewrites tab for your site.
+In order to receive direct hits using history mode on Vue Router, you need to add the following rewrite rule in the `Redirects/Rewrites` tab for your site.
 
   - **Source:** `/*`
   - **Destination:** `/index.html`
