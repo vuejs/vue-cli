@@ -2,6 +2,17 @@ const pluginRE = /^(@vue\/|vue-|@[\w-]+\/vue-)cli-plugin-/
 const scopeRE = /^@[\w-]+\//
 const officialRE = /^@vue\//
 
+const officialPlugins = [
+  'babel',
+  'e2e-cypress',
+  'e2e-nightwatch',
+  'eslint',
+  'pwa',
+  'typescript',
+  'unit-jest',
+  'unit-mocha'
+]
+
 exports.isPlugin = id => pluginRE.test(id)
 
 exports.isOfficialPlugin = id => exports.isPlugin(id) && officialRE.test(id)
@@ -13,6 +24,9 @@ exports.resolvePluginId = id => {
   // e.g. vue-cli-plugin-foo, @vue/cli-plugin-foo, @bar/vue-cli-plugin-foo
   if (pluginRE.test(id)) {
     return id
+  }
+  if (officialPlugins.includes(id)) {
+    return `@vue/cli-plugin-${id}`
   }
   // scoped short
   // e.g. @vue/foo, @bar/foo
