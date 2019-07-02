@@ -1,5 +1,5 @@
 const path = require('path')
-const getPackageJson = require('./get-package-json')
+const getPackageJson = require('./getPackageJson')
 
 module.exports = function getInstalledVersion (packageName) {
   // for first level deps, read package.json directly is way faster than `npm list`

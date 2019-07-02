@@ -334,7 +334,7 @@ function install (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockInstall(id, context)
     } else {
-      await installPackage(cwd.get(), getCommand(cwd.get()), null, id)
+      await installPackage(cwd.get(), getCommand(cwd.get()), id)
     }
     await initPrompts(id, context)
     installationStep = 'config'
@@ -412,7 +412,7 @@ function uninstall (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockUninstall(id, context)
     } else {
-      await uninstallPackage(cwd.get(), getCommand(cwd.get()), null, id)
+      await uninstallPackage(cwd.get(), getCommand(cwd.get()), id)
     }
     currentPluginId = null
     installationStep = null
@@ -520,7 +520,7 @@ function update ({ id, full }, context) {
     if (localPath) {
       await updateLocalPackage({ cwd: cwd.get(), id, localPath, full }, context)
     } else {
-      await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
+      await updatePackage(cwd.get(), getCommand(cwd.get()), id)
     }
 
     logs.add({
@@ -583,7 +583,7 @@ async function updateAll (context) {
       args: [updatedPlugins.length]
     })
 
-    await updatePackage(cwd.get(), getCommand(cwd.get()), null, updatedPlugins.map(
+    await updatePackage(cwd.get(), getCommand(cwd.get()), updatedPlugins.map(
       p => p.id
     ).join(' '))
 

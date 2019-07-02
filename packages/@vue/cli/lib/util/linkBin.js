@@ -19,3 +19,12 @@ exports.linkBin = async (src, dest) => {
     await fs.chmod(dest, '755')
   }
 }
+
+exports.linkPackage = async (src, dest) => {
+  if (!process.env.VUE_CLI_TEST && !process.env.VUE_CLI_DEBUG) {
+    throw new Error(`linkPackage should only be used during tests or debugging.`)
+  }
+
+  await fs.remove(dest)
+  await fs.symlink(src, dest, 'dir')
+}

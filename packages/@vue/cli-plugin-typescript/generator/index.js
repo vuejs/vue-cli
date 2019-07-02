@@ -3,6 +3,7 @@ module.exports = (api, {
   tsLint,
   lintOn = []
 }, _, invoking) => {
+  debugger
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }

@@ -2,13 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const execa = require('execa')
 const chalk = require('chalk')
-const globby = require('globby')
 const inquirer = require('inquirer')
-const { isBinaryFileSync } = require('isbinaryfile')
-const Generator = require('./Generator')
-const { loadOptions } = require('./options')
-const { installDeps } = require('./util/installDeps')
-const normalizeFilePaths = require('./util/normalizeFilePaths')
 const {
   log,
   error,
@@ -21,23 +15,10 @@ const {
   loadModule
 } = require('@vue/cli-shared-utils')
 
-async function readFiles (context) {
-  const files = await globby(['**'], {
-    cwd: context,
-    onlyFiles: true,
-    gitignore: true,
-    ignore: ['**/node_modules/**', '**/.git/**'],
-    dot: true
-  })
-  const res = {}
-  for (const file of files) {
-    const name = path.resolve(context, file)
-    res[file] = isBinaryFileSync(name)
-      ? fs.readFileSync(name)
-      : fs.readFileSync(name, 'utf-8')
-  }
-  return normalizeFilePaths(res)
-}
+const Generator = require('./Generator')
+const { loadOptions } = require('./options')
+const { installDeps } = require('./util/installDeps')
+const readFiles = require('./util/readFiles')
 
 function getPkg (context) {
   const pkgPath = path.resolve(context, 'package.json')
@@ -146,7 +127,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     log()
     const packageManager =
       loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm')
-    await installDeps(context, packageManager, plugin.options && plugin.options.registry)
+    await installDeps(context, packageManager)
   }
 
   if (createCompleteCbs.length) {
