@@ -142,6 +142,28 @@ In order to receive direct hits using `history mode` on Vue Router, you need to 
 
 More information on [Netlify redirects documentation](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
 
+### Render
+
+[Render](https://render.com) offers [free static site hosting](https://render.com/docs/static-sites) with fully managed SSL, a global CDN and continuous auto deploys from GitHub.
+
+1. Create a new Web Service on Render, and give Render’s GitHub app permission to access your Vue repo.
+
+2. Use the following values during creation:
+
+    - **Environment:** `Static Site`
+    - **Build Command:** `npm run build` or `yarn build`
+    - **Publish directory:** `dist`
+
+That’s it! Your app will be live on your Render URL as soon as the build finishes.
+
+In order to receive direct hits using history mode on Vue Router, you need to add the following rewrite rule in the `Redirects/Rewrites` tab for your site.
+
+  - **Source:** `/*`
+  - **Destination:** `/index.html`
+  - **Status** `Rewrite`
+
+Learn more about setting up [redirects, rewrites](https://render.com/docs/redirects-rewrites) and [custom domains](https://render.com/docs/custom-domains) on Render.
+
 ### Amazon S3
 
 See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
