@@ -1,5 +1,4 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
-// const create = require('@vue/cli-test-utils/createTestProject')
 
 test('base', async () => {
   const { files, pkg } = await generateWithPlugin({

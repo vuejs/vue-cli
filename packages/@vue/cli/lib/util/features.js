@@ -3,6 +3,9 @@ const { toShortPluginId } = require('@vue/cli-shared-utils')
 
 exports.getFeatures = (preset) => {
   const features = []
+  if (preset.router) {
+    features.push('router')
+  }
   if (preset.vuex) {
     features.push('vuex')
   }

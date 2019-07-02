@@ -230,6 +230,9 @@ async function applyPreset (id, context) {
       )
     }
     if (preset.raw) {
+      if (preset.raw.router) {
+        await setFeatureEnabled({ id: 'router', enabled: true, updatePrompts: false }, context)
+      }
       if (preset.raw.vuex) {
         await setFeatureEnabled({ id: 'vuex', enabled: true, updatePrompts: false }, context)
       }
