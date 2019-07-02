@@ -42,7 +42,14 @@ module.exports = function resolveDeps (generatorId, to, from, sources, forceNewV
         sources[name] = generatorId
       }
       // warn incompatible version requirements
-      if (!forceNewVersion && !semver.validRange(r1semver) || !semver.validRange(r2semver) || !semver.intersects(r1semver, r2semver)) {
+      if (
+        !forceNewVersion &&
+        (
+          !semver.validRange(r1semver) ||
+          !semver.validRange(r2semver) ||
+          !semver.intersects(r1semver, r2semver)
+        )
+      ) {
         warn(
           `conflicting versions for project dependency "${name}":\n\n` +
           `- ${r1} injected by generator "${sourceGeneratorId}"\n` +
