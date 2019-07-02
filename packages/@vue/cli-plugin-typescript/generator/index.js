@@ -84,5 +84,5 @@ module.exports = (api, {
     hasJest: api.hasPlugin('unit-jest')
   })
 
-  require('./convert')(api, { tsLint }, convertJsToTs)
+  require('./convert')(api, { tsLint, convertJsToTs })
 }

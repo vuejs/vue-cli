@@ -1,4 +1,4 @@
-module.exports = (api, { tsLint = false } = {}, convertAllFiles = true) => {
+module.exports = (api, { tsLint = false, convertAllFiles = true } = {}) => {
   const jsRE = /\.js$/
   const excludeRE = /^tests\/e2e\/|(\.config|rc)\.js$/
   const convertLintFlags = require('../lib/convertLintFlags')
