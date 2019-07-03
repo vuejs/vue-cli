@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "3.8.1",
+  "version": "3.9.0",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@types/webpack-env": "^1.13.9",
-    "@vue/cli-shared-utils": "^3.8.0",
+    "@vue/cli-shared-utils": "^3.9.0",
     "fork-ts-checker-webpack-plugin": "^0.5.2",
     "globby": "^9.2.0",
     "ts-loader": "^5.3.3",
