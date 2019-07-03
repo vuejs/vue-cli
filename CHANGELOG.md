@@ -1,4 +1,60 @@
 
+## 4.0.0-alpha.2 (2019-07-03)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli-upgrade`, `@vue/cli`
+  * [#4090](https://github.com/vuejs/vue-cli/pull/4090) feat!: redesigns `vue upgrade`, supports code migration ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#4188](https://github.com/vuejs/vue-cli/pull/4188) feat: add `transformScript` to GeneratorAPI ([@sodatea](https://github.com/sodatea))
+  * [#4000](https://github.com/vuejs/vue-cli/pull/4000) feat: implement version-related APIs for `GeneratorAPI` ([@sodatea](https://github.com/sodatea))
+  * [#4168](https://github.com/vuejs/vue-cli/pull/4168) feat: make `injectImports` & `injectRootOptions` work for `.vue` files ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli-upgrade`, `@vue/cli`
+  * [#4090](https://github.com/vuejs/vue-cli/pull/4090) feat!: redesigns `vue upgrade`, supports code migration ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4169](https://github.com/vuejs/vue-cli/pull/4169) fix: prefer `devServer.public` as the custom url for browser to open (#4169) ([@Devil-Cong](https://github.com/Devil-Cong))
+  * [#4150](https://github.com/vuejs/vue-cli/pull/4150) chore: upgrade default-gateway to 5.0.2 ([@zrh122](https://github.com/zrh122))
+  * [#4083](https://github.com/vuejs/vue-cli/pull/4083) fix: display correct address when multiple network adapters present ([@sodatea](https://github.com/sodatea))
+  * [#4095](https://github.com/vuejs/vue-cli/pull/4095) fix: fix resolve project local plugin's file path ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#4148](https://github.com/vuejs/vue-cli/pull/4148) fix: fix config merging during `vue invoke` in Node.js v12 ([@sodatea](https://github.com/sodatea))
+* `@vue/eslint-config-airbnb`
+  * [#3961](https://github.com/vuejs/vue-cli/pull/3961) airbnb lint should not warn on vuex state mutation ([@LinusBorg](https://github.com/LinusBorg))
+
+#### :memo: Documentation
+* Other
+  * [#4217](https://github.com/vuejs/vue-cli/pull/4217) docs: add Render deployment guide ([@anurag](https://github.com/anurag))
+  * [#3777](https://github.com/vuejs/vue-cli/pull/3777) Add heroku deployment guide ([@zigomir](https://github.com/zigomir))
+  * [#3857](https://github.com/vuejs/vue-cli/pull/3857) docs: mention caveat about missing plugins when in legacy config ([@LinusBorg](https://github.com/LinusBorg))
+  * [#4120](https://github.com/vuejs/vue-cli/pull/4120) Move core plugins docs to documentation website ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+  * [#3924](https://github.com/vuejs/vue-cli/pull/3924) docs: add more explanation at prompts ([@kazupon](https://github.com/kazupon))
+* `@vue/cli-plugin-typescript`, `@vue/cli`
+  * [#4046](https://github.com/vuejs/vue-cli/pull/4046) docs: add description of babel plugin usage in TS plugin prompt ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli`
+  * [#4205](https://github.com/vuejs/vue-cli/pull/4205) Minor refactor to eliminate redundant code ([@jamesgeorge007](https://github.com/jamesgeorge007))
+* `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#4153](https://github.com/vuejs/vue-cli/pull/4153) chore: move yorkie from cli-service to plugin-eslint & plugin-typescript ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 11
+- Anurag Goel ([@anurag](https://github.com/anurag))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- James George ([@jamesgeorge007](https://github.com/jamesgeorge007))
+- Leon Liu ([@Devil-Cong](https://github.com/Devil-Cong))
+- Natalia Tepluhina ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+- Thorsten Lünborg ([@LinusBorg](https://github.com/LinusBorg))
+- [@aruseni](https://github.com/aruseni)
+- [@zrh122](https://github.com/zrh122)
+- kazuya kawaguchi ([@kazupon](https://github.com/kazupon))
+- ziga ([@zigomir](https://github.com/zigomir))
+
+
+
 ## 4.0.0-alpha.1 (2019-05-25)
 
 #### :boom: Breaking Changes
