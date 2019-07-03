@@ -226,7 +226,7 @@ npm install -g now
       "name": "my-example-app",
       "version": 2,
       "builds": [
-        { "src": "dist/**", "use": "@now/static"}
+        { "src": "dist/**", "use": "@now/static" }
       ],
       "routes": [
         { "src": "/(.*)", "dest": "dist/$1" }
