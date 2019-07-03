@@ -8,6 +8,8 @@
   * [#4188](https://github.com/vuejs/vue-cli/pull/4188) feat: add `transformScript` to GeneratorAPI ([@sodatea](https://github.com/sodatea))
   * [#4000](https://github.com/vuejs/vue-cli/pull/4000) feat: implement version-related APIs for `GeneratorAPI` ([@sodatea](https://github.com/sodatea))
   * [#4168](https://github.com/vuejs/vue-cli/pull/4168) feat: make `injectImports` & `injectRootOptions` work for `.vue` files ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`
+  * [#4212](https://github.com/vuejs/vue-cli/pull/4212) feat(typescript): add `convertJsToTs` and `allowJs` options ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
 
 #### :boom: Breaking Changes
 * `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli-upgrade`, `@vue/cli`
@@ -26,13 +28,13 @@
 
 #### :memo: Documentation
 * Other
-  * [#4217](https://github.com/vuejs/vue-cli/pull/4217) docs: add Render deployment guide ([@anurag](https://github.com/anurag))
+  * [#4217](https://github.com/vuejs/vue-cli/pull/4217) Add Render deployment guide ([@anurag](https://github.com/anurag))
   * [#3777](https://github.com/vuejs/vue-cli/pull/3777) Add heroku deployment guide ([@zigomir](https://github.com/zigomir))
-  * [#3857](https://github.com/vuejs/vue-cli/pull/3857) docs: mention caveat about missing plugins when in legacy config ([@LinusBorg](https://github.com/LinusBorg))
+  * [#3857](https://github.com/vuejs/vue-cli/pull/3857) Mention caveat about missing plugins when in legacy config ([@LinusBorg](https://github.com/LinusBorg))
   * [#4120](https://github.com/vuejs/vue-cli/pull/4120) Move core plugins docs to documentation website ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
-  * [#3924](https://github.com/vuejs/vue-cli/pull/3924) docs: add more explanation at prompts ([@kazupon](https://github.com/kazupon))
+  * [#3924](https://github.com/vuejs/vue-cli/pull/3924) Add more explanation at prompts ([@kazupon](https://github.com/kazupon))
 * `@vue/cli-plugin-typescript`, `@vue/cli`
-  * [#4046](https://github.com/vuejs/vue-cli/pull/4046) docs: add description of babel plugin usage in TS plugin prompt ([@sodatea](https://github.com/sodatea))
+  * [#4046](https://github.com/vuejs/vue-cli/pull/4046) Add description of babel plugin usage in TS plugin prompt ([@sodatea](https://github.com/sodatea))
 
 #### :house: Internal
 * `@vue/cli`
