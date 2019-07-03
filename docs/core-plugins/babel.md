@@ -29,7 +29,7 @@ module.exports = {
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/babel
+vue add babel
 ```
 
 ## Injected webpack-chain Rules
