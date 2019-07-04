@@ -1,4 +1,15 @@
 
+## 3.9.1 (2019-07-04)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#4233](https://github.com/vuejs/vue-cli/pull/4233) fix: use module directory instead of main entry path for `eslintPath` ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 3.9.0 (2019-07-03)
 
 #### :rocket: New Features

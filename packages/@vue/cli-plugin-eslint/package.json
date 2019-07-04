@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-eslint",
-  "version": "3.9.0",
+  "version": "3.9.1",
   "description": "eslint plugin for vue-cli",
   "main": "index.js",
   "repository": {
