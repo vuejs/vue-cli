@@ -35,6 +35,8 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 ### GitHub Pages
 
+#### Pushing updates manually
+
 1. Set correct `publicPath` in `vue.config.js`.
 
     If you are deploying to `https://<USERNAME>.github.io/`, you can omit `publicPath` as it defaults to `"/"`.
@@ -79,9 +81,39 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     cd -
     ```
 
-    ::: tip
-    You can also run the above script in your CI setup to enable automatic deployment on each push.
-    :::
+#### Using Travis CI for automatic updates 
+
+1. Set correct `publicPath` in `vue.config.js` as explained above.
+
+2. Install the Travis CLI client: `gem install travis && travis --login`
+
+3. Generate a GitHub [access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+   with repo permissions.
+
+4. Grant the Travis job access to your repository: `travis set GITHUB_TOKEN=xxx`
+   (`xxx` is the personal access token from step 3.)
+
+5. Create a `.travis.yml` file in the root of your project.
+
+    ```yaml
+    language: node_js
+   node_js:
+     - "node"
+
+   cache: npm
+
+   script: npm run build
+
+   deploy:
+     provider: pages
+     skip_cleanup: true
+     github_token: $GITHUB_TOKEN
+     local_dir: dist
+     on:
+       branch: master
+    ```
+
+6. Push the `.travis.yml` file to your repository to trigger the first build.
 
 ### GitLab Pages
 
@@ -347,7 +379,6 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
     cd -
     ```
-
 
 ### Docker (Nginx)
 
