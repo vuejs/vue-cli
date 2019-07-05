@@ -96,6 +96,13 @@ class GeneratorAPI {
   }
 
   get cliServiceVersion () {
+    // In generator unit tests, we don't write the actual file back to the disk.
+    // So there is no cli-service module to load.
+    // In that case, just return the cli version.
+    if (process.env.VUE_CLI_TEST && process.env.VUE_CLI_SKIP_WRITE) {
+      return this.cliVersion
+    }
+
     const servicePkg = loadModule(
       '@vue/cli-service/package.json',
       this.generator.context
