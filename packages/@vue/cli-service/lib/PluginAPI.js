@@ -64,10 +64,6 @@ class PluginAPI {
    * @return {boolean}
    */
   hasPlugin (id) {
-    if (['vuex'].includes(id)) {
-      const pkg = this.service.pkg
-      return ((pkg.dependencies && pkg.dependencies[id]) || (pkg.devDependencies && pkg.devDependencies[id]))
-    }
     return this.service.plugins.some(p => matchesPluginId(id, p.id))
   }
 

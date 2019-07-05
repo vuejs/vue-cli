@@ -8,16 +8,10 @@ const {
   hasProjectYarn,
   hasProjectPnpm,
   resolvePluginId,
-  resolveModule,
-  loadModule
+  resolveModule
 } = require('@vue/cli-shared-utils')
 
 async function add (pluginName, options = {}, context = process.cwd()) {
-  // special internal "plugins"
-  if (/^(@vue\/)?vuex$/.test(pluginName)) {
-    return addVuex(context)
-  }
-
   const packageName = resolvePluginId(pluginName)
 
   log()
@@ -36,13 +30,6 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   } else {
     log(`Plugin ${packageName} does not have a generator to invoke`)
   }
-}
-
-async function addVuex (context) {
-  invoke.runGenerator(context, {
-    id: 'core:vuex',
-    apply: loadModule('@vue/cli-service/generator/vuex', context)
-  })
 }
 
 module.exports = (...args) => {

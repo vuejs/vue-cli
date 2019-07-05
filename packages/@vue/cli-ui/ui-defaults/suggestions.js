@@ -1,4 +1,3 @@
-const { loadModule } = require('@vue/cli-shared-utils')
 const invoke = require('@vue/cli/lib/invoke')
 
 const ROUTER = 'org.vue.vue-router-add'
@@ -78,14 +77,7 @@ async function install (api, id) {
   let error
 
   try {
-    if (id === 'router') {
-      await invoke(id, {}, context)
-    } else {
-      await invoke.runGenerator(context, {
-        id: `core:${id}`,
-        apply: loadModule(`@vue/cli-service/generator/${id}`, context)
-      })
-    }
+    await invoke(id, {}, context)
   } catch (e) {
     error = e
   }

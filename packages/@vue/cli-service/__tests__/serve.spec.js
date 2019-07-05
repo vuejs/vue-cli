@@ -74,6 +74,19 @@ test('serve with legacy router option', async () => {
   )
 })
 
+test('serve with legacy vuex option', async () => {
+  const project = await create('e2e-serve-legacy-vuex', Object.assign({}, defaultPreset, {
+    vuex: true
+  }))
+
+  await serve(
+    () => project.run('vue-cli-service serve'),
+    async ({ page, helpers }) => {
+      expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
+    }
+  )
+})
+
 test('serve with inline entry', async () => {
   const project = await create('e2e-serve-inline-entry', defaultPreset)
 

@@ -105,7 +105,6 @@ vue add @vue/eslint --config airbnb --lintOn save
 ``` json
 {
   "useConfigFiles": true,
-  "vuex": true,
   "cssPreprocessor": "sass",
   "plugins": {
     "@vue/cli-plugin-babel": {},
@@ -113,7 +112,8 @@ vue add @vue/eslint --config airbnb --lintOn save
       "config": "airbnb",
       "lintOn": ["save", "commit"]
     },
-    "@vue/cli-plugin-router": {}
+    "@vue/cli-plugin-router": {},
+    "@vue/cli-plugin-vuex": {}
   }
 }
 ```
