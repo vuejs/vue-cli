@@ -1,0 +1,31 @@
+{
+  "name": "@vue/cli-plugin-router",
+  "version": "4.0.0-alpha.3",
+  "description": "router plugin for vue-cli",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-plugin-router"
+  },
+  "keywords": [
+    "vue",
+    "cli",
+    "router"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-router#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@vue/cli-shared-utils": "^4.0.0-alpha.3"
+  },
+  "devDependencies": {
+    "@vue/cli-test-utils": "^4.0.0-alpha.3"
+  }
+}

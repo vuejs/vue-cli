@@ -8,7 +8,7 @@ const VUE_CONFIG_OPEN = 'org.vue.vue-config-open'
 module.exports = api => {
   api.onViewOpen(({ view }) => {
     if (view.id === 'vue-project-plugins') {
-      if (!api.hasPlugin('vue-router')) {
+      if (!api.hasPlugin('router')) {
         api.addSuggestion({
           id: ROUTER,
           type: 'action',
@@ -16,7 +16,7 @@ module.exports = api => {
           message: 'org.vue.cli-service.suggestions.vue-router-add.message',
           link: 'https://router.vuejs.org/',
           async handler () {
-            await install(api, 'vue-router')
+            await install(api, 'router')
           }
         })
       }
@@ -73,16 +73,19 @@ async function install (api, id) {
     progress: -1
   })
 
-  const name = id === 'vue-router' ? 'router' : id
   const context = api.getCwd()
 
   let error
 
   try {
-    await invoke.runGenerator(context, {
-      id: `core:${name}`,
-      apply: loadModule(`@vue/cli-service/generator/${name}`, context)
-    })
+    if (id === 'router') {
+      await invoke(id, {}, context)
+    } else {
+      await invoke.runGenerator(context, {
+        id: `core:${id}`,
+        apply: loadModule(`@vue/cli-service/generator/${id}`, context)
+      })
+    }
   } catch (e) {
     error = e
   }

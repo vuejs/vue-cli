@@ -92,8 +92,18 @@ module.exports = class Creator extends EventEmitter {
     preset.plugins['@vue/cli-service'] = Object.assign({
       projectName: name
     }, preset)
+
     if (cliOptions.bare) {
       preset.plugins['@vue/cli-service'].bare = true
+    }
+
+    // legacy support for router
+    if (preset.router) {
+      preset.plugins['@vue/cli-plugin-router'] = {}
+
+      if (preset.routerHistoryMode) {
+        preset.plugins['@vue/cli-plugin-router'].historyMode = true
+      }
     }
 
     const packageManager = (

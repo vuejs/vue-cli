@@ -19,9 +19,11 @@ test('router', async () => {
   ]
 
   const expectedOptions = {
-    router: true,
-    routerHistoryMode: true,
-    plugins: {}
+    plugins: {
+      '@vue/cli-plugin-router': {
+        historyMode: true
+      }
+    }
   }
 
   await assertPromptModule(
