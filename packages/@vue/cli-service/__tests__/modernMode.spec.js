@@ -88,7 +88,7 @@ test('no-unsafe-inline', async () => {
   const { stdout } = await project.run('vue-cli-service build --modern --no-unsafe-inline')
   expect(stdout).toMatch('Build complete.')
 
-  // should output a seperate safari-nomodule-fix bundle
+  // should output a separate safari-nomodule-fix bundle
   const files = await fs.readdir(path.join(project.dir, 'dist/js'))
   expect(files.some(f => /^safari-nomodule-fix\.js$/.test(f))).toBe(true)
 
