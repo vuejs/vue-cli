@@ -76,7 +76,7 @@ VUE_APP_TITLE=My App (staging)
 console.log(process.env.VUE_APP_SECRET)
 ```
 
-在构建过程中，`process.env.VUE_APP_SECRET` 将会被相应的值所取代。在 `VUE_APP_SECRET=secret` 的情况下，它会被替换为 `"sercet"`。
+在构建过程中，`process.env.VUE_APP_SECRET` 将会被相应的值所取代。在 `VUE_APP_SECRET=secret` 的情况下，它会被替换为 `"secret"`。
 
 除了 `VUE_APP_*` 变量之外，在你的应用代码中始终可用的还有两个特殊的变量：
 

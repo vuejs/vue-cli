@@ -158,7 +158,7 @@ module.exports = (api, options) => {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay
         app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
-          `To specify an editor, sepcify the EDITOR env variable or ` +
+          `To specify an editor, specify the EDITOR env variable or ` +
           `add "editor" field to your Vue project config.\n`
         )))
         // allow other plugins to register middlewares, e.g. PWA

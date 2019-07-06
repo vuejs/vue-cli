@@ -193,7 +193,7 @@ async function getUpgradable (context) {
 }
 
 async function checkForUpdates (context) {
-  logWithSpinner('Gathering pacakage information...')
+  logWithSpinner('Gathering package information...')
   const upgradable = await getUpgradable(context)
   stopSpinner()
 
