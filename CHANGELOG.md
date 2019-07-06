@@ -163,6 +163,74 @@ Most of the following new features and bugfixes also applies to v3.8.0
 - 毛呆 ([@aweikalee](https://github.com/aweikalee))
 
 
+## 3.9.2 (2019-07-06)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#4246](https://github.com/vuejs/vue-cli/pull/4246) fix: fix eslint path resolution in `vue serve` ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-service`, `@vue/cli-ui`
+  * [#4241](https://github.com/vuejs/vue-cli/pull/4241) Fix typos ([@minho42](https://github.com/minho42))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Min ho Kim ([@minho42](https://github.com/minho42))
+
+
+
+## 3.9.1 (2019-07-04)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#4233](https://github.com/vuejs/vue-cli/pull/4233) fix: use module directory instead of main entry path for `eslintPath` ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 3.9.0 (2019-07-03)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#4188](https://github.com/vuejs/vue-cli/pull/4188) feat: add `transformScript` to GeneratorAPI ([@sodatea](https://github.com/sodatea))
+  * [#4000](https://github.com/vuejs/vue-cli/pull/4000) feat: implement version-related APIs for `GeneratorAPI` ([@sodatea](https://github.com/sodatea))
+  * [#4168](https://github.com/vuejs/vue-cli/pull/4168) feat: make `injectImports` & `injectRootOptions` work for `.vue` files ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4169](https://github.com/vuejs/vue-cli/pull/4169) fix: prefer `devServer.public` as the custom url for browser to open (#4169) ([@Devil-Cong](https://github.com/Devil-Cong))
+
+#### :memo: Documentation
+* `@vue/cli-plugin-typescript`
+  * [#4212](https://github.com/vuejs/vue-cli/pull/4212) feat(typescript): add an option to not rename all .js files to .ts and to set `allowJs` to true ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+* Other
+  * [#4217](https://github.com/vuejs/vue-cli/pull/4217) docs: add Render deployment guide ([@anurag](https://github.com/anurag))
+  * [#3777](https://github.com/vuejs/vue-cli/pull/3777) Add heroku deployment guide ([@zigomir](https://github.com/zigomir))
+  * [#3857](https://github.com/vuejs/vue-cli/pull/3857) docs: mention caveat about missing plugins when in legacy config ([@LinusBorg](https://github.com/LinusBorg))
+  * [#3171](https://github.com/vuejs/vue-cli/pull/3171) docs: Update issue template naming Issue Helper ([@peterblazejewicz](https://github.com/peterblazejewicz))
+  * [#4165](https://github.com/vuejs/vue-cli/pull/4165) docs: Add Chinese translation for the part -- Installing plugin locally ([@MoruoFrog](https://github.com/MoruoFrog))
+
+#### :house: Internal
+* `@vue/cli`
+  * [#4205](https://github.com/vuejs/vue-cli/pull/4205) Minor refactor to eliminate redundant code ([@jamesgeorge007](https://github.com/jamesgeorge007))
+* `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#4153](https://github.com/vuejs/vue-cli/pull/4153) chore: move yorkie from cli-service to plugin-eslint & plugin-typescript ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 10
+- Anurag Goel ([@anurag](https://github.com/anurag))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- James George ([@jamesgeorge007](https://github.com/jamesgeorge007))
+- Leon Liu ([@Devil-Cong](https://github.com/Devil-Cong))
+- Natalia Tepluhina ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+- Piotr Błażejewicz (Peter Blazejewicz) ([@peterblazejewicz](https://github.com/peterblazejewicz))
+- Thorsten Lünborg ([@LinusBorg](https://github.com/LinusBorg))
+- [@MoruoFrog](https://github.com/MoruoFrog)
+- [@aruseni](https://github.com/aruseni)
+- ziga ([@zigomir](https://github.com/zigomir))
+
+
 ## 3.8.4 (2019-06-15)
 
 #### :bug: Bug Fix
