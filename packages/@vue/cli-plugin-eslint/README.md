@@ -63,7 +63,7 @@ module.exports = {
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/eslint
+vue add eslint
 ```
 
 ## Injected webpack-chain Rules

@@ -32,5 +32,5 @@
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/unit-mocha
+vue add unit-mocha
 ```

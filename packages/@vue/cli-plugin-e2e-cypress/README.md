@@ -29,7 +29,7 @@ Cypress offers a rich interactive interface for running E2E tests, but currently
 
   - In GUI mode, [all Cypress CLI options for `cypress open` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-open);
   - In `--headless` mode, [all Cypress CLI options for `cypress run` are also supported](https://docs.cypress.io/guides/guides/command-line.html#cypress-run).
-  
+
   Examples :
   - Run Cypress in headless mode for a specific file: `vue-cli-service test:e2e --headless --spec tests/e2e/specs/actions.spec.js`
 
@@ -44,5 +44,5 @@ Cypress doesn't load .env files for your test files the same way as `vue-cli` do
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/e2e-cypress
+vue add e2e-cypress
 ```
