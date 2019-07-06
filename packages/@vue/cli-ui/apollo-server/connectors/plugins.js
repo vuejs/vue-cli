@@ -244,7 +244,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
       log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
       logs.add({
         type: 'error',
-        message: `An error occured while loading ${name}: no function exported`
+        message: `An error occurred while loading ${name}: no function exported`
       })
     } else {
       pluginApi.pluginId = id
@@ -255,7 +255,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
         log(`${chalk.red('ERROR')} while loading plugin API for ${name}:`, e)
         logs.add({
           type: 'error',
-          message: `An error occured while loading ${name}: ${e.message}`
+          message: `An error occurred while loading ${name}: ${e.message}`
         })
       }
       pluginApi.pluginId = null

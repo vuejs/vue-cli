@@ -430,7 +430,7 @@ This is because the command's expected mode needs to be known before loading env
 
 Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
 
-When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. 
+When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js.
 
 You should export directly array of questions, or export function that return those.
 
@@ -445,7 +445,7 @@ module.exports = [
     message: 'The locale of project localization.',
     validate: input => !!input,
     default: 'en'
-  }, 
+  },
   // ...
 ]
 ```
@@ -466,7 +466,7 @@ module.exports = pkg => {
     }
   ]
 
-  // add dynamically propmpt
+  // add dynamically prompt
   if ('@vue/cli-plugin-eslint' in (pkg.devDependencies || {})) {
     prompts.push({
       type: 'confirm',

@@ -270,7 +270,7 @@
 #### Bug Fixes
 
 * should not add polyfills from transform-runtime plugin ([#3730](https://github.com/vuejs/vue-cli/issues/3730)) ([b987969](https://github.com/vuejs/vue-cli/commit/b987969))
-* should not use abosulte polyfill paths when `absoluteRuntime` is on ([#3732](https://github.com/vuejs/vue-cli/issues/3732)) ([9bdff3b](https://github.com/vuejs/vue-cli/commit/9bdff3b)), closes [#3725](https://github.com/vuejs/vue-cli/issues/3725)
+* should not use absolute polyfill paths when `absoluteRuntime` is on ([#3732](https://github.com/vuejs/vue-cli/issues/3732)) ([9bdff3b](https://github.com/vuejs/vue-cli/commit/9bdff3b)), closes [#3725](https://github.com/vuejs/vue-cli/issues/3725)
 
 ## cli-plugin-babel
 
@@ -2069,7 +2069,7 @@ and want to retain the previous behavior, you can configure webpack to use
 `output.libraryExport: 'default'` in `vue.config.js`.
 * **ui:** - `file-icon` for the configurations is removed
 - Configuration objects `icon` option changed and is now working differently: you can either use a material icon code or a custom image (see Public static files in the UI Plugin docs).
-- Task objects have a new `icon` option wich works exactly the same
+- Task objects have a new `icon` option which works exactly the same
 - By default, if no icon is provided for either the config or the task, the corresponding vue-cli plugin logo will be used instead (if any).
 * jest is upgraded to 23.1.0 with minor breaking changes
 but should not affect normal test cases
