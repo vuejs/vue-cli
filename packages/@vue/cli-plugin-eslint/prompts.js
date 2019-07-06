@@ -1,50 +1,12 @@
 // these prompts are used if the plugin is late-installed into an existing
 // project and invoked by `vue invoke`.
 
-const { chalk, hasGit } = require('@vue/cli-shared-utils')
+const {
+  lintOn,
+  eslintConfig
+} = require('@vue/cli-shared-utils/lib/pluginPrompts/eslint')
 
 module.exports = [
-  {
-    name: 'config',
-    type: 'list',
-    message: `Pick an ESLint config:`,
-    choices: [
-      {
-        name: 'Error prevention only',
-        value: 'base',
-        short: 'Basic'
-      },
-      {
-        name: 'Airbnb',
-        value: 'airbnb',
-        short: 'Airbnb'
-      },
-      {
-        name: 'Standard',
-        value: 'standard',
-        short: 'Standard'
-      },
-      {
-        name: 'Prettier',
-        value: 'prettier',
-        short: 'Prettier'
-      }
-    ]
-  },
-  {
-    name: 'lintOn',
-    type: 'checkbox',
-    message: 'Pick additional lint features:',
-    choices: [
-      {
-        name: 'Lint on save',
-        value: 'save',
-        checked: true
-      },
-      {
-        name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
-        value: 'commit'
-      }
-    ]
-  }
+  eslintConfig,
+  lintOn
 ]

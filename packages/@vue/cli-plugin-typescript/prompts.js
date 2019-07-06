@@ -1,54 +1,27 @@
 // these prompts are used if the plugin is late-installed into an existing
 // project and invoked by `vue invoke`.
 
-const { chalk, hasGit } = require('@vue/cli-shared-utils')
+const {
+  lintOn
+} = require('@vue/cli-shared-utils/lib/pluginPrompts/eslint')
+const {
+  classComponent,
+  useTsWithBabel,
+  useTsLint,
+  convertJsToTs,
+  allowJs
+} = require('@vue/cli-shared-utils/lib/pluginPrompts/typescript')
 
 const prompts = module.exports = [
+  classComponent,
+  useTsWithBabel,
+  useTsLint,
   {
-    name: `classComponent`,
-    type: `confirm`,
-    message: `Use class-style component syntax?`,
-    default: true
+    ...lintOn,
+    when: answers => answers.lint
   },
-  {
-    name: `useTsWithBabel`,
-    type: `confirm`,
-    message: 'Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)?'
-  },
-  {
-    name: `lint`,
-    type: `confirm`,
-    message: `Use TSLint?`
-  },
-  {
-    name: `lintOn`,
-    type: `checkbox`,
-    when: answers => answers.lint,
-    message: `Pick lint features:`,
-    choices: [
-      {
-        name: 'Lint on save',
-        value: 'save',
-        checked: true
-      },
-      {
-        name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
-        value: 'commit'
-      }
-    ]
-  },
-  {
-    name: `convertJsToTs`,
-    type: `confirm`,
-    message: `Convert all .js files to .ts?`,
-    default: true
-  },
-  {
-    name: `allowJs`,
-    type: `confirm`,
-    message: `Allow .js files to be compiled?`,
-    default: false
-  }
+  convertJsToTs,
+  allowJs
 ]
 
 // in RC6+ the export can be function, but that would break invoke for RC5 and

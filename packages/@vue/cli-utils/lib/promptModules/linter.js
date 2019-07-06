@@ -1,6 +1,8 @@
 module.exports = cli => {
-  const chalk = require('chalk')
-  const { hasGit } = require('@vue/cli-shared-utils')
+  const {
+    lintOn,
+    eslintConfig
+  } = require('@vue/cli-shared-utils/lib/pluginPrompts/eslint')
 
   cli.injectFeature({
     name: 'Linter / Formatter',
@@ -13,11 +15,9 @@ module.exports = cli => {
   })
 
   cli.injectPrompt({
+    ...eslintConfig,
     name: 'eslintConfig',
     when: answers => answers.features.includes('linter'),
-    type: 'list',
-    message: 'Pick a linter / formatter config:',
-    description: 'Checking code errors and enforcing an homogeoneous code style is recommended.',
     choices: answers => [
       ...(
         answers.features.includes('ts')
@@ -28,45 +28,13 @@ module.exports = cli => {
           }]
           : []
       ),
-      {
-        name: 'ESLint with error prevention only',
-        value: 'base',
-        short: 'Basic'
-      },
-      {
-        name: 'ESLint + Airbnb config',
-        value: 'airbnb',
-        short: 'Airbnb'
-      },
-      {
-        name: 'ESLint + Standard config',
-        value: 'standard',
-        short: 'Standard'
-      },
-      {
-        name: 'ESLint + Prettier',
-        value: 'prettier',
-        short: 'Prettier'
-      }
+      ...eslintConfig.choices
     ]
   })
 
   cli.injectPrompt({
-    name: 'lintOn',
-    message: 'Pick additional lint features:',
-    when: answers => answers.features.includes('linter'),
-    type: 'checkbox',
-    choices: [
-      {
-        name: 'Lint on save',
-        value: 'save',
-        checked: true
-      },
-      {
-        name: 'Lint and fix on commit' + (hasGit() ? '' : chalk.red(' (requires Git)')),
-        value: 'commit'
-      }
-    ]
+    ...lintOn,
+    when: answers => answers.features.includes('linter')
   })
 
   cli.onPromptComplete((answers, options) => {

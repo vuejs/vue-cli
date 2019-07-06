@@ -1,3 +1,8 @@
+const {
+  classComponent,
+  useTsWithBabel
+} = require('@vue/cli-shared-utils/lib/pluginPrompts/typescript')
+
 module.exports = cli => {
   cli.injectFeature({
     name: 'TypeScript',
@@ -9,21 +14,14 @@ module.exports = cli => {
   })
 
   cli.injectPrompt({
+    ...classComponent,
     name: 'tsClassComponent',
-    when: answers => answers.features.includes('ts'),
-    type: 'confirm',
-    message: 'Use class-style component syntax?',
-    description: 'Use the @Component decorator on classes.',
-    link: 'https://vuejs.org/v2/guide/typescript.html#Class-Style-Vue-Components',
-    default: true
+    when: answers => answers.features.includes('ts')
   })
 
   cli.injectPrompt({
-    name: 'useTsWithBabel',
+    ...useTsWithBabel,
     when: answers => answers.features.includes('ts'),
-    type: 'confirm',
-    message: 'Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)?',
-    description: 'It will output ES2015 and delegate the rest to Babel for auto polyfill based on browser targets.',
     default: answers => answers.features.includes('babel')
   })
 
