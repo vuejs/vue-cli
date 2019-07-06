@@ -1,4 +1,20 @@
 
+## 3.9.2 (2019-07-06)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#4246](https://github.com/vuejs/vue-cli/pull/4246) fix: fix eslint path resolution in `vue serve` ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-service`, `@vue/cli-ui`
+  * [#4241](https://github.com/vuejs/vue-cli/pull/4241) Fix typos ([@minho42](https://github.com/minho42))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Min ho Kim ([@minho42](https://github.com/minho42))
+
+
+
 ## 3.9.1 (2019-07-04)
 
 #### :bug: Bug Fix
