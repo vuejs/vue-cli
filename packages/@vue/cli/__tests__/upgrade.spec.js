@@ -3,7 +3,7 @@ const path = require('path')
 const create = require('@vue/cli-test-utils/createTestProject')
 // const { logs } = require('@vue/cli-shared-utils')
 
-jest.setTimeout(200000)
+jest.setTimeout(300000)
 
 const outsideTestFolder = path.resolve(__dirname, '../../../../../vue-upgrade-tests')
 
