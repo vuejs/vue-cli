@@ -43,7 +43,7 @@ module.exports = (api, options) => {
           .pre()
           .exclude
             .add(/node_modules/)
-            .add(require('path').dirname(require.resolve('@vue/cli-service')))
+            .add(require('path').dirname(require.resolve('@vue/cli-service')))  // eslint-disable-line
             .end()
           .test(/\.(vue|(j|t)sx?)$/)
           .use('eslint-loader')
@@ -55,7 +55,10 @@ module.exports = (api, options) => {
               emitWarning: allWarnings,
               // only emit errors in production mode.
               emitError: allErrors,
-              eslintPath: path.dirname(resolveModule('eslint/package.json', cwd)),
+              eslintPath: path.dirname(
+                resolveModule('eslint/package.json', cwd) ||
+                require.resolve('eslint/package.json')
+              ),
               formatter:
                 loadModule('eslint/lib/formatters/codeframe', cwd, true) ||
                 require('eslint/lib/formatters/codeframe')
