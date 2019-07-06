@@ -75,7 +75,7 @@ module.exports = api => {
     maxCount: 1
   })
 
-  // Depdency updates
+  // Dependency updates
 
   setSharedData('dependency-updates.status', {
     status: 'loading',

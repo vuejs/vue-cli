@@ -203,7 +203,7 @@ class PluginApi {
   }
 
   /**
-   * Add a new task indepently from the scripts.
+   * Add a new task independently from the scripts.
    * The task will only appear in the UI.
    *
    * @param {object} options Task description

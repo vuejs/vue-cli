@@ -129,7 +129,7 @@ test('css.extract', () => {
   }, 'production')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
-    // if postcss config is present, two postcss-loaders will be used becasue it
+    // if postcss config is present, two postcss-loaders will be used because it
     // does not support mixing config files with loader options.
     expect(findLoaders(config2, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
     expect(findOptions(config2, lang, 'css').importLoaders).toBe(3)
