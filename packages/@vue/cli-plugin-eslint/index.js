@@ -53,7 +53,10 @@ module.exports = (api, options) => {
               emitWarning: allWarnings,
               // only emit errors in production mode.
               emitError: allErrors,
-              eslintPath: path.dirname(resolveModule('eslint/package.json', cwd)),
+              eslintPath: path.dirname(
+                resolveModule('eslint/package.json', cwd) ||
+                resolveModule('eslint/package.json', __dirname)
+              ),
               formatter: loadModule('eslint/lib/formatters/codeframe', cwd, true)
             })
     })
