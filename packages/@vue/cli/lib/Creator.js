@@ -55,8 +55,8 @@ module.exports = class Creator {
     const promptAPI = new PromptModuleAPI()
     promptModules.forEach(m => m(promptAPI))
     this.featurePrompt.choices.push(...promptAPI.features)
-    this.injectedPrompts = promptAPI.injectPrompt
-    this.promptCompleteCbs = promptAPI.promptCompleteCbs
+    this.injectedPrompts.push(...promptAPI.injectedPrompts)
+    this.promptCompleteCbs.push(...promptAPI.promptCompleteCbs)
   }
 
   async create (cliOptions = {}, preset = null) {
