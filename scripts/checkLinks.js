@@ -50,7 +50,7 @@ function checkFiles (folder, all = false, recursive = false) {
 }
 
 checkFiles(path.resolve(__dirname, '../packages/@vue'), false, true)
-checkFiles(path.resolve(__dirname, '../packages/@vue/cli/lib/promptModules'), true, true)
+checkFiles(path.resolve(__dirname, '../packages/@vue/cli-utils/lib/promptModules'), true, true)
 Promise.all(promises).catch(() => {
   process.exit(1)
 })
