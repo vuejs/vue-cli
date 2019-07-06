@@ -8,9 +8,11 @@ const officialPlugins = [
   'e2e-nightwatch',
   'eslint',
   'pwa',
+  'router',
   'typescript',
   'unit-jest',
-  'unit-mocha'
+  'unit-mocha',
+  'vuex'
 ]
 
 exports.isPlugin = id => pluginRE.test(id)
