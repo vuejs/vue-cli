@@ -5,5 +5,5 @@
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/vuex
+vue add vuex
 ```

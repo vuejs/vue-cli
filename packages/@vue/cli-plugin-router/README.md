@@ -5,5 +5,5 @@
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/router
+vue add router
 ```

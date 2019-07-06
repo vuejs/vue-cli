@@ -127,7 +127,7 @@ module.exports = {
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/pwa
+vue add pwa
 ```
 
 ## Injected webpack-chain Rules
