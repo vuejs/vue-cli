@@ -1,4 +1,34 @@
 
+## 4.0.0-alpha.4 (2019-07-06)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`, `@vue/cli-shared-utils`
+  * [#4219](https://github.com/vuejs/vue-cli/pull/4219) feat: allow omitting scope prefix for official plugins on `vue add` ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-vuex`, `@vue/cli-service`, `@vue/cli-ui`, `@vue/cli`
+  * [#4242](https://github.com/vuejs/vue-cli/pull/4242) feat!: make vuex a separate plugin ([@pksunkara](https://github.com/pksunkara))
+* `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-service`, `@vue/cli-ui`, `@vue/cli`
+  * [#4196](https://github.com/vuejs/vue-cli/pull/4196) Make router a separate plugin ([@pksunkara](https://github.com/pksunkara))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#4246](https://github.com/vuejs/vue-cli/pull/4246) fix: fix eslint path resolution in `vue serve` ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* Other
+  * [#4103](https://github.com/vuejs/vue-cli/pull/4103) deployment.md: Add instructions for Travis CI ([@terorie](https://github.com/terorie))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-service`, `@vue/cli-ui`, `@vue/cli`
+  * [#4241](https://github.com/vuejs/vue-cli/pull/4241) Fix typos ([@minho42](https://github.com/minho42))
+
+#### Committers: 4
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Min ho Kim ([@minho42](https://github.com/minho42))
+- Pavan Kumar Sunkara ([@pksunkara](https://github.com/pksunkara))
+- Richard Patel ([@terorie](https://github.com/terorie))
+
+
+
 ## 4.0.0-alpha.3 (2019-07-04)
 
 #### :bug: Bug Fix

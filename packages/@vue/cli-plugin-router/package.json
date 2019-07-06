@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-router",
-  "version": "4.0.0-alpha.3",
+  "version": "4.0.0-alpha.4",
   "description": "router plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,9 +23,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^4.0.0-alpha.3"
+    "@vue/cli-shared-utils": "^4.0.0-alpha.4"
   },
   "devDependencies": {
-    "@vue/cli-test-utils": "^4.0.0-alpha.3"
+    "@vue/cli-test-utils": "^4.0.0-alpha.4"
   }
 }
