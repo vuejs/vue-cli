@@ -105,7 +105,6 @@ Here's an example preset:
 ``` json
 {
   "useConfigFiles": true,
-  "vuex": true,
   "cssPreprocessor": "sass",
   "plugins": {
     "@vue/cli-plugin-babel": {},
@@ -113,7 +112,8 @@ Here's an example preset:
       "config": "airbnb",
       "lintOn": ["save", "commit"]
     },
-    "@vue/cli-plugin-router": {}
+    "@vue/cli-plugin-router": {},
+    "@vue/cli-plugin-vuex": {}
   }
 }
 ```

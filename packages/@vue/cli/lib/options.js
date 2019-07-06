@@ -10,7 +10,7 @@ const rcPath = exports.rcPath = getRcPath('.vuerc')
 const presetSchema = createSchema(joi => joi.object().keys({
   bare: joi.boolean(),
   useConfigFiles: joi.boolean(),
-  // TODO: Use warn for router once @hapi/joi v16 releases
+  // TODO: Use warn for router and vuex once @hapi/joi v16 releases
   router: joi.boolean(),
   routerHistoryMode: joi.boolean(),
   vuex: joi.boolean(),
@@ -32,7 +32,6 @@ exports.validatePreset = preset => validate(preset, presetSchema, msg => {
 })
 
 exports.defaultPreset = {
-  vuex: false,
   useConfigFiles: false,
   cssPreprocessor: undefined,
   plugins: {

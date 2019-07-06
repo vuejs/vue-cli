@@ -243,10 +243,6 @@ module.exports = class Generator {
   }
 
   hasPlugin (_id) {
-    if (['vuex'].includes(_id)) {
-      const pkg = this.pkg
-      return ((pkg.dependencies && pkg.dependencies[_id]) || (pkg.devDependencies && pkg.devDependencies[_id]))
-    }
     return [
       ...this.plugins.map(p => p.id),
       ...Object.keys(this.pkg.devDependencies || {}),
