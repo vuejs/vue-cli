@@ -1,11 +1,11 @@
 const ejs = require('ejs')
 const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
-const sortObject = require('./util/sortObject')
-const writeFileTree = require('./util/writeFileTree')
-const inferRootOptions = require('./util/inferRootOptions')
-const normalizeFilePaths = require('./util/normalizeFilePaths')
-const runCodemod = require('./util/runCodemod')
+const sortObject = require('@vue/cli-utils/lib/util/sortObject')
+const writeFileTree = require('@vue/cli-utils/lib/util/writeFileTree')
+const inferRootOptions = require('@vue/cli-utils/lib/util/inferRootOptions')
+const normalizeFilePaths = require('@vue/cli-utils/lib/util/normalizeFilePaths')
+const runCodemod = require('@vue/cli-utils/lib/util/runCodemod')
 const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
@@ -219,7 +219,7 @@ module.exports = class Generator {
       imports = imports instanceof Set ? Array.from(imports) : imports
       if (imports && imports.length > 0) {
         files[file] = runCodemod(
-          require('./util/codemods/injectImports'),
+          require('@vue/cli-utils/lib/util/codemods/injectImports'),
           { path: file, source: files[file] },
           { imports }
         )
@@ -229,7 +229,7 @@ module.exports = class Generator {
       injections = injections instanceof Set ? Array.from(injections) : injections
       if (injections && injections.length > 0) {
         files[file] = runCodemod(
-          require('./util/codemods/injectOptions'),
+          require('@vue/cli-utils/lib/util/codemods/injectOptions'),
           { path: file, source: files[file] },
           { injections }
         )

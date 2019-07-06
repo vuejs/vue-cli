@@ -1,30 +1,26 @@
-const path = require('path')
 const chalk = require('chalk')
 const debug = require('debug')
 const execa = require('execa')
 const inquirer = require('inquirer')
 const semver = require('semver')
-const EventEmitter = require('events')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
-const sortObject = require('./util/sortObject')
-const getVersions = require('./util/getVersions')
-const { installDeps } = require('./util/installDeps')
-const { clearConsole } = require('./util/clearConsole')
-const PromptModuleAPI = require('./PromptModuleAPI')
-const writeFileTree = require('./util/writeFileTree')
-const { formatFeatures } = require('./util/features')
-const loadLocalPreset = require('./util/loadLocalPreset')
-const loadRemotePreset = require('./util/loadRemotePreset')
-const generateReadme = require('./util/generateReadme')
+const sortObject = require('@vue/cli-utils/lib/util/sortObject')
+const getVersions = require('@vue/cli-utils/lib/util/getVersions')
+const { installDeps } = require('@vue/cli-utils/lib/util/installDeps')
+const { clearConsole } = require('@vue/cli-utils/lib/util/clearConsole')
+const PromptModuleAPI = require('@vue/cli-utils/lib/PromptModuleAPI')
+const writeFileTree = require('@vue/cli-utils/lib/util/writeFileTree')
+const { formatFeatures } = require('@vue/cli-utils/lib/util/features')
+const { resolvePreset } = require('@vue/cli-utils/lib/util/resolvePreset')
+const generateReadme = require('@vue/cli-utils/lib/util/generateReadme')
+const { getPresets } = require('@vue/cli-utils/lib/util/getPresets')
+const { getPresetFromAnswers } = require('@vue/cli-utils/lib/util/getPresetFromAnswers')
 
 const {
   defaults,
-  saveOptions,
-  loadOptions,
-  savePreset,
-  validatePreset
-} = require('./options')
+  loadOptions
+} = require('@vue/cli-utils/lib/options')
 
 const {
   log,
@@ -42,10 +38,8 @@ const {
 
 const isManualMode = answers => answers.preset === '__manual__'
 
-module.exports = class Creator extends EventEmitter {
+module.exports = class Creator {
   constructor (name, context, promptModules) {
-    super()
-
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
     const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
@@ -58,8 +52,11 @@ module.exports = class Creator extends EventEmitter {
 
     this.run = this.run.bind(this)
 
-    const promptAPI = new PromptModuleAPI(this)
+    const promptAPI = new PromptModuleAPI()
     promptModules.forEach(m => m(promptAPI))
+    this.featurePrompt.choices.push(...promptAPI.features)
+    this.injectedPrompts = promptAPI.injectPrompt
+    this.promptCompleteCbs = promptAPI.promptCompleteCbs
   }
 
   async create (cliOptions = {}, preset = null) {
@@ -69,7 +66,7 @@ module.exports = class Creator extends EventEmitter {
     if (!preset) {
       if (cliOptions.preset) {
         // vue create foo --preset bar
-        preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
+        preset = await resolvePreset(cliOptions.preset, cliOptions.clone)
       } else if (cliOptions.default) {
         // vue create foo --default
         preset = defaults.presets.default
@@ -120,7 +117,6 @@ module.exports = class Creator extends EventEmitter {
 
     await clearConsole()
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
-    this.emit('creation', { event: 'creating' })
 
     // get latest CLI version
     const { current, latest } = await getVersions()
@@ -162,7 +158,6 @@ module.exports = class Creator extends EventEmitter {
     const shouldInitGit = this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
       logWithSpinner(`🗃`, `Initializing git repository...`)
-      this.emit('creation', { event: 'git-init' })
       await run('git init')
     }
 
@@ -170,18 +165,16 @@ module.exports = class Creator extends EventEmitter {
     stopSpinner()
     log(`⚙  Installing CLI plugins. This might take a while...`)
     log()
-    this.emit('creation', { event: 'plugins-install' })
 
     if (isTestOrDebug && !process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
       // in development, avoid installation process
-      await require('./util/setupDevProject')(context)
+      await require('@vue/cli-utils/lib/util/setupDevProject')(context)
     } else {
       await installDeps(context, packageManager)
     }
 
     // run generator
     log(`🚀  Invoking generators...`)
-    this.emit('creation', { event: 'invoking-generators' })
     const plugins = await this.resolvePlugins(preset.plugins)
     const generator = new Generator(context, {
       pkg,
@@ -194,7 +187,6 @@ module.exports = class Creator extends EventEmitter {
 
     // install additional deps (injected by generators)
     log(`📦  Installing additional dependencies...`)
-    this.emit('creation', { event: 'deps-install' })
     log()
     if (!isTestOrDebug) {
       await installDeps(context, packageManager)
@@ -202,7 +194,6 @@ module.exports = class Creator extends EventEmitter {
 
     // run complete cbs if any (injected by generators)
     logWithSpinner('⚓', `Running completion hooks...`)
-    this.emit('creation', { event: 'completion-hooks' })
     for (const cb of createCompleteCbs) {
       await cb()
     }
@@ -250,7 +241,6 @@ module.exports = class Creator extends EventEmitter {
       )
     }
     log()
-    this.emit('creation', { event: 'done' })
 
     if (gitCommitFailed) {
       warn(
@@ -273,78 +263,7 @@ module.exports = class Creator extends EventEmitter {
       await clearConsole(true)
       answers = await inquirer.prompt(this.resolveFinalPrompts())
     }
-    debug('vue-cli:answers')(answers)
-
-    if (answers.packageManager) {
-      saveOptions({
-        packageManager: answers.packageManager
-      })
-    }
-
-    let preset
-    if (answers.preset && answers.preset !== '__manual__') {
-      preset = await this.resolvePreset(answers.preset)
-    } else {
-      // manual
-      preset = {
-        useConfigFiles: answers.useConfigFiles === 'files',
-        plugins: {}
-      }
-      answers.features = answers.features || []
-      // run cb registered by prompt modules to finalize the preset
-      this.promptCompleteCbs.forEach(cb => cb(answers, preset))
-    }
-
-    // validate
-    validatePreset(preset)
-
-    // save preset
-    if (answers.save && answers.saveName) {
-      savePreset(answers.saveName, preset)
-    }
-
-    debug('vue-cli:preset')(preset)
-    return preset
-  }
-
-  async resolvePreset (name, clone) {
-    let preset
-    const savedPresets = loadOptions().presets || {}
-
-    if (name in savedPresets) {
-      preset = savedPresets[name]
-    } else if (name.endsWith('.json') || /^\./.test(name) || path.isAbsolute(name)) {
-      preset = await loadLocalPreset(path.resolve(name))
-    } else if (name.includes('/')) {
-      logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
-      this.emit('creation', { event: 'fetch-remote-preset' })
-      try {
-        preset = await loadRemotePreset(name, clone)
-        stopSpinner()
-      } catch (e) {
-        stopSpinner()
-        error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
-        throw e
-      }
-    }
-
-    // use default preset if user has not overwritten it
-    if (name === 'default' && !preset) {
-      preset = defaults.presets.default
-    }
-    if (!preset) {
-      error(`preset "${name}" not found.`)
-      const presets = Object.keys(savedPresets)
-      if (presets.length) {
-        log()
-        log(`available presets:\n${presets.join(`\n`)}`)
-      } else {
-        log(`you don't seem to have any saved preset.`)
-        log(`run vue-cli in manual mode to create a preset.`)
-      }
-      exit(1)
-    }
-    return preset
+    return getPresetFromAnswers(answers, this.promptCompleteCbs)
   }
 
   // { id: options } => [{ id, apply, options }]
@@ -368,13 +287,8 @@ module.exports = class Creator extends EventEmitter {
     return plugins
   }
 
-  getPresets () {
-    const savedOptions = loadOptions()
-    return Object.assign({}, savedOptions.presets, defaults.presets)
-  }
-
   resolveIntroPrompts () {
-    const presets = this.getPresets()
+    const presets = getPresets()
     const presetChoices = Object.keys(presets).map(name => {
       return {
         name: `${name} (${formatFeatures(presets[name])})`,

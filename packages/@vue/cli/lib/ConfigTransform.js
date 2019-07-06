@@ -1,4 +1,4 @@
-const transforms = require('./util/configTransforms')
+const transforms = require('@vue/cli-utils/lib/util/configTransforms')
 
 class ConfigTransform {
   constructor (options) {

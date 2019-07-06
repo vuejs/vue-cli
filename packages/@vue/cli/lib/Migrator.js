@@ -1,7 +1,7 @@
 const Generator = require('./Generator')
 const MigratorAPI = require('./MigratorAPI')
 
-const inferRootOptions = require('./util/inferRootOptions')
+const inferRootOptions = require('@vue/cli-utils/lib/util/inferRootOptions')
 
 module.exports = class Migrator extends Generator {
   constructor (context, {

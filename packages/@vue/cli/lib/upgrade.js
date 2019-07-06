@@ -19,14 +19,14 @@ const {
 
 const Migrator = require('./Migrator')
 
-const { getCommand, getVersion } = require('./util/packageManager')
-const { installDeps, updatePackage } = require('./util/installDeps')
-const { linkPackage } = require('./util/linkBin')
+const { getCommand, getVersion } = require('@vue/cli-utils/lib/util/packageManager')
+const { installDeps, updatePackage } = require('@vue/cli-utils/lib/util/installDeps')
+const { linkPackage } = require('@vue/cli-utils/lib/util/linkBin')
 
-const getPackageJson = require('./util/getPackageJson')
-const getInstalledVersion = require('./util/getInstalledVersion')
-const tryGetNewerRange = require('./util/tryGetNewerRange')
-const readFiles = require('./util/readFiles')
+const getPackageJson = require('@vue/cli-utils/lib/util/getPackageJson')
+const getInstalledVersion = require('@vue/cli-utils/lib/util/getInstalledVersion')
+const tryGetNewerRange = require('@vue/cli-utils/lib/util/tryGetNewerRange')
+const readFiles = require('@vue/cli-utils/lib/util/readFiles')
 
 const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
