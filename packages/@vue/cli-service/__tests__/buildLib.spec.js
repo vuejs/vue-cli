@@ -3,7 +3,7 @@ jest.setTimeout(40000)
 const path = require('path')
 const portfinder = require('portfinder')
 const createServer = require('@vue/cli-test-utils/createServer')
-const { defaultPreset } = require('@vue/cli/lib/options')
+const { defaultPreset } = require('@vue/cli-utils/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
