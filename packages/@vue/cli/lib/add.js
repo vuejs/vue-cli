@@ -1,7 +1,7 @@
 const chalk = require('chalk')
 const invoke = require('./invoke')
-const { loadOptions } = require('@vue/cli-utils/lib/options')
-const { installPackage } = require('@vue/cli-utils/lib/util/installDeps')
+const { loadOptions } = require('@vue/cli-global-utils/lib/options')
+const { installPackage } = require('@vue/cli-global-utils/lib/util/installDeps')
 const {
   log,
   error,

@@ -28,7 +28,7 @@
     "@vue/cli-ui": "^4.0.0-alpha.3",
     "@vue/cli-ui-addon-webpack": "^4.0.0-alpha.3",
     "@vue/cli-ui-addon-widgets": "^4.0.0-alpha.3",
-    "@vue/cli-utils": "^4.0.0-alpha.3",
+    "@vue/cli-global-utils": "^4.0.0-alpha.3",
     "chalk": "^2.4.1",
     "commander": "^2.20.0",
     "debug": "^4.1.0",

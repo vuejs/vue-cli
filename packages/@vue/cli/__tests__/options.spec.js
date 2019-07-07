@@ -6,7 +6,7 @@ const {
   loadOptions,
   saveOptions,
   savePreset
-} = require('@vue/cli-utils/lib/options')
+} = require('@vue/cli-global-utils/lib/options')
 
 test('load options', () => {
   expect(loadOptions()).toEqual({})

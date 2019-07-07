@@ -4,7 +4,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const Generator = require('../lib/Generator')
 const { logs } = require('@vue/cli-shared-utils')
-const stringifyJS = require('@vue/cli-utils/lib/util/stringifyJS')
+const stringifyJS = require('@vue/cli-global-utils/lib/util/stringifyJS')
 
 // prepare template fixtures
 const templateDir = path.resolve(__dirname, 'template')

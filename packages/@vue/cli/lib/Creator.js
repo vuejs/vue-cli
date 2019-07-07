@@ -5,22 +5,22 @@ const inquirer = require('inquirer')
 const semver = require('semver')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
-const sortObject = require('@vue/cli-utils/lib/util/sortObject')
-const getVersions = require('@vue/cli-utils/lib/util/getVersions')
-const { installDeps } = require('@vue/cli-utils/lib/util/installDeps')
-const { clearConsole } = require('@vue/cli-utils/lib/util/clearConsole')
-const PromptModuleAPI = require('@vue/cli-utils/lib/PromptModuleAPI')
-const writeFileTree = require('@vue/cli-utils/lib/util/writeFileTree')
-const { formatFeatures } = require('@vue/cli-utils/lib/util/features')
-const { resolvePreset } = require('@vue/cli-utils/lib/util/resolvePreset')
-const generateReadme = require('@vue/cli-utils/lib/util/generateReadme')
-const { getPresets } = require('@vue/cli-utils/lib/util/getPresets')
-const { getPresetFromAnswers } = require('@vue/cli-utils/lib/util/getPresetFromAnswers')
+const sortObject = require('@vue/cli-global-utils/lib/util/sortObject')
+const getVersions = require('@vue/cli-global-utils/lib/util/getVersions')
+const { installDeps } = require('@vue/cli-global-utils/lib/util/installDeps')
+const { clearConsole } = require('@vue/cli-global-utils/lib/util/clearConsole')
+const PromptModuleAPI = require('@vue/cli-global-utils/lib/PromptModuleAPI')
+const writeFileTree = require('@vue/cli-global-utils/lib/util/writeFileTree')
+const { formatFeatures } = require('@vue/cli-global-utils/lib/util/features')
+const { resolvePreset } = require('@vue/cli-global-utils/lib/util/resolvePreset')
+const generateReadme = require('@vue/cli-global-utils/lib/util/generateReadme')
+const { getPresets } = require('@vue/cli-global-utils/lib/util/getPresets')
+const { getPresetFromAnswers } = require('@vue/cli-global-utils/lib/util/getPresetFromAnswers')
 
 const {
   defaults,
   loadOptions
-} = require('@vue/cli-utils/lib/options')
+} = require('@vue/cli-global-utils/lib/options')
 
 const {
   log,
@@ -168,7 +168,7 @@ module.exports = class Creator {
 
     if (isTestOrDebug && !process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
       // in development, avoid installation process
-      await require('@vue/cli-utils/lib/util/setupDevProject')(context)
+      await require('@vue/cli-global-utils/lib/util/setupDevProject')(context)
     } else {
       await installDeps(context, packageManager)
     }

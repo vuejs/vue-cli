@@ -16,9 +16,9 @@ const {
 } = require('@vue/cli-shared-utils')
 
 const Generator = require('./Generator')
-const { loadOptions } = require('@vue/cli-utils/lib/options')
-const { installDeps } = require('@vue/cli-utils/lib/util/installDeps')
-const readFiles = require('@vue/cli-utils/lib/util/readFiles')
+const { loadOptions } = require('@vue/cli-global-utils/lib/options')
+const { installDeps } = require('@vue/cli-global-utils/lib/util/installDeps')
+const readFiles = require('@vue/cli-global-utils/lib/util/readFiles')
 
 function getPkg (context) {
   const pkgPath = path.resolve(context, 'package.json')

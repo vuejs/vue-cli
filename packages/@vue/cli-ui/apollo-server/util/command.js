@@ -4,7 +4,7 @@ const {
   hasPnpm3OrLater,
   hasProjectPnpm
 } = require('@vue/cli-shared-utils')
-const { loadOptions } = require('@vue/cli-utils/lib/options')
+const { loadOptions } = require('@vue/cli-global-utils/lib/options')
 
 exports.getCommand = function (cwd = undefined) {
   if (!cwd) {

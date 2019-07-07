@@ -47,7 +47,7 @@ if (
 }
 
 const program = require('commander')
-const loadCommand = require('@vue/cli-utils/lib/util/loadCommand')
+const loadCommand = require('@vue/cli-global-utils/lib/util/loadCommand')
 
 program
   .version(require('../package').version)
@@ -215,7 +215,7 @@ program.on('--help', () => {
 program.commands.forEach(c => c.on('--help', () => console.log()))
 
 // enhance common error messages
-const enhanceErrorMessages = require('@vue/cli-utils/lib/util/enhanceErrorMessages')
+const enhanceErrorMessages = require('@vue/cli-global-utils/lib/util/enhanceErrorMessages')
 
 enhanceErrorMessages('missingArgument', argName => {
   return `Missing required argument ${chalk.yellow(`<${argName}>`)}.`

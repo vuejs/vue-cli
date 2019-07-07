@@ -1,7 +1,7 @@
 jest.setTimeout(30000)
 
 const request = require('request-promise-native')
-const { defaultPreset } = require('@vue/cli-utils/lib/options')
+const { defaultPreset } = require('@vue/cli-global-utils/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 const createJSONServer = require('@vue/cli-test-utils/createJSONServer')

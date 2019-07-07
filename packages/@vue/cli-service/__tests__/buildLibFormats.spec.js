@@ -1,6 +1,6 @@
 jest.setTimeout(40000)
 
-const { defaultPreset } = require('@vue/cli-utils/lib/options')
+const { defaultPreset } = require('@vue/cli-global-utils/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 
 let project
