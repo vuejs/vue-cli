@@ -1,7 +1,0 @@
-#import "./clientAddonFragment.gql"
-
-subscription clientAddonAdded {
-  clientAddonAdded {
-    ...clientAddon
-  }
-}

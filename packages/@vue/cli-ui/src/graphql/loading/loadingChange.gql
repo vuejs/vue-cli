@@ -1,3 +1,0 @@
-mutation loadingChange ($mod: Int!) {
-  loadingChange (mod: $mod) @client
-}

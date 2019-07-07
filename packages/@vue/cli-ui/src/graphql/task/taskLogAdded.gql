@@ -1,7 +1,0 @@
-#import "./taskLogFragment.gql"
-
-subscription taskLogAdded ($id: ID!) {
-  taskLogAdded (id: $id) {
-    ...taskLog
-  }
-}

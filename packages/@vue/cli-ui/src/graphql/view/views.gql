@@ -1,7 +1,0 @@
-#import "./viewFragment.gql"
-
-query views {
-  views {
-    ...view
-  }
-}

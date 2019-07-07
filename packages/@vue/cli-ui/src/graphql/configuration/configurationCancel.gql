@@ -1,7 +1,0 @@
-#import "./configurationFragment.gql"
-
-mutation configurationCancel ($id: ID!) {
-  configurationCancel (id: $id) {
-    ...configuration
-  }
-}

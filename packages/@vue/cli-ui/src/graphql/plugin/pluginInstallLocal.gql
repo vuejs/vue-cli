@@ -1,7 +1,0 @@
-#import "./pluginInstallationFragment.gql"
-
-mutation pluginInstallLocal {
-  pluginInstallLocal {
-    ...pluginInstallation
-  }
-}

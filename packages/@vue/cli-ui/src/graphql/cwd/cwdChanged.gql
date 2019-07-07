@@ -1,3 +1,0 @@
-subscription cwdChanged {
-  cwd: cwdChanged
-}

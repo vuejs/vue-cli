@@ -1,7 +1,0 @@
-#import "./taskFragment.gql"
-
-subscription taskChanged {
-  taskChanged {
-    ...task
-  }
-}

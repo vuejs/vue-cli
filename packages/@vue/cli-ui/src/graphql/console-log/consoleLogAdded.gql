@@ -1,7 +1,0 @@
-#import "./consoleLogFragment.gql"
-
-subscription consoleLogAdded {
-  consoleLogAdded {
-    ...consoleLog
-  }
-}

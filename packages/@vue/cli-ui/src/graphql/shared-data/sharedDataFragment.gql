@@ -1,4 +1,0 @@
-fragment sharedData on SharedData {
-  id
-  value
-}

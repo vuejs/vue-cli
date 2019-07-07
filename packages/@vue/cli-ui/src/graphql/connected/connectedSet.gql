@@ -1,3 +1,0 @@
-mutation connectedSet ($value: Boolean!) {
-  connectedSet (value: $value) @client
-}

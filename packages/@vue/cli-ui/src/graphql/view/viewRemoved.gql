@@ -1,7 +1,0 @@
-#import "./viewFragment.gql"
-
-subscription viewRemoved {
-  viewRemoved {
-    ...view
-  }
-}

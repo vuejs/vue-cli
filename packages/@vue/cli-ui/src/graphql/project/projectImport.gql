@@ -1,7 +1,0 @@
-#import "./projectFragment.gql"
-
-mutation projectImport ($input: ProjectImportInput!) {
-  projectImport(input: $input) {
-    ...project
-  }
-}

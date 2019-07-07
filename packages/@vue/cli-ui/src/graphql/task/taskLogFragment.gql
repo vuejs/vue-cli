@@ -1,5 +1,0 @@
-fragment taskLog on TaskLog {
-  taskId
-  type
-  text
-}

@@ -1,9 +1,0 @@
-fragment project on Project {
-  id
-  name
-  type
-  path
-  favorite
-  homepage
-  openDate
-}

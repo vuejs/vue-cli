@@ -1,6 +1,0 @@
-fragment pluginActionResult on PluginActionResult {
-  id
-  params
-  results
-  errors
-}

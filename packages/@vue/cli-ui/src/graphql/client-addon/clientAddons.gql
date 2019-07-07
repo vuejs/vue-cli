@@ -1,7 +1,0 @@
-#import "./clientAddonFragment.gql"
-
-query clientAddons {
-  clientAddons {
-    ...clientAddon
-  }
-}

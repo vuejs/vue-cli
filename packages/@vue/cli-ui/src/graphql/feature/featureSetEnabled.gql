@@ -1,7 +1,0 @@
-#import "./featureFragment.gql"
-
-mutation featureSetEnabled ($id: ID!, $enabled: Boolean!) {
-  featureSetEnabled (id: $id, enabled: $enabled) {
-    ...feature
-  }
-}

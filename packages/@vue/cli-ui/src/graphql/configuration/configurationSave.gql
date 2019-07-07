@@ -1,7 +1,0 @@
-#import "./configurationFragment.gql"
-
-mutation configurationSave ($id: ID!) {
-  configurationSave (id: $id) {
-    ...configuration
-  }
-}

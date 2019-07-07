@@ -1,3 +1,0 @@
-query currentProjectId {
-  currentProjectId @client
-}

@@ -1,3 +1,0 @@
-mutation viewOpen ($id: ID!) {
-  viewOpen (id: $id)
-}

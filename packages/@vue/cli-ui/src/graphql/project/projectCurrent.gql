@@ -1,7 +1,0 @@
-#import "./projectFragment.gql"
-
-query projectCurrent {
-  projectCurrent {
-    ...project
-  }
-}

@@ -1,7 +1,0 @@
-#import "./pluginInstallationFragment.gql"
-
-mutation pluginInvoke ($id: ID!) {
-  pluginInvoke (id: $id) {
-    ...pluginInstallation
-  }
-}

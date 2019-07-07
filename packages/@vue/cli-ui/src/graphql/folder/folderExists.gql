@@ -1,3 +1,0 @@
-query folderExists ($file: String!) {
-  folderExists(file: $file)
-}

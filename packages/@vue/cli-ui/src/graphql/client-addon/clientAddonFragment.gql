@@ -1,4 +1,0 @@
-fragment clientAddon on ClientAddon {
-  id
-  url
-}

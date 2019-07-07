@@ -1,3 +1,0 @@
-mutation gitCommit ($message: String!) {
-  gitCommit (message: $message)
-}

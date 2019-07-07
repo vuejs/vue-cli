@@ -1,7 +1,0 @@
-#import "./widgetFragment.gql"
-
-mutation widgetAdd ($input: WidgetAddInput!) {
-  widgetAdd (input: $input) {
-    ...widget
-  }
-}

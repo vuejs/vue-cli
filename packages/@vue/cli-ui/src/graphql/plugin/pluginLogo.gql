@@ -1,6 +1,0 @@
-query pluginLogo ($id: ID!) {
-  pluginLogo: plugin (id: $id) {
-    id
-    logo
-  }
-}

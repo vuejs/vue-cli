@@ -1,7 +1,0 @@
-#import "./folderCurrentFragment.gql"
-
-query folderCurrent {
-  folderCurrent {
-    ...folderCurrent
-  }
-}

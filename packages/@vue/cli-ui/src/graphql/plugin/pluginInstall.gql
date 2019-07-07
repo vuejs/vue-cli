@@ -1,7 +1,0 @@
-#import "./pluginInstallationFragment.gql"
-
-mutation pluginInstall ($id: ID!) {
-  pluginInstall (id: $id) {
-    ...pluginInstallation
-  }
-}

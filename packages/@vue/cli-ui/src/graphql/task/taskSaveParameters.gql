@@ -1,7 +1,0 @@
-#import "../prompt/promptFragment.gql"
-
-mutation taskSaveParameters ($id: ID!) {
-  taskSaveParameters (id: $id) {
-    ...prompt
-  }
-}

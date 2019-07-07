@@ -1,7 +1,0 @@
-#import "./widgetFragment.gql"
-
-mutation widgetConfigOpen ($id: ID!) {
-  widgetConfigOpen (id: $id) {
-    ...widget
-  }
-}

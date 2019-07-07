@@ -1,3 +1,0 @@
-subscription progressRemoved ($id: ID!) {
-  progressRemoved (id: $id)
-}

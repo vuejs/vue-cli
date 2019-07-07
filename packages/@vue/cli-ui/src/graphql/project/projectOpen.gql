@@ -1,7 +1,0 @@
-#import "./projectFragment.gql"
-
-mutation projectOpen ($id: ID!) {
-  projectOpen(id: $id) {
-    ...project
-  }
-}

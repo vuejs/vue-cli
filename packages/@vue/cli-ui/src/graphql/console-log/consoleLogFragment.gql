@@ -1,7 +1,0 @@
-fragment consoleLog on ConsoleLog {
-  id
-  type
-  message
-  tag
-  date
-}

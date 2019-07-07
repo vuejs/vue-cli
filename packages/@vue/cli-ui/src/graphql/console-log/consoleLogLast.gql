@@ -1,7 +1,0 @@
-#import "./consoleLogFragment.gql"
-
-query consoleLogLast {
-  consoleLogLast {
-    ...consoleLog
-  }
-}

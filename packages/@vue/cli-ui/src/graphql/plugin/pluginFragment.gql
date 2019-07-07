@@ -1,6 +1,0 @@
-fragment plugin on Plugin {
-  id
-  official
-  installed
-  website
-}

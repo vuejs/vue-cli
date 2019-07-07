@@ -1,7 +1,0 @@
-#import "./widgetFragment.gql"
-
-mutation widgetRemove ($id: ID!) {
-  widgetRemove(id: $id) {
-    ...widget
-  }
-}

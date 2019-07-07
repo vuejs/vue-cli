@@ -1,7 +1,0 @@
-#import "./taskFragment.gql"
-
-mutation taskRun ($id: ID!) {
-  taskRun (id: $id) {
-    ...task
-  }
-}

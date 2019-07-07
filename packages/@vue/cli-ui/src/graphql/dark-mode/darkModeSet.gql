@@ -1,3 +1,0 @@
-mutation darkModeSet($enabled: Boolean!) {
-  darkModeSet (enabled: $enabled) @client
-}

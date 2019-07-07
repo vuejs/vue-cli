@@ -1,7 +1,0 @@
-#import "./taskFragment.gql"
-
-mutation taskLogsClear ($id: ID!) {
-  taskLogsClear (id: $id) {
-    ...task
-  }
-}

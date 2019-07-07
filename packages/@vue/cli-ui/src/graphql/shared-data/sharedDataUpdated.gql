@@ -1,7 +1,0 @@
-#import "./sharedDataFragment.gql"
-
-subscription sharedDataUpdated ($id: ID!, $projectId: ID!) {
-  sharedDataUpdated (id: $id, projectId: $projectId) {
-    ...sharedData
-  }
-}

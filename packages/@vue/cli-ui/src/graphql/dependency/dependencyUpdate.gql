@@ -1,8 +1,0 @@
-mutation dependencyUpdate ($input: DependencyUpdate!) {
-  dependencyUpdate (input: $input) {
-    id
-    version {
-      current
-    }
-  }
-}

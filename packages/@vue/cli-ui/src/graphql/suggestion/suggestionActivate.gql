@@ -1,7 +1,0 @@
-#import "./suggestionFragment.gql"
-
-mutation suggestionActivate ($input: SuggestionActivate!) {
-  suggestionActivate (input: $input) {
-    ...suggestion
-  }
-}

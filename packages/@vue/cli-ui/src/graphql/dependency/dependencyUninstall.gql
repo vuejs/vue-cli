@@ -1,7 +1,0 @@
-#import "./dependencyFragment.gql"
-
-mutation dependencyUninstall ($input: DependencyUninstall!) {
-  dependencyUninstall (input: $input) {
-    ...dependency
-  }
-}

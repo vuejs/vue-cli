@@ -1,7 +1,0 @@
-#import "./suggestionFragment.gql"
-
-query suggestions {
-  suggestions {
-    ...suggestion
-  }
-}

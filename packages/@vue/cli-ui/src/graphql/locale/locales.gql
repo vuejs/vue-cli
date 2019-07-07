@@ -1,7 +1,0 @@
-#import "./localeFragment.gql"
-
-query locales {
-  locales {
-    ...locale
-  }
-}
