@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 
 const execa = require('execa')
@@ -49,6 +49,18 @@ const PACKAGE_MANAGER_CONFIG = {
     upgrade: ['upgrade'],
     remove: ['remove']
   }
+}
+
+// extract the package name 'xx' from the format 'xx@1.1'
+function stripVersion (packageName) {
+  const nameRegExp = /^(@?[^@]+)(@.*)?$/
+  const result = packageName.match(nameRegExp)
+
+  if (!result) {
+    throw new Error(`Invalid package name ${packageName}`)
+  }
+
+  return result[1]
 }
 
 class PackageManager {
@@ -163,13 +175,15 @@ class PackageManager {
   }
 
   async upgrade (packageName) {
+    const realname = stripVersion(packageName)
     if (
       isTestOrDebug &&
-      (packageName === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(packageName)))
+      (packageName === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(realname)))
     ) {
       // link packages in current repo for test
-      const src = path.resolve(__dirname, `../../../${packageName}`)
-      const dest = path.join(this.context, 'node_modules', packageName)
+      const src = path.resolve(__dirname, `../../../../${realname}`)
+      const dest = path.join(this.context, 'node_modules', realname)
+      fs.writeFileSync('./aaa', `${src}, ${dest}`)
       await fs.remove(dest)
       await fs.symlink(src, dest, 'dir')
       return
