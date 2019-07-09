@@ -54,6 +54,7 @@ function renderProgressBar (curr, total) {
   process.stderr.write(`[${complete}${incomplete}]${bar}`)
 }
 
+const progress = new InstallProgress()
 module.exports = function executeCommand (command, args, cwd) {
   debug(`command: `, command)
   debug(`args: `, args)
@@ -143,4 +144,4 @@ module.exports = function executeCommand (command, args, cwd) {
   })
 }
 
-const progress = exports.progress = new InstallProgress()
+exports.progress = progress
