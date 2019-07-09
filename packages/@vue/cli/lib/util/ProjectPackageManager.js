@@ -12,7 +12,7 @@ const {
   hasPnpm3OrLater,
   hasProjectPnpm
 } = require('@vue/cli-shared-utils/lib/env')
-const { isOfficialPlugin } = require('@vue/cli-shared-utils/lib/pluginResolution')
+const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib/pluginResolution')
 
 const { loadOptions } = require('../options')
 const getPackageJson = require('./getPackageJson')
@@ -165,7 +165,7 @@ class PackageManager {
   async upgrade (packageName) {
     if (
       isTestOrDebug &&
-      (packageName === '@vue/cli-service' || isOfficialPlugin(packageName))
+      (packageName === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(packageName)))
     ) {
       // link packages in current repo for test
       const src = path.resolve(__dirname, `../../../${packageName}`)
