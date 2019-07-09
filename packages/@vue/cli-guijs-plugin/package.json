@@ -1,0 +1,31 @@
+{
+  "name": "@vue/cli-guijs-plugin",
+  "version": "4.0.0-alpha.3",
+  "description": "UI integration",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/guisj-plugin-vue"
+  },
+  "keywords": [
+    "vue",
+    "cli"
+  ],
+  "author": "Guillaume Chau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://cli.vuejs.org/",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@vue/cli-global-utils": "^4.0.0-alpha.3",
+    "@vue/cli-shared-utils": "^4.0.0-alpha.3"
+  },
+  "engines": {
+    "node": ">=8.9"
+  }
+}
