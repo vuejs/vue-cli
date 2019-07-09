@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^4.0.0-alpha.4",
-    "webpack": ">=4 < 4.29",
+    "webpack": "^4.0.0",
     "workbox-webpack-plugin": "^4.3.1"
   },
   "devDependencies": {
