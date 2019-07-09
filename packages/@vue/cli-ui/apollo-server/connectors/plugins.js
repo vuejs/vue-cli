@@ -31,7 +31,7 @@ const {
   execa
 } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
-const PackageManager = require('@vue/cli/lib/util/PackageManager')
+const PackageManager = require('@vue/cli/lib/util/ProjectPackageManager')
 
 const ipc = require('../util/ipc')
 const { log } = require('../util/logger')

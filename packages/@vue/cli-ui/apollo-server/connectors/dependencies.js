@@ -14,7 +14,7 @@ const getContext = require('../context')
 // Utils
 const { isPlugin, hasYarn, resolveModule } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
-const PackageManager = require('@vue/cli/lib/util/PackageManager')
+const PackageManager = require('@vue/cli/lib/util/ProjectPackageManager')
 const { resolveModuleRoot } = require('../util/resolve-path')
 const { notify } = require('../util/notification')
 const { log } = require('../util/logger')

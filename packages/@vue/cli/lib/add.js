@@ -1,7 +1,7 @@
 const chalk = require('chalk')
 const invoke = require('./invoke')
 
-const PackageManager = require('./util/PackageManager')
+const PackageManager = require('./util/ProjectPackageManager')
 const {
   log,
   error,

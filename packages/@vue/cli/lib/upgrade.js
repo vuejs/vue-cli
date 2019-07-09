@@ -22,7 +22,7 @@ const tryGetNewerRange = require('./util/tryGetNewerRange')
 const readFiles = require('./util/readFiles')
 
 const getPackageJson = require('./util/getPackageJson')
-const PackageManager = require('./util/PackageManager')
+const PackageManager = require('./util/ProjectPackageManager')
 
 const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 

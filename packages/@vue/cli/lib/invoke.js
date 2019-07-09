@@ -16,7 +16,7 @@ const {
 const Generator = require('./Generator')
 
 const readFiles = require('./util/readFiles')
-const PackageManager = require('./util/PackageManager')
+const PackageManager = require('./util/ProjectPackageManager')
 
 function getPkg (context) {
   const pkgPath = path.resolve(context, 'package.json')

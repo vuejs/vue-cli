@@ -1,5 +1,5 @@
 const semver = require('semver')
-const PackageManager = require('./PackageManager')
+const PackageManager = require('./ProjectPackageManager')
 const { loadOptions, saveOptions } = require('../options')
 
 let sessionCached
