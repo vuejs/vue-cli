@@ -9,7 +9,7 @@ const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
 const sortObject = require('./util/sortObject')
 const getVersions = require('./util/getVersions')
-const { installDeps } = require('./util/installDeps')
+const PackageManager = require('./util/PackageManager')
 const { clearConsole } = require('./util/clearConsole')
 const PromptModuleAPI = require('./PromptModuleAPI')
 const writeFileTree = require('./util/writeFileTree')
@@ -117,6 +117,7 @@ module.exports = class Creator extends EventEmitter {
       (hasYarn() ? 'yarn' : null) ||
       (hasPnpm3OrLater() ? 'pnpm' : 'npm')
     )
+    const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
     await clearConsole()
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
@@ -176,7 +177,7 @@ module.exports = class Creator extends EventEmitter {
       // in development, avoid installation process
       await require('./util/setupDevProject')(context)
     } else {
-      await installDeps(context, packageManager)
+      await pm.install()
     }
 
     // run generator
@@ -197,7 +198,7 @@ module.exports = class Creator extends EventEmitter {
     this.emit('creation', { event: 'deps-install' })
     log()
     if (!isTestOrDebug) {
-      await installDeps(context, packageManager)
+      await pm.install()
     }
 
     // run complete cbs if any (injected by generators)

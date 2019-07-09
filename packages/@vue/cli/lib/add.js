@@ -1,12 +1,10 @@
 const chalk = require('chalk')
 const invoke = require('./invoke')
-const { loadOptions } = require('./options')
-const { installPackage } = require('./util/installDeps')
+
+const PackageManager = require('./util/PackageManager')
 const {
   log,
   error,
-  hasProjectYarn,
-  hasProjectPnpm,
   resolvePluginId,
   resolveModule
 } = require('@vue/cli-shared-utils')
@@ -18,8 +16,8 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log(`📦  Installing ${chalk.cyan(packageName)}...`)
   log()
 
-  const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm')
-  await installPackage(context, packageManager, packageName)
+  const pm = new PackageManager({ context })
+  await pm.add(packageName)
 
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()

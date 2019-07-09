@@ -30,13 +30,9 @@ const {
   clearModule,
   execa
 } = require('@vue/cli-shared-utils')
-const {
-  progress: installProgress,
-  installPackage,
-  uninstallPackage,
-  updatePackage
-} = require('@vue/cli/lib/util/installDeps')
-const { getCommand } = require('../util/command')
+const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
+const PackageManager = require('@vue/cli/lib/util/PackageManager')
+
 const ipc = require('../util/ipc')
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
@@ -334,7 +330,8 @@ function install (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockInstall(id, context)
     } else {
-      await installPackage(cwd.get(), getCommand(cwd.get()), id)
+      const pm = new PackageManager({ context: cwd.get() })
+      await pm.add(id)
     }
     await initPrompts(id, context)
     installationStep = 'config'
@@ -412,7 +409,8 @@ function uninstall (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockUninstall(id, context)
     } else {
-      await uninstallPackage(cwd.get(), getCommand(cwd.get()), id)
+      const pm = new PackageManager({ context: cwd.get() })
+      await pm.remove(id)
     }
     currentPluginId = null
     installationStep = null
@@ -520,7 +518,8 @@ function update ({ id, full }, context) {
     if (localPath) {
       await updateLocalPackage({ cwd: cwd.get(), id, localPath, full }, context)
     } else {
-      await updatePackage(cwd.get(), getCommand(cwd.get()), id)
+      const pm = new PackageManager({ context: cwd.get() })
+      await pm.upgrade(id)
     }
 
     logs.add({
@@ -583,9 +582,8 @@ async function updateAll (context) {
       args: [updatedPlugins.length]
     })
 
-    await updatePackage(cwd.get(), getCommand(cwd.get()), updatedPlugins.map(
-      p => p.id
-    ).join(' '))
+    const pm = new PackageManager({ context: cwd.get() })
+    await pm.upgrade(updatedPlugins.map(p => p.id).join(' '))
 
     notify({
       title: `Plugins updated`,

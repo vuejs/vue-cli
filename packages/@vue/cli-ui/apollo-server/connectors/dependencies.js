@@ -13,14 +13,8 @@ const logs = require('./logs')
 const getContext = require('../context')
 // Utils
 const { isPlugin, hasYarn, resolveModule } = require('@vue/cli-shared-utils')
-const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
-const {
-  progress: installProgress,
-  installPackage,
-  uninstallPackage,
-  updatePackage
-} = require('@vue/cli/lib/util/installDeps')
-const { getCommand } = require('../util/command')
+const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
+const PackageManager = require('@vue/cli/lib/util/PackageManager')
 const { resolveModuleRoot } = require('../util/resolve-path')
 const { notify } = require('../util/notification')
 const { log } = require('../util/logger')
@@ -113,10 +107,7 @@ async function getMetadata (id, context) {
 
   if (!metadata) {
     try {
-      const res = await getPackageVersion(id)
-      if (res.statusCode === 200) {
-        metadata = res.body
-      }
+      metadata = await (new PackageManager({ context: cwd.get() })).getMetadata()
     } catch (e) {
       // No connection?
     }
@@ -126,7 +117,7 @@ async function getMetadata (id, context) {
     metadataCache.set(id, metadata)
     return metadata
   } else {
-    log('Dpendencies', chalk.yellow(`Can't load metadata`), id)
+    log('Dependencies', chalk.yellow(`Can't load metadata`), id)
   }
 }
 
@@ -211,7 +202,8 @@ function install ({ id, type, range }, context) {
       arg = id
     }
 
-    await installPackage(cwd.get(), getCommand(cwd.get()), arg, type === 'devDependencies')
+    const pm = new PackageManager({ context: cwd.get() })
+    await pm.add(arg, type === 'devDependencies')
 
     logs.add({
       message: `Dependency ${id} installed`,
@@ -239,7 +231,8 @@ function uninstall ({ id }, context) {
 
     const dep = findOne(id, context)
 
-    await uninstallPackage(cwd.get(), getCommand(cwd.get()), id)
+    const pm = new PackageManager({ context: cwd.get() })
+    await pm.remove(id)
 
     logs.add({
       message: `Dependency ${id} uninstalled`,
@@ -265,7 +258,9 @@ function update ({ id }, context) {
 
     const dep = findOne(id, context)
     const { current, wanted } = await getVersion(dep, context)
-    await updatePackage(cwd.get(), getCommand(cwd.get()), id)
+
+    const pm = new PackageManager({ context: cwd.get() })
+    await pm.upgrade(id)
 
     logs.add({
       message: `Dependency ${id} updated from ${current} to ${wanted}`,
@@ -310,9 +305,8 @@ function updateAll (context) {
       args: [updatedDeps.length]
     })
 
-    await updatePackage(cwd.get(), getCommand(cwd.get()), updatedDeps.map(
-      p => p.id
-    ).join(' '))
+    const pm = new PackageManager({ context: cwd.get() })
+    await pm.upgrade(updatedDeps.map(p => p.id).join(' '))
 
     notify({
       title: `Dependencies updated`,
