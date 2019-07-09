@@ -16,7 +16,7 @@ const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib
 
 const { loadOptions } = require('../options')
 const getPackageJson = require('./getPackageJson')
-const executeCommand = require('./executeCommand')
+const { executeCommand } = require('./executeCommand')
 
 const registries = require('./registries')
 const shouldUseTaobao = require('./shouldUseTaobao')
