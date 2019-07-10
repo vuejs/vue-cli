@@ -42,9 +42,11 @@ You can specify env variables by placing the following files in your project roo
 An env file simply contains key=value pairs of environment variables:
 
 ```
-FOO=bar
+VUE_APP_FOO=bar
 VUE_APP_SECRET=secret
 ```
+
+Please note that only variables that starts with `VUE_APP_` are loaded on the client.
 
 For more detailed env parsing rules, please refer to [the documentation of `dotenv`](https://github.com/motdotla/dotenv#rules). We also use [dotenv-expand](https://github.com/motdotla/dotenv-expand) for variable expansion (available in Vue CLI 3.5+).
 
