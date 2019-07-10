@@ -234,6 +234,36 @@ npm install -g now
       "alias": "vue-example"
     }
     ```
+    
+   In case you want to deploy an application with router mode set to history, the config file should look like the following (if you have different folder names, update your config accordingly):
+   ```json
+    {
+      "name": "my-example-app",
+      "version": 2,
+      "builds": [
+        {
+          "src": "dist/**",
+          "use": "@now/static"
+        }
+      ],
+      "routes": [
+        {
+          "src": "/(js|css|img)/(.*)",
+          "dest": "/dist/$1/$2"
+        },
+        {
+          "src": "/favicon.ico",
+          "dest": "/dist/favicon.ico"
+        },
+        {
+          "src": "/(.*)",
+          "dest": "/dist"
+        }
+      ],
+      "alias": "vue-example"
+    }
+   ```
+   This additional config is required in order to avoid issues when directly deep-linking to a specific page (e.g. when opening my-example-app.now.sh/some-subpage, you would presented with a 404 error otherwise).
 
 3. Adding a deployment script in `package.json`:
 
