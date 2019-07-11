@@ -263,7 +263,7 @@ npm install -g now
       "alias": "vue-example"
     }
    ```
-   This additional config is required in order to avoid issues when directly deep-linking to a specific page (e.g. when opening my-example-app.now.sh/some-subpage, you would presented with a 404 error otherwise).
+   This additional config is required in order to avoid issues when directly deep-linking to a specific page (e.g. when opening `my-example-app.now.sh/some-subpage`, you would be presented with a 404 error otherwise).
 
 3. Adding a deployment script in `package.json`:
 
