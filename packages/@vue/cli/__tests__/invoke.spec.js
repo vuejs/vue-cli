@@ -5,6 +5,10 @@ const invoke = require('../lib/invoke')
 const { expectPrompts } = require('inquirer')
 const create = require('@vue/cli-test-utils/createTestProject')
 
+beforeEach(() => {
+  process.env.VUE_CLI_SKIP_DIRTY_GIT_PROMPT = true
+})
+
 const parseJS = file => {
   const res = {}
   ;(new Function('module', file))(res)
@@ -148,4 +152,21 @@ test('invoking a plugin that renames files', async () => {
   await project.write('package.json', JSON.stringify(pkg, null, 2))
   await project.run(`${require.resolve('../bin/vue')} invoke typescript -d`)
   expect(project.has('src/main.js')).toBe(false)
+})
+
+test.only('should prompt if invoking in a git repository with uncommited changes', async () => {
+  delete process.env.VUE_CLI_SKIP_DIRTY_GIT_PROMPT
+  const project = await create('invoke-dirty', {
+    plugins: {
+      '@vue/cli-plugin-babel': {}
+    }
+  })
+  await project.write('some-random-file', '')
+  expectPrompts([
+    {
+      message: `Still proceed?`,
+      confirm: true
+    }
+  ])
+  await invoke(`babel`, {}, project.dir)
 })

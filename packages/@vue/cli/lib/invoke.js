@@ -18,6 +18,7 @@ const {
 const Generator = require('./Generator')
 const { loadOptions } = require('./options')
 const { installDeps } = require('./util/installDeps')
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 const readFiles = require('./util/readFiles')
 
 function getPkg (context) {
@@ -33,6 +34,10 @@ function getPkg (context) {
 }
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
+  if (!(await confirmIfGitDirty(context))) {
+    return
+  }
+
   delete options._
   const pkg = getPkg(context)
 

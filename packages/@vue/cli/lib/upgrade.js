@@ -27,6 +27,7 @@ const getPackageJson = require('./util/getPackageJson')
 const getInstalledVersion = require('./util/getInstalledVersion')
 const tryGetNewerRange = require('./util/tryGetNewerRange')
 const readFiles = require('./util/readFiles')
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 
 const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
@@ -245,6 +246,10 @@ async function upgradeAll (context) {
 }
 
 async function upgrade (packageName, options, context = process.cwd()) {
+  if (!(await confirmIfGitDirty(context))) {
+    return
+  }
+
   if (!packageName) {
     if (options.to) {
       error(`Must specify a package name to upgrade to ${options.to}`)
