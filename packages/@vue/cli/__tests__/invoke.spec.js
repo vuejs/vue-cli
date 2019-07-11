@@ -5,10 +5,6 @@ const invoke = require('../lib/invoke')
 const { expectPrompts } = require('inquirer')
 const create = require('@vue/cli-test-utils/createTestProject')
 
-beforeEach(() => {
-  process.env.VUE_CLI_SKIP_DIRTY_GIT_PROMPT = true
-})
-
 const parseJS = file => {
   const res = {}
   ;(new Function('module', file))(res)
