@@ -150,7 +150,7 @@ test('invoking a plugin that renames files', async () => {
   expect(project.has('src/main.js')).toBe(false)
 })
 
-test.only('should prompt if invoking in a git repository with uncommited changes', async () => {
+test('should prompt if invoking in a git repository with uncommited changes', async () => {
   delete process.env.VUE_CLI_SKIP_DIRTY_GIT_PROMPT
   const project = await create('invoke-dirty', {
     plugins: {
