@@ -1,38 +1,9 @@
-const EventEmitter = require('events')
 const chalk = require('chalk')
+const EventEmitter = require('events')
 const execa = require('execa')
 const readline = require('readline')
-const registries = require('./registries')
-const { getRegistry } = require('./packageManager')
 
 const debug = require('debug')('vue-cli:install')
-
-const taobaoDistURL = 'https://npm.taobao.org/dist'
-
-const supportPackageManagerList = ['npm', 'yarn', 'pnpm']
-
-const packageManagerConfig = {
-  npm: {
-    installDeps: ['install', '--loglevel', 'error'],
-    installPackage: ['install', '--loglevel', 'error'],
-    uninstallPackage: ['uninstall', '--loglevel', 'error'],
-    updatePackage: ['update', '--loglevel', 'error']
-  },
-
-  pnpm: {
-    installDeps: ['install', '--loglevel', 'error', '--shamefully-flatten'],
-    installPackage: ['install', '--loglevel', 'error'],
-    uninstallPackage: ['uninstall', '--loglevel', 'error'],
-    updatePackage: ['update', '--loglevel', 'error']
-  },
-
-  yarn: {
-    installDeps: [],
-    installPackage: ['add'],
-    uninstallPackage: ['remove'],
-    updatePackage: ['upgrade']
-  }
-}
 
 class InstallProgress extends EventEmitter {
   constructor () {
@@ -63,20 +34,12 @@ class InstallProgress extends EventEmitter {
   }
 }
 
-const progress = exports.progress = new InstallProgress()
-
 function toStartOfLine (stream) {
   if (!chalk.supportsColor) {
     stream.write('\r')
     return
   }
   readline.cursorTo(stream, 0)
-}
-
-function checkPackageManagerIsSupported (command) {
-  if (supportPackageManagerList.indexOf(command) === -1) {
-    throw new Error(`Unknown package manager: ${command}`)
-  }
 }
 
 function renderProgressBar (curr, total) {
@@ -91,18 +54,11 @@ function renderProgressBar (curr, total) {
   process.stderr.write(`[${complete}${incomplete}]${bar}`)
 }
 
-async function addRegistryToArgs (command, args) {
-  const altRegistry = await getRegistry({ packageManager: command })
+const progress = exports.progress = new InstallProgress()
+exports.executeCommand = function executeCommand (command, args, cwd) {
+  debug(`command: `, command)
+  debug(`args: `, args)
 
-  if (altRegistry) {
-    args.push(`--registry=${altRegistry}`)
-    if (altRegistry === registries.taobao) {
-      args.push(`--disturl=${taobaoDistURL}`)
-    }
-  }
-}
-
-function executeCommand (command, args, targetDir) {
   return new Promise((resolve, reject) => {
     const apiMode = process.env.VUE_CLI_API_MODE
 
@@ -117,7 +73,7 @@ function executeCommand (command, args, targetDir) {
     }
 
     const child = execa(command, args, {
-      cwd: targetDir,
+      cwd,
       stdio: ['inherit', apiMode ? 'pipe' : 'inherit', !apiMode && command === 'yarn' ? 'pipe' : 'inherit']
     })
 
@@ -186,64 +142,4 @@ function executeCommand (command, args, targetDir) {
       resolve()
     })
   })
-}
-
-exports.installDeps = async function installDeps (targetDir, command) {
-  checkPackageManagerIsSupported(command)
-
-  const args = packageManagerConfig[command].installDeps
-
-  await addRegistryToArgs(command, args)
-
-  debug(`command: `, command)
-  debug(`args: `, args)
-
-  await executeCommand(command, args, targetDir)
-}
-
-exports.installPackage = async function (targetDir, command, packageName, dev = true) {
-  checkPackageManagerIsSupported(command)
-
-  const args = packageManagerConfig[command].installPackage
-
-  if (dev) args.push('-D')
-
-  await addRegistryToArgs(command, args)
-
-  args.push(packageName)
-
-  debug(`command: `, command)
-  debug(`args: `, args)
-
-  await executeCommand(command, args, targetDir)
-}
-
-exports.uninstallPackage = async function (targetDir, command, packageName) {
-  checkPackageManagerIsSupported(command)
-
-  const args = packageManagerConfig[command].uninstallPackage
-
-  await addRegistryToArgs(command, args)
-
-  args.push(packageName)
-
-  debug(`command: `, command)
-  debug(`args: `, args)
-
-  await executeCommand(command, args, targetDir)
-}
-
-exports.updatePackage = async function (targetDir, command, packageName) {
-  checkPackageManagerIsSupported(command)
-
-  const args = packageManagerConfig[command].updatePackage
-
-  await addRegistryToArgs(command, args)
-
-  packageName.split(' ').forEach(name => args.push(name))
-
-  debug(`command: `, command)
-  debug(`args: `, args)
-
-  await executeCommand(command, args, targetDir)
 }

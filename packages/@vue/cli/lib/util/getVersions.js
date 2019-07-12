@@ -1,7 +1,9 @@
 const semver = require('semver')
+const PackageManager = require('./ProjectPackageManager')
 const { loadOptions, saveOptions } = require('../options')
 
 let sessionCached
+const pm = new PackageManager()
 
 module.exports = async function getVersions () {
   if (sessionCached) {
@@ -41,14 +43,10 @@ module.exports = async function getVersions () {
 // fetch the latest version and save it on disk
 // so that it is available immediately next time
 async function getAndCacheLatestVersion (cached) {
-  const getPackageVersion = require('./getPackageVersion')
-  const res = await getPackageVersion('vue-cli-version-marker', 'latest')
-  if (res.statusCode === 200) {
-    const { version } = res.body
-    if (semver.valid(version) && version !== cached) {
-      saveOptions({ latestVersion: version, lastChecked: Date.now() })
-      return version
-    }
+  const version = await pm.getRemoteVersion('vue-cli-version-marker', 'latest')
+  if (semver.valid(version) && version !== cached) {
+    saveOptions({ latestVersion: version, lastChecked: Date.now() })
+    return version
   }
   return cached
 }

@@ -6,7 +6,7 @@ const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { getFeatures } = require('@vue/cli/lib/util/features')
 const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId, execa } = require('@vue/cli-shared-utils')
-const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
+const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
 const parseGitConfig = require('parse-git-config')
 // Connectors
 const progress = require('./progress')
