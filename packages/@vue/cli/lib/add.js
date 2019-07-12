@@ -10,8 +10,13 @@ const {
   resolvePluginId,
   resolveModule
 } = require('@vue/cli-shared-utils')
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 
 async function add (pluginName, options = {}, context = process.cwd()) {
+  if (!(await confirmIfGitDirty(context))) {
+    return
+  }
+
   const packageName = resolvePluginId(pluginName)
 
   log()
