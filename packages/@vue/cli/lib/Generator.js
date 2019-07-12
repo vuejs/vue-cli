@@ -69,7 +69,7 @@ module.exports = class Generator {
   constructor (context, {
     pkg = {},
     plugins = [],
-    completeCbs = [],
+    afterInvokeCbs = [],
     files = {},
     invoking = false
   } = {}) {
@@ -79,7 +79,7 @@ module.exports = class Generator {
     this.pkg = Object.assign({}, pkg)
     this.imports = {}
     this.rootOptions = {}
-    this.completeCbs = completeCbs
+    this.afterInvokeCbs = afterInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
     this.reservedConfigTransforms = reservedConfigTransforms

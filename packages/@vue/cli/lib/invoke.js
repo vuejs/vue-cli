@@ -103,12 +103,12 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
 
 async function runGenerator (context, plugin, pkg = getPkg(context)) {
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-  const createCompleteCbs = []
+  const afterInvokeCbs = []
   const generator = new Generator(context, {
     pkg,
     plugins: [plugin],
     files: await readFiles(context),
-    completeCbs: createCompleteCbs,
+    afterInvokeCbs,
     invoking: true
   })
 
@@ -132,9 +132,9 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     await pm.install()
   }
 
-  if (createCompleteCbs.length) {
+  if (afterInvokeCbs.length) {
     logWithSpinner('⚓', `Running completion hooks...`)
-    for (const cb of createCompleteCbs) {
+    for (const cb of afterInvokeCbs) {
       await cb()
     }
     stopSpinner()

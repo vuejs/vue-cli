@@ -280,7 +280,11 @@ class GeneratorAPI {
    * @param {function} cb
    */
   onCreateComplete (cb) {
-    this.generator.completeCbs.push(cb)
+    this.afterInvoke(cb)
+  }
+
+  afterInvoke (cb) {
+    this.generator.afterInvokeCbs.push(cb)
   }
 
   /**

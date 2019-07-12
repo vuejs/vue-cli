@@ -5,8 +5,7 @@ const PackageManager = require('./util/ProjectPackageManager')
 const {
   log,
   error,
-  resolvePluginId,
-  resolveModule
+  resolvePluginId
 } = require('@vue/cli-shared-utils')
 const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 
@@ -27,12 +26,7 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()
 
-  const generatorPath = resolveModule(`${packageName}/generator`, context)
-  if (generatorPath) {
-    invoke(pluginName, options, context)
-  } else {
-    log(`Plugin ${packageName} does not have a generator to invoke`)
-  }
+  invoke(pluginName, options, context)
 }
 
 module.exports = (...args) => {
