@@ -338,6 +338,10 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   This will tell the dev server to proxy any unknown requests (requests that did not match a static file) to `http://localhost:4000`.
 
+  ::: warning
+  When `devServer.proxy` is set to a string, only XHR requests will be proxied. If you want to test an API URL, don't open it in the browser, use an API tool like Postman instead.
+  :::
+
   If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
 
   ``` js

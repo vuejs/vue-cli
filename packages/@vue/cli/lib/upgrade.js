@@ -20,6 +20,7 @@ const {
 const Migrator = require('./Migrator')
 const tryGetNewerRange = require('./util/tryGetNewerRange')
 const readFiles = require('./util/readFiles')
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 
 const getPackageJson = require('./util/getPackageJson')
 const PackageManager = require('./util/ProjectPackageManager')
@@ -240,6 +241,10 @@ class Upgrader {
 }
 
 async function upgrade (packageName, options, context = process.cwd()) {
+  if (!(await confirmIfGitDirty(context))) {
+    return
+  }
+  
   const upgrader = new Upgrader(context)
 
   if (!packageName) {
