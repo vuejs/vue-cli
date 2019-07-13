@@ -241,51 +241,57 @@ Let's consider the case where we have created a `router.js` file via [templating
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
-Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `onCreateComplete` hook which is to be called when the files have been written to disk.
+Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `afterInvoke` hook which is to be called when the files have been written to disk.
 
 First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
 
 ```js
 // generator/index.js
 
-api.onCreateComplete(() => {
-  const fs = require('fs')
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
-  const lines = contentMain.split(/\r?\n/g)
-})
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
+  })
+}
 ```
 
 Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
 
-```js{8-9}
+```js{9-10}
 // generator/index.js
 
-api.onCreateComplete(() => {
-  const fs = require('fs')
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
-  const lines = contentMain.split(/\r?\n/g)
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
 
-  const renderIndex = lines.findIndex(line => line.match(/render/))
-  lines[renderIndex] += `\n  router,`
-})
+    const renderIndex = lines.findIndex(line => line.match(/render/))
+    lines[renderIndex] += `\n  router,`
+  })
+}
 ```
 
 Finally, you need to write the content back to the main file:
 
-```js{2,11}
+```js{12-13}
 // generator/index.js
 
-api.onCreateComplete(() => {
-  const { EOL } = require('os')
-  const fs = require('fs')
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
-  const lines = contentMain.split(/\r?\n/g)
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const { EOL } = require('os')
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
 
-  const renderIndex = lines.findIndex(line => line.match(/render/))
-   lines[renderIndex] += `${EOL}  router,`
+    const renderIndex = lines.findIndex(line => line.match(/render/))
+    lines[renderIndex] += `${EOL}  router,`
 
-  fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
-})
+    fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
+  })
+}
 ```
 
 ## Service Plugin
