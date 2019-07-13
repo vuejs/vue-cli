@@ -133,10 +133,11 @@ class GeneratorAPI {
    * Check if the project has a given plugin.
    *
    * @param {string} id - Plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
+   * @param {string} version - Plugin version. Defaults to ''
    * @return {boolean}
    */
-  hasPlugin (id) {
-    return this.generator.hasPlugin(id)
+  hasPlugin (id, version) {
+    return this.generator.hasPlugin(id, version)
   }
 
   /**

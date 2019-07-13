@@ -1,12 +1,14 @@
 const ejs = require('ejs')
 const debug = require('debug')
+const semver = require('semver')
 const GeneratorAPI = require('./GeneratorAPI')
+const PackageManager = require('./util/ProjectPackageManager')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const runCodemod = require('./util/runCodemod')
-const { toShortPluginId, matchesPluginId, loadModule } = require('@vue/cli-shared-utils')
+const { toShortPluginId, matchesPluginId, loadModule, isPlugin } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
@@ -69,7 +71,6 @@ module.exports = class Generator {
   constructor (context, {
     pkg = {},
     plugins = [],
-    otherPlugins = [],
     afterInvokeCbs = [],
     afterAnyInvokeCbs = [],
     files = {},
@@ -77,9 +78,9 @@ module.exports = class Generator {
   } = {}) {
     this.context = context
     this.plugins = plugins
-    this.otherPlugins = otherPlugins
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
+    this.pm = new PackageManager({ context })
     this.imports = {}
     this.rootOptions = {}
     this.afterInvokeCbs = []
@@ -98,13 +99,20 @@ module.exports = class Generator {
     this.exitLogs = []
 
     const pluginIds = plugins.map(p => p.id)
+
+    // load all the other plugins
+    this.otherPlugins = Object.keys(this.pkg.dependencies || {})
+      .concat(Object.keys(this.pkg.devDependencies || {}))
+      .filter(isPlugin)
+      .filter(id => pluginIds.indexOf(id) === -1)
+
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService
       ? cliService.options
       : inferRootOptions(pkg)
 
     // apply hooks from all plugins
-    otherPlugins.forEach(id => {
+    this.otherPlugins.forEach(id => {
       const api = new GeneratorAPI(id, this, {}, rootOptions)
       const pluginGenerator = loadModule(`${id}/generator`, context)
       if (pluginGenerator && pluginGenerator.hooks) {
@@ -265,11 +273,22 @@ module.exports = class Generator {
     debug('vue:cli-files')(this.files)
   }
 
-  hasPlugin (_id) {
+  hasPlugin (_id, _version) {
     return [
       ...this.plugins.map(p => p.id),
       ...this.otherPlugins
-    ].some(id => matchesPluginId(_id, id))
+    ].some(id => {
+      if (!matchesPluginId(_id, id)) {
+        return false
+      }
+
+      if (!_version) {
+        return true
+      }
+
+      const version = this.pm.getInstalledVersion(id)
+      return semver.satisfies(version, _version)
+    })
   }
 
   printExitLogs () {

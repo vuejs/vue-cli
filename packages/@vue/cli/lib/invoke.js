@@ -9,7 +9,6 @@ const {
   hasProjectGit,
   logWithSpinner,
   stopSpinner,
-  isPlugin,
   resolvePluginId,
   loadModule
 } = require('@vue/cli-shared-utils')
@@ -107,16 +106,9 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   const afterInvokeCbs = []
   const afterAnyInvokeCbs = []
 
-  // load all the other plugins
-  const otherPlugins = Object.keys(pkg.dependencies)
-    .concat(Object.keys(pkg.devDependencies))
-    .filter(isPlugin)
-    .filter(id => id !== plugin.id)
-
   const generator = new Generator(context, {
     pkg,
     plugins: [plugin],
-    otherPlugins,
     files: await readFiles(context),
     afterInvokeCbs,
     afterAnyInvokeCbs,
