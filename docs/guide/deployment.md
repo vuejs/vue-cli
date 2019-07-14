@@ -265,6 +265,8 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
+This example uses the latest Now platform version 2.
+
 1. Install the Now CLI globally:
 
 ```bash
@@ -276,35 +278,57 @@ npm install -g now
     ```json
     {
       "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
-      "alias": "vue-example",
-      "files": [
-        "dist"
-      ]
+      "version": 2,
+      "builds": [
+        { "src": "dist/**", "use": "@now/static" }
+      ],
+      "routes": [
+        { "src": "/(.*)", "dest": "dist/$1" }
+      ],
+      "alias": "vue-example"
     }
     ```
-
-    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+    
+   In case you want to deploy an application with router mode set to history, the config file should look like the following (if you have different folder names, update your config accordingly):
+   ```json
+    {
+      "name": "my-example-app",
+      "version": 2,
+      "builds": [
+        {
+          "src": "dist/**",
+          "use": "@now/static"
+        }
+      ],
+      "routes": [
+        {
+          "src": "/(js|css|img)/(.*)",
+          "dest": "/dist/$1/$2"
+        },
+        {
+          "src": "/favicon.ico",
+          "dest": "/dist/favicon.ico"
+        },
+        {
+          "src": "/(.*)",
+          "dest": "/dist"
+        }
+      ],
+      "alias": "vue-example"
+    }
+   ```
+   This additional config is required in order to avoid issues when directly deep-linking to a specific page (e.g. when opening `my-example-app.now.sh/some-subpage`, you would be presented with a 404 error otherwise).
 
 3. Adding a deployment script in `package.json`:
 
     ```json
-    "deploy": "npm run build && now && now alias"
+    "deploy": "npm run build && now --target production"
     ```
 
     If you want to deploy publicly by default, you can change the deployment script to the following one:
 
     ```json
-    "deploy": "npm run build && now --public && now alias"
+    "deploy": "npm run build && now --target production --public"
     ```
 
     This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
