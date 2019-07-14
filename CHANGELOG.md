@@ -1,4 +1,35 @@
 
+## 4.0.0-alpha.5 (2019-07-14)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#4275](https://github.com/vuejs/vue-cli/pull/4275) feat!: confirm before invoke/add/upgrade if project has uncommitted changes ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-service`
+  * [#4230](https://github.com/vuejs/vue-cli/pull/4230) fix: make webpack `use` values consistent ([@shadow-light](https://github.com/shadow-light))
+* `@vue/cli`
+  * [#4275](https://github.com/vuejs/vue-cli/pull/4275) feat!: confirm before invoke/add/upgrade if project has uncommitted changes ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4057](https://github.com/vuejs/vue-cli/pull/4057) fix: indexPath should also affect non-production builds (#2327) ([@shadow-light](https://github.com/shadow-light))
+
+#### :memo: Documentation
+* [#3320](https://github.com/vuejs/vue-cli/pull/3320) docs(proxy): add warning when proxy set as string (Closes [#3308](https://github.com/vuejs/vue-cli/issues/3308)) ([@lbogdan](https://github.com/lbogdan))
+
+#### :house: Internal
+* `@vue/cli-ui`, `@vue/cli`
+  * [#4256](https://github.com/vuejs/vue-cli/pull/4256)  refactor: unify package manager related logic ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 4
+- Bogdan Luca ([@lbogdan](https://github.com/lbogdan))
+- Eric Mastro ([@emizzle](https://github.com/emizzle))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- [@shadow-light](https://github.com/shadow-light)
+
+
+
 ## 4.0.0-alpha.4 (2019-07-06)
 
 #### :rocket: New Features
