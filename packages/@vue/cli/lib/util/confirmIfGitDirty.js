@@ -22,7 +22,7 @@ module.exports = async function confirmIfGitDirty (context) {
     {
       name: 'ok',
       type: 'confirm',
-      message: 'Still proceed',
+      message: 'Still proceed?',
       default: false
     }
   ])
