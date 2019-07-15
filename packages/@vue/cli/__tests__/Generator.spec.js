@@ -470,27 +470,6 @@ test('api: afterInvoke', () => {
   expect(cbs).toContain(fn)
 })
 
-test('api: afterAnyInvoke', () => {
-  const fn = () => {}
-  const cbs = []
-
-  const apply = () => {}
-  apply.hooks = api => {
-    api.afterAnyInvoke(fn)
-  }
-
-  new Generator('/', {
-    plugins: [
-      {
-        id: 'test',
-        apply
-      }
-    ],
-    afterAnyInvokeCbs: cbs
-  })
-  expect(cbs).toContain(fn)
-})
-
 test('api: resolve', () => {
   new Generator('/foo/bar', { plugins: [
     {

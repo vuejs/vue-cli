@@ -135,17 +135,11 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     await pm.install()
   }
 
-  if (afterInvokeCbs.length) {
+  if (afterInvokeCbs.length || afterAnyInvokeCbs.length) {
     logWithSpinner('⚓', `Running completion hooks...`)
     for (const cb of afterInvokeCbs) {
       await cb()
     }
-    stopSpinner()
-    log()
-  }
-
-  if (afterAnyInvokeCbs.length) {
-    logWithSpinner('⚓', `Running completion hooks from other plugins...`)
     for (const cb of afterAnyInvokeCbs) {
       await cb()
     }

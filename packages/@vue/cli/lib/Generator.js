@@ -101,10 +101,9 @@ module.exports = class Generator {
     const pluginIds = plugins.map(p => p.id)
 
     // load all the other plugins
-    this.otherPlugins = Object.keys(this.pkg.dependencies || {})
+    this.allPlugins = Object.keys(this.pkg.dependencies || {})
       .concat(Object.keys(this.pkg.devDependencies || {}))
       .filter(isPlugin)
-      .filter(id => pluginIds.indexOf(id) === -1)
 
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService
@@ -112,16 +111,22 @@ module.exports = class Generator {
       : inferRootOptions(pkg)
 
     // apply hooks from all plugins
-    this.otherPlugins.forEach(id => {
+    this.allPlugins.forEach(id => {
       const api = new GeneratorAPI(id, this, {}, rootOptions)
       const pluginGenerator = loadModule(`${id}/generator`, context)
+
       if (pluginGenerator && pluginGenerator.hooks) {
         pluginGenerator.hooks(api, {}, rootOptions, pluginIds)
       }
     })
 
-    // reset nonAny hooks
+    // We are doing save/load to make the hook order deterministic
+    // save "any" hooks
+    const afterAnyInvokeCbsFromPlugins = this.afterAnyInvokeCbs
+
+    // reset hooks
     this.afterInvokeCbs = afterInvokeCbs
+    this.afterAnyInvokeCbs = []
     this.postProcessFilesCbs = []
 
     // apply generators from plugins
@@ -133,6 +138,9 @@ module.exports = class Generator {
         apply.hooks(api, options, rootOptions, pluginIds)
       }
     })
+
+    // load "any" hooks
+    this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
   }
 
   async generate ({
@@ -276,7 +284,7 @@ module.exports = class Generator {
   hasPlugin (_id, _version) {
     return [
       ...this.plugins.map(p => p.id),
-      ...this.otherPlugins
+      ...this.allPlugins
     ].some(id => {
       if (!matchesPluginId(_id, id)) {
         return false
