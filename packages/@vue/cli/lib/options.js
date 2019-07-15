@@ -20,7 +20,7 @@ const presetSchema = createSchema(joi => joi.object().keys({
 }))
 
 const schema = createSchema(joi => joi.object().keys({
-  latestVersion: joi.string().regex(/^\d+\.\d+\.\d+(-(alpha|beta|rc.\d+))?$/),
+  latestVersion: joi.string().regex(/^\d+\.\d+\.\d+(-(alpha|beta|rc)\.\d+)?$/),
   lastChecked: joi.date().timestamp(),
   packageManager: joi.string().only(['yarn', 'npm', 'pnpm']),
   useTaobaoRegistry: joi.boolean(),
