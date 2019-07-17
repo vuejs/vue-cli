@@ -148,7 +148,6 @@ module.exports = class Service {
       // config plugins are order sensitive
       './config/base',
       './config/css',
-      './config/dev',
       './config/prod',
       './config/app'
     ].map(idToPlugin)
