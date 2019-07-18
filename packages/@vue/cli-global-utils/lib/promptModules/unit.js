@@ -1,6 +1,8 @@
 module.exports = cli => {
+  const featureName = 'Unit Testing'
+
   cli.injectFeature({
-    name: 'Unit Testing',
+    name: featureName,
     value: 'unit',
     short: 'Unit',
     description: 'Add a Unit Testing solution like Jest or Mocha',
@@ -13,6 +15,7 @@ module.exports = cli => {
     when: answers => answers.features.includes('unit'),
     type: 'list',
     message: 'Pick a unit testing solution:',
+    group: featureName,
     choices: [
       {
         name: 'Mocha + Chai',

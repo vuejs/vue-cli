@@ -3,8 +3,10 @@ module.exports = cli => {
     historyMode
   } = require('@vue/cli-shared-utils/lib/pluginPrompts/router')
 
+  const featureName = 'Router'
+
   cli.injectFeature({
-    name: 'Router',
+    name: featureName,
     value: 'router',
     description: 'Structure the app with dynamic pages',
     link: 'https://router.vuejs.org/'
@@ -12,6 +14,7 @@ module.exports = cli => {
 
   cli.injectPrompt({
     ...historyMode,
+    group: featureName,
     when: answers => answers.features.includes('router')
   })
 

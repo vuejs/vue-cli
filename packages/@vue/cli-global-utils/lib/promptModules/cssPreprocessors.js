@@ -1,6 +1,8 @@
 module.exports = cli => {
+  const featureName = 'CSS Pre-processors'
+
   cli.injectFeature({
-    name: 'CSS Pre-processors',
+    name: featureName,
     value: 'css-preprocessor',
     description: 'Add support for CSS pre-processors like Sass, Less or Stylus',
     link: 'https://cli.vuejs.org/guide/css.html'
@@ -14,6 +16,7 @@ module.exports = cli => {
     type: 'list',
     message: `Pick a CSS pre-processor${process.env.VUE_CLI_API_MODE ? '' : ` (${notice})`}:`,
     description: `${notice}.`,
+    group: featureName,
     choices: [
       // In Vue CLI <= 3.3, the value of Sass option in 'sass' an means 'node-sass'.
       // Considering the 'sass' package on NPM is actually for Dart Sass, we renamed it to 'node-sass'.

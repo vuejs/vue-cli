@@ -4,8 +4,10 @@ module.exports = cli => {
     eslintConfig
   } = require('@vue/cli-shared-utils/lib/pluginPrompts/eslint')
 
+  const FeatureName = 'Linter / Formatter'
+
   cli.injectFeature({
-    name: 'Linter / Formatter',
+    name: FeatureName,
     value: 'linter',
     short: 'Linter',
     description: 'Check and enforce code quality with ESLint or Prettier',
@@ -17,6 +19,7 @@ module.exports = cli => {
   cli.injectPrompt({
     ...eslintConfig,
     name: 'eslintConfig',
+    group: FeatureName,
     when: answers => answers.features.includes('linter'),
     choices: answers => [
       ...(
@@ -34,6 +37,7 @@ module.exports = cli => {
 
   cli.injectPrompt({
     ...lintOn,
+    group: FeatureName,
     when: answers => answers.features.includes('linter')
   })
 

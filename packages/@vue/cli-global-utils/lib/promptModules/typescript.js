@@ -4,8 +4,10 @@ const {
 } = require('@vue/cli-shared-utils/lib/pluginPrompts/typescript')
 
 module.exports = cli => {
+  const featureName = 'TypeScript'
+
   cli.injectFeature({
-    name: 'TypeScript',
+    name: featureName,
     value: 'ts',
     short: 'TS',
     description: 'Add support for the TypeScript language',
@@ -16,11 +18,13 @@ module.exports = cli => {
   cli.injectPrompt({
     ...classComponent,
     name: 'tsClassComponent',
+    group: featureName,
     when: answers => answers.features.includes('ts')
   })
 
   cli.injectPrompt({
     ...useTsWithBabel,
+    group: featureName,
     when: answers => answers.features.includes('ts'),
     default: answers => answers.features.includes('babel')
   })

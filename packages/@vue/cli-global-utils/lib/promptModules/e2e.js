@@ -1,6 +1,8 @@
 module.exports = cli => {
+  const featureName = 'E2E Testing'
+
   cli.injectFeature({
-    name: 'E2E Testing',
+    name: featureName,
     value: 'e2e',
     short: 'E2E',
     description: 'Add an End-to-End testing solution to the app like Cypress or Nightwatch',
@@ -13,6 +15,7 @@ module.exports = cli => {
     when: answers => answers.features.includes('e2e'),
     type: 'list',
     message: 'Pick a E2E testing solution:',
+    group: featureName,
     choices: [
       {
         name: 'Cypress (Chrome only)',
