@@ -1,4 +1,17 @@
 
+## 3.9.3 (2019-07-18)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4057](https://github.com/vuejs/vue-cli/pull/4057) fix: indexPath should also affect non-production builds (#2327) ([@shadow-light](https://github.com/shadow-light))
+
+#### Committers: 3
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Eric Mastro ([@emizzle](https://github.com/emizzle))
+- [@shadow-light](https://github.com/shadow-light)
+
+
+
 ## 3.9.2 (2019-07-06)
 
 #### :bug: Bug Fix
