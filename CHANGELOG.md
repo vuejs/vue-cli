@@ -4,6 +4,9 @@
 #### :bug: Bug Fix
 * `@vue/cli-service`
   * [#4057](https://github.com/vuejs/vue-cli/pull/4057) fix: indexPath should also affect non-production builds (#2327) ([@shadow-light](https://github.com/shadow-light))
+* `@vue/cli-test-utils`
+  * [#4224](https://github.com/vuejs/vue-cli/pull/4224) fix(cli-test-utils): use `--no-git` when `initGit` option is `false` ([@fangbinwei](https://github.com/fangbinwei))
+
 
 #### Committers: 3
 - Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
