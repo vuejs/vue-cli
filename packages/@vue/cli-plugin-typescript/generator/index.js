@@ -5,6 +5,9 @@ module.exports = (api, {
   convertJsToTs,
   allowJs
 }, _, invoking) => {
+  api.assertCliVersion('^4.0.0-alpha.4')
+  api.assertCliServiceVersion('^4.0.0-alpha.4')
+
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
