@@ -23,6 +23,16 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const outputDir = api.resolve(options.outputDir)
 
+    const getAssetPath = require('../util/getAssetPath')
+    const filename = getAssetPath(
+      options,
+      `js/[name]${isLegacyBundle ? `-legacy` : ``}${isProd && options.filenameHashing ? '.[contenthash:8]' : ''}.js`
+    )
+    webpackConfig
+      .output
+        .filename(filename)
+        .chunkFilename(filename)
+
     // code splitting
     if (process.env.NODE_ENV !== 'test') {
       webpackConfig
