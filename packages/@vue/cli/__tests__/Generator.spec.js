@@ -448,7 +448,24 @@ test('api: onCreateComplete', () => {
         }
       }
     ],
-    completeCbs: cbs
+    afterInvokeCbs: cbs
+  })
+  expect(cbs).toContain(fn)
+})
+
+test('api: afterInvoke', () => {
+  const fn = () => {}
+  const cbs = []
+  new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.afterInvoke(fn)
+        }
+      }
+    ],
+    afterInvokeCbs: cbs
   })
   expect(cbs).toContain(fn)
 })

@@ -54,12 +54,13 @@ Resolve a path for the current project
 
 - **Arguments**
   - `{string} id` - plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
+  - `{string} version` - semver version range, optional
 
 - **Returns**
   - `{boolean}`
 
 - **Usage**:
-Check if the project has a plugin with given id
+Check if the project has a plugin with given id. If version range is given, then the plugin version should satisfy it
 
 ## addConfigTransform
 
@@ -177,4 +178,3 @@ Get the entry file taking into account typescript.
 
 - **Usage**:
 Checks if the plugin is being invoked.
-

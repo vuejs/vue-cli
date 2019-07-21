@@ -133,10 +133,11 @@ class GeneratorAPI {
    * Check if the project has a given plugin.
    *
    * @param {string} id - Plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
+   * @param {string} version - Plugin version. Defaults to ''
    * @return {boolean}
    */
-  hasPlugin (id) {
-    return this.generator.hasPlugin(id)
+  hasPlugin (id, version) {
+    return this.generator.hasPlugin(id, version)
   }
 
   /**
@@ -280,7 +281,21 @@ class GeneratorAPI {
    * @param {function} cb
    */
   onCreateComplete (cb) {
-    this.generator.completeCbs.push(cb)
+    this.afterInvoke(cb)
+  }
+
+  afterInvoke (cb) {
+    this.generator.afterInvokeCbs.push(cb)
+  }
+
+  /**
+   * Push a callback to be called when the files have been written to disk
+   * from non invoked plugins
+   *
+   * @param {function} cb
+   */
+  afterAnyInvoke (cb) {
+    this.generator.afterAnyInvokeCbs.push(cb)
   }
 
   /**

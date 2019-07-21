@@ -1,12 +1,14 @@
 const ejs = require('ejs')
 const debug = require('debug')
+const semver = require('semver')
 const GeneratorAPI = require('./GeneratorAPI')
+const PackageManager = require('./util/ProjectPackageManager')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const runCodemod = require('./util/runCodemod')
-const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+const { toShortPluginId, matchesPluginId, loadModule, isPlugin } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
@@ -69,7 +71,8 @@ module.exports = class Generator {
   constructor (context, {
     pkg = {},
     plugins = [],
-    completeCbs = [],
+    afterInvokeCbs = [],
+    afterAnyInvokeCbs = [],
     files = {},
     invoking = false
   } = {}) {
@@ -77,9 +80,11 @@ module.exports = class Generator {
     this.plugins = plugins
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
+    this.pm = new PackageManager({ context })
     this.imports = {}
     this.rootOptions = {}
-    this.completeCbs = completeCbs
+    this.afterInvokeCbs = []
+    this.afterAnyInvokeCbs = afterAnyInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
     this.reservedConfigTransforms = reservedConfigTransforms
@@ -93,15 +98,49 @@ module.exports = class Generator {
     // exit messages
     this.exitLogs = []
 
+    const pluginIds = plugins.map(p => p.id)
+
+    // load all the other plugins
+    this.allPlugins = Object.keys(this.pkg.dependencies || {})
+      .concat(Object.keys(this.pkg.devDependencies || {}))
+      .filter(isPlugin)
+
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService
       ? cliService.options
       : inferRootOptions(pkg)
+
+    // apply hooks from all plugins
+    this.allPlugins.forEach(id => {
+      const api = new GeneratorAPI(id, this, {}, rootOptions)
+      const pluginGenerator = loadModule(`${id}/generator`, context)
+
+      if (pluginGenerator && pluginGenerator.hooks) {
+        pluginGenerator.hooks(api, {}, rootOptions, pluginIds)
+      }
+    })
+
+    // We are doing save/load to make the hook order deterministic
+    // save "any" hooks
+    const afterAnyInvokeCbsFromPlugins = this.afterAnyInvokeCbs
+
+    // reset hooks
+    this.afterInvokeCbs = afterInvokeCbs
+    this.afterAnyInvokeCbs = []
+    this.postProcessFilesCbs = []
+
     // apply generators from plugins
     plugins.forEach(({ id, apply, options }) => {
       const api = new GeneratorAPI(id, this, options, rootOptions)
       apply(api, options, rootOptions, invoking)
+
+      if (apply.hooks) {
+        apply.hooks(api, options, rootOptions, pluginIds)
+      }
     })
+
+    // load "any" hooks
+    this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
   }
 
   async generate ({
@@ -242,12 +281,22 @@ module.exports = class Generator {
     debug('vue:cli-files')(this.files)
   }
 
-  hasPlugin (_id) {
+  hasPlugin (_id, _version) {
     return [
       ...this.plugins.map(p => p.id),
-      ...Object.keys(this.pkg.devDependencies || {}),
-      ...Object.keys(this.pkg.dependencies || {})
-    ].some(id => matchesPluginId(_id, id))
+      ...this.allPlugins
+    ].some(id => {
+      if (!matchesPluginId(_id, id)) {
+        return false
+      }
+
+      if (!_version) {
+        return true
+      }
+
+      const version = this.pm.getInstalledVersion(id)
+      return semver.satisfies(version, _version)
+    })
   }
 
   printExitLogs () {

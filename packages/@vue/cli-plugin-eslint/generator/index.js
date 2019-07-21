@@ -2,6 +2,9 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { config, lintOn = [] }, _, invoking) => {
+  api.assertCliVersion('^4.0.0-alpha.4')
+  api.assertCliServiceVersion('^4.0.0-alpha.4')
+
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
@@ -97,13 +100,13 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       require('@vue/cli-plugin-unit-jest/generator').applyESLint(api)
     }
   }
+}
 
+module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
-  if (config && config !== 'base') {
-    api.onCreateComplete(() => {
-      require('../lint')({ silent: true }, api)
-    })
-  }
+  api.afterAnyInvoke(() => {
+    require('../lint')({ silent: true }, api)
+  })
 }
 
 const applyTS = module.exports.applyTS = api => {
