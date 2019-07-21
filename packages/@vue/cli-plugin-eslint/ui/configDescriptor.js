@@ -79,6 +79,7 @@ function getEslintPrompts (data, rules) {
       return {
         name: rule.name,
         type: 'list',
+        skin: 'buttongroup',
         message: rule.name,
         group: `org.vue.eslint.config.eslint.groups.${rule.meta.docs.category || 'uncategorized'}`,
         description: escapeHTML(rule.meta.docs.description),
