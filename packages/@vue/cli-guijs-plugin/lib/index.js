@@ -1,9 +1,11 @@
-module.exports = api => {
-  require('./project-type')(api)
+module.exports = globalApi => {
+  require('./project-type')(globalApi)
 
-  if (api.getProject().type === 'vue') {
-    require('./config')(api)
-    require('./task')(api)
-    require('./suggestion')(api)
-  }
+  globalApi.inProject(api => {
+    if (api.getProject().type === 'vue') {
+      require('./config')(api)
+      require('./task')(api)
+      require('./suggestion')(api)
+    }
+  })
 }

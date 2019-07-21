@@ -2,18 +2,37 @@ const { getPromptModules } = require('@vue/cli-global-utils/lib/util/createTools
 const PromptModuleAPI = require('@vue/cli-global-utils/lib/PromptModuleAPI')
 const { getPresets } = require('@vue/cli-global-utils/lib/util/getPresets')
 const { getFeatures } = require('@vue/cli-global-utils/lib/util/features')
-const { toShortPluginId } = require('@vue/cli-shared-utils')
+const {
+  toShortPluginId,
+  isPlugin,
+  isOfficialPlugin,
+  getPluginLink
+} = require('@vue/cli-shared-utils')
 const { createProject } = require('./create-project')
+
+const CLI_SERVICE = '@vue/cli-service'
 
 module.exports = api => {
   api.addProjectType('vue', 'Vue CLI', projectType => {
     projectType.logo = '/_plugin/@vue%2Fcli-guijs-plugin/vue-project.png'
 
     // Detect Vue CLI project
-    projectType.filterProject(({ pkg }) => ({ ...pkg.dependencies, ...pkg.devDependencies })['@vue/cli-service'])
+    projectType.filterProject = ({ pkg }) => ({ ...pkg.dependencies, ...pkg.devDependencies })['@vue/cli-service']
 
     // Project creation
     projectType.onCreate(onCreate)
+
+    // Plugins
+    projectType.hasPlugins(config => {
+      config.filterPlugin = ({ pkg }) => isPlugin(pkg.name) || pkg.name === CLI_SERVICE
+      config.isOfficial = ({ pkg }) => isOfficialPlugin(pkg.name) || pkg.name === CLI_SERVICE
+      config.getLink = ({ pkg }) => {
+        if (pkg.name === CLI_SERVICE) {
+          return 'https://cli.vuejs.org/'
+        }
+        return getPluginLink(pkg.name)
+      }
+    })
   })
 }
 
