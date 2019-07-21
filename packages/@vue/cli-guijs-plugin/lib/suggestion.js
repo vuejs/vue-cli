@@ -14,6 +14,7 @@ module.exports = api => {
           id: VUE_CONFIG_OPEN,
           type: 'action',
           label: 'org.vue.vue-webpack.suggestions.vue-config-open',
+          icon: 'open_in_browser',
           handler () {
             const file = config.foundFiles.vue.path
             console.log('open', file)

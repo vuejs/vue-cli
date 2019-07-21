@@ -20,6 +20,7 @@ module.exports = api => {
         id: OPEN_ESLINTRC,
         type: 'action',
         label: 'org.vue.eslint.suggestions.open-eslintrc.label',
+        icon: 'open_in_browser',
         handler () {
           const file = config.foundFiles.eslint.path
           const { launch } = require('@vue/cli-shared-utils')
