@@ -45,6 +45,8 @@ exports.createProject = async function ({
     '--skipGetStarted'
   ]
   if (answers.packageManager) args.push('--packageManager', answers.packageManager)
+  if (answers.registryUrl) args.push('--registry', answers.registryUrl)
+  if (answers.proxy) args.push('--proxy', answers.proxy)
   if (answers.bare) args.push('--bare')
   if (answers.force) args.push('--force')
   // Git

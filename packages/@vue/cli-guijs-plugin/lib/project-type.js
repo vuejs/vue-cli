@@ -89,6 +89,13 @@ function onCreate ({ wizard }) {
         description: 'Use specified npm registry when installing dependencies'
       },
       {
+        name: 'proxy',
+        type: 'input',
+        message: 'Proxy',
+        group: 'Dependencies',
+        description: 'Use specified proxy when creating project'
+      },
+      {
         name: 'useGit',
         type: 'confirm',
         message: 'Initialize git repository (recommended)',
