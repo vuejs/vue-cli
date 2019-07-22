@@ -8,7 +8,7 @@ npm install -g @vue/cli-service-global
 yarn global add @vue/cli-service-global
 ```
 
-The drawback of `vue serve` is that it relies on globally installed dependencies which may be inconsistent on different machines. Therefore this is only recommended for rapid prototyping.
+The drawback of `vue serve` is that it relies on globally installed dependencies which may be inconsistent on different machines. You can get around this by using your [npx](https://www.npmjs.com/package/npx) command to call vue instead.
 
 ### vue serve
 
