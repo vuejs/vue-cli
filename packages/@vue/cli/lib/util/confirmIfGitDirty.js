@@ -8,6 +8,8 @@ module.exports = async function confirmIfGitDirty (context) {
     return true
   }
 
+  process.env.VUE_CLI_SKIP_DIRTY_GIT_PROMPT = true
+
   if (!hasProjectGit(context)) {
     return true
   }
