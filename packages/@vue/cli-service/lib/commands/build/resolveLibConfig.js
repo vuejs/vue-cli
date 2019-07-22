@@ -21,8 +21,11 @@ module.exports = (api, { entry, name, formats, filename }, options) => {
   const isVueEntry = /\.vue$/.test(entry)
   const libName = (
     name ||
-    api.service.pkg.name ||
-    path.basename(entry).replace(/\.(jsx?|vue)$/, '')
+    (
+      api.service.pkg.name
+        ? api.service.pkg.name.replace(/^@.+\//, '')
+        : path.basename(entry).replace(/\.(jsx?|vue)$/, '')
+    )
   )
   filename = filename || libName
   function genConfig (format, postfix = format, genHTML) {

@@ -174,3 +174,43 @@ test('build as lib with --filename option', async () => {
     return window.testLib.bar
   })).toBe(2)
 })
+
+test('build as lib without --name and --filename options (default to package name)', async () => {
+  const project = await create('build-lib-no-name-and-filename-option', defaultPreset)
+  await project.write('package.json', `
+      {
+        "name": "test-lib"
+      }
+    `)
+  await project.write('src/main.js', `
+      export default { foo: 1 }
+      export const bar = 2
+    `)
+  const { stdout } = await project.run('vue-cli-service build --target lib src/main.js')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/test-lib.common.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.min.js')).toBe(true)
+})
+
+test('build as lib without --name and --filename options (default to package name, minus scope)', async () => {
+  const project = await create('build-lib-no-name-and-filename-option-with-scope', defaultPreset)
+  await project.write('package.json', `
+      {
+        "name": "@foo/test-lib"
+      }
+    `)
+  await project.write('src/main.js', `
+      export default { foo: 1 }
+      export const bar = 2
+    `)
+  const { stdout } = await project.run('vue-cli-service build --target lib src/main.js')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/test-lib.common.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.min.js')).toBe(true)
+})
