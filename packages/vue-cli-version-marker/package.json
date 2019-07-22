@@ -1,11 +1,11 @@
 {
   "name": "vue-cli-version-marker",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0-beta.0",
   "description": "version marker for @vue/cli",
   "author": "Evan You",
   "license": "MIT",
   "main": "package.json",
   "devDependencies": {
-    "@vue/cli": "^4.0.0-alpha.5"
+    "@vue/cli": "^4.0.0-beta.0"
   }
 }

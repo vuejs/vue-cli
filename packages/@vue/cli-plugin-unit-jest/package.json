@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-jest",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0-beta.0",
   "description": "unit-jest plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-transform-modules-commonjs": "^7.4.4",
-    "@vue/cli-shared-utils": "^4.0.0-alpha.5",
+    "@vue/cli-shared-utils": "^4.0.0-beta.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",

@@ -1,4 +1,56 @@
 
+## 4.0.0-beta.0 (2019-07-22)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-eslint`
+  * [#4329](https://github.com/vuejs/vue-cli/pull/4329) feat(eslint-generator): upgrade @vue/eslint-config-prettier to v5.0.0 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`, `@vue/cli`
+  * [#2337](https://github.com/vuejs/vue-cli/pull/2337) More flexible hook system ([@pksunkara](https://github.com/pksunkara))
+
+#### :boom: Breaking Changes
+* `@vue/cli-service`
+  * [#4331](https://github.com/vuejs/vue-cli/pull/4331) chore!: update versions of underlying webpack loaders ([@sodatea](https://github.com/sodatea))
+  * [#4323](https://github.com/vuejs/vue-cli/pull/4323) chore!: ensure consistent directory structure for all modes ([@sodatea](https://github.com/sodatea))
+  * [#4302](https://github.com/vuejs/vue-cli/pull/4302) chore!: move dev configs into serve command ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#4332](https://github.com/vuejs/vue-cli/pull/4332) fix: when executing multiple actions, only check git status once ([@sodatea](https://github.com/sodatea))
+  * [#4330](https://github.com/vuejs/vue-cli/pull/4330) fix: require parent template after `when` condition evaluated as truthy ([@sodatea](https://github.com/sodatea))
+  * [#4295](https://github.com/vuejs/vue-cli/pull/4295) fix: fix latest version check when current version is a prerelease ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`
+  * [#4329](https://github.com/vuejs/vue-cli/pull/4329) feat(eslint-generator): upgrade @vue/eslint-config-prettier to v5.0.0 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#4320](https://github.com/vuejs/vue-cli/pull/4320) fix: do not introduce extra level of directory when building lib for scoped packages ([@MewesK](https://github.com/MewesK))
+* `@vue/cli-test-utils`
+  * [#4224](https://github.com/vuejs/vue-cli/pull/4224) fix(cli-test-utils): use `--no-git` when `initGit` option is `false` ([@fangbinwei](https://github.com/fangbinwei))
+
+#### :memo: Documentation
+* [#4171](https://github.com/vuejs/vue-cli/pull/4171) Explain when .env files are loaded. ([@rimutaka](https://github.com/rimutaka))
+* [#4232](https://github.com/vuejs/vue-cli/pull/4232) Updated for Zeit Now V2 ([@ivansieder](https://github.com/ivansieder))
+
+#### :house: Internal
+* `@vue/cli-service`
+  * [#4302](https://github.com/vuejs/vue-cli/pull/4302) chore!: move dev configs into serve command ([@sodatea](https://github.com/sodatea))
+
+#### :hammer: Underlying Tools
+* `@vue/cli-service`
+  * [#4331](https://github.com/vuejs/vue-cli/pull/4331) chore!: update versions of underlying webpack loaders ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#4289](https://github.com/vuejs/vue-cli/pull/4289) chore: deprecate tslint ([@sodatea](https://github.com/sodatea))
+  * [#4289](https://github.com/vuejs/vue-cli/pull/4289) chore: deprecate tslint ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 7
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Ivan Sieder ([@ivansieder](https://github.com/ivansieder))
+- Max Tolkachev ([@zhrivodkin](https://github.com/zhrivodkin))
+- Mewes Kochheim ([@MewesK](https://github.com/MewesK))
+- Pavan Kumar Sunkara ([@pksunkara](https://github.com/pksunkara))
+- mx ([@rimutaka](https://github.com/rimutaka))
+
+
+
 ## 4.0.0-alpha.5 (2019-07-14)
 
 #### :rocket: New Features
