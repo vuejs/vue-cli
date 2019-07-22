@@ -417,6 +417,22 @@ function renderFile (name, data, ejsOptions) {
   const parsed = yaml.loadFront(template)
   const content = parsed.__content
   let finalTemplate = content.trim() + `\n`
+
+  if (parsed.when) {
+    finalTemplate = (
+      `<%_ if (${parsed.when}) { _%>` +
+        finalTemplate +
+      `<%_ } _%>`
+    )
+
+    // use ejs.render to test the conditional expression
+    // if evaluated to falsy vaule, return early to avoid extra cost for extend expression
+    const result = ejs.render(finalTemplate, data, ejsOptions)
+    if (!result) {
+      return
+    }
+  }
+
   if (parsed.extend) {
     const extendPath = path.isAbsolute(parsed.extend)
       ? parsed.extend
@@ -436,13 +452,6 @@ function renderFile (name, data, ejsOptions) {
       } else {
         finalTemplate = finalTemplate.replace(parsed.replace, content.trim())
       }
-    }
-    if (parsed.when) {
-      finalTemplate = (
-        `<%_ if (${parsed.when}) { _%>` +
-          finalTemplate +
-        `<%_ } _%>`
-      )
     }
   }
 
