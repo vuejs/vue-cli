@@ -80,8 +80,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
-    pkg['lint-staged'] = {
-      '*.{js,vue}': ['vue-cli-service lint', 'git add']
+    if (api.hasPlugin('typescript')) {
+      pkg['lint-staged'] = {
+        '*.{js,vue,ts}': ['vue-cli-service lint', 'git add']
+      }
+    } else {
+      pkg['lint-staged'] = {
+        '*.{js,vue}': ['vue-cli-service lint', 'git add']
+      }
     }
   }
 
