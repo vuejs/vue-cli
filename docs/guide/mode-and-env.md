@@ -42,11 +42,11 @@ You can specify env variables by placing the following files in your project roo
 An env file simply contains key=value pairs of environment variables:
 
 ```
-VUE_APP_FOO=bar
+FOO=bar
 VUE_APP_SECRET=secret
 ```
 
-Please note that only variables that starts with `VUE_APP_` are loaded on the client.
+Note that only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`.
 
 For more detailed env parsing rules, please refer to [the documentation of `dotenv`](https://github.com/motdotla/dotenv#rules). We also use [dotenv-expand](https://github.com/motdotla/dotenv-expand) for variable expansion (available in Vue CLI 3.5+).
 
@@ -82,7 +82,7 @@ In both cases, the app is built as a production app because of the `NODE_ENV`, b
 
 ### Using Env Variables in Client-side Code
 
-Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
+You can access them in your application code:
 
 ``` js
 console.log(process.env.VUE_APP_SECRET)
