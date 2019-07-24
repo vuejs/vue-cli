@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name }) => {
+module.exports = (api, { target, entry, name, alias = 'Vue' }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -58,7 +58,7 @@ module.exports = (api, { target, entry, name }) => {
     config
       .externals({
         ...config.get('externals'),
-        vue: process.env.VUE_EXTERNAL_NAME || 'Vue'
+        vue: alias
       })
 
     config
@@ -82,6 +82,7 @@ module.exports = (api, { target, entry, name }) => {
         .use(require('html-webpack-plugin'), [{
           template: path.resolve(__dirname, `./demo-wc.html`),
           inject: false,
+          alias,
           filename: 'demo.html',
           libName,
           components:

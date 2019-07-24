@@ -35,7 +35,8 @@ module.exports = (api, options) => {
       '--no-clean': `do not remove the dist directory before building the project`,
       '--report': `generate report.html to help analyze bundle content`,
       '--report-json': 'generate report.json to help analyze bundle content',
-      '--watch': `watch for changes`
+      '--watch': `watch for changes`,
+      '--alias': `use with --target 'wc' or 'wc-async' to externalize Vue under a custom alias, e.g. $MyVue`
     }
   }, async (args, rawArgs) => {
     for (const key in defaults) {
