@@ -82,7 +82,7 @@ In both cases, the app is built as a production app because of the `NODE_ENV`, b
 
 ### Using Env Variables in Client-side Code
 
-You can access them in your application code:
+You can access env variables in your application code:
 
 ``` js
 console.log(process.env.VUE_APP_SECRET)
