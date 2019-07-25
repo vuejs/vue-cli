@@ -1,4 +1,27 @@
 
+## 4.0.0-beta.1 (2019-07-25)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#4342](https://github.com/vuejs/vue-cli/pull/4342) Add --port argument to 'vue serve' command ([@bokub](https://github.com/bokub))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4345](https://github.com/vuejs/vue-cli/pull/4345) fix: fix css modules configuration in css-loader v3 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`
+  * [#4346](https://github.com/vuejs/vue-cli/pull/4346) fix: fix typo in typescript generator, convertAllFiles -> convertJsToTs ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`
+  * [#4347](https://github.com/vuejs/vue-cli/pull/4347) fix(eslint-generator): add ts file check to lint-staged ([@liruifengv](https://github.com/liruifengv))
+* `@vue/cli-shared-utils`
+  * [#4336](https://github.com/vuejs/vue-cli/pull/4336) fix: use `yarn --version` to detect yarn ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 3
+- Boris K ([@bokub](https://github.com/bokub))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- 李瑞丰 ([@liruifengv](https://github.com/liruifengv))
+
+
+
 ## 4.0.0-beta.0 (2019-07-22)
 
 #### :rocket: New Features
