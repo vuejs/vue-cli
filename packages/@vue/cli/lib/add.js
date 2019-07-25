@@ -1,11 +1,13 @@
 const chalk = require('chalk')
+const semver = require('semver')
 const invoke = require('./invoke')
 
 const PackageManager = require('./util/ProjectPackageManager')
 const {
   log,
   error,
-  resolvePluginId
+  resolvePluginId,
+  isOfficialPlugin
 } = require('@vue/cli-shared-utils')
 const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 
@@ -21,7 +23,13 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log()
 
   const pm = new PackageManager({ context })
-  await pm.add(packageName)
+
+  const cliVersion = require('../package.json').version
+  if (isOfficialPlugin(packageName) && semver.prerelease(cliVersion)) {
+    await pm.add(`${packageName}@next`)
+  } else {
+    await pm.add(packageName)
+  }
 
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()
