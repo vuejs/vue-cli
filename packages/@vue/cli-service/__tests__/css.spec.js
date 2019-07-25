@@ -89,9 +89,10 @@ test('CSS Modules rules', () => {
   LANGS.forEach(lang => {
     const expected = {
       importLoaders: 1, // no postcss-loader
-      localIdentName: `[name]_[local]_[hash:base64:5]`,
       sourceMap: false,
-      modules: true
+      modules: {
+        localIdentName: `[name]_[local]_[hash:base64:5]`
+      }
     }
     // vue-modules rules
     expect(findOptions(config, lang, 'css', 0)).toEqual(expected)

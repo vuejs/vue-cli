@@ -127,8 +127,9 @@ module.exports = (api, options) => {
             localIdentName = '[name]_[local]_[hash:base64:5]'
           } = loaderOptions.css || {}
           Object.assign(cssLoaderOptions, {
-            modules,
-            localIdentName
+            modules: {
+              localIdentName
+            }
           })
         }
 
