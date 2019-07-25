@@ -136,6 +136,23 @@ test('lint on commit', async () => {
   })
 })
 
+test('should lint ts files when typescript plugin co-exists', async () => {
+  const { read } = await create('eslint-lint-ts-files', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {}
+    }
+  }, null, true)
+  const pkg = JSON.parse(await read('package.json'))
+  expect(pkg).toMatchObject({
+    'lint-staged': {
+      '*.{js,vue,ts}': ['vue-cli-service lint', 'git add']
+    }
+  })
+})
+
 test('generate .editorconfig for new projects', async () => {
   const { files } = await generateWithPlugin({
     id: 'eslint',
