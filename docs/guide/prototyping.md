@@ -20,9 +20,10 @@ serve a .js or .vue file in development mode with zero config
 
 Options:
 
-  -o, --open  Open browser
-  -c, --copy  Copy local url to clipboard
-  -h, --help  output usage information
+  -o, --open         Open browser
+  -c, --copy         Copy local url to clipboard
+  -p, --port <port>  Port used by the server (default: 8080 or next available port)
+  -h, --help         Output usage information
 ```
 
 All you need is an `App.vue` file:
