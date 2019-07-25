@@ -117,6 +117,7 @@ program
   .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
   .option('-c, --copy', 'Copy local url to clipboard')
+  .option('-p, --port <port>', 'Port used by the server (default: 8080 or next available port)')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
   })
