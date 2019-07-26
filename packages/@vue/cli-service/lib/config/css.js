@@ -123,14 +123,10 @@ module.exports = (api, options) => {
         }, loaderOptions.css)
 
         if (modules) {
-          const {
-            localIdentName = '[name]_[local]_[hash:base64:5]'
-          } = loaderOptions.css || {}
-          Object.assign(cssLoaderOptions, {
-            modules: {
-              localIdentName
-            }
-          })
+          cssLoaderOptions.modules = {
+            ...modules,
+            localIdentName: '[name]_[local]_[hash:base64:5]'
+          }
         }
 
         rule
