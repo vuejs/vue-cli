@@ -37,5 +37,8 @@
   "devDependencies": {
     "@vue/test-utils": "1.0.0-beta.29",
     "ts-jest": "^24.0.2"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
   }
 }

@@ -26,6 +26,9 @@
     "babel-loader": "^8.0.6",
     "webpack": ">=4 < 4.29"
   },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
+  },
   "publishConfig": {
     "access": "public"
   }
