@@ -75,7 +75,7 @@ module.exports = (api, options) => {
     validateWebpackConfig(webpackConfig, api, options)
 
     // load user devServer options with higher priority than devServer
-    // in webpck config
+    // in webpack config
     const projectDevServerOptions = Object.assign(
       webpackConfig.devServer || {},
       options.devServer
@@ -129,7 +129,7 @@ module.exports = (api, options) => {
         // explicitly configured via devServer.public
         ? `?${publicUrl}/sockjs-node`
         : isInContainer
-          // can't infer public netowrk url if inside a container...
+          // can't infer public network url if inside a container...
           // use client-side inference (note this would break with non-root publicPath)
           ? ``
           // otherwise infer the url

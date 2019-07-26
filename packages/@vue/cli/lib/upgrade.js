@@ -205,7 +205,7 @@ class Upgrader {
   }
 
   async checkForUpdates () {
-    logWithSpinner('Gathering pacakage information...')
+    logWithSpinner('Gathering package information...')
     const upgradable = await this.getUpgradable()
     stopSpinner()
 
