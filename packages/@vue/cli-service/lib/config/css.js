@@ -91,7 +91,7 @@ module.exports = (api, rootOptions) => {
 
       // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      const treatAllAsModules = !!(options.css && options.css.modules)
+      const treatAllAsModules = !!(rootOptions.css && rootOptions.css.modules)
       applyLoaders(normalRule, treatAllAsModules)
 
       function applyLoaders (rule, isCssModule) {
