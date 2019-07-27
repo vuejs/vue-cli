@@ -91,9 +91,10 @@ module.exports = (api, options) => {
 
       // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      applyLoaders(normalRule, options.css && options.css.modules)
+      const treatAllAsModules = !!(options.css && options.css.modules)
+      applyLoaders(normalRule, treatAllAsModules)
 
-      function applyLoaders (rule, modules) {
+      function applyLoaders (rule, isCssModule) {
         if (shouldExtract) {
           rule
             .use('extract-css-loader')
@@ -121,10 +122,10 @@ module.exports = (api, options) => {
           )
         }, loaderOptions.css)
 
-        if (modules) {
+        if (isCssModule) {
           cssLoaderOptions.modules = {
-            ...modules,
-            localIdentName: '[name]_[local]_[hash:base64:5]'
+            localIdentName: '[name]_[local]_[hash:base64:5]',
+            ...cssLoaderOptions.modules
           }
         }
 
