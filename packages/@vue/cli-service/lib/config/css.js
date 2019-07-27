@@ -22,7 +22,6 @@ module.exports = (api, options) => {
     } catch (e) {}
 
     const {
-      modules = false,
       extract = isProd,
       sourceMap = false,
       loaderOptions = {}
@@ -92,7 +91,7 @@ module.exports = (api, options) => {
 
       // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      applyLoaders(normalRule, modules)
+      applyLoaders(normalRule, options.css && options.css.modules)
 
       function applyLoaders (rule, modules) {
         if (shouldExtract) {
