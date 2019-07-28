@@ -20,7 +20,7 @@
 
   > Note: this plugin currently uses Nightwatch v0.9.x. We are waiting for Nightwatch 1.0 to stabilize before upgrading.
 
-  Additionally, [all Nightwatch CLI options are also supported](https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js).
+  Additionally, [all Nightwatch CLI options are also supported](https://nightwatchjs.org/guide#command-line-options).
 
 ## Configuration
 
