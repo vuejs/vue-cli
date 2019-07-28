@@ -9,7 +9,7 @@ const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { warn, error, isPlugin, loadModule } = require('@vue/cli-shared-utils')
+const { warn, error, isPlugin, resolvePluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 
@@ -32,6 +32,8 @@ module.exports = class Service {
     // When useBuiltIn === false, built-in plugins are disabled. This is mostly
     // for testing.
     this.plugins = this.resolvePlugins(plugins, useBuiltIn)
+    // pluginsToSkip will be populated during run()
+    this.pluginsToSkip = new Set()
     // resolve the default mode to use for each command
     // this is provided by plugins as module.exports.defaultModes
     // so we can get the information without actually applying the plugin.
@@ -77,6 +79,7 @@ module.exports = class Service {
 
     // apply plugins.
     this.plugins.forEach(({ id, apply }) => {
+      if (this.pluginsToSkip.has(id)) return
       apply(new PluginAPI(id, this), this.projectOptions)
     })
 
@@ -130,6 +133,15 @@ module.exports = class Service {
         process.env.BABEL_ENV = defaultNodeEnv
       }
     }
+  }
+
+  setPluginsToSkip (args) {
+    const skipPlugins = args['skip-plugins']
+    const pluginsToSkip = skipPlugins
+      ? new Set(skipPlugins.split(',').map(id => resolvePluginId(id)))
+      : new Set()
+
+    this.pluginsToSkip = pluginsToSkip
   }
 
   resolvePlugins (inlinePlugins, useBuiltIn) {
@@ -200,6 +212,9 @@ module.exports = class Service {
     // prioritize inline --mode
     // fallback to resolved default modes from plugins or development if --watch is defined
     const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
+
+    // --skip-plugins arg may have plugins that should be skipped during init()
+    this.setPluginsToSkip(args)
 
     // load env variables, load user config, apply plugins
     this.init(mode)
@@ -345,7 +360,6 @@ module.exports = class Service {
       resolved = this.inlineOptions || {}
       resolvedFrom = 'inline options'
     }
-
 
     if (resolved.css && typeof resolved.css.modules !== 'undefined') {
       if (typeof resolved.css.requireModuleExtension !== 'undefined') {

@@ -44,12 +44,14 @@ Usage: vue-cli-service serve [options] [entry]
 
 Options:
 
-  --open    open browser on server start
-  --copy    copy url to clipboard on server start
-  --mode    specify env mode (default: development)
-  --host    specify host (default: 0.0.0.0)
-  --port    specify port (default: 8080)
-  --https   use https (default: false)
+  --open         open browser on server start
+  --copy         copy url to clipboard on server start
+  --mode         specify env mode (default: development)
+  --host         specify host (default: 0.0.0.0)
+  --port         specify port (default: 8080)
+  --https        use https (default: false)
+  --public       specify the public network URL for the HMR client
+  --skip-plugins comma-separated list of plugin names to skip for this run
 ```
 
 ::: tip --copy
@@ -70,16 +72,19 @@ Usage: vue-cli-service build [options] [entry|pattern]
 
 Options:
 
-  --mode        specify env mode (default: production)
-  --dest        specify output directory (default: dist)
-  --modern      build app targeting modern browsers with auto fallback
-  --target      app | lib | wc | wc-async (default: app)
-  --formats     list of output formats for library builds (default: commonjs,umd,umd-min)
-  --name        name for lib or web-component mode (default: "name" in package.json or entry filename)
-  --no-clean    do not remove the dist directory before building the project
-  --report      generate report.html to help analyze bundle content
-  --report-json generate report.json to help analyze bundle content
-  --watch       watch for changes
+  --mode         specify env mode (default: production)
+  --dest         specify output directory (default: dist)
+  --modern       build app targeting modern browsers with auto fallback
+  --no-unsafe-inline build app without introducing inline scripts
+  --target       app | lib | wc | wc-async (default: app)
+  --formats      list of output formats for library builds (default: commonjs,umd,umd-min)
+  --name         name for lib or web-component mode (default: "name" in package.json or entry filename)
+  --filename     file name for output, only usable for 'lib' target (default: value of --name),
+  --no-clean     do not remove the dist directory before building the project
+  --report       generate report.html to help analyze bundle content
+  --report-json  generate report.json to help analyze bundle content
+  --skip-plugins comma-separated list of plugin names to skip for this run
+  --watch        watch for changes
 ```
 
 `vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
@@ -116,6 +121,35 @@ You can also learn about the available options of each command with:
 
 ``` bash
 npx vue-cli-service help [command]
+```
+
+## Skipping Plugins
+
+Sometimes, you may want to not use a certain CLI Plugin when running a command. For example you might want to build a version of your app that doesn't include the PWA plugin. You can do that by passing the name of the plugin to the `--skip-plugins` option.
+
+```bash
+npx vue-cli-service build --skip-plugins pwa
+```
+
+::: tip
+This option is available for _every_ `vue-cli-service` command, including custom ones added by other plugins.
+:::
+
+You can skip multiple plugins by passing their names as a comma-separated list:
+
+```bash
+npx vue-cli-service build --skip-plugins pwa,apollo
+```
+
+Plugin names are resolved the same way they are during install, as described [here](./plugins-and-presets.md#installing-plugins-in-an-existing-project)
+
+``` bash
+# these are all equivalent
+npx vue-cli-service build --skip-plugins pwa
+
+npx vue-cli-service build --skip-plugins @vue/pwa
+
+npx vue-cli-service build --skip-plugins @vue/cli-plugin-pwa
 ```
 
 ## Caching and Parallelization

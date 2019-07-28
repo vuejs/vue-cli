@@ -10,7 +10,8 @@ module.exports = (api, options) => {
         '--plugin <pluginName>': 'inspect a specific plugin',
         '--rules': 'list all module rule names',
         '--plugins': 'list all plugin names',
-        '--verbose': 'show full function definitions in output'
+        '--verbose': 'show full function definitions in output',
+        '--skip-plugins': 'comma-separated list of plugin names to skip for this run'
       }
     },
     args => {
