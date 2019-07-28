@@ -426,7 +426,7 @@ function renderFile (name, data, ejsOptions) {
     )
 
     // use ejs.render to test the conditional expression
-    // if evaluated to falsy vaule, return early to avoid extra cost for extend expression
+    // if evaluated to falsy value, return early to avoid extra cost for extend expression
     const result = ejs.render(finalTemplate, data, ejsOptions)
     if (!result) {
       return
