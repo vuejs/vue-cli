@@ -11,7 +11,7 @@ module.exports = (api, options) => {
     },
     details:
       `All Nightwatch CLI options are also supported.\n` +
-      `https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js`
+      `https://nightwatchjs.org/guide#command-line-options`
   }, (args, rawArgs) => {
     removeArg(rawArgs, 'url')
     removeArg(rawArgs, 'mode')
