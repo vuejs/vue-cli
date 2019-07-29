@@ -1,7 +1,9 @@
 module.exports = (api, {
   classComponent,
   tsLint,
-  lintOn = []
+  lintOn = [],
+  convertJsToTs,
+  allowJs
 }, _, invoking) => {
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
@@ -9,7 +11,7 @@ module.exports = (api, {
 
   api.extendPackage({
     devDependencies: {
-      typescript: '^3.4.3'
+      typescript: '^3.4.5'
     }
   })
 
@@ -82,5 +84,5 @@ module.exports = (api, {
     hasJest: api.hasPlugin('unit-jest')
   })
 
-  require('./convert')(api, { tsLint })
+  require('./convert')(api, { tsLint, convertJsToTs })
 }

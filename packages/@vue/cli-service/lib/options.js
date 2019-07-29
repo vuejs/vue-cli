@@ -10,7 +10,10 @@ const schema = createSchema(joi => joi.object({
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
-  parallel: joi.boolean(),
+  parallel: joi.alternatives().try([
+    joi.boolean(),
+    joi.number().integer()
+  ]),
   devServer: joi.object(),
   pages: joi.object().pattern(
     /\w+/,
@@ -125,7 +128,7 @@ exports.defaults = () => ({
   },
 
   // whether to use eslint-loader
-  lintOnSave: true,
+  lintOnSave: 'default',
 
   devServer: {
     /*

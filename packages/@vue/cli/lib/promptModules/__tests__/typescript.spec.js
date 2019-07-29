@@ -23,8 +23,8 @@ test('with TSLint', async () => {
     },
     {
       message: 'Pick a linter / formatter',
-      choices: ['TSLint', 'error prevention', 'Airbnb', 'Standard', 'Prettier'],
-      choose: [0]
+      choices: ['ESLint with error prevention only', 'Airbnb', 'Standard', 'Prettier', 'TSLint (deprecated)'],
+      choose: [4]
     },
     {
       message: 'Pick additional lint features',
@@ -69,8 +69,8 @@ test('with ESLint', async () => {
     },
     {
       message: 'Pick a linter / formatter',
-      choices: ['TSLint', 'error prevention', 'Airbnb', 'Standard', 'Prettier'],
-      choose: [2]
+      choices: ['ESLint with error prevention only', 'Airbnb', 'Standard', 'Prettier', 'TSLint (deprecated)'],
+      choose: [1]
     },
     {
       message: 'Pick additional lint features',

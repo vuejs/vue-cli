@@ -89,9 +89,10 @@ test('CSS Modules rules', () => {
   LANGS.forEach(lang => {
     const expected = {
       importLoaders: 1, // no postcss-loader
-      localIdentName: `[name]_[local]_[hash:base64:5]`,
       sourceMap: false,
-      modules: true
+      modules: {
+        localIdentName: `[name]_[local]_[hash:base64:5]`
+      }
     }
     // vue-modules rules
     expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
@@ -129,7 +130,7 @@ test('css.extract', () => {
   }, 'production')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
-    // if postcss config is present, two postcss-loaders will be used becasue it
+    // if postcss config is present, two postcss-loaders will be used because it
     // does not support mixing config files with loader options.
     expect(findLoaders(config2, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
     expect(findOptions(config2, lang, 'css').importLoaders).toBe(3)

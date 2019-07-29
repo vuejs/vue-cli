@@ -2,6 +2,9 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { config, lintOn = [] }, _, invoking) => {
+  api.assertCliVersion('^4.0.0-alpha.4')
+  api.assertCliServiceVersion('^4.0.0-alpha.4')
+
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
@@ -13,15 +16,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       lint: 'vue-cli-service lint'
     },
     eslintConfig,
-    // TODO:
-    // Move these dependencies to package.json in v4.
-    // Now in v3 we have to add redundant eslint related dependencies
-    // in order to keep compatibility with v3.0.x users who defaults to ESlint v4.
     devDependencies: {
-      'babel-eslint': '^10.0.1',
       'eslint': '^5.16.0',
       'eslint-plugin-vue': '^5.0.0'
     }
+  }
+
+  if (!api.hasPlugin('typescript')) {
+    pkg.devDependencies['babel-eslint'] = '^10.0.1'
   }
 
   const injectEditorConfig = (config) => {
@@ -54,7 +56,9 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   } else if (config === 'prettier') {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^4.0.1'
+      '@vue/eslint-config-prettier': '^5.0.0',
+      'eslint-plugin-prettier': '^3.1.0',
+      prettier: '^1.18.2'
     })
     // prettier & default config do not have any style rules
     // so no need to generate an editorconfig file
@@ -76,8 +80,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
-    pkg['lint-staged'] = {
-      '*.{js,vue}': ['vue-cli-service lint', 'git add']
+    if (api.hasPlugin('typescript')) {
+      pkg['lint-staged'] = {
+        '*.{js,vue,ts}': ['vue-cli-service lint', 'git add']
+      }
+    } else {
+      pkg['lint-staged'] = {
+        '*.{js,vue}': ['vue-cli-service lint', 'git add']
+      }
     }
   }
 
@@ -98,13 +108,13 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       require('@vue/cli-plugin-unit-jest/generator').applyESLint(api)
     }
   }
+}
 
+module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
-  if (config && config !== 'base') {
-    api.onCreateComplete(() => {
-      require('../lint')({ silent: true }, api)
-    })
-  }
+  api.afterAnyInvoke(() => {
+    require('../lint')({ silent: true }, api)
+  })
 }
 
 const applyTS = module.exports.applyTS = api => {

@@ -83,16 +83,7 @@ module.exports = {
           },
           {
             text: 'Plugins',
-            items: [
-              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
-              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript' },
-              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' },
-              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa' },
-              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest' },
-              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha' },
-              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress' },
-              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch' }
-            ]
+            link: '/core-plugins/'
           },
           {
             text: 'Changelog',
@@ -147,7 +138,22 @@ module.exports = {
                 '/dev-guide/ui-localization.md'
               ]
             }
-          ]
+          ],
+          '/core-plugins/': [{
+            title: 'Core Vue CLI Plugins',
+            collapsable: false,
+            children: [
+              '/core-plugins/babel.md',
+              '/core-plugins/typescript.md',
+              '/core-plugins/eslint.md',
+              '/core-plugins/pwa.md',
+              '/core-plugins/unit-jest.md',
+              '/core-plugins/unit-mocha.md',
+              '/core-plugins/e2e-cypress.md',
+              '/core-plugins/e2e-nightwatch.md'
+            ]
+          }],
+
         }
       },
       '/zh/': {

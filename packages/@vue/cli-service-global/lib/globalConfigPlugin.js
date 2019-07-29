@@ -48,6 +48,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
           resolve.sync('vue-hot-reload-api', { basedir: context })
         } catch (e) {
           config.resolve.alias
+            // eslint-disable-next-line node/no-extraneous-require
             .set('vue-hot-reload-api', require.resolve('vue-hot-reload-api'))
         }
 

@@ -102,7 +102,7 @@ A generator should export a function which receives three arguments:
 
 And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
 
-For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts for 3rd party plugins](#prompts-for-3rd-party-plugins)).
+For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts](#prompts)).
 
 3. The entire preset (`presets.foo`) will be passed as the third argument.
 
@@ -241,51 +241,57 @@ Let's consider the case where we have created a `router.js` file via [templating
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
-Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `onCreateComplete` hook which is to be called when the files have been written to disk.
+Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `afterInvoke` hook which is to be called when the files have been written to disk.
 
 First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
 
 ```js
 // generator/index.js
 
-api.onCreateComplete(() => {
-  const fs = require('fs')
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
-  const lines = contentMain.split(/\r?\n/g)
-})
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
+  })
+}
 ```
 
 Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
 
-```js{8-9}
+```js{9-10}
 // generator/index.js
 
-api.onCreateComplete(() => {
-  const fs = require('fs')
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
-  const lines = contentMain.split(/\r?\n/g)
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
 
-  const renderIndex = lines.findIndex(line => line.match(/render/))
-  lines[renderIndex] += `\n  router,`
-})
+    const renderIndex = lines.findIndex(line => line.match(/render/))
+    lines[renderIndex] += `\n  router,`
+  })
+}
 ```
 
 Finally, you need to write the content back to the main file:
 
-```js{2,11}
+```js{12-13}
 // generator/index.js
 
-api.onCreateComplete(() => {
-  const { EOL } = require('os')
-  const fs = require('fs')
-  const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
-  const lines = contentMain.split(/\r?\n/g)
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const { EOL } = require('os')
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
 
-  const renderIndex = lines.findIndex(line => line.match(/render/))
-   lines[renderIndex] += `${EOL}  router,`
+    const renderIndex = lines.findIndex(line => line.match(/render/))
+    lines[renderIndex] += `${EOL}  router,`
 
-  fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
-})
+    fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
+  })
+}
 ```
 
 ## Service Plugin
@@ -430,7 +436,56 @@ This is because the command's expected mode needs to be known before loading env
 
 Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
 
-When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js. The resolved answers object will be passed to the plugin's generator as options.
+When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js.
+
+You should export directly array of questions, or export function that return those.
+
+e.g. directly array of questions:
+```js
+// prompts.js
+
+module.exports = [
+  {
+    type: 'input',
+    name: 'locale',
+    message: 'The locale of project localization.',
+    validate: input => !!input,
+    default: 'en'
+  },
+  // ...
+]
+```
+
+e.g. function that return array of questions:
+```js
+// prompts.js
+
+// pass `package.json` of project to function argument
+module.exports = pkg => {
+  const prompts = [
+    {
+      type: 'input',
+      name: 'locale',
+      message: 'The locale of project localization.',
+      validate: input => !!input,
+      default: 'en'
+    }
+  ]
+
+  // add dynamically prompt
+  if ('@vue/cli-plugin-eslint' in (pkg.devDependencies || {})) {
+    prompts.push({
+      type: 'confirm',
+      name: 'useESLintPluginVueI18n',
+      message: 'Use ESLint plugin for Vue I18n ?'
+    })
+  }
+
+  return prompts
+}
+```
+
+The resolved answers object will be passed to the plugin's generator as options.
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 

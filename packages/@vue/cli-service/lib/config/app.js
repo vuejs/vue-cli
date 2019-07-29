@@ -23,8 +23,18 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const outputDir = api.resolve(options.outputDir)
 
+    const getAssetPath = require('../util/getAssetPath')
+    const filename = getAssetPath(
+      options,
+      `js/[name]${isLegacyBundle ? `-legacy` : ``}${isProd && options.filenameHashing ? '.[contenthash:8]' : ''}.js`
+    )
+    webpackConfig
+      .output
+        .filename(filename)
+        .chunkFilename(filename)
+
     // code splitting
-    if (isProd && !process.env.CYPRESS_ENV) {
+    if (process.env.NODE_ENV !== 'test') {
       webpackConfig
         .optimization.splitChunks({
           cacheGroups: {
@@ -88,24 +98,24 @@ module.exports = (api, options) => {
             files: assets,
             options: pluginOptions
           }
-        }, resolveClientEnv(options, true /* raw */))
+        }, resolveClientEnv(options))
       }
     }
 
-    if (isProd) {
-      // handle indexPath
-      if (options.indexPath !== 'index.html') {
-        // why not set filename for html-webpack-plugin?
-        // 1. It cannot handle absolute paths
-        // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
-        webpackConfig
-          .plugin('move-index')
-          .use(require('../webpack/MovePlugin'), [
-            path.resolve(outputDir, 'index.html'),
-            path.resolve(outputDir, options.indexPath)
-          ])
-      }
+    // handle indexPath
+    if (options.indexPath !== 'index.html') {
+      // why not set filename for html-webpack-plugin?
+      // 1. It cannot handle absolute paths
+      // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
+      webpackConfig
+        .plugin('move-index')
+        .use(require('../webpack/MovePlugin'), [
+          path.resolve(outputDir, 'index.html'),
+          path.resolve(outputDir, options.indexPath)
+        ])
+    }
 
+    if (isProd) {
       Object.assign(htmlOptions, {
         minify: {
           removeComments: true,

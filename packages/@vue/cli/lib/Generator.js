@@ -1,12 +1,14 @@
 const ejs = require('ejs')
 const debug = require('debug')
+const semver = require('semver')
 const GeneratorAPI = require('./GeneratorAPI')
+const PackageManager = require('./util/ProjectPackageManager')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
-const injectImportsAndOptions = require('./util/injectImportsAndOptions')
-const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+const runCodemod = require('./util/runCodemod')
+const { toShortPluginId, matchesPluginId, loadModule, isPlugin } = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
@@ -69,7 +71,8 @@ module.exports = class Generator {
   constructor (context, {
     pkg = {},
     plugins = [],
-    completeCbs = [],
+    afterInvokeCbs = [],
+    afterAnyInvokeCbs = [],
     files = {},
     invoking = false
   } = {}) {
@@ -77,9 +80,11 @@ module.exports = class Generator {
     this.plugins = plugins
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
+    this.pm = new PackageManager({ context })
     this.imports = {}
     this.rootOptions = {}
-    this.completeCbs = completeCbs
+    this.afterInvokeCbs = afterInvokeCbs
+    this.afterAnyInvokeCbs = afterAnyInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
     this.reservedConfigTransforms = reservedConfigTransforms
@@ -93,6 +98,11 @@ module.exports = class Generator {
     // exit messages
     this.exitLogs = []
 
+    // load all the other plugins
+    this.allPluginIds = Object.keys(this.pkg.dependencies || {})
+      .concat(Object.keys(this.pkg.devDependencies || {}))
+      .filter(isPlugin)
+
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService
       ? cliService.options
@@ -101,19 +111,44 @@ module.exports = class Generator {
     this.rootOptions = rootOptions
   }
 
-  initPlugins () {
+  async initPlugins () {
     const { rootOptions, invoking } = this
-    return new Promise((resolve, reject) => {
-      const arrP = []
-      // apply generators from plugins
-      this.plugins.forEach(({ id, apply, options }) => {
-        const api = new GeneratorAPI(id, this, options, rootOptions)
-        const fn = apply(api, options, rootOptions, invoking)
-        arrP.push(fn)
-      })
+    const pluginIds = this.plugins.map(p => p.id)
 
-      Promise.all(arrP).then(resolve).catch(reject)
-    })
+    // apply hooks from all plugins
+    for (const id of this.allPluginIds) {
+      const api = new GeneratorAPI(id, this, {}, rootOptions)
+      const pluginGenerator = loadModule(`${id}/generator`, this.context)
+
+      if (pluginGenerator && pluginGenerator.hooks) {
+        await pluginGenerator.hooks(api, {}, rootOptions, pluginIds)
+      }
+    }
+
+    // We are doing save/load to make the hook order deterministic
+    // save "any" hooks
+    const afterAnyInvokeCbsFromPlugins = this.afterAnyInvokeCbs
+
+    // reset hooks
+    this.afterAnyInvokeCbs = []
+    this.postProcessFilesCbs = []
+
+    // apply generators from plugins
+    for (const plugin of this.plugins) {
+      const { id, apply, options } = plugin
+      const api = new GeneratorAPI(id, this, options, rootOptions)
+      await apply(api, options, rootOptions, invoking)
+
+      if (apply.hooks) {
+        // while we execute the entire `hooks` function,
+        // only the `afterInvoke` hook is respected
+        // because `afterAnyHooks` is already determined by the `allPluginIds` loop aboe
+        await apply.hooks(api, options, rootOptions, pluginIds)
+      }
+
+      // restore "any" hooks
+      this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
+    }
   }
 
   async generate ({
@@ -229,11 +264,25 @@ module.exports = class Generator {
 
     // handle imports and root option injections
     Object.keys(files).forEach(file => {
-      files[file] = injectImportsAndOptions(
-        files[file],
-        this.imports[file],
-        this.rootOptions[file]
-      )
+      let imports = this.imports[file]
+      imports = imports instanceof Set ? Array.from(imports) : imports
+      if (imports && imports.length > 0) {
+        files[file] = runCodemod(
+          require('./util/codemods/injectImports'),
+          { path: file, source: files[file] },
+          { imports }
+        )
+      }
+
+      let injections = this.rootOptions[file]
+      injections = injections instanceof Set ? Array.from(injections) : injections
+      if (injections && injections.length > 0) {
+        files[file] = runCodemod(
+          require('./util/codemods/injectOptions'),
+          { path: file, source: files[file] },
+          { injections }
+        )
+      }
     })
 
     for (const postProcess of this.postProcessFilesCbs) {
@@ -242,17 +291,22 @@ module.exports = class Generator {
     debug('vue:cli-files')(this.files)
   }
 
-  hasPlugin (_id) {
-    if (_id === 'router') _id = 'vue-router'
-    if (['vue-router', 'vuex'].includes(_id)) {
-      const pkg = this.pkg
-      return ((pkg.dependencies && pkg.dependencies[_id]) || (pkg.devDependencies && pkg.devDependencies[_id]))
-    }
+  hasPlugin (_id, _version) {
     return [
       ...this.plugins.map(p => p.id),
-      ...Object.keys(this.pkg.devDependencies || {}),
-      ...Object.keys(this.pkg.dependencies || {})
-    ].some(id => matchesPluginId(_id, id))
+      ...this.allPluginIds
+    ].some(id => {
+      if (!matchesPluginId(_id, id)) {
+        return false
+      }
+
+      if (!_version) {
+        return true
+      }
+
+      const version = this.pm.getInstalledVersion(id)
+      return semver.satisfies(version, _version)
+    })
   }
 
   printExitLogs () {

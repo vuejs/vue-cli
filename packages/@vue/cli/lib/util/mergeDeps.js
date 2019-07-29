@@ -1,7 +1,12 @@
 const semver = require('semver')
 const { warn } = require('@vue/cli-shared-utils')
 
-module.exports = function resolveDeps (generatorId, to, from, sources) {
+const tryGetNewerRange = require('./tryGetNewerRange')
+
+const extractSemver = r => r.replace(/^.+#semver:/, '')
+const injectSemver = (r, v) => semver.validRange(r) ? v : r.replace(/#semver:.+$/, `#semver:${v}`)
+
+module.exports = function resolveDeps (generatorId, to, from, sources, forceNewVersion) {
   const res = Object.assign({}, to)
   for (const name in from) {
     const r1 = to[name]
@@ -37,7 +42,14 @@ module.exports = function resolveDeps (generatorId, to, from, sources) {
         sources[name] = generatorId
       }
       // warn incompatible version requirements
-      if (!semver.validRange(r1semver) || !semver.validRange(r2semver) || !semver.intersects(r1semver, r2semver)) {
+      if (
+        !forceNewVersion &&
+        (
+          !semver.validRange(r1semver) ||
+          !semver.validRange(r2semver) ||
+          !semver.intersects(r1semver, r2semver)
+        )
+      ) {
         warn(
           `conflicting versions for project dependency "${name}":\n\n` +
           `- ${r1} injected by generator "${sourceGeneratorId}"\n` +
@@ -48,17 +60,4 @@ module.exports = function resolveDeps (generatorId, to, from, sources) {
     }
   }
   return res
-}
-
-const leadRE = /^(~|\^|>=?)/
-const rangeToVersion = r => r.replace(leadRE, '').replace(/x/g, '0')
-const extractSemver = r => r.replace(/^.+#semver:/, '')
-const injectSemver = (r, v) => semver.validRange(r) ? v : r.replace(/#semver:.+$/, `#semver:${v}`)
-
-function tryGetNewerRange (r1, r2) {
-  const v1 = rangeToVersion(r1)
-  const v2 = rangeToVersion(r2)
-  if (semver.valid(v1) && semver.valid(v2)) {
-    return semver.gt(v1, v2) ? r1 : r2
-  }
 }

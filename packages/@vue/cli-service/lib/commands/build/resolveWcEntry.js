@@ -51,7 +51,7 @@ import Vue from 'vue'
 import wrap from '@vue/web-component-wrapper'
 
 // runtime shared by every component chunk
-import 'css-loader/lib/css-base'
+import 'css-loader/dist/runtime/api.js'
 import 'vue-style-loader/lib/addStylesShadow'
 import 'vue-loader/lib/runtime/componentNormalizer'
 

@@ -12,7 +12,7 @@ module.exports = (api, options) => {
       'vue': '^2.6.10'
     },
     devDependencies: {
-      'vue-template-compiler': '^2.5.21'
+      'vue-template-compiler': '^2.6.10'
     },
     'postcss': {
       'plugins': {
@@ -25,27 +25,18 @@ module.exports = (api, options) => {
     ]
   })
 
-  if (options.router) {
-    require('./router')(api, options)
-  }
-
-  if (options.vuex) {
-    require('./vuex')(api, options)
-  }
-
   if (options.cssPreprocessor) {
     const deps = {
-      // TODO: remove 'sass' option in v4 or rename 'dart-sass' to 'sass'
       sass: {
-        'node-sass': '^4.9.0',
+        sass: '^1.19.0',
         'sass-loader': '^7.1.0'
       },
       'node-sass': {
-        'node-sass': '^4.9.0',
+        'node-sass': '^4.12.0',
         'sass-loader': '^7.1.0'
       },
       'dart-sass': {
-        sass: '^1.18.0',
+        sass: '^1.19.0',
         'sass-loader': '^7.1.0'
       },
       less: {

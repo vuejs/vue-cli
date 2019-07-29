@@ -6,6 +6,10 @@
 const chalk = require('chalk')
 const semver = require('semver')
 const requiredVersion = require('../package.json').engines.node
+const didYouMean = require('didyoumean')
+
+// Setting edit distance to 60% of the input string's length
+didYouMean.threshold = 0.6
 
 function checkNodeVersion (wanted, id) {
   if (!semver.satisfies(process.version, wanted)) {
@@ -113,6 +117,7 @@ program
   .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
   .option('-c, --copy', 'Copy local url to clipboard')
+  .option('-p, --port <port>', 'Port used by the server (default: 8080 or next available port)')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
   })
@@ -162,10 +167,12 @@ program
   })
 
 program
-  .command('upgrade [semverLevel]')
-  .description('upgrade vue cli service / plugins (default semverLevel: minor)')
-  .action((semverLevel, cmd) => {
-    loadCommand('upgrade', '@vue/cli-upgrade')(semverLevel, cleanArgs(cmd))
+  .command('upgrade [package-name]')
+  .description('(experimental) upgrade vue cli service / plugins')
+  .option('-t, --to <version>', 'upgrade <package-name> to a version that is not latest')
+  .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
+  .action((packageName, cmd) => {
+    require('../lib/upgrade')(packageName, cleanArgs(cmd))
   })
 
 program
@@ -196,6 +203,7 @@ program
     program.outputHelp()
     console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     console.log()
+    suggestCommands(cmd)
   })
 
 // add some useful info on help
@@ -228,6 +236,17 @@ program.parse(process.argv)
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()
+}
+
+function suggestCommands (cmd) {
+  const availableCommands = program.commands.map(cmd => {
+    return cmd._name
+  })
+
+  const suggestion = didYouMean(cmd, availableCommands)
+  if (suggestion) {
+    console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
+  }
 }
 
 function camelize (str) {

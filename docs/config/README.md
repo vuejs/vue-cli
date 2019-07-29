@@ -193,7 +193,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 ::: warning Jest config
 This option is not respected by the [cli-unit-jest plugin](#jest), because in jest, we don't have to transpile code from `/node_modules` unless it uses non-standard features - Node >8.11 supports the latest ECMAScript features already.
 
-However, jest sometimes has to transform content from node_modules if that code uses ES6 `import`/`export` syntax. In that case, use the `tranformIgnorePatterns` option in `jest.config.js`.
+However, jest sometimes has to transform content from node_modules if that code uses ES6 `import`/`export` syntax. In that case, use the `transformIgnorePatterns` option in `jest.config.js`.
 
 See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-unit-jest/README.md) for more information.
 :::
@@ -337,6 +337,10 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
   ```
 
   This will tell the dev server to proxy any unknown requests (requests that did not match a static file) to `http://localhost:4000`.
+
+  ::: warning
+  When `devServer.proxy` is set to a string, only XHR requests will be proxied. If you want to test an API URL, don't open it in the browser, use an API tool like Postman instead.
+  :::
 
   If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
 

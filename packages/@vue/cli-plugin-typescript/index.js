@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = (api, options) => {
   const fs = require('fs')
-  const useThreads = process.env.NODE_ENV === 'production' && options.parallel
+  const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
 
   api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
@@ -15,7 +15,8 @@ module.exports = (api, options) => {
 
     config.resolve
       .extensions
-        .merge(['.ts', '.tsx'])
+        .prepend('.ts')
+        .prepend('.tsx')
 
     const tsRule = config.module.rule('ts').test(/\.ts$/)
     const tsxRule = config.module.rule('tsx').test(/\.tsx$/)
@@ -37,7 +38,11 @@ module.exports = (api, options) => {
 
     if (useThreads) {
       addLoader({
-        loader: 'thread-loader'
+        loader: 'thread-loader',
+        options:
+          typeof options.parallel === 'number'
+            ? { workers: options.parallel }
+            : {}
       })
     }
 

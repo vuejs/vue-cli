@@ -15,7 +15,7 @@ You can install and manage Plugins using the GUI with the `vue ui` command.
 Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:
 
 ``` bash
-vue add @vue/eslint
+vue add eslint
 ```
 
 ::: tip
@@ -30,7 +30,7 @@ The command resolves `@vue/eslint` to the full package name `@vue/cli-plugin-esl
 
 ``` bash
 # these are equivalent to the previous usage
-vue add @vue/cli-plugin-eslint
+vue add cli-plugin-eslint
 ```
 
 Without the `@vue` prefix, the command will resolve to an unscoped package instead. For example, to install the 3rd party plugin `vue-cli-plugin-apollo`:
@@ -49,14 +49,7 @@ vue add @foo/bar
 You can pass generator options to the installed plugin (this will skip the prompts):
 
 ``` bash
-vue add @vue/eslint --config airbnb --lintOn save
-```
-
-`vue-router` and `vuex` are special cases - they do not have their own plugins, but you can add them nonetheless:
-
-``` bash
-vue add router
-vue add vuex
+vue add eslint --config airbnb --lintOn save
 ```
 
 If a plugin is already installed, you can skip the installation and only invoke its generator with the `vue invoke` command. The command takes the same arguments as `vue add`.
@@ -112,15 +105,15 @@ Here's an example preset:
 ``` json
 {
   "useConfigFiles": true,
-  "router": true,
-  "vuex": true,
   "cssPreprocessor": "sass",
   "plugins": {
     "@vue/cli-plugin-babel": {},
     "@vue/cli-plugin-eslint": {
       "config": "airbnb",
       "lintOn": ["save", "commit"]
-    }
+    },
+    "@vue/cli-plugin-router": {},
+    "@vue/cli-plugin-vuex": {}
   }
 }
 ```

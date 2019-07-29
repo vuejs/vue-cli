@@ -73,7 +73,7 @@ function createService (context, entry, asLib) {
   return new Service(context, {
     projectOptions: {
       compiler: true,
-      lintOnSave: true
+      lintOnSave: 'default'
     },
     plugins: [
       babelPlugin,

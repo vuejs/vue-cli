@@ -16,7 +16,7 @@ vue-cli-service build --mode development
 
 When running `vue-cli-service`, environment variables are loaded from all [corresponding files](#environment-variables). If they don't contain a `NODE_ENV` variable, it will be set accordingly. For example, `NODE_ENV` will be set to `"production"` in production mode, `"test"` in test mode, and defaults to `"development"` otherwise.
 
-Then `NODE_ENV` will determine the primary mode your app is runnning in - development, production or test - and consequently, what kind of webpack config will be created.
+Then `NODE_ENV` will determine the primary mode your app is running in - development, production or test - and consequently, what kind of webpack config will be created.
 
 With `NODE_ENV` set to "test" for example, Vue CLI creates a webpack config that is intended to be used and optimized for unit tests. It doesn't process images and other assets that are unnecessary for unit tests.
 
@@ -55,6 +55,8 @@ Loaded variables will become available to all `vue-cli-service` commands, plugin
 An env file for a specific mode (e.g. `.env.production`) will take higher priority than a generic one (e.g. `.env`).
 
 In addition, environment variables that already exist when Vue CLI is executed have the highest priority and will not be overwritten by `.env` files.
+
+`.env` files are loaded at the start of `vue-cli-service`. Restart the service after making changes.
 :::
 
 ### Example: Staging Mode

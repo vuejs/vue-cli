@@ -161,6 +161,7 @@ export default {
         this.widget.customTitle = this.feed.title
       } catch (e) {
         this.error = 'fetch'
+        // eslint-disable-next-line no-console
         console.error(e)
       }
       this.loading = false

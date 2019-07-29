@@ -6,12 +6,12 @@ module.exports = (api, options) => {
       '--url': 'run e2e tests against given url instead of auto-starting dev server',
       '--config': 'use custom nightwatch config file (overrides internals)',
       '-e, --env': 'specify comma-delimited browser envs to run in (default: chrome)',
-      '-t, --test': 'sepcify a test to run by name',
+      '-t, --test': 'specify a test to run by name',
       '-f, --filter': 'glob to filter tests by filename'
     },
     details:
       `All Nightwatch CLI options are also supported.\n` +
-      `https://github.com/nightwatchjs/nightwatch/blob/master/lib/runner/cli/cli.js`
+      `https://nightwatchjs.org/guide#command-line-options`
   }, (args, rawArgs) => {
     removeArg(rawArgs, 'url')
     removeArg(rawArgs, 'mode')
@@ -57,13 +57,6 @@ module.exports = (api, options) => {
 
       return runner
     })
-  })
-
-  // TODO remove in RC
-  api.registerCommand('e2e', (args, rawArgv) => {
-    const { warn } = require('@vue/cli-shared-utils')
-    warn(`Deprecation Warning: "vue-cli-service e2e" has been renamed to "vue-cli-service test:e2e".`)
-    return api.service.run('test:e2e', args, rawArgv)
   })
 }
 
