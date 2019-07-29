@@ -27,5 +27,8 @@
   },
   "devDependencies": {
     "@vue/cli-test-utils": "^4.0.0-beta.1"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
   }
 }

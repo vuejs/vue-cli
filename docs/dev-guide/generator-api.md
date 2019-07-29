@@ -38,6 +38,8 @@ The version string for the **project local** `@vue/cli-service` version that is 
 
   Nothing happens if the provided version is satisfied. Otherwise, an error will be thrown.
 
+  Note: It's recommended to use [the `peerDependencies` field in `package.json`](https://docs.npmjs.com/files/package.json#peerdependencies) under most circumstances.
+
 
 ## resolve
 

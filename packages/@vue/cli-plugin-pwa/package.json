@@ -29,5 +29,8 @@
   },
   "devDependencies": {
     "register-service-worker": "^1.6.2"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
   }
 }
