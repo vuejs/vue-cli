@@ -196,7 +196,13 @@ class Upgrader {
         const latest = await this.pm.getRemoteVersion(name)
 
         if (installed !== latest) {
-          upgradable.push({ name, installed, wanted, latest })
+          // always list @vue/cli-service as the first one
+          // as it's depended by all other plugins
+          if (name === '@vue/cli-service') {
+            upgradable.unshift({ name, installed, wanted, latest })
+          } else {
+            upgradable.push({ name, installed, wanted, latest })
+          }
         }
       }
     }
@@ -244,7 +250,7 @@ async function upgrade (packageName, options, context = process.cwd()) {
   if (!(await confirmIfGitDirty(context))) {
     return
   }
-  
+
   const upgrader = new Upgrader(context)
 
   if (!packageName) {
