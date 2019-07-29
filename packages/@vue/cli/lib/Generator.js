@@ -83,7 +83,7 @@ module.exports = class Generator {
     this.pm = new PackageManager({ context })
     this.imports = {}
     this.rootOptions = {}
-    this.afterInvokeCbs = []
+    this.afterInvokeCbs = afterInvokeCbs
     this.afterAnyInvokeCbs = afterAnyInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
@@ -98,10 +98,8 @@ module.exports = class Generator {
     // exit messages
     this.exitLogs = []
 
-    const pluginIds = plugins.map(p => p.id)
-
     // load all the other plugins
-    this.allPlugins = Object.keys(this.pkg.dependencies || {})
+    this.allPluginIds = Object.keys(this.pkg.dependencies || {})
       .concat(Object.keys(this.pkg.devDependencies || {}))
       .filter(isPlugin)
 
@@ -110,43 +108,55 @@ module.exports = class Generator {
       ? cliService.options
       : inferRootOptions(pkg)
 
+    this.rootOptions = rootOptions
+  }
+
+  async initPlugins () {
+    const { rootOptions, invoking } = this
+    const pluginIds = this.plugins.map(p => p.id)
+
     // apply hooks from all plugins
-    this.allPlugins.forEach(id => {
+    for (const id of this.allPluginIds) {
       const api = new GeneratorAPI(id, this, {}, rootOptions)
-      const pluginGenerator = loadModule(`${id}/generator`, context)
+      const pluginGenerator = loadModule(`${id}/generator`, this.context)
 
       if (pluginGenerator && pluginGenerator.hooks) {
-        pluginGenerator.hooks(api, {}, rootOptions, pluginIds)
+        await pluginGenerator.hooks(api, {}, rootOptions, pluginIds)
       }
-    })
+    }
 
     // We are doing save/load to make the hook order deterministic
     // save "any" hooks
     const afterAnyInvokeCbsFromPlugins = this.afterAnyInvokeCbs
 
     // reset hooks
-    this.afterInvokeCbs = afterInvokeCbs
     this.afterAnyInvokeCbs = []
     this.postProcessFilesCbs = []
 
     // apply generators from plugins
-    plugins.forEach(({ id, apply, options }) => {
+    for (const plugin of this.plugins) {
+      const { id, apply, options } = plugin
       const api = new GeneratorAPI(id, this, options, rootOptions)
-      apply(api, options, rootOptions, invoking)
+      await apply(api, options, rootOptions, invoking)
 
       if (apply.hooks) {
-        apply.hooks(api, options, rootOptions, pluginIds)
+        // while we execute the entire `hooks` function,
+        // only the `afterInvoke` hook is respected
+        // because `afterAnyHooks` is already determined by the `allPluginIds` loop aboe
+        await apply.hooks(api, options, rootOptions, pluginIds)
       }
-    })
 
-    // load "any" hooks
-    this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
+      // restore "any" hooks
+      this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
+    }
   }
 
   async generate ({
     extractConfigFiles = false,
     checkExisting = false
   } = {}) {
+    await this.initPlugins()
+
     // save the file system before applying plugin for comparison
     const initialFiles = Object.assign({}, this.files)
     // extract configs from package.json into dedicated files.
@@ -284,7 +294,7 @@ module.exports = class Generator {
   hasPlugin (_id, _version) {
     return [
       ...this.plugins.map(p => p.id),
-      ...this.allPlugins
+      ...this.allPluginIds
     ].some(id => {
       if (!matchesPluginId(_id, id)) {
         return false
