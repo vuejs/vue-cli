@@ -1,4 +1,45 @@
 
+## 4.0.0-beta.2 (2019-07-29)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#3897](https://github.com/vuejs/vue-cli/pull/3897) feat(cli): Generator support async ([@xierenyuan](https://github.com/xierenyuan))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4363](https://github.com/vuejs/vue-cli/pull/4363) fix: fix `css.loaderOptions.css.modules` default values ([@sodatea](https://github.com/sodatea))
+  * [#4359](https://github.com/vuejs/vue-cli/pull/4359) fix stats display when chunkFilename contains query string ([@flyhope](https://github.com/flyhope))
+* `@vue/cli`
+  * [#4356](https://github.com/vuejs/vue-cli/pull/4356) fix: `vue add` should be able to install prerelease versions for official plugins ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* Other
+  * [#4333](https://github.com/vuejs/vue-cli/pull/4333) Update html-and-static-assets.md ([@sergeymorkovkin](https://github.com/sergeymorkovkin))
+  * [#4257](https://github.com/vuejs/vue-cli/pull/4257) Update mode-and-env.md ([@TechieForFun](https://github.com/TechieForFun))
+  * [#4358](https://github.com/vuejs/vue-cli/pull/4358) docs(ru): fix link in webpack.md ([@euaaaio](https://github.com/euaaaio))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`
+  * [#4365](https://github.com/vuejs/vue-cli/pull/4365) chore: plugins should list @vue/cli-service in peerDependencies ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#4364](https://github.com/vuejs/vue-cli/pull/4364) Replacing nightwatch CLI options URL with proper documentation ([@aberonni](https://github.com/aberonni))
+
+#### :house: Internal
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`
+  * [#4365](https://github.com/vuejs/vue-cli/pull/4365) chore: plugins should list @vue/cli-service in peerDependencies ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli`
+  * [#4367](https://github.com/vuejs/vue-cli/pull/4367) chore(cli-service): word spelling in comments ([@yiliang114](https://github.com/yiliang114))
+
+#### Committers: 8
+- Domenico Gemoli ([@aberonni](https://github.com/aberonni))
+- Eduard Aksamitov ([@euaaaio](https://github.com/euaaaio))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Mohsen Sadeghzade ([@TechieForFun](https://github.com/TechieForFun))
+- Sergey Morkovkin ([@sergeymorkovkin](https://github.com/sergeymorkovkin))
+- yiliang ([@yiliang114](https://github.com/yiliang114))
+- 李枨煊 ([@flyhope](https://github.com/flyhope))
+- 阿平 ([@xierenyuan](https://github.com/xierenyuan))
+
+
+
 ## 4.0.0-beta.1 (2019-07-25)
 
 #### :rocket: New Features

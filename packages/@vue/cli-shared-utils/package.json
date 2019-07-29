@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-shared-utils",
-  "version": "4.0.0-beta.1",
+  "version": "4.0.0-beta.2",
   "description": "shared utilities for vue-cli packages",
   "main": "index.js",
   "repository": {
