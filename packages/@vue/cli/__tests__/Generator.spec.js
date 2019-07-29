@@ -456,13 +456,16 @@ test('api: onCreateComplete', async () => {
     ],
     afterInvokeCbs: cbs
   })
+
+  await generator.generate()
+
   expect(cbs).toContain(fn)
 })
 
-test('api: afterInvoke', () => {
+test('api: afterInvoke', async () => {
   const fn = () => {}
   const cbs = []
-  new Generator('/', {
+  const generator = new Generator('/', {
     plugins: [
       {
         id: 'test',
