@@ -1,8 +1,6 @@
 const Generator = require('./Generator')
 const MigratorAPI = require('./MigratorAPI')
 
-const inferRootOptions = require('./util/inferRootOptions')
-
 module.exports = class Migrator extends Generator {
   constructor (context, {
     plugin,
@@ -19,11 +17,25 @@ module.exports = class Migrator extends Generator {
       files,
       invoking
     })
-    this.plugins = [plugin]
 
-    const rootOptions = inferRootOptions(pkg)
+    this.migratorPlugin = plugin
+    this.invoking = invoking
+  }
+
+  async generate () {
+    const plugin = this.migratorPlugin
+
     // apply migrators from plugins
-    const api = new MigratorAPI(plugin.id, plugin.installed, this, plugin.options, rootOptions)
-    plugin.apply(api, plugin.options, rootOptions, invoking)
+    const api = new MigratorAPI(
+      plugin.id,
+      plugin.installed,
+      this,
+      plugin.options,
+      this.rootOptions
+    )
+
+    await plugin.apply(api, plugin.options, this.rootOptions, this.invoking)
+
+    await super.generate()
   }
 }
