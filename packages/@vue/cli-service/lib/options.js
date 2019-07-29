@@ -122,7 +122,6 @@ exports.defaults = () => ({
   css: {
     // extract: true,
     // modules: false,
-    // localIdentName: '[name]_[local]_[hash:base64:5]',
     // sourceMap: false,
     // loaderOptions: {}
   },
