@@ -60,7 +60,7 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.2.2",
-    "eslint-plugin-vue-libs": "^3.0.0",
+    "eslint-plugin-vue-libs": "^4.0.0",
     "execa": "^1.0.0",
     "globby": "^9.2.0",
     "graphql": "^14.3.1",
