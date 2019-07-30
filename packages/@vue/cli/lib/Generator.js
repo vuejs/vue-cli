@@ -83,7 +83,9 @@ module.exports = class Generator {
     this.pm = new PackageManager({ context })
     this.imports = {}
     this.rootOptions = {}
-    this.afterInvokeCbs = afterInvokeCbs
+    // we don't load the passed afterInvokes yet because we want to ignore them from other plugins
+    this.passedAfterInvokeCbs = afterInvokeCbs
+    this.afterInvokeCbs = []
     this.afterAnyInvokeCbs = afterAnyInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
@@ -130,6 +132,7 @@ module.exports = class Generator {
     const afterAnyInvokeCbsFromPlugins = this.afterAnyInvokeCbs
 
     // reset hooks
+    this.afterInvokeCbs = this.passedAfterInvokeCbs
     this.afterAnyInvokeCbs = []
     this.postProcessFilesCbs = []
 
@@ -142,7 +145,7 @@ module.exports = class Generator {
       if (apply.hooks) {
         // while we execute the entire `hooks` function,
         // only the `afterInvoke` hook is respected
-        // because `afterAnyHooks` is already determined by the `allPluginIds` loop aboe
+        // because `afterAnyHooks` is already determined by the `allPluginIds` loop above
         await apply.hooks(api, options, rootOptions, pluginIds)
       }
 
