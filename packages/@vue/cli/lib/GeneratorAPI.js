@@ -429,7 +429,7 @@ function renderFile (name, data, ejsOptions) {
     // if evaluated to falsy value, return early to avoid extra cost for extend expression
     const result = ejs.render(finalTemplate, data, ejsOptions)
     if (!result) {
-      return
+      return ''
     }
   }
 
