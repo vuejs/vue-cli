@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+<%_ if (!bare) { _%>
 import Home from '../views/Home.vue'
+<%_ } _%>
 
 Vue.use(VueRouter)
 
 const routes = [
+  <%_ if (!bare) { _%>
   {
     path: '/',
     name: 'home',
@@ -24,6 +27,7 @@ const routes = [
     }
     <%_ } _%>
   }
+  <%_ } _%>
 ]
 
 const router = new VueRouter({

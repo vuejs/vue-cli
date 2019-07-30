@@ -9,10 +9,12 @@ replace:
 <%# REPLACE %>
 <template>
   <div id="app">
+    <%_ if (!bare) { _%>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
+    <%_ } _%>
     <router-view/>
   </div>
 </template>
@@ -23,9 +25,9 @@ replace:
 
 <%# REPLACE %>
 }
-
-<%_ if (rootOptions.cssPreprocessor !== 'stylus') { _%>
-  <%_ if (!rootOptions.cssPreprocessor) { _%>
+<%_ if (!bare) { _%>
+  <%_ if (rootOptions.cssPreprocessor !== 'stylus') { _%>
+    <%_ if (!rootOptions.cssPreprocessor) { _%>
 #nav {
   padding: 30px;
 }
@@ -38,7 +40,7 @@ replace:
 #nav a.router-link-exact-active {
   color: #42b983;
 }
-  <%_ } else { _%>
+    <%_ } else { _%>
 #nav {
   padding: 30px;
 
@@ -51,8 +53,8 @@ replace:
     }
   }
 }
-  <%_ } _%>
-<%_ } else { _%>
+    <%_ } _%>
+  <%_ } else { _%>
 #nav
   padding 30px
   a
@@ -60,6 +62,7 @@ replace:
     color #2c3e50
     &.router-link-exact-active
       color #42b983
+  <%_ } _%>
 <%_ } _%>
 </style>
 <%# END_REPLACE %>

@@ -1,20 +1,8 @@
-module.exports = (api, options = {}) => {
+module.exports = (api, options = {}, rootOptions = {}) => {
   api.assertCliVersion('^4.0.0-alpha.3')
   api.assertCliServiceVersion('^4.0.0-alpha.3')
 
-  api.injectImports(api.entryFile, `import router from './router'`)
-  api.injectRootOptions(api.entryFile, `router`)
-
-  api.extendPackage({
-    dependencies: {
-      'vue-router': '^3.0.6'
-    }
-  })
-
-  api.render('./template', {
-    historyMode: options.historyMode,
-    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
-  })
+  require(`./${options.type || 'init'}`)(api, options, rootOptions)
 
   if (api.invoking) {
     if (api.hasPlugin('typescript')) {

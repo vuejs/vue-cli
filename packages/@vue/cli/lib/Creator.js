@@ -100,16 +100,18 @@ module.exports = class Creator extends EventEmitter {
 
     // legacy support for router
     if (preset.router) {
-      preset.plugins['@vue/cli-plugin-router'] = {}
-
-      if (preset.routerHistoryMode) {
-        preset.plugins['@vue/cli-plugin-router'].historyMode = true
+      preset.plugins['@vue/cli-plugin-router'] = {
+        type: 'init',
+        bare: !!cliOptions.bare,
+        historyMode: !!preset.historyMode
       }
     }
 
     // legacy support for vuex
     if (preset.vuex) {
-      preset.plugins['@vue/cli-plugin-vuex'] = {}
+      preset.plugins['@vue/cli-plugin-vuex'] = {
+        type: 'init'
+      }
     }
 
     const packageManager = (
