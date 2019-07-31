@@ -90,6 +90,7 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
   })
 }
 
+/* eslint-disable no-shadow */
 function createHelpers (page) {
   return {
     getText: selector => page.evaluate(selector => {
@@ -106,3 +107,4 @@ function createHelpers (page) {
     }, selector, cls)
   }
 }
+/* eslint-enable no-shadow */

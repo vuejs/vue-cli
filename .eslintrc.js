@@ -15,6 +15,7 @@ module.exports = {
     "indent": ["error", 2, {
       "MemberExpression": "off"
     }],
+    "no-shadow": ["error"],
     "node/no-extraneous-require": ["error", {
       "allowModules": [
         "@vue/cli-service",

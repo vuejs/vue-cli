@@ -102,18 +102,18 @@ module.exports = api => {
         ]
       }
     },
-    onWrite: async ({ api, prompts, cwd }) => {
+    onWrite: async ({ onWriteApi, prompts, cwd }) => {
       const result = {}
       for (const prompt of prompts.filter(p => !p.raw.skipSave)) {
-        result[`pwa.${prompt.id}`] = await api.getAnswer(prompt.id)
+        result[`pwa.${prompt.id}`] = await onWriteApi.getAnswer(prompt.id)
       }
-      api.setData('vue', result)
+      onWriteApi.setData('vue', result)
 
       // Update app manifest
 
       const name = result['name']
       if (name) {
-        api.setData('manifest', {
+        onWriteApi.setData('manifest', {
           name,
           short_name: name
         })
@@ -121,14 +121,14 @@ module.exports = api => {
 
       const themeColor = result['themeColor']
       if (themeColor) {
-        api.setData('manifest', {
+        onWriteApi.setData('manifest', {
           theme_color: themeColor
         })
       }
 
-      const backgroundColor = await api.getAnswer('backgroundColor')
+      const backgroundColor = await onWriteApi.getAnswer('backgroundColor')
       if (backgroundColor) {
-        api.setData('manifest', {
+        onWriteApi.setData('manifest', {
           background_color: backgroundColor
         })
       }

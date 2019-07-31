@@ -36,14 +36,14 @@ exports.unset = function (target, path) {
     if (!obj[key]) {
       return
     }
-    objs.splice(0, 0, { obj, key, value: obj[key] })
+    objs.unshift({ parent: obj, key, value: obj[key] })
     obj = obj[key]
   }
   delete obj[fields[l - 1]]
   // Clear empty objects
-  for (const { obj, key, value } of objs) {
+  for (const { parent, key, value } of objs) {
     if (!Object.keys(value).length) {
-      delete obj[key]
+      delete parent[key]
     }
   }
 }

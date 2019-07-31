@@ -103,7 +103,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
               .add(/node_modules/)
               .end()
             .use('eslint-loader')
-              .tap(options => Object.assign({}, options, {
+              .tap(loaderOptions => Object.assign({}, loaderOptions, {
                 useEslintrc: hasESLintConfig,
                 baseConfig: {
                   extends: [
