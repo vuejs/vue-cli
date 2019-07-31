@@ -292,6 +292,8 @@ module.exports = {
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
 
+  另外，也可以使用 `scss` 选项，针对 `scss` 语法进行单独配置（区别于 `sass` 语法）。
+
   更多细节可查阅：[向预处理器 Loader 传递选项](../guide/css.html#向预处理器-loader-传递选项)
 
   ::: tip 提示
