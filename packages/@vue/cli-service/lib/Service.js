@@ -346,28 +346,11 @@ module.exports = class Service {
       resolvedFrom = 'inline options'
     }
 
-    if (typeof resolved.baseUrl !== 'undefined') {
-      if (typeof resolved.publicPath !== 'undefined') {
-        warn(
-          `You have set both "baseUrl" and "publicPath" in ${chalk.bold('vue.config.js')}, ` +
-          `in this case, "baseUrl" will be ignored in favor of "publicPath".`
-        )
-      } else {
-        warn(
-          `"baseUrl" option in ${chalk.bold('vue.config.js')} ` +
-          `is deprecated now, please use "publicPath" instead.`
-        )
-        resolved.publicPath = resolved.baseUrl
-      }
-    }
-
     // normalize some options
     ensureSlash(resolved, 'publicPath')
     if (typeof resolved.publicPath === 'string') {
       resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
     }
-    // for compatibility concern, in case some plugins still rely on `baseUrl` option
-    resolved.baseUrl = resolved.publicPath
     removeSlash(resolved, 'outputDir')
 
     // validate options
