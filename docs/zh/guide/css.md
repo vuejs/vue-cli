@@ -81,13 +81,13 @@ import styles from './foo.module.css'
 import sassStyles from './foo.module.scss'
 ```
 
-如果你想去掉文件名中的 `.module`，可以设置 `vue.config.js` 中的 `css.modules` 为 `true`：
+如果你想去掉文件名中的 `.module`，可以设置 `vue.config.js` 中的 `css.requireModuleExtension` 为 `false`：
 
 ``` js
 // vue.config.js
 module.exports = {
   css: {
-    modules: true
+    requireModuleExtension: false
   }
 }
 ```

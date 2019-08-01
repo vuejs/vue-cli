@@ -89,13 +89,13 @@ import styles from './foo.module.css'
 import sassStyles from './foo.module.scss'
 ```
 
-If you want to drop the `.module` in the filenames, set `css.modules` to `true` in `vue.config.js`:
+If you want to drop the `.module` in the filenames, set `css.requireModuleExtension` to `false` in `vue.config.js`:
 
 ``` js
 // vue.config.js
 module.exports = {
   css: {
-    modules: true
+    requireModuleExtension: false
   }
 }
 ```
