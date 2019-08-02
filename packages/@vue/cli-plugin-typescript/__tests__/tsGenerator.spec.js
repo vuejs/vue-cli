@@ -64,22 +64,6 @@ test('use with Babel', async () => {
   expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
 })
 
-test('use with router', async () => {
-  const { files } = await generateWithPlugin([
-    {
-      id: '@vue/cli-plugin-router',
-      apply: require('@vue/cli-plugin-router/generator'),
-      options: {}
-    },
-    {
-      id: 'ts',
-      apply: require('../generator'),
-      options: {}
-    }
-  ])
-  expect(files['src/views/Home.vue']).toMatch('<div class=\"home\">')
-})
-
 test('lint', async () => {
   const { pkg, files } = await generateWithPlugin([
     {
