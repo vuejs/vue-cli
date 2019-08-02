@@ -39,6 +39,7 @@ const schema = createSchema(joi => joi.object({
     loaderOptions: joi.object({
       css: joi.object(),
       sass: joi.object(),
+      scss: joi.object(),
       less: joi.object(),
       stylus: joi.object(),
       postcss: joi.object()

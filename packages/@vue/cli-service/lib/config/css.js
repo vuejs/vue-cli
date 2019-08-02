@@ -162,10 +162,17 @@ module.exports = (api, rootOptions) => {
 
     createCSSRule('css', /\.css$/)
     createCSSRule('postcss', /\.p(ost)?css$/)
-    createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, loaderOptions.sass))
-    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, {
-      indentedSyntax: true
-    }, loaderOptions.sass))
+    createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(
+      defaultSassLoaderOptions,
+      loaderOptions.scss || loaderOptions.sass
+    ))
+    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+      defaultSassLoaderOptions,
+      {
+        indentedSyntax: true
+      },
+      loaderOptions.sass
+    ))
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
     createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', Object.assign({
       preferPathResolver: 'webpack'

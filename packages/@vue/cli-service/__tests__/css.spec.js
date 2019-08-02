@@ -198,6 +198,29 @@ test('css.loaderOptions', () => {
   expect(findOptions(config, 'sass', 'sass')).toMatchObject({ data, indentedSyntax: true, sourceMap: false })
 })
 
+test('scss loaderOptions', () => {
+  const sassData = '$env: production'
+  const scssData = '$env: production;'
+
+  const config = genConfig({
+    vue: {
+      css: {
+        loaderOptions: {
+          sass: {
+            sassData
+          },
+          scss: {
+            scssData
+          }
+        }
+      }
+    }
+  })
+
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ scssData, sourceMap: false })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ sassData, indentedSyntax: true, sourceMap: false })
+})
+
 test('should use dart sass implementation whenever possible', () => {
   const config = genConfig()
   expect(findOptions(config, 'scss', 'sass')).toMatchObject({ fiber: require('fibers'), implementation: require('sass') })
