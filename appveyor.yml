@@ -3,7 +3,6 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - yarn patch-chromedriver
   - yarn --network-timeout 600000
 
 test_script:
