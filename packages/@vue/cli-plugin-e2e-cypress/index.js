@@ -53,9 +53,9 @@ module.exports.defaultModes = {
   'test:e2e': 'production'
 }
 
-function removeArg (rawArgs, arg, offset = 1) {
-  const matchRE = new RegExp(`^--${arg}`)
-  const equalRE = new RegExp(`^--${arg}=`)
+function removeArg (rawArgs, argToRemove, offset = 1) {
+  const matchRE = new RegExp(`^--${argToRemove}`)
+  const equalRE = new RegExp(`^--${argToRemove}=`)
   const i = rawArgs.findIndex(arg => matchRE.test(arg))
   if (i > -1) {
     rawArgs.splice(i, offset + (equalRE.test(rawArgs[i]) ? 0 : 1))

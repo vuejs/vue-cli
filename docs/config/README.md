@@ -314,6 +314,8 @@ In v3 this means the opposite of `css.requireModuleExtension`.
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
 
+  It's also possible to target `scss` syntax separately from `sass`, with the `scss` option.
+
   See also: [Passing Options to Pre-Processor Loaders](../guide/css.md#passing-options-to-pre-processor-loaders)
 
   ::: tip

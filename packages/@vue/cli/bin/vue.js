@@ -238,12 +238,12 @@ if (!process.argv.slice(2).length) {
   program.outputHelp()
 }
 
-function suggestCommands (cmd) {
+function suggestCommands (unknownCommand) {
   const availableCommands = program.commands.map(cmd => {
     return cmd._name
   })
 
-  const suggestion = didYouMean(cmd, availableCommands)
+  const suggestion = didYouMean(unknownCommand, availableCommands)
   if (suggestion) {
     console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
   }

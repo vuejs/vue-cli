@@ -26,33 +26,16 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     pkg.devDependencies['babel-eslint'] = '^10.0.1'
   }
 
-  const injectEditorConfig = (config) => {
-    const filePath = api.resolve('.editorconfig')
-    if (fs.existsSync(filePath)) {
-      // Append to existing .editorconfig
-      api.render(files => {
-        const configPath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
-        const editorconfig = fs.readFileSync(configPath, 'utf-8')
-
-        files['.editorconfig'] += `\n${editorconfig}`
-      })
-    } else {
-      api.render(`./template/${config}`)
-    }
-  }
-
   if (config === 'airbnb') {
     eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-airbnb': '^4.0.0'
     })
-    injectEditorConfig('airbnb')
   } else if (config === 'standard') {
     eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-standard': '^4.0.0'
     })
-    injectEditorConfig('standard')
   } else if (config === 'prettier') {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
@@ -65,6 +48,19 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   } else {
     // default
     eslintConfig.extends.push('eslint:recommended')
+  }
+
+  const editorConfigTemplatePath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
+  if (fs.existsSync(editorConfigTemplatePath)) {
+    if (fs.existsSync(api.resolve('.editorconfig'))) {
+      // Append to existing .editorconfig
+      api.render(files => {
+        const editorconfig = fs.readFileSync(editorConfigTemplatePath, 'utf-8')
+        files['.editorconfig'] += `\n${editorconfig}`
+      })
+    } else {
+      api.render(`./template/${config}`)
+    }
   }
 
   if (!lintOn.includes('save')) {

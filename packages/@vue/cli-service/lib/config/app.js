@@ -24,14 +24,14 @@ module.exports = (api, options) => {
     const outputDir = api.resolve(options.outputDir)
 
     const getAssetPath = require('../util/getAssetPath')
-    const filename = getAssetPath(
+    const outputFilename = getAssetPath(
       options,
       `js/[name]${isLegacyBundle ? `-legacy` : ``}${isProd && options.filenameHashing ? '.[contenthash:8]' : ''}.js`
     )
     webpackConfig
       .output
-        .filename(filename)
-        .chunkFilename(filename)
+        .filename(outputFilename)
+        .chunkFilename(outputFilename)
 
     // code splitting
     if (process.env.NODE_ENV !== 'test') {

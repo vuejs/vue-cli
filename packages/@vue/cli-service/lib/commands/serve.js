@@ -178,6 +178,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
+      // eslint-disable-next-line no-shadow
       before (app, server) {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay

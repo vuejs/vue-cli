@@ -94,11 +94,11 @@ module.exports = class Service {
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
 
-    const load = path => {
+    const load = envPath => {
       try {
-        const env = dotenv.config({ path, debug: process.env.DEBUG })
+        const env = dotenv.config({ path: envPath, debug: process.env.DEBUG })
         dotenvExpand(env)
-        logger(path, env)
+        logger(envPath, env)
       } catch (err) {
         // only ignore error if file is not found
         if (err.toString().indexOf('ENOENT') < 0) {
@@ -346,20 +346,6 @@ module.exports = class Service {
       resolvedFrom = 'inline options'
     }
 
-    if (typeof resolved.baseUrl !== 'undefined') {
-      if (typeof resolved.publicPath !== 'undefined') {
-        warn(
-          `You have set both "baseUrl" and "publicPath" in ${chalk.bold('vue.config.js')}, ` +
-          `in this case, "baseUrl" will be ignored in favor of "publicPath".`
-        )
-      } else {
-        warn(
-          `"baseUrl" option in ${chalk.bold('vue.config.js')} ` +
-          `is deprecated now, please use "publicPath" instead.`
-        )
-        resolved.publicPath = resolved.baseUrl
-      }
-    }
 
     if (resolved.css && typeof resolved.css.modules !== 'undefined') {
       if (typeof resolved.css.requireModuleExtension !== 'undefined') {
@@ -381,8 +367,6 @@ module.exports = class Service {
     if (typeof resolved.publicPath === 'string') {
       resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
     }
-    // for compatibility concern, in case some plugins still rely on `baseUrl` option
-    resolved.baseUrl = resolved.publicPath
     removeSlash(resolved, 'outputDir')
 
     // validate options
