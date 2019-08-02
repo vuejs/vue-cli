@@ -202,7 +202,7 @@ function isArgumentContainsChunkIds (arg) {
 function isArgumentContainsModulesList (arg) {
   if (arg.type === 'ObjectExpression') {
     return arg.properties
-      .map(arg => arg.value)
+      .map(prop => prop.value)
       .every(isModuleWrapper)
   }
 

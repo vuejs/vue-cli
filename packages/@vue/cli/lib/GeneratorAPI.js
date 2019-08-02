@@ -29,12 +29,14 @@ class GeneratorAPI {
     this.options = options
     this.rootOptions = rootOptions
 
+    /* eslint-disable no-shadow */
     this.pluginsData = generator.plugins
       .filter(({ id }) => id !== `@vue/cli-service`)
       .map(({ id }) => ({
         name: toShortPluginId(id),
         link: getPluginLink(id)
       }))
+    /* eslint-enable no-shadow */
 
     this._entryFile = undefined
   }

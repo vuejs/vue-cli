@@ -94,11 +94,11 @@ module.exports = class Service {
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
 
-    const load = path => {
+    const load = envPath => {
       try {
-        const env = dotenv.config({ path, debug: process.env.DEBUG })
+        const env = dotenv.config({ path: envPath, debug: process.env.DEBUG })
         dotenvExpand(env)
-        logger(path, env)
+        logger(envPath, env)
       } catch (err) {
         // only ignore error if file is not found
         if (err.toString().indexOf('ENOENT') < 0) {
