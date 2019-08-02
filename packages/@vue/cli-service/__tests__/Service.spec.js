@@ -6,8 +6,6 @@ const fs = require('fs')
 const path = require('path')
 const Service = require('../lib/Service')
 
-const { logs } = require('@vue/cli-shared-utils')
-
 const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
@@ -82,29 +80,6 @@ test('load project options from package.json', () => {
   })
   const service = createMockService()
   expect(service.projectOptions.lintOnSave).toBe('default')
-})
-
-test('deprecate baseUrl', () => {
-  mockPkg({
-    vue: {
-      baseUrl: './foo/bar'
-    }
-  })
-  createMockService()
-  expect(logs.warn.some(([msg]) => msg.match('is deprecated now, please use "publicPath" instead.')))
-})
-
-test('discard baseUrl if publicPath also exists', () => {
-  mockPkg({
-    vue: {
-      baseUrl: '/foo/barbase/',
-      publicPath: '/foo/barpublic/'
-    }
-  })
-
-  const service = createMockService()
-  expect(logs.warn.some(([msg]) => msg.match('"baseUrl" will be ignored in favor of "publicPath"')))
-  expect(service.projectOptions.publicPath).toBe('/foo/barpublic/')
 })
 
 test('handle option publicPath and outputDir correctly', () => {
