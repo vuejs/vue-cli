@@ -33,7 +33,9 @@ const schema = createSchema(joi => joi.object({
 
   // css
   css: joi.object({
+    // TODO: deprecate this after joi 16 release
     modules: joi.boolean(),
+    requireModuleExtension: joi.boolean(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
