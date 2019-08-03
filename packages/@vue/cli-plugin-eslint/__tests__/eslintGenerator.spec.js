@@ -1,3 +1,5 @@
+jest.setTimeout(35000)
+
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 const create = require('@vue/cli-test-utils/createTestProject')
 
