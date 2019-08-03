@@ -3,13 +3,14 @@
 
 #### :rocket: New Features
 * `@vue/cli`
-  * [#4342](https://github.com/vuejs/vue-cli/pull/4342) Add --port argument to 'vue serve' command ([@bokub](https://github.com/bokub))
+  * [#4342](https://github.com/vuejs/vue-cli/pull/4342) Support `--port` argument to 'vue serve' command ([@bokub](https://github.com/bokub))
 * `@vue/cli-plugin-eslint`
   * [#4329](https://github.com/vuejs/vue-cli/pull/4329) feat(eslint-generator): upgrade @vue/eslint-config-prettier to v5.0.0 ([@sodatea](https://github.com/sodatea))
 
 #### :bug: Bug Fix
 * `@vue/cli-plugin-typescript`, `@vue/cli`
-  * [#4374](https://github.com/vuejs/vue-cli/pull/4374) fix: do not generate empty file ([@cexbrayat](https://github.com/cexbrayat))
+  * [#4330](https://github.com/vuejs/vue-cli/pull/4330) fix: require parent template after `when` condition evaluated as truthy ([@sodatea](https://github.com/sodatea))
+  * [#4374](https://github.com/vuejs/vue-cli/pull/4374) fix: when adding ts plugin without router, fixup #4330 ([@cexbrayat](https://github.com/cexbrayat))
 * `@vue/cli-service`
   * [#4359](https://github.com/vuejs/vue-cli/pull/4359) fix stats display when chunkFilename contains query string ([@flyhope](https://github.com/flyhope))
 * `@vue/cli-plugin-typescript`
@@ -19,8 +20,7 @@
   * [#4329](https://github.com/vuejs/vue-cli/pull/4329) feat(eslint-generator): upgrade @vue/eslint-config-prettier to v5.0.0 ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-shared-utils`
   * [#4336](https://github.com/vuejs/vue-cli/pull/4336) fix: use `yarn --version` to detect yarn ([@sodatea](https://github.com/sodatea))
-* `@vue/cli`
-  * [#4330](https://github.com/vuejs/vue-cli/pull/4330) fix: require parent template after `when` condition evaluated as truthy ([@sodatea](https://github.com/sodatea))
+
 
 #### :memo: Documentation
 * `@vue/cli-plugin-e2e-nightwatch`
