@@ -340,6 +340,85 @@ Most of the following new features and bugfixes also applies to v3.8.0
 - 毛呆 ([@aweikalee](https://github.com/aweikalee))
 
 
+
+## 3.10.0 (2019-08-03)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#4342](https://github.com/vuejs/vue-cli/pull/4342) Support `--port` argument to 'vue serve' command ([@bokub](https://github.com/bokub))
+* `@vue/cli-plugin-eslint`
+  * [#4329](https://github.com/vuejs/vue-cli/pull/4329) feat(eslint-generator): upgrade @vue/eslint-config-prettier to v5.0.0 ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`, `@vue/cli`
+  * [#4330](https://github.com/vuejs/vue-cli/pull/4330) fix: require parent template after `when` condition evaluated as truthy ([@sodatea](https://github.com/sodatea))
+  * [#4374](https://github.com/vuejs/vue-cli/pull/4374) fix: when adding ts plugin without router, fixup #4330 ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli-service`
+  * [#4359](https://github.com/vuejs/vue-cli/pull/4359) fix stats display when chunkFilename contains query string ([@flyhope](https://github.com/flyhope))
+* `@vue/cli-plugin-typescript`
+  * [#4346](https://github.com/vuejs/vue-cli/pull/4346) fix: fix typo in typescript generator, convertAllFiles -> convertJsToTs ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`
+  * [#4347](https://github.com/vuejs/vue-cli/pull/4347) fix(eslint-generator): add ts file check to lint-staged ([@liruifengv](https://github.com/liruifengv))
+  * [#4329](https://github.com/vuejs/vue-cli/pull/4329) feat(eslint-generator): upgrade @vue/eslint-config-prettier to v5.0.0 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-shared-utils`
+  * [#4336](https://github.com/vuejs/vue-cli/pull/4336) fix: use `yarn --version` to detect yarn ([@sodatea](https://github.com/sodatea))
+
+
+#### :memo: Documentation
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#4364](https://github.com/vuejs/vue-cli/pull/4364) Replacing nightwatch CLI options URL with proper documentation ([@aberonni](https://github.com/aberonni))
+* Other
+  * [#4358](https://github.com/vuejs/vue-cli/pull/4358) docs(ru): fix link in webpack.md ([@euaaaio](https://github.com/euaaaio))
+  * [#4333](https://github.com/vuejs/vue-cli/pull/4333) Update html-and-static-assets.md ([@sergeymorkovkin](https://github.com/sergeymorkovkin))
+  * [#4257](https://github.com/vuejs/vue-cli/pull/4257) Update mode-and-env.md ([@TechieForFun](https://github.com/TechieForFun))
+  * [#4171](https://github.com/vuejs/vue-cli/pull/4171) Explain when .env files are loaded. ([@rimutaka](https://github.com/rimutaka))
+  * [#4232](https://github.com/vuejs/vue-cli/pull/4232) Updated for Zeit Now V2 ([@ivansieder](https://github.com/ivansieder))
+  * [#4217](https://github.com/vuejs/vue-cli/pull/4217) docs: add Render deployment guide ([@anurag](https://github.com/anurag))
+  * [#4103](https://github.com/vuejs/vue-cli/pull/4103) deployment.md: Add instructions for Travis CI ([@terorie](https://github.com/terorie))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-service`, `@vue/cli-ui`
+  * [#4241](https://github.com/vuejs/vue-cli/pull/4241) Fix typos ([@minho42](https://github.com/minho42))
+
+#### :house: Internal
+* `@vue/cli-service`, `@vue/cli`
+  * [#4367](https://github.com/vuejs/vue-cli/pull/4367) chore(cli-service): word spelling in comments ([@yiliang114](https://github.com/yiliang114))
+
+#### Committers: 17
+- Anurag Goel ([@anurag](https://github.com/anurag))
+- Boris K ([@bokub](https://github.com/bokub))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Domenico Gemoli ([@aberonni](https://github.com/aberonni))
+- Eduard Aksamitov ([@euaaaio](https://github.com/euaaaio))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Ivan Sieder ([@ivansieder](https://github.com/ivansieder))
+- Max Tolkachev ([@zhrivodkin](https://github.com/zhrivodkin))
+- Min ho Kim ([@minho42](https://github.com/minho42))
+- Mohsen Sadeghzade ([@TechieForFun](https://github.com/TechieForFun))
+- Richard Patel ([@terorie](https://github.com/terorie))
+- Sergey Morkovkin ([@sergeymorkovkin](https://github.com/sergeymorkovkin))
+- [@aruseni](https://github.com/aruseni)
+- mx ([@rimutaka](https://github.com/rimutaka))
+- yiliang ([@yiliang114](https://github.com/yiliang114))
+- 李枨煊 ([@flyhope](https://github.com/flyhope))
+- 李瑞丰 ([@liruifengv](https://github.com/liruifengv))
+
+
+
+## 3.9.3 (2019-07-18)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4057](https://github.com/vuejs/vue-cli/pull/4057) fix: indexPath should also affect non-production builds (#2327) ([@shadow-light](https://github.com/shadow-light))
+* `@vue/cli-test-utils`
+  * [#4224](https://github.com/vuejs/vue-cli/pull/4224) fix(cli-test-utils): use `--no-git` when `initGit` option is `false` ([@fangbinwei](https://github.com/fangbinwei))
+
+
+#### Committers: 3
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Eric Mastro ([@emizzle](https://github.com/emizzle))
+- [@shadow-light](https://github.com/shadow-light)
+
+
+
 ## 3.9.2 (2019-07-06)
 
 #### :bug: Bug Fix
