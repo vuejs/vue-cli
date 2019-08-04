@@ -1,7 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 const create = require('@vue/cli-test-utils/createTestProject')
-// const { logs } = require('@vue/cli-shared-utils')
+const { logs } = require('@vue/cli-shared-utils')
+
+const Upgrader = require('../lib/Upgrader')
 
 jest.setTimeout(300000)
 
@@ -26,13 +28,12 @@ test('upgrade: plugin-babel v3.5', async () => {
   const pkg = JSON.parse(await project.read('package.json'))
   expect(pkg.dependencies).not.toHaveProperty('core-js')
 
-  await project.run(`${require.resolve('../bin/vue')} upgrade @vue/babel`)
+  await (new Upgrader(project.dir)).upgrade('@vue/babel', {})
 
   const updatedPkg = JSON.parse(await project.read('package.json'))
   expect(updatedPkg.dependencies).toHaveProperty('core-js')
 
-  // TODO: run upgrade in the same process so that we can access logs
-  // expect(logs.log.some(([msg]) => msg.match('core-js has been upgraded'))).toBe(true)
+  expect(logs.log.some(([msg]) => msg.match('core-js has been upgraded'))).toBe(true)
 })
 
 test('upgrade: plugin-babel with core-js 2', async () => {
@@ -48,7 +49,7 @@ test('upgrade: plugin-babel with core-js 2', async () => {
   const pkg = JSON.parse(await project.read('package.json'))
   expect(pkg.dependencies['core-js']).toMatch('^2')
 
-  await project.run(`${require.resolve('../bin/vue')} upgrade @vue/babel --to next`)
+  await (new Upgrader(project.dir)).upgrade('@vue/babel', {})
 
   const updatedPkg = JSON.parse(await project.read('package.json'))
   expect(updatedPkg.dependencies['core-js']).toMatch('^3')

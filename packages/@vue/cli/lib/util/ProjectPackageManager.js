@@ -183,7 +183,6 @@ class PackageManager {
       // link packages in current repo for test
       const src = path.resolve(__dirname, `../../../../${realname}`)
       const dest = path.join(this.context, 'node_modules', realname)
-      fs.writeFileSync('./aaa', `${src}, ${dest}`)
       await fs.remove(dest)
       await fs.symlink(src, dest, 'dir')
       return
