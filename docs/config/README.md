@@ -266,6 +266,8 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
   When building as a library, you can also set this to `false` to avoid your users having to import the CSS themselves.
 
   Extracting CSS is disabled by default in development mode since it is incompatible with CSS hot reloading. However, you can still enforce extraction in all cases by explicitly setting the value to `true`.
+  
+  Instead of a `true`, you can also pass an object of options for the [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) if you want to further configure what this plugin does exactly.
 
 ### css.sourceMap
 
