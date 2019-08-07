@@ -27,6 +27,11 @@ exports.resolvePluginId = id => {
   if (pluginRE.test(id)) {
     return id
   }
+
+  if (id === '@vue/cli-service') {
+    return id
+  }
+
   if (officialPlugins.includes(id)) {
     return `@vue/cli-plugin-${id}`
   }
