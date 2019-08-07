@@ -267,10 +267,13 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 This example uses the latest Now platform version 2.
 
-1. Install the Now CLI globally:
+1. Install the Now CLI:
 
 ```bash
 npm install -g now
+
+# Or, if you prefer a local one
+npm install now
 ```
 
 2. Add a `now.json` file to your project root:
@@ -280,58 +283,59 @@ npm install -g now
       "name": "my-example-app",
       "version": 2,
       "builds": [
-        { "src": "dist/**", "use": "@now/static" }
+        {
+          "src": "package.json",
+          "use": "@now/static-build"
+        }
       ],
       "routes": [
-        { "src": "/(.*)", "dest": "dist/$1" }
+        {
+          "src": "/(js|css|img)/.*",
+          "headers": { "cache-control": "max-age=31536000, immutable" }
+        },
+        { "handle": "filesystem" },
+        { "src": ".*", "dest": "/" }
       ],
-      "alias": "vue-example"
+      "alias": "example.com"
     }
+    ```
+
+    If you have different/additional folders, modify the route accordingly:
+
+    ```diff
+    - {
+    -   "src": "/(js|css|img)/.*",
+    -   "headers": { "cache-control": "max-age=31536000, immutable" }
+    - }
+    + {
+    +   "src": "/(js|css|img|fonts|media)/.*",
+    +   "headers": { "cache-control": "max-age=31536000, immutable" }
+    + }
+    ```
+
+    If your `outputDir` is not the default `dist`, say `build`:
+
+    ```diff
+    - {
+    -   "src": "package.json",
+    -   "use": "@now/static-build"
+    - }
+    + {
+    +   "src": "package.json",
+    +   "use": "@now/static-build",
+    +   "config": { "distDir": "build" }
+    + }
+    ```
+
+3. Adding a `now-build` script in `package.json`:
+
+    ```json
+    "now-build": "npm run build"
     ```
     
-   In case you want to deploy an application with router mode set to history, the config file should look like the following (if you have different folder names, update your config accordingly):
-   ```json
-    {
-      "name": "my-example-app",
-      "version": 2,
-      "builds": [
-        {
-          "src": "dist/**",
-          "use": "@now/static"
-        }
-      ],
-      "routes": [
-        {
-          "src": "/(js|css|img)/(.*)",
-          "dest": "/dist/$1/$2"
-        },
-        {
-          "src": "/favicon.ico",
-          "dest": "/dist/favicon.ico"
-        },
-        {
-          "src": "/(.*)",
-          "dest": "/dist"
-        }
-      ],
-      "alias": "vue-example"
-    }
-   ```
-   This additional config is required in order to avoid issues when directly deep-linking to a specific page (e.g. when opening `my-example-app.now.sh/some-subpage`, you would be presented with a 404 error otherwise).
+    To make a deployment, run `now`.
 
-3. Adding a deployment script in `package.json`:
-
-    ```json
-    "deploy": "npm run build && now --target production"
-    ```
-
-    If you want to deploy publicly by default, you can change the deployment script to the following one:
-
-    ```json
-    "deploy": "npm run build && now --target production --public"
-    ```
-
-    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+    If you want your deployment aliased, run `now --target production` instead.
 
 ### Stdlib
 
