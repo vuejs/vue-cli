@@ -17,10 +17,10 @@ async function upgrade (packageName, options, context = process.cwd()) {
     }
 
     if (options.all) {
-      return upgrader.upgradeAll()
+      return upgrader.upgradeAll(options.next)
     }
 
-    return upgrader.checkForUpdates()
+    return upgrader.checkForUpdates(options.next)
   }
 
   return upgrader.upgrade(packageName, options)

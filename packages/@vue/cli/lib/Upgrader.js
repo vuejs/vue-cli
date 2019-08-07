@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const execa = require('execa')
+const semver = require('semver')
 const {
   log,
   done,
@@ -32,11 +33,11 @@ module.exports = class Upgrader {
     this.pm = new PackageManager({ context })
   }
 
-  async upgradeAll () {
+  async upgradeAll (includeNext) {
     // TODO: should confirm for major version upgrades
     // for patch & minor versions, upgrade directly
     // for major versions, prompt before upgrading
-    const upgradable = await this.getUpgradable()
+    const upgradable = await this.getUpgradable(includeNext)
 
     if (!upgradable.length) {
       done('Seems all plugins are up to date. Good work!')
@@ -75,6 +76,10 @@ module.exports = class Upgrader {
       }
 
       targetVersion = await this.pm.getRemoteVersion(packageName, targetVersion)
+      if (!options.to && options.next) {
+        const next = await this.pm.getRemoteVersion(packageName, 'next')
+        targetVersion = semver.gte(targetVersion, next) ? targetVersion : next
+      }
       stopSpinner()
     }
 
@@ -177,7 +182,7 @@ module.exports = class Upgrader {
     migrator.printExitLogs()
   }
 
-  async getUpgradable () {
+  async getUpgradable (includeNext) {
     const upgradable = []
 
     // get current deps
@@ -191,9 +196,13 @@ module.exports = class Upgrader {
         const installed = await this.pm.getInstalledVersion(name)
         const wanted = await this.pm.getRemoteVersion(name, range)
 
-        const latest = await this.pm.getRemoteVersion(name)
+        let latest = await this.pm.getRemoteVersion(name)
+        if (includeNext) {
+          const next = await this.pm.getRemoteVersion(name, 'next')
+          latest = semver.gte(latest, next) ? latest : next
+        }
 
-        if (installed !== latest) {
+        if (semver.lt(installed, latest)) {
           // always list @vue/cli-service as the first one
           // as it's depended by all other plugins
           if (name === '@vue/cli-service') {
@@ -208,9 +217,9 @@ module.exports = class Upgrader {
     return upgradable
   }
 
-  async checkForUpdates () {
+  async checkForUpdates (includeNext) {
     logWithSpinner('Gathering package information...')
-    const upgradable = await this.getUpgradable()
+    const upgradable = await this.getUpgradable(includeNext)
     stopSpinner()
 
     if (!upgradable.length) {
@@ -225,7 +234,7 @@ module.exports = class Upgrader {
     if (!Number.isFinite(namePad)) {
       namePad = 30
     }
-    const pads = [namePad, 12, 12, 12, 0]
+    const pads = [namePad, 16, 16, 16, 0]
     console.log(
       '  ' +
       ['Name', 'Installed', 'Wanted', 'Latest', 'Command to upgrade'].map(
