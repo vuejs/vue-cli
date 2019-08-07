@@ -276,6 +276,8 @@ In v3 this means the opposite of `css.requireModuleExtension`.
   When building as a library, you can also set this to `false` to avoid your users having to import the CSS themselves.
 
   Extracting CSS is disabled by default in development mode since it is incompatible with CSS hot reloading. However, you can still enforce extraction in all cases by explicitly setting the value to `true`.
+  
+  Instead of a `true`, you can also pass an object of options for the [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) if you want to further configure what this plugin does exactly.
 
 ### css.sourceMap
 
