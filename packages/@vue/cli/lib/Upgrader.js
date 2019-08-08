@@ -78,7 +78,9 @@ module.exports = class Upgrader {
       targetVersion = await this.pm.getRemoteVersion(packageName, targetVersion)
       if (!options.to && options.next) {
         const next = await this.pm.getRemoteVersion(packageName, 'next')
-        targetVersion = semver.gte(targetVersion, next) ? targetVersion : next
+        if (next) {
+          targetVersion = semver.gte(targetVersion, next) ? targetVersion : next
+        }
       }
       stopSpinner()
     }
@@ -199,7 +201,9 @@ module.exports = class Upgrader {
         let latest = await this.pm.getRemoteVersion(name)
         if (includeNext) {
           const next = await this.pm.getRemoteVersion(name, 'next')
-          latest = semver.gte(latest, next) ? latest : next
+          if (next) {
+            latest = semver.gte(latest, next) ? latest : next
+          }
         }
 
         if (semver.lt(installed, latest)) {
@@ -242,7 +246,13 @@ module.exports = class Upgrader {
       ).join('')
     )
     for (const p of upgradable) {
-      const fields = [p.name, p.installed, p.wanted, p.latest, `vue upgrade ${p.name}`]
+      const fields = [
+        p.name,
+        p.installed,
+        p.wanted,
+        p.latest,
+        `vue upgrade ${p.name}${includeNext ? ' --next' : ''}`
+      ]
       // TODO: highlight the diff part, like in `yarn outdated`
       console.log('  ' + fields.map((x, i) => x.padEnd(pads[i])).join(''))
     }
