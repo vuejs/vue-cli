@@ -1,3 +1,5 @@
+jest.setTimeout(35000)
+
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 const create = require('@vue/cli-test-utils/createTestProject')
 
@@ -133,6 +135,23 @@ test('lint on commit', async () => {
   })
   expect(pkg.vue).toEqual({
     lintOnSave: false
+  })
+})
+
+test('should lint ts files when typescript plugin co-exists', async () => {
+  const { read } = await create('eslint-lint-ts-files', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {}
+    }
+  }, null, true)
+  const pkg = JSON.parse(await read('package.json'))
+  expect(pkg).toMatchObject({
+    'lint-staged': {
+      '*.{js,vue,ts}': ['vue-cli-service lint', 'git add']
+    }
   })
 })
 

@@ -19,15 +19,6 @@ module.exports = cli => {
     message: 'Pick a linter / formatter config:',
     description: 'Checking code errors and enforcing an homogeoneous code style is recommended.',
     choices: answers => [
-      ...(
-        answers.features.includes('ts')
-          ? [{
-            name: `TSLint`,
-            value: 'tslint',
-            short: 'TSLint'
-          }]
-          : []
-      ),
       {
         name: 'ESLint with error prevention only',
         value: 'base',
@@ -47,7 +38,16 @@ module.exports = cli => {
         name: 'ESLint + Prettier',
         value: 'prettier',
         short: 'Prettier'
-      }
+      },
+      ...(
+        answers.features.includes('ts')
+          ? [{
+            name: `TSLint (deprecated)`,
+            value: 'tslint',
+            short: 'TSLint'
+          }]
+          : []
+      )
     ]
   })
 

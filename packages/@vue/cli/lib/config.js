@@ -3,7 +3,7 @@ const path = require('path')
 const homedir = require('os').homedir()
 const { get, set, unset, error, launch } = require('@vue/cli-shared-utils')
 
-async function config (value, options) {
+async function configure (value, options) {
   const file = path.resolve(homedir, '.vuerc')
   const config = await fs.readJson(file)
 
@@ -19,6 +19,7 @@ async function config (value, options) {
   }
 
   if (options.get) {
+    // eslint-disable-next-line no-shadow
     const value = get(config, options.get)
     if (options.json) {
       console.log(JSON.stringify({
@@ -76,7 +77,7 @@ async function config (value, options) {
 }
 
 module.exports = (...args) => {
-  return config(...args).catch(err => {
+  return configure(...args).catch(err => {
     error(err)
     if (!process.env.VUE_CLI_TEST) {
       process.exit(1)

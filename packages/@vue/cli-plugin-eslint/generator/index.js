@@ -2,6 +2,9 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { config, lintOn = [] }, _, invoking) => {
+  api.assertCliVersion('^4.0.0-alpha.4')
+  api.assertCliServiceVersion('^4.0.0-alpha.4')
+
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
@@ -23,43 +26,41 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     pkg.devDependencies['babel-eslint'] = '^10.0.1'
   }
 
-  const injectEditorConfig = (config) => {
-    const filePath = api.resolve('.editorconfig')
-    if (fs.existsSync(filePath)) {
-      // Append to existing .editorconfig
-      api.render(files => {
-        const configPath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
-        const editorconfig = fs.readFileSync(configPath, 'utf-8')
-
-        files['.editorconfig'] += `\n${editorconfig}`
-      })
-    } else {
-      api.render(`./template/${config}`)
-    }
-  }
-
   if (config === 'airbnb') {
     eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-airbnb': '^4.0.0'
     })
-    injectEditorConfig('airbnb')
   } else if (config === 'standard') {
     eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-standard': '^4.0.0'
     })
-    injectEditorConfig('standard')
   } else if (config === 'prettier') {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^4.0.1'
+      '@vue/eslint-config-prettier': '^5.0.0',
+      'eslint-plugin-prettier': '^3.1.0',
+      prettier: '^1.18.2'
     })
     // prettier & default config do not have any style rules
     // so no need to generate an editorconfig file
   } else {
     // default
     eslintConfig.extends.push('eslint:recommended')
+  }
+
+  const editorConfigTemplatePath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
+  if (fs.existsSync(editorConfigTemplatePath)) {
+    if (fs.existsSync(api.resolve('.editorconfig'))) {
+      // Append to existing .editorconfig
+      api.render(files => {
+        const editorconfig = fs.readFileSync(editorConfigTemplatePath, 'utf-8')
+        files['.editorconfig'] += `\n${editorconfig}`
+      })
+    } else {
+      api.render(`./template/${config}`)
+    }
   }
 
   if (!lintOn.includes('save')) {
@@ -75,8 +76,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
-    pkg['lint-staged'] = {
-      '*.{js,vue}': ['vue-cli-service lint', 'git add']
+    if (api.hasPlugin('typescript')) {
+      pkg['lint-staged'] = {
+        '*.{js,vue,ts}': ['vue-cli-service lint', 'git add']
+      }
+    } else {
+      pkg['lint-staged'] = {
+        '*.{js,vue}': ['vue-cli-service lint', 'git add']
+      }
     }
   }
 
@@ -97,13 +104,13 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       require('@vue/cli-plugin-unit-jest/generator').applyESLint(api)
     }
   }
+}
 
+module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
-  if (config && config !== 'base') {
-    api.onCreateComplete(() => {
-      require('../lint')({ silent: true }, api)
-    })
-  }
+  api.afterAnyInvoke(() => {
+    require('../lint')({ silent: true }, api)
+  })
 }
 
 const applyTS = module.exports.applyTS = api => {

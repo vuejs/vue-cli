@@ -143,7 +143,7 @@ module.exports = (api, options) => {
             .use('raw')
               .loader('raw-loader')
               .end()
-            .use('pug-plain')
+            .use('pug-plain-loader')
               .loader('pug-plain-loader')
               .end()
             .end()

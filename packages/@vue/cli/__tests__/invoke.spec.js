@@ -149,3 +149,20 @@ test('invoking a plugin that renames files', async () => {
   await project.run(`${require.resolve('../bin/vue')} invoke typescript -d`)
   expect(project.has('src/main.js')).toBe(false)
 })
+
+test('should prompt if invoking in a git repository with uncommited changes', async () => {
+  delete process.env.VUE_CLI_SKIP_DIRTY_GIT_PROMPT
+  const project = await create('invoke-dirty', {
+    plugins: {
+      '@vue/cli-plugin-babel': {}
+    }
+  })
+  await project.write('some-random-file', '')
+  expectPrompts([
+    {
+      message: `Still proceed?`,
+      confirm: true
+    }
+  ])
+  await invoke(`babel`, {}, project.dir)
+})

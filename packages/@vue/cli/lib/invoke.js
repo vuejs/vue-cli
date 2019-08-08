@@ -6,9 +6,7 @@ const inquirer = require('inquirer')
 const {
   log,
   error,
-  hasProjectYarn,
   hasProjectGit,
-  hasProjectPnpm,
   logWithSpinner,
   stopSpinner,
   resolvePluginId,
@@ -16,9 +14,10 @@ const {
 } = require('@vue/cli-shared-utils')
 
 const Generator = require('./Generator')
-const { loadOptions } = require('./options')
-const { installDeps } = require('./util/installDeps')
+
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 const readFiles = require('./util/readFiles')
+const PackageManager = require('./util/ProjectPackageManager')
 
 function getPkg (context) {
   const pkgPath = path.resolve(context, 'package.json')
@@ -33,6 +32,10 @@ function getPkg (context) {
 }
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
+  if (!(await confirmIfGitDirty(context))) {
+    return
+  }
+
   delete options._
   const pkg = getPkg(context)
 
@@ -100,12 +103,15 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
 
 async function runGenerator (context, plugin, pkg = getPkg(context)) {
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-  const createCompleteCbs = []
+  const afterInvokeCbs = []
+  const afterAnyInvokeCbs = []
+
   const generator = new Generator(context, {
     pkg,
     plugins: [plugin],
     files: await readFiles(context),
-    completeCbs: createCompleteCbs,
+    afterInvokeCbs,
+    afterAnyInvokeCbs,
     invoking: true
   })
 
@@ -125,14 +131,16 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   if (!isTestOrDebug && depsChanged) {
     log(`📦  Installing additional dependencies...`)
     log()
-    const packageManager =
-      loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm')
-    await installDeps(context, packageManager)
+    const pm = new PackageManager({ context })
+    await pm.install()
   }
 
-  if (createCompleteCbs.length) {
+  if (afterInvokeCbs.length || afterAnyInvokeCbs.length) {
     logWithSpinner('⚓', `Running completion hooks...`)
-    for (const cb of createCompleteCbs) {
+    for (const cb of afterInvokeCbs) {
+      await cb()
+    }
+    for (const cb of afterAnyInvokeCbs) {
       await cb()
     }
     stopSpinner()

@@ -44,6 +44,30 @@ module.exports = (api, options) => {
     const validateWebpackConfig = require('../util/validateWebpackConfig')
     const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
+    // configs that only matters for dev server
+    api.chainWebpack(webpackConfig => {
+      if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
+        webpackConfig
+          .devtool('cheap-module-eval-source-map')
+
+        webpackConfig
+          .plugin('hmr')
+            .use(require('webpack/lib/HotModuleReplacementPlugin'))
+
+        // https://github.com/webpack/webpack/issues/6642
+        // https://github.com/vuejs/vue-cli/issues/3539
+        webpackConfig
+          .output
+            .globalObject(`(typeof self !== 'undefined' ? self : this)`)
+
+        if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
+          webpackConfig
+            .plugin('progress')
+            .use(require('webpack/lib/ProgressPlugin'))
+        }
+      }
+    })
+
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
 
@@ -51,7 +75,7 @@ module.exports = (api, options) => {
     validateWebpackConfig(webpackConfig, api, options)
 
     // load user devServer options with higher priority than devServer
-    // in webpck config
+    // in webpack config
     const projectDevServerOptions = Object.assign(
       webpackConfig.devServer || {},
       options.devServer
@@ -105,7 +129,7 @@ module.exports = (api, options) => {
         // explicitly configured via devServer.public
         ? `?${publicUrl}/sockjs-node`
         : isInContainer
-          // can't infer public netowrk url if inside a container...
+          // can't infer public network url if inside a container...
           // use client-side inference (note this would break with non-root publicPath)
           ? ``
           // otherwise infer the url
@@ -154,6 +178,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
+      // eslint-disable-next-line no-shadow
       before (app, server) {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay

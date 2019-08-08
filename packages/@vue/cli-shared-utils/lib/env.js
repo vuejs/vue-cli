@@ -24,7 +24,7 @@ exports.hasYarn = () => {
     return _hasYarn
   }
   try {
-    execSync('yarnpkg --version', { stdio: 'ignore' })
+    execSync('yarn --version', { stdio: 'ignore' })
     return (_hasYarn = true)
   } catch (e) {
     return (_hasYarn = false)

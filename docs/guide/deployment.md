@@ -265,10 +265,15 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-1. Install the Now CLI globally:
+This example uses the latest Now platform version 2.
+
+1. Install the Now CLI:
 
 ```bash
 npm install -g now
+
+# Or, if you prefer a local one
+npm install now
 ```
 
 2. Add a `now.json` file to your project root:
@@ -276,38 +281,61 @@ npm install -g now
     ```json
     {
       "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
-      "alias": "vue-example",
-      "files": [
-        "dist"
-      ]
+      "version": 2,
+      "builds": [
+        {
+          "src": "package.json",
+          "use": "@now/static-build"
+        }
+      ],
+      "routes": [
+        {
+          "src": "/(js|css|img)/.*",
+          "headers": { "cache-control": "max-age=31536000, immutable" }
+        },
+        { "handle": "filesystem" },
+        { "src": ".*", "dest": "/" }
+      ],
+      "alias": "example.com"
     }
     ```
 
-    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+    If you have different/additional folders, modify the route accordingly:
 
-3. Adding a deployment script in `package.json`:
-
-    ```json
-    "deploy": "npm run build && now && now alias"
+    ```diff
+    - {
+    -   "src": "/(js|css|img)/.*",
+    -   "headers": { "cache-control": "max-age=31536000, immutable" }
+    - }
+    + {
+    +   "src": "/(js|css|img|fonts|media)/.*",
+    +   "headers": { "cache-control": "max-age=31536000, immutable" }
+    + }
     ```
 
-    If you want to deploy publicly by default, you can change the deployment script to the following one:
+    If your `outputDir` is not the default `dist`, say `build`:
 
-    ```json
-    "deploy": "npm run build && now --public && now alias"
+    ```diff
+    - {
+    -   "src": "package.json",
+    -   "use": "@now/static-build"
+    - }
+    + {
+    +   "src": "package.json",
+    +   "use": "@now/static-build",
+    +   "config": { "distDir": "build" }
+    + }
     ```
 
-    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+3. Adding a `now-build` script in `package.json`:
+
+    ```json
+    "now-build": "npm run build"
+    ```
+    
+    To make a deployment, run `now`.
+
+    If you want your deployment aliased, run `now --target production` instead.
 
 ### Stdlib
 

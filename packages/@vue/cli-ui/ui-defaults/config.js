@@ -16,7 +16,7 @@ module.exports = api => {
           name: 'publicPath',
           type: 'input',
           default: '/',
-          value: data.vue && (data.vue.publicPath || data.vue.baseUrl), // fallback to baseUrl for compatibility
+          value: data.vue && data.vue.publicPath,
           message: 'org.vue.vue-webpack.config.vue-cli.publicPath.label',
           description: 'org.vue.vue-webpack.config.vue-cli.publicPath.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',

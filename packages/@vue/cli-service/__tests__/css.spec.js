@@ -1,4 +1,9 @@
+const { logs } = require('@vue/cli-shared-utils')
 const Service = require('../lib/Service')
+
+beforeEach(() => {
+  logs.warn = []
+})
 
 const LANGS = ['css', 'sass', 'scss', 'less', 'styl', 'stylus']
 const extractLoaderPath = require('mini-css-extract-plugin').loader
@@ -82,16 +87,127 @@ test('CSS Modules rules', () => {
   const config = genConfig({
     vue: {
       css: {
-        modules: true
+        requireModuleExtension: false
       }
     }
   })
   LANGS.forEach(lang => {
     const expected = {
       importLoaders: 1, // no postcss-loader
-      localIdentName: `[name]_[local]_[hash:base64:5]`,
       sourceMap: false,
-      modules: true
+      modules: {
+        localIdentName: `[name]_[local]_[hash:base64:5]`
+      }
+    }
+    // vue-modules rules
+    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
+    // normal-modules rules
+    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
+    // normal rules
+    expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
+  })
+})
+
+test('Customized CSS Modules rules', () => {
+  const userOptions = {
+    vue: {
+      css: {
+        loaderOptions: {
+          css: {
+            modules: {
+              localIdentName: '[folder]-[name]-[local][emoji]'
+            }
+          }
+        }
+      }
+    }
+  }
+
+  expect(() => {
+    genConfig(userOptions)
+  }).toThrow('`css.requireModuleExtension` is required when custom css modules options provided')
+
+  userOptions.vue.css.requireModuleExtension = true
+  const config = genConfig(userOptions)
+
+  LANGS.forEach(lang => {
+    const expected = {
+      importLoaders: 1, // no postcss-loader
+      sourceMap: false,
+      modules: {
+        localIdentName: `[folder]-[name]-[local][emoji]`
+      }
+    }
+    // vue-modules rules
+    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
+    // normal-modules rules
+    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
+    // normal rules
+    expect(findOptions(config, lang, 'css', 3)).not.toEqual(expected)
+  })
+})
+
+test('deprecate `css.modules` option', () => {
+  const config = genConfig({
+    vue: {
+      css: {
+        modules: true,
+        loaderOptions: {
+          css: {
+            modules: {
+              localIdentName: '[folder]-[name]-[local][emoji]'
+            }
+          }
+        }
+      }
+    }
+  })
+  expect(logs.warn.some(([msg]) => msg.match('please use "css.requireModuleExtension" instead'))).toBe(true)
+
+  LANGS.forEach(lang => {
+    const expected = {
+      importLoaders: 1, // no postcss-loader
+      sourceMap: false,
+      modules: {
+        localIdentName: `[folder]-[name]-[local][emoji]`
+      }
+    }
+    // vue-modules rules
+    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
+    // normal-modules rules
+    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
+    // normal rules
+    expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
+  })
+})
+
+test('favor `css.requireModuleExtension` over `css.modules`', () => {
+  const config = genConfig({
+    vue: {
+      css: {
+        requireModuleExtension: false,
+        modules: false,
+
+        loaderOptions: {
+          css: {
+            modules: {
+              localIdentName: '[folder]-[name]-[local][emoji]'
+            }
+          }
+        }
+      }
+    }
+  })
+
+  expect(logs.warn.some(([msg]) => msg.match('"css.modules" will be ignored in favor of "css.requireModuleExtension"'))).toBe(true)
+
+  LANGS.forEach(lang => {
+    const expected = {
+      importLoaders: 1, // no postcss-loader
+      sourceMap: false,
+      modules: {
+        localIdentName: `[folder]-[name]-[local][emoji]`
+      }
     }
     // vue-modules rules
     expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
@@ -195,6 +311,29 @@ test('css.loaderOptions', () => {
 
   expect(findOptions(config, 'scss', 'sass')).toMatchObject({ data, sourceMap: false })
   expect(findOptions(config, 'sass', 'sass')).toMatchObject({ data, indentedSyntax: true, sourceMap: false })
+})
+
+test('scss loaderOptions', () => {
+  const sassData = '$env: production'
+  const scssData = '$env: production;'
+
+  const config = genConfig({
+    vue: {
+      css: {
+        loaderOptions: {
+          sass: {
+            sassData
+          },
+          scss: {
+            scssData
+          }
+        }
+      }
+    }
+  })
+
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ scssData, sourceMap: false })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ sassData, indentedSyntax: true, sourceMap: false })
 })
 
 test('should use dart sass implementation whenever possible', () => {
