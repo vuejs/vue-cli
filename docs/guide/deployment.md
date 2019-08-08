@@ -263,75 +263,35 @@ You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
 
 Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 
-### Now
+### ZEIT Now
 
-This example uses the latest Now platform version 2.
+[ZEIT Now](https://zeit.co) is a cloud platform for websites and serverless APIs, that you can use to deploy your Vue projects to your personal domain (or a free `.now.sh` suffixed URL).
 
-1. Install the Now CLI globally:
+This guide will show you how to get started in a few quick steps:
+
+#### Step 1: Installing Now CLI
+
+To install their command-line interface with [npm](https://www.npmjs.com/package/now), run the following command:
 
 ```bash
 npm install -g now
 ```
 
-2. Add a `now.json` file to your project root:
+#### Step 2: Deploying
 
-    ```json
-    {
-      "name": "my-example-app",
-      "version": 2,
-      "builds": [
-        { "src": "dist/**", "use": "@now/static" }
-      ],
-      "routes": [
-        { "src": "/(.*)", "dest": "dist/$1" }
-      ],
-      "alias": "vue-example"
-    }
-    ```
-    
-   In case you want to deploy an application with router mode set to history, the config file should look like the following (if you have different folder names, update your config accordingly):
-   ```json
-    {
-      "name": "my-example-app",
-      "version": 2,
-      "builds": [
-        {
-          "src": "dist/**",
-          "use": "@now/static"
-        }
-      ],
-      "routes": [
-        {
-          "src": "/(js|css|img)/(.*)",
-          "dest": "/dist/$1/$2"
-        },
-        {
-          "src": "/favicon.ico",
-          "dest": "/dist/favicon.ico"
-        },
-        {
-          "src": "/(.*)",
-          "dest": "/dist"
-        }
-      ],
-      "alias": "vue-example"
-    }
-   ```
-   This additional config is required in order to avoid issues when directly deep-linking to a specific page (e.g. when opening `my-example-app.now.sh/some-subpage`, you would be presented with a 404 error otherwise).
+You can deploy your application by running the following command in the root of the project directory:
 
-3. Adding a deployment script in `package.json`:
+```bash
+now
+```
 
-    ```json
-    "deploy": "npm run build && now --target production"
-    ```
+**Alternatively**, you can also use their integration for [GitHub](https://zeit.co/github) or [GitLab](https://zeit.co/gitlab).
 
-    If you want to deploy publicly by default, you can change the deployment script to the following one:
+That’s all!
 
-    ```json
-    "deploy": "npm run build && now --target production --public"
-    ```
+Your site will deploy, and you will receive a link similar to the following: https://vue.now-examples.now.sh
 
-    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+Out of the box, you are already provided with the necessary routes for rewriting requests (except for custom static files) directly to your `index.html` file and the appropiate default caching headers. This behaviour can be overwritten [like this](https://zeit.co/docs/v2/advanced/routes/).
 
 ### Stdlib
 
