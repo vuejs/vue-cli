@@ -375,10 +375,10 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 
 ### parallel
 
-- Type: `boolean`
+- Type: `boolean | number`
 - Default: `require('os').cpus().length > 1`
 
-  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores.
+  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores. Passing a number will define the number of workers used.
 
 ### pwa
 
