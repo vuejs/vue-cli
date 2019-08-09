@@ -12,7 +12,7 @@ Vue CLI 项目天生支持 [PostCSS](http://postcss.org/)、[CSS Modules](https:
 
 ``` bash
 # Sass
-npm install -D sass-loader node-sass
+npm install -D sass-loader sass
 
 # Less
 npm install -D less-loader less
@@ -28,6 +28,14 @@ npm install -D stylus-loader stylus
 $color: red;
 </style>
 ```
+
+::: tip Sass 性能贴士
+请注意，当使用 Dart 版本的 Sass 时，默认情况下，**同步编译的速度为异步编译速度的两倍**，这是由于异步回调造成的性能开销。为避免此开销，你可以使用 [fibers](https://www.npmjs.com/package/fibers) 的 package 在异步环境下使用同步的代码。要启用此功能，只需安装 `fibers` 到项目依赖：
+```
+npm install -D fibers
+```
+另外请注意，由于这是一个原生模块，因此 OS 与构建环境之间可能存在兼容问题。如果遇到此问题，请执行 `npm uninstall -D fibers` 来解决此问题。
+:::
 
 ### 自动化导入
 
