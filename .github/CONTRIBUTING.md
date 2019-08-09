@@ -1,3 +1,17 @@
+## Workflow
+
+The Git workflow used in this project is largely inspired by [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
+
+There are two main branches: `master` and `next`, corresponding to the npm `dist-tag`s with the same names.
+The documentation website <https://cli.vuejs.org> is deployed from the `master` branch, with <https://next.cli.vuejs.org/> from `next`.
+
+When sending documentation pull requests, please fork your branches from these two branches.
+
+The development branch is `dev`.
+And there are several version branches for archiving old versions of Vue CLI, such as `v2`, `v3`.
+
+Pull requests that touches the code should be forked from `dev`, unless it's only targeting an old version.
+
 ## Development Setup
 
 This project uses a monorepo setup that requires using [Yarn](https://yarnpkg.com) because it relies on [Yarn workspaces](https://yarnpkg.com/blog/2017/08/02/introducing-workspaces/).
