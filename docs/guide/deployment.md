@@ -276,66 +276,9 @@ npm install -g now
 npm install now
 ```
 
-2. Add a `now.json` file to your project root:
+2. Run `now` command inside `vue-cli` app.
 
-    ```json
-    {
-      "name": "my-example-app",
-      "version": 2,
-      "builds": [
-        {
-          "src": "package.json",
-          "use": "@now/static-build"
-        }
-      ],
-      "routes": [
-        {
-          "src": "/(js|css|img)/.*",
-          "headers": { "cache-control": "max-age=31536000, immutable" }
-        },
-        { "handle": "filesystem" },
-        { "src": ".*", "dest": "/" }
-      ],
-      "alias": "example.com"
-    }
-    ```
-
-    If you have different/additional folders, modify the route accordingly:
-
-    ```diff
-    - {
-    -   "src": "/(js|css|img)/.*",
-    -   "headers": { "cache-control": "max-age=31536000, immutable" }
-    - }
-    + {
-    +   "src": "/(js|css|img|fonts|media)/.*",
-    +   "headers": { "cache-control": "max-age=31536000, immutable" }
-    + }
-    ```
-
-    If your `outputDir` is not the default `dist`, say `build`:
-
-    ```diff
-    - {
-    -   "src": "package.json",
-    -   "use": "@now/static-build"
-    - }
-    + {
-    +   "src": "package.json",
-    +   "use": "@now/static-build",
-    +   "config": { "distDir": "build" }
-    + }
-    ```
-
-3. Adding a `now-build` script in `package.json`:
-
-    ```json
-    "now-build": "npm run build"
-    ```
-    
-    To make a deployment, run `now`.
-
-    If you want your deployment aliased, run `now --target production` instead.
+More info at [Now docs](https://zeit.co/docs).
 
 ### Stdlib
 
