@@ -3,7 +3,7 @@
 The Git workflow used in this project is largely inspired by [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
 
 There are two main branches: `master` and `next`, corresponding to the npm `dist-tag`s with the same names.
-The documentation website <https://cli.vuejs.org> is deployed from the `master` branch, with <https://next.cli.vuejs.org/> from `next`.
+The documentation website for the current CLI version <https://cli.vuejs.org> is deployed from the `master` branch, while documentation for new features <https://next.cli.vuejs.org/> is deployed from `next` branch.
 
 When sending documentation pull requests, please fork your branches from these two branches.
 
