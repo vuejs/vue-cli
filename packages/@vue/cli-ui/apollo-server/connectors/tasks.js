@@ -129,7 +129,7 @@ async function list ({ file = null, api = true } = {}, context) {
       if (index !== -1) return index
       return Infinity
     }
-    list = list.sort((a, b) => getSortScore(a) - getSortScore(b))
+    list.sort((a, b) => getSortScore(a) - getSortScore(b))
 
     tasks.set(file, list)
   }
