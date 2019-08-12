@@ -71,7 +71,7 @@
     "typescript": "^3.4.3",
     "vuepress": "1.0.0-alpha.44",
     "vuepress-theme-vue": "^1.1.0",
-    "webpack": ">=4 < 4.29",
+    "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
   "resolutions": {

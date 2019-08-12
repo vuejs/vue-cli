@@ -27,7 +27,7 @@
     "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.2",
     "globby": "^9.2.0",
-    "webpack": ">=4 < 4.29",
+    "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
   "optionalDependencies": {

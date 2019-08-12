@@ -99,18 +99,16 @@ test('build w/ multi page', async () => {
   const assertSharedAssets = file => {
     // should split and preload vendor chunk
     expect(file).toMatch(/<link [^>]*js\/chunk-vendors[^>]*\.js rel=preload as=script>/)
-    // should split and preload common js and css
-    expect(file).toMatch(/<link [^>]*js\/chunk-common[^>]*\.js rel=preload as=script>/)
-    expect(file).toMatch(/<link [^>]*chunk-common[^>]*\.css rel=preload as=style>/)
-    // should load common css
-    expect(file).toMatch(/<link href=\/css\/chunk-common\.\w+\.css rel=stylesheet>/)
-    // should load common js
     expect(file).toMatch(/<script [^>]*src=\/js\/chunk-vendors\.\w+\.js>/)
-    expect(file).toMatch(/<script [^>]*src=\/js\/chunk-common\.\w+\.js>/)
   }
 
   const index = await project.read('dist/index.html')
   assertSharedAssets(index)
+  // should split and preload common js and css
+  expect(index).toMatch(/<link [^>]*js\/chunk-common[^>]*\.js rel=preload as=script>/)
+  expect(index).toMatch(/<script [^>]*src=\/js\/chunk-common\.\w+\.js>/)
+  expect(index).toMatch(/<link href=\/css\/chunk-common\.\w+\.css rel=stylesheet>/)
+  expect(index).toMatch(/<link [^>]*chunk-common[^>]*\.css rel=preload as=style>/)
   // should preload correct page file
   expect(index).toMatch(/<link [^>]*js\/index[^>]*\.js rel=preload as=script>/)
   expect(index).not.toMatch(/<link [^>]*js\/foo[^>]*\.js rel=preload as=script>/)
@@ -140,6 +138,11 @@ test('build w/ multi page', async () => {
 
   const bar = await project.read('dist/bar.html')
   assertSharedAssets(bar)
+  // bar & index have a shared common chunk (App.vue)
+  expect(bar).toMatch(/<link [^>]*js\/chunk-common[^>]*\.js rel=preload as=script>/)
+  expect(bar).toMatch(/<script [^>]*src=\/js\/chunk-common\.\w+\.js>/)
+  expect(bar).toMatch(/<link href=\/css\/chunk-common\.\w+\.css rel=stylesheet>/)
+  expect(bar).toMatch(/<link [^>]*chunk-common[^>]*\.css rel=preload as=style>/)
   // should preload correct page file
   expect(bar).not.toMatch(/<link [^>]*js\/index[^>]*\.js rel=preload as=script>/)
   expect(bar).not.toMatch(/<link [^>]*js\/foo[^>]*\.js rel=preload as=script>/)
