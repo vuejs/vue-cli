@@ -85,6 +85,7 @@
     "puppeteer": "1.11.0",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
-    "vue-server-renderer": "^2.6.10"
+    "vue-server-renderer": "^2.6.10",
+    "@vuepress/core": "1.0.2"
   }
 }
