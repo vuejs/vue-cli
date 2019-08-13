@@ -54,13 +54,6 @@ module.exports = (api, { target, entry, name }) => {
       config.optimization.minimize(false)
     }
 
-    // externalize Vue in case user imports it
-    config
-      .externals({
-        ...config.get('externals'),
-        vue: 'Vue'
-      })
-
     config
       .plugin('web-component-options')
         .use(webpack.EnvironmentPlugin, [{
@@ -102,6 +95,14 @@ module.exports = (api, { target, entry, name }) => {
         .set('~root', api.resolve('.'))
 
     const rawConfig = api.resolveWebpackConfig(config)
+
+    // externalize Vue in case user imports it
+    rawConfig.externals = [
+      ...(Array.isArray(rawConfig.externals) ? rawConfig.externals : [rawConfig.externals]),
+      {
+        vue: 'Vue'
+      }
+    ].filter(Boolean)
 
     const entryName = `${libName}${minify ? `.min` : ``}`
     rawConfig.entry = {
