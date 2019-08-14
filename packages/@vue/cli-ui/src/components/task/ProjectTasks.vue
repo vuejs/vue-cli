@@ -4,6 +4,7 @@
       :title="$t('org.vue.views.project-tasks.title')"
     >
       <ApolloQuery
+        ref="tasks"
         :query="require('@/graphql/task/tasks.gql')"
         class="fill-height"
       >
@@ -26,6 +27,13 @@
                 v-model="search"
                 icon-left="search"
                 class="search round"
+              />
+
+              <VueButton
+                v-tooltip="$t('org.vue.views.project-tasks.refresh')"
+                icon-left="refresh"
+                class="icon-button flat"
+                @click="refresh()"
               />
             </div>
 
@@ -101,7 +109,16 @@ export default {
           task
         })
       )
+    },
+
+    refresh () {
+      this.$refs.tasks.$apollo.queries.query.refetch()
     }
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.search
+  margin-right 6px
+</style>

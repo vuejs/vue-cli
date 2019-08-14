@@ -18,7 +18,7 @@ This is the default Babel preset used in all Vue CLI projects. **Note: this pres
 
 ### Stage 3 or Below
 
-Only the following stage 3 or below features are supported (object reset spread is supported as part of `preset-env`):
+Only the following stage 3 or below features are supported (object rest spread is supported as part of `preset-env`):
 
 - [Dynamic Import Syntax](https://github.com/tc39/proposal-dynamic-import)
 - [Proposal Class Properties](https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties.html)
@@ -29,9 +29,7 @@ If you need additional stage 3 or below features, you need to install and config
 ### Vue JSX support
 
 - [@babel/plugin-syntax-jsx](https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx)
-- [babel-plugin-transform-vue-jsx](https://github.com/vuejs/babel-plugin-transform-vue-jsx)
-- ~~[babel-plugin-jsx-event-modifiers](https://github.com/nickmessing/babel-plugin-jsx-event-modifiers)~~ (temporarily disabled until fixed for Babel 7)
-- ~~[babel-plugin-jsx-v-model](https://github.com/nickmessing/babel-plugin-jsx-v-model)~~ (temporarily disabled until fixed for Babel 7)
+- [@vue/babel-preset-jsx](https://github.com/vuejs/jsx)
 
 ### [@babel/plugin-transform-runtime](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-runtime)
 
@@ -90,10 +88,16 @@ Use this option when you have 3rd party dependencies that are not processed by B
 
 - Default: `true`.
 
-Set to `false` to disable JSX support.
+Set to `false` to disable JSX support. Or you can toggle [@vue/babel-preset-jsx](https://github.com/vuejs/jsx/tree/dev/packages/babel-preset-jsx) features here.
 
 ### loose
 
 - Default: `false`.
 
 Setting this to `true` will generate code that is more performant but less spec-compliant.
+
+### entryFiles
+
+- Default: `[]`
+
+Multi page repo use `entryFiles` to ensure inject polyfills to all entry file.

@@ -1,1 +1,1 @@
-export { ProjectOptions } from './ProjectOptions'
+export { ProjectOptions, ConfigFunction } from './ProjectOptions'

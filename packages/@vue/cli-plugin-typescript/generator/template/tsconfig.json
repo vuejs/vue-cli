@@ -9,6 +9,9 @@
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
     <%_ } _%>
+    <%_ if (options.allowJs) { _%>
+    "allowJs": true,
+    <%_ } _%>
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,

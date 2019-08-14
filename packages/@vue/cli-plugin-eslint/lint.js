@@ -36,13 +36,13 @@ module.exports = function lint (args = {}, api) {
   const noFixWarningsPredicate = (lintResult) => lintResult.severity === 2
   config.fix = config.fix && (noFixWarnings ? noFixWarningsPredicate : true)
 
-  if (!fs.existsSync(api.resolve('.eslintignore'))) {
+  if (!fs.existsSync(api.resolve('.eslintignore')) && !config.ignorePattern) {
     // .eslintrc.js files (ignored by default)
     // However, we need to lint & fix them so as to make the default generated project's
     // code style consistent with user's selected eslint config.
     // Though, if users provided their own `.eslintignore` file, we don't want to
     // add our own customized ignore pattern here (in eslint, ignorePattern is
-    // an addition to eslintignore, i.e. it can't be overriden by user),
+    // an addition to eslintignore, i.e. it can't be overridden by user),
     // following the principle of least astonishment.
     config.ignorePattern = [
       '!.*.js',

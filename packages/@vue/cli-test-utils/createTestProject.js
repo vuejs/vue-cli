@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const execa = require('execa')
 
-module.exports = function createTestProject (name, preset, cwd, initGit) {
+module.exports = function createTestProject (name, preset, cwd, initGit = true) {
   delete process.env.VUE_CLI_SKIP_WRITE
 
   cwd = cwd || path.resolve(__dirname, '../../test')
@@ -48,8 +48,7 @@ module.exports = function createTestProject (name, preset, cwd, initGit) {
     '--force',
     '--inlinePreset',
     JSON.stringify(preset),
-    '--git',
-    initGit ? 'init' : 'false'
+    initGit ? '--git' : '--no-git'
   ]
 
   const options = {

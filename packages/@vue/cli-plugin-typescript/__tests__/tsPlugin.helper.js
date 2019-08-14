@@ -1,6 +1,6 @@
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')

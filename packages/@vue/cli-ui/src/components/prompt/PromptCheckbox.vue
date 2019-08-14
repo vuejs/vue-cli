@@ -16,7 +16,7 @@
         :value="isCheckboxSelected(choice)"
         :disabled="choice.disabled"
         class="right"
-        @input="value => asnwerCheckbox(choice, value)"
+        @update="value => asnwerCheckbox(choice, value)"
       >
         {{ $t(choice.name) }}
       </VueSwitch>

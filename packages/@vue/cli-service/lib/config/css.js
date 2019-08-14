@@ -9,7 +9,7 @@ const findExisting = (context, files) => {
   }
 }
 
-module.exports = (api, options) => {
+module.exports = (api, rootOptions) => {
   api.chainWebpack(webpackConfig => {
     const getAssetPath = require('../util/getAssetPath')
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
@@ -22,16 +22,23 @@ module.exports = (api, options) => {
     } catch (e) {}
 
     const {
-      modules = false,
       extract = isProd,
       sourceMap = false,
       loaderOptions = {}
-    } = options.css || {}
+    } = rootOptions.css || {}
+
+    let { requireModuleExtension } = rootOptions.css || {}
+    if (typeof requireModuleExtension === 'undefined') {
+      if (loaderOptions.css && loaderOptions.css.modules) {
+        throw new Error('`css.requireModuleExtension` is required when custom css modules options provided')
+      }
+      requireModuleExtension = true
+    }
 
     const shouldExtract = extract !== false && !shadowMode
     const filename = getAssetPath(
-      options,
-      `css/[name]${options.filenameHashing ? '.[contenthash:8]' : ''}.css`
+      rootOptions,
+      `css/[name]${rootOptions.filenameHashing ? '.[contenthash:8]' : ''}.css`
     )
     const extractOptions = Object.assign({
       filename,
@@ -71,7 +78,7 @@ module.exports = (api, options) => {
         cssDeclarationSorter: false
       }]
     }
-    if (options.productionSourceMap && sourceMap) {
+    if (rootOptions.productionSourceMap && sourceMap) {
       cssnanoOptions.map = { inline: false }
     }
 
@@ -92,14 +99,15 @@ module.exports = (api, options) => {
 
       // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      applyLoaders(normalRule, modules)
+      applyLoaders(normalRule, !requireModuleExtension)
 
-      function applyLoaders (rule, modules) {
+      function applyLoaders (rule, isCssModule) {
         if (shouldExtract) {
           rule
             .use('extract-css-loader')
             .loader(require('mini-css-extract-plugin').loader)
             .options({
+              hmr: !isProd,
               publicPath: cssPublicPath
             })
         } else {
@@ -121,14 +129,13 @@ module.exports = (api, options) => {
           )
         }, loaderOptions.css)
 
-        if (modules) {
-          const {
-            localIdentName = '[name]_[local]_[hash:base64:5]'
-          } = loaderOptions.css || {}
-          Object.assign(cssLoaderOptions, {
-            modules,
-            localIdentName
-          })
+        if (isCssModule) {
+          cssLoaderOptions.modules = {
+            localIdentName: '[name]_[local]_[hash:base64:5]',
+            ...cssLoaderOptions.modules
+          }
+        } else {
+          delete cssLoaderOptions.modules
         }
 
         rule
@@ -164,10 +171,17 @@ module.exports = (api, options) => {
 
     createCSSRule('css', /\.css$/)
     createCSSRule('postcss', /\.p(ost)?css$/)
-    createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, loaderOptions.sass))
-    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(defaultSassLoaderOptions, {
-      indentedSyntax: true
-    }, loaderOptions.sass))
+    createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(
+      defaultSassLoaderOptions,
+      loaderOptions.scss || loaderOptions.sass
+    ))
+    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+      defaultSassLoaderOptions,
+      {
+        indentedSyntax: true
+      },
+      loaderOptions.sass
+    ))
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
     createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', Object.assign({
       preferPathResolver: 'webpack'
@@ -184,7 +198,7 @@ module.exports = (api, options) => {
         webpackConfig
           .plugin('optimize-css')
             .use(require('@intervolga/optimize-cssnano-plugin'), [{
-              sourceMap: options.productionSourceMap && sourceMap,
+              sourceMap: rootOptions.productionSourceMap && sourceMap,
               cssnanoOptions
             }])
       }

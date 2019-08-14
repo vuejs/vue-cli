@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import deepmerge from 'deepmerge'
-import VueTimeago from 'vue-timeago'
+import VueTimeago, { createTimeago } from 'vue-timeago'
 
 Vue.use(VueI18n)
 
@@ -15,7 +15,7 @@ function detectLanguage () {
     const lang = (window.navigator.languages && window.navigator.languages[0]) ||
       window.navigator.language ||
       window.navigator.userLanguage
-    return [ lang, lang.toLowerCase(), lang.substr(0, 2) ]
+    return [ lang, lang.toLowerCase(), lang.substr(0, 2) ].map(lang => lang.replace('-', '_'))
   } catch (e) {
     return undefined
   }
@@ -50,11 +50,11 @@ async function autoDetect () {
     }
 
     const dateFnsLocale = i18n.locale.toLowerCase().replace(/-/g, '_')
-    Vue.component('VueTimeago', VueTimeago.createTimeago({
+    Vue.component('VueTimeago', createTimeago({
       name: 'VueTimeago',
       locale: i18n.locale,
       locales: {
-        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}`)
+        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}/index.js`)
       }
     }))
   }

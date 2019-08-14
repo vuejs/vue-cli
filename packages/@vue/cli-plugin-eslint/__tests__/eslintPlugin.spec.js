@@ -61,7 +61,7 @@ test('should work', async () => {
     done = resolve
   })
   // enable lintOnSave
-  await write('vue.config.js', 'module.exports = { lintOnSave: true }')
+  await write('vue.config.js', "module.exports = { lintOnSave: 'default' }")
   // write invalid file
   const app = await read('src/App.vue')
   const updatedApp = app.replace(/;/, '')
@@ -74,7 +74,7 @@ test('should work', async () => {
     data = data.toString()
     if (isFirstMsg) {
       // should fail on start
-      expect(data).toMatch(/Compiled with \d warning/)
+      expect(data).toMatch(/Failed to compile with \d error/)
       isFirstMsg = false
 
       // fix it

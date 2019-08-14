@@ -1,7 +1,7 @@
 import ChainableWebpackConfig from 'webpack-chain'
 import { WebpackOptions } from 'webpack/declarations/WebpackOptions'
 
-type PageEntry = string;
+type PageEntry = string | string[];
 
 interface PageConfig {
   entry: PageEntry;
@@ -38,7 +38,7 @@ export interface ProjectOptions {
   runtimeCompiler?: boolean;
   transpileDependencies?: Array<string | RegExp>;
   productionSourceMap?: boolean;
-  parallel?: boolean;
+  parallel?: boolean | number;
   devServer?: object;
   pages?: {
     [key: string]: PageEntry | PageConfig;
@@ -51,8 +51,10 @@ export interface ProjectOptions {
   chainWebpack?: (config: ChainableWebpackConfig) => void;
   configureWebpack?: WebpackOptions | ((config: WebpackOptions) => (WebpackOptions | void));
 
-  lintOnSave?: boolean | 'error';
+  lintOnSave?: boolean | 'default' | 'warning' | 'error';
   pwa?: object;
 
   pluginOptions?: object;
 }
+
+export type ConfigFunction = () => ProjectOptions

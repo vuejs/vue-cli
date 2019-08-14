@@ -4,9 +4,9 @@ module.exports = (api, args, options) => {
 
   // respect inline build destination in copy plugin
   if (args.dest && config.plugins.has('copy')) {
-    config.plugin('copy').tap(args => {
-      args[0][0].to = targetDir
-      return args
+    config.plugin('copy').tap(pluginArgs => {
+      pluginArgs[0][0].to = targetDir
+      return pluginArgs
     })
   }
 
@@ -28,7 +28,10 @@ module.exports = (api, args, options) => {
         .use(ModernModePlugin, [{
           targetDir,
           isModernBuild: true,
-          unsafeInline: args['unsafe-inline']
+          unsafeInline: args['unsafe-inline'],
+          // as we may generate an addition file asset (if `no-unsafe-inline` specified)
+          // we need to provide the correct directory for that file to place in
+          jsDirectory: require('../../util/getAssetPath')(options, 'js')
         }])
     }
   }

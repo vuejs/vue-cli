@@ -27,7 +27,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
   if (!proxy) {
     return undefined
   }
-  if (typeof proxy !== 'object' && typeof proxy !== 'string') {
+  if (Array.isArray(proxy) || (typeof proxy !== 'object' && typeof proxy !== 'string')) {
     console.log(
       chalk.red(
         'When specified, "proxy" in package.json must be a string or an object.'

@@ -69,7 +69,7 @@ export default {
 
 .title
   font-size 32px
-  font-weight lighter
+  font-weight 300
   text-align center
   margin-bottom ($padding-item * 2)
 

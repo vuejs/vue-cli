@@ -1,10 +1,10 @@
 const { exit } = require('./exit')
 
 // proxy to joi for option validation
-exports.createSchema = fn => fn(require('joi'))
+exports.createSchema = fn => fn(require('@hapi/joi'))
 
 exports.validate = (obj, schema, cb) => {
-  require('joi').validate(obj, schema, {}, err => {
+  require('@hapi/joi').validate(obj, schema, {}, err => {
     if (err) {
       cb(err.message)
       if (process.env.VUE_CLI_TEST) {
@@ -17,7 +17,7 @@ exports.validate = (obj, schema, cb) => {
 }
 
 exports.validateSync = (obj, schema) => {
-  const result = require('joi').validate(obj, schema)
+  const result = require('@hapi/joi').validate(obj, schema)
   if (result.error) {
     throw result.error
   }

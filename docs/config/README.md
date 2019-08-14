@@ -140,14 +140,16 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
 ### lintOnSave
 
-- Type: `boolean | 'error'`
+- Type: `boolean | 'warning' | 'default' | 'error'`
 - Default: `true`
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
 
-  When set to `true`, `eslint-loader` will emit lint errors as warnings. By default, warnings are only logged to the terminal and does not fail the compilation.
+  When set to `true` or `'warning'`, `eslint-loader` will emit lint errors as warnings. By default, warnings are only logged to the terminal and does not fail the compilation, so this is a good default for development.
 
-  To make lint errors show up in the browser overlay, you can use `lintOnSave: 'error'`. This will force `eslint-loader` to always emit errors. this also means lint errors will now cause the compilation to fail.
+  To make lint errors show up in the browser overlay, you can use `lintOnSave: 'default'`. This will force `eslint-loader` to actually emit errors. this also means lint errors will now cause the compilation to fail.
+
+  Setting it to `'errors'` will force eslint-loader to emit warnings as errors as well, which means warnings will also show up in the overlay.
 
   Alternatively, you can configure the overlay to display both warnings and errors:
 
@@ -187,6 +189,14 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 - Default: `[]`
 
   By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly transpile a dependency with Babel, you can list it in this option.
+
+::: warning Jest config
+This option is not respected by the [cli-unit-jest plugin](#jest), because in jest, we don't have to transpile code from `/node_modules` unless it uses non-standard features - Node >8.11 supports the latest ECMAScript features already.
+
+However, jest sometimes has to transform content from node_modules if that code uses ES6 `import`/`export` syntax. In that case, use the `transformIgnorePatterns` option in `jest.config.js`.
+
+See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-unit-jest/README.md) for more information.
+:::
 
 ### productionSourceMap
 
@@ -237,10 +247,20 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
 ### css.modules
 
-- Type: `boolean`
-- Default: `false`
+Deprecated since v4, please use [`css.requireModuleExtension`](#css-requireModuleExtension) instead.
 
-  By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `true` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
+In v3 this means the opposite of `css.requireModuleExtension`.
+
+### css.requireModuleExtension
+
+- Type: `boolean`
+- Default: `true`
+
+  By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `false` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
+
+  ::: tip
+  If you have customized CSS Modules configurations in `css.loaderOptions.css`, then the `css.requireModuleExtension` field must be explictly configured to `true` or `false`, otherwise we can't be sure whether you want to apply these options to all CSS files or not.
+  :::
 
   See also: [Working with CSS > CSS Modules](../guide/css.md#css-modules)
 
@@ -294,6 +314,8 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
 
+  It's also possible to target `scss` syntax separately from `sass`, with the `scss` option.
+
   See also: [Passing Options to Pre-Processor Loaders](../guide/css.md#passing-options-to-pre-processor-loaders)
 
   ::: tip
@@ -328,6 +350,10 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   This will tell the dev server to proxy any unknown requests (requests that did not match a static file) to `http://localhost:4000`.
 
+  ::: warning
+  When `devServer.proxy` is set to a string, only XHR requests will be proxied. If you want to test an API URL, don't open it in the browser, use an API tool like Postman instead.
+  :::
+
   If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
 
   ``` js
@@ -349,10 +375,10 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
 ### parallel
 
-- Type: `boolean`
+- Type: `boolean | number`
 - Default: `require('os').cpus().length > 1`
 
-  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores.
+  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores. Passing a number will define the amount of workers used.
 
 ### pwa
 

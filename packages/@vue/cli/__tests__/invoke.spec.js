@@ -90,7 +90,7 @@ test('invoke with ts', async () => {
   await project.write('package.json', JSON.stringify(pkg, null, 2))
 
   // mock existing vue.config.js
-  await project.write('vue.config.js', `module.exports = { lintOnSave: true }`)
+  await project.write('vue.config.js', `module.exports = { lintOnSave: 'default' }`)
 
   const eslintrc = parseJS(await project.read('.eslintrc.js'))
   expect(eslintrc).toEqual(Object.assign({}, baseESLintConfig, {
@@ -148,4 +148,21 @@ test('invoking a plugin that renames files', async () => {
   await project.write('package.json', JSON.stringify(pkg, null, 2))
   await project.run(`${require.resolve('../bin/vue')} invoke typescript -d`)
   expect(project.has('src/main.js')).toBe(false)
+})
+
+test('should prompt if invoking in a git repository with uncommited changes', async () => {
+  delete process.env.VUE_CLI_SKIP_DIRTY_GIT_PROMPT
+  const project = await create('invoke-dirty', {
+    plugins: {
+      '@vue/cli-plugin-babel': {}
+    }
+  })
+  await project.write('some-random-file', '')
+  expectPrompts([
+    {
+      message: `Still proceed?`,
+      confirm: true
+    }
+  ])
+  await invoke(`babel`, {}, project.dir)
 })

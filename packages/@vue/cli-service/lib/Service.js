@@ -6,7 +6,8 @@ const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
-const loadEnv = require('./util/loadEnv')
+const dotenv = require('dotenv')
+const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
 const { warn, error, isPlugin, loadModule } = require('@vue/cli-shared-utils')
 
@@ -93,10 +94,11 @@ module.exports = class Service {
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
 
-    const load = path => {
+    const load = envPath => {
       try {
-        const res = loadEnv(path)
-        logger(path, res)
+        const env = dotenv.config({ path: envPath, debug: process.env.DEBUG })
+        dotenvExpand(env)
+        logger(envPath, env)
       } catch (err) {
         // only ignore error if file is not found
         if (err.toString().indexOf('ENOENT') < 0) {
@@ -146,7 +148,6 @@ module.exports = class Service {
       // config plugins are order sensitive
       './config/base',
       './config/css',
-      './config/dev',
       './config/prod',
       './config/app'
     ].map(idToPlugin)
@@ -187,7 +188,7 @@ module.exports = class Service {
       }
       plugins = plugins.concat(files.map(file => ({
         id: `local:${file}`,
-        apply: loadModule(file, this.pkgContext)
+        apply: loadModule(`./${file}`, this.pkgContext)
       })))
     }
 
@@ -268,6 +269,22 @@ module.exports = class Service {
       )
     }
 
+    if (typeof config.entry !== 'function') {
+      let entryFiles
+      if (typeof config.entry === 'string') {
+        entryFiles = [config.entry]
+      } else if (Array.isArray(config.entry)) {
+        entryFiles = config.entry
+      } else {
+        entryFiles = Object.values(config.entry || []).reduce((allEntries, curr) => {
+          return allEntries.concat(curr)
+        }, [])
+      }
+
+      entryFiles = entryFiles.map(file => path.resolve(this.context, file))
+      process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
+    }
+
     return config
   }
 
@@ -281,9 +298,14 @@ module.exports = class Service {
     if (fs.existsSync(configPath)) {
       try {
         fileConfig = require(configPath)
+
+        if (typeof fileConfig === 'function') {
+          fileConfig = fileConfig()
+        }
+
         if (!fileConfig || typeof fileConfig !== 'object') {
           error(
-            `Error loading ${chalk.bold('vue.config.js')}: should export an object.`
+            `Error loading ${chalk.bold('vue.config.js')}: should export an object or a function that returns object.`
           )
           fileConfig = null
         }
@@ -324,18 +346,19 @@ module.exports = class Service {
       resolvedFrom = 'inline options'
     }
 
-    if (typeof resolved.baseUrl !== 'undefined') {
-      if (typeof resolved.publicPath !== 'undefined') {
+
+    if (resolved.css && typeof resolved.css.modules !== 'undefined') {
+      if (typeof resolved.css.requireModuleExtension !== 'undefined') {
         warn(
-          `You have set both "baseUrl" and "publicPath" in ${chalk.bold('vue.config.js')}, ` +
-          `in this case, "baseUrl" will be ignored in favor of "publicPath".`
+          `You have set both "css.modules" and "css.requireModuleExtension" in ${chalk.bold('vue.config.js')}, ` +
+          `"css.modules" will be ignored in favor of "css.requireModuleExtension".`
         )
       } else {
         warn(
-          `"baseUrl" option in ${chalk.bold('vue.config.js')} ` +
-          `is deprecated now, please use "publicPath" instead.`
+          `"css.modules" option in ${chalk.bold('vue.config.js')} ` +
+          `is deprecated now, please use "css.requireModuleExtension" instead.`
         )
-        resolved.publicPath = resolved.baseUrl
+        resolved.css.requireModuleExtension = !resolved.css.modules
       }
     }
 
@@ -344,18 +367,7 @@ module.exports = class Service {
     if (typeof resolved.publicPath === 'string') {
       resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
     }
-    // for compatibility concern, in case some plugins still rely on `baseUrl` option
-    resolved.baseUrl = resolved.publicPath
     removeSlash(resolved, 'outputDir')
-
-    // deprecation warning
-    // TODO remove in final release
-    if (resolved.css && resolved.css.localIdentName) {
-      warn(
-        `css.localIdentName has been deprecated. ` +
-        `All css-loader options (except "modules") are now supported via css.loaderOptions.css.`
-      )
-    }
 
     // validate options
     validate(resolved, msg => {

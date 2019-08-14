@@ -1,5 +1,5 @@
 <template>
-  <div v-if="false" class="status-widget">
+  <div v-if="implemented" class="status-widget">
     <div class="header">
       <div class="icon-wrapper">
         <ItemLogo
@@ -14,9 +14,10 @@
         <div class="last-updated">
           <template v-if="status.lastUpdate">
             <div class="label">
-              {{ $t('org.vue.widgets.status-widget.last-updated') }}
+              {{ message || $t('org.vue.widgets.status-widget.last-updated') }}
             </div>
             <VueTimeago
+              v-if="!message"
               :datetime="status.lastUpdate"
               :auto-update="60"
             />
@@ -73,6 +74,17 @@ export default {
     status: {
       type: Object,
       required: true
+    },
+
+    message: {
+      type: String,
+      default: null
+    },
+
+    // TODO remove
+    implemented: {
+      type: Boolean,
+      default: false
     }
   },
 

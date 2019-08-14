@@ -31,5 +31,5 @@
 
 .title
   font-size 28px
-  font-weight lighter
+  font-weight 300
 </style>

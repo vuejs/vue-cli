@@ -17,6 +17,7 @@ module.exports = {
   globals: {
     ClientAddonApi: false,
     mapSharedData: false,
-    Vue: false
+    Vue: false,
+    name: 'off'
   }
 }

@@ -35,6 +35,8 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 ### GitHub Pages
 
+#### Pushing updates manually
+
 1. Set correct `publicPath` in `vue.config.js`.
 
     If you are deploying to `https://<USERNAME>.github.io/`, you can omit `publicPath` as it defaults to `"/"`.
@@ -79,9 +81,39 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     cd -
     ```
 
-    ::: tip
-    You can also run the above script in your CI setup to enable automatic deployment on each push.
-    :::
+#### Using Travis CI for automatic updates 
+
+1. Set correct `publicPath` in `vue.config.js` as explained above.
+
+2. Install the Travis CLI client: `gem install travis && travis --login`
+
+3. Generate a GitHub [access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+   with repo permissions.
+
+4. Grant the Travis job access to your repository: `travis set GITHUB_TOKEN=xxx`
+   (`xxx` is the personal access token from step 3.)
+
+5. Create a `.travis.yml` file in the root of your project.
+
+    ```yaml
+    language: node_js
+   node_js:
+     - "node"
+
+   cache: npm
+
+   script: npm run build
+
+   deploy:
+     provider: pages
+     skip_cleanup: true
+     github_token: $GITHUB_TOKEN
+     local_dir: dist
+     on:
+       branch: master
+    ```
+
+6. Push the `.travis.yml` file to your repository to trigger the first build.
 
 ### GitLab Pages
 
@@ -141,6 +173,28 @@ In order to receive direct hits using `history mode` on Vue Router, you need to 
 ```
 
 More information on [Netlify redirects documentation](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
+
+### Render
+
+[Render](https://render.com) offers [free static site hosting](https://render.com/docs/static-sites) with fully managed SSL, a global CDN and continuous auto deploys from GitHub.
+
+1. Create a new Web Service on Render, and give Render’s GitHub app permission to access your Vue repo.
+
+2. Use the following values during creation:
+
+    - **Environment:** `Static Site`
+    - **Build Command:** `npm run build` or `yarn build`
+    - **Publish directory:** `dist`
+
+That’s it! Your app will be live on your Render URL as soon as the build finishes.
+
+In order to receive direct hits using history mode on Vue Router, you need to add the following rewrite rule in the `Redirects/Rewrites` tab for your site.
+
+  - **Source:** `/*`
+  - **Destination:** `/index.html`
+  - **Status** `Rewrite`
+
+Learn more about setting up [redirects, rewrites](https://render.com/docs/redirects-rewrites) and [custom domains](https://render.com/docs/custom-domains) on Render.
 
 ### Amazon S3
 
@@ -211,10 +265,15 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 ### Now
 
-1. Install the Now CLI globally:
+This example uses the latest Now platform version 2.
+
+1. Install the Now CLI:
 
 ```bash
 npm install -g now
+
+# Or, if you prefer a local one
+npm install now
 ```
 
 2. Add a `now.json` file to your project root:
@@ -222,38 +281,61 @@ npm install -g now
     ```json
     {
       "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
-      "alias": "vue-example",
-      "files": [
-        "dist"
-      ]
+      "version": 2,
+      "builds": [
+        {
+          "src": "package.json",
+          "use": "@now/static-build"
+        }
+      ],
+      "routes": [
+        {
+          "src": "/(js|css|img)/.*",
+          "headers": { "cache-control": "max-age=31536000, immutable" }
+        },
+        { "handle": "filesystem" },
+        { "src": ".*", "dest": "/" }
+      ],
+      "alias": "example.com"
     }
     ```
 
-    You can further customize the static serving behavior by consulting [Now's documentation](https://zeit.co/docs/deployment-types/static).
+    If you have different/additional folders, modify the route accordingly:
 
-3. Adding a deployment script in `package.json`:
-
-    ```json
-    "deploy": "npm run build && now && now alias"
+    ```diff
+    - {
+    -   "src": "/(js|css|img)/.*",
+    -   "headers": { "cache-control": "max-age=31536000, immutable" }
+    - }
+    + {
+    +   "src": "/(js|css|img|fonts|media)/.*",
+    +   "headers": { "cache-control": "max-age=31536000, immutable" }
+    + }
     ```
 
-    If you want to deploy publicly by default, you can change the deployment script to the following one:
+    If your `outputDir` is not the default `dist`, say `build`:
 
-    ```json
-    "deploy": "npm run build && now --public && now alias"
+    ```diff
+    - {
+    -   "src": "package.json",
+    -   "use": "@now/static-build"
+    - }
+    + {
+    +   "src": "package.json",
+    +   "use": "@now/static-build",
+    +   "config": { "distDir": "build" }
+    + }
     ```
 
-    This will automatically point your site's alias to the latest deployment. Now, just run `npm run deploy` to deploy your app.
+3. Adding a `now-build` script in `package.json`:
+
+    ```json
+    "now-build": "npm run build"
+    ```
+    
+    To make a deployment, run `now`.
+
+    If you want your deployment aliased, run `now --target production` instead.
 
 ### Stdlib
 
@@ -261,7 +343,35 @@ npm install -g now
 
 ### Heroku
 
-> TODO | Open to contribution.
+1. [Install Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+
+2. Create a `static.json` file:
+```json
+{
+  "root": "dist",
+  "clean_urls": true,
+  "routes": {
+    "/**": "index.html"
+  }
+}
+```
+
+3. Add `static.json` file to git
+```bash
+git add static.json
+git commit -m "add static configuration"
+```
+
+4. Deploy to Heroku
+```bash
+heroku login
+heroku create
+heroku buildpacks:add heroku/nodejs
+heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
+git push heroku master
+```
+
+More info: https://gist.github.com/hone/24b06869b4c1eca701f9
 
 ### Surge
 
@@ -318,4 +428,92 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
     git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
 
     cd -
+    ```
+
+### Docker (Nginx)
+
+Deploy your application using nginx inside of a docker container.
+
+1. Install [docker](https://www.docker.com/get-started)
+
+2. Create a `Dockerfile` file in the root of your project.
+
+    ```Dockerfile
+    FROM node:10
+    COPY ./ /app
+    WORKDIR /app
+    RUN npm install && npm run build
+
+    FROM nginx
+    RUN mkdir /app
+    COPY --from=0 /app/dist /app
+    COPY nginx.conf /etc/nginx/nginx.conf
+    ```
+
+3. Create a `.dockerignore` file in the root of your project
+
+    Setting up the `.dockerignore` file prevents `node_modules` and any intermediate build artifacts from being copied to the image which can cause issues during building.
+
+    ```gitignore
+    **/node_modules
+    **/dist
+    ```
+
+4. Create a `nginx.conf` file in the root of your project
+
+    `Nginx` is an HTTP(s) server that will run in your docker container. It uses a configuration file to determine how to serve content/which ports to listen on/etc. See the [nginx configuration documentation](https://www.nginx.com/resources/wiki/start/topics/examples/full/) for an example of all of the possible configuration options.
+
+    The following is a simple `nginx` configuration that serves your vue project on port `80`. The root `index.html` is served for `page not found` / `404` errors which allows us to use `pushState()` based routing.
+
+    ```text
+    user  nginx;
+    worker_processes  1;
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+    events {
+      worker_connections  1024;
+    }
+    http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+      access_log  /var/log/nginx/access.log  main;
+      sendfile        on;
+      keepalive_timeout  65;
+      server {
+        listen       80;
+        server_name  localhost;
+        location / {
+          root   /app;
+          index  index.html;
+          try_files $uri $uri/ /index.html;
+        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+          root   /usr/share/nginx/html;
+        }
+      }
+    }
+    ```
+
+5. Build your docker image
+
+    ```bash
+    docker build . -t my-app
+    # Sending build context to Docker daemon  884.7kB
+    # ...
+    # Successfully built 4b00e5ee82ae
+    # Successfully tagged my-app:latest
+    ```
+
+6. Run your docker image
+
+    This build is based on the official `nginx` image so log redirection has already been set up and self daemonizing has been turned off. Some other default settings have been setup to improve running nginx in a docker container. See the [nginx docker repo](https://hub.docker.com/_/nginx) for more info.
+
+    ```bash
+    docker run -d -p 8080:80 my-app
+    curl localhost:8080
+    # <!DOCTYPE html><html lang=en>...</html>
     ```

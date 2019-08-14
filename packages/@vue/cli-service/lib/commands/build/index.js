@@ -31,12 +31,13 @@ module.exports = (api, options) => {
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--formats': `list of output formats for library builds (default: ${defaults.formats})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
+      '--filename': `file name for output, only usable for 'lib' target (default: value of --name)`,
       '--no-clean': `do not remove the dist directory before building the project`,
       '--report': `generate report.html to help analyze bundle content`,
       '--report-json': 'generate report.json to help analyze bundle content',
       '--watch': `watch for changes`
     }
-  }, async (args) => {
+  }, async (args, rawArgs) => {
     for (const key in defaults) {
       if (args[key] == null) {
         args[key] = defaults[key]
@@ -50,20 +51,29 @@ module.exports = (api, options) => {
     process.env.VUE_CLI_BUILD_TARGET = args.target
     if (args.modern && args.target === 'app') {
       process.env.VUE_CLI_MODERN_MODE = true
-      delete process.env.VUE_CLI_MODERN_BUILD
-      await build(Object.assign({}, args, {
-        modernBuild: false,
-        keepAlive: true
-      }), api, options)
-
-      process.env.VUE_CLI_MODERN_BUILD = true
-      await build(Object.assign({}, args, {
-        modernBuild: true,
-        clean: false
-      }), api, options)
-
+      if (!process.env.VUE_CLI_MODERN_BUILD) {
+        // main-process for legacy build
+        await build(Object.assign({}, args, {
+          modernBuild: false,
+          keepAlive: true
+        }), api, options)
+        // spawn sub-process of self for modern build
+        const { execa } = require('@vue/cli-shared-utils')
+        const cliBin = require('path').resolve(__dirname, '../../../bin/vue-cli-service.js')
+        await execa(cliBin, ['build', ...rawArgs], {
+          stdio: 'inherit',
+          env: {
+            VUE_CLI_MODERN_BUILD: true
+          }
+        })
+      } else {
+        // sub-process for modern build
+        await build(Object.assign({}, args, {
+          modernBuild: true,
+          clean: false
+        }), api, options)
+      }
       delete process.env.VUE_CLI_MODERN_MODE
-      delete process.env.VUE_CLI_MODERN_BUILD
     } else {
       if (args.modern) {
         const { warn } = require('@vue/cli-shared-utils')
@@ -113,7 +123,12 @@ async function build (args, api, options) {
     }
   }
 
-  const targetDir = api.resolve(args.dest || options.outputDir)
+  if (args.dest) {
+    // Override outputDir before resolving webpack config as config relies on it (#2327)
+    options.outputDir = args.dest
+  }
+
+  const targetDir = api.resolve(options.outputDir)
   const isLegacyBuild = args.target === 'app' && args.modern && !args.modernBuild
 
   // resolve raw webpack config
@@ -131,14 +146,6 @@ async function build (args, api, options) {
 
   // check for common config errors
   validateWebpackConfig(webpackConfig, api, options, args.target)
-
-  // apply inline dest path after user configureWebpack hooks
-  // so it takes higher priority
-  if (args.dest) {
-    modifyConfig(webpackConfig, config => {
-      config.output.path = targetDir
-    })
-  }
 
   if (args.watch) {
     modifyConfig(webpackConfig, config => {

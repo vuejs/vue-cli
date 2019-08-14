@@ -173,7 +173,7 @@ async function syncDeps ({ local, version, skipPrompt }) {
               return require(`../packages/${pkg}/package.json`).version
             }
 
-            if (pkg.includes('@vue/cli-plugin')) {
+            if (!semver.prerelease(version) && pkg.includes('@vue/cli-plugin')) {
               return `${semver.major(version)}.${semver.minor(version)}.0`
             }
 

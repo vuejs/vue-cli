@@ -17,6 +17,12 @@
       />
       <VueButton
         class="icon-button flat"
+        icon-left="content_copy"
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.content-copy')"
+        @click="copyContent()"
+      />
+      <VueButton
+        class="icon-button flat"
         icon-left="subdirectory_arrow_left"
         v-tooltip="$t('org.vue.components.terminal-view.buttons.scroll')"
         @click="scrollToBottom()"
@@ -194,6 +200,29 @@ export default {
 
     scrollToBottom () {
       this.$_terminal.scrollToBottom()
+    },
+
+    copyContent () {
+      const textarea = this.$_terminal.textarea
+      if (!textarea) {
+        return
+      }
+      const textValue = textarea.value
+      const emptySelection = !this.$_terminal.hasSelection()
+      try {
+        if (emptySelection) {
+          this.$_terminal.selectAll()
+        }
+        var selection = this.$_terminal.getSelection()
+        textarea.value = selection
+        textarea.select()
+        document.execCommand('copy')
+      } finally {
+        textarea.value = textValue
+        if (emptySelection) {
+          this.$_terminal.clearSelection()
+        }
+      }
     },
 
     handleLink (event, uri) {

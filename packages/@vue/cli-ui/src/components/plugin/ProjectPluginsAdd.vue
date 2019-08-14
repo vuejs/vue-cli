@@ -15,7 +15,7 @@
           >
             <NpmPackageSearch
               filters="computedKeywords:vue-cli-plugin"
-              try-logos
+              load-metadata
               @close="close()"
               @install="installPlugin"
             >

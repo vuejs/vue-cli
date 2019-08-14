@@ -28,6 +28,13 @@
 
       <div class="actions">
         <VueButton
+          icon-left="open_in_browser"
+          @click.stop="openInEditor()"
+        >
+          {{ $t('org.vue.components.project-select-list-item.tooltips.open-in-editor') }}
+        </VueButton>
+
+        <VueButton
           v-if="project.homepage"
           :href="project.homepage"
           target="_blank"
@@ -39,9 +46,9 @@
 
         <VueButton
           class="icon-button"
-          icon-left="open_in_browser"
-          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.open-in-editor')"
-          @click.stop="openInEditor()"
+          icon-left="edit"
+          v-tooltip="$t('org.vue.components.project-rename.title')"
+          @click.stop="showRename = true"
         />
 
         <VueButton
@@ -53,17 +60,36 @@
         />
       </div>
     </div>
+
+    <ProjectRename
+      v-if="showRename"
+      :project="project"
+      @close="showRename = false"
+      @click.native.stop
+    />
   </div>
 </template>
 
 <script>
 import OPEN_IN_EDITOR from '@/graphql/file/fileOpenInEditor.gql'
 
+import ProjectRename from './ProjectRename.vue'
+
 export default {
+  components: {
+    ProjectRename
+  },
+
   props: {
     project: {
       type: Object,
       required: true
+    }
+  },
+
+  data () {
+    return {
+      showRename: false
     }
   },
 

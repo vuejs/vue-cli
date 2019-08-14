@@ -79,3 +79,29 @@ module.exports = {
 }`
   )
 })
+
+test(`add a new undefined property`, () => {
+  const value = {
+    foo: undefined
+  }
+  const source = `module.exports = {
+  bar: 123
+}`
+
+  expect(extend(value, source)).toMatch(source)
+})
+
+test(`change an existing property to undefined`, () => {
+  const value = {
+    foo: undefined
+  }
+  const source = `module.exports = {
+  foo: 123,
+  bar: 456
+}`
+  expect(extend(value, source)).toMatch(
+    `module.exports = {
+  bar: 456
+}`
+  )
+})

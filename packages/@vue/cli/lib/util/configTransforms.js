@@ -13,7 +13,7 @@ const isObject = val => val && typeof val === 'object'
 const transformJS = {
   read: ({ filename, context }) => {
     try {
-      return loadModule(filename, context, true)
+      return loadModule(`./${filename}`, context, true)
     } catch (e) {
       return null
     }

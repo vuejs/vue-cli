@@ -161,6 +161,8 @@ function walkTreeToSortChildren (tree, sizeType) {
   }
   tree.children = Object.keys(tree.children).map(
     key => tree.children[key]
+  ).filter(
+    child => child.size.stats > tree.size.stats * 0.01 && child.size.stats > 1024
   ).sort((a, b) => b.size[sizeType] - a.size[sizeType])
   for (const child of tree.children) {
     child.previousSize = {

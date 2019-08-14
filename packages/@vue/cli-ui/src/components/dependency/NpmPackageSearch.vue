@@ -21,6 +21,9 @@
             'name',
             'description'
           ],
+          analyticsTags: [
+            'vue-cli-ui'
+          ],
           filters
         }"
       >
@@ -34,7 +37,7 @@
               slot-scope="{ result }"
               :pkg="result"
               :selected="selectedIdModel === result.name"
-              :try-logo="tryLogos"
+              :load-metadata="loadMetadata"
               @click.native="selectedIdModel = result.name"
             />
           </ais-results>
@@ -95,7 +98,7 @@ export default {
       default: 20
     },
 
-    tryLogos: {
+    loadMetadata: {
       type: Boolean,
       default: false
     }

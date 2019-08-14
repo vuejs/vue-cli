@@ -35,7 +35,7 @@ module.exports = (api, options) => {
           /\.map$/,
           /img\/icons\//,
           /favicon\.ico$/,
-          /manifest\.json$/
+          /^manifest.*\.js?$/
         ]
       }
 
