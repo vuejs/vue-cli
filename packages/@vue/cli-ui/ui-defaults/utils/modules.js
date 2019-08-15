@@ -17,7 +17,7 @@ exports.buildSortedModules = function (modules, sizeField) {
         size
       }
     })
-    list = list.sort((a, b) => b.size - a.size)
+    list.sort((a, b) => b.size - a.size)
   }
   return list
 }
@@ -47,7 +47,7 @@ exports.buildDepModules = function (modules) {
     }
   }
   let list = Array.from(deps.values())
-  list = list.sort((a, b) => b.size - a.size)
+  list.sort((a, b) => b.size - a.size)
   if (list.length) {
     const max = list[0].size
     for (const dep of list) {
