@@ -28,6 +28,9 @@ module.exports = deepmerge({
     chrome: {
       desiredCapabilities: {
         browserName: 'chrome',
+        chromeOptions: {
+            w3c: false
+        },
         javascriptEnabled: true,
         acceptSslCerts: true
       }
