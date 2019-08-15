@@ -23,7 +23,7 @@ npm run serve
 yarn serve
 ```
 
-如果你可以使用 [npx](https://github.com/zkat/npx) (最新版的 npm 应该已经自带)，也可以直接这样调用命令：
+如果你可以使用 [npx](https://github.com/npm/npx) (最新版的 npm 应该已经自带)，也可以直接这样调用命令：
 
 ``` bash
 npx vue-cli-service serve
