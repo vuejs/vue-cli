@@ -216,7 +216,7 @@ test('build as lib without --name and --filename options (default to package nam
 })
 
 test('build as lib with --inline-vue', async () => {
-  const project = await create('build-lib-keep-vue-instance', defaultPreset)
+  const project = await create('build-lib-inline-vue', defaultPreset)
 
   await project.write('src/main-lib.js', `
     import Vue from 'vue'
