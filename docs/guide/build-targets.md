@@ -16,7 +16,7 @@ App is the default build target. In this mode:
 ::: tip Note on Vue Dependency
 In lib mode, Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
 
-You can avoid externalization of Vue by providing `--inline-vue` flag to `build` command.
+To avoid this behavior provide `--inline-vue` flag to `build` command.
 
 ```
 vue-cli-service build --target lib --inline-vue -name myLib [entry]
@@ -74,6 +74,8 @@ Web Component mode does not support IE11 and below. [More details](https://githu
 
 ::: tip Note on Vue Dependency
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
+
+To avoid this behavior provide `--inline-vue` flag to `build` command.
 :::
 
 You can build a single entry as a web component using

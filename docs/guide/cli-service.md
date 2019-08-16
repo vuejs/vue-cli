@@ -75,7 +75,7 @@ Options:
   --modern      build app targeting modern browsers with auto fallback
   --target      app | lib | wc | wc-async (default: app)
   --formats     list of output formats for library builds (default: commonjs,umd,umd-min)
-  --inline-vue  disable externalization of Vue for lib mode
+  --inline-vue  include the Vue module in the final bundle of library or web component target
   --name        name for lib or web-component mode (default: "name" in package.json or entry filename)
   --no-clean    do not remove the dist directory before building the project
   --report      generate report.html to help analyze bundle content
