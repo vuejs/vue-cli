@@ -15,6 +15,18 @@ module.exports = (api, _, __, invoking) => {
 
   if (api.hasPlugin('eslint')) {
     applyESLint(api)
+    api.extendPackage({
+      eslintConfig: {
+        overrides: [
+          {
+            files: ['**/__tests__/*.js', '**/__tests__/*.jsx', '**/__tests__/*.ts', '**/__tests__/*.tsx'],
+            env: {
+              mocha: true
+            }
+          }
+        ]
+      }
+    })
   }
 
   if (api.hasPlugin('typescript')) {
