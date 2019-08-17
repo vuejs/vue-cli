@@ -15,10 +15,23 @@ function genTranspileDepRegex (transpileDependencies) {
   return deps.length ? new RegExp(deps.join('|')) : null
 }
 
+function genTranspiledDepsCacheKey (dependencies = {}, transpileDepRegex) {
+  return Object
+    .keys(dependencies)
+    .reduce((acc, dep) => {
+      const depPath = path.join('node_modules', dep, '/')
+      if (transpileDepRegex.test(depPath)) {
+        acc[dep] = dependencies[dep]
+      }
+      return acc
+    }, {})
+}
+
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
   const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
   const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
+  const transpiledDependencies = genTranspiledDepsCacheKey(api.service.pkg.dependencies, transpileDepRegex)
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
@@ -51,7 +64,8 @@ module.exports = (api, options) => {
             '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
             'babel-loader': require('babel-loader/package.json').version,
             modern: !!process.env.VUE_CLI_MODERN_BUILD,
-            browserslist: api.service.pkg.browserslist
+            browserslist: api.service.pkg.browserslist,
+            transpiledDependencies
           }, [
             'babel.config.js',
             '.browserslistrc'
