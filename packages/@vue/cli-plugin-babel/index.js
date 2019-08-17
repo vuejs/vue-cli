@@ -16,6 +16,7 @@ function genTranspileDepRegex (transpileDependencies) {
 }
 
 function genTranspiledDepsCacheKey (dependencies = {}, transpileDepRegex) {
+  if (!transpileDepRegex) return null
   return Object
     .keys(dependencies)
     .reduce((acc, dep) => {
