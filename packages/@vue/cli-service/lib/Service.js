@@ -285,6 +285,8 @@ module.exports = class Service {
       process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
     }
 
+    config = this.projectOptions.finalWebpack(config)
+
     return config
   }
 
@@ -345,7 +347,6 @@ module.exports = class Service {
       resolved = this.inlineOptions || {}
       resolvedFrom = 'inline options'
     }
-
 
     if (resolved.css && typeof resolved.css.modules !== 'undefined') {
       if (typeof resolved.css.requireModuleExtension !== 'undefined') {

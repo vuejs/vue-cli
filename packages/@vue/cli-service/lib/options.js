@@ -54,6 +54,7 @@ const schema = createSchema(joi => joi.object({
     joi.object(),
     joi.func()
   ),
+  finalWebpack: joi.func(),
 
   // known runtime options for built-in plugins
   lintOnSave: joi.any().valid([true, false, 'error', 'warning', 'default']),
@@ -139,5 +140,7 @@ exports.defaults = () => ({
     proxy: null, // string | Object
     before: app => {}
   */
-  }
+  },
+
+  finalWebpack: config => config
 })

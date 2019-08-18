@@ -286,6 +286,27 @@ test('api: configureWebpack preserve ruleNames', () => {
   expect(config.module.rules[0].__ruleNames).toEqual(['js'])
 })
 
+test('finalWebpack', () => {
+  const service = createMockService([{
+    id: 'test',
+    apply: api => {
+      api.configureWebpack(config => {
+        config.entry = {
+          page1: './src/page1.js',
+          page2: './src/page2.js'
+        }
+      })
+    }
+  }])
+  service.projectOptions.finalWebpack = config => {
+    config.entry.app = ['test']
+    return config
+  }
+  const config = service.resolveWebpackConfig()
+
+  expect(config.entry.app[0]).toBe('test')
+})
+
 test('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
   const service = createMockService([{
     id: 'test',
