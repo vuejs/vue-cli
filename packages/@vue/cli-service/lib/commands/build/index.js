@@ -29,6 +29,7 @@ module.exports = (api, options) => {
       '--modern': `build app targeting modern browsers with auto fallback`,
       '--no-unsafe-inline': `build app without introducing inline scripts`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
+      '--inline-vue': 'include the Vue module in the final bundle of library or web component target',
       '--formats': `list of output formats for library builds (default: ${defaults.formats})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
       '--filename': `file name for output, only usable for 'lib' target (default: value of --name)`,

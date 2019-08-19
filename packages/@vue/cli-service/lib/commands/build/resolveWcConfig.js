@@ -1,7 +1,7 @@
 const path = require('path')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name }) => {
+module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -100,9 +100,7 @@ module.exports = (api, { target, entry, name }) => {
     // externalize Vue in case user imports it
     rawConfig.externals = [
       ...(Array.isArray(rawConfig.externals) ? rawConfig.externals : [rawConfig.externals]),
-      {
-        vue: 'Vue'
-      }
+      { ...(inlineVue || { vue: 'Vue' }) }
     ].filter(Boolean)
 
     const entryName = `${libName}${minify ? `.min` : ``}`
