@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (api, { entry, name, formats, filename }, options) => {
+module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue }, options) => {
   const { log, error } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
@@ -97,11 +97,13 @@ module.exports = (api, { entry, name, formats, filename }, options) => {
     rawConfig.externals = [
       ...(Array.isArray(rawConfig.externals) ? rawConfig.externals : [rawConfig.externals]),
       {
-        vue: {
-          commonjs: 'vue',
-          commonjs2: 'vue',
-          root: 'Vue'
-        }
+        ...(inlineVue || {
+          vue: {
+            commonjs: 'vue',
+            commonjs2: 'vue',
+            root: 'Vue'
+          }
+        })
       }
     ].filter(Boolean)
 
