@@ -15,6 +15,8 @@ const CLI_SERVICE = '@vue/cli-service'
 module.exports = api => {
   api.addProjectType('vue', 'Vue CLI', projectType => {
     projectType.logo = '/_plugin/@vue%2Fcli-guijs-plugin/vue-project.png'
+    projectType.description = `Official Vue.js build tool`
+    projectType.link = 'https://cli.vuejs.org/'
 
     // Detect Vue CLI project
     projectType.filterProject = ({ pkg }) => ({ ...pkg.dependencies, ...pkg.devDependencies })['@vue/cli-service']
