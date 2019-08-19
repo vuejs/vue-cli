@@ -19,7 +19,7 @@ In lib mode, Vue is *externalized*. This means the bundle will not bundle Vue ev
 To avoid this behavior provide `--inline-vue` flag to `build` command.
 
 ```
-vue-cli-service build --target lib --inline-vue -name myLib [entry]
+vue-cli-service build --target lib --inline-vue
 ```
 :::
 
@@ -76,6 +76,10 @@ Web Component mode does not support IE11 and below. [More details](https://githu
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
 
 To avoid this behavior provide `--inline-vue` flag to `build` command.
+
+```
+vue-cli-service build --target wc --inline-vue
+```
 :::
 
 You can build a single entry as a web component using
