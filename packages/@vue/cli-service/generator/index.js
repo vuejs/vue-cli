@@ -41,7 +41,7 @@ module.exports = (api, options) => {
       },
       less: {
         'less': '^3.0.4',
-        'less-loader': '^4.1.0'
+        'less-loader': '^5.0.0'
       },
       stylus: {
         'stylus': '^0.54.5',
