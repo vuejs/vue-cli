@@ -97,13 +97,13 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
     rawConfig.externals = [
       ...(Array.isArray(rawConfig.externals) ? rawConfig.externals : [rawConfig.externals]),
       {
-        ...(!inlineVue ? {
+        ...(inlineVue || {
           vue: {
             commonjs: 'vue',
             commonjs2: 'vue',
             root: 'Vue'
           }
-        } : {})
+        })
       }
     ].filter(Boolean)
 

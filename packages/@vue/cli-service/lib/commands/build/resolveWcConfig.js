@@ -99,11 +99,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
     // externalize Vue in case user imports it
     rawConfig.externals = [
       ...(Array.isArray(rawConfig.externals) ? rawConfig.externals : [rawConfig.externals]),
-      {
-        ...(!inlineVue ? {
-          vue: 'Vue'
-        } : {})
-      }
+      { ...(inlineVue || { vue: 'Vue' }) }
     ].filter(Boolean)
 
     const entryName = `${libName}${minify ? `.min` : ``}`
