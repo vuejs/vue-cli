@@ -19,7 +19,7 @@ module.exports = (api, _, __, invoking) => {
       eslintConfig: {
         overrides: [
           {
-            files: ['**/__tests__/*.js', '**/__tests__/*.jsx', '**/__tests__/*.ts', '**/__tests__/*.tsx'],
+            files: ['**/__tests__/*.{j,t}s?(x)'],
             env: {
               mocha: true
             }
