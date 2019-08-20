@@ -21,7 +21,7 @@ test('serve', async () => {
       const file = await project.read(`src/App.vue`)
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
-      await sleep(1000) // give the client time to update
+      await sleep(5000) // give the client time to update
       expect(await helpers.getText('h1')).toMatch(`Updated`)
     }
   )
