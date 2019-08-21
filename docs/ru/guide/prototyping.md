@@ -2,7 +2,7 @@
 
 Вы можете быстро создавать прототип в одном файле `*.vue` с помощью команд `vue serve` и `vue build`, но для них сначала потребуется глобально установить дополнительный плагин:
 
-``` bash
+```bash
 npm install -g @vue/cli-service-global
 # или
 yarn global add @vue/cli-service-global
@@ -20,14 +20,15 @@ yarn global add @vue/cli-service-global
 
 Опции:
 
-  -o, --open  Открыть в браузере
-  -c, --copy  Скопировать локальный URL в буфер обмена
-  -h, --help  Вывести информацию об использовании команды
+  -o, --open         Открыть в браузере
+  -c, --copy         Скопировать локальный URL в буфер обмена
+  -p, --port <port>  Используемый сервером порт (по умолчанию: 8080 или следующий свободный порт)
+  -h, --help         Вывести информацию об использовании команды
 ```
 
 Всё что вам потребуется — файл `App.vue`:
 
-``` vue
+```vue
 <template>
   <h1>Hello!</h1>
 </template>
@@ -35,13 +36,13 @@ yarn global add @vue/cli-service-global
 
 Затем, в каталоге с файлом `App.vue`, выполните команду:
 
-``` bash
+```bash
 vue serve
 ```
 
 `vue serve` использует такую же конфигурацию по умолчанию (webpack, babel, postcss & eslint) как и проекты создаваемые с помощью `vue create`. Он автоматически выбирает стартовый файл в текущем каталоге — этот файл может быть одним из `main.js`, `index.js`, `App.vue` или `app.vue`. Можно также явно указать стартовый файл:
 
-``` bash
+```bash
 vue serve MyComponent.vue
 ```
 
@@ -64,7 +65,7 @@ vue serve MyComponent.vue
 
 Вы можете собрать целевой файл в режиме production для публикации с помощью `vue build`:
 
-``` bash
+```bash
 vue build MyComponent.vue
 ```
 

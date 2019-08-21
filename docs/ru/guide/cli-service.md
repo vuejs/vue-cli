@@ -6,7 +6,7 @@
 
 Это то, что вы увидите в `package.json` проекта с пресетом настроек по умолчанию:
 
-``` json
+```json
 {
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -17,15 +17,15 @@
 
 Вы можете вызвать эти команды с помощью npm или Yarn:
 
-``` bash
+```bash
 npm run serve
 # ИЛИ
 yarn serve
 ```
 
-Если у вас установлен [npx](https://github.com/zkat/npx) (должен поставляться в комплекте с последней версией npm), то вы также можете запустить бинарник напрямую:
+Если у вас установлен [npx](https://github.com/npm/npx) (должен поставляться в комплекте с последней версией npm), то вы также можете запустить бинарник напрямую:
 
-``` bash
+```bash
 npx vue-cli-service serve
 ```
 
@@ -52,9 +52,15 @@ npx vue-cli-service serve
   --https   использовать https (по умолчанию: false)
 ```
 
+::: tip --copy
+Копирование в буфер обмена может не работать на некоторых платформах. Если копирование выполнилось успешно, то рядом с URL-адресом локального сервера разработки будет отображено `(copied to clipboard)`.
+:::
+
 Команда `vue-cli-service serve` запускает сервер для разработки (основанный на [webpack-dev-server](https://github.com/webpack/webpack-dev-server)), предоставляющий из коробки функцию горячей замены модулей.
 
 Кроме флагов командной строки, также можно настраивать сервер для разработки с помощью поля [devServer](../config/#devserver) в файле `vue.config.js`.
+
+В команде CLI `[entry]` означает *входной файл*, а не *дополнительный входной файл*. Если вы перезапишете запись в CLI, тогда записи из `config.pages` больше не будут учитываться, что может привести к ошибке.
 
 ## vue-cli-service build
 
@@ -67,6 +73,7 @@ npx vue-cli-service serve
   --dest        определить каталог сборки (по умолчанию: dist)
   --modern      собирать приложение для современных браузеров с авто-фоллбэком для старых
   --target      app | lib | wc | wc-async (по умолчанию: app)
+  --formats     список выходных форматов для сборок библиотек (по умолчанию: commonjs,umd,umd-min)
   --name        имя библиотеки или режим веб-компонента (по умолчанию: "name" в package.json или имя файла точки входа)
   --no-clean    не удалять каталог dist перед сборкой проекта
   --report      сгенерировать report.html для анализа содержимого сборки
@@ -100,13 +107,13 @@ npx vue-cli-service serve
 
 Некоторые плагины CLI добавляют собственные команды в `vue-cli-service`. Например, `@vue/cli-plugin-eslint` внедряет команду `vue-cli-service lint`. Вы можете посмотреть весь список команд запустив:
 
-``` bash
+```bash
 npx vue-cli-service help
 ```
 
 Вы также можете узнать о доступных параметрах каждой команды с помощью:
 
-``` bash
+```bash
 npx vue-cli-service help [command]
 ```
 
@@ -120,7 +127,7 @@ npx vue-cli-service help [command]
 
 После установки `@vue/cli-service` также добавляется [yorkie](https://github.com/yyx990803/yorkie), который позволяет легко указывать Git хуки, используя поле `gitHooks` в файле `package.json`:
 
-``` json
+```json
 {
   "gitHooks": {
     "pre-commit": "lint-staged"
