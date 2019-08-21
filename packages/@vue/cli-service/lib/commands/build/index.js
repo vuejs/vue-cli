@@ -36,6 +36,7 @@ module.exports = (api, options) => {
       '--no-clean': `do not remove the dist directory before building the project`,
       '--report': `generate report.html to help analyze bundle content`,
       '--report-json': 'generate report.json to help analyze bundle content',
+      '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
       '--watch': `watch for changes`
     }
   }, async (args, rawArgs) => {
