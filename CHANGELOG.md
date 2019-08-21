@@ -426,6 +426,57 @@ Most of the following new features and bugfixes also applies to v3.8.0
 
 
 
+## 3.11.0 (2019-08-21)
+
+#### :rocket: New Features
+* `@vue/cli-service`
+  * [#4468](https://github.com/vuejs/vue-cli/pull/4468) feat: bump default less-loader version ([@sodatea](https://github.com/sodatea))
+  * [#4448](https://github.com/vuejs/vue-cli/pull/4448) feat: --skip-plugins ([@LinusBorg](https://github.com/LinusBorg))
+  * [#4261](https://github.com/vuejs/vue-cli/pull/4261) Add `--inline-vue` flag for `build` command to avoid externalization of Vue in lib & wc mode ([@romansp](https://github.com/romansp))
+  * [#4386](https://github.com/vuejs/vue-cli/pull/4386) feat: allow configuring scss options separately from sass ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-shared-utils`
+  * [#4219](https://github.com/vuejs/vue-cli/pull/4219) feat: allow omitting scope prefix for official plugins on `vue add` ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`, `@vue/cli-ui`
+  * [#4442](https://github.com/vuejs/vue-cli/pull/4442) chore: add cwd option when calling globby ([@zrh122](https://github.com/zrh122))
+* `@vue/cli-service`
+  * [#4468](https://github.com/vuejs/vue-cli/pull/4468) feat: bump default less-loader version ([@sodatea](https://github.com/sodatea))
+  * [#4429](https://github.com/vuejs/vue-cli/pull/4429) fix: merge custom `externals` config correctly, supports array ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`
+  * [#4447](https://github.com/vuejs/vue-cli/pull/4447) fix: eslint should override env for `**/tests/**` subfolders ([@LinusBorg](https://github.com/LinusBorg))
+* `@vue/cli-shared-utils`
+  * [#4405](https://github.com/vuejs/vue-cli/pull/4405) fix: `resolvePluginId` should correctly resolve `@vue/cli-service` ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#4420](https://github.com/vuejs/vue-cli/pull/4420) Update parallel config description ([@danielwaltz](https://github.com/danielwaltz))
+* [#4431](https://github.com/vuejs/vue-cli/pull/4431) Update npx repository URL. ([@DanielsLuz](https://github.com/DanielsLuz))
+* [#4418](https://github.com/vuejs/vue-cli/pull/4418) Link ZEIT Now deployment example ([@leo](https://github.com/leo))
+* [#4412](https://github.com/vuejs/vue-cli/pull/4412) Adjusted deployment documentation for ZEIT Now ([@leo](https://github.com/leo))
+
+#### :house: Internal
+* `@vue/cli-ui-addon-webpack`, `@vue/cli-ui`
+  * [#4422](https://github.com/vuejs/vue-cli/pull/4422) fix: remove self-assignment ([@DanielRuf](https://github.com/DanielRuf))
+
+#### :hammer: Underlying Tools
+* `@vue/cli-service`
+  * [#4468](https://github.com/vuejs/vue-cli/pull/4468) feat: bump default less-loader version ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#4253](https://github.com/vuejs/vue-cli/pull/4253) feat: upgrade webpack ([@DRoet](https://github.com/DRoet))
+
+#### Committers: 9
+- Daan Roet ([@DRoet](https://github.com/DRoet))
+- Daniel Luz ([@DanielsLuz](https://github.com/DanielsLuz))
+- Daniel Ruf ([@DanielRuf](https://github.com/DanielRuf))
+- Daniel Waltz ([@danielwaltz](https://github.com/danielwaltz))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Leo Lamprecht ([@leo](https://github.com/leo))
+- Roman Pavlov ([@romansp](https://github.com/romansp))
+- Thorsten Lünborg ([@LinusBorg](https://github.com/LinusBorg))
+- [@zrh122](https://github.com/zrh122)
+
+
+
 ## 3.10.0 (2019-08-03)
 
 #### :rocket: New Features
