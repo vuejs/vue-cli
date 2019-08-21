@@ -1,5 +1,4 @@
 const { withFilter } = require('graphql-subscriptions')
-const path = require('path')
 const globby = require('globby')
 const merge = require('lodash.merge')
 const { GraphQLJSON } = require('graphql-type-json')
@@ -90,7 +89,7 @@ const resolvers = [{
 }]
 
 // Load resolvers in './schema'
-const paths = globby.sync([path.join(__dirname, './schema/*.js')])
+const paths = globby.sync(['./schema/*.js'], { cwd: __dirname, absolute: true })
 paths.forEach(file => {
   const { resolvers: r } = require(file)
   r && resolvers.push(r)
