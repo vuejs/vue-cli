@@ -62,7 +62,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^4.0.0-beta.3',
+      '@vue/cli-plugin-babel': '^4.0.0-rc.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -173,6 +173,27 @@ test('api: registerCommand', () => {
 
   service.run('foo', { n: 1 })
   expect(args).toEqual({ _: [], n: 1 })
+})
+
+test('api: --skip-plugins', () => {
+  let untouched = true
+  const service = createMockService([{
+    id: 'test-command',
+    apply: api => {
+      api.registerCommand('foo', _args => {
+        return
+      })
+    }
+  },
+  {
+    id: 'vue-cli-plugin-test-plugin',
+    apply: api => {
+      untouched = false
+    }
+  }], false)
+
+  service.run('foo', { 'skip-plugins': 'test-plugin' })
+  expect(untouched).toEqual(true)
 })
 
 test('api: defaultModes', () => {

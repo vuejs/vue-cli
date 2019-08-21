@@ -61,7 +61,7 @@ module.exports = function lint (args = {}, api) {
   ]
     .filter(pattern =>
       globby
-        .sync(path.join(cwd, pattern))
+        .sync(pattern, { cwd, absolute: true })
         .some(p => !engine.isPathIgnored(p))
     )
 

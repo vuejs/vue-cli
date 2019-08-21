@@ -23,7 +23,8 @@ module.exports = (api, options) => {
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
-      '--public': `specify the public network URL for the HMR client`
+      '--public': `specify the public network URL for the HMR client`,
+      '--skip-plugins': `comma-separated list of plugin names to skip for this run`
     }
   }, async function serve (args) {
     info('Starting development server...')

@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name }) => {
+module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -54,13 +54,6 @@ module.exports = (api, { target, entry, name }) => {
       config.optimization.minimize(false)
     }
 
-    // externalize Vue in case user imports it
-    config
-      .externals({
-        ...config.get('externals'),
-        vue: 'Vue'
-      })
-
     config
       .plugin('web-component-options')
         .use(webpack.EnvironmentPlugin, [{
@@ -102,6 +95,12 @@ module.exports = (api, { target, entry, name }) => {
         .set('~root', api.resolve('.'))
 
     const rawConfig = api.resolveWebpackConfig(config)
+
+    // externalize Vue in case user imports it
+    rawConfig.externals = [
+      ...(Array.isArray(rawConfig.externals) ? rawConfig.externals : [rawConfig.externals]),
+      { ...(inlineVue || { vue: 'Vue' }) }
+    ].filter(Boolean)
 
     const entryName = `${libName}${minify ? `.min` : ``}`
     rawConfig.entry = {

@@ -22,6 +22,7 @@ const args = require('minimist')(rawArgv, {
     'modern',
     'report',
     'report-json',
+    'inline-vue',
     'watch',
     // serve
     'open',
