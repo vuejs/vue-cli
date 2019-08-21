@@ -7,7 +7,7 @@ sidebarDepth: 0
 <Bit/>
 
 ::: warning Предупреждение
-Эта документация для `@vue/cli` версии **3.x**. Для старой версии `vue-cli`, см. [здесь](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
+Эта документация для `@vue/cli`. Для старой версии `vue-cli`, см. [здесь](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
 :::
 
 Vue CLI — полноценная система для быстрой разработки на Vue.js, предоставляющая:
