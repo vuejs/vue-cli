@@ -14,6 +14,14 @@ vue create hello-world
 你需要重新启动 Git Bash 终端会话以使更新后的 bashrc 文件生效。
 :::
 
+安装如果不成功，可以尝试运行以下命令来创建一个新项目：
+
+``` bash
+npx vue create hello-world
+```
+
+[全局安装问题](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally)
+
 你会被提示选取一个 preset。你可以选默认的包含了基本的 Babel + ESLint 设置的 preset，也可以选“手动选择特性”来选取需要的特性。
 
 ![CLI 预览](/cli-new-project.png)
