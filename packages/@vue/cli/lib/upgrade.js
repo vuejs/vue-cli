@@ -1,3 +1,4 @@
+const inquirer = require('inquirer')
 const { error } = require('@vue/cli-shared-utils')
 
 const Upgrader = require('./Upgrader')
@@ -20,7 +21,23 @@ async function upgrade (packageName, options, context = process.cwd()) {
       return upgrader.upgradeAll(options.next)
     }
 
-    return upgrader.checkForUpdates(options.next)
+    const upgradable = await upgrader.checkForUpdates(options.next)
+    if (upgradable) {
+      const { ok } = await inquirer.prompt([
+        {
+          name: 'ok',
+          type: 'confirm',
+          message: 'Continue to upgrade these plugins?',
+          default: false
+        }
+      ])
+
+      if (ok) {
+        return upgrader.upgradeAll(options.next)
+      }
+    }
+
+    return
   }
 
   return upgrader.upgrade(packageName, options)
