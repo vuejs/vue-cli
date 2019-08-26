@@ -72,7 +72,7 @@ import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
 webpack's runtime will inject prefetch links when the parent chunk is loaded.
 
 ::: tip
-Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
+Prefetch links will consume bandwidth. If you have a large app with many async chunks and your users are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
 :::
 
 ### Disable Index Generation
