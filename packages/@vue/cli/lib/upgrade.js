@@ -28,7 +28,7 @@ async function upgrade (packageName, options, context = process.cwd()) {
           name: 'ok',
           type: 'confirm',
           message: 'Continue to upgrade these plugins?',
-          default: false
+          default: true
         }
       ])
 
