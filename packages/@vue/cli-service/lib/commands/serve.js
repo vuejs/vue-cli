@@ -179,6 +179,8 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
+      // disable webpack to open the browser, as we mannually open browser later, see line282
+      open: false,
       // eslint-disable-next-line no-shadow
       before (app, server) {
         // launch editor support.
