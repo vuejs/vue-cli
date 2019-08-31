@@ -41,11 +41,11 @@ module.exports = async function shouldUseTaobao (command) {
   let userCurrent
   try {
     userCurrent = (await execa(command, ['config', 'get', 'registry'])).stdout
-  } catch (error) {
+  } catch (registryError) {
     try {
       // Yarn 2 uses `npmRegistryServer` instead of `registry`
       userCurrent = (await execa(command, ['config', 'get', 'npmRegistryServer'])).stdout
-    } catch (error) {
+    } catch (npmRegistryServerError) {
       return save(false)
     }
   }
