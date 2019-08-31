@@ -161,9 +161,16 @@ module.exports = (api, rootOptions) => {
         }
 
         if (loader) {
+          let resolvedLoader;
+          try {
+            resolvedLoader = require.resolve(loader)
+          } catch (error) {
+            resolvedLoader = loader
+          }
+
           rule
             .use(loader)
-            .loader(require.resolve(loader))
+            .loader(resolvedLoader)
             .options(Object.assign({ sourceMap }, options))
         }
       }
