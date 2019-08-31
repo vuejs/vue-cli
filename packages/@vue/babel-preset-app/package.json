@@ -36,5 +36,8 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "core-js": "^3.1.2",
     "core-js-compat": "^3.1.2"
+  },
+  "peerDependencies": {
+    "@babel/core": "*"
   }
 }

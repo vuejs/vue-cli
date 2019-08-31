@@ -130,21 +130,29 @@ module.exports = (api, options) => {
 
     // Other common pre-processors ---------------------------------------------
 
+    const maybeResolve = name => {
+      try {
+        return require.resolve(name)
+      } catch (error) {
+        return name
+      }
+    }
+
     webpackConfig.module
       .rule('pug')
         .test(/\.pug$/)
           .oneOf('pug-vue')
             .resourceQuery(/vue/)
             .use('pug-plain-loader')
-              .loader(require.resolve('pug-plain-loader'))
+              .loader(maybeResolve('pug-plain-loader'))
               .end()
             .end()
           .oneOf('pug-template')
             .use('raw')
-              .loader(require.resolve('raw-loader'))
+              .loader(maybeResolve('raw-loader'))
               .end()
             .use('pug-plain-loader')
-              .loader(require.resolve('pug-plain-loader'))
+              .loader(maybeResolve('pug-plain-loader'))
               .end()
             .end()
 
