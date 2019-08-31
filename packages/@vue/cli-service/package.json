@@ -85,7 +85,7 @@
     "raw-loader": "*",
     "sass-loader": "*",
     "stylus-loader": "*",
-    "vue-template-compiler": "^2.0.0",
+    "vue-template-compiler": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "less-loader": {
