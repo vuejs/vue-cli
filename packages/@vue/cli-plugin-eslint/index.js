@@ -45,7 +45,7 @@ module.exports = (api, options) => {
             .end()
           .test(/\.(vue|(j|t)sx?)$/)
           .use('eslint-loader')
-            .loader('eslint-loader')
+            .loader(require.resolve('eslint-loader'))
             .options({
               extensions,
               cache: true,

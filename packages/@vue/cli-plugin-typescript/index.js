@@ -28,7 +28,7 @@ module.exports = (api, projectOptions) => {
     }
 
     addLoader({
-      loader: 'cache-loader',
+      loader: require.resolve('cache-loader'),
       options: api.genCacheConfig('ts-loader', {
         'ts-loader': require('ts-loader/package.json').version,
         'typescript': require('typescript/package.json').version,
@@ -38,7 +38,7 @@ module.exports = (api, projectOptions) => {
 
     if (useThreads) {
       addLoader({
-        loader: 'thread-loader',
+        loader: require.resolve('thread-loader'),
         options:
           typeof projectOptions.parallel === 'number'
             ? { workers: projectOptions.parallel }
@@ -48,11 +48,14 @@ module.exports = (api, projectOptions) => {
 
     if (api.hasPlugin('babel')) {
       addLoader({
-        loader: 'babel-loader'
+        // TODO: I guess the intent is to require the `babel-loader` provided by the Babel vue
+        // plugin, but that means we now rely on the hoisting. It should instead we queried
+        // against the plugin itself, or through a peer dependency.
+        loader: require.resolve('babel-loader')
       })
     }
     addLoader({
-      loader: 'ts-loader',
+      loader: require.resolve('ts-loader'),
       options: {
         transpileOnly: true,
         appendTsSuffixTo: ['\\.vue$'],
@@ -61,7 +64,7 @@ module.exports = (api, projectOptions) => {
       }
     })
     // make sure to append TSX suffix
-    tsxRule.use('ts-loader').loader('ts-loader').tap(options => {
+    tsxRule.use('ts-loader').loader(require.resolve('ts-loader')).tap(options => {
       options = Object.assign({}, options)
       delete options.appendTsSuffixTo
       options.appendTsxSuffixTo = ['\\.vue$']

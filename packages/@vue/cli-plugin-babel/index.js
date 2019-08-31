@@ -45,7 +45,7 @@ module.exports = (api, options) => {
           })
           .end()
         .use('cache-loader')
-          .loader('cache-loader')
+          .loader(require.resolve('cache-loader'))
           .options(api.genCacheConfig('babel-loader', {
             '@babel/core': require('@babel/core/package.json').version,
             '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
@@ -61,7 +61,7 @@ module.exports = (api, options) => {
     if (useThreads) {
       const threadLoaderConfig = jsRule
         .use('thread-loader')
-          .loader('thread-loader')
+          .loader(require.resolve('thread-loader'))
 
       if (typeof options.parallel === 'number') {
         threadLoaderConfig.options({ workers: options.parallel })
@@ -70,6 +70,6 @@ module.exports = (api, options) => {
 
     jsRule
       .use('babel-loader')
-        .loader('babel-loader')
+        .loader(require.resolve('babel-loader'))
   })
 }
