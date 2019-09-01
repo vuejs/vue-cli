@@ -6,7 +6,7 @@
 
 - **`vue-cli-service test:e2e`**
 
-  run e2e tests with [NightwatchJS](http://nightwatchjs.org).
+  run e2e tests with [NightwatchJS](https://nightwatchjs.org).
 
   Options:
 
@@ -17,10 +17,8 @@
   -t, --test   specify a test to run by name
   -f, --filter glob to filter tests by filename
   ```
-
-  > Note: this plugin currently uses Nightwatch v0.9.x. We are waiting for Nightwatch 1.0 to stabilize before upgrading.
-
-  Additionally, [all Nightwatch CLI options are also supported](https://nightwatchjs.org/guide#command-line-options).
+ 
+  Additionally, [all Nightwatch CLI options are also supported](https://nightwatchjs.org/guide/running-tests/#command-line-options).
 
 ## Configuration
 
@@ -28,7 +26,7 @@ We've pre-configured Nightwatch to run with Chrome by default. If you wish to ru
 
 Alternatively, you can completely replace the internal config with a custom config file using the `--config` option.
 
-Consult Nightwatch docs for [configuration options](http://nightwatchjs.org/gettingstarted#settings-file) and how to [setup browser drivers](http://nightwatchjs.org/gettingstarted#browser-drivers-setup).
+Consult Nightwatch docs for [configuration options](https://nightwatchjs.org/gettingstarted/configuration/) and how to [setup browser drivers](https://nightwatchjs.org/gettingstarted/browser-drivers-setup/).
 
 ## Installing in an Already Created Project
 
