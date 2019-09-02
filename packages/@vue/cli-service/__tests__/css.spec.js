@@ -45,7 +45,7 @@ const findLoaders = (config, lang, index) => {
     throw new Error(`rule not found for ${lang}`)
   }
   return rule.use.map(({ loader }) => {
-    const match = loader.match(/([^/]+)-loader/)
+    const match = loader.match(/([^\\/]+)-loader/)
     return match ? match[1] : loader
   })
 }
