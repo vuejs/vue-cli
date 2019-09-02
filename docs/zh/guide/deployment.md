@@ -155,7 +155,7 @@ module.exports = {
     - **构建命令:** `npm run build` 或 `yarn build`
     - **发布目录:** `dist`
 
-2. 点击 "deploy" 按钮！
+2. 点击“deploy”按钮！
 
 也可以查看 [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda)。
 
