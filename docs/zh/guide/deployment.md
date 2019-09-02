@@ -41,7 +41,7 @@ serve -s dist
     
    如果打算将项目部署到 `https://<USERNAME>.github.io/` 上, `publicPath` 将默认被设为 `"/"`，你可以忽略这个参数。
 
-   如果打算将项目部署到 `https://<USERNAME>.github.io/<REPO>/` 上, (换句话说，你的仓库地址为 `https://github.com/<USERNAME>/<REPO>`), 可将 `publicPath` 设为 `"/<REPO>/"` 。 举个例子, 如果仓库名字为 "my-project"，`vue.config.js` 的内容应如下所示:
+   如果打算将项目部署到 `https://<USERNAME>.github.io/<REPO>/` 上 (即仓库地址为 `https://github.com/<USERNAME>/<REPO>`)，可将 `publicPath` 设为 `"/<REPO>/"`。举个例子，如果仓库名字为“my-project”，那么 `vue.config.js` 的内容应如下所示：
 
     ``` js
     module.exports = {
