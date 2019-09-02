@@ -180,7 +180,7 @@ module.exports = {
 
 大功告成！构建结束时你的应用便会在你的 Render URL 上线。
 
-如果使用 Vue Router 的 "history" 模式，你需要在站点的 `Redirects/Rewrites` 设置中添加以下改写规则：
+如果使用 Vue Router 的 history 模式，你需要在站点的 `Redirects/Rewrites` 设置中添加以下改写规则：
 
 - **Source**: `/*`
 - **Destination**: `/index.html`
