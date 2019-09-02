@@ -86,7 +86,7 @@ serve -s dist
 1. 仿照上面在 `vue.config.js` 中设置正确的 `publicPath`。
 2. 安装 Travis CLI 客户端：`gem install travis && travis --login`
 3. 生成一个拥有 "repo" 权限的 GitHub [访问令牌](https://help.github.com/cn/articles/creating-a-personal-access-token-for-the-command-line)。
-4. 授予 Travis 访问仓库的权限：`travis set GITHUB_TOKEN=xxx` (`xxx` 是第三步中的个人访问令牌) 
+4. 授予 Travis 访问仓库的权限：`travis set GITHUB_TOKEN=xxx` (`xxx` 是第三步中的个人访问令牌)
 5. 在项目根目录下创建一个 `.travis.yml` 文件。
    
     ```yaml
