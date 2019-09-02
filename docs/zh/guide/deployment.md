@@ -275,7 +275,7 @@ npm install -g now
 now
 ```
 
-**此外**，你还可以使用 [GitHub](https://zeit.co/github) 或 [GitLab](https://zeit.co/gitlab) 集成服务。
+**此外**，你还可以使用他们的 [GitHub](https://zeit.co/github) 或 [GitLab](https://zeit.co/gitlab) 集成服务。
 
 大功告成！
 
