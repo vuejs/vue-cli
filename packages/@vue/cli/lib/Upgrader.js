@@ -257,8 +257,6 @@ module.exports = class Upgrader {
       console.log('  ' + fields.map((x, i) => x.padEnd(pads[i])).join(''))
     }
 
-    console.log(`Run ${chalk.yellow('vue upgrade --all')} to upgrade all the above plugins`)
-
     return upgradable
   }
 }

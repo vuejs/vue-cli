@@ -167,6 +167,14 @@ program
   })
 
 program
+  .command('outdated')
+  .description('(experimental) check for outdated vue cli service / plugins')
+  .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
+  .action((cmd) => {
+    require('../lib/outdated')(cleanArgs(cmd))
+  })
+
+program
   .command('upgrade [plugin-name]')
   .description('(experimental) upgrade vue cli service / plugins')
   .option('-t, --to <version>', 'upgrade <package-name> to a version that is not latest')
