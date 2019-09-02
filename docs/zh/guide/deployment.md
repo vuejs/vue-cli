@@ -159,7 +159,7 @@ module.exports = {
 
 也可以查看 [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda)。
 
-如果使用 Vue Router 的 "history" 模式，你需要在 `/public` 目录下创建一个 `_redirects` 文件：
+如果使用 Vue Router 的 history 模式，你需要在 `/public` 目录下创建一个 `_redirects` 文件：
 
 ```
 # 单页应用的 Netlify 设置
