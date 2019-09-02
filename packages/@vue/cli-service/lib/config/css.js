@@ -161,7 +161,7 @@ module.exports = (api, rootOptions) => {
         }
 
         if (loader) {
-          let resolvedLoader;
+          let resolvedLoader
           try {
             resolvedLoader = require.resolve(loader)
           } catch (error) {
