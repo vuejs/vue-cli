@@ -457,7 +457,7 @@ npm install --global surge
 
 6. 运行你的 Docker 镜像
 
-    这个例子基于官方 `Nginx` 镜像，因此已经设置了日志重定向并关闭了自我守护进程。它也提供了其他有利于 Nginx 在 Docker 容器中运行的默认设置。更多信息参阅 [Nginx Docker 仓库](https://hub.docker.com/_/nginx).
+    这个例子基于官方 `Nginx` 镜像，因此已经设置了日志重定向并关闭了自我守护进程。它也提供了其他有利于 Nginx 在 Docker 容器中运行的默认设置。更多信息参阅 [Nginx Docker 仓库](https://hub.docker.com/_/nginx)。
 
     ```bash
     docker run -d -p 8080:80 my-app
