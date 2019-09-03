@@ -31,6 +31,8 @@ module.exports = (api, options) => {
           userOptions = require(userOptionsPath)
         } else if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.json'))) {
           userOptions = require(userOptionsPath)
+        } else if (fs.existsSync(userOptionsPath = api.resolve('nightwatch.conf.js'))) {
+          userOptions = require(userOptionsPath)
         }
         process.env.VUE_NIGHTWATCH_USER_OPTIONS = JSON.stringify(userOptions || {})
 
