@@ -13,7 +13,7 @@
 * `@vue/cli`
   * [#4525](https://github.com/vuejs/vue-cli/pull/4525) fix: remove the nonexistent `test` command from generated README ([@cexbrayat](https://github.com/cexbrayat))
 * `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`
-  * [#4533](https://github.com/vuejs/vue-cli/pull/4533) fix(cli-plugin-babel): [roperly exports the babel preset ([@arcanis](https://github.com/arcanis))
+  * [#4533](https://github.com/vuejs/vue-cli/pull/4533) fix(cli-plugin-babel): properly exports the babel preset ([@arcanis](https://github.com/arcanis))
 * `@vue/cli-shared-utils`
   * [#4512](https://github.com/vuejs/vue-cli/pull/4512) fix(pluginResolution): support dots in scope names ([@ma-jahn](https://github.com/ma-jahn))
 
