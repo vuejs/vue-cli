@@ -5,15 +5,13 @@ const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
-const sleep = n => new Promise(resolve => setTimeout(resolve, n))
-
 exports.assertServe = async (name, options) => {
   test('serve', async () => {
     const project = await create(name, options)
 
     await serve(
       () => project.run('vue-cli-service serve'),
-      async ({ nextUpdate, helpers }) => {
+      async ({ page, nextUpdate, helpers }) => {
         const msg = `Welcome to Your Vue.js + TypeScript App`
         expect(await helpers.getText('h1')).toMatch(msg)
 
@@ -21,8 +19,10 @@ exports.assertServe = async (name, options) => {
         const file = await project.read(`src/App.vue`)
         project.write(`src/App.vue`, file.replace(msg, `Updated`))
         await nextUpdate() // wait for child stdout update signal
-        await sleep(5000) // give the client time to update
-        expect(await helpers.getText('h1')).toMatch(`Updated`)
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, {}, 'h1')
       }
     )
   })

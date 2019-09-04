@@ -222,8 +222,8 @@ module.exports = class Generator {
     this.pkg.scripts = sortObject(this.pkg.scripts, [
       'serve',
       'build',
-      'test',
-      'e2e',
+      'test:unit',
+      'test:e2e',
       'lint',
       'deploy'
     ])
