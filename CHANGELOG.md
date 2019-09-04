@@ -1,4 +1,31 @@
 
+## 4.0.0-rc.1 (2019-09-04)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#4445](https://github.com/vuejs/vue-cli/pull/4445) feat: Check for `nightwatch.conf.js` config ([@LukeeeeBennett](https://github.com/LukeeeeBennett))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`
+  * [#4533](https://github.com/vuejs/vue-cli/pull/4533) fix(cli-plugin-babel): roperly exports the babel preset ([@arcanis](https://github.com/arcanis))
+* `@vue/cli`
+  * [#4497](https://github.com/vuejs/vue-cli/pull/4497) feat: add `vue outdated` command & make `vue upgrade` interactive ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#4525](https://github.com/vuejs/vue-cli/pull/4525) fix: remove the nonexistent `test` command from generated README ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`
+  * [#4533](https://github.com/vuejs/vue-cli/pull/4533) fix(cli-plugin-babel): roperly exports the babel preset ([@arcanis](https://github.com/arcanis))
+* `@vue/cli-shared-utils`
+  * [#4512](https://github.com/vuejs/vue-cli/pull/4512) fix(pluginResolution): support dots in scope names ([@ma-jahn](https://github.com/ma-jahn))
+
+#### Committers: 5
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Luke Bennett ([@LukeeeeBennett](https://github.com/LukeeeeBennett))
+- Marcel Jahn ([@ma-jahn](https://github.com/ma-jahn))
+- Maël Nison ([@arcanis](https://github.com/arcanis))
+
+
+
 ## 4.0.0-rc.0 (2019-08-21)
 
 #### :rocket: New Features
