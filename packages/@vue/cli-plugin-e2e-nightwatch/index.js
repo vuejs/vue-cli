@@ -4,15 +4,14 @@ module.exports = (api, options) => {
   const { info, chalk, execa } = require('@vue/cli-shared-utils')
 
   api.registerCommand('test:e2e', {
-    description: 'run e2e tests with nightwatch',
+    description: 'run end-to-end tests with nightwatch',
     usage: 'vue-cli-service test:e2e [options]',
     options: {
-      '--url': 'run e2e tests against given url instead of auto-starting dev server',
+      '--url': 'run end-to-end tests against given url instead of auto-starting dev server',
       '--config': 'use custom nightwatch config file (overrides internals)',
-      '--skip-start-server': 'skip auto-starting the dev server and run e2e tests against an existing running one',
       '--headless': 'use chrome or firefox in headless mode',
-      '--parallel': 'enable parallel mode via test workers (only when using one test env)',
-      '--use-selenium': 'use legacy Selenium standalone server instead of chromedriver or geckodriver',
+      '--parallel': 'enable parallel mode via test workers (only available in chromedriver)',
+      '--use-selenium': 'use Selenium standalone server instead of chromedriver or geckodriver',
       '-e, --env': 'specify comma-delimited browser envs to run in (default: chrome)',
       '-t, --test': 'specify a test to run by name',
       '-f, --filter': 'glob to filter tests by filename'
@@ -21,7 +20,7 @@ module.exports = (api, options) => {
       `All Nightwatch CLI options are also supported.\n` +
       chalk.yellow(`https://nightwatchjs.org/guide/running-tests/#command-line-options`)
   }, (args, rawArgs) => {
-    const argsToRemove = ['url', 'mode', 'skip-start-server', 'headless', 'use-selenium', 'parallel']
+    const argsToRemove = ['url', 'mode', 'headless', 'use-selenium', 'parallel']
     argsToRemove.forEach((toRemove) => removeArg(rawArgs, toRemove))
 
     return Promise.all([
@@ -33,7 +32,7 @@ module.exports = (api, options) => {
       if (args.parallel) {
         content += ' with concurrency'
       }
-      console.log('ARGS', args)
+
       info(`Running end-to-end tests ${content}...`)
 
       // expose dev server url to tests
@@ -78,17 +77,10 @@ module.exports.defaultModes = {
 }
 
 function startDevServer (args, api) {
-  const result = {}
-  if (args['skip-start-server']) {
-    args.url = 'http://localhost:8080/'
-  }
+  const { url } = args
 
-  if (args.url) {
-    result.url = args.url
-  }
-
-  if (result.url) {
-    return Promise.resolve(result)
+  if (url) {
+    return Promise.resolve({ url })
   }
 
   return api.service.run('serve')
