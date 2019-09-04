@@ -6,14 +6,12 @@ const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
-const sleep = n => new Promise(resolve => setTimeout(resolve, n))
-
 test('serve', async () => {
   const project = await create('e2e-serve', defaultPreset)
 
   await serve(
     () => project.run('vue-cli-service serve'),
-    async ({ nextUpdate, helpers }) => {
+    async ({ page, nextUpdate, helpers }) => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
 
@@ -21,8 +19,10 @@ test('serve', async () => {
       const file = await project.read(`src/App.vue`)
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
-      await sleep(5000) // give the client time to update
-      expect(await helpers.getText('h1')).toMatch(`Updated`)
+      await page.waitForFunction(selector => {
+        const el = document.querySelector(selector)
+        return el && el.textContent.includes('Updated')
+      }, {}, 'h1')
     }
   )
 })
@@ -97,7 +97,7 @@ test('serve with inline entry', async () => {
 
   await serve(
     () => project.run('vue-cli-service serve src/index.js'),
-    async ({ nextUpdate, helpers }) => {
+    async ({ page, nextUpdate, helpers }) => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
 
@@ -105,8 +105,10 @@ test('serve with inline entry', async () => {
       const file = await project.read(`src/App.vue`)
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
-      await sleep(1000) // give the client time to update
-      expect(await helpers.getText('h1')).toMatch(`Updated`)
+      await page.waitForFunction(selector => {
+        const el = document.querySelector(selector)
+        return el && el.textContent.includes('Updated')
+      }, {}, 'h1')
     }
   )
 })
@@ -118,7 +120,7 @@ test('serve with no public dir', async () => {
 
   await serve(
     () => project.run('vue-cli-service serve'),
-    async ({ nextUpdate, helpers }) => {
+    async ({ page, nextUpdate, helpers }) => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
 
@@ -126,8 +128,10 @@ test('serve with no public dir', async () => {
       const file = await project.read(`src/App.vue`)
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
-      await sleep(1000) // give the client time to update
-      expect(await helpers.getText('h1')).toMatch(`Updated`)
+      await page.waitForFunction(selector => {
+        const el = document.querySelector(selector)
+        return el && el.textContent.includes('Updated')
+      }, {}, 'h1')
     }
   )
 })
