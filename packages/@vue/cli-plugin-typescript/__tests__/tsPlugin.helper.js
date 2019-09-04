@@ -20,7 +20,8 @@ exports.assertServe = async (name, options) => {
         project.write(`src/App.vue`, file.replace(msg, `Updated`))
         await nextUpdate() // wait for child stdout update signal
         await page.waitForFunction(selector => {
-          return document.querySelector(selector).textContent.includes('Updated')
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
         }, {}, 'h1')
       }
     )
