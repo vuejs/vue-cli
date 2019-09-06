@@ -19,6 +19,7 @@
 
 ::: tip 注意对 Vue 的依赖
 在库模式中，Vue 是*外置的*。这意味着包中不会有 Vue，即便你在代码中导入了 Vue。如果这个库会通过一个打包器使用，它将尝试通过打包器以依赖的方式加载 Vue；否则就会回退到一个全局的 `Vue` 变量。
+
 要避免此行为，可以在`build`命令中添加`--inline-vue`标志。
 ```
 vue-cli-service build --target lib --inline-vue
