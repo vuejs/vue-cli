@@ -35,10 +35,7 @@ test('global serve', async () => {
       expect(await helpers.getText('h1')).toMatch('hi')
       write('App.vue', entryVue.replace(`{{ msg }}`, 'Updated'))
       await nextUpdate() // wait for child stdout update signal
-      await page.waitForFunction(selector => {
-        const el = document.querySelector(selector)
-        return el && el.textContent.includes('Updated')
-      }, {}, 'h1')
+      await page.waitForXPath('//h1[contains(text(), "Updated")]')
     }
   )
 })

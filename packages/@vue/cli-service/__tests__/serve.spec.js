@@ -19,10 +19,7 @@ test('serve', async () => {
       const file = await project.read(`src/App.vue`)
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
-      await page.waitForFunction(selector => {
-        const el = document.querySelector(selector)
-        return el && el.textContent.includes('Updated')
-      }, {}, 'h1')
+      await page.waitForXPath('//h1[contains(text(), "Updated")]')
     }
   )
 })
@@ -105,10 +102,7 @@ test('serve with inline entry', async () => {
       const file = await project.read(`src/App.vue`)
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
-      await page.waitForFunction(selector => {
-        const el = document.querySelector(selector)
-        return el && el.textContent.includes('Updated')
-      }, {}, 'h1')
+      await page.waitForXPath('//h1[contains(text(), "Updated")]')
     }
   )
 })
@@ -128,10 +122,7 @@ test('serve with no public dir', async () => {
       const file = await project.read(`src/App.vue`)
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
-      await page.waitForFunction(selector => {
-        const el = document.querySelector(selector)
-        return el && el.textContent.includes('Updated')
-      }, {}, 'h1')
+      await page.waitForXPath('//h1[contains(text(), "Updated")]')
     }
   )
 })
