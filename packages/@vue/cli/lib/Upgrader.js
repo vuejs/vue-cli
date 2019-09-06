@@ -101,6 +101,8 @@ module.exports = class Upgrader {
     log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
     await this.pm.upgrade(`${packageName}@^${targetVersion}`)
 
+    // the cached `pkg` field won't automatically update after running `this.pm.upgrade`
+    this.pkg[depEntry][packageName] = `^${targetVersion}`
     await this.runMigrator(packageName, { installed })
   }
 

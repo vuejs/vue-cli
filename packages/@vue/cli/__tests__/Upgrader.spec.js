@@ -34,6 +34,9 @@ test('upgrade: plugin-babel v3.5', async () => {
   expect(updatedPkg.dependencies).toHaveProperty('core-js')
 
   expect(logs.log.some(([msg]) => msg.match('core-js has been upgraded'))).toBe(true)
+
+  // should have updated the version range in package.json
+  expect(updatedPkg.devDependencies['@vue/cli-plugin-babel']).not.toMatch('3.5.3')
 })
 
 test('upgrade: plugin-babel with core-js 2', async () => {
