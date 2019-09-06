@@ -47,8 +47,8 @@
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
-    "@vuepress/plugin-pwa": "^1.0.1",
-    "@vuepress/theme-vue": "^1.0.1",
+    "@vuepress/plugin-pwa": "^1.0.4",
+    "@vuepress/theme-vue": "^1.0.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
@@ -77,7 +77,7 @@
     "rimraf": "^2.6.2",
     "semver": "^6.1.0",
     "typescript": "^3.4.5",
-    "vuepress": "^1.0.1",
+    "vuepress": "^1.0.4",
     "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
@@ -85,7 +85,6 @@
     "puppeteer": "1.11.0",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
-    "vue-server-renderer": "^2.6.10",
-    "@vuepress/core": "1.0.2"
+    "vue-server-renderer": "^2.6.10"
   }
 }
