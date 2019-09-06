@@ -24,15 +24,12 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
         activeChild.stdin.write('close')
         activeBrowser = null
       }
-      console.log(log)
       reject(err)
     }
 
     let isFirstMatch = true
-    let log = ''
     child.stdout.on('data', async (data) => {
       data = data.toString()
-      log += data
       try {
         const urlMatch = data.match(/http:\/\/[^/]+\//)
         if (urlMatch && isFirstMatch) {
