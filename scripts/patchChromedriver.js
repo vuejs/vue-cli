@@ -9,4 +9,6 @@ const versionString = require('child_process').execSync('wmic datafile where nam
 const majorVersion = versionString.match(/Version=(\d+)/)[1]
 pkg.resolutions.chromedriver = `^${majorVersion}.0.0`
 
+console.log(`patched chromedriver to version ${majorVersion}`)
+
 fs.writeFileSync(path.resolve(__dirname, '../package.json'), JSON.stringify(pkg, null, 2))
