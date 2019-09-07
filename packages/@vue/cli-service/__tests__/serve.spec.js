@@ -1,4 +1,4 @@
-jest.setTimeout(60000)
+jest.setTimeout(80000)
 
 const path = require('path')
 const fs = require('fs-extra')
@@ -20,7 +20,7 @@ test('serve', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]')
+        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
@@ -113,7 +113,7 @@ test('serve with inline entry', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]')
+        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
@@ -143,7 +143,7 @@ test('serve with no public dir', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]')
+        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,

@@ -1,4 +1,4 @@
-jest.setTimeout(40000)
+jest.setTimeout(80000)
 
 const fs = require('fs-extra')
 const path = require('path')
@@ -36,7 +36,7 @@ test('global serve', async () => {
       write('App.vue', entryVue.replace(`{{ msg }}`, 'Updated'))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]')
+        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
