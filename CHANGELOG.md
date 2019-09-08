@@ -1,4 +1,29 @@
 
+## 4.0.0-rc.2 (2019-09-08)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-eslint`, `@vue/cli`
+  * [#4549](https://github.com/vuejs/vue-cli/pull/4549) feat: implement a migrator to auto add eslint to deps ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#4440](https://github.com/vuejs/vue-cli/pull/4440) fix: fix incompatibility with Chrome 75 ([@tomomi-code](https://github.com/tomomi-code))
+* `@vue/cli-service`
+  * [#4550](https://github.com/vuejs/vue-cli/pull/4550) fix: should not proxy sockjs endpoint ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#4546](https://github.com/vuejs/vue-cli/pull/4546) fix(upgrade): correctly update version range in package.json ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* `@vue/cli`
+  * [#4551](https://github.com/vuejs/vue-cli/pull/4551) docs: remove run for yarn commands in readme ([@cexbrayat](https://github.com/cexbrayat))
+
+#### Committers: 3
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- tomomi ([@tomomi-code](https://github.com/tomomi-code))
+
+
+
 ## 4.0.0-rc.1 (2019-09-04)
 
 #### :rocket: New Features
