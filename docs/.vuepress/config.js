@@ -86,6 +86,10 @@ module.exports = {
             link: '/core-plugins/'
           },
           {
+            text: 'Migrating From v3',
+            link: '/guide/migrating-from-v3'
+          },
+          {
             text: 'Changelog',
             link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
           }
@@ -115,7 +119,8 @@ module.exports = {
                 '/guide/mode-and-env',
                 '/guide/build-targets',
                 '/guide/deployment',
-                '/guide/troubleshooting'
+                '/guide/troubleshooting',
+                '/guide/migrating-from-v3'
               ]
             }
           ],
