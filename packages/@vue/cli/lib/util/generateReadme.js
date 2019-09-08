@@ -12,7 +12,7 @@ function printScripts (pkg, packageManager) {
     return [
       `\n### ${descriptions[key]}`,
       '```',
-      `${packageManager} run ${key}`,
+      `${packageManager} ${packageManager !== 'yarn' ? 'run ' : ''}${key}`,
       '```',
       ''
     ].join('\n')
