@@ -60,6 +60,12 @@ Working with page objects is a popular methodology in end-to-end UI testing. Fil
 #### `globals.js`
 The external globals file which can hold global properties or hooks. See [test globals](https://nightwatchjs.org/gettingstarted/configuration/#test-globals) section.
 
+## Installing in an Already Created Project
+
+``` sh
+vue add e2e-nightwatch
+```
+
 ## Configuration
 
 We've pre-configured Nightwatch to run with Chrome by default. Firefox is also available via `--env firefox`. If you wish to run end-to-end tests in additional browsers (e.g. Safari, Microsoft Edge), you will need to add a `nightwatch.conf.js` or `nightwatch.json` in your project root to configure additional browsers. The config will be merged into the [internal Nightwatch config](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-e2e-nightwatch/nightwatch.config.js).
@@ -68,12 +74,44 @@ Alternatively, you can completely replace the internal config with a custom conf
 
 Consult Nightwatch docs for [configuration options](https://nightwatchjs.org/gettingstarted/configuration/) and how to [setup browser drivers](http://nightwatchjs.org/gettingstarted#browser-drivers-setup).
 
+## Running Tests
+
+By default, all tests inside the `specs` folder will be run using Chrome. If you'd like to run end-to-end tests against Chrome (or Firefox) in headless mode, simply pass the `--headless` argument.
+
+```sh
+$ vue-cli-service test:e2e
+```
+
+**Running a single test**
+
+To run a single test supply the filename path. E.g.:
+
+```sh
+$ vue-cli-service test:e2e tests/e2e/specs/test.js
+```
+
+**Skip Dev server auto-start**
+
+If the development server is already running and you want to skip starting it automatically, pass the `--url` argument:
+
+```sh
+$ vue-cli-service test:e2e --url http://localhost:8080/
+```
+
 **Running in Firefox**
 
 Support for running tests in Firefox is also available by default. Simply run the following (optionally add `--headless` to run Firefox in headless mode):
 
 ```sh
 $ vue-cli-service test:e2e --env firefox [--headless]
+```
+
+**Running in Firefox and Chrome simultaneously**
+
+You can also run the tests simultaneously in both browsers by supplying both test environments separated by a comma (",") - no spaces.
+
+```sh
+$ vue-cli-service test:e2e --env firefox,chrome [--headless]
 ```
 
 **Running Tests in Parallel**
@@ -88,13 +126,18 @@ $ vue-cli-service test:e2e --parallel
 
 **Running with Selenium**
 
-In most cases, running with Selenium is not required since Nightwatch v1.0. It is still possible with the following:
-```sh
-$ vue-cli-service test:e2e --use-selenium
-```
+Since `v4`, the Selenium standalone server is not included anymore in this plugin and in most cases running with Selenium is not required since Nightwatch v1.0. 
 
-## Installing in an Already Created Project
+It is still possible to use the Selenium server, by following these steps:
 
-``` sh
-vue add e2e-nightwatch
-```
+__1.__ Install `selenium-server` NPM package:
+
+  ```sh
+  $ npm install selenium-server --save-dev
+  ```
+  
+__2.__ Run with `--use-selenium` cli argument:
+
+  ```sh
+  $ vue-cli-service test:e2e --use-selenium
+  ```
