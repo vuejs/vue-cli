@@ -1,4 +1,4 @@
-# Migration from v3
+# Migrating from v3
 
 First, install the latest Vue CLI globally:
 ```
