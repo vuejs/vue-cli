@@ -9,7 +9,7 @@ npm install -g @vue/cli@4
 
 In your existing projects, run:
 ```
-vue upgrade --all --next
+vue upgrade --next
 ```
 
 Please refer to the [Breaking Changes](#breaking-changes) section for all the possible breaking changes introduced.
