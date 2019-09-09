@@ -7,7 +7,7 @@ module.exports = {
       .init()
       .waitForElementVisible('#app')
       .assert.elementPresent('.hello')
-      .assert.containsText('h1', 'Welcome to Your Vue.js App')
+      .assert.containsText('h1', 'Welcome to Your Vue.js <%- hasTS ? '+ TypeScript ' : '' %>App')
       .assert.elementCount('img', 1)
       .end()
   },
