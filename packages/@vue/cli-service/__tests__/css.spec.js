@@ -62,7 +62,12 @@ test('default loaders', () => {
     })
   })
   // sass indented syntax
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({
+    sassOptions: {
+      indentedSyntax: true
+    },
+    sourceMap: false
+  })
 })
 
 test('production defaults', () => {
@@ -180,21 +185,30 @@ test('css-loader options', () => {
 })
 
 test('css.loaderOptions', () => {
-  const data = '$env: production;'
+  const prependData = '$env: production;'
   const config = genConfig({
     vue: {
       css: {
         loaderOptions: {
           sass: {
-            data
+            prependData
           }
         }
       }
     }
   })
 
-  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ data, sourceMap: false })
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ data, indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({
+    prependData,
+    sourceMap: false
+  })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({
+    prependData,
+    sassOptions: {
+      indentedSyntax: true
+    },
+    sourceMap: false
+  })
 })
 
 test('scss loaderOptions', () => {
@@ -206,24 +220,33 @@ test('scss loaderOptions', () => {
       css: {
         loaderOptions: {
           sass: {
-            sassData
+            prependData: sassData
           },
           scss: {
-            scssData
+            prependData: scssData
           }
         }
       }
     }
   })
 
-  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ scssData, sourceMap: false })
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ sassData, indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({
+    prependData: scssData,
+    sourceMap: false
+  })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({
+    prependData: sassData,
+    sassOptions: {
+      indentedSyntax: true
+    },
+    sourceMap: false
+  })
 })
 
 test('should use dart sass implementation whenever possible', () => {
   const config = genConfig()
-  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ fiber: require('fibers'), implementation: require('sass') })
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ fiber: require('fibers'), implementation: require('sass') })
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ implementation: require('sass') })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ implementation: require('sass') })
 })
 
 test('skip postcss-loader if no postcss config found', () => {
