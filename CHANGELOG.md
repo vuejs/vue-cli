@@ -1,4 +1,18 @@
 
+## 4.0.0-rc.3 (2019-09-09)
+
+#### :rocket: New Features
+* `@vue/cli-service`, `@vue/cli-shared-utils`
+  * [#4554](https://github.com/vuejs/vue-cli/pull/4554) Support sass-loader v8 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#4541](https://github.com/vuejs/vue-cli/pull/4541) Upgrade Nightwatch to v1.2 and update bundled config and generated tests ([@beatfactor](https://github.com/beatfactor))
+
+#### Committers: 2
+- Andrei Rusu ([@beatfactor](https://github.com/beatfactor))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.0.0-rc.2 (2019-09-08)
 
 #### :rocket: New Features
