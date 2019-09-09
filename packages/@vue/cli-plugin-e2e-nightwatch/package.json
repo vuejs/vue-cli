@@ -26,14 +26,22 @@
     "@vue/cli-shared-utils": "^4.0.0-rc.2",
     "deepmerge": "^3.2.0",
     "execa": "^1.0.0",
-    "nightwatch": "^1.1.11",
-    "selenium-server": "^3.141.59"
+    "nightwatch": "^1.2.2"
   },
   "devDependencies": {
-    "chromedriver": "^74.0.0"
+    "chromedriver": "^76.0.1",
+    "geckodriver": "^1.16.2",
+    "selenium-server": "^3.141.59"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0",
-    "chromedriver": "*"
+    "selenium-server": "^3.141.59",
+    "chromedriver": "*",
+    "geckodriver": "*"
+  },
+  "peerDependenciesMeta": {
+    "selenium-server": {
+      "optional": true
+    }
   }
 }

@@ -8,7 +8,8 @@ module.exports = api => {
       'test:e2e': 'vue-cli-service test:e2e'
     },
     devDependencies: {
-      chromedriver: '^74.0.0'
+      chromedriver: '^76.0.1',
+      geckodriver: '^1.16.2'
     }
   })
 }
