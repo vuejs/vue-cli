@@ -32,12 +32,15 @@
     "chromedriver": "^76.0.1",
     "geckodriver": "^1.16.2"
   },
-  "optionalDependencies": {
-    "selenium-server": "^3.141.59"
-  },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0",
+    "selenium-server": "^3.141.59",
     "chromedriver": "*",
     "geckodriver": "*"
+  },
+  "peerDependenciesMeta": {
+    "selenium-server": {
+      "optional": true
+    }
   }
 }
