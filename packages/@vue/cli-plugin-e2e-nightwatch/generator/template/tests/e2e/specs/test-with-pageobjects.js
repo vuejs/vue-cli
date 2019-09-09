@@ -16,7 +16,7 @@ module.exports = {
     const app = homepage.section.app;
     app.assert.elementCount('@logo', 1)
     app.expect.section('@welcome').to.be.visible
-    app.expect.section('@headline').text.to.contain('Welcome to Your Vue.js App')
+    app.expect.section('@headline').text.to.match(/^Welcome to Your Vue\.js (.*)App$/)
 
     browser.end()
   },
