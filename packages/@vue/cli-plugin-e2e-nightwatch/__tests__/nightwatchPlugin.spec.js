@@ -70,7 +70,7 @@ describe('nightwatch e2e plugin', () => {
     expect(testSettings.parallel_mode).toStrictEqual(true)
     expect(testSettings.test_workers).toStrictEqual(true)
 
-    expect(Object.keys(results.modules)).toEqual([
+    expect(Object.keys(results.modules).sort()).toEqual([
       'test', 'test-with-pageobjects'
     ])
   })
