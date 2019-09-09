@@ -23,7 +23,7 @@ module.exports = (api, rootOptions) => {
     } catch (e) {}
     if (sassLoaderVersion < 8) {
       pauseSpinner()
-      warn('sass-loader v8 is out, please consider upgrading your sass-loader version.')
+      warn('A new version of sass-loader is available. Please upgrade for best experience.')
       resumeSpinner()
     }
 
