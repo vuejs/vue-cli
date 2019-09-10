@@ -1,8 +1,7 @@
 const fs = require('fs')
+const { installedBrowsers, info, warn, error, chalk, execa } = require('@vue/cli-shared-utils')
 
 module.exports = (api, options) => {
-  const { info, chalk, execa } = require('@vue/cli-shared-utils')
-
   api.registerCommand('test:e2e', {
     description: 'run end-to-end tests with nightwatch',
     usage: 'vue-cli-service test:e2e [options]',
@@ -20,6 +19,28 @@ module.exports = (api, options) => {
       `All Nightwatch CLI options are also supported.\n` +
       chalk.yellow(`https://nightwatchjs.org/guide/running-tests/#command-line-options`)
   }, (args, rawArgs) => {
+    if (args.env && args.env.includes('firefox')) {
+      try {
+        require('geckodriver')
+      } catch (e) {
+        error(`To run e2e tests in Firefox, you need to install ${chalk.yellow.bold('geckodriver')} first.`)
+        process.exit(1)
+      }
+    }
+    if (installedBrowsers.chrome) {
+      const userVersion = installedBrowsers.chrome
+      const driverVersion = require('chromedriver').version
+
+      const userMajor = userVersion.match(/^(\d+)\./)[1]
+      const driverMajor = driverVersion.match(/^(\d+)\./)[1]
+
+      if (userMajor !== driverMajor) {
+        warn(`Local ${chalk.cyan.bold('Chrome')} version is ${chalk.cyan.bold(userMajor)}, but the installed ${chalk.cyan.bold('chromedriver')} is for version ${chalk.cyan.bold(driverMajor)}.`)
+        warn(`There may be incompatibilities between them.`)
+        warn(`Please update your ${chalk.cyan.bold('chromedriver')} dependency to match the ${chalk.cyan.bold('Chrome')} version.`)
+      }
+    }
+
     const argsToRemove = ['url', 'mode', 'headless', 'use-selenium', 'parallel']
     argsToRemove.forEach((toRemove) => removeArg(rawArgs, toRemove))
 

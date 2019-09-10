@@ -129,3 +129,54 @@ function checkPnpm (result) {
 exports.isWindows = process.platform === 'win32'
 exports.isMacintosh = process.platform === 'darwin'
 exports.isLinux = process.platform === 'linux'
+
+const browsers = {}
+let hasCheckedBrowsers = false
+
+function run (cmd) {
+  return (
+    execSync(cmd, {
+      stdio: [0, 'pipe', 'ignore']
+    }).toString() || ''
+  ).trim()
+}
+
+function getLinuxAppVersion (binary) {
+  try {
+    return run(`${binary} --version`).replace(/^.* ([^ ]*)/g, '$1')
+  } catch (e) {}
+}
+
+function getMacAppVersion (bundleIdentifier) {
+  try {
+    const bundlePath = run(`mdfind "kMDItemCFBundleIdentifier=='${bundleIdentifier}'"`)
+
+    return run(`/usr/libexec/PlistBuddy -c Print:CFBundleShortVersionString ${
+      bundlePath.replace(/(\s)/g, '\\ ')
+    }/Contents/Info.plist`)
+  } catch (e) {}
+}
+
+Object.defineProperty(exports, 'installedBrowsers', {
+  enumerable: true,
+  get () {
+    if (hasCheckedBrowsers) {
+      return browsers
+    }
+    hasCheckedBrowsers = true
+
+    if (exports.isWindows) {
+      browsers.chrome = getLinuxAppVersion('google-chrome')
+      browsers.firefox = getLinuxAppVersion('firefox')
+    } else if (exports.isMacintosh) {
+      browsers.chrome = getMacAppVersion('com.google.Chrome')
+      browsers.firefox = getMacAppVersion('org.mozilla.firefox')
+    } else if (exports.isWindows) {
+      // TODO:
+      // get chrome stable version: https://stackoverflow.com/a/51773107/2302258
+      // get firefox version: https://community.spiceworks.com/topic/111518-how-to-determine-version-of-installed-firefox-in-windows-batchscript
+    }
+
+    return browsers
+  }
+})
