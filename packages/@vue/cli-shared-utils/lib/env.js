@@ -165,7 +165,7 @@ Object.defineProperty(exports, 'installedBrowsers', {
     }
     hasCheckedBrowsers = true
 
-    if (exports.isWindows) {
+    if (exports.isLinux) {
       browsers.chrome = getLinuxAppVersion('google-chrome')
       browsers.firefox = getLinuxAppVersion('firefox')
     } else if (exports.isMacintosh) {
