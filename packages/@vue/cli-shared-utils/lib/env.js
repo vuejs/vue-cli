@@ -139,7 +139,7 @@ function tryRun (cmd) {
       stdio: [0, 'pipe', 'ignore']
     }).toString().trim()
   } catch (e) {
-    return
+    return ''
   }
 }
 
