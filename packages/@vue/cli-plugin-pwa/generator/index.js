@@ -2,6 +2,9 @@ module.exports = api => {
   api.extendPackage({
     dependencies: {
       'register-service-worker': '^1.6.2'
+    },
+    devDependencies: {
+      'workbox-webpack-plugin': '^4.3.1'
     }
   })
   api.injectImports(api.entryFile, `import './registerServiceWorker'`)
