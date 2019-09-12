@@ -42,6 +42,9 @@
   "peerDependenciesMeta": {
     "selenium-server": {
       "optional": true
+    },
+    "geckodriver": {
+      "optional": true
     }
   }
 }

@@ -3,7 +3,12 @@
 const path = require('path')
 const deepmerge = require('deepmerge')
 const chromedriver = require('chromedriver')
-const geckodriver = require('geckodriver')
+
+// user may have not installed geckodriver
+let geckodriver = {}
+try {
+  geckodriver = require('geckodriver')
+} catch (e) {}
 
 const userOptions = JSON.parse(process.env.VUE_NIGHTWATCH_USER_OPTIONS || '{}')
 const useSelenium = process.env.VUE_NIGHTWATCH_USE_SELENIUM === '1'
@@ -51,7 +56,7 @@ const defaultSettings = {
         }
       },
       webdriver: useSelenium ? {} : {
-        server_path: require('geckodriver').path,
+        server_path: geckodriver.path,
         port: 4444
       }
     }
