@@ -92,6 +92,32 @@ There are a few useful flags:
 
 - `--report` and `--report-json` will generate reports based on your build stats that can help you analyze the size of the modules included in your bundle.
 
+## vue-cli-service lint
+
+```
+Usage: vue-cli-service lint [options] [...files]
+
+Options:
+
+  --format [formatter]   specify formatter (default: codeframe)
+  --no-fix               do not fix errors or warnings
+  --no-fix-warnings      fix errors, but do not fix warnings
+  --max-errors [limit]   specify number of errors to make build failed (default: 0)
+  --max-warnings [limit] specify number of warnings to make build failed (default: Infinity)
+```
+
+### What if my project is not in the same directory as the Vue CLI scaffold?
+
+For those looking to specify direcotry will be impacted by their `vue-cli-service lint` command, you can pass it a regex pattern for whichever directory you desire. For example:
+
+1. Vue CLI projects lives in `/src/webapp/`
+2. `package.json` lives in root directory (`/`)
+
+You will need to define your lint command as:
+
+`"lint": "vue-cli-service lint ./src/webapp/**/*.js ./src/webapp/**/*.vue`
+
+
 ## vue-cli-service inspect
 
 ```
