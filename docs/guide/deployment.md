@@ -395,7 +395,7 @@ Deploy your application using nginx inside of a docker container.
 2. Create a `Dockerfile` file in the root of your project.
 
     ```Dockerfile
-    FROM node:10 as build-stage
+    FROM node:latest as build-stage
     WORKDIR /app
     COPY package*.json ./
     RUN npm install
