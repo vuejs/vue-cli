@@ -108,7 +108,7 @@ Options:
 
 ### What if my project is not in the same directory as the Vue CLI scaffold?
 
-For those looking to specify direcotry will be impacted by their `vue-cli-service lint` command, you can pass it a regex pattern for whichever directory you desire. For example:
+For those looking to specify directory will be impacted by their `vue-cli-service lint` command, you can pass it a regex pattern for whichever directory you desire. For example:
 
 1. Vue CLI projects lives in `/src/webapp/`
 2. `package.json` lives in root directory (`/`)
