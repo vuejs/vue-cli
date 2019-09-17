@@ -54,7 +54,6 @@ module.exports = (api, _, __, invoking) => {
     if (api.hasPlugin('babel')) {
       api.extendPackage({
         devDependencies: {
-          'babel-jest': '^24.8.0',
           '@babel/core': '^7.4.5'
         }
       })
