@@ -23,8 +23,7 @@ test('base', async () => {
   expect(pkg.scripts['test:unit']).toBe('vue-cli-service test:unit')
   expect(pkg.devDependencies).toHaveProperty('@vue/test-utils')
 
-  // should inject babel-jest
-  expect(pkg.devDependencies).toHaveProperty('babel-jest')
+  // should inject @babel/core
   expect(pkg.devDependencies).toHaveProperty('@babel/core')
   // eslint
   expect(files['tests/unit/.eslintrc.js']).toMatch('jest: true')
