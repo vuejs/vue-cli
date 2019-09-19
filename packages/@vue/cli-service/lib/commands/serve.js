@@ -254,8 +254,13 @@ module.exports = (api, options) => {
             console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
             console.log()
           }
+
+          const devServerUrl = publicUrl
+            ? publicUrl
+            : '${protocol}://localhost:<your container\'s external mapped port>';
+
           console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
-            `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
+            `${devServerUrl}${options.publicPath}`
           )}`))
         }
         console.log()
