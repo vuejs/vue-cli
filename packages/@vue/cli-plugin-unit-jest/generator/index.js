@@ -3,21 +3,6 @@ module.exports = (api, _, __, invoking) => {
     hasTS: api.hasPlugin('typescript')
   })
 
-  let jestPresetPath
-  if (api.hasPlugin('babel')) {
-    if (api.hasPlugin('typescript')) {
-      jestPresetPath = '@vue/cli-plugin-unit-jest/preset/typescript-and-babel'
-    } else {
-      jestPresetPath = '@vue/cli-plugin-unit-jest/preset'
-    }
-  } else {
-    if (api.hasPlugin('typescript')) {
-      jestPresetPath = '@vue/cli-plugin-unit-jest/preset/typescript'
-    } else {
-      jestPresetPath = '@vue/cli-plugin-unit-jest/preset/no-babel'
-    }
-  }
-
   api.extendPackage({
     scripts: {
       'test:unit': 'vue-cli-service test:unit'
@@ -26,7 +11,9 @@ module.exports = (api, _, __, invoking) => {
       '@vue/test-utils': '1.0.0-beta.29'
     },
     jest: {
-      preset: jestPresetPath
+      preset: api.hasPlugin('babel')
+        ? '@vue/cli-plugin-unit-jest/preset'
+        : '@vue/cli-plugin-unit-jest/preset/no-babel'
     }
   })
 
@@ -48,8 +35,25 @@ module.exports = (api, _, __, invoking) => {
     })
   }
 
-  // inject jest type to tsconfig.json
-  if (api.hasPlugin('typescript') && invoking) {
+  if (api.hasPlugin('typescript')) {
+    applyTS(api, invoking)
+  }
+}
+
+const applyTS = (module.exports.applyTS = (api, invoking) => {
+  api.extendPackage({
+    jest: {
+      preset: api.hasPlugin('babel')
+        ? '@vue/cli-plugin-unit-jest/preset/typescript-and-babel'
+        : '@vue/cli-plugin-unit-jest/preset/typescript'
+    },
+    devDependencies: {
+      '@types/jest': '^24.0.11'
+    }
+  })
+
+  if (invoking) {
+    // inject jest type to tsconfig.json
     api.render(files => {
       const tsconfig = files['tsconfig.json']
       if (tsconfig) {
@@ -64,4 +68,4 @@ module.exports = (api, _, __, invoking) => {
       }
     })
   }
-}
+})
