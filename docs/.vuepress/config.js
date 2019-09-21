@@ -50,7 +50,7 @@ module.exports = {
   themeConfig: {
     repo: 'vuejs/vue-cli',
     docsDir: 'docs',
-    docsBranch: 'docs',
+    docsBranch: 'next',
     editLinks: true,
     sidebarDepth: 3,
     algolia: {
