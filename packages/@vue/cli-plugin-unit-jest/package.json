@@ -32,6 +32,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "deepmerge": "^4.0.0",
     "jest": "^24.8.0",
+    "jest-environment-jsdom-fifteen": "^1.0.0",
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^2.0.0",
     "jest-watch-typeahead": "^0.4.0",
