@@ -1,5 +1,5 @@
 const deepmerge = require('deepmerge')
-const defaultPreset = require('../jest-preset')
+const defaultPreset = require('../default/jest-preset')
 
 module.exports = deepmerge(
   defaultPreset,
