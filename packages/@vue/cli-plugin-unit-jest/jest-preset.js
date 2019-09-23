@@ -1,1 +1,1 @@
-module.exports = require('./presets/jest-preset')
+module.exports = require('./presets/default/jest-preset')
