@@ -138,6 +138,7 @@ module.exports = {
       // 在这种情况下，我们可以使用 `scss` 选项，对 `scss` 语法进行单独配置
       scss: {
         data: `@import "~@/variables.scss";`
+        //从2019-08-29号的v8.0.0版本开始, sass-loader将data选项重命名为prependData.
       },
       // 给 less-loader 传递 Less.js 相关选项
       less:{
