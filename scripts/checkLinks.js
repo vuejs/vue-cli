@@ -4,6 +4,8 @@ const request = require('request-promise-native')
 
 const promises = []
 
+process.setMaxListeners(Infinity)
+
 async function checkLink (file, link, n) {
   try {
     const result = await request({
@@ -51,13 +53,6 @@ function checkFiles (folder, all = false, recursive = false) {
 
 checkFiles(path.resolve(__dirname, '../packages/@vue'), false, true)
 checkFiles(path.resolve(__dirname, '../packages/@vue/cli/lib/promptModules'), true, true)
-
-async function main () {
-  for (const p of promises) {
-    await p
-  }
-}
-
-main().catch(() => {
+Promise.all(promises).catch(() => {
   process.exit(1)
 })
