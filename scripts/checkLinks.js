@@ -1,10 +1,9 @@
+require('events').defaultMaxListeners = 0
 const path = require('path')
 const fs = require('fs')
 const request = require('request-promise-native')
 
 const promises = []
-
-process.setMaxListeners(Infinity)
 
 async function checkLink (file, link, n) {
   try {
