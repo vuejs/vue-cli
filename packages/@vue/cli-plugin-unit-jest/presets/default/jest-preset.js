@@ -18,6 +18,7 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
+  testEnvironment: 'jest-environment-jsdom-fifteen',
   // serializer for snapshots
   snapshotSerializers: [
     'jest-serializer-vue'
