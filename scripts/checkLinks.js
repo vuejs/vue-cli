@@ -51,6 +51,13 @@ function checkFiles (folder, all = false, recursive = false) {
 
 checkFiles(path.resolve(__dirname, '../packages/@vue'), false, true)
 checkFiles(path.resolve(__dirname, '../packages/@vue/cli/lib/promptModules'), true, true)
-Promise.all(promises).catch(() => {
+
+async function main () {
+  for (const p of promises) {
+    await p
+  }
+}
+
+main().catch(() => {
   process.exit(1)
 })
