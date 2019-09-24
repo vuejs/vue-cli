@@ -158,6 +158,11 @@ module.exports = (api, options) => {
         ? htmlPath
         : defaultHtmlPath
 
+      publicCopyIgnore.push({
+        glob: path.relative(api.resolve('public'), api.resolve(htmlOptions.template)),
+        matchBase: false
+      })
+
       webpackConfig
         .plugin('html')
           .use(HTMLPlugin, [htmlOptions])
@@ -214,14 +219,16 @@ module.exports = (api, options) => {
 
         // resolve page index template
         const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
-        if (hasDedicatedTemplate) {
-          publicCopyIgnore.push(template)
-        }
         const templatePath = hasDedicatedTemplate
           ? template
           : fs.existsSync(htmlPath)
             ? htmlPath
             : defaultHtmlPath
+
+        publicCopyIgnore.push({
+          glob: path.relative(api.resolve('public'), api.resolve(templatePath)),
+          matchBase: false
+        })
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
