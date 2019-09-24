@@ -12,8 +12,8 @@ module.exports = (api, _, __, invoking) => {
     },
     jest: {
       preset: api.hasPlugin('babel')
-        ? '@vue/cli-plugin-unit-jest/preset'
-        : '@vue/cli-plugin-unit-jest/preset/no-babel'
+        ? '@vue/cli-plugin-unit-jest'
+        : '@vue/cli-plugin-unit-jest/presets/no-babel'
     }
   })
 
@@ -44,8 +44,8 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     jest: {
       preset: api.hasPlugin('babel')
-        ? '@vue/cli-plugin-unit-jest/preset/typescript-and-babel'
-        : '@vue/cli-plugin-unit-jest/preset/typescript'
+        ? '@vue/cli-plugin-unit-jest/presets/typescript-and-babel'
+        : '@vue/cli-plugin-unit-jest/presets/typescript'
     },
     devDependencies: {
       '@types/jest': '^24.0.11'

@@ -1,5 +1,5 @@
 const deepmerge = require('deepmerge')
-const defaultPreset = require('../jest-preset')
+const defaultPreset = require('../default/jest-preset')
 
 // If no default babel preset exists,
 // we need to use a customized babel transformer to deal with es modules
