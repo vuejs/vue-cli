@@ -69,7 +69,7 @@ Recently `sass-loader@8` has been out and has changed its configuration format q
 
 - [deprecate `css.modules` in favor of `css.requireModuleExtension`](https://github.com/vuejs/vue-cli/pull/4387). This is because we've upgraded to css-loader v3 and the config format has been changed. For more detailed explanation please follow the link.
 
-#### Other Noticealbe Changes in `vue.config.js`
+#### Other Noticeable Changes in `vue.config.js`
 
 - The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl) is now [removed](https://github.com/vuejs/vue-cli/pull/4388)
 
