@@ -1,6 +1,28 @@
 
 ## 4.0.0-rc.4 (2019-09-25)
 
+Start from the version, the `unit-jest` plugin now comes with four configuration presets:
+
+- `@vue/cli-plugin-unit-jest` The default preset for the most common type of projects
+- `@vue/cli-plugin-unit-jest/presets/no-babel` If you don't have `@vue/cli-plugin-babel` installed and don't want to see babel files in the project
+- `@vue/cli-plugin-unit-jest/presets/typescript` The preset with TypeScript support (but no TSX support)
+- `@vue/cli-plugin-unit-jest/presets/typescript-and-babel` The preset with TypeScript (and TSX) and babel suuport.
+
+If you haven't changed the default Jest configurations (lies in either `jest.config.js` or the `jest` field in `package.json`) ever since project creation, you can now replace the massive configuration object with one single field:
+
+```js
+module.exports = {
+  // Replace the following preset name with the one you want to use from the above list
+  preset: '@vue/cli-plugin-unit-jest'
+}
+```
+
+A reminder:
+The default test environment in the new presets is jsdom@15, which differs from the default one in Jest 24 (jsdom@11).
+This is to be align with the upcoming Jest 25 changes.
+Most users won't be affected by this change.
+For a detailed changelog with regard to jsdom, see https://github.com/jsdom/jsdom/blob/master/Changelog.md
+
 #### :rocket: New Features
 * `@vue/cli-plugin-unit-jest`
   * [#4607](https://github.com/vuejs/vue-cli/pull/4607) feat: use jsdom v15 in jest presets instead of the default v11 ([@sodatea](https://github.com/sodatea))
