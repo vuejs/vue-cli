@@ -53,7 +53,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
-    "chromedriver": "^74.0.0",
+    "chromedriver": "^77.0.0",
     "debug": "^4.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-graphql": "^3.0.3",
