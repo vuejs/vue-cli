@@ -78,6 +78,8 @@ class PackageManager {
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
       throw new Error(`Unknown package manager: ${this.bin}`)
     }
+
+    this.execBin = process.env.VUE_CLI_PACKAGE_MANAGER_BIN || this.bin
   }
 
   // Any command that implemented registry-related feature should support
@@ -162,7 +164,7 @@ class PackageManager {
 
   async install () {
     const args = await this.addRegistryToArgs(PACKAGE_MANAGER_CONFIG[this.bin].install)
-    return executeCommand(this.bin, args, this.context)
+    return executeCommand(this.execBin, args, this.context)
   }
 
   async add (packageName, isDev = true) {
@@ -171,7 +173,7 @@ class PackageManager {
       packageName,
       ...(isDev ? ['-D'] : [])
     ])
-    return executeCommand(this.bin, args, this.context)
+    return executeCommand(this.execBin, args, this.context)
   }
 
   async upgrade (packageName) {
@@ -192,7 +194,7 @@ class PackageManager {
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName
     ])
-    return executeCommand(this.bin, args, this.context)
+    return executeCommand(this.execBin, args, this.context)
   }
 
   async remove (packageName) {
@@ -200,7 +202,7 @@ class PackageManager {
       ...PACKAGE_MANAGER_CONFIG[this.bin].remove,
       packageName
     ]
-    return executeCommand(this.bin, args, this.context)
+    return executeCommand(this.execBin, args, this.context)
   }
 }
 
