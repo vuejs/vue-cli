@@ -49,4 +49,4 @@ module.exports = {
       }
     }
   }
-};
+}

@@ -2,7 +2,8 @@ const { installedBrowsers } = require('@vue/cli-shared-utils')
 
 module.exports = api => {
   api.render('./template', {
-    hasTS: api.hasPlugin('typescript')
+    hasTS: api.hasPlugin('typescript'),
+    hasESLint: api.hasPlugin('eslint')
   })
 
   // Use devDependencies to store latest version number so as to automate update
