@@ -13,6 +13,7 @@ const {
   hasProjectPnpm
 } = require('@vue/cli-shared-utils/lib/env')
 const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib/pluginResolution')
+const { warn } = require('@vue/cli-shared-utils/lib/logger')
 
 const { loadOptions } = require('../options')
 const getPackageJson = require('./getPackageJson')
@@ -76,7 +77,8 @@ class PackageManager {
     }
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
-      throw new Error(`Unknown package manager: ${this.bin}`)
+      warn(`Unknown package manager: ${this.bin}`)
+      PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
   }
 
