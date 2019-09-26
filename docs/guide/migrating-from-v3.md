@@ -137,7 +137,8 @@ When using Typescript, the webpack resolve options now [prefer `ts(x)` file exte
 
 ### `@vue/cli-plugin-unit-jest`
 
-We've upgraded the bundled Jest from v23 to v24, so please read their [release notes](https://jestjs.io/blog/2019/01/25/jest-24-refreshing-polished-typescript-friendly) first. The full changelog is at <https://github.com/facebook/jest/blob/20ba4be9499d50ed0c9231b86d4a64ec8a6bd303/CHANGELOG.md#2400>.
+We've upgraded the bundled Jest from v23 to v24, so please read their [release notes](https://jestjs.io/blog/2019/01/25/jest-24-refreshing-polished-typescript-friendly) first.
+Follow [this link](https://github.com/facebook/jest/blob/20ba4be9499d50ed0c9231b86d4a64ec8a6bd303/CHANGELOG.md#user-content-2400) for the full changelog.
 
 The `unit-jest` plugin now comes with 4 configuration presets:
 
