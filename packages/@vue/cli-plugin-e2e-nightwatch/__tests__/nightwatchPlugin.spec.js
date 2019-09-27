@@ -3,6 +3,7 @@ jest.setTimeout(process.env.APPVEYOR ? 300000 : 120000)
 const fs = require('fs-extra')
 const path = require('path')
 const create = require('@vue/cli-test-utils/createTestProject')
+const createServer = require('@vue/cli-test-utils/createServer')
 
 describe('nightwatch e2e plugin', () => {
   let project
@@ -26,6 +27,26 @@ describe('nightwatch e2e plugin', () => {
 
   test('should run all tests successfully', async () => {
     await project.run(`vue-cli-service test:e2e --headless`)
+    let results = await project.read('test_results.json')
+    results = JSON.parse(results)
+    expect(Object.keys(results.modules)).toEqual([
+      'test-with-pageobjects',
+      'test'
+    ])
+  })
+
+  test('should accept the --url cli option', async () => {
+    await project.run(`vue-cli-service build`)
+    const server = createServer({ root: path.join(project.dir, 'dist') })
+    await new Promise((resolve, reject) => {
+      server.listen(8080, err => {
+        if (err) return reject(err)
+        resolve()
+      })
+    })
+    await project.run(`vue-cli-service test:e2e --headless --url http://127.0.0.1:8080/`)
+    server.close()
+
     let results = await project.read('test_results.json')
     results = JSON.parse(results)
     expect(Object.keys(results.modules)).toEqual([
