@@ -78,7 +78,7 @@ class PackageManager {
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
       log()
-      warn(`Unknown package manager: ${this.bin}. It may not be well supported and we are now treating it like npm but potential errors could happen.`)
+      warn(`Unknown package manager: ${this.bin}. Currently we only support one of [${SUPPORTED_PACKAGE_MANAGERS.join(', ')}]. ${this.bin} may not be well supported and we are now treating it like npm but potential errors could happen. See if you can use '--registry' instead.`)
       PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
   }
