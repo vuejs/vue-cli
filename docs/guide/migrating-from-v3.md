@@ -68,21 +68,31 @@ It's strongly recommended to upgrade to less-loader@5 if your project depends on
 
 #### For CSS Module Users
 
-- [deprecate `css.modules` in favor of `css.requireModuleExtension`](https://github.com/vuejs/vue-cli/pull/4387). This is because we've upgraded to css-loader v3 and the config format has been changed. For more detailed explanation please follow the link.
+- [Deprecate `css.modules` in favor of `css.requireModuleExtension`](https://github.com/vuejs/vue-cli/pull/4387). This is because we've upgraded to css-loader v3 and the config format has been changed. For more detailed explanation please follow the link.
 
-#### Other Noticeable Changes in `vue.config.js`
+#### `vue.config.js` options
 
-- The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl) is now [removed](https://github.com/vuejs/vue-cli/pull/4388)
+The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl) is now [removed](https://github.com/vuejs/vue-cli/pull/4388)
 
-- [Upgraded versions of several underlying webpack loaders](https://github.com/vuejs/vue-cli/pull/4331) [TODO: elaborate this]
+#### `chainWebpack` / `configureWebpack`
 
 If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config. [TODO: add example here].
 
-Please also notice that the following rules/loaders have been updated:
+The following rules have been updated:
 
-1. [`copy-webpack-plugin`](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md#500-2019-02-20), the `debug` option was renamed to `logLevel`
-2. [use EnvironmentPlugin instead of DefinePlugin for `process.env.*` vars](https://github.com/vuejs/vue-cli/pull/3782), [TODO: detailed explanation]
-3. [The `pug-plain` rule was renamed to `pug-plain-loader`](https://github.com/vuejs/vue-cli/pull/4230)
+- [use EnvironmentPlugin instead of DefinePlugin for `process.env.*` vars](https://github.com/vuejs/vue-cli/pull/3782), [TODO: detailed explanation and example]
+- [The `pug-plain` rule was renamed to `pug-plain-loader`](https://github.com/vuejs/vue-cli/pull/4230)
+
+#### Underlying Loaders / Plugins
+
+Not likely to affect users unless you've customized their options via `chainWebpack` / `configureWebpack`
+
+Several underlying webpack loaders and plugins have been upgraded, most changes are trivial:
+
+- css-loader [TODO: elaborate this]
+- url-loader [from v1 to v2](https://github.com/webpack-contrib/url-loader/releases/tag/v2.0.0)
+- file-loader [from v3 to v4](https://github.com/webpack-contrib/file-loader/releases/tag/v4.0.0)
+- copy-webpack-plugin [from v4 to v5](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md#500-2019-02-20)
 
 ### `@vue/babel-preset-app`, `@vue/cli-plugin-babel`
 
