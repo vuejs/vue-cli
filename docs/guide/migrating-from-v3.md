@@ -63,7 +63,8 @@ Recently `sass-loader@8` has been out and has changed its configuration format q
 
 #### For Less Users
 
-- [TODO: notes on less-loader version]
+less-loader v4 is incompatible with less >= v3.10, see <https://github.com/less/less.js/issues/3414>.
+It's strongly recommended to upgrade to less-loader@5 if your project depends on it.
 
 #### For CSS Module Users
 
@@ -73,7 +74,7 @@ Recently `sass-loader@8` has been out and has changed its configuration format q
 
 - The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl) is now [removed](https://github.com/vuejs/vue-cli/pull/4388)
 
-- [Upgraded versions of several underlying webpack loaders](https://github.com/vuejs/vue-cli/pull/4331) [TODO elaborate this]
+- [Upgraded versions of several underlying webpack loaders](https://github.com/vuejs/vue-cli/pull/4331) [TODO: elaborate this]
 
 If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config. [TODO: add example here].
 
@@ -121,7 +122,7 @@ It's also recommended to upgrade your ESLint to v5, and ESLint config versions t
 
 ------
 
-[TODO][Notes on prettier config version]
+[TODO:][Notes on prettier config version]
 
 ------
 
