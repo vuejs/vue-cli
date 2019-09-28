@@ -91,9 +91,13 @@ The following rules have been updated:
 
 Not likely to affect users unless you've customized their options via `chainWebpack` / `configureWebpack`
 
-Several underlying webpack loaders and plugins have been upgraded, most changes are trivial:
+css-loader was upgraded from v1 to v3:
 
-- css-loader [TODO: elaborate this]
+- [v2 changelog](https://github.com/webpack-contrib/css-loader/releases/tag/v2.0.0)
+- [v3 changelog](https://github.com/webpack-contrib/css-loader/releases/tag/v3.0.0)
+
+Several other underlying webpack loaders and plugins have been upgraded, with mostly trivial changes:
+
 - url-loader [from v1 to v2](https://github.com/webpack-contrib/url-loader/releases/tag/v2.0.0)
 - file-loader [from v3 to v4](https://github.com/webpack-contrib/file-loader/releases/tag/v4.0.0)
 - copy-webpack-plugin [from v4 to v5](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md#500-2019-02-20)
