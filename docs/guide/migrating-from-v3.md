@@ -122,9 +122,21 @@ It's also recommended to upgrade your ESLint to v5, and ESLint config versions t
 
 ------
 
-[TODO:][Notes on prettier config version]
+#### The Prettier Preset
+
+The old implementation of our prettier preset is flawed. We've updated the default template since Vue CLI v3.10.
+
+It now requires `eslint`, `eslint-plugin-prettier` and `prettier` as peer dependencies, following the [standard practice in the ESLint ecosystem](https://github.com/eslint/eslint/issues/3458).
+
+For older projects, if you encountered issues like `Cannot find module: eslint-plugin-prettier`, please run the following command to fix it:
+
+```sh
+npm install --sav-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-prettier prettier
+```
 
 ------
+
+#### `lintOnSave` options
 
 (the following only affects development)
 
