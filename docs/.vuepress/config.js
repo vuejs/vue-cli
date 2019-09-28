@@ -87,7 +87,7 @@ module.exports = {
           },
           {
             text: 'Migrating From v3',
-            link: '/guide/migrating-from-v3'
+            link: '/migrating-from-v3/'
           },
           {
             text: 'Changelog',
@@ -119,8 +119,7 @@ module.exports = {
                 '/guide/mode-and-env',
                 '/guide/build-targets',
                 '/guide/deployment',
-                '/guide/troubleshooting',
-                '/guide/migrating-from-v3'
+                '/guide/troubleshooting'
               ]
             }
           ],

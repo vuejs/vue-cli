@@ -1,3 +1,7 @@
+---
+sidebar: auto
+---
+
 # Migrating from v3
 
 First, install the latest Vue CLI globally:
@@ -22,7 +26,7 @@ And then see the following section for detailed breaking changes introduced in e
 
 If you want to do the migration manually and gradually, here are the tips:
 
-### The Global `@vue/cli` Package
+### The Global `@vue/cli`
 
 The `vue upgrade` command was [redesigned](https://github.com/vuejs/vue-cli/pull/4090).
 
@@ -94,7 +98,7 @@ Several underlying webpack loaders and plugins have been upgraded, most changes 
 - file-loader [from v3 to v4](https://github.com/webpack-contrib/file-loader/releases/tag/v4.0.0)
 - copy-webpack-plugin [from v4 to v5](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md#500-2019-02-20)
 
-### `@vue/babel-preset-app`, `@vue/cli-plugin-babel`
+### `@vue/cli-plugin-babel`, `@vue/babel-preset-app`
 
 #### core-js
 
