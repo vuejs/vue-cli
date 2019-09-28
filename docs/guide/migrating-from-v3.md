@@ -85,8 +85,27 @@ Please also notice that the following rules/loaders have been updated:
 
 ### `@vue/babel-preset-app`, `@vue/cli-plugin-babel`
 
-- [Upgrade to core-js v3](https://github.com/vuejs/vue-cli/pull/3912). [TODO: detailed explanation]
-- Use `@vue/cli-plugin-babel/preset` [TODO: auto migration & elaborate on this]
+#### core-js
+
+The babel plugin requires a peer dependency, for the polyfills used in the transpiled code.
+
+In Vue CLI v3, the required core-js version is 2.x, it is now upgraded to 3.x.
+
+This migration is automated if you upgrade it through `vue upgrade babel --next`. But if you have custom polyfills introduced, you may need to manually update the polyfill names.
+
+[TODO: more detailed explanation]
+
+#### Babel Preset
+
+This migration is also automated if you upgrade it through `vue upgrade babel --next`. (TODO: pending <https://github.com/vuejs/vue-cli/pull/4629>)
+
+- In v3, the default babel preset used in `babel.config.js` is `@vue/app`.
+- In v4, we moved it to the plugin, so now it's named as `@vue/cli-plugin-babel/preset`
+
+It is because that `@vue/babel-preset-app` is actually an indirect dependency in the project.
+It works because of npm's package hoisting.
+But potential problems could still occur if the project has multiple conflicting indirect dependencies of the same package, or if the package manager puts stricter constraints on the dependency resolution (e.g. yarn plug'n'play or pnpm).
+So we now moved it to the project's direct dependency (`@vue/cli-plugin-babel`) to make it more standard-compliant and less error-prone.
 
 ------
 
