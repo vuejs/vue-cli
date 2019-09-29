@@ -5,6 +5,7 @@ const execa = require('execa')
 const minimist = require('minimist')
 const semver = require('semver')
 const LRU = require('lru-cache')
+const chalk = require('chalk')
 
 const {
   hasYarn,
@@ -78,7 +79,11 @@ class PackageManager {
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
       log()
-      warn(`Unknown package manager: ${this.bin}. Currently we only support one of [${SUPPORTED_PACKAGE_MANAGERS.join(', ')}]. ${this.bin} may not be well supported and we are now treating it like npm but potential errors could happen. See if you can use '--registry' instead.`)
+      warn(
+        `The package manager ${chalk.red(this.bin)} is ${chalk.red('not officially supported')}.\n` +
+        `It will be treated like ${chalk.cyan('npm')}, but compatibility issues may occur.\n` +
+        `See if you can use ${chalk.cyan('--registry')} instead.`
+      )
       PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
   }
