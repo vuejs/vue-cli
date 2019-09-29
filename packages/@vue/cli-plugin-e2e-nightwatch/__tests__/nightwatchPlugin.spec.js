@@ -12,7 +12,11 @@ describe('nightwatch e2e plugin', () => {
     project = await create('e2e-nightwatch', {
       plugins: {
         '@vue/cli-plugin-babel': {},
-        '@vue/cli-plugin-e2e-nightwatch': {}
+        '@vue/cli-plugin-e2e-nightwatch': {},
+        '@vue/cli-plugin-eslint': {
+          config: 'airbnb',
+          lintOn: 'save'
+        }
       }
     })
 
