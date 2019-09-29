@@ -29,6 +29,9 @@
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
   },
+  "devDependencies": {
+    "jscodeshift": "^0.6.4"
+  },
   "publishConfig": {
     "access": "public"
   }
