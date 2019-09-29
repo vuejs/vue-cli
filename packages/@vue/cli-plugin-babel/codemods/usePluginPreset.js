@@ -37,5 +37,5 @@ module.exports = function (fileInfo, api) {
       node.value = { cooked: '@vue/cli-plugin-babel/preset', raw: '@vue/cli-plugin-babel/preset' }
     })
 
-  return root.toSource()
+  return root.toSource({ lineTerminator: '\n' })
 }
