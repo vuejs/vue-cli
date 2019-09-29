@@ -41,8 +41,10 @@ module.exports = (api, options) => {
       }
     }
 
-    const argsToRemove = ['url', 'mode', 'headless', 'use-selenium', 'parallel']
-    argsToRemove.forEach((toRemove) => removeArg(rawArgs, toRemove))
+    // remove args
+    ;['url', 'mode'].forEach(toRemove => removeArg(rawArgs, toRemove))
+    // remove flags
+    ;['headless', 'use-selenium', 'parallel'].forEach(toRemove => removeArg(rawArgs, toRemove, 0))
 
     return Promise.all([
       startDevServer(args, api),
@@ -169,11 +171,10 @@ function checkPath (source) {
 }
 
 function removeArg (rawArgs, argToRemove, offset = 1) {
-  const matchRE = new RegExp(`^--${argToRemove}$`)
+  const matchRE = new RegExp(`^--${argToRemove}`)
   const equalRE = new RegExp(`^--${argToRemove}=`)
-
-  const index = rawArgs.findIndex(arg => matchRE.test(arg))
-  if (index > -1) {
-    rawArgs.splice(index, offset + (equalRE.test(rawArgs[index]) ? 1 : 0))
+  const i = rawArgs.findIndex(arg => matchRE.test(arg))
+  if (i > -1) {
+    rawArgs.splice(i, offset + (equalRE.test(rawArgs[i]) ? 0 : 1))
   }
 }
