@@ -4,8 +4,13 @@ jest.mock('vue-cli-plugin-foo', () => () => {}, { virtual: true })
 
 const fs = require('fs')
 const path = require('path')
-const Service = require('../lib/Service')
 
+jest.mock('@vue/cli-shared-utils', () => ({
+  ...jest.requireActual('@vue/cli-shared-utils'),
+  loadModule: jest.fn().mockReturnValue(() => {})
+}))
+
+const Service = require('../lib/Service')
 const mockPkg = json => {
   fs.writeFileSync('/package.json', JSON.stringify(json, null, 2))
 }
@@ -70,6 +75,31 @@ test('loading plugins from package.json', () => {
   expect(service.plugins.some(({ id }) => id === '@vue/cli-plugin-babel')).toBe(true)
   expect(service.plugins.some(({ id }) => id === 'vue-cli-plugin-foo')).toBe(true)
   expect(service.plugins.some(({ id }) => id === 'bar')).toBe(false)
+})
+
+test('loading local plugins from package.json as array', () => {
+  fs.writeFileSync('/local-foo.js', `module.exports = () => {}`)
+  mockPkg({
+    vuePlugins: {
+      service: ['local-foo.js']
+    }
+  })
+  const service = new Service('/')
+  expect(service.plugins.some(({ id }) => id === 'local:local-foo.js')).toBe(true)
+})
+
+test('loading local plugins from package.json as object', () => {
+  fs.writeFileSync('/local-foo.js', `module.exports = () => {}`)
+  mockPkg({
+    vuePlugins: {
+      service: {
+        foo: 'local-foo.js'
+      }
+    }
+  })
+  const service = new Service('/')
+  expect(service.plugins.some(({ id }) => id === 'local:local-foo.js')).toBe(true)
+  expect(service.plugins.some(({ name }) => name === 'foo')).toBe(true)
 })
 
 test('load project options from package.json', () => {
@@ -366,4 +396,26 @@ test('api: hasPlugin', () => {
       }
     }
   ])
+})
+
+test('api: accessing options for named local plugin', () => {
+  mockPkg({
+    vue: {
+      pluginOptions: {
+        test: {
+          option: 'option'
+        }
+      }
+    }
+  })
+  const plugin = {
+    id: 'test-name-options',
+    name: 'test',
+    apply: (_, { pluginOptions }, { option }) => {
+      expect(option).toEqual('option')
+      expect(pluginOptions.test.option).toEqual(option)
+      expect(pluginOptions.test.option).toEqual('option')
+    }
+  }
+  createMockService([plugin], true /* init */)
 })

@@ -78,9 +78,11 @@ module.exports = class Service {
     debug('vue:project-config')(this.projectOptions)
 
     // apply plugins.
-    this.plugins.forEach(({ id, apply }) => {
+    this.plugins.forEach(({ id, name, apply }) => {
       if (this.pluginsToSkip.has(id)) return
-      apply(new PluginAPI(id, this), this.projectOptions)
+      const { pluginOptions = {}} = this.projectOptions
+      const options = pluginOptions[name] || {}
+      apply(new PluginAPI(id, this), this.projectOptions, options)
     })
 
     // apply webpack configs from project config file
@@ -195,13 +197,20 @@ module.exports = class Service {
     // Local plugins
     if (this.pkg.vuePlugins && this.pkg.vuePlugins.service) {
       const files = this.pkg.vuePlugins.service
-      if (!Array.isArray(files)) {
-        throw new Error(`Invalid type for option 'vuePlugins.service', expected 'array' but got ${typeof files}.`)
+      if (isObject(files)) {
+        plugins = plugins.concat(Object.entries(files).map(([name, file]) => ({
+          id: `local:${file}`,
+          name,
+          apply: loadModule(`./${file}`, this.pkgContext)
+        })))
+      } else if (Array.isArray(files)) {
+        plugins = plugins.concat(files.map(file => ({
+          id: `local:${file}`,
+          apply: loadModule(`./${file}`, this.pkgContext)
+        })))
+      } else {
+        throw new Error(`Invalid type for option 'vuePlugins.service', expected 'Array' or 'Object' but got ${typeof files}.`)
       }
-      plugins = plugins.concat(files.map(file => ({
-        id: `local:${file}`,
-        apply: loadModule(`./${file}`, this.pkgContext)
-      })))
     }
 
     return plugins
@@ -422,4 +431,8 @@ function cloneRuleNames (to, from) {
       cloneRuleNames(to[i].oneOf, r.oneOf)
     }
   })
+}
+
+function isObject (obj) {
+  return obj instanceof Object && obj.constructor === Object
 }
