@@ -1,4 +1,19 @@
 
+## 4.0.0-rc.6 (2019-09-30)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-babel`
+  * [#4633](https://github.com/vuejs/vue-cli/pull/4633) feat(babel-migrator): transform babel preset regardless of plugin version ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#4634](https://github.com/vuejs/vue-cli/pull/4634) fix(upgrade-all): avoid accidentally writing outdated package.json back ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.0.0-rc.5 (2019-09-30)
 
 #### :rocket: New Features
