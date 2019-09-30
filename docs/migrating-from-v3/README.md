@@ -80,11 +80,36 @@ The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl)
 
 #### `chainWebpack` / `configureWebpack`
 
-If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config. [TODO: add example here].
+##### The `minimizer` Method in `chainWebpack`
 
-The following rules have been updated:
+If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config.
 
-- [use EnvironmentPlugin instead of DefinePlugin for `process.env.*` vars](https://github.com/vuejs/vue-cli/pull/3782), [TODO: detailed explanation and example]
+For example, if you want to enable `drop_console` option in the terser plugin.
+In v3, you can do this in `chainWebpack`:
+
+```js
+module.exports = {
+  chainWebpack: (config) => {
+    // TODO:
+    // terserOptions: { compress: { drop_console: true } }
+  }
+}
+```
+
+In v4, it's changed to:
+
+```js
+// TODO:
+```
+
+##### The `define` Plugin is Changed to `process-env` and Uses `EnvironmentPlugin` Underlyingly
+
+See [#3782](https://github.com/vuejs/vue-cli/pull/3782).
+
+[TODO: detailed explanation and example for defining `process.env.*` vars]
+
+##### Other Changes
+
 - [The `pug-plain` rule was renamed to `pug-plain-loader`](https://github.com/vuejs/vue-cli/pull/4230)
 
 #### Underlying Loaders / Plugins
