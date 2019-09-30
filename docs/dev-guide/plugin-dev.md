@@ -432,6 +432,49 @@ module.exports.defaultModes = {
 
 This is because the command's expected mode needs to be known before loading environment variables, which in turn needs to happen before loading user options / applying the plugins.
 
+### Local plugins
+
+If you need access to the plugin API in your project and don't want to create a full plugin for it, you can use the `vuePlugins.service` option in your `package.json` file:
+
+```json
+{
+  "vuePlugins": {
+    "service": ["my-local-plugin.js"]
+  }
+}
+```
+or
+```json
+{
+  "vuePlugins": {
+    "service": {
+      "myPlugin": "my-local-plugin.js"
+    }
+  }
+}
+```
+When using the object configuration, key `myCommands` becomes your local plugin `name` and the plugin options will be directly accessible as the third argument in `PluginAPI` if the plugin `name` corresponds to the key defined in `pluginOptions`.
+
+`pluginOptions` are defined in `vue.config.js` or in `vue` field in `package.json`:
+```json
+{
+  pluginOptions: {
+    myPlugin: {
+      foo: "bar",
+      baz: "quz"
+    }
+  }
+}
+```
+
+``` js
+// my-local-plugin.js
+module.exports = (api, options, { foo, baz }) => {
+  console.log(foo) // bar
+  console.log(baz) // quz
+}
+```
+
 ## Prompts
 
 Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.

@@ -79,6 +79,16 @@ If you need access to the plugin API in your project and don't want to create a 
   }
 }
 ```
+or
+```json
+{
+  "vuePlugins": {
+    "service": {
+      "myCommands": "my-commands.js"
+    }
+  }
+}
+```
 
 Each file will need to export a function taking the plugin API as the first argument. For more information about the plugin API, check out the [Plugin Development Guide](../dev-guide/plugin-dev.md).
 
