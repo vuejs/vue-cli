@@ -456,7 +456,7 @@ or
 When using the object configuration, key `myCommands` becomes your local plugin `name` and the plugin options will be directly accessible as the third argument in `PluginAPI` if the plugin `name` corresponds to the key defined in `pluginOptions`.
 
 `pluginOptions` are defined in `vue.config.js` or in `vue` field in `package.json`:
-```json
+```js
 {
   pluginOptions: {
     myPlugin: {
