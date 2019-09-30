@@ -12,7 +12,7 @@ class PluginAPI {
   /**
    * @param {string} id - Id of the plugin.
    * @param {Service} service - A vue-cli-service instance.
-   * @param {Object} options - optional access plugin options for named local plugins
+   * @param {Object} options - optional access to plugin options for named local plugins
    */
   constructor (id, service, options = {}) {
     this.id = id
