@@ -307,7 +307,10 @@ test('css.loaderOptions', () => {
       css: {
         loaderOptions: {
           sass: {
-            prependData
+            prependData,
+            sassOptions: {
+              includePaths: ['./src/styles']
+            }
           }
         }
       }
@@ -316,12 +319,17 @@ test('css.loaderOptions', () => {
 
   expect(findOptions(config, 'scss', 'sass')).toMatchObject({
     prependData,
-    sourceMap: false
+    sourceMap: false,
+    sassOptions: {
+      includePaths: ['./src/styles']
+    }
   })
+  expect(findOptions(config, 'scss', 'sass').sassOptions).not.toHaveProperty('indentedSyntax')
   expect(findOptions(config, 'sass', 'sass')).toMatchObject({
     prependData,
     sassOptions: {
-      indentedSyntax: true
+      indentedSyntax: true,
+      includePaths: ['./src/styles']
     },
     sourceMap: false
   })
