@@ -5,6 +5,7 @@ const execa = require('execa')
 const minimist = require('minimist')
 const semver = require('semver')
 const LRU = require('lru-cache')
+const chalk = require('chalk')
 
 const {
   hasYarn,
@@ -13,6 +14,7 @@ const {
   hasProjectPnpm
 } = require('@vue/cli-shared-utils/lib/env')
 const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib/pluginResolution')
+const { log, warn } = require('@vue/cli-shared-utils/lib/logger')
 
 const { loadOptions } = require('../options')
 const getPackageJson = require('./getPackageJson')
@@ -76,7 +78,13 @@ class PackageManager {
     }
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
-      throw new Error(`Unknown package manager: ${this.bin}`)
+      log()
+      warn(
+        `The package manager ${chalk.red(this.bin)} is ${chalk.red('not officially supported')}.\n` +
+        `It will be treated like ${chalk.cyan('npm')}, but compatibility issues may occur.\n` +
+        `See if you can use ${chalk.cyan('--registry')} instead.`
+      )
+      PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
   }
 
