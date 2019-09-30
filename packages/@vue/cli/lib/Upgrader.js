@@ -45,6 +45,7 @@ module.exports = class Upgrader {
     }
 
     for (const p of upgradable) {
+      this.pkg = getPackageJson(this.context)
       await this.upgrade(p.name, { to: p.latest })
     }
 
