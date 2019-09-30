@@ -1,6 +1,6 @@
 const config = {
   presets: [
-    [require("@vue/cli-plugin-babel/preset"), {
+    [require('@vue/cli-plugin-babel/preset'), {
       polyfills: []
     }]
   ]
