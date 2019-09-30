@@ -196,7 +196,8 @@ module.exports = (api, options) => {
         loaderOptions.sass,
         {
           sassOptions: Object.assign(
-            (loaderOptions.sass && loaderOptions.sass.sassOptions) || {},
+            {},
+            loaderOptions.sass && loaderOptions.sass.sassOptions,
             {
               indentedSyntax: true
             }
