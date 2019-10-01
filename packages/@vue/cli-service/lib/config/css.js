@@ -187,11 +187,13 @@ module.exports = (api, rootOptions) => {
     createCSSRule('css', /\.css$/)
     createCSSRule('postcss', /\.p(ost)?css$/)
     createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(
+      {},
       defaultSassLoaderOptions,
       loaderOptions.scss || loaderOptions.sass
     ))
     if (sassLoaderVersion < 8) {
       createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+        {},
         defaultSassLoaderOptions,
         {
           indentedSyntax: true
@@ -200,6 +202,7 @@ module.exports = (api, rootOptions) => {
       ))
     } else {
       createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+        {},
         defaultSassLoaderOptions,
         loaderOptions.sass,
         {
