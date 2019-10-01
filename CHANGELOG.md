@@ -1,4 +1,15 @@
 
+## 4.0.0-rc.7 (2019-10-01)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4637](https://github.com/vuejs/vue-cli/pull/4637) fix: avoid accidentally overriding sass config with scss configs ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.0.0-rc.6 (2019-09-30)
 
 #### :rocket: New Features
