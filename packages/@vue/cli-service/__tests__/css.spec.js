@@ -347,7 +347,8 @@ test('scss loaderOptions', () => {
             prependData: sassData
           },
           scss: {
-            prependData: scssData
+            prependData: scssData,
+            webpackImporter: false
           }
         }
       }
@@ -365,6 +366,9 @@ test('scss loaderOptions', () => {
     },
     sourceMap: false
   })
+
+  // should not merge scss options into default sass config
+  expect(findOptions(config, 'sass', 'sass')).not.toHaveProperty('webpackImporter')
 })
 
 test('should use dart sass implementation whenever possible', () => {
