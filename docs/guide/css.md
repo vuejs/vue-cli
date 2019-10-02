@@ -129,15 +129,15 @@ module.exports = {
       // @/ is an alias to src/
       // so this assumes you have a file named `src/variables.sass`
       sass: {
-        data: `@import "~@/variables.sass"`
+        prependData: `@import "~@/variables.sass"`
       },
       // by default the `sass` option will apply to both syntaxes
       // because `scss` syntax is also processed by sass-loader underlyingly
-      // but when configuring the `data` option
+      // but when configuring the `prependData` option
       // `scss` syntax requires an semicolon at the end of a statement, while `sass` syntax requires none
       // in that case, we can target the `scss` syntax separately using the `scss` option
       scss: {
-        data: `@import "~@/variables.scss";`
+        prependData: `@import "~@/variables.scss";`
       },
       // pass Less.js Options to less-loader
       less:{
