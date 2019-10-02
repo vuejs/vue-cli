@@ -43,10 +43,17 @@ When running `vue invoke` / `vue add` / `vue upgrade`, there's now an [extra con
 
 When running `vue add vuex` or `vue add router`:
 
-- in v3, only `vuex` or `vue-router` will be added to the project;
-- in v4, there will also be `@vue/cli-plugin-vuex` & `@vue/cli-plugin-router` installed.
+- In v3, only `vuex` or `vue-router` will be added to the project;
+- In v4, there will also be `@vue/cli-plugin-vuex` & `@vue/cli-plugin-router` installed.
 
 This currently does not make an actual difference for end users, but such design allows us to add more features for vuex & vue-router users later.
+
+For preset and plugin authors, there are several noteworthy changes in the two plugins:
+
+- The default directory structure was changed:
+  - `src/store.js` moved to `src/store/index.js`;
+  - `src/router.js` renamed to `src/router/index.js`;
+- The `router` & `routerHistoryMode` options in `preset.json` is still supported for compatibility reason. But it's now recommended to use `plugins: { '@vue/cli-plugin-router': { historyMode: true } }` for better consistency.
 
 ### `@vue/cli-service`
 
@@ -82,16 +89,18 @@ The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl)
 
 ##### The `minimizer` Method in `chainWebpack`
 
-If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config.
+If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config
 
 For example, if you want to enable `drop_console` option in the terser plugin.
-In v3, you can do this in `chainWebpack`:
+In v3, you may do this in `chainWebpack`:
 
 ```js
+const TerserPlugin = require('terser-webpack-plugin')
 module.exports = {
   chainWebpack: (config) => {
-    // TODO:
-    // terserOptions: { compress: { drop_console: true } }
+    config.optimization.minimizer([
+      new TerserPlugin({ terserOptions: { compress: { drop_console: true } } })
+    ])
   }
 }
 ```
@@ -99,7 +108,16 @@ module.exports = {
 In v4, it's changed to:
 
 ```js
-// TODO:
+module.exports = {
+  chainWebpack: (config) => {
+    if (process.env.NODE_ENV === 'production') {
+      config.optimization.minimizer('terser').tap((args) => {
+        args[0].terserOptions.compress.drop_console = true
+        return args
+      })
+    }
+  }
+}
 ```
 
 ##### The `define` Plugin is Changed to `process-env` and Uses `EnvironmentPlugin` Underlyingly
@@ -137,7 +155,7 @@ In Vue CLI v3, the required `core-js` version is 2.x, it is now upgraded to 3.x.
 
 This migration is automated if you upgrade it through `vue upgrade babel --next`. But if you have custom polyfills introduced, you may need to manually update the polyfill names.
 
-[TODO: more detailed explanation]
+[TODO: more detailed explanation on polyfills]
 
 #### Babel Preset
 
