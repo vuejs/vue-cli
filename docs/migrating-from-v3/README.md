@@ -54,6 +54,7 @@ For preset and plugin authors, there are several noteworthy changes in the two p
   - `src/store.js` moved to `src/store/index.js`;
   - `src/router.js` renamed to `src/router/index.js`;
 - The `router` & `routerHistoryMode` options in `preset.json` is still supported for compatibility reason. But it's now recommended to use `plugins: { '@vue/cli-plugin-router': { historyMode: true } }` for better consistency.
+- `api.hasPlugin('vue-router')` is no longer supported. It's now `api.hasPlugin('router')`.
 
 ### `@vue/cli-service`
 
