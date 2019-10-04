@@ -28,18 +28,18 @@ If you want to do the migration manually and gradually, here are the tips:
 
 ### The Global `@vue/cli`
 
-The `vue upgrade` command was [redesigned](https://github.com/vuejs/vue-cli/pull/4090).
+#### [Redesigned](https://github.com/vuejs/vue-cli/pull/4090) `vue upgrade`
 
 - Before: `vue upgrade [patch | minor | major]`, and it does nothing more than install the latest versions of Vue CLI plugins.
 - After: `vue upgrade [plugin-name]`. Aside from upgrading the plugins, it can run migrators from plugins to help you automate the migration process. For more options for this command, please run `vue upgrade --help`.
 
-------
+#### Extra Confirmation Step To Avoid Overwriting
 
 When running `vue invoke` / `vue add` / `vue upgrade`, there's now an [extra confirmation step](https://github.com/vuejs/vue-cli/pull/4275) if you have uncommitted changes in the current repository.
 
 ![image](https://user-images.githubusercontent.com/3277634/65588457-23db5a80-dfba-11e9-9899-9dd72efc111e.png)
 
-------
+#### Vue Router and Vuex Now Have Corresponding CLI Plugins
 
 When running `vue add vuex` or `vue add router`:
 
