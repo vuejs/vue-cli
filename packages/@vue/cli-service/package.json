@@ -59,7 +59,7 @@
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.mapvalues": "^4.6.0",
     "lodash.transform": "^4.6.0",
-    "mini-css-extract-plugin": "^0.6.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "minimist": "^1.2.0",
     "ora": "^3.4.0",
     "portfinder": "^1.0.20",
