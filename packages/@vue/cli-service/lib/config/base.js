@@ -187,5 +187,11 @@ module.exports = (api, options) => {
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]
         }])
+
+    const TerserPlugin = require('terser-webpack-plugin')
+    const terserOptions = require('./terserOptions')
+    webpackConfig.optimization
+      .minimizer('terser')
+        .use(TerserPlugin, [terserOptions(options)])
   })
 }
