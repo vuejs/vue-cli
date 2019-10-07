@@ -4,8 +4,6 @@ sidebarDepth: 0
 
 # Введение
 
-<Bit/>
-
 ::: warning Предупреждение
 Эта документация для `@vue/cli`. Для старой версии `vue-cli`, см. [здесь](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
 :::
