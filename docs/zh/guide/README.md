@@ -4,8 +4,6 @@ sidebarDepth: 0
 
 # 介绍
 
-<Bit/>
-
 ::: warning 警告
 这份文档是对应 `@vue/cli` **3.x** 版本的。老版本的 `vue-cli` 文档请移步[这里](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--)。
 :::
