@@ -4,8 +4,6 @@ sidebarDepth: 0
 
 # Overview
 
-<Bit/>
-
 ::: warning
 This documentation is for `@vue/cli` version **3.x**. For the old `vue-cli`, see [here](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
 :::
