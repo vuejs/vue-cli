@@ -1,13 +1,13 @@
 const path = require('path')
 
-module.exports = (api, options) => {
+module.exports = (api, projectOptions) => {
   const fs = require('fs')
-  const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
+  const useThreads = process.env.NODE_ENV === 'production' && !!projectOptions.parallel
 
   api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
-    if (!options.pages) {
+    if (!projectOptions.pages) {
       config.entry('app')
         .clear()
         .add('./src/main.ts')
@@ -15,7 +15,8 @@ module.exports = (api, options) => {
 
     config.resolve
       .extensions
-        .merge(['.ts', '.tsx'])
+        .prepend('.ts')
+        .prepend('.tsx')
 
     const tsRule = config.module.rule('ts').test(/\.ts$/)
     const tsxRule = config.module.rule('tsx').test(/\.tsx$/)
@@ -39,8 +40,8 @@ module.exports = (api, options) => {
       addLoader({
         loader: 'thread-loader',
         options:
-          typeof options.parallel === 'number'
-            ? { workers: options.parallel }
+          typeof projectOptions.parallel === 'number'
+            ? { workers: projectOptions.parallel }
             : {}
       })
     }
@@ -74,7 +75,7 @@ module.exports = (api, options) => {
         .plugin('fork-ts-checker')
           .use(require('fork-ts-checker-webpack-plugin'), [{
             vue: true,
-            tslint: options.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
+            tslint: projectOptions.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
             formatter: 'codeframe',
             // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
             checkSyntacticErrors: useThreads

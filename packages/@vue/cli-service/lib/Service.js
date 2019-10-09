@@ -9,7 +9,7 @@ const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { warn, error, isPlugin, loadModule } = require('@vue/cli-shared-utils')
+const { warn, error, isPlugin, resolvePluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 
@@ -32,6 +32,8 @@ module.exports = class Service {
     // When useBuiltIn === false, built-in plugins are disabled. This is mostly
     // for testing.
     this.plugins = this.resolvePlugins(plugins, useBuiltIn)
+    // pluginsToSkip will be populated during run()
+    this.pluginsToSkip = new Set()
     // resolve the default mode to use for each command
     // this is provided by plugins as module.exports.defaultModes
     // so we can get the information without actually applying the plugin.
@@ -77,6 +79,7 @@ module.exports = class Service {
 
     // apply plugins.
     this.plugins.forEach(({ id, apply }) => {
+      if (this.pluginsToSkip.has(id)) return
       apply(new PluginAPI(id, this), this.projectOptions)
     })
 
@@ -94,11 +97,11 @@ module.exports = class Service {
     const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
 
-    const load = path => {
+    const load = envPath => {
       try {
-        const env = dotenv.config({ path, debug: process.env.DEBUG })
+        const env = dotenv.config({ path: envPath, debug: process.env.DEBUG })
         dotenvExpand(env)
-        logger(path, env)
+        logger(envPath, env)
       } catch (err) {
         // only ignore error if file is not found
         if (err.toString().indexOf('ENOENT') < 0) {
@@ -132,6 +135,15 @@ module.exports = class Service {
     }
   }
 
+  setPluginsToSkip (args) {
+    const skipPlugins = args['skip-plugins']
+    const pluginsToSkip = skipPlugins
+      ? new Set(skipPlugins.split(',').map(id => resolvePluginId(id)))
+      : new Set()
+
+    this.pluginsToSkip = pluginsToSkip
+  }
+
   resolvePlugins (inlinePlugins, useBuiltIn) {
     const idToPlugin = id => ({
       id: id.replace(/^.\//, 'built-in:'),
@@ -148,7 +160,6 @@ module.exports = class Service {
       // config plugins are order sensitive
       './config/base',
       './config/css',
-      './config/dev',
       './config/prod',
       './config/app'
     ].map(idToPlugin)
@@ -189,7 +200,7 @@ module.exports = class Service {
       }
       plugins = plugins.concat(files.map(file => ({
         id: `local:${file}`,
-        apply: loadModule(file, this.pkgContext)
+        apply: loadModule(`./${file}`, this.pkgContext)
       })))
     }
 
@@ -201,6 +212,9 @@ module.exports = class Service {
     // prioritize inline --mode
     // fallback to resolved default modes from plugins or development if --watch is defined
     const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
+
+    // --skip-plugins arg may have plugins that should be skipped during init()
+    this.setPluginsToSkip(args)
 
     // load env variables, load user config, apply plugins
     this.init(mode)
@@ -347,18 +361,18 @@ module.exports = class Service {
       resolvedFrom = 'inline options'
     }
 
-    if (typeof resolved.baseUrl !== 'undefined') {
-      if (typeof resolved.publicPath !== 'undefined') {
+    if (resolved.css && typeof resolved.css.modules !== 'undefined') {
+      if (typeof resolved.css.requireModuleExtension !== 'undefined') {
         warn(
-          `You have set both "baseUrl" and "publicPath" in ${chalk.bold('vue.config.js')}, ` +
-          `in this case, "baseUrl" will be ignored in favor of "publicPath".`
+          `You have set both "css.modules" and "css.requireModuleExtension" in ${chalk.bold('vue.config.js')}, ` +
+          `"css.modules" will be ignored in favor of "css.requireModuleExtension".`
         )
       } else {
         warn(
-          `"baseUrl" option in ${chalk.bold('vue.config.js')} ` +
-          `is deprecated now, please use "publicPath" instead.`
+          `"css.modules" option in ${chalk.bold('vue.config.js')} ` +
+          `is deprecated now, please use "css.requireModuleExtension" instead.`
         )
-        resolved.publicPath = resolved.baseUrl
+        resolved.css.requireModuleExtension = !resolved.css.modules
       }
     }
 
@@ -367,18 +381,7 @@ module.exports = class Service {
     if (typeof resolved.publicPath === 'string') {
       resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
     }
-    // for compatibility concern, in case some plugins still rely on `baseUrl` option
-    resolved.baseUrl = resolved.publicPath
     removeSlash(resolved, 'outputDir')
-
-    // deprecation warning
-    // TODO remove in final release
-    if (resolved.css && resolved.css.localIdentName) {
-      warn(
-        `css.localIdentName has been deprecated. ` +
-        `All css-loader options (except "modules") are now supported via css.loaderOptions.css.`
-      )
-    }
 
     // validate options
     validate(resolved, msg => {

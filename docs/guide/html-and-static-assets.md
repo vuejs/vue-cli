@@ -27,7 +27,7 @@ See also:
 
 [`<link rel="preload">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Preloading_content) is a type of resource hint that is used to specify resources that your pages will need very soon after loading, which you therefore want to start preloading early in the lifecycle of a page load, before the browser's main rendering machinery kicks in.
 
-By default, a Vue CLI app will automatically generate preload hints for all files that are needed for the initial rendering the your app.
+By default, a Vue CLI app will automatically generate preload hints for all files that are needed for the initial rendering of your app.
 
 The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('preload')`.
 
@@ -72,7 +72,7 @@ import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
 webpack's runtime will inject prefetch links when the parent chunk is loaded.
 
 ::: tip
-Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
+Prefetch links will consume bandwidth. If you have a large app with many async chunks and your users are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
 :::
 
 ### Disable Index Generation

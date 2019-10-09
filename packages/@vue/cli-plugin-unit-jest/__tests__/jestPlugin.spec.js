@@ -111,3 +111,13 @@ test('should work with tsx', async () => {
 
   await run(`vue-cli-service test:unit`)
 })
+
+test('should correctly configured eslint', async () => {
+  const project = await create('unit-jest-eslint', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {},
+      '@vue/cli-plugin-unit-jest': {}
+    }
+  })
+  await project.run(`vue-cli-service lint`)
+})

@@ -47,22 +47,15 @@ module.exports = (api, options) => {
 
     return runner
   })
-
-  // TODO remove in RC
-  api.registerCommand('e2e', (args, rawArgv) => {
-    const { warn } = require('@vue/cli-shared-utils')
-    warn(`Deprecation Warning: "vue-cli-service e2e" has been renamed to "vue-cli-service test:e2e".`)
-    return api.service.run('test:e2e', args, rawArgv)
-  })
 }
 
 module.exports.defaultModes = {
   'test:e2e': 'production'
 }
 
-function removeArg (rawArgs, arg, offset = 1) {
-  const matchRE = new RegExp(`^--${arg}`)
-  const equalRE = new RegExp(`^--${arg}=`)
+function removeArg (rawArgs, argToRemove, offset = 1) {
+  const matchRE = new RegExp(`^--${argToRemove}`)
+  const equalRE = new RegExp(`^--${argToRemove}=`)
   const i = rawArgs.findIndex(arg => matchRE.test(arg))
   if (i > -1) {
     rawArgs.splice(i, offset + (equalRE.test(rawArgs[i]) ? 0 : 1))

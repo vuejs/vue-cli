@@ -11,107 +11,49 @@ module.exports = (api, _, __, invoking) => {
       '@vue/test-utils': '1.0.0-beta.29'
     },
     jest: {
-      moduleFileExtensions: [
-        'js',
-        'jsx',
-        'json',
-        // tell Jest to handle *.vue files
-        'vue'
-      ],
-      transform: {
-        // process *.vue files with vue-jest
-        '^.+\\.vue$': 'vue-jest',
-        '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$':
-          'jest-transform-stub'
-      },
-      'transformIgnorePatterns': ['/node_modules/'],
-      // support the same @ -> src alias mapping in source code
-      moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/src/$1'
-      },
-      // serializer for snapshots
-      snapshotSerializers: ['jest-serializer-vue'],
-      testMatch: [
-        '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
-      ],
-      // https://github.com/facebook/jest/issues/6766
-      testURL: 'http://localhost/',
-      watchPlugins: [
-        'jest-watch-typeahead/filename',
-        'jest-watch-typeahead/testname'
-      ]
+      preset: api.hasPlugin('babel')
+        ? '@vue/cli-plugin-unit-jest'
+        : '@vue/cli-plugin-unit-jest/presets/no-babel'
     }
   })
 
-  if (!api.hasPlugin('typescript')) {
+  if (api.hasPlugin('eslint')) {
     api.extendPackage({
-      jest: {
-        transform: {
-          '^.+\\.jsx?$': 'babel-jest'
-        }
+      eslintConfig: {
+        overrides: [
+          {
+            files: [
+              '**/__tests__/*.{j,t}s?(x)',
+              '**/tests/unit/**/*.spec.{j,t}s?(x)'
+            ],
+            env: {
+              jest: true
+            }
+          }
+        ]
       }
     })
-    if (api.hasPlugin('babel')) {
-      api.extendPackage({
-        devDependencies: {
-          'babel-jest': '^24.7.1',
-          '@babel/core': '^7.4.4'
-        }
-      })
-    } else {
-      // ts-jest still does not support babel.config.js
-      // https://github.com/kulshekhar/ts-jest/issues/933
-      api.render(files => {
-        files['.babelrc'] = JSON.stringify(
-          {
-            plugins: ['@babel/plugin-transform-modules-commonjs']
-          },
-          null,
-          2
-        )
-      })
-    }
-  } else {
-    applyTS(api, invoking)
   }
 
-  if (api.hasPlugin('eslint')) {
-    applyESLint(api)
+  if (api.hasPlugin('typescript')) {
+    applyTS(api, invoking)
   }
 }
 
 const applyTS = (module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     jest: {
-      moduleFileExtensions: ['ts', 'tsx'],
-      transform: {
-        '^.+\\.tsx?$': 'ts-jest'
-      }
+      preset: api.hasPlugin('babel')
+        ? '@vue/cli-plugin-unit-jest/presets/typescript-and-babel'
+        : '@vue/cli-plugin-unit-jest/presets/typescript'
     },
     devDependencies: {
-      '@types/jest': '^24.0.11',
-      'ts-jest': '^24.0.2'
+      '@types/jest': '^24.0.11'
     }
   })
-  if (api.hasPlugin('babel')) {
-    api.extendPackage({
-      jest: {
-        globals: {
-          'ts-jest': {
-            // we need babel to transpile JSX
-            babelConfig: true
-          }
-        }
-      },
-      devDependencies: {
-        // this is for now necessary to force ts-jest and vue-jest to use babel 7
-        '@babel/core': '^7.4.4',
-        'babel-core': '7.0.0-bridge.0'
-      }
-    })
-  }
-  // inject jest type to tsconfig.json
+
   if (invoking) {
+    // inject jest type to tsconfig.json
     api.render(files => {
       const tsconfig = files['tsconfig.json']
       if (tsconfig) {
@@ -126,12 +68,4 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
       }
     })
   }
-})
-
-const applyESLint = (module.exports.applyESLint = api => {
-  api.render(files => {
-    files['tests/unit/.eslintrc.js'] = api.genJSConfig({
-      env: { jest: true }
-    })
-  })
 })

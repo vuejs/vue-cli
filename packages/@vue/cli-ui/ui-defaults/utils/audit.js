@@ -54,7 +54,7 @@ exports.auditProject = async function (cwd) {
         }
       }
 
-      auditAdvisories = auditAdvisories.sort((a, b) => severity[a.data.advisory.severity] - severity[b.data.advisory.severity])
+      auditAdvisories.sort((a, b) => severity[a.data.advisory.severity] - severity[b.data.advisory.severity])
 
       let id = 0
       for (const { data: { advisory } } of auditAdvisories) {

@@ -2,7 +2,7 @@ jest.setTimeout(40000)
 
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
@@ -173,4 +173,100 @@ test('build as lib with --filename option', async () => {
   expect(await page.evaluate(() => {
     return window.testLib.bar
   })).toBe(2)
+})
+
+test('build as lib without --name and --filename options (default to package name)', async () => {
+  const project = await create('build-lib-no-name-and-filename-option', defaultPreset)
+  await project.write('package.json', `
+      {
+        "name": "test-lib"
+      }
+    `)
+  await project.write('src/main.js', `
+      export default { foo: 1 }
+      export const bar = 2
+    `)
+  const { stdout } = await project.run('vue-cli-service build --target lib src/main.js')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/test-lib.common.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.min.js')).toBe(true)
+})
+
+test('build as lib without --name and --filename options (default to package name, minus scope)', async () => {
+  const project = await create('build-lib-no-name-and-filename-option-with-scope', defaultPreset)
+  await project.write('package.json', `
+      {
+        "name": "@foo/test-lib"
+      }
+    `)
+  await project.write('src/main.js', `
+      export default { foo: 1 }
+      export const bar = 2
+    `)
+  const { stdout } = await project.run('vue-cli-service build --target lib src/main.js')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/test-lib.common.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.js')).toBe(true)
+  expect(project.has('dist/test-lib.umd.min.js')).toBe(true)
+})
+
+test('build as lib with --inline-vue', async () => {
+  const project = await create('build-lib-inline-vue', defaultPreset)
+
+  await project.write('src/main-lib.js', `
+    import Vue from 'vue'
+    import App from "./components/App.vue"
+
+    document.addEventListener("DOMContentLoaded", function() {
+      new Vue({
+        render: h => h(App),
+      }).$mount('body');
+    });
+  `)
+
+  await project.write('src/components/App.vue', `
+    <template>
+      <div>{{ message }}<div>
+    </template>
+    <script>
+      export default {
+        data() {
+          return {
+            message: 'Hello from Lib'
+          }
+        },
+      }
+    </script>
+  `)
+
+  const { stdout } = await project.run('vue-cli-service build --target lib --inline-vue --name testLib src/main-lib.js')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/testLib.common.js')).toBe(true)
+  expect(project.has('dist/testLib.umd.js')).toBe(true)
+  expect(project.has('dist/testLib.umd.min.js')).toBe(true)
+
+  const port = await portfinder.getPortPromise()
+  server = createServer({ root: path.join(project.dir, 'dist') })
+
+  await new Promise((resolve, reject) => {
+    server.listen(port, err => {
+      if (err) return reject(err)
+      resolve()
+    })
+  })
+
+  const launched = await launchPuppeteer(`http://localhost:${port}/demo.html`)
+  browser = launched.browser
+  page = launched.page
+  const divText = await page.evaluate(() => {
+    return document.querySelector('div').textContent
+  })
+  expect(divText).toMatch('Hello from Lib')
 })

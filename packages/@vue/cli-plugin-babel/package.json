@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-babel",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.0-rc.7",
   "description": "babel plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -20,11 +20,17 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-babel#readme",
   "dependencies": {
-    "@babel/core": "^7.4.4",
-    "@vue/babel-preset-app": "^4.0.0-alpha.0",
-    "@vue/cli-shared-utils": "^4.0.0-alpha.0",
-    "babel-loader": "^8.0.5",
-    "webpack": ">=4 < 4.29"
+    "@babel/core": "^7.4.5",
+    "@vue/babel-preset-app": "^4.0.0-rc.7",
+    "@vue/cli-shared-utils": "^4.0.0-rc.7",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.0.0"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
+  },
+  "devDependencies": {
+    "jscodeshift": "^0.6.4"
   },
   "publishConfig": {
     "access": "public"

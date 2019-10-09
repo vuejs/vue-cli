@@ -1,10 +1,11 @@
 {
   "npmClient": "yarn",
-  "useWorkspaces": false,
-  "version": "4.0.0-alpha.0",
+  "useWorkspaces": true,
+  "version": "4.0.0-rc.7",
   "packages": [
     "packages/@vue/babel-preset-app",
-    "packages/@vue/cli*"
+    "packages/@vue/cli*",
+    "packages/vue-cli-version-marker"
   ],
   "changelog": {
     "repo": "vuejs/vue-cli",

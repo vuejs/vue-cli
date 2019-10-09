@@ -76,22 +76,44 @@ module.exports = api => {
             description: 'org.vue.pwa.config.pwa.appleMobileWebAppStatusBarStyle.description',
             default: 'default',
             value: data.vue && data.vue.pwa && data.vue.pwa.appleMobileWebAppStatusBarStyle
+          },
+          {
+            name: 'manifestCrossorigin',
+            type: 'list',
+            message: 'org.vue.pwa.config.pwa.manifestCrossorigin.message',
+            description: 'org.vue.pwa.config.pwa.manifestCrossorigin.description',
+            default: undefined,
+            value: data.vue && data.vue.pwa && data.vue.pwa.manifestCrossorigin,
+            choices: [
+              {
+                name: 'none',
+                value: undefined
+              },
+              {
+                name: 'anonymous',
+                value: 'anonymous'
+              },
+              {
+                name: 'use-credentials',
+                value: 'use-credentials'
+              }
+            ]
           }
         ]
       }
     },
-    onWrite: async ({ api, prompts, cwd }) => {
+    onWrite: async ({ onWriteApi, prompts, cwd }) => {
       const result = {}
       for (const prompt of prompts.filter(p => !p.raw.skipSave)) {
-        result[`pwa.${prompt.id}`] = await api.getAnswer(prompt.id)
+        result[`pwa.${prompt.id}`] = await onWriteApi.getAnswer(prompt.id)
       }
-      api.setData('vue', result)
+      onWriteApi.setData('vue', result)
 
       // Update app manifest
 
       const name = result['name']
       if (name) {
-        api.setData('manifest', {
+        onWriteApi.setData('manifest', {
           name,
           short_name: name
         })
@@ -99,14 +121,14 @@ module.exports = api => {
 
       const themeColor = result['themeColor']
       if (themeColor) {
-        api.setData('manifest', {
+        onWriteApi.setData('manifest', {
           theme_color: themeColor
         })
       }
 
-      const backgroundColor = await api.getAnswer('backgroundColor')
+      const backgroundColor = await onWriteApi.getAnswer('backgroundColor')
       if (backgroundColor) {
-        api.setData('manifest', {
+        onWriteApi.setData('manifest', {
           background_color: backgroundColor
         })
       }

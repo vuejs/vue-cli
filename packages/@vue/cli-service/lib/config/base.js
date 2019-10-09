@@ -143,7 +143,7 @@ module.exports = (api, options) => {
             .use('raw')
               .loader('raw-loader')
               .end()
-            .use('pug-plain')
+            .use('pug-plain-loader')
               .loader('pug-plain-loader')
               .end()
             .end()
@@ -187,5 +187,11 @@ module.exports = (api, options) => {
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]
         }])
+
+    const TerserPlugin = require('terser-webpack-plugin')
+    const terserOptions = require('./terserOptions')
+    webpackConfig.optimization
+      .minimizer('terser')
+        .use(TerserPlugin, [terserOptions(options)])
   })
 }

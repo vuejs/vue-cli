@@ -29,12 +29,14 @@ module.exports = (api, options) => {
       '--modern': `build app targeting modern browsers with auto fallback`,
       '--no-unsafe-inline': `build app without introducing inline scripts`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
+      '--inline-vue': 'include the Vue module in the final bundle of library or web component target',
       '--formats': `list of output formats for library builds (default: ${defaults.formats})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
       '--filename': `file name for output, only usable for 'lib' target (default: value of --name)`,
       '--no-clean': `do not remove the dist directory before building the project`,
       '--report': `generate report.html to help analyze bundle content`,
       '--report-json': 'generate report.json to help analyze bundle content',
+      '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
       '--watch': `watch for changes`
     }
   }, async (args, rawArgs) => {
@@ -123,7 +125,12 @@ async function build (args, api, options) {
     }
   }
 
-  const targetDir = api.resolve(args.dest || options.outputDir)
+  if (args.dest) {
+    // Override outputDir before resolving webpack config as config relies on it (#2327)
+    options.outputDir = args.dest
+  }
+
+  const targetDir = api.resolve(options.outputDir)
   const isLegacyBuild = args.target === 'app' && args.modern && !args.modernBuild
 
   // resolve raw webpack config
@@ -141,14 +148,6 @@ async function build (args, api, options) {
 
   // check for common config errors
   validateWebpackConfig(webpackConfig, api, options, args.target)
-
-  // apply inline dest path after user configureWebpack hooks
-  // so it takes higher priority
-  if (args.dest) {
-    modifyConfig(webpackConfig, config => {
-      config.output.path = targetDir
-    })
-  }
 
   if (args.watch) {
     modifyConfig(webpackConfig, config => {

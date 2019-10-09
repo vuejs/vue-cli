@@ -42,7 +42,7 @@ module.exports = function lint (args = {}, api) {
     // code style consistent with user's selected eslint config.
     // Though, if users provided their own `.eslintignore` file, we don't want to
     // add our own customized ignore pattern here (in eslint, ignorePattern is
-    // an addition to eslintignore, i.e. it can't be overriden by user),
+    // an addition to eslintignore, i.e. it can't be overridden by user),
     // following the principle of least astonishment.
     config.ignorePattern = [
       '!.*.js',
@@ -61,7 +61,7 @@ module.exports = function lint (args = {}, api) {
   ]
     .filter(pattern =>
       globby
-        .sync(path.join(cwd, pattern))
+        .sync(pattern, { cwd, absolute: true })
         .some(p => !engine.isPathIgnored(p))
     )
 

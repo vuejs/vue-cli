@@ -36,8 +36,17 @@ process.env.VUE_CLI_RELEASE = true
 const execa = require('execa')
 const semver = require('semver')
 const inquirer = require('inquirer')
+const minimist = require('minimist')
 const { syncDeps } = require('./syncDeps')
 // const { buildEditorConfig } = require('./buildEditorConfig')
+
+const cliOptions = minimist(process.argv)
+if (cliOptions['local-registry']) {
+  inquirer.prompt = () => ({
+    bump: 'minor',
+    yes: true
+  })
+}
 
 const curVersion = require('../lerna.json').version
 
@@ -96,7 +105,7 @@ const release = async () => {
   const releaseType = semver.diff(curVersion, version)
 
   let distTag = 'latest'
-  if (releaseType.startsWith('pre')) {
+  if (releaseType.startsWith('pre') && !cliOptions['local-registry']) {
     distTag = 'next'
   }
 
@@ -111,27 +120,11 @@ const release = async () => {
     lernaArgs.push('--force-publish')
   }
 
-  await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
+  if (cliOptions['local-registry']) {
+    lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push', '--yes')
+  }
 
-  // publish version marker after all other packages are published
-  await execa(
-    'npm',
-    [
-      'publish',
-      '--tag',
-      distTag,
-      // must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
-      '--registry',
-      'https://registry.npmjs.org/'
-    ],
-    {
-      stdio: 'inherit',
-      cwd: require('path').resolve(
-        __dirname,
-        '../packages/vue-cli-version-marker'
-      )
-    }
-  )
+  await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 }
 
 release().catch(err => {

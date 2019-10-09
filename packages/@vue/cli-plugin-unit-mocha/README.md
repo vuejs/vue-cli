@@ -6,7 +6,7 @@
 
 - **`vue-cli-service test:unit`**
 
-  Run unit tests with [mocha-webpack](https://github.com/zinserjan/mocha-webpack) + [chai](http://chaijs.com/).
+  Run unit tests with [mochapack](https://github.com/sysgears/mochapack) + [chai](http://chaijs.com/).
 
   **Note the tests are run inside Node.js with browser environment simulated with JSDOM.**
 
@@ -27,10 +27,10 @@
 
   Default files matches are: any files in `tests/unit` that end in `.spec.(ts|js)`.
 
-  All [mocha-webpack command line options](http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html) are also supported.
+  All [mochapack command line options](https://sysgears.github.io/mochapack/docs/installation/cli-usage.html) are also supported.
 
 ## Installing in an Already Created Project
 
 ``` sh
-vue add @vue/unit-mocha
+vue add unit-mocha
 ```

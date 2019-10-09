@@ -15,7 +15,7 @@ function detectLanguage () {
     const lang = (window.navigator.languages && window.navigator.languages[0]) ||
       window.navigator.language ||
       window.navigator.userLanguage
-    return [ lang, lang.toLowerCase(), lang.substr(0, 2) ]
+    return [ lang, lang.toLowerCase(), lang.substr(0, 2) ].map(lang => lang.replace('-', '_'))
   } catch (e) {
     return undefined
   }

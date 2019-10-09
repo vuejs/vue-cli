@@ -2,7 +2,7 @@ jest.setTimeout(80000)
 
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
@@ -15,7 +15,12 @@ async function makeProjectMultiPage (project) {
         index: { entry: 'src/main.js' },
         foo: { entry: 'src/foo.js' },
         bar: { entry: 'src/bar.js' },
-        foobar: { entry: ['src/foobar.js'] }
+        foobar: { entry: ['src/foobar.js'] },
+        baz: {
+          entry: 'src/main.js',
+          template: 'public/baz.html',
+          filename: 'qux.html'
+        }
       },
       chainWebpack: config => {
         const splitOptions = config.optimization.get('splitChunks')
@@ -25,6 +30,7 @@ async function makeProjectMultiPage (project) {
       }
     }
   `)
+  await project.write('public/baz.html', await project.read('public/index.html'))
   await project.write('src/foo.js', `
     import Vue from 'vue'
     new Vue({
@@ -96,21 +102,24 @@ test('build w/ multi page', async () => {
   expect(project.has('dist/foo.html')).toBe(true)
   expect(project.has('dist/bar.html')).toBe(true)
 
+  // should properly ignore the template file
+  expect(project.has('dist/baz.html')).toBe(false)
+  // should respect the `filename` field in a multi-page config
+  expect(project.has('dist/qux.html')).toBe(true)
+
   const assertSharedAssets = file => {
     // should split and preload vendor chunk
     expect(file).toMatch(/<link [^>]*js\/chunk-vendors[^>]*\.js rel=preload as=script>/)
-    // should split and preload common js and css
-    expect(file).toMatch(/<link [^>]*js\/chunk-common[^>]*\.js rel=preload as=script>/)
-    expect(file).toMatch(/<link [^>]*chunk-common[^>]*\.css rel=preload as=style>/)
-    // should load common css
-    expect(file).toMatch(/<link href=\/css\/chunk-common\.\w+\.css rel=stylesheet>/)
-    // should load common js
     expect(file).toMatch(/<script [^>]*src=\/js\/chunk-vendors\.\w+\.js>/)
-    expect(file).toMatch(/<script [^>]*src=\/js\/chunk-common\.\w+\.js>/)
   }
 
   const index = await project.read('dist/index.html')
   assertSharedAssets(index)
+  // should split and preload common js and css
+  expect(index).toMatch(/<link [^>]*js\/chunk-common[^>]*\.js rel=preload as=script>/)
+  expect(index).toMatch(/<script [^>]*src=\/js\/chunk-common\.\w+\.js>/)
+  expect(index).toMatch(/<link href=\/css\/chunk-common\.\w+\.css rel=stylesheet>/)
+  expect(index).toMatch(/<link [^>]*chunk-common[^>]*\.css rel=preload as=style>/)
   // should preload correct page file
   expect(index).toMatch(/<link [^>]*js\/index[^>]*\.js rel=preload as=script>/)
   expect(index).not.toMatch(/<link [^>]*js\/foo[^>]*\.js rel=preload as=script>/)
@@ -140,6 +149,11 @@ test('build w/ multi page', async () => {
 
   const bar = await project.read('dist/bar.html')
   assertSharedAssets(bar)
+  // bar & index have a shared common chunk (App.vue)
+  expect(bar).toMatch(/<link [^>]*js\/chunk-common[^>]*\.js rel=preload as=script>/)
+  expect(bar).toMatch(/<script [^>]*src=\/js\/chunk-common\.\w+\.js>/)
+  expect(bar).toMatch(/<link href=\/css\/chunk-common\.\w+\.css rel=stylesheet>/)
+  expect(bar).toMatch(/<link [^>]*chunk-common[^>]*\.css rel=preload as=style>/)
   // should preload correct page file
   expect(bar).not.toMatch(/<link [^>]*js\/index[^>]*\.js rel=preload as=script>/)
   expect(bar).not.toMatch(/<link [^>]*js\/foo[^>]*\.js rel=preload as=script>/)

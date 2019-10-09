@@ -2,7 +2,7 @@
  * @param {string} args
  */
 exports.parseArgs = function (args) {
-  const parts = args.split(/\s+|=/)
+  const parts = args.split(/\s+/)
   const result = []
   let arg
   let index = 0

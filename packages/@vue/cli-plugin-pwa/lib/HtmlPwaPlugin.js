@@ -8,25 +8,26 @@ const defaults = {
   appleMobileWebAppStatusBarStyle: 'default',
   assetsVersion: '',
   manifestPath: 'manifest.json',
-  manifestOptions: {}
+  manifestOptions: {},
+  manifestCrossorigin: undefined
 }
 
 const defaultManifest = {
   icons: [
     {
-      "src": "./img/icons/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      'src': './img/icons/android-chrome-192x192.png',
+      'sizes': '192x192',
+      'type': 'image/png'
     },
     {
-      "src": "./img/icons/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      'src': './img/icons/android-chrome-512x512.png',
+      'sizes': '512x512',
+      'type': 'image/png'
     }
   ],
   start_url: '.',
   display: 'standalone',
-  background_color: "#000000"
+  background_color: '#000000'
 }
 
 const defaultIconPaths = {
@@ -61,7 +62,8 @@ module.exports = class HtmlPwaPlugin {
           appleMobileWebAppStatusBarStyle,
           assetsVersion,
           manifestPath,
-          iconPaths
+          iconPaths,
+          manifestCrossorigin
         } = this.options
         const { publicPath } = compiler.options.output
 
@@ -83,10 +85,17 @@ module.exports = class HtmlPwaPlugin {
           }),
 
           // Add to home screen for Android and modern mobile browsers
-          makeTag('link', {
-            rel: 'manifest',
-            href: `${publicPath}${manifestPath}${assetsVersionStr}`
-          }),
+          makeTag('link', manifestCrossorigin
+            ? {
+              rel: 'manifest',
+              href: `${publicPath}${manifestPath}${assetsVersionStr}`,
+              crossorigin: manifestCrossorigin
+            }
+            : {
+              rel: 'manifest',
+              href: `${publicPath}${manifestPath}${assetsVersionStr}`
+            }
+          ),
           makeTag('meta', {
             name: 'theme-color',
             content: themeColor
@@ -128,8 +137,6 @@ module.exports = class HtmlPwaPlugin {
 
         cb(null, data)
       })
-
-
     })
 
     compiler.hooks.emit.tapAsync(ID, (data, cb) => {

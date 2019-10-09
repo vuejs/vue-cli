@@ -235,10 +235,19 @@ module.exports = {
 
 ### css.modules
 
-- Type: `boolean`
-- Default: `false`
+从 v4 起已弃用，请使用[`css.requireModuleExtension`](#css-requireModuleExtension)。
+在 v3 中，这个选项含义与 `css.requireModuleExtension` 相反。
 
-  默认情况下，只有 `*.module.[ext]` 结尾的文件才会被视作 CSS Modules 模块。设置为 `true` 后你就可以去掉文件名中的 `.module` 并将所有的 `*.(css|scss|sass|less|styl(us)?)` 文件视为 CSS Modules 模块。
+### css.requireModuleExtension
+
+- Type: `boolean`
+- Default: `true`
+
+  默认情况下，只有 `*.module.[ext]` 结尾的文件才会被视作 CSS Modules 模块。设置为 `false` 后你就可以去掉文件名中的 `.module` 并将所有的 `*.(css|scss|sass|less|styl(us)?)` 文件视为 CSS Modules 模块。
+
+  ::: tip 提示
+  如果你在 `css.loaderOptions.css` 里配置了自定义的 CSS Module 选项，则 `css.requireModuleExtension` 必须被显式地指定为 `true` 或者 `false`，否则我们无法确定你是否希望将这些自定义配置应用到所有 CSS 文件中。
+  :::
 
   更多细节可查阅：[配合 CSS > CSS Modules](../guide/css.md#css-modules)
 
@@ -291,6 +300,8 @@ module.exports = {
   - [sass-loader](https://github.com/webpack-contrib/sass-loader)
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
+
+  另外，也可以使用 `scss` 选项，针对 `scss` 语法进行单独配置（区别于 `sass` 语法）。
 
   更多细节可查阅：[向预处理器 Loader 传递选项](../guide/css.html#向预处理器-loader-传递选项)
 

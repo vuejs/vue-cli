@@ -1,5 +1,46 @@
 # Generator API
 
+## cliVersion
+
+Type: `string`
+
+The version string for the **global** `@vue/cli` version that is invoking the plugin.
+
+
+## assertCliVersion
+
+- **Arguments**
+  - `{integer | string} range` - a semver range that `@vue/cli` needs to satisfy
+
+- **Usage**
+
+  While api.version can be useful in general, it's sometimes nice to just declare your version.
+  This API exposes a simple way to do that.
+
+  Nothing happens if the provided version is satisfied. Otherwise, an error will be thrown.
+
+
+## cliServiceVersion
+
+Type: `string`
+
+The version string for the **project local** `@vue/cli-service` version that is invoking the plugin.
+
+
+## assertCliServiceVersion
+
+- **Arguments**
+  - `{integer | string} range` - a semver range that `@vue/cli-service` needs to satisfy
+
+- **Usage**
+
+  This API exposes a simple way to declare the required project local `@vue/cli-service` version.
+
+  Nothing happens if the provided version is satisfied. Otherwise, an error will be thrown.
+
+  Note: It's recommended to use [the `peerDependencies` field in `package.json`](https://docs.npmjs.com/files/package.json#peerdependencies) under most circumstances.
+
+
 ## resolve
 
 - **Arguments**
@@ -15,12 +56,13 @@ Resolve a path for the current project
 
 - **Arguments**
   - `{string} id` - plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
+  - `{string} version` - semver version range, optional
 
 - **Returns**
   - `{boolean}`
 
 - **Usage**:
-Check if the project has a plugin with given id
+Check if the project has a plugin with given id. If version range is given, then the plugin version should satisfy it
 
 ## addConfigTransform
 
@@ -138,4 +180,3 @@ Get the entry file taking into account typescript.
 
 - **Usage**:
 Checks if the plugin is being invoked.
-

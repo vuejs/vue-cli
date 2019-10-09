@@ -6,10 +6,6 @@ actionLink: /guide/
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
 
-<div style="text-align: center">
-  <Bit/>
-</div>
-
 <div class="features">
   <div class="feature">
     <h2>Feature Rich</h2>

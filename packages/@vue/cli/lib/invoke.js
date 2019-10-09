@@ -2,42 +2,22 @@ const fs = require('fs-extra')
 const path = require('path')
 const execa = require('execa')
 const chalk = require('chalk')
-const globby = require('globby')
 const inquirer = require('inquirer')
-const isBinary = require('isbinaryfile')
-const Generator = require('./Generator')
-const { loadOptions } = require('./options')
-const { installDeps } = require('./util/installDeps')
-const normalizeFilePaths = require('./util/normalizeFilePaths')
 const {
   log,
   error,
-  hasProjectYarn,
   hasProjectGit,
-  hasProjectPnpm,
   logWithSpinner,
   stopSpinner,
   resolvePluginId,
   loadModule
 } = require('@vue/cli-shared-utils')
 
-async function readFiles (context) {
-  const files = await globby(['**'], {
-    cwd: context,
-    onlyFiles: true,
-    gitignore: true,
-    ignore: ['**/node_modules/**', '**/.git/**'],
-    dot: true
-  })
-  const res = {}
-  for (const file of files) {
-    const name = path.resolve(context, file)
-    res[file] = isBinary.sync(name)
-      ? fs.readFileSync(name)
-      : fs.readFileSync(name, 'utf-8')
-  }
-  return normalizeFilePaths(res)
-}
+const Generator = require('./Generator')
+
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
+const readFiles = require('./util/readFiles')
+const PackageManager = require('./util/ProjectPackageManager')
 
 function getPkg (context) {
   const pkgPath = path.resolve(context, 'package.json')
@@ -52,6 +32,10 @@ function getPkg (context) {
 }
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
+  if (!(await confirmIfGitDirty(context))) {
+    return
+  }
+
   delete options._
   const pkg = getPkg(context)
 
@@ -119,12 +103,15 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
 
 async function runGenerator (context, plugin, pkg = getPkg(context)) {
   const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
-  const createCompleteCbs = []
+  const afterInvokeCbs = []
+  const afterAnyInvokeCbs = []
+
   const generator = new Generator(context, {
     pkg,
     plugins: [plugin],
     files: await readFiles(context),
-    completeCbs: createCompleteCbs,
+    afterInvokeCbs,
+    afterAnyInvokeCbs,
     invoking: true
   })
 
@@ -144,14 +131,16 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   if (!isTestOrDebug && depsChanged) {
     log(`📦  Installing additional dependencies...`)
     log()
-    const packageManager =
-      loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm')
-    await installDeps(context, packageManager, plugin.options && plugin.options.registry)
+    const pm = new PackageManager({ context })
+    await pm.install()
   }
 
-  if (createCompleteCbs.length) {
+  if (afterInvokeCbs.length || afterAnyInvokeCbs.length) {
     logWithSpinner('⚓', `Running completion hooks...`)
-    for (const cb of createCompleteCbs) {
+    for (const cb of afterInvokeCbs) {
+      await cb()
+    }
+    for (const cb of afterAnyInvokeCbs) {
       await cb()
     }
     stopSpinner()
