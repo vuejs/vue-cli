@@ -162,6 +162,7 @@ module.exports = (api, options) => {
 
     // create server
     const server = new WebpackDevServer(compiler, Object.assign({
+      logLevel: 'silent',
       clientLogLevel: 'silent',
       historyApiFallback: {
         disableDotRule: true,
@@ -170,7 +171,6 @@ module.exports = (api, options) => {
       contentBase: api.resolve('public'),
       watchContentBase: !isProduction,
       hot: !isProduction,
-      quiet: true,
       compress: isProduction,
       publicPath: options.publicPath,
       overlay: isProduction // TODO disable this
