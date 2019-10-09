@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const semver = require('semver')
-const { warn } = require('@vue/cli-shared-utils')
 
 const findExisting = (context, files) => {
   for (const file of files) {
@@ -21,9 +20,6 @@ module.exports = (api, options) => {
     try {
       sassLoaderVersion = semver.major(require('sass-loader/package.json').version)
     } catch (e) {}
-    if (sassLoaderVersion < 8) {
-      warn('sass-loader v8 is out, please consider upgrading your sass-loader version.')
-    }
 
     const defaultSassLoaderOptions = {}
     try {
