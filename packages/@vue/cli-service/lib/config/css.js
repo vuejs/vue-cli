@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const semver = require('semver')
 
 const findExisting = (context, files) => {
   for (const file of files) {
@@ -15,10 +16,18 @@ module.exports = (api, options) => {
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
 
+    let sassLoaderVersion
+    try {
+      sassLoaderVersion = semver.major(require('sass-loader/package.json').version)
+    } catch (e) {}
+
     const defaultSassLoaderOptions = {}
     try {
       defaultSassLoaderOptions.implementation = require('sass')
-      defaultSassLoaderOptions.fiber = require('fibers')
+      // since sass-loader 8, fibers will be automatically detected and used
+      if (sassLoaderVersion < 8) {
+        defaultSassLoaderOptions.fiber = require('fibers')
+      }
     } catch (e) {}
 
     const {
@@ -166,16 +175,35 @@ module.exports = (api, options) => {
     createCSSRule('css', /\.css$/)
     createCSSRule('postcss', /\.p(ost)?css$/)
     createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(
+      {},
       defaultSassLoaderOptions,
       loaderOptions.scss || loaderOptions.sass
     ))
-    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
-      defaultSassLoaderOptions,
-      {
-        indentedSyntax: true
-      },
-      loaderOptions.sass
-    ))
+    if (sassLoaderVersion < 8) {
+      createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+        {},
+        defaultSassLoaderOptions,
+        {
+          indentedSyntax: true
+        },
+        loaderOptions.sass
+      ))
+    } else {
+      createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+        {},
+        defaultSassLoaderOptions,
+        loaderOptions.sass,
+        {
+          sassOptions: Object.assign(
+            {},
+            loaderOptions.sass && loaderOptions.sass.sassOptions,
+            {
+              indentedSyntax: true
+            }
+          )
+        }
+      ))
+    }
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
     createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', Object.assign({
       preferPathResolver: 'webpack'
