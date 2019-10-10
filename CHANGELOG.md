@@ -1,4 +1,38 @@
 
+## 3.12.0 (2019-10-10)
+
+#### :rocket: New Features
+* `@vue/cli-service`
+  * [#4662](https://github.com/vuejs/vue-cli/pull/4662) [v3] Support sass-loader v8 ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4666](https://github.com/vuejs/vue-cli/pull/4666) fix: fix redundant log messages from webpack-dev-server ([@sodatea](https://github.com/sodatea))
+  * [#4613](https://github.com/vuejs/vue-cli/pull/4613) fix: correctly ignore html templates in copy-webpack-plugin ([@sodatea](https://github.com/sodatea))
+  * [#4550](https://github.com/vuejs/vue-cli/pull/4550) fix: should not proxy sockjs endpoint ([@sodatea](https://github.com/sodatea))
+  * [#4654](https://github.com/vuejs/vue-cli/pull/4654) fix: fix ie11 compatibility when css.extract set to true ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-shared-utils`
+  * [#4512](https://github.com/vuejs/vue-cli/pull/4512) fix(pluginResolution): support dots in scope names ([@ma-jahn](https://github.com/ma-jahn))
+* `@vue/cli`
+  * [#4525](https://github.com/vuejs/vue-cli/pull/4525) fix: remove the nonexistent `test` command from generated README ([@cexbrayat](https://github.com/cexbrayat))
+
+#### :memo: Documentation
+* `@vue/cli`
+  * [#4551](https://github.com/vuejs/vue-cli/pull/4551) docs: remove run for yarn commands in readme ([@cexbrayat](https://github.com/cexbrayat))
+* Other
+  * [#4561](https://github.com/vuejs/vue-cli/pull/4561) Edited Dockerfile of Docker(Nginx) deployment doc ([@vahdet](https://github.com/vahdet))
+  * [#4500](https://github.com/vuejs/vue-cli/pull/4500) Documentation typo fixes ([@owanhunte](https://github.com/owanhunte))
+
+#### Committers: 6
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Marcel Jahn ([@ma-jahn](https://github.com/ma-jahn))
+- Natalia Tepluhina ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+- Owan Hunte ([@owanhunte](https://github.com/owanhunte))
+- vahdet ([@vahdet](https://github.com/vahdet))
+
+
+
 ## 3.11.0 (2019-08-21)
 
 #### :rocket: New Features
