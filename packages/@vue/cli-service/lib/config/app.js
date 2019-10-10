@@ -98,7 +98,7 @@ module.exports = (api, options) => {
             files: assets,
             options: pluginOptions
           }
-        }, resolveClientEnv(options))
+        }, resolveClientEnv(options, true /* raw */))
       }
     }
 
