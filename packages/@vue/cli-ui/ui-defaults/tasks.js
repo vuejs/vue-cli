@@ -239,7 +239,7 @@ module.exports = api => {
     ...views
   })
   api.describeTask({
-    match: /vue-cli-service build(\s+--\S+(\s+\S+)?)*$/,
+    match: /vue-cli-service build(\s+--\S+(\s+\S+)?).*$/,
     description: 'org.vue.vue-webpack.tasks.build.description',
     link: 'https://cli.vuejs.org/guide/cli-service.html#vue-cli-service-build',
     icon: '/public/webpack-logo.png',
