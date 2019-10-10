@@ -61,7 +61,7 @@
     "semver": "^6.1.0",
     "shortid": "^2.2.11",
     "typescript": "^3.4.5",
-    "vue-cli-plugin-apollo": "^0.20.0",
+    "vue-cli-plugin-apollo": "^0.21.1",
     "watch": "^1.0.2"
   },
   "devDependencies": {
@@ -73,6 +73,7 @@
     "@vue/ui": "^0.9.2",
     "ansi_up": "^3.0.0",
     "apollo-client": "^2.6.0",
+    "apollo-link": "^1.0.0",
     "core-js": "^3.1.2",
     "cross-env": "^5.1.5",
     "eslint": "^5.16.0",
