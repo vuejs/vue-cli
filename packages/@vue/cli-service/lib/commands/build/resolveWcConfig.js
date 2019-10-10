@@ -55,10 +55,8 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
 
     config
       .plugin('web-component-options')
-        .use(require('webpack/lib/DefinePlugin'), [{
-          'process.env': {
-            CUSTOM_ELEMENT_NAME: JSON.stringify(libName)
-          }
+        .use(require('webpack').DefinePlugin, [{
+          'process.env.CUSTOM_ELEMENT_NAME': JSON.stringify(libName)
         }])
 
     // enable shadow mode in vue-loader

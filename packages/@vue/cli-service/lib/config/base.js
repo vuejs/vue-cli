@@ -168,7 +168,7 @@ module.exports = (api, options) => {
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
       .plugin('define')
-        .use(require('webpack/lib/DefinePlugin'), [
+        .use(require('webpack').DefinePlugin, [
           resolveClientEnv(options)
         ])
 
