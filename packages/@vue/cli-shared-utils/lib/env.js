@@ -80,7 +80,7 @@ exports.hasProjectGit = (cwd) => {
 
 let _hasPnpm
 let _hasPnpm3orLater
-let _hasPnpm4OrLater
+let _hasPnpm4orLater
 const _pnpmProjects = new LRU({
   max: 10,
   maxAge: 1000
