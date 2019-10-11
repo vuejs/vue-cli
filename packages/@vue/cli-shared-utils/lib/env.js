@@ -86,13 +86,7 @@ const _pnpmProjects = new LRU({
   maxAge: 1000
 })
 
-exports.hasPnpm3OrLater = () => {
-  if (process.env.VUE_CLI_TEST) {
-    return true
-  }
-  if (_hasPnpm3orLater != null) {
-    return _hasPnpm3orLater
-  }
+function checkPnpmVersion () {
   try {
     const pnpmVersion = execSync('pnpm --version', {
       stdio: ['pipe', 'pipe', 'ignore']
@@ -102,10 +96,21 @@ exports.hasPnpm3OrLater = () => {
     // so we only support pnpm >= 3.0.0
     _hasPnpm = true
     _hasPnpm3orLater = semver.gte(pnpmVersion, '3.0.0')
-    return _hasPnpm3orLater
+    _hasPnpm4orLater = semver.gte(pnpmVersion, '4.0.0')
+    return [_hasPnpm3orLater, _hasPnpm4orLater]
   } catch (e) {
-    return (_hasPnpm3orLater = false)
+    return [_hasPnpm3orLater = false, _hasPnpm4orLater = false]
   }
+}
+
+exports.hasPnpm3OrLater = () => {
+  if (process.env.VUE_CLI_TEST) {
+    return true
+  }
+  if (_hasPnpm3orLater != null) {
+    return _hasPnpm3orLater
+  }
+  return checkPnpmVersion()[0]
 }
 
 exports.hasPnpm4OrLater = () => {
@@ -115,16 +120,7 @@ exports.hasPnpm4OrLater = () => {
   if (_hasPnpm4orLater != null) {
     return _hasPnpm4orLater
   }
-  try {
-    const pnpmVersion = execSync('pnpm --version', {
-      stdio: ['pipe', 'pipe', 'ignore']
-    }).toString()
-    _hasPnpm = true
-    _hasPnpm4orLater = semver.gte(pnpmVersion, '4.0.0')
-    return _hasPnpm4orLater
-  } catch (e) {
-    return (_hasPnpm4orLater = false)
-  }
+  return checkPnpmVersion()[1]
 }
 
 exports.hasProjectPnpm = (cwd) => {
