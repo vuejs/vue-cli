@@ -61,7 +61,9 @@ For preset and plugin authors, there are several noteworthy changes in the two p
 #### Whitespace handling in the template block
 
 To get a smaller bundle, we've disabled the `preserveWhitespace` option of `vue-template-compiler` by default in Vue CLI v3.
+
 This set comes with some caveats, however.
+
 Luckily, since the Vue 2.6 release, we can now have finer control over the whitespace handling, with the [new `whitespace` option](https://github.com/vuejs/vue/issues/9208#issuecomment-450012518). So we decided to switch over to use this new option by default in Vue CLI v4.
 
 Take the following template as an example:
