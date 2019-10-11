@@ -7,7 +7,7 @@ sidebar: auto
 First, install the latest Vue CLI globally:
 
 ```sh
-npm install -g @vue/cli@4
+npm install -g @vue/cli@next
 ```
 
 ## Upgrade All Plugins at Once
