@@ -1,4 +1,40 @@
 
+## 4.0.0-rc.8 (2019-10-11)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#3926](https://github.com/vuejs/vue-cli/pull/3926) chore: better upgrade messages ([@phanan](https://github.com/phanan))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`
+  * [#4663](https://github.com/vuejs/vue-cli/pull/4663) feat(babel-preset): set target to node whenever NODE_ENV === 'test' ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-pwa`
+  * [#4664](https://github.com/vuejs/vue-cli/pull/4664) feat(pwa): improve compatibility with v3 plugin usage ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#4641](https://github.com/vuejs/vue-cli/pull/4641) feat: make the minimizer config available in all modes ([@sodatea](https://github.com/sodatea))
+  * [#4644](https://github.com/vuejs/vue-cli/pull/4644) feat: add webdriver log files to gitignore ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-service`
+  * [#4676](https://github.com/vuejs/vue-cli/pull/4676) chore!: upgrade terser-webpack-plugin to 2.x ([@sodatea](https://github.com/sodatea))
+  * [#4673](https://github.com/vuejs/vue-cli/pull/4673) refactor!: use DefinePlugin (again) instead of EnvironmentPlugin ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4666](https://github.com/vuejs/vue-cli/pull/4666) fix: fix redundant log messages from webpack-dev-server ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-service`
+  * [#4673](https://github.com/vuejs/vue-cli/pull/4673) refactor!: use DefinePlugin (again) instead of EnvironmentPlugin ([@sodatea](https://github.com/sodatea))
+
+#### :hammer: Underlying Tools
+* `@vue/cli-service`
+  * [#4676](https://github.com/vuejs/vue-cli/pull/4676) chore!: upgrade terser-webpack-plugin to 2.x ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Phan An ([@phanan](https://github.com/phanan))
+
+
+
 ## 4.0.0-rc.7 (2019-10-01)
 
 #### :bug: Bug Fix
