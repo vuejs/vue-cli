@@ -24,13 +24,13 @@ And then see the following section for detailed breaking changes introduced in e
 
 ## One-By-One Manual Migration
 
-If you want to do the migration manually and gradually, here are the tips:
+If you want to migrate manually and gradually, here are the tips:
 
 ### The Global `@vue/cli`
 
 #### [Redesigned](https://github.com/vuejs/vue-cli/pull/4090) `vue upgrade`
 
-- Before: `vue upgrade [patch | minor | major]`, and it does nothing more than install the latest versions of Vue CLI plugins.
+- Before: `vue upgrade [patch | minor | major]`, and it does nothing more than installing the latest versions of Vue CLI plugins.
 - After: `vue upgrade [plugin-name]`. Aside from upgrading the plugins, it can run migrators from plugins to help you automate the migration process. For more options for this command, please run `vue upgrade --help`.
 
 #### Extra Confirmation Step To Avoid Overwriting
@@ -46,7 +46,7 @@ When running `vue add vuex` or `vue add router`:
 - In v3, only `vuex` or `vue-router` will be added to the project;
 - In v4, there will also be `@vue/cli-plugin-vuex` & `@vue/cli-plugin-router` installed.
 
-This currently does not make an actual difference for end users, but such design allows us to add more features for vuex & vue-router users later.
+This currently does not make an actual difference for end-users, but such design allows us to add more features for vuex & vue-router users later.
 
 For preset and plugin authors, there are several noteworthy changes in the two plugins:
 
@@ -80,7 +80,7 @@ It's strongly recommended to upgrade to `less-loader@5` if your project depends 
 
 #### For CSS Module Users
 
-- [Deprecate `css.modules` in favor of `css.requireModuleExtension`](https://github.com/vuejs/vue-cli/pull/4387). This is because we've upgraded to css-loader v3 and the config format has been changed. For more detailed explanation please follow the link.
+- [Deprecate `css.modules` in favor of `css.requireModuleExtension`](https://github.com/vuejs/vue-cli/pull/4387). This is because we've upgraded to css-loader v3 and the config format has been changed. For a more detailed explanation please follow the link.
 
 #### `vue.config.js` options
 
@@ -92,7 +92,7 @@ The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl)
 
 If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config
 
-For example, if you want to enable `drop_console` option in the terser plugin.
+For example, if you want to enable the `drop_console` option in the terser plugin.
 In v3, you may do this in `chainWebpack`:
 
 ```js
@@ -156,7 +156,7 @@ This migration is also automated if you upgrade it through `vue upgrade babel --
 - In v3, the default babel preset used in `babel.config.js` is `@vue/app`.
 - In v4, we moved it to the plugin, so now it's named as `@vue/cli-plugin-babel/preset`
 
-It is because that `@vue/babel-preset-app` is actually an indirect dependency in the project.
+It is because that `@vue/babel-preset-app` is indeed an indirect dependency on the project.
 It works because of npm's package hoisting.
 But potential problems could still occur if the project has multiple conflicting indirect dependencies of the same package, or if the package manager puts stricter constraints on the dependency resolution (e.g. yarn plug'n'play or pnpm).
 So we now moved it to the project's direct dependency (`@vue/cli-plugin-babel`) to make it more standard-compliant and less error-prone.
@@ -171,7 +171,7 @@ This won't affect projects scaffolded with Vue CLI 3.1 or later.
 
 If your project was scaffolded with Vue CLI 3.0.x or earlier, you may need to add `eslint@4` to your project dependencies (This is automated if you upgrade the plugin using `vue upgrade eslint --next`).
 
-It's also recommended to upgrade your ESLint to v5, and ESLint config versions to latest. (ESLint v6 support is still on the way)
+It's also recommended to upgrade your ESLint to v5, and ESLint config versions to the latest. (ESLint v6 support is still on the way)
 
 ------
 
