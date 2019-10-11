@@ -80,6 +80,7 @@ exports.hasProjectGit = (cwd) => {
 
 let _hasPnpm
 let _hasPnpm3orLater
+let _hasPnpm4OrLater
 const _pnpmProjects = new LRU({
   max: 10,
   maxAge: 1000
@@ -104,6 +105,25 @@ exports.hasPnpm3OrLater = () => {
     return _hasPnpm3orLater
   } catch (e) {
     return (_hasPnpm3orLater = false)
+  }
+}
+
+exports.hasPnpm4OrLater = () => {
+  if (process.env.VUE_CLI_TEST) {
+    return true
+  }
+  if (_hasPnpm3orLater != null) {
+    return _hasPnpm4orLater
+  }
+  try {
+    const pnpmVersion = execSync('pnpm --version', {
+      stdio: ['pipe', 'pipe', 'ignore']
+    }).toString()
+    _hasPnpm = true
+    _hasPnpm4orLater = semver.gte(pnpmVersion, '4.0.0')
+    return _hasPnpm4orLater
+  } catch (e) {
+    return (_hasPnpm4orLater = false)
   }
 }
 
