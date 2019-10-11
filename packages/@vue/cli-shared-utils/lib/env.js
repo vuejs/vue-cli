@@ -112,7 +112,7 @@ exports.hasPnpm4OrLater = () => {
   if (process.env.VUE_CLI_TEST) {
     return true
   }
-  if (_hasPnpm3orLater != null) {
+  if (_hasPnpm4orLater != null) {
     return _hasPnpm4orLater
   }
   try {
