@@ -37,5 +37,6 @@ module.exports = options => ({
   },
   sourceMap: options.productionSourceMap,
   cache: true,
-  parallel: options.parallel
+  parallel: options.parallel,
+  extractComments: false
 })

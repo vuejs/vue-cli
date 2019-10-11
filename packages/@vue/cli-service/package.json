@@ -69,7 +69,7 @@
     "source-map-url": "^0.4.0",
     "ssri": "^6.0.1",
     "string.prototype.padend": "^3.0.0",
-    "terser-webpack-plugin": "^1.3.0",
+    "terser-webpack-plugin": "^2.1.2",
     "thread-loader": "^2.1.2",
     "url-loader": "^2.1.0",
     "vue-loader": "^15.7.0",
