@@ -97,10 +97,11 @@ function checkPnpmVersion () {
     _hasPnpm = true
     _hasPnpm3orLater = semver.gte(pnpmVersion, '3.0.0')
     _hasPnpm4orLater = semver.gte(pnpmVersion, '4.0.0')
-    return [_hasPnpm3orLater, _hasPnpm4orLater]
   } catch (e) {
-    return [_hasPnpm3orLater = false, _hasPnpm4orLater = false]
+    _hasPnpm3orLater = false
+    _hasPnpm4orLater = false
   }
+  return [_hasPnpm3orLater, _hasPnpm4orLater]
 }
 
 exports.hasPnpm3OrLater = () => {
