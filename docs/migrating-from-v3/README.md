@@ -58,6 +58,35 @@ For preset and plugin authors, there are several noteworthy changes in the two p
 
 ### `@vue/cli-service`
 
+#### Whitespace handling in the template block
+
+To get a smaller bundle, we've disabled the `preserveWhitespace` option of `vue-template-compiler` by default in Vue CLI v3.
+This set comes with some caveats, however.
+Luckily, since the Vue 2.6 release, we can now have finer control over the whitespace handling, with the [new `whitespace` option](https://github.com/vuejs/vue/issues/9208#issuecomment-450012518). So we decided to switch over to use this new option by default in Vue CLI v4.
+
+Take the following template as an example:
+
+```html
+<p>
+  Welcome to <b>Vue.js</b> <i>world</i>.
+  Have fun!
+</p>
+```
+
+With `preserveWhitespace: false`, all whitespaces between tags are removed, so it was compiled as:
+
+```html
+<p> Welcome to <b>Vue.js</b><i>world</i>. Have fun! </p>
+```
+
+With `whitespace: 'condense'`, it is now compiled as:
+
+```html
+<p> Welcome to <b>Vue.js</b> <i>world</i>. Have fun! </p>
+```
+
+Note the **inline** whitespace between tags is now preserved.
+
 #### `vue-cli-service build --mode development`
 
 In the past, when running the `build` command in the `development` mode, the `dist` folder layout would be different from the `production` mode. Now with the following two changes, the directory structures across all modes would be the same (file names are still different - no hashes in `development` mode):
