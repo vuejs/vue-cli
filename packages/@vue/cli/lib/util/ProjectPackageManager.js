@@ -33,13 +33,13 @@ const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
 const TAOBAO_DIST_URL = 'https://npm.taobao.org/dist'
 const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'pnpm', 'npm']
-const PACKAGE_MANAGER_PNPMv4_CONFIG = {
+const PACKAGE_MANAGER_PNPM4_CONFIG = {
   install: ['install', '--reporter', 'silent', '--shamefully-hoist'],
   add: ['install', '--reporter', 'silent', '--shamefully-hoist'],
   upgrade: ['update', '--reporter', 'silent'],
   remove: ['uninstall', '--reporter', 'silent']
 }
-const PACKAGE_MANAGER_PNPMv3_CONFIG = {
+const PACKAGE_MANAGER_PNPM3_CONFIG = {
   install: ['install', '--loglevel', 'error', '--shamefully-flatten'],
   add: ['install', '--loglevel', 'error', '--shamefully-flatten'],
   upgrade: ['update', '--loglevel', 'error'],
@@ -52,7 +52,7 @@ const PACKAGE_MANAGER_CONFIG = {
     upgrade: ['update', '--loglevel', 'error'],
     remove: ['uninstall', '--loglevel', 'error']
   },
-  pnpm: hasPnpm4OrLater ? PACKAGE_MANAGER_PNPMv4_CONFIG : PACKAGE_MANAGER_PNPMv3_CONFIG,
+  pnpm: hasPnpm4OrLater ? PACKAGE_MANAGER_PNPM4_CONFIG : PACKAGE_MANAGER_PNPM3_CONFIG,
   yarn: {
     install: [],
     add: ['add'],
