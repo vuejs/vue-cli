@@ -46,7 +46,7 @@ When running `vue add vuex` or `vue add router`:
 - In v3, only `vuex` or `vue-router` will be added to the project;
 - In v4, there will also be `@vue/cli-plugin-vuex` or `@vue/cli-plugin-router` installed.
 
-This currently does not make an actual difference for end-users, but such design allows us to add more features for vuex & vue-router users later.
+This currently does not make an actual difference for end-users, but such design allows us to add more features for Vuex and Vue Router users later.
 
 For preset and plugin authors, there are several noteworthy changes in the two plugins:
 
