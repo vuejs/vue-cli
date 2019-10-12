@@ -111,7 +111,8 @@ exports.hasPnpm3OrLater = () => {
   if (_hasPnpm3orLater != null) {
     return _hasPnpm3orLater
   }
-  return checkPnpmVersion()[0]
+  checkPnpmVersion()
+  return _hasPnpm3orLater
 }
 
 exports.hasPnpm4OrLater = () => {
