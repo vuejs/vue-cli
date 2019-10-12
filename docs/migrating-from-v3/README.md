@@ -111,7 +111,7 @@ It's strongly recommended to upgrade to `less-loader@5` if your project depends 
 
 #### For CSS Module Users
 
-- [Deprecate `css.modules` in favor of `css.requireModuleExtension`](https://github.com/vuejs/vue-cli/pull/4387). This is because we've upgraded to css-loader v3 and the config format has been changed. For a more detailed explanation please follow the link.
+- [Deprecate `css.modules` in favor of `css.requireModuleExtension`](https://github.com/vuejs/vue-cli/pull/4387). This is because we've upgraded to `css-loader` v3 and the config format has been changed. For a more detailed explanation please follow the link.
 
 #### `vue.config.js` options
 
