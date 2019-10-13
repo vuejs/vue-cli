@@ -88,7 +88,7 @@ const _pnpmProjects = new LRU({
 
 function checkPnpmVersion () {
   try {
-    const pnpmVersion = execSync('pnpm --version', {
+    pnpmVersion = execSync('pnpm --version', {
       stdio: ['pipe', 'pipe', 'ignore']
     }).toString()
     // there's a critical bug in pnpm 2
@@ -101,7 +101,6 @@ function checkPnpmVersion () {
     _hasPnpm3orLater = false
     _hasPnpm4orLater = false
   }
-  return [_hasPnpm3orLater, _hasPnpm4orLater]
 }
 
 exports.hasPnpm3OrLater = () => {
@@ -122,7 +121,8 @@ exports.hasPnpm4OrLater = () => {
   if (_hasPnpm4orLater != null) {
     return _hasPnpm4orLater
   }
-  return checkPnpmVersion()[1]
+  checkPnpmVersion()
+  return _hasPnpm4orLater
 }
 
 exports.hasProjectPnpm = (cwd) => {
