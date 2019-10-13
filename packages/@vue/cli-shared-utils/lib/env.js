@@ -88,7 +88,7 @@ const _pnpmProjects = new LRU({
 
 function checkPnpmVersion () {
   try {
-    pnpmVersion = execSync('pnpm --version', {
+    let pnpmVersion = execSync('pnpm --version', {
       stdio: ['pipe', 'pipe', 'ignore']
     }).toString()
     // there's a critical bug in pnpm 2
