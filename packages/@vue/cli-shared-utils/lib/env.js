@@ -86,6 +86,9 @@ const _pnpmProjects = new LRU({
 })
 
 function getPnpmVersion () {
+  if (_pnpmVersion != null) {
+    return _pnpmVersion
+  }
   try {
     _pnpmVersion = execSync('pnpm --version', {
       stdio: ['pipe', 'pipe', 'ignore']
@@ -101,9 +104,6 @@ function getPnpmVersion () {
 exports.hasPnpmVersionOrLater = (version) => {
   if (process.env.VUE_CLI_TEST) {
     return true
-  }
-  if (_pnpmVersion != null) {
-    return semver.gte(_pnpmVersion, version)
   }
   return semver.gte(getPnpmVersion(), version)
 }
