@@ -98,7 +98,7 @@ function getPnpmVersion () {
   return _pnpmVersion || '0.0.0'
 }
 
-function hasPnpmVersionOrLater (version) {
+exports.hasPnpmVersionOrLater = (version) => {
   if (process.env.VUE_CLI_TEST) {
     return true
   }
@@ -109,11 +109,7 @@ function hasPnpmVersionOrLater (version) {
 }
 
 exports.hasPnpm3OrLater = () => {
-  return hasPnpmVersionOrLater('3.0.0')
-}
-
-exports.hasPnpm4OrLater = () => {
-  return hasPnpmVersionOrLater('4.0.0')
+  return this.hasPnpmVersionOrLater('3.0.0')
 }
 
 exports.hasProjectPnpm = (cwd) => {

@@ -11,7 +11,7 @@ const {
   hasYarn,
   hasProjectYarn,
   hasPnpm3OrLater,
-  hasPnpm4OrLater,
+  hasPnpmVersionOrLater,
   hasProjectPnpm
 } = require('@vue/cli-shared-utils/lib/env')
 const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib/pluginResolution')
@@ -52,7 +52,7 @@ const PACKAGE_MANAGER_CONFIG = {
     upgrade: ['update', '--loglevel', 'error'],
     remove: ['uninstall', '--loglevel', 'error']
   },
-  pnpm: hasPnpm4OrLater() ? PACKAGE_MANAGER_PNPM4_CONFIG : PACKAGE_MANAGER_PNPM3_CONFIG,
+  pnpm: hasPnpmVersionOrLater('4.0.0') ? PACKAGE_MANAGER_PNPM4_CONFIG : PACKAGE_MANAGER_PNPM3_CONFIG,
   yarn: {
     install: [],
     add: ['add'],
