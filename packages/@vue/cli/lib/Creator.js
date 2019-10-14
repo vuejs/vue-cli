@@ -33,7 +33,7 @@ const {
   hasGit,
   hasProjectGit,
   hasYarn,
-  hasPnpm3OrLater,
+  hasPnpmXOrLater,
   logWithSpinner,
   stopSpinner,
   exit,
@@ -116,7 +116,7 @@ module.exports = class Creator extends EventEmitter {
       cliOptions.packageManager ||
       loadOptions().packageManager ||
       (hasYarn() ? 'yarn' : null) ||
-      (hasPnpm3OrLater() ? 'pnpm' : 'npm')
+      (hasPnpmXOrLater('3.0.0') ? 'pnpm' : 'npm')
     )
     const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
@@ -448,7 +448,7 @@ module.exports = class Creator extends EventEmitter {
 
     // ask for packageManager once
     const savedOptions = loadOptions()
-    if (!savedOptions.packageManager && (hasYarn() || hasPnpm3OrLater())) {
+    if (!savedOptions.packageManager && (hasYarn() || hasPnpmXOrLater('3.0.0'))) {
       const packageManagerChoices = []
 
       if (hasYarn()) {
@@ -459,7 +459,7 @@ module.exports = class Creator extends EventEmitter {
         })
       }
 
-      if (hasPnpm3OrLater()) {
+      if (hasPnpmXOrLater('3.0.0')) {
         packageManagerChoices.push({
           name: 'Use PNPM',
           value: 'pnpm',

@@ -2,7 +2,7 @@ const chalk = require('chalk')
 const execa = require('execa')
 const semver = require('semver')
 const getVersions = require('./getVersions')
-const { clearConsole, hasYarn, hasPnpm3OrLater } = require('@vue/cli-shared-utils')
+const { clearConsole, hasYarn, hasPnpmXOrLater } = require('@vue/cli-shared-utils')
 
 async function getInstallationCommand () {
   if (hasYarn()) {
@@ -12,7 +12,7 @@ async function getInstallationCommand () {
     }
   }
 
-  if (hasPnpm3OrLater()) {
+  if (hasPnpmXOrLater('3.0.0')) {
     const { stdout: pnpmGlobalPrefix } = await execa('pnpm', ['config', 'get', 'prefix'])
     if (__dirname.includes(pnpmGlobalPrefix) && __dirname.includes('pnpm-global')) {
       return `pnpm i -g`

@@ -79,50 +79,33 @@ exports.hasProjectGit = (cwd) => {
 }
 
 let _hasPnpm
-let _hasPnpm3orLater
-let _hasPnpm4orLater
+let _pnpmVersion
 const _pnpmProjects = new LRU({
   max: 10,
   maxAge: 1000
 })
 
-function checkPnpmVersion () {
+function getPnpmVersion () {
   try {
-    let pnpmVersion = execSync('pnpm --version', {
+    _pnpmVersion = execSync('pnpm --version', {
       stdio: ['pipe', 'pipe', 'ignore']
     }).toString()
     // there's a critical bug in pnpm 2
     // https://github.com/pnpm/pnpm/issues/1678#issuecomment-469981972
     // so we only support pnpm >= 3.0.0
     _hasPnpm = true
-    _hasPnpm3orLater = semver.gte(pnpmVersion, '3.0.0')
-    _hasPnpm4orLater = semver.gte(pnpmVersion, '4.0.0')
-  } catch (e) {
-    _hasPnpm3orLater = false
-    _hasPnpm4orLater = false
-  }
+  } catch (e) {}
+  return _pnpmVersion || '0.0.0'
 }
 
-exports.hasPnpm3OrLater = () => {
+exports.hasPnpmXOrLater = (version) => {
   if (process.env.VUE_CLI_TEST) {
     return true
   }
-  if (_hasPnpm3orLater != null) {
-    return _hasPnpm3orLater
+  if (_pnpmVersion != null) {
+    return semver.gte(_pnpmVersion, version)
   }
-  checkPnpmVersion()
-  return _hasPnpm3orLater
-}
-
-exports.hasPnpm4OrLater = () => {
-  if (process.env.VUE_CLI_TEST) {
-    return true
-  }
-  if (_hasPnpm4orLater != null) {
-    return _hasPnpm4orLater
-  }
-  checkPnpmVersion()
-  return _hasPnpm4orLater
+  return semver.gte(getPnpmVersion(), version)
 }
 
 exports.hasProjectPnpm = (cwd) => {
@@ -137,7 +120,7 @@ exports.hasProjectPnpm = (cwd) => {
 }
 
 function checkPnpm (result) {
-  if (result && !exports.hasPnpm3OrLater()) {
+  if (result && !exports.hasPnpmXOrLater('3.0.0')) {
     throw new Error(`The project seems to require pnpm${_hasPnpm ? ' >= 3' : ''} but it's not installed.`)
   }
   return result
