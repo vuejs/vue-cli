@@ -98,7 +98,7 @@ function getPnpmVersion () {
   return _pnpmVersion || '0.0.0'
 }
 
-exports.hasPnpmXOrLater = (version) => {
+function hasPnpmVersionOrLater (version) {
   if (process.env.VUE_CLI_TEST) {
     return true
   }
@@ -106,6 +106,14 @@ exports.hasPnpmXOrLater = (version) => {
     return semver.gte(_pnpmVersion, version)
   }
   return semver.gte(getPnpmVersion(), version)
+}
+
+exports.hasPnpm3OrLater = () => {
+  return hasPnpmVersionOrLater('3.0.0')
+}
+
+exports.hasPnpm4OrLater = () => {
+  return hasPnpmVersionOrLater('4.0.0')
 }
 
 exports.hasProjectPnpm = (cwd) => {
@@ -120,7 +128,7 @@ exports.hasProjectPnpm = (cwd) => {
 }
 
 function checkPnpm (result) {
-  if (result && !exports.hasPnpmXOrLater('3.0.0')) {
+  if (result && !exports.hasPnpm3OrLater()) {
     throw new Error(`The project seems to require pnpm${_hasPnpm ? ' >= 3' : ''} but it's not installed.`)
   }
   return result

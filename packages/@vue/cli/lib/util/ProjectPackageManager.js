@@ -10,7 +10,8 @@ const chalk = require('chalk')
 const {
   hasYarn,
   hasProjectYarn,
-  hasPnpmXOrLater,
+  hasPnpm3OrLater,
+  hasPnpm4OrLater,
   hasProjectPnpm
 } = require('@vue/cli-shared-utils/lib/env')
 const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib/pluginResolution')
@@ -51,7 +52,7 @@ const PACKAGE_MANAGER_CONFIG = {
     upgrade: ['update', '--loglevel', 'error'],
     remove: ['uninstall', '--loglevel', 'error']
   },
-  pnpm: hasPnpmXOrLater('4.0.0') ? PACKAGE_MANAGER_PNPM4_CONFIG : PACKAGE_MANAGER_PNPM3_CONFIG,
+  pnpm: hasPnpm4OrLater ? PACKAGE_MANAGER_PNPM4_CONFIG : PACKAGE_MANAGER_PNPM3_CONFIG,
   yarn: {
     install: [],
     add: ['add'],
@@ -81,7 +82,7 @@ class PackageManager {
     } else if (context) {
       this.bin = hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm'
     } else {
-      this.bin = loadOptions().packageManager || (hasYarn() ? 'yarn' : hasPnpmXOrLater('3.0.0') ? 'pnpm' : 'npm')
+      this.bin = loadOptions().packageManager || (hasYarn() ? 'yarn' : hasPnpm3OrLater() ? 'pnpm' : 'npm')
     }
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
