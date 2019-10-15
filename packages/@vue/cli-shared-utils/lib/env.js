@@ -84,7 +84,7 @@ const _pnpmProjects = new LRU({
   max: 10,
   maxAge: 1000
 })
-// remove
+
 function getPnpmVersion () {
   if (_pnpmVersion != null) {
     return _pnpmVersion
