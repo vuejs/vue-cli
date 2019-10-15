@@ -50,7 +50,7 @@ const program = require('commander')
 const loadCommand = require('../lib/util/loadCommand')
 
 program
-  .version(require('../package').version)
+  .version(`Vue CLI ${require('../package').version}`)
   .usage('<command> [options]')
 
 program
