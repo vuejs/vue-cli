@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-router",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "router plugin for vue-cli",
   "main": "index.js",
   "repository": {
