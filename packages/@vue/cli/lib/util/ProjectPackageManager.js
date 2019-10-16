@@ -126,7 +126,8 @@ class PackageManager {
     args.push(`--registry=${registry}`)
 
     if (registry === registries.taobao) {
-      args.push(`--disturl=${TAOBAO_DIST_URL}`)
+      // for node-gyp
+      process.env.NODEJS_ORG_MIRROR = TAOBAO_DIST_URL
     }
 
     return args
