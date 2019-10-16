@@ -34,6 +34,7 @@ const {
   hasProjectGit,
   hasYarn,
   hasPnpm3OrLater,
+  hasPnpmVersionOrLater,
   logWithSpinner,
   stopSpinner,
   exit,
@@ -223,8 +224,12 @@ module.exports = class Creator extends EventEmitter {
 
     // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
     if (packageManager === 'pnpm') {
+      const pnpmConfig = hasPnpmVersionOrLater('4.0.0')
+        ? 'shamefully-hoist=true\n'
+        : 'shamefully-flatten=true\n'
+
       await writeFileTree(context, {
-        '.npmrc': 'shamefully-flatten=true\n'
+        '.npmrc': pnpmConfig
       })
     }
 
