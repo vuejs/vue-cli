@@ -33,6 +33,13 @@ If you want to migrate manually and gradually, here are the tips:
 - Before: `vue upgrade [patch | minor | major]`, and it does nothing more than installing the latest versions of Vue CLI plugins.
 - After: `vue upgrade [plugin-name]`. Aside from upgrading the plugins, it can run migrators from plugins to help you automate the migration process. For more options for this command, please run `vue upgrade --help`.
 
+#### `vue --version` Output Format Change
+
+When running `vue --version`:
+
+- 3.x: outputs `3.12.0`
+- 4.x: outputs `@vue/cli 4.0.0`
+
 #### Extra Confirmation Step To Avoid Overwriting
 
 When running `vue invoke` / `vue add` / `vue upgrade`, there's now an [extra confirmation step](https://github.com/vuejs/vue-cli/pull/4275) if you have uncommitted changes in the current repository.
