@@ -106,10 +106,12 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   }
 }
 
+const lint = require('../lint')
+
 module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
   api.afterAnyInvoke(() => {
-    require('../lint')({ silent: true }, api)
+    lint({ silent: true }, api)
   })
 }
 
