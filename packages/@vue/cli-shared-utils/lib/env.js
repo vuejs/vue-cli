@@ -79,32 +79,37 @@ exports.hasProjectGit = (cwd) => {
 }
 
 let _hasPnpm
-let _hasPnpm3orLater
+let _pnpmVersion
 const _pnpmProjects = new LRU({
   max: 10,
   maxAge: 1000
 })
 
-exports.hasPnpm3OrLater = () => {
-  if (process.env.VUE_CLI_TEST) {
-    return true
-  }
-  if (_hasPnpm3orLater != null) {
-    return _hasPnpm3orLater
+function getPnpmVersion () {
+  if (_pnpmVersion != null) {
+    return _pnpmVersion
   }
   try {
-    const pnpmVersion = execSync('pnpm --version', {
+    _pnpmVersion = execSync('pnpm --version', {
       stdio: ['pipe', 'pipe', 'ignore']
     }).toString()
     // there's a critical bug in pnpm 2
     // https://github.com/pnpm/pnpm/issues/1678#issuecomment-469981972
     // so we only support pnpm >= 3.0.0
     _hasPnpm = true
-    _hasPnpm3orLater = semver.gte(pnpmVersion, '3.0.0')
-    return _hasPnpm3orLater
-  } catch (e) {
-    return (_hasPnpm3orLater = false)
+  } catch (e) {}
+  return _pnpmVersion || '0.0.0'
+}
+
+exports.hasPnpmVersionOrLater = (version) => {
+  if (process.env.VUE_CLI_TEST) {
+    return true
   }
+  return semver.gte(getPnpmVersion(), version)
+}
+
+exports.hasPnpm3OrLater = () => {
+  return this.hasPnpmVersionOrLater('3.0.0')
 }
 
 exports.hasProjectPnpm = (cwd) => {
