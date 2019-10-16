@@ -80,6 +80,8 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
     cd -
     ```
+    
+Also checkout [vue-cli-plugin-gh-pages](https://github.com/JaZo/vue-cli-plugin-gh-pages).
 
 #### Using Travis CI for automatic updates
 
