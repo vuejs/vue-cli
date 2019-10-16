@@ -86,6 +86,10 @@ module.exports = {
             link: '/core-plugins/'
           },
           {
+            text: 'Migrating From v3',
+            link: '/migrating-from-v3/'
+          },
+          {
             text: 'Changelog',
             link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
           }
