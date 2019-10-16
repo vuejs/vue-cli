@@ -21,7 +21,7 @@ function checkNodeVersion (wanted, id) {
   }
 }
 
-checkNodeVersion(requiredVersion, 'vue-cli')
+checkNodeVersion(requiredVersion, '@vue/cli')
 
 if (semver.satisfies(process.version, '9.x')) {
   console.log(chalk.red(
@@ -50,7 +50,7 @@ const program = require('commander')
 const loadCommand = require('../lib/util/loadCommand')
 
 program
-  .version(require('../package').version)
+  .version(`@vue/cli ${require('../package').version}`)
   .usage('<command> [options]')
 
 program
