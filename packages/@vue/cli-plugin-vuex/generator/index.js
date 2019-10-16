@@ -1,7 +1,4 @@
 module.exports = (api, options = {}) => {
-  api.assertCliVersion('^4.0.0-alpha.3')
-  api.assertCliServiceVersion('^4.0.0-alpha.3')
-
   api.injectImports(api.entryFile, `import store from './store'`)
   api.injectRootOptions(api.entryFile, `store`)
 
