@@ -7,7 +7,7 @@ sidebar: auto
 First, install the latest Vue CLI globally:
 
 ```sh
-npm install -g @vue/cli@next
+npm install -g @vue/cli
 ```
 
 ## Upgrade All Plugins at Once
@@ -15,7 +15,7 @@ npm install -g @vue/cli@next
 In your existing projects, run:
 
 ```sh
-vue upgrade --next
+vue upgrade
 ```
 
 And then see the following section for detailed breaking changes introduced in each package.
@@ -185,11 +185,11 @@ The babel plugin requires a peer dependency, for the polyfills used in the trans
 
 In Vue CLI v3, the required `core-js` version is 2.x, it is now upgraded to 3.x.
 
-This migration is automated if you upgrade it through `vue upgrade babel --next`. But if you have custom polyfills introduced, you may need to manually update the polyfill names (For more details, see [core-js changelog](https://github.com/zloirock/core-js/blob/master/CHANGELOG.md#L279-L297)).
+This migration is automated if you upgrade it through `vue upgrade babel`. But if you have custom polyfills introduced, you may need to manually update the polyfill names (For more details, see [core-js changelog](https://github.com/zloirock/core-js/blob/master/CHANGELOG.md#L279-L297)).
 
 #### Babel Preset
 
-This migration is also automated if you upgrade it through `vue upgrade babel --next`.
+This migration is also automated if you upgrade it through `vue upgrade babel`.
 
 - In v3, the default babel preset used in `babel.config.js` is `@vue/app`.
 - In v4, we moved it to the plugin, so now it's named as `@vue/cli-plugin-babel/preset`
@@ -207,7 +207,7 @@ This plugin now [requires ESLint as a peer dependency]((https://github.com/vuejs
 
 This won't affect projects scaffolded with Vue CLI 3.1 or later.
 
-If your project was scaffolded with Vue CLI 3.0.x or earlier, you may need to add `eslint@4` to your project dependencies (This is automated if you upgrade the plugin using `vue upgrade eslint --next`).
+If your project was scaffolded with Vue CLI 3.0.x or earlier, you may need to add `eslint@4` to your project dependencies (This is automated if you upgrade the plugin using `vue upgrade eslint`).
 
 It's also recommended to upgrade your ESLint to v5, and ESLint config versions to the latest. (ESLint v6 support is still on the way)
 
