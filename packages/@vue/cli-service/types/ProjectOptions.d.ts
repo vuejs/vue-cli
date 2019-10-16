@@ -23,7 +23,7 @@ interface ExtractOptions {
 }
 
 interface CSSOptions {
-  modules?: boolean;
+  requireModuleExtension?: boolean;
   extract?: boolean | ExtractOptions;
   sourceMap?: boolean;
   loaderOptions?: LoaderOptions;
