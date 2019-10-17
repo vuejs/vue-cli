@@ -46,3 +46,9 @@ Cypress doesn't load .env files for your test files the same way as `vue-cli` do
 ``` sh
 vue add e2e-cypress
 ```
+
+## If you use vue-cli^3.9.2
+
+``` sh
+vue add @vue/e2e-cypress
+```
