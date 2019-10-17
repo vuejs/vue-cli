@@ -1,5 +1,3 @@
-const { execa } = require('@vue/cli-shared-utils')
-
 module.exports = (api, options) => {
   api.render('./template', {
     doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
@@ -58,39 +56,12 @@ module.exports = (api, options) => {
 
   // for v3 compatibility
   if (options.router && !api.hasPlugin('router')) {
-    api.extendPackage({
-      devDependencies: {
-        '@vue/cli-plugin-router': '^4.0.0'
-      }
-    })
-
-    api.onCreateComplete(() => {
-      execa.sync('vue', [
-        'invoke',
-        '@vue/cli-plugin-router',
-        `--historyMode=${options.routerHistoryMode ? 'true' : ''}`
-      ], {
-        cwd: api.resolve('.')
-      })
-    })
+    require('./router')(api, options)
   }
 
   // for v3 compatibility
   if (options.vuex && !api.hasPlugin('vuex')) {
-    api.extendPackage({
-      devDependencies: {
-        '@vue/cli-plugin-vuex': '^4.0.0'
-      }
-    })
-
-    api.onCreateComplete(() => {
-      execa.sync('vue', [
-        'invoke',
-        '@vue/cli-plugin-vuex'
-      ], {
-        cwd: api.resolve('.')
-      })
-    })
+    require('./vuex')(api)
   }
 
   // additional tooling configurations
