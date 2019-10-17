@@ -8,6 +8,8 @@ First, install the latest Vue CLI globally:
 
 ```sh
 npm install -g @vue/cli
+# OR
+yarn global add @vue/cli
 ```
 
 ## Upgrade All Plugins at Once
