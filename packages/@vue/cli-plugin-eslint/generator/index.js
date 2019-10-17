@@ -68,7 +68,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^8.1.5'
+      'lint-staged': '^9.4.2'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
@@ -103,12 +103,18 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   }
 }
 
-const lint = require('../lint')
-
+// In PNPM v4, due to their implementation of the module resolution mechanism,
+// put require('../lint') in the callback would raise a "Module not found" error,
+// But we cannot cache the file outside the callback,
+// because the node_module layout may change after the "intall additional dependencies"
+// phase, thus making the cached module fail to execute.
+// FIXME: at the moment we have to catch the bug and silently fail. Need to fix later.
 module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
   api.afterAnyInvoke(() => {
-    lint({ silent: true }, api)
+    try {
+      require('../lint')({ silent: true }, api)
+    } catch (e) {}
   })
 }
 
