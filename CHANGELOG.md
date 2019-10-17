@@ -1,3 +1,14 @@
+
+## 4.0.2 (2019-10-17)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4693](https://github.com/vuejs/vue-cli/pull/4693) fix: add a compatibility layer for router & vuex for CLI v3 ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
 ## 4.0.1 (2019-10-16)
 
 #### :bug: Bug Fix
