@@ -115,10 +115,8 @@ const release = async () => {
     '--dist-tag',
     distTag
   ]
-  // keep packages' minor version in sync
-  if (releaseType !== 'patch') {
-    lernaArgs.push('--force-publish')
-  }
+  // keep all packages' versions in sync
+  lernaArgs.push('--force-publish')
 
   if (cliOptions['local-registry']) {
     lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push', '--yes')
