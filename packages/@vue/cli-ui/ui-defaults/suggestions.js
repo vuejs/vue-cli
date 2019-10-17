@@ -1,4 +1,7 @@
+const semver = require('semver')
+const { loadModule } = require('@vue/cli-shared-utils')
 const invoke = require('@vue/cli/lib/invoke')
+const add = require('@vue/cli/lib/add')
 
 const ROUTER = 'org.vue.vue-router-add'
 const VUEX = 'org.vue.vuex-add'
@@ -77,7 +80,17 @@ async function install (api, id) {
   let error
 
   try {
-    await invoke(id, {}, context)
+    const servicePkg = loadModule('@vue/cli-service/package.json', context)
+    // @vue/cli-plugin-router is not compatible with @vue/cli-service v3,
+    // so we have to check for the version and call the right generator
+    if (semver.satisfies(servicePkg.version, '3.x')) {
+      await invoke.runGenerator(context, {
+        id: `core:${id}`,
+        apply: loadModule(`@vue/cli-service/generator/${id}`, context)
+      })
+    } else {
+      await add(id, {}, context)
+    }
   } catch (e) {
     error = e
   }
