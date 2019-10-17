@@ -203,7 +203,7 @@ So we now moved it to the project's direct dependency (`@vue/cli-plugin-babel`) 
 
 ### `@vue/cli-plugin-eslint`
 
-This plugin now [requires ESLint as a peer dependency]((https://github.com/vuejs/vue-cli/pull/3852)).
+This plugin now [requires ESLint as a peer dependency](https://github.com/vuejs/vue-cli/pull/3852).
 
 This won't affect projects scaffolded with Vue CLI 3.1 or later.
 
