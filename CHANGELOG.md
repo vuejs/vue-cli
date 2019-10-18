@@ -1,4 +1,15 @@
 
+## 3.12.1 (2019-10-18)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#4712](https://github.com/vuejs/vue-cli/pull/4712) fix(v3): do not install core plugins that have major version bumps ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 3.12.0 (2019-10-10)
 
 #### :rocket: New Features
