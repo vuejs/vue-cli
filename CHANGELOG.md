@@ -1,4 +1,19 @@
 
+## 4.0.4 (2019-10-18)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4711](https://github.com/vuejs/vue-cli/pull/4711) fix: fix a typo that caused router failed to install in older versions ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#4702](https://github.com/vuejs/vue-cli/pull/4702) Fix link to eslint PR ([@rmbl](https://github.com/rmbl))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Philipp Gildein ([@rmbl](https://github.com/rmbl))
+
+
+
 ## 4.0.3 (2019-10-17)
 
 #### :bug: Bug Fix
