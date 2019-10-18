@@ -71,8 +71,8 @@ class GeneratorAPI {
    * @param {string} _path - Relative path from project root
    * @return {string} The resolved absolute path.
    */
-  resolve (_path) {
-    return path.resolve(this.generator.context, _path)
+  resolve (..._paths) {
+    return path.resolve(this.generator.context, ..._paths)
   }
 
   get cliVersion () {
