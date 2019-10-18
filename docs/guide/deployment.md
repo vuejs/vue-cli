@@ -145,7 +145,7 @@ Typically, your static website will be hosted on https://yourUserName.gitlab.io/
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/yourProjectName/'
+    ? '/' + process.env.CI_PROJECT_NAME + '/'
     : '/'
 }
 ```
