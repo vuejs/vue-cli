@@ -107,9 +107,8 @@ module.exports = class Creator extends EventEmitter {
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
-    // get latest CLI version
-    const { latest } = await getVersions()
-    const latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+    const { current } = await getVersions()
+    const currentMinor = `${semver.major(current)}.${semver.minor(current)}.0`
     // generate package.json with plugin dependencies
     const pkg = {
       name,
@@ -128,7 +127,7 @@ module.exports = class Creator extends EventEmitter {
       // Other `@vue/*` packages' version may not be in sync with the cli itself.
       pkg.devDependencies[dep] = (
         preset.plugins[dep].version ||
-        ((/^@vue/.test(dep)) ? `^${latestMinor}` : `latest`)
+        ((/^@vue/.test(dep)) ? `^${currentMinor}` : `latest`)
       )
     })
     // write package.json
