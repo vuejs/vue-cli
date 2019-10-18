@@ -107,7 +107,6 @@ module.exports = class Creator extends EventEmitter {
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
-    // get latest CLI version
     const { current } = await getVersions()
     const currentMinor = `${semver.major(current)}.${semver.minor(current)}.0`
     // generate package.json with plugin dependencies
