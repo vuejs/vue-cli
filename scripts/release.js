@@ -95,16 +95,12 @@ const release = async () => {
 
   const lernaArgs = [
     'publish',
-    version
-  ]
-  const releaseType = semver.diff(curVersion, version)
+    version,
 
-  // keep packages' minor version in sync
-  if (releaseType !== 'patch') {
-    lernaArgs.push('--force-publish')
-  } else {
-    lernaArgs.push('--force-publish=@vue/cli')
-  }
+    // keep packages' versions in sync
+    '--force-publish'
+  ]
+
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 }
 
