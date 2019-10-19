@@ -131,7 +131,7 @@ module.exports = class Creator extends EventEmitter {
 
     if (
       // if the latest version contains breaking changes
-      semver.diff(current, latest).includes('major') ||
+      /major/.test(semver.diff(current, latest)) ||
       // or if using `next` branch of cli
       (semver.gte(current, latest) && semver.prerelease(current))
     ) {
