@@ -20,7 +20,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   }
 
   if (!api.hasPlugin('typescript')) {
-    pkg.devDependencies['babel-eslint'] = '^10.0.1'
+    pkg.devDependencies['babel-eslint'] = '^10.0.3'
   }
 
   if (config === 'airbnb') {
@@ -37,7 +37,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-prettier': '^5.0.0',
-      'eslint-plugin-prettier': '^3.1.0',
+      'eslint-plugin-prettier': '^3.1.1',
       prettier: '^1.18.2'
     })
     // prettier & default config do not have any style rules
