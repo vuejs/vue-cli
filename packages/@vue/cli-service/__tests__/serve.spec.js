@@ -20,7 +20,10 @@ test('serve', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, { timeout: 60000 }, 'h1')
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
@@ -113,7 +116,10 @@ test('serve with inline entry', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, { timeout: 60000 }, 'h1')
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
@@ -143,7 +149,10 @@ test('serve with no public dir', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, { timeout: 60000 }, 'h1')
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
