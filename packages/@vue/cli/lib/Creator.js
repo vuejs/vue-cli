@@ -129,8 +129,13 @@ module.exports = class Creator extends EventEmitter {
     const { current, latest } = await getVersions()
     let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
 
-    // if using `next` branch of cli
-    if (semver.gte(current, latest) && semver.prerelease(current)) {
+    if (
+      // if the latest version contains breaking changes
+      /major/.test(semver.diff(current, latest)) ||
+      // or if using `next` branch of cli
+      (semver.gte(current, latest) && semver.prerelease(current))
+    ) {
+      // fallback to the current cli version number
       latestMinor = current
     }
     // generate package.json with plugin dependencies
