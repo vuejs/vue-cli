@@ -26,9 +26,12 @@ async function getInstallationCommand () {
 }
 
 exports.generateTitle = async function (checkUpdate) {
-  const { current, latest } = await getVersions()
-
+  const { current, latest, error } = await getVersions()
   let title = chalk.bold.blue(`Vue CLI v${current}`)
+
+  if (error) {
+    title += '\n' + chalk.red('Failed to check for updates')
+  }
 
   if (process.env.VUE_CLI_TEST) {
     title += ' ' + chalk.blue.bold('TEST')
@@ -36,7 +39,8 @@ exports.generateTitle = async function (checkUpdate) {
   if (process.env.VUE_CLI_DEBUG) {
     title += ' ' + chalk.magenta.bold('DEBUG')
   }
-  if (checkUpdate && semver.gt(latest, current)) {
+
+  if (checkUpdate && !error && semver.gt(latest, current)) {
     if (process.env.VUE_CLI_API_MODE) {
       title += chalk.green(` 🌟️ New version available: ${latest}`)
     } else {
