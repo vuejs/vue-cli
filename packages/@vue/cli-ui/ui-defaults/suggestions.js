@@ -89,7 +89,9 @@ async function install (api, id) {
         apply: loadModule(`@vue/cli-service/generator/${id}`, context)
       })
     } else {
-      await add(id, {}, context)
+      // FIXME: a temporary fix for adding router plugin
+      // should implement a plugin prompt ui later
+      await add(id, { $inlineOptions: '{}' }, context)
     }
   } catch (e) {
     error = e
