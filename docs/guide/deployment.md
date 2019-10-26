@@ -137,11 +137,11 @@ pages: # the job must be named pages
     - master
 ```
 
-Typically, your static website will be hosted on https://yourUserName.gitlab.io/yourProjectName, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
+Typically, your static website will be hosted on https://yourUserName.gitlab.io/yourProjectName, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match your project name (the [`CI_PROJECT_NAME` environment variable](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html) contains this value):
+
 
 ```javascript
 // vue.config.js file to be place in the root of your repository
-// make sure you update `yourProjectName` with the name of your GitLab project
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
