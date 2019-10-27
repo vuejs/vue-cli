@@ -83,7 +83,10 @@ module.exports = {
           },
           {
             text: 'Plugins',
-            link: '/core-plugins/'
+            items: [
+              { text: 'Core plugins', link: '/core-plugins/' },
+              { text: 'Browse plugins', link: 'https://awesomejs.dev/for/vue-cli/' }
+            ]
           },
           {
             text: 'Migrating From v3',
