@@ -31,7 +31,6 @@ const metadataCache = new LRU({
 
 const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
-const TAOBAO_DIST_URL = 'https://npm.taobao.org/dist'
 const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'pnpm', 'npm']
 const PACKAGE_MANAGER_PNPM4_CONFIG = {
   install: ['install', '--reporter', 'silent', '--shamefully-hoist'],
@@ -114,8 +113,12 @@ class PackageManager {
     } else if (await shouldUseTaobao(this.bin)) {
       this._registry = registries.taobao
     } else {
-      const { stdout } = await execa(this.bin, ['config', 'get', 'registry'])
-      this._registry = stdout
+      try {
+        this._registry = (await execa(this.bin, ['config', 'get', 'registry'])).stdout
+      } catch (e) {
+        // Yarn 2 uses `npmRegistryServer` instead of `registry`
+        this._registry = (await execa(this.bin, ['config', 'get', 'npmRegistryServer'])).stdout
+      }
     }
 
     return this._registry
@@ -125,12 +128,42 @@ class PackageManager {
     const registry = await this.getRegistry()
     args.push(`--registry=${registry}`)
 
-    if (registry === registries.taobao) {
-      // for node-gyp
-      process.env.NODEJS_ORG_MIRROR = TAOBAO_DIST_URL
+    return args
+  }
+
+  // set mirror urls for users in china
+  async setBinaryMirrors () {
+    const registry = await this.getRegistry()
+
+    if (registry !== registries.taobao) {
+      return
     }
 
-    return args
+    try {
+      // node-sass, chromedriver, etc.
+      const binaryMirrorConfig = await this.getMetadata('binary-mirror-config')
+      const mirrors = binaryMirrorConfig.mirrors.china
+      for (const key in mirrors.ENVS) {
+        process.env[key] = mirrors.ENVS[key]
+      }
+
+      // Cypress
+      const cypressMirror = mirrors.cypress
+      const defaultPlatforms = {
+        darwin: 'osx64',
+        linux: 'linux64',
+        win32: 'win64'
+      }
+      const platforms = cypressMirror.newPlatforms || defaultPlatforms
+      const targetPlatform = platforms[require('os').platform()]
+      if (targetPlatform) {
+        const latestCypressVersion = await this.getRemoteVersion('cypress')
+        process.env.CYPRESS_INSTALL_BINARY =
+          `${cypressMirror.host}/${latestCypressVersion}/${targetPlatform}/cypress.zip`
+      }
+    } catch (e) {
+      // get binary mirror config failed
+    }
   }
 
   async getMetadata (packageName, { field = '' } = {}) {
@@ -178,11 +211,13 @@ class PackageManager {
   }
 
   async install () {
+    await this.setBinaryMirrors()
     const args = await this.addRegistryToArgs(PACKAGE_MANAGER_CONFIG[this.bin].install)
     return executeCommand(this.bin, args, this.context)
   }
 
   async add (packageName, isDev = true) {
+    await this.setBinaryMirrors()
     const args = await this.addRegistryToArgs([
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName,
@@ -205,6 +240,7 @@ class PackageManager {
       return
     }
 
+    await this.setBinaryMirrors()
     const args = await this.addRegistryToArgs([
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName
