@@ -156,7 +156,9 @@ class PackageManager {
       }
       const platforms = cypressMirror.newPlatforms || defaultPlatforms
       const targetPlatform = platforms[require('os').platform()]
-      if (targetPlatform) {
+      // Do not override user-defined env variable
+      // Because we may construct a wrong download url and an escape hatch is necessary
+      if (targetPlatform && !process.env.CYPRESS_INSTALL_BINARY) {
         // We only support cypress 3 for the current major version
         const latestCypressVersion = await this.getRemoteVersion('cypress', '^3')
         process.env.CYPRESS_INSTALL_BINARY =
