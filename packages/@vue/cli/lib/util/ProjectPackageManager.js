@@ -157,7 +157,8 @@ class PackageManager {
       const platforms = cypressMirror.newPlatforms || defaultPlatforms
       const targetPlatform = platforms[require('os').platform()]
       if (targetPlatform) {
-        const latestCypressVersion = await this.getRemoteVersion('cypress')
+        // We only support cypress 3 for the current major version
+        const latestCypressVersion = await this.getRemoteVersion('cypress', '^3')
         process.env.CYPRESS_INSTALL_BINARY =
           `${cypressMirror.host}/${latestCypressVersion}/${targetPlatform}/cypress.zip`
       }
