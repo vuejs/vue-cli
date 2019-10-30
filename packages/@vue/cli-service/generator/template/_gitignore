@@ -5,6 +5,8 @@ node_modules
 
 /tests/e2e/reports/
 selenium-debug.log
+chromedriver.log
+geckodriver.log
 <%_ } _%>
 <%_ if (rootOptions.plugins && rootOptions.plugins['@vue/cli-plugin-e2e-cypress']) { _%>
 

@@ -81,7 +81,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     cd -
     ```
 
-#### Using Travis CI for automatic updates 
+#### Using Travis CI for automatic updates
 
 1. Set correct `publicPath` in `vue.config.js` as explained above.
 
@@ -332,7 +332,7 @@ npm install now
     ```json
     "now-build": "npm run build"
     ```
-    
+
     To make a deployment, run `now`.
 
     If you want your deployment aliased, run `now --target production` instead.
@@ -438,15 +438,17 @@ Deploy your application using nginx inside of a docker container.
 
 2. Create a `Dockerfile` file in the root of your project.
 
-    ```Dockerfile
-    FROM node:10
-    COPY ./ /app
+    ```docker
+    FROM node:latest as build-stage
     WORKDIR /app
-    RUN npm install && npm run build
+    COPY package*.json ./
+    RUN npm install
+    COPY ./ .
+    RUN npm run build
 
-    FROM nginx
+    FROM nginx as production-stage
     RUN mkdir /app
-    COPY --from=0 /app/dist /app
+    COPY --from=build-stage /app/dist /app
     COPY nginx.conf /etc/nginx/nginx.conf
     ```
 
@@ -454,7 +456,7 @@ Deploy your application using nginx inside of a docker container.
 
     Setting up the `.dockerignore` file prevents `node_modules` and any intermediate build artifacts from being copied to the image which can cause issues during building.
 
-    ```gitignore
+    ```
     **/node_modules
     **/dist
     ```
@@ -465,7 +467,7 @@ Deploy your application using nginx inside of a docker container.
 
     The following is a simple `nginx` configuration that serves your vue project on port `80`. The root `index.html` is served for `page not found` / `404` errors which allows us to use `pushState()` based routing.
 
-    ```text
+    ```nginx
     user  nginx;
     worker_processes  1;
     error_log  /var/log/nginx/error.log warn;

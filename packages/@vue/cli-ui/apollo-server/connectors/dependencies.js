@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
 const semver = require('semver')
-const execa = require('execa')
 const chalk = require('chalk')
 // Connectors
 const cwd = require('./cwd')
@@ -12,7 +11,7 @@ const logs = require('./logs')
 // Context
 const getContext = require('../context')
 // Utils
-const { isPlugin, hasYarn, resolveModule } = require('@vue/cli-shared-utils')
+const { isPlugin, resolveModule } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
 const PackageManager = require('@vue/cli/lib/util/ProjectPackageManager')
 const { resolveModuleRoot } = require('../util/resolve-path')
@@ -94,23 +93,10 @@ async function getMetadata (id, context) {
     return metadata
   }
 
-  if (hasYarn()) {
-    try {
-      const { stdout } = await execa('yarn', ['info', id, '--json'], {
-        cwd: cwd.get()
-      })
-      metadata = JSON.parse(stdout).data
-    } catch (e) {
-      // yarn info failed
-    }
-  }
-
-  if (!metadata) {
-    try {
-      metadata = await (new PackageManager({ context: cwd.get() })).getMetadata()
-    } catch (e) {
-      // No connection?
-    }
+  try {
+    metadata = await (new PackageManager({ context: cwd.get() })).getMetadata(id)
+  } catch (e) {
+    // No connection?
   }
 
   if (metadata) {

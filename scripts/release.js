@@ -102,7 +102,9 @@ const release = async () => {
     }
   }
 
-  const releaseType = semver.diff(curVersion, version)
+  const releaseType = semver.prerelease(curVersion)
+    ? 'prerelease'
+    : semver.diff(curVersion, version)
 
   let distTag = 'latest'
   if (releaseType.startsWith('pre') && !cliOptions['local-registry']) {
@@ -115,10 +117,8 @@ const release = async () => {
     '--dist-tag',
     distTag
   ]
-  // keep packages' minor version in sync
-  if (releaseType !== 'patch') {
-    lernaArgs.push('--force-publish')
-  }
+  // keep all packages' versions in sync
+  lernaArgs.push('--force-publish')
 
   if (cliOptions['local-registry']) {
     lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push', '--yes')

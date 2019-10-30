@@ -55,7 +55,7 @@ Options:
 ```
 
 ::: tip --copy
-Copying to clipboard might not work on a few platforms.  
+Copying to clipboard might not work on a few platforms.
 If copying was successful, `(copied to clipboard)` is displayed next to the local dev server URL.
 :::
 
@@ -78,7 +78,7 @@ Options:
   --no-unsafe-inline build app without introducing inline scripts
   --target       app | lib | wc | wc-async (default: app)
   --formats      list of output formats for library builds (default: commonjs,umd,umd-min)
-  --inline-vue  include the Vue module in the final bundle of library or web component target
+  --inline-vue   include the Vue module in the final bundle of library or web component target
   --name         name for lib or web-component mode (default: "name" in package.json or entry filename)
   --filename     file name for output, only usable for 'lib' target (default: value of --name),
   --no-clean     do not remove the dist directory before building the project
@@ -179,4 +179,4 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 
 Projects created via `vue create` are ready to go without the need for additional configuration. The plugins are designed to work with one another so in most cases, all you need to do is pick the features you want during the interactive prompts.
 
-However, we also understand that it's impossible to cater to every possible need, and the need of a project may also change over time. Projects created by Vue CLI allow you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.
+However, we also understand that it's impossible to cater to every possible need, and the needs of a project may also change over time. Projects created by Vue CLI allow you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.

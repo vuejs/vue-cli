@@ -5,14 +5,17 @@ const execa = require('execa')
 const minimist = require('minimist')
 const semver = require('semver')
 const LRU = require('lru-cache')
+const chalk = require('chalk')
 
 const {
   hasYarn,
   hasProjectYarn,
   hasPnpm3OrLater,
+  hasPnpmVersionOrLater,
   hasProjectPnpm
 } = require('@vue/cli-shared-utils/lib/env')
 const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib/pluginResolution')
+const { log, warn } = require('@vue/cli-shared-utils/lib/logger')
 
 const { loadOptions } = require('../options')
 const getPackageJson = require('./getPackageJson')
@@ -30,6 +33,18 @@ const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
 const TAOBAO_DIST_URL = 'https://npm.taobao.org/dist'
 const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'pnpm', 'npm']
+const PACKAGE_MANAGER_PNPM4_CONFIG = {
+  install: ['install', '--reporter', 'silent', '--shamefully-hoist'],
+  add: ['install', '--reporter', 'silent', '--shamefully-hoist'],
+  upgrade: ['update', '--reporter', 'silent'],
+  remove: ['uninstall', '--reporter', 'silent']
+}
+const PACKAGE_MANAGER_PNPM3_CONFIG = {
+  install: ['install', '--loglevel', 'error', '--shamefully-flatten'],
+  add: ['install', '--loglevel', 'error', '--shamefully-flatten'],
+  upgrade: ['update', '--loglevel', 'error'],
+  remove: ['uninstall', '--loglevel', 'error']
+}
 const PACKAGE_MANAGER_CONFIG = {
   npm: {
     install: ['install', '--loglevel', 'error'],
@@ -37,12 +52,7 @@ const PACKAGE_MANAGER_CONFIG = {
     upgrade: ['update', '--loglevel', 'error'],
     remove: ['uninstall', '--loglevel', 'error']
   },
-  pnpm: {
-    install: ['install', '--loglevel', 'error', '--shamefully-flatten'],
-    add: ['install', '--loglevel', 'error', '--shamefully-flatten'],
-    upgrade: ['update', '--loglevel', 'error'],
-    remove: ['uninstall', '--loglevel', 'error']
-  },
+  pnpm: hasPnpmVersionOrLater('4.0.0') ? PACKAGE_MANAGER_PNPM4_CONFIG : PACKAGE_MANAGER_PNPM3_CONFIG,
   yarn: {
     install: [],
     add: ['add'],
@@ -76,7 +86,13 @@ class PackageManager {
     }
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
-      throw new Error(`Unknown package manager: ${this.bin}`)
+      log()
+      warn(
+        `The package manager ${chalk.red(this.bin)} is ${chalk.red('not officially supported')}.\n` +
+        `It will be treated like ${chalk.cyan('npm')}, but compatibility issues may occur.\n` +
+        `See if you can use ${chalk.cyan('--registry')} instead.`
+      )
+      PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
   }
 
@@ -110,7 +126,8 @@ class PackageManager {
     args.push(`--registry=${registry}`)
 
     if (registry === registries.taobao) {
-      args.push(`--disturl=${TAOBAO_DIST_URL}`)
+      // for node-gyp
+      process.env.NODEJS_ORG_MIRROR = TAOBAO_DIST_URL
     }
 
     return args

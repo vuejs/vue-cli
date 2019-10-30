@@ -1,5 +1,3 @@
-const webpack = require('webpack')
-
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -163,7 +161,7 @@ module.exports = (api, options) => {
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).
         setImmediate: false,
-        // process is injected via EnvironmentPlugin, although some 3rd party
+        // process is injected via DefinePlugin, although some 3rd party
         // libraries may require a mock to work properly (#934)
         process: 'mock',
         // prevent webpack from injecting mocks to Node native modules
@@ -177,8 +175,8 @@ module.exports = (api, options) => {
 
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
-      .plugin('process-env')
-        .use(webpack.EnvironmentPlugin, [
+      .plugin('define')
+        .use(require('webpack').DefinePlugin, [
           resolveClientEnv(options)
         ])
 
@@ -195,5 +193,11 @@ module.exports = (api, options) => {
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]
         }])
+
+    const TerserPlugin = require('terser-webpack-plugin')
+    const terserOptions = require('./terserOptions')
+    webpackConfig.optimization
+      .minimizer('terser')
+        .use(TerserPlugin, [terserOptions(options)])
   })
 }

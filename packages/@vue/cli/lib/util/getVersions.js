@@ -26,20 +26,28 @@ module.exports = async function getVersions () {
   const cached = latestVersion
   const daysPassed = (Date.now() - lastChecked) / (60 * 60 * 1000 * 24)
 
+  let error
   if (daysPassed > 1) {
     // if we haven't check for a new version in a day, wait for the check
     // before proceeding
-    latest = await getAndCacheLatestVersion(cached, includePrerelease)
+    try {
+      latest = await getAndCacheLatestVersion(cached, includePrerelease)
+    } catch (e) {
+      latest = cached
+      error = e
+    }
   } else {
     // Otherwise, do a check in the background. If the result was updated,
     // it will be used for the next 24 hours.
-    getAndCacheLatestVersion(cached, includePrerelease)
+    // don't throw to interrupt the user if the background check failed
+    getAndCacheLatestVersion(cached, includePrerelease).catch(() => {})
     latest = cached
   }
 
   return (sessionCached = {
     current: local,
-    latest
+    latest,
+    error
   })
 }
 

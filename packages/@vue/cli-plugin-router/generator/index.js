@@ -1,13 +1,10 @@
 module.exports = (api, options = {}) => {
-  api.assertCliVersion('^4.0.0-alpha.3')
-  api.assertCliServiceVersion('^4.0.0-alpha.3')
-
   api.injectImports(api.entryFile, `import router from './router'`)
   api.injectRootOptions(api.entryFile, `router`)
 
   api.extendPackage({
     dependencies: {
-      'vue-router': '^3.0.6'
+      'vue-router': '^3.1.3'
     }
   })
 

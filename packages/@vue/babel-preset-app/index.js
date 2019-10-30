@@ -32,6 +32,21 @@ module.exports = (context, options = {}) => {
   const plugins = []
   const defaultEntryFiles = JSON.parse(process.env.VUE_CLI_ENTRY_FILES || '[]')
 
+  // Though in the vue-cli repo, we only use the two envrionment variables
+  // for tests, users may have relied on them for some features,
+  // dropping them may break some projects.
+  // So in the following blocks we don't directly test the `NODE_ENV`.
+  // Rather, we turn it into the two commonly used feature flags.
+  if (process.env.NODE_ENV === 'test') {
+    // Both Jest & Mocha set NODE_ENV to 'test'.
+    // And both requires the `node` target.
+    process.env.VUE_CLI_BABEL_TARGET_NODE = 'true'
+    // Jest runs without bundling so it needs this.
+    // With the node target, tree shaking is not a necessity,
+    // so we set it for maximum compatibility.
+    process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = 'true'
+  }
+
   // JSX
   if (options.jsx !== false) {
     presets.push([require('@vue/babel-preset-jsx'), typeof options.jsx === 'object' ? options.jsx : {}])
@@ -134,8 +149,10 @@ module.exports = (context, options = {}) => {
   // cli-plugin-jest sets this to true because Jest runs without bundling
   if (process.env.VUE_CLI_BABEL_TRANSPILE_MODULES) {
     envOptions.modules = 'commonjs'
-    // necessary for dynamic import to work in tests
-    plugins.push(require('babel-plugin-dynamic-import-node'))
+    if (process.env.VUE_CLI_BABEL_TARGET_NODE) {
+      // necessary for dynamic import to work in tests
+      plugins.push(require('babel-plugin-dynamic-import-node'))
+    }
   }
 
   // pass options along to babel-preset-env

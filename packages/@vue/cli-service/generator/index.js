@@ -29,22 +29,22 @@ module.exports = (api, options) => {
     const deps = {
       sass: {
         sass: '^1.19.0',
-        'sass-loader': '^7.1.0'
+        'sass-loader': '^8.0.0'
       },
       'node-sass': {
         'node-sass': '^4.12.0',
-        'sass-loader': '^7.1.0'
+        'sass-loader': '^8.0.0'
       },
       'dart-sass': {
         sass: '^1.19.0',
-        'sass-loader': '^7.1.0'
+        'sass-loader': '^8.0.0'
       },
       less: {
         'less': '^3.0.4',
         'less-loader': '^5.0.0'
       },
       stylus: {
-        'stylus': '^0.54.5',
+        'stylus': '^0.54.7',
         'stylus-loader': '^3.0.2'
       }
     }
@@ -52,6 +52,16 @@ module.exports = (api, options) => {
     api.extendPackage({
       devDependencies: deps[options.cssPreprocessor]
     })
+  }
+
+  // for v3 compatibility
+  if (options.router && !api.hasPlugin('router')) {
+    require('./router')(api, options)
+  }
+
+  // for v3 compatibility
+  if (options.vuex && !api.hasPlugin('vuex')) {
+    require('./vuex')(api)
   }
 
   // additional tooling configurations

@@ -16,7 +16,8 @@
     "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
     "version": "node scripts/genChangelog.js && node scripts/genDocs.js && git add CHANGELOG.md && git add docs",
     "docs": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "patch-chromedriver": "node scripts/patchChromedriver.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
@@ -42,30 +43,31 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
+    "@babel/core": "^7.6.4",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
-    "@vuepress/plugin-pwa": "^1.0.1",
-    "@vuepress/theme-vue": "^1.0.1",
+    "@vuepress/plugin-pwa": "^1.2.0",
+    "@vuepress/theme-vue": "^1.2.0",
     "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.8.0",
-    "chromedriver": "^74.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "chromedriver": "^77.0.0",
     "debug": "^4.1.0",
     "eslint": "^5.16.0",
-    "eslint-plugin-graphql": "^3.0.3",
+    "eslint-plugin-graphql": "^3.1.0",
     "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.2.2",
     "eslint-plugin-vue-libs": "^4.0.0",
     "execa": "^1.0.0",
+    "geckodriver": "^1.19.0",
     "globby": "^9.2.0",
     "graphql": "^14.3.1",
     "http-server": "^0.11.1",
     "inquirer": "^6.3.1",
-    "jest": "^24.7.1",
+    "jest": "^24.9.0",
     "lerna": "^3.13.4",
     "lerna-changelog": "^0.8.2",
     "lint-staged": "^8.1.5",
@@ -77,7 +79,7 @@
     "rimraf": "^2.6.2",
     "semver": "^6.1.0",
     "typescript": "^3.4.5",
-    "vuepress": "^1.0.1",
+    "vuepress": "^1.2.0",
     "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
@@ -85,7 +87,6 @@
     "puppeteer": "1.11.0",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
-    "vue-server-renderer": "^2.6.10",
-    "@vuepress/core": "1.0.2"
+    "vue-server-renderer": "^2.6.10"
   }
 }

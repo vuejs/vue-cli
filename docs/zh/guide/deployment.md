@@ -31,19 +31,17 @@ serve -s dist
 
 如果你使用了 PWA 插件，那么应用必须架设在 HTTPS 上，这样 [Service Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API) 才能被正确注册。
 
-<!-- @todo: translation -->
-
-## Platform Guides
-
-(暂未翻译，此部分英文文档处于开放贡献中)
+## 平台指南
 
 ### GitHub Pages
+
+#### 手动推送更新
  
 1. 在 `vue.config.js` 中设置正确的 `publicPath`。
     
-   如果打算将项目部署到 `https://<USERNAME>.github.io/` 上 , `publicPath` 将默认被设为 `"/"`，你可以忽略这个参数。
+   如果打算将项目部署到 `https://<USERNAME>.github.io/` 上, `publicPath` 将默认被设为 `"/"`，你可以忽略这个参数。
 
-   如果打算将项目部署到 `https://<USERNAME>.github.io/<REPO>/` 上, (换句话说 仓库地址为 `https://github.com/<USERNAME>/<REPO>`), 可将 `publicPath` 设为 `"/<REPO>/"` 。 举个例子， 如果仓库名字为 "my-project"，`vue.config.js` 的内容应如下所示:
+   如果打算将项目部署到 `https://<USERNAME>.github.io/<REPO>/` 上 (即仓库地址为 `https://github.com/<USERNAME>/<REPO>`)，可将 `publicPath` 设为 `"/<REPO>/"`。举个例子，如果仓库名字为“my-project”，那么 `vue.config.js` 的内容应如下所示：
 
     ``` js
     module.exports = {
@@ -53,7 +51,7 @@ serve -s dist
     }
     ```
 
-2. 在项目目录下， 用以下的代码创建 `deploy.sh`（可以适当地取消注释）并运行它以进行部署：
+2. 在项目目录下，创建内容如下的 `deploy.sh` (可以适当地取消注释) 并运行它以进行部署：
 
     ``` bash{13,20,23}
     #!/usr/bin/env sh
@@ -83,9 +81,33 @@ serve -s dist
     cd -
     ```
 
-    ::: tip
-    您还可以在 CI 设置中配置上述脚本，以便在每次推送时启用自动部署。
-    :::
+#### 使用 Travis CI 自动更新
+
+1. 仿照上面在 `vue.config.js` 中设置正确的 `publicPath`。
+2. 安装 Travis CLI 客户端：`gem install travis && travis --login`
+3. 生成一个拥有“repo”权限的 GitHub [访问令牌](https://help.github.com/cn/articles/creating-a-personal-access-token-for-the-command-line)。
+4. 授予 Travis 访问仓库的权限：`travis set GITHUB_TOKEN=xxx` (`xxx` 是第三步中的个人访问令牌)
+5. 在项目根目录下创建一个 `.travis.yml` 文件。
+   
+    ```yaml
+    language: node_js
+    node_js:
+      - "node"
+
+    cache: npm
+
+    script: npm run build
+
+    deploy:
+    provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: dist
+    on:
+      branch: master
+    ```
+  
+6. 将 `.travis.yml` 文件推送到仓库来触发第一次构建。
 
 ### GitLab Pages
 
@@ -130,16 +152,45 @@ module.exports = {
 
 1. 在 Netlify 上，使用以下设置从 GitHub 创建新项目:
 
-    - **构建命令:** `npm run build` or `yarn build`
+    - **构建命令:** `npm run build` 或 `yarn build`
     - **发布目录:** `dist`
 
-2. 点击 deploy 按钮！
+2. 点击“deploy”按钮！
 
 也可以查看 [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda)。
 
+如果使用 Vue Router 的 history 模式，你需要在 `/public` 目录下创建一个 `_redirects` 文件：
+
+```
+# 单页应用的 Netlify 设置
+/*    /index.html   200
+```
+
+详细信息请查看 [Netlify 重定向文档](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps)。
+
+### Render
+
+[Render](https://render.com/) 提供带有全托管 SSL，全球 CDN 和 GitHub 持续自动部署的[免费静态站点托管](https://render.com/docs/static-sites)服务。
+
+1. 在 Render 上创建一个新的 Web Service，并授予 Render 的 GitHub 应用访问你的 Vue 仓库的权限。
+2. 在创建过程中使用以下设置：
+   - **环境**：`Static Site`
+   - **构建命令**：`npm run build` 或者 `yarn build`
+   - **发布目录**：`dist`
+
+大功告成！构建结束时你的应用便会在你的 Render URL 上线。
+
+如果使用 Vue Router 的 history 模式，你需要在站点的 `Redirects/Rewrites` 设置中添加以下改写规则：
+
+- **Source**: `/*`
+- **Destination**: `/index.html`
+- **Status**: `Rewrite`
+
+详细信息请查看 Render 的[重定向和改写](https://render.com/docs/redirects-rewrites)及[自定义域名](https://render.com/docs/custom-domains)文档。
+
 ### Amazon S3
 
-见 [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy)。
+参见 [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy)。
 
 ### Firebase
 
@@ -204,55 +255,71 @@ firebase deploy --only hosting
 
 请参考 [Firebase 文档](https://firebase.google.com/docs/hosting/deploying) 来获取更多细节。
 
-### Now
+### ZEIT Now
 
-1. 全局安装 Now CLI: `npm install -g now`
+[ZEIT Now](https://zeit.co/) 是一个网站和无服务器 (Serverless) API 云平台，你可以使用你的个人域名 (或是免费的 `.now.sh` URL) 部署你的 Vue 项目。
 
-2. 添加 `now.json` 文件到项目根目录 ：
+#### 步骤一：安装 Now CLI
 
-    ```json
-    {
-      "name": "my-example-app",
-      "type": "static",
-      "static": {
-        "public": "dist",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
-      "alias": "vue-example",
-      "files": [
-        "dist"
-      ]
-    }
-    ```
+要使用 [npm](https://www.npmjs.com/package/now) 安装其命令行界面，运行以下命令：
 
-    您可以通过阅读来进一步了解自定义静态服务的信息 [Now's 文档](https://zeit.co/docs/deployment-types/static)。
+```
+npm install -g now
+```
 
-3. 在 `package.json` 中添加部署脚本：
+#### 步骤二：部署
 
-    ```json
-    "deploy": "npm run build && now && now alias"
-    ```
+在项目根目录运行以下命令部署你的应用：
 
-    如果想要将项目默认公开部署，部署脚本如下
+```
+now
+```
 
-    ```json
-    "deploy": "npm run build && now --public && now alias"
-    ```
+**此外**，你还可以使用他们的 [GitHub](https://zeit.co/github) 或 [GitLab](https://zeit.co/gitlab) 集成服务。
 
-    这将自动将站点的别名指向最新的部署。现在，只要运行 `npm run deploy` 就可以部署你的应用。
+大功告成！
+
+你的站点会开始部署，你将获得一个形如 [https://vue.now-examples.now.sh/](https://vue.now-examples.now.sh/) 的链接。
+
+开箱即用地，请求会被自动改写到 `index.html` (除了自定义的静态文件) 并带有合适的缓存请求头。你可以[改写](https://zeit.co/docs/v2/advanced/routes/)这些规则。
 
 ### Stdlib
 
-> TODO | Open to contribution.
+> 未完成 | 欢迎参与贡献。
 
 ### Heroku
 
-> TODO | Open to contribution.
+1. [安装 Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+2. 创建 `static.json` 文件：
+   
+    ```json
+    {
+      "root": "dist",
+      "clean_urls": true,
+      "routes": {
+        "/**": "index.html"
+      }
+    }
+    ```
+
+3. 将 `static.json` 加入 Git
+
+    ```
+    git add static.json
+    git commit -m "add static configuration"
+    ```
+
+4. 部署到 Heroku
+
+    ```
+    heroku login
+    heroku create
+    heroku buildpacks:add heroku/nodejs
+    heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
+    git push heroku master
+    ```
+
+详细信息：https://gist.github.com/hone/24b06869b4c1eca701f9
 
 ### Surge
 
@@ -309,4 +376,91 @@ npm install --global surge
     git push -f git@bitbucket.org:<USERNAME>/<USERNAME>.bitbucket.io.git master
 
     cd -
+    ```
+
+### Docker (Nginx)
+
+在 Docker 容器中使用 Nginx 部署你的应用。
+
+1. 安装 [Docker](https://www.docker.com/get-started)
+2. 在项目根目录创建 `Dockerfile` 文件
+
+    ```Dockerfile
+    FROM node:10
+    COPY ./ /app
+    WORKDIR /app
+    RUN npm install && npm run build
+
+    FROM nginx
+    RUN mkdir /app
+    COPY --from=0 /app/dist /app
+    COPY nginx.conf /etc/nginx/nginx.conf
+    ```
+
+3. 在项目根目录创建 `.dockerignore` 文件
+
+    设置 `.dockerignore` 文件能防止 `node_modules` 和其他中间构建产物被复制到镜像中导致构建问题。
+
+    ```gitignore
+    **/node_modules
+    **/dist
+    ```
+
+4. 在项目根目录创建 `nginx.conf` 文件
+
+    `Nginx` 是一个能在 Docker 容器中运行的 HTTP(s) 服务器。它使用配置文件决定如何提供内容、要监听的端口等。参阅 [Nginx 设置文档](https://www.nginx.com/resources/wiki/start/topics/examples/full/) 以了解所有可能的设置选项。
+
+    下面是一个简单的 `Nginx` 设置文件，它会在 `80` 端口上提供你的 Vue 项目。`页面未找到` / `404` 错误使用的是 `index.html`，这让我们可以使用基于 `pushState()` 的路由。
+
+    ```text
+    user  nginx;
+    worker_processes  1;
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+    events {
+      worker_connections  1024;
+    }
+    http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+      access_log  /var/log/nginx/access.log  main;
+      sendfile        on;
+      keepalive_timeout  65;
+      server {
+        listen       80;
+        server_name  localhost;
+        location / {
+          root   /app;
+          index  index.html;
+          try_files $uri $uri/ /index.html;
+        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+          root   /usr/share/nginx/html;
+        }
+      }
+    }
+    ```
+
+5. 构建你的 Docker 镜像
+
+    ```bash
+    docker build . -t my-app
+    # Sending build context to Docker daemon  884.7kB
+    # ...
+    # Successfully built 4b00e5ee82ae
+    # Successfully tagged my-app:latest
+    ```
+
+6. 运行你的 Docker 镜像
+
+    这个例子基于官方 `Nginx` 镜像，因此已经设置了日志重定向并关闭了自我守护进程。它也提供了其他有利于 Nginx 在 Docker 容器中运行的默认设置。更多信息参阅 [Nginx Docker 仓库](https://hub.docker.com/_/nginx)。
+
+    ```bash
+    docker run -d -p 8080:80 my-app
+    curl localhost:8080
+    # <!DOCTYPE html><html lang=en>...</html>
     ```

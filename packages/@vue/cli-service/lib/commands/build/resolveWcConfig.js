@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
 module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
@@ -56,8 +55,8 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
 
     config
       .plugin('web-component-options')
-        .use(webpack.EnvironmentPlugin, [{
-          CUSTOM_ELEMENT_NAME: libName
+        .use(require('webpack').DefinePlugin, [{
+          'process.env.CUSTOM_ELEMENT_NAME': JSON.stringify(libName)
         }])
 
     // enable shadow mode in vue-loader
