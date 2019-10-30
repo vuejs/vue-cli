@@ -81,11 +81,6 @@
     "webpack-merge": "^4.2.1"
   },
   "peerDependencies": {
-    "less-loader": "*",
-    "pug-plain-loader": "*",
-    "raw-loader": "*",
-    "sass-loader": "*",
-    "stylus-loader": "*",
     "vue-template-compiler": "^2.0.0"
   },
   "peerDependenciesMeta": {
