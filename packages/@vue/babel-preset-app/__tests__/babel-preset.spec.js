@@ -107,7 +107,7 @@ test('async/await', () => {
   // should use regenerator runtime
   expect(code).toMatch(`import "regenerator-runtime/runtime"`)
   // should use required helper instead of inline
-  expect(code).toMatch(/import _asyncToGenerator from ".*@babel\/runtime\/helpers\/esm\/asyncToGenerator\"/)
+  expect(code).toMatch(/import _asyncToGenerator from ".*runtime\/helpers\/esm\/asyncToGenerator\"/)
 })
 
 test('jsx', () => {
