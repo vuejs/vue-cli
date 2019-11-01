@@ -4599,17 +4599,6 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
-cache-loader@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/cache-loader/-/cache-loader-2.0.1.tgz#5758f41a62d7c23941e3c3c7016e6faeb03acb07"
-  integrity sha512-V99T3FOynmGx26Zom+JrVBytLBsmUCzVG2/4NnUKgvXN4bEV42R1ERl1IyiH/cvFIDA1Ytq2lPZ9tXDSahcQpQ==
-  dependencies:
-    loader-utils "^1.1.0"
-    mkdirp "^0.5.1"
-    neo-async "^2.6.0"
-    normalize-path "^3.0.0"
-    schema-utils "^1.0.0"
-
 cache-loader@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/cache-loader/-/cache-loader-3.0.1.tgz#cee6cf4b3cdc7c610905b26bad6c2fc439c821af"
@@ -7129,7 +7118,7 @@ eslint-plugin-vue-libs@^4.0.0:
     babel-eslint "^10.0.1"
     eslint-plugin-vue "^5.1.0"
 
-eslint-plugin-vue@^5.1.0, eslint-plugin-vue@^5.2.2:
+eslint-plugin-vue@^5.0.0, eslint-plugin-vue@^5.1.0, eslint-plugin-vue@^5.2.2:	
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-5.2.3.tgz#3ee7597d823b5478804b2feba9863b1b74273961"
   integrity sha512-mGwMqbbJf0+VvpGR5Lllq0PMxvTdrZ/ZPjmhkacrCHbubJeJOt+T6E3HUzAifa2Mxi7RSdJfC9HFpOeSYVMMIw==
@@ -16240,7 +16229,7 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-thread-loader@^2.1.2, thread-loader@^2.1.3:
+thread-loader@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/thread-loader/-/thread-loader-2.1.3.tgz#cbd2c139fc2b2de6e9d28f62286ab770c1acbdda"
   integrity sha512-wNrVKH2Lcf8ZrWxDF/khdlLlsTMczdcwPA9VEK4c2exlEPynYWxi9op3nPTo5lAnDIkE0rQEB3VBP+4Zncc9Hg==
