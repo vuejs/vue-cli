@@ -44,7 +44,7 @@ test('should not transpile babel helpers multiple times', async () => {
   // there would be an error thrown and the page would be empty
   await serve(
     () => project.run('vue-cli-service serve'),
-    async ({ page, nextUpdate, helpers }) => {
+    async ({ helpers }) => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
     }
