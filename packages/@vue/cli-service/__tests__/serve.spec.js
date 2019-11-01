@@ -6,6 +6,8 @@ const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
+const sleep = n => new Promise(resolve => setTimeout(resolve, n))
+
 test('serve', async () => {
   const project = await create('e2e-serve', defaultPreset)
 
@@ -53,6 +55,7 @@ test('serve with router', async () => {
       expect(await helpers.hasClass('a[href="#/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="#/about"]')
+      await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
       expect(await helpers.hasElement('#nav')).toBe(true)
       expect(await helpers.hasClass('a[href="#/"]', 'router-link-exact-active')).toBe(false)
@@ -76,6 +79,7 @@ test('serve with legacy router option', async () => {
       expect(await helpers.hasClass('a[href="/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="/about"]')
+      await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
       expect(await helpers.hasElement('#nav')).toBe(true)
       expect(await helpers.hasClass('a[href="/"]', 'router-link-exact-active')).toBe(false)
