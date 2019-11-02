@@ -7118,7 +7118,7 @@ eslint-plugin-vue-libs@^4.0.0:
     babel-eslint "^10.0.1"
     eslint-plugin-vue "^5.1.0"
 
-eslint-plugin-vue@^5.0.0, eslint-plugin-vue@^5.1.0, eslint-plugin-vue@^5.2.2:
+eslint-plugin-vue@^5.1.0, eslint-plugin-vue@^5.2.2:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-5.2.3.tgz#3ee7597d823b5478804b2feba9863b1b74273961"
   integrity sha512-mGwMqbbJf0+VvpGR5Lllq0PMxvTdrZ/ZPjmhkacrCHbubJeJOt+T6E3HUzAifa2Mxi7RSdJfC9HFpOeSYVMMIw==
