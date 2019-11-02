@@ -201,6 +201,7 @@ module.exports = (context, options = {}) => {
 
   return {
     presets,
-    plugins
+    plugins,
+    ignore: [/\/core-js/]
   }
 }
