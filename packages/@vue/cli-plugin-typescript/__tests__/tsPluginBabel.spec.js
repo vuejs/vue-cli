@@ -16,9 +16,9 @@ test('using correct loader', () => {
   const config = service.resolveWebpackConfig()
   // eslint-disable-next-line no-shadow
   const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))
-  expect(rule.use[0].loader).toMatch('cache-loader')
-  expect(rule.use[1].loader).toMatch('babel-loader')
-  expect(rule.use[2].loader).toMatch('ts-loader')
+  expect(rule.use[0].loader).toMatch(require.resolve('cache-loader'))
+  expect(rule.use[1].loader).toMatch(require.resolve('babel-loader'))
+  expect(rule.use[2].loader).toMatch(require.resolve('ts-loader'))
 })
 
 const creatorOptions = {

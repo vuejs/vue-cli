@@ -23,7 +23,7 @@ exports.clientAddonConfig = function ({ id, port = 8042 }) {
         .rule('gql')
         .test(/\.(gql|graphql)$/)
         .use('gql-loader')
-        .loader('graphql-tag/loader')
+        .loader(require.resolve('graphql-tag/loader'))
         .end()
     },
     devServer: {

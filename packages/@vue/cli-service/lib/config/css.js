@@ -128,7 +128,7 @@ module.exports = (api, rootOptions) => {
         } else {
           rule
             .use('vue-style-loader')
-            .loader('vue-style-loader')
+            .loader(require.resolve('vue-style-loader'))
             .options({
               sourceMap,
               shadowMode
@@ -155,13 +155,13 @@ module.exports = (api, rootOptions) => {
 
         rule
           .use('css-loader')
-          .loader('css-loader')
+          .loader(require.resolve('css-loader'))
           .options(cssLoaderOptions)
 
         if (needInlineMinification) {
           rule
             .use('cssnano')
-            .loader('postcss-loader')
+            .loader(require.resolve('postcss-loader'))
             .options({
               sourceMap,
               plugins: [require('cssnano')(cssnanoOptions)]
@@ -171,14 +171,21 @@ module.exports = (api, rootOptions) => {
         if (hasPostCSSConfig) {
           rule
             .use('postcss-loader')
-            .loader('postcss-loader')
+            .loader(require.resolve('postcss-loader'))
             .options(Object.assign({ sourceMap }, loaderOptions.postcss))
         }
 
         if (loader) {
+          let resolvedLoader
+          try {
+            resolvedLoader = require.resolve(loader)
+          } catch (error) {
+            resolvedLoader = loader
+          }
+
           rule
             .use(loader)
-            .loader(loader)
+            .loader(resolvedLoader)
             .options(Object.assign({ sourceMap }, options))
         }
       }
