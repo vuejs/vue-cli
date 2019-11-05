@@ -82,6 +82,14 @@ module.exports = (api, rootOptions) => {
       '.postcssrc.json'
     ]))
 
+    if (!hasPostCSSConfig) {
+      loaderOptions.postcss = {
+        plugins: [
+          require('autoprefixer')
+        ]
+      }
+    }
+
     // if building for production but not extracting CSS, we need to minimize
     // the embbeded inline CSS as they will not be going through the optimizing
     // plugin.
@@ -139,7 +147,7 @@ module.exports = (api, rootOptions) => {
           sourceMap,
           importLoaders: (
             1 + // stylePostLoader injected by vue-loader
-            (hasPostCSSConfig ? 1 : 0) +
+            1 + // postcss-loader
             (needInlineMinification ? 1 : 0)
           )
         }, loaderOptions.css)
@@ -168,12 +176,10 @@ module.exports = (api, rootOptions) => {
             })
         }
 
-        if (hasPostCSSConfig) {
-          rule
-            .use('postcss-loader')
-            .loader(require.resolve('postcss-loader'))
-            .options(Object.assign({ sourceMap }, loaderOptions.postcss))
-        }
+        rule
+          .use('postcss-loader')
+          .loader(require.resolve('postcss-loader'))
+          .options(Object.assign({ sourceMap }, loaderOptions.postcss))
 
         if (loader) {
           let resolvedLoader
