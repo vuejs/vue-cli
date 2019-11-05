@@ -184,6 +184,7 @@ module.exports = (context, options = {}) => {
   }])
 
   return {
+    sourceType: 'unambiguous',
     overrides: [{
       exclude: [/@babel[\/|\\\\]runtime/, /core-js/],
       presets,
