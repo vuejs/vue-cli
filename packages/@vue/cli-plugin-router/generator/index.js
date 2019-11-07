@@ -10,7 +10,8 @@ module.exports = (api, options = {}) => {
 
   api.render('./template', {
     historyMode: options.historyMode,
-    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
+    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
+    hasTypeScript: api.hasPlugin('typescript')
   })
 
   if (api.invoking) {
