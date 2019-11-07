@@ -14,11 +14,6 @@ module.exports = (api, options) => {
     devDependencies: {
       'vue-template-compiler': '^2.6.10'
     },
-    'postcss': {
-      'plugins': {
-        'autoprefixer': {}
-      }
-    },
     browserslist: [
       '> 1%',
       'last 2 versions'

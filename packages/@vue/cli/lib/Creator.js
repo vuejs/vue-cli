@@ -429,7 +429,7 @@ module.exports = class Creator extends EventEmitter {
         name: 'useConfigFiles',
         when: isManualMode,
         type: 'list',
-        message: 'Where do you prefer placing config for Babel, PostCSS, ESLint, etc.?',
+        message: 'Where do you prefer placing config for Babel, ESLint, etc.?',
         choices: [
           {
             name: 'In dedicated config files',

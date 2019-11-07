@@ -57,12 +57,12 @@ const findOptions = (config, lang, _loader, index) => {
 }
 
 test('default loaders', () => {
-  const config = genConfig({ postcss: {}})
+  const config = genConfig()
 
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'postcss').plugins).toBeFalsy()
+    expect(findOptions(config, lang, 'postcss').plugins).toEqual([require('autoprefixer')])
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
@@ -79,11 +79,25 @@ test('default loaders', () => {
 })
 
 test('production defaults', () => {
-  const config = genConfig({ postcss: {}}, 'production')
+  const config = genConfig({}, 'production')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
+    expect(findOptions(config, lang, 'postcss').plugins).toEqual([require('autoprefixer')])
+    expect(findOptions(config, lang, 'css')).toEqual({
+      sourceMap: false,
+      importLoaders: 2
+    })
+  })
+})
+
+test('override postcss config', () => {
+  const config = genConfig({ postcss: {}})
+  LANGS.forEach(lang => {
+    const loader = lang === 'css' ? [] : LOADERS[lang]
+    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'postcss').plugins).toBeFalsy()
+    // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
       importLoaders: 2
@@ -101,7 +115,7 @@ test('CSS Modules rules', () => {
   })
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[name]_[local]_[hash:base64:5]`
@@ -140,7 +154,7 @@ test('Customized CSS Modules rules', () => {
 
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[folder]-[name]-[local][emoji]`
@@ -174,7 +188,7 @@ test('deprecate `css.modules` option', () => {
 
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[folder]-[name]-[local][emoji]`
@@ -211,7 +225,7 @@ test('favor `css.requireModuleExtension` over `css.modules`', () => {
 
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[folder]-[name]-[local][emoji]`
@@ -236,10 +250,10 @@ test('css.extract', () => {
   }, 'production')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
-    // when extract is false in production, even without postcss config,
-    // an instance of postcss-loader is injected for inline minification.
-    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'css').importLoaders).toBe(2)
+    // when extract is false in production,
+    // an additional instance of postcss-loader is injected for inline minification.
+    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
+    expect(findOptions(config, lang, 'css').importLoaders).toBe(3)
     expect(findOptions(config, lang, 'postcss').plugins).toBeTruthy()
   })
 
@@ -380,10 +394,3 @@ test('should use dart sass implementation whenever possible', () => {
   expect(findOptions(config, 'sass', 'sass')).toMatchObject({ implementation: require('sass') })
 })
 
-test('skip postcss-loader if no postcss config found', () => {
-  const config = genConfig()
-  LANGS.forEach(lang => {
-    const loader = lang === 'css' ? [] : LOADERS[lang]
-    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css'].concat(loader))
-  })
-})
