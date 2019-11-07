@@ -9,7 +9,7 @@ const defaultOptions = {
 
 const getAbsolutePolyfill = mod => {
   // expected to include a `node_modules` in the import path because we use absolute path for core-js
-  return new RegExp(`import "${['.*node_modules', 'core-js', 'modules', mod].join(`[\\${path.sep}]+`)}`)
+  return new RegExp(`"${['.*node_modules', 'core-js', 'modules', mod].join(`[\\${path.sep}]+`)}`)
 }
 
 beforeEach(() => {
@@ -29,7 +29,7 @@ test('polyfill detection', () => {
   // default includes
   expect(code).not.toMatch(getAbsolutePolyfill('es.promise'))
   // usage-based detection
-  expect(code).not.toMatch('import "core-js/modules/es.map"')
+  expect(code).not.toMatch('"core-js/modules/es.map"')
 
   ;({ code } = babel.transformSync(`
     const a = new Map()
@@ -45,7 +45,7 @@ test('polyfill detection', () => {
   // promise polyfill alone doesn't work in IE, needs this as well. fix: #1642
   expect(code).toMatch(getAbsolutePolyfill('es.array.iterator'))
   // usage-based detection
-  expect(code).toMatch('import "core-js/modules/es.map"')
+  expect(code).toMatch('"core-js/modules/es.map"')
 })
 
 test('modern mode always skips polyfills', () => {
@@ -63,7 +63,7 @@ test('modern mode always skips polyfills', () => {
   // default includes
   expect(code).not.toMatch(getAbsolutePolyfill('es.promise'))
   // usage-based detection
-  expect(code).not.toMatch('import "core-js/modules/es.map"')
+  expect(code).not.toMatch('"core-js/modules/es.map"')
 
   ;({ code } = babel.transformSync(`
     const a = new Map()
@@ -78,7 +78,7 @@ test('modern mode always skips polyfills', () => {
   // default includes
   expect(code).not.toMatch(getAbsolutePolyfill('es.promise'))
   // usage-based detection
-  expect(code).not.toMatch('import "core-js/modules/es.map"')
+  expect(code).not.toMatch('"core-js/modules/es.map"')
   delete process.env.VUE_CLI_MODERN_BUILD
 })
 
@@ -105,9 +105,9 @@ test('async/await', () => {
   `.trim(), defaultOptions)
   expect(code).toMatch(getAbsolutePolyfill('es.promise'))
   // should use regenerator runtime
-  expect(code).toMatch(`import "regenerator-runtime/runtime"`)
+  expect(code).toMatch(`"regenerator-runtime/runtime"`)
   // should use required helper instead of inline
-  expect(code).toMatch(/import _asyncToGenerator from ".*runtime\/helpers\/esm\/asyncToGenerator\"/)
+  expect(code).toMatch(/".*runtime\/helpers\/asyncToGenerator\"/)
 })
 
 test('jsx', () => {
@@ -153,6 +153,47 @@ test('disable absoluteRuntime', () => {
     filename: 'test-entry-file.js'
   })
 
-  expect(code).toMatch('import _toConsumableArray from "@babel/runtime/helpers/esm/toConsumableArray"')
+  expect(code).toMatch('"@babel/runtime/helpers/toConsumableArray"')
   expect(code).not.toMatch(getAbsolutePolyfill('es.promise'))
+})
+
+test('should inject polyfills / helpers using "require" statements for a umd module', () => {
+  // TODO:
+  const { code } = babel.transformSync(`
+  (function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = global || self, global.Vue = factory());
+  }(this, function () {
+    const a = [...arr]
+    new Promise()
+  }))
+  `.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      absoluteRuntime: false
+    }]],
+    filename: 'test-entry-file.js'
+  })
+  expect(code).toMatch('require("@babel/runtime/helpers/toConsumableArray")')
+  expect(code).toMatch('require("core-js/modules/es.promise")')
+  expect(code).not.toMatch('import ')
+})
+
+test('should inject polyfills / helpers using "import" statements for an es module', () => {
+  const { code } = babel.transformSync(`
+    import Vue from 'vue'
+    const a = [...arr]
+    new Promise()
+  `.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      absoluteRuntime: false
+    }]],
+    filename: 'test-entry-file.js'
+  })
+
+  expect(code).toMatch('import _toConsumableArray from "@babel/runtime/helpers/esm/toConsumableArray"')
+  expect(code).toMatch('import "core-js/modules/es.promise"')
+  expect(code).not.toMatch('require(')
 })
