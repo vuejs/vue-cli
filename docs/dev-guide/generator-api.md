@@ -44,10 +44,10 @@ The version string for the **project local** `@vue/cli-service` version that is 
 ## resolve
 
 - **Arguments**
-  - `{string} _path` - relative path from project root
+  - `{string} ..._paths` - A sequence of relative paths or path segments
 
 - **Returns**
-  - `{string}`- the resolved absolute path
+  - `{string}`- the resolved absolute path, caculated based on the current project root
 
 - **Usage**:
 Resolve a path for the current project

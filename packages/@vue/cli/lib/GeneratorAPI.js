@@ -68,8 +68,8 @@ class GeneratorAPI {
   /**
    * Resolve path for a project.
    *
-   * @param {string} _path - Relative path from project root
-   * @return {string} The resolved absolute path.
+   * @param {string} _paths - A sequence of relative paths or path segments
+   * @return {string} The resolved absolute path, caculated based on the current project root.
    */
   resolve (..._paths) {
     return path.resolve(this.generator.context, ..._paths)
