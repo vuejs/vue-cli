@@ -6,6 +6,8 @@ const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
+const sleep = n => new Promise(resolve => setTimeout(resolve, n))
+
 test('serve', async () => {
   const project = await create('e2e-serve', defaultPreset)
 
@@ -20,7 +22,10 @@ test('serve', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, { timeout: 60000 }, 'h1')
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
@@ -50,6 +55,7 @@ test('serve with router', async () => {
       expect(await helpers.hasClass('a[href="#/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="#/about"]')
+      await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
       expect(await helpers.hasElement('#nav')).toBe(true)
       expect(await helpers.hasClass('a[href="#/"]', 'router-link-exact-active')).toBe(false)
@@ -73,6 +79,7 @@ test('serve with legacy router option', async () => {
       expect(await helpers.hasClass('a[href="/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="/about"]')
+      await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
       expect(await helpers.hasElement('#nav')).toBe(true)
       expect(await helpers.hasClass('a[href="/"]', 'router-link-exact-active')).toBe(false)
@@ -113,7 +120,10 @@ test('serve with inline entry', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, { timeout: 60000 }, 'h1')
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,
@@ -143,7 +153,10 @@ test('serve with no public dir', async () => {
       project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
-        await page.waitForXPath('//h1[contains(text(), "Updated")]', { timeout: 60000 })
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, { timeout: 60000 }, 'h1')
       } catch (e) {
         if (process.env.APPVEYOR && e.message.match('timeout')) {
           // AppVeyor VM is so slow that there's a large chance this test cases will time out,

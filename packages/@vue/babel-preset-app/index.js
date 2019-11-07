@@ -183,24 +183,25 @@ module.exports = (context, options = {}) => {
     absoluteRuntime
   }])
 
-  // use @babel/runtime-corejs3 so that helpers that need polyfillable APIs will reference core-js instead.
-  // if useBuiltIns is not set to 'usage', then it means users would take care of the polyfills on their own,
-  // i.e., core-js 3 is no longer needed.
-  // this extra plugin can be removed once one of the two issues resolves:
-  // https://github.com/babel/babel/issues/7597
-  // https://github.com/babel/babel/issues/9903
-  if (useBuiltIns === 'usage' && !process.env.VUE_CLI_MODERN_BUILD) {
-    const runtimeCoreJs3Path = path.dirname(require.resolve('@babel/runtime-corejs3/package.json'))
-    plugins.push([require('babel-plugin-module-resolver'), {
-      alias: {
-        '@babel/runtime': '@babel/runtime-corejs3',
-        [runtimePath]: runtimeCoreJs3Path
-      }
-    }])
-  }
-
   return {
-    presets,
-    plugins
+    overrides: [{
+      exclude: [/@babel[\/|\\\\]runtime/, /core-js/],
+      presets,
+      plugins
+    }, {
+      // there are some untranspiled code in @babel/runtime
+      // https://github.com/babel/babel/issues/9903
+      include: [/@babel[\/|\\\\]runtime/],
+      presets: [
+        [require('@babel/preset-env'), {
+          useBuiltIns,
+          corejs: 3
+        }]
+      ]
+    }]
   }
 }
+
+// a special flag to tell @vue/cli-plugin-babel to include @babel/runtime for transpilation
+// otherwise the above `include` option won't take effect
+process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME = true

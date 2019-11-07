@@ -1,4 +1,30 @@
 
+## 4.0.5 (2019-10-22)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#4741](https://github.com/vuejs/vue-cli/pull/4741) fix: should tolerate cli version check error ([@sodatea](https://github.com/sodatea))
+  * [#4720](https://github.com/vuejs/vue-cli/pull/4720) fix: do not install core plugins that have major version bumps ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`
+  * [#4740](https://github.com/vuejs/vue-cli/pull/4740) fix(eslint): autofix code style after scaffolding on older versions of cli ([@sodatea](https://github.com/sodatea))
+  * [#4728](https://github.com/vuejs/vue-cli/pull/4728) fix: fix eslint not found error in `vue serve` command ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#4739](https://github.com/vuejs/vue-cli/pull/4739) fix(ui): "add router" button should not require prompt in terminal ([@sodatea](https://github.com/sodatea))
+  * [#4724](https://github.com/vuejs/vue-cli/pull/4724) fix(ui): fix latest version check always displaying "0.1.0" ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#4733](https://github.com/vuejs/vue-cli/pull/4733) Fix indentation of --inline-vue description ([@mul14](https://github.com/mul14))
+
+#### :house: Internal
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-service-global`, `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`, `@vue/cli`
+  * [#4734](https://github.com/vuejs/vue-cli/pull/4734) chore: dependency maintenance ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Mulia Nasution ([@mul14](https://github.com/mul14))
+
+
+
 ## 4.0.4 (2019-10-18)
 
 #### :bug: Bug Fix

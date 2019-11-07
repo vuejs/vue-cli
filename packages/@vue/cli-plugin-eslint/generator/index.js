@@ -20,7 +20,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   }
 
   if (!api.hasPlugin('typescript')) {
-    pkg.devDependencies['babel-eslint'] = '^10.0.1'
+    pkg.devDependencies['babel-eslint'] = '^10.0.3'
   }
 
   if (config === 'airbnb') {
@@ -37,7 +37,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-prettier': '^5.0.0',
-      'eslint-plugin-prettier': '^3.1.0',
+      'eslint-plugin-prettier': '^3.1.1',
       prettier: '^1.18.2'
     })
     // prettier & default config do not have any style rules
@@ -99,6 +99,18 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     } else if (api.hasPlugin('unit-jest')) {
       // eslint-disable-next-line node/no-extraneous-require
       require('@vue/cli-plugin-unit-jest/generator').applyESLint(api)
+    }
+  }
+
+  // lint & fix after create to ensure files adhere to chosen config
+  // for older versions that do not support the `hooks` feature
+  try {
+    api.assertCliVersion('^4.0.0-beta.0')
+  } catch (e) {
+    if (config && config !== 'base') {
+      api.onCreateComplete(() => {
+        require('../lint')({ silent: true }, api)
+      })
     }
   }
 }
