@@ -395,11 +395,8 @@ module.exports = class Service {
 }
 
 function ensureSlash (config, key) {
-  let val = config[key]
+  const val = config[key]
   if (typeof val === 'string') {
-    if (!/^https?:/.test(val)) {
-      val = val.replace(/^([^/.])/, '/$1')
-    }
     config[key] = val.replace(/([^/])$/, '$1/')
   }
 }
