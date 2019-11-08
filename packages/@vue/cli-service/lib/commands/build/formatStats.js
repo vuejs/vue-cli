@@ -21,7 +21,7 @@ module.exports = function formatStats (stats, dir, api) {
   const isMinJS = val => /\.min\.js$/.test(val)
   assets = assets
     .map(a => {
-      a.name = a.name.split(`?`)[0]
+      a.name = a.name.split('?')[0]
       return a
     })
     .filter(a => {
