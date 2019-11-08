@@ -20,7 +20,7 @@ async function add (pluginName, options = {}, context = process.cwd()) {
 
   // for `vue add` command in 3.x projects
   const servicePkg = loadModule('@vue/cli-service/package.json', context)
-  if (semver.satisfies(servicePkg.version, '3.x')) {
+  if (servicePkg && semver.satisfies(servicePkg.version, '3.x')) {
     // special internal "plugins"
     if (/^(@vue\/)?router$/.test(pluginName)) {
       return addRouter(context)
