@@ -57,7 +57,7 @@ module.exports = class Service {
     }
   }
 
-  init (mode = process.env.VUE_CLI_MODE) {
+  async init (mode = process.env.VUE_CLI_MODE) {
     if (this.initialized) {
       return
     }
@@ -72,7 +72,7 @@ module.exports = class Service {
     this.loadEnv()
 
     // load user config
-    const userOptions = this.loadUserOptions()
+    const userOptions = await this.loadUserOptions()
     this.projectOptions = defaultsDeep(userOptions, defaults())
 
     debug('vue:project-config')(this.projectOptions)
@@ -217,7 +217,7 @@ module.exports = class Service {
     this.setPluginsToSkip(args)
 
     // load env variables, load user config, apply plugins
-    this.init(mode)
+    await this.init(mode)
 
     args._ = args._ || []
     let command = this.commands[name]
@@ -303,7 +303,7 @@ module.exports = class Service {
     return config
   }
 
-  loadUserOptions () {
+  async loadUserOptions () {
     // vue.config.js
     let fileConfig, pkgConfig, resolved, resolvedFrom
     const configPath = (
@@ -315,7 +315,7 @@ module.exports = class Service {
         fileConfig = require(configPath)
 
         if (typeof fileConfig === 'function') {
-          fileConfig = fileConfig()
+          fileConfig = await fileConfig()
         }
 
         if (!fileConfig || typeof fileConfig !== 'object') {
