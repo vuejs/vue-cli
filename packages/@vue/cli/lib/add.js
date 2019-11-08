@@ -2,7 +2,7 @@ const chalk = require('chalk')
 const semver = require('semver')
 const invoke = require('./invoke')
 const inquirer = require('inquirer')
-const { loadModule } = require('@vue/cli-shared-utils')
+const { resolveModule, loadModule } = require('@vue/cli-shared-utils')
 
 const PackageManager = require('./util/ProjectPackageManager')
 const {
@@ -48,7 +48,12 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()
 
-  invoke(pluginName, options, context)
+  const generatorPath = resolveModule(`${packageName}/generator`, context)
+  if (generatorPath) {
+    invoke(pluginName, options, context)
+  } else {
+    log(`Plugin ${packageName} does not have a generator to invoke`)
+  }
 }
 
 module.exports = (...args) => {
