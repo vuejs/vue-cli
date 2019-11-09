@@ -1,4 +1,42 @@
 
+## 4.1.0-beta.0 (2019-11-09)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#4715](https://github.com/vuejs/vue-cli/pull/4715) feat(GeneratorAPI): accept multiple arguments for the resolve method ([@sodatea](https://github.com/sodatea))
+  * [#4767](https://github.com/vuejs/vue-cli/pull/4767) feat: support binary mirrors for taobao registry ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`, `@vue/cli`
+  * [#4798](https://github.com/vuejs/vue-cli/pull/4798) feat: enable postcss+autoprefixer by default internally, reducing boilerplate ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#4816](https://github.com/vuejs/vue-cli/pull/4816) fix: don't prepend publicPath with slash ([@sodatea](https://github.com/sodatea))
+  * [#4809](https://github.com/vuejs/vue-cli/pull/4809) fix: fix build error when path contains space (Closes [#4667](https://github.com/vuejs/vue-cli/issues/4667)) ([@RSeidelsohn](https://github.com/RSeidelsohn))
+* `@vue/babel-preset-app`
+  * [#4797](https://github.com/vuejs/vue-cli/pull/4797) fix: add `sourceType: 'unambiguous'` to babel preset ([@sodatea](https://github.com/sodatea))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-service`
+  * [#4777](https://github.com/vuejs/vue-cli/pull/4777) refactor: use babel overrides to transpile babel runtime helpers ([@sodatea](https://github.com/sodatea))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`, `@vue/cli-service`, `@vue/cli-ui`
+  * [#4532](https://github.com/vuejs/vue-cli/pull/4532) Enforces require.resolve for loaders ([@arcanis](https://github.com/arcanis))
+
+#### :memo: Documentation
+* [#4760](https://github.com/vuejs/vue-cli/pull/4760) Add 'Browse plugins' link to header ([@Akryum](https://github.com/Akryum))
+
+#### :house: Internal
+* `@vue/cli-ui`
+  * [#4818](https://github.com/vuejs/vue-cli/pull/4818) Add missing cli-ui dependencies ([@JanCVanB](https://github.com/JanCVanB))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-service`
+  * [#4777](https://github.com/vuejs/vue-cli/pull/4777) refactor: use babel overrides to transpile babel runtime helpers ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 5
+- Guillaume Chau ([@Akryum](https://github.com/Akryum))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Jan Van Bruggen ([@JanCVanB](https://github.com/JanCVanB))
+- Maël Nison ([@arcanis](https://github.com/arcanis))
+- Roman Seidelsohn ([@RSeidelsohn](https://github.com/RSeidelsohn))
+
+
+
 ## 4.0.5 (2019-10-22)
 
 #### :bug: Bug Fix
