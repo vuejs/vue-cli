@@ -100,7 +100,7 @@ const release = async () => {
     : semver.diff(curVersion, version)
 
   let distTag = 'latest'
-  if (releaseType.startsWith('pre') && !cliOptions['local-registry']) {
+  if (releaseType.startsWith('pre')) {
     distTag = 'next'
   }
 
