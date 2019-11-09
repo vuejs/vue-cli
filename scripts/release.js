@@ -41,13 +41,6 @@ const { syncDeps } = require('./syncDeps')
 // const { buildEditorConfig } = require('./buildEditorConfig')
 
 const cliOptions = minimist(process.argv)
-if (cliOptions['local-registry']) {
-  inquirer.prompt = () => ({
-    bump: 'minor',
-    yes: true
-  })
-}
-
 const curVersion = require('../lerna.json').version
 
 const release = async () => {
