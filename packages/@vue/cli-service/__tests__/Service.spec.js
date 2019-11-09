@@ -104,6 +104,16 @@ test('normalize publicPath when relative', () => {
   expect(service.projectOptions.publicPath).toBe('foo/bar/')
 })
 
+test('allow custom protocol in publicPath', () => {
+  mockPkg({
+    vue: {
+      publicPath: 'customprotocol://foo/bar'
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.publicPath).toBe('customprotocol://foo/bar/')
+})
+
 test('keep publicPath when empty', () => {
   mockPkg({
     vue: {
