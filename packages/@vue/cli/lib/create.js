@@ -29,7 +29,7 @@ async function create (projectName, options) {
     exit(1)
   }
 
-  if (fs.existsSync(targetDir)) {
+  if (fs.existsSync(targetDir) && !options.merge) {
     if (options.force) {
       await fs.remove(targetDir)
     } else {
