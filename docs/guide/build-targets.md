@@ -50,6 +50,10 @@ A lib build outputs:
 
 - `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
+::: warning
+If you are developing a library or in a monorepo, please be aware that CSS imports **are side effects**. Make sure to **remove** `"sideEffects": false` in the `package.json`, otherwise CSS chunks will be dropped by webpack in production builds.
+:::
+
 ### Vue vs. JS/TS Entry Files
 
 When using a `.vue` file as entry, your library will directly expose the Vue component itself, because the component is always the default export.
@@ -148,7 +152,7 @@ Now on the page, the user only needs to include Vue and the entry file:
 
 When building a [Webcomponent](#web-component) or [Library](#library), the entry point is not `main.js`, but an `entry-wc.js` file, generated here: [https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js)
 
-So to use vuex in web component target, you need to initialize the store in `App.vue`: 
+So to use vuex in web component target, you need to initialize the store in `App.vue`:
 
 ``` js
 import store from './store'
