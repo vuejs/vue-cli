@@ -75,25 +75,25 @@ module.exports = class HtmlPwaPlugin {
             rel: 'icon',
             type: 'image/png',
             sizes: '32x32',
-            href: `${publicPath}${iconPaths.favicon32}${assetsVersionStr}`
+            href: getTagHref(publicPath, iconPaths.favicon32, assetsVersionStr)
           }),
           makeTag('link', {
             rel: 'icon',
             type: 'image/png',
             sizes: '16x16',
-            href: `${publicPath}${iconPaths.favicon16}${assetsVersionStr}`
+            href: getTagHref(publicPath, iconPaths.favicon16, assetsVersionStr)
           }),
 
           // Add to home screen for Android and modern mobile browsers
           makeTag('link', manifestCrossorigin
             ? {
               rel: 'manifest',
-              href: `${publicPath}${manifestPath}${assetsVersionStr}`,
+              href: getTagHref(publicPath, manifestPath, assetsVersionStr),
               crossorigin: manifestCrossorigin
             }
             : {
               rel: 'manifest',
-              href: `${publicPath}${manifestPath}${assetsVersionStr}`
+              href: getTagHref(publicPath, manifestPath, assetsVersionStr)
             }
           ),
           makeTag('meta', {
@@ -116,18 +116,18 @@ module.exports = class HtmlPwaPlugin {
           }),
           makeTag('link', {
             rel: 'apple-touch-icon',
-            href: `${publicPath}${iconPaths.appleTouchIcon}${assetsVersionStr}`
+            href: getTagHref(publicPath, iconPaths.appleTouchIcon, assetsVersionStr)
           }),
           makeTag('link', {
             rel: 'mask-icon',
-            href: `${publicPath}${iconPaths.maskIcon}${assetsVersionStr}`,
+            href: getTagHref(publicPath, iconPaths.maskIcon, assetsVersionStr),
             color: themeColor
           }),
 
           // Add to home screen for Windows
           makeTag('meta', {
             name: 'msapplication-TileImage',
-            content: `${publicPath}${iconPaths.msTileImage}${assetsVersionStr}`
+            content: getTagHref(publicPath, iconPaths.msTileImage, assetsVersionStr)
           }),
           makeTag('meta', {
             name: 'msapplication-TileColor',
@@ -169,4 +169,12 @@ function makeTag (tagName, attributes, closeTag = false) {
     closeTag,
     attributes
   }
+}
+
+function getTagHref (publicPath, href, assetsVersionStr) {
+  let tagHref = `${href}${assetsVersionStr}`
+  if (!(/(http(s?)):\/\//gi.test(href))) {
+    tagHref = `${publicPath}${tagHref}`
+  }
+  return tagHref
 }
