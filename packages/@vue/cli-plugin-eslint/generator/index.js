@@ -14,8 +14,8 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     },
     eslintConfig,
     devDependencies: {
-      'eslint': '^5.16.0',
-      'eslint-plugin-vue': '^5.0.0'
+      'eslint': '^6.6.0',
+      'eslint-plugin-vue': '^6.0.0'
     }
   }
 
