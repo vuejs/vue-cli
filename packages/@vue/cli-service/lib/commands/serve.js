@@ -164,6 +164,8 @@ module.exports = (api, options) => {
     const server = new WebpackDevServer(compiler, Object.assign({
       logLevel: 'silent',
       clientLogLevel: 'silent',
+      // 'Inline mode (set to false to disable including client scripts like livereload)',
+      inline: false,
       historyApiFallback: {
         disableDotRule: true,
         rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
