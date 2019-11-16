@@ -20,7 +20,7 @@
 
   Lints and fixes files. If no specific files are given, it lints all files in `src` and `test`.
 
-  Other [ESLint CLI options](https://eslint.org/docs/user-guide/command-line-interface#options) are also supported.
+  Other [ESLint CLI options](https://eslint.org/docs/user-guide/command-line-interface#options) are not supported.
 
 ## Configuration
 
