@@ -14,7 +14,12 @@ module.exports = {
       lang: 'ru',
       title: 'Vue CLI',
       description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
-    }
+    },
+    '/ja/': {
+      lang: 'ja',
+      title: 'Vue CLI',
+      description: '🛠️ Vue.js 開発用の標準ツール'
+    },
   },
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }],
