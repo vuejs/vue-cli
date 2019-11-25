@@ -73,7 +73,7 @@ module.exports = (context, options = {}) => {
     entryFiles = defaultEntryFiles,
 
     // Undocumented option of @babel/plugin-transform-runtime.
-    // When enabled, an absolute path is used when importing a runtime helper after tranforming.
+    // When enabled, an absolute path is used when importing a runtime helper after transforming.
     // This ensures the transpiled file always use the runtime version required in this package.
     // However, this may cause hash inconsistency if the project is moved to another directory.
     // So here we allow user to explicit disable this option if hash consistency is a requirement
