@@ -38,7 +38,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-prettier': '^5.0.0',
       'eslint-plugin-prettier': '^3.1.1',
-      prettier: '^1.18.2'
+      prettier: '^1.19.1'
     })
     // prettier & default config do not have any style rules
     // so no need to generate an editorconfig file
@@ -68,7 +68,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^9.4.2'
+      'lint-staged': '^9.4.3'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'

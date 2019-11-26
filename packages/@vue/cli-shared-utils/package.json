@@ -29,7 +29,7 @@
     "open": "^6.3.0",
     "ora": "^3.4.0",
     "request": "^2.87.0",
-    "request-promise-native": "^1.0.7",
+    "request-promise-native": "^1.0.8",
     "semver": "^6.1.0",
     "string.prototype.padstart": "^3.0.0"
   },

@@ -10,7 +10,7 @@ module.exports = api => {
       presets: ['@vue/cli-plugin-babel/preset']
     },
     dependencies: {
-      'core-js': '^3.3.2'
+      'core-js': '^3.4.3'
     }
   })
 }

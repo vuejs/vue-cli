@@ -6,7 +6,7 @@ module.exports = (api) => {
   if (api.fromVersion('^3')) {
     api.extendPackage({
       dependencies: {
-        'core-js': '^3.3.2'
+        'core-js': '^3.4.3'
       }
     }, true)
 
