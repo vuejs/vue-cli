@@ -130,6 +130,8 @@ pages: # the job must be named pages
     - npm run build
     - mv public public-vue # GitLab Pages hooks on the public folder
     - mv dist public # rename the dist folder (result of npm run build)
+    # optionally, you can activate gzip support wih the following line:
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
   artifacts:
     paths:
       - public # artifact path must be /public for GitLab Pages to pick it up
@@ -137,15 +139,15 @@ pages: # the job must be named pages
     - master
 ```
 
-Typically, your static website will be hosted on https://yourUserName.gitlab.io/yourProjectName, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match:
+Typically, your static website will be hosted on https://yourUserName.gitlab.io/yourProjectName, so you will also want to create an initial `vue.config.js` file to [update the `BASE_URL`](https://github.com/vuejs/vue-cli/tree/dev/docs/config#baseurl) value to match your project name (the [`CI_PROJECT_NAME` environment variable](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html) contains this value):
+
 
 ```javascript
 // vue.config.js file to be place in the root of your repository
-// make sure you update `yourProjectName` with the name of your GitLab project
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/yourProjectName/'
+    ? '/' + process.env.CI_PROJECT_NAME + '/'
     : '/'
 }
 ```

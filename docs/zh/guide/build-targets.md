@@ -54,6 +54,10 @@ dist/myLib.css           0.33 kb                  0.23 kb
 
 - `dist/myLib.css`：提取出来的 CSS 文件 (可以通过在 `vue.config.js` 中设置 `css: { extract: false }` 强制内联)
 
+::: warning 警告
+如果你在开发一个库或多项目仓库 (monorepo)，请注意导入 CSS **是具有副作用的**。请确保在 `package.json` 中**移除** `"sideEffects": false`，否则 CSS 代码块会在生产环境构建时被 webpack 丢掉。
+:::
+
 ### Vue vs. JS/TS 入口文件
 
 当使用一个 `.vue` 文件作为入口时，你的库会直接暴露这个 Vue 组件本身，因为组件始终是默认导出的内容。

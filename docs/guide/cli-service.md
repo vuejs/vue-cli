@@ -63,7 +63,7 @@ The `vue-cli-service serve` command starts a dev server (based on [webpack-dev-s
 
 In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
 
-`[entry]` in the CLI command is defined as *the entry file*, not *an additional entry file*. If you overwrite the entry in the CLI, then the entries from `config.pages` are no longer considered, which may cause an error.
+`[entry]` in the CLI command is defined as *the entry file*, not *an additional entry file*. If you overwrite the entry in the CLI, then the entries from `config.pages` are no longer considered, which may cause an error. Defaults to [entryFile](../dev-guide/generator-api.html#entryfile).
 
 ## vue-cli-service build
 
@@ -167,6 +167,12 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 {
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   }
 }
 ```
