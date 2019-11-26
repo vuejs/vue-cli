@@ -9,6 +9,7 @@
     "test": "node scripts/test.js",
     "pretest": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/*",
+    "lint-without-fix": "eslint packages/**/*.js packages/**/bin/*",
     "check-links": "node scripts/checkLinks.js",
     "clean": "rimraf packages/test/* packages/**/temp/*",
     "sync": "node scripts/syncDeps.js",
