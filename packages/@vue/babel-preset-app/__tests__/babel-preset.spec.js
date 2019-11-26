@@ -106,8 +106,6 @@ test('async/await', () => {
   expect(code).toMatch(getAbsolutePolyfill('es.promise'))
   // should use regenerator runtime
   expect(code).toMatch(`"regenerator-runtime/runtime"`)
-  // should use required helper instead of inline
-  expect(code).toMatch(/".*runtime\/helpers\/asyncToGenerator\"/)
 })
 
 test('jsx', () => {
@@ -158,7 +156,6 @@ test('disable absoluteRuntime', () => {
 })
 
 test('should inject polyfills / helpers using "require" statements for a umd module', () => {
-  // TODO:
   const { code } = babel.transformSync(`
   (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
