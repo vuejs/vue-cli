@@ -1,5 +1,5 @@
 const chalk = require('chalk')
-const stripAnsi = require('strip-ansi');
+const stripAnsi = require('strip-ansi')
 const readline = require('readline')
 const padStart = require('string.prototype.padstart')
 const EventEmitter = require('events')
