@@ -201,6 +201,10 @@ module.exports = class Upgrader {
         const installed = await this.pm.getInstalledVersion(name)
         const wanted = await this.pm.getRemoteVersion(name, range)
 
+        if (installed === 'N/A') {
+          throw new Error('At least one dependency is not installed. Please run npm install or yarn before trying to upgrade')
+        }
+
         let latest = await this.pm.getRemoteVersion(name)
         if (includeNext) {
           const next = await this.pm.getRemoteVersion(name, 'next')
