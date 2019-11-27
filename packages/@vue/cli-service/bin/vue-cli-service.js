@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const path = require('path')
 const semver = require('semver')
 const { error } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
@@ -12,8 +13,13 @@ if (!semver.satisfies(process.version, requiredVersion)) {
   process.exit(1)
 }
 
+let vueCliContext = process.env.VUE_CLI_CONTEXT
+if (vueCliContext && !path.isAbsolute(vueCliContext)) {
+   vueCliContext = path.resolve(process.cwd(), vueCliContext)
+}
+
 const Service = require('../lib/Service')
-const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
+const service = new Service(vueCliContext || process.cwd())
 
 const rawArgv = process.argv.slice(2)
 const args = require('minimist')(rawArgv, {
