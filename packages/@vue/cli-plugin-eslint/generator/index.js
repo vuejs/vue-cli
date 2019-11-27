@@ -2,9 +2,6 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { config, lintOn = [] }, _, invoking) => {
-  api.assertCliVersion('^4.0.0-alpha.4')
-  api.assertCliServiceVersion('^4.0.0-alpha.4')
-
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
@@ -23,7 +20,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   }
 
   if (!api.hasPlugin('typescript')) {
-    pkg.devDependencies['babel-eslint'] = '^10.0.1'
+    pkg.devDependencies['babel-eslint'] = '^10.0.3'
   }
 
   if (config === 'airbnb') {
@@ -40,8 +37,8 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     eslintConfig.extends.push('@vue/prettier')
     Object.assign(pkg.devDependencies, {
       '@vue/eslint-config-prettier': '^5.0.0',
-      'eslint-plugin-prettier': '^3.1.0',
-      prettier: '^1.18.2'
+      'eslint-plugin-prettier': '^3.1.1',
+      prettier: '^1.19.1'
     })
     // prettier & default config do not have any style rules
     // so no need to generate an editorconfig file
@@ -71,7 +68,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^8.1.5'
+      'lint-staged': '^9.4.3'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
@@ -104,12 +101,32 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
       require('@vue/cli-plugin-unit-jest/generator').applyESLint(api)
     }
   }
+
+  // lint & fix after create to ensure files adhere to chosen config
+  // for older versions that do not support the `hooks` feature
+  try {
+    api.assertCliVersion('^4.0.0-beta.0')
+  } catch (e) {
+    if (config && config !== 'base') {
+      api.onCreateComplete(() => {
+        require('../lint')({ silent: true }, api)
+      })
+    }
+  }
 }
 
+// In PNPM v4, due to their implementation of the module resolution mechanism,
+// put require('../lint') in the callback would raise a "Module not found" error,
+// But we cannot cache the file outside the callback,
+// because the node_module layout may change after the "intall additional dependencies"
+// phase, thus making the cached module fail to execute.
+// FIXME: at the moment we have to catch the bug and silently fail. Need to fix later.
 module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
   api.afterAnyInvoke(() => {
-    require('../lint')({ silent: true }, api)
+    try {
+      require('../lint')({ silent: true }, api)
+    } catch (e) {}
   })
 }
 

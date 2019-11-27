@@ -68,11 +68,11 @@ class GeneratorAPI {
   /**
    * Resolve path for a project.
    *
-   * @param {string} _path - Relative path from project root
-   * @return {string} The resolved absolute path.
+   * @param {string} _paths - A sequence of relative paths or path segments
+   * @return {string} The resolved absolute path, caculated based on the current project root.
    */
-  resolve (_path) {
-    return path.resolve(this.generator.context, _path)
+  resolve (..._paths) {
+    return path.resolve(this.generator.context, ..._paths)
   }
 
   get cliVersion () {
@@ -90,7 +90,7 @@ class GeneratorAPI {
       throw new Error('Expected string or integer value.')
     }
 
-    if (semver.satisfies(this.cliVersion, range)) return
+    if (semver.satisfies(this.cliVersion, range, { includePrerelease: true })) return
 
     throw new Error(
       `Require global @vue/cli "${range}", but was invoked by "${this.cliVersion}".`
@@ -124,7 +124,7 @@ class GeneratorAPI {
       throw new Error('Expected string or integer value.')
     }
 
-    if (semver.satisfies(this.cliServiceVersion, range)) return
+    if (semver.satisfies(this.cliServiceVersion, range, { includePrerelease: true })) return
 
     throw new Error(
       `Require @vue/cli-service "${range}", but was loaded with "${this.cliServiceVersion}".`

@@ -50,7 +50,7 @@ module.exports = {
   themeConfig: {
     repo: 'vuejs/vue-cli',
     docsDir: 'docs',
-    docsBranch: 'docs',
+    docsBranch: 'master',
     editLinks: true,
     sidebarDepth: 3,
     algolia: {
@@ -83,7 +83,14 @@ module.exports = {
           },
           {
             text: 'Plugins',
-            link: '/core-plugins/'
+            items: [
+              { text: 'Core plugins', link: '/core-plugins/' },
+              { text: 'Browse plugins', link: 'https://awesomejs.dev/for/vue-cli/' }
+            ]
+          },
+          {
+            text: 'Migrating From v3',
+            link: '/migrating-from-v3/'
           },
           {
             text: 'Changelog',

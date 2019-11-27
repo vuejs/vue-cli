@@ -21,7 +21,7 @@ function checkNodeVersion (wanted, id) {
   }
 }
 
-checkNodeVersion(requiredVersion, 'vue-cli')
+checkNodeVersion(requiredVersion, '@vue/cli')
 
 if (semver.satisfies(process.version, '9.x')) {
   console.log(chalk.red(
@@ -50,7 +50,7 @@ const program = require('commander')
 const loadCommand = require('../lib/util/loadCommand')
 
 program
-  .version(require('../package').version)
+  .version(`@vue/cli ${require('../package').version}`)
   .usage('<command> [options]')
 
 program
@@ -164,6 +164,14 @@ program
   .option('--json', 'outputs JSON result only')
   .action((value, cmd) => {
     require('../lib/config')(value, cleanArgs(cmd))
+  })
+
+program
+  .command('outdated')
+  .description('(experimental) check for outdated vue cli service / plugins')
+  .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
+  .action((cmd) => {
+    require('../lib/outdated')(cleanArgs(cmd))
   })
 
 program

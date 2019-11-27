@@ -50,7 +50,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: yarn lint
+      - run: yarn lint-without-fix
       - run: yarn check-links
       - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app,vuex,router
 

@@ -1,5 +1,3 @@
-const webpack = require('webpack')
-
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -79,11 +77,11 @@ module.exports = (api, options) => {
       .rule('vue')
         .test(/\.vue$/)
         .use('cache-loader')
-          .loader('cache-loader')
+          .loader(require.resolve('cache-loader'))
           .options(vueLoaderCacheConfig)
           .end()
         .use('vue-loader')
-          .loader('vue-loader')
+          .loader(require.resolve('vue-loader'))
           .options(Object.assign({
             compilerOptions: {
               whitespace: 'condense'
@@ -100,7 +98,7 @@ module.exports = (api, options) => {
       .rule('images')
         .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
         .use('url-loader')
-          .loader('url-loader')
+          .loader(require.resolve('url-loader'))
           .options(genUrlLoaderOptions('img'))
 
     // do not base64-inline SVGs.
@@ -109,7 +107,7 @@ module.exports = (api, options) => {
       .rule('svg')
         .test(/\.(svg)(\?.*)?$/)
         .use('file-loader')
-          .loader('file-loader')
+          .loader(require.resolve('file-loader'))
           .options({
             name: genAssetSubPath('img')
           })
@@ -118,17 +116,25 @@ module.exports = (api, options) => {
       .rule('media')
         .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
         .use('url-loader')
-          .loader('url-loader')
+          .loader(require.resolve('url-loader'))
           .options(genUrlLoaderOptions('media'))
 
     webpackConfig.module
       .rule('fonts')
         .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
         .use('url-loader')
-          .loader('url-loader')
+          .loader(require.resolve('url-loader'))
           .options(genUrlLoaderOptions('fonts'))
 
     // Other common pre-processors ---------------------------------------------
+
+    const maybeResolve = name => {
+      try {
+        return require.resolve(name)
+      } catch (error) {
+        return name
+      }
+    }
 
     webpackConfig.module
       .rule('pug')
@@ -136,15 +142,15 @@ module.exports = (api, options) => {
           .oneOf('pug-vue')
             .resourceQuery(/vue/)
             .use('pug-plain-loader')
-              .loader('pug-plain-loader')
+              .loader(maybeResolve('pug-plain-loader'))
               .end()
             .end()
           .oneOf('pug-template')
             .use('raw')
-              .loader('raw-loader')
+              .loader(maybeResolve('raw-loader'))
               .end()
             .use('pug-plain-loader')
-              .loader('pug-plain-loader')
+              .loader(maybeResolve('pug-plain-loader'))
               .end()
             .end()
 
@@ -155,7 +161,7 @@ module.exports = (api, options) => {
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).
         setImmediate: false,
-        // process is injected via EnvironmentPlugin, although some 3rd party
+        // process is injected via DefinePlugin, although some 3rd party
         // libraries may require a mock to work properly (#934)
         process: 'mock',
         // prevent webpack from injecting mocks to Node native modules
@@ -169,8 +175,8 @@ module.exports = (api, options) => {
 
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
-      .plugin('process-env')
-        .use(webpack.EnvironmentPlugin, [
+      .plugin('define')
+        .use(require('webpack').DefinePlugin, [
           resolveClientEnv(options)
         ])
 
@@ -187,5 +193,11 @@ module.exports = (api, options) => {
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]
         }])
+
+    const TerserPlugin = require('terser-webpack-plugin')
+    const terserOptions = require('./terserOptions')
+    webpackConfig.optimization
+      .minimizer('terser')
+        .use(TerserPlugin, [terserOptions(options)])
   })
 }

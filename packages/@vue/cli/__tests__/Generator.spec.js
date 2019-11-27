@@ -23,6 +23,7 @@ new Vue({
 }).$mount('#app')
 `.trim())
 fs.writeFileSync(path.resolve(templateDir, 'empty-entry.js'), `;`)
+fs.writeFileSync(path.resolve(templateDir, 'main.ts'), `const a: string = 'hello';`)
 fs.writeFileSync(path.resolve(templateDir, 'hello.vue'), `
 <template>
   <p>Hello, {{ msg }}</p>
@@ -528,6 +529,23 @@ test('api: injectImports to empty file', async () => {
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\r?\nimport bar from 'bar'/)
+})
+
+test('api: injectImports to typescript file', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.ts', `import foo from 'foo'`)
+        api.render({
+          'main.ts': path.join(templateDir, 'main.ts')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.ts', 'utf-8')).toMatch(/import foo from 'foo'/)
 })
 
 test('api: addEntryDuplicateImport', async () => {

@@ -44,7 +44,10 @@ const findLoaders = (config, lang, index) => {
   if (!rule) {
     throw new Error(`rule not found for ${lang}`)
   }
-  return rule.use.map(({ loader }) => loader.replace(/-loader$/, ''))
+  return rule.use.map(({ loader }) => {
+    const match = loader.match(/([^\\/]+)-loader/)
+    return match ? match[1] : loader
+  })
 }
 
 const findOptions = (config, lang, _loader, index) => {
@@ -54,12 +57,12 @@ const findOptions = (config, lang, _loader, index) => {
 }
 
 test('default loaders', () => {
-  const config = genConfig({ postcss: {}})
+  const config = genConfig()
 
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'postcss').plugins).toBeFalsy()
+    expect(findOptions(config, lang, 'postcss').plugins).toEqual([require('autoprefixer')])
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
@@ -67,15 +70,34 @@ test('default loaders', () => {
     })
   })
   // sass indented syntax
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({
+    sassOptions: {
+      indentedSyntax: true
+    },
+    sourceMap: false
+  })
 })
 
 test('production defaults', () => {
-  const config = genConfig({ postcss: {}}, 'production')
+  const config = genConfig({}, 'production')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
+    expect(findOptions(config, lang, 'postcss').plugins).toEqual([require('autoprefixer')])
+    expect(findOptions(config, lang, 'css')).toEqual({
+      sourceMap: false,
+      importLoaders: 2
+    })
+  })
+})
+
+test('override postcss config', () => {
+  const config = genConfig({ postcss: {}})
+  LANGS.forEach(lang => {
+    const loader = lang === 'css' ? [] : LOADERS[lang]
+    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'postcss').plugins).toBeFalsy()
+    // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
       importLoaders: 2
@@ -93,7 +115,7 @@ test('CSS Modules rules', () => {
   })
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[name]_[local]_[hash:base64:5]`
@@ -132,7 +154,7 @@ test('Customized CSS Modules rules', () => {
 
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[folder]-[name]-[local][emoji]`
@@ -166,7 +188,7 @@ test('deprecate `css.modules` option', () => {
 
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[folder]-[name]-[local][emoji]`
@@ -203,7 +225,7 @@ test('favor `css.requireModuleExtension` over `css.modules`', () => {
 
   LANGS.forEach(lang => {
     const expected = {
-      importLoaders: 1, // no postcss-loader
+      importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
         localIdentName: `[folder]-[name]-[local][emoji]`
@@ -228,10 +250,10 @@ test('css.extract', () => {
   }, 'production')
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
-    // when extract is false in production, even without postcss config,
-    // an instance of postcss-loader is injected for inline minification.
-    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'css').importLoaders).toBe(2)
+    // when extract is false in production,
+    // an additional instance of postcss-loader is injected for inline minification.
+    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
+    expect(findOptions(config, lang, 'css').importLoaders).toBe(3)
     expect(findOptions(config, lang, 'postcss').plugins).toBeTruthy()
   })
 
@@ -296,21 +318,38 @@ test('css-loader options', () => {
 })
 
 test('css.loaderOptions', () => {
-  const data = '$env: production;'
+  const prependData = '$env: production;'
   const config = genConfig({
     vue: {
       css: {
         loaderOptions: {
           sass: {
-            data
+            prependData,
+            sassOptions: {
+              includePaths: ['./src/styles']
+            }
           }
         }
       }
     }
   })
 
-  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ data, sourceMap: false })
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ data, indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({
+    prependData,
+    sourceMap: false,
+    sassOptions: {
+      includePaths: ['./src/styles']
+    }
+  })
+  expect(findOptions(config, 'scss', 'sass').sassOptions).not.toHaveProperty('indentedSyntax')
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({
+    prependData,
+    sassOptions: {
+      indentedSyntax: true,
+      includePaths: ['./src/styles']
+    },
+    sourceMap: false
+  })
 })
 
 test('scss loaderOptions', () => {
@@ -322,30 +361,36 @@ test('scss loaderOptions', () => {
       css: {
         loaderOptions: {
           sass: {
-            sassData
+            prependData: sassData
           },
           scss: {
-            scssData
+            prependData: scssData,
+            webpackImporter: false
           }
         }
       }
     }
   })
 
-  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ scssData, sourceMap: false })
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ sassData, indentedSyntax: true, sourceMap: false })
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({
+    prependData: scssData,
+    sourceMap: false
+  })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({
+    prependData: sassData,
+    sassOptions: {
+      indentedSyntax: true
+    },
+    sourceMap: false
+  })
+
+  // should not merge scss options into default sass config
+  expect(findOptions(config, 'sass', 'sass')).not.toHaveProperty('webpackImporter')
 })
 
 test('should use dart sass implementation whenever possible', () => {
   const config = genConfig()
-  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ fiber: require('fibers'), implementation: require('sass') })
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ fiber: require('fibers'), implementation: require('sass') })
+  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ implementation: require('sass') })
+  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ implementation: require('sass') })
 })
 
-test('skip postcss-loader if no postcss config found', () => {
-  const config = genConfig()
-  LANGS.forEach(lang => {
-    const loader = lang === 'css' ? [] : LOADERS[lang]
-    expect(findLoaders(config, lang)).toEqual(['vue-style', 'css'].concat(loader))
-  })
-})

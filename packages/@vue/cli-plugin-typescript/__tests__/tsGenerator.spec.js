@@ -60,7 +60,7 @@ test('use with Babel', async () => {
     }
   ])
 
-  expect(files['babel.config.js']).toMatch(`presets: [\n    '@vue/app'\n  ]`)
+  expect(files['babel.config.js']).toMatch(`presets: [\n    '@vue/cli-plugin-babel/preset'\n  ]`)
   expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
 })
 

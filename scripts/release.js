@@ -41,13 +41,6 @@ const { syncDeps } = require('./syncDeps')
 // const { buildEditorConfig } = require('./buildEditorConfig')
 
 const cliOptions = minimist(process.argv)
-if (cliOptions['local-registry']) {
-  inquirer.prompt = () => ({
-    bump: 'minor',
-    yes: true
-  })
-}
-
 const curVersion = require('../lerna.json').version
 
 const release = async () => {
@@ -102,10 +95,8 @@ const release = async () => {
     }
   }
 
-  const releaseType = semver.diff(curVersion, version)
-
   let distTag = 'latest'
-  if (releaseType.startsWith('pre') && !cliOptions['local-registry']) {
+  if (bump === 'prerelease' || semver.prerelease(version)) {
     distTag = 'next'
   }
 
@@ -115,10 +106,8 @@ const release = async () => {
     '--dist-tag',
     distTag
   ]
-  // keep packages' minor version in sync
-  if (releaseType !== 'patch') {
-    lernaArgs.push('--force-publish')
-  }
+  // keep all packages' versions in sync
+  lernaArgs.push('--force-publish')
 
   if (cliOptions['local-registry']) {
     lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push', '--yes')

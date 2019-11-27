@@ -1,5 +1,7 @@
 const fs = require('fs')
 const path = require('path')
+const semver = require('semver')
+const { warn, pauseSpinner, resumeSpinner } = require('@vue/cli-shared-utils')
 
 const findExisting = (context, files) => {
   for (const file of files) {
@@ -15,10 +17,23 @@ module.exports = (api, rootOptions) => {
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
 
+    let sassLoaderVersion
+    try {
+      sassLoaderVersion = semver.major(require('sass-loader/package.json').version)
+    } catch (e) {}
+    if (sassLoaderVersion < 8) {
+      pauseSpinner()
+      warn('A new version of sass-loader is available. Please upgrade for best experience.')
+      resumeSpinner()
+    }
+
     const defaultSassLoaderOptions = {}
     try {
       defaultSassLoaderOptions.implementation = require('sass')
-      defaultSassLoaderOptions.fiber = require('fibers')
+      // since sass-loader 8, fibers will be automatically detected and used
+      if (sassLoaderVersion < 8) {
+        defaultSassLoaderOptions.fiber = require('fibers')
+      }
     } catch (e) {}
 
     const {
@@ -67,6 +82,14 @@ module.exports = (api, rootOptions) => {
       '.postcssrc.json'
     ]))
 
+    if (!hasPostCSSConfig) {
+      loaderOptions.postcss = {
+        plugins: [
+          require('autoprefixer')
+        ]
+      }
+    }
+
     // if building for production but not extracting CSS, we need to minimize
     // the embbeded inline CSS as they will not be going through the optimizing
     // plugin.
@@ -113,7 +136,7 @@ module.exports = (api, rootOptions) => {
         } else {
           rule
             .use('vue-style-loader')
-            .loader('vue-style-loader')
+            .loader(require.resolve('vue-style-loader'))
             .options({
               sourceMap,
               shadowMode
@@ -124,7 +147,7 @@ module.exports = (api, rootOptions) => {
           sourceMap,
           importLoaders: (
             1 + // stylePostLoader injected by vue-loader
-            (hasPostCSSConfig ? 1 : 0) +
+            1 + // postcss-loader
             (needInlineMinification ? 1 : 0)
           )
         }, loaderOptions.css)
@@ -140,30 +163,35 @@ module.exports = (api, rootOptions) => {
 
         rule
           .use('css-loader')
-          .loader('css-loader')
+          .loader(require.resolve('css-loader'))
           .options(cssLoaderOptions)
 
         if (needInlineMinification) {
           rule
             .use('cssnano')
-            .loader('postcss-loader')
+            .loader(require.resolve('postcss-loader'))
             .options({
               sourceMap,
               plugins: [require('cssnano')(cssnanoOptions)]
             })
         }
 
-        if (hasPostCSSConfig) {
-          rule
-            .use('postcss-loader')
-            .loader('postcss-loader')
-            .options(Object.assign({ sourceMap }, loaderOptions.postcss))
-        }
+        rule
+          .use('postcss-loader')
+          .loader(require.resolve('postcss-loader'))
+          .options(Object.assign({ sourceMap }, loaderOptions.postcss))
 
         if (loader) {
+          let resolvedLoader
+          try {
+            resolvedLoader = require.resolve(loader)
+          } catch (error) {
+            resolvedLoader = loader
+          }
+
           rule
             .use(loader)
-            .loader(loader)
+            .loader(resolvedLoader)
             .options(Object.assign({ sourceMap }, options))
         }
       }
@@ -172,16 +200,35 @@ module.exports = (api, rootOptions) => {
     createCSSRule('css', /\.css$/)
     createCSSRule('postcss', /\.p(ost)?css$/)
     createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(
+      {},
       defaultSassLoaderOptions,
       loaderOptions.scss || loaderOptions.sass
     ))
-    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
-      defaultSassLoaderOptions,
-      {
-        indentedSyntax: true
-      },
-      loaderOptions.sass
-    ))
+    if (sassLoaderVersion < 8) {
+      createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+        {},
+        defaultSassLoaderOptions,
+        {
+          indentedSyntax: true
+        },
+        loaderOptions.sass
+      ))
+    } else {
+      createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+        {},
+        defaultSassLoaderOptions,
+        loaderOptions.sass,
+        {
+          sassOptions: Object.assign(
+            {},
+            loaderOptions.sass && loaderOptions.sass.sassOptions,
+            {
+              indentedSyntax: true
+            }
+          )
+        }
+      ))
+    }
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
     createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', Object.assign({
       preferPathResolver: 'webpack'

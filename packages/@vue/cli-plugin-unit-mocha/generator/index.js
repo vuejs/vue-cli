@@ -46,7 +46,7 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     devDependencies: {
       '@types/mocha': '^5.2.4',
-      '@types/chai': '^4.1.0'
+      '@types/chai': '^4.2.5'
     }
   })
   // inject mocha/chai types to tsconfig.json

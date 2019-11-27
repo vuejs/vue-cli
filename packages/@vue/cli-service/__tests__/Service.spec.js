@@ -62,7 +62,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^4.0.0-rc.0',
+      '@vue/cli-plugin-babel': '^4.1.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -102,6 +102,16 @@ test('normalize publicPath when relative', () => {
   })
   const service = createMockService()
   expect(service.projectOptions.publicPath).toBe('foo/bar/')
+})
+
+test('allow custom protocol in publicPath', () => {
+  mockPkg({
+    vue: {
+      publicPath: 'customprotocol://foo/bar'
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.publicPath).toBe('customprotocol://foo/bar/')
 })
 
 test('keep publicPath when empty', () => {

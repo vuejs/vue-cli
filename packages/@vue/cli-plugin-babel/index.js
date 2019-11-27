@@ -1,4 +1,5 @@
 const path = require('path')
+const babel = require('@babel/core')
 const { isWindows } = require('@vue/cli-shared-utils')
 
 function genTranspileDepRegex (transpileDependencies) {
@@ -17,8 +18,13 @@ function genTranspileDepRegex (transpileDependencies) {
 
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
-  const cliServicePath = require('path').dirname(require.resolve('@vue/cli-service'))
+  const cliServicePath = path.dirname(require.resolve('@vue/cli-service'))
   const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
+
+  // try to load the project babel config;
+  // if the default preset is used,
+  // there will be a VUE_CLI_TRANSPILE_BABEL_RUNTIME env var set.
+  babel.loadPartialConfig()
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
@@ -36,6 +42,15 @@ module.exports = (api, options) => {
             if (filepath.startsWith(cliServicePath)) {
               return true
             }
+
+            // only include @babel/runtime when the @vue/babel-preset-app preset is used
+            if (
+              process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME &&
+              filepath.includes(path.join('@babel', 'runtime'))
+            ) {
+              return false
+            }
+
             // check if this is something the user explicitly wants to transpile
             if (transpileDepRegex && transpileDepRegex.test(filepath)) {
               return false
@@ -45,7 +60,7 @@ module.exports = (api, options) => {
           })
           .end()
         .use('cache-loader')
-          .loader('cache-loader')
+          .loader(require.resolve('cache-loader'))
           .options(api.genCacheConfig('babel-loader', {
             '@babel/core': require('@babel/core/package.json').version,
             '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
@@ -61,7 +76,7 @@ module.exports = (api, options) => {
     if (useThreads) {
       const threadLoaderConfig = jsRule
         .use('thread-loader')
-          .loader('thread-loader')
+          .loader(require.resolve('thread-loader'))
 
       if (typeof options.parallel === 'number') {
         threadLoaderConfig.options({ workers: options.parallel })
@@ -70,6 +85,6 @@ module.exports = (api, options) => {
 
     jsRule
       .use('babel-loader')
-        .loader('babel-loader')
+        .loader(require.resolve('babel-loader'))
   })
 }

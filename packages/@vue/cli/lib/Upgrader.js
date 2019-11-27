@@ -45,6 +45,7 @@ module.exports = class Upgrader {
     }
 
     for (const p of upgradable) {
+      this.pkg = getPackageJson(this.context)
       await this.upgrade(p.name, { to: p.latest })
     }
 
@@ -101,6 +102,8 @@ module.exports = class Upgrader {
     log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
     await this.pm.upgrade(`${packageName}@^${targetVersion}`)
 
+    // the cached `pkg` field won't automatically update after running `this.pm.upgrade`
+    this.pkg[depEntry][packageName] = `^${targetVersion}`
     await this.runMigrator(packageName, { installed })
   }
 
@@ -198,6 +201,10 @@ module.exports = class Upgrader {
         const installed = await this.pm.getInstalledVersion(name)
         const wanted = await this.pm.getRemoteVersion(name, range)
 
+        if (installed === 'N/A') {
+          throw new Error('At least one dependency is not installed. Please run npm install or yarn before trying to upgrade')
+        }
+
         let latest = await this.pm.getRemoteVersion(name)
         if (includeNext) {
           const next = await this.pm.getRemoteVersion(name, 'next')
@@ -256,8 +263,6 @@ module.exports = class Upgrader {
       // TODO: highlight the diff part, like in `yarn outdated`
       console.log('  ' + fields.map((x, i) => x.padEnd(pads[i])).join(''))
     }
-
-    console.log(`Run ${chalk.yellow('vue upgrade --all')} to upgrade all the above plugins`)
 
     return upgradable
   }

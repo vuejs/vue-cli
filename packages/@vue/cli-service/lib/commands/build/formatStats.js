@@ -4,7 +4,6 @@ module.exports = function formatStats (stats, dir, api) {
   const zlib = require('zlib')
   const chalk = require('chalk')
   const ui = require('cliui')({ width: 80 })
-  const url = require('url')
 
   const json = stats.toJson({
     hash: false,
@@ -22,7 +21,7 @@ module.exports = function formatStats (stats, dir, api) {
   const isMinJS = val => /\.min\.js$/.test(val)
   assets = assets
     .map(a => {
-      a.name = url.parse(a.name).pathname
+      a.name = a.name.split('?')[0]
       return a
     })
     .filter(a => {

@@ -1,5 +1,5 @@
-const pluginRE = /^(@vue\/|vue-|@[\w-]+\/vue-)cli-plugin-/
-const scopeRE = /^@[\w-]+\//
+const pluginRE = /^(@vue\/|vue-|@[\w-]+(\.)?[\w-]+\/vue-)cli-plugin-/
+const scopeRE = /^@[\w-]+(\.)?[\w-]+\//
 const officialRE = /^@vue\//
 
 const officialPlugins = [
