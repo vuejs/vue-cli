@@ -50,6 +50,10 @@ dist/myLib.css           0.33 kb                  0.23 kb
 
 - `dist/myLib.css`: извлечённый CSS-файл (можно принудительно вставлять стили инлайн, установив `css: { extract: false }` в `vue.config.js`)
 
+::: warning ВНИМАНИЕ
+При разработке библиотеки или использования монорепозитория, имейте ввиду, что CSS-импорты **являются побочными эффектами (side effects)**. Убедитесь, что **удалили** опцию `"sideEffects": false` из файла `package.json`, в противном случае webpack будет удалять CSS-фрагменты при сборке для production.
+:::
+
 ### Vue vs. JS / TS файлы точек входа
 
 При использовании `.vue` файла в качестве точки входа, библиотека будет экспортировать сам компонент Vue, потому что компонент всегда имеет экспорт по умолчанию (export default).
@@ -141,4 +145,22 @@ dist/foo.1.js        5.24 kb                     1.64 kb
 
 <!-- фрагмент с реализацией foo-one загрузится автоматически когда потребуется -->
 <foo-one></foo-one>
+```
+
+## Использование vuex в сборках
+
+При создании [Веб-компонента](#веб-компонент-web-component) или [Библиотеки](#бибnиотека-library), точкой входа будет не `main.js`, а файл `entry-wc.js`, генерируемый здесь: [https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js)
+
+Поэтому для использования vuex при сборке веб-компонента необходимо инициализировать хранилище в `App.vue`:
+
+```js
+import store from './store'
+
+// ...
+
+export default {
+  store,
+  name: 'App',
+  // ...
+}
 ```
