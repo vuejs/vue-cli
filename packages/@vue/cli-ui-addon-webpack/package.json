@@ -22,7 +22,7 @@
     "@vue/cli-plugin-eslint": "^4.1.1",
     "@vue/cli-service": "^4.1.1",
     "@vue/eslint-config-standard": "^4.0.0",
-    "core-js": "^3.4.3",
+    "core-js": "^3.4.4",
     "eslint": "^5.16.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
