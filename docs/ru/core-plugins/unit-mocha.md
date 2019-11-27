@@ -6,7 +6,7 @@
 
 - **`vue-cli-service test:unit`**
 
-  Запускает тесты с помощью [mocha-webpack](https://github.com/zinserjan/mocha-webpack) + [chai](http://chaijs.com/).
+  Запускает тесты с помощью [mochapack](https://github.com/sysgears/mochapack) + [chai](http://chaijs.com/).
 
   **Обратите внимание, что тесты запускаются в Node.js с симулированным JSDOM окружением браузера.**
 
@@ -27,7 +27,7 @@
 
   По умолчанию под файлы тестов попадают: любые файлы `tests/unit` которые заканчиваются на `.spec.(ts|js)`.
 
-  Поддерживаются все [опции командной строки mocha-webpack](http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html).
+  Поддерживаются все [опции командной строки mochapack](https://sysgears.github.io/mochapack/docs/installation/cli-usage.html).
 
 ## Установка в уже созданный проект
 
