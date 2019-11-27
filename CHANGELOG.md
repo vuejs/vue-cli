@@ -1,4 +1,40 @@
 
+## 4.1.0 (2019-11-27)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-pwa`
+  * [#4736](https://github.com/vuejs/vue-cli/pull/4736) feat: allow use of full url for pwa manifest and icons ([@tkint](https://github.com/tkint))
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`
+  * [#4842](https://github.com/vuejs/vue-cli/pull/4842) Replace chalk.reset with stripAnsi in @vue/cli-shared-utils/lib/logger.js ([@perakerberg](https://github.com/perakerberg))
+* `@vue/cli`
+  * [#4883](https://github.com/vuejs/vue-cli/pull/4883) fix: support `parser` option for codemods, and enable ts parsing by default ([@sodatea](https://github.com/sodatea))
+  * [#4859](https://github.com/vuejs/vue-cli/pull/4859) fix: invalid version error when modules not installed ([@yannbertrand](https://github.com/yannbertrand))
+
+#### :memo: Documentation
+* [#4820](https://github.com/vuejs/vue-cli/pull/4820) Update doc section on Git Hooks ([@Codermar](https://github.com/Codermar))
+* [#4836](https://github.com/vuejs/vue-cli/pull/4836) docs: add warnings on CSS sideEffects ([@sodatea](https://github.com/sodatea))
+* [#4831](https://github.com/vuejs/vue-cli/pull/4831) Update browser-compatibility.md ([@wenhandi](https://github.com/wenhandi))
+* [#4716](https://github.com/vuejs/vue-cli/pull/4716) use gitlab CI env variable for project name ([@gregoiredx](https://github.com/gregoiredx))
+* [#4803](https://github.com/vuejs/vue-cli/pull/4803) fix docs `css.loaderOptions.css.localsConvention` ([@negibouze](https://github.com/negibouze))
+* [#4746](https://github.com/vuejs/vue-cli/pull/4746) Update migrating-from-v3 README typo ([@seangwright](https://github.com/seangwright))
+
+#### Committers: 11
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Jose G. Alfonso ([@Codermar](https://github.com/Codermar))
+- Per Åkerberg ([@perakerberg](https://github.com/perakerberg))
+- Sean G. Wright ([@seangwright](https://github.com/seangwright))
+- Thomas Kint ([@tkint](https://github.com/tkint))
+- Yann Bertrand ([@yannbertrand](https://github.com/yannbertrand))
+- Yingya Zhang ([@zyy7259](https://github.com/zyy7259))
+- Yoshiaki Itakura ([@negibouze](https://github.com/negibouze))
+- [@arnaudvalle](https://github.com/arnaudvalle)
+- [@gregoiredx](https://github.com/gregoiredx)
+- 文翰弟 ([@wenhandi](https://github.com/wenhandi))
+
+
+
 ## 4.1.0-beta.0 (2019-11-09)
 
 #### :rocket: New Features
