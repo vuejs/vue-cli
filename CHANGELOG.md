@@ -1,4 +1,15 @@
 
+## 4.1.1 (2019-11-27)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`
+  * [#4894](https://github.com/vuejs/vue-cli/pull/4894) fix: fix tsx compilation ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.1.0 (2019-11-27)
 
 #### :rocket: New Features
