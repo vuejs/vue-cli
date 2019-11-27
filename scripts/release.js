@@ -95,12 +95,8 @@ const release = async () => {
     }
   }
 
-  const releaseType = semver.prerelease(curVersion)
-    ? 'prerelease'
-    : semver.diff(curVersion, version)
-
   let distTag = 'latest'
-  if (releaseType.startsWith('pre')) {
+  if (bump === 'prerelease' || semver.prerelease(version)) {
     distTag = 'next'
   }
 
