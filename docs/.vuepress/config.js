@@ -271,7 +271,14 @@ module.exports = {
           },
           {
             text: 'Плагины',
-            link: '/ru/core-plugins/'
+            items: [
+              { text: 'Основные плагины', link: '/ru/core-plugins/' },
+              { text: 'Просмотр плагинов', link: 'https://awesomejs.dev/for/vue-cli/' }
+            ]
+          },
+          {
+            text: 'Миграция с v3',
+            link: '/ru/migrating-from-v3/'
           },
           {
             text: 'История изменений',
