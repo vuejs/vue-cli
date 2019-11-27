@@ -62,7 +62,7 @@ npx vue-cli-service serve
 
 Кроме флагов командной строки, также можно настраивать сервер для разработки с помощью поля [devServer](../config/#devserver) в файле `vue.config.js`.
 
-В команде CLI `[entry]` означает *входной файл*, а не *дополнительный входной файл*. Если вы перезапишете запись в CLI, тогда записи из `config.pages` больше не будут учитываться, что может привести к ошибке.
+В команде CLI `[entry]` означает *входной файл*, а не *дополнительный входной файл*. Если вы перезапишете запись в CLI, тогда записи из `config.pages` больше не будут учитываться, что может привести к ошибке. По умолчанию [entryFile](../dev-guide/generator-api.html#entryfile).
 
 ## vue-cli-service build
 
@@ -143,7 +143,7 @@ npx vue-cli-service build --skip-plugins pwa,apollo
 
 Имена плагинов разрешаются также, как и при установке, что подробнее описано [здесь](./plugins-and-presets.md#установка-пnагинов-в-существующий-проект)
 
-``` bash
+```bash
 # все вызовы равнозначны
 npx vue-cli-service build --skip-plugins pwa
 npx vue-cli-service build --skip-plugins @vue/pwa
@@ -164,6 +164,12 @@ npx vue-cli-service build --skip-plugins @vue/cli-plugin-pwa
 {
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   }
 }
 ```
