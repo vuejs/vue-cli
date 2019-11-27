@@ -125,6 +125,8 @@ pages: # задание должно быть именованными стра�
     - npm run build
     - mv public public-vue # GitLab Pages хук для каталога public
     - mv dist public # переименование каталога dist (результат команды npm run build)
+    # опционально, можно активировать поддержку gzip с помощью следующей строки:
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
   artifacts:
     paths:
       - public # путь к артефакту должен быть /public для GitLab Pages
@@ -132,15 +134,14 @@ pages: # задание должно быть именованными стра�
     - master
 ```
 
-Как правило, по адресу `https://yourUserName.gitlab.io/yourProjectName` будет располагаться статический веб-сайт, поэтому вы также захотите создать файл `vue.config.js` для указания [значения `BASE_URL`](../config/#publicpath), соответствующего ему:
+Как правило, по адресу `https://yourUserName.gitlab.io/yourProjectName` будет располагаться статический веб-сайт, поэтому потребуется создать файл `vue.config.js` для указания [значения `BASE_URL`](../config/#publicpath), соответствующего имени проекта ([переменная окружения `CI_PROJECT_NAME`](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html) содержит его):
 
 ```javascript
 // файл vue.config.js расположен в корне вашего репозитория
-// убедитесь, что обновили `yourProjectName` на имя вашего проекта GitLab
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/yourProjectName/'
+    ? '/' + process.env.CI_PROJECT_NAME + '/'
     : '/'
 }
 ```
@@ -260,14 +261,16 @@ firebase deploy --only hosting
 
 ### Now
 
+В данном примере используется последняя версия платформы Now версии 2.
+
 1. Установите Now CLI:
 
-    ```bash
-    npm install -g now
+```bash
+npm install -g now
 
-    # Или если предпочитаете локальную установку
-    npm install now
-    ```
+# Или если предпочитаете локальную установку
+npm install now
+```
 
 2. Добавьте файл `now.json` в корневой каталог проекта:
 
@@ -326,9 +329,9 @@ firebase deploy --only hosting
     "now-build": "npm run build"
     ```
 
-  Для публикации запустите `now`.
+    Для публикации запустите `now`.
 
-  Если необходим псевдоним публикации, запустите `now --target production`.
+    Если необходим псевдоним публикации, запустите `now --target production`.
 
 ### Stdlib
 
@@ -434,14 +437,17 @@ Deploy your application using nginx inside of a docker container.
 
 2. Создайте файл `Dockerfile` в корневом каталоге проекта
 
-    ```Dockerfile
-    FROM node:10
-    COPY ./ /app
+    ```docker
+    FROM node:latest as build-stage
     WORKDIR /app
-    RUN npm install && npm run build
-    FROM nginx
+    COPY package*.json ./
+    RUN npm install
+    COPY ./ .
+    RUN npm run build
+
+    FROM nginx as production-stage
     RUN mkdir /app
-    COPY --from=0 /app/dist /app
+    COPY --from=build-stage /app/dist /app
     COPY nginx.conf /etc/nginx/nginx.conf
     ```
 
@@ -449,7 +455,7 @@ Deploy your application using nginx inside of a docker container.
 
     Настройка файла `.dockerignore` предотвращает копирование `node_modules` и любых промежуточных артефактов сборки в образ, что может вызывать проблемы при сборке.
 
-    ```gitignore
+    ```
     **/node_modules
     **/dist
     ```
@@ -460,7 +466,7 @@ Deploy your application using nginx inside of a docker container.
 
     Ниже приведена простая конфигурация `nginx`, которая обслуживает ваш vue-проект на порту `80`. Корневой `index.html` служит для `page not found` / `404` ошибок, что позволяет использовать маршрутизации, основанной на `pushState()`.
 
-    ```text
+    ```nginx
     user  nginx;
     worker_processes  1;
     error_log  /var/log/nginx/error.log warn;
