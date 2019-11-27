@@ -114,9 +114,9 @@ module.exports = {
         // Для пользователей Vue CLI v3, обратитесь к документации css-loader v1
         // https://github.com/webpack-contrib/css-loader/tree/v1.0.1
         modules: {
-          localIdentName: '[name]-[hash]',
-          localsConvention: 'camelCaseOnly'
-        }
+          localIdentName: '[name]-[hash]'
+        },
+        localsConvention: 'camelCaseOnly'
       }
     }
   }
@@ -135,8 +135,9 @@ module.exports = {
       // передача настроек в sass-loader
       // @/ это псевдоним к каталогу src/ поэтому предполагается,
       // что у вас в проекте есть файл `src/variables.scss`
+      // Примечание: эта опция называется "data" в sass-loader v7
       sass: {
-        data: `@import "~@/variables.sass"`
+        prependData: `@import "~@/variables.sass"`
       },
       // по умолчанию опция `sass` будет применяться к обоим синтаксисам
       // потому что синтаксис `scss` по сути также обрабатывается sass-loader
@@ -144,7 +145,7 @@ module.exports = {
       // в конце оператора, в то время как для `sass` точки с запятой не требуется
       // в этом случае синтаксис `scss` можно настроить отдельно с помощью опции `scss`
       scss: {
-        data: `@import "~@/variables.scss";`
+        prependData: `@import "~@/variables.scss";`
       },
       // передача настроек Less.js в less-loader
       less:{
