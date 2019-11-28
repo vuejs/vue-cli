@@ -6,14 +6,14 @@
 
 - **`vue-cli-service test:unit`**
 
-  Запуск модульных тестов с помощью. По умолчанию значением `testMatch` будет `<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))` что совпадает с:
+  Запуск модульных тестов с помощью Jest. По умолчанию значением `testMatch` будет `<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))` что совпадает с:
 
   - Любыми файлами в `tests/unit` которые заканчиваются на `.spec.(js|jsx|ts|tsx)`;
   - Любыми js(x)/ts(x) файлами внутри каталогов `__tests__`.
 
   Использование: `vue-cli-service test:unit [options] <regexForTestFiles>`
 
-  Также поддерживаются все [опции командной строки Jest](https://facebook.github.io/jest/docs/en/cli.html).
+  Также поддерживаются все [опции Jest CLI](https://facebook.github.io/jest/docs/en/cli.html).
 
 ## Отладка тестов
 
