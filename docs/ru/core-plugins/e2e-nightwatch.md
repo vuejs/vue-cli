@@ -6,32 +6,136 @@
 
 - **`vue-cli-service test:e2e`**
 
-  Запускает E2E тесты с помощью [NightwatchJS](http://nightwatchjs.org).
+  Запускает E2E тесты с помощью [Nightwatch.js](https://nightwatchjs.org).
 
   Опции:
 
   ```
-  --url        запуск E2E тестов по указанному URL, вместо авто-запуска сервера
-  --config     использовать пользовательский файл конфигурации nightwatch (перезаписывает внутренние настройки)
-  -e, --env    указанные через запятую окружения браузеров, в которых требуется запуск (по умолчанию: chrome)
-  -t, --test   указать запускаемый тест по имени
-  -f, --filter glob для фильтрации тестов по имени файла
+  --url          запуск E2E тестов по указанному URL, вместо авто-запуска сервера
+  --config       использовать пользовательский файл конфигурации nightwatch (перезаписывает внутренние настройки)
+  --headless     использовать chrome или firefox в безголовом (headless) режиме
+  --parallel     использовать параллельный режим через test workers (доступно только в chromedriver)
+  --use-selenium использовать сервер Selenium вместо chromedriver или geckodriver
+  -e, --env      указанные через запятую окружения браузеров, в которых требуется запуск (по умолчанию: chrome)
+  -t, --test     указать запускаемый тест по имени
+  -f, --filter   glob для фильтрации тестов по имени файла
   ```
 
-  > Примечание: этот плагин в настоящее время использует Nightwatch v0.9.x. Мы ждём стабильного релиза Nightwatch 1.0 для обновления.
+  Также [поддерживаются все опции Nightwatch CLI](https://nightwatchjs.org/guide/running-tests/#command-line-options). Например: `--verbose`, `--retries` и т.д.
 
-  Дополнительно, [все опции Nightwatch CLI поддерживаются](https://nightwatchjs.org/guide#command-line-options).
+## Структура проекта
 
-## Конфигурация
+При установке плагина генерируется следующая структура каталогов. В ней уже будут примеры для большинства концептов тестирования, доступных в Nightwatch.
 
-Nightwatch предварительно сконфигурирован для запуска в Chrome по умолчанию. Если необходимо запустить E2E тесты в других браузерах — потребуется добавить `nightwatch.config.js` или `nightwatch.json` в корневой каталог проекта и указать там дополнительные браузеры. Конфигурация будет объединена с [внутренней конфигурацией Nightwatch](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-e2e-nightwatch/nightwatch.config.js).
+```
+tests/e2e/
+  ├── custom-assertions/
+  |   └── elementCount.js
+  ├── custom-commands/
+  |   ├── customExecute.js
+  |   ├── openHomepage.js
+  |   └── openHomepageClass.js
+  ├── page-objects/
+  |   └── homepage.js
+  ├── specs/
+  |   ├── test.js
+  |   └── test-with-pageobjects.js
+  └── globals.js
+```
 
-Кроме того, можно полностью заменить внутреннюю конфигурацию на пользовательский конфигурационный файл с помощью опции `--config`.
+#### `specs`
+Основное место расположения тестов. Может содержать вложенные каталоги, которые возможно выбирать при запуске с помощью аргумента `--group`. [Подробнее](https://nightwatchjs.org/guide/running-tests/#test-groups).
 
-Обратитесь к документации Nightwatch для получения информации о [параметрах конфигурации](http://nightwatchjs.org/gettingstarted#settings-file) и о том, как [установить драйверы браузера](http://nightwatchjs.org/gettingstarted#browser-drivers-setup).
+#### `custom-assertions`
+Расположенные здесь файлы будут автоматически загружаться Nightwatch и добавляться в API `.assert` и `.verify` для расширения встроенных методов проверок Nightwatch. Подробнее в документации [по созданию пользовательских утверждений (assertions)](https://nightwatchjs.org/guide/extending-nightwatch/#writing-custom-assertions).
+
+#### `custom-commands`
+Расположенные здесь файлы будут автоматически загружаться Nightwatch и добавляться в API объекта `browser` для расширения встроенных команд Nightwatch. Подробнее в документации [по созданию пользовательских команд](https://nightwatchjs.org/guide/extending-nightwatch/#writing-custom-commands).
+
+#### `page objects`
+Работа с объектами страниц — популярная методология в end-to-end UI тестировании. Расположенные здесь файлы будут автоматически добавляться в API `.page`, при этом имя файла определит имя объекта страницы. Подробнее в документации [по работе с объектами страниц](https://nightwatchjs.org/guide/working-with-page-objects/).
+
+#### `globals.js`
+Файл с внешними глобальными переменными, который может содержать глобальные свойства или хуки. Подробнее в документации [по глобальным свойствам тестов](https://nightwatchjs.org/gettingstarted/configuration/#test-globals).
 
 ## Установка в уже созданный проект
 
 ```sh
 vue add e2e-nightwatch
 ```
+
+## Конфигурация
+
+Nightwatch предварительно сконфигурирован для запуска в Chrome по умолчанию. Доступен также Firefox через `--env firefox`. При необходимости запускать end-to-end тесты в других браузерах (например, Safari, Microsoft Edge), нужно добавить `nightwatch.conf.js` или `nightwatch.json` в корневой каталог проекта для настройки дополнительных браузеров. Конфигурация будет объединена во [внутреннюю конфигурацию Nightwatch](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-e2e-nightwatch/nightwatch.config.js).
+
+При необходимости можно полностью заменить внутреннюю конфигурацию собственной с помощью опции `--config`.
+
+Обратитесь к документации Nightwatch для информации о [параметрах конфигурации](https://nightwatchjs.org/gettingstarted/configuration/) и как [устанавливать драйверы браузеров](http://nightwatchjs.org/gettingstarted#browser-drivers-setup).
+
+## Запуск тестов
+
+По умолчанию, все тесты внутри каталога `specs` будут запускаться с использованием Chrome. Если необходимо запустить end-to-end тесты в безголовом (headless) режиме в Chrome (или Firefox), укажите аргумент `--headless`.
+
+```sh
+$ vue-cli-service test:e2e
+```
+
+**Запуск одного теста**
+
+Для запуска одного теста укажите путь к файлу. Например:
+
+```sh
+$ vue-cli-service test:e2e tests/e2e/specs/test.js
+```
+
+**Пропустить автоматический запуск сервера разработки**
+
+Если сервер разработки уже запущен и необходимо пропустить автоматический запуск, укажите аргумент `--url`:
+
+```sh
+$ vue-cli-service test:e2e --url http://localhost:8080/
+```
+
+**Запуск тестов в Firefox**
+
+По умолчанию также поддерживается запуск тестов в Firefox. Выполните следующую команду (опционально можно добавить `--headless` для запуска Firefox в безголовом режиме):
+
+```sh
+$ vue-cli-service test:e2e --env firefox [--headless]
+```
+
+**Запуск тестов в Firefox и Chrome одновременно**
+
+Можно запускать тесты одновременно в обоих браузерах, определяя требуемые тестовые окружения через запятую (",") — не используя пробелы.
+
+```sh
+$ vue-cli-service test:e2e --env firefox,chrome [--headless]
+```
+
+**Запуск тестов в параллельном режиме**
+
+Для значительного увеличения скорости тестирования можно включить параллельный запуск тестов если имеются в наличии несколько тестовых наборов. Согласование осуществляется на файловом уровне и автоматически распределяется по доступным ядрам процессора.
+
+На данный момент возможность доступна только в Chromedriver. Подробнее о [режиме параллельной работы](https://nightwatchjs.org/guide/running-tests/#parallel-running) можно прочитать в документации Nightwatch.
+
+```sh
+$ vue-cli-service test:e2e --parallel
+```
+
+**Запуск тестов с Selenium**
+
+Поскольку с версии `v4` автономный сервер Selenium больше не включён в этот плагин, да и в большинстве случаев работа с Selenium не требуется с версии Nightwatch v1.0.
+
+Но возможность использования сервера Selenium по-прежнему имеется, для этого необходимо выполнить следующие шаги:
+
+__1.__ Установите NPM-пакет `selenium-server`:
+
+  ```sh
+  $ npm install selenium-server --save-dev
+  ```
+
+__2.__ Запустите команду с аргументом `--use-selenium`:
+
+  ```sh
+  $ vue-cli-service test:e2e --use-selenium
+  ```
