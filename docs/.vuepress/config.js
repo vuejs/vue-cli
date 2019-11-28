@@ -334,7 +334,7 @@ module.exports = {
           ]
         }
       },
-      '/ja': {
+      '/ja/': {
         label: '日本語',
         selectText: '言語',
         lastUpdated: '最終更新日',
@@ -378,7 +378,7 @@ module.exports = {
             '/ja/guide/',
             '/ja/guide/installation',
             {
-              title: 'Basics',
+              title: '基本',
               collapsable: false,
               children: [
                 '/ja/guide/prototyping',
@@ -388,7 +388,7 @@ module.exports = {
               ]
             },
             {
-              title: 'Development',
+              title: '開発',
               collapsable: false,
               children: [
                 '/ja/guide/browser-compatibility',
@@ -405,7 +405,7 @@ module.exports = {
           '/ja/dev-guide/': [
             '/ja/dev-guide/plugin-dev.md',
             {
-              title: 'API reference',
+              title: 'API リファレンス',
               collapsable: false,
               children: [
                 '/ja/dev-guide/plugin-api.md',
@@ -413,7 +413,7 @@ module.exports = {
               ]
             },
             {
-              title: 'UI Development',
+              title: 'UI 開発',
               collapsable: false,
               children: [
                 '/ja/dev-guide/ui-info.md',
@@ -423,7 +423,7 @@ module.exports = {
             }
           ],
           '/ja/core-plugins/': [{
-            title: 'Core Vue CLI Plugins',
+            title: 'コア Vue CLI プラグイン',
             collapsable: false,
             children: [
               '/ja/core-plugins/babel.md',
