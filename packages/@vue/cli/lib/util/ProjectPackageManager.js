@@ -1,21 +1,26 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-const execa = require('execa')
 const minimist = require('minimist')
-const semver = require('semver')
 const LRU = require('lru-cache')
-const chalk = require('chalk')
 
 const {
+  chalk,
+  execa,
+  semver,
+
   hasYarn,
   hasProjectYarn,
   hasPnpm3OrLater,
   hasPnpmVersionOrLater,
-  hasProjectPnpm
-} = require('@vue/cli-shared-utils/lib/env')
-const { isOfficialPlugin, resolvePluginId } = require('@vue/cli-shared-utils/lib/pluginResolution')
-const { log, warn } = require('@vue/cli-shared-utils/lib/logger')
+  hasProjectPnpm,
+
+  isOfficialPlugin,
+  resolvePluginId,
+
+  log,
+  warn
+} = require('@vue/cli-shared-utils')
 
 const { loadOptions } = require('../options')
 const getPackageJson = require('./getPackageJson')

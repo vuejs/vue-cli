@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
-const semver = require('semver')
-const chalk = require('chalk')
+const { chalk, semver } = require('@vue/cli-shared-utils')
 // Connectors
 const cwd = require('./cwd')
 const folders = require('./folders')

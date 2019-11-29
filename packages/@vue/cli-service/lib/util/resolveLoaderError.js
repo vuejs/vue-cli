@@ -1,4 +1,4 @@
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 
 const rules = [
   {

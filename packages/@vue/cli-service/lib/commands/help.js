@@ -1,4 +1,4 @@
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 const padEnd = require('string.prototype.padend')
 const getPadLength = require('../util/getPadLength')
 

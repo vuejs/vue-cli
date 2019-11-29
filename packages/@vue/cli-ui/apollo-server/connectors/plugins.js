@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 const LRU = require('lru-cache')
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 // Context
 const getContext = require('../context')
 // Subs

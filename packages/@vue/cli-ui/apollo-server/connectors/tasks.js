@@ -1,5 +1,4 @@
-const execa = require('execa')
-const chalk = require('chalk')
+const { chalk, execa } = require('@vue/cli-shared-utils')
 // Subs
 const channels = require('../channels')
 // Connectors

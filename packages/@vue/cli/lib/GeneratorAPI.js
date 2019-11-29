@@ -4,12 +4,11 @@ const path = require('path')
 const merge = require('deepmerge')
 const resolve = require('resolve')
 const { isBinaryFileSync } = require('isbinaryfile')
-const semver = require('semver')
 const mergeDeps = require('./util/mergeDeps')
 const runCodemod = require('./util/runCodemod')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
-const { getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
+const { semver, getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'

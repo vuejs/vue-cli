@@ -1,5 +1,4 @@
-const semver = require('semver')
-const { warn } = require('@vue/cli-shared-utils')
+const { semver, warn } = require('@vue/cli-shared-utils')
 
 const tryGetNewerRange = require('./tryGetNewerRange')
 

@@ -21,7 +21,7 @@
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-shared-utils#readme",
   "dependencies": {
     "@hapi/joi": "^15.0.1",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
     "execa": "^1.0.0",
     "launch-editor": "^2.2.1",
     "lru-cache": "^5.1.1",

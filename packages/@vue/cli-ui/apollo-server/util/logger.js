@@ -1,4 +1,4 @@
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 
 exports.log = (...args) => {
   if (!process.env.VUE_APP_CLI_UI_DEBUG) return

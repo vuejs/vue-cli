@@ -3,8 +3,7 @@
 // Check node version before requiring/doing anything else
 // The user may be on a very old node version
 
-const chalk = require('chalk')
-const semver = require('semver')
+const { chalk, semver } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
 const didYouMean = require('didyoumean')
 

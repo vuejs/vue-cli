@@ -1,11 +1,10 @@
-const execa = require('execa')
 const path = require('path')
 const fs = require('fs-extra')
 const parseDiff = require('../util/parse-diff')
 // Connectors
 const cwd = require('./cwd')
 // Utils
-const { hasProjectGit } = require('@vue/cli-shared-utils')
+const { execa, hasProjectGit } = require('@vue/cli-shared-utils')
 
 async function getNewFiles (context) {
   if (!hasProjectGit(cwd.get())) return []

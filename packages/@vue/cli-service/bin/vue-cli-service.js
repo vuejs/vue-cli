@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-const semver = require('semver')
-const { error } = require('@vue/cli-shared-utils')
+const { semver, error } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
 
 if (!semver.satisfies(process.version, requiredVersion)) {

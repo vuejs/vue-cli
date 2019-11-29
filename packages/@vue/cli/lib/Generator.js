@@ -1,6 +1,5 @@
 const ejs = require('ejs')
 const debug = require('debug')
-const semver = require('semver')
 const GeneratorAPI = require('./GeneratorAPI')
 const PackageManager = require('./util/ProjectPackageManager')
 const sortObject = require('./util/sortObject')
@@ -8,7 +7,15 @@ const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
 const runCodemod = require('./util/runCodemod')
-const { toShortPluginId, matchesPluginId, loadModule, isPlugin } = require('@vue/cli-shared-utils')
+const {
+  semver,
+
+  isPlugin,
+  toShortPluginId,
+  matchesPluginId,
+
+  loadModule
+} = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')

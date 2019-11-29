@@ -75,7 +75,7 @@
     "memfs": "^3.0.1",
     "minimist": "^1.2.0",
     "prettier": ">= 1.13.0",
-    "request": "^2.83.0",
+    "request": "^2.87.0",
     "request-promise-native": "^1.0.8",
     "rimraf": "^3.0.0",
     "semver": "^6.1.0",
