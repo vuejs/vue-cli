@@ -1,52 +1,52 @@
 ---
 home: true
 heroImage: /favicon.png
-actionText: Get Started →
+actionText: はじめる →
 actionLink: /guide/
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
 
 <div class="features">
   <div class="feature">
-    <h2>Feature Rich</h2>
-    <p>Out-of-the-box support for Babel, TypeScript, ESLint, PostCSS, PWA, Unit Testing & End-to-end Testing.</p>
+    <h2>豊富な機能</h2>
+    <p>Babel, TypeScript, ESLint, PostCSS, PWA, Unit Test, E2E Test などを標準でサポート。</p>
   </div>
   <div class="feature">
-    <h2>Extensible</h2>
-    <p>The plugin system allows the community to build and share reusable solutions to common needs.</p>
+    <h2>拡張可能</h2>
+    <p>プラグインシステムにより、コミュニティは一般的なニーズに合わせて再利用可能なソリューションを構築および共有できます。</p>
   </div>
   <div class="feature">
-    <h2>No Need to Eject</h2>
-    <p>Vue CLI is fully configurable without the need for ejecting. This allows your project to stay up-to-date for the long run.</p>
+    <h2>取り出す必要はない</h2>
+    <p>Vue CLIは、取り出すことなく完全に構成可能です。これにより、プロジェクトを長期にわたって最新の状態に保つことができます。</p>
   </div>
   <div class="feature">
-    <h2>Graphical User Interface</h2>
-    <p>Create, develop and manage your projects through an accompanying graphical user interface.</p>
+    <h2>グラフィカル・ユーザー・インターフェース</h2>
+    <p>付属のグラフィカルユーザーインターフェイスを使用して、プロジェクトを作成、開発、管理します。</p>
   </div>
   <div class="feature">
-    <h2>Instant Prototyping</h2>
-    <p>Instantly prototype new ideas with a single Vue file.</p>
+    <h2>簡単なプロトタイピング</h2>
+    <p>単一のVueファイルを使用して、新しいアイデアを即座にプロトタイプ化します。</p>
   </div>
   <div class="feature">
-    <h2>Future Ready</h2>
-    <p>Effortlessly ship native ES2015 code for modern browsers, or build your vue components as native web components.</p>
+    <h2>将来の準備</h2>
+    <p>最新のブラウザ向けにネイティブのES2015のコードを簡単に出荷するか、vueコンポーネントをネイティブのWebコンポーネントとしてビルドします。</p>
   </div>
 </div>
 
-## Getting Started
+## はじめる
 
-Install:
+インストール:
 
 ``` bash
 npm install -g @vue/cli
-# OR
+# もしくは
 yarn global add @vue/cli
 ```
 
-Create a project:
+プロジェクトの作成:
 
 ``` bash
 vue create my-project
-# OR
+# もしくは
 vue ui
 ```
