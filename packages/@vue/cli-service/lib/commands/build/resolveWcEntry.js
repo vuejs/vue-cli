@@ -16,12 +16,12 @@ const hyphenate = str => {
  * @param {string} prefix The prefix for the component library
  * @param {string} component The component name for single entry builds, component file for multi-entry builds
  * @param {string} file The file for the component
- * @param {boolean} async Whether to load component async or not
+ * @param {boolean} isAsync Whether to load component async or not
  */
-const createElement = (prefix, component, file, async) => {
+const createElement = (prefix, component, file, isAsync) => {
   const { camelName, kebabName } = exports.fileToComponentName(prefix, component)
 
-  return async
+  return isAsync
     ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}?shadow')))\n`
     : `import ${camelName} from '~root/${file}?shadow'\n` +
         `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}))\n`
@@ -38,12 +38,12 @@ exports.fileToComponentName = (prefix, file) => {
   }
 }
 
-exports.resolveEntry = (prefix, libName, files, async) => {
+exports.resolveEntry = (prefix, libName, files, isAsync) => {
   const filePath = path.resolve(__dirname, 'entry-wc.js')
   const elements =
     prefix === ''
       ? [createElement('', libName, files[0])]
-      : files.map(file => createElement(prefix, file, file, async)).join('\n')
+      : files.map(file => createElement(prefix, file, file, isAsync)).join('\n')
 
   const content = `
 import './setPublicPath'
