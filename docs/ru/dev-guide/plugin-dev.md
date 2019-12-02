@@ -6,49 +6,49 @@ sidebarDepth: 3
 
 ## Введение
 
-A CLI plugin is an npm package that can add additional features to the project using Vue CLI. These features can include:
+Плагин CLI — это npm-пакет, который может добавлять дополнительные возможности в проект с помощью Vue CLI. Эти функции могут включать в себя:
 
-- changing project webpack config - for example, you can add a new webpack resolve rule for a certain file extension, if your plugin is supposed to work with this type of files. Say, `@vue/cli-plugin-typescript` adds such rule to resolve `.ts` and `.tsx` extensions;
-- adding new vue-cli-service command - for example, `@vue/cli-plugin-unit-jest` adds a new command `test:unit` that allows developer to run unit tests;
-- extending `package.json` - a useful option when your plugin adds some dependencies to the project and you need to add them to package dependencies section;
-- creating new files in the project and/or modifying old ones. Sometimes it's a good idea to create an example component or modify a main file to add some imports;
-- prompting user to select certain options - for example, you can ask user if they want to create the example component mentioned above.
+- изменение конфигурации webpack проекта — например, можно добавить новое правило для разрешения определённых расширений файлов, если плагин должен работать с этим типом файлов. Например, `@vue/cli-plugin-typescript` добавляет такое правило для разрешения файлов с расширениями `.ts` и `.tsx`;
+- добавление новых команд vue-cli-service — например, `@vue/cli-plugin-unit-jest` добавляет новую команду `test:unit`, которая позволяет разработчику запускать модульные тесты;
+- расширение `package.json` — полезная опция, когда плагину для работы требуются новые зависимости и необходимо добавить их в раздел зависимостей проекта;
+- создание новых и/или изменение старых файлов в проекте. Иногда полезно создать файл с примером компонента или изменить основной файл для добавления необходимых импортов;
+- предоставление возможности выбора пользователем требуемых опций — например, можно уточнить необходимость создания примера компонента, упомянутого выше.
 
-:::tip
-Don't overuse vue-cli plugins! If you want just to include a certain dependency, e.g. [Lodash](https://lodash.com/) - it's easier to do it manually with npm than create a specific plugin only to do so.
+:::tip Совет
+Не злоупотребляйте плагинами vue-cli! Если необходимо просто добавить какую-то новую зависимость в проект, например [Lodash](https://lodash.com/) — проще сделать это вручную через npm, чем создавать специальный плагин только для этого.
 :::
 
-CLI Plugin should always contain a [Service Plugin](#service-plugin) as its main export, and can optionally contain a [Generator](#generator), a [Prompt File](#prompts) and a [Vue UI integration](#ui-integration).
+Плагин CLI всегда должен содержать [плагин для сервиса](#пnагин-дnя-сервиса) в качестве своего основного экспорта, и может опционально содержать [генератор](#генератор), [файл интерактивных подсказок](#интерактивные-подсказки) и [интеграцию с Vue UI](#интеграция-с-ui).
 
-As an npm package, CLI plugin must have a `package.json` file. It's also recommended to have a plugin description in `README.md` to help others find your plugin on npm.
+Как npm-пакет, плагин CLI должен иметь файл `package.json`. Также рекомендуется, чтобы у плагина было описание в файле `README.md`, чтобы помочь другим найти ваш плагин в npm.
 
-So, typical CLI plugin folder structure looks like the following:
+Типичная структура плагина CLI выглядит следующим образом:
 
 ```bash
 .
 ├── README.md
-├── generator.js  # generator (optional)
-├── index.js      # service plugin
+├── generator.js  # генератор (опционально)
+├── index.js      # плагин для сервиса
 ├── package.json
-├── prompts.js    # prompts file (optional)
-└── ui.js         # Vue UI integration (optional)
+├── prompts.js    # файл интерактивных подсказок (опционально)
+└── ui.js         # интеграция с Vue UI (опционально)
 ```
 
 ## Именование и обнаруживаемость в поиске
 
-For a CLI plugin to be usable in a Vue CLI project, it must follow the name convention `vue-cli-plugin-<name>` or `@scope/vue-cli-plugin-<name>`. It allows your plugin to be:
+Чтобы плагин CLI мог использоваться в проекте Vue CLI, он должен соответствовать соглашению по именованию `vue-cli-plugin-<name>` или `@scope/vue-cli-plugin-<name>`. Это позволит вашему плагину быть:
 
-- Discoverable by `@vue/cli-service`;
-- Discoverable by other developers via searching;
-- Installable via `vue add <name>` or `vue invoke <name>`.
+- Обнаруживаемым `@vue/cli-service`;
+- Обнаруживаемым другими разработчиками при поиске;
+- Устанавливаемым через `vue add <name>` или `vue invoke <name>`.
 
-:::warning Warning
-Make sure to name the plugin correctly, otherwise it will be impossible to install it via `vue add` command or find it with Vue UI plugins search!
+:::warning Предупреждение
+Убедитесь, что плагин назван правильно, иначе его невозможно будет установить через команду `vue add` или найти с помощью поиска плагинов Vue UI!
 :::
 
-For better discoverability when a user searches for your plugin, put keywords describing your plugin in the `description` field of the plugin `package.json` file.
+Для лучшей обнаруживаемости при поиске плагина пользователем, укажите ключевые слова, описывающие плагин, в поле `description` в его файле `package.json`.
 
-Example:
+Например:
 
 ```json
 {
@@ -58,7 +58,7 @@ Example:
 }
 ```
 
-You should add the url to the plugin website or repository in the `homepage` or `repository` field so that a 'More info' button will be displayed in your plugin description:
+Для отображения в описании плагина кнопки «More info» нужно указать URL-адрес веб-сайта плагина или его репозитория в полях `homepage` или `repository`:
 
 ```json
 {
@@ -74,53 +74,53 @@ You should add the url to the plugin website or repository in the `homepage` or 
 
 ## Генератор
 
-A Generator part of the CLI plugin is usually needed when you want to extend your package with new dependencies, create new files in your project or edit existing ones.
+Генератор — это часть плагина CLI, которая обычно необходима когда требуется расширить пакет новыми зависимостями, создать новые файлы в проекте или изменить существующие.
 
-Inside the CLI plugin the generator should be placed in a `generator.js` or `generator/index.js` file. It will be invoked in two possible scenarios:
+Внутри плагина CLI генератор должен быть расположен в файле `generator.js` или `generator/index.js`. Он будет вызываться в двух возможных сценариях:
 
-- During a project's initial creation, if the CLI plugin is installed as part of the project creation preset.
+- При первоначальном создании проекта, если подключаемый плагин CLI необходим в рамках выбранного пресета настроек создания проекта.
 
-- When the plugin is installed after project's creation and invoked individually via `vue add` or `vue invoke`.
+- При установке плагина после создания проекта через команду `vue add` или `vue invoke`.
 
-A generator should export a function which receives three arguments:
+Генератор должен экспортировать функцию, которая принимает три аргумента:
 
-1. A [GeneratorAPI](generator-api.md) instance;
+1. Экземпляр [GeneratorAPI](generator-api.md);
 
-2. The generator options for this plugin. These options are resolved during the [prompt](#prompts) phase of project creation, or loaded from a saved preset in `~/.vuerc`. For example, if the saved `~/.vuerc` looks like this:
+2. Настройки генератора для плагина. Эти настройки разрешаются с помощью [интерактивных подсказок](#интерактивные-подсказки) во время фазы создания проекта или загружаются из сохранённого пресета в `~/.vuerc`. Например, если сохранённый файл `~/.vuerc` выглядит так:
 
-```json
-{
-  "presets" : {
-    "foo": {
-      "plugins": {
-        "@vue/cli-plugin-foo": { "option": "bar" }
+    ```json
+    {
+      "presets" : {
+        "foo": {
+          "plugins": {
+            "@vue/cli-plugin-foo": { "option": "bar" }
+          }
+        }
       }
     }
-  }
-}
-```
+    ```
 
-And if the user creates a project using the `foo` preset, then the generator of `@vue/cli-plugin-foo` will receive `{ option: 'bar' }` as its second argument.
+    Если пользователь создаёт проект, используя пресет `foo`, то генератор `@vue/cli-plugin-foo` получит `{ option: 'bar' }` в качестве второго аргумента.
 
-For a 3rd party plugin, the options will be resolved from the prompts or command line arguments when the user executes `vue invoke` (see [Prompts](#prompts)).
+    Для сторонних плагинов настройки будут разрешаются из интерактивных подсказок или аргументов командной строки, когда пользователь вызывает `vue invoke` (см. [интерактивные подсказки](#интерактивные-подсказки)).
 
-3. The entire preset (`presets.foo`) will be passed as the third argument.
+3. Всё содержимое пресета (`presets.foo`) будет передано в качестве третьего аргумента.
 
 ### Создание новых шаблонов
 
-When you call `api.render('./template')`, the generator will render files in `./template` (resolved relative to the generator file) with [EJS](https://github.com/mde/ejs).
+При вызове команды `api.render('./template')` генератор будет компилировать файлы из каталога `./template` (путь разрешается относительно файла генератора) с помощью [EJS](https://github.com/mde/ejs).
 
-Let's imagine we're creating [vue-cli-auto-routing](https://github.com/ktsn/vue-cli-plugin-auto-routing) plugin and we want to make the following changes to the project on plugin invoke:
+Представим, что разрабатываем плагин [vue-cli-auto-routing](https://github.com/ktsn/vue-cli-plugin-auto-routing) и хотим внести следующие изменения в проект при его вызове:
 
-- create a `layouts` folder with a default layout file;
-- create a `pages` folder with `about` and `home` pages;
-- add a `router.js` to the `src` folder root
+- создать каталог `layouts` с файлом шаблона по умолчанию;
+- создать каталог `pages` со страницами `about` и `home`;
+- добавить файл `router.js` в каталоге `src`
 
-To render this structure, you need to create it first inside the `generator/template` folder:
+Для создания такой структуры нужно сначала создать её внутри каталога `generator/template`:
 
-![Generator structure](/generator-template.png)
+![Структура файлов генератора](/generator-template.png)
 
-After template is created, you should add `api.render` call to the `generator/index.js` file:
+После создания шаблона необходимо добавить вызов `api.render` в файле `generator/index.js`:
 
 ```js
 module.exports = api => {
@@ -130,7 +130,7 @@ module.exports = api => {
 
 ### Изменение существующих шаблонов
 
-In addition, you can inherit and replace parts of an existing template file (even from another package) using YAML front-matter:
+Кроме того, можно унаследовать или заменить части существующего файла шаблона (даже из другого пакета) используя YAML front-matter:
 
 ```ejs
 ---
@@ -140,12 +140,12 @@ replace: !!js/regexp /<script>[^]*?<\/script>/
 
 <script>
 export default {
-  // Replace default script
+  // Заменяем скрипт по умолчанию
 }
 </script>
 ```
 
-It's also possible to do multiple replaces, although you will need to wrap your replace strings within `<%# REPLACE %>` and `<%# END_REPLACE %>` blocks:
+Также есть возможность заменять сразу несколько мест, для этого потребуется обернуть заменяющие строки в блоки `<%# REPLACE %>` и `<%# END_REPLACE %>`:
 
 ```ejs
 ---
@@ -156,13 +156,13 @@ replace:
 ---
 
 <%# REPLACE %>
-Replace Welcome Message
+Заменяем сообщение с приветствием
 <%# END_REPLACE %>
 
 <%# REPLACE %>
 <script>
 export default {
-  // Replace default script
+  // Заменяем скрипт по умолчанию
 }
 </script>
 <%# END_REPLACE %>
@@ -170,26 +170,26 @@ export default {
 
 ### Ограничения по именованию файлов
 
-If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
+При необходимости создания шаблона файла, имя которого начинается с точки (например, `.env`), необходимо следовать определённому соглашению об именовании, поскольку при публикации плагина в npm такие файлы игнорируются:
 
 ```bash
-# dotfile templates have to use an underscore instead of the dot:
+# Шаблон файла должен использовать символ подчёркивания вместо точки:
 
 /generator/template/_env
 
-# When calling api.render('./template'), this will be rendered in the project folder as:
+# При вызове api.render('./template') в каталоге проекта он будет сгенерирован как:
 
 /generator/template/.env
 ```
 
-Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
+Следовательно, также потребуется придерживаться определённого соглашения об именовании, если требуется сгенерировать файл, имя которого начинается с подчёркивания:
 
 ```bash
-# such templates have to use two underscores instead of one:
+# Шаблоны таких файлов должны использовать 2 символа подчёркивания вместо одного:
 
 /generator/template/__variables.scss
 
-# When calling api.render('./template'), this will be rendered in the project folder as:
+# При вызове api.render('./template') в каталоге проекта он будет сгенерирован как:
 
 /generator/template/_variables.scss
 ```
@@ -197,7 +197,7 @@ Consequently, this means that you also have to follow a special naming conventio
 
 ### Расширение пакета
 
-If you need to add an additional dependency to the project, create a new npm script or modify `package.json` in any other way, you can use API `extendPackage` method.
+Если нужно добавить новую зависимость к проекту, создать npm script или изменить `package.json` любым другим способом, можно использовать метод API `extendPackage`.
 
 ```js
 // generator/index.js
@@ -211,9 +211,9 @@ module.exports = api => {
 }
 ```
 
-In the example above we added one dependency: `vue-router-layout`. During the plugin invocation this npm module will be installed and this dependency will be added to the user `package.json` file.
+В примере выше добавляется одна зависимость: `vue-router-layout`. При вызове плагина этот npm-пакет будет установлен и зависимость добавлена в пользовательский файл `package.json`.
 
-With the same API method we can add new npm tasks to the project. To do so, we need to specify task name and a command that should be run in the `scripts` section of the user `package.json`:
+Этим же методом API можно добавлять npm-задачи в проект. Для этого нужно указать имя задачи и команду, которая будет выполняться, для добавления в секцию `scripts` файла `package.json`:
 
 ```js
 // generator/index.js
@@ -227,13 +227,13 @@ module.exports = api => {
 }
 ```
 
-In the example above we're adding a new `greet` task to run a custom vue-cli service command created in [Service section](#add-a-new-cli-service-command).
+В примере выше добавляется новая задача `greet`, которая будет запускать специальную команду сервиса vue-cli, создание которой подробнее описано в разделе [плагина для сервиса](#добавnение-новой-команды-в-cli-service).
 
 ### Изменение основного файла
 
-With generator methods you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc.
+С помощью методов генератора можно вносить изменения и в файлы проекта. Наиболее распространённым случаем является изменение основного файла `main.js` или `main.ts`: добавление новых импортов, вызовы новых `Vue.use()` и т.д.
 
-Let's consider the case where we have created a `router.js` file via [templating](#creating-new-templates) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` serves for adding new imports to this file:
+Рассмотрим случай, когда файл `router.js` создан с помощью [генерации новых шаблонов](#создание-новых-шабnонов) и теперь требуется импортировать этот маршрутизатор в основной файл. Для этого используем два метода API генератора: `entryFile` вернёт основной файл проекта (`main.js` или `main.ts`), а `injectImports` предоставит возможность добавить новые импорты в этот файл:
 
 ```js
 // generator/index.js
@@ -241,9 +241,9 @@ Let's consider the case where we have created a `router.js` file via [templating
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
-Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `afterInvoke` hook which is to be called when the files have been written to disk.
+Теперь, когда маршрутизатор импортирован, можно внедрить его в экземпляр Vue в основном файле. Для этого используем хук `afterInvoke`, который вызывается после записи файлов на диск.
 
-First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
+Сначала нужно прочитать содержимое основного файла с помощью модуля Node `fs` (который предоставляет API для взаимодействия с файловой системой) и разделить содержимое на строки:
 
 ```js
 // generator/index.js
@@ -257,7 +257,7 @@ module.exports.hooks = (api) => {
 }
 ```
 
-Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
+Затем находим строку, содержащую слово `render` (это обычно будет часть экземпляра Vue), и добавляем `router` в качестве следующей строки:
 
 ```js{9-10}
 // generator/index.js
@@ -274,7 +274,7 @@ module.exports.hooks = (api) => {
 }
 ```
 
-Finally, you need to write the content back to the main file:
+Наконец, нужно сохранить содержимое обратно в основной файл:
 
 ```js{12-13}
 // generator/index.js
@@ -296,17 +296,17 @@ module.exports.hooks = (api) => {
 
 ## Плагин для сервиса
 
-Service plugin serves for modifying webpack config, creating new vue-cli service commands or changing existing commands (such as `serve` and `build`).
+Плагин для сервиса позволяет вносить изменения в конфигурацию webpack, создавать новые vue-cli команды или изменять существующие (такие как `serve` и `build`).
 
-Service plugins are loaded automatically when a Service instance is created - i.e. every time the `vue-cli-service` command is invoked inside a project. It's located in the `index.js` file in CLI plugin root folder.
+Плагин для сервиса автоматически загружается при создании экземпляра сервиса — т.е. при каждом вызове команды `vue-cli-service` внутри проекта. Он располагается в файле `index.js` в корневом каталоге плагина CLI.
 
-A service plugin should export a function which receives two arguments:
+Плагин для сервиса должен экспортировать функцию, которая принимает два аргумента:
 
-- A [PluginAPI](plugin-api.md) instance
+- Экземпляр [PluginAPI](plugin-api.md)
 
-- An object containing project local options specified in `vue.config.js`, or in the `"vue"` field in `package.json`.
+- Объект, содержащий локальные настройки проекта, указанные в файле `vue.config.js` или в поле `"vue"` файла `package.json`.
 
-The minimal required code in the service plugin file is the following:
+Минимально необходимый код файла плагина сервиса приведён ниже:
 
 ```js
 module.exports = () => {}
@@ -314,7 +314,7 @@ module.exports = () => {}
 
 ### Изменение конфигурации webpack
 
-The API allows service plugins to extend/modify the internal webpack config for different environments. For example, here we're modifying webpack config with webpack-chain to include `vue-auto-routing` webpack plugin with given parameters:
+API позволяет плагину для сервиса расширять/изменять внутреннюю конфигурацию webpack для различных окружений. Например, модифицируем конфигурацию webpack с помощью webpack-chain для добавления плагина `vue-auto-routing` с заданными параметрами:
 
 ```js
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
@@ -333,70 +333,70 @@ module.exports = (api, options) => {
 }
 ```
 
-You can also use `configureWebpack` method to modify the  webpack config or return object to be merged with webpack-merge.
+Также можно использовать метод `configureWebpack` для изменении конфигурации webpack или возврата объекта, который будет объединён с помощью webpack-merge.
 
 ### Добавление новой команды в cli-service
 
-With service plugin you can register a new cli-service command in addition to standard ones (i.e. `serve` and `build`). You can do it with a `registerCommand` API method.
+С помощью плагина для сервиса можно зарегистрировать новую команду в cli-service в дополнение к стандартным (т.е. `serve` и `build`). Для этого можно использовать метод API `registerCommand`.
 
-Here is an example of creating a simple new command that will print a greeting to developer console:
+Пример создания простой новой команды, которая выводит приветствие в консоли разработчика:
 
 ```js
 api.registerCommand(
   'greet',
   {
-    description: 'Writes a greeting to the console',
+    description: 'Выводит приветствие в консоли',
     usage: 'vue-cli-service greet'
   },
   () => {
-    console.log(`👋  Hello`)
+    console.log(`👋  Привет`)
   }
 )
 ```
 
-In this example we provided the command name (`'greet'`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
+В этом примере мы задаём имя команды (`'greet'`), объект настроек с опциями `description` и `usage`, а также функцию которая выполняется при запуске команды `vue-cli-service greet`.
 
-:::tip
-You can add new command to the list of project npm scripts inside the `package.json` file [via Generator](#extending-package).
+:::tip Совет
+Также можно добавить новую команду в список npm-скриптов проекта внутри файла `package.json` [с помощью генератора](#расширение-пакета).
 :::
 
-If you try to run a new command in the project with your plugin installed, you will see the following output:
+При запуске новой команды в проекте с установленным плагином появится сообщение в консоли:
 
 ```bash
 $ vue-cli-service greet
-👋 Hello!
+👋 Привет!
 ```
 
-You can also specify a list of available options for a new command. Let's add the option `--name` and change the function to print this name if it's provided.
+Также можно указать список доступных опций для новой команды. Добавим опцию `--name` и изменим функцию для вывода этого имени, если оно было указано.
 
 ```js
 api.registerCommand(
   'greet',
   {
-    description: 'Writes a greeting to the console',
+    description: 'Выводит приветствие в консоль',
     usage: 'vue-cli-service greet [options]',
-    options: { '--name': 'specifies a name for greeting' }
+    options: { '--name': 'определяет имя для приветствия' }
   },
   args => {
     if (args.name) {
-      console.log(`👋 Hello, ${args.name}!`);
+      console.log(`👋 Привет, ${args.name}!`);
     } else {
-      console.log(`👋 Hello!`);
+      console.log(`👋 Привет!`);
     }
   }
 );
 ```
 
-Now, if you a `greet` command with a specified `--name` option, this name will be added to console message:
+Теперь, если запустить команду `greet` с указанной опцией `--name`, это имя будет выведено в сообщение в консоли:
 
 ```bash
-$ vue-cli-service greet --name 'John Doe'
-👋 Hello, John Doe!
+$ vue-cli-service greet --name 'Джон'
+👋 Привет, Джон!
 ```
 
 ### Изменение существующей команды в cli-service
 
-If you want to modify an existing cli-service command, you can retrieve it with `api.service.commands` and add some changes. We're going to print a message to the console with a port where application is running:
+Если необходимо изменить существующую команду cli-service, можно получить её с помощью `api.service.commands` и внести некоторые изменения. Мы выведем сообщение в консоль с номером порта, на котором запущено приложение:
 
 ```js
 const { serve } = api.service.commands
@@ -406,17 +406,17 @@ const serveFn = serve.fn
 serve.fn = (...args) => {
   return serveFn(...args).then(res => {
     if (res && res.url) {
-      console.log(`Project is running now at ${res.url}`)
+      console.log(`Проект запущен по адресу ${res.url}`)
     }
   })
 }
 ```
 
-In the example above we retrieve the `serve` command from the list of existing commands; then we modify its `fn` part (`fn` is the third parameter passed when you create a new command; it specifies the function to run when running the command). With the modification done the console message will be printed after `serve` command has run successfully.
+В примере выше сначала получаем команду `serve` из списка существующих команд; затем изменяем её `fn`-часть (`fn` — это третий параметр, передаваемый при создании новой команды; он определяет функцию, запускаемую при выполнении команды). После внесения модификаций сообщение в консоли будет выводиться после успешного выполнения команды `serve`.
 
-### Определение режимов работы для команд
+### Определение режима работы команды
 
-If a plugin-registered command needs to run in a specific default mode, the plugin needs to expose it via `module.exports.defaultModes` in the form of `{ [commandName]: mode }`:
+Если команда, зарегистрированная плагином, должна запускаться в определённом режиме, плагин должен определять его через `module.exports.defaultModes` в виде `{ [commandName]: mode }`:
 
 ```js
 module.exports = api => {
@@ -430,17 +430,17 @@ module.exports.defaultModes = {
 }
 ```
 
-This is because the command's expected mode needs to be known before loading environment variables, which in turn needs to happen before loading user options / applying the plugins.
+Это связано с тем, что ожидаемый режим для работы команды должен быть известен до загрузки переменных окружения, что произойдёт перед загрузкой пользовательских настроек / применением плагинов.
 
-## Подсказки
+## Интерактивные подсказки
 
-Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
+Интерактивные подсказки предназначены для обработки пользовательского выбора при создании нового проекта или добавлении нового плагина в существующий проект. Вся логика интерактивных подсказок расположена в файле `prompts.js`. Эти подсказки реализованы с помощью пакета [inquirer](https://github.com/SBoudrias/Inquirer.js) под капотом.
 
-When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js.
+Когда пользователь инициализирует плагин вызовом `vue invoke`, если плагин содержит `prompts.js` в своем корневом каталоге, он будет использован во время вызова. Файл должен экспортировать массив [вопросов](https://github.com/SBoudrias/Inquirer.js#question), которые затем будут обработаны Inquirer.js.
 
-You should export directly array of questions, or export function that return those.
+Необходимо экспортировать массив вопросов или функцию, которая возвращает его.
 
-e.g. directly array of questions:
+Например, экспорт непосредственно массива вопросов:
 ```js
 // prompts.js
 
@@ -448,7 +448,7 @@ module.exports = [
   {
     type: 'input',
     name: 'locale',
-    message: 'The locale of project localization.',
+    message: 'Используемый язык для локализации проекта.',
     validate: input => !!input,
     default: 'en'
   },
@@ -456,28 +456,28 @@ module.exports = [
 ]
 ```
 
-e.g. function that return array of questions:
+Или функция, которая возвращает массив вопросов:
 ```js
 // prompts.js
 
-// pass `package.json` of project to function argument
+// в качестве аргумента функции передаётся `package.json` проекта
 module.exports = pkg => {
   const prompts = [
     {
       type: 'input',
       name: 'locale',
-      message: 'The locale of project localization.',
+      message: 'Используемый язык для локализации проекта.',
       validate: input => !!input,
       default: 'en'
     }
   ]
 
-  // add dynamically prompt
+  // динамическое добавление интерактивной подсказки
   if ('@vue/cli-plugin-eslint' in (pkg.devDependencies || {})) {
     prompts.push({
       type: 'confirm',
       name: 'useESLintPluginVueI18n',
-      message: 'Use ESLint plugin for Vue I18n ?'
+      message: 'Использовать ESLint-плагин для Vue I18n?'
     })
   }
 
@@ -485,15 +485,15 @@ module.exports = pkg => {
 }
 ```
 
-The resolved answers object will be passed to the plugin's generator as options.
+Итоговый объект с ответами будет передан в генератор плагина в качестве настроек.
 
-Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
+Кроме того, пользователь может пропускать интерактивные подсказки и напрямую инициализировать плагин, передав опции через командную строку, например:
 
 ```bash
 vue invoke my-plugin --mode awesome
 ```
 
-Prompt can have [different types](https://github.com/SBoudrias/Inquirer.js#prompt-types) but the most widely used in CLI are `checkbox` and `confirm`. Let's add a `confirm` prompt and then use it in plugin generator to create a condition for [template rendering](#creating-new-templates).
+Интерактивные подсказки могут быть [различных типов](https://github.com/SBoudrias/Inquirer.js#prompt-types), но наиболее широко в CLI используются `checkbox` и `confirm`. Добавим интерактивную подсказку `confirm` и используем её в генераторе плагина чтобы создавать по условию [новый шаблон файла](#создание-новых-шабnонов).
 
 ```js
 // prompts.js
@@ -502,17 +502,17 @@ module.exports = [
   {
     name: `addExampleRoutes`,
     type: 'confirm',
-    message: 'Add example routes?',
+    message: 'Добавить примеры маршрутов?',
     default: false
   }
 ]
 ```
 
-On plugin invoke user will be prompted with the question about example routes and the default answer will be `No`.
+При вызове плагина пользователю будет предложено ответить на вопрос о добавлении примеров маршрутов и ответом по умолчанию будет выбран «Нет».
 
-![Prompts example](/prompts-example.png)
+![Пример интерактивных подсказок](/prompts-example.png)
 
-If you want to use the result of the user's choice in generator, it will be accessible with the prompt name. We can add a modification to `generator/index.js`:
+Если необходимо использовать результат выбора пользователя в генераторе, ответ будет доступен по имени интерактивной подсказки. Теперь можно модифицировать `generator/index.js`:
 
 ```js
 if (options.addExampleRoutes) {
@@ -522,96 +522,96 @@ if (options.addExampleRoutes) {
 }
 ```
 
-Now template will be rendered only if user agreed to create example routes.
+Шаблон будет генерироваться только если пользователь согласился создать примеры маршрутов.
 
 ## Локальная установка плагина
 
-While working on your plugin, you need to test it and check how it works locally on a project using Vue CLI. You can use an existing project or create a new one just for testing purposes:
+При разработке плагина может потребоваться протестировать его и проверить как он работает локально на проекте с помощью Vue CLI. Можно использовать существующий проект или создать новый в целях тестирования:
 
 ```bash
 vue create test-app
 ```
 
-To add the plugin, run the following command in the root folder of the project:
+Для добавления плагина выполните следующую команду в корневом каталоге проекта:
 
 ```bash
 npm install --save-dev file:/full/path/to/your/plugin
 vue invoke <your-plugin-name>
 ```
 
-You need to repeat these steps every time you make changes to your plugin.
+Это необходимо повторять каждый раз, когда вносите изменения в плагин.
 
-Another way to add a plugin is to leverage the power of Vue UI. You can run it with:
+Другой способ добавления плагина — воспользоваться возможностями Vue UI. Выполните команду:
 
 ```bash
 vue ui
 ```
 
-You will have a UI open in browser window on `localhost:8000`. Go to the `Vue Project Manager` tab:
+Пользовательский интерфейс откроется в браузере по адресу `localhost:8000`. Перейдите на вкладку `Vue Project Manager`:
 
-![Vue Project Manager](/ui-project-manager.png)
+![Менеджер проекта Vue](/ui-project-manager.png)
 
-And look for your test project name there:
+И найдите в списке название тестового проекта:
 
-![UI Plugins List](/ui-select-plugin.png)
+![Список плагинов в UI](/ui-select-plugin.png)
 
-Click on your application name, go to the Plugins tab (it has a puzzle icon) and then click the `Add new plugin` button on the top right. In the new view you will see a list of Vue CLI plugins accessible via npm. There is also a `Browse local plugin` button on the bottom of the page:
+Нажмите на названии приложения, перейдите на вкладку плагинов (значок пазла) и затем нажмите кнопку `Add new plugin` (Добавить новый плагин) в правом верхнем углу. На новой странице будет отображён список плагинов Vue CLI, доступных через npm. В нижней части страницы будет кнопка `Browse local plugin` (Выбор локального плагина):
 
-![Browse local plugins](/ui-browse-local-plugin.png)
+![Выбор локальный плагин](/ui-browse-local-plugin.png)
 
-After you click it, you can easily search for you plugin and add it to the project. After this you will be able to see it in plugins list and apply all changes done to the plugin via simply clicking on `Refresh` icon:
+В окне выбора легко найти тестируемый плагин и добавить в проект. После этого его можно будет увидеть в списке плагинов и применять изменения к плагину просто нажав на иконку обновления:
 
 ![Refresh plugin](/ui-plugin-refresh.png)
 
 ## Интеграция с UI
 
-Vue CLI has a great UI tool which allows user to scaffold and manage a project with a nice graphical interface. The Vue CLI plugin can be integrated to this interface. UI provides an additional functionality to CLI plugins:
+Vue CLI имеет отличный UI с помощью которого пользователь сможет разворачивать и управлять проектом в удобном графическом интерфейсе. Плагин Vue CLI может интегрироваться в этот интерфейс. UI предоставляет дополнительные возможности для плагинов CLI:
 
-- you can run npm tasks, including plugin-specific ones, directly from the UI;
-- you can display custom configurations for your plugin. For example, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) provides the following configuration screen for Apollo server:
+- можно запускать npm-задачи, в том числе и специфичные для плагинов, напрямую из UI;
+- можно отображать экран с настройками конфигурации плагина. Например, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) предоставляет отдельный экран для конфигурации сервера Apollo:
 
-![UI Configuration Screen](/ui-configuration.png)
-- when creating the project, you can display [prompts](#prompts) visually
-- you can add localizations for your plugin if you want to support multiple languages
-- you can make your plugin discoverable in the Vue UI search
+![Экран конфигурации в UI](/ui-configuration.png)
+- можно отображать [интерактивные подсказки](#интерактивные-подсказки) при создании проекта
+- можно добавлять локализации плагина при необходимости поддержки нескольких языков
+- можно сделать плагин обнаруживаемым при поиске в Vue UI
 
-All the logic connected to Vue UI should be placed to `ui.js` file in the root folder or in the `ui/index.js`. The file should export a function which gets the api object as argument:
+Вся логика, связанная с Vue UI, должна располагаться в файле `ui.js` в корневом каталоге или в `ui/index.js`. Файл должен экспортировать функцию, которая принимает аргументом объект api:
 
 ```js
 module.exports = api => {
-  // Use the API here...
+  // Используем API здесь...
 }
 ```
 
 ### Отображение задачи в UI
 
-Vue CLI plugin allows you not only add new npm tasks to the project [via Generator](#extending-package) but also create a view for them in Vue UI. It's useful when you want to run the the task right from the UI and see its output there.
+Плагин Vue CLI позволяет не только добавлять новые npm-задачи в проект [через Generator](#расширение-пакета), но и создавать новые экраны для использования в Vue UI. Это полезно, если хочется запускать задачу прямо из пользовательского интерфейса и видеть результаты её выполнения.
 
-Let's add a `greet` task created with [Generator](#extending-package) to the UI. Tasks are generated from the `scripts` field in the project `package.json` file. You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method. Let's provide some additional information about our task:
+Добавим в пользовательский интерфейс задачу `greet`, которую создавали с помощью [генератора](#расширение-пакета). Список задач генерируются из поля `scripts` файла проекта `package.json`. Можно «дополнить» задачу дополнительной информацией и хуками с помощью метода `api.describeTask`:
 
 ```js
 module.exports = api => {
   api.describeTask({
     match: /greet/,
-    description: 'Prints a greeting in the console',
-    link: 'https://cli.vuejs.org/dev-guide/plugin-dev.html#core-concepts'
+    description: 'Выводит приветствие в консоль',
+    link: 'https://cli.vuejs.org/ru/dev-guide/plugin-dev.html'
   })
 }
 ```
 
-Now if you explore your project in the Vue UI, you will find your task added to the `Tasks` section. You can see a name of the task, provided description, a link icon that leads to the provided URL and also an output screen to show the task output:
+Теперь в обзоре проекта через Vue UI можно увидеть, что задача добавлена в секцию `Tasks`. Можно увидеть её название, предоставленное описание, иконку ссылки, которая ведёт на указанный URL, а также экран для отображения результатов выполнения задачи:
 
-![UI Greet task](/ui-greet-task.png)
+![Задача Greet в UI](/ui-greet-task.png)
 
 ### Отображение экрана конфигурации
 
-Sometimes your project can have custom configuration files for different features or libraries. With Vue CLI plugin you can display this config in Vue UI, change it and save (saving will change the corresponding config file in your project). By default, Vue CLI project has a main configuration screen representing `vue.config.js` settings. If you included ESLint to your project, you will see also a ESLint configuration screen:
+Иногда проект может иметь пользовательские файлы конфигураций для различных функций или библиотек. С помощью плагина Vue CLI можно отображать эту конфигурацию в Vue UI, изменять её и сохранять (сохранение изменит соответствующий конфигурационный файл в вашем проекте). По умолчанию, проект Vue CLI имеет главный экран конфигурации, отображающий настройки из `vue.config.js`. Если добавить ESLint в проект, то будет виден также экран конфигурации ESLint:
 
 ![UI Configuration Screen](/ui-configuration-default.png)
 
-Let's build a custom configuration for our plugin. First of all, after you add your plugin to the existing project, there should be a file containing this custom config. This means you need to add this file to `template` folder on the [templating step](#creating-new-templates).
+Давайте создадим пользовательский экран конфигурации для плагина. Прежде всего, после добавления плагина в существующий проект, должен быть файл, содержащий эту пользовательскую конфигурацию. Это означает, что требуется добавить этот файл в каталог `template` для [шага создания новых шаблонов](#создание-новых-шабnонов).
 
-By default, a configuration UI might read and write to the following file types: `json`, `yaml`, `js`, `package`. Let's name our new file `myConfig.js` and place in it the root of `template` folder:
+По умолчанию пользовательский интерфейс конфигурации может читать и записывать файлы следующих форматов: `json`, `yaml`, `js`, `package`. Назовём новый файл `myConfig.js` и поместим его в корне каталога `template`:
 
 ```
 .
@@ -625,7 +625,7 @@ By default, a configuration UI might read and write to the following file types:
             └── router.js
 ```
 
-Now you need to add some actual config to this file:
+Теперь необходимо добавить в этот файл какую-то актуальную конфигурацию:
 
 ```js
 // myConfig.js
@@ -635,52 +635,52 @@ module.exports = {
 }
 ```
 
-After your plugin is invoked, the `myConfig.js` file will be rendered in the project root directory. Now let's add a new configuration screen with the `api.describeConfig` method in the `ui.js` file:
+После вызова плагина файл `myConfig.js` будет сгенерирован в корневом каталоге проекта. Теперь добавим новый экран конфигурации с помощью метода `api.describeConfig` в файле `ui.js`:
 
-First you need to pass some information:
+Сначала нужно передать некоторую информацию:
 
 ```js
 // ui.js
 
 api.describeConfig({
-  // Unique ID for the config
+  // Уникальный ID для конфигурации
   id: 'org.ktsn.vue-auto-routing.config',
-  // Displayed name
-  name: 'Greeting configuration',
-  // Shown below the name
-  description: 'This config defines the color of the greeting printed',
-  // "More info" link
+  // Отображаемое имя
+  name: 'Настройка приветствия',
+  // Описание, отображаемое под именем
+  description: 'Можно настроить цвет текста приветствия',
+  // Ссылка «More info»
   link: 'https://github.com/ktsn/vue-cli-plugin-auto-routing#readme'
 })
 ```
 
-:::danger Warning
-Make sure to namespace the id correctly, since it must be unique across all plugins. It's recommended to use the [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)
+:::danger Предупреждение
+Убедитесь в точности пространства имён для id, так как он должен быть уникальным для всех плагинов. Рекомендуется использовать [обратную нотацию записи доменного имени](https://en.wikipedia.org/wiki/Reverse_domain_name_notation)
 :::
 
-#### Config logo
+#### Логотип конфигурации
 
-You can also select an icon for your config. It can be either a [Material icon](https://material.io/tools/icons/?style=baseline) code or a custom image (see [Public static files](ui-api.md#public-static-files)).
+Можно выбрать значок для конфигурации. Это может быть код [значка Material](https://material.io/tools/icons/?style=baseline) или пользовательское изображение (см. [публичные статические файлы](ui-api.md#пубnичные-статические-файnы)).
 
 ```js
 // ui.js
 
 api.describeConfig({
   /* ... */
-  // Config icon
+  // Значок конфигурации
   icon: 'color_lens'
 })
 ```
 
-If you don't specify an icon, the plugin logo will be displayed if any (see [Logo](#logo)).
+Если значок не указан, будет использоваться логотип плагина если такой есть (см. [Логотип](#логотип)).
 
-#### Config files
+#### Файлы конфигурации
 
-Now you need to provide your configuration file to UI: this way you could read its content and save changes to it. You need to choose a name for your config file, select its format and provide a path to the file:
+Теперь, если необходимо предоставить файл конфигурации для UI: таким образом можно будет читать его содержимое и сохранять изменения в нём. Для этого необходимо указать имя конфигурационного файла, выбрать его формат и указать путь к нему:
 
 ```js
 api.describeConfig({
-  // other config properties
+  // другие свойства конфигурации
   files: {
     myConfig: {
       js: ['myConfig.js']
@@ -689,21 +689,21 @@ api.describeConfig({
 })
 ```
 
-There can be more than one file provided. Say, if we have `myConfig.json`, we can provide it with `json: ['myConfig.json']` property. The order is important: the first filename in the list will be used to create the config file if it doesn't exist.
+Можно указывать больше одного файла. Например, если есть `myConfig.json`, можно указать его в свойстве `json: ['myConfig.json']`. Порядок важен: первое имя файла в списке будет использовано для создания файла конфигурации, если его не существует.
 
-#### Display config prompts
+#### Отображение интерактивных подсказок конфигурации
 
-We want to display an input field for color property on the configuration screen. To do so, we need a `onRead` hook that will return a list of prompts to be displayed:
+Отобразим поля ввода для свойства цвета на экране конфигурации. Для этого используем хук `onRead`, который вернёт список интерактивных подсказок для отображения:
 
 ```js
 api.describeConfig({
-  // other config properties
+  // другие свойства конфигурации
   onRead: ({ data }) => ({
     prompts: [
       {
         name: `color`,
         type: 'input',
-        message: 'Define the color for greeting message',
+        message: 'Цвет сообщения с приветствием',
         value: 'white'
       }
     ]
@@ -711,11 +711,11 @@ api.describeConfig({
 })
 ```
 
-In the example above we specified the input prompt with the value of 'white'. This is how our configuration screen will look with all the settings provided above:
+В примере выше мы добавили интерактивную подсказку в виде поля со значением `white`. Вот как будет выглядеть экран конфигурации со всеми приведёнными выше настройками:
 
-![UI Config Start](/ui-config-start.png)
+![Начало конфигурации UI](/ui-config-start.png)
 
-Now let's replace hardcoded `white` value with the property from the config file. In the `onRead` hook `data` object contains the JSON result of each config file content. In our case, the content of `myConfig.js` was
+Теперь заменим явно указанное значение `white` на свойство из конфигурационного файла. В хуке `onRead` объект `data` содержит JSON с результатом каждого файла конфигурации. В нашем случае, содержание `myConfig.js` было таким:
 
 ```js
 // myConfig.js
@@ -725,19 +725,19 @@ module.exports = {
 }
 ```
 
-So, the `data` object will be
+Поэтому объект `data` будет таким:
 
 ```js
 {
-  // File
+  // Файл
   myConfig: {
-    // File data
+    // Данные файла
     color: 'black'
   }
 }
 ```
 
-It's easy to see that we need `data.myConfig.color` property. Let's change `onRead` hook:
+Легко увидеть, что нам необходимо свойство `data.myConfig.color`. Изменим хук `onRead`:
 
 ```js
 // ui.js
@@ -747,20 +747,20 @@ onRead: ({ data }) => ({
     {
       name: `color`,
       type: 'input',
-      message: 'Define the color for greeting message',
+      message: 'Цвет сообщения с приветствием',
       value: data.myConfig && data.myConfig.color
     }
   ]
 }),
 ```
 
-::: tip
-Note that `myConfig` may be undefined if the config file doesn't exist when the screen is loaded.
+::: tip Совет
+Обратите внимание, что `myConfig` может быть неопределён, если конфигурационного файла не существует при загрузке экрана.
 :::
 
-You can see that on the configuration screen `white` is replaced with `black`.
+Как можно увидеть на экране конфигурации значение `white` заменилось на `black`.
 
-We can also provide a default value if the config file is not present:
+Также можно предоставить значение по умолчанию, если конфигурационный файл отсутствует:
 
 ```js
 // ui.js
@@ -770,7 +770,7 @@ onRead: ({ data }) => ({
     {
       name: `color`,
       type: 'input',
-      message: 'Define the color for greeting message',
+      message: 'Цвет сообщения с приветствием',
       value: data.myConfig && data.myConfig.color,
       default: 'black',
     }
@@ -778,9 +778,9 @@ onRead: ({ data }) => ({
 }),
 ```
 
-#### Save config changes
+#### Сохранение конфигурации после изменений
 
-We just read the content of `myConfig.js` and used it on the configuration screen. Now let's try to save any changes done in the color input field to the file. We can do it with the `onWrite` hook:
+Пока мы лишь считали содержимое `myConfig.js` и использовали его на экране конфигурации. Теперь попробуем сохранить все изменения в файл. Это можно сделать с помощью хука `onWrite`:
 
 ```js
 // ui.js
@@ -793,7 +793,7 @@ api.describeConfig({
 })
 ```
 
-`onWrite` hook can take a lot of [arguments](ui-api.html#save-config-changes) but we will need only two of them: `prompts` and `api`. First one is current prompts runtime objects - we will get a prompt id from it and retrieve an answer with this id. To retrieve the answer we'll use `async getAnswer()` method from the `api`:
+Хук `onWrite` принимает множество [аргументов](ui-api.html#сохранение-изменений-конфигурации), но нам необходимо только два из них: `prompts` и `api`. В первом текущие объекты интерактивных подсказок — мы молучим id интерактивной подсказки и ответ для этого id. Для получения ответа воспользуемся методом `async getAnswer()` из `api`:
 
 ```js
 // ui.js
@@ -807,7 +807,7 @@ async onWrite({ api, prompts }) {
 }
 ```
 
-Now if you try to change the value in the color input field from `black` to `red` on the config screen and press `Save the changes`, you will observe that `myConfig.js` file in your project has been changed as well:
+Теперь, если изменить значение цвета в поле ввода с `black` на `red` на экране конфигурации и нажать кнопку `Save the changes`, то содержимое файла `myConfig.js` в проекте также изменится:
 
 ```js
 // myConfig.js
@@ -817,65 +817,64 @@ module.exports = {
 }
 ```
 
-### Отображение подсказок
+### Отображение интерактивных подсказок
 
-If you want, you can display [prompts](#prompts) in the Vue UI as well. When installing your plugin through the UI, prompts will be shown on the plugin invocation step.
+При желании можно также отображать [интерактивные подсказки](#интерактивные-подсказки) в Vue UI. При установке плагина через UI, интерактивные подсказки будут отображены на шаге вызова плагина.
 
-You can extend the [inquirer object](#prompts-for-3rd-party-plugins) with additional properties. They are optional and only used by the UI:
+[Объект inquirer](#prompts-for-3rd-party-plugins) можно расширить дополнительными свойствами. Они опциональны и используются только в UI:
 
 ```js
 // prompts.js
 
 module.exports = [
   {
-    // basic prompt properties
+    // основные свойства интерактивных подсказок
     name: `addExampleRoutes`,
     type: 'confirm',
-    message: 'Add example routes?',
+    message: 'Добавить примеры маршрутов?',
     default: false,
-    // UI-related prompt properties
-    group: 'Strongly recommended',
-    description: 'Adds example pages, layouts and correct router config',
-    link:
-      'https://github.com/ktsn/vue-cli-plugin-auto-routing/#vue-cli-plugin-auto-routing'
+    // свойства интерактивных подсказок для UI
+    group: 'Настоятельно рекомендуется',
+    description: 'Добавить примеры страниц, шаблонов и конфигурацию маршрутизатора',
+    link: 'https://github.com/ktsn/vue-cli-plugin-auto-routing/#vue-cli-plugin-auto-routing'
   }
 ]
 ```
 
-As a result, you will have this screen on plugin invocation:
+В результате при вызове плагина появится такой экран:
 
-![UI Prompts](/ui-prompts.png)
+![Интерактивные подсказки в UI](/ui-prompts.png)
 
 ### Логотип
 
-You can put a `logo.png` file in the root directory of the folder that will be published on npm. It will be displayed in several places:
- - When searching for a plugin to install
- - In the installed plugin list
- - In the configurations list (by default)
- - In the tasks list for augmented tasks (by default)
+Можно поместить файл `logo.png` в корне каталога, который будет публиковаться в npm. Тогда его можно будет увидеть в нескольких местах:
+ - При поиска плагина для установки
+ - В списке установленных плагинов
+ - В списке конфигураций (по умолчанию)
+ - В списке дополненных задач (по умолчанию)
 
-![Plugins](/plugins.png)
+![Плагины](/plugins.png)
 
-The logo should be a square non-transparent image (ideally 84x84).
+Логотип должен быть квадратным изображением без прозрачности (в идеале 84x84).
 
 ## Публикация плагина в npm
 
-To publish your plugin, you need to be registered an [npmjs.com](npmjs.com) and you should have `npm` installed globally. If it's your first npm module, please run
+Для публикации плагина необходимо быть зарегистрированным на [npmjs.com](npmjs.com) и `npm` должна быть установлена глобально. Если это ваш первый npm-модуль, запустите команду:
 
 ```bash
 npm login
 ```
 
-Enter your username and password. This will store the credentials so you don’t have to enter it for every publish.
+Введите имя пользователя и пароль. Это позволит сохранить учётные данные, чтобы не пришлось вводить их при каждой публикации.
 
-:::tip
-Before publishing a plugin, make sure you choose a right name for it! Name convention is `vue-cli-plugin-<name>`. Check [Discoverability](#discoverability) section for more information
+:::tip Совет
+Перед публикацией плагина убедитесь, что выбрали правильно имя для него! Соглашение по именованию `vue-cli-plugin-<name>`. Дополнительную информации см. в разделе [Именование и обнаруживаемость в поиске](#именование-и-обнаруживаемость-в-поиске).
 :::
 
-To publish a plugin, go to the plugin root folder and run this command in the terminal:
+Для публикации плагина перейдите в корневой каталог и выполните команду в терминале:
 
 ```bash
 npm publish
 ```
 
-After successful publish, you should be able to add your plugin to the project created with Vue CLI with `vue add <plugin-name>` command.
+После успешной публикации можно будет добавить ваш плагин в проект, созданный с помощью Vue CLI командой `vue add <plugin-name>`.
