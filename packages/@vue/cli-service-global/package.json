@@ -28,11 +28,11 @@
     "@vue/cli-service": "^4.1.1",
     "babel-eslint": "^10.0.3",
     "chalk": "^2.4.2",
-    "core-js": "^3.4.3",
+    "core-js": "^3.4.4",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "regenerator-runtime": "^0.13.2",
-    "resolve": "^1.13.0",
+    "resolve": "^1.13.1",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10"
   }

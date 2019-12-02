@@ -1,8 +1,11 @@
-const chalk = require('chalk')
-const semver = require('semver')
 const invoke = require('./invoke')
 const inquirer = require('inquirer')
-const { resolveModule, loadModule } = require('@vue/cli-shared-utils')
+const {
+  chalk,
+  semver,
+  resolveModule,
+  loadModule
+} = require('@vue/cli-shared-utils')
 
 const PackageManager = require('./util/ProjectPackageManager')
 const {

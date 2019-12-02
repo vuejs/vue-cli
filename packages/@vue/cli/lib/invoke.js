@@ -1,15 +1,19 @@
 const fs = require('fs-extra')
 const path = require('path')
-const execa = require('execa')
-const chalk = require('chalk')
 const inquirer = require('inquirer')
 const {
+  chalk,
+  execa,
+
   log,
   error,
-  hasProjectGit,
   logWithSpinner,
   stopSpinner,
+
+  hasProjectGit,
+
   resolvePluginId,
+
   loadModule
 } = require('@vue/cli-shared-utils')
 

@@ -1,9 +1,6 @@
 const path = require('path')
-const chalk = require('chalk')
 const debug = require('debug')
-const execa = require('execa')
 const inquirer = require('inquirer')
-const semver = require('semver')
 const EventEmitter = require('events')
 const Generator = require('./Generator')
 const cloneDeep = require('lodash.clonedeep')
@@ -27,16 +24,22 @@ const {
 } = require('./options')
 
 const {
+  chalk,
+  execa,
+  semver,
+
   log,
   warn,
   error,
+  logWithSpinner,
+  stopSpinner,
+
   hasGit,
   hasProjectGit,
   hasYarn,
   hasPnpm3OrLater,
   hasPnpmVersionOrLater,
-  logWithSpinner,
-  stopSpinner,
+
   exit,
   loadModule
 } = require('@vue/cli-shared-utils')

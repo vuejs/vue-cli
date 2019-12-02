@@ -1,6 +1,5 @@
-const chalk = require('chalk')
+const { chalk, execa } = require('@vue/cli-shared-utils')
 const EventEmitter = require('events')
-const execa = require('execa')
 const readline = require('readline')
 
 const debug = require('debug')('vue-cli:install')

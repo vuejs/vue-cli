@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const semver = require('semver')
-const { warn, pauseSpinner, resumeSpinner } = require('@vue/cli-shared-utils')
+const { semver, warn, pauseSpinner, resumeSpinner } = require('@vue/cli-shared-utils')
 
 const findExisting = (context, files) => {
   for (const file of files) {

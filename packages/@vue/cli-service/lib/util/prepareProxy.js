@@ -9,7 +9,7 @@
 const fs = require('fs')
 const url = require('url')
 const path = require('path')
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 const address = require('address')
 
 const defaultConfig = {

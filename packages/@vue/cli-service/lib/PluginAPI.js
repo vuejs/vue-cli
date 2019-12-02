@@ -1,7 +1,6 @@
 const path = require('path')
 const hash = require('hash-sum')
-const semver = require('semver')
-const { matchesPluginId } = require('@vue/cli-shared-utils')
+const { semver, matchesPluginId } = require('@vue/cli-shared-utils')
 
 // Note: if a plugin-registered command needs to run in a specific default mode,
 // the plugin needs to expose it via `module.exports.defaultModes` in the form

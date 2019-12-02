@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
-const chalk = require('chalk')
 const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
@@ -9,7 +8,7 @@ const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { warn, error, isPlugin, resolvePluginId, loadModule } = require('@vue/cli-shared-utils')
+const { chalk, warn, error, isPlugin, resolvePluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 

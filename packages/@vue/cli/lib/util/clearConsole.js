@@ -1,8 +1,14 @@
-const chalk = require('chalk')
-const execa = require('execa')
-const semver = require('semver')
 const getVersions = require('./getVersions')
-const { clearConsole, hasYarn, hasPnpm3OrLater } = require('@vue/cli-shared-utils')
+const {
+  chalk,
+  execa,
+  semver,
+
+  clearConsole,
+
+  hasYarn,
+  hasPnpm3OrLater
+} = require('@vue/cli-shared-utils')
 
 async function getInstallationCommand () {
   if (hasYarn()) {

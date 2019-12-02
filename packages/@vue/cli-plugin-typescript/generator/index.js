@@ -42,7 +42,7 @@ module.exports = (api, {
     if (lintOn.includes('commit')) {
       api.extendPackage({
         devDependencies: {
-          'lint-staged': '^9.4.3'
+          'lint-staged': '^9.5.0'
         },
         gitHooks: {
           'pre-commit': 'lint-staged'

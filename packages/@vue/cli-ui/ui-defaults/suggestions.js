@@ -1,5 +1,4 @@
-const semver = require('semver')
-const { loadModule } = require('@vue/cli-shared-utils')
+const { semver, loadModule } = require('@vue/cli-shared-utils')
 const invoke = require('@vue/cli/lib/invoke')
 const add = require('@vue/cli/lib/add')
 
