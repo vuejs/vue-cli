@@ -64,7 +64,6 @@
     "portfinder": "^1.0.25",
     "postcss-loader": "^3.0.0",
     "read-pkg": "^5.1.1",
-    "slash": "^3.0.0",
     "ssri": "^7.1.0",
     "terser-webpack-plugin": "^2.2.1",
     "thread-loader": "^2.1.3",
