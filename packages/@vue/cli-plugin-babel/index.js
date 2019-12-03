@@ -24,7 +24,9 @@ module.exports = (api, options) => {
   // try to load the project babel config;
   // if the default preset is used,
   // there will be a VUE_CLI_TRANSPILE_BABEL_RUNTIME env var set.
-  babel.loadPartialConfig()
+  // the `filename` field is required
+  // in case there're filename-related options like `ignore` in the user config
+  babel.loadPartialConfig({ filename: api.resolve('src/main.js') })
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
