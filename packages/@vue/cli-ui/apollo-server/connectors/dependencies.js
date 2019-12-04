@@ -102,7 +102,7 @@ async function getMetadata (id, context) {
     metadataCache.set(id, metadata)
     return metadata
   } else {
-    log('Dependencies', chalk.yellow(`Can't load metadata`), id)
+    log('Dependencies', chalk.yellow('Can\'t load metadata'), id)
   }
 }
 
@@ -170,7 +170,7 @@ function getLink ({ id, file }, context) {
   const pkg = readPackage({ id, file }, context)
   return pkg.homepage ||
     (pkg.repository && pkg.repository.url) ||
-    `https://www.npmjs.com/package/${id.replace(`/`, `%2F`)}`
+    `https://www.npmjs.com/package/${id.replace('/', '%2F')}`
 }
 
 function install ({ id, type, range }, context) {
@@ -196,7 +196,7 @@ function install ({ id, type, range }, context) {
     }, context)
 
     notify({
-      title: `Dependency installed`,
+      title: 'Dependency installed',
       message: `Dependency ${id} successfully installed`,
       icon: 'done'
     })
@@ -225,7 +225,7 @@ function uninstall ({ id }, context) {
     }, context)
 
     notify({
-      title: `Dependency uninstalled`,
+      title: 'Dependency uninstalled',
       message: `Dependency ${id} successfully uninstalled`,
       icon: 'done'
     })
@@ -253,7 +253,7 @@ function update ({ id }, context) {
     }, context)
 
     notify({
-      title: `Dependency updated`,
+      title: 'Dependency updated',
       message: `Dependency ${id} was successfully updated`,
       icon: 'done'
     })
@@ -267,7 +267,7 @@ function update ({ id }, context) {
 function updateAll (context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     const deps = list(cwd.get(), context)
-    let updatedDeps = []
+    const updatedDeps = []
     for (const dep of deps) {
       const version = await getVersion(dep, context)
       if (version.current !== version.wanted) {
@@ -278,8 +278,8 @@ function updateAll (context) {
 
     if (!updatedDeps.length) {
       notify({
-        title: `No updates available`,
-        message: `No dependency to update in the version ranges declared in package.json`,
+        title: 'No updates available',
+        message: 'No dependency to update in the version ranges declared in package.json',
         icon: 'done'
       })
       return []
@@ -294,7 +294,7 @@ function updateAll (context) {
     await pm.upgrade(updatedDeps.map(p => p.id).join(' '))
 
     notify({
-      title: `Dependencies updated`,
+      title: 'Dependencies updated',
       message: `${updatedDeps.length} dependencies were successfully updated`,
       icon: 'done'
     })

@@ -49,7 +49,7 @@ function findByPath (file, context) {
 }
 
 function autoClean (projects, context) {
-  let result = []
+  const result = []
   for (const project of projects) {
     if (fs.existsSync(project.path)) {
       result.push(project)
@@ -77,7 +77,7 @@ function getLast (context) {
 function generatePresetDescription (preset) {
   let description = preset.features.join(', ')
   if (preset.raw.useConfigFiles) {
-    description += ` (Use config files)`
+    description += ' (Use config files)'
   }
   return description
 }
@@ -347,7 +347,7 @@ async function create (input, context) {
     removeCreator()
 
     notify({
-      title: `Project created`,
+      title: 'Project created',
       message: `Project ${cwd.get()} created`,
       icon: 'done'
     })
@@ -466,7 +466,7 @@ async function autoOpenLastProject () {
     try {
       await open(id, context)
     } catch (e) {
-      log(`Project can't be auto-opened`, id)
+      log('Project can\'t be auto-opened', id)
     }
   }
 }
