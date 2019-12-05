@@ -3,15 +3,12 @@ exports.config = api => {
     root: true,
     env: { node: true },
     extends: ['plugin:vue/essential'],
-    parserOptions: {
-      ecmaVersion: 2020
-    },
     rules: {
       'no-console': makeJSOnlyValue(`process.env.NODE_ENV === 'production' ? 'error' : 'off'`),
       'no-debugger': makeJSOnlyValue(`process.env.NODE_ENV === 'production' ? 'error' : 'off'`)
     }
   }
-  if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
+  if (!api.hasPlugin('typescript')) {
     config.parserOptions = {
       parser: 'babel-eslint'
     }

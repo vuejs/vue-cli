@@ -17,7 +17,8 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     }
   }
 
-  if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
+  if (!api.hasPlugin('typescript')) {
+    // required for dynamic import support
     pkg.devDependencies['babel-eslint'] = '^10.0.3'
   }
 
