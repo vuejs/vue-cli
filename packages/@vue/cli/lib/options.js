@@ -68,7 +68,7 @@ exports.loadOptions = () => {
         `Error loading saved preferences: ` +
         `~/.vuerc may be corrupted or have syntax errors. ` +
         `Please fix/delete it and re-run vue-cli in manual mode.\n` +
-        `(${e.message})`,
+        `(${e.message})`
       )
       exit(1)
     }
