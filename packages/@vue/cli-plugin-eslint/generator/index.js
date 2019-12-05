@@ -33,7 +33,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   case 'standard':
     eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^5.0.0',
+      '@vue/eslint-config-standard': '^5.0.1',
       'eslint-plugin-import': '^2.18.2',
       'eslint-plugin-node': '^9.1.0',
       'eslint-plugin-promise': '^4.2.1',
