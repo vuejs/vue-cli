@@ -16,7 +16,7 @@
 
 В дополнение к [значениям по умолчанию, предоставляемым `html-webpack-plugin`](https://github.com/jantimon/html-webpack-plugin#writing-your-own-templates), все [переменные окружения в клиентском коде](./mode-and-env.md#испоnьзование-переменных-окружения-в-кnиентском-коде) также доступны напрямую. Например, чтобы использовать значение `BASE_URL`:
 
-``` html
+```html
 <link rel="icon" href="<%= BASE_URL %>favicon.ico">
 ```
 
@@ -39,9 +39,13 @@
 
 Эти подсказки внедряются [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) и могут быть изменены / удалены с помощью `chainWebpack` через `config.plugin('prefetch')`.
 
+::: tip Примечание для многостраничных конфигураций
+При использовании многостраничной конфигурации имя плагина нужно изменить в соответствии со структурой `prefetch-{pagename}`, например `prefetch-app`.
+:::
+
 Например:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
@@ -61,7 +65,7 @@ module.exports = {
 
 Когда prefetch плагин отключён, вы можете вручную указывать необходимые фрагменты для prefetch с помощью инлайновых комментариев для webpack:
 
-``` js
+```js
 import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
 ```
 
@@ -75,7 +79,7 @@ Webpack добавит prefetch-ссылки когда родительский
 
 При использовании Vue CLI с существующим бэкендом, вам может потребоваться отключить генерацию `index.html`, чтобы сгенерированные ресурсы могли быть использованы с другим документом по умолчанию. Для этого добавьте в файл [`vue.config.js`](../config/#vue-config-js) следующее:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   // отключение хэшей в именах файлов
@@ -115,13 +119,13 @@ module.exports = {
 
 Например, `url(./image.png)` будет преобразован в `require('./image.png')`, а тег шаблона
 
-``` html
+```html
 <img src="./image.png">
 ```
 
 будет скомпилирован в:
 
-``` js
+```js
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
@@ -129,7 +133,7 @@ h('img', { attrs: { src: require('./image.png') }})
 
 Изменить размер можно через [chainWebpack](../config/#chainwebpack). Например, чтобы установить лимит в 10 КБайт:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
@@ -150,7 +154,7 @@ module.exports = {
 
 - Если URL начинается с `~`, то всё что после него будет интерпретироваться как запрос модуля. Это означает, что вы можете ссылаться на ресурсы даже внутри `node_modules`:
 
-  ``` html
+  ```html
   <img src="~some-npm-package/foo.png">
   ```
 
@@ -170,13 +174,13 @@ module.exports = {
 
 - В `public/index.html` или других HTML-файлах, используемых `html-webpack-plugin` в качестве шаблонов, необходимо добавлять префикс в ссылки с помощью `<%= BASE_URL %>`:
 
-  ``` html
+  ```html
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   ```
 
 - В шаблонах потребуется сначала передать `BASE_URL` в компонент:
 
-  ``` js
+  ```js
   data () {
     return {
       publicPath: process.env.BASE_URL
@@ -186,7 +190,7 @@ module.exports = {
 
   А затем использовать в шаблоне:
 
-  ``` html
+  ```html
   <img :src="`${publicPath}my-image.png`">
   ```
 

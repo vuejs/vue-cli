@@ -272,15 +272,13 @@ module.exports = {
           {
             text: 'Плагины',
             items: [
-              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
-              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript' },
-              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' },
-              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa' },
-              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest' },
-              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha' },
-              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress' },
-              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch' }
+              { text: 'Основные плагины', link: '/ru/core-plugins/' },
+              { text: 'Просмотр плагинов', link: 'https://awesomejs.dev/for/vue-cli/' }
             ]
+          },
+          {
+            text: 'Миграция с v3',
+            link: '/ru/migrating-from-v3/'
           },
           {
             text: 'История изменений',
@@ -311,12 +309,21 @@ module.exports = {
                 '/ru/guide/webpack',
                 '/ru/guide/mode-and-env',
                 '/ru/guide/build-targets',
-                '/ru/guide/deployment'
+                '/ru/guide/deployment',
+                '/ru/guide/troubleshooting'
               ]
             }
           ],
           '/ru/dev-guide/': [
             '/ru/dev-guide/plugin-dev.md',
+            {
+              title: 'Справочник API',
+              collapsable: false,
+              children: [
+                '/ru/dev-guide/plugin-api.md',
+                '/ru/dev-guide/generator-api.md',
+              ]
+            },
             {
               title: 'Разработка UI',
               collapsable: false,
@@ -326,7 +333,21 @@ module.exports = {
                 '/ru/dev-guide/ui-localization.md'
               ]
             }
-          ]
+          ],
+          '/ru/core-plugins/': [{
+            title: 'Основные плагины Vue CLI',
+            collapsable: false,
+            children: [
+              '/ru/core-plugins/babel.md',
+              '/ru/core-plugins/typescript.md',
+              '/ru/core-plugins/eslint.md',
+              '/ru/core-plugins/pwa.md',
+              '/ru/core-plugins/unit-jest.md',
+              '/ru/core-plugins/unit-mocha.md',
+              '/ru/core-plugins/e2e-cypress.md',
+              '/ru/core-plugins/e2e-nightwatch.md'
+            ]
+          }]
         }
       }
     }
