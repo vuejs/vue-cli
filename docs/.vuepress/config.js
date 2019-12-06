@@ -14,7 +14,12 @@ module.exports = {
       lang: 'ru',
       title: 'Vue CLI',
       description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
-    }
+    },
+    '/': {
+      lang: 'en-US',
+      title: 'Vue CLI',
+      description: '🛠️ Standard Tooling for Vue.js Development'
+    },
   },
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }],
@@ -42,7 +47,11 @@ module.exports = {
         '/ru/': {
           message: 'Доступно обновление контента',
           buttonText: 'Обновить'
-        }
+        },
+        '/': {
+          message: "New content is available.",
+          buttonText: "Refresh"
+        },
       }
     }
   },
@@ -328,7 +337,111 @@ module.exports = {
             }
           ]
         }
-      }
+      },
+      '/': {
+        label: 'English',
+        selectText: 'Languages',
+        lastUpdated: 'Last Updated',
+        editLinkText: 'Edit this page on GitHub',
+        nav: [
+          {
+            text: 'Guide',
+            link: '/guide/'
+          },
+          {
+            text: 'Config Reference',
+            link: '/config/'
+          },
+          {
+            text: 'Plugin Dev Guide',
+            items: [
+              { text: 'Plugin Dev Guide', link: '/dev-guide/plugin-dev.md' },
+              { text: 'UI Plugin Info', link: '/dev-guide/ui-info.md' },
+              { text: 'UI Plugin API', link: '/dev-guide/ui-api.md' },
+              { text: 'UI Localization', link: '/dev-guide/ui-localization.md' }
+            ]
+          },
+          {
+            text: 'Plugins',
+            items: [
+              { text: 'Core plugins', link: '/core-plugins/' },
+              { text: 'Browse plugins', link: 'https://awesomejs.dev/for/vue-cli/' }
+            ]
+          },
+          {
+            text: 'Migrating From v3',
+            link: '/migrating-from-v3/'
+          },
+          {
+            text: 'Changelog',
+            link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
+          }
+        ],
+        sidebar: {
+          '/guide/': [
+            '/guide/',
+            '/guide/installation',
+            {
+              title: 'Basics',
+              collapsable: false,
+              children: [
+                '/guide/prototyping',
+                '/guide/creating-a-project',
+                '/guide/plugins-and-presets',
+                '/guide/cli-service'
+              ]
+            },
+            {
+              title: 'Development',
+              collapsable: false,
+              children: [
+                '/guide/browser-compatibility',
+                '/guide/html-and-static-assets',
+                '/guide/css',
+                '/guide/webpack',
+                '/guide/mode-and-env',
+                '/guide/build-targets',
+                '/guide/deployment',
+                '/guide/troubleshooting'
+              ]
+            }
+          ],
+          '/dev-guide/': [
+            '/dev-guide/plugin-dev.md',
+            {
+              title: 'API reference',
+              collapsable: false,
+              children: [
+                '/dev-guide/plugin-api.md',
+                '/dev-guide/generator-api.md',
+              ]
+            },
+            {
+              title: 'UI Development',
+              collapsable: false,
+              children: [
+                '/dev-guide/ui-info.md',
+                '/dev-guide/ui-api.md',
+                '/dev-guide/ui-localization.md'
+              ]
+            }
+          ],
+          '/core-plugins/': [{
+            title: 'Core Vue CLI Plugins',
+            collapsable: false,
+            children: [
+              '/core-plugins/babel.md',
+              '/core-plugins/typescript.md',
+              '/core-plugins/eslint.md',
+              '/core-plugins/pwa.md',
+              '/core-plugins/unit-jest.md',
+              '/core-plugins/unit-mocha.md',
+              '/core-plugins/e2e-cypress.md',
+              '/core-plugins/e2e-nightwatch.md'
+            ]
+          }],
+        }
+      },
     }
   }
 }
