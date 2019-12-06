@@ -15,10 +15,10 @@ module.exports = {
       title: 'Vue CLI',
       description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
     },
-    '/': {
-      lang: 'en-US',
+    '/ja/': {
+      lang: 'ja',
       title: 'Vue CLI',
-      description: '🛠️ Standard Tooling for Vue.js Development'
+      description: '🛠️ Vue.js 開発用の標準ツール'
     },
   },
   head: [
@@ -48,9 +48,9 @@ module.exports = {
           message: 'Доступно обновление контента',
           buttonText: 'Обновить'
         },
-        '/': {
-          message: "New content is available.",
-          buttonText: "Refresh"
+        '/ja/': {
+          message: "新しいコンテンツが利用可能です。",
+          buttonText: "更新"
         },
       }
     }
@@ -338,106 +338,106 @@ module.exports = {
           ]
         }
       },
-      '/': {
-        label: 'English',
-        selectText: 'Languages',
-        lastUpdated: 'Last Updated',
-        editLinkText: 'Edit this page on GitHub',
+      '/ja/': {
+        label: '日本語',
+        selectText: '言語',
+        lastUpdated: '最終更新日',
+        editLinkText: 'GitHub でこのページを編集する',
         nav: [
           {
-            text: 'Guide',
-            link: '/guide/'
+            text: 'ガイド',
+            link: '/ja/guide/'
           },
           {
-            text: 'Config Reference',
-            link: '/config/'
+            text: '構成リファレンス',
+            link: '/ja/config/'
           },
           {
-            text: 'Plugin Dev Guide',
+            text: 'プラグイン開発ガイド',
             items: [
-              { text: 'Plugin Dev Guide', link: '/dev-guide/plugin-dev.md' },
-              { text: 'UI Plugin Info', link: '/dev-guide/ui-info.md' },
-              { text: 'UI Plugin API', link: '/dev-guide/ui-api.md' },
-              { text: 'UI Localization', link: '/dev-guide/ui-localization.md' }
+              { text: 'プラグイン開発ガイド', link: '/ja/dev-guide/plugin-dev.md' },
+              { text: 'UI プラグイン情報', link: '/ja/dev-guide/ui-info.md' },
+              { text: 'UI プラグイン API', link: '/ja/dev-guide/ui-api.md' },
+              { text: 'UI ローカライズ', link: '/ja/dev-guide/ui-localization.md' }
             ]
           },
           {
-            text: 'Plugins',
+            text: 'プラグイン',
             items: [
-              { text: 'Core plugins', link: '/core-plugins/' },
-              { text: 'Browse plugins', link: 'https://awesomejs.dev/for/vue-cli/' }
+              { text: 'コアプラグイン', link: '/ja/core-plugins/' },
+              { text: 'ブラウザプラグイン', link: 'https://awesomejs.dev/for/vue-cli/' }
             ]
           },
           {
-            text: 'Migrating From v3',
-            link: '/migrating-from-v3/'
+            text: 'v3からの移行',
+            link: '/ja/migrating-from-v3/'
           },
           {
-            text: 'Changelog',
+            text: '変更履歴',
             link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
           }
         ],
         sidebar: {
-          '/guide/': [
-            '/guide/',
-            '/guide/installation',
+          '/ja/guide/': [
+            '/ja/guide/',
+            '/ja/guide/installation',
             {
-              title: 'Basics',
+              title: '基本',
               collapsable: false,
               children: [
-                '/guide/prototyping',
-                '/guide/creating-a-project',
-                '/guide/plugins-and-presets',
-                '/guide/cli-service'
+                '/ja/guide/prototyping',
+                '/ja/guide/creating-a-project',
+                '/ja/guide/plugins-and-presets',
+                '/ja/guide/cli-service'
               ]
             },
             {
-              title: 'Development',
+              title: '開発',
               collapsable: false,
               children: [
-                '/guide/browser-compatibility',
-                '/guide/html-and-static-assets',
-                '/guide/css',
-                '/guide/webpack',
-                '/guide/mode-and-env',
-                '/guide/build-targets',
-                '/guide/deployment',
-                '/guide/troubleshooting'
+                '/ja/guide/browser-compatibility',
+                '/ja/guide/html-and-static-assets',
+                '/ja/guide/css',
+                '/ja/guide/webpack',
+                '/ja/guide/mode-and-env',
+                '/ja/guide/build-targets',
+                '/ja/guide/deployment',
+                '/ja/guide/troubleshooting'
               ]
             }
           ],
-          '/dev-guide/': [
-            '/dev-guide/plugin-dev.md',
+          '/ja/dev-guide/': [
+            '/ja/dev-guide/plugin-dev.md',
             {
-              title: 'API reference',
+              title: 'API リファレンス',
               collapsable: false,
               children: [
-                '/dev-guide/plugin-api.md',
-                '/dev-guide/generator-api.md',
+                '/ja/dev-guide/plugin-api.md',
+                '/ja/dev-guide/generator-api.md',
               ]
             },
             {
-              title: 'UI Development',
+              title: 'UI 開発',
               collapsable: false,
               children: [
-                '/dev-guide/ui-info.md',
-                '/dev-guide/ui-api.md',
-                '/dev-guide/ui-localization.md'
+                '/ja/dev-guide/ui-info.md',
+                '/ja/dev-guide/ui-api.md',
+                '/ja/dev-guide/ui-localization.md'
               ]
             }
           ],
-          '/core-plugins/': [{
-            title: 'Core Vue CLI Plugins',
+          '/ja/core-plugins/': [{
+            title: 'コア Vue CLI プラグイン',
             collapsable: false,
             children: [
-              '/core-plugins/babel.md',
-              '/core-plugins/typescript.md',
-              '/core-plugins/eslint.md',
-              '/core-plugins/pwa.md',
-              '/core-plugins/unit-jest.md',
-              '/core-plugins/unit-mocha.md',
-              '/core-plugins/e2e-cypress.md',
-              '/core-plugins/e2e-nightwatch.md'
+              '/ja/core-plugins/babel.md',
+              '/ja/core-plugins/typescript.md',
+              '/ja/core-plugins/eslint.md',
+              '/ja/core-plugins/pwa.md',
+              '/ja/core-plugins/unit-jest.md',
+              '/ja/core-plugins/unit-mocha.md',
+              '/ja/core-plugins/e2e-cypress.md',
+              '/ja/core-plugins/e2e-nightwatch.md'
             ]
           }],
         }
