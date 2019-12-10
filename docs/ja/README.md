@@ -25,7 +25,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
   </div>
   <div class="feature">
     <h2>簡単なプロトタイピング</h2>
-    <p>単一のVueファイルを使用して、新しいアイデアを即座にプロトタイプ化します。</p>
+    <p>単一ファイルコンポーネントを使用して、新しいアイデアを即座にプロトタイプ化します。</p>
   </div>
   <div class="feature">
     <h2>将来の準備</h2>
