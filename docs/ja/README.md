@@ -17,7 +17,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
   </div>
   <div class="feature">
     <h2>取り出す必要はない</h2>
-    <p>Vue CLIは、取り出すことなく完全に構成可能です。これにより、プロジェクトを長期にわたって最新の状態に保つことができます。</p>
+    <p>Vue CLIは、取り出すことなく設定可能です。これにより、プロジェクトを長期にわたって最新の状態に保つことができます。</p>
   </div>
   <div class="feature">
     <h2>グラフィカル・ユーザー・インターフェース</h2>
