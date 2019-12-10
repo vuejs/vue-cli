@@ -28,7 +28,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
     <p>単一ファイルコンポーネントを使用して、新しいアイデアを即座にプロトタイプ化します。</p>
   </div>
   <div class="feature">
-    <h2>将来の準備</h2>
+    <h2>将来に向けて</h2>
     <p>最新のブラウザ向けにネイティブのES2015のコードを簡単に出荷するか、vueコンポーネントをネイティブのWebコンポーネントとしてビルドします。</p>
   </div>
 </div>
