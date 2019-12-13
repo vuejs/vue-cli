@@ -1,8 +1,8 @@
 # Plugins
 
-Vue CLI uses a plugin-based architecture. If you inspect a newly created project's `package.json`, you will find dependencies that start with `@vue/cli-plugin-`. Plugins can modify the internal webpack configuration and inject commands to `vue-cli-service`. Most of the features listed during the project creation process are implemented as plugins.
+Vue CLI はプラグインベースのアーキテクチャを使用します。 新しく作成されたプロジェクトの `package.json` を調べると、 `@vue/cli-plugin-` で始まる依存関係が見つかります。プラグインは内部で利用している webpack の設定を変更し、コマンドを `vue-cli-service` に注入できます。プロジェクト作成のプロセス中に表示される機能のほとんどは、プラグインとして実装されます。
 
-This section contains documentation for core Vue CLI plugins:
+このセクションには、コア Vue CLI プラグインのドキュメントが含まれています。
 
 - [Babel](babel.md)
 - [TypeScript](typescript.md)
