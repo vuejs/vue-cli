@@ -39,7 +39,7 @@ module.exports = (api, options) => {
     webpackConfig.resolve
       // This plugin can be removed once we switch to Webpack 6
       .plugin('pnp')
-        .use(require('pnp-webpack-plugin'))
+        .use({ ...require('pnp-webpack-plugin') })
         .end()
       .extensions
         .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
@@ -60,7 +60,7 @@ module.exports = (api, options) => {
 
     webpackConfig.resolveLoader
       .plugin('pnp-loaders')
-        .use(require('pnp-webpack-plugin').topLevelLoader)
+        .use({ ...require('pnp-webpack-plugin').topLevelLoader })
         .end()
       .modules
         .add('node_modules')
