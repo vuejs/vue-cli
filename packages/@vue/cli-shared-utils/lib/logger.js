@@ -1,7 +1,6 @@
 const chalk = require('chalk')
 const stripAnsi = require('strip-ansi')
 const readline = require('readline')
-const padStart = require('string.prototype.padstart')
 const EventEmitter = require('events')
 
 exports.events = new EventEmitter()
@@ -20,7 +19,7 @@ const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
     return i === 0
       ? `${label} ${line}`
-      : padStart(line, stripAnsi(label).length)
+      : line.padStart(stripAnsi(label).length)
   }).join('\n')
 }
 

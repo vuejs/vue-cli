@@ -248,9 +248,7 @@ if (!process.argv.slice(2).length) {
 }
 
 function suggestCommands (unknownCommand) {
-  const availableCommands = program.commands.map(cmd => {
-    return cmd._name
-  })
+  const availableCommands = program.commands.map(cmd => cmd._name)
 
   const suggestion = didYouMean(unknownCommand, availableCommands)
   if (suggestion) {
