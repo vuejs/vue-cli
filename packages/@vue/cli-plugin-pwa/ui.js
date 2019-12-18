@@ -15,7 +15,13 @@ module.exports = api => {
         json: ['public/manifest.json']
       }
     },
-    onRead: ({ data, cwd }) => {
+    onRead: ({ data }) => {
+      // Dirty hack here: only in onRead can we delete files from the original data.
+      // Remove (or, don't create the file) manifest.json if no actual content in it.
+      if (!data.manifest || !Object.keys(data.manifest).length) {
+        delete data.manifest
+      }
+
       return {
         prompts: [
           {
@@ -58,7 +64,12 @@ module.exports = api => {
             message: 'org.vue.pwa.config.pwa.backgroundColor.message',
             description: 'org.vue.pwa.config.pwa.backgroundColor.description',
             default: '#000000',
-            value: data.manifest && data.manifest.background_color,
+            value:
+              (data.vue &&
+                data.vue.pwa &&
+                data.vue.pwa.manifestOptions &&
+                data.vue.pwa.manifestOptions.background_color) ||
+              (data.manifest && data.manifest.background_color),
             skipSave: true
           },
           {
@@ -82,12 +93,12 @@ module.exports = api => {
             type: 'list',
             message: 'org.vue.pwa.config.pwa.manifestCrossorigin.message',
             description: 'org.vue.pwa.config.pwa.manifestCrossorigin.description',
-            default: undefined,
+            default: null,
             value: data.vue && data.vue.pwa && data.vue.pwa.manifestCrossorigin,
             choices: [
               {
                 name: 'none',
-                value: undefined
+                value: null
               },
               {
                 name: 'anonymous',
@@ -102,35 +113,42 @@ module.exports = api => {
         ]
       }
     },
-    onWrite: async ({ onWriteApi, prompts, cwd }) => {
+    onWrite: async ({ api: onWriteApi, data, prompts }) => {
       const result = {}
       for (const prompt of prompts.filter(p => !p.raw.skipSave)) {
         result[`pwa.${prompt.id}`] = await onWriteApi.getAnswer(prompt.id)
       }
-      onWriteApi.setData('vue', result)
-
-      // Update app manifest
-
-      const name = result['name']
-      if (name) {
-        onWriteApi.setData('manifest', {
-          name,
-          short_name: name
-        })
-      }
-
-      const themeColor = result['themeColor']
-      if (themeColor) {
-        onWriteApi.setData('manifest', {
-          theme_color: themeColor
-        })
-      }
 
       const backgroundColor = await onWriteApi.getAnswer('backgroundColor')
-      if (backgroundColor) {
-        onWriteApi.setData('manifest', {
-          background_color: backgroundColor
-        })
+      if (!data.manifest && backgroundColor) {
+        result['pwa.manifestOptions.background_color'] = backgroundColor
+      }
+
+      onWriteApi.setData('vue', result)
+
+      // Update app manifest (only when there's a manifest.json file,
+      // otherwise it will be inferred from options in vue.config.js)
+      if (data.manifest) {
+        const name = result['name']
+        if (name) {
+          onWriteApi.setData('manifest', {
+            name,
+            short_name: name
+          })
+        }
+
+        const themeColor = result['themeColor']
+        if (themeColor) {
+          onWriteApi.setData('manifest', {
+            theme_color: themeColor
+          })
+        }
+
+        if (backgroundColor) {
+          onWriteApi.setData('manifest', {
+            background_color: backgroundColor
+          })
+        }
       }
     }
   })
