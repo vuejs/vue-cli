@@ -36,7 +36,7 @@ async function ui (options = {}, context = process.cwd()) {
     subscriptionsPath: '/graphql',
     enableMocks: false,
     enableEngine: false,
-    cors: '*',
+    cors: 'localhost',
     timeout: 1000000,
     quiet: true,
     paths: {
