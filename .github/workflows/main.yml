@@ -1,0 +1,16 @@
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Check Tests
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: testomatio/check-tests
+        with:
+          framework: jest
+          tests: tests/**.spec.js
+          token: ${{ secrets.GITHUB_TOKEN }}
+          has-tests-label: true
