@@ -1,4 +1,43 @@
 
+## 4.1.2 (2019-12-28)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-pwa`
+  * [#4974](https://github.com/vuejs/vue-cli/pull/4974) fix: fix several bugs in the PWA plugin UI, make it usable again ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#4922](https://github.com/vuejs/vue-cli/pull/4922) fix: should download to different directories for different presets ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`
+  * [#4924](https://github.com/vuejs/vue-cli/pull/4924) fix: do not throw when babel config contains ignore/include/exclude ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* `@vue/cli-service-global`
+  * [#5004](https://github.com/vuejs/vue-cli/pull/5004) build: fix link to homepage ([@Scrum](https://github.com/Scrum))
+* `@vue/cli-plugin-unit-jest`
+  * [#4754](https://github.com/vuejs/vue-cli/pull/4754) Update debugging instructions ([@zigomir](https://github.com/zigomir))
+* Other
+  * [#4976](https://github.com/vuejs/vue-cli/pull/4976) docs: his -> their ([@sodatea](https://github.com/sodatea))
+  * [#4973](https://github.com/vuejs/vue-cli/pull/4973) docs: mention navigateFallback option for PWA App Shell caching ([@clementmas](https://github.com/clementmas))
+  * [#4917](https://github.com/vuejs/vue-cli/pull/4917) docs: [RU] Translation update ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+
+#### :house: Internal
+* `@vue/cli`
+  * [#4904](https://github.com/vuejs/vue-cli/pull/4904) refactor: use inline approach ([@jamesgeorge007](https://github.com/jamesgeorge007))
+* `@vue/cli-service`
+  * [#4909](https://github.com/vuejs/vue-cli/pull/4909) changed var-name `async` to `isAsync` ([@ikumargaurav](https://github.com/ikumargaurav))
+
+#### Committers: 9
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Ivan Demidov ([@Scrum](https://github.com/Scrum))
+- James George ([@jamesgeorge007](https://github.com/jamesgeorge007))
+- Jorge Moliner ([@whoisjorge](https://github.com/whoisjorge))
+- Jun-Kyu Kim ([@x6ax6b](https://github.com/x6ax6b))
+- Kumar Gaurav ([@ikumargaurav](https://github.com/ikumargaurav))
+- clem ([@clementmas](https://github.com/clementmas))
+- ziga ([@zigomir](https://github.com/zigomir))
+
+
+
 ## 4.1.1 (2019-11-27)
 
 #### :bug: Bug Fix
