@@ -31,6 +31,11 @@ file, or the `"vue"` field in `package.json`.
 
   These options are passed on through to the underlying `workbox-webpack-plugin`.
 
+  If you're using the App Shell pattern with the `GenerateSW` mode, you can configure your entry point like this to make sure all your pages load offline:
+  ```js
+  navigateFallback: 'index.html'
+  ```
+
   For more information on what values are supported, please see the guide for
   [`GenerateSW`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_generatesw_config)
   or for [`InjectManifest`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_injectmanifest_config).
@@ -112,6 +117,13 @@ module.exports = {
     msTileColor: '#000000',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
+    
+    // configure the manifest options
+    manifestOptions: {
+      display: 'landscape',
+      background_color: '#42B883'
+      // ...other Manifest options...
+    },
 
     // configure the workbox plugin
     workboxPluginMode: 'InjectManifest',

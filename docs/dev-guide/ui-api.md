@@ -146,7 +146,7 @@ See [Prompts](#prompts) for more info.
 
 The `data` object contains the JSON result of each config file content.
 
-For example, let's say the user has the following `vue.config.js` in his project:
+For example, let's say the user has the following `vue.config.js` in their project:
 
 ```js
 module.exports = {
