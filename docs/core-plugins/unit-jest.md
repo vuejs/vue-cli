@@ -23,10 +23,10 @@ If you want to debug your tests via the Node inspector, you can run the followin
 
 ```sh
 # macOS or linux
-node --inspect-brk ./node_modules/.bin/vue-cli-service test:unit
+node --inspect-brk ./node_modules/.bin/vue-cli-service test:unit --runInBand
 
 # Windows
-node --inspect-brk ./node_modules/@vue/cli-service/bin/vue-cli-service.js test:unit
+node --inspect-brk ./node_modules/@vue/cli-service/bin/vue-cli-service.js test:unit --runInBand
 ```
 
 ## Configuration
