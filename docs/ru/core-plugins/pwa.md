@@ -111,6 +111,13 @@ module.exports = {
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
 
+    // настройки манифеста
+    manifestOptions: {
+      display: 'landscape',
+      background_color: '#42B883'
+      // ...другие настройки манифеста...
+    },
+
     // настройка workbox-плагина
     workboxPluginMode: 'InjectManifest',
     workboxOptions: {
