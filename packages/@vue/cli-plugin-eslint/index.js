@@ -41,7 +41,7 @@ module.exports = (api, options) => {
             .add(/node_modules/)
             .add(path.dirname(require.resolve('@vue/cli-service')))
             .end()
-          .test(/\.(vue|(j|t)sx?)$/)
+          .test(/\.(vue|(j|t)sx?|coffee)$/)
           .use('eslint-loader')
             .loader(require.resolve('eslint-loader'))
             .options({

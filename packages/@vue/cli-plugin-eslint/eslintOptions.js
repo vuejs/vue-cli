@@ -25,6 +25,13 @@ function makeJSOnlyValue (str) {
 }
 
 const baseExtensions = ['.js', '.jsx', '.vue']
-exports.extensions = api => api.hasPlugin('typescript')
-  ? baseExtensions.concat('.ts', '.tsx')
-  : baseExtensions
+exports.extensions = api => {
+  let extensions = baseExtensions
+  if (api.hasPlugin('typescript')) {
+    extensions = extensions.concat('.ts', '.tsx')
+  }
+  if (api.hasPlugin('coffee')) {
+    extensions = extensions.concat('.coffee')
+  }
+  return extensions
+}
