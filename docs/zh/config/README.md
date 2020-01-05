@@ -138,7 +138,7 @@ module.exports = {
 
 ### lintOnSave
 
-- Type: `boolean` | `'warning'` | `'default'` | `'error'` 
+- Type: `boolean` | `'warning'` | `'default'` | `'error'`
 - Default: `true`
 
   是否在开发环境下通过 [eslint-loader](https://github.com/webpack-contrib/eslint-loader) 在每次保存时 lint 代码。这个值会在 [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) 被安装之后生效。
