@@ -103,7 +103,7 @@ module.exports = (api, options) => {
     const protocol = useHttps ? 'https' : 'http'
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
-    const port = await portfinder.getPortPromise()
+    const port = projectDevServerOptions.socket || await portfinder.getPortPromise()
     const rawPublicUrl = args.public || projectDevServerOptions.public
     const publicUrl = rawPublicUrl
       ? /^[a-zA-Z]+:\/\//.test(rawPublicUrl)
@@ -241,23 +241,28 @@ module.exports = (api, options) => {
 
         console.log()
         console.log(`  App running at:`)
-        console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
-        if (!isInContainer) {
-          console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
-        } else {
-          console.log()
-          console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
-          if (!publicUrl && options.publicPath && options.publicPath !== '/') {
+        if (!projectDevServerOptions.socket) {
+          console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
+          if (!isInContainer) {
+            console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
+          } else {
             console.log()
-            console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
-            console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
-            console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
-            console.log()
+            console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
+            if (!publicUrl && options.publicPath && options.publicPath !== '/') {
+              console.log()
+              console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
+              console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
+              console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
+              console.log()
+            }
+            console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
+              `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
+            )}`))
           }
-          console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
-            `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
-          )}`))
+        } else {
+          console.log(`  - UNIX Socket:   ${chalk.cyan(projectDevServerOptions.socket)}`)
         }
+       
         console.log()
 
         if (isFirstCompile) {
