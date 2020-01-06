@@ -262,7 +262,6 @@ module.exports = (api, options) => {
         } else {
           console.log(`  - UNIX Socket:   ${chalk.cyan(projectDevServerOptions.socket)}`)
         }
-       
         console.log()
 
         if (isFirstCompile) {
