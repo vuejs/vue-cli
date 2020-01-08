@@ -176,6 +176,7 @@ class PackageManager {
     }
   }
 
+  // https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md
   async getMetadata (packageName, { full = false } = {}) {
     const registry = await this.getRegistry()
 
