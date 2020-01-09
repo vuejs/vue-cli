@@ -91,5 +91,5 @@ exports.build = (_entry, args) => {
   if (asLib) {
     args.entry = entry
   }
-  createService(entry, asLib).run('build', args)
+  return createService(entry, asLib).run('build', args)
 }
