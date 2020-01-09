@@ -19,11 +19,11 @@ module.exports = (api, options) => {
     options: {
       '--open': `open browser on server start`,
       '--copy': `copy url to clipboard on server start`,
+      '--stdin': `close when stdin ends`,
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
-      '--stdin': `close when stdin ends`,
       '--public': `specify the public network URL for the HMR client`,
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`
     }
