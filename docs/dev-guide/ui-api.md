@@ -64,7 +64,7 @@ vue ui -D
 
 You can add a project configuration with the `api.describeConfig` method.
 
-First you need to pass some informations:
+First you need to pass some information:
 
 ```js
 api.describeConfig({
@@ -146,7 +146,7 @@ See [Prompts](#prompts) for more info.
 
 The `data` object contains the JSON result of each config file content.
 
-For example, let's say the user has the following `vue.config.js` in his project:
+For example, let's say the user has the following `vue.config.js` in their project:
 
 ```js
 module.exports = {
@@ -350,6 +350,14 @@ api.describeTask({
 })
 ```
 
+You can also use a function for `match`:
+
+```js
+api.describeTask({
+  match: (command) => /vue-cli-service serve/.test(command),
+})
+```
+
 ### Task icon
 
 It can be either a [Material icon](https://material.io/tools/icons) code or a custom image (see [Public static files](#public-static-files)):
@@ -430,7 +438,7 @@ api.describeTask({
     if (answers.mode) args.push('--mode', answers.mode)
     args.push('--dashboard')
   },
-  // Immediatly after running the task
+  // Immediately after running the task
   onRun: async ({ args, child, cwd }) => {
     // child: node child process
     // cwd: process working directory
@@ -518,7 +526,7 @@ However, you can add the following additional fields (which are optional and onl
 }
 ```
 
-Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`, `editor`.
 
 In addition to those, the UI supports special types that only works with it:
 
@@ -620,7 +628,7 @@ A Client addon is a JS bundle which is dynamically loaded into the cli-ui. It is
 
 ### Create a client addon
 
-The recommended way to create a Client addon is by creating a new project using vue-cli 3. You can either do this in a subfolder of your plugin or in a different npm package.
+The recommended way to create a Client addon is by creating a new project using vue cli. You can either do this in a subfolder of your plugin or in a different npm package.
 
 Install `@vue/cli-ui` as a dev dependency.
 
@@ -1252,7 +1260,7 @@ You can also open a page instead when the user activates the suggestion with `ac
 ```js
 api.addSuggestion({
   id: 'com.my-name.my-suggestion',
-  type: 'action', // Required 
+  type: 'action', // Required
   label: 'Add vue-router',
   // Open a new tab
   actionLink: 'https://vuejs.org/'
@@ -1266,7 +1274,7 @@ const ROUTER = 'vue-router-add'
 
 api.onViewOpen(({ view }) => {
   if (view.id === 'vue-project-plugins') {
-    if (!api.hasPlugin('vue-router')) {
+    if (!api.hasPlugin('router')) {
       api.addSuggestion({
         id: ROUTER,
         type: 'action',
@@ -1274,7 +1282,7 @@ api.onViewOpen(({ view }) => {
         message: 'org.vue.cli-service.suggestions.vue-router-add.message',
         link: 'https://router.vuejs.org/',
         async handler () {
-          await install(api, 'vue-router')
+          await install(api, 'router')
         }
       })
     }
@@ -1287,6 +1295,58 @@ api.onViewOpen(({ view }) => {
 In this example we only display the vue-router suggestion in the plugins view and if the project doesn't have vue-router installed already.
 
 Note: `addSuggestion` and `removeSuggestion` can be namespaced with `api.namespace()`.
+
+## Widgets
+
+You can register a widget for the project dashboard in your plugin ui file:
+
+```js
+registerWidget({
+  // Unique ID
+  id: 'org.vue.widgets.news',
+  // Basic infos
+  title: 'org.vue.widgets.news.title',
+  description: 'org.vue.widgets.news.description',
+  icon: 'rss_feed',
+  // Main component used to render the widget
+  component: 'org.vue.widgets.components.news',
+  // (Optional) Secondary component for widget 'fullscreen' view
+  detailsComponent: 'org.vue.widgets.components.news',
+  // Size
+  minWidth: 2,
+  minHeight: 1,
+  maxWidth: 6,
+  maxHeight: 6,
+  defaultWidth: 2,
+  defaultHeight: 3,
+  // (Optional) Limit the maximum number of this widget on the dashboard
+  maxCount: 1,
+  // (Optional) Add a 'fullscreen' button in widget header
+  openDetailsButton: true,
+  // (Optional) Default configuration for the widget
+  defaultConfig: () => ({
+    url: 'https://vuenews.fireside.fm/rss'
+  }),
+  // (Optional) Require user to configure widget when added
+  // You shouldn't use `defaultConfig` with this
+  needsUserConfig: true,
+  // (Optional) Display prompts to configure the widget
+  onConfigOpen: async ({ context }) => {
+    return {
+      prompts: [
+        {
+          name: 'url',
+          type: 'input',
+          message: 'org.vue.widgets.news.prompts.url',
+          validate: input => !!input // Required
+        }
+      ]
+    }
+  }
+})
+```
+
+Note: `registerWidget` can be namespaced with `api.namespace()`.
 
 ## Other methods
 
@@ -1322,6 +1382,21 @@ Get currently open project.
 
 ```js
 api.getProject()
+```
+
+### requestRoute
+
+Switch the user on a specific route in the web client.
+
+```js
+api.requestRoute({
+  name: 'foo',
+  params: {
+    id: 'bar'
+  }
+})
+
+api.requestRoute('/foobar')
 ```
 
 ## Public static files

@@ -1,0 +1,13 @@
+fragment widgetDefinition on WidgetDefinition {
+  id
+  title
+  description
+  longDescription
+  link
+  icon
+  screenshot
+  component
+  canAddMore
+  count
+  maxCount
+}

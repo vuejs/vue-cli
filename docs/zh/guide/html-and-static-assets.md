@@ -21,7 +21,7 @@
 ```
 
 更多内容可以查阅：
-- [baseUrl](../config/#baseurl)
+- [publicPath](../config/#publicpath)
 
 ### Preload
 
@@ -52,7 +52,7 @@ module.exports = {
     // 修改它的选项：
     config.plugin('prefetch').tap(options => {
       options[0].fileBlacklist = options[0].fileBlacklist || []
-      options[0].fileBlacklist.push([/myasyncRoute(.)+?\.js$/])
+      options[0].fileBlacklist.push(/myasyncRoute(.)+?\.js$/)
       return options
     })
   }
@@ -125,7 +125,22 @@ module.exports = {
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-在其内部，我们通过 `file-loader` 用版本哈希值和正确的公共基础路径来决定最终的文件路径，再用 `url-loader` 将小于 10kb 的资源内联，以减少 HTTP 请求的数量。
+在其内部，我们通过 `file-loader` 用版本哈希值和正确的公共基础路径来决定最终的文件路径，再用 `url-loader` 将小于 4kb 的资源内联，以减少 HTTP 请求的数量。
+
+你可以通过 [chainWebpack](../config/#chainwebpack) 调整内联文件的大小限制。例如，下列代码会将其限制设置为 10kb：
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('images')
+        .use('url-loader')
+          .loader('url-loader')
+          .tap(options => Object.assign(options, { limit: 10240 }))
+  }
+}
+```
 
 ### URL 转换规则
 
@@ -136,7 +151,7 @@ h('img', { attrs: { src: require('./image.png') }})
 - 如果 URL 以 `~` 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：
 
   ``` html
-  <img src="~/some-npm-package/foo.png">
+  <img src="~some-npm-package/foo.png">
   ```
 
 - 如果 URL 以 `@` 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 `<projectRoot>/src` 的别名 `@`。**(仅作用于模版中)**
@@ -151,7 +166,7 @@ h('img', { attrs: { src: require('./image.png') }})
 - 文件丢失会直接在编译时报错，而不是到了用户端才产生 404 错误。
 - 最终生成的文件名包含了内容哈希，因此你不必担心浏览器会缓存它们的老版本。
 
-`public` 目录提供的是一个**应急手段**，当你通过绝对路径引用它时，留意应用将会部署到哪里。如果你的应用没有部署在域名的根部，那么你需要为你的 URL 配置 [baseUrl](../config/#baseurl) 前缀：
+`public` 目录提供的是一个**应急手段**，当你通过绝对路径引用它时，留意应用将会部署到哪里。如果你的应用没有部署在域名的根部，那么你需要为你的 URL 配置 [publicPath](../config/#publicpath) 前缀：
 
 - 在 `public/index.html` 或其它通过 `html-webpack-plugin` 用作模板的 HTML 文件中，你需要通过 `<%= BASE_URL %>` 设置链接前缀：
 
@@ -164,7 +179,7 @@ h('img', { attrs: { src: require('./image.png') }})
   ``` js
   data () {
     return {
-      baseUrl: process.env.BASE_URL
+      publicPath: process.env.BASE_URL
     }
   }
   ```
@@ -172,7 +187,7 @@ h('img', { attrs: { src: require('./image.png') }})
   然后：
 
   ``` html
-  <img :src="`${baseUrl}my-image.png`">
+  <img :src="`${publicPath}my-image.png`">
   ```
 
 ### 何时使用 `public` 文件夹

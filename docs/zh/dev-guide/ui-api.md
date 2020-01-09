@@ -97,7 +97,7 @@ api.describeConfig({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](./ui-info.md#logo))。
 
 ### 配置文件
 
@@ -364,7 +364,7 @@ api.describeTask({
 })
 ```
 
-如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](#logo))。
+如果你没有定义图标，那就展示该插件可能存在的 logo (详见 [Logo](./ui-info.md#logo))。
 
 ### 任务参数
 
@@ -626,7 +626,7 @@ api.addTask({
 
 ### 创建一个客户端 addon
 
-推荐的创建一个客户端 addon 的方式是通过 vue-cli 3 创建一个新项目。你也可以在插件的子目录或不同的 npm 包中这样做。
+推荐的创建一个客户端 addon 的方式是通过 vue cli 创建一个新项目。你也可以在插件的子目录或不同的 npm 包中这样做。
 
 作为开发依赖安装 `@vue/cli-ui`。
 
@@ -980,7 +980,7 @@ IPC 就是进程间通信 (Inter-Process Communication) 的缩写。该系统允
 
 > 为了在 webpack 仪表盘 UI 上展示数据，`@vue/cli-service` 的 `serve` 和 `build` 命令会在 `--dashboard` 参数被传入时向 cli-ui Node.js 服务器发送 IPC 消息。
 
-在进程代码中 (可以是一个 webpack 插件或一个 Node.js 的任务脚步)，你可以使用 `@vue/cli-shared-utils` 中的 `IpcMessenger` 类：
+在进程代码中 (可以是一个 webpack 插件或一个 Node.js 的任务脚本)，你可以使用 `@vue/cli-shared-utils` 中的 `IpcMessenger` 类：
 
 ```js
 const { IpcMessenger } = require('@vue/cli-shared-utils')
@@ -1338,7 +1338,7 @@ api.getProject()
 
 你可能需要在 cli-ui 内建的 HTTP 服务器上暴露一些静态文件 (通常是为自定义视图指定图标)。
 
-在插件包跟目录里可选的放置一个 `ui-public` 文件夹，这个文件夹里的任何文件都会暴露至 `/_plugin/:id/*` 的 HTTP 路由。
+在插件包根目录里可选的放置一个 `ui-public` 文件夹，这个文件夹里的任何文件都会暴露至 `/_plugin/:id/*` 的 HTTP 路由。
 
 例如，如果你将 `my-logo.png` 文件放置到 `vue-cli-plugin-hello/ui-public/` 文件夹，那么 cli-ui 加载插件的时候可以通过 `/_plugin/vue-cli-plugin-hello/my-logo.png` 这个 URL 来访问它。
 

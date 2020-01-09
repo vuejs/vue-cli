@@ -1,6 +1,7 @@
 const {
   info,
   hasProjectYarn,
+  hasProjectPnpm,
   openBrowser,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
@@ -23,7 +24,7 @@ module.exports = (api, options) => {
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
       '--stdin': `close when stdin ends`,
-      '--public': `specify the public network URL for the HMR client`
+      '--skip-plugins': `comma-separated list of plugin names to skip for this run`
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -34,8 +35,7 @@ module.exports = (api, options) => {
     const isProduction = process.env.NODE_ENV === 'production'
 
     const url = require('url')
-    const path = require('path')
-    const chalk = require('chalk')
+    const { chalk } = require('@vue/cli-shared-utils')
     const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
     const portfinder = require('portfinder')
@@ -43,6 +43,31 @@ module.exports = (api, options) => {
     const prepareProxy = require('../util/prepareProxy')
     const launchEditorMiddleware = require('launch-editor-middleware')
     const validateWebpackConfig = require('../util/validateWebpackConfig')
+    const isAbsoluteUrl = require('../util/isAbsoluteUrl')
+
+    // configs that only matters for dev server
+    api.chainWebpack(webpackConfig => {
+      if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
+        webpackConfig
+          .devtool('cheap-module-eval-source-map')
+
+        webpackConfig
+          .plugin('hmr')
+            .use(require('webpack/lib/HotModuleReplacementPlugin'))
+
+        // https://github.com/webpack/webpack/issues/6642
+        // https://github.com/vuejs/vue-cli/issues/3539
+        webpackConfig
+          .output
+            .globalObject(`(typeof self !== 'undefined' ? self : this)`)
+
+        if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
+          webpackConfig
+            .plugin('progress')
+            .use(require('webpack/lib/ProgressPlugin'))
+        }
+      }
+    })
 
     // resolve webpack config
     const webpackConfig = api.resolveWebpackConfig()
@@ -51,7 +76,7 @@ module.exports = (api, options) => {
     validateWebpackConfig(webpackConfig, api, options)
 
     // load user devServer options with higher priority than devServer
-    // in webpck config
+    // in webpack config
     const projectDevServerOptions = Object.assign(
       webpackConfig.devServer || {},
       options.devServer
@@ -90,8 +115,9 @@ module.exports = (api, options) => {
       protocol,
       host,
       port,
-      options.baseUrl
+      isAbsoluteUrl(options.publicPath) ? '/' : options.publicPath
     )
+    const localUrlForBrowser = publicUrl || urls.localUrlForBrowser
 
     const proxySettings = prepareProxy(
       projectDevServerOptions.proxy,
@@ -104,8 +130,8 @@ module.exports = (api, options) => {
         // explicitly configured via devServer.public
         ? `?${publicUrl}/sockjs-node`
         : isInContainer
-          // can't infer public netowrk url if inside a container...
-          // use client-side inference (note this would break with non-root baseUrl)
+          // can't infer public network url if inside a container...
+          // use client-side inference (note this would break with non-root publicPath)
           ? ``
           // otherwise infer the url
           : `?` + url.format({
@@ -136,37 +162,38 @@ module.exports = (api, options) => {
 
     // create server
     const server = new WebpackDevServer(compiler, Object.assign({
-      clientLogLevel: 'none',
+      logLevel: 'silent',
+      clientLogLevel: 'silent',
       historyApiFallback: {
         disableDotRule: true,
-        rewrites: [
-          { from: /./, to: path.posix.join(options.baseUrl, 'index.html') }
-        ]
+        rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
       },
       contentBase: api.resolve('public'),
       watchContentBase: !isProduction,
       hot: !isProduction,
-      quiet: true,
       compress: isProduction,
-      publicPath: options.baseUrl,
+      publicPath: options.publicPath,
       overlay: isProduction // TODO disable this
         ? false
         : { warnings: false, errors: true }
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
+      // eslint-disable-next-line no-shadow
       before (app, server) {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay
         app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
-          `To specify an editor, sepcify the EDITOR env variable or ` +
+          `To specify an editor, specify the EDITOR env variable or ` +
           `add "editor" field to your Vue project config.\n`
         )))
         // allow other plugins to register middlewares, e.g. PWA
         api.service.devServerConfigFns.forEach(fn => fn(app, server))
         // apply in project middlewares
         projectDevServerOptions.before && projectDevServerOptions.before(app, server)
-      }
+      },
+      // avoid opening browser
+      open: false
     }))
 
     ;['SIGINT', 'SIGTERM'].forEach(signal => {
@@ -210,8 +237,12 @@ module.exports = (api, options) => {
 
         let copied = ''
         if (isFirstCompile && args.copy) {
-          require('clipboardy').write(urls.localUrlForBrowser)
-          copied = chalk.dim('(copied to clipboard)')
+          try {
+            require('clipboardy').writeSync(localUrlForBrowser)
+            copied = chalk.dim('(copied to clipboard)')
+          } catch (_) {
+            /* catch exception if copy to clipboard isn't supported (e.g. WSL), see issue #3476 */
+          }
         }
 
         const networkUrl = publicUrl
@@ -226,15 +257,15 @@ module.exports = (api, options) => {
         } else {
           console.log()
           console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
-          if (!publicUrl && options.baseUrl && options.baseUrl !== '/') {
+          if (!publicUrl && options.publicPath && options.publicPath !== '/') {
             console.log()
-            console.log(chalk.yellow(`  Since you are using a non-root baseUrl, the hot-reload socket`))
+            console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
             console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
             console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
             console.log()
           }
           console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
-            `${protocol}://localhost:<your container's external mapped port>${options.baseUrl}`
+            `${protocol}://localhost:<your container's external mapped port>${options.publicPath}`
           )}`))
         }
         console.log()
@@ -243,7 +274,7 @@ module.exports = (api, options) => {
           isFirstCompile = false
 
           if (!isProduction) {
-            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : `npm run build`
+            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
           } else {
@@ -253,7 +284,10 @@ module.exports = (api, options) => {
           console.log()
 
           if (args.open || projectDevServerOptions.open) {
-            openBrowser(urls.localUrlForBrowser)
+            const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
+              ? projectDevServerOptions.openPage
+              : ''
+            openBrowser(localUrlForBrowser + pageUri)
           }
 
           // Send final app URL
@@ -261,7 +295,7 @@ module.exports = (api, options) => {
             const ipc = new IpcMessenger()
             ipc.send({
               vueServe: {
-                url: urls.localUrlForBrowser
+                url: localUrlForBrowser
               }
             })
           }
@@ -270,7 +304,7 @@ module.exports = (api, options) => {
           // so other commands can do api.service.run('serve').then(...)
           resolve({
             server,
-            url: urls.localUrlForBrowser
+            url: localUrlForBrowser
           })
         } else if (process.env.VUE_CLI_TEST) {
           // signal for test to check HMR
@@ -305,8 +339,25 @@ function checkInContainer () {
   const fs = require('fs')
   if (fs.existsSync(`/proc/1/cgroup`)) {
     const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
-    return /:\/(lxc|docker)\//.test(content)
+    return /:\/(lxc|docker|kubepods)\//.test(content)
   }
+}
+
+function genHistoryApiFallbackRewrites (baseUrl, pages = {}) {
+  const path = require('path')
+  const multiPageRewrites = Object
+    .keys(pages)
+    // sort by length in reversed order to avoid overrides
+    // eg. 'page11' should appear in front of 'page1'
+    .sort((a, b) => b.length - a.length)
+    .map(name => ({
+      from: new RegExp(`^/${name}`),
+      to: path.posix.join(baseUrl, pages[name].filename || `${name}.html`)
+    }))
+  return [
+    ...multiPageRewrites,
+    { from: /./, to: path.posix.join(baseUrl, 'index.html') }
+  ]
 }
 
 module.exports.defaultModes = {

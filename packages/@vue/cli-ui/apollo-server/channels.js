@@ -15,5 +15,6 @@ module.exports = {
   LOCALE_ADDED: 'locale_added',
   SUGGESTION_ADDED: 'suggestion_added',
   SUGGESTION_REMOVED: 'suggestion_removed',
-  SUGGESTION_UPDATED: 'suggestion_updated'
+  SUGGESTION_UPDATED: 'suggestion_updated',
+  ROUTE_REQUESTED: 'route_requested'
 }

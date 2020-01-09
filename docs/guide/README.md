@@ -4,10 +4,8 @@ sidebarDepth: 0
 
 # Overview
 
-<Bit/>
-
 ::: warning
-This documentation is for `@vue/cli` version **3.x**. For the old `vue-cli`, see [here](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
+This documentation is for `@vue/cli`. For the old `vue-cli`, see [here](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--).
 :::
 
 Vue CLI is a full system for rapid Vue.js development, providing:

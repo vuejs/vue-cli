@@ -52,7 +52,7 @@ describe('Vue project manager', () => {
     })
     cy.get('.loading-screen .vue-ui-loading-indicator').should('be.visible')
     cy.get('.project-home', { timeout: 250000 }).should('be.visible')
-    cy.get('.top-bar .current-project').should('contain', 'cli-ui-test')
+    cy.get('.project-nav .current-project').should('contain', 'cli-ui-test')
   })
 
   it('Favorites the project', () => {
@@ -77,6 +77,6 @@ describe('Vue project manager', () => {
       cy.get('.import-project').should('not.have.class', 'disabled').click()
     })
     cy.get('.project-home').should('be.visible')
-    cy.get('.top-bar .current-project').should('contain', 'cli-ui-test')
+    cy.get('.project-nav .current-project').should('contain', 'cli-ui-test')
   })
 })

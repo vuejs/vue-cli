@@ -27,7 +27,7 @@ function set (data, context) {
 }
 
 function remove (id, context) {
-  context.pubsub.publish(channels.PROGRESS_REMOVED, { progressRemoved: { id } })
+  context.pubsub.publish(channels.PROGRESS_REMOVED, { progressRemoved: id })
   return map.delete(id)
 }
 

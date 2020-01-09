@@ -13,10 +13,8 @@ module.exports = cli => {
       if (!answers.useTsWithBabel) {
         return
       }
-    } else {
-      if (!answers.features.includes('babel')) {
-        return
-      }
+    } else if (!answers.features.includes('babel')) {
+      return
     }
     options.plugins['@vue/cli-plugin-babel'] = {}
   })

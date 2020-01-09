@@ -2,8 +2,8 @@ module.exports = function formatStats (stats, dir, api) {
   const fs = require('fs')
   const path = require('path')
   const zlib = require('zlib')
-  const chalk = require('chalk')
   const ui = require('cliui')({ width: 80 })
+  const { chalk } = require('@vue/cli-shared-utils')
 
   const json = stats.toJson({
     hash: false,
@@ -20,6 +20,10 @@ module.exports = function formatStats (stats, dir, api) {
   const isCSS = val => /\.css$/.test(val)
   const isMinJS = val => /\.min\.js$/.test(val)
   assets = assets
+    .map(a => {
+      a.name = a.name.split('?')[0]
+      return a
+    })
     .filter(a => {
       if (seenNames.has(a.name)) {
         return false
@@ -36,7 +40,7 @@ module.exports = function formatStats (stats, dir, api) {
     })
 
   function formatSize (size) {
-    return (size / 1024).toFixed(2) + ' kb'
+    return (size / 1024).toFixed(2) + ' KiB'
   }
 
   function getGzippedSize (asset) {

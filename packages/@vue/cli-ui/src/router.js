@@ -2,26 +2,27 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { apolloClient } from './vue-apollo'
 
-import ProjectHome from './views/ProjectHome.vue'
+import ProjectHome from './components/app/ProjectHome.vue'
 
-import ProjectPlugins from './views/ProjectPlugins.vue'
-import ProjectPluginsAdd from './views/ProjectPluginsAdd.vue'
-import ProjectConfigurations from './views/ProjectConfigurations.vue'
-import ProjectConfigurationDetails from './views/ProjectConfigurationDetails.vue'
-import ProjectTasks from './views/ProjectTasks.vue'
-import ProjectTaskDetails from './views/ProjectTaskDetails.vue'
-import ProjectDependencies from './views/ProjectDependencies.vue'
+import ProjectDashboard from './components/dashboard/ProjectDashboard.vue'
+import ProjectPlugins from './components/plugin/ProjectPlugins.vue'
+import ProjectPluginsAdd from './components/plugin/ProjectPluginsAdd.vue'
+import ProjectConfigurations from './components/configuration/ProjectConfigurations.vue'
+import ProjectConfigurationDetails from './components/configuration/ProjectConfigurationDetails.vue'
+import ProjectTasks from './components/task/ProjectTasks.vue'
+import ProjectTaskDetails from './components/task/ProjectTaskDetails.vue'
+import ProjectDependencies from './components/dependency/ProjectDependencies.vue'
 
-import ProjectSelect from './views/ProjectSelect.vue'
-import ProjectCreate from './views/ProjectCreate.vue'
+import ProjectSelect from './components/project-manager/ProjectSelect.vue'
+import ProjectCreate from './components/project-create/ProjectCreate.vue'
 
-import FileDiffView from './components/FileDiffView.vue'
+import FileDiffView from './components/file-diff/FileDiffView.vue'
 
-import About from './views/About.vue'
-import NotFound from './views/NotFound.vue'
+import About from './components/app/About.vue'
+import NotFound from './components/app/NotFound.vue'
 
-import PROJECT_CURRENT from './graphql/projectCurrent.gql'
-import CURRENT_PROJECT_ID_SET from './graphql/currentProjectIdSet.gql'
+import PROJECT_CURRENT from './graphql/project/projectCurrent.gql'
+import CURRENT_PROJECT_ID_SET from './graphql/project/currentProjectIdSet.gql'
 
 Vue.use(Router)
 
@@ -32,14 +33,18 @@ const router = new Router({
       path: '/',
       component: ProjectHome,
       meta: {
-        needProject: true,
-        restore: true
+        needProject: true
       },
       children: [
         {
           path: '',
           name: 'project-home',
-          redirect: { name: 'project-plugins' }
+          redirect: { name: 'project-dashboard' }
+        },
+        {
+          path: 'dashboard',
+          name: 'project-dashboard',
+          component: ProjectDashboard
         },
         {
           path: 'plugins',
@@ -87,18 +92,12 @@ const router = new Router({
     {
       path: '/project/select',
       name: 'project-select',
-      component: ProjectSelect,
-      meta: {
-        restore: true
-      }
+      component: ProjectSelect
     },
     {
       path: '/project/create',
       name: 'project-create',
-      component: ProjectCreate,
-      meta: {
-        restore: true
-      }
+      component: ProjectCreate
     },
     {
       path: '/file-diff',
@@ -142,14 +141,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   next()
-})
-
-router.afterEach((to, from) => {
-  if (to.matched.some(m => m.meta.restore)) {
-    localStorage.setItem('vue-cli-ui.lastRoute', to.fullPath)
-  } else {
-    localStorage.removeItem('vue-cli-ui.lastRoute')
-  }
 })
 
 export default router

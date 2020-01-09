@@ -1,20 +1,22 @@
-module.exports = function sortObject (obj, keyOrder) {
+module.exports = function sortObject (obj, keyOrder, dontSortByUnicode) {
   if (!obj) return
   const res = {}
-  const keys = Object.keys(obj)
-  const getOrder = key => {
-    const i = keyOrder.indexOf(key)
-    return i === -1 ? Infinity : i
-  }
+
   if (keyOrder) {
-    keys.sort((a, b) => {
-      return getOrder(a) - getOrder(b)
+    keyOrder.forEach(key => {
+      if (obj.hasOwnProperty(key)) {
+        res[key] = obj[key]
+        delete obj[key]
+      }
     })
-  } else {
-    keys.sort()
   }
+
+  const keys = Object.keys(obj)
+
+  !dontSortByUnicode && keys.sort()
   keys.forEach(key => {
     res[key] = obj[key]
   })
+
   return res
 }

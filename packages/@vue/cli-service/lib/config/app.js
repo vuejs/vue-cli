@@ -23,8 +23,18 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const outputDir = api.resolve(options.outputDir)
 
+    const getAssetPath = require('../util/getAssetPath')
+    const outputFilename = getAssetPath(
+      options,
+      `js/[name]${isLegacyBundle ? `-legacy` : ``}${isProd && options.filenameHashing ? '.[contenthash:8]' : ''}.js`
+    )
+    webpackConfig
+      .output
+        .filename(outputFilename)
+        .chunkFilename(outputFilename)
+
     // code splitting
-    if (isProd) {
+    if (process.env.NODE_ENV !== 'test') {
       webpackConfig
         .optimization.splitChunks({
           cacheGroups: {
@@ -92,20 +102,20 @@ module.exports = (api, options) => {
       }
     }
 
-    if (isProd) {
-      // handle indexPath
-      if (options.indexPath !== 'index.html') {
-        // why not set filename for html-webpack-plugin?
-        // 1. It cannot handle absolute paths
-        // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
-        webpackConfig
-          .plugin('move-index')
-          .use(require('../webpack/MovePlugin'), [
-            path.resolve(outputDir, 'index.html'),
-            path.resolve(outputDir, options.indexPath)
-          ])
-      }
+    // handle indexPath
+    if (options.indexPath !== 'index.html') {
+      // why not set filename for html-webpack-plugin?
+      // 1. It cannot handle absolute paths
+      // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
+      webpackConfig
+        .plugin('move-index')
+        .use(require('../webpack/MovePlugin'), [
+          path.resolve(outputDir, 'index.html'),
+          path.resolve(outputDir, options.indexPath)
+        ])
+    }
 
+    if (isProd) {
       Object.assign(htmlOptions, {
         minify: {
           removeComments: true,
@@ -119,25 +129,18 @@ module.exports = (api, options) => {
       })
 
       // keep chunk ids stable so async chunks have consistent hash (#1916)
-      const seen = new Set()
-      const nameLength = 4
       webpackConfig
         .plugin('named-chunks')
           .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
             if (chunk.name) {
               return chunk.name
             }
-            const modules = Array.from(chunk.modulesIterable)
-            if (modules.length > 1) {
-              const hash = require('hash-sum')
-              const joinedHash = hash(modules.map(m => m.id).join('_'))
-              let len = nameLength
-              while (seen.has(joinedHash.substr(0, len))) len++
-              seen.add(joinedHash.substr(0, len))
-              return `chunk-${joinedHash.substr(0, len)}`
-            } else {
-              return modules[0].id
-            }
+
+            const hash = require('hash-sum')
+            const joinedHash = hash(
+              Array.from(chunk.modulesIterable, m => m.id).join('_')
+            )
+            return `chunk-` + joinedHash
           }])
     }
 
@@ -147,13 +150,18 @@ module.exports = (api, options) => {
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
-    const publicCopyIgnore = ['index.html', '.DS_Store']
+    const publicCopyIgnore = ['.DS_Store']
 
     if (!multiPageConfig) {
       // default, single page setup.
       htmlOptions.template = fs.existsSync(htmlPath)
         ? htmlPath
         : defaultHtmlPath
+
+      publicCopyIgnore.push({
+        glob: path.relative(api.resolve('public'), api.resolve(htmlOptions.template)),
+        matchBase: false
+      })
 
       webpackConfig
         .plugin('html')
@@ -184,34 +192,55 @@ module.exports = (api, options) => {
       const normalizePageConfig = c => typeof c === 'string' ? { entry: c } : c
 
       pages.forEach(name => {
+        const pageConfig = normalizePageConfig(multiPageConfig[name])
         const {
-          title,
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`,
-          chunks
-        } = normalizePageConfig(multiPageConfig[name])
+          chunks = ['chunk-vendors', 'chunk-common', name]
+        } = pageConfig
+
+        // Currently Cypress v3.1.0 comes with a very old version of Node,
+        // which does not support object rest syntax.
+        // (https://github.com/cypress-io/cypress/issues/2253)
+        // So here we have to extract the customHtmlOptions manually.
+        const customHtmlOptions = {}
+        for (const key in pageConfig) {
+          if (
+            !['entry', 'template', 'filename', 'chunks'].includes(key)
+          ) {
+            customHtmlOptions[key] = pageConfig[key]
+          }
+        }
+
         // inject entry
-        webpackConfig.entry(name).add(api.resolve(entry))
+        const entries = Array.isArray(entry) ? entry : [entry]
+        webpackConfig.entry(name).merge(entries.map(e => api.resolve(e)))
 
         // resolve page index template
         const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
-        if (hasDedicatedTemplate) {
-          publicCopyIgnore.push(template)
-        }
         const templatePath = hasDedicatedTemplate
           ? template
           : fs.existsSync(htmlPath)
             ? htmlPath
             : defaultHtmlPath
 
-        // inject html plugin for the page
-        const pageHtmlOptions = Object.assign({}, htmlOptions, {
-          chunks: chunks || ['chunk-vendors', 'chunk-common', name],
-          template: templatePath,
-          filename: ensureRelative(outputDir, filename),
-          title
+        publicCopyIgnore.push({
+          glob: path.relative(api.resolve('public'), api.resolve(templatePath)),
+          matchBase: false
         })
+
+        // inject html plugin for the page
+        const pageHtmlOptions = Object.assign(
+          {},
+          htmlOptions,
+          {
+            chunks,
+            template: templatePath,
+            filename: ensureRelative(outputDir, filename)
+          },
+          customHtmlOptions
+        )
 
         webpackConfig
           .plugin(`html-${name}`)
@@ -257,7 +286,7 @@ module.exports = (api, options) => {
           .use(require('../webpack/CorsPlugin'), [{
             crossorigin: options.crossorigin,
             integrity: options.integrity,
-            baseUrl: options.baseUrl
+            publicPath: options.publicPath
           }])
     }
 
@@ -269,6 +298,7 @@ module.exports = (api, options) => {
           .use(require('copy-webpack-plugin'), [[{
             from: publicDir,
             to: outputDir,
+            toType: 'dir',
             ignore: publicCopyIgnore
           }]])
     }

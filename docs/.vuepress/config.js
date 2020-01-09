@@ -2,40 +2,67 @@ module.exports = {
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Standard Tooling for Vue.js Development'
     },
     '/zh/': {
       lang: 'zh-CN',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Vue.js 开发的标准工具'
     },
     '/ru/': {
       lang: 'ru',
-      title: 'Vue CLI 3',
+      title: 'Vue CLI',
       description: '🛠️ Стандартный инструментарий для разработки на Vue.js'
     }
   },
-  serviceWorker: true,
-  theme: 'vue',
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png' }],
+    ['link', { rel: 'manifest', href: '/manifest.json' }],
+    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+    ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
+    ['link', { rel: 'apple-touch-icon', href: `/icons/apple-touch-icon-152x152.png` }],
+    ['link', { rel: 'mask-icon', href: '/icons/safari-pinned-tab.svg', color: '#3eaf7c' }],
+    ['meta', { name: 'msapplication-TileImage', content: '/icons/msapplication-icon-144x144.png' }],
+    ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
+  ],
+  plugins: {
+    '@vuepress/pwa': {
+      serviceWorker: true,
+      updatePopup: {
+        '/': {
+          message: "New content is available.",
+          buttonText: "Refresh"
+        },
+        '/zh/': {
+          message: "发现新内容可用",
+          buttonText: "刷新"
+        },
+        '/ru/': {
+          message: 'Доступно обновление контента',
+          buttonText: 'Обновить'
+        }
+      }
+    }
+  },
+  theme: '@vuepress/theme-vue',
   themeConfig: {
     repo: 'vuejs/vue-cli',
     docsDir: 'docs',
-    docsBranch: 'docs',
+    docsBranch: 'master',
     editLinks: true,
     sidebarDepth: 3,
+    algolia: {
+      indexName: 'cli_vuejs',
+      apiKey: 'f6df220f7d246aff64a56300b7f19f21',
+    },
     locales: {
       '/': {
         label: 'English',
         selectText: 'Languages',
         lastUpdated: 'Last Updated',
         editLinkText: 'Edit this page on GitHub',
-        serviceWorker: {
-          updatePopup: {
-            message: "New content is available.",
-            buttonText: "Refresh"
-          }
-        },
         nav: [
           {
             text: 'Guide',
@@ -57,15 +84,13 @@ module.exports = {
           {
             text: 'Plugins',
             items: [
-              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
-              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript' },
-              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' },
-              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa' },
-              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest' },
-              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha' },
-              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress' },
-              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch' }
+              { text: 'Core plugins', link: '/core-plugins/' },
+              { text: 'Browse plugins', link: 'https://awesomejs.dev/for/vue-cli/' }
             ]
+          },
+          {
+            text: 'Migrating From v3',
+            link: '/migrating-from-v3/'
           },
           {
             text: 'Changelog',
@@ -96,12 +121,21 @@ module.exports = {
                 '/guide/webpack',
                 '/guide/mode-and-env',
                 '/guide/build-targets',
-                '/guide/deployment'
+                '/guide/deployment',
+                '/guide/troubleshooting'
               ]
             }
           ],
           '/dev-guide/': [
             '/dev-guide/plugin-dev.md',
+            {
+              title: 'API reference',
+              collapsable: false,
+              children: [
+                '/dev-guide/plugin-api.md',
+                '/dev-guide/generator-api.md',
+              ]
+            },
             {
               title: 'UI Development',
               collapsable: false,
@@ -111,7 +145,22 @@ module.exports = {
                 '/dev-guide/ui-localization.md'
               ]
             }
-          ]
+          ],
+          '/core-plugins/': [{
+            title: 'Core Vue CLI Plugins',
+            collapsable: false,
+            children: [
+              '/core-plugins/babel.md',
+              '/core-plugins/typescript.md',
+              '/core-plugins/eslint.md',
+              '/core-plugins/pwa.md',
+              '/core-plugins/unit-jest.md',
+              '/core-plugins/unit-mocha.md',
+              '/core-plugins/e2e-cypress.md',
+              '/core-plugins/e2e-nightwatch.md'
+            ]
+          }],
+
         }
       },
       '/zh/': {
@@ -119,12 +168,6 @@ module.exports = {
         selectText: '选择语言',
         lastUpdated: '上次编辑时间',
         editLinkText: '在 GitHub 上编辑此页',
-        serviceWorker: {
-          updatePopup: {
-            message: "发现新内容可用",
-            buttonText: "刷新"
-          }
-        },
         nav: [
           {
             text: '指南',
@@ -208,12 +251,6 @@ module.exports = {
         selectText: 'Переводы',
         lastUpdated: 'Последнее обновление',
         editLinkText: 'Изменить эту страницу на GitHub',
-        serviceWorker: {
-          updatePopup: {
-            message: 'Доступно обновление контента',
-            buttonText: 'Обновить'
-          }
-        },
         nav: [
           {
             text: 'Руководство',
@@ -235,15 +272,13 @@ module.exports = {
           {
             text: 'Плагины',
             items: [
-              { text: 'Babel', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
-              { text: 'TypeScript', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript' },
-              { text: 'ESLint', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' },
-              { text: 'PWA', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa' },
-              { text: 'Jest', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest' },
-              { text: 'Mocha', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha' },
-              { text: 'Cypress', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-cypress' },
-              { text: 'Nightwatch', link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch' }
+              { text: 'Основные плагины', link: '/ru/core-plugins/' },
+              { text: 'Просмотр плагинов', link: 'https://awesomejs.dev/for/vue-cli/' }
             ]
+          },
+          {
+            text: 'Миграция с v3',
+            link: '/ru/migrating-from-v3/'
           },
           {
             text: 'История изменений',
@@ -274,12 +309,21 @@ module.exports = {
                 '/ru/guide/webpack',
                 '/ru/guide/mode-and-env',
                 '/ru/guide/build-targets',
-                '/ru/guide/deployment'
+                '/ru/guide/deployment',
+                '/ru/guide/troubleshooting'
               ]
             }
           ],
           '/ru/dev-guide/': [
             '/ru/dev-guide/plugin-dev.md',
+            {
+              title: 'Справочник API',
+              collapsable: false,
+              children: [
+                '/ru/dev-guide/plugin-api.md',
+                '/ru/dev-guide/generator-api.md',
+              ]
+            },
             {
               title: 'Разработка UI',
               collapsable: false,
@@ -289,7 +333,21 @@ module.exports = {
                 '/ru/dev-guide/ui-localization.md'
               ]
             }
-          ]
+          ],
+          '/ru/core-plugins/': [{
+            title: 'Основные плагины Vue CLI',
+            collapsable: false,
+            children: [
+              '/ru/core-plugins/babel.md',
+              '/ru/core-plugins/typescript.md',
+              '/ru/core-plugins/eslint.md',
+              '/ru/core-plugins/pwa.md',
+              '/ru/core-plugins/unit-jest.md',
+              '/ru/core-plugins/unit-mocha.md',
+              '/ru/core-plugins/e2e-cypress.md',
+              '/ru/core-plugins/e2e-nightwatch.md'
+            ]
+          }]
         }
       }
     }

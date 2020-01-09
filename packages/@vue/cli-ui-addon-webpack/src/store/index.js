@@ -1,7 +1,6 @@
 import Vuex from 'vuex'
 
 import { buildSortedAssets } from '../util/assets'
-import { filterModules, buildSortedModules, buildDepModules, buildModulesTrees } from '../util/modules'
 
 Vue.use(Vuex)
 
@@ -12,13 +11,16 @@ const store = new Vuex.Store({
       mode: 'serve',
       showModernBuild: true,
       serve: {
-        stats: null
+        stats: null,
+        analyzer: {}
       },
       build: {
-        stats: null
+        stats: null,
+        analyzer: {}
       },
       'build-modern': {
-        stats: null
+        stats: null,
+        analyzer: {}
       }
     }
   },
@@ -37,12 +39,12 @@ const store = new Vuex.Store({
     assets: (state, getters) => (getters.stats && getters.stats.data.assets) || [],
     assetsSorted: (state, getters) => buildSortedAssets(getters.assets, getters.sizeField),
     assetsTotalSize: (state, getters) => getters.assetsSorted.filter(a => !a.secondary).reduce((total, asset) => total + asset.size, 0),
-    rawModules: (state, getters) => (getters.stats && filterModules(getters.stats.data.modules)) || [],
-    modules: (state, getters) => buildSortedModules(getters.rawModules, getters.sizeField),
-    modulesTotalSize: (state, getters) => getters.modules.reduce((total, module) => total + module.size, 0),
-    modulesTrees: (state, getters) => buildModulesTrees(getters.rawModules),
-    depModules: (state, getters) => buildDepModules(getters.modules),
-    depModulesTotalSize: (state, getters) => getters.depModules.reduce((total, module) => total + module.size, 0),
+    modules: (state, getters) => (getters.stats && getters.stats.computed.modulesPerSizeType[getters.sizeField]) || {},
+    modulesTotalSize: (state, getters) => getters.modules.modulesTotalSize || 0,
+    analyzer: (state, getters) => state[getters.mode].analyzer[getters.sizeField],
+    modulesTrees: (state, getters) => (getters.analyzer && getters.analyzer.modulesTrees) || [],
+    depModules: (state, getters) => getters.modules.depModules || [],
+    depModulesTotalSize: (state, getters) => getters.modules.depModulesTotalSize || 0,
     chunks: (state, getters) => (getters.stats && getters.stats.data.chunks) || []
   },
 
@@ -61,7 +63,12 @@ const store = new Vuex.Store({
     },
 
     stats (state, { mode, value }) {
-      state[mode].stats = value
+      state[mode].stats = Object.freeze(value)
+    },
+
+    analyzer (state, { mode, value }) {
+      console.log(value)
+      state[mode].analyzer = Object.freeze(value)
     }
   }
 })

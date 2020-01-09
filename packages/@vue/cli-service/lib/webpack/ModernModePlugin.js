@@ -5,9 +5,11 @@ const path = require('path')
 const safariFix = `!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();`
 
 class ModernModePlugin {
-  constructor ({ targetDir, isModernBuild }) {
+  constructor ({ targetDir, isModernBuild, unsafeInline, jsDirectory }) {
     this.targetDir = targetDir
     this.isModernBuild = isModernBuild
+    this.unsafeInline = unsafeInline
+    this.jsDirectory = jsDirectory
   }
 
   apply (compiler) {
@@ -56,13 +58,6 @@ class ModernModePlugin {
           }
         })
 
-        // inject Safari 10 nomodule fix
-        data.body.push({
-          tagName: 'script',
-          closeTag: true,
-          innerHTML: safariFix
-        })
-
         // inject links for legacy assets as <script nomodule>
         const htmlName = path.basename(data.plugin.options.filename)
         // Watch out for output files in sub directories
@@ -71,6 +66,35 @@ class ModernModePlugin {
         const legacyAssets = JSON.parse(await fs.readFile(tempFilename, 'utf-8'))
           .filter(a => a.tagName === 'script' && a.attributes)
         legacyAssets.forEach(a => { a.attributes.nomodule = '' })
+
+        if (this.unsafeInline) {
+          // inject inline Safari 10 nomodule fix
+          data.body.push({
+            tagName: 'script',
+            closeTag: true,
+            innerHTML: safariFix
+          })
+        } else {
+          // inject the fix as an external script
+          const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
+          const fullSafariFixPath = path.join(compilation.options.output.publicPath, safariFixPath)
+          compilation.assets[safariFixPath] = {
+            source: function () {
+              return new Buffer(safariFix)
+            },
+            size: function () {
+              return Buffer.byteLength(safariFix)
+            }
+          }
+          data.body.push({
+            tagName: 'script',
+            closeTag: true,
+            attributes: {
+              src: fullSafariFixPath
+            }
+          })
+        }
+
         data.body.push(...legacyAssets)
         await fs.remove(tempFilename)
         cb()

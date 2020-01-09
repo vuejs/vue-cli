@@ -16,7 +16,7 @@
 
 如果有依赖需要 polyfill，你有几种选择：
 
-1. **如果该依赖基于一个目标环境不支持的 ES 版本撰写:** 将其添加到 `vue.config.js` 中的 [`transpileDependencies`](../config/#transpiledependencies) 选项。这会为该依赖同时开启语法语法转换和根据使用情况检测 polyfill。
+1. **如果该依赖基于一个目标环境不支持的 ES 版本撰写:** 将其添加到 `vue.config.js` 中的 [`transpileDependencies`](../config/#transpiledependencies) 选项。这会为该依赖同时开启语法转换和根据使用情况检测 polyfill。
 
 2. **如果该依赖交付了 ES5 代码并显式地列出了需要的 polyfill:** 你可以使用 `@vue/babel-preset-app` 的 [polyfills](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app#polyfills) 选项预包含所需要的 polyfill。**注意 `es6.promise` 将被默认包含，因为现在的库依赖 Promise 是非常普遍的。**
 

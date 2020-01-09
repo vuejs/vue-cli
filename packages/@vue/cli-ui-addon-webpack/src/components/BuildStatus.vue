@@ -1,5 +1,5 @@
 <template>
-  <div class="build-status">
+  <div class="build-status card">
     <div class="content">
       <div class="info-block status">
         <div class="label">

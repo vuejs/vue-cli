@@ -1,5 +1,5 @@
 <template>
-  <div class="speed-stats">
+  <div class="speed-stats card">
     <div class="content">
       <div class="title">
         {{ $t('org.vue.vue-webpack.dashboard.speed-stats.title') }}

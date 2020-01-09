@@ -3,9 +3,12 @@
 // Check node version before requiring/doing anything else
 // The user may be on a very old node version
 
-const chalk = require('chalk')
-const semver = require('semver')
+const { chalk, semver } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
+const didYouMean = require('didyoumean')
+
+// Setting edit distance to 60% of the input string's length
+didYouMean.threshold = 0.6
 
 function checkNodeVersion (wanted, id) {
   if (!semver.satisfies(process.version, wanted)) {
@@ -17,7 +20,15 @@ function checkNodeVersion (wanted, id) {
   }
 }
 
-checkNodeVersion(requiredVersion, 'vue-cli')
+checkNodeVersion(requiredVersion, '@vue/cli')
+
+if (semver.satisfies(process.version, '9.x')) {
+  console.log(chalk.red(
+    `You are using Node ${process.version}.\n` +
+    `Node.js 9.x has already reached end-of-life and will not be supported in future major releases.\n` +
+    `It's strongly recommended to use an active LTS version instead.`
+  ))
+}
 
 const fs = require('fs')
 const path = require('path')
@@ -38,7 +49,7 @@ const program = require('commander')
 const loadCommand = require('../lib/util/loadCommand')
 
 program
-  .version(require('../package').version)
+  .version(`@vue/cli ${require('../package').version}`)
   .usage('<command> [options]')
 
 program
@@ -52,12 +63,18 @@ program
   .option('-g, --git [message]', 'Force git initialization with initial commit message')
   .option('-n, --no-git', 'Skip git initialization')
   .option('-f, --force', 'Overwrite target directory if it exists')
+  .option('--merge', 'Merge target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
+  .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
-    // --no-git makes commander to default git to true
+
+    if (minimist(process.argv.slice(3))._.length > 1) {
+      console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
+    }
+    // --git makes commander to default git to true
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
       options.forceGit = true
     }
@@ -67,6 +84,7 @@ program
 program
   .command('add <plugin> [pluginOptions]')
   .description('install a plugin and invoke its generator in an already created project')
+  .option('--registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
   .allowUnknownOption()
   .action((plugin) => {
     require('../lib/add')(plugin, minimist(process.argv.slice(3)))
@@ -75,6 +93,7 @@ program
 program
   .command('invoke <plugin> [pluginOptions]')
   .description('invoke the generator of a plugin in an already created project')
+  .option('--registry <url>', 'Use specified npm registry when installing dependencies (only for npm)')
   .allowUnknownOption()
   .action((plugin) => {
     require('../lib/invoke')(plugin, minimist(process.argv.slice(3)))
@@ -98,6 +117,7 @@ program
   .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
   .option('-c, --copy', 'Copy local url to clipboard')
+  .option('-p, --port <port>', 'Port used by the server (default: 8080 or next available port)')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
   })
@@ -115,6 +135,7 @@ program
 program
   .command('ui')
   .description('start and open the vue-cli ui')
+  .option('-H, --host <host>', 'Host used for the UI server (default: localhost)')
   .option('-p, --port <port>', 'Port used for the UI server (by default search for available port)')
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
@@ -145,6 +166,46 @@ program
     require('../lib/config')(value, cleanArgs(cmd))
   })
 
+program
+  .command('outdated')
+  .description('(experimental) check for outdated vue cli service / plugins')
+  .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
+  .action((cmd) => {
+    require('../lib/outdated')(cleanArgs(cmd))
+  })
+
+program
+  .command('upgrade [plugin-name]')
+  .description('(experimental) upgrade vue cli service / plugins')
+  .option('-t, --to <version>', 'upgrade <package-name> to a version that is not latest')
+  .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
+  .option('--all', 'Upgrade all plugins')
+  .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
+  .action((packageName, cmd) => {
+    require('../lib/upgrade')(packageName, cleanArgs(cmd))
+  })
+
+program
+  .command('info')
+  .description('print debugging information about your environment')
+  .action((cmd) => {
+    console.log(chalk.bold('\nEnvironment Info:'))
+    require('envinfo').run(
+      {
+        System: ['OS', 'CPU'],
+        Binaries: ['Node', 'Yarn', 'npm'],
+        Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
+        npmPackages: '/**/{typescript,*vue*,@vue/*/}',
+        npmGlobalPackages: ['@vue/cli']
+      },
+      {
+        showNotFound: true,
+        duplicates: true,
+        fullTree: true
+      }
+    ).then(console.log)
+  })
+
 // output help information on unknown commands
 program
   .arguments('<command>')
@@ -152,6 +213,7 @@ program
     program.outputHelp()
     console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     console.log()
+    suggestCommands(cmd)
   })
 
 // add some useful info on help
@@ -186,12 +248,25 @@ if (!process.argv.slice(2).length) {
   program.outputHelp()
 }
 
+function suggestCommands (unknownCommand) {
+  const availableCommands = program.commands.map(cmd => cmd._name)
+
+  const suggestion = didYouMean(unknownCommand, availableCommands)
+  if (suggestion) {
+    console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
+  }
+}
+
+function camelize (str) {
+  return str.replace(/-(\w)/g, (_, c) => c ? c.toUpperCase() : '')
+}
+
 // commander passes the Command object itself as options,
 // extract only actual options into a fresh object.
 function cleanArgs (cmd) {
   const args = {}
   cmd.options.forEach(o => {
-    const key = o.long.replace(/^--/, '')
+    const key = camelize(o.long.replace(/^--/, ''))
     // if an option is not present and Command has a method with the same name
     // it should not be copied
     if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {

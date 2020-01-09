@@ -8,14 +8,24 @@
 
 - `index.html` 会带有注入的资源和 resource hint
 - 第三方库会被分到一个独立包以便更好的缓存
-- 小于 10kb 的静态资源会被内联在 JavaScript 中
+- 小于 4kb 的静态资源会被内联在 JavaScript 中
 - `public` 中的静态资源会被复制到输出目录中
 
 ## 库
 
+::: tip 关于 IE 兼容性的提醒
+在库模式中，项目的 `publicPath` 是根据主文件的加载路径[动态设置](https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/commands/build/setPublicPath.js)的（用以支持动态的资源加载能力）。但是这个功能用到了 `document.currentScript`，而 IE 浏览器并不支持这一特性。所以如果网站需要支持 IE 的话，建议使用库之前先在页面上引入 [current-script-polyfill](https://www.npmjs.com/package/current-script-polyfill)。
+:::
+
 ::: tip 注意对 Vue 的依赖
 在库模式中，Vue 是*外置的*。这意味着包中不会有 Vue，即便你在代码中导入了 Vue。如果这个库会通过一个打包器使用，它将尝试通过打包器以依赖的方式加载 Vue；否则就会回退到一个全局的 `Vue` 变量。
+
+要避免此行为，可以在`build`命令中添加`--inline-vue`标志。
+```
+vue-cli-service build --target lib --inline-vue
+```
 :::
+
 
 你可以通过下面的命令将一个单独的入口构建为一个库：
 
@@ -43,6 +53,10 @@ dist/myLib.css           0.33 kb                  0.23 kb
 - `dist/myLib.umd.min.js`：压缩后的 UMD 构建版本
 
 - `dist/myLib.css`：提取出来的 CSS 文件 (可以通过在 `vue.config.js` 中设置 `css: { extract: false }` 强制内联)
+
+::: warning 警告
+如果你在开发一个库或多项目仓库 (monorepo)，请注意导入 CSS **是具有副作用的**。请确保在 `package.json` 中**移除** `"sideEffects": false`，否则 CSS 代码块会在生产环境构建时被 webpack 丢掉。
+:::
 
 ### Vue vs. JS/TS 入口文件
 

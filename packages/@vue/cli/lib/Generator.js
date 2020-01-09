@@ -1,12 +1,21 @@
 const ejs = require('ejs')
 const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
+const PackageManager = require('./util/ProjectPackageManager')
 const sortObject = require('./util/sortObject')
 const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
-const injectImportsAndOptions = require('./util/injectImportsAndOptions')
-const { toShortPluginId, matchesPluginId } = require('@vue/cli-shared-utils')
+const runCodemod = require('./util/runCodemod')
+const {
+  semver,
+
+  isPlugin,
+  toShortPluginId,
+  matchesPluginId,
+
+  loadModule
+} = require('@vue/cli-shared-utils')
 const ConfigTransform = require('./ConfigTransform')
 
 const logger = require('@vue/cli-shared-utils/lib/logger')
@@ -69,7 +78,8 @@ module.exports = class Generator {
   constructor (context, {
     pkg = {},
     plugins = [],
-    completeCbs = [],
+    afterInvokeCbs = [],
+    afterAnyInvokeCbs = [],
     files = {},
     invoking = false
   } = {}) {
@@ -77,9 +87,13 @@ module.exports = class Generator {
     this.plugins = plugins
     this.originalPkg = pkg
     this.pkg = Object.assign({}, pkg)
+    this.pm = new PackageManager({ context })
     this.imports = {}
     this.rootOptions = {}
-    this.completeCbs = completeCbs
+    // we don't load the passed afterInvokes yet because we want to ignore them from other plugins
+    this.passedAfterInvokeCbs = afterInvokeCbs
+    this.afterInvokeCbs = []
+    this.afterAnyInvokeCbs = afterAnyInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
     this.reservedConfigTransforms = reservedConfigTransforms
@@ -93,21 +107,66 @@ module.exports = class Generator {
     // exit messages
     this.exitLogs = []
 
+    // load all the other plugins
+    this.allPluginIds = Object.keys(this.pkg.dependencies || {})
+      .concat(Object.keys(this.pkg.devDependencies || {}))
+      .filter(isPlugin)
+
     const cliService = plugins.find(p => p.id === '@vue/cli-service')
     const rootOptions = cliService
       ? cliService.options
       : inferRootOptions(pkg)
+
+    this.rootOptions = rootOptions
+  }
+
+  async initPlugins () {
+    const { rootOptions, invoking } = this
+    const pluginIds = this.plugins.map(p => p.id)
+
+    // apply hooks from all plugins
+    for (const id of this.allPluginIds) {
+      const api = new GeneratorAPI(id, this, {}, rootOptions)
+      const pluginGenerator = loadModule(`${id}/generator`, this.context)
+
+      if (pluginGenerator && pluginGenerator.hooks) {
+        await pluginGenerator.hooks(api, {}, rootOptions, pluginIds)
+      }
+    }
+
+    // We are doing save/load to make the hook order deterministic
+    // save "any" hooks
+    const afterAnyInvokeCbsFromPlugins = this.afterAnyInvokeCbs
+
+    // reset hooks
+    this.afterInvokeCbs = this.passedAfterInvokeCbs
+    this.afterAnyInvokeCbs = []
+    this.postProcessFilesCbs = []
+
     // apply generators from plugins
-    plugins.forEach(({ id, apply, options }) => {
+    for (const plugin of this.plugins) {
+      const { id, apply, options } = plugin
       const api = new GeneratorAPI(id, this, options, rootOptions)
-      apply(api, options, rootOptions, invoking)
-    })
+      await apply(api, options, rootOptions, invoking)
+
+      if (apply.hooks) {
+        // while we execute the entire `hooks` function,
+        // only the `afterInvoke` hook is respected
+        // because `afterAnyHooks` is already determined by the `allPluginIds` loop above
+        await apply.hooks(api, options, rootOptions, pluginIds)
+      }
+
+      // restore "any" hooks
+      this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
+    }
   }
 
   async generate ({
     extractConfigFiles = false,
     checkExisting = false
   } = {}) {
+    await this.initPlugins()
+
     // save the file system before applying plugin for comparison
     const initialFiles = Object.assign({}, this.files)
     // extract configs from package.json into dedicated files.
@@ -170,8 +229,8 @@ module.exports = class Generator {
     this.pkg.scripts = sortObject(this.pkg.scripts, [
       'serve',
       'build',
-      'test',
-      'e2e',
+      'test:unit',
+      'test:e2e',
       'lint',
       'deploy'
     ])
@@ -179,9 +238,18 @@ module.exports = class Generator {
       'name',
       'version',
       'private',
+      'description',
+      'author',
       'scripts',
+      'main',
+      'module',
+      'browser',
+      'jsDelivr',
+      'unpkg',
+      'files',
       'dependencies',
       'devDependencies',
+      'peerDependencies',
       'vue',
       'babel',
       'eslintConfig',
@@ -206,11 +274,25 @@ module.exports = class Generator {
 
     // handle imports and root option injections
     Object.keys(files).forEach(file => {
-      files[file] = injectImportsAndOptions(
-        files[file],
-        this.imports[file],
-        this.rootOptions[file]
-      )
+      let imports = this.imports[file]
+      imports = imports instanceof Set ? Array.from(imports) : imports
+      if (imports && imports.length > 0) {
+        files[file] = runCodemod(
+          require('./util/codemods/injectImports'),
+          { path: file, source: files[file] },
+          { imports }
+        )
+      }
+
+      let injections = this.rootOptions[file]
+      injections = injections instanceof Set ? Array.from(injections) : injections
+      if (injections && injections.length > 0) {
+        files[file] = runCodemod(
+          require('./util/codemods/injectOptions'),
+          { path: file, source: files[file] },
+          { injections }
+        )
+      }
     })
 
     for (const postProcess of this.postProcessFilesCbs) {
@@ -219,17 +301,22 @@ module.exports = class Generator {
     debug('vue:cli-files')(this.files)
   }
 
-  hasPlugin (_id) {
-    if (_id === 'router') _id = 'vue-router'
-    if (['vue-router', 'vuex'].includes(_id)) {
-      const pkg = this.pkg
-      return ((pkg.dependencies && pkg.dependencies[_id]) || (pkg.devDependencies && pkg.devDependencies[_id]))
-    }
+  hasPlugin (_id, _version) {
     return [
       ...this.plugins.map(p => p.id),
-      ...Object.keys(this.pkg.devDependencies || {}),
-      ...Object.keys(this.pkg.dependencies || {})
-    ].some(id => matchesPluginId(_id, id))
+      ...this.allPluginIds
+    ].some(id => {
+      if (!matchesPluginId(_id, id)) {
+        return false
+      }
+
+      if (!_version) {
+        return true
+      }
+
+      const version = this.pm.getInstalledVersion(id)
+      return semver.satisfies(version, _version)
+    })
   }
 
   printExitLogs () {

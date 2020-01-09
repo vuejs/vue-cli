@@ -1,23 +1,36 @@
-const chalk = require('chalk')
 const invoke = require('./invoke')
-const { loadOptions } = require('./options')
-const { installPackage } = require('./util/installDeps')
+const inquirer = require('inquirer')
 const {
-  log,
-  error,
-  hasProjectYarn,
-  resolvePluginId,
+  chalk,
+  semver,
   resolveModule,
   loadModule
 } = require('@vue/cli-shared-utils')
 
+const PackageManager = require('./util/ProjectPackageManager')
+const {
+  log,
+  error,
+  resolvePluginId,
+  isOfficialPlugin
+} = require('@vue/cli-shared-utils')
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
+
 async function add (pluginName, options = {}, context = process.cwd()) {
-  // special internal "plugins"
-  if (/^(@vue\/)?router$/.test(pluginName)) {
-    return addRouter(context)
+  if (!(await confirmIfGitDirty(context))) {
+    return
   }
-  if (/^(@vue\/)?vuex$/.test(pluginName)) {
-    return addVuex(context)
+
+  // for `vue add` command in 3.x projects
+  const servicePkg = loadModule('@vue/cli-service/package.json', context)
+  if (servicePkg && semver.satisfies(servicePkg.version, '3.x')) {
+    // special internal "plugins"
+    if (/^(@vue\/)?router$/.test(pluginName)) {
+      return addRouter(context)
+    }
+    if (/^(@vue\/)?vuex$/.test(pluginName)) {
+      return addVuex(context)
+    }
   }
 
   const packageName = resolvePluginId(pluginName)
@@ -26,8 +39,14 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log(`📦  Installing ${chalk.cyan(packageName)}...`)
   log()
 
-  const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
-  await installPackage(context, packageManager, null, packageName)
+  const pm = new PackageManager({ context })
+
+  const cliVersion = require('../package.json').version
+  if (isOfficialPlugin(packageName) && semver.prerelease(cliVersion)) {
+    await pm.add(`${packageName}@^${cliVersion}`)
+  } else {
+    await pm.add(packageName)
+  }
 
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()
@@ -40,8 +59,16 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   }
 }
 
+module.exports = (...args) => {
+  return add(...args).catch(err => {
+    error(err)
+    if (!process.env.VUE_CLI_TEST) {
+      process.exit(1)
+    }
+  })
+}
+
 async function addRouter (context) {
-  const inquirer = require('inquirer')
   const options = await inquirer.prompt([{
     name: 'routerHistoryMode',
     type: 'confirm',
@@ -58,14 +85,5 @@ async function addVuex (context) {
   invoke.runGenerator(context, {
     id: 'core:vuex',
     apply: loadModule('@vue/cli-service/generator/vuex', context)
-  })
-}
-
-module.exports = (...args) => {
-  return add(...args).catch(err => {
-    error(err)
-    if (!process.env.VUE_CLI_TEST) {
-      process.exit(1)
-    }
   })
 }

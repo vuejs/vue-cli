@@ -1,10 +1,9 @@
-const chalk = require('chalk')
-const { toShortPluginId } = require('@vue/cli-shared-utils')
+const { chalk, toShortPluginId } = require('@vue/cli-shared-utils')
 
 exports.getFeatures = (preset) => {
   const features = []
   if (preset.router) {
-    features.push('vue-router')
+    features.push('router')
   }
   if (preset.vuex) {
     features.push('vuex')

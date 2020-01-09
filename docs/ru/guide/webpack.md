@@ -4,7 +4,7 @@
 
 Самый простой способ изменять конфигурацию webpack — использовать объект в опции `configureWebpack` в файле `vue.config.js`:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   configureWebpack: {
@@ -18,12 +18,12 @@ module.exports = {
 Объект будет объединён в итоговую конфигурацию webpack с помощью [webpack-merge](https://github.com/survivejs/webpack-merge).
 
 ::: warning Предупреждение
-Некоторые параметры webpack устанавливаются на основе значений из `vue.config.js` и не должны изменяться напрямую. Например, вместо изменения `output.path` нужно использовать опцию `outputDir` в `vue.config.js`; а вместо `output.publicPath` нужно использовать опцию `baseUrl` в `vue.config.js`. Это связано с тем, что значения из `vue.config.js` используются в нескольких местах внутри конфигурации и необходимо гарантировать что всё вместе будет работать правильно.
+Некоторые параметры webpack устанавливаются на основе значений из `vue.config.js` и не должны изменяться напрямую. Например, вместо изменения `output.path` нужно использовать опцию `outputDir` в `vue.config.js`; а вместо `output.publicPath` нужно использовать опцию `publicPath` в `vue.config.js`. Это связано с тем, что значения из `vue.config.js` используются в нескольких местах внутри конфигурации и необходимо гарантировать что всё вместе будет работать правильно.
 :::
 
 Если необходимо условное поведение, в зависимости от окружения, или вы хотите напрямую изменять конфигурацию — используйте функцию (будет лениво выполняться после установки переменных окружения). Она получает итоговую конфигурацию в качестве аргумента. Внутри функции можно напрямую изменить конфигурацию, ИЛИ вернуть объект для объединения:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   configureWebpack: config => {
@@ -43,12 +43,12 @@ module.exports = {
 Это позволяет осуществлять более тонкий контроль над встроенной конфигурацией. Ниже вы увидите примеры изменений, выполненных с помощью опции `chainWebpack` в `vue.config.js`.
 
 ::: tip Совет
-Команда [vue inspect](#inspecting-the-project-s-webpack-config) пригодится, когда вы будете пробовать добраться до определённого загрузчика в цепочке.
+Команда [vue inspect](#просмотр-конфигурации-webpack-проекта) пригодится, когда вы будете пробовать добраться до определённого загрузчика в цепочке.
 :::
 
 ### Изменение настроек загрузчика
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
@@ -70,7 +70,7 @@ module.exports = {
 
 ### Добавление нового загрузчика
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
@@ -89,7 +89,7 @@ module.exports = {
 
 Если вы хотите заменить существующий [базовый загрузчик](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js), например воспользоваться `vue-svg-loader` для вставки SVG-файлов инлайн вместо загрузки обычными файлами:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
@@ -110,7 +110,7 @@ module.exports = {
 
 ### Изменение настроек плагина
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
@@ -127,7 +127,7 @@ module.exports = {
 
 Например, предположим, необходимо изменить местоположение `index.html` по умолчанию с `/Users/test/proj/public/index.html` на `/Users/test/proj/app/templates/index.html`. По ссылке [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin#options) перечислен список параметров, которые можем передавать. Чтобы изменить шаблон, передадим новый путь к шаблону следующей конфигурацией:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   chainWebpack: config => {
@@ -153,7 +153,7 @@ module.exports = {
 
 Вы можете перенаправить вывод в файл для более удобного изучения:
 
-``` bash
+```bash
 vue inspect > output.js
 ```
 
@@ -161,21 +161,21 @@ vue inspect > output.js
 
 Вы также можете указать подмножество конфигурации для проверки, указав путь:
 
-``` bash
+```bash
 # показать только первое правило
 vue inspect module.rules.0
 ```
 
 Или указать именованное правило или плагин:
 
-``` bash
+```bash
 vue inspect --rule vue
 vue inspect --plugin html
 ```
 
 Наконец, вы можете вывести все именованные правила и плагины:
 
-``` bash
+```bash
 vue inspect --rules
 vue inspect --plugins
 ```

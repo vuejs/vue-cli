@@ -1,0 +1,7 @@
+#import "./widgetDefinitionFragment.gql"
+
+query widgetDefinitions {
+  widgetDefinitions {
+    ...widgetDefinition
+  }
+}

@@ -26,12 +26,14 @@
       class="children"
       :transform="`translate(${size / 2}, ${size / 2})`"
     >
+      <!-- eslint-disable vue/no-use-v-if-with-v-for  -->
       <DonutModule
-        v-for="module of module.children"
-        v-if="isVisible(getRatio(module, ratio))"
-        :key="module.id"
-        :module="module"
+        v-for="m of module.children"
+        v-if="isVisible(getRatio(m, ratio))"
+        :key="m.id"
+        :module="m"
         :depth="depth + 1"
+        :parent-module="module"
         :parent-ratio="ratio"
         :colors="colors"
       />
@@ -53,6 +55,11 @@ export default {
     module: {
       type: Object,
       required: true
+    },
+
+    parentModule: {
+      type: Object,
+      default: undefined
     },
 
     depth: {
@@ -101,7 +108,7 @@ export default {
     },
 
     rotation () {
-      return this.module.previousSize[this.sizeField] / this.module.parent.size[this.sizeField] * this.parentRatio * 360
+      return this.module.previousSize[this.sizeField] / this.parentModule.size[this.sizeField] * this.parentRatio * 360
     },
 
     size () {
@@ -129,7 +136,7 @@ export default {
 
   methods: {
     getRatio (module, parentRatio) {
-      return module.size[this.sizeField] / module.parent.size[this.sizeField] * parentRatio
+      return module.size[this.sizeField] / this.parentModule.size[this.sizeField] * parentRatio
     },
 
     isVisible (ratio) {

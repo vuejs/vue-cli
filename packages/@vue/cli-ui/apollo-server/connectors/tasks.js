@@ -1,6 +1,4 @@
-const execa = require('execa')
-const terminate = require('terminate')
-const chalk = require('chalk')
+const { chalk, execa } = require('@vue/cli-shared-utils')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -14,6 +12,8 @@ const projects = require('./projects')
 // Utils
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
+const { terminate } = require('../util/terminate')
+const { parseArgs } = require('../util/parse-args')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -45,7 +45,8 @@ async function list ({ file = null, api = true } = {}, context) {
     const pluginApi = api && plugins.getApi(file)
 
     // Get current valid tasks in project `package.json`
-    let currentTasks = Object.keys(pkg.scripts).map(
+    const scriptKeys = Object.keys(pkg.scripts)
+    let currentTasks = scriptKeys.map(
       name => {
         const id = `${file}:${name}`
         existing.set(id, true)
@@ -112,14 +113,22 @@ async function list ({ file = null, api = true } = {}, context) {
       })
     )
 
-    // Keep existing or ran tasks
+    // Keep existing running tasks
     list = list.filter(
       task => existing.get(task.id) ||
-      task.status !== 'idle'
+      task.status === 'running'
     )
 
     // Add the new tasks
     list = list.concat(newTasks)
+
+    // Sort
+    const getSortScore = task => {
+      const index = scriptKeys.indexOf(task.name)
+      if (index !== -1) return index
+      return Infinity
+    }
+    list.sort((a, b) => getSortScore(a) - getSortScore(b))
 
     tasks.set(file, list)
   }
@@ -228,15 +237,7 @@ async function run (id, context) {
 
     // Answers
     const answers = prompts.getAnswers()
-    let args = []
-    let command = task.command
-
-    // Process command containing args
-    if (command.indexOf(' ')) {
-      const parts = command.split(/\s+/)
-      command = parts.shift()
-      args = parts
-    }
+    let [command, ...args] = parseArgs(task.command)
 
     // Output colors
     // See: https://www.npmjs.com/package/supports-color
@@ -244,6 +245,13 @@ async function run (id, context) {
 
     // Plugin API
     if (task.onBeforeRun) {
+      if (!answers.$_overrideArgs) {
+        const origPush = args.push.bind(args)
+        args.push = (...items) => {
+          if (items.length && args.indexOf(items[0]) !== -1) return items.length
+          return origPush(...items)
+        }
+      }
       await task.onBeforeRun({
         answers,
         args
@@ -462,18 +470,25 @@ async function run (id, context) {
   return task
 }
 
-function stop (id, context) {
+async function stop (id, context) {
   const task = findOne(id, context)
   if (task && task.status === 'running' && task.child) {
     task._terminating = true
     try {
-      terminate(task.child.pid)
+      const { success, error } = await terminate(task.child, cwd.get())
+      if (success) {
+        updateOne({
+          id: task.id,
+          status: 'terminated'
+        }, context)
+      } else if (error) {
+        throw error
+      } else {
+        throw new Error('Unknown error')
+      }
     } catch (e) {
+      console.log(chalk.red(`Can't terminate process ${task.child.pid}`))
       console.error(e)
-      updateOne({
-        id: task.id,
-        status: 'terminated'
-      }, context)
     }
   }
   return task
@@ -565,6 +580,15 @@ async function restoreParameters ({ id }, context) {
   const task = findOne(id, context)
   if (task) {
     await prompts.reset()
+    if (task.prompts.length) {
+      prompts.add({
+        name: '$_overrideArgs',
+        type: 'confirm',
+        default: false,
+        message: 'org.vue.views.project-task-details.override-args.message',
+        description: 'org.vue.views.project-task-details.override-args.description'
+      })
+    }
     task.prompts.forEach(prompts.add)
     const data = getSavedData(id, context)
     if (data) {

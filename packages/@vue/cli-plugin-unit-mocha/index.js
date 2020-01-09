@@ -19,7 +19,7 @@ module.exports = api => {
   })
 
   api.registerCommand('test:unit', {
-    description: 'run unit tests with mocha-webpack',
+    description: 'run unit tests with mochapack',
     usage: 'vue-cli-service test:unit [options] [...files]',
     options: {
       '--watch, -w': 'run in watch mode',
@@ -34,7 +34,7 @@ module.exports = api => {
     details: (
       `The above list only includes the most commonly used options.\n` +
       `For a full list of available options, see\n` +
-      `http://zinserjan.github.io/mocha-webpack/docs/installation/cli-usage.html`
+      `https://sysgears.github.io/mochapack/docs/installation/cli-usage.html`
     )
   }, (args, rawArgv) => {
     const inspectPos = rawArgv.indexOf('--inspect-brk')
@@ -42,11 +42,11 @@ module.exports = api => {
     if (inspectPos !== -1) {
       nodeArgs = rawArgv.splice(inspectPos, inspectPos + 1)
     }
-    // for @vue/babel-preset-app
+    // for @vue/babel-preset-app <= v4.0.0-rc.7
     process.env.VUE_CLI_BABEL_TARGET_NODE = true
     // start runner
     const { execa } = require('@vue/cli-shared-utils')
-    const bin = require.resolve('mocha-webpack/bin/mocha-webpack')
+    const bin = require.resolve('mochapack/bin/mochapack')
     const hasInlineFilesGlob = args._ && args._.length
     const argv = [
       ...nodeArgs,
@@ -69,7 +69,7 @@ module.exports = api => {
       child.on('error', reject)
       child.on('exit', code => {
         if (code !== 0) {
-          reject(`mocha-webpack exited with code ${code}.`)
+          reject(`mochapack exited with code ${code}.`)
         } else {
           resolve()
         }

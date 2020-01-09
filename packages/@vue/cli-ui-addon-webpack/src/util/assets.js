@@ -49,7 +49,7 @@ export function buildSortedAssets (assets, sizeField) {
         speeds: getSpeeds(size)
       }
     })
-    list = list.sort((a, b) => {
+    list.sort((a, b) => {
       if (a.secondary === b.secondary) {
         return b.size - a.size
       } else if (a.secondary && !b.secondary) {

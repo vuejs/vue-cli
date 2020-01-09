@@ -1,11 +1,12 @@
 {
   "name": "@vue/cli-plugin-eslint",
-  "version": "3.0.1",
+  "version": "4.1.2",
   "description": "eslint plugin for vue-cli",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git"
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-plugin-eslint"
   },
   "keywords": [
     "vue",
@@ -22,10 +23,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.0.1",
-    "babel-eslint": "^8.2.5",
-    "eslint": "^4.19.1",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-vue": "^4.5.0"
+    "@vue/cli-shared-utils": "^4.1.2",
+    "eslint-loader": "^2.1.2",
+    "globby": "^9.2.0",
+    "webpack": "^4.0.0",
+    "yorkie": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0",
+    "eslint": ">= 1.6.0"
   }
 }

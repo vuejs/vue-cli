@@ -2,12 +2,20 @@
 const cwd = require('./cwd')
 // Subs
 const channels = require('../channels')
+// Utils
+const { log } = require('../util/logger')
 
 let currentView
 
 function createViewsSet () {
   // Builtin views
   return [
+    {
+      id: 'vue-project-dashboard',
+      name: 'project-dashboard',
+      icon: 'dashboard',
+      tooltip: 'org.vue.components.project-nav.tooltips.dashboard'
+    },
     {
       id: 'vue-project-plugins',
       name: 'project-plugins',
@@ -17,7 +25,7 @@ function createViewsSet () {
     {
       id: 'vue-project-dependencies',
       name: 'project-dependencies',
-      icon: 'widgets',
+      icon: 'collections_bookmark',
       tooltip: 'org.vue.components.project-nav.tooltips.dependencies',
       projectTypes: ['vue', 'unknown']
     },
@@ -58,13 +66,23 @@ function findOne (id) {
   return views.find(r => r.id === id)
 }
 
-function add (view, context) {
+async function add ({ view, project }, context) {
   remove(view.id, context)
+
+  // Default icon
+  if (!view.icon) {
+    const plugins = require('./plugins')
+    const plugin = plugins.findOne({ id: view.pluginId, file: cwd.get() }, context)
+    const logo = await plugins.getLogo(plugin, context)
+    view.icon = logo ? `${logo}?project=${project.id}` : 'radio_button_unchecked'
+  }
+
   const views = getViews()
   views.push(view)
   context.pubsub.publish(channels.VIEW_ADDED, {
     viewAdded: view
   })
+  log('View added', view.id)
 }
 
 function remove (id, context) {

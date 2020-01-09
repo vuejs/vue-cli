@@ -34,12 +34,11 @@ module.exports = (api, options) => {
       .output
         .path(api.resolve(options.outputDir))
         .filename(isLegacyBundle ? '[name]-legacy.js' : '[name].js')
-        .publicPath(options.baseUrl)
+        .publicPath(options.publicPath)
 
     webpackConfig.resolve
-      .set('symlinks', false)
       .extensions
-        .merge(['.js', '.jsx', '.vue', '.json'])
+        .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
         .end()
       .modules
         .add('node_modules')
@@ -78,14 +77,14 @@ module.exports = (api, options) => {
       .rule('vue')
         .test(/\.vue$/)
         .use('cache-loader')
-          .loader('cache-loader')
+          .loader(require.resolve('cache-loader'))
           .options(vueLoaderCacheConfig)
           .end()
         .use('vue-loader')
-          .loader('vue-loader')
+          .loader(require.resolve('vue-loader'))
           .options(Object.assign({
             compilerOptions: {
-              preserveWhitespace: false
+              whitespace: 'condense'
             }
           }, vueLoaderCacheConfig))
 
@@ -99,7 +98,7 @@ module.exports = (api, options) => {
       .rule('images')
         .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
         .use('url-loader')
-          .loader('url-loader')
+          .loader(require.resolve('url-loader'))
           .options(genUrlLoaderOptions('img'))
 
     // do not base64-inline SVGs.
@@ -108,7 +107,7 @@ module.exports = (api, options) => {
       .rule('svg')
         .test(/\.(svg)(\?.*)?$/)
         .use('file-loader')
-          .loader('file-loader')
+          .loader(require.resolve('file-loader'))
           .options({
             name: genAssetSubPath('img')
           })
@@ -117,24 +116,43 @@ module.exports = (api, options) => {
       .rule('media')
         .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
         .use('url-loader')
-          .loader('url-loader')
+          .loader(require.resolve('url-loader'))
           .options(genUrlLoaderOptions('media'))
 
     webpackConfig.module
       .rule('fonts')
         .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
         .use('url-loader')
-          .loader('url-loader')
+          .loader(require.resolve('url-loader'))
           .options(genUrlLoaderOptions('fonts'))
 
     // Other common pre-processors ---------------------------------------------
 
+    const maybeResolve = name => {
+      try {
+        return require.resolve(name)
+      } catch (error) {
+        return name
+      }
+    }
+
     webpackConfig.module
       .rule('pug')
-      .test(/\.pug$/)
-      .use('pug-plain-loader')
-        .loader('pug-plain-loader')
-        .end()
+        .test(/\.pug$/)
+          .oneOf('pug-vue')
+            .resourceQuery(/vue/)
+            .use('pug-plain-loader')
+              .loader(maybeResolve('pug-plain-loader'))
+              .end()
+            .end()
+          .oneOf('pug-template')
+            .use('raw')
+              .loader(maybeResolve('raw-loader'))
+              .end()
+            .use('pug-plain-loader')
+              .loader(maybeResolve('pug-plain-loader'))
+              .end()
+            .end()
 
     // shims
 
@@ -158,7 +176,7 @@ module.exports = (api, options) => {
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
       .plugin('define')
-        .use(require('webpack/lib/DefinePlugin'), [
+        .use(require('webpack').DefinePlugin, [
           resolveClientEnv(options)
         ])
 
@@ -171,9 +189,15 @@ module.exports = (api, options) => {
     const { transformer, formatter } = require('../util/resolveLoaderError')
     webpackConfig
       .plugin('friendly-errors')
-        .use(require('friendly-errors-webpack-plugin'), [{
+        .use(require('@soda/friendly-errors-webpack-plugin'), [{
           additionalTransformers: [transformer],
           additionalFormatters: [formatter]
         }])
+
+    const TerserPlugin = require('terser-webpack-plugin')
+    const terserOptions = require('./terserOptions')
+    webpackConfig.optimization
+      .minimizer('terser')
+        .use(TerserPlugin, [terserOptions(options)])
   })
 }

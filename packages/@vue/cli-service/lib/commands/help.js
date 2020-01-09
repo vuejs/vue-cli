@@ -1,14 +1,13 @@
-const chalk = require('chalk')
-const padEnd = require('string.prototype.padend')
+const { chalk } = require('@vue/cli-shared-utils')
 const getPadLength = require('../util/getPadLength')
 
 module.exports = (api, options) => {
   api.registerCommand('help', args => {
-    const command = args._[0]
-    if (!command) {
+    const commandName = args._[0]
+    if (!commandName) {
       logMainHelp()
     } else {
-      logHelpForCommand(command, api.service.commands[command])
+      logHelpForCommand(commandName, api.service.commands[commandName])
     }
   })
 
@@ -23,7 +22,7 @@ module.exports = (api, options) => {
       if (name !== 'help') {
         const opts = commands[name].opts || {}
         console.log(`    ${
-          chalk.blue(padEnd(name, padLength))
+          chalk.blue(name.padEnd(padLength))
         }${
           opts.description || ''
         }`)
@@ -45,11 +44,11 @@ module.exports = (api, options) => {
       if (opts.options) {
         console.log(`\n  Options:\n`)
         const padLength = getPadLength(opts.options)
-        for (const name in opts.options) {
+        for (const [flags, description] of Object.entries(opts.options)) {
           console.log(`    ${
-            chalk.blue(padEnd(name, padLength))
+            chalk.blue(flags.padEnd(padLength))
           }${
-            opts.options[name]
+            description
           }`)
         }
       }

@@ -26,20 +26,24 @@ module.exports = {
   // 选项...
 }
 ```
-
 ### baseUrl
+
+从 Vue CLI 3.3 起已弃用，请使用[`publicPath`](#publicPath)。
+
+
+### publicPath
 
 - Type: `string`
 - Default: `'/'`
 
-  部署应用时的基本 URL。用法和 webpack 本身的 `output.publicPath` 一致，但是 Vue CLI 在一些其他地方也需要用到这个值，所以**请始终使用 `baseUrl` 而不要直接修改 webpack 的 `output.publicPath`**。
+  部署应用包时的基本 URL。用法和 webpack 本身的 `output.publicPath` 一致，但是 Vue CLI 在一些其他地方也需要用到这个值，所以**请始终使用 `publicPath` 而不要直接修改 webpack 的 `output.publicPath`**。
 
-  默认情况下，Vue CLI 会假设你的应用是被部署在一个域名的根路径上，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `baseUrl` 为 `/my-app/`。
+  默认情况下，Vue CLI 会假设你的应用是被部署在一个域名的根路径上，例如 `https://www.my-app.com/`。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 `https://www.my-app.com/my-app/`，则设置 `publicPath` 为 `/my-app/`。
 
   这个值也可以被设置为空字符串 (`''`) 或是相对路径 (`'./'`)，这样所有的资源都会被链接为相对路径，这样打出来的包可以被部署在任意路径，也可以用在类似 Cordova hybrid 应用的文件系统中。
 
-  ::: warning 相对 baseUrl 的限制
-  相对路径的 `baseUrl` 有一些使用上的限制。在以下情况下，应当避免使用相对 `baseUrl`:
+  ::: warning 相对 publicPath 的限制
+  相对路径的 `publicPath` 有一些使用上的限制。在以下情况下，应当避免使用相对 `publicPath`:
 
   - 当使用基于 HTML5 `history.pushState` 的路由时；
 
@@ -50,7 +54,7 @@ module.exports = {
 
   ``` js
   module.exports = {
-    baseUrl: process.env.NODE_ENV === 'production'
+    publicPath: process.env.NODE_ENV === 'production'
       ? '/production-sub-path/'
       : '/'
   }
@@ -198,7 +202,7 @@ module.exports = {
 
   需要注意的是该选项仅影响由 `html-webpack-plugin` 在构建时注入的标签 - 直接写在模版 (`public/index.html`) 中的标签不受影响。
 
-  更多细节可查阅: [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes)
+  更多细节可查阅: [CORS settings attributes](https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_settings_attributes)
 
 ### integrity
 
@@ -231,10 +235,19 @@ module.exports = {
 
 ### css.modules
 
-- Type: `boolean`
-- Default: `false`
+从 v4 起已弃用，请使用[`css.requireModuleExtension`](#css-requireModuleExtension)。
+在 v3 中，这个选项含义与 `css.requireModuleExtension` 相反。
 
-  默认情况下，只有 `*.module.[ext]` 结尾的文件才会被视作 CSS Modules 模块。设置为 `true` 后你就可以去掉文件名中的 `.module` 并将所有的 `*.(css|scss|sass|less|styl(us)?)` 文件视为 CSS Modules 模块。
+### css.requireModuleExtension
+
+- Type: `boolean`
+- Default: `true`
+
+  默认情况下，只有 `*.module.[ext]` 结尾的文件才会被视作 CSS Modules 模块。设置为 `false` 后你就可以去掉文件名中的 `.module` 并将所有的 `*.(css|scss|sass|less|styl(us)?)` 文件视为 CSS Modules 模块。
+
+  ::: tip 提示
+  如果你在 `css.loaderOptions.css` 里配置了自定义的 CSS Module 选项，则 `css.requireModuleExtension` 必须被显式地指定为 `true` 或者 `false`，否则我们无法确定你是否希望将这些自定义配置应用到所有 CSS 文件中。
+  :::
 
   更多细节可查阅：[配合 CSS > CSS Modules](../guide/css.md#css-modules)
 
@@ -288,6 +301,8 @@ module.exports = {
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
 
+  另外，也可以使用 `scss` 选项，针对 `scss` 语法进行单独配置（区别于 `sass` 语法）。
+
   更多细节可查阅：[向预处理器 Loader 传递选项](../guide/css.html#向预处理器-loader-传递选项)
 
   ::: tip 提示
@@ -302,7 +317,7 @@ module.exports = {
 
   - 有些值像 `host`、`port` 和 `https` 可能会被命令行参数覆写。
 
-  - 有些值像 `publicPath` 和 `historyApiFallback` 不应该被修改，因为它们需要和开发服务器的 [baseUrl](#baseurl) 同步以保障正常的工作。
+  - 有些值像 `publicPath` 和 `historyApiFallback` 不应该被修改，因为它们需要和开发服务器的 [publicPath](#baseurl) 同步以保障正常的工作。
 
 ### devServer.proxy
 
@@ -384,7 +399,7 @@ Vue CLI 使用了 Babel 7 中的新配置格式 `babel.config.js`。和 `.babelr
 
 ## ESLint
 
-ESLint 可以通过 `.eslintrc` 或 `pacakge.json` 中的 `eslintConfig` 字段来配置。
+ESLint 可以通过 `.eslintrc` 或 `package.json` 中的 `eslintConfig` 字段来配置。
 
 更多细节可查阅 [@vue/cli-plugin-eslint](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint)。
 

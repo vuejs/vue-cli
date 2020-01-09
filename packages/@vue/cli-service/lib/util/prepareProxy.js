@@ -9,7 +9,7 @@
 const fs = require('fs')
 const url = require('url')
 const path = require('path')
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 const address = require('address')
 
 const defaultConfig = {
@@ -27,7 +27,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
   if (!proxy) {
     return undefined
   }
-  if (typeof proxy !== 'object' && typeof proxy !== 'string') {
+  if (Array.isArray(proxy) || (typeof proxy !== 'object' && typeof proxy !== 'string')) {
     console.log(
       chalk.red(
         'When specified, "proxy" in package.json must be a string or an object.'
@@ -44,14 +44,21 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     process.exit(1)
   }
 
-  // Otherwise, if proxy is specified, we will let it handle any request except for files in the public folder.
+  // If proxy is specified, let it handle any request except for
+  // files in the public folder and requests to the WebpackDevServer socket endpoint.
+  // https://github.com/facebook/create-react-app/issues/6720
   function mayProxy (pathname) {
     const maybePublicPath = path.resolve(appPublicFolder, pathname.slice(1))
-    return !fs.existsSync(maybePublicPath)
+    const isPublicFileRequest = fs.existsSync(maybePublicPath)
+    const isWdsEndpointRequest = pathname.startsWith('/sockjs-node') // used by webpackHotDevClient
+    return !(isPublicFileRequest || isWdsEndpointRequest)
   }
 
   function createProxyEntry (target, usersOnProxyReq, context) {
-    if (process.platform === 'win32') {
+    // #2478
+    // There're a little-known use case that the `target` field is an object rather than a string
+    // https://github.com/chimurai/http-proxy-middleware/blob/master/recipes/https.md
+    if (typeof target === 'string' && process.platform === 'win32') {
       target = resolveLoopback(target)
     }
     return {
@@ -116,7 +123,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     if (!config.hasOwnProperty('target')) {
       console.log(
         chalk.red(
-          'When `proxy` in package.json is as an object, each `context` object must have a ' +
+          'When `proxy` in package.json is an object, each `context` object must have a ' +
             '`target` property specified as a url string'
         )
       )

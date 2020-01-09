@@ -14,13 +14,13 @@ test('CSS pre-processor ', async () => {
     },
     {
       message: 'Pick a CSS pre-processor',
-      choices: ['Sass', 'Less', 'Stylus'],
+      choices: ['Sass/SCSS (with dart-sass)', 'Sass/SCSS (with node-sass)', 'Less', 'Stylus'],
       choose: 0
     }
   ]
 
   const expectedOptions = {
-    cssPreprocessor: 'sass',
+    cssPreprocessor: 'dart-sass',
     plugins: {}
   }
 

@@ -27,6 +27,8 @@ How to do a release:
 6. Go to GitHub releases page and publish the release (this is required for
    the release to show up in the issue helper)
 
+Note: eslint-config-* packages should be released separately & manually.
+
 */
 
 process.env.VUE_CLI_RELEASE = true
@@ -34,8 +36,11 @@ process.env.VUE_CLI_RELEASE = true
 const execa = require('execa')
 const semver = require('semver')
 const inquirer = require('inquirer')
+const minimist = require('minimist')
 const { syncDeps } = require('./syncDeps')
+// const { buildEditorConfig } = require('./buildEditorConfig')
 
+const cliOptions = minimist(process.argv)
 const curVersion = require('../lerna.json').version
 
 const release = async () => {
@@ -79,17 +84,36 @@ const release = async () => {
       skipPrompt: true
     })
     delete process.env.PREFIX
-    await execa('git', ['add', '-A'], { stdio: 'inherit' })
-    await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+
+    // buildEditorConfig()
+
+    try {
+      await execa('git', ['add', '-A'], { stdio: 'inherit' })
+      await execa('git', ['commit', '-m', 'chore: pre release sync'], { stdio: 'inherit' })
+    } catch (e) {
+      // if it's a patch release, there may be no local deps to sync
+    }
   }
 
-  await execa(require.resolve('lerna/bin/lerna'), [
-    'publish',
-    '--repo-version',
-    version
-  ], { stdio: 'inherit' })
+  let distTag = 'latest'
+  if (bump === 'prerelease' || semver.prerelease(version)) {
+    distTag = 'next'
+  }
 
-  require('./genChangelog')(version)
+  const lernaArgs = [
+    'publish',
+    version,
+    '--dist-tag',
+    distTag
+  ]
+  // keep all packages' versions in sync
+  lernaArgs.push('--force-publish')
+
+  if (cliOptions['local-registry']) {
+    lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push', '--yes')
+  }
+
+  await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
 }
 
 release().catch(err => {

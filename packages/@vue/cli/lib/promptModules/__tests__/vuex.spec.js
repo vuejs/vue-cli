@@ -15,8 +15,9 @@ test('vuex', async () => {
   ]
 
   const expectedOptions = {
-    vuex: true,
-    plugins: {}
+    plugins: {
+      '@vue/cli-plugin-vuex': {}
+    }
   }
 
   await assertPromptModule(

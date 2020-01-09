@@ -4,8 +4,6 @@ sidebar: auto
 
 # Configuration Reference
 
-<Bit/>
-
 ## Global CLI Config
 
 Some global configurations for `@vue/cli`, such as your preferred package manager and your locally saved presets, are stored in a JSON file named `.vuerc` in your home directory. You can edit this file directly with your editor of choice to change the saved options.
@@ -31,17 +29,21 @@ module.exports = {
 
 ### baseUrl
 
+Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
+
+### publicPath
+
 - Type: `string`
 - Default: `'/'`
 
-  The base URL your application bundle will be deployed at. This is the equivalent of webpack's `output.publicPath`, but Vue CLI also needs this value for other purposes, so you should **always use `baseUrl` instead of modifying webpack `output.publicPath`**.
+  The base URL your application bundle will be deployed at (known as `baseUrl` before Vue CLI 3.3). This is the equivalent of webpack's `output.publicPath`, but Vue CLI also needs this value for other purposes, so you should **always use `publicPath` instead of modifying webpack `output.publicPath`**.
 
-  By default, Vue CLI assumes your app will be deployed at the root of a domain, e.g. `https://www.my-app.com/`. If your app is deployed at a sub-path, you will need to specify that sub-path using this option. For example, if your app is deployed at `https://www.foobar.com/my-app/`, set `baseUrl` to `'/my-app/'`.
+  By default, Vue CLI assumes your app will be deployed at the root of a domain, e.g. `https://www.my-app.com/`. If your app is deployed at a sub-path, you will need to specify that sub-path using this option. For example, if your app is deployed at `https://www.foobar.com/my-app/`, set `publicPath` to `'/my-app/'`.
 
   The value can also be set to an empty string (`''`) or a relative path (`./`) so that all assets are linked using relative paths. This allows the built bundle to be deployed under any public path, or used in a file system based environment like a Cordova hybrid app.
 
-  ::: warning Limitations of relative baseUrl
-  Relative `baseUrl` has some limitations and should be avoided when:
+  ::: warning Limitations of relative publicPath
+  Relative `publicPath` has some limitations and should be avoided when:
 
   - You are using HTML5 `history.pushState` routing;
 
@@ -52,7 +54,7 @@ module.exports = {
 
   ``` js
   module.exports = {
-    baseUrl: process.env.NODE_ENV === 'production'
+    publicPath: process.env.NODE_ENV === 'production'
       ? '/production-sub-path/'
       : '/'
   }
@@ -101,7 +103,7 @@ module.exports = {
 
   Build the app in multi-page mode. Each "page" should have a corresponding JavaScript entry file. The value should be an object where the key is the name of the entry, and the value is either:
 
-  - An object that specifies its `entry`, `template`, `filename`, `title` and `chunks` (all optional except `entry`);
+  - An object that specifies its `entry`, `template`, `filename`, `title` and `chunks` (all optional except `entry`). Any other properties added beside those will also be passed directly to `html-webpack-plugin`, allowing user to customize said plugin;
   - Or a string specifying its `entry`.
 
   ``` js
@@ -136,14 +138,16 @@ module.exports = {
 
 ### lintOnSave
 
-- Type: `boolean | 'error'`
+- Type: `boolean | 'warning' | 'default' | 'error'`
 - Default: `true`
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
 
-  When set to `true`, `eslint-loader` will emit lint errors as warnings. By default, warnings are only logged to the terminal and does not fail the compilation.
+  When set to `true` or `'warning'`, `eslint-loader` will emit lint errors as warnings. By default, warnings are only logged to the terminal and does not fail the compilation, so this is a good default for development.
 
-  To make lint errors show up in the browser overlay, you can use `lintOnSave: 'error'`. This will force `eslint-loader` to always emit errors. this also means lint errors will now cause the compilation to fail.
+  To make lint errors show up in the browser overlay, you can use `lintOnSave: 'default'`. This will force `eslint-loader` to actually emit errors. this also means lint errors will now cause the compilation to fail.
+
+  Setting it to `'error'` will force eslint-loader to emit warnings as errors as well, which means warnings will also show up in the overlay.
 
   Alternatively, you can configure the overlay to display both warnings and errors:
 
@@ -183,6 +187,14 @@ module.exports = {
 - Default: `[]`
 
   By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly transpile a dependency with Babel, you can list it in this option.
+
+::: warning Jest config
+This option is not respected by the [cli-unit-jest plugin](#jest), because in jest, we don't have to transpile code from `/node_modules` unless it uses non-standard features - Node >8.11 supports the latest ECMAScript features already.
+
+However, jest sometimes has to transform content from node_modules if that code uses ES6 `import`/`export` syntax. In that case, use the `transformIgnorePatterns` option in `jest.config.js`.
+
+See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-plugin-unit-jest/README.md) for more information.
+:::
 
 ### productionSourceMap
 
@@ -233,10 +245,20 @@ module.exports = {
 
 ### css.modules
 
-- Type: `boolean`
-- Default: `false`
+Deprecated since v4, please use [`css.requireModuleExtension`](#css-requireModuleExtension) instead.
 
-  By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `true` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
+In v3 this means the opposite of `css.requireModuleExtension`.
+
+### css.requireModuleExtension
+
+- Type: `boolean`
+- Default: `true`
+
+  By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `false` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
+
+  ::: tip
+  If you have customized CSS Modules configurations in `css.loaderOptions.css`, then the `css.requireModuleExtension` field must be explictly configured to `true` or `false`, otherwise we can't be sure whether you want to apply these options to all CSS files or not.
+  :::
 
   See also: [Working with CSS > CSS Modules](../guide/css.md#css-modules)
 
@@ -252,6 +274,8 @@ module.exports = {
   When building as a library, you can also set this to `false` to avoid your users having to import the CSS themselves.
 
   Extracting CSS is disabled by default in development mode since it is incompatible with CSS hot reloading. However, you can still enforce extraction in all cases by explicitly setting the value to `true`.
+
+  Instead of a `true`, you can also pass an object of options for the [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) if you want to further configure what this plugin does exactly.
 
 ### css.sourceMap
 
@@ -290,6 +314,8 @@ module.exports = {
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
 
+  It's also possible to target `scss` syntax separately from `sass`, with the `scss` option.
+
   See also: [Passing Options to Pre-Processor Loaders](../guide/css.md#passing-options-to-pre-processor-loaders)
 
   ::: tip
@@ -304,7 +330,7 @@ module.exports = {
 
   - Some values like `host`, `port` and `https` may be overwritten by command line flags.
 
-  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [baseUrl](#baseurl) for the dev server to function properly.
+  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [publicPath](#baseurl) for the dev server to function properly.
 
 ### devServer.proxy
 
@@ -324,18 +350,22 @@ module.exports = {
 
   This will tell the dev server to proxy any unknown requests (requests that did not match a static file) to `http://localhost:4000`.
 
+  ::: warning
+  When `devServer.proxy` is set to a string, only XHR requests will be proxied. If you want to test an API URL, don't open it in the browser, use an API tool like Postman instead.
+  :::
+
   If you want to have more control over the proxy behavior, you can also use an object with `path: options` pairs. Consult [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config) for full options:
 
   ``` js
   module.exports = {
     devServer: {
       proxy: {
-        '/api': {
+        '^/api': {
           target: '<url>',
           ws: true,
           changeOrigin: true
         },
-        '/foo': {
+        '^/foo': {
           target: '<other_url>'
         }
       }
@@ -345,10 +375,10 @@ module.exports = {
 
 ### parallel
 
-- Type: `boolean`
+- Type: `boolean | number`
 - Default: `require('os').cpus().length > 1`
 
-  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores.
+  Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores. Passing a number will define the amount of workers used.
 
 ### pwa
 

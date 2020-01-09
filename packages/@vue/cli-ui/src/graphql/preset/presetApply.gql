@@ -1,0 +1,7 @@
+#import "../project/projectCreationFragment.gql"
+
+mutation presetApply ($id: ID!) {
+  presetApply(id: $id) {
+    ...projectCreation
+  }
+}

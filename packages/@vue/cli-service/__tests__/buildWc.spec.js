@@ -2,7 +2,7 @@ jest.setTimeout(30000)
 
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
@@ -87,6 +87,61 @@ test('build as single wc', async () => {
     return document.querySelector('single-wc').shadowRoot.querySelector('h1').textContent
   })
   expect(h1Text).toMatch('Welcome to Your Vue.js App')
+})
+
+test('build as wc with --inline-vue', async () => {
+  const project = await create('build-wc-inline-vue', defaultPreset)
+
+  await project.write('src/main-wc.js', `
+    import Vue from 'vue'
+    import App from "./components/App.vue"
+
+    document.addEventListener("DOMContentLoaded", function() {
+      new Vue({
+        render: h => h(App),
+      }).$mount('body');
+    });
+  `)
+
+  await project.write('src/components/App.vue', `
+    <template>
+      <div>{{ message }}<div>
+    </template>
+    <script>
+      export default {
+        data() {
+          return {
+            message: 'Hello from Wc'
+          }
+        },
+      }
+    </script>
+  `)
+
+  const { stdout } = await project.run('vue-cli-service build --target wc --inline-vue --name single-wc src/main-wc.js')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/single-wc.js')).toBe(true)
+  expect(project.has('dist/single-wc.min.js')).toBe(true)
+
+  const port = await portfinder.getPortPromise()
+  server = createServer({ root: path.join(project.dir, 'dist') })
+
+  await new Promise((resolve, reject) => {
+    server.listen(port, err => {
+      if (err) return reject(err)
+      resolve()
+    })
+  })
+
+  const launched = await launchPuppeteer(`http://localhost:${port}/demo.html`)
+  browser = launched.browser
+  page = launched.page
+  const divText = await page.evaluate(() => {
+    return document.querySelector('div').textContent
+  })
+  expect(divText).toMatch('Hello from Wc')
 })
 
 afterEach(async () => {

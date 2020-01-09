@@ -1,6 +1,22 @@
 {
-  "lerna": "2.5.1",
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "3.0.1"
+  "version": "4.1.2",
+  "packages": [
+    "packages/@vue/babel-preset-app",
+    "packages/@vue/cli*",
+    "packages/vue-cli-version-marker"
+  ],
+  "changelog": {
+    "repo": "vuejs/vue-cli",
+    "labels": {
+      "PR: New Feature": ":rocket: New Features",
+      "PR: Breaking Change": ":boom: Breaking Changes",
+      "PR: Bug Fix": ":bug: Bug Fix",
+      "PR: Documentation": ":memo: Documentation",
+      "PR: Internal": ":house: Internal",
+      "PR: Underlying Tools": ":hammer: Underlying Tools"
+    },
+    "cacheDir": ".changelog"
+  }
 }

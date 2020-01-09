@@ -22,7 +22,7 @@ Example:
 {
   "name": "vue-cli-plugin-apollo",
   "version": "0.7.7",
-  "description": "vue-cli 3 plugin to add Apollo and GraphQL"
+  "description": "vue-cli plugin to add Apollo and GraphQL"
 }
 ```
 

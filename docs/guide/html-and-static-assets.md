@@ -21,13 +21,13 @@ In addition to the [default values exposed by `html-webpack-plugin`](https://git
 ```
 
 See also:
-- [baseUrl](../config/#baseurl)
+- [publicPath](../config/#publicpath)
 
 ### Preload
 
 [`<link rel="preload">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Preloading_content) is a type of resource hint that is used to specify resources that your pages will need very soon after loading, which you therefore want to start preloading early in the lifecycle of a page load, before the browser's main rendering machinery kicks in.
 
-By default, a Vue CLI app will automatically generate preload hints for all files that are needed for the initial rendering the your app.
+By default, a Vue CLI app will automatically generate preload hints for all files that are needed for the initial rendering of your app.
 
 The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('preload')`.
 
@@ -38,6 +38,10 @@ The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vu
 By default, a Vue CLI app will automatically generate prefetch hints for all JavaScript files generated for async chunks (as a result of [on-demand code splitting via dynamic `import()`](https://webpack.js.org/guides/code-splitting/#dynamic-imports)).
 
 The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('prefetch')`.
+
+::: tip Note for multi page setups
+When using a multipage setup, the plugin name above should be changed to match the structure 'prefetch-{pagename}', for example 'prefetch-app'.
+:::
 
 Example:
 
@@ -52,7 +56,7 @@ module.exports = {
     // modify its options:
     config.plugin('prefetch').tap(options => {
       options[0].fileBlacklist = options[0].fileBlacklist || []
-      options[0].fileBlacklist.push([/myasyncRoute(.)+?\.js$/])
+      options[0].fileBlacklist.push(/myasyncRoute(.)+?\.js$/)
       return options
     })
   }
@@ -68,7 +72,7 @@ import(/* webpackPrefetch: true */ './someAsyncComponent.vue')
 webpack's runtime will inject prefetch links when the parent chunk is loaded.
 
 ::: tip
-Prefetch links will consume bandwidth. If you have a large app with many async chunks and your user are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
+Prefetch links will consume bandwidth. If you have a large app with many async chunks and your users are primarily mobile and thus bandwidth-aware, you may want to disable prefetch links and manually select chunks to prefetch.
 :::
 
 ### Disable Index Generation
@@ -166,7 +170,7 @@ Note we recommend importing assets as part of your module dependency graph so th
 - Missing files cause compilation errors instead of 404 errors for your users.
 - Result filenames include content hashes so you don’t need to worry about browsers caching their old versions.
 
-The `public` directory is provided as an **escape hatch**, and when you reference it via absolute path, you need to take into account where your app will be deployed. If your app is not deployed at the root of a domain, you will need to prefix your URLs with the [baseUrl](../config/#baseurl):
+The `public` directory is provided as an **escape hatch**, and when you reference it via absolute path, you need to take into account where your app will be deployed. If your app is not deployed at the root of a domain, you will need to prefix your URLs with the [publicPath](../config/#publicpath):
 
 - In `public/index.html` or other HTML files used as templates by `html-webpack-plugin`, you need to prefix the link with `<%= BASE_URL %>`:
 
@@ -179,7 +183,7 @@ The `public` directory is provided as an **escape hatch**, and when you referenc
   ``` js
   data () {
     return {
-      baseUrl: process.env.BASE_URL
+      publicPath: process.env.BASE_URL
     }
   }
   ```
@@ -187,7 +191,7 @@ The `public` directory is provided as an **escape hatch**, and when you referenc
   Then:
 
   ``` html
-  <img :src="`${baseUrl}my-image.png`">
+  <img :src="`${publicPath}my-image.png`">
   ```
 
 ### When to use the `public` folder

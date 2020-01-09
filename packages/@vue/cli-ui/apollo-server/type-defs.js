@@ -1,5 +1,4 @@
 const gql = require('graphql-tag')
-const path = require('path')
 const globby = require('globby')
 
 const typeDefs = [gql`
@@ -8,6 +7,7 @@ scalar JSON
 enum PackageManager {
   npm
   yarn
+  pnpm
 }
 
 interface DescribedEntity {
@@ -21,6 +21,7 @@ type Version {
   latest: String
   wanted: String
   range: String
+  localPath: String
 }
 
 type GitHubStats {
@@ -79,11 +80,12 @@ type Subscription {
   clientAddonAdded: ClientAddon
   sharedDataUpdated (id: ID!, projectId: ID!): SharedData
   localeAdded: Locale
+  routeRequested: JSON!
 }
 `]
 
 // Load types in './schema'
-const paths = globby.sync([path.join(__dirname, './schema/*.js')])
+const paths = globby.sync(['./schema/*.js'], { cwd: __dirname, absolute: true })
 paths.forEach(file => {
   const { types } = require(file)
   types && typeDefs.push(types)

@@ -8,7 +8,7 @@ let addons = []
 
 let baseUrl = process.env.VUE_APP_CLI_UI_URL
 if (typeof baseUrl === 'undefined') {
-  baseUrl = 'http://localhost:4000'
+  baseUrl = `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}`
 } else {
   baseUrl = baseUrl.replace(/ws:\/\/([a-z0-9_-]+:\d+).*/i, 'http://$1')
 }

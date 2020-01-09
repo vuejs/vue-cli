@@ -1,0 +1,7 @@
+fragment version on Version {
+  current
+  latest
+  wanted
+  range
+  localPath
+}

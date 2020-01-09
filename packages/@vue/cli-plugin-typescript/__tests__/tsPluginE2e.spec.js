@@ -8,8 +8,8 @@ const create = require('@vue/cli-test-utils/createTestProject')
 if (!process.env.APPVEYOR) {
   test('cypress', async () => {
     const project = await create('ts-e2e-cypress-router', {
-      router: true,
       plugins: {
+        '@vue/cli-plugin-router': {},
         '@vue/cli-plugin-typescript': {},
         '@vue/cli-plugin-e2e-cypress': {}
       }
@@ -21,12 +21,14 @@ if (!process.env.APPVEYOR) {
   })
 }
 
-test('nightwatch', async () => {
-  const project = await create('ts-e2e-nightwatch', {
-    plugins: {
-      '@vue/cli-plugin-typescript': {},
-      '@vue/cli-plugin-e2e-nightwatch': {}
-    }
+if (!process.env.CIRCLECI) {
+  test('nightwatch', async () => {
+    const project = await create('ts-e2e-nightwatch', {
+      plugins: {
+        '@vue/cli-plugin-typescript': {},
+        '@vue/cli-plugin-e2e-nightwatch': {}
+      }
+    })
+    await project.run(`vue-cli-service test:e2e`)
   })
-  await project.run(`vue-cli-service test:e2e`)
-})
+}

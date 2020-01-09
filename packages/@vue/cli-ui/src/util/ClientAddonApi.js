@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import router from '../router'
 import { mergeLocale } from '../i18n'
-import ProjectHome from '../views/ProjectHome.vue'
+import ProjectHome from '@/components/app/ProjectHome.vue'
 
 export default class ClientAddonApi {
   constructor () {

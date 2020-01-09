@@ -62,7 +62,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^3.0.1',
+      '@vue/cli-plugin-babel': '^4.1.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -75,43 +75,53 @@ test('loading plugins from package.json', () => {
 test('load project options from package.json', () => {
   mockPkg({
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   })
   const service = createMockService()
-  expect(service.projectOptions.lintOnSave).toBe(true)
+  expect(service.projectOptions.lintOnSave).toBe('default')
 })
 
-test('handle option baseUrl and outputDir correctly', () => {
+test('handle option publicPath and outputDir correctly', () => {
   mockPkg({
     vue: {
-      baseUrl: 'https://foo.com/bar',
+      publicPath: 'https://foo.com/bar',
       outputDir: '/public/'
     }
   })
   const service = createMockService()
-  expect(service.projectOptions.baseUrl).toBe('https://foo.com/bar/')
+  expect(service.projectOptions.publicPath).toBe('https://foo.com/bar/')
   expect(service.projectOptions.outputDir).toBe('/public')
 })
 
-test('normalize baseUrl when relative', () => {
+test('normalize publicPath when relative', () => {
   mockPkg({
     vue: {
-      baseUrl: './foo/bar'
+      publicPath: './foo/bar'
     }
   })
   const service = createMockService()
-  expect(service.projectOptions.baseUrl).toBe('foo/bar/')
+  expect(service.projectOptions.publicPath).toBe('foo/bar/')
 })
 
-test('keep baseUrl when empty', () => {
+test('allow custom protocol in publicPath', () => {
   mockPkg({
     vue: {
-      baseUrl: ''
+      publicPath: 'customprotocol://foo/bar'
     }
   })
   const service = createMockService()
-  expect(service.projectOptions.baseUrl).toBe('')
+  expect(service.projectOptions.publicPath).toBe('customprotocol://foo/bar/')
+})
+
+test('keep publicPath when empty', () => {
+  mockPkg({
+    vue: {
+      publicPath: ''
+    }
+  })
+  const service = createMockService()
+  expect(service.projectOptions.publicPath).toBe('')
 })
 
 test('load project options from vue.config.js', () => {
@@ -119,7 +129,7 @@ test('load project options from vue.config.js', () => {
   fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
   mockPkg({
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   })
   const service = createMockService()
@@ -127,6 +137,37 @@ test('load project options from vue.config.js', () => {
   delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
   // vue.config.js has higher priority
   expect(service.projectOptions.lintOnSave).toBe(false)
+})
+
+test('load project options from vue.config.js', () => {
+  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
+  fs.writeFileSync('/vue.config.js', '')  // only to ensure fs.existsSync returns true
+  jest.mock('/vue.config.js', () => function () { return { lintOnSave: false } }, { virtual: true })
+  mockPkg({
+    vue: {
+      lintOnSave: 'default'
+    }
+  })
+  const service = createMockService()
+  fs.unlinkSync('/vue.config.js')
+  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
+  // vue.config.js has higher priority
+  expect(service.projectOptions.lintOnSave).toBe(false)
+})
+
+test('api: assertVersion', () => {
+  const plugin = {
+    id: 'test-assertVersion',
+    apply: api => {
+      expect(() => api.assertVersion(4)).not.toThrow()
+      expect(() => api.assertVersion('^4.0.0-0')).not.toThrow()
+      // expect(() => api.assertVersion('>= 4')).not.toThrow()
+
+      expect(() => api.assertVersion(4.1)).toThrow('Expected string or integer value')
+      expect(() => api.assertVersion('^100')).toThrow('Require @vue/cli-service "^100"')
+    }
+  }
+  createMockService([plugin], true /* init */)
 })
 
 test('api: registerCommand', () => {
@@ -142,6 +183,27 @@ test('api: registerCommand', () => {
 
   service.run('foo', { n: 1 })
   expect(args).toEqual({ _: [], n: 1 })
+})
+
+test('api: --skip-plugins', () => {
+  let untouched = true
+  const service = createMockService([{
+    id: 'test-command',
+    apply: api => {
+      api.registerCommand('foo', _args => {
+        return
+      })
+    }
+  },
+  {
+    id: 'vue-cli-plugin-test-plugin',
+    apply: api => {
+      untouched = false
+    }
+  }], false)
+
+  service.run('foo', { 'skip-plugins': 'test-plugin' })
+  expect(untouched).toEqual(true)
 })
 
 test('api: defaultModes', () => {
@@ -253,6 +315,28 @@ test('api: configureWebpack preserve ruleNames', () => {
 
   const config = service.resolveWebpackConfig()
   expect(config.module.rules[0].__ruleNames).toEqual(['js'])
+})
+
+test('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
+  const service = createMockService([{
+    id: 'test',
+    apply: api => {
+      api.configureWebpack(config => {
+        config.entry = {
+          page1: './src/page1.js',
+          page2: './src/page2.js'
+        }
+      })
+    }
+  }])
+
+  service.resolveWebpackConfig()
+  expect(process.env.VUE_CLI_ENTRY_FILES).toEqual(
+    JSON.stringify([
+      path.resolve('/', './src/page1.js'),
+      path.resolve('/', './src/page2.js')
+    ])
+  )
 })
 
 test('api: configureDevServer', () => {

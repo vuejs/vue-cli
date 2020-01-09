@@ -4,9 +4,9 @@ module.exports = (api, args, options) => {
 
   // respect inline build destination in copy plugin
   if (args.dest && config.plugins.has('copy')) {
-    config.plugin('copy').tap(args => {
-      args[0][0].to = targetDir
-      return args
+    config.plugin('copy').tap(pluginArgs => {
+      pluginArgs[0][0].to = targetDir
+      return pluginArgs
     })
   }
 
@@ -18,7 +18,8 @@ module.exports = (api, args, options) => {
         .plugin('modern-mode-legacy')
         .use(ModernModePlugin, [{
           targetDir,
-          isModernBuild: false
+          isModernBuild: false,
+          unsafeInline: args['unsafe-inline']
         }])
     } else {
       // Inject plugin to read non-modern build stats and inject HTML
@@ -26,7 +27,11 @@ module.exports = (api, args, options) => {
         .plugin('modern-mode-modern')
         .use(ModernModePlugin, [{
           targetDir,
-          isModernBuild: true
+          isModernBuild: true,
+          unsafeInline: args['unsafe-inline'],
+          // as we may generate an addition file asset (if `no-unsafe-inline` specified)
+          // we need to provide the correct directory for that file to place in
+          jsDirectory: require('../../util/getAssetPath')(options, 'js')
         }])
     }
   }

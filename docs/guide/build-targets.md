@@ -15,6 +15,12 @@ App is the default build target. In this mode:
 
 ::: tip Note on Vue Dependency
 In lib mode, Vue is *externalized*. This means the bundle will not bundle Vue even if your code imports Vue. If the lib is used via a bundler, it will attempt to load Vue as a dependency through the bundler; otherwise, it falls back to a global `Vue` variable.
+
+To avoid this behavior provide `--inline-vue` flag to `build` command.
+
+```
+vue-cli-service build --target lib --inline-vue
+```
 :::
 
 You can build a single entry as a library using
@@ -44,6 +50,10 @@ A lib build outputs:
 
 - `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
+::: warning
+If you are developing a library or in a monorepo, please be aware that CSS imports **are side effects**. Make sure to **remove** `"sideEffects": false` in the `package.json`, otherwise CSS chunks will be dropped by webpack in production builds.
+:::
+
 ### Vue vs. JS/TS Entry Files
 
 When using a `.vue` file as entry, your library will directly expose the Vue component itself, because the component is always the default export.
@@ -68,6 +78,12 @@ Web Component mode does not support IE11 and below. [More details](https://githu
 
 ::: tip Note on Vue Dependency
 In web component mode, Vue is *externalized.* This means the bundle will not bundle Vue even if your code imports Vue. The bundle will assume `Vue` is available on the host page as a global variable.
+
+To avoid this behavior provide `--inline-vue` flag to `build` command.
+
+```
+vue-cli-service build --target wc --inline-vue
+```
 :::
 
 You can build a single entry as a web component using
@@ -129,4 +145,23 @@ Now on the page, the user only needs to include Vue and the entry file:
 
 <!-- foo-one's implementation chunk is auto fetched when it's used -->
 <foo-one></foo-one>
+```
+
+
+## Using vuex in builds
+
+When building a [Webcomponent](#web-component) or [Library](#library), the entry point is not `main.js`, but an `entry-wc.js` file, generated here: [https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js)
+
+So to use vuex in web component target, you need to initialize the store in `App.vue`:
+
+``` js
+import store from './store'
+
+// ...
+
+export default {
+  store,
+  name: 'App',
+  // ...
+}
 ```

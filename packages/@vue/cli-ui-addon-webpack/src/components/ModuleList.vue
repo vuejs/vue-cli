@@ -1,5 +1,5 @@
 <template>
-  <div class="module-list list-block">
+  <div class="module-list card list-block">
     <div class="content">
       <div class="title">
         {{ $t('org.vue.vue-webpack.dashboard.module-list.title') }}

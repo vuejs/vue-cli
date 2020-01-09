@@ -78,6 +78,23 @@ Content-Security-Policy: script-src 'self' 'sha256-4RS22DYeB7U14dra4KcQYxmwt5HkO
 ```
 :::
 
+::: tip Detecting the Current Mode in Config
+Sometimes you may need to change the webpack config only for the legacy build, or only for the modern build.
+
+Vue CLI uses two environment variables to communicate this:
+
+* `VUE_CLI_MODERN_MODE`: The build was started with the `--modern` flag
+* `VUE_CLI_MODERN_BUILD`: when true, the current config is for the modern build. Otherwise it's for the legacy build.
+
+**Important:** These variables are only accessible when/after `chainWebpack()` and `configureWebpack()` functions are evaluated, (so not directly in the `vue.config.js` module's root scope). That means it's also available in the postcss config file.
+:::
+
+::: warning Caveat: Adjusting webpack plugins
+Some Plugins, i.e. `html-webpack-plugin`, `preload-plugin` etc. are only included in the config for modern mode. Trying to tap into their options in the legacy config can throw an error as the plugins don't exist.
+
+Use the above tip about *Detecting the Current Mode* to manipulate plugins in the right mode only, and/or check if the plugin actually exists in the current mode's config before trying to tap into their options.
+:::
+
 [autoprefixer]: https://github.com/postcss/autoprefixer
 [babel-preset-env]: https://new.babeljs.io/docs/en/next/babel-preset-env.html
 [babel-preset-app]: https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app

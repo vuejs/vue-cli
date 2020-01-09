@@ -1,8 +1,8 @@
 module.exports = class CorsPlugin {
-  constructor ({ baseUrl, crossorigin, integrity }) {
+  constructor ({ publicPath, crossorigin, integrity }) {
     this.crossorigin = crossorigin
     this.integrity = integrity
-    this.baseUrl = baseUrl
+    this.publicPath = publicPath
   }
 
   apply (compiler) {
@@ -11,7 +11,7 @@ module.exports = class CorsPlugin {
       const ssri = require('ssri')
 
       const computeHash = url => {
-        const filename = url.replace(this.baseUrl, '')
+        const filename = url.replace(this.publicPath, '')
         const asset = compilation.assets[filename]
         if (asset) {
           const src = asset.source()

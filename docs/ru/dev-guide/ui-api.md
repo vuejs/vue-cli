@@ -2,7 +2,7 @@
 
 С помощью API `cli-ui` возможно дополнять конфигурацию и задачи проекта, а также обмениваться данными и взаимодействовать с другими процессами.
 
-![UI Plugin architecture](/vue-cli-ui-schema.png)
+![UI Plugin architecture](/ru/vue-cli-ui-schema.png)
 
 ## Файлы UI
 
@@ -333,6 +333,7 @@ api.describeConfig({
 ```
 
 ## Задачи проекта
+
 ![Tasks ui](/tasks-ui.png)
 
 Задачи создаются из поля `scripts` файла `package.json` проекта.
@@ -346,6 +347,14 @@ api.describeTask({
   description: 'Компиляция и горячая замена модулей для разработки',
   // Ссылка "More info"
   link: 'https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#serve'
+})
+```
+
+Также можно использовать функцию для `match`:
+
+```js
+api.describeTask({
+  match: (command) => /vue-cli-service serve/.test(command),
 })
 ```
 
@@ -517,7 +526,7 @@ api.addTask({
 }
 ```
 
-Поддерживаемые inquirer типы: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+Поддерживаемые inquirer-типы: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`, `editor`.
 
 В дополнение к ним пользовательский интерфейс поддерживает специальные типы, которые работают только с ним:
 
@@ -619,7 +628,7 @@ api.addTask({
 
 ### Создание клиентского дополнения
 
-Рекомендуемый способ создания клиентского дополнения — создать новый проект с помощью vue-cli 3. Вы можете либо сделать это в подкаталоге вашего плагина, либо в другом npm пакете.
+Рекомендуемый способ создания клиентского дополнения — создать новый проект с помощью Vue CLI. Вы можете либо сделать это в подкаталоге вашего плагина, либо в другом npm пакете.
 
 Установите `@vue/cli-ui` в качестве зависимости для разработки (dev dependency).
 
@@ -781,7 +790,7 @@ api.addView({
   id: 'org.vue.webpack.views.test',
 
   // Имя маршрута (из vue-router)
-  // Использует то же имя, как и в методе 'ClientAddonApi.addRoutes' (см. выше в разлеле клиентское дополнение)
+  // Использует то же имя, как и в методе 'ClientAddonApi.addRoutes' (см. выше в разделе клиентское дополнение)
   name: 'org.vue.webpack.routes.test',
 
   // Иконка кнопки (material-icons)
@@ -1018,7 +1027,7 @@ ipc.send({ ... })
 ipc.connect()
 ```
 
-Автоотключение при простое (спустя некоторое время без отправляемых сообщений):
+Авто-отключение при простое (спустя некоторое время без отправляемых сообщений):
 
 ```js
 const ipc = new IpcMessenger({
@@ -1265,7 +1274,7 @@ const ROUTER = 'vue-router-add'
 
 api.onViewOpen(({ view }) => {
   if (view.id === 'vue-project-plugins') {
-    if (!api.hasPlugin('vue-router')) {
+    if (!api.hasPlugin('router')) {
       api.addSuggestion({
         id: ROUTER,
         type: 'action',
@@ -1273,7 +1282,7 @@ api.onViewOpen(({ view }) => {
         message: 'org.vue.cli-service.suggestions.vue-router-add.message',
         link: 'https://router.vuejs.org/',
         async handler () {
-          await install(api, 'vue-router')
+          await install(api, 'router')
         }
       })
     }

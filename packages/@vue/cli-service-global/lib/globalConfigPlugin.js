@@ -24,6 +24,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
         config.resolve
           .alias
             .set('core-js', path.dirname(require.resolve('core-js')))
+            .set('regenerator-runtime', path.dirname(require.resolve('regenerator-runtime')))
 
         // ensure loaders can be resolved properly
         // this is done by locating vue's install location (which is a
@@ -47,6 +48,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
           resolve.sync('vue-hot-reload-api', { basedir: context })
         } catch (e) {
           config.resolve.alias
+            // eslint-disable-next-line node/no-extraneous-require
             .set('vue-hot-reload-api', require.resolve('vue-hot-reload-api'))
         }
 
@@ -101,13 +103,20 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
               .add(/node_modules/)
               .end()
             .use('eslint-loader')
-              .tap(options => Object.assign({}, options, {
+              .tap(loaderOptions => Object.assign({}, loaderOptions, {
                 useEslintrc: hasESLintConfig,
                 baseConfig: {
                   extends: [
                     'plugin:vue/essential',
                     'eslint:recommended'
-                  ]
+                  ],
+                  parserOptions: {
+                    parser: 'babel-eslint'
+                  },
+                  rules: {
+                    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+                    'no-debugger': `process.env.NODE_ENV === 'production' ? 'error' : 'off'`
+                  }
                 }
               }))
 

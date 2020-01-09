@@ -1,7 +1,19 @@
 {
   "org": {
     "vue": {
+      "common": {
+        "close": "Close",
+        "cancel": "Cancel",
+        "back": "Go back",
+        "more-info": "More info",
+        "show-more": "Show more",
+        "show-less": "Show less"
+      },
       "components": {
+        "client-addon-component": {
+          "timeout": "Component load timeout",
+          "timeout-info": "The custom component takes too much time to load, there might be an error"
+        },
         "connection-status": {
           "disconnected": "Disconnected from UI server",
           "connected": "Connected!"
@@ -66,7 +78,7 @@
         },
         "logger-view": {
           "title": "Logs",
-          "empty": "Not logs yet",
+          "empty": "No logs yet",
           "buttons": {
             "clear": "Clear logs",
             "scroll": "Scroll to bottom",
@@ -78,6 +90,7 @@
         },
         "project-nav": {
           "tooltips": {
+            "dashboard": "Dashboard",
             "plugins": "Plugins",
             "dependencies": "Dependencies",
             "configuration": "Configuration",
@@ -99,13 +112,27 @@
             "open-in-editor": "Open in editor"
           }
         },
+        "project-rename": {
+          "title": "Rename",
+          "name-field": {
+            "title": "Name",
+            "subtitle": "Enter the new name"
+          },
+          "submit": "Rename"
+        },
         "project-plugin-item": {
           "version": "version",
           "latest": "latest",
           "official": "Official",
           "installed": "Installed",
           "actions": {
-            "update": "Update {target}"
+            "update": "Update {target}",
+            "refresh": "Force Refresh {target}<br><i>Press [Shift] for Quick Refresh (node_modules won't be updated)</i>"
+          },
+          "local": "Local",
+          "features": {
+            "generator": "This plugin has a generator and can modify your project files and add new files for you.",
+            "ui-integration": "This plugin includes additional UI features like enhanced tasks, configuration screens, dashboard widgets..."
           }
         },
         "project-dependency-item": {
@@ -157,7 +184,8 @@
         "terminal-view": {
           "buttons": {
             "clear": "Clear console",
-            "scroll": "Scroll to bottom"
+            "scroll": "Scroll to bottom",
+            "content-copy": "Copy content"
           }
         },
         "top-bar": {
@@ -173,6 +201,24 @@
               "running": "Running status",
               "done": "Done status"
             }
+          }
+        },
+        "widget": {
+          "remove": "Remove widget",
+          "configure": "Configure widget",
+          "save": "Save",
+          "reset-config": "Reset config",
+          "open-details": "Show more"
+        },
+        "widget-add-pane": {
+          "title": "Add widgets"
+        },
+        "widget-add-item": {
+          "add": "Add widget",
+          "details": {
+            "title": "Widget details",
+            "max-instances": "Max instance count: {count}/{total}",
+            "unlimited": "unlimited"
           }
         }
       },
@@ -225,7 +271,8 @@
               "title": "Missing modules",
               "message": "It seems the project is missing the 'node_modules' folder. Please check you installed the dependencies before importing.",
               "close": "Got it"
-            }
+            },
+            "force": "Import anyway"
           }
         },
         "project-create": {
@@ -249,6 +296,7 @@
                 "options": {
                   "label": "Additional options",
                   "force": "Overwrite target folder if it exists",
+                  "bare": "Scaffold project without beginner instructions",
                   "git-title": "Git repository",
                   "git": "Initialize git repository (recommended)",
                   "git-commit-message": "Initial commit message (optional)"
@@ -292,7 +340,7 @@
                   "subtitle": "Git repo, for example 'username/repo'. You can also prefix with 'gitlab:' or 'bitbucket:'."
                 },
                 "options": "Other options",
-                "clone": "Cloner/Private repository",
+                "clone": "Clone/Private repository",
                 "cancel": "Cancel",
                 "done": "Done"
               },
@@ -373,6 +421,15 @@
               "cancel": "Cancel without uninstalling",
               "uninstall": "Uninstall"
             }
+          },
+          "buttons": {
+            "add-local": "Browse local plugin"
+          }
+        },
+        "project-plugin-add-local": {
+          "title": "Add a local plugin",
+          "buttons": {
+            "add": "Add local plugin"
           }
         },
         "project-configurations": {
@@ -387,7 +444,8 @@
           }
         },
         "project-tasks": {
-          "title": "Project tasks"
+          "title": "Project tasks",
+          "refresh": "Refresh tasks"
         },
         "project-task-details": {
           "actions": {
@@ -399,7 +457,11 @@
           "command": "Script command",
           "parameters": "Parameters",
           "more-info": "More Info",
-          "output": "Output"
+          "output": "Output",
+          "override-args": {
+            "message": "Override hard-coded arguments",
+            "description": "If enabled, hard-coded arguments in your package.json file will be replaced with the values defined below"
+          }
         },
         "project-dependencies": {
           "title": "Project dependencies",
@@ -421,10 +483,18 @@
             "uninstall": "Uninstall {id}"
           }
         },
+        "project-dashboard": {
+          "title": "Project dashboard",
+          "cutomize": "Customize",
+          "done": "Done"
+        },
+        "settings": {
+          "title": "Settings"
+        },
         "about": {
           "title": "About",
           "description": "<a href=\"https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-ui\" target=\"_blank\">@vue/cli-ui</a> is a built-in package of vue-cli which opens a full-blown UI.",
-          "quote": "Vue-cli 3.x is a complete rewrite, with a lot of new awesome features. You will be to select features like routing, Vuex or Typescript, then add and upgrade building blocks called \"vue-cli plugins\". But having so much more options also means the tool is now more complex and harder to start using. That's why we thought having a full-blown GUI would help discover the new features, search and install vue-cli plugins and unlock more possibilities overall while not being limited by a terminal interface. To sum up, vue-cli will not only allow you to bootstrap a new project easily, but it will also remain useful for ongoing work afterwards!",
+          "quote": "Vue-cli 3.x is a complete rewrite, with a lot of new awesome features. You will be able to select features like routing, Vuex or Typescript, then add and upgrade building blocks called \"vue-cli plugins\". But having so much more options also means the tool is now more complex and harder to start using. That's why we thought having a full-blown GUI would help discover the new features, search and install vue-cli plugins and unlock more possibilities overall while not being limited by a terminal interface. To sum up, vue-cli will not only allow you to bootstrap a new project easily, but it will also remain useful for ongoing work afterwards!",
           "links": "Useful links",
           "back": "Go back"
         }
@@ -531,8 +601,8 @@
               "general": "General settings",
               "css": "CSS settings"
             },
-            "baseUrl": {
-              "label": "Base URL",
+            "publicPath": {
+              "label": "Public Path",
               "description": "The base URL your application will be deployed at, for example '/my-app/'. Use an empty string ('') so that all assets are linked using relative paths."
             },
             "outputDir": {
@@ -647,6 +717,10 @@
             "appleMobileWebAppStatusBarStyle": {
               "message": "Apple mobile status bar style",
               "description": "Style for the web app status bar on iOS"
+            },
+            "manifestCrossorigin": {
+              "message": "Attribute value for manifest.json link tag's crossorigin attribute",
+              "description": "Value for `crossoriging` attribute in manifest link tag in the generated HTML, you may need to set this if your pwa is behind an authenticated proxy"
             }
           }
         },
@@ -694,6 +768,103 @@
           "test": {
             "description": "Run unit tests with Mocha",
             "watch": "Watch files for changes and rerun tests related to changed files"
+          }
+        }
+      },
+      "widgets": {
+        "welcome": {
+          "title": "Welcome tips",
+          "description": "Some tips to help you get started",
+          "content": {
+            "title": "Welcome to your new project!",
+            "tip1": "You are looking at the project dashboard where you can put widgets. Use the 'Customize' button to add more! Everything is automatically saved.",
+            "tip2": "On the left are the different available pages. 'Plugins' let you add new Vue CLI plugins, 'Dependencies' for managing the packages, 'Configuration' to configure the tools and 'Tasks' to run scripts (for example webpack).",
+            "tip3": "Return to the project manager with the dropdown at the top left of the screen or the home button in the status bar at the bottom.",
+            "ok": "Understood"
+          }
+        },
+        "kill-port": {
+          "title": "Kill port",
+          "description": "Kill processes using a specific network port",
+          "input": {
+            "placeholder": "Enter a network port"
+          },
+          "kill": "Kill",
+          "status": {
+            "idle": "Ready to kill",
+            "killing": "Killing process...",
+            "killed": "Killed successfully!",
+            "error": "Couldn't kill process"
+          }
+        },
+        "status-widget": {
+          "last-updated": "Updated",
+          "never": "Not updated yet",
+          "check": "Check for updates",
+          "more-info": "More details"
+        },
+        "plugin-updates": {
+          "title": "Plugin updates",
+          "description": "Monitor plugin updates",
+          "messages": {
+            "ok": "All plugins up-to-date",
+            "loading": "Checking for updates...",
+            "attention": "{n} plugin updates available"
+          },
+          "page": "Go to Plugins"
+        },
+        "dependency-updates": {
+          "title": "Dependency updates",
+          "description": "Monitor dependencies updates",
+          "messages": {
+            "ok": "All dependencies up-to-date",
+            "loading": "Checking for updates...",
+            "attention": "{n} dependency updates available"
+          },
+          "page": "Go to Dependencies"
+        },
+        "vulnerability": {
+          "title": "Vulnerability check",
+          "description": "Check for known vulnerabilities in your project dependencies",
+          "messages": {
+            "ok": "No vulnerability found",
+            "loading": "Auditing project security...",
+            "attention": "{n} vulnerabilities found",
+            "error": "Couldn't check for vulnerability"
+          },
+          "severity": {
+            "critical": "Critical severity",
+            "high": "High severity",
+            "moderate": "Medium severity",
+            "low": "Low severity"
+          },
+          "direct-dep": "Direct dependency",
+          "versions": {
+            "vulnerable": "Vulnerable versions:",
+            "patched": "Patched versions:"
+          },
+          "recheck": "Check again"
+        },
+        "run-task": {
+          "title": "Run task",
+          "description": "Shortcut to run a task",
+          "prompts": {
+            "task": "Select a task"
+          },
+          "page": "Go to Task"
+        },
+        "news": {
+          "title": "News feed",
+          "description": "Read news feed",
+          "refresh": "Force refresh",
+          "select-tip": "Select an item on the left",
+          "prompts": {
+            "url": "RSS feed URL or GitHub repository"
+          },
+          "errors": {
+            "fetch": "Couldn't fetch feed",
+            "offline": "You are offline",
+            "empty": "Empty feed"
           }
         }
       }

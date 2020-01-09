@@ -3,7 +3,7 @@ const { createSchema, validateSync } = require('@vue/cli-shared-utils')
 const viewSchema = createSchema(joi => ({
   id: joi.string().required(),
   name: joi.string().required().description('route name (vue-router)'),
-  icon: joi.string().required(),
+  icon: joi.string(),
   tooltip: joi.string().required(),
   projectTypes: joi.array().items(joi.string())
 }))

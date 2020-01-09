@@ -1,4 +1,7 @@
+jest.setTimeout(35000)
+
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
+const create = require('@vue/cli-test-utils/createTestProject')
 
 test('base', async () => {
   const { pkg } = await generateWithPlugin({
@@ -99,7 +102,7 @@ test('typescript', async () => {
     '@vue/typescript'
   ])
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'typescript-eslint-parser'
+    parser: '@typescript-eslint/parser'
   })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
@@ -128,10 +131,68 @@ test('lint on commit', async () => {
   expect(pkg.gitHooks['pre-commit']).toBe('lint-staged')
   expect(pkg.devDependencies).toHaveProperty('lint-staged')
   expect(pkg['lint-staged']).toEqual({
-    '*.js': ['vue-cli-service lint', 'git add'],
-    '*.vue': ['vue-cli-service lint', 'git add']
+    '*.{js,vue}': ['vue-cli-service lint', 'git add']
   })
   expect(pkg.vue).toEqual({
     lintOnSave: false
   })
 })
+
+test('should lint ts files when typescript plugin co-exists', async () => {
+  const { read } = await create('eslint-lint-ts-files', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {}
+    }
+  }, null, true)
+  const pkg = JSON.parse(await read('package.json'))
+  expect(pkg).toMatchObject({
+    'lint-staged': {
+      '*.{js,vue,ts}': ['vue-cli-service lint', 'git add']
+    }
+  })
+})
+
+test('generate .editorconfig for new projects', async () => {
+  const { files } = await generateWithPlugin({
+    id: 'eslint',
+    apply: require('../generator'),
+    options: {
+      config: 'airbnb'
+    }
+  })
+  expect(files['.editorconfig']).toBeTruthy()
+})
+
+test('append to existing .editorconfig', async () => {
+  const { dir, read, write } = await create('eslint-editorconfig', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {}
+    }
+  }, null, true)
+  await write('.editorconfig', 'root = true\n')
+
+  const invoke = require('@vue/cli/lib/invoke')
+  await invoke(`eslint`, { config: 'airbnb' }, dir)
+
+  const editorconfig = await read('.editorconfig')
+  expect(editorconfig).toMatch('root = true')
+  expect(editorconfig).toMatch('[*.{js,jsx,ts,tsx,vue}]')
+})
+
+test('airbnb config + typescript + unit-mocha', async () => {
+  await create('eslint-airbnb-typescript', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {
+        classComponent: true
+      },
+      '@vue/cli-plugin-unit-mocha': {}
+    }
+  })
+}, 30000)

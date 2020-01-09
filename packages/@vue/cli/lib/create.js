@@ -1,11 +1,10 @@
 const fs = require('fs-extra')
 const path = require('path')
-const chalk = require('chalk')
 const inquirer = require('inquirer')
 const Creator = require('./Creator')
 const { clearConsole } = require('./util/clearConsole')
 const { getPromptModules } = require('./util/createTools')
-const { error, stopSpinner, exit } = require('@vue/cli-shared-utils')
+const { chalk, error, stopSpinner, exit } = require('@vue/cli-shared-utils')
 const validateProjectName = require('validate-npm-package-name')
 
 async function create (projectName, options) {
@@ -20,14 +19,17 @@ async function create (projectName, options) {
 
   const result = validateProjectName(name)
   if (!result.validForNewPackages) {
-    console.error(chalk.red(`Invalid project name: "${projectName}"`))
+    console.error(chalk.red(`Invalid project name: "${name}"`))
     result.errors && result.errors.forEach(err => {
-      console.error(chalk.red(err))
+      console.error(chalk.red.dim('Error: ' + err))
+    })
+    result.warnings && result.warnings.forEach(warn => {
+      console.error(chalk.red.dim('Warning: ' + warn))
     })
     exit(1)
   }
 
-  if (fs.existsSync(targetDir)) {
+  if (fs.existsSync(targetDir) && !options.merge) {
     if (options.force) {
       await fs.remove(targetDir)
     } else {

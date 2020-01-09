@@ -1,0 +1,28 @@
+#import "../prompt/promptFragment.gql"
+
+fragment widget on Widget {
+  id
+  definition {
+    id
+    title
+    icon
+    component
+    detailsComponent
+    canAddMore
+    hasConfigPrompts
+    minWidth
+    minHeight
+    maxWidth
+    maxHeight
+    openDetailsButton
+  }
+  x
+  y
+  width
+  height
+  config
+  configured
+  prompts {
+    ...prompt
+  }
+}

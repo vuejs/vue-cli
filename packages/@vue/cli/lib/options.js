@@ -10,16 +10,19 @@ const rcPath = exports.rcPath = getRcPath('.vuerc')
 const presetSchema = createSchema(joi => joi.object().keys({
   bare: joi.boolean(),
   useConfigFiles: joi.boolean(),
+  // TODO: Use warn for router and vuex once @hapi/joi v16 releases
   router: joi.boolean(),
   routerHistoryMode: joi.boolean(),
   vuex: joi.boolean(),
-  cssPreprocessor: joi.string().only(['sass', 'less', 'stylus']),
+  cssPreprocessor: joi.string().only(['sass', 'dart-sass', 'node-sass', 'less', 'stylus']),
   plugins: joi.object().required(),
   configs: joi.object()
 }))
 
 const schema = createSchema(joi => joi.object().keys({
-  packageManager: joi.string().only(['yarn', 'npm']),
+  latestVersion: joi.string().regex(/^\d+\.\d+\.\d+(-(alpha|beta|rc)\.\d+)?$/),
+  lastChecked: joi.date().timestamp(),
+  packageManager: joi.string().only(['yarn', 'npm', 'pnpm']),
   useTaobaoRegistry: joi.boolean(),
   presets: joi.object().pattern(/^/, presetSchema)
 }))
@@ -29,8 +32,6 @@ exports.validatePreset = preset => validate(preset, presetSchema, msg => {
 })
 
 exports.defaultPreset = {
-  router: false,
-  vuex: false,
   useConfigFiles: false,
   cssPreprocessor: undefined,
   plugins: {
@@ -43,6 +44,9 @@ exports.defaultPreset = {
 }
 
 exports.defaults = {
+  lastChecked: undefined,
+  latestVersion: undefined,
+
   packageManager: undefined,
   useTaobaoRegistry: undefined,
   presets: {

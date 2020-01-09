@@ -1,14 +1,10 @@
 ---
 home: true
-heroImage: /logo.png
+heroImage: /favicon.png
 actionText: Get Started →
 actionLink: /guide/
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
-
-<div style="text-align: center">
-  <Bit/>
-</div>
 
 <div class="features">
   <div class="feature">

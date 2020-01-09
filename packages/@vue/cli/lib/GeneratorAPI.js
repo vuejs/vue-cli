@@ -3,11 +3,12 @@ const ejs = require('ejs')
 const path = require('path')
 const merge = require('deepmerge')
 const resolve = require('resolve')
-const isBinary = require('isbinaryfile')
+const { isBinaryFileSync } = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
+const runCodemod = require('./util/runCodemod')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
-const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
+const { semver, getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -27,12 +28,14 @@ class GeneratorAPI {
     this.options = options
     this.rootOptions = rootOptions
 
+    /* eslint-disable no-shadow */
     this.pluginsData = generator.plugins
       .filter(({ id }) => id !== `@vue/cli-service`)
       .map(({ id }) => ({
         name: toShortPluginId(id),
         link: getPluginLink(id)
       }))
+    /* eslint-enable no-shadow */
 
     this._entryFile = undefined
   }
@@ -64,21 +67,78 @@ class GeneratorAPI {
   /**
    * Resolve path for a project.
    *
-   * @param {string} _path - Relative path from project root
-   * @return {string} The resolved absolute path.
+   * @param {string} _paths - A sequence of relative paths or path segments
+   * @return {string} The resolved absolute path, caculated based on the current project root.
    */
-  resolve (_path) {
-    return path.resolve(this.generator.context, _path)
+  resolve (..._paths) {
+    return path.resolve(this.generator.context, ..._paths)
+  }
+
+  get cliVersion () {
+    return require('../package.json').version
+  }
+
+  assertCliVersion (range) {
+    if (typeof range === 'number') {
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.cliVersion, range, { includePrerelease: true })) return
+
+    throw new Error(
+      `Require global @vue/cli "${range}", but was invoked by "${this.cliVersion}".`
+    )
+  }
+
+  get cliServiceVersion () {
+    // In generator unit tests, we don't write the actual file back to the disk.
+    // So there is no cli-service module to load.
+    // In that case, just return the cli version.
+    if (process.env.VUE_CLI_TEST && process.env.VUE_CLI_SKIP_WRITE) {
+      return this.cliVersion
+    }
+
+    const servicePkg = loadModule(
+      '@vue/cli-service/package.json',
+      this.generator.context
+    )
+
+    return servicePkg.version
+  }
+
+  assertCliServiceVersion (range) {
+    if (typeof range === 'number') {
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.cliServiceVersion, range, { includePrerelease: true })) return
+
+    throw new Error(
+      `Require @vue/cli-service "${range}", but was loaded with "${this.cliServiceVersion}".`
+    )
   }
 
   /**
    * Check if the project has a given plugin.
    *
    * @param {string} id - Plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
+   * @param {string} version - Plugin version. Defaults to ''
    * @return {boolean}
    */
-  hasPlugin (id) {
-    return this.generator.hasPlugin(id)
+  hasPlugin (id, version) {
+    return this.generator.hasPlugin(id, version)
   }
 
   /**
@@ -122,8 +182,9 @@ class GeneratorAPI {
    * files are written to disk.
    *
    * @param {object | () => object} fields - Fields to merge.
+   * @param {boolean} forceNewVersion - Ignore version conflicts when updating dependency version
    */
-  extendPackage (fields) {
+  extendPackage (fields, forceNewVersion) {
     const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
     for (const key in toMerge) {
@@ -135,7 +196,8 @@ class GeneratorAPI {
           this.id,
           existing || {},
           value,
-          this.generator.depSources
+          this.generator.depSources,
+          forceNewVersion
         )
       } else if (!(key in pkg)) {
         pkg[key] = value
@@ -169,7 +231,7 @@ class GeneratorAPI {
         const globby = require('globby')
         const _files = await globby(['**/*'], { cwd: source })
         for (const rawPath of _files) {
-          const targetPath = rawPath.split(path.sep).map(filename => {
+          const targetPath = rawPath.split('/').map(filename => {
             // dotfiles are ignored when published to npm, therefore in templates
             // we need to use underscore instead (e.g. "_gitignore")
             if (filename.charAt(0) === '_' && filename.charAt(1) !== '_') {
@@ -179,7 +241,7 @@ class GeneratorAPI {
               return `${filename.slice(1)}`
             }
             return filename
-          }).join(path.sep)
+          }).join('/')
           const sourcePath = path.resolve(source, rawPath)
           const content = renderFile(sourcePath, data, ejsOptions)
           // only set file if it's not all whitespace, or is a Buffer (binary files)
@@ -220,7 +282,21 @@ class GeneratorAPI {
    * @param {function} cb
    */
   onCreateComplete (cb) {
-    this.generator.completeCbs.push(cb)
+    this.afterInvoke(cb)
+  }
+
+  afterInvoke (cb) {
+    this.generator.afterInvokeCbs.push(cb)
+  }
+
+  /**
+   * Push a callback to be called when the files have been written to disk
+   * from non invoked plugins
+   *
+   * @param {function} cb
+   */
+  afterAnyInvoke (cb) {
+    this.generator.afterAnyInvokeCbs.push(cb)
   }
 
   /**
@@ -238,6 +314,32 @@ class GeneratorAPI {
    */
   genJSConfig (value) {
     return `module.exports = ${stringifyJS(value, null, 2)}`
+  }
+
+  /**
+   * Turns a string expression into executable JS for JS configs.
+   * @param {*} str JS expression as a string
+   */
+  makeJSOnlyValue (str) {
+    const fn = () => {}
+    fn.__expression = str
+    return fn
+  }
+
+  /**
+   * Run codemod on a script file or the script part of a .vue file
+   * @param {string} file the path to the file to transform
+   * @param {Codemod} codemod the codemod module to run
+   * @param {object} options additional options for the codemod
+   */
+  transformScript (file, codemod, options) {
+    this._injectFileMiddleware(files => {
+      files[file] = runCodemod(
+        codemod,
+        { path: this.resolve(file), source: files[file] },
+        options
+      )
+    })
   }
 
   /**
@@ -298,7 +400,7 @@ function extractCallDir () {
 const replaceBlockRE = /<%# REPLACE %>([^]*?)<%# END_REPLACE %>/g
 
 function renderFile (name, data, ejsOptions) {
-  if (isBinary.sync(name)) {
+  if (isBinaryFileSync(name)) {
     return fs.readFileSync(name) // return buffer
   }
   const template = fs.readFileSync(name, 'utf-8')
@@ -316,6 +418,22 @@ function renderFile (name, data, ejsOptions) {
   const parsed = yaml.loadFront(template)
   const content = parsed.__content
   let finalTemplate = content.trim() + `\n`
+
+  if (parsed.when) {
+    finalTemplate = (
+      `<%_ if (${parsed.when}) { _%>` +
+        finalTemplate +
+      `<%_ } _%>`
+    )
+
+    // use ejs.render to test the conditional expression
+    // if evaluated to falsy value, return early to avoid extra cost for extend expression
+    const result = ejs.render(finalTemplate, data, ejsOptions)
+    if (!result) {
+      return ''
+    }
+  }
+
   if (parsed.extend) {
     const extendPath = path.isAbsolute(parsed.extend)
       ? parsed.extend
@@ -335,13 +453,6 @@ function renderFile (name, data, ejsOptions) {
       } else {
         finalTemplate = finalTemplate.replace(parsed.replace, content.trim())
       }
-    }
-    if (parsed.when) {
-      finalTemplate = (
-        `<%_ if (${parsed.when}) { _%>` +
-          finalTemplate +
-        `<%_ } _%>`
-      )
     }
   }
 

@@ -1,3 +1,4 @@
+require('events').defaultMaxListeners = 0
 const path = require('path')
 const fs = require('fs')
 const request = require('request-promise-native')

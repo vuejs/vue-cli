@@ -12,6 +12,7 @@ fs.ensureDirSync(templateDir)
 fs.writeFileSync(path.resolve(templateDir, 'foo.js'), 'foo(<%- options.n %>)')
 fs.ensureDirSync(path.resolve(templateDir, 'bar'))
 fs.writeFileSync(path.resolve(templateDir, 'bar/bar.js'), 'bar(<%- m %>)')
+fs.writeFileSync(path.resolve(templateDir, 'bar/_bar.js'), '.bar(<%- m %>)')
 fs.writeFileSync(path.resolve(templateDir, 'entry.js'), `
 import foo from 'foo'
 
@@ -21,6 +22,21 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 `.trim())
+fs.writeFileSync(path.resolve(templateDir, 'empty-entry.js'), `;`)
+fs.writeFileSync(path.resolve(templateDir, 'main.ts'), `const a: string = 'hello';`)
+fs.writeFileSync(path.resolve(templateDir, 'hello.vue'), `
+<template>
+  <p>Hello, {{ msg }}</p>
+</template>
+<script>
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String
+  }
+}
+</script>
+`)
 
 // replace stubs
 fs.writeFileSync(path.resolve(templateDir, 'replace.js'), `
@@ -241,7 +257,7 @@ test('api: extendPackage merge dependencies', async () => {
 })
 
 test('api: warn invalid dep range', async () => {
-  new Generator('/', { plugins: [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -254,6 +270,8 @@ test('api: warn invalid dep range', async () => {
     }
   ] })
 
+  await generator.generate()
+
   expect(logs.warn.some(([msg]) => {
     return (
       msg.match(/invalid version range for dependency "foo"/) &&
@@ -263,7 +281,7 @@ test('api: warn invalid dep range', async () => {
 })
 
 test('api: extendPackage dependencies conflict', async () => {
-  new Generator('/', { plugins: [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test1',
       apply: api => {
@@ -286,6 +304,8 @@ test('api: extendPackage dependencies conflict', async () => {
     }
   ] })
 
+  await generator.generate()
+
   expect(logs.warn.some(([msg]) => {
     return (
       msg.match(/conflicting versions for project dependency "foo"/) &&
@@ -297,7 +317,7 @@ test('api: extendPackage dependencies conflict', async () => {
 })
 
 test('api: extendPackage merge warn nonstrictly semver deps', async () => {
-  new Generator('/', { plugins: [
+  const generator = new Generator('/', { plugins: [
     {
       id: 'test3',
       apply: api => {
@@ -319,6 +339,8 @@ test('api: extendPackage merge warn nonstrictly semver deps', async () => {
       }
     }
   ] })
+
+  await generator.generate()
 
   expect(logs.warn.some(([msg]) => {
     return (
@@ -347,6 +369,7 @@ test('api: render fs directory', async () => {
 
   expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo(1)')
   expect(fs.readFileSync('/bar/bar.js', 'utf-8')).toMatch('bar(2)')
+  expect(fs.readFileSync('/bar/.bar.js', 'utf-8')).toMatch('.bar(2)')
   expect(fs.readFileSync('/replace.js', 'utf-8')).toMatch('baz(2)')
   expect(fs.readFileSync('/multi-replace.js', 'utf-8')).toMatch('baz(1)\nqux(2)')
   expect(fs.readFileSync('/.gitignore', 'utf-8')).toMatch('foo')
@@ -420,10 +443,10 @@ test('api: hasPlugin', () => {
   ] })
 })
 
-test('api: onCreateComplete', () => {
+test('api: onCreateComplete', async () => {
   const fn = () => {}
   const cbs = []
-  new Generator('/', {
+  const generator = new Generator('/', {
     plugins: [
       {
         id: 'test',
@@ -432,8 +455,31 @@ test('api: onCreateComplete', () => {
         }
       }
     ],
-    completeCbs: cbs
+    afterInvokeCbs: cbs
   })
+
+  await generator.generate()
+
+  expect(cbs).toContain(fn)
+})
+
+test('api: afterInvoke', async () => {
+  const fn = () => {}
+  const cbs = []
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.afterInvoke(fn)
+        }
+      }
+    ],
+    afterInvokeCbs: cbs
+  })
+
+  await generator.generate()
+
   expect(cbs).toContain(fn)
 })
 
@@ -463,8 +509,43 @@ test('api: addEntryImport & addEntryInjection', async () => {
   ] })
 
   await generator.generate()
-  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\s+import bar from 'bar'/)
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\r?\nimport bar from 'bar'/)
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new Vue\({\s+p: p\(\),\s+baz,\s+foo,\s+bar,\s+render: h => h\(App\)\s+}\)/)
+})
+
+test('api: injectImports to empty file', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.js', `import foo from 'foo'`)
+        api.injectImports('main.js', `import bar from 'bar'`)
+        api.render({
+          'main.js': path.join(templateDir, 'empty-entry.js')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\r?\nimport bar from 'bar'/)
+})
+
+test('api: injectImports to typescript file', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('main.ts', `import foo from 'foo'`)
+        api.render({
+          'main.ts': path.join(templateDir, 'main.ts')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.ts', 'utf-8')).toMatch(/import foo from 'foo'/)
 })
 
 test('api: addEntryDuplicateImport', async () => {
@@ -482,6 +563,25 @@ test('api: addEntryDuplicateImport', async () => {
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/^import foo from 'foo'\s+new Vue/)
+})
+
+test('api: injectImport for .vue files', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.injectImports('hello.vue', `import foo from 'foo'`)
+        api.render({
+          'hello.vue': path.join(templateDir, 'hello.vue')
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+  const content = fs.readFileSync('/hello.vue', 'utf-8')
+  expect(content).toMatch(/import foo from 'foo'/)
+  expect(content).toMatch(/<template>([\s\S]*)<\/template>/)
 })
 
 test('api: addEntryDuplicateInjection', async () => {
@@ -582,7 +682,7 @@ test('api: addConfigTransform (multiple)', async () => {
 test('api: addConfigTransform transform vue warn', async () => {
   const configs = {
     vue: {
-      lintOnSave: true
+      lintOnSave: 'default'
     }
   }
 
@@ -604,7 +704,7 @@ test('api: addConfigTransform transform vue warn', async () => {
     extractConfigFiles: true
   })
 
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch('module.exports = {\n  lintOnSave: true\n}')
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(`module.exports = {\n  lintOnSave: 'default'\n}`)
   expect(logs.warn.some(([msg]) => {
     return msg.match(/Reserved config transform 'vue'/)
   })).toBe(true)
@@ -653,4 +753,57 @@ test('extract config files', async () => {
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
   expect(fs.readFileSync('/jest.config.js', 'utf-8')).toMatch(js(configs.jest))
   expect(fs.readFileSync('/.browserslistrc', 'utf-8')).toMatch('> 1%\nnot <= IE8')
+})
+
+test('generate a JS-Only value from a string', async () => {
+  const jsAsString = 'true ? "alice" : "bob"'
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.extendPackage({
+          testScript: api.makeJSOnlyValue(jsAsString)
+        })
+      }
+    }
+  ] })
+
+  await generator.generate({})
+
+  expect(generator.pkg).toHaveProperty('testScript')
+  expect(typeof generator.pkg.testScript).toBe('function')
+})
+
+test('run a codemod on the entry file', async () => {
+  // A test codemod that tranforms `new Vue` to `new TestVue`
+  const codemod = (fileInfo, api) => {
+    const j = api.jscodeshift
+    return j(fileInfo.source)
+        .find(j.NewExpression, {
+          callee: { name: 'Vue' },
+          arguments: [{ type: 'ObjectExpression' }]
+        })
+        .replaceWith(({ node }) => {
+          node.callee.name = 'TestVue'
+          return node
+        })
+        .toSource()
+  }
+
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test',
+      apply: api => {
+        api.render({
+          'main.js': path.join(templateDir, 'entry.js')
+        })
+
+        api.transformScript('main.js', codemod)
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new TestVue/)
 })

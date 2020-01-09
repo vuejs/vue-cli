@@ -3,7 +3,7 @@ jest.setTimeout(50000)
 const fs = require('fs-extra')
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
@@ -21,6 +21,12 @@ test('modern mode', async () => {
   expect(files.some(f => /^app-legacy\.\w{8}\.js$/.test(f))).toBe(true)
   expect(files.some(f => /^chunk-vendors\.\w{8}\.js$/.test(f))).toBe(true)
   expect(files.some(f => /^chunk-vendors-legacy\.\w{8}\.js$/.test(f))).toBe(true)
+
+  // arrow function should be reserved in the modern build
+  const app = await project.read(`dist/js/${files.find(f => /^app\.\w{8}\.js$/.test(f))}`)
+  expect(app).toMatch(/=>/)
+  const legacyApp = await project.read(`dist/js/${files.find(f => /^app-legacy\.\w{8}\.js$/.test(f))}`)
+  expect(legacyApp).not.toMatch(/=>/)
 
   // assert correct asset links
   const index = await project.read('dist/index.html')
@@ -74,6 +80,21 @@ test('modern mode', async () => {
   })
 
   expect(await getH1Text()).toMatch('Welcome to Your Vue.js App')
+})
+
+test('no-unsafe-inline', async () => {
+  const project = await create('no-unsafe-inline', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --modern --no-unsafe-inline')
+  expect(stdout).toMatch('Build complete.')
+
+  // should output a separate safari-nomodule-fix bundle
+  const files = await fs.readdir(path.join(project.dir, 'dist/js'))
+  expect(files.some(f => /^safari-nomodule-fix\.js$/.test(f))).toBe(true)
+
+  // should contain no inline scripts in the output html
+  const index = await project.read('dist/index.html')
+  expect(index).not.toMatch(/[^>]\s*<\/script>/)
 })
 
 afterAll(async () => {

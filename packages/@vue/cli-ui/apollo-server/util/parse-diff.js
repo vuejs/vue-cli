@@ -84,13 +84,13 @@ module.exports = function (input) {
 
   const del = function (line) {
     if (!current) return
-    current.changes.push({type: 'del', del: true, ln: lnDel++, content: line})
+    current.changes.push({ type: 'del', del: true, ln: lnDel++, content: line })
     file.deletions++
   }
 
   const add = function (line) {
     if (!current) return
-    current.changes.push({type: 'add', add: true, ln: lnAdd++, content: line})
+    current.changes.push({ type: 'add', add: true, ln: lnAdd++, content: line })
     file.additions++
   }
 

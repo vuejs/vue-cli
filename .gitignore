@@ -7,3 +7,5 @@ dist
 temp
 .vuerc
 .version
+.versions
+.changelog

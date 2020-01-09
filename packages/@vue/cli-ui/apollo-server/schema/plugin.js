@@ -15,10 +15,11 @@ extend type Query {
 
 extend type Mutation {
   pluginInstall (id: ID!): PluginInstallation
+  pluginInstallLocal: PluginInstallation
   pluginUninstall (id: ID!): PluginInstallation
   pluginInvoke (id: ID!): PluginInstallation
   pluginFinishInstall: PluginInstallation
-  pluginUpdate (id: ID!): Plugin
+  pluginUpdate (id: ID!, full: Boolean = true): Plugin
   pluginActionCall (id: ID!, params: JSON): PluginActionResult
   pluginsUpdate: [Plugin]
   pluginResetApi: Boolean
@@ -82,10 +83,11 @@ exports.resolvers = {
 
   Mutation: {
     pluginInstall: (root, { id }, context) => plugins.install(id, context),
+    pluginInstallLocal: (root, args, context) => plugins.installLocal(context),
     pluginUninstall: (root, { id }, context) => plugins.uninstall(id, context),
     pluginInvoke: (root, { id }, context) => plugins.runInvoke(id, context),
     pluginFinishInstall: (root, args, context) => plugins.finishInstall(context),
-    pluginUpdate: (root, { id }, context) => plugins.update(id, context),
+    pluginUpdate: (root, { id, full }, context) => plugins.update({ id, full }, context),
     pluginActionCall: (root, args, context) => plugins.callAction(args, context),
     pluginsUpdate: (root, args, context) => plugins.updateAll(context),
     pluginResetApi: (root, args, context) => plugins.resetPluginApi({ file: cwd.get() }, context)

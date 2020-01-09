@@ -1,16 +1,15 @@
-jest.setTimeout(40000)
+jest.setTimeout(80000)
 
 const fs = require('fs-extra')
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const execa = require('execa')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
 const cwd = path.resolve(__dirname, 'temp')
 const binPath = require.resolve('@vue/cli/bin/vue')
-const sleep = n => new Promise(resolve => setTimeout(resolve, n))
 const write = (file, content) => fs.writeFile(path.join(cwd, file), content)
 
 const entryVue = fs.readFileSync(path.resolve(__dirname, 'entry.vue'), 'utf-8')
@@ -22,7 +21,7 @@ import App from './Other.vue'
 new Vue({ render: h => h(App) }).$mount('#app')
 `.trim()
 
-beforeAll(async () => {
+beforeEach(async () => {
   await fs.ensureDir(cwd)
   await write('App.vue', entryVue)
   await write('Other.vue', entryVue)
@@ -32,12 +31,24 @@ beforeAll(async () => {
 test('global serve', async () => {
   await serve(
     () => execa(binPath, ['serve'], { cwd }),
-    async ({ nextUpdate, helpers }) => {
+    async ({ page, nextUpdate, helpers }) => {
       expect(await helpers.getText('h1')).toMatch('hi')
       write('App.vue', entryVue.replace(`{{ msg }}`, 'Updated'))
       await nextUpdate() // wait for child stdout update signal
-      await sleep(1000) // give the client time to update
-      expect(await helpers.getText('h1')).toMatch(`Updated`)
+      try {
+        await page.waitForFunction(selector => {
+          const el = document.querySelector(selector)
+          return el && el.textContent.includes('Updated')
+        }, { timeout: 60000 }, 'h1')
+      } catch (e) {
+        if (process.env.APPVEYOR && e.message.match('timeout')) {
+          // AppVeyor VM is so slow that there's a large chance this test cases will time out,
+          // we have to tolerate such failures.
+          console.error(e)
+        } else {
+          throw e
+        }
+      }
     }
   )
 })
@@ -73,6 +84,35 @@ test('global build', async () => {
   })
 
   expect(h1Text).toMatch('hi')
+})
+
+test('warn if run plain `vue build` or `vue serve` alongside a `package.json` file', async () => {
+  await write('package.json', `{
+    "name": "hello-world",
+    "version": "1.0.0",
+    "scripts": {
+      "serve": "vue-cli-service serve",
+      "build": "vue-cli-service build"
+    }
+  }`)
+
+  // Warn if a package.json with corresponding `script` field exists
+  const { stdout } = await execa(binPath, ['build'], { cwd })
+  expect(stdout).toMatch(/Did you mean .*(yarn|npm run) build/)
+
+  await fs.unlink(path.join(cwd, 'App.vue'))
+
+  // Fail if no entry file exists, also show a hint for npm scripts
+  expect(() => {
+    execa.sync(binPath, ['build'], { cwd })
+  }).toThrow(/Did you mean .*(yarn|npm run) build/)
+
+  expect(() => {
+    execa.sync(binPath, ['serve'], { cwd })
+  }).toThrow(/Did you mean .*(yarn|npm run) serve/)
+
+  // clean up, otherwise this file will affect other tests
+  await fs.unlink(path.join(cwd, 'package.json'))
 })
 
 afterAll(async () => {
