@@ -6,14 +6,14 @@ module.exports = class Migrator extends Generator {
     plugin,
 
     pkg = {},
-    completeCbs = [],
+    afterInvokeCbs = [],
     files = {},
     invoking = false
   } = {}) {
     super(context, {
       pkg,
       plugins: [],
-      completeCbs,
+      afterInvokeCbs,
       files,
       invoking
     })
