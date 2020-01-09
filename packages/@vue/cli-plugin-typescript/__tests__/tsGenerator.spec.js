@@ -81,12 +81,11 @@ test('use with router', async () => {
 })
 
 test('lint', async () => {
-  const { pkg, files } = await generateWithPlugin([
+  const { pkg } = await generateWithPlugin([
     {
       id: 'ts',
       apply: require('../generator'),
       options: {
-        tsLint: true,
         lintOn: ['save', 'commit']
       }
     }
@@ -99,8 +98,6 @@ test('lint', async () => {
     '*.ts': ['vue-cli-service lint', 'git add'],
     '*.vue': ['vue-cli-service lint', 'git add']
   })
-
-  expect(files['tslint.json']).toBeTruthy()
 })
 
 test('lint with no lintOnSave', async () => {
@@ -109,7 +106,6 @@ test('lint with no lintOnSave', async () => {
       id: 'ts',
       apply: require('../generator'),
       options: {
-        tsLint: true,
         lintOn: ['commit']
       }
     }
