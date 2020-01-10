@@ -181,7 +181,7 @@ test('dart sass', async () => {
   await project.run('vue-cli-service build')
 })
 
-test.only('use a single websocket connection for HMR', async () => {
+test('use a single websocket connection for HMR', async () => {
   const project = await create('e2e-serve', defaultPreset)
 
   await serve(
