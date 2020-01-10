@@ -17,8 +17,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     }
   }
 
-  if (!api.hasPlugin('typescript')) {
-    // required for dynamic import support
+  if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     pkg.devDependencies['babel-eslint'] = '^10.0.3'
   }
 
@@ -33,7 +32,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   case 'standard':
     eslintConfig.extends.push('@vue/standard')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^5.0.1',
+      '@vue/eslint-config-standard': '^5.1.0',
       'eslint-plugin-import': '^2.18.2',
       'eslint-plugin-node': '^9.1.0',
       'eslint-plugin-promise': '^4.2.1',
