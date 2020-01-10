@@ -34,6 +34,42 @@ module.exports = (
     }
   }
 
+  if (tsLint) {
+    api.extendPackage({
+      scripts: {
+        lint: "vue-cli-service lint",
+      },
+    });
+
+    if (!lintOn.includes("save")) {
+      api.extendPackage({
+        vue: {
+          lintOnSave: false,
+        },
+      });
+    }
+
+    if (lintOn.includes("commit")) {
+      api.extendPackage({
+        devDependencies: {
+          "lint-staged": "^9.5.0",
+        },
+        gitHooks: {
+          "pre-commit": "lint-staged",
+        },
+        "lint-staged": {
+          "*.ts": ["vue-cli-service lint", "git add"],
+          "*.vue": ["vue-cli-service lint", "git add"],
+        },
+      });
+    }
+
+    // lint and fix files on creation complete
+    api.onCreateComplete(() => {
+      return require("../lib/tslint")({}, api, true);
+    });
+  }
+
   // late invoke compat
   if (invoking) {
     if (api.hasPlugin("unit-mocha")) {
