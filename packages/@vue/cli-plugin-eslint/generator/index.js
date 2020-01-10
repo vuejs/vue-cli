@@ -13,7 +13,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     eslintConfig,
     devDependencies: {
       eslint: '^6.7.2',
-      'eslint-plugin-vue': '^6.0.1'
+      'eslint-plugin-vue': '^6.1.2'
     }
   }
 
