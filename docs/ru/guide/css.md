@@ -10,9 +10,9 @@
 
 Вы можете выбрать пре-процессоры (Sass/Less/Stylus) при создании проекта. Если вы этого не сделали, то внутренняя конфигурация webpack всё равно настроена для их использования. Вам лишь требуется вручную доустановить соответствующие загрузчики для webpack:
 
-``` bash
+```bash
 # Sass
-npm install -D sass-loader node-sass
+npm install -D sass-loader sass
 
 # Less
 npm install -D less-loader less
@@ -23,11 +23,21 @@ npm install -D stylus-loader stylus
 
 Теперь вы можете импортировать соответствующие типы файлов, или использовать их синтаксис внутри файлов `*.vue` с помощью:
 
-``` vue
+```vue
 <style lang="scss">
 $color: red;
 </style>
 ```
+
+::: tip Совет по производительности Sass
+Обратите внимание, при использовании Dart Sass **синхронная компиляция вдвое быстрее асинхронной** по умолчанию, из-за накладных расходов на асинхронные коллбэки. Чтобы избежать их можно воспользоваться пакетом [fibers](https://www.npmjs.com/package/fibers) для вызова асинхронных импортёров по пути синхронного кода. Для этого просто установите `fibers` в качестве зависимости проекта:
+
+```
+npm install -D fibers
+```
+
+Также имейте в виду, поскольку это нативный модуль, то могут возникнуть различные проблемы совместимости, в зависимости от ОС и окружения сборки. В таких случаях выполните `npm uninstall -D fibers` для устранения проблемы.
+:::
 
 ### Автоматические импорты
 
@@ -75,33 +85,38 @@ Vue CLI использует PostCSS внутри себя.
 
 Для импорта CSS или других файлов пре-процессоров в качестве CSS-модулей в JavaScript, необходимо чтобы имя файла заканчивалось на `.module.(css|less|sass|scss|styl)`:
 
-``` js
+```js
 import styles from './foo.module.css'
 // работает для всех поддерживаемых пре-процессоров
 import sassStyles from './foo.module.scss'
 ```
 
-Если вы не хотите указывать `.module` в именах файлов, установите `css.modules` в `true` внутри файла `vue.config.js`:
+Если вы не хотите указывать `.module` в именах файлов, установите `css.requireModuleExtension` в `false` внутри файла `vue.config.js`:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   css: {
-    modules: true
+    requireModuleExtension: false
   }
 }
 ```
 
 Если вы хотите настроить генерируемые имена классов для CSS-модулей, вы можете сделать это с помощью опции `css.loaderOptions.css` в `vue.config.js`. Все настройки `css-loader` поддерживаются, например `localIdentName` и `camelCase`:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   css: {
     loaderOptions: {
       css: {
-        localIdentName: '[name]-[hash]',
-        camelCase: 'only'
+        // Примечание: формат конфигурации отличается между Vue CLI v4 и v3
+        // Для пользователей Vue CLI v3, обратитесь к документации css-loader v1
+        // https://github.com/webpack-contrib/css-loader/tree/v1.0.1
+        modules: {
+          localIdentName: '[name]-[hash]'
+        },
+        localsConvention: 'camelCaseOnly'
       }
     }
   }
@@ -112,16 +127,25 @@ module.exports = {
 
 Иногда может возникнуть необходимость передать настройки в загрузчик пре-процессора для webpack. Вы можете сделать это с помощью опции `css.loaderOptions` в `vue.config.js`. Например, для передачи глобальных переменных во все стили Sass/Less:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   css: {
     loaderOptions: {
       // передача настроек в sass-loader
+      // @/ это псевдоним к каталогу src/ поэтому предполагается,
+      // что у вас в проекте есть файл `src/variables.scss`
+      // Примечание: эта опция называется "data" в sass-loader v7
       sass: {
-        // @/ это псевдоним к каталогу src/ поэтому предполагается,
-        // что у вас в проекте есть файл `src/variables.scss`
-        data: `@import "~@/variables.scss";`
+        prependData: `@import "~@/variables.sass"`
+      },
+      // по умолчанию опция `sass` будет применяться к обоим синтаксисам
+      // потому что синтаксис `scss` по сути также обрабатывается sass-loader
+      // но при настройке опции `data` синтаксис `scss` требует точку с запятой
+      // в конце оператора, в то время как для `sass` точки с запятой не требуется
+      // в этом случае синтаксис `scss` можно настроить отдельно с помощью опции `scss`
+      scss: {
+        prependData: `@import "~@/variables.scss";`
       },
       // передача настроек Less.js в less-loader
       less:{

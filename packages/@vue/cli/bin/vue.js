@@ -63,6 +63,7 @@ program
   .option('-g, --git [message]', 'Force git initialization with initial commit message')
   .option('-n, --no-git', 'Skip git initialization')
   .option('-f, --force', 'Overwrite target directory if it exists')
+  .option('--merge', 'Merge target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
   .option('-x, --proxy', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
@@ -248,9 +249,7 @@ if (!process.argv.slice(2).length) {
 }
 
 function suggestCommands (unknownCommand) {
-  const availableCommands = program.commands.map(cmd => {
-    return cmd._name
-  })
+  const availableCommands = program.commands.map(cmd => cmd._name)
 
   const suggestion = didYouMean(unknownCommand, availableCommands)
   if (suggestion) {

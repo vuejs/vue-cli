@@ -37,7 +37,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
 
 Установка:
 
-``` bash
+```bash
 npm install -g @vue/cli
 # ИЛИ
 yarn global add @vue/cli
@@ -45,7 +45,7 @@ yarn global add @vue/cli
 
 Создание проекта:
 
-``` bash
+```bash
 vue create my-project
 # ИЛИ
 vue ui

@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-shared-utils",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "shared utilities for vue-cli packages",
   "main": "index.js",
   "repository": {
@@ -28,10 +28,10 @@
     "node-ipc": "^9.1.1",
     "open": "^6.3.0",
     "ora": "^3.4.0",
+    "read-pkg": "^5.1.1",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.8",
     "semver": "^6.1.0",
-    "string.prototype.padstart": "^3.0.0",
     "strip-ansi": "^6.0.0"
   },
   "publishConfig": {

@@ -65,7 +65,7 @@ module.exports = (api, options) => {
         rawArgs.push('--env', 'chrome')
       }
 
-      if (args['with-selenium']) {
+      if (args['use-selenium']) {
         process.env.VUE_NIGHTWATCH_USE_SELENIUM = '1'
       }
 
