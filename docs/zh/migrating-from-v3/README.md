@@ -20,7 +20,7 @@ yarn global add @vue/cli
 vue upgrade
 ```
 
-之后参看各章节为具体的breaking changes。
+之后参看各章节为具体的重大更新。
 
 ------
 
@@ -289,3 +289,7 @@ module.exports = {
 
 - 使用 mochapack 替换 mocha-webpack，请看更新日志 <https://github.com/sysgears/mochapack/releases>。这个改变不会影响实际使用。
 - 升级到 mocha 6，参看 [Mocha 更新日志](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#600-0--2019-01-01) 获取更多细节。
+
+### `@vue/cli-service-global`
+
+请查看 [`@vue/cli-service`](#vue-cli-service) 以及 [`@vue/cli-plugin-eslint`](#vue-cli-plugin-eslint) 的重大更新。
