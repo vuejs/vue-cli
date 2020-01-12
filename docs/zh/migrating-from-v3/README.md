@@ -103,7 +103,7 @@ vue upgrade
 
 #### 对 SASS/SCSS 用户
 
-之前在 Vue CLI v3中，我们使用了 `sass-loader@7`。
+之前在 Vue CLI v3 中，我们使用了 `sass-loader@7`。
 
 最近 `sass-loader@8` 已经发布而且在配置文件格式上有了很多变化。这里是更新日志：<https://github.com/webpack-contrib/sass-loader/releases/tag/v8.0.0>
 
@@ -168,7 +168,7 @@ module.exports = {
 - [v2 更新日志](https://github.com/webpack-contrib/css-loader/releases/tag/v2.0.0)
 - [v3 更新日志](https://github.com/webpack-contrib/css-loader/releases/tag/v3.0.0)
 
-若干个底层的 webpack loader 和 插件 已经升级，其中的绝大多数不太重要:
+若干个底层的 webpack loader 和插件已经升级，其中的绝大多数不太重要:
 
 - `url-loader` [从 v1 to v2](https://github.com/webpack-contrib/url-loader/releases/tag/v2.0.0)
 - `file-loader` [从 v3 to v4](https://github.com/webpack-contrib/file-loader/releases/tag/v4.0.0)
@@ -194,4 +194,10 @@ Babel 插件需要一个 peer dependency，用来帮助执行转译后的代码
 所以我们把它移到了项目的直接依赖 (`@vue/cli-plugin-babel`) 好让它能更符合标准且减少出错。
 
 ------
+
+### `@vue/cli-plugin-eslint`
+
+这个 plugin 现在 [需要 ESLint 作为 peer dependency](https://github.com/vuejs/vue-cli/pull/3852)。
+
+这不会影响使用 Vue CLI 3.1 或之后版本生成的项目脚手架。
 
