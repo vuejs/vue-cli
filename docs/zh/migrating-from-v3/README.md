@@ -116,7 +116,7 @@ vue upgrade
 
 #### 对 CSS Module 用户
 
-- [为了有利于 `css.requireModuleExtension` 已弃用 `css.modules`](https://github.com/vuejs/vue-cli/pull/4387)。
+- [为了便于使用 `css.requireModuleExtension` 已弃用 `css.modules`](https://github.com/vuejs/vue-cli/pull/4387)。
 
 #### `vue.config.js` 选项
 
@@ -154,3 +154,5 @@ module.exports = {
   }
 }
 ```
+
+##### Other Changes
