@@ -200,6 +200,10 @@ module.exports = {
             ]
           },
           {
+            text: '从 v3 迁移',
+            link: '/migrating-from-v3/'
+          },
+          {
             text: '更新记录',
             link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
           }
