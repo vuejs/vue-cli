@@ -114,8 +114,43 @@ vue upgrade
 `less-loader` v4 与 `less` >= 3.10 的版本不兼容，查看<https://github.com/less/less.js/issues/3414>。
 如果你的项目依赖它，强烈建议升级到 `less-loader@5`。
 
-#### 对 CSS Module 　用户
+#### 对 CSS Module 用户
 
 - [为了有利于 `css.requireModuleExtension` 已弃用 `css.modules`](https://github.com/vuejs/vue-cli/pull/4387)。
 
 #### `vue.config.js` 选项
+
+已弃用的 [`baseUrl` option](https://cli.vuejs.org/config/#baseurl) 现在已经 [被移除](https://github.com/vuejs/vue-cli/pull/4388)
+
+#### `chainWebpack` / `configureWebpack`
+
+##### The `minimizer` Method in `chainWebpack`
+
+如果你已经自定义了 `chainWebpack` 的内置rules，请注意现在 `webpack-chain` 已经从 v4 升级到了 v6，最值得注意的改变是 `minimizer` 配置
+
+举例来说，如果你想要在 terser 插件中启用 `drop_console` 选项。
+在 v3 中，你可以在 `chainWebpack` 中这么做:
+
+```js
+const TerserPlugin = require('terser-webpack-plugin')
+module.exports = {
+  chainWebpack: config => {
+    config.optimization.minimizer([
+      new TerserPlugin({ terserOptions: { compress: { drop_console: true } } })
+    ])
+  }
+}
+```
+
+在 v4 中，变成了:
+
+```js
+module.exports = {
+  chainWebpack: config => {
+    config.optimization.minimizer('terser').tap(args => {
+      args[0].terserOptions.compress.drop_console = true
+      return args
+    })
+  }
+}
+```
