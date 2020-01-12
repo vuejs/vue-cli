@@ -168,7 +168,7 @@ module.exports = {
 - [v2 更新日志](https://github.com/webpack-contrib/css-loader/releases/tag/v2.0.0)
 - [v3 更新日志](https://github.com/webpack-contrib/css-loader/releases/tag/v3.0.0)
 
-若干个底层的 webpack loader 和插件已经升级，其中的绝大多数不太重要:
+若干个基础的 webpack loader 和插件已经升级，其中的绝大多数不太重要:
 
 - `url-loader` [从 v1 to v2](https://github.com/webpack-contrib/url-loader/releases/tag/v2.0.0)
 - `file-loader` [从 v3 to v4](https://github.com/webpack-contrib/file-loader/releases/tag/v4.0.0)
@@ -231,3 +231,9 @@ npm install --save-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-pret
 
 - 在 v3 中，默认情况下，lint warning 以及 error 会显示为 error 样式
 - 在 v4 中，默认情况下，只有 lint error 会打断你的开发过程。Warning 现在只会在终端中打印出来。
+
+### `@vue/cli-plugin-pwa`
+
+底层的 workbox-webpack-plugin 已经从 v3 更新到了 v4。在这里查看 [更新日志](https://github.com/GoogleChrome/workbox/releases/tag/v4.0.0)。
+
+现在还有了一个新的 `pwa.manifestOptions` 字段可用 (你可以在 `vue.config.js` 中设置)。随着这个新选项，`manifest.json`将会生成一个 config 对象而不是直接从 `public` 文件夹拷贝一个。(注意，这是一个可选特性。相关PR: [#2981](https://github.com/vuejs/vue-cli/pull/2981), [#4664](https://github.com/vuejs/vue-cli/pull/4664))
