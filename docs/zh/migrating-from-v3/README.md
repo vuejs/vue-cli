@@ -201,7 +201,7 @@ Babel 插件需要一个 peer dependency，用来帮助执行转译后的代码
 
 这不会影响使用 Vue CLI 3.1 或之后版本生成的项目脚手架。
 
-如果你的项目是使用 Vue CLI 3.0.x 或更早版本搭建的, 你可能需要把 `eslint@4` 添加到项目的依赖 (如果你使用 `vue upgrade eslint` 升级，这个过程是完全自动的)。
+如果你的项目是使用 Vue CLI 3.0.x 或更早版本搭建的，你可能需要把 `eslint@4` 添加到项目的依赖 (如果你使用 `vue upgrade eslint` 升级，这个过程是完全自动的)。
 
 同时建议升级你的 ESLint 到 v5，以及 ESLint config 到最新版。(ESLint v6 支持工作进行中)
 
@@ -236,7 +236,7 @@ npm install --save-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-pret
 
 底层的 workbox-webpack-plugin 已经从 v3 更新到了 v4。在这里查看 [更新日志](https://github.com/GoogleChrome/workbox/releases/tag/v4.0.0)。
 
-现在还有了一个新的 `pwa.manifestOptions` 字段可用 (你可以在 `vue.config.js` 中设置)。随着这个新选项，`manifest.json`将会生成一个 config 对象而不是直接从 `public` 文件夹拷贝一个。(注意，这是一个可选特性。相关PR: [#2981](https://github.com/vuejs/vue-cli/pull/2981), [#4664](https://github.com/vuejs/vue-cli/pull/4664))
+现在还有了一个新的 `pwa.manifestOptions` 字段可用 (你可以在 `vue.config.js` 中设置)。随着这个新选项，`manifest.json`将会生成一个 config 对象而不是直接从 `public` 文件夹拷贝一个。(注意，这是一个可选特性。相关PR: [#2981](https://github.com/vuejs/vue-cli/pull/2981)，[#4664](https://github.com/vuejs/vue-cli/pull/4664))
 
 ### `@vue/cli-plugin-e2e-nightwatch`
 
@@ -249,7 +249,7 @@ Bundled config 以及 generated test [已经被完全重写了](https://github.c
 
 ------
 
-就像在 cypress plugin 中一样, 对遗留版 `vue-cli-service e2e` 命令的支持已经被移除。
+就像在 cypress plugin 中一样，对遗留版 `vue-cli-service e2e` 命令的支持已经被移除。
 
 ### `@vue/cli-plugin-typescript`
 
@@ -276,7 +276,7 @@ module.exports = {
 }
 ```
 
-(`ts-jest`, `babel-jest` 的依赖在配置文件移植到使用preset后也可以移除了)
+(`ts-jest`，`babel-jest` 的依赖在配置文件移植到使用preset后也可以移除了)
 
 ::: tip 一个小提示
 在新preset中默认的测试环境是 jsdom@15，这和 Jest 24 中默认的 (jsdom@11) 不同。
