@@ -279,8 +279,13 @@ module.exports = {
 (`ts-jest`, `babel-jest` 的依赖在配置文件移植到使用preset后也可以移除了)
 
 ::: tip 一个小提示
-在新preset中默认的测试环境是 jsdom@15, 这和 Jest 24 中默认的 (jsdom@11) 不同。
+在新preset中默认的测试环境是 jsdom@15，这和 Jest 24 中默认的 (jsdom@11) 不同。
 这是为了与即将到来的 Jest 25 更新保持一致。
 绝大多数用户不会因为这项改变受到影响。
-关于 jsdom 更详细的更新日志, 请查阅 <https://github.com/jsdom/jsdom/blob/master/Changelog.md>
+关于 jsdom 更详细的更新日志，请查阅 <https://github.com/jsdom/jsdom/blob/master/Changelog.md>
 :::
+
+### `@vue/cli-plugin-unit-mocha`
+
+- 使用 mochapack 替换 mocha-webpack，请看更新日志 <https://github.com/sysgears/mochapack/releases>。这个改变不会影响实际使用。
+- 升级到 mocha 6，参看 [Mocha 更新日志](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#600-0--2019-01-01) 获取更多细节。
