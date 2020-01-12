@@ -248,3 +248,9 @@ Bundled config 以及 generated test [已经被完全重写了](https://github.c
 在插件中新增了一个简单浏览器版本检测，如果你升级到了一个不兼容版本的 Chrome，现在会有一个 warning 来提醒你升级到依赖的版本。
 
 ------
+
+就像在 cypress plugin 中一样, 对遗留版 `vue-cli-service e2e` 命令的支持已经被移除。
+
+### `@vue/cli-plugin-typescript`
+
+当使用 Typescript 时，webpack resolve 选项现在 [相比 `js(x)`更倾向于使用 `ts(x)` 文件后缀](https://github.com/vuejs/vue-cli/pull/3909)。
