@@ -237,3 +237,14 @@ npm install --save-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-pret
 底层的 workbox-webpack-plugin 已经从 v3 更新到了 v4。在这里查看 [更新日志](https://github.com/GoogleChrome/workbox/releases/tag/v4.0.0)。
 
 现在还有了一个新的 `pwa.manifestOptions` 字段可用 (你可以在 `vue.config.js` 中设置)。随着这个新选项，`manifest.json`将会生成一个 config 对象而不是直接从 `public` 文件夹拷贝一个。(注意，这是一个可选特性。相关PR: [#2981](https://github.com/vuejs/vue-cli/pull/2981), [#4664](https://github.com/vuejs/vue-cli/pull/4664))
+
+### `@vue/cli-plugin-e2e-nightwatch`
+
+Nightwatch.js 已经从 0.9 升级到了 1.x。请先阅读 [Nightwatch 移植指南](https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0)。
+
+Bundled config 以及 generated test [已经被完全重写了](https://github.com/vuejs/vue-cli/pull/4541)。 更多细节请看链接。大多数用例在 Vue CLI v3 中仍旧支持。它们只是新功能。
+
+由于 ChromeDriver 自从73版本之后改变了发版策略，我们把它放到了项目的 peer dependency。
+在插件中新增了一个简单浏览器版本检测，如果你升级到了一个不兼容版本的 Chrome，现在会有一个 warning 来提醒你升级到依赖的版本。
+
+------
