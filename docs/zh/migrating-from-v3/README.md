@@ -220,3 +220,14 @@ npm install --save-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-pret
 ```
 
 ------
+
+#### `lintOnSave` options
+
+(以下内容只影响开发过程)
+
+`lintOnSave` 的默认值 (当没有指定时) 现在已经 [从 `true` 变成 `'default'`](https://github.com/vuejs/vue-cli/pull/3975)。你可以在这里找到更多详细的原因解释 [文档](https://cli.vuejs.org/config/#lintonsave)。
+
+总结:
+
+- 在 v3 中，默认情况下，lint warning 以及 error 会显示为 error 样式
+- 在 v4 中，默认情况下，只有 lint error 会打断你的开发过程。Warning 现在只会在终端中打印出来。
