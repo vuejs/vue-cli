@@ -20,7 +20,7 @@ yarn global add @vue/cli
 vue upgrade
 ```
 
-之后参看各章节为具体的重大更新。
+之后细节请参看各章节的重大更新。
 
 ------
 
@@ -92,7 +92,7 @@ vue upgrade
 <p>Welcome to <b>Vue.js</b> <i>world</i>. Have fun!</p>
 ```
 
-注意 tag中 **inline** 样式的的空位会保留。
+注意 tag中 **inline** 样式的空格会保留。
 
 #### `vue-cli-service build --mode development`
 
@@ -159,7 +159,7 @@ module.exports = {
 
 - [The `pug-plain` rule 改名为 `pug-plain-loader`](https://github.com/vuejs/vue-cli/pull/4230)
 
-#### Underlying Loaders / Plugins
+#### 基础 Loaders / Plugins
 
 不会影响用户除非你使用 `chainWebpack` / `configureWebpack` 自定义了配置
 
@@ -209,7 +209,7 @@ Babel 插件需要一个 peer dependency，用来帮助执行转译后的代码
 
 #### The Prettier Preset
 
-我们之前的 prettier preset 实现是有缺陷的。我们已经在 Vue CLI 3.10中更新了预置模板。
+我们之前实现的 prettier preset 是有缺陷的。我们已经在 Vue CLI 3.10中更新了预置模板。
 
 它现在需要 `eslint`，`eslint-plugin-prettier` 和 `prettier` 作为 peer dependencies，已符合[ESLint 生态系统中的标准实践](https://github.com/eslint/eslint/issues/3458)。
 
