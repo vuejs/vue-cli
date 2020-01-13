@@ -280,6 +280,30 @@ test('api: warn invalid dep range', async () => {
   })).toBe(true)
 })
 
+test('api: warn invalid dep range when non-string', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test1',
+      apply: api => {
+        api.extendPackage({
+          dependencies: {
+            foo: null
+          }
+        })
+      }
+    }
+  ] })
+
+  await generator.generate()
+
+  expect(logs.warn.some(([msg]) => {
+    return (
+      msg.match(/invalid version range for dependency "foo"/) &&
+      msg.match(/injected by generator "test1"/)
+    )
+  })).toBe(true)
+})
+
 test('api: extendPackage dependencies conflict', async () => {
   const generator = new Generator('/', { plugins: [
     {
