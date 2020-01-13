@@ -172,6 +172,7 @@ module.exports = (api, options) => {
       contentBase: api.resolve('public'),
       watchContentBase: !isProduction,
       hot: !isProduction,
+      injectClient: false,
       compress: isProduction,
       publicPath: options.publicPath,
       overlay: isProduction // TODO disable this
