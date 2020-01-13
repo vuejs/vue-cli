@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
-    "@vue/eslint-config-airbnb": "^5.0.0",
+    "@vue/eslint-config-airbnb": "^5.0.1",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-standard": "^5.1.0",
     "@vue/eslint-config-typescript": "^5.0.1",

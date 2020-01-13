@@ -25,7 +25,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
   case 'airbnb':
     eslintConfig.extends.push('@vue/airbnb')
     Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^5.0.0',
+      '@vue/eslint-config-airbnb': '^5.0.1',
       'eslint-plugin-import': '^2.18.2'
     })
     break
