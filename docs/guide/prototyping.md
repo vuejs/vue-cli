@@ -3,9 +3,9 @@
 You can rapidly prototype with just a single `*.vue` file with the `vue serve` and `vue build` commands, but they require a global addon to be installed along with the Vue CLI:
 
 ``` bash
-npm install -g @vue/cli-service-global
+npm install-g @vue/cli @vue/cli-service-global
 # or
-yarn global add @vue/cli-service-global
+yarn global add @vue/cli @vue/cli-service-global
 ```
 
 The drawback of `vue serve` is that it relies on globally installed dependencies which may be inconsistent on different machines. Therefore this is only recommended for rapid prototyping.
