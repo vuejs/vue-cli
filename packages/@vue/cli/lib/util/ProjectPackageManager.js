@@ -8,6 +8,7 @@ const {
   chalk,
   execa,
   semver,
+  request,
 
   hasYarn,
   hasProjectYarn,
@@ -19,7 +20,8 @@ const {
   resolvePluginId,
 
   log,
-  warn
+  warn,
+  error
 } = require('@vue/cli-shared-utils')
 
 const { loadOptions } = require('../options')
@@ -174,7 +176,8 @@ class PackageManager {
     }
   }
 
-  async getMetadata (packageName, { field = '' } = {}) {
+  // https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md
+  async getMetadata (packageName, { full = false } = {}) {
     const registry = await this.getRegistry()
 
     const metadataKey = `${this.bin}-${registry}-${packageName}`
@@ -184,17 +187,20 @@ class PackageManager {
       return metadata
     }
 
-    const args = await this.addRegistryToArgs(['info', packageName, field, '--json'])
-    const { stdout } = await execa(this.bin, args)
-
-    metadata = JSON.parse(stdout)
-    if (this.bin === 'yarn') {
-      // `yarn info` outputs messages in the form of `{"type": "inspect", data: {}}`
-      metadata = metadata.data
+    const headers = {}
+    if (!full) {
+      headers.Accept = 'application/vnd.npm.install-v1+json'
     }
 
-    metadataCache.set(metadataKey, metadata)
-    return metadata
+    const url = `${registry}/${packageName}`
+    try {
+      metadata = (await request.get(url, { headers })).body
+      metadataCache.set(metadataKey, metadata)
+      return metadata
+    } catch (e) {
+      error(`Failed to get response from ${url}`)
+      throw e
+    }
   }
 
   async getRemoteVersion (packageName, versionRange = 'latest') {
