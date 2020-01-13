@@ -266,7 +266,7 @@ As in the cypress plugin, the support for legacy `vue-cli-service e2e` command h
 
 ### `@vue/cli-plugin-typescript`
 
-When importing a file without extension, the webpack resolve options now prefer [prefer `.ts(x)` files over `.js(x)` and `.vue` ones](https://github.com/vuejs/vue-cli/pull/3909). We strongly recommend you to always include the file extension when importing `.vue` files.
+When importing a file without extension, the webpack resolve options now [prefer `.ts(x)` files over `.js(x)` and `.vue` ones](https://github.com/vuejs/vue-cli/pull/3909). We strongly recommend you to always include the file extension when importing `.vue` files.
 
 ### `@vue/cli-plugin-unit-jest`
 
