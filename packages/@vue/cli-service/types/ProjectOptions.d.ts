@@ -1,11 +1,16 @@
 import ChainableWebpackConfig from 'webpack-chain'
-import { WebpackOptions } from 'webpack/declarations/WebpackOptions'
+import { Configuration as WebpackConfiguration } from 'webpack';
+import { Configuration } from 'webpack-dev-server';
+import { DeepPartial } from 'utility-types';
 
 type PageEntry = string | string[];
 
 interface PageConfig {
   entry: PageEntry;
-  [key: string]: any;
+  template?: string;
+  filename?: string;
+  title?: string;
+  chunks?: string[];
 }
 
 interface LoaderOptions {
@@ -29,32 +34,36 @@ interface CSSOptions {
   loaderOptions?: LoaderOptions;
 }
 
-export interface ProjectOptions {
-  publicPath?: string;
-  outputDir?: string;
-  assetsDir?: string;
-  indexPath?: string;
-  filenameHashing?: boolean;
-  runtimeCompiler?: boolean;
-  transpileDependencies?: Array<string | RegExp>;
-  productionSourceMap?: boolean;
-  parallel?: boolean | number;
-  devServer?: object;
-  pages?: {
-    [key: string]: PageEntry | PageConfig;
-  };
+// export to fix "Default export of the module has or is using private name"
+export interface DefaultProjectOptions {
+  publicPath: string;
+  outputDir: string;
+  assetsDir: string;
+  indexPath: string;
+  filenameHashing: boolean;
+  runtimeCompiler: boolean;
+  transpileDependencies: Array<string | RegExp>;
+  productionSourceMap: boolean;
+  parallel: boolean;
+  devServer: Configuration,
+  pages?: Record<string, PageEntry | PageConfig>,
   crossorigin?: '' | 'anonymous' | 'use-credentials';
-  integrity?: boolean;
+  integrity: boolean;
+  // css
+  css?: CSSOptions
 
-  css?: CSSOptions;
-
+  // webpack
   chainWebpack?: (config: ChainableWebpackConfig) => void;
-  configureWebpack?: WebpackOptions | ((config: WebpackOptions) => (WebpackOptions | void));
+  configureWebpack?: WebpackConfiguration | ((config: WebpackConfiguration) => (WebpackConfiguration | void));
 
+  // known runtime options for built-in plugins
   lintOnSave?: boolean | 'default' | 'warning' | 'error';
-  pwa?: object;
+  pwa?: Record<string, any>;
 
+  // 3rd party plugin options
   pluginOptions?: object;
 }
+
+export type ProjectOptions = DeepPartial<DefaultProjectOptions>;
 
 export type ConfigFunction = () => ProjectOptions
