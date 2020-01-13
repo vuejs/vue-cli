@@ -118,13 +118,13 @@ module.exports = class Upgrader {
       installed: options.installed
     }
 
-    const createCompleteCbs = []
+    const afterInvokeCbs = []
     const migrator = new Migrator(this.context, {
       plugin: plugin,
 
       pkg: this.pkg,
       files: await readFiles(this.context),
-      completeCbs: createCompleteCbs,
+      afterInvokeCbs,
       invoking: true
     })
 
@@ -146,9 +146,9 @@ module.exports = class Upgrader {
       await this.pm.install()
     }
 
-    if (createCompleteCbs.length) {
+    if (afterInvokeCbs.length) {
       logWithSpinner('⚓', `Running completion hooks...`)
-      for (const cb of createCompleteCbs) {
+      for (const cb of afterInvokeCbs) {
         await cb()
       }
       stopSpinner()
