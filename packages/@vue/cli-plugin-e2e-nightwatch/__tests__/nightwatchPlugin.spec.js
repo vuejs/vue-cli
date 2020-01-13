@@ -20,6 +20,8 @@ describe('nightwatch e2e plugin', () => {
       }
     })
 
+    await project.run('vue-cli-service lint')
+
     await fs.copy(path.join(__dirname, './lib/globals-generated.js'),
       path.join(project.dir, 'tests/e2e/globals-generated.js'))
 
