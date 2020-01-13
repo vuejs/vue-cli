@@ -84,6 +84,7 @@ module.exports = (api, options) => {
     }
 
     const htmlOptions = {
+      title: api.service.pkg.name,
       templateParameters: (compilation, assets, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
         let stats
