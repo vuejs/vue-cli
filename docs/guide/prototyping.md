@@ -1,6 +1,6 @@
 # Instant Prototyping
 
-You can rapidly prototype with just a single `*.vue` file with the `vue serve` and `vue build` commands, but they require an additional global addon to be installed first:
+You can rapidly prototype with just a single `*.vue` file with the `vue serve` and `vue build` commands, but they require a global addon to be installed along with the Vue CLI:
 
 ``` bash
 npm install -g @vue/cli-service-global
