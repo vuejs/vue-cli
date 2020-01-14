@@ -12,7 +12,7 @@ const parseJS = file => {
 }
 
 const baseESLintConfig = Object.assign({}, require('@vue/cli-plugin-eslint/eslintOptions').config({
-  hasPlugin: () => false
+  hasPlugin: (name) => { if (name === 'babel') { return true } }
 }), {
   rules: {
     'no-console': 'off',

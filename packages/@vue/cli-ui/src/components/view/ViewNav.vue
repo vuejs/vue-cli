@@ -57,7 +57,7 @@ export default {
             const view = subscriptionData.data.viewAdded
             if (!previousResult.views) {
               return {
-                views: [ view ]
+                views: [view]
               }
             }
             if (previousResult.views.find(r => r.id === view.id)) return previousResult

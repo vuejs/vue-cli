@@ -1,7 +1,7 @@
 // Subs
 const channels = require('../channels')
 
-let map = new Map()
+const map = new Map()
 
 function get (id, context) {
   return map.get(id)

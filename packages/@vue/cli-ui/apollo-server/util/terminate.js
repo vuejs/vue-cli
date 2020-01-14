@@ -13,7 +13,7 @@ const spawn = util.promisify(cp.spawn)
 exports.terminate = async function (childProcess, cwd) {
   if (isWindows) {
     try {
-      let options = {
+      const options = {
         stdio: ['pipe', 'pipe', 'ignore']
       }
       if (cwd) {
@@ -25,8 +25,8 @@ exports.terminate = async function (childProcess, cwd) {
     }
   } else if (isLinux || isMacintosh) {
     try {
-      let cmd = path.resolve(__dirname, './terminate.sh')
-      let result = await spawn(cmd, [childProcess.pid.toString()], {
+      const cmd = path.resolve(__dirname, './terminate.sh')
+      const result = await spawn(cmd, [childProcess.pid.toString()], {
         cwd
       })
       if (result.error) {

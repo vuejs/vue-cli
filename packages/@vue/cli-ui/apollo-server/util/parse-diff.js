@@ -135,7 +135,7 @@ module.exports = function (input) {
   ]
 
   const parse = function (line) {
-    for (let p of schema) {
+    for (const p of schema) {
       const m = line.match(p[0])
       if (m) {
         p[1](line, m)
@@ -145,7 +145,7 @@ module.exports = function (input) {
     return false
   }
 
-  for (let line of lines) {
+  for (const line of lines) {
     parse(line)
   }
 
