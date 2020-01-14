@@ -44,7 +44,7 @@
 
 ### 构建库或是 Web Component 时的 Polyfills
 
-当使用 Vue CLI 来[构建一个库或是 Web Component](./build-targets.md) 时，推荐给 `@vue/babel-preset-env` 传入 `useBuiltIns: false` 选项。这能够确保你的库或是组件不包含不必要的 polyfills。通常来说，打包 polyfills 应当是最终使用你的库的应用的责任。
+当使用 Vue CLI 来[构建一个库或是 Web Component](./build-targets.md) 时，推荐给 `@vue/babel-preset-app` 传入 `useBuiltIns: false` 选项。这能够确保你的库或是组件不包含不必要的 polyfills。通常来说，打包 polyfills 应当是最终使用你的库的应用的责任。
 
 ## 现代模式
 
