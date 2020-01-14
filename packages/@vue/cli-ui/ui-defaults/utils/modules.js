@@ -46,7 +46,7 @@ exports.buildDepModules = function (modules) {
       dep.size += module.size
     }
   }
-  let list = Array.from(deps.values())
+  const list = Array.from(deps.values())
   list.sort((a, b) => b.size - a.size)
   if (list.length) {
     const max = list[0].size
@@ -111,7 +111,7 @@ exports.buildModulesTrees = function (modules, sizeType) {
           children: {}
         }
       }
-      let fullPath = []
+      const fullPath = []
       for (let i = 0; i < parts.length; i++) {
         const part = parts[i]
         let child = subtree.children[part]
@@ -154,7 +154,7 @@ exports.buildModulesTrees = function (modules, sizeType) {
 }
 
 function walkTreeToSortChildren (tree, sizeType) {
-  let size = {
+  const size = {
     stats: 0,
     parsed: 0,
     gzip: 0

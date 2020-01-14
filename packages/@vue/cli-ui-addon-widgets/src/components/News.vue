@@ -69,13 +69,13 @@ import NewsItem from './NewsItem.vue'
 import NewsItemDetails from './NewsItemDetails.vue'
 
 const ERRORS = {
-  'fetch': {
+  fetch: {
     icon: 'error'
   },
-  'offline': {
+  offline: {
     icon: 'cloud_off'
   },
-  'empty': {
+  empty: {
     icon: 'cake'
   }
 }
