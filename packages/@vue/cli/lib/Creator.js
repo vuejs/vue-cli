@@ -181,7 +181,7 @@ module.exports = class Creator extends EventEmitter {
 
     // install plugins
     stopSpinner()
-    log(`⚙  Installing CLI plugins. This might take a while...`)
+    log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`)
     log()
     this.emit('creation', { event: 'plugins-install' })
 
