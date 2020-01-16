@@ -1,8 +1,8 @@
 # @vue/cli-plugin-router
 
-> router plugin for vue-cli
+> vue-cli 用の router プラグイン
 
-## Installing in an Already Created Project
+## 作成済みのプロジェクトにインストール
 
 ``` sh
 vue add router
