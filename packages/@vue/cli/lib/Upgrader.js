@@ -102,7 +102,7 @@ module.exports = class Upgrader {
 
     // the cached `pkg` field won't automatically update after running `this.pm.upgrade`
     this.pkg[depEntry][packageName] = `^${targetVersion}`
-    await this.runMigrator(packageName, { installed })
+    await this.runMigrator(packageName, { baseVersion: installed })
   }
 
   async runMigrator (packageName, options) {
@@ -112,7 +112,7 @@ module.exports = class Upgrader {
     const plugin = {
       id: packageName,
       apply: pluginMigrator,
-      installed: options.installed
+      baseVersion: options.baseVersion
     }
 
     const afterInvokeCbs = []

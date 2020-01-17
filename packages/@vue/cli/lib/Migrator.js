@@ -28,7 +28,7 @@ module.exports = class Migrator extends Generator {
     // apply migrators from plugins
     const api = new MigratorAPI(
       plugin.id,
-      plugin.installed,
+      plugin.baseVersion,
       this,
       plugin.options,
       this.rootOptions
