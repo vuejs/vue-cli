@@ -213,6 +213,7 @@ class PackageManager {
     return semver.maxSatisfying(versions, versionRange)
   }
 
+  // FIXME: use `createRequire` instead of hard-coded path
   getInstalledVersion (packageName) {
     // for first level deps, read package.json directly is way faster than `npm list`
     try {
