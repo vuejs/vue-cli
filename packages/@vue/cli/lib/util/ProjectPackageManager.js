@@ -9,6 +9,7 @@ const {
   execa,
   semver,
   request,
+  loadModule,
 
   hasYarn,
   hasProjectYarn,
@@ -26,7 +27,6 @@ const {
 } = require('@vue/cli-shared-utils')
 
 const { loadOptions } = require('../options')
-const getPackageJson = require('./getPackageJson')
 const { executeCommand } = require('./executeCommand')
 
 const registries = require('./registries')
@@ -213,33 +213,32 @@ class PackageManager {
     return semver.maxSatisfying(versions, versionRange)
   }
 
-  // FIXME: use `createRequire` instead of hard-coded path
   getInstalledVersion (packageName) {
     // for first level deps, read package.json directly is way faster than `npm list`
     try {
-      const packageJson = getPackageJson(
-        path.resolve(this.context, 'node_modules', packageName)
-      )
+      const packageJson = loadModule(`${packageName}/package.json`, this.context)
       return packageJson.version
     } catch (e) {
       if (!isPlugin(packageName)) {
-        return 'N/A'
+        return
       }
 
       // plugin may be located in another location if `resolveFrom` presents
-      const projectPkg = getPackageJson(this.context)
+      const projectPkg = loadModule('./package.json', this.context)
       const resolveFrom = projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
 
       if (!resolveFrom) {
-        return 'N/A'
+        return
       }
 
       try {
-        return getPackageJson(
-          path.resolve(this.context, projectPkg.vuePlugins.resolveFrom, 'node_modules', packageName)
+        const packageJson = loadModule(
+          `${packageName}/package.json`,
+          path.resolve(this.context, resolveFrom)
         )
+        return packageJson.version
       } catch (err) {
-        return 'N/A'
+        return
       }
     }
   }

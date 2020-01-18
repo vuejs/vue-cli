@@ -64,7 +64,7 @@ module.exports = class Upgrader {
     }
 
     const installed = options.from || this.pm.getInstalledVersion(packageName)
-    if (installed === 'N/A') {
+    if (!installed) {
       throw new Error(
         `Can't find ${chalk.yellow(packageName)} in ${chalk.yellow('node_modules')}. Please install the dependencies first.\n` +
         `Or to force upgrade, you can specify your current plugin version with the ${chalk.cyan('--from')} option`
@@ -136,7 +136,7 @@ module.exports = class Upgrader {
         const installed = await this.pm.getInstalledVersion(name)
         const wanted = await this.pm.getRemoteVersion(name, range)
 
-        if (installed === 'N/A') {
+        if (!installed) {
           throw new Error(`At least one dependency can't be found. Please install the dependencies before trying to upgrade`)
         }
 
@@ -190,7 +190,7 @@ module.exports = class Upgrader {
     for (const p of upgradable) {
       const fields = [
         p.name,
-        p.installed,
+        p.installed || 'N/A',
         p.wanted,
         p.latest,
         `vue upgrade ${p.name}${includeNext ? ' --next' : ''}`
