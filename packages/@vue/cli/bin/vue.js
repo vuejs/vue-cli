@@ -177,12 +177,22 @@ program
 program
   .command('upgrade [plugin-name]')
   .description('(experimental) upgrade vue cli service / plugins')
-  .option('-t, --to <version>', 'upgrade <package-name> to a version that is not latest')
+  .option('-t, --to <version>', 'Upgrade <package-name> to a version that is not latest')
+  .option('-f, --from <version>', 'Skip probing installed plugin, assuming it is upgraded from the designated version')
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
   .option('--all', 'Upgrade all plugins')
   .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
   .action((packageName, cmd) => {
     require('../lib/upgrade')(packageName, cleanArgs(cmd))
+  })
+
+program
+  .command('migrate [plugin-name]')
+  .description('(experimental) run migrator for an already-installed cli plugin')
+  // TODO: use `requiredOption` after upgrading to commander 4.x
+  .option('-f, --from <version>', 'The base version for the migrator to migrate from')
+  .action((packageName, cmd) => {
+    require('../lib/migrate')(packageName, cleanArgs(cmd))
   })
 
 program
