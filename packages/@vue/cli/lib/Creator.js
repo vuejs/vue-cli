@@ -14,6 +14,7 @@ const { formatFeatures } = require('./util/features')
 const loadLocalPreset = require('./util/loadLocalPreset')
 const loadRemotePreset = require('./util/loadRemotePreset')
 const generateReadme = require('./util/generateReadme')
+const { resolvePkg } = require('@vue/cli-shared-utils')
 
 const {
   defaults,
@@ -146,7 +147,8 @@ module.exports = class Creator extends EventEmitter {
       name,
       version: '0.1.0',
       private: true,
-      devDependencies: {}
+      devDependencies: {},
+      ...resolvePkg(context)
     }
     const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
@@ -179,7 +181,7 @@ module.exports = class Creator extends EventEmitter {
 
     // install plugins
     stopSpinner()
-    log(`⚙  Installing CLI plugins. This might take a while...`)
+    log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`)
     log()
     this.emit('creation', { event: 'plugins-install' })
 

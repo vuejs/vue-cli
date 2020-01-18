@@ -15,7 +15,8 @@ test_script:
   # - cd "packages/@vue/cli-ui" && yarn test
 
 cache:
-  - node_modules -> yarn.lock
+  - node_modules -> appveyor.yml, **\package.json, yarn.lock
+  - '%LOCALAPPDATA%\Yarn -> appveyor.yml, **\package.json, yarn.lock'
 
 build: off
 

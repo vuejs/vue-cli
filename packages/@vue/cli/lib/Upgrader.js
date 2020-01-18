@@ -2,25 +2,22 @@ const fs = require('fs')
 const path = require('path')
 const {
   chalk,
-  execa,
   semver,
 
   log,
   done,
-
   logWithSpinner,
   stopSpinner,
 
   isPlugin,
   resolvePluginId,
-  loadModule,
-
-  hasProjectGit
+  loadModule
 } = require('@vue/cli-shared-utils')
 
 const Migrator = require('./Migrator')
 const tryGetNewerRange = require('./util/tryGetNewerRange')
 const readFiles = require('./util/readFiles')
+const getChangedFiles = require('./util/getChangedFiles')
 
 const getPackageJson = require('./util/getPackageJson')
 const PackageManager = require('./util/ProjectPackageManager')
@@ -118,13 +115,13 @@ module.exports = class Upgrader {
       installed: options.installed
     }
 
-    const createCompleteCbs = []
+    const afterInvokeCbs = []
     const migrator = new Migrator(this.context, {
       plugin: plugin,
 
       pkg: this.pkg,
       files: await readFiles(this.context),
-      completeCbs: createCompleteCbs,
+      afterInvokeCbs,
       invoking: true
     })
 
@@ -146,43 +143,32 @@ module.exports = class Upgrader {
       await this.pm.install()
     }
 
-    if (createCompleteCbs.length) {
+    if (afterInvokeCbs.length) {
       logWithSpinner('⚓', `Running completion hooks...`)
-      for (const cb of createCompleteCbs) {
+      for (const cb of afterInvokeCbs) {
         await cb()
       }
       stopSpinner()
       log()
     }
 
-    log(`${chalk.green('✔')}  Successfully invoked migrator for plugin: ${chalk.cyan(plugin.id)}`)
-    if (!process.env.VUE_CLI_TEST && hasProjectGit(this.context)) {
-      const { stdout } = await execa('git', [
-        'ls-files',
-        '--exclude-standard',
-        '--modified',
-        '--others'
-      ], {
-        cwd: this.context
-      })
-      if (stdout.trim()) {
-        log(`   The following files have been updated / added:\n`)
-        log(
-          chalk.red(
-            stdout
-              .split(/\r?\n/g)
-              .map(line => `     ${line}`)
-              .join('\n')
-          )
-        )
-        log()
-        log(
-          `   You should review these changes with ${chalk.cyan(
-            `git diff`
-          )} and commit them.`
-        )
-        log()
-      }
+    log(
+      `${chalk.green(
+        '✔'
+      )}  Successfully invoked migrator for plugin: ${chalk.cyan(plugin.id)}`
+    )
+
+    const changedFiles = getChangedFiles(this.context)
+    if (changedFiles.length) {
+      log(`   The following files have been updated / added:\n`)
+      log(chalk.red(changedFiles.map(line => `     ${line}`).join('\n')))
+      log()
+      log(
+        `   You should review these changes with ${chalk.cyan(
+          'git diff'
+        )} and commit them.`
+      )
+      log()
     }
 
     migrator.printExitLogs()

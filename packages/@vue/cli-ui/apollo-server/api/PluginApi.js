@@ -244,7 +244,7 @@ class PluginApi {
     try {
       validateClientAddon(options)
       if (options.url && options.path) {
-        throw new Error(`'url' and 'path' can't be defined at the same time.`)
+        throw new Error('\'url\' and \'path\' can\'t be defined at the same time.')
       }
       this.clientAddons.push({
         ...options,

@@ -44,7 +44,7 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
             await test({ url })
           } else {
             // start browser
-            const { page, browser } = await launchPuppeteer(url)
+            const { page, browser, requestUrls } = await launchPuppeteer(url)
             activeBrowser = browser
 
             const helpers = createHelpers(page)
@@ -54,7 +54,8 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
               page,
               url,
               nextUpdate,
-              helpers
+              helpers,
+              requestUrls
             })
 
             await browser.close()

@@ -53,6 +53,7 @@ module.exports = (context, options = {}) => {
   }
 
   const runtimePath = path.dirname(require.resolve('@babel/runtime/package.json'))
+  const runtimeVersion = require('@babel/runtime/package.json').version
   const {
     polyfills: userPolyfills,
     loose = false,
@@ -78,7 +79,13 @@ module.exports = (context, options = {}) => {
     // However, this may cause hash inconsistency if the project is moved to another directory.
     // So here we allow user to explicit disable this option if hash consistency is a requirement
     // and the runtime version is sure to be correct.
-    absoluteRuntime = runtimePath
+    absoluteRuntime = runtimePath,
+
+    // https://babeljs.io/docs/en/babel-plugin-transform-runtime#version
+    // By default transform-runtime assumes that @babel/runtime@7.0.0-beta.0 is installed, which means helpers introduced later than 7.0.0-beta.0 will be inlined instead of imported.
+    // See https://github.com/babel/babel/issues/10261
+    // And https://github.com/facebook/docusaurus/pull/2111
+    version = runtimeVersion
   } = options
 
   // resolve targets
@@ -167,7 +174,7 @@ module.exports = (context, options = {}) => {
       decoratorsBeforeExport,
       legacy: decoratorsLegacy !== false
     }],
-    [require('@babel/plugin-proposal-class-properties'), { loose }],
+    [require('@babel/plugin-proposal-class-properties'), { loose }]
   )
 
   // transform runtime, but only for helpers
@@ -180,7 +187,9 @@ module.exports = (context, options = {}) => {
     helpers: useBuiltIns === 'usage',
     useESModules: !process.env.VUE_CLI_BABEL_TRANSPILE_MODULES,
 
-    absoluteRuntime
+    absoluteRuntime,
+
+    version
   }])
 
   return {

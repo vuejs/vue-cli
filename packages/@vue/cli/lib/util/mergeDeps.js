@@ -10,9 +10,10 @@ module.exports = function resolveDeps (generatorId, to, from, sources, forceNewV
   for (const name in from) {
     const r1 = to[name]
     const r2 = from[name]
+    const r2IsString = typeof r2 === 'string'
     const sourceGeneratorId = sources[name]
-    const isValidURI = r2.match(/^(?:file|git|git\+ssh|git\+http|git\+https|git\+file|https?):/) != null
-    const isValidGitHub = r2.match(/^[^/]+\/[^/]+/) != null
+    const isValidURI = r2IsString && r2.match(/^(?:file|git|git\+ssh|git\+http|git\+https|git\+file|https?):/) != null
+    const isValidGitHub = r2IsString && r2.match(/^[^/]+\/[^/]+/) != null
 
     // if they are the same, do nothing. Helps when non semver type deps are used
     if (r1 === r2) continue

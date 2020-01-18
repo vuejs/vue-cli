@@ -124,7 +124,7 @@ async function updatePrompts () {
       prompt.valueChanged = false
     } else if (prompt.visible && !prompt.valueChanged) {
       let value
-      let answer = getAnswer(prompt.id)
+      const answer = getAnswer(prompt.id)
       if (typeof answer !== 'undefined') {
         value = await getTransformedValue(prompt, answer)
       } else if (typeof prompt.raw.value !== 'undefined') {
