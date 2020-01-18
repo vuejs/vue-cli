@@ -16,7 +16,7 @@ const {
 } = require('@vue/cli-shared-utils')
 
 const tryGetNewerRange = require('./util/tryGetNewerRange')
-const getPackageJson = require('./util/getPackageJson')
+const getPkg = require('./util/getPkg')
 const PackageManager = require('./util/ProjectPackageManager')
 
 const { runMigrator } = require('./migrate')
@@ -24,7 +24,7 @@ const { runMigrator } = require('./migrate')
 module.exports = class Upgrader {
   constructor (context = process.cwd()) {
     this.context = context
-    this.pkg = getPackageJson(this.context)
+    this.pkg = getPkg(this.context)
     this.pm = new PackageManager({ context })
   }
 
@@ -40,7 +40,8 @@ module.exports = class Upgrader {
     }
 
     for (const p of upgradable) {
-      this.pkg = getPackageJson(this.context)
+      // reread to avoid accidentally writing outdated package.json back
+      this.pkg = getPkg(this.context)
       await this.upgrade(p.name, { to: p.latest })
     }
 

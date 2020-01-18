@@ -77,3 +77,5 @@ test('upgrade: should add eslint to devDependencies', async () => {
   const updatedPkg = JSON.parse(await project.read('package.json'))
   expect(updatedPkg.devDependencies.eslint).toMatch('^4')
 })
+
+test.todo('upgrade: should respect plugin resolveFrom')

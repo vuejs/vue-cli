@@ -16,6 +16,7 @@ const {
   hasPnpmVersionOrLater,
   hasProjectPnpm,
 
+  isPlugin,
   isOfficialPlugin,
   resolvePluginId,
 
@@ -220,7 +221,25 @@ class PackageManager {
       )
       return packageJson.version
     } catch (e) {
-      return 'N/A'
+      if (!isPlugin(packageName)) {
+        return 'N/A'
+      }
+
+      // plugin may be located in another location if `resolveFrom` presents
+      const projectPkg = getPackageJson(this.context)
+      const resolveFrom = projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
+
+      if (!resolveFrom) {
+        return 'N/A'
+      }
+
+      try {
+        return getPackageJson(
+          path.resolve(this.context, projectPkg.vuePlugins.resolveFrom, 'node_modules', packageName)
+        )
+      } catch (err) {
+        return 'N/A'
+      }
     }
   }
 

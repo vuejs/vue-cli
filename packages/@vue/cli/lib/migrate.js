@@ -14,12 +14,12 @@ const Migrator = require('./Migrator')
 const PackageManager = require('./util/ProjectPackageManager')
 
 const readFiles = require('./util/readFiles')
-const getPackageJson = require('./util/getPackageJson')
+const getPkg = require('./util/getPkg')
 const getChangedFiles = require('./util/getChangedFiles')
 
 const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
-async function runMigrator (context, plugin, pkg = getPackageJson(context)) {
+async function runMigrator (context, plugin, pkg = getPkg(context)) {
   const afterInvokeCbs = []
   const migrator = new Migrator(context, {
     plugin,

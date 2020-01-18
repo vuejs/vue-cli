@@ -1,5 +1,3 @@
-const fs = require('fs-extra')
-const path = require('path')
 const inquirer = require('inquirer')
 const {
   chalk,
@@ -18,20 +16,9 @@ const Generator = require('./Generator')
 
 const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 const readFiles = require('./util/readFiles')
+const getPkg = require('./util/getPkg')
 const getChangedFiles = require('./util/getChangedFiles')
 const PackageManager = require('./util/ProjectPackageManager')
-
-function getPkg (context) {
-  const pkgPath = path.resolve(context, 'package.json')
-  if (!fs.existsSync(pkgPath)) {
-    throw new Error(`package.json not found in ${chalk.yellow(context)}`)
-  }
-  const pkg = fs.readJsonSync(pkgPath)
-  if (pkg.vuePlugins && pkg.vuePlugins.resolveFrom) {
-    return getPkg(path.resolve(context, pkg.vuePlugins.resolveFrom))
-  }
-  return pkg
-}
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
   if (!(await confirmIfGitDirty(context))) {
