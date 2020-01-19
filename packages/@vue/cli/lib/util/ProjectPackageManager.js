@@ -9,7 +9,8 @@ const {
   execa,
   semver,
   request,
-  loadModule,
+
+  resolvePkg,
 
   hasYarn,
   hasProjectYarn,
@@ -81,7 +82,7 @@ function stripVersion (packageName) {
 
 class PackageManager {
   constructor ({ context, forcePackageManager } = {}) {
-    this.context = context
+    this.context = context || process.cwd()
 
     if (forcePackageManager) {
       this.bin = forcePackageManager
@@ -101,16 +102,16 @@ class PackageManager {
       PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
 
-    try {
-      // plugin may be located in another location if `resolveFrom` presents
-      const projectPkg = loadModule('./package.json', this.context)
-      const resolveFrom = projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
+    // Plugin may be located in another location if `resolveFrom` presents.
+    const projectPkg = resolvePkg(this.context)
+    const resolveFrom = projectPkg && projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
 
-      // Logically, `resolveFrom` and `context` are distinct fields.
-      // But in Vue CLI we only care about plugins.
-      // So it is fine to let all other operations take place in the `resolveFrom` directory.
+    // Logically, `resolveFrom` and `context` are distinct fields.
+    // But in Vue CLI we only care about plugins.
+    // So it is fine to let all other operations take place in the `resolveFrom` directory.
+    if (resolveFrom) {
       this.context = path.resolve(context, resolveFrom)
-    } catch (e) {}
+    }
   }
 
   // Any command that implemented registry-related feature should support
@@ -225,11 +226,8 @@ class PackageManager {
 
   getInstalledVersion (packageName) {
     // for first level deps, read package.json directly is way faster than `npm list`
-    try {
-      const packageJson = loadModule(`${packageName}/package.json`, this.context)
-      return packageJson.version
-    } catch (e) {
-    }
+    const packageJson = resolvePkg(path.resolve(this.context, packageName))
+    return packageJson.version
   }
 
   async install () {
