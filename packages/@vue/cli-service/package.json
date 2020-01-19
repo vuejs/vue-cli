@@ -61,6 +61,7 @@
     "lodash.transform": "^4.6.0",
     "mini-css-extract-plugin": "^0.8.0",
     "minimist": "^1.2.0",
+    "pnp-webpack-plugin": "^1.5.0",
     "portfinder": "^1.0.25",
     "postcss-loader": "^3.0.0",
     "ssri": "^7.1.0",
