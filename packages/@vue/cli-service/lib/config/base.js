@@ -17,7 +17,7 @@ module.exports = (api, options) => {
         limit: inlineLimit,
         // use explicit fallback to avoid regression in url-loader>=1.1.0
         fallback: {
-          loader: 'file-loader',
+          loader: require.resolve('file-loader'),
           options: {
             name: genAssetSubPath(dir)
           }
@@ -37,6 +37,10 @@ module.exports = (api, options) => {
         .publicPath(options.publicPath)
 
     webpackConfig.resolve
+      // This plugin can be removed once we switch to Webpack 6
+      .plugin('pnp')
+        .use({ ...require('pnp-webpack-plugin') })
+        .end()
       .extensions
         .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
         .end()
@@ -55,6 +59,9 @@ module.exports = (api, options) => {
         )
 
     webpackConfig.resolveLoader
+      .plugin('pnp-loaders')
+        .use({ ...require('pnp-webpack-plugin').topLevelLoader })
+        .end()
       .modules
         .add('node_modules')
         .add(api.resolve('node_modules'))
