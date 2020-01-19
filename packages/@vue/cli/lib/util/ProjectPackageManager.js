@@ -11,6 +11,7 @@ const {
   request,
 
   resolvePkg,
+  loadModule,
 
   hasYarn,
   hasProjectYarn,
@@ -226,8 +227,10 @@ class PackageManager {
 
   getInstalledVersion (packageName) {
     // for first level deps, read package.json directly is way faster than `npm list`
-    const packageJson = resolvePkg(path.resolve(this.context, packageName))
-    return packageJson.version
+    try {
+      const packageJson = loadModule(`${packageName}/package.json`, this.context, true)
+      return packageJson.version
+    } catch (e) {}
   }
 
   async install () {
