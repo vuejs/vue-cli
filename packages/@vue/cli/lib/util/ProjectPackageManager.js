@@ -17,7 +17,6 @@ const {
   hasPnpmVersionOrLater,
   hasProjectPnpm,
 
-  isPlugin,
   isOfficialPlugin,
   resolvePluginId,
 
@@ -101,6 +100,17 @@ class PackageManager {
       )
       PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
+
+    try {
+      // plugin may be located in another location if `resolveFrom` presents
+      const projectPkg = loadModule('./package.json', this.context)
+      const resolveFrom = projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
+
+      // Logically, `resolveFrom` and `context` are distinct fields.
+      // But in Vue CLI we only care about plugins.
+      // So it is fine to let all other operations take place in the `resolveFrom` directory.
+      this.context = path.resolve(context, resolveFrom)
+    } catch (e) {}
   }
 
   // Any command that implemented registry-related feature should support
@@ -219,27 +229,6 @@ class PackageManager {
       const packageJson = loadModule(`${packageName}/package.json`, this.context)
       return packageJson.version
     } catch (e) {
-      if (!isPlugin(packageName)) {
-        return
-      }
-
-      // plugin may be located in another location if `resolveFrom` presents
-      const projectPkg = loadModule('./package.json', this.context)
-      const resolveFrom = projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
-
-      if (!resolveFrom) {
-        return
-      }
-
-      try {
-        const packageJson = loadModule(
-          `${packageName}/package.json`,
-          path.resolve(this.context, resolveFrom)
-        )
-        return packageJson.version
-      } catch (err) {
-        return
-      }
     }
   }
 
