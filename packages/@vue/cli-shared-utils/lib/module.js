@@ -52,23 +52,25 @@ exports.resolveModule = function (request, context) {
   let resolvedPath
   try {
     try {
-      resolvedPath = createRequire(context).resolve(request)
+      resolvedPath = createRequire(path.resolve(context, 'package.json')).resolve(request)
     } catch (e) {
-      resolvedPath = resolve(request, {
-        paths: [context]
-      })
+      resolvedPath = resolve(request, { paths: [context] })
     }
   } catch (e) {}
   return resolvedPath
 }
 
 exports.loadModule = function (request, context, force = false) {
-  const resolvedPath = exports.resolveModule(request, context)
-  if (resolvedPath) {
-    if (force) {
-      clearRequireCache(resolvedPath)
+  try {
+    return createRequire(path.resolve(context, 'package.json'))(request)
+  } catch (e) {
+    const resolvedPath = exports.resolveModule(request, context)
+    if (resolvedPath) {
+      if (force) {
+        clearRequireCache(resolvedPath)
+      }
+      return require(resolvedPath)
     }
-    return require(resolvedPath)
   }
 }
 
