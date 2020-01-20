@@ -7,6 +7,7 @@ const { getPromptModules } = require('./util/createTools')
 const { chalk, error, stopSpinner, exit } = require('@vue/cli-shared-utils')
 const validateProjectName = require('validate-npm-package-name')
 
+// TODO: add test cases for prompts in this file
 async function create (projectName, options) {
   if (options.proxy) {
     process.env.HTTP_PROXY = options.proxy
@@ -14,9 +15,11 @@ async function create (projectName, options) {
 
   const cwd = options.cwd || process.cwd()
   const inCurrent = projectName === '.'
-  const name = inCurrent ? path.relative('../', cwd) : projectName
-  const targetDir = path.resolve(cwd, projectName || '.')
 
+  const originalName = inCurrent ? path.relative('../', cwd) : projectName
+  const name = originalName.toLowerCase()
+
+  // TODO: should also implement this logic in the UI
   const result = validateProjectName(name)
   if (!result.validForNewPackages) {
     console.error(chalk.red(`Invalid project name: "${name}"`))
@@ -29,6 +32,21 @@ async function create (projectName, options) {
     exit(1)
   }
 
+  if (name !== originalName) {
+    const { continueWithLowerCase } = await inquirer.prompt([
+      {
+        name: 'continueWithLowerCase',
+        type: 'confirm',
+        message: `Uppercase is not allowed in an npm package. Continue with the name ${chalk.yellow(name)}?`
+      }
+    ])
+
+    if (!continueWithLowerCase) {
+      return
+    }
+  }
+
+  const targetDir = path.resolve(cwd, inCurrent ? '.' : name)
   if (fs.existsSync(targetDir) && !options.merge) {
     if (options.force) {
       await fs.remove(targetDir)
