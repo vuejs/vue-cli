@@ -13,7 +13,9 @@ module.exports = async (api) => {
     localESLintRange = '^4.19.1'
     api.extendPackage({
       devDependencies: {
-        eslint: localESLintRange
+        eslint: localESLintRange,
+        'babel-eslint': '^8.2.5',
+        'eslint-plugin-vue': '^4.5.0'
       }
     })
   }
