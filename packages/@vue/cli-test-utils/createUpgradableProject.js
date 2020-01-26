@@ -17,10 +17,8 @@ module.exports = async function createUpgradableProject (...args) {
     return (new Upgrader(project.dir)).upgrade(pluginName, options || {})
   }
 
-  return Object.assign(project, { upgrade })
-
-  // return {
-  //   ...project,
-  //   upgrade
-  // }
+  return {
+    ...project,
+    upgrade
+  }
 }
