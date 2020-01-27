@@ -61,6 +61,11 @@ exports.resolveModule = function (request, context) {
 }
 
 exports.loadModule = function (request, context, force = false) {
+  // createRequire doesn't work with jest mock modules (which we used in migrator, for inquirer)
+  if (process.env.VUE_CLI_TEST && request.endsWith('migrator')) {
+    return require(request)
+  }
+
   try {
     return createRequire(path.resolve(context, 'package.json'))(request)
   } catch (e) {
