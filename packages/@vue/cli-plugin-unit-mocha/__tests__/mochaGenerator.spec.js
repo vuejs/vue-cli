@@ -17,7 +17,6 @@ test('base', async () => {
 
   expect(pkg.scripts['test:unit']).toBe('vue-cli-service test:unit')
   expect(pkg.devDependencies).toHaveProperty('@vue/test-utils')
-  expect(files['tests/unit/.eslintrc.js']).toMatch('mocha: true')
 
   const spec = files['tests/unit/example.spec.js']
   expect(spec).toMatch(`import { expect } from 'chai'`)

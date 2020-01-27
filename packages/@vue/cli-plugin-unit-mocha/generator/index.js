@@ -15,18 +15,6 @@ module.exports = (api, _, __, invoking) => {
 
   if (api.hasPlugin('eslint')) {
     applyESLint(api)
-    api.extendPackage({
-      eslintConfig: {
-        overrides: [
-          {
-            files: ['**/__tests__/*.{j,t}s?(x)'],
-            env: {
-              mocha: true
-            }
-          }
-        ]
-      }
-    })
   }
 
   if (api.hasPlugin('typescript')) {
@@ -35,10 +23,20 @@ module.exports = (api, _, __, invoking) => {
 }
 
 const applyESLint = module.exports.applyESLint = api => {
-  api.render(files => {
-    files['tests/unit/.eslintrc.js'] = api.genJSConfig({
-      env: { mocha: true }
-    })
+  api.extendPackage({
+    eslintConfig: {
+      overrides: [
+        {
+          files: [
+            '**/__tests__/*.{j,t}s?(x)',
+            '**/tests/unit/**/*.spec.{j,t}s?(x)'
+          ],
+          env: {
+            mocha: true
+          }
+        }
+      ]
+    }
   })
 }
 
