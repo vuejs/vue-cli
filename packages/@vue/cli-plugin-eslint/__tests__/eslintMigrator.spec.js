@@ -33,7 +33,8 @@ test('upgrade: should add eslint to devDependencies', async () => {
   expect(updatedPkg.devDependencies.eslint).toMatch('^4')
 })
 
-test('upgrade: should upgrade eslint from v5 to v6', async () => {
+// skip this test case until we fixed test caching issue
+test.skip('upgrade: should upgrade eslint from v5 to v6', async () => {
   const project = await create('plugin-eslint-with-eslint-5', {
     plugins: {
       '@vue/cli-plugin-eslint': {
