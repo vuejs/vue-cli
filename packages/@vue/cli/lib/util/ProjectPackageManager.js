@@ -144,11 +144,13 @@ class PackageManager {
     return this._registry
   }
 
-  async addRegistryToArgs (args) {
+  async setRegistryEnvs () {
     const registry = await this.getRegistry()
-    args.push(`--registry=${registry}`)
 
-    return args
+    process.env.npm_config_registry = registry
+    process.env.YARN_NPM_REGISTRY_SERVER = registry
+
+    this.setBinaryMirrors()
   }
 
   // set mirror urls for users in china
@@ -233,20 +235,28 @@ class PackageManager {
     } catch (e) {}
   }
 
+  async runCommand (args) {
+    await this.setRegistryEnvs()
+    await executeCommand(this.bin, args, this.context)
+  }
+
   async install () {
-    await this.setBinaryMirrors()
-    const args = await this.addRegistryToArgs(PACKAGE_MANAGER_CONFIG[this.bin].install)
-    return executeCommand(this.bin, args, this.context)
+    return this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
   }
 
   async add (packageName, isDev = true) {
-    await this.setBinaryMirrors()
-    const args = await this.addRegistryToArgs([
+    return this.runCommand([
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName,
       ...(isDev ? ['-D'] : [])
     ])
-    return executeCommand(this.bin, args, this.context)
+  }
+
+  async remove (packageName) {
+    return this.runCommand([
+      ...PACKAGE_MANAGER_CONFIG[this.bin].remove,
+      packageName
+    ])
   }
 
   async upgrade (packageName) {
@@ -263,20 +273,10 @@ class PackageManager {
       return
     }
 
-    await this.setBinaryMirrors()
-    const args = await this.addRegistryToArgs([
+    return this.runCommand([
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName
     ])
-    return executeCommand(this.bin, args, this.context)
-  }
-
-  async remove (packageName) {
-    const args = [
-      ...PACKAGE_MANAGER_CONFIG[this.bin].remove,
-      packageName
-    ]
-    return executeCommand(this.bin, args, this.context)
   }
 }
 
