@@ -35,7 +35,7 @@ module.exports = async (api) => {
     name: 'confirmUpgrade',
     type: 'confirm',
     message:
-    `Your current ESLint version is v${localESLintMajor}.` +
+    `Your current ESLint version is v${localESLintMajor}.\n` +
     `The lastest major version is v6.\n` +
     `Do you want to upgrade? (May contain breaking changes)\n`
   }])
