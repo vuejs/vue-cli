@@ -166,3 +166,5 @@ test('should prompt if invoking in a git repository with uncommited changes', as
   ])
   await invoke(`babel`, {}, project.dir)
 })
+
+test.todo('invoke: should respect plugin resolveFrom')
