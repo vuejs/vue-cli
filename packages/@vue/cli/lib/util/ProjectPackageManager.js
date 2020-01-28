@@ -10,6 +10,9 @@ const {
   semver,
   request,
 
+  resolvePkg,
+  loadModule,
+
   hasYarn,
   hasProjectYarn,
   hasPnpm3OrLater,
@@ -25,7 +28,6 @@ const {
 } = require('@vue/cli-shared-utils')
 
 const { loadOptions } = require('../options')
-const getPackageJson = require('./getPackageJson')
 const { executeCommand } = require('./executeCommand')
 
 const registries = require('./registries')
@@ -81,7 +83,7 @@ function stripVersion (packageName) {
 
 class PackageManager {
   constructor ({ context, forcePackageManager } = {}) {
-    this.context = context
+    this.context = context || process.cwd()
 
     if (forcePackageManager) {
       this.bin = forcePackageManager
@@ -99,6 +101,17 @@ class PackageManager {
         `See if you can use ${chalk.cyan('--registry')} instead.`
       )
       PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
+    }
+
+    // Plugin may be located in another location if `resolveFrom` presents.
+    const projectPkg = resolvePkg(this.context)
+    const resolveFrom = projectPkg && projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
+
+    // Logically, `resolveFrom` and `context` are distinct fields.
+    // But in Vue CLI we only care about plugins.
+    // So it is fine to let all other operations take place in the `resolveFrom` directory.
+    if (resolveFrom) {
+      this.context = path.resolve(context, resolveFrom)
     }
   }
 
@@ -217,13 +230,9 @@ class PackageManager {
   getInstalledVersion (packageName) {
     // for first level deps, read package.json directly is way faster than `npm list`
     try {
-      const packageJson = getPackageJson(
-        path.resolve(this.context, 'node_modules', packageName)
-      )
+      const packageJson = loadModule(`${packageName}/package.json`, this.context, true)
       return packageJson.version
-    } catch (e) {
-      return 'N/A'
-    }
+    } catch (e) {}
   }
 
   async runCommand (args) {
