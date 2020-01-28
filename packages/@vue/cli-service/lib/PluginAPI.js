@@ -175,6 +175,11 @@ class PluginAPI {
     if (!Array.isArray(configFiles)) {
       configFiles = [configFiles]
     }
+    configFiles = configFiles.concat([
+      'package-lock.json',
+      'yarn.lock',
+      'pnpm-lock.yaml'
+    ])
 
     const readConfig = file => {
       const absolutePath = this.resolve(file)
@@ -201,18 +206,6 @@ class PluginAPI {
         break
       }
     }
-
-    const lockfiles = [
-      'package-lock.json',
-      'yarn.lock',
-      'pnpm-lock.yaml',
-      // technically not a lockfile, but should also be taken into account
-      'package.json'
-    ]
-    variables.dependencies = lockfiles.map(f => {
-      const content = readConfig(f)
-      return content && content.replace(/\r\n?/g, '\n')
-    })
 
     const cacheIdentifier = hash(variables)
     return { cacheDirectory, cacheIdentifier }
