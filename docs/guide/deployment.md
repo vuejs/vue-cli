@@ -51,7 +51,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     }
     ```
     
-    Also if you are using vue-router you want override the base property like:
+    Also if you are using vue-router you want to override the base property like:
 
     ``` js
     const router = new VueRouter({
