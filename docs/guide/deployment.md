@@ -50,6 +50,16 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
         : '/'
     }
     ```
+    
+    Also if you are using vue-router you want override the base property like:
+
+    ``` js
+    const router = new VueRouter({
+    ...,
+    base: '/my-project/',
+    ...,
+    })
+    ```
 
 2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
 
