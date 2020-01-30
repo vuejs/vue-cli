@@ -73,12 +73,21 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-    const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-      'vue-loader': require('vue-loader/package.json').version,
-      /* eslint-disable-next-line node/no-extraneous-require */
-      '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
-      'vue-template-compiler': require('vue-template-compiler/package.json').version
-    })
+    const vueLoaderCacheIdentifier = {
+      'vue-loader': require('vue-loader/package.json').version
+    }
+
+    // The following 2 deps are sure to exist in Vue 2 projects.
+    // But once we switch to Vue 3, they're no longer mandatory.
+    // (In Vue 3 they are replaced by @vue/compiler-sfc)
+    // So wrap them in a try catch block.
+    try {
+      vueLoaderCacheIdentifier['@vue/component-compiler-utils'] =
+        require('@vue/component-compiler-utils/package.json').version
+      vueLoaderCacheIdentifier['vue-template-compiler'] =
+        require('vue-template-compiler/package.json').version
+    } catch (e) {}
+    const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', vueLoaderCacheIdentifier)
 
     webpackConfig.module
       .rule('vue')

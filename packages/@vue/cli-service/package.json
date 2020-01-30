@@ -94,6 +94,9 @@
     },
     "stylus-loader": {
       "optional": true
+    },
+    "vue-template-compiler": {
+      "optional": true
     }
   },
   "devDependencies": {
