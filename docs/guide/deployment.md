@@ -55,9 +55,9 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
     ``` js
     const router = new VueRouter({
-    ...,
-    base: '/my-project/',
-    ...,
+      ...,
+      base: '/my-project/',
+      ...,
     })
     ```
 
