@@ -14,7 +14,6 @@ module.exports = (api, options) => {
       `All Cypress CLI options are also supported:\n` +
       chalk.yellow(`https://docs.cypress.io/guides/guides/command-line.html#cypress-run`)
   }, async (args, rawArgs) => {
-    removeArg(rawArgs, 'headless', 0)
     removeArg(rawArgs, 'mode')
     removeArg(rawArgs, 'url')
     removeArg(rawArgs, 'config')
