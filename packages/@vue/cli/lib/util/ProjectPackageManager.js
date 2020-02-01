@@ -130,7 +130,7 @@ class PackageManager {
 
     if (args.registry) {
       this._registry = args.registry
-    } else if (await shouldUseTaobao(this.bin)) {
+    } else if (!process.env.VUE_CLI_TEST && await shouldUseTaobao(this.bin)) {
       this._registry = registries.taobao
     } else {
       try {
