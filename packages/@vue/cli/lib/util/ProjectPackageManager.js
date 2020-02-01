@@ -243,9 +243,9 @@ class PackageManager {
   async install () {
     if (process.env.VUE_CLI_TEST) {
       try {
-        return this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install, '--offline'])
+        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install, '--offline'])
       } catch (e) {
-        this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
+        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
       }
     }
 
