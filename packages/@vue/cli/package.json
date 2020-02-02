@@ -58,10 +58,5 @@
   },
   "engines": {
     "node": ">=8.9"
-  },
-  "devDependencies": {
-    "plugin-babel-3.5.3": "npm:@vue/cli-plugin-babel@3.5.3",
-    "plugin-babel-3.8.0": "npm:@vue/cli-plugin-babel@3.8.0",
-    "plugin-eslint-3.0.0": "npm:@vue/cli-plugin-eslint@3.0.0"
   }
 }
