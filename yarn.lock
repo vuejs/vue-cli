@@ -14271,39 +14271,6 @@ please-upgrade-node@^3.1.1, please-upgrade-node@^3.2.0:
   dependencies:
     semver-compare "^1.0.0"
 
-"plugin-babel-3.5.3@npm:@vue/cli-plugin-babel@3.5.3":
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.5.3.tgz#6e8de8f60904bcc1884dbe10ee0d617ddd93af04"
-  integrity sha512-N0EJV+AdY5QnpGXECbv3kEpBjcKZSKy7bRkOOxpvIVHOtNYMdp0TXI5ibfuCAs53CAufcuJwm1CqeQA8uELv1w==
-  dependencies:
-    "@babel/core" "^7.0.0"
-    "@vue/babel-preset-app" "^3.5.3"
-    "@vue/cli-shared-utils" "^3.5.1"
-    babel-loader "^8.0.5"
-    webpack ">=4 < 4.29"
-
-"plugin-babel-3.8.0@npm:@vue/cli-plugin-babel@3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.8.0.tgz#a7ce6ef9c6680e7953c609d859451dd937c7284e"
-  integrity sha512-VLWvpgDM+HN2FZu1x+r9pisombDTK1k+RPNPeslnwjGjrUXmKNAamXL1ZIsPwsj6k6PpWPN4jetBIMqcBzBu6Q==
-  dependencies:
-    "@babel/core" "^7.0.0"
-    "@vue/babel-preset-app" "^3.8.0"
-    "@vue/cli-shared-utils" "^3.8.0"
-    babel-loader "^8.0.5"
-    webpack ">=4 < 4.29"
-
-"plugin-eslint-3.0.0@npm:@vue/cli-plugin-eslint@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-3.0.0.tgz#97b163df1272b39e61e18c8add5dfe28a92375c4"
-  integrity sha512-J4UuVgMYColq8v3YXpmXjfjqTEvb6aVkoAqtsu0LgWcJWAps0LHP/lbjv5Cw0wKoBF8EHrdMAE5mW3L12E+V8g==
-  dependencies:
-    "@vue/cli-shared-utils" "^3.0.0"
-    babel-eslint "^8.2.5"
-    eslint "^4.19.1"
-    eslint-loader "^2.0.0"
-    eslint-plugin-vue "^4.5.0"
-
 pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
