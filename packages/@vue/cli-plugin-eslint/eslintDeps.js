@@ -4,8 +4,8 @@ const DEPS_MAP = {
     'eslint-plugin-vue': '^6.1.2'
   },
   airbnb: {
-    '@vue/eslint-config-airbnb': '^5.0.1',
-    'eslint-plugin-import': '^2.18.2'
+    '@vue/eslint-config-airbnb': '^5.0.2',
+    'eslint-plugin-import': '^2.20.1'
   },
   prettier: {
     '@vue/eslint-config-prettier': '^6.0.0',
@@ -14,15 +14,15 @@ const DEPS_MAP = {
   },
   standard: {
     '@vue/eslint-config-standard': '^5.1.0',
-    'eslint-plugin-import': '^2.18.2',
-    'eslint-plugin-node': '^9.1.0',
+    'eslint-plugin-import': '^2.20.1',
+    'eslint-plugin-node': '^11.0.0',
     'eslint-plugin-promise': '^4.2.1',
     'eslint-plugin-standard': '^4.0.0'
   },
   typescript: {
     '@vue/eslint-config-typescript': '^5.0.1',
-    '@typescript-eslint/eslint-plugin': '^2.10.0',
-    '@typescript-eslint/parser': '^2.10.0'
+    '@typescript-eslint/eslint-plugin': '^2.18.0',
+    '@typescript-eslint/parser': '^2.18.0'
   }
 }
 

@@ -4,7 +4,7 @@ module.exports = (api, options = {}) => {
 
   api.extendPackage({
     dependencies: {
-      'vue-router': '^3.1.3'
+      'vue-router': '^3.1.5'
     }
   })
 

@@ -27,13 +27,13 @@
     "@vue/cli-plugin-eslint": "^4.1.2",
     "@vue/cli-service": "^4.1.2",
     "babel-eslint": "^10.0.3",
-    "chalk": "^2.4.2",
-    "core-js": "^3.4.4",
+    "chalk": "^3.0.0",
+    "core-js": "^3.6.4",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
-    "regenerator-runtime": "^0.13.2",
-    "resolve": "^1.13.1",
-    "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10"
+    "regenerator-runtime": "^0.13.3",
+    "resolve": "^1.15.0",
+    "vue": "^2.6.11",
+    "vue-template-compiler": "^2.6.11"
   }
 }

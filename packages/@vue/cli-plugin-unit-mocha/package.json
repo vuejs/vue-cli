@@ -26,7 +26,7 @@
     "jsdom": "^15.2.1",
     "jsdom-global": "^3.0.2",
     "mocha": "^6.2.2",
-    "mochapack": "^1.1.12"
+    "mochapack": "^1.1.13"
   },
   "devDependencies": {
     "@vue/test-utils": "1.0.0-beta.29",
