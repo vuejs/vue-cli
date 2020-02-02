@@ -57,7 +57,7 @@
     "prismjs": "^1.16.0",
     "rss-parser": "^3.7.3",
     "shortid": "^2.2.15",
-    "typescript": "^3.4.5",
+    "typescript": "~3.7.5",
     "vue-cli-plugin-apollo": "^0.21.3",
     "watch": "^1.0.2"
   },
