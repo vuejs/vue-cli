@@ -51,7 +51,7 @@ async function ui (options = {}, context = process.cwd()) {
     }
   }
 
-  server(opts, () => {
+  const { httpServer } = server(opts, () => {
     // Reset for yarn/npm to work correctly
     if (typeof nodeEnv === 'undefined') {
       delete process.env.NODE_ENV
@@ -66,6 +66,13 @@ async function ui (options = {}, context = process.cwd()) {
       console.log(port)
     } else {
       openBrowser(url)
+    }
+  })
+
+  httpServer.on('upgrade', (req, socket) => {
+    const { origin } = req.headers
+    if (!origin || !(new RegExp(host)).test(origin)) {
+      socket.destroy()
     }
   })
 }
