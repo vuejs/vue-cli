@@ -1,2 +1,2 @@
-exports.server = require('vue-cli-plugin-apollo/graphql-server')
+exports.server = require('./graphql-server')
 exports.portfinder = require('portfinder')
