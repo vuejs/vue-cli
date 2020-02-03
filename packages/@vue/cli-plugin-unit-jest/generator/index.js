@@ -18,26 +18,30 @@ module.exports = (api, _, __, invoking) => {
   })
 
   if (api.hasPlugin('eslint')) {
-    api.extendPackage({
-      eslintConfig: {
-        overrides: [
-          {
-            files: [
-              '**/__tests__/*.{j,t}s?(x)',
-              '**/tests/unit/**/*.spec.{j,t}s?(x)'
-            ],
-            env: {
-              jest: true
-            }
-          }
-        ]
-      }
-    })
+    applyESLint(api)
   }
 
   if (api.hasPlugin('typescript')) {
     applyTS(api, invoking)
   }
+}
+
+const applyESLint = module.exports.applyESLint = api => {
+  api.extendPackage({
+    eslintConfig: {
+      overrides: [
+        {
+          files: [
+            '**/__tests__/*.{j,t}s?(x)',
+            '**/tests/unit/**/*.spec.{j,t}s?(x)'
+          ],
+          env: {
+            jest: true
+          }
+        }
+      ]
+    }
+  })
 }
 
 const applyTS = (module.exports.applyTS = (api, invoking) => {

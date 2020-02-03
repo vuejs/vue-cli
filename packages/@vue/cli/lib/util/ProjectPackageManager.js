@@ -8,6 +8,10 @@ const {
   chalk,
   execa,
   semver,
+  request,
+
+  resolvePkg,
+  loadModule,
 
   hasYarn,
   hasProjectYarn,
@@ -19,11 +23,11 @@ const {
   resolvePluginId,
 
   log,
-  warn
+  warn,
+  error
 } = require('@vue/cli-shared-utils')
 
 const { loadOptions } = require('../options')
-const getPackageJson = require('./getPackageJson')
 const { executeCommand } = require('./executeCommand')
 
 const registries = require('./registries')
@@ -79,7 +83,7 @@ function stripVersion (packageName) {
 
 class PackageManager {
   constructor ({ context, forcePackageManager } = {}) {
-    this.context = context
+    this.context = context || process.cwd()
 
     if (forcePackageManager) {
       this.bin = forcePackageManager
@@ -98,6 +102,17 @@ class PackageManager {
       )
       PACKAGE_MANAGER_CONFIG[this.bin] = PACKAGE_MANAGER_CONFIG.npm
     }
+
+    // Plugin may be located in another location if `resolveFrom` presents.
+    const projectPkg = resolvePkg(this.context)
+    const resolveFrom = projectPkg && projectPkg.vuePlugins && projectPkg.vuePlugins.resolveFrom
+
+    // Logically, `resolveFrom` and `context` are distinct fields.
+    // But in Vue CLI we only care about plugins.
+    // So it is fine to let all other operations take place in the `resolveFrom` directory.
+    if (resolveFrom) {
+      this.context = path.resolve(context, resolveFrom)
+    }
   }
 
   // Any command that implemented registry-related feature should support
@@ -115,7 +130,7 @@ class PackageManager {
 
     if (args.registry) {
       this._registry = args.registry
-    } else if (await shouldUseTaobao(this.bin)) {
+    } else if (!process.env.VUE_CLI_TEST && await shouldUseTaobao(this.bin)) {
       this._registry = registries.taobao
     } else {
       try {
@@ -129,11 +144,13 @@ class PackageManager {
     return this._registry
   }
 
-  async addRegistryToArgs (args) {
+  async setRegistryEnvs () {
     const registry = await this.getRegistry()
-    args.push(`--registry=${registry}`)
 
-    return args
+    process.env.npm_config_registry = registry
+    process.env.YARN_NPM_REGISTRY_SERVER = registry
+
+    this.setBinaryMirrors()
   }
 
   // set mirror urls for users in china
@@ -174,7 +191,8 @@ class PackageManager {
     }
   }
 
-  async getMetadata (packageName, { field = '' } = {}) {
+  // https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md
+  async getMetadata (packageName, { full = false } = {}) {
     const registry = await this.getRegistry()
 
     const metadataKey = `${this.bin}-${registry}-${packageName}`
@@ -184,17 +202,20 @@ class PackageManager {
       return metadata
     }
 
-    const args = await this.addRegistryToArgs(['info', packageName, field, '--json'])
-    const { stdout } = await execa(this.bin, args)
-
-    metadata = JSON.parse(stdout)
-    if (this.bin === 'yarn') {
-      // `yarn info` outputs messages in the form of `{"type": "inspect", data: {}}`
-      metadata = metadata.data
+    const headers = {}
+    if (!full) {
+      headers.Accept = 'application/vnd.npm.install-v1+json'
     }
 
-    metadataCache.set(metadataKey, metadata)
-    return metadata
+    const url = `${registry}/${packageName}`
+    try {
+      metadata = (await request.get(url, { headers })).body
+      metadataCache.set(metadataKey, metadata)
+      return metadata
+    } catch (e) {
+      error(`Failed to get response from ${url}`)
+      throw e
+    }
   }
 
   async getRemoteVersion (packageName, versionRange = 'latest') {
@@ -209,29 +230,41 @@ class PackageManager {
   getInstalledVersion (packageName) {
     // for first level deps, read package.json directly is way faster than `npm list`
     try {
-      const packageJson = getPackageJson(
-        path.resolve(this.context, 'node_modules', packageName)
-      )
+      const packageJson = loadModule(`${packageName}/package.json`, this.context, true)
       return packageJson.version
-    } catch (e) {
-      return 'N/A'
-    }
+    } catch (e) {}
+  }
+
+  async runCommand (args) {
+    await this.setRegistryEnvs()
+    await executeCommand(this.bin, args, this.context)
   }
 
   async install () {
-    await this.setBinaryMirrors()
-    const args = await this.addRegistryToArgs(PACKAGE_MANAGER_CONFIG[this.bin].install)
-    return executeCommand(this.bin, args, this.context)
+    if (process.env.VUE_CLI_TEST) {
+      try {
+        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install, '--offline'])
+      } catch (e) {
+        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
+      }
+    }
+
+    return this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
   }
 
   async add (packageName, isDev = true) {
-    await this.setBinaryMirrors()
-    const args = await this.addRegistryToArgs([
+    return this.runCommand([
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName,
       ...(isDev ? ['-D'] : [])
     ])
-    return executeCommand(this.bin, args, this.context)
+  }
+
+  async remove (packageName) {
+    return this.runCommand([
+      ...PACKAGE_MANAGER_CONFIG[this.bin].remove,
+      packageName
+    ])
   }
 
   async upgrade (packageName) {
@@ -248,20 +281,10 @@ class PackageManager {
       return
     }
 
-    await this.setBinaryMirrors()
-    const args = await this.addRegistryToArgs([
+    return this.runCommand([
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName
     ])
-    return executeCommand(this.bin, args, this.context)
-  }
-
-  async remove (packageName) {
-    const args = [
-      ...PACKAGE_MANAGER_CONFIG[this.bin].remove,
-      packageName
-    ]
-    return executeCommand(this.bin, args, this.context)
   }
 }
 

@@ -11,14 +11,14 @@ module.exports = (api, {
 
   api.extendPackage({
     devDependencies: {
-      typescript: '~3.5.3'
+      typescript: '~3.7.5'
     }
   })
 
   if (classComponent) {
     api.extendPackage({
       dependencies: {
-        'vue-class-component': '^7.0.2',
+        'vue-class-component': '^7.2.2',
         'vue-property-decorator': '^8.3.0'
       }
     })

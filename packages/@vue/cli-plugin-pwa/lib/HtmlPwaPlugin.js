@@ -23,6 +23,18 @@ const defaultManifest = {
       'src': './img/icons/android-chrome-512x512.png',
       'sizes': '512x512',
       'type': 'image/png'
+    },
+    {
+      'src': './img/icons/android-chrome-maskable-192x192.png',
+      'sizes': '192x192',
+      'type': 'image/png',
+      'purpose': 'maskable'
+    },
+    {
+      'src': './img/icons/android-chrome-maskable-512x512.png',
+      'sizes': '512x512',
+      'type': 'image/png',
+      'purpose': 'maskable'
     }
   ],
   start_url: '.',
@@ -139,27 +151,29 @@ module.exports = class HtmlPwaPlugin {
       })
     })
 
-    compiler.hooks.emit.tapAsync(ID, (data, cb) => {
-      const {
-        name,
-        themeColor,
-        manifestPath,
-        manifestOptions
-      } = this.options
-      const publicOptions = {
-        name,
-        short_name: name,
-        theme_color: themeColor
-      }
-      const outputManifest = JSON.stringify(
-        Object.assign(publicOptions, defaultManifest, manifestOptions)
-      )
-      data.assets[manifestPath] = {
-        source: () => outputManifest,
-        size: () => outputManifest.length
-      }
-      cb(null, data)
-    })
+    if (!isHrefAbsoluteUrl(this.options.manifestPath)) {
+      compiler.hooks.emit.tapAsync(ID, (data, cb) => {
+        const {
+          name,
+          themeColor,
+          manifestPath,
+          manifestOptions
+        } = this.options
+        const publicOptions = {
+          name,
+          short_name: name,
+          theme_color: themeColor
+        }
+        const outputManifest = JSON.stringify(
+          Object.assign(publicOptions, defaultManifest, manifestOptions)
+        )
+        data.assets[manifestPath] = {
+          source: () => outputManifest,
+          size: () => outputManifest.length
+        }
+        cb(null, data)
+      })
+    }
   }
 }
 
@@ -173,8 +187,12 @@ function makeTag (tagName, attributes, closeTag = false) {
 
 function getTagHref (publicPath, href, assetsVersionStr) {
   let tagHref = `${href}${assetsVersionStr}`
-  if (!(/(http(s?)):\/\//gi.test(href))) {
+  if (!isHrefAbsoluteUrl(href)) {
     tagHref = `${publicPath}${tagHref}`
   }
   return tagHref
+}
+
+function isHrefAbsoluteUrl (href) {
+  return /(http(s?)):\/\//gi.test(href)
 }

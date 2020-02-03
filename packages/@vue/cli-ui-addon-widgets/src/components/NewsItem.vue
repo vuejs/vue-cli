@@ -6,6 +6,7 @@
           <a
             :href="item.link"
             target="_blank"
+            rel="noopener noreferrer"
             @click.stop
           >
             {{ item.title }}

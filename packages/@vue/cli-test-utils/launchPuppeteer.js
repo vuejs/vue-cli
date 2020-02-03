@@ -9,9 +9,16 @@ module.exports = async function launchPuppeteer (url) {
   const page = await browser.newPage()
 
   const logs = []
+  const requestUrls = []
   page.on('console', msg => logs.push(msg.text()))
+
+  await page.setRequestInterception(true)
+  page.on('request', interceptedRequest => {
+    requestUrls.push(interceptedRequest.url())
+    interceptedRequest.continue()
+  })
 
   await page.goto(url)
 
-  return { browser, page, logs }
+  return { browser, page, logs, requestUrls }
 }

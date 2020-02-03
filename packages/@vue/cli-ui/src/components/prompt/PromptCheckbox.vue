@@ -44,7 +44,7 @@ export default {
     },
 
     asnwerCheckbox (choice, value) {
-      let list = this.checkboxValue
+      const list = this.checkboxValue
       const choiceValue = this.value(choice.value)
       if (value) {
         list.push(choiceValue)

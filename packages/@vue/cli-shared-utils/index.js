@@ -6,6 +6,7 @@
   'module',
   'object',
   'openBrowser',
+  'pkg',
   'pluginResolution',
   'launch',
   'request',

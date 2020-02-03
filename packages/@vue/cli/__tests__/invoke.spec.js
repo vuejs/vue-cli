@@ -12,7 +12,7 @@ const parseJS = file => {
 }
 
 const baseESLintConfig = Object.assign({}, require('@vue/cli-plugin-eslint/eslintOptions').config({
-  hasPlugin: () => false
+  hasPlugin: (name) => { if (name === 'babel') { return true } }
 }), {
   rules: {
     'no-console': 'off',
@@ -166,3 +166,5 @@ test('should prompt if invoking in a git repository with uncommited changes', as
   ])
   await invoke(`babel`, {}, project.dir)
 })
+
+test.todo('invoke: should respect plugin resolveFrom')

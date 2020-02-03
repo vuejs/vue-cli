@@ -69,7 +69,7 @@ file, or the `"vue"` field in `package.json`.
 
   - Default: `'manifest.json'`
 
-    The path of app’s manifest.
+    The path of app’s manifest. If the path is an URL, the plugin won't generate a manifest.json in the dist directory during the build.
 
 - **pwa.manifestOptions**
 

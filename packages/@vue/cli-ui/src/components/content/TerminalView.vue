@@ -159,7 +159,7 @@ export default {
 
   methods: {
     initTerminal () {
-      let term = this.$_terminal = new Terminal({
+      const term = this.$_terminal = new Terminal({
         cols: this.cols,
         rows: this.rows,
         theme: this.theme,
@@ -233,7 +233,7 @@ export default {
     },
 
     async fit () {
-      let term = this.$_terminal
+      const term = this.$_terminal
       term.element.style.display = 'none'
 
       await this.$nextTick()

@@ -19,6 +19,7 @@ module.exports = (api, options) => {
     options: {
       '--open': `open browser on server start`,
       '--copy': `copy url to clipboard on server start`,
+      '--stdin': `close when stdin ends`,
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
@@ -171,6 +172,7 @@ module.exports = (api, options) => {
       contentBase: api.resolve('public'),
       watchContentBase: !isProduction,
       hot: !isProduction,
+      injectClient: false,
       compress: isProduction,
       publicPath: options.publicPath,
       overlay: isProduction // TODO disable this
@@ -203,6 +205,16 @@ module.exports = (api, options) => {
         })
       })
     })
+
+    if (args.stdin) {
+      process.stdin.on('end', () => {
+        server.close(() => {
+          process.exit(0)
+        })
+      })
+
+      process.stdin.resume()
+    }
 
     // on appveyor, killing the process with SIGTERM causes execa to
     // throw error

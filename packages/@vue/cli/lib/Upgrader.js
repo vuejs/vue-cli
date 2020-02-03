@@ -2,35 +2,29 @@ const fs = require('fs')
 const path = require('path')
 const {
   chalk,
-  execa,
   semver,
 
   log,
   done,
-
   logWithSpinner,
   stopSpinner,
 
   isPlugin,
   resolvePluginId,
-  loadModule,
 
-  hasProjectGit
+  loadModule
 } = require('@vue/cli-shared-utils')
 
-const Migrator = require('./Migrator')
 const tryGetNewerRange = require('./util/tryGetNewerRange')
-const readFiles = require('./util/readFiles')
-
-const getPackageJson = require('./util/getPackageJson')
+const getPkg = require('./util/getPkg')
 const PackageManager = require('./util/ProjectPackageManager')
 
-const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
+const { runMigrator } = require('./migrate')
 
 module.exports = class Upgrader {
   constructor (context = process.cwd()) {
     this.context = context
-    this.pkg = getPackageJson(this.context)
+    this.pkg = getPkg(this.context)
     this.pm = new PackageManager({ context })
   }
 
@@ -46,7 +40,8 @@ module.exports = class Upgrader {
     }
 
     for (const p of upgradable) {
-      this.pkg = getPackageJson(this.context)
+      // reread to avoid accidentally writing outdated package.json back
+      this.pkg = getPkg(this.context)
       await this.upgrade(p.name, { to: p.latest })
     }
 
@@ -68,6 +63,14 @@ module.exports = class Upgrader {
       throw new Error(`Can't find ${chalk.yellow(packageName)} in ${chalk.yellow('package.json')}`)
     }
 
+    const installed = options.from || this.pm.getInstalledVersion(packageName)
+    if (!installed) {
+      throw new Error(
+        `Can't find ${chalk.yellow(packageName)} in ${chalk.yellow('node_modules')}. Please install the dependencies first.\n` +
+        `Or to force upgrade, you can specify your current plugin version with the ${chalk.cyan('--from')} option`
+      )
+    }
+
     let targetVersion = options.to || 'latest'
     // if the targetVersion is not an exact version
     if (!/\d+\.\d+\.\d+/.test(targetVersion)) {
@@ -87,7 +90,6 @@ module.exports = class Upgrader {
       stopSpinner()
     }
 
-    const installed = this.pm.getInstalledVersion(packageName)
     if (targetVersion === installed) {
       log(`Already installed ${packageName}@${targetVersion}`)
 
@@ -105,87 +107,19 @@ module.exports = class Upgrader {
 
     // the cached `pkg` field won't automatically update after running `this.pm.upgrade`
     this.pkg[depEntry][packageName] = `^${targetVersion}`
-    await this.runMigrator(packageName, { installed })
-  }
-
-  async runMigrator (packageName, options) {
     const pluginMigrator = loadModule(`${packageName}/migrator`, this.context)
-    if (!pluginMigrator) { return }
 
-    const plugin = {
-      id: packageName,
-      apply: pluginMigrator,
-      installed: options.installed
+    if (pluginMigrator) {
+      await runMigrator(
+        this.context,
+        {
+          id: packageName,
+          apply: pluginMigrator,
+          baseVersion: installed
+        },
+        this.pkg
+      )
     }
-
-    const createCompleteCbs = []
-    const migrator = new Migrator(this.context, {
-      plugin: plugin,
-
-      pkg: this.pkg,
-      files: await readFiles(this.context),
-      completeCbs: createCompleteCbs,
-      invoking: true
-    })
-
-    log(`🚀  Running migrator of ${packageName}`)
-    await migrator.generate({
-      extractConfigFiles: true,
-      checkExisting: true
-    })
-
-    const newDeps = migrator.pkg.dependencies
-    const newDevDeps = migrator.pkg.devDependencies
-    const depsChanged =
-      JSON.stringify(newDeps) !== JSON.stringify(this.pkg.dependencies) ||
-      JSON.stringify(newDevDeps) !== JSON.stringify(this.pkg.devDependencies)
-
-    if (!isTestOrDebug && depsChanged) {
-      log(`📦  Installing additional dependencies...`)
-      log()
-      await this.pm.install()
-    }
-
-    if (createCompleteCbs.length) {
-      logWithSpinner('⚓', `Running completion hooks...`)
-      for (const cb of createCompleteCbs) {
-        await cb()
-      }
-      stopSpinner()
-      log()
-    }
-
-    log(`${chalk.green('✔')}  Successfully invoked migrator for plugin: ${chalk.cyan(plugin.id)}`)
-    if (!process.env.VUE_CLI_TEST && hasProjectGit(this.context)) {
-      const { stdout } = await execa('git', [
-        'ls-files',
-        '--exclude-standard',
-        '--modified',
-        '--others'
-      ], {
-        cwd: this.context
-      })
-      if (stdout.trim()) {
-        log(`   The following files have been updated / added:\n`)
-        log(
-          chalk.red(
-            stdout
-              .split(/\r?\n/g)
-              .map(line => `     ${line}`)
-              .join('\n')
-          )
-        )
-        log()
-        log(
-          `   You should review these changes with ${chalk.cyan(
-            `git diff`
-          )} and commit them.`
-        )
-        log()
-      }
-    }
-
-    migrator.printExitLogs()
   }
 
   async getUpgradable (includeNext) {
@@ -202,8 +136,8 @@ module.exports = class Upgrader {
         const installed = await this.pm.getInstalledVersion(name)
         const wanted = await this.pm.getRemoteVersion(name, range)
 
-        if (installed === 'N/A') {
-          throw new Error('At least one dependency is not installed. Please run npm install or yarn before trying to upgrade')
+        if (!installed) {
+          throw new Error(`At least one dependency can't be found. Please install the dependencies before trying to upgrade`)
         }
 
         let latest = await this.pm.getRemoteVersion(name)
@@ -256,7 +190,7 @@ module.exports = class Upgrader {
     for (const p of upgradable) {
       const fields = [
         p.name,
-        p.installed,
+        p.installed || 'N/A',
         p.wanted,
         p.latest,
         `vue upgrade ${p.name}${includeNext ? ' --next' : ''}`

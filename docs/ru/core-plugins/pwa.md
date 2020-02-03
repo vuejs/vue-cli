@@ -26,6 +26,11 @@
 
   Настройки, передаваемые в используемый `workbox-webpack-plugin`.
 
+  При использовании шаблона App Shell в режиме `GenerateSW` можно настроить точку входа таким образом, чтобы убедиться, что все страницы загружаются в оффлайне:
+  ```js
+  navigateFallback: 'index.html'
+  ```
+
   Для получения дополнительной информации о поддерживаемых значениях обратитесь к руководству для [`GenerateSW`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_generatesw_config) или для [`InjectManifest`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_injectmanifest_config).
 
 - **pwa.name**
@@ -105,6 +110,13 @@ module.exports = {
     msTileColor: '#000000',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
+
+    // настройки манифеста
+    manifestOptions: {
+      display: 'landscape',
+      background_color: '#42B883'
+      // ...другие настройки манифеста...
+    },
 
     // настройка workbox-плагина
     workboxPluginMode: 'InjectManifest',
