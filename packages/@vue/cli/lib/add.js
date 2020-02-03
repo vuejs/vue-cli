@@ -43,7 +43,7 @@ async function add (pluginName, options = {}, context = process.cwd()) {
 
   const cliVersion = require('../package.json').version
   if (isOfficialPlugin(packageName) && semver.prerelease(cliVersion)) {
-    await pm.add(`${packageName}@^${cliVersion}`)
+    await pm.add(`${packageName}@~${cliVersion}`)
   } else {
     await pm.add(packageName)
   }

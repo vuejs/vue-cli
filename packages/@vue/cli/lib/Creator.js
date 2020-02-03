@@ -161,7 +161,7 @@ module.exports = class Creator extends EventEmitter {
       // Other `@vue/*` packages' version may not be in sync with the cli itself.
       pkg.devDependencies[dep] = (
         preset.plugins[dep].version ||
-        ((/^@vue/.test(dep)) ? `^${latestMinor}` : `latest`)
+        ((/^@vue/.test(dep)) ? `~${latestMinor}` : `latest`)
       )
     })
 
