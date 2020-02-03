@@ -26,7 +26,7 @@ module.exports = (api, options) => {
   // there will be a VUE_CLI_TRANSPILE_BABEL_RUNTIME env var set.
   // the `filename` field is required
   // in case there're filename-related options like `ignore` in the user config
-  babel.loadPartialConfig({ filename: api.resolve('src/main.js') })
+  babel.loadPartialConfigSync({ filename: api.resolve('src/main.js') })
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
