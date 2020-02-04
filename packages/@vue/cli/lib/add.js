@@ -7,6 +7,7 @@ const {
   loadModule
 } = require('@vue/cli-shared-utils')
 
+const getVersions = require('./util/getVersions')
 const PackageManager = require('./util/ProjectPackageManager')
 const {
   log,
@@ -40,12 +41,12 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log()
 
   const pm = new PackageManager({ context })
+  const { latestMinor } = await getVersions()
 
-  const cliVersion = require('../package.json').version
-  if (isOfficialPlugin(packageName) && semver.prerelease(cliVersion)) {
-    await pm.add(`${packageName}@~${cliVersion}`)
+  if (isOfficialPlugin(packageName)) {
+    await pm.add(`${packageName}@~${latestMinor}`)
   } else {
-    await pm.add(packageName)
+    await pm.add(packageName, { tilde: true })
   }
 
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
