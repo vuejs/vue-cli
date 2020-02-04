@@ -69,8 +69,6 @@ const PACKAGE_MANAGER_CONFIG = {
   }
 }
 
-console.log(`hasPnpmVersionOrLater('4.0.0')`, hasPnpmVersionOrLater('4.0.0'))
-
 // extract the package name 'xx' from the format 'xx@1.1'
 function stripVersion (packageName) {
   const nameRegExp = /^(@?[^@]+)(@.*)?$/
@@ -237,21 +235,28 @@ class PackageManager {
     } catch (e) {}
   }
 
-  async runCommand (args) {
+  async runCommand (command, args) {
     await this.setRegistryEnvs()
-    await executeCommand(this.bin, args, this.context)
+    return await executeCommand(
+      this.bin,
+      [
+        ...PACKAGE_MANAGER_CONFIG[this.bin][command],
+        ...args
+      ],
+      this.context
+    )
   }
 
   async install () {
     if (process.env.VUE_CLI_TEST) {
       try {
-        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install, '--offline'])
+        await this.runCommand('install', ['--offline'])
       } catch (e) {
-        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
+        await this.runCommand('install')
       }
     }
 
-    return this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
+    return await this.runCommand('install')
   }
 
   async add (packageName, {
@@ -266,18 +271,12 @@ class PackageManager {
         process.env.npm_config_save_prefix = '~'
       }
     }
-    return this.runCommand([
-      ...PACKAGE_MANAGER_CONFIG[this.bin].add,
-      packageName,
-      ...args
-    ])
+
+    return await this.runCommand('add', [packageName, ...args])
   }
 
   async remove (packageName) {
-    return this.runCommand([
-      ...PACKAGE_MANAGER_CONFIG[this.bin].remove,
-      packageName
-    ])
+    return await this.runCommand('remove', [packageName])
   }
 
   async upgrade (packageName) {
@@ -294,10 +293,7 @@ class PackageManager {
       return
     }
 
-    return this.runCommand([
-      ...PACKAGE_MANAGER_CONFIG[this.bin].add,
-      packageName
-    ])
+    return await this.runCommand('add', [packageName])
   }
 }
 
