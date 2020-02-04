@@ -241,7 +241,7 @@ class PackageManager {
       this.bin,
       [
         ...PACKAGE_MANAGER_CONFIG[this.bin][command],
-        ...args
+        ...(args || [])
       ],
       this.context
     )
