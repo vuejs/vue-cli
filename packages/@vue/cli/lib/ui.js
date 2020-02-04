@@ -5,7 +5,8 @@ const shortid = require('shortid')
 function simpleCorsValidation (allowedHost) {
   return function (req, socket) {
     const { host, origin } = req.headers
-    const hostRegExp = new RegExp(`${host}|${allowedHost}|localhost`)
+    // maybe we should just use strict string equal?
+    const hostRegExp = new RegExp(`^(${host}|${allowedHost}|localhost)(:\\d+)?$`)
 
     if (!origin || !hostRegExp.test(origin)) {
       socket.destroy()
