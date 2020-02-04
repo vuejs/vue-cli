@@ -69,6 +69,8 @@ const PACKAGE_MANAGER_CONFIG = {
   }
 }
 
+console.log(`hasPnpmVersionOrLater('4.0.0')`, hasPnpmVersionOrLater('4.0.0'))
+
 // extract the package name 'xx' from the format 'xx@1.1'
 function stripVersion (packageName) {
   const nameRegExp = /^(@?[^@]+)(@.*)?$/
@@ -252,11 +254,22 @@ class PackageManager {
     return this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
   }
 
-  async add (packageName, isDev = true) {
+  async add (packageName, {
+    tilde = false,
+    dev = true
+  } = {}) {
+    const args = dev ? ['-D'] : []
+    if (tilde) {
+      if (this.bin === 'yarn') {
+        args.push('--tilde')
+      } else {
+        process.env.npm_config_save_prefix = '~'
+      }
+    }
     return this.runCommand([
       ...PACKAGE_MANAGER_CONFIG[this.bin].add,
       packageName,
-      ...(isDev ? ['-D'] : [])
+      ...args
     ])
   }
 
