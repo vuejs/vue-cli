@@ -4,7 +4,7 @@
 
 This adds E2E testing support using [Cypress](https://www.cypress.io/).
 
-Cypress offers a rich interactive interface for running E2E tests in Firefox and Chromium based browsers (Chrome, MS Edge, Brave, Electron). To learn more about cross browser testing, visit the Cypress Cross Browser Testing Guide.
+Cypress offers a rich interactive interface for running E2E tests in Firefox and Chromium based browsers (Chrome, MS Edge, Brave, Electron). To learn more about cross browser testing, visit the [Cypress Cross Browser Testing Guide](https://on.cypress.io/cross-browser-testing).
 
 > **Note:** If you have a hard requirement on E2E testing in IE or Safari, consider using the Selenium-based [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch).
 
