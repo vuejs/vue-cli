@@ -15,7 +15,8 @@ module.exports = async function getVersions () {
   if (process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG) {
     return (sessionCached = {
       current: local,
-      latest: local
+      latest: local,
+      latestMinor: local
     })
   }
 
@@ -44,9 +45,21 @@ module.exports = async function getVersions () {
     latest = cached
   }
 
+  let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+  if (
+    // if the latest version contains breaking changes
+    /major/.test(semver.diff(local, latest)) ||
+    // or if using `next` branch of cli
+    (semver.gte(local, latest) && semver.prerelease(local))
+  ) {
+    // fallback to the local cli version number
+    latestMinor = local
+  }
+
   return (sessionCached = {
     current: local,
     latest,
+    latestMinor,
     error
   })
 }
