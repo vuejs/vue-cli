@@ -188,7 +188,10 @@ function install ({ id, type, range }, context) {
     }
 
     const pm = new PackageManager({ context: cwd.get() })
-    await pm.add(arg, type === 'devDependencies')
+    await pm.add(arg, {
+      tilde: !range && isPlugin(id),
+      dev: type === 'devDependencies'
+    })
 
     logs.add({
       message: `Dependency ${id} installed`,

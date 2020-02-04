@@ -93,7 +93,7 @@ module.exports = class Upgrader {
     if (targetVersion === installed) {
       log(`Already installed ${packageName}@${targetVersion}`)
 
-      const newRange = tryGetNewerRange(`^${targetVersion}`, required)
+      const newRange = tryGetNewerRange(`~${targetVersion}`, required)
       if (newRange !== required) {
         this.pkg[depEntry][packageName] = newRange
         fs.writeFileSync(path.resolve(this.context, 'package.json'), JSON.stringify(this.pkg, null, 2))
@@ -103,10 +103,10 @@ module.exports = class Upgrader {
     }
 
     log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
-    await this.pm.upgrade(`${packageName}@^${targetVersion}`)
+    await this.pm.upgrade(`${packageName}@~${targetVersion}`)
 
     // the cached `pkg` field won't automatically update after running `this.pm.upgrade`
-    this.pkg[depEntry][packageName] = `^${targetVersion}`
+    this.pkg[depEntry][packageName] = `~${targetVersion}`
     const pluginMigrator = loadModule(`${packageName}/migrator`, this.context)
 
     if (pluginMigrator) {
