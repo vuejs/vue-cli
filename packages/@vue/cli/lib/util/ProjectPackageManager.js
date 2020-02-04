@@ -235,36 +235,48 @@ class PackageManager {
     } catch (e) {}
   }
 
-  async runCommand (args) {
+  async runCommand (command, args) {
     await this.setRegistryEnvs()
-    await executeCommand(this.bin, args, this.context)
+    return await executeCommand(
+      this.bin,
+      [
+        ...PACKAGE_MANAGER_CONFIG[this.bin][command],
+        ...(args || [])
+      ],
+      this.context
+    )
   }
 
   async install () {
     if (process.env.VUE_CLI_TEST) {
       try {
-        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install, '--offline'])
+        await this.runCommand('install', ['--offline'])
       } catch (e) {
-        await this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
+        await this.runCommand('install')
       }
     }
 
-    return this.runCommand([PACKAGE_MANAGER_CONFIG[this.bin].install])
+    return await this.runCommand('install')
   }
 
-  async add (packageName, isDev = true) {
-    return this.runCommand([
-      ...PACKAGE_MANAGER_CONFIG[this.bin].add,
-      packageName,
-      ...(isDev ? ['-D'] : [])
-    ])
+  async add (packageName, {
+    tilde = false,
+    dev = true
+  } = {}) {
+    const args = dev ? ['-D'] : []
+    if (tilde) {
+      if (this.bin === 'yarn') {
+        args.push('--tilde')
+      } else {
+        process.env.npm_config_save_prefix = '~'
+      }
+    }
+
+    return await this.runCommand('add', [packageName, ...args])
   }
 
   async remove (packageName) {
-    return this.runCommand([
-      ...PACKAGE_MANAGER_CONFIG[this.bin].remove,
-      packageName
-    ])
+    return await this.runCommand('remove', [packageName])
   }
 
   async upgrade (packageName) {
@@ -281,10 +293,7 @@ class PackageManager {
       return
     }
 
-    return this.runCommand([
-      ...PACKAGE_MANAGER_CONFIG[this.bin].add,
-      packageName
-    ])
+    return await this.runCommand('add', [packageName])
   }
 }
 
