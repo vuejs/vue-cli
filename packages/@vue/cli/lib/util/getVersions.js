@@ -45,6 +45,11 @@ module.exports = async function getVersions () {
     latest = cached
   }
 
+  // if the installed version is updated but the cache doesn't update
+  if (semver.gt(local, latest) && !semver.prerelease(local)) {
+    latest = local
+  }
+
   let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
   if (
     // if the latest version contains breaking changes
