@@ -207,7 +207,7 @@ class PackageManager {
       headers.Accept = 'application/vnd.npm.install-v1+json'
     }
 
-    const url = path.join(registry, packageName)
+    const url = `${registry.replace(/\/$/g, '')}/${packageName}`
     try {
       metadata = (await request.get(url, { headers })).body
       metadataCache.set(metadataKey, metadata)
