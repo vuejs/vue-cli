@@ -91,8 +91,8 @@
   },
   "resolutions": {
     "puppeteer": "1.11.0",
-    "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10",
-    "vue-server-renderer": "^2.6.10"
+    "vue": "^2.6.11",
+    "vue-template-compiler": "^2.6.11",
+    "vue-server-renderer": "^2.6.11"
   }
 }
