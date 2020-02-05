@@ -54,7 +54,7 @@ module.exports = async (api) => {
       Object.assign(newDeps, getDeps(api, 'prettier'))
     }
 
-    api.extendPackage({ devDependencies: newDeps }, true)
+    api.extendPackage({ devDependencies: newDeps }, { warnIncompatibleVersions: false })
 
     // in case anyone's upgrading from the legacy `typescript-eslint-parser`
     if (api.hasPlugin('typescript')) {
