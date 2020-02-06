@@ -105,21 +105,23 @@ module.exports = class Upgrader {
     log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
     await this.pm.upgrade(`${packageName}@~${targetVersion}`)
 
-    // the cached `pkg` field won't automatically update after running `this.pm.upgrade`
+    // The cached `pkg` field won't automatically update after running `this.pm.upgrade`.
+    // Also, `npm install pkg@~version` won't replace the original `"pkg": "^version"` field.
+    // So we have to manually update `this.pkg` and write to the file system in `runMigrator`
     this.pkg[depEntry][packageName] = `~${targetVersion}`
-    const pluginMigrator = loadModule(`${packageName}/migrator`, this.context)
+    const noop = () => {}
+    const pluginMigrator =
+      loadModule(`${packageName}/migrator`, this.context) || noop
 
-    if (pluginMigrator) {
-      await runMigrator(
-        this.context,
-        {
-          id: packageName,
-          apply: pluginMigrator,
-          baseVersion: installed
-        },
-        this.pkg
-      )
-    }
+    await runMigrator(
+      this.context,
+      {
+        id: packageName,
+        apply: pluginMigrator,
+        baseVersion: installed
+      },
+      this.pkg
+    )
   }
 
   async getUpgradable (includeNext) {
