@@ -1,14 +1,20 @@
 const { chalk } = require('@vue/cli-shared-utils')
 
-module.exports = (api) => {
-  api.transformScript('babel.config.js', require('../codemods/usePluginPreset'))
+module.exports = api => {
+  api.transformScript(
+    'babel.config.js',
+    require('../codemods/usePluginPreset')
+  )
 
   if (api.fromVersion('^3')) {
-    api.extendPackage({
-      dependencies: {
-        'core-js': '^3.6.4'
-      }
-    }, true)
+    api.extendPackage(
+      {
+        dependencies: {
+          'core-js': '^3.6.4'
+        }
+      },
+      { warnIncompatibleVersions: false }
+    )
 
     // TODO: implement a codemod to migrate polyfills
     api.exitLog(`core-js has been upgraded from v2 to v3.
