@@ -140,7 +140,7 @@ exports.hasProjectNpm = (cwd) => {
   }
 
   const lockFile = path.join(cwd, 'package-lock.json')
-  const result = fs.exists(lockFile)
+  const result = fs.existsSync(lockFile)
   _npmProjects.set(cwd, result)
   return result
 }
