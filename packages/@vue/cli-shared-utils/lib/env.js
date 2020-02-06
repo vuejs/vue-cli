@@ -130,6 +130,21 @@ function checkPnpm (result) {
   return result
 }
 
+const _npmProjects = new LRU({
+  max: 10,
+  maxAge: 1000
+})
+exports.hasProjectNpm = (cwd) => {
+  if (_npmProjects.has(cwd)) {
+    return true
+  }
+
+  const lockFile = path.join(cwd, 'package-lock.json')
+  const result = fs.existsSync(lockFile)
+  _npmProjects.set(cwd, result)
+  return result
+}
+
 // OS
 exports.isWindows = process.platform === 'win32'
 exports.isMacintosh = process.platform === 'darwin'

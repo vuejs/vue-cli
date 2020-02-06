@@ -18,6 +18,7 @@ const {
   hasPnpm3OrLater,
   hasPnpmVersionOrLater,
   hasProjectPnpm,
+  hasProjectNpm,
 
   isOfficialPlugin,
   resolvePluginId,
@@ -88,8 +89,17 @@ class PackageManager {
     if (forcePackageManager) {
       this.bin = forcePackageManager
     } else if (context) {
-      this.bin = hasProjectYarn(context) ? 'yarn' : hasProjectPnpm(context) ? 'pnpm' : 'npm'
-    } else {
+      if (hasProjectYarn(context)) {
+        this.bin = 'yarn'
+      } else if (hasProjectPnpm(context)) {
+        this.bin = 'pnpm'
+      } else if (hasProjectNpm(context)) {
+        this.bin = 'npm'
+      }
+    }
+
+    // if no package managers specified, and no lockfile exists
+    if (!this.bin) {
       this.bin = loadOptions().packageManager || (hasYarn() ? 'yarn' : hasPnpm3OrLater() ? 'pnpm' : 'npm')
     }
 
