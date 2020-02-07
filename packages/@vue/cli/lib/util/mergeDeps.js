@@ -3,61 +3,93 @@ const { semver, warn } = require('@vue/cli-shared-utils')
 const tryGetNewerRange = require('./tryGetNewerRange')
 
 const extractSemver = r => r.replace(/^.+#semver:/, '')
-const injectSemver = (r, v) => semver.validRange(r) ? v : r.replace(/#semver:.+$/, `#semver:${v}`)
+const injectSemver = (r, v) =>
+  semver.validRange(r) ? v : r.replace(/#semver:.+$/, `#semver:${v}`)
 
-module.exports = function resolveDeps (generatorId, to, from, sources, forceNewVersion) {
-  const res = Object.assign({}, to)
-  for (const name in from) {
-    const r1 = to[name]
-    const r2 = from[name]
-    const r2IsString = typeof r2 === 'string'
-    const sourceGeneratorId = sources[name]
-    const isValidURI = r2IsString && r2.match(/^(?:file|git|git\+ssh|git\+http|git\+https|git\+file|https?):/) != null
-    const isValidGitHub = r2IsString && r2.match(/^[^/]+\/[^/]+/) != null
+const isValidRange = range => {
+  if (typeof range !== 'string') {
+    return false
+  }
+
+  const isValidSemver = !!semver.validRange(range)
+  const isValidGitHub = range.match(/^[^/]+\/[^/]+/) != null
+  const isValidURI =
+    range.match(
+      /^(?:file|git|git\+ssh|git\+http|git\+https|git\+file|https?):/
+    ) != null
+
+  return isValidSemver || isValidGitHub || isValidURI
+}
+
+module.exports = function mergeDeps (
+  generatorId,
+  sourceDeps,
+  depsToInject,
+  sources,
+  {
+    prune,
+    warnIncompatibleVersions
+  }
+) {
+  const result = Object.assign({}, sourceDeps)
+
+  for (const depName in depsToInject) {
+    const sourceRange = sourceDeps[depName]
+    const injectingRange = depsToInject[depName]
 
     // if they are the same, do nothing. Helps when non semver type deps are used
-    if (r1 === r2) continue
+    if (sourceRange === injectingRange) continue
 
-    if (!isValidGitHub && !isValidURI && !semver.validRange(r2)) {
+    if (prune && injectingRange == null) {
+      delete result[depName]
+    }
+
+    if (!isValidRange(injectingRange)) {
       warn(
-        `invalid version range for dependency "${name}":\n\n` +
-        `- ${r2} injected by generator "${generatorId}"`
+        `invalid version range for dependency "${depName}":\n\n` +
+          `- ${injectingRange} injected by generator "${generatorId}"`
       )
       continue
     }
 
-    if (!r1) {
-      res[name] = r2
-      sources[name] = generatorId
+    const sourceGeneratorId = sources[depName]
+    if (!sourceRange) {
+      result[depName] = injectingRange
+      sources[depName] = generatorId
     } else {
-      const r1semver = extractSemver(r1)
-      const r2semver = extractSemver(r2)
-      const r = tryGetNewerRange(r1semver, r2semver)
+      const sourceRangeSemver = extractSemver(sourceRange)
+      const injectingRangeSemver = extractSemver(injectingRange)
+      const r = tryGetNewerRange(sourceRangeSemver, injectingRangeSemver)
       const didGetNewer = !!r
+
       // if failed to infer newer version, use existing one because it's likely
       // built-in
-      res[name] = didGetNewer ? injectSemver(r2, r) : r1
+      result[depName] = didGetNewer
+        ? injectSemver(injectingRange, r)
+        : sourceRange
+
       // if changed, update source
-      if (res[name] === r2) {
-        sources[name] = generatorId
+      if (result[depName] === injectingRange) {
+        sources[depName] = generatorId
       }
+
       // warn incompatible version requirements
       if (
-        !forceNewVersion &&
-        (
-          !semver.validRange(r1semver) ||
-          !semver.validRange(r2semver) ||
-          !semver.intersects(r1semver, r2semver)
-        )
+        warnIncompatibleVersions &&
+        (!semver.validRange(sourceRangeSemver) ||
+          !semver.validRange(injectingRangeSemver) ||
+          !semver.intersects(sourceRangeSemver, injectingRangeSemver))
       ) {
         warn(
-          `conflicting versions for project dependency "${name}":\n\n` +
-          `- ${r1} injected by generator "${sourceGeneratorId}"\n` +
-          `- ${r2} injected by generator "${generatorId}"\n\n` +
-          `Using ${didGetNewer ? `newer ` : ``}version (${res[name]}), but this may cause build errors.`
+          `conflicting versions for project dependency "${depName}":\n\n` +
+            `- ${sourceRange} injected by generator "${sourceGeneratorId}"\n` +
+            `- ${injectingRange} injected by generator "${generatorId}"\n\n` +
+            `Using ${didGetNewer ? `newer ` : ``}version (${
+              result[depName]
+            }), but this may cause build errors.`
         )
       }
     }
   }
-  return res
+  return result
 }

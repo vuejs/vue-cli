@@ -206,11 +206,25 @@ test('airbnb config + typescript + unit-mocha', async () => {
   })
 }, 30000)
 
+test('typescript + e2e-nightwatch', async () => {
+  const { run } = await create('eslint-typescript-nightwatch', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {},
+      '@vue/cli-plugin-typescript': {
+        classComponent: true
+      },
+      '@vue/cli-plugin-e2e-nightwatch': {}
+    }
+  })
+  await run('vue-cli-service lint')
+}, 30000)
+
 test('should be able to parse dynamic import syntax', async () => {
-  await create('eslint-dynamic-import', {
+  const { run } = await create('eslint-dynamic-import', {
     plugins: {
       '@vue/cli-plugin-eslint': {},
       '@vue/cli-plugin-router': {}
     }
   })
+  await run('vue-cli-service lint')
 }, 30000)

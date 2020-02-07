@@ -2,6 +2,18 @@ const { log, error, openBrowser } = require('@vue/cli-shared-utils')
 const { portfinder, server } = require('@vue/cli-ui/server')
 const shortid = require('shortid')
 
+function simpleCorsValidation (allowedHost) {
+  return function (req, socket) {
+    const { host, origin } = req.headers
+    // maybe we should just use strict string equal?
+    const hostRegExp = new RegExp(`^https?://(${host}|${allowedHost}|localhost)(:\\d+)?$`)
+
+    if (!origin || !hostRegExp.test(origin)) {
+      socket.destroy()
+    }
+  }
+}
+
 async function ui (options = {}, context = process.cwd()) {
   const host = options.host || 'localhost'
 
@@ -69,12 +81,7 @@ async function ui (options = {}, context = process.cwd()) {
     }
   })
 
-  httpServer.on('upgrade', (req, socket) => {
-    const { origin } = req.headers
-    if (!origin || !(new RegExp(host)).test(origin)) {
-      socket.destroy()
-    }
-  })
+  httpServer.on('upgrade', simpleCorsValidation(host))
 }
 
 module.exports = (...args) => {

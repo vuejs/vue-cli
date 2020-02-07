@@ -38,13 +38,13 @@
     我们推荐以这种方式添加 polyfill 而不是在源代码中直接导入它们，因为如果这里列出的 polyfill 在 `browserslist` 的目标中不需要，则它会被自动排除。
     :::
 
-3. **如果该依赖交付 ES5 代码，但使用了 ES6+ 特性且没有显式地列出需要的 polyfill (例如 Vuetify)：**请使用 `useBuiltIns: 'entry'` 然后在入口文件添加 `import '@babel/polyfill'`。这会根据 `browserslist` 目标导入**所有** polyfill，这样你就不用再担心依赖的 polyfill 问题了，但是因为包含了一些没有用到的 polyfill 所以最终的包大小可能会增加。
+3. **如果该依赖交付 ES5 代码，但使用了 ES6+ 特性且没有显式地列出需要的 polyfill (例如 Vuetify)：**请使用 `useBuiltIns: 'entry'` 然后在入口文件添加 `import 'core-js/stable'; import 'regenerator-runtime/runtime';`。这会根据 `browserslist` 目标导入**所有** polyfill，这样你就不用再担心依赖的 polyfill 问题了，但是因为包含了一些没有用到的 polyfill 所以最终的包大小可能会增加。
 
 更多细节可查阅 [@babel-preset/env 文档](https://new.babeljs.io/docs/en/next/babel-preset-env.html#usebuiltins-usage)。
 
 ### 构建库或是 Web Component 时的 Polyfills
 
-当使用 Vue CLI 来[构建一个库或是 Web Component](./build-targets.md) 时，推荐给 `@vue/babel-preset-env` 传入 `useBuiltIns: false` 选项。这能够确保你的库或是组件不包含不必要的 polyfills。通常来说，打包 polyfills 应当是最终使用你的库的应用的责任。
+当使用 Vue CLI 来[构建一个库或是 Web Component](./build-targets.md) 时，推荐给 `@vue/babel-preset-app` 传入 `useBuiltIns: false` 选项。这能够确保你的库或是组件不包含不必要的 polyfills。通常来说，打包 polyfills 应当是最终使用你的库的应用的责任。
 
 ## 现代模式
 

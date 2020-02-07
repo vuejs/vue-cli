@@ -21,6 +21,10 @@ const PackageManager = require('./util/ProjectPackageManager')
 
 const { runMigrator } = require('./migrate')
 
+function clearRequireCache () {
+  Object.keys(require.cache).forEach(key => delete require.cache[key])
+}
+
 module.exports = class Upgrader {
   constructor (context = process.cwd()) {
     this.context = context
@@ -93,7 +97,7 @@ module.exports = class Upgrader {
     if (targetVersion === installed) {
       log(`Already installed ${packageName}@${targetVersion}`)
 
-      const newRange = tryGetNewerRange(`^${targetVersion}`, required)
+      const newRange = tryGetNewerRange(`~${targetVersion}`, required)
       if (newRange !== required) {
         this.pkg[depEntry][packageName] = newRange
         fs.writeFileSync(path.resolve(this.context, 'package.json'), JSON.stringify(this.pkg, null, 2))
@@ -103,23 +107,29 @@ module.exports = class Upgrader {
     }
 
     log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
-    await this.pm.upgrade(`${packageName}@^${targetVersion}`)
+    await this.pm.upgrade(`${packageName}@~${targetVersion}`)
+    // as the dependencies have now changed, the require cache must be invalidated
+    // otherwise it may affect the behavior of the migrator
+    clearRequireCache()
 
-    // the cached `pkg` field won't automatically update after running `this.pm.upgrade`
-    this.pkg[depEntry][packageName] = `^${targetVersion}`
-    const pluginMigrator = loadModule(`${packageName}/migrator`, this.context)
+    // The cached `pkg` field won't automatically update after running `this.pm.upgrade`.
+    // Also, `npm install pkg@~version` won't replace the original `"pkg": "^version"` field.
+    // So we have to manually update `this.pkg` and write to the file system in `runMigrator`
+    this.pkg[depEntry][packageName] = `~${targetVersion}`
+    const noop = () => {}
 
-    if (pluginMigrator) {
-      await runMigrator(
-        this.context,
-        {
-          id: packageName,
-          apply: pluginMigrator,
-          baseVersion: installed
-        },
-        this.pkg
-      )
-    }
+    const pluginMigrator =
+      loadModule(`${packageName}/migrator`, this.context) || noop
+
+    await runMigrator(
+      this.context,
+      {
+        id: packageName,
+        apply: pluginMigrator,
+        baseVersion: installed
+      },
+      this.pkg
+    )
   }
 
   async getUpgradable (includeNext) {

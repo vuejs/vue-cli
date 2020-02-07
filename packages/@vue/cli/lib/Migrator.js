@@ -22,7 +22,7 @@ module.exports = class Migrator extends Generator {
     this.invoking = invoking
   }
 
-  async generate () {
+  async generate (...args) {
     const plugin = this.migratorPlugin
 
     // apply migrators from plugins
@@ -36,6 +36,6 @@ module.exports = class Migrator extends Generator {
 
     await plugin.apply(api, plugin.options, this.rootOptions, this.invoking)
 
-    await super.generate()
+    await super.generate(...args)
   }
 }

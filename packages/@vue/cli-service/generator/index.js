@@ -12,7 +12,7 @@ module.exports = (api, options) => {
       'vue': '^2.6.11'
     },
     devDependencies: {
-      'vue-template-compiler': '^2.6.10'
+      'vue-template-compiler': '^2.6.11'
     },
     browserslist: [
       '> 1%',

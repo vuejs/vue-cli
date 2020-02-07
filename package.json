@@ -56,7 +56,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
-    "chromedriver": "^79.0.2",
+    "chromedriver": "^80.0.0",
     "debug": "^4.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.1",
@@ -91,8 +91,8 @@
   },
   "resolutions": {
     "puppeteer": "1.11.0",
-    "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10",
-    "vue-server-renderer": "^2.6.10"
+    "vue": "^2.6.11",
+    "vue-template-compiler": "^2.6.11",
+    "vue-server-renderer": "^2.6.11"
   }
 }
