@@ -184,7 +184,7 @@ module.exports = {
 - Type: `Array<string | RegExp>`
 - Default: `[]`
 
-  默认情况下 `babel-loader` 会忽略所有 `node_modules` 中的文件。如果你想要通过 Babel 显式转译一个依赖，可以在这个选项中列出来。
+  默认情况下 `babel-loader` 会忽略所有 `node_modules` 中的文件。如果你想要通过 Babel 显式转译一个依赖，可以在这个选项中列出来。为了确保此选项生效，请使用 `babel.config.js` 替代 `.babelrc` 或者 `package.json` 中的 Babel 配置。参考：[transpileDependencies option doesn't work #1552](https://github.com/vuejs/vue-cli/issues/1552)。
 
 ### productionSourceMap
 
