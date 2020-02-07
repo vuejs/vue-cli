@@ -1,6 +1,10 @@
 
 ## 4.2.1 (2020-02-07)
 
+#### :bug: Bug Fix
+* `@vue/cli-ui`
+  * [776275d](https://github.com/vuejs/vue-cli/commit/776275d) fix: add graphql-server.js to npm files ([@sodatea](https://github.com/sodatea))
+
 #### :memo: Documentation
 * [#5126](https://github.com/vuejs/vue-cli/pull/5126) fix(docs): new travis CLI interface ([@iliyaZelenko](https://github.com/iliyaZelenko))
 * [#5122](https://github.com/vuejs/vue-cli/pull/5122) Add a demo for multiple loaders (Chinese doc) ([@FrankFang](https://github.com/FrankFang))
