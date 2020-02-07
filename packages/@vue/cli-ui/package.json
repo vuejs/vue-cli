@@ -30,7 +30,8 @@
     "ui-defaults",
     "ui-public",
     "index.js",
-    "server.js"
+    "server.js",
+    "graphql-server.js"
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
