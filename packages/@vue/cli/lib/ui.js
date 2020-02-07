@@ -6,7 +6,7 @@ function simpleCorsValidation (allowedHost) {
   return function (req, socket) {
     const { host, origin } = req.headers
     // maybe we should just use strict string equal?
-    const hostRegExp = new RegExp(`^(${host}|${allowedHost}|localhost)(:\\d+)?$`)
+    const hostRegExp = new RegExp(`^https?://(${host}|${allowedHost}|localhost)(:\\d+)?$`)
 
     if (!origin || !hostRegExp.test(origin)) {
       socket.destroy()
