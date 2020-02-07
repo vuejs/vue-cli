@@ -1,4 +1,29 @@
 
+## 4.2.1 (2020-02-07)
+
+#### :memo: Documentation
+* [#5126](https://github.com/vuejs/vue-cli/pull/5126) fix(docs): new travis CLI interface ([@iliyaZelenko](https://github.com/iliyaZelenko))
+* [#5122](https://github.com/vuejs/vue-cli/pull/5122) Add a demo for multiple loaders (Chinese doc) ([@FrankFang](https://github.com/FrankFang))
+* [#5094](https://github.com/vuejs/vue-cli/pull/5094) docs: [RU] Translation update ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+* [#5081](https://github.com/vuejs/vue-cli/pull/5081) line 47 according to english version ([@defead](https://github.com/defead))
+* [#5076](https://github.com/vuejs/vue-cli/pull/5076) Add a demo for multiple loaders ([@FrankFang](https://github.com/FrankFang))
+* [#5079](https://github.com/vuejs/vue-cli/pull/5079) Mention that Vue CLI should be installed in Prototyping guide ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+* [#5078](https://github.com/vuejs/vue-cli/pull/5078) Fix a typo in migration guide ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+* [#5055](https://github.com/vuejs/vue-cli/pull/5055) docs: mention the precedence of `.vue` & `.ts(x)` extensions ([@sodatea](https://github.com/sodatea))
+* [#5019](https://github.com/vuejs/vue-cli/pull/5019) Updated zh-cn translation in cli section ([@mactanxin](https://github.com/mactanxin))
+
+#### Committers: 8
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Frank Fang ([@FrankFang](https://github.com/FrankFang))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Natalia Tepluhina ([@NataliaTepluhina](https://github.com/NataliaTepluhina))
+- Xin Tan ([@mactanxin](https://github.com/mactanxin))
+- [@defead](https://github.com/defead)
+- Илья ([@iliyaZelenko](https://github.com/iliyaZelenko))
+- 小新 ([@llccing](https://github.com/llccing))
+
+
+
 ## 4.2.0 (2020-02-07)
 
 #### :rocket: New Features
