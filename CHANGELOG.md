@@ -1,4 +1,91 @@
 
+## 4.2.0 (2020-02-07)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli`
+  * [#5149](https://github.com/vuejs/vue-cli/pull/5149) feat(GeneratorAPI): allow passing options to `api.extendPackage` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`
+  * [#5147](https://github.com/vuejs/vue-cli/pull/5147) feat: create projects with @vue/test-utils beta 31 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`, `@vue/cli`
+  * [#5134](https://github.com/vuejs/vue-cli/pull/5134) feat: lock minor versions when creating projects / adding plugins ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`, `@vue/cli-ui`
+  * [#5128](https://github.com/vuejs/vue-cli/pull/5128) feat: upgrade to typescript@~3.7.5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5091](https://github.com/vuejs/vue-cli/pull/5091) feat: `vue upgrade` monorepo support,  `--from` option, and a new `vue migrate --from` command ([@sodatea](https://github.com/sodatea))
+  * [#4828](https://github.com/vuejs/vue-cli/pull/4828) feat: add option merge to command create ([@zyy7259](https://github.com/zyy7259))
+* `@vue/cli-service`
+  * [#4953](https://github.com/vuejs/vue-cli/pull/4953) feat: adds transparent PnP support to Webpack ([@arcanis](https://github.com/arcanis))
+  * [#2411](https://github.com/vuejs/vue-cli/pull/2411) feat(cli): add stdin flag to serve ([@nullpilot](https://github.com/nullpilot))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`, `@vue/cli`
+  * [#4933](https://github.com/vuejs/vue-cli/pull/4933) feat: upgrade to eslint 6 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli`
+  * [#4827](https://github.com/vuejs/vue-cli/pull/4827) feat: respect existing package.json ([@zyy7259](https://github.com/zyy7259))
+* `@vue/babel-preset-app`
+  * [#4959](https://github.com/vuejs/vue-cli/pull/4959) feat: specify babel runtime version ([@zyy7259](https://github.com/zyy7259))
+* `@vue/cli-service-global`
+  * [#5029](https://github.com/vuejs/vue-cli/pull/5029) feat: don't throw on console/debugger statements for `vue serve` ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`, `@vue/cli`
+  * [#5150](https://github.com/vuejs/vue-cli/pull/5150) fix: should infer package manager from config if there's no lockfile in the project ([@sodatea](https://github.com/sodatea))
+  * [#5045](https://github.com/vuejs/vue-cli/pull/5045) refactor: use a plain http request to get package metadata ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5142](https://github.com/vuejs/vue-cli/pull/5142) fix(cors): fixup #4985, allow same-origin ws requests of any domain ([@sodatea](https://github.com/sodatea))
+  * [#5062](https://github.com/vuejs/vue-cli/pull/5062) fix `afterInvoke`/`onCreateComplete` callbacks in Migrator ([@sodatea](https://github.com/sodatea))
+  * [#5038](https://github.com/vuejs/vue-cli/pull/5038) fix: extendPackage object values should be string ([@pksunkara](https://github.com/pksunkara))
+* `@vue/cli-ui`, `@vue/cli`
+  * [#4985](https://github.com/vuejs/vue-cli/pull/4985) fix(CORS): only allow connections from the designated host ([@Akryum](https://github.com/Akryum))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#5108](https://github.com/vuejs/vue-cli/pull/5108) fix(e2e-cypress): make --headless work with --browser chrome ([@LinusBorg](https://github.com/LinusBorg))
+  * [#4910](https://github.com/vuejs/vue-cli/pull/4910) fix: comment eslint disable in cypress config ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli-service`
+  * [#5113](https://github.com/vuejs/vue-cli/pull/5113) fix: correctly calculate cacheIdentifier from lockfiles ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-pwa`
+  * [#5089](https://github.com/vuejs/vue-cli/pull/5089) fix: pwa-plugin avoid generating manifest when path is an URL ([@tkint](https://github.com/tkint))
+* `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`
+  * [#5028](https://github.com/vuejs/vue-cli/pull/5028) fix applyESLint when eslint plugin is added after unit test plugins ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-test-utils`
+  * [#5069](https://github.com/vuejs/vue-cli/pull/5069) Use a single websocket connection for HMR ([@lbogdan](https://github.com/lbogdan))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#5016](https://github.com/vuejs/vue-cli/pull/5016) fix(e2e-nightwatch): check for correct flag name ([@LinusBorg](https://github.com/LinusBorg))
+
+#### :memo: Documentation
+* [#5019](https://github.com/vuejs/vue-cli/pull/5019) Updated zh-cn translation in cli section ([@mactanxin](https://github.com/mactanxin))
+
+#### :house: Internal
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`
+  * [#5133](https://github.com/vuejs/vue-cli/pull/5133) refactor: remove usage of deprecated babel functions, preparing for babel 8 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5123](https://github.com/vuejs/vue-cli/pull/5123) fix: vue-template-compiler can be optional if @vue/compiler-sfc presents ([@sodatea](https://github.com/sodatea))
+  * [#5060](https://github.com/vuejs/vue-cli/pull/5060) refactor: use the `title` option in the html template, instead of hard-code the project name ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5110](https://github.com/vuejs/vue-cli/pull/5110) refactor: use env variables to set registry for package managers ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-shared-utils`
+  * [#5092](https://github.com/vuejs/vue-cli/pull/5092) refactor: use createRequire to load/resolve modules ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#4991](https://github.com/vuejs/vue-cli/pull/4991) 🎨 style: unified components' naming style ([@taoweicn](https://github.com/taoweicn))
+
+#### Committers: 17
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Bogdan Luca ([@lbogdan](https://github.com/lbogdan))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Dan Hogan ([@danhogan](https://github.com/danhogan))
+- Daniel Bächtold ([@danbaechtold](https://github.com/danbaechtold))
+- Eduardo San Martin Morote ([@posva](https://github.com/posva))
+- Guillaume Chau ([@Akryum](https://github.com/Akryum))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Marcel Lindig ([@nullpilot](https://github.com/nullpilot))
+- Maël Nison ([@arcanis](https://github.com/arcanis))
+- Pavan Kumar Sunkara ([@pksunkara](https://github.com/pksunkara))
+- Tao Wei ([@taoweicn](https://github.com/taoweicn))
+- Thomas Kint ([@tkint](https://github.com/tkint))
+- Thorsten Lünborg ([@LinusBorg](https://github.com/LinusBorg))
+- Xin Tan ([@mactanxin](https://github.com/mactanxin))
+- Yingya Zhang ([@zyy7259](https://github.com/zyy7259))
+- plantainX ([@cheqianxiao](https://github.com/cheqianxiao))
+
+
+
 ## 4.1.2 (2019-12-28)
 
 #### :bug: Bug Fix
