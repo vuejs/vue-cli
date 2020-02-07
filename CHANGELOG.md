@@ -12,10 +12,10 @@
   * [#5128](https://github.com/vuejs/vue-cli/pull/5128) feat: upgrade to typescript@~3.7.5 ([@sodatea](https://github.com/sodatea))
 * `@vue/cli`
   * [#5091](https://github.com/vuejs/vue-cli/pull/5091) feat: `vue upgrade` monorepo support,  `--from` option, and a new `vue migrate --from` command ([@sodatea](https://github.com/sodatea))
-  * [#4828](https://github.com/vuejs/vue-cli/pull/4828) feat: add option merge to command create ([@zyy7259](https://github.com/zyy7259))
+  * [#4828](https://github.com/vuejs/vue-cli/pull/4828) feat: add option `--merge` to `create` command ([@zyy7259](https://github.com/zyy7259))
 * `@vue/cli-service`
   * [#4953](https://github.com/vuejs/vue-cli/pull/4953) feat: adds transparent PnP support to Webpack ([@arcanis](https://github.com/arcanis))
-  * [#2411](https://github.com/vuejs/vue-cli/pull/2411) feat(cli): add stdin flag to serve ([@nullpilot](https://github.com/nullpilot))
+  * [#2411](https://github.com/vuejs/vue-cli/pull/2411) feat(cli): add `--stdin` flag to serve ([@nullpilot](https://github.com/nullpilot))
 * `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`, `@vue/cli`
   * [#4933](https://github.com/vuejs/vue-cli/pull/4933) feat: upgrade to eslint 6 ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli`
@@ -30,13 +30,13 @@
   * [#5150](https://github.com/vuejs/vue-cli/pull/5150) fix: should infer package manager from config if there's no lockfile in the project ([@sodatea](https://github.com/sodatea))
   * [#5045](https://github.com/vuejs/vue-cli/pull/5045) refactor: use a plain http request to get package metadata ([@sodatea](https://github.com/sodatea))
 * `@vue/cli`
-  * [#5142](https://github.com/vuejs/vue-cli/pull/5142) fix(cors): fixup #4985, allow same-origin ws requests of any domain ([@sodatea](https://github.com/sodatea))
   * [#5062](https://github.com/vuejs/vue-cli/pull/5062) fix `afterInvoke`/`onCreateComplete` callbacks in Migrator ([@sodatea](https://github.com/sodatea))
-  * [#5038](https://github.com/vuejs/vue-cli/pull/5038) fix: extendPackage object values should be string ([@pksunkara](https://github.com/pksunkara))
+  * [#5038](https://github.com/vuejs/vue-cli/pull/5038) fix: `extendPackage` dependency versions should be string ([@pksunkara](https://github.com/pksunkara))
 * `@vue/cli-ui`, `@vue/cli`
   * [#4985](https://github.com/vuejs/vue-cli/pull/4985) fix(CORS): only allow connections from the designated host ([@Akryum](https://github.com/Akryum))
+  * [#5142](https://github.com/vuejs/vue-cli/pull/5142) fix(CORS): fixup #4985, allow same-origin ws requests of any domain ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-plugin-e2e-cypress`
-  * [#5108](https://github.com/vuejs/vue-cli/pull/5108) fix(e2e-cypress): make --headless work with --browser chrome ([@LinusBorg](https://github.com/LinusBorg))
+  * [#5108](https://github.com/vuejs/vue-cli/pull/5108) fix(e2e-cypress): make `--headless` work with `--browser chrome` ([@LinusBorg](https://github.com/LinusBorg))
   * [#4910](https://github.com/vuejs/vue-cli/pull/4910) fix: comment eslint disable in cypress config ([@cexbrayat](https://github.com/cexbrayat))
 * `@vue/cli-service`
   * [#5113](https://github.com/vuejs/vue-cli/pull/5113) fix: correctly calculate cacheIdentifier from lockfiles ([@sodatea](https://github.com/sodatea))
@@ -56,12 +56,12 @@
 * `@vue/babel-preset-app`, `@vue/cli-plugin-babel`
   * [#5133](https://github.com/vuejs/vue-cli/pull/5133) refactor: remove usage of deprecated babel functions, preparing for babel 8 ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-service`
-  * [#5123](https://github.com/vuejs/vue-cli/pull/5123) fix: vue-template-compiler can be optional if @vue/compiler-sfc presents ([@sodatea](https://github.com/sodatea))
+  * [#5123](https://github.com/vuejs/vue-cli/pull/5123) fix: `vue-template-compiler` can be optional if `@vue/compiler-sfc` presents ([@sodatea](https://github.com/sodatea))
   * [#5060](https://github.com/vuejs/vue-cli/pull/5060) refactor: use the `title` option in the html template, instead of hard-code the project name ([@sodatea](https://github.com/sodatea))
 * `@vue/cli`
   * [#5110](https://github.com/vuejs/vue-cli/pull/5110) refactor: use env variables to set registry for package managers ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-shared-utils`
-  * [#5092](https://github.com/vuejs/vue-cli/pull/5092) refactor: use createRequire to load/resolve modules ([@sodatea](https://github.com/sodatea))
+  * [#5092](https://github.com/vuejs/vue-cli/pull/5092) refactor: use `createRequire` to load/resolve modules ([@sodatea](https://github.com/sodatea))
 * `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-service`
   * [#4991](https://github.com/vuejs/vue-cli/pull/4991) 🎨 style: unified components' naming style ([@taoweicn](https://github.com/taoweicn))
 
