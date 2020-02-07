@@ -5,7 +5,7 @@ module.exports = (api, _, __, invoking) => {
 
   api.extendPackage({
     devDependencies: {
-      '@vue/test-utils': '1.0.0-beta.29',
+      '@vue/test-utils': '1.0.0-beta.31',
       'chai': '^4.1.2'
     },
     scripts: {
@@ -15,18 +15,6 @@ module.exports = (api, _, __, invoking) => {
 
   if (api.hasPlugin('eslint')) {
     applyESLint(api)
-    api.extendPackage({
-      eslintConfig: {
-        overrides: [
-          {
-            files: ['**/__tests__/*.{j,t}s?(x)'],
-            env: {
-              mocha: true
-            }
-          }
-        ]
-      }
-    })
   }
 
   if (api.hasPlugin('typescript')) {
@@ -35,10 +23,20 @@ module.exports = (api, _, __, invoking) => {
 }
 
 const applyESLint = module.exports.applyESLint = api => {
-  api.render(files => {
-    files['tests/unit/.eslintrc.js'] = api.genJSConfig({
-      env: { mocha: true }
-    })
+  api.extendPackage({
+    eslintConfig: {
+      overrides: [
+        {
+          files: [
+            '**/__tests__/*.{j,t}s?(x)',
+            '**/tests/unit/**/*.spec.{j,t}s?(x)'
+          ],
+          env: {
+            mocha: true
+          }
+        }
+      ]
+    }
   })
 }
 
@@ -46,7 +44,7 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     devDependencies: {
       '@types/mocha': '^5.2.4',
-      '@types/chai': '^4.2.5'
+      '@types/chai': '^4.2.8'
     }
   })
   // inject mocha/chai types to tsconfig.json

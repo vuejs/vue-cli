@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-cypress",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "description": "e2e-cypress plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,9 +23,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^4.1.2",
-    "cypress": "^3.3.1",
-    "eslint-plugin-cypress": "^2.7.0"
+    "@vue/cli-shared-utils": "^4.2.0",
+    "cypress": "^3.8.3",
+    "eslint-plugin-cypress": "^2.8.1"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0"

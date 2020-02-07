@@ -20,7 +20,7 @@ fs.ensureDirSync(rootFolder)
 
 /** @type {Map<string, Map<string, SharedData>>} */
 const sharedData = new Map()
-let watchers = new Map()
+const watchers = new Map()
 
 function get ({ id, projectId }, context) {
   const store = sharedData.get(projectId)

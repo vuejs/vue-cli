@@ -1,3 +1,5 @@
+const pluginDevDeps = require('../package.json').devDependencies
+
 module.exports = (api, {
   classComponent,
   tsLint,
@@ -11,15 +13,15 @@ module.exports = (api, {
 
   api.extendPackage({
     devDependencies: {
-      typescript: '~3.5.3'
+      typescript: pluginDevDeps.typescript
     }
   })
 
   if (classComponent) {
     api.extendPackage({
       dependencies: {
-        'vue-class-component': '^7.0.2',
-        'vue-property-decorator': '^8.3.0'
+        'vue-class-component': pluginDevDeps['vue-class-component'],
+        'vue-property-decorator': pluginDevDeps['vue-property-decorator']
       }
     })
   }

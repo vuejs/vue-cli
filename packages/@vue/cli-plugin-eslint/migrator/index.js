@@ -1,26 +1,74 @@
-module.exports = (api) => {
+const inquirer = require('inquirer')
+const { semver } = require('@vue/cli-shared-utils')
+
+module.exports = async (api) => {
+  const pkg = require(api.resolve('package.json'))
+
+  let localESLintRange = pkg.devDependencies.eslint
+
   // if project is scaffolded by Vue CLI 3.0.x or earlier,
   // the ESLint dependency (ESLint v4) is inside @vue/cli-plugin-eslint;
   // in Vue CLI v4 it should be extracted to the project dependency list.
-  if (api.fromVersion('^3')) {
-    const pkg = require(api.resolve('package.json'))
-    const hasESLint = [
-      'dependencies',
-      'devDependencies',
-      'peerDependencies',
-      'optionalDependencies'
-    ].some(depType =>
-      Object.keys(pkg[depType] || {}).includes('eslint')
-    )
+  if (api.fromVersion('^3') && !localESLintRange) {
+    localESLintRange = '^4.19.1'
+    api.extendPackage({
+      devDependencies: {
+        eslint: localESLintRange,
+        'babel-eslint': '^8.2.5',
+        'eslint-plugin-vue': '^4.5.0'
+      }
+    })
+  }
 
-    if (!hasESLint) {
+  const localESLintMajor = semver.major(
+    semver.maxSatisfying(
+      ['4.99.0', '5.99.0', '6.99.0'],
+      localESLintRange
+    )
+  )
+
+  if (localESLintMajor === 6) {
+    return
+  }
+
+  const { confirmUpgrade } = await inquirer.prompt([{
+    name: 'confirmUpgrade',
+    type: 'confirm',
+    message:
+    `Your current ESLint version is v${localESLintMajor}.\n` +
+    `The lastest major version is v6.\n` +
+    `Do you want to upgrade? (May contain breaking changes)\n`
+  }])
+
+  if (confirmUpgrade) {
+    const { getDeps } = require('../eslintDeps')
+
+    const newDeps = getDeps(api)
+    if (pkg.devDependencies['@vue/eslint-config-airbnb']) {
+      Object.assign(newDeps, getDeps(api, 'airbnb'))
+    }
+    if (pkg.devDependencies['@vue/eslint-config-standard']) {
+      Object.assign(newDeps, getDeps(api, 'standard'))
+    }
+    if (pkg.devDependencies['@vue/eslint-config-prettier']) {
+      Object.assign(newDeps, getDeps(api, 'prettier'))
+    }
+
+    api.extendPackage({ devDependencies: newDeps }, { warnIncompatibleVersions: false })
+
+    // in case anyone's upgrading from the legacy `typescript-eslint-parser`
+    if (api.hasPlugin('typescript')) {
       api.extendPackage({
-        devDependencies: {
-          eslint: '^4.19.1'
+        eslintConfig: {
+          parserOptions: {
+            parser: '@typescript-eslint/parser'
+          }
         }
       })
     }
 
-    // TODO: add a prompt for users to optionally upgrade their eslint configs to a new major version
+    // TODO:
+    // transform `@vue/prettier` to `eslint:recommended` + `@vue/prettier`
+    // transform `@vue/typescript` to `@vue/typescript/recommended` and also fix prettier compatibility for it
   }
 }

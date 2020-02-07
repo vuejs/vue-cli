@@ -6,14 +6,14 @@ module.exports = class Migrator extends Generator {
     plugin,
 
     pkg = {},
-    completeCbs = [],
+    afterInvokeCbs = [],
     files = {},
     invoking = false
   } = {}) {
     super(context, {
       pkg,
       plugins: [],
-      completeCbs,
+      afterInvokeCbs,
       files,
       invoking
     })
@@ -22,13 +22,13 @@ module.exports = class Migrator extends Generator {
     this.invoking = invoking
   }
 
-  async generate () {
+  async generate (...args) {
     const plugin = this.migratorPlugin
 
     // apply migrators from plugins
     const api = new MigratorAPI(
       plugin.id,
-      plugin.installed,
+      plugin.baseVersion,
       this,
       plugin.options,
       this.rootOptions
@@ -36,6 +36,6 @@ module.exports = class Migrator extends Generator {
 
     await plugin.apply(api, plugin.options, this.rootOptions, this.invoking)
 
-    await super.generate()
+    await super.generate(...args)
   }
 }

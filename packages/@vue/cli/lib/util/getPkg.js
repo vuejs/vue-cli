@@ -1,7 +1,10 @@
+// Get the package.json containing all the `vue-cli-pluin-*` dependencies
+// See issue #1815
+
 const fs = require('fs')
 const path = require('path')
 
-module.exports = function getPackageJson (projectPath) {
+function getPackageJson (projectPath) {
   const packagePath = path.join(projectPath, 'package.json')
 
   let packageJson
@@ -18,4 +21,12 @@ module.exports = function getPackageJson (projectPath) {
   }
 
   return packageJson
+}
+
+module.exports = function getPkg (context) {
+  const pkg = getPackageJson(context)
+  if (pkg.vuePlugins && pkg.vuePlugins.resolveFrom) {
+    return getPackageJson(path.resolve(context, pkg.vuePlugins.resolveFrom))
+  }
+  return pkg
 }

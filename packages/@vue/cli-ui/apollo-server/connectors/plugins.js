@@ -49,9 +49,9 @@ const logoCache = new LRU({
 let currentPluginId
 let eventsInstalled = false
 let installationStep
-let pluginsStore = new Map()
-let pluginApiInstances = new Map()
-let pkgStore = new Map()
+const pluginsStore = new Map()
+const pluginApiInstances = new Map()
+const pkgStore = new Map()
 
 async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
   let pkg = folders.readPackage(file, context)
@@ -337,7 +337,7 @@ function install (id, context) {
     installationStep = 'config'
 
     notify({
-      title: `Plugin installed`,
+      title: 'Plugin installed',
       message: `Plugin ${id} installed, next step is configuration`,
       icon: 'done'
     })
@@ -389,7 +389,7 @@ function installLocal (context) {
     installationStep = 'config'
 
     notify({
-      title: `Plugin installed`,
+      title: 'Plugin installed',
       message: `Plugin ${id} installed, next step is configuration`,
       icon: 'done'
     })
@@ -416,7 +416,7 @@ function uninstall (id, context) {
     installationStep = null
 
     notify({
-      title: `Plugin uninstalled`,
+      title: 'Plugin uninstalled',
       message: `Plugin ${id} uninstalled`,
       icon: 'done'
     })
@@ -476,7 +476,7 @@ function runInvoke (id, context) {
     installationStep = 'diff'
 
     notify({
-      title: `Plugin invoked successfully`,
+      title: 'Plugin invoked successfully',
       message: `Plugin ${id} invoked successfully`,
       icon: 'done'
     })
@@ -528,7 +528,7 @@ function update ({ id, full }, context) {
     }, context)
 
     notify({
-      title: `Plugin updated`,
+      title: 'Plugin updated',
       message: `Plugin ${id} was successfully updated`,
       icon: 'done'
     })
@@ -559,7 +559,7 @@ async function updateLocalPackage ({ id, cwd, localPath, full = true }, context)
 async function updateAll (context) {
   return progress.wrap('plugins-update', context, async setProgress => {
     const plugins = await list(cwd.get(), context, { resetApi: false })
-    let updatedPlugins = []
+    const updatedPlugins = []
     for (const plugin of plugins) {
       const version = await dependencies.getVersion(plugin, context)
       if (version.current !== version.wanted) {
@@ -570,8 +570,8 @@ async function updateAll (context) {
 
     if (!updatedPlugins.length) {
       notify({
-        title: `No updates available`,
-        message: `No plugin to update in the version ranges declared in package.json`,
+        title: 'No updates available',
+        message: 'No plugin to update in the version ranges declared in package.json',
         icon: 'done'
       })
       return []
@@ -586,7 +586,7 @@ async function updateAll (context) {
     await pm.upgrade(updatedPlugins.map(p => p.id).join(' '))
 
     notify({
-      title: `Plugins updated`,
+      title: 'Plugins updated',
       message: `${updatedPlugins.length} plugin(s) were successfully updated`,
       icon: 'done'
     })

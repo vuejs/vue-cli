@@ -16,8 +16,8 @@ export default {
 
   sharedData () {
     return {
-      serveUrl: `org.vue.webpack.serve-url`,
-      modernMode: `org.vue.webpack.modern-mode`
+      serveUrl: 'org.vue.webpack.serve-url',
+      modernMode: 'org.vue.webpack.modern-mode'
     }
   },
 

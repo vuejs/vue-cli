@@ -199,13 +199,10 @@ class PluginAPI {
       }
     }
 
-    for (const file of configFiles) {
+    variables.configFiles = configFiles.map(file => {
       const content = readConfig(file)
-      if (content) {
-        variables.configFiles = content.replace(/\r\n?/g, '\n')
-        break
-      }
-    }
+      return content && content.replace(/\r\n?/g, '\n')
+    })
 
     const cacheIdentifier = hash(variables)
     return { cacheDirectory, cacheIdentifier }

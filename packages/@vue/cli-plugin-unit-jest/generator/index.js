@@ -8,7 +8,7 @@ module.exports = (api, _, __, invoking) => {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
-      '@vue/test-utils': '1.0.0-beta.29'
+      '@vue/test-utils': '1.0.0-beta.31'
     },
     jest: {
       preset: api.hasPlugin('babel')
@@ -18,26 +18,30 @@ module.exports = (api, _, __, invoking) => {
   })
 
   if (api.hasPlugin('eslint')) {
-    api.extendPackage({
-      eslintConfig: {
-        overrides: [
-          {
-            files: [
-              '**/__tests__/*.{j,t}s?(x)',
-              '**/tests/unit/**/*.spec.{j,t}s?(x)'
-            ],
-            env: {
-              jest: true
-            }
-          }
-        ]
-      }
-    })
+    applyESLint(api)
   }
 
   if (api.hasPlugin('typescript')) {
     applyTS(api, invoking)
   }
+}
+
+const applyESLint = module.exports.applyESLint = api => {
+  api.extendPackage({
+    eslintConfig: {
+      overrides: [
+        {
+          files: [
+            '**/__tests__/*.{j,t}s?(x)',
+            '**/tests/unit/**/*.spec.{j,t}s?(x)'
+          ],
+          env: {
+            jest: true
+          }
+        }
+      ]
+    }
+  })
 }
 
 const applyTS = (module.exports.applyTS = (api, invoking) => {

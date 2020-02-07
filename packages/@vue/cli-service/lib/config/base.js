@@ -17,7 +17,7 @@ module.exports = (api, options) => {
         limit: inlineLimit,
         // use explicit fallback to avoid regression in url-loader>=1.1.0
         fallback: {
-          loader: 'file-loader',
+          loader: require.resolve('file-loader'),
           options: {
             name: genAssetSubPath(dir)
           }
@@ -37,6 +37,10 @@ module.exports = (api, options) => {
         .publicPath(options.publicPath)
 
     webpackConfig.resolve
+      // This plugin can be removed once we switch to Webpack 6
+      .plugin('pnp')
+        .use({ ...require('pnp-webpack-plugin') })
+        .end()
       .extensions
         .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
         .end()
@@ -55,6 +59,9 @@ module.exports = (api, options) => {
         )
 
     webpackConfig.resolveLoader
+      .plugin('pnp-loaders')
+        .use({ ...require('pnp-webpack-plugin').topLevelLoader })
+        .end()
       .modules
         .add('node_modules')
         .add(api.resolve('node_modules'))
@@ -66,12 +73,21 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-    const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-      'vue-loader': require('vue-loader/package.json').version,
-      /* eslint-disable-next-line node/no-extraneous-require */
-      '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
-      'vue-template-compiler': require('vue-template-compiler/package.json').version
-    })
+    const vueLoaderCacheIdentifier = {
+      'vue-loader': require('vue-loader/package.json').version
+    }
+
+    // The following 2 deps are sure to exist in Vue 2 projects.
+    // But once we switch to Vue 3, they're no longer mandatory.
+    // (In Vue 3 they are replaced by @vue/compiler-sfc)
+    // So wrap them in a try catch block.
+    try {
+      vueLoaderCacheIdentifier['@vue/component-compiler-utils'] =
+        require('@vue/component-compiler-utils/package.json').version
+      vueLoaderCacheIdentifier['vue-template-compiler'] =
+        require('vue-template-compiler/package.json').version
+    } catch (e) {}
+    const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', vueLoaderCacheIdentifier)
 
     webpackConfig.module
       .rule('vue')
