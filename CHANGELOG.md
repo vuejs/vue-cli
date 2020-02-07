@@ -1,7 +1,8 @@
+## 4.2.2 (2020-02-07)
 
-
-
-
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [0d0168b](https://github.com/vuejs/vue-cli/commit/0d0168b) fix(ui): fix the incorrect RegExp used for CORS check ([@sodatea](https://github.com/sodatea))
 
 ## 4.2.1 (2020-02-07)
 
