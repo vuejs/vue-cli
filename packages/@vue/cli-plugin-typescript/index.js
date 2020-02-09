@@ -76,9 +76,17 @@ module.exports = (api, projectOptions) => {
       return options
     })
 
-    if (!process.env.VUE_CLI_TEST) {
+    let isUsingNextCompiler = true
+    try {
+      require('@vue/compiler-sfc')
+    } catch (e) {
+      isUsingNextCompiler = false
+    }
+    if (!process.env.VUE_CLI_TEST && !isUsingNextCompiler) {
       // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
       // so temporarily disabled for vue-cli tests
+      // it also does not play well with `@vue/compiler-sfc`
+      // so we also disable it if the project is built with Vue 3
       config
         .plugin('fork-ts-checker')
           .use(require('fork-ts-checker-webpack-plugin'), [{
