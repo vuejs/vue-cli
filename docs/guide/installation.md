@@ -27,7 +27,7 @@ vue --version
 
 ### Upgrading
 
-To upgrade the global Vue CLI package run:
+To upgrade the global Vue CLI package, you need to run:
 
 ``` bash
 npm update -g @vue/cli
