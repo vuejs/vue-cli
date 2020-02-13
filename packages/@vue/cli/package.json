@@ -33,7 +33,6 @@
     "commander": "^2.20.0",
     "debug": "^4.1.0",
     "deepmerge": "^4.2.2",
-    "didyoumean": "^1.2.1",
     "download-git-repo": "^1.0.2",
     "ejs": "^2.7.1",
     "envinfo": "^7.5.0",
