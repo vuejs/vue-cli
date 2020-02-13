@@ -257,9 +257,9 @@ if (!process.argv.slice(2).length) {
 
 function suggestCommands (unknownCommand) {
   const availableCommands = program.commands.map(cmd => cmd._name)
-  
+
   let suggestion
-  
+
   availableCommands.forEach(cmd => {
     if (leven(cmd, unknownCommand) < 3) {
       suggestion = cmd
