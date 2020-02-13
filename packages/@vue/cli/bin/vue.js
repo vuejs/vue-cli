@@ -257,10 +257,15 @@ if (!process.argv.slice(2).length) {
 
 function suggestCommands (unknownCommand) {
   const availableCommands = program.commands.map(cmd => cmd._name)
-
-  const suggestion = availableCommands.find(cmd => {
-    return leven(cmd, unknownCommand) < 3
+  
+  let suggestion
+  
+  availableCommands.forEach(cmd => {
+    if (leven(cmd, unknownCommand) < 3) {
+      suggestion = cmd
+    }
   })
+
   if (suggestion) {
     console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
   }
