@@ -261,7 +261,8 @@ function suggestCommands (unknownCommand) {
   let suggestion
 
   availableCommands.forEach(cmd => {
-    if (leven(cmd, unknownCommand) < 3) {
+    const isBestMatch = leven(cmd, unknownCommand) < leven(suggestion || '', unknownCommand)
+    if (leven(cmd, unknownCommand) < 3 && isBestMatch) {
       suggestion = cmd
     }
   })
