@@ -24,3 +24,32 @@ You can check you have the right version with this command:
 ```bash
 vue --version
 ```
+
+### Upgrading
+
+To upgrade the global Vue CLI package, you need to run:
+
+``` bash
+npm update -g @vue/cli
+
+# OR
+yarn global upgrade --latest @vue/cli
+```
+
+#### Project Dependencies
+
+Upgrade commands shown above apply to the global Vue CLI installation. To upgrade one or more `@vue/cli` related packages (including packages starting with `@vue/cli-plugin-`) inside your project, run `vue upgrade` inside the project directory:
+
+```
+Usage: upgrade [options] [plugin-name]
+
+(experimental) upgrade vue cli service / plugins
+
+Options:
+  -t, --to <version>    Upgrade <package-name> to a version that is not latest
+  -f, --from <version>  Skip probing installed plugin, assuming it is upgraded from the designated version
+  -r, --registry <url>  Use specified npm registry when installing dependencies
+  --all                 Upgrade all plugins
+  --next                Also check for alpha / beta / rc versions when upgrading
+  -h, --help            output usage information
+```
