@@ -13,7 +13,7 @@ test('cypress', async () => {
       check: [0]
     },
     {
-      message: 'Pick a E2E testing solution',
+      message: 'Pick an E2E testing solution',
       choices: ['Cypress', 'Nightwatch'],
       choose: 0
     }
@@ -41,7 +41,7 @@ test('nightwatch', async () => {
       check: [0]
     },
     {
-      message: 'Pick a E2E testing solution',
+      message: 'Pick an E2E testing solution',
       choices: ['Cypress', 'Nightwatch'],
       choose: 1
     },
