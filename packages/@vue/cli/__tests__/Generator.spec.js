@@ -457,6 +457,9 @@ test('api: extendPackage + { prune: true }', async () => {
 
   await generator.generate()
 
+  // should not warn about the null versions
+  expect(logs.warn.length).toBe(0)
+
   const pkg = JSON.parse(fs.readFileSync('/package.json', 'utf-8'))
   expect(pkg).toEqual({
     version: '0.0.0',
