@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -35,7 +35,7 @@
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^4.2.2",
+    "@vue/cli-shared-utils": "^4.2.3",
     "apollo-server-express": "^2.9.6",
     "clone": "^2.1.1",
     "deepmerge": "^4.2.2",
@@ -65,10 +65,10 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.2.2",
-    "@vue/cli-plugin-e2e-cypress": "^4.2.2",
-    "@vue/cli-plugin-eslint": "^4.2.2",
-    "@vue/cli-service": "^4.2.2",
+    "@vue/cli-plugin-babel": "^4.2.3",
+    "@vue/cli-plugin-e2e-cypress": "^4.2.3",
+    "@vue/cli-plugin-eslint": "^4.2.3",
+    "@vue/cli-service": "^4.2.3",
     "@vue/eslint-config-standard": "^5.1.0",
     "@vue/ui": "^0.9.2",
     "ansi_up": "^3.0.0",
