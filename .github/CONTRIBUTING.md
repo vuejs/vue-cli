@@ -1,3 +1,5 @@
+# Contributing to Vue CLI
+
 ## Workflow
 
 The Git workflow used in this project is largely inspired by [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
@@ -66,4 +68,4 @@ Note that `jest --onlyChanged` isn't always accurate because some tests spawn ch
 
 ### Plugin Development
 
-See [dedicated section in docs](https://github.com/vuejs/vue-cli/blob/dev/docs/dev-guide/plugin-dev.md).
+See [dedicated section in docs](https://cli.vuejs.org/dev-guide/plugin-dev.html).
