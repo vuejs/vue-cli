@@ -5,10 +5,7 @@
 
 const { chalk, semver } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
-const didYouMean = require('didyoumean')
-
-// Setting edit distance to 60% of the input string's length
-didYouMean.threshold = 0.6
+const leven = require('leven')
 
 function checkNodeVersion (wanted, id) {
   if (!semver.satisfies(process.version, wanted)) {
@@ -261,7 +258,15 @@ if (!process.argv.slice(2).length) {
 function suggestCommands (unknownCommand) {
   const availableCommands = program.commands.map(cmd => cmd._name)
 
-  const suggestion = didYouMean(unknownCommand, availableCommands)
+  let suggestion
+
+  availableCommands.forEach(cmd => {
+    const isBestMatch = leven(cmd, unknownCommand) < leven(suggestion || '', unknownCommand)
+    if (leven(cmd, unknownCommand) < 3 && isBestMatch) {
+      suggestion = cmd
+    }
+  })
+
   if (suggestion) {
     console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
   }

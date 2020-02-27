@@ -281,7 +281,7 @@ now
 
 你的站点会开始部署，你将获得一个形如 [https://vue.now-examples.now.sh/](https://vue.now-examples.now.sh/) 的链接。
 
-开箱即用地，请求会被自动改写到 `index.html` (除了自定义的静态文件) 并带有合适的缓存请求头。你可以[改写](https://zeit.co/docs/v2/advanced/routes/)这些规则。
+开箱即用地，请求会被自动改写到 `index.html` (除了自定义的静态文件) 并带有合适的缓存请求头。
 
 ### Stdlib
 

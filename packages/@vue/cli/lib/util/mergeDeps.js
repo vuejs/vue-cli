@@ -42,6 +42,7 @@ module.exports = function mergeDeps (
 
     if (prune && injectingRange == null) {
       delete result[depName]
+      continue
     }
 
     if (!isValidRange(injectingRange)) {
