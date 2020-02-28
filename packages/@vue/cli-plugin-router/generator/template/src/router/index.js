@@ -6,6 +6,8 @@ import VueRouter from 'vue-router'
 <%_ } _%>
 import Home from '../views/Home.vue'
 
+Vue.use(VueRouter)
+
 <%_ if (hasTypeScript) { _%>
   const routes: Array<RouteConfig> = [
 <%_ } else { _%>
@@ -31,8 +33,6 @@ import Home from '../views/Home.vue'
     <%_ } _%>
   }
 ]
-
-Vue.use(VueRouter)
 
 const router = new VueRouter({
   <%_ if (historyMode) { _%>
