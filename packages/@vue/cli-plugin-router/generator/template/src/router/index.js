@@ -7,7 +7,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
 <%_ if (hasTypeScript) { _%>
-  const routes = <Array<RouteConfig>>[
+  const routes: Array<RouteConfig> = [
 <%_ } else { _%>
   const routes = [
 <%_ } _%>
