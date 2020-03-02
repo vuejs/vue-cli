@@ -1,14 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
-const readPkg = require('read-pkg')
 const merge = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { chalk, warn, error, isPlugin, resolvePluginId, loadModule } = require('@vue/cli-shared-utils')
+const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 
@@ -44,16 +43,13 @@ module.exports = class Service {
   resolvePkg (inlinePkg, context = this.context) {
     if (inlinePkg) {
       return inlinePkg
-    } else if (fs.existsSync(path.join(context, 'package.json'))) {
-      const pkg = readPkg.sync({ cwd: context })
-      if (pkg.vuePlugins && pkg.vuePlugins.resolveFrom) {
-        this.pkgContext = path.resolve(context, pkg.vuePlugins.resolveFrom)
-        return this.resolvePkg(null, this.pkgContext)
-      }
-      return pkg
-    } else {
-      return {}
     }
+    const pkg = resolvePkg(context)
+    if (pkg.vuePlugins && pkg.vuePlugins.resolveFrom) {
+      this.pkgContext = path.resolve(context, pkg.vuePlugins.resolveFrom)
+      return this.resolvePkg(null, this.pkgContext)
+    }
+    return pkg
   }
 
   init (mode = process.env.VUE_CLI_MODE) {

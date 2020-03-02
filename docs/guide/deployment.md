@@ -90,7 +90,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 3. Generate a GitHub [access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
    with repo permissions.
 
-4. Grant the Travis job access to your repository: `travis set GITHUB_TOKEN=xxx`
+4. Grant the Travis job access to your repository: `travis env set GITHUB_TOKEN xxx`
    (`xxx` is the personal access token from step 3.)
 
 5. Create a `.travis.yml` file in the root of your project.

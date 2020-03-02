@@ -180,3 +180,17 @@ test('dart sass', async () => {
   // should build successfully
   await project.run('vue-cli-service build')
 })
+
+test('use a single websocket connection for HMR', async () => {
+  const project = await create('e2e-serve-hmr', defaultPreset)
+
+  await serve(
+    () => project.run('vue-cli-service serve'),
+    async ({ helpers, requestUrls }) => {
+      const msg = `Welcome to Your Vue.js App`
+      expect(await helpers.getText('h1')).toMatch(msg)
+
+      expect(requestUrls.filter(url => url.includes('sockjs-node')).length).toBe(1)
+    }
+  )
+})

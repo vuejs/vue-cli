@@ -4,7 +4,7 @@ const channels = require('../channels')
 // Utils
 const { resolveModuleRoot } = require('../util/resolve-path')
 
-let addons = []
+const addons = []
 
 let baseUrl = process.env.VUE_APP_CLI_UI_URL
 if (typeof baseUrl === 'undefined') {

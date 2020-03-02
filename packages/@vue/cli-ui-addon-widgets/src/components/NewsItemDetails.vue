@@ -5,6 +5,7 @@
         <a
           :href="item.link"
           target="_blank"
+          rel="noopener noreferrer"
         >
           {{ item.title }}
         </a>

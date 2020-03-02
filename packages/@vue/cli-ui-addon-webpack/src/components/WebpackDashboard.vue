@@ -13,6 +13,7 @@
           :disabled="!serveUrl"
           :href="serveUrl"
           target="_blank"
+          rel="noopener noreferrer"
         />
         <VueIcon
           icon="lens"
@@ -49,7 +50,7 @@
     </div>
 
     <div class="logo">
-      <a href="https://webpack.js.org/" target="_blank">
+      <a href="https://webpack.js.org/" target="_blank" rel="noopener noreferrer">
         <img src="../assets/webpack.svg" class="webpack-logo">
       </a>
     </div>

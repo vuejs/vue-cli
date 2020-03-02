@@ -36,7 +36,7 @@ async function getDiffs (context) {
     cwd: cwd.get()
   })
   await reset(context)
-  let list = parseDiff(stdout)
+  const list = parseDiff(stdout)
   for (const n in list) {
     const fileDiff = list[n]
     const isNew = newFiles.includes(fileDiff.to)

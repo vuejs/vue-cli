@@ -1,3 +1,4 @@
+/* eslint-disable-next-line no-redeclare */
 /* global self */
 
 // This service worker file is effectively a 'no-op' that will reset any

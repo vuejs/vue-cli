@@ -5,7 +5,7 @@ const { defaults } = require('../lib/options')
 const assertPromptModule = require('@vue/cli-test-utils/assertPromptModule')
 
 test('default', async () => {
-  const epxectedPrompts = [
+  const expectedPrompts = [
     {
       message: 'pick a preset',
       choices: [
@@ -20,7 +20,7 @@ test('default', async () => {
       choose: 0
     }
   ]
-  await assertPromptModule([], epxectedPrompts, defaults.presets.default)
+  await assertPromptModule([], expectedPrompts, defaults.presets.default)
 })
 
 test('manual + PromptModuleAPI', async () => {
