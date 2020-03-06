@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
 
   var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
   if (src) {
-    __webpack_public_path__ = i[1] // eslint-disable-line
+    __webpack_public_path__ = src[1] // eslint-disable-line
   }
 }
 
