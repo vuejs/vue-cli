@@ -25,6 +25,7 @@
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
     "@soda/friendly-errors-webpack-plugin": "^1.7.1",
+    "@soda/get-current-script": "^1.0.0",
     "@vue/cli-overlay": "^4.2.3",
     "@vue/cli-plugin-router": "^4.2.3",
     "@vue/cli-plugin-vuex": "^4.2.3",
@@ -45,7 +46,6 @@
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
     "cssnano": "^4.1.10",
-    "current-script-polyfill": "^1.0.0",
     "debug": "^4.1.1",
     "default-gateway": "^5.0.5",
     "dotenv": "^8.2.0",

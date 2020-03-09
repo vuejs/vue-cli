@@ -3,7 +3,13 @@
 if (typeof window !== 'undefined') {
   var currentScript = window.document.currentScript
   if (process.env.NEED_CURRENTSCRIPT_POLYFILL) {
-    currentScript = currentScript || require('./getCurrentScript')()
+    const getCurrentScript = require('@soda/get-current-script')
+    currentScript = getCurrentScript()
+
+    // for backward compatibility, because previously we directly included the polyfill
+    if (!('currentScript' in document)) {
+      Object.defineProperty(document, 'currentScript', { get: getCurrentScript })
+    }
   }
 
   var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
