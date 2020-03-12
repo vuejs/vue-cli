@@ -12,7 +12,9 @@ if (!semver.satisfies(process.version, requiredVersion)) {
 }
 
 const Service = require('../lib/Service')
-const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
+const getGlobalParams = require('../lib/util/getGlobalParams')
+const context = process.env.VUE_CLI_CONTEXT || process.cwd()
+const service = new Service(context, getGlobalParams(context))
 
 const rawArgv = process.argv.slice(2)
 const args = require('minimist')(rawArgv, {
