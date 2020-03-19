@@ -16,7 +16,8 @@ module.exports = (api, options) => {
     },
     browserslist: [
       '> 1%',
-      'last 2 versions'
+      'last 2 versions',
+      'not dead'
     ]
   })
 
