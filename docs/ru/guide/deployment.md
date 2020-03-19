@@ -89,7 +89,7 @@ serve -s dist
 
 3. Сгенерируйте [токен доступа](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) на GitHub с правами доступа к репозиторию.
 
-4. Разрешите доступ Travis к репозиторию: `travis set GITHUB_TOKEN=xxx` (`xxx` — это персональный токен доступа из шага 3.)
+4. Разрешите доступ Travis к репозиторию: `travis env set GITHUB_TOKEN xxx` (`xxx` — это персональный токен доступа из шага 3.)
 
 5. Создайте файл `.travis.yml` в корневом каталоге проекта.
 
