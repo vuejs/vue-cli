@@ -300,10 +300,13 @@ module.exports = class Service {
 
   loadUserOptions () {
     // vue.config.js
+    // vue.config.cjs
     let fileConfig, pkgConfig, resolved, resolvedFrom
+    const jsConfigPath = path.resolve(this.context, 'vue.config.js')
+    const cjsConfigPath = path.resolve(this.context, 'vue.config.cjs')
     const configPath = (
       process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
-      path.resolve(this.context, 'vue.config.js')
+      (fs.existsSync(cjsConfigPath) ? cjsConfigPath : jsConfigPath)
     )
     if (fs.existsSync(configPath)) {
       try {
