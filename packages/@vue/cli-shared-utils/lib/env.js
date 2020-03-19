@@ -136,7 +136,7 @@ const _npmProjects = new LRU({
 })
 exports.hasProjectNpm = (cwd) => {
   if (_npmProjects.has(cwd)) {
-    return true
+    return _npmProjects.get(cwd)
   }
 
   const lockFile = path.join(cwd, 'package-lock.json')
