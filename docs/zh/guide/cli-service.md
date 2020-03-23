@@ -137,7 +137,7 @@ npx vue-cli-service help [command]
 ```
 
 ::: warning
-`yorkie` fork 自 [`husky`](https://github.com/typicode/husky) 且并与后者不兼容。
+`yorkie` fork 自 [`husky`](https://github.com/typicode/husky) 并且与后者不兼容。
 :::
 
 ## 配置时无需 Eject
