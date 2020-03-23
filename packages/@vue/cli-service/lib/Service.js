@@ -306,7 +306,7 @@ module.exports = class Service {
     const cjsConfigPath = path.resolve(this.context, 'vue.config.cjs')
     const configPath = (
       process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
-      (fs.existsSync(cjsConfigPath) ? cjsConfigPath : jsConfigPath)
+      (fs.existsSync(jsConfigPath) ? jsConfigPath : cjsConfigPath)
     )
     if (fs.existsSync(configPath)) {
       try {
