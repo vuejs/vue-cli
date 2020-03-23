@@ -3,7 +3,7 @@
 if (typeof window !== 'undefined') {
   var currentScript = window.document.currentScript
   if (process.env.NEED_CURRENTSCRIPT_POLYFILL) {
-    const getCurrentScript = require('@soda/get-current-script')
+    var getCurrentScript = require('@soda/get-current-script')
     currentScript = getCurrentScript()
 
     // for backward compatibility, because previously we directly included the polyfill
