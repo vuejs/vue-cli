@@ -377,3 +377,22 @@ test('api: hasPlugin', () => {
     }
   ])
 })
+
+test('load project options from vue.config.js', () => {
+  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue-plugins.config.js`
+  fs.writeFileSync('/vue-plugins.config.js', ' ')
+  jest.mock('/vue-plugins.config.js', () => ({
+    plugins: [
+      {
+        id: 'vue-cli-plugin-foo',
+        apply: api => {
+          expect(api.hasPlugin('foo')).toBe(true)
+        }
+      }
+    ]
+  }), { virtual: true })
+  const service = createMockService()
+  fs.unlinkSync('/vue-plugins.config.js')
+  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
+  expect(service.projectOptions.plugins).toBeUndefined()
+})
