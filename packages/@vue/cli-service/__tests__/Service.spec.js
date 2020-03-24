@@ -135,15 +135,6 @@ test('load project options from vue.config.js', () => {
   expect(service.projectOptions.lintOnSave).toBe(false)
 })
 
-
-test('load project options from vue.config.cjs', () => {
-  fs.writeFileSync('/vue.config.cjs', '')
-  const service = createMockService()
-  fs.unlinkSync('/vue.config.cjs')
-  expect(service.projectOptions.lintOnSave).toBe(true)
-})
-
-
 test('load project options from vue.config.js as a function', () => {
   jest.mock('/vue.config.js', () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
