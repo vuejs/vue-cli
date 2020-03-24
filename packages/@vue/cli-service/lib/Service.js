@@ -72,6 +72,28 @@ module.exports = class Service {
 
     debug('vue:project-config')(this.projectOptions)
 
+    if (this.projectOptions.plugins) {
+      const plugins = this.projectOptions.plugins || []
+      delete this.projectOptions.plugins
+      this.plugins = this.plugins.concat(plugins.map(id => {
+        if (id && typeof id === 'string') {
+          let apply = () => {}
+          try {
+            apply = require(id)
+          } catch (e) {
+            warn(`projectOptions.plugins ${id} is not installed.`)
+          }
+          return { id, apply }
+        }
+        return id
+      }))
+
+      // refresh
+      this.modes = this.plugins.reduce((modes, { apply: { defaultModes }}) => {
+        return Object.assign(modes, defaultModes)
+      }, {})
+    }
+
     // apply plugins.
     this.plugins.forEach(({ id, apply }) => {
       if (this.pluginsToSkip.has(id)) return
