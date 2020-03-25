@@ -156,7 +156,8 @@ let hasCheckedBrowsers = false
 function tryRun (cmd) {
   try {
     return execSync(cmd, {
-      stdio: [0, 'pipe', 'ignore']
+      stdio: [0, 'pipe', 'ignore'],
+      timeout: 10000
     }).toString().trim()
   } catch (e) {
     return ''
