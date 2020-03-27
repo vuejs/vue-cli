@@ -59,7 +59,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
             .add(entry)
 
         const babelOptions = {
-          presets: [require.resolve('@vue/babel-preset-app')]
+          presets: [require.resolve('@vue/cli-plugin-babel/preset')]
         }
 
         // set inline babel options
