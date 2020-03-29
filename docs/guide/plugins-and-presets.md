@@ -15,7 +15,7 @@ You can install and manage Plugins using the GUI with the `vue ui` command.
 Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:
 
 ``` bash
-vue add eslint
+vue add @vue/eslint
 ```
 
 ::: tip
