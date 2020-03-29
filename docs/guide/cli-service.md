@@ -2,7 +2,7 @@
 
 ## Using the Binary
 
-Inside a Vue CLI project, `@vue/cli-service` installs a binary named `vue-cli-service`. You can access the binary directly as `vue-cli-service` in npm scripts, or as `./node_modules/.bin/vue-cli-service` from the terminal.
+Inside a Vue CLI project, `@vue/cli-service` installs a binary named `vue-cli-service`. You can access the binary directly as `vue-cli-service` in npm scripts, or as `npx vue-cli-service` from the terminal.
 
 This is what you will see in the `package.json` of a project using the default preset:
 
