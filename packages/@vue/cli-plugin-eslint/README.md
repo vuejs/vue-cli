@@ -17,7 +17,7 @@
     --max-warnings       specify number of warnings to make build failed (default: Infinity)
   ```
 
-  Lints and fixes files. If no specific files are given, it lints all files in `src` and `test`.
+  Lints and fixes files. If no specific files are given, it lints all files in `src` and `tests`.
 
   Other [ESLint CLI options](https://eslint.org/docs/user-guide/command-line-interface#options) are also supported.
 

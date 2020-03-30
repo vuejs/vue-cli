@@ -9,10 +9,10 @@ module.exports = (api, options) => {
       'build': 'vue-cli-service build'
     },
     dependencies: {
-      'vue': '^2.6.10'
+      'vue': '^2.6.11'
     },
     devDependencies: {
-      'vue-template-compiler': '^2.6.10'
+      'vue-template-compiler': '^2.6.11'
     },
     browserslist: [
       '> 1%',
@@ -23,16 +23,16 @@ module.exports = (api, options) => {
   if (options.cssPreprocessor) {
     const deps = {
       sass: {
-        sass: '^1.23.7',
-        'sass-loader': '^8.0.0'
+        sass: '^1.25.0',
+        'sass-loader': '^8.0.2'
       },
       'node-sass': {
         'node-sass': '^4.12.0',
-        'sass-loader': '^8.0.0'
+        'sass-loader': '^8.0.2'
       },
       'dart-sass': {
-        sass: '^1.23.7',
-        'sass-loader': '^8.0.0'
+        sass: '^1.25.0',
+        'sass-loader': '^8.0.2'
       },
       less: {
         'less': '^3.0.4',

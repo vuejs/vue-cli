@@ -1,16 +1,11 @@
-const fs = require('fs-extra')
-const path = require('path')
 const inquirer = require('inquirer')
 const {
   chalk,
-  execa,
 
   log,
   error,
   logWithSpinner,
   stopSpinner,
-
-  hasProjectGit,
 
   resolvePluginId,
 
@@ -21,19 +16,9 @@ const Generator = require('./Generator')
 
 const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 const readFiles = require('./util/readFiles')
+const getPkg = require('./util/getPkg')
+const getChangedFiles = require('./util/getChangedFiles')
 const PackageManager = require('./util/ProjectPackageManager')
-
-function getPkg (context) {
-  const pkgPath = path.resolve(context, 'package.json')
-  if (!fs.existsSync(pkgPath)) {
-    throw new Error(`package.json not found in ${chalk.yellow(context)}`)
-  }
-  const pkg = fs.readJsonSync(pkgPath)
-  if (pkg.vuePlugins && pkg.vuePlugins.resolveFrom) {
-    return getPkg(path.resolve(context, pkg.vuePlugins.resolveFrom))
-  }
-  return pkg
-}
 
 async function invoke (pluginName, options = {}, context = process.cwd()) {
   if (!(await confirmIfGitDirty(context))) {
@@ -152,33 +137,17 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   }
 
   log(`${chalk.green('✔')}  Successfully invoked generator for plugin: ${chalk.cyan(plugin.id)}`)
-  if (!process.env.VUE_CLI_TEST && hasProjectGit(context)) {
-    const { stdout } = await execa('git', [
-      'ls-files',
-      '--exclude-standard',
-      '--modified',
-      '--others'
-    ], {
-      cwd: context
-    })
-    if (stdout.trim()) {
-      log(`   The following files have been updated / added:\n`)
-      log(
-        chalk.red(
-          stdout
-            .split(/\r?\n/g)
-            .map(line => `     ${line}`)
-            .join('\n')
-        )
-      )
-      log()
-      log(
-        `   You should review these changes with ${chalk.cyan(
-          `git diff`
-        )} and commit them.`
-      )
-      log()
-    }
+  const changedFiles = getChangedFiles(context)
+  if (changedFiles.length) {
+    log(`   The following files have been updated / added:\n`)
+    log(chalk.red(changedFiles.map(line => `     ${line}`).join('\n')))
+    log()
+    log(
+      `   You should review these changes with ${chalk.cyan(
+        'git diff'
+      )} and commit them.`
+    )
+    log()
   }
 
   generator.printExitLogs()

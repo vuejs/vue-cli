@@ -27,7 +27,6 @@ const {
 const {
   chalk,
   execa,
-  semver,
 
   log,
   warn,
@@ -129,19 +128,9 @@ module.exports = class Creator extends EventEmitter {
     logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
-    // get latest CLI version
-    const { current, latest } = await getVersions()
-    let latestMinor = `${semver.major(latest)}.${semver.minor(latest)}.0`
+    // get latest CLI plugin version
+    const { latestMinor } = await getVersions()
 
-    if (
-      // if the latest version contains breaking changes
-      /major/.test(semver.diff(current, latest)) ||
-      // or if using `next` branch of cli
-      (semver.gte(current, latest) && semver.prerelease(current))
-    ) {
-      // fallback to the current cli version number
-      latestMinor = current
-    }
     // generate package.json with plugin dependencies
     const pkg = {
       name,
@@ -161,7 +150,7 @@ module.exports = class Creator extends EventEmitter {
       // Other `@vue/*` packages' version may not be in sync with the cli itself.
       pkg.devDependencies[dep] = (
         preset.plugins[dep].version ||
-        ((/^@vue/.test(dep)) ? `^${latestMinor}` : `latest`)
+        ((/^@vue/.test(dep)) ? `~${latestMinor}` : `latest`)
       )
     })
 
@@ -181,7 +170,7 @@ module.exports = class Creator extends EventEmitter {
 
     // install plugins
     stopSpinner()
-    log(`⚙  Installing CLI plugins. This might take a while...`)
+    log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`)
     log()
     this.emit('creation', { event: 'plugins-install' })
 

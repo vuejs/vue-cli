@@ -14,17 +14,16 @@ const defaultPolyfills = [
 ]
 
 function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
-  const { isPluginRequired } = require('@babel/preset-env')
-  const builtInsList = require('core-js-compat/data')
-  const getTargets = require('@babel/preset-env/lib/targets-parser').default
-  const builtInTargets = getTargets(targets, {
-    ignoreBrowserslistConfig,
-    configPath
-  })
+  const getTargets = require('@babel/helper-compilation-targets').default
+  const builtInTargets = getTargets(targets, { ignoreBrowserslistConfig, configPath })
 
-  return includes.filter(item => {
-    return isPluginRequired(builtInTargets, builtInsList[item])
-  })
+  // if no targets specified, include all default polyfills
+  if (!targets && !Object.keys(builtInTargets).length) {
+    return includes
+  }
+
+  const { list } = require('core-js-compat')({ targets: builtInTargets })
+  return includes.filter(item => list.includes(item))
 }
 
 module.exports = (context, options = {}) => {
@@ -174,7 +173,7 @@ module.exports = (context, options = {}) => {
       decoratorsBeforeExport,
       legacy: decoratorsLegacy !== false
     }],
-    [require('@babel/plugin-proposal-class-properties'), { loose }],
+    [require('@babel/plugin-proposal-class-properties'), { loose }]
   )
 
   // transform runtime, but only for helpers

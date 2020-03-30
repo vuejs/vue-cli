@@ -95,7 +95,7 @@ const release = async () => {
     }
   }
 
-  let distTag = 'latest'
+  let distTag = cliOptions['dist-tag'] || 'latest'
   if (bump === 'prerelease' || semver.prerelease(version)) {
     distTag = 'next'
   }

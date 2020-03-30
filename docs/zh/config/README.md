@@ -138,12 +138,12 @@ module.exports = {
 
 ### lintOnSave
 
-- Type: `boolean` | `'error'`
+- Type: `boolean` | `'warning'` | `'default'` | `'error'`
 - Default: `true`
 
   是否在开发环境下通过 [eslint-loader](https://github.com/webpack-contrib/eslint-loader) 在每次保存时 lint 代码。这个值会在 [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) 被安装之后生效。
 
-  设置为 `true` 时，`eslint-loader` 会将 lint 错误输出为编译警告。默认情况下，警告仅仅会被输出到命令行，且不会使得编译失败。
+  设置为 `true` 或 `'warning'` 时，`eslint-loader` 会将 lint 错误输出为编译警告。默认情况下，警告仅仅会被输出到命令行，且不会使得编译失败。
 
   如果你希望让 lint 错误在开发时直接显示在浏览器中，你可以使用 `lintOnSave: 'error'`。这会强制 `eslint-loader` 将 lint 错误输出为编译错误，同时也意味着 lint 错误将会导致编译失败。
 
@@ -221,7 +221,7 @@ module.exports = {
 
   如果这个值是一个对象，则会通过 [webpack-merge](https://github.com/survivejs/webpack-merge) 合并到最终的配置中。
 
-  如果这个值是一个函数，则会接收被解析的配置作为参数。该函数及可以修改配置并不返回任何东西，也可以返回一个被克隆或合并过的配置版本。
+  如果这个值是一个函数，则会接收被解析的配置作为参数。该函数既可以修改配置并不返回任何东西，也可以返回一个被克隆或合并过的配置版本。
 
   更多细节可查阅：[配合 webpack > 简单的配置方式](../guide/webpack.md#简单的配置方式)
 

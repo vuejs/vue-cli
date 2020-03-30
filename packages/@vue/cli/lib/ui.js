@@ -2,6 +2,18 @@ const { log, error, openBrowser } = require('@vue/cli-shared-utils')
 const { portfinder, server } = require('@vue/cli-ui/server')
 const shortid = require('shortid')
 
+function simpleCorsValidation (allowedHost) {
+  return function (req, socket) {
+    const { host, origin } = req.headers
+    // maybe we should just use strict string equal?
+    const hostRegExp = new RegExp(`^https?://(${host}|${allowedHost}|localhost)(:\\d+)?$`)
+
+    if (!origin || !hostRegExp.test(origin)) {
+      socket.destroy()
+    }
+  }
+}
+
 async function ui (options = {}, context = process.cwd()) {
   const host = options.host || 'localhost'
 
@@ -36,7 +48,9 @@ async function ui (options = {}, context = process.cwd()) {
     subscriptionsPath: '/graphql',
     enableMocks: false,
     enableEngine: false,
-    cors: '*',
+    cors: {
+      origin: host
+    },
     timeout: 1000000,
     quiet: true,
     paths: {
@@ -49,7 +63,7 @@ async function ui (options = {}, context = process.cwd()) {
     }
   }
 
-  server(opts, () => {
+  const { httpServer } = server(opts, () => {
     // Reset for yarn/npm to work correctly
     if (typeof nodeEnv === 'undefined') {
       delete process.env.NODE_ENV
@@ -66,6 +80,8 @@ async function ui (options = {}, context = process.cwd()) {
       openBrowser(url)
     }
   })
+
+  httpServer.on('upgrade', simpleCorsValidation(host))
 }
 
 module.exports = (...args) => {

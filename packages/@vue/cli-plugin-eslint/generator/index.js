@@ -2,49 +2,15 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (api, { config, lintOn = [] }, _, invoking) => {
-  if (typeof lintOn === 'string') {
-    lintOn = lintOn.split(',')
-  }
-
-  const eslintConfig = require('../eslintOptions').config(api)
+  const eslintConfig = require('../eslintOptions').config(api, config)
+  const devDependencies = require('../eslintDeps').getDeps(api, config)
 
   const pkg = {
     scripts: {
       lint: 'vue-cli-service lint'
     },
     eslintConfig,
-    devDependencies: {
-      'eslint': '^5.16.0',
-      'eslint-plugin-vue': '^5.0.0'
-    }
-  }
-
-  if (!api.hasPlugin('typescript')) {
-    pkg.devDependencies['babel-eslint'] = '^10.0.3'
-  }
-
-  if (config === 'airbnb') {
-    eslintConfig.extends.push('@vue/airbnb')
-    Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-airbnb': '^4.0.0'
-    })
-  } else if (config === 'standard') {
-    eslintConfig.extends.push('@vue/standard')
-    Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-standard': '^4.0.0'
-    })
-  } else if (config === 'prettier') {
-    eslintConfig.extends.push('@vue/prettier')
-    Object.assign(pkg.devDependencies, {
-      '@vue/eslint-config-prettier': '^5.0.0',
-      'eslint-plugin-prettier': '^3.1.1',
-      prettier: '^1.19.1'
-    })
-    // prettier & default config do not have any style rules
-    // so no need to generate an editorconfig file
-  } else {
-    // default
-    eslintConfig.extends.push('eslint:recommended')
+    devDependencies
   }
 
   const editorConfigTemplatePath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
@@ -60,6 +26,10 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     }
   }
 
+  if (typeof lintOn === 'string') {
+    lintOn = lintOn.split(',')
+  }
+
   if (!lintOn.includes('save')) {
     pkg.vue = {
       lintOnSave: false // eslint-loader configured in runtime plugin
@@ -73,23 +43,14 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
-    if (api.hasPlugin('typescript')) {
-      pkg['lint-staged'] = {
-        '*.{js,vue,ts}': ['vue-cli-service lint', 'git add']
-      }
-    } else {
-      pkg['lint-staged'] = {
-        '*.{js,vue}': ['vue-cli-service lint', 'git add']
-      }
+    const extentions = require('../eslintOptions').extensions(api)
+      .map(ext => ext.replace(/^\./, ''))  // remove the leading `.`
+    pkg['lint-staged'] = {
+      [`*.{${extentions.join(',')}}`]: ['vue-cli-service lint', 'git add']
     }
   }
 
   api.extendPackage(pkg)
-
-  // typescript support
-  if (api.hasPlugin('typescript')) {
-    applyTS(api)
-  }
 
   // invoking only
   if (invoking) {
@@ -130,7 +91,8 @@ module.exports.hooks = (api) => {
   })
 }
 
-const applyTS = module.exports.applyTS = api => {
+// exposed for the typescript plugin
+module.exports.applyTS = api => {
   api.extendPackage({
     eslintConfig: {
       extends: ['@vue/typescript'],
@@ -138,8 +100,6 @@ const applyTS = module.exports.applyTS = api => {
         parser: '@typescript-eslint/parser'
       }
     },
-    devDependencies: {
-      '@vue/eslint-config-typescript': '^4.0.0'
-    }
+    devDependencies: require('../eslintDeps').DEPS_MAP.typescript
   })
 }

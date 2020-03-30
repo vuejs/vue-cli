@@ -251,7 +251,7 @@ First, we need to read main file content with Node `fs` module (which provides a
 module.exports.hooks = (api) => {
   api.afterInvoke(() => {
     const fs = require('fs')
-    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const contentMain = fs.readFileSync(api.resolve(api.entryFile), { encoding: 'utf-8' })
     const lines = contentMain.split(/\r?\n/g)
   })
 }
@@ -265,7 +265,7 @@ Then we should to find the string containing `render` word (it's usually a part 
 module.exports.hooks = (api) => {
   api.afterInvoke(() => {
     const fs = require('fs')
-    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const contentMain = fs.readFileSync(api.resolve(api.entryFile), { encoding: 'utf-8' })
     const lines = contentMain.split(/\r?\n/g)
 
     const renderIndex = lines.findIndex(line => line.match(/render/))
@@ -283,7 +283,7 @@ module.exports.hooks = (api) => {
   api.afterInvoke(() => {
     const { EOL } = require('os')
     const fs = require('fs')
-    const contentMain = fs.readFileSync(api.entryFile, { encoding: 'utf-8' })
+    const contentMain = fs.readFileSync(api.resolve(api.entryFile), { encoding: 'utf-8' })
     const lines = contentMain.split(/\r?\n/g)
 
     const renderIndex = lines.findIndex(line => line.match(/render/))

@@ -14,7 +14,7 @@ module.exports = cli => {
     name: 'e2e',
     when: answers => answers.features.includes('e2e'),
     type: 'list',
-    message: 'Pick a E2E testing solution:',
+    message: 'Pick an E2E testing solution:',
     choices: [
       {
         name: 'Cypress (Chrome only)',

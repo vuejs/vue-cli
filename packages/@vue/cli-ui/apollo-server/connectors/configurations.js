@@ -123,7 +123,7 @@ function writeFile (config, fileId, data, changedFields, context) {
     } else if (file.type === 'yaml') {
       rawContent = yaml.safeDump(data)
     } else if (file.type === 'js') {
-      let source = fs.readFileSync(file.path, { encoding: 'utf8' })
+      const source = fs.readFileSync(file.path, { encoding: 'utf8' })
       if (!source.trim()) {
         rawContent = `module.exports = ${stringifyJS(data, null, 2)}`
       } else {
@@ -204,7 +204,7 @@ async function save (id, context) {
   if (config) {
     if (current.config === config) {
       const answers = prompts.getAnswers()
-      let data = clone(current.data)
+      const data = clone(current.data)
       const changedFields = {}
       const getChangedFields = fileId => changedFields[fileId] || (changedFields[fileId] = [])
 
