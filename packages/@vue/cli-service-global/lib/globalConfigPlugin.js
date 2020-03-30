@@ -59,7 +59,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
             .add(entry)
 
         const babelOptions = {
-          presets: [require.resolve('@vue/babel-preset-app')]
+          presets: [require.resolve('@vue/cli-plugin-babel/preset')]
         }
 
         // set inline babel options
@@ -114,8 +114,8 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
                     parser: 'babel-eslint'
                   },
                   rules: {
-                    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-                    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+                    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+                    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
                   }
                 }
               }))

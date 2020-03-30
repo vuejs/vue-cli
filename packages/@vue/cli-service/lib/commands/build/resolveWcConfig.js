@@ -15,7 +15,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   const isAsync = /async/.test(target)
 
   // generate dynamic entry based on glob files
-  const resolvedFiles = require('globby').sync([entry], { cwd: api.resolve('.') })
+  const resolvedFiles = require('globby').sync(entry.split(','), { cwd: api.resolve('.') })
 
   if (!resolvedFiles.length) {
     abort(`entry pattern "${entry}" did not match any files.`)

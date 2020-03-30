@@ -21,7 +21,8 @@ const {
   saveOptions,
   loadOptions,
   savePreset,
-  validatePreset
+  validatePreset,
+  rcPath
 } = require('./options')
 
 const {
@@ -309,8 +310,9 @@ module.exports = class Creator extends EventEmitter {
     validatePreset(preset)
 
     // save preset
-    if (answers.save && answers.saveName) {
-      savePreset(answers.saveName, preset)
+    if (answers.save && answers.saveName && savePreset(answers.saveName, preset)) {
+      log()
+      log(`🎉  Preset ${chalk.yellow(answers.saveName)} saved in ${chalk.yellow(rcPath)}`)
     }
 
     debug('vue-cli:preset')(preset)

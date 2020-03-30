@@ -11,7 +11,7 @@ function getPackageJson (projectPath) {
   try {
     packageJson = fs.readFileSync(packagePath, 'utf-8')
   } catch (err) {
-    throw new Error(`${packagePath} not exist`)
+    throw new Error(`The package.json file at '${packagePath}' does not exist`)
   }
 
   try {

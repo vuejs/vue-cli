@@ -1,10 +1,18 @@
 import Vue from 'vue'
+<%_ if (hasTypeScript) { _%>
+import VueRouter, { RouteConfig } from 'vue-router'
+<%_ } else { _%>
 import VueRouter from 'vue-router'
+<%_ } _%>
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+<%_ if (hasTypeScript) { _%>
+  const routes: Array<RouteConfig> = [
+<%_ } else { _%>
+  const routes = [
+<%_ } _%>
   {
     path: '/',
     name: 'Home',
