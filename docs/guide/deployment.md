@@ -373,7 +373,7 @@ heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
 git push heroku master
 ```
 
-More info: https://gist.github.com/hone/24b06869b4c1eca701f9
+More info: [Getting started with SPAs on Heroku](https://gist.github.com/hone/24b06869b4c1eca701f9)
 
 ### Surge
 
