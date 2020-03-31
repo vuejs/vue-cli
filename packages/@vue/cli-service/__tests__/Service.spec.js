@@ -60,7 +60,7 @@ test('env loading for custom mode', () => {
 test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
-      'bar': '^1.0.0',
+      bar: '^1.0.0',
       '@vue/cli-plugin-babel': '^4.2.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
@@ -183,7 +183,7 @@ test('api: --skip-plugins', () => {
     id: 'test-command',
     apply: api => {
       api.registerCommand('foo', _args => {
-        return
+
       })
     }
   },

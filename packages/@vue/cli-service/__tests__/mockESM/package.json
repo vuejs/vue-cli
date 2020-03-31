@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "vue": {
+    "lintOnSave": "default"
+  }
+}
