@@ -59,6 +59,7 @@ module.exports = (context, options = {}) => {
     debug = false,
     useBuiltIns = 'usage',
     modules = false,
+    bugfixes = true,
     targets: rawTargets,
     spec,
     ignoreBrowserslistConfig = !!process.env.VUE_CLI_MODERN_BUILD,
@@ -137,6 +138,7 @@ module.exports = (context, options = {}) => {
   }
 
   const envOptions = {
+    bugfixes,
     corejs: useBuiltIns ? 3 : false,
     spec,
     loose,
