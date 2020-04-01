@@ -24,7 +24,7 @@ module.exports = (api, options) => {
   if (options.cssPreprocessor) {
     const deps = {
       sass: {
-        sass: '^1.25.0',
+        sass: '^1.26.3',
         'sass-loader': '^8.0.2'
       },
       'node-sass': {
@@ -32,7 +32,7 @@ module.exports = (api, options) => {
         'sass-loader': '^8.0.2'
       },
       'dart-sass': {
-        sass: '^1.25.0',
+        sass: '^1.26.3',
         'sass-loader': '^8.0.2'
       },
       less: {

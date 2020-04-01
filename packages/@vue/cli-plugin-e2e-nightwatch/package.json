@@ -28,7 +28,7 @@
     "nightwatch": "^1.3.4"
   },
   "devDependencies": {
-    "chromedriver": "^80.0.0",
+    "chromedriver": "^80.0.1",
     "geckodriver": "^1.19.1",
     "selenium-server": "^3.141.59"
   },
