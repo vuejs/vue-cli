@@ -2773,6 +2773,11 @@
   dependencies:
     "@types/express" "*"
 
+"@types/ejs@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.npmjs.org/@types/ejs/-/ejs-2.7.0.tgz#bc84e083eae38f64a287a6dab9012bbe1d96e295"
+  integrity sha512-kM2g9Fdk/du24fKuuQhA/LBleFR4Z4JP2MVKpLxQQSzofF1uJ06D+c05zfLDAkkDO55aEeNwJih0gHrE/Ci20A==
+
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
@@ -2847,6 +2852,14 @@
   dependencies:
     "@types/node" "*"
 
+"@types/inquirer@^6.5.0":
+  version "6.5.0"
+  resolved "https://registry.npmjs.org/@types/inquirer/-/inquirer-6.5.0.tgz#b83b0bf30b88b8be7246d40e51d32fe9d10e09be"
+  integrity sha512-rjaYQ9b9y/VFGOpqBEXRavc3jh0a+e6evAbI31tMda8VlPaSy0AZJfXsvmIe3wklc7W6C3zCSfleuMXR7NOyXw==
+  dependencies:
+    "@types/through" "*"
+    rxjs "^6.4.0"
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"
@@ -2873,6 +2886,14 @@
   integrity sha512-Fb38HkXSVA4L8fGKEZ6le5bB8r6MRWlOCZbVuWZcmOMSCd2wCYOwN1ibj8daIoV9naq7aaOZjrLCoCMptKU/4Q==
   dependencies:
     jest-diff "^24.3.0"
+
+"@types/jscodeshift@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.npmjs.org/@types/jscodeshift/-/jscodeshift-0.7.0.tgz#796bf05a420c5d3e95b196b1fa01cc75f10c41b2"
+  integrity sha512-W59Y/fnztfJ/5gP4m2ZSWHvb4JPl9SXXn5ne3/6kYP5twRek9DTyKB6xbPIeg0RXbcNTHPBXHNLcKw3AlCrjTw==
+  dependencies:
+    ast-types "0.12.1"
+    recast "0.17.2"
 
 "@types/json-schema@^7.0.3":
   version "7.0.4"
@@ -2997,6 +3018,13 @@
   version "1.0.5"
   resolved "https://registry.npmjs.org/@types/tapable/-/tapable-1.0.5.tgz#9adbc12950582aa65ead76bffdf39fe0c27a3c02"
   integrity sha512-/gG2M/Imw7cQFp8PGvz/SwocNrmKFjFsm5Pb8HdbHkZ1K8pmuPzOX4VeVoiEecFCVf4CsN1r3/BRvx+6sNqwtQ==
+
+"@types/through@*":
+  version "0.0.30"
+  resolved "https://registry.npmjs.org/@types/through/-/through-0.0.30.tgz#e0e42ce77e897bd6aead6f6ea62aeb135b8a3895"
+  integrity sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==
+  dependencies:
+    "@types/node" "*"
 
 "@types/uglify-js@*":
   version "3.0.5"
@@ -4661,6 +4689,11 @@ assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
   integrity sha1-WWZ/QfrdTyDMvCu5a41Pf3jsA2c=
+
+ast-types@0.12.1:
+  version "0.12.1"
+  resolved "https://registry.npmjs.org/ast-types/-/ast-types-0.12.1.tgz#55d3737a8a68e1ccde131067005ce7ee3dd42b99"
+  integrity sha512-H2izJAyT2xwew4TxShpmxe6f9R5hHgJQy1QloLiUC2yrJMtyraBWNJL7903rpeCY9keNUipORR/zIUC2XcYKng==
 
 ast-types@0.13.2, ast-types@0.x.x, ast-types@^0.13.0:
   version "0.13.2"
@@ -15345,7 +15378,7 @@ prismjs@^1.13.0, prismjs@^1.19.0:
   optionalDependencies:
     clipboard "^2.0.0"
 
-private@^0.1.6, private@^0.1.8:
+private@^0.1.6, private@^0.1.8, private@~0.1.5:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
   integrity sha512-VvivMrbvd2nKkiG38qjULzlc+4Vx4wm/whI9pQD35YrARNnhxeiRktSOhSukRLFNlzg6Br/cJPet5J/u19r/mg==
@@ -15850,6 +15883,16 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
+
+recast@0.17.2:
+  version "0.17.2"
+  resolved "https://registry.npmjs.org/recast/-/recast-0.17.2.tgz#f18f18cf20bf3fad4522621a7f9c2ada37276814"
+  integrity sha512-YHFvn4rBXl8eIjALjUiOV/AP3xFpyGNGNHDw9mAncAWuIdgnBKjbZQ9+P3VlsKcNaNapRVFlTEX1dvDRlYwyxg==
+  dependencies:
+    ast-types "0.12.1"
+    esprima "~4.0.0"
+    private "~0.1.5"
+    source-map "~0.6.1"
 
 recast@^0.18.0, recast@^0.18.1:
   version "0.18.5"
