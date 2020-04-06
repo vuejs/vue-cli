@@ -13,6 +13,7 @@ const {
   isPlugin,
   resolvePluginId,
 
+  loadModule,
   resolveModule
 } = require('@vue/cli-shared-utils')
 
@@ -20,6 +21,9 @@ const tryGetNewerRange = require('./util/tryGetNewerRange')
 const getPkg = require('./util/getPkg')
 const PackageManager = require('./util/ProjectPackageManager')
 
+function clearRequireCache () {
+  Object.keys(require.cache).forEach(key => delete require.cache[key])
+}
 module.exports = class Upgrader {
   constructor (context = process.cwd()) {
     this.context = context
@@ -111,7 +115,23 @@ module.exports = class Upgrader {
 
     const resolvedPluginMigrator =
       resolveModule(`${packageName}/migrator`, this.context)
+
     if (resolvedPluginMigrator) {
+      // for unit tests, need to run migrator in the same process for mocks to work
+      // TODO: fix the tests and remove this special case
+      if (process.env.VUE_CLI_TEST) {
+        clearRequireCache()
+        await require('./migrate').runMigrator(
+          this.context,
+          {
+            id: packageName,
+            apply: loadModule(`${packageName}/migrator`, this.context),
+            baseVersion: installed
+          },
+          this.pkg
+        )
+      }
+
       const cliBin = path.resolve(__dirname, '../bin/vue.js')
       // Run migrator in a separate process to avoid all kinds of require cache issues
       await execa('node', [cliBin, 'migrate', packageName, '--from', installed], {
