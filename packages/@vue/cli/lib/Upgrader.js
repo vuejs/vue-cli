@@ -115,6 +115,7 @@ module.exports = class Upgrader {
       const cliBin = path.resolve(__dirname, '../bin/vue.js')
       // Run migrator in a separate process to avoid all kinds of require cache issues
       await execa('node', [cliBin, 'migrate', packageName, '--from', installed], {
+        cwd: this.context,
         stdio: 'inherit'
       })
     }
