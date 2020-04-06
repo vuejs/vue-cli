@@ -20,6 +20,7 @@ declare function createTestProject(
    * }
    */
   preset: GeneratorRootOptions,
+  /** `path.resolve(cwd, name)` will be the project's root directory */
   cwd?: string | null,
   /**
    * if init git repo
@@ -35,7 +36,7 @@ declare function createTestProject(
   /** read the content for the file */
   read: (file: string) => Promise<string>
   /** write file to project */
-  write: (file: string, content: string) => Promise<void>
+  write: (file: string, content: any) => Promise<void>
   /** execa command at root path of project  */
   run: (command: string, args?: ReadonlyArray<string>) => execa.ExecaChildProcess
   /** delete the file of project */
