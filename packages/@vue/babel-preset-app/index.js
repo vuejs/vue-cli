@@ -59,6 +59,7 @@ module.exports = (context, options = {}) => {
     debug = false,
     useBuiltIns = 'usage',
     modules = false,
+    bugfixes = true,
     targets: rawTargets,
     spec,
     ignoreBrowserslistConfig = !!process.env.VUE_CLI_MODERN_BUILD,
@@ -137,7 +138,8 @@ module.exports = (context, options = {}) => {
   }
 
   const envOptions = {
-    corejs: 3,
+    bugfixes,
+    corejs: useBuiltIns ? 3 : false,
     spec,
     loose,
     debug,
@@ -204,7 +206,7 @@ module.exports = (context, options = {}) => {
       presets: [
         [require('@babel/preset-env'), {
           useBuiltIns,
-          corejs: 3
+          corejs: useBuiltIns ? 3 : false
         }]
       ]
     }]

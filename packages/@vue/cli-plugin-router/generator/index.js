@@ -4,13 +4,14 @@ module.exports = (api, options = {}) => {
 
   api.extendPackage({
     dependencies: {
-      'vue-router': '^3.1.5'
+      'vue-router': '^3.1.6'
     }
   })
 
   api.render('./template', {
     historyMode: options.historyMode,
-    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
+    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
+    hasTypeScript: api.hasPlugin('typescript')
   })
 
   if (api.invoking) {

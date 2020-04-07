@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const {
   chalk,
+  execa,
   semver,
 
   log,
@@ -12,19 +13,17 @@ const {
   isPlugin,
   resolvePluginId,
 
-  loadModule
+  loadModule,
+  resolveModule
 } = require('@vue/cli-shared-utils')
 
 const tryGetNewerRange = require('./util/tryGetNewerRange')
 const getPkg = require('./util/getPkg')
 const PackageManager = require('./util/ProjectPackageManager')
 
-const { runMigrator } = require('./migrate')
-
 function clearRequireCache () {
   Object.keys(require.cache).forEach(key => delete require.cache[key])
 }
-
 module.exports = class Upgrader {
   constructor (context = process.cwd()) {
     this.context = context
@@ -108,28 +107,39 @@ module.exports = class Upgrader {
 
     log(`Upgrading ${packageName} from ${installed} to ${targetVersion}`)
     await this.pm.upgrade(`${packageName}@~${targetVersion}`)
-    // as the dependencies have now changed, the require cache must be invalidated
-    // otherwise it may affect the behavior of the migrator
-    clearRequireCache()
 
     // The cached `pkg` field won't automatically update after running `this.pm.upgrade`.
     // Also, `npm install pkg@~version` won't replace the original `"pkg": "^version"` field.
     // So we have to manually update `this.pkg` and write to the file system in `runMigrator`
     this.pkg[depEntry][packageName] = `~${targetVersion}`
-    const noop = () => {}
 
-    const pluginMigrator =
-      loadModule(`${packageName}/migrator`, this.context) || noop
+    const resolvedPluginMigrator =
+      resolveModule(`${packageName}/migrator`, this.context)
 
-    await runMigrator(
-      this.context,
-      {
-        id: packageName,
-        apply: pluginMigrator,
-        baseVersion: installed
-      },
-      this.pkg
-    )
+    if (resolvedPluginMigrator) {
+      // for unit tests, need to run migrator in the same process for mocks to work
+      // TODO: fix the tests and remove this special case
+      if (process.env.VUE_CLI_TEST) {
+        clearRequireCache()
+        await require('./migrate').runMigrator(
+          this.context,
+          {
+            id: packageName,
+            apply: loadModule(`${packageName}/migrator`, this.context),
+            baseVersion: installed
+          },
+          this.pkg
+        )
+        return
+      }
+
+      const cliBin = path.resolve(__dirname, '../bin/vue.js')
+      // Run migrator in a separate process to avoid all kinds of require cache issues
+      await execa('node', [cliBin, 'migrate', packageName, '--from', installed], {
+        cwd: this.context,
+        stdio: 'inherit'
+      })
+    }
   }
 
   async getUpgradable (includeNext) {

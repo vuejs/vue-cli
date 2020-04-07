@@ -279,7 +279,7 @@ module.exports = api => {
       {
         name: 'dest',
         type: 'input',
-        default: 'dist',
+        default: '',
         description: 'org.vue.vue-webpack.tasks.build.dest'
       },
       {

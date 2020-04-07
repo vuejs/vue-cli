@@ -77,12 +77,24 @@ module.exports = (api, projectOptions) => {
     })
 
     if (!process.env.VUE_CLI_TEST) {
+      // try to load `@vue/compiler-sfc` if the project is using Vue 3.
+      // if it is not available, it uses `vue-template-compiler`
+      let compiler = '@vue/compiler-sfc'
+      try {
+        require.resolve(compiler)
+        // use a shim as @vue/compiler-sfc does not offer the `parseComponent` function
+        // but a `parse` function
+        // the shim only delegates to the parse function
+        compiler = '@vue/cli-plugin-typescript/vue-compiler-sfc-shim'
+      } catch (e) {
+        compiler = 'vue-template-compiler'
+      }
       // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
       // so temporarily disabled for vue-cli tests
       config
         .plugin('fork-ts-checker')
           .use(require('fork-ts-checker-webpack-plugin'), [{
-            vue: true,
+            vue: { enabled: true, compiler },
             tslint: projectOptions.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
             formatter: 'codeframe',
             // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse

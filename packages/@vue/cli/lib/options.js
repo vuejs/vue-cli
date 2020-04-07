@@ -94,6 +94,7 @@ exports.saveOptions = toSave => {
   cachedOptions = options
   try {
     fs.writeFileSync(rcPath, JSON.stringify(options, null, 2))
+    return true
   } catch (e) {
     error(
       `Error saving preferences: ` +
@@ -106,5 +107,5 @@ exports.saveOptions = toSave => {
 exports.savePreset = (name, preset) => {
   const presets = cloneDeep(exports.loadOptions().presets || {})
   presets[name] = preset
-  exports.saveOptions({ presets })
+  return exports.saveOptions({ presets })
 }

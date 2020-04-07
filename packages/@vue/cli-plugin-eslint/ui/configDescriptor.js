@@ -10,7 +10,7 @@ const CATEGORIES = [
 const DEFAULT_CATEGORY = 'essential'
 const RULE_SETTING_OFF = 'off'
 const RULE_SETTING_ERROR = 'error'
-const RULE_SETTING_WARNING = 'warning'
+const RULE_SETTING_WARNING = 'warn'
 const RULE_SETTINGS = [RULE_SETTING_OFF, RULE_SETTING_ERROR, RULE_SETTING_WARNING]
 
 const defaultChoices = [
