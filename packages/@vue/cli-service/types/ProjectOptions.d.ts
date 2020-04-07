@@ -1,4 +1,4 @@
-import ChainableWebpackConfig from 'webpack-chain'
+import ChainableWebpackConfig = require('webpack-chain')
 import { WebpackOptions } from 'webpack/declarations/WebpackOptions'
 
 type PageEntry = string | string[];

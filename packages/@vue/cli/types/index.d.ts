@@ -1,6 +1,6 @@
 import { DistinctQuestion, CheckboxChoiceOptions, Answers, ChoiceOptions } from 'inquirer'
 import { Parser, Transform } from 'jscodeshift'
-import ejs from 'ejs'
+import * as ejs from 'ejs'
 
 interface RenderFile {
   [path: string]: string | Buffer
@@ -45,7 +45,7 @@ type GeneratorRootOptions = Partial<{
   configs: object
   cssPreprocessor: 'sass' | 'dart-sass' | 'node-sass' | 'less' | 'stylus'
 }>
-class PromptModuleAPI {
+declare class PromptModuleAPI {
   /** inject checkbox choice for feature prompt. */
   injectFeature<T = Answers>(feature: CheckboxChoiceOptions<T>): void
 
@@ -57,7 +57,7 @@ class PromptModuleAPI {
   onPromptComplete<T = Answers>(cb: OnPromptCompleteCb<T>): void
 }
 
-class GeneratorAPI {
+declare class GeneratorAPI {
   /**
    * Resolve path for a project.
    *

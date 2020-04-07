@@ -2,7 +2,8 @@
 {
     "files": [
       "cli-service-test.ts",
-      "index.d.ts"
+      "index.d.ts",
+      "ProjectOptions.d.ts"
     ],
     "compilerOptions": {
         "module": "commonjs",

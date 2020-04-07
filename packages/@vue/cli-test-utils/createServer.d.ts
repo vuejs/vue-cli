@@ -1,4 +1,4 @@
-import http from 'http'
+import * as http from 'http'
 
 type Options = {
   [props: string]: any
