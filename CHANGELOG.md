@@ -1,4 +1,17 @@
 
+## 4.3.1 (2020-04-07)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#5363](https://github.com/vuejs/vue-cli/pull/5363) fix(eslint-migrator): fix local eslint major version detection ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5360](https://github.com/vuejs/vue-cli/pull/5360) fix: run migrator in a separator process, fix require cache issues during upgrade ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.3.0 (2020-04-01)
 
 #### :rocket: New Features
