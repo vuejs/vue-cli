@@ -130,6 +130,7 @@ module.exports = class Upgrader {
           },
           this.pkg
         )
+        return
       }
 
       const cliBin = path.resolve(__dirname, '../bin/vue.js')
