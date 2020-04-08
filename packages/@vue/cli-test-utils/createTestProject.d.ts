@@ -1,5 +1,5 @@
 import execa = require('execa') // execa@1.0.0 needs @types/execa
-import { GeneratorRootOptions } from '@vue/cli'
+import { Preset } from '@vue/cli'
 
 /**
  * create project at path `cwd`
@@ -19,7 +19,7 @@ declare function createTestProject(
    *  }
    * }
    */
-  preset: GeneratorRootOptions,
+  preset: Preset,
   /** `path.resolve(cwd, name)` will be the project's root directory */
   cwd?: string | null,
   /**

@@ -82,8 +82,22 @@ async function createTest() {
 async function testGenerate() {
   const { pkg, files } = await generateWithPlugin({
     id: 'test-plugin',
-    apply: (api, options, rootOptions, invoking) => {},
-    options: {}
+    apply: (api, options, rootOptions, invoking) => {
+      if (options.skip) return
+      console.log(rootOptions.bare, rootOptions.projectName, rootOptions.useConfigFiles, rootOptions.cssPreprocessor)
+      if (rootOptions.plugins) console.log(rootOptions.plugins['@vue/cli-service'])
+      if (rootOptions.configs) console.log(rootOptions.configs.vue)
+    },
+    options: {
+      skip: true
+    }
+  })
+  const lint = pkg.scripts.lint
+  const main = files['src/main.js']
+
+  await generateWithPlugin({
+    id: 'test-plugin-no-options',
+    apply: (api, options, rootOptions, invoking) => {}
   })
 }
 

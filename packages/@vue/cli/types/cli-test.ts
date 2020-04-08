@@ -1,4 +1,4 @@
-import { GeneratorAPI, PromptModuleAPI } from '@vue/cli'
+import { GeneratorPlugin, PromptModuleAPI } from '@vue/cli'
 
 const testPromptAPI = (cli: PromptModuleAPI) => {
   cli.injectFeature({
@@ -60,7 +60,7 @@ const testPromptAPI = (cli: PromptModuleAPI) => {
   })
 }
 
-export = (api: GeneratorAPI) => {
+const generator: GeneratorPlugin = (api, options, rootOptions, invoking) => {
   const version = api.cliVersion
   const cliServiceVersion = api.cliServiceVersion
   api.assertCliServiceVersion(4)
@@ -89,6 +89,9 @@ export = (api: GeneratorAPI) => {
     dependencies: {
       'vue-router-layout': '^0.1.2'
     }
+  }))
+  api.extendPackage(pkg => ({
+    foo: pkg.foo + 1
   }))
   api.extendPackage(
     {
@@ -181,3 +184,5 @@ export = (api: GeneratorAPI) => {
 
   const isInvoking = api.invoking
 }
+
+export = generator

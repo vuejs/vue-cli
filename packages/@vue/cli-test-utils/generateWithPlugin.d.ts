@@ -1,9 +1,9 @@
-import { GeneratorAPI, GeneratorRootOptions } from '@vue/cli'
+import { GeneratorAPI, Preset } from '@vue/cli'
 
 type ApplyFn = (
   api: GeneratorAPI,
-  options: Record<string, any>,
-  rootOptions: GeneratorRootOptions,
+  options: any,
+  rootOptions: Preset,
   invoking: boolean,
 ) => any
 interface Plugin {
@@ -12,7 +12,7 @@ interface Plugin {
   /** generator function from plugin */
   apply: ApplyFn
   /** parameter passed to generator function */
-  options: Record<string, any>
+  options?: any
 }
 
 /**
@@ -22,7 +22,7 @@ declare function generateWithPlugin(
   plugin: Plugin | Plugin[],
 ): Promise<{
   /** package.json Object */
-  pkg: object
+  pkg: Record<string, any>
   /** virtual file tree, file path is the key of Object */
   files: {
     [filePath: string]: string | Buffer

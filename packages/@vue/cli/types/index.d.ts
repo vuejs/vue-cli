@@ -33,18 +33,17 @@ interface OnPromptCompleteCb<T> {
     },
   ): void
 }
-interface Feature<T> extends CheckboxChoiceOptions<T> {
-  [prop: string]: any
-}
 
-type GeneratorRootOptions = Partial<{
+type Preset = Partial<{
   [props: string]: any
+  bare: boolean
   projectName: string
   useConfigFiles: boolean
-  plugins: object
-  configs: object
+  plugins: Record<string, any>
+  configs: Record<string, any>
   cssPreprocessor: 'sass' | 'dart-sass' | 'node-sass' | 'less' | 'stylus'
 }>
+
 declare class PromptModuleAPI {
   /** inject checkbox choice for feature prompt. */
   injectFeature<T = Answers>(feature: CheckboxChoiceOptions<T>): void
@@ -117,13 +116,13 @@ declare class GeneratorAPI {
    *    if two dependency version ranges don't intersect.
    */
   extendPackage(
-    fields: object | ((pkg: object) => object),
+    fields: object | ((pkg: Record<string, any>) => object),
     options?:
       | {
-          prune?: boolean
-          merge?: boolean
-          warnIncompatibleVersions?: boolean
-        }
+        prune?: boolean
+        merge?: boolean
+        warnIncompatibleVersions?: boolean
+      }
       | boolean,
   ): void
 
@@ -221,4 +220,19 @@ declare class GeneratorAPI {
   get invoking(): boolean
 }
 
-export { PromptModuleAPI, GeneratorAPI, GeneratorRootOptions }
+/**
+ * function exported by a generator
+ * @param api - A GeneratorAPI instance
+ * @param options - These options are resolved during the prompt phase of project creation,
+ *    or loaded from a saved preset in ~/.vuerc
+ * @param rootOptions - The entire preset will be passed
+ * @param invoking - Is the plugin being invoked
+ */
+type GeneratorPlugin = (
+  api: GeneratorAPI,
+  options: any,
+  rootOptions: Preset,
+  invoking: boolean
+) => any
+
+export { PromptModuleAPI, GeneratorAPI, Preset, GeneratorPlugin }

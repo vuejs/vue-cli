@@ -1,10 +1,9 @@
-// Users who do not have --allowSyntheticDefaultExports or --esModuleInterop will get different behavior
-// https://github.com/Microsoft/dtslint/blob/master/docs/no-import-default-of-export-equals.md
 import minimist = require('minimist')
 import ChainableConfig = require('webpack-chain')
 import webpack = require('webpack')
 import WebpackDevServer = require('webpack-dev-server')
 import express = require('express') // @types/webpack-dev-server depends on @types/express
+import { ProjectOptions } from './ProjectOptions'
 
 type RegisterCommandFn = (args: minimist.ParsedArgs, rawArgv: string[]) => any
 
@@ -27,7 +26,7 @@ interface CacheConfig {
   cacheDirectory: string
   cacheIdentifier: string
 }
-export class PluginAPI {
+declare class PluginAPI {
   id: string
 
   service: any
@@ -121,4 +120,18 @@ export class PluginAPI {
   genCacheConfig(id: string, partialIdentifier: any, configFiles?: object | object[]): CacheConfig
 }
 
-export { ProjectOptions, ConfigFunction } from './ProjectOptions'
+/**
+ * Service plugin serves for modifying webpack config,
+ * creating new vue-cli service commands or changing existing commands
+ *
+ * @param api - A PluginAPI instance
+ * @param options - An object containing project local options specified in vue.config.js,
+ *    or in the "vue" field in package.json.
+ */
+type ServicePlugin = (
+  api: PluginAPI,
+  options: ProjectOptions
+) => any
+
+export { ProjectOptions, ServicePlugin, PluginAPI }
+export { ConfigFunction } from './ProjectOptions'

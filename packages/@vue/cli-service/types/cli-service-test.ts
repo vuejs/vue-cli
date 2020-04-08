@@ -1,6 +1,6 @@
-import { PluginAPI } from '@vue/cli-service'
+import { ServicePlugin } from '@vue/cli-service'
 
-export = (api: PluginAPI) => {
+const servicePlugin: ServicePlugin = (api, options) => {
   const version = api.version
   api.assertVersion(4)
   api.assertVersion('^100')
@@ -41,7 +41,7 @@ export = (api: PluginAPI) => {
 
   api.configureWebpack(config => {
     return {
-      devtool: config.devtool ? config.devtool : 'source-map'
+      devtool: config.devtool || 'source-map'
     }
   })
 
@@ -61,3 +61,4 @@ export = (api: PluginAPI) => {
     ['babel.config.js', '.browserslistrc']
   )
 }
+export = servicePlugin
