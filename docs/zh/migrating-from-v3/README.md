@@ -239,3 +239,8 @@ npm install --save-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-pret
 底层的 workbox-webpack-plugin 已经从 v3 更新到了 v4。在这里查看 [更新日志](https://github.com/GoogleChrome/workbox/releases/tag/v4.0.0)。
 
 现在还有了一个新的 `pwa.manifestOptions` 字段可用 (你可以在 `vue.config.js` 中设置)。随着这个新选项，`manifest.json`将会生成一个 config 对象而不是直接从 `public` 文件夹拷贝一个。(注意，这是一个可选特性。相关PR: [#2981](https://github.com/vuejs/vue-cli/pull/2981)，[#4664](https://github.com/vuejs/vue-cli/pull/4664))
+
+### `@vue/cli-plugin-e2e-cypress`
+
+在 Vue CLI v3.0.0-beta.10 之前，E2E 测试的默认命令是 `vue-cli-service e2e`。之后我们把它改成了 `vue-cli-service test:e2e`。 之前的命令已经过期，但仍然可以使用。
+现在我们彻底 [停用了旧的命令](https://github.com/vuejs/vue-cli/pull/3774)。
