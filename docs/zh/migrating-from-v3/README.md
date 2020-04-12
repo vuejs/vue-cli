@@ -65,3 +65,31 @@ vue upgrade
 - 为了兼容更早的版本， `preset.json` 里的 `router` 和 `routerHistoryMode` 选项仍然支持。但是现在为了保持更好的一致性推荐使用 `plugins: { '@vue/cli-plugin-router': { historyMode: true } }`。
 
 - 现在已经不再支持 `api.hasPlugin('vue-router')` 的写法。现在的写法是 `api.hasPlugin('router')`。
+
+### `@vue/cli-service`
+
+#### 在模板中处理空格
+
+为了获得一个更小的打包，我们在 Vue CLI v3 中默认禁用了 `vue-template-compiler` 的 `preserveWhitespace` 选项。
+
+然而这项改进有一些需要注意的地方。
+
+好消息是，自从 Vue 2.6 发布以来，我们可以用 [新的 `whitespace` 选项](https://github.com/vuejs/vue/issues/9208#issuecomment-450012518) 来更好的处理空格。
+
+使用以下模板作为参考：
+
+```html
+<p>Welcome to <b>Vue.js</b> <i>world</i>. Have fun!</p>
+```
+设置 `preserveWhitespace: false`，所有tag中的空格已经被移除，编译后为：
+
+```html
+<p>Welcome to <b>Vue.js</b><i>world</i>. Have fun!</p>
+```
+设置 `whitespace: 'condense'`， 编译后为：
+
+```html
+<p>Welcome to <b>Vue.js</b> <i>world</i>. Have fun!</p>
+```
+
+注意 tag中 **inline** 样式的空格会保留。
