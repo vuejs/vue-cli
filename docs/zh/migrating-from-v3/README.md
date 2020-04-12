@@ -93,3 +93,10 @@ vue upgrade
 ```
 
 注意 tag中 **inline** 样式的空格会保留。
+
+#### `vue-cli-service build --mode development`
+
+在过去，在 `development`模式下执行 `build` 命令，`dist` 文件夹的结构会与 `production` 的不同。现在随着下面两项改变，文件夹的结构在所有模式下都会相同 (文件名仍然会不同 - 在 `development` 模式下文件名没有哈希)：
+
+- [#4323](https://github.com/vuejs/vue-cli/pull/4323) ensure consistent directory structure for all modes
+- [#4302](https://github.com/vuejs/vue-cli/pull/4302) move dev configs into serve command
