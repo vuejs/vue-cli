@@ -100,3 +100,11 @@ vue upgrade
 
 - [#4323](https://github.com/vuejs/vue-cli/pull/4323) ensure consistent directory structure for all modes
 - [#4302](https://github.com/vuejs/vue-cli/pull/4302) move dev configs into serve command
+
+#### 对 SASS/SCSS 用户
+
+之前在 Vue CLI v3 中，我们使用了 `sass-loader@7`。
+
+最近 `sass-loader@8` 已经发布而且在配置文件格式上有了很多变化。这里是更新日志：<https://github.com/webpack-contrib/sass-loader/releases/tag/v8.0.0>
+
+`@vue/cli-service` 在 v4 版中还会继续支持 `sass-loader@7`，但是我们强烈建议你看一下 v8 版本，并且更新到最新版。
