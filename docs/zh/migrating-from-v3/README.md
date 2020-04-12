@@ -259,3 +259,17 @@ Bundled config 以及 generated test [已经被完全重写了](https://github.c
 ### `@vue/cli-plugin-typescript`
 
 当使用 Typescript 时，webpack resolve 选项现在 [相比 `js(x)`更倾向于使用 `ts(x)` 文件后缀](https://github.com/vuejs/vue-cli/pull/3909)。
+
+### `@vue/cli-plugin-unit-jest`
+
+我们升级了内置的 Jest 从 v23 到 v23，所以请先阅读他们的 [更新日志](https://jestjs.io/blog/2019/01/25/jest-24-refreshing-polished-typescript-friendly)。
+以及 [这个链接](https://github.com/facebook/jest/blob/20ba4be9499d50ed0c9231b86d4a64ec8a6bd303/CHANGELOG.md#user-content-2400) 来查看完整更新日志。
+
+`unit-jest` plugin 现在自带了4套配置 preset:
+
+- `@vue/cli-plugin-unit-jest` 默认的 preset 适合大多数普通类型的项目
+- `@vue/cli-plugin-unit-jest/presets/no-babel` 如果你没有安装 `@vue/cli-plugin-babel` 并且不想在项目中看到 babel 文件
+- `@vue/cli-plugin-unit-jest/presets/typescript` preset 支持 TypeScript (但是不支持 TSX)
+- `@vue/cli-plugin-unit-jest/presets/typescript-and-babel` preset 支持 TypeScript (以及 TSX) 还有 babel。
+
+如果你自项目创建都没有改过默认的 Jest 配置 (一般在 `jest.config.js` 或 `package.json` 中的 `jest` 字段)，现在你可以用一个单一字段来替换掉之前大篇幅的配置:
