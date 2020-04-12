@@ -194,3 +194,15 @@ Babel 插件需要一个 peer dependency，用来帮助执行转译后的代码
 所以我们把它移到了项目的直接依赖 (`@vue/cli-plugin-babel`) 好让它能更符合标准且减少出错。
 
 ------
+
+### `@vue/cli-plugin-eslint`
+
+这个 plugin 现在 [需要 ESLint 作为 peer dependency](https://github.com/vuejs/vue-cli/pull/3852)。
+
+这不会影响使用 Vue CLI 3.1 或之后版本生成的项目脚手架。
+
+如果你的项目是使用 Vue CLI 3.0.x 或更早版本搭建的，你可能需要把 `eslint@4` 添加到项目的依赖 (如果你使用 `vue upgrade eslint` 升级，这个过程是完全自动的)。
+
+同时建议升级你的 ESLint 到 v5，以及 ESLint config 到最新版。(ESLint v6 支持工作进行中)
+
+------
