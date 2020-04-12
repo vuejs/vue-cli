@@ -47,3 +47,21 @@ vue upgrade
 当执行 `vue invoke` / `vue add` / `vue upgrade`时，当你当前的项目里有未提交代码时，会有一个[额外的验证步骤](https://github.com/vuejs/vue-cli/pull/4275)
 
 ![image](https://user-images.githubusercontent.com/3277634/65588457-23db5a80-dfba-11e9-9899-9dd72efc111e.png)
+
+#### Vue Router 和 Vuex 现在有了对应的 CLI 插件
+
+当运行 `vue add vuex` 或 `vue add router`时：
+
+- 在 v3 版中: 只有 `vuex` 或 `vue-router` 会被添加到项目中；
+- 在 v4 版中: 同时会把 `@vue/cli-plugin-vuex` 或 `@vue/cli-plugin-router` 安装到项目中。
+
+当前不会对终端用户产生影响，但是这个设计可以允许我们以后为 Vuex 或 Vue Router用户添加更多新特性。
+
+对 Preset 和 插件作者来说，在这两个插件中有许多值得注意的改变:
+
+- 默认的目录结构变更：
+  - `src/store.js` 搬到了 `src/store/index.js`；
+  - `src/router.js` 重命名为 `src/router/index.js`；
+- 为了兼容更早的版本， `preset.json` 里的 `router` 和 `routerHistoryMode` 选项仍然支持。但是现在为了保持更好的一致性推荐使用 `plugins: { '@vue/cli-plugin-router': { historyMode: true } }`。
+
+- 现在已经不再支持 `api.hasPlugin('vue-router')` 的写法。现在的写法是 `api.hasPlugin('router')`。
