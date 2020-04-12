@@ -34,3 +34,10 @@ vue upgrade
 
 - 之前运行：`vue upgrade [patch | minor | major]`，这个命令只会安装最新版的插件。
 - 现在运行：`vue upgrade [plugin-name]`。 除了升级插件外，该命令还可以运行移植工具来帮助你自动化移植过程。关于这个命令的更多选项，请执行 `vue upgrade --help`。
+
+#### `vue --version` 输出格式变更
+
+当执行 `vue --version`时：
+
+- 3.x：输出 `3.12.0`
+- 4.x：输出 `@vue/cli 4.0.0`
