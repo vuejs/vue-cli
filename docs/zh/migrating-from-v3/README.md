@@ -113,3 +113,7 @@ vue upgrade
 
 `less-loader` v4 与 `less` >= 3.10 的版本不兼容，查看<https://github.com/less/less.js/issues/3414>。
 如果你的项目依赖它，强烈建议升级到 `less-loader@5`。
+
+#### 对 CSS Module 用户
+
+- [为了便于使用 `css.requireModuleExtension` 已弃用 `css.modules`](https://github.com/vuejs/vue-cli/pull/4387)。
