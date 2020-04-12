@@ -41,3 +41,9 @@ vue upgrade
 
 - 3.x：输出 `3.12.0`
 - 4.x：输出 `@vue/cli 4.0.0`
+
+#### 额外的验证步骤来防止覆盖
+
+当执行 `vue invoke` / `vue add` / `vue upgrade`时，当你当前的项目里有未提交代码时，会有一个[额外的验证步骤](https://github.com/vuejs/vue-cli/pull/4275)
+
+![image](https://user-images.githubusercontent.com/3277634/65588457-23db5a80-dfba-11e9-9899-9dd72efc111e.png)
