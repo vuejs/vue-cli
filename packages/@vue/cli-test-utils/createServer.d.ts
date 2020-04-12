@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import * as http from 'http'
 
 type Options = {
