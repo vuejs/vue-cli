@@ -186,6 +186,16 @@ Babel 插件需要一个 peer dependency，用来帮助执行转译后的代码
 如果你是通过 `vue upgrade babel` 升级，移植过程是完全自动化的。
 但是如果你在一个项目中有自定义配置，你可能需要手动更新这些字段 (更多详情，请查看[core-js 更新日志](https://github.com/zloirock/core-js/blob/master/CHANGELOG.md#L279-L297))。
 
+#### Babel Preset
+如果你是通过 `vue upgrade babel` 升级，这个移植过程是完全自动化的。
+
+- 在 v3 中，`babel.config.js` 中默认的 babel preset 是 `@vue/app`。
+- 在 v4 中，我们把它移动到了 plugin 中，所以现在改名为 `@vue/cli-plugin-babel/preset`
+
+这是因为 `@vue/babel-preset-app` 是项目的一个非直接依赖。
+它能工作是由于 npm 的 package hoisting。
+但是如果你在一个项目中有若干个同 package 的多个互相冲突的非直接依赖版本，或者包管理工具对依赖解决方案有更严格的限制 (例如 yarn plug'n'play 或 pnpm)，仍然可能会有潜在的问题。
+所以我们把它移到了项目的直接依赖 (`@vue/cli-plugin-babel`) 好让它能更符合标准且减少出错。
 
 ### `@vue/cli-plugin-eslint`
 
