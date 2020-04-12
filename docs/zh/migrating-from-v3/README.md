@@ -154,3 +154,7 @@ module.exports = {
   }
 }
 ```
+
+##### Other Changes
+
+- [The `pug-plain` rule 改名为 `pug-plain-loader`](https://github.com/vuejs/vue-cli/pull/4230)
