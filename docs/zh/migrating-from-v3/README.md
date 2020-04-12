@@ -273,3 +273,10 @@ Bundled config 以及 generated test [已经被完全重写了](https://github.c
 - `@vue/cli-plugin-unit-jest/presets/typescript-and-babel` preset 支持 TypeScript (以及 TSX) 还有 babel。
 
 如果你自项目创建都没有改过默认的 Jest 配置 (一般在 `jest.config.js` 或 `package.json` 中的 `jest` 字段)，现在你可以用一个单一字段来替换掉之前大篇幅的配置:
+
+```js
+module.exports = {
+  // Replace the following preset name with the one you want to use from the above list
+  preset: '@vue/cli-plugin-unit-jest'
+}
+```
