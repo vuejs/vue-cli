@@ -184,16 +184,8 @@ Babel 插件需要一个 peer dependency，用来帮助执行转译后的代码
 在 Vue CLI v3中，要求的 `core-js` 版本是 2.x，现在已经升级为 3.x。
 
 如果你是通过 `vue upgrade babel` 升级，移植过程是完全自动化的。
+但是如果你在一个项目中有自定义配置，你可能需要手动更新这些字段 (更多详情，请查看[core-js 更新日志](https://github.com/zloirock/core-js/blob/master/CHANGELOG.md#L279-L297))。
 
-- 在 v3 中，`babel.config.js` 中默认的 babel preset 是 `@vue/app`。
-- 在 v4 中，我们把它移动到了 plugin，所以现在改名为 `@vue/cli-plugin-babel/preset`
-
-这是因为 `@vue/babel-preset-app` 是项目的一个非直接依赖。
-它能工作是因为 npm 的 package hoisting。
-但是如果你在一个项目中有若干个同 package 的多个互相冲突的非直接依赖版本，或者包管理工具对依赖解决方案有更严格的限制 (例如 yarn plug'n'play 或 pnpm)，仍然可能会有潜在的问题。
-所以我们把它移到了项目的直接依赖 (`@vue/cli-plugin-babel`) 好让它能更符合标准且减少出错。
-
-------
 
 ### `@vue/cli-plugin-eslint`
 
@@ -204,5 +196,19 @@ Babel 插件需要一个 peer dependency，用来帮助执行转译后的代码
 如果你的项目是使用 Vue CLI 3.0.x 或更早版本搭建的，你可能需要把 `eslint@4` 添加到项目的依赖 (如果你使用 `vue upgrade eslint` 升级，这个过程是完全自动的)。
 
 同时建议升级你的 ESLint 到 v5，以及 ESLint config 到最新版。(ESLint v6 支持工作进行中)
+
+------
+
+#### The Prettier Preset
+
+我们之前实现的 prettier preset 是有缺陷的。我们已经在 Vue CLI 3.10中更新了预置模板。
+
+它现在需要 `eslint`，`eslint-plugin-prettier` 和 `prettier` 作为 peer dependencies，已符合[ESLint 生态系统中的标准实践](https://github.com/eslint/eslint/issues/3458)。
+
+对于更早的项目，如果你遇到了问题，例如 `Cannot find module: eslint-plugin-prettier`，请执行下面的命令来修复:
+
+```sh
+npm install --save-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-prettier prettier
+```
 
 ------
