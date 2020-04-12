@@ -117,3 +117,7 @@ vue upgrade
 #### 对 CSS Module 用户
 
 - [为了便于使用 `css.requireModuleExtension` 已弃用 `css.modules`](https://github.com/vuejs/vue-cli/pull/4387)。
+
+#### `vue.config.js` 选项
+
+已弃用的 [`baseUrl` option](https://cli.vuejs.org/config/#baseurl) 现在已经 [被移除](https://github.com/vuejs/vue-cli/pull/4388)
