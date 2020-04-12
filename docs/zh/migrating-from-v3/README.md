@@ -290,3 +290,7 @@ module.exports = {
 关于 jsdom 更详细的更新日志，请查阅 <https://github.com/jsdom/jsdom/blob/master/Changelog.md>
 :::
 
+### `@vue/cli-plugin-unit-mocha`
+
+- 使用 mochapack 替换 mocha-webpack，请看更新日志 <https://github.com/sysgears/mochapack/releases>。这个改变不会影响实际使用。
+- 升级到 mocha 6，参看 [Mocha 更新日志](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#600-0--2019-01-01) 获取更多细节。
