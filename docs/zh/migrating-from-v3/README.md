@@ -158,3 +158,19 @@ module.exports = {
 ##### Other Changes
 
 - [The `pug-plain` rule 改名为 `pug-plain-loader`](https://github.com/vuejs/vue-cli/pull/4230)
+
+#### 基础 Loaders / Plugins
+
+不会影响用户除非你使用 `chainWebpack` / `configureWebpack` 自定义了配置
+
+`css-loader` 已经从 v1 升级到了 v3:
+
+- [v2 更新日志](https://github.com/webpack-contrib/css-loader/releases/tag/v2.0.0)
+- [v3 更新日志](https://github.com/webpack-contrib/css-loader/releases/tag/v3.0.0)
+
+若干个基础的 webpack loader 和插件已经升级，其中的绝大多数不太重要:
+
+- `url-loader` [从 v1 to v2](https://github.com/webpack-contrib/url-loader/releases/tag/v2.0.0)
+- `file-loader` [从 v3 to v4](https://github.com/webpack-contrib/file-loader/releases/tag/v4.0.0)
+- `copy-webpack-plugin` [从 v4 to v5](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md#500-2019-02-20)
+- `terser-webpack-plugin` [从 v1 to v2](https://github.com/vuejs/vue-cli/pull/4676)
