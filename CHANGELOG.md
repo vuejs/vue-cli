@@ -1,4 +1,90 @@
 
+## 4.3.1 (2020-04-07)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#5363](https://github.com/vuejs/vue-cli/pull/5363) fix(eslint-migrator): fix local eslint major version detection ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5360](https://github.com/vuejs/vue-cli/pull/5360) fix: run migrator in a separator process, fix require cache issues during upgrade ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 4.3.0 (2020-04-01)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-unit-mocha`
+  * [#5294](https://github.com/vuejs/vue-cli/pull/5294) feat(service): Allow mocha unit tests debugger to be bound to a specified IP and port ([@darrylkuhn](https://github.com/darrylkuhn))
+* `@vue/babel-preset-app`
+  * [#5322](https://github.com/vuejs/vue-cli/pull/5322) feat: enable `bugfixes` option for babel by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5293](https://github.com/vuejs/vue-cli/pull/5293) support vue.config.cjs ([@simon300000](https://github.com/simon300000))
+  * [#3886](https://github.com/vuejs/vue-cli/pull/3886) feat: wc entry accepts multiple file patterns splited by ',' ([@manico](https://github.com/manico))
+* `@vue/cli`
+  * [#5212](https://github.com/vuejs/vue-cli/pull/5212) feat(vue-cli): Choosing to save as a preset tells you where it is saved ([@jaireina](https://github.com/jaireina))
+* `@vue/cli-plugin-typescript`
+  * [#5170](https://github.com/vuejs/vue-cli/pull/5170) feat: use @vue/compiler-sfc as a compiler for TS if available ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli-plugin-eslint`, `@vue/cli-service-global`, `@vue/cli-ui-addon-widgets`
+  * [#5241](https://github.com/vuejs/vue-cli/pull/5241) feat: ease the default `no-console` severity to `warn` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`
+  * [#5233](https://github.com/vuejs/vue-cli/pull/5233) feat: add "not dead" to the default browserslist query ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-router`
+  * [#4805](https://github.com/vuejs/vue-cli/pull/4805) types(router): added router array type for Array RouteConfig ([@manuelojeda](https://github.com/manuelojeda))
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`
+  * [#5315](https://github.com/vuejs/vue-cli/pull/5315) fix: avoid process hanging when trying to get Chrome version ([@sodatea](https://github.com/sodatea))
+  * [#5264](https://github.com/vuejs/vue-cli/pull/5264) fix false positive of `hasProjectNpm` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#5290](https://github.com/vuejs/vue-cli/pull/5290) fix(cli-ui): build task defaults should respect outputDir option from config file (Closes [#2639](https://github.com/vuejs/vue-cli/issues/2639)) ([@LinusBorg](https://github.com/LinusBorg))
+* `@vue/cli-service`
+  * [#5320](https://github.com/vuejs/vue-cli/pull/5320) fix: spawn scripts with node, fix modern mode with Yarn 2 (Berry) ([@sodatea](https://github.com/sodatea))
+  * [#5247](https://github.com/vuejs/vue-cli/pull/5247) fix(target-lib): fix dynamic public path in a dynamic chunk in Firefox ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-pwa`
+  * [#5087](https://github.com/vuejs/vue-cli/pull/5087) feat(pwa): Check for null or undefined in iconPaths ([@janispritzkau](https://github.com/janispritzkau))
+* `@vue/cli-plugin-eslint`
+  * [#5242](https://github.com/vuejs/vue-cli/pull/5242) fix: fix severity config in ui ([@sodatea](https://github.com/sodatea))
+* `@vue/babel-preset-app`
+  * [#5236](https://github.com/vuejs/vue-cli/pull/5236) fix(babel-preset-app): avoid corejs warning when useBuiltIns is false ([@LeBenLeBen](https://github.com/LeBenLeBen))
+
+#### :memo: Documentation
+* [#5243](https://github.com/vuejs/vue-cli/pull/5243) docs: add warning on client side environment variables ([@sodatea](https://github.com/sodatea))
+* [#5231](https://github.com/vuejs/vue-cli/pull/5231) Update plugin-dev.md ([@yeyan1996](https://github.com/yeyan1996))
+
+#### :house: Internal
+* `@vue/cli-service-global`
+  * [#5319](https://github.com/vuejs/vue-cli/pull/5319) chore(cli-service-global): remove direct dependency on `@vue/babel-preset-app` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5305](https://github.com/vuejs/vue-cli/pull/5305) refactor: simplify config loading by skipping `fs.existsSync` check ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5228](https://github.com/vuejs/vue-cli/pull/5228) test: e2e test case for command suggestion logic ([@jamesgeorge007](https://github.com/jamesgeorge007))
+  * [#5238](https://github.com/vuejs/vue-cli/pull/5238) Improve package.json not found error  ([@barbeque](https://github.com/barbeque))
+
+#### :hammer: Underlying Tools
+* `@vue/cli-plugin-eslint`
+  * [#5273](https://github.com/vuejs/vue-cli/pull/5273) chore(eslint): bump minimum required eslint-loader version to support ESLint 6 ([@megos](https://github.com/megos))
+
+#### Committers: 15
+- Benoît Burgener ([@LeBenLeBen](https://github.com/LeBenLeBen))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Darryl Kuhn ([@darrylkuhn](https://github.com/darrylkuhn))
+- George Tsiolis ([@gtsiolis](https://github.com/gtsiolis))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Jadranko Dragoje ([@manico](https://github.com/manico))
+- Jair Reina ([@jaireina](https://github.com/jaireina))
+- James George ([@jamesgeorge007](https://github.com/jamesgeorge007))
+- Janis Pritzkau ([@janispritzkau](https://github.com/janispritzkau))
+- Manuel Ojeda ([@manuelojeda](https://github.com/manuelojeda))
+- Mike ([@barbeque](https://github.com/barbeque))
+- Thorsten Lünborg ([@LinusBorg](https://github.com/LinusBorg))
+- megos ([@megos](https://github.com/megos))
+- simon3000 ([@simon300000](https://github.com/simon300000))
+- 夜宴 ([@yeyan1996](https://github.com/yeyan1996))
+
+
+
 ## 4.2.3 (2020-02-27)
 
 #### :bug: Bug Fix

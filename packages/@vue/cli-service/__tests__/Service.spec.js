@@ -1,5 +1,4 @@
 jest.mock('fs')
-jest.mock('/vue.config.js', () => ({ lintOnSave: false }), { virtual: true })
 jest.mock('vue-cli-plugin-foo', () => () => {}, { virtual: true })
 
 const fs = require('fs')
@@ -61,8 +60,8 @@ test('env loading for custom mode', () => {
 test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
-      'bar': '^1.0.0',
-      '@vue/cli-plugin-babel': '^4.2.0',
+      bar: '^1.0.0',
+      '@vue/cli-plugin-babel': '^4.3.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -125,23 +124,18 @@ test('keep publicPath when empty', () => {
 })
 
 test('load project options from vue.config.js', () => {
-  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
-  fs.writeFileSync('/vue.config.js', `module.exports = { lintOnSave: false }`)
+  jest.mock(path.resolve('/', 'vue.config.js'), () => ({ lintOnSave: false }), { virtual: true })
   mockPkg({
     vue: {
       lintOnSave: 'default'
     }
   })
   const service = createMockService()
-  fs.unlinkSync('/vue.config.js')
-  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
   // vue.config.js has higher priority
   expect(service.projectOptions.lintOnSave).toBe(false)
 })
 
-test('load project options from vue.config.js', () => {
-  process.env.VUE_CLI_SERVICE_CONFIG_PATH = `/vue.config.js`
-  fs.writeFileSync('/vue.config.js', '')  // only to ensure fs.existsSync returns true
+test('load project options from vue.config.js as a function', () => {
   jest.mock('/vue.config.js', () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
     vue: {
@@ -149,8 +143,6 @@ test('load project options from vue.config.js', () => {
     }
   })
   const service = createMockService()
-  fs.unlinkSync('/vue.config.js')
-  delete process.env.VUE_CLI_SERVICE_CONFIG_PATH
   // vue.config.js has higher priority
   expect(service.projectOptions.lintOnSave).toBe(false)
 })
@@ -191,7 +183,7 @@ test('api: --skip-plugins', () => {
     id: 'test-command',
     apply: api => {
       api.registerCommand('foo', _args => {
-        return
+
       })
     }
   },

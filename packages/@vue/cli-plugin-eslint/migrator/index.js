@@ -21,10 +21,11 @@ module.exports = async (api) => {
   }
 
   const localESLintMajor = semver.major(
-    semver.maxSatisfying(
-      ['4.99.0', '5.99.0', '6.99.0'],
-      localESLintRange
-    )
+    semver.maxSatisfying(['4.99.0', '5.99.0', '6.99.0'], localESLintRange) ||
+      // in case the user does not specify a typical caret range;
+      // it is used as **fallback** because the user may have not previously
+      // installed eslint yet, such as in the case that they are from v3.0.x
+      require('eslint/package.json').version
   )
 
   if (localESLintMajor === 6) {
