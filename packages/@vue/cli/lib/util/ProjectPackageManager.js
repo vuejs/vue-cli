@@ -290,20 +290,25 @@ class PackageManager {
   }
 
   async upgrade (packageName) {
-    const realname = stripVersion(packageName)
-    if (
-      isTestOrDebug &&
-      (packageName === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(realname)))
-    ) {
-      // link packages in current repo for test
-      const src = path.resolve(__dirname, `../../../../${realname}`)
-      const dest = path.join(this.context, 'node_modules', realname)
-      await fs.remove(dest)
-      await fs.symlink(src, dest, 'dir')
-      return
+    // manage multiple packages separated by spaces
+    const packageNamesArray = [];
+
+    for (const packname of packageName.split(" ")) {
+      const realname = stripVersion(packname)
+      if (
+        isTestOrDebug &&
+        (packname === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(realname)))
+      ) {
+        // link packages in current repo for test
+        const src = path.resolve(__dirname, `../../../../${realname}`)
+        const dest = path.join(this.context, 'node_modules', realname)
+        await fs.remove(dest)
+        await fs.symlink(src, dest, 'dir')
+      }
+      else packageNamesArray.push(packname)
     }
 
-    return await this.runCommand('add', [packageName])
+    if(packageNamesArray.length) return await this.runCommand('add', packageNamesArray)
   }
 }
 
