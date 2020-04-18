@@ -291,9 +291,9 @@ class PackageManager {
 
   async upgrade (packageName) {
     // manage multiple packages separated by spaces
-    const packageNamesArray = [];
+    const packageNamesArray = []
 
-    for (const packname of packageName.split(" ")) {
+    for (const packname of packageName.split(' ')) {
       const realname = stripVersion(packname)
       if (
         isTestOrDebug &&
@@ -304,11 +304,12 @@ class PackageManager {
         const dest = path.join(this.context, 'node_modules', realname)
         await fs.remove(dest)
         await fs.symlink(src, dest, 'dir')
+      } else {
+        packageNamesArray.push(packname)
       }
-      else packageNamesArray.push(packname)
     }
 
-    if(packageNamesArray.length) return await this.runCommand('add', packageNamesArray)
+    if (packageNamesArray.length) return await this.runCommand('add', packageNamesArray)
   }
 }
 
