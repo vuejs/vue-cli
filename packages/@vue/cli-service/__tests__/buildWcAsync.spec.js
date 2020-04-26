@@ -1,4 +1,4 @@
-jest.setTimeout(15000)
+jest.setTimeout(30000)
 
 const path = require('path')
 const portfinder = require('portfinder')
