@@ -861,7 +861,7 @@ The logo should be a square non-transparent image (ideally 84x84).
 
 ## Publish Plugin to npm
 
-To publish your plugin, you need to be registered an [npmjs.com](npmjs.com) and you should have `npm` installed globally. If it's your first npm module, please run
+To publish your plugin, you need to be registered an [npmjs.com](https://www.npmjs.com) and you should have `npm` installed globally. If it's your first npm module, please run
 
 ```bash
 npm login
