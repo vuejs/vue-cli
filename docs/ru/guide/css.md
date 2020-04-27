@@ -137,7 +137,7 @@ module.exports = {
       // что у вас в проекте есть файл `src/variables.scss`
       // Примечание: эта опция называется "data" в sass-loader v7
       sass: {
-        prependData: `@import "~@/variables.sass"`
+        prependData: `@import "~@/variables.sass";`
       },
       // по умолчанию опция `sass` будет применяться к обоим синтаксисам
       // потому что синтаксис `scss` по сути также обрабатывается sass-loader

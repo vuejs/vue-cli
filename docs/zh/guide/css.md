@@ -127,7 +127,7 @@ module.exports = {
         // @/ 是 src/ 的别名
         // 所以这里假设你有 `src/variables.sass` 这个文件
         // 注意：在 sass-loader v7 中，这个选项名是 "data"
-        prependData: `@import "~@/variables.sass"`
+        prependData: `@import "~@/variables.sass";`
       },
       // 默认情况下 `sass` 选项会同时对 `sass` 和 `scss` 语法同时生效
       // 因为 `scss` 语法在内部也是由 sass-loader 处理的

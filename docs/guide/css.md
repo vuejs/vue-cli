@@ -135,7 +135,7 @@ module.exports = {
       // so this assumes you have a file named `src/variables.sass`
       // Note: this option is named as "data" in sass-loader v7
       sass: {
-        prependData: `@import "~@/variables.sass"`
+        prependData: `@import "~@/variables.sass";`
       },
       // by default the `sass` option will apply to both syntaxes
       // because `scss` syntax is also processed by sass-loader underlyingly
