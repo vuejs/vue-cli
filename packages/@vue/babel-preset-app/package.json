@@ -30,12 +30,12 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-jsx": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
     "@babel/runtime": "^7.9.2",
     "@vue/babel-preset-jsx": "^1.1.2",
-    "babel-plugin-dynamic-import-node": "^2.3.0",
-    "core-js": "^3.6.4",
-    "core-js-compat": "^3.6.4"
+    "babel-plugin-dynamic-import-node": "^2.3.3",
+    "core-js": "^3.6.5",
+    "core-js-compat": "^3.6.5"
   },
   "peerDependencies": {
     "@babel/core": "*"

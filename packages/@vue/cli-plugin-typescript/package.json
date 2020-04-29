@@ -23,7 +23,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/webpack-env": "^1.15.1",
+    "@types/webpack-env": "^1.15.2",
     "@vue/cli-shared-utils": "^4.3.1",
     "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^3.1.1",
@@ -44,6 +44,6 @@
     "@types/mocha": "^5.2.6",
     "typescript": "~3.8.3",
     "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^8.4.1"
+    "vue-property-decorator": "^8.4.2"
   }
 }
