@@ -33,5 +33,6 @@ module.exports = {
         import: ['~@/style/imports']
       }
     }
-  }
+  },
+  parallel: !process.env.CIRCLECI
 }
