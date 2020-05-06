@@ -12,7 +12,7 @@ Vue CLI 项目天生支持 [PostCSS](http://postcss.org/)、[CSS Modules](https:
 
 ``` bash
 # Sass
-npm install -D sass-loader node-sass
+npm install -D sass-loader sass
 
 # Less
 npm install -D less-loader less
