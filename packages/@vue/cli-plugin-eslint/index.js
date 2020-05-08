@@ -25,6 +25,7 @@ module.exports = (api, options) => {
         '.eslintrc.yml',
         '.eslintrc.json',
         '.eslintrc',
+        '.eslintignore',
         'package.json'
       ]
     )
