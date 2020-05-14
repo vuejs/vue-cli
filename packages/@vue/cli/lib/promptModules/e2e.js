@@ -7,7 +7,7 @@ module.exports = cli => {
     short: 'E2E',
     description: 'Add an End-to-End testing solution to the app like Cypress or Nightwatch',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/docs#e2e-testing',
-    plugins: ['e2e-cypress', 'e2e-nightwatch']
+    plugins: ['e2e-cypress', 'e2e-nightwatch', 'e2e-webdriverio']
   })
 
   cli.injectPrompt({
@@ -25,6 +25,11 @@ module.exports = cli => {
         name: 'Nightwatch (WebDriver-based)',
         value: 'nightwatch',
         short: 'Nightwatch'
+      },
+      {
+        name: 'WebDriverIO (WebDriver/DevTools based)',
+        value: 'webdriverio',
+        short: 'WebdriverIO'
       }
     ]
   })
@@ -54,6 +59,8 @@ module.exports = cli => {
       options.plugins['@vue/cli-plugin-e2e-cypress'] = {}
     } else if (answers.e2e === 'nightwatch') {
       options.plugins['@vue/cli-plugin-e2e-nightwatch'] = {}
+    } else if (answers.e2e === 'webdriverio') {
+      options.plugins['@vue/cli-plugin-e2e-webdriverio'] = {}
     }
   })
 }
