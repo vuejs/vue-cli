@@ -19,6 +19,3 @@ exports.config = {
     }
   }]
 }
-
-
-console.log(process.argv);

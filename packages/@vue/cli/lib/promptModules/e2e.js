@@ -27,7 +27,7 @@ module.exports = cli => {
         short: 'Nightwatch'
       },
       {
-        name: 'WebDriverIO (WebDriver/DevTools based)',
+        name: 'WebdriverIO (WebDriver/DevTools based)',
         value: 'webdriverio',
         short: 'WebdriverIO'
       }
