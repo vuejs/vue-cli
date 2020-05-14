@@ -127,9 +127,10 @@ module.exports = (api, options) => {
 
     // inject dev & hot-reload middleware entries
     if (!isProduction) {
+      const sockPath = projectDevServerOptions.sockPath || '/sockjs-node'
       const sockjsUrl = publicUrl
         // explicitly configured via devServer.public
-        ? `?${publicUrl}/sockjs-node`
+        ? `?${publicUrl}&sockPath=${sockPath}`
         : isInContainer
           // can't infer public network url if inside a container...
           // use client-side inference (note this would break with non-root publicPath)
@@ -138,9 +139,8 @@ module.exports = (api, options) => {
           : `?` + url.format({
             protocol,
             port,
-            hostname: urls.lanUrlForConfig || 'localhost',
-            pathname: '/sockjs-node'
-          })
+            hostname: urls.lanUrlForConfig || 'localhost'
+          }) + `&sockPath=${sockPath}`
       const devClients = [
         // dev server client
         require.resolve(`webpack-dev-server/client`) + sockjsUrl,
