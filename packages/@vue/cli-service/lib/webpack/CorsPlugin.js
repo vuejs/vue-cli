@@ -38,7 +38,7 @@ module.exports = class CorsPlugin {
               if (hash) {
                 tag.attributes.integrity = hash
               }
-            } else if (tag.tagName === 'link' && tag.attributes.rel === 'stylesheet') {
+            } else if (tag.tagName === 'link' && (tag.attributes.rel === 'stylesheet' || tag.attributes.rel === 'prefetch')) {
               const hash = computeHash(tag.attributes.href)
               if (hash) {
                 tag.attributes.integrity = hash
