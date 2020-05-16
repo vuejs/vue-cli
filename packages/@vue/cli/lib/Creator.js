@@ -32,8 +32,6 @@ const {
   log,
   warn,
   error,
-  logWithSpinner,
-  stopSpinner,
 
   hasGit,
   hasProjectGit,
@@ -126,7 +124,7 @@ module.exports = class Creator extends EventEmitter {
     const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
     await clearConsole()
-    logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
+    log(`✨`, `Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
     // get latest CLI plugin version
@@ -164,13 +162,12 @@ module.exports = class Creator extends EventEmitter {
     // so that vue-cli-service can setup git hooks.
     const shouldInitGit = this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
-      logWithSpinner(`🗃`, `Initializing git repository...`)
+      log(`🗃`, `Initializing git repository...`)
       this.emit('creation', { event: 'git-init' })
       await run('git init')
     }
 
     // install plugins
-    stopSpinner()
     log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`)
     log()
     this.emit('creation', { event: 'plugins-install' })
@@ -205,7 +202,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run complete cbs if any (injected by generators)
-    logWithSpinner('⚓', `Running completion hooks...`)
+    log('⚓', `Running completion hooks...`)
     this.emit('creation', { event: 'completion-hooks' })
     for (const cb of afterInvokeCbs) {
       await cb()
@@ -215,9 +212,8 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // generate README.md
-    stopSpinner()
     log()
-    logWithSpinner('📄', 'Generating README.md...')
+    log('📄', 'Generating README.md...')
     await writeFileTree(context, {
       'README.md': generateReadme(generator.pkg, packageManager)
     })
@@ -250,7 +246,6 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // log instructions
-    stopSpinner()
     log()
     log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
     if (!cliOptions.skipGetStarted) {
@@ -328,13 +323,11 @@ module.exports = class Creator extends EventEmitter {
     } else if (name.endsWith('.json') || /^\./.test(name) || path.isAbsolute(name)) {
       preset = await loadLocalPreset(path.resolve(name))
     } else if (name.includes('/')) {
-      logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
+      log(`Fetching remote preset ${chalk.cyan(name)}...`)
       this.emit('creation', { event: 'fetch-remote-preset' })
       try {
         preset = await loadRemotePreset(name, clone)
-        stopSpinner()
       } catch (e) {
-        stopSpinner()
         error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
         throw e
       }
