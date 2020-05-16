@@ -211,12 +211,14 @@ module.exports = class Creator extends EventEmitter {
       await cb()
     }
 
-    // generate README.md
-    log()
-    log('📄', 'Generating README.md...')
-    await writeFileTree(context, {
-      'README.md': generateReadme(generator.pkg, packageManager)
-    })
+    if (!generator.files['README.md']) {
+      // generate README.md
+      log()
+      log('📄', 'Generating README.md...')
+      await writeFileTree(context, {
+        'README.md': generateReadme(generator.pkg, packageManager)
+      })
+    }
 
     // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
     if (packageManager === 'pnpm') {
