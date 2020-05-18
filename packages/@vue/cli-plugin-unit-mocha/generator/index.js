@@ -5,7 +5,7 @@ module.exports = (api, _, __, invoking) => {
 
   api.extendPackage({
     devDependencies: {
-      '@vue/test-utils': '1.0.0-beta.31',
+      '@vue/test-utils': '^1.0.3',
       'chai': '^4.1.2'
     },
     scripts: {
