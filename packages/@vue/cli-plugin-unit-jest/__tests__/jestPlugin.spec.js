@@ -66,6 +66,10 @@ test('should work without Babel', async () => {
     useConfigFiles: true
   })
   await project.run(`vue-cli-service test:unit`)
+
+  await project.run(`vue-cli-service test:unit --coverage --collectCoverageFrom="src/**/*.{js,vue}"`)
+  const appCoverage = await project.read('coverage/lcov-report/App.vue.html')
+  expect(appCoverage).toBeTruthy()
 })
 
 test('should work with tsx', async () => {

@@ -13,7 +13,7 @@ module.exports = deepmerge(
     globals: {
       'vue-jest': {
         babelConfig: {
-          plugins: [require('babel-plugin-transform-es2015-modules-commonjs')]
+          plugins: ['babel-plugin-transform-es2015-modules-commonjs']
         }
       }
     }
