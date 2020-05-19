@@ -65,6 +65,9 @@ exports.loadModule = function (request, context, force = false) {
   // (which we used in migrator for inquirer, and in tests for cli-service)
   // TODO: it's supported in Jest 25
   if (process.env.VUE_CLI_TEST && (request.endsWith('migrator') || context === '/')) {
+    if (context === '/') {
+      request = request.replace('C:\\', '/')
+    }
     return require(request)
   }
 
