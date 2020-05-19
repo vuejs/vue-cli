@@ -17,7 +17,7 @@ const {
 } = require('@vue/cli-shared-utils')
 const confirmIfGitDirty = require('./util/confirmIfGitDirty')
 
-async function add (pluginName, options = {}, context = process.cwd()) {
+async function add (pluginToAdd, options = {}, context = process.cwd()) {
   if (!(await confirmIfGitDirty(context))) {
     return
   }
@@ -26,14 +26,21 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   const servicePkg = loadModule('@vue/cli-service/package.json', context)
   if (servicePkg && semver.satisfies(servicePkg.version, '3.x')) {
     // special internal "plugins"
-    if (/^(@vue\/)?router$/.test(pluginName)) {
+    if (/^(@vue\/)?router$/.test(pluginToAdd)) {
       return addRouter(context)
     }
-    if (/^(@vue\/)?vuex$/.test(pluginName)) {
+    if (/^(@vue\/)?vuex$/.test(pluginToAdd)) {
       return addVuex(context)
     }
   }
 
+  const pluginRe = /^(@?[^@]+)(?:@(.+))?$/
+  const [
+    // eslint-disable-next-line
+    _skip,
+    pluginName,
+    pluginVersion
+  ] = pluginToAdd.match(pluginRe)
   const packageName = resolvePluginId(pluginName)
 
   log()
@@ -41,9 +48,11 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   log()
 
   const pm = new PackageManager({ context })
-  const { latestMinor } = await getVersions()
 
-  if (isOfficialPlugin(packageName)) {
+  if (pluginVersion) {
+    await pm.add(`${packageName}@${pluginVersion}`)
+  } else if (isOfficialPlugin(packageName)) {
+    const { latestMinor } = await getVersions()
     await pm.add(`${packageName}@~${latestMinor}`)
   } else {
     await pm.add(packageName, { tilde: true })
