@@ -7,7 +7,7 @@ exports.prompt = prompts => {
 
   const answers = {}
   let skipped = 0
-  prompts.forEach((prompt, i) => {
+  prompts.forEach((prompt, index) => {
     if (prompt.when && !prompt.when(answers)) {
       skipped++
       return
@@ -25,7 +25,7 @@ exports.prompt = prompts => {
         : val
     }
 
-    const a = pendingAssertions[i - skipped]
+    const a = pendingAssertions[index - skipped]
     if (!a) {
       console.error(`no matching assertion for prompt:`, prompt)
       console.log(prompts)
@@ -86,6 +86,10 @@ exports.prompt = prompts => {
   pendingAssertions = null
 
   return Promise.resolve(answers)
+}
+
+exports.createPromptModule = () => {
+  return exports.prompt
 }
 
 exports.expectPrompts = assertions => {

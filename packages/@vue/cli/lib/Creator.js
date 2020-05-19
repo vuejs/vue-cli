@@ -182,7 +182,7 @@ module.exports = class Creator extends EventEmitter {
     // run generator
     log(`🚀  Invoking generators...`)
     this.emit('creation', { event: 'invoking-generators' })
-    const plugins = await this.resolvePlugins(preset.plugins)
+    const plugins = await this.resolvePlugins(preset.plugins, pkg)
     const generator = new Generator(context, {
       pkg,
       plugins,
@@ -355,21 +355,33 @@ module.exports = class Creator extends EventEmitter {
   }
 
   // { id: options } => [{ id, apply, options }]
-  async resolvePlugins (rawPlugins) {
+  async resolvePlugins (rawPlugins, pkg) {
     // ensure cli-service is invoked first
     rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'], true)
     const plugins = []
     for (const id of Object.keys(rawPlugins)) {
       const apply = loadModule(`${id}/generator`, this.context) || (() => {})
       let options = rawPlugins[id] || {}
+
       if (options.prompts) {
-        const prompts = loadModule(`${id}/prompts`, this.context)
-        if (prompts) {
+        let pluginPrompts = loadModule(`${id}/prompts`, this.context)
+
+        if (pluginPrompts) {
+          const prompt = inquirer.createPromptModule()
+
+          if (typeof pluginPrompts === 'function') {
+            pluginPrompts = pluginPrompts(pkg, prompt)
+          }
+          if (typeof pluginPrompts.getPrompts === 'function') {
+            pluginPrompts = pluginPrompts.getPrompts(pkg, prompt)
+          }
+
           log()
           log(`${chalk.cyan(options._isPreset ? `Preset options:` : id)}`)
-          options = await inquirer.prompt(prompts)
+          options = await prompt(pluginPrompts)
         }
       }
+
       plugins.push({ id, apply, options })
     }
     return plugins
