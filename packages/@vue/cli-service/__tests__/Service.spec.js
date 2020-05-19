@@ -29,6 +29,12 @@ beforeEach(() => {
   delete process.env.BAZ
 })
 
+afterEach(() => {
+  if (fs.existsSync('/vue.config.js')) {
+    fs.unlinkSync('/vue.config.js')
+  }
+})
+
 test('env loading', () => {
   process.env.FOO = 0
   fs.writeFileSync('/.env.local', `FOO=1\nBAR=2`)
@@ -124,6 +130,7 @@ test('keep publicPath when empty', () => {
 })
 
 test('load project options from vue.config.js', () => {
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '')  // only to ensure fs.existsSync returns true
   jest.mock(path.resolve('/', 'vue.config.js'), () => ({ lintOnSave: false }), { virtual: true })
   mockPkg({
     vue: {
@@ -136,7 +143,8 @@ test('load project options from vue.config.js', () => {
 })
 
 test('load project options from vue.config.js as a function', () => {
-  jest.mock('/vue.config.js', () => function () { return { lintOnSave: false } }, { virtual: true })
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '')
+  jest.mock(path.resolve('/', 'vue.config.js'), () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
     vue: {
       lintOnSave: 'default'
