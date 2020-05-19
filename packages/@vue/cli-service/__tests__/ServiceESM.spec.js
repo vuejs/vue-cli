@@ -1,12 +1,13 @@
 const Service = require('../lib/Service')
 
-const configPath = '/vue.config.cjs'
+const path = require('path')
+const configPath = path.resolve('/', 'vue.config.cjs')
 
 jest.mock('fs')
 const fs = require('fs')
 
 beforeEach(() => {
-  fs.writeFileSync('/package.json', JSON.stringify({
+  fs.writeFileSync(path.resolve('/', 'package.json'), JSON.stringify({
     type: 'module',
     vue: {
       lintOnSave: 'default'
