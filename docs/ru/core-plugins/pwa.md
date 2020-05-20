@@ -81,6 +81,30 @@
       - start_url: `'.'`
       - display: `'standalone'`
       - theme_color: `pwa.themeColor`
+      - icons: `[
+                  {
+                    'src': './img/icons/android-chrome-192x192.png',
+                    'sizes': '192x192',
+                    'type': 'image/png'
+                  },
+                  {
+                    'src': './img/icons/android-chrome-512x512.png',
+                    'sizes': '512x512',
+                    'type': 'image/png'
+                  },
+                  {
+                    'src': './img/icons/android-chrome-maskable-192x192.png',
+                    'sizes': '192x192',
+                    'type': 'image/png',
+                    'purpose': 'maskable'
+                  },
+                  {
+                    'src': './img/icons/android-chrome-maskable-512x512.png',
+                    'sizes': '512x512',
+                    'type': 'image/png',
+                    'purpose': 'maskable'
+                  }
+                ]`
 
 - **pwa.iconPaths**
 
@@ -97,6 +121,8 @@
     ```
 
     Измените эти значения при необходимости использовать различные пути для иконок.
+
+    *ПРИМЕЧАНИЕ:* Эти иконки используются только для генерации мета-тегов в `<head>` HTML-документа. Для изменения пути к иконкам в манифесте используйте `pwa.manifestOptions.icons`
 
 ### Пример конфигурации
 

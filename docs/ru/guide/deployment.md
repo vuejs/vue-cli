@@ -370,7 +370,7 @@ npm install now
     git push heroku master
     ```
 
-Подробная информация: [https://gist.github.com/hone/24b06869b4c1eca701f9](https://gist.github.com/hone/24b06869b4c1eca701f9)
+Подробная информация: [Начало работы с SPA на Heroku](https://gist.github.com/hone/24b06869b4c1eca701f9)
 
 ### Surge
 
