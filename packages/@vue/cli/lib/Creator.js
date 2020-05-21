@@ -124,7 +124,7 @@ module.exports = class Creator extends EventEmitter {
     const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
     await clearConsole()
-    log(`✨`, `Creating project in ${chalk.yellow(context)}.`)
+    log(`✨  Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
     // get latest CLI plugin version
@@ -162,7 +162,7 @@ module.exports = class Creator extends EventEmitter {
     // so that vue-cli-service can setup git hooks.
     const shouldInitGit = this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
-      log(`🗃`, `Initializing git repository...`)
+      log(`🗃  Initializing git repository...`)
       this.emit('creation', { event: 'git-init' })
       await run('git init')
     }
@@ -202,7 +202,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run complete cbs if any (injected by generators)
-    log('⚓', `Running completion hooks...`)
+    log(`⚓  Running completion hooks...`)
     this.emit('creation', { event: 'completion-hooks' })
     for (const cb of afterInvokeCbs) {
       await cb()
@@ -214,7 +214,7 @@ module.exports = class Creator extends EventEmitter {
     if (!generator.files['README.md']) {
       // generate README.md
       log()
-      log('📄', 'Generating README.md...')
+      log('📄  Generating README.md...')
       await writeFileTree(context, {
         'README.md': generateReadme(generator.pkg, packageManager)
       })
