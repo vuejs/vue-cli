@@ -9,12 +9,12 @@ const defaultPolyfills = [
   // this is needed for object rest spread support in templates
   // as vue-template-es2015-compiler 1.8+ compiles it to Object.assign() calls.
   'es.object.assign',
-  // #2012 es6.promise replaces native Promise in FF and causes missing finally
+  // #2012 es.promise replaces native Promise in FF and causes missing finally
   'es.promise.finally'
 ]
 
 function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
-  const getTargets = require('@babel/helper-compilation-targets').default
+  const { default: getTargets, isRequired } = require('@babel/helper-compilation-targets')
   const builtInTargets = getTargets(targets, { ignoreBrowserslistConfig, configPath })
 
   // if no targets specified, include all default polyfills
@@ -22,8 +22,8 @@ function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath
     return includes
   }
 
-  const { list } = require('core-js-compat')({ targets: builtInTargets })
-  return includes.filter(item => list.includes(item))
+  const compatData = require('core-js-compat').data
+  return includes.filter(item => isRequired(item, builtInTargets, { compatData }))
 }
 
 module.exports = (context, options = {}) => {
@@ -108,6 +108,7 @@ module.exports = (context, options = {}) => {
     }
   } else if (process.env.VUE_CLI_MODERN_BUILD) {
     // targeting browsers that support <script type="module">
+    // TODO: should use intersections of esmodules & the user defined targets
     targets = { esmodules: true }
   } else {
     targets = rawTargets
@@ -122,8 +123,7 @@ module.exports = (context, options = {}) => {
   if (
     buildTarget === 'app' &&
     useBuiltIns === 'usage' &&
-    !process.env.VUE_CLI_BABEL_TARGET_NODE &&
-    !process.env.VUE_CLI_MODERN_BUILD
+    !process.env.VUE_CLI_BABEL_TARGET_NODE
   ) {
     polyfills = getPolyfills(targets, userPolyfills || defaultPolyfills, {
       ignoreBrowserslistConfig,
