@@ -1,4 +1,5 @@
 const path = require('path')
+const semver = require('semver')
 
 const defaultPolyfills = [
   // promise polyfill alone doesn't work in IE,
@@ -13,17 +14,62 @@ const defaultPolyfills = [
   'es.promise.finally'
 ]
 
-function getPolyfills (targets, includes, { ignoreBrowserslistConfig, configPath }) {
-  const { default: getTargets, isRequired } = require('@babel/helper-compilation-targets')
-  const builtInTargets = getTargets(targets, { ignoreBrowserslistConfig, configPath })
+function getPolyfills (
+  rawTargets,
+  includes,
+  { ignoreBrowserslistConfig, configPath }
+) {
+  const {
+    default: getTargets,
+    isRequired
+  } = require('@babel/helper-compilation-targets')
+  let targets = getTargets(rawTargets, {
+    ignoreBrowserslistConfig,
+    configPath
+  })
 
   // if no targets specified, include all default polyfills
-  if (!targets && !Object.keys(builtInTargets).length) {
+  if (
+    !rawTargets &&
+    !Object.keys(targets).length &&
+    !process.env.VUE_CLI_MODERN_BUILD
+  ) {
     return includes
   }
 
+  // targeting browsers that support <script type="module">
+  if (process.env.VUE_CLI_MODERN_BUILD) {
+    const modernTargets = getTargets(
+      { esmodules: true },
+      { ignoreBrowserslistConfig: true, configPath }
+    )
+
+    // use the intersection of modern mode browsers and user defined targets config
+    const intersection = Object.keys(modernTargets).reduce(
+      (results, browser) => {
+        // exclude the browsers that the user does not need
+        if (!targets[browser]) {
+          return results
+        }
+
+        // if the user-specified version is higher the minimum version that supports esmodule, than use it
+        results[browser] = semver.gt(
+          semver.coerce(modernTargets[browser]),
+          semver.coerce(targets[browser])
+        )
+          ? modernTargets[browser]
+          : targets[browser]
+
+        return results
+      },
+      {}
+    )
+
+    targets = intersection
+  }
+
   const compatData = require('core-js-compat').data
-  return includes.filter(item => isRequired(item, builtInTargets, { compatData }))
+  return includes.filter(item => isRequired(item, targets, { compatData }))
 }
 
 module.exports = (context, options = {}) => {
@@ -36,7 +82,7 @@ module.exports = (context, options = {}) => {
   // dropping them may break some projects.
   // So in the following blocks we don't directly test the `NODE_ENV`.
   // Rather, we turn it into the two commonly used feature flags.
-  if (process.env.NODE_ENV === 'test') {
+  if (!process.env.VUE_CLI_TEST && process.env.NODE_ENV === 'test') {
     // Both Jest & Mocha set NODE_ENV to 'test'.
     // And both requires the `node` target.
     process.env.VUE_CLI_BABEL_TARGET_NODE = 'true'
@@ -62,7 +108,7 @@ module.exports = (context, options = {}) => {
     bugfixes = true,
     targets: rawTargets,
     spec,
-    ignoreBrowserslistConfig = !!process.env.VUE_CLI_MODERN_BUILD,
+    ignoreBrowserslistConfig,
     configPath,
     include,
     exclude,
@@ -88,7 +134,30 @@ module.exports = (context, options = {}) => {
     version = runtimeVersion
   } = options
 
-  // resolve targets
+  // included-by-default polyfills. These are common polyfills that 3rd party
+  // dependencies may rely on (e.g. Vuex relies on Promise), but since with
+  // useBuiltIns: 'usage' we won't be running Babel on these deps, they need to
+  // be force-included.
+  let polyfills
+  const buildTarget = process.env.VUE_CLI_BUILD_TARGET || 'app'
+  if (
+    buildTarget === 'app' &&
+    useBuiltIns === 'usage' &&
+    !process.env.VUE_CLI_BABEL_TARGET_NODE
+  ) {
+    polyfills = getPolyfills(rawTargets, userPolyfills || defaultPolyfills, {
+      ignoreBrowserslistConfig,
+      configPath
+    })
+    plugins.push([
+      require('./polyfillsPlugin'),
+      { polyfills, entryFiles, useAbsolutePath: !!absoluteRuntime }
+    ])
+  } else {
+    polyfills = []
+  }
+
+  // resolve targets for preset-env
   let targets
   if (process.env.VUE_CLI_BABEL_TARGET_NODE) {
     // running tests in Node.js
@@ -108,33 +177,9 @@ module.exports = (context, options = {}) => {
     }
   } else if (process.env.VUE_CLI_MODERN_BUILD) {
     // targeting browsers that support <script type="module">
-    // TODO: should use intersections of esmodules & the user defined targets
     targets = { esmodules: true }
   } else {
     targets = rawTargets
-  }
-
-  // included-by-default polyfills. These are common polyfills that 3rd party
-  // dependencies may rely on (e.g. Vuex relies on Promise), but since with
-  // useBuiltIns: 'usage' we won't be running Babel on these deps, they need to
-  // be force-included.
-  let polyfills
-  const buildTarget = process.env.VUE_CLI_BUILD_TARGET || 'app'
-  if (
-    buildTarget === 'app' &&
-    useBuiltIns === 'usage' &&
-    !process.env.VUE_CLI_BABEL_TARGET_NODE
-  ) {
-    polyfills = getPolyfills(targets, userPolyfills || defaultPolyfills, {
-      ignoreBrowserslistConfig,
-      configPath
-    })
-    plugins.push([
-      require('./polyfillsPlugin'),
-      { polyfills, entryFiles, useAbsolutePath: !!absoluteRuntime }
-    ])
-  } else {
-    polyfills = []
   }
 
   const envOptions = {

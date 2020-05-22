@@ -48,20 +48,24 @@ test('polyfill detection', () => {
   expect(code).toMatch('"core-js/modules/es.map"')
 })
 
-test('modern mode always skips polyfills', () => {
+test('modern mode always skips unnecessary polyfills', () => {
   process.env.VUE_CLI_MODERN_BUILD = true
   let { code } = babel.transformSync(`
     const a = new Map()
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
-      targets: { ie: 9 },
+      targets: { ie: 9, chrome: 5 },
       useBuiltIns: 'usage'
     }]],
     filename: 'test-entry-file.js'
   })
-  // default includes
-  expect(code).not.toMatch(getAbsolutePolyfill('es.promise'))
+  // default includes that are supported in all modern browsers should be skipped
+  expect(code).not.toMatch('es.assign')
+  // according to the compat table, es.promise is fully supported in only chrome >= 67
+  // which is greater than both the minimum version supporting `module` (61) and the user-specified version (5)
+  // so it's still required
+  expect(code).toMatch('es.promise')
   // usage-based detection
   expect(code).not.toMatch('"core-js/modules/es.map"')
 
@@ -70,7 +74,7 @@ test('modern mode always skips polyfills', () => {
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
-      targets: { ie: 9 },
+      targets: { ie: 9, chrome: 5 },
       useBuiltIns: 'entry'
     }]],
     filename: 'test-entry-file.js'
