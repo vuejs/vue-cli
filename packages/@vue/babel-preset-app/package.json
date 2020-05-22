@@ -38,6 +38,12 @@
     "core-js-compat": "^3.6.5"
   },
   "peerDependencies": {
-    "@babel/core": "*"
+    "@babel/core": "*",
+    "core-js": "^3"
+  },
+  "peerDependenciesMeta": {
+    "core-js": {
+      "optional": true
+    }
   }
 }

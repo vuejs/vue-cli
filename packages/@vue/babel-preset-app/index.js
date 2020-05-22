@@ -139,7 +139,7 @@ module.exports = (context, options = {}) => {
 
   const envOptions = {
     bugfixes,
-    corejs: useBuiltIns ? 3 : false,
+    corejs: useBuiltIns ? require('core-js/package.json').version : false,
     spec,
     loose,
     debug,
@@ -206,7 +206,7 @@ module.exports = (context, options = {}) => {
       presets: [
         [require('@babel/preset-env'), {
           useBuiltIns,
-          corejs: useBuiltIns ? 3 : false
+          corejs: useBuiltIns ? require('core-js/package.json').version : false
         }]
       ]
     }]
