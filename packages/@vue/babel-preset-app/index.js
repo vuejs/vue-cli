@@ -14,58 +14,70 @@ const defaultPolyfills = [
   'es.promise.finally'
 ]
 
-function getPolyfills (
-  rawTargets,
-  includes,
-  { ignoreBrowserslistConfig, configPath }
-) {
-  const {
-    default: getTargets,
-    isRequired
-  } = require('@babel/helper-compilation-targets')
-  let targets = getTargets(rawTargets, {
-    ignoreBrowserslistConfig,
-    configPath
-  })
+const {
+  default: getTargets,
+  isRequired
+} = require('@babel/helper-compilation-targets')
 
-  // if no targets specified, include all default polyfills
-  if (
-    !rawTargets &&
-    !Object.keys(targets).length &&
-    !process.env.VUE_CLI_MODERN_BUILD
-  ) {
-    return includes
-  }
-
-  // targeting browsers that support <script type="module">
-  if (process.env.VUE_CLI_MODERN_BUILD) {
-    const modernTargets = getTargets(
-      { esmodules: true },
-      { ignoreBrowserslistConfig: true, configPath }
-    )
-
-    // use the intersection of modern mode browsers and user defined targets config
-    const intersection = Object.keys(modernTargets).reduce(
-      (results, browser) => {
-        // exclude the browsers that the user does not need
-        if (!targets[browser]) {
-          return results
-        }
-
-        // if the user-specified version is higher the minimum version that supports esmodule, than use it
-        results[browser] = semver.gt(
-          semver.coerce(modernTargets[browser]),
-          semver.coerce(targets[browser])
-        )
-          ? modernTargets[browser]
-          : targets[browser]
-
+function getIntersectionTargets (targets, constraintTargets) {
+  const intersection = Object.keys(constraintTargets).reduce(
+    (results, browser) => {
+      // exclude the browsers that the user does not need
+      if (!targets[browser]) {
         return results
-      },
-      {}
-    )
+      }
 
-    targets = intersection
+      // if the user-specified version is higher the minimum version that supports esmodule, than use it
+      results[browser] = semver.gt(
+        semver.coerce(constraintTargets[browser]),
+        semver.coerce(targets[browser])
+      )
+        ? constraintTargets[browser]
+        : targets[browser]
+
+      return results
+    },
+    {}
+  )
+
+  return intersection
+}
+
+function getModernTargets (targets) {
+  const allModernTargets = getTargets(
+    { esmodules: true },
+    { ignoreBrowserslistConfig: true }
+  )
+
+  // use the intersection of modern mode browsers and user defined targets config
+  return getIntersectionTargets(targets, allModernTargets)
+}
+
+function getWCTargets (targets) {
+  // targeting browsers that at least support ES2015 classes
+  // https://github.com/babel/babel/blob/v7.9.6/packages/babel-compat-data/data/plugins.json#L194-L204
+  const allWCTargets = getTargets(
+    {
+      browsers: [
+        'Chrome >= 46',
+        'Firefox >= 45',
+        'Safari >= 10',
+        'Edge >= 13',
+        'iOS >= 10',
+        'Electron >= 0.36'
+      ]
+    },
+    { ignoreBrowserslistConfig: true }
+  )
+
+  // use the intersection of browsers supporting Web Components and user defined targets config
+  return getIntersectionTargets(targets, allWCTargets)
+}
+
+function getPolyfills (targets, includes) {
+  // if no targets specified, include all default polyfills
+  if (!targets || !Object.keys(targets).length) {
+    return includes
   }
 
   const compatData = require('core-js-compat').data
@@ -134,6 +146,19 @@ module.exports = (context, options = {}) => {
     version = runtimeVersion
   } = options
 
+  // resolve targets for preset-env
+  let targets = getTargets(rawTargets, { ignoreBrowserslistConfig, configPath })
+  if (process.env.VUE_CLI_BABEL_TARGET_NODE) {
+    // running tests in Node.js
+    targets = { node: 'current' }
+  } else if (process.env.VUE_CLI_BUILD_TARGET === 'wc' || process.env.VUE_CLI_BUILD_TARGET === 'wc-async') {
+    // targeting browsers that at least support ES2015 classes
+    targets = getWCTargets(targets)
+  } else if (process.env.VUE_CLI_MODERN_BUILD) {
+    // targeting browsers that at least support <script type="module">
+    targets = getModernTargets(targets)
+  }
+
   // included-by-default polyfills. These are common polyfills that 3rd party
   // dependencies may rely on (e.g. Vuex relies on Promise), but since with
   // useBuiltIns: 'usage' we won't be running Babel on these deps, they need to
@@ -145,41 +170,13 @@ module.exports = (context, options = {}) => {
     useBuiltIns === 'usage' &&
     !process.env.VUE_CLI_BABEL_TARGET_NODE
   ) {
-    polyfills = getPolyfills(rawTargets, userPolyfills || defaultPolyfills, {
-      ignoreBrowserslistConfig,
-      configPath
-    })
+    polyfills = getPolyfills(targets, userPolyfills || defaultPolyfills)
     plugins.push([
       require('./polyfillsPlugin'),
       { polyfills, entryFiles, useAbsolutePath: !!absoluteRuntime }
     ])
   } else {
     polyfills = []
-  }
-
-  // resolve targets for preset-env
-  let targets
-  if (process.env.VUE_CLI_BABEL_TARGET_NODE) {
-    // running tests in Node.js
-    targets = { node: 'current' }
-  } else if (process.env.VUE_CLI_BUILD_TARGET === 'wc' || process.env.VUE_CLI_BUILD_TARGET === 'wc-async') {
-    // targeting browsers that at least support ES2015 classes
-    // https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/plugins.json#L52-L61
-    targets = {
-      browsers: [
-        'Chrome >= 49',
-        'Firefox >= 45',
-        'Safari >= 10',
-        'Edge >= 13',
-        'iOS >= 10',
-        'Electron >= 0.36'
-      ]
-    }
-  } else if (process.env.VUE_CLI_MODERN_BUILD) {
-    // targeting browsers that support <script type="module">
-    targets = { esmodules: true }
-  } else {
-    targets = rawTargets
   }
 
   const envOptions = {
