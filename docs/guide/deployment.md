@@ -198,6 +198,16 @@ In order to receive direct hits using history mode on Vue Router, you need to ad
 
 Learn more about setting up [redirects, rewrites](https://render.com/docs/redirects-rewrites) and [custom domains](https://render.com/docs/custom-domains) on Render.
 
+### Azure
+
+1. Create a new Static Web App [here](https://ms.portal.azure.com/#create/Microsoft.StaticApp).
+1. Add in the details and connect to your GitHub repo.
+1. Make sure the build folder is set correctly on the "build" tab and create the resource.
+
+Azure Static Web Apps will automatically configure a GitHub Action in your repo and begin the deployment 🚀.
+
+See the [Azure Static Web Apps documentation](https://aka.ms/swadocs) for more information on routing, APIs, authentication and authorization, custom domains and more.
+
 ### Amazon S3
 
 See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
