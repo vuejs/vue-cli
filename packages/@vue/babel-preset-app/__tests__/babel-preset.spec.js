@@ -209,3 +209,18 @@ test('should inject polyfills / helpers using "import" statements for an es modu
   expect(code).toMatch('import "core-js/modules/es.promise"')
   expect(code).not.toMatch('require(')
 })
+
+test('should not inject excluded polyfills', () => {
+  const { code } = babel.transformSync(`
+    new Promise()
+  `.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      exclude: ['es.promise'],
+      polyfills: ['es.array.iterator', 'es.object.assign']
+    }]],
+    filename: 'test-entry-file.js'
+  })
+
+  expect(code).not.toMatch('es.promise')
+})

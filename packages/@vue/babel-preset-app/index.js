@@ -246,10 +246,7 @@ module.exports = (context, options = {}) => {
       // https://github.com/babel/babel/issues/9903
       include: [/@babel[\/|\\\\]runtime/],
       presets: [
-        [require('@babel/preset-env'), {
-          useBuiltIns,
-          corejs: useBuiltIns ? require('core-js/package.json').version : false
-        }]
+        [require('@babel/preset-env'), envOptions]
       ]
     }]
   }
