@@ -1,4 +1,26 @@
 
+## 4.4.1 (2020-05-25)
+
+#### :bug: Bug Fix
+* `@vue/babel-preset-app`
+  * [#5513](https://github.com/vuejs/vue-cli/pull/5513) refactor: improve the polyfill importing logic of modern mode ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5502](https://github.com/vuejs/vue-cli/pull/5502) fix(cli): fix the creation log ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#5408](https://github.com/vuejs/vue-cli/pull/5408) docs: explain pwa head/manifest icons ([@DRBragg](https://github.com/DRBragg))
+
+#### :house: Internal
+* `@vue/babel-preset-app`
+  * [#5513](https://github.com/vuejs/vue-cli/pull/5513) refactor: improve the polyfill importing logic of modern mode ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 3
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Drew Bragg ([@DRBragg](https://github.com/DRBragg))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.4.0 (2020-05-19)
 
 #### :rocket: New Features

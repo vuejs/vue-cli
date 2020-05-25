@@ -83,30 +83,6 @@ file, or the `"vue"` field in `package.json`.
       - start_url: `'.'`
       - display: `'standalone'`
       - theme_color: `pwa.themeColor`
-      - icons: `[
-                  {
-                    'src': './img/icons/android-chrome-192x192.png',
-                    'sizes': '192x192',
-                    'type': 'image/png'
-                  },
-                  {
-                    'src': './img/icons/android-chrome-512x512.png',
-                    'sizes': '512x512',
-                    'type': 'image/png'
-                  },
-                  {
-                    'src': './img/icons/android-chrome-maskable-192x192.png',
-                    'sizes': '192x192',
-                    'type': 'image/png',
-                    'purpose': 'maskable'
-                  },
-                  {
-                    'src': './img/icons/android-chrome-maskable-512x512.png',
-                    'sizes': '512x512',
-                    'type': 'image/png',
-                    'purpose': 'maskable'
-                  }
-                ]`
 
 - **pwa.iconPaths**
 
@@ -123,8 +99,6 @@ file, or the `"vue"` field in `package.json`.
     ```
 
     Change these values to use different paths for your icons.
-
-    *NOTE:* These icons are only used to generate the meta tags in the `<head>` of your HTML doc. To change the icon paths for your manifest please use `pwa.manifestOptions.icons`
 
 ### Example Configuration
 
