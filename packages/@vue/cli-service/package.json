@@ -71,7 +71,7 @@
     "vue-loader": "^15.9.2",
     "vue-style-loader": "^4.1.2",
     "webpack": "^4.0.0",
-    "webpack-bundle-analyzer": "^3.7.0",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-chain": "^6.4.0",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
@@ -104,7 +104,7 @@
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.6",
+    "vue-router": "^3.2.0",
     "vue-template-compiler": "^2.6.11",
     "vuex": "^3.4.0"
   },
