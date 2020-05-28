@@ -121,7 +121,11 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
         title: 'Index Page',
         // chunks to include on this page, by default includes
         // extracted common chunks and vendor chunks.
-        chunks: ['chunk-vendors', 'chunk-common', 'index']
+        chunks: ['chunk-vendors', 'chunk-common', 'index'],
+        // devServer.historyApiFallback.rewrites
+        // We can set advanced path regex when serve
+        // Notice: This option doesn't effect production.
+        from: /^\/m(\/.*)?$/
       },
       // when using the entry-only string format,
       // template is inferred to be `public/subpage.html`
