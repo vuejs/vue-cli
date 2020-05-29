@@ -98,7 +98,7 @@ file, or the `"vue"` field in `package.json`.
     }
     ```
 
-    Change these values to use different paths for your icons.
+    Change these values to use different paths for your icons. As of v4.3.0, you can use `null` as a value and that icon will not be included.
 
 ### Example Configuration
 
