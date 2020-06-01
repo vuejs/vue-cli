@@ -241,7 +241,7 @@ module.exports = class Creator extends EventEmitter {
       }
       const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
       try {
-        await run('git', ['commit', '-m', msg])
+        await run('git', ['commit', '-m', msg, '--no-verify'])
       } catch (e) {
         gitCommitFailed = true
       }
