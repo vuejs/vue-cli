@@ -81,7 +81,14 @@ function getPolyfills (targets, includes) {
   }
 
   const compatData = require('core-js-compat').data
-  return includes.filter(item => isRequired(item, targets, { compatData }))
+  return includes.filter(item => {
+    if (!compatData[item]) {
+      console.warn(`Skipping polyfill ${item} as it's not found in the compatibility table.`)
+      return false
+    }
+
+    return isRequired(item, targets, { compatData })
+  })
 }
 
 module.exports = (context, options = {}) => {
