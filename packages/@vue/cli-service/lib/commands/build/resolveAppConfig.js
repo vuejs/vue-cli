@@ -40,7 +40,9 @@ module.exports = (api, args, options) => {
 
   // respect inline entry
   if (args.entry && !options.pages) {
-    rawConfig.entry = { app: api.resolve(args.entry) }
+    const entry = api.resolve(args.entry)
+    rawConfig.entry = { app: entry }
+    process.env.VUE_CLI_ENTRY_FILES = JSON.stringify([entry])
   }
 
   return rawConfig
