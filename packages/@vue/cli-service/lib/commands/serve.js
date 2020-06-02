@@ -1,5 +1,6 @@
 const {
   info,
+  error,
   hasProjectYarn,
   hasProjectPnpm,
   openBrowser,
@@ -160,6 +161,12 @@ module.exports = (api, options) => {
 
     // create compiler
     const compiler = webpack(webpackConfig)
+
+    // handle compiler error
+    compiler.hooks.failed.tap('vue-cli-service serve', msg => {
+      error(msg)
+      process.exit(1)
+    })
 
     // create server
     const server = new WebpackDevServer(compiler, Object.assign({
