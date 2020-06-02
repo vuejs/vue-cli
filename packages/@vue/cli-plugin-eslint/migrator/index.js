@@ -21,14 +21,14 @@ module.exports = async (api) => {
   }
 
   const localESLintMajor = semver.major(
-    semver.maxSatisfying(['4.99.0', '5.99.0', '6.99.0'], localESLintRange) ||
+    semver.maxSatisfying(['4.99.0', '5.99.0', '6.99.0', '7.99.0'], localESLintRange) ||
       // in case the user does not specify a typical caret range;
       // it is used as **fallback** because the user may have not previously
       // installed eslint yet, such as in the case that they are from v3.0.x
       require('eslint/package.json').version
   )
 
-  if (localESLintMajor === 6) {
+  if (localESLintMajor >= 6) {
     return
   }
 
@@ -37,7 +37,7 @@ module.exports = async (api) => {
     type: 'confirm',
     message:
     `Your current ESLint version is v${localESLintMajor}.\n` +
-    `The lastest major version is v6.\n` +
+    `The latest major version which supported by vue-cli is v6.\n` +
     `Do you want to upgrade? (May contain breaking changes)\n`
   }])
 
