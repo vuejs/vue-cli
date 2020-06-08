@@ -139,7 +139,7 @@ module.exports = {
 ### lintOnSave
 
 - Тип: `boolean | 'warning' | 'default' | 'error'`
-- По умолчанию: `true`
+- По умолчанию: 'default'
 
   Выполнять ли линтинг кода при сохранении во время разработки с помощью [eslint-loader](https://github.com/webpack-contrib/eslint-loader). Эта опция действует только когда установлен плагин [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint).
 
