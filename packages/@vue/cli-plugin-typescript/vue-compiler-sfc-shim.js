@@ -10,5 +10,7 @@ module.exports = {
     if (script) {
       script.start = script.loc.start.offset
     }
+
+    return result
   }
 }
