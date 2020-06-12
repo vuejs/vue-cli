@@ -1,4 +1,15 @@
 
+## 4.4.2 (2020-06-12)
+
+#### :memo: Documentation
+* `@vue/cli-plugin-pwa`
+  * [#5530](https://github.com/vuejs/vue-cli/pull/5530) docs: mention using `null` to ignore icons ([@qirh](https://github.com/qirh))
+
+#### Committers: 1
+- Saleh Alghusson ([@qirh](https://github.com/qirh))
+
+
+
 ## 4.4.1 (2020-05-25)
 
 #### :bug: Bug Fix
