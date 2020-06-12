@@ -88,7 +88,7 @@ file, or the `"vue"` field in `package.json`.
 
   - Default: `undefined`
 
-    Value for `crossorigin` attribute in manifest link tag in the generated HTML, you may need to set this if your pwa is behind an authenticated proxy. See [cross-origin values](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link#attr-crossorigin) for more details
+    Value for `crossorigin` attribute in manifest link tag in the generated HTML, you may need to set this if your PWA is behind an authenticated proxy. See [cross-origin values](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link#attr-crossorigin) for more details.
 
 - **pwa.iconPaths**
 
