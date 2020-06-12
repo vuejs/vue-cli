@@ -1,4 +1,29 @@
 
+## 4.4.3 (2020-06-12)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#5545](https://github.com/vuejs/vue-cli/pull/5545) fix(eslint-migrator): skip upgrade prompt if eslint v7 is installed (#5545) ([@EzioKissshot](https://github.com/EzioKissshot))
+* `@vue/cli-plugin-typescript`
+  * [#5539](https://github.com/vuejs/vue-cli/pull/5539) fix: correctly shim @vue/compiler-sfc for fork-ts-checker-plugin ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5542](https://github.com/vuejs/vue-cli/pull/5542) fix(cli-service): process the webpack failed hook in the serve command ([@jeneser](https://github.com/jeneser))
+* `@vue/cli`
+  * [#5540](https://github.com/vuejs/vue-cli/pull/5540) fix: add `--no-verify` to initial git commit ([@fxxjdedd](https://github.com/fxxjdedd))
+
+#### :house: Internal
+* `@vue/babel-preset-app`
+  * [#5522](https://github.com/vuejs/vue-cli/pull/5522) feat(babel-preset-app): pass full config to @babel/preset-env ([@lucaswerkmeister](https://github.com/lucaswerkmeister))
+
+#### Committers: 5
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Lucas Werkmeister ([@lucaswerkmeister](https://github.com/lucaswerkmeister))
+- Zhenya Zhu ([@EzioKissshot](https://github.com/EzioKissshot))
+- fxxjdedd ([@fxxjdedd](https://github.com/fxxjdedd))
+- yazhe wang ([@jeneser](https://github.com/jeneser))
+
+
+
 ## 4.4.2 (2020-06-12)
 
 #### :memo: Documentation
