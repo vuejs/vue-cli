@@ -1,4 +1,15 @@
 
+## 4.4.4 (2020-06-12)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`
+  * [#5576](https://github.com/vuejs/vue-cli/pull/5576) fix: should return the parse result in the compiler-sfc-shim ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.4.3 (2020-06-12)
 
 #### :bug: Bug Fix
