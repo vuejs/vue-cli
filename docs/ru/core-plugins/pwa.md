@@ -106,6 +106,12 @@
                   }
                 ]`
 
+- **pwa.manifestCrossorigin**
+
+  - По умолчанию:: `undefined`
+
+    Значение атрибута `crossorigin` в теге ссылки на манифест в сгенерированном HTML. Это значение может потребоваться установить, когда PWA находится за аутентифицированном прокси-сервером. Для более подробной информации смотрите [варианты значений cross-origin](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link#attr-crossorigin).
+
 - **pwa.iconPaths**
 
   - По умолчанию:
