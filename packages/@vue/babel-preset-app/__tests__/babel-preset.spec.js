@@ -48,37 +48,52 @@ test('polyfill detection', () => {
   expect(code).toMatch('"core-js/modules/es.map"')
 })
 
-test('modern mode always skips polyfills', () => {
+test('modern mode always skips unnecessary polyfills', () => {
   process.env.VUE_CLI_MODERN_BUILD = true
   let { code } = babel.transformSync(`
     const a = new Map()
+    console.log(globalThis)
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
-      targets: { ie: 9 },
+      targets: { ie: 9, safari: '12' },
       useBuiltIns: 'usage'
     }]],
     filename: 'test-entry-file.js'
   })
-  // default includes
-  expect(code).not.toMatch(getAbsolutePolyfill('es.promise'))
+  // default includes that are supported in all modern browsers should be skipped
+  expect(code).not.toMatch('es.assign')
+  // though es.promise is not supported in all modern browsers
+  // (modern: safari >= 10.1, es.promise: safrai >= 11)
+  // the custom configuration only expects to support safari >= 12
+  // so it can be skipped
+  expect(code).not.toMatch('es.promise"')
+  // es.promise.finally is supported in safari >= 13.0.3
+  // so still needs to be included
+  expect(code).toMatch('es.promise.finally')
+
   // usage-based detection
-  expect(code).not.toMatch('"core-js/modules/es.map"')
+  // Map is supported in all modern browsers
+  expect(code).not.toMatch('es.map')
+  // globalThis is not supported until safari 12.1
+  expect(code).toMatch('es.global-this')
 
   ;({ code } = babel.transformSync(`
     const a = new Map()
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
-      targets: { ie: 9 },
+      targets: { ie: 9, safari: '12' },
       useBuiltIns: 'entry'
     }]],
     filename: 'test-entry-file.js'
   }))
   // default includes
-  expect(code).not.toMatch(getAbsolutePolyfill('es.promise'))
+  expect(code).not.toMatch('es.promise"')
+  expect(code).not.toMatch('es.promise.finally')
   // usage-based detection
   expect(code).not.toMatch('"core-js/modules/es.map"')
+  expect(code).not.toMatch('es.global-this')
   delete process.env.VUE_CLI_MODERN_BUILD
 })
 
@@ -193,4 +208,19 @@ test('should inject polyfills / helpers using "import" statements for an es modu
   expect(code).toMatch('import _toConsumableArray from "@babel/runtime/helpers/esm/toConsumableArray"')
   expect(code).toMatch('import "core-js/modules/es.promise"')
   expect(code).not.toMatch('require(')
+})
+
+test('should not inject excluded polyfills', () => {
+  const { code } = babel.transformSync(`
+    new Promise()
+  `.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      exclude: ['es.promise'],
+      polyfills: ['es.array.iterator', 'es.object.assign']
+    }]],
+    filename: 'test-entry-file.js'
+  })
+
+  expect(code).not.toMatch('es.promise')
 })

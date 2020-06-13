@@ -28,6 +28,7 @@ const defaultSettings = {
   page_objects_path: 'tests/e2e/page-objects',
   custom_assertions_path: 'tests/e2e/custom-assertions',
   custom_commands_path: 'tests/e2e/custom-commands',
+  globals_path: path.resolve('tests/e2e/globals.js'),
   test_workers: concurrentMode,
   test_settings: {
     default: {

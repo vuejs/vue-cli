@@ -5,7 +5,8 @@ module.exports = {
   pluginOptions: {
     apollo: {
       enableMocks: false,
-      enableEngine: false
+      enableEngine: false,
+      lintGQL: false
     }
   },
 
@@ -32,5 +33,6 @@ module.exports = {
         import: ['~@/style/imports']
       }
     }
-  }
+  },
+  parallel: !process.env.CIRCLECI
 }

@@ -32,8 +32,6 @@ const {
   log,
   warn,
   error,
-  logWithSpinner,
-  stopSpinner,
 
   hasGit,
   hasProjectGit,
@@ -126,7 +124,7 @@ module.exports = class Creator extends EventEmitter {
     const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
     await clearConsole()
-    logWithSpinner(`✨`, `Creating project in ${chalk.yellow(context)}.`)
+    log(`✨  Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
     // get latest CLI plugin version
@@ -164,13 +162,12 @@ module.exports = class Creator extends EventEmitter {
     // so that vue-cli-service can setup git hooks.
     const shouldInitGit = this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
-      logWithSpinner(`🗃`, `Initializing git repository...`)
+      log(`🗃  Initializing git repository...`)
       this.emit('creation', { event: 'git-init' })
       await run('git init')
     }
 
     // install plugins
-    stopSpinner()
     log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`)
     log()
     this.emit('creation', { event: 'plugins-install' })
@@ -185,7 +182,7 @@ module.exports = class Creator extends EventEmitter {
     // run generator
     log(`🚀  Invoking generators...`)
     this.emit('creation', { event: 'invoking-generators' })
-    const plugins = await this.resolvePlugins(preset.plugins)
+    const plugins = await this.resolvePlugins(preset.plugins, pkg)
     const generator = new Generator(context, {
       pkg,
       plugins,
@@ -205,7 +202,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run complete cbs if any (injected by generators)
-    logWithSpinner('⚓', `Running completion hooks...`)
+    log(`⚓  Running completion hooks...`)
     this.emit('creation', { event: 'completion-hooks' })
     for (const cb of afterInvokeCbs) {
       await cb()
@@ -214,13 +211,14 @@ module.exports = class Creator extends EventEmitter {
       await cb()
     }
 
-    // generate README.md
-    stopSpinner()
-    log()
-    logWithSpinner('📄', 'Generating README.md...')
-    await writeFileTree(context, {
-      'README.md': generateReadme(generator.pkg, packageManager)
-    })
+    if (!generator.files['README.md']) {
+      // generate README.md
+      log()
+      log('📄  Generating README.md...')
+      await writeFileTree(context, {
+        'README.md': generateReadme(generator.pkg, packageManager)
+      })
+    }
 
     // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
     if (packageManager === 'pnpm') {
@@ -243,14 +241,13 @@ module.exports = class Creator extends EventEmitter {
       }
       const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
       try {
-        await run('git', ['commit', '-m', msg])
+        await run('git', ['commit', '-m', msg, '--no-verify'])
       } catch (e) {
         gitCommitFailed = true
       }
     }
 
     // log instructions
-    stopSpinner()
     log()
     log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
     if (!cliOptions.skipGetStarted) {
@@ -328,13 +325,11 @@ module.exports = class Creator extends EventEmitter {
     } else if (name.endsWith('.json') || /^\./.test(name) || path.isAbsolute(name)) {
       preset = await loadLocalPreset(path.resolve(name))
     } else if (name.includes('/')) {
-      logWithSpinner(`Fetching remote preset ${chalk.cyan(name)}...`)
+      log(`Fetching remote preset ${chalk.cyan(name)}...`)
       this.emit('creation', { event: 'fetch-remote-preset' })
       try {
         preset = await loadRemotePreset(name, clone)
-        stopSpinner()
       } catch (e) {
-        stopSpinner()
         error(`Failed fetching remote preset ${chalk.cyan(name)}:`)
         throw e
       }
@@ -360,21 +355,33 @@ module.exports = class Creator extends EventEmitter {
   }
 
   // { id: options } => [{ id, apply, options }]
-  async resolvePlugins (rawPlugins) {
+  async resolvePlugins (rawPlugins, pkg) {
     // ensure cli-service is invoked first
     rawPlugins = sortObject(rawPlugins, ['@vue/cli-service'], true)
     const plugins = []
     for (const id of Object.keys(rawPlugins)) {
       const apply = loadModule(`${id}/generator`, this.context) || (() => {})
       let options = rawPlugins[id] || {}
+
       if (options.prompts) {
-        const prompts = loadModule(`${id}/prompts`, this.context)
-        if (prompts) {
+        let pluginPrompts = loadModule(`${id}/prompts`, this.context)
+
+        if (pluginPrompts) {
+          const prompt = inquirer.createPromptModule()
+
+          if (typeof pluginPrompts === 'function') {
+            pluginPrompts = pluginPrompts(pkg, prompt)
+          }
+          if (typeof pluginPrompts.getPrompts === 'function') {
+            pluginPrompts = pluginPrompts.getPrompts(pkg, prompt)
+          }
+
           log()
           log(`${chalk.cyan(options._isPreset ? `Preset options:` : id)}`)
-          options = await inquirer.prompt(prompts)
+          options = await prompt(pluginPrompts)
         }
       }
+
       plugins.push({ id, apply, options })
     }
     return plugins

@@ -8,7 +8,7 @@ const mergeDeps = require('./util/mergeDeps')
 const runCodemod = require('./util/runCodemod')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
-const { semver, getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
+const { semver, error, getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
@@ -79,6 +79,20 @@ class GeneratorAPI {
    */
   _injectFileMiddleware (middleware) {
     this.generator.fileMiddlewares.push(middleware)
+  }
+
+  /**
+   * Normalize absolute path, Windows-style path
+   * to the relative path used as index in this.files
+   * @param {string} p the path to normalize
+   */
+  _normalizePath (p) {
+    if (path.isAbsolute(p)) {
+      p = path.relative(this.generator.context, p)
+    }
+    // The `files` tree always use `/` in its index.
+    // So we need to normalize the path string in case the user passes a Windows path.
+    return p.replace(/\\/g, '/')
   }
 
   /**
@@ -373,10 +387,20 @@ class GeneratorAPI {
    * @param {object} options additional options for the codemod
    */
   transformScript (file, codemod, options) {
+    const normalizedPath = this._normalizePath(file)
+
     this._injectFileMiddleware(files => {
-      files[file] = runCodemod(
+      if (typeof files[normalizedPath] === 'undefined') {
+        error(`Cannot find file ${normalizedPath}`)
+        return
+      }
+
+      files[normalizedPath] = runCodemod(
         codemod,
-        { path: this.resolve(file), source: files[file] },
+        {
+          path: this.resolve(normalizedPath),
+          source: files[normalizedPath]
+        },
         options
       )
     })

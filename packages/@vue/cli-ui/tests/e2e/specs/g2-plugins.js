@@ -21,7 +21,7 @@ describe('Plugins', () => {
     cy.get('[data-testid="download-plugin"]:contains("@vue/cli-plugin-pwa")').should('not.have.class', 'disabled').click()
     cy.get('.loading-screen .vue-ui-loading-indicator').should('be.visible')
     cy.get('.prompts-list', { timeout: 250000 }).should('be.visible')
-    cy.get('[data-testid="finish-install"]').should('not.have.class', 'disabled').click()
+    cy.get('[data-testid="finish-install"]').should('not.have.class', 'disabled').click({ force: true })
     cy.get('.loading-screen .vue-ui-loading-indicator', { timeout: 3000 }).should('be.visible')
     cy.get('.file-diff-view', { timeout: 250000 }).should('be.visible')
     cy.get('[data-testid="skip-button"]', { timeout: 3000 })

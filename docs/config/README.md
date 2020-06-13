@@ -139,7 +139,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 ### lintOnSave
 
 - Type: `boolean | 'warning' | 'default' | 'error'`
-- Default: `true`
+- Default: `'default'`
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
 
