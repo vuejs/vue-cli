@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 
+const ini = require('ini')
 const minimist = require('minimist')
 const LRU = require('lru-cache')
 
@@ -154,6 +155,36 @@ class PackageManager {
     return this._registry
   }
 
+  async getAuthToken () {
+    // get npmrc (https://docs.npmjs.com/configuring-npm/npmrc.html#files)
+    const possibleRcPaths = [
+      path.resolve(this.context, '.npmrc'),
+      path.resolve(require('os').homedir(), '.npmrc')
+    ]
+    if (process.env.PREFIX) {
+      possibleRcPaths.push(path.resolve(process.env.PREFIX, '/etc/npmrc'))
+    }
+    // there's also a '/path/to/npm/npmrc', skipped for simplicity of implementation
+
+    let npmConfig = {}
+    for (const loc of possibleRcPaths) {
+      if (fs.existsSync(loc)) {
+        // the closer config file (the one with lower index) takes higher precedence
+        npmConfig = Object.assign({}, ini.parse(fs.readFileSync(loc, 'utf-8')), npmConfig)
+      }
+    }
+
+    console.log(npmConfig)
+    const registry = await this.getRegistry()
+    console.log(registry)
+    const registryWithoutProtocol = registry
+      .replace(/https?:/, '')     // remove leading protocol
+      .replace(/([^/])$/, '$1/')  // ensure ending with slash
+    const authTokenKey = `${registryWithoutProtocol}:_authToken`
+
+    return npmConfig[authTokenKey]
+  }
+
   async setRegistryEnvs () {
     const registry = await this.getRegistry()
 
@@ -204,6 +235,7 @@ class PackageManager {
   // https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md
   async getMetadata (packageName, { full = false } = {}) {
     const registry = await this.getRegistry()
+    const authToken = await this.getAuthToken()
 
     const metadataKey = `${this.bin}-${registry}-${packageName}`
     let metadata = metadataCache.get(metadataKey)
@@ -215,6 +247,10 @@ class PackageManager {
     const headers = {}
     if (!full) {
       headers.Accept = 'application/vnd.npm.install-v1+json'
+    }
+
+    if (authToken) {
+      headers.Authorization = `Bearer ${authToken}`
     }
 
     const url = `${registry.replace(/\/$/g, '')}/${packageName}`
