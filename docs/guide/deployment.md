@@ -200,7 +200,7 @@ Learn more about setting up [redirects, rewrites](https://render.com/docs/redire
 
 ### Amazon S3
 
-See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy).
+See [vue-cli-plugin-s3-deploy](https://github.com/multiplegeorges/vue-cli-plugin-s3-deploy) and [vue-cli-plugin-s3-deploy-cleanup](https://github.com/euan-forrester/vue-cli-plugin-s3-deploy-cleanup).
 
 ### Firebase
 
