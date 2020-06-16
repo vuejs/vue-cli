@@ -178,9 +178,7 @@ class PackageManager {
       }
     }
 
-    console.log(npmConfig)
     const registry = await this.getRegistry()
-    console.log(registry)
     const registryWithoutProtocol = registry
       .replace(/https?:/, '')     // remove leading protocol
       .replace(/([^/])$/, '$1/')  // ensure ending with slash
