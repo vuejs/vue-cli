@@ -169,8 +169,12 @@ class PackageManager {
     let npmConfig = {}
     for (const loc of possibleRcPaths) {
       if (fs.existsSync(loc)) {
-        // the closer config file (the one with lower index) takes higher precedence
-        npmConfig = Object.assign({}, ini.parse(fs.readFileSync(loc, 'utf-8')), npmConfig)
+        try {
+          // the closer config file (the one with lower index) takes higher precedence
+          npmConfig = Object.assign({}, ini.parse(fs.readFileSync(loc, 'utf-8')), npmConfig)
+        } catch (e) {
+          // in case of file permission issues, etc.
+        }
       }
     }
 
