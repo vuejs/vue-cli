@@ -1,6 +1,7 @@
 module.exports = (api, _, __, invoking) => {
   api.render('./template', {
-    hasTS: api.hasPlugin('typescript')
+    hasTS: api.hasPlugin('typescript'),
+    hasRouter: api.hasPlugin('router')
   })
 
   api.extendPackage({
