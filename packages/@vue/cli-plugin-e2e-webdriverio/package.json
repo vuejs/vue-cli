@@ -32,10 +32,12 @@
     "@wdio/sauce-service": "^6.1.9",
     "@wdio/spec-reporter": "^6.1.9",
     "@wdio/sync": "^6.1.8",
-    "chromedriver": "^81.0.0",
     "eslint-plugin-wdio": "^6.0.12",
     "webdriverio": "^6.1.11",
     "wdio-chromedriver-service": "^6.0.3"
+  },
+  "peerDependencies": {
+    "chromedriver": "*"
   },
   "devDependencies": {}
 }

@@ -51,8 +51,10 @@ Your e2e tests.
 ## Installing in an Already Created Project
 
 ``` sh
-vue add e2e-nightwatch
+vue add e2e-webdriverio
 ```
+
+For users with older CLI versions you may need to run `vue add @vue/e2e-webdriverio`.
 
 ## Running Tests
 
