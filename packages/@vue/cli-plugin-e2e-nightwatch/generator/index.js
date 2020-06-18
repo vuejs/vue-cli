@@ -11,10 +11,10 @@ module.exports = (api, { webdrivers }) => {
   // Use devDependencies to store latest version number so as to automate update
   const pluginDeps = require('../package.json').devDependencies
 
-  if (webdrivers.includes('firefox')) {
+  if (webdrivers && webdrivers.includes('firefox')) {
     devDependencies.geckodriver = pluginDeps.geckodriver
   }
-  if (webdrivers.includes('chrome')) {
+  if (webdrivers && webdrivers.includes('chrome')) {
     // chromedriver major version bumps every 6 weeks following Chrome
     // so there may be a mismatch between
     // user's installed browser version and the default provided version
