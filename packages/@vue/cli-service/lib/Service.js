@@ -314,6 +314,7 @@ module.exports = class Service {
       const resolvedPath = p && path.resolve(this.context, p)
       if (resolvedPath && fs.existsSync(resolvedPath)) {
         fileConfigPath = resolvedPath
+        break
       }
     }
 
