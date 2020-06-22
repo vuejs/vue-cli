@@ -604,7 +604,7 @@ module.exports = api => {
 
 ### 展示配置页面
 
-有时你的项目针对不同的功能或者库，有自定义的配置文件。通过 Vue CLI 插件，你可以在 Vue UI 中展示配置，修改它和保存它（保存将修改你项目中相应的配置）。默认情况下，Vue CLI 项目有个主配置页面对应 `vue.config.js` 的配置。如果你将 ESLint 包含到项目中，你可以看一个 ESLint 的配置页面：
+有时你的项目针对不同的功能或者库，有自定义的配置文件。通过 Vue CLI 插件，你可以在 Vue UI 中展示配置，修改它和保存它（保存将修改你项目中相应的配置）。默认情况下，Vue CLI 项目有个主配置页面对应 `vue.config.js` 的配置。如果你将 ESLint 包含到项目中，你可以看到一个 ESLint 的配置页面：
 
 ![UI Configuration Screen](/ui-configuration-default.png)
 
