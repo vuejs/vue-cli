@@ -232,7 +232,7 @@ module.exports = api => {
 
 通过 generator 方法你能够修改项目中的文件。最有用的场景是针对 `main.js` 或 `main.ts` 文件的一些修改：新的导入，新的 `Vue.use()` 调用等。
 
-让我们来思考一个场景，当我们通过 [模板](#creating-new-templates) 创建了一个 `router.js` 文件，现在我们希望导入这个路由到主文件中。我们将用到两个 generator API 方法： `entryFile` 将返回项目的主文件（`main.js` 或 `main.ts`），`injectImports` 用于将添加新的导入到主文件中：
+让我们来思考一个场景，当我们通过 [模板](#creating-new-templates) 创建了一个 `router.js` 文件，现在我们希望导入这个路由到主文件中。我们将用到两个 generator API 方法： `entryFile` 将返回项目的主文件（`main.js` 或 `main.ts`），`injectImports` 用于添加新的导入到主文件中：
 
 ```js
 // generator/index.js
