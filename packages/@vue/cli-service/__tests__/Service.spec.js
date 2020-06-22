@@ -318,6 +318,8 @@ test('api: configureWebpack preserve ruleNames', () => {
 })
 
 test('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
+  delete process.env.VUE_CLI_ENTRY_FILES
+
   const service = createMockService([{
     id: 'test',
     apply: api => {
