@@ -240,7 +240,7 @@ module.exports = api => {
 api.injectImports(api.entryFile, `import router from './router'`)
 ```
 
-现在，当我们路由被导入时，我们可以在主文件中将这个路由注入到 Vue 实例。我们能够使用 `afterInvoke` 钩子，这个钩子将在文件被写入硬盘之后被调用。
+现在，当我们路由被导入时，我们可以在主文件中将这个路由注入到 Vue 实例。我们可以使用 `afterInvoke` 钩子，这个钩子将在文件被写入硬盘之后被调用。
 
 首先，我们需要通过 Node 的 `fs` 模块（提供了文件交互 API）读取文件内容，将内容拆分
 
