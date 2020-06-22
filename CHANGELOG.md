@@ -1,4 +1,30 @@
 
+## 4.4.5 (2020-06-22)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#5592](https://github.com/vuejs/vue-cli/pull/5592) fix polyfill injection when building app on multiple threads ([@dtcz](https://github.com/dtcz))
+  * [#5598](https://github.com/vuejs/vue-cli/pull/5598) fix: fix an edge case that VUE_CLI_SERVICE_CONFIG_PATH might be ignored ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#5580](https://github.com/vuejs/vue-cli/pull/5580) Fix: stop ignoring --config-file cypress option ([@ahderman](https://github.com/ahderman))
+* `@vue/cli`
+  * [#5586](https://github.com/vuejs/vue-cli/pull/5586) fix: support auth token when retrieving package metadata ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#5528](https://github.com/vuejs/vue-cli/pull/5528) fix(nightwatch): should not install corresponding webdriver if the browser is unselected ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-shared-utils`
+  * [#5572](https://github.com/vuejs/vue-cli/pull/5572) refactor: replace request-promise-native with util.promisify ([@jeneser](https://github.com/jeneser))
+
+#### Committers: 5
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Alexandre D'Erman ([@ahderman](https://github.com/ahderman))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Yazhe Wang ([@jeneser](https://github.com/jeneser))
+- [@dtcz](https://github.com/dtcz)
+
+
+
 ## 4.4.4 (2020-06-12)
 
 #### :bug: Bug Fix
