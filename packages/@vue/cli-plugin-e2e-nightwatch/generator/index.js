@@ -11,6 +11,13 @@ module.exports = (api, { webdrivers }) => {
   // Use devDependencies to store latest version number so as to automate update
   const pluginDeps = require('../package.json').devDependencies
 
+  // In some legacy presets, they may forget to add a `webdrivers` field
+  // (which works fine before PR #5528).
+  // So we should add both drivers by default in that circumstance.
+  if (typeof webdrivers === 'undefined') {
+    webdrivers = ['firefox', 'chrome']
+  }
+
   if (webdrivers && webdrivers.includes('firefox')) {
     devDependencies.geckodriver = pluginDeps.geckodriver
   }
