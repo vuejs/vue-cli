@@ -1,3 +1,5 @@
+const isWP5 = parseInt(require('webpack').version, 10) === 5
+
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -171,8 +173,10 @@ module.exports = (api, options) => {
             .end()
 
     // shims
+    if (isWP5) {
 
-    webpackConfig.node
+    } else {
+      webpackConfig.node
       .merge({
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).
@@ -188,7 +192,7 @@ module.exports = (api, options) => {
         tls: 'empty',
         child_process: 'empty'
       })
-
+    }
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
       .plugin('define')

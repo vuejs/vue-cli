@@ -1,6 +1,7 @@
 // config that are specific to --target app
 const fs = require('fs')
 const path = require('path')
+const isWP5 = parseInt(require('webpack').version, 10) === 5
 
 // ensure the filename passed to html-webpack-plugin is a relative path
 // because it cannot correctly handle absolute paths
@@ -130,8 +131,11 @@ module.exports = (api, options) => {
       })
 
       // keep chunk ids stable so async chunks have consistent hash (#1916)
-      webpackConfig
-        .plugin('named-chunks')
+      if (isWP5) {
+        webpackConfig.optimization.namedChunks = true
+      } else {
+        webpackConfig
+          .plugin('named-chunks')
           .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
             if (chunk.name) {
               return chunk.name
@@ -143,11 +147,15 @@ module.exports = (api, options) => {
             )
             return `chunk-` + joinedHash
           }])
+      }
     }
 
     // resolve HTML file(s)
     const HTMLPlugin = require('html-webpack-plugin')
-    const PreloadPlugin = require('@vue/preload-webpack-plugin')
+    let PreloadPlugin
+    if (!isWP5) {
+      PreloadPlugin = require('@vue/preload-webpack-plugin')
+    }
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
@@ -168,7 +176,7 @@ module.exports = (api, options) => {
         .plugin('html')
           .use(HTMLPlugin, [htmlOptions])
 
-      if (!isLegacyBundle) {
+      if (!isLegacyBundle && !isWP5) {
         // inject preload/prefetch to HTML
         webpackConfig
           .plugin('preload')
