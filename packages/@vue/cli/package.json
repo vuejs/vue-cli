@@ -24,6 +24,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.9.6",
     "@vue/cli-shared-utils": "^4.4.5",
     "@vue/cli-ui": "^4.4.5",
     "@vue/cli-ui-addon-webpack": "^4.4.5",
@@ -44,7 +45,7 @@
     "isbinaryfile": "^4.0.6",
     "javascript-stringify": "^1.6.0",
     "js-yaml": "^3.13.1",
-    "jscodeshift": "^0.9.0",
+    "jscodeshift": "^0.10.0",
     "leven": "^3.1.0",
     "lodash.clonedeep": "^4.5.0",
     "lru-cache": "^5.1.1",
