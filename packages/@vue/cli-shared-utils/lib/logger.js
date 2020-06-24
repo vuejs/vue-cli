@@ -3,6 +3,8 @@ const stripAnsi = require('strip-ansi')
 const readline = require('readline')
 const EventEmitter = require('events')
 
+const { stopSpinner } = require('./spinner')
+
 exports.events = new EventEmitter()
 
 function _log (type, tag, message) {
@@ -46,6 +48,7 @@ exports.warn = (msg, tag = null) => {
 }
 
 exports.error = (msg, tag = null) => {
+  stopSpinner()
   console.error(format(chalk.bgRed(' ERROR ') + (tag ? chalkTag(tag) : ''), chalk.red(msg)))
   _log('error', tag, msg)
   if (msg instanceof Error) {
