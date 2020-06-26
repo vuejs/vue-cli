@@ -37,6 +37,8 @@ Cypress offers a rich interactive interface for running E2E tests, but currently
 
 We've pre-configured Cypress to place most of the e2e testing related files under `<projectRoot>/tests/e2e`. You can also check out [how to configure Cypress via `cypress.json`](https://docs.cypress.io/guides/references/configuration.html#Options).
 
+Defining `baseUrl` in `cypress.json` won't have any effect, the only way to change `baseUrl` is trough the CLI flag `--url`. Ex. `vue-cli-service test:e2e --url https://localhost:8080`. 
+
 ## Environment Variables
 
 Cypress doesn't load .env files for your test files the same way as `vue-cli` does for your [application code](https://cli.vuejs.org/guide/mode-and-env.html#using-env-variables-in-client-side-code). Cypress supports a few ways to [define env variables](https://docs.cypress.io/guides/guides/environment-variables.html#) but the easiest one is to use .json files (either `cypress.json` or `cypress.env.json`) to define environment variables. Keep in mind those variables are accessible via `Cypress.env` function instead of regular `process.env` object.
