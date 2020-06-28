@@ -5,7 +5,7 @@ const deepmerge = require('deepmerge')
 const resolve = require('resolve')
 const { isBinaryFileSync } = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
-const runCodemod = require('./util/runCodemod')
+const { runTransformation } = require('vue-codemod')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
 const { semver, error, getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
@@ -395,12 +395,12 @@ class GeneratorAPI {
         return
       }
 
-      files[normalizedPath] = runCodemod(
-        codemod,
+      files[normalizedPath] = runTransformation(
         {
           path: this.resolve(normalizedPath),
           source: files[normalizedPath]
         },
+        codemod,
         options
       )
     })
