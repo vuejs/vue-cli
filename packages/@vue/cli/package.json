@@ -54,7 +54,7 @@
     "slash": "^3.0.0",
     "validate-npm-package-name": "^3.0.0",
     "vue": "^2.6.11",
-    "vue-codemod": "^0.0.3",
+    "vue-codemod": "^0.0.4",
     "yaml-front-matter": "^3.4.1"
   },
   "engines": {
