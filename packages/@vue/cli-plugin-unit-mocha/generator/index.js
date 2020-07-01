@@ -1,11 +1,14 @@
-module.exports = (api, _, __, invoking) => {
+module.exports = (api, options, rootOptions, invoking) => {
+  const isVue3 = rootOptions && rootOptions.vueVersion === '3'
+
   api.render('./template', {
+    isVue3,
     hasTS: api.hasPlugin('typescript')
   })
 
   api.extendPackage({
     devDependencies: {
-      '@vue/test-utils': '^1.0.3',
+      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.0.3',
       'chai': '^4.1.2'
     },
     scripts: {
