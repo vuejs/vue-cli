@@ -28,7 +28,7 @@ const DEPS_MAP = {
 
 exports.DEPS_MAP = DEPS_MAP
 
-exports.getDeps = function (api, preset, rootOptions) {
+exports.getDeps = function (api, preset, rootOptions = {}) {
   const deps = Object.assign({}, DEPS_MAP.base, DEPS_MAP[preset])
 
   if (rootOptions.vueVersion === '3') {

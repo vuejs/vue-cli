@@ -1,4 +1,4 @@
-exports.config = (api, preset, rootOptions) => {
+exports.config = (api, preset, rootOptions = {}) => {
   const config = {
     root: true,
     env: { node: true },
