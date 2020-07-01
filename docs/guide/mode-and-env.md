@@ -88,6 +88,11 @@ VUE_APP_TITLE=My App (staging)
 
 In both cases, the app is built as a production app because of the `NODE_ENV`, but in the staging version, `process.env.VUE_APP_TITLE` is overwritten with a different value.
 
+::: warning NPM usage
+If you use the command `npm run build` you need to use the following command: `npm run build -- --mode staging`
+All arguments before -- are considered npm arguments and arguments after -- are passed to vue-cli-service
+:::
+
 ### Using Env Variables in Client-side Code
 
 You can access env variables in your application code:
