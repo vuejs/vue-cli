@@ -1,18 +1,34 @@
 module.exports = (api, options) => {
+  const isVue3 = (options.vueVersion === '3')
   api.render('./template', {
+    isVue3,
     doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
   })
+
+  if (isVue3) {
+    api.extendPackage({
+      dependencies: {
+        'vue': '^3.0.0-0'
+      },
+      devDependencies: {
+        '@vue/compiler-sfc': '^3.0.0-0'
+      }
+    })
+  } else {
+    api.extendPackage({
+      dependencies: {
+        'vue': '^2.6.11'
+      },
+      devDependencies: {
+        'vue-template-compiler': '^2.6.11'
+      }
+    })
+  }
 
   api.extendPackage({
     scripts: {
       'serve': 'vue-cli-service serve',
       'build': 'vue-cli-service build'
-    },
-    dependencies: {
-      'vue': '^2.6.11'
-    },
-    devDependencies: {
-      'vue-template-compiler': '^2.6.11'
     },
     browserslist: [
       '> 1%',
