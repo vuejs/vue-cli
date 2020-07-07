@@ -1,5 +1,8 @@
-module.exports = (api, _, __, invoking) => {
+module.exports = (api, options, rootOptions, invoking) => {
+  const isVue3 = rootOptions && rootOptions.vueVersion === '3'
+
   api.render('./template', {
+    isVue3,
     hasTS: api.hasPlugin('typescript')
   })
 
@@ -8,7 +11,7 @@ module.exports = (api, _, __, invoking) => {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
-      '@vue/test-utils': '^1.0.3'
+      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.0.3'
     },
     jest: {
       preset: api.hasPlugin('babel')
@@ -16,6 +19,21 @@ module.exports = (api, _, __, invoking) => {
         : '@vue/cli-plugin-unit-jest/presets/no-babel'
     }
   })
+
+  if (isVue3) {
+    api.extendPackage({
+      devDependencies: {
+        'vue-jest': '^5.0.0-0',
+        // vue-jest 5.0.0-alpha.1 requires typescript to be present
+        'typescript': '~3.9.3'
+      },
+      jest: {
+        transform: {
+          '^.+\\.vue$': 'vue-jest'
+        }
+      }
+    })
+  }
 
   if (api.hasPlugin('eslint')) {
     applyESLint(api)
