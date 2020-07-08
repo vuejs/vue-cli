@@ -261,7 +261,7 @@ firebase deploy --only hosting
 
 If you want other Firebase CLI features you use on your project to be deployed, run `firebase deploy` without the `--only` option.
 
-You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
+You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com` or `https://<YOUR-PROJECT-ID>.web.app`.
 
 Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 
