@@ -130,7 +130,7 @@ module.exports = (api, options) => {
             .options(vueLoaderCacheConfig)
             .end()
           .use('vue-loader')
-            .loader(require.resolve('vue-loader'))
+            .loader(require.resolve('vue-loader-v16'))
             .options(vueLoaderCacheConfig)
             .end()
           .end()
