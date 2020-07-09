@@ -1,14 +1,14 @@
-# Working with CSS
+# CSS 相关
 
-Vue CLI projects comes with support for [PostCSS](http://postcss.org/), [CSS Modules](https://github.com/css-modules/css-modules) and pre-processors including [Sass](https://sass-lang.com/), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
+Vue CLI 项目天生支持 [PostCSS](http://postcss.org/)、[CSS Modules](https://github.com/css-modules/css-modules) 和包含 [Sass](https://sass-lang.com/)、[Less](http://lesscss.org/)、[Stylus](http://stylus-lang.com/) 在内的预处理器。
 
-## Referencing Assets
+## 引用静态资源
 
-All compiled CSS are processed by [css-loader](https://github.com/webpack-contrib/css-loader), which parses `url()` and resolves them as module requests. This means you can refer to assets using relative paths based on the local file structure. Note if you want to reference a file inside an npm dependency or via webpack alias, the path must be prefixed with `~` to avoid ambiguity. See [Static Asset Handling](./html-and-static-assets.md#static-assets-handling) for more details.
+所有编译后的 CSS 都会通过 [css-loader](https://github.com/webpack-contrib/css-loader) 来解析其中的 `url()` 引用，并将这些引用作为模块请求来处理。这意味着你可以根据本地的文件结构用相对路径来引用静态资源。另外要注意的是如果你想要引用一个 npm 依赖中的文件，或是想要用 webpack alias，则需要在路径前加上 `~` 的前缀来避免歧义。更多细节请参考[处理静态资源](./html-and-static-assets.md#处理静态资源)。
 
-## Pre-Processors
+## 预处理器
 
-You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, the internal webpack config is still pre-configured to handle all of them. You just need to manually install the corresponding webpack loaders:
+你可以在创建项目的时候选择预处理器 (Sass/Less/Stylus)。如果当时没有选好，内置的 webpack 仍然会被预配置为可以完成所有的处理。你也可以手动安装相应的 webpack loader：
 
 ``` bash
 # Sass
@@ -21,7 +21,7 @@ npm install -D less-loader less
 npm install -D stylus-loader stylus
 ```
 
-Then you can import the corresponding file types, or use them in `*.vue` files with:
+然后你就可以导入相应的文件类型，或在 `*.vue` 文件中这样来使用：
 
 ``` vue
 <style lang="scss">
@@ -29,17 +29,9 @@ $color: red;
 </style>
 ```
 
-::: tip A Tip on Sass Performance
-Note that when using Dart Sass, **synchronous compilation is twice as fast as asynchronous compilation** by default, due to the overhead of asynchronous callbacks. To avoid this overhead, you can use the [fibers](https://www.npmjs.com/package/fibers) package to call asynchronous importers from the synchronous code path. To enable this, simply install `fibers` as a project dependency:
-```
-npm install -D fibers
-```
-Please also be aware, as it's a native module, there may be compatibility issues vary on the OS and build environment. In that case, please run `npm uninstall -D fibers` to fix the problem.
-:::
+### 自动化导入
 
-### Automatic imports
-
-If you want to automatically import files (for colors, variables, mixins...), you can use the [style-resources-loader](https://github.com/yenshih/style-resources-loader). Here is an example for stylus that imports `./src/styles/imports.styl` in every SFC and every stylus files:
+如果你想自动化导入文件 (用于颜色、变量、mixin……)，你可以使用 [style-resources-loader](https://github.com/yenshih/style-resources-loader)。这里有一个关于 Stylus 的在每个单文件组件和 Stylus 文件中导入 `./src/styles/imports.styl` 的例子：
 
 ```js
 // vue.config.js
@@ -63,33 +55,33 @@ function addStyleResource (rule) {
 }
 ```
 
-You can also use the [vue-cli-plugin-style-resources-loader](https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader).
+你也可以选择使用 [vue-cli-plugin-style-resources-loader](https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader)。
 
 ## PostCSS
 
-Vue CLI uses PostCSS internally.
+Vue CLI 内部使用了 PostCSS。
 
-You can configure PostCSS via `.postcssrc` or any config source supported by [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config), and configure [postcss-loader](https://github.com/postcss/postcss-loader) via `css.loaderOptions.postcss` in `vue.config.js`.
+你可以通过 `.postcssrc` 或任何 [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config) 支持的配置源来配置 PostCSS。也可以通过 `vue.config.js` 中的 `css.loaderOptions.postcss` 配置 [postcss-loader](https://github.com/postcss/postcss-loader)。
 
-The [autoprefixer](https://github.com/postcss/autoprefixer) plugin is enabled by default. To configure the browser targets, use the [browserslist](../guide/browser-compatibility.html#browserslist) field in `package.json`.
+我们默认开启了 [autoprefixer](https://github.com/postcss/autoprefixer)。如果要配置目标浏览器，可使用 `package.json` 的 [browserslist](../guide/browser-compatibility.html#browserslist) 字段。
 
-::: tip Note on Vendor-prefixed CSS Rules
-In the production build, Vue CLI optimizes your CSS and will drop unnecessary vendor-prefixed CSS rules based on your browser targets. With `autoprefixer` enabled by default, you should always use only non-prefixed CSS rules.
+::: tip 关于 CSS 中浏览器前缀规则的注意事项
+在生产环境构建中，Vue CLI 会优化 CSS 并基于目标浏览器抛弃不必要的浏览器前缀规则。因为默认开启了 `autoprefixer`，你只使用无前缀的 CSS 规则即可。
 :::
 
 ## CSS Modules
 
-You can [use CSS Modules in `*.vue` files](https://vue-loader.vuejs.org/en/features/css-modules.html) out of the box with `<style module>`.
+你可以通过 `<style module>` 以开箱即用的方式[在 `*.vue` 文件中使用 CSS Modules](https://vue-loader.vuejs.org/zh/guide/css-modules.html)。
 
-To import CSS or other pre-processor files as CSS Modules in JavaScript, the filename should end with `.module.(css|less|sass|scss|styl)`:
+如果想在 JavaScript 中作为 CSS Modules 导入 CSS 或其它预处理文件，该文件应该以 `.module.(css|less|sass|scss|styl)` 结尾：
 
 ``` js
 import styles from './foo.module.css'
-// works for all supported pre-processors as well
+// 所有支持的预处理器都一样工作
 import sassStyles from './foo.module.scss'
 ```
 
-If you want to drop the `.module` in the filenames, set `css.requireModuleExtension` to `false` in `vue.config.js`:
+如果你想去掉文件名中的 `.module`，可以设置 `vue.config.js` 中的 `css.requireModuleExtension` 为 `false`：
 
 ``` js
 // vue.config.js
@@ -100,7 +92,7 @@ module.exports = {
 }
 ```
 
-If you wish to customize the generated CSS modules class names, you can do so via `css.loaderOptions.css` in `vue.config.js`. All `css-loader` options are supported here, for example `localIdentName` and `camelCase`:
+如果你希望自定义生成的 CSS Modules 模块的类名，可以通过 `vue.config.js` 中的 `css.loaderOptions.css` 选项来实现。所有的 `css-loader` 选项在这里都是支持的，例如 `localIdentName` 和 `camelCase`：
 
 ``` js
 // vue.config.js
@@ -108,8 +100,8 @@ module.exports = {
   css: {
     loaderOptions: {
       css: {
-        // Note: the following config format is different between Vue CLI v4 and v3
-        // For Vue CLI v3 users, please refer to css-loader v1 documentations
+        // 注意：以下配置在 Vue CLI v4 与 v3 之间存在差异。
+        // Vue CLI v3 用户可参考 css-loader v1 文档
         // https://github.com/webpack-contrib/css-loader/tree/v1.0.1
         modules: {
           localIdentName: '[name]-[hash]'
@@ -121,31 +113,44 @@ module.exports = {
 }
 ```
 
-## Passing Options to Pre-Processor Loaders
+## 向预处理器 Loader 传递选项
 
-Sometimes you may want to pass options to the pre-processor's webpack loader. You can do that using the `css.loaderOptions` option in `vue.config.js`. For example, to pass some shared global variables to all your Sass/Less styles:
+有的时候你想要向 webpack 的预处理器 loader 传递选项。你可以使用 `vue.config.js` 中的 `css.loaderOptions` 选项。比如你可以这样向所有 Sass/Less 样式传入共享的全局变量：
 
 ``` js
 // vue.config.js
 module.exports = {
   css: {
     loaderOptions: {
-      // pass options to sass-loader
-      // @/ is an alias to src/
-      // so this assumes you have a file named `src/variables.sass`
-      // Note: this option is named as "data" in sass-loader v7
+      // 给 sass-loader 传递选项
       sass: {
+        // @/ 是 src/ 的别名
+        // 所以这里假设你有 `src/variables.sass` 这个文件
+        // 注意：在 sass-loader v7 中，这个选项名是 "data"
         prependData: `@import "~@/variables.sass"`
       },
-      // by default the `sass` option will apply to both syntaxes
-      // because `scss` syntax is also processed by sass-loader underlyingly
-      // but when configuring the `data` option
-      // `scss` syntax requires an semicolon at the end of a statement, while `sass` syntax requires none
-      // in that case, we can target the `scss` syntax separately using the `scss` option
+      // 默认情况下 `sass` 选项会同时对 `sass` 和 `scss` 语法同时生效
+      // 因为 `scss` 语法在内部也是由 sass-loader 处理的
+      // 但是在配置 `data` 选项的时候
+      // `scss` 语法会要求语句结尾必须有分号，`sass` 则要求必须没有分号
+      // 在这种情况下，我们可以使用 `scss` 选项，对 `scss` 语法进行单独配置
       scss: {
-        prependData: `@import "~@/variables.scss";`
+        // sass-loader v8语法
+        // prependData: `@import "~@/variables.scss";`
+        // sass-loader v9语法
+        additionalData(content, loaderContext) {
+          const { resourcePath, rootContext } = loaderContext;
+          const relativePath = path.relative(rootContext, resourcePath);
+          if (
+            relativePath.replace(/\\/g, "/") !== "src/styles/variables.scss"
+          ) {
+            return '@import "~@/styles/variables.scss";' + content;
+          }
+          return content;
+        },
+
       },
-      // pass Less.js Options to less-loader
+      // 给 less-loader 传递 Less.js 相关选项
       less:{
         // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
         // `primary` is global variables fields name
@@ -158,7 +163,7 @@ module.exports = {
 }
 ```
 
-Loaders which can be configured via `loaderOptions` include:
+Loader 可以通过 `loaderOptions` 配置，包括：
 
 - [css-loader](https://github.com/webpack-contrib/css-loader)
 - [postcss-loader](https://github.com/postcss/postcss-loader)
@@ -166,6 +171,6 @@ Loaders which can be configured via `loaderOptions` include:
 - [less-loader](https://github.com/webpack-contrib/less-loader)
 - [stylus-loader](https://github.com/shama/stylus-loader)
 
-::: tip
-This is preferred over manually tapping into specific loaders using `chainWebpack`, because these options need to be applied in multiple locations where the corresponding loader is used.
+::: tip 提示
+这样做比使用 `chainWebpack` 手动指定 loader 更推荐，因为这些选项需要应用在使用了相应 loader 的多个地方。
 :::
