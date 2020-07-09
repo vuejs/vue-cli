@@ -3751,7 +3751,7 @@
 
 "@vue/compiler-core@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-core/download/@vue/compiler-core-3.0.0-beta.20.tgz#66c085e23d5420088074bec73291fbd8151caff3"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/@vue/compiler-core-3.0.0-beta.20.tgz#66c085e23d5420088074bec73291fbd8151caff3"
   integrity sha1-ZsCF4j1UIAiAdL7HMpH72BUcr/M=
   dependencies:
     "@babel/parser" "^7.8.6"
@@ -3770,7 +3770,7 @@
 
 "@vue/compiler-dom@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/download/@vue/compiler-dom-3.0.0-beta.20.tgz#9d305d566da28222db4a0f7cd349e3e603a42872"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/@vue/compiler-dom-3.0.0-beta.20.tgz#9d305d566da28222db4a0f7cd349e3e603a42872"
   integrity sha1-nTBdVm2igiLbSg9800nj5gOkKHI=
   dependencies:
     "@vue/compiler-core" "3.0.0-beta.20"
@@ -3902,7 +3902,7 @@
 
 "@vue/shared@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@vue/shared/download/@vue/shared-3.0.0-beta.20.tgz#022b7aac09669d6ca79ff2cd38418853b2ffc8be"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/@vue/shared-3.0.0-beta.20.tgz#022b7aac09669d6ca79ff2cd38418853b2ffc8be"
   integrity sha1-Ait6rAlmnWynn/LNOEGIU7L/yL4=
 
 "@vue/test-utils@^1.0.3":
@@ -19937,7 +19937,7 @@ vue-router@^3.2.0:
 
 vue-server-renderer@^2.6.10, vue-server-renderer@^2.6.11:
   version "2.6.11"
-  resolved "https://registry.yarnpkg.com/vue-server-renderer/download/vue-server-renderer-2.6.11.tgz#be8c9abc6aacc309828a755c021a05fc474b4bc3"
+  resolved "https://registry.yarnpkg.com/vue-server-renderer/-/vue-server-renderer-2.6.11.tgz#be8c9abc6aacc309828a755c021a05fc474b4bc3"
   integrity sha1-voyavGqswwmCinVcAhoF/EdLS8M=
   dependencies:
     chalk "^1.1.3"
