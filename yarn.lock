@@ -3873,23 +3873,23 @@
 
 "@vue/reactivity@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@vue/reactivity/download/@vue/reactivity-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554179&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2F%40vue%2Freactivity%2Fdownload%2F%40vue%2Freactivity-3.0.0-beta.20.tgz#8a16f089394a29a8509e4c8e515f5ec84b26cc13"
-  integrity sha1-ihbwiTlKKahQnkyOUV9eyEsmzBM=
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.0.0-beta.20.tgz#8a16f089394a29a8509e4c8e515f5ec84b26cc13"
+  integrity sha512-X59+ZENE1sFRW56vcyb3eTGwqGwRpBJIkau0/NMv86hBbtWUigG4+r4thoCNKQAX3iyMQBlk5dQvxUxopjn5pg==
   dependencies:
     "@vue/shared" "3.0.0-beta.20"
 
 "@vue/runtime-core@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-core/download/@vue/runtime-core-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554469&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2F%40vue%2Fruntime-core%2Fdownload%2F%40vue%2Fruntime-core-3.0.0-beta.20.tgz#33d090a18ae86899ffdc571e19cfa8a5523b4a4f"
-  integrity sha1-M9CQoYroaJn/3FceGc+opVI7Sk8=
+  resolved "https://registry.yarnpkg.com/@vue/runtime-core/-/runtime-core-3.0.0-beta.20.tgz#33d090a18ae86899ffdc571e19cfa8a5523b4a4f"
+  integrity sha512-X5mM44vKVi9YC963McJ2m3siKdAAXS0s+LaWnnVH4IjkrlJFcaqQBMhfkJt8mI2SCv5tICBDgmIIkIkJzZ2tTw==
   dependencies:
     "@vue/reactivity" "3.0.0-beta.20"
     "@vue/shared" "3.0.0-beta.20"
 
 "@vue/runtime-dom@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/download/@vue/runtime-dom-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554754&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2F%40vue%2Fruntime-dom%2Fdownload%2F%40vue%2Fruntime-dom-3.0.0-beta.20.tgz#7588341e7304ae5a695ea1dd86bbe86c8df96e55"
-  integrity sha1-dYg0HnMErlppXqHdhrvobI35blU=
+  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/-/runtime-dom-3.0.0-beta.20.tgz#7588341e7304ae5a695ea1dd86bbe86c8df96e55"
+  integrity sha512-L8G9O34TuUUWMA06kZBSGfc44vHPpy+d3K8bM5qXiocdSCyjvikb9McXJsTZesLZZksRAyr1G05u/ikxCERCWQ==
   dependencies:
     "@vue/runtime-core" "3.0.0-beta.20"
     "@vue/shared" "3.0.0-beta.20"
@@ -7730,8 +7730,8 @@ cssstyle@^2.0.0:
 
 csstype@^2.6.8:
   version "2.6.11"
-  resolved "https://registry.yarnpkg.com/csstype/download/csstype-2.6.11.tgz?cache=0&sync_timestamp=1593600104141&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2Fcsstype%2Fdownload%2Fcsstype-2.6.11.tgz#452f4d024149ecf260a852b025e36562a253ffc5"
-  integrity sha1-RS9NAkFJ7PJgqFKwJeNlYqJT/8U=
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.11.tgz#452f4d024149ecf260a852b025e36562a253ffc5"
+  integrity sha512-l8YyEC9NBkSm783PFTvh0FmJy7s5pFKrDp49ZL7zBGX3fWkO+N4EEyan1qqp8cwPLDcD0OSdyY6hAMoxp34JFw==
 
 csv-parser@^1.6.0:
   version "1.12.1"
@@ -19993,8 +19993,8 @@ vue@^2.6.10, vue@^2.6.11:
 
 vue@^3.0.0-beta.15:
   version "3.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/vue/download/vue-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594226819006&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2Fvue%2Fdownload%2Fvue-3.0.0-beta.20.tgz#34a7907cfbdc65b6b8c61fb4d7656f4aa6bf1fff"
-  integrity sha1-NKeQfPvcZba4xh+012VvSqa/H/8=
+  resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.0-beta.20.tgz#34a7907cfbdc65b6b8c61fb4d7656f4aa6bf1fff"
+  integrity sha512-JmfvMwZQ/bsEF5YBDdYqZzpp4M8dSninyGxG2bHUlpS4Y66X/pduw2GpGE61xxgfrp2KM5cI9ryRpsNHrsf9HA==
   dependencies:
     "@vue/compiler-dom" "3.0.0-beta.20"
     "@vue/runtime-dom" "3.0.0-beta.20"
