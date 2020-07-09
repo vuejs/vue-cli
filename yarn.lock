@@ -3766,6 +3766,11 @@
     webpack "^4.0.0"
     yorkie "^2.0.0"
 
+"@vue/cli-plugin-router@file:packages/@vue/cli-plugin-router":
+  version "4.4.6"
+  dependencies:
+    "@vue/cli-shared-utils" "^4.4.6"
+
 "@vue/cli-service@file:packages/@vue/cli-service":
   version "4.4.6"
   dependencies:
@@ -3836,7 +3841,7 @@
 
 "@vue/compiler-core@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/compiler-core/download/@vue/compiler-core-3.0.0-beta.20.tgz#66c085e23d5420088074bec73291fbd8151caff3"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-core/download/@vue/compiler-core-3.0.0-beta.20.tgz#66c085e23d5420088074bec73291fbd8151caff3"
   integrity sha1-ZsCF4j1UIAiAdL7HMpH72BUcr/M=
   dependencies:
     "@babel/parser" "^7.8.6"
@@ -3855,7 +3860,7 @@
 
 "@vue/compiler-dom@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/compiler-dom/download/@vue/compiler-dom-3.0.0-beta.20.tgz#9d305d566da28222db4a0f7cd349e3e603a42872"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-dom/download/@vue/compiler-dom-3.0.0-beta.20.tgz#9d305d566da28222db4a0f7cd349e3e603a42872"
   integrity sha1-nTBdVm2igiLbSg9800nj5gOkKHI=
   dependencies:
     "@vue/compiler-core" "3.0.0-beta.20"
@@ -3984,14 +3989,14 @@
 
 "@vue/reactivity@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/reactivity/download/@vue/reactivity-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554179&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vue%2Freactivity%2Fdownload%2F%40vue%2Freactivity-3.0.0-beta.20.tgz#8a16f089394a29a8509e4c8e515f5ec84b26cc13"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/download/@vue/reactivity-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554179&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2F%40vue%2Freactivity%2Fdownload%2F%40vue%2Freactivity-3.0.0-beta.20.tgz#8a16f089394a29a8509e4c8e515f5ec84b26cc13"
   integrity sha1-ihbwiTlKKahQnkyOUV9eyEsmzBM=
   dependencies:
     "@vue/shared" "3.0.0-beta.20"
 
 "@vue/runtime-core@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/runtime-core/download/@vue/runtime-core-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554469&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vue%2Fruntime-core%2Fdownload%2F%40vue%2Fruntime-core-3.0.0-beta.20.tgz#33d090a18ae86899ffdc571e19cfa8a5523b4a4f"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-core/download/@vue/runtime-core-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554469&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2F%40vue%2Fruntime-core%2Fdownload%2F%40vue%2Fruntime-core-3.0.0-beta.20.tgz#33d090a18ae86899ffdc571e19cfa8a5523b4a4f"
   integrity sha1-M9CQoYroaJn/3FceGc+opVI7Sk8=
   dependencies:
     "@vue/reactivity" "3.0.0-beta.20"
@@ -3999,7 +4004,7 @@
 
 "@vue/runtime-dom@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/runtime-dom/download/@vue/runtime-dom-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554754&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vue%2Fruntime-dom%2Fdownload%2F%40vue%2Fruntime-dom-3.0.0-beta.20.tgz#7588341e7304ae5a695ea1dd86bbe86c8df96e55"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/download/@vue/runtime-dom-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594227554754&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2F%40vue%2Fruntime-dom%2Fdownload%2F%40vue%2Fruntime-dom-3.0.0-beta.20.tgz#7588341e7304ae5a695ea1dd86bbe86c8df96e55"
   integrity sha1-dYg0HnMErlppXqHdhrvobI35blU=
   dependencies:
     "@vue/runtime-core" "3.0.0-beta.20"
@@ -4013,7 +4018,7 @@
 
 "@vue/shared@3.0.0-beta.20":
   version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/shared/download/@vue/shared-3.0.0-beta.20.tgz#022b7aac09669d6ca79ff2cd38418853b2ffc8be"
+  resolved "https://registry.yarnpkg.com/@vue/shared/download/@vue/shared-3.0.0-beta.20.tgz#022b7aac09669d6ca79ff2cd38418853b2ffc8be"
   integrity sha1-Ait6rAlmnWynn/LNOEGIU7L/yL4=
 
 "@vue/test-utils@^1.0.3":
@@ -7846,7 +7851,7 @@ cssstyle@^2.0.0:
 
 csstype@^2.6.8:
   version "2.6.11"
-  resolved "https://registry.npm.taobao.org/csstype/download/csstype-2.6.11.tgz?cache=0&sync_timestamp=1593600104141&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcsstype%2Fdownload%2Fcsstype-2.6.11.tgz#452f4d024149ecf260a852b025e36562a253ffc5"
+  resolved "https://registry.yarnpkg.com/csstype/download/csstype-2.6.11.tgz?cache=0&sync_timestamp=1593600104141&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2Fcsstype%2Fdownload%2Fcsstype-2.6.11.tgz#452f4d024149ecf260a852b025e36562a253ffc5"
   integrity sha1-RS9NAkFJ7PJgqFKwJeNlYqJT/8U=
 
 csv-parser@^1.6.0:
@@ -16641,7 +16646,7 @@ punycode@^2.1.0, punycode@^2.1.1:
 
 puppeteer@1.11.0, puppeteer@^1.11.0:
   version "1.11.0"
-  resolved "https://registry.npm.taobao.org/puppeteer/download/puppeteer-1.11.0.tgz?cache=0&sync_timestamp=1593696356704&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fpuppeteer%2Fdownload%2Fpuppeteer-1.11.0.tgz#63cdbe12b07275cd6e0b94bce41f3fcb20305770"
+  resolved "https://registry.yarnpkg.com/puppeteer/download/puppeteer-1.11.0.tgz?cache=0&sync_timestamp=1593696356704&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2Fpuppeteer%2Fdownload%2Fpuppeteer-1.11.0.tgz#63cdbe12b07275cd6e0b94bce41f3fcb20305770"
   integrity sha1-Y82+ErBydc1uC5S85B8/yyAwV3A=
   dependencies:
     debug "^4.1.0"
@@ -20109,7 +20114,7 @@ vue-router@^3.2.0:
 
 vue-server-renderer@^2.6.10, vue-server-renderer@^2.6.11:
   version "2.6.11"
-  resolved "https://registry.npm.taobao.org/vue-server-renderer/download/vue-server-renderer-2.6.11.tgz#be8c9abc6aacc309828a755c021a05fc474b4bc3"
+  resolved "https://registry.yarnpkg.com/vue-server-renderer/download/vue-server-renderer-2.6.11.tgz#be8c9abc6aacc309828a755c021a05fc474b4bc3"
   integrity sha1-voyavGqswwmCinVcAhoF/EdLS8M=
   dependencies:
     chalk "^1.1.3"
@@ -20165,7 +20170,7 @@ vue@^2.6.10, vue@^2.6.11:
 
 vue@^3.0.0-0, vue@^3.0.0-beta.15:
   version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/vue/download/vue-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594226819006&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue%2Fdownload%2Fvue-3.0.0-beta.20.tgz#34a7907cfbdc65b6b8c61fb4d7656f4aa6bf1fff"
+  resolved "https://registry.yarnpkg.com/vue/download/vue-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594226819006&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2Fvue%2Fdownload%2Fvue-3.0.0-beta.20.tgz#34a7907cfbdc65b6b8c61fb4d7656f4aa6bf1fff"
   integrity sha1-NKeQfPvcZba4xh+012VvSqa/H/8=
   dependencies:
     "@vue/compiler-dom" "3.0.0-beta.20"

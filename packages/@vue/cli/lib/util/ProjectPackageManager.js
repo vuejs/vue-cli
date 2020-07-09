@@ -303,7 +303,7 @@ class PackageManager {
       try {
         await this.runCommand('install', ['--offline', '--silent', '--no-progress'])
       } catch (e) {
-        await this.runCommand('install', '--silent', '--no-progress')
+        await this.runCommand('install', ['--silent', '--no-progress'])
       }
     }
 
