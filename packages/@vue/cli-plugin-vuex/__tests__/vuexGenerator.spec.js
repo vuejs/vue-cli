@@ -31,6 +31,7 @@ test('use with Vue 3', async () => {
 
   expect(files['src/store/index.js']).toBeTruthy()
   expect(files['src/store/index.js']).toMatch('import { createStore }')
+  expect(files['src/main.js']).toMatch('.use(store)')
 
   expect(pkg.dependencies).toHaveProperty('vuex')
   expect(pkg.dependencies.vuex).toMatch('^4')

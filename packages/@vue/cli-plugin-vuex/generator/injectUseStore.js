@@ -24,4 +24,6 @@ module.exports = (file, api) => {
       [j.identifier('store')]
     )
   })
+
+  return root.toSource()
 }

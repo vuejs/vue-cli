@@ -2,7 +2,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
   api.injectImports(api.entryFile, `import store from './store'`)
 
   if (rootOptions.vueVersion === '3') {
-    api.transformScript(api.entryFile, require('./inject-use-store'))
+    api.transformScript(api.entryFile, require('./injectUseStore'))
     api.extendPackage({
       dependencies: {
         vuex: '^4.0.0-0'
