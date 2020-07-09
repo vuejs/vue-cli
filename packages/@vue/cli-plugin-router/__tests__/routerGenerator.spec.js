@@ -62,3 +62,77 @@ test('use with Babel', async () => {
 
   expect(pkg.dependencies).toHaveProperty('vue-router')
 })
+
+test('use with Vue 3', async () => {
+  const { files, pkg } = await generateWithPlugin([
+    {
+      id: '@vue/cli-service',
+      apply: require('@vue/cli-service/generator'),
+      options: {
+        vueVersion: '3'
+      }
+    },
+    {
+      id: '@vue/cli-plugin-router',
+      apply: require('../generator'),
+      options: {}
+    }
+  ])
+
+  expect(files['src/router/index.js']).toBeTruthy()
+  expect(files['src/router/index.js']).toMatch('createRouter')
+  expect(files['src/router/index.js']).toMatch('history: createWebHashHistory()')
+
+  expect(files['src/main.js']).toMatch('.use(router)')
+
+  expect(pkg.dependencies).toHaveProperty('vue-router')
+  expect(pkg.dependencies['vue-router']).toMatch('^4')
+})
+
+test('Vue 3 + History Mode', async () => {
+  const { files } = await generateWithPlugin([
+    {
+      id: '@vue/cli-service',
+      apply: require('@vue/cli-service/generator'),
+      options: {
+        vueVersion: '3'
+      }
+    },
+    {
+      id: '@vue/cli-plugin-router',
+      apply: require('../generator'),
+      options: {
+        historyMode: true
+      }
+    }
+  ])
+
+  expect(files['src/router/index.js']).toMatch(/import {.*createWebHistory/)
+  expect(files['src/router/index.js']).toMatch('history: createWebHistory(process.env.BASE_URL)')
+})
+
+test('Vue 3 + TypeScript', async () => {
+  const { files } = await generateWithPlugin([
+    {
+      id: '@vue/cli-service',
+      apply: require('@vue/cli-service/generator'),
+      options: {
+        vueVersion: '3'
+      }
+    },
+    {
+      id: '@vue/cli-plugin-router',
+      apply: require('../generator'),
+      options: {}
+    },
+    {
+      id: '@vue/cli-plugin-typescript',
+      apply: require('@vue/cli-plugin-typescript/generator'),
+      options: {}
+    }
+  ])
+
+  expect(files['src/router/index.ts']).toBeTruthy()
+  expect(files['src/router/index.ts']).toMatch(/import {.*RouteRecordRaw/)
+  expect(files['src/router/index.ts']).toMatch('const routes: Array<RouteRecordRaw> =')
+})

@@ -36,7 +36,7 @@ const routes<% if (hasTypeScript) { %>: Array<RouteRecordRaw><% } %> = [
 const router = createRouter({
   <%_ if (historyMode) { _%>
   history: createWebHistory(process.env.BASE_URL),
-  <%_ else { _%>
+  <%_ } else { _%>
   history: createWebHashHistory(),
   <%_ } _%>
   routes

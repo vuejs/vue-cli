@@ -21,7 +21,9 @@ module.exports = (file, api) => {
   appRoots.replaceWith(({ node: createAppCall }) => {
     return j.callExpression(
       j.memberExpression(createAppCall, j.identifier('use')),
-      ['router']
+      [j.identifier('router')]
     )
   })
+
+  return root.toSource()
 }

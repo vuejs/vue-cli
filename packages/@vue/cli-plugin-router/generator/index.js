@@ -4,7 +4,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
   api.injectImports(api.entryFile, `import router from './router'`)
 
   if (isVue3) {
-    api.transformScript(api.entryFile, require('./inject-use-router'))
+    api.transformScript(api.entryFile, require('./injectUseRouter'))
     api.extendPackage({
       dependencies: {
         'vue-router': '^4.0.0-0'
