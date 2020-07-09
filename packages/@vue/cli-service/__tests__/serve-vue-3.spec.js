@@ -1,21 +1,15 @@
 const { defaultPreset } = require('@vue/cli/lib/options')
-const create = require('@vue/cli-test-utils/createTestProject')
+// needs to be outside the workspace, so we reuse the createUpgradableProject functionality here
+const create = require('@vue/cli-test-utils/createUpgradableProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
 jest.setTimeout(300000)
-beforeEach(() => {
-  process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN = true
-})
-
-afterAll(() => {
-  delete process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN
-})
 
 test('serve with Vue 3', async () => {
   const project = await create('e2e-serve-vue-3', Object.assign({}, defaultPreset, { vueVersion: '3' }))
 
   await serve(
-    () => project.run('vue-cli-service serve'),
+    () => project.run('yarn serve'),
     async ({ page, nextUpdate, helpers }) => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
