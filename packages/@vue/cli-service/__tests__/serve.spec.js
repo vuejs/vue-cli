@@ -40,7 +40,8 @@ test('serve', async () => {
 })
 
 // TODO: need to fix vue package hoisting in Yarn workspace first
-test.skip('serve with Vue 3', async () => {
+test('serve with Vue 3', async () => {
+  process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN = true
   const project = await create('e2e-serve-vue-3', Object.assign({}, defaultPreset, { vueVersion: '3' }))
 
   await serve(
@@ -69,6 +70,8 @@ test.skip('serve with Vue 3', async () => {
       }
     }
   )
+
+  delete process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN
 })
 
 test('serve with router', async () => {

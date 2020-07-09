@@ -14,7 +14,7 @@ const { formatFeatures } = require('./util/features')
 const loadLocalPreset = require('./util/loadLocalPreset')
 const loadRemotePreset = require('./util/loadRemotePreset')
 const generateReadme = require('./util/generateReadme')
-const { resolvePkg } = require('@vue/cli-shared-utils')
+const { resolvePkg, isOfficialPlugin } = require('@vue/cli-shared-utils')
 
 const {
   defaults,
@@ -144,13 +144,17 @@ module.exports = class Creator extends EventEmitter {
         return
       }
 
-      // Note: the default creator includes no more than `@vue/cli-*` & `@vue/babel-preset-env`,
-      // so it is fine to only test `@vue` prefix.
-      // Other `@vue/*` packages' version may not be in sync with the cli itself.
-      pkg.devDependencies[dep] = (
-        preset.plugins[dep].version ||
-        ((/^@vue/.test(dep)) ? `~${latestMinor}` : `latest`)
-      )
+      let { version } = preset.plugins[dep]
+
+      if (!version) {
+        if (isOfficialPlugin(dep) || dep === '@vue/cli-service' || dep === '@vue/babel-preset-env') {
+          version = isTestOrDebug ? `file:../../${dep}` : `~${latestMinor}`
+        } else {
+          version = 'latest'
+        }
+      }
+
+      pkg.devDependencies[dep] = version
     })
 
     // write package.json
@@ -197,9 +201,7 @@ module.exports = class Creator extends EventEmitter {
     log(`📦  Installing additional dependencies...`)
     this.emit('creation', { event: 'deps-install' })
     log()
-    if (!isTestOrDebug) {
-      await pm.install()
-    }
+    await pm.install()
 
     // run complete cbs if any (injected by generators)
     log(`⚓  Running completion hooks...`)
