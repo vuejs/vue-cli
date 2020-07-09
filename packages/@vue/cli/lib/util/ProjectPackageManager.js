@@ -305,6 +305,7 @@ class PackageManager {
         await this.runCommand('install', ['--offline', '--silent', '--no-progress'])
         delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
       } catch (e) {
+        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
         await this.runCommand('install', ['--silent', '--no-progress'])
       }
     }
