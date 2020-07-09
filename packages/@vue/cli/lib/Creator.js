@@ -201,7 +201,9 @@ module.exports = class Creator extends EventEmitter {
     log(`📦  Installing additional dependencies...`)
     this.emit('creation', { event: 'deps-install' })
     log()
-    await pm.install()
+    if (!isTestOrDebug || process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
+      await pm.install()
+    }
 
     // run complete cbs if any (injected by generators)
     log(`⚓  Running completion hooks...`)
