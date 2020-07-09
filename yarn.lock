@@ -3522,13 +3522,6 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
-"@types/semver@^7.2.0":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.1.tgz#7a9a5d595b6d873f338c867dcef64df289468cfa"
-  integrity sha512-ooD/FJ8EuwlDKOI6D9HWxgIgJjMg2cuziXm/42npDC8y4NjxplBUn9loewZiBNCt44450lHAU0OSb51/UqXeag==
-  dependencies:
-    "@types/node" "*"
-
 "@types/serve-static@*":
   version "1.13.3"
   resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.13.3.tgz#eb7e1c41c4468272557e897e9171ded5e2ded9d1"
@@ -3745,89 +3738,6 @@
     "@vue/babel-plugin-transform-vue-jsx" "^1.1.2"
     camelcase "^5.0.0"
 
-"@vue/cli-plugin-babel@file:packages/@vue/cli-plugin-babel":
-  version "4.4.6"
-  dependencies:
-    "@babel/core" "^7.9.6"
-    "@vue/babel-preset-app" "^4.4.6"
-    "@vue/cli-shared-utils" "^4.4.6"
-    babel-loader "^8.1.0"
-    cache-loader "^4.1.0"
-    thread-loader "^2.1.3"
-    webpack "^4.0.0"
-
-"@vue/cli-plugin-eslint@file:packages/@vue/cli-plugin-eslint":
-  version "4.4.6"
-  dependencies:
-    "@vue/cli-shared-utils" "^4.4.6"
-    eslint-loader "^2.2.1"
-    globby "^9.2.0"
-    inquirer "^7.1.0"
-    webpack "^4.0.0"
-    yorkie "^2.0.0"
-
-"@vue/cli-plugin-router@file:packages/@vue/cli-plugin-router":
-  version "4.4.6"
-  dependencies:
-    "@vue/cli-shared-utils" "^4.4.6"
-
-"@vue/cli-service@file:packages/@vue/cli-service":
-  version "4.4.6"
-  dependencies:
-    "@intervolga/optimize-cssnano-plugin" "^1.0.5"
-    "@soda/friendly-errors-webpack-plugin" "^1.7.1"
-    "@soda/get-current-script" "^1.0.0"
-    "@vue/cli-overlay" "^4.4.6"
-    "@vue/cli-plugin-router" "^4.4.6"
-    "@vue/cli-plugin-vuex" "^4.4.6"
-    "@vue/cli-shared-utils" "^4.4.6"
-    "@vue/component-compiler-utils" "^3.1.2"
-    "@vue/preload-webpack-plugin" "^1.1.0"
-    "@vue/web-component-wrapper" "^1.2.0"
-    acorn "^7.2.0"
-    acorn-walk "^7.1.1"
-    address "^1.1.2"
-    autoprefixer "^9.8.0"
-    browserslist "^4.12.0"
-    cache-loader "^4.1.0"
-    case-sensitive-paths-webpack-plugin "^2.3.0"
-    cli-highlight "^2.1.4"
-    clipboardy "^2.3.0"
-    cliui "^6.0.0"
-    copy-webpack-plugin "^5.1.1"
-    css-loader "^3.5.3"
-    cssnano "^4.1.10"
-    debug "^4.1.1"
-    default-gateway "^5.0.5"
-    dotenv "^8.2.0"
-    dotenv-expand "^5.1.0"
-    file-loader "^4.2.0"
-    fs-extra "^7.0.1"
-    globby "^9.2.0"
-    hash-sum "^2.0.0"
-    html-webpack-plugin "^3.2.0"
-    launch-editor-middleware "^2.2.1"
-    lodash.defaultsdeep "^4.6.1"
-    lodash.mapvalues "^4.6.0"
-    lodash.transform "^4.6.0"
-    mini-css-extract-plugin "^0.9.0"
-    minimist "^1.2.5"
-    pnp-webpack-plugin "^1.6.4"
-    portfinder "^1.0.26"
-    postcss-loader "^3.0.0"
-    ssri "^7.1.0"
-    terser-webpack-plugin "^2.3.6"
-    thread-loader "^2.1.3"
-    url-loader "^2.2.0"
-    vue-loader "^15.9.2"
-    vue-loader-v16 "npm:vue-loader@^16.0.0-beta.3"
-    vue-style-loader "^4.1.2"
-    webpack "^4.0.0"
-    webpack-bundle-analyzer "^3.8.0"
-    webpack-chain "^6.4.0"
-    webpack-dev-server "^3.11.0"
-    webpack-merge "^4.2.2"
-
 "@vue/compiler-core@3.0.0-beta.15":
   version "3.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.0.0-beta.15.tgz#8710a8e3ba15ba1a8b62bd17609d26bd27fdcc45"
@@ -3866,24 +3776,6 @@
     "@vue/compiler-core" "3.0.0-beta.20"
     "@vue/shared" "3.0.0-beta.20"
 
-"@vue/compiler-sfc@^3.0.0-0":
-  version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/compiler-sfc/download/@vue/compiler-sfc-3.0.0-beta.20.tgz#8ffe1a31e709713708fb625cae62e7efdae90b14"
-  integrity sha1-j/4aMecJcTcI+2JcrmLn79rpCxQ=
-  dependencies:
-    "@vue/compiler-core" "3.0.0-beta.20"
-    "@vue/compiler-dom" "3.0.0-beta.20"
-    "@vue/compiler-ssr" "3.0.0-beta.20"
-    "@vue/shared" "3.0.0-beta.20"
-    consolidate "^0.15.1"
-    hash-sum "^2.0.0"
-    lru-cache "^5.1.1"
-    merge-source-map "^1.1.0"
-    postcss "^7.0.27"
-    postcss-modules "^3.1.0"
-    postcss-selector-parser "^6.0.2"
-    source-map "^0.6.1"
-
 "@vue/compiler-sfc@^3.0.0-beta.15":
   version "3.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.0.0-beta.15.tgz#8a8cc309fd56d5ceca76160743a4eb4e8a43281b"
@@ -3909,14 +3801,6 @@
   dependencies:
     "@vue/compiler-dom" "3.0.0-beta.15"
     "@vue/shared" "3.0.0-beta.15"
-
-"@vue/compiler-ssr@3.0.0-beta.20":
-  version "3.0.0-beta.20"
-  resolved "https://registry.npm.taobao.org/@vue/compiler-ssr/download/@vue/compiler-ssr-3.0.0-beta.20.tgz#f605836a09b9bcd3ca66193e4984081aa1408825"
-  integrity sha1-9gWDagm5vNPKZhk+SYQIGqFAiCU=
-  dependencies:
-    "@vue/compiler-dom" "3.0.0-beta.20"
-    "@vue/shared" "3.0.0-beta.20"
 
 "@vue/component-compiler-utils@^3.1.0":
   version "3.1.1"
@@ -4411,11 +4295,6 @@ acorn-jsx@^5.0.0, acorn-jsx@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.1.0.tgz#294adb71b57398b0680015f0a38c563ee1db5384"
   integrity sha512-tMUqwBWfLFbJbizRmEcWSLw6HnFzfdJs2sOJEOwwtVPMoH/0Ay+E703oZz78VSXZiiDcZrQ5XKjPIUQixhmgVw==
-
-acorn-jsx@^5.2.0:
-  version "5.2.0"
-  resolved "http://localhost:4873/acorn-jsx/-/acorn-jsx-5.2.0.tgz#4c66069173d6fdd68ed85239fc256226182b2ebe"
-  integrity sha1-TGYGkXPW/daO2FI5/CViJhgrLr4=
 
 acorn-walk@^6.0.1:
   version "6.2.0"
@@ -9050,17 +8929,6 @@ eslint-plugin-vue@^6.2.2:
     semver "^5.6.0"
     vue-eslint-parser "^7.0.0"
 
-eslint-plugin-vue@^7.0.0-0:
-  version "7.0.0-alpha.9"
-  resolved "https://registry.npm.taobao.org/eslint-plugin-vue/download/eslint-plugin-vue-7.0.0-alpha.9.tgz#a7850e196a8ae6061ed81f47bc9143c054a53dc0"
-  integrity sha1-p4UOGWqK5gYe2B9HvJFDwFSlPcA=
-  dependencies:
-    "@types/semver" "^7.2.0"
-    eslint-utils "^2.0.0"
-    natural-compare "^1.4.0"
-    semver "^7.3.2"
-    vue-eslint-parser "^7.1.0"
-
 eslint-scope@^4.0.0, eslint-scope@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-4.0.3.tgz#ca03833310f6889a3264781aa82e63eb9cfe7848"
@@ -9211,15 +9079,6 @@ espree@^6.1.2:
   dependencies:
     acorn "^7.1.0"
     acorn-jsx "^5.1.0"
-    eslint-visitor-keys "^1.1.0"
-
-espree@^6.2.1:
-  version "6.2.1"
-  resolved "http://localhost:4873/espree/-/espree-6.2.1.tgz#77fc72e1fd744a2052c20f38a5b575832e82734a"
-  integrity sha1-d/xy4f10SiBSwg84pbV1gy6Cc0o=
-  dependencies:
-    acorn "^7.1.1"
-    acorn-jsx "^5.2.0"
     eslint-visitor-keys "^1.1.0"
 
 esprima@3.x.x:
@@ -16128,21 +15987,6 @@ postcss-modules@^2.0.0:
     postcss "^7.0.1"
     string-hash "^1.1.1"
 
-postcss-modules@^3.1.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/postcss-modules/-/postcss-modules-3.2.0.tgz#1ca870d197cd09a7964253e12de2aac906c94256"
-  integrity sha512-ceodlVbBypGD3R7EI1xM7gz28J0syaXq0VKd7rJVXVlOSkxUIRBRJQjBgpoKnKVFNAcCjtLVgZqBA3mUNntWPA==
-  dependencies:
-    generic-names "^2.0.1"
-    icss-replace-symbols "^1.1.0"
-    lodash.camelcase "^4.3.0"
-    postcss "^7.0.32"
-    postcss-modules-extract-imports "^2.0.0"
-    postcss-modules-local-by-default "^3.0.2"
-    postcss-modules-scope "^2.2.0"
-    postcss-modules-values "^3.0.0"
-    string-hash "^1.1.1"
-
 postcss-normalize-charset@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/postcss-normalize-charset/-/postcss-normalize-charset-4.0.1.tgz#8b35add3aee83a136b0471e0d59be58a50285dd4"
@@ -16366,15 +16210,6 @@ postcss@^7.0.30:
   version "7.0.30"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.30.tgz#cc9378beffe46a02cbc4506a0477d05fcea9a8e2"
   integrity sha512-nu/0m+NtIzoubO+xdAlwZl/u5S5vi/y6BCsoL8D+8IxsD3XvBS8X4YEADNIVXKVuQvduiucnRv+vPIqj56EGMQ==
-  dependencies:
-    chalk "^2.4.2"
-    source-map "^0.6.1"
-    supports-color "^6.1.0"
-
-postcss@^7.0.32:
-  version "7.0.32"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.32.tgz#4310d6ee347053da3433db2be492883d62cec59d"
-  integrity sha512-03eXong5NLnNCD05xscnGKGDZ98CyzoqPSMjOe6SuoQY7Z2hIj0Ld1g/O/UQRuOle2aRtiIRDg9tDcTGAkLfKw==
   dependencies:
     chalk "^2.4.2"
     source-map "^0.6.1"
@@ -19989,18 +19824,6 @@ vue-eslint-parser@^7.0.0:
     esquery "^1.0.1"
     lodash "^4.17.15"
 
-vue-eslint-parser@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.1.0.tgz#9cdbcc823e656b087507a1911732b867ac101e83"
-  integrity sha512-Kr21uPfthDc63nDl27AGQEhtt9VrZ9nkYk/NTftJ2ws9XiJwzJJCnCr3AITQ2jpRMA0XPGDECxYH8E027qMK9Q==
-  dependencies:
-    debug "^4.1.1"
-    eslint-scope "^5.0.0"
-    eslint-visitor-keys "^1.1.0"
-    espree "^6.2.1"
-    esquery "^1.0.1"
-    lodash "^4.17.15"
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
@@ -20168,7 +19991,7 @@ vue@^2.6.10, vue@^2.6.11:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
 
-vue@^3.0.0-0, vue@^3.0.0-beta.15:
+vue@^3.0.0-beta.15:
   version "3.0.0-beta.20"
   resolved "https://registry.yarnpkg.com/vue/download/vue-3.0.0-beta.20.tgz?cache=0&sync_timestamp=1594226819006&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2Fvue%2Fdownload%2Fvue-3.0.0-beta.20.tgz#34a7907cfbdc65b6b8c61fb4d7656f4aa6bf1fff"
   integrity sha1-NKeQfPvcZba4xh+012VvSqa/H/8=
