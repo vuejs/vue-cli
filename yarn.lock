@@ -16481,8 +16481,8 @@ punycode@^2.1.0, punycode@^2.1.1:
 
 puppeteer@1.11.0, puppeteer@^1.11.0:
   version "1.11.0"
-  resolved "https://registry.yarnpkg.com/puppeteer/download/puppeteer-1.11.0.tgz?cache=0&sync_timestamp=1593696356704&other_urls=https%3A%2F%2Fregistry.yarnpkg.com%2Fpuppeteer%2Fdownload%2Fpuppeteer-1.11.0.tgz#63cdbe12b07275cd6e0b94bce41f3fcb20305770"
-  integrity sha1-Y82+ErBydc1uC5S85B8/yyAwV3A=
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.11.0.tgz#63cdbe12b07275cd6e0b94bce41f3fcb20305770"
+  integrity sha512-iG4iMOHixc2EpzqRV+pv7o3GgmU2dNYEMkvKwSaQO/vMZURakwSOn/EYJ6OIRFYOque1qorzIBvrytPIQB3YzQ==
   dependencies:
     debug "^4.1.0"
     extract-zip "^1.6.6"
