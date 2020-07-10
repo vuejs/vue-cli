@@ -51,7 +51,8 @@ module.exports = class Creator extends EventEmitter {
 
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
-    const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
+    const { vueVersionPrompt, presetPrompt, featurePrompt } = this.resolveIntroPrompts()
+    this.vueVersionPrompt = vueVersionPrompt
     this.presetPrompt = presetPrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
@@ -307,6 +308,8 @@ module.exports = class Creator extends EventEmitter {
       this.promptCompleteCbs.forEach(cb => cb(answers, preset))
     }
 
+    preset.vueVersion = answers.vueVersion
+
     // validate
     validatePreset(preset)
 
@@ -398,10 +401,11 @@ module.exports = class Creator extends EventEmitter {
 
   resolveIntroPrompts () {
     const presets = this.getPresets()
-    const presetChoices = Object.keys(presets).map(name => {
+    const presetChoices = Object.entries(presets).map(([name, preset]) => {
       return {
-        name: `${name} (${formatFeatures(presets[name])})`,
-        value: name
+        name: `${name} (${formatFeatures(name, preset)})`,
+        value: name,
+        when: (answers) => !preset.vueVersion || preset.vueVersion === answers.vueVersion
       }
     })
     const presetPrompt = {
@@ -416,6 +420,22 @@ module.exports = class Creator extends EventEmitter {
         }
       ]
     }
+    const vueVersionPrompt = {
+      when: answers => answers.preset === 'default',
+      name: 'vueVersion',
+      type: 'list',
+      message: `Choose a version of Vue.js that you want to start the project with`,
+      choices: [
+        {
+          name: '2.x',
+          value: '2'
+        },
+        {
+          name: '3.x (preview)',
+          value: '3'
+        }
+      ]
+    }
     const featurePrompt = {
       name: 'features',
       when: isManualMode,
@@ -425,6 +445,7 @@ module.exports = class Creator extends EventEmitter {
       pageSize: 10
     }
     return {
+      vueVersionPrompt,
       presetPrompt,
       featurePrompt
     }
@@ -511,6 +532,7 @@ module.exports = class Creator extends EventEmitter {
     })
     const prompts = [
       this.presetPrompt,
+      this.vueVersionPrompt,
       this.featurePrompt,
       ...this.injectedPrompts,
       ...this.outroPrompts

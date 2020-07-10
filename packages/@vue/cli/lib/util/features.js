@@ -18,10 +18,17 @@ exports.getFeatures = (preset) => {
   return features
 }
 
-exports.formatFeatures = (preset, lead, joiner) => {
+exports.formatFeatures = (name, preset) => {
+  let versionInfo = ''
+  if (preset.vueVersion) {
+    versionInfo = chalk.yellow(`[Vue ${preset.vueVersion}] `)
+  } else if (name !== 'default') {  // default preset is Vue version-agnositic
+    versionInfo = chalk.yellow('[Vue 2] ')
+  }
+
   const features = exports.getFeatures(preset)
-  return features.map(dep => {
+  return versionInfo + features.map(dep => {
     dep = toShortPluginId(dep)
-    return `${lead || ''}${chalk.yellow(dep)}`
-  }).join(joiner || ', ')
+    return chalk.yellow(dep)
+  }).join(', ')
 }
