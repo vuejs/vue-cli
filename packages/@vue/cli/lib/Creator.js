@@ -297,6 +297,10 @@ module.exports = class Creator extends EventEmitter {
     let preset
     if (answers.preset && answers.preset !== '__manual__') {
       preset = await this.resolvePreset(answers.preset)
+
+      if (answers.preset === 'default') {
+        preset.vueVersion = answers.vueVersion
+      }
     } else {
       // manual
       preset = {
@@ -307,8 +311,6 @@ module.exports = class Creator extends EventEmitter {
       // run cb registered by prompt modules to finalize the preset
       this.promptCompleteCbs.forEach(cb => cb(answers, preset))
     }
-
-    preset.vueVersion = answers.vueVersion
 
     // validate
     validatePreset(preset)
