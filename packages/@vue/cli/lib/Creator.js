@@ -111,6 +111,16 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
+    // Introducing this hack because typescript plugin must be invoked after router.
+    // Currently we rely on the `plugins` object enumeration order,
+    // which depends on the order of the field initialization.
+    // FIXME: Remove this ugly hack after the plugin ordering API settled down
+    if (preset.plugins['@vue/cli-plugin-router'] && preset.plugins['@vue/cli-plugin-typescript']) {
+      const tmp = preset.plugins['@vue/cli-plugin-typescript']
+      delete preset.plugins['@vue/cli-plugin-typescript']
+      preset.plugins['@vue/cli-plugin-typescript'] = tmp
+    }
+
     // legacy support for vuex
     if (preset.vuex) {
       preset.plugins['@vue/cli-plugin-vuex'] = {}
@@ -423,7 +433,6 @@ module.exports = class Creator extends EventEmitter {
       ]
     }
     const vueVersionPrompt = {
-      when: answers => answers.preset === 'default',
       name: 'vueVersion',
       type: 'list',
       message: `Choose a version of Vue.js that you want to start the project with`,
@@ -532,10 +541,20 @@ module.exports = class Creator extends EventEmitter {
         return isManualMode(answers) && originalWhen(answers)
       }
     })
+
+    const vueVersionPromptForDefaultPreset = Object.assign({
+      when: answers => answers.preset === 'default'
+    }, this.vueVersionPrompt)
+
+    const vueVersionPromptAsAFeature = Object.assign({
+      when: answers => answers.features.includes['vueVersion']
+    }, this.vueVersionPrompt)
+
     const prompts = [
       this.presetPrompt,
-      this.vueVersionPrompt,
+      vueVersionPromptForDefaultPreset,
       this.featurePrompt,
+      vueVersionPromptAsAFeature,
       ...this.injectedPrompts,
       ...this.outroPrompts
     ]
