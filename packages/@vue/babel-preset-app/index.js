@@ -81,13 +81,7 @@ function getPolyfills (targets, includes) {
   }
 
   const compatData = require('core-js-compat').data
-  return includes.filter(item => {
-    if (!compatData[item]) {
-      throw new Error(`Cannot find polyfill ${item}, please refer to 'core-js-compat' for a complete list of available modules`)
-    }
-
-    return isRequired(item, targets, { compatData })
-  })
+  return includes.filter(item => isRequired(item, targets, { compatData }))
 }
 
 module.exports = (context, options = {}) => {
