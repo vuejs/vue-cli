@@ -22,7 +22,7 @@ module.exports = (api, {
     if (isVue3) {
       api.extendPackage({
         dependencies: {
-          'vue-class-component': '8.0.0-0'
+          'vue-class-component': '^8.0.0-0'
         }
       })
     } else {
