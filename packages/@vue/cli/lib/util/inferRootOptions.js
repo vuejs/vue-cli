@@ -1,6 +1,6 @@
 // Infer rootOptions for individual generators being invoked
 // in an existing project.
-const { semver } = require('@vue/cli-shared-utils')
+const { semver, isPlugin } = require('@vue/cli-shared-utils')
 module.exports = function inferRootOptions (pkg) {
   const rootOptions = {}
   const deps = Object.assign({}, pkg.dependencies, pkg.devDependencies)
@@ -41,6 +41,13 @@ module.exports = function inferRootOptions (pkg) {
   } else if ('stylus-loader' in deps) {
     rootOptions.cssPreprocessor = 'stylus'
   }
+
+  rootOptions.plugins = Object.keys(deps)
+    .filter(isPlugin)
+    .reduce((plugins, name) => {
+      plugins[name] = {}
+      return plugins
+    }, {})
 
   return rootOptions
 }
