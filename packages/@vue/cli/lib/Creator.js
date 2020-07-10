@@ -547,7 +547,7 @@ module.exports = class Creator extends EventEmitter {
     }, this.vueVersionPrompt)
 
     const vueVersionPromptAsAFeature = Object.assign({
-      when: answers => answers.features.includes['vueVersion']
+      when: answers => answers.features.includes('vueVersion')
     }, this.vueVersionPrompt)
 
     const prompts = [
