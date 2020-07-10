@@ -135,7 +135,20 @@ module.exports = {
       // `scss` 语法会要求语句结尾必须有分号，`sass` 则要求必须没有分号
       // 在这种情况下，我们可以使用 `scss` 选项，对 `scss` 语法进行单独配置
       scss: {
-        prependData: `@import "~@/variables.scss";`
+        // sass-loader v8语法
+        // prependData: `@import "~@/variables.scss";`
+        // sass-loader v9语法
+        additionalData(content, loaderContext) {
+          const { resourcePath, rootContext } = loaderContext;
+          const relativePath = path.relative(rootContext, resourcePath);
+          if (
+            relativePath.replace(/\\/g, "/") !== "src/styles/variables.scss"
+          ) {
+            return '@import "~@/styles/variables.scss";' + content;
+          }
+          return content;
+        },
+
       },
       // 给 less-loader 传递 Less.js 相关选项
       less:{
