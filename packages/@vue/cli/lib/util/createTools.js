@@ -1,5 +1,6 @@
 exports.getPromptModules = () => {
   return [
+    'vueVersion',
     'babel',
     'typescript',
     'pwa',
