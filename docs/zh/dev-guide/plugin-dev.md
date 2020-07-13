@@ -288,7 +288,7 @@ module.exports.hooks = (api) => {
     const renderIndex = lines.findIndex(line => line.match(/render/))
     lines[renderIndex] += `${EOL}  router,`
 
-    fs.writeFileSync(api.entryFile, line.join(EOL), { encoding: 'utf-8' })
+    fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
   })
 }
 ```
@@ -301,7 +301,7 @@ Service 插件在 Service 实例被创建后自动加载 - 例如，每次 `vue-
 
 一个 service 插件应该导出一个函数，这个函数接受两个参数：
 
-- 一个 [PluginAPI][plugin-api] 实例
+- 一个 [PluginAPI][plugin-api.md] 实例
 
 - 一个包含 `vue.config.js` 内指定的项目本地选项的对象，或者在 `package.json` 内的 `vue` 字段。
 
