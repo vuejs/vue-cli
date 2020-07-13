@@ -15,7 +15,7 @@ file, or the `"vue"` field in `package.json`.
 
 - **pwa.workboxPluginMode**
 
-  This allows you to the choose between the two modes supported by the underlying
+  This allows you to choose between the two modes supported by the underlying
   [`workbox-webpack-plugin`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin).
 
   - `'GenerateSW'` (default), will lead to a new service worker file being created
