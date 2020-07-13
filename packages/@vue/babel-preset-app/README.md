@@ -11,12 +11,10 @@ This is the default Babel preset used in all Vue CLI projects. **Note: this pres
 - `modules: false`
   - auto set to `'commonjs'` in Jest tests
 - [`useBuiltIns: 'usage'`](#usebuiltins)
-- `targets` is determined:
-  - using `browserslist` field in `package.json` when building for browsers
+- `targets`:
+  - by default `@babel/preset-env` will use [`browserslist config sources`](https://github.com/browserslist/browserslist#queries) (browserslist key in package.json file is recommend) unless either the [`targets`](https://babeljs.io/docs/en/babel-preset-env#targets) or [`ignoreBrowserslistConfig`](https://babeljs.io/docs/en/babel-preset-env#ignorebrowserslistconfig) options are set.
   - set to `{ node: 'current' }` when running unit tests in Node.js
 - Includes `Promise` polyfill by default so that they are usable even in non-transpiled dependencies (only for environments that need it)
-
-Sidenote, by default `@babel/preset-env` will use [`browserslist config sources`](https://github.com/browserslist/browserslist#queries) (browserslist key in package.json file is recommend) unless either the [`targets`](https://babeljs.io/docs/en/babel-preset-env#targets) or [`ignoreBrowserslistConfig`](https://babeljs.io/docs/en/babel-preset-env#ignorebrowserslistconfig) options are set.
 
 ### Stage 3 or Below
 
@@ -52,10 +50,8 @@ Explicitly set `modules` option for `babel-preset-env`. See [babel-preset-env do
 ### targets
 
 - Default:
-  - determined from `browserslist` field in `package.json` when building for browsers
+  - `@vue/babel-preset-app` will use [`browserslist config sources`](https://github.com/browserslist/browserslist#queries) (browserslist key in package.json file is recommend) unless either the [`targets`](https://babeljs.io/docs/en/babel-preset-env#targets) or [`ignoreBrowserslistConfig`](https://babeljs.io/docs/en/babel-preset-env#ignorebrowserslistconfig) options are set.
   - set to `{ node: 'current' }` when running unit tests in Node.js
-
-Sidenote, by default `@vue/babel-preset-app` will use [`browserslist config sources`](https://github.com/browserslist/browserslist#queries) (browserslist key in package.json file is recommend) unless either the [`targets`](https://babeljs.io/docs/en/babel-preset-env#targets) or [`ignoreBrowserslistConfig`](https://babeljs.io/docs/en/babel-preset-env#ignorebrowserslistconfig) options are set.
 
 Explicitly set `targets` option for `babel-preset-env`. See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#targets) for more details.
 
