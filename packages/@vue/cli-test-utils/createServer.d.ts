@@ -1,14 +1,11 @@
 /// <reference types="node" />
 import * as http from 'http'
 
-type Options = {
-  [props: string]: any
+declare function createServer(options: {
   /**
    * Set a sub directory to be served
    */
   root: string
-}
-
-declare function createServer(options: Options): http.Server
+}): http.Server
 
 export = createServer
