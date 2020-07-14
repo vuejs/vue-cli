@@ -117,7 +117,7 @@ declare class PluginAPI {
   /**
    * Generate a cache identifier from a number of variables
    */
-  genCacheConfig(id: string, partialIdentifier: any, configFiles?: object | object[]): CacheConfig
+  genCacheConfig(id: string, partialIdentifier: any, configFiles?: string | string[]): CacheConfig
 }
 
 /**
