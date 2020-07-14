@@ -31,7 +31,7 @@ declare class PluginAPI {
 
   service: any
 
-  get version(): string
+  readonly version: string
 
   assertVersion(range: number | string): void
 

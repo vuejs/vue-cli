@@ -65,11 +65,11 @@ declare class GeneratorAPI {
    */
   resolve(..._paths: string[]): string
 
-  get cliVersion(): string
+  readonly cliVersion: string
 
   assertCliVersion(range: number | string): void
 
-  get cliServiceVersion(): string
+  readonly cliServiceVersion: string
 
   assertCliServiceVersion(range: number | string): void
 
@@ -211,13 +211,13 @@ declare class GeneratorAPI {
    * Get the entry file taking into account typescript.
    *
    */
-  get entryFile(): 'src/main.ts' | 'src/main.js'
+  readonly entryFile: 'src/main.ts' | 'src/main.js'
 
   /**
    * Is the plugin being invoked?
    *
    */
-  get invoking(): boolean
+  readonly invoking: boolean
 }
 
 /**
