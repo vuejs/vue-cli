@@ -30,9 +30,16 @@ interface OnPromptCompleteCb<T> {
     options: {
       useConfigFiles: boolean
       plugins: Record<string, any>
-    },
+    }
   ): void
 }
+type ExtendPackageOptions =
+  | {
+      prune?: boolean
+      merge?: boolean
+      warnIncompatibleVersions?: boolean
+    }
+  | boolean
 
 type Preset = Partial<{
   [props: string]: any
@@ -116,14 +123,12 @@ declare class GeneratorAPI {
    *    if two dependency version ranges don't intersect.
    */
   extendPackage(
-    fields: object | ((pkg: Record<string, any>) => object),
-    options?:
-      | {
-        prune?: boolean
-        merge?: boolean
-        warnIncompatibleVersions?: boolean
-      }
-      | boolean,
+    fields: (pkg: Record<string, any>) => object,
+    options?: ExtendPackageOptions
+  ): void
+  extendPackage<T extends object>(
+    fields: T extends Function ? never : T,
+    options?: ExtendPackageOptions
   ): void
 
   /**
