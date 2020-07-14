@@ -4,75 +4,416 @@ sidebarDepth: 3
 
 # 插件开发指南
 
-## 核心概念
+## 开始
 
-系统里有两个主要的部分：
+一个 CLI 插件是一个 npm 包，它能够为 Vue CLI 创建的项目添加额外的功能，这些功能包括：
 
-- `@vue/cli`：全局安装的，暴露 `vue create <app>` 命令；
-- `@vue/cli-service`：局部安装，暴露 `vue-cli-service` 命令。
+- 修改项目的 webpack 配置 - 例如，如果你的插件希望去针对某种类型的文件工作，你可以为这个特定的文件扩展名添加新的 webpack 解析规则。比如说，`@vue/cli-plugin-typescript` 就添加这样的规则来解析 `.ts` 和 `.tsx` 扩展的文件；
+- 添加新的 vue-cli-service 命令 - 例如，`@vue/cli-plugin-unit-jest` 添加了 `test:unit` 命令，允许开发者运行单元测试；
+- 扩展 `package.json` - 当你的插件添加了一些依赖到项目中，你需要将他们添加到 package 的 dependencies 部分时，这是一个有用的选项；
+- 在项目中创建新文件、或者修改老文件。有时创建一个示例组件或者通过给入口文件（main.js）添加导入（imports）是一个好的主意；
+- 提示用户选择一个特定的选项 - 例如，你可以询问用户是否创建我们前面提到的示例组件。
 
-两者皆应用了基于插件的架构。
+:::tip
+不要过度使用 vue-cli 插件！如果你仅希望包含特定的插件，例如，[Lodash](https://lodash.com/) - 相比创建一个特定的插件，通过 npm 手动安装更加简单。
+:::
 
-### Creator
+CLI 插件应该总是包含一个 [service 插件](#service-plugin) 做为主的导出，并且他能够选择性的包含 [generator](#generator), [prompt 文件](#prompts) 和 [Vue UI 集成](#ui-integration)。
 
-[Creator][creator-class] 是调用 `vue create <app>` 时创建的类。负责偏好对话、调用 generator 和安装依赖。
+作为一个 npm 包，CLI 插件必须有一个 `package.json` 文件。通常建议在 `README.md` 中包含插件的描述，来帮助其他人在 npm 上发现你的插件。
 
-### Service
+所以，通常的 CLI 插件目录结构看起来像下面这样：
 
-[Service][service-class] 是调用 `vue-cli-service <command> [...args]` 时创建的类。负责管理内部的 webpack 配置、暴露服务和构建项目的命令等。
-
-### CLI 插件
-
-CLI 插件是一个可以为 `@vue/cli` 项目添加额外特性的 npm 包。它应该始终包含一个 [Service 插件](#service-插件)作为其主要导出，且可选的包含一个 [Generator](#generator) 和一个 [Prompt 文件](#第三方插件的对话)。
-
-一个典型的 CLI 插件的目录结构看起来是这样的：
-
-```
+```bash
 .
 ├── README.md
-├── generator.js  # generator (可选)
-├── prompts.js    # prompt 文件 (可选)
+├── generator.js  # generator（可选）
 ├── index.js      # service 插件
-└── package.json
+├── package.json
+├── prompts.js    # prompt 文件（可选）
+└── ui.js         # Vue UI 集成（可选）
 ```
 
-### Service 插件
+## 命名和可发现性
 
-Service 插件会在一个 Service 实例被创建时自动加载——比如每次 `vue-cli-service` 命令在项目中被调用时。
+为了让一个 CLI 插件在 Vue CLI 项目中被正常使用，它必须遵循 `vue-cli-plugin-<name>` 或者 `@scope/vue-cli-plugin-<name>` 这样的命名惯例。这样你的插件才能够：
 
-注意我们这里讨论的“service 插件”的概念要比发布为一个 npm 包的“CLI 插件”的要更窄。前者涉及一个会被 `@vue/cli-service` 在初始化时加载的模块，也经常是后者的一部分。
+- 被 `@vue/cli-service` 发现；
+- 被其他开发者通过搜索发现；
+- 通过 `vue add <name>` 或者 `vue invoke <name>` 安装。
 
-此外，`@vue/cli-service` 的[内建命令][commands]和[配置模块][config]也是全部以 service 插件实现的。
+:::warning Warning
+确保插件的名字是正确的，否则他将不能通过 `vue add` 安装并且不能在 UI 插件中搜索得到！
+:::
 
-一个 service 插件应该导出一个函数，这个函数接受两个参数：
+为了能够被用户在搜索时更好的发现，可以将插件的关键描述放到 `package.json` 文件的 `description` 字段中。
 
-- 一个 [PluginAPI][plugin-api] 实例
+例如：
 
-- 一个包含 `vue.config.js` 内指定的项目本地选项的对象，或者在 `package.json` 内的 `vue` 字段。
+```json
+{
+  "name": "vue-cli-plugin-apollo",
+  "version": "0.7.7",
+  "description": "vue-cli plugin to add Apollo and GraphQL"
+}
+```
 
-这个 API 允许 service 插件针对不同的环境扩展/修改内部的 webpack 配置，并向 `vue-cli-service` 注入额外的命令。例如：
+你应该在 `homepage` 或者 `repository` 字段添加创建插件的官网地址或者仓库的地址，这样你的插件详情里就会出现一个 `查看详情` 按钮：
 
-``` js
-module.exports = (api, projectOptions) => {
-  api.chainWebpack(webpackConfig => {
-    // 通过 webpack-chain 修改 webpack 配置
-  })
+```json
+{
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akryum/vue-cli-plugin-apollo.git"
+  },
+  "homepage": "https://github.com/Akryum/vue-cli-plugin-apollo#readme"
+}
+```
 
-  api.configureWebpack(webpackConfig => {
-    // 修改 webpack 配置
-    // 或返回通过 webpack-merge 合并的配置对象
-  })
+![Plugin search item](/plugin-search-item.png)
 
-  api.registerCommand('test', args => {
-    // 注册 `vue-cli-service test`
+## Generator
+
+插件的 Generator 部分通常在你想要为项目扩展包依赖，创建新的文件或者编辑已经存在的文件时需要。
+
+在 CLI 插件内部，generator 应该放在 `generator.js` 或者 `generator/index.js` 文件中。它将在以下两个场景被调用：
+
+- 项目初始创建期间，CLI 插件被作为项目创建 preset 的一部分被安装时。
+
+- 当插件在项目创建完成和通过 `vue add` 或者 `vue invoke` 单独调用被安装时。
+
+一个 generator 应该导出一个接收三个参数的函数：
+
+1. 一个 [GeneratorAPI](generator-api.md) 实例；
+
+2. 插件的 generator 选项。这些选项在项目创建，或者从 `~/.vuerc` 载入预设时被解析。例如：如果保存的 `~/.vuerc` 像这样：
+
+```json
+{
+  "presets" : {
+    "foo": {
+      "plugins": {
+        "@vue/cli-plugin-foo": { "option": "bar" }
+      }
+    }
+  }
+}
+```
+
+如果用户使用 preset `foo` 创建了一个项目，那么 `@vue/cli-plugin-foo` 的 generator 就会收到 `{ option: 'bar' }` 作为第二个参数。
+
+对于第三方插件，这个选项将在用户执行 `vue invoke` 时，从提示或者命令行参数中被解析(详见 [对话](#对话))。
+
+3. 整个 preset (presets.foo) 将会作为第三个参数传入。
+
+### 创建新的模板
+
+当你调用 `api.render('./template')` 时，该 generator 将会使用 [EJS](https://github.com/mde/ejs) 渲染 `./template` 中的文件 (相对于 generator 中的文件路径进行解析)
+
+想象我们正在创建 [vue-cli-auto-routing](https://github.com/ktsn/vue-cli-plugin-auto-routing) 插件，我们希望当插件在项目中被引用时做以下的改变：
+
+- 创建一个 `layouts` 文件夹包含默认布局文件；
+- 创建一个 `pages` 文件夹包含 `about` 和 `home` 页面；
+- 在 `src` 文件夹中添加 `router.js` 文件
+
+为了渲染这个结构，你需要在 `generator/template` 文件夹内创建它：
+
+![Generator structure](/generator-template.png)
+
+模板创建完之后，你应该在 `generator/index.js` 文件中添加 `api.render` 调用：
+
+```js
+module.exports = api => {
+  api.render('./template')
+}
+```
+
+### 编辑已经存在的模板
+
+此外，你可以使用 YAML 前置元信息继承并替换已有的模板文件的一部分（即使来自另一个包）：
+
+```ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace: !!js/regexp /<script>[^]*?<\/script>/
+---
+
+<script>
+export default {
+  // 替换默认脚本
+}
+</script>
+```
+
+也可以替换多处，只不过你需要将替换的字符串包裹在 `<%# REPLACE %>` 和 `<%# END_REPLACE %>` 块中：
+
+```ejs
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace:
+  - !!js/regexp /Welcome to Your Vue\.js App/
+  - !!js/regexp /<script>[^]*?<\/script>
+---
+
+<%# REPLACE %>
+替换欢迎信息
+<%# END_REPLACE %>
+
+<%# REPLACE %>
+<script>
+export default {
+  // 替换默认脚本
+}
+</script>
+<%# END_REPLACE %>
+```
+
+### 文件名的边界情况
+
+如果你想要渲染一个以点开头的模板文件 (例如 `.env`)，则需要遵循一个特殊的命名约定，因为以点开头的文件会在插件发布到 npm 的时候被忽略：
+
+```bash
+# 以点开头的模板需要使用下划线取代那个点：
+
+/generator/template/_env
+
+# 当调用 api.render('./template') 时，它在项目文件夹中将被渲染为：
+
+/generator/template/.env
+```
+
+同时这也意味着当你想渲染以下划线开头的文件时，同样需要遵循一个特殊的命名约定：
+
+```bash
+# 这种模板需要使用两个下划线来取代单个下划线：
+
+/generator/template/__variables.scss
+
+# 当调用 api.render('./template') 时，它在项目文件夹中将被渲染为：
+
+/generator/template/_variable.scss
+```
+
+### 扩展包
+
+如果你需要向项目中添加额外的依赖，创建一个 npm 脚本或者修改 `package.json` 的其他任何一处，你可以使用 API `extendPackage` 方法。
+
+```js
+// generator/index.js
+
+module.exports = api => {
+  api.extendPackage({
+    dependencies: {
+      'vue-router-layout': '^0.1.2'
+    }
   })
 }
 ```
 
-#### 为命令指定模式
+在上面这个例子中，我们添加了一个依赖：`vue-router-layout`。在插件调用时，这个 npm 模块将被安装，这个依赖将被添加到用户项目的 `package.json` 文件。
 
-<!-- 对于环境变量来说，有一个值得注意的重要的事情，就是了解它们何时被解析。一般情况下，像 `vue-cli-service serve` 或 `vue-cli-service build` 这样的命令会始终调用 `api.setMode()` 作为它的第一件事。然而，这也意味着这些环境变量可能在 service 插件被调用的时候还不可用： -->
-> 注意：插件设置模式的方式从 beta.10 开始已经改变了。
+同样使用这个 API 我们可以添加新的 npm 任务到项目中。为了实现这个，我们需要定义一个任务名和一个命令，这样他才能够在用户 `package.json` 文件的 `scripts` 部分运行：
+
+```js
+// generator/index.js
+
+module.exports = api => {
+  api.extendPackage({
+    scripts: {
+      greet: 'vue-cli-service greet'
+    }
+  })
+}
+```
+
+在上面这个例子中，我们添加了一个新的 `greet` 任务来执行一个创建在 [Service 部分](#add-a-new-cli-service-command) 的自定义 vue-cli 服务命令。
+
+### 修改主文件
+
+通过 generator 方法你能够修改项目中的文件。最有用的场景是针对 `main.js` 或 `main.ts` 文件的一些修改：新的导入，新的 `Vue.use()` 调用等。
+
+让我们来思考一个场景，当我们通过 [模板](#creating-new-templates) 创建了一个 `router.js` 文件，现在我们希望导入这个路由到主文件中。我们将用到两个 generator API 方法： `entryFile` 将返回项目的主文件（`main.js` 或 `main.ts`），`injectImports` 用于添加新的导入到主文件中：
+
+```js
+// generator/index.js
+
+api.injectImports(api.entryFile, `import router from './router'`)
+```
+
+现在，当我们路由被导入时，我们可以在主文件中将这个路由注入到 Vue 实例。我们可以使用 `afterInvoke` 钩子，这个钩子将在文件被写入硬盘之后被调用。
+
+首先，我们需要通过 Node 的 `fs` 模块（提供了文件交互 API）读取文件内容，将内容拆分
+
+```js
+// generator/index.js
+
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.resolve(api.entryFile), { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
+  })
+}
+```
+
+然后我们需要找到包含 `render` 单词的字符串（它通常是 Vue 实例的一部分），`router` 就是下一个字符串：
+
+```js{9-10}
+// generator/index.js
+
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.resolve(api.entryFile), { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
+
+    const renderIndex = lines.findIndex(line => line.match(/render/))
+    lines[renderIndex] + = `\n router,`
+  })
+}
+```
+
+最后，你需要将内容写入主文件：
+
+```js{12-13}
+// generator/index.js
+
+module.exports.hooks = (api) => {
+  api.afterInvoke(() => {
+    const { EOL } = require('os')
+    const fs = require('fs')
+    const contentMain = fs.readFileSync(api.resolve(api.entryFile), { encoding: 'utf-8' })
+    const lines = contentMain.split(/\r?\n/g)
+
+    const renderIndex = lines.findIndex(line => line.match(/render/))
+    lines[renderIndex] += `${EOL}  router,`
+
+    fs.writeFileSync(api.entryFile, lines.join(EOL), { encoding: 'utf-8' })
+  })
+}
+```
+
+### Service 插件
+
+Service 插件可以修改 webpack 配置，创建新的 vue-cli service 命令或者修改已经存在的命令（如 `serve` 和 `build`）。
+
+Service 插件在 Service 实例被创建后自动加载 - 例如，每次 `vue-cli-service` 命令在项目中被调用的时候。它位于 CLI 插件根目录的 `index.js` 文件。
+
+一个 service 插件应该导出一个函数，这个函数接受两个参数：
+
+- 一个 [PluginAPI][plugin-api.md] 实例
+
+- 一个包含 `vue.config.js` 内指定的项目本地选项的对象，或者在 `package.json` 内的 `vue` 字段。
+
+一个 service 插件至少应包含如下代码：
+
+```js
+module.exports = () => {}
+```
+
+### 修改 webpack 配置
+
+这个 API 允许 service 插件针对不同的环境扩展/修改内部的 webpack 配置。例如，这里我们在 webpack-chain 中添加 `vue-auto-routing` 这个 webpack 插件，并指定参数：
+
+```js
+const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
+
+module.exports = (api, options) => {
+  api.chainWebpack(webpackConfig => {
+    webpackConfig
+    .plugin('vue-auto-routing')
+      .use(VueAutoRoutingPlugin, [
+        {
+          pages: 'src/pages',
+          nested: true
+        }
+      ])
+  })
+}
+```
+
+你也可以使用 `configureWebpack` 方法修改 webpack 配置或者返回一个对象，返回的对象将通过 webpack-merge 被合并到配置中。
+
+### 添加一个新的 cli-service 命令
+
+通过 service 插件你可以注册一个新的 cli-service 命令，除了标准的命令（即 `serve` 和 `build`）。你可以使用 `registerCommand` API 方法实现。
+
+下面的例子创建了一个简单的新命令，可以向开发控制台输出一条问候语：
+
+```js
+api.registerCommand(
+  'greet',
+  {
+    description: 'Write a greeting to the console',
+    usage: 'vue-cli-service greet'
+  },
+  () = > {
+    console.log(`👋  Hello`)
+  }
+)
+```
+
+在这个例子中，我们提供了命令的名字（`'greet'`）、一个有 `description` 和 `usage` 选项的对象，和一个在执行 `vue-cli-service greet` 命令时会调用的函数。
+
+:::tip
+你可以 [通过 Generator](#extending-package) 添加一个新的命令到项目 `package.json` 文件的 npm 脚本列表中。
+:::
+
+如果你在已经安装了插件的项目中运行新命令，你将看到下面的输出：
+
+```bash
+$ vue-cli-service greet
+👋 Hello!
+```
+
+你也可以给新命令定义一系列可能的选项。接下来我们添加一个 `--name` 选项，并修改实现函数，当提供了 name 参数时把它也打印出来。
+
+```js
+api.registerCommand(
+  'greet',
+  {
+    description: 'Writes a greeting to the console',
+    usage: 'vue-cli-service greet [options]',
+    options: { '--name': 'specifies a name for greeting' }
+  },
+  args => {
+    if (args.name) {
+      console.log(`👋 Hello, ${args.name}!`);
+    } else {
+      console.log(`👋 Hello!`);
+    }
+  }
+)
+```
+
+现在，如果 `greet` 命令携带了特定的 `--name` 选项，这个 name 被添加到控制台输出：
+
+```bash
+$ vue-cli-service greet --name 'John Doe'
+👋 Hello, John Doe!
+```
+
+### 修改已经存在的 cli-service 命令
+
+如果你想修改一个已经存在的 cli-service 命令，你可以使用 `api.service.commands` 获取到命令对象并且做些改变。我们将在应用程序运行的端口打印一条信息到控制台：
+
+```js
+const { serve } = api.service.commands
+
+const serveFn = serve.fn
+
+serve.fn = (...args) => {
+  return serveFn(...args).then(res => {
+    if(res && res.url) {
+      console.log(`Project is running now at ${res.url}`)
+    }
+  })
+}
+```
+
+在上面的这个例子中，我们从已经存在的命令列表中获取到命令对象 `serve`；然后我们修改了他的 `fn` 部分（`fn` 是创建这个新命令时传入的第三个参数；它定义了在执行这个命令时要执行的函数）。修改完后，这个控制台消息将在 `serve` 命令成功运行后打印。
+
+### 为命令指定模式
 
 如果一个已注册的插件命令需要运行在特定的默认模式下，则该插件需要通过 `module.exports.defaultModes` 以 `{ [commandName]: mode }` 的形式来暴露：
 
@@ -90,249 +431,448 @@ module.exports.defaultModes = {
 
 这是因为我们需要在加载环境变量之前知道该命令的预期模式，所以需要提前加载用户选项/应用插件。
 
-#### 在插件中解析 webpack 配置
+## 对话
 
-一个插件可以通过调用 `api.resolveWebpackConfig()` 取回解析好的 webpack 配置。每次调用都会新生成一个 webpack 配置用来在需要时进一步修改。
+对话是在创建一个新的项目或者在已有项目中添加新的插件时处理用户选项时需要的。所有的对话逻辑都存储在 `prompts.js` 文件中。对话内部是通过 [inquirer](https://github.com/SBoudrias/Inquirer.js) 实现。
 
-``` js
-module.exports = api => {
-  api.registerCommand('my-build', args => {
-    const configA = api.resolveWebpackConfig()
-    const configB = api.resolveWebpackConfig()
+当用户通过调用 `vue invoke` 初始化插件时，如果插件根目录包含 `prompts.js`，他将在调用时被使用。这个文件应该导出一个[问题](https://github.com/SBoudrias/Inquirer.js#question)数组 -- 将被 Inquirer.js 处理。
 
-    // 针对不同的目的修改 `configA` 和 `configB`...
-  })
-}
+你应该直接导出一个问题数组，或者导出一个返回这些内容的函数。
 
-// 请确保为正确的环境变量指定默认模式
-module.exports.defaultModes = {
-  'my-build': 'production'
-}
-```
+例如，直接是问题数组：
+```js
+// prompts.js
 
-或者，一个插件也可以通过调用 `api.resolveChainableWebpackConfig()` 获得一个新生成的[链式配置](https://github.com/mozilla-neutrino/webpack-chain)：
-
-``` js
-api.registerCommand('my-build', args => {
-  const configA = api.resolveChainableWebpackConfig()
-  const configB = api.resolveChainableWebpackConfig()
-
-  // 针对不同的目的链式修改 `configA` 和 `configB`...
-
-  const finalConfigA = configA.toConfig()
-  const finalConfigB = configB.toConfig()
-})
-```
-
-#### 第三方插件的自定义选项
-
-`vue.config.js` 的导出将会[通过一个 schema 的验证](https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/options.js#L3)以避免笔误和错误的配置值。然而，一个第三方插件仍然允许用户通过 `pluginOptions` 字段配置其行为。例如，对于下面的 `vue.config.js`：
-
-``` js
-module.exports = {
-  pluginOptions: {
-    foo: { /* ... */ }
+module.exports = [
+  {
+    type: 'input',
+    name: 'locale',
+    message: 'The locale of project localization.',
+    validate: input => !!input,
+    default: 'en'
   }
-}
+  // ...
+]
 ```
 
-该第三方插件可以读取 `projectOptions.pluginOptions.foo` 来做条件式的决定配置。
+例如，一个返回问题数组的函数：
+```js
+// prompts.js
 
-### Generator
-
-一个发布为 npm 包的 CLI 插件可以包含一个 `generator.js` 或 `generator/index.js` 文件。插件内的 generator 将会在两种场景下被调用：
-
-- 在一个项目的初始化创建过程中，如果 CLI 插件作为项目创建 preset 的一部分被安装。
-
-- 插件在项目创建好之后通过 `vue invoke` 独立调用时被安装。
-
-这里的 [GeneratorAPI][generator-api] 允许一个 generator 向 `package.json` 注入额外的依赖或字段，并向项目中添加文件。
-
-一个 generator 应该导出一个函数，这个函数接收三个参数：
-
-1. 一个 `GeneratorAPI` 实例：
-
-2. 这个插件的 generator 选项。这些选项会在项目创建对话过程中被解析，或从一个保存在 `~/.vuerc` 中的 preset 中加载。例如，如果保存好的 `~/.vuerc` 像如下的这样：
-
-    ``` json
+// 将 `package.json` 作为参数传入函数
+module.exports = pkg => {
+  const prompts = [
     {
-      "presets" : {
-        "foo": {
-          "plugins": {
-            "@vue/cli-plugin-foo": { "option": "bar" }
-          }
-        }
-      }
+      type: 'input',
+      name: 'locale',
+      message: 'The locale of project localization.',
+      validate: input => !!input,
+      default: 'en'
     }
-    ```
+  ]
 
-    如果用户使用 preset `foo` 创建了一个项目，那么 `@vue/cli-plugin-foo` 的 generator 就会收到 `{ option: 'bar' }` 作为第二个参数。
-
-    对于一个第三方插件来说，该选项将会解析自对话或用户执行 `vue invoke` 时的命令行参数中 (详见[第三方插件的对话](#第三方插件的对话))。
-
-3. 整个 preset (`presets.foo`) 将会作为第三个参数传入。
-
-**示例：**
-
-``` js
-module.exports = (api, options, rootOptions) => {
-  // 修改 `package.json` 里的字段
-  api.extendPackage({
-    scripts: {
-      test: 'vue-cli-service test'
-    }
-  })
-
-  // 复制并用 ejs 渲染 `./template` 内所有的文件
-  api.render('./template')
-
-  if (options.foo) {
-    // 有条件地生成文件
+  // 添加动态对话
+  if ('@vue/cli-plugin-eslint' in (pkg.devDependencies || {})) {
+    prompts.push({
+      type: 'confirm',
+      name: 'useESLintPluginVueI18n',
+      message: 'Use ESLint plugin for Vue I18n ?'
+    })
   }
+
+  return prompts
 }
 ```
 
-#### Generator 的模板处理
+解析到的答案对象将作为选项传入到插件的 generator。
 
-当你调用 `api.render('./template')` 时，该 generator 将会使用 [EJS](https://github.com/mde/ejs) 渲染 `./template` 中的文件 (相对于 generator 中的文件路径进行解析)
+或者，用户可以通过在命令行传入选项跳过对话直接初始化插件，例如：
 
-此外，你可以使用 YAML 前置元信息继承并替换已有的模板文件的一部分：
-
-``` ejs
----
-extend: '@vue/cli-service/generator/template/src/App.vue'
-replace: !!js/regexp /<script>[^]*?<\/script>/
----
-
-<script>
-export default {
-  // 替换默认脚本
-}
-</script>
-```
-
-你也可以完成多处替换，当然你需要将要替换的字符串用 `<%# REPLACE %>` 和 `<%# END_REPLACE %>` 块包裹起来：
-
-``` ejs
----
-extend: '@vue/cli-service/generator/template/src/App.vue'
-replace:
-  - !!js/regexp /欢迎来到你的 Vue\.js 应用/
-  - !!js/regexp /<script>[^]*?<\/script>/
----
-
-<%# REPLACE %>
-替换欢迎信息
-<%# END_REPLACE %>
-
-<%# REPLACE %>
-<script>
-export default {
-  // 替换默认脚本
-}
-</script>
-<%# END_REPLACE %>
-```
-
-#### 文件名的极端情况
-
-如果你想要渲染一个以点开头的模板文件 (例如 `.env`)，则需要遵循一个特殊的命名约定，因为以点开头的文件会在插件发布到 npm 的时候被忽略：
-
-```
-# 以点开头的模板需要使用下划线取代那个点：
-
-/generator/template/_env
-
-# 调用 api.render('./template') 会在项目目录中渲染成为：
-
-.env
-```
-
-同时这也意味着当你想渲染以下划线开头的文件时，同样需要遵循一个特殊的命名约定：
-
-```
-# 这种模板需要使用两个下划线来取代单个下划线：
-
-/generator/template/__variables.scss
-
-# 调用 api.render('./template') 会在项目目录中渲染成为：
-
-_variables.scss
-```
-
-
-### Prompts
-
-#### 内建插件的对话
-
-只有内建插件可以定制创建新项目时的初始化对话，且这些对话模块放置在 [`@vue/cli` 包的内部][prompt-modules]。
-
-一个对话模块应该导出一个函数，这个函数接收一个 [PromptModuleAPI][prompt-api] 实例。这些对话的底层使用 [inquirer](https://github.com/SBoudrias/Inquirer.js) 进行展示：
-
-``` js
-module.exports = api => {
-  // 一个特性对象应该是一个有效的 inquirer 选择对象
-  api.injectFeature({
-    name: 'Some great feature',
-    value: 'my-feature'
-  })
-
-  // injectPrompt 期望接收一个有效的 inquirer 对话对象
-  api.injectPrompt({
-    name: 'someFlag',
-    // 确认对话只在用户已经选取了特性的时候展示
-    when: answers => answers.features.include('my-feature'),
-    message: 'Do you want to turn on flag foo?',
-    type: 'confirm'
-  })
-
-  // 当所有的对话都完成之后，将你的插件注入到
-  // 即将传递给 Generator 的 options 中
-  api.onPromptComplete((answers, options) => {
-    if (answers.features.includes('my-feature')) {
-      options.plugins['vue-cli-plugin-my-feature'] = {
-        someFlag: answers.someFlag
-      }
-    }
-  })
-}
-```
-
-#### 第三方插件的对话
-
-第三方插件通常会在一个项目创建完毕后被手动安装，且用户将会通过调用 `vue invoke` 来初始化这个插件。如果这个插件在其根目录包含一个 `prompts.js`，那么它将会用在该插件被初始化调用的时候。这个文件应该导出一个用于 Inquirer.js 的[问题](https://github.com/SBoudrias/Inquirer.js#question)的数组。这些被解析的答案对象会作为选项被传递给插件的 generator。
-
-或者，用户可以通过在命令行传递选项来跳过对话直接初始化插件，比如：
-
-``` bash
+```bash
 vue invoke my-plugin --mode awesome
 ```
 
-## 发布插件
+对话可以有[不同的类型](https://github.com/SBoudrias/Inquirer.js#prompt-types)，但是在 CLI 大多数使用的是 `checkbox` 和 `confirm`。让我们添加一个 `confirm` 对话，然后在插件的 generator 使用它，来创建一个有条件的[模板渲染](#creating-new-templates)。
 
-为了让一个 CLI 插件能够被其它开发者使用，你必须遵循 `vue-cli-plugin-<name>` 的命名约定将其发布到 npm 上。插件遵循命名约定之后就可以：
+```js
+// prompts.js
 
-- 被 `@vue/cli-service` 发现；
-- 被其它开发者搜索到；
-- 通过 `vue add <name>` 或 `vue invoke <name>` 安装下来。
+module.exports = [
+  {
+    name: `addExampleRoutes`,
+    type: 'confirm',
+    message: 'Add example routes?',
+    default: false
+  }
+]
+```
 
-## 开发核心插件的注意事项
+插件被调用时，用户将被问到示例路由的问题，默认的答案是 `No`。
 
-::: tip 注意
-这个章节只用于 `vuejs/vue-cli` 仓库内部的内建插件工作。
+![Prompts example](/prompts-example.png)
+
+如果你想在 generator 中使用用户的选择结果，你可以通过对话名字获得。我们可以修改一下 `generator/index.js`：
+
+```js
+if (options.addExampleRoutes) {
+  api.render('./template', {
+    ...options
+  })
+}
+```
+
+现在如果用户同意创建示例路由，那么模板将被渲染。
+
+## 安装本地插件
+
+当你开发自己的插件时，你需要测试它、查看它在使用 Vue CLI 创建的项目中如何工作。你可以使用已经存在的项目或者创建一个新的项目用来测试：
+
+```bash
+vue create test-app
+```
+
+安装插件，在项目根目录运行下面的命令：
+
+```bash
+npm install --save-dev file:/full/path/to/your/plugin
+vue invoke <your-plugin-name>
+```
+
+每次插件修改后，你需要重复这个步骤。
+
+另一个方式是利用 Vue UI 的能力来添加插件。你可以运行它：
+
+```bash
+vue ui
+```
+
+将打开浏览器的窗口地址 `localhost:8000`。到 `Vue 项目管理` 菜单栏：
+
+![Vue Project Manager](/ui-project-manager.png)
+
+然后找到你的测试项目的名字：
+
+![UI Plugins List](/ui-select-plugin.png)
+
+点击应用名字，到插件菜单（有个拼图图标）然后点击右上角的 `添加新的插件` 按钮。在新页面中你将看到一系列能够通过 npm 获得的 Vue CLI 插件。在页面底部有一个 `浏览本地插件` 的按钮：
+
+![Browse local plugins](/ui-browse-local-plugin.png)
+
+点击它之后，你能够轻松的搜索到你的插件并添加到项目中。在这之后你可以在插件列表中看到这个插件，并且简单的点击下 `刷新` 图标即可同步对插件代码所做的修改：
+
+![Refresh plugin](/ui-plugin-refresh.png)
+
+## UI 集成
+
+Vue CLI 有一个非常强大的 UI 工具 -- 允许用户通过图形接口来架构和管理项目。Vue CLI 插件能够集成到接口中。UI 为 CLI 插件提供了额外的功能：
+
+- 你可以执行 npm 任务，直接在 UI 中执行插件中定义的命令；
+- 你可以展示插件的自定义配置。例如： [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) 针对 Apollo 服务器提供了如下的配置：
+
+![UI Configuration Screen](/ui-configuration.png)
+- 当创建项目时，你可以展示 [对话](#对话)
+- 如果你想支持多种语言，你可以为你的插件添加本地化
+- 你可以使插件在 Vue UI 搜索中被搜索到
+
+所有关于 Vue UI 的逻辑都应该放到根目录的 `ui.js` 文件 或者 `ui/index.js`。这个文件应该导出一个函数 -- 这个函数接收 api 对象作为参数：
+
+```js
+module.exports = api => {
+  // Use the API here
+}
+```
+
+### 为任务增加 UI 界面
+
+Vue CLI 插件不仅允许你[通过 Generator](#extending-package) 为项目添加新的 npm 任务，也可以在 Vue UI 中为它们创建一个图形界面。如果你想通过 UI 运行任务并且直接看到输出，这是很有用的。
+
+让我们把之前通过 [Generator](#extending-package) 创建的 `greet` 任务添加到 UI 中。任务列表是从项目的 `package.json` 文件的 `scripts` 字段生成的。你可以根据 `api.describeTask` 方法 '补充' 额外的信息和钩子。让我们为任务添加一些额外的信息：
+
+```js
+module.exports = api => {
+  api.describeTask({
+    match: /greet/,
+    description: 'Prints a greeting in the console',
+    link: 'https://cli.vuejs.org/dev-guide/plugin-dev.html#core-concepts'
+  })
+}
+```
+
+现在如果你在 Vue UI 中浏览你的项目，你会发现添加到 `Tasks` 部分的任务。你可以看见任务的名字、描述信息、指向你提供的 URL 的链接图标和一个展示任务输出的输出窗口：
+
+![UI Greet task](/ui-greet-task.png)
+
+### 展示配置页面
+
+有时你的项目针对不同的功能或者库，有自定义的配置文件。通过 Vue CLI 插件，你可以在 Vue UI 中展示配置，修改它和保存它（保存将修改你项目中相应的配置）。默认情况下，Vue CLI 项目有个主配置页面对应 `vue.config.js` 的配置。如果你将 ESLint 包含到项目中，你可以看到一个 ESLint 的配置页面：
+
+![UI Configuration Screen](/ui-configuration-default.png)
+
+让我们为你的插件建一个自定义的配置。第一步，在你的插件添加到已经存在的项目中之后，应该有个配置文件。这意味着你需要在[模板步骤](#creating-new-templates)将这个文件添加到 `template` 文件夹中。
+
+默认情况下，一个可配置的 UI 能够读取和写入以下文件类型：`json`，`yaml`，`js`，`package`。让我们命名文件为 `myConfig.js` 将它放入 `template` 的根文件夹：
+
+```
+.
+└── generator
+    ├── index.js
+    └── template
+        ├── myConfig.js
+        └── src
+            ├── layouts
+            ├── pages
+            └── router.js
+```
+
+现在你需要添加一些真实的配置到这个文件中：
+
+```js
+// myConfig.js
+
+module.exports = {
+  color: 'black'
+}
+```
+
+当你的插件被应用后，`myConfig.js` 文件将被渲染到项目根目录。现在让我们在 `ui.js` 文件中通过 `api.describeConfig` 方法添加一个新的配置页面。
+
+首先你需要传入一些信息：
+
+```js
+// ui.js
+
+api.describeConfig({
+  // 配置的唯一id
+  id: 'org.ktsn.vue-auto-routing.config',
+  // 展示的名字
+  name: 'Greeting configuration',
+  // 展示在名字下面
+  description: 'This config defines the color of the greeting printed',
+  // “查看详情” 的链接
+  link: 'https://github.com/ktsn/vue-cli-plugin-auto-routing#readme'
+})
+```
+
+:::danger Warning
+确保正确地为 id 设置命名空间，它必须在所有的插件中唯一。建议使用 [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation) 命名方法
 :::
 
-一个带有为本仓库注入额外依赖的 generator 的插件 (比如 `chai` 会通过 `@vue/cli-plugin-unit-mocha/generator/index.js` 被注入) 应该将这些依赖列入其自身的 `devDependencies` 字段。这会确保：
+### 配置 logo
 
-1. 这个包始终存在于该仓库的根 `node_modules` 中，因此我们不必在每次测试的时候重新安装它们。
+你也可以为你的配置选择一个图标。他既可以是 [Material icon](https://material.io/tools/icons/?style=baseline) 代码，也可以是自定义图片（看这里 [Public static files](ui-api.md#public-static-files)）。
 
-2. `yarn.lock` 会保持其一致性，因此 CI 程序可以更好地利用缓存。
+```js
+// ui.js
 
-[creator-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/Creator.js
-[service-class]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/Service.js
-[generator-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/GeneratorAPI.js
-[commands]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/commands
-[config]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/config
-[plugin-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service/lib/PluginAPI.js
-[prompt-modules]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/promptModules
-[prompt-api]: https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli/lib/PromptModuleAPI.js
+api.describeConfig({
+  /* ... */
+  // Config icon
+  icon: 'color_lens'
+})
+```
+
+如果你不定义图标，将展示插件logo (看这里 [Logo](#logo))。
+
+#### 配置文件
+
+现在你需要将配置文件提供给 UI：这样你可以读取它的内容或者修改它。你需要为你的配置文件选择一个名字，选择格式和提供文件路径：
+
+```js
+api.describeConfig({
+  // other config properties
+  files: {
+    myConfig: {
+      js: ['myConfig.js']
+    }
+  }
+})
+```
+
+这里可以提供多个文件。如果我们有 `myConfig.json`，我们使用 `json: ['myConfig.json']` 属性提供它。顺序很重要：如果配置文件不存在，列表中的第一个文件名将被用于创建它。
+
+#### 展示配置的对话
+
+我们希望在配置页面中展示一个颜色属性的输入框。为了完成它，我们需要 `onRead` 钩子，它将返回一个被展示的对话列表：
+
+```js
+api.describeConfig({
+  onRead: ({ data }) => ({
+    prompts: [
+      {
+        name: `color`,
+        type: 'input',
+        message: 'Define the color for greeting message',
+        value: 'white'
+      }
+    ]
+  })
+})
+```
+
+上面这个例子中，我们定义值为 'white' 的输入对话。加了以上所有设置后，我们的配置页面看起来会是这样的：
+
+![UI Config Start](/ui-config-start.png)
+
+现在让我们使用来自配置文件的属性，替换硬编码的 `white` 值。在 `onRead` 钩子中 `data` 对象包含每一个配置文件内容的 JSON 结果。在我们的情况下，`myConfig.js` 的内容是
+
+```js
+// myConfig.js
+
+module.exports = {
+  color: 'black'
+}
+```
+
+所以，`data` 对象将是
+
+```js
+{
+  // File
+  myConfig: {
+    // File data
+    color: 'black'
+  }
+}
+```
+
+容易看到，我们需要 `data.myConfig.color` 属性。让我们修改 `onRead` 钩子：
+
+```js
+// ui.js
+
+onRead: ({ data }) => ({
+  prompts: [
+    {
+      name: `color`,
+      type: 'input',
+      message: 'Define the color for greeting message',
+      value: data.myConfig && data.myConfig.color
+    }
+  ]
+}),
+```
+
+::: tip
+注意，当页面加载时，如果配置文件不存在 `myConfig` 可能是 undefined。
+:::
+
+你可以看见，在配置页面中 `white` 被 `black` 替换了。
+
+如果配置文件不存在，我们可以提供一个默认值：
+
+```js
+// ui.js
+
+onRead: ({ data }) => ({
+  prompts: [
+    {
+      name: `color`,
+      type: 'input',
+      message: 'Define the color for greeting message',
+      value: data.myConfig && data.myConfig.color,
+      default: 'black',
+    }
+  ]
+}),
+```
+
+#### 保存配置变化
+
+我们刚刚读取了 `myConfig.js` 的内容并且在配置页面使用它。现在让我们尝试将颜色输入框的内容保存到文件中。我们可以使用 `onWrite` 钩子：
+
+```js
+// ui.js
+
+api.describeConfig({
+  /* ... */
+  onWrite: ({ prompts, api }) => {
+    // ...
+  }
+})
+```
+
+`onWrite` 钩子能够得到许多[参数](ui-api.html#save-config-changes) 但我们仅仅需要其中的两个：`prompts` 和 `api`。第一个是当前对话运行时对象 - 我们将得到对话 id 并且通过 id 拿到答案。为了获取答案我们需要使用来自 `api` 的 `async getAnswer()` 方法：
+
+```js
+// ui.js
+
+async onWrite({ api, prompts }) {
+  const result = {}
+  for (const prompt of prompts) {
+    result[`${prompt.id}`] = await api.getAnswer(prompt.id)
+  }
+  api.setData('myConfig', result)
+}
+```
+
+现在如果你通过配置页面修改颜色输入框的内容，有 `black` 变为 `red`，然后按下 `保存修改` 按钮，你会发现你的项目中的 `myConfig.js` 文件也发生了变化：
+
+```js
+// myConfig.js
+
+module.exports = {
+  color: 'red'
+}
+```
+
+### 展示对话
+
+如果你想，你可以在 Vue UI 中展示[对话](#prompts)。当你通过 UI 安装插件时，对话将在插件的调用步骤中展示。
+
+你可以通过添加额外属性扩展  [inquirer 对象](#prompts-for-3rd-party-plugins)。他们是可选项且仅仅被 UI 使用：
+
+```js
+// prompts.js
+
+module.exports = [
+  {
+    // 基本对话属性
+    name: `addExampleRoutes`,
+    type: 'confirm',
+    message: 'Add example routes?',
+    default: false,
+    // UI 关联的对话属性
+    group: 'Strongly recommended',
+    description: 'Adds example pages, layouts and correct router config',
+    link:
+      'https://github.com/ktsn/vue-cli-plugin-auto-routing/#vue-cli-plugin-auto-routing'
+  }
+]
+```
+现在，你将在插件调用时看到：
+
+![UI Prompts](/ui-prompts.png)
+
+### Logo
+
+你可以放一个 `logo.png` 文件到文件夹根目录，它将被发布到 npm。将在以下几个地方展示：
+- 在搜索要安装的插件时
+- 在已安装的插件列表中
+- 在配置列表中（默认情况）
+- 在添加任务的任务列表中（默认情况）
+
+![Plugins](/plugins.png)
+
+Logo 应该是方形非透明图片（理想尺寸 84*84）。
+
+### 发布插件到 npm 
+
+为了发布插件，你需要在 [npmjs.com](https://www.npmjs.com) 上注册并且全局安装 `npm`。如果这是你的第一个发布的 npm 模块，请执行
+
+```bash
+npm login
+```
+
+输入你的名字和密码。这将存储你的凭证，这样你就不必每次发布时都输入。
+
+:::tip
+发布插件之前，确保你为它选择了正确的名字！名字规范是 `vue-cli-plugin-<name>`。在 [Discoverability](#discoverability) 查看更多信息
+:::
+
+接下来发布插件，到插件的根目录，在命令行执行下面的命令：
+
+```bash
+npm publish
+```
+
+成功发布后，你应该能够使用 `vue add <plugin-name>` 命令将你的插件添加到使用 Vue CLI 创建的项目。

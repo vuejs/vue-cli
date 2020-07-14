@@ -8,7 +8,7 @@ const requiredVersion = require('../package.json').engines.node
 const leven = require('leven')
 
 function checkNodeVersion (wanted, id) {
-  if (!semver.satisfies(process.version, wanted)) {
+  if (!semver.satisfies(process.version, wanted, { includePrerelease: true })) {
     console.log(chalk.red(
       'You are using Node ' + process.version + ', but this version of ' + id +
       ' requires Node ' + wanted + '.\nPlease upgrade your Node version.'

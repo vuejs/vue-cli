@@ -15,7 +15,7 @@ file, or the `"vue"` field in `package.json`.
 
 - **pwa.workboxPluginMode**
 
-  This allows you to the choose between the two modes supported by the underlying
+  This allows you to choose between the two modes supported by the underlying
   [`workbox-webpack-plugin`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin).
 
   - `'GenerateSW'` (default), will lead to a new service worker file being created
@@ -84,6 +84,12 @@ file, or the `"vue"` field in `package.json`.
       - display: `'standalone'`
       - theme_color: `pwa.themeColor`
 
+- **pwa.manifestCrossorigin**
+
+  - Default: `undefined`
+
+    Value for `crossorigin` attribute in manifest link tag in the generated HTML. You may need to set this if your PWA is behind an authenticated proxy. See [cross-origin values](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link#attr-crossorigin) for more details.
+
 - **pwa.iconPaths**
 
   - Defaults:
@@ -98,7 +104,7 @@ file, or the `"vue"` field in `package.json`.
     }
     ```
 
-    Change these values to use different paths for your icons.
+    Change these values to use different paths for your icons. As of v4.3.0, you can use `null` as a value and that icon will not be included.
 
 ### Example Configuration
 

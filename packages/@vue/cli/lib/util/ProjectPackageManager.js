@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 
+const ini = require('ini')
 const minimist = require('minimist')
 const LRU = require('lru-cache')
 
@@ -154,6 +155,38 @@ class PackageManager {
     return this._registry
   }
 
+  async getAuthToken () {
+    // get npmrc (https://docs.npmjs.com/configuring-npm/npmrc.html#files)
+    const possibleRcPaths = [
+      path.resolve(this.context, '.npmrc'),
+      path.resolve(require('os').homedir(), '.npmrc')
+    ]
+    if (process.env.PREFIX) {
+      possibleRcPaths.push(path.resolve(process.env.PREFIX, '/etc/npmrc'))
+    }
+    // there's also a '/path/to/npm/npmrc', skipped for simplicity of implementation
+
+    let npmConfig = {}
+    for (const loc of possibleRcPaths) {
+      if (fs.existsSync(loc)) {
+        try {
+          // the closer config file (the one with lower index) takes higher precedence
+          npmConfig = Object.assign({}, ini.parse(fs.readFileSync(loc, 'utf-8')), npmConfig)
+        } catch (e) {
+          // in case of file permission issues, etc.
+        }
+      }
+    }
+
+    const registry = await this.getRegistry()
+    const registryWithoutProtocol = registry
+      .replace(/https?:/, '')     // remove leading protocol
+      .replace(/([^/])$/, '$1/')  // ensure ending with slash
+    const authTokenKey = `${registryWithoutProtocol}:_authToken`
+
+    return npmConfig[authTokenKey]
+  }
+
   async setRegistryEnvs () {
     const registry = await this.getRegistry()
 
@@ -204,6 +237,7 @@ class PackageManager {
   // https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md
   async getMetadata (packageName, { full = false } = {}) {
     const registry = await this.getRegistry()
+    const authToken = await this.getAuthToken()
 
     const metadataKey = `${this.bin}-${registry}-${packageName}`
     let metadata = metadataCache.get(metadataKey)
@@ -214,12 +248,19 @@ class PackageManager {
 
     const headers = {}
     if (!full) {
-      headers.Accept = 'application/vnd.npm.install-v1+json'
+      headers.Accept = 'application/vnd.npm.install-v1+json;q=1.0, application/json;q=0.9, */*;q=0.8'
+    }
+
+    if (authToken) {
+      headers.Authorization = `Bearer ${authToken}`
     }
 
     const url = `${registry.replace(/\/$/g, '')}/${packageName}`
     try {
       metadata = (await request.get(url, { headers })).body
+      if (metadata.error) {
+        throw new Error(metadata.error)
+      }
       metadataCache.set(metadataKey, metadata)
       return metadata
     } catch (e) {
@@ -290,20 +331,26 @@ class PackageManager {
   }
 
   async upgrade (packageName) {
-    const realname = stripVersion(packageName)
-    if (
-      isTestOrDebug &&
-      (packageName === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(realname)))
-    ) {
-      // link packages in current repo for test
-      const src = path.resolve(__dirname, `../../../../${realname}`)
-      const dest = path.join(this.context, 'node_modules', realname)
-      await fs.remove(dest)
-      await fs.symlink(src, dest, 'dir')
-      return
+    // manage multiple packages separated by spaces
+    const packageNamesArray = []
+
+    for (const packname of packageName.split(' ')) {
+      const realname = stripVersion(packname)
+      if (
+        isTestOrDebug &&
+        (packname === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(realname)))
+      ) {
+        // link packages in current repo for test
+        const src = path.resolve(__dirname, `../../../../${realname}`)
+        const dest = path.join(this.context, 'node_modules', realname)
+        await fs.remove(dest)
+        await fs.symlink(src, dest, 'dir')
+      } else {
+        packageNamesArray.push(packname)
+      }
     }
 
-    return await this.runCommand('add', [packageName])
+    if (packageNamesArray.length) return await this.runCommand('add', packageNamesArray)
   }
 }
 

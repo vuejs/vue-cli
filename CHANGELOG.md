@@ -1,4 +1,188 @@
 
+## 4.4.6 (2020-06-24)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#5614](https://github.com/vuejs/vue-cli/pull/5614) fix jscodeshift peer dependency error ([@sodatea](https://github.com/sodatea))
+  * [#5609](https://github.com/vuejs/vue-cli/pull/5609) fix: fix support for some legacy registry servers ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#5603](https://github.com/vuejs/vue-cli/pull/5603) docs: @babel-preset/env -> @babel/preset-env ([@sodatea](https://github.com/sodatea))
+* [#5603](https://github.com/vuejs/vue-cli/pull/5603) docs: @babel-preset/env -> @babel/preset-env ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 4.4.5 (2020-06-22)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#5592](https://github.com/vuejs/vue-cli/pull/5592) fix polyfill injection when building app on multiple threads ([@dtcz](https://github.com/dtcz))
+  * [#5598](https://github.com/vuejs/vue-cli/pull/5598) fix: fix an edge case that VUE_CLI_SERVICE_CONFIG_PATH might be ignored ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#5580](https://github.com/vuejs/vue-cli/pull/5580) Fix: stop ignoring --config-file cypress option ([@ahderman](https://github.com/ahderman))
+* `@vue/cli`
+  * [#5586](https://github.com/vuejs/vue-cli/pull/5586) fix: support auth token when retrieving package metadata ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#5528](https://github.com/vuejs/vue-cli/pull/5528) fix(nightwatch): should not install corresponding webdriver if the browser is unselected ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-shared-utils`
+  * [#5572](https://github.com/vuejs/vue-cli/pull/5572) refactor: replace request-promise-native with util.promisify ([@jeneser](https://github.com/jeneser))
+
+#### Committers: 5
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Alexandre D'Erman ([@ahderman](https://github.com/ahderman))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Yazhe Wang ([@jeneser](https://github.com/jeneser))
+- [@dtcz](https://github.com/dtcz)
+
+
+
+## 4.4.4 (2020-06-12)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`
+  * [#5576](https://github.com/vuejs/vue-cli/pull/5576) fix: should return the parse result in the compiler-sfc-shim ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 4.4.3 (2020-06-12)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#5545](https://github.com/vuejs/vue-cli/pull/5545) fix(eslint-migrator): skip upgrade prompt if eslint v7 is installed (#5545) ([@EzioKissshot](https://github.com/EzioKissshot))
+* `@vue/cli-plugin-typescript`
+  * [#5539](https://github.com/vuejs/vue-cli/pull/5539) fix: correctly shim @vue/compiler-sfc for fork-ts-checker-plugin ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5542](https://github.com/vuejs/vue-cli/pull/5542) fix(cli-service): process the webpack failed hook in the serve command ([@jeneser](https://github.com/jeneser))
+* `@vue/cli`
+  * [#5540](https://github.com/vuejs/vue-cli/pull/5540) fix: add `--no-verify` to initial git commit ([@fxxjdedd](https://github.com/fxxjdedd))
+
+#### :house: Internal
+* `@vue/babel-preset-app`
+  * [#5522](https://github.com/vuejs/vue-cli/pull/5522) feat(babel-preset-app): pass full config to @babel/preset-env ([@lucaswerkmeister](https://github.com/lucaswerkmeister))
+
+#### Committers: 5
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Lucas Werkmeister ([@lucaswerkmeister](https://github.com/lucaswerkmeister))
+- Zhenya Zhu ([@EzioKissshot](https://github.com/EzioKissshot))
+- fxxjdedd ([@fxxjdedd](https://github.com/fxxjdedd))
+- yazhe wang ([@jeneser](https://github.com/jeneser))
+
+
+
+## 4.4.2 (2020-06-12)
+
+#### :memo: Documentation
+* `@vue/cli-plugin-pwa`
+  * [#5530](https://github.com/vuejs/vue-cli/pull/5530) docs: mention using `null` to ignore icons ([@qirh](https://github.com/qirh))
+
+#### Committers: 1
+- Saleh Alghusson ([@qirh](https://github.com/qirh))
+
+
+
+## 4.4.1 (2020-05-25)
+
+#### :bug: Bug Fix
+* `@vue/babel-preset-app`
+  * [#5513](https://github.com/vuejs/vue-cli/pull/5513) refactor: improve the polyfill importing logic of modern mode ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5502](https://github.com/vuejs/vue-cli/pull/5502) fix(cli): fix the creation log ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#5408](https://github.com/vuejs/vue-cli/pull/5408) docs: explain pwa head/manifest icons ([@DRBragg](https://github.com/DRBragg))
+
+#### :house: Internal
+* `@vue/babel-preset-app`
+  * [#5513](https://github.com/vuejs/vue-cli/pull/5513) refactor: improve the polyfill importing logic of modern mode ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 3
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Drew Bragg ([@DRBragg](https://github.com/DRBragg))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 4.4.0 (2020-05-19)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#5498](https://github.com/vuejs/vue-cli/pull/5498) feat(plugin-api): expose `inquirer` to prompts.js, allowing custom prompt types ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5376](https://github.com/vuejs/vue-cli/pull/5376) feat(cli-service) add stdin flag to build ([@sickp](https://github.com/sickp))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`, `@vue/cli-shared-utils`
+  * [#5500](https://github.com/vuejs/vue-cli/pull/5500) fix: should throw errors if there is bad require() in vue.config.js ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-jest`
+  * [#5499](https://github.com/vuejs/vue-cli/pull/5499) fix(unit-jest): fix .vue coverage report when babel plugin is not enabled ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5497](https://github.com/vuejs/vue-cli/pull/5497) fix: allow specifying plugin version when calling `vue add` ([@sodatea](https://github.com/sodatea))
+  * [#5493](https://github.com/vuejs/vue-cli/pull/5493) fix(ui): the logs from creator should be displayed in the UI ([@sodatea](https://github.com/sodatea))
+  * [#5472](https://github.com/vuejs/vue-cli/pull/5472) fix(creator): do not override the README.md generated by plugins ([@sodatea](https://github.com/sodatea))
+  * [#5395](https://github.com/vuejs/vue-cli/pull/5395) Update ProjectPackageManager.js upgrade() method: manage multiple package names separated by spaces ([@motla](https://github.com/motla))
+  * [#5424](https://github.com/vuejs/vue-cli/pull/5424) fix: normalize the `file` argument of `transformScript`, fix Windows compatibility ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`
+  * [#5473](https://github.com/vuejs/vue-cli/pull/5473) fixed --inspect-brk flag clobbering other values ([@tommyo](https://github.com/tommyo))
+* `@vue/cli-service`
+  * [#4800](https://github.com/vuejs/vue-cli/pull/4800) fix(serve): pass devServer sockPath properly to client ([@AlbertBrand](https://github.com/AlbertBrand))
+* `@vue/cli-plugin-eslint`
+  * [#5455](https://github.com/vuejs/vue-cli/pull/5455) fix(eslint): invalidate the cache when `.eslintignore` changes ([@godkun](https://github.com/godkun))
+* `@vue/cli-shared-utils`
+  * [#5390](https://github.com/vuejs/vue-cli/pull/5390) fix: set timeout of openChrome.applescript ([@374632897](https://github.com/374632897))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#5387](https://github.com/vuejs/vue-cli/pull/5387) [cli-plugin-e2e-nightwatch] fixing globals.js import ([@aberonni](https://github.com/aberonni))
+
+#### :memo: Documentation
+* Other
+  * [#5408](https://github.com/vuejs/vue-cli/pull/5408) docs: explain pwa head/manifest icons ([@DRBragg](https://github.com/DRBragg))
+  * [#5312](https://github.com/vuejs/vue-cli/pull/5312) Make Heroku resource link accessible ([@Timibadass](https://github.com/Timibadass))
+  * [#5300](https://github.com/vuejs/vue-cli/pull/5300) Update cli-service.md ([@Akenokoru](https://github.com/Akenokoru))
+* `@vue/babel-preset-app`
+  * [#5282](https://github.com/vuejs/vue-cli/pull/5282) docs: update polyfill names according to core-js 3 ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`, `@vue/cli-service`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui`, `@vue/cli`
+  * [#5496](https://github.com/vuejs/vue-cli/pull/5496) chore: dependency maintenance ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 14
+- Adrian B. Danieli ([@sickp](https://github.com/sickp))
+- Albert Brand ([@AlbertBrand](https://github.com/AlbertBrand))
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Domenico Gemoli ([@aberonni](https://github.com/aberonni))
+- Drew Bragg ([@DRBragg](https://github.com/DRBragg))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Jiang Guoxi ([@374632897](https://github.com/374632897))
+- Romain ([@motla](https://github.com/motla))
+- Stefano Bartoletti ([@stefano-b](https://github.com/stefano-b))
+- Timi Omoyeni ([@Timibadass](https://github.com/Timibadass))
+- [@Akenokoru](https://github.com/Akenokoru)
+- [@epixian](https://github.com/epixian)
+- [@tommyo](https://github.com/tommyo)
+- 杨昆 ([@godkun](https://github.com/godkun))
+
+
+
+## 4.3.1 (2020-04-07)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-eslint`
+  * [#5363](https://github.com/vuejs/vue-cli/pull/5363) fix(eslint-migrator): fix local eslint major version detection ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5360](https://github.com/vuejs/vue-cli/pull/5360) fix: run migrator in a separator process, fix require cache issues during upgrade ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.3.0 (2020-04-01)
 
 #### :rocket: New Features

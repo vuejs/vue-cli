@@ -1,4 +1,11 @@
 module.exports = (api, args, options) => {
+  // respect inline entry
+  if (args.entry && !options.pages) {
+    api.configureWebpack(config => {
+      config.entry = { app: api.resolve(args.entry) }
+    })
+  }
+
   const config = api.resolveChainableWebpackConfig()
   const targetDir = api.resolve(args.dest || options.outputDir)
 
@@ -36,12 +43,5 @@ module.exports = (api, args, options) => {
     }
   }
 
-  const rawConfig = api.resolveWebpackConfig(config)
-
-  // respect inline entry
-  if (args.entry && !options.pages) {
-    rawConfig.entry = { app: api.resolve(args.entry) }
-  }
-
-  return rawConfig
+  return api.resolveWebpackConfig(config)
 }

@@ -25,6 +25,10 @@ exports.logWithSpinner = (symbol, msg) => {
 }
 
 exports.stopSpinner = (persist) => {
+  if (!spinner.isSpinning) {
+    return
+  }
+
   if (lastMsg && persist !== false) {
     spinner.stopAndPersist({
       symbol: lastMsg.symbol,

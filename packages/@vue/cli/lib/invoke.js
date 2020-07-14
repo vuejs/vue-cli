@@ -68,13 +68,15 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   } else if (!Object.keys(pluginOptions).length) {
     let pluginPrompts = loadModule(`${id}/prompts`, context)
     if (pluginPrompts) {
+      const prompt = inquirer.createPromptModule()
+
       if (typeof pluginPrompts === 'function') {
-        pluginPrompts = pluginPrompts(pkg)
+        pluginPrompts = pluginPrompts(pkg, prompt)
       }
       if (typeof pluginPrompts.getPrompts === 'function') {
-        pluginPrompts = pluginPrompts.getPrompts(pkg)
+        pluginPrompts = pluginPrompts.getPrompts(pkg, prompt)
       }
-      pluginOptions = await inquirer.prompt(pluginPrompts)
+      pluginOptions = await prompt(pluginPrompts)
     }
   }
 

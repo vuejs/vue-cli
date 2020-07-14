@@ -67,7 +67,7 @@
 
   - По умолчанию: `'manifest.json'`
 
-    Путь к манифесту приложения.
+    Путь к манифесту приложения. Если в качестве пути указан URL, то плагин не будет во время сборки генерировать manifest.json в каталоге dist.
 
 - **pwa.manifestOptions**
 
@@ -81,6 +81,36 @@
       - start_url: `'.'`
       - display: `'standalone'`
       - theme_color: `pwa.themeColor`
+      - icons: `[
+                  {
+                    'src': './img/icons/android-chrome-192x192.png',
+                    'sizes': '192x192',
+                    'type': 'image/png'
+                  },
+                  {
+                    'src': './img/icons/android-chrome-512x512.png',
+                    'sizes': '512x512',
+                    'type': 'image/png'
+                  },
+                  {
+                    'src': './img/icons/android-chrome-maskable-192x192.png',
+                    'sizes': '192x192',
+                    'type': 'image/png',
+                    'purpose': 'maskable'
+                  },
+                  {
+                    'src': './img/icons/android-chrome-maskable-512x512.png',
+                    'sizes': '512x512',
+                    'type': 'image/png',
+                    'purpose': 'maskable'
+                  }
+                ]`
+
+- **pwa.manifestCrossorigin**
+
+  - По умолчанию: `undefined`
+
+    Значение атрибута `crossorigin` в теге ссылки на манифест в сгенерированном HTML. Это значение может потребоваться установить, когда PWA находится за аутентифицированным прокси-сервером. Для более подробной информации смотрите [варианты значений cross-origin](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link#attr-crossorigin).
 
 - **pwa.iconPaths**
 
@@ -96,7 +126,9 @@
     }
     ```
 
-    Измените эти значения при необходимости использовать различные пути для иконок.
+    Измените эти значения при необходимости использовать различные пути для иконок. Начиная с версии 4.3.0, можно указывать `null` в качестве значения, чтобы не включать эту иконку.
+
+    *ПРИМЕЧАНИЕ:* Эти иконки используются только для генерации мета-тегов в `<head>` HTML-документа. Для изменения пути к иконкам в манифесте используйте `pwa.manifestOptions.icons`
 
 ### Пример конфигурации
 

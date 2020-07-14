@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
 const merge = require('webpack-merge')
@@ -9,22 +10,6 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
-
-const loadConfig = configPath => {
-  let fileConfig = require(configPath)
-
-  if (typeof fileConfig === 'function') {
-    fileConfig = fileConfig()
-  }
-
-  if (!fileConfig || typeof fileConfig !== 'object') {
-    error(
-      `Error loading ${chalk.bold('vue.config.js')}: should export an object or a function that returns object.`
-    )
-    fileConfig = null
-  }
-  return fileConfig
-}
 
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
@@ -294,7 +279,10 @@ module.exports = class Service {
       )
     }
 
-    if (typeof config.entry !== 'function') {
+    if (
+      !process.env.VUE_CLI_ENTRY_FILES &&
+      typeof config.entry !== 'function'
+    ) {
       let entryFiles
       if (typeof config.entry === 'string') {
         entryFiles = [config.entry]
@@ -314,41 +302,47 @@ module.exports = class Service {
   }
 
   loadUserOptions () {
-    // vue.config.js
-    // vue.config.cjs
+    // vue.config.c?js
     let fileConfig, pkgConfig, resolved, resolvedFrom
     const esm = this.pkg.type && this.pkg.type === 'module'
-    const jsConfigPath = path.resolve(this.context, 'vue.config.js')
-    const cjsConfigPath = path.resolve(this.context, 'vue.config.cjs')
-    const configPath = (
-      process.env.VUE_CLI_SERVICE_CONFIG_PATH ||
-      jsConfigPath
-    )
 
-    try {
-      fileConfig = loadConfig(configPath)
-    } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') {
-        if (e.code === 'ERR_REQUIRE_ESM') {
-          warn(`Rename ${chalk.bold('vue.config.js')} to ${chalk.bold('vue.config.cjs')} when ECMAScript modules is enabled`)
-        }
-        error(`Error loading ${chalk.bold('vue.config.js')}:`)
-        throw e
+    const possibleConfigPaths = [
+      process.env.VUE_CLI_SERVICE_CONFIG_PATH,
+      './vue.config.js',
+      './vue.config.cjs'
+    ]
+
+    let fileConfigPath
+    for (const p of possibleConfigPaths) {
+      const resolvedPath = p && path.resolve(this.context, p)
+      if (resolvedPath && fs.existsSync(resolvedPath)) {
+        fileConfigPath = resolvedPath
+        break
       }
     }
 
-    // vue.config.js not found, esm enabled, no env set
-    if (!fileConfig && esm && !process.env.VUE_CLI_SERVICE_CONFIG_PATH) {
-      try {
-        fileConfig = loadConfig(cjsConfigPath)
-      } catch (e) {
-        if (e.code !== 'MODULE_NOT_FOUND') {
-          error(`Error loading ${chalk.bold('vue.config.cjs')}:`)
-          throw e
-        }
+    if (fileConfigPath) {
+      if (esm && fileConfigPath === './vue.config.js') {
+        throw new Error(`Please rename ${chalk.bold('vue.config.js')} to ${chalk.bold('vue.config.cjs')} when ECMAScript modules is enabled`)
       }
-      if (fileConfig) {
-        warn(`ECMAScript modules is detected, config loaded from ${chalk.bold('vue.config.cjs')}`)
+
+      try {
+        fileConfig = loadModule(fileConfigPath, this.context)
+
+        if (typeof fileConfig === 'function') {
+          fileConfig = fileConfig()
+        }
+
+        if (!fileConfig || typeof fileConfig !== 'object') {
+          // TODO: show throw an Error here, to be fixed in v5
+          error(
+            `Error loading ${chalk.bold(fileConfigPath)}: should export an object or a function that returns object.`
+          )
+          fileConfig = null
+        }
+      } catch (e) {
+        error(`Error loading ${chalk.bold(fileConfigPath)}:`)
+        throw e
       }
     }
 
