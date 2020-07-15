@@ -12,6 +12,9 @@
     <%_ if (options.allowJs) { _%>
     "allowJs": true,
     <%_ } _%>
+    <%_ if (options.skipLibCheck) { _%>
+    "skipLibCheck": true,
+    <%_ } _%>
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
