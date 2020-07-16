@@ -48,6 +48,12 @@ const prompts = module.exports = [
     type: `confirm`,
     message: `Allow .js files to be compiled?`,
     default: false
+  },
+  {
+    name: 'skipLibCheck',
+    type: `confirm`,
+    message: `Skip type checking of all declaration files (recommended for apps)?`,
+    default: true
   }
 ]
 

@@ -5,6 +5,7 @@
   "bin": {
     "vue": "bin/vue.js"
   },
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -24,6 +25,8 @@
     "access": "public"
   },
   "dependencies": {
+    "@types/ejs": "^2.7.0",
+    "@types/inquirer": "^6.5.0",
     "@vue/cli-shared-utils": "^4.4.6",
     "@vue/cli-ui": "^4.4.6",
     "@vue/cli-ui-addon-webpack": "^4.4.6",
