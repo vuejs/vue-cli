@@ -49,7 +49,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
   // https://github.com/facebook/create-react-app/issues/6720
   function mayProxy (pathname) {
     const maybePublicPath = path.resolve(appPublicFolder, pathname.slice(1))
-    const isPublicFileRequest = fs.existsSync(maybePublicPath)
+    const isPublicFileRequest = fs.existsSync(maybePublicPath) && fs.statSync(maybePublicPath).isFile()
     const isWdsEndpointRequest = pathname.startsWith('/sockjs-node') // used by webpackHotDevClient
     return !(isPublicFileRequest || isWdsEndpointRequest)
   }
