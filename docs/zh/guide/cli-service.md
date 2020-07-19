@@ -66,7 +66,7 @@ npx vue-cli-service serve
 选项：
 
   --mode        指定环境模式 (默认值：production)
-  --dest        指定输出目录 (默认值：dist)默认构建前清空输出目录，请指定安全的空目录，不要指定类似"/","C:/"这样的根目录
+  --dest        指定输出目录 (默认值：dist)，警告：构建前输出目录内容将会被删除
   --modern      面向现代浏览器带自动回退地构建应用
   --target      app | lib | wc | wc-async (默认值：app)
   --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
