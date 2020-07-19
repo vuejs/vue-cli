@@ -73,7 +73,7 @@ Usage: vue-cli-service build [options] [entry|pattern]
 Options:
 
   --mode         specify env mode (default: production)
-  --dest         specify output directory (default: dist)
+  --dest         specify output directory (default: dist)By default, the output directory is cleared before building. Please specify a safe empty directory. Do not specify a root directory such as '/','c:/'
   --modern       build app targeting modern browsers with auto fallback
   --no-unsafe-inline build app without introducing inline scripts
   --target       app | lib | wc | wc-async (default: app)
