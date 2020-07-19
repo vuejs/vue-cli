@@ -3,6 +3,7 @@ const debug = require('debug')
 const GeneratorAPI = require('./GeneratorAPI')
 const PackageManager = require('./util/ProjectPackageManager')
 const sortObject = require('./util/sortObject')
+const sortArrayPartially = require('./util/sortArrayPartially')
 const writeFileTree = require('./util/writeFileTree')
 const inferRootOptions = require('./util/inferRootOptions')
 const normalizeFilePaths = require('./util/normalizeFilePaths')
@@ -142,6 +143,9 @@ module.exports = class Generator {
     this.afterInvokeCbs = this.passedAfterInvokeCbs
     this.afterAnyInvokeCbs = []
     this.postProcessFilesCbs = []
+
+    // `@vue/cli-plugin-router` must be executed before `@vue/cli-plugin-typescript`
+    this.plugins = sortArrayPartially(this.plugins, ['@vue/cli-plugin-router', '@vue/cli-plugin-typescript'])
 
     // apply generators from plugins
     for (const plugin of this.plugins) {
