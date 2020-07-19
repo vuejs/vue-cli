@@ -73,7 +73,7 @@ Usage: vue-cli-service build [options] [entry|pattern]
 Options:
 
   --mode         specify env mode (default: production)
-  --dest         specify output directory (default: dist), warning: content of the directory would be deleted 
+  --dest         specify output directory (default: dist) WARNING: all content of the directory will be deleted
   --modern       build app targeting modern browsers with auto fallback
   --no-unsafe-inline build app without introducing inline scripts
   --target       app | lib | wc | wc-async (default: app)
