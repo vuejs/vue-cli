@@ -75,14 +75,7 @@ function getLast (context) {
 }
 
 function generatePresetDescription (preset) {
-  let description = ''
-  if (preset.raw.vueVersion) {
-    description += `[Vue ${preset.raw.vueVersion}] `
-  } else if (preset.id === 'default') { // default preset is Vue version-agnositic
-    description += '[Vue 2 & 3] '
-  } else {
-    description += '[Vue 2] '
-  }
+  let description = `[Vue ${preset.raw.vueVersion || 2}] `
 
   description += preset.features.join(', ')
   if (preset.raw.useConfigFiles) {
@@ -139,9 +132,16 @@ async function initCreator (context) {
         const features = getFeatures(preset).map(
           f => toShortPluginId(f)
         )
+
+        let name = key
+        if (key === 'default') {
+          name = 'org.vue.views.project-create.tabs.presets.default-preset'
+        } else if (key === '__default_vue_3__') {
+          name = 'org.vue.views.project-create.tabs.presets.default-vue-3-preset'
+        }
         const info = {
           id: key,
-          name: key === 'default' ? 'org.vue.views.project-create.tabs.presets.default-preset' : key,
+          name,
           features,
           link: null,
           raw: preset

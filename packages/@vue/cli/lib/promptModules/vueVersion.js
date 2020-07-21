@@ -3,6 +3,13 @@ module.exports = cli => {
     name: 'Choose Vue version',
     value: 'vueVersion',
     description: 'Choose a version of Vue.js that you want to start the project with',
+    checked: true
+  })
+
+  cli.injectPrompt({
+    name: 'vueVersion',
+    when: answers => answers.features.includes('vueVersion'),
+    message: 'Choose a version of Vue.js that you want to start the project with',
     type: 'list',
     choices: [
       {
@@ -10,11 +17,11 @@ module.exports = cli => {
         value: '2'
       },
       {
-        name: '3.x (preview)',
+        name: '3.x (Preview)',
         value: '3'
       }
     ],
-    checked: true
+    default: '2'
   })
 
   cli.onPromptComplete((answers, options) => {

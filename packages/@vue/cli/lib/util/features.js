@@ -18,17 +18,10 @@ exports.getFeatures = (preset) => {
   return features
 }
 
-exports.formatFeatures = (name, preset) => {
-  let versionInfo = ''
-  if (preset.vueVersion) {
-    versionInfo = chalk.yellow(`[Vue ${preset.vueVersion}] `)
-  } else if (name === 'default') {  // default preset is Vue version-agnositic
-    versionInfo = chalk.yellow('[Vue 2 or 3] ')
-  } else {
-    versionInfo = chalk.yellow('[Vue 2] ')
-  }
-
+exports.formatFeatures = (preset) => {
+  const versionInfo = chalk.yellow(`[Vue ${preset.vueVersion || 2}] `)
   const features = exports.getFeatures(preset)
+
   return versionInfo + features.map(dep => {
     dep = toShortPluginId(dep)
     return chalk.yellow(dep)

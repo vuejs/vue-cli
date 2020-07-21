@@ -51,17 +51,12 @@ module.exports = class Creator extends EventEmitter {
 
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
-    const { vueVersionPrompt, presetPrompt, featurePrompt } = this.resolveIntroPrompts()
-
-    this.vueVersionPrompt = vueVersionPrompt
-    const vueVersionPromptAsAFeature = Object.assign({
-      when: answers => answers.features.includes('vueVersion')
-    }, this.vueVersionPrompt)
+    const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
 
     this.presetPrompt = presetPrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
-    this.injectedPrompts = [vueVersionPromptAsAFeature]
+    this.injectedPrompts = []
     this.promptCompleteCbs = []
     this.afterInvokeCbs = []
     this.afterAnyInvokeCbs = []
@@ -312,10 +307,6 @@ module.exports = class Creator extends EventEmitter {
     let preset
     if (answers.preset && answers.preset !== '__manual__') {
       preset = await this.resolvePreset(answers.preset)
-
-      if (answers.preset === 'default') {
-        preset.vueVersion = answers.vueVersion
-      }
     } else {
       // manual
       preset = {
@@ -342,7 +333,7 @@ module.exports = class Creator extends EventEmitter {
 
   async resolvePreset (name, clone) {
     let preset
-    const savedPresets = loadOptions().presets || {}
+    const savedPresets = this.getPresets()
 
     if (name in savedPresets) {
       preset = savedPresets[name]
@@ -359,10 +350,6 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
-    // use default preset if user has not overwritten it
-    if (name === 'default' && !preset) {
-      preset = defaults.presets.default
-    }
     if (!preset) {
       error(`preset "${name}" not found.`)
       const presets = Object.keys(savedPresets)
@@ -419,10 +406,16 @@ module.exports = class Creator extends EventEmitter {
   resolveIntroPrompts () {
     const presets = this.getPresets()
     const presetChoices = Object.entries(presets).map(([name, preset]) => {
+      let displayName = name
+      if (name === 'default') {
+        displayName = 'Default'
+      } else if (name === '__default_vue_3__') {
+        displayName = 'Default (Vue 3 Preview)'
+      }
+
       return {
-        name: `${name} (${formatFeatures(name, preset)})`,
-        value: name,
-        when: (answers) => !preset.vueVersion || preset.vueVersion === answers.vueVersion
+        name: `${displayName} (${formatFeatures(preset)})`,
+        value: name
       }
     })
     const presetPrompt = {
@@ -437,21 +430,6 @@ module.exports = class Creator extends EventEmitter {
         }
       ]
     }
-    const vueVersionPrompt = {
-      name: 'vueVersion',
-      type: 'list',
-      message: `Choose a version of Vue.js that you want to start the project with`,
-      choices: [
-        {
-          name: '2.x',
-          value: '2'
-        },
-        {
-          name: '3.x (preview)',
-          value: '3'
-        }
-      ]
-    }
     const featurePrompt = {
       name: 'features',
       when: isManualMode,
@@ -461,7 +439,6 @@ module.exports = class Creator extends EventEmitter {
       pageSize: 10
     }
     return {
-      vueVersionPrompt,
       presetPrompt,
       featurePrompt
     }
@@ -547,13 +524,8 @@ module.exports = class Creator extends EventEmitter {
       }
     })
 
-    const vueVersionPromptForDefaultPreset = Object.assign({
-      when: answers => answers.preset === 'default'
-    }, this.vueVersionPrompt)
-
     const prompts = [
       this.presetPrompt,
-      vueVersionPromptForDefaultPreset,
       this.featurePrompt,
       ...this.injectedPrompts,
       ...this.outroPrompts
