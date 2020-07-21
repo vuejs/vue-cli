@@ -23,7 +23,7 @@ exports.formatFeatures = (name, preset) => {
   if (preset.vueVersion) {
     versionInfo = chalk.yellow(`[Vue ${preset.vueVersion}] `)
   } else if (name === 'default') {  // default preset is Vue version-agnositic
-    versionInfo = chalk.yellow('[Vue 2 & 3] ')
+    versionInfo = chalk.yellow('[Vue 2 or 3] ')
   } else {
     versionInfo = chalk.yellow('[Vue 2] ')
   }
