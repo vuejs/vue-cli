@@ -75,7 +75,16 @@ function getLast (context) {
 }
 
 function generatePresetDescription (preset) {
-  let description = preset.features.join(', ')
+  let description = ''
+  if (preset.raw.vueVersion) {
+    description += `[Vue ${preset.raw.vueVersion}] `
+  } else if (preset.id === 'default') { // default preset is Vue version-agnositic
+    description += '[Vue 2 & 3] '
+  } else {
+    description += '[Vue 2] '
+  }
+
+  description += preset.features.join(', ')
   if (preset.raw.useConfigFiles) {
     description += ' (Use config files)'
   }
