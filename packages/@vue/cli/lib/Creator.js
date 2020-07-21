@@ -52,11 +52,16 @@ module.exports = class Creator extends EventEmitter {
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
     const { vueVersionPrompt, presetPrompt, featurePrompt } = this.resolveIntroPrompts()
+
     this.vueVersionPrompt = vueVersionPrompt
+    const vueVersionPromptAsAFeature = Object.assign({
+      when: answers => answers.features.includes('vueVersion')
+    }, this.vueVersionPrompt)
+
     this.presetPrompt = presetPrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
-    this.injectedPrompts = []
+    this.injectedPrompts = [vueVersionPromptAsAFeature]
     this.promptCompleteCbs = []
     this.afterInvokeCbs = []
     this.afterAnyInvokeCbs = []
@@ -546,15 +551,10 @@ module.exports = class Creator extends EventEmitter {
       when: answers => answers.preset === 'default'
     }, this.vueVersionPrompt)
 
-    const vueVersionPromptAsAFeature = Object.assign({
-      when: answers => answers.features.includes('vueVersion')
-    }, this.vueVersionPrompt)
-
     const prompts = [
       this.presetPrompt,
       vueVersionPromptForDefaultPreset,
       this.featurePrompt,
-      vueVersionPromptAsAFeature,
       ...this.injectedPrompts,
       ...this.outroPrompts
     ]
