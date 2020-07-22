@@ -9,7 +9,8 @@ test('default', async () => {
     {
       message: 'pick a preset',
       choices: [
-        'default',
+        'Default',
+        'Default (Vue 3 Preview)',
         'Manually select'
       ],
       choose: 0
