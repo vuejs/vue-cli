@@ -62,7 +62,10 @@ test('manual + PromptModuleAPI', async () => {
   }
 
   const expectedPrompts = [
-    { choose: 1 },
+    {
+      message: 'Please pick a preset',
+      choose: 2 // manual
+    },
     {
       message: 'Check the features',
       choices: ['Foo', 'Bar'],
@@ -85,6 +88,10 @@ test('manual + PromptModuleAPI', async () => {
     {
       message: 'Save preset as',
       input: 'test'
+    },
+    {
+      message: 'package manager',
+      choose: 0 // yarn
     }
   ]
 
@@ -103,7 +110,8 @@ test('manual + PromptModuleAPI', async () => {
     {
       choices: [
         'test',
-        'default',
+        'Default',
+        'Default (Vue 3 Preview)',
         'Manually'
       ],
       choose: 0
