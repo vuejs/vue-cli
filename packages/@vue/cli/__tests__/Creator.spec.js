@@ -88,10 +88,6 @@ test('manual + PromptModuleAPI', async () => {
     {
       message: 'Save preset as',
       input: 'test'
-    },
-    {
-      message: 'package manager',
-      choose: 0 // yarn
     }
   ]
 
