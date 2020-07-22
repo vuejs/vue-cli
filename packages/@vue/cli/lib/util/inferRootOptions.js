@@ -10,13 +10,13 @@ module.exports = function inferRootOptions (pkg) {
 
   if ('vue' in deps) {
     const vue2Range = semver.Range('^2.0.0')
-    const vue3Range = semver.Range('^3.0.0-0')
+    const vue3Range = semver.Range('^3.0.0', { includePrerelease: true })
 
-    const depRange = semver.Range(deps.vue)
+    const depVueVersion = semver.minVersion(semver.Range(deps.vue))
 
-    if (vue3Range.intersects(depRange)) {
+    if (semver.satisfies(depVueVersion, vue3Range)) {
       rootOptions.vueVersion = '3'
-    } else if (vue2Range.intersects(depRange)) {
+    } else if (semver.satisfies(depVueVersion, vue2Range)) {
       rootOptions.vueVersion = '2'
     }
   }
