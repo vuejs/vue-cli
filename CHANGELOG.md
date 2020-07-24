@@ -1,4 +1,46 @@
 
+## 4.5.0 (2020-07-24)
+
+#### :rocket: New Features
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`, `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#5637](https://github.com/vuejs/vue-cli/pull/5637) feat: allow choosing vue version on creation (and in presets) ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`
+  * [#5688](https://github.com/vuejs/vue-cli/pull/5688) feat: add `skipLibCheck` option in the TS template (defaults to `true`) ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli`
+  * [#5356](https://github.com/vuejs/vue-cli/pull/5356) feat(cli,cli-service,cli-test-utils): add ts declaration ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#5570](https://github.com/vuejs/vue-cli/pull/5570) feat: detect and compile Vue 3 projects ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli`
+  * [#5556](https://github.com/vuejs/vue-cli/pull/5556) feat: support node nightly builds ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#5681](https://github.com/vuejs/vue-cli/pull/5681) Fix Kubernetes container detection ([@lbogdan](https://github.com/lbogdan))
+* `@vue/babel-preset-app`
+  * [#5543](https://github.com/vuejs/vue-cli/pull/5543) fix: better error message for non-existent polyfill names ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#5671](https://github.com/vuejs/vue-cli/pull/5671) docs(zh): change line to lines in plugin-dev.md ([@zhouxinyong](https://github.com/zhouxinyong))
+* [#5668](https://github.com/vuejs/vue-cli/pull/5668) docs(zh): `additionalData` example for sass-loader 9.0 ([@chuzhixin](https://github.com/chuzhixin))
+* [#5408](https://github.com/vuejs/vue-cli/pull/5408) docs: explain pwa head/manifest icons ([@DRBragg](https://github.com/DRBragg))
+
+#### :house: Internal
+* `@vue/cli-shared-utils`
+  * [#5700](https://github.com/vuejs/vue-cli/pull/5700) refactor: use console.clear to clear the log ([@imtaotao](https://github.com/imtaotao))
+* `@vue/cli-service`, `@vue/cli`
+  * [#5629](https://github.com/vuejs/vue-cli/pull/5629) refactor: replace jscodeshift with vue-codemod ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 7
+- Arthur ([@imtaotao](https://github.com/imtaotao))
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Bogdan Luca ([@lbogdan](https://github.com/lbogdan))
+- Drew Bragg ([@DRBragg](https://github.com/DRBragg))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- good luck ([@chuzhixin](https://github.com/chuzhixin))
+- vimvinter ([@zhouxinyong](https://github.com/zhouxinyong))
+
+
+
 ## 4.4.6 (2020-06-24)
 
 #### :bug: Bug Fix
