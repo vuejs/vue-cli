@@ -26,7 +26,6 @@
     "@types/express": "4.17.4",
     "@types/node": "*",
     "@types/puppeteer": "^1.11.0",
-    "@vue/cli": "^4.3.0",
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1",
     "json-server": "^0.15.0",
