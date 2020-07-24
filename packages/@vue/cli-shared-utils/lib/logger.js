@@ -1,5 +1,6 @@
 const chalk = require('chalk')
 const stripAnsi = require('strip-ansi')
+const readline = require('readline')
 const EventEmitter = require('events')
 
 const { stopSpinner } = require('./spinner')
@@ -58,7 +59,10 @@ exports.error = (msg, tag = null) => {
 
 exports.clearConsole = title => {
   if (process.stdout.isTTY) {
-    console.clear()
+    const blank = '\n'.repeat(process.stdout.rows)
+    console.log(blank)
+    readline.cursorTo(process.stdout, 0, 0)
+    readline.clearScreenDown(process.stdout)
     if (title) {
       console.log(title)
     }
