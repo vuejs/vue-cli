@@ -4,15 +4,21 @@ const path = require('path')
 const portfinder = require('portfinder')
 const createServer = require('@vue/cli-test-utils/createServer')
 const create = require('@vue/cli-test-utils/createTestProject')
+const createOutside = require('@vue/cli-test-utils/createUpgradableProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 
-exports.assertServe = async (name, options) => {
+exports.assertServe = async (name, options, outside = false) => {
   test('serve', async () => {
-    const project = await create(name, options)
+    let project
+    if (outside) {
+      project = await createOutside(name, options)
+    } else {
+      project = await create(name, options)
+    }
 
     await serve(
-      () => project.run('vue-cli-service serve'),
+      () => project.run('yarn serve'),
       async ({ page, nextUpdate, helpers }) => {
         const msg = `Welcome to Your Vue.js + TypeScript App`
         expect(await helpers.getText('h1')).toMatch(msg)
@@ -40,12 +46,17 @@ exports.assertServe = async (name, options) => {
   })
 }
 
-exports.assertBuild = async (name, options, customAssert) => {
+exports.assertBuild = async (name, options, customAssert, outside = false) => {
   let browser, server, page
   test('build', async () => {
-    const project = await create(name, options)
+    let project
+    if (outside) {
+      project = await createOutside(name, options)
+    } else {
+      project = await create(name, options)
+    }
 
-    const { stdout } = await project.run('vue-cli-service build')
+    const { stdout } = await project.run('yarn build')
     expect(stdout).toMatch('Build complete.')
 
     const port = await portfinder.getPortPromise()

@@ -301,9 +301,12 @@ class PackageManager {
   async install () {
     if (process.env.VUE_CLI_TEST) {
       try {
-        await this.runCommand('install', ['--offline'])
+        process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
+        await this.runCommand('install', ['--offline', '--silent', '--no-progress'])
+        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
       } catch (e) {
-        await this.runCommand('install')
+        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        await this.runCommand('install', ['--silent', '--no-progress'])
       }
     }
 

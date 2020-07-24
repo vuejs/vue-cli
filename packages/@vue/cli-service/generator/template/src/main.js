@@ -1,3 +1,9 @@
+<%_ if (isVue3) { _%>
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')
+<%_ } else { _%>
 import Vue from 'vue'
 import App from './App.vue'
 
@@ -10,3 +16,4 @@ new Vue({
   render: function (h) { return h(App) },
   <%_ } _%>
 }).$mount('#app')
+<%_ } _%>

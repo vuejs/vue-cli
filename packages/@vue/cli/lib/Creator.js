@@ -14,7 +14,7 @@ const { formatFeatures } = require('./util/features')
 const loadLocalPreset = require('./util/loadLocalPreset')
 const loadRemotePreset = require('./util/loadRemotePreset')
 const generateReadme = require('./util/generateReadme')
-const { resolvePkg } = require('@vue/cli-shared-utils')
+const { resolvePkg, isOfficialPlugin } = require('@vue/cli-shared-utils')
 
 const {
   defaults,
@@ -52,6 +52,7 @@ module.exports = class Creator extends EventEmitter {
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
     const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
+
     this.presetPrompt = presetPrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
@@ -110,6 +111,16 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
+    // Introducing this hack because typescript plugin must be invoked after router.
+    // Currently we rely on the `plugins` object enumeration order,
+    // which depends on the order of the field initialization.
+    // FIXME: Remove this ugly hack after the plugin ordering API settled down
+    if (preset.plugins['@vue/cli-plugin-router'] && preset.plugins['@vue/cli-plugin-typescript']) {
+      const tmp = preset.plugins['@vue/cli-plugin-typescript']
+      delete preset.plugins['@vue/cli-plugin-typescript']
+      preset.plugins['@vue/cli-plugin-typescript'] = tmp
+    }
+
     // legacy support for vuex
     if (preset.vuex) {
       preset.plugins['@vue/cli-plugin-vuex'] = {}
@@ -144,13 +155,17 @@ module.exports = class Creator extends EventEmitter {
         return
       }
 
-      // Note: the default creator includes no more than `@vue/cli-*` & `@vue/babel-preset-env`,
-      // so it is fine to only test `@vue` prefix.
-      // Other `@vue/*` packages' version may not be in sync with the cli itself.
-      pkg.devDependencies[dep] = (
-        preset.plugins[dep].version ||
-        ((/^@vue/.test(dep)) ? `~${latestMinor}` : `latest`)
-      )
+      let { version } = preset.plugins[dep]
+
+      if (!version) {
+        if (isOfficialPlugin(dep) || dep === '@vue/cli-service' || dep === '@vue/babel-preset-env') {
+          version = isTestOrDebug ? `file:${path.resolve(__dirname, '../../../', dep)}` : `~${latestMinor}`
+        } else {
+          version = 'latest'
+        }
+      }
+
+      pkg.devDependencies[dep] = version
     })
 
     // write package.json
@@ -197,7 +212,7 @@ module.exports = class Creator extends EventEmitter {
     log(`📦  Installing additional dependencies...`)
     this.emit('creation', { event: 'deps-install' })
     log()
-    if (!isTestOrDebug) {
+    if (!isTestOrDebug || process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
       await pm.install()
     }
 
@@ -318,7 +333,7 @@ module.exports = class Creator extends EventEmitter {
 
   async resolvePreset (name, clone) {
     let preset
-    const savedPresets = loadOptions().presets || {}
+    const savedPresets = this.getPresets()
 
     if (name in savedPresets) {
       preset = savedPresets[name]
@@ -335,10 +350,6 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
-    // use default preset if user has not overwritten it
-    if (name === 'default' && !preset) {
-      preset = defaults.presets.default
-    }
     if (!preset) {
       error(`preset "${name}" not found.`)
       const presets = Object.keys(savedPresets)
@@ -394,9 +405,16 @@ module.exports = class Creator extends EventEmitter {
 
   resolveIntroPrompts () {
     const presets = this.getPresets()
-    const presetChoices = Object.keys(presets).map(name => {
+    const presetChoices = Object.entries(presets).map(([name, preset]) => {
+      let displayName = name
+      if (name === 'default') {
+        displayName = 'Default'
+      } else if (name === '__default_vue_3__') {
+        displayName = 'Default (Vue 3 Preview)'
+      }
+
       return {
-        name: `${name} (${formatFeatures(presets[name])})`,
+        name: `${displayName} (${formatFeatures(preset)})`,
         value: name
       }
     })
@@ -505,6 +523,7 @@ module.exports = class Creator extends EventEmitter {
         return isManualMode(answers) && originalWhen(answers)
       }
     })
+
     const prompts = [
       this.presetPrompt,
       this.featurePrompt,

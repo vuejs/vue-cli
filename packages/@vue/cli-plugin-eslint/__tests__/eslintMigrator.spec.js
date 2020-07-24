@@ -1,10 +1,6 @@
 jest.setTimeout(300000)
 jest.mock('inquirer')
 
-beforeEach(() => {
-  process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN = true
-})
-
 const create = require('@vue/cli-test-utils/createUpgradableProject')
 const { expectPrompts } = require('inquirer')
 

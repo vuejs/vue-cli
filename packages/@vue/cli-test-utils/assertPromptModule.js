@@ -15,7 +15,7 @@ module.exports = async function assertPromptModule (
     expectedPrompts.unshift(
       {
         message: 'Please pick a preset',
-        choose: 1
+        choose: 2
       }
     )
     expectedPrompts.push(

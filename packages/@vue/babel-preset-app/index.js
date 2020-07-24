@@ -112,7 +112,22 @@ module.exports = (context, options = {}) => {
 
   // JSX
   if (options.jsx !== false) {
-    presets.push([require('@vue/babel-preset-jsx'), typeof options.jsx === 'object' ? options.jsx : {}])
+    let jsxOptions = {}
+    if (typeof options.jsx === 'object') {
+      jsxOptions = options.jsx
+    }
+
+    let vueVersion = 2
+    try {
+      const Vue = require('vue')
+      vueVersion = semver.major(Vue.version)
+    } catch (e) {}
+
+    if (vueVersion === 2) {
+      presets.push([require('@vue/babel-preset-jsx'), jsxOptions])
+    } else if (vueVersion === 3) {
+      plugins.push([require('@ant-design-vue/babel-plugin-jsx'), jsxOptions])
+    }
   }
 
   const runtimePath = path.dirname(require.resolve('@babel/runtime/package.json'))

@@ -63,6 +63,11 @@ beforeAll(async () => {
   )
 })
 
+afterAll(async () => {
+  // avoid the non-existent made-up deps interfere with other tests
+  await project.rm('package.json')
+})
+
 test('dep from node_modules should not been transpiled', async () => {
   await project.run('vue-cli-service build')
   expect(await readVendorFile()).toMatch('() => "__TEST__"')

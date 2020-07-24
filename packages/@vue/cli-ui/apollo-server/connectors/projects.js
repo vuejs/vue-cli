@@ -75,7 +75,9 @@ function getLast (context) {
 }
 
 function generatePresetDescription (preset) {
-  let description = preset.features.join(', ')
+  let description = `[Vue ${preset.raw.vueVersion || 2}] `
+
+  description += preset.features.join(', ')
   if (preset.raw.useConfigFiles) {
     description += ' (Use config files)'
   }
@@ -130,9 +132,16 @@ async function initCreator (context) {
         const features = getFeatures(preset).map(
           f => toShortPluginId(f)
         )
+
+        let name = key
+        if (key === 'default') {
+          name = 'org.vue.views.project-create.tabs.presets.default-preset'
+        } else if (key === '__default_vue_3__') {
+          name = 'org.vue.views.project-create.tabs.presets.default-preset-vue-3-preview'
+        }
         const info = {
           id: key,
-          name: key === 'default' ? 'org.vue.views.project-create.tabs.presets.default-preset' : key,
+          name,
           features,
           link: null,
           raw: preset

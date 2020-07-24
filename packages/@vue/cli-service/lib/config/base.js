@@ -130,7 +130,7 @@ module.exports = (api, options) => {
             .options(vueLoaderCacheConfig)
             .end()
           .use('vue-loader')
-            .loader(require.resolve('vue-loader'))
+            .loader(require.resolve('vue-loader-v16'))
             .options(vueLoaderCacheConfig)
             .end()
           .end()
@@ -138,6 +138,14 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('vue-loader')
           .use(require('vue-loader-v16').VueLoaderPlugin)
+
+      // feature flags <http://link.vuejs.org/feature-flags>
+      webpackConfig
+        .plugin('feature-flags')
+          .use(require('webpack').DefinePlugin, [{
+            __VUE_OPTIONS_API__: 'true',
+            __VUE_PROD_DEVTOOLS__: 'false'
+          }])
     }
 
     // static assets -----------------------------------------------------------

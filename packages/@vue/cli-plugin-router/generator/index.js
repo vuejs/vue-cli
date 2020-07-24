@@ -1,18 +1,38 @@
-module.exports = (api, options = {}) => {
-  api.injectImports(api.entryFile, `import router from './router'`)
-  api.injectRootOptions(api.entryFile, `router`)
+module.exports = (api, options = {}, rootOptions = {}) => {
+  const isVue3 = (rootOptions.vueVersion === '3')
 
-  api.extendPackage({
-    dependencies: {
-      'vue-router': '^3.2.0'
-    }
-  })
+  api.injectImports(api.entryFile, `import router from './router'`)
+
+  if (isVue3) {
+    api.transformScript(api.entryFile, require('./injectUseRouter'))
+    api.extendPackage({
+      dependencies: {
+        'vue-router': '^4.0.0-0'
+      }
+    })
+  } else {
+    api.injectRootOptions(api.entryFile, `router`)
+
+    api.extendPackage({
+      dependencies: {
+        'vue-router': '^3.2.0'
+      }
+    })
+  }
 
   api.render('./template', {
     historyMode: options.historyMode,
     doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
     hasTypeScript: api.hasPlugin('typescript')
   })
+
+  if (isVue3) {
+    api.render('./template-vue3', {
+      historyMode: options.historyMode,
+      doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
+      hasTypeScript: api.hasPlugin('typescript')
+    })
+  }
 
   if (api.invoking) {
     if (api.hasPlugin('typescript')) {
