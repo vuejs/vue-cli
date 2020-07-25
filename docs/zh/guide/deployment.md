@@ -39,7 +39,7 @@ serve -s dist
 
 #### 步骤一：安装云开发 CloudBase  CLI
 
-CloudBase  CLI 集成了  [CloudBase Framework](https://cloudbase.net/framework.html)  的能力，全局安装 CloudBase  CLI  请运行以下命令：
+CloudBase  CLI 集成了  [CloudBase Framework](https://github.com/TencentCloudBase/cloudbase-framework)  的能力，全局安装 CloudBase  CLI  请运行以下命令：
 
 ```
 npm install -g @cloudbase/cli
@@ -47,7 +47,7 @@ npm install -g @cloudbase/cli
 
 #### 步骤二：一键部署
 
-在项目根目录运行以下命令部署 Vue CLI 基于创建的应用：
+在项目根目录运行以下命令部署 Vue CLI 创建的应用：
 
 ```
 cloudbase login
@@ -60,7 +60,7 @@ cloudbase framework:deploy
 - 选择一个环境，如果没有可以选择新建环境
 - 自动检测项目并确认构建脚本，输出目录、部署云端路径等信息
 
-确认信息后 [CloudBase Framework](https://cloudbase.net/framework.html) 会立即进行部署，部署完成后，可以获得一个自动 SSL， CDN 加速的网站应用，你也可以搭配使用 Github Action 来持续部署  Github 上的 Vue 应用。
+确认信息后会立即进行部署，部署完成后，可以获得一个自动 SSL，CDN 加速的网站应用，你也可以搭配使用 Github Action 来持续部署  Github 上的 Vue 应用。
 
 ### 混合部署
 
