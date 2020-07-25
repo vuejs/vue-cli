@@ -69,7 +69,7 @@ cloudbase framework:deploy
 - 使用 `cloudbase init --template vue`  快速创建和部署一个包含 Serverless 云函数后端的 Vue 应用
 - 使用 `cloudbase init --template nuxt-ssr` 快速创建和部署一个包含  SSR 和 Serverless 云函数后端的 Vue 应用
 
-详细信息请查看  CloudBase Framework 的[部署项目示例]([https://github.com/TencentCloudBase/cloudbase-framework#%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B](https://github.com/TencentCloudBase/cloudbase-framework#项目示例))
+详细信息请查看  CloudBase Framework 的[部署项目示例](https://github.com/TencentCloudBase/cloudbase-framework#%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B)
 
 ### GitHub Pages
 
