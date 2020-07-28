@@ -431,7 +431,7 @@ npm install --global surge
 
 ### Docker (Nginx)
 
-Deploy your application using nginx inside of a docker container.
+Опубликуйте ваше приложение, используя nginx внутри docker контейнера.
 
 1. Установите [docker](https://www.docker.com/get-started)
 
