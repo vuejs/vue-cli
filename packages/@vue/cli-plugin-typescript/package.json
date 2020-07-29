@@ -34,6 +34,9 @@
     "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
+  "optionalDependencies": {
+    "fork-ts-checker-webpack-plugin-v5": "npm:fork-ts-checker-webpack-plugin@^5.0.11"
+  },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0",
     "@vue/compiler-sfc": "^3.0.0-beta.14",
