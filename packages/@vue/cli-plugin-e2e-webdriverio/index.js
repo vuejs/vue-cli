@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 
 const { info, chalk, execa } = require('@vue/cli-shared-utils')
@@ -32,9 +33,10 @@ module.exports = (api, options) => {
         rawArgs.push(`--baseUrl=${url}`)
       }
 
+      const isTS = fs.existsSync(path.join(process.cwd(), 'tsconfig.json'))
       const configFile = !args.remote
-        ? path.join(process.cwd(), 'tests', 'wdio.local.conf.js')
-        : path.join(process.cwd(), 'tests', 'wdio.sauce.conf.js')
+        ? path.join(process.cwd(), 'wdio.local.conf.' + (isTS ? 'ts' : 'js'))
+        : path.join(process.cwd(), 'wdio.sauce.conf.' + (isTS ? 'ts' : 'js'))
       const wdioBinPath = require.resolve('@wdio/cli/bin/wdio')
 
       const runArgs = ['run', configFile, ...rawArgs]

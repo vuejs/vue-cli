@@ -1,4 +1,4 @@
-const { config } = require('./wdio.shared.conf')
+<%- hasTS ? 'import { config } from \'./wdio.shared.conf.ts\'' : 'const { config } = require(\'./wdio.shared.conf\')' %>
 
 const BUILD_ID = Math.ceil(Date.now() / 1000)
 

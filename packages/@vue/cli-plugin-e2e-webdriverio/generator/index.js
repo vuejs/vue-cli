@@ -13,12 +13,14 @@ module.exports = (api, { webdrivers }) => {
 
   if (webdrivers && webdrivers.includes('firefox')) {
     devDependencies.geckodriver = pluginDeps.geckodriver
+    devDependencies['wdio-geckodriver-service'] = pluginDeps['wdio-geckodriver-service']
   }
   if (webdrivers && webdrivers.includes('chrome')) {
     // chromedriver major version bumps every 6 weeks following Chrome
     // so there may be a mismatch between
     // user's installed browser version and the default provided version
     // fallback to the devDependencies version in case detection fails
+    devDependencies['wdio-chromedriver-service'] = pluginDeps['wdio-chromedriver-service']
     devDependencies.chromedriver = installedBrowsers.chrome
       ? installedBrowsers.chrome.match(/^(\d+)\./)[1]
       : pluginDeps.chromedriver

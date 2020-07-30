@@ -12,4 +12,5 @@ class App {
   }
 }
 
-module.exports = new App()
+<%- hasTS ? 'export default new App()' : 'module.exports = new App()' %>
+

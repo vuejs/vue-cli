@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+const path = require('path')
 
 exports.config = {
   // ==================
@@ -10,7 +11,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    __dirname + '/tests/e2e/**/*.spec.js'
+    path.join(__dirname, '/tests/e2e/**/*.spec.js')
   ],
   // Patterns to exclude.
   exclude: [
@@ -27,7 +28,7 @@ exports.config = {
   logLevel: 'trace',
   //
   // Set directory to store all logs into
-  outputDir: __dirname + '/logs',
+  outputDir: path.join(__dirname, '/logs'),
   //
   // If you only want to run your tests until a specific amount of tests have failed use
   // bail (default is 0 - don't bail, run all tests).
@@ -60,6 +61,7 @@ exports.config = {
   mochaOpts: {
     ui: 'bdd',
     timeout: 30000,
+    <%- hasTS ? 'require: \'ts-node/register\'' : '' %>
   },
   //
   // =====

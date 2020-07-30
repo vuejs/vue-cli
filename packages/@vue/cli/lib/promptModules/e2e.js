@@ -36,7 +36,7 @@ module.exports = cli => {
 
   cli.injectPrompt({
     name: 'webdrivers',
-    when: answers => answers.e2e === 'nightwatch',
+    when: answers => ['nightwatch', 'webdriverio'].includes(answers.e2e),
     type: `checkbox`,
     message: `Pick browsers to run end-to-end test on`,
     choices: [

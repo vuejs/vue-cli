@@ -33,11 +33,18 @@
     "@wdio/spec-reporter": "^6.1.9",
     "@wdio/sync": "^6.1.8",
     "eslint-plugin-wdio": "^6.0.12",
-    "webdriverio": "^6.1.11",
-    "wdio-chromedriver-service": "^6.0.3"
+    "webdriverio": "^6.1.11"
   },
   "peerDependencies": {
-    "chromedriver": "*"
+    "chromedriver": "*",
+    "geckodriver": "*",
+    "wdio-chromedriver-service": "^6.0.3",
+    "wdio-geckodriver-service": "^1.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chromedriver": "*",
+    "geckodriver": "*",
+    "wdio-chromedriver-service": "^6.0.3",
+    "wdio-geckodriver-service": "^1.1.0"
+  }
 }
