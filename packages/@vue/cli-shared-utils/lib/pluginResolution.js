@@ -6,6 +6,7 @@ const officialPlugins = [
   'babel',
   'e2e-cypress',
   'e2e-nightwatch',
+  'e2e-webdriverio',
   'eslint',
   'pwa',
   'router',

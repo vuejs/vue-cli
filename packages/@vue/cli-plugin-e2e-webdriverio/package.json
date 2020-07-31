@@ -1,0 +1,50 @@
+{
+  "name": "@vue/cli-plugin-e2e-webdriverio",
+  "version": "4.3.1",
+  "description": "e2e-webdriverio plugin for vue-cli",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-plugin-e2e-webdriverio"
+  },
+  "keywords": [
+    "vue",
+    "cli",
+    "wdio",
+    "webdriverio",
+    "e2e-webdriverio"
+  ],
+  "author": "Christian Bromann <christian@saucelabs.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-e2e-webdriverio#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@vue/cli-shared-utils": "^4.3.1",
+    "@wdio/cli": "^6.1.11",
+    "@wdio/local-runner": "^6.1.11",
+    "@wdio/mocha-framework": "^6.1.8",
+    "@wdio/sauce-service": "^6.1.9",
+    "@wdio/spec-reporter": "^6.1.9",
+    "@wdio/sync": "^6.1.8",
+    "eslint-plugin-wdio": "^6.0.12",
+    "webdriverio": "^6.1.11"
+  },
+  "peerDependencies": {
+    "chromedriver": "84.0.1",
+    "geckodriver": "1.19.1",
+    "wdio-chromedriver-service": "^6.0.3",
+    "wdio-geckodriver-service": "^1.1.0"
+  },
+  "devDependencies": {
+    "chromedriver": "84.0.1",
+    "geckodriver": "1.19.1",
+    "wdio-chromedriver-service": "^6.0.3",
+    "wdio-geckodriver-service": "^1.1.0"
+  }
+}

@@ -446,3 +446,7 @@ See [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/pack
 ### Nightwatch
 
 See [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch) for more details.
+
+### WebdriverIO
+
+See [@vue/cli-plugin-e2e-webdriverio](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-webdriverio) for more details.

@@ -184,7 +184,8 @@ module.exports = {
               '/core-plugins/unit-jest.md',
               '/core-plugins/unit-mocha.md',
               '/core-plugins/e2e-cypress.md',
-              '/core-plugins/e2e-nightwatch.md'
+              '/core-plugins/e2e-nightwatch.md',
+              '/core-plugins/e2e-webdriverio.md'
             ]
           }],
 
