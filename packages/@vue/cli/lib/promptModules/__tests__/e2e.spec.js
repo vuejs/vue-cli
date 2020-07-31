@@ -77,6 +77,11 @@ test('webdriverio', async () => {
       message: 'Pick an E2E testing solution',
       choices: ['Cypress', 'Nightwatch', 'WebdriverIO'],
       choose: 2
+    },
+    {
+      message: 'Pick browsers to run end-to-end test on',
+      choice: ['Chrome', 'Firefox'],
+      check: [0, 1]
     }
   ]
 
