@@ -42,8 +42,8 @@
     "wdio-geckodriver-service": "^1.1.0"
   },
   "devDependencies": {
-    "chromedriver": "*",
-    "geckodriver": "*",
+    "chromedriver": "84.0.1",
+    "geckodriver": "1.19.1",
     "wdio-chromedriver-service": "^6.0.3",
     "wdio-geckodriver-service": "^1.1.0"
   }
