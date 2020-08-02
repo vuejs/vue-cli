@@ -54,7 +54,9 @@ test('nightwatch', async () => {
 
   const expectedOptions = {
     plugins: {
-      '@vue/cli-plugin-e2e-nightwatch': {}
+      '@vue/cli-plugin-e2e-nightwatch': {
+        webdrivers: ['chrome', 'firefox']
+      }
     }
   }
 
@@ -87,7 +89,9 @@ test('webdriverio', async () => {
 
   const expectedOptions = {
     plugins: {
-      '@vue/cli-plugin-e2e-webdriverio': {}
+      '@vue/cli-plugin-e2e-webdriverio': {
+        webdrivers: ['chrome', 'firefox']
+      }
     }
   }
 
