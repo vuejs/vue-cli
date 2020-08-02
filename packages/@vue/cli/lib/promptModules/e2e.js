@@ -58,9 +58,13 @@ module.exports = cli => {
     if (answers.e2e === 'cypress') {
       options.plugins['@vue/cli-plugin-e2e-cypress'] = {}
     } else if (answers.e2e === 'nightwatch') {
-      options.plugins['@vue/cli-plugin-e2e-nightwatch'] = {}
+      options.plugins['@vue/cli-plugin-e2e-nightwatch'] = {
+        webdrivers: answers.webdrivers
+      }
     } else if (answers.e2e === 'webdriverio') {
-      options.plugins['@vue/cli-plugin-e2e-webdriverio'] = {}
+      options.plugins['@vue/cli-plugin-e2e-webdriverio'] = {
+        webdrivers: answers.webdrivers
+      }
     }
   })
 }
