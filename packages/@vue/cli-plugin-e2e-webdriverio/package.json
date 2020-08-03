@@ -36,14 +36,28 @@
     "webdriverio": "^6.1.11"
   },
   "peerDependencies": {
-    "chromedriver": "84.0.1",
-    "geckodriver": "1.19.1",
+    "chromedriver": "*",
+    "geckodriver": "*",
     "wdio-chromedriver-service": "^6.0.3",
     "wdio-geckodriver-service": "^1.1.0"
   },
+  "peerDependenciesMeta": {
+    "chromedriver": {
+      "optional": true
+    },
+    "geckodriver": {
+      "optional": true
+    },
+    "wdio-chromedriver-service": {
+      "optional": true
+    },
+    "wdio-geckodriver-service": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "chromedriver": "84.0.1",
-    "geckodriver": "1.19.1",
+    "chromedriver": "^84.0.1",
+    "geckodriver": "^1.20.0",
     "wdio-chromedriver-service": "^6.0.3",
     "wdio-geckodriver-service": "^1.1.0"
   }
