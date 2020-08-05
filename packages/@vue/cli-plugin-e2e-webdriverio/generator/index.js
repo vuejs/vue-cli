@@ -11,6 +11,10 @@ module.exports = (api, { webdrivers }) => {
   // Use devDependencies to store latest version number so as to automate update
   const pluginDeps = require('../package.json').devDependencies
 
+  if (api.hasPlugin('typescript')) {
+    devDependencies['ts-node'] = pluginDeps['ts-node']
+  }
+
   if (webdrivers && webdrivers.includes('firefox')) {
     devDependencies.geckodriver = pluginDeps.geckodriver
     devDependencies['wdio-geckodriver-service'] = pluginDeps['wdio-geckodriver-service']

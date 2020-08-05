@@ -9,6 +9,7 @@ const CLI_OPTIONS = Object.entries(cmdArgs).reduce((obj, [param, { desc }]) => {
   return obj
 }, {})
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   api.registerCommand('test:e2e', {
     description: 'run end-to-end tests with WebdriverIO',
@@ -33,11 +34,16 @@ module.exports = (api, options) => {
         rawArgs.push(`--baseUrl=${url}`)
       }
 
-      const isTS = fs.existsSync(path.join(process.cwd(), 'tsconfig.json'))
+      const isTS = fs.existsSync(path.join(api.getCwd(), 'tsconfig.json'))
       const configFile = !args.remote
-        ? path.join(process.cwd(), 'wdio.local.conf.' + (isTS ? 'ts' : 'js'))
-        : path.join(process.cwd(), 'wdio.sauce.conf.' + (isTS ? 'ts' : 'js'))
+        ? path.join(api.getCwd(), 'wdio.local.conf.' + (isTS ? 'ts' : 'js'))
+        : path.join(api.getCwd(), 'wdio.sauce.conf.' + (isTS ? 'ts' : 'js'))
       const wdioBinPath = require.resolve('@wdio/cli/bin/wdio')
+
+      if (isTS) {
+        // make sure ts-node runs with commonjs format, as it does not support esm
+        process.env.TS_NODE_COMPILER_OPTIONS = '{ "module": "commonjs" }'
+      }
 
       const runArgs = ['run', configFile, ...rawArgs]
       info(`Start WebdriverIO: $ wdio ${runArgs.join(' ')}`)
