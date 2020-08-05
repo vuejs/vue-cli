@@ -28,10 +28,10 @@ The following structure will be generated when installing this plugin:
 ```
 tests/e2e/
   ├── pageobjects/
-  |   └── app.js
+  |   └── app.page.js
   ├── specs/
   |   ├── app.spec.js
-  └── globals.js
+  └── .eslintrc.js
 ```
 
 In addition to that there will be 3 configuration files generated:
