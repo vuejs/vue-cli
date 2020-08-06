@@ -1,4 +1,41 @@
 
+## 4.5.1 (2020-08-06)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-shared-utils`, `@vue/cli`
+  * [#5479](https://github.com/vuejs/vue-cli/pull/5479) feat(e2e-webdriverio): add e2e plugin for WebdriverIO ([@christian-bromann](https://github.com/christian-bromann))
+* `@vue/cli-service`
+  * [#5725](https://github.com/vuejs/vue-cli/pull/5725) feat: implement a migrator that removes `vue-cli-plugin-next` as it's no longer needed ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`
+  * [#5731](https://github.com/vuejs/vue-cli/pull/5731) fix: fix skipLibCheck default value for `vue create` ([@sodatea](https://github.com/sodatea))
+  * [#5722](https://github.com/vuejs/vue-cli/pull/5722) fix: use fork-ts-checker-webpack-plugin v5 for vue 3 type checking ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5744](https://github.com/vuejs/vue-cli/pull/5744) fix: ignore `.svn/**` when reading and writing files ([@sodatea](https://github.com/sodatea))
+  * [#5736](https://github.com/vuejs/vue-cli/pull/5736) fix(e2e): shouldn't install webdrivers for unchecked browsers on creation ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5718](https://github.com/vuejs/vue-cli/pull/5718) fix: make vue-loader-v16 an optional dependency, avoid crashing npm 5 ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-service`
+  * [#5759](https://github.com/vuejs/vue-cli/pull/5759) chore: update type definition test ([@jamesgeorge007](https://github.com/jamesgeorge007))
+  * [#5735](https://github.com/vuejs/vue-cli/pull/5735) refactor(cli-service): webpack `devtool` option ([@jeneser](https://github.com/jeneser))
+
+#### :hammer: Underlying Tools
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-service`, `@vue/cli-test-utils`
+  * [#5742](https://github.com/vuejs/vue-cli/pull/5742) chore: dependency maintenance ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 6
+- Booker Zhao ([@binggg](https://github.com/binggg))
+- Christian Bromann ([@christian-bromann](https://github.com/christian-bromann))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- James George ([@jamesgeorge007](https://github.com/jamesgeorge007))
+- Renato Vicente ([@Renato66](https://github.com/Renato66))
+- Yazhe Wang ([@jeneser](https://github.com/jeneser))
+
+
+
 ## 4.5.0 (2020-07-24)
 
 #### :rocket: New Features
