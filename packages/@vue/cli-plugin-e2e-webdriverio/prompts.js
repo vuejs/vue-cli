@@ -4,7 +4,7 @@ module.exports = [
   {
     name: 'webdrivers',
     type: `checkbox`,
-    message: `Pick browsers to run end-to-end test on!!!!!`,
+    message: `Pick browsers to run end-to-end test on`,
     choices: [
       {
         name: `Chrome`,
