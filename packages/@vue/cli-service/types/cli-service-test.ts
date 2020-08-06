@@ -25,7 +25,7 @@ const servicePlugin: ServicePlugin = (api, options) => {
 
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-      webpackConfig.devtool('cheap-module-eval-source-map')
+      webpackConfig.devtool('eval-cheap-module-source-map')
 
       webpackConfig.plugin('hmr').use(require('webpack/lib/HotModuleReplacementPlugin'))
 
