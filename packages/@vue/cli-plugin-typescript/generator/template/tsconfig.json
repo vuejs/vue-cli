@@ -20,7 +20,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"<% if (hasMocha || hasJest) { %>,<% } %>
+      "webpack-env"<% if (hasMocha || hasJest || hasWebDriverIO) { %>,<% } %>
+      <%_ if (hasWebDriverIO) { _%>
+      "@wdio/mocha-framework",
+      "@wdio/sync"<% if (hasMocha || hasJest) { %>,<% } %>
+      <%_ } _%>
       <%_ if (hasMocha) { _%>
       "mocha",
       "chai"

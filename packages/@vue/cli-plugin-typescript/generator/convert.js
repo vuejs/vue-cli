@@ -1,6 +1,10 @@
 module.exports = (api, { tsLint = false, convertJsToTs = true } = {}) => {
   const jsRE = /\.js$/
-  const excludeRE = /^tests\/e2e\/|(\.config|rc)\.js$/
+  let excludeRE = /^tests\/e2e\/|(\.config|rc)\.js$/
+
+  if (api.hasPlugin('e2e-webdriverio')) {
+    excludeRE = /(\.config|rc)\.js$/
+  }
   const convertLintFlags = require('../lib/convertLintFlags')
   api.postProcessFiles(files => {
     if (convertJsToTs) {

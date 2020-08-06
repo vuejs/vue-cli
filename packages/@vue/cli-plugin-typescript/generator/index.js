@@ -93,7 +93,8 @@ module.exports = (api, {
   api.render('./template', {
     skipLibCheck,
     hasMocha: api.hasPlugin('unit-mocha'),
-    hasJest: api.hasPlugin('unit-jest')
+    hasJest: api.hasPlugin('unit-jest'),
+    hasWebDriverIO: api.hasPlugin('e2e-webdriverio')
   })
 
   if (isVue3) {
