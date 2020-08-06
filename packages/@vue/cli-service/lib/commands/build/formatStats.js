@@ -2,7 +2,7 @@ module.exports = function formatStats (stats, dir, api) {
   const fs = require('fs')
   const path = require('path')
   const zlib = require('zlib')
-  const ui = require('cliui')({ width: 80 })
+  const ui = require('cliui')({ width: process.stdout.columns || 80 })
   const { chalk } = require('@vue/cli-shared-utils')
 
   const json = stats.toJson({
