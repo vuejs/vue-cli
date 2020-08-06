@@ -31,7 +31,7 @@ exports.config = {
   logLevel: 'trace',
   //
   // Set directory to store all logs into
-  outputDir: path.join(__dirname, '/logs'),
+  outputDir: path.join(__dirname, 'test/e2e/logs'),
   //
   // If you only want to run your tests until a specific amount of tests have failed use
   // bail (default is 0 - don't bail, run all tests).
