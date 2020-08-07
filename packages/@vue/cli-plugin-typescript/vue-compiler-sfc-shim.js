@@ -1,7 +1,7 @@
 const compilerSFC = require('@vue/compiler-sfc')
 
 module.exports = {
-  parseComponent (content, options) {
+  parse (content, options) {
     const result = compilerSFC.parse(content, options)
     const { script } = result.descriptor
 
