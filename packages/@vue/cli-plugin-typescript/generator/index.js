@@ -4,12 +4,14 @@ module.exports = (api, {
   classComponent,
   tsLint,
   lintOn = [],
+  skipLibCheck = true,
   convertJsToTs,
   allowJs
-}, _, invoking) => {
+}, rootOptions, invoking) => {
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
+  const isVue3 = rootOptions && rootOptions.vueVersion === '3'
 
   api.extendPackage({
     devDependencies: {
@@ -18,12 +20,20 @@ module.exports = (api, {
   })
 
   if (classComponent) {
-    api.extendPackage({
-      dependencies: {
-        'vue-class-component': pluginDevDeps['vue-class-component'],
-        'vue-property-decorator': pluginDevDeps['vue-property-decorator']
-      }
-    })
+    if (isVue3) {
+      api.extendPackage({
+        dependencies: {
+          'vue-class-component': '^8.0.0-0'
+        }
+      })
+    } else {
+      api.extendPackage({
+        dependencies: {
+          'vue-class-component': pluginDevDeps['vue-class-component'],
+          'vue-property-decorator': pluginDevDeps['vue-property-decorator']
+        }
+      })
+    }
   }
 
   if (tsLint) {
@@ -81,10 +91,19 @@ module.exports = (api, {
   }
 
   api.render('./template', {
-    isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,
+    skipLibCheck,
     hasMocha: api.hasPlugin('unit-mocha'),
-    hasJest: api.hasPlugin('unit-jest')
+    hasJest: api.hasPlugin('unit-jest'),
+    hasWebDriverIO: api.hasPlugin('e2e-webdriverio')
   })
+
+  if (isVue3) {
+    api.render('./template-vue3')
+
+    // In Vue 3, TSX interface is defined in https://github.com/vuejs/vue-next/blob/master/packages/runtime-dom/types/jsx.d.ts
+    // So no need to manually add a shim.
+    api.render((files) => delete files['src/shims-tsx.d.ts'])
+  }
 
   require('./convert')(api, { tsLint, convertJsToTs })
 }

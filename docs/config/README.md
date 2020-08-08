@@ -330,7 +330,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 
   - Some values like `host`, `port` and `https` may be overwritten by command line flags.
 
-  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [publicPath](#baseurl) for the dev server to function properly.
+  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [publicPath](#publicPath) for the dev server to function properly.
 
 ### devServer.proxy
 
@@ -446,3 +446,7 @@ See [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/pack
 ### Nightwatch
 
 See [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch) for more details.
+
+### WebdriverIO
+
+See [@vue/cli-plugin-e2e-webdriverio](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-webdriverio) for more details.

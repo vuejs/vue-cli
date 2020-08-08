@@ -73,19 +73,46 @@ module.exports = {
             link: '/config/'
           },
           {
-            text: 'Plugin Dev Guide',
-            items: [
-              { text: 'Plugin Dev Guide', link: '/dev-guide/plugin-dev.md' },
-              { text: 'UI Plugin Info', link: '/dev-guide/ui-info.md' },
-              { text: 'UI Plugin API', link: '/dev-guide/ui-api.md' },
-              { text: 'UI Localization', link: '/dev-guide/ui-localization.md' }
-            ]
-          },
-          {
             text: 'Plugins',
             items: [
-              { text: 'Core plugins', link: '/core-plugins/' },
-              { text: 'Browse plugins', link: 'https://awesomejs.dev/for/vue-cli/' }
+              {
+                text: 'Configuration',
+                items:
+                [
+                  { text: 'Core', link: '/core-plugins/' },
+                ]
+              },
+              {
+                text: 'Discover',
+                items:
+                [
+                  { text: 'Browse', link: 'https://awesomejs.dev/for/vue-cli/' }
+                ]
+              },
+              {
+                text: 'Development',
+                items:
+                [
+                  { text: 'Guide', link: '/dev-guide/plugin-dev.md' },
+                ]
+              },
+              {
+                text: 'API',
+                items:
+                [
+                  { text: 'Plugin', link: '/dev-guide/plugin-api.md' },
+                  { text: 'Generator', link: '/dev-guide/generator-api.md' },
+                ]
+              },
+              {
+                text: 'UI',
+                items:
+                [
+                  { text: 'Info', link: '/dev-guide/ui-info.md' },
+                  { text: 'API', link: '/dev-guide/ui-api.md' },
+                  { text: 'Localization', link: '/dev-guide/ui-localization.md' }
+                ]
+              },
             ]
           },
           {
@@ -157,7 +184,8 @@ module.exports = {
               '/core-plugins/unit-jest.md',
               '/core-plugins/unit-mocha.md',
               '/core-plugins/e2e-cypress.md',
-              '/core-plugins/e2e-nightwatch.md'
+              '/core-plugins/e2e-nightwatch.md',
+              '/core-plugins/e2e-webdriverio.md'
             ]
           }],
 

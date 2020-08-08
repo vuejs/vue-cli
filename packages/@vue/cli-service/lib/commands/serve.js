@@ -51,7 +51,7 @@ module.exports = (api, options) => {
     api.chainWebpack(webpackConfig => {
       if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
         webpackConfig
-          .devtool('cheap-module-eval-source-map')
+          .devtool('eval-cheap-module-source-map')
 
         webpackConfig
           .plugin('hmr')
@@ -345,10 +345,13 @@ function addDevClientToEntry (config, devClient) {
 
 // https://stackoverflow.com/a/20012536
 function checkInContainer () {
+  if ('CODESANDBOX_SSE' in process.env) {
+    return true
+  }
   const fs = require('fs')
   if (fs.existsSync(`/proc/1/cgroup`)) {
     const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
-    return /:\/(lxc|docker|kubepods)\//.test(content)
+    return /:\/(lxc|docker|kubepods(\.slice)?)\//.test(content)
   }
 }
 

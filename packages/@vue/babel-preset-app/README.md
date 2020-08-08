@@ -11,8 +11,8 @@ This is the default Babel preset used in all Vue CLI projects. **Note: this pres
 - `modules: false`
   - auto set to `'commonjs'` in Jest tests
 - [`useBuiltIns: 'usage'`](#usebuiltins)
-- `targets` is determined:
-  - using `browserslist` field in `package.json` when building for browsers
+- `targets`:
+  - by default `@babel/preset-env` will use [`browserslist config sources`](https://github.com/browserslist/browserslist#queries) (browserslist key in package.json file is recommend) unless either the [`targets`](https://babeljs.io/docs/en/babel-preset-env#targets) or [`ignoreBrowserslistConfig`](https://babeljs.io/docs/en/babel-preset-env#ignorebrowserslistconfig) options are set.
   - set to `{ node: 'current' }` when running unit tests in Node.js
 - Includes `Promise` polyfill by default so that they are usable even in non-transpiled dependencies (only for environments that need it)
 
@@ -50,7 +50,7 @@ Explicitly set `modules` option for `babel-preset-env`. See [babel-preset-env do
 ### targets
 
 - Default:
-  - determined from `browserslist` field in `package.json` when building for browsers
+  - `@vue/babel-preset-app` will use [`browserslist config sources`](https://github.com/browserslist/browserslist#queries) (browserslist key in package.json file is recommend) unless either the [`targets`](https://babeljs.io/docs/en/babel-preset-env#targets) or [`ignoreBrowserslistConfig`](https://babeljs.io/docs/en/babel-preset-env#ignorebrowserslistconfig) options are set.
   - set to `{ node: 'current' }` when running unit tests in Node.js
 
 Explicitly set `targets` option for `babel-preset-env`. See [babel-preset-env docs](https://github.com/babel/babel/tree/master/packages/babel-preset-env#targets) for more details.
@@ -88,7 +88,7 @@ Use this option when you have 3rd party dependencies that are not processed by B
 
 - Default: `true`.
 
-Set to `false` to disable JSX support. Or you can toggle [@vue/babel-preset-jsx](https://github.com/vuejs/jsx/tree/dev/packages/babel-preset-jsx) features here.
+Set to `false` to disable JSX support. Or you can toggle [@vue/babel-preset-jsx](https://github.com/vuejs/jsx/tree/dev/packages/babel-preset-jsx) (or [@ant-design-vue/babel-plugin-jsx](https://github.com/vueComponent/jsx) for Vue 3 projects) features here.
 
 ### loose
 

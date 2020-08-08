@@ -8,6 +8,7 @@ const { createSchema, validate } = require('@vue/cli-shared-utils/lib/validate')
 const rcPath = exports.rcPath = getRcPath('.vuerc')
 
 const presetSchema = createSchema(joi => joi.object().keys({
+  vueVersion: joi.string().only(['2', '3']),
   bare: joi.boolean(),
   useConfigFiles: joi.boolean(),
   // TODO: Use warn for router and vuex once @hapi/joi v16 releases
@@ -50,7 +51,8 @@ exports.defaults = {
   packageManager: undefined,
   useTaobaoRegistry: undefined,
   presets: {
-    'default': exports.defaultPreset
+    'default': Object.assign({ vueVersion: '2' }, exports.defaultPreset),
+    '__default_vue_3__': Object.assign({ vueVersion: '3' }, exports.defaultPreset)
   }
 }
 

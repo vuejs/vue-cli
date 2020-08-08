@@ -279,7 +279,10 @@ module.exports = class Service {
       )
     }
 
-    if (typeof config.entry !== 'function') {
+    if (
+      !process.env.VUE_CLI_ENTRY_FILES &&
+      typeof config.entry !== 'function'
+    ) {
       let entryFiles
       if (typeof config.entry === 'string') {
         entryFiles = [config.entry]
@@ -314,6 +317,7 @@ module.exports = class Service {
       const resolvedPath = p && path.resolve(this.context, p)
       if (resolvedPath && fs.existsSync(resolvedPath)) {
         fileConfigPath = resolvedPath
+        break
       }
     }
 

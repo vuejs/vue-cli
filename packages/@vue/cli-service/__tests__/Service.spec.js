@@ -67,7 +67,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       bar: '^1.0.0',
-      '@vue/cli-plugin-babel': '^4.4.0',
+      '@vue/cli-plugin-babel': '^4.5.0',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -318,6 +318,8 @@ test('api: configureWebpack preserve ruleNames', () => {
 })
 
 test('internal: should correctly set VUE_CLI_ENTRY_FILES', () => {
+  delete process.env.VUE_CLI_ENTRY_FILES
+
   const service = createMockService([{
     id: 'test',
     apply: api => {

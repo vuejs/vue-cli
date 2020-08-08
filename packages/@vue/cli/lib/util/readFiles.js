@@ -10,7 +10,7 @@ module.exports = async function readFiles (context) {
     cwd: context,
     onlyFiles: true,
     gitignore: true,
-    ignore: ['**/node_modules/**', '**/.git/**'],
+    ignore: ['**/node_modules/**', '**/.git/**', '**/.svn/**'],
     dot: true
   })
   const res = {}
