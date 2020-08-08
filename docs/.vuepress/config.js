@@ -400,7 +400,8 @@ module.exports = {
               '/ru/core-plugins/unit-jest.md',
               '/ru/core-plugins/unit-mocha.md',
               '/ru/core-plugins/e2e-cypress.md',
-              '/ru/core-plugins/e2e-nightwatch.md'
+              '/ru/core-plugins/e2e-nightwatch.md',
+              '/ru/core-plugins/e2e-webdriverio.md',
             ]
           }]
         }
