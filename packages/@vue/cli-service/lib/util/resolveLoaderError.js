@@ -20,7 +20,7 @@ exports.transformer = error => {
       const match = message.match(re)
       if (match) {
         return Object.assign({}, error, {
-          // type is necessary to avoid being printed as defualt error
+          // type is necessary to avoid being printed as default error
           // by friendly-error-webpack-plugin
           type,
           shortMessage: msg(error, match)

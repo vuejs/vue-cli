@@ -1,5 +1,5 @@
 /**
- * This file is copied during the test inside the project folder and used to inpsect the results
+ * This file is copied during the test inside the project folder and used to inspect the results
  */
 const fs = require('fs')
 

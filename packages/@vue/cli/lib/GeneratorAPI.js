@@ -227,7 +227,7 @@ class GeneratorAPI {
       warnIncompatibleVersions: true
     }
 
-    // this condition statement is added for compatiblity reason, because
+    // this condition statement is added for compatibility reason, because
     // in version 4.0.0 to 4.1.2, there's no `options` object, but a `forceNewVersion` flag
     if (typeof options === 'boolean') {
       extendOptions.warnIncompatibleVersions = !options
