@@ -46,7 +46,7 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     const extensions = require('../eslintOptions').extensions(api)
       .map(ext => ext.replace(/^\./, ''))  // remove the leading `.`
     pkg['lint-staged'] = {
-      [`*.{${extentions.join(',')}}`]: ['vue-cli-service lint', 'git add']
+      [`*.{${extensions.join(',')}}`]: ['vue-cli-service lint', 'git add']
     }
   }
 
