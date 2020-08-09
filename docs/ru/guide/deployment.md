@@ -255,7 +255,7 @@ firebase deploy --only hosting
 
 Если вы хотите использовать другие возможности Firebase CLI, которые вы используете в своём проекте для публикации, запустите `firebase deploy` без опции `--only`.
 
-Теперь можно открыть проект по адресу `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
+Теперь можно открыть проект по адресу `https://<YOUR-PROJECT-ID>.firebaseapp.com` или `https://<YOUR-PROJECT-ID>.web.app`.
 
 Обратитесь к [документации Firebase](https://firebase.google.com/docs/hosting/deploying) для получения более подробной информации.
 
