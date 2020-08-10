@@ -1,4 +1,25 @@
 
+## 4.5.2 (2020-08-10)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`
+  * [#5768](https://github.com/vuejs/vue-cli/pull/5768) fix: no longer need a shim for fork-ts-checker vue 3 support ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-service`, `@vue/cli`
+  * [#5694](https://github.com/vuejs/vue-cli/pull/5694) [Fix] common misspelling errors ([@Necmttn](https://github.com/Necmttn))
+
+#### :house: Internal
+* `@vue/babel-preset-app`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-service`, `@vue/cli`
+  * [#5694](https://github.com/vuejs/vue-cli/pull/5694) [Fix] common misspelling errors ([@Necmttn](https://github.com/Necmttn))
+
+#### Committers: 3
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Necmettin Karakaya ([@Necmttn](https://github.com/Necmttn))
+
+
+
 ## 4.5.1 (2020-08-06)
 
 #### :rocket: New Features

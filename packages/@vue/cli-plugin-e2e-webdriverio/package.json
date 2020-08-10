@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-webdriverio",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "description": "e2e-webdriverio plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^4.5.1",
+    "@vue/cli-shared-utils": "^4.5.2",
     "@wdio/cli": "^6.1.11",
     "@wdio/local-runner": "^6.1.11",
     "@wdio/mocha-framework": "^6.1.8",
