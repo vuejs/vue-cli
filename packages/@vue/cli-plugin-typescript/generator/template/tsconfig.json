@@ -22,6 +22,7 @@
     "types": [
       "webpack-env"<% if (hasMocha || hasJest || hasWebDriverIO) { %>,<% } %>
       <%_ if (hasWebDriverIO) { _%>
+      <% if (!hasMocha && !hasJest) { %>"mocha",<% } %>
       "@wdio/mocha-framework",
       "@wdio/sync"<% if (hasMocha || hasJest) { %>,<% } %>
       <%_ } _%>

@@ -25,6 +25,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@types/mocha": "^8.0.1",
     "@vue/cli-shared-utils": "^4.5.2",
     "@wdio/cli": "^6.1.11",
     "@wdio/local-runner": "^6.1.11",
