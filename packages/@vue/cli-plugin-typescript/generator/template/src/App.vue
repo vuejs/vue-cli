@@ -1,5 +1,6 @@
 ---
 extend: '@vue/cli-service/generator/template/src/App.vue'
+when: "rootOptions.plugins && !rootOptions.plugins['@vue/cli-plugin-router']"
 replace:
   - !!js/regexp /Welcome to Your Vue\.js App/g
   - !!js/regexp /<script>[^]*?<\/script>/
