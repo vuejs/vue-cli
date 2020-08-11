@@ -1,4 +1,5 @@
-const ipc = require('node-ipc')
+const net = require('net')
+const path = require('path')
 
 const DEFAULT_ID = process.env.VUE_CLI_IPC || 'vue-cli'
 const DEFAULT_IDLE_TIMEOUT = 3000
@@ -9,22 +10,22 @@ const DEFAULT_OPTIONS = {
   idleTimeout: DEFAULT_IDLE_TIMEOUT,
   namespaceOnProject: true
 }
-
 const PROJECT_ID = process.env.VUE_CLI_PROJECT_ID
 
-exports.IpcMessenger = class IpcMessenger {
+exports.NewIpcMessenger = class NewIpcMessenger {
   constructor (options = {}) {
-    options = Object.assign({}, DEFAULT_OPTIONS, options)
-    ipc.config.id = this.id = options.networkId
-    ipc.config.retry = 1500
-    ipc.config.silent = true
+    this.options = Object.assign({}, DEFAULT_OPTIONS, options)
+
+    this.id = this.options.networkId
+
+    // per the node-ipc documentation
+    // TODO: windows socket path
+    this.socketPath = path.join('/tmp/', `app.${this.id}`)
 
     this.connected = false
     this.connecting = false
     this.disconnecting = false
-    this.queue = []
-    this.options = options
-
+    this.queue = null
     this.listeners = []
 
     this.disconnectTimeout = 15000
@@ -35,18 +36,13 @@ exports.IpcMessenger = class IpcMessenger {
     process.exit = code => {
       process.exitCode = code
     }
-
-    this._reset()
   }
 
   checkConnection () {
-    if (!ipc.of[this.id]) {
-      this.connected = false
-    }
+    // TODO: not sure how to abstract this under the current implementation
   }
 
   send (data, type = 'message') {
-    this.checkConnection()
     if (this.connected) {
       if (this.options.namespaceOnProject && PROJECT_ID) {
         data = {
@@ -55,7 +51,8 @@ exports.IpcMessenger = class IpcMessenger {
         }
       }
 
-      ipc.of[this.id].emit(type, data)
+      // the packet format is compatible with node-ipc default
+      this._client.write(JSON.stringify({ type, data }) + '\f', 'utf8')
 
       clearTimeout(this.idleTimer)
       if (this.options.disconnectOnIdle) {
@@ -72,39 +69,25 @@ exports.IpcMessenger = class IpcMessenger {
   }
 
   connect () {
-    this.checkConnection()
     if (this.connected || this.connecting) return
+
     this.connecting = true
     this.disconnecting = false
-    ipc.connectTo(this.id, () => {
+
+    // TODO: check the socketPath, unlink if existed
+    // TODO: server side
+    // net.createServer().listen(this.socketPath)
+
+    // client side
+    this._client = net.createConnection({ path: this.socketPath }, () => {
       this.connected = true
       this.connecting = false
       this.queue && this.queue.forEach(data => this.send(data))
-      this.queue = []
-
-      ipc.of[this.id].on('message', this._onMessage)
+      this.queue = null
     })
   }
 
-  disconnect () {
-    this.checkConnection()
-    if (!this.connected || this.disconnecting) return
-    this.disconnecting = true
-    this.connecting = false
-
-    const ipcTimer = setTimeout(() => {
-      this._disconnect()
-    }, this.disconnectTimeout)
-
-    this.send({ done: true }, 'ack')
-
-    ipc.of[this.id].on('ack', data => {
-      if (data.ok) {
-        clearTimeout(ipcTimer)
-        this._disconnect()
-      }
-    })
-  }
+  disconnect () {}
 
   on (listener) {
     this.listeners.push(listener)
@@ -113,18 +96,6 @@ exports.IpcMessenger = class IpcMessenger {
   off (listener) {
     const index = this.listeners.indexOf(listener)
     if (index !== -1) this.listeners.splice(index, 1)
-  }
-
-  _reset () {
-    this.queue = []
-    this.connected = false
-  }
-
-  _disconnect () {
-    this.connected = false
-    this.disconnecting = false
-    ipc.disconnect(this.id)
-    this._reset()
   }
 
   _onMessage (data) {

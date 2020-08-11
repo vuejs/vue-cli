@@ -2,6 +2,7 @@
   'env',
   'exit',
   'ipc',
+  'NewIpcMessenger',
   'logger',
   'module',
   'object',

@@ -4,7 +4,7 @@ const {
   hasProjectYarn,
   hasProjectPnpm,
   openBrowser,
-  IpcMessenger
+  NewIpcMessenger
 } = require('@vue/cli-shared-utils')
 
 const defaults = {
@@ -301,7 +301,7 @@ module.exports = (api, options) => {
 
           // Send final app URL
           if (args.dashboard) {
-            const ipc = new IpcMessenger()
+            const ipc = new NewIpcMessenger()
             ipc.send({
               vueServe: {
                 url: localUrlForBrowser

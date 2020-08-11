@@ -7,14 +7,14 @@
 const path = require('path')
 const fs = require('fs-extra')
 const webpack = require('webpack')
-const { IpcMessenger } = require('@vue/cli-shared-utils')
+const { NewIpcMessenger } = require('@vue/cli-shared-utils')
 const { analyzeBundle } = require('./analyzeBundle')
 
 const ID = 'vue-cli-dashboard-plugin'
 const ONE_SECOND = 1000
 const FILENAME_QUERY_REGEXP = /\?.*$/
 
-const ipc = new IpcMessenger()
+const ipc = new NewIpcMessenger()
 
 function getTimeMessage (timer) {
   let time = Date.now() - timer
