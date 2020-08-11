@@ -1,4 +1,19 @@
 
+## 4.5.3 (2020-08-11)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#5774](https://github.com/vuejs/vue-cli/pull/5774) fix: load vue from `@vue/cli-service-global` on `vue serve`/`vue build` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`
+  * [#5769](https://github.com/vuejs/vue-cli/pull/5769) fix: add missing mocha type if wdio is not installed along with any unit testing frameworks ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`
+  * [#5771](https://github.com/vuejs/vue-cli/pull/5771) fix: only replace App.vue when there's no router plugin ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.5.2 (2020-08-10)
 
 #### :bug: Bug Fix
