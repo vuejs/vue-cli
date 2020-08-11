@@ -21,6 +21,7 @@ Vue CLI is a full system for rapid Vue.js development, providing:
 - A full graphical user interface to create and manage Vue.js projects.
 
 Vue CLI aims to be the standard tooling baseline for the Vue ecosystem. It ensures the various build tools work smoothly together with sensible defaults so you can focus on writing your app instead of spending days wrangling with configurations. At the same time, it still offers the flexibility to tweak the config of each tool without the need for ejecting.
+As a side note, the CLI tool is not required for you to build a Vue application,you can include the CDN or download the Vue scripts and include them manually in your project.However,Vue CLI is more reliable when working on large projects.
 
 ## Components of the System
 
