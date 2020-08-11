@@ -25,7 +25,7 @@ exports.NewIpcMessenger = class NewIpcMessenger {
     this.connected = false
     this.connecting = false
     this.disconnecting = false
-    this.queue = null
+    this.queue = []
     this.listeners = []
 
     this.disconnectTimeout = 15000
@@ -83,7 +83,7 @@ exports.NewIpcMessenger = class NewIpcMessenger {
       this.connected = true
       this.connecting = false
       this.queue && this.queue.forEach(data => this.send(data))
-      this.queue = null
+      this.queue = []
     })
   }
 
