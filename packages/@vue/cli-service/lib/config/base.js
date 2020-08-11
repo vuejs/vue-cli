@@ -69,7 +69,9 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-    const vue = loadModule('vue', api.service.context)
+    // try to load vue in the project
+    // use fallback require in the instant prototyping environment
+    const vue = loadModule('vue', api.service.context) || require('vue')
 
     if (semver.major(vue.version) === 2) {
       // for Vue 2 projects
