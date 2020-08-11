@@ -69,9 +69,11 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-    const vue = loadModule('vue', api.service.context)
+    // try to load vue in the project
+    // fallback to peer vue package in the instant prototyping environment
+    const vue = loadModule('vue', api.service.context) || loadModule('vue', __dirname)
 
-    if (semver.major(vue.version) === 2) {
+    if (vue && semver.major(vue.version) === 2) {
       // for Vue 2 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
         'vue-loader': require('vue-loader/package.json').version,
@@ -106,7 +108,7 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('vue-loader')
           .use(require('vue-loader').VueLoaderPlugin)
-    } else if (semver.major(vue.version) === 3) {
+    } else if (vue && semver.major(vue.version) === 3) {
       // for Vue 3 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
         'vue-loader': require('vue-loader-v16/package.json').version,
