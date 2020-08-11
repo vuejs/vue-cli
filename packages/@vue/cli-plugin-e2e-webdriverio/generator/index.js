@@ -1,6 +1,33 @@
 const { installedBrowsers } = require('@vue/cli-shared-utils')
 
-module.exports = (api, { webdrivers }) => {
+const applyTS = module.exports.applyTS = (api, invoking) => {
+  api.extendPackage({
+    devDependencies: {
+      '@types/mocha': '^8.0.1'
+    }
+  })
+
+  // inject types to tsconfig.json
+  if (invoking) {
+    api.render(files => {
+      const tsconfig = files['tsconfig.json']
+      if (tsconfig) {
+        const parsed = JSON.parse(tsconfig)
+        const types = parsed.compilerOptions.types
+        if (types) {
+          for (const t of ['mocha', '@wdio/mocha-framework', '@wdio/sync']) {
+            if (!types.includes(t)) {
+              types.push(t)
+            }
+          }
+        }
+        files['tsconfig.json'] = JSON.stringify(parsed, null, 2)
+      }
+    })
+  }
+}
+
+module.exports = (api, { webdrivers }, rootOptions, invoking) => {
   api.render('./template', {
     hasTS: api.hasPlugin('typescript'),
     hasESLint: api.hasPlugin('eslint')
@@ -36,4 +63,8 @@ module.exports = (api, { webdrivers }) => {
     },
     devDependencies
   })
+
+  if (api.hasPlugin('typescript')) {
+    applyTS(api, invoking)
+  }
 }
