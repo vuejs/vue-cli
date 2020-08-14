@@ -121,7 +121,7 @@ module.exports = (api, options) => {
             'vue$',
             options.runtimeCompiler
               ? 'vue/dist/vue.esm-bundler.js'
-              : '@vue/runtime-dom'
+              : 'vue/dist/vue.runtime.esm-bundler.js'
           )
 
       webpackConfig.module
