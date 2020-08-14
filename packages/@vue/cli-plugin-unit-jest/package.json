@@ -36,7 +36,7 @@
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^2.0.0",
     "jest-watch-typeahead": "^0.4.2",
-    "ts-jest": "^24.2.0",
+    "ts-jest": "^26.2.0",
     "vue-jest": "^3.0.5"
   },
   "devDependencies": {
