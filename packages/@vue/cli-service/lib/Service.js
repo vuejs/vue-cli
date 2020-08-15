@@ -7,7 +7,7 @@ const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
+const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg, resolveModule } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 const checkWebpack = require('@vue/cli-service/lib/util/checkWebpack')
@@ -178,14 +178,14 @@ module.exports = class Service {
           ) {
             let apply = () => {}
             try {
-              apply = require(id)
+              apply = require(resolveModule(id, this.pkgContext))
             } catch (e) {
               warn(`Optional dependency ${id} is not installed.`)
             }
 
             return { id, apply }
           } else {
-            return idToPlugin(id)
+            return idToPlugin(resolveModule(id, this.pkgContext))
           }
         })
       plugins = builtInPlugins.concat(projectPlugins)
