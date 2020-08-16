@@ -14,7 +14,7 @@ exports.config = (api, preset, rootOptions = {}) => {
 
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     config.parserOptions = {
-      parser: '@babel/eslint-parser'
+      parser: makeJSOnlyValue(`require.resolve('@babel/eslint-parser')`)
     }
   }
 
@@ -59,6 +59,7 @@ function makeJSOnlyValue (str) {
   fn.__expression = str
   return fn
 }
+exports.makeJSOnlyValue = makeJSOnlyValue
 
 const baseExtensions = ['.js', '.jsx', '.vue']
 exports.extensions = api => api.hasPlugin('typescript')

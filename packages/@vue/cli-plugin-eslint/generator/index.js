@@ -97,7 +97,7 @@ module.exports.applyTS = api => {
     eslintConfig: {
       extends: ['@vue/typescript'],
       parserOptions: {
-        parser: '@typescript-eslint/parser'
+        parser: require('../eslintOptions').makeJSOnlyValue(`require.resolve('@typescript-eslint/parser')`)
       }
     },
     devDependencies: require('../eslintDeps').DEPS_MAP.typescript
