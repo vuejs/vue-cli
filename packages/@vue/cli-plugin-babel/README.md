@@ -26,6 +26,8 @@ module.exports = {
 
 [thread-loader](https://github.com/webpack-contrib/thread-loader) is enabled by default when the machine has more than 1 CPU cores. This can be turned off by setting `parallel: false` in `vue.config.js`.
 
+`parallel` should be set to `false` when using Babel in combination with non-serializable loader options, such as regexes, dates and functions. These options would not be passed correctly to `babel-loader` which may lead to unexpected errors.
+
 ## Installing in an Already Created Project
 
 ``` sh
