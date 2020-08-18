@@ -1,4 +1,22 @@
 
+## 4.5.4 (2020-08-18)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`
+  * [#5798](https://github.com/vuejs/vue-cli/pull/5798) fix: fix Vue 3 + TS + Router template ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#5788](https://github.com/vuejs/vue-cli/pull/5788)  fix: ensure Dev Tool is enabled in Vue 3 runtime ([@sodatea](https://github.com/sodatea))
+  * [#5693](https://github.com/vuejs/vue-cli/pull/5693) fix: mayProxy.isPublicFileRequest judgment ([@Blacate](https://github.com/Blacate))
+* `@vue/cli`
+  * [#5778](https://github.com/vuejs/vue-cli/pull/5778) fix: missing proxy argument ([@RobbinBaauw](https://github.com/RobbinBaauw))
+
+#### Committers: 3
+- Blacate ([@Blacate](https://github.com/Blacate))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Robbin Baauw ([@RobbinBaauw](https://github.com/RobbinBaauw))
+
+
+
 ## 4.5.3 (2020-08-11)
 
 #### :bug: Bug Fix
