@@ -35,11 +35,11 @@ serve -s dist
 
 ### 云开发 CloudBase
 
-[云开发 CloudBase](https://cloudbase.net/) 是一个云原生一体化的 Serverless 云平台，支持静态网站、容器等多种托管能力，并提供简便的部署工具 [CloudBase Framework](https://cloudbase.net/framework.html) 来一键部署应用。
+[云开发 CloudBase](https://cloudbase.net/?site=vuecli) 是一个云原生一体化的 Serverless 云平台，支持静态网站、容器等多种托管能力，并提供简便的部署工具 [CloudBase Framework](https://cloudbase.net/framework.html?site=vuecli)) 来一键部署应用。
 
 #### 步骤一：安装云开发 CloudBase  CLI
 
-CloudBase  CLI 集成了  [CloudBase Framework](https://github.com/TencentCloudBase/cloudbase-framework)  的能力，全局安装 CloudBase  CLI  请运行以下命令：
+CloudBase  CLI 集成了  [CloudBase Framework](https://github.com/TencentCloudBase/cloudbase-framework?site=vuecli))  的能力，全局安装 CloudBase  CLI  请运行以下命令：
 
 ```
 npm install -g @cloudbase/cli
@@ -47,10 +47,9 @@ npm install -g @cloudbase/cli
 
 #### 步骤二：一键部署
 
-在项目根目录运行以下命令部署 Vue CLI 创建的应用：
+在项目根目录运行以下命令部署 Vue CLI 创建的应用，在部署之前可以先 [开通环境](https://console.cloud.tencent.com/tcb/env/index?channel=ad&site=vuejs)
 
 ```
-cloudbase login
 cloudbase init --without-template
 cloudbase framework:deploy
 ```
@@ -69,7 +68,7 @@ cloudbase framework:deploy
 - 使用 `cloudbase init --template vue`  快速创建和部署一个包含 Serverless 云函数后端的 Vue 应用
 - 使用 `cloudbase init --template nuxt-ssr` 快速创建和部署一个包含  SSR 和 Serverless 云函数后端的 Vue 应用
 
-详细信息请查看  CloudBase Framework 的[部署项目示例](https://github.com/TencentCloudBase/cloudbase-framework#%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B)
+详细信息请查看  CloudBase Framework 的[部署项目示例](https://github.com/TencentCloudBase/cloudbase-framework?site=vuecli#%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B)
 
 ### GitHub Pages
 
