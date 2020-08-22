@@ -47,7 +47,7 @@ npm install -g @cloudbase/cli
 
 #### 步骤二：一键部署
 
-在项目根目录运行以下命令部署 Vue CLI 创建的应用，在部署之前可以先 [开通环境](https://console.cloud.tencent.com/tcb/env/index?channel=ad&site=vuejs)
+在项目根目录运行以下命令部署 Vue CLI 创建的应用，在部署之前可以先 [开通环境](https://console.cloud.tencent.com/tcb/env/index?tdl_anchor=ad&tdl_site=vuejs)
 
 ```
 cloudbase init --without-template
