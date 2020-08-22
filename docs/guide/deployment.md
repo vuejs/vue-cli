@@ -44,6 +44,8 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `publicPath` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
     ``` js
+    // vue.config.js file to be place in the root of your repository
+    
     module.exports = {
       publicPath: process.env.NODE_ENV === 'production'
         ? '/my-project/'
