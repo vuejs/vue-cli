@@ -531,6 +531,26 @@ test('api: render fs directory', async () => {
   expect(fs.readFileSync('/.vscode/config.json', 'utf-8')).toMatch('{}')
 })
 
+// #4774
+test('api: call render inside an anonymous function', async () => {
+  const generator = new Generator('/', { plugins: [
+    {
+      id: 'test1',
+      apply: api => {
+        (() => {
+          api.render('./template', { m: 2 })
+        })()
+      },
+      options: {
+        n: 1
+      }
+    }
+  ] })
+
+  await generator.generate()
+  expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo(1)')
+})
+
 test('api: render object', async () => {
   const generator = new Generator('/', { plugins: [
     {
