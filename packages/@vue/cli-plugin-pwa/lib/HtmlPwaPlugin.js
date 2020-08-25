@@ -51,13 +51,13 @@ const defaultIconPaths = {
 }
 
 module.exports = class HtmlPwaPlugin {
-  constructor (options = {}) {
+  constructor(options = {}) {
     const iconPaths = Object.assign({}, defaultIconPaths, options.iconPaths)
     delete options.iconPaths
     this.options = Object.assign({ iconPaths: iconPaths }, defaults, options)
   }
 
-  apply (compiler) {
+  apply(compiler) {
     compiler.hooks.compilation.tap(ID, compilation => {
       compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(ID, (data, cb) => {
         // wrap favicon in the base template with IE only comment
@@ -111,12 +111,17 @@ module.exports = class HtmlPwaPlugin {
               rel: 'manifest',
               href: getTagHref(publicPath, manifestPath, assetsVersionStr)
             }
-          ),
-          makeTag('meta', {
-            name: 'theme-color',
-            content: themeColor
-          })
+          )
         )
+
+        if (themeColor !== null) {
+          data.head.push(
+            makeTag('meta', {
+              name: 'theme-color',
+              content: themeColor
+            })
+          )
+        }
 
         // Add to home screen for Safari on iOS
         data.head.push(
@@ -154,12 +159,14 @@ module.exports = class HtmlPwaPlugin {
             content: getTagHref(publicPath, iconPaths.msTileImage, assetsVersionStr)
           }))
         }
-        data.head.push(
-          makeTag('meta', {
-            name: 'msapplication-TileColor',
-            content: msTileColor
-          })
-        )
+        if (msTileColor !== null) {
+          data.head.push(
+            makeTag('meta', {
+              name: 'msapplication-TileColor',
+              content: msTileColor
+            })
+          )
+        }
 
         cb(null, data)
       })
@@ -191,7 +198,7 @@ module.exports = class HtmlPwaPlugin {
   }
 }
 
-function makeTag (tagName, attributes, closeTag = false) {
+function makeTag(tagName, attributes, closeTag = false) {
   return {
     tagName,
     closeTag,
@@ -199,7 +206,7 @@ function makeTag (tagName, attributes, closeTag = false) {
   }
 }
 
-function getTagHref (publicPath, href, assetsVersionStr) {
+function getTagHref(publicPath, href, assetsVersionStr) {
   let tagHref = `${href}${assetsVersionStr}`
   if (!isHrefAbsoluteUrl(href)) {
     tagHref = `${publicPath}${tagHref}`
@@ -207,6 +214,6 @@ function getTagHref (publicPath, href, assetsVersionStr) {
   return tagHref
 }
 
-function isHrefAbsoluteUrl (href) {
+function isHrefAbsoluteUrl(href) {
   return /(http(s?)):\/\//gi.test(href)
 }
