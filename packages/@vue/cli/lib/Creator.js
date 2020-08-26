@@ -254,6 +254,7 @@ module.exports = class Creator extends EventEmitter {
       if (isTestOrDebug) {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
+        await run('git', ['config', 'commit.gpgSign', 'false'])
       }
       gpgSign = await (async () => {
         const { stdout: gpgSignConfig } = await run('git', [
