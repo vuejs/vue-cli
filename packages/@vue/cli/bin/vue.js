@@ -19,7 +19,7 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, '@vue/cli')
 
-const EOL_NODE_MAJORS = ['8.x', '9.x']
+const EOL_NODE_MAJORS = ['8.x', '9.x', '11.x', '13.x']
 for (const major of EOL_NODE_MAJORS) {
   if (semver.satisfies(process.version, major)) {
     console.log(chalk.red(
