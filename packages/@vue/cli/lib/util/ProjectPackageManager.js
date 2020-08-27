@@ -5,6 +5,8 @@ const ini = require('ini')
 const minimist = require('minimist')
 const LRU = require('lru-cache')
 
+const stripAnsi = require('strip-ansi')
+
 const {
   chalk,
   execa,
@@ -168,6 +170,7 @@ class PackageManager {
       }
     }
 
+    this._registry = stripAnsi(this._registry).trim()
     return this._registry
   }
 
