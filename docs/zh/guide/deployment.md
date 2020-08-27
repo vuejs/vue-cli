@@ -302,7 +302,7 @@ firebase deploy --only hosting
 要使用 [npm](https://www.npmjs.com/package/vercel) 安装其命令行界面，运行以下命令：
 
 ```
-npm install -g now
+npm install -g vercel
 ```
 
 #### 步骤二：部署
