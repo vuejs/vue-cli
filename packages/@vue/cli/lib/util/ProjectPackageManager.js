@@ -109,7 +109,7 @@ class PackageManager {
     if (this.bin === 'npm') {
       // npm doesn't support package aliases until v6.9
       const MIN_SUPPORTED_NPM_VERSION = '6.9.0'
-      const npmVersion = execa.sync('npm', ['--version']).stdout
+      const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
 
       if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
         warn(
