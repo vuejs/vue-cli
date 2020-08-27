@@ -296,7 +296,7 @@ module.exports = (api, options) => {
     if (!isLegacyBundle && fs.existsSync(publicDir)) {
       webpackConfig
         .plugin('copy')
-          .use(require('copy-webpack-plugin'), [[{
+          .use(require('copy-webpack-plugin-v5'), [[{
             from: publicDir,
             to: outputDir,
             toType: 'dir',

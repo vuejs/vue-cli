@@ -46,7 +46,7 @@
     "cli-highlight": "^2.1.4",
     "clipboardy": "^2.3.0",
     "cliui": "^6.0.0",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin-v5": "^5.1.2",
     "css-loader": "^3.5.3",
     "cssnano": "^4.1.10",
     "debug": "^4.1.1",
