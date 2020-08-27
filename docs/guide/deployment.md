@@ -265,20 +265,20 @@ You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com` o
 
 Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 
-### Now
+### Vercel
 
-This example uses the latest Now platform version 2.
+This example uses the latest Vercel platform version 2.
 
-1. Install the Now CLI:
+1. Install the Vercel CLI:
 
 ```bash
-npm install -g now
+npm install -g vercel
 
 # Or, if you prefer a local one
-npm install now
+npm install vercel
 ```
 
-2. Add a `now.json` file to your project root:
+2. Add a `vercel.json` file to your project root:
 
     ```json
     {
@@ -287,7 +287,7 @@ npm install now
       "builds": [
         {
           "src": "package.json",
-          "use": "@now/static-build"
+          "use": "@vercel/static-build"
         }
       ],
       "routes": [
@@ -320,11 +320,11 @@ npm install now
     ```diff
     - {
     -   "src": "package.json",
-    -   "use": "@now/static-build"
+    -   "use": "@vercel/static-build"
     - }
     + {
     +   "src": "package.json",
-    +   "use": "@now/static-build",
+    +   "use": "@vercel/static-build",
     +   "config": { "distDir": "build" }
     + }
     ```
@@ -332,12 +332,12 @@ npm install now
 3. Adding a `now-build` script in `package.json`:
 
     ```json
-    "now-build": "npm run build"
+    "vercel-build": "npm run build"
     ```
 
-    To make a deployment, run `now`.
+    To make a deployment, run `vercel`.
 
-    If you want your deployment aliased, run `now --target production` instead.
+    If you want your deployment aliased, run `vercel --target production` instead.
 
 ### Stdlib
 
