@@ -35,7 +35,7 @@
 
         <template v-else-if="data">
           <WidgetAddItem
-            v-for="definition of data.widgetDefinitionslist.filter(filterDefinition)"
+            v-for="definition of data.widgetDefinitions.filter(filterDefinition)"
             v-if="definition.canAddMore"
             :key="definition.id"
             :definition="definition"
