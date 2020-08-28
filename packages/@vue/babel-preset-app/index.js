@@ -126,7 +126,7 @@ module.exports = (context, options = {}) => {
     if (vueVersion === 2) {
       presets.push([require('@vue/babel-preset-jsx'), jsxOptions])
     } else if (vueVersion === 3) {
-      plugins.push([require('@ant-design-vue/babel-plugin-jsx'), jsxOptions])
+      plugins.push([require('@vue/babel-plugin-jsx'), jsxOptions])
     }
   }
 
