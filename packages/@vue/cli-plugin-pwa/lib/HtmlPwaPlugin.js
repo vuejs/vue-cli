@@ -159,7 +159,7 @@ module.exports = class HtmlPwaPlugin {
             content: getTagHref(publicPath, iconPaths.msTileImage, assetsVersionStr)
           }))
         }
-        if (msTileColor !== null) {
+        if (msTileColor != null) {
           data.head.push(
             makeTag('meta', {
               name: 'msapplication-TileColor',
