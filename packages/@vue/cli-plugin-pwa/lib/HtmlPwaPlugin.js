@@ -114,7 +114,7 @@ module.exports = class HtmlPwaPlugin {
           )
         )
 
-        if (themeColor !== null) {
+        if (themeColor != null) {
           data.head.push(
             makeTag('meta', {
               name: 'theme-color',
