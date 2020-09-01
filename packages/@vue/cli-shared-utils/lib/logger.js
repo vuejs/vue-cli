@@ -1,7 +1,9 @@
 const chalk = require('chalk')
+const stripAnsi = require('strip-ansi')
 const readline = require('readline')
-const padStart = require('string.prototype.padstart')
 const EventEmitter = require('events')
+
+const { stopSpinner } = require('./spinner')
 
 exports.events = new EventEmitter()
 
@@ -19,7 +21,7 @@ const format = (label, msg) => {
   return msg.split('\n').map((line, i) => {
     return i === 0
       ? `${label} ${line}`
-      : padStart(line, chalk.reset(label).length)
+      : line.padStart(stripAnsi(label).length)
   }).join('\n')
 }
 
@@ -46,6 +48,7 @@ exports.warn = (msg, tag = null) => {
 }
 
 exports.error = (msg, tag = null) => {
+  stopSpinner()
   console.error(format(chalk.bgRed(' ERROR ') + (tag ? chalkTag(tag) : ''), chalk.red(msg)))
   _log('error', tag, msg)
   if (msg instanceof Error) {

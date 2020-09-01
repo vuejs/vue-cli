@@ -1,3 +1,5 @@
+jest.setTimeout(35000)
+
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 const create = require('@vue/cli-test-utils/createTestProject')
 
@@ -12,9 +14,6 @@ test('base', async () => {
   expect(pkg.eslintConfig.extends).toEqual([
     'plugin:vue/essential', 'eslint:recommended'
   ])
-  expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
-  })
 })
 
 test('airbnb', async () => {
@@ -31,9 +30,6 @@ test('airbnb', async () => {
     'plugin:vue/essential',
     '@vue/airbnb'
   ])
-  expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
-  })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-airbnb')
 })
 
@@ -51,9 +47,6 @@ test('standard', async () => {
     'plugin:vue/essential',
     '@vue/standard'
   ])
-  expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
-  })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-standard')
 })
 
@@ -69,12 +62,31 @@ test('prettier', async () => {
   expect(pkg.scripts.lint).toBeTruthy()
   expect(pkg.eslintConfig.extends).toEqual([
     'plugin:vue/essential',
+    'eslint:recommended',
     '@vue/prettier'
   ])
+  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+})
+
+test('babel', async () => {
+  const { pkg } = await generateWithPlugin([
+    {
+      id: 'eslint',
+      apply: require('../generator'),
+      options: {}
+    },
+    {
+      id: 'babel',
+      apply: require('@vue/cli-plugin-babel/generator'),
+      options: {}
+    }
+  ])
+
+  expect(pkg.scripts.lint).toBeTruthy()
+  expect(pkg.devDependencies).toHaveProperty('babel-eslint')
   expect(pkg.eslintConfig.parserOptions).toEqual({
     parser: 'babel-eslint'
   })
-  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
 })
 
 test('typescript', async () => {
@@ -96,12 +108,11 @@ test('typescript', async () => {
   expect(pkg.scripts.lint).toBeTruthy()
   expect(pkg.eslintConfig.extends).toEqual([
     'plugin:vue/essential',
+    'eslint:recommended',
+    '@vue/typescript/recommended',
     '@vue/prettier',
-    '@vue/typescript'
+    '@vue/prettier/@typescript-eslint'
   ])
-  expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: '@typescript-eslint/parser'
-  })
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
 })
@@ -129,10 +140,27 @@ test('lint on commit', async () => {
   expect(pkg.gitHooks['pre-commit']).toBe('lint-staged')
   expect(pkg.devDependencies).toHaveProperty('lint-staged')
   expect(pkg['lint-staged']).toEqual({
-    '*.{js,vue}': ['vue-cli-service lint', 'git add']
+    '*.{js,jsx,vue}': ['vue-cli-service lint', 'git add']
   })
   expect(pkg.vue).toEqual({
     lintOnSave: false
+  })
+})
+
+test('should lint ts files when typescript plugin co-exists', async () => {
+  const { read } = await create('eslint-lint-ts-files', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        lintOn: 'commit'
+      },
+      '@vue/cli-plugin-typescript': {}
+    }
+  }, null, true)
+  const pkg = JSON.parse(await read('package.json'))
+  expect(pkg).toMatchObject({
+    'lint-staged': {
+      '*.{js,jsx,vue,ts,tsx}': ['vue-cli-service lint', 'git add']
+    }
   })
 })
 
@@ -176,4 +204,27 @@ test('airbnb config + typescript + unit-mocha', async () => {
       '@vue/cli-plugin-unit-mocha': {}
     }
   })
+}, 30000)
+
+test('typescript + e2e-nightwatch', async () => {
+  const { run } = await create('eslint-typescript-nightwatch', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {},
+      '@vue/cli-plugin-typescript': {
+        classComponent: true
+      },
+      '@vue/cli-plugin-e2e-nightwatch': {}
+    }
+  })
+  await run('vue-cli-service lint')
+}, 30000)
+
+test('should be able to parse dynamic import syntax', async () => {
+  const { run } = await create('eslint-dynamic-import', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {},
+      '@vue/cli-plugin-router': {}
+    }
+  })
+  await run('vue-cli-service lint')
 }, 30000)

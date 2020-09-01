@@ -57,7 +57,7 @@ export default {
             const view = subscriptionData.data.viewAdded
             if (!previousResult.views) {
               return {
-                views: [ view ]
+                views: [view]
               }
             }
             if (previousResult.views.find(r => r.id === view.id)) return previousResult
@@ -222,16 +222,17 @@ export default {
         button-colors($vue-ui-color-primary, transparent)
 
   &.wide
-    >>> .vue-ui-button
-      justify-content flex-start
-      padding-left $padding-item
-      padding-right @padding-left
-      > .content
-        width 100%
-        text-align left
-        > .default-slot
-          flex auto 1 1
-          width 0
-          ellipsis()
-          padding 4px 0
+    .content
+      >>> .vue-ui-button
+        justify-content flex-start
+        padding-left $padding-item
+        padding-right @padding-left
+        > .content
+          width 100%
+          text-align left
+          > .default-slot
+            flex auto 1 1
+            width 0
+            ellipsis()
+            padding 4px 0
 </style>

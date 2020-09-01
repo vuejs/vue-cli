@@ -16,7 +16,7 @@ vue-cli-service build --mode development
 
 When running `vue-cli-service`, environment variables are loaded from all [corresponding files](#environment-variables). If they don't contain a `NODE_ENV` variable, it will be set accordingly. For example, `NODE_ENV` will be set to `"production"` in production mode, `"test"` in test mode, and defaults to `"development"` otherwise.
 
-Then `NODE_ENV` will determine the primary mode your app is runnning in - development, production or test - and consequently, what kind of webpack config will be created.
+Then `NODE_ENV` will determine the primary mode your app is running in - development, production or test - and consequently, what kind of webpack config will be created.
 
 With `NODE_ENV` set to "test" for example, Vue CLI creates a webpack config that is intended to be used and optimized for unit tests. It doesn't process images and other assets that are unnecessary for unit tests.
 
@@ -43,8 +43,16 @@ An env file simply contains key=value pairs of environment variables:
 
 ```
 FOO=bar
-VUE_APP_SECRET=secret
+VUE_APP_NOT_SECRET_CODE=some_value
 ```
+
+::: warning
+Do not store any secrets (such as private API keys) in your app!
+
+Environment variables are embedded into the build, meaning anyone can view them by inspecting your app's files.
+:::
+
+Note that only `NODE_ENV`, `BASE_URL`, and variables that start with `VUE_APP_` will be statically embedded into the *client bundle* with `webpack.DefinePlugin`. It is to avoid accidentally exposing a private key on the machine that could have the same name.
 
 For more detailed env parsing rules, please refer to [the documentation of `dotenv`](https://github.com/motdotla/dotenv#rules). We also use [dotenv-expand](https://github.com/motdotla/dotenv-expand) for variable expansion (available in Vue CLI 3.5+).
 
@@ -55,6 +63,8 @@ Loaded variables will become available to all `vue-cli-service` commands, plugin
 An env file for a specific mode (e.g. `.env.production`) will take higher priority than a generic one (e.g. `.env`).
 
 In addition, environment variables that already exist when Vue CLI is executed have the highest priority and will not be overwritten by `.env` files.
+
+`.env` files are loaded at the start of `vue-cli-service`. Restart the service after making changes.
 :::
 
 ### Example: Staging Mode
@@ -80,13 +90,13 @@ In both cases, the app is built as a production app because of the `NODE_ENV`, b
 
 ### Using Env Variables in Client-side Code
 
-Only variables that start with `VUE_APP_` will be statically embedded into the client bundle with `webpack.DefinePlugin`. You can access them in your application code:
+You can access env variables in your application code:
 
 ``` js
-console.log(process.env.VUE_APP_SECRET)
+console.log(process.env.VUE_APP_NOT_SECRET_CODE)
 ```
 
-During build, `process.env.VUE_APP_SECRET` will be replaced by the corresponding value. In the case of `VUE_APP_SECRET=secret`, it will be replaced by `"secret"`.
+During build, `process.env.VUE_APP_NOT_SECRET_CODE` will be replaced by the corresponding value. In the case of `VUE_APP_NOT_SECRET_CODE=some_value`, it will be replaced by `"some_value"`.
 
 In addition to `VUE_APP_*` variables, there are also two special variables that will always be available in your app code:
 

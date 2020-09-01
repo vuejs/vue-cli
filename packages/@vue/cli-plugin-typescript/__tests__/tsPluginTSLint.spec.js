@@ -106,7 +106,7 @@ test('should be able to fix mixed line endings', async () => {
   await write('src/bad.vue', buf)
 
   // Try twice to fix the file.
-  // For now, it will fail the first time, which corresponds to the behaviour of tslint.
+  // For now, it will fail the first time, which corresponds to the behavior of tslint.
   try {
     await run('vue-cli-service lint -- src/bad.vue')
   } catch (e) { }

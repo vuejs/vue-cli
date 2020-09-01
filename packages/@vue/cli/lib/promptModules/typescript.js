@@ -15,14 +15,14 @@ module.exports = cli => {
     message: 'Use class-style component syntax?',
     description: 'Use the @Component decorator on classes.',
     link: 'https://vuejs.org/v2/guide/typescript.html#Class-Style-Vue-Components',
-    default: true
+    default: answers => answers.vueVersion !== '3'
   })
 
   cli.injectPrompt({
     name: 'useTsWithBabel',
     when: answers => answers.features.includes('ts'),
     type: 'confirm',
-    message: 'Use Babel alongside TypeScript for auto-detected polyfills?',
+    message: 'Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)?',
     description: 'It will output ES2015 and delegate the rest to Babel for auto polyfill based on browser targets.',
     default: answers => answers.features.includes('babel')
   })

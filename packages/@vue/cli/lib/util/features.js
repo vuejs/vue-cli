@@ -1,10 +1,9 @@
-const chalk = require('chalk')
-const { toShortPluginId } = require('@vue/cli-shared-utils')
+const { chalk, toShortPluginId } = require('@vue/cli-shared-utils')
 
 exports.getFeatures = (preset) => {
   const features = []
   if (preset.router) {
-    features.push('vue-router')
+    features.push('router')
   }
   if (preset.vuex) {
     features.push('vuex')
@@ -19,10 +18,12 @@ exports.getFeatures = (preset) => {
   return features
 }
 
-exports.formatFeatures = (preset, lead, joiner) => {
+exports.formatFeatures = (preset) => {
+  const versionInfo = chalk.yellow(`[Vue ${preset.vueVersion || 2}] `)
   const features = exports.getFeatures(preset)
-  return features.map(dep => {
+
+  return versionInfo + features.map(dep => {
     dep = toShortPluginId(dep)
-    return `${lead || ''}${chalk.yellow(dep)}`
-  }).join(joiner || ', ')
+    return chalk.yellow(dep)
+  }).join(', ')
 }

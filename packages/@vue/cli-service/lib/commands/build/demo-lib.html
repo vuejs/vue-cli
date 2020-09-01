@@ -1,9 +1,9 @@
 <meta charset="utf-8">
 <title><%- htmlWebpackPlugin.options.libName %> demo</title>
 <script src="https://unpkg.com/vue"></script>
-<script src="./<%- htmlWebpackPlugin.options.libName %>.umd.js"></script>
+<script src="./<%- htmlWebpackPlugin.options.assetsFileName %>.umd.js"></script>
 <% if (htmlWebpackPlugin.options.cssExtract) { %>
-<link rel="stylesheet" href="./<%- htmlWebpackPlugin.options.libName %>.css">
+<link rel="stylesheet" href="./<%- htmlWebpackPlugin.options.assetsFileName %>.css">
 <% } %>
 
 <div id="app">

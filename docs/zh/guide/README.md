@@ -4,16 +4,14 @@ sidebarDepth: 0
 
 # 介绍
 
-<Bit/>
-
 ::: warning 警告
-这份文档是对应 `@vue/cli` **3.x** 版本的。老版本的 `vue-cli` 文档请移步[这里](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--)。
+这份文档是对应 `@vue/cli`。老版本的 `vue-cli` 文档请移步[这里](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--)。
 :::
 
 Vue CLI 是一个基于 Vue.js 进行快速开发的完整系统，提供：
 
-- 通过 `@vue/cli` 搭建交互式的项目脚手架。
-- 通过 `@vue/cli` + `@vue/cli-service-global` 快速开始零配置原型开发。
+- 通过 `@vue/cli` 实现的交互式的项目脚手架。
+- 通过 `@vue/cli` + `@vue/cli-service-global` 实现的零配置原型开发。
 - 一个运行时依赖 (`@vue/cli-service`)，该依赖：
   - 可升级；
   - 基于 webpack 构建，并带有合理的默认配置；
@@ -30,7 +28,7 @@ Vue CLI 有几个独立的部分——如果你看到了我们的[源代码](htt
 
 ### CLI
 
-CLI (`@vue/cli`) 是一个全局安装的 npm 包，提供了终端里的 `vue` 命令。它可以通过 `vue create` 快速创建一个新项目的脚手架，或者直接通过 `vue serve` 构建新想法的原型。你也可以通过 `vue ui` 通过一套图形化界面管理你的所有项目。我们会在接下来的指南中逐章节深入介绍。
+CLI (`@vue/cli`) 是一个全局安装的 npm 包，提供了终端里的 `vue` 命令。它可以通过 `vue create` 快速搭建一个新项目，或者直接通过 `vue serve` 构建新想法的原型。你也可以通过 `vue ui` 通过一套图形化界面管理你的所有项目。我们会在接下来的指南中逐章节深入介绍。
 
 ### CLI 服务
 

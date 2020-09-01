@@ -3,7 +3,7 @@ jest.setTimeout(50000)
 const fs = require('fs-extra')
 const path = require('path')
 const portfinder = require('portfinder')
-const { createServer } = require('http-server')
+const createServer = require('@vue/cli-test-utils/createServer')
 const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
@@ -88,7 +88,7 @@ test('no-unsafe-inline', async () => {
   const { stdout } = await project.run('vue-cli-service build --modern --no-unsafe-inline')
   expect(stdout).toMatch('Build complete.')
 
-  // should output a seperate safari-nomodule-fix bundle
+  // should output a separate safari-nomodule-fix bundle
   const files = await fs.readdir(path.join(project.dir, 'dist/js'))
   expect(files.some(f => /^safari-nomodule-fix\.js$/.test(f))).toBe(true)
 

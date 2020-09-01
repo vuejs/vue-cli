@@ -1,11 +1,10 @@
 const fs = require('fs-extra')
 const path = require('path')
-const chalk = require('chalk')
 const inquirer = require('inquirer')
 const Creator = require('./Creator')
 const { clearConsole } = require('./util/clearConsole')
 const { getPromptModules } = require('./util/createTools')
-const { error, stopSpinner, exit } = require('@vue/cli-shared-utils')
+const { chalk, error, stopSpinner, exit } = require('@vue/cli-shared-utils')
 const validateProjectName = require('validate-npm-package-name')
 
 async function create (projectName, options) {
@@ -30,7 +29,7 @@ async function create (projectName, options) {
     exit(1)
   }
 
-  if (fs.existsSync(targetDir)) {
+  if (fs.existsSync(targetDir) && !options.merge) {
     if (options.force) {
       await fs.remove(targetDir)
     } else {

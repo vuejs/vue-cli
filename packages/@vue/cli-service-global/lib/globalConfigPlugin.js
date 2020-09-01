@@ -48,6 +48,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
           resolve.sync('vue-hot-reload-api', { basedir: context })
         } catch (e) {
           config.resolve.alias
+            // eslint-disable-next-line node/no-extraneous-require
             .set('vue-hot-reload-api', require.resolve('vue-hot-reload-api'))
         }
 
@@ -58,7 +59,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
             .add(entry)
 
         const babelOptions = {
-          presets: [require.resolve('@vue/babel-preset-app')]
+          presets: [require.resolve('@vue/cli-plugin-babel/preset')]
         }
 
         // set inline babel options
@@ -102,7 +103,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
               .add(/node_modules/)
               .end()
             .use('eslint-loader')
-              .tap(options => Object.assign({}, options, {
+              .tap(loaderOptions => Object.assign({}, loaderOptions, {
                 useEslintrc: hasESLintConfig,
                 baseConfig: {
                   extends: [
@@ -111,6 +112,10 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
                   ],
                   parserOptions: {
                     parser: 'babel-eslint'
+                  },
+                  rules: {
+                    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+                    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
                   }
                 }
               }))

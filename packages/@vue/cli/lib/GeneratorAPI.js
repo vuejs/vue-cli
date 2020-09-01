@@ -1,18 +1,36 @@
 const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
-const merge = require('deepmerge')
+const deepmerge = require('deepmerge')
 const resolve = require('resolve')
-const isBinary = require('isbinaryfile')
+const { isBinaryFileSync } = require('isbinaryfile')
 const mergeDeps = require('./util/mergeDeps')
+const { runTransformation } = require('vue-codemod')
 const stringifyJS = require('./util/stringifyJS')
 const ConfigTransform = require('./ConfigTransform')
-const { getPluginLink, toShortPluginId } = require('@vue/cli-shared-utils')
+const { semver, error, getPluginLink, toShortPluginId, loadModule } = require('@vue/cli-shared-utils')
 
 const isString = val => typeof val === 'string'
 const isFunction = val => typeof val === 'function'
 const isObject = val => val && typeof val === 'object'
 const mergeArrayWithDedupe = (a, b) => Array.from(new Set([...a, ...b]))
+function pruneObject (obj) {
+  if (typeof obj === 'object') {
+    for (const k in obj) {
+      if (!obj.hasOwnProperty(k)) {
+        continue
+      }
+
+      if (obj[k] == null) {
+        delete obj[k]
+      } else {
+        obj[k] = pruneObject(obj[k])
+      }
+    }
+  }
+
+  return obj
+}
 
 class GeneratorAPI {
   /**
@@ -27,12 +45,14 @@ class GeneratorAPI {
     this.options = options
     this.rootOptions = rootOptions
 
+    /* eslint-disable no-shadow */
     this.pluginsData = generator.plugins
       .filter(({ id }) => id !== `@vue/cli-service`)
       .map(({ id }) => ({
         name: toShortPluginId(id),
         link: getPluginLink(id)
       }))
+    /* eslint-enable no-shadow */
 
     this._entryFile = undefined
   }
@@ -62,23 +82,94 @@ class GeneratorAPI {
   }
 
   /**
+   * Normalize absolute path, Windows-style path
+   * to the relative path used as index in this.files
+   * @param {string} p the path to normalize
+   */
+  _normalizePath (p) {
+    if (path.isAbsolute(p)) {
+      p = path.relative(this.generator.context, p)
+    }
+    // The `files` tree always use `/` in its index.
+    // So we need to normalize the path string in case the user passes a Windows path.
+    return p.replace(/\\/g, '/')
+  }
+
+  /**
    * Resolve path for a project.
    *
-   * @param {string} _path - Relative path from project root
-   * @return {string} The resolved absolute path.
+   * @param {string} _paths - A sequence of relative paths or path segments
+   * @return {string} The resolved absolute path, caculated based on the current project root.
    */
-  resolve (_path) {
-    return path.resolve(this.generator.context, _path)
+  resolve (..._paths) {
+    return path.resolve(this.generator.context, ..._paths)
+  }
+
+  get cliVersion () {
+    return require('../package.json').version
+  }
+
+  assertCliVersion (range) {
+    if (typeof range === 'number') {
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.cliVersion, range, { includePrerelease: true })) return
+
+    throw new Error(
+      `Require global @vue/cli "${range}", but was invoked by "${this.cliVersion}".`
+    )
+  }
+
+  get cliServiceVersion () {
+    // In generator unit tests, we don't write the actual file back to the disk.
+    // So there is no cli-service module to load.
+    // In that case, just return the cli version.
+    if (process.env.VUE_CLI_TEST && process.env.VUE_CLI_SKIP_WRITE) {
+      return this.cliVersion
+    }
+
+    const servicePkg = loadModule(
+      '@vue/cli-service/package.json',
+      this.generator.context
+    )
+
+    return servicePkg.version
+  }
+
+  assertCliServiceVersion (range) {
+    if (typeof range === 'number') {
+      if (!Number.isInteger(range)) {
+        throw new Error('Expected string or integer value.')
+      }
+      range = `^${range}.0.0-0`
+    }
+    if (typeof range !== 'string') {
+      throw new Error('Expected string or integer value.')
+    }
+
+    if (semver.satisfies(this.cliServiceVersion, range, { includePrerelease: true })) return
+
+    throw new Error(
+      `Require @vue/cli-service "${range}", but was loaded with "${this.cliServiceVersion}".`
+    )
   }
 
   /**
    * Check if the project has a given plugin.
    *
    * @param {string} id - Plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
+   * @param {string} version - Plugin version. Defaults to ''
    * @return {boolean}
    */
-  hasPlugin (id) {
-    return this.generator.hasPlugin(id)
+  hasPlugin (id, version) {
+    return this.generator.hasPlugin(id, version)
   }
 
   /**
@@ -116,14 +207,34 @@ class GeneratorAPI {
 
   /**
    * Extend the package.json of the project.
-   * Nested fields are deep-merged unless `{ merge: false }` is passed.
    * Also resolves dependency conflicts between plugins.
    * Tool configuration fields may be extracted into standalone files before
    * files are written to disk.
    *
    * @param {object | () => object} fields - Fields to merge.
+   * @param {object} [options] - Options for extending / merging fields.
+   * @param {boolean} [options.prune=false] - Remove null or undefined fields
+   *    from the object after merging.
+   * @param {boolean} [options.merge=true] deep-merge nested fields, note
+   *    that dependency fields are always deep merged regardless of this option.
+   * @param {boolean} [options.warnIncompatibleVersions=true] Output warning
+   *    if two dependency version ranges don't intersect.
    */
-  extendPackage (fields) {
+  extendPackage (fields, options = {}) {
+    const extendOptions = {
+      prune: false,
+      merge: true,
+      warnIncompatibleVersions: true
+    }
+
+    // this condition statement is added for compatibility reason, because
+    // in version 4.0.0 to 4.1.2, there's no `options` object, but a `forceNewVersion` flag
+    if (typeof options === 'boolean') {
+      extendOptions.warnIncompatibleVersions = !options
+    } else {
+      Object.assign(extendOptions, options)
+    }
+
     const pkg = this.generator.pkg
     const toMerge = isFunction(fields) ? fields(pkg) : fields
     for (const key in toMerge) {
@@ -135,17 +246,22 @@ class GeneratorAPI {
           this.id,
           existing || {},
           value,
-          this.generator.depSources
+          this.generator.depSources,
+          extendOptions
         )
-      } else if (!(key in pkg)) {
+      } else if (!extendOptions.merge || !(key in pkg)) {
         pkg[key] = value
       } else if (Array.isArray(value) && Array.isArray(existing)) {
         pkg[key] = mergeArrayWithDedupe(existing, value)
       } else if (isObject(value) && isObject(existing)) {
-        pkg[key] = merge(existing, value, { arrayMerge: mergeArrayWithDedupe })
+        pkg[key] = deepmerge(existing, value, { arrayMerge: mergeArrayWithDedupe })
       } else {
         pkg[key] = value
       }
+    }
+
+    if (extendOptions.prune) {
+      pruneObject(pkg)
     }
   }
 
@@ -220,7 +336,21 @@ class GeneratorAPI {
    * @param {function} cb
    */
   onCreateComplete (cb) {
-    this.generator.completeCbs.push(cb)
+    this.afterInvoke(cb)
+  }
+
+  afterInvoke (cb) {
+    this.generator.afterInvokeCbs.push(cb)
+  }
+
+  /**
+   * Push a callback to be called when the files have been written to disk
+   * from non invoked plugins
+   *
+   * @param {function} cb
+   */
+  afterAnyInvoke (cb) {
+    this.generator.afterAnyInvokeCbs.push(cb)
   }
 
   /**
@@ -238,6 +368,42 @@ class GeneratorAPI {
    */
   genJSConfig (value) {
     return `module.exports = ${stringifyJS(value, null, 2)}`
+  }
+
+  /**
+   * Turns a string expression into executable JS for JS configs.
+   * @param {*} str JS expression as a string
+   */
+  makeJSOnlyValue (str) {
+    const fn = () => {}
+    fn.__expression = str
+    return fn
+  }
+
+  /**
+   * Run codemod on a script file or the script part of a .vue file
+   * @param {string} file the path to the file to transform
+   * @param {Codemod} codemod the codemod module to run
+   * @param {object} options additional options for the codemod
+   */
+  transformScript (file, codemod, options) {
+    const normalizedPath = this._normalizePath(file)
+
+    this._injectFileMiddleware(files => {
+      if (typeof files[normalizedPath] === 'undefined') {
+        error(`Cannot find file ${normalizedPath}`)
+        return
+      }
+
+      files[normalizedPath] = runTransformation(
+        {
+          path: this.resolve(normalizedPath),
+          source: files[normalizedPath]
+        },
+        codemod,
+        options
+      )
+    })
   }
 
   /**
@@ -291,14 +457,25 @@ function extractCallDir () {
   const obj = {}
   Error.captureStackTrace(obj)
   const callSite = obj.stack.split('\n')[3]
-  const fileName = callSite.match(/\s\((.*):\d+:\d+\)$/)[1]
+
+  // the regexp for the stack when called inside a named function
+  const namedStackRegExp = /\s\((.*):\d+:\d+\)$/
+  // the regexp for the stack when called inside an anonymous
+  const anonymousStackRegExp = /at (.*):\d+:\d+$/
+
+  let matchResult = callSite.match(namedStackRegExp)
+  if (!matchResult) {
+    matchResult = callSite.match(anonymousStackRegExp)
+  }
+
+  const fileName = matchResult[1]
   return path.dirname(fileName)
 }
 
 const replaceBlockRE = /<%# REPLACE %>([^]*?)<%# END_REPLACE %>/g
 
 function renderFile (name, data, ejsOptions) {
-  if (isBinary.sync(name)) {
+  if (isBinaryFileSync(name)) {
     return fs.readFileSync(name) // return buffer
   }
   const template = fs.readFileSync(name, 'utf-8')
@@ -316,6 +493,22 @@ function renderFile (name, data, ejsOptions) {
   const parsed = yaml.loadFront(template)
   const content = parsed.__content
   let finalTemplate = content.trim() + `\n`
+
+  if (parsed.when) {
+    finalTemplate = (
+      `<%_ if (${parsed.when}) { _%>` +
+        finalTemplate +
+      `<%_ } _%>`
+    )
+
+    // use ejs.render to test the conditional expression
+    // if evaluated to falsy value, return early to avoid extra cost for extend expression
+    const result = ejs.render(finalTemplate, data, ejsOptions)
+    if (!result) {
+      return ''
+    }
+  }
+
   if (parsed.extend) {
     const extendPath = path.isAbsolute(parsed.extend)
       ? parsed.extend
@@ -335,13 +528,6 @@ function renderFile (name, data, ejsOptions) {
       } else {
         finalTemplate = finalTemplate.replace(parsed.replace, content.trim())
       }
-    }
-    if (parsed.when) {
-      finalTemplate = (
-        `<%_ if (${parsed.when}) { _%>` +
-          finalTemplate +
-        `<%_ } _%>`
-      )
     }
   }
 

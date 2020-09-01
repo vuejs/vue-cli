@@ -69,13 +69,13 @@ import NewsItem from './NewsItem.vue'
 import NewsItemDetails from './NewsItemDetails.vue'
 
 const ERRORS = {
-  'fetch': {
+  fetch: {
     icon: 'error'
   },
-  'offline': {
+  offline: {
     icon: 'cloud_off'
   },
-  'empty': {
+  empty: {
     icon: 'cake'
   }
 }
@@ -161,6 +161,7 @@ export default {
         this.widget.customTitle = this.feed.title
       } catch (e) {
         this.error = 'fetch'
+        // eslint-disable-next-line no-console
         console.error(e)
       }
       this.loading = false

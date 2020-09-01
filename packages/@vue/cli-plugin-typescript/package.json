@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "3.5.1",
+  "version": "4.5.4",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,23 +23,36 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/webpack-env": "^1.13.6",
-    "@vue/cli-shared-utils": "^3.5.1",
-    "fork-ts-checker-webpack-plugin": "^0.5.2",
-    "globby": "^9.0.0",
-    "ts-loader": "^5.3.3",
-    "tslint": "^5.13.0",
-    "webpack": ">=4 < 4.29"
+    "@types/webpack-env": "^1.15.2",
+    "@vue/cli-shared-utils": "^4.5.4",
+    "cache-loader": "^4.1.0",
+    "fork-ts-checker-webpack-plugin": "^3.1.1",
+    "globby": "^9.2.0",
+    "thread-loader": "^2.1.3",
+    "ts-loader": "^6.2.2",
+    "tslint": "^5.20.1",
+    "webpack": "^4.0.0",
+    "yorkie": "^2.0.0"
+  },
+  "optionalDependencies": {
+    "fork-ts-checker-webpack-plugin-v5": "npm:fork-ts-checker-webpack-plugin@^5.0.11"
   },
   "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0",
+    "@vue/compiler-sfc": "^3.0.0-beta.14",
     "typescript": ">=2"
   },
+  "peerDependenciesMeta": {
+    "@vue/compiler-sfc": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "@types/chai": "^4.1.0",
-    "@types/jest": "^23.1.4",
+    "@types/chai": "^4.2.11",
+    "@types/jest": "^24.0.19",
     "@types/mocha": "^5.2.6",
-    "typescript": "^3.2.1",
-    "vue-class-component": "^7.0.1",
-    "vue-property-decorator": "^8.0.0"
+    "typescript": "~3.9.3",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^8.4.2"
   }
 }

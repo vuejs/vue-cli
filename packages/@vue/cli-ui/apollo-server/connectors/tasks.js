@@ -1,5 +1,4 @@
-const execa = require('execa')
-const chalk = require('chalk')
+const { chalk, execa } = require('@vue/cli-shared-utils')
 // Subs
 const channels = require('../channels')
 // Connectors
@@ -14,6 +13,7 @@ const projects = require('./projects')
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
 const { terminate } = require('../util/terminate')
+const { parseArgs } = require('../util/parse-args')
 
 const MAX_LOGS = 2000
 const VIEW_ID = 'vue-project-tasks'
@@ -45,7 +45,8 @@ async function list ({ file = null, api = true } = {}, context) {
     const pluginApi = api && plugins.getApi(file)
 
     // Get current valid tasks in project `package.json`
-    let currentTasks = Object.keys(pkg.scripts).map(
+    const scriptKeys = Object.keys(pkg.scripts)
+    let currentTasks = scriptKeys.map(
       name => {
         const id = `${file}:${name}`
         existing.set(id, true)
@@ -120,6 +121,14 @@ async function list ({ file = null, api = true } = {}, context) {
 
     // Add the new tasks
     list = list.concat(newTasks)
+
+    // Sort
+    const getSortScore = task => {
+      const index = scriptKeys.indexOf(task.name)
+      if (index !== -1) return index
+      return Infinity
+    }
+    list.sort((a, b) => getSortScore(a) - getSortScore(b))
 
     tasks.set(file, list)
   }
@@ -228,15 +237,7 @@ async function run (id, context) {
 
     // Answers
     const answers = prompts.getAnswers()
-    let args = []
-    let command = task.command
-
-    // Process command containing args
-    if (command.indexOf(' ')) {
-      const parts = command.split(/\s+/)
-      command = parts.shift()
-      args = parts
-    }
+    let [command, ...args] = parseArgs(task.command)
 
     // Output colors
     // See: https://www.npmjs.com/package/supports-color
@@ -244,6 +245,13 @@ async function run (id, context) {
 
     // Plugin API
     if (task.onBeforeRun) {
+      if (!answers.$_overrideArgs) {
+        const origPush = args.push.bind(args)
+        args.push = (...items) => {
+          if (items.length && args.indexOf(items[0]) !== -1) return items.length
+          return origPush(...items)
+        }
+      }
       await task.onBeforeRun({
         answers,
         args
@@ -376,7 +384,7 @@ async function run (id, context) {
           type: 'error'
         }, context)
         notify({
-          title: `Task error`,
+          title: 'Task error',
           message: `Task ${task.id} ended with error code ${code}`,
           icon: 'error'
         })
@@ -390,7 +398,7 @@ async function run (id, context) {
           type: 'done'
         }, context)
         notify({
-          title: `Task completed`,
+          title: 'Task completed',
           message: `Task ${task.id} completed in ${seconds}s.`,
           icon: 'done'
         })
@@ -427,7 +435,7 @@ async function run (id, context) {
         type: 'error'
       }, context)
       notify({
-        title: `Task error`,
+        title: 'Task error',
         message: `Error while running task ${task.id} with message'${error.message}'`,
         icon: 'error'
       })
@@ -572,6 +580,15 @@ async function restoreParameters ({ id }, context) {
   const task = findOne(id, context)
   if (task) {
     await prompts.reset()
+    if (task.prompts.length) {
+      prompts.add({
+        name: '$_overrideArgs',
+        type: 'confirm',
+        default: false,
+        message: 'org.vue.views.project-task-details.override-args.message',
+        description: 'org.vue.views.project-task-details.override-args.description'
+      })
+    }
     task.prompts.forEach(prompts.add)
     const data = getSavedData(id, context)
     if (data) {

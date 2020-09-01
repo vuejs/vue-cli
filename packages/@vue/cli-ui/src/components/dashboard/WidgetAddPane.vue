@@ -34,19 +34,12 @@
         />
 
         <template v-else-if="data">
-          <ListFilter
-            :list="data.widgetDefinitions"
-            :filter="filterDefinition"
-          >
-            <template slot-scope="{ list }">
-              <WidgetAddItem
-                v-for="definition of list"
-                v-if="definition.canAddMore"
-                :key="definition.id"
-                :definition="definition"
-              />
-            </template>
-          </ListFilter>
+          <WidgetAddItem
+            v-for="definition of data.widgetDefinitions.filter(filterDefinition)"
+            v-if="definition.canAddMore"
+            :key="definition.id"
+            :definition="definition"
+          />
         </template>
       </template>
     </ApolloQuery>

@@ -1,6 +1,10 @@
-const chalk = require('chalk')
-const execa = require('execa')
-const { hasYarn, request } = require('@vue/cli-shared-utils')
+const {
+  chalk,
+  execa,
+  request,
+
+  hasYarn
+} = require('@vue/cli-shared-utils')
 const inquirer = require('inquirer')
 const registries = require('./registries')
 const { loadOptions, saveOptions } = require('../options')
@@ -38,9 +42,19 @@ module.exports = async function shouldUseTaobao (command) {
     return val
   }
 
-  const userCurrent = (await execa(command, ['config', 'get', 'registry'])).stdout
-  const defaultRegistry = registries[command]
+  let userCurrent
+  try {
+    userCurrent = (await execa(command, ['config', 'get', 'registry'])).stdout
+  } catch (registryError) {
+    try {
+      // Yarn 2 uses `npmRegistryServer` instead of `registry`
+      userCurrent = (await execa(command, ['config', 'get', 'npmRegistryServer'])).stdout
+    } catch (npmRegistryServerError) {
+      return save(false)
+    }
+  }
 
+  const defaultRegistry = registries[command]
   if (removeSlash(userCurrent) !== removeSlash(defaultRegistry)) {
     // user has configured custom registry, respect that
     return save(false)

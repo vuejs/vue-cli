@@ -24,15 +24,12 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
         activeChild.stdin.write('close')
         activeBrowser = null
       }
-      console.log(log)
       reject(err)
     }
 
     let isFirstMatch = true
-    let log = ''
     child.stdout.on('data', async (data) => {
       data = data.toString()
-      log += data
       try {
         const urlMatch = data.match(/http:\/\/[^/]+\//)
         if (urlMatch && isFirstMatch) {
@@ -47,7 +44,7 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
             await test({ url })
           } else {
             // start browser
-            const { page, browser } = await launchPuppeteer(url)
+            const { page, browser, requestUrls } = await launchPuppeteer(url)
             activeBrowser = browser
 
             const helpers = createHelpers(page)
@@ -57,7 +54,8 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
               page,
               url,
               nextUpdate,
-              helpers
+              helpers,
+              requestUrls
             })
 
             await browser.close()
@@ -90,6 +88,7 @@ module.exports = async function serveWithPuppeteer (serve, test, noPuppeteer) {
   })
 }
 
+/* eslint-disable no-shadow */
 function createHelpers (page) {
   return {
     getText: selector => page.evaluate(selector => {
@@ -106,3 +105,4 @@ function createHelpers (page) {
     }, selector, cls)
   }
 }
+/* eslint-enable no-shadow */

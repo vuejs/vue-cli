@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-nightwatch",
-  "version": "3.5.1",
+  "version": "4.5.4",
   "description": "e2e-nightwatch plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,11 +23,27 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^3.5.1",
-    "chromedriver": "^2.46.0",
-    "deepmerge": "^3.2.0",
-    "execa": "^1.0.0",
-    "nightwatch": "^0.9.21",
+    "@vue/cli-shared-utils": "^4.5.4",
+    "deepmerge": "^4.2.2",
+    "nightwatch": "^1.3.5"
+  },
+  "devDependencies": {
+    "chromedriver": "^84.0.1",
+    "geckodriver": "^1.20.0",
     "selenium-server": "^3.141.59"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0",
+    "chromedriver": "*",
+    "geckodriver": "*",
+    "selenium-server": "^3.141.59"
+  },
+  "peerDependenciesMeta": {
+    "selenium-server": {
+      "optional": true
+    },
+    "geckodriver": {
+      "optional": true
+    }
   }
 }

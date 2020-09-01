@@ -1,7 +1,7 @@
 const path = require('path')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name }) => {
+module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -15,7 +15,7 @@ module.exports = (api, { target, entry, name }) => {
   const isAsync = /async/.test(target)
 
   // generate dynamic entry based on glob files
-  const resolvedFiles = require('globby').sync([entry], { cwd: api.resolve('.') })
+  const resolvedFiles = require('globby').sync(entry.split(','), { cwd: api.resolve('.') })
 
   if (!resolvedFiles.length) {
     abort(`entry pattern "${entry}" did not match any files.`)
@@ -53,19 +53,10 @@ module.exports = (api, { target, entry, name }) => {
       config.optimization.minimize(false)
     }
 
-    // externalize Vue in case user imports it
-    config
-      .externals({
-        ...config.get('externals'),
-        vue: 'Vue'
-      })
-
     config
       .plugin('web-component-options')
-        .use(require('webpack/lib/DefinePlugin'), [{
-          'process.env': {
-            CUSTOM_ELEMENT_NAME: JSON.stringify(libName)
-          }
+        .use(require('webpack').DefinePlugin, [{
+          'process.env.CUSTOM_ELEMENT_NAME': JSON.stringify(libName)
         }])
 
     // enable shadow mode in vue-loader
@@ -103,6 +94,12 @@ module.exports = (api, { target, entry, name }) => {
         .set('~root', api.resolve('.'))
 
     const rawConfig = api.resolveWebpackConfig(config)
+
+    // externalize Vue in case user imports it
+    rawConfig.externals = [
+      ...(Array.isArray(rawConfig.externals) ? rawConfig.externals : [rawConfig.externals]),
+      { ...(inlineVue || { vue: 'Vue' }) }
+    ].filter(Boolean)
 
     const entryName = `${libName}${minify ? `.min` : ``}`
     rawConfig.entry = {

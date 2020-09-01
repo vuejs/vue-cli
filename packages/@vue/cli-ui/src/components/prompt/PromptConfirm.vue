@@ -6,7 +6,7 @@
     <VueSwitch
       :value="value(prompt.value)"
       class="extend-left"
-      @input="value => answer(value)"
+      @update="value => answer(value)"
     >
       <ListItemInfo
         :name="$t(prompt.message)"

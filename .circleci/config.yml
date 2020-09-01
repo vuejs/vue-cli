@@ -18,10 +18,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-vue-cli-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v2-vue-cli-{{ checksum "yarn.lock" }}
       - run: yarn --network-timeout 600000
       - save_cache:
-          key: v2-vue-cli-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: v2-vue-cli-{{ checksum "yarn.lock" }}
           paths:
             - node_modules/
             - ~/.cache
@@ -50,9 +50,18 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: yarn lint
+      - run: yarn lint-without-fix
       - run: yarn check-links
-      - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app
+      - restore_cache:
+          keys:
+            # TODO: should use a more accurate cache key
+            - v2-vue-cli-offline-{{ checksum "yarn.lock" }}
+      - run: yarn config set yarn-offline-mirror ~/npm-packages-offline-cache
+      - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app,vuex,router
+      - save_cache:
+          key: v2-vue-cli-offline-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/npm-packages-offline-cache
 
   group-4:
     <<: *defaults

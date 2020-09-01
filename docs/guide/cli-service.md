@@ -23,7 +23,7 @@ npm run serve
 yarn serve
 ```
 
-If you have [npx](https://github.com/zkat/npx) available (should be bundled with an up-to-date version of npm), you can also invoke the binary directly with:
+If you have [npx](https://github.com/npm/npx) available (should be bundled with an up-to-date version of npm), you can also invoke the binary directly with:
 
 ``` bash
 npx vue-cli-service serve
@@ -44,16 +44,18 @@ Usage: vue-cli-service serve [options] [entry]
 
 Options:
 
-  --open    open browser on server start
-  --copy    copy url to clipboard on server start
-  --mode    specify env mode (default: development)
-  --host    specify host (default: 0.0.0.0)
-  --port    specify port (default: 8080)
-  --https   use https (default: false)
+  --open         open browser on server start
+  --copy         copy url to clipboard on server start
+  --mode         specify env mode (default: development)
+  --host         specify host (default: 0.0.0.0)
+  --port         specify port (default: 8080)
+  --https        use https (default: false)
+  --public       specify the public network URL for the HMR client
+  --skip-plugins comma-separated list of plugin names to skip for this run
 ```
 
 ::: tip --copy
-Copying to clipboard might not work on a few platforms.  
+Copying to clipboard might not work on a few platforms.
 If copying was successful, `(copied to clipboard)` is displayed next to the local dev server URL.
 :::
 
@@ -61,7 +63,7 @@ The `vue-cli-service serve` command starts a dev server (based on [webpack-dev-s
 
 In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
 
-`[entry]` in the CLI command is defined as *the entry file*, not *an additional entry file*. If you overwrite the entry in the CLI, then the entries from `config.pages` are no longer considered, which may cause an error.
+`[entry]` in the CLI command is defined as *the entry file* (default: `src/main.js` or `src/main.ts` in TypeScript project), not *an additional entry file*. If you overwrite the entry in the CLI, then the entries from `config.pages` are no longer considered, which may cause an error.
 
 ## vue-cli-service build
 
@@ -70,16 +72,20 @@ Usage: vue-cli-service build [options] [entry|pattern]
 
 Options:
 
-  --mode        specify env mode (default: production)
-  --dest        specify output directory (default: dist)
-  --modern      build app targeting modern browsers with auto fallback
-  --target      app | lib | wc | wc-async (default: app)
-  --formats     list of output formats for library builds (default: commonjs,umd,umd-min)
-  --name        name for lib or web-component mode (default: "name" in package.json or entry filename)
-  --no-clean    do not remove the dist directory before building the project
-  --report      generate report.html to help analyze bundle content
-  --report-json generate report.json to help analyze bundle content
-  --watch       watch for changes
+  --mode         specify env mode (default: production)
+  --dest         specify output directory (default: dist)
+  --modern       build app targeting modern browsers with auto fallback
+  --no-unsafe-inline build app without introducing inline scripts
+  --target       app | lib | wc | wc-async (default: app)
+  --formats      list of output formats for library builds (default: commonjs,umd,umd-min)
+  --inline-vue   include the Vue module in the final bundle of library or web component target
+  --name         name for lib or web-component mode (default: "name" in package.json or entry filename)
+  --filename     file name for output, only usable for 'lib' target (default: value of --name),
+  --no-clean     do not remove the dist directory before building the project
+  --report       generate report.html to help analyze bundle content
+  --report-json  generate report.json to help analyze bundle content
+  --skip-plugins comma-separated list of plugin names to skip for this run
+  --watch        watch for changes
 ```
 
 `vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
@@ -118,6 +124,35 @@ You can also learn about the available options of each command with:
 npx vue-cli-service help [command]
 ```
 
+## Skipping Plugins
+
+Sometimes, you may want to not use a certain CLI Plugin when running a command. For example you might want to build a version of your app that doesn't include the PWA plugin. You can do that by passing the name of the plugin to the `--skip-plugins` option.
+
+```bash
+npx vue-cli-service build --skip-plugins pwa
+```
+
+::: tip
+This option is available for _every_ `vue-cli-service` command, including custom ones added by other plugins.
+:::
+
+You can skip multiple plugins by passing their names as a comma-separated list:
+
+```bash
+npx vue-cli-service build --skip-plugins pwa,apollo
+```
+
+Plugin names are resolved the same way they are during install, as described [here](./plugins-and-presets.md#installing-plugins-in-an-existing-project)
+
+``` bash
+# these are all equivalent
+npx vue-cli-service build --skip-plugins pwa
+
+npx vue-cli-service build --skip-plugins @vue/pwa
+
+npx vue-cli-service build --skip-plugins @vue/cli-plugin-pwa
+```
+
 ## Caching and Parallelization
 
 - `cache-loader` is enabled for Vue/Babel/TypeScript compilations by default. Files are cached inside `node_modules/.cache` - if running into compilation issues, always try deleting the cache directory first.
@@ -132,6 +167,12 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 {
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   }
 }
 ```
@@ -144,4 +185,4 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
 
 Projects created via `vue create` are ready to go without the need for additional configuration. The plugins are designed to work with one another so in most cases, all you need to do is pick the features you want during the interactive prompts.
 
-However, we also understand that it's impossible to cater to every possible need, and the need of a project may also change over time. Projects created by Vue CLI allow you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.
+However, we also understand that it's impossible to cater to every possible need, and the needs of a project may also change over time. Projects created by Vue CLI allow you to configure almost every aspect of the tooling without ever needing to eject. Check out the [Config Reference](../config/) for more details.

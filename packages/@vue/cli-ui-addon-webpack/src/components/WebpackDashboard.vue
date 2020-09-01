@@ -13,6 +13,7 @@
           :disabled="!serveUrl"
           :href="serveUrl"
           target="_blank"
+          rel="noopener noreferrer"
         />
         <VueIcon
           icon="lens"
@@ -49,7 +50,7 @@
     </div>
 
     <div class="logo">
-      <a href="https://webpack.js.org/" target="_blank">
+      <a href="https://webpack.js.org/" target="_blank" rel="noopener noreferrer">
         <img src="../assets/webpack.svg" class="webpack-logo">
       </a>
     </div>
@@ -96,7 +97,7 @@ export default {
       .title
         color lighten($vue-ui-color-dark, 60%)
         font-size 20px
-        font-weight lighter
+        font-weight 300
         text-align center
         margin-bottom $padding-item
 
@@ -108,7 +109,7 @@ export default {
       .info-block
         v-box()
         box-center()
-        font-weight lighter
+        font-weight 300
         text-align center
 
         .label

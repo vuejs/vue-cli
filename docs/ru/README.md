@@ -6,10 +6,6 @@ actionLink: /ru/guide/
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
 
-<div style="text-align: center">
-  <Bit/>
-</div>
-
 <div class="features">
   <div class="feature">
     <h2>Богатые возможности</h2>
@@ -41,7 +37,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
 
 Установка:
 
-``` bash
+```bash
 npm install -g @vue/cli
 # ИЛИ
 yarn global add @vue/cli
@@ -49,7 +45,7 @@ yarn global add @vue/cli
 
 Создание проекта:
 
-``` bash
+```bash
 vue create my-project
 # ИЛИ
 vue ui

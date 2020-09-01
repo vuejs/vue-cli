@@ -1,33 +1,62 @@
-const chalk = require('chalk')
 const invoke = require('./invoke')
-const { loadOptions } = require('./options')
-const { installPackage } = require('./util/installDeps')
+const inquirer = require('inquirer')
 const {
-  log,
-  error,
-  hasProjectYarn,
-  resolvePluginId,
+  chalk,
+  semver,
   resolveModule,
   loadModule
 } = require('@vue/cli-shared-utils')
 
-async function add (pluginName, options = {}, context = process.cwd()) {
-  // special internal "plugins"
-  if (/^(@vue\/)?router$/.test(pluginName)) {
-    return addRouter(context)
-  }
-  if (/^(@vue\/)?vuex$/.test(pluginName)) {
-    return addVuex(context)
+const getVersions = require('./util/getVersions')
+const PackageManager = require('./util/ProjectPackageManager')
+const {
+  log,
+  error,
+  resolvePluginId,
+  isOfficialPlugin
+} = require('@vue/cli-shared-utils')
+const confirmIfGitDirty = require('./util/confirmIfGitDirty')
+
+async function add (pluginToAdd, options = {}, context = process.cwd()) {
+  if (!(await confirmIfGitDirty(context))) {
+    return
   }
 
+  // for `vue add` command in 3.x projects
+  const servicePkg = loadModule('@vue/cli-service/package.json', context)
+  if (servicePkg && semver.satisfies(servicePkg.version, '3.x')) {
+    // special internal "plugins"
+    if (/^(@vue\/)?router$/.test(pluginToAdd)) {
+      return addRouter(context)
+    }
+    if (/^(@vue\/)?vuex$/.test(pluginToAdd)) {
+      return addVuex(context)
+    }
+  }
+
+  const pluginRe = /^(@?[^@]+)(?:@(.+))?$/
+  const [
+    // eslint-disable-next-line
+    _skip,
+    pluginName,
+    pluginVersion
+  ] = pluginToAdd.match(pluginRe)
   const packageName = resolvePluginId(pluginName)
 
   log()
   log(`📦  Installing ${chalk.cyan(packageName)}...`)
   log()
 
-  const packageManager = loadOptions().packageManager || (hasProjectYarn(context) ? 'yarn' : 'npm')
-  await installPackage(context, packageManager, options.registry, packageName)
+  const pm = new PackageManager({ context })
+
+  if (pluginVersion) {
+    await pm.add(`${packageName}@${pluginVersion}`)
+  } else if (isOfficialPlugin(packageName)) {
+    const { latestMinor } = await getVersions()
+    await pm.add(`${packageName}@~${latestMinor}`)
+  } else {
+    await pm.add(packageName, { tilde: true })
+  }
 
   log(`${chalk.green('✔')}  Successfully installed plugin: ${chalk.cyan(packageName)}`)
   log()
@@ -40,8 +69,16 @@ async function add (pluginName, options = {}, context = process.cwd()) {
   }
 }
 
+module.exports = (...args) => {
+  return add(...args).catch(err => {
+    error(err)
+    if (!process.env.VUE_CLI_TEST) {
+      process.exit(1)
+    }
+  })
+}
+
 async function addRouter (context) {
-  const inquirer = require('inquirer')
   const options = await inquirer.prompt([{
     name: 'routerHistoryMode',
     type: 'confirm',
@@ -58,14 +95,5 @@ async function addVuex (context) {
   invoke.runGenerator(context, {
     id: 'core:vuex',
     apply: loadModule('@vue/cli-service/generator/vuex', context)
-  })
-}
-
-module.exports = (...args) => {
-  return add(...args).catch(err => {
-    error(err)
-    if (!process.env.VUE_CLI_TEST) {
-      process.exit(1)
-    }
   })
 }

@@ -914,7 +914,7 @@ export default {
 
 ## 插件的 action
 
-插件的 action 就是在 cli-ui (浏览器) 和插件 (Node.js) 直接的调用。
+插件的 action 就是在 cli-ui (浏览器) 和插件 (Node.js) 之间的调用。
 
 > 例如，你可能有一个自定义组件里的按钮 (详见[客户端 addon](#客户端-addon))，这个按钮会通过这个 API 向服务端调用一些 Node.js 代码。
 

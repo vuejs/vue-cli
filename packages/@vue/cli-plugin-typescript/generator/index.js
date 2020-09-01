@@ -1,25 +1,39 @@
+const pluginDevDeps = require('../package.json').devDependencies
+
 module.exports = (api, {
   classComponent,
   tsLint,
-  lintOn = []
-}, _, invoking) => {
+  lintOn = [],
+  skipLibCheck = true,
+  convertJsToTs,
+  allowJs
+}, rootOptions, invoking) => {
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
+  const isVue3 = rootOptions && rootOptions.vueVersion === '3'
 
   api.extendPackage({
     devDependencies: {
-      typescript: '^3.2.1'
+      typescript: pluginDevDeps.typescript
     }
   })
 
   if (classComponent) {
-    api.extendPackage({
-      dependencies: {
-        'vue-class-component': '^6.0.0',
-        'vue-property-decorator': '^8.0.0'
-      }
-    })
+    if (isVue3) {
+      api.extendPackage({
+        dependencies: {
+          'vue-class-component': '^8.0.0-0'
+        }
+      })
+    } else {
+      api.extendPackage({
+        dependencies: {
+          'vue-class-component': pluginDevDeps['vue-class-component'],
+          'vue-property-decorator': pluginDevDeps['vue-property-decorator']
+        }
+      })
+    }
   }
 
   if (tsLint) {
@@ -40,7 +54,7 @@ module.exports = (api, {
     if (lintOn.includes('commit')) {
       api.extendPackage({
         devDependencies: {
-          'lint-staged': '^8.1.0'
+          'lint-staged': '^9.5.0'
         },
         gitHooks: {
           'pre-commit': 'lint-staged'
@@ -74,13 +88,27 @@ module.exports = (api, {
       // eslint-disable-next-line node/no-extraneous-require
       require('@vue/cli-plugin-eslint/generator').applyTS(api)
     }
+
+    if (api.hasPlugin('e2e-webdriverio')) {
+      // eslint-disable-next-line node/no-extraneous-require
+      require('@vue/cli-plugin-e2e-webdriverio/generator').applyTS(api)
+    }
   }
 
   api.render('./template', {
-    isTest: process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG,
+    skipLibCheck,
     hasMocha: api.hasPlugin('unit-mocha'),
-    hasJest: api.hasPlugin('unit-jest')
+    hasJest: api.hasPlugin('unit-jest'),
+    hasWebDriverIO: api.hasPlugin('e2e-webdriverio')
   })
 
-  require('./convert')(api, { tsLint })
+  if (isVue3) {
+    api.render('./template-vue3')
+
+    // In Vue 3, TSX interface is defined in https://github.com/vuejs/vue-next/blob/master/packages/runtime-dom/types/jsx.d.ts
+    // So no need to manually add a shim.
+    api.render((files) => delete files['src/shims-tsx.d.ts'])
+  }
+
+  require('./convert')(api, { tsLint, convertJsToTs })
 }

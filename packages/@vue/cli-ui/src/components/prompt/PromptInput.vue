@@ -14,7 +14,7 @@
         <VueInput
           :value="value(prompt.value)"
           :type="prompt.type === 'password' ? 'password' : 'text'"
-          @input="value => answer(value)"
+          @update="value => answer(value)"
         />
       </div>
     </div>

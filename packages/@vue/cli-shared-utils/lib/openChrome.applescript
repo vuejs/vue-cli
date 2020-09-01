@@ -13,43 +13,45 @@ property targetWindow: null
 on run argv
   set theURL to item 1 of argv
 
-  tell application "Chrome"
+  with timeout of 2 seconds
+    tell application "Chrome"
 
-    if (count every window) = 0 then
-      make new window
-    end if
+      if (count every window) = 0 then
+        make new window
+      end if
 
-    -- 1: Looking for tab running debugger
-    -- then, Reload debugging tab if found
-    -- then return
-    set found to my lookupTabWithUrl(theURL)
-    if found then
-      set targetWindow's active tab index to targetTabIndex
-      tell targetTab to reload
-      tell targetWindow to activate
-      set index of targetWindow to 1
-      return
-    end if
+      -- 1: Looking for tab running debugger
+      -- then, Reload debugging tab if found
+      -- then return
+      set found to my lookupTabWithUrl(theURL)
+      if found then
+        set targetWindow's active tab index to targetTabIndex
+        tell targetTab to reload
+        tell targetWindow to activate
+        set index of targetWindow to 1
+        return
+      end if
 
-    -- 2: Looking for Empty tab
-    -- In case debugging tab was not found
-    -- We try to find an empty tab instead
-    set found to my lookupTabWithUrl("chrome://newtab/")
-    if found then
-      set targetWindow's active tab index to targetTabIndex
-      set URL of targetTab to theURL
-      tell targetWindow to activate
-      return
-    end if
+      -- 2: Looking for Empty tab
+      -- In case debugging tab was not found
+      -- We try to find an empty tab instead
+      set found to my lookupTabWithUrl("chrome://newtab/")
+      if found then
+        set targetWindow's active tab index to targetTabIndex
+        set URL of targetTab to theURL
+        tell targetWindow to activate
+        return
+      end if
 
-    -- 3: Create new tab
-    -- both debugging and empty tab were not found
-    -- make a new tab with url
-    tell window 1
-      activate
-      make new tab with properties {URL:theURL}
+      -- 3: Create new tab
+      -- both debugging and empty tab were not found
+      -- make a new tab with url
+      tell window 1
+        activate
+        make new tab with properties {URL:theURL}
+      end tell
     end tell
-  end tell
+  end timeout
 end run
 
 -- Function:

@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "3.5.1",
+  "version": "4.5.4",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
@@ -25,69 +25,98 @@
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
     "@soda/friendly-errors-webpack-plugin": "^1.7.1",
-    "@vue/cli-overlay": "^3.5.1",
-    "@vue/cli-shared-utils": "^3.5.1",
-    "@vue/component-compiler-utils": "^2.6.0",
+    "@soda/get-current-script": "^1.0.0",
+    "@types/minimist": "^1.2.0",
+    "@types/webpack": "^4.0.0",
+    "@types/webpack-dev-server": "^3.11.0",
+    "@vue/cli-overlay": "^4.5.4",
+    "@vue/cli-plugin-router": "^4.5.4",
+    "@vue/cli-plugin-vuex": "^4.5.4",
+    "@vue/cli-shared-utils": "^4.5.4",
+    "@vue/component-compiler-utils": "^3.1.2",
     "@vue/preload-webpack-plugin": "^1.1.0",
     "@vue/web-component-wrapper": "^1.2.0",
-    "acorn": "^6.1.0",
-    "acorn-walk": "^6.1.1",
-    "address": "^1.0.3",
-    "autoprefixer": "^9.4.8",
-    "cache-loader": "^2.0.1",
-    "case-sensitive-paths-webpack-plugin": "^2.2.0",
-    "chalk": "^2.4.2",
-    "clipboardy": "^1.2.3",
-    "cliui": "^4.1.0",
-    "copy-webpack-plugin": "^4.6.0",
-    "css-loader": "^1.0.1",
+    "acorn": "^7.4.0",
+    "acorn-walk": "^7.1.1",
+    "address": "^1.1.2",
+    "autoprefixer": "^9.8.6",
+    "browserslist": "^4.12.0",
+    "cache-loader": "^4.1.0",
+    "case-sensitive-paths-webpack-plugin": "^2.3.0",
+    "cli-highlight": "^2.1.4",
+    "clipboardy": "^2.3.0",
+    "cliui": "^6.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.5.3",
     "cssnano": "^4.1.10",
     "debug": "^4.1.1",
-    "dotenv": "^6.2.0",
-    "dotenv-expand": "^4.2.0",
-    "escape-string-regexp": "^1.0.5",
-    "file-loader": "^3.0.1",
+    "default-gateway": "^5.0.5",
+    "dotenv": "^8.2.0",
+    "dotenv-expand": "^5.1.0",
+    "file-loader": "^4.2.0",
     "fs-extra": "^7.0.1",
-    "globby": "^9.0.0",
-    "hash-sum": "^1.0.2",
+    "globby": "^9.2.0",
+    "hash-sum": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "launch-editor-middleware": "^2.2.1",
-    "lodash.defaultsdeep": "^4.6.0",
+    "lodash.defaultsdeep": "^4.6.1",
     "lodash.mapvalues": "^4.6.0",
     "lodash.transform": "^4.6.0",
-    "mini-css-extract-plugin": "^0.5.0",
-    "minimist": "^1.2.0",
-    "ora": "^3.1.0",
-    "portfinder": "^1.0.20",
+    "mini-css-extract-plugin": "^0.9.0",
+    "minimist": "^1.2.5",
+    "pnp-webpack-plugin": "^1.6.4",
+    "portfinder": "^1.0.26",
     "postcss-loader": "^3.0.0",
-    "read-pkg": "^4.0.1",
-    "semver": "^5.6.0",
-    "slash": "^2.0.0",
-    "source-map-url": "^0.4.0",
-    "ssri": "^6.0.1",
-    "string.prototype.padend": "^3.0.0",
-    "terser-webpack-plugin": "^1.2.2",
-    "thread-loader": "^2.1.2",
-    "url-loader": "^1.1.2",
-    "vue-loader": "^15.6.4",
-    "webpack": ">=4 < 4.29",
-    "webpack-bundle-analyzer": "^3.0.4",
-    "webpack-chain": "^4.11.0",
-    "webpack-dev-server": "^3.2.0",
-    "webpack-merge": "^4.2.1",
-    "yorkie": "^2.0.0"
+    "ssri": "^7.1.0",
+    "terser-webpack-plugin": "^2.3.6",
+    "thread-loader": "^2.1.3",
+    "url-loader": "^2.2.0",
+    "vue-loader": "^15.9.2",
+    "vue-style-loader": "^4.1.2",
+    "webpack": "^4.0.0",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-chain": "^6.4.0",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^4.2.2"
+  },
+  "optionalDependencies": {
+    "vue-loader-v16": "npm:vue-loader@^16.0.0-beta.3"
   },
   "peerDependencies": {
+    "@vue/compiler-sfc": "^3.0.0-beta.14",
     "vue-template-compiler": "^2.0.0"
   },
+  "peerDependenciesMeta": {
+    "@vue/compiler-sfc": {
+      "optional": true
+    },
+    "less-loader": {
+      "optional": true
+    },
+    "pug-plain-loader": {
+      "optional": true
+    },
+    "raw-loader": {
+      "optional": true
+    },
+    "sass-loader": {
+      "optional": true
+    },
+    "stylus-loader": {
+      "optional": true
+    },
+    "vue-template-compiler": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "fibers": "^3.1.1",
-    "sass": "^1.17.2",
-    "sass-loader": "^7.1.0",
-    "vue": "^2.6.7",
-    "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.6.7",
-    "vuex": "^3.0.1"
+    "fibers": ">= 3.1.1 <5.0.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0",
+    "vue-template-compiler": "^2.6.11",
+    "vuex": "^3.4.0"
   },
   "publishConfig": {
     "access": "public"

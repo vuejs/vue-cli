@@ -3,6 +3,7 @@ const chalk = require('chalk')
 
 const spinner = ora()
 let lastMsg = null
+let isPaused = false
 
 exports.logWithSpinner = (symbol, msg) => {
   if (!msg) {
@@ -24,6 +25,10 @@ exports.logWithSpinner = (symbol, msg) => {
 }
 
 exports.stopSpinner = (persist) => {
+  if (!spinner.isSpinning) {
+    return
+  }
+
   if (lastMsg && persist !== false) {
     spinner.stopAndPersist({
       symbol: lastMsg.symbol,
@@ -36,11 +41,21 @@ exports.stopSpinner = (persist) => {
 }
 
 exports.pauseSpinner = () => {
-  spinner.stop()
+  if (spinner.isSpinning) {
+    spinner.stop()
+    isPaused = true
+  }
 }
 
 exports.resumeSpinner = () => {
-  spinner.start()
+  if (isPaused) {
+    spinner.start()
+    isPaused = false
+  }
+}
+
+exports.failSpinner = (text) => {
+  spinner.fail(text)
 }
 
 // silent all logs except errors during tests and keep record

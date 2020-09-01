@@ -2,7 +2,7 @@
 
 ## Translate the standard UI
 
-To make collaboration and synchronisation easier, the English source locale from the `dev` branch is automatically imported to [Transifex](https://www.transifex.com/vuejs/vue-cli/dashboard/), a platform for collaborative translation.
+To make collaboration and synchronization easier, the English source locale from the `dev` branch is automatically imported to [Transifex](https://www.transifex.com/vuejs/vue-cli/dashboard/), a platform for collaborative translation.
 
 For existing languages, you can [sign up as a translator](https://www.transifex.com/vuejs/vue-cli/dashboard/).
 For new languages, you can [request the new language](https://www.transifex.com/vuejs/vue-cli/dashboard/) after signing up.

@@ -4,7 +4,6 @@ const logs = require('../connectors/logs')
 const sharedData = require('../connectors/shared-data')
 const views = require('../connectors/views')
 const suggestions = require('../connectors/suggestions')
-const folders = require('../connectors/folders')
 const progress = require('../connectors/progress')
 const app = require('../connectors/app')
 // Utils
@@ -21,6 +20,13 @@ const { validateNotify } = require('./notify')
 const { validateSuggestion } = require('./suggestion')
 const { validateProgress } = require('./progress')
 const { validateWidget } = require('./widget')
+
+/**
+ * @typedef SetSharedDataOptions
+ * @prop {boolean} disk Don't keep this data in memory by writing it to disk
+ */
+
+/** @typedef {import('../connectors/shared-data').SharedData} SharedData */
 
 class PluginApi {
   constructor ({ plugins, file, project, lightMode = false }, context) {
@@ -196,7 +202,7 @@ class PluginApi {
   }
 
   /**
-   * Add a new task indepently from the scripts.
+   * Add a new task independently from the scripts.
    * The task will only appear in the UI.
    *
    * @param {object} options Task description
@@ -238,7 +244,7 @@ class PluginApi {
     try {
       validateClientAddon(options)
       if (options.url && options.path) {
-        throw new Error(`'url' and 'path' can't be defined at the same time.`)
+        throw new Error('\'url\' and \'path\' can\'t be defined at the same time.')
       }
       this.clientAddons.push({
         ...options,
@@ -390,11 +396,6 @@ class PluginApi {
    * @param {string} id Plugin id or short id
    */
   hasPlugin (id) {
-    if (id === 'router') id = 'vue-router'
-    if (['vue-router', 'vuex'].includes(id)) {
-      const pkg = folders.readPackage(this.cwd, this.context, true)
-      return ((pkg.dependencies && pkg.dependencies[id]) || (pkg.devDependencies && pkg.devDependencies[id]))
-    }
     return this.plugins.some(p => matchesPluginId(id, p.id))
   }
 
@@ -453,10 +454,10 @@ class PluginApi {
   /* Namespaced */
 
   /**
-   * Retrieve a Shared data value.
+   * Retrieve a Shared data instance.
    *
    * @param {string} id Id of the Shared data
-   * @returns {any} Shared data value
+   * @returns {SharedData} Shared data instance
    */
   getSharedData (id) {
     return sharedData.get({ id, projectId: this.project.id }, this.context)
@@ -467,9 +468,10 @@ class PluginApi {
    *
    * @param {string} id Id of the Shared data
    * @param {any} value Value of the Shared data
+   * @param {SetSharedDataOptions} options
    */
-  setSharedData (id, value) {
-    sharedData.set({ id, projectId: this.project.id, value }, this.context)
+  async setSharedData (id, value, { disk = false } = {}) {
+    return sharedData.set({ id, projectId: this.project.id, value, disk }, this.context)
   }
 
   /**
@@ -477,8 +479,8 @@ class PluginApi {
    *
    * @param {string} id Id of the Shared data
    */
-  removeSharedData (id) {
-    sharedData.remove({ id, projectId: this.project.id }, this.context)
+  async removeSharedData (id) {
+    return sharedData.remove({ id, projectId: this.project.id }, this.context)
   }
 
   /**
@@ -616,24 +618,93 @@ class PluginApi {
    *   - callAction
    *
    * @param {string} namespace Prefix to add to the id params
-   * @returns {object} Namespaced methods
    */
   namespace (namespace) {
     return {
+      /**
+       * Retrieve a Shared data instance.
+       *
+       * @param {string} id Id of the Shared data
+       * @returns {SharedData} Shared data instance
+       */
       getSharedData: (id) => this.getSharedData(namespace + id),
-      setSharedData: (id, value) => this.setSharedData(namespace + id, value),
+      /**
+       * Set or update the value of a Shared data
+       *
+       * @param {string} id Id of the Shared data
+       * @param {any} value Value of the Shared data
+       * @param {SetSharedDataOptions} options
+       */
+      setSharedData: (id, value, options) => this.setSharedData(namespace + id, value, options),
+      /**
+       * Delete a shared data.
+       *
+       * @param {string} id Id of the Shared data
+       */
       removeSharedData: (id) => this.removeSharedData(namespace + id),
+      /**
+       * Watch for a value change of a shared data
+       *
+       * @param {string} id Id of the Shared data
+       * @param {function} handler Callback
+       */
       watchSharedData: (id, handler) => this.watchSharedData(namespace + id, handler),
+      /**
+       * Delete the watcher of a shared data.
+       *
+       * @param {string} id Id of the Shared data
+       * @param {function} handler Callback
+       */
       unwatchSharedData: (id, handler) => this.unwatchSharedData(namespace + id, handler),
+      /**
+       * Listener triggered when a Plugin action is called from a client addon component.
+       *
+       * @param {string} id Id of the action to listen
+       * @param {any} cb Callback (ex: (params) => {} )
+       */
       onAction: (id, cb) => this.onAction(namespace + id, cb),
+      /**
+       * Call a Plugin action. This can also listened by client addon components.
+       *
+       * @param {string} id Id of the action
+       * @param {object} params Params object passed as 1st argument to callbacks
+       * @returns {Promise}
+       */
       callAction: (id, params) => this.callAction(namespace + id, params),
+      /**
+       * Retrieve a value from the local DB
+       *
+       * @param {string} id Path to the item
+       * @returns Item value
+       */
       storageGet: (id) => this.storageGet(namespace + id),
+      /**
+       * Store a value into the local DB
+       *
+       * @param {string} id Path to the item
+       * @param {any} value Value to be stored (must be serializable in JSON)
+       */
       storageSet: (id, value) => this.storageSet(namespace + id, value),
+      /**
+       * Add a suggestion for the user.
+       *
+       * @param {object} options Suggestion
+       */
       addSuggestion: (options) => {
         options.id = namespace + options.id
         return this.addSuggestion(options)
       },
+      /**
+       * Remove a suggestion
+       *
+       * @param {string} id Id of the suggestion
+       */
       removeSuggestion: (id) => this.removeSuggestion(namespace + id),
+      /**
+       * Register a widget for project dashboard
+       *
+       * @param {object} def Widget definition
+       */
       registerWidget: (def) => {
         def.id = namespace + def.id
         return this.registerWidget(def)

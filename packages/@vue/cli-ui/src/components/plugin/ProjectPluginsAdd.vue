@@ -6,7 +6,7 @@
         class="frame"
         :tab-id.sync="tabId"
       >
-        <template slot-scope="{ next, previous }">
+        <template>
           <VueTab
             id="search"
             :label="$t('org.vue.views.project-plugins-add.tabs.search.label')"
@@ -15,7 +15,7 @@
           >
             <NpmPackageSearch
               filters="computedKeywords:vue-cli-plugin"
-              try-logos
+              load-metadata
               @close="close()"
               @install="installPlugin"
             >

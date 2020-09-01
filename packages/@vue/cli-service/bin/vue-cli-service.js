@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-const semver = require('semver')
-const { error } = require('@vue/cli-shared-utils')
+const { semver, error } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
 
-if (!semver.satisfies(process.version, requiredVersion)) {
+if (!semver.satisfies(process.version, requiredVersion, { includePrerelease: true })) {
   error(
     `You are using Node ${process.version}, but vue-cli-service ` +
     `requires Node ${requiredVersion}.\nPlease upgrade your Node version.`
@@ -22,6 +21,7 @@ const args = require('minimist')(rawArgv, {
     'modern',
     'report',
     'report-json',
+    'inline-vue',
     'watch',
     // serve
     'open',

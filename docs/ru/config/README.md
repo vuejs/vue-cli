@@ -4,8 +4,6 @@ sidebar: auto
 
 # Конфигурация
 
-<Bit/>
-
 ## Глобальная конфигурация CLI
 
 Некоторые глобальные настройки для `@vue/cli`, такие как предпочитаемый менеджер пакетов и ваши локальные пресеты настроек, сохранены в JSON-файле `.vuerc` в вашем домашнем каталоге. Вы можете использовать любой редактор для изменения этих настроек.
@@ -22,7 +20,7 @@ sidebar: auto
 
 Файл должен экспортировать объект с настройками:
 
-``` js
+```js
 // vue.config.js
 module.exports = {
   // настройки...
@@ -54,7 +52,7 @@ module.exports = {
 
   Опция может быть полезна и на этапе разработки. Если вы хотите запускать сервер разработки из корня сайта, то можно устанавливать значение по условию:
 
-  ``` js
+  ```js
   module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
       ? '/production-sub-path/'
@@ -108,7 +106,7 @@ module.exports = {
   - объектом, который определяет свои `entry`, `template`, `filename`, `title` и `chunks` (все опциональные, за исключением `entry`). Любые другие свойства, указанные рядом с ними будут переданы непосредственно в `html-webpack-plugin`, для возможности более тонкой настройки этого плагина;
   - или строкой, определяющей свою `entry`.
 
-  ``` js
+  ```js
   module.exports = {
     pages: {
       index: {
@@ -122,7 +120,7 @@ module.exports = {
         // должен быть <title><%= htmlWebpackPlugin.options.title %></title>
         title: 'Index Page',
         // все фрагменты, добавляемые на этой странице, по умолчанию
-        // это извлеченные общий фрагмент и вендорный фрагмент.
+        // это извлечённые общий фрагмент и вендорный фрагмент.
         chunks: ['chunk-vendors', 'chunk-common', 'index']
       },
       // когда используется строковый формат точки входа, то
@@ -140,18 +138,20 @@ module.exports = {
 
 ### lintOnSave
 
-- Тип: `boolean | 'error'`
-- По умолчанию: `true`
+- Тип: `boolean | 'warning' | 'default' | 'error'`
+- По умолчанию: 'default'
 
   Выполнять ли линтинг кода при сохранении во время разработки с помощью [eslint-loader](https://github.com/webpack-contrib/eslint-loader). Эта опция действует только когда установлен плагин [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint).
 
-  Когда значение `true`, `eslint-loader` показывает ошибки линтинга как предупреждения. По умолчанию предупреждения выводятся в терминал и не останавливают сборку ошибкой.
+  Когда значение `true` или `'warning'`, `eslint-loader` показывает ошибки линтинга как предупреждения. По умолчанию предупреждения выводятся в терминал и не останавливают сборку ошибкой, поэтому это хорошее значение по умолчанию для разработки.
 
-  Чтобы ошибки линтинга отображались в браузере, можно указать `lintOnSave: 'error'`. Тогда `eslint-loader` будет всегда генерировать ошибки. Это также означает, что ошибки линтинга будут останавливать сборку ошибкой.
+  Для отображения ошибок линтинга в браузере можно указать `lintOnSave: 'default'`. Это заставит `eslint-loader` генерировать ошибки и любые ошибки линтинга приведут к неудаче компиляции сборки.
 
-  Кроме того, вы можете настроить отображение в браузере предупреждений и ошибок:
+  Установка значения в `'error'` заставит `eslint-loader` считать все предупреждения ошибками, а значит и они будут отображены в браузере.
 
-  ``` js
+  Кроме того, можно настроить отображение в браузере предупреждений и ошибок:
+
+  ```js
   // vue.config.js
   module.exports = {
     devServer: {
@@ -165,7 +165,7 @@ module.exports = {
 
   Когда значение `lintOnSave` приводится к `true`, `eslint-loader` будет применяться как в разработке, так и в production. Если вы хотите отключить `eslint-loader` при сборке в production, можете воспользоваться следующей конфигурацией:
 
-  ``` js
+  ```js
   // vue.config.js
   module.exports = {
     lintOnSave: process.env.NODE_ENV !== 'production'
@@ -187,6 +187,14 @@ module.exports = {
 - По умолчанию: `[]`
 
   По умолчанию `babel-loader` игнорирует все файлы из `node_modules`. Если вы хотите явно транспилировать зависимость с помощью Babel, то вы можете перечислить её в этой опции.
+
+::: warning Конфигурация Jest
+Эта опция не поддерживается [плагином cli-unit-jest](#jest), потому что в Jest мы не должны транспилировать код из `node_modules`, если в нём не используются нестандартные возможности — Node >8.11 уже поддерживает последние нововведения ECMAScript.
+
+Однако, Jest иногда требуется преобразовывать содержимое из `node_modules`, например если в этом коде используется синтаксис ES6 `import`/`export`. В таком случае используйте опцию `transformIgnorePatterns` в файле `jest.config.js`.
+
+См. [README плагина](../core-plugins/unit-jest.md) для получения дополнительной информации.
+:::
 
 ### productionSourceMap
 
@@ -237,10 +245,20 @@ module.exports = {
 
 ### css.modules
 
-- Тип: `boolean`
-- По умолчанию: `false`
+Устаревшая опция, начиная с версии v4, используйте вместо неё [`css.requireModuleExtension`](#css-requireModuleExtension).
 
-  По умолчанию, только файлы заканчивающиеся на `*.module.[ext]` обрабатываются как CSS-модули. Установка в значение `true` позволит вам убрать `.module` из имён файлов и обрабатывать все `*.(css|scss|sass|less|styl(us)?)` файлы как CSS-модули.
+В версии v3 это противоположность опции `css.requireModuleExtension`.
+
+### css.requireModuleExtension
+
+- Тип: `boolean`
+- По умолчанию: `true`
+
+  По умолчанию, только файлы заканчивающиеся на `*.module.[ext]` обрабатываются как CSS-модули. Установка в значение `false` позволит вам убрать `.module` из имён файлов и обрабатывать все `*.(css|scss|sass|less|styl(us)?)` файлы как CSS-модули.
+
+  ::: tip СОВЕТ
+  Если в `css.loaderOptions.css` есть настроенные конфигурации CSS-модулей, то поле `css.requireModuleExtension` должно быть явно указано в `true` или `false`, иначе нельзя быть уверенным необходимо ли применять эти параметры ко всем CSS-файлам или нет.
+  :::
 
   См. также: [Работа с CSS — CSS-модули](../guide/css.md#css-модуnи)
 
@@ -257,6 +275,8 @@ module.exports = {
 
   Извлечение CSS отключено по умолчанию в режиме `development`, поскольку оно несовместимо с горячей перезагрузкой CSS. Тем не менее, вы всё равно можете принудительно использовать извлечение стилей всегда, установив значение в `true`.
 
+  Вместо `true` также можно передать объект с настройками для [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) если необходимо детальнее настроить работу этого плагина.
+
 ### css.sourceMap
 
 - Тип: `boolean`
@@ -271,7 +291,7 @@ module.exports = {
 
   Передача настроек в загрузчики относящиеся к CSS. Например:
 
-  ``` js
+  ```js
   module.exports = {
     css: {
       loaderOptions: {
@@ -293,6 +313,8 @@ module.exports = {
   - [sass-loader](https://github.com/webpack-contrib/sass-loader)
   - [less-loader](https://github.com/webpack-contrib/less-loader)
   - [stylus-loader](https://github.com/shama/stylus-loader)
+
+  Также можно настроить синтаксис `scss` отдельно от `sass` через опцию `scss`.
 
   См. также: [Передача настроек в загрузчики пре-процессоров](../guide/css.md#передача-настроек-в-загрузчики-пре-процессоров)
 
@@ -318,7 +340,7 @@ module.exports = {
 
   `devServer.proxy` может быть строкой, указывающей на сервер API для разработки:
 
-  ``` js
+  ```js
   module.exports = {
     devServer: {
       proxy: 'http://localhost:4000'
@@ -328,9 +350,13 @@ module.exports = {
 
   Это скажет серверу разработки проксировать любые неизвестные запросы (запросы, которые не соответствуют статическому файлу) на адрес `http://localhost:4000`.
 
+  ::: warning ПРЕДУПРЕЖДЕНИЕ
+  При указании `devServer.proxy` строкой будут проксироваться только XHR-запросы. Если необходимо протестировать API URL, не открывайте его в браузере, а вместо этого используйте инструмент для работы с API (например, Postman).
+  :::
+
   Если вам нужно больше контроля поведения прокси-сервера, вы также можете использовать объект с парами опций `path: options`. См. полный список опций [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware#proxycontext-config):
 
-  ``` js
+  ```js
   module.exports = {
     devServer: {
       proxy: {
@@ -349,10 +375,10 @@ module.exports = {
 
 ### parallel
 
-- Тип: `boolean`
+- Тип: `boolean | number`
 - По умолчанию: `require('os').cpus().length > 1`
 
-  Использовать ли `thread-loader` для транспиляции Babel или TypeScript. Включается для production-сборок, когда система имеет более 1 процессорных ядер.
+  Использовать ли `thread-loader` для транспиляции Babel или TypeScript. Включается для production-сборок, когда система имеет более 1 процессорных ядер. Указание числа определит количество задействованных воркеров (workers).
 
 ### pwa
 
@@ -366,7 +392,7 @@ module.exports = {
 
   Этот объект не проходит никакой валидации своей структуры, поэтому можно его использовать для передачи произвольных параметров сторонним плагинам. Например:
 
-  ``` js
+  ```js
   module.exports = {
     pluginOptions: {
       foo: {
@@ -420,3 +446,8 @@ TypeScript можно настроить через `tsconfig.json`.
 ### Nightwatch
 
 Подробнее на странице плагина [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch).
+
+
+### WebdriverIO
+
+Подробнее на странице плагина [@vue/cli-plugin-e2e-webdriverio](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-webdriverio).

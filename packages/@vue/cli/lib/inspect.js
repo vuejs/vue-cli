@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const execa = require('execa')
 const resolve = require('resolve')
+const { execa } = require('@vue/cli-shared-utils')
 
 module.exports = function inspect (paths, args) {
   const cwd = process.cwd()

@@ -1,61 +1,62 @@
 module.exports = (api, options) => {
+  const isVue3 = (options.vueVersion === '3')
   api.render('./template', {
+    isVue3,
     doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
   })
+
+  if (isVue3) {
+    api.extendPackage({
+      dependencies: {
+        'vue': '^3.0.0-0'
+      },
+      devDependencies: {
+        '@vue/compiler-sfc': '^3.0.0-0'
+      }
+    })
+  } else {
+    api.extendPackage({
+      dependencies: {
+        'vue': '^2.6.11'
+      },
+      devDependencies: {
+        'vue-template-compiler': '^2.6.11'
+      }
+    })
+  }
 
   api.extendPackage({
     scripts: {
       'serve': 'vue-cli-service serve',
       'build': 'vue-cli-service build'
     },
-    dependencies: {
-      'vue': '^2.6.6'
-    },
-    devDependencies: {
-      'vue-template-compiler': '^2.5.21'
-    },
-    'postcss': {
-      'plugins': {
-        'autoprefixer': {}
-      }
-    },
     browserslist: [
       '> 1%',
       'last 2 versions',
-      'not ie <= 8'
+      'not dead'
     ]
   })
 
-  if (options.router) {
-    require('./router')(api, options)
-  }
-
-  if (options.vuex) {
-    require('./vuex')(api, options)
-  }
-
   if (options.cssPreprocessor) {
     const deps = {
-      // TODO: remove 'sass' option in v4 or rename 'dart-sass' to 'sass'
       sass: {
-        'node-sass': '^4.9.0',
-        'sass-loader': '^7.1.0'
+        sass: '^1.26.5',
+        'sass-loader': '^8.0.2'
       },
       'node-sass': {
-        'node-sass': '^4.9.0',
-        'sass-loader': '^7.1.0'
+        'node-sass': '^4.12.0',
+        'sass-loader': '^8.0.2'
       },
       'dart-sass': {
-        fibers: '^3.1.1',
-        sass: '^1.17.2',
-        'sass-loader': '^7.1.0'
+        sass: '^1.26.5',
+        'sass-loader': '^8.0.2'
       },
       less: {
         'less': '^3.0.4',
-        'less-loader': '^4.1.0'
+        'less-loader': '^5.0.0'
       },
       stylus: {
-        'stylus': '^0.54.5',
+        'stylus': '^0.54.7',
         'stylus-loader': '^3.0.2'
       }
     }
@@ -63,6 +64,16 @@ module.exports = (api, options) => {
     api.extendPackage({
       devDependencies: deps[options.cssPreprocessor]
     })
+  }
+
+  // for v3 compatibility
+  if (options.router && !api.hasPlugin('router')) {
+    require('./router')(api, options, options)
+  }
+
+  // for v3 compatibility
+  if (options.vuex && !api.hasPlugin('vuex')) {
+    require('./vuex')(api, options, options)
   }
 
   // additional tooling configurations

@@ -5,10 +5,11 @@ const path = require('path')
 const safariFix = `!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();`
 
 class ModernModePlugin {
-  constructor ({ targetDir, isModernBuild, unsafeInline }) {
+  constructor ({ targetDir, isModernBuild, unsafeInline, jsDirectory }) {
     this.targetDir = targetDir
     this.isModernBuild = isModernBuild
     this.unsafeInline = unsafeInline
+    this.jsDirectory = jsDirectory
   }
 
   apply (compiler) {
@@ -75,11 +76,8 @@ class ModernModePlugin {
           })
         } else {
           // inject the fix as an external script
-          const safariFixPath = legacyAssets[0].attributes.src
-            .split('/')
-            .slice(0, -1)
-            .concat(['safari-nomodule-fix.js'])
-            .join('/')
+          const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
+          const fullSafariFixPath = path.join(compilation.options.output.publicPath, safariFixPath)
           compilation.assets[safariFixPath] = {
             source: function () {
               return new Buffer(safariFix)
@@ -92,7 +90,7 @@ class ModernModePlugin {
             tagName: 'script',
             closeTag: true,
             attributes: {
-              src: safariFixPath
+              src: fullSafariFixPath
             }
           })
         }

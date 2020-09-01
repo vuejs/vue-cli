@@ -40,7 +40,7 @@ describe('Vue project manager', () => {
       cy.get('.next').click()
     })
     cy.get('.config').within(() => {
-      cy.get('.vue-ui-select').eq(0).click()
+      cy.get('.vue-ui-select').eq(1).click()
     })
     cy.get('.vue-ui-select-button').eq(2).click()
     cy.get('.config').within(() => {
@@ -73,7 +73,7 @@ describe('Vue project manager', () => {
       cy.get('.folder-explorer').should('be.visible')
       cy.get('.edit-path-button').click()
       cy.get('.path-input input').clear().type(Cypress.env('cwd') + '{enter}')
-      cy.get(`.folder-explorer-item:contains('cli-ui-test')`).click()
+      cy.get('.folder-explorer-item:contains(\'cli-ui-test\')').click()
       cy.get('.import-project').should('not.have.class', 'disabled').click()
     })
     cy.get('.project-home').should('be.visible')

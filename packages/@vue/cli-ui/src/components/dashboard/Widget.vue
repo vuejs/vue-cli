@@ -1,5 +1,5 @@
 <template>
-  <transition duration="150">
+  <transition duration="150" appear>
     <div
       class="widget"
       :class="{

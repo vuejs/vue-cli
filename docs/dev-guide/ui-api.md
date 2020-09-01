@@ -146,7 +146,7 @@ See [Prompts](#prompts) for more info.
 
 The `data` object contains the JSON result of each config file content.
 
-For example, let's say the user has the following `vue.config.js` in his project:
+For example, let's say the user has the following `vue.config.js` in their project:
 
 ```js
 module.exports = {
@@ -526,7 +526,7 @@ However, you can add the following additional fields (which are optional and onl
 }
 ```
 
-Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`.
+Supported inquirer types: `checkbox`, `confirm`, `input`, `password`, `list`, `rawlist`, `editor`.
 
 In addition to those, the UI supports special types that only works with it:
 
@@ -1274,7 +1274,7 @@ const ROUTER = 'vue-router-add'
 
 api.onViewOpen(({ view }) => {
   if (view.id === 'vue-project-plugins') {
-    if (!api.hasPlugin('vue-router')) {
+    if (!api.hasPlugin('router')) {
       api.addSuggestion({
         id: ROUTER,
         type: 'action',
@@ -1282,7 +1282,7 @@ api.onViewOpen(({ view }) => {
         message: 'org.vue.cli-service.suggestions.vue-router-add.message',
         link: 'https://router.vuejs.org/',
         async handler () {
-          await install(api, 'vue-router')
+          await install(api, 'router')
         }
       })
     }

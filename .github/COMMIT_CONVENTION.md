@@ -56,6 +56,8 @@ A commit message consists of a **header**, **body** and **footer**.  The header 
 
 The **header** is mandatory and the **scope** of the header is optional.
 
+A `!` MAY be appended prior to the `:` in the type/scope prefix, to further draw attention to breaking changes. `BREAKING CHANGE:` description MUST also be included in the body or footer, along with the `!` in the prefix.
+
 ### Revert
 
 If the commit reverts a previous commit, it should begin with `revert: `, followed by the header of the reverted commit. In the body it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.

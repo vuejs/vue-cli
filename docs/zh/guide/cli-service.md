@@ -23,7 +23,7 @@ npm run serve
 yarn serve
 ```
 
-如果你可以使用 [npx](https://github.com/zkat/npx) (最新版的 npm 应该已经自带)，也可以直接这样调用命令：
+如果你可以使用 [npx](https://github.com/npm/npx) (最新版的 npm 应该已经自带)，也可以直接这样调用命令：
 
 ``` bash
 npx vue-cli-service serve
@@ -126,12 +126,18 @@ npx vue-cli-service help [command]
 {
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+   "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   }
 }
 ```
 
 ::: warning
-`yorkie` fork 自 [`husky`](https://github.com/typicode/husky) 且并不和之后的版本兼容。
+`yorkie` fork 自 [`husky`](https://github.com/typicode/husky) 并且与后者不兼容。
 :::
 
 ## 配置时无需 Eject

@@ -15,7 +15,7 @@ Vue CLI 使用了一套基于插件的架构。如果你查阅一个新创建项
 每个 CLI 插件都会包含一个 (用来创建文件的) 生成器和一个 (用来调整 webpack 核心配置和注入命令的) 运行时插件。当你使用 `vue create` 来创建一个新项目的时候，有些插件会根据你选择的特性被预安装好。如果你想在一个已经被创建好的项目中安装一个插件，可以使用 `vue add` 命令：
 
 ``` bash
-vue add @vue/eslint
+vue add eslint
 ```
 
 ::: tip 提示
@@ -30,7 +30,7 @@ vue add @vue/eslint
 
 ``` bash
 # 这个和之前的用法等价
-vue add @vue/cli-plugin-eslint
+vue add cli-plugin-eslint
 ```
 
 如果不带 `@vue` 前缀，该命令会换作解析一个 unscoped 的包。例如以下命令会安装第三方插件 `vue-cli-plugin-apollo`：
@@ -49,14 +49,7 @@ vue add @foo/bar
 你可以向被安装的插件传递生成器选项 (这样做会跳过命令提示)：
 
 ``` bash
-vue add @vue/eslint --config airbnb --lintOn save
-```
-
-`vue-router` 和 `vuex` 的情况比较特殊——它们并没有自己的插件，但是你仍然可以这样添加它们：
-
-``` bash
-vue add router
-vue add vuex
+vue add eslint --config airbnb --lintOn save
 ```
 
 如果一个插件已经被安装，你可以使用 `vue invoke` 命令跳过安装过程，只调用它的生成器。这个命令会接受和 `vue add` 相同的参数。
@@ -112,15 +105,15 @@ vue add vuex
 ``` json
 {
   "useConfigFiles": true,
-  "router": true,
-  "vuex": true,
   "cssPreprocessor": "sass",
   "plugins": {
     "@vue/cli-plugin-babel": {},
     "@vue/cli-plugin-eslint": {
       "config": "airbnb",
       "lintOn": ["save", "commit"]
-    }
+    },
+    "@vue/cli-plugin-router": {},
+    "@vue/cli-plugin-vuex": {}
   }
 }
 ```

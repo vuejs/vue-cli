@@ -9,12 +9,23 @@
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
     <%_ } _%>
+    <%_ if (options.allowJs) { _%>
+    "allowJs": true,
+    <%_ } _%>
+    <%_ if (skipLibCheck) { _%>
+    "skipLibCheck": true,
+    <%_ } _%>
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"<% if (hasMocha || hasJest) { %>,<% } %>
+      "webpack-env"<% if (hasMocha || hasJest || hasWebDriverIO) { %>,<% } %>
+      <%_ if (hasWebDriverIO) { _%>
+      <% if (!hasMocha && !hasJest) { %>"mocha",<% } %>
+      "@wdio/mocha-framework",
+      "@wdio/sync"<% if (hasMocha || hasJest) { %>,<% } %>
+      <%_ } _%>
       <%_ if (hasMocha) { _%>
       "mocha",
       "chai"

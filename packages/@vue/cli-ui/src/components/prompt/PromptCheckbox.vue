@@ -16,7 +16,7 @@
         :value="isCheckboxSelected(choice)"
         :disabled="choice.disabled"
         class="right"
-        @input="value => asnwerCheckbox(choice, value)"
+        @update="value => asnwerCheckbox(choice, value)"
       >
         {{ $t(choice.name) }}
       </VueSwitch>
@@ -44,7 +44,7 @@ export default {
     },
 
     asnwerCheckbox (choice, value) {
-      let list = this.checkboxValue
+      const list = this.checkboxValue
       const choiceValue = this.value(choice.value)
       if (value) {
         list.push(choiceValue)

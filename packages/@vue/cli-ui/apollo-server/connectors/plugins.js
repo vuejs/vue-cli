@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 const LRU = require('lru-cache')
-const chalk = require('chalk')
+const { chalk } = require('@vue/cli-shared-utils')
 // Context
 const getContext = require('../context')
 // Subs
@@ -27,16 +27,12 @@ const {
   getPluginLink,
   resolveModule,
   loadModule,
-  clearModule
+  clearModule,
+  execa
 } = require('@vue/cli-shared-utils')
-const {
-  progress: installProgress,
-  installPackage,
-  uninstallPackage,
-  updatePackage
-} = require('@vue/cli/lib/util/installDeps')
-const invoke = require('@vue/cli/lib/invoke')
-const { getCommand } = require('../util/command')
+const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
+const PackageManager = require('@vue/cli/lib/util/ProjectPackageManager')
+
 const ipc = require('../util/ipc')
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
@@ -53,9 +49,9 @@ const logoCache = new LRU({
 let currentPluginId
 let eventsInstalled = false
 let installationStep
-let pluginsStore = new Map()
-let pluginApiInstances = new Map()
-let pkgStore = new Map()
+const pluginsStore = new Map()
+const pluginApiInstances = new Map()
+const pkgStore = new Map()
 
 async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
   let pkg = folders.readPackage(file, context)
@@ -244,7 +240,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
       log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
       logs.add({
         type: 'error',
-        message: `An error occured while loading ${name}: no function exported`
+        message: `An error occurred while loading ${name}: no function exported`
       })
     } else {
       pluginApi.pluginId = id
@@ -255,7 +251,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
         log(`${chalk.red('ERROR')} while loading plugin API for ${name}:`, e)
         logs.add({
           type: 'error',
-          message: `An error occured while loading ${name}: ${e.message}`
+          message: `An error occurred while loading ${name}: ${e.message}`
         })
       }
       pluginApi.pluginId = null
@@ -334,13 +330,14 @@ function install (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockInstall(id, context)
     } else {
-      await installPackage(cwd.get(), getCommand(cwd.get()), null, id)
+      const pm = new PackageManager({ context: cwd.get() })
+      await pm.add(id)
     }
     await initPrompts(id, context)
     installationStep = 'config'
 
     notify({
-      title: `Plugin installed`,
+      title: 'Plugin installed',
       message: `Plugin ${id} installed, next step is configuration`,
       icon: 'done'
     })
@@ -392,7 +389,7 @@ function installLocal (context) {
     installationStep = 'config'
 
     notify({
-      title: `Plugin installed`,
+      title: 'Plugin installed',
       message: `Plugin ${id} installed, next step is configuration`,
       icon: 'done'
     })
@@ -412,13 +409,14 @@ function uninstall (id, context) {
     if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
       mockUninstall(id, context)
     } else {
-      await uninstallPackage(cwd.get(), getCommand(cwd.get()), null, id)
+      const pm = new PackageManager({ context: cwd.get() })
+      await pm.remove(id)
     }
     currentPluginId = null
     installationStep = null
 
     notify({
-      title: `Plugin uninstalled`,
+      title: 'Plugin uninstalled',
       message: `Plugin ${id} uninstalled`,
       icon: 'done'
     })
@@ -446,14 +444,39 @@ function runInvoke (id, context) {
     currentPluginId = id
     // Allow plugins that don't have a generator
     if (resolveModule(`${id}/generator`, cwd.get())) {
-      await invoke(id, prompts.getAnswers(), cwd.get())
+      const child = execa('vue', [
+        'invoke',
+        id,
+        '--$inlineOptions',
+        JSON.stringify(prompts.getAnswers())
+      ], {
+        cwd: cwd.get(),
+        stdio: ['inherit', 'pipe', 'inherit']
+      })
+
+      const onData = buffer => {
+        const text = buffer.toString().trim()
+        if (text) {
+          setProgress({
+            info: text
+          })
+          logs.add({
+            type: 'info',
+            message: text
+          }, context)
+        }
+      }
+
+      child.stdout.on('data', onData)
+
+      await child
     }
     // Run plugin api
     runPluginApi(id, getApi(cwd.get()), context)
     installationStep = 'diff'
 
     notify({
-      title: `Plugin invoked successfully`,
+      title: 'Plugin invoked successfully',
       message: `Plugin ${id} invoked successfully`,
       icon: 'done'
     })
@@ -495,7 +518,8 @@ function update ({ id, full }, context) {
     if (localPath) {
       await updateLocalPackage({ cwd: cwd.get(), id, localPath, full }, context)
     } else {
-      await updatePackage(cwd.get(), getCommand(cwd.get()), null, id)
+      const pm = new PackageManager({ context: cwd.get() })
+      await pm.upgrade(id)
     }
 
     logs.add({
@@ -504,7 +528,7 @@ function update ({ id, full }, context) {
     }, context)
 
     notify({
-      title: `Plugin updated`,
+      title: 'Plugin updated',
       message: `Plugin ${id} was successfully updated`,
       icon: 'done'
     })
@@ -535,7 +559,7 @@ async function updateLocalPackage ({ id, cwd, localPath, full = true }, context)
 async function updateAll (context) {
   return progress.wrap('plugins-update', context, async setProgress => {
     const plugins = await list(cwd.get(), context, { resetApi: false })
-    let updatedPlugins = []
+    const updatedPlugins = []
     for (const plugin of plugins) {
       const version = await dependencies.getVersion(plugin, context)
       if (version.current !== version.wanted) {
@@ -546,8 +570,8 @@ async function updateAll (context) {
 
     if (!updatedPlugins.length) {
       notify({
-        title: `No updates available`,
-        message: `No plugin to update in the version ranges declared in package.json`,
+        title: 'No updates available',
+        message: 'No plugin to update in the version ranges declared in package.json',
         icon: 'done'
       })
       return []
@@ -558,12 +582,11 @@ async function updateAll (context) {
       args: [updatedPlugins.length]
     })
 
-    await updatePackage(cwd.get(), getCommand(cwd.get()), null, updatedPlugins.map(
-      p => p.id
-    ).join(' '))
+    const pm = new PackageManager({ context: cwd.get() })
+    await pm.upgrade(updatedPlugins.map(p => p.id).join(' '))
 
     notify({
-      title: `Plugins updated`,
+      title: 'Plugins updated',
       message: `${updatedPlugins.length} plugin(s) were successfully updated`,
       icon: 'done'
     })

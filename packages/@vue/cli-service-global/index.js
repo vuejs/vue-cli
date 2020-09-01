@@ -63,17 +63,14 @@ function resolveEntry (entry, cmd) {
   }
 
   warnAboutNpmScript(cmd)
-  return {
-    context,
-    entry
-  }
+  return entry
 }
 
-function createService (context, entry, asLib) {
+function createService (entry, asLib) {
   return new Service(context, {
     projectOptions: {
       compiler: true,
-      lintOnSave: true
+      lintOnSave: 'default'
     },
     plugins: [
       babelPlugin,
@@ -84,15 +81,15 @@ function createService (context, entry, asLib) {
 }
 
 exports.serve = (_entry, args) => {
-  const { context, entry } = resolveEntry(_entry, 'serve')
-  createService(context, entry).run('serve', args)
+  const entry = resolveEntry(_entry, 'serve')
+  createService(entry).run('serve', args)
 }
 
 exports.build = (_entry, args) => {
-  const { context, entry } = resolveEntry(_entry, 'build')
+  const entry = resolveEntry(_entry, 'build')
   const asLib = args.target && args.target !== 'app'
   if (asLib) {
     args.entry = entry
   }
-  createService(context, entry, asLib).run('build', args)
+  return createService(entry, asLib).run('build', args)
 }

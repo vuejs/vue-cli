@@ -33,14 +33,14 @@ Note: eslint-config-* packages should be released separately & manually.
 
 process.env.VUE_CLI_RELEASE = true
 
-const fs = require('fs')
-const path = require('path')
 const execa = require('execa')
 const semver = require('semver')
 const inquirer = require('inquirer')
+const minimist = require('minimist')
 const { syncDeps } = require('./syncDeps')
 // const { buildEditorConfig } = require('./buildEditorConfig')
 
+const cliOptions = minimist(process.argv)
 const curVersion = require('../lerna.json').version
 
 const release = async () => {
@@ -95,46 +95,25 @@ const release = async () => {
     }
   }
 
+  let distTag = cliOptions['dist-tag'] || 'latest'
+  if (bump === 'prerelease' || semver.prerelease(version)) {
+    distTag = 'next'
+  }
+
   const lernaArgs = [
     'publish',
-    version
+    version,
+    '--dist-tag',
+    distTag
   ]
-  const releaseType = semver.diff(curVersion, version)
+  // keep all packages' versions in sync
+  lernaArgs.push('--force-publish')
 
-  // keep packages' minor version in sync
-  if (releaseType !== 'patch') {
-    lernaArgs.push('--force-publish')
+  if (cliOptions['local-registry']) {
+    lernaArgs.push('--no-git-tag-version', '--no-commit-hooks', '--no-push', '--yes')
   }
+
   await execa(require.resolve('lerna/cli'), lernaArgs, { stdio: 'inherit' })
-
-  await require('./genChangelog')(version)
-
-  const packages = JSON.parse(
-    (await execa(require.resolve('lerna/cli'), ['list', '--json'])).stdout
-  ).filter(p => !p.private)
-  const versionMarkerPath = path.resolve(__dirname, '../packages/vue-cli-version-marker/package.json')
-  const versionMarkerPkg = JSON.parse(fs.readFileSync(versionMarkerPath))
-
-  versionMarkerPkg.version = semver.inc(versionMarkerPkg.version, releaseType)
-  versionMarkerPkg.devDependencies = packages.reduce((prev, pkg) => {
-    prev[pkg.name] = pkg.version
-    return prev
-  }, {})
-  fs.writeFileSync(versionMarkerPath, JSON.stringify(versionMarkerPkg, null, 2))
-
-  const tagName = `vue-cli-version-marker@${versionMarkerPkg.version}`
-  await execa('git', ['add', '-A'], { stdio: 'inherit' })
-  await execa('git', ['commit', '-m', `chore: ${tagName}`], { stdio: 'inherit' })
-
-  // Must specify registry url: https://github.com/lerna/lerna/issues/896#issuecomment-311894609
-  await execa(
-    'npm',
-    ['publish', '--registry', 'https://registry.npmjs.org/'],
-    { stdio: 'inherit', cwd: path.dirname(versionMarkerPath) }
-  )
-
-  await execa('git', ['tag', tagName], { stdio: 'inherit' })
-  await execa('git', ['push', '--follow-tags'], { stdio: 'inherit' })
 }
 
 release().catch(err => {

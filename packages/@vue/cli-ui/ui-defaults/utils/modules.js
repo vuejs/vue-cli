@@ -17,7 +17,7 @@ exports.buildSortedModules = function (modules, sizeField) {
         size
       }
     })
-    list = list.sort((a, b) => b.size - a.size)
+    list.sort((a, b) => b.size - a.size)
   }
   return list
 }
@@ -46,8 +46,8 @@ exports.buildDepModules = function (modules) {
       dep.size += module.size
     }
   }
-  let list = Array.from(deps.values())
-  list = list.sort((a, b) => b.size - a.size)
+  const list = Array.from(deps.values())
+  list.sort((a, b) => b.size - a.size)
   if (list.length) {
     const max = list[0].size
     for (const dep of list) {
@@ -111,7 +111,7 @@ exports.buildModulesTrees = function (modules, sizeType) {
           children: {}
         }
       }
-      let fullPath = []
+      const fullPath = []
       for (let i = 0; i < parts.length; i++) {
         const part = parts[i]
         let child = subtree.children[part]
@@ -154,13 +154,15 @@ exports.buildModulesTrees = function (modules, sizeType) {
 }
 
 function walkTreeToSortChildren (tree, sizeType) {
-  let size = {
+  const size = {
     stats: 0,
     parsed: 0,
     gzip: 0
   }
   tree.children = Object.keys(tree.children).map(
     key => tree.children[key]
+  ).filter(
+    child => child.size.stats > tree.size.stats * 0.01 && child.size.stats > 1024
   ).sort((a, b) => b.size[sizeType] - a.size[sizeType])
   for (const child of tree.children) {
     child.previousSize = {

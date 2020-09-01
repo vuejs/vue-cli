@@ -1,11 +1,10 @@
-const execa = require('execa')
 const path = require('path')
 const fs = require('fs-extra')
 const parseDiff = require('../util/parse-diff')
 // Connectors
 const cwd = require('./cwd')
 // Utils
-const { hasProjectGit } = require('@vue/cli-shared-utils')
+const { execa, hasProjectGit } = require('@vue/cli-shared-utils')
 
 async function getNewFiles (context) {
   if (!hasProjectGit(cwd.get())) return []
@@ -37,7 +36,7 @@ async function getDiffs (context) {
     cwd: cwd.get()
   })
   await reset(context)
-  let list = parseDiff(stdout)
+  const list = parseDiff(stdout)
   for (const n in list) {
     const fileDiff = list[n]
     const isNew = newFiles.includes(fileDiff.to)

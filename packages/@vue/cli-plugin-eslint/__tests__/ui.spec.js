@@ -84,7 +84,7 @@ describe('getEslintPrompts', () => {
       extends: 'plugin:vue/recommended',
       rules: {
         'vue/lorem': ['error', ['asd']], // custom setting
-        'vue/ipsum': 'warning'
+        'vue/ipsum': 'warn'
       }
     }
   }
@@ -146,7 +146,7 @@ describe('getEslintPrompts', () => {
   })
 
   it('sets value on prompt item, if the rule was set in project\'s eslint config', () => {
-    expect(prompts[1].value).toBe('"warning"')
+    expect(prompts[1].value).toBe('"warn"')
     expect(prompts[2].value).toBe('["error",["asd"]]')
   })
 

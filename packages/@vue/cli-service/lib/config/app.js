@@ -23,8 +23,18 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const outputDir = api.resolve(options.outputDir)
 
+    const getAssetPath = require('../util/getAssetPath')
+    const outputFilename = getAssetPath(
+      options,
+      `js/[name]${isLegacyBundle ? `-legacy` : ``}${isProd && options.filenameHashing ? '.[contenthash:8]' : ''}.js`
+    )
+    webpackConfig
+      .output
+        .filename(outputFilename)
+        .chunkFilename(outputFilename)
+
     // code splitting
-    if (isProd && !process.env.CYPRESS_ENV) {
+    if (process.env.NODE_ENV !== 'test') {
       webpackConfig
         .optimization.splitChunks({
           cacheGroups: {
@@ -74,6 +84,7 @@ module.exports = (api, options) => {
     }
 
     const htmlOptions = {
+      title: api.service.pkg.name,
       templateParameters: (compilation, assets, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
         let stats
@@ -92,20 +103,20 @@ module.exports = (api, options) => {
       }
     }
 
-    if (isProd) {
-      // handle indexPath
-      if (options.indexPath !== 'index.html') {
-        // why not set filename for html-webpack-plugin?
-        // 1. It cannot handle absolute paths
-        // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
-        webpackConfig
-          .plugin('move-index')
-          .use(require('../webpack/MovePlugin'), [
-            path.resolve(outputDir, 'index.html'),
-            path.resolve(outputDir, options.indexPath)
-          ])
-      }
+    // handle indexPath
+    if (options.indexPath !== 'index.html') {
+      // why not set filename for html-webpack-plugin?
+      // 1. It cannot handle absolute paths
+      // 2. Relative paths causes incorrect SW manifest to be generated (#2007)
+      webpackConfig
+        .plugin('move-index')
+        .use(require('../webpack/MovePlugin'), [
+          path.resolve(outputDir, 'index.html'),
+          path.resolve(outputDir, options.indexPath)
+        ])
+    }
 
+    if (isProd) {
       Object.assign(htmlOptions, {
         minify: {
           removeComments: true,
@@ -147,6 +158,11 @@ module.exports = (api, options) => {
       htmlOptions.template = fs.existsSync(htmlPath)
         ? htmlPath
         : defaultHtmlPath
+
+      publicCopyIgnore.push({
+        glob: path.relative(api.resolve('public'), api.resolve(htmlOptions.template)),
+        matchBase: false
+      })
 
       webpackConfig
         .plugin('html')
@@ -199,18 +215,21 @@ module.exports = (api, options) => {
         }
 
         // inject entry
-        webpackConfig.entry(name).add(api.resolve(entry))
+        const entries = Array.isArray(entry) ? entry : [entry]
+        webpackConfig.entry(name).merge(entries.map(e => api.resolve(e)))
 
         // resolve page index template
         const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
-        if (hasDedicatedTemplate) {
-          publicCopyIgnore.push(template)
-        }
         const templatePath = hasDedicatedTemplate
           ? template
           : fs.existsSync(htmlPath)
             ? htmlPath
             : defaultHtmlPath
+
+        publicCopyIgnore.push({
+          glob: path.relative(api.resolve('public'), api.resolve(templatePath)),
+          matchBase: false
+        })
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(

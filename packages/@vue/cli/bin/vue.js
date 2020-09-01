@@ -3,12 +3,12 @@
 // Check node version before requiring/doing anything else
 // The user may be on a very old node version
 
-const chalk = require('chalk')
-const semver = require('semver')
+const { chalk, semver } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
+const leven = require('leven')
 
 function checkNodeVersion (wanted, id) {
-  if (!semver.satisfies(process.version, wanted)) {
+  if (!semver.satisfies(process.version, wanted, { includePrerelease: true })) {
     console.log(chalk.red(
       'You are using Node ' + process.version + ', but this version of ' + id +
       ' requires Node ' + wanted + '.\nPlease upgrade your Node version.'
@@ -17,14 +17,17 @@ function checkNodeVersion (wanted, id) {
   }
 }
 
-checkNodeVersion(requiredVersion, 'vue-cli')
+checkNodeVersion(requiredVersion, '@vue/cli')
 
-if (semver.satisfies(process.version, '9.x')) {
-  console.log(chalk.red(
-    `You are using Node ${process.version}.\n` +
-    `Node.js 9.x has already reached end-of-life and will not be supported in future major releases.\n` +
-    `It's strongly recommended to use an active LTS version instead.`
-  ))
+const EOL_NODE_MAJORS = ['8.x', '9.x', '11.x', '13.x']
+for (const major of EOL_NODE_MAJORS) {
+  if (semver.satisfies(process.version, major)) {
+    console.log(chalk.red(
+      `You are using Node ${process.version}.\n` +
+      `Node.js ${major} has already reached end-of-life and will not be supported in future major releases.\n` +
+      `It's strongly recommended to use an active LTS version instead.`
+    ))
+  }
 }
 
 const fs = require('fs')
@@ -46,7 +49,7 @@ const program = require('commander')
 const loadCommand = require('../lib/util/loadCommand')
 
 program
-  .version(require('../package').version)
+  .version(`@vue/cli ${require('../package').version}`)
   .usage('<command> [options]')
 
 program
@@ -60,9 +63,11 @@ program
   .option('-g, --git [message]', 'Force git initialization with initial commit message')
   .option('-n, --no-git', 'Skip git initialization')
   .option('-f, --force', 'Overwrite target directory if it exists')
+  .option('--merge', 'Merge target directory if it exists')
   .option('-c, --clone', 'Use git clone when fetching remote preset')
-  .option('-x, --proxy', 'Use specified proxy when creating project')
+  .option('-x, --proxy <proxyUrl>', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
+  .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
   .action((name, cmd) => {
     const options = cleanArgs(cmd)
 
@@ -112,6 +117,7 @@ program
   .description('serve a .js or .vue file in development mode with zero config')
   .option('-o, --open', 'Open browser')
   .option('-c, --copy', 'Copy local url to clipboard')
+  .option('-p, --port <port>', 'Port used by the server (default: 8080 or next available port)')
   .action((entry, cmd) => {
     loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
   })
@@ -161,10 +167,32 @@ program
   })
 
 program
-  .command('upgrade [semverLevel]')
-  .description('upgrade vue cli service / plugins (default semverLevel: minor)')
-  .action((semverLevel, cmd) => {
-    loadCommand('upgrade', '@vue/cli-upgrade')(semverLevel, cleanArgs(cmd))
+  .command('outdated')
+  .description('(experimental) check for outdated vue cli service / plugins')
+  .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
+  .action((cmd) => {
+    require('../lib/outdated')(cleanArgs(cmd))
+  })
+
+program
+  .command('upgrade [plugin-name]')
+  .description('(experimental) upgrade vue cli service / plugins')
+  .option('-t, --to <version>', 'Upgrade <package-name> to a version that is not latest')
+  .option('-f, --from <version>', 'Skip probing installed plugin, assuming it is upgraded from the designated version')
+  .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
+  .option('--all', 'Upgrade all plugins')
+  .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
+  .action((packageName, cmd) => {
+    require('../lib/upgrade')(packageName, cleanArgs(cmd))
+  })
+
+program
+  .command('migrate [plugin-name]')
+  .description('(experimental) run migrator for an already-installed cli plugin')
+  // TODO: use `requiredOption` after upgrading to commander 4.x
+  .option('-f, --from <version>', 'The base version for the migrator to migrate from')
+  .action((packageName, cmd) => {
+    require('../lib/migrate')(packageName, cleanArgs(cmd))
   })
 
 program
@@ -195,6 +223,7 @@ program
     program.outputHelp()
     console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     console.log()
+    suggestCommands(cmd)
   })
 
 // add some useful info on help
@@ -227,6 +256,23 @@ program.parse(process.argv)
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()
+}
+
+function suggestCommands (unknownCommand) {
+  const availableCommands = program.commands.map(cmd => cmd._name)
+
+  let suggestion
+
+  availableCommands.forEach(cmd => {
+    const isBestMatch = leven(cmd, unknownCommand) < leven(suggestion || '', unknownCommand)
+    if (leven(cmd, unknownCommand) < 3 && isBestMatch) {
+      suggestion = cmd
+    }
+  })
+
+  if (suggestion) {
+    console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
+  }
 }
 
 function camelize (str) {
