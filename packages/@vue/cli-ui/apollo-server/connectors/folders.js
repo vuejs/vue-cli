@@ -13,22 +13,12 @@ const pkgCache = new LRU({
 
 const cwd = require('./cwd')
 
-function isDirectorySync (file) {
-  file = file.replace(/\\/g, path.sep)
-  try {
-    return fs.statSync(file).isDirectory()
-  } catch (e) {
-    if (process.env.VUE_APP_CLI_UI_DEBUG) console.warn(e.message)
-  }
-  return false
-}
-
 function isDirectory (file) {
   file = file.replace(/\\/g, path.sep)
   try {
-    return fs.stat(file).then(x => x.isDirectory())
+    return fs.stat(file).then((x) => x.isDirectory())
   } catch (e) {
-    if (process.env.VUE_APP_CLI_UI_DEV) console.warn(e.message)
+    if (process.env.VUE_APP_CLI_UI_DEBUG) console.warn(e.message)
   }
   return false
 }
@@ -42,33 +32,37 @@ async function list (base, context) {
   }
   const files = await fs.readdir(dir, 'utf8')
 
-  const f = await Promise.all(files.map(async file => {
-    const folderPath = path.join(base, file)
+  const f = await Promise.all(
+    files.map(async (file) => {
+      const folderPath = path.join(base, file)
 
-    const [directory, hidden] = await Promise.all([isDirectory(folderPath), isHidden(folderPath)])
-    if (!directory) {
-      return null
-    }
-    return {
-      path: folderPath,
-      name: file,
-      hidden
-    }
-  }))
-  return f.filter(x => !!x)
+      const [directory, hidden] = await Promise.all([
+        isDirectory(folderPath),
+        isHidden(folderPath)
+      ])
+      if (!directory) {
+        return null
+      }
+      return {
+        path: folderPath,
+        name: file,
+        hidden
+      }
+    })
+  )
+  return f.filter((x) => !!x)
 }
 
 async function isHiddenWindows (file) {
   const windowsFile = file.replace(/\\/g, '\\\\')
-  return (new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     winattr.get(windowsFile, (file, error) => {
       if (error) {
         return reject(error)
       }
       resolve(file)
     })
-  })
-    .then(x => x.hidden))
+  }).then((x) => x.hidden)
 }
 
 async function isHidden (file) {
@@ -83,7 +77,10 @@ async function isHidden (file) {
       result.windows = await isHiddenWindows(file)
     }
 
-    return (!isPlatformWindows && result.unix) || (isPlatformWindows && result.windows)
+    return (
+      (!isPlatformWindows && result.unix) ||
+      (isPlatformWindows && result.windows)
+    )
   } catch (e) {
     if (process.env.VUE_APP_CLI_UI_DEBUG) {
       console.log('file:', file)
@@ -167,9 +164,10 @@ function isVueProject (file, context) {
 }
 
 function listFavorite (context) {
-  return context.db.get('foldersFavorite').value().map(
-    file => generateFolder(file.id, context)
-  )
+  return context.db
+    .get('foldersFavorite')
+    .value()
+    .map((file) => generateFolder(file.id, context))
 }
 
 function isFavorite (file, context) {
@@ -197,7 +195,7 @@ function createFolder (name, context) {
 }
 
 module.exports = {
-  isDirectory: isDirectorySync,
+  isDirectory,
   getCurrent,
   list,
   open,
