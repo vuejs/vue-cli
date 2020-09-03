@@ -191,6 +191,10 @@ GitLab 和 BitBucket 也是支持的。如果要从私有 repo 获取，请确�
 ``` bash
 vue create --preset gitlab:username/repo --clone my-project
 vue create --preset bitbucket:username/repo --clone my-project
+
+# 私有服务器
+vue create --preset gitlab:my-gitlab-server.com:group/projectname --clone my-project
+vue create --preset direct:ssh://git@my-gitlab-server.com/group/projectname.git --clone my-project
 ```
 
 ### 加载文件系统中的 Preset
