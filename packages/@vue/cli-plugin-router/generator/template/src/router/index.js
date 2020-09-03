@@ -9,9 +9,9 @@ import Home from '../views/Home.vue'
 Vue.use(VueRouter)
 
 <%_ if (hasTypeScript) { _%>
-  const routes: Array<RouteConfig> = [
+const routes: Array<RouteConfig> = [
 <%_ } else { _%>
-  const routes = [
+const routes = [
 <%_ } _%>
   {
     path: '/',
