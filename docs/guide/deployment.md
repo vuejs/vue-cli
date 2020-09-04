@@ -145,7 +145,7 @@ Typically, your static website will be hosted on https://yourUserName.gitlab.io/
 
 
 ```javascript
-// vue.config.js file to be place in the root of your repository
+// vue.config.js file to be placed in the root of your repository
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
@@ -177,6 +177,21 @@ In order to receive direct hits using `history mode` on Vue Router, you need to 
 ```
 
 More information on [Netlify redirects documentation](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
+
+If you are using [@vue/cli-plugin-pwa](https://cli.vuejs.org/core-plugins/pwa.html#vue-cli-plugin-pwa) make sure to exclude the `_redirects` file from being cached by the service worker.
+To do so, add the following to your `vue.config.js`:
+```javascript
+// vue.config.js file to be placed in the root of your repository
+
+module.exports = {
+  pwa: {
+      workboxOptions: {
+        exclude: [/_redirects/]
+      }
+    }
+}
+```
+Checkout [workboxOptions](https://cli.vuejs.org/core-plugins/pwa.html#configuration) and [exclude](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest#InjectManifest) for more.
 
 ### Render
 
