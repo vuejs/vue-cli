@@ -12,7 +12,11 @@ describe('HelloWorld.vue', () => {
   it('renders props.msg when passed', () => {
     const msg = 'new message'
     const wrapper = shallowMount(HelloWorld, {
+      <%_ if (isVue3) { _%>
+      props: { msg }
+      <%_ } else { _%>
       propsData: { msg }
+      <%_ } _%>
     })
     expect(wrapper.text()).to.include(msg)
   })

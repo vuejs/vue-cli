@@ -73,19 +73,46 @@ module.exports = {
             link: '/config/'
           },
           {
-            text: 'Plugin Dev Guide',
-            items: [
-              { text: 'Plugin Dev Guide', link: '/dev-guide/plugin-dev.md' },
-              { text: 'UI Plugin Info', link: '/dev-guide/ui-info.md' },
-              { text: 'UI Plugin API', link: '/dev-guide/ui-api.md' },
-              { text: 'UI Localization', link: '/dev-guide/ui-localization.md' }
-            ]
-          },
-          {
             text: 'Plugins',
             items: [
-              { text: 'Core plugins', link: '/core-plugins/' },
-              { text: 'Browse plugins', link: 'https://awesomejs.dev/for/vue-cli/' }
+              {
+                text: 'Configuration',
+                items:
+                [
+                  { text: 'Core', link: '/core-plugins/' },
+                ]
+              },
+              {
+                text: 'Discover',
+                items:
+                [
+                  { text: 'Browse', link: 'https://awesomejs.dev/for/vue-cli/' }
+                ]
+              },
+              {
+                text: 'Development',
+                items:
+                [
+                  { text: 'Guide', link: '/dev-guide/plugin-dev.md' },
+                ]
+              },
+              {
+                text: 'API',
+                items:
+                [
+                  { text: 'Plugin', link: '/dev-guide/plugin-api.md' },
+                  { text: 'Generator', link: '/dev-guide/generator-api.md' },
+                ]
+              },
+              {
+                text: 'UI',
+                items:
+                [
+                  { text: 'Info', link: '/dev-guide/ui-info.md' },
+                  { text: 'API', link: '/dev-guide/ui-api.md' },
+                  { text: 'Localization', link: '/dev-guide/ui-localization.md' }
+                ]
+              },
             ]
           },
           {
@@ -157,7 +184,8 @@ module.exports = {
               '/core-plugins/unit-jest.md',
               '/core-plugins/unit-mocha.md',
               '/core-plugins/e2e-cypress.md',
-              '/core-plugins/e2e-nightwatch.md'
+              '/core-plugins/e2e-nightwatch.md',
+              '/core-plugins/e2e-webdriverio.md'
             ]
           }],
 
@@ -261,19 +289,46 @@ module.exports = {
             link: '/ru/config/'
           },
           {
-            text: 'Создание плагинов',
-            items: [
-              { text: 'Руководство по разработке', link: '/ru/dev-guide/plugin-dev.md' },
-              { text: 'Информация о плагине в UI', link: '/ru/dev-guide/ui-info.md' },
-              { text: 'API плагина в UI', link: '/ru/dev-guide/ui-api.md' },
-              { text: 'Локализация в UI', link: '/ru/dev-guide/ui-localization.md' }
-            ]
-          },
-          {
             text: 'Плагины',
             items: [
-              { text: 'Основные плагины', link: '/ru/core-plugins/' },
-              { text: 'Просмотр плагинов', link: 'https://awesomejs.dev/for/vue-cli/' }
+              {
+                text: 'Конфигурация',
+                items:
+                [
+                  { text: 'Основные плагины', link: '/ru/core-plugins/' },
+                ]
+              },
+              {
+                text: 'Поиск',
+                items:
+                [
+                  { text: 'Обзор плагинов', link: 'https://awesomejs.dev/for/vue-cli/' }
+                ]
+              },
+              {
+                text: 'Разработка',
+                items:
+                [
+                  { text: 'Руководство по разработке', link: '/ru/dev-guide/plugin-dev.md' },
+                ]
+              },
+              {
+                text: 'API',
+                items:
+                [
+                  { text: 'Плагин', link: '/ru/dev-guide/plugin-api.md' },
+                  { text: 'Генератор', link: '/ru/dev-guide/generator-api.md' },
+                ]
+              },
+              {
+                text: 'UI',
+                items:
+                [
+                  { text: 'Информация о плагине', link: '/ru/dev-guide/ui-info.md' },
+                  { text: 'API', link: '/ru/dev-guide/ui-api.md' },
+                  { text: 'Локализация', link: '/ru/dev-guide/ui-localization.md' }
+                ]
+              },
             ]
           },
           {
@@ -345,7 +400,8 @@ module.exports = {
               '/ru/core-plugins/unit-jest.md',
               '/ru/core-plugins/unit-mocha.md',
               '/ru/core-plugins/e2e-cypress.md',
-              '/ru/core-plugins/e2e-nightwatch.md'
+              '/ru/core-plugins/e2e-nightwatch.md',
+              '/ru/core-plugins/e2e-webdriverio.md',
             ]
           }]
         }

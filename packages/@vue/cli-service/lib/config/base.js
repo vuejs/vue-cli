@@ -1,3 +1,5 @@
+const { semver, loadModule } = require('@vue/cli-shared-utils')
+
 module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -51,12 +53,6 @@ module.exports = (api, options) => {
         .end()
       .alias
         .set('@', api.resolve('src'))
-        .set(
-          'vue$',
-          options.runtimeCompiler
-            ? 'vue/dist/vue.esm.js'
-            : 'vue/dist/vue.runtime.esm.js'
-        )
 
     webpackConfig.resolveLoader
       .plugin('pnp-loaders')
@@ -73,40 +69,86 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-    const vueLoaderCacheIdentifier = {
-      'vue-loader': require('vue-loader/package.json').version
-    }
+    // try to load vue in the project
+    // fallback to peer vue package in the instant prototyping environment
+    const vue = loadModule('vue', api.service.context) || loadModule('vue', __dirname)
 
-    // The following 2 deps are sure to exist in Vue 2 projects.
-    // But once we switch to Vue 3, they're no longer mandatory.
-    // (In Vue 3 they are replaced by @vue/compiler-sfc)
-    // So wrap them in a try catch block.
-    try {
-      vueLoaderCacheIdentifier['@vue/component-compiler-utils'] =
-        require('@vue/component-compiler-utils/package.json').version
-      vueLoaderCacheIdentifier['vue-template-compiler'] =
-        require('vue-template-compiler/package.json').version
-    } catch (e) {}
-    const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', vueLoaderCacheIdentifier)
+    if (vue && semver.major(vue.version) === 2) {
+      // for Vue 2 projects
+      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
+        'vue-loader': require('vue-loader/package.json').version,
+        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
+        'vue-template-compiler': require('vue-template-compiler/package.json').version
+      })
 
-    webpackConfig.module
-      .rule('vue')
-        .test(/\.vue$/)
-        .use('cache-loader')
-          .loader(require.resolve('cache-loader'))
-          .options(vueLoaderCacheConfig)
+      webpackConfig.resolve
+        .alias
+          .set(
+            'vue$',
+            options.runtimeCompiler
+              ? 'vue/dist/vue.esm.js'
+              : 'vue/dist/vue.runtime.esm.js'
+          )
+
+      webpackConfig.module
+        .rule('vue')
+          .test(/\.vue$/)
+          .use('cache-loader')
+            .loader(require.resolve('cache-loader'))
+            .options(vueLoaderCacheConfig)
+            .end()
+          .use('vue-loader')
+            .loader(require.resolve('vue-loader'))
+            .options(Object.assign({
+              compilerOptions: {
+                whitespace: 'condense'
+              }
+            }, vueLoaderCacheConfig))
+
+      webpackConfig
+        .plugin('vue-loader')
+          .use(require('vue-loader').VueLoaderPlugin)
+    } else if (vue && semver.major(vue.version) === 3) {
+      // for Vue 3 projects
+      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
+        'vue-loader': require('vue-loader-v16/package.json').version,
+        '@vue/compiler-sfc': require('@vue/compiler-sfc/package.json').version
+      })
+
+      webpackConfig.resolve
+        .alias
+          .set(
+            'vue$',
+            options.runtimeCompiler
+              ? 'vue/dist/vue.esm-bundler.js'
+              : 'vue/dist/vue.runtime.esm-bundler.js'
+          )
+
+      webpackConfig.module
+        .rule('vue')
+          .test(/\.vue$/)
+          .use('cache-loader')
+            .loader(require.resolve('cache-loader'))
+            .options(vueLoaderCacheConfig)
+            .end()
+          .use('vue-loader')
+            .loader(require.resolve('vue-loader-v16'))
+            .options(vueLoaderCacheConfig)
+            .end()
           .end()
-        .use('vue-loader')
-          .loader(require.resolve('vue-loader'))
-          .options(Object.assign({
-            compilerOptions: {
-              whitespace: 'condense'
-            }
-          }, vueLoaderCacheConfig))
 
-    webpackConfig
-      .plugin('vue-loader')
-      .use(require('vue-loader/lib/plugin'))
+      webpackConfig
+        .plugin('vue-loader')
+          .use(require('vue-loader-v16').VueLoaderPlugin)
+
+      // feature flags <http://link.vuejs.org/feature-flags>
+      webpackConfig
+        .plugin('feature-flags')
+          .use(require('webpack').DefinePlugin, [{
+            __VUE_OPTIONS_API__: 'true',
+            __VUE_PROD_DEVTOOLS__: 'false'
+          }])
+    }
 
     // static assets -----------------------------------------------------------
 

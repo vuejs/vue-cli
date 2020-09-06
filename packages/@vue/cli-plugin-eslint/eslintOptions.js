@@ -1,4 +1,4 @@
-exports.config = (api, preset) => {
+exports.config = (api, preset, rootOptions = {}) => {
   const config = {
     root: true,
     env: { node: true },
@@ -38,6 +38,15 @@ exports.config = (api, preset) => {
     } else {
       config.extends.push('@vue/typescript/recommended')
     }
+  }
+
+  if (rootOptions.vueVersion === '3') {
+    const updateConfig = cfg =>
+      cfg.replace(
+        /plugin:vue\/(essential|recommended|strongly-recommended)/gi,
+        'plugin:vue/vue3-$1'
+      )
+    config.extends = config.extends.map(updateConfig)
   }
 
   return config

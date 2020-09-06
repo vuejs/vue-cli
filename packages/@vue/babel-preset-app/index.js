@@ -81,7 +81,13 @@ function getPolyfills (targets, includes) {
   }
 
   const compatData = require('core-js-compat').data
-  return includes.filter(item => isRequired(item, targets, { compatData }))
+  return includes.filter(item => {
+    if (!compatData[item]) {
+      throw new Error(`Cannot find polyfill ${item}, please refer to 'core-js-compat' for a complete list of available modules`)
+    }
+
+    return isRequired(item, targets, { compatData })
+  })
 }
 
 module.exports = (context, options = {}) => {
@@ -89,7 +95,7 @@ module.exports = (context, options = {}) => {
   const plugins = []
   const defaultEntryFiles = JSON.parse(process.env.VUE_CLI_ENTRY_FILES || '[]')
 
-  // Though in the vue-cli repo, we only use the two envrionment variables
+  // Though in the vue-cli repo, we only use the two environment variables
   // for tests, users may have relied on them for some features,
   // dropping them may break some projects.
   // So in the following blocks we don't directly test the `NODE_ENV`.
@@ -106,7 +112,22 @@ module.exports = (context, options = {}) => {
 
   // JSX
   if (options.jsx !== false) {
-    presets.push([require('@vue/babel-preset-jsx'), typeof options.jsx === 'object' ? options.jsx : {}])
+    let jsxOptions = {}
+    if (typeof options.jsx === 'object') {
+      jsxOptions = options.jsx
+    }
+
+    let vueVersion = 2
+    try {
+      const Vue = require('vue')
+      vueVersion = semver.major(Vue.version)
+    } catch (e) {}
+
+    if (vueVersion === 2) {
+      presets.push([require('@vue/babel-preset-jsx'), jsxOptions])
+    } else if (vueVersion === 3) {
+      plugins.push([require('@vue/babel-plugin-jsx'), jsxOptions])
+    }
   }
 
   const runtimePath = path.dirname(require.resolve('@babel/runtime/package.json'))

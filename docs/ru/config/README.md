@@ -446,3 +446,8 @@ TypeScript можно настроить через `tsconfig.json`.
 ### Nightwatch
 
 Подробнее на странице плагина [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch).
+
+
+### WebdriverIO
+
+Подробнее на странице плагина [@vue/cli-plugin-e2e-webdriverio](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-webdriverio).

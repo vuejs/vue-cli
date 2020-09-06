@@ -1,0 +1,21 @@
+{
+  "files": [
+    "cli-test-utils-test.ts"
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "strictFunctionTypes": true,
+    "types": [],
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "."
+  }
+}

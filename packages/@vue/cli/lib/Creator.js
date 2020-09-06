@@ -14,7 +14,7 @@ const { formatFeatures } = require('./util/features')
 const loadLocalPreset = require('./util/loadLocalPreset')
 const loadRemotePreset = require('./util/loadRemotePreset')
 const generateReadme = require('./util/generateReadme')
-const { resolvePkg } = require('@vue/cli-shared-utils')
+const { resolvePkg, isOfficialPlugin } = require('@vue/cli-shared-utils')
 
 const {
   defaults,
@@ -28,6 +28,7 @@ const {
 const {
   chalk,
   execa,
+  semver,
 
   log,
   warn,
@@ -52,6 +53,7 @@ module.exports = class Creator extends EventEmitter {
     this.name = name
     this.context = process.env.VUE_CLI_CONTEXT = context
     const { presetPrompt, featurePrompt } = this.resolveIntroPrompts()
+
     this.presetPrompt = presetPrompt
     this.featurePrompt = featurePrompt
     this.outroPrompts = this.resolveOutroPrompts()
@@ -110,6 +112,16 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
+    // Introducing this hack because typescript plugin must be invoked after router.
+    // Currently we rely on the `plugins` object enumeration order,
+    // which depends on the order of the field initialization.
+    // FIXME: Remove this ugly hack after the plugin ordering API settled down
+    if (preset.plugins['@vue/cli-plugin-router'] && preset.plugins['@vue/cli-plugin-typescript']) {
+      const tmp = preset.plugins['@vue/cli-plugin-typescript']
+      delete preset.plugins['@vue/cli-plugin-typescript']
+      preset.plugins['@vue/cli-plugin-typescript'] = tmp
+    }
+
     // legacy support for vuex
     if (preset.vuex) {
       preset.plugins['@vue/cli-plugin-vuex'] = {}
@@ -121,9 +133,10 @@ module.exports = class Creator extends EventEmitter {
       (hasYarn() ? 'yarn' : null) ||
       (hasPnpm3OrLater() ? 'pnpm' : 'npm')
     )
-    const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
     await clearConsole()
+    const pm = new PackageManager({ context, forcePackageManager: packageManager })
+
     log(`✨  Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
@@ -144,19 +157,43 @@ module.exports = class Creator extends EventEmitter {
         return
       }
 
-      // Note: the default creator includes no more than `@vue/cli-*` & `@vue/babel-preset-env`,
-      // so it is fine to only test `@vue` prefix.
-      // Other `@vue/*` packages' version may not be in sync with the cli itself.
-      pkg.devDependencies[dep] = (
-        preset.plugins[dep].version ||
-        ((/^@vue/.test(dep)) ? `~${latestMinor}` : `latest`)
-      )
+      let { version } = preset.plugins[dep]
+
+      if (!version) {
+        if (isOfficialPlugin(dep) || dep === '@vue/cli-service' || dep === '@vue/babel-preset-env') {
+          version = isTestOrDebug ? `file:${path.resolve(__dirname, '../../../', dep)}` : `~${latestMinor}`
+        } else {
+          version = 'latest'
+        }
+      }
+
+      pkg.devDependencies[dep] = version
     })
 
     // write package.json
     await writeFileTree(context, {
       'package.json': JSON.stringify(pkg, null, 2)
     })
+
+    // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
+    if (packageManager === 'pnpm') {
+      const pnpmConfig = hasPnpmVersionOrLater('4.0.0')
+        ? 'shamefully-hoist=true\n'
+        : 'shamefully-flatten=true\n'
+
+      await writeFileTree(context, {
+        '.npmrc': pnpmConfig
+      })
+    }
+
+    if (packageManager === 'yarn' && semver.satisfies(process.version, '8.x')) {
+      // Vue CLI 4.x should support Node 8.x,
+      // but some dependenices already bumped `engines` field to Node 10
+      // and Yarn treats `engines` field too strictly
+      await writeFileTree(context, {
+        '.yarnrc': '# Hotfix for Node 8.x\n--install.ignore-engines true\n'
+      })
+    }
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
@@ -197,7 +234,7 @@ module.exports = class Creator extends EventEmitter {
     log(`📦  Installing additional dependencies...`)
     this.emit('creation', { event: 'deps-install' })
     log()
-    if (!isTestOrDebug) {
+    if (!isTestOrDebug || process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
       await pm.install()
     }
 
@@ -220,25 +257,24 @@ module.exports = class Creator extends EventEmitter {
       })
     }
 
-    // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
-    if (packageManager === 'pnpm') {
-      const pnpmConfig = hasPnpmVersionOrLater('4.0.0')
-        ? 'shamefully-hoist=true\n'
-        : 'shamefully-flatten=true\n'
-
-      await writeFileTree(context, {
-        '.npmrc': pnpmConfig
-      })
-    }
-
     // commit initial state
     let gitCommitFailed = false
+    let gpgSign = false
     if (shouldInitGit) {
       await run('git add -A')
       if (isTestOrDebug) {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
+        await run('git', ['config', 'commit.gpgSign', 'false'])
       }
+      gpgSign = await (async () => {
+        const { stdout: gpgSignConfig } = await run('git', [
+          'config',
+          '--get',
+          'commit.gpgSign'
+        ])
+        return gpgSignConfig === 'true'
+      })()
       const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
       try {
         await run('git', ['commit', '-m', msg, '--no-verify'])
@@ -262,7 +298,7 @@ module.exports = class Creator extends EventEmitter {
 
     if (gitCommitFailed) {
       warn(
-        `Skipped git commit due to missing username and email in git config.\n` +
+        `Skipped git commit due to missing username and email in git config${gpgSign ? ' or failed to sign commit' : ''}.\n` +
         `You will need to perform the initial commit yourself.\n`
       )
     }
@@ -318,7 +354,7 @@ module.exports = class Creator extends EventEmitter {
 
   async resolvePreset (name, clone) {
     let preset
-    const savedPresets = loadOptions().presets || {}
+    const savedPresets = this.getPresets()
 
     if (name in savedPresets) {
       preset = savedPresets[name]
@@ -335,10 +371,6 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
-    // use default preset if user has not overwritten it
-    if (name === 'default' && !preset) {
-      preset = defaults.presets.default
-    }
     if (!preset) {
       error(`preset "${name}" not found.`)
       const presets = Object.keys(savedPresets)
@@ -394,9 +426,16 @@ module.exports = class Creator extends EventEmitter {
 
   resolveIntroPrompts () {
     const presets = this.getPresets()
-    const presetChoices = Object.keys(presets).map(name => {
+    const presetChoices = Object.entries(presets).map(([name, preset]) => {
+      let displayName = name
+      if (name === 'default') {
+        displayName = 'Default'
+      } else if (name === '__default_vue_3__') {
+        displayName = 'Default (Vue 3 Preview)'
+      }
+
       return {
-        name: `${name} (${formatFeatures(presets[name])})`,
+        name: `${displayName} (${formatFeatures(preset)})`,
         value: name
       }
     })
@@ -505,6 +544,7 @@ module.exports = class Creator extends EventEmitter {
         return isManualMode(answers) && originalWhen(answers)
       }
     })
+
     const prompts = [
       this.presetPrompt,
       this.featurePrompt,

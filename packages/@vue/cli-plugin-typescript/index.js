@@ -4,6 +4,10 @@ module.exports = (api, projectOptions) => {
   const fs = require('fs')
   const useThreads = process.env.NODE_ENV === 'production' && !!projectOptions.parallel
 
+  const { semver, loadModule } = require('@vue/cli-shared-utils')
+  const vue = loadModule('vue', api.service.context)
+  const isVue3 = (vue && semver.major(vue.version) === 3)
+
   api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
@@ -76,30 +80,38 @@ module.exports = (api, projectOptions) => {
       return options
     })
 
+    // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
+    // so temporarily disabled for vue-cli tests
     if (!process.env.VUE_CLI_TEST) {
-      // try to load `@vue/compiler-sfc` if the project is using Vue 3.
-      // if it is not available, it uses `vue-template-compiler`
-      let compiler = '@vue/compiler-sfc'
-      try {
-        require.resolve(compiler)
-        // use a shim as @vue/compiler-sfc does not offer the `parseComponent` function
-        // but a `parse` function
-        // the shim only delegates to the parse function
-        compiler = '@vue/cli-plugin-typescript/vue-compiler-sfc-shim'
-      } catch (e) {
-        compiler = 'vue-template-compiler'
-      }
-      // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
-      // so temporarily disabled for vue-cli tests
-      config
-        .plugin('fork-ts-checker')
-          .use(require('fork-ts-checker-webpack-plugin'), [{
-            vue: { enabled: true, compiler },
-            tslint: projectOptions.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
-            formatter: 'codeframe',
-            // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
-            checkSyntacticErrors: useThreads
+      if (isVue3) {
+        config
+          .plugin('fork-ts-checker')
+          .use(require('fork-ts-checker-webpack-plugin-v5'), [{
+            typescript: {
+              extensions: {
+                vue: {
+                  enabled: true,
+                  compiler: '@vue/compiler-sfc'
+                }
+              },
+              diagnosticOptions: {
+                semantic: true,
+                // https://github.com/TypeStrong/ts-loader#happypackmode
+                syntactic: useThreads
+              }
+            }
           }])
+      } else {
+        config
+          .plugin('fork-ts-checker')
+            .use(require('fork-ts-checker-webpack-plugin'), [{
+              vue: { enabled: true, compiler: 'vue-template-compiler' },
+              tslint: projectOptions.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
+              formatter: 'codeframe',
+              // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
+              checkSyntacticErrors: useThreads
+            }])
+      }
     }
   })
 

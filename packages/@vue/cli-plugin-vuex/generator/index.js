@@ -1,15 +1,25 @@
-module.exports = (api, options = {}) => {
+module.exports = (api, options = {}, rootOptions = {}) => {
   api.injectImports(api.entryFile, `import store from './store'`)
-  api.injectRootOptions(api.entryFile, `store`)
 
-  api.extendPackage({
-    dependencies: {
-      vuex: '^3.4.0'
-    }
-  })
+  if (rootOptions.vueVersion === '3') {
+    api.transformScript(api.entryFile, require('./injectUseStore'))
+    api.extendPackage({
+      dependencies: {
+        vuex: '^4.0.0-0'
+      }
+    })
+    api.render('./template-vue3', {})
+  } else {
+    api.injectRootOptions(api.entryFile, `store`)
 
-  api.render('./template', {
-  })
+    api.extendPackage({
+      dependencies: {
+        vuex: '^3.4.0'
+      }
+    })
+
+    api.render('./template', {})
+  }
 
   if (api.invoking && api.hasPlugin('typescript')) {
     /* eslint-disable-next-line node/no-extraneous-require */

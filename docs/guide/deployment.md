@@ -130,7 +130,7 @@ pages: # the job must be named pages
     - npm run build
     - mv public public-vue # GitLab Pages hooks on the public folder
     - mv dist public # rename the dist folder (result of npm run build)
-    # optionally, you can activate gzip support wih the following line:
+    # optionally, you can activate gzip support with the following line:
     - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
   artifacts:
     paths:
@@ -261,7 +261,7 @@ firebase deploy --only hosting
 
 If you want other Firebase CLI features you use on your project to be deployed, run `firebase deploy` without the `--only` option.
 
-You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com`.
+You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com` or `https://<YOUR-PROJECT-ID>.web.app`.
 
 Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 

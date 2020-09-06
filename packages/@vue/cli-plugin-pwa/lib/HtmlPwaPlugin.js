@@ -111,12 +111,17 @@ module.exports = class HtmlPwaPlugin {
               rel: 'manifest',
               href: getTagHref(publicPath, manifestPath, assetsVersionStr)
             }
-          ),
-          makeTag('meta', {
-            name: 'theme-color',
-            content: themeColor
-          })
+          )
         )
+
+        if (themeColor != null) {
+          data.head.push(
+            makeTag('meta', {
+              name: 'theme-color',
+              content: themeColor
+            })
+          )
+        }
 
         // Add to home screen for Safari on iOS
         data.head.push(
@@ -154,12 +159,14 @@ module.exports = class HtmlPwaPlugin {
             content: getTagHref(publicPath, iconPaths.msTileImage, assetsVersionStr)
           }))
         }
-        data.head.push(
-          makeTag('meta', {
-            name: 'msapplication-TileColor',
-            content: msTileColor
-          })
-        )
+        if (msTileColor != null) {
+          data.head.push(
+            makeTag('meta', {
+              name: 'msapplication-TileColor',
+              content: msTileColor
+            })
+          )
+        }
 
         cb(null, data)
       })

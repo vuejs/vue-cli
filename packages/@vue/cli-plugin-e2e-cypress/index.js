@@ -53,9 +53,10 @@ module.exports.defaultModes = {
 }
 
 function removeArg (rawArgs, argToRemove, offset = 1) {
-  const matchRE = new RegExp(`^--${argToRemove}`)
+  const matchRE = new RegExp(`^--${argToRemove}$`)
   const equalRE = new RegExp(`^--${argToRemove}=`)
-  const i = rawArgs.findIndex(arg => matchRE.test(arg))
+
+  const i = rawArgs.findIndex(arg => matchRE.test(arg) || equalRE.test(arg))
   if (i > -1) {
     rawArgs.splice(i, offset + (equalRE.test(rawArgs[i]) ? 0 : 1))
   }

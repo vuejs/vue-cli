@@ -2,9 +2,6 @@ const create = require('@vue/cli-test-utils/createUpgradableProject')
 const { logs } = require('@vue/cli-shared-utils')
 
 jest.setTimeout(300000)
-beforeEach(() => {
-  process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN = true
-})
 
 test('upgrade: plugin-babel v3.5', async () => {
   const project = await create('plugin-babel-legacy', {

@@ -6,15 +6,22 @@ module.exports = api => {
         devtool: 'inline-cheap-module-source-map'
       })
 
+      const { semver, loadModule } = require('@vue/cli-shared-utils')
+      const vue = loadModule('vue', api.service.context)
+      const isVue3 = (vue && semver.major(vue.version) === 3)
+
       // when target === 'node', vue-loader will attempt to generate
       // SSR-optimized code. We need to turn that off here.
-      webpackConfig.module
+      // the `optimizeSSR` option is only available in vue-loader 15
+      if (!isVue3) {
+        webpackConfig.module
         .rule('vue')
           .use('vue-loader')
           .tap(options => {
             options.optimizeSSR = false
             return options
           })
+      }
     }
   })
 

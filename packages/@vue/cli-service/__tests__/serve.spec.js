@@ -7,7 +7,6 @@ const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
 const sleep = n => new Promise(resolve => setTimeout(resolve, n))
-
 test('serve', async () => {
   const project = await create('e2e-serve', defaultPreset)
 
@@ -38,7 +37,6 @@ test('serve', async () => {
     }
   )
 })
-
 test('serve with router', async () => {
   const project = await create('e2e-serve-router', Object.assign({}, defaultPreset, {
     plugins: {
@@ -194,3 +192,4 @@ test('use a single websocket connection for HMR', async () => {
     }
   )
 })
+

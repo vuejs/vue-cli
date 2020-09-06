@@ -257,7 +257,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
   By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `false` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
 
   ::: tip
-  If you have customized CSS Modules configurations in `css.loaderOptions.css`, then the `css.requireModuleExtension` field must be explictly configured to `true` or `false`, otherwise we can't be sure whether you want to apply these options to all CSS files or not.
+  If you have customized CSS Modules configurations in `css.loaderOptions.css`, then the `css.requireModuleExtension` field must be explicitly configured to `true` or `false`, otherwise we can't be sure whether you want to apply these options to all CSS files or not.
   :::
 
   See also: [Working with CSS > CSS Modules](../guide/css.md#css-modules)
@@ -330,7 +330,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 
   - Some values like `host`, `port` and `https` may be overwritten by command line flags.
 
-  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [publicPath](#baseurl) for the dev server to function properly.
+  - Some values like `publicPath` and `historyApiFallback` should not be modified as they need to be synchronized with [publicPath](#publicPath) for the dev server to function properly.
 
 ### devServer.proxy
 
@@ -379,6 +379,10 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 - Default: `require('os').cpus().length > 1`
 
   Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores. Passing a number will define the amount of workers used.
+
+::: warning
+Do not use `parallel` in combination with non-serializable loader options, such as regexes, dates and functions. These options would not be passed correctly to the respective loaders which may lead to unexpected errors.
+:::
 
 ### pwa
 
@@ -446,3 +450,7 @@ See [@vue/cli-plugin-e2e-cypress](https://github.com/vuejs/vue-cli/tree/dev/pack
 ### Nightwatch
 
 See [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch) for more details.
+
+### WebdriverIO
+
+See [@vue/cli-plugin-e2e-webdriverio](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-webdriverio) for more details.

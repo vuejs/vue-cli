@@ -1,9 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (api, { config, lintOn = [] }, _, invoking) => {
-  const eslintConfig = require('../eslintOptions').config(api, config)
-  const devDependencies = require('../eslintDeps').getDeps(api, config)
+module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
+  const eslintConfig = require('../eslintOptions').config(api, config, rootOptions)
+  const devDependencies = require('../eslintDeps').getDeps(api, config, rootOptions)
 
   const pkg = {
     scripts: {
@@ -43,10 +43,10 @@ module.exports = (api, { config, lintOn = [] }, _, invoking) => {
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
-    const extentions = require('../eslintOptions').extensions(api)
+    const extensions = require('../eslintOptions').extensions(api)
       .map(ext => ext.replace(/^\./, ''))  // remove the leading `.`
     pkg['lint-staged'] = {
-      [`*.{${extentions.join(',')}}`]: ['vue-cli-service lint', 'git add']
+      [`*.{${extensions.join(',')}}`]: ['vue-cli-service lint', 'git add']
     }
   }
 

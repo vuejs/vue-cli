@@ -40,7 +40,7 @@ describe('Vue project manager', () => {
       cy.get('.next').click()
     })
     cy.get('.config').within(() => {
-      cy.get('.vue-ui-select').eq(0).click()
+      cy.get('.vue-ui-select').eq(1).click()
     })
     cy.get('.vue-ui-select-button').eq(2).click()
     cy.get('.config').within(() => {

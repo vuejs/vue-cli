@@ -1,8 +1,11 @@
 const fs = require('fs-extra')
 const path = require('path')
 
+const ini = require('ini')
 const minimist = require('minimist')
 const LRU = require('lru-cache')
+
+const stripAnsi = require('strip-ansi')
 
 const {
   chalk,
@@ -103,6 +106,22 @@ class PackageManager {
       this.bin = loadOptions().packageManager || (hasYarn() ? 'yarn' : hasPnpm3OrLater() ? 'pnpm' : 'npm')
     }
 
+    if (this.bin === 'npm') {
+      // npm doesn't support package aliases until v6.9
+      const MIN_SUPPORTED_NPM_VERSION = '6.9.0'
+      const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
+
+      if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
+        warn(
+          'You are using an outdated version of NPM.\n' +
+          'there may be unexpected errors during installation.\n' +
+          'Please upgrade your NPM version.'
+        )
+
+        this.needsNpmInstallFix = true
+      }
+    }
+
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
       log()
       warn(
@@ -151,7 +170,40 @@ class PackageManager {
       }
     }
 
+    this._registry = stripAnsi(this._registry).trim()
     return this._registry
+  }
+
+  async getAuthToken () {
+    // get npmrc (https://docs.npmjs.com/configuring-npm/npmrc.html#files)
+    const possibleRcPaths = [
+      path.resolve(this.context, '.npmrc'),
+      path.resolve(require('os').homedir(), '.npmrc')
+    ]
+    if (process.env.PREFIX) {
+      possibleRcPaths.push(path.resolve(process.env.PREFIX, '/etc/npmrc'))
+    }
+    // there's also a '/path/to/npm/npmrc', skipped for simplicity of implementation
+
+    let npmConfig = {}
+    for (const loc of possibleRcPaths) {
+      if (fs.existsSync(loc)) {
+        try {
+          // the closer config file (the one with lower index) takes higher precedence
+          npmConfig = Object.assign({}, ini.parse(fs.readFileSync(loc, 'utf-8')), npmConfig)
+        } catch (e) {
+          // in case of file permission issues, etc.
+        }
+      }
+    }
+
+    const registry = await this.getRegistry()
+    const registryWithoutProtocol = registry
+      .replace(/https?:/, '')     // remove leading protocol
+      .replace(/([^/])$/, '$1/')  // ensure ending with slash
+    const authTokenKey = `${registryWithoutProtocol}:_authToken`
+
+    return npmConfig[authTokenKey]
   }
 
   async setRegistryEnvs () {
@@ -204,6 +256,7 @@ class PackageManager {
   // https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md
   async getMetadata (packageName, { full = false } = {}) {
     const registry = await this.getRegistry()
+    const authToken = await this.getAuthToken()
 
     const metadataKey = `${this.bin}-${registry}-${packageName}`
     let metadata = metadataCache.get(metadataKey)
@@ -214,12 +267,19 @@ class PackageManager {
 
     const headers = {}
     if (!full) {
-      headers.Accept = 'application/vnd.npm.install-v1+json'
+      headers.Accept = 'application/vnd.npm.install-v1+json;q=1.0, application/json;q=0.9, */*;q=0.8'
+    }
+
+    if (authToken) {
+      headers.Authorization = `Bearer ${authToken}`
     }
 
     const url = `${registry.replace(/\/$/g, '')}/${packageName}`
     try {
       metadata = (await request.get(url, { headers })).body
+      if (metadata.error) {
+        throw new Error(metadata.error)
+      }
       metadataCache.set(metadataKey, metadata)
       return metadata
     } catch (e) {
@@ -260,10 +320,35 @@ class PackageManager {
   async install () {
     if (process.env.VUE_CLI_TEST) {
       try {
-        await this.runCommand('install', ['--offline'])
+        process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
+        await this.runCommand('install', ['--offline', '--silent', '--no-progress'])
+        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
       } catch (e) {
-        await this.runCommand('install')
+        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        await this.runCommand('install', ['--silent', '--no-progress'])
       }
+    }
+
+    if (this.needsNpmInstallFix) {
+      // if npm 5, split into several `npm add` calls
+      // see https://github.com/vuejs/vue-cli/issues/5800#issuecomment-675199729
+      const pkg = resolvePkg(this.context)
+      if (pkg.dependencies) {
+        const deps = Object.entries(pkg.dependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', deps)
+      }
+
+      if (pkg.devDependencies) {
+        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', [...devDeps, '--save-dev'])
+      }
+
+      if (pkg.optionalDependencies) {
+        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', [...devDeps, '--save-optional'])
+      }
+
+      return
     }
 
     return await this.runCommand('install')
