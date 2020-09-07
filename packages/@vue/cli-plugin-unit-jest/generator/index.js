@@ -3,7 +3,8 @@ module.exports = (api, options, rootOptions, invoking) => {
 
   api.render('./template', {
     isVue3,
-    hasTS: api.hasPlugin('typescript')
+    hasTS: api.hasPlugin('typescript'),
+    hasRouter: api.hasPlugin('router')
   })
 
   api.extendPackage({
