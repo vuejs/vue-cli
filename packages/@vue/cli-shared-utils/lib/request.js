@@ -1,16 +1,15 @@
 exports.request = {
-  get (uri, opts) {
+  get (url, opts) {
     // lazy require
-    const request = require('util').promisify(require('request'))
+    const got = require('got')
     const reqOpts = {
       method: 'GET',
       timeout: 30000,
-      resolveWithFullResponse: true,
-      json: true,
-      uri,
+      responseType: 'json',
+      url,
       ...opts
     }
 
-    return request(reqOpts)
+    return got(reqOpts)
   }
 }

@@ -1,16 +1,15 @@
 require('events').defaultMaxListeners = 0
 const path = require('path')
 const fs = require('fs')
-const request = require('request-promise-native')
+const got = require('got')
 
 const promises = []
 
 async function checkLink (file, link, n) {
   try {
-    const result = await request({
+    const result = await got({
       method: 'HEAD',
-      uri: link,
-      resolveWithFullResponse: true
+      url: link
     })
     if (result.statusCode !== 200) {
       throw new Error('error')
