@@ -32,7 +32,7 @@
     "eslint-plugin-vue": "^5.2.2",
     "regenerator-runtime": "^0.13.5",
     "resolve": "^1.17.0",
-    "vue": "^2.6.11",
-    "vue-template-compiler": "^2.6.11"
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
   }
 }

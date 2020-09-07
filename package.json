@@ -44,15 +44,15 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.11.0",
+    "@babel/core": "^7.11.6",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/eslint-config-typescript": "^5.0.2",
-    "@vuepress/plugin-pwa": "^1.5.0",
-    "@vuepress/theme-vue": "^1.5.0",
+    "@vuepress/plugin-pwa": "^1.5.4",
+    "@vuepress/theme-vue": "^1.5.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^24.9.0",
@@ -85,13 +85,13 @@
     "rimraf": "^3.0.2",
     "semver": "^6.1.0",
     "typescript": "~3.9.3",
-    "vuepress": "^1.5.0",
+    "vuepress": "^1.5.4",
     "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
   "resolutions": {
     "puppeteer": "1.11.0",
-    "vue-template-compiler": "^2.6.11",
-    "vue-server-renderer": "^2.6.11"
+    "vue-template-compiler": "^2.6.12",
+    "vue-server-renderer": "^2.6.12"
   }
 }

@@ -20,7 +20,7 @@ const DEPS_MAP = {
     'eslint-plugin-standard': '^4.0.0'
   },
   typescript: {
-    '@vue/eslint-config-typescript': '^5.0.2',
+    '@vue/eslint-config-typescript': '^5.1.0',
     '@typescript-eslint/eslint-plugin': '^2.33.0',
     '@typescript-eslint/parser': '^2.33.0'
   }

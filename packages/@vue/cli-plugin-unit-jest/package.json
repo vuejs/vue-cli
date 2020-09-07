@@ -23,7 +23,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/core": "^7.11.0",
+    "@babel/core": "^7.11.6",
     "@babel/plugin-transform-modules-commonjs": "^7.9.6",
     "@types/jest": "^24.0.19",
     "@vue/cli-shared-utils": "^4.5.4",
@@ -40,7 +40,7 @@
     "vue-jest": "^3.0.5"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.0.3"
+    "@vue/test-utils": "^1.0.5"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0"

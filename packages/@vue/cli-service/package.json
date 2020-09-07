@@ -40,7 +40,7 @@
     "acorn-walk": "^7.1.1",
     "address": "^1.1.2",
     "autoprefixer": "^9.8.6",
-    "browserslist": "^4.12.0",
+    "browserslist": "^4.14.1",
     "cache-loader": "^4.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "cli-highlight": "^2.1.4",
@@ -113,9 +113,9 @@
     "fibers": ">= 3.1.1 <5.0.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "vue": "^2.6.11",
-    "vue-router": "^3.2.0",
-    "vue-template-compiler": "^2.6.11",
+    "vue": "^2.6.12",
+    "vue-router": "^3.4.3",
+    "vue-template-compiler": "^2.6.12",
     "vuex": "^3.4.0"
   },
   "publishConfig": {

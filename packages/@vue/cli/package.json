@@ -38,7 +38,7 @@
     "deepmerge": "^4.2.2",
     "download-git-repo": "^3.0.2",
     "ejs": "^2.7.1",
-    "envinfo": "^7.5.1",
+    "envinfo": "^7.7.3",
     "fs-extra": "^7.0.1",
     "globby": "^9.2.0",
     "import-global": "^0.1.0",
@@ -57,7 +57,7 @@
     "slash": "^3.0.0",
     "strip-ansi": "^6.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-codemod": "^0.0.4",
     "yaml-front-matter": "^3.4.1"
   },
