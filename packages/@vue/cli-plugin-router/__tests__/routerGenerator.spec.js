@@ -85,6 +85,8 @@ test('use with Vue 3', async () => {
 
   expect(files['src/main.js']).toMatch('.use(router)')
 
+  expect(files['src/App.vue']).not.toMatch('<div id="app">')
+
   expect(pkg.dependencies).toHaveProperty('vue-router')
   expect(pkg.dependencies['vue-router']).toMatch('^4')
 })

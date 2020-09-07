@@ -1,4 +1,12 @@
 <template>
+<%_ if (rootOptions.vueVersion === '3') { _%>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <%_ if (!rootOptions.bare) { _%>
+  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <%_ } else { _%>
+  <h1>Welcome to Your Vue.js App</h1>
+  <%_ } _%>
+<%_ } else { _%>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <%_ if (!rootOptions.bare) { _%>
@@ -7,6 +15,7 @@
     <h1>Welcome to Your Vue.js App</h1>
     <%_ } _%>
   </div>
+<%_ } _%>
 </template>
 <%_ if (!rootOptions.bare) { _%>
 
