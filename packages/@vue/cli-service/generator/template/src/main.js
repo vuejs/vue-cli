@@ -1,4 +1,4 @@
-<%_ if (isVue3) { _%>
+<%_ if (rootOptions.vueVersion === '3') { _%>
 import { createApp } from 'vue'
 import App from './App.vue'
 

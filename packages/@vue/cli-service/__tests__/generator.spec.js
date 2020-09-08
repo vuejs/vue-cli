@@ -46,4 +46,6 @@ test('Vue 3', async () => {
   expect(pkg).toHaveProperty(['devDependencies', '@vue/compiler-sfc'])
 
   expect(files['src/main.js']).toMatch(`import { createApp } from 'vue'`)
+
+  expect(files['src/App.vue']).not.toMatch('<div id="app">')
 })
