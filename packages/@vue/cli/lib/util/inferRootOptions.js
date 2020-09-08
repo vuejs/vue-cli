@@ -9,10 +9,10 @@ module.exports = function inferRootOptions (pkg) {
   rootOptions.projectName = pkg.name
 
   if ('vue' in deps) {
-    const vue2Range = semver.Range('^2.0.0', { includePrerelease: true })
-    const vue3Range = semver.Range('^3.0.0-0', { includePrerelease: true })
+    const vue2Range = new semver.Range('^2.0.0', { includePrerelease: true })
+    const vue3Range = new semver.Range('^3.0.0-0', { includePrerelease: true })
 
-    const depVueVersion = semver.minVersion(semver.Range(deps.vue))
+    const depVueVersion = semver.minVersion(new semver.Range(deps.vue))
 
     if (semver.satisfies(depVueVersion, vue3Range)) {
       rootOptions.vueVersion = '3'
