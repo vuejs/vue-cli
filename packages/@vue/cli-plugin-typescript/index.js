@@ -1,21 +1,25 @@
 const path = require('path')
 
 module.exports = (api, projectOptions) => {
-  const useThreads =
-    process.env.NODE_ENV === 'production' && !!projectOptions.parallel
+  const useThreads = process.env.NODE_ENV === 'production' && !!projectOptions.parallel
 
   const { semver, loadModule } = require('@vue/cli-shared-utils')
   const vue = loadModule('vue', api.service.context)
-  const isVue3 = vue && semver.major(vue.version) === 3
+  const isVue3 = (vue && semver.major(vue.version) === 3)
 
-  api.chainWebpack((config) => {
+  api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
     if (!projectOptions.pages) {
-      config.entry('app').clear().add('./src/main.ts')
+      config.entry('app')
+        .clear()
+        .add('./src/main.ts')
     }
 
-    config.resolve.extensions.prepend('.ts').prepend('.tsx')
+    config.resolve
+      .extensions
+        .prepend('.ts')
+        .prepend('.tsx')
 
     const tsRule = config.module.rule('ts').test(/\.ts$/)
     const tsxRule = config.module.rule('tsx').test(/\.tsx$/)
@@ -29,15 +33,11 @@ module.exports = (api, projectOptions) => {
     addLoader({
       name: 'cache-loader',
       loader: require.resolve('cache-loader'),
-      options: api.genCacheConfig(
-        'ts-loader',
-        {
-          'ts-loader': require('ts-loader/package.json').version,
-          typescript: require('typescript/package.json').version,
-          modern: !!process.env.VUE_CLI_MODERN_BUILD
-        },
-        'tsconfig.json'
-      )
+      options: api.genCacheConfig('ts-loader', {
+        'ts-loader': require('ts-loader/package.json').version,
+        'typescript': require('typescript/package.json').version,
+        modern: !!process.env.VUE_CLI_MODERN_BUILD
+      }, 'tsconfig.json')
     })
 
     if (useThreads) {
@@ -72,15 +72,12 @@ module.exports = (api, projectOptions) => {
       }
     })
     // make sure to append TSX suffix
-    tsxRule
-      .use('ts-loader')
-      .loader(require.resolve('ts-loader'))
-      .tap((options) => {
-        options = Object.assign({}, options)
-        delete options.appendTsSuffixTo
-        options.appendTsxSuffixTo = ['\\.vue$']
-        return options
-      })
+    tsxRule.use('ts-loader').loader(require.resolve('ts-loader')).tap(options => {
+      options = Object.assign({}, options)
+      delete options.appendTsSuffixTo
+      options.appendTsxSuffixTo = ['\\.vue$']
+      return options
+    })
 
     // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
     // so temporarily disabled for vue-cli tests
@@ -88,34 +85,30 @@ module.exports = (api, projectOptions) => {
       if (isVue3) {
         config
           .plugin('fork-ts-checker')
-          .use(require('fork-ts-checker-webpack-plugin-v5'), [
-            {
-              typescript: {
-                extensions: {
-                  vue: {
-                    enabled: true,
-                    compiler: '@vue/compiler-sfc'
-                  }
-                },
-                diagnosticOptions: {
-                  semantic: true,
-                  // https://github.com/TypeStrong/ts-loader#happypackmode
-                  syntactic: useThreads
+          .use(require('fork-ts-checker-webpack-plugin-v5'), [{
+            typescript: {
+              extensions: {
+                vue: {
+                  enabled: true,
+                  compiler: '@vue/compiler-sfc'
                 }
+              },
+              diagnosticOptions: {
+                semantic: true,
+                // https://github.com/TypeStrong/ts-loader#happypackmode
+                syntactic: useThreads
               }
             }
-          ])
+          }])
       } else {
         config
           .plugin('fork-ts-checker')
-          .use(require('fork-ts-checker-webpack-plugin'), [
-            {
+            .use(require('fork-ts-checker-webpack-plugin'), [{
               vue: { enabled: true, compiler: 'vue-template-compiler' },
               formatter: 'codeframe',
               // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
               checkSyntacticErrors: useThreads
-            }
-          ])
+            }])
       }
     }
   })
