@@ -37,7 +37,7 @@
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "core-js": "^3.6.5",
     "core-js-compat": "^3.6.5",
-    "semver": "^6.1.0"
+    "semver": "^7.3.2"
   },
   "peerDependencies": {
     "@babel/core": "*",

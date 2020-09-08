@@ -21,16 +21,16 @@
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-shared-utils#readme",
   "dependencies": {
     "@hapi/joi": "^15.0.1",
-    "chalk": "^2.4.2",
+    "chalk": "^4.1.0",
     "execa": "^1.0.0",
     "launch-editor": "^2.2.1",
-    "lru-cache": "^5.1.1",
+    "lru-cache": "^6.0.0",
     "node-ipc": "^9.1.1",
-    "open": "^6.3.0",
-    "ora": "^3.4.0",
+    "open": "^7.2.1",
+    "ora": "^5.1.0",
     "read-pkg": "^5.1.1",
     "request": "^2.88.2",
-    "semver": "^6.1.0",
+    "semver": "^7.3.2",
     "strip-ansi": "^6.0.0"
   },
   "publishConfig": {
