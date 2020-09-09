@@ -2,13 +2,10 @@ const pluginDevDeps = require('../package.json').devDependencies
 
 module.exports = (
   api,
-  { classComponent, lintOn = [], skipLibCheck = true, convertJsToTs, allowJs },
+  { classComponent, skipLibCheck = true, convertJsToTs, allowJs },
   rootOptions,
   invoking
 ) => {
-  if (typeof lintOn === 'string') {
-    lintOn = lintOn.split(',')
-  }
   const isVue3 = rootOptions && rootOptions.vueVersion === '3'
 
   api.extendPackage({
