@@ -1,4 +1,15 @@
 
+## 4.5.6 (2020-09-10)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#5869](https://github.com/vuejs/vue-cli/pull/5869) fix: skip checking git gpgSign config ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.5.5 (2020-09-10)
 
 #### :bug: Bug Fix
