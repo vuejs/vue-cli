@@ -292,16 +292,16 @@ firebase deploy --only hosting
 
 请参考 [Firebase 文档](https://firebase.google.com/docs/hosting/deploying) 来获取更多细节。
 
-### ZEIT Now
+### Vercel
 
-[ZEIT Now](https://zeit.co/) 是一个网站和无服务器 (Serverless) API 云平台，你可以使用你的个人域名 (或是免费的 `.now.sh` URL) 部署你的 Vue 项目。
+[Vercel](https://vercel.com/) 是一个网站和无服务器 (Serverless) API 云平台，你可以使用你的个人域名 (或是免费的 `.vercel.app` URL) 部署你的 Vue 项目。
 
 #### 步骤一：安装 Now CLI
 
-要使用 [npm](https://www.npmjs.com/package/now) 安装其命令行界面，运行以下命令：
+要使用 [npm](https://www.npmjs.com/package/vercel) 安装其命令行界面，运行以下命令：
 
 ```
-npm install -g now
+npm install -g vercel
 ```
 
 #### 步骤二：部署
@@ -309,14 +309,14 @@ npm install -g now
 在项目根目录运行以下命令部署你的应用：
 
 ```
-now
+vercel
 ```
 
-**此外**，你还可以使用他们的 [GitHub](https://zeit.co/github) 或 [GitLab](https://zeit.co/gitlab) 集成服务。
+**此外**，你还可以使用他们的 [GitHub](https://vercel.com/github) 或 [GitLab](https://vercel.com/gitlab) 集成服务。
 
 大功告成！
 
-你的站点会开始部署，你将获得一个形如 [https://vue.now-examples.now.sh/](https://vue.now-examples.now.sh/) 的链接。
+你的站点会开始部署，你将获得一个形如 [https://vue.now-examples.now.sh/](https://vue.now-examples.now.sh/) （或`.vercel.app`）的链接。
 
 开箱即用地，请求会被自动改写到 `index.html` (除了自定义的静态文件) 并带有合适的缓存请求头。
 

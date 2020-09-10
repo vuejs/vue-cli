@@ -1,11 +1,9 @@
 module.exports = (api, options) => {
-  const isVue3 = (options.vueVersion === '3')
   api.render('./template', {
-    isVue3,
     doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
   })
 
-  if (isVue3) {
+  if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
         'vue': '^3.0.0-0'

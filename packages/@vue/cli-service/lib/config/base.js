@@ -133,7 +133,10 @@ module.exports = (api, options) => {
             .end()
           .use('vue-loader')
             .loader(require.resolve('vue-loader-v16'))
-            .options(vueLoaderCacheConfig)
+            .options({
+              ...vueLoaderCacheConfig,
+              babelParserPlugins: ['jsx', 'classProperties', 'decorators-legacy']
+            })
             .end()
           .end()
 

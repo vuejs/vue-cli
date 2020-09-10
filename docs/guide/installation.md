@@ -6,7 +6,10 @@ If you have the previous `vue-cli` (1.x or 2.x) package installed globally, you 
 :::
 
 ::: tip Node Version Requirement
-Vue CLI requires [Node.js](https://nodejs.org/) version 8.9 or above (8.11.0+ recommended). You can manage multiple versions of Node on the same machine with [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
+Vue CLI 4.x requires [Node.js](https://nodejs.org/) version 8.9 or above (v10+ recommended). You can manage multiple versions of Node on the same machine with [n](https://github.com/tj/n), [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
+
+As Node.js v8 has reached end-of-life, it's now recommended to use Node.js v10+ for best compatibility.
+If you have to stay with Node.js v8, please make sure npm v6 is used as the default package manager. (`npm -v` to check the version, and `vue config --set packageManager npm` to set the default package manager.)
 :::
 
 To install the new package, use one of the following commands. You need administrator privileges to execute these unless npm was installed on your system through a Node.js version manager (e.g. n or nvm).
@@ -38,7 +41,7 @@ yarn global upgrade --latest @vue/cli
 
 #### Project Dependencies
 
-Upgrade commands shown above apply to the global Vue CLI installation. To upgrade one or more `@vue/cli` related packages (including packages starting with `@vue/cli-plugin-`) inside your project, run `vue upgrade` inside the project directory:
+Upgrade commands shown above apply to the global Vue CLI installation. To upgrade one or more `@vue/cli` related packages (including packages starting with `@vue/cli-plugin-` or `vue-cli-plugin-`) inside your project, run `vue upgrade` inside the project directory:
 
 ```
 Usage: upgrade [options] [plugin-name]
@@ -46,7 +49,7 @@ Usage: upgrade [options] [plugin-name]
 (experimental) upgrade vue cli service / plugins
 
 Options:
-  -t, --to <version>    Upgrade <package-name> to a version that is not latest
+  -t, --to <version>    Upgrade <plugin-name> to a version that is not latest
   -f, --from <version>  Skip probing installed plugin, assuming it is upgraded from the designated version
   -r, --registry <url>  Use specified npm registry when installing dependencies
   --all                 Upgrade all plugins
