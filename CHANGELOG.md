@@ -1,4 +1,41 @@
 
+## 4.5.5 (2020-09-10)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#5868](https://github.com/vuejs/vue-cli/pull/5868) fix: enable some syntax extensions by default for vue script compiler ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-router`, `@vue/cli-service`
+  * [#5852](https://github.com/vuejs/vue-cli/pull/5852) fix: fix duplicate id="app" in Vue 3 project template ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`
+  * [#5591](https://github.com/vuejs/vue-cli/pull/5591) fix(unit-jest, unit-mocha): generate passing tests when `bare` option is used with router enabled (#3544) ([@IwalkAlone](https://github.com/IwalkAlone))
+* `@vue/cli-plugin-pwa`
+  * [#5820](https://github.com/vuejs/vue-cli/pull/5820) fix: allow turning off theme color tags ([@GabrielGMartinsBr](https://github.com/GabrielGMartinsBr))
+* `@vue/cli`
+  * [#5827](https://github.com/vuejs/vue-cli/pull/5827) fix: fix support for Node.js v8 and deprecate it ([@sodatea](https://github.com/sodatea))
+  * [#5823](https://github.com/vuejs/vue-cli/pull/5823) Handle GPG sign git config for initial commit ([@spenserblack](https://github.com/spenserblack))
+  * [#5808](https://github.com/vuejs/vue-cli/pull/5808) fix: strip non-ansi characters from registry config ([@sodatea](https://github.com/sodatea))
+  * [#5801](https://github.com/vuejs/vue-cli/pull/5801) fix: do not throw when api.render is called from an anonymous function ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-ui`
+  * [#3687](https://github.com/vuejs/vue-cli/pull/3687) perf(ui): improve get folder list to use Promises instead of sync ([@pikax](https://github.com/pikax))
+
+#### :hammer: Underlying Tools
+* `@vue/babel-preset-app`
+  * [#5831](https://github.com/vuejs/vue-cli/pull/5831) chore: rename jsx package scope from ant-design-vue to vue ([@Amour1688](https://github.com/Amour1688))
+
+#### Committers: 8
+- Booker Zhao ([@binggg](https://github.com/binggg))
+- Carlos Rodrigues ([@pikax](https://github.com/pikax))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Renan Cidale Assumpcao ([@rcidaleassumpo](https://github.com/rcidaleassumpo))
+- Sergey Skrynnikov ([@IwalkAlone](https://github.com/IwalkAlone))
+- Spenser Black ([@spenserblack](https://github.com/spenserblack))
+- [@GabrielGMartinsBr](https://github.com/GabrielGMartinsBr)
+- 天泽 ([@Amour1688](https://github.com/Amour1688))
+
+
+
 ## 4.5.4 (2020-08-18)
 
 #### :bug: Bug Fix
