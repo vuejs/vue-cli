@@ -259,7 +259,6 @@ module.exports = class Creator extends EventEmitter {
 
     // commit initial state
     let gitCommitFailed = false
-    let gpgSign = false
     if (shouldInitGit) {
       await run('git add -A')
       if (isTestOrDebug) {
@@ -267,14 +266,6 @@ module.exports = class Creator extends EventEmitter {
         await run('git', ['config', 'user.email', 'test@test.com'])
         await run('git', ['config', 'commit.gpgSign', 'false'])
       }
-      gpgSign = await (async () => {
-        const { stdout: gpgSignConfig } = await run('git', [
-          'config',
-          '--get',
-          'commit.gpgSign'
-        ])
-        return gpgSignConfig === 'true'
-      })()
       const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
       try {
         await run('git', ['commit', '-m', msg, '--no-verify'])
@@ -298,7 +289,7 @@ module.exports = class Creator extends EventEmitter {
 
     if (gitCommitFailed) {
       warn(
-        `Skipped git commit due to missing username and email in git config${gpgSign ? ' or failed to sign commit' : ''}.\n` +
+        `Skipped git commit due to missing username and email in git config, or failed to sign commit.\n` +
         `You will need to perform the initial commit yourself.\n`
       )
     }
