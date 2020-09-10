@@ -38,9 +38,15 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 ### The Global `@vue/cli` and The `vue` Command
 
+### `@vue/cli-plugin-typescript`
+
+#### Dropped TSLint support
+
+As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
+Please consider switching to ESLint. You can check out [`tslint-to-eslint-config`](https://github.com/typescript-eslint/tslint-to-eslint-config) for a mostly automatic migration experience.
+
 ### Internal Packages
 
 #### `@vue/cli-shared-utils`
 
 - Bump [chalk](https://github.com/chalk/chalk) from v2 to v4
--
