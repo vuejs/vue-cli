@@ -28,6 +28,7 @@ const {
 const {
   chalk,
   execa,
+  semver,
 
   log,
   warn,
@@ -132,9 +133,10 @@ module.exports = class Creator extends EventEmitter {
       (hasYarn() ? 'yarn' : null) ||
       (hasPnpm3OrLater() ? 'pnpm' : 'npm')
     )
-    const pm = new PackageManager({ context, forcePackageManager: packageManager })
 
     await clearConsole()
+    const pm = new PackageManager({ context, forcePackageManager: packageManager })
+
     log(`✨  Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
 
@@ -172,6 +174,26 @@ module.exports = class Creator extends EventEmitter {
     await writeFileTree(context, {
       'package.json': JSON.stringify(pkg, null, 2)
     })
+
+    // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
+    if (packageManager === 'pnpm') {
+      const pnpmConfig = hasPnpmVersionOrLater('4.0.0')
+        ? 'shamefully-hoist=true\n'
+        : 'shamefully-flatten=true\n'
+
+      await writeFileTree(context, {
+        '.npmrc': pnpmConfig
+      })
+    }
+
+    if (packageManager === 'yarn' && semver.satisfies(process.version, '8.x')) {
+      // Vue CLI 4.x should support Node 8.x,
+      // but some dependenices already bumped `engines` field to Node 10
+      // and Yarn treats `engines` field too strictly
+      await writeFileTree(context, {
+        '.yarnrc': '# Hotfix for Node 8.x\n--install.ignore-engines true\n'
+      })
+    }
 
     // intilaize git repository before installing deps
     // so that vue-cli-service can setup git hooks.
@@ -235,25 +257,24 @@ module.exports = class Creator extends EventEmitter {
       })
     }
 
-    // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
-    if (packageManager === 'pnpm') {
-      const pnpmConfig = hasPnpmVersionOrLater('4.0.0')
-        ? 'shamefully-hoist=true\n'
-        : 'shamefully-flatten=true\n'
-
-      await writeFileTree(context, {
-        '.npmrc': pnpmConfig
-      })
-    }
-
     // commit initial state
     let gitCommitFailed = false
+    let gpgSign = false
     if (shouldInitGit) {
       await run('git add -A')
       if (isTestOrDebug) {
         await run('git', ['config', 'user.name', 'test'])
         await run('git', ['config', 'user.email', 'test@test.com'])
+        await run('git', ['config', 'commit.gpgSign', 'false'])
       }
+      gpgSign = await (async () => {
+        const { stdout: gpgSignConfig } = await run('git', [
+          'config',
+          '--get',
+          'commit.gpgSign'
+        ])
+        return gpgSignConfig === 'true'
+      })()
       const msg = typeof cliOptions.git === 'string' ? cliOptions.git : 'init'
       try {
         await run('git', ['commit', '-m', msg, '--no-verify'])
@@ -277,7 +298,7 @@ module.exports = class Creator extends EventEmitter {
 
     if (gitCommitFailed) {
       warn(
-        `Skipped git commit due to missing username and email in git config.\n` +
+        `Skipped git commit due to missing username and email in git config${gpgSign ? ' or failed to sign commit' : ''}.\n` +
         `You will need to perform the initial commit yourself.\n`
       )
     }

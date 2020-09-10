@@ -85,3 +85,56 @@ test('TS + bare', async () => {
   expect(spec).toMatch(`const wrapper = shallowMount(App)`)
   expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js + TypeScript App\`)`)
 })
+
+test('bare + router', async () => {
+  const { files } = await generateWithPlugin([
+    {
+      id: 'unit-mocha',
+      apply: require('../generator'),
+      options: {}
+    },
+    {
+      id: '@vue/cli-service',
+      apply: () => {},
+      options: { bare: true }
+    },
+    {
+      id: 'router',
+      apply: () => {},
+      options: {}
+    }
+  ])
+
+  const spec = files['tests/unit/example.spec.js']
+  expect(spec).toMatch(`const wrapper = mount(App,`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js App\`)`)
+})
+
+test('TS + bare + router', async () => {
+  const { files } = await generateWithPlugin([
+    {
+      id: 'unit-mocha',
+      apply: require('../generator'),
+      options: {}
+    },
+    {
+      id: 'typescript',
+      apply: () => {},
+      options: {}
+    },
+    {
+      id: '@vue/cli-service',
+      apply: () => {},
+      options: { bare: true }
+    },
+    {
+      id: 'router',
+      apply: () => {},
+      options: {}
+    }
+  ])
+
+  const spec = files['tests/unit/example.spec.ts']
+  expect(spec).toMatch(`const wrapper = mount(App,`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js App\`)`)
+})

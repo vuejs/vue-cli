@@ -5,6 +5,8 @@ const ini = require('ini')
 const minimist = require('minimist')
 const LRU = require('lru-cache')
 
+const stripAnsi = require('strip-ansi')
+
 const {
   chalk,
   execa,
@@ -104,6 +106,22 @@ class PackageManager {
       this.bin = loadOptions().packageManager || (hasYarn() ? 'yarn' : hasPnpm3OrLater() ? 'pnpm' : 'npm')
     }
 
+    if (this.bin === 'npm') {
+      // npm doesn't support package aliases until v6.9
+      const MIN_SUPPORTED_NPM_VERSION = '6.9.0'
+      const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
+
+      if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
+        warn(
+          'You are using an outdated version of NPM.\n' +
+          'there may be unexpected errors during installation.\n' +
+          'Please upgrade your NPM version.'
+        )
+
+        this.needsNpmInstallFix = true
+      }
+    }
+
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
       log()
       warn(
@@ -152,6 +170,7 @@ class PackageManager {
       }
     }
 
+    this._registry = stripAnsi(this._registry).trim()
     return this._registry
   }
 
@@ -308,6 +327,28 @@ class PackageManager {
         delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
         await this.runCommand('install', ['--silent', '--no-progress'])
       }
+    }
+
+    if (this.needsNpmInstallFix) {
+      // if npm 5, split into several `npm add` calls
+      // see https://github.com/vuejs/vue-cli/issues/5800#issuecomment-675199729
+      const pkg = resolvePkg(this.context)
+      if (pkg.dependencies) {
+        const deps = Object.entries(pkg.dependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', deps)
+      }
+
+      if (pkg.devDependencies) {
+        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', [...devDeps, '--save-dev'])
+      }
+
+      if (pkg.optionalDependencies) {
+        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', [...devDeps, '--save-optional'])
+      }
+
+      return
     }
 
     return await this.runCommand('install')

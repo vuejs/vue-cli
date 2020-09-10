@@ -19,12 +19,15 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, '@vue/cli')
 
-if (semver.satisfies(process.version, '9.x')) {
-  console.log(chalk.red(
-    `You are using Node ${process.version}.\n` +
-    `Node.js 9.x has already reached end-of-life and will not be supported in future major releases.\n` +
-    `It's strongly recommended to use an active LTS version instead.`
-  ))
+const EOL_NODE_MAJORS = ['8.x', '9.x', '11.x', '13.x']
+for (const major of EOL_NODE_MAJORS) {
+  if (semver.satisfies(process.version, major)) {
+    console.log(chalk.red(
+      `You are using Node ${process.version}.\n` +
+      `Node.js ${major} has already reached end-of-life and will not be supported in future major releases.\n` +
+      `It's strongly recommended to use an active LTS version instead.`
+    ))
+  }
 }
 
 const fs = require('fs')

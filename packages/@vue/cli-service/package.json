@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service",
-  "version": "4.5.4",
+  "version": "4.5.5",
   "description": "local service for vue-cli projects",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
@@ -29,10 +29,10 @@
     "@types/minimist": "^1.2.0",
     "@types/webpack": "^4.0.0",
     "@types/webpack-dev-server": "^3.11.0",
-    "@vue/cli-overlay": "^4.5.4",
-    "@vue/cli-plugin-router": "^4.5.4",
-    "@vue/cli-plugin-vuex": "^4.5.4",
-    "@vue/cli-shared-utils": "^4.5.4",
+    "@vue/cli-overlay": "^4.5.5",
+    "@vue/cli-plugin-router": "^4.5.5",
+    "@vue/cli-plugin-vuex": "^4.5.5",
+    "@vue/cli-shared-utils": "^4.5.5",
     "@vue/component-compiler-utils": "^3.1.2",
     "@vue/preload-webpack-plugin": "^1.1.0",
     "@vue/web-component-wrapper": "^1.2.0",
@@ -80,7 +80,7 @@
     "webpack-merge": "^4.2.2"
   },
   "optionalDependencies": {
-    "vue-loader-v16": "npm:vue-loader@^16.0.0-beta.3"
+    "vue-loader-v16": "npm:vue-loader@^16.0.0-beta.7"
   },
   "peerDependencies": {
     "@vue/compiler-sfc": "^3.0.0-beta.14",

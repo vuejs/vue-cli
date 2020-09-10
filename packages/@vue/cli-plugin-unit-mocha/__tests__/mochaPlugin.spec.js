@@ -27,7 +27,7 @@ test('should work with Vue 3', async () => {
 })
 
 test('should work with Vue 3 + TS', async () => {
-  const project = await createOutside('unit-mocha-vue-3', {
+  const project = await createOutside('unit-mocha-vue-3-ts', {
     vueVersion: '3',
     plugins: {
       '@vue/cli-plugin-babel': {},
