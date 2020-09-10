@@ -1,7 +1,6 @@
 const path = require('path')
 
 module.exports = (api, projectOptions) => {
-  const fs = require('fs')
   const useThreads = process.env.NODE_ENV === 'production' && !!projectOptions.parallel
 
   const { semver, loadModule } = require('@vue/cli-shared-utils')
@@ -106,7 +105,6 @@ module.exports = (api, projectOptions) => {
           .plugin('fork-ts-checker')
             .use(require('fork-ts-checker-webpack-plugin'), [{
               vue: { enabled: true, compiler: 'vue-template-compiler' },
-              tslint: projectOptions.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
               formatter: 'codeframe',
               // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
               checkSyntacticErrors: useThreads
@@ -114,19 +112,4 @@ module.exports = (api, projectOptions) => {
       }
     }
   })
-
-  if (!api.hasPlugin('eslint')) {
-    api.registerCommand('lint', {
-      description: 'lint source files with TSLint',
-      usage: 'vue-cli-service lint [options] [...files]',
-      options: {
-        '--format [formatter]': 'specify formatter (default: codeFrame)',
-        '--no-fix': 'do not fix errors',
-        '--formatters-dir [dir]': 'formatter directory',
-        '--rules-dir [dir]': 'rules directory'
-      }
-    }, args => {
-      return require('./lib/tslint')(args, api)
-    })
-  }
 }
