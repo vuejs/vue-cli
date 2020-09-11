@@ -6,3 +6,4 @@ temp
 entry-wc.js
 dist
 __testfixtures__
+packages/test/unit-jest-jest.config.js
