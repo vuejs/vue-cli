@@ -38,6 +38,10 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 ### The Global `@vue/cli` and The `vue` Command
 
+### `@vue/cli-plugin-eslint`
+
+* `eslint-loader` is upgraded [from v2 to v4](https://github.com/webpack-contrib/eslint-loader/blob/master/CHANGELOG.md). The only major change is that it dropped support for ESLint < v6.
+
 ### `@vue/cli-plugin-typescript`
 
 #### Dropped TSLint support
