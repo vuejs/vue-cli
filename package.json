@@ -70,7 +70,7 @@
     "execa": "^1.0.0",
     "geckodriver": "^1.20.0",
     "globby": "^9.2.0",
-    "got": "^11.6.0",
+    "got": "^11.6.2",
     "graphql": "^14.6.0",
     "http-server": "^0.12.3",
     "inquirer": "^7.1.0",
