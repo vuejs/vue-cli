@@ -1,6 +1,6 @@
 const { execa, hasYarn, hasPnpm3OrLater } = require('@vue/cli-shared-utils')
 
-module.exports.getGlobalInstallCommand = function getGlobalInstallCommand () {
+module.exports = function getGlobalInstallCommand () {
   if (hasYarn()) {
     const { stdout: yarnGlobalDir } = execa.sync('yarn', ['global', 'dir'])
     if (__dirname.includes(yarnGlobalDir)) {
