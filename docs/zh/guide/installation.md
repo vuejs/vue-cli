@@ -7,9 +7,6 @@ Vue CLI 的包名称由 `vue-cli` 改成了 `@vue/cli`。
 
 ::: tip Node 版本要求
 Vue CLI 4.x 需要 [Node.js](https://nodejs.org/) v8.9 或更高版本 (推荐 v10 以上)。你可以使用 [n](https://github.com/tj/n)，[nvm](https://github.com/creationix/nvm) 或 [nvm-windows](https://github.com/coreybutler/nvm-windows) 在同一台电脑中管理多个 Node 版本。
-
-由于 Node.js v8 已不再维护，我们建议使用 Node.js v10 以上的版本，以保证最佳的兼容性。
-如果暂时无法升级 Node.js 版本，请使用 npm v6 作为默认的包管理工具。（可以用 `npm -v` 检查 npm 版本，然后运行 `vue config --set packageManager npm` 以设置默认包管理工具。）
 :::
 
 可以使用下列任一命令安装这个新的包：
