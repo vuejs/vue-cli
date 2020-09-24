@@ -28,19 +28,19 @@ test('build', async () => {
 
   const index = await project.read('dist/index.html')
   // should split and preload app.js & vendor.js
-  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js rel=preload as=script>/)
-  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js rel=preload as=script>/)
+  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js" rel="preload" as="script">/)
+  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js" rel="preload" as="script">/)
   // should preload css
-  expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload as=style>/)
+  expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
 
   // should inject scripts
-  expect(index).toMatch(/<script src=\/js\/chunk-vendors\.\w{8}\.js>/)
-  expect(index).toMatch(/<script src=\/js\/app\.\w{8}\.js>/)
+  expect(index).toMatch(/<script src="\/js\/chunk-vendors\.\w{8}\.js">/)
+  expect(index).toMatch(/<script src="\/js\/app\.\w{8}\.js">/)
   // should inject css
-  expect(index).toMatch(/<link href=\/css\/app\.\w{8}\.css rel=stylesheet>/)
+  expect(index).toMatch(/<link href="\/css\/app\.\w{8}\.css" rel="stylesheet">/)
 
   // should reference favicon with correct base URL
-  expect(index).toMatch(/<link rel=icon href=\/favicon.ico>/)
+  expect(index).toMatch(/<link rel="icon" href="\/favicon.ico">/)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
