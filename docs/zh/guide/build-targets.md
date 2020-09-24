@@ -146,9 +146,9 @@ dist/foo.1.js        5.24 kb                     1.64 kb
 ```
 
 ## 在构建时使用 vuex
-在构建[Web Components组件](#web-components-组件)或[库](#库)时，入口点不是`main.js`，而是`entry-wc.js`文件，该文件由此生成：https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js
+在构建 [Web Components 组件](#web-components-组件)或[库](#库)时，入口点不是 `main.js` ，而是 `entry-wc.js` 文件，该文件由此生成： https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/commands/build/resolveWcEntry.js
 
-因此，要在Web Components组件的目标中使用vuex，你需要在 `App.vue`中初始化存储(store)：
+因此，要在 Web Components 组件的目标中使用 vuex ，你需要在 `App.vue` 中初始化存储 (store):
 ``` js
 import store from './store'
 
