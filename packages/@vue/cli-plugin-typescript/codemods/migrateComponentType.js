@@ -8,6 +8,8 @@ module.exports = function migrateComponentType (file, api) {
   const j = api.jscodeshift
   const root = j(file.source)
 
+  const useDoubleQuote = root.find(j.Literal).some(({ node }) => node.raw.startsWith('"'))
+
   const tsmodule = root.find(j.TSModuleDeclaration, {
     id: {
       value: '*.vue'
@@ -82,7 +84,10 @@ module.exports = function migrateComponentType (file, api) {
       .remove()
   }
 
-  return root.toSource()
+  return root.toSource({
+    lineTerminator: '\n',
+    quote: useDoubleQuote ? 'double' : 'single'
+  })
 }
 
 module.exports.parser = 'ts'
