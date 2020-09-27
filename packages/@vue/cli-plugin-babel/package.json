@@ -32,7 +32,7 @@
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
   },
   "devDependencies": {
-    "jscodeshift": "^0.9.0"
+    "jscodeshift": "^0.10.0"
   },
   "publishConfig": {
     "access": "public"
