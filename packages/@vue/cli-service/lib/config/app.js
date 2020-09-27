@@ -121,7 +121,6 @@ module.exports = (api, options) => {
         minify: {
           removeComments: true,
           collapseWhitespace: true,
-          removeAttributeQuotes: true,
           collapseBooleanAttributes: true,
           removeScriptTypeAttributes: true
           // more options:
