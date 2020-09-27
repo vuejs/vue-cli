@@ -8,7 +8,7 @@ module.exports = function migrateComponentType (file, api) {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  const useDoubleQuote = root.find(j.Literal).some(({ node }) => node.raw.startsWith('"'))
+  const useDoubleQuote = root.find(j.StringLiteral).some(({ node }) => node.extra.raw.startsWith('"'))
 
   const tsmodule = root.find(j.TSModuleDeclaration, {
     id: {
