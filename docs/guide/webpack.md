@@ -156,7 +156,7 @@ You can redirect the output into a file for easier inspection:
 ``` bash
 vue inspect > output.js
 ```
-By default inspect will out put the development config. To see the production configuration
+By default, `inspect` command will show the output for development config. To see the production configuration, you need to run
 
 ``` bash
 vue inspect --mode production > output.prod.js
