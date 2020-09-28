@@ -49,6 +49,11 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
 Please consider switching to ESLint. You can check out [`tslint-to-eslint-config`](https://github.com/typescript-eslint/tslint-to-eslint-config) for a mostly automatic migration experience.
 
+### `@vue/cli-plugin-unit-mocha`
+
+* Updated `mocha` from v6 to v7, please refer to the release notes of [mocha v7](https://github.com/mochajs/mocha/releases/tag/v7.0.0) for a complete list of breaking changes.
+* Updated `jsdom` from v15 to v16, the breaking changes are listed at <https://github.com/jsdom/jsdom/releases/tag/16.0.0>
+
 ### Internal Packages
 
 #### `@vue/cli-shared-utils`
