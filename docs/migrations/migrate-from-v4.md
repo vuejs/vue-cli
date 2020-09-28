@@ -51,6 +51,10 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
 Please consider switching to ESLint. You can check out [`tslint-to-eslint-config`](https://github.com/typescript-eslint/tslint-to-eslint-config) for a mostly automatic migration experience.
 
+### E2E-Cypress Plugin
+
+* Cypress is updated from v3 to v5. See <https://docs.cypress.io/guides/references/migration-guide.html> for a detailed migration guide.
+
 ### Internal Packages
 
 #### `@vue/cli-shared-utils`
