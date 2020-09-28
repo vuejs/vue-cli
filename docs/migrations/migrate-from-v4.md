@@ -20,7 +20,9 @@ In your existing projects, run:
 vue upgrade
 ```
 
-And then see the following section for detailed breaking changes introduced in each package.
+And then follow the command line instructions.
+
+See the following section for detailed breaking changes introduced in each package.
 
 ------
 
@@ -36,13 +38,13 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 * Drop support of Node.js 8, 11, 13
 
-### The Global `@vue/cli` and The `vue` Command
+### The `vue` Command (The Global `@vue/cli` Package)
 
-### `@vue/cli-plugin-eslint`
+### ESLint Plugin
 
 * `eslint-loader` is upgraded [from v2 to v4](https://github.com/webpack-contrib/eslint-loader/blob/master/CHANGELOG.md). The only major change is that it dropped support for ESLint < v6.
 
-### `@vue/cli-plugin-typescript`
+### TypeScript Plugin
 
 #### Dropped TSLint support
 
@@ -53,4 +55,4 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 
 #### `@vue/cli-shared-utils`
 
-- Bump [chalk](https://github.com/chalk/chalk) from v2 to v4
+* Bump [chalk](https://github.com/chalk/chalk) from v2 to v4
