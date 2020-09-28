@@ -20,7 +20,9 @@ In your existing projects, run:
 vue upgrade
 ```
 
-And then see the following section for detailed breaking changes introduced in each package.
+And then follow the command line instructions.
+
+See the following section for detailed breaking changes introduced in each package.
 
 ------
 
@@ -36,20 +38,24 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 * Drop support of Node.js 8, 11, 13
 
-### The Global `@vue/cli` and The `vue` Command
+### The `vue` Command (The Global `@vue/cli` Package)
 
-### `@vue/cli-plugin-eslint`
+### ESLint Plugin
 
 * `eslint-loader` is upgraded [from v2 to v4](https://github.com/webpack-contrib/eslint-loader/blob/master/CHANGELOG.md). The only major change is that it dropped support for ESLint < v6.
 
-### `@vue/cli-plugin-typescript`
+### TypeScript Plugin
 
 #### Dropped TSLint support
 
 As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
 Please consider switching to ESLint. You can check out [`tslint-to-eslint-config`](https://github.com/typescript-eslint/tslint-to-eslint-config) for a mostly automatic migration experience.
 
-### `@vue/cli-plugin-unit-mocha`
+### E2E-Cypress Plugin
+
+* Cypress is updated from v3 to v5. See <https://docs.cypress.io/guides/references/migration-guide.html> for a detailed migration guide.
+
+### Unit-Mocha Plugin
 
 * Updated `mocha` from v6 to v7, please refer to the release notes of [mocha v7](https://github.com/mochajs/mocha/releases/tag/v7.0.0) for a complete list of breaking changes.
 * Updated `jsdom` from v15 to v16, the breaking changes are listed at <https://github.com/jsdom/jsdom/releases/tag/16.0.0>
@@ -58,4 +64,4 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 
 #### `@vue/cli-shared-utils`
 
-- Bump [chalk](https://github.com/chalk/chalk) from v2 to v4
+* Bump [chalk](https://github.com/chalk/chalk) from v2 to v4
