@@ -246,8 +246,9 @@ class PackageManager {
 
     try {
       // node-sass, chromedriver, etc.
-      const binaryMirrorConfig = await this.getMetadata('binary-mirror-config')
-      const mirrors = binaryMirrorConfig.mirrors.china
+      const binaryMirrorConfigMetadata = await this.getMetadata('binary-mirror-config', { full: true })
+      const latest = binaryMirrorConfigMetadata['dist-tags'] && binaryMirrorConfigMetadata['dist-tags'].latest
+      const mirrors = binaryMirrorConfigMetadata.versions[latest].mirrors.china
       for (const key in mirrors.ENVS) {
         process.env[key] = mirrors.ENVS[key]
       }
@@ -278,7 +279,6 @@ class PackageManager {
   async getMetadata (packageName, { full = false } = {}) {
     const scope = extractPackageScope(packageName)
     const registry = await this.getRegistry(scope)
-    const authToken = await this.getAuthToken(scope)
 
     const metadataKey = `${this.bin}-${registry}-${packageName}`
     let metadata = metadataCache.get(metadataKey)
@@ -292,6 +292,7 @@ class PackageManager {
       headers.Accept = 'application/vnd.npm.install-v1+json;q=1.0, application/json;q=0.9, */*;q=0.8'
     }
 
+    const authToken = await this.getAuthToken(scope)
     if (authToken) {
       headers.Authorization = `Bearer ${authToken}`
     }
