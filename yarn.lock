@@ -3343,17 +3343,10 @@
   version "4.5.5"
   dependencies:
     "@vue/cli-shared-utils" "^4.5.5"
-<<<<<<< HEAD
     jsdom "^16.4.0"
     jsdom-global "^3.0.2"
     mocha "^7.2.0"
     mochapack "^2.0.2"
-=======
-    jsdom "^15.2.1"
-    jsdom-global "^3.0.2"
-    mocha "^6.2.2"
-    mochapack "^1.1.15"
->>>>>>> next
 
 "@vue/cli-service@file:packages/@vue/cli-service":
   version "4.5.5"
