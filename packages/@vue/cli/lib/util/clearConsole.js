@@ -1,35 +1,12 @@
 const getVersions = require('./getVersions')
 const {
   chalk,
-  execa,
   semver,
 
-  clearConsole,
-
-  hasYarn,
-  hasPnpm3OrLater
+  clearConsole
 } = require('@vue/cli-shared-utils')
 
-async function getInstallationCommand () {
-  if (hasYarn()) {
-    const { stdout: yarnGlobalDir } = await execa('yarn', ['global', 'dir'])
-    if (__dirname.includes(yarnGlobalDir)) {
-      return 'yarn global add'
-    }
-  }
-
-  if (hasPnpm3OrLater()) {
-    const { stdout: pnpmGlobalPrefix } = await execa('pnpm', ['config', 'get', 'prefix'])
-    if (__dirname.includes(pnpmGlobalPrefix) && __dirname.includes('pnpm-global')) {
-      return `pnpm i -g`
-    }
-  }
-
-  const { stdout: npmGlobalPrefix } = await execa('npm', ['config', 'get', 'prefix'])
-  if (__dirname.includes(npmGlobalPrefix)) {
-    return `npm i -g`
-  }
-}
+const getGlobalInstallCommand = require('./getGlobalInstallCommand')
 
 exports.generateTitle = async function (checkUpdate) {
   const { current, latest, error } = await getVersions()
@@ -53,7 +30,7 @@ exports.generateTitle = async function (checkUpdate) {
       let upgradeMessage = `New version available ${chalk.magenta(current)} → ${chalk.green(latest)}`
 
       try {
-        const command = await getInstallationCommand()
+        const command = getGlobalInstallCommand()
         let name = require('../../package.json').name
         if (semver.prerelease(latest)) {
           name += '@next'
