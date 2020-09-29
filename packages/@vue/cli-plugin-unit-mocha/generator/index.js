@@ -9,8 +9,8 @@ module.exports = (api, options, rootOptions, invoking) => {
 
   api.extendPackage({
     devDependencies: {
-      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.0.3',
-      'chai': '^4.1.2'
+      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.0',
+      'chai': '^4.2.0'
     },
     scripts: {
       'test:unit': 'vue-cli-service test:unit'

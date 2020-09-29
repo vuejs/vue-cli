@@ -55,6 +55,11 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 
 * Cypress is updated from v3 to v5. See <https://docs.cypress.io/guides/references/migration-guide.html> for a detailed migration guide.
 
+### Unit-Mocha Plugin
+
+* Updated `mocha` from v6 to v7, please refer to the release notes of [mocha v7](https://github.com/mochajs/mocha/releases/tag/v7.0.0) for a complete list of breaking changes.
+* Updated `jsdom` from v15 to v16, the breaking changes are listed at <https://github.com/jsdom/jsdom/releases/tag/16.0.0>
+
 ### Internal Packages
 
 #### `@vue/cli-shared-utils`
