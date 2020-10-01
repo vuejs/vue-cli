@@ -69,7 +69,10 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
     # if you are deploying to a custom domain
     # echo 'www.example.com' > CNAME
-
+    
+    # to execute git in script
+    env -i 
+    
     git init
     git add -A
     git commit -m 'deploy'
