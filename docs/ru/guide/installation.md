@@ -5,7 +5,7 @@
 Если у вас установлена глобально предыдущая версия пакета `vue-cli` (1.x или 2.x), то необходимо сначала удалить её командой `npm uninstall vue-cli -g` или `yarn global remove vue-cli`.
 :::
 
-::: tip Требования к версии Node
+::: tip Требования к версии Node JS
 Vue CLI требуется [Node.js](https://nodejs.org/) версии 8.9 или выше (рекомендуется 8.11.0+). Управлять несколькими версиями Node на машине можно с помощью [nvm](https://github.com/creationix/nvm) или [nvm-windows](https://github.com/coreybutler/nvm-windows).
 :::
 
