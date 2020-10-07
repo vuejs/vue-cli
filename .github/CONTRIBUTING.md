@@ -26,6 +26,7 @@ yarn
 # if you have the old vue-cli installed globally, you may
 # need to uninstall it first.
 cd packages/@vue/cli
+# before yarn link, you can delete the link in `~/.config/yarn/link/@vue` (see issue: [yarn link error message is not helpful](https://github.com/yarnpkg/yarn/issues/7054))
 yarn link
 
 # create test projects in /packages/test
