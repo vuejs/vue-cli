@@ -1,4 +1,27 @@
 
+## 4.5.7 (2020-10-07)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#5903](https://github.com/vuejs/vue-cli/pull/5903) fix: update the `.vue` file shim for Vue 3 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#5871](https://github.com/vuejs/vue-cli/pull/5871) fix: more accurate warning message for missing global peer dependencies ([@sodatea](https://github.com/sodatea))
+  * [#5902](https://github.com/vuejs/vue-cli/pull/5902) fix: incorrectly read Taobao binary mirror configuration. ([@godky](https://github.com/godky))
+  * [#5892](https://github.com/vuejs/vue-cli/pull/5892) fix: respect scope when resolving package metadata ([@bodograumann](https://github.com/bodograumann))
+* `@vue/cli-plugin-pwa`, `@vue/cli-service`
+  * [#5899](https://github.com/vuejs/vue-cli/pull/5899) fix: shouldn't remove attribute quotes in HTML ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#5835](https://github.com/vuejs/vue-cli/pull/5835) Update Vercel deployment instructions ([@timothyis](https://github.com/timothyis))
+
+#### Committers: 4
+- Bodo Graumann ([@bodograumann](https://github.com/bodograumann))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Timothy ([@timothyis](https://github.com/timothyis))
+- kzhang ([@godky](https://github.com/godky))
+
+
+
 ## 4.5.6 (2020-09-10)
 
 #### :bug: Bug Fix
