@@ -168,8 +168,8 @@ class GeneratorAPI {
    * @param {string} version - Plugin version. Defaults to ''
    * @return {boolean}
    */
-  hasPlugin (id, version) {
-    return this.generator.hasPlugin(id, version)
+  hasPlugin (id, versionRange) {
+    return this.generator.hasPlugin(id, versionRange)
   }
 
   /**
