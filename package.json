@@ -44,19 +44,19 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.11.0",
+    "@babel/core": "^7.11.6",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/eslint-config-typescript": "^5.0.2",
-    "@vuepress/plugin-pwa": "^1.5.0",
-    "@vuepress/theme-vue": "^1.5.0",
+    "@vuepress/plugin-pwa": "^1.5.4",
+    "@vuepress/theme-vue": "^1.5.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^24.9.0",
-    "chromedriver": "^84.0.1",
+    "chromedriver": "^85.0.0",
     "debug": "^4.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-graphql": "^3.1.0",
@@ -75,7 +75,7 @@
     "inquirer": "^7.1.0",
     "jest": "^24.9.0",
     "lerna": "^3.22.0",
-    "lerna-changelog": "^0.8.3",
+    "lerna-changelog": "^1.0.1",
     "lint-staged": "^9.5.0",
     "memfs": "^3.2.0",
     "minimist": "^1.2.5",
@@ -83,15 +83,15 @@
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
     "rimraf": "^3.0.2",
-    "semver": "^6.1.0",
+    "semver": "^7.3.2",
     "typescript": "~3.9.3",
-    "vuepress": "^1.5.0",
+    "vuepress": "^1.5.4",
     "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
   "resolutions": {
     "puppeteer": "1.11.0",
-    "vue-template-compiler": "^2.6.11",
-    "vue-server-renderer": "^2.6.11"
+    "vue-template-compiler": "^2.6.12",
+    "vue-server-renderer": "^2.6.12"
   }
 }

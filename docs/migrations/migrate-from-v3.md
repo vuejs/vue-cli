@@ -2,7 +2,7 @@
 sidebar: auto
 ---
 
-# Migrating from v3
+# Migrate from v3
 
 First, install the latest Vue CLI globally:
 

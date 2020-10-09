@@ -23,12 +23,12 @@
   },
   "dependencies": {
     "@types/execa": "^0.9.0",
-    "@types/express": "4.17.7",
+    "@types/express": "4.17.8",
     "@types/node": "*",
     "@types/puppeteer": "^1.11.0",
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1",
-    "json-server": "^0.15.0",
+    "json-server": "^0.16.1",
     "puppeteer": "^1.11.0",
     "serve-handler": "^6.1.2",
     "strip-ansi": "^6.0.0"

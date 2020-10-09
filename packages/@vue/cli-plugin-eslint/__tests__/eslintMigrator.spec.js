@@ -1,8 +1,6 @@
 jest.setTimeout(300000)
-jest.mock('inquirer')
 
 const create = require('@vue/cli-test-utils/createUpgradableProject')
-const { expectPrompts } = require('inquirer')
 
 test('upgrade: should add eslint to devDependencies', async () => {
   const project = await create('plugin-eslint-v3.0', {
@@ -16,17 +14,10 @@ test('upgrade: should add eslint to devDependencies', async () => {
   const pkg = JSON.parse(await project.read('package.json'))
   expect(pkg.devDependencies).not.toHaveProperty('eslint')
 
-  expectPrompts([
-    {
-      message: `Your current ESLint version is v4`,
-      confirm: false
-    }
-  ])
-
   await project.upgrade('eslint')
 
   const updatedPkg = JSON.parse(await project.read('package.json'))
-  expect(updatedPkg.devDependencies.eslint).toMatch('^4')
+  expect(updatedPkg.devDependencies.eslint).toMatch('^6')
 })
 
 test('upgrade: should upgrade eslint from v5 to v6', async () => {
@@ -41,13 +32,6 @@ test('upgrade: should upgrade eslint from v5 to v6', async () => {
 
   const pkg = JSON.parse(await project.read('package.json'))
   expect(pkg.devDependencies.eslint).toMatch('^5')
-
-  expectPrompts([
-    {
-      message: `Your current ESLint version is v5`,
-      confirm: true
-    }
-  ])
 
   try {
     await project.upgrade('eslint')

@@ -27,19 +27,19 @@
   "dependencies": {
     "@types/mocha": "^8.0.1",
     "@vue/cli-shared-utils": "^4.5.7",
-    "@wdio/cli": "^6.1.11",
-    "@wdio/local-runner": "^6.1.11",
-    "@wdio/mocha-framework": "^6.1.8",
-    "@wdio/sauce-service": "^6.1.9",
-    "@wdio/spec-reporter": "^6.1.9",
-    "@wdio/sync": "^6.1.8",
+    "@wdio/cli": "^6.4.6",
+    "@wdio/local-runner": "^6.4.6",
+    "@wdio/mocha-framework": "^6.4.0",
+    "@wdio/sauce-service": "^6.4.6",
+    "@wdio/spec-reporter": "^6.4.0",
+    "@wdio/sync": "^6.4.6",
     "eslint-plugin-wdio": "^6.0.12",
-    "webdriverio": "^6.1.11"
+    "webdriverio": "^6.4.6"
   },
   "peerDependencies": {
     "chromedriver": "*",
     "geckodriver": "*",
-    "wdio-chromedriver-service": "^6.0.3",
+    "wdio-chromedriver-service": "^6.0.4",
     "wdio-geckodriver-service": "^1.1.0"
   },
   "peerDependenciesMeta": {
@@ -57,10 +57,10 @@
     }
   },
   "devDependencies": {
-    "chromedriver": "^84.0.1",
+    "chromedriver": "^85.0.0",
     "geckodriver": "^1.20.0",
-    "ts-node": "^8.10.2",
-    "wdio-chromedriver-service": "^6.0.3",
+    "ts-node": "^9.0.0",
+    "wdio-chromedriver-service": "^6.0.4",
     "wdio-geckodriver-service": "^1.1.0"
   }
 }
