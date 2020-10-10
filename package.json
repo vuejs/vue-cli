@@ -85,7 +85,7 @@
     "rimraf": "^3.0.2",
     "semver": "^7.3.2",
     "typescript": "~3.9.3",
-    "vuepress": "^1.5.4",
+    "vuepress": "^1.6.0",
     "webpack": "^4.0.0",
     "yorkie": "^2.0.0"
   },
