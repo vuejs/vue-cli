@@ -46,10 +46,9 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 ### TypeScript Plugin
 
-#### Dropped TSLint support
-
-As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
+* Dropped TSLint support. As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
 Please consider switching to ESLint. You can check out [`tslint-to-eslint-config`](https://github.com/typescript-eslint/tslint-to-eslint-config) for a mostly automatic migration experience.
+* Updated `fork-ts-checker-webpack-plugin` from v3.x to v5.x, you can see the detailed breaking changes at <https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v4.0.0> and <https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v5.0.0>
 
 ### E2E-Cypress Plugin
 

@@ -82,34 +82,23 @@ module.exports = (api, projectOptions) => {
     // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
     // so temporarily disabled for vue-cli tests
     if (!process.env.VUE_CLI_TEST) {
-      if (isVue3) {
-        config
-          .plugin('fork-ts-checker')
-          .use(require('fork-ts-checker-webpack-plugin-v5'), [{
-            typescript: {
-              extensions: {
-                vue: {
-                  enabled: true,
-                  compiler: '@vue/compiler-sfc'
-                }
-              },
-              diagnosticOptions: {
-                semantic: true,
-                // https://github.com/TypeStrong/ts-loader#happypackmode
-                syntactic: useThreads
+      config
+        .plugin('fork-ts-checker')
+        .use(require('fork-ts-checker-webpack-plugin'), [{
+          typescript: {
+            extensions: {
+              vue: {
+                enabled: true,
+                compiler: isVue3 ? '@vue/compiler-sfc' : 'vue-template-compiler'
               }
+            },
+            diagnosticOptions: {
+              semantic: true,
+              // https://github.com/TypeStrong/ts-loader#happypackmode
+              syntactic: useThreads
             }
-          }])
-      } else {
-        config
-          .plugin('fork-ts-checker')
-            .use(require('fork-ts-checker-webpack-plugin'), [{
-              vue: { enabled: true, compiler: 'vue-template-compiler' },
-              formatter: 'codeframe',
-              // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
-              checkSyntacticErrors: useThreads
-            }])
-      }
+          }
+        }])
     }
   })
 }
