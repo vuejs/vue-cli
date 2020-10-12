@@ -15,11 +15,12 @@
     --no-fix             do not fix errors
     --max-errors         specify number of errors to make build failed (default: 0)
     --max-warnings       specify number of warnings to make build failed (default: Infinity)
+    --output-file        specify file to write report to
   ```
 
   Lints and fixes files. If no specific files are given, it lints all files in `src` and `tests`.
 
-  Other [ESLint CLI options](https://eslint.org/docs/user-guide/command-line-interface#options) are also supported.
+  Other [ESLint CLI options](https://eslint.org/docs/user-guide/command-line-interface#options) are not supported.
 
 ## Configuration
 
