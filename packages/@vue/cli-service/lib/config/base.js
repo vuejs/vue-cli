@@ -14,14 +14,24 @@ module.exports = (api, options) => {
       )
     }
 
+    // try to load vue in the project
+    // fallback to peer vue package in the instant prototyping environment
+    const vue = loadModule('vue', api.service.context) || loadModule('vue', __dirname)
+    let supportsEsModuleAsset = true
+    if (vue && semver.major(vue.version) === 2) {
+      supportsEsModuleAsset = false
+    }
+
     const genUrlLoaderOptions = dir => {
       return {
         limit: inlineLimit,
+        esModule: supportsEsModuleAsset,
         // use explicit fallback to avoid regression in url-loader>=1.1.0
         fallback: {
           loader: require.resolve('file-loader'),
           options: {
-            name: genAssetSubPath(dir)
+            name: genAssetSubPath(dir),
+            esModule: supportsEsModuleAsset
           }
         }
       }
@@ -69,10 +79,6 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-    // try to load vue in the project
-    // fallback to peer vue package in the instant prototyping environment
-    const vue = loadModule('vue', api.service.context) || loadModule('vue', __dirname)
-
     if (vue && semver.major(vue.version) === 2) {
       // for Vue 2 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
@@ -170,7 +176,8 @@ module.exports = (api, options) => {
         .use('file-loader')
           .loader(require.resolve('file-loader'))
           .options({
-            name: genAssetSubPath('img')
+            name: genAssetSubPath('img'),
+            esModule: supportsEsModuleAsset
           })
 
     webpackConfig.module

@@ -40,6 +40,14 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 ### The `vue` Command (The Global `@vue/cli` Package)
 
+### `@vue/cli-service`
+
+Updated several underlying loaders and plugins:
+
+* Updated `copy-webpack-plugin` from v5 to v6. If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at <https://github.com/webpack-contrib/copy-webpack-plugin/releases/tag/v6.0.0>.
+* Updated `file-loader` from v4 to v6, and `url-loader` from v2 to v4. The `esModule` option is now turned on by default for non-Vue-2 projects. Full changelog available at <https://github.com/webpack-contrib/file-loader/blob/master/CHANGELOG.md> and <https://github.com/webpack-contrib/url-loader/blob/master/CHANGELOG.md>
+* Updated `terser-webpack-plugin` from v2 to v4, using terser 5 and some there are some changes in the options format. Full changelog at <https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md>
+
 ### ESLint Plugin
 
 * `eslint-loader` is upgraded [from v2 to v4](https://github.com/webpack-contrib/eslint-loader/blob/master/CHANGELOG.md). The only major change is that it dropped support for ESLint < v6.

@@ -295,12 +295,16 @@ module.exports = (api, options) => {
     if (!isLegacyBundle && fs.existsSync(publicDir)) {
       webpackConfig
         .plugin('copy')
-          .use(require('copy-webpack-plugin'), [[{
-            from: publicDir,
-            to: outputDir,
-            toType: 'dir',
-            ignore: publicCopyIgnore
-          }]])
+          .use(require('copy-webpack-plugin'), [{
+            patterns: {
+              from: publicDir,
+              to: outputDir,
+              toType: 'dir',
+              globOptions: {
+                ignore: publicCopyIgnore
+              }
+            }
+          }])
     }
   })
 }
