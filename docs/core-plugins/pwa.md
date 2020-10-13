@@ -65,6 +65,15 @@ file, or the `"vue"` field in `package.json`.
 
     This option is used if you need to add a version to your icons and manifest, against browser’s cache. This will append `?v=<pwa.assetsVersion>` to the URLs of the icons and manifest.
 
+- **pwa.manifestBasePath**
+
+  - Default: `'''`
+
+    The Base path of app’s manifest. This value will be replaced by **publicPath** when it defaulted.
+
+    By this way, you can set a relative path for `start_url` in `manifest.json`
+
+
 - **pwa.manifestPath**
 
   - Default: `'manifest.json'`

@@ -73,6 +73,7 @@ module.exports = class HtmlPwaPlugin {
           appleMobileWebAppCapable,
           appleMobileWebAppStatusBarStyle,
           assetsVersion,
+          manifestBasePath,
           manifestPath,
           iconPaths,
           manifestCrossorigin
@@ -104,12 +105,12 @@ module.exports = class HtmlPwaPlugin {
           makeTag('link', manifestCrossorigin
             ? {
               rel: 'manifest',
-              href: getTagHref(publicPath, manifestPath, assetsVersionStr),
+              href: getTagHref(manifestBasePath || publicPath, manifestPath, assetsVersionStr),
               crossorigin: manifestCrossorigin
             }
             : {
               rel: 'manifest',
-              href: getTagHref(publicPath, manifestPath, assetsVersionStr)
+              href: getTagHref(manifestBasePath || publicPath, manifestPath, assetsVersionStr)
             }
           )
         )
