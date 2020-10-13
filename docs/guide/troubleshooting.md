@@ -24,7 +24,7 @@ A workaround for this issue is to manually disable symlinks resolution in webpac
 // vue.config.js
 module.exports = {
   chainWebpack: (config) => {
-    config.resolve.symlinks(false)
+    config.resolve.symlinks = false
   }
 }
 ```
