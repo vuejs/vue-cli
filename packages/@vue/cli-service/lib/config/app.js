@@ -296,14 +296,14 @@ module.exports = (api, options) => {
       webpackConfig
         .plugin('copy')
           .use(require('copy-webpack-plugin'), [{
-            patterns: {
+            patterns: [{
               from: publicDir,
               to: outputDir,
               toType: 'dir',
               globOptions: {
                 ignore: publicCopyIgnore
               }
-            }
+            }]
           }])
     }
   })
