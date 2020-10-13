@@ -222,10 +222,7 @@ module.exports = (api, options) => {
             ? htmlPath
             : defaultHtmlPath
 
-        publicCopyIgnore.push({
-          glob: path.relative(api.resolve('public'), api.resolve(templatePath)),
-          matchBase: false
-        })
+        publicCopyIgnore.push(path.relative(api.resolve('public'), api.resolve(templatePath)))
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
