@@ -150,7 +150,7 @@ module.exports = (api, options) => {
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
-    const publicCopyIgnore = ['.DS_Store']
+    const publicCopyIgnore = ['**/.DS_Store']
 
     if (!multiPageConfig) {
       // default, single page setup.
@@ -158,7 +158,7 @@ module.exports = (api, options) => {
         ? htmlPath
         : defaultHtmlPath
 
-      publicCopyIgnore.push(path.relative(api.resolve('public'), api.resolve(htmlOptions.template)))
+      publicCopyIgnore.push(api.resolve(htmlOptions.template))
 
       webpackConfig
         .plugin('html')
@@ -222,7 +222,7 @@ module.exports = (api, options) => {
             ? htmlPath
             : defaultHtmlPath
 
-        publicCopyIgnore.push(path.relative(api.resolve('public'), api.resolve(templatePath)))
+        publicCopyIgnore.push(api.resolve(templatePath))
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
