@@ -499,3 +499,51 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
+
+
+### Moovweb XDN
+
+The [Moovweb XDN](https://www.moovweb.com/) is an all-in-one platform to develop, deploy, preview, experiment on, monitor, and run your headless frontend with a focus on support large. The XDN is focused on large, dynamic websites and best in class performance through an integrated CDN, CDN-as-JavaScript, predictive prefetching, and performance monitoring. Moovweb offers a free tier.
+
+1. Sign up for a [free XDN account](https://moovweb.app/signup).
+
+2. Install the XDN CLI:
+
+```bash
+npm i -g @xdn/cli
+```
+
+3. Run XDN `init` in your project directory:
+
+```bash
+xdn init
+```
+
+4. Generate a production Vue build:
+
+```bash
+npm run build
+```
+
+5. Configure your routes. For example, a single page app shell would have `routes.js` file of:
+
+```js
+const { Router } = require('@xdn/core/router')
+
+module.exports = new Router()
+  // Send requests to static assets in the build output folder `dist`
+  .static('dist')
+
+  // Send everything else to the App Shell
+  .fallback(({ appShell }) => {
+    appShell('dist/index.html')  
+  })
+```
+
+6. Deploy the build:
+
+```bash
+xdn deploy
+```
+
+Refer to the [Moovweb XDN Vue guide](https://developer.moovweb.com/guides/vue) for more details on these steps.
