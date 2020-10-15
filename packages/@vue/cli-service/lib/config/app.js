@@ -158,7 +158,7 @@ module.exports = (api, options) => {
         ? htmlPath
         : defaultHtmlPath
 
-      publicCopyIgnore.push(api.resolve(htmlOptions.template))
+      publicCopyIgnore.push(api.resolve(htmlOptions.template).replace(/\\/g, '/'))
 
       webpackConfig
         .plugin('html')
@@ -222,7 +222,7 @@ module.exports = (api, options) => {
             ? htmlPath
             : defaultHtmlPath
 
-        publicCopyIgnore.push(api.resolve(templatePath))
+        publicCopyIgnore.push(api.resolve(templatePath).replace(/\\/g, '/'))
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
