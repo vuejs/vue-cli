@@ -57,9 +57,9 @@ module.exports = (api, options) => {
         .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
         .end()
       .modules
-        .add('node_modules')
         .add(api.resolve('node_modules'))
         .add(resolveLocal('node_modules'))
+        .add('node_modules')
         .end()
       .alias
         .set('@', api.resolve('src'))
