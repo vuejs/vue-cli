@@ -9,24 +9,24 @@ const schema = createSchema(joi => joi.object({
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
-  parallel: joi.alternatives().try([
+  parallel: joi.alternatives().try(
     joi.boolean(),
     joi.number().integer()
-  ]),
+  ),
   devServer: joi.object(),
   pages: joi.object().pattern(
     /\w+/,
-    joi.alternatives().try([
+    joi.alternatives().try(
       joi.string().required(),
       joi.array().items(joi.string().required()),
 
       joi.object().keys({
-        entry: joi.alternatives().try([
+        entry: joi.alternatives().try(
           joi.string().required(),
           joi.array().items(joi.string().required())
-        ]).required()
+        ).required()
       }).unknown(true)
-    ])
+    )
   ),
   crossorigin: joi.string().valid('', 'anonymous', 'use-credentials'),
   integrity: joi.boolean(),
