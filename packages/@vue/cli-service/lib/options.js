@@ -28,7 +28,7 @@ const schema = createSchema(joi => joi.object({
       }).unknown(true)
     ])
   ),
-  crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
+  crossorigin: joi.string().valid('', 'anonymous', 'use-credentials'),
   integrity: joi.boolean(),
 
   // css
@@ -56,7 +56,7 @@ const schema = createSchema(joi => joi.object({
   ),
 
   // known runtime options for built-in plugins
-  lintOnSave: joi.any().valid([true, false, 'error', 'warning', 'default']),
+  lintOnSave: joi.any().valid(true, false, 'error', 'warning', 'default'),
   pwa: joi.object(),
 
   // 3rd party plugin options
