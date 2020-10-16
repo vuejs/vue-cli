@@ -33,8 +33,15 @@ const schema = createSchema(joi => joi.object({
 
   // css
   css: joi.object({
-    // TODO: deprecate this after joi 16 release
-    modules: joi.boolean(),
+    modules:
+      joi.boolean()
+      .warning('deprecate.error', {
+        message: 'Please use `css.requireModuleExtension` instead.'
+      })
+      .message({
+        'deprecate.error':
+          'The {#label} option in vue.config.js is deprecated. {#message}'
+      }),
     requireModuleExtension: joi.boolean(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
