@@ -70,7 +70,7 @@
     "ssri": "^8.0.0",
     "terser-webpack-plugin": "^4.2.3",
     "thread-loader": "^3.0.0",
-    "url-loader": "^2.2.0",
+    "url-loader": "^4.1.1",
     "vue-loader": "^15.9.2",
     "vue-style-loader": "^4.1.2",
     "webpack": "^4.0.0",
