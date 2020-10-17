@@ -136,6 +136,7 @@ module.exports = class Creator extends EventEmitter {
 
     await clearConsole()
     const pm = new PackageManager({ context, forcePackageManager: packageManager })
+    let presetPm = null
 
     log(`✨  Creating project in ${chalk.yellow(context)}.`)
     this.emit('creation', { event: 'creating' })
@@ -154,6 +155,10 @@ module.exports = class Creator extends EventEmitter {
     const deps = Object.keys(preset.plugins)
     deps.forEach(dep => {
       if (preset.plugins[dep]._isPreset) {
+        const { _hasPackageJson, _dir } = preset.plugins[dep]
+        if (!_hasPackageJson) return
+        if (!path.relative(pm.context, _dir)) return
+        presetPm = new PackageManager({ context: _dir })
         return
       }
 
@@ -213,6 +218,7 @@ module.exports = class Creator extends EventEmitter {
       // in development, avoid installation process
       await require('./util/setupDevProject')(context)
     } else {
+      presetPm && await presetPm.install()
       await pm.install()
     }
 

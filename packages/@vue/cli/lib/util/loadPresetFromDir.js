@@ -14,6 +14,8 @@ module.exports = async function loadPresetFromDir (dir) {
   if (hasGenerator) {
     (preset.plugins || (preset.plugins = {}))[dir.replace(/[\/]$/, '')] = {
       _isPreset: true,
+      _dir: dir,
+      _hasPackageJson: fs.existsSync(path.join(dir, 'package.json')),
       prompts: true
     }
   }
