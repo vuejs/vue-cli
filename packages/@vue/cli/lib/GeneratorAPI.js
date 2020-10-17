@@ -32,11 +32,6 @@ function pruneObject (obj) {
   return obj
 }
 
-function isSubFile (folder, filename) {
-  const relative = path.relative(folder, filename)
-  return !!relative && !relative.startsWith('..') && !path.isAbsolute(relative)
-}
-
 class GeneratorAPI {
   /**
    * @param {string} id - Id of the owner plugin
@@ -302,7 +297,7 @@ class GeneratorAPI {
             return filename
           }).join('/')
           const sourcePath = path.resolve(source, rawPath)
-          const content = renderFile(sourcePath, data, ejsOptions, this.generator.context)
+          const content = renderFile(sourcePath, data, ejsOptions)
           // only set file if it's not all whitespace, or is a Buffer (binary files)
           if (Buffer.isBuffer(content) || /[^\s]/.test(content)) {
             files[targetPath] = content
@@ -314,7 +309,7 @@ class GeneratorAPI {
         const data = this._resolveData(additionalData)
         for (const targetPath in source) {
           const sourcePath = path.resolve(baseDir, source[targetPath])
-          const content = renderFile(sourcePath, data, ejsOptions, this.generator.context)
+          const content = renderFile(sourcePath, data, ejsOptions)
           if (Buffer.isBuffer(content) || content.trim()) {
             files[targetPath] = content
           }
@@ -479,7 +474,7 @@ function extractCallDir () {
 
 const replaceBlockRE = /<%# REPLACE %>([^]*?)<%# END_REPLACE %>/g
 
-function renderFile (name, data, ejsOptions, context) {
+function renderFile (name, data, ejsOptions) {
   if (isBinaryFileSync(name)) {
     return fs.readFileSync(name) // return buffer
   }
@@ -515,16 +510,9 @@ function renderFile (name, data, ejsOptions, context) {
   }
 
   if (parsed.extend) {
-    let extendPath = parsed.extend
-    if (!path.isAbsolute(parsed.extend)) {
-      try {
-        extendPath = resolve.sync(parsed.extend, { basedir: path.dirname(name) })
-      } catch (e) {
-        if (isSubFile(context, name)) throw e
-        extendPath = resolve.sync(parsed.extend, { basedir: context })
-      }
-    }
-
+    const extendPath = path.isAbsolute(parsed.extend)
+      ? parsed.extend
+      : resolve.sync(parsed.extend, { basedir: path.dirname(name) })
     finalTemplate = fs.readFileSync(extendPath, 'utf-8')
     if (parsed.replace) {
       if (Array.isArray(parsed.replace)) {
