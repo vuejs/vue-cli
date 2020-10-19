@@ -161,7 +161,7 @@ module.exports = class Creator extends EventEmitter {
 
       if (!version) {
         if (isOfficialPlugin(dep) || dep === '@vue/cli-service' || dep === '@vue/babel-preset-env') {
-          version = isTestOrDebug ? `link:${path.resolve(__dirname, '../../../', dep)}` : `~${latestMinor}`
+          version = isTestOrDebug ? `file:${path.resolve(__dirname, '../../../', dep)}` : `~${latestMinor}`
         } else {
           version = 'latest'
         }
