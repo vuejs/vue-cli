@@ -210,7 +210,7 @@ function makeTag (tagName, attributes, closeTag = false) {
 
 function getTagHref (publicPath, href, assetsVersionStr, useRelativePath) {
   let tagHref = `${href}${assetsVersionStr}`
-  if(useRelativePath) {
+  if (useRelativePath) {
     return tagHref
   }
   if (!isHrefAbsoluteUrl(href)) {
