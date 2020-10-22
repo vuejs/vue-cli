@@ -134,6 +134,10 @@ class PackageManager {
 
         this.needsNpmInstallFix = true
       }
+
+      if (semver.gte(npmVersion, '7.0.0')) {
+        this.needsPeerDepsFix = true
+      }
     }
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
@@ -374,7 +378,7 @@ class PackageManager {
       return
     }
 
-    return await this.runCommand('install')
+    return await this.runCommand('install', this.needsPeerDepsFix ? ['--legacy-peer-deps'] : [])
   }
 
   async add (packageName, {
@@ -388,6 +392,10 @@ class PackageManager {
       } else {
         process.env.npm_config_save_prefix = '~'
       }
+    }
+
+    if (this.needsPeerDepsFix) {
+      args.push('--legacy-peer-deps')
     }
 
     return await this.runCommand('add', [packageName, ...args])
