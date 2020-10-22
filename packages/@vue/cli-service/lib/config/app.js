@@ -218,7 +218,11 @@ module.exports = (api, options) => {
         webpackConfig.entry(name).merge(entries.map(e => api.resolve(e)))
 
         // resolve page index template
-        const hasDedicatedTemplate = fs.existsSync(api.resolve(template))
+        const hasDedicatedTemplate = /^[-!]?!/.test(template)
+          // when using inline-loader
+          // * See https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md#2-setting-a-loader-directly-for-the-template
+          ? fs.existsSync(api.resolve(template.replace(/[-!]?!.+!/, '')))
+          : fs.existsSync(api.resolve(template))
         const templatePath = hasDedicatedTemplate
           ? template
           : fs.existsSync(htmlPath)
