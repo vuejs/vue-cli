@@ -217,12 +217,13 @@ module.exports = (api, options) => {
         const entries = Array.isArray(entry) ? entry : [entry]
         webpackConfig.entry(name).merge(entries.map(e => api.resolve(e)))
 
+        // test whether use inline loader
+        // * See https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md#2-setting-a-loader-directly-for-the-template
+        const inlineLoaderReg = /[-!]?!.+!/
+        const isWithInlineLoader = /^[-!]?!/.test(template)
+
         // resolve page index template
-        const hasDedicatedTemplate = /^[-!]?!/.test(template)
-          // when using inline-loader
-          // * See https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md#2-setting-a-loader-directly-for-the-template
-          ? fs.existsSync(api.resolve(template.replace(/[-!]?!.+!/, '')))
-          : fs.existsSync(api.resolve(template))
+        const hasDedicatedTemplate = fs.existsSync(api.resolve(isWithInlineLoader ? template.replace(inlineLoaderReg, '') : template))
         const templatePath = hasDedicatedTemplate
           ? template
           : fs.existsSync(htmlPath)
@@ -230,7 +231,7 @@ module.exports = (api, options) => {
             : defaultHtmlPath
 
         publicCopyIgnore.push({
-          glob: path.relative(api.resolve('public'), api.resolve(templatePath)),
+          glob: path.relative(api.resolve('public'), api.resolve(isWithInlineLoader ? templatePath.replace(inlineLoaderReg, '') : templatePath)),
           matchBase: false
         })
 
