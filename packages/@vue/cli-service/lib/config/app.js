@@ -230,10 +230,7 @@ module.exports = (api, options) => {
             ? htmlPath
             : defaultHtmlPath
 
-        publicCopyIgnore.push({
-          glob: path.relative(api.resolve('public'), api.resolve(isWithInlineLoader ? templatePath.replace(inlineLoaderReg, '') : templatePath)),
-          matchBase: false
-        })
+        publicCopyIgnore.push(api.resolve(templatePath).replace(/\\/g, '/').replace(inlineLoaderReg, ''))
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
