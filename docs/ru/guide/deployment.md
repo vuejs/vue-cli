@@ -261,20 +261,20 @@ firebase deploy --only hosting
 
 Обратитесь к [документации Firebase](https://firebase.google.com/docs/hosting/deploying) для получения более подробной информации.
 
-### Now
+### Vercel
 
-В данном примере используется последняя версия платформы Now версии 2.
+В данном примере используется последняя версия платформы Vercel версии 2.
 
-1. Установите Now CLI:
+1. Установите Vercel CLI:
 
 ```bash
-npm install -g now
+npm install -g vercel
 
 # Или если предпочитаете локальную установку
-npm install now
+npm install vercel
 ```
 
-2. Добавьте файл `now.json` в корневой каталог проекта:
+2. Добавьте файл `vercel.json` в корневой каталог проекта:
 
     ```json
     {
@@ -283,7 +283,7 @@ npm install now
       "builds": [
         {
           "src": "package.json",
-          "use": "@now/static-build"
+          "use": "@vercel/static-build"
         }
       ],
       "routes": [
@@ -316,24 +316,24 @@ npm install now
     ```diff
     - {
     -   "src": "package.json",
-    -   "use": "@now/static-build"
+    -   "use": "@vercel/static-build"
     - }
     + {
     +   "src": "package.json",
-    +   "use": "@now/static-build",
+    +   "use": "@vercel/static-build",
     +   "config": { "distDir": "build" }
     + }
     ```
 
-3. Добавьте `now-build` скрипт для публикации в `package.json`:
+3. Добавьте `vercel-build` скрипт для публикации в `package.json`:
 
     ```json
-    "now-build": "npm run build"
+    "vercel-build": "npm run build"
     ```
 
-    Для публикации запустите `now`.
+    Для публикации запустите `vercel`.
 
-    Если необходим псевдоним публикации, запустите `now --target production`.
+    Если необходим псевдоним публикации, запустите `vercel --target production`.
 
 ### Stdlib
 
