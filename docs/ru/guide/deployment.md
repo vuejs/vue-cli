@@ -44,6 +44,8 @@ serve -s dist
     Если вы публикуете по адресу `https://<USERNAME>.github.io/<REPO>/`, (т.е. ваш репозиторий находится по адресу `https://github.com/<USERNAME>/<REPO>`), установите `publicPath` в значение `"/<REPO>/"`. Например, если ваш репозиторий называется "my-project", то ваш `vue.config.js` будет выглядеть примерно так:
 
     ```js
+    // файл vue.config.js должен быть расположен в корневом каталоге проекта
+
     module.exports = {
       publicPath: process.env.NODE_ENV === 'production'
         ? '/my-project/'
