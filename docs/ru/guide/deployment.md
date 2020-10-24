@@ -281,77 +281,38 @@ firebase deploy --only hosting
 
 ### Vercel
 
-В данном примере используется последняя версия платформы Vercel версии 2.
+[Vercel](https://vercel.com/home) — облачная платформа, позволяющая разработчикам хостить Jamstack веб-сайты и веб-сервисы, которые публикуются мгновенно, автоматически масштабируются и не требуют никакого контроля, всё это с zero-конфигурацией. Они обеспечивают глобальный доступ, SSL-шифрование, сжатие ресурсов, инвалидацию кэша и многое другое.
 
-1. Установите Vercel CLI:
+#### Шаг 1: Публикация проекта Vue на Vercel
 
-```bash
-npm install -g vercel
+Для публикации проекта Vue с помощью [Vercel для интеграции с Git](https://vercel.com/docs/git-integrations), убедитесь, что он был выложен в Git-репозиторий.
 
-# Или если предпочитаете локальную установку
-npm install vercel
-```
+Импортируйте проект в Vercel с помощью [Import Flow](https://vercel.com/import/git). Во время импорта будут запрошены все соответствующие [опции](https://vercel.com/docs/build-step#build-&-development-settings), предварительно сконфигурированные, но с возможностью изменения при необходимости.
 
-2. Добавьте файл `vercel.json` в корневой каталог проекта:
+После импорта проекта, все последующие push в ветку будут генерировать [публикации для предпросмотра](https://vercel.com/docs/platform/deployments#preview), а все изменения внесённые в [ветку Production](https://vercel.com/docs/git-integrations#production-branch) (обычно "master" или "main") будут приводить к [публикации Production](https://vercel.com/docs/platform/deployments#production).
 
-    ```json
-    {
-      "name": "my-example-app",
-      "version": 2,
-      "builds": [
-        {
-          "src": "package.json",
-          "use": "@vercel/static-build"
-        }
-      ],
-      "routes": [
-        {
-          "src": "/(js|css|img)/.*",
-          "headers": { "cache-control": "max-age=31536000, immutable" }
-        },
-        { "handle": "filesystem" },
-        { "src": ".*", "dest": "/" }
-      ],
-      "alias": "example.com"
-    }
-    ```
+После публикации вы получите URL-адрес для просмотра приложения вживую, например: https://vue-example-tawny.vercel.app/.
 
-    Если у вас есть другие/дополнительные каталоги, измените маршрут соответствующим образом:
+#### Шаг 2 (опционально): Использование пользовательского домена
 
-    ```diff
-    - {
-    -   "src": "/(js|css|img)/.*",
-    -   "headers": { "cache-control": "max-age=31536000, immutable" }
-    - }
-    + {
-    +   "src": "/(js|css|img|fonts|media)/.*",
-    +   "headers": { "cache-control": "max-age=31536000, immutable" }
-    + }
-    ```
+При необходимости использовать пользовательский домен при публикации Vercel, можно **Добавить** или **Перенаправить** домен через [настройки домена аккаунта](https://vercel.com/dashboard/domains) Vercel.
 
-    Когда значение `outputDir` вместо стандартного `dist` указано `build`:
+Для добавления домена в проект, перейдите в раздел [Проект](https://vercel.com/docs/platform/projects) на панели Vercel. После выбора проекта перейдите на вкладку "Настройки", затем выберите пункт меню **Домены**. На странице **Домен** вашего проекта, укажите домен которые хотите использовать в проекте.
 
-    ```diff
-    - {
-    -   "src": "package.json",
-    -   "use": "@vercel/static-build"
-    - }
-    + {
-    +   "src": "package.json",
-    +   "use": "@vercel/static-build",
-    +   "config": { "distDir": "build" }
-    + }
-    ```
+После добавления домена, будут предоставлены различные методы его настройки.
 
-3. Добавьте `vercel-build` скрипт для публикации в `package.json`:
+#### Публикация свежего проекта на Vue
 
-    ```json
-    "vercel-build": "npm run build"
-    ```
+Для публикации свежего проекта на Vue с настроенным Git-репозиторием, можно с помощью кнопки Deploy ниже:
 
-    Для публикации запустите `vercel`.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmaster%2Fexamples%2Fvue)
 
-    Если необходим псевдоним публикации, запустите `vercel --target production`.
+## Ресурсы:
+
+- [Пример исходного кода](https://github.com/vercel/vercel/tree/master/examples/vue)
+- [Официальное руководство Vercel](https://vercel.com/guides/deploying-vuejs-to-vercel)
+- [Руководство по публикации Vercel](https://vercel.com/docs)
+- [Документация по пользовательским доменам Vercel](https://vercel.com/docs/custom-domains)
 
 ### Stdlib
 
