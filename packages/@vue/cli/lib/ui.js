@@ -1,6 +1,7 @@
 const { log, error, openBrowser } = require('@vue/cli-shared-utils')
 const { portfinder, server } = require('@vue/cli-ui/server')
 const shortid = require('shortid')
+const { setNotificationCallback } = require('@vue/cli-ui/apollo-server/util/notification')
 
 function simpleCorsValidation (allowedHost) {
   return function (req, socket) {
@@ -77,6 +78,7 @@ async function ui (options = {}, context = process.cwd()) {
     if (options.headless) {
       console.log(port)
     } else {
+      setNotificationCallback(() => openBrowser(url))
       openBrowser(url)
     }
   })
