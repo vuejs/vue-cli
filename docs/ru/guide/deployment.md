@@ -172,6 +172,24 @@ module.exports = {
 
 Подробнее можно изучить в [документации Netlify по перенаправлениям](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
 
+При использовании [@vue/cli-plugin-pwa](../core-plugins/pwa.md#vue-cli-plugin-pwa) убедитесь, что файл `_redirects` не кэшируется service worker.
+
+Для этого добавьте в `vue.config.js` следующее:
+
+```js
+// файл vue.config.js должен быть расположен в корневом каталоге проекта
+
+module.exports = {
+  pwa: {
+      workboxOptions: {
+        exclude: [/_redirects/]
+      }
+    }
+}
+```
+
+Подробнее об опциях [workboxOptions](../core-plugins/pwa.md#configuration) и [exclude](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.InjectManifest#InjectManifest).
+
 ### Render
 
 [Render](https://render.com) предлагает [бесплатный хостинг статических сайтов](https://render.com/docs/static-sites) с полностью управляемым SSL, глобальным CDN и непрерывным автоматическим развёртыванием из GitHub.
