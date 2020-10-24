@@ -6,7 +6,9 @@ test('should work', async () => {
   const project = await create('e2e-webdriverio', {
     plugins: {
       '@vue/cli-plugin-babel': {},
-      '@vue/cli-plugin-e2e-webdriverio': {},
+      '@vue/cli-plugin-e2e-webdriverio': {
+        webdrivers: ['chrome']
+      },
       '@vue/cli-plugin-eslint': {
         config: 'airbnb',
         lintOn: 'save'
@@ -29,7 +31,9 @@ test('should work with TS', async () => {
         'tsLint': true,
         'lintOn': ['save']
       },
-      '@vue/cli-plugin-e2e-webdriverio': {}
+      '@vue/cli-plugin-e2e-webdriverio': {
+        webdrivers: ['chrome']
+      }
     }
   })
 

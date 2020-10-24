@@ -13,6 +13,7 @@ test('serve with Vue 3', async () => {
     async ({ page, nextUpdate, helpers }) => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
+      expect(await page.evaluate(() => window.__VUE__)).toBeDefined()
 
       // test hot reload
       const file = await project.read(`src/App.vue`)

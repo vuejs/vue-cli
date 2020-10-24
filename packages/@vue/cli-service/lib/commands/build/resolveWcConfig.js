@@ -5,11 +5,16 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
-  const { log, error } = require('@vue/cli-shared-utils')
+  const { log, error, loadModule, semver } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
     error(msg)
     process.exit(1)
+  }
+
+  const vue = loadModule('vue', api.resolve('.'))
+  if (vue && semver.satisfies(vue.version, '^3.0.0-0')) {
+    abort(`Vue 3 support of the web component target is still under development.`)
   }
 
   const isAsync = /async/.test(target)

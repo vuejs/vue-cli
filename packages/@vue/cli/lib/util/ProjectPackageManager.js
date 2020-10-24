@@ -5,6 +5,8 @@ const ini = require('ini')
 const minimist = require('minimist')
 const LRU = require('lru-cache')
 
+const stripAnsi = require('strip-ansi')
+
 const {
   chalk,
   execa,
@@ -83,9 +85,23 @@ function stripVersion (packageName) {
   return result[1]
 }
 
+// extract the package scope from the full package name
+// the result includes the initial @ character
+function extractPackageScope (packageName) {
+  const scopedNameRegExp = /^(@[^\/]+)\/.*$/
+  const result = packageName.match(scopedNameRegExp)
+
+  if (!result) {
+    return undefined
+  }
+
+  return result[1]
+}
+
 class PackageManager {
   constructor ({ context, forcePackageManager } = {}) {
     this.context = context || process.cwd()
+    this._registries = {}
 
     if (forcePackageManager) {
       this.bin = forcePackageManager
@@ -102,6 +118,22 @@ class PackageManager {
     // if no package managers specified, and no lockfile exists
     if (!this.bin) {
       this.bin = loadOptions().packageManager || (hasYarn() ? 'yarn' : hasPnpm3OrLater() ? 'pnpm' : 'npm')
+    }
+
+    if (this.bin === 'npm') {
+      // npm doesn't support package aliases until v6.9
+      const MIN_SUPPORTED_NPM_VERSION = '6.9.0'
+      const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
+
+      if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
+        warn(
+          'You are using an outdated version of NPM.\n' +
+          'there may be unexpected errors during installation.\n' +
+          'Please upgrade your NPM version.'
+        )
+
+        this.needsNpmInstallFix = true
+      }
     }
 
     if (!SUPPORTED_PACKAGE_MANAGERS.includes(this.bin)) {
@@ -128,9 +160,10 @@ class PackageManager {
 
   // Any command that implemented registry-related feature should support
   // `-r` / `--registry` option
-  async getRegistry () {
-    if (this._registry) {
-      return this._registry
+  async getRegistry (scope) {
+    const cacheKey = scope || ''
+    if (this._registries[cacheKey]) {
+      return this._registries[cacheKey]
     }
 
     const args = minimist(process.argv, {
@@ -139,23 +172,30 @@ class PackageManager {
       }
     })
 
+    let registry
     if (args.registry) {
-      this._registry = args.registry
+      registry = args.registry
     } else if (!process.env.VUE_CLI_TEST && await shouldUseTaobao(this.bin)) {
-      this._registry = registries.taobao
+      registry = registries.taobao
     } else {
       try {
-        this._registry = (await execa(this.bin, ['config', 'get', 'registry'])).stdout
+        if (scope) {
+          registry = (await execa(this.bin, ['config', 'get', scope + ':registry'])).stdout
+        }
+        if (!registry || registry === 'undefined') {
+          registry = (await execa(this.bin, ['config', 'get', 'registry'])).stdout
+        }
       } catch (e) {
         // Yarn 2 uses `npmRegistryServer` instead of `registry`
-        this._registry = (await execa(this.bin, ['config', 'get', 'npmRegistryServer'])).stdout
+        registry = (await execa(this.bin, ['config', 'get', 'npmRegistryServer'])).stdout
       }
     }
 
-    return this._registry
+    this._registries[cacheKey] = stripAnsi(registry).trim()
+    return this._registries[cacheKey]
   }
 
-  async getAuthToken () {
+  async getAuthToken (scope) {
     // get npmrc (https://docs.npmjs.com/configuring-npm/npmrc.html#files)
     const possibleRcPaths = [
       path.resolve(this.context, '.npmrc'),
@@ -178,7 +218,7 @@ class PackageManager {
       }
     }
 
-    const registry = await this.getRegistry()
+    const registry = await this.getRegistry(scope)
     const registryWithoutProtocol = registry
       .replace(/https?:/, '')     // remove leading protocol
       .replace(/([^/])$/, '$1/')  // ensure ending with slash
@@ -206,8 +246,9 @@ class PackageManager {
 
     try {
       // node-sass, chromedriver, etc.
-      const binaryMirrorConfig = await this.getMetadata('binary-mirror-config')
-      const mirrors = binaryMirrorConfig.mirrors.china
+      const binaryMirrorConfigMetadata = await this.getMetadata('binary-mirror-config', { full: true })
+      const latest = binaryMirrorConfigMetadata['dist-tags'] && binaryMirrorConfigMetadata['dist-tags'].latest
+      const mirrors = binaryMirrorConfigMetadata.versions[latest].mirrors.china
       for (const key in mirrors.ENVS) {
         process.env[key] = mirrors.ENVS[key]
       }
@@ -236,8 +277,8 @@ class PackageManager {
 
   // https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md
   async getMetadata (packageName, { full = false } = {}) {
-    const registry = await this.getRegistry()
-    const authToken = await this.getAuthToken()
+    const scope = extractPackageScope(packageName)
+    const registry = await this.getRegistry(scope)
 
     const metadataKey = `${this.bin}-${registry}-${packageName}`
     let metadata = metadataCache.get(metadataKey)
@@ -251,6 +292,7 @@ class PackageManager {
       headers.Accept = 'application/vnd.npm.install-v1+json;q=1.0, application/json;q=0.9, */*;q=0.8'
     }
 
+    const authToken = await this.getAuthToken(scope)
     if (authToken) {
       headers.Authorization = `Bearer ${authToken}`
     }
@@ -308,6 +350,28 @@ class PackageManager {
         delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
         await this.runCommand('install', ['--silent', '--no-progress'])
       }
+    }
+
+    if (this.needsNpmInstallFix) {
+      // if npm 5, split into several `npm add` calls
+      // see https://github.com/vuejs/vue-cli/issues/5800#issuecomment-675199729
+      const pkg = resolvePkg(this.context)
+      if (pkg.dependencies) {
+        const deps = Object.entries(pkg.dependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', deps)
+      }
+
+      if (pkg.devDependencies) {
+        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', [...devDeps, '--save-dev'])
+      }
+
+      if (pkg.optionalDependencies) {
+        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
+        await this.runCommand('install', [...devDeps, '--save-optional'])
+      }
+
+      return
     }
 
     return await this.runCommand('install')

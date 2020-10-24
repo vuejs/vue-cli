@@ -91,8 +91,7 @@ module.exports = (api, projectOptions) => {
               extensions: {
                 vue: {
                   enabled: true,
-                  // use a shim as @vue/compiler-sfc does not offer the `parseComponent` function
-                  compiler: '@vue/cli-plugin-typescript/vue-compiler-sfc-shim'
+                  compiler: '@vue/compiler-sfc'
                 }
               },
               diagnosticOptions: {

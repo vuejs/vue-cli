@@ -88,6 +88,11 @@ module.exports = (api, {
       // eslint-disable-next-line node/no-extraneous-require
       require('@vue/cli-plugin-eslint/generator').applyTS(api)
     }
+
+    if (api.hasPlugin('e2e-webdriverio')) {
+      // eslint-disable-next-line node/no-extraneous-require
+      require('@vue/cli-plugin-e2e-webdriverio/generator').applyTS(api)
+    }
   }
 
   api.render('./template', {

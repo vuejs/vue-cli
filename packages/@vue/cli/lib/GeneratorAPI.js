@@ -227,7 +227,7 @@ class GeneratorAPI {
       warnIncompatibleVersions: true
     }
 
-    // this condition statement is added for compatiblity reason, because
+    // this condition statement is added for compatibility reason, because
     // in version 4.0.0 to 4.1.2, there's no `options` object, but a `forceNewVersion` flag
     if (typeof options === 'boolean') {
       extendOptions.warnIncompatibleVersions = !options
@@ -457,7 +457,18 @@ function extractCallDir () {
   const obj = {}
   Error.captureStackTrace(obj)
   const callSite = obj.stack.split('\n')[3]
-  const fileName = callSite.match(/\s\((.*):\d+:\d+\)$/)[1]
+
+  // the regexp for the stack when called inside a named function
+  const namedStackRegExp = /\s\((.*):\d+:\d+\)$/
+  // the regexp for the stack when called inside an anonymous
+  const anonymousStackRegExp = /at (.*):\d+:\d+$/
+
+  let matchResult = callSite.match(namedStackRegExp)
+  if (!matchResult) {
+    matchResult = callSite.match(anonymousStackRegExp)
+  }
+
+  const fileName = matchResult[1]
   return path.dirname(fileName)
 }
 

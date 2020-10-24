@@ -35,11 +35,11 @@ serve -s dist
 
 ### 云开发 CloudBase
 
-[云开发 CloudBase](https://cloudbase.net/) 是一个云原生一体化的 Serverless 云平台，支持静态网站、容器等多种托管能力，并提供简便的部署工具 [CloudBase Framework](https://cloudbase.net/framework.html) 来一键部署应用。
+[云开发 CloudBase](https://cloudbase.net/?site=vuecli) 是一个云原生一体化的 Serverless 云平台，支持静态网站、容器等多种托管能力，并提供简便的部署工具 [CloudBase Framework](https://cloudbase.net/framework.html?site=vuecli)) 来一键部署应用。
 
 #### 步骤一：安装云开发 CloudBase  CLI
 
-CloudBase  CLI 集成了  [CloudBase Framework](https://github.com/TencentCloudBase/cloudbase-framework)  的能力，全局安装 CloudBase  CLI  请运行以下命令：
+CloudBase  CLI 集成了  [CloudBase Framework](https://github.com/TencentCloudBase/cloudbase-framework?site=vuecli))  的能力，全局安装 CloudBase  CLI  请运行以下命令：
 
 ```
 npm install -g @cloudbase/cli
@@ -47,10 +47,9 @@ npm install -g @cloudbase/cli
 
 #### 步骤二：一键部署
 
-在项目根目录运行以下命令部署 Vue CLI 创建的应用：
+在项目根目录运行以下命令部署 Vue CLI 创建的应用，在部署之前可以先 [开通环境](https://console.cloud.tencent.com/tcb/env/index?tdl_anchor=ad&tdl_site=vuejs)
 
 ```
-cloudbase login
 cloudbase init --without-template
 cloudbase framework:deploy
 ```
@@ -69,7 +68,7 @@ cloudbase framework:deploy
 - 使用 `cloudbase init --template vue`  快速创建和部署一个包含 Serverless 云函数后端的 Vue 应用
 - 使用 `cloudbase init --template nuxt-ssr` 快速创建和部署一个包含  SSR 和 Serverless 云函数后端的 Vue 应用
 
-详细信息请查看  CloudBase Framework 的[部署项目示例](https://github.com/TencentCloudBase/cloudbase-framework#%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B)
+详细信息请查看  CloudBase Framework 的[部署项目示例](https://github.com/TencentCloudBase/cloudbase-framework?site=vuecli#%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B)
 
 ### GitHub Pages
 
@@ -293,16 +292,16 @@ firebase deploy --only hosting
 
 请参考 [Firebase 文档](https://firebase.google.com/docs/hosting/deploying) 来获取更多细节。
 
-### ZEIT Now
+### Vercel
 
-[ZEIT Now](https://zeit.co/) 是一个网站和无服务器 (Serverless) API 云平台，你可以使用你的个人域名 (或是免费的 `.now.sh` URL) 部署你的 Vue 项目。
+[Vercel](https://vercel.com/) 是一个网站和无服务器 (Serverless) API 云平台，你可以使用你的个人域名 (或是免费的 `.vercel.app` URL) 部署你的 Vue 项目。
 
 #### 步骤一：安装 Now CLI
 
-要使用 [npm](https://www.npmjs.com/package/now) 安装其命令行界面，运行以下命令：
+要使用 [npm](https://www.npmjs.com/package/vercel) 安装其命令行界面，运行以下命令：
 
 ```
-npm install -g now
+npm install -g vercel
 ```
 
 #### 步骤二：部署
@@ -310,14 +309,14 @@ npm install -g now
 在项目根目录运行以下命令部署你的应用：
 
 ```
-now
+vercel
 ```
 
-**此外**，你还可以使用他们的 [GitHub](https://zeit.co/github) 或 [GitLab](https://zeit.co/gitlab) 集成服务。
+**此外**，你还可以使用他们的 [GitHub](https://vercel.com/github) 或 [GitLab](https://vercel.com/gitlab) 集成服务。
 
 大功告成！
 
-你的站点会开始部署，你将获得一个形如 [https://vue.now-examples.now.sh/](https://vue.now-examples.now.sh/) 的链接。
+你的站点会开始部署，你将获得一个形如 [https://vue.now-examples.now.sh/](https://vue.now-examples.now.sh/) （或`.vercel.app`）的链接。
 
 开箱即用地，请求会被自动改写到 `index.html` (除了自定义的静态文件) 并带有合适的缓存请求头。
 

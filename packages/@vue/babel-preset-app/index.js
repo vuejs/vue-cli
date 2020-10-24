@@ -95,7 +95,7 @@ module.exports = (context, options = {}) => {
   const plugins = []
   const defaultEntryFiles = JSON.parse(process.env.VUE_CLI_ENTRY_FILES || '[]')
 
-  // Though in the vue-cli repo, we only use the two envrionment variables
+  // Though in the vue-cli repo, we only use the two environment variables
   // for tests, users may have relied on them for some features,
   // dropping them may break some projects.
   // So in the following blocks we don't directly test the `NODE_ENV`.
@@ -126,7 +126,7 @@ module.exports = (context, options = {}) => {
     if (vueVersion === 2) {
       presets.push([require('@vue/babel-preset-jsx'), jsxOptions])
     } else if (vueVersion === 3) {
-      plugins.push([require('@ant-design-vue/babel-plugin-jsx'), jsxOptions])
+      plugins.push([require('@vue/babel-plugin-jsx'), jsxOptions])
     }
   }
 

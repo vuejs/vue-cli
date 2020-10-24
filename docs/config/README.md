@@ -257,7 +257,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
   By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `false` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
 
   ::: tip
-  If you have customized CSS Modules configurations in `css.loaderOptions.css`, then the `css.requireModuleExtension` field must be explictly configured to `true` or `false`, otherwise we can't be sure whether you want to apply these options to all CSS files or not.
+  If you have customized CSS Modules configurations in `css.loaderOptions.css`, then the `css.requireModuleExtension` field must be explicitly configured to `true` or `false`, otherwise we can't be sure whether you want to apply these options to all CSS files or not.
   :::
 
   See also: [Working with CSS > CSS Modules](../guide/css.md#css-modules)
@@ -379,6 +379,10 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 - Default: `require('os').cpus().length > 1`
 
   Whether to use `thread-loader` for Babel or TypeScript transpilation. This is enabled for production builds when the system has more than 1 CPU cores. Passing a number will define the amount of workers used.
+
+::: warning
+Do not use `parallel` in combination with non-serializable loader options, such as regexes, dates and functions. These options would not be passed correctly to the respective loaders which may lead to unexpected errors.
+:::
 
 ### pwa
 
