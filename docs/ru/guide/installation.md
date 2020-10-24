@@ -33,7 +33,7 @@ vue --version
 
 Для обновления глобального пакета Vue CLI выполните команду:
 
-``` bash
+```bash
 npm update -g @vue/cli
 # ИЛИ
 yarn global upgrade --latest @vue/cli
