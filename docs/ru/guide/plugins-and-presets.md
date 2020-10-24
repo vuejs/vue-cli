@@ -192,7 +192,7 @@ GitLab и BitBucket также поддерживаются. Убедитесь,
 vue create --preset gitlab:username/repo --clone my-project
 vue create --preset bitbucket:username/repo --clone my-project
 
-# self-hosted repos
+# репозитории на собственном хостинге
 vue create --preset gitlab:my-gitlab-server.com:group/projectname --clone my-project
 vue create --preset direct:ssh://git@my-gitlab-server.com/group/projectname.git --clone my-project
 ```
