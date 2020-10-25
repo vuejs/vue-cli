@@ -1,3 +1,4 @@
 __tests__
 __mocks__
 .version
+.DS_Store
