@@ -43,7 +43,7 @@ async function assertProxy (url, title) {
       author: 'test'
     }),
     headers: { 'Content-Type': 'application/json' }
-  }).then(result => result.json())
+  })
 
   const newPost = await fetch(`${url}posts/${newId}`).then(result => result.json())
   expect(newPost.title).toBe('new')
