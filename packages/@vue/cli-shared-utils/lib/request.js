@@ -1,16 +1,13 @@
 exports.request = {
-  get (uri, opts) {
+  get (url, opts) {
     // lazy require
-    const request = require('util').promisify(require('request'))
+    const fetch = require('node-fetch')
     const reqOpts = {
       method: 'GET',
       timeout: 30000,
-      resolveWithFullResponse: true,
-      json: true,
-      uri,
       ...opts
     }
 
-    return request(reqOpts)
+    return fetch(url, reqOpts).then(result => result.json())
   }
 }
