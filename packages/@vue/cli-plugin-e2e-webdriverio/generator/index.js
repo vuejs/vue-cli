@@ -21,7 +21,7 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
             }
           }
         }
-        files['tsconfig.json'] = JSON.stringify(parsed, null, 2)
+        files['tsconfig.json'] = JSON.stringify(parsed, null, 2) + '\n'
       }
     })
   }
