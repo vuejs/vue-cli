@@ -885,7 +885,7 @@ test('api: addConfigTransform transform vue warn', async () => {
   })).toBe(true)
 })
 
-test('avoid overwriting existing files if it is not modified', async () => {
+test('avoid overwriting files that have not been modified', async () => {
   const generator = new Generator('/', {
     plugins: [
       {
@@ -909,7 +909,7 @@ test('avoid overwriting existing files if it is not modified', async () => {
   expect(fs.existsSync('/existFile.js')).toBe(false)
 })
 
-test('overwrite existing file if it is modified', async () => {
+test('overwrite files that have been modified', async () => {
   const generator = new Generator('/', {
     plugins: [
       {

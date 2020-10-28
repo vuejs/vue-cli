@@ -16,7 +16,7 @@ function deleteRemovedFiles (directory, newFiles, previousFiles) {
  *
  * @param {string} dir
  * @param {Record<string,string|Buffer>} files
- * @param {Record<string,|Buffer>} previousFiles
+ * @param {Record<string,string|Buffer>} [previousFiles]
  * @param {Set<string>} [include]
  */
 module.exports = async function writeFileTree (dir, files, previousFiles, include) {
