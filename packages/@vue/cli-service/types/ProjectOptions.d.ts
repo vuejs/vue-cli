@@ -120,7 +120,7 @@ interface ProjectOptions {
    */
   chainWebpack?: (config: ChainableWebpackConfig) => void;
   /**
-   * Set webpack configuration.  If the value is `Object`, will be merged into config.  If value is `Function`, will receicve current config as argument
+   * Set webpack configuration.  If the value is `Object`, will be merged into config.  If value is `Function`, will receive current config as argument
    */
   configureWebpack?: WebpackOptions | ((config: WebpackOptions) => (WebpackOptions | void));
 
