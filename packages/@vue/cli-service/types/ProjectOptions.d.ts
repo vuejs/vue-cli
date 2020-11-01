@@ -34,7 +34,7 @@ interface CSSOptions {
    */
   extract?: boolean | ExtractOptions;
   /**
-   * Default: `true`
+   * Default: `false`
    * Whether to enable source maps for CSS. Setting this to `true` may affect build performance
    */
   sourceMap?: boolean;
