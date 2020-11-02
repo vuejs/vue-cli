@@ -125,7 +125,7 @@ interface ProjectOptions {
   configureWebpack?: WebpackOptions | ((config: WebpackOptions) => (WebpackOptions | void));
 
   /**
-   * Default: `default`
+   * Default: `'default'`
    * Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader)
    */
   lintOnSave?: boolean | 'default' | 'warning' | 'error';
