@@ -241,11 +241,6 @@ module.exports = class Generator {
       // project-wide configuration even to dependencies.
       // TODO: this can be removed when Babel supports root: true in package.json
       extract('babel')
-
-      // Always extract .eslintrc.js as the parser needs to be require.resolve'ed
-      // since ESLint doesn't resolve things from where it's declared
-      // TODO: this can be removed when ESLint starts resolving things correctly
-      extract('eslint')
     }
   }
 
