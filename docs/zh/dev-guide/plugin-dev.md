@@ -293,7 +293,7 @@ module.exports.hooks = (api) => {
 }
 ```
 
-### Service 插件
+## Service 插件
 
 Service 插件可以修改 webpack 配置，创建新的 vue-cli service 命令或者修改已经存在的命令（如 `serve` 和 `build`）。
 
