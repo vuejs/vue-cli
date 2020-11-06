@@ -143,9 +143,9 @@ module.exports = class Service {
   }
 
   resolvePlugins (inlinePlugins, useBuiltIn) {
-    const idToPlugin = id => ({
+    const idToPlugin = (id, absolutePath) => ({
       id: id.replace(/^.\//, 'built-in:'),
-      apply: require(id)
+      apply: require(absolutePath || id)
     })
 
     let plugins
@@ -185,7 +185,7 @@ module.exports = class Service {
 
             return { id, apply }
           } else {
-            return idToPlugin(resolveModule(id, this.pkgContext))
+            return idToPlugin(id, resolveModule(id, this.pkgContext))
           }
         })
       plugins = builtInPlugins.concat(projectPlugins)
