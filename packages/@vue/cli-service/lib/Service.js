@@ -161,7 +161,7 @@ module.exports = class Service {
       './config/css',
       './config/prod',
       './config/app'
-    ].map(idToPlugin)
+    ].map((id) => idToPlugin(id))
 
     if (inlinePlugins) {
       plugins = useBuiltIn !== false
