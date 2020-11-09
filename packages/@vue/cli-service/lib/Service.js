@@ -121,7 +121,8 @@ module.exports = class Service {
       const defaultNodeEnv = (mode === 'production' || mode === 'test')
         ? mode
         : 'development'
-      if (shouldForceDefaultEnv || process.env.NODE_ENV == null) {
+        // fix: When the environment is "dev", NODE_ENV cannot be correctly set to "development"
+      if (shouldForceDefaultEnv || process.env.NODE_ENV == null || process.env.NODE_ENV == 'dev') {
         process.env.NODE_ENV = defaultNodeEnv
       }
       if (shouldForceDefaultEnv || process.env.BABEL_ENV == null) {
