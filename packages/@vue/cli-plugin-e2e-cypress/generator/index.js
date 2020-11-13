@@ -7,6 +7,9 @@ module.exports = api => {
   api.extendPackage({
     scripts: {
       'test:e2e': 'vue-cli-service test:e2e'
+    },
+    devDependencies: {
+      'cypress': '^5.0.0'
     }
   })
 }
