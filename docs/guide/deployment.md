@@ -468,7 +468,7 @@ Deploy your application using nginx inside of a docker container.
         listen       80;
         server_name  localhost;
         location / {
-          root   /app;
+          root   /usr/share/nginx/html;
           index  index.html;
           try_files $uri $uri/ /index.html;
         }
