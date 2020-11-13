@@ -303,7 +303,7 @@ class PackageManager {
 
     const url = `${registry.replace(/\/$/g, '')}/${packageName}`
     try {
-      metadata = (await request.get(url, { headers })).body
+      metadata = (await request.get(url, { headers }))
       if (metadata.error) {
         throw new Error(metadata.error)
       }
