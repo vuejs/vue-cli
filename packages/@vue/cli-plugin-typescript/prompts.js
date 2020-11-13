@@ -32,11 +32,3 @@ const prompts = module.exports = [
     default: true
   }
 ]
-
-// in RC6+ the export can be function, but that would break invoke for RC5 and
-// below, so this is a temporary compatibility hack until we release stable.
-// TODO just export the function in 3.0.0
-module.exports.getPrompts = pkg => {
-  prompts[2].when = () => !('@vue/cli-plugin-eslint' in (pkg.devDependencies || {}))
-  return prompts
-}
