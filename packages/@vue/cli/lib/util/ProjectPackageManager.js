@@ -126,13 +126,11 @@ class PackageManager {
       const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
 
       if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
-        warn(
+        throw new Error(
           'You are using an outdated version of NPM.\n' +
-          'there may be unexpected errors during installation.\n' +
+          'It does not support some core functionalities of Vue CLI.\n' +
           'Please upgrade your NPM version.'
         )
-
-        this.needsNpmInstallFix = true
       }
 
       if (semver.gte(npmVersion, '7.0.0')) {
@@ -354,28 +352,6 @@ class PackageManager {
         delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
         await this.runCommand('install', ['--silent', '--no-progress'])
       }
-    }
-
-    if (this.needsNpmInstallFix) {
-      // if npm 5, split into several `npm add` calls
-      // see https://github.com/vuejs/vue-cli/issues/5800#issuecomment-675199729
-      const pkg = resolvePkg(this.context)
-      if (pkg.dependencies) {
-        const deps = Object.entries(pkg.dependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', deps)
-      }
-
-      if (pkg.devDependencies) {
-        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', [...devDeps, '--save-dev'])
-      }
-
-      if (pkg.optionalDependencies) {
-        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', [...devDeps, '--save-optional'])
-      }
-
-      return
     }
 
     return await this.runCommand('install', this.needsPeerDepsFix ? ['--legacy-peer-deps'] : [])
