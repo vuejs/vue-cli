@@ -31,7 +31,6 @@
     "yorkie": "^2.0.0"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0-0",
-    "eslint": ">= 6.0.0"
+    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
   }
 }

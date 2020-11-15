@@ -83,9 +83,9 @@ test('babel', async () => {
   ])
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.devDependencies).toHaveProperty('babel-eslint')
+  expect(pkg.devDependencies).toHaveProperty('@babel/eslint-parser')
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser'
   })
 })
 
