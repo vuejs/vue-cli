@@ -1,5 +1,6 @@
 const { semver } = require('@vue/cli-shared-utils')
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const cwd = api.getCwd()
   const webpack = require('../util/loadWebpack')(cwd)
@@ -9,6 +10,12 @@ module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
+
+    // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
+    webpackConfig.module
+      .rule('esm')
+        .test(/\.m?jsx?$/)
+        .resolve.set('fullySpecified', false)
 
     webpackConfig
       .mode('development')
