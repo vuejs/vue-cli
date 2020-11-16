@@ -1,7 +1,10 @@
-const getVersions = require('../util/getVersions')
+const { semver } = require('@vue/cli-shared-utils')
 
 module.exports = (api, options) => {
-  const { vueMajor, webpackMajor } = getVersions(api.getCwd())
+  const cwd = api.getCwd()
+  const webpack = require('../util/loadWebpack')(cwd)
+  const webpackMajor = semver.major(webpack.version)
+  const vueMajor = require('../util/getVueMajor')(cwd)
 
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -123,7 +126,7 @@ module.exports = (api, options) => {
       // feature flags <http://link.vuejs.org/feature-flags>
       webpackConfig
         .plugin('feature-flags')
-          .use(require('webpack').DefinePlugin, [{
+          .use(webpack.DefinePlugin, [{
             __VUE_OPTIONS_API__: 'true',
             __VUE_PROD_DEVTOOLS__: 'false'
           }])
@@ -182,7 +185,7 @@ module.exports = (api, options) => {
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
       .plugin('define')
-        .use(require('webpack').DefinePlugin, [
+        .use(webpack.DefinePlugin, [
           resolveClientEnv(options)
         ])
 

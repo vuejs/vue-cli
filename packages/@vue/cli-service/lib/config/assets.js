@@ -1,11 +1,11 @@
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const getAssetPath = require('../util/getAssetPath')
-  const getVersions = require('../util/getVersions')
+  const getVueMajor = require('../util/getVueMajor')
 
   const inlineLimit = 4096
 
-  const { vueMajor } = getVersions(api.getCwd())
+  const vueMajor = getVueMajor(api.getCwd())
   const supportsEsModuleAsset = (vueMajor !== 2)
 
   const genAssetSubPath = dir => {

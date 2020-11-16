@@ -85,7 +85,7 @@
     "semver": "^7.3.2",
     "typescript": "~3.9.3",
     "vuepress": "^1.6.0",
-    "webpack": "^4.0.0",
+    "webpack": "^5.0.0",
     "yorkie": "^2.0.0"
   },
   "resolutions": {

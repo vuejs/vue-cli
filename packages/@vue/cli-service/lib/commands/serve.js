@@ -38,7 +38,7 @@ module.exports = (api, options) => {
 
     const url = require('url')
     const { chalk } = require('@vue/cli-shared-utils')
-    const webpack = require('webpack')
+    const webpack = require('../util/loadWebpack')(api.getCwd())
     const WebpackDevServer = require('webpack-dev-server')
     const portfinder = require('portfinder')
     const prepareURLs = require('../util/prepareURLs')

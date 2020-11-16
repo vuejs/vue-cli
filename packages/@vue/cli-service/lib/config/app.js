@@ -1,6 +1,7 @@
 // config that are specific to --target app
 const fs = require('fs')
 const path = require('path')
+const { semver } = require('@vue/cli-shared-utils')
 
 // ensure the filename passed to html-webpack-plugin is a relative path
 // because it cannot correctly handle absolute paths
@@ -13,8 +14,9 @@ function ensureRelative (outputDir, _path) {
 }
 
 module.exports = (api, options) => {
-  const getVersions = require('../util/getVersions')
-  const { webpackMajor } = getVersions(api.getCwd())
+  const cwd = api.getCwd()
+  const webpack = require('../util/loadWebpack')(cwd)
+  const webpackMajor = semver.major(webpack.version)
 
   api.chainWebpack(webpackConfig => {
     // only apply when there's no alternative target
@@ -130,7 +132,7 @@ module.exports = (api, options) => {
       if (webpackMajor === 4) {
         webpackConfig
           .plugin('named-chunks')
-            .use(require('webpack').NamedChunksPlugin, [chunk => {
+            .use(webpack.NamedChunksPlugin, [chunk => {
               if (chunk.name) {
                 return chunk.name
               }
