@@ -16,7 +16,11 @@ module.exports = function loadWebpack (cwd) {
   // Check the package.json,
   // and only load from the project if webpack is explictly depended on,
   // in case of accidental hoisting.
-  const pkg = loadModule('./package.json', cwd)
+  let pkg = {}
+  try {
+    pkg = loadModule('./package.json', cwd)
+  } catch (e) {}
+
   const deps = {
     ...pkg.dependencies,
     ...pkg.devDependencies,
