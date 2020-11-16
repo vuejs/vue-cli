@@ -13,6 +13,9 @@ function ensureRelative (outputDir, _path) {
 }
 
 module.exports = (api, options) => {
+  const getVersions = require('../util/getVersions')
+  const { webpackMajor } = getVersions(api.getCwd())
+
   api.chainWebpack(webpackConfig => {
     // only apply when there's no alternative target
     if (process.env.VUE_CLI_BUILD_TARGET && process.env.VUE_CLI_BUILD_TARGET !== 'app') {
@@ -35,8 +38,8 @@ module.exports = (api, options) => {
 
     // code splitting
     if (process.env.NODE_ENV !== 'test') {
-      webpackConfig
-        .optimization.splitChunks({
+      if (webpackMajor === 4) {
+        webpackConfig.optimization.splitChunks({
           cacheGroups: {
             vendors: {
               name: `chunk-vendors`,
@@ -53,35 +56,29 @@ module.exports = (api, options) => {
             }
           }
         })
+      } else {
+        webpackConfig.optimization.splitChunks({
+          cacheGroups: {
+            defaultVendors: {
+              name: `chunk-vendors`,
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+              chunks: 'initial'
+            },
+            common: {
+              name: `chunk-common`,
+              minChunks: 2,
+              priority: -20,
+              chunks: 'initial',
+              reuseExistingChunk: true
+            }
+          }
+        })
+      }
     }
 
     // HTML plugin
     const resolveClientEnv = require('../util/resolveClientEnv')
-
-    // #1669 html-webpack-plugin's default sort uses toposort which cannot
-    // handle cyclic deps in certain cases. Monkey patch it to handle the case
-    // before we can upgrade to its 4.0 version (incompatible with preload atm)
-    const chunkSorters = require('html-webpack-plugin/lib/chunksorter')
-    const depSort = chunkSorters.dependency
-    chunkSorters.auto = chunkSorters.dependency = (chunks, ...args) => {
-      try {
-        return depSort(chunks, ...args)
-      } catch (e) {
-        // fallback to a manual sort if that happens...
-        return chunks.sort((a, b) => {
-          // make sure user entry is loaded last so user CSS can override
-          // vendor CSS
-          if (a.id === 'app') {
-            return 1
-          } else if (b.id === 'app') {
-            return -1
-          } else if (a.entry !== b.entry) {
-            return b.entry ? -1 : 1
-          }
-          return 0
-        })
-      }
-    }
 
     const htmlOptions = {
       title: api.service.pkg.name,
@@ -128,20 +125,23 @@ module.exports = (api, options) => {
         }
       })
 
-      // keep chunk ids stable so async chunks have consistent hash (#1916)
-      webpackConfig
-        .plugin('named-chunks')
-          .use(require('webpack/lib/NamedChunksPlugin'), [chunk => {
-            if (chunk.name) {
-              return chunk.name
-            }
+      // In webpack 5, optimization.chunkIds is set to `deterministic` by default in production
+      // In webpack 4, we use the following trick to keep chunk ids stable so async chunks have consistent hash (#1916)
+      if (webpackMajor === 4) {
+        webpackConfig
+          .plugin('named-chunks')
+            .use(require('webpack').NamedChunksPlugin, [chunk => {
+              if (chunk.name) {
+                return chunk.name
+              }
 
-            const hash = require('hash-sum')
-            const joinedHash = hash(
-              Array.from(chunk.modulesIterable, m => m.id).join('_')
-            )
-            return `chunk-` + joinedHash
-          }])
+              const hash = require('hash-sum')
+              const joinedHash = hash(
+                Array.from(chunk.modulesIterable, m => m.id).join('_')
+              )
+              return `chunk-` + joinedHash
+            }])
+      }
     }
 
     // resolve HTML file(s)
@@ -164,7 +164,8 @@ module.exports = (api, options) => {
         .plugin('html')
           .use(HTMLPlugin, [htmlOptions])
 
-      if (!isLegacyBundle) {
+      // FIXME: preload plugin is not compatible with webpack 5 / html-webpack-plugin 4 yet
+      if (!isLegacyBundle && webpackMajor === 4) {
         // inject preload/prefetch to HTML
         webpackConfig
           .plugin('preload')
@@ -241,7 +242,8 @@ module.exports = (api, options) => {
             .use(HTMLPlugin, [pageHtmlOptions])
       })
 
-      if (!isLegacyBundle) {
+      // FIXME: preload plugin is not compatible with webpack 5 / html-webpack-plugin 4 yet
+      if (!isLegacyBundle && webpackMajor === 4) {
         pages.forEach(name => {
           const filename = ensureRelative(
             outputDir,

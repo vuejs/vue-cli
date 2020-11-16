@@ -112,9 +112,6 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
     }
 
     Object.assign(rawConfig.output, {
-      // to ensure that multiple copies of async wc bundles can co-exist
-      // on the same page.
-      jsonpFunction: libName.replace(/-\w/g, c => c.charAt(1).toUpperCase()) + '_jsonp',
       filename: `${entryName}.js`,
       chunkFilename: `${libName}.[name]${minify ? `.min` : ``}.js`,
       // use dynamic publicPath so this can be deployed anywhere
@@ -122,6 +119,17 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
       // document.currentScript.src.
       publicPath: ''
     })
+
+    const getVersions = require('../../util/getVersions')
+    const { webpackMajor } = getVersions(api.getCwd())
+
+    // to ensure that multiple copies of async wc bundles can co-exist
+    // on the same page.
+    if (webpackMajor === 4) {
+      rawConfig.output.jsonpFunction = libName.replace(/-\w/g, c => c.charAt(1).toUpperCase()) + '_jsonp'
+    } else {
+      rawConfig.output.uniqueName = `vue-lib-${libName}`
+    }
 
     return rawConfig
   }

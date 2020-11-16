@@ -154,6 +154,7 @@ module.exports = class Service {
       './commands/help',
       // config plugins are order sensitive
       './config/base',
+      './config/assets',
       './config/css',
       './config/prod',
       './config/app'
