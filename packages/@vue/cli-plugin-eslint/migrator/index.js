@@ -1,5 +1,6 @@
 const { semver } = require('@vue/cli-shared-utils')
 
+/** @param {import('@vue/cli/lib/MigratorAPI')} api MigratorAPI */
 module.exports = async (api) => {
   const pkg = require(api.resolve('package.json'))
 
@@ -46,21 +47,21 @@ module.exports = async (api) => {
   }
 
   const fields = { devDependencies: newDeps }
-  if (newDeps['@babel/eslint-parser']) {
+
+  if (newDeps['@babel/core'] && newDeps['@babel/eslint-parser']) {
+    Reflect.deleteProperty(api.generator.pkg.devDependencies, 'babel-eslint')
+
     const minSupportedBabelCoreVersion = '>=7.2.0'
-    // eslint-disable-next-line node/no-extraneous-require
-    const babelCoreVersion = require('@babel/core').version
-    const isRunningMinSupportedCoreVersion = semver.satisfies(
-      babelCoreVersion,
-      minSupportedBabelCoreVersion
-    )
-    if (!isRunningMinSupportedCoreVersion) {
-      throw new Error(`@babel/eslint-parser${newDeps['@babel/eslint-parser']} doesn't support @babel/core${babelCoreVersion}.` +
-      ` Please upgrade to @babel/core${minSupportedBabelCoreVersion}` +
-       ` or upgrade @vue/cli-plugin-babel`)
+    const localBabelCoreVersion = pkg.devDependencies['@babel/core']
+
+    if (localBabelCoreVersion &&
+      semver.satisfies(
+        localBabelCoreVersion,
+        minSupportedBabelCoreVersion
+      )) {
+      Reflect.deleteProperty(newDeps, '@babel/core')
     }
 
-    Reflect.deleteProperty(api.generator.pkg.devDependencies, 'babel-eslint')
     fields.eslintConfig = {
       parserOptions: {
         parser: '@babel/eslint-parser'

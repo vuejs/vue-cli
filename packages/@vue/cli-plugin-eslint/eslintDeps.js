@@ -41,7 +41,8 @@ exports.getDeps = function (api, preset, rootOptions = {}) {
 
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     Object.assign(deps, {
-      '@babel/eslint-parser': '^7.12.1'
+      '@babel/eslint-parser': '^7.12.1',
+      '@babel/core': '^7.12.3'
     })
   }
 
