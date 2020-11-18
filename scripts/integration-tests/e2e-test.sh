@@ -27,4 +27,7 @@ yarn
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 publishToLocalRegistry
+
+yarn test --e2e-only
+
 cleanup
