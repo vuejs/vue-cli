@@ -29,12 +29,10 @@ jobs:
       - restore_cache: *restore-yarn-cache
       - run: yarn --network-timeout 600000
       - save_cache: *save-yarn-cache
-      - run: ./scripts/publish-local.sh
       - persist_to_workspace:
           root: ~/
           paths:
             - project/vue
-            - project/verdaccio-workspace
             - .cache/Cypress
 
   e2e:
@@ -42,7 +40,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: yarn test --e2e-only
+      - run: ./scripts/e2e-test/run-e2e-test.sh
 
   group-1:
     <<: *defaults

@@ -8,11 +8,11 @@
 
 # path to a directory with all packages
 # use relative path here because circleci workspace persisting only allows a single root
-storage: ../../../verdaccio-workspace/storage
+storage: /tmp/verdaccio-workspace/storage
 
 auth:
   htpasswd:
-    file: ../../../verdaccio-workspace/htpasswd
+    file: /tmp/verdaccio-workspace/htpasswd
     # Maximum amount of users allowed to register, defaults to "+inf".
     # You can set this to -1 to disable registration.
     # max_users: 1000
