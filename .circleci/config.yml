@@ -34,6 +34,7 @@ jobs:
           root: ~/
           paths:
             - project/vue
+            - project/verdaccio-workspace
             - .cache/Cypress
 
   e2e:
