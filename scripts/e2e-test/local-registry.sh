@@ -5,13 +5,12 @@
 custom_registry_url=http://localhost:4873
 original_npm_registry_url=`npm get registry`
 original_yarn_registry_url=`yarn config get registry`
-default_verdaccio_package=verdaccio@^4.8.1
 
 function startLocalRegistry {
   # Start local registry
   tmp_registry_log=`mktemp`
   echo "Registry output file: $tmp_registry_log"
-  (cd && nohup npx ${VERDACCIO_PACKAGE:-$default_verdaccio_package} -c $1 &>$tmp_registry_log &)
+  nohup yarn verdaccio -c $1 &>$tmp_registry_log &
   # Wait for Verdaccio to boot
   grep -q 'http address' <(tail -f $tmp_registry_log)
 
