@@ -112,6 +112,7 @@ module.exports = (api, options) => {
         ? rawPublicUrl
         : `${protocol}://${rawPublicUrl}`
       : null
+    const publicHost = publicUrl ? /^[a-zA-Z]+:\/\/([^/?#]+)/.exec(publicUrl)[1] : undefined
 
     const urls = prepareURLs(
       protocol,
@@ -181,6 +182,7 @@ module.exports = (api, options) => {
       hot: !isProduction,
       injectClient: false,
       compress: isProduction,
+      public: publicHost,
       publicPath: options.publicPath,
       overlay: isProduction // TODO disable this
         ? false
