@@ -70,11 +70,15 @@ const release = async () => {
 
   const version = customVersion || versions[bump]
 
-  const { yes } = await inquirer.prompt([{
-    name: 'yes',
-    message: `Confirm releasing ${version}?`,
-    type: 'confirm'
-  }])
+  const { yes } = cliOptions['local-registry']
+    ? { yes: true }
+    : await inquirer.prompt([
+      {
+        name: 'yes',
+        message: `Confirm releasing ${version}?`,
+        type: 'confirm'
+      }
+    ])
 
   if (yes) {
     await syncDeps({
