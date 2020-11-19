@@ -28,7 +28,6 @@ const {
 const {
   chalk,
   execa,
-  semver,
 
   log,
   warn,
@@ -183,15 +182,6 @@ module.exports = class Creator extends EventEmitter {
 
       await writeFileTree(context, {
         '.npmrc': pnpmConfig
-      })
-    }
-
-    if (packageManager === 'yarn' && semver.satisfies(process.version, '8.x')) {
-      // Vue CLI 4.x should support Node 8.x,
-      // but some dependenices already bumped `engines` field to Node 10
-      // and Yarn treats `engines` field too strictly
-      await writeFileTree(context, {
-        '.yarnrc': '# Hotfix for Node 8.x\n--install.ignore-engines true\n'
       })
     }
 

@@ -1,4 +1,5 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
+const create = require('@vue/cli-test-utils/createTestProject')
 
 test('base', async () => {
   const { pkg, files } = await generateWithPlugin([
@@ -138,3 +139,20 @@ test('TS + bare + router', async () => {
   expect(spec).toMatch(`const wrapper = mount(App,`)
   expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js App\`)`)
 })
+
+test('add types to existing tsconfig.json', async () => {
+  const { dir, read, write } = await create('unit-mocha-tsconfig', {
+    plugins: {
+      '@vue/cli-plugin-typescript': {},
+      '@vue/cli-plugin-unit-mocha': {}
+    }
+  })
+  await write('tsconfig.json', JSON.stringify({ compilerOptions: { types: ['some-type'] }}))
+
+  const invoke = require('@vue/cli/lib/invoke')
+  await invoke('unit-mocha', {}, dir)
+
+  const tsconfig = await read('tsconfig.json')
+  expect(tsconfig).toMatch(/\r?\n$/)
+  expect(JSON.parse(tsconfig)['compilerOptions']['types']).toEqual(['some-type', 'mocha', 'chai'])
+}, 30000)

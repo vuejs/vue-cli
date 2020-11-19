@@ -87,7 +87,7 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
         ) {
           parsed.compilerOptions.types.push('jest')
         }
-        files['tsconfig.json'] = JSON.stringify(parsed, null, 2)
+        files['tsconfig.json'] = JSON.stringify(parsed, null, 2) + '\n'
       }
     })
   }
