@@ -74,3 +74,4 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 #### `@vue/cli-shared-utils`
 
 * Bump [chalk](https://github.com/chalk/chalk) from v2 to v4
+* Bump [joi](https://github.com/sideway/joi) from v15 (used to be `@hapi/joi`) to v17
