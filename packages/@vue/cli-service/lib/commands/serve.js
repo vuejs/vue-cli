@@ -182,7 +182,6 @@ module.exports = (api, options) => {
       hot: !isProduction,
       injectClient: false,
       compress: isProduction,
-      public: publicHost,
       publicPath: options.publicPath,
       overlay: isProduction // TODO disable this
         ? false
@@ -190,6 +189,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
+      public: publicHost,
       // eslint-disable-next-line no-shadow
       before (app, server) {
         // launch editor support.
