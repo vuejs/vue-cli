@@ -343,18 +343,17 @@ class PackageManager {
   }
 
   async install () {
-    if (process.env.VUE_CLI_TEST) {
-      try {
-        process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
-        await this.runCommand('install', ['--offline', '--silent', '--no-progress'])
-        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
-      } catch (e) {
-        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
-        await this.runCommand('install', ['--silent', '--no-progress'])
-      }
+    const args = []
+
+    if (this.needsPeerDepsFix) {
+      args.push('--legacy-peer-deps')
     }
 
-    return await this.runCommand('install', this.needsPeerDepsFix ? ['--legacy-peer-deps'] : [])
+    if (process.env.VUE_CLI_TEST) {
+      args.push('--silent', '--no-progress')
+    }
+
+    return await this.runCommand('install', args)
   }
 
   async add (packageName, {

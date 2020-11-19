@@ -10,6 +10,16 @@ if (args.p) {
   rawArgs.splice(i, 2)
 }
 
+const e2ePathPattern = 'Migrator|Vue3'
+
+if (args['e2e-only']) {
+  regex = e2ePathPattern
+  const i = rawArgs.indexOf('--e2e-only')
+  rawArgs.splice(i, 2)
+} else {
+  rawArgs.push('--testPathIgnorePatterns', e2ePathPattern)
+}
+
 const jestArgs = [
   '--env', 'node',
   '--runInBand',
