@@ -1,7 +1,16 @@
 const { exit } = require('./exit')
 
 // proxy to joi for option validation
-exports.createSchema = fn => fn(require('joi'))
+exports.createSchema = fn => {
+  const joi = require('joi')
+
+  let schema = fn(joi)
+  if (typeof schema === 'object' && typeof schema.validate !== 'function') {
+    schema = joi.object(schema)
+  }
+
+  return schema
+}
 
 exports.validate = (obj, schema, cb) => {
   const { error } = schema.validate(obj)
