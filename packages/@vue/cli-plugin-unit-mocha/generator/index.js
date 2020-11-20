@@ -14,6 +14,9 @@ module.exports = (api, options, rootOptions, invoking) => {
     },
     scripts: {
       'test:unit': 'vue-cli-service test:unit'
+    },
+    resolutions: {
+      '@vue/cli-*/webpack': '^4.0.0'
     }
   })
 
