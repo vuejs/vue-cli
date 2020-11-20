@@ -51,9 +51,9 @@ import Vue from 'vue'
 import wrap from '@vue/web-component-wrapper'
 
 // runtime shared by every component chunk
-import 'css-loader/dist/runtime/api.js'
-import 'vue-style-loader/lib/addStylesShadow'
-import 'vue-loader/lib/runtime/componentNormalizer'
+import '${require.resolve('css-loader/dist/runtime/api.js')}'
+import '${require.resolve('vue-style-loader/lib/addStylesShadow')}'
+import '${require.resolve('vue-loader-v15/lib/runtime/componentNormalizer')}'
 
 ${elements}`.trim()
   fs.writeFileSync(filePath, content)
