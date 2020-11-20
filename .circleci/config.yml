@@ -64,7 +64,7 @@ jobs:
       - run: yarn lint-without-fix
       - run: yarn check-links
       - restore_cache: *restore-yarn-cache
-      - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app,vuex,router
+      - run: yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
       - save_cache: *save-yarn-cache
 
   group-4:
