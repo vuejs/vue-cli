@@ -13,10 +13,12 @@ module.exports = (api, options) => {
     const resolveLocal = require('../util/resolveLocal')
 
     // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
-    webpackConfig.module
-      .rule('esm')
-        .test(/\.m?jsx?$/)
-        .resolve.set('fullySpecified', false)
+    if (webpackMajor !== 4) {
+      webpackConfig.module
+        .rule('esm')
+          .test(/\.m?jsx?$/)
+          .resolve.set('fullySpecified', false)
+    }
 
     webpackConfig
       .mode('development')
