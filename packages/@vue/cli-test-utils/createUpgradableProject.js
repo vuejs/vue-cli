@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const execa = require('execa')
 
 const createTestProject = require('./createTestProject')
 const Upgrader = require('@vue/cli/lib/Upgrader')
@@ -15,6 +16,16 @@ module.exports = async function createUpgradableProject (...args) {
   const project = await createTestProject(...args, outsideTestFolder)
   const upgrade = async function upgrade (pluginName, options) {
     return (new Upgrader(project.dir)).upgrade(pluginName, options || {})
+  }
+
+  project.run = (command) => {
+    let cmdArgs
+    [command, ...cmdArgs] = command.split(/\s+/)
+    if (command === 'vue-cli-service') {
+      // appveyor has problem with paths sometimes
+      command = 'yarn vue-cli-service'
+    }
+    return execa(command, cmdArgs, { cwd: project.dir })
   }
 
   return {
