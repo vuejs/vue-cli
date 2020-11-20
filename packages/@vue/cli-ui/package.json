@@ -90,7 +90,7 @@
     "rimraf": "^3.0.2",
     "start-server-and-test": "^1.11.3",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
+    "stylus-loader": "^4.3.0",
     "subscriptions-transport-ws": "^0.9.18",
     "vue": "^2.6.12",
     "vue-apollo": "^3.0.3",

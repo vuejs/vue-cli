@@ -210,10 +210,11 @@ module.exports = (api, options) => {
           additionalFormatters: [formatter]
         }])
 
-    const TerserPlugin = require('terser-webpack-plugin')
-    const terserOptions = require('./terserOptions')
-    webpackConfig.optimization
-      .minimizer('terser')
-        .use(TerserPlugin, [terserOptions(options)])
+    // FIXME: use webpack's built-in terser plugin
+    // const TerserPlugin = require('terser-webpack-plugin')
+    // const terserOptions = require('./terserOptions')
+    // webpackConfig.optimization
+    //   .minimizer('terser')
+    //     .use(TerserPlugin, [terserOptions(options)])
   })
 }

@@ -1,7 +1,7 @@
 // config that are specific to --target app
 const fs = require('fs')
 const path = require('path')
-const { semver } = require('@vue/cli-shared-utils')
+const { semver, loadModule } = require('@vue/cli-shared-utils')
 
 // ensure the filename passed to html-webpack-plugin is a relative path
 // because it cannot correctly handle absolute paths
@@ -147,7 +147,8 @@ module.exports = (api, options) => {
     }
 
     // resolve HTML file(s)
-    const HTMLPlugin = require('html-webpack-plugin')
+    // FIXME: should use the same logic as loadWebpack
+    const HTMLPlugin = loadModule('html-webpack-plugin', api.getCwd()) || require('html-webpack-plugin')
     const PreloadPlugin = require('@vue/preload-webpack-plugin')
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
@@ -167,7 +168,7 @@ module.exports = (api, options) => {
           .use(HTMLPlugin, [htmlOptions])
 
       // FIXME: preload plugin is not compatible with webpack 5 / html-webpack-plugin 4 yet
-      if (!isLegacyBundle && webpackMajor === 4) {
+      if (!isLegacyBundle && webpackMajor === 4 && HTMLPlugin.version !== 4) {
         // inject preload/prefetch to HTML
         webpackConfig
           .plugin('preload')
