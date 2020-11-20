@@ -20419,16 +20419,18 @@ vue-jest@^3.0.5:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-"vue-loader-v16@npm:vue-loader@^16.0.0-beta.7":
-  version "16.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.0.0-rc.2.tgz#b6a7e7f30d28f35659a83de41f4a1831a4232a04"
-  integrity sha512-cz8GK4dgIf1UTC+do80pGvh8BHcCRHLIQVHV9ONVQ8wtoqS9t/+H02rKcQP+TVNg7khgLyQV2+8eHUq7/AFq3g==
+"vue-loader-v15@npm:vue-loader@^15.9.5":
+  version "15.9.5"
+  resolved "https://registry.npm.taobao.org/vue-loader/download/vue-loader-15.9.5.tgz?cache=0&sync_timestamp=1605670792427&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-loader%2Fdownload%2Fvue-loader-15.9.5.tgz#7a960dc420a3439deaacdda038fdcdbf7c432706"
+  integrity sha1-epYNxCCjQ53qrN2gOP3Nv3xDJwY=
   dependencies:
-    chalk "^4.1.0"
-    hash-sum "^2.0.0"
-    loader-utils "^2.0.0"
+    "@vue/component-compiler-utils" "^3.1.0"
+    hash-sum "^1.0.2"
+    loader-utils "^1.1.0"
+    vue-hot-reload-api "^2.3.0"
+    vue-style-loader "^4.1.0"
 
-vue-loader@^15.7.1, vue-loader@^15.9.5:
+vue-loader@^15.7.1:
   version "15.9.5"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.5.tgz#7a960dc420a3439deaacdda038fdcdbf7c432706"
   integrity sha512-oeMOs2b5o5gRqkxfds10bCx6JeXYTwivRgbb8hzOrcThD2z1+GqEKE3EX9A2SGbsYDf4rXwRg6D5n1w0jO5SwA==
@@ -20438,6 +20440,15 @@ vue-loader@^15.7.1, vue-loader@^15.9.5:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-loader@^16.0.0-rc.2:
+  version "16.0.0-rc.2"
+  resolved "https://registry.npm.taobao.org/vue-loader/download/vue-loader-16.0.0-rc.2.tgz?cache=0&sync_timestamp=1605670792427&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-loader%2Fdownload%2Fvue-loader-16.0.0-rc.2.tgz#b6a7e7f30d28f35659a83de41f4a1831a4232a04"
+  integrity sha1-tqfn8w0o81ZZqD3kH0oYMaQjKgQ=
+  dependencies:
+    chalk "^4.1.0"
+    hash-sum "^2.0.0"
+    loader-utils "^2.0.0"
 
 vue-meta@^1.6.0:
   version "1.6.0"
@@ -20903,7 +20914,36 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@^4.8.1, webpack@^5.0.0, webpack@^5.4.0:
+webpack@^4.8.1:
+  version "4.44.2"
+  resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.44.2.tgz?cache=0&sync_timestamp=1605786608413&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwebpack%2Fdownload%2Fwebpack-4.44.2.tgz#6bfe2b0af055c8b2d1e90ed2cd9363f841266b72"
+  integrity sha1-a/4rCvBVyLLR6Q7SzZNj+EEma3I=
+  dependencies:
+    "@webassemblyjs/ast" "1.9.0"
+    "@webassemblyjs/helper-module-context" "1.9.0"
+    "@webassemblyjs/wasm-edit" "1.9.0"
+    "@webassemblyjs/wasm-parser" "1.9.0"
+    acorn "^6.4.1"
+    ajv "^6.10.2"
+    ajv-keywords "^3.4.1"
+    chrome-trace-event "^1.0.2"
+    enhanced-resolve "^4.3.0"
+    eslint-scope "^4.0.3"
+    json-parse-better-errors "^1.0.2"
+    loader-runner "^2.4.0"
+    loader-utils "^1.2.3"
+    memory-fs "^0.4.1"
+    micromatch "^3.1.10"
+    mkdirp "^0.5.3"
+    neo-async "^2.6.1"
+    node-libs-browser "^2.2.1"
+    schema-utils "^1.0.0"
+    tapable "^1.1.3"
+    terser-webpack-plugin "^1.4.3"
+    watchpack "^1.7.4"
+    webpack-sources "^1.4.1"
+
+webpack@^5.0.0, webpack@^5.4.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.6.0.tgz#282d10434c403b070ed91d459b385e873b51a07d"
   integrity sha512-SIeFuBhuheKElRbd84O35UhKc0nxlgSwtzm2ksZ0BVhRJqxVJxEguT/pYhfiR0le/pxTa1VsCp7EOYyTsa6XOA==

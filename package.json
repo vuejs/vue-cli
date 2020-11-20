@@ -93,7 +93,6 @@
   "resolutions": {
     "puppeteer": "1.11.0",
     "vue-template-compiler": "^2.6.12",
-    "vue-server-renderer": "^2.6.12",
-    "webpack": "^5.0.0"
+    "vue-server-renderer": "^2.6.12"
   }
 }

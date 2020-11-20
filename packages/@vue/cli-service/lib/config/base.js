@@ -1,3 +1,4 @@
+const path = require('path')
 const { semver } = require('@vue/cli-shared-utils')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
@@ -62,7 +63,7 @@ module.exports = (api, options) => {
     if (vueMajor === 2) {
       // for Vue 2 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader/package.json').version,
+        'vue-loader': require('vue-loader-v15/package.json').version,
         '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
         'vue-template-compiler': require('vue-template-compiler/package.json').version
       })
@@ -84,7 +85,7 @@ module.exports = (api, options) => {
             .options(vueLoaderCacheConfig)
             .end()
           .use('vue-loader')
-            .loader(require.resolve('vue-loader'))
+            .loader(require.resolve('vue-loader-v15'))
             .options(Object.assign({
               compilerOptions: {
                 whitespace: 'condense'
@@ -93,11 +94,20 @@ module.exports = (api, options) => {
 
       webpackConfig
         .plugin('vue-loader')
-          .use(require('vue-loader').VueLoaderPlugin)
+          .use(require('vue-loader-v15').VueLoaderPlugin)
+
+      // some plugins may implicitly relies on the `vue-loader` dependency path name
+      // such as vue-cli-plugin-apollo
+      // <https://github.com/Akryum/vue-cli-plugin-apollo/blob/d9fe48c61cc19db88fef4e4aa5e49b31aa0c44b7/index.js#L88>
+      // so we need a hotfix for that
+      webpackConfig
+        .resolveLoader
+          .modules
+            .prepend(path.resolve(__dirname, './vue-loader-v15-resolve-compat'))
     } else if (vueMajor === 3) {
       // for Vue 3 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader-v16/package.json').version,
+        'vue-loader': require('vue-loader/package.json').version,
         '@vue/compiler-sfc': require('@vue/compiler-sfc/package.json').version
       })
 
@@ -118,7 +128,7 @@ module.exports = (api, options) => {
             .options(vueLoaderCacheConfig)
             .end()
           .use('vue-loader')
-            .loader(require.resolve('vue-loader-v16'))
+            .loader(require.resolve('vue-loader'))
             .options({
               ...vueLoaderCacheConfig,
               babelParserPlugins: ['jsx', 'classProperties', 'decorators-legacy']
@@ -128,7 +138,7 @@ module.exports = (api, options) => {
 
       webpackConfig
         .plugin('vue-loader')
-          .use(require('vue-loader-v16').VueLoaderPlugin)
+          .use(require('vue-loader').VueLoaderPlugin)
 
       // feature flags <http://link.vuejs.org/feature-flags>
       webpackConfig
