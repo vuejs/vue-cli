@@ -23,7 +23,8 @@ module.exports = async function createUpgradableProject (...args) {
     [command, ...cmdArgs] = command.split(/\s+/)
     if (command === 'vue-cli-service') {
       // appveyor has problem with paths sometimes
-      command = 'yarn vue-cli-service'
+      command = 'yarn'
+      cmdArgs.unshift('vue-cli-service')
     }
     return execa(command, cmdArgs, { cwd: project.dir })
   }
