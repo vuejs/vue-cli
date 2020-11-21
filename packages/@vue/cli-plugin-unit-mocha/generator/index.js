@@ -20,6 +20,14 @@ module.exports = (api, options, rootOptions, invoking) => {
     }
   })
 
+  if (isVue3) {
+    api.extendPackage({
+      devDependencies: {
+        '@vue/server-renderer': '^3.0.0'
+      }
+    })
+  }
+
   if (api.hasPlugin('eslint')) {
     applyESLint(api)
   }
