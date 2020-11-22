@@ -115,35 +115,22 @@ module.exports = (api, options) => {
         ])
     }
 
-    if (isProd) {
-      Object.assign(htmlOptions, {
-        minify: {
-          removeComments: true,
-          collapseWhitespace: true,
-          collapseBooleanAttributes: true,
-          removeScriptTypeAttributes: true
-          // more options:
-          // https://github.com/kangax/html-minifier#options-quick-reference
-        }
-      })
-
+    if (webpackMajor === 4 && isProd) {
       // In webpack 5, optimization.chunkIds is set to `deterministic` by default in production
       // In webpack 4, we use the following trick to keep chunk ids stable so async chunks have consistent hash (#1916)
-      if (webpackMajor === 4) {
-        webpackConfig
-          .plugin('named-chunks')
-            .use(webpack.NamedChunksPlugin, [chunk => {
-              if (chunk.name) {
-                return chunk.name
-              }
+      webpackConfig
+        .plugin('named-chunks')
+          .use(webpack.NamedChunksPlugin, [chunk => {
+            if (chunk.name) {
+              return chunk.name
+            }
 
-              const hash = require('hash-sum')
-              const joinedHash = hash(
-                Array.from(chunk.modulesIterable, m => m.id).join('_')
-              )
-              return `chunk-` + joinedHash
-            }])
-      }
+            const hash = require('hash-sum')
+            const joinedHash = hash(
+              Array.from(chunk.modulesIterable, m => m.id).join('_')
+            )
+            return `chunk-` + joinedHash
+          }])
     }
 
     // resolve HTML file(s)
