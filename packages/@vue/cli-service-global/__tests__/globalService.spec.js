@@ -53,6 +53,28 @@ test('global serve', async () => {
   )
 })
 
+test('global serve with eslint', async () => {
+  try {
+    await serve(
+      () => execa(binPath, ['serve', 'foo.js'], { cwd }),
+      async ({ page, nextUpdate, helpers }) => {
+        expect(await helpers.getText('h1')).toMatch('hi')
+
+        write('foo.js', entryJs.replace(`$mount('#app')`, `$mount('#app');`))
+        const data = await nextUpdate()
+        expect(data).toMatch('App updated')
+
+        write('foo.js', entryJs.replace(`$mount('#app')`, `$mount('#app');;`))
+        await nextUpdate()
+      }
+    )
+  } catch (err) {
+    // Failed because of no-extra-semi
+    expect(err).toMatch('Failed to compile with 1 errors')
+  }
+  expect.assertions(3)
+})
+
 let server, browser, page
 test('global build', async () => {
   const { stdout } = await execa(binPath, ['build', 'foo.js'], { cwd })

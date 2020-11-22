@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({ msg: 'hi' })
-  }
+export default {
+  data: () => ({ msg: 'hi' })
+}
 </script>
 
 <style>
