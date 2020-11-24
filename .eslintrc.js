@@ -1,33 +1,33 @@
 module.exports = {
   extends: [
-    "plugin:vue-libs/recommended"
+    'plugin:vue-libs/recommended'
   ],
   plugins: [
-    "node"
+    'node'
   ],
   env: {
-    "jest": true
+    'jest': true
   },
   globals: {
     name: 'off'
   },
   rules: {
-    "indent": ["error", 2, {
-      "MemberExpression": "off"
+    'indent': ['error', 2, {
+      'MemberExpression': 'off'
     }],
-    "no-shadow": ["error"],
-    "node/no-extraneous-require": ["error", {
-      "allowModules": [
-        "@vue/cli-service",
-        "@vue/cli-test-utils"
+    'no-shadow': ['error'],
+    'node/no-extraneous-require': ['error', {
+      'allowModules': [
+        '@vue/cli-service',
+        '@vue/cli-test-utils'
       ]
     }]
   },
   overrides: [
     {
-      files: ['**/__tests__/**/*.js', "**/cli-test-utils/**/*.js"],
+      files: ['**/__tests__/**/*.js', '**/cli-test-utils/**/*.js'],
       rules: {
-        "node/no-extraneous-require": "off"
+        'node/no-extraneous-require': 'off'
       }
     }
   ]

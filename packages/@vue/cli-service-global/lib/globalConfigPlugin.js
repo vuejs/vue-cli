@@ -1,17 +1,19 @@
 const path = require('path')
 const resolve = require('resolve')
 const { findExisting } = require('./util')
+const { loadPartialConfigSync } = require('@babel/core')
 
 module.exports = function createConfigPlugin (context, entry, asLib) {
   return {
     id: '@vue/cli-service-global-config',
     apply: (api, options) => {
+      const _entry = path.resolve(context, entry)
       api.chainWebpack(config => {
         // entry is *.vue file, create alias for built-in js entry
         if (/\.vue$/.test(entry)) {
           config.resolve
             .alias
-              .set('~entry', path.resolve(context, entry))
+              .set('~entry', _entry)
           entry = require.resolve('../template/main.js')
         } else {
           // make sure entry is relative
@@ -93,6 +95,9 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
           ? !!(require(path.join(context, 'package.json')).eslintConfig)
           : !!ESLintConfigFile
 
+        const babelConfig = loadPartialConfigSync({ filename: _entry })
+        const hasBabelConfig = !!babelConfig && babelConfig.hasFilesystemConfig()
+
         // set inline eslint options
         config.module
           .rule('eslint')
@@ -111,7 +116,9 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
                     'eslint:recommended'
                   ],
                   parserOptions: {
-                    parser: 'babel-eslint'
+                    parser: '@babel/eslint-parser',
+                    requireConfigFile: hasBabelConfig,
+                    babelOptions
                   },
                   rules: {
                     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

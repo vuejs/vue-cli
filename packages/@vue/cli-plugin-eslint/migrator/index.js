@@ -1,5 +1,6 @@
 const { semver } = require('@vue/cli-shared-utils')
 
+/** @param {import('@vue/cli/lib/MigratorAPI')} api MigratorAPI */
 module.exports = async (api) => {
   const pkg = require(api.resolve('package.json'))
 
@@ -13,7 +14,7 @@ module.exports = async (api) => {
     api.extendPackage({
       devDependencies: {
         eslint: localESLintRange,
-        'babel-eslint': '^8.2.5',
+        '@babel/eslint-parser': '^7.12.1',
         'eslint-plugin-vue': '^4.5.0'
       }
     })
@@ -24,10 +25,11 @@ module.exports = async (api) => {
       // in case the user does not specify a typical caret range;
       // it is used as **fallback** because the user may have not previously
       // installed eslint yet, such as in the case that they are from v3.0.x
+      // eslint-disable-next-line node/no-extraneous-require
       require('eslint/package.json').version
   )
 
-  if (localESLintMajor >= 6) {
+  if (localESLintMajor > 6) {
     return
   }
 
@@ -44,7 +46,30 @@ module.exports = async (api) => {
     Object.assign(newDeps, getDeps(api, 'prettier'))
   }
 
-  api.extendPackage({ devDependencies: newDeps }, { warnIncompatibleVersions: false })
+  const fields = { devDependencies: newDeps }
+
+  if (newDeps['@babel/core'] && newDeps['@babel/eslint-parser']) {
+    Reflect.deleteProperty(api.generator.pkg.devDependencies, 'babel-eslint')
+
+    const minSupportedBabelCoreVersion = '>=7.2.0'
+    const localBabelCoreVersion = pkg.devDependencies['@babel/core']
+
+    if (localBabelCoreVersion &&
+      semver.satisfies(
+        localBabelCoreVersion,
+        minSupportedBabelCoreVersion
+      )) {
+      Reflect.deleteProperty(newDeps, '@babel/core')
+    }
+
+    fields.eslintConfig = {
+      parserOptions: {
+        parser: '@babel/eslint-parser'
+      }
+    }
+  }
+
+  api.extendPackage(fields, { warnIncompatibleVersions: false })
 
   // in case anyone's upgrading from the legacy `typescript-eslint-parser`
   if (api.hasPlugin('typescript')) {
@@ -57,7 +82,7 @@ module.exports = async (api) => {
     })
   }
 
-  api.exitLog(`ESLint upgraded from v${localESLintMajor}. to v6\n`)
+  api.exitLog(`ESLint upgraded from v${localESLintMajor}. to v7\n`)
 
   // TODO:
   // transform `@vue/prettier` to `eslint:recommended` + `@vue/prettier`

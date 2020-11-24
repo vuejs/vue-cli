@@ -65,6 +65,8 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/eslint-parser": "^7.12.1",
     "@vue/cli-plugin-babel": "^4.5.8",
     "@vue/cli-plugin-e2e-cypress": "^4.5.8",
     "@vue/cli-plugin-eslint": "^4.5.8",
@@ -74,10 +76,9 @@
     "ansi_up": "^4.0.4",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
-    "babel-eslint": "^10.1.0",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
-    "eslint": "^6.7.2",
+    "eslint": "^7.13.0",
     "eslint-plugin-graphql": "^3.1.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
