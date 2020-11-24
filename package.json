@@ -25,15 +25,6 @@
     "pre-commit": "lint-staged",
     "commit-msg": "node scripts/verifyCommitMsg.js"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "setupFiles": [
-      "<rootDir>/scripts/testSetup.js"
-    ],
-    "testMatch": [
-      "**/__tests__/**/*.spec.js"
-    ]
-  },
   "lint-staged": {
     "*.{js,vue}": [
       "eslint --fix",

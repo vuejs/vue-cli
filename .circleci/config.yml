@@ -42,32 +42,51 @@ jobs:
           at: ~/
       - run: ./scripts/e2e-test/run-e2e-test.sh
 
-  group-1:
+  core:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
       - run: yarn test -p cli,cli-service,cli-shared-utils
 
-  group-2:
+  core-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: WEBPACK4=true yarn test -p cli,cli-service,cli-shared-utils
+
+  typescript:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
       - run: yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
 
-  group-3:
+  typescript-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: WEBPACK4=true yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
+
+  plugins:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
       - run: yarn lint-without-fix
       - run: yarn check-links
-      - restore_cache: *restore-yarn-cache
       - run: yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
-      - save_cache: *save-yarn-cache
 
-  group-4:
+  plugins-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: WEBPACK4=true yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
+
+  tests:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -75,6 +94,14 @@ jobs:
       - run: yarn test -p unit-mocha,unit-jest,e2e-cypress
       # e2e-nightwatch was left out due to some unknown issues with selenium and the CI image
       - run: yarn test tsPluginE2e
+
+  tests-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: WEBPACK4=true yarn test -p unit-mocha,unit-jest,e2e-cypress
+      - run: WEBPACK4=true yarn test tsPluginE2e
 
   cli-ui:
     <<: *defaults
@@ -87,25 +114,43 @@ jobs:
       - store_artifacts:
           path: packages/@vue/cli-ui/tests/e2e/screenshots
 
+  # TODO: cli-ui-webpack-4
+
 workflows:
   version: 2
   test:
     jobs:
       - install:
           <<: *filters
-      - group-1:
+      - core:
           <<: *filters
           requires:
             - install
-      - group-2:
+      - core-webpack-4:
           <<: *filters
           requires:
             - install
-      - group-3:
+      - typescript:
           <<: *filters
           requires:
             - install
-      - group-4:
+      - typescript-webpack-4:
+          <<: *filters
+          requires:
+            - install
+      - plugins:
+          <<: *filters
+          requires:
+            - install
+      - plugins-webpack-4:
+          <<: *filters
+          requires:
+            - install
+      - tests:
+          <<: *filters
+          requires:
+            - install
+      - tests-webpack-4:
           <<: *filters
           requires:
             - install
