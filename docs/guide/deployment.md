@@ -197,11 +197,10 @@ Checkout [workboxOptions](https://cli.vuejs.org/core-plugins/pwa.html#configurat
 
 [Render](https://render.com) offers [free static site hosting](https://render.com/docs/static-sites) with fully managed SSL, a global CDN and continuous auto deploys from GitHub.
 
-1. Create a new Web Service on Render, and give Render’s GitHub app permission to access your Vue repo.
+1. Create a new Static Site on Render, and give Render’s GitHub app permission to access your Vue repo.
 
 2. Use the following values during creation:
 
-    - **Environment:** `Static Site`
     - **Build Command:** `npm run build` or `yarn build`
     - **Publish directory:** `dist`
 
