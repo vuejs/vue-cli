@@ -32,10 +32,6 @@ module.exports = (api, options) => {
         .publicPath(options.publicPath)
 
     webpackConfig.resolve
-      // This plugin can be removed once we switch to Webpack 6
-      .plugin('pnp')
-        .use({ ...require('pnp-webpack-plugin') })
-        .end()
       .extensions
         .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
         .end()
@@ -178,11 +174,11 @@ module.exports = (api, options) => {
               .end()
             .end()
 
-    // Node.js polyfills
-    // They are not polyfilled by default in webpack 5
-    // <https://github.com/webpack/webpack/pull/8460>
-    // In webpack 4, we used to disabled many of the core module polyfills too
     if (webpackMajor === 4) {
+      // Node.js polyfills
+      // They are not polyfilled by default in webpack 5
+      // <https://github.com/webpack/webpack/pull/8460>
+      // In webpack 4, we used to disabled many of the core module polyfills too
       webpackConfig.node
         .merge({
           // prevent webpack from injecting useless setImmediate polyfill because Vue
@@ -199,6 +195,12 @@ module.exports = (api, options) => {
           tls: 'empty',
           child_process: 'empty'
         })
+
+      // Yarn PnP / Yarn 2 support
+      webpackConfig.resolve
+        .plugin('pnp')
+          .use({ ...require('pnp-webpack-plugin') })
+          .end()
     }
 
     const resolveClientEnv = require('../util/resolveClientEnv')
