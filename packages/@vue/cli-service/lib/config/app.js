@@ -89,6 +89,7 @@ module.exports = (api, options) => {
         let stats
         return Object.assign({
           // make stats lazy as it is expensive
+          // TODO: not sure if it's still needed as of <https://github.com/jantimon/html-webpack-plugin/issues/780#issuecomment-390651831>
           get webpack () {
             return stats || (stats = compilation.getStats().toJson())
           },
