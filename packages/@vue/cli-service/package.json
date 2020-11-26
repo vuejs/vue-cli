@@ -60,7 +60,6 @@
     "launch-editor-middleware": "^2.2.1",
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.mapvalues": "^4.6.0",
-    "lodash.transform": "^4.6.0",
     "mini-css-extract-plugin": "^1.3.1",
     "minimist": "^1.2.5",
     "pnp-webpack-plugin": "^1.6.4",
