@@ -19,15 +19,6 @@ test('sass (default)', async () => {
   expect(pkg).toHaveProperty(['devDependencies', 'sass'])
 })
 
-test('node sass', async () => {
-  const { pkg, files } = await generateWithOptions({
-    cssPreprocessor: 'node-sass'
-  })
-
-  expect(files['src/App.vue']).toMatch('<style lang="scss">')
-  expect(pkg).toHaveProperty(['devDependencies', 'node-sass'])
-})
-
 test('dart sass', async () => {
   const { pkg, files } = await generateWithOptions({
     cssPreprocessor: 'dart-sass'
