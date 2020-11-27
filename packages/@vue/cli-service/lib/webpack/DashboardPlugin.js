@@ -142,7 +142,15 @@ class DashboardPlugin {
       assetSources = new Map()
       for (const name in compilation.assets) {
         const asset = compilation.assets[name]
-        assetSources.set(name.replace(FILENAME_QUERY_REGEXP, ''), asset.source())
+        const filename = name.replace(FILENAME_QUERY_REGEXP, '')
+        try {
+          assetSources.set(filename, asset.source())
+        } catch (e) {
+          const webpackFs = compiler.outputFileSystem
+          const fullPath = (webpackFs.join || path.join)(compiler.options.output.path, filename)
+          const buf = webpackFs.readFileSync(fullPath)
+          assetSources.set(filename, buf.toString())
+        }
       }
     })
 
