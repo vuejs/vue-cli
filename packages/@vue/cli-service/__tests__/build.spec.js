@@ -63,6 +63,43 @@ test('build', async () => {
   expect(h1Text).toMatch('Welcome to Your Vue.js App')
 })
 
+test('build with --report-json', async () => {
+  const project = await create('e2e-build-report-json', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --report-json')
+  expect(stdout).toMatch('Build complete.')
+  // should generate report.json
+  expect(project.has('dist/report.json')).toBe(true)
+
+  const report = JSON.parse(await project.read('dist/report.json'))
+  // should contain assetsByChunkName & entry points info
+  expect(report.assetsByChunkName).toStrictEqual({ 'app': 'js/app.js' })
+  expect(report.entrypoints).toStrictEqual({
+    'app': {
+      'chunks': [
+        'app'
+      ],
+      'assets': [
+        'js/app.js'
+      ],
+      'children': {
+      },
+      'childAssets': {
+      }
+    }
+  })
+
+  const appChunk = report.chunks.find(chunk => chunk.id === 'app')
+  // Each chunk should contain meta info
+  expect(appChunk).toHaveProperty('rendered')
+  expect(appChunk).toHaveProperty('initial')
+  expect(appChunk).toHaveProperty('entry')
+  expect(appChunk).toHaveProperty('size')
+  expect(appChunk).toHaveProperty('names')
+  expect(appChunk).toHaveProperty('files')
+  expect(appChunk).toHaveProperty('modules')
+})
+
 afterAll(async () => {
   if (browser) {
     await browser.close()
