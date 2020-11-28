@@ -11,6 +11,7 @@ const launchPuppeteer = require('@vue/cli-test-utils/launchPuppeteer')
 const cwd = path.resolve(__dirname, 'temp')
 const binPath = require.resolve('@vue/cli/bin/vue')
 const write = (file, content) => fs.writeFile(path.join(cwd, file), content)
+const remove = (file) => fs.remove(path.join(cwd, file))
 
 const entryVue = fs.readFileSync(path.resolve(__dirname, 'entry.vue'), 'utf-8')
 
@@ -26,6 +27,7 @@ beforeEach(async () => {
   await write('App.vue', entryVue)
   await write('Other.vue', entryVue)
   await write('foo.js', entryJs)
+  await remove('node_modules/.cache')
 })
 
 test('global serve', async () => {
@@ -55,9 +57,12 @@ test('global serve', async () => {
 
 test('global serve with eslint', async () => {
   try {
+    const cachePath = path.join(cwd, 'node_modules/.cache/.eslintcache')
+    expect(fs.existsSync(cachePath)).toBe(false)
     await serve(
       () => execa(binPath, ['serve', 'foo.js'], { cwd }),
-      async ({ page, nextUpdate, helpers }) => {
+      async ({ nextUpdate, helpers }) => {
+        expect(fs.existsSync(cachePath)).toBe(true)
         expect(await helpers.getText('h1')).toMatch('hi')
 
         write('foo.js', entryJs.replace(`$mount('#app')`, `$mount('#app');`))
@@ -72,7 +77,7 @@ test('global serve with eslint', async () => {
     // Failed because of no-extra-semi
     expect(err).toMatch('Failed to compile with 1 errors')
   }
-  expect.assertions(3)
+  expect.assertions(5)
 })
 
 let server, browser, page
