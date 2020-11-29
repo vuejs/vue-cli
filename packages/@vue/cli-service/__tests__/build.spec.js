@@ -72,8 +72,7 @@ test('build with --report-json', async () => {
   expect(project.has('dist/report.json')).toBe(true)
 
   const report = JSON.parse(await project.read('dist/report.json'))
-  // should contain assetsByChunkName & entry points info
-  expect(report.assetsByChunkName).toStrictEqual({ 'app': 'js/app.js' })
+  // should contain entry points info
   expect(report.entrypoints).toStrictEqual({
     'app': {
       'chunks': [
