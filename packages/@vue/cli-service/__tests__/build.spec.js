@@ -73,20 +73,8 @@ test('build with --report-json', async () => {
 
   const report = JSON.parse(await project.read('dist/report.json'))
   // should contain entry points info
-  expect(report.entrypoints).toStrictEqual({
-    'app': {
-      'chunks': [
-        'app'
-      ],
-      'assets': [
-        'js/app.js'
-      ],
-      'children': {
-      },
-      'childAssets': {
-      }
-    }
-  })
+  expect(report.entrypoints).toHaveProperty('app.chunks')
+  expect(report.entrypoints).toHaveProperty('app.assets')
 
   const appChunk = report.chunks.find(chunk => chunk.id === 'app')
   // Each chunk should contain meta info
