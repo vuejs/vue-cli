@@ -1,7 +1,11 @@
 const merge = require('deepmerge')
 const path = require('path')
 
+/** @type {import('@vue/cli-service').ProjectOptions} */
 module.exports = {
+  lintOnSave: process.env.CIRCLECI
+    ? false
+    : 'default',
   pluginOptions: {
     apollo: {
       enableMocks: false,
