@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 
 const camelizeRE = /-(\w)/g
@@ -56,6 +55,9 @@ import 'vue-style-loader/lib/addStylesShadow'
 import 'vue-loader/lib/runtime/componentNormalizer'
 
 ${elements}`.trim()
-  fs.writeFileSync(filePath, content)
-  return filePath
+
+  return {
+    filePath: filePath,
+    content: content
+  }
 }

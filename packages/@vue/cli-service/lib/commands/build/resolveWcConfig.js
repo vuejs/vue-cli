@@ -59,6 +59,12 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
     }
 
     config
+      .plugin('webpack-virtual-modules')
+        .use(require('webpack-virtual-modules'), [{
+          [dynamicEntry.filePath]: dynamicEntry.content
+        }])
+
+    config
       .plugin('web-component-options')
         .use(require('webpack').DefinePlugin, [{
           'process.env.CUSTOM_ELEMENT_NAME': JSON.stringify(libName)
@@ -108,7 +114,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
 
     const entryName = `${libName}${minify ? `.min` : ``}`
     rawConfig.entry = {
-      [entryName]: dynamicEntry
+      [entryName]: dynamicEntry.filePath
     }
 
     Object.assign(rawConfig.output, {
