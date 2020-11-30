@@ -216,12 +216,12 @@ test('should persist cache', async () => {
   server.stdout.on('data', data => {
     data = data.toString()
     if (data.match(/Compiled successfully/)) {
+      server.stdin.write('close')
       done()
     }
   })
 
   await donePromise
-  server.kill('SIGTERM')
 
   expect(has('node_modules/.cache/.eslintcache')).toBe(true)
 })

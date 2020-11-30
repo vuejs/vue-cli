@@ -42,23 +42,27 @@ describe('nightwatch e2e plugin', () => {
   })
 
   test('should accept the --url cli option', async () => {
-    await project.run(`vue-cli-service build`)
-    const server = createServer({ root: path.join(project.dir, 'dist') })
-    await new Promise((resolve, reject) => {
-      server.listen(8080, err => {
-        if (err) return reject(err)
-        resolve()
+    let server
+    try {
+      await project.run(`vue-cli-service build`)
+      server = createServer({ root: path.join(project.dir, 'dist') })
+      await new Promise((resolve, reject) => {
+        server.listen(8080, err => {
+          if (err) return reject(err)
+          resolve()
+        })
       })
-    })
-    await project.run(`vue-cli-service test:e2e --headless --url http://127.0.0.1:8080/`)
-    server.close()
+      await project.run(`vue-cli-service test:e2e --headless --url http://127.0.0.1:8080/`)
 
-    let results = await project.read('test_results.json')
-    results = JSON.parse(results)
-    expect(Object.keys(results.modules)).toEqual([
-      'test-with-pageobjects',
-      'test'
-    ])
+      let results = await project.read('test_results.json')
+      results = JSON.parse(results)
+      expect(Object.keys(results.modules)).toEqual([
+        'test-with-pageobjects',
+        'test'
+      ])
+    } finally {
+      server && server.close()
+    }
   })
 
   test('should run single test with custom nightwatch.json', async () => {
