@@ -80,7 +80,7 @@
     "webpack-merge": "^4.2.2"
   },
   "optionalDependencies": {
-    "vue-loader-v16": "npm:vue-loader@^16.0.0-beta.7"
+    "vue-loader-v16": "npm:vue-loader@^16.1.0"
   },
   "peerDependencies": {
     "@vue/compiler-sfc": "^3.0.0-beta.14",

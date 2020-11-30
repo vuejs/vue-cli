@@ -12,16 +12,18 @@ module.exports = api => {
 
       // when target === 'node', vue-loader will attempt to generate
       // SSR-optimized code. We need to turn that off here.
-      // the `optimizeSSR` option is only available in vue-loader 15
-      if (!isVue3) {
-        webpackConfig.module
+      webpackConfig.module
         .rule('vue')
           .use('vue-loader')
           .tap(options => {
-            options.optimizeSSR = false
+            if (isVue3) {
+              options.isServerBuild = false
+            } else {
+              options.optimizeSSR = false
+            }
+
             return options
           })
-      }
     }
   })
 
