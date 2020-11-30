@@ -1,18 +1,11 @@
 const {
   chalk,
   execa,
-  request,
-
   hasYarn
 } = require('@vue/cli-shared-utils')
 const inquirer = require('inquirer')
 const registries = require('./registries')
-const { loadOptions, saveOptions } = require('../options')
-
-async function ping (registry) {
-  await request.get(`${registry}/vue-cli-version-marker/latest`)
-  return registry
-}
+const { getProjectRegistry, setProjectRegistry } = require('./projectRegistry')
 
 function removeSlash (url) {
   return url.replace(/\/$/, '')
@@ -21,7 +14,7 @@ function removeSlash (url) {
 let checked
 let result
 
-module.exports = async function shouldUseTaobao (command) {
+module.exports = async function shouldUseTaobao (command, context) {
   if (!command) {
     command = hasYarn() ? 'yarn' : 'npm'
   }
@@ -31,14 +24,19 @@ module.exports = async function shouldUseTaobao (command) {
   checked = true
 
   // previously saved preference
-  const saved = loadOptions().useTaobaoRegistry
-  if (typeof saved === 'boolean') {
-    return (result = saved)
+  const saved = getProjectRegistry(context)
+  if (saved) {
+    result = saved === registries.taobao
+    return result
   }
 
   const save = val => {
     result = val
-    saveOptions({ useTaobaoRegistry: val })
+
+    if (val === true) {
+      setProjectRegistry(context, registries.taobao)
+    }
+
     return val
   }
 
@@ -60,21 +58,6 @@ module.exports = async function shouldUseTaobao (command) {
     return save(false)
   }
 
-  let faster
-  try {
-    faster = await Promise.race([
-      ping(defaultRegistry),
-      ping(registries.taobao)
-    ])
-  } catch (e) {
-    return save(false)
-  }
-
-  if (faster !== registries.taobao) {
-    // default is already faster
-    return save(false)
-  }
-
   if (process.env.VUE_CLI_API_MODE) {
     return save(true)
   }
@@ -84,10 +67,8 @@ module.exports = async function shouldUseTaobao (command) {
     {
       name: 'useTaobaoRegistry',
       type: 'confirm',
-      message: chalk.yellow(
-        ` Your connection to the default ${command} registry seems to be slow.\n` +
-          `   Use ${chalk.cyan(registries.taobao)} for faster installation?`
-      )
+      default: false,
+      message: `Use ${chalk.cyan(registries.taobao)} for faster installation? (Recommend to Chinese users)`
     }
   ])
   return save(useTaobaoRegistry)
