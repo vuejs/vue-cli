@@ -43,7 +43,7 @@
     "browserslist": "^4.14.1",
     "cache-loader": "^4.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
-    "cli-highlight": "^2.1.4",
+    "cli-highlight": "2.1.4",
     "clipboardy": "^2.3.0",
     "cliui": "^6.0.0",
     "copy-webpack-plugin": "^6.2.1",
