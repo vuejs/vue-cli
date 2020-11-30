@@ -37,6 +37,7 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 ### For All Packages
 
 * Drop support of Node.js 8, 11, 13
+* Drop support of NPM 5
 
 ### The `vue` Command (The Global `@vue/cli` Package)
 
@@ -73,3 +74,4 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 #### `@vue/cli-shared-utils`
 
 * Bump [chalk](https://github.com/chalk/chalk) from v2 to v4
+* Bump [joi](https://github.com/sideway/joi) from v15 (used to be `@hapi/joi`) to v17

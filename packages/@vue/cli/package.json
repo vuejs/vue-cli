@@ -59,9 +59,9 @@
     "validate-npm-package-name": "^3.0.0",
     "vue": "^2.6.12",
     "vue-codemod": "^0.0.4",
-    "yaml-front-matter": "^3.4.1"
+    "yaml-front-matter": "^4.1.0"
   },
   "engines": {
-    "node": ">=8.9"
+    "node": "^10.12.0 || ^12.0.0 || >= 14.0.0"
   }
 }

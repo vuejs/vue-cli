@@ -83,9 +83,26 @@ test('babel', async () => {
   ])
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.devDependencies).toHaveProperty('babel-eslint')
+  expect(pkg.devDependencies).toHaveProperty('@babel/eslint-parser')
+  expect(pkg.devDependencies).toHaveProperty('@babel/core')
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser'
+  })
+})
+
+test('no-@babel/eslint-parser', async () => {
+  const { pkg } = await generateWithPlugin([
+    {
+      id: 'eslint',
+      apply: require('../generator'),
+      options: {}
+    }
+  ])
+
+  expect(pkg.devDependencies).not.toHaveProperty('@babel/eslint-parser')
+  expect(pkg.devDependencies).not.toHaveProperty('@babel/core')
+  expect(pkg.eslintConfig.parserOptions).not.toMatchObject({
+    parser: '@babel/eslint-parser'
   })
 })
 

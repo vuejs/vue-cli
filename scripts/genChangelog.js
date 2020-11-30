@@ -3,6 +3,10 @@ const path = require('path')
 const execa = require('execa')
 
 async function genNewRelease () {
+  if (process.env.GIT_E2E_SETUP) {
+    return 'skipped for e2e testing'
+  }
+
   const nextVersion = require('../lerna.json').version
   const { stdout } = await execa(require.resolve('lerna-changelog/bin/cli'), [
     '--next-version',
