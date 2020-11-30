@@ -10,15 +10,20 @@ module.exports = (api, options, rootOptions, invoking) => {
   api.extendPackage({
     devDependencies: {
       '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.0',
-      'chai': '^4.2.0'
+      'chai': '^4.2.0',
+      'webpack': '^4.0.0'
     },
     scripts: {
       'test:unit': 'vue-cli-service test:unit'
-    },
-    resolutions: {
-      '@vue/cli-*/webpack': '^4.0.0'
     }
   })
+
+  // TODO:
+  // favor "resolution" field for yarn users
+  // resolutions: {
+  //   '@vue/cli-*/webpack': '^4.0.0'
+  // }
+  // or pnpmfile.js for pnpm users
 
   if (isVue3) {
     api.extendPackage({

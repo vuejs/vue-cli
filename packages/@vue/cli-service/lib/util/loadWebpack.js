@@ -1,4 +1,5 @@
-const { loadModule } = require('@vue/cli-shared-utils')
+const path = require('path')
+const { warn, loadModule, resolveModule } = require('@vue/cli-shared-utils')
 
 const moduleCache = {}
 
@@ -30,6 +31,20 @@ module.exports = function loadWebpack (cwd) {
   const webpack = deps.webpack
     ? loadModule('webpack', cwd)
     : require('webpack')
+
+  // A custom webpack version is found but no force resolutions used.
+  // So the webpack version in this package is still 5.x.
+  // This may cause problems for loaders/plugins required in this package.
+  // Because many uses runtime sniffing to run conditional code for different webpack versions.
+  if (webpack !== require('webpack')) {
+    // TODO: recommend users to use yarn force resolutions or pnpm hooks instead
+    warn(`Using "module-alias" to load custom webpack version.`)
+
+    const moduleAlias = require('module-alias')
+    const webpackPath = path.dirname(resolveModule('webpack/package.json', cwd))
+    moduleAlias.addAlias('webpack', webpackPath)
+  }
+
   moduleCache[cwd] = webpack
 
   return webpack
