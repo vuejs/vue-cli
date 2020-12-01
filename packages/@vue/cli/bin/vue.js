@@ -19,7 +19,6 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, '@vue/cli')
 
-
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
