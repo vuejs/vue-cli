@@ -36,7 +36,7 @@ module.exports = function loadWebpack (cwd) {
   // So the webpack version in this package is still 5.x.
   // This may cause problems for loaders/plugins required in this package.
   // Because many uses runtime sniffing to run conditional code for different webpack versions.
-  if (webpack !== require('webpack')) {
+  if (webpack.version !== require('webpack').version) {
     // TODO: recommend users to use yarn force resolutions or pnpm hooks instead
     warn(`Using "module-alias" to load custom webpack version.`)
 

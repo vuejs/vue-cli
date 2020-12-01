@@ -15,15 +15,14 @@ module.exports = (api, options, rootOptions, invoking) => {
     },
     scripts: {
       'test:unit': 'vue-cli-service test:unit'
+    },
+    // Force resolutions is more reliable than module-alias
+    // Yarn and PNPM 5.10+ support this feature
+    // So we'll try to use that whenever possible
+    resolutions: {
+      '@vue/cli-*/webpack': '^4.0.0'
     }
   })
-
-  // TODO:
-  // favor "resolution" field for yarn users
-  // resolutions: {
-  //   '@vue/cli-*/webpack': '^4.0.0'
-  // }
-  // or pnpmfile.js for pnpm users
 
   if (isVue3) {
     api.extendPackage({
