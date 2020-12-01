@@ -5,7 +5,7 @@ const { semver, loadModule } = require('@vue/cli-shared-utils')
  * @param {string} cwd the user project root
  * @returns {2|3}
  */
-module.exports = function getVueVersion (cwd) {
+module.exports = function getVueMajor (cwd) {
   const vue = loadModule('vue', cwd)
   // TODO: make Vue 3 the default version
   const vueMajor = vue ? semver.major(vue.version) : 2
