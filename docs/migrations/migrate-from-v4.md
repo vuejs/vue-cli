@@ -49,14 +49,14 @@ We've upgraded the underlying webpack version to 5. There are plenty of breaking
 
 Besides the internal changes that are only noticeable for custom configurations, there're several notable changes for user-land code too:
 
-1. named exports from JSON modules are no longer supported. Instead of `import { version } from './package.json'; console.log(version);` use `import package from './package.json'; console.log(package.version);`
-2. webpack 5 does no longer include polyfills for Node.js modules by default
+1. Named exports from JSON modules are no longer supported. Instead of `import { version } from './package.json'; console.log(version);` use `import package from './package.json'; console.log(package.version);`
+2. Webpack 5 does no longer include polyfills for Node.js modules by default. You shall see an informative error message if your code relies on any of these modules. A detailed list of previously polyfilled modules is also available [here](https://github.com/webpack/webpack/pull/8460/commits/a68426e9255edcce7822480b78416837617ab065).
 
 #### Opt Out to Webpack 4
 
 Considering many ecosystem packages haven't catched up yet, we provided a way to opt out to webpack 4 for easier migration.
 
-To use webpack 4, you need to use Yarn as the package manager, and specify the `"resolutions"` field in your `package.json`:
+If you are using Yarn or PNPM 5.10+, you can specify the `"resolutions"` field in your `package.json`:
 
 ```json
 {
@@ -66,8 +66,15 @@ To use webpack 4, you need to use Yarn as the package manager, and specify the `
 }
 ```
 
+and then rerun `yarn` or `pnpm install` to force Vue CLI to use webpack 4.
+
+If you are using NPM, you can simply add webpack 4 to the project's `devDependencies`: `npm i -D webpack@4`. Vue CLI will redirect all the underlying requests to webpack to this version through [`module-alias`](https://github.com/ilearnio/module-alias).
+
+Though it works in all our tests, please be aware that this approach is still somehow hacky and may not be as stable as the `"resolutions"` approach.
+
 #### Underlying Loaders and Plugins
 
+* `html-webpack-plugin` is upgraded from v3 to v4, see more details in the [release announcement](https://dev.to/jantimon/html-webpack-plugin-4-has-been-released-125d).
 * `copy-webpack-plugin` is upgraded from v5 to v6. If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 release](https://github.com/webpack-contrib/copy-webpack-plugin/releases/tag/v6.0.0).
 * `file-loader` is upgraded from v4 to v6, and `url-loader` from v2 to v4. The `esModule` option is now turned on by default for non-Vue-2 projects. Full changelog available at [`file-loader` changelog](https://github.com/webpack-contrib/file-loader/blob/master/CHANGELOG.md) and [`url-loader` changelog](https://github.com/webpack-contrib/url-loader/blob/master/CHANGELOG.md)
 <!-- * `terser-webpack-plugin` is upgraded from v2 to v4, using terser 5 and some there are some changes in the options format. Full changelog at <https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md> -->
@@ -75,6 +82,12 @@ To use webpack 4, you need to use Yarn as the package manager, and specify the `
 ### ESLint Plugin
 
 * `eslint-loader` is upgraded [from v2 to v4](https://github.com/webpack-contrib/eslint-loader/blob/master/CHANGELOG.md). The only major change is that it dropped support for ESLint < v6.
+
+### PWA Plugin
+
+* The underlying `workbox-webpack-plugin` is upgraded from v4 to v6. Detailed migration guides available on workbox's website:
+  * [From Workbox v4 to v5](https://developers.google.com/web/tools/workbox/guides/migrations/migrate-from-v4)
+  * [From Workbox v5 to v6](https://developers.google.com/web/tools/workbox/guides/migrations/migrate-from-v5)
 
 ### TypeScript Plugin
 
