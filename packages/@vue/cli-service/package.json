@@ -67,6 +67,7 @@
     "portfinder": "^1.0.26",
     "postcss-loader": "^3.0.0",
     "ssri": "^8.0.0",
+    "terser-webpack-plugin": "^4.2.3",
     "thread-loader": "^3.0.0",
     "url-loader": "^4.1.1",
     "vue-loader": "^16.1.0",
