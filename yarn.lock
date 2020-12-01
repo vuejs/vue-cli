@@ -8936,10 +8936,10 @@ eslint-visitor-keys@^2.0.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-2.0.0.tgz#21fdc8fbcd9c795cc0321f0563702095751511a8"
   integrity sha512-QudtT6av5WXels9WjIM7qz1XD1cWGvX4gGXvp/zBn9nXG02D0utdU3Em2m/QjTnrsk6bBjmCygl3rmj118msQQ==
 
-eslint-webpack-plugin@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-webpack-plugin/-/eslint-webpack-plugin-2.4.0.tgz#dcfd2653d0e15e52251f34dd3690ce60718d5589"
-  integrity sha512-j0lAJj3RnStAFdIH2P0+nsEImiBijwogZhL1go4bI6DE+9OhQuOmJ/xtmxkLtNr1w0cf5SRNkDlmIe8t/pHgww==
+eslint-webpack-plugin@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/eslint-webpack-plugin/-/eslint-webpack-plugin-2.4.1.tgz#9353ec46a31d29558734a38a05eb14c5760a7144"
+  integrity sha512-cj8iPWZKuAiVD8MMgTSunyMCAvxQxp5mxoPHZl1UMGkApFXaXJHdCFcCR+oZEJbBNhReNa5SjESIn34uqUbBtg==
   dependencies:
     "@types/eslint" "^7.2.4"
     arrify "^2.0.1"
