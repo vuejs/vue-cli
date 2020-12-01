@@ -5,7 +5,7 @@ const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
 jest.setTimeout(300000)
 
-test.skip('serve with Vue 3', async () => {
+test('serve with Vue 3', async () => {
   const project = await create('e2e-serve-vue-3', Object.assign({}, defaultPreset, { vueVersion: '3' }))
 
   await serve(
