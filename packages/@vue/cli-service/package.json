@@ -77,7 +77,7 @@
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-chain": "^6.4.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^5.4.0"
   },
   "peerDependencies": {
     "@vue/compiler-sfc": "^3.0.0-beta.14",

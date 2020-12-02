@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
