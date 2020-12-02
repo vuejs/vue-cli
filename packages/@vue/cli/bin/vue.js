@@ -213,6 +213,7 @@ program
     console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     console.log()
     suggestCommands(cmd)
+    process.exitCode = 1
   })
 
 // add some useful info on help
