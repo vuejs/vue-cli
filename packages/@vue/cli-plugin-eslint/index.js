@@ -24,9 +24,8 @@ module.exports = (api, options) => {
         cacheLocation: api.resolve('node_modules/.cache/.eslintcache'),
         // plugin options
         context: cwd,
-        threads: process.env.NODE_ENV === 'production'
-          ? options.parallel
-          : false,
+        // https://github.com/webpack-contrib/eslint-webpack-plugin/issues/56
+        threads: false,
         emitWarning: allWarnings,
         emitError: allErrors,
         eslintPath: path.dirname(
