@@ -48,7 +48,7 @@ type Preset = Partial<{
   useConfigFiles: boolean
   plugins: Record<string, any>
   configs: Record<string, any>
-  cssPreprocessor: 'sass' | 'dart-sass' | 'node-sass' | 'less' | 'stylus'
+  cssPreprocessor: 'sass' | 'dart-sass' | 'less' | 'stylus'
 }>
 
 declare class PromptModuleAPI {
