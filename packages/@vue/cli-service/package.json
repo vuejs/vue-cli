@@ -74,10 +74,11 @@
     "vue-loader-v15": "npm:vue-loader@^15.9.5",
     "vue-style-loader": "^4.1.2",
     "webpack": "^5.4.0",
-    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-bundle-analyzer": "^4.1.0",
     "webpack-chain": "^6.4.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.4.0"
+    "webpack-merge": "^5.4.0",
+    "webpack-virtual-modules": "^0.4.1"
   },
   "peerDependencies": {
     "@vue/compiler-sfc": "^3.0.0-beta.14",

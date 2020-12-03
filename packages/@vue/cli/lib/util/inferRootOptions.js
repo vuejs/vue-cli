@@ -34,8 +34,6 @@ module.exports = function inferRootOptions (pkg) {
   // cssPreprocessors
   if ('sass' in deps) {
     rootOptions.cssPreprocessor = 'sass'
-  } else if ('node-sass' in deps) {
-    rootOptions.cssPreprocessor = 'node-sass'
   } else if ('less-loader' in deps) {
     rootOptions.cssPreprocessor = 'less'
   } else if ('stylus-loader' in deps) {

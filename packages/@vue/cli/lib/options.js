@@ -43,7 +43,7 @@ const presetSchema = createSchema((joi) =>
         }),
       cssPreprocessor: joi
         .string()
-        .valid('sass', 'dart-sass', 'node-sass', 'less', 'stylus'),
+        .valid('sass', 'dart-sass', 'less', 'stylus'),
       plugins: joi.object().required(),
       configs: joi.object()
     })

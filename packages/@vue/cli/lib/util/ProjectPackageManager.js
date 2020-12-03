@@ -247,7 +247,7 @@ class PackageManager {
     }
 
     try {
-      // node-sass, chromedriver, etc.
+      // chromedriver, etc.
       const binaryMirrorConfigMetadata = await this.getMetadata('binary-mirror-config', { full: true })
       const latest = binaryMirrorConfigMetadata['dist-tags'] && binaryMirrorConfigMetadata['dist-tags'].latest
       const mirrors = binaryMirrorConfigMetadata.versions[latest].mirrors.china
