@@ -10,9 +10,12 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
+const checkWebpack = require('@vue/cli-service/lib/util/checkWebpack')
 
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
+    checkWebpack(context)
+
     process.VUE_CLI_SERVICE = this
     this.initialized = false
     this.context = context

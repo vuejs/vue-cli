@@ -95,7 +95,7 @@ module.exports = (api, options) => {
 async function build (args, api, options) {
   const fs = require('fs-extra')
   const path = require('path')
-  const webpack = require('../../util/loadWebpack')(api.getCwd())
+  const webpack = require('webpack')
   const { chalk } = require('@vue/cli-shared-utils')
   const formatStats = require('./formatStats')
   const validateWebpackConfig = require('../../util/validateWebpackConfig')

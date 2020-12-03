@@ -7,7 +7,7 @@ module.exports = (api, options) => {
         .devtool(options.productionSourceMap ? 'source-map' : false)
 
       const { semver } = require('@vue/cli-shared-utils')
-      const webpack = require('../util/loadWebpack')(api.getCwd())
+      const webpack = require('webpack')
       const webpackMajor = semver.major(webpack.version)
 
       // DeterministicModuleIdsPlugin is only available in webpack 5

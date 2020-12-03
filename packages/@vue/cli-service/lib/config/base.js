@@ -4,7 +4,7 @@ const { semver } = require('@vue/cli-shared-utils')
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const cwd = api.getCwd()
-  const webpack = require('../util/loadWebpack')(cwd)
+  const webpack = require('webpack')
   const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../util/getVueMajor')(cwd)
 

@@ -1,7 +1,7 @@
 // config that are specific to --target app
 const fs = require('fs')
 const path = require('path')
-const { semver, loadModule } = require('@vue/cli-shared-utils')
+const { semver } = require('@vue/cli-shared-utils')
 
 // ensure the filename passed to html-webpack-plugin is a relative path
 // because it cannot correctly handle absolute paths
@@ -14,8 +14,7 @@ function ensureRelative (outputDir, _path) {
 }
 
 module.exports = (api, options) => {
-  const cwd = api.getCwd()
-  const webpack = require('../util/loadWebpack')(cwd)
+  const webpack = require('webpack')
   const webpackMajor = semver.major(webpack.version)
 
   api.chainWebpack(webpackConfig => {
@@ -135,9 +134,8 @@ module.exports = (api, options) => {
     }
 
     // resolve HTML file(s)
-    // FIXME: should use the same logic as loadWebpack
-    const HTMLPlugin = loadModule('html-webpack-plugin', api.getCwd()) || require('html-webpack-plugin')
-    const PreloadPlugin = require('@vue/preload-webpack-plugin')
+    const HTMLPlugin = require('html-webpack-plugin')
+    // const PreloadPlugin = require('@vue/preload-webpack-plugin')
     const multiPageConfig = options.pages
     const htmlPath = api.resolve('public/index.html')
     const defaultHtmlPath = path.resolve(__dirname, 'index-default.html')
@@ -156,23 +154,23 @@ module.exports = (api, options) => {
           .use(HTMLPlugin, [htmlOptions])
 
       // FIXME: preload plugin is not compatible with webpack 5 / html-webpack-plugin 4 yet
-      if (!isLegacyBundle && webpackMajor === 4 && HTMLPlugin.version !== 4) {
-        // inject preload/prefetch to HTML
-        webpackConfig
-          .plugin('preload')
-            .use(PreloadPlugin, [{
-              rel: 'preload',
-              include: 'initial',
-              fileBlacklist: [/\.map$/, /hot-update\.js$/]
-            }])
+      // if (!isLegacyBundle) {
+      //   // inject preload/prefetch to HTML
+      //   webpackConfig
+      //     .plugin('preload')
+      //       .use(PreloadPlugin, [{
+      //         rel: 'preload',
+      //         include: 'initial',
+      //         fileBlacklist: [/\.map$/, /hot-update\.js$/]
+      //       }])
 
-        webpackConfig
-          .plugin('prefetch')
-            .use(PreloadPlugin, [{
-              rel: 'prefetch',
-              include: 'asyncChunks'
-            }])
-      }
+      //   webpackConfig
+      //     .plugin('prefetch')
+      //       .use(PreloadPlugin, [{
+      //         rel: 'prefetch',
+      //         include: 'asyncChunks'
+      //       }])
+      // }
     } else {
       // multi-page setup
       webpackConfig.entryPoints.clear()
@@ -234,36 +232,36 @@ module.exports = (api, options) => {
       })
 
       // FIXME: preload plugin is not compatible with webpack 5 / html-webpack-plugin 4 yet
-      if (!isLegacyBundle && webpackMajor === 4) {
-        pages.forEach(name => {
-          const filename = ensureRelative(
-            outputDir,
-            normalizePageConfig(multiPageConfig[name]).filename || `${name}.html`
-          )
-          webpackConfig
-            .plugin(`preload-${name}`)
-              .use(PreloadPlugin, [{
-                rel: 'preload',
-                includeHtmlNames: [filename],
-                include: {
-                  type: 'initial',
-                  entries: [name]
-                },
-                fileBlacklist: [/\.map$/, /hot-update\.js$/]
-              }])
+      // if (!isLegacyBundle) {
+      //   pages.forEach(name => {
+      //     const filename = ensureRelative(
+      //       outputDir,
+      //       normalizePageConfig(multiPageConfig[name]).filename || `${name}.html`
+      //     )
+      //     webpackConfig
+      //       .plugin(`preload-${name}`)
+      //         .use(PreloadPlugin, [{
+      //           rel: 'preload',
+      //           includeHtmlNames: [filename],
+      //           include: {
+      //             type: 'initial',
+      //             entries: [name]
+      //           },
+      //           fileBlacklist: [/\.map$/, /hot-update\.js$/]
+      //         }])
 
-          webpackConfig
-            .plugin(`prefetch-${name}`)
-              .use(PreloadPlugin, [{
-                rel: 'prefetch',
-                includeHtmlNames: [filename],
-                include: {
-                  type: 'asyncChunks',
-                  entries: [name]
-                }
-              }])
-        })
-      }
+      //     webpackConfig
+      //       .plugin(`prefetch-${name}`)
+      //         .use(PreloadPlugin, [{
+      //           rel: 'prefetch',
+      //           includeHtmlNames: [filename],
+      //           include: {
+      //             type: 'asyncChunks',
+      //             entries: [name]
+      //           }
+      //         }])
+      //   })
+      // }
     }
 
     // CORS and Subresource Integrity

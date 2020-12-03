@@ -54,7 +54,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: WEBPACK4=true yarn test -p cli,cli-service,cli-shared-utils
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p cli,cli-service,cli-shared-utils
 
   typescript:
     <<: *defaults
@@ -68,7 +68,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: WEBPACK4=true yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
 
   plugins:
     <<: *defaults
@@ -84,7 +84,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: WEBPACK4=true yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
 
   tests:
     <<: *defaults
@@ -100,8 +100,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: WEBPACK4=true yarn test -p unit-mocha,unit-jest,e2e-cypress
-      - run: WEBPACK4=true yarn test tsPluginE2e
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p unit-mocha,unit-jest,e2e-cypress
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test tsPluginE2e
 
   cli-ui:
     <<: *defaults

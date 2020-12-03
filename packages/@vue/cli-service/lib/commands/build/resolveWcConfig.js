@@ -13,7 +13,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   }
 
   const cwd = api.getCwd()
-  const webpack = require('../../util/loadWebpack')(cwd)
+  const webpack = require('webpack')
   const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../../util/getVueMajor')(cwd)
   if (vueMajor === 3) {

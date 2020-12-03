@@ -38,7 +38,7 @@ module.exports = (api, options) => {
 
     const url = require('url')
     const { chalk } = require('@vue/cli-shared-utils')
-    const webpack = require('../util/loadWebpack')(api.getCwd())
+    const webpack = require('webpack')
     const WebpackDevServer = require('webpack-dev-server')
     const portfinder = require('portfinder')
     const prepareURLs = require('../util/prepareURLs')
@@ -66,7 +66,7 @@ module.exports = (api, options) => {
         if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
           webpackConfig
             .plugin('progress')
-            .use(require('webpack/lib/ProgressPlugin'))
+            .use(webpack.ProgressPlugin)
         }
       }
     })
