@@ -19,7 +19,8 @@ module.exports = (api, options) => {
       'eslint',
       {
         eslint: eslintPkg.version
-      }
+      },
+      ['package.json']
     )
 
     api.chainWebpack(webpackConfig => {
