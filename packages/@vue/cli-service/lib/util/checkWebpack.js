@@ -1,5 +1,6 @@
 const path = require('path')
 const { warn, loadModule, resolveModule } = require('@vue/cli-shared-utils')
+const moduleAlias = require('module-alias')
 
 /**
  * If the user has installed a version of webpack themself, load it.
@@ -14,8 +15,15 @@ module.exports = function checkWebpack (cwd) {
     process.env.VUE_CLI_USE_WEBPACK4 &&
     require('webpack/package.json').version[0] !== '4'
   ) {
-    const webpackPath = path.dirname(require.resolve('webpack-4/package.json'))
-    require('module-alias').addAlias('webpack', webpackPath)
+    const webpack4Path = path.dirname(require.resolve('webpack-4/package.json'))
+
+    moduleAlias.addAlias('webpack', (fromPath, request) => {
+      if (fromPath.includes('webpack-dev-server')) {
+        return 'webpack'
+      }
+
+      return webpack4Path
+    })
 
     return
   }
@@ -46,9 +54,14 @@ module.exports = function checkWebpack (cwd) {
       // TODO: recommend users to use yarn force resolutions or pnpm hooks instead
       warn(`Using "module-alias" to load custom webpack version.`)
 
-      const moduleAlias = require('module-alias')
-      const webpackPath = path.dirname(resolveModule('webpack/package.json', cwd))
-      moduleAlias.addAlias('webpack', webpackPath)
+      const webpack4Path = path.dirname(resolveModule('webpack/package.json', cwd))
+      moduleAlias.addAlias('webpack', (fromPath, request) => {
+        if (fromPath.includes('webpack-dev-server')) {
+          return 'webpack'
+        }
+
+        return webpack4Path
+      })
     }
   }
 }
