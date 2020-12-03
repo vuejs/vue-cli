@@ -1,10 +1,9 @@
-// From https://github.com/webpack-contrib/webpack-bundle-analyzer/blob/ba3dbd71cec7becec0fbf529833204425f66efde/src/parseUtils.js
+// From https://github.com/webpack-contrib/webpack-bundle-analyzer/blob/4abac503c789bac94118e5bbfc410686fb5112c7/src/parseUtils.js
 // Modified by Guillaume Chau (Akryum)
 
 const acorn = require('acorn')
 const walk = require('acorn-walk')
 const mapValues = require('lodash.mapvalues')
-const transform = require('lodash.transform')
 const zlib = require('zlib')
 const { warn } = require('@vue/cli-shared-utils')
 
@@ -36,21 +35,19 @@ exports.analyzeBundle = function analyzeBundle (bundleStats, assetSources) {
     try {
       bundleInfo = parseBundle(source)
     } catch (err) {
-      bundleInfo = null
-    }
-
-    if (!bundleInfo) {
-      warn(
-        `\nCouldn't parse bundle asset "${asset.fullPath}".\n` +
-        'Analyzer will use module sizes from stats file.\n'
-      )
-      parsedModules = null
-      bundlesSources = null
-      break
+      const msg = (err.code === 'ENOENT') ? 'no such file' : err.message
+      warn(`Error parsing bundle asset "${asset.fullPath}": ${msg}`)
+      continue
     }
 
     bundlesSources[asset.name] = bundleInfo.src
     Object.assign(parsedModules, bundleInfo.modules)
+  }
+
+  if (!Object.keys(bundlesSources).length) {
+    bundlesSources = null
+    parsedModules = null
+    warn('\nNo bundles were parsed. Analyzer will show only original module sizes from stats file.\n')
   }
 
   // Update sizes
@@ -107,67 +104,116 @@ function parseBundle (bundleContent) {
   })
 
   const walkState = {
-    locations: null
+    locations: null,
+    expressionStatementDepth: 0
   }
 
   walk.recursive(
     ast,
     walkState,
     {
+      ExpressionStatement (node, state, c) {
+        if (state.locations) return
+
+        state.expressionStatementDepth++
+
+        if (
+          // Webpack 5 stores modules in the the top-level IIFE
+          state.expressionStatementDepth === 1 &&
+          ast.body.includes(node) &&
+          isIIFE(node)
+        ) {
+          const fn = getIIFECallExpression(node)
+
+          if (
+            // It should not contain neither arguments
+            fn.arguments.length === 0 &&
+            // ...nor parameters
+            fn.callee.params.length === 0
+          ) {
+            // Modules are stored in the very first variable declaration as hash
+            const firstVariableDeclaration = fn.callee.body.body.find(n => n.type === 'VariableDeclaration')
+
+            if (firstVariableDeclaration) {
+              for (const declaration of firstVariableDeclaration.declarations) {
+                if (declaration.init) {
+                  state.locations = getModulesLocations(declaration.init)
+
+                  if (state.locations) {
+                    break
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (!state.locations) {
+          c(node.expression, state)
+        }
+
+        state.expressionStatementDepth--
+      },
+      AssignmentExpression (node, state) {
+        if (state.locations) return
+
+        // Modules are stored in exports.modules:
+        // exports.modules = {};
+        const { left, right } = node
+
+        if (
+          left &&
+          left.object && left.object.name === 'exports' &&
+          left.property && left.property.name === 'modules' &&
+          isModulesHash(right)
+        ) {
+          state.locations = getModulesLocations(right)
+        }
+      },
       CallExpression (node, state, c) {
-        if (state.sizes) return
+        if (state.locations) return
 
         const args = node.arguments
 
-        // Additional bundle without webpack loader.
-        // Modules are stored in second argument, after chunk ids:
-        // webpackJsonp([<chunks>], <modules>, ...)
-        // As function name may be changed with `output.jsonpFunction` option we can't rely on it's default name.
-        if (
-          node.callee.type === 'Identifier' &&
-          args.length >= 2 &&
-          isArgumentContainsChunkIds(args[0]) &&
-          isArgumentContainsModulesList(args[1])
-        ) {
-          state.locations = getModulesLocationFromFunctionArgument(args[1])
-          return
-        }
-
-        // Additional bundle without webpack loader, with module IDs optimized.
-        // Modules are stored in second arguments Array(n).concat() call
-        // webpackJsonp([<chunks>], Array([minimum ID]).concat([<module>, <module>, ...]))
-        // As function name may be changed with `output.jsonpFunction` option we can't rely on it's default name.
-        if (
-          node.callee.type === 'Identifier' &&
-          (args.length === 2 || args.length === 3) &&
-          isArgumentContainsChunkIds(args[0]) &&
-          isArgumentArrayConcatContainingChunks(args[1])
-        ) {
-          state.locations = getModulesLocationFromArrayConcat(args[1])
-          return
-        }
-
-        // Main bundle with webpack loader
+        // Main chunk with webpack loader.
         // Modules are stored in first argument:
         // (function (...) {...})(<modules>)
         if (
           node.callee.type === 'FunctionExpression' &&
           !node.callee.id &&
           args.length === 1 &&
-          isArgumentContainsModulesList(args[0])
+          isSimpleModulesList(args[0])
         ) {
-          state.locations = getModulesLocationFromFunctionArgument(args[0])
+          state.locations = getModulesLocations(args[0])
           return
         }
 
-        // Additional bundles with webpack 4 are loaded with:
-        // (window.webpackJsonp=window.webpackJsonp||[]).push([[chunkId], [<module>, <module>], [[optional_entries]]]);
+        // Async Webpack < v4 chunk without webpack loader.
+        // webpackJsonp([<chunks>], <modules>, ...)
+
+        // As function name may be changed with `output.jsonpFunction` option we can't rely on it's default name.
         if (
-          isWindowPropertyPushExpression(node) &&
-          args.length === 1 &&
-          isArgumentContainingChunkIdsAndModulesList(args[0])
+          node.callee.type === 'Identifier' &&
+          mayBeAsyncChunkArguments(args) &&
+          isModulesList(args[1])
         ) {
-          state.locations = getModulesLocationFromFunctionArgument(args[0].elements[1])
+          state.locations = getModulesLocations(args[1])
+          return
+        }
+
+        // Async Webpack v4 chunk without webpack loader.
+        // (window.webpackJsonp=window.webpackJsonp||[]).push([[<chunks>], <modules>, ...]);
+        // As function name may be changed with `output.jsonpFunction` option we can't rely on it's default name.
+        if (isAsyncChunkPushExpression(node)) {
+          state.locations = getModulesLocations(args[0].elements[1])
+          return
+        }
+
+        // Webpack v4 WebWorkerChunkTemplatePlugin
+        // globalObject.chunkCallbackName([<chunks>],<modules>, ...);
+        // Both globalObject and chunkCallbackName can be changed through the config, so we can't check them.
+        if (isAsyncWebWorkerChunkExpression(node)) {
+          state.locations = getModulesLocations(args[1])
           return
         }
 
@@ -178,15 +224,20 @@ function parseBundle (bundleContent) {
     }
   )
 
-  if (!walkState.locations) {
-    return null
+  let modules
+
+  if (walkState.locations) {
+    modules = mapValues(walkState.locations,
+      loc => bundleContent.slice(loc.start, loc.end)
+    )
+  } else {
+    modules = {}
   }
 
   return {
+    modules: modules,
     src: bundleContent,
-    modules: mapValues(walkState.locations,
-      loc => bundleContent.slice(loc.start, loc.end)
-    )
+    runtimeSrc: getBundleRuntime(bundleContent, walkState.locations)
   }
 }
 
@@ -194,74 +245,99 @@ function getGzipSize (buffer) {
   return zlib.gzipSync(buffer).length
 }
 
-function isArgumentContainsChunkIds (arg) {
-  // Array of numeric or string ids. Chunk IDs are strings when NamedChunksPlugin is used
-  return (arg.type === 'ArrayExpression' && arg.elements.every(isModuleId))
-}
+/**
+ * Returns bundle source except modules
+ */
+function getBundleRuntime (content, modulesLocations) {
+  const sortedLocations = Object.values(modulesLocations || {})
+    .sort((a, b) => a.start - b.start)
 
-function isArgumentContainsModulesList (arg) {
-  if (arg.type === 'ObjectExpression') {
-    return arg.properties
-      .map(prop => prop.value)
-      .every(isModuleWrapper)
+  let result = ''
+  let lastIndex = 0
+
+  for (const { start, end } of sortedLocations) {
+    result += content.slice(lastIndex, start)
+    lastIndex = end
   }
 
-  if (arg.type === 'ArrayExpression') {
-    // Modules are contained in array.
-    // Array indexes are module ids
-    return arg.elements.every(elem =>
+  return result + content.slice(lastIndex, content.length)
+}
+
+function isIIFE (node) {
+  return (
+    node.type === 'ExpressionStatement' &&
+    (
+      node.expression.type === 'CallExpression' ||
+      (node.expression.type === 'UnaryExpression' && node.expression.argument.type === 'CallExpression')
+    )
+  )
+}
+
+function getIIFECallExpression (node) {
+  if (node.expression.type === 'UnaryExpression') {
+    return node.expression.argument
+  } else {
+    return node.expression
+  }
+}
+
+function isModulesList (node) {
+  return (
+    isSimpleModulesList(node) ||
+    // Modules are contained in expression `Array([minimum ID]).concat([<module>, <module>, ...])`
+    isOptimizedModulesArray(node)
+  )
+}
+
+function isSimpleModulesList (node) {
+  return (
+    // Modules are contained in hash. Keys are module ids.
+    isModulesHash(node) ||
+    // Modules are contained in array. Indexes are module ids.
+    isModulesArray(node)
+  )
+}
+
+function isModulesHash (node) {
+  return (
+    node.type === 'ObjectExpression' &&
+    node.properties
+      .map(p => p.value)
+      .every(isModuleWrapper)
+  )
+}
+
+function isModulesArray (node) {
+  return (
+    node.type === 'ArrayExpression' &&
+    node.elements.every(elem =>
       // Some of array items may be skipped because there is no module with such id
       !elem ||
       isModuleWrapper(elem)
     )
-  }
-
-  return false
+  )
 }
 
-function isArgumentContainingChunkIdsAndModulesList (arg) {
-  if (
-    arg.type === 'ArrayExpression' &&
-    arg.elements.length >= 2 &&
-    isArgumentContainsChunkIds(arg.elements[0]) &&
-    isArgumentContainsModulesList(arg.elements[1])
-  ) {
-    return true
-  }
-  return false
-}
-
-function isArgumentArrayConcatContainingChunks (arg) {
-  if (
-    arg.type === 'CallExpression' &&
-    arg.callee.type === 'MemberExpression' &&
+function isOptimizedModulesArray (node) {
+  // Checking whether modules are contained in `Array(<minimum ID>).concat(...modules)` array:
+  // https://github.com/webpack/webpack/blob/v1.14.0/lib/Template.js#L91
+  // The `<minimum ID>` + array indexes are module ids
+  return (
+    node.type === 'CallExpression' &&
+    node.callee.type === 'MemberExpression' &&
     // Make sure the object called is `Array(<some number>)`
-    arg.callee.object.type === 'CallExpression' &&
-    arg.callee.object.callee.type === 'Identifier' &&
-    arg.callee.object.callee.name === 'Array' &&
-    arg.callee.object.arguments.length === 1 &&
-    isNumericId(arg.callee.object.arguments[0]) &&
+    node.callee.object.type === 'CallExpression' &&
+    node.callee.object.callee.type === 'Identifier' &&
+    node.callee.object.callee.name === 'Array' &&
+    node.callee.object.arguments.length === 1 &&
+    isNumericId(node.callee.object.arguments[0]) &&
     // Make sure the property X called for `Array(<some number>).X` is `concat`
-    arg.callee.property.type === 'Identifier' &&
-    arg.callee.property.name === 'concat' &&
+    node.callee.property.type === 'Identifier' &&
+    node.callee.property.name === 'concat' &&
     // Make sure exactly one array is passed in to `concat`
-    arg.arguments.length === 1 &&
-    arg.arguments[0].type === 'ArrayExpression'
-  ) {
-    // Modules are contained in `Array(<minimum ID>).concat(` array:
-    // https://github.com/webpack/webpack/blob/v1.14.0/lib/Template.js#L91
-    // The `<minimum ID>` + array indexes are module ids
-    return true
-  }
-
-  return false
-}
-
-function isWindowPropertyPushExpression (node) {
-  return node.callee.type === 'MemberExpression' &&
-    node.callee.property.name === 'push' &&
-    node.callee.object.type === 'AssignmentExpression' &&
-    node.callee.object.left.object.name === 'window'
+    node.arguments.length === 1 &&
+    isModulesArray(node.arguments[0])
+  )
 }
 
 function isModuleWrapper (node) {
@@ -283,44 +359,86 @@ function isNumericId (node) {
   return (node.type === 'Literal' && Number.isInteger(node.value) && node.value >= 0)
 }
 
-function getModulesLocationFromFunctionArgument (arg) {
-  if (arg.type === 'ObjectExpression') {
-    const modulesNodes = arg.properties
+function isChunkIds (node) {
+  // Array of numeric or string ids. Chunk IDs are strings when NamedChunksPlugin is used
+  return (
+    node.type === 'ArrayExpression' &&
+    node.elements.every(isModuleId)
+  )
+}
 
-    return transform(modulesNodes, (result, moduleNode) => {
+function isAsyncChunkPushExpression (node) {
+  const {
+    callee,
+    arguments: args
+  } = node
+
+  return (
+    callee.type === 'MemberExpression' &&
+    callee.property.name === 'push' &&
+    callee.object.type === 'AssignmentExpression' &&
+    args.length === 1 &&
+    args[0].type === 'ArrayExpression' &&
+    mayBeAsyncChunkArguments(args[0].elements) &&
+    isModulesList(args[0].elements[1])
+  )
+}
+
+function mayBeAsyncChunkArguments (args) {
+  return (
+    args.length >= 2 &&
+    isChunkIds(args[0])
+  )
+}
+
+function isAsyncWebWorkerChunkExpression (node) {
+  const { callee, type, arguments: args } = node
+
+  return (
+    type === 'CallExpression' &&
+    callee.type === 'MemberExpression' &&
+    args.length === 2 &&
+    isChunkIds(args[0]) &&
+    isModulesList(args[1])
+  )
+}
+
+function getModulesLocations (node) {
+  if (node.type === 'ObjectExpression') {
+    // Modules hash
+    const modulesNodes = node.properties
+
+    return modulesNodes.reduce((result, moduleNode) => {
       const moduleId = moduleNode.key.name || moduleNode.key.value
 
       result[moduleId] = getModuleLocation(moduleNode.value)
+      return result
     }, {})
   }
 
-  if (arg.type === 'ArrayExpression') {
-    const modulesNodes = arg.elements
+  const isOptimizedArray = (node.type === 'CallExpression')
 
-    return transform(modulesNodes, (result, moduleNode, i) => {
-      if (!moduleNode) return
+  if (node.type === 'ArrayExpression' || isOptimizedArray) {
+    // Modules array or optimized array
+    const minId = isOptimizedArray
+      // Get the [minId] value from the Array() call first argument literal value
+      ? node.callee.object.arguments[0].value
+      // `0` for simple array
+      : 0
+    const modulesNodes = isOptimizedArray
+      // The modules reside in the `concat()` function call arguments
+      ? node.arguments[0].elements
+      : node.elements
 
-      result[i] = getModuleLocation(moduleNode)
+    return modulesNodes.reduce((result, moduleNode, i) => {
+      if (moduleNode) {
+        result[i + minId] = getModuleLocation(moduleNode)
+      }
+      return result
     }, {})
   }
 
   return {}
-}
-
-function getModulesLocationFromArrayConcat (arg) {
-  // arg(CallExpression) =
-  //   Array([minId]).concat([<minId module>, <minId+1 module>, ...])
-  //
-  // Get the [minId] value from the Array() call first argument literal value
-  const minId = arg.callee.object.arguments[0].value
-  // The modules reside in the `concat()` function call arguments
-  const modulesNodes = arg.arguments[0].elements
-
-  return transform(modulesNodes, (result, moduleNode, i) => {
-    if (!moduleNode) return
-
-    result[i + minId] = getModuleLocation(moduleNode)
-  }, {})
 }
 
 function getModuleLocation (node) {

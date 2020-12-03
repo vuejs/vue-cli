@@ -66,7 +66,7 @@ module.exports = (api, options) => {
         if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
           webpackConfig
             .plugin('progress')
-            .use(require('webpack/lib/ProgressPlugin'))
+            .use(webpack.ProgressPlugin)
         }
       }
     })

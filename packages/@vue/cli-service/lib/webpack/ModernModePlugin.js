@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 // https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
 const safariFix = `!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();`
@@ -23,7 +24,7 @@ class ModernModePlugin {
   applyLegacy (compiler) {
     const ID = `vue-cli-legacy-bundle`
     compiler.hooks.compilation.tap(ID, compilation => {
-      compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, async (data, cb) => {
+      HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(ID, async (data, cb) => {
         // get stats, write to disk
         await fs.ensureDir(this.targetDir)
         const htmlName = path.basename(data.plugin.options.filename)
@@ -31,7 +32,7 @@ class ModernModePlugin {
         const htmlPath = path.dirname(data.plugin.options.filename)
         const tempFilename = path.join(this.targetDir, htmlPath, `legacy-assets-${htmlName}.json`)
         await fs.mkdirp(path.dirname(tempFilename))
-        await fs.writeFile(tempFilename, JSON.stringify(data.body))
+        await fs.writeFile(tempFilename, JSON.stringify(data.bodyTags))
         cb()
       })
     })
@@ -40,9 +41,9 @@ class ModernModePlugin {
   applyModern (compiler) {
     const ID = `vue-cli-modern-bundle`
     compiler.hooks.compilation.tap(ID, compilation => {
-      compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, async (data, cb) => {
+      HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(ID, async (data, cb) => {
         // use <script type="module"> for modern assets
-        data.body.forEach(tag => {
+        data.bodyTags.forEach(tag => {
           if (tag.tagName === 'script' && tag.attributes) {
             tag.attributes.type = 'module'
           }
@@ -50,7 +51,7 @@ class ModernModePlugin {
 
         // use <link rel="modulepreload"> instead of <link rel="preload">
         // for modern assets
-        data.head.forEach(tag => {
+        data.headTags.forEach(tag => {
           if (tag.tagName === 'link' &&
               tag.attributes.rel === 'preload' &&
               tag.attributes.as === 'script') {
@@ -69,7 +70,7 @@ class ModernModePlugin {
 
         if (this.unsafeInline) {
           // inject inline Safari 10 nomodule fix
-          data.body.push({
+          data.bodyTags.push({
             tagName: 'script',
             closeTag: true,
             innerHTML: safariFix
@@ -86,7 +87,7 @@ class ModernModePlugin {
               return Buffer.byteLength(safariFix)
             }
           }
-          data.body.push({
+          data.bodyTags.push({
             tagName: 'script',
             closeTag: true,
             attributes: {
@@ -95,12 +96,12 @@ class ModernModePlugin {
           })
         }
 
-        data.body.push(...legacyAssets)
+        data.bodyTags.push(...legacyAssets)
         await fs.remove(tempFilename)
         cb()
       })
 
-      compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tap(ID, data => {
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tap(ID, data => {
         data.html = data.html.replace(/\snomodule="">/g, ' nomodule>')
       })
     })

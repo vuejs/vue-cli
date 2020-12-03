@@ -27,7 +27,7 @@
     "eslint-loader": "^4.0.2",
     "globby": "^9.2.0",
     "inquirer": "^7.1.0",
-    "webpack": "^4.0.0",
+    "webpack": "^5.0.0",
     "yorkie": "^2.0.0"
   },
   "peerDependencies": {

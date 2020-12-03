@@ -44,15 +44,19 @@ exports.resolveEntry = (prefix, libName, files, isAsync) => {
       ? [createElement('', libName, files[0])]
       : files.map(file => createElement(prefix, file, file, isAsync)).join('\n')
 
+  function resolveImportPath (mod) {
+    return require.resolve(mod).replace(/\\/g, '\\\\')
+  }
+
   const content = `
 import './setPublicPath'
 import Vue from 'vue'
 import wrap from '@vue/web-component-wrapper'
 
 // runtime shared by every component chunk
-import 'css-loader/dist/runtime/api.js'
-import 'vue-style-loader/lib/addStylesShadow'
-import 'vue-loader/lib/runtime/componentNormalizer'
+import '${resolveImportPath('css-loader/dist/runtime/api.js')}'
+import '${resolveImportPath('vue-style-loader/lib/addStylesShadow')}'
+import '${resolveImportPath('vue-loader-v15/lib/runtime/componentNormalizer')}'
 
 ${elements}`.trim()
 

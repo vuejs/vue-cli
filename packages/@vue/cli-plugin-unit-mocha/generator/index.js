@@ -10,12 +10,27 @@ module.exports = (api, options, rootOptions, invoking) => {
   api.extendPackage({
     devDependencies: {
       '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.0',
-      'chai': '^4.2.0'
+      'chai': '^4.2.0',
+      'webpack': '^4.0.0'
     },
     scripts: {
       'test:unit': 'vue-cli-service test:unit'
+    },
+    // Force resolutions is more reliable than module-alias
+    // Yarn and PNPM 5.10+ support this feature
+    // So we'll try to use that whenever possible
+    resolutions: {
+      '@vue/cli-*/webpack': '^4.0.0'
     }
   })
+
+  if (isVue3) {
+    api.extendPackage({
+      devDependencies: {
+        '@vue/server-renderer': '^3.0.0'
+      }
+    })
+  }
 
   if (api.hasPlugin('eslint')) {
     applyESLint(api)

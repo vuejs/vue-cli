@@ -26,7 +26,7 @@
     "babel-loader": "^8.1.0",
     "cache-loader": "^4.1.0",
     "thread-loader": "^3.0.0",
-    "webpack": "^4.0.0"
+    "webpack": "^5.0.0"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0"

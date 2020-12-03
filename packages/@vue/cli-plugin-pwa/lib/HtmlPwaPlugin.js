@@ -1,3 +1,5 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
 const ID = 'vue-cli:pwa-html-plugin'
 
 const defaults = {
@@ -59,13 +61,13 @@ module.exports = class HtmlPwaPlugin {
 
   apply (compiler) {
     compiler.hooks.compilation.tap(ID, compilation => {
-      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(ID, (data, cb) => {
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(ID, (data, cb) => {
         // wrap favicon in the base template with IE only comment
         data.html = data.html.replace(/<link rel="icon"[^>]+>/, '<!--[if IE]>$&<![endif]-->')
         cb(null, data)
       })
 
-      compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, (data, cb) => {
+      HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(ID, (data, cb) => {
         const {
           name,
           themeColor,
@@ -83,7 +85,7 @@ module.exports = class HtmlPwaPlugin {
 
         // Favicons
         if (iconPaths.favicon32 != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'icon',
             type: 'image/png',
             sizes: '32x32',
@@ -91,7 +93,7 @@ module.exports = class HtmlPwaPlugin {
           }))
         }
         if (iconPaths.favicon16 != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'icon',
             type: 'image/png',
             sizes: '16x16',
@@ -100,7 +102,7 @@ module.exports = class HtmlPwaPlugin {
         }
 
         // Add to home screen for Android and modern mobile browsers
-        data.head.push(
+        data.headTags.push(
           makeTag('link', manifestCrossorigin
             ? {
               rel: 'manifest',
@@ -115,7 +117,7 @@ module.exports = class HtmlPwaPlugin {
         )
 
         if (themeColor != null) {
-          data.head.push(
+          data.headTags.push(
             makeTag('meta', {
               name: 'theme-color',
               content: themeColor
@@ -124,7 +126,7 @@ module.exports = class HtmlPwaPlugin {
         }
 
         // Add to home screen for Safari on iOS
-        data.head.push(
+        data.headTags.push(
           makeTag('meta', {
             name: 'apple-mobile-web-app-capable',
             content: appleMobileWebAppCapable
@@ -139,13 +141,13 @@ module.exports = class HtmlPwaPlugin {
           })
         )
         if (iconPaths.appleTouchIcon != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'apple-touch-icon',
             href: getTagHref(publicPath, iconPaths.appleTouchIcon, assetsVersionStr)
           }))
         }
         if (iconPaths.maskIcon != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'mask-icon',
             href: getTagHref(publicPath, iconPaths.maskIcon, assetsVersionStr),
             color: themeColor
@@ -154,13 +156,13 @@ module.exports = class HtmlPwaPlugin {
 
         // Add to home screen for Windows
         if (iconPaths.msTileImage != null) {
-          data.head.push(makeTag('meta', {
+          data.headTags.push(makeTag('meta', {
             name: 'msapplication-TileImage',
             content: getTagHref(publicPath, iconPaths.msTileImage, assetsVersionStr)
           }))
         }
         if (msTileColor != null) {
-          data.head.push(
+          data.headTags.push(
             makeTag('meta', {
               name: 'msapplication-TileColor',
               content: msTileColor

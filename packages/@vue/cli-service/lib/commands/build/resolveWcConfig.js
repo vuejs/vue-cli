@@ -5,15 +5,18 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
-  const { log, error, loadModule, semver } = require('@vue/cli-shared-utils')
+  const { log, error, semver } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
     error(msg)
     process.exit(1)
   }
 
-  const vue = loadModule('vue', api.resolve('.'))
-  if (vue && semver.satisfies(vue.version, '^3.0.0-0')) {
+  const cwd = api.getCwd()
+  const webpack = require('webpack')
+  const webpackMajor = semver.major(webpack.version)
+  const vueMajor = require('../../util/getVueMajor')(cwd)
+  if (vueMajor === 3) {
     abort(`Vue 3 support of the web component target is still under development.`)
   }
 
@@ -66,7 +69,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
 
     config
       .plugin('web-component-options')
-        .use(require('webpack').DefinePlugin, [{
+        .use(webpack.DefinePlugin, [{
           'process.env.CUSTOM_ELEMENT_NAME': JSON.stringify(libName)
         }])
 
@@ -118,9 +121,6 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
     }
 
     Object.assign(rawConfig.output, {
-      // to ensure that multiple copies of async wc bundles can co-exist
-      // on the same page.
-      jsonpFunction: libName.replace(/-\w/g, c => c.charAt(1).toUpperCase()) + '_jsonp',
       filename: `${entryName}.js`,
       chunkFilename: `${libName}.[name]${minify ? `.min` : ``}.js`,
       // use dynamic publicPath so this can be deployed anywhere
@@ -128,6 +128,14 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
       // document.currentScript.src.
       publicPath: ''
     })
+
+    // to ensure that multiple copies of async wc bundles can co-exist
+    // on the same page.
+    if (webpackMajor === 4) {
+      rawConfig.output.jsonpFunction = libName.replace(/-\w/g, c => c.charAt(1).toUpperCase()) + '_jsonp'
+    } else {
+      rawConfig.output.uniqueName = `vue-lib-${libName}`
+    }
 
     return rawConfig
   }

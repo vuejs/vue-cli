@@ -27,7 +27,6 @@
     "@soda/friendly-errors-webpack-plugin": "^1.7.1",
     "@soda/get-current-script": "^1.0.0",
     "@types/minimist": "^1.2.0",
-    "@types/webpack": "^4.0.0",
     "@types/webpack-dev-server": "^3.11.0",
     "@vue/cli-overlay": "^4.5.8",
     "@vue/cli-plugin-router": "^4.5.8",
@@ -57,13 +56,13 @@
     "fs-extra": "^7.0.1",
     "globby": "^9.2.0",
     "hash-sum": "^2.0.0",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^4.5.0",
     "launch-editor-middleware": "^2.2.1",
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.mapvalues": "^4.6.0",
-    "lodash.transform": "^4.6.0",
-    "mini-css-extract-plugin": "^0.9.0",
+    "mini-css-extract-plugin": "^1.3.1",
     "minimist": "^1.2.5",
+    "module-alias": "^2.2.2",
     "pnp-webpack-plugin": "^1.6.4",
     "portfinder": "^1.0.26",
     "postcss-loader": "^3.0.0",
@@ -71,14 +70,14 @@
     "terser-webpack-plugin": "^4.2.3",
     "thread-loader": "^3.0.0",
     "url-loader": "^4.1.1",
-    "vue-loader": "^15.9.2",
-    "vue-loader-v16": "npm:vue-loader@^16.1.0",
+    "vue-loader": "^16.1.0",
+    "vue-loader-v15": "npm:vue-loader@^15.9.5",
     "vue-style-loader": "^4.1.2",
-    "webpack": "^4.0.0",
+    "webpack": "^5.4.0",
     "webpack-bundle-analyzer": "^4.1.0",
     "webpack-chain": "^6.4.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.2",
+    "webpack-merge": "^5.4.0",
     "webpack-virtual-modules": "^0.4.1"
   },
   "peerDependencies": {
@@ -115,7 +114,8 @@
     "vue": "^2.6.12",
     "vue-router": "^3.4.3",
     "vue-template-compiler": "^2.6.12",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "webpack-4": "npm:webpack@^4.44.2"
   },
   "publishConfig": {
     "access": "public"

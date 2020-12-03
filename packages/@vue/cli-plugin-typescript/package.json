@@ -25,12 +25,13 @@
   "dependencies": {
     "@types/webpack-env": "^1.15.2",
     "@vue/cli-shared-utils": "^4.5.8",
+    "babel-loader": "^8.1.0",
     "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^5.0.11",
     "globby": "^9.2.0",
     "thread-loader": "^3.0.0",
     "ts-loader": "^8.0.5",
-    "webpack": "^4.0.0",
+    "webpack": "^5.0.0",
     "yorkie": "^2.0.0"
   },
   "peerDependencies": {
