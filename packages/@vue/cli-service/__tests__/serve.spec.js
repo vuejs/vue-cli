@@ -7,7 +7,7 @@ const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
 const sleep = n => new Promise(resolve => setTimeout(resolve, n))
-test.only('serve', async () => {
+test('serve', async () => {
   const project = await create('e2e-serve', defaultPreset)
 
   await serve(
