@@ -223,5 +223,5 @@ test('should persist cache', async () => {
 
   await donePromise
 
-  expect(has('node_modules/.cache/.eslintcache')).toBe(true)
+  expect(has('node_modules/.cache/eslint/cache.json')).toBe(true)
 })

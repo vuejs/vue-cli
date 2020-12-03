@@ -9,6 +9,19 @@ module.exports = (api, options) => {
     const { resolveModule, loadModule } = require('@vue/cli-shared-utils')
     const cwd = api.getCwd()
 
+    const eslintPkg =
+      loadModule('eslint/package.json', cwd, true) ||
+      loadModule('eslint/package.json', __dirname, true)
+
+    // ESLint doesn't clear the cache when you upgrade ESLint plugins (ESlint do consider config changes)
+    // so we have to manually generate a cache identifier that takes lock file into account.
+    const { cacheIdentifier, cacheDirectory } = api.genCacheConfig(
+      'eslint',
+      {
+        eslint: eslintPkg.version
+      }
+    )
+
     api.chainWebpack(webpackConfig => {
       const { lintOnSave } = options
       const allWarnings = lintOnSave === true || lintOnSave === 'warning'
@@ -21,7 +34,13 @@ module.exports = (api, options) => {
         // ESlint options
         cwd,
         cache: true,
-        cacheLocation: api.resolve('node_modules/.cache/.eslintcache'),
+        cacheLocation: path.format({
+          dir: cacheDirectory,
+          name: process.env.VUE_CLI_TEST
+            ? 'cache'
+            : cacheIdentifier,
+          ext: '.json'
+        }),
         // plugin options
         context: cwd,
         // https://github.com/webpack-contrib/eslint-webpack-plugin/issues/56

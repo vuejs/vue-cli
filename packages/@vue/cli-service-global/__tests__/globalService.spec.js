@@ -57,7 +57,7 @@ test('global serve', async () => {
 
 test('global serve with eslint', async () => {
   try {
-    const cachePath = path.join(cwd, 'node_modules/.cache/.eslintcache')
+    const cachePath = path.join(cwd, 'node_modules/.cache/eslint/cache.json')
     expect(fs.existsSync(cachePath)).toBe(false)
     await serve(
       () => execa(binPath, ['serve', 'foo.js'], { cwd }),
