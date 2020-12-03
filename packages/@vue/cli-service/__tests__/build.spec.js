@@ -76,7 +76,7 @@ test('build with --report-json', async () => {
   expect(report.entrypoints).toHaveProperty('app.chunks')
   expect(report.entrypoints).toHaveProperty('app.assets')
 
-  const appChunk = report.chunks.find(chunk => chunk.id === 'app')
+  const appChunk = report.chunks.find(chunk => chunk.names.includes('app'))
   // Each chunk should contain meta info
   expect(appChunk).toHaveProperty('rendered')
   expect(appChunk).toHaveProperty('initial')
