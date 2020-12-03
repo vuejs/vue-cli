@@ -53,11 +53,7 @@ module.exports = (api, projectOptions) => {
 
     if (api.hasPlugin('babel')) {
       addLoader({
-        // TODO: I guess the intent is to require the `babel-loader` provided by the Babel vue
-        // plugin, but that means we now rely on the hoisting. It should instead be queried
-        // against the plugin itself, or through a peer dependency.
         name: 'babel-loader',
-        // eslint-disable-next-line node/no-extraneous-require
         loader: require.resolve('babel-loader')
       })
     }

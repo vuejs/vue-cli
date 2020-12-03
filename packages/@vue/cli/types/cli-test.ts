@@ -45,10 +45,6 @@ const testPromptAPI = (cli: PromptModuleAPI) => {
         value: 'dart-sass'
       },
       {
-        name: 'Sass/SCSS (with node-sass)',
-        value: 'node-sass'
-      },
-      {
         name: 'Less',
         value: 'less'
       },

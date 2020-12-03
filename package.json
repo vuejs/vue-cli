@@ -25,15 +25,6 @@
     "pre-commit": "lint-staged",
     "commit-msg": "node scripts/verifyCommitMsg.js"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "setupFiles": [
-      "<rootDir>/scripts/testSetup.js"
-    ],
-    "testMatch": [
-      "**/__tests__/**/*.spec.js"
-    ]
-  },
   "lint-staged": {
     "*.{js,vue}": [
       "eslint --fix",
@@ -87,7 +78,7 @@
     "typescript": "~3.9.3",
     "verdaccio": "^4.8.1",
     "vuepress": "^1.6.0",
-    "webpack": "^4.0.0",
+    "webpack": "^5.0.0",
     "yorkie": "^2.0.0"
   },
   "resolutions": {

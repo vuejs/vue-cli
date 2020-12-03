@@ -1,9 +1,9 @@
 jest.setTimeout(3000000)
 
-const create = require('@vue/cli-test-utils/createTestProject')
+const createOutside = require('@vue/cli-test-utils/createUpgradableProject')
 
 test('should work', async () => {
-  const project = await create('unit-mocha', {
+  const project = await createOutside('unit-mocha', {
     plugins: {
       '@vue/cli-plugin-babel': {},
       '@vue/cli-plugin-unit-mocha': {}

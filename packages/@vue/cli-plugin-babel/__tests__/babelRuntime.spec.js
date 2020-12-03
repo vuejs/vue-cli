@@ -54,7 +54,7 @@ test('should not transpile babel helpers multiple times', async () => {
 // #4742 core-js-pure imports are likely to be caused by
 // incorrect configuration of @babel/plugin-transform-runtime
 test('should not introduce polyfills from core-js-pure', async () => {
-  const project = await create('babel-runtime-core-js-pure', defaultPreset)
+  const project = await create('babel-runtime-no-duplicate-core-js', defaultPreset)
 
   await project.write('src/main.js', `
 import Vue from 'vue'

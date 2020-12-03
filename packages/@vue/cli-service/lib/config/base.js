@@ -1,40 +1,23 @@
-const { semver, loadModule } = require('@vue/cli-shared-utils')
+const path = require('path')
+const { semver } = require('@vue/cli-shared-utils')
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
+  const cwd = api.getCwd()
+  const webpack = require('webpack')
+  const webpackMajor = semver.major(webpack.version)
+  const vueMajor = require('../util/getVueMajor')(cwd)
+
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
-    const getAssetPath = require('../util/getAssetPath')
-    const inlineLimit = 4096
 
-    const genAssetSubPath = dir => {
-      return getAssetPath(
-        options,
-        `${dir}/[name]${options.filenameHashing ? '.[hash:8]' : ''}.[ext]`
-      )
-    }
-
-    // try to load vue in the project
-    // fallback to peer vue package in the instant prototyping environment
-    const vue = loadModule('vue', api.service.context) || loadModule('vue', __dirname)
-    let supportsEsModuleAsset = true
-    if (vue && semver.major(vue.version) === 2) {
-      supportsEsModuleAsset = false
-    }
-
-    const genUrlLoaderOptions = dir => {
-      return {
-        limit: inlineLimit,
-        esModule: supportsEsModuleAsset,
-        // use explicit fallback to avoid regression in url-loader>=1.1.0
-        fallback: {
-          loader: require.resolve('file-loader'),
-          options: {
-            name: genAssetSubPath(dir),
-            esModule: supportsEsModuleAsset
-          }
-        }
-      }
+    // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
+    if (webpackMajor !== 4) {
+      webpackConfig.module
+        .rule('esm')
+          .test(/\.m?jsx?$/)
+          .resolve.set('fullySpecified', false)
     }
 
     webpackConfig
@@ -49,10 +32,6 @@ module.exports = (api, options) => {
         .publicPath(options.publicPath)
 
     webpackConfig.resolve
-      // This plugin can be removed once we switch to Webpack 6
-      .plugin('pnp')
-        .use({ ...require('pnp-webpack-plugin') })
-        .end()
       .extensions
         .merge(['.mjs', '.js', '.jsx', '.vue', '.json', '.wasm'])
         .end()
@@ -79,10 +58,10 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
-    if (vue && semver.major(vue.version) === 2) {
+    if (vueMajor === 2) {
       // for Vue 2 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader/package.json').version,
+        'vue-loader': require('vue-loader-v15/package.json').version,
         '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
         'vue-template-compiler': require('vue-template-compiler/package.json').version
       })
@@ -104,7 +83,7 @@ module.exports = (api, options) => {
             .options(vueLoaderCacheConfig)
             .end()
           .use('vue-loader')
-            .loader(require.resolve('vue-loader'))
+            .loader(require.resolve('vue-loader-v15'))
             .options(Object.assign({
               compilerOptions: {
                 whitespace: 'condense'
@@ -113,11 +92,20 @@ module.exports = (api, options) => {
 
       webpackConfig
         .plugin('vue-loader')
-          .use(require('vue-loader').VueLoaderPlugin)
-    } else if (vue && semver.major(vue.version) === 3) {
+          .use(require('vue-loader-v15').VueLoaderPlugin)
+
+      // some plugins may implicitly relies on the `vue-loader` dependency path name
+      // such as vue-cli-plugin-apollo
+      // <https://github.com/Akryum/vue-cli-plugin-apollo/blob/d9fe48c61cc19db88fef4e4aa5e49b31aa0c44b7/index.js#L88>
+      // so we need a hotfix for that
+      webpackConfig
+        .resolveLoader
+          .modules
+            .prepend(path.resolve(__dirname, './vue-loader-v15-resolve-compat'))
+    } else if (vueMajor === 3) {
       // for Vue 3 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader-v16/package.json').version,
+        'vue-loader': require('vue-loader/package.json').version,
         '@vue/compiler-sfc': require('@vue/compiler-sfc/package.json').version
       })
 
@@ -138,7 +126,7 @@ module.exports = (api, options) => {
             .options(vueLoaderCacheConfig)
             .end()
           .use('vue-loader')
-            .loader(require.resolve('vue-loader-v16'))
+            .loader(require.resolve('vue-loader'))
             .options({
               ...vueLoaderCacheConfig,
               babelParserPlugins: ['jsx', 'classProperties', 'decorators-legacy']
@@ -148,54 +136,18 @@ module.exports = (api, options) => {
 
       webpackConfig
         .plugin('vue-loader')
-          .use(require('vue-loader-v16').VueLoaderPlugin)
+          .use(require('vue-loader').VueLoaderPlugin)
 
       // feature flags <http://link.vuejs.org/feature-flags>
       webpackConfig
         .plugin('feature-flags')
-          .use(require('webpack').DefinePlugin, [{
+          .use(webpack.DefinePlugin, [{
             __VUE_OPTIONS_API__: 'true',
             __VUE_PROD_DEVTOOLS__: 'false'
           }])
     }
 
-    // static assets -----------------------------------------------------------
-
-    webpackConfig.module
-      .rule('images')
-        .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
-        .use('url-loader')
-          .loader(require.resolve('url-loader'))
-          .options(genUrlLoaderOptions('img'))
-
-    // do not base64-inline SVGs.
-    // https://github.com/facebookincubator/create-react-app/pull/1180
-    webpackConfig.module
-      .rule('svg')
-        .test(/\.(svg)(\?.*)?$/)
-        .use('file-loader')
-          .loader(require.resolve('file-loader'))
-          .options({
-            name: genAssetSubPath('img'),
-            esModule: supportsEsModuleAsset
-          })
-
-    webpackConfig.module
-      .rule('media')
-        .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
-        .use('url-loader')
-          .loader(require.resolve('url-loader'))
-          .options(genUrlLoaderOptions('media'))
-
-    webpackConfig.module
-      .rule('fonts')
-        .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
-        .use('url-loader')
-          .loader(require.resolve('url-loader'))
-          .options(genUrlLoaderOptions('fonts'))
-
     // Other common pre-processors ---------------------------------------------
-
     const maybeResolve = name => {
       try {
         return require.resolve(name)
@@ -222,29 +174,39 @@ module.exports = (api, options) => {
               .end()
             .end()
 
-    // shims
+    if (webpackMajor === 4) {
+      // Node.js polyfills
+      // They are not polyfilled by default in webpack 5
+      // <https://github.com/webpack/webpack/pull/8460>
+      // In webpack 4, we used to disabled many of the core module polyfills too
+      webpackConfig.node
+        .merge({
+          // prevent webpack from injecting useless setImmediate polyfill because Vue
+          // source contains it (although only uses it if it's native).
+          setImmediate: false,
+          // process is injected via DefinePlugin, although some 3rd party
+          // libraries may require a mock to work properly (#934)
+          process: 'mock',
+          // prevent webpack from injecting mocks to Node native modules
+          // that does not make sense for the client
+          dgram: 'empty',
+          fs: 'empty',
+          net: 'empty',
+          tls: 'empty',
+          child_process: 'empty'
+        })
 
-    webpackConfig.node
-      .merge({
-        // prevent webpack from injecting useless setImmediate polyfill because Vue
-        // source contains it (although only uses it if it's native).
-        setImmediate: false,
-        // process is injected via DefinePlugin, although some 3rd party
-        // libraries may require a mock to work properly (#934)
-        process: 'mock',
-        // prevent webpack from injecting mocks to Node native modules
-        // that does not make sense for the client
-        dgram: 'empty',
-        fs: 'empty',
-        net: 'empty',
-        tls: 'empty',
-        child_process: 'empty'
-      })
+      // Yarn PnP / Yarn 2 support
+      webpackConfig.resolve
+        .plugin('pnp')
+          .use({ ...require('pnp-webpack-plugin') })
+          .end()
+    }
 
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig
       .plugin('define')
-        .use(require('webpack').DefinePlugin, [
+        .use(webpack.DefinePlugin, [
           resolveClientEnv(options)
         ])
 

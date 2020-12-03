@@ -129,8 +129,9 @@ module.exports = (api, rootOptions) => {
             .use('extract-css-loader')
             .loader(require('mini-css-extract-plugin').loader)
             .options({
-              hmr: !isProd,
-              publicPath: cssPublicPath
+              publicPath: cssPublicPath,
+              // TODO: enable this option later
+              esModule: false
             })
         } else {
           rule
