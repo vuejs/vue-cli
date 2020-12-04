@@ -83,9 +83,11 @@ module.exports = (api, rootOptions) => {
 
     if (!hasPostCSSConfig) {
       loaderOptions.postcss = {
-        plugins: [
-          require('autoprefixer')
-        ]
+        postcssOptions: {
+          plugins: [
+            require('autoprefixer')
+          ]
+        }
       }
     }
 
@@ -172,7 +174,9 @@ module.exports = (api, rootOptions) => {
             .loader(require.resolve('postcss-loader'))
             .options({
               sourceMap,
-              plugins: [require('cssnano')(cssnanoOptions)]
+              postcssOptions: {
+                plugins: [require('cssnano')(cssnanoOptions)]
+              }
             })
         }
 

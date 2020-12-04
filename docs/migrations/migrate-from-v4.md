@@ -75,6 +75,7 @@ Though it works in all our tests, please be aware that this approach is still so
 #### Underlying Loaders and Plugins
 
 * `html-webpack-plugin` is upgraded from v3 to v4, see more details in the [release announcement](https://dev.to/jantimon/html-webpack-plugin-4-has-been-released-125d).
+* `postcss-loader` is upgraded from v3 to v4. Most notably, `PostCSS` options (`plugin` / `syntax` / `parser` / `stringifier`) are moved into the `postcssOptions` field. More details available at the [changelog](https://github.com/webpack-contrib/postcss-loader/blob/master/CHANGELOG.md#400-2020-09-07).
 * `copy-webpack-plugin` is upgraded from v5 to v6. If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 release](https://github.com/webpack-contrib/copy-webpack-plugin/releases/tag/v6.0.0).
 * `file-loader` is upgraded from v4 to v6, and `url-loader` from v2 to v4. The `esModule` option is now turned on by default for non-Vue-2 projects. Full changelog available at [`file-loader` changelog](https://github.com/webpack-contrib/file-loader/blob/master/CHANGELOG.md) and [`url-loader` changelog](https://github.com/webpack-contrib/url-loader/blob/master/CHANGELOG.md)
 * `terser-webpack-plugin` is upgraded from v2 to v4, using terser 5 and some there are some changes in the options format. See full details in its [changelog](https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md#400-2020-08-04).
