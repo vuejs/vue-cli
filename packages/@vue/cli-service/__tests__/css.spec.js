@@ -96,7 +96,7 @@ test('override postcss config', () => {
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'postcss').postcssOptions.plugins).toBeFalsy()
+    expect(findOptions(config, lang, 'postcss').postcssOptions).toBeFalsy()
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
