@@ -36,6 +36,8 @@ test('CSS inline minification', async () => {
   expect(appJs).toMatch('height:200px;')
 })
 
+// test('CSS minification', async () => {})
+
 // test('Custom PostCSS plugins', async () => {
 //   const project = await create('css-custom-postcss', defaultPreset)
 // })
