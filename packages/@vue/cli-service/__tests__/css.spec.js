@@ -272,7 +272,7 @@ test('css.extract', () => {
     expect(findLoaders(config2, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
     expect(findOptions(config2, lang, 'css').importLoaders).toBe(3)
     // minification loader should be injected before the user-facing postcss-loader
-    expect(findOptions(config2, lang, 'postcss').plugins).toBeTruthy()
+    expect(findOptions(config2, lang, 'postcss').postcssOptions.plugins).toBeTruthy()
   })
 })
 
