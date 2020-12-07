@@ -36,8 +36,51 @@ test('CSS inline minification', async () => {
   expect(appJs).toMatch('height:200px;')
 })
 
-// test('CSS minification', async () => {})
+test('CSS minification', async () => {
+  const project = await create('css-minification', defaultPreset)
 
-// test('Custom PostCSS plugins', async () => {
-//   const project = await create('css-custom-postcss', defaultPreset)
-// })
+  await project.write('vue.config.js', 'module.exports = { filenameHashing: false }\n')
+
+  const appVue = await project.read('src/App.vue')
+  await project.write('src/App.vue',
+    appVue.replace(
+      '#app {',
+
+      '#app {\n  height: calc(100px * 2);'
+    )
+  )
+  await project.run('vue-cli-service build')
+  const appCss = await project.read('dist/css/app.css')
+  expect(appCss).not.toMatch('calc(100px')
+  expect(appCss).toMatch('height:200px;')
+})
+
+test('Custom PostCSS plugins', async () => {
+  const project = await create('css-custom-postcss', defaultPreset)
+  await project.write('vue.config.js', `
+  const toRedPlugin = () => {
+    return {
+      postcssPlugin: 'to-red',
+      Declaration (decl) {
+        if (decl.prop === 'color') {
+          decl.value = 'red'
+        }
+      }
+    }
+  }
+  toRedPlugin.postcss = true
+
+  module.exports = {
+    filenameHashing: false,
+    css: {
+      loaderOptions: {
+        postcss: {
+          postcssOptions: { plugins: [toRedPlugin] }
+        }
+      }
+    }
+  }`)
+  await project.run('vue-cli-service build')
+  const appCss = await project.read('dist/css/app.css')
+  expect(appCss).toMatch('color:red')
+})
