@@ -38,7 +38,7 @@
     "acorn": "^8.0.1",
     "acorn-walk": "^8.0.0",
     "address": "^1.1.2",
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.0.4",
     "browserslist": "^4.14.1",
     "cache-loader": "^4.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
