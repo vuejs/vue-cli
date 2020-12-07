@@ -104,15 +104,16 @@ program
 program
   .command('serve')
   .description('alias of "npm run serve" in the current project')
-  .action((cmd) => {
-    require('../lib/util/runNpmScript')('serve', cmd)
+  .allowUnknownOption()
+  .action(() => {
+    require('../lib/util/runNpmScript')('serve', process.argv.slice(3))
   })
 
 program
   .command('build')
   .description('alias of "npm run serve" in the current project')
   .action((cmd) => {
-    require('../lib/util/runNpmScript')('serve', cmd)
+    require('../lib/util/runNpmScript')('build', process.argv.slice(3))
   })
 
 program

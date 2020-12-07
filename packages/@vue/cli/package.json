@@ -51,6 +51,7 @@
     "lodash.clonedeep": "^4.5.0",
     "lru-cache": "^6.0.0",
     "minimist": "^1.2.5",
+    "pkg-dir": "^5.0.0",
     "recast": "^0.20.3",
     "resolve": "^1.17.0",
     "shortid": "^2.2.15",

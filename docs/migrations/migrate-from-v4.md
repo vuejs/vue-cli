@@ -41,6 +41,10 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 ### The `vue` Command (The Global `@vue/cli` Package)
 
+The [instant prototyping functionalities](https://v4.cli.vuejs.org/guide/prototyping.html) are removed. Now the `vue serve` / `vue build` commands are aliases to `npm run serve` / `npm run build`, which in turn execute the scripts specified in the project `package.json`.
+
+If you need a minimum setup for developing standalone `.vue` components, please use `vite` (for Vue 3) or `parcel` (for Vue 2) instead.
+
 ### `@vue/cli-service`
 
 #### Webpack 5
