@@ -195,3 +195,33 @@ test('should save report results to file with --output-file option', async () =>
   // results file should show "Missing semicolon" errors
   expect(resultsFileContents).toEqual(expect.stringContaining('Missing semicolon'))
 })
+
+test('should persist cache', async () => {
+  const project = await create('eslint-cache', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'save'
+      }
+    }
+  })
+
+  let done
+  const donePromise = new Promise(resolve => {
+    done = resolve
+  })
+  const { has, run } = project
+  const server = run('vue-cli-service serve')
+
+  server.stdout.on('data', data => {
+    data = data.toString()
+    if (data.match(/Compiled successfully/)) {
+      server.stdin.write('close')
+      done()
+    }
+  })
+
+  await donePromise
+
+  expect(has('node_modules/.cache/eslint/cache.json')).toBe(true)
+})
