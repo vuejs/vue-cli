@@ -25,7 +25,7 @@
   "dependencies": {
     "@intervolga/optimize-cssnano-plugin": "^1.0.5",
     "@soda/friendly-errors-webpack-plugin": "^1.7.1",
-    "@soda/get-current-script": "^1.0.0",
+    "@soda/get-current-script": "^1.0.2",
     "@types/minimist": "^1.2.0",
     "@types/webpack-dev-server": "^3.11.0",
     "@vue/cli-overlay": "^4.5.8",
