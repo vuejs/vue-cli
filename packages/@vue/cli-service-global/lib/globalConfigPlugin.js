@@ -6,6 +6,7 @@ const { loadPartialConfigSync } = require('@babel/core')
 module.exports = function createConfigPlugin (context, entry, asLib) {
   return {
     id: '@vue/cli-service-global-config',
+    /** @type {import('@vue/cli-service').ServicePlugin} */
     apply: (api, options) => {
       const _entry = path.resolve(context, entry)
       api.chainWebpack(config => {
@@ -85,6 +86,7 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
         // messed up when the project is inside another project.
         const ESLintConfigFile = findExisting(context, [
           '.eslintrc.js',
+          '.eslintrc.cjs',
           '.eslintrc.yaml',
           '.eslintrc.yml',
           '.eslintrc.json',
@@ -99,33 +101,36 @@ module.exports = function createConfigPlugin (context, entry, asLib) {
         const hasBabelConfig = !!babelConfig && babelConfig.hasFilesystemConfig()
 
         // set inline eslint options
-        config.module
-          .rule('eslint')
-            .include
-              .clear()
-              .end()
-            .exclude
-              .add(/node_modules/)
-              .end()
-            .use('eslint-loader')
-              .tap(loaderOptions => Object.assign({}, loaderOptions, {
-                useEslintrc: hasESLintConfig,
-                baseConfig: {
-                  extends: [
-                    'plugin:vue/essential',
-                    'eslint:recommended'
-                  ],
-                  parserOptions: {
-                    parser: '@babel/eslint-parser',
-                    requireConfigFile: hasBabelConfig,
-                    babelOptions
-                  },
-                  rules: {
-                    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-                    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-                  }
+        config
+          .plugin('eslint')
+          .tap(args => {
+            /** @type {import('eslint-webpack-plugin').Options & import('eslint').ESLint.Options} */
+            const eslintWebpackPluginOptions = {
+              // eslint@7 load config and plugin related to baseConfig.extends from cwd,
+              // By default, cwd is the current working directory of `vue serve`,
+              // should load baseConfig.extends config(dependencies of @vue/cli-service-global) from `__dirname`
+              cwd: __dirname,
+              useEslintrc: hasESLintConfig,
+              baseConfig: {
+                extends: [
+                  'plugin:vue/essential',
+                  'eslint:recommended'
+                ],
+                parserOptions: {
+                  parser: '@babel/eslint-parser',
+                  requireConfigFile: hasBabelConfig,
+                  babelOptions
+                },
+                rules: {
+                  'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+                  'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
                 }
-              }))
+              }
+            }
+            Object.assign(args[0], eslintWebpackPluginOptions)
+
+            return args
+          })
 
         if (!asLib) {
           // set html plugin template
