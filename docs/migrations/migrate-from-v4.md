@@ -104,7 +104,7 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 ### Unit-Jest Plugin
 
 * The underlying `jest`-related packages are upgraded from v24 to v26. For most users the transition would be seamless. See their corresponding changelogs for more detail:
-  * [jest](https://github.com/facebook/jest/blob/v26.6.3/CHANGELOG.md)
+  * [jest, babel-jest](https://github.com/facebook/jest/blob/v26.6.3/CHANGELOG.md)
   * [ts-jest](https://github.com/kulshekhar/ts-jest/blob/v26.4.4/CHANGELOG.md)
 
 ### Unit-Mocha Plugin
