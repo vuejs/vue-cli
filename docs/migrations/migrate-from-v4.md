@@ -99,7 +99,10 @@ Though it works in all our tests, please be aware that this approach is still so
 * Dropped TSLint support. As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
 Please consider switching to ESLint. You can check out [`tslint-to-eslint-config`](https://github.com/typescript-eslint/tslint-to-eslint-config) for a mostly automatic migration experience.
 * `ts-loader` is upgraded from v6 to v8. It now only supports TypeScript >= 3.6.
-* `fork-ts-checker-webpack-plugin` is upgraded from v3.x to v5.x, you can see the detailed breaking changes at [`fork-ts-checker=webpack-plugin` v4.0.0 release](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v4.0.0) and [`fork-ts-checker=webpack-plugin` v5.0.0 release](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v5.0.0)
+* `fork-ts-checker-webpack-plugin` is upgraded from v3.x to v6.x, you can see the detailed breaking changes in its release notes:
+  * [v4.0.0](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v4.0.0)
+  * [v5.0.0](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v5.0.0)
+  * [v6.0.0](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v6.0.0)
 
 ### E2E-Cypress Plugin
 
