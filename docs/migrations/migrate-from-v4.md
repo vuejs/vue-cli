@@ -102,6 +102,12 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 * Cypress is required as a peer dependency.
 * Cypress is updated from v3 to v5. See [Cypress Migration Guide](https://docs.cypress.io/guides/references/migration-guide.html) for detailed instructions of the migration process.
 
+### Unit-Jest Plugin
+
+* The underlying `jest`-related packages are upgraded from v24 to v26. For most users the transition would be seamless. See their corresponding changelogs for more detail:
+  * [jest, babel-jest](https://github.com/facebook/jest/blob/v26.6.3/CHANGELOG.md)
+  * [ts-jest](https://github.com/kulshekhar/ts-jest/blob/v26.4.4/CHANGELOG.md)
+
 ### Unit-Mocha Plugin
 
 * `mocha` is upgraded from v6 to v7, please refer to the [release notes of mocha v7](https://github.com/mochajs/mocha/releases/tag/v7.0.0) for a complete list of breaking changes.
