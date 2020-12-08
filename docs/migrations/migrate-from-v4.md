@@ -104,7 +104,7 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 ### E2E-Cypress Plugin
 
 * Cypress is required as a peer dependency.
-* Cypress is updated from v3 to v5. See [Cypress Migration Guide](https://docs.cypress.io/guides/references/migration-guide.html) for detailed instructions of the migration process.
+* Cypress is updated from v3 to v6. See [Cypress Migration Guide](https://docs.cypress.io/guides/references/migration-guide.html) for detailed instructions of the migration process.
 
 ### Unit-Jest Plugin
 
