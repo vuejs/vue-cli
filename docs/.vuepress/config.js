@@ -142,7 +142,6 @@ module.exports = {
               title: 'Basics',
               collapsable: false,
               children: [
-                '/guide/prototyping',
                 '/guide/creating-a-project',
                 '/guide/plugins-and-presets',
                 '/guide/cli-service'
@@ -250,7 +249,6 @@ module.exports = {
               title: '基础',
               collapsable: false,
               children: [
-                '/zh/guide/prototyping',
                 '/zh/guide/creating-a-project',
                 '/zh/guide/plugins-and-presets',
                 '/zh/guide/cli-service'
@@ -358,7 +356,6 @@ module.exports = {
               title: 'Основы',
               collapsable: false,
               children: [
-                '/ru/guide/prototyping',
                 '/ru/guide/creating-a-project',
                 '/ru/guide/plugins-and-presets',
                 '/ru/guide/cli-service'
