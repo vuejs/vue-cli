@@ -46,7 +46,7 @@
     "inquirer": "^7.1.0",
     "isbinaryfile": "^4.0.6",
     "javascript-stringify": "^1.6.0",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^3.14.1",
     "leven": "^3.1.0",
     "lodash.clonedeep": "^4.5.0",
     "lru-cache": "^6.0.0",

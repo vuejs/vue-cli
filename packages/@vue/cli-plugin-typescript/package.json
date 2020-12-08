@@ -25,13 +25,13 @@
   "dependencies": {
     "@types/webpack-env": "^1.15.2",
     "@vue/cli-shared-utils": "^4.5.8",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.2.2",
     "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^5.0.11",
     "globby": "^9.2.0",
     "thread-loader": "^3.0.0",
     "ts-loader": "^8.0.5",
-    "webpack": "^5.0.0",
+    "webpack": "^5.10.0",
     "yorkie": "^2.0.0"
   },
   "peerDependencies": {
@@ -46,9 +46,9 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
-    "@types/jest": "^26.0.16",
+    "@types/jest": "^26.0.17",
     "@types/mocha": "^7.0.2",
-    "jscodeshift": "^0.10.0",
+    "jscodeshift": "^0.11.0",
     "typescript": "~3.9.3",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2"

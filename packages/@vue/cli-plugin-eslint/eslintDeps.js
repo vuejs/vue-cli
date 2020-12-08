@@ -1,6 +1,6 @@
 const DEPS_MAP = {
   base: {
-    eslint: '^7.13.0',
+    eslint: '^7.15.0',
     'eslint-plugin-vue': '^6.2.2'
   },
   airbnb: {
@@ -9,8 +9,8 @@ const DEPS_MAP = {
   },
   prettier: {
     '@vue/eslint-config-prettier': '^6.0.0',
-    'eslint-plugin-prettier': '^3.1.3',
-    prettier: '^2.1.2'
+    'eslint-plugin-prettier': '^3.2.0',
+    prettier: '^2.2.1'
   },
   standard: {
     '@vue/eslint-config-standard': '^5.1.2',
@@ -32,7 +32,7 @@ exports.getDeps = function (api, preset, rootOptions = {}) {
   const deps = Object.assign({}, DEPS_MAP.base, DEPS_MAP[preset])
 
   if (rootOptions.vueVersion === '3') {
-    Object.assign(deps, { 'eslint-plugin-vue': '^7.0.0-0' })
+    Object.assign(deps, { 'eslint-plugin-vue': '^7.2.0' })
   }
 
   if (api.hasPlugin('typescript')) {
@@ -42,7 +42,7 @@ exports.getDeps = function (api, preset, rootOptions = {}) {
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     Object.assign(deps, {
       '@babel/eslint-parser': '^7.12.1',
-      '@babel/core': '^7.12.3'
+      '@babel/core': '^7.12.9'
     })
   }
 

@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/babel-preset-app#readme",
   "dependencies": {
-    "@babel/core": "^7.11.6",
+    "@babel/core": "^7.12.9",
     "@babel/helper-compilation-targets": "^7.9.6",
     "@babel/helper-module-imports": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -35,9 +35,9 @@
     "@vue/babel-plugin-jsx": "^1.0.0-0",
     "@vue/babel-preset-jsx": "^1.1.2",
     "babel-plugin-dynamic-import-node": "^2.3.3",
-    "core-js": "^3.6.5",
-    "core-js-compat": "^3.6.5",
-    "semver": "^7.3.2"
+    "core-js": "^3.8.1",
+    "core-js-compat": "^3.8.1",
+    "semver": "^7.3.4"
   },
   "peerDependencies": {
     "@babel/core": "*",
