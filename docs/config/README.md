@@ -267,7 +267,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 - Type: `boolean | Object`
 - Default: `true` in production, `false` in development
 
-  Whether to extract CSS in your components into a standalone CSS files (instead of inlined in JavaScript and injected dynamically).
+  Whether to extract CSS in your components into a standalone CSS file (instead of inlined in JavaScript and injected dynamically).
 
   This is always disabled when building as web components (styles are inlined and injected into shadowRoot).
 
