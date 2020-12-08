@@ -312,7 +312,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
   - [postcss-loader](https://github.com/postcss/postcss-loader)
   - [sass-loader](https://github.com/webpack-contrib/sass-loader)
   - [less-loader](https://github.com/webpack-contrib/less-loader)
-  - [stylus-loader](https://github.com/shama/stylus-loader)
+  - [stylus-loader](https://github.com/webpack-contrib/stylus-loader)
 
   It's also possible to target `scss` syntax separately from `sass`, with the `scss` option.
 
