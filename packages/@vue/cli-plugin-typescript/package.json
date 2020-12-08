@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
-    "@types/jest": "^24.0.19",
+    "@types/jest": "^26.0.16",
     "@types/mocha": "^7.0.2",
     "jscodeshift": "^0.10.0",
     "typescript": "~3.9.3",
