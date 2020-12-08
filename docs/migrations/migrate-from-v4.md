@@ -86,7 +86,8 @@ Though it works in all our tests, please be aware that this approach is still so
 
 ### ESLint Plugin
 
-* `eslint-loader` is upgraded [from v2 to v4](https://github.com/webpack-contrib/eslint-loader/blob/master/CHANGELOG.md). The only major change is that it dropped support for ESLint < v6.
+* `eslint-loader` is replaced by [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin), dropping support for ESLint <= 6.
+* New projects are now generated with `eslint-plugin-vue` v7, see its [release notes](https://github.com/vuejs/eslint-plugin-vue/releases/tag/v7.0.0) for breaking changes.
 
 ### PWA Plugin
 
