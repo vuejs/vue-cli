@@ -62,7 +62,7 @@ const applyESLint = module.exports.applyESLint = api => {
 const applyTS = module.exports.applyTS = (api, invoking) => {
   api.extendPackage({
     devDependencies: {
-      '@types/mocha': '^7.0.2',
+      '@types/mocha': '^8.0.4',
       '@types/chai': '^4.2.11'
     }
   })
