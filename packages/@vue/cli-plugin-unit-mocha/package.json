@@ -25,7 +25,7 @@
     "@vue/cli-shared-utils": "^4.5.8",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
-    "mocha": "^7.2.0",
+    "mocha": "^8.2.1",
     "mochapack": "^2.0.2"
   },
   "devDependencies": {

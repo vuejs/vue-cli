@@ -47,7 +47,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/jest": "^26.0.17",
-    "@types/mocha": "^7.0.2",
+    "@types/mocha": "^8.0.4",
     "jscodeshift": "^0.11.0",
     "typescript": "~3.9.3",
     "vue-class-component": "^7.2.3",
