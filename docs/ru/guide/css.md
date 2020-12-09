@@ -166,7 +166,7 @@ module.exports = {
 - [postcss-loader](https://github.com/postcss/postcss-loader)
 - [sass-loader](https://github.com/webpack-contrib/sass-loader)
 - [less-loader](https://github.com/webpack-contrib/less-loader)
-- [stylus-loader](https://github.com/webpack-contrib/stylus-loader)
+- [stylus-loader](https://github.com/shama/stylus-loader)
 
 ::: tip Совет
 Это предпочтительнее, чем вручную обращаться к конкретным загрузчикам, используя `chainWebpack`, потому что настройки необходимо применять в нескольких местах, где используется соответствующий загрузчик.

@@ -156,7 +156,7 @@ Loader 可以通过 `loaderOptions` 配置，包括：
 - [postcss-loader](https://github.com/postcss/postcss-loader)
 - [sass-loader](https://github.com/webpack-contrib/sass-loader)
 - [less-loader](https://github.com/webpack-contrib/less-loader)
-- [stylus-loader](https://github.com/webpack-contrib/stylus-loader)
+- [stylus-loader](https://github.com/shama/stylus-loader)
 
 ::: tip 提示
 这样做比使用 `chainWebpack` 手动指定 loader 更推荐，因为这些选项需要应用在使用了相应 loader 的多个地方。

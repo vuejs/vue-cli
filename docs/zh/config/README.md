@@ -301,7 +301,7 @@ module.exports = {
   - [postcss-loader](https://github.com/postcss/postcss-loader)
   - [sass-loader](https://github.com/webpack-contrib/sass-loader)
   - [less-loader](https://github.com/webpack-contrib/less-loader)
-  - [stylus-loader](https://github.com/webpack-contrib/stylus-loader)
+  - [stylus-loader](https://github.com/shama/stylus-loader)
 
   另外，也可以使用 `scss` 选项，针对 `scss` 语法进行单独配置（区别于 `sass` 语法）。
 

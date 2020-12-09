@@ -16,9 +16,7 @@ module.exports = {
   css: {
     loaderOptions: {
       stylus: {
-        stylusOptions: {
-          import: ['~@/style/imports']
-        }
+        import: ['~@/style/imports']
       }
     }
   },

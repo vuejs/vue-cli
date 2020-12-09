@@ -164,7 +164,7 @@ Loaders which can be configured via `loaderOptions` include:
 - [postcss-loader](https://github.com/postcss/postcss-loader)
 - [sass-loader](https://github.com/webpack-contrib/sass-loader)
 - [less-loader](https://github.com/webpack-contrib/less-loader)
-- [stylus-loader](https://github.com/webpack-contrib/stylus-loader)
+- [stylus-loader](https://github.com/shama/stylus-loader)
 
 ::: tip
 This is preferred over manually tapping into specific loaders using `chainWebpack`, because these options need to be applied in multiple locations where the corresponding loader is used.

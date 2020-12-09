@@ -312,7 +312,7 @@ module.exports = {
   - [postcss-loader](https://github.com/postcss/postcss-loader)
   - [sass-loader](https://github.com/webpack-contrib/sass-loader)
   - [less-loader](https://github.com/webpack-contrib/less-loader)
-  - [stylus-loader](https://github.com/webpack-contrib/stylus-loader)
+  - [stylus-loader](https://github.com/shama/stylus-loader)
 
   Также можно настроить синтаксис `scss` отдельно от `sass` через опцию `scss`.
 
