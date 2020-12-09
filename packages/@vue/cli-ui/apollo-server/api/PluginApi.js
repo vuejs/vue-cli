@@ -335,7 +335,7 @@ class PluginApi {
           return
         }
       }
-      // eslint-disable-next-line standard/no-callback-literal
+      // eslint-disable-next-line node/no-callback-literal
       cb({ data, emit })
     }
     this.ipcHandlers.push(handler)
