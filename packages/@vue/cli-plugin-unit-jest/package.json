@@ -42,6 +42,6 @@
     "@vue/test-utils": "^1.0.5"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
+    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
   }
 }

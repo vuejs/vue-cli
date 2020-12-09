@@ -33,7 +33,7 @@
     "chai": "^4.2.0"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
+    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
   },
   "publishConfig": {
     "access": "public"
