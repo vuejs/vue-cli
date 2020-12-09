@@ -52,7 +52,7 @@ module.exports = (api, options) => {
           resolveModule('eslint/package.json', cwd) ||
             resolveModule('eslint/package.json', __dirname)
         ),
-        formatter: loadModule('eslint/lib/formatters/codeframe', cwd, true)
+        formatter: loadModule('eslint/lib/cli-engine/formatters/codeframe', cwd, true)
       }
       webpackConfig.plugin('eslint').use(eslintWebpackPlugin, [eslintWebpackPluginOptions])
     })
