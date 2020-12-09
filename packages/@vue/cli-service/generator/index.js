@@ -50,8 +50,8 @@ module.exports = (api, options) => {
         'less-loader': '^5.0.0'
       },
       stylus: {
-        'stylus': '^0.54.7',
-        'stylus-loader': '^3.0.2'
+        'stylus': '^0.54.8',
+        'stylus-loader': '^4.3.1'
       }
     }
 

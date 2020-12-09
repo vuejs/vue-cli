@@ -234,9 +234,7 @@ module.exports = (api, rootOptions) => {
       ))
     }
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
-    createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', Object.assign({
-      preferPathResolver: 'webpack'
-    }, loaderOptions.stylus))
+    createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', loaderOptions.stylus)
 
     // inject CSS extraction plugin
     if (shouldExtract) {
