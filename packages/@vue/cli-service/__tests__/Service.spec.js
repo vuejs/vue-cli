@@ -3,6 +3,7 @@ jest.mock('vue-cli-plugin-foo', () => () => {}, { virtual: true })
 
 const fs = require('fs')
 const path = require('path')
+const { semver } = require('@vue/cli-shared-utils')
 const Service = require('../lib/Service')
 
 const mockPkg = json => {
@@ -159,8 +160,9 @@ test('api: assertVersion', () => {
   const plugin = {
     id: 'test-assertVersion',
     apply: api => {
-      expect(() => api.assertVersion(4)).not.toThrow()
-      expect(() => api.assertVersion('^4.0.0-0')).not.toThrow()
+      const majorVersionNumber = semver.major(api.version)
+      expect(() => api.assertVersion(majorVersionNumber)).not.toThrow()
+      expect(() => api.assertVersion(`^${majorVersionNumber}.0.0-0`)).not.toThrow()
       // expect(() => api.assertVersion('>= 4')).not.toThrow()
 
       expect(() => api.assertVersion(4.1)).toThrow('Expected string or integer value')
