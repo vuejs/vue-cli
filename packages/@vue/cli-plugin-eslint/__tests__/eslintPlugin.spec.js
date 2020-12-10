@@ -1,4 +1,4 @@
-jest.setTimeout(35000)
+jest.setTimeout(300000)
 
 const path = require('path')
 const { linkBin } = require('@vue/cli/lib/util/linkBin')
