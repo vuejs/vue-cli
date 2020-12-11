@@ -169,10 +169,7 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add"
-    ]
+    "*.{js,vue}": "vue-cli-service lint"
   }
 }
 ```

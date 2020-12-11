@@ -166,10 +166,7 @@ npx vue-cli-service build --skip-plugins @vue/cli-plugin-pwa
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add"
-    ]
+    "*.{js,vue}": "vue-cli-service lint"
   }
 }
 ```

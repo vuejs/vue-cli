@@ -45,7 +45,8 @@ test('should work', async () => {
   })
   const hook = await read('.git/hooks/pre-commit')
   expect(hook).toMatch('#yorkie')
-  await write('src/main.js', updatedMain)
+  // add a trivial change to avoid empty changeset after running lint-staged
+  await write('src/main.js', updatedMain.replace('false', 'true'))
   // nvm doesn't like PREFIX env
   if (process.platform === 'darwin') {
     delete process.env.PREFIX
