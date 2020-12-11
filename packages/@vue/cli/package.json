@@ -25,7 +25,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/ejs": "^2.7.0",
+    "@types/ejs": "^3.0.5",
     "@types/inquirer": "^7.3.1",
     "@vue/cli-shared-utils": "^4.5.8",
     "@vue/cli-ui": "^4.5.8",
@@ -36,7 +36,7 @@
     "debug": "^4.1.0",
     "deepmerge": "^4.2.2",
     "download-git-repo": "^3.0.2",
-    "ejs": "^2.7.1",
+    "ejs": "^3.1.5",
     "envinfo": "^7.7.3",
     "fs-extra": "^7.0.1",
     "globby": "^9.2.0",
