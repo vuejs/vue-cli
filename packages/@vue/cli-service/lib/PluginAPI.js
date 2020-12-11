@@ -163,13 +163,18 @@ class PluginAPI {
     const variables = {
       partialIdentifier,
       'cli-service': require('../package.json').version,
-      'cache-loader': require('cache-loader/package.json').version,
       env: process.env.NODE_ENV,
       test: !!process.env.VUE_CLI_TEST,
       config: [
         fmtFunc(this.service.projectOptions.chainWebpack),
         fmtFunc(this.service.projectOptions.configureWebpack)
       ]
+    }
+
+    try {
+      variables['cache-loader'] = require('cache-loader/package.json').version
+    } catch (e) {
+      // cache-loader is only intended to be used for webpack 4
     }
 
     if (!Array.isArray(configFiles)) {
