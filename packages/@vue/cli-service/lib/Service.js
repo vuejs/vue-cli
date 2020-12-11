@@ -178,7 +178,7 @@ module.exports = class Service {
           ) {
             let apply = () => {}
             try {
-              apply = require(resolveModule(id, this.pkgContext))
+              apply = loadModule(id, this.pkgContext)
             } catch (e) {
               warn(`Optional dependency ${id} is not installed.`)
             }
