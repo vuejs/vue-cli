@@ -49,6 +49,7 @@ test('CSS minification', async () => {
       '#app {\n  height: calc(100px * 2);'
     )
   )
+  process.env.VUE_CLI_TEST_MINIMIZE = true
   await project.run('vue-cli-service build')
   const appCss = await project.read('dist/css/app.css')
   expect(appCss).not.toMatch('calc(100px')

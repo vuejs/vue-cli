@@ -243,14 +243,13 @@ module.exports = (api, rootOptions) => {
           .use(require('mini-css-extract-plugin'), [extractOptions])
 
       // minify extracted CSS
-      if (isProd) {
-        webpackConfig
-          .plugin('optimize-css')
-            .use(require('@intervolga/optimize-cssnano-plugin'), [{
-              sourceMap: rootOptions.productionSourceMap && sourceMap,
-              cssnanoOptions
-            }])
-      }
+      webpackConfig.optimization
+        .minimizer('css')
+          .use(require('css-minimizer-webpack-plugin'), [{
+            parallel: rootOptions.parallel,
+            sourceMap: rootOptions.productionSourceMap && sourceMap,
+            minimizerOptions: cssnanoOptions
+          }])
     }
   })
 }
