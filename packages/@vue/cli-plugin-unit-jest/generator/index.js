@@ -71,7 +71,7 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
         : '@vue/cli-plugin-unit-jest/presets/typescript'
     },
     devDependencies: {
-      '@types/jest': '^26.0.17'
+      '@types/jest': '^26.0.19'
     }
   })
 
