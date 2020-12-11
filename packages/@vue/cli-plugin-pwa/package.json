@@ -32,6 +32,6 @@
     "register-service-worker": "^1.7.1"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
+    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
   }
 }
