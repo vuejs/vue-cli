@@ -267,10 +267,12 @@ class PackageManager {
       // Do not override user-defined env variable
       // Because we may construct a wrong download url and an escape hatch is necessary
       if (targetPlatform && !process.env.CYPRESS_INSTALL_BINARY) {
-        // We only support cypress 3 for the current major version
-        const latestCypressVersion = await this.getRemoteVersion('cypress', '^3')
-        process.env.CYPRESS_INSTALL_BINARY =
-          `${cypressMirror.host}/${latestCypressVersion}/${targetPlatform}/cypress.zip`
+        const projectPkg = resolvePkg(this.context)
+        if (projectPkg && projectPkg.devDependencies && projectPkg.devDependencies.cypress) {
+          const wantedCypressVersion = await this.getRemoteVersion('cypress', projectPkg.devDependencies.cypress)
+          process.env.CYPRESS_INSTALL_BINARY =
+            `${cypressMirror.host}/${wantedCypressVersion}/${targetPlatform}/cypress.zip`
+        }
       }
     } catch (e) {
       // get binary mirror config failed
