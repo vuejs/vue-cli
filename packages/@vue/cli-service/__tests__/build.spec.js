@@ -27,6 +27,10 @@ test('build', async () => {
   expect(project.has('dist/subfolder/index.html')).toBe(true)
 
   const index = await project.read('dist/index.html')
+
+  // should have set the title inferred from the project name
+  expect(index).toMatch(/<title>e2e-build<\/title>/)
+
   // should split and preload app.js & vendor.js
   // expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js" rel="preload" as="script">/)
   // expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js" rel="preload" as="script">/)
