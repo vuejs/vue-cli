@@ -112,6 +112,7 @@
     "fibers": ">= 3.1.1 <6.0.0",
     "sass": "^1.30.0",
     "sass-loader": "^8.0.2",
+    "stylus-loader": "^4.3.1",
     "vue": "^2.6.12",
     "vue-router": "^3.4.3",
     "vue-template-compiler": "^2.6.12",
