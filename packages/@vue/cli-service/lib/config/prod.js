@@ -22,7 +22,7 @@ module.exports = (api, options) => {
       }
 
       // disable optimization during tests to speed things up
-      if (process.env.VUE_CLI_TEST) {
+      if (process.env.VUE_CLI_TEST && !process.env.VUE_CLI_TEST_MINIMIZE) {
         webpackConfig.optimization.minimize(false)
       }
     }

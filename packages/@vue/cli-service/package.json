@@ -23,7 +23,6 @@
   },
   "homepage": "https://cli.vuejs.org/",
   "dependencies": {
-    "@intervolga/optimize-cssnano-plugin": "^1.0.5",
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@soda/get-current-script": "^1.0.2",
     "@types/minimist": "^1.2.0",
@@ -47,6 +46,7 @@
     "cliui": "^7.0.4",
     "copy-webpack-plugin": "^6.4.0",
     "css-loader": "^3.5.3",
+    "css-minimizer-webpack-plugin": "^1.1.5",
     "cssnano": "^4.1.10",
     "debug": "^4.1.1",
     "default-gateway": "^6.0.2",
