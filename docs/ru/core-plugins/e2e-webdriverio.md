@@ -46,7 +46,7 @@ tests/e2e/
 
 ## Установка в уже созданный проект
 
-``` sh
+```sh
 vue add e2e-webdriverio
 ```
 

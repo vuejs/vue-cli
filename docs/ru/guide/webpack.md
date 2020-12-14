@@ -55,7 +55,6 @@ module.exports = {
     config.module
       .rule('vue')
       .use('vue-loader')
-        .loader('vue-loader')
         .tap(options => {
           // изменение настроек...
           return options
@@ -159,6 +158,12 @@ module.exports = {
 
 ```bash
 vue inspect > output.js
+```
+
+По умолчанию команда `inspect` показывает конфигурацию для разработки. Для отображения конфигурации для production необходимо запустить:
+
+```bash
+vue inspect --mode production > output.prod.js
 ```
 
 Обратите внимание, что вывод не является файлом рабочей конфигурации webpack, это только сериализованный формат предназначенный для проверки.
