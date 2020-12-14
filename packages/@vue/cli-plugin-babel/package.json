@@ -24,7 +24,6 @@
     "@vue/babel-preset-app": "^4.5.8",
     "@vue/cli-shared-utils": "^4.5.8",
     "babel-loader": "^8.2.2",
-    "cache-loader": "^4.1.0",
     "thread-loader": "^3.0.0",
     "webpack": "^5.10.0"
   },
