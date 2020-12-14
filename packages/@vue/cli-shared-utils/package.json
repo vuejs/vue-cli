@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-shared-utils",
-  "version": "4.5.8",
+  "version": "5.0.0-alpha.0",
   "description": "shared utilities for vue-cli packages",
   "main": "index.js",
   "repository": {
@@ -20,9 +20,9 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-shared-utils#readme",
   "dependencies": {
-    "joi": "^17.2.1",
     "chalk": "^4.1.0",
     "execa": "^1.0.0",
+    "joi": "^17.2.1",
     "launch-editor": "^2.2.1",
     "lru-cache": "^6.0.0",
     "node-fetch": "^2.6.1",
