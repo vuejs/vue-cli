@@ -41,7 +41,7 @@
     "fs-extra": "^7.0.1",
     "globby": "^11.0.1",
     "import-global": "^0.1.0",
-    "ini": "^1.3.7",
+    "ini": "^2.0.0",
     "inquirer": "^7.1.0",
     "isbinaryfile": "^4.0.6",
     "javascript-stringify": "^2.0.1",
