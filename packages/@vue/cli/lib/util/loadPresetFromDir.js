@@ -12,7 +12,7 @@ module.exports = async function loadPresetFromDir (dir) {
   // plugin so it will be invoked by the generator.
   const hasGenerator = fs.existsSync(path.join(dir, 'generator.js')) || fs.existsSync(path.join(dir, 'generator/index.js'))
   if (hasGenerator) {
-    (preset.plugins || (preset.plugins = {}))[dir.replace(/[\/]$/, '')] = {
+    (preset.plugins || (preset.plugins = {}))[dir.replace(/[/]$/, '')] = {
       _isPreset: true,
       prompts: true
     }

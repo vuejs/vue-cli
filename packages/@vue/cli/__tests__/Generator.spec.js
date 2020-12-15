@@ -596,6 +596,7 @@ test('api: render middleware', async () => {
 })
 
 test('api: hasPlugin', () => {
+  // eslint-disable-next-line no-new
   new Generator('/', { plugins: [
     {
       id: 'foo',
@@ -659,6 +660,7 @@ test('api: afterInvoke', async () => {
 })
 
 test('api: resolve', () => {
+  // eslint-disable-next-line no-new
   new Generator('/foo/bar', { plugins: [
     {
       id: 'test',

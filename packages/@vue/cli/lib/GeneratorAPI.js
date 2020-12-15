@@ -17,7 +17,7 @@ const mergeArrayWithDedupe = (a, b) => Array.from(new Set([...a, ...b]))
 function pruneObject (obj) {
   if (typeof obj === 'object') {
     for (const k in obj) {
-      if (!obj.hasOwnProperty(k)) {
+      if (!Object.prototype.hasOwnProperty.call(obj, k)) {
         continue
       }
 

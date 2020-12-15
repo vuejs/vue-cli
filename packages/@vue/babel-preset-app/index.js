@@ -259,13 +259,13 @@ module.exports = (context, options = {}) => {
   return {
     sourceType: 'unambiguous',
     overrides: [{
-      exclude: [/@babel[\/|\\\\]runtime/, /core-js/],
+      exclude: [/@babel[/|\\\\]runtime/, /core-js/],
       presets,
       plugins
     }, {
       // there are some untranspiled code in @babel/runtime
       // https://github.com/babel/babel/issues/9903
-      include: [/@babel[\/|\\\\]runtime/],
+      include: [/@babel[/|\\\\]runtime/],
       presets: [
         [require('@babel/preset-env'), envOptions]
       ]

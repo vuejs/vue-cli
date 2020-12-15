@@ -92,7 +92,7 @@ test('production defaults', () => {
 })
 
 test('override postcss config', () => {
-  const config = genConfig({ postcss: {}})
+  const config = genConfig({ postcss: {} })
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
@@ -393,4 +393,3 @@ test('should use dart sass implementation whenever possible', () => {
   expect(findOptions(config, 'scss', 'sass')).toMatchObject({ implementation: require('sass') })
   expect(findOptions(config, 'sass', 'sass')).toMatchObject({ implementation: require('sass') })
 })
-

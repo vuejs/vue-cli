@@ -54,9 +54,9 @@ module.exports = (api, options) => {
         ]
       }
 
-      const defaultGenerateSWOptions = workboxPluginMode === 'GenerateSW' ? {
-        cacheId: name
-      } : {}
+      const defaultGenerateSWOptions = workboxPluginMode === 'GenerateSW'
+        ? { cacheId: name }
+        : {}
 
       const workBoxConfig = Object.assign(defaultOptions, defaultGenerateSWOptions, userOptions.workboxOptions)
 

@@ -129,7 +129,7 @@ module.exports = api => {
       // Update app manifest (only when there's a manifest.json file,
       // otherwise it will be inferred from options in vue.config.js)
       if (data.manifest) {
-        const name = result['name']
+        const name = result.name
         if (name) {
           onWriteApi.setData('manifest', {
             name,
@@ -137,7 +137,7 @@ module.exports = api => {
           })
         }
 
-        const themeColor = result['themeColor']
+        const themeColor = result.themeColor
         if (themeColor) {
           onWriteApi.setData('manifest', {
             theme_color: themeColor

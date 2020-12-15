@@ -38,7 +38,7 @@ module.exports = class Service {
     // resolve the default mode to use for each command
     // this is provided by plugins as module.exports.defaultModes
     // so we can get the information without actually applying the plugin.
-    this.modes = this.plugins.reduce((modes, { apply: { defaultModes }}) => {
+    this.modes = this.plugins.reduce((modes, { apply: { defaultModes } }) => {
       return Object.assign(modes, defaultModes)
     }, {})
   }
