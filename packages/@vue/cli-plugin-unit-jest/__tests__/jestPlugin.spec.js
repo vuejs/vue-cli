@@ -10,7 +10,7 @@ test('should work', async () => {
       '@vue/cli-plugin-unit-jest': {}
     }
   })
-  await project.run(`vue-cli-service test:unit`)
+  await project.run('vue-cli-service test:unit')
 })
 
 test('should respect jest testMatch config', async () => {
@@ -27,7 +27,7 @@ test('should respect jest testMatch config', async () => {
 
   let result
   try {
-    await project.run(`vue-cli-service test:unit`)
+    await project.run('vue-cli-service test:unit')
   } catch (e) {
     result = e
   }
@@ -51,7 +51,7 @@ test('should respect jest.config.js testMatch config', async () => {
 
   let result
   try {
-    await project.run(`vue-cli-service test:unit`)
+    await project.run('vue-cli-service test:unit')
   } catch (e) {
     result = e
   }
@@ -66,9 +66,9 @@ test('should work without Babel', async () => {
     },
     useConfigFiles: true
   })
-  await project.run(`vue-cli-service test:unit`)
+  await project.run('vue-cli-service test:unit')
 
-  await project.run(`vue-cli-service test:unit --coverage --collectCoverageFrom="src/**/*.{js,vue}"`)
+  await project.run('vue-cli-service test:unit --coverage --collectCoverageFrom="src/**/*.{js,vue}"')
   const appCoverage = await project.read('coverage/lcov-report/App.vue.html')
   expect(appCoverage).toBeTruthy()
 })
@@ -114,7 +114,7 @@ test('should work with tsx', async () => {
   })
   `)
 
-  await run(`vue-cli-service test:unit`)
+  await run('vue-cli-service test:unit')
 })
 
 test('should correctly configured eslint', async () => {
@@ -124,7 +124,7 @@ test('should correctly configured eslint', async () => {
       '@vue/cli-plugin-unit-jest': {}
     }
   })
-  await project.run(`vue-cli-service lint`)
+  await project.run('vue-cli-service lint')
 })
 
 test('should work with Vue 3', async () => {
@@ -137,5 +137,5 @@ test('should work with Vue 3', async () => {
   })
   const pkg = JSON.parse(await project.read('package.json'))
   expect(pkg.devDependencies['@vue/test-utils']).toMatch('^2')
-  await project.run(`vue-cli-service test:unit`)
+  await project.run('vue-cli-service test:unit')
 })

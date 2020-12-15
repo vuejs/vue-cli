@@ -6,7 +6,7 @@ module.exports = (api, options) => {
   if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
-        'vue': '^3.0.4'
+        vue: '^3.0.4'
       },
       devDependencies: {
         '@vue/compiler-sfc': '^3.0.4'
@@ -15,7 +15,7 @@ module.exports = (api, options) => {
   } else {
     api.extendPackage({
       dependencies: {
-        'vue': '^2.6.11'
+        vue: '^2.6.11'
       },
       devDependencies: {
         'vue-template-compiler': '^2.6.11'
@@ -25,8 +25,8 @@ module.exports = (api, options) => {
 
   api.extendPackage({
     scripts: {
-      'serve': 'vue-cli-service serve',
-      'build': 'vue-cli-service build'
+      serve: 'vue-cli-service serve',
+      build: 'vue-cli-service build'
     },
     browserslist: [
       '> 1%',
@@ -46,11 +46,11 @@ module.exports = (api, options) => {
         'sass-loader': '^8.0.2'
       },
       less: {
-        'less': '^3.0.4',
+        less: '^3.0.4',
         'less-loader': '^5.0.0'
       },
       stylus: {
-        'stylus': '^0.54.8',
+        stylus: '^0.54.8',
         'stylus-loader': '^4.3.1'
       }
     }

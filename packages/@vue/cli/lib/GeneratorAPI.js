@@ -47,7 +47,7 @@ class GeneratorAPI {
 
     /* eslint-disable no-shadow */
     this.pluginsData = generator.plugins
-      .filter(({ id }) => id !== `@vue/cli-service`)
+      .filter(({ id }) => id !== '@vue/cli-service')
       .map(({ id }) => ({
         name: toShortPluginId(id),
         link: getPluginLink(id)
@@ -492,13 +492,13 @@ function renderFile (name, data, ejsOptions) {
   const yaml = require('yaml-front-matter')
   const parsed = yaml.loadFront(template)
   const content = parsed.__content
-  let finalTemplate = content.trim() + `\n`
+  let finalTemplate = content.trim() + '\n'
 
   if (parsed.when) {
     finalTemplate = (
       `<%_ if (${parsed.when}) { _%>` +
         finalTemplate +
-      `<%_ } _%>`
+      '<%_ } _%>'
     )
 
     // use ejs.render to test the conditional expression

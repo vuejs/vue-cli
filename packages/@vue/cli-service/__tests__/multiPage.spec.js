@@ -55,8 +55,8 @@ async function makeProjectMultiPage (project) {
   `)
   const app = await project.read('src/App.vue')
   await project.write('src/App.vue', app.replace(
-    `import HelloWorld from './components/HelloWorld.vue'`,
-    `const HelloWorld = () => import('./components/HelloWorld.vue')`
+    'import HelloWorld from \'./components/HelloWorld.vue\'',
+    'const HelloWorld = () => import(\'./components/HelloWorld.vue\')'
   ))
 }
 
@@ -68,22 +68,22 @@ test('serve w/ multi page', async () => {
   await serve(
     () => project.run('vue-cli-service serve'),
     async ({ page, url, helpers }) => {
-      expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
+      expect(await helpers.getText('h1')).toMatch('Welcome to Your Vue.js App')
 
       await page.goto(`${url}/foo.html`)
-      expect(await helpers.getText('h1')).toMatch(`Foo`)
+      expect(await helpers.getText('h1')).toMatch('Foo')
 
       await page.goto(`${url}/bar.html`)
-      expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
+      expect(await helpers.getText('h1')).toMatch('Welcome to Your Vue.js App')
 
       await page.goto(`${url}foo`)
-      expect(await helpers.getText('h1')).toMatch(`Foo`)
+      expect(await helpers.getText('h1')).toMatch('Foo')
 
       await page.goto(`${url}bar`)
-      expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
+      expect(await helpers.getText('h1')).toMatch('Welcome to Your Vue.js App')
 
       await page.goto(`${url}foobar`)
-      expect(await helpers.getText('h1')).toMatch(`FooBar`)
+      expect(await helpers.getText('h1')).toMatch('FooBar')
     }
   )
 })

@@ -13,8 +13,8 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
 
   if (!fs.existsSync(fullEntryPath)) {
     abort(
-      `Failed to resolve lib entry: ${entry}${entry === `src/App.vue` ? ' (default)' : ''}. ` +
-      `Make sure to specify the correct entry file.`
+      `Failed to resolve lib entry: ${entry}${entry === 'src/App.vue' ? ' (default)' : ''}. ` +
+      'Make sure to specify the correct entry file.'
     )
   }
 
@@ -119,7 +119,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       // libraryTarget: 'esm' or target: 'universal'
       // https://github.com/webpack/webpack/issues/6522
       // https://github.com/webpack/webpack/issues/6525
-      globalObject: `(typeof self !== 'undefined' ? self : this)`
+      globalObject: '(typeof self !== \'undefined\' ? self : this)'
     }, rawConfig.output, {
       filename: `${entryName}.js`,
       chunkFilename: `${entryName}.[name].js`,

@@ -7,7 +7,7 @@ module.exports = [
   {
     name: 'config',
     type: 'list',
-    message: `Pick an ESLint config:`,
+    message: 'Pick an ESLint config:',
     choices: [
       {
         name: 'Error prevention only',

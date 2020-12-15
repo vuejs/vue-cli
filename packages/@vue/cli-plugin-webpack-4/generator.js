@@ -2,7 +2,7 @@
 module.exports = (api) => {
   api.extendPackage({
     devDependencies: {
-      'webpack': '^4.0.0'
+      webpack: '^4.0.0'
     },
     // Force resolutions is more reliable than module-alias
     // Yarn and PNPM 5.10+ support this feature

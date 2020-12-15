@@ -46,7 +46,7 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   if (!id) {
     throw new Error(
       `Cannot resolve plugin ${chalk.yellow(pluginName)} from package.json. ` +
-        `Did you forget to install it?`
+        'Did you forget to install it?'
     )
   }
 
@@ -120,14 +120,14 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
 
   if (!isTestOrDebug && depsChanged) {
-    log(`📦  Installing additional dependencies...`)
+    log('📦  Installing additional dependencies...')
     log()
     const pm = new PackageManager({ context })
     await pm.install()
   }
 
   if (afterInvokeCbs.length || afterAnyInvokeCbs.length) {
-    logWithSpinner('⚓', `Running completion hooks...`)
+    logWithSpinner('⚓', 'Running completion hooks...')
     for (const cb of afterInvokeCbs) {
       await cb()
     }
@@ -141,7 +141,7 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
   log(`${chalk.green('✔')}  Successfully invoked generator for plugin: ${chalk.cyan(plugin.id)}`)
   const changedFiles = getChangedFiles(context)
   if (changedFiles.length) {
-    log(`   The following files have been updated / added:\n`)
+    log('   The following files have been updated / added:\n')
     log(chalk.red(changedFiles.map(line => `     ${line}`).join('\n')))
     log()
     log(

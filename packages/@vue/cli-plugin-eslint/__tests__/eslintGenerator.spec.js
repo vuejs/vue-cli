@@ -201,7 +201,7 @@ test('append to existing .editorconfig', async () => {
   await write('.editorconfig', 'root = true\n')
 
   const invoke = require('@vue/cli/lib/invoke')
-  await invoke(`eslint`, { config: 'airbnb' }, dir)
+  await invoke('eslint', { config: 'airbnb' }, dir)
 
   const editorconfig = await read('.editorconfig')
   expect(editorconfig).toMatch('root = true')

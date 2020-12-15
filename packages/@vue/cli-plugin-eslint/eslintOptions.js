@@ -7,8 +7,8 @@ exports.config = (api, preset, rootOptions = {}) => {
       ecmaVersion: 2020
     },
     rules: {
-      'no-console': makeJSOnlyValue(`process.env.NODE_ENV === 'production' ? 'warn' : 'off'`),
-      'no-debugger': makeJSOnlyValue(`process.env.NODE_ENV === 'production' ? 'warn' : 'off'`)
+      'no-console': makeJSOnlyValue('process.env.NODE_ENV === \'production\' ? \'warn\' : \'off\''),
+      'no-debugger': makeJSOnlyValue('process.env.NODE_ENV === \'production\' ? \'warn\' : \'off\'')
     }
   }
 

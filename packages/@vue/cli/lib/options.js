@@ -80,8 +80,8 @@ exports.defaults = {
   packageManager: undefined,
   useTaobaoRegistry: undefined,
   presets: {
-    'default': Object.assign({ vueVersion: '2' }, exports.defaultPreset),
-    '__default_vue_3__': Object.assign({ vueVersion: '3' }, exports.defaultPreset)
+    default: Object.assign({ vueVersion: '2' }, exports.defaultPreset),
+    __default_vue_3__: Object.assign({ vueVersion: '3' }, exports.defaultPreset)
   }
 }
 
@@ -96,17 +96,17 @@ exports.loadOptions = () => {
       cachedOptions = JSON.parse(fs.readFileSync(rcPath, 'utf-8'))
     } catch (e) {
       error(
-        `Error loading saved preferences: ` +
-        `~/.vuerc may be corrupted or have syntax errors. ` +
-        `Please fix/delete it and re-run vue-cli in manual mode.\n` +
+        'Error loading saved preferences: ' +
+        '~/.vuerc may be corrupted or have syntax errors. ' +
+        'Please fix/delete it and re-run vue-cli in manual mode.\n' +
         `(${e.message})`
       )
       exit(1)
     }
     validate(cachedOptions, schema, () => {
       error(
-        `~/.vuerc may be outdated. ` +
-        `Please delete it and re-run vue-cli in manual mode.`
+        '~/.vuerc may be outdated. ' +
+        'Please delete it and re-run vue-cli in manual mode.'
       )
     })
     return cachedOptions
@@ -128,7 +128,7 @@ exports.saveOptions = toSave => {
     return true
   } catch (e) {
     error(
-      `Error saving preferences: ` +
+      'Error saving preferences: ' +
       `make sure you have write access to ${rcPath}.\n` +
       `(${e.message})`
     )

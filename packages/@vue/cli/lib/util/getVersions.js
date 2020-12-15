@@ -11,7 +11,7 @@ module.exports = async function getVersions () {
   }
 
   let latest
-  const local = require(`../../package.json`).version
+  const local = require('../../package.json').version
   if (process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG) {
     return (sessionCached = {
       current: local,

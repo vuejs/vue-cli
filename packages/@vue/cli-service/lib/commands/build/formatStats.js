@@ -55,18 +55,18 @@ module.exports = function formatStats (stats, dir, api) {
 
   ui.div(
     makeRow(
-      chalk.cyan.bold(`File`),
-      chalk.cyan.bold(`Size`),
-      chalk.cyan.bold(`Gzipped`)
-    ) + `\n\n` +
+      chalk.cyan.bold('File'),
+      chalk.cyan.bold('Size'),
+      chalk.cyan.bold('Gzipped')
+    ) + '\n\n' +
     assets.map(asset => makeRow(
       /js$/.test(asset.name)
         ? chalk.green(path.join(dir, asset.name))
         : chalk.blue(path.join(dir, asset.name)),
       formatSize(asset.size),
       getGzippedSize(asset)
-    )).join(`\n`)
+    )).join('\n')
   )
 
-  return `${ui.toString()}\n\n  ${chalk.gray(`Images and other types of assets omitted.`)}\n`
+  return `${ui.toString()}\n\n  ${chalk.gray('Images and other types of assets omitted.')}\n`
 }

@@ -38,8 +38,8 @@ afterEach(() => {
 
 test('env loading', () => {
   process.env.FOO = 0
-  fs.writeFileSync('/.env.local', `FOO=1\nBAR=2`)
-  fs.writeFileSync('/.env', `BAR=3\nBAZ=4`)
+  fs.writeFileSync('/.env.local', 'FOO=1\nBAR=2')
+  fs.writeFileSync('/.env', 'BAR=3\nBAZ=4')
   createMockService()
 
   expect(process.env.FOO).toBe('0')
@@ -209,8 +209,8 @@ test('api: --skip-plugins', () => {
 })
 
 test('api: defaultModes', () => {
-  fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
-  fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
+  fs.writeFileSync('/.env.foo', 'FOO=5\nBAR=6')
+  fs.writeFileSync('/.env.foo.local', 'FOO=7\nBAZ=8')
 
   const plugin1 = {
     id: 'test-defaultModes',

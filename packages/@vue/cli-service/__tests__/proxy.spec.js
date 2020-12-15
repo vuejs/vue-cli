@@ -11,13 +11,13 @@ let mockServer2
 
 beforeAll(done => {
   mockServer1 = createJSONServer({
-    'posts': [
-      { 'id': 1, 'title': 'server-one', 'author': 'typicode' }
+    posts: [
+      { id: 1, title: 'server-one', author: 'typicode' }
     ]
   }).listen(3000, () => {
     mockServer2 = createJSONServer({
-      'posts': [
-        { 'id': 1, 'title': 'server-two', 'author': 'typicode' }
+      posts: [
+        { id: 1, title: 'server-two', author: 'typicode' }
       ]
     }).listen(3001, done)
   })

@@ -13,8 +13,8 @@ module.exports = (api, options) => {
 
   function logMainHelp () {
     console.log(
-      `\n  Usage: vue-cli-service <command> [options]\n` +
-      `\n  Commands:\n`
+      '\n  Usage: vue-cli-service <command> [options]\n' +
+      '\n  Commands:\n'
     )
     const commands = api.service.commands
     const padLength = getPadLength(commands)
@@ -29,7 +29,7 @@ module.exports = (api, options) => {
       }
     }
     console.log(`\n  run ${
-      chalk.green(`vue-cli-service help [command]`)
+      chalk.green('vue-cli-service help [command]')
     } for usage of a specific command.\n`)
   }
 
@@ -42,7 +42,7 @@ module.exports = (api, options) => {
         console.log(`\n  Usage: ${opts.usage}`)
       }
       if (opts.options) {
-        console.log(`\n  Options:\n`)
+        console.log('\n  Options:\n')
         const padLength = getPadLength(opts.options)
         for (const [flags, description] of Object.entries(opts.options)) {
           console.log(`    ${

@@ -9,7 +9,7 @@ exports.launch = (...args) => {
   }
   launch(...args, (fileName, errorMessage) => {
     console.error(`Unable to open '${fileName}'`, errorMessage)
-    console.log(`Try setting the EDITOR env variable. More info: https://github.com/yyx990803/launch-editor`)
+    console.log('Try setting the EDITOR env variable. More info: https://github.com/yyx990803/launch-editor')
 
     if (cb) cb(fileName, errorMessage)
   })

@@ -157,7 +157,7 @@ module.exports = class Upgrader {
         const wanted = await this.pm.getRemoteVersion(name, range)
 
         if (!installed) {
-          throw new Error(`At least one dependency can't be found. Please install the dependencies before trying to upgrade`)
+          throw new Error('At least one dependency can\'t be found. Please install the dependencies before trying to upgrade')
         }
 
         let latest = await this.pm.getRemoteVersion(name)

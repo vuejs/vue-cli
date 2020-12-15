@@ -21,7 +21,7 @@ module.exports = async function confirmIfGitDirty (context) {
     return true
   }
 
-  warn(`There are uncommitted changes in the current repository, it's recommended to commit or stash them first.`)
+  warn('There are uncommitted changes in the current repository, it\'s recommended to commit or stash them first.')
   const { ok } = await inquirer.prompt([
     {
       name: 'ok',

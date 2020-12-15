@@ -47,16 +47,16 @@ function renderProgressBar (curr, total) {
   const availableSpace = Math.max(0, process.stderr.columns - bar.length - 3)
   const width = Math.min(total, availableSpace)
   const completeLength = Math.round(width * ratio)
-  const complete = `#`.repeat(completeLength)
-  const incomplete = `-`.repeat(width - completeLength)
+  const complete = '#'.repeat(completeLength)
+  const incomplete = '-'.repeat(width - completeLength)
   toStartOfLine(process.stderr)
   process.stderr.write(`[${complete}${incomplete}]${bar}`)
 }
 
 const progress = exports.progress = new InstallProgress()
 exports.executeCommand = function executeCommand (command, args, cwd) {
-  debug(`command: `, command)
-  debug(`args: `, args)
+  debug('command: ', command)
+  debug('args: ', args)
 
   return new Promise((resolve, reject) => {
     const apiMode = process.env.VUE_CLI_API_MODE

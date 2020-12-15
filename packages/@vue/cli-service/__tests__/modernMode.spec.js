@@ -48,7 +48,7 @@ test('modern mode', async () => {
   expect(index).toMatch(`<script>${safariFix}</script>`)
 
   // Test crossorigin="use-credentials"
-  await project.write('vue.config.js', `module.exports = { crossorigin: 'use-credentials' }`)
+  await project.write('vue.config.js', 'module.exports = { crossorigin: \'use-credentials\' }')
   const { stdout: stdout2 } = await project.run('vue-cli-service build --modern')
   expect(stdout2).toMatch('Build complete.')
   const index2 = await project.read('dist/index.html')

@@ -107,7 +107,7 @@ module.exports = function lint (args = {}, api) {
     if (!args.silent) {
       const hasFixed = report.results.some(f => f.output)
       if (hasFixed) {
-        log(`The following files have been auto-fixed:`)
+        log('The following files have been auto-fixed:')
         log()
         report.results.forEach(f => {
           if (f.output) {
@@ -119,7 +119,7 @@ module.exports = function lint (args = {}, api) {
       if (report.warningCount || report.errorCount) {
         console.log(formatter(report.results))
       } else {
-        done(hasFixed ? `All lint errors auto-fixed.` : `No lint errors found!`)
+        done(hasFixed ? 'All lint errors auto-fixed.' : 'No lint errors found!')
       }
     }
   } else {

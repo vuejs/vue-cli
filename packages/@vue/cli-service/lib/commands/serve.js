@@ -18,15 +18,15 @@ module.exports = (api, options) => {
     description: 'start development server',
     usage: 'vue-cli-service serve [options] [entry]',
     options: {
-      '--open': `open browser on server start`,
-      '--copy': `copy url to clipboard on server start`,
-      '--stdin': `close when stdin ends`,
-      '--mode': `specify env mode (default: development)`,
+      '--open': 'open browser on server start',
+      '--copy': 'copy url to clipboard on server start',
+      '--stdin': 'close when stdin ends',
+      '--mode': 'specify env mode (default: development)',
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
-      '--public': `specify the public network URL for the HMR client`,
-      '--skip-plugins': `comma-separated list of plugin names to skip for this run`
+      '--public': 'specify the public network URL for the HMR client',
+      '--skip-plugins': 'comma-separated list of plugin names to skip for this run'
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -61,7 +61,7 @@ module.exports = (api, options) => {
         // https://github.com/vuejs/vue-cli/issues/3539
         webpackConfig
           .output
-            .globalObject(`(typeof self !== 'undefined' ? self : this)`)
+            .globalObject('(typeof self !== \'undefined\' ? self : this)')
 
         if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
           webpackConfig
@@ -136,16 +136,16 @@ module.exports = (api, options) => {
         : isInContainer
           // can't infer public network url if inside a container...
           // use client-side inference (note this would break with non-root publicPath)
-          ? ``
+          ? ''
           // otherwise infer the url
-          : `?` + url.format({
+          : '?' + url.format({
             protocol,
             port,
             hostname: urls.lanUrlForConfig || 'localhost'
           }) + `&sockPath=${sockPath}`
       const devClients = [
         // dev server client
-        require.resolve(`webpack-dev-server/client`) + sockjsUrl,
+        require.resolve('webpack-dev-server/client') + sockjsUrl,
         // hmr client
         require.resolve(projectDevServerOptions.hotOnly
           ? 'webpack/hot/only-dev-server'
@@ -154,7 +154,7 @@ module.exports = (api, options) => {
         // `@vue/cli-overlay/dist/client`
       ]
       if (process.env.APPVEYOR) {
-        devClients.push(`webpack/hot/poll?500`)
+        devClients.push('webpack/hot/poll?500')
       }
       // inject dev/hot client
       addDevClientToEntry(webpackConfig, devClients)
@@ -195,8 +195,8 @@ module.exports = (api, options) => {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay
         app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
-          `To specify an editor, specify the EDITOR env variable or ` +
-          `add "editor" field to your Vue project config.\n`
+          'To specify an editor, specify the EDITOR env variable or ' +
+          'add "editor" field to your Vue project config.\n'
         )))
         // allow other plugins to register middlewares, e.g. PWA
         api.service.devServerConfigFns.forEach(fn => fn(app, server))
@@ -261,18 +261,18 @@ module.exports = (api, options) => {
           : urls.lanUrlForTerminal
 
         console.log()
-        console.log(`  App running at:`)
+        console.log('  App running at:')
         console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
         if (!isInContainer) {
           console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
         } else {
           console.log()
-          console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
+          console.log(chalk.yellow('  It seems you are running Vue CLI inside a container.'))
           if (!publicUrl && options.publicPath && options.publicPath !== '/') {
             console.log()
-            console.log(chalk.yellow(`  Since you are using a non-root publicPath, the hot-reload socket`))
-            console.log(chalk.yellow(`  will not be able to infer the correct URL to connect. You should`))
-            console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue(`devServer.public`)}.`))
+            console.log(chalk.yellow('  Since you are using a non-root publicPath, the hot-reload socket'))
+            console.log(chalk.yellow('  will not be able to infer the correct URL to connect. You should'))
+            console.log(chalk.yellow(`  explicitly specify the URL via ${chalk.blue('devServer.public')}.`))
             console.log()
           }
           console.log(chalk.yellow(`  Access the dev server via ${chalk.cyan(
@@ -285,12 +285,12 @@ module.exports = (api, options) => {
           isFirstCompile = false
 
           if (!isProduction) {
-            const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
-            console.log(`  Note that the development build is not optimized.`)
+            const buildCommand = hasProjectYarn(api.getCwd()) ? 'yarn build' : hasProjectPnpm(api.getCwd()) ? 'pnpm run build' : 'npm run build'
+            console.log('  Note that the development build is not optimized.')
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
           } else {
-            console.log(`  App is served in production mode.`)
-            console.log(`  Note this is for preview or E2E testing only.`)
+            console.log('  App is served in production mode.')
+            console.log('  Note this is for preview or E2E testing only.')
           }
           console.log()
 
@@ -351,8 +351,8 @@ function checkInContainer () {
     return true
   }
   const fs = require('fs')
-  if (fs.existsSync(`/proc/1/cgroup`)) {
-    const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
+  if (fs.existsSync('/proc/1/cgroup')) {
+    const content = fs.readFileSync('/proc/1/cgroup', 'utf-8')
     return /:\/(lxc|docker|kubepods(\.slice)?)\//.test(content)
   }
 }

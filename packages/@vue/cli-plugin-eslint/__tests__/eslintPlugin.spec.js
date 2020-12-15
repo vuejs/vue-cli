@@ -227,7 +227,7 @@ test('should persist cache', async () => {
   expect(has('node_modules/.cache/eslint/cache.json')).toBe(true)
 })
 
-test(`should use formatter 'codeframe'`, async () => {
+test('should use formatter \'codeframe\'', async () => {
   const project = await create('eslint-formatter-codeframe', {
     plugins: {
       '@vue/cli-plugin-babel': {},

@@ -160,7 +160,7 @@ module.exports = class Creator extends EventEmitter {
 
       if (!version) {
         if (isOfficialPlugin(dep) || dep === '@vue/cli-service' || dep === '@vue/babel-preset-env') {
-          version = isTestOrDebug ? `latest` : `~${latestMinor}`
+          version = isTestOrDebug ? 'latest' : `~${latestMinor}`
         } else {
           version = 'latest'
         }
@@ -189,13 +189,13 @@ module.exports = class Creator extends EventEmitter {
     // so that vue-cli-service can setup git hooks.
     const shouldInitGit = this.shouldInitGit(cliOptions)
     if (shouldInitGit) {
-      log(`🗃  Initializing git repository...`)
+      log('🗃  Initializing git repository...')
       this.emit('creation', { event: 'git-init' })
       await run('git init')
     }
 
     // install plugins
-    log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`)
+    log('⚙\u{fe0f}  Installing CLI plugins. This might take a while...')
     log()
     this.emit('creation', { event: 'plugins-install' })
 
@@ -207,7 +207,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run generator
-    log(`🚀  Invoking generators...`)
+    log('🚀  Invoking generators...')
     this.emit('creation', { event: 'invoking-generators' })
     const plugins = await this.resolvePlugins(preset.plugins, pkg)
     const generator = new Generator(context, {
@@ -221,7 +221,7 @@ module.exports = class Creator extends EventEmitter {
     })
 
     // install additional deps (injected by generators)
-    log(`📦  Installing additional dependencies...`)
+    log('📦  Installing additional dependencies...')
     this.emit('creation', { event: 'deps-install' })
     log()
     if (!isTestOrDebug || process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
@@ -229,7 +229,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run complete cbs if any (injected by generators)
-    log(`⚓  Running completion hooks...`)
+    log('⚓  Running completion hooks...')
     this.emit('creation', { event: 'completion-hooks' })
     for (const cb of afterInvokeCbs) {
       await cb()
@@ -269,8 +269,8 @@ module.exports = class Creator extends EventEmitter {
     log(`🎉  Successfully created project ${chalk.yellow(name)}.`)
     if (!cliOptions.skipGetStarted) {
       log(
-        `👉  Get started with the following commands:\n\n` +
-        (this.context === process.cwd() ? `` : chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`)) +
+        '👉  Get started with the following commands:\n\n' +
+        (this.context === process.cwd() ? '' : chalk.cyan(` ${chalk.gray('$')} cd ${name}\n`)) +
         chalk.cyan(` ${chalk.gray('$')} ${packageManager === 'yarn' ? 'yarn serve' : packageManager === 'pnpm' ? 'pnpm run serve' : 'npm run serve'}`)
       )
     }
@@ -279,8 +279,8 @@ module.exports = class Creator extends EventEmitter {
 
     if (gitCommitFailed) {
       warn(
-        `Skipped git commit due to missing username and email in git config, or failed to sign commit.\n` +
-        `You will need to perform the initial commit yourself.\n`
+        'Skipped git commit due to missing username and email in git config, or failed to sign commit.\n' +
+        'You will need to perform the initial commit yourself.\n'
       )
     }
 
@@ -357,10 +357,10 @@ module.exports = class Creator extends EventEmitter {
       const presets = Object.keys(savedPresets)
       if (presets.length) {
         log()
-        log(`available presets:\n${presets.join(`\n`)}`)
+        log(`available presets:\n${presets.join('\n')}`)
       } else {
-        log(`you don't seem to have any saved preset.`)
-        log(`run vue-cli in manual mode to create a preset.`)
+        log('you don\'t seem to have any saved preset.')
+        log('run vue-cli in manual mode to create a preset.')
       }
       exit(1)
     }
@@ -390,7 +390,7 @@ module.exports = class Creator extends EventEmitter {
           }
 
           log()
-          log(`${chalk.cyan(options._isPreset ? `Preset options:` : id)}`)
+          log(`${chalk.cyan(options._isPreset ? 'Preset options:' : id)}`)
           options = await prompt(pluginPrompts)
         }
       }
@@ -423,7 +423,7 @@ module.exports = class Creator extends EventEmitter {
     const presetPrompt = {
       name: 'preset',
       type: 'list',
-      message: `Please pick a preset:`,
+      message: 'Please pick a preset:',
       choices: [
         ...presetChoices,
         {

@@ -13,5 +13,5 @@ const options = {
 assertServe('ts-class-serve', options)
 assertBuild('ts-class-build', options, async (project) => {
   const app = await project.read('src/App.vue')
-  expect(app).toMatch(`export default class App extends Vue {`)
+  expect(app).toMatch('export default class App extends Vue {')
 })

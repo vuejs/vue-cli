@@ -7,7 +7,7 @@ module.exports = (methodName, log) => {
       return
     }
     this.outputHelp()
-    console.log(`  ` + chalk.red(log(...args)))
+    console.log('  ' + chalk.red(log(...args)))
     console.log()
     process.exit(1)
   }

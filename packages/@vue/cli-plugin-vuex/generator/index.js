@@ -1,5 +1,5 @@
 module.exports = (api, options = {}, rootOptions = {}) => {
-  api.injectImports(api.entryFile, `import store from './store'`)
+  api.injectImports(api.entryFile, 'import store from \'./store\'')
 
   if (rootOptions.vueVersion === '3') {
     api.transformScript(api.entryFile, require('./injectUseStore'))
@@ -10,7 +10,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
     })
     api.render('./template-vue3', {})
   } else {
-    api.injectRootOptions(api.entryFile, `store`)
+    api.injectRootOptions(api.entryFile, 'store')
 
     api.extendPackage({
       dependencies: {

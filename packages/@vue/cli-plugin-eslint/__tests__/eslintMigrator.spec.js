@@ -146,7 +146,7 @@ test('upgrade: replace babel-eslint with @babel/eslint-parser in eslintrc.js', a
 
   const eslintrc = await project.read('.eslintrc.js')
   expect(eslintrc).toMatch('babel-eslint')
-  const eslintrcMerge = eslintrc.replace(`parser: 'babel-eslint'`, `testMerge: 'testMerge', parser: 'babel-eslint'`)
+  const eslintrcMerge = eslintrc.replace('parser: \'babel-eslint\'', 'testMerge: \'testMerge\', parser: \'babel-eslint\'')
   await project.write('.eslintrc.js', eslintrcMerge)
 
   await project.upgrade('eslint')

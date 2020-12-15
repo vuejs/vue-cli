@@ -44,7 +44,7 @@ exports.resolvePluginId = id => {
     if (scopeMatch) {
       const scope = scopeMatch[0]
       const shortId = id.replace(scopeRE, '')
-      return `${scope}${scope === '@vue/' ? `` : `vue-`}cli-plugin-${shortId}`
+      return `${scope}${scope === '@vue/' ? '' : 'vue-'}cli-plugin-${shortId}`
     }
   }
   // default short
@@ -77,6 +77,6 @@ exports.getPluginLink = id => {
   return (
     pkg.homepage ||
     (pkg.repository && pkg.repository.url) ||
-    `https://www.npmjs.com/package/${id.replace(`/`, `%2F`)}`
+    `https://www.npmjs.com/package/${id.replace('/', '%2F')}`
   )
 }

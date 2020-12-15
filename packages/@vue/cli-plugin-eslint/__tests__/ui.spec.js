@@ -91,7 +91,7 @@ describe('getEslintPrompts', () => {
 
   // all rules
   const rules = {
-    'lorem': {
+    lorem: {
       meta: {
         docs: {
           category: undefined,
@@ -100,7 +100,7 @@ describe('getEslintPrompts', () => {
         }
       }
     },
-    'ipsum': {
+    ipsum: {
       meta: {
         docs: {
           category: 'recommended',
@@ -109,7 +109,7 @@ describe('getEslintPrompts', () => {
         }
       }
     },
-    'dolor': {
+    dolor: {
       meta: {
         docs: {
           category: 'strongly-recommended',
@@ -118,7 +118,7 @@ describe('getEslintPrompts', () => {
         }
       }
     },
-    'sit': {
+    sit: {
       meta: {
         docs: {
           category: 'base',

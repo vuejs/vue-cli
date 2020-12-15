@@ -20,12 +20,12 @@ exports.assertServe = async (name, options, outside = false) => {
     await serve(
       () => project.run('yarn serve'),
       async ({ page, nextUpdate, helpers }) => {
-        const msg = `Welcome to Your Vue.js + TypeScript App`
+        const msg = 'Welcome to Your Vue.js + TypeScript App'
         expect(await helpers.getText('h1')).toMatch(msg)
 
         // test hot reload
-        const file = await project.read(`src/App.vue`)
-        project.write(`src/App.vue`, file.replace(msg, `Updated`))
+        const file = await project.read('src/App.vue')
+        project.write('src/App.vue', file.replace(msg, 'Updated'))
         await nextUpdate() // wait for child stdout update signal
         try {
           await page.waitForFunction(selector => {

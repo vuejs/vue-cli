@@ -4,7 +4,7 @@ function extend (value, source) {
   return _extend(value, source).replace(/\r\n/g, '\n')
 }
 
-test(`basic`, () => {
+test('basic', () => {
   const value = {
     foo: true,
     css: {
@@ -28,7 +28,7 @@ test(`basic`, () => {
   )
 })
 
-test(`adding new property`, () => {
+test('adding new property', () => {
   const value = {
     foo: true
   }
@@ -44,7 +44,7 @@ test(`adding new property`, () => {
   )
 })
 
-test(`non direct assignment`, () => {
+test('non direct assignment', () => {
   const value = {
     foo: true
   }
@@ -62,7 +62,7 @@ module.exports = config`
   )
 })
 
-test(`with extra assignment expression`, () => {
+test('with extra assignment expression', () => {
   const value = {
     foo: true
   }
@@ -80,7 +80,7 @@ module.exports = {
   )
 })
 
-test(`add a new undefined property`, () => {
+test('add a new undefined property', () => {
   const value = {
     foo: undefined
   }
@@ -91,7 +91,7 @@ test(`add a new undefined property`, () => {
   expect(extend(value, source)).toMatch(source)
 })
 
-test(`change an existing property to undefined`, () => {
+test('change an existing property to undefined', () => {
   const value = {
     foo: undefined
   }

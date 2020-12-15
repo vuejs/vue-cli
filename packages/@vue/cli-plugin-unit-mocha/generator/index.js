@@ -14,7 +14,7 @@ module.exports = (api, options, rootOptions, invoking) => {
     devDependencies: {
       '@vue/cli-plugin-webpack-4': require('../package.json').dependencies['@vue/cli-plugin-webpack-4'],
       '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.0',
-      'chai': '^4.2.0'
+      chai: '^4.2.0'
     },
     scripts: {
       'test:unit': 'vue-cli-service test:unit'

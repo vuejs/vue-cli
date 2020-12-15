@@ -11,9 +11,9 @@ module.exports = function inspect (paths, args) {
   } catch (e) {
     const { error } = require('@vue/cli-shared-utils')
     error(
-      `Failed to locate @vue/cli-service.\n` +
-      `Note that \`vue inspect\` is an alias of \`vue-cli-service inspect\`\n` +
-      `and can only be used in a project where @vue/cli-service is locally installed.`
+      'Failed to locate @vue/cli-service.\n' +
+      'Note that `vue inspect` is an alias of `vue-cli-service inspect`\n' +
+      'and can only be used in a project where @vue/cli-service is locally installed.'
     )
     process.exit(1)
   }

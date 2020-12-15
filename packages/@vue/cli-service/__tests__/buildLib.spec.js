@@ -127,10 +127,10 @@ test('build as lib with webpackConfiguration depending on target (js)', async ()
   expect(project.has('dist/testLib.common.js')).toBe(true)
 
   const umdContent = await project.read('dist/testLib.umd.js')
-  expect(umdContent).toContain(`foo: 'bar'`)
+  expect(umdContent).toContain('foo: \'bar\'')
 
   const commonContent = await project.read('dist/testLib.common.js')
-  expect(commonContent).not.toContain(`foo: 'bar'`)
+  expect(commonContent).not.toContain('foo: \'bar\'')
 })
 
 test('build as lib with --filename option', async () => {

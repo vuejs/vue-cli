@@ -18,22 +18,22 @@ beforeAll(async () => {
 
   await project.write(
     'node_modules/external-dep/package.json',
-    `{ "name": "external-dep", "version": "1.0.0", "main": "index.js" }`
+    '{ "name": "external-dep", "version": "1.0.0", "main": "index.js" }'
   )
 
   await project.write(
     'node_modules/external-dep/index.js',
-    `const test = () => "__TEST__";\nexport default test`
+    'const test = () => "__TEST__";\nexport default test'
   )
 
   await project.write(
     'node_modules/@scope/external-dep/package.json',
-    `{ "name": "@scope/external-dep", "version": "1.0.0", "main": "index.js" }`
+    '{ "name": "@scope/external-dep", "version": "1.0.0", "main": "index.js" }'
   )
 
   await project.write(
     'node_modules/@scope/external-dep/index.js',
-    `const test = () => "__SCOPE_TEST__";\nexport default test`
+    'const test = () => "__SCOPE_TEST__";\nexport default test'
   )
 
   let $packageJson = await project.read('package.json')
@@ -76,7 +76,7 @@ test('dep from node_modules should not been transpiled', async () => {
 test('dep from node_modules should been transpiled', async () => {
   await project.write(
     'vue.config.js',
-    `module.exports = { transpileDependencies: ['external-dep', '@scope/external-dep'] }`
+    'module.exports = { transpileDependencies: [\'external-dep\', \'@scope/external-dep\'] }'
   )
   await project.run('vue-cli-service build')
   expect(await readVendorFile()).toMatch('return "__TEST__"')
@@ -88,7 +88,7 @@ test('dep from node_modules should been transpiled', async () => {
 test('only transpile package with same name specified in transpileDependencies', async () => {
   await project.write(
     'vue.config.js',
-    `module.exports = { transpileDependencies: ['babel-transpile-deps'] }`
+    'module.exports = { transpileDependencies: [\'babel-transpile-deps\'] }'
   )
   try {
     await project.run('vue-cli-service build')

@@ -24,21 +24,21 @@ module.exports = (api, options) => {
     description: 'build for production',
     usage: 'vue-cli-service build [options] [entry|pattern]',
     options: {
-      '--mode': `specify env mode (default: production)`,
+      '--mode': 'specify env mode (default: production)',
       '--dest': `specify output directory (default: ${options.outputDir})`,
-      '--modern': `build app targeting modern browsers with auto fallback`,
-      '--no-unsafe-inline': `build app without introducing inline scripts`,
+      '--modern': 'build app targeting modern browsers with auto fallback',
+      '--no-unsafe-inline': 'build app without introducing inline scripts',
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--inline-vue': 'include the Vue module in the final bundle of library or web component target',
       '--formats': `list of output formats for library builds (default: ${defaults.formats})`,
-      '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
-      '--filename': `file name for output, only usable for 'lib' target (default: value of --name)`,
-      '--no-clean': `do not remove the dist directory before building the project`,
-      '--report': `generate report.html to help analyze bundle content`,
+      '--name': 'name for lib or web-component mode (default: "name" in package.json or entry filename)',
+      '--filename': 'file name for output, only usable for \'lib\' target (default: value of --name)',
+      '--no-clean': 'do not remove the dist directory before building the project',
+      '--report': 'generate report.html to help analyze bundle content',
       '--report-json': 'generate report.json to help analyze bundle content',
-      '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
-      '--watch': `watch for changes`,
-      '--stdin': `close when stdin ends`
+      '--skip-plugins': 'comma-separated list of plugin names to skip for this run',
+      '--watch': 'watch for changes',
+      '--stdin': 'close when stdin ends'
     }
   }, async (args, rawArgs) => {
     for (const key in defaults) {
@@ -81,9 +81,9 @@ module.exports = (api, options) => {
       if (args.modern) {
         const { warn } = require('@vue/cli-shared-utils')
         warn(
-          `Modern mode only works with default target (app). ` +
-          `For libraries or web components, use the browserslist ` +
-          `config to specify target browsers.`
+          'Modern mode only works with default target (app). ' +
+          'For libraries or web components, use the browserslist ' +
+          'config to specify target browsers.'
         )
       }
       await build(args, api, options)
@@ -112,14 +112,14 @@ async function build (args, api, options) {
   if (args.target === 'app') {
     const bundleTag = args.modern
       ? args.modernBuild
-        ? `modern bundle `
-        : `legacy bundle `
-      : ``
+        ? 'modern bundle '
+        : 'legacy bundle '
+      : ''
     logWithSpinner(`Building ${bundleTag}for ${mode}...`)
   } else {
     const buildMode = buildModes[args.target]
     if (buildMode) {
-      const additionalParams = buildMode === 'library' ? ` (${args.formats})` : ``
+      const additionalParams = buildMode === 'library' ? ` (${args.formats})` : ''
       logWithSpinner(`Building for ${mode} as ${buildMode}${additionalParams}...`)
     } else {
       throw new Error(`Unknown build target: ${args.target}`)
@@ -216,9 +216,9 @@ async function build (args, api, options) {
         if (args.target === 'app' && !isLegacyBuild) {
           if (!args.watch) {
             done(`Build complete. The ${chalk.cyan(targetDirShort)} directory is ready to be deployed.`)
-            info(`Check out deployment instructions at ${chalk.cyan(`https://cli.vuejs.org/guide/deployment.html`)}\n`)
+            info(`Check out deployment instructions at ${chalk.cyan('https://cli.vuejs.org/guide/deployment.html')}\n`)
           } else {
-            done(`Build complete. Watching for changes...`)
+            done('Build complete. Watching for changes...')
           }
         }
       }

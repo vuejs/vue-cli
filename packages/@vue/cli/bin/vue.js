@@ -122,8 +122,8 @@ program
   .option('-H, --host <host>', 'Host used for the UI server (default: localhost)')
   .option('-p, --port <port>', 'Port used for the UI server (by default search for available port)')
   .option('-D, --dev', 'Run in dev mode')
-  .option('--quiet', `Don't output starting messages`)
-  .option('--headless', `Don't open browser on start and output port`)
+  .option('--quiet', 'Don\'t output starting messages')
+  .option('--headless', 'Don\'t open browser on start and output port')
   .action((cmd) => {
     checkNodeVersion('>=8.6', 'vue ui')
     require('../lib/ui')(cleanArgs(cmd))
@@ -205,7 +205,7 @@ program
   .arguments('<command>')
   .action((cmd) => {
     program.outputHelp()
-    console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
+    console.log('  ' + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     console.log()
     suggestCommands(cmd)
     process.exitCode = 1
@@ -214,7 +214,7 @@ program
 // add some useful info on help
 program.on('--help', () => {
   console.log()
-  console.log(`  Run ${chalk.cyan(`vue <command> --help`)} for detailed usage of given command.`)
+  console.log(`  Run ${chalk.cyan('vue <command> --help')} for detailed usage of given command.`)
   console.log()
 })
 
@@ -233,7 +233,7 @@ enhanceErrorMessages('unknownOption', optionName => {
 
 enhanceErrorMessages('optionMissingArgument', (option, flag) => {
   return `Missing required argument for option ${chalk.yellow(option.flags)}` + (
-    flag ? `, got ${chalk.yellow(flag)}` : ``
+    flag ? `, got ${chalk.yellow(flag)}` : ''
   )
 })
 
@@ -256,7 +256,7 @@ function suggestCommands (unknownCommand) {
   })
 
   if (suggestion) {
-    console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
+    console.log('  ' + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
   }
 }
 

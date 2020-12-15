@@ -1,7 +1,7 @@
 module.exports = (api, options = {}, rootOptions = {}) => {
   const isVue3 = (rootOptions.vueVersion === '3')
 
-  api.injectImports(api.entryFile, `import router from './router'`)
+  api.injectImports(api.entryFile, 'import router from \'./router\'')
 
   if (isVue3) {
     api.transformScript(api.entryFile, require('./injectUseRouter'))
@@ -11,7 +11,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
       }
     })
   } else {
-    api.injectRootOptions(api.entryFile, `router`)
+    api.injectRootOptions(api.entryFile, 'router')
 
     api.extendPackage({
       dependencies: {

@@ -35,12 +35,12 @@ test('classComponent', async () => {
   expect(pkg.dependencies).toHaveProperty('vue-class-component')
   expect(pkg.dependencies).toHaveProperty('vue-property-decorator')
 
-  expect(files['tsconfig.json']).toMatch(`"experimentalDecorators": true`)
+  expect(files['tsconfig.json']).toMatch('"experimentalDecorators": true')
   expect(files['src/App.vue']).toMatch(
-    `export default class App extends Vue {`
+    'export default class App extends Vue {'
   )
   expect(files['src/components/HelloWorld.vue']).toMatch(
-    `export default class HelloWorld extends Vue {`
+    'export default class HelloWorld extends Vue {'
   )
 })
 
@@ -60,8 +60,8 @@ test('use with Babel', async () => {
     }
   ])
 
-  expect(files['babel.config.js']).toMatch(`presets: [\n    '@vue/cli-plugin-babel/preset'\n  ]`)
-  expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
+  expect(files['babel.config.js']).toMatch('presets: [\n    \'@vue/cli-plugin-babel/preset\'\n  ]')
+  expect(files['tsconfig.json']).toMatch('"target": "esnext"')
 })
 
 test('use with router', async () => {
