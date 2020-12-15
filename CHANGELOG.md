@@ -149,6 +149,18 @@
 
 
 
+
+## 4.5.9 (2020-11-17)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6062](https://github.com/vuejs/vue-cli/pull/6062) fix(cypress): allow users to update cypress ([@elevatebart](https://github.com/elevatebart))
+
+#### Committers: 1
+- Barthélémy Ledoux ([@elevatebart](https://github.com/elevatebart))
+
+
+
 ## 4.5.8 (2020-10-19)
 
 #### :bug: Bug Fix
