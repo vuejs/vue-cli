@@ -58,23 +58,19 @@ Besides the internal changes that are only noticeable for custom configurations,
 
 #### Opt Out to Webpack 4
 
-Considering many ecosystem packages haven't catched up yet, we provided a way to opt out to webpack 4 for easier migration.
+Considering many ecosystem packages haven't catched up yet, we provided a plugin to opt out to webpack 4 for easier migration.
 
-If you are using Yarn or PNPM 5.10+, you can specify the `"resolutions"` field in your `package.json`:
+It's as simple as running
 
-```json
-{
-  "resolutions": {
-    "@vue/cli-*/webpack": "^4.44.2"
-  }
-}
+```sh
+vue add webpack-4
 ```
 
-and then rerun `yarn` or `pnpm install` to force Vue CLI to use webpack 4.
+at the project root.
 
-If you are using NPM, you can simply add webpack 4 to the project's `devDependencies`: `npm i -D webpack@4`. Vue CLI will redirect all the underlying requests to webpack to this version through [`module-alias`](https://github.com/ilearnio/module-alias).
+Underlyingly, it uses the [`resolutions`](https://classic.yarnpkg.com/en/docs/selective-version-resolutions) field for Yarn and PNPM users, and [`module-alias`](https://github.com/ilearnio/module-alias) for NPM users.
 
-Though it works in all our tests, please be aware that this approach is still somehow hacky and may not be as stable as the `"resolutions"` approach.
+Though both work in all our tests, please be aware that the `module-alias` approach is still considered hacky, and may not be as stable as the `"resolutions"` one.
 
 #### Underlying Loaders and Plugins
 
