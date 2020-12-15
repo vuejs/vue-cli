@@ -28,7 +28,7 @@
     "babel-loader": "^8.2.2",
     "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^6.0.5",
-    "globby": "^9.2.0",
+    "globby": "^11.0.1",
     "thread-loader": "^3.0.0",
     "ts-loader": "^8.0.12",
     "webpack": "^5.10.0",
