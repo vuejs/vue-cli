@@ -55,7 +55,7 @@
     "lru-cache": "^6.0.0",
     "node-ipc": "^9.1.1",
     "node-notifier": "^6.0.0",
-    "parse-git-config": "^2.0.2",
+    "parse-git-config": "^3.0.0",
     "portfinder": "^1.0.26",
     "prismjs": "^1.21.0",
     "rss-parser": "^3.10.0",
