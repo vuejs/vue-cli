@@ -268,7 +268,7 @@ module.exports.hooks = (api) => {
     const lines = contentMain.split(/\r?\n/g)
 
     const renderIndex = lines.findIndex(line => line.match(/render/))
-    lines[renderIndex] + = `\n router,`
+    lines[renderIndex] += `\n router,`
   })
 }
 ```
