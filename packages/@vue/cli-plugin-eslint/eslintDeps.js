@@ -4,7 +4,7 @@ const DEPS_MAP = {
     'eslint-plugin-vue': '^7.2.0'
   },
   airbnb: {
-    '@vue/eslint-config-airbnb': '^5.0.2',
+    '@vue/eslint-config-airbnb': '^5.3.0',
     'eslint-plugin-import': '^2.20.2'
   },
   prettier: {

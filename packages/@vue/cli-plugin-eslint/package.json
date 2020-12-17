@@ -25,7 +25,7 @@
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.0-alpha.0",
     "eslint-webpack-plugin": "^2.4.1",
-    "globby": "^9.2.0",
+    "globby": "^11.0.1",
     "inquirer": "^7.1.0",
     "webpack": "^5.10.0",
     "yorkie": "^2.0.0"
