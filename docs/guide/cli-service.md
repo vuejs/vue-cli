@@ -26,7 +26,7 @@ yarn serve
 If you have [npx](https://github.com/npm/npx) available (should be bundled with an up-to-date version of npm), you can also invoke the binary directly with:
 
 ``` bash
-npx vue-cli-service serve
+npx @vue/cli-service serve
 ```
 
 ::: tip
@@ -115,13 +115,13 @@ You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue
 Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
 
 ``` bash
-npx vue-cli-service help
+npx @vue/cli-service help
 ```
 
 You can also learn about the available options of each command with:
 
 ``` bash
-npx vue-cli-service help [command]
+npx @vue/cli-service help [command]
 ```
 
 ## Skipping Plugins
@@ -129,7 +129,7 @@ npx vue-cli-service help [command]
 Sometimes, you may want to not use a certain CLI Plugin when running a command. For example you might want to build a version of your app that doesn't include the PWA plugin. You can do that by passing the name of the plugin to the `--skip-plugins` option.
 
 ```bash
-npx vue-cli-service build --skip-plugins pwa
+npx @vue/cli-service build --skip-plugins pwa
 ```
 
 ::: tip
@@ -139,18 +139,18 @@ This option is available for _every_ `vue-cli-service` command, including custom
 You can skip multiple plugins by passing their names as a comma-separated list:
 
 ```bash
-npx vue-cli-service build --skip-plugins pwa,apollo
+npx @vue/cli-service build --skip-plugins pwa,apollo
 ```
 
 Plugin names are resolved the same way they are during install, as described [here](./plugins-and-presets.md#installing-plugins-in-an-existing-project)
 
 ``` bash
 # these are all equivalent
-npx vue-cli-service build --skip-plugins pwa
+npx @vue/cli-service build --skip-plugins pwa
 
-npx vue-cli-service build --skip-plugins @vue/pwa
+npx @vue/cli-service build --skip-plugins @vue/pwa
 
-npx vue-cli-service build --skip-plugins @vue/cli-plugin-pwa
+npx @vue/cli-service build --skip-plugins @vue/cli-plugin-pwa
 ```
 
 ## Caching and Parallelization
