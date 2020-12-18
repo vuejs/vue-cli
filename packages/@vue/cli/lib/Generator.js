@@ -90,9 +90,7 @@ module.exports = class Generator {
     this.pm = new PackageManager({ context })
     this.imports = {}
     this.rootOptions = {}
-    // we don't load the passed afterInvokes yet because we want to ignore them from other plugins
-    this.passedAfterInvokeCbs = afterInvokeCbs
-    this.afterInvokeCbs = []
+    this.afterInvokeCbs = afterInvokeCbs
     this.afterAnyInvokeCbs = afterAnyInvokeCbs
     this.configTransforms = {}
     this.defaultConfigTransforms = defaultConfigTransforms
@@ -124,7 +122,10 @@ module.exports = class Generator {
     const { rootOptions, invoking } = this
     const pluginIds = this.plugins.map(p => p.id)
 
-    // apply hooks from all plugins
+    // avoid modifying the passed afterInvokes, because we want to ignore them from other plugins
+    const passedAfterInvokeCbs = this.afterInvokeCbs
+    this.afterInvokeCbs = []
+    // apply hooks from all plugins to collect 'afterAnyHooks'
     for (const id of this.allPluginIds) {
       const api = new GeneratorAPI(id, this, {}, rootOptions)
       const pluginGenerator = loadModule(`${id}/generator`, this.context)
@@ -139,7 +140,7 @@ module.exports = class Generator {
     const afterAnyInvokeCbsFromPlugins = this.afterAnyInvokeCbs
 
     // reset hooks
-    this.afterInvokeCbs = this.passedAfterInvokeCbs
+    this.afterInvokeCbs = passedAfterInvokeCbs
     this.afterAnyInvokeCbs = []
     this.postProcessFilesCbs = []
 
@@ -155,10 +156,9 @@ module.exports = class Generator {
         // because `afterAnyHooks` is already determined by the `allPluginIds` loop above
         await apply.hooks(api, options, rootOptions, pluginIds)
       }
-
-      // restore "any" hooks
-      this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
     }
+    // restore "any" hooks
+    this.afterAnyInvokeCbs = afterAnyInvokeCbsFromPlugins
   }
 
   async generate ({
