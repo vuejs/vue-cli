@@ -173,7 +173,7 @@ Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli
 
 In order to receive direct hits using `history mode` on Vue Router, you need to redirect all trafic to the `/index.html` file.
 
-> More information on [Netlify redirects documentation](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
+> More information on [Netlify redirects documentation](https://docs.netlify.com/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-apps).
 
 ##### Recomended method
 
