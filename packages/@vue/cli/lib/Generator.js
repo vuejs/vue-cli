@@ -74,6 +74,24 @@ const ensureEOL = str => {
   return str
 }
 
+/**
+ * Collect created/modified files into set
+ * @param {Record<string,string|Buffer>} files
+ * @param {Set<string>} set
+ */
+const watchFiles = (files, set) => {
+  return new Proxy(files, {
+    set (target, key, value, receiver) {
+      set.add(key)
+      return Reflect.set(target, key, value, receiver)
+    },
+    deleteProperty (target, key) {
+      set.delete(key)
+      return Reflect.deleteProperty(target, key)
+    }
+  })
+}
+
 module.exports = class Generator {
   constructor (context, {
     pkg = {},
@@ -99,7 +117,11 @@ module.exports = class Generator {
     // for conflict resolution
     this.depSources = {}
     // virtual file tree
-    this.files = files
+    this.files = Object.keys(files).length
+      // when execute `vue add/invoke`, only created/modified files are written to disk
+      ? watchFiles(files, this.filesModifyRecord = new Set())
+      // all files need to be written to disk
+      : files
     this.fileMiddlewares = []
     this.postProcessFilesCbs = []
     // exit messages
@@ -177,7 +199,7 @@ module.exports = class Generator {
     this.sortPkg()
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2) + '\n'
     // write/update file tree to disk
-    await writeFileTree(this.context, this.files, initialFiles)
+    await writeFileTree(this.context, this.files, initialFiles, this.filesModifyRecord)
   }
 
   extractConfigFiles (extractAll, checkExisting) {

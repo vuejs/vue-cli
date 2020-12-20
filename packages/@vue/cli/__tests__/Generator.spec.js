@@ -933,6 +933,52 @@ test('api: addConfigTransform transform vue warn', async () => {
   })).toBe(true)
 })
 
+test('avoid overwriting files that have not been modified', async () => {
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: (api, options) => {
+          api.render((files, render) => {
+            files['foo.js'] = render('foo()')
+          })
+        }
+      }
+    ],
+    files: {
+      // skip writing to this file
+      'existFile.js': 'existFile()'
+    }
+  })
+
+  await generator.generate()
+
+  expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo()')
+  expect(fs.existsSync('/existFile.js')).toBe(false)
+})
+
+test('overwrite files that have been modified', async () => {
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: (api, options) => {
+          api.render((files, render) => {
+            files['existFile.js'] = render('foo()')
+          })
+        }
+      }
+    ],
+    files: {
+      'existFile.js': 'existFile()'
+    }
+  })
+
+  await generator.generate()
+
+  expect(fs.readFileSync('/existFile.js', 'utf-8')).toMatch('foo()')
+})
+
 test('extract config files', async () => {
   const configs = {
     vue: {
