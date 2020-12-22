@@ -5,7 +5,7 @@
 
 const { chalk, semver } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
-const leven = require('leven')
+const { distance } = require('fastest-levenshtein')
 
 function checkNodeVersion (wanted, id) {
   if (!semver.satisfies(process.version, wanted, { includePrerelease: true })) {
@@ -249,8 +249,8 @@ function suggestCommands (unknownCommand) {
   let suggestion
 
   availableCommands.forEach(cmd => {
-    const isBestMatch = leven(cmd, unknownCommand) < leven(suggestion || '', unknownCommand)
-    if (leven(cmd, unknownCommand) < 3 && isBestMatch) {
+    const isBestMatch = distance(cmd, unknownCommand) < distance(suggestion || '', unknownCommand)
+    if (distance(cmd, unknownCommand) < 3 && isBestMatch) {
       suggestion = cmd
     }
   })
