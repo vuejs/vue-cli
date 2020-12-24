@@ -33,6 +33,31 @@ node --inspect-brk ./node_modules/@vue/cli-service/bin/vue-cli-service.js test:u
 
 Jest can be configured via `jest.config.js` in your project root, or the `jest` field in `package.json`.
 
+### Asset Mocks
+
+If you get a SyntaxError on an asset such as an image or stylesheet, you will need to configure mocks:
+
+**jest.config.js**:
+
+```
+  "moduleNameMapper": {
+    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/file-mock.js",
+    "\\.(css|sass)$": "<rootDir>/__mocks__/style-mock.js"
+  }
+```
+
+**/src/__mock__/file-mock.js**:
+
+```js
+module.exports = 'test-file-stub'
+```
+
+**/src/__mock__/style-mock.js**:
+
+```js
+module.exports = {}
+```
+
 ## Installing in an Already Created Project
 
 ```sh
