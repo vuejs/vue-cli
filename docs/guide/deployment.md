@@ -177,7 +177,7 @@ In order to receive direct hits using `history mode` on Vue Router, you need to 
 
 ##### Recomended method
 
-Create a file called `netlify.toml` in the root fo your repository wit the following content:
+Create a file called `netlify.toml` in the root of your repository with the following content:
 
 ```toml
 [[redirects]]
