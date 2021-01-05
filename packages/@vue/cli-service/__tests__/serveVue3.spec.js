@@ -11,13 +11,13 @@ test('serve with Vue 3', async () => {
   await serve(
     () => project.run('yarn serve'),
     async ({ page, nextUpdate, helpers }) => {
-      const msg = 'Welcome to Your Vue.js App'
+      const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
       expect(await page.evaluate(() => window.__VUE__)).toBeDefined()
 
       // test hot reload
-      const file = await project.read('src/App.vue')
-      project.write('src/App.vue', file.replace(msg, 'Updated'))
+      const file = await project.read(`src/App.vue`)
+      project.write(`src/App.vue`, file.replace(msg, `Updated`))
       await nextUpdate() // wait for child stdout update signal
       try {
         await page.waitForFunction(selector => {

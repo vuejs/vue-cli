@@ -14,7 +14,7 @@ test('inject import statement for service worker', async () => {
     }
   ])
 
-  expect(files['src/main.js']).toMatch('import \'./registerServiceWorker\'')
+  expect(files['src/main.js']).toMatch(`import './registerServiceWorker'`)
 })
 
 test('inject import statement for service worker (with TS)', async () => {
@@ -36,5 +36,5 @@ test('inject import statement for service worker (with TS)', async () => {
     }
   ])
 
-  expect(files['src/main.ts']).toMatch('import \'./registerServiceWorker\'')
+  expect(files['src/main.ts']).toMatch(`import './registerServiceWorker'`)
 })

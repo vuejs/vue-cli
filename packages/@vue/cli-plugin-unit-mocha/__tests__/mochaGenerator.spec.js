@@ -20,8 +20,8 @@ test('base', async () => {
   expect(pkg.devDependencies).toHaveProperty('@vue/test-utils')
 
   const spec = files['tests/unit/example.spec.js']
-  expect(spec).toMatch('import { expect } from \'chai\'')
-  expect(spec).toMatch('expect(wrapper.text()).to.include(msg)')
+  expect(spec).toMatch(`import { expect } from 'chai'`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(msg)`)
 })
 
 test('with TS', async () => {
@@ -40,8 +40,8 @@ test('with TS', async () => {
   ])
 
   const spec = files['tests/unit/example.spec.ts']
-  expect(spec).toMatch('import { expect } from \'chai\'')
-  expect(spec).toMatch('expect(wrapper.text()).to.include(msg)')
+  expect(spec).toMatch(`import { expect } from 'chai'`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(msg)`)
 })
 
 test('bare', async () => {
@@ -59,8 +59,8 @@ test('bare', async () => {
   ])
 
   const spec = files['tests/unit/example.spec.js']
-  expect(spec).toMatch('const wrapper = shallowMount(App)')
-  expect(spec).toMatch('expect(wrapper.text()).to.include(`Welcome to Your Vue.js App`)')
+  expect(spec).toMatch(`const wrapper = shallowMount(App)`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js App\`)`)
 })
 
 test('TS + bare', async () => {
@@ -83,8 +83,8 @@ test('TS + bare', async () => {
   ])
 
   const spec = files['tests/unit/example.spec.ts']
-  expect(spec).toMatch('const wrapper = shallowMount(App)')
-  expect(spec).toMatch('expect(wrapper.text()).to.include(`Welcome to Your Vue.js + TypeScript App`)')
+  expect(spec).toMatch(`const wrapper = shallowMount(App)`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js + TypeScript App\`)`)
 })
 
 test('bare + router', async () => {
@@ -107,8 +107,8 @@ test('bare + router', async () => {
   ])
 
   const spec = files['tests/unit/example.spec.js']
-  expect(spec).toMatch('const wrapper = mount(App,')
-  expect(spec).toMatch('expect(wrapper.text()).to.include(`Welcome to Your Vue.js App`)')
+  expect(spec).toMatch(`const wrapper = mount(App,`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js App\`)`)
 })
 
 test('TS + bare + router', async () => {
@@ -136,8 +136,8 @@ test('TS + bare + router', async () => {
   ])
 
   const spec = files['tests/unit/example.spec.ts']
-  expect(spec).toMatch('const wrapper = mount(App,')
-  expect(spec).toMatch('expect(wrapper.text()).to.include(`Welcome to Your Vue.js App`)')
+  expect(spec).toMatch(`const wrapper = mount(App,`)
+  expect(spec).toMatch(`expect(wrapper.text()).to.include(\`Welcome to Your Vue.js App\`)`)
 })
 
 test('add types to existing tsconfig.json', async () => {

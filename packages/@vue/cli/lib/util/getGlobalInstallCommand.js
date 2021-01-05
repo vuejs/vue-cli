@@ -11,12 +11,12 @@ module.exports = function getGlobalInstallCommand () {
   if (hasPnpm3OrLater()) {
     const { stdout: pnpmGlobalPrefix } = execa.sync('pnpm', ['config', 'get', 'prefix'])
     if (__dirname.includes(pnpmGlobalPrefix) && __dirname.includes('pnpm-global')) {
-      return 'pnpm i -g'
+      return `pnpm i -g`
     }
   }
 
   const { stdout: npmGlobalPrefix } = execa.sync('npm', ['config', 'get', 'prefix'])
   if (__dirname.includes(npmGlobalPrefix)) {
-    return 'npm i -g'
+    return `npm i -g`
   }
 }

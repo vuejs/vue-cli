@@ -17,9 +17,9 @@ test('should work', async () => {
   })
 
   if (!process.env.CI) {
-    await project.run('vue-cli-service test:e2e')
+    await project.run(`vue-cli-service test:e2e`)
   } else if (!process.env.APPVEYOR) {
-    await project.run('vue-cli-service test:e2e --headless')
+    await project.run(`vue-cli-service test:e2e --headless`)
   }
 })
 
@@ -27,8 +27,8 @@ test('should work with TS', async () => {
   const project = await create('e2e-webdriverio-ts', {
     plugins: {
       '@vue/cli-plugin-typescript': {
-        classComponent: true,
-        lintOn: ['save']
+        'classComponent': true,
+        'lintOn': ['save']
       },
       '@vue/cli-plugin-e2e-webdriverio': {
         webdrivers: ['chrome']
@@ -37,8 +37,8 @@ test('should work with TS', async () => {
   })
 
   if (!process.env.CI) {
-    await project.run('vue-cli-service test:e2e')
+    await project.run(`vue-cli-service test:e2e`)
   } else if (!process.env.APPVEYOR) {
-    await project.run('vue-cli-service test:e2e --headless')
+    await project.run(`vue-cli-service test:e2e --headless`)
   }
 })

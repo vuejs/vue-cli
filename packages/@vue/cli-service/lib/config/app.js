@@ -30,7 +30,7 @@ module.exports = (api, options) => {
     const getAssetPath = require('../util/getAssetPath')
     const outputFilename = getAssetPath(
       options,
-      `js/[name]${isLegacyBundle ? '-legacy' : ''}${isProd && options.filenameHashing ? '.[contenthash:8]' : ''}.js`
+      `js/[name]${isLegacyBundle ? `-legacy` : ``}${isProd && options.filenameHashing ? '.[contenthash:8]' : ''}.js`
     )
     webpackConfig
       .output
@@ -43,13 +43,13 @@ module.exports = (api, options) => {
         webpackConfig.optimization.splitChunks({
           cacheGroups: {
             vendors: {
-              name: 'chunk-vendors',
+              name: `chunk-vendors`,
               test: /[\\/]node_modules[\\/]/,
               priority: -10,
               chunks: 'initial'
             },
             common: {
-              name: 'chunk-common',
+              name: `chunk-common`,
               minChunks: 2,
               priority: -20,
               chunks: 'initial',
@@ -61,13 +61,13 @@ module.exports = (api, options) => {
         webpackConfig.optimization.splitChunks({
           cacheGroups: {
             defaultVendors: {
-              name: 'chunk-vendors',
+              name: `chunk-vendors`,
               test: /[\\/]node_modules[\\/]/,
               priority: -10,
               chunks: 'initial'
             },
             common: {
-              name: 'chunk-common',
+              name: `chunk-common`,
               minChunks: 2,
               priority: -20,
               chunks: 'initial',
@@ -129,7 +129,7 @@ module.exports = (api, options) => {
             const joinedHash = hash(
               Array.from(chunk.modulesIterable, m => m.id).join('_')
             )
-            return 'chunk-' + joinedHash
+            return `chunk-` + joinedHash
           }])
     }
 

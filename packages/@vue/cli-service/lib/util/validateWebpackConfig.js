@@ -15,24 +15,24 @@ module.exports = function validateWebpackConfig (
     // this is not supported because there's no way for us to give copy
     // plugin the correct value this way.
     throw new Error(
-      '\n\nConfiguration Error: ' +
-      'Avoid modifying webpack output.path directly. ' +
-      'Use the "outputDir" option instead.\n'
+      `\n\nConfiguration Error: ` +
+      `Avoid modifying webpack output.path directly. ` +
+      `Use the "outputDir" option instead.\n`
     )
   }
 
   if (actualTargetDir === api.service.context) {
     throw new Error(
-      '\n\nConfiguration Error: ' +
-      'Do not set output directory to project root.\n'
+      `\n\nConfiguration Error: ` +
+      `Do not set output directory to project root.\n`
     )
   }
 
   if (target === 'app' && singleConfig.output.publicPath !== options.publicPath) {
     throw new Error(
-      '\n\nConfiguration Error: ' +
-      'Avoid modifying webpack output.publicPath directly. ' +
-      'Use the "publicPath" option instead.\n'
+      `\n\nConfiguration Error: ` +
+      `Avoid modifying webpack output.publicPath directly. ` +
+      `Use the "publicPath" option instead.\n`
     )
   }
 }

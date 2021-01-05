@@ -11,14 +11,14 @@ module.exports = (api, options) => {
       '-s, --spec': '(headless only) runs a specific spec file. defaults to "all"'
     },
     details:
-      'All Cypress CLI options are also supported:\n' +
-      chalk.yellow('https://docs.cypress.io/guides/guides/command-line.html#cypress-run')
+      `All Cypress CLI options are also supported:\n` +
+      chalk.yellow(`https://docs.cypress.io/guides/guides/command-line.html#cypress-run`)
   }, async (args, rawArgs) => {
     removeArg(rawArgs, 'mode')
     removeArg(rawArgs, 'url')
     removeArg(rawArgs, 'config')
 
-    info('Starting e2e tests...')
+    info(`Starting e2e tests...`)
 
     const { url, server } = args.url
       ? { url: args.url }

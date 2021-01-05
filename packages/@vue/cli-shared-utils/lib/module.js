@@ -13,7 +13,7 @@ const createRequire = Module.createRequire || Module.createRequireFromPath || fu
   mod.filename = filename
   mod.paths = Module._nodeModulePaths(path.dirname(filename))
 
-  mod._compile('module.exports = require;', filename)
+  mod._compile(`module.exports = require;`, filename)
 
   return mod.exports
 }

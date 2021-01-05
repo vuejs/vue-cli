@@ -52,7 +52,7 @@ module.exports = function checkWebpack (cwd) {
     // Because many uses runtime sniffing to run conditional code for different webpack versions.
     if (customWebpackVersion !== requiredWebpackVersion) {
       // TODO: recommend users to use yarn force resolutions or pnpm hooks instead
-      warn('Using "module-alias" to load custom webpack version.')
+      warn(`Using "module-alias" to load custom webpack version.`)
 
       const webpack4Path = path.dirname(resolveModule('webpack/package.json', cwd))
       moduleAlias.addAlias('webpack', (fromPath, request) => {

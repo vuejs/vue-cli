@@ -9,6 +9,9 @@ module.exports = {
     indent: ['error', 2, {
       MemberExpression: 'off'
     }],
+    'object-curly-newline': 'off',
+    quotes: [2, 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+    'quote-props': 'off',
     'no-shadow': ['error'],
     'node/no-extraneous-require': ['error', {
       allowModules: [

@@ -9,7 +9,7 @@ test('jest', async () => {
       '@vue/cli-plugin-unit-jest': {}
     }
   })
-  await project.run('vue-cli-service test:unit')
+  await project.run(`vue-cli-service test:unit`)
 })
 
 test('jest w/ babel', async () => {
@@ -20,5 +20,5 @@ test('jest w/ babel', async () => {
       '@vue/cli-plugin-unit-jest': {}
     }
   })
-  await project.run('vue-cli-service test:unit')
+  await project.run(`vue-cli-service test:unit`)
 })

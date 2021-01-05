@@ -118,7 +118,7 @@ test('CSS Modules rules', () => {
       importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
-        localIdentName: '[name]_[local]_[hash:base64:5]'
+        localIdentName: `[name]_[local]_[hash:base64:5]`
       }
     }
     // vue-modules rules
@@ -157,7 +157,7 @@ test('Customized CSS Modules rules', () => {
       importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
-        localIdentName: '[folder]-[name]-[local][emoji]'
+        localIdentName: `[folder]-[name]-[local][emoji]`
       }
     }
     // vue-modules rules
@@ -191,7 +191,7 @@ test('deprecate `css.modules` option', () => {
       importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
-        localIdentName: '[folder]-[name]-[local][emoji]'
+        localIdentName: `[folder]-[name]-[local][emoji]`
       }
     }
     // vue-modules rules
@@ -228,7 +228,7 @@ test('favor `css.requireModuleExtension` over `css.modules`', () => {
       importLoaders: 2, // with postcss-loader
       sourceMap: false,
       modules: {
-        localIdentName: '[folder]-[name]-[local][emoji]'
+        localIdentName: `[folder]-[name]-[local][emoji]`
       }
     }
     // vue-modules rules

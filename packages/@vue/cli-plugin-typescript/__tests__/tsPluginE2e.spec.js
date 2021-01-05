@@ -17,7 +17,7 @@ if (!process.env.APPVEYOR) {
     const config = JSON.parse(await project.read('cypress.json'))
     config.video = false
     await project.write('cypress.json', JSON.stringify(config))
-    await project.run('vue-cli-service test:e2e --headless')
+    await project.run(`vue-cli-service test:e2e --headless`)
   })
 }
 
@@ -29,6 +29,6 @@ if (!process.env.CIRCLECI) {
         '@vue/cli-plugin-e2e-nightwatch': {}
       }
     })
-    await project.run('vue-cli-service test:e2e')
+    await project.run(`vue-cli-service test:e2e`)
   })
 }

@@ -39,7 +39,7 @@ async function ui (options = {}, context = process.cwd()) {
     process.env.VUE_CLI_IPC = `vue-cli-${shortid()}`
   }
 
-  if (!options.quiet) log('🚀  Starting GUI...')
+  if (!options.quiet) log(`🚀  Starting GUI...`)
 
   const opts = {
     host,

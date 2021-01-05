@@ -41,9 +41,9 @@ module.exports = api => {
       '--inspect-brk': 'Enable inspector to debug the tests'
     },
     details: (
-      'The above list only includes the most commonly used options.\n' +
-      'For a full list of available options, see\n' +
-      'https://sysgears.github.io/mochapack/docs/installation/cli-usage.html'
+      `The above list only includes the most commonly used options.\n` +
+      `For a full list of available options, see\n` +
+      `https://sysgears.github.io/mochapack/docs/installation/cli-usage.html`
     )
   }, (args, rawArgv) => {
     let nodeArgs = []
@@ -71,8 +71,8 @@ module.exports = api => {
         ? []
         : [
           api.hasPlugin('typescript')
-            ? 'tests/unit/**/*.spec.ts'
-            : 'tests/unit/**/*.spec.js'
+            ? `tests/unit/**/*.spec.ts`
+            : `tests/unit/**/*.spec.js`
         ])
     ]
 

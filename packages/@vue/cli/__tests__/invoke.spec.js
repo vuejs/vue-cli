@@ -51,22 +51,22 @@ async function assertUpdates (project) {
 }
 
 test('invoke with inline options', async () => {
-  const project = await createAndInstall('invoke-inline')
+  const project = await createAndInstall(`invoke-inline`)
   await project.run(`${require.resolve('../bin/vue')} invoke eslint --config airbnb --lintOn save,commit`)
   await assertUpdates(project)
 })
 
 test('invoke with prompts', async () => {
-  const project = await createAndInstall('invoke-prompts')
+  const project = await createAndInstall(`invoke-prompts`)
   expectPrompts([
     {
-      message: 'Pick an ESLint config',
-      choices: ['Error prevention only', 'Airbnb', 'Standard', 'Prettier'],
+      message: `Pick an ESLint config`,
+      choices: [`Error prevention only`, `Airbnb`, `Standard`, `Prettier`],
       choose: 1
     },
     {
-      message: 'Pick additional lint features',
-      choices: ['on save', 'on commit'],
+      message: `Pick additional lint features`,
+      choices: [`on save`, 'on commit'],
       check: [0, 1]
     }
   ])
@@ -77,7 +77,7 @@ test('invoke with prompts', async () => {
   // chdir, and let @babel/eslint-parser find the babel.config.js in our test project
   process.chdir(project.dir)
 
-  await invoke('eslint', {}, project.dir)
+  await invoke(`eslint`, {}, project.dir)
   await assertUpdates(project)
 
   // restore
@@ -85,7 +85,7 @@ test('invoke with prompts', async () => {
 })
 
 test('invoke with ts', async () => {
-  const project = await create('invoke-existing', {
+  const project = await create(`invoke-existing`, {
     useConfigFiles: true,
     plugins: {
       '@vue/cli-plugin-babel': {},
@@ -98,7 +98,7 @@ test('invoke with ts', async () => {
   await project.write('package.json', JSON.stringify(pkg, null, 2))
 
   // mock existing vue.config.js
-  await project.write('vue.config.js', 'module.exports = { lintOnSave: \'default\' }')
+  await project.write('vue.config.js', `module.exports = { lintOnSave: 'default' }`)
 
   const eslintrc = parseJS(await project.read('.eslintrc.js'))
   expect(eslintrc).toEqual(Object.assign({}, baseESLintConfig, {
@@ -117,7 +117,7 @@ test('invoke with ts', async () => {
 })
 
 test('invoke with existing files (yaml)', async () => {
-  const project = await create('invoke-existing-yaml', {
+  const project = await create(`invoke-existing-yaml`, {
     useConfigFiles: true,
     plugins: {
       '@vue/cli-plugin-babel': {},
@@ -130,8 +130,8 @@ test('invoke with existing files (yaml)', async () => {
     extends: ['plugin:vue/essential', 'eslint:recommended']
   }))
 
-  await project.rm('.eslintrc.js')
-  await project.write('.eslintrc.yml', `
+  await project.rm(`.eslintrc.js`)
+  await project.write(`.eslintrc.yml`, `
 root: true
 extends:
   - 'plugin:vue/essential'
@@ -150,7 +150,7 @@ extends:
 })
 
 test('invoking a plugin that renames files', async () => {
-  const project = await create('invoke-rename', { plugins: {} })
+  const project = await create(`invoke-rename`, { plugins: {} })
   const pkg = JSON.parse(await project.read('package.json'))
   pkg.devDependencies['@vue/cli-plugin-typescript'] = '*'
   await project.write('package.json', JSON.stringify(pkg, null, 2))
@@ -168,11 +168,11 @@ test('should prompt if invoking in a git repository with uncommitted changes', a
   await project.write('some-random-file', '')
   expectPrompts([
     {
-      message: 'Still proceed?',
+      message: `Still proceed?`,
       confirm: true
     }
   ])
-  await invoke('babel', {}, project.dir)
+  await invoke(`babel`, {}, project.dir)
 })
 
 test.todo('invoke: should respect plugin resolveFrom')

@@ -92,7 +92,7 @@ module.exports = class Service {
 
   loadEnv (mode) {
     const logger = debug('vue:env')
-    const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ''}`)
+    const basePath = path.resolve(this.context, `.env${mode ? `.${mode}` : ``}`)
     const localPath = `${basePath}.local`
 
     const load = envPath => {
@@ -278,8 +278,8 @@ module.exports = class Service {
       config.output.publicPath !== this.projectOptions.publicPath
     ) {
       throw new Error(
-        'Do not modify webpack output.publicPath directly. ' +
-        'Use the "publicPath" option in vue.config.js instead.'
+        `Do not modify webpack output.publicPath directly. ` +
+        `Use the "publicPath" option in vue.config.js instead.`
       )
     }
 
@@ -354,8 +354,8 @@ module.exports = class Service {
     pkgConfig = this.pkg.vue
     if (pkgConfig && typeof pkgConfig !== 'object') {
       error(
-        `Error loading vue-cli config in ${chalk.bold('package.json')}: ` +
-        'the "vue" field should be an object.'
+        `Error loading vue-cli config in ${chalk.bold(`package.json`)}: ` +
+        `the "vue" field should be an object.`
       )
       pkgConfig = null
     }
@@ -363,12 +363,12 @@ module.exports = class Service {
     if (fileConfig) {
       if (pkgConfig) {
         warn(
-          '"vue" field in package.json ignored ' +
+          `"vue" field in package.json ignored ` +
           `due to presence of ${chalk.bold('vue.config.js')}.`
         )
         warn(
           `You should migrate it into ${chalk.bold('vue.config.js')} ` +
-          'and remove it from package.json.'
+          `and remove it from package.json.`
         )
       }
       resolved = fileConfig
@@ -385,12 +385,12 @@ module.exports = class Service {
       if (typeof resolved.css.requireModuleExtension !== 'undefined') {
         warn(
           `You have set both "css.modules" and "css.requireModuleExtension" in ${chalk.bold('vue.config.js')}, ` +
-          '"css.modules" will be ignored in favor of "css.requireModuleExtension".'
+          `"css.modules" will be ignored in favor of "css.requireModuleExtension".`
         )
       } else {
         warn(
           `"css.modules" option in ${chalk.bold('vue.config.js')} ` +
-          'is deprecated now, please use "css.requireModuleExtension" instead.'
+          `is deprecated now, please use "css.requireModuleExtension" instead.`
         )
         resolved.css.requireModuleExtension = !resolved.css.modules
       }

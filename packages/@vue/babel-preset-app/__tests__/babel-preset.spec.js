@@ -102,12 +102,12 @@ test('object spread', () => {
     const a = { ...b }
   `.trim(), defaultOptions)
   // expect(code).toMatch(`import _objectSpread from`)
-  expect(code).toMatch('var a = _objectSpread({}, b)')
+  expect(code).toMatch(`var a = _objectSpread({}, b)`)
 })
 
 test('dynamic import', () => {
   expect(() => {
-    babel.transformSync('const Foo = () => import(\'./Foo.vue\')', defaultOptions)
+    babel.transformSync(`const Foo = () => import('./Foo.vue')`, defaultOptions)
   }).not.toThrow()
 })
 
@@ -120,7 +120,7 @@ test('async/await', () => {
   `.trim(), defaultOptions)
   expect(code).toMatch(getAbsolutePolyfill('es.promise'))
   // should use regenerator runtime
-  expect(code).toMatch('regenerator-runtime/runtime')
+  expect(code).toMatch(`regenerator-runtime/runtime`)
 })
 
 test('jsx', () => {
@@ -131,8 +131,8 @@ test('jsx', () => {
       }
     }
   `.trim(), defaultOptions)
-  expect(code).toMatch('var h = arguments[0]')
-  expect(code).toMatch('return h("div", ["bar"])')
+  expect(code).toMatch(`var h = arguments[0]`)
+  expect(code).toMatch(`return h("div", ["bar"])`)
 })
 
 test('jsx options', () => {
@@ -151,8 +151,8 @@ test('jsx options', () => {
     }]],
     filename: 'test-entry-file.js'
   })
-  expect(code).not.toMatch('var h = arguments[0]')
-  expect(code).toMatch('return h("div", ["bar"])')
+  expect(code).not.toMatch(`var h = arguments[0]`)
+  expect(code).toMatch(`return h("div", ["bar"])`)
 })
 
 test('disable absoluteRuntime', () => {

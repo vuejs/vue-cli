@@ -29,7 +29,7 @@ const createElement = (prefix, component, file, isAsync) => {
 exports.fileToComponentName = (prefix, file) => {
   const basename = path.basename(file).replace(/\.(jsx?|vue)$/, '')
   const camelName = camelize(basename)
-  const kebabName = `${prefix ? `${prefix}-` : ''}${hyphenate(basename)}`
+  const kebabName = `${prefix ? `${prefix}-` : ``}${hyphenate(basename)}`
   return {
     basename,
     camelName,

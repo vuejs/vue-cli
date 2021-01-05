@@ -3,11 +3,11 @@ const { installedBrowsers } = require('@vue/cli-shared-utils')
 module.exports = [
   {
     name: 'webdrivers',
-    type: 'checkbox',
-    message: 'Pick browsers to run end-to-end test on',
+    type: `checkbox`,
+    message: `Pick browsers to run end-to-end test on`,
     choices: [
       {
-        name: 'Chrome',
+        name: `Chrome`,
         value: 'chrome',
         checked: true
       },

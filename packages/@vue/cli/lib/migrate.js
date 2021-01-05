@@ -40,7 +40,7 @@ async function runMigrator (context, plugin, pkg = getPkg(context)) {
     JSON.stringify(newDeps) !== JSON.stringify(pkg.dependencies) ||
     JSON.stringify(newDevDeps) !== JSON.stringify(pkg.devDependencies)
   if (!isTestOrDebug && depsChanged) {
-    log('📦  Installing additional dependencies...')
+    log(`📦  Installing additional dependencies...`)
     log()
 
     const pm = new PackageManager({ context })
@@ -48,7 +48,7 @@ async function runMigrator (context, plugin, pkg = getPkg(context)) {
   }
 
   if (afterInvokeCbs.length) {
-    logWithSpinner('⚓', 'Running completion hooks...')
+    logWithSpinner('⚓', `Running completion hooks...`)
     for (const cb of afterInvokeCbs) {
       await cb()
     }
@@ -64,7 +64,7 @@ async function runMigrator (context, plugin, pkg = getPkg(context)) {
 
   const changedFiles = getChangedFiles(context)
   if (changedFiles.length) {
-    log('   The following files have been updated / added:\n')
+    log(`   The following files have been updated / added:\n`)
     log(chalk.red(changedFiles.map(line => `     ${line}`).join('\n')))
     log()
     log(
@@ -81,7 +81,7 @@ async function runMigrator (context, plugin, pkg = getPkg(context)) {
 async function migrate (pluginId, { from }, context = process.cwd()) {
   // TODO: remove this after upgrading to commander 4.x
   if (!from) {
-    throw new Error('Required option \'from\' not specified')
+    throw new Error(`Required option 'from' not specified`)
   }
 
   const pluginName = resolvePluginId(pluginId)

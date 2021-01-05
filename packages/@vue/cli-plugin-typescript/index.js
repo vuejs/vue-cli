@@ -35,7 +35,7 @@ module.exports = (api, projectOptions) => {
       loader: require.resolve('cache-loader'),
       options: api.genCacheConfig('ts-loader', {
         'ts-loader': require('ts-loader/package.json').version,
-        typescript: require('typescript/package.json').version,
+        'typescript': require('typescript/package.json').version,
         modern: !!process.env.VUE_CLI_MODERN_BUILD
       }, 'tsconfig.json')
     })

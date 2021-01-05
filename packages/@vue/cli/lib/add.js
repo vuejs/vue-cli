@@ -82,7 +82,7 @@ async function addRouter (context) {
   const options = await inquirer.prompt([{
     name: 'routerHistoryMode',
     type: 'confirm',
-    message: `Use history mode for router? ${chalk.yellow('(Requires proper server setup for index fallback in production)')}`
+    message: `Use history mode for router? ${chalk.yellow(`(Requires proper server setup for index fallback in production)`)}`
   }])
   invoke.runGenerator(context, {
     id: 'core:router',

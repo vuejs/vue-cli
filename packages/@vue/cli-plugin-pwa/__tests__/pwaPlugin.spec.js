@@ -36,14 +36,14 @@ test('pwa', async () => {
   // expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
 
   // PWA specific directives
-  expect(index).toMatch('<link rel="manifest" href="/manifest.json">')
+  expect(index).toMatch(`<link rel="manifest" href="/manifest.json">`)
   // favicon is not minified because it's technically a comment
-  expect(index).toMatch('<!--[if IE]><link rel="icon" href="/favicon.ico"><![endif]-->')
-  expect(index).toMatch('<meta name="apple-mobile-web-app-capable" content="no">')
+  expect(index).toMatch(`<!--[if IE]><link rel="icon" href="/favicon.ico"><![endif]-->`)
+  expect(index).toMatch(`<meta name="apple-mobile-web-app-capable" content="no">`)
 
   // should import service worker script
   const main = await project.read('src/main.js')
-  expect(main).toMatch('import \'./registerServiceWorker\'')
+  expect(main).toMatch(`import './registerServiceWorker'`)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })

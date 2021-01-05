@@ -43,7 +43,7 @@ exports.hasProjectYarn = (cwd) => {
 }
 
 function checkYarn (result) {
-  if (result && !exports.hasYarn()) throw new Error('The project seems to require yarn but it\'s not installed.')
+  if (result && !exports.hasYarn()) throw new Error(`The project seems to require yarn but it's not installed.`)
   return result
 }
 

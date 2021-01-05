@@ -12,7 +12,7 @@ let server, browser, page
 test('build as wc', async () => {
   const project = await create('build-wc', defaultPreset)
 
-  const { stdout } = await project.run('vue-cli-service build --target wc **/*.vue')
+  const { stdout } = await project.run(`vue-cli-service build --target wc **/*.vue`)
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
@@ -57,7 +57,7 @@ test('build as wc', async () => {
 test('build as single wc', async () => {
   const project = await create('build-single-wc', defaultPreset)
 
-  const { stdout } = await project.run('vue-cli-service build --target wc --name single-wc')
+  const { stdout } = await project.run(`vue-cli-service build --target wc --name single-wc`)
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)

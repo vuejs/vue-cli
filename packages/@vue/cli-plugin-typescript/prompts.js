@@ -3,32 +3,32 @@
 
 module.exports = [
   {
-    name: 'classComponent',
-    type: 'confirm',
-    message: 'Use class-style component syntax?',
+    name: `classComponent`,
+    type: `confirm`,
+    message: `Use class-style component syntax?`,
     default: true
   },
   {
-    name: 'useTsWithBabel',
-    type: 'confirm',
+    name: `useTsWithBabel`,
+    type: `confirm`,
     message: 'Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)?'
   },
   {
-    name: 'convertJsToTs',
-    type: 'confirm',
-    message: 'Convert all .js files to .ts?',
+    name: `convertJsToTs`,
+    type: `confirm`,
+    message: `Convert all .js files to .ts?`,
     default: true
   },
   {
-    name: 'allowJs',
-    type: 'confirm',
-    message: 'Allow .js files to be compiled?',
+    name: `allowJs`,
+    type: `confirm`,
+    message: `Allow .js files to be compiled?`,
     default: false
   },
   {
     name: 'skipLibCheck',
-    type: 'confirm',
-    message: 'Skip type checking of all declaration files (recommended for apps)?',
+    type: `confirm`,
+    message: `Skip type checking of all declaration files (recommended for apps)?`,
     default: true
   }
 ]

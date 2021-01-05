@@ -20,14 +20,14 @@ module.exports = (api, options) => {
       ...CLI_OPTIONS
     },
     details:
-      'All WebdriverIO CLI options are also supported.\n' +
-      chalk.yellow('https://webdriver.io/docs/clioptions.html')
+      `All WebdriverIO CLI options are also supported.\n` +
+      chalk.yellow(`https://webdriver.io/docs/clioptions.html`)
   }, (args, rawArgs) => {
     return Promise.all([
       startDevServer(args, api)
     ]).then((results) => {
       const { server, url } = results[0]
-      info('Running end-to-end tests...')
+      info(`Running end-to-end tests...`)
 
       // expose dev server url to tests
       if (!args.baseUrl) {

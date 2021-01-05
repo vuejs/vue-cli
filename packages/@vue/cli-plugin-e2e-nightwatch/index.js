@@ -16,8 +16,8 @@ module.exports = (api, options) => {
       '-f, --filter': 'glob to filter tests by filename'
     },
     details:
-      'All Nightwatch CLI options are also supported.\n' +
-      chalk.yellow('https://nightwatchjs.org/guide/running-tests/#command-line-options')
+      `All Nightwatch CLI options are also supported.\n` +
+      chalk.yellow(`https://nightwatchjs.org/guide/running-tests/#command-line-options`)
   }, (args, rawArgs) => {
     if (args.env && args.env.includes('firefox')) {
       try {
@@ -36,7 +36,7 @@ module.exports = (api, options) => {
 
       if (userMajor !== driverMajor) {
         warn(`Local ${chalk.cyan.bold('Chrome')} version is ${chalk.cyan.bold(userMajor)}, but the installed ${chalk.cyan.bold('chromedriver')} is for version ${chalk.cyan.bold(driverMajor)}.`)
-        warn('There may be incompatibilities between them.')
+        warn(`There may be incompatibilities between them.`)
         warn(`Please update your ${chalk.cyan.bold('chromedriver')} dependency to match the ${chalk.cyan.bold('Chrome')} version.`)
       }
     }

@@ -17,7 +17,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../../util/getVueMajor')(cwd)
   if (vueMajor === 3) {
-    abort('Vue 3 support of the web component target is still under development.')
+    abort(`Vue 3 support of the web component target is still under development.`)
   }
 
   const isAsync = /async/.test(target)
@@ -35,13 +35,13 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
     libName = name || fileToComponentName('', resolvedFiles[0]).kebabName
     prefix = ''
     if (libName.indexOf('-') < 0) {
-      abort('--name must contain a hyphen when building a single web component.')
+      abort(`--name must contain a hyphen when building a single web component.`)
     }
   } else {
     // multi mode
     libName = prefix = (name || api.service.pkg.name)
     if (!libName) {
-      abort('--name is required when building multiple web components.')
+      abort(`--name is required when building multiple web components.`)
     }
   }
 
@@ -86,7 +86,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
       config
         .plugin('demo-html')
           .use(require('html-webpack-plugin'), [{
-            template: path.resolve(__dirname, './demo-wc.html'),
+            template: path.resolve(__dirname, `./demo-wc.html`),
             inject: false,
             filename: 'demo.html',
             libName,
@@ -115,14 +115,14 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
       { ...(inlineVue || { vue: 'Vue' }) }
     ].filter(Boolean)
 
-    const entryName = `${libName}${minify ? '.min' : ''}`
+    const entryName = `${libName}${minify ? `.min` : ``}`
     rawConfig.entry = {
       [entryName]: dynamicEntry.filePath
     }
 
     Object.assign(rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${libName}.[name]${minify ? '.min' : ''}.js`,
+      chunkFilename: `${libName}.[name]${minify ? `.min` : ``}.js`,
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
       // document.currentScript.src.

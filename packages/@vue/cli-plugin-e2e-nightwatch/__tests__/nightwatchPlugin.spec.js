@@ -32,7 +32,7 @@ describe('nightwatch e2e plugin', () => {
   })
 
   test('should run all tests successfully', async () => {
-    await project.run('vue-cli-service test:e2e --headless')
+    await project.run(`vue-cli-service test:e2e --headless`)
     let results = await project.read('test_results.json')
     results = JSON.parse(results)
     expect(Object.keys(results.modules)).toEqual([
@@ -44,7 +44,7 @@ describe('nightwatch e2e plugin', () => {
   test('should accept the --url cli option', async () => {
     let server
     try {
-      await project.run('vue-cli-service build')
+      await project.run(`vue-cli-service build`)
       server = createServer({ root: path.join(project.dir, 'dist') })
       await new Promise((resolve, reject) => {
         server.listen(8080, err => {
@@ -52,7 +52,7 @@ describe('nightwatch e2e plugin', () => {
           resolve()
         })
       })
-      await project.run('vue-cli-service test:e2e --headless --url http://127.0.0.1:8080/')
+      await project.run(`vue-cli-service test:e2e --headless --url http://127.0.0.1:8080/`)
 
       let results = await project.read('test_results.json')
       results = JSON.parse(results)
@@ -66,7 +66,7 @@ describe('nightwatch e2e plugin', () => {
   })
 
   test('should run single test with custom nightwatch.json', async () => {
-    await project.run('vue-cli-service test:e2e --headless -t tests/e2e/specs/test.js')
+    await project.run(`vue-cli-service test:e2e --headless -t tests/e2e/specs/test.js`)
     let results = await project.read('test_results.json')
     results = JSON.parse(results)
     expect(Object.keys(results.modules)).toEqual([
@@ -75,7 +75,7 @@ describe('nightwatch e2e plugin', () => {
   })
 
   test('should run single test with custom nightwatch.json and selenium server', async () => {
-    await project.run('vue-cli-service test:e2e --headless --use-selenium -t tests/e2e/specs/test.js')
+    await project.run(`vue-cli-service test:e2e --headless --use-selenium -t tests/e2e/specs/test.js`)
     let results = await project.read('test_results.json')
     results = JSON.parse(results)
 
@@ -91,7 +91,7 @@ describe('nightwatch e2e plugin', () => {
   })
 
   test('should run tests in parallel', async () => {
-    await project.run('vue-cli-service test:e2e --headless --parallel')
+    await project.run(`vue-cli-service test:e2e --headless --parallel`)
     let results = await project.read('test_results.json')
     results = JSON.parse(results)
 
@@ -118,7 +118,7 @@ describe('nightwatch e2e plugin', () => {
 
     await Promise.all([copyConfig, copyGlobals])
 
-    await project.run('vue-cli-service test:e2e --headless --env firefox -t tests/e2e/specs/test.js')
+    await project.run(`vue-cli-service test:e2e --headless --env firefox -t tests/e2e/specs/test.js`)
     let results = await project.read('test_results_gecko.json')
     results = JSON.parse(results)
 

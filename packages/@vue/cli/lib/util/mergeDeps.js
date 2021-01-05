@@ -85,7 +85,7 @@ module.exports = function mergeDeps (
           `conflicting versions for project dependency "${depName}":\n\n` +
             `- ${sourceRange} injected by generator "${sourceGeneratorId}"\n` +
             `- ${injectingRange} injected by generator "${generatorId}"\n\n` +
-            `Using ${didGetNewer ? 'newer ' : ''}version (${
+            `Using ${didGetNewer ? `newer ` : ``}version (${
               result[depName]
             }), but this may cause build errors.`
         )
