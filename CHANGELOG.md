@@ -1,4 +1,23 @@
 
+## 4.5.10 (2021-01-06)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-unit-mocha`
+  * [#6186](https://github.com/vuejs/vue-cli/pull/6186) fix(mocha): workaround the ShadowRoot issue in Vue 3.0.5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`, `@vue/cli-service`
+  * [#6097](https://github.com/vuejs/vue-cli/pull/6097) fix(mocha): disable SSR optimization for Vue 3 testing ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#6000](https://github.com/vuejs/vue-cli/pull/6000) fix: prevent snoretoast shortcut, set notif title (#2720) ([@tony19](https://github.com/tony19))
+* `@vue/cli-service-global`, `@vue/cli-service`
+  * [#5992](https://github.com/vuejs/vue-cli/pull/5992) fix: using `lang` attribute with empty string in html template ([@fangbinwei](https://github.com/fangbinwei))
+
+#### Committers: 3
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Tony Trinh ([@tony19](https://github.com/tony19))
+
+
+
 ## 4.5.9 (2020-11-17)
 
 #### :rocket: New Features
