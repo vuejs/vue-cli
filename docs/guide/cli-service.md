@@ -126,7 +126,7 @@ npx vue-cli-service help [command]
 
 ## Skipping Plugins
 
-Sometimes, you may want to not use a certain CLI Plugin when running a command. For example you might want to build a version of your app that doesn't include the PWA plugin. You can do that by passing the name of the plugin to the `--skip-plugins` option.
+You can exclude specific plugins when running a command by passing the name of the plugin to the `--skip-plugins` option:
 
 ```bash
 npx vue-cli-service build --skip-plugins pwa
@@ -169,10 +169,7 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add"
-    ]
+    "*.{js,vue}": "vue-cli-service lint"
   }
 }
 ```

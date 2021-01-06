@@ -14,7 +14,7 @@ test('CSS pre-processor ', async () => {
     },
     {
       message: 'Pick a CSS pre-processor',
-      choices: ['Sass/SCSS (with dart-sass)', 'Sass/SCSS (with node-sass)', 'Less', 'Stylus'],
+      choices: ['Sass/SCSS (with dart-sass)', 'Less', 'Stylus'],
       choose: 0
     }
   ]

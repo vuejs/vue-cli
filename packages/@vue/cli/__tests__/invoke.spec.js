@@ -7,7 +7,7 @@ const create = require('@vue/cli-test-utils/createTestProject')
 
 const parseJS = file => {
   const res = {}
-  ;(new Function('module', file))(res)
+  ;(new Function('module', file))(res) // eslint-disable-line no-new-func
   return res.exports
 }
 
@@ -72,8 +72,16 @@ test('invoke with prompts', async () => {
   ])
   // need to be in the same process to have inquirer mocked
   // so calling directly
+  const cwd = process.cwd()
+  // By default, @babel/eslint-parser will load babel.config.js in `path.resolve('.')`(equals `process.cwd()`) through @babel/core.
+  // chdir, and let @babel/eslint-parser find the babel.config.js in our test project
+  process.chdir(project.dir)
+
   await invoke(`eslint`, {}, project.dir)
   await assertUpdates(project)
+
+  // restore
+  process.chdir(cwd)
 })
 
 test('invoke with ts', async () => {
@@ -142,7 +150,7 @@ extends:
 })
 
 test('invoking a plugin that renames files', async () => {
-  const project = await create(`invoke-rename`, { plugins: {}})
+  const project = await create(`invoke-rename`, { plugins: {} })
   const pkg = JSON.parse(await project.read('package.json'))
   pkg.devDependencies['@vue/cli-plugin-typescript'] = '*'
   await project.write('package.json', JSON.stringify(pkg, null, 2))

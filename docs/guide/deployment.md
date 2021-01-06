@@ -169,14 +169,30 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
-In order to receive direct hits using `history mode` on Vue Router, you need to create a file called `_redirects` under `/public` with the following content:
+#### Use history mode on Vue Router
+
+In order to receive direct hits using `history mode` on Vue Router, you need to redirect all trafic to the `/index.html` file.
+
+> More information on [Netlify redirects documentation](https://docs.netlify.com/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-apps).
+
+##### Recomended method
+
+Create a file called `netlify.toml` in the root of your repository with the following content:
+
+```toml
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+##### Alternative method
+Create a file called `_redirects` under `/public` with the following content:
 
 ```
 # Netlify settings for single-page application
 /*    /index.html   200
 ```
-
-More information on [Netlify redirects documentation](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
 
 If you are using [@vue/cli-plugin-pwa](https://cli.vuejs.org/core-plugins/pwa.html#vue-cli-plugin-pwa) make sure to exclude the `_redirects` file from being cached by the service worker.
 To do so, add the following to your `vue.config.js`:
@@ -197,11 +213,10 @@ Checkout [workboxOptions](https://cli.vuejs.org/core-plugins/pwa.html#configurat
 
 [Render](https://render.com) offers [free static site hosting](https://render.com/docs/static-sites) with fully managed SSL, a global CDN and continuous auto deploys from GitHub.
 
-1. Create a new Web Service on Render, and give Render’s GitHub app permission to access your Vue repo.
+1. Create a new Static Site on Render, and give Render’s GitHub app permission to access your Vue repo.
 
 2. Use the following values during creation:
 
-    - **Environment:** `Static Site`
     - **Build Command:** `npm run build` or `yarn build`
     - **Publish directory:** `dist`
 

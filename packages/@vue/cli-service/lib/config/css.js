@@ -65,8 +65,8 @@ module.exports = (api, rootOptions) => {
       ? './'
       : '../'.repeat(
         extractOptions.filename
-            .replace(/^\.[\/\\]/, '')
-            .split(/[\/\\]/g)
+            .replace(/^\.[/\\]/, '')
+            .split(/[/\\]/g)
             .length - 1
       )
 
@@ -83,9 +83,11 @@ module.exports = (api, rootOptions) => {
 
     if (!hasPostCSSConfig) {
       loaderOptions.postcss = {
-        plugins: [
-          require('autoprefixer')
-        ]
+        postcssOptions: {
+          plugins: [
+            require('autoprefixer')
+          ]
+        }
       }
     }
 
@@ -129,8 +131,9 @@ module.exports = (api, rootOptions) => {
             .use('extract-css-loader')
             .loader(require('mini-css-extract-plugin').loader)
             .options({
-              hmr: !isProd,
-              publicPath: cssPublicPath
+              publicPath: cssPublicPath,
+              // TODO: enable this option later
+              esModule: false
             })
         } else {
           rule
@@ -171,7 +174,9 @@ module.exports = (api, rootOptions) => {
             .loader(require.resolve('postcss-loader'))
             .options({
               sourceMap,
-              plugins: [require('cssnano')(cssnanoOptions)]
+              postcssOptions: {
+                plugins: [require('cssnano')(cssnanoOptions)]
+              }
             })
         }
 
@@ -229,9 +234,7 @@ module.exports = (api, rootOptions) => {
       ))
     }
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
-    createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', Object.assign({
-      preferPathResolver: 'webpack'
-    }, loaderOptions.stylus))
+    createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', loaderOptions.stylus)
 
     // inject CSS extraction plugin
     if (shouldExtract) {
@@ -240,14 +243,13 @@ module.exports = (api, rootOptions) => {
           .use(require('mini-css-extract-plugin'), [extractOptions])
 
       // minify extracted CSS
-      if (isProd) {
-        webpackConfig
-          .plugin('optimize-css')
-            .use(require('@intervolga/optimize-cssnano-plugin'), [{
-              sourceMap: rootOptions.productionSourceMap && sourceMap,
-              cssnanoOptions
-            }])
-      }
+      webpackConfig.optimization
+        .minimizer('css')
+          .use(require('css-minimizer-webpack-plugin'), [{
+            parallel: rootOptions.parallel,
+            sourceMap: rootOptions.productionSourceMap && sourceMap,
+            minimizerOptions: cssnanoOptions
+          }])
     }
   })
 }

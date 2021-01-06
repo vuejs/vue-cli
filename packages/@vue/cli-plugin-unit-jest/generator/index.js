@@ -26,7 +26,7 @@ module.exports = (api, options, rootOptions, invoking) => {
       devDependencies: {
         'vue-jest': '^5.0.0-0',
         // vue-jest 5.0.0-alpha.1 requires typescript to be present
-        'typescript': '~3.9.3'
+        'typescript': '~4.1.2'
       },
       jest: {
         transform: {
@@ -71,7 +71,7 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
         : '@vue/cli-plugin-unit-jest/presets/typescript'
     },
     devDependencies: {
-      '@types/jest': '^24.0.19'
+      '@types/jest': '^26.0.19'
     }
   })
 
@@ -87,7 +87,7 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
         ) {
           parsed.compilerOptions.types.push('jest')
         }
-        files['tsconfig.json'] = JSON.stringify(parsed, null, 2)
+        files['tsconfig.json'] = JSON.stringify(parsed, null, 2) + '\n'
       }
     })
   }

@@ -80,6 +80,8 @@ module.exports = function migrateComponentType (file, api) {
       ) {
         return false
       }
+
+      return true
     })
   if (defineComponentUsages.length === 0) {
     tsmodule

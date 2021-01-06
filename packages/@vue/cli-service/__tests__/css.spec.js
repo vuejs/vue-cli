@@ -62,7 +62,7 @@ test('default loaders', () => {
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'postcss').plugins).toEqual([require('autoprefixer')])
+    expect(findOptions(config, lang, 'postcss').postcssOptions.plugins).toEqual([require('autoprefixer')])
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
@@ -83,7 +83,7 @@ test('production defaults', () => {
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual([extractLoaderPath, 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'postcss').plugins).toEqual([require('autoprefixer')])
+    expect(findOptions(config, lang, 'postcss').postcssOptions.plugins).toEqual([require('autoprefixer')])
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
       importLoaders: 2
@@ -92,11 +92,11 @@ test('production defaults', () => {
 })
 
 test('override postcss config', () => {
-  const config = genConfig({ postcss: {}})
+  const config = genConfig({ postcss: {} })
   LANGS.forEach(lang => {
     const loader = lang === 'css' ? [] : LOADERS[lang]
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss'].concat(loader))
-    expect(findOptions(config, lang, 'postcss').plugins).toBeFalsy()
+    expect(findOptions(config, lang, 'postcss').postcssOptions).toBeFalsy()
     // assert css-loader options
     expect(findOptions(config, lang, 'css')).toEqual({
       sourceMap: false,
@@ -254,7 +254,7 @@ test('css.extract', () => {
     // an additional instance of postcss-loader is injected for inline minification.
     expect(findLoaders(config, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
     expect(findOptions(config, lang, 'css').importLoaders).toBe(3)
-    expect(findOptions(config, lang, 'postcss').plugins).toBeTruthy()
+    expect(findOptions(config, lang, 'postcss').postcssOptions.plugins).toBeTruthy()
   })
 
   const config2 = genConfig({
@@ -272,7 +272,7 @@ test('css.extract', () => {
     expect(findLoaders(config2, lang)).toEqual(['vue-style', 'css', 'postcss', 'postcss'].concat(loader))
     expect(findOptions(config2, lang, 'css').importLoaders).toBe(3)
     // minification loader should be injected before the user-facing postcss-loader
-    expect(findOptions(config2, lang, 'postcss').plugins).toBeTruthy()
+    expect(findOptions(config2, lang, 'postcss').postcssOptions.plugins).toBeTruthy()
   })
 })
 
@@ -393,4 +393,3 @@ test('should use dart sass implementation whenever possible', () => {
   expect(findOptions(config, 'scss', 'sass')).toMatchObject({ implementation: require('sass') })
   expect(findOptions(config, 'sass', 'sass')).toMatchObject({ implementation: require('sass') })
 })
-

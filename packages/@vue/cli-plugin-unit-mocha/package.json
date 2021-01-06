@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-mocha",
-  "version": "4.5.8",
+  "version": "5.0.0-alpha.2",
   "description": "mocha unit testing plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -22,10 +22,11 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-unit-mocha#readme",
   "dependencies": {
-    "@vue/cli-shared-utils": "^4.5.8",
+    "@vue/cli-plugin-webpack-4": "^5.0.0-alpha.2",
+    "@vue/cli-shared-utils": "^5.0.0-alpha.2",
     "jsdom": "^16.4.0",
     "jsdom-global": "^3.0.2",
-    "mocha": "^7.2.0",
+    "mocha": "^8.2.1",
     "mochapack": "^2.0.2"
   },
   "devDependencies": {
@@ -33,7 +34,7 @@
     "chai": "^4.2.0"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
+    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
   },
   "publishConfig": {
     "access": "public"

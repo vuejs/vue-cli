@@ -1,33 +1,26 @@
 const path = require('path')
+const eslintWebpackPlugin = require('eslint-webpack-plugin')
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   if (options.lintOnSave) {
     const extensions = require('./eslintOptions').extensions(api)
     // Use loadModule to allow users to customize their ESLint dependency version.
     const { resolveModule, loadModule } = require('@vue/cli-shared-utils')
     const cwd = api.getCwd()
+
     const eslintPkg =
       loadModule('eslint/package.json', cwd, true) ||
       loadModule('eslint/package.json', __dirname, true)
 
-    // eslint-loader doesn't bust cache when eslint config changes
-    // so we have to manually generate a cache identifier that takes the config
-    // into account.
-    const { cacheIdentifier } = api.genCacheConfig(
-      'eslint-loader',
+    // ESLint doesn't clear the cache when you upgrade ESLint plugins (ESlint do consider config changes)
+    // so we have to manually generate a cache identifier that takes lock file into account.
+    const { cacheIdentifier, cacheDirectory } = api.genCacheConfig(
+      'eslint',
       {
-        'eslint-loader': require('eslint-loader/package.json').version,
         eslint: eslintPkg.version
       },
-      [
-        '.eslintrc.js',
-        '.eslintrc.yaml',
-        '.eslintrc.yml',
-        '.eslintrc.json',
-        '.eslintrc',
-        '.eslintignore',
-        'package.json'
-      ]
+      ['package.json']
     )
 
     api.chainWebpack(webpackConfig => {
@@ -35,29 +28,33 @@ module.exports = (api, options) => {
       const allWarnings = lintOnSave === true || lintOnSave === 'warning'
       const allErrors = lintOnSave === 'error'
 
-      webpackConfig.module
-        .rule('eslint')
-          .pre()
-          .exclude
-            .add(/node_modules/)
-            .add(path.dirname(require.resolve('@vue/cli-service')))
-            .end()
-          .test(/\.(vue|(j|t)sx?)$/)
-          .use('eslint-loader')
-            .loader(require.resolve('eslint-loader'))
-            .options({
-              extensions,
-              cache: true,
-              cacheIdentifier,
-              emitWarning: allWarnings,
-              // only emit errors in production mode.
-              emitError: allErrors,
-              eslintPath: path.dirname(
-                resolveModule('eslint/package.json', cwd) ||
-                resolveModule('eslint/package.json', __dirname)
-              ),
-              formatter: loadModule('eslint/lib/formatters/codeframe', cwd, true)
-            })
+      /** @type {import('eslint-webpack-plugin').Options & import('eslint').ESLint.Options} */
+      const eslintWebpackPluginOptions = {
+        // common to both plugin and ESlint
+        extensions,
+        // ESlint options
+        cwd,
+        cache: true,
+        cacheLocation: path.format({
+          dir: cacheDirectory,
+          name: process.env.VUE_CLI_TEST
+            ? 'cache'
+            : cacheIdentifier,
+          ext: '.json'
+        }),
+        // plugin options
+        context: cwd,
+        // https://github.com/webpack-contrib/eslint-webpack-plugin/issues/56
+        threads: false,
+        emitWarning: allWarnings,
+        emitError: allErrors,
+        eslintPath: path.dirname(
+          resolveModule('eslint/package.json', cwd) ||
+            resolveModule('eslint/package.json', __dirname)
+        ),
+        formatter: 'codeframe'
+      }
+      webpackConfig.plugin('eslint').use(eslintWebpackPlugin, [eslintWebpackPluginOptions])
     })
   }
 

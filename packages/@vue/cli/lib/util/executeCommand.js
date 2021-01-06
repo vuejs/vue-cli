@@ -135,7 +135,7 @@ exports.executeCommand = function executeCommand (command, args, cwd) {
 
     child.on('close', code => {
       if (code !== 0) {
-        reject(`command failed: ${command} ${args.join(' ')}`)
+        reject(new Error(`command failed: ${command} ${args.join(' ')}`))
         return
       }
       resolve()

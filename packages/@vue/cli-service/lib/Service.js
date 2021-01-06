@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
@@ -10,9 +10,12 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
+const checkWebpack = require('@vue/cli-service/lib/util/checkWebpack')
 
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
+    checkWebpack(context)
+
     process.VUE_CLI_SERVICE = this
     this.initialized = false
     this.context = context
@@ -35,7 +38,7 @@ module.exports = class Service {
     // resolve the default mode to use for each command
     // this is provided by plugins as module.exports.defaultModes
     // so we can get the information without actually applying the plugin.
-    this.modes = this.plugins.reduce((modes, { apply: { defaultModes }}) => {
+    this.modes = this.plugins.reduce((modes, { apply: { defaultModes } }) => {
       return Object.assign(modes, defaultModes)
     }, {})
   }
@@ -154,6 +157,7 @@ module.exports = class Service {
       './commands/help',
       // config plugins are order sensitive
       './config/base',
+      './config/assets',
       './config/css',
       './config/prod',
       './config/app'

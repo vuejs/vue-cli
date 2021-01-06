@@ -48,6 +48,7 @@ class DashboardPlugin {
   apply (compiler) {
     let sendData = this.sendData
     let timer
+    let inProgress = false
 
     let assetSources = new Map()
 
@@ -63,6 +64,13 @@ class DashboardPlugin {
     // Progress status
     let progressTime = Date.now()
     const progressPlugin = new webpack.ProgressPlugin((percent, msg) => {
+      // in webpack 5, progress plugin will continue sending progresses even after the done hook
+      // for things like caching, causing the progress indicator stuck at 0.99
+      // so we have to use a flag to stop sending such `compiling` progress data
+      if (!inProgress) {
+        return
+      }
+
       // Debouncing
       const time = Date.now()
       if (time - progressTime > 300) {
@@ -94,6 +102,7 @@ class DashboardPlugin {
     })
 
     compiler.hooks.compile.tap(ID, () => {
+      inProgress = true
       timer = Date.now()
 
       sendData([
@@ -136,13 +145,22 @@ class DashboardPlugin {
           value: `idle${getTimeMessage(timer)}`
         }
       ])
+      inProgress = false
     })
 
     compiler.hooks.afterEmit.tap(ID, compilation => {
       assetSources = new Map()
       for (const name in compilation.assets) {
         const asset = compilation.assets[name]
-        assetSources.set(name.replace(FILENAME_QUERY_REGEXP, ''), asset.source())
+        const filename = name.replace(FILENAME_QUERY_REGEXP, '')
+        try {
+          assetSources.set(filename, asset.source())
+        } catch (e) {
+          const webpackFs = compiler.outputFileSystem
+          const fullPath = (webpackFs.join || path.join)(compiler.options.output.path, filename)
+          const buf = webpackFs.readFileSync(fullPath)
+          assetSources.set(filename, buf.toString())
+        }
       }
     })
 
@@ -178,6 +196,7 @@ class DashboardPlugin {
           value: `idle${getTimeMessage(timer)}`
         }
       ])
+      inProgress = false
 
       const statsFile = path.resolve(process.cwd(), `./node_modules/.stats-${this.type}.json`)
       fs.writeJson(statsFile, {

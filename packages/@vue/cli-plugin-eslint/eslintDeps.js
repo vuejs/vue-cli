@@ -1,28 +1,27 @@
 const DEPS_MAP = {
   base: {
-    eslint: '^6.7.2',
-    'eslint-plugin-vue': '^6.2.2'
+    eslint: '^7.15.0',
+    'eslint-plugin-vue': '^7.2.0'
   },
   airbnb: {
-    '@vue/eslint-config-airbnb': '^5.0.2',
+    '@vue/eslint-config-airbnb': '^5.3.0',
     'eslint-plugin-import': '^2.20.2'
   },
   prettier: {
     '@vue/eslint-config-prettier': '^6.0.0',
-    'eslint-plugin-prettier': '^3.1.3',
-    prettier: '^1.19.1'
+    'eslint-plugin-prettier': '^3.2.0',
+    prettier: '^2.2.1'
   },
   standard: {
-    '@vue/eslint-config-standard': '^5.1.2',
+    '@vue/eslint-config-standard': '^6.0.0',
     'eslint-plugin-import': '^2.20.2',
     'eslint-plugin-node': '^11.1.0',
-    'eslint-plugin-promise': '^4.2.1',
-    'eslint-plugin-standard': '^4.0.0'
+    'eslint-plugin-promise': '^4.2.1'
   },
   typescript: {
-    '@vue/eslint-config-typescript': '^5.1.0',
-    '@typescript-eslint/eslint-plugin': '^2.33.0',
-    '@typescript-eslint/parser': '^2.33.0'
+    '@vue/eslint-config-typescript': '^7.0.0',
+    '@typescript-eslint/eslint-plugin': '^4.9.1',
+    '@typescript-eslint/parser': '^4.9.1'
   }
 }
 
@@ -32,7 +31,7 @@ exports.getDeps = function (api, preset, rootOptions = {}) {
   const deps = Object.assign({}, DEPS_MAP.base, DEPS_MAP[preset])
 
   if (rootOptions.vueVersion === '3') {
-    Object.assign(deps, { 'eslint-plugin-vue': '^7.0.0-0' })
+    Object.assign(deps, { 'eslint-plugin-vue': '^7.2.0' })
   }
 
   if (api.hasPlugin('typescript')) {
@@ -41,7 +40,8 @@ exports.getDeps = function (api, preset, rootOptions = {}) {
 
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     Object.assign(deps, {
-      'babel-eslint': '^10.1.0'
+      '@babel/eslint-parser': '^7.12.1',
+      '@babel/core': '^7.12.10'
     })
   }
 

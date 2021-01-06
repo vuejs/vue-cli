@@ -150,24 +150,26 @@ test('api: extendPackage function', async () => {
 })
 
 test('api: extendPackage allow git, github, http, file version ranges', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            foo: 'git+ssh://git@github.com:npm/npm.git#v1.0.27',
-            baz: 'git://github.com/npm/npm.git#v1.0.27',
-            bar: 'expressjs/express',
-            bad: 'mochajs/mocha#4727d357ea',
-            bac: 'http://asdf.com/asdf.tar.gz',
-            bae: 'file:../dyl',
-            'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
-          }
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              foo: 'git+ssh://git@github.com:npm/npm.git#v1.0.27',
+              baz: 'git://github.com/npm/npm.git#v1.0.27',
+              bar: 'expressjs/express',
+              bad: 'mochajs/mocha#4727d357ea',
+              bac: 'http://asdf.com/asdf.tar.gz',
+              bae: 'file:../dyl',
+              'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
+            }
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -186,30 +188,32 @@ test('api: extendPackage allow git, github, http, file version ranges', async ()
 })
 
 test('api: extendPackage merge nonstrictly semver deps', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:1.0.0',
-            bar: 'expressjs/express'
-          }
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:1.0.0',
+              bar: 'expressjs/express'
+            }
+          })
+        }
+      },
+      {
+        id: 'test2',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:1.2.0',
+              bar: 'expressjs/express'
+            }
+          })
+        }
       }
-    },
-    {
-      id: 'test2',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:1.2.0',
-            bar: 'expressjs/express'
-          }
-        })
-      }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -223,30 +227,32 @@ test('api: extendPackage merge nonstrictly semver deps', async () => {
 })
 
 test('api: extendPackage merge dependencies', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            foo: '^1.1.0',
-            bar: '^1.0.0'
-          }
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              foo: '^1.1.0',
+              bar: '^1.0.0'
+            }
+          })
+        }
+      },
+      {
+        id: 'test2',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              foo: '^1.0.0',
+              baz: '^1.0.0'
+            }
+          })
+        }
       }
-    },
-    {
-      id: 'test2',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            foo: '^1.0.0',
-            baz: '^1.0.0'
-          }
-        })
-      }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -261,18 +267,20 @@ test('api: extendPackage merge dependencies', async () => {
 })
 
 test('api: warn invalid dep range', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            foo: 'foo'
-          }
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              foo: 'foo'
+            }
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -285,18 +293,20 @@ test('api: warn invalid dep range', async () => {
 })
 
 test('api: warn invalid dep range when non-string', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            foo: null
-          }
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              foo: null
+            }
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -309,28 +319,30 @@ test('api: warn invalid dep range when non-string', async () => {
 })
 
 test('api: extendPackage dependencies conflict', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            foo: '^1.0.0'
-          }
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              foo: '^1.0.0'
+            }
+          })
+        }
+      },
+      {
+        id: 'test2',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              foo: '^2.0.0'
+            }
+          })
+        }
       }
-    },
-    {
-      id: 'test2',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            foo: '^2.0.0'
-          }
-        })
-      }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -345,28 +357,30 @@ test('api: extendPackage dependencies conflict', async () => {
 })
 
 test('api: extendPackage merge warn nonstrictly semver deps', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test3',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            bar: 'expressjs/express'
-          }
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test3',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              bar: 'expressjs/express'
+            }
+          })
+        }
+      },
+      {
+        id: 'test4',
+        apply: api => {
+          api.extendPackage({
+            dependencies: {
+              bar: 'expressjs/express#1234'
+            }
+          })
+        }
       }
-    },
-    {
-      id: 'test4',
-      apply: api => {
-        api.extendPackage({
-          dependencies: {
-            bar: 'expressjs/express#1234'
-          }
-        })
-      }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -508,17 +522,19 @@ test('api: extendPackage + { warnIncompatibleVersions: false }', async () => {
 })
 
 test('api: render fs directory', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: api => {
-        api.render('./template', { m: 2 })
-      },
-      options: {
-        n: 1
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: api => {
+          api.render('./template', { m: 2 })
+        },
+        options: {
+          n: 1
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -533,39 +549,43 @@ test('api: render fs directory', async () => {
 
 // #4774
 test('api: call render inside an anonymous function', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: api => {
-        (() => {
-          api.render('./template', { m: 2 })
-        })()
-      },
-      options: {
-        n: 1
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: api => {
+          (() => {
+            api.render('./template', { m: 2 })
+          })()
+        },
+        options: {
+          n: 1
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo(1)')
 })
 
 test('api: render object', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: api => {
-        api.render({
-          'foo1.js': path.join(templateDir, 'foo.js'),
-          'bar/bar1.js': path.join(templateDir, 'bar/bar.js')
-        }, { m: 3 })
-      },
-      options: {
-        n: 2
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: api => {
+          api.render({
+            'foo1.js': path.join(templateDir, 'foo.js'),
+            'bar/bar1.js': path.join(templateDir, 'bar/bar.js')
+          }, { m: 3 })
+        },
+        options: {
+          n: 2
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -574,20 +594,22 @@ test('api: render object', async () => {
 })
 
 test('api: render middleware', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test1',
-      apply: (api, options) => {
-        api.render((files, render) => {
-          files['foo2.js'] = render('foo(<%- n %>)', options)
-          files['bar/bar2.js'] = render('bar(<%- n %>)', options)
-        })
-      },
-      options: {
-        n: 3
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: (api, options) => {
+          api.render((files, render) => {
+            files['foo2.js'] = render('foo(<%- n %>)', options)
+            files['bar/bar2.js'] = render('bar(<%- n %>)', options)
+          })
+        },
+        options: {
+          n: 3
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
 
@@ -596,26 +618,29 @@ test('api: render middleware', async () => {
 })
 
 test('api: hasPlugin', () => {
-  new Generator('/', { plugins: [
-    {
-      id: 'foo',
-      apply: api => {
-        expect(api.hasPlugin('foo')).toBe(true)
-        expect(api.hasPlugin('bar')).toBe(true)
-        expect(api.hasPlugin('baz')).toBe(true)
-        expect(api.hasPlugin('vue-cli-plugin-bar')).toBe(true)
-        expect(api.hasPlugin('@vue/cli-plugin-baz')).toBe(true)
+  // eslint-disable-next-line no-new
+  new Generator('/', {
+    plugins: [
+      {
+        id: 'foo',
+        apply: api => {
+          expect(api.hasPlugin('foo')).toBe(true)
+          expect(api.hasPlugin('bar')).toBe(true)
+          expect(api.hasPlugin('baz')).toBe(true)
+          expect(api.hasPlugin('vue-cli-plugin-bar')).toBe(true)
+          expect(api.hasPlugin('@vue/cli-plugin-baz')).toBe(true)
+        }
+      },
+      {
+        id: 'vue-cli-plugin-bar',
+        apply: () => {}
+      },
+      {
+        id: '@vue/cli-plugin-baz',
+        apply: () => {}
       }
-    },
-    {
-      id: 'vue-cli-plugin-bar',
-      apply: () => {}
-    },
-    {
-      id: '@vue/cli-plugin-baz',
-      apply: () => {}
-    }
-  ] })
+    ]
+  })
 })
 
 test('api: onCreateComplete', async () => {
@@ -658,30 +683,83 @@ test('api: afterInvoke', async () => {
   expect(cbs).toContain(fn)
 })
 
-test('api: resolve', () => {
-  new Generator('/foo/bar', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        expect(api.resolve('baz')).toBe(path.resolve('/foo/bar', 'baz'))
-      }
+test('api: afterAnyInvoke and afterInvoke in hooks', async () => {
+  const fooAnyInvokeHandler = () => {}
+  const fooInvokeHandler = () => {}
+  const barAnyInvokeHandler = () => {}
+  const barInvokeHandler = () => {}
+
+  const getGeneratorFn = (invokeHandler, anyInvokeHandler) => {
+    const generatorFn = () => {}
+    generatorFn.hooks = api => {
+      api.afterInvoke(invokeHandler)
+      api.afterAnyInvoke(anyInvokeHandler)
     }
-  ] })
+    return generatorFn
+  }
+
+  jest.doMock('vue-cli-plugin-foo-hooks/generator', () => {
+    return getGeneratorFn(fooInvokeHandler, fooAnyInvokeHandler)
+  }, { virtual: true })
+
+  jest.doMock('vue-cli-plugin-bar-hooks/generator', () => {
+    return getGeneratorFn(barInvokeHandler, barAnyInvokeHandler)
+  }, { virtual: true })
+
+  const afterAnyInvokeCbs = []
+  const afterInvokeCbs = []
+  const generator = new Generator('/', {
+    pkg: {
+      devDependencies: {
+        'vue-cli-plugin-foo-hooks': '1.0.0',
+        'vue-cli-plugin-bar-hooks': '1.0.0'
+      }
+    },
+    plugins: [
+      {
+        id: 'vue-cli-plugin-foo-hooks',
+        apply: getGeneratorFn(fooInvokeHandler, fooAnyInvokeHandler)
+      }
+    ],
+    afterInvokeCbs,
+    afterAnyInvokeCbs
+  })
+
+  await generator.generate()
+
+  expect(afterAnyInvokeCbs).toEqual([fooAnyInvokeHandler, barAnyInvokeHandler])
+  expect(afterInvokeCbs).toEqual([fooInvokeHandler])
+})
+
+test('api: resolve', () => {
+  // eslint-disable-next-line no-new
+  new Generator('/foo/bar', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          expect(api.resolve('baz')).toBe(path.resolve('/foo/bar', 'baz'))
+        }
+      }
+    ]
+  })
 })
 
 test('api: addEntryImport & addEntryInjection', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.injectImports('main.js', `import bar from 'bar'`)
-        api.injectRootOptions('main.js', ['foo', 'bar'])
-        api.render({
-          'main.js': path.join(templateDir, 'entry.js')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.injectImports('main.js', `import bar from 'bar'`)
+          api.injectRootOptions('main.js', ['foo', 'bar'])
+          api.render({
+            'main.js': path.join(templateDir, 'entry.js')
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\r?\nimport bar from 'bar'/)
@@ -689,69 +767,77 @@ test('api: addEntryImport & addEntryInjection', async () => {
 })
 
 test('api: injectImports to empty file', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.injectImports('main.js', `import foo from 'foo'`)
-        api.injectImports('main.js', `import bar from 'bar'`)
-        api.render({
-          'main.js': path.join(templateDir, 'empty-entry.js')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.injectImports('main.js', `import foo from 'foo'`)
+          api.injectImports('main.js', `import bar from 'bar'`)
+          api.render({
+            'main.js': path.join(templateDir, 'empty-entry.js')
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/import foo from 'foo'\r?\nimport bar from 'bar'/)
 })
 
 test('api: injectImports to typescript file', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.injectImports('main.ts', `import foo from 'foo'`)
-        api.render({
-          'main.ts': path.join(templateDir, 'main.ts')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.injectImports('main.ts', `import foo from 'foo'`)
+          api.render({
+            'main.ts': path.join(templateDir, 'main.ts')
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/main.ts', 'utf-8')).toMatch(/import foo from 'foo'/)
 })
 
 test('api: addEntryDuplicateImport', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.injectImports('main.js', `import foo from 'foo'`)
-        api.render({
-          'main.js': path.join(templateDir, 'entry.js')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.injectImports('main.js', `import foo from 'foo'`)
+          api.render({
+            'main.js': path.join(templateDir, 'entry.js')
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/^import foo from 'foo'\s+new Vue/)
 })
 
 test('api: injectImport for .vue files', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.injectImports('hello.vue', `import foo from 'foo'`)
-        api.render({
-          'hello.vue': path.join(templateDir, 'hello.vue')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.injectImports('hello.vue', `import foo from 'foo'`)
+          api.render({
+            'hello.vue': path.join(templateDir, 'hello.vue')
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   const content = fs.readFileSync('/hello.vue', 'utf-8')
@@ -760,34 +846,38 @@ test('api: injectImport for .vue files', async () => {
 })
 
 test('api: addEntryDuplicateInjection', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.injectRootOptions('main.js', 'baz')
-        api.render({
-          'main.js': path.join(templateDir, 'entry.js')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.injectRootOptions('main.js', 'baz')
+          api.render({
+            'main.js': path.join(templateDir, 'entry.js')
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/{\s+p: p\(\),\s+baz,\s+render/)
 })
 
 test('api: addEntryDuplicateNonIdentifierInjection', async () => {
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.injectRootOptions('main.js', 'p: p()')
-        api.render({
-          'main.js': path.join(templateDir, 'entry.js')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.injectRootOptions('main.js', 'p: p()')
+          api.render({
+            'main.js': path.join(templateDir, 'entry.js')
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/{\s+p: p\(\),\s+baz,\s+render/)
@@ -800,19 +890,21 @@ test('api: addConfigTransform', async () => {
     }
   }
 
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.addConfigTransform('fooConfig', {
-          file: {
-            json: ['foo.config.json']
-          }
-        })
-        api.extendPackage(configs)
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.addConfigTransform('fooConfig', {
+            file: {
+              json: ['foo.config.json']
+            }
+          })
+          api.extendPackage(configs)
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate({
     extractConfigFiles: true
@@ -830,20 +922,22 @@ test('api: addConfigTransform (multiple)', async () => {
     }
   }
 
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.addConfigTransform('bazConfig', {
-          file: {
-            js: ['.bazrc.js'],
-            json: ['.bazrc', 'baz.config.json']
-          }
-        })
-        api.extendPackage(configs)
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.addConfigTransform('bazConfig', {
+            file: {
+              js: ['.bazrc.js'],
+              json: ['.bazrc', 'baz.config.json']
+            }
+          })
+          api.extendPackage(configs)
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate({
     extractConfigFiles: true
@@ -861,19 +955,21 @@ test('api: addConfigTransform transform vue warn', async () => {
     }
   }
 
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.addConfigTransform('vue', {
-          file: {
-            js: ['vue.config.js']
-          }
-        })
-        api.extendPackage(configs)
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.addConfigTransform('vue', {
+            file: {
+              js: ['vue.config.js']
+            }
+          })
+          api.extendPackage(configs)
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate({
     extractConfigFiles: true
@@ -883,6 +979,52 @@ test('api: addConfigTransform transform vue warn', async () => {
   expect(logs.warn.some(([msg]) => {
     return msg.match(/Reserved config transform 'vue'/)
   })).toBe(true)
+})
+
+test('avoid overwriting files that have not been modified', async () => {
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: (api, options) => {
+          api.render((files, render) => {
+            files['foo.js'] = render('foo()')
+          })
+        }
+      }
+    ],
+    files: {
+      // skip writing to this file
+      'existFile.js': 'existFile()'
+    }
+  })
+
+  await generator.generate()
+
+  expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo()')
+  expect(fs.existsSync('/existFile.js')).toBe(false)
+})
+
+test('overwrite files that have been modified', async () => {
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: (api, options) => {
+          api.render((files, render) => {
+            files['existFile.js'] = render('foo()')
+          })
+        }
+      }
+    ],
+    files: {
+      'existFile.js': 'existFile()'
+    }
+  })
+
+  await generator.generate()
+
+  expect(fs.readFileSync('/existFile.js', 'utf-8')).toMatch('foo()')
 })
 
 test('extract config files', async () => {
@@ -908,14 +1050,16 @@ test('extract config files', async () => {
     ]
   }
 
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.extendPackage(configs)
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.extendPackage(configs)
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate({
     extractConfigFiles: true
@@ -933,16 +1077,18 @@ test('extract config files', async () => {
 test('generate a JS-Only value from a string', async () => {
   const jsAsString = 'true ? "alice" : "bob"'
 
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.extendPackage({
-          testScript: api.makeJSOnlyValue(jsAsString)
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.extendPackage({
+            testScript: api.makeJSOnlyValue(jsAsString)
+          })
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate({})
 
@@ -966,18 +1112,20 @@ test('run a codemod on the entry file', async () => {
         .toSource()
   }
 
-  const generator = new Generator('/', { plugins: [
-    {
-      id: 'test',
-      apply: api => {
-        api.render({
-          'main.js': path.join(templateDir, 'entry.js')
-        })
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test',
+        apply: api => {
+          api.render({
+            'main.js': path.join(templateDir, 'entry.js')
+          })
 
-        api.transformScript('main.js', codemod)
+          api.transformScript('main.js', codemod)
+        }
       }
-    }
-  ] })
+    ]
+  })
 
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new TestVue/)

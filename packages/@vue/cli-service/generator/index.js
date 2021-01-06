@@ -6,10 +6,10 @@ module.exports = (api, options) => {
   if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
-        'vue': '^3.0.0'
+        'vue': '^3.0.4'
       },
       devDependencies: {
-        '@vue/compiler-sfc': '^3.0.0'
+        '@vue/compiler-sfc': '^3.0.4'
       }
     })
   } else {
@@ -38,15 +38,11 @@ module.exports = (api, options) => {
   if (options.cssPreprocessor) {
     const deps = {
       sass: {
-        sass: '^1.26.5',
-        'sass-loader': '^8.0.2'
-      },
-      'node-sass': {
-        'node-sass': '^4.12.0',
+        sass: '^1.30.0',
         'sass-loader': '^8.0.2'
       },
       'dart-sass': {
-        sass: '^1.26.5',
+        sass: '^1.30.0',
         'sass-loader': '^8.0.2'
       },
       less: {
@@ -54,8 +50,8 @@ module.exports = (api, options) => {
         'less-loader': '^5.0.0'
       },
       stylus: {
-        'stylus': '^0.54.7',
-        'stylus-loader': '^3.0.2'
+        'stylus': '^0.54.8',
+        'stylus-loader': '^4.3.1'
       }
     }
 

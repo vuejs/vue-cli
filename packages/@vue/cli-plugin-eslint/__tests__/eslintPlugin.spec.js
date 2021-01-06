@@ -1,4 +1,4 @@
-jest.setTimeout(35000)
+jest.setTimeout(300000)
 
 const path = require('path')
 const { linkBin } = require('@vue/cli/lib/util/linkBin')
@@ -45,7 +45,8 @@ test('should work', async () => {
   })
   const hook = await read('.git/hooks/pre-commit')
   expect(hook).toMatch('#yorkie')
-  await write('src/main.js', updatedMain)
+  // add a trivial change to avoid empty changeset after running lint-staged
+  await write('src/main.js', updatedMain.replace('false', 'true'))
   // nvm doesn't like PREFIX env
   if (process.platform === 'darwin') {
     delete process.env.PREFIX
@@ -194,4 +195,77 @@ test('should save report results to file with --output-file option', async () =>
 
   // results file should show "Missing semicolon" errors
   expect(resultsFileContents).toEqual(expect.stringContaining('Missing semicolon'))
+})
+
+test('should persist cache', async () => {
+  const project = await create('eslint-cache', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'save'
+      }
+    }
+  })
+
+  let done
+  const donePromise = new Promise(resolve => {
+    done = resolve
+  })
+  const { has, run } = project
+  const server = run('vue-cli-service serve')
+
+  server.stdout.on('data', data => {
+    data = data.toString()
+    if (data.match(/Compiled successfully/)) {
+      server.stdin.write('close')
+      done()
+    }
+  })
+
+  await donePromise
+
+  expect(has('node_modules/.cache/eslint/cache.json')).toBe(true)
+})
+
+test(`should use formatter 'codeframe'`, async () => {
+  const project = await create('eslint-formatter-codeframe', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'save'
+      }
+    }
+  })
+  const { read, write, run } = project
+  const main = await read('src/main.js')
+  expect(main).toMatch(';')
+
+  let done
+  const donePromise = new Promise(resolve => {
+    done = resolve
+  })
+  // remove semicolons
+  const updatedMain = main.replace(/;/g, '')
+  await write('src/main.js', updatedMain)
+
+  const server = run('vue-cli-service serve')
+
+  let isFirstMsg = true
+  server.stdout.on('data', data => {
+    data = data.toString()
+    if (isFirstMsg) {
+      expect(data).toMatch(/Failed to compile with \d error/)
+      isFirstMsg = false
+    } else if (data.match(/semi/)) {
+      // check the format of output
+      // https://eslint.org/docs/user-guide/formatters/#codeframe
+      expect(data).toMatch(`error: Missing semicolon (semi) at src${path.sep}main.js`)
+
+      server.stdin.write('close')
+      done()
+    }
+  })
+
+  await donePromise
 })

@@ -66,7 +66,7 @@ module.exports = (api, options) => {
         if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
           webpackConfig
             .plugin('progress')
-            .use(require('webpack/lib/ProgressPlugin'))
+            .use(webpack.ProgressPlugin)
         }
       }
     })
@@ -112,6 +112,7 @@ module.exports = (api, options) => {
         ? rawPublicUrl
         : `${protocol}://${rawPublicUrl}`
       : null
+    const publicHost = publicUrl ? /^[a-zA-Z]+:\/\/([^/?#]+)/.exec(publicUrl)[1] : undefined
 
     const urls = prepareURLs(
       protocol,
@@ -174,6 +175,10 @@ module.exports = (api, options) => {
       clientLogLevel: 'silent',
       historyApiFallback: {
         disableDotRule: true,
+        htmlAcceptHeaders: [
+          'text/html',
+          'application/xhtml+xml'
+        ],
         rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
       },
       contentBase: api.resolve('public'),
@@ -188,6 +193,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
+      public: publicHost,
       // eslint-disable-next-line no-shadow
       before (app, server) {
         // launch editor support.

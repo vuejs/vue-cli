@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-webdriverio",
-  "version": "4.5.8",
+  "version": "5.0.0-alpha.2",
   "description": "e2e-webdriverio plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -25,16 +25,16 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/mocha": "^8.0.1",
-    "@vue/cli-shared-utils": "^4.5.8",
-    "@wdio/cli": "^6.4.6",
-    "@wdio/local-runner": "^6.4.6",
-    "@wdio/mocha-framework": "^6.4.0",
-    "@wdio/sauce-service": "^6.4.6",
-    "@wdio/spec-reporter": "^6.4.0",
-    "@wdio/sync": "^6.4.6",
+    "@types/mocha": "^8.0.4",
+    "@vue/cli-shared-utils": "^5.0.0-alpha.2",
+    "@wdio/cli": "^6.10.5",
+    "@wdio/local-runner": "^6.10.5",
+    "@wdio/mocha-framework": "^6.10.4",
+    "@wdio/sauce-service": "^6.10.4",
+    "@wdio/spec-reporter": "^6.8.1",
+    "@wdio/sync": "^6.10.4",
     "eslint-plugin-wdio": "^6.0.12",
-    "webdriverio": "^6.4.6"
+    "webdriverio": "^6.10.5"
   },
   "peerDependencies": {
     "chromedriver": "*",
@@ -57,9 +57,9 @@
     }
   },
   "devDependencies": {
-    "chromedriver": "^85.0.0",
+    "chromedriver": "^87.0.2",
     "geckodriver": "^1.20.0",
-    "ts-node": "^9.0.0",
+    "ts-node": "^9.1.1",
     "wdio-chromedriver-service": "^6.0.4",
     "wdio-geckodriver-service": "^1.1.0"
   }

@@ -17,7 +17,7 @@ const mergeArrayWithDedupe = (a, b) => Array.from(new Set([...a, ...b]))
 function pruneObject (obj) {
   if (typeof obj === 'object') {
     for (const k in obj) {
-      if (!obj.hasOwnProperty(k)) {
+      if (!Object.prototype.hasOwnProperty.call(obj, k)) {
         continue
       }
 
@@ -283,7 +283,7 @@ class GeneratorAPI {
       this._injectFileMiddleware(async (files) => {
         const data = this._resolveData(additionalData)
         const globby = require('globby')
-        const _files = await globby(['**/*'], { cwd: source })
+        const _files = await globby(['**/*'], { cwd: source, dot: true })
         for (const rawPath of _files) {
           const targetPath = rawPath.split('/').map(filename => {
             // dotfiles are ignored when published to npm, therefore in templates

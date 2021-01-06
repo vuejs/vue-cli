@@ -19,17 +19,6 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, '@vue/cli')
 
-const EOL_NODE_MAJORS = ['8.x', '9.x', '11.x', '13.x']
-for (const major of EOL_NODE_MAJORS) {
-  if (semver.satisfies(process.version, major)) {
-    console.log(chalk.red(
-      `You are using Node ${process.version}.\n` +
-      `Node.js ${major} has already reached end-of-life and will not be supported in future major releases.\n` +
-      `It's strongly recommended to use an active LTS version instead.`
-    ))
-  }
-}
-
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
@@ -113,23 +102,18 @@ program
   })
 
 program
-  .command('serve [entry]')
-  .description('serve a .js or .vue file in development mode with zero config')
-  .option('-o, --open', 'Open browser')
-  .option('-c, --copy', 'Copy local url to clipboard')
-  .option('-p, --port <port>', 'Port used by the server (default: 8080 or next available port)')
-  .action((entry, cmd) => {
-    loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
+  .command('serve')
+  .description('alias of "npm run serve" in the current project')
+  .allowUnknownOption()
+  .action(() => {
+    require('../lib/util/runNpmScript')('serve', process.argv.slice(3))
   })
 
 program
-  .command('build [entry]')
-  .description('build a .js or .vue file in production mode with zero config')
-  .option('-t, --target <target>', 'Build target (app | lib | wc | wc-async, default: app)')
-  .option('-n, --name <name>', 'name for lib or web-component mode (default: entry filename)')
-  .option('-d, --dest <dir>', 'output directory (default: dist)')
-  .action((entry, cmd) => {
-    loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
+  .command('build')
+  .description('alias of "npm run serve" in the current project')
+  .action((cmd) => {
+    require('../lib/util/runNpmScript')('build', process.argv.slice(3))
   })
 
 program
@@ -224,6 +208,7 @@ program
     console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
     console.log()
     suggestCommands(cmd)
+    process.exitCode = 1
   })
 
 // add some useful info on help

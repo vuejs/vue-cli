@@ -1,9 +1,19 @@
-version: 2
+version: 2.1
 
 defaults: &defaults
   working_directory: ~/project/vue
   docker:
-    - image: vuejs/ci
+    - image: circleci/node:lts-browsers
+
+aliases:
+  - &restore-yarn-cache
+    key: v2-vue-cli-{{ checksum "yarn.lock" }}
+
+  - &save-yarn-cache
+    key: v2-vue-cli-{{ checksum "yarn.lock" }}
+    paths:
+      - node_modules/
+      - ~/.cache
 
 workflow_filters: &filters
   filters:
@@ -16,54 +26,67 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v2-vue-cli-{{ checksum "yarn.lock" }}
+      - restore_cache: *restore-yarn-cache
       - run: yarn --network-timeout 600000
-      - save_cache:
-          key: v2-vue-cli-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules/
-            - ~/.cache
+      - save_cache: *save-yarn-cache
       - persist_to_workspace:
           root: ~/
           paths:
             - project/vue
             - .cache/Cypress
 
-  group-1:
+  e2e:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: ./scripts/e2e-test/run-e2e-test.sh
+
+  core:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
       - run: yarn test -p cli,cli-service,cli-shared-utils
 
-  group-2:
+  core-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p cli,cli-service,cli-shared-utils
+
+  typescript:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
       - run: yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
 
-  group-3:
+  typescript-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
+
+  plugins:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
       - run: yarn lint-without-fix
       - run: yarn check-links
-      - restore_cache:
-          keys:
-            # TODO: should use a more accurate cache key
-            - v2-vue-cli-offline-{{ checksum "yarn.lock" }}
-      - run: yarn config set yarn-offline-mirror ~/npm-packages-offline-cache
-      - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app,vuex,router
-      - save_cache:
-          key: v2-vue-cli-offline-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/npm-packages-offline-cache
+      - run: yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
 
-  group-4:
+  plugins-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
+
+  tests:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -71,6 +94,14 @@ jobs:
       - run: yarn test -p unit-mocha,unit-jest,e2e-cypress
       # e2e-nightwatch was left out due to some unknown issues with selenium and the CI image
       - run: yarn test tsPluginE2e
+
+  tests-webpack-4:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p unit-mocha,unit-jest,e2e-cypress
+      - run: VUE_CLI_USE_WEBPACK4=true yarn test tsPluginE2e
 
   cli-ui:
     <<: *defaults
@@ -83,29 +114,51 @@ jobs:
       - store_artifacts:
           path: packages/@vue/cli-ui/tests/e2e/screenshots
 
+  # TODO: cli-ui-webpack-4
+
 workflows:
   version: 2
   test:
     jobs:
       - install:
           <<: *filters
-      - group-1:
+      - core:
           <<: *filters
           requires:
             - install
-      - group-2:
+      - core-webpack-4:
           <<: *filters
           requires:
             - install
-      - group-3:
+      - typescript:
           <<: *filters
           requires:
             - install
-      - group-4:
+      - typescript-webpack-4:
+          <<: *filters
+          requires:
+            - install
+      - plugins:
+          <<: *filters
+          requires:
+            - install
+      - plugins-webpack-4:
+          <<: *filters
+          requires:
+            - install
+      - tests:
+          <<: *filters
+          requires:
+            - install
+      - tests-webpack-4:
           <<: *filters
           requires:
             - install
       - cli-ui:
+          <<: *filters
+          requires:
+            - install
+      - e2e:
           <<: *filters
           requires:
             - install

@@ -1,4 +1,240 @@
 
+## 5.0.0-alpha.2 (2021-01-06)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#5537](https://github.com/vuejs/vue-cli/pull/5537) feat(cli): make globby includes dot files ([@fxxjdedd](https://github.com/fxxjdedd))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-pwa`
+  * [#5327](https://github.com/vuejs/vue-cli/pull/5327) fix pwa installability when using noopServiceWorker "Page does not work offline" ([@kubenstein](https://github.com/kubenstein))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6186](https://github.com/vuejs/vue-cli/pull/6186) fix(mocha): workaround the ShadowRoot issue in Vue 3.0.5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6162](https://github.com/vuejs/vue-cli/pull/6162) fix(cli-service): restrict request headers of historyApiFallback in WebpackDevServer ([@githoniel](https://github.com/githoniel))
+* `@vue/cli-plugin-unit-jest`
+  * [#6170](https://github.com/vuejs/vue-cli/pull/6170) fix: add missing jest-transform-stub media types (#6169) ([@raineorshine](https://github.com/raineorshine))
+* `@vue/cli`
+  * [#6011](https://github.com/vuejs/vue-cli/pull/6011) fix(generator): avoid doing redundant write operations ([@fangbinwei](https://github.com/fangbinwei))
+
+#### :memo: Documentation
+* [#6176](https://github.com/vuejs/vue-cli/pull/6176) Fixed some typos on deployment.md ([@black-fyre](https://github.com/black-fyre))
+* [#5927](https://github.com/vuejs/vue-cli/pull/5927) Update skip plugins section of cli-service ([@markjszy](https://github.com/markjszy))
+* [#6093](https://github.com/vuejs/vue-cli/pull/6093) Easier Netlify setup ([@mauriciabad](https://github.com/mauriciabad))
+* [#6050](https://github.com/vuejs/vue-cli/pull/6050) mode-and-env doc need be updated ([@theniceangel](https://github.com/theniceangel))
+* [#6050](https://github.com/vuejs/vue-cli/pull/6050) mode-and-env doc need be updated ([@theniceangel](https://github.com/theniceangel))
+
+#### :house: Internal
+* `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#6152](https://github.com/vuejs/vue-cli/pull/6152) chore: some trivial dependency version bumps ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 11
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Dahunsi Fehintoluwa ([@black-fyre](https://github.com/black-fyre))
+- Githoniel ([@githoniel](https://github.com/githoniel))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Jakub Niewczas ([@kubenstein](https://github.com/kubenstein))
+- JiZhi ([@theniceangel](https://github.com/theniceangel))
+- Mark Szymanski ([@markjszy](https://github.com/markjszy))
+- Maurici Abad Gutierrez ([@mauriciabad](https://github.com/mauriciabad))
+- Raine Revere ([@raineorshine](https://github.com/raineorshine))
+- fxxjdedd ([@fxxjdedd](https://github.com/fxxjdedd))
+
+
+
+## 5.0.0-alpha.1 (2021-01-06)
+
+#### :memo: Documentation
+* [#6128](https://github.com/vuejs/vue-cli/pull/6128) docs: don't add `.loader()` when modifying vue-loader options ([@sodatea](https://github.com/sodatea))
+* [#6005](https://github.com/vuejs/vue-cli/pull/6005) docs: [RU] Translation update ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+
+#### Committers: 2
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 5.0.0-alpha.0 (2020-12-14)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-webpack-4`, `@vue/cli-shared-utils`
+  * [#6144](https://github.com/vuejs/vue-cli/pull/6144) feat: add a @vue/cli-plugin-webpack-4 package for future use ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`
+  * [#6132](https://github.com/vuejs/vue-cli/pull/6132) chore!: prepare for v5 peer dependencies, drop v4 prereleases ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`, `@vue/cli-service`, `@vue/cli-ui`
+  * [#6136](https://github.com/vuejs/vue-cli/pull/6136) feat: bump lint-staged to v10 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6130](https://github.com/vuejs/vue-cli/pull/6130) chore!: bump stylus-loader from v3 to v4 ([@jeneser](https://github.com/jeneser))
+* `@vue/cli-plugin-eslint`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`
+  * [#6123](https://github.com/vuejs/vue-cli/pull/6123) feat: update eslint-related packages ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-ui`
+  * [#6129](https://github.com/vuejs/vue-cli/pull/6129) chore!: update typescript-related dependencies ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-mocha`
+  * [#6121](https://github.com/vuejs/vue-cli/pull/6121) feat!: update mocha to v8 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6120](https://github.com/vuejs/vue-cli/pull/6120) feat: update cypress to v6 ([@sodatea](https://github.com/sodatea))
+  * [#6062](https://github.com/vuejs/vue-cli/pull/6062) fix(cypress): allow users to update cypress ([@elevatebart](https://github.com/elevatebart))
+* `@vue/cli-service`, `@vue/cli-ui`
+  * [#6108](https://github.com/vuejs/vue-cli/pull/6108) feat!: upgrade postcss-loader, using postcss 8 by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service-global`, `@vue/cli`
+  * [#6115](https://github.com/vuejs/vue-cli/pull/6115) feat!: make `vue serve/build` aliases to `npm run serve/build` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`
+  * [#6116](https://github.com/vuejs/vue-cli/pull/6116) feat!: update jest to v26 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-service-global`
+  * [#6094](https://github.com/vuejs/vue-cli/pull/6094) feat: replace eslint-loader by eslint-webpack-plugin ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli-ui`
+  * [#6060](https://github.com/vuejs/vue-cli/pull/6060) feat!: support and use webpack 5 as default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`, `@vue/cli-test-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#6059](https://github.com/vuejs/vue-cli/pull/6059) feat(eslint): support eslint7 and @babel/eslint-parser ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-plugin-eslint`
+  * [#4850](https://github.com/vuejs/vue-cli/pull/4850) feat(lint): add output file option (Closes [#4849](https://github.com/vuejs/vue-cli/issues/4849)) ([@ataylorme](https://github.com/ataylorme))
+
+#### :boom: Breaking Changes
+* `@vue/cli-service`, `@vue/cli-ui`
+  * [#6140](https://github.com/vuejs/vue-cli/pull/6140) refactor!: replace optimize-cssnano-plugin with css-minimizer-webpack-plugin ([@sodatea](https://github.com/sodatea))
+  * [#6108](https://github.com/vuejs/vue-cli/pull/6108) feat!: upgrade postcss-loader, using postcss 8 by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`
+  * [#6132](https://github.com/vuejs/vue-cli/pull/6132) chore!: prepare for v5 peer dependencies, drop v4 prereleases ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#6133](https://github.com/vuejs/vue-cli/pull/6133) chore!: bump ejs to v3 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6130](https://github.com/vuejs/vue-cli/pull/6130) chore!: bump stylus-loader from v3 to v4 ([@jeneser](https://github.com/jeneser))
+  * [#5951](https://github.com/vuejs/vue-cli/pull/5951) chore!: some trivial dependency major version updates ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-ui`
+  * [#6129](https://github.com/vuejs/vue-cli/pull/6129) chore!: update typescript-related dependencies ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-mocha`
+  * [#6121](https://github.com/vuejs/vue-cli/pull/6121) feat!: update mocha to v8 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service-global`, `@vue/cli`
+  * [#6115](https://github.com/vuejs/vue-cli/pull/6115) feat!: make `vue serve/build` aliases to `npm run serve/build` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`
+  * [#6116](https://github.com/vuejs/vue-cli/pull/6116) feat!: update jest to v26 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-eslint`, `@vue/cli-service-global`
+  * [#6094](https://github.com/vuejs/vue-cli/pull/6094) feat: replace eslint-loader by eslint-webpack-plugin ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli-ui`
+  * [#6060](https://github.com/vuejs/vue-cli/pull/6060) feat!: support and use webpack 5 as default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli`
+  * [#6090](https://github.com/vuejs/vue-cli/pull/6090) chore: remove deprecated node-sass ([@andreiTn](https://github.com/andreiTn))
+  * [#6051](https://github.com/vuejs/vue-cli/pull/6051) chore!: drop support of NPM 5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#5973](https://github.com/vuejs/vue-cli/pull/5973) chore!: bump joi to v17 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-ui`, `@vue/cli`
+  * [#6052](https://github.com/vuejs/vue-cli/pull/6052) chore!: drop support of end-of-life node releases (8, 11, 13) ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli`
+  * [#6009](https://github.com/vuejs/vue-cli/pull/6009) refactor!: replace request with node-fetch ([@jeneser](https://github.com/jeneser))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#5951](https://github.com/vuejs/vue-cli/pull/5951) chore!: some trivial dependency major version updates ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`
+  * [#5941](https://github.com/vuejs/vue-cli/pull/5941) feat!: bump fork-ts-checker-webpack-plugin version to v5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-mocha`
+  * [#5907](https://github.com/vuejs/vue-cli/pull/5907) chore!: bump unit-mocha dependency versions ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`
+  * [#5907](https://github.com/vuejs/vue-cli/pull/5907) chore!: bump unit-mocha dependency versions ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`, `@vue/cli-service-global`
+  * [#5870](https://github.com/vuejs/vue-cli/pull/5870) chore!: update eslint-loader, minimum supported ESLint version is 6 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`, `@vue/cli`
+  * [#5065](https://github.com/vuejs/vue-cli/pull/5065) Remove linter option TSLint ([@Shinigami92](https://github.com/Shinigami92))
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#6145](https://github.com/vuejs/vue-cli/pull/6145) fix: fix cypress mirror url for cypress version > 3 ([@sodatea](https://github.com/sodatea))
+  * [#6137](https://github.com/vuejs/vue-cli/pull/6137) fix: fix usage of cmd-shim ([@fangbinwei](https://github.com/fangbinwei))
+  * [#5921](https://github.com/vuejs/vue-cli/pull/5921) fix(cli): only process template file contents, bump yaml-front-matter… ([@ferm10n](https://github.com/ferm10n))
+  * [#5961](https://github.com/vuejs/vue-cli/pull/5961) fix: npm 7 compat by turning on `legacy-peer-deps` flag ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6101](https://github.com/vuejs/vue-cli/pull/6101) fix(cli-service): don't write entry-wc to node[3m_modules ([@merceyz](https://github.com/merceyz))
+    * [#6066](https://github.com/vuejs/vue-cli/pull/6066) fix(cli-service): pass --public host to devserver ([@jonaskuske](https://github.com/jonaskuske))
+* `@vue/cli-plugin-unit-mocha`, `@vue/cli-service`
+  * [#6097](https://github.com/vuejs/vue-cli/pull/6097) fix(mocha): disable SSR optimization for Vue 3 testing ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`
+  * [#6020](https://github.com/vuejs/vue-cli/pull/6020) fix(generator): upgrade to prettier v2 ([@jeneser](https://github.com/jeneser))
+* `@vue/cli-ui`
+  * [#6000](https://github.com/vuejs/vue-cli/pull/6000) fix: prevent snoretoast shortcut, set notif title (#2720) ([@tony19](https://github.com/tony19))
+* `@vue/cli-service-global`, `@vue/cli-service`
+  * [#5992](https://github.com/vuejs/vue-cli/pull/5992) fix: using `lang` attribute with empty string in html template ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-plugin-typescript`
+  * [#5975](https://github.com/vuejs/vue-cli/pull/5975) fix: update vue-shims for Vue v3.0.1 ([@cexbrayat](https://github.com/cexbrayat))
+
+#### :house: Internal
+* `@vue/cli-plugin-babel`, `@vue/cli-service`
+  * [#6142](https://github.com/vuejs/vue-cli/pull/6142) refactor: replace cache-loader with babel-loader's built-in cache ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-ui`
+  * [#6140](https://github.com/vuejs/vue-cli/pull/6140) refactor!: replace optimize-cssnano-plugin with css-minimizer-webpack-plugin ([@sodatea](https://github.com/sodatea))
+* `@vue/cli`
+  * [#6127](https://github.com/vuejs/vue-cli/pull/6127) chore: update cmd-shim and move it to devDependencies ([@sodatea](https://github.com/sodatea))
+  * [#6102](https://github.com/vuejs/vue-cli/pull/6102) perf(packages/@vue/cli/bin/vue.js): deleting the EOL_NODE_MAJORS chec… ([@ChanningHan](https://github.com/ChanningHan))
+* `@vue/cli-service-global`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`
+  * [#6078](https://github.com/vuejs/vue-cli/pull/6078) refactor: sub-package eslint maintance ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#5973](https://github.com/vuejs/vue-cli/pull/5973) chore!: bump joi to v17 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`
+  * [#6053](https://github.com/vuejs/vue-cli/pull/6053) fix(cli-plugin-typescript): remove getPrompts function in prompts.js ([@jeneser](https://github.com/jeneser))
+* `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli`
+  * [#6009](https://github.com/vuejs/vue-cli/pull/6009) refactor!: replace request with node-fetch ([@jeneser](https://github.com/jeneser))
+
+#### :hammer: Underlying Tools
+* `@vue/cli`
+  * [#6133](https://github.com/vuejs/vue-cli/pull/6133) chore!: bump ejs to v3 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6092](https://github.com/vuejs/vue-cli/pull/6092) chore: webpack-bundle-analyzer to ^4.1.0 ([@genie-youn](https://github.com/genie-youn))
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-mocha`
+  * [#5907](https://github.com/vuejs/vue-cli/pull/5907) chore!: bump unit-mocha dependency versions ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`
+  * [#5907](https://github.com/vuejs/vue-cli/pull/5907) chore!: bump unit-mocha dependency versions ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 19
+- Andrei ([@andreiTn](https://github.com/andreiTn))
+- Andrew Taylor ([@ataylorme](https://github.com/ataylorme))
+- Barthélémy Ledoux ([@elevatebart](https://github.com/elevatebart))
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Channing ([@ChanningHan](https://github.com/ChanningHan))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Githoniel ([@githoniel](https://github.com/githoniel))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- James George ([@jamesgeorge007](https://github.com/jamesgeorge007))
+- JayZhong ([@zzzJH](https://github.com/zzzJH))
+- Jisoo Youn ([@genie-youn](https://github.com/genie-youn))
+- John Sanders ([@ferm10n](https://github.com/ferm10n))
+- Jonas ([@jonaskuske](https://github.com/jonaskuske))
+- Kristoffer K. ([@merceyz](https://github.com/merceyz))
+- Max Coplan ([@vegerot](https://github.com/vegerot))
+- Parker Mauney ([@ParkerM](https://github.com/ParkerM))
+- Shinigami ([@Shinigami92](https://github.com/Shinigami92))
+- Tony Trinh ([@tony19](https://github.com/tony19))
+- Yazhe Wang ([@jeneser](https://github.com/jeneser))[23m
+
+
+
+## 4.5.10 (2021-01-06)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-unit-mocha`
+  * [#6186](https://github.com/vuejs/vue-cli/pull/6186) fix(mocha): workaround the ShadowRoot issue in Vue 3.0.5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`, `@vue/cli-service`
+  * [#6097](https://github.com/vuejs/vue-cli/pull/6097) fix(mocha): disable SSR optimization for Vue 3 testing ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#6000](https://github.com/vuejs/vue-cli/pull/6000) fix: prevent snoretoast shortcut, set notif title (#2720) ([@tony19](https://github.com/tony19))
+* `@vue/cli-service-global`, `@vue/cli-service`
+  * [#5992](https://github.com/vuejs/vue-cli/pull/5992) fix: using `lang` attribute with empty string in html template ([@fangbinwei](https://github.com/fangbinwei))
+
+#### Committers: 3
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Tony Trinh ([@tony19](https://github.com/tony19))
+
+
+
+## 4.5.9 (2020-11-17)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6062](https://github.com/vuejs/vue-cli/pull/6062) fix(cypress): allow users to update cypress ([@elevatebart](https://github.com/elevatebart))
+
+#### Committers: 1
+- Barthélémy Ledoux ([@elevatebart](https://github.com/elevatebart))
+
+
+
 ## 4.5.8 (2020-10-19)
 
 #### :bug: Bug Fix

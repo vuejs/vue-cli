@@ -12,7 +12,7 @@ describe('Plugins', () => {
     cy.get('.instant-search-input input').clear().type('pwa')
     cy.get('.package-search-item:contains("@vue/cli-plugin-pwa")').should('be.visible')
     cy.get('.instant-search-input input').clear().type('unit-jest')
-    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa")').should('be.not.visible')
+    cy.get('.package-search-item:contains("@vue/cli-plugin-pwa")').should('not.exist')
     cy.get('.package-search-item:contains("@vue/cli-plugin-unit-jest")').should('be.visible')
     cy.get('.instant-search-input input').clear()
     // Install

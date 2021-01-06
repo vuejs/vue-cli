@@ -12,10 +12,13 @@ function genTranspileDepRegex (transpileDependencies) {
     } else if (dep instanceof RegExp) {
       return dep.source
     }
+
+    throw new Error('transpileDependencies only accepts an array of string or regular expressions')
   })
   return deps.length ? new RegExp(deps.join('|')) : null
 }
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
   const cliServicePath = path.dirname(require.resolve('@vue/cli-service'))
@@ -61,19 +64,6 @@ module.exports = (api, options) => {
             return /node_modules/.test(filepath)
           })
           .end()
-        .use('cache-loader')
-          .loader(require.resolve('cache-loader'))
-          .options(api.genCacheConfig('babel-loader', {
-            '@babel/core': require('@babel/core/package.json').version,
-            '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
-            'babel-loader': require('babel-loader/package.json').version,
-            modern: !!process.env.VUE_CLI_MODERN_BUILD,
-            browserslist: api.service.pkg.browserslist
-          }, [
-            'babel.config.js',
-            '.browserslistrc'
-          ]))
-          .end()
 
     if (useThreads) {
       const threadLoaderConfig = jsRule
@@ -88,5 +78,15 @@ module.exports = (api, options) => {
     jsRule
       .use('babel-loader')
         .loader(require.resolve('babel-loader'))
+        .options(api.genCacheConfig('babel-loader', {
+          '@babel/core': require('@babel/core/package.json').version,
+          '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
+          'babel-loader': require('babel-loader/package.json').version,
+          modern: !!process.env.VUE_CLI_MODERN_BUILD,
+          browserslist: api.service.pkg.browserslist
+        }, [
+          'babel.config.js',
+          '.browserslistrc'
+        ]))
   })
 }

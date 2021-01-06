@@ -38,15 +38,15 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^9.5.0'
+      'lint-staged': '^10.5.3'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
     const extensions = require('../eslintOptions').extensions(api)
-      .map(ext => ext.replace(/^\./, ''))  // remove the leading `.`
+      .map(ext => ext.replace(/^\./, '')) // remove the leading `.`
     pkg['lint-staged'] = {
-      [`*.{${extensions.join(',')}}`]: ['vue-cli-service lint', 'git add']
+      [`*.{${extensions.join(',')}}`]: 'vue-cli-service lint'
     }
   }
 

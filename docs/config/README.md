@@ -267,7 +267,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 - Type: `boolean | Object`
 - Default: `true` in production, `false` in development
 
-  Whether to extract CSS in your components into a standalone CSS files (instead of inlined in JavaScript and injected dynamically).
+  Whether to extract CSS in your components into a standalone CSS file (instead of inlined in JavaScript and injected dynamically).
 
   This is always disabled when building as web components (styles are inlined and injected into shadowRoot).
 
@@ -372,6 +372,16 @@ In v3 this means the opposite of `css.requireModuleExtension`.
     }
   }
   ```
+
+### devServer.inline
+
+- Type: `boolean`
+- Default: `true`
+
+  Toggle between the dev-server's two different modes. See [devServer.inline](https://webpack.js.org/configuration/dev-server/#devserverinline) for more details. Note that:
+
+  - To use the `iframe mode` no additional configuration is needed. Just navigate the browser to `http://<host>:<port>/webpack-dev-server/<path>` to debug your app. A notification bar with messages will appear at the top of your app.
+  - To use the `inline mode`, just navigate to `http://<host>:<port>/<path>` to debug your app. The build messages will appear in the browser console.
 
 ### parallel
 

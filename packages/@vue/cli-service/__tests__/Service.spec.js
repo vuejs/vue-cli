@@ -3,6 +3,7 @@ jest.mock('vue-cli-plugin-foo', () => () => {}, { virtual: true })
 
 const fs = require('fs')
 const path = require('path')
+const { semver } = require('@vue/cli-shared-utils')
 const Service = require('../lib/Service')
 
 const mockPkg = json => {
@@ -67,7 +68,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       bar: '^1.0.0',
-      '@vue/cli-plugin-babel': '^4.5.0',
+      '@vue/cli-plugin-babel': '^5.0.0-alpha.2',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -130,7 +131,7 @@ test('keep publicPath when empty', () => {
 })
 
 test('load project options from vue.config.js', () => {
-  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '')  // only to ensure fs.existsSync returns true
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '') // only to ensure fs.existsSync returns true
   jest.mock(path.resolve('/', 'vue.config.js'), () => ({ lintOnSave: false }), { virtual: true })
   mockPkg({
     vue: {
@@ -159,8 +160,9 @@ test('api: assertVersion', () => {
   const plugin = {
     id: 'test-assertVersion',
     apply: api => {
-      expect(() => api.assertVersion(4)).not.toThrow()
-      expect(() => api.assertVersion('^4.0.0-0')).not.toThrow()
+      const majorVersionNumber = semver.major(api.version)
+      expect(() => api.assertVersion(majorVersionNumber)).not.toThrow()
+      expect(() => api.assertVersion(`^${majorVersionNumber}.0.0-0`)).not.toThrow()
       // expect(() => api.assertVersion('>= 4')).not.toThrow()
 
       expect(() => api.assertVersion(4.1)).toThrow('Expected string or integer value')

@@ -9,32 +9,39 @@ const schema = createSchema(joi => joi.object({
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.array(),
   productionSourceMap: joi.boolean(),
-  parallel: joi.alternatives().try([
+  parallel: joi.alternatives().try(
     joi.boolean(),
     joi.number().integer()
-  ]),
+  ),
   devServer: joi.object(),
   pages: joi.object().pattern(
     /\w+/,
-    joi.alternatives().try([
+    joi.alternatives().try(
       joi.string().required(),
       joi.array().items(joi.string().required()),
 
       joi.object().keys({
-        entry: joi.alternatives().try([
+        entry: joi.alternatives().try(
           joi.string().required(),
           joi.array().items(joi.string().required())
-        ]).required()
+        ).required()
       }).unknown(true)
-    ])
+    )
   ),
-  crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
+  crossorigin: joi.string().valid('', 'anonymous', 'use-credentials'),
   integrity: joi.boolean(),
 
   // css
   css: joi.object({
-    // TODO: deprecate this after joi 16 release
-    modules: joi.boolean(),
+    modules:
+      joi.boolean()
+      .warning('deprecate.error', {
+        message: 'Please use `css.requireModuleExtension` instead.'
+      })
+      .message({
+        'deprecate.error':
+          'The {#label} option in vue.config.js is deprecated. {#message}'
+      }),
     requireModuleExtension: joi.boolean(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
@@ -56,7 +63,7 @@ const schema = createSchema(joi => joi.object({
   ),
 
   // known runtime options for built-in plugins
-  lintOnSave: joi.any().valid([true, false, 'error', 'warning', 'default']),
+  lintOnSave: joi.any().valid(true, false, 'error', 'warning', 'default'),
   pwa: joi.object(),
 
   // 3rd party plugin options
