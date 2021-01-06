@@ -683,6 +683,54 @@ test('api: afterInvoke', async () => {
   expect(cbs).toContain(fn)
 })
 
+test('api: afterAnyInvoke and afterInvoke in hooks', async () => {
+  const fooAnyInvokeHandler = () => {}
+  const fooInvokeHandler = () => {}
+  const barAnyInvokeHandler = () => {}
+  const barInvokeHandler = () => {}
+
+  const getGeneratorFn = (invokeHandler, anyInvokeHandler) => {
+    const generatorFn = () => {}
+    generatorFn.hooks = api => {
+      api.afterInvoke(invokeHandler)
+      api.afterAnyInvoke(anyInvokeHandler)
+    }
+    return generatorFn
+  }
+
+  jest.doMock('vue-cli-plugin-foo-hooks/generator', () => {
+    return getGeneratorFn(fooInvokeHandler, fooAnyInvokeHandler)
+  }, { virtual: true })
+
+  jest.doMock('vue-cli-plugin-bar-hooks/generator', () => {
+    return getGeneratorFn(barInvokeHandler, barAnyInvokeHandler)
+  }, { virtual: true })
+
+  const afterAnyInvokeCbs = []
+  const afterInvokeCbs = []
+  const generator = new Generator('/', {
+    pkg: {
+      devDependencies: {
+        'vue-cli-plugin-foo-hooks': '1.0.0',
+        'vue-cli-plugin-bar-hooks': '1.0.0'
+      }
+    },
+    plugins: [
+      {
+        id: 'vue-cli-plugin-foo-hooks',
+        apply: getGeneratorFn(fooInvokeHandler, fooAnyInvokeHandler)
+      }
+    ],
+    afterInvokeCbs,
+    afterAnyInvokeCbs
+  })
+
+  await generator.generate()
+
+  expect(afterAnyInvokeCbs).toEqual([fooAnyInvokeHandler, barAnyInvokeHandler])
+  expect(afterInvokeCbs).toEqual([fooInvokeHandler])
+})
+
 test('api: resolve', () => {
   // eslint-disable-next-line no-new
   new Generator('/foo/bar', {
@@ -931,6 +979,52 @@ test('api: addConfigTransform transform vue warn', async () => {
   expect(logs.warn.some(([msg]) => {
     return msg.match(/Reserved config transform 'vue'/)
   })).toBe(true)
+})
+
+test('avoid overwriting files that have not been modified', async () => {
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: (api, options) => {
+          api.render((files, render) => {
+            files['foo.js'] = render('foo()')
+          })
+        }
+      }
+    ],
+    files: {
+      // skip writing to this file
+      'existFile.js': 'existFile()'
+    }
+  })
+
+  await generator.generate()
+
+  expect(fs.readFileSync('/foo.js', 'utf-8')).toMatch('foo()')
+  expect(fs.existsSync('/existFile.js')).toBe(false)
+})
+
+test('overwrite files that have been modified', async () => {
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'test1',
+        apply: (api, options) => {
+          api.render((files, render) => {
+            files['existFile.js'] = render('foo()')
+          })
+        }
+      }
+    ],
+    files: {
+      'existFile.js': 'existFile()'
+    }
+  })
+
+  await generator.generate()
+
+  expect(fs.readFileSync('/existFile.js', 'utf-8')).toMatch('foo()')
 })
 
 test('extract config files', async () => {
