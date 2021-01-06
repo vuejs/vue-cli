@@ -39,11 +39,11 @@ module.exports = (api, options) => {
     const deps = {
       sass: {
         sass: '^1.30.0',
-        'sass-loader': '^8.0.2'
+        'sass-loader': '^10.1.0'
       },
       'dart-sass': {
         sass: '^1.30.0',
-        'sass-loader': '^8.0.2'
+        'sass-loader': '^10.1.0'
       },
       less: {
         'less': '^3.0.4',
