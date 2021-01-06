@@ -1,4 +1,48 @@
 
+## 5.0.0-alpha.2 (2021-01-06)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#5537](https://github.com/vuejs/vue-cli/pull/5537) feat(cli): make globby includes dot files ([@fxxjdedd](https://github.com/fxxjdedd))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-pwa`
+  * [#5327](https://github.com/vuejs/vue-cli/pull/5327) fix pwa installability when using noopServiceWorker "Page does not work offline" ([@kubenstein](https://github.com/kubenstein))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6186](https://github.com/vuejs/vue-cli/pull/6186) fix(mocha): workaround the ShadowRoot issue in Vue 3.0.5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6162](https://github.com/vuejs/vue-cli/pull/6162) fix(cli-service): restrict request headers of historyApiFallback in WebpackDevServer ([@githoniel](https://github.com/githoniel))
+* `@vue/cli-plugin-unit-jest`
+  * [#6170](https://github.com/vuejs/vue-cli/pull/6170) fix: add missing jest-transform-stub media types (#6169) ([@raineorshine](https://github.com/raineorshine))
+* `@vue/cli`
+  * [#6011](https://github.com/vuejs/vue-cli/pull/6011) fix(generator): avoid doing redundant write operations ([@fangbinwei](https://github.com/fangbinwei))
+
+#### :memo: Documentation
+* [#6176](https://github.com/vuejs/vue-cli/pull/6176) Fixed some typos on deployment.md ([@black-fyre](https://github.com/black-fyre))
+* [#5927](https://github.com/vuejs/vue-cli/pull/5927) Update skip plugins section of cli-service ([@markjszy](https://github.com/markjszy))
+* [#6093](https://github.com/vuejs/vue-cli/pull/6093) Easier Netlify setup ([@mauriciabad](https://github.com/mauriciabad))
+* [#6050](https://github.com/vuejs/vue-cli/pull/6050) mode-and-env doc need be updated ([@theniceangel](https://github.com/theniceangel))
+* [#6050](https://github.com/vuejs/vue-cli/pull/6050) mode-and-env doc need be updated ([@theniceangel](https://github.com/theniceangel))
+
+#### :house: Internal
+* `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#6152](https://github.com/vuejs/vue-cli/pull/6152) chore: some trivial dependency version bumps ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 11
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Dahunsi Fehintoluwa ([@black-fyre](https://github.com/black-fyre))
+- Githoniel ([@githoniel](https://github.com/githoniel))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Jakub Niewczas ([@kubenstein](https://github.com/kubenstein))
+- JiZhi ([@theniceangel](https://github.com/theniceangel))
+- Mark Szymanski ([@markjszy](https://github.com/markjszy))
+- Maurici Abad Gutierrez ([@mauriciabad](https://github.com/mauriciabad))
+- Raine Revere ([@raineorshine](https://github.com/raineorshine))
+- fxxjdedd ([@fxxjdedd](https://github.com/fxxjdedd))
+
+
+
 ## 5.0.0-alpha.1 (2021-01-06)
 
 #### :memo: Documentation
