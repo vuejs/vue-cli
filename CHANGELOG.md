@@ -1,4 +1,16 @@
 
+## 5.0.0-alpha.1 (2021-01-06)
+
+#### :memo: Documentation
+* [#6128](https://github.com/vuejs/vue-cli/pull/6128) docs: don't add `.loader()` when modifying vue-loader options ([@sodatea](https://github.com/sodatea))
+* [#6005](https://github.com/vuejs/vue-cli/pull/6005) docs: [RU] Translation update ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+
+#### Committers: 2
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 5.0.0-alpha.0 (2020-12-14)
 
 #### :rocket: New Features

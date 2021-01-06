@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "5.0.0-alpha.0",
+  "version": "5.0.0-alpha.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -35,7 +35,7 @@
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^5.0.0-alpha.0",
+    "@vue/cli-shared-utils": "^5.0.0-alpha.1",
     "apollo-server-express": "^2.17.0",
     "clone": "^2.1.1",
     "deepmerge": "^4.2.2",
@@ -67,10 +67,10 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.12.1",
-    "@vue/cli-plugin-babel": "^5.0.0-alpha.0",
-    "@vue/cli-plugin-e2e-cypress": "^5.0.0-alpha.0",
-    "@vue/cli-plugin-eslint": "^5.0.0-alpha.0",
-    "@vue/cli-service": "^5.0.0-alpha.0",
+    "@vue/cli-plugin-babel": "^5.0.0-alpha.1",
+    "@vue/cli-plugin-e2e-cypress": "^5.0.0-alpha.1",
+    "@vue/cli-plugin-eslint": "^5.0.0-alpha.1",
+    "@vue/cli-service": "^5.0.0-alpha.1",
     "@vue/eslint-config-standard": "^6.0.0",
     "@vue/ui": "^0.11.6",
     "ansi_up": "^4.0.4",
