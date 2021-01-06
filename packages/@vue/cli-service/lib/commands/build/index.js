@@ -204,7 +204,7 @@ async function build (args, api, options) {
       }
 
       if (stats.hasErrors()) {
-        return reject(`Build failed with errors.`)
+        return reject(new Error('Build failed with errors.'))
       }
 
       if (!args.silent) {

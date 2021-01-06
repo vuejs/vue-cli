@@ -12,6 +12,8 @@ function genTranspileDepRegex (transpileDependencies) {
     } else if (dep instanceof RegExp) {
       return dep.source
     }
+
+    throw new Error('transpileDependencies only accepts an array of string or regular expressions')
   })
   return deps.length ? new RegExp(deps.join('|')) : null
 }

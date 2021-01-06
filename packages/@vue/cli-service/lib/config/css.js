@@ -65,8 +65,8 @@ module.exports = (api, rootOptions) => {
       ? './'
       : '../'.repeat(
         extractOptions.filename
-            .replace(/^\.[\/\\]/, '')
-            .split(/[\/\\]/g)
+            .replace(/^\.[/\\]/, '')
+            .split(/[/\\]/g)
             .length - 1
       )
 

@@ -131,7 +131,7 @@ test('keep publicPath when empty', () => {
 })
 
 test('load project options from vue.config.js', () => {
-  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '')  // only to ensure fs.existsSync returns true
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '') // only to ensure fs.existsSync returns true
   jest.mock(path.resolve('/', 'vue.config.js'), () => ({ lintOnSave: false }), { virtual: true })
   mockPkg({
     vue: {

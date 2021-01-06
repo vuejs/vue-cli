@@ -4,7 +4,7 @@ module.exports = function sortObject (obj, keyOrder, dontSortByUnicode) {
 
   if (keyOrder) {
     keyOrder.forEach(key => {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         res[key] = obj[key]
         delete obj[key]
       }

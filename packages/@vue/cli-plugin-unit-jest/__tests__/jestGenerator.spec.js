@@ -150,12 +150,12 @@ test('add types to existing tsconfig.json', async () => {
       '@vue/cli-plugin-unit-jest': {}
     }
   })
-  await write('tsconfig.json', JSON.stringify({ compilerOptions: { types: ['some-type'] }}))
+  await write('tsconfig.json', JSON.stringify({ compilerOptions: { types: ['some-type'] } }))
 
   const invoke = require('@vue/cli/lib/invoke')
   await invoke('unit-jest', {}, dir)
 
   const tsconfig = await read('tsconfig.json')
   expect(tsconfig).toMatch(/\r?\n$/)
-  expect(JSON.parse(tsconfig)['compilerOptions']['types']).toEqual(['some-type', 'jest'])
+  expect(JSON.parse(tsconfig).compilerOptions.types).toEqual(['some-type', 'jest'])
 }, 30000)
