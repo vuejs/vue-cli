@@ -55,7 +55,7 @@
     "execa": "^1.0.0",
     "geckodriver": "^1.20.0",
     "globby": "^11.0.1",
-    "graphql": "^14.6.0",
+    "graphql": "^15.4.0",
     "http-server": "^0.12.3",
     "inquirer": "^7.1.0",
     "jest": "^26.6.3",
