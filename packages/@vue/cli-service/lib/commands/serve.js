@@ -175,6 +175,10 @@ module.exports = (api, options) => {
       clientLogLevel: 'silent',
       historyApiFallback: {
         disableDotRule: true,
+        htmlAcceptHeaders: [
+          'text/html',
+          'application/xhtml+xml'
+        ],
         rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
       },
       contentBase: api.resolve('public'),

@@ -88,7 +88,7 @@ function stripVersion (packageName) {
 // extract the package scope from the full package name
 // the result includes the initial @ character
 function extractPackageScope (packageName) {
-  const scopedNameRegExp = /^(@[^\/]+)\/.*$/
+  const scopedNameRegExp = /^(@[^/]+)\/.*$/
   const result = packageName.match(scopedNameRegExp)
 
   if (!result) {
@@ -222,8 +222,8 @@ class PackageManager {
 
     const registry = await this.getRegistry(scope)
     const registryWithoutProtocol = registry
-      .replace(/https?:/, '')     // remove leading protocol
-      .replace(/([^/])$/, '$1/')  // ensure ending with slash
+      .replace(/https?:/, '') // remove leading protocol
+      .replace(/([^/])$/, '$1/') // ensure ending with slash
     const authTokenKey = `${registryWithoutProtocol}:_authToken`
 
     return npmConfig[authTokenKey]

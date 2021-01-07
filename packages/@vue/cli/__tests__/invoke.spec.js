@@ -7,7 +7,7 @@ const create = require('@vue/cli-test-utils/createTestProject')
 
 const parseJS = file => {
   const res = {}
-  ;(new Function('module', file))(res)
+  ;(new Function('module', file))(res) // eslint-disable-line no-new-func
   return res.exports
 }
 
@@ -150,7 +150,7 @@ extends:
 })
 
 test('invoking a plugin that renames files', async () => {
-  const project = await create(`invoke-rename`, { plugins: {}})
+  const project = await create(`invoke-rename`, { plugins: {} })
   const pkg = JSON.parse(await project.read('package.json'))
   pkg.devDependencies['@vue/cli-plugin-typescript'] = '*'
   await project.write('package.json', JSON.stringify(pkg, null, 2))

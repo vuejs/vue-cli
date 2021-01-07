@@ -11,13 +11,13 @@ test('should add types to existing tsconfig.json', async () => {
       }
     }
   })
-  await write('tsconfig.json', JSON.stringify({ compilerOptions: { types: ['some-type'] }}))
+  await write('tsconfig.json', JSON.stringify({ compilerOptions: { types: ['some-type'] } }))
 
   const invoke = require('@vue/cli/lib/invoke')
   await invoke('e2e-webdriverio', { webdrivers: ['chrome'] }, dir)
 
   const tsconfig = await read('tsconfig.json')
   expect(tsconfig).toMatch(/\r?\n$/)
-  expect(JSON.parse(tsconfig)['compilerOptions']['types'])
+  expect(JSON.parse(tsconfig).compilerOptions.types)
     .toEqual(['some-type', 'mocha', '@wdio/mocha-framework', '@wdio/sync'])
 })

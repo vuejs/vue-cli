@@ -67,11 +67,13 @@ module.exports = api => {
       '--webpack-config',
       require.resolve('@vue/cli-service/webpack.config.js'),
       ...rawArgv,
-      ...(hasInlineFilesGlob ? [] : [
-        api.hasPlugin('typescript')
-          ? `tests/unit/**/*.spec.ts`
-          : `tests/unit/**/*.spec.js`
-      ])
+      ...(hasInlineFilesGlob
+        ? []
+        : [
+          api.hasPlugin('typescript')
+            ? `tests/unit/**/*.spec.ts`
+            : `tests/unit/**/*.spec.js`
+        ])
     ]
 
     return new Promise((resolve, reject) => {
@@ -79,7 +81,7 @@ module.exports = api => {
       child.on('error', reject)
       child.on('exit', code => {
         if (code !== 0) {
-          reject(`mochapack exited with code ${code}.`)
+          reject(new Error(`mochapack exited with code ${code}.`))
         } else {
           resolve()
         }

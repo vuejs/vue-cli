@@ -1,4 +1,60 @@
 
+## 5.0.0-alpha.2 (2021-01-06)
+
+#### :rocket: New Features
+* `@vue/cli`
+  * [#5537](https://github.com/vuejs/vue-cli/pull/5537) feat(cli): make globby includes dot files ([@fxxjdedd](https://github.com/fxxjdedd))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-pwa`
+  * [#5327](https://github.com/vuejs/vue-cli/pull/5327) fix pwa installability when using noopServiceWorker "Page does not work offline" ([@kubenstein](https://github.com/kubenstein))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6186](https://github.com/vuejs/vue-cli/pull/6186) fix(mocha): workaround the ShadowRoot issue in Vue 3.0.5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6162](https://github.com/vuejs/vue-cli/pull/6162) fix(cli-service): restrict request headers of historyApiFallback in WebpackDevServer ([@githoniel](https://github.com/githoniel))
+* `@vue/cli-plugin-unit-jest`
+  * [#6170](https://github.com/vuejs/vue-cli/pull/6170) fix: add missing jest-transform-stub media types (#6169) ([@raineorshine](https://github.com/raineorshine))
+* `@vue/cli`
+  * [#6011](https://github.com/vuejs/vue-cli/pull/6011) fix(generator): avoid doing redundant write operations ([@fangbinwei](https://github.com/fangbinwei))
+
+#### :memo: Documentation
+* [#6176](https://github.com/vuejs/vue-cli/pull/6176) Fixed some typos on deployment.md ([@black-fyre](https://github.com/black-fyre))
+* [#5927](https://github.com/vuejs/vue-cli/pull/5927) Update skip plugins section of cli-service ([@markjszy](https://github.com/markjszy))
+* [#6093](https://github.com/vuejs/vue-cli/pull/6093) Easier Netlify setup ([@mauriciabad](https://github.com/mauriciabad))
+* [#6050](https://github.com/vuejs/vue-cli/pull/6050) mode-and-env doc need be updated ([@theniceangel](https://github.com/theniceangel))
+* [#6050](https://github.com/vuejs/vue-cli/pull/6050) mode-and-env doc need be updated ([@theniceangel](https://github.com/theniceangel))
+
+#### :house: Internal
+* `@vue/cli-plugin-eslint`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-service`, `@vue/cli-test-utils`, `@vue/cli-ui`, `@vue/cli`
+  * [#6152](https://github.com/vuejs/vue-cli/pull/6152) chore: some trivial dependency version bumps ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 11
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Dahunsi Fehintoluwa ([@black-fyre](https://github.com/black-fyre))
+- Githoniel ([@githoniel](https://github.com/githoniel))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Jakub Niewczas ([@kubenstein](https://github.com/kubenstein))
+- JiZhi ([@theniceangel](https://github.com/theniceangel))
+- Mark Szymanski ([@markjszy](https://github.com/markjszy))
+- Maurici Abad Gutierrez ([@mauriciabad](https://github.com/mauriciabad))
+- Raine Revere ([@raineorshine](https://github.com/raineorshine))
+- fxxjdedd ([@fxxjdedd](https://github.com/fxxjdedd))
+
+
+
+## 5.0.0-alpha.1 (2021-01-06)
+
+#### :memo: Documentation
+* [#6128](https://github.com/vuejs/vue-cli/pull/6128) docs: don't add `.loader()` when modifying vue-loader options ([@sodatea](https://github.com/sodatea))
+* [#6005](https://github.com/vuejs/vue-cli/pull/6005) docs: [RU] Translation update ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+
+#### Committers: 2
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 5.0.0-alpha.0 (2020-12-14)
 
 #### :rocket: New Features
@@ -147,6 +203,24 @@
 - Tony Trinh ([@tony19](https://github.com/tony19))
 - Yazhe Wang ([@jeneser](https://github.com/jeneser))[23m
 
+
+
+## 4.5.10 (2021-01-06)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-unit-mocha`
+  * [#6186](https://github.com/vuejs/vue-cli/pull/6186) fix(mocha): workaround the ShadowRoot issue in Vue 3.0.5 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`, `@vue/cli-service`
+  * [#6097](https://github.com/vuejs/vue-cli/pull/6097) fix(mocha): disable SSR optimization for Vue 3 testing ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#6000](https://github.com/vuejs/vue-cli/pull/6000) fix: prevent snoretoast shortcut, set notif title (#2720) ([@tony19](https://github.com/tony19))
+* `@vue/cli-service-global`, `@vue/cli-service`
+  * [#5992](https://github.com/vuejs/vue-cli/pull/5992) fix: using `lang` attribute with empty string in html template ([@fangbinwei](https://github.com/fangbinwei))
+
+#### Committers: 3
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Tony Trinh ([@tony19](https://github.com/tony19))
 
 
 

@@ -68,7 +68,7 @@ test('loading plugins from package.json', () => {
   mockPkg({
     devDependencies: {
       bar: '^1.0.0',
-      '@vue/cli-plugin-babel': '^5.0.0-alpha.0',
+      '@vue/cli-plugin-babel': '^5.0.0-alpha.2',
       'vue-cli-plugin-foo': '^1.0.0'
     }
   })
@@ -131,7 +131,7 @@ test('keep publicPath when empty', () => {
 })
 
 test('load project options from vue.config.js', () => {
-  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '')  // only to ensure fs.existsSync returns true
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '') // only to ensure fs.existsSync returns true
   jest.mock(path.resolve('/', 'vue.config.js'), () => ({ lintOnSave: false }), { virtual: true })
   mockPkg({
     vue: {

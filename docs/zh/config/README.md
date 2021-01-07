@@ -28,7 +28,7 @@ module.exports = {
 ```
 ### baseUrl
 
-从 Vue CLI 3.3 起已弃用，请使用[`publicPath`](#publicPath)。
+从 Vue CLI 3.3 起已弃用，请使用[`publicPath`](#publicpath)。
 
 
 ### publicPath
