@@ -6,6 +6,13 @@ const builtinIcons = {
   error: path.resolve(__dirname, '../../src/assets/error.png')
 }
 
+let notifCallback = null
+exports.setNotificationCallback = cb => {
+  notifCallback = cb
+    ? (_err, action) => (action === 'activate') && cb()
+    : null
+}
+
 // https://github.com/mikaelbr/node-notifier/issues/154
 // Specify appID to prevent SnoreToast shortcut installation.
 // SnoreToast actually uses it as the string in the notification's
@@ -19,5 +26,5 @@ exports.notify = ({ title, message, icon }) => {
     title,
     message,
     icon: builtinIcons[icon] || icon
-  })
+  }, notifCallback)
 }
