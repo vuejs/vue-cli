@@ -387,9 +387,3 @@ test('scss loaderOptions', () => {
   // should not merge scss options into default sass config
   expect(findOptions(config, 'sass', 'sass')).not.toHaveProperty('webpackImporter')
 })
-
-test('should use dart sass implementation whenever possible', () => {
-  const config = genConfig()
-  expect(findOptions(config, 'scss', 'sass')).toMatchObject({ implementation: require('sass') })
-  expect(findOptions(config, 'sass', 'sass')).toMatchObject({ implementation: require('sass') })
-})

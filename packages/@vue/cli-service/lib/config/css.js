@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const { semver, warn, pauseSpinner, resumeSpinner } = require('@vue/cli-shared-utils')
 
 const findExisting = (context, files) => {
   for (const file of files) {
@@ -15,25 +14,6 @@ module.exports = (api, rootOptions) => {
     const getAssetPath = require('../util/getAssetPath')
     const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
     const isProd = process.env.NODE_ENV === 'production'
-
-    let sassLoaderVersion
-    try {
-      sassLoaderVersion = semver.major(require('sass-loader/package.json').version)
-    } catch (e) {}
-    if (sassLoaderVersion < 8) {
-      pauseSpinner()
-      warn('A new version of sass-loader is available. Please upgrade for best experience.')
-      resumeSpinner()
-    }
-
-    const defaultSassLoaderOptions = {}
-    try {
-      defaultSassLoaderOptions.implementation = require('sass')
-      // since sass-loader 8, fibers will be automatically detected and used
-      if (sassLoaderVersion < 8) {
-        defaultSassLoaderOptions.fiber = require('fibers')
-      }
-    } catch (e) {}
 
     const {
       extract = isProd,
@@ -205,34 +185,21 @@ module.exports = (api, rootOptions) => {
     createCSSRule('postcss', /\.p(ost)?css$/)
     createCSSRule('scss', /\.scss$/, 'sass-loader', Object.assign(
       {},
-      defaultSassLoaderOptions,
       loaderOptions.scss || loaderOptions.sass
     ))
-    if (sassLoaderVersion < 8) {
-      createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
-        {},
-        defaultSassLoaderOptions,
-        {
-          indentedSyntax: true
-        },
-        loaderOptions.sass
-      ))
-    } else {
-      createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
-        {},
-        defaultSassLoaderOptions,
-        loaderOptions.sass,
-        {
-          sassOptions: Object.assign(
-            {},
-            loaderOptions.sass && loaderOptions.sass.sassOptions,
-            {
-              indentedSyntax: true
-            }
-          )
-        }
-      ))
-    }
+    createCSSRule('sass', /\.sass$/, 'sass-loader', Object.assign(
+      {},
+      loaderOptions.sass,
+      {
+        sassOptions: Object.assign(
+          {},
+          loaderOptions.sass && loaderOptions.sass.sassOptions,
+          {
+            indentedSyntax: true
+          }
+        )
+      }
+    ))
     createCSSRule('less', /\.less$/, 'less-loader', loaderOptions.less)
     createCSSRule('stylus', /\.styl(us)?$/, 'stylus-loader', loaderOptions.stylus)
 
