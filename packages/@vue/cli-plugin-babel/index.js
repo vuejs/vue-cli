@@ -22,7 +22,6 @@ function genTranspileDepRegex (transpileDependencies) {
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
   const cliServicePath = path.dirname(require.resolve('@vue/cli-service'))
-  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
   // try to load the project babel config;
   // if the default preset is used,
@@ -33,6 +32,7 @@ module.exports = (api, options) => {
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
+    const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
     const jsRule = webpackConfig.module
       .rule('js')
