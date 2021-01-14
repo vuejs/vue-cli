@@ -199,7 +199,7 @@ class PackageManager {
     return this._registries[cacheKey]
   }
 
-  async getAuthToken (scope) {
+  async getAuthConfig (scope) {
     // get npmrc (https://docs.npmjs.com/configuring-npm/npmrc.html#files)
     const possibleRcPaths = [
       path.resolve(this.context, '.npmrc'),
@@ -227,8 +227,18 @@ class PackageManager {
       .replace(/https?:/, '')     // remove leading protocol
       .replace(/([^/])$/, '$1/')  // ensure ending with slash
     const authTokenKey = `${registryWithoutProtocol}:_authToken`
+    const authUsernameKey = `${registryWithoutProtocol}:username`
+    const authPasswordKey = `${registryWithoutProtocol}:_password`
 
-    return npmConfig[authTokenKey]
+    const auth = {}
+    if (authTokenKey in npmConfig) {
+      auth.token = npmConfig[authTokenKey]
+    }
+    if (authPasswordKey in npmConfig) {
+      auth.username = npmConfig[authUsernameKey]
+      auth.password = Buffer.from(npmConfig[authPasswordKey], 'base64').toString()
+    }
+    return auth
   }
 
   async setRegistryEnvs () {
@@ -296,9 +306,13 @@ class PackageManager {
       headers.Accept = 'application/vnd.npm.install-v1+json;q=1.0, application/json;q=0.9, */*;q=0.8'
     }
 
-    const authToken = await this.getAuthToken(scope)
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`
+    const authConfig = await this.getAuthConfig(scope)
+    if ('password' in authConfig) {
+      const credentials = Buffer.from(`${authConfig.username}:${authConfig.password}`).toString('base64')
+      headers.Authorization = `Basic ${credentials}`
+    }
+    if ('token' in authConfig) {
+      headers.Authorization = `Bearer ${authConfig.token}`
     }
 
     const url = `${registry.replace(/\/$/g, '')}/${packageName}`
