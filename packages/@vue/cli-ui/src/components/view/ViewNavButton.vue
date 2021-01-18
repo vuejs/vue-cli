@@ -66,6 +66,8 @@ export default {
       if (this.view.badges && this.view.badges.length) {
         return this.view.badges.slice().sort((a, b) => b.priority - a.priority)
       }
+
+      return []
     },
 
     firstNotHiddenBadge () {

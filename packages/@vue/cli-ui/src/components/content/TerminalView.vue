@@ -213,7 +213,7 @@ export default {
         if (emptySelection) {
           this.$_terminal.selectAll()
         }
-        var selection = this.$_terminal.getSelection()
+        const selection = this.$_terminal.getSelection()
         textarea.value = selection
         textarea.select()
         document.execCommand('copy')
