@@ -129,6 +129,11 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       publicPath: ''
     })
 
+    if (format === 'commonjs2') {
+      // #6188
+      delete rawConfig.output.library
+    }
+
     return rawConfig
   }
 
