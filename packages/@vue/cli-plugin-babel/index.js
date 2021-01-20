@@ -22,7 +22,6 @@ function genTranspileDepRegex (transpileDependencies) {
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
   const cliServicePath = path.dirname(require.resolve('@vue/cli-service'))
-  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
   // try to load the project babel config;
   // if the default preset is used,
@@ -43,23 +42,33 @@ module.exports = (api, options) => {
             if (/\.vue\.jsx?$/.test(filepath)) {
               return false
             }
+
             // exclude dynamic entries from cli-service
             if (filepath.startsWith(cliServicePath)) {
               return true
             }
 
-            // only include @babel/runtime when the @vue/babel-preset-app preset is used
-            if (
-              process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME &&
-              filepath.includes(path.join('@babel', 'runtime'))
-            ) {
+            // Only transpile @babel/runtime when babel is properly configured
+            // to avoid infinite loops.
+            // The flag is set in `@vue/babel-preset-app` v4.1.0+
+            const canTranspileBabelRuntime = !!process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME
+            const shouldExcludeBabelRuntime = !canTranspileBabelRuntime
+            if (filepath.includes(path.join('@babel', 'runtime'))) {
+              return shouldExcludeBabelRuntime
+            }
+
+            const shouldTranspileAll = !!process.env.VUE_CLI_TRANSPILE_ALL_DEPS
+
+            if (shouldTranspileAll) {
               return false
             }
 
             // check if this is something the user explicitly wants to transpile
+            const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
             if (transpileDepRegex && transpileDepRegex.test(filepath)) {
               return false
             }
+
             // Don't transpile node_modules
             return /node_modules/.test(filepath)
           })

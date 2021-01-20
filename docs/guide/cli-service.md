@@ -52,6 +52,7 @@ Options:
   --https        use https (default: false)
   --public       specify the public network URL for the HMR client
   --skip-plugins comma-separated list of plugin names to skip for this run
+  --no-transpile-all: don't transpile all dependencies with Babel; only those specified by 'transpileDependencies' will be processed
 ```
 
 ::: tip --copy
@@ -85,6 +86,7 @@ Options:
   --report       generate report.html to help analyze bundle content
   --report-json  generate report.json to help analyze bundle content
   --skip-plugins comma-separated list of plugin names to skip for this run
+  --no-transpile-all don't transpile all dependencies with Babel; only those specified by 'transpileDependencies' will be processed
   --watch        watch for changes
 ```
 

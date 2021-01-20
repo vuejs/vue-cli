@@ -10,7 +10,8 @@ const {
 const defaults = {
   host: '0.0.0.0',
   port: 8080,
-  https: false
+  https: false,
+  'transpile-all': true
 }
 
 module.exports = (api, options) => {
@@ -26,7 +27,8 @@ module.exports = (api, options) => {
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
       '--public': `specify the public network URL for the HMR client`,
-      '--skip-plugins': `comma-separated list of plugin names to skip for this run`
+      '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
+      '--no-transpile-all': `don't transpile all dependencies with Babel; only those specified by 'transpileDependencies' will be processed`
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -46,6 +48,11 @@ module.exports = (api, options) => {
     const launchEditorMiddleware = require('launch-editor-middleware')
     const validateWebpackConfig = require('../util/validateWebpackConfig')
     const isAbsoluteUrl = require('../util/isAbsoluteUrl')
+
+    const transpileAll = args['transpile-all'] || defaults['transpile-all']
+    if (transpileAll) {
+      process.env.VUE_CLI_BABEL_TRANSPILE_ALL_DEPS = true
+    }
 
     // configs that only matters for dev server
     api.chainWebpack(webpackConfig => {
