@@ -347,8 +347,14 @@ class PackageManager {
   }
 
   async runCommand (command, args) {
+    const prevNodeEnv = process.env.NODE_ENV
+    // In the use case of Vue CLI, when installing dependencies,
+    // the `NODE_ENV` environment variable does no good;
+    // it only confuses users by skipping dev deps (when set to `production`).
+    delete process.env.NODE_ENV
+
     await this.setRegistryEnvs()
-    return await executeCommand(
+    await executeCommand(
       this.bin,
       [
         ...PACKAGE_MANAGER_CONFIG[this.bin][command],
@@ -356,6 +362,10 @@ class PackageManager {
       ],
       this.context
     )
+
+    if (prevNodeEnv) {
+      process.env.NODE_ENV = prevNodeEnv
+    }
   }
 
   async install () {
