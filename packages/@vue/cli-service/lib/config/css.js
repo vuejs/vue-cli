@@ -39,15 +39,20 @@ module.exports = (api, rootOptions) => {
       chunkFilename: filename
     }, extract && typeof extract === 'object' ? extract : {})
 
+    // when project publicPath is a relative path
     // use relative publicPath in extracted CSS based on extract location
     const cssPublicPath = process.env.VUE_CLI_BUILD_TARGET === 'lib'
       // in lib mode, CSS is extracted to dist root.
       ? './'
-      : '../'.repeat(
-        extractOptions.filename
-            .replace(/^\.[/\\]/, '')
-            .split(/[/\\]/g)
-            .length - 1
+      : (
+        rootOptions.publicPath.startsWith('.')
+          ? '../'.repeat(
+            extractOptions.filename
+              .replace(/^\.[/\\]/, '')
+              .split(/[/\\]/g)
+              .length - 1
+          )
+          : undefined
       )
 
     // check if the project has a valid postcss config
