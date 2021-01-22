@@ -54,7 +54,7 @@
     "lowdb": "^1.0.0",
     "lru-cache": "^5.1.1",
     "node-ipc": "^9.1.1",
-    "node-notifier": "^6.0.0",
+    "node-notifier": "^9.0.0",
     "parse-git-config": "^2.0.2",
     "portfinder": "^1.0.26",
     "prismjs": "^1.20.0",
