@@ -72,6 +72,10 @@ Underlyingly, it uses the [`resolutions`](https://classic.yarnpkg.com/en/docs/se
 
 Though both work in all our tests, please be aware that the `module-alias` approach is still considered hacky, and may not be as stable as the `"resolutions"` one.
 
+#### Sass/SCSS
+
+No longer supports generating project with `node-sass`. It has been [deprecated](https://sass-lang.com/blog/libsass-is-deprecated#how-do-i-migrate) for a while. Please use the `sass` package instead.
+
 #### Underlying Loaders and Plugins
 
 * `html-webpack-plugin` is upgraded from v3 to v4, see more details in the [release announcement](https://dev.to/jantimon/html-webpack-plugin-4-has-been-released-125d).
