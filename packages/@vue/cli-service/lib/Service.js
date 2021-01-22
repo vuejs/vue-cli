@@ -7,7 +7,7 @@ const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
+const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg, resolveModule } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
 const checkWebpack = require('@vue/cli-service/lib/util/checkWebpack')
@@ -143,9 +143,9 @@ module.exports = class Service {
   }
 
   resolvePlugins (inlinePlugins, useBuiltIn) {
-    const idToPlugin = id => ({
+    const idToPlugin = (id, absolutePath) => ({
       id: id.replace(/^.\//, 'built-in:'),
-      apply: require(id)
+      apply: require(absolutePath || id)
     })
 
     let plugins
@@ -161,7 +161,7 @@ module.exports = class Service {
       './config/css',
       './config/prod',
       './config/app'
-    ].map(idToPlugin)
+    ].map((id) => idToPlugin(id))
 
     if (inlinePlugins) {
       plugins = useBuiltIn !== false
@@ -176,16 +176,15 @@ module.exports = class Service {
             this.pkg.optionalDependencies &&
             id in this.pkg.optionalDependencies
           ) {
-            let apply = () => {}
-            try {
-              apply = require(id)
-            } catch (e) {
+            let apply = loadModule(id, this.pkgContext)
+            if (!apply) {
               warn(`Optional dependency ${id} is not installed.`)
+              apply = () => {}
             }
 
             return { id, apply }
           } else {
-            return idToPlugin(id)
+            return idToPlugin(id, resolveModule(id, this.pkgContext))
           }
         })
       plugins = builtInPlugins.concat(projectPlugins)

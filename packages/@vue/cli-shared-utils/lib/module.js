@@ -50,6 +50,13 @@ const resolve = semver.satisfies(process.version, '>=10.0.0')
   : resolveFallback
 
 exports.resolveModule = function (request, context) {
+  // createRequire doesn't work with jest mock modules
+  // (which we used in migrator for inquirer, and in tests for cli-service)
+  // TODO: it's supported in Jest 25
+  if (process.env.VUE_CLI_TEST && (request.endsWith('migrator') || context === '/')) {
+    return request
+  }
+
   let resolvedPath
   try {
     try {
