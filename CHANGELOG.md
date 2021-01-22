@@ -1,4 +1,46 @@
 
+## 5.0.0-alpha.3 (2021-01-22)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-pwa`
+  * [#6198](https://github.com/vuejs/vue-cli/pull/6198) Support svg favicon ([@mauriciabad](https://github.com/mauriciabad))
+* `@vue/cli-service`
+  * [#6187](https://github.com/vuejs/vue-cli/pull/6187) feat!: bump default sass-loader version to v10, drop sass-loader v7 support ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`, `@vue/cli`
+  * [#6001](https://github.com/vuejs/vue-cli/pull/6001) feat: open browser when toast clicked ([@tony19](https://github.com/tony19))
+
+#### :boom: Breaking Changes
+* `@vue/cli-service`
+  * [#6187](https://github.com/vuejs/vue-cli/pull/6187) feat!: bump default sass-loader version to v10, drop sass-loader v7 support ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`, `@vue/cli-shared-utils`
+  * [#5794](https://github.com/vuejs/vue-cli/pull/5794) fix(cli): resolve plugins relative to the package context ([@merceyz](https://github.com/merceyz))
+* `@vue/cli`
+  * [#6224](https://github.com/vuejs/vue-cli/pull/6224) fix: discard `NODE_ENV` when installing project dependencies ([@sodatea](https://github.com/sodatea))
+  * [#6207](https://github.com/vuejs/vue-cli/pull/6207) fix: support basic auth for npm registry access ([@bodograumann](https://github.com/bodograumann))
+* `@vue/cli-service`
+  * [#6218](https://github.com/vuejs/vue-cli/pull/6218) fix: "commonjs2" target should not be used with "output.library" ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6215](https://github.com/vuejs/vue-cli/pull/6215) fix(unit-mocha): shouldn't require webpack-4 plugin with cli-service v4 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#6192](https://github.com/vuejs/vue-cli/pull/6192) fix: should use graphql v15 at all levels of dependency ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-plugin-babel`
+  * [#6222](https://github.com/vuejs/vue-cli/pull/6222) chore: disable cacheCompression for babel-loader by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-ui`
+  * [#6189](https://github.com/vuejs/vue-cli/pull/6189) refactor: fix eslint warnings in the cli-ui codebase ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 5
+- Bodo Graumann ([@bodograumann](https://github.com/bodograumann))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Kristoffer K. ([@merceyz](https://github.com/merceyz))
+- Maurici Abad Gutierrez ([@mauriciabad](https://github.com/mauriciabad))
+- Tony Trinh ([@tony19](https://github.com/tony19))
+
+
+
 ## 5.0.0-alpha.2 (2021-01-06)
 
 #### :rocket: New Features

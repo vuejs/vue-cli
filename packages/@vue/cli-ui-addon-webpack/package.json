@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui-addon-webpack",
-  "version": "5.0.0-alpha.2",
+  "version": "5.0.0-alpha.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -20,9 +20,9 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.12.1",
-    "@vue/cli-plugin-babel": "^5.0.0-alpha.2",
-    "@vue/cli-plugin-eslint": "^5.0.0-alpha.2",
-    "@vue/cli-service": "^5.0.0-alpha.2",
+    "@vue/cli-plugin-babel": "^5.0.0-alpha.3",
+    "@vue/cli-plugin-eslint": "^5.0.0-alpha.3",
+    "@vue/cli-service": "^5.0.0-alpha.3",
     "@vue/eslint-config-standard": "^6.0.0",
     "core-js": "^3.8.1",
     "eslint": "^7.15.0",

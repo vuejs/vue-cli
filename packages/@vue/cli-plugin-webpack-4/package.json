@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-webpack-4",
-  "version": "5.0.0-alpha.2",
+  "version": "5.0.0-alpha.3",
   "description": "webpack-4 plugin for @vue/cli v5",
   "main": "index.js",
   "repository": {

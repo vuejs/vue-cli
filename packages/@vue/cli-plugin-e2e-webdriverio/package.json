@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-webdriverio",
-  "version": "5.0.0-alpha.2",
+  "version": "5.0.0-alpha.3",
   "description": "e2e-webdriverio plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/mocha": "^8.0.4",
-    "@vue/cli-shared-utils": "^5.0.0-alpha.2",
+    "@vue/cli-shared-utils": "^5.0.0-alpha.3",
     "@wdio/cli": "^6.10.5",
     "@wdio/local-runner": "^6.10.5",
     "@wdio/mocha-framework": "^6.10.4",
