@@ -176,11 +176,10 @@ module.exports = class Service {
             this.pkg.optionalDependencies &&
             id in this.pkg.optionalDependencies
           ) {
-            let apply = () => {}
-            try {
-              apply = loadModule(id, this.pkgContext)
-            } catch (e) {
+            let apply = loadModule(id, this.pkgContext)
+            if (!apply) {
               warn(`Optional dependency ${id} is not installed.`)
+              apply = () => {}
             }
 
             return { id, apply }
