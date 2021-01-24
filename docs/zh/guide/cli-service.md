@@ -70,7 +70,7 @@ npx vue-cli-service serve
   --modern      面向现代浏览器带自动回退地构建应用
   --target      app | lib | wc | wc-async (默认值：app)
   --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
-  --no-clean    在构建项目之前不清除目标目录
+  --no-clean    在构建项目之前不清除目标目录的内容
   --report      生成 report.html 以帮助分析包内容
   --report-json 生成 report.json 以帮助分析包内容
   --watch       监听文件变化
