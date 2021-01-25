@@ -347,7 +347,7 @@ api.registerCommand(
     description: 'Write a greeting to the console',
     usage: 'vue-cli-service greet'
   },
-  () = > {
+  () => {
     console.log(`👋  Hello`)
   }
 )
