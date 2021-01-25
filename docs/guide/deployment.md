@@ -39,7 +39,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 1. Set correct `publicPath` in `vue.config.js`.
 
-    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `publicPath` as it defaults to `"/"`.
+    If you are deploying to `https://<USERNAME>.github.io/` or to a custom domain, you can omit `publicPath` as it defaults to `"/"`.
 
     If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `publicPath` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
