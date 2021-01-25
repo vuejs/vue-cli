@@ -65,7 +65,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 - Type: `string`
 - Default: `'dist'`
 
-  The directory where the production build files will be generated in when running `vue-cli-service build`. Note the target directory will be removed before building (this behavior can be disabled by passing `--no-clean` when building).
+  The directory where the production build files will be generated in when running `vue-cli-service build`. Note the target directory contents will be removed before building (this behavior can be disabled by passing `--no-clean` when building).
 
   ::: tip
   Always use `outputDir` instead of modifying webpack `output.path`.

@@ -33,7 +33,7 @@ module.exports = (api, options) => {
       '--formats': `list of output formats for library builds (default: ${defaults.formats})`,
       '--name': `name for lib or web-component mode (default: "name" in package.json or entry filename)`,
       '--filename': `file name for output, only usable for 'lib' target (default: value of --name)`,
-      '--no-clean': `do not remove the dist directory before building the project`,
+      '--no-clean': `do not remove the dist directory contents before building the project`,
       '--report': `generate report.html to help analyze bundle content`,
       '--report-json': 'generate report.json to help analyze bundle content',
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
@@ -193,7 +193,7 @@ async function build (args, api, options) {
   }
 
   if (args.clean) {
-    await fs.remove(targetDir)
+    await fs.emptyDir(targetDir)
   }
 
   return new Promise((resolve, reject) => {

@@ -65,7 +65,7 @@ module.exports = {
 - Type: `string`
 - Default: `'dist'`
 
-  当运行 `vue-cli-service build` 时生成的生产环境构建文件的目录。注意目标目录在构建之前会被清除 (构建时传入 `--no-clean` 可关闭该行为)。
+  当运行 `vue-cli-service build` 时生成的生产环境构建文件的目录。注意目标目录的内容在构建之前会被清除 (构建时传入 `--no-clean` 可关闭该行为)。
 
   ::: tip 提示
   请始终使用 `outputDir` 而不要修改 webpack 的 `output.path`。
