@@ -16,7 +16,7 @@ npm_config_unsafe_perm=true vue create my-project
 
 ## Symbolic Links in `node_modules`
 
-If there're dependencies installed by `npm link` or `yarn link`, ESLint (and sometimes Babel as well) may not work properly for those symlinked dependencies. It is because [webpack resolves symlinks to their real locations by default](https://webpack.js.org/configuration/resolve/#resolvesymlinks), thus breaks ESLint / Babel config lookup.
+If there are dependencies installed by `npm link` or `yarn link`, ESLint (and sometimes Babel as well) may not work properly for those symlinked dependencies. It is because [webpack resolves symlinks to their real locations by default](https://webpack.js.org/configuration/resolve/#resolvesymlinks), thus breaks ESLint / Babel config lookup.
 
 A workaround for this issue is to manually disable symlinks resolution in webpack:
 
@@ -31,3 +31,7 @@ module.exports = {
 
 ::: warning
 Disabling `resolve.symlinks` may break hot module reloading if your dependencies are installed by third-party npm clients that utilized symbolic links, such as`cnpm` or `pnpm`.
+
+::: 'vue' is not recognized as an internal or external command
+This error happens in Windows if you don't have npm in your system path. To check: from a command prompt type `path`.
+Confirm the actual path to your npm repo. It should be like `c:\Users\[YourLoginName]\AppData\Roaming\npm` (using your actual login name). Add that to your System Properties, Environment Variables.
