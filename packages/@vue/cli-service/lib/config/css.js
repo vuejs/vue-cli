@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
 const findExisting = (context, files) => {
   for (const file of files) {
@@ -39,16 +40,19 @@ module.exports = (api, rootOptions) => {
       chunkFilename: filename
     }, extract && typeof extract === 'object' ? extract : {})
 
+    // when project publicPath is a relative path
     // use relative publicPath in extracted CSS based on extract location
-    const cssPublicPath = process.env.VUE_CLI_BUILD_TARGET === 'lib'
-      // in lib mode, CSS is extracted to dist root.
-      ? './'
-      : '../'.repeat(
-        extractOptions.filename
+    const cssPublicPath = (isAbsoluteUrl(rootOptions.publicPath) || rootOptions.publicPath.startsWith('/'))
+      ? rootOptions.publicPath
+      : process.env.VUE_CLI_BUILD_TARGET === 'lib'
+        // in lib mode, CSS is extracted to dist root.
+        ? './'
+        : '../'.repeat(
+          extractOptions.filename
             .replace(/^\.[/\\]/, '')
             .split(/[/\\]/g)
             .length - 1
-      )
+        )
 
     // check if the project has a valid postcss config
     // if it doesn't, don't use postcss-loader for direct style imports
