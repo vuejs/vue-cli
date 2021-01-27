@@ -51,7 +51,6 @@
     "eslint-plugin-prettier": "^3.2.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-vue": "^7.2.0",
-    "eslint-plugin-vue-libs": "^4.0.0",
     "execa": "^1.0.0",
     "geckodriver": "^1.20.0",
     "globby": "^11.0.1",
