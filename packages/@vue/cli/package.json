@@ -32,7 +32,7 @@
     "@vue/cli-ui-addon-webpack": "^5.0.0-alpha.3",
     "@vue/cli-ui-addon-widgets": "^5.0.0-alpha.3",
     "boxen": "^4.1.0",
-    "commander": "^2.20.0",
+    "commander": "^7.0.0",
     "debug": "^4.1.0",
     "deepmerge": "^4.2.2",
     "download-git-repo": "^3.0.2",

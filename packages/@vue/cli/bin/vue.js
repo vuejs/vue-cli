@@ -57,9 +57,7 @@ program
   .option('-x, --proxy <proxyUrl>', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
   .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
-  .action((name, cmd) => {
-    const options = cleanArgs(cmd)
-
+  .action((name, options) => {
     if (minimist(process.argv.slice(3))._.length > 1) {
       console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
     }
@@ -97,8 +95,8 @@ program
   .option('--rules', 'list all module rule names')
   .option('--plugins', 'list all plugin names')
   .option('-v --verbose', 'Show full function definitions in output')
-  .action((paths, cmd) => {
-    require('../lib/inspect')(paths, cleanArgs(cmd))
+  .action((paths, options) => {
+    require('../lib/inspect')(paths, options)
   })
 
 program
@@ -124,9 +122,9 @@ program
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
   .option('--headless', `Don't open browser on start and output port`)
-  .action((cmd) => {
+  .action((options) => {
     checkNodeVersion('>=8.6', 'vue ui')
-    require('../lib/ui')(cleanArgs(cmd))
+    require('../lib/ui')(options)
   })
 
 program
@@ -146,16 +144,16 @@ program
   .option('-d, --delete <path>', 'delete option from config')
   .option('-e, --edit', 'open config with default editor')
   .option('--json', 'outputs JSON result only')
-  .action((value, cmd) => {
-    require('../lib/config')(value, cleanArgs(cmd))
+  .action((value, options) => {
+    require('../lib/config')(value, options)
   })
 
 program
   .command('outdated')
   .description('(experimental) check for outdated vue cli service / plugins')
   .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
-  .action((cmd) => {
-    require('../lib/outdated')(cleanArgs(cmd))
+  .action((options) => {
+    require('../lib/outdated')(options)
   })
 
 program
@@ -166,17 +164,16 @@ program
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
   .option('--all', 'Upgrade all plugins')
   .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
-  .action((packageName, cmd) => {
-    require('../lib/upgrade')(packageName, cleanArgs(cmd))
+  .action((packageName, options) => {
+    require('../lib/upgrade')(packageName, options)
   })
 
 program
   .command('migrate [plugin-name]')
   .description('(experimental) run migrator for an already-installed cli plugin')
-  // TODO: use `requiredOption` after upgrading to commander 4.x
-  .option('-f, --from <version>', 'The base version for the migrator to migrate from')
-  .action((packageName, cmd) => {
-    require('../lib/migrate')(packageName, cleanArgs(cmd))
+  .requiredOption('-f, --from <version>', 'The base version for the migrator to migrate from')
+  .action((packageName, options) => {
+    require('../lib/migrate')(packageName, options)
   })
 
 program
@@ -201,15 +198,13 @@ program
   })
 
 // output help information on unknown commands
-program
-  .arguments('<command>')
-  .action((cmd) => {
-    program.outputHelp()
-    console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
-    console.log()
-    suggestCommands(cmd)
-    process.exitCode = 1
-  })
+program.on('command:*', ([cmd]) => {
+  program.outputHelp()
+  console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
+  console.log()
+  suggestCommands(cmd)
+  process.exitCode = 1
+})
 
 // add some useful info on help
 program.on('--help', () => {
@@ -258,23 +253,4 @@ function suggestCommands (unknownCommand) {
   if (suggestion) {
     console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
   }
-}
-
-function camelize (str) {
-  return str.replace(/-(\w)/g, (_, c) => c ? c.toUpperCase() : '')
-}
-
-// commander passes the Command object itself as options,
-// extract only actual options into a fresh object.
-function cleanArgs (cmd) {
-  const args = {}
-  cmd.options.forEach(o => {
-    const key = camelize(o.long.replace(/^--/, ''))
-    // if an option is not present and Command has a method with the same name
-    // it should not be copied
-    if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {
-      args[key] = cmd[key]
-    }
-  })
-  return args
 }
