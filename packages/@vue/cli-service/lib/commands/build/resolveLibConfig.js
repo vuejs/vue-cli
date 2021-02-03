@@ -122,7 +122,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       globalObject: `(typeof self !== 'undefined' ? self : this)`
     }, rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${entryName}.[name].js`,
+      chunkFilename: `${entryName}.[name].js`
 
     })
 
