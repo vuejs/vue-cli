@@ -11,4 +11,6 @@ module.exports = (api) => {
       '@vue/cli-*/webpack': '^4.0.0'
     }
   })
+
+  // TODO: if uses sass, replace sass-loader@11 with sass-loader@10
 }

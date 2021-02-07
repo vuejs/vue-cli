@@ -23,6 +23,7 @@
     "access": "public"
   },
   "dependencies": {
+    "html-webpack-plugin": "^4.5.1",
     "webpack": "^4.44.2"
   },
   "peerDependencies": {
