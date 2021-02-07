@@ -187,6 +187,18 @@ module.exports = class Service {
             return idToPlugin(id, resolveModule(id, this.pkgContext))
           }
         })
+
+      // Add the plugin automatically to simplify the webpack-4 tests
+      // so that a simple Jest alias would suffice, avoid changing every
+      // preset used in the tests
+      if (
+        process.env.VUE_CLI_TEST &&
+        process.env.VUE_CLI_USE_WEBPACK4 &&
+        !projectPlugins.some((p) => p.id === '@vue/cli-plugin-webpack-4')
+      ) {
+        builtInPlugins.push(idToPlugin('@vue/cli-plugin-webpack-4'))
+      }
+
       plugins = builtInPlugins.concat(projectPlugins)
     }
 
