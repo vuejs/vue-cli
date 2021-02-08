@@ -83,6 +83,7 @@ module.exports = (api, options) => {
 
     const htmlOptions = {
       title: api.service.pkg.name,
+      scriptLoading: 'defer',
       templateParameters: (compilation, assets, assetTags, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
         let stats
