@@ -32,7 +32,12 @@ class ModernModePlugin {
         const htmlPath = path.dirname(data.plugin.options.filename)
         const tempFilename = path.join(this.targetDir, htmlPath, `legacy-assets-${htmlName}.json`)
         await fs.mkdirp(path.dirname(tempFilename))
-        await fs.writeFile(tempFilename, JSON.stringify(data.bodyTags))
+
+        let tags = data.bodyTags
+        if (data.plugin.options.scriptLoading === 'defer') {
+          tags = data.headTags
+        }
+        await fs.writeFile(tempFilename, JSON.stringify(tags))
         cb()
       })
     })
@@ -42,8 +47,12 @@ class ModernModePlugin {
     const ID = `vue-cli-modern-bundle`
     compiler.hooks.compilation.tap(ID, compilation => {
       HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(ID, async (data, cb) => {
+        let tags = data.bodyTags
+        if (data.plugin.options.scriptLoading === 'defer') {
+          tags = data.headTags
+        }
         // use <script type="module"> for modern assets
-        data.bodyTags.forEach(tag => {
+        tags.forEach(tag => {
           if (tag.tagName === 'script' && tag.attributes) {
             tag.attributes.type = 'module'
           }
@@ -70,7 +79,7 @@ class ModernModePlugin {
 
         if (this.unsafeInline) {
           // inject inline Safari 10 nomodule fix
-          data.bodyTags.push({
+          tags.push({
             tagName: 'script',
             closeTag: true,
             innerHTML: safariFix
@@ -87,7 +96,7 @@ class ModernModePlugin {
               return Buffer.byteLength(safariFix)
             }
           }
-          data.bodyTags.push({
+          tags.push({
             tagName: 'script',
             closeTag: true,
             attributes: {
@@ -96,7 +105,7 @@ class ModernModePlugin {
           })
         }
 
-        data.bodyTags.push(...legacyAssets)
+        tags.push(...legacyAssets)
         await fs.remove(tempFilename)
         cb()
       })
