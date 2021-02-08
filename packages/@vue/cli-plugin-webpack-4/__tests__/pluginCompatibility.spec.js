@@ -1,4 +1,4 @@
-jest.setTimeout(30000)
+jest.setTimeout(3000000)
 
 const path = require('path')
 const { defaultPreset } = require('@vue/cli/lib/options')
@@ -74,7 +74,7 @@ test('build', async () => {
 })
 
 test('multi-page', async () => {
-  const project = await create('e2e-build-webpack-4', webpack4Preset)
+  const project = await create('e2e-build-webpack-4-multipage', webpack4Preset)
 
   await project.write('vue.config.js', `
 module.exports = {
