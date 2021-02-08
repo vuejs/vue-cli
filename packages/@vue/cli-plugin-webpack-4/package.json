@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "html-webpack-plugin": "^4.5.1",
+    "module-alias": "^2.2.2",
     "webpack": "^4.44.2"
   },
   "peerDependencies": {
