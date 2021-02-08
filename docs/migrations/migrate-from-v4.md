@@ -78,7 +78,7 @@ No longer supports generating project with `node-sass`. It has been [deprecated]
 
 #### Underlying Loaders and Plugins
 
-* `html-webpack-plugin` is upgraded from v3 to v4, see more details in the [release announcement](https://dev.to/jantimon/html-webpack-plugin-4-has-been-released-125d).
+* `html-webpack-plugin` is upgraded from v3 to v5, and for webpack 4 users, v4 will be used. More details are available in the [release announcement of `html-webpack-plugin` v4](https://dev.to/jantimon/html-webpack-plugin-4-has-been-released-125d) and the [full changelog](https://github.com/jantimon/html-webpack-plugin/blob/master/CHANGELOG.md).
 * `sass-loader` v7 support is dropped. See the v8 breaking changes at its [changelog](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md#800-2019-08-29).
 * `postcss-loader` is upgraded from v3 to v4. Most notably, `PostCSS` options (`plugin` / `syntax` / `parser` / `stringifier`) are moved into the `postcssOptions` field. More details available at the [changelog](https://github.com/webpack-contrib/postcss-loader/blob/master/CHANGELOG.md#400-2020-09-07).
 * `copy-webpack-plugin` is upgraded from v5 to v6. If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 release](https://github.com/webpack-contrib/copy-webpack-plugin/releases/tag/v6.0.0).
