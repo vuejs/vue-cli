@@ -10,7 +10,7 @@ if (args.p) {
   rawArgs.splice(i, 2)
 }
 
-const e2ePathPattern = 'Migrator|Vue3|mochaPlugin|MochaPlugin'
+const e2ePathPattern = 'Migrator|Vue3|mochaPlugin|MochaPlugin|cli-plugin-webpack-4'
 
 if (args['e2e-only']) {
   regex = e2ePathPattern

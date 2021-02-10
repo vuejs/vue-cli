@@ -32,16 +32,16 @@ test('modern mode', async () => {
   const index = await project.read('dist/index.html')
 
   // should use <script type="module" crossorigin="use-credentials"> for modern bundle
-  expect(index).toMatch(/<script src="\/js\/chunk-vendors\.\w{8}\.js" type="module">/)
-  expect(index).toMatch(/<script src="\/js\/app\.\w{8}\.js" type="module">/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors\.\w{8}\.js" type="module">/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/app\.\w{8}\.js" type="module">/)
 
   // should use <link rel="modulepreload" crossorigin="use-credentials"> for modern bundle
   // expect(index).toMatch(/<link [^>]*js\/chunk-vendors\.\w{8}\.js" rel="modulepreload" as="script">/)
   // expect(index).toMatch(/<link [^>]*js\/app\.\w{8}\.js" rel="modulepreload" as="script">/)
 
   // should use <script nomodule> for legacy bundle
-  expect(index).toMatch(/<script src="\/js\/chunk-vendors-legacy\.\w{8}\.js" nomodule>/)
-  expect(index).toMatch(/<script src="\/js\/app-legacy\.\w{8}\.js" nomodule>/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors-legacy\.\w{8}\.js" nomodule>/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/app-legacy\.\w{8}\.js" nomodule>/)
 
   // should inject Safari 10 nomodule fix
   const { safariFix } = require('../lib/webpack/ModernModePlugin')
@@ -53,8 +53,8 @@ test('modern mode', async () => {
   expect(stdout2).toMatch('Build complete.')
   const index2 = await project.read('dist/index.html')
   // should use <script type="module" crossorigin="use-credentials"> for modern bundle
-  expect(index2).toMatch(/<script src="\/js\/chunk-vendors\.\w{8}\.js" crossorigin="use-credentials" type="module">/)
-  expect(index2).toMatch(/<script src="\/js\/app\.\w{8}\.js" crossorigin="use-credentials" type="module">/)
+  expect(index2).toMatch(/<script defer="defer" src="\/js\/chunk-vendors\.\w{8}\.js" crossorigin="use-credentials" type="module">/)
+  expect(index2).toMatch(/<script defer="defer" src="\/js\/app\.\w{8}\.js" crossorigin="use-credentials" type="module">/)
   // should use <link rel="modulepreload" crossorigin="use-credentials"> for modern bundle
   // expect(index2).toMatch(/<link [^>]*js\/chunk-vendors\.\w{8}\.js" rel="modulepreload" as="script" crossorigin="use-credentials">/)
   // expect(index2).toMatch(/<link [^>]*js\/app\.\w{8}\.js" rel="modulepreload" as="script" crossorigin="use-credentials">/)

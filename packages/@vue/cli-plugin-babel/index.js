@@ -39,6 +39,11 @@ module.exports = (api, options) => {
         .test(/\.m?jsx?$/)
         .exclude
           .add(filepath => {
+            // With data URI support in webpack 5, filepath could be undefined
+            if (!filepath) {
+              return true
+            }
+
             // always transpile js in vue files
             if (/\.vue\.jsx?$/.test(filepath)) {
               return false
