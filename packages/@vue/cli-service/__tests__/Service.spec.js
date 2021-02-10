@@ -155,6 +155,19 @@ test('load project options from vue.config.js as a function', () => {
   expect(service.projectOptions.lintOnSave).toBe(false)
 })
 
+test('load project options from vue.config.js as an async function', () => {
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '')
+  jest.mock(path.resolve('/', 'vue.config.js'), () => async function () { return { lintOnSave: false } }, { virtual: true })
+  mockPkg({
+    vue: {
+      lintOnSave: 'default'
+    }
+  })
+  const service = createMockService()
+  // vue.config.js has higher priority
+  expect(service.projectOptions.lintOnSave).toBe(false)
+})
+
 test('api: assertVersion', () => {
   const plugin = {
     id: 'test-assertVersion',
