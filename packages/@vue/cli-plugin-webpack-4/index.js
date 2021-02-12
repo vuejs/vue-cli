@@ -91,11 +91,11 @@ module.exports = (api, options) => {
     if (process.env.NODE_ENV === 'production') {
       const TerserPluginV4 = require('terser-webpack-plugin')
       config.optimization.minimizer('terser').init(
-        (Plugin, args) =>
+        (Plugin, [terserPluginOptions]) =>
           new TerserPluginV4({
             sourceMap: options.productionSourceMap,
             cache: true,
-            ...args
+            ...terserPluginOptions
           })
       )
 
