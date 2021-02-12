@@ -35,8 +35,6 @@ module.exports = options => ({
       safari10: true
     }
   },
-  sourceMap: options.productionSourceMap,
-  cache: true,
   parallel: options.parallel,
   extractComments: false
 })
