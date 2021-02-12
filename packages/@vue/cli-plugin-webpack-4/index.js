@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const moduleAlias = require('module-alias')
 
@@ -43,11 +44,15 @@ module.exports = (api, options) => {
         .use({ ...require('pnp-webpack-plugin').topLevelLoader })
         .end()
 
-    if (process.env.VUE_CLI_BUILD_TARGET === 'app') {
-      const CopyWebpackPluginV6 = require('copy-webpack-plugin')
-      config
-        .plugin('copy')
-        .init((Plugin, args) => new CopyWebpackPluginV6(...args))
+    if (!process.env.VUE_CLI_BUILD_TARGET || process.env.VUE_CLI_BUILD_TARGET === 'app') {
+      const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
+      const publicDir = api.resolve('public')
+      if (!isLegacyBundle && fs.existsSync(publicDir)) {
+        const CopyWebpackPluginV6 = require('copy-webpack-plugin')
+        config
+          .plugin('copy')
+          .init((Plugin, args) => new CopyWebpackPluginV6(...args))
+      }
 
       if (process.env.NODE_ENV === 'production') {
         // In webpack 5, optimization.chunkIds is set to `deterministic` by default in production
