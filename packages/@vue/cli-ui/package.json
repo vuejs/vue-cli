@@ -20,7 +20,9 @@
     "test:e2e:dev": "cross-env VUE_APP_CLI_UI_URL=ws://localhost:4040/graphql vue-cli-service test:e2e --mode development",
     "test:e2e:start": "vue-cli-service test:e2e --mode production --headless --url=http://localhost:4040",
     "test:clear": "rimraf ../../test/cli-ui-test && rimraf ./live-test",
-    "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui-addon-widgets && yarn run build && cd ../cli-ui && yarn run test:start"
+    "test": "yarn run build && cd ../cli-ui-addon-webpack && yarn run build && cd ../cli-ui-addon-widgets && yarn run build && cd ../cli-ui && yarn run test:start",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "files": [
     "apollo-server",
@@ -62,7 +64,8 @@
     "shortid": "^2.2.15",
     "typescript": "~3.9.3",
     "vue-cli-plugin-apollo": "^0.21.3",
-    "watch": "^1.0.2"
+    "watch": "^1.0.2",
+    "snyk": "^1.437.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.8",
@@ -96,7 +99,7 @@
     "vue-apollo": "^3.0.3",
     "vue-color": "^2.7.1",
     "vue-i18n": "^8.21.0",
-    "vue-instantsearch": "^1.5.1",
+    "vue-instantsearch": "^3.0.0",
     "vue-meta": "^1.6.0",
     "vue-observe-visibility": "^0.4.6",
     "vue-router": "^3.4.3",
@@ -136,5 +139,6 @@
     "ui": [
       "ui-dev.js"
     ]
-  }
+  },
+  "snyk": true
 }
