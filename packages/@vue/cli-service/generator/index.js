@@ -1,6 +1,7 @@
 module.exports = (api, options) => {
   api.render('./template', {
-    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
+    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
+    useBabel: api.hasPlugin('babel')
   })
 
   if (options.vueVersion === '3') {
@@ -73,5 +74,10 @@ module.exports = (api, options) => {
   // additional tooling configurations
   if (options.configs) {
     api.extendPackage(options.configs)
+  }
+
+  // Delete jsconfig.json when typescript
+  if (api.hasPlugin('typescript')) {
+    api.render((files) => delete files['jsconfig.json'])
   }
 }
