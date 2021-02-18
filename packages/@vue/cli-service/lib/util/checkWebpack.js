@@ -16,14 +16,7 @@ module.exports = function checkWebpack (cwd) {
     require('webpack/package.json').version[0] !== '4'
   ) {
     const webpack4Path = path.dirname(require.resolve('webpack-4/package.json'))
-
-    moduleAlias.addAlias('webpack', (fromPath, request) => {
-      if (fromPath.includes('webpack-dev-server')) {
-        return 'webpack'
-      }
-
-      return webpack4Path
-    })
+    moduleAlias.addAlias('webpack', webpack4Path)
 
     return
   }
@@ -55,13 +48,7 @@ module.exports = function checkWebpack (cwd) {
       warn(`Using "module-alias" to load custom webpack version.`)
 
       const webpack4Path = path.dirname(resolveModule('webpack/package.json', cwd))
-      moduleAlias.addAlias('webpack', (fromPath, request) => {
-        if (fromPath.includes('webpack-dev-server')) {
-          return 'webpack'
-        }
-
-        return webpack4Path
-      })
+      moduleAlias.addAlias('webpack', webpack4Path)
     }
   }
 }
