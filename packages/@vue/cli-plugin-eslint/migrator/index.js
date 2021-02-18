@@ -14,7 +14,7 @@ module.exports = async (api) => {
     api.extendPackage({
       devDependencies: {
         eslint: localESLintRange,
-        '@babel/eslint-parser': '^7.12.1',
+        '@babel/eslint-parser': '^7.12.16',
         'eslint-plugin-vue': '^4.5.0'
       }
     })
