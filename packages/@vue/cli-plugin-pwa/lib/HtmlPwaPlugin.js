@@ -185,7 +185,7 @@ module.exports = class HtmlPwaPlugin {
     if (!isHrefAbsoluteUrl(this.options.manifestPath)) {
       compiler.hooks.compilation.tap(ID, compilation => {
         compilation.hooks.processAssets.tap(
-          {name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS'},
+          { name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS' },
           assets => {
             const {
               name,
@@ -203,11 +203,11 @@ module.exports = class HtmlPwaPlugin {
             )
             assets[manifestPath] = {
               source: () => outputManifest,
-              size: () => outputManifest.length,
-            };
-          },
-        );
-      });
+              size: () => outputManifest.length
+            }
+          }
+        )
+      })
     }
   }
 }
