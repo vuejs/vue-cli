@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
+const arrify = require('arrify')
 const { merge } = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
@@ -39,7 +40,19 @@ module.exports = class Service {
     // this is provided by plugins as module.exports.defaultModes
     // so we can get the information without actually applying the plugin.
     this.modes = this.plugins.reduce((modes, { apply: { defaultModes } }) => {
-      return Object.assign(modes, defaultModes)
+      Object.keys(defaultModes || {}).forEach((cmd) => {
+        const [mode, extendEnv] = arrify(defaultModes[cmd])
+        Object.assign(modes, {
+          [cmd]: mode
+        })
+        // allow plugin to set addtional process.env
+        if (extendEnv) {
+          Object.keys(extendEnv).forEach((envKey) => {
+            process.env[envKey] = extendEnv[envKey]
+          })
+        }
+      })
+      return modes
     }, {})
   }
 

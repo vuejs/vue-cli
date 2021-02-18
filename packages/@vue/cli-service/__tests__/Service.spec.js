@@ -247,6 +247,26 @@ test('api: defaultModes', () => {
   }
 
   createMockService([plugin2], false /* init */).run('test')
+
+  delete process.env.NODE_ENV
+  delete process.env.BABEL_ENV
+
+  const plugin3 = {
+    id: 'test-defaultModes',
+    apply: api => {
+      expect(process.env.NODE_ENV).toBe('test')
+      expect(process.env.BABEL_ENV).toBe('test')
+      expect(process.env.TEST_ENV).toBe('test-env')
+      api.registerCommand('bar', () => {})
+    }
+  }
+  plugin3.apply.defaultModes = {
+    bar: ['test', {
+      TEST_ENV: 'test-env'
+    }]
+  }
+
+  createMockService([plugin3], false /* init */).run('bar')
 })
 
 test('api: chainWebpack', () => {
