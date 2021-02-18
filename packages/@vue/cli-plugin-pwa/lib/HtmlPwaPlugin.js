@@ -183,27 +183,31 @@ module.exports = class HtmlPwaPlugin {
     })
 
     if (!isHrefAbsoluteUrl(this.options.manifestPath)) {
-      compiler.hooks.emit.tapAsync(ID, (data, cb) => {
-        const {
-          name,
-          themeColor,
-          manifestPath,
-          manifestOptions
-        } = this.options
-        const publicOptions = {
-          name,
-          short_name: name,
-          theme_color: themeColor
-        }
-        const outputManifest = JSON.stringify(
-          Object.assign(publicOptions, defaultManifest, manifestOptions)
-        )
-        data.assets[manifestPath] = {
-          source: () => outputManifest,
-          size: () => outputManifest.length
-        }
-        cb(null, data)
-      })
+      compiler.hooks.compilation.tap(ID, compilation => {
+        compilation.hooks.processAssets.tap(
+          {name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS'},
+          assets => {
+            const {
+              name,
+              themeColor,
+              manifestPath,
+              manifestOptions
+            } = this.options
+            const publicOptions = {
+              name,
+              short_name: name,
+              theme_color: themeColor
+            }
+            const outputManifest = JSON.stringify(
+              Object.assign(publicOptions, defaultManifest, manifestOptions)
+            )
+            assets[manifestPath] = {
+              source: () => outputManifest,
+              size: () => outputManifest.length,
+            };
+          },
+        );
+      });
     }
   }
 }
