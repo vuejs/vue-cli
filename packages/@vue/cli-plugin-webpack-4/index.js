@@ -12,6 +12,11 @@ moduleAlias.addAlias('html-webpack-plugin', htmlWebpackPlugin4Path)
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   api.chainWebpack(config => {
+    // webpack-4 alias is set for the webpack-dev-server
+    // should also set for the injected client hmr code so as to avoid mismatch
+    const webpack4Path = path.dirname(require.resolve('webpack/package.json'))
+    config.resolve.alias.set('webpack', webpack4Path)
+
     // Node.js polyfills
     // They are not polyfilled by default in webpack 5
     // <https://github.com/webpack/webpack/pull/8460>
