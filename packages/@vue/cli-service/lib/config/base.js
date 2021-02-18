@@ -44,9 +44,6 @@ module.exports = (api, options) => {
         .set('@', api.resolve('src'))
 
     webpackConfig.resolveLoader
-      .plugin('pnp-loaders')
-        .use({ ...require('pnp-webpack-plugin').topLevelLoader })
-        .end()
       .modules
         .add('node_modules')
         .add(api.resolve('node_modules'))
@@ -173,35 +170,6 @@ module.exports = (api, options) => {
               .loader(maybeResolve('pug-plain-loader'))
               .end()
             .end()
-
-    if (webpackMajor === 4) {
-      // Node.js polyfills
-      // They are not polyfilled by default in webpack 5
-      // <https://github.com/webpack/webpack/pull/8460>
-      // In webpack 4, we used to disabled many of the core module polyfills too
-      webpackConfig.node
-        .merge({
-          // prevent webpack from injecting useless setImmediate polyfill because Vue
-          // source contains it (although only uses it if it's native).
-          setImmediate: false,
-          // process is injected via DefinePlugin, although some 3rd party
-          // libraries may require a mock to work properly (#934)
-          process: 'mock',
-          // prevent webpack from injecting mocks to Node native modules
-          // that does not make sense for the client
-          dgram: 'empty',
-          fs: 'empty',
-          net: 'empty',
-          tls: 'empty',
-          child_process: 'empty'
-        })
-
-      // Yarn PnP / Yarn 2 support
-      webpackConfig.resolve
-        .plugin('pnp')
-          .use({ ...require('pnp-webpack-plugin') })
-          .end()
-    }
 
     const resolveClientEnv = require('../util/resolveClientEnv')
     webpackConfig

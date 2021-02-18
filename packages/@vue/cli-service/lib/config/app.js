@@ -1,7 +1,6 @@
 // config that are specific to --target app
 const fs = require('fs')
 const path = require('path')
-const { semver } = require('@vue/cli-shared-utils')
 
 // ensure the filename passed to html-webpack-plugin is a relative path
 // because it cannot correctly handle absolute paths
@@ -14,9 +13,6 @@ function ensureRelative (outputDir, _path) {
 }
 
 module.exports = (api, options) => {
-  const webpack = require('webpack')
-  const webpackMajor = semver.major(webpack.version)
-
   api.chainWebpack(webpackConfig => {
     // only apply when there's no alternative target
     if (process.env.VUE_CLI_BUILD_TARGET && process.env.VUE_CLI_BUILD_TARGET !== 'app') {
@@ -39,43 +35,23 @@ module.exports = (api, options) => {
 
     // code splitting
     if (process.env.NODE_ENV !== 'test') {
-      if (webpackMajor === 4) {
-        webpackConfig.optimization.splitChunks({
-          cacheGroups: {
-            vendors: {
-              name: `chunk-vendors`,
-              test: /[\\/]node_modules[\\/]/,
-              priority: -10,
-              chunks: 'initial'
-            },
-            common: {
-              name: `chunk-common`,
-              minChunks: 2,
-              priority: -20,
-              chunks: 'initial',
-              reuseExistingChunk: true
-            }
+      webpackConfig.optimization.splitChunks({
+        cacheGroups: {
+          defaultVendors: {
+            name: `chunk-vendors`,
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            chunks: 'initial'
+          },
+          common: {
+            name: `chunk-common`,
+            minChunks: 2,
+            priority: -20,
+            chunks: 'initial',
+            reuseExistingChunk: true
           }
-        })
-      } else {
-        webpackConfig.optimization.splitChunks({
-          cacheGroups: {
-            defaultVendors: {
-              name: `chunk-vendors`,
-              test: /[\\/]node_modules[\\/]/,
-              priority: -10,
-              chunks: 'initial'
-            },
-            common: {
-              name: `chunk-common`,
-              minChunks: 2,
-              priority: -20,
-              chunks: 'initial',
-              reuseExistingChunk: true
-            }
-          }
-        })
-      }
+        }
+      })
     }
 
     // HTML plugin
@@ -114,24 +90,6 @@ module.exports = (api, options) => {
           path.resolve(outputDir, 'index.html'),
           path.resolve(outputDir, options.indexPath)
         ])
-    }
-
-    if (webpackMajor === 4 && isProd) {
-      // In webpack 5, optimization.chunkIds is set to `deterministic` by default in production
-      // In webpack 4, we use the following trick to keep chunk ids stable so async chunks have consistent hash (#1916)
-      webpackConfig
-        .plugin('named-chunks')
-          .use(webpack.NamedChunksPlugin, [chunk => {
-            if (chunk.name) {
-              return chunk.name
-            }
-
-            const hash = require('hash-sum')
-            const joinedHash = hash(
-              Array.from(chunk.modulesIterable, m => m.id).join('_')
-            )
-            return `chunk-` + joinedHash
-          }])
     }
 
     // resolve HTML file(s)
