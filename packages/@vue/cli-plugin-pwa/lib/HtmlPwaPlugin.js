@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { semver } = require('@vue/cli-shared-utils')
 
 const ID = 'vue-cli:pwa-html-plugin'
 
@@ -183,31 +184,43 @@ module.exports = class HtmlPwaPlugin {
     })
 
     if (!isHrefAbsoluteUrl(this.options.manifestPath)) {
-      compiler.hooks.compilation.tap(ID, compilation => {
-        compilation.hooks.processAssets.tap(
-          { name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS' },
-          assets => {
-            const {
-              name,
-              themeColor,
-              manifestPath,
-              manifestOptions
-            } = this.options
-            const publicOptions = {
-              name,
-              short_name: name,
-              theme_color: themeColor
-            }
-            const outputManifest = JSON.stringify(
-              Object.assign(publicOptions, defaultManifest, manifestOptions)
-            )
-            assets[manifestPath] = {
-              source: () => outputManifest,
-              size: () => outputManifest.length
-            }
-          }
-        )
-      })
+      const {
+        name,
+        themeColor,
+        manifestPath,
+        manifestOptions
+      } = this.options
+      const publicOptions = {
+        name,
+        short_name: name,
+        theme_color: themeColor
+      }
+      const outputManifest = JSON.stringify(
+        Object.assign(publicOptions, defaultManifest, manifestOptions)
+      )
+      const manifestAsset = {
+        source: () => outputManifest,
+        size: () => outputManifest.length
+      }
+
+      let webpackMajor = 4
+      if (compiler.webpack) {
+        webpackMajor = semver.major(compiler.webpack.version)
+      }
+
+      if (webpackMajor === 4) {
+        compiler.hooks.emit.tapAsync(ID, (data, cb) => {
+          data.assets[manifestPath] = manifestAsset
+          cb(null, data)
+        })
+      } else {
+        compiler.hooks.compilation.tap(ID, compilation => {
+          compilation.hooks.processAssets.tap(
+            { name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS' },
+            assets => { assets[manifestPath] = manifestAsset }
+          )
+        })
+      }
     }
   }
 }
