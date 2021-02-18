@@ -1,4 +1,42 @@
 
+## 5.0.0-alpha.4 (2021-02-18)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6279](https://github.com/vuejs/vue-cli/pull/6279) feat!: update copy & terser plugin, move more legacy code to webpack-4 plugin ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6269](https://github.com/vuejs/vue-cli/pull/6269) feat: use html-webpack-plugin v5 by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`
+  * [#6235](https://github.com/vuejs/vue-cli/pull/6235) feat(typescript): add `useDefineForClassFields` option in tsconfig template ([@ktsn](https://github.com/ktsn))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6279](https://github.com/vuejs/vue-cli/pull/6279) feat!: update copy & terser plugin, move more legacy code to webpack-4 plugin ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6269](https://github.com/vuejs/vue-cli/pull/6269) feat: use html-webpack-plugin v5 by default ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-pwa`
+  * [#6277](https://github.com/vuejs/vue-cli/pull/6277) fix(cli-plugin-pwa): webpack5 warning for emitting manifest.json ([@awill1988](https://github.com/awill1988))
+* `@vue/cli-service`
+  * [#6230](https://github.com/vuejs/vue-cli/pull/6230) fix: mini-css-extract-plugin publicPath option can be an absolute path ([@Veath](https://github.com/Veath))
+  * [#6221](https://github.com/vuejs/vue-cli/pull/6221) fix(cli-service): avoiding recreating dist directory ([@fangbinwei](https://github.com/fangbinwei))
+
+#### :house: Internal
+* `@vue/cli`
+  * [#6242](https://github.com/vuejs/vue-cli/pull/6242) chore: upgrade commander to v7 ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 7
+- Adam Williams ([@awill1988](https://github.com/awill1988))
+- Andy Chen ([@tjcchen](https://github.com/tjcchen))
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Katashin ([@ktsn](https://github.com/ktsn))
+- Robin Hellemans ([@Robin-Hoodie](https://github.com/Robin-Hoodie))
+- [@Veath](https://github.com/Veath)
+
+
+
 ## 5.0.0-alpha.3 (2021-01-22)
 
 #### :rocket: New Features
