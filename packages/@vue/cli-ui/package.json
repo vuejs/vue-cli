@@ -71,7 +71,7 @@
     "@vue/cli-plugin-eslint": "^5.0.0-alpha.4",
     "@vue/cli-service": "^5.0.0-alpha.4",
     "@vue/eslint-config-standard": "^6.0.0",
-    "@vue/ui": "^0.11.6",
+    "@vue/ui": "^0.12.2",
     "ansi_up": "^5.0.0",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
