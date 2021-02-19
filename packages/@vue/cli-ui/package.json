@@ -114,7 +114,7 @@
   "license": "MIT",
   "author": "Guillaume Chau",
   "engines": {
-    "node": "^10.12.0 || ^12.0.0 || >= 14.0.0"
+    "node": "^12.0.0 || >= 14.0.0"
   },
   "publishConfig": {
     "access": "public"
