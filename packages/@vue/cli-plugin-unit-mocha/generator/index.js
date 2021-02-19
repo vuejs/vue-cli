@@ -18,7 +18,7 @@ module.exports = (api, options, rootOptions, invoking) => {
   api.extendPackage({
     devDependencies: {
       '@vue/cli-plugin-webpack-4': require('../package.json').dependencies['@vue/cli-plugin-webpack-4'],
-      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.0',
+      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.3',
       'chai': '^4.2.0'
     },
     scripts: {
@@ -54,10 +54,11 @@ const applyESLint = module.exports.applyESLint = api => {
 }
 
 const applyTS = module.exports.applyTS = (api, invoking) => {
+  const devDeps = require('../package.json').devDependencies
   api.extendPackage({
     devDependencies: {
-      '@types/mocha': '^8.0.4',
-      '@types/chai': '^4.2.11'
+      '@types/mocha': devDeps['@types/mocha'],
+      '@types/chai': devDeps['@types/chai']
     }
   })
   // inject mocha/chai types to tsconfig.json

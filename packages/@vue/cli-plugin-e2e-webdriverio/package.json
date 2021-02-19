@@ -25,7 +25,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/mocha": "^8.0.4",
+    "@types/mocha": "^8.2.1",
     "@vue/cli-shared-utils": "^5.0.0-alpha.4",
     "@wdio/cli": "^6.10.5",
     "@wdio/local-runner": "^6.10.5",
@@ -40,7 +40,7 @@
     "chromedriver": "*",
     "geckodriver": "*",
     "wdio-chromedriver-service": "^6.0.4",
-    "wdio-geckodriver-service": "^1.1.0"
+    "wdio-geckodriver-service": "^1.1.2"
   },
   "peerDependenciesMeta": {
     "chromedriver": {
@@ -57,10 +57,10 @@
     }
   },
   "devDependencies": {
-    "chromedriver": "^87.0.2",
-    "geckodriver": "^1.20.0",
+    "chromedriver": "^88.0.0",
+    "geckodriver": "^1.22.1",
     "ts-node": "^9.1.1",
     "wdio-chromedriver-service": "^6.0.4",
-    "wdio-geckodriver-service": "^1.1.0"
+    "wdio-geckodriver-service": "^1.1.2"
   }
 }

@@ -10,7 +10,7 @@ module.exports = api => {
     api.extendPackage(
       {
         dependencies: {
-          'core-js': '^3.8.1'
+          'core-js': '^3.8.3'
         }
       },
       { warnIncompatibleVersions: false }

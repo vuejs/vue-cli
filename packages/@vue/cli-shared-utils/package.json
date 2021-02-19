@@ -22,13 +22,13 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "execa": "^1.0.0",
-    "joi": "^17.2.1",
+    "joi": "^17.4.0",
     "launch-editor": "^2.2.1",
     "lru-cache": "^6.0.0",
     "node-fetch": "^2.6.1",
     "node-ipc": "^9.1.1",
-    "open": "^7.2.1",
-    "ora": "^5.1.0",
+    "open": "^7.4.2",
+    "ora": "^5.3.0",
     "read-pkg": "^5.1.1",
     "semver": "^7.3.4",
     "strip-ansi": "^6.0.0"

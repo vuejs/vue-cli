@@ -38,7 +38,7 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^10.5.3'
+      'lint-staged': '^10.5.4'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'

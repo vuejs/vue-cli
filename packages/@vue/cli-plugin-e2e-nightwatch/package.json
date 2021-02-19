@@ -28,8 +28,8 @@
     "nightwatch": "^1.4.1"
   },
   "devDependencies": {
-    "chromedriver": "^87.0.2",
-    "geckodriver": "^1.20.0",
+    "chromedriver": "^88.0.0",
+    "geckodriver": "^1.22.1",
     "selenium-server": "^3.141.59"
   },
   "peerDependencies": {
