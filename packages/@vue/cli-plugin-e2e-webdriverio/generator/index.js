@@ -15,7 +15,7 @@ const applyTS = module.exports.applyTS = (api, invoking) => {
         const parsed = JSON.parse(tsconfig)
         const types = parsed.compilerOptions.types
         if (types) {
-          for (const t of ['mocha', '@wdio/mocha-framework', '@wdio/sync']) {
+          for (const t of ['mocha', '@wdio/mocha-framework', 'webdriverio/sync']) {
             if (!types.includes(t)) {
               types.push(t)
             }

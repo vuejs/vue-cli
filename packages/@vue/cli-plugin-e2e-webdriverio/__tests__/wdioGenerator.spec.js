@@ -19,5 +19,5 @@ test('should add types to existing tsconfig.json', async () => {
   const tsconfig = await read('tsconfig.json')
   expect(tsconfig).toMatch(/\r?\n$/)
   expect(JSON.parse(tsconfig).compilerOptions.types)
-    .toEqual(['some-type', 'mocha', '@wdio/mocha-framework', '@wdio/sync'])
+    .toEqual(['some-type', 'mocha', '@wdio/mocha-framework', 'webdriverio/sync'])
 })
