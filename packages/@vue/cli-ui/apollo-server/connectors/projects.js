@@ -137,7 +137,7 @@ async function initCreator (context) {
         if (key === 'default') {
           name = 'org.vue.views.project-create.tabs.presets.default-preset'
         } else if (key === '__default_vue_3__') {
-          name = 'org.vue.views.project-create.tabs.presets.default-preset-vue-3-preview'
+          name = 'org.vue.views.project-create.tabs.presets.default-preset-vue-3'
         }
         const info = {
           id: key,
