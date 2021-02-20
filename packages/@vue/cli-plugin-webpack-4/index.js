@@ -10,7 +10,7 @@ const htmlWebpackPlugin4Path = path.dirname(require.resolve('html-webpack-plugin
 moduleAlias.addAlias('html-webpack-plugin', htmlWebpackPlugin4Path)
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
-module.exports = (api, options) => {
+module.exports = (api, rootOptions) => {
   api.chainWebpack(config => {
     // webpack-4 alias is set for the webpack-dev-server
     // should also set for the injected client hmr code so as to avoid mismatch
@@ -48,6 +48,31 @@ module.exports = (api, options) => {
         .plugin('pnp-loaders')
         .use({ ...require('pnp-webpack-plugin').topLevelLoader })
         .end()
+
+    // Use postcss-loader v7
+    const shadowMode = !!process.env.VUE_CLI_CSS_SHADOW_MODE
+    const isProd = process.env.NODE_ENV === 'production'
+    const { extract = isProd } = rootOptions.css || {}
+    const shouldExtract = extract !== false && !shadowMode
+    const needInlineMinification = isProd && !shouldExtract
+
+    const postcssLoaderPath = require.resolve('postcss-loader')
+
+    const langs = ['css', 'postcss', 'scss', 'sass', 'less', 'stylus']
+    const matches = ['vue-modules', 'vue', 'normal-modules', 'normal']
+
+    langs.forEach(lang =>
+      matches.forEach(match => {
+        const rule = config.module
+          .rule(lang)
+          .oneOf(match)
+
+        if (needInlineMinification) {
+          rule.use('cssnano').loader(postcssLoaderPath)
+        }
+        rule.use('postcss-loader').loader(postcssLoaderPath)
+      })
+    )
 
     if (!process.env.VUE_CLI_BUILD_TARGET || process.env.VUE_CLI_BUILD_TARGET === 'app') {
       const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -103,7 +128,7 @@ module.exports = (api, options) => {
       config.optimization.minimizer('terser').init(
         (Plugin, [terserPluginOptions]) =>
           new TerserPluginV4({
-            sourceMap: options.productionSourceMap,
+            sourceMap: rootOptions.productionSourceMap,
             cache: true,
             ...terserPluginOptions
           })
