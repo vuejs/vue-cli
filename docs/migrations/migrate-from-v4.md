@@ -111,6 +111,10 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 * Cypress is required as a peer dependency.
 * Cypress is updated from v3 to v6. See [Cypress Migration Guide](https://docs.cypress.io/guides/references/migration-guide.html) for detailed instructions of the migration process.
 
+### E2E-WebDriverIO Plugin
+
+* WebDriverIO is updated from v6 to v7. Not many user-facing breaking changes. See the [blog post on release](https://webdriver.io/blog/2021/02/09/webdriverio-v7-released) for more details.
+
 ### Unit-Jest Plugin
 
 * The underlying `jest`-related packages are upgraded from v24 to v26. For most users the transition would be seamless. See their corresponding changelogs for more detail:
