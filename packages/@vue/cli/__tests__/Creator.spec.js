@@ -10,7 +10,7 @@ test('default', async () => {
       message: 'pick a preset',
       choices: [
         'Default',
-        'Default (Vue 3 Preview)',
+        'Default (Vue 3)',
         'Manually select'
       ],
       choose: 0
@@ -107,7 +107,7 @@ test('manual + PromptModuleAPI', async () => {
       choices: [
         'test',
         'Default',
-        'Default (Vue 3 Preview)',
+        'Default (Vue 3)',
         'Manually'
       ],
       choose: 0

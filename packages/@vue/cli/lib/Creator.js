@@ -412,7 +412,7 @@ module.exports = class Creator extends EventEmitter {
       if (name === 'default') {
         displayName = 'Default'
       } else if (name === '__default_vue_3__') {
-        displayName = 'Default (Vue 3 Preview)'
+        displayName = 'Default (Vue 3)'
       }
 
       return {
