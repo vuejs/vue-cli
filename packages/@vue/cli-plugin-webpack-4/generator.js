@@ -1,8 +1,10 @@
+const { semver } = require('@vue/cli-shared-utils')
+
 /** @type {import('@vue/cli').GeneratorPlugin} */
 module.exports = (api) => {
   api.extendPackage({
     devDependencies: {
-      'webpack': '^4.0.0'
+      webpack: '^4.0.0'
     },
     // Force resolutions is more reliable than module-alias
     // Yarn and PNPM 5.10+ support this feature
@@ -13,5 +15,36 @@ module.exports = (api) => {
     }
   })
 
-  // TODO: if uses sass, replace sass-loader@11 with sass-loader@10
+  api.extendPackage(
+    (pkg) => {
+      const oldDevDeps = pkg.devDependencies
+      const newDevDeps = {}
+      const unsupportedRanges = {
+        'less-loader': '>= 8.0.0',
+        'sass-loader': '>= 11.0.0',
+        'stylus-loader': '>= 5.0.0'
+      }
+      const maxSupportedRanges = {
+        'less-loader': '^7.3.0',
+        'sass-loader': '^10.1.1',
+        'stylus-loader': '^4.3.3'
+      }
+
+      for (const loader of ['less-loader', 'sass-loader', 'stylus-loader']) {
+        if (
+          oldDevDeps[loader] &&
+          semver.intersects(oldDevDeps[loader], unsupportedRanges[loader])
+        ) {
+          newDevDeps[loader] = maxSupportedRanges[loader]
+        }
+      }
+
+      const toMerge = { devDependencies: newDevDeps }
+
+      return toMerge
+    },
+    {
+      warnIncompatibleVersions: false
+    }
+  )
 }
