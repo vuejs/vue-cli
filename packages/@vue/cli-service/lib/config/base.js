@@ -12,12 +12,28 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
 
-    // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
     if (webpackMajor !== 4) {
+      // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
       webpackConfig.module
         .rule('esm')
           .test(/\.m?jsx?$/)
           .resolve.set('fullySpecified', false)
+
+      // Filesystem cache only available for webpack 5
+      webpackConfig.cache({
+        type: 'filesystem',
+        // Set different cache name for different modes and targets (and commands).
+        // Since we use environment variables for all kinds of purposes,
+        // the most straightforward way is to just find and combine those
+        // Vue CLI-specific environment variables.
+        name: Object.entries(process.env)
+          .filter(([key]) => key.startsWith('VUE_CLI'))
+          .map(([key, value]) => `${key}-${value}`)
+          .join(';'),
+        buildDependencies: {
+          config: [require.resolve('../../webpack.config')]
+        }
+      })
     }
 
     webpackConfig

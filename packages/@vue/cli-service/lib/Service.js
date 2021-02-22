@@ -349,11 +349,9 @@ module.exports = class Service {
         }
 
         if (!fileConfig || typeof fileConfig !== 'object') {
-          // TODO: show throw an Error here, to be fixed in v5
-          error(
+          throw new Error(
             `Error loading ${chalk.bold(fileConfigPath)}: should export an object or a function that returns object.`
           )
-          fileConfig = null
         }
       } catch (e) {
         error(`Error loading ${chalk.bold(fileConfigPath)}:`)
@@ -384,12 +382,20 @@ module.exports = class Service {
       }
       resolved = fileConfig
       resolvedFrom = 'vue.config.js'
+
+      // add the path to buildDependencies
+      this.plugins.push({
+        id: 'set-build-dependencies',
+        apply: (api) => api.addBuildDependencies([fileConfigPath])
+      })
     } else if (pkgConfig) {
       resolved = pkgConfig
       resolvedFrom = '"vue" field in package.json'
     } else {
       resolved = this.inlineOptions || {}
       resolvedFrom = 'inline options'
+
+      // FIXME: may need to add inline options hash to cache name
     }
 
     if (resolved.css && typeof resolved.css.modules !== 'undefined') {

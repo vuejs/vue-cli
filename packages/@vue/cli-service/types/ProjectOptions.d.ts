@@ -132,6 +132,12 @@ interface ProjectOptions {
   css?: CSSOptions;
 
   /**
+   * Tell webpack to invalidate the build cache when changes are detected in these additional buildDependencies.
+   * Can be an array of config file paths or an object that is accepted by the webpack `cache.buildDependencies` option.
+   */
+  buildDependencies?: Array<string> | Object,
+
+  /**
    * A function that will receive an instance of `ChainableConfig` powered by [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain)
    */
   chainWebpack?: (config: ChainableWebpackConfig) => void;
