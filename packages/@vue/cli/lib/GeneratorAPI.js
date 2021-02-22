@@ -219,12 +219,15 @@ class GeneratorAPI {
    *    that dependency fields are always deep merged regardless of this option.
    * @param {boolean} [options.warnIncompatibleVersions=true] Output warning
    *    if two dependency version ranges don't intersect.
+   * @param {boolean} [options.forceOverwrite=false] force using the dependency
+   * version provided in the first argument, instead of trying to get the newer ones
    */
   extendPackage (fields, options = {}) {
     const extendOptions = {
       prune: false,
       merge: true,
-      warnIncompatibleVersions: true
+      warnIncompatibleVersions: true,
+      forceOverwrite: false
     }
 
     // this condition statement is added for compatibility reason, because
