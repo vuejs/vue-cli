@@ -65,7 +65,7 @@
     "module-alias": "^2.2.2",
     "portfinder": "^1.0.26",
     "postcss": "^8.2.6",
-    "postcss-loader": "^4.1.0",
+    "postcss-loader": "^5.0.0",
     "ssri": "^8.0.1",
     "terser-webpack-plugin": "^5.1.1",
     "thread-loader": "^3.0.0",
