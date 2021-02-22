@@ -129,8 +129,7 @@ npx vue-cli-service help [command]
   },
    "lint-staged": {
     "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add"
+      "vue-cli-service lint"
     ]
   }
 }
