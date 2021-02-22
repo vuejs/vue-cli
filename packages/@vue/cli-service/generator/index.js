@@ -43,7 +43,7 @@ module.exports = (api, options) => {
       },
       'dart-sass': {
         sass: '^1.32.7',
-        'sass-loader': '^10.1.0'
+        'sass-loader': '^11.0.1'
       },
       less: {
         'less': '^4.0.0',
