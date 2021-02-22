@@ -163,6 +163,7 @@ test('api: extendPackage allow git, github, http, file version ranges', async ()
               bad: 'mochajs/mocha#4727d357ea',
               bac: 'http://asdf.com/asdf.tar.gz',
               bae: 'file:../dyl',
+              bcd: 'npm:vue@^3.0.0',
               'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
             }
           })
@@ -182,6 +183,7 @@ test('api: extendPackage allow git, github, http, file version ranges', async ()
       bad: 'mochajs/mocha#4727d357ea',
       bac: 'http://asdf.com/asdf.tar.gz',
       bae: 'file:../dyl',
+      bcd: 'npm:vue@^3.0.0',
       'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
     }
   })

@@ -15,7 +15,7 @@ const isValidRange = range => {
   const isValidGitHub = range.match(/^[^/]+\/[^/]+/) != null
   const isValidURI =
     range.match(
-      /^(?:file|git|git\+ssh|git\+http|git\+https|git\+file|https?):/
+      /^(?:file|git|npm|git\+ssh|git\+http|git\+https|git\+file|https?):/
     ) != null
 
   return isValidSemver || isValidGitHub || isValidURI
