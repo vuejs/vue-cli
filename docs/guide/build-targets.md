@@ -86,6 +86,18 @@ vue-cli-service build --target wc --inline-vue
 ```
 :::
 
+
+::: tip Note on Shadow Root
+By default, the `shadowRoot` mode of a web component is set to `open`. This means that the shadow root's internal features are accessible with JavaScript.
+
+To close the Shadow Root, provide `--shadowMode closed` to the `build` command.
+
+```
+vue-cli-service build --target wc --shadowMode closed
+```
+
+:::
+
 You can build a single entry as a web component using
 
 ```
