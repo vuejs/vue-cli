@@ -134,8 +134,8 @@ test('invoke with existing files (yaml)', async () => {
   await project.write(`.eslintrc.yml`, `
 root: true
 extends:
-  - 'plugin:vue/essential'
-  - 'eslint:recommended'
+  - plugin:vue/essential
+  - eslint:recommended
   `.trim())
 
   await project.run(`${require.resolve('../bin/vue')} invoke eslint --config airbnb`)
@@ -143,8 +143,8 @@ extends:
   const updated = await project.read('.eslintrc.yml')
   expect(updated).toMatch(`
 extends:
-  - 'plugin:vue/essential'
-  - 'eslint:recommended'
+  - plugin:vue/essential
+  - eslint:recommended
   - '@vue/airbnb'
 `.trim())
 })
