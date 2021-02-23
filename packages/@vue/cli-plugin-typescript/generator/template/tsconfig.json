@@ -25,6 +25,7 @@
       <%_ if (hasWebDriverIO) { _%>
       <% if (!hasMocha && !hasJest) { %>"mocha",<% } %>
       "@wdio/mocha-framework",
+      "expect-webdriverio",
       "webdriverio/sync"<% if (hasMocha || hasJest) { %>,<% } %>
       <%_ } _%>
       <%_ if (hasMocha) { _%>
