@@ -66,12 +66,12 @@ module.exports = function mergeDeps (
 
       if (forceOverwrite) {
         result[depName] = injectingRange
+      } else if (didGetNewer) {
+        result[depName] = injectSemver(injectingRange, r)
       } else {
         // if failed to infer newer version, use existing one because it's likely
         // built-in
-        result[depName] = didGetNewer
-          ? injectSemver(injectingRange, r)
-          : sourceRange
+        result[depName] = sourceRange
       }
 
       // if changed, update source
