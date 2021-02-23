@@ -45,8 +45,6 @@ exports.resolveEntry = (prefix, libName, files, isAsync, componentOpts) => {
       ? [createElement('', libName, files[0], false, componentOpts)]
       : files.map(file => createElement(prefix, file, file, isAsync, componentOpts)).join('\n')
 
-  console.log(elements)
-
   function resolveImportPath (mod) {
     return require.resolve(mod).replace(/\\/g, '\\\\')
   }
