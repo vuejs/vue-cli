@@ -44,7 +44,8 @@ module.exports = (api) => {
       return toMerge
     },
     {
-      warnIncompatibleVersions: false
+      warnIncompatibleVersions: false,
+      forceOverwrite: true
     }
   )
 }
