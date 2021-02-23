@@ -17,13 +17,14 @@ const hyphenate = str => {
  * @param {string} file The file for the component
  * @param {boolean} isAsync Whether to load component async or not
  */
-const createElement = (prefix, component, file, isAsync) => {
+const createElement = (prefix, component, file, isAsync, componentOpts = {}) => {
   const { camelName, kebabName } = exports.fileToComponentName(prefix, component)
+  const stringifiedOpts = JSON.stringify(componentOpts)
 
   return isAsync
-    ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}?shadow')))\n`
+    ? `window.customElements.define('${kebabName}', wrap(Vue, () => import('~root/${file}?shadow'), ${stringifiedOpts}))\n`
     : `import ${camelName} from '~root/${file}?shadow'\n` +
-        `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}))\n`
+        `window.customElements.define('${kebabName}', wrap(Vue, ${camelName}, ${stringifiedOpts}))\n`
 }
 
 exports.fileToComponentName = (prefix, file) => {
@@ -37,12 +38,14 @@ exports.fileToComponentName = (prefix, file) => {
   }
 }
 
-exports.resolveEntry = (prefix, libName, files, isAsync) => {
+exports.resolveEntry = (prefix, libName, files, isAsync, componentOpts) => {
   const filePath = path.resolve(__dirname, 'entry-wc.js')
   const elements =
     prefix === ''
-      ? [createElement('', libName, files[0])]
-      : files.map(file => createElement(prefix, file, file, isAsync)).join('\n')
+      ? [createElement('', libName, files[0], false, componentOpts)]
+      : files.map(file => createElement(prefix, file, file, isAsync, componentOpts)).join('\n')
+
+  console.log(elements)
 
   function resolveImportPath (mod) {
     return require.resolve(mod).replace(/\\/g, '\\\\')
