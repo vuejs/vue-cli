@@ -98,7 +98,7 @@
     "vue-i18n": "^8.22.4",
     "vue-instantsearch": "^1.5.1",
     "vue-meta": "^2.4.0",
-    "vue-observe-visibility": "^0.4.6",
+    "vue-observe-visibility": "^1.0.0",
     "vue-router": "^3.5.1",
     "vue-template-compiler": "^2.6.12",
     "vue-timeago": "^5.1.3",
