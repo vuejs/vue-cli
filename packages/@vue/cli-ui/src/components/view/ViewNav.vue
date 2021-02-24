@@ -208,7 +208,6 @@ export default {
         border none !important
         background $vue-ui-color-primary
 
-    >>> .v-popover .trigger,
     >>> .vue-ui-dropdown
       display block !important
 
