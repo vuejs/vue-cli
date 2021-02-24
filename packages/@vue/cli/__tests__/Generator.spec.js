@@ -523,6 +523,41 @@ test('api: extendPackage + { warnIncompatibleVersions: false }', async () => {
   })
 })
 
+test('api: extendPackage + { forceOverwrite: true }', async () => {
+  const generator = new Generator('/', {
+    pkg: {
+      devDependencies: {
+        'sass-loader': '^11.0.0'
+      }
+    },
+    plugins: [{
+      id: 'test',
+      apply: api => {
+        api.extendPackage(
+          {
+            devDependencies: {
+              'sass-loader': '^10.0.0'
+            }
+          },
+          { warnIncompatibleVersions: false, forceOverwrite: true }
+        )
+      }
+    }]
+  })
+
+  await generator.generate()
+  const pkg = JSON.parse(fs.readFileSync('/package.json', 'utf-8'))
+
+  // should not warn about the version conflicts
+  expect(logs.warn.length).toBe(0)
+  // should use the newer version
+  expect(pkg).toEqual({
+    devDependencies: {
+      'sass-loader': '^10.0.0'
+    }
+  })
+})
+
 test('api: render fs directory', async () => {
   const generator = new Generator('/', {
     plugins: [

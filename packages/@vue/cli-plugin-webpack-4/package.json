@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-webpack-4",
-  "version": "5.0.0-alpha.4",
+  "version": "5.0.0-alpha.5",
   "description": "webpack-4 plugin for @vue/cli v5",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^5.0.0-alpha.4",
+    "@vue/cli-shared-utils": "^5.0.0-alpha.5",
     "copy-webpack-plugin": "^6.4.1",
     "hash-sum": "^2.0.0",
     "html-webpack-plugin": "^4.5.1",

@@ -38,6 +38,7 @@ type ExtendPackageOptions =
       prune?: boolean
       merge?: boolean
       warnIncompatibleVersions?: boolean
+      forceOverwrite?: boolean
     }
   | boolean
 
@@ -121,6 +122,8 @@ declare class GeneratorAPI {
    *    that dependency fields are always deep merged regardless of this option.
    * @param [options.warnIncompatibleVersions=true] Output warning
    *    if two dependency version ranges don't intersect.
+   * @param [options.forceOverwrite=false] force using the dependency
+   * version provided in the first argument, instead of trying to get the newer ones
    */
   extendPackage(
     fields: (pkg: Record<string, any>) => object,

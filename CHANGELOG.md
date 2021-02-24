@@ -1,4 +1,41 @@
 
+## 5.0.0-alpha.5 (2021-02-23)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-webpack-4`, `@vue/cli`
+  * [#6307](https://github.com/vuejs/vue-cli/pull/6307) feat(GeneratorAPI): `forceOverwrite` option for `extendPackage` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6301](https://github.com/vuejs/vue-cli/pull/6301) feat!: use the latest versions of css preprocessor loaders by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`
+  * [#6295](https://github.com/vuejs/vue-cli/pull/6295) feat!: update WebDriverIO to v7 ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6301](https://github.com/vuejs/vue-cli/pull/6301) feat!: use the latest versions of css preprocessor loaders by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`
+  * [#6295](https://github.com/vuejs/vue-cli/pull/6295) feat!: update WebDriverIO to v7 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`, `@vue/cli-ui`, `@vue/cli`
+  * [#6292](https://github.com/vuejs/vue-cli/pull/6292) chore!: drop Node.js v10 support ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-typescript`
+  * [#6309](https://github.com/vuejs/vue-cli/pull/6309) fix(webdriverio): add `expect-webdriverio` to tsconfig ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-shared-utils`
+  * [#6254](https://github.com/vuejs/vue-cli/pull/6254) fix: correctly pad log strings ([@xiek881028](https://github.com/xiek881028))
+* `@vue/cli`
+  * [#6304](https://github.com/vuejs/vue-cli/pull/6304) fix(generator): support npm package aliases ("@npm:" in version specifier) ([@nuochong](https://github.com/nuochong))
+  * [#6303](https://github.com/vuejs/vue-cli/pull/6303) fix(create): write the lint-staged config to its own file (Closes [#6298](https://github.com/vuejs/vue-cli/issues/6298)) ([@HexPandaa](https://github.com/HexPandaa))
+* `@vue/babel-preset-app`, `@vue/cli-plugin-babel`, `@vue/cli-plugin-e2e-cypress`, `@vue/cli-plugin-e2e-nightwatch`, `@vue/cli-plugin-e2e-webdriverio`, `@vue/cli-plugin-eslint`, `@vue/cli-plugin-pwa`, `@vue/cli-plugin-router`, `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`, `@vue/cli-plugin-unit-mocha`, `@vue/cli-plugin-vuex`, `@vue/cli-plugin-webpack-4`, `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli-test-utils`, `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`, `@vue/cli`
+  * [#6291](https://github.com/vuejs/vue-cli/pull/6291) fix: better dev server & webpack 4 compatibility and some trivial dependency updates ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 4
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Superman ([@nuochong](https://github.com/nuochong))
+- [@HexPandaa](https://github.com/HexPandaa)
+- xiek ([@xiek881028](https://github.com/xiek881028))
+
+
+
 ## 5.0.0-alpha.4 (2021-02-18)
 
 #### :rocket: New Features

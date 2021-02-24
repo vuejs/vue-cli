@@ -48,9 +48,9 @@ const transformJSON = {
 }
 
 const transformYAML = {
-  read: ({ source }) => require('js-yaml').safeLoad(source),
+  read: ({ source }) => require('js-yaml').load(source),
   write: ({ value, existing }) => {
-    return require('js-yaml').safeDump(merge(existing, value, mergeOptions), {
+    return require('js-yaml').dump(merge(existing, value, mergeOptions), {
       skipInvalid: true
     })
   }
