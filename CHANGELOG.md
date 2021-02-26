@@ -322,6 +322,17 @@
 
 
 
+## 4.5.11 (2021-01-22)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#6207](https://github.com/vuejs/vue-cli/pull/6207) fix: support basic auth for npm registry access ([@bodograumann](https://github.com/bodograumann))
+
+#### Committers: 1
+- Bodo Graumann ([@bodograumann](https://github.com/bodograumann))
+
+
+
 ## 4.5.10 (2021-01-06)
 
 #### :bug: Bug Fix
