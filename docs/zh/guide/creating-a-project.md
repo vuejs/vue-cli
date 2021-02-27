@@ -30,6 +30,16 @@ vue create hello-world
 在项目创建的过程中，你也会被提示选择喜欢的包管理器或使用[淘宝 npm 镜像源](https://npm.taobao.org/)以更快地安装依赖。这些选择也将会存入 `~/.vuerc`。
 :::
 
+你可以设置每次新建项目时默认是否跳过 git 初始化，包管理器以及 npm 镜像源。
+
+```json
+{
+  "useTaobaoRegistry": true,
+  "packageManager": "yarn",
+  "enableGit": false
+}
+```
+
 `vue create` 命令有一些可选项，你可以通过运行以下命令进行探索：
 
 ``` bash

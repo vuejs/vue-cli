@@ -54,6 +54,7 @@ const schema = createSchema(joi => joi.object().keys({
   lastChecked: joi.date().timestamp(),
   packageManager: joi.string().valid('yarn', 'npm', 'pnpm'),
   useTaobaoRegistry: joi.boolean(),
+  enableGit: joi.boolean(),
   presets: joi.object().pattern(/^/, presetSchema)
 }))
 
@@ -79,6 +80,7 @@ exports.defaults = {
 
   packageManager: undefined,
   useTaobaoRegistry: undefined,
+  enableGit: undefined,
   presets: {
     'default': Object.assign({ vueVersion: '2' }, exports.defaultPreset),
     '__default_vue_3__': Object.assign({ vueVersion: '3' }, exports.defaultPreset)
@@ -87,8 +89,8 @@ exports.defaults = {
 
 let cachedOptions
 
-exports.loadOptions = () => {
-  if (cachedOptions) {
+exports.loadOptions = (isCache = true) => {
+  if (cachedOptions && isCache) {
     return cachedOptions
   }
   if (fs.existsSync(rcPath)) {
