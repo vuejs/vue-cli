@@ -531,10 +531,6 @@ export default {
     projectCreation: {
       query: PROJECT_CREATION,
       fetchPolicy: 'network-only'
-    },
-
-    projectUserSettings: {
-      query: PROJECT_USER_SETTINGS
     }
   },
 
