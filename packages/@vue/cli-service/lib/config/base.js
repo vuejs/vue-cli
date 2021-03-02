@@ -27,7 +27,7 @@ module.exports = (api, options) => {
         // the most straightforward way is to just find and combine those
         // Vue CLI-specific environment variables.
         name: Object.entries(process.env)
-          .filter(([key]) => key.startsWith('VUE_CLI'))
+          .filter(([key]) => key.startsWith('VUE_CLI') || key === 'NODE_ENV')
           .map(([key, value]) => `${key}-${value}`)
           .join(';'),
         buildDependencies: {
