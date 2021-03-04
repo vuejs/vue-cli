@@ -395,7 +395,7 @@ module.exports = class Service {
       resolved = this.inlineOptions || {}
       resolvedFrom = 'inline options'
 
-      // FIXME: may need to add inline options hash to cache name
+      // FIXME: may need to call `api.appendCacheIdentifier` with inline options hash
     }
 
     if (resolved.css && typeof resolved.css.modules !== 'undefined') {
