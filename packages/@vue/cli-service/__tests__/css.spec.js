@@ -105,31 +105,6 @@ test('override postcss config', () => {
   })
 })
 
-test('CSS Modules rules', () => {
-  const config = genConfig({
-    vue: {
-      css: {
-        requireModuleExtension: false
-      }
-    }
-  })
-  LANGS.forEach(lang => {
-    const expected = {
-      importLoaders: 2, // with postcss-loader
-      sourceMap: false,
-      modules: {
-        localIdentName: `[name]_[local]_[hash:base64:5]`
-      }
-    }
-    // vue-modules rules
-    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
-    // normal-modules rules
-    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
-    // normal rules
-    expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
-  })
-})
-
 test('Customized CSS Modules rules', () => {
   const userOptions = {
     vue: {
@@ -145,11 +120,6 @@ test('Customized CSS Modules rules', () => {
     }
   }
 
-  expect(() => {
-    genConfig(userOptions)
-  }).toThrow('`css.requireModuleExtension` is required when custom css modules options provided')
-
-  userOptions.vue.css.requireModuleExtension = true
   const config = genConfig(userOptions)
 
   LANGS.forEach(lang => {
@@ -165,77 +135,10 @@ test('Customized CSS Modules rules', () => {
     // normal-modules rules
     expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
     // normal rules
-    expect(findOptions(config, lang, 'css', 3)).not.toEqual(expected)
-  })
-})
-
-test('deprecate `css.modules` option', () => {
-  const config = genConfig({
-    vue: {
-      css: {
-        modules: true,
-        loaderOptions: {
-          css: {
-            modules: {
-              localIdentName: '[folder]-[name]-[local][emoji]'
-            }
-          }
-        }
-      }
-    }
-  })
-  expect(logs.warn.some(([msg]) => msg.match('please use "css.requireModuleExtension" instead'))).toBe(true)
-
-  LANGS.forEach(lang => {
-    const expected = {
-      importLoaders: 2, // with postcss-loader
-      sourceMap: false,
-      modules: {
-        localIdentName: `[folder]-[name]-[local][emoji]`
-      }
-    }
-    // vue-modules rules
-    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
-    // normal-modules rules
-    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
-    // normal rules
-    expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
-  })
-})
-
-test('favor `css.requireModuleExtension` over `css.modules`', () => {
-  const config = genConfig({
-    vue: {
-      css: {
-        requireModuleExtension: false,
-        modules: false,
-
-        loaderOptions: {
-          css: {
-            modules: {
-              localIdentName: '[folder]-[name]-[local][emoji]'
-            }
-          }
-        }
-      }
-    }
-  })
-
-  expect(logs.warn.some(([msg]) => msg.match('"css.modules" will be ignored in favor of "css.requireModuleExtension"'))).toBe(true)
-
-  LANGS.forEach(lang => {
-    const expected = {
-      importLoaders: 2, // with postcss-loader
-      sourceMap: false,
-      modules: {
-        localIdentName: `[folder]-[name]-[local][emoji]`
-      }
-    }
-    // vue-modules rules
-    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
-    // normal-modules rules
-    expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
-    // normal rules
+    // FIXME: Because `modules.auto` is true by default,
+    // even the configuration is passed, css module parsing won't
+    // be enabled for normal css files.
+    // Need to add a test for that.
     expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
   })
 })

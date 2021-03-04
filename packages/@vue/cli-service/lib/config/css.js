@@ -22,14 +22,6 @@ module.exports = (api, rootOptions) => {
       loaderOptions = {}
     } = rootOptions.css || {}
 
-    let { requireModuleExtension } = rootOptions.css || {}
-    if (typeof requireModuleExtension === 'undefined') {
-      if (loaderOptions.css && loaderOptions.css.modules) {
-        throw new Error('`css.requireModuleExtension` is required when custom css modules options provided')
-      }
-      requireModuleExtension = true
-    }
-
     const shouldExtract = extract !== false && !shadowMode
     const filename = getAssetPath(
       rootOptions,
@@ -99,17 +91,17 @@ module.exports = (api, rootOptions) => {
 
       // rules for <style>
       const vueNormalRule = baseRule.oneOf('vue').resourceQuery(/\?vue/)
-      applyLoaders(vueNormalRule, false)
+      applyLoaders(vueNormalRule)
 
       // rules for *.module.* files
       const extModulesRule = baseRule.oneOf('normal-modules').test(/\.module\.\w+$/)
-      applyLoaders(extModulesRule, true)
+      applyLoaders(extModulesRule)
 
       // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      applyLoaders(normalRule, !requireModuleExtension)
+      applyLoaders(normalRule)
 
-      function applyLoaders (rule, isCssModule) {
+      function applyLoaders (rule, forceCssModule = false) {
         if (shouldExtract) {
           rule
             .use('extract-css-loader')
@@ -138,13 +130,11 @@ module.exports = (api, rootOptions) => {
           )
         }, loaderOptions.css)
 
-        if (isCssModule) {
+        if (cssLoaderOptions.modules || forceCssModule) {
           cssLoaderOptions.modules = {
             localIdentName: '[name]_[local]_[hash:base64:5]',
             ...cssLoaderOptions.modules
           }
-        } else {
-          delete cssLoaderOptions.modules
         }
 
         rule
