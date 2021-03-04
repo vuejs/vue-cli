@@ -130,7 +130,16 @@ module.exports = (api, rootOptions) => {
           )
         }, loaderOptions.css)
 
-        if (cssLoaderOptions.modules || forceCssModule) {
+        if (forceCssModule) {
+          if (
+            typeof cssLoaderOptions.modules === 'object' &&
+            !cssLoaderOptions.modules.auto
+          ) {
+            cssLoaderOptions.modules.auto = () => true
+          }
+        }
+
+        if (cssLoaderOptions.modules) {
           cssLoaderOptions.modules = {
             localIdentName: '[name]_[local]_[hash:base64:5]',
             ...cssLoaderOptions.modules
