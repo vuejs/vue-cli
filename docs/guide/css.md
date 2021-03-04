@@ -98,7 +98,7 @@ module.exports = {
     loaderOptions: {
       css: {
         modules: {
-          auto: /.*/
+          auto: () => true
         }
       }
     }
