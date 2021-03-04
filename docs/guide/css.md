@@ -97,11 +97,8 @@ module.exports = {
   css: {
     loaderOptions: {
       css: {
-        // `modules: false`:          don't enable CSS Modules
-        // `modules: { auto: true }`: enable CSS Modules only for files named as `*.module(s).*` (default)
-        // `modules: { auto: false}`: enable CSS Modules for all css files
         modules: {
-          auto: false
+          auto: /.*/
         }
       }
     }
