@@ -85,7 +85,7 @@ module.exports = (api, rootOptions) => {
     function createCSSRule (lang, test, loader, options) {
       const baseRule = webpackConfig.module.rule(lang).test(test)
 
-      // rules for <style lang="module">
+      // rules for <style module>
       const vueModulesRule = baseRule.oneOf('vue-modules').resourceQuery(/module/)
       applyLoaders(vueModulesRule, true)
 
@@ -131,14 +131,9 @@ module.exports = (api, rootOptions) => {
         }, loaderOptions.css)
 
         if (forceCssModule) {
-          if (
-            typeof cssLoaderOptions.modules === 'object' &&
-            !cssLoaderOptions.modules.auto
-          ) {
-            cssLoaderOptions.modules = {
-              ...cssLoaderOptions.modules,
-              auto: () => true
-            }
+          cssLoaderOptions.modules = {
+            ...cssLoaderOptions.modules,
+            auto: () => true
           }
         }
 
