@@ -1,5 +1,7 @@
 const { logs } = require('@vue/cli-shared-utils')
 const Service = require('../lib/Service')
+const { defaultPreset } = require('@vue/cli/lib/options')
+const create = require('@vue/cli-test-utils/createTestProject')
 
 beforeEach(() => {
   logs.warn = []
@@ -32,7 +34,7 @@ const findRule = (config, lang, index = 3) => {
     return rule.test.test(`.${lang}`)
   })
   // all CSS rules have 4 oneOf rules:
-  // 0 - <style lang="module"> in Vue files
+  // 0 - <style module> in Vue files
   // 1 - <style> in Vue files
   // 2 - *.modules.css imports from JS
   // 3 - *.css imports from JS
@@ -291,3 +293,171 @@ test('scss loaderOptions', () => {
   // should not merge scss options into default sass config
   expect(findOptions(config, 'sass', 'sass')).not.toHaveProperty('webpackImporter')
 })
+
+test('Auto recognition of CSS Modules by file names', async () => {
+  const project = await create('css-modules-auto', defaultPreset)
+  await project.write('vue.config.js', 'module.exports = { filenameHashing: false }\n')
+
+  await project.write('src/App.vue', `<template>
+  <div id="app" :class="$style.red">
+    <img alt="Vue logo" src="./assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  </div>
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld.vue'
+import style1 from './style.module.css'
+import style2 from './style.css'
+
+console.log(style1, style2)
+
+export default {
+  name: 'App',
+  components: {
+    HelloWorld
+  }
+}
+</script>
+
+<style module>
+.red {
+  color: red;
+}
+</style>
+`)
+  await project.write('src/style.module.css', `.green { color: green; }\n`)
+  await project.write('src/style.css', `.yellow { color: yellow; }\n`)
+
+  const { stdout } = await project.run('vue-cli-service build')
+
+  expect(stdout).toMatch('Build complete.')
+
+  const appCss = await project.read('dist/css/app.css')
+
+  // <style module> successfully transformed
+  expect(appCss).not.toMatch('.red')
+  expect(appCss).toMatch('color: red')
+
+  // style.module.css successfully transformed
+  expect(appCss).not.toMatch('.green')
+  expect(appCss).toMatch('color: green')
+
+  // class names in style.css should not be transformed
+  expect(appCss).toMatch('.yellow')
+  expect(appCss).toMatch('color: yellow')
+
+  const appJs = await project.read('dist/js/app.js')
+
+  // should contain the class name map in js
+  expect(appJs).toMatch(/\{"red":/)
+  expect(appJs).toMatch(/\{"green":/)
+  expect(appJs).not.toMatch(/\{"yellow":/)
+}, 300000)
+
+test('CSS Moduels Options', async () => {
+  const project = await create('css-modules-options', defaultPreset)
+
+  await project.write('src/App.vue', `<template>
+  <div id="app" :class="$style.red">
+    <img alt="Vue logo" src="./assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  </div>
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld.vue'
+import style1 from './style.module.css'
+import style2 from './style.css'
+
+console.log(style1, style2)
+
+export default {
+  name: 'App',
+  components: {
+    HelloWorld
+  }
+}
+</script>
+
+<style module>
+.red {
+  color: red;
+}
+</style>
+`)
+  await project.write('src/style.module.css', `.green { color: green; }\n`)
+  await project.write('src/style.css', `.yellow { color: yellow; }\n`)
+
+  // disable CSS Modules
+  await project.write(
+    'vue.config.js',
+    `module.exports = {
+      filenameHashing: false,
+      css: {
+        loaderOptions: {
+          css: {
+            modules: false
+          }
+        }
+      }
+    }`
+  )
+  let { stdout } = await project.run('vue-cli-service build')
+  expect(stdout).toMatch('Build complete.')
+  let appCss = await project.read('dist/css/app.css')
+
+  // <style module> works anyway
+  expect(appCss).not.toMatch('.red')
+  expect(appCss).toMatch('color: red')
+  // style.module.css should not be transformed
+  expect(appCss).toMatch('.green')
+  expect(appCss).toMatch('color: green')
+  // class names in style.css should not be transformed
+  expect(appCss).toMatch('.yellow')
+  expect(appCss).toMatch('color: yellow')
+
+  let appJs = await project.read('dist/js/app.js')
+
+  // should not contain class name map
+  expect(appJs).toMatch(/\{"red":/) // <style module> works anyway
+  expect(appJs).not.toMatch(/\{"green":/)
+  expect(appJs).not.toMatch(/\{"yellow":/)
+
+  // enable CSS Modules for all files
+  await project.write(
+    'vue.config.js',
+    `module.exports = {
+      filenameHashing: false,
+      css: {
+        loaderOptions: {
+          css: {
+            modules: {
+              auto: () => true
+            }
+          }
+        }
+      }
+    }`
+  )
+
+  stdout = (await project.run('vue-cli-service build')).stdout
+  expect(stdout).toMatch('Build complete.')
+  appCss = await project.read('dist/css/app.css')
+
+  // <style module> works anyway
+  expect(appCss).not.toMatch('.red')
+  expect(appCss).toMatch('color: red')
+  // style.module.css should be transformed
+  expect(appCss).not.toMatch('.green')
+  expect(appCss).toMatch('color: green')
+  // class names in style.css should be transformed
+  expect(appCss).not.toMatch('.yellow')
+  expect(appCss).toMatch('color: yellow')
+
+  appJs = await project.read('dist/js/app.js')
+  // should contain class name map
+  expect(appJs).toMatch(/\{"red":/)
+  expect(appJs).toMatch(/\{"green":/)
+  expect(appJs).toMatch(/\{"yellow":/)
+}, 300000)
