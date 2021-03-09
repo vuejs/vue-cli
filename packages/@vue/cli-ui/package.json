@@ -61,7 +61,6 @@
     "rss-parser": "^3.8.0",
     "shortid": "^2.2.15",
     "typescript": "~3.9.3",
-    "vue-cli-plugin-apollo": "^0.21.3",
     "watch": "^1.0.2"
   },
   "devDependencies": {
@@ -94,6 +93,7 @@
     "subscriptions-transport-ws": "^0.9.6",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.3",
+    "vue-cli-plugin-apollo": "^0.21.3",
     "vue-color": "^2.7.1",
     "vue-i18n": "^8.17.7",
     "vue-instantsearch": "^1.5.1",
