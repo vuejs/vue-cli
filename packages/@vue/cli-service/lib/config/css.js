@@ -107,9 +107,7 @@ module.exports = (api, rootOptions) => {
             .use('extract-css-loader')
             .loader(require('mini-css-extract-plugin').loader)
             .options({
-              publicPath: cssPublicPath,
-              // TODO: enable this option later
-              esModule: false
+              publicPath: cssPublicPath
             })
         } else {
           rule
