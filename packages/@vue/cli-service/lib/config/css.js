@@ -135,7 +135,10 @@ module.exports = (api, rootOptions) => {
             typeof cssLoaderOptions.modules === 'object' &&
             !cssLoaderOptions.modules.auto
           ) {
-            cssLoaderOptions.modules.auto = () => true
+            cssLoaderOptions.modules = {
+              ...cssLoaderOptions.modules,
+              auto: () => true
+            }
           }
         }
 

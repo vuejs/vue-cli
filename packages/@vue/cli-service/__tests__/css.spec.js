@@ -131,7 +131,8 @@ test('Customized CSS Modules rules', () => {
       }
     }
     // vue-modules rules
-    expect(findOptions(config, lang, 'css', 0)).toEqual(expected)
+    expect(findOptions(config, lang, 'css', 0)).toMatchObject(expected)
+    expect(findOptions(config, lang, 'css', 0).modules.auto.toString()).toEqual('() => true')
     // normal-modules rules
     expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
     // normal rules
