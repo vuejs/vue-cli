@@ -245,22 +245,9 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
 ### css.modules
 
-Deprecated since v4, please use [`css.requireModuleExtension`](#css-requireModuleExtension) instead.
-
-In v3 this means the opposite of `css.requireModuleExtension`.
-
 ### css.requireModuleExtension
 
-- Type: `boolean`
-- Default: `true`
-
-  By default, only files that ends in `*.module.[ext]` are treated as CSS modules. Setting this to `false` will allow you to drop `.module` in the filenames and treat all `*.(css|scss|sass|less|styl(us)?)` files as CSS modules.
-
-  ::: tip
-  If you have customized CSS Modules configurations in `css.loaderOptions.css`, then the `css.requireModuleExtension` field must be explicitly configured to `true` or `false`, otherwise we can't be sure whether you want to apply these options to all CSS files or not.
-  :::
-
-  See also: [Working with CSS > CSS Modules](../guide/css.md#css-modules)
+Both removed in v5, see [Working with CSS > CSS Modules](../guide/css.md#css-modules) for guidance on how to treat all style imports as CSS Modules.
 
 ### css.extract
 

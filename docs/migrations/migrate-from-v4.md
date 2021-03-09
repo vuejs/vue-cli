@@ -72,6 +72,12 @@ Underlyingly, it uses the [`resolutions`](https://classic.yarnpkg.com/en/docs/se
 
 Though both work in all our tests, please be aware that the `module-alias` approach is still considered hacky, and may not be as stable as the `"resolutions"` one.
 
+#### CSS Modules
+
+The `css.requireModuleExtension` option is removed. If you do need to strip the `.module` part in CSS Module file names, please refer to [Working with CSS > CSS Modules](../guide/css.md#css-modules) for more guidance.
+
+`css-loader` is upgraded from v3 to v5, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
+
 #### Sass/SCSS
 
 No longer supports generating project with `node-sass`. It has been [deprecated](https://sass-lang.com/blog/libsass-is-deprecated#how-do-i-migrate) for a while. Please use the `sass` package instead.

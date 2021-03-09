@@ -392,21 +392,6 @@ module.exports = class Service {
       resolvedFrom = 'inline options'
     }
 
-    if (resolved.css && typeof resolved.css.modules !== 'undefined') {
-      if (typeof resolved.css.requireModuleExtension !== 'undefined') {
-        warn(
-          `You have set both "css.modules" and "css.requireModuleExtension" in ${chalk.bold('vue.config.js')}, ` +
-          `"css.modules" will be ignored in favor of "css.requireModuleExtension".`
-        )
-      } else {
-        warn(
-          `"css.modules" option in ${chalk.bold('vue.config.js')} ` +
-          `is deprecated now, please use "css.requireModuleExtension" instead.`
-        )
-        resolved.css.requireModuleExtension = !resolved.css.modules
-      }
-    }
-
     // normalize some options
     ensureSlash(resolved, 'publicPath')
     if (typeof resolved.publicPath === 'string') {
