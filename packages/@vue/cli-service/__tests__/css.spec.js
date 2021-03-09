@@ -138,10 +138,6 @@ test('Customized CSS Modules rules', () => {
     // normal-modules rules
     expect(findOptions(config, lang, 'css', 2)).toEqual(expected)
     // normal rules
-    // FIXME: Because `modules.auto` is true by default,
-    // even the configuration is passed, css module parsing won't
-    // be enabled for normal css files.
-    // Need to add a test for that.
     expect(findOptions(config, lang, 'css', 3)).toEqual(expected)
   })
 })
