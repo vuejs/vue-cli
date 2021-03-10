@@ -66,6 +66,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "date-fns": "^2.17.0",
     "@vue/cli-plugin-babel": "^5.0.0-alpha.5",
     "@vue/cli-plugin-e2e-cypress": "^5.0.0-alpha.5",
     "@vue/cli-plugin-eslint": "^5.0.0-alpha.5",
@@ -85,7 +86,7 @@
     "eslint-plugin-vue": "^7.6.0",
     "lint-staged": "^10.5.4",
     "lodash.debounce": "^4.0.8",
-    "portal-vue": "^1.3.0",
+    "portal-vue": "^2.1.7",
     "rimraf": "^3.0.2",
     "start-server-and-test": "^1.12.0",
     "stylus": "^0.54.5",
@@ -97,13 +98,15 @@
     "vue-color": "^2.8.1",
     "vue-i18n": "^8.22.4",
     "vue-instantsearch": "^1.5.1",
-    "vue-meta": "^1.6.0",
-    "vue-observe-visibility": "^0.4.6",
+    "vue-meta": "^2.4.0",
+    "vue-observe-visibility": "^1.0.0",
     "vue-router": "^3.5.1",
     "vue-template-compiler": "^2.6.12",
     "vue-timeago": "^5.1.3",
     "vue-virtual-scroller": "^1.0.10",
-    "xterm": "^3.13.2"
+    "xterm": "~4.10.0",
+    "xterm-addon-fit": "^0.5.0",
+    "xterm-addon-web-links": "^0.4.0"
   },
   "browserslist": [
     "> 1%",
