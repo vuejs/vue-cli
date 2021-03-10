@@ -1,4 +1,28 @@
 
+## 5.0.0-alpha.6 (2021-03-10)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-unit-jest`
+  * [#6335](https://github.com/vuejs/vue-cli/pull/6335) chore!: update vue-jest to v4.x ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6332](https://github.com/vuejs/vue-cli/pull/6332) feat!: upgrade to css-loader 5; remove `css.requireModuleExtension` & `css.modules` options ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-unit-jest`
+  * [#6335](https://github.com/vuejs/vue-cli/pull/6335) chore!: update vue-jest to v4.x ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6332](https://github.com/vuejs/vue-cli/pull/6332) feat!: upgrade to css-loader 5; remove `css.requireModuleExtension` & `css.modules` options ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6314](https://github.com/vuejs/vue-cli/pull/6314) fix: fix `build --dest` option ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 2
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Tony Trinh ([@tony19](https://github.com/tony19))
+
+
+
 ## 5.0.0-alpha.5 (2021-02-23)
 
 #### :rocket: New Features
