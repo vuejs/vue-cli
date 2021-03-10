@@ -91,6 +91,20 @@ test('build with --report-json', async () => {
   expect(appChunk).toHaveProperty('modules')
 })
 
+test('build with --dest', async () => {
+  const project = await create('e2e-build-dest', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --dest other_dist')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('other_dist/index.html')).toBe(true)
+  expect(project.has('other_dist/favicon.ico')).toBe(true)
+  expect(project.has('other_dist/js')).toBe(true)
+  expect(project.has('other_dist/css')).toBe(true)
+
+  expect(project.has('dist')).toBe(false)
+})
+
 afterAll(async () => {
   if (browser) {
     await browser.close()

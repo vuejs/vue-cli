@@ -12,7 +12,7 @@ module.exports = (api, args, options) => {
   // respect inline build destination in copy plugin
   if (args.dest && config.plugins.has('copy')) {
     config.plugin('copy').tap(pluginArgs => {
-      pluginArgs[0][0].to = targetDir
+      pluginArgs[0].patterns.to = targetDir
       return pluginArgs
     })
   }
