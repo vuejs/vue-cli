@@ -1,4 +1,15 @@
 
+## 5.0.0-alpha.7 (2021-03-11)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6343](https://github.com/vuejs/vue-cli/pull/6343) fix: use cssnano v5.0.0-rc.1, work around a npm 6 hoisting bug ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 5.0.0-alpha.6 (2021-03-10)
 
 #### :rocket: New Features
