@@ -57,7 +57,7 @@
     "globby": "^11.0.2",
     "graphql": "^15.5.0",
     "http-server": "^0.12.3",
-    "inquirer": "^7.1.0",
+    "inquirer": "^8.0.0",
     "jest": "^26.6.3",
     "lerna": "^3.22.0",
     "lerna-changelog": "^1.0.1",
