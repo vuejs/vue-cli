@@ -112,7 +112,7 @@ module.exports = (api, options) => {
         .plugin('html')
           .use(HTMLPlugin, [htmlOptions])
 
-      // FIXME: preload plugin is not compatible with webpack 5 / html-webpack-plugin 4 yet
+      // FIXME: need to test out preload plugin's compatibility with html-webpack-plugin 4/5
       // if (!isLegacyBundle) {
       //   // inject preload/prefetch to HTML
       //   webpackConfig
