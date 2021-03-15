@@ -244,6 +244,7 @@ module.exports = (api, options) => {
               from: publicDir,
               to: outputDir,
               toType: 'dir',
+              noErrorOnMissing: true,
               globOptions: {
                 ignore: publicCopyIgnore
               }
