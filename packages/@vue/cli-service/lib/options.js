@@ -8,7 +8,7 @@ const schema = createSchema(joi => joi.object({
   filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),
   transpileDependencies: joi.alternatives().try(
-    joi.booelan(),
+    joi.boolean(),
     joi.array()
   ),
   productionSourceMap: joi.boolean(),
