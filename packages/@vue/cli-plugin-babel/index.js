@@ -3,6 +3,10 @@ const babel = require('@babel/core')
 const { isWindows } = require('@vue/cli-shared-utils')
 
 function genTranspileDepRegex (transpileDependencies) {
+  if (!Array.isArray(transpileDependencies)) {
+    return
+  }
+
   const deps = transpileDependencies.map(dep => {
     if (typeof dep === 'string') {
       const depPath = path.join('node_modules', dep, '/')
@@ -39,34 +43,44 @@ module.exports = (api, options) => {
         .test(/\.m?jsx?$/)
         .exclude
           .add(filepath => {
+            const SHOULD_SKIP = true
+            const SHOULD_TRANSPILE = false
+
             // With data URI support in webpack 5, filepath could be undefined
             if (!filepath) {
-              return true
+              return SHOULD_SKIP
             }
 
-            // always transpile js in vue files
+            // Always transpile js in vue files
             if (/\.vue\.jsx?$/.test(filepath)) {
-              return false
+              return SHOULD_TRANSPILE
             }
-            // exclude dynamic entries from cli-service
+            // Exclude dynamic entries from cli-service
             if (filepath.startsWith(cliServicePath)) {
-              return true
+              return SHOULD_SKIP
             }
 
-            // only include @babel/runtime when the @vue/babel-preset-app preset is used
+            // To transpile `@babel/runtime`, the config needs to be
+            // carefully adjusted to avoid infinite loops.
+            // So we only do the tranpilation when the special flag is on.
             if (
               process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME &&
               filepath.includes(path.join('@babel', 'runtime'))
             ) {
-              return false
+              return SHOULD_TRANSPILE
             }
 
-            // check if this is something the user explicitly wants to transpile
+            // if `transpileDependencies` is set to true, transpile all deps
+            if (options.transpileDependencies === true) {
+              return SHOULD_TRANSPILE
+            }
+
+            // Otherwise, check if this is something the user explicitly wants to transpile
             if (transpileDepRegex && transpileDepRegex.test(filepath)) {
-              return false
+              return SHOULD_TRANSPILE
             }
             // Don't transpile node_modules
-            return /node_modules/.test(filepath)
+            return /node_modules/.test(filepath) ? SHOULD_SKIP : SHOULD_TRANSPILE
           })
           .end()
 
