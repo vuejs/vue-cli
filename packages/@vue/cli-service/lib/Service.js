@@ -437,13 +437,5 @@ function cloneRuleNames (to, from) {
   })
 }
 
-/**
- * @typedef {import('../types/index').ConfigFunction} ConfigFunction
- * @typedef {import('../types/index').ProjectOptions} ProjectOptions
- * @typedef {ProjectOptions|ConfigFunction} UserConfig
- * @param {UserConfig} config
- * @returns UserConfig
- */
-module.exports.defineConfig = function defineConfig (config) {
-  return config
-}
+/** @type {import('../types/index').defineConfig} */
+module.exports.defineConfig = (config) => config
