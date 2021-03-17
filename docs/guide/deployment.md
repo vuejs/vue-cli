@@ -363,7 +363,7 @@ heroku login
 heroku create
 heroku buildpacks:add heroku/nodejs
 heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
-git push heroku master
+git push heroku main
 ```
 
 More info: [Getting started with SPAs on Heroku](https://gist.github.com/hone/24b06869b4c1eca701f9)
