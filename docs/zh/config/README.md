@@ -26,6 +26,18 @@ module.exports = {
   // 选项...
 }
 ```
+
+或者，你也可以使用 `@vue/cli-service` 提供的 `defineConfig` 帮手函数，以获得更好的类型提示：
+
+```js
+// vue.config.js
+const { defineConfig } = require('@vue/cli-service')
+
+module.exports = defineConfig({
+  // 选项
+})
+```
+
 ### baseUrl
 
 从 Vue CLI 3.3 起已弃用，请使用[`publicPath`](#publicpath)。

@@ -27,6 +27,17 @@ module.exports = {
 }
 ```
 
+Or, you can use the `defineConfig` helper from `@vue/cli-service`, which could provide better intellisense support:
+
+```js
+// vue.config.js
+const { defineConfig } = require('@vue/cli-service')
+
+module.exports = defineConfig({
+  // options...
+})
+```
+
 ### baseUrl
 
 Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
