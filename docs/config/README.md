@@ -183,10 +183,12 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
 ### transpileDependencies
 
-- Type: `Array<string | RegExp>`
-- Default: `[]`
+- Type: `boolean | Array<string | RegExp>`
+- Default: `false`
 
-  By default `babel-loader` ignores all files inside `node_modules`. If you want to explicitly transpile a dependency with Babel, you can list it in this option.
+  By default `babel-loader` ignores all files inside `node_modules`. You can enable this option to avoid unexpected untranspiled code from third-party dependencies.
+
+  Transpiling all the dependencies could slow down the build process, though. If build performance is a concern, you can explicitly transpile only some of the dependencies by passing an array of package names or name patterns to this option.
 
 ::: warning Jest config
 This option is not respected by the [cli-unit-jest plugin](#jest), because in jest, we don't have to transpile code from `/node_modules` unless it uses non-standard features - Node >8.11 supports the latest ECMAScript features already.
