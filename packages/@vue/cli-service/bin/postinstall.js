@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { execa, semver } = require('@vue/cli-shared-utils')
+const { semver } = require('@vue/cli-shared-utils')
 
 const cwd = process.cwd()
 
@@ -25,5 +25,7 @@ if (deps.postcss) {
 }
 
 if (!hasPostCSS8) {
-  execa.sync('npm', ['install', '--save-dev', '--loglevel', 'error', 'postcss@8'])
+  const hotfixPath = path.resolve(__dirname, '../generator/hotfix-npm6only.js')
+  const targetPath = path.resolve(__dirname, '../generator/hotfix.js')
+  fs.renameSync(hotfixPath, targetPath)
 }
