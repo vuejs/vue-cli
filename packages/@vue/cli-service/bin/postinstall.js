@@ -1,18 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 
-const stripAnsi = require('strip-ansi')
 const { execa, semver } = require('@vue/cli-shared-utils')
 
 const cwd = process.cwd()
 
-const usesNpm = fs.existsSync(path.resolve(cwd, './package-lock.json'))
-if (!usesNpm) {
-  process.exit()
-}
-
-const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
-if (!semver.satisfies(npmVersion, '6.x')) {
+const userAgent = process.env.npm_config_user_agent
+const usesNpm6 = userAgent && userAgent.startsWith('npm/6.')
+if (!usesNpm6) {
   process.exit()
 }
 
