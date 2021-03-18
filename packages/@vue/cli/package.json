@@ -62,6 +62,7 @@
     "yaml-front-matter": "^4.1.0"
   },
   "devDependencies": {
+    "@vue/cli-service": "^5.0.0-alpha.7",
     "cmd-shim": "^4.1.0"
   },
   "engines": {
