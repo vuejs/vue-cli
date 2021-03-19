@@ -9,6 +9,9 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
     process.exit(1)
   }
 
+  const vueMajor = require('../../util/getVueMajor')(api.getCwd())
+  const isVue3 = vueMajor === 3
+
   const fullEntryPath = api.resolve(entry)
 
   if (!fs.existsSync(fullEntryPath)) {
@@ -66,6 +69,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
             inject: false,
             filename: 'demo.html',
             libName,
+            isVue3,
             assetsFileName: filename,
             cssExtract: config.plugins.has('extract-css')
           }])
