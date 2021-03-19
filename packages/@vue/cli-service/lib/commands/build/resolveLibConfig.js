@@ -10,7 +10,6 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
   }
 
   const vueMajor = require('../../util/getVueMajor')(api.getCwd())
-  const isVue3 = vueMajor === 3
 
   const fullEntryPath = api.resolve(entry)
 
@@ -69,7 +68,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
             inject: false,
             filename: 'demo.html',
             libName,
-            isVue3,
+            vueMajor,
             assetsFileName: filename,
             cssExtract: config.plugins.has('extract-css')
           }])
