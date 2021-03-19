@@ -11,7 +11,7 @@ function generateWithOptions (options) {
 }
 
 test('sass (default)', async () => {
-  const { pkg, files } = await await generateWithOptions({
+  const { pkg, files } = await generateWithOptions({
     cssPreprocessor: 'sass'
   })
 
