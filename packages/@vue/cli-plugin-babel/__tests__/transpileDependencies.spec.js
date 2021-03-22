@@ -68,15 +68,26 @@ afterAll(async () => {
   await project.rm('package.json')
 })
 
-test('dep from node_modules should not been transpiled', async () => {
+test('dep from node_modules should not been transpiled by default', async () => {
   await project.run('vue-cli-service build')
   expect(await readVendorFile()).toMatch('() => "__TEST__"')
 })
 
-test('dep from node_modules should been transpiled', async () => {
+test('dep from node_modules should been transpiled when matched by transpileDependencies', async () => {
   await project.write(
     'vue.config.js',
     `module.exports = { transpileDependencies: ['external-dep', '@scope/external-dep'] }`
+  )
+  await project.run('vue-cli-service build')
+  expect(await readVendorFile()).toMatch('return "__TEST__"')
+
+  expect(await readVendorFile()).toMatch('return "__SCOPE_TEST__"')
+})
+
+test('dep from node_modules should been transpiled when transpileDependencies is true', async () => {
+  await project.write(
+    'vue.config.js',
+    `module.exports = { transpileDependencies: true }`
   )
   await project.run('vue-cli-service build')
   expect(await readVendorFile()).toMatch('return "__TEST__"')
