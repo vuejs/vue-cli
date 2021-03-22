@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <title><%- htmlWebpackPlugin.options.libName %> demo</title>
-<script src="https://unpkg.com/vue"></script>
+<script src="//unpkg.com/vue@<%- htmlWebpackPlugin.options.vueMajor %>"></script>
 <script src="./<%- htmlWebpackPlugin.options.assetsFileName %>.umd.js"></script>
 <% if (htmlWebpackPlugin.options.cssExtract) { %>
 <link rel="stylesheet" href="./<%- htmlWebpackPlugin.options.assetsFileName %>.css">
@@ -11,9 +11,17 @@
 </div>
 
 <script>
+<% if (htmlWebpackPlugin.options.vueMajor === 3) { %>
+Vue.createApp({
+  components: {
+    demo: <%- htmlWebpackPlugin.options.libName %>
+  }
+}).mount('#app')
+<% } else { %>
 new Vue({
   components: {
     demo: <%- htmlWebpackPlugin.options.libName %>
   }
 }).$mount('#app')
+<% } %>
 </script>
