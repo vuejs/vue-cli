@@ -63,11 +63,8 @@ module.exports = (api, options) => {
             // To transpile `@babel/runtime`, the config needs to be
             // carefully adjusted to avoid infinite loops.
             // So we only do the tranpilation when the special flag is on.
-            if (
-              process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME &&
-              filepath.includes(path.join('@babel', 'runtime'))
-            ) {
-              return SHOULD_TRANSPILE
+            if (filepath.includes(path.join('@babel', 'runtime'))) {
+              return process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME ? SHOULD_TRANSPILE : SHOULD_SKIP
             }
 
             // if `transpileDependencies` is set to true, transpile all deps
