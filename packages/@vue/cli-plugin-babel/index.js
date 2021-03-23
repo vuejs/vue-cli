@@ -2,12 +2,8 @@ const path = require('path')
 const babel = require('@babel/core')
 const { isWindows } = require('@vue/cli-shared-utils')
 
-function genTranspileDepRegex (transpileDependencies) {
-  if (!Array.isArray(transpileDependencies)) {
-    return
-  }
-
-  const deps = transpileDependencies.map(dep => {
+function getDepPathRegex (dependencies) {
+  const deps = dependencies.map(dep => {
     if (typeof dep === 'string') {
       const depPath = path.join('node_modules', dep, '/')
       return isWindows
@@ -26,7 +22,6 @@ function genTranspileDepRegex (transpileDependencies) {
 module.exports = (api, options) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!options.parallel
   const cliServicePath = path.dirname(require.resolve('@vue/cli-service'))
-  const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
   // try to load the project babel config;
   // if the default preset is used,
@@ -63,19 +58,38 @@ module.exports = (api, options) => {
             // To transpile `@babel/runtime`, the config needs to be
             // carefully adjusted to avoid infinite loops.
             // So we only do the tranpilation when the special flag is on.
-            if (filepath.includes(path.join('@babel', 'runtime'))) {
-              return process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME ? SHOULD_TRANSPILE : SHOULD_SKIP
+            if (getDepPathRegex(['@babel/runtime']).test(filepath)) {
+              return process.env.VUE_CLI_TRANSPILE_BABEL_RUNTIME
+                ? SHOULD_TRANSPILE
+                : SHOULD_SKIP
             }
 
             // if `transpileDependencies` is set to true, transpile all deps
             if (options.transpileDependencies === true) {
-              return SHOULD_TRANSPILE
+              // Some of the deps cannot be transpiled, though
+              // https://stackoverflow.com/a/58517865/2302258
+              const NON_TRANSPILABLE_DEPS = [
+                'core-js',
+                'webpack',
+                'webpack-4',
+                'css-loader',
+                'mini-css-extract-plugin',
+                'promise-polyfill',
+                'html-webpack-plugin',
+                'whatwg-fetch'
+              ]
+              const nonTranspilableDepsRegex = getDepPathRegex(NON_TRANSPILABLE_DEPS)
+              return nonTranspilableDepsRegex.test(filepath) ? SHOULD_SKIP : SHOULD_TRANSPILE
             }
 
             // Otherwise, check if this is something the user explicitly wants to transpile
-            if (transpileDepRegex && transpileDepRegex.test(filepath)) {
-              return SHOULD_TRANSPILE
+            if (Array.isArray(options.transpileDependencies)) {
+              const transpileDepRegex = getDepPathRegex(options.transpileDependencies)
+              if (transpileDepRegex && transpileDepRegex.test(filepath)) {
+                return SHOULD_TRANSPILE
+              }
             }
+
             // Don't transpile node_modules
             return /node_modules/.test(filepath) ? SHOULD_SKIP : SHOULD_TRANSPILE
           })
