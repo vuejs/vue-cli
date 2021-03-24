@@ -6,12 +6,10 @@
 
 Uses Babel 7 + `babel-loader` + [@vue/babel-preset-app](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/babel-preset-app) by default, but can be configured via `babel.config.js` to use any other Babel presets or plugins.
 
-By default, `babel-loader` excludes files inside `node_modules` dependencies. You can enable the `transpileDependencies` option in `vue.config.js` to transpile the dependencies. Or, if you want to only transpile some of the dependency modules, you can pass an array to the `transpileDependencies` option:
+By default, `babel-loader` excludes files inside `node_modules` dependencies. If you wish to explicitly transpile a dependency module, you will need to add it to the `transpileDependencies` option in `vue.config.js`:
 
 ``` js
 module.exports = {
-  // Set to `true` to transpile all dependencies.
-  // Or pass an array to transpile selectively.
   transpileDependencies: [
     // can be string or regex
     'my-dep',

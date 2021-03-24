@@ -1,4 +1,32 @@
 
+## 5.0.0-alpha.8 (2021-03-24)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-babel`, `@vue/cli-service`
+  * [#6354](https://github.com/vuejs/vue-cli/pull/6354) feat: when `transpileDependencies` is set to `true`, transpile all dependencies in `node_modules` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6355](https://github.com/vuejs/vue-cli/pull/6355) feat: a `defineConfig` API from `@vue/cli-service` for better typing support in `vue.config.js` ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-service`
+  * [#6348](https://github.com/vuejs/vue-cli/pull/6348) chore!: bump copy-webpack-plugin to v8 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-jest`
+  * [#6347](https://github.com/vuejs/vue-cli/pull/6347) refactor!: move vue-jest and ts-jest to peer dependencies ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6372](https://github.com/vuejs/vue-cli/pull/6372) fix: check hoisted postcss version ([@sodatea](https://github.com/sodatea))
+  * [#6358](https://github.com/vuejs/vue-cli/pull/6358) fix: work around npm6/postcss8 hoisting issue ([@sodatea](https://github.com/sodatea))
+  * [#6366](https://github.com/vuejs/vue-cli/pull/6366) fix(build): demo-lib.html compatible Vue 3 ([@jeneser](https://github.com/jeneser))
+
+#### Committers: 4
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Péter Gaál ([@petergaal91](https://github.com/petergaal91))
+- Yazhe Wang ([@jeneser](https://github.com/jeneser))
+- zoomdong ([@fireairforce](https://github.com/fireairforce))
+
+
+
 ## 5.0.0-alpha.7 (2021-03-11)
 
 #### :bug: Bug Fix

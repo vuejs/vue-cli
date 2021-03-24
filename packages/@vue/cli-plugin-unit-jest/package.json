@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-unit-jest",
-  "version": "5.0.0-alpha.7",
+  "version": "5.0.0-alpha.8",
   "description": "unit-jest plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -26,7 +26,7 @@
     "@babel/core": "^7.12.16",
     "@babel/plugin-transform-modules-commonjs": "^7.12.13",
     "@types/jest": "^26.0.20",
-    "@vue/cli-shared-utils": "^5.0.0-alpha.7",
+    "@vue/cli-shared-utils": "^5.0.0-alpha.8",
     "babel-jest": "^26.6.3",
     "deepmerge": "^4.2.2",
     "jest": "^26.6.3",
@@ -41,8 +41,8 @@
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0",
-    "vue-jest": "^4.0.1 || ^5.0.0-0",
-    "ts-jest": "^26.5.3"
+    "ts-jest": "^26.5.3",
+    "vue-jest": "^4.0.1 || ^5.0.0-0"
   },
   "peerDependenciesMeta": {
     "ts-jest": {
