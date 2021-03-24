@@ -436,3 +436,6 @@ function cloneRuleNames (to, from) {
     }
   })
 }
+
+/** @type {import('../types/index').defineConfig} */
+module.exports.defineConfig = (config) => config
