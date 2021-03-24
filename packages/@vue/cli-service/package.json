@@ -7,6 +7,9 @@
   "bin": {
     "vue-cli-service": "bin/vue-cli-service.js"
   },
+  "scripts": {
+    "postinstall": "node bin/postinstall.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",

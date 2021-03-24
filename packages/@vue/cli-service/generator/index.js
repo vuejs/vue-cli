@@ -1,3 +1,6 @@
+const fs = require('fs-extra')
+const path = require('path')
+
 module.exports = (api, options) => {
   api.render('./template', {
     doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
@@ -73,5 +76,9 @@ module.exports = (api, options) => {
   // additional tooling configurations
   if (options.configs) {
     api.extendPackage(options.configs)
+  }
+
+  if (fs.existsSync(path.resolve(__dirname, './hotfix.js'))) {
+    require('./hotfix')(api, options, options)
   }
 }
