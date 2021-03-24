@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { chalk, semver, loadModule } = require('@vue/cli-shared-utils')
 const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
 const findExisting = (context, files) => {
@@ -58,6 +59,19 @@ module.exports = (api, rootOptions) => {
     ]))
 
     if (!hasPostCSSConfig) {
+      // #6342
+      // NPM 6 may incorrectly hoist postcss 7 to the same level of autoprefixer
+      // So we have to run a preflight check to tell the users how to fix it
+      const autoprefixerDirectory = path.dirname(require.resolve('autoprefixer/package.json'))
+      const postcssPkg = loadModule('postcss/package.json', autoprefixerDirectory)
+      const postcssVersion = postcssPkg.version
+      if (!semver.satisfies(postcssVersion, '8.x')) {
+        throw new Error(
+          `The package manager has hoisted a wrong version of ${chalk.cyan('postcss')}, ` +
+          `please run ${chalk.cyan('npm i postcss@8 -D')} to fix it.`
+        )
+      }
+
       loaderOptions.postcss = {
         postcssOptions: {
           plugins: [
