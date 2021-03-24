@@ -92,6 +92,10 @@ No longer supports generating project with `node-sass`. It has been [deprecated]
 * `terser-webpack-plugin` is upgraded from v2 to v5 (v4 if you choose to stay at webpack 4), using terser 5 and some there are some changes in the options format. See full details in its [changelog](https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md).
 * When creating new projects, the default `less-loader` is updated from [v5 to v8](https://github.com/webpack-contrib/less-loader/blob/master/CHANGELOG.md)(v7 for webpack 4 users); `less` from [v3 to v4](https://github.com/less/less.js/pull/3573); `sass-loader` from [v8 to v11](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md) (v10 for webpack 4 users); `stylus-loader` from [v3 to v5](https://github.com/webpack-contrib/stylus-loader/blob/master/CHANGELOG.md) (v4 for webpack 4 users).
 
+### Babel Plugin
+
+The [`transpileDependencies` option](../config/#transpiledependencies) now accepts a boolean value. Setting it to `true` will transpile all dependencies inside `node_modules`.
+
 ### ESLint Plugin
 
 * `eslint-loader` is replaced by [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin), dropping support for ESLint <= 6.
