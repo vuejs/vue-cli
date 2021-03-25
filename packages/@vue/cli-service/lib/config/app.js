@@ -214,20 +214,19 @@ module.exports = (api, options) => {
         const entries = Array.isArray(entry) ? entry : [entry]
         webpackConfig.entry(name).merge(entries.map(e => api.resolve(e)))
 
-        // test whether use inline loader
+        // trim inline loader
         // * See https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md#2-setting-a-loader-directly-for-the-template
-        const inlineLoaderReg = /[-!]?!.+!/
-        const isWithInlineLoader = /^[-!]?!/.test(template)
+        const templateWithoutLoader = template.replace(/^.+!/, '').replace(/\?.+$/, '')
 
         // resolve page index template
-        const hasDedicatedTemplate = fs.existsSync(api.resolve(isWithInlineLoader ? template.replace(inlineLoaderReg, '') : template))
+        const hasDedicatedTemplate = fs.existsSync(api.resolve(templateWithoutLoader))
         const templatePath = hasDedicatedTemplate
           ? template
           : fs.existsSync(htmlPath)
             ? htmlPath
             : defaultHtmlPath
 
-        publicCopyIgnore.push(api.resolve(templatePath).replace(/\\/g, '/').replace(inlineLoaderReg, ''))
+        publicCopyIgnore.push(api.resolve(templateWithoutLoader).replace(/\\/g, '/'))
 
         // inject html plugin for the page
         const pageHtmlOptions = Object.assign(
