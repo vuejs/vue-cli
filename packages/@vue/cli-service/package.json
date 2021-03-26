@@ -38,7 +38,6 @@
     "address": "^1.1.2",
     "autoprefixer": "^10.2.4",
     "browserslist": "^4.16.3",
-    "cache-loader": "^4.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "cli-highlight": "^2.1.10",
     "clipboardy": "^2.3.0",

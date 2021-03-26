@@ -21,6 +21,7 @@ module.exports = (api, options) => {
     }
 
     webpackConfig
+      .cache(true)
       .mode('development')
       .context(api.service.context)
       .entry('app')
@@ -75,10 +76,6 @@ module.exports = (api, options) => {
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('vue-loader-v15'))
             .options(Object.assign({
@@ -118,10 +115,6 @@ module.exports = (api, options) => {
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('vue-loader'))
             .options({
