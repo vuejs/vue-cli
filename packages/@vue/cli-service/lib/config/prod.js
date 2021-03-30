@@ -3,7 +3,6 @@ module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'production') {
       webpackConfig
-        .cache(false)
         .mode('production')
         .devtool(options.productionSourceMap ? 'source-map' : false)
 
