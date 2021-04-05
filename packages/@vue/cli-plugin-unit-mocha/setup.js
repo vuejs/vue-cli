@@ -4,3 +4,5 @@ require('jsdom-global')(undefined, { pretendToBeVisual: true, url: 'http://local
 window.Date = Date
 // https://github.com/vuejs/vue-next/pull/2943
 global.ShadowRoot = window.ShadowRoot
+
+global.SVGElement = window.SVGElement
