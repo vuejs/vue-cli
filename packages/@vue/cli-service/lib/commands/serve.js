@@ -160,6 +160,8 @@ module.exports = (api, options) => {
       addDevClientToEntry(webpackConfig, devClients)
     }
 
+    webpackConfig.cache.name = `${webpackConfig.mode}-${Object.keys(webpackConfig.entry).join('-')}`
+
     // create compiler
     const compiler = webpack(webpackConfig)
 

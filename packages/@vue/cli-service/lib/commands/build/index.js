@@ -196,6 +196,18 @@ async function build (args, api, options) {
     await fs.emptyDir(targetDir)
   }
 
+  modifyConfig(webpackConfig, config => {
+    config.cache.name = `${
+      config.mode
+    }-${
+      args.target
+    }-${
+      Object.keys(config.entry).join('-')
+    }${
+      args.modern ? (args.modernBuild ? '-modern' : '-legacy') : ''
+    }`
+  })
+
   return new Promise((resolve, reject) => {
     webpack(webpackConfig, (err, stats) => {
       stopSpinner(false)

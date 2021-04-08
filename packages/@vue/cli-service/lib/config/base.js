@@ -24,8 +24,6 @@ module.exports = (api, options) => {
 
     const cacheOptions = {
       type: 'filesystem',
-      // Includes:
-      //  - @vue/cli-service version
       version: `${cliServiceVersion}`
     }
 
