@@ -23,6 +23,7 @@
   },
   "homepage": "https://cli.vuejs.org/",
   "dependencies": {
+    "@babel/helper-compilation-targets": "^7.12.16",
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@soda/get-current-script": "^1.0.2",
     "@types/minimist": "^1.2.0",
