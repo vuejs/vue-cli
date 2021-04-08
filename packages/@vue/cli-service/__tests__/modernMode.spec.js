@@ -43,10 +43,6 @@ test('modern mode', async () => {
   expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors-legacy\.\w{8}\.js" nomodule>/)
   expect(index).toMatch(/<script defer="defer" src="\/js\/app-legacy\.\w{8}\.js" nomodule>/)
 
-  // should inject Safari 10 nomodule fix
-  const { safariFix } = require('../lib/webpack/ModernModePlugin')
-  expect(index).toMatch(`<script>${safariFix}</script>`)
-
   // Test crossorigin="use-credentials"
   await project.write('vue.config.js', `module.exports = { crossorigin: 'use-credentials' }`)
   const { stdout: stdout2 } = await project.run('vue-cli-service build --modern')
@@ -82,18 +78,42 @@ test('modern mode', async () => {
   expect(await getH1Text()).toMatch('Welcome to Your Vue.js App')
 })
 
-test('no-unsafe-inline', async () => {
-  const project = await create('no-unsafe-inline', defaultPreset)
+test('should not inject the nomodule-fix script if Safari 10 is not targeted', async () => {
+  // the default targets already excludes safari 10
+  const project = await create('skip-safari-fix', defaultPreset)
 
-  const { stdout } = await project.run('vue-cli-service build --modern --no-unsafe-inline')
+  const { stdout } = await project.run('vue-cli-service build --modern')
   expect(stdout).toMatch('Build complete.')
-
-  // should output a separate safari-nomodule-fix bundle
-  const files = await fs.readdir(path.join(project.dir, 'dist/js'))
-  expect(files.some(f => /^safari-nomodule-fix\.js$/.test(f))).toBe(true)
 
   // should contain no inline scripts in the output html
   const index = await project.read('dist/index.html')
+  expect(index).not.toMatch(/[^>]\s*<\/script>/)
+  // should not contain the safari-nomodule-fix bundle, either
+  const files = await fs.readdir(path.join(project.dir, 'dist/js'))
+  expect(files.some(f => /^safari-nomodule-fix\.js$/.test(f))).toBe(false)
+})
+
+test('should inject nomodule-fix script when Safari 10 support is required', async () => {
+  const project = await create('safari-nomodule-fix', defaultPreset)
+
+  const pkg = JSON.parse(await project.read('package.json'))
+  pkg.browserslist.push('safari > 10')
+  await project.write('package.json', JSON.stringify(pkg, null, 2))
+
+  let { stdout } = await project.run('vue-cli-service build --modern')
+  let index = await project.read('dist/index.html')
+  // should inject Safari 10 nomodule fix as an inline script
+  const { safariFix } = require('../lib/webpack/ModernModePlugin')
+  expect(index).toMatch(`<script>${safariFix}</script>`)
+
+  // `--no-unsafe-inline` option
+  stdout = (await project.run('vue-cli-service build --modern --no-unsafe-inline')).stdout
+  expect(stdout).toMatch('Build complete.')
+  // should output a separate safari-nomodule-fix bundle
+  const files = await fs.readdir(path.join(project.dir, 'dist/js'))
+  expect(files.some(f => /^safari-nomodule-fix\.js$/.test(f))).toBe(true)
+  // should contain no inline scripts in the output html
+  index = await project.read('dist/index.html')
   expect(index).not.toMatch(/[^>]\s*<\/script>/)
 })
 
