@@ -13,6 +13,8 @@ const checkWebpack = require('./util/checkWebpack')
 const loadFileConfig = require('./util/loadFileConfig')
 const resolveUserConfig = require('./util/resolveUserConfig')
 
+// Seems we can't use `instanceof Promise` here (would fail the tests)
+const isPromise = p => p && typeof p.then === 'function'
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
     checkWebpack(context)
@@ -56,7 +58,7 @@ module.exports = class Service {
     return pkg
   }
 
-  async init (mode = process.env.VUE_CLI_MODE) {
+  init (mode = process.env.VUE_CLI_MODE) {
     if (this.initialized) {
       return
     }
@@ -71,23 +73,31 @@ module.exports = class Service {
     this.loadEnv()
 
     // load user config
-    const userOptions = await this.loadUserOptions()
-    this.projectOptions = defaultsDeep(userOptions, defaults())
+    const userOptions = this.loadUserOptions()
+    const loadedCallback = (loadedUserOptions) => {
+      this.projectOptions = defaultsDeep(loadedUserOptions, defaults())
 
-    debug('vue:project-config')(this.projectOptions)
+      debug('vue:project-config')(this.projectOptions)
 
-    // apply plugins.
-    this.plugins.forEach(({ id, apply }) => {
-      if (this.pluginsToSkip.has(id)) return
-      apply(new PluginAPI(id, this), this.projectOptions)
-    })
+      // apply plugins.
+      this.plugins.forEach(({ id, apply }) => {
+        if (this.pluginsToSkip.has(id)) return
+        apply(new PluginAPI(id, this), this.projectOptions)
+      })
 
-    // apply webpack configs from project config file
-    if (this.projectOptions.chainWebpack) {
-      this.webpackChainFns.push(this.projectOptions.chainWebpack)
+      // apply webpack configs from project config file
+      if (this.projectOptions.chainWebpack) {
+        this.webpackChainFns.push(this.projectOptions.chainWebpack)
+      }
+      if (this.projectOptions.configureWebpack) {
+        this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+      }
     }
-    if (this.projectOptions.configureWebpack) {
-      this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+
+    if (isPromise(userOptions)) {
+      return userOptions.then(loadedCallback)
+    } else {
+      return loadedCallback(userOptions)
     }
   }
 
@@ -322,13 +332,9 @@ module.exports = class Service {
   loadUserOptions () {
     const { fileConfig, fileConfigPath } = loadFileConfig(this.context)
 
-    // Seems we can't use `instanceof Promise` here (would fail the tests)
-    if (fileConfig && typeof fileConfig.then === 'function') {
+    if (isPromise(fileConfig)) {
       return fileConfig
-        .then(mod => {
-          // fs.writeFileSync(`${this.context}/aaaa`, `mod ${JSON.stringify(mod, null, 2)}`)
-          return mod.default
-        })
+        .then(mod => mod.default)
         .then(loadedConfig => resolveUserConfig({
           inlineOptions: this.inlineOptions,
           pkgConfig: this.pkg.vue,
