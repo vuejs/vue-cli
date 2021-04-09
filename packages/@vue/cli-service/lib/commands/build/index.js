@@ -1,6 +1,7 @@
 const defaults = {
   clean: true,
   target: 'app',
+  module: true,
   formats: 'commonjs,umd,umd-min',
   'unsafe-inline': true
 }
@@ -26,7 +27,7 @@ module.exports = (api, options) => {
     options: {
       '--mode': `specify env mode (default: production)`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
-      '--modern': `build app targeting modern browsers with auto fallback`,
+      '--no-module': `build app without generating <script type="module"> chunks for modern browsers`,
       '--no-unsafe-inline': `build app without introducing inline scripts`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--inline-vue': 'include the Vue module in the final bundle of library or web component target',
@@ -38,7 +39,8 @@ module.exports = (api, options) => {
       '--report-json': 'generate report.json to help analyze bundle content',
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
       '--watch': `watch for changes`,
-      '--stdin': `close when stdin ends`
+      '--stdin': `close when stdin ends`,
+      '--no-modern': `(deprecated) same as --no-module`
     }
   }, async (args, rawArgs) => {
     for (const key in defaults) {
@@ -49,6 +51,16 @@ module.exports = (api, options) => {
     args.entry = args.entry || args._[0]
     if (args.target !== 'app') {
       args.entry = args.entry || 'src/App.vue'
+    }
+
+    // A trick to quickly introduce the `--no-module` command
+    // without modifying the rest of the code
+    // todo: refactor this later
+    if (args.module != null) {
+      args.modern = args.module
+    } else {
+      // Make --no-modern an alias of --no-module
+      args.module = args.modern
     }
 
     process.env.VUE_CLI_BUILD_TARGET = args.target
@@ -78,14 +90,6 @@ module.exports = (api, options) => {
       }
       delete process.env.VUE_CLI_MODERN_MODE
     } else {
-      if (args.modern) {
-        const { warn } = require('@vue/cli-shared-utils')
-        warn(
-          `Modern mode only works with default target (app). ` +
-          `For libraries or web components, use the browserslist ` +
-          `config to specify target browsers.`
-        )
-      }
       await build(args, api, options)
     }
     delete process.env.VUE_CLI_BUILD_TARGET
