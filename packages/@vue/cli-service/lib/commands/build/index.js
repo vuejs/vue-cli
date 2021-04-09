@@ -53,18 +53,13 @@ module.exports = (api, options) => {
       args.entry = args.entry || 'src/App.vue'
     }
 
-    // A trick to quickly introduce the `--no-module` command
-    // without modifying the rest of the code
-    // todo: refactor this later
-    if (args.module != null) {
-      args.modern = args.module
-    } else {
-      // Make --no-modern an alias of --no-module
-      args.module = args.modern
+    // Make --no-modern an alias of --no-module
+    if (args.modern === false) {
+      args.module = false
     }
 
     process.env.VUE_CLI_BUILD_TARGET = args.target
-    if (args.modern && args.target === 'app') {
+    if (args.module && args.target === 'app') {
       process.env.VUE_CLI_MODERN_MODE = true
       if (!process.env.VUE_CLI_MODERN_BUILD) {
         // main-process for legacy build
@@ -114,7 +109,7 @@ async function build (args, api, options) {
   log()
   const mode = api.service.mode
   if (args.target === 'app') {
-    const bundleTag = args.modern
+    const bundleTag = args.module
       ? args.modernBuild
         ? `modern bundle `
         : `legacy bundle `
@@ -136,7 +131,7 @@ async function build (args, api, options) {
   }
 
   const targetDir = api.resolve(options.outputDir)
-  const isLegacyBuild = args.target === 'app' && args.modern && !args.modernBuild
+  const isLegacyBuild = args.target === 'app' && args.module && !args.modernBuild
 
   // resolve raw webpack config
   let webpackConfig
