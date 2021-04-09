@@ -39,8 +39,7 @@ module.exports = (api, options) => {
       '--report-json': 'generate report.json to help analyze bundle content',
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
       '--watch': `watch for changes`,
-      '--stdin': `close when stdin ends`,
-      '--no-modern': `(deprecated) same as --no-module`
+      '--stdin': `close when stdin ends`
     }
   }, async (args, rawArgs) => {
     for (const key in defaults) {
@@ -51,11 +50,6 @@ module.exports = (api, options) => {
     args.entry = args.entry || args._[0]
     if (args.target !== 'app') {
       args.entry = args.entry || 'src/App.vue'
-    }
-
-    // Make --no-modern an alias of --no-module
-    if (args.modern === false) {
-      args.module = false
     }
 
     process.env.VUE_CLI_BUILD_TARGET = args.target
