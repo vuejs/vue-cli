@@ -36,9 +36,6 @@ module.exports = (api, options) => {
     webpackConfig
     .cache(cacheOptions)
 
-    webpackConfig.optimization
-      .set('realContentHash', false)
-
     webpackConfig
       .mode('development')
       .context(api.service.context)
