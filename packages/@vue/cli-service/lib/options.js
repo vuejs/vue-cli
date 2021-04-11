@@ -60,7 +60,9 @@ const schema = createSchema(joi => joi.object({
   pwa: joi.object(),
 
   // 3rd party plugin options
-  pluginOptions: joi.object()
+  pluginOptions: joi.object(),
+  // local plugins
+  plugins: joi.array()
 }))
 
 exports.validate = (options, cb) => {
