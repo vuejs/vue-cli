@@ -10,7 +10,8 @@ const {
 const defaults = {
   host: '0.0.0.0',
   port: 8080,
-  https: false
+  https: false,
+  cache: true
 }
 
 module.exports = (api, options) => {
@@ -26,7 +27,8 @@ module.exports = (api, options) => {
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
       '--public': `specify the public network URL for the HMR client`,
-      '--skip-plugins': `comma-separated list of plugin names to skip for this run`
+      '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
+      '--no-cache': `disable webpack persistent caching`
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -160,7 +162,12 @@ module.exports = (api, options) => {
       addDevClientToEntry(webpackConfig, devClients)
     }
 
-    webpackConfig.cache.name = `${webpackConfig.mode}-${Object.keys(webpackConfig.entry).join('-')}`
+    args.cache = args.cache == null ? defaults.cache : args.cache
+    if (args.cache) {
+      webpackConfig.cache.name = `${webpackConfig.mode}-${Object.keys(webpackConfig.entry).join('-')}`
+    } else {
+      webpackConfig.cache = false
+    }
 
     // create compiler
     const compiler = webpack(webpackConfig)

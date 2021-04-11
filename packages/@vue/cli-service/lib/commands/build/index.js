@@ -2,7 +2,8 @@ const defaults = {
   clean: true,
   target: 'app',
   formats: 'commonjs,umd,umd-min',
-  'unsafe-inline': true
+  'unsafe-inline': true,
+  cache: true
 }
 
 const buildModes = {
@@ -38,7 +39,8 @@ module.exports = (api, options) => {
       '--report-json': 'generate report.json to help analyze bundle content',
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
       '--watch': `watch for changes`,
-      '--stdin': `close when stdin ends`
+      '--stdin': `close when stdin ends`,
+      '--no-cache': `disable webpack persistent caching`
     }
   }, async (args, rawArgs) => {
     for (const key in defaults) {
@@ -196,17 +198,17 @@ async function build (args, api, options) {
     await fs.emptyDir(targetDir)
   }
 
-  modifyConfig(webpackConfig, config => {
-    config.cache.name = `${
-      config.mode
-    }-${
-      args.target
-    }-${
-      Object.keys(config.entry).join('-')
-    }${
-      args.modern ? (args.modernBuild ? '-modern' : '-legacy') : ''
-    }`
-  })
+  if (args.cache) {
+    modifyConfig(webpackConfig, config => {
+      config.cache.name = `${config.mode}-${args.target}-${Object.keys(config.entry).join('-')}${
+        args.modern ? (args.modernBuild ? '-modern' : '-legacy') : ''
+      }`
+    })
+  } else {
+    modifyConfig(webpackConfig, config => {
+      config.cache = false
+    })
+  }
 
   return new Promise((resolve, reject) => {
     webpack(webpackConfig, (err, stats) => {
