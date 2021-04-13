@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 const debug = require('debug')
 const { merge } = require('webpack-merge')
@@ -7,11 +6,15 @@ const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg, resolveModule } = require('@vue/cli-shared-utils')
+const { warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg, resolveModule } = require('@vue/cli-shared-utils')
 
-const { defaults, validate } = require('./options')
-const checkWebpack = require('@vue/cli-service/lib/util/checkWebpack')
+const { defaults } = require('./options')
+const checkWebpack = require('./util/checkWebpack')
+const loadFileConfig = require('./util/loadFileConfig')
+const resolveUserConfig = require('./util/resolveUserConfig')
 
+// Seems we can't use `instanceof Promise` here (would fail the tests)
+const isPromise = p => p && typeof p.then === 'function'
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
     checkWebpack(context)
@@ -71,22 +74,30 @@ module.exports = class Service {
 
     // load user config
     const userOptions = this.loadUserOptions()
-    this.projectOptions = defaultsDeep(userOptions, defaults())
+    const loadedCallback = (loadedUserOptions) => {
+      this.projectOptions = defaultsDeep(loadedUserOptions, defaults())
 
-    debug('vue:project-config')(this.projectOptions)
+      debug('vue:project-config')(this.projectOptions)
 
-    // apply plugins.
-    this.plugins.forEach(({ id, apply }) => {
-      if (this.pluginsToSkip.has(id)) return
-      apply(new PluginAPI(id, this), this.projectOptions)
-    })
+      // apply plugins.
+      this.plugins.forEach(({ id, apply }) => {
+        if (this.pluginsToSkip.has(id)) return
+        apply(new PluginAPI(id, this), this.projectOptions)
+      })
 
-    // apply webpack configs from project config file
-    if (this.projectOptions.chainWebpack) {
-      this.webpackChainFns.push(this.projectOptions.chainWebpack)
+      // apply webpack configs from project config file
+      if (this.projectOptions.chainWebpack) {
+        this.webpackChainFns.push(this.projectOptions.chainWebpack)
+      }
+      if (this.projectOptions.configureWebpack) {
+        this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+      }
     }
-    if (this.projectOptions.configureWebpack) {
-      this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+
+    if (isPromise(userOptions)) {
+      return userOptions.then(loadedCallback)
+    } else {
+      return loadedCallback(userOptions)
     }
   }
 
@@ -227,7 +238,7 @@ module.exports = class Service {
     this.setPluginsToSkip(args)
 
     // load env variables, load user config, apply plugins
-    this.init(mode)
+    await this.init(mode)
 
     args._ = args._ || []
     let command = this.commands[name]
@@ -316,110 +327,28 @@ module.exports = class Service {
     return config
   }
 
+  // Note: we intentionally make this function synchronous by default
+  // because eslint-import-resolver-webpack does not support async webpack configs.
   loadUserOptions () {
-    // vue.config.c?js
-    let fileConfig, pkgConfig, resolved, resolvedFrom
-    const esm = this.pkg.type && this.pkg.type === 'module'
+    const { fileConfig, fileConfigPath } = loadFileConfig(this.context)
 
-    const possibleConfigPaths = [
-      process.env.VUE_CLI_SERVICE_CONFIG_PATH,
-      './vue.config.js',
-      './vue.config.cjs'
-    ]
-
-    let fileConfigPath
-    for (const p of possibleConfigPaths) {
-      const resolvedPath = p && path.resolve(this.context, p)
-      if (resolvedPath && fs.existsSync(resolvedPath)) {
-        fileConfigPath = resolvedPath
-        break
-      }
+    if (isPromise(fileConfig)) {
+      return fileConfig
+        .then(mod => mod.default)
+        .then(loadedConfig => resolveUserConfig({
+          inlineOptions: this.inlineOptions,
+          pkgConfig: this.pkg.vue,
+          fileConfig: loadedConfig,
+          fileConfigPath
+        }))
     }
 
-    if (fileConfigPath) {
-      if (esm && fileConfigPath === './vue.config.js') {
-        throw new Error(`Please rename ${chalk.bold('vue.config.js')} to ${chalk.bold('vue.config.cjs')} when ECMAScript modules is enabled`)
-      }
-
-      try {
-        fileConfig = loadModule(fileConfigPath, this.context)
-
-        if (typeof fileConfig === 'function') {
-          fileConfig = fileConfig()
-        }
-
-        if (!fileConfig || typeof fileConfig !== 'object') {
-          // TODO: show throw an Error here, to be fixed in v5
-          error(
-            `Error loading ${chalk.bold(fileConfigPath)}: should export an object or a function that returns object.`
-          )
-          fileConfig = null
-        }
-      } catch (e) {
-        error(`Error loading ${chalk.bold(fileConfigPath)}:`)
-        throw e
-      }
-    }
-
-    // package.vue
-    pkgConfig = this.pkg.vue
-    if (pkgConfig && typeof pkgConfig !== 'object') {
-      error(
-        `Error loading vue-cli config in ${chalk.bold(`package.json`)}: ` +
-        `the "vue" field should be an object.`
-      )
-      pkgConfig = null
-    }
-
-    if (fileConfig) {
-      if (pkgConfig) {
-        warn(
-          `"vue" field in package.json ignored ` +
-          `due to presence of ${chalk.bold('vue.config.js')}.`
-        )
-        warn(
-          `You should migrate it into ${chalk.bold('vue.config.js')} ` +
-          `and remove it from package.json.`
-        )
-      }
-      resolved = fileConfig
-      resolvedFrom = 'vue.config.js'
-    } else if (pkgConfig) {
-      resolved = pkgConfig
-      resolvedFrom = '"vue" field in package.json'
-    } else {
-      resolved = this.inlineOptions || {}
-      resolvedFrom = 'inline options'
-    }
-
-    // normalize some options
-    ensureSlash(resolved, 'publicPath')
-    if (typeof resolved.publicPath === 'string') {
-      resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
-    }
-    removeSlash(resolved, 'outputDir')
-
-    // validate options
-    validate(resolved, msg => {
-      error(
-        `Invalid options in ${chalk.bold(resolvedFrom)}: ${msg}`
-      )
+    return resolveUserConfig({
+      inlineOptions: this.inlineOptions,
+      pkgConfig: this.pkg.vue,
+      fileConfig,
+      fileConfigPath
     })
-
-    return resolved
-  }
-}
-
-function ensureSlash (config, key) {
-  const val = config[key]
-  if (typeof val === 'string') {
-    config[key] = val.replace(/([^/])$/, '$1/')
-  }
-}
-
-function removeSlash (config, key) {
-  if (typeof config[key] === 'string') {
-    config[key] = config[key].replace(/\/$/g, '')
   }
 }
 
