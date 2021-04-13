@@ -117,8 +117,18 @@ test('should inject nomodule-fix script when Safari 10 support is required', asy
   expect(index).not.toMatch(/[^>]\s*<\/script>/)
 })
 
-test.todo('--no-module')
-test.todo('--no-modern as an alias to --no-module')
+test('--no-module', async () => {
+  const project = await create('no-module', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --no-module')
+  expect(stdout).toMatch('Build complete.')
+
+  const index = await project.read('dist/index.html')
+  expect(index).not.toMatch('type="module"')
+
+  const files = await fs.readdir(path.join(project.dir, 'dist/js'))
+  expect(files.some(f => /-legacy.js/.test(f))).toBe(false)
+})
 
 afterAll(async () => {
   if (browser) {
