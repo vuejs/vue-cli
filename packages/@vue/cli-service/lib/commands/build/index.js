@@ -108,6 +108,7 @@ async function build (args, api, options) {
     logWithSpinner,
     stopSpinner
   } = require('@vue/cli-shared-utils')
+  const cliServiceVersion = require('@vue/cli-service/package.json').version
 
   log()
   const mode = api.service.mode
@@ -202,6 +203,12 @@ async function build (args, api, options) {
     modifyConfig(webpackConfig, config => {
       config.cache.name = `${config.mode}-${args.target}-${Object.keys(config.entry).join('-')}${
         args.modern ? (args.modernBuild ? '-modern' : '-legacy') : ''
+      }`
+      config.cache.version = `${cliServiceVersion}|${JSON.stringify(args)}|${targetDir}|${
+        Object.entries(process.env)
+          .filter(([key]) => key.startsWith('VUE_CLI_') || key.startsWith('VUE_APP_') || key === 'NODE_ENV' || key === 'BABEL_ENV')
+          .map(([key, value]) => `${key}-${value}`)
+          .join(';')
       }`
     })
   } else {

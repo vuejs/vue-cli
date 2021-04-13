@@ -7,7 +7,6 @@ module.exports = (api, options) => {
   const webpack = require('webpack')
   const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../util/getVueMajor')(cwd)
-  const cliServiceVersion = require('@vue/cli-service/package.json').version
   const fileConfigPath = require('../util/getFileConfigPath')(cwd)
 
   api.chainWebpack(webpackConfig => {
@@ -23,8 +22,7 @@ module.exports = (api, options) => {
     }
 
     const cacheOptions = {
-      type: 'filesystem',
-      version: `${cliServiceVersion}`
+      type: 'filesystem'
     }
 
     if (fileConfigPath) {
