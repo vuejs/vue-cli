@@ -54,7 +54,13 @@ VUE_APP_NOT_SECRET_CODE=some_value
 
 Обратите внимание, что только `NODE_ENV`, `BASE_URL` и переменные, именованные с префикса `VUE_APP_`, статически внедрятся в *клиентскую сборку* с помощью `webpack.DefinePlugin`. Это сделано во избежание случайного обнародования закрытого ключа на машине, которая может иметь такое же имя.
 
-Подробнее о правилах парсинга env можно узнать [в документации `dotenv`](https://github.com/motdotla/dotenv#rules). Мы также используем [dotenv-expand](https://github.com/motdotla/dotenv-expand) для переменных расширения (доступно в Vue CLI 3.5+).
+Подробнее о правилах парсинга env [в документации `dotenv`](https://github.com/motdotla/dotenv#rules). Можно также использовать [dotenv-expand](https://github.com/motdotla/dotenv-expand) для переменных расширения (доступно с версии Vue CLI 3.5+). Например:
+
+```bash
+FOO=foo
+BAR=bar
+CONCAT=$FOO$BAR # CONCAT=foobar
+```
 
 Загруженные переменные станут доступны всем командам `vue-cli-service`, плагинам и зависимостям.
 
@@ -78,7 +84,7 @@ VUE_APP_TITLE=My App
 
 ```
 NODE_ENV=production
-VUE_APP_TITLE=My App (staging)
+VUE_APP_TITLE=My Staging App
 ```
 
 - `vue-cli-service build` собирает приложение для production, загружает `.env`, `.env.production` и `.env.production.local` если они существуют;
