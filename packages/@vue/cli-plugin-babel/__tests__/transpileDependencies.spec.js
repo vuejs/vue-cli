@@ -116,7 +116,7 @@ test('only transpile package with same name specified in transpileDependencies',
   expect(await readLegacyVendorFile()).toMatch('() => "__SCOPE_TEST__"')
 })
 
-test('when transpileDependencies is on, the module build should also include transpiled code', async () => {
+test('when transpileDependencies is on, the module build should also include transpiled code (with a different target)', async () => {
   await project.write(
     'vue.config.js',
     `module.exports = { transpileDependencies: true }`
@@ -127,5 +127,9 @@ test('when transpileDependencies is on, the module build should also include tra
   )
 
   await project.run('vue-cli-service build')
-  expect(await readVendorFile()).not.toMatch('x?.y?.z')
+  const file = await readVendorFile()
+  // module build won't need arrow function transformation
+  expect(file).toMatch('() => "__SCOPE_TEST__"')
+  // but still needs optional chaining transformation
+  expect(file).not.toMatch('x?.y?.z')
 })
