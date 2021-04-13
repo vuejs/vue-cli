@@ -2,7 +2,8 @@ const defaults = {
   clean: true,
   target: 'app',
   formats: 'commonjs,umd,umd-min',
-  'unsafe-inline': true
+  'unsafe-inline': true,
+  shadowMode: 'open'
 }
 
 const buildModes = {
@@ -38,7 +39,8 @@ module.exports = (api, options) => {
       '--report-json': 'generate report.json to help analyze bundle content',
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
       '--watch': `watch for changes`,
-      '--stdin': `close when stdin ends`
+      '--stdin': `close when stdin ends`,
+      '--shadowMode': `set shadow mode for web components (default: ${defaults.shadowMode})`
     }
   }, async (args, rawArgs) => {
     for (const key in defaults) {

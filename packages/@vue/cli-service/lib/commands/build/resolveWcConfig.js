@@ -1,7 +1,7 @@
 const path = require('path')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
+module.exports = (api, { target, entry, name, shadowMode, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -45,7 +45,11 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
     }
   }
 
-  const dynamicEntry = resolveEntry(prefix, libName, resolvedFiles, isAsync)
+  const componentOpts = {
+    shadowMode
+  }
+
+  const dynamicEntry = resolveEntry(prefix, libName, resolvedFiles, isAsync, componentOpts)
 
   function genConfig (minify, genHTML) {
     const config = api.resolveChainableWebpackConfig()

@@ -144,6 +144,36 @@ test('build as wc with --inline-vue', async () => {
   expect(divText).toMatch('Hello from Wc')
 })
 
+test('build as single wc, setting the shadowRoot mode to "closed', async () => {
+  const project = await create('build-single-wc', defaultPreset)
+
+  const { stdout } = await project.run(`vue-cli-service build --target wc --name single-wc --shadowMode closed`)
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('dist/demo.html')).toBe(true)
+  expect(project.has('dist/single-wc.js')).toBe(true)
+  expect(project.has('dist/single-wc.min.js')).toBe(true)
+
+  const port = await portfinder.getPortPromise()
+  server = createServer({ root: path.join(project.dir, 'dist') })
+
+  await new Promise((resolve, reject) => {
+    server.listen(port, err => {
+      if (err) return reject(err)
+      resolve()
+    })
+  })
+
+  const launched = await launchPuppeteer(`http://localhost:${port}/demo.html`)
+  browser = launched.browser
+  page = launched.page
+
+  const shadowRoot = await page.evaluate(() => {
+    return document.querySelector('single-wc').shadowRoot
+  })
+  expect(shadowRoot).toBeNull() // should contain styles from both app and child
+})
+
 afterEach(async () => {
   if (browser) {
     await browser.close()
