@@ -173,8 +173,8 @@ export default {
 
       term.open(this.$refs.render)
 
-      term.onBlur(() => this.$emit('blur'))
-      term.onFocus(() => this.$emit('focus'))
+      term.element.addEventListener('blur', () => this.$emit('blur'))
+      term.element.addEventListener('focus', () => this.$emit('focus'))
 
       if (this.autoSize) {
         this.$nextTick(this.fit)
