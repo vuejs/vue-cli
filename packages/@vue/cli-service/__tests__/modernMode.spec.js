@@ -103,7 +103,7 @@ test('should inject nomodule-fix script when Safari 10 support is required', asy
   let { stdout } = await project.run('vue-cli-service build')
   let index = await project.read('dist/index.html')
   // should inject Safari 10 nomodule fix as an inline script
-  const { safariFix } = require('../lib/webpack/ModernModePlugin')
+  const { safariFix } = require('../lib/webpack/SafariNomoduleFixPlugin')
   expect(index).toMatch(`<script>${safariFix}</script>`)
 
   // `--no-unsafe-inline` option
