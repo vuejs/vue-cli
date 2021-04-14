@@ -38,8 +38,8 @@ test('build', async () => {
   // expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
 
   // should inject scripts
-  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors\.\w{8}\.js">/)
-  expect(index).toMatch(/<script defer="defer" src="\/js\/app\.\w{8}\.js">/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors-legacy\.\w{8}\.js" nomodule>/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/app-legacy\.\w{8}\.js" nomodule>/)
   // should inject css
   expect(index).toMatch(/<link href="\/css\/app\.\w{8}\.css" rel="stylesheet">/)
 

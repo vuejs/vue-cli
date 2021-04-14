@@ -17,7 +17,7 @@ module.exports = (api, args, options) => {
     })
   }
 
-  if (args.modern) {
+  if (args.module) {
     const ModernModePlugin = require('../../webpack/ModernModePlugin')
     if (!args.modernBuild) {
       // Inject plugin to extract build stats and write to disk

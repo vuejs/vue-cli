@@ -1,6 +1,7 @@
 const defaults = {
   clean: true,
   target: 'app',
+  module: true,
   formats: 'commonjs,umd,umd-min',
   'unsafe-inline': true
 }
@@ -26,7 +27,7 @@ module.exports = (api, options) => {
     options: {
       '--mode': `specify env mode (default: production)`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
-      '--modern': `build app targeting modern browsers with auto fallback`,
+      '--no-module': `build app without generating <script type="module"> chunks for modern browsers`,
       '--no-unsafe-inline': `build app without introducing inline scripts`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--inline-vue': 'include the Vue module in the final bundle of library or web component target',
@@ -52,7 +53,7 @@ module.exports = (api, options) => {
     }
 
     process.env.VUE_CLI_BUILD_TARGET = args.target
-    if (args.modern && args.target === 'app') {
+    if (args.module && args.target === 'app') {
       process.env.VUE_CLI_MODERN_MODE = true
       if (!process.env.VUE_CLI_MODERN_BUILD) {
         // main-process for legacy build
@@ -78,14 +79,6 @@ module.exports = (api, options) => {
       }
       delete process.env.VUE_CLI_MODERN_MODE
     } else {
-      if (args.modern) {
-        const { warn } = require('@vue/cli-shared-utils')
-        warn(
-          `Modern mode only works with default target (app). ` +
-          `For libraries or web components, use the browserslist ` +
-          `config to specify target browsers.`
-        )
-      }
       await build(args, api, options)
     }
     delete process.env.VUE_CLI_BUILD_TARGET
@@ -110,7 +103,7 @@ async function build (args, api, options) {
   log()
   const mode = api.service.mode
   if (args.target === 'app') {
-    const bundleTag = args.modern
+    const bundleTag = args.module
       ? args.modernBuild
         ? `modern bundle `
         : `legacy bundle `
@@ -132,7 +125,7 @@ async function build (args, api, options) {
   }
 
   const targetDir = api.resolve(options.outputDir)
-  const isLegacyBuild = args.target === 'app' && args.modern && !args.modernBuild
+  const isLegacyBuild = args.target === 'app' && args.module && !args.modernBuild
 
   // resolve raw webpack config
   let webpackConfig
