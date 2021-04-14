@@ -43,14 +43,14 @@ function getIntersectionTargets (targets, constraintTargets) {
   return intersection
 }
 
-function getModernTargets (targets) {
-  const allModernTargets = getTargets(
+function getModuleTargets (targets) {
+  const allModuleTargets = getTargets(
     { esmodules: true },
     { ignoreBrowserslistConfig: true }
   )
 
   // use the intersection of modern mode browsers and user defined targets config
-  return getIntersectionTargets(targets, allModernTargets)
+  return getIntersectionTargets(targets, allModuleTargets)
 }
 
 function getWCTargets (targets) {
@@ -177,7 +177,7 @@ module.exports = (context, options = {}) => {
     targets = getWCTargets(targets)
   } else if (process.env.VUE_CLI_MODERN_BUILD) {
     // targeting browsers that at least support <script type="module">
-    targets = getModernTargets(targets)
+    targets = getModuleTargets(targets)
   }
 
   // included-by-default polyfills. These are common polyfills that 3rd party

@@ -3,10 +3,10 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const { semver } = require('@vue/cli-shared-utils')
-const { projectModernTargets } = require('../util/targets')
+const { projectModuleTargets } = require('../util/targets')
 
-const minSafariVersion = projectModernTargets.safari
-const minIOSVersion = projectModernTargets.ios
+const minSafariVersion = projectModuleTargets.safari
+const minIOSVersion = projectModuleTargets.ios
 const supportsSafari10 =
   (minSafariVersion && semver.lt(semver.coerce(minSafariVersion), '11.0.0')) ||
   (minIOSVersion && semver.lt(semver.coerce(minIOSVersion), '11.0.0'))
