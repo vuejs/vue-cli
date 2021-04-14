@@ -38,15 +38,33 @@ function getModuleTargets (targets) {
   return getIntersectionTargets(targets, allModuleTargets)
 }
 
+function doAllTargetsSupportModule (targets) {
+  const browserList = Object.keys(targets)
+
+  return browserList.every(browserName => {
+    if (!allModuleTargets[browserName]) {
+      return false
+    }
+
+    return semver.gte(
+      semver.coerce(targets[browserName]),
+      semver.coerce(allModuleTargets[browserName])
+    )
+  })
+}
+
 // get browserslist targets in current working directory
 const projectTargets = getTargets()
 const projectModuleTargets = getModuleTargets(projectTargets)
+const allProjectTargetsSupportModule = doAllTargetsSupportModule(projectTargets)
 
 module.exports = {
   getTargets,
   getModuleTargets,
   getIntersectionTargets,
+  doAllTargetsSupportModule,
 
   projectTargets,
-  projectModuleTargets
+  projectModuleTargets,
+  allProjectTargetsSupportModule
 }
