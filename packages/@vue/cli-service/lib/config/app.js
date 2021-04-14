@@ -33,6 +33,9 @@ module.exports = (api, options) => {
         .filename(outputFilename)
         .chunkFilename(outputFilename)
 
+    webpackConfig.optimization
+      .set('realContentHash', false)
+
     // code splitting
     if (process.env.NODE_ENV !== 'test') {
       webpackConfig.optimization.splitChunks({
