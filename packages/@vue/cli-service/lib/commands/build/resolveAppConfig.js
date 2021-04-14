@@ -21,13 +21,13 @@ module.exports = (api, args, options) => {
     const ModernModePlugin = require('../../webpack/ModernModePlugin')
     const SafariNomoduleFixPlugin = require('../../webpack/SafariNomoduleFixPlugin')
 
-    if (!args.modernBuild) {
+    if (!args.moduleBuild) {
       // Inject plugin to extract build stats and write to disk
       config
       .plugin('modern-mode-legacy')
       .use(ModernModePlugin, [{
         targetDir,
-        isModernBuild: false
+        isModuleBuild: false
       }])
     } else {
       config
@@ -44,7 +44,7 @@ module.exports = (api, args, options) => {
         .plugin('modern-mode-modern')
         .use(ModernModePlugin, [{
           targetDir,
-          isModernBuild: true
+          isModuleBuild: true
         }])
     }
   }

@@ -2,16 +2,16 @@ const fs = require('fs-extra')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 class ModernModePlugin {
-  constructor ({ targetDir, isModernBuild }) {
+  constructor ({ targetDir, isModuleBuild }) {
     this.targetDir = targetDir
-    this.isModernBuild = isModernBuild
+    this.isModuleBuild = isModuleBuild
   }
 
   apply (compiler) {
-    if (!this.isModernBuild) {
+    if (!this.isModuleBuild) {
       this.applyLegacy(compiler)
     } else {
-      this.applyModern(compiler)
+      this.applyModule(compiler)
     }
   }
 
@@ -37,7 +37,7 @@ class ModernModePlugin {
     })
   }
 
-  applyModern (compiler) {
+  applyModule (compiler) {
     const ID = `vue-cli-modern-bundle`
     compiler.hooks.compilation.tap(ID, compilation => {
       HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(ID, async (data, cb) => {

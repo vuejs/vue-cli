@@ -58,7 +58,7 @@ module.exports = (api, options) => {
       if (!process.env.VUE_CLI_MODERN_BUILD) {
         // main-process for legacy build
         await build(Object.assign({}, args, {
-          modernBuild: false,
+          moduleBuild: false,
           keepAlive: true
         }), api, options)
         // spawn sub-process of self for modern build
@@ -73,7 +73,7 @@ module.exports = (api, options) => {
       } else {
         // sub-process for modern build
         await build(Object.assign({}, args, {
-          modernBuild: true,
+          moduleBuild: true,
           clean: false
         }), api, options)
       }
@@ -104,8 +104,8 @@ async function build (args, api, options) {
   const mode = api.service.mode
   if (args.target === 'app') {
     const bundleTag = args.module
-      ? args.modernBuild
-        ? `modern bundle `
+      ? args.moduleBuild
+        ? `module bundle `
         : `legacy bundle `
       : ``
     logWithSpinner(`Building ${bundleTag}for ${mode}...`)
@@ -125,7 +125,7 @@ async function build (args, api, options) {
   }
 
   const targetDir = api.resolve(options.outputDir)
-  const isLegacyBuild = args.target === 'app' && args.module && !args.modernBuild
+  const isLegacyBuild = args.target === 'app' && args.module && !args.moduleBuild
 
   // resolve raw webpack config
   let webpackConfig
@@ -162,7 +162,7 @@ async function build (args, api, options) {
     modifyConfig(webpackConfig, config => {
       config.plugins.push(new DashboardPlugin({
         type: 'build',
-        modernBuild: args.modernBuild,
+        moduleBuild: args.moduleBuild,
         keepAlive: args.keepAlive
       }))
     })
