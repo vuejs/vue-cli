@@ -49,6 +49,10 @@ module.exports = (api, options) => {
     const validateWebpackConfig = require('../util/validateWebpackConfig')
     const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
+    const cwd = api.getCwd()
+    const cliServiceVersion = require('@vue/cli-service/package.json').version
+    const fileConfigPath = require('../util/getFileConfigPath')(cwd)
+
     // configs that only matters for dev server
     api.chainWebpack(webpackConfig => {
       if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
@@ -164,7 +168,17 @@ module.exports = (api, options) => {
 
     args.cache = args.cache == null ? defaults.cache : args.cache
     if (args.cache) {
-      webpackConfig.cache.name = `${webpackConfig.mode}-${Object.keys(webpackConfig.entry).join('-')}`
+      webpackConfig.cache = {
+        type: 'filesystem',
+        name: `${webpackConfig.mode}-${Object.keys(webpackConfig.entry).join('-')}`,
+        version: `${cliServiceVersion}`
+      }
+      if (fileConfigPath) {
+        webpackConfig.cache.buildDependencies = {
+          ...(webpackConfig.cache.buildDependencies || {}),
+          config: [fileConfigPath]
+        }
+      }
     } else {
       webpackConfig.cache = false
     }
