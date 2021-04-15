@@ -19,6 +19,10 @@ const {
   isRequired
 } = require('@babel/helper-compilation-targets')
 
+// We'll no longer need this logic in Babel 8 as it's the default behavior
+// See discussions at:
+// https://github.com/babel/rfcs/pull/2#issuecomment-714785228
+// https://github.com/babel/babel/pull/12189
 function getIntersectionTargets (targets, constraintTargets) {
   const intersection = Object.keys(constraintTargets).reduce(
     (results, browser) => {
