@@ -130,7 +130,18 @@ test('--no-module', async () => {
   expect(files.some(f => /-legacy.js/.test(f))).toBe(false)
 })
 
-test.todo('should use correct hash for fallback bundles')
+test('should use correct hash for fallback bundles', async () => {
+  const project = await create('legacy-hash', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build')
+  expect(stdout).toMatch('Build complete.')
+
+  const index = await project.read('dist/index.html')
+  const jsFiles = (await fs.readdir(path.join(project.dir, 'dist/js'))).filter(f => f.endsWith('.js'))
+  for (const f of jsFiles) {
+    expect(index).toMatch(`<script defer="defer" src="/js/${f}"`)
+  }
+})
 
 test('should only build one bundle if all targets support ES module', async () => {
   const project = await create('no-differential-loading', defaultPreset)
