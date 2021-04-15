@@ -2,8 +2,7 @@ const defaults = {
   clean: true,
   target: 'app',
   module: true,
-  formats: 'commonjs,umd,umd-min',
-  'unsafe-inline': true
+  formats: 'commonjs,umd,umd-min'
 }
 
 const buildModes = {
@@ -28,7 +27,6 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: production)`,
       '--dest': `specify output directory (default: ${options.outputDir})`,
       '--no-module': `build app without generating <script type="module"> chunks for modern browsers`,
-      '--no-unsafe-inline': `build app without introducing inline scripts`,
       '--target': `app | lib | wc | wc-async (default: ${defaults.target})`,
       '--inline-vue': 'include the Vue module in the final bundle of library or web component target',
       '--formats': `list of output formats for library builds (default: ${defaults.formats})`,

@@ -88,33 +88,24 @@ class ModernModePlugin {
         legacyAssets.forEach(a => { a.attributes.nomodule = '' })
 
         if (needsSafariFix) {
-          if (this.unsafeInline) {
-            // inject inline Safari 10 nomodule fix
-            tags.push({
-              tagName: 'script',
-              closeTag: true,
-              innerHTML: safariFix
-            })
-          } else {
-            // inject the fix as an external script
-            const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
-            const fullSafariFixPath = path.join(compilation.options.output.publicPath, safariFixPath)
-            compilation.assets[safariFixPath] = {
-              source: function () {
-                return Buffer.from(safariFix)
-              },
-              size: function () {
-                return Buffer.byteLength(safariFix)
-              }
+          // inject the Safari 10 nomodule fix as an external script
+          const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
+          const fullSafariFixPath = path.join(compilation.options.output.publicPath, safariFixPath)
+          compilation.assets[safariFixPath] = {
+            source: function () {
+              return Buffer.from(safariFix)
+            },
+            size: function () {
+              return Buffer.byteLength(safariFix)
             }
-            tags.push({
-              tagName: 'script',
-              closeTag: true,
-              attributes: {
-                src: fullSafariFixPath
-              }
-            })
           }
+          tags.push({
+            tagName: 'script',
+            closeTag: true,
+            attributes: {
+              src: fullSafariFixPath
+            }
+          })
         }
 
         tags.push(...legacyAssets)

@@ -36,7 +36,7 @@ module.exports = (api, args, options) => {
           targetDir,
           isModernBuild: true,
           unsafeInline: args['unsafe-inline'],
-          // as we may generate an addition file asset (if `no-unsafe-inline` specified)
+          // as we may generate an addition file asset (if Safari 10 fix is needed)
           // we need to provide the correct directory for that file to place in
           jsDirectory: require('../../util/getAssetPath')(options, 'js')
         }])
