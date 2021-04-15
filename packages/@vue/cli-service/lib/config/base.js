@@ -7,6 +7,8 @@ module.exports = (api, options) => {
   const webpack = require('webpack')
   const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../util/getVueMajor')(cwd)
+  const fileConfigPath = require('../util/getFileConfigPath')(cwd)
+  const cliServiceVersion = require('@vue/cli-service/package.json').version
 
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -20,7 +22,20 @@ module.exports = (api, options) => {
           .resolve.set('fullySpecified', false)
     }
 
+    const cacheOptions = {
+      type: 'filesystem',
+      version: `${cliServiceVersion}`,
+      buildDependencies: {
+        config: [require.resolve('../../webpack.config')]
+      }
+    }
+
+    if (fileConfigPath) {
+      cacheOptions.buildDependencies.config.push(fileConfigPath)
+    }
+
     webpackConfig
+      .cache(cacheOptions)
       .mode('development')
       .context(api.service.context)
       .entry('app')

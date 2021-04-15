@@ -108,9 +108,7 @@ async function build (args, api, options) {
     logWithSpinner,
     stopSpinner
   } = require('@vue/cli-shared-utils')
-  const cliServiceVersion = require('@vue/cli-service/package.json').version
-  const cwd = api.getCwd()
-  const fileConfigPath = require('../../util/getFileConfigPath')(cwd)
+  const getSpecificEnv = require('../../util/getSpecificEnv')
 
   log()
   const mode = api.service.mode
@@ -203,23 +201,14 @@ async function build (args, api, options) {
 
   if (args.cache) {
     modifyConfig(webpackConfig, config => {
-      config.cache = {
-        type: 'filesystem',
-        name: `${config.mode}-${args.target}-${Object.keys(config.entry).join('-')}${
-          args.modern ? (args.modernBuild ? '-modern' : '-legacy') : ''
-        }`,
-        version: `${cliServiceVersion}|${JSON.stringify(args)}|${targetDir}|${
-          Object.entries(process.env)
-            .filter(([key]) => key.startsWith('VUE_CLI_') || key.startsWith('VUE_APP_') || key === 'NODE_ENV' || key === 'BABEL_ENV')
-            .map(([key, value]) => `${key}-${value}`)
-            .join(';')
-        }`
-      }
-      if (fileConfigPath) {
-        config.cache.buildDependencies = {
-          ...(config.cache.buildDependencies || {}),
-          config: [fileConfigPath]
-        }
+      if (config.cache && typeof config.cache === 'object') {
+        const configVars = JSON.stringify({ ...args, targetDir })
+        config.cache.name =
+            `${config.mode}-${args.target}` +
+            `-${Object.keys(config.entry).join('-')}` +
+            `${args.modern ? (args.modernBuild ? '-modern' : '-legacy') : ''}` +
+            `${config.cache.name ? '-' + config.cache.name : ''}`
+        config.cache.version = `${config.cache.version}|${configVars}|${getSpecificEnv()}`
       }
     })
   } else {
