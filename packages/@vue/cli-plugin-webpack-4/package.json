@@ -25,6 +25,7 @@
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.0-alpha.8",
     "copy-webpack-plugin": "^6.4.1",
+    "css-minimizer-webpack-plugin": "^1.2.0",
     "hash-sum": "^2.0.0",
     "html-webpack-plugin": "^4.5.1",
     "module-alias": "^2.2.2",
