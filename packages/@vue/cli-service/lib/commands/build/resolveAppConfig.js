@@ -17,7 +17,7 @@ module.exports = (api, args, options) => {
     })
   }
 
-  if (args.module) {
+  if (process.env.VUE_CLI_MODERN_MODE) {
     const ModernModePlugin = require('../../webpack/ModernModePlugin')
     const SafariNomoduleFixPlugin = require('../../webpack/SafariNomoduleFixPlugin')
 
