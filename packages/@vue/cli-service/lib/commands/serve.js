@@ -10,7 +10,8 @@ const {
 const defaults = {
   host: '0.0.0.0',
   port: 8080,
-  https: false
+  https: false,
+  cache: true
 }
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
@@ -27,7 +28,8 @@ module.exports = (api, options) => {
       '--port': `specify port (default: ${defaults.port})`,
       '--https': `use https (default: ${defaults.https})`,
       '--public': `specify the public network URL for the HMR client`,
-      '--skip-plugins': `comma-separated list of plugin names to skip for this run`
+      '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
+      '--no-cache': `disable webpack persistent caching`
     }
   }, async function serve (args) {
     info('Starting development server...')
@@ -47,6 +49,7 @@ module.exports = (api, options) => {
     const launchEditorMiddleware = require('launch-editor-middleware')
     const validateWebpackConfig = require('../util/validateWebpackConfig')
     const isAbsoluteUrl = require('../util/isAbsoluteUrl')
+    const getSpecificEnv = require('../util/getSpecificEnv')
 
     // configs that only matters for dev server
     api.chainWebpack(webpackConfig => {
@@ -161,6 +164,21 @@ module.exports = (api, options) => {
       }
       // inject dev/hot client
       addDevClientToEntry(webpackConfig, devClients)
+    }
+
+    args.cache = args.cache == null ? defaults.cache : args.cache
+    if (args.cache) {
+      if (webpackConfig.cache && typeof webpackConfig.cache === 'object') {
+        const configVars = JSON.stringify({ ...args })
+
+        webpackConfig.cache.name =
+          `${webpackConfig.mode}` +
+          `-${Object.keys(webpackConfig.entry).join('-')}` +
+          `${webpackConfig.cache.name ? '-' + webpackConfig.cache.name : ''}`
+        webpackConfig.cache.version = `${webpackConfig.cache.version}|${configVars}|${getSpecificEnv()}`
+      }
+    } else {
+      webpackConfig.cache = false
     }
 
     // create compiler

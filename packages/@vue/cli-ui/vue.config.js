@@ -13,6 +13,10 @@ module.exports = {
     }
   },
 
+  chainWebpack: config => {
+    config.module.rule('gql').uses.delete('cache-loader')
+  },
+
   css: {
     loaderOptions: {
       stylus: {

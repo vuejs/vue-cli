@@ -3,7 +3,8 @@ const defaults = {
   target: 'app',
   module: true,
   formats: 'commonjs,umd,umd-min',
-  'unsafe-inline': true
+  'unsafe-inline': true,
+  cache: true
 }
 
 const buildModes = {
@@ -39,7 +40,8 @@ module.exports = (api, options) => {
       '--report-json': 'generate report.json to help analyze bundle content',
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`,
       '--watch': `watch for changes`,
-      '--stdin': `close when stdin ends`
+      '--stdin': `close when stdin ends`,
+      '--no-cache': `disable webpack persistent caching`
     }
   }, async (args, rawArgs) => {
     for (const key in defaults) {
@@ -107,6 +109,7 @@ async function build (args, api, options) {
     logWithSpinner,
     stopSpinner
   } = require('@vue/cli-shared-utils')
+  const getSpecificEnv = require('../../util/getSpecificEnv')
 
   log()
   const mode = api.service.mode
@@ -195,6 +198,24 @@ async function build (args, api, options) {
 
   if (args.clean) {
     await fs.emptyDir(targetDir)
+  }
+
+  if (args.cache) {
+    modifyConfig(webpackConfig, config => {
+      if (config.cache && typeof config.cache === 'object') {
+        const configVars = JSON.stringify({ ...args, targetDir })
+        config.cache.name =
+            `${config.mode}-${args.target}` +
+            `-${Object.keys(config.entry).join('-')}` +
+            `${args.modern ? (args.modernBuild ? '-modern' : '-legacy') : ''}` +
+            `${config.cache.name ? '-' + config.cache.name : ''}`
+        config.cache.version = `${config.cache.version}|${configVars}|${getSpecificEnv()}`
+      }
+    })
+  } else {
+    modifyConfig(webpackConfig, config => {
+      config.cache = false
+    })
   }
 
   return new Promise((resolve, reject) => {

@@ -7,6 +7,8 @@ module.exports = (api, options) => {
   const webpack = require('webpack')
   const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../util/getVueMajor')(cwd)
+  const fileConfigPath = require('../util/getFileConfigPath')(cwd)
+  const cliServiceVersion = require('@vue/cli-service/package.json').version
 
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
@@ -20,7 +22,20 @@ module.exports = (api, options) => {
           .resolve.set('fullySpecified', false)
     }
 
+    const cacheOptions = {
+      type: 'filesystem',
+      version: `${cliServiceVersion}`,
+      buildDependencies: {
+        config: [require.resolve('../../webpack.config')]
+      }
+    }
+
+    if (fileConfigPath) {
+      cacheOptions.buildDependencies.config.push(fileConfigPath)
+    }
+
     webpackConfig
+      .cache(cacheOptions)
       .mode('development')
       .context(api.service.context)
       .entry('app')
@@ -57,12 +72,6 @@ module.exports = (api, options) => {
     // vue-loader --------------------------------------------------------------
     if (vueMajor === 2) {
       // for Vue 2 projects
-      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader-v15/package.json').version,
-        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
-        'vue-template-compiler': require('vue-template-compiler/package.json').version
-      })
-
       webpackConfig.resolve
         .alias
           .set(
@@ -75,17 +84,13 @@ module.exports = (api, options) => {
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('vue-loader-v15'))
-            .options(Object.assign({
+            .options({
               compilerOptions: {
                 whitespace: 'condense'
               }
-            }, vueLoaderCacheConfig))
+            })
 
       webpackConfig
         .plugin('vue-loader')
@@ -101,11 +106,6 @@ module.exports = (api, options) => {
             .prepend(path.resolve(__dirname, './vue-loader-v15-resolve-compat'))
     } else if (vueMajor === 3) {
       // for Vue 3 projects
-      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader/package.json').version,
-        '@vue/compiler-sfc': require('@vue/compiler-sfc/package.json').version
-      })
-
       webpackConfig.resolve
         .alias
           .set(
@@ -118,14 +118,9 @@ module.exports = (api, options) => {
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('vue-loader'))
             .options({
-              ...vueLoaderCacheConfig,
               babelParserPlugins: ['jsx', 'classProperties', 'decorators-legacy']
             })
             .end()
