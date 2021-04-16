@@ -24,17 +24,16 @@ module.exports = (api, args, options) => {
     if (!args.moduleBuild) {
       // Inject plugin to extract build stats and write to disk
       config
-      .plugin('modern-mode-legacy')
-      .use(ModernModePlugin, [{
-        targetDir,
-        isModuleBuild: false
-      }])
+        .plugin('modern-mode-legacy')
+        .use(ModernModePlugin, [{
+          targetDir,
+          isModernBuild: false
+        }])
     } else {
       config
         .plugin('safari-nomodule-fix')
         .use(SafariNomoduleFixPlugin, [{
-          unsafeInline: args['unsafe-inline'],
-          // as we may generate an addition file asset (if `no-unsafe-inline` specified)
+          // as we may generate an addition file asset (if Safari 10 fix is needed)
           // we need to provide the correct directory for that file to place in
           jsDirectory: require('../../util/getAssetPath')(options, 'js')
         }])
