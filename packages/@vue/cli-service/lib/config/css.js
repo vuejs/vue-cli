@@ -227,7 +227,6 @@ module.exports = (api, rootOptions) => {
         .minimizer('css')
           .use(require('css-minimizer-webpack-plugin'), [{
             parallel: rootOptions.parallel,
-            sourceMap: rootOptions.productionSourceMap && sourceMap,
             minimizerOptions: cssnanoOptions
           }])
     }
