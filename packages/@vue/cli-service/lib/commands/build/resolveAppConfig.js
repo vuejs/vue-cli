@@ -25,8 +25,7 @@ module.exports = (api, args, options) => {
         .plugin('modern-mode-legacy')
         .use(ModernModePlugin, [{
           targetDir,
-          isModernBuild: false,
-          unsafeInline: args['unsafe-inline']
+          isModernBuild: false
         }])
     } else {
       // Inject plugin to read non-modern build stats and inject HTML
@@ -35,7 +34,6 @@ module.exports = (api, args, options) => {
         .use(ModernModePlugin, [{
           targetDir,
           isModernBuild: true,
-          unsafeInline: args['unsafe-inline'],
           // as we may generate an addition file asset (if Safari 10 fix is needed)
           // we need to provide the correct directory for that file to place in
           jsDirectory: require('../../util/getAssetPath')(options, 'js')
