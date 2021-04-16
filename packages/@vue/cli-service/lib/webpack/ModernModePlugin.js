@@ -1,32 +1,17 @@
 const fs = require('fs-extra')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-const { semver } = require('@vue/cli-shared-utils')
-const { projectModernTargets } = require('../util/targets')
-
-const minSafariVersion = projectModernTargets.safari
-const minIOSVersion = projectModernTargets.ios
-const supportsSafari10 =
-  (minSafariVersion && semver.lt(semver.coerce(minSafariVersion), '11.0.0')) ||
-  (minIOSVersion && semver.lt(semver.coerce(minIOSVersion), '11.0.0'))
-const needsSafariFix = supportsSafari10
-
-// https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
-const safariFix = `!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();`
-
 class ModernModePlugin {
-  constructor ({ targetDir, isModernBuild, jsDirectory }) {
+  constructor ({ targetDir, isModuleBuild }) {
     this.targetDir = targetDir
-    this.isModernBuild = isModernBuild
-    this.jsDirectory = jsDirectory
+    this.isModuleBuild = isModuleBuild
   }
 
   apply (compiler) {
-    if (!this.isModernBuild) {
+    if (!this.isModuleBuild) {
       this.applyLegacy(compiler)
     } else {
-      this.applyModern(compiler)
+      this.applyModule(compiler)
     }
   }
 
@@ -52,7 +37,7 @@ class ModernModePlugin {
     })
   }
 
-  applyModern (compiler) {
+  applyModule (compiler) {
     const ID = `vue-cli-modern-bundle`
     compiler.hooks.compilation.tap(ID, compilation => {
       HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(ID, async (data, cb) => {
@@ -86,27 +71,6 @@ class ModernModePlugin {
           .filter(a => a.tagName === 'script' && a.attributes)
         legacyAssets.forEach(a => { a.attributes.nomodule = '' })
 
-        if (needsSafariFix) {
-          // inject the Safari 10 nomodule fix as an external script
-          const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
-          const fullSafariFixPath = path.join(compilation.options.output.publicPath, safariFixPath)
-          compilation.assets[safariFixPath] = {
-            source: function () {
-              return Buffer.from(safariFix)
-            },
-            size: function () {
-              return Buffer.byteLength(safariFix)
-            }
-          }
-          tags.push({
-            tagName: 'script',
-            closeTag: true,
-            attributes: {
-              src: fullSafariFixPath
-            }
-          })
-        }
-
         tags.push(...legacyAssets)
         await fs.remove(tempFilename)
         cb()
@@ -119,5 +83,4 @@ class ModernModePlugin {
   }
 }
 
-ModernModePlugin.safariFix = safariFix
 module.exports = ModernModePlugin
