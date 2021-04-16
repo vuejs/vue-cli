@@ -17,28 +17,34 @@ module.exports = (api, args, options) => {
     })
   }
 
-  if (args.module) {
+  if (process.env.VUE_CLI_MODERN_MODE) {
     const ModernModePlugin = require('../../webpack/ModernModePlugin')
-    if (!args.modernBuild) {
+    const SafariNomoduleFixPlugin = require('../../webpack/SafariNomoduleFixPlugin')
+
+    if (!args.moduleBuild) {
       // Inject plugin to extract build stats and write to disk
       config
-        .plugin('modern-mode-legacy')
-        .use(ModernModePlugin, [{
-          targetDir,
-          isModernBuild: false,
-          unsafeInline: args['unsafe-inline']
-        }])
+      .plugin('modern-mode-legacy')
+      .use(ModernModePlugin, [{
+        targetDir,
+        isModuleBuild: false
+      }])
     } else {
+      config
+        .plugin('safari-nomodule-fix')
+        .use(SafariNomoduleFixPlugin, [{
+          unsafeInline: args['unsafe-inline'],
+          // as we may generate an addition file asset (if `no-unsafe-inline` specified)
+          // we need to provide the correct directory for that file to place in
+          jsDirectory: require('../../util/getAssetPath')(options, 'js')
+        }])
+
       // Inject plugin to read non-modern build stats and inject HTML
       config
         .plugin('modern-mode-modern')
         .use(ModernModePlugin, [{
           targetDir,
-          isModernBuild: true,
-          unsafeInline: args['unsafe-inline'],
-          // as we may generate an addition file asset (if `no-unsafe-inline` specified)
-          // we need to provide the correct directory for that file to place in
-          jsDirectory: require('../../util/getAssetPath')(options, 'js')
+          isModuleBuild: true
         }])
     }
   }

@@ -53,35 +53,43 @@ module.exports = (api, options) => {
     }
 
     process.env.VUE_CLI_BUILD_TARGET = args.target
-    if (args.module && args.target === 'app') {
-      process.env.VUE_CLI_MODERN_MODE = true
-      if (!process.env.VUE_CLI_MODERN_BUILD) {
-        // main-process for legacy build
-        await build(Object.assign({}, args, {
-          modernBuild: false,
-          keepAlive: true
-        }), api, options)
-        // spawn sub-process of self for modern build
-        const { execa } = require('@vue/cli-shared-utils')
-        const cliBin = require('path').resolve(__dirname, '../../../bin/vue-cli-service.js')
-        await execa('node', [cliBin, 'build', ...rawArgs], {
-          stdio: 'inherit',
-          env: {
-            VUE_CLI_MODERN_BUILD: true
-          }
-        })
-      } else {
-        // sub-process for modern build
-        await build(Object.assign({}, args, {
-          modernBuild: true,
-          clean: false
-        }), api, options)
-      }
-      delete process.env.VUE_CLI_MODERN_MODE
-    } else {
-      await build(args, api, options)
+
+    const { log, execa } = require('@vue/cli-shared-utils')
+    const { allProjectTargetsSupportModule } = require('../../util/targets')
+
+    let needsDifferentialLoading = args.target === 'app' && args.module
+    if (allProjectTargetsSupportModule) {
+      log(
+        `All browser targets in the browserslist configuration have supported ES module.\n` +
+        `Therefore we don't build two separate bundles for differential loading.\n`
+      )
+      needsDifferentialLoading = false
     }
-    delete process.env.VUE_CLI_BUILD_TARGET
+
+    if (!needsDifferentialLoading) {
+      await build(args, api, options)
+      return
+    }
+
+    process.env.VUE_CLI_MODERN_MODE = true
+    if (!process.env.VUE_CLI_MODERN_BUILD) {
+      // main-process for legacy build
+      const legacyBuildArgs = { ...args, moduleBuild: false, keepAlive: true }
+      await build(legacyBuildArgs, api, options)
+
+      // spawn sub-process of self for modern build
+      const cliBin = require('path').resolve(__dirname, '../../../bin/vue-cli-service.js')
+      await execa('node', [cliBin, 'build', ...rawArgs], {
+        stdio: 'inherit',
+        env: {
+          VUE_CLI_MODERN_BUILD: true
+        }
+      })
+    } else {
+      // sub-process for modern build
+      const moduleBuildArgs = { ...args, moduleBuild: true, clean: false }
+      await build(moduleBuildArgs, api, options)
+    }
   })
 }
 
@@ -104,8 +112,8 @@ async function build (args, api, options) {
   const mode = api.service.mode
   if (args.target === 'app') {
     const bundleTag = args.module
-      ? args.modernBuild
-        ? `modern bundle `
+      ? args.moduleBuild
+        ? `module bundle `
         : `legacy bundle `
       : ``
     logWithSpinner(`Building ${bundleTag}for ${mode}...`)
@@ -125,7 +133,7 @@ async function build (args, api, options) {
   }
 
   const targetDir = api.resolve(options.outputDir)
-  const isLegacyBuild = args.target === 'app' && args.module && !args.modernBuild
+  const isLegacyBuild = args.target === 'app' && args.module && !args.moduleBuild
 
   // resolve raw webpack config
   let webpackConfig
@@ -162,7 +170,7 @@ async function build (args, api, options) {
     modifyConfig(webpackConfig, config => {
       config.plugins.push(new DashboardPlugin({
         type: 'build',
-        modernBuild: args.modernBuild,
+        moduleBuild: args.moduleBuild,
         keepAlive: args.keepAlive
       }))
     })

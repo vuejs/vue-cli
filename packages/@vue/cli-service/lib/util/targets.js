@@ -3,7 +3,8 @@
 const { semver } = require('@vue/cli-shared-utils')
 const { default: getTargets } = require('@babel/helper-compilation-targets')
 
-const allModernTargets = getTargets(
+// See the result at <https://github.com/babel/babel/blob/v7.13.15/packages/babel-compat-data/data/native-modules.json>
+const allModuleTargets = getTargets(
   { esmodules: true },
   { ignoreBrowserslistConfig: true }
 )
@@ -32,19 +33,38 @@ function getIntersectionTargets (targets, constraintTargets) {
   return intersection
 }
 
-function getModernTargets (targets) {
+function getModuleTargets (targets) {
   // use the intersection of modern mode browsers and user defined targets config
-  return getIntersectionTargets(targets, allModernTargets)
+  return getIntersectionTargets(targets, allModuleTargets)
 }
 
+function doAllTargetsSupportModule (targets) {
+  const browserList = Object.keys(targets)
+
+  return browserList.every(browserName => {
+    if (!allModuleTargets[browserName]) {
+      return false
+    }
+
+    return semver.gte(
+      semver.coerce(targets[browserName]),
+      semver.coerce(allModuleTargets[browserName])
+    )
+  })
+}
+
+// get browserslist targets in current working directory
 const projectTargets = getTargets()
-const projectModernTargets = getModernTargets(projectTargets)
+const projectModuleTargets = getModuleTargets(projectTargets)
+const allProjectTargetsSupportModule = doAllTargetsSupportModule(projectTargets)
 
 module.exports = {
   getTargets,
-  getModernTargets,
+  getModuleTargets,
   getIntersectionTargets,
+  doAllTargetsSupportModule,
 
   projectTargets,
-  projectModernTargets
+  projectModuleTargets,
+  allProjectTargetsSupportModule
 }
