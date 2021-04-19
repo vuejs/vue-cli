@@ -19,7 +19,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
       }
     })
   }
-  
+
   api.render(`./template${isVue3 ? '-vue3' : ''}`, {
     historyMode: options.historyMode,
     doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
