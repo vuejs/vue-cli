@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.0-alpha.8",
-    "cypress": "^6.5.0",
+    "cypress": "^7.1.0",
     "eslint-plugin-cypress": "^2.11.2"
   },
   "peerDependencies": {
