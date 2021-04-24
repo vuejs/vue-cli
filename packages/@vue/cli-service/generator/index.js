@@ -32,7 +32,8 @@ module.exports = (api, options) => {
     browserslist: [
       '> 1%',
       'last 2 versions',
-      'not dead'
+      'not dead',
+      ...(options.vueVersion === '3' ? ['not ie 11'] : [])
     ]
   })
 
