@@ -72,6 +72,19 @@ Underlyingly, it uses the [`resolutions`](https://classic.yarnpkg.com/en/docs/se
 
 Though both work in all our tests, please be aware that the `module-alias` approach is still considered hacky, and may not be as stable as the `"resolutions"` one.
 
+#### Changes to the `build` command and modern mode
+
+Starting with v5.0.0-beta.0, running `vue-cli-service build` will automatically generate different bundles based on your browserslist configurations.
+The `--modern` flag is no longer needed because it is turned on by default.
+
+Say we are building a simple single-page app with the default setup, here are some possible scenarios:
+
+* With the default browserslist target of Vue 2 projects (`> 1%, last 2 versions, not dead`), `vue-cli-service build` will produce two types of bundles:
+  * One for modern target browsers that support `<script type="module">` (`app.[contenthash].js` and `chunk-vendors.[contenthash].js`). The bundle size will be much smaller because it drops polyfills and transformations for legacy browsers.
+  * One for those do not (`app-legacy.[contenthash].js` and `chunk-vendors-legacy.[contenthash].js`), and will be loaded via `<script nomodule>`.
+* You can opt-out this behavior by appending a `--no-module` flag to the build command. `vue-cli-service build --no-module` will only output the legacy bundles that support all target browsers (loaded via plain `<script>`s).
+* With the default browserslist target of Vue 3 projects (`> 1%, last 2 versions, not dead, not ie 11`), all target browsers supports `<script type="module">`, there's no point (and no way) differentiating them, thus `vue-cli-service build` will only produce one type of bundle: `app.[contenthash].js` and `chunk-vendors.[contenthash].js` (loaded via plain `<script>`s).
+
 #### CSS Modules
 
 The `css.requireModuleExtension` option is removed. If you do need to strip the `.module` part in CSS Module file names, please refer to [Working with CSS > CSS Modules](../guide/css.md#css-modules) for more guidance.
