@@ -1,4 +1,58 @@
 
+## 5.0.0-beta.0 (2021-04-25)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-typescript`
+  * [#6428](https://github.com/vuejs/vue-cli/pull/6428) feat(plugin-typescript): add all recommended tsconfig ([@IndexXuan](https://github.com/IndexXuan))
+* `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6420](https://github.com/vuejs/vue-cli/pull/6420) feat!: upgrade to css-minimizer-webpack-plugin v2 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6422](https://github.com/vuejs/vue-cli/pull/6422) feat!: always inject safari-nomodule-fix as an external script; drop `--no-unsafe-inline` flag ([@sodatea](https://github.com/sodatea))
+  * [#6285](https://github.com/vuejs/vue-cli/pull/6285) feat(cli-service): provide jsconfig.json in no-ts template ([@yoyo930021](https://github.com/yoyo930021))
+  * [#5997](https://github.com/vuejs/vue-cli/pull/5997) feat(cli-service): add inline loader support for html-webpack-plugin ([@ylc395](https://github.com/ylc395))
+* `@vue/babel-preset-app`, `@vue/cli-service`
+  * [#6419](https://github.com/vuejs/vue-cli/pull/6419) feat: only needs one bundle if all targets support es module ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-service`, `@vue/cli-ui`
+  * [#6416](https://github.com/vuejs/vue-cli/pull/6416) feat!: turn on modern mode by default, and provide a `--no-module` option ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#6405](https://github.com/vuejs/vue-cli/pull/6405) feat: support `vue.config.mjs` ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-ui-addon-webpack`, `@vue/cli-ui-addon-widgets`, `@vue/cli-ui`
+  * [#6439](https://github.com/vuejs/vue-cli/pull/6439) feat!: drop IE11 support in CLI UI ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6420](https://github.com/vuejs/vue-cli/pull/6420) feat!: upgrade to css-minimizer-webpack-plugin v2 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6422](https://github.com/vuejs/vue-cli/pull/6422) feat!: always inject safari-nomodule-fix as an external script; drop `--no-unsafe-inline` flag ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-service`, `@vue/cli-ui`
+  * [#6416](https://github.com/vuejs/vue-cli/pull/6416) feat!: turn on modern mode by default, and provide a `--no-module` option ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-ui`
+  * [#6440](https://github.com/vuejs/vue-cli/pull/6440) fix(ui): fix publicPath documentation link ([@jeffreyyjp](https://github.com/jeffreyyjp))
+* `@vue/cli-service`
+  * [#6437](https://github.com/vuejs/vue-cli/pull/6437) fix: should not include IE11 target in Vue 3 projects ([@sodatea](https://github.com/sodatea))
+  * [#6402](https://github.com/vuejs/vue-cli/pull/6402) fix(cli-service): respect the existing 'devtool' ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-plugin-unit-jest`
+  * [#6418](https://github.com/vuejs/vue-cli/pull/6418) Show fallback message for typescript jest preset if ts-jest is not in… ([@m0ksem](https://github.com/m0ksem))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6400](https://github.com/vuejs/vue-cli/pull/6400) fix(mocha): workaround the SVGElement issue in Vue ([@fangbinwei](https://github.com/fangbinwei))
+
+#### :memo: Documentation
+* [#6438](https://github.com/vuejs/vue-cli/pull/6438) docs: add modern mode changes to the migration guide ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 8
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- IU ([@yoyo930021](https://github.com/yoyo930021))
+- James George ([@jamesgeorge007](https://github.com/jamesgeorge007))
+- Jeffrey Yang ([@jeffreyyjp](https://github.com/jeffreyyjp))
+- Maksim Nedoshev ([@m0ksem](https://github.com/m0ksem))
+- PENG Rui ([@IndexXuan](https://github.com/IndexXuan))
+- 叡山电车 ([@ylc395](https://github.com/ylc395))
+
+
+
 ## 5.0.0-alpha.8 (2021-03-24)
 
 #### :rocket: New Features
