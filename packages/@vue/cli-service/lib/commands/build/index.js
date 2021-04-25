@@ -64,6 +64,7 @@ module.exports = (api, options) => {
       needsDifferentialLoading = false
     }
 
+    args.needsDifferentialLoading = needsDifferentialLoading
     if (!needsDifferentialLoading) {
       await build(args, api, options)
       return
@@ -109,7 +110,7 @@ async function build (args, api, options) {
   log()
   const mode = api.service.mode
   if (args.target === 'app') {
-    const bundleTag = args.module
+    const bundleTag = args.needsDifferentialLoading
       ? args.moduleBuild
         ? `module bundle `
         : `legacy bundle `
@@ -131,7 +132,7 @@ async function build (args, api, options) {
   }
 
   const targetDir = api.resolve(options.outputDir)
-  const isLegacyBuild = args.target === 'app' && args.module && !args.moduleBuild
+  const isLegacyBuild = args.needsDifferentialLoading && !args.moduleBuild
 
   // resolve raw webpack config
   let webpackConfig
