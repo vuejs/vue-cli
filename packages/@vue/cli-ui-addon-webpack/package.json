@@ -39,7 +39,8 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not dead"
+    "not dead",
+    "not ie 11"
   ],
   "publishConfig": {
     "access": "public"
