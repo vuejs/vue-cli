@@ -24,6 +24,7 @@ describe('Plugins', () => {
     cy.get('.prompts-list', { timeout: 250000 }).should('be.visible')
     cy.get('[data-testid="finish-install"]').should('not.have.class', 'disabled').click({ force: true })
     cy.get('.loading-screen .vue-ui-loading-indicator', { timeout: 3000 }).should('be.visible')
+    cy.wait(10000)
     cy.get('.file-diff-view', { timeout: 250000 }).should('be.visible')
     cy.get('[data-testid="skip-button"]', { timeout: 30000 })
       .should('be.visible')
