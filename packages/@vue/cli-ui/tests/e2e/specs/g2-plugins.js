@@ -6,6 +6,7 @@ describe('Plugins', () => {
 
   it('Should add a plugin', () => {
     cy.visit('/plugins')
+    cy.wait(5000)
     cy.get('[data-testid="add-plugin"]').click()
     cy.get('.project-plugins-add').should('be.visible')
     // Search
