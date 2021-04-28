@@ -1,11 +1,12 @@
 describe('Plugins', () => {
   it('Should display the plugins', () => {
     cy.visit('/plugins')
-    cy.get('.project-plugin-item').should('have.length', 6)
+    cy.get('.project-plugin-item').should('have.length', 5)
   })
 
   it('Should add a plugin', () => {
     cy.visit('/plugins')
+    cy.wait(5000)
     cy.get('[data-testid="add-plugin"]').click()
     cy.get('.project-plugins-add').should('be.visible')
     // Search
@@ -23,8 +24,9 @@ describe('Plugins', () => {
     cy.get('.prompts-list', { timeout: 250000 }).should('be.visible')
     cy.get('[data-testid="finish-install"]').should('not.have.class', 'disabled').click({ force: true })
     cy.get('.loading-screen .vue-ui-loading-indicator', { timeout: 3000 }).should('be.visible')
+    cy.wait(10000)
     cy.get('.file-diff-view', { timeout: 250000 }).should('be.visible')
-    cy.get('[data-testid="skip-button"]', { timeout: 3000 })
+    cy.get('[data-testid="skip-button"]', { timeout: 30000 })
       .should('be.visible')
       .should('not.have.class', 'disabled')
       .click()

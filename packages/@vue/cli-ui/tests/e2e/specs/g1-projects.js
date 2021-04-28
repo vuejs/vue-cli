@@ -33,7 +33,6 @@ describe('Vue project manager', () => {
       cy.get('.next').click()
     })
     cy.get('.features').within(() => {
-      cy.get('[data-testid="pwa"] .bullet').click()
       cy.get('[data-testid="router"] .bullet').click()
       cy.get('[data-testid="vuex"] .bullet').click()
       cy.get('[data-testid="use-config-files"] .bullet').click()

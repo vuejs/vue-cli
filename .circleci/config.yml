@@ -113,6 +113,8 @@ jobs:
           path: packages/@vue/cli-ui/tests/e2e/videos
       - store_artifacts:
           path: packages/@vue/cli-ui/tests/e2e/screenshots
+      - store_artifacts:
+          path: /home/circleci/.npm/_logs
 
   # TODO: cli-ui-webpack-4
 
