@@ -92,6 +92,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^5.0.0",
     "subscriptions-transport-ws": "^0.9.18",
+    "validate-npm-package-name": "^3.0.0",
     "vue": "^2.6.12",
     "vue-apollo": "^3.0.7",
     "vue-cli-plugin-apollo": "^0.22.2",
