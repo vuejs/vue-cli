@@ -50,7 +50,14 @@ function getModernTargets (targets) {
   )
 
   // use the intersection of modern mode browsers and user defined targets config
-  return getIntersectionTargets(targets, allModernTargets)
+  const result = getIntersectionTargets(targets, allModernTargets)
+
+  // webpack 4 uses acorn 6, which does not support newer syntaxes such as optional chaining
+  // so we have to add samsung 12 as a target to force transpiling these syntaxes
+  // https://github.com/vuejs/vue-cli/issues/6449#issuecomment-828559068
+  result.samsung = '12.0.0'
+
+  return result
 }
 
 function getWCTargets (targets) {
