@@ -85,7 +85,7 @@ module.exports = (api, projectOptions) => {
             extensions: {
               vue: {
                 enabled: true,
-                compiler: isVue3 ? '@vue/compiler-sfc' : 'vue-template-compiler'
+                compiler: isVue3 ? require.resolve('@vue/compiler-sfc') : require.resolve('vue-template-compiler')
               }
             },
             diagnosticOptions: {
