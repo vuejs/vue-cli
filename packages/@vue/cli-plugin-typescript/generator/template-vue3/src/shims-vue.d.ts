@@ -7,7 +7,7 @@ declare module '*.vue' {
 
 type OneOf<T extends string[]> = T[number]
 
-type Directive<
+declare type Directive<
   Exp,
   Arg extends string | undefined = undefined,
   Modifiers extends string[] = never[]
