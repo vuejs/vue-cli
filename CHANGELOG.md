@@ -435,7 +435,36 @@
 - Parker Mauney ([@ParkerM](https://github.com/ParkerM))
 - Shinigami ([@Shinigami92](https://github.com/Shinigami92))
 - Tony Trinh ([@tony19](https://github.com/tony19))
-- Yazhe Wang ([@jeneser](https://github.com/jeneser))[23m
+- Yazhe Wang ([@jeneser](https://github.com/jeneser))
+
+
+
+## 4.5.13 (2021-05-08)
+
+#### :bug: Bug Fix
+* `@vue/babel-preset-app`
+  * [#6459](https://github.com/vuejs/vue-cli/pull/6459) fix: fix modern mode optional chaining syntax tranpilation ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6400](https://github.com/vuejs/vue-cli/pull/6400) fix(mocha): workaround the SVGElement issue in Vue 3 ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-service`
+  * [#6455](https://github.com/vuejs/vue-cli/pull/6455) fix: get rid of ssri vulnerability warnings ([@sodatea](https://github.com/sodatea))
+
+### Others
+
+* [#6300](https://github.com/vuejs/vue-cli/pull/6300) chore: remove the word "Preview" from vue 3 preset  ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 3
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Tony Trinh ([@tony19](https://github.com/tony19))
+
+
+
+## 4.5.12 (2021-03-17)
+
+* bump `vue-codemod` to work around an NPM hoisting bug
+* bump minimum required JSX preset / plugin versions, fixes https://github.com/vuejs/jsx/issues/183
+* bump default `typescript` version to 4.1 and `prettier` version to 2.x for new projects, fixes [#6299](https://github.com/vuejs/vue-cli/pull/6299)
 
 
 
