@@ -1,4 +1,21 @@
 
+## 4.5.13 (2021-05-08)
+
+#### :bug: Bug Fix
+* `@vue/babel-preset-app`
+  * [#6459](https://github.com/vuejs/vue-cli/pull/6459) fix(v4): fix modern mode optional chaining syntax tranpilation ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6400](https://github.com/vuejs/vue-cli/pull/6400) fix(mocha): workaround the SVGElement issue in Vue ([@fangbinwei](https://github.com/fangbinwei))
+* `@vue/cli-service`
+  * [#6455](https://github.com/vuejs/vue-cli/pull/6455) fix(v4): get rid of ssri vulnerability warnings ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 3
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Tony Trinh ([@tony19](https://github.com/tony19))
+
+
+
 
 
 
