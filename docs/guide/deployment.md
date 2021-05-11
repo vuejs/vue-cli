@@ -108,7 +108,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
    deploy:
      provider: pages
-     skip_cleanup: true
+     cleanup: true
      github_token: $GITHUB_TOKEN
      local_dir: dist
      on:
