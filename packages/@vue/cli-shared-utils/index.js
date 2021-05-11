@@ -8,6 +8,7 @@
   'openBrowser',
   'pkg',
   'pluginResolution',
+  'pluginOrder',
   'launch',
   'request',
   'spinner',

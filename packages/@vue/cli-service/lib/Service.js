@@ -6,7 +6,7 @@ const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg, resolveModule } = require('@vue/cli-shared-utils')
+const { warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg, resolveModule, sortPlugins } = require('@vue/cli-shared-utils')
 
 const { defaults } = require('./options')
 const checkWebpack = require('./util/checkWebpack')
@@ -224,8 +224,12 @@ module.exports = class Service {
         apply: loadModule(`./${file}`, this.pkgContext)
       })))
     }
+    debug('vue:plugins')(plugins)
 
-    return plugins
+    const orderedPlugins = sortPlugins(plugins)
+    debug('vue:plugins-ordered')(orderedPlugins)
+
+    return orderedPlugins
   }
 
   async run (name, args = {}, rawArgv = []) {
