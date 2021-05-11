@@ -514,3 +514,73 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
+### Docker (http-server)
+
+Deploy your application using node with [http-server](https://www.npmjs.com/package/http-server) inside of a docker container. This can be useful when you want to keep a node image in production.
+
+1. Install [docker](https://www.docker.com/get-started)
+
+2. Create a `Dockerfile` file in the root of your project.
+
+    ```docker
+    FROM node:latest
+    WORKDIR /app
+    RUN npm i -g http-server
+    COPY package*.json ./
+    RUN npm install
+    COPY ./ .
+    RUN npm run build
+    CMD ["http-server", "./dist"]
+    ```
+
+3. Create a `.dockerignore` file in the root of your project
+
+    Setting up the `.dockerignore` file prevents `node_modules` and any intermediate build artifacts from being copied to the image which can cause issues during building.
+
+    ```
+    **/node_modules
+    **/dist
+    ```
+
+4. By default the http-server uses the `404.html` file for files not found. If you are using [@vue/cli](https://cli.vuejs.org/) you can configure the `vue.config.js` file to create this file in the build. You can find this configuration in more detail in the [doc](https://cli.vuejs.org/config/#pages).
+    
+    To do so, add the following to your `vue.config.js`:
+    ```javascript
+    // vue.config.js file to be placed in the root of your repository
+
+    module.exports = {
+      pages: {
+        index: {
+          entry: 'src/main.js',
+          template: 'public/index.html',
+          filename: 'index.html',
+          title: 'Home',
+        },
+        notFound: {
+          entry: 'src/main.js',
+          template: 'public/index.html',
+          filename: '404.html',
+          title: 'Home',
+        },
+      }
+    };
+    ```
+
+5. Build your docker image
+
+    ```bash
+    docker build . -t my-app
+    # Sending build context to Docker daemon  115.3MB
+    # ...
+    # Successfully built 4b00e5ee82ae
+    # Successfully tagged my-app:latest
+    ```
+
+6. Run your docker image
+
+    This build is based on the official [node image](https://hub.docker.com/_/node) and you can see complete configuration about [http-server here](https://www.npmjs.com/package/http-server).
+
+    ```bash
+    docker run -p 8080:80 my-app
+    ```
+7. The open the browser at [localhost:8080](http://127.0.0.1:8080/)
