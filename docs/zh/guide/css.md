@@ -137,13 +137,15 @@ module.exports = {
       scss: {
         additionalData: `@import "~@/variables.scss";`
       },
-      // 给 less-loader 传递 Less.js 相关选项
+      // 给 less-loader 传递选项
       less:{
         // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
         // `primary` is global variables fields name
         globalVars: {
           primary: '#fff'
         }
+        // less-loader 6.0+不支持globalVars配置, 可使用prependData代替:
+        prependData: `@primary: #fff;`
       }
     }
   }
