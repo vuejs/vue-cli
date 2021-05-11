@@ -145,7 +145,8 @@ module.exports = {
 
     // настройки манифеста
     manifestOptions: {
-      display: 'landscape',
+      display: 'standalone',
+      orientation: 'landscape',
       background_color: '#42B883'
       // ...другие настройки манифеста...
     },
