@@ -28,6 +28,10 @@ When you are running `vue-cli-service build`, your `NODE_ENV` should always be s
 If you have a default `NODE_ENV` in your environment, you should either remove it or explicitly set `NODE_ENV` when running `vue-cli-service` commands.
 :::
 
+::: warning service worker
+A service worker is output only when `NODE_ENV=production` is present in an env file, or if `--mode=production` is passed to the build command.
+:::
+
 ## Environment Variables
 
 You can specify env variables by placing the following files in your project root:
