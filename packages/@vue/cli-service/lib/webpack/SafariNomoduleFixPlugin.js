@@ -23,7 +23,9 @@ class SafariNomoduleFixPlugin {
     if (!needsSafariFix) {
       return
     }
-    const { RawSource } = compiler.webpack.sources
+    const { RawSource } = compiler.webpack
+      ? compiler.webpack.sources
+      : require('webpack-sources')
 
     const ID = 'SafariNomoduleFixPlugin'
     compiler.hooks.compilation.tap(ID, compilation => {
