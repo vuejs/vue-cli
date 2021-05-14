@@ -15706,10 +15706,10 @@ mocha@^8.0.1, mocha@^8.3.0:
     yargs-parser "20.2.4"
     yargs-unparser "2.0.0"
 
-mochapack@^2.0.2:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/mochapack/-/mochapack-2.0.6.tgz#79bee97a3d300c890816ce6cf374c5fb5053dec0"
-  integrity sha512-6ijz1pJlSnzuy0PXEZKhO2QRrZ1RSI8ZEQ2Rk9jvGAm7dyXXrYcyd8hMmrBXSJSLnZqRuKV0e1SAYQJxYSlfEg==
+mochapack@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/mochapack/-/mochapack-2.1.0.tgz#45b9ddda909443cf8fbd9020be5d606e2c5be193"
+  integrity sha512-m/h4qVcsNfLZcCph0OfYaeHcXaRjf3DtswAk09uOj7h7JMlVaDMDCzMxZ6M6uNfeh4LJT9f3wUwgChTyrdLtxA==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     chalk "^2.4.2"

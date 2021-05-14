@@ -8,16 +8,8 @@ module.exports = (api, options, rootOptions, invoking) => {
     hasRouter: api.hasPlugin('router')
   })
 
-  const { semver } = require('@vue/cli-shared-utils')
-  const cliServiceVersion = require('@vue/cli-service/package.json').version
-  if (semver.gte(cliServiceVersion, '5.0.0-0')) {
-    // mochapack currently does not support webpack 5 yet
-    require('@vue/cli-plugin-webpack-4/generator')(api, {}, rootOptions, invoking)
-  }
-
   api.extendPackage({
     devDependencies: {
-      '@vue/cli-plugin-webpack-4': require('../package.json').dependencies['@vue/cli-plugin-webpack-4'],
       '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.3',
       'chai': '^4.2.0'
     },
