@@ -23,6 +23,9 @@ class SafariNomoduleFixPlugin {
     if (!needsSafariFix) {
       return
     }
+    const { RawSource } = compiler.webpack
+      ? compiler.webpack.sources
+      : require('webpack-sources')
 
     const ID = 'SafariNomoduleFixPlugin'
     compiler.hooks.compilation.tap(ID, compilation => {
@@ -40,14 +43,7 @@ class SafariNomoduleFixPlugin {
           // inject the fix as an external script
           const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
           const fullSafariFixPath = path.join(compilation.options.output.publicPath, safariFixPath)
-          compilation.assets[safariFixPath] = {
-            source: function () {
-              return Buffer.from(safariFix)
-            },
-            size: function () {
-              return Buffer.byteLength(safariFix)
-            }
-          }
+          compilation.assets[safariFixPath] = new RawSource(safariFix)
           scriptTag = {
             tagName: 'script',
             closeTag: true,
