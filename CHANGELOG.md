@@ -1,4 +1,38 @@
 
+## 5.0.0-beta.1 (2021-05-14)
+
+#### :rocket: New Features
+* `@vue/cli-service`
+  * [#6472](https://github.com/vuejs/vue-cli/pull/6472) Feature: add "tags" part to htmlWebpackPlugin ([@TimmersThomas](https://github.com/TimmersThomas))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6471](https://github.com/vuejs/vue-cli/pull/6471) feat: support webpack 5 in unit-mocha plugin ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-ui`
+  * [#6443](https://github.com/vuejs/vue-cli/pull/6443) fix!: keep project name validation rules in sync between UI and CLI ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6470](https://github.com/vuejs/vue-cli/pull/6470) fix(SafariNomoduleFixPlugin): use RawSource instead of a plain object ([@KaelWD](https://github.com/KaelWD))
+* `@vue/cli-plugin-typescript`
+  * [#6456](https://github.com/vuejs/vue-cli/pull/6456) fix(typescript): add missing dependencies and `require.resolve` compiler ([@merceyz](https://github.com/merceyz))
+* `@vue/cli-ui`
+  * [#6443](https://github.com/vuejs/vue-cli/pull/6443) fix!: keep project name validation rules in sync between UI and CLI ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-jest`
+  * [#6454](https://github.com/vuejs/vue-cli/pull/6454) fix: fix jest migrator dependency merging ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-ui`
+  * [#6446](https://github.com/vuejs/vue-cli/pull/6446) ci: fix random failing ui tests ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 4
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Kael ([@KaelWD](https://github.com/KaelWD))
+- Kristoffer K. ([@merceyz](https://github.com/merceyz))
+- Thomas Timmers ([@TimmersThomas](https://github.com/TimmersThomas))
+
+
+
 ## 5.0.0-beta.0 (2021-04-25)
 
 #### :rocket: New Features
