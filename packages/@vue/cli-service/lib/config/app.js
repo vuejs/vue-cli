@@ -82,6 +82,7 @@ module.exports = (api, options) => {
           compilation: compilation,
           webpackConfig: compilation.options,
           htmlWebpackPlugin: {
+            tags: assetTags,
             files: assets,
             options: pluginOptions
           }
