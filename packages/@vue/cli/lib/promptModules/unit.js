@@ -20,7 +20,7 @@ module.exports = cli => {
         short: 'Jest'
       },
       {
-        name: 'Mocha + Chai (requires webpack 4)',
+        name: 'Mocha + Chai',
         value: 'mocha',
         short: 'Mocha'
       }
