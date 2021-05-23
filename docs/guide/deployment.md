@@ -21,7 +21,7 @@ serve -s dist
 
 If you are using Vue Router in `history` mode, a simple static file server will fail. For example, if you used Vue Router with a route for `/todos/42`, the dev server has been configured to respond to `localhost:3000/todos/42` properly, but a simple static server serving a production build will respond with a 404 instead.
 
-To fix that, you will need to configure your production server to fallback to `index.html` for any requests that do not match a static file. The Vue Router docs provides [configuration instructions for common server setups](https://router.vuejs.org/guide/essentials/history-mode.html).
+To fix that, you will need to configure your production server to fallback to `index.html` for any requests that do not match a static file. The Vue Router docs provide [configuration instructions for common server setups](https://router.vuejs.org/guide/essentials/history-mode.html).
 
 ### CORS
 
@@ -44,7 +44,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `publicPath` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
     ``` js
-    // vue.config.js file to be place in the root of your repository
+    // vue.config.js file to be placed in the root of your repository
     
     module.exports = {
       publicPath: process.env.NODE_ENV === 'production'
@@ -171,7 +171,7 @@ Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli
 
 #### Use history mode on Vue Router
 
-In order to receive direct hits using `history mode` on Vue Router, you need to redirect all trafic to the `/index.html` file.
+In order to receive direct hits using `history mode` on Vue Router, you need to redirect all traffic to the `/index.html` file.
 
 > More information on [Netlify redirects documentation](https://docs.netlify.com/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-apps).
 
@@ -317,7 +317,7 @@ If you want to use a Custom Domain with your Vercel deployment, you can **Add** 
 
 To add your domain to your project, navigate to your [Project](https://vercel.com/docs/platform/projects) from the Vercel Dashboard. Once you have selected your project, click on the "Settings" tab, then select the **Domains** menu item. From your projects **Domain** page, enter the domain you wish to add to your project.
 
-Once the domain as been added, you will be presented with different methods for configuring it.
+Once the domain has been added, you will be presented with different methods for configuring it.
 
 #### Deploying a fresh Vue project
 
@@ -372,7 +372,7 @@ More info: [Getting started with SPAs on Heroku](https://gist.github.com/hone/24
 
 To deploy with [Surge](http://surge.sh/) the steps are very straightforward.
 
-First you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
+First, you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
 
 ```bash
 npm install --global surge
@@ -396,11 +396,11 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
 1. As described in the [Bitbucket documentation](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) you need to create a repository named exactly `<USERNAME>.bitbucket.io`.
 
-2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case set correct `publicPath` in `vue.config.js`.
+2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case, set correct `publicPath` in `vue.config.js`.
 
     If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `publicPath` as it defaults to `"/"`.
 
-    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `publicPath` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
+    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `publicPath` to `"/<SUBFOLDER>/"`. In this case, the directory structure of the repository should reflect the url structure, for instance, the repository should have a `/<SUBFOLDER>` directory.
 
 3. Inside your project, create `deploy.sh` with the following content and run it to deploy:
 
