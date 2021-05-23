@@ -45,7 +45,14 @@ module.exports = function migrateComponentType (file, api) {
   // update the component type
   componentDecl.forEach(({ node }) => {
     node.id.typeAnnotation = j.tsTypeAnnotation(
-      j.tsTypeReference(j.identifier('DefineComponent'))
+      j.tsTypeReference(
+        j.identifier('DefineComponent'),
+        j.tsTypeParameterInstantiation([
+          j.tsTypeLiteral([]),
+          j.tsTypeLiteral([]),
+          j.tsAnyKeyword()
+        ])
+      )
     )
   })
 
@@ -73,6 +80,8 @@ module.exports = function migrateComponentType (file, api) {
       ) {
         return false
       }
+
+      return true
     })
   if (defineComponentUsages.length === 0) {
     tsmodule

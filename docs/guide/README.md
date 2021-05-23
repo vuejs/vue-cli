@@ -11,7 +11,6 @@ This documentation is for `@vue/cli`. For the old `vue-cli`, see [here](https://
 Vue CLI is a full system for rapid Vue.js development, providing:
 
 - Interactive project scaffolding via `@vue/cli`.
-- Zero config rapid prototyping via `@vue/cli` + `@vue/cli-service-global`.
 - A runtime dependency (`@vue/cli-service`) that is:
   - Upgradeable;
   - Built on top of webpack, with sensible defaults;
@@ -28,7 +27,7 @@ There are several moving parts of Vue CLI - if you look at the [source code](htt
 
 ### CLI
 
-The CLI (`@vue/cli`) is a globally installed npm package and provides the `vue` command in your terminal. It provides the ability to quickly scaffold a new project via `vue create`, or instantly prototype new ideas via `vue serve`. You can also manage your projects using a graphical user interface via `vue ui`. We will walk through what it can do in the next few sections of the guide.
+The CLI (`@vue/cli`) is a globally installed npm package and provides the `vue` command in your terminal. It provides the ability to quickly scaffold a new project via `vue create`. You can also manage your projects using a graphical user interface via `vue ui`. We will walk through what it can do in the next few sections of the guide.
 
 ### CLI Service
 

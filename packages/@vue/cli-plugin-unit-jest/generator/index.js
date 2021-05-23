@@ -12,7 +12,8 @@ module.exports = (api, options, rootOptions, invoking) => {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
-      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.0.3'
+      'vue-jest': isVue3 ? '^5.0.0-0' : '^4.0.1',
+      '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.3'
     },
     jest: {
       preset: api.hasPlugin('babel')
@@ -20,21 +21,6 @@ module.exports = (api, options, rootOptions, invoking) => {
         : '@vue/cli-plugin-unit-jest/presets/no-babel'
     }
   })
-
-  if (isVue3) {
-    api.extendPackage({
-      devDependencies: {
-        'vue-jest': '^5.0.0-0',
-        // vue-jest 5.0.0-alpha.1 requires typescript to be present
-        'typescript': '~3.9.3'
-      },
-      jest: {
-        transform: {
-          '^.+\\.vue$': 'vue-jest'
-        }
-      }
-    })
-  }
 
   if (api.hasPlugin('eslint')) {
     applyESLint(api)
@@ -71,7 +57,8 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
         : '@vue/cli-plugin-unit-jest/presets/typescript'
     },
     devDependencies: {
-      '@types/jest': '^24.0.19'
+      '@types/jest': '^26.0.20',
+      'ts-jest': '^26.5.3'
     }
   })
 
@@ -87,7 +74,7 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
         ) {
           parsed.compilerOptions.types.push('jest')
         }
-        files['tsconfig.json'] = JSON.stringify(parsed, null, 2)
+        files['tsconfig.json'] = JSON.stringify(parsed, null, 2) + '\n'
       }
     })
   }

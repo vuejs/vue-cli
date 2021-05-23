@@ -18,7 +18,7 @@ const schema = joi => ({
 })
 
 const describeSchema = createSchema(joi => ({
-  match: joi.alternatives().try(joi.object().type(RegExp), joi.func()).required().description('Match a npm script command'),
+  match: joi.alternatives().try(joi.object().instance(RegExp), joi.func()).required().description('Match a npm script command'),
   ...schema(joi)
 }))
 

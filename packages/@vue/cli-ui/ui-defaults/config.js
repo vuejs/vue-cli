@@ -20,7 +20,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.publicPath.label',
           description: 'org.vue.vue-webpack.config.vue-cli.publicPath.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#publicPath'
+          link: 'https://cli.vuejs.org/config/#publicpath'
         },
         {
           name: 'outputDir',

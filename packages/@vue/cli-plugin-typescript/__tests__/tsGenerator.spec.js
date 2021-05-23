@@ -18,7 +18,7 @@ test('generate files', async () => {
   expect(files['src/main.js']).toBeFalsy()
   expect(files['src/App.vue']).toMatch('<script lang="ts">')
   // checks that the Home.vue file has not been created, even empty
-  expect(files.hasOwnProperty('src/views/Home.vue')).toBeFalsy()
+  expect(Object.prototype.hasOwnProperty.call(files, 'src/views/Home.vue')).toBeFalsy()
 })
 
 test('classComponent', async () => {
@@ -77,44 +77,7 @@ test('use with router', async () => {
       options: {}
     }
   ])
-  expect(files['src/views/Home.vue']).toMatch('<div class=\"home\">')
-})
-
-test('lint', async () => {
-  const { pkg, files } = await generateWithPlugin([
-    {
-      id: 'ts',
-      apply: require('../generator'),
-      options: {
-        tsLint: true,
-        lintOn: ['save', 'commit']
-      }
-    }
-  ])
-
-  expect(pkg.scripts.lint).toBe(`vue-cli-service lint`)
-  expect(pkg.devDependencies).toHaveProperty('lint-staged')
-  expect(pkg.gitHooks).toEqual({ 'pre-commit': 'lint-staged' })
-  expect(pkg['lint-staged']).toEqual({
-    '*.ts': ['vue-cli-service lint', 'git add'],
-    '*.vue': ['vue-cli-service lint', 'git add']
-  })
-
-  expect(files['tslint.json']).toBeTruthy()
-})
-
-test('lint with no lintOnSave', async () => {
-  const { pkg } = await generateWithPlugin([
-    {
-      id: 'ts',
-      apply: require('../generator'),
-      options: {
-        tsLint: true,
-        lintOn: ['commit']
-      }
-    }
-  ])
-  expect(pkg.vue).toEqual({ lintOnSave: false })
+  expect(files['src/views/Home.vue']).toMatch('<div class="home">')
 })
 
 test('tsconfig.json should be valid json', async () => {

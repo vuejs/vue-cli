@@ -120,7 +120,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
   // Otherwise, proxy is an object so create an array of proxies to pass to webpackDevServer
   return Object.keys(proxy).map(context => {
     const config = proxy[context]
-    if (!config.hasOwnProperty('target')) {
+    if (!Object.prototype.hasOwnProperty.call(config, 'target')) {
       console.log(
         chalk.red(
           'When `proxy` in package.json is an object, each `context` object must have a ' +
@@ -135,7 +135,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
 }
 
 function resolveLoopback (proxy) {
-  const o = url.parse(proxy)
+  const o = new url.URL(proxy)
   o.host = undefined
   if (o.hostname !== 'localhost') {
     return proxy
@@ -148,7 +148,7 @@ function resolveLoopback (proxy) {
     o.hostname = address.ipv6() ? '::1' : '127.0.0.1';
   } catch (_ignored) {
     o.hostname = '127.0.0.1';
-  }*/
+  } */
 
   try {
     // Check if we're on a network; if we are, chances are we can resolve

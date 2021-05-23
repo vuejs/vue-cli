@@ -3,6 +3,5 @@ template
 template-vue3
 packages/test
 temp
-entry-wc.js
 dist
 __testfixtures__

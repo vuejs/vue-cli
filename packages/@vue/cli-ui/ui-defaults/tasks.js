@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
+const { loadModule, semver } = require('@vue/cli-shared-utils')
 const { processStats } = require('./utils/stats')
 
 /** @typedef {import('../apollo-server/api/PluginApi')} PluginApi */
@@ -326,7 +327,17 @@ module.exports = api => {
       if (answers.target) args.push('--target', answers.target)
       if (answers.name) args.push('--name', answers.name)
       if (answers.watch) args.push('--watch')
-      if (answers.modern) args.push('--modern')
+
+      // the flag is different between v3/4 and v5 projects
+      const servicePkg = loadModule('@vue/cli-service/package.json', api.getCwd())
+      const isV5Project = servicePkg && semver.satisfies(servicePkg.version, '^5.0.0-0')
+
+      if (answers.modern) {
+        args.push(isV5Project ? '--module' : '--modern')
+      } else {
+        args.push(isV5Project ? '--no-module' : '--no-modern')
+      }
+
       setSharedData('modern-mode', !!answers.modern)
       args.push('--dashboard')
 

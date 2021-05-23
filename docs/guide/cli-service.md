@@ -75,13 +75,12 @@ Options:
   --mode         specify env mode (default: production)
   --dest         specify output directory (default: dist)
   --modern       build app targeting modern browsers with auto fallback
-  --no-unsafe-inline build app without introducing inline scripts
   --target       app | lib | wc | wc-async (default: app)
   --formats      list of output formats for library builds (default: commonjs,umd,umd-min)
   --inline-vue   include the Vue module in the final bundle of library or web component target
   --name         name for lib or web-component mode (default: "name" in package.json or entry filename)
   --filename     file name for output, only usable for 'lib' target (default: value of --name),
-  --no-clean     do not remove the dist directory before building the project
+  --no-clean     do not remove the dist directory contents before building the project
   --report       generate report.html to help analyze bundle content
   --report-json  generate report.json to help analyze bundle content
   --skip-plugins comma-separated list of plugin names to skip for this run
@@ -169,10 +168,7 @@ When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add"
-    ]
+    "*.{js,vue}": "vue-cli-service lint"
   }
 }
 ```

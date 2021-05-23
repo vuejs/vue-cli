@@ -17,7 +17,7 @@ module.exports = cli => {
         value: '2'
       },
       {
-        name: '3.x (Preview)',
+        name: '3.x',
         value: '3'
       }
     ],

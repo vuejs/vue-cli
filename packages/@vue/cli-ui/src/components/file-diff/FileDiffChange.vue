@@ -45,6 +45,8 @@ export default {
       } else if (this.change.type === 'del') {
         return this.change.ln
       }
+
+      return ''
     },
 
     ln2 () {
@@ -53,6 +55,8 @@ export default {
       } else if (this.change.type === 'add') {
         return this.change.ln
       }
+
+      return ''
     }
   },
 

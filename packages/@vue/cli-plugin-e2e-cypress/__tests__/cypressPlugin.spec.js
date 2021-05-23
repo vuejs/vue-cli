@@ -30,7 +30,6 @@ test('should work with TS', async () => {
     plugins: {
       '@vue/cli-plugin-typescript': {
         'classComponent': true,
-        'tsLint': true,
         'lintOn': ['save']
       },
       '@vue/cli-plugin-e2e-cypress': {}

@@ -9,9 +9,9 @@ sidebarDepth: 3
 A CLI plugin is an npm package that can add additional features to the project using Vue CLI. These features can include:
 
 - changing project webpack config - for example, you can add a new webpack resolve rule for a certain file extension, if your plugin is supposed to work with this type of files. Say, `@vue/cli-plugin-typescript` adds such rule to resolve `.ts` and `.tsx` extensions;
-- adding new vue-cli-service command - for example, `@vue/cli-plugin-unit-jest` adds a new command `test:unit` that allows developer to run unit tests;
-- extending `package.json` - a useful option when your plugin adds some dependencies to the project and you need to add them to package dependencies section;
-- creating new files in the project and/or modifying old ones. Sometimes it's a good idea to create an example component or modify a main file to add some imports;
+- adding new vue-cli-service command - for example, `@vue/cli-plugin-unit-jest` adds a new command `test:unit` that allows a developer to run unit tests;
+- extending `package.json` - a useful option when your plugin adds some dependencies to the project and you need to add them to the package dependencies section;
+- creating new files in the project and/or modifying old ones. Sometimes it's a good idea to create an example component or modify the main file to add some imports;
 - prompting user to select certain options - for example, you can ask user if they want to create the example component mentioned above.
 
 :::tip
@@ -76,7 +76,7 @@ You should add the url to the plugin website or repository in the `homepage` or 
 
 A Generator part of the CLI plugin is usually needed when you want to extend your package with new dependencies, create new files in your project or edit existing ones.
 
-Inside the CLI plugin the generator should be placed in a `generator.js` or `generator/index.js` file. It will be invoked in two possible scenarios:
+Inside the CLI plugin, the generator should be placed in a `generator.js` or `generator/index.js` file. It will be invoked in two possible scenarios:
 
 - During a project's initial creation, if the CLI plugin is installed as part of the project creation preset.
 
@@ -170,7 +170,7 @@ export default {
 
 ### Filename edge cases
 
-If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention, since dotfiles are ignored when publishing your plugin to npm:
+If you want to render a template file that either begins with a dot (i.e. `.env`) you will have to follow a specific naming convention since dotfiles are ignored when publishing your plugin to npm:
 
 ```bash
 # dotfile templates have to use an underscore instead of the dot:
@@ -182,7 +182,7 @@ If you want to render a template file that either begins with a dot (i.e. `.env`
 /generator/template/.env
 ```
 
-Consequently, this means that you also have to follow a special naming convention if you want to render file whose name actually begins with an underscore:
+Consequently, this means that you also have to follow a special naming convention if you want to render a file whose name actually begins with an underscore:
 
 ```bash
 # such templates have to use two underscores instead of one:
@@ -211,9 +211,9 @@ module.exports = api => {
 }
 ```
 
-In the example above we added one dependency: `vue-router-layout`. During the plugin invocation this npm module will be installed and this dependency will be added to the user `package.json` file.
+In the example above we added one dependency: `vue-router-layout`. During the plugin invocation, this npm module will be installed and this dependency will be added to the user `package.json` file.
 
-With the same API method we can add new npm tasks to the project. To do so, we need to specify task name and a command that should be run in the `scripts` section of the user `package.json`:
+With the same API method, we can add new npm tasks to the project. To do so, we need to specify the task name and a command that should be run in the `scripts` section of the user `package.json`:
 
 ```js
 // generator/index.js
@@ -231,7 +231,7 @@ In the example above we're adding a new `greet` task to run a custom vue-cli ser
 
 ### Changing main file
 
-With generator methods you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc.
+With generator methods, you can make changes to the project files. The most usual case is some modifications to `main.js` or `main.ts` file: new imports, new `Vue.use()` calls etc.
 
 Let's consider the case where we have created a `router.js` file via [templating](#creating-new-templates) and now we want to import this router to the main file. We will use two Generator API methods: `entryFile` will return the main file of the project (`main.js` or `main.ts`) and `injectImports` serves for adding new imports to this file:
 
@@ -243,7 +243,7 @@ api.injectImports(api.entryFile, `import router from './router'`)
 
 Now, when we have a router imported, we can inject this router to the Vue instance in the main file. We will use `afterInvoke` hook which is to be called when the files have been written to disk.
 
-First, we need to read main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content on lines:
+First, we need to read the main file content with Node `fs` module (which provides an API for interacting with the file system) and split this content into lines:
 
 ```js
 // generator/index.js
@@ -257,7 +257,7 @@ module.exports.hooks = (api) => {
 }
 ```
 
-Then we should to find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
+Then we should find the string containing `render` word (it's usually a part of Vue instance) and add our `router` as a next string:
 
 ```js{9-10}
 // generator/index.js
@@ -333,13 +333,13 @@ module.exports = (api, options) => {
 }
 ```
 
-You can also use `configureWebpack` method to modify the  webpack config or return object to be merged with webpack-merge.
+You can also use `configureWebpack` method to modify the webpack config or return the object to be merged with webpack-merge.
 
 ### Add a new cli-service command
 
-With service plugin you can register a new cli-service command in addition to standard ones (i.e. `serve` and `build`). You can do it with a `registerCommand` API method.
+With service plugin, you can register a new cli-service command in addition to standard ones (i.e. `serve` and `build`). You can do it with a `registerCommand` API method.
 
-Here is an example of creating a simple new command that will print a greeting to developer console:
+Here is an example of creating a simple new command that will print a greeting to the developer console:
 
 ```js
 api.registerCommand(
@@ -354,10 +354,10 @@ api.registerCommand(
 )
 ```
 
-In this example we provided the command name (`'greet'`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
+In this example, we provided the command name (`'greet'`), an object of command options with `description` and `usage`, and a function that will be run on `vue-cli-service greet` command.
 
 :::tip
-You can add new command to the list of project npm scripts inside the `package.json` file [via Generator](#extending-package).
+You can add a new command to the list of project npm scripts inside the `package.json` file [via Generator](#extending-package).
 :::
 
 If you try to run a new command in the project with your plugin installed, you will see the following output:
@@ -387,7 +387,7 @@ api.registerCommand(
 );
 ```
 
-Now, if you a `greet` command with a specified `--name` option, this name will be added to console message:
+Now, if you a `greet` command with a specified `--name` option, this name will be added to the console message:
 
 ```bash
 $ vue-cli-service greet --name 'John Doe'
@@ -396,7 +396,7 @@ $ vue-cli-service greet --name 'John Doe'
 
 ### Modifying existing cli-service command
 
-If you want to modify an existing cli-service command, you can retrieve it with `api.service.commands` and add some changes. We're going to print a message to the console with a port where application is running:
+If you want to modify an existing cli-service command, you can retrieve it with `api.service.commands` and add some changes. We're going to print a message to the console with a port where the application is running:
 
 ```js
 const { serve } = api.service.commands
@@ -436,9 +436,9 @@ This is because the command's expected mode needs to be known before loading env
 
 Prompts are required to handle user choices when creating a new project or adding a new plugin to the existing one. All prompts logic is stored inside the `prompts.js` file. The prompts are presented using [inquirer](https://github.com/SBoudrias/Inquirer.js) under the hood.
 
-When user initialize the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js.
+When a user initializes the plugin by calling `vue invoke`, if the plugin contains a `prompts.js` in its root directory, it will be used during invocation. The file should export an array of [Questions](https://github.com/SBoudrias/Inquirer.js#question) that will be handled by Inquirer.js.
 
-You should export directly array of questions, or export function that return those.
+You should export a direct array of questions, or export function that return those.
 
 e.g. directly array of questions:
 ```js
@@ -493,7 +493,7 @@ Alternatively, the user can skip the prompts and directly initialize the plugin 
 vue invoke my-plugin --mode awesome
 ```
 
-Prompt can have [different types](https://github.com/SBoudrias/Inquirer.js#prompt-types) but the most widely used in CLI are `checkbox` and `confirm`. Let's add a `confirm` prompt and then use it in plugin generator to create a condition for [template rendering](#creating-new-templates).
+Prompt can have [different types](https://github.com/SBoudrias/Inquirer.js#prompt-types) but the most widely used in CLI are `checkbox` and `confirm`. Let's add a `confirm` prompt and then use it in the plugin generator to create a condition for [template rendering](#creating-new-templates).
 
 ```js
 // prompts.js
@@ -522,7 +522,7 @@ if (options.addExampleRoutes) {
 }
 ```
 
-Now template will be rendered only if user agreed to create example routes.
+Now template will be rendered only if the user agreed to create example routes.
 
 
 ## Installing plugin locally
@@ -548,7 +548,7 @@ Another way to add a plugin is to leverage the power of Vue UI. You can run it w
 vue ui
 ```
 
-You will have a UI open in browser window on `localhost:8000`. Go to the `Vue Project Manager` tab:
+You will have a UI open in a browser window on `localhost:8000`. Go to the `Vue Project Manager` tab:
 
 ![Vue Project Manager](/ui-project-manager.png)
 
@@ -556,17 +556,17 @@ And look for your test project name there:
 
 ![UI Plugins List](/ui-select-plugin.png)
 
-Click on your application name, go to the Plugins tab (it has a puzzle icon) and then click the `Add new plugin` button on the top right. In the new view you will see a list of Vue CLI plugins accessible via npm. There is also a `Browse local plugin` button on the bottom of the page:
+Click on your application name, go to the Plugins tab (it has a puzzle icon) and then click the `Add new plugin` button on the top right. In the new view, you will see a list of Vue CLI plugins accessible via npm. There is also a `Browse local plugin` button on the bottom of the page:
 
 ![Browse local plugins](/ui-browse-local-plugin.png)
 
-After you click it, you can easily search for you plugin and add it to the project. After this you will be able to see it in plugins list and apply all changes done to the plugin via simply clicking on `Refresh` icon:
+After you click it, you can easily search for your plugin and add it to the project. After this you will be able to see it in the plugins list and apply all changes done to the plugin via simply clicking on `Refresh` icon:
 
 ![Refresh plugin](/ui-plugin-refresh.png)
 
 ## UI Integration
 
-Vue CLI has a great UI tool which allows user to scaffold and manage a project with a nice graphical interface. The Vue CLI plugin can be integrated to this interface. UI provides an additional functionality to CLI plugins:
+Vue CLI has a great UI tool which allows user to scaffold and manage a project with a nice graphical interface. The Vue CLI plugin can be integrated into this interface. UI provides an additional functionality to CLI plugins:
 
 - you can run npm tasks, including plugin-specific ones, directly from the UI;
 - you can display custom configurations for your plugin. For example, [vue-cli-plugin-apollo](https://github.com/Akryum/vue-cli-plugin-apollo) provides the following configuration screen for Apollo server:
@@ -576,7 +576,7 @@ Vue CLI has a great UI tool which allows user to scaffold and manage a project w
 - you can add localizations for your plugin if you want to support multiple languages
 - you can make your plugin discoverable in the Vue UI search
 
-All the logic connected to Vue UI should be placed to `ui.js` file in the root folder or in the `ui/index.js`. The file should export a function which gets the api object as argument:
+All the logic connected to Vue UI should be placed to `ui.js` file in the root folder or in the `ui/index.js`. The file should export a function which gets the api object as an argument:
 
 ```js
 module.exports = api => {
@@ -586,7 +586,7 @@ module.exports = api => {
 
 ### Augment the task in the UI
 
-Vue CLI plugin allows you not only add new npm tasks to the project [via Generator](#extending-package) but also create a view for them in Vue UI. It's useful when you want to run the the task right from the UI and see its output there.
+Vue CLI plugin allows you not only add new npm tasks to the project [via Generator](#extending-package) but also create a view for them in Vue UI. It's useful when you want to run the task right from the UI and see its output there.
 
 Let's add a `greet` task created with [Generator](#extending-package) to the UI. Tasks are generated from the `scripts` field in the project `package.json` file. You can 'augment' the tasks with additional info and hooks thanks to the `api.describeTask` method. Let's provide some additional information about our task:
 
@@ -600,13 +600,13 @@ module.exports = api => {
 }
 ```
 
-Now if you explore your project in the Vue UI, you will find your task added to the `Tasks` section. You can see a name of the task, provided description, a link icon that leads to the provided URL and also an output screen to show the task output:
+Now if you explore your project in the Vue UI, you will find your task added to the `Tasks` section. You can see the name of the task, provided description, a link icon that leads to the provided URL and also an output screen to show the task output:
 
 ![UI Greet task](/ui-greet-task.png)
 
 ### Display a configuration screen
 
-Sometimes your project can have custom configuration files for different features or libraries. With Vue CLI plugin you can display this config in Vue UI, change it and save (saving will change the corresponding config file in your project). By default, Vue CLI project has a main configuration screen representing `vue.config.js` settings. If you included ESLint to your project, you will see also a ESLint configuration screen:
+Sometimes your project can have custom configuration files for different features or libraries. With Vue CLI plugin you can display this config in Vue UI, change it and save (saving will change the corresponding config file in your project). By default, Vue CLI project has a main configuration screen representing `vue.config.js` settings. If you included ESLint in your project, you will see also a ESLint configuration screen:
 
 ![UI Configuration Screen](/ui-configuration-default.png)
 
@@ -638,7 +638,7 @@ module.exports = {
 
 After your plugin is invoked, the `myConfig.js` file will be rendered in the project root directory. Now let's add a new configuration screen with the `api.describeConfig` method in the `ui.js` file:
 
-First you need to pass some information:
+First, you need to pass some information:
 
 ```js
 // ui.js
@@ -716,7 +716,7 @@ In the example above we specified the input prompt with the value of 'white'. Th
 
 ![UI Config Start](/ui-config-start.png)
 
-Now let's replace hardcoded `white` value with the property from the config file. In the `onRead` hook `data` object contains the JSON result of each config file content. In our case, the content of `myConfig.js` was
+Now let's replace the hardcoded `white` value with the property from the config file. In the `onRead` hook `data` object contains the JSON result of each config file content. In our case, the content of `myConfig.js` was
 
 ```js
 // myConfig.js
@@ -794,7 +794,7 @@ api.describeConfig({
 })
 ```
 
-`onWrite` hook can take a lot of [arguments](ui-api.html#save-config-changes) but we will need only two of them: `prompts` and `api`. First one is current prompts runtime objects - we will get a prompt id from it and retrieve an answer with this id. To retrieve the answer we'll use `async getAnswer()` method from the `api`:
+`onWrite` hook can take a lot of [arguments](ui-api.html#save-config-changes) but we will need only two of them: `prompts` and `api`. The first one is current prompts runtime objects - we will get a prompt id from it and retrieve an answer with this id. To retrieve the answer we'll use `async getAnswer()` method from the `api`:
 
 ```js
 // ui.js
@@ -870,7 +870,7 @@ npm login
 Enter your username and password. This will store the credentials so you don’t have to enter it for every publish.
 
 :::tip
-Before publishing a plugin, make sure you choose a right name for it! Name convention is `vue-cli-plugin-<name>`. Check [Discoverability](#discoverability) section for more information
+Before publishing a plugin, make sure you choose the right name for it! Name convention is `vue-cli-plugin-<name>`. Check [Discoverability](#discoverability) section for more information
 :::
 
 To publish a plugin, go to the plugin root folder and run this command in the terminal:

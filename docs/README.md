@@ -24,10 +24,6 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
     <p>Create, develop and manage your projects through an accompanying graphical user interface.</p>
   </div>
   <div class="feature">
-    <h2>Instant Prototyping</h2>
-    <p>Instantly prototype new ideas with a single Vue file.</p>
-  </div>
-  <div class="feature">
     <h2>Future Ready</h2>
     <p>Effortlessly ship native ES2015 code for modern browsers, or build your vue components as native web components.</p>
   </div>

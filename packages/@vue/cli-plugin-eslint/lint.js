@@ -15,7 +15,8 @@ const renamedArgs = {
   rule: 'rules',
   eslintrc: 'useEslintrc',
   c: 'configFile',
-  config: 'configFile'
+  config: 'configFile',
+  'output-file': 'outputFile'
 }
 
 module.exports = function lint (args = {}, api) {
@@ -82,6 +83,16 @@ module.exports = function lint (args = {}, api) {
   process.cwd = processCwd
 
   const formatter = engine.getFormatter(args.format || 'codeframe')
+
+  if (config.outputFile) {
+    const outputFilePath = path.resolve(config.outputFile)
+    try {
+      fs.writeFileSync(outputFilePath, formatter(report.results))
+      log(`Lint results saved to ${chalk.blue(outputFilePath)}`)
+    } catch (err) {
+      log(`Error saving lint results to ${chalk.blue(outputFilePath)}: ${chalk.red(err)}`)
+    }
+  }
 
   if (config.fix) {
     CLIEngine.outputFixes(report)

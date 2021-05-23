@@ -137,7 +137,7 @@ async function initCreator (context) {
         if (key === 'default') {
           name = 'org.vue.views.project-create.tabs.presets.default-preset'
         } else if (key === '__default_vue_3__') {
-          name = 'org.vue.views.project-create.tabs.presets.default-preset-vue-3-preview'
+          name = 'org.vue.views.project-create.tabs.presets.default-preset-vue-3'
         }
         const info = {
           id: key,
@@ -272,7 +272,7 @@ async function create (input, context) {
     creator.context = targetDir
 
     const inCurrent = input.folder === '.'
-    const name = creator.name = (inCurrent ? path.relative('../', process.cwd()) : input.folder).toLowerCase()
+    const name = creator.name = (inCurrent ? path.relative('../', process.cwd()) : input.folder)
 
     // Answers
     const answers = prompts.getAnswers()

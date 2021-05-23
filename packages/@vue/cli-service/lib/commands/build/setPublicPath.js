@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 // This file is imported into lib/wc client bundles.
 
 if (typeof window !== 'undefined') {

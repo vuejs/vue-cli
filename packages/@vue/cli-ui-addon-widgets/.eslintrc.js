@@ -12,7 +12,10 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser',
+    babelOptions: {
+      cwd: __dirname
+    }
   },
   globals: {
     ClientAddonApi: false,

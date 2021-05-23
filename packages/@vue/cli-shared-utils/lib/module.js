@@ -7,6 +7,7 @@ const semver = require('semver')
 // https://github.com/benmosher/eslint-plugin-import/pull/1602
 // Polyfill Node's `Module.createRequireFromPath` if not present (added in Node v10.12.0)
 // Use `Module.createRequire` if available (added in Node v12.2.0)
+// eslint-disable-next-line node/no-deprecated-api
 const createRequire = Module.createRequire || Module.createRequireFromPath || function (filename) {
   const mod = new Module(filename, null)
   mod.filename = filename
@@ -49,6 +50,13 @@ const resolve = semver.satisfies(process.version, '>=10.0.0')
   : resolveFallback
 
 exports.resolveModule = function (request, context) {
+  // createRequire doesn't work with jest mock modules
+  // (which we used in migrator for inquirer, and in tests for cli-service)
+  // TODO: it's supported in Jest 25
+  if (process.env.VUE_CLI_TEST && (request.endsWith('migrator') || context === '/')) {
+    return request
+  }
+
   let resolvedPath
   try {
     try {
@@ -61,10 +69,9 @@ exports.resolveModule = function (request, context) {
 }
 
 exports.loadModule = function (request, context, force = false) {
-  // createRequire doesn't work with jest mock modules
-  // (which we used in migrator for inquirer, and in tests for cli-service)
-  // TODO: it's supported in Jest 25
-  if (process.env.VUE_CLI_TEST && (request.endsWith('migrator') || context === '/')) {
+  // createRequire doesn't work with jest mocked fs
+  // (which we used in tests for cli-service)
+  if (process.env.VUE_CLI_TEST && context === '/') {
     return require(request)
   }
 

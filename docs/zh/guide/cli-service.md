@@ -56,7 +56,7 @@ npx vue-cli-service serve
 
 除了通过命令行参数，你也可以使用 `vue.config.js` 里的 [devServer](../config/#devserver) 字段配置开发服务器。
 
-命令行参数 `[entry]` 将被指定为唯一入口，而非额外的追加入口。尝试使用 `[entry]` 覆盖 `config.pages` 中的 `entry` 将可能引发错误。
+命令行参数 `[entry]` 将被指定为唯一入口 (默认值：`src/main.js`，TypeScript 项目则为 `src/main.ts`)，而非额外的追加入口。尝试使用 `[entry]` 覆盖 `config.pages` 中的 `entry` 将可能引发错误。
 
 ## vue-cli-service build
 
@@ -70,7 +70,7 @@ npx vue-cli-service serve
   --modern      面向现代浏览器带自动回退地构建应用
   --target      app | lib | wc | wc-async (默认值：app)
   --name        库或 Web Components 模式下的名字 (默认值：package.json 中的 "name" 字段或入口文件名)
-  --no-clean    在构建项目之前不清除目标目录
+  --no-clean    在构建项目之前不清除目标目录的内容
   --report      生成 report.html 以帮助分析包内容
   --report-json 生成 report.json 以帮助分析包内容
   --watch       监听文件变化
@@ -128,10 +128,7 @@ npx vue-cli-service help [command]
     "pre-commit": "lint-staged"
   },
    "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add"
-    ]
+    "*.{js,vue}": "vue-cli-service lint"
   }
 }
 ```

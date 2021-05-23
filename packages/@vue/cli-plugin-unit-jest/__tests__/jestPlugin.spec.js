@@ -69,7 +69,7 @@ test('should work without Babel', async () => {
   await project.run(`vue-cli-service test:unit`)
 
   await project.run(`vue-cli-service test:unit --coverage --collectCoverageFrom="src/**/*.{js,vue}"`)
-  const appCoverage = await project.read('coverage/lcov-report/App.vue.html')
+  const appCoverage = await project.read('coverage/lcov-report/src/App.vue.html')
   expect(appCoverage).toBeTruthy()
 })
 

@@ -4,7 +4,9 @@
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
+    <%_ if (!options.useTsWithBabel) { _%>
     "importHelpers": true,
+    <%_ } _%>
     "moduleResolution": "node",
     <%_ if (options.classComponent) { _%>
     "experimentalDecorators": true,
@@ -17,6 +19,8 @@
     <%_ } _%>
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
@@ -24,7 +28,8 @@
       <%_ if (hasWebDriverIO) { _%>
       <% if (!hasMocha && !hasJest) { %>"mocha",<% } %>
       "@wdio/mocha-framework",
-      "@wdio/sync"<% if (hasMocha || hasJest) { %>,<% } %>
+      "expect-webdriverio",
+      "webdriverio/sync"<% if (hasMocha || hasJest) { %>,<% } %>
       <%_ } _%>
       <%_ if (hasMocha) { _%>
       "mocha",

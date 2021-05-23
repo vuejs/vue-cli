@@ -49,7 +49,14 @@ async function autoDetect () {
       console.log(`[UI] No locale data was found for your locale ${codes[0]}.`)
     }
 
-    const dateFnsLocale = i18n.locale.toLowerCase().replace(/-/g, '_')
+    let dateFnsLocale = i18n.locale
+    if (dateFnsLocale === 'en') {
+      dateFnsLocale = 'en-US'
+    } else if (dateFnsLocale === 'zh') {
+      // we use `zh` as language code in transifex, but date-fns only has zh-CN
+      dateFnsLocale = 'zh-CN'
+    }
+
     Vue.component('VueTimeago', createTimeago({
       name: 'VueTimeago',
       locale: i18n.locale,

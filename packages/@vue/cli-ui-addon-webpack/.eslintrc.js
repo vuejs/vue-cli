@@ -9,5 +9,11 @@ module.exports = {
     mapSharedData: false,
     Vue: false,
     name: 'off'
+  },
+  parserOptions: {
+    parser: '@babel/eslint-parser',
+    babelOptions: {
+      cwd: __dirname
+    }
   }
 }

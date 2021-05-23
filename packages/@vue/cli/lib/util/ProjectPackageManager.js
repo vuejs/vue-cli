@@ -88,7 +88,7 @@ function stripVersion (packageName) {
 // extract the package scope from the full package name
 // the result includes the initial @ character
 function extractPackageScope (packageName) {
-  const scopedNameRegExp = /^(@[^\/]+)\/.*$/
+  const scopedNameRegExp = /^(@[^/]+)\/.*$/
   const result = packageName.match(scopedNameRegExp)
 
   if (!result) {
@@ -126,13 +126,15 @@ class PackageManager {
       const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
 
       if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
-        warn(
+        throw new Error(
           'You are using an outdated version of NPM.\n' +
-          'there may be unexpected errors during installation.\n' +
+          'It does not support some core functionalities of Vue CLI.\n' +
           'Please upgrade your NPM version.'
         )
+      }
 
-        this.needsNpmInstallFix = true
+      if (semver.gte(npmVersion, '7.0.0')) {
+        this.needsPeerDepsFix = true
       }
     }
 
@@ -195,7 +197,7 @@ class PackageManager {
     return this._registries[cacheKey]
   }
 
-  async getAuthToken (scope) {
+  async getAuthConfig (scope) {
     // get npmrc (https://docs.npmjs.com/configuring-npm/npmrc.html#files)
     const possibleRcPaths = [
       path.resolve(this.context, '.npmrc'),
@@ -220,11 +222,21 @@ class PackageManager {
 
     const registry = await this.getRegistry(scope)
     const registryWithoutProtocol = registry
-      .replace(/https?:/, '')     // remove leading protocol
-      .replace(/([^/])$/, '$1/')  // ensure ending with slash
+      .replace(/https?:/, '') // remove leading protocol
+      .replace(/([^/])$/, '$1/') // ensure ending with slash
     const authTokenKey = `${registryWithoutProtocol}:_authToken`
+    const authUsernameKey = `${registryWithoutProtocol}:username`
+    const authPasswordKey = `${registryWithoutProtocol}:_password`
 
-    return npmConfig[authTokenKey]
+    const auth = {}
+    if (authTokenKey in npmConfig) {
+      auth.token = npmConfig[authTokenKey]
+    }
+    if (authPasswordKey in npmConfig) {
+      auth.username = npmConfig[authUsernameKey]
+      auth.password = Buffer.from(npmConfig[authPasswordKey], 'base64').toString()
+    }
+    return auth
   }
 
   async setRegistryEnvs () {
@@ -245,7 +257,7 @@ class PackageManager {
     }
 
     try {
-      // node-sass, chromedriver, etc.
+      // chromedriver, etc.
       const binaryMirrorConfigMetadata = await this.getMetadata('binary-mirror-config', { full: true })
       const latest = binaryMirrorConfigMetadata['dist-tags'] && binaryMirrorConfigMetadata['dist-tags'].latest
       const mirrors = binaryMirrorConfigMetadata.versions[latest].mirrors.china
@@ -265,10 +277,12 @@ class PackageManager {
       // Do not override user-defined env variable
       // Because we may construct a wrong download url and an escape hatch is necessary
       if (targetPlatform && !process.env.CYPRESS_INSTALL_BINARY) {
-        // We only support cypress 3 for the current major version
-        const latestCypressVersion = await this.getRemoteVersion('cypress', '^3')
-        process.env.CYPRESS_INSTALL_BINARY =
-          `${cypressMirror.host}/${latestCypressVersion}/${targetPlatform}/cypress.zip`
+        const projectPkg = resolvePkg(this.context)
+        if (projectPkg && projectPkg.devDependencies && projectPkg.devDependencies.cypress) {
+          const wantedCypressVersion = await this.getRemoteVersion('cypress', projectPkg.devDependencies.cypress)
+          process.env.CYPRESS_INSTALL_BINARY =
+            `${cypressMirror.host}/${wantedCypressVersion}/${targetPlatform}/cypress.zip`
+        }
       }
     } catch (e) {
       // get binary mirror config failed
@@ -292,14 +306,18 @@ class PackageManager {
       headers.Accept = 'application/vnd.npm.install-v1+json;q=1.0, application/json;q=0.9, */*;q=0.8'
     }
 
-    const authToken = await this.getAuthToken(scope)
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`
+    const authConfig = await this.getAuthConfig(scope)
+    if ('password' in authConfig) {
+      const credentials = Buffer.from(`${authConfig.username}:${authConfig.password}`).toString('base64')
+      headers.Authorization = `Basic ${credentials}`
+    }
+    if ('token' in authConfig) {
+      headers.Authorization = `Bearer ${authConfig.token}`
     }
 
     const url = `${registry.replace(/\/$/g, '')}/${packageName}`
     try {
-      metadata = (await request.get(url, { headers })).body
+      metadata = (await request.get(url, { headers }))
       if (metadata.error) {
         throw new Error(metadata.error)
       }
@@ -329,8 +347,14 @@ class PackageManager {
   }
 
   async runCommand (command, args) {
+    const prevNodeEnv = process.env.NODE_ENV
+    // In the use case of Vue CLI, when installing dependencies,
+    // the `NODE_ENV` environment variable does no good;
+    // it only confuses users by skipping dev deps (when set to `production`).
+    delete process.env.NODE_ENV
+
     await this.setRegistryEnvs()
-    return await executeCommand(
+    await executeCommand(
       this.bin,
       [
         ...PACKAGE_MANAGER_CONFIG[this.bin][command],
@@ -338,43 +362,24 @@ class PackageManager {
       ],
       this.context
     )
+
+    if (prevNodeEnv) {
+      process.env.NODE_ENV = prevNodeEnv
+    }
   }
 
   async install () {
+    const args = []
+
+    if (this.needsPeerDepsFix) {
+      args.push('--legacy-peer-deps')
+    }
+
     if (process.env.VUE_CLI_TEST) {
-      try {
-        process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
-        await this.runCommand('install', ['--offline', '--silent', '--no-progress'])
-        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
-      } catch (e) {
-        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
-        await this.runCommand('install', ['--silent', '--no-progress'])
-      }
+      args.push('--silent', '--no-progress')
     }
 
-    if (this.needsNpmInstallFix) {
-      // if npm 5, split into several `npm add` calls
-      // see https://github.com/vuejs/vue-cli/issues/5800#issuecomment-675199729
-      const pkg = resolvePkg(this.context)
-      if (pkg.dependencies) {
-        const deps = Object.entries(pkg.dependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', deps)
-      }
-
-      if (pkg.devDependencies) {
-        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', [...devDeps, '--save-dev'])
-      }
-
-      if (pkg.optionalDependencies) {
-        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', [...devDeps, '--save-optional'])
-      }
-
-      return
-    }
-
-    return await this.runCommand('install')
+    return await this.runCommand('install', args)
   }
 
   async add (packageName, {
@@ -388,6 +393,10 @@ class PackageManager {
       } else {
         process.env.npm_config_save_prefix = '~'
       }
+    }
+
+    if (this.needsPeerDepsFix) {
+      args.push('--legacy-peer-deps')
     }
 
     return await this.runCommand('add', [packageName, ...args])

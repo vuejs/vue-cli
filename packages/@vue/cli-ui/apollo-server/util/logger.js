@@ -26,5 +26,5 @@ exports.dumpObject = (obj) => {
       result[key] = type
     }
   })
-  return result.toString()
+  return JSON.stringify(result)
 }

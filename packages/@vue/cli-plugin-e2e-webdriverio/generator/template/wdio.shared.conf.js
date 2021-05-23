@@ -59,16 +59,6 @@ exports.config = {
   // see also: https://webdriver.io/docs/dot-reporter.html
   reporters: ['spec'],
   //
-  // Options to be passed to Mocha.
-  // See the full list at http://mochajs.org/
-  mochaOpts: {
-    ui: 'bdd',
-    timeout: 30000,
-    <%_ if (hasTS) { _%>
-    require: 'ts-node/register',
-    <%_ } _%>
-  },
-  //
   // =====
   // Hooks
   // =====

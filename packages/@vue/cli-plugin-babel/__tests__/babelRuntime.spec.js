@@ -4,30 +4,31 @@ const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const serve = require('@vue/cli-test-utils/serveWithPuppeteer')
 
-test('should add polyfills for code in @babel/runtime', async () => {
-  const project = await create('babel-runtime-polyfills', defaultPreset)
+// iterableToArray no longer required in babel/runtime 7.8.7+
+// test('should add polyfills for code in @babel/runtime', async () => {
+//   const project = await create('babel-runtime-polyfills', defaultPreset)
 
-  await project.write('src/main.js', `
-  const x = function () {
-    setTimeout(
-      // eslint-disable-next-line
-      () => console.log(...arguments), 100
-    );
-  }
-  x(1, 2)
-  `)
+//   await project.write('src/main.js', `
+//   const x = function () {
+//     setTimeout(
+//       // eslint-disable-next-line
+//       () => console.log(...arguments), 100
+//     );
+//   }
+//   x(1, 2)
+//   `)
 
-  await project.run('vue-cli-service build --mode development')
-  const vendorFile = await project.read('dist/js/chunk-vendors.js')
+//   await project.run('vue-cli-service build --mode development')
+//   const vendorFile = await project.read('dist/js/chunk-vendors.js')
 
-  // iterableToArray is used to transform `console.log(...arguments)`
-  expect(vendorFile).toMatch('iterableToArray')
-  // with inline helpers, preset-env can detect the symbol polyfill is required
-  // (because the implementation of `iterableToArray` relies on it)
-  // however, with transform-runtime plugin, helpers are only references to @babel/runtime modules
-  // so we need to make sure polyfill detection is enabled for @babel/runtime too
-  expect(vendorFile).toMatch('es.symbol')
-})
+//   // iterableToArray is used to transform `console.log(...arguments)`
+//   expect(vendorFile).toMatch('iterableToArray')
+//   // with inline helpers, preset-env can detect the symbol polyfill is required
+//   // (because the implementation of `iterableToArray` relies on it)
+//   // however, with transform-runtime plugin, helpers are only references to @babel/runtime modules
+//   // so we need to make sure polyfill detection is enabled for @babel/runtime too
+//   expect(vendorFile).toMatch('es.symbol')
+// })
 
 test('should not transpile babel helpers multiple times', async () => {
   const project = await create('babel-runtime-helpers', defaultPreset)
@@ -54,7 +55,7 @@ test('should not transpile babel helpers multiple times', async () => {
 // #4742 core-js-pure imports are likely to be caused by
 // incorrect configuration of @babel/plugin-transform-runtime
 test('should not introduce polyfills from core-js-pure', async () => {
-  const project = await create('babel-runtime-core-js-pure', defaultPreset)
+  const project = await create('babel-runtime-no-duplicate-core-js', defaultPreset)
 
   await project.write('src/main.js', `
 import Vue from 'vue'

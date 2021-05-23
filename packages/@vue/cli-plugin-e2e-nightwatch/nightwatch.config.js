@@ -33,7 +33,7 @@ const defaultSettings = {
   test_settings: {
     default: {
       detailed_output: !concurrentMode,
-      launch_url: '${VUE_DEV_SERVER_URL}'
+      launch_url: '${VUE_DEV_SERVER_URL}' // eslint-disable-line no-template-curly-in-string
     },
 
     chrome: {
@@ -56,10 +56,12 @@ const defaultSettings = {
           }
         }
       },
-      webdriver: useSelenium ? {} : {
-        server_path: geckodriver.path,
-        port: 4444
-      }
+      webdriver: useSelenium
+        ? {}
+        : {
+          server_path: geckodriver.path,
+          port: 4444
+        }
     }
   }
 }

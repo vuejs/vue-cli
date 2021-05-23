@@ -1,15 +1,16 @@
 module.exports = (api, options) => {
   api.render('./template', {
-    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
+    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
+    useBabel: api.hasPlugin('babel')
   })
 
   if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
-        'vue': '^3.0.0'
+        'vue': '^3.0.4'
       },
       devDependencies: {
-        '@vue/compiler-sfc': '^3.0.0'
+        '@vue/compiler-sfc': '^3.0.4'
       }
     })
   } else {
@@ -31,31 +32,28 @@ module.exports = (api, options) => {
     browserslist: [
       '> 1%',
       'last 2 versions',
-      'not dead'
+      'not dead',
+      ...(options.vueVersion === '3' ? ['not ie 11'] : [])
     ]
   })
 
   if (options.cssPreprocessor) {
     const deps = {
       sass: {
-        sass: '^1.26.5',
-        'sass-loader': '^8.0.2'
-      },
-      'node-sass': {
-        'node-sass': '^4.12.0',
-        'sass-loader': '^8.0.2'
+        sass: '^1.32.7',
+        'sass-loader': '^11.0.1'
       },
       'dart-sass': {
-        sass: '^1.26.5',
-        'sass-loader': '^8.0.2'
+        sass: '^1.32.7',
+        'sass-loader': '^11.0.1'
       },
       less: {
-        'less': '^3.0.4',
-        'less-loader': '^5.0.0'
+        'less': '^4.0.0',
+        'less-loader': '^8.0.0'
       },
       stylus: {
-        'stylus': '^0.54.7',
-        'stylus-loader': '^3.0.2'
+        'stylus': '^0.54.8',
+        'stylus-loader': '^5.0.0'
       }
     }
 
@@ -77,5 +75,10 @@ module.exports = (api, options) => {
   // additional tooling configurations
   if (options.configs) {
     api.extendPackage(options.configs)
+  }
+
+  // Delete jsconfig.json when typescript
+  if (api.hasPlugin('typescript')) {
+    api.render((files) => delete files['jsconfig.json'])
   }
 }
