@@ -1,0 +1,31 @@
+{
+  "name": "vue-cli-plugin-workbox-pwa",
+  "version": "0.0.1-alpha",
+  "description": "vue-cli plugin for Workbox and Vue 3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kb-coder/vue-cli-plugin-workbox-pwa.git"
+  },
+  "homepage": "https://github.com/kb-coder/vue-cli-plugin-workbox-pwa#readme",
+  "keywords": [
+    "workbox",
+    "cli",
+    "pwa",
+    "vue"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Karen Baney",
+  "license": "MIT",
+  "dependencies": {
+    "@vue/cli-shared-utils": "^4.5.13",
+    "html-webpack-plugin": "^5.3.1",
+    "webpack": "^4.46.0",
+    "workbox-webpack-plugin": "^6.1.5"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
+  }
+}
