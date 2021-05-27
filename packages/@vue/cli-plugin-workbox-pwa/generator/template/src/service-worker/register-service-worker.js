@@ -70,10 +70,6 @@
      wb.addEventListener('controlling', (event) => {
        console.log('sw: controlling event listener hit.')
      })
-
-     wb.addEventListener('fetch', (event) => {
-       console.log('sw: fetch event listener hit.')
-     })
    }
  }
 

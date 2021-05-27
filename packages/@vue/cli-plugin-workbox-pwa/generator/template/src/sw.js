@@ -68,3 +68,7 @@ self.addEventListener('message', (event) => {
       break
   }
 })
+
+self.addEventListener('fetch', (event) => {
+  console.log('sw root: fetch event listener hit.')
+})
