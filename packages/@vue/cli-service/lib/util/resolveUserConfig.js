@@ -66,7 +66,9 @@ module.exports = function resolveUserConfig ({
   }
 
   // normalize some options
-  ensureSlash(resolved, 'publicPath')
+  if (resolved.publicPath !== 'auto') {
+    ensureSlash(resolved, 'publicPath')
+  }
   if (typeof resolved.publicPath === 'string') {
     resolved.publicPath = resolved.publicPath.replace(/^\.\//, '')
   }
