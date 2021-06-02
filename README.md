@@ -7,6 +7,8 @@
 
 Docs are available at https://cli.vuejs.org/ - we are still working on refining it and contributions are welcome!
 
+[![Known Vulnerabilities](https://snyk.io/test/npm/vue-template-es2015-compiler/1.9.1/badge.svg)](https://snyk.io/test/npm/vue-template-es2015-compiler/1.9.1)
+
 ## Contributing
 
 Please see [contributing guide](https://github.com/vuejs/vue-cli/blob/dev/.github/CONTRIBUTING.md).
