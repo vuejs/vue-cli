@@ -268,7 +268,7 @@ module.exports.hooks = (api) => {
     const lines = contentMain.split(/\r?\n/g)
 
     const renderIndex = lines.findIndex(line => line.match(/render/))
-    lines[renderIndex] + = `\n router,`
+    lines[renderIndex] += `\n router,`
   })
 }
 ```
@@ -293,7 +293,7 @@ module.exports.hooks = (api) => {
 }
 ```
 
-### Service 插件
+## Service 插件
 
 Service 插件可以修改 webpack 配置，创建新的 vue-cli service 命令或者修改已经存在的命令（如 `serve` 和 `build`）。
 
@@ -301,7 +301,7 @@ Service 插件在 Service 实例被创建后自动加载 - 例如，每次 `vue-
 
 一个 service 插件应该导出一个函数，这个函数接受两个参数：
 
-- 一个 [PluginAPI][plugin-api.md] 实例
+- 一个 [PluginAPI](plugin-api.md) 实例
 
 - 一个包含 `vue.config.js` 内指定的项目本地选项的对象，或者在 `package.json` 内的 `vue` 字段。
 
@@ -347,7 +347,7 @@ api.registerCommand(
     description: 'Write a greeting to the console',
     usage: 'vue-cli-service greet'
   },
-  () = > {
+  () => {
     console.log(`👋  Hello`)
   }
 )

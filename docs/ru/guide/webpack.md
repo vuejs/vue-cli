@@ -55,7 +55,6 @@ module.exports = {
     config.module
       .rule('vue')
       .use('vue-loader')
-        .loader('vue-loader')
         .tap(options => {
           // изменение настроек...
           return options

@@ -1,6 +1,6 @@
 # Working with CSS
 
-Vue CLI projects comes with support for [PostCSS](http://postcss.org/), [CSS Modules](https://github.com/css-modules/css-modules) and pre-processors including [Sass](https://sass-lang.com/), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
+Vue CLI projects come with support for [PostCSS](http://postcss.org/), [CSS Modules](https://github.com/css-modules/css-modules) and pre-processors including [Sass](https://sass-lang.com/), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
 
 ## Referencing Assets
 
@@ -21,6 +21,15 @@ npm install -D less-loader less
 npm install -D stylus-loader stylus
 ```
 
+::: tip Note on webpack 4
+When using `webpack` version 4, the default in Vue CLI 4, you need to make sure your loaders are compatible with it. Otherwise you will get errors about confliciting peer dependencies. In this case you can use an older version of the loader that is still compatible with `webpack` 4.
+
+``` bash
+# Sass
+npm install -D sass-loader@^10 sass
+```
+:::
+ 
 Then you can import the corresponding file types, or use them in `*.vue` files with:
 
 ``` vue

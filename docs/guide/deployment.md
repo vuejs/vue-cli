@@ -39,7 +39,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 1. Set correct `publicPath` in `vue.config.js`.
 
-    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `publicPath` as it defaults to `"/"`.
+    If you are deploying to `https://<USERNAME>.github.io/` or to a custom domain, you can omit `publicPath` as it defaults to `"/"`.
 
     If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `publicPath` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
@@ -75,10 +75,10 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     git commit -m 'deploy'
 
     # if you are deploying to https://<USERNAME>.github.io
-    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
 
     # if you are deploying to https://<USERNAME>.github.io/<REPO>
-    # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
+    # git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
 
     cd -
     ```
@@ -112,7 +112,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
      github_token: $GITHUB_TOKEN
      local_dir: dist
      on:
-       branch: master
+       branch: main
     ```
 
 6. Push the `.travis.yml` file to your repository to trigger the first build.
@@ -169,14 +169,30 @@ Commit both the `.gitlab-ci.yml` and `vue.config.js` files before pushing to you
 
 Also checkout [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
-In order to receive direct hits using `history mode` on Vue Router, you need to create a file called `_redirects` under `/public` with the following content:
+#### Use history mode on Vue Router
+
+In order to receive direct hits using `history mode` on Vue Router, you need to redirect all trafic to the `/index.html` file.
+
+> More information on [Netlify redirects documentation](https://docs.netlify.com/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-apps).
+
+##### Recomended method
+
+Create a file called `netlify.toml` in the root of your repository with the following content:
+
+```toml
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+##### Alternative method
+Create a file called `_redirects` under `/public` with the following content:
 
 ```
 # Netlify settings for single-page application
 /*    /index.html   200
 ```
-
-More information on [Netlify redirects documentation](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
 
 If you are using [@vue/cli-plugin-pwa](https://cli.vuejs.org/core-plugins/pwa.html#vue-cli-plugin-pwa) make sure to exclude the `_redirects` file from being cached by the service worker.
 To do so, add the following to your `vue.config.js`:
@@ -197,11 +213,10 @@ Checkout [workboxOptions](https://cli.vuejs.org/core-plugins/pwa.html#configurat
 
 [Render](https://render.com) offers [free static site hosting](https://render.com/docs/static-sites) with fully managed SSL, a global CDN and continuous auto deploys from GitHub.
 
-1. Create a new Web Service on Render, and give Render’s GitHub app permission to access your Vue repo.
+1. Create a new Static Site on Render, and give Render’s GitHub app permission to access your Vue repo.
 
 2. Use the following values during creation:
 
-    - **Environment:** `Static Site`
     - **Build Command:** `npm run build` or `yarn build`
     - **Publish directory:** `dist`
 
@@ -348,7 +363,7 @@ heroku login
 heroku create
 heroku buildpacks:add heroku/nodejs
 heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
-git push heroku master
+git push heroku main
 ```
 
 More info: [Getting started with SPAs on Heroku](https://gist.github.com/hone/24b06869b4c1eca701f9)
