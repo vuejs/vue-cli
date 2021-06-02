@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-service-global",
-  "version": "4.5.7",
+  "version": "4.5.8",
   "description": "vue-cli-service global addon for vue-cli",
   "main": "index.js",
   "publishConfig": {
@@ -22,17 +22,17 @@
   },
   "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-service-global#readme",
   "dependencies": {
-    "@vue/cli-plugin-babel": "^4.5.7",
-    "@vue/cli-plugin-eslint": "^4.5.7",
-    "@vue/cli-service": "^4.5.7",
+    "@vue/cli-plugin-babel": "^4.5.8",
+    "@vue/cli-plugin-eslint": "^4.5.8",
+    "@vue/cli-service": "^4.5.8",
     "babel-eslint": "^10.1.0",
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "core-js": "^3.6.5",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.2.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
     "regenerator-runtime": "^0.13.5",
     "resolve": "^1.17.0",
-    "vue": "^2.6.11",
-    "vue-template-compiler": "^2.6.11"
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
   }
 }

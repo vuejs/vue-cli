@@ -84,10 +84,10 @@ declare class GeneratorAPI {
    * Check if the project has a given plugin.
    *
    * @param id - Plugin id, can omit the (@vue/|vue-|@scope/vue)-cli-plugin- prefix
-   * @param version - Plugin version. Defaults to ''
+   * @param versionRange - Plugin version range. Defaults to '*'
    * @return `boolean`
    */
-  hasPlugin(id: string, version?: string): boolean
+  hasPlugin(id: string, versionRange?: string): boolean
 
   /**
    * Configure how config files are extracted.

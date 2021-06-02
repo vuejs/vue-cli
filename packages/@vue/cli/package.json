@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli",
-  "version": "4.5.7",
+  "version": "4.5.8",
   "description": "Command line interface for rapid Vue.js development",
   "bin": {
     "vue": "bin/vue.js"
@@ -26,19 +26,19 @@
   },
   "dependencies": {
     "@types/ejs": "^2.7.0",
-    "@types/inquirer": "^6.5.0",
-    "@vue/cli-shared-utils": "^4.5.7",
-    "@vue/cli-ui": "^4.5.7",
-    "@vue/cli-ui-addon-webpack": "^4.5.7",
-    "@vue/cli-ui-addon-widgets": "^4.5.7",
+    "@types/inquirer": "^7.3.1",
+    "@vue/cli-shared-utils": "^4.5.8",
+    "@vue/cli-ui": "^4.5.8",
+    "@vue/cli-ui-addon-webpack": "^4.5.8",
+    "@vue/cli-ui-addon-widgets": "^4.5.8",
     "boxen": "^4.1.0",
     "cmd-shim": "^3.0.3",
     "commander": "^2.20.0",
     "debug": "^4.1.0",
     "deepmerge": "^4.2.2",
     "download-git-repo": "^3.0.2",
-    "ejs": "^2.7.1",
-    "envinfo": "^7.5.1",
+    "ejs": "^3.1.6",
+    "envinfo": "^7.7.3",
     "fs-extra": "^7.0.1",
     "globby": "^9.2.0",
     "import-global": "^0.1.0",
@@ -49,19 +49,19 @@
     "js-yaml": "^3.13.1",
     "leven": "^3.1.0",
     "lodash.clonedeep": "^4.5.0",
-    "lru-cache": "^5.1.1",
+    "lru-cache": "^6.0.0",
     "minimist": "^1.2.5",
-    "recast": "^0.18.8",
+    "recast": "^0.20.3",
     "resolve": "^1.17.0",
     "shortid": "^2.2.15",
     "slash": "^3.0.0",
     "strip-ansi": "^6.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-codemod": "^0.0.4",
-    "yaml-front-matter": "^3.4.1"
+    "yaml-front-matter": "^4.1.0"
   },
   "engines": {
-    "node": ">=8.9"
+    "node": "^10.12.0 || ^12.0.0 || >= 14.0.0"
   }
 }

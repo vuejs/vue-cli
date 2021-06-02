@@ -72,8 +72,16 @@ test('invoke with prompts', async () => {
   ])
   // need to be in the same process to have inquirer mocked
   // so calling directly
+  const cwd = process.cwd()
+  // By default, @babel/eslint-parser will load babel.config.js in `path.resolve('.')`(equals `process.cwd()`) through @babel/core.
+  // chdir, and let @babel/eslint-parser find the babel.config.js in our test project
+  process.chdir(project.dir)
+
   await invoke(`eslint`, {}, project.dir)
   await assertUpdates(project)
+
+  // restore
+  process.chdir(cwd)
 })
 
 test('invoke with ts', async () => {

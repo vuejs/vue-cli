@@ -140,3 +140,58 @@ test('should not throw when src folder is ignored by .eslintignore', async () =>
   // should not throw
   await run('vue-cli-service lint')
 })
+
+test('should save report results to file with --output-file option', async () => {
+  const project = await create('eslint-output-file', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'commit'
+      }
+    }
+  })
+  const { read, write, run } = project
+  // should've applied airbnb autofix
+  const main = await read('src/main.js')
+  expect(main).toMatch(';')
+  // remove semicolons
+  const updatedMain = main.replace(/;/g, '')
+  await write('src/main.js', updatedMain)
+
+  // result file name
+  const resultsFile = 'lint_results.json'
+
+  try {
+    // lint in JSON format to output-file
+    await run(`vue-cli-service lint --format json --output-file ${resultsFile} --no-fix`)
+  } catch (e) {
+    // lint with no fix should fail
+    expect(e.code).toBe(1)
+    expect(e.failed).toBeTruthy()
+  }
+
+  let resultsFileContents = ''
+
+  // results file should exist
+  try {
+    resultsFileContents = await read(resultsFile)
+  } catch (e) {
+    expect(e.code).toBe(0)
+    expect(e.failed).toBeFalsy()
+  }
+
+  // results file should not be empty
+  expect(resultsFileContents.length).toBeGreaterThan(0)
+
+  // results file is valid JSON
+  try {
+    JSON.parse(resultsFileContents)
+  } catch (e) {
+    expect(e.code).toBe(0)
+    expect(e.failed).toBeFalsy()
+  }
+
+  // results file should show "Missing semicolon" errors
+  expect(resultsFileContents).toEqual(expect.stringContaining('Missing semicolon'))
+})

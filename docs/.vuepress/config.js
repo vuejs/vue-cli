@@ -116,12 +116,22 @@ module.exports = {
             ]
           },
           {
-            text: 'Migrating From v3',
-            link: '/migrating-from-v3/'
-          },
-          {
-            text: 'Changelog',
-            link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
+            text: 'Migrate from Older Versions',
+            items:
+            [
+              {
+                text: 'From Vue CLI v3 to v4',
+                link: '/migrations/migrate-from-v3/'
+              },
+              {
+                text: 'From Vue CLI v4 to v5',
+                link: '/migrations/migrate-from-v4/'
+              },
+              {
+                text: 'Full Changelog',
+                link: 'https://github.com/vuejs/vue-cli/blob/dev/CHANGELOG.md'
+              }
+            ]
           }
         ],
         sidebar: {

@@ -5,7 +5,7 @@
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
-const request = require('request-promise-native')
+const fetch = require('node-fetch')
 const semver = require('semver')
 const globby = require('globby')
 const { execSync } = require('child_process')
@@ -26,7 +26,7 @@ const getRemoteVersion = async (pkg) => {
   }
   let res
   try {
-    res = await request(`http://registry.npmjs.org/${pkg}/latest`, { json: true })
+    res = await fetch(`http://registry.npmjs.org/${pkg}/latest`).then(result => result.json())
   } catch (e) {
     return
   }

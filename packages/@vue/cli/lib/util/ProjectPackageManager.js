@@ -126,13 +126,15 @@ class PackageManager {
       const npmVersion = stripAnsi(execa.sync('npm', ['--version']).stdout)
 
       if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
-        warn(
+        throw new Error(
           'You are using an outdated version of NPM.\n' +
-          'there may be unexpected errors during installation.\n' +
+          'It does not support some core functionalities of Vue CLI.\n' +
           'Please upgrade your NPM version.'
         )
+      }
 
-        this.needsNpmInstallFix = true
+      if (semver.gte(npmVersion, '7.0.0')) {
+        this.needsPeerDepsFix = true
       }
     }
 
@@ -299,7 +301,7 @@ class PackageManager {
 
     const url = `${registry.replace(/\/$/g, '')}/${packageName}`
     try {
-      metadata = (await request.get(url, { headers })).body
+      metadata = (await request.get(url, { headers }))
       if (metadata.error) {
         throw new Error(metadata.error)
       }
@@ -341,40 +343,17 @@ class PackageManager {
   }
 
   async install () {
+    const args = []
+
+    if (this.needsPeerDepsFix) {
+      args.push('--legacy-peer-deps')
+    }
+
     if (process.env.VUE_CLI_TEST) {
-      try {
-        process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
-        await this.runCommand('install', ['--offline', '--silent', '--no-progress'])
-        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
-      } catch (e) {
-        delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
-        await this.runCommand('install', ['--silent', '--no-progress'])
-      }
+      args.push('--silent', '--no-progress')
     }
 
-    if (this.needsNpmInstallFix) {
-      // if npm 5, split into several `npm add` calls
-      // see https://github.com/vuejs/vue-cli/issues/5800#issuecomment-675199729
-      const pkg = resolvePkg(this.context)
-      if (pkg.dependencies) {
-        const deps = Object.entries(pkg.dependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', deps)
-      }
-
-      if (pkg.devDependencies) {
-        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', [...devDeps, '--save-dev'])
-      }
-
-      if (pkg.optionalDependencies) {
-        const devDeps = Object.entries(pkg.devDependencies).map(([dep, range]) => `${dep}@${range}`)
-        await this.runCommand('install', [...devDeps, '--save-optional'])
-      }
-
-      return
-    }
-
-    return await this.runCommand('install')
+    return await this.runCommand('install', args)
   }
 
   async add (packageName, {
@@ -388,6 +367,10 @@ class PackageManager {
       } else {
         process.env.npm_config_save_prefix = '~'
       }
+    }
+
+    if (this.needsPeerDepsFix) {
+      args.push('--legacy-peer-deps')
     }
 
     return await this.runCommand('add', [packageName, ...args])
