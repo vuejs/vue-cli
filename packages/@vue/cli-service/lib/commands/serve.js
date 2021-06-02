@@ -112,6 +112,7 @@ module.exports = (api, options) => {
         ? rawPublicUrl
         : `${protocol}://${rawPublicUrl}`
       : null
+    const publicHost = publicUrl ? /^[a-zA-Z]+:\/\/([^/?#]+)/.exec(publicUrl)[1] : undefined
 
     const urls = prepareURLs(
       protocol,
@@ -188,6 +189,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       https: useHttps,
       proxy: proxySettings,
+      public: publicHost,
       // eslint-disable-next-line no-shadow
       before (app, server) {
         // launch editor support.

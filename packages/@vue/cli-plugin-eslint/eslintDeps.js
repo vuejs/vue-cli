@@ -1,6 +1,6 @@
 const DEPS_MAP = {
   base: {
-    eslint: '^6.7.2',
+    eslint: '^7.13.0',
     'eslint-plugin-vue': '^6.2.2'
   },
   airbnb: {
@@ -20,9 +20,9 @@ const DEPS_MAP = {
     'eslint-plugin-standard': '^4.0.0'
   },
   typescript: {
-    '@vue/eslint-config-typescript': '^5.0.2',
-    '@typescript-eslint/eslint-plugin': '^2.33.0',
-    '@typescript-eslint/parser': '^2.33.0'
+    '@vue/eslint-config-typescript': '^7.0.0',
+    '@typescript-eslint/eslint-plugin': '^4.4.0',
+    '@typescript-eslint/parser': '^4.4.0'
   }
 }
 
@@ -41,7 +41,8 @@ exports.getDeps = function (api, preset, rootOptions = {}) {
 
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     Object.assign(deps, {
-      'babel-eslint': '^10.1.0'
+      '@babel/eslint-parser': '^7.12.1',
+      '@babel/core': '^7.12.3'
     })
   }
 

@@ -301,22 +301,24 @@ module.exports = class Generator {
     debug('vue:cli-files')(this.files)
   }
 
-  hasPlugin (_id, _version) {
-    return [
+  hasPlugin (id, versionRange) {
+    const pluginExists = [
       ...this.plugins.map(p => p.id),
       ...this.allPluginIds
-    ].some(id => {
-      if (!matchesPluginId(_id, id)) {
-        return false
-      }
+    ].some(pid => matchesPluginId(id, pid))
 
-      if (!_version) {
-        return true
-      }
+    if (!pluginExists) {
+      return false
+    }
 
-      const version = this.pm.getInstalledVersion(id)
-      return semver.satisfies(version, _version)
-    })
+    if (!versionRange) {
+      return pluginExists
+    }
+
+    return semver.satisfies(
+      this.pm.getInstalledVersion(id),
+      versionRange
+    )
   }
 
   printExitLogs () {

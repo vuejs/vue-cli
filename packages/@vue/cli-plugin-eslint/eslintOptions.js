@@ -14,7 +14,7 @@ exports.config = (api, preset, rootOptions = {}) => {
 
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     config.parserOptions = {
-      parser: 'babel-eslint'
+      parser: '@babel/eslint-parser'
     }
   }
 

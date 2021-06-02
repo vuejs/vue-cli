@@ -1,4 +1,20 @@
 
+## 4.5.8 (2020-10-19)
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-typescript`
+  * [#5975](https://github.com/vuejs/vue-cli/pull/5975) fix: update vue-shims for Vue v3.0.1 ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli`
+  * [#5961](https://github.com/vuejs/vue-cli/pull/5961) fix: npm 7 compat by turning on `legacy-peer-deps` flag ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-eslint`
+  * [#5962](https://github.com/vuejs/vue-cli/pull/5962) fix: narrow the eslint peer dep version range, avoiding npm 7 error ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 2
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 4.5.7 (2020-10-07)
 
 #### :bug: Bug Fix

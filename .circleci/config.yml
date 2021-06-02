@@ -1,9 +1,19 @@
-version: 2
+version: 2.1
 
 defaults: &defaults
   working_directory: ~/project/vue
   docker:
-    - image: vuejs/ci
+    - image: circleci/node:lts-browsers
+
+aliases:
+  - &restore-yarn-cache
+    key: v2-vue-cli-{{ checksum "yarn.lock" }}
+
+  - &save-yarn-cache
+    key: v2-vue-cli-{{ checksum "yarn.lock" }}
+    paths:
+      - node_modules/
+      - ~/.cache
 
 workflow_filters: &filters
   filters:
@@ -16,20 +26,21 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v2-vue-cli-{{ checksum "yarn.lock" }}
+      - restore_cache: *restore-yarn-cache
       - run: yarn --network-timeout 600000
-      - save_cache:
-          key: v2-vue-cli-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules/
-            - ~/.cache
+      - save_cache: *save-yarn-cache
       - persist_to_workspace:
           root: ~/
           paths:
             - project/vue
             - .cache/Cypress
+
+  e2e:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: ./scripts/e2e-test/run-e2e-test.sh
 
   group-1:
     <<: *defaults
@@ -52,16 +63,9 @@ jobs:
           at: ~/
       - run: yarn lint-without-fix
       - run: yarn check-links
-      - restore_cache:
-          keys:
-            # TODO: should use a more accurate cache key
-            - v2-vue-cli-offline-{{ checksum "yarn.lock" }}
-      - run: yarn config set yarn-offline-mirror ~/npm-packages-offline-cache
+      - restore_cache: *restore-yarn-cache
       - run: yarn test -p cli-service-global,eslint,pwa,babel,babel-preset-app,vuex,router
-      - save_cache:
-          key: v2-vue-cli-offline-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/npm-packages-offline-cache
+      - save_cache: *save-yarn-cache
 
   group-4:
     <<: *defaults
@@ -106,6 +110,10 @@ workflows:
           requires:
             - install
       - cli-ui:
+          <<: *filters
+          requires:
+            - install
+      - e2e:
           <<: *filters
           requires:
             - install
