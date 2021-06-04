@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { chalk, semver, loadModule } = require('@vue/cli-shared-utils')
 const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
 const findExisting = (context, files) => {
@@ -21,14 +22,6 @@ module.exports = (api, rootOptions) => {
       sourceMap = false,
       loaderOptions = {}
     } = rootOptions.css || {}
-
-    let { requireModuleExtension } = rootOptions.css || {}
-    if (typeof requireModuleExtension === 'undefined') {
-      if (loaderOptions.css && loaderOptions.css.modules) {
-        throw new Error('`css.requireModuleExtension` is required when custom css modules options provided')
-      }
-      requireModuleExtension = true
-    }
 
     const shouldExtract = extract !== false && !shadowMode
     const filename = getAssetPath(
@@ -66,6 +59,19 @@ module.exports = (api, rootOptions) => {
     ]))
 
     if (!hasPostCSSConfig) {
+      // #6342
+      // NPM 6 may incorrectly hoist postcss 7 to the same level of autoprefixer
+      // So we have to run a preflight check to tell the users how to fix it
+      const autoprefixerDirectory = path.dirname(require.resolve('autoprefixer/package.json'))
+      const postcssPkg = loadModule('postcss/package.json', autoprefixerDirectory)
+      const postcssVersion = postcssPkg.version
+      if (!semver.satisfies(postcssVersion, '8.x')) {
+        throw new Error(
+          `The package manager has hoisted a wrong version of ${chalk.cyan('postcss')}, ` +
+          `please run ${chalk.cyan('npm i postcss@8 -D')} to fix it.`
+        )
+      }
+
       loaderOptions.postcss = {
         postcssOptions: {
           plugins: [
@@ -93,31 +99,29 @@ module.exports = (api, rootOptions) => {
     function createCSSRule (lang, test, loader, options) {
       const baseRule = webpackConfig.module.rule(lang).test(test)
 
-      // rules for <style lang="module">
+      // rules for <style module>
       const vueModulesRule = baseRule.oneOf('vue-modules').resourceQuery(/module/)
       applyLoaders(vueModulesRule, true)
 
       // rules for <style>
       const vueNormalRule = baseRule.oneOf('vue').resourceQuery(/\?vue/)
-      applyLoaders(vueNormalRule, false)
+      applyLoaders(vueNormalRule)
 
       // rules for *.module.* files
       const extModulesRule = baseRule.oneOf('normal-modules').test(/\.module\.\w+$/)
-      applyLoaders(extModulesRule, true)
+      applyLoaders(extModulesRule)
 
       // rules for normal CSS imports
       const normalRule = baseRule.oneOf('normal')
-      applyLoaders(normalRule, !requireModuleExtension)
+      applyLoaders(normalRule)
 
-      function applyLoaders (rule, isCssModule) {
+      function applyLoaders (rule, forceCssModule = false) {
         if (shouldExtract) {
           rule
             .use('extract-css-loader')
             .loader(require('mini-css-extract-plugin').loader)
             .options({
-              publicPath: cssPublicPath,
-              // TODO: enable this option later
-              esModule: false
+              publicPath: cssPublicPath
             })
         } else {
           rule
@@ -138,13 +142,18 @@ module.exports = (api, rootOptions) => {
           )
         }, loaderOptions.css)
 
-        if (isCssModule) {
+        if (forceCssModule) {
+          cssLoaderOptions.modules = {
+            ...cssLoaderOptions.modules,
+            auto: () => true
+          }
+        }
+
+        if (cssLoaderOptions.modules) {
           cssLoaderOptions.modules = {
             localIdentName: '[name]_[local]_[hash:base64:5]',
             ...cssLoaderOptions.modules
           }
-        } else {
-          delete cssLoaderOptions.modules
         }
 
         rule
@@ -218,7 +227,6 @@ module.exports = (api, rootOptions) => {
         .minimizer('css')
           .use(require('css-minimizer-webpack-plugin'), [{
             parallel: rootOptions.parallel,
-            sourceMap: rootOptions.productionSourceMap && sourceMap,
             minimizerOptions: cssnanoOptions
           }])
     }

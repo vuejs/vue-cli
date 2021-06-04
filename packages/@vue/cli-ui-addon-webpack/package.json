@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui-addon-webpack",
-  "version": "5.0.0-alpha.4",
+  "version": "5.0.0-beta.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -20,9 +20,9 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "^5.0.0-alpha.4",
-    "@vue/cli-plugin-eslint": "^5.0.0-alpha.4",
-    "@vue/cli-service": "^5.0.0-alpha.4",
+    "@vue/cli-plugin-babel": "^5.0.0-beta.1",
+    "@vue/cli-plugin-eslint": "^5.0.0-beta.1",
+    "@vue/cli-service": "^5.0.0-beta.1",
     "@vue/eslint-config-standard": "^6.0.0",
     "core-js": "^3.8.3",
     "eslint": "^7.20.0",
@@ -31,7 +31,7 @@
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-vue": "^7.6.0",
     "stylus": "^0.54.7",
-    "stylus-loader": "^4.3.1",
+    "stylus-loader": "^5.0.0",
     "vue-progress-path": "^0.0.2",
     "vue-template-compiler": "^2.6.12",
     "vuex": "^3.6.2"
@@ -39,7 +39,8 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not dead"
+    "not dead",
+    "not ie 11"
   ],
   "publishConfig": {
     "access": "public"

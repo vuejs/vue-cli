@@ -112,7 +112,8 @@ const generator: GeneratorPlugin = (api, options, rootOptions, invoking) => {
     {
       merge: true,
       prune: true,
-      warnIncompatibleVersions: true
+      warnIncompatibleVersions: true,
+      forceOverwrite: true
     }
   )
 

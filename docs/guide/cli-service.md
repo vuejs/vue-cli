@@ -75,7 +75,6 @@ Options:
   --mode         specify env mode (default: production)
   --dest         specify output directory (default: dist)
   --modern       build app targeting modern browsers with auto fallback
-  --no-unsafe-inline build app without introducing inline scripts
   --target       app | lib | wc | wc-async (default: app)
   --formats      list of output formats for library builds (default: commonjs,umd,umd-min)
   --inline-vue   include the Vue module in the final bundle of library or web component target

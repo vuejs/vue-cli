@@ -38,8 +38,8 @@ test('build', async () => {
   // expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
 
   // should inject scripts
-  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors\.\w{8}\.js">/)
-  expect(index).toMatch(/<script defer="defer" src="\/js\/app\.\w{8}\.js">/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors-legacy\.\w{8}\.js" nomodule>/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/app-legacy\.\w{8}\.js" nomodule>/)
   // should inject css
   expect(index).toMatch(/<link href="\/css\/app\.\w{8}\.css" rel="stylesheet">/)
 
@@ -89,6 +89,20 @@ test('build with --report-json', async () => {
   expect(appChunk).toHaveProperty('names')
   expect(appChunk).toHaveProperty('files')
   expect(appChunk).toHaveProperty('modules')
+})
+
+test('build with --dest', async () => {
+  const project = await create('e2e-build-dest', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --dest other_dist')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('other_dist/index.html')).toBe(true)
+  expect(project.has('other_dist/favicon.ico')).toBe(true)
+  expect(project.has('other_dist/js')).toBe(true)
+  expect(project.has('other_dist/css')).toBe(true)
+
+  expect(project.has('dist')).toBe(false)
 })
 
 afterAll(async () => {

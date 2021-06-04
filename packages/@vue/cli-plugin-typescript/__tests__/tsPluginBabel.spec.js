@@ -4,7 +4,7 @@ const Service = require('@vue/cli-service/lib/Service')
 const create = require('@vue/cli-test-utils/createTestProject')
 const { assertServe, assertBuild } = require('./tsPlugin.helper')
 
-test('using correct loader', () => {
+test('using correct loader', async () => {
   const service = new Service('/', {
     pkg: {},
     plugins: [
@@ -13,7 +13,7 @@ test('using correct loader', () => {
     ]
   })
 
-  service.init()
+  await service.init()
   const config = service.resolveWebpackConfig()
   // eslint-disable-next-line no-shadow
   const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))

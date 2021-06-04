@@ -1,6 +1,8 @@
 module.exports = api => {
   api.chainWebpack(webpackConfig => {
     if (process.env.NODE_ENV === 'test') {
+      webpackConfig.mode('none')
+
       webpackConfig.merge({
         target: 'node',
         devtool: 'inline-cheap-module-source-map'

@@ -163,6 +163,7 @@ test('api: extendPackage allow git, github, http, file version ranges', async ()
               bad: 'mochajs/mocha#4727d357ea',
               bac: 'http://asdf.com/asdf.tar.gz',
               bae: 'file:../dyl',
+              bcd: 'npm:vue@^3.0.0',
               'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
             }
           })
@@ -182,6 +183,7 @@ test('api: extendPackage allow git, github, http, file version ranges', async ()
       bad: 'mochajs/mocha#4727d357ea',
       bac: 'http://asdf.com/asdf.tar.gz',
       bae: 'file:../dyl',
+      bcd: 'npm:vue@^3.0.0',
       'my-lib': 'https://bitbucket.org/user/my-lib.git#semver:^1.0.0'
     }
   })
@@ -517,6 +519,41 @@ test('api: extendPackage + { warnIncompatibleVersions: false }', async () => {
   expect(pkg).toEqual({
     devDependencies: {
       eslint: '^6.0.0'
+    }
+  })
+})
+
+test('api: extendPackage + { forceOverwrite: true }', async () => {
+  const generator = new Generator('/', {
+    pkg: {
+      devDependencies: {
+        'sass-loader': '^11.0.0'
+      }
+    },
+    plugins: [{
+      id: 'test',
+      apply: api => {
+        api.extendPackage(
+          {
+            devDependencies: {
+              'sass-loader': '^10.0.0'
+            }
+          },
+          { warnIncompatibleVersions: false, forceOverwrite: true }
+        )
+      }
+    }]
+  })
+
+  await generator.generate()
+  const pkg = JSON.parse(fs.readFileSync('/package.json', 'utf-8'))
+
+  // should not warn about the version conflicts
+  expect(logs.warn.length).toBe(0)
+  // should use the newer version
+  expect(pkg).toEqual({
+    devDependencies: {
+      'sass-loader': '^10.0.0'
     }
   })
 })

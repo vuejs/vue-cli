@@ -87,11 +87,13 @@ interface ProjectOptions {
    */
   runtimeCompiler?: boolean;
   /**
-   * Default: `[]`
+   * Default: `false`
    *
-   * If you want to explicitly transpile a dependency with Babel, you can list it in this option
+   * If set to `true`, all dependencies in `node_modules` will be transpiled by Babel;
+   * Or, if you only want to selectively transpile some of the dependencies, you can list them
+   * in this option.
    */
-  transpileDependencies?: Array<string | RegExp>;
+  transpileDependencies?: boolean | Array<string | RegExp>;
   /**
    * Default: `true`
    *

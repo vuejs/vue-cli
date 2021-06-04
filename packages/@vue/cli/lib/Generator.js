@@ -56,6 +56,13 @@ const defaultConfigTransforms = {
     file: {
       lines: ['.browserslistrc']
     }
+  }),
+  'lint-staged': new ConfigTransform({
+    file: {
+      js: ['lint-staged.config.js'],
+      json: ['.lintstagedrc', '.lintstagedrc.json'],
+      yaml: ['.lintstagedrc.yaml', '.lintstagedrc.yml']
+    }
   })
 }
 

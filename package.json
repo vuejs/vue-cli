@@ -6,7 +6,7 @@
     "packages/vue-cli-version-marker"
   ],
   "scripts": {
-    "test": "node scripts/test.js",
+    "test": "node --experimental-vm-modules scripts/test.js",
     "pretest": "yarn clean",
     "lint": "eslint --fix packages/**/*.js packages/**/bin/*",
     "lint-without-fix": "eslint packages/**/*.js packages/**/bin/*",
@@ -19,7 +19,8 @@
     "version": "node scripts/genChangelog.js && node scripts/genDocs.js && git add CHANGELOG.md && git add docs",
     "docs": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "patch-chromedriver": "node scripts/patchChromedriver.js"
+    "patch-chromedriver": "node scripts/patchChromedriver.js",
+    "postinstall": "patch-package"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
@@ -42,7 +43,7 @@
     "@vuepress/theme-vue": "^1.8.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^26.6.3",
-    "chromedriver": "^88.0.0",
+    "chromedriver": "^90.0.0",
     "debug": "^4.1.0",
     "eslint": "^7.20.0",
     "eslint-plugin-graphql": "^4.0.0",
@@ -56,7 +57,7 @@
     "globby": "^11.0.2",
     "graphql": "^15.5.0",
     "http-server": "^0.12.3",
-    "inquirer": "^7.1.0",
+    "inquirer": "^8.0.0",
     "jest": "^26.6.3",
     "lerna": "^3.22.0",
     "lerna-changelog": "^1.0.1",
@@ -64,12 +65,13 @@
     "memfs": "^3.2.0",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
+    "patch-package": "^6.2.2",
     "prettier": ">= 1.13.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.4",
     "stylus-loader": "^3.0.2",
     "typescript": "~4.1.5",
-    "verdaccio": "^4.11.0",
+    "verdaccio": "^5.0.1",
     "vuepress": "^1.8.1",
     "webpack": "^5.22.0",
     "yorkie": "^2.0.0"

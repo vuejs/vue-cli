@@ -33,7 +33,7 @@ function getTimeMessage (timer) {
 class DashboardPlugin {
   constructor (options) {
     this.type = options.type
-    if (this.type === 'build' && options.modernBuild) {
+    if (this.type === 'build' && options.moduleBuild) {
       this.type = 'build-modern'
     }
     this.watching = false

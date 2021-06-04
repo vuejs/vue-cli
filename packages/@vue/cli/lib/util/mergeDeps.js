@@ -15,7 +15,7 @@ const isValidRange = range => {
   const isValidGitHub = range.match(/^[^/]+\/[^/]+/) != null
   const isValidURI =
     range.match(
-      /^(?:file|git|git\+ssh|git\+http|git\+https|git\+file|https?):/
+      /^(?:file|git|npm|git\+ssh|git\+http|git\+https|git\+file|https?):/
     ) != null
 
   return isValidSemver || isValidGitHub || isValidURI
@@ -28,7 +28,8 @@ module.exports = function mergeDeps (
   sources,
   {
     prune,
-    warnIncompatibleVersions
+    warnIncompatibleVersions,
+    forceOverwrite
   }
 ) {
   const result = Object.assign({}, sourceDeps)
@@ -63,11 +64,15 @@ module.exports = function mergeDeps (
       const r = tryGetNewerRange(sourceRangeSemver, injectingRangeSemver)
       const didGetNewer = !!r
 
-      // if failed to infer newer version, use existing one because it's likely
-      // built-in
-      result[depName] = didGetNewer
-        ? injectSemver(injectingRange, r)
-        : sourceRange
+      if (forceOverwrite) {
+        result[depName] = injectingRange
+      } else if (didGetNewer) {
+        result[depName] = injectSemver(injectingRange, r)
+      } else {
+        // if failed to infer newer version, use existing one because it's likely
+        // built-in
+        result[depName] = sourceRange
+      }
 
       // if changed, update source
       if (result[depName] === injectingRange) {
@@ -85,7 +90,7 @@ module.exports = function mergeDeps (
           `conflicting versions for project dependency "${depName}":\n\n` +
             `- ${sourceRange} injected by generator "${sourceGeneratorId}"\n` +
             `- ${injectingRange} injected by generator "${generatorId}"\n\n` +
-            `Using ${didGetNewer ? `newer ` : ``}version (${
+            `Using ${(!forceOverwrite && didGetNewer) ? `newer ` : ``}version (${
               result[depName]
             }), but this may cause build errors.`
         )

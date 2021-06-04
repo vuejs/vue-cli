@@ -26,6 +26,18 @@ module.exports = {
   // 选项...
 }
 ```
+
+或者，你也可以使用 `@vue/cli-service` 提供的 `defineConfig` 帮手函数，以获得更好的类型提示：
+
+```js
+// vue.config.js
+const { defineConfig } = require('@vue/cli-service')
+
+module.exports = defineConfig({
+  // 选项
+})
+```
+
 ### baseUrl
 
 从 Vue CLI 3.3 起已弃用，请使用[`publicPath`](#publicpath)。
@@ -183,10 +195,13 @@ module.exports = {
 
 ### transpileDependencies
 
-- Type: `Array<string | RegExp>`
-- Default: `[]`
+- Type: `boolean | Array<string | RegExp>`
+- Default: `false`
 
-  默认情况下 `babel-loader` 会忽略所有 `node_modules` 中的文件。如果你想要通过 Babel 显式转译一个依赖，可以在这个选项中列出来。
+  默认情况下 `babel-loader` 会忽略所有 `node_modules` 中的文件。你可以启用本选项，以避免构建后的代码中出现未转译的第三方依赖。
+
+  不过，对所有的依赖都进行转译可能会降低构建速度。如果对构建性能有所顾虑，你可以只转译部分特定的依赖：给本选项传一个数组，列出需要转译的第三方包包名或正则表达式即可。
+
 
 ### productionSourceMap
 
