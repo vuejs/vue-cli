@@ -99,7 +99,10 @@ describe('nightwatch e2e plugin', () => {
     testSettings = JSON.parse(testSettings)
 
     expect(testSettings.parallel_mode).toStrictEqual(true)
-    expect(testSettings.test_workers).toStrictEqual(true)
+    expect(testSettings.test_workers).toStrictEqual({
+      enabled: true,
+      workers: 'auto'
+    })
 
     expect(Object.keys(results.modules).sort()).toEqual([
       'test', 'test-with-pageobjects'
