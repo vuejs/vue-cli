@@ -5,7 +5,9 @@ const deepmerge = require('deepmerge')
 
 const Services = {}
 loadServices()
-
+const VUE_DEV_SERVER_URL = process.env.VUE_DEV_SERVER_URL
+const BROWSERSTACK_USER = process.env.BROWSERSTACK_USER
+const BROWSERSTACK_KEY = process.env.VUE_DEV_SERVER_URL
 const userOptions = JSON.parse(process.env.VUE_NIGHTWATCH_USER_OPTIONS || '{}')
 const concurrentMode = process.env.VUE_NIGHTWATCH_CONCURRENT === '1'
 const useSelenium = process.env.VUE_NIGHTWATCH_USE_SELENIUM === '1'
@@ -27,10 +29,10 @@ const defaultSettings = {
   page_objects_path: 'tests/e2e/page-objects',
 
   // See https://nightwatchjs.org/guide/extending-nightwatch/#writing-custom-commands
-  custom_commands_path: 'tests/e2e/custom-assertions',
+  custom_commands_path: 'tests/e2e/custom-commands',
 
   // See https://nightwatchjs.org/guide/extending-nightwatch/#writing-custom-assertions
-  custom_assertions_path: 'tests/e2e/custom-commands',
+  custom_assertions_path: 'tests/e2e/custom-assertions',
 
   // See https://nightwatchjs.org/guide/#external-globals
   globals_path: path.resolve('tests/e2e/globals.js'),
@@ -42,7 +44,7 @@ const defaultSettings = {
   test_settings: {
     default: {
       disable_error_log: false,
-      launch_url: '${VUE_DEV_SERVER_URL}', // eslint-disable-line no-template-curly-in-string
+      launch_url: `${VUE_DEV_SERVER_URL}`,
 
       screenshots: {
         enabled: false,
@@ -140,8 +142,8 @@ const defaultSettings = {
       desiredCapabilities: {
         'bstack:options': {
           local: 'false',
-          userName: '${BROWSERSTACK_USER}', // eslint-disable-line no-template-curly-in-string
-          accessKey: '${BROWSERSTACK_KEY}' // eslint-disable-line no-template-curly-in-string
+          userName: `${BROWSERSTACK_USER}`,
+          accessKey: `${BROWSERSTACK_KEY}`
         }
       },
 
