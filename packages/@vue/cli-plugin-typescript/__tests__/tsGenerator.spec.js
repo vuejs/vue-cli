@@ -65,19 +65,34 @@ test('use with Babel', async () => {
 })
 
 test('use with router', async () => {
+  const tsApply = require('../generator')
+
+  expect(tsApply.after).toBe('@vue/cli-plugin-router')
+
   const { files } = await generateWithPlugin([
+    {
+      id: '@vue/cli-service',
+      apply: require('@vue/cli-service/generator'),
+      options: {
+        plugins: {
+          '@vue/cli-service': {},
+          '@vue/cli-plugin-router': {},
+          '@vue/cli-plugin-typescript': {}
+        }
+      }
+    },
+    {
+      id: '@vue/cli-plugin-typescript',
+      apply: tsApply,
+      options: {}
+    },
     {
       id: '@vue/cli-plugin-router',
       apply: require('@vue/cli-plugin-router/generator'),
       options: {}
-    },
-    {
-      id: 'ts',
-      apply: require('../generator'),
-      options: {}
     }
   ])
-  expect(files['src/views/Home.vue']).toMatch('<div class="home">')
+  expect(files['src/views/Home.vue']).toMatch('Welcome to Your Vue.js + TypeScript App')
 })
 
 test('tsconfig.json should be valid json', async () => {
