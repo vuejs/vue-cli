@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "chromedriver": "^91.0.0",
-    "geckodriver": "^2.0.0",
+    "geckodriver": "^1.22.3",
     "selenium-server": "^3.141.59"
   },
   "peerDependencies": {
