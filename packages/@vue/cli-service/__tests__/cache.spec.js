@@ -1,4 +1,8 @@
-test.todo('should ignore cache when `--no-cache` argument is passed')
+test.todo('should ignore serve cache when `--no-cache` argument is passed')
+
+test.todo('should ignore build cache when `--no-cache` argument is passed')
+
+test.todo('should ignore test cache when `--no-cache` argument is passed')
 
 test.todo('should ignore previous cache when `--mode` argument changed')
 
