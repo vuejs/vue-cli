@@ -1,4 +1,36 @@
 
+## 5.0.0-beta.2 (2021-06-09)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-typescript`, `@vue/cli-service`, `@vue/cli-shared-utils`, `@vue/cli`
+  * [#6411](https://github.com/vuejs/vue-cli/pull/6411) feat: implement plugin execution order ([@fangbinwei](https://github.com/fangbinwei))
+
+#### :bug: Bug Fix
+* `@vue/cli-plugin-pwa`
+  * [#6518](https://github.com/vuejs/vue-cli/pull/6518) fix(pwa): Replace closeTag parameter with voidTag for HtmlWebpackPlugin ([@tcitworld](https://github.com/tcitworld))
+* `@vue/cli-service`
+  * [#6506](https://github.com/vuejs/vue-cli/pull/6506) fix(webpack): slash on publicPath: 'auto' ([@tomicakr](https://github.com/tomicakr))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6478](https://github.com/vuejs/vue-cli/pull/6478) fix(mocha): set mode to `none` to avoid DefinePlugin conflict ([@sodatea](https://github.com/sodatea))
+
+#### :memo: Documentation
+* [#6493](https://github.com/vuejs/vue-cli/pull/6493) Fixed some minor typos ([@Ashikpaul](https://github.com/Ashikpaul))
+* [#6487](https://github.com/vuejs/vue-cli/pull/6487) update deployment.md ([@andydodo](https://github.com/andydodo))
+
+#### :house: Internal
+* `@vue/cli-service`
+  * [#6519](https://github.com/vuejs/vue-cli/pull/6519) chore: use scoped package names for aliases ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 6
+- Andy Do ([@andydodo](https://github.com/andydodo))
+- Ashik Paul ([@Ashikpaul](https://github.com/Ashikpaul))
+- Binwei Fang ([@fangbinwei](https://github.com/fangbinwei))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Thomas Citharel ([@tcitworld](https://github.com/tcitworld))
+- tomica ([@tomicakr](https://github.com/tomicakr))
+
+
+
 ## 5.0.0-beta.1 (2021-05-14)
 
 #### :rocket: New Features
