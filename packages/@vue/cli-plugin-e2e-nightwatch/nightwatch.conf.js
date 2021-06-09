@@ -41,6 +41,11 @@ const defaultSettings = {
 
   webdriver: {},
 
+  test_workers: {
+    enabled: concurrentMode,
+    workers: 'auto'
+  },
+
   test_settings: {
     default: {
       disable_error_log: false,
@@ -59,11 +64,6 @@ const defaultSettings = {
       webdriver: {
         start_process: true,
         server_path: Services.geckodriver ? Services.geckodriver.path : ''
-      },
-
-      test_workers: {
-        enabled: concurrentMode,
-        workers: 'auto'
       }
     },
 
