@@ -225,10 +225,10 @@ module.exports = class HtmlPwaPlugin {
   }
 }
 
-function makeTag (tagName, attributes, closeTag = false) {
+function makeTag (tagName, attributes, voidTag = true) {
   return {
     tagName,
-    closeTag,
+    voidTag,
     attributes
   }
 }
