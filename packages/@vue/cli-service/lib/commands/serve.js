@@ -13,6 +13,7 @@ const defaults = {
   https: false
 }
 
+/** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   api.registerCommand('serve', {
     description: 'start development server',
@@ -50,8 +51,10 @@ module.exports = (api, options) => {
     // configs that only matters for dev server
     api.chainWebpack(webpackConfig => {
       if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-        webpackConfig
-          .devtool('eval-cheap-module-source-map')
+        if (!webpackConfig.get('devtool')) {
+          webpackConfig
+            .devtool('eval-cheap-module-source-map')
+        }
 
         webpackConfig
           .plugin('hmr')

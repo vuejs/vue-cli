@@ -1,52 +1,64 @@
-const Service = require('../lib/Service')
-
+jest.setTimeout(200000)
 const path = require('path')
-const configPath = path.resolve('/', 'vue.config.cjs')
+const fs = require('fs-extra')
 
-jest.mock('fs')
-const fs = require('fs')
+const { defaultPreset } = require('@vue/cli/lib/options')
+const create = require('@vue/cli-test-utils/createTestProject')
+const { loadModule } = require('@vue/cli-shared-utils')
 
-beforeEach(() => {
-  fs.writeFileSync(path.resolve('/', 'package.json'), JSON.stringify({
-    type: 'module',
-    vue: {
-      lintOnSave: 'default'
-    }
-  }, null, 2))
+let project
+beforeAll(async () => {
+  project = await create('service-esm-test', defaultPreset)
+  const pkg = JSON.parse(await project.read('package.json'))
+  pkg.type = 'module'
+  pkg.vue = { lintOnSave: 'default' }
+  await project.write('package.json', JSON.stringify(pkg, null, 2))
+  fs.renameSync(path.resolve(project.dir, 'babel.config.js'), path.resolve(project.dir, 'babel.config.cjs'))
 })
 
-afterEach(() => {
-  if (fs.existsSync(configPath)) {
-    fs.unlinkSync(configPath)
-  }
-})
-
-const createService = () => {
-  const service = new Service('/', {
+const createService = async () => {
+  const Service = loadModule('@vue/cli-service/lib/Service', project.dir)
+  const service = new Service(project.dir, {
     plugins: [],
     useBuiltIn: false
   })
-  service.init()
+  await service.init()
   return service
 }
 
-// vue.config.cjs has higher priority
-
 test('load project options from package.json', async () => {
-  const service = createService()
+  const service = await createService()
   expect(service.projectOptions.lintOnSave).toBe('default')
 })
 
 test('load project options from vue.config.cjs', async () => {
-  fs.writeFileSync(configPath, '')
-  jest.mock(configPath, () => ({ lintOnSave: true }), { virtual: true })
-  const service = createService()
+  const configPath = path.resolve(project.dir, './vue.config.cjs')
+  fs.writeFileSync(configPath, 'module.exports = { lintOnSave: true }')
+  const service = await createService()
   expect(service.projectOptions.lintOnSave).toBe(true)
+  await fs.unlinkSync(configPath)
 })
 
 test('load project options from vue.config.cjs as a function', async () => {
-  fs.writeFileSync(configPath, '')
-  jest.mock(configPath, () => function () { return { lintOnSave: true } }, { virtual: true })
-  const service = createService()
+  const configPath = path.resolve(project.dir, './vue.config.cjs')
+  fs.writeFileSync(configPath, 'module.exports = function () { return { lintOnSave: true } }')
+  const service = await createService()
   expect(service.projectOptions.lintOnSave).toBe(true)
+  await fs.unlinkSync(configPath)
+})
+
+test('load project options from vue.config.js', async () => {
+  const configPath = path.resolve(project.dir, './vue.config.js')
+  fs.writeFileSync(configPath, 'export default { lintOnSave: true }')
+  const service = await createService()
+  expect(service.projectOptions.lintOnSave).toBe(true)
+  await fs.unlinkSync(configPath)
+})
+
+test('load project options from vue.config.mjs', async () => {
+  const configPath = path.resolve(project.dir, './vue.config.mjs')
+  fs.writeFileSync(configPath, 'export default { lintOnSave: true }')
+  const service = await createService()
+  expect(service.projectOptions.lintOnSave).toBe(true)
+  await fs.unlinkSync(configPath)
 })

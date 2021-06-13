@@ -111,16 +111,6 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
-    // Introducing this hack because typescript plugin must be invoked after router.
-    // Currently we rely on the `plugins` object enumeration order,
-    // which depends on the order of the field initialization.
-    // FIXME: Remove this ugly hack after the plugin ordering API settled down
-    if (preset.plugins['@vue/cli-plugin-router'] && preset.plugins['@vue/cli-plugin-typescript']) {
-      const tmp = preset.plugins['@vue/cli-plugin-typescript']
-      delete preset.plugins['@vue/cli-plugin-typescript']
-      preset.plugins['@vue/cli-plugin-typescript'] = tmp
-    }
-
     // legacy support for vuex
     if (preset.vuex) {
       preset.plugins['@vue/cli-plugin-vuex'] = {}

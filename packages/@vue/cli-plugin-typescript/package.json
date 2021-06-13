@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "5.0.0-alpha.5",
+  "version": "5.0.0-beta.2",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,8 +23,9 @@
     "access": "public"
   },
   "dependencies": {
+    "@babel/core": "^7.12.16",
     "@types/webpack-env": "^1.15.2",
-    "@vue/cli-shared-utils": "^5.0.0-alpha.5",
+    "@vue/cli-shared-utils": "^5.0.0-beta.2",
     "babel-loader": "^8.2.2",
     "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^6.1.0",
@@ -37,10 +38,14 @@
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0",
     "@vue/compiler-sfc": "^3.0.0-beta.14",
-    "typescript": ">=2"
+    "typescript": ">=2",
+    "vue-template-compiler": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "@vue/compiler-sfc": {
+      "optional": true
+    },
+    "vue-template-compiler": {
       "optional": true
     }
   },
@@ -48,7 +53,7 @@
     "@types/chai": "^4.2.15",
     "@types/jest": "^26.0.20",
     "@types/mocha": "^8.2.1",
-    "jscodeshift": "^0.11.0",
+    "jscodeshift": "^0.12.0",
     "typescript": "~4.1.5",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2"

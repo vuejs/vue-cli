@@ -134,6 +134,17 @@ module.exports = (api, rootOptions) => {
           })
       )
 
+      if (shouldExtract) {
+        const CssMinimizerPluginV1 = require('css-minimizer-webpack-plugin')
+        config.optimization.minimizer('css').init(
+          (Plugin, [cssMinimizerOptions]) =>
+            new CssMinimizerPluginV1({
+              sourceMap: rootOptions.productionSourceMap,
+              ...cssMinimizerOptions
+            })
+        )
+      }
+
       // DeterministicModuleIdsPlugin is only available in webpack 5
       // (and enabled by default in production mode).
 

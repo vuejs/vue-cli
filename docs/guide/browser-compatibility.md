@@ -71,13 +71,6 @@ For a Hello World app, the modern bundle is already 16% smaller. In production, 
 ::: tip
 `<script type="module">` is loaded [with CORS always enabled](https://jakearchibald.com/2017/es-modules-in-browsers/#always-cors). This means your server must return valid CORS headers such as `Access-Control-Allow-Origin: *`. If you want to fetch the scripts with credentials, set the [crossorigin](../config/#crossorigin) option to `use-credentials`.
 
-Also, modern mode uses an inline script to avoid Safari 10 loading both bundles, so if you are using a strict CSP, you will need to explicitly allow the inline script with:
-
-```
-Content-Security-Policy: script-src 'self' 'sha256-4RS22DYeB7U14dra4KcQYxmwt5HkOInieXK1NUMBmQI='
-```
-:::
-
 ::: tip Detecting the Current Mode in Config
 Sometimes you may need to change the webpack config only for the legacy build, or only for the modern build.
 

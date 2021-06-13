@@ -7,9 +7,9 @@ sidebar: auto
 First, install the latest Vue CLI globally:
 
 ```sh
-npm install -g @vue/cli
+npm install -g @vue/cli@next
 # OR
-yarn global add @vue/cli
+yarn global add @vue/cli@next
 ```
 
 ## Upgrade All Plugins at Once
@@ -17,12 +17,16 @@ yarn global add @vue/cli
 In your existing projects, run:
 
 ```sh
-vue upgrade
+vue upgrade --next
 ```
 
 And then follow the command line instructions.
 
 See the following section for detailed breaking changes introduced in each package.
+
+::: tip Note
+If you see errors like `setup compilation vue-loader-plugin(node:44156) UnhandledPromiseRejectionWarning: TypeError: The 'compilation' argument must be an instance of Compilation` after upgrading, please remove the lockfile (`yarn.lock` or `package-lock.json`) and `node_modules` in the project and reinstall all the dependencies.
+:::
 
 ------
 
@@ -72,6 +76,25 @@ Underlyingly, it uses the [`resolutions`](https://classic.yarnpkg.com/en/docs/se
 
 Though both work in all our tests, please be aware that the `module-alias` approach is still considered hacky, and may not be as stable as the `"resolutions"` one.
 
+#### Changes to the `build` command and modern mode
+
+Starting with v5.0.0-beta.0, running `vue-cli-service build` will automatically generate different bundles based on your browserslist configurations.
+The `--modern` flag is no longer needed because it is turned on by default.
+
+Say we are building a simple single-page app with the default setup, here are some possible scenarios:
+
+* With the default browserslist target of Vue 2 projects (`> 1%, last 2 versions, not dead`), `vue-cli-service build` will produce two types of bundles:
+  * One for modern target browsers that support `<script type="module">` (`app.[contenthash].js` and `chunk-vendors.[contenthash].js`). The bundle size will be much smaller because it drops polyfills and transformations for legacy browsers.
+  * One for those do not (`app-legacy.[contenthash].js` and `chunk-vendors-legacy.[contenthash].js`), and will be loaded via `<script nomodule>`.
+* You can opt-out this behavior by appending a `--no-module` flag to the build command. `vue-cli-service build --no-module` will only output the legacy bundles that support all target browsers (loaded via plain `<script>`s).
+* With the default browserslist target of Vue 3 projects (`> 1%, last 2 versions, not dead, not ie 11`), all target browsers supports `<script type="module">`, there's no point (and no way) differentiating them, thus `vue-cli-service build` will only produce one type of bundle: `app.[contenthash].js` and `chunk-vendors.[contenthash].js` (loaded via plain `<script>`s).
+
+#### CSS Modules
+
+The `css.requireModuleExtension` option is removed. If you do need to strip the `.module` part in CSS Module file names, please refer to [Working with CSS > CSS Modules](../guide/css.md#css-modules) for more guidance.
+
+`css-loader` is upgraded from v3 to v5, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
+
 #### Sass/SCSS
 
 No longer supports generating project with `node-sass`. It has been [deprecated](https://sass-lang.com/blog/libsass-is-deprecated#how-do-i-migrate) for a while. Please use the `sass` package instead.
@@ -81,10 +104,14 @@ No longer supports generating project with `node-sass`. It has been [deprecated]
 * `html-webpack-plugin` is upgraded from v3 to v5, and for webpack 4 users, v4 will be used. More details are available in the [release announcement of `html-webpack-plugin` v4](https://dev.to/jantimon/html-webpack-plugin-4-has-been-released-125d) and the [full changelog](https://github.com/jantimon/html-webpack-plugin/blob/master/CHANGELOG.md).
 * `sass-loader` v7 support is dropped. See the v8 breaking changes at its [changelog](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md#800-2019-08-29).
 * `postcss-loader` is upgraded from v3 to v5 (v4 for webpack 4 users). Most notably, `PostCSS` options (`plugin` / `syntax` / `parser` / `stringifier`) are moved into the `postcssOptions` field. More details available at the [changelog](https://github.com/webpack-contrib/postcss-loader/blob/master/CHANGELOG.md#400-2020-09-07).
-* `copy-webpack-plugin` is upgraded from v5 to v7 (v6 if you choose to stay at webpack 4). If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 release](https://github.com/webpack-contrib/copy-webpack-plugin/releases/tag/v6.0.0) and [v7.0.0 release](https://github.com/webpack-contrib/copy-webpack-plugin/releases/tag/v7.0.0).
+* `copy-webpack-plugin` is upgraded from v5 to v8 (v6 if you choose to stay at webpack 4). If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 changelog](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md).
 * `file-loader` is upgraded from v4 to v6, and `url-loader` from v2 to v4. The `esModule` option is now turned on by default for non-Vue-2 projects. Full changelog available at [`file-loader` changelog](https://github.com/webpack-contrib/file-loader/blob/master/CHANGELOG.md) and [`url-loader` changelog](https://github.com/webpack-contrib/url-loader/blob/master/CHANGELOG.md).
 * `terser-webpack-plugin` is upgraded from v2 to v5 (v4 if you choose to stay at webpack 4), using terser 5 and some there are some changes in the options format. See full details in its [changelog](https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md).
 * When creating new projects, the default `less-loader` is updated from [v5 to v8](https://github.com/webpack-contrib/less-loader/blob/master/CHANGELOG.md)(v7 for webpack 4 users); `less` from [v3 to v4](https://github.com/less/less.js/pull/3573); `sass-loader` from [v8 to v11](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md) (v10 for webpack 4 users); `stylus-loader` from [v3 to v5](https://github.com/webpack-contrib/stylus-loader/blob/master/CHANGELOG.md) (v4 for webpack 4 users).
+
+### Babel Plugin
+
+The [`transpileDependencies` option](../config/#transpiledependencies) now accepts a boolean value. Setting it to `true` will transpile all dependencies inside `node_modules`.
 
 ### ESLint Plugin
 
@@ -110,7 +137,7 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 ### E2E-Cypress Plugin
 
 * Cypress is required as a peer dependency.
-* Cypress is updated from v3 to v6. See [Cypress Migration Guide](https://docs.cypress.io/guides/references/migration-guide.html) for detailed instructions of the migration process.
+* Cypress is updated from v3 to v7. See [Cypress Migration Guide](https://docs.cypress.io/guides/references/migration-guide.html) for detailed instructions of the migration process.
 
 ### E2E-WebDriverIO Plugin
 
@@ -118,6 +145,8 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 
 ### Unit-Jest Plugin
 
+* For Vue 2 projects, `vue-jest` is now required as a peer dependency, please install `vue-jest@^4.0.1` as a dev dependency to the project.
+* For TypeScript projects, `ts-jest` is now required as a peer dependency. Users need to install `ts-jest@26` manually to the project root.
 * The underlying `jest`-related packages are upgraded from v24 to v26. For most users the transition would be seamless. See their corresponding changelogs for more detail:
   * [jest, babel-jest](https://github.com/facebook/jest/blob/v26.6.3/CHANGELOG.md)
   * [ts-jest](https://github.com/kulshekhar/ts-jest/blob/v26.4.4/CHANGELOG.md)

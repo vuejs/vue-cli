@@ -19,6 +19,10 @@ const {
   isRequired
 } = require('@babel/helper-compilation-targets')
 
+// We'll no longer need this logic in Babel 8 as it's the default behavior
+// See discussions at:
+// https://github.com/babel/rfcs/pull/2#issuecomment-714785228
+// https://github.com/babel/babel/pull/12189
 function getIntersectionTargets (targets, constraintTargets) {
   const intersection = Object.keys(constraintTargets).reduce(
     (results, browser) => {
@@ -43,14 +47,14 @@ function getIntersectionTargets (targets, constraintTargets) {
   return intersection
 }
 
-function getModernTargets (targets) {
-  const allModernTargets = getTargets(
+function getModuleTargets (targets) {
+  const allModuleTargets = getTargets(
     { esmodules: true },
     { ignoreBrowserslistConfig: true }
   )
 
   // use the intersection of modern mode browsers and user defined targets config
-  return getIntersectionTargets(targets, allModernTargets)
+  return getIntersectionTargets(targets, allModuleTargets)
 }
 
 function getWCTargets (targets) {
@@ -177,7 +181,7 @@ module.exports = (context, options = {}) => {
     targets = getWCTargets(targets)
   } else if (process.env.VUE_CLI_MODERN_BUILD) {
     // targeting browsers that at least support <script type="module">
-    targets = getModernTargets(targets)
+    targets = getModuleTargets(targets)
   }
 
   // included-by-default polyfills. These are common polyfills that 3rd party

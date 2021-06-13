@@ -1167,3 +1167,92 @@ test('run a codemod on the entry file', async () => {
   await generator.generate()
   expect(fs.readFileSync('/main.js', 'utf-8')).toMatch(/new TestVue/)
 })
+
+test('order: generator plugins order', async () => {
+  const applyCallOrder = []
+  function apply (id, order) {
+    order = order || {}
+    const fn = jest.fn(() => { applyCallOrder.push(id) })
+    fn.after = order.after
+    return fn
+  }
+  const generator = new Generator('/', {
+    plugins: [
+      {
+        id: 'vue-cli-plugin-foo',
+        apply: apply('vue-cli-plugin-foo')
+      },
+      {
+        id: 'vue-cli-plugin-bar',
+        apply: apply('vue-cli-plugin-bar', { after: 'vue-cli-plugin-baz' })
+      },
+      {
+        id: 'vue-cli-plugin-baz',
+        apply: apply('vue-cli-plugin-baz')
+      }
+    ]
+  })
+  await generator.generate()
+
+  expect(applyCallOrder).toEqual([
+    'vue-cli-plugin-foo',
+    'vue-cli-plugin-baz',
+    'vue-cli-plugin-bar'
+  ])
+})
+
+test('order: afterAnyInvoke order', async () => {
+  const fooAnyInvokeHandler = () => {}
+  const barAnyInvokeHandler = () => {}
+  const bazAnyInvokeHandler = () => {}
+
+  const getGeneratorFn = (anyInvokeHandler, order) => {
+    order = order || {}
+    const generatorFn = () => {}
+    generatorFn.hooks = api => {
+      api.afterAnyInvoke(anyInvokeHandler)
+    }
+    generatorFn.after = order.after
+    return generatorFn
+  }
+
+  jest.doMock('vue-cli-plugin-foo-order/generator', () => {
+    return getGeneratorFn(fooAnyInvokeHandler, { after: 'vue-cli-plugin-bar-order' })
+  }, { virtual: true })
+
+  jest.doMock('vue-cli-plugin-bar-order/generator', () => {
+    return getGeneratorFn(barAnyInvokeHandler)
+  }, { virtual: true })
+
+  jest.doMock('vue-cli-plugin-baz-order/generator', () => {
+    return getGeneratorFn(bazAnyInvokeHandler)
+  }, { virtual: true })
+
+  const afterAnyInvokeCbs = []
+  const afterInvokeCbs = []
+  const generator = new Generator('/', {
+    pkg: {
+      devDependencies: {
+        'vue-cli-plugin-foo-order': '1.0.0',
+        'vue-cli-plugin-bar-order': '1.0.0',
+        'vue-cli-plugin-baz-order': '1.0.0'
+      }
+    },
+    plugins: [
+      {
+        id: 'vue-cli-plugin-foo-order',
+        apply: getGeneratorFn(fooAnyInvokeHandler)
+      }
+    ],
+    afterInvokeCbs,
+    afterAnyInvokeCbs
+  })
+
+  await generator.generate()
+
+  expect(afterAnyInvokeCbs).toEqual([
+    barAnyInvokeHandler,
+    bazAnyInvokeHandler,
+    fooAnyInvokeHandler
+  ])
+})

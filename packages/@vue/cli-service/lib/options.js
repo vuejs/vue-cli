@@ -7,7 +7,10 @@ const schema = createSchema(joi => joi.object({
   indexPath: joi.string(),
   filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),
-  transpileDependencies: joi.array(),
+  transpileDependencies: joi.alternatives().try(
+    joi.boolean(),
+    joi.array()
+  ),
   productionSourceMap: joi.boolean(),
   parallel: joi.alternatives().try(
     joi.boolean(),
@@ -33,16 +36,6 @@ const schema = createSchema(joi => joi.object({
 
   // css
   css: joi.object({
-    modules:
-      joi.boolean()
-      .warning('deprecate.error', {
-        message: 'Please use `css.requireModuleExtension` instead.'
-      })
-      .message({
-        'deprecate.error':
-          'The {#label} option in vue.config.js is deprecated. {#message}'
-      }),
-    requireModuleExtension: joi.boolean(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
@@ -104,10 +97,8 @@ exports.defaults = () => ({
   // boolean, use full build?
   runtimeCompiler: false,
 
-  // deps to transpile
-  transpileDependencies: [
-    /* string or regex */
-  ],
+  // whether to transpile all dependencies
+  transpileDependencies: false,
 
   // sourceMap for production build?
   productionSourceMap: !process.env.VUE_CLI_TEST,

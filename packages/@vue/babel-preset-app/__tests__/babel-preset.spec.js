@@ -3,7 +3,7 @@ const babel = require('@babel/core')
 const preset = require('../index')
 const defaultOptions = {
   babelrc: false,
-  presets: [preset],
+  presets: [[preset, { targets: { ie: 9 } }]],
   filename: 'test-entry-file.js'
 }
 
@@ -161,6 +161,7 @@ test('disable absoluteRuntime', () => {
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
+      targets: { ie: 9 },
       absoluteRuntime: false
     }]],
     filename: 'test-entry-file.js'
@@ -183,6 +184,7 @@ test('should inject polyfills / helpers using "require" statements for a umd mod
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
+      targets: { ie: 9 },
       absoluteRuntime: false
     }]],
     filename: 'test-entry-file.js'
@@ -200,6 +202,7 @@ test('should inject polyfills / helpers using "import" statements for an es modu
   `.trim(), {
     babelrc: false,
     presets: [[preset, {
+      targets: { ie: 9 },
       absoluteRuntime: false
     }]],
     filename: 'test-entry-file.js'

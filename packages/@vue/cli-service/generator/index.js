@@ -1,6 +1,7 @@
 module.exports = (api, options) => {
   api.render('./template', {
-    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript')
+    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
+    useBabel: api.hasPlugin('babel')
   })
 
   if (options.vueVersion === '3') {
@@ -31,7 +32,8 @@ module.exports = (api, options) => {
     browserslist: [
       '> 1%',
       'last 2 versions',
-      'not dead'
+      'not dead',
+      ...(options.vueVersion === '3' ? ['not ie 11'] : [])
     ]
   })
 
@@ -73,5 +75,10 @@ module.exports = (api, options) => {
   // additional tooling configurations
   if (options.configs) {
     api.extendPackage(options.configs)
+  }
+
+  // Delete jsconfig.json when typescript
+  if (api.hasPlugin('typescript')) {
+    api.render((files) => delete files['jsconfig.json'])
   }
 }

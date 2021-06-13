@@ -24,6 +24,7 @@ module.exports = function checkWebpack (cwd) {
   // Check the package.json,
   // and only load from the project if webpack is explictly depended on,
   // in case of accidental hoisting.
+
   let pkg = {}
   try {
     pkg = loadModule('./package.json', cwd)
