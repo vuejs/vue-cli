@@ -56,7 +56,7 @@ import wrap from '@vue/web-component-wrapper'
 // runtime shared by every component chunk
 import '${resolveImportPath('css-loader/dist/runtime/api.js')}'
 import '${resolveImportPath('vue-style-loader/lib/addStylesShadow')}'
-import '${resolveImportPath('vue-loader-v15/lib/runtime/componentNormalizer')}'
+import '${resolveImportPath('@vue/vue-loader-v15/lib/runtime/componentNormalizer')}'
 
 ${elements}`.trim()
 

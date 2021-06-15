@@ -58,7 +58,7 @@ module.exports = (api, options) => {
     if (vueMajor === 2) {
       // for Vue 2 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader-v15/package.json').version,
+        'vue-loader': require('@vue/vue-loader-v15/package.json').version,
         '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
         'vue-template-compiler': require('vue-template-compiler/package.json').version
       })
@@ -80,7 +80,7 @@ module.exports = (api, options) => {
             .options(vueLoaderCacheConfig)
             .end()
           .use('vue-loader')
-            .loader(require.resolve('vue-loader-v15'))
+            .loader(require.resolve('@vue/vue-loader-v15'))
             .options(Object.assign({
               compilerOptions: {
                 whitespace: 'condense'
@@ -89,7 +89,7 @@ module.exports = (api, options) => {
 
       webpackConfig
         .plugin('vue-loader')
-          .use(require('vue-loader-v15').VueLoaderPlugin)
+          .use(require('@vue/vue-loader-v15').VueLoaderPlugin)
 
       // some plugins may implicitly relies on the `vue-loader` dependency path name
       // such as vue-cli-plugin-apollo

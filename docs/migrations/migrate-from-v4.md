@@ -7,9 +7,9 @@ sidebar: auto
 First, install the latest Vue CLI globally:
 
 ```sh
-npm install -g @vue/cli
+npm install -g @vue/cli@next
 # OR
-yarn global add @vue/cli
+yarn global add @vue/cli@next
 ```
 
 ## Upgrade All Plugins at Once
@@ -17,12 +17,16 @@ yarn global add @vue/cli
 In your existing projects, run:
 
 ```sh
-vue upgrade
+vue upgrade --next
 ```
 
 And then follow the command line instructions.
 
 See the following section for detailed breaking changes introduced in each package.
+
+::: tip Note
+If you see errors like `setup compilation vue-loader-plugin(node:44156) UnhandledPromiseRejectionWarning: TypeError: The 'compilation' argument must be an instance of Compilation` after upgrading, please remove the lockfile (`yarn.lock` or `package-lock.json`) and `node_modules` in the project and reinstall all the dependencies.
+:::
 
 ------
 

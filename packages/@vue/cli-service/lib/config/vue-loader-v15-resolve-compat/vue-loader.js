@@ -1,1 +1,1 @@
-module.exports = require('vue-loader-v15')
+module.exports = require('@vue/vue-loader-v15')
