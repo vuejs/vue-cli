@@ -23,6 +23,7 @@
           v-focus
           @keyup.esc="editingPath = false"
           @keyup.enter="submitPathEdit()"
+          @blur="editingPath = false"
         />
       </div>
 
