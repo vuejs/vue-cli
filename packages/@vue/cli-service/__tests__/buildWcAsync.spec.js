@@ -16,13 +16,13 @@ test('build as wc in async mode', async () => {
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
-  expect(project.has('dist/build-wc-async.js')).toBe(true)
-  expect(project.has('dist/build-wc-async.min.js')).toBe(true)
+  const files = await fs.readdir(path.resolve(project.dir, 'dist'))
+  expect(files.filter(f => f.match(/build-wc-async\.\w{8}\.js$/)).length).toBe(1)
+  expect(files.filter(f => f.match(/build-wc-async\.\w{8}\.min\.js$/)).length).toBe(1)
 
   // code-split chunks
-  const files = await fs.readdir(path.resolve(project.dir, 'dist'))
-  const asyncOutputs = files.filter(f => f.match(/build-wc-async\.\d+\.js/))
-  const minifiedAsycnOutputs = files.filter(f => f.match(/build-wc-async\.\d+\.min\.js/))
+  const asyncOutputs = files.filter(f => f.match(/build-wc-async\.\d+\.\w{8}\.js/))
+  const minifiedAsycnOutputs = files.filter(f => f.match(/build-wc-async\.\d+\.\w{8}\.min\.js/))
   expect(asyncOutputs.length).toBe(2)
   expect(minifiedAsycnOutputs.length).toBe(2)
 
