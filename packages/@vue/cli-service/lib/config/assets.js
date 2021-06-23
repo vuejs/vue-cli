@@ -36,7 +36,7 @@ module.exports = (api, options) => {
   api.chainWebpack(webpackConfig => {
     webpackConfig.module
       .rule('images')
-        .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
+        .test(/\.(png|jpe?g|gif|webp|avif)(\?.*)?$/)
         .use('url-loader')
           .loader(require.resolve('url-loader'))
           .options(genUrlLoaderOptions('img'))
