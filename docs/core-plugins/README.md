@@ -11,5 +11,7 @@ This section contains documentation for core Vue CLI plugins:
 - [Jest](unit-jest.md)
 - [Mocha](unit-mocha.md)
 - [Cypress](e2e-cypress.md)
-- [Nightwatch](e2e-nightwatch.md)
-- [WebdriverIO](e2e-webdriverio.md)
+- [Nightwatch](e2e-nightwat
+- md)
+- [WebdriverIO](e2e-webdriverio.md
+
