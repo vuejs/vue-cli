@@ -1,5 +1,6 @@
 const path = require('path')
 const debug = require('debug')
+const glob = require('glob')
 const { merge } = require('webpack-merge')
 const Config = require('webpack-chain')
 const PluginAPI = require('./PluginAPI')
@@ -179,25 +180,31 @@ module.exports = class Service {
         ? builtInPlugins.concat(inlinePlugins)
         : inlinePlugins
     } else {
-      const projectPlugins = Object.keys(this.pkg.devDependencies || {})
-        .concat(Object.keys(this.pkg.dependencies || {}))
-        .filter(isPlugin)
-        .map(id => {
-          if (
-            this.pkg.optionalDependencies &&
+      const projectPlugins = [
+        './node_modules/@vue/cli-plugin-*',
+        './node_modules/vue-cli-plugin-*',
+        './node_modules/@**/vue-cli-plugin-*'
+      ].map(rule => glob.sync(rule)).reduce((depPaths, current) => {
+        return depPaths.concat(current)
+      }, [])
+       .map(depPath => depPath.replace(/\.\/node_modules\//, ''))
+       .filter(isPlugin)
+       .map(id => {
+         if (
+           this.pkg.optionalDependencies &&
             id in this.pkg.optionalDependencies
-          ) {
-            let apply = loadModule(id, this.pkgContext)
-            if (!apply) {
-              warn(`Optional dependency ${id} is not installed.`)
-              apply = () => {}
-            }
+         ) {
+           let apply = loadModule(id, this.pkgContext)
+           if (!apply) {
+             warn(`Optional dependency ${id} is not installed.`)
+             apply = () => {}
+           }
 
-            return { id, apply }
-          } else {
-            return idToPlugin(id, resolveModule(id, this.pkgContext))
-          }
-        })
+           return { id, apply }
+         } else {
+           return idToPlugin(id, resolveModule(id, this.pkgContext))
+         }
+       })
 
       // Add the plugin automatically to simplify the webpack-4 tests
       // so that a simple Jest alias would suffice, avoid changing every
