@@ -524,7 +524,10 @@ Deploy your application using nginx inside of a docker container.
     npm i -g @layer0/cli # yarn global add @layer0/cli
     ```
     
-2. Initialize your project via ```layer0 init```
+2. Initialize your project via 
+    ```bash
+    layer0 init
+    ```
 
 3. Configure the routes, replace the routes.js file that was created during layer0 init with the following: 
     ```js
