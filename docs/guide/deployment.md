@@ -514,3 +514,39 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
+
+### Layer0
+
+[Layer0](https://www.layer0.co) is an all-in-one platform to develop, deploy, preview, experiment on, monitor, and run your headless frontend. It is focused on large, dynamic websites and best-in-class performance through EdgeJS (a JavaScript-based Content Delivery Network), predictive prefetching, and performance monitoring. Layer0 offers a free tier.
+
+1. Install Layer0 via 
+    ```bash
+    npm i -g @layer0/cli # yarn global add @layer0/cli
+    ```
+    
+2. Initialize your project via ```layer0 init```
+
+3. Configure the routes, replace the routes.js file that was created during layer0 init with the following: 
+    ```js
+    const { Router } = require('@layer0/core/router')
+    module.exports = new Router()
+      // Send requests to static assets in the build output folder `dist`
+      .static('dist')
+      // Send everything else to the App Shell
+      .fallback(({ appShell }) => {
+        appShell('dist/index.html')
+      })
+    ```
+    
+4. Run the Vue.js app locally on Layer0 via 
+    ```bash
+    npm run build
+    npm run layer0:dev
+    ```
+    
+5. Deploy to Layer0
+    ```bash
+    npm run build
+    layer0 deploy
+    ```
+For detailed instructions consult the [Layer0 Vue](https://docs.layer0.co/guides/vue#section_install_the_layer0_cli) documentation.
