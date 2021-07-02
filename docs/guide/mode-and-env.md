@@ -86,7 +86,7 @@ And the following `.env.staging` file:
 
 ```
 NODE_ENV=production
-VUE_APP_TITLE=My App (staging)
+VUE_APP_TITLE=My Staging App
 ```
 
 - `vue-cli-service build` builds a production app, loading `.env`, `.env.production` and `.env.production.local` if they are present;
