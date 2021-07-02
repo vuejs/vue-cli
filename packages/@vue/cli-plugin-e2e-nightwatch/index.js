@@ -42,9 +42,9 @@ module.exports = (api, options) => {
     }
 
     // remove args
-    ;['url', 'mode'].forEach(toRemove => removeArg(rawArgs, toRemove))
+    ['url', 'mode'].forEach(toRemove => removeArg(rawArgs, toRemove));
     // remove flags
-    ;['headless', 'use-selenium', 'parallel'].forEach(toRemove => removeArg(rawArgs, toRemove, 0))
+    ['headless', 'use-selenium', 'parallel'].forEach(toRemove => removeArg(rawArgs, toRemove, 0))
 
     return Promise.all([
       startDevServer(args, api),
@@ -127,7 +127,7 @@ async function loadNightwatchConfig (rawArgs, api) {
 
     process.env.VUE_NIGHTWATCH_USER_OPTIONS = JSON.stringify(userOptions || {})
 
-    rawArgs.push('--config', require.resolve('./nightwatch.config.js'))
+    rawArgs.push('--config', require.resolve('./nightwatch.conf.js'))
   }
 }
 
