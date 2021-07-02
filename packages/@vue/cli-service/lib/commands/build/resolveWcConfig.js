@@ -1,7 +1,7 @@
 const path = require('path')
 const { resolveEntry, fileToComponentName } = require('./resolveWcEntry')
 
-module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
+module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }, { filenameHashing }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
@@ -115,14 +115,14 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
       { ...(inlineVue || { vue: 'Vue' }) }
     ].filter(Boolean)
 
-    const entryName = `${libName}${minify ? `.min` : ``}`
+    const entryName = `${libName}${filenameHashing ? '.[chunkhash:8]' : ''}${minify ? `.min` : ``}`
     rawConfig.entry = {
       [entryName]: dynamicEntry.filePath
     }
 
     Object.assign(rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${libName}.[name]${minify ? `.min` : ``}.js`,
+      chunkFilename: `${libName}.[name]${filenameHashing ? '.[chunkhash:8]' : ''}${minify ? `.min` : ``}.js`,
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
       // document.currentScript.src.
