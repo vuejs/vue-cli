@@ -177,7 +177,7 @@ class PackageManager {
     let registry
     if (args.registry) {
       registry = args.registry
-    } else if (!process.env.VUE_CLI_TEST && await shouldUseTaobao(this.bin)) {
+    } else if (!process.env.VUE_CLI_TEST && await shouldUseTaobao(this.bin, this.context)) {
       registry = registries.taobao
     } else {
       try {
