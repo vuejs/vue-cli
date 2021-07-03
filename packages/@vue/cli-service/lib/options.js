@@ -48,6 +48,12 @@ const schema = createSchema(joi => joi.object({
     })
   }),
 
+  // for cache invalidation
+  buildDependencies: joi.alternatives().try(
+    joi.array().items(joi.string().required()),
+    joi.object()
+  ),
+
   // webpack
   chainWebpack: joi.func(),
   configureWebpack: joi.alternatives().try(

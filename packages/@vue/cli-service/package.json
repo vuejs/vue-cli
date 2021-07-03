@@ -114,6 +114,7 @@
   },
   "devDependencies": {
     "fibers": ">= 3.1.1 <6.0.0",
+    "folder-hash": "^4.0.1",
     "sass": "^1.32.7",
     "sass-loader": "^11.0.1",
     "stylus-loader": "^5.0.0",
