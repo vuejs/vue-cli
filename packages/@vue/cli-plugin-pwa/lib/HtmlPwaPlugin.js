@@ -10,6 +10,7 @@ const defaults = {
   appleMobileWebAppCapable: 'no',
   appleMobileWebAppStatusBarStyle: 'default',
   assetsVersion: '',
+  manifestUseRelative: false,
   manifestPath: 'manifest.json',
   manifestOptions: {},
   manifestCrossorigin: undefined
@@ -77,6 +78,7 @@ module.exports = class HtmlPwaPlugin {
           appleMobileWebAppCapable,
           appleMobileWebAppStatusBarStyle,
           assetsVersion,
+          manifestUseRelative,
           manifestPath,
           iconPaths,
           manifestCrossorigin
@@ -115,12 +117,12 @@ module.exports = class HtmlPwaPlugin {
           makeTag('link', manifestCrossorigin
             ? {
               rel: 'manifest',
-              href: getTagHref(publicPath, manifestPath, assetsVersionStr),
+              href: getTagHref(publicPath, manifestPath, assetsVersionStr, manifestUseRelative),
               crossorigin: manifestCrossorigin
             }
             : {
               rel: 'manifest',
-              href: getTagHref(publicPath, manifestPath, assetsVersionStr)
+              href: getTagHref(publicPath, manifestPath, assetsVersionStr, manifestUseRelative)
             }
           )
         )
@@ -233,8 +235,11 @@ function makeTag (tagName, attributes, voidTag = true) {
   }
 }
 
-function getTagHref (publicPath, href, assetsVersionStr) {
+function getTagHref (publicPath, href, assetsVersionStr, useRelativePath) {
   let tagHref = `${href}${assetsVersionStr}`
+  if (useRelativePath) {
+    return tagHref
+  }
   if (!isHrefAbsoluteUrl(href)) {
     tagHref = `${publicPath}${tagHref}`
   }
