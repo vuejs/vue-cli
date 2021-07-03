@@ -475,6 +475,7 @@ import FEATURE_SET_ENABLED from '@/graphql/feature/featureSetEnabled.gql'
 import PRESET_APPLY from '@/graphql/preset/presetApply.gql'
 import PROJECT_CREATE from '@/graphql/project/projectCreate.gql'
 import PROJECT_CANCEL_CREATION from '@/graphql/project/projectCancelCreation.gql'
+import PROJECT_USER_SETTINGS from '@/graphql/project/projectUserSettings.gql'
 
 function formDataFactory () {
   return {
@@ -604,6 +605,7 @@ export default {
 
   created () {
     this.debouncedCheckRemotePreset = debounce(this.checkRemotePreset, 1000)
+    this.handleUserGitSettings()
   },
 
   beforeDestroy () {
@@ -611,6 +613,13 @@ export default {
   },
 
   methods: {
+    handleUserGitSettings () {
+      this.$apollo.query({ query: PROJECT_USER_SETTINGS }).then(({ data: { projectUserSettings } }) => {
+        const enableGit = projectUserSettings.enableGit
+        if (enableGit !== null) this.formData.enableGit = enableGit
+      })
+    },
+
     async selectPreset (id) {
       this.formData.selectedPreset = id
 

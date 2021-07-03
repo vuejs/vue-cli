@@ -4,7 +4,7 @@ const shortId = require('shortid')
 const Creator = require('@vue/cli/lib/Creator')
 const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { getFeatures } = require('@vue/cli/lib/util/features')
-const { defaults } = require('@vue/cli/lib/options')
+const { defaults, loadOptions } = require('@vue/cli/lib/options')
 const { toShortPluginId, execa } = require('@vue/cli-shared-utils')
 const { progress: installProgress } = require('@vue/cli/lib/util/executeCommand')
 const parseGitConfig = require('parse-git-config')
@@ -260,6 +260,17 @@ async function applyPreset (id, context) {
   return generateProjectCreation(creator)
 }
 
+async function getUserSettings () {
+  const enableGitOriginal = loadOptions(false).enableGit
+  let enableGit = undefined
+  if(enableGitOriginal === false || enableGitOriginal === 'false'){
+    enableGit = false
+  }else if(enableGitOriginal === true || enableGitOriginal === 'true'){
+    enableGit = true
+  }
+  return { enableGit }
+}
+
 async function create (input, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
@@ -492,6 +503,7 @@ module.exports = {
   applyPreset,
   setFeatureEnabled,
   create,
+  getUserSettings,
   import: importProject,
   open,
   remove,

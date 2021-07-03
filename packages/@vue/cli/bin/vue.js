@@ -4,6 +4,7 @@
 // The user may be on a very old node version
 
 const { chalk, semver } = require('@vue/cli-shared-utils')
+const { loadOptions } = require('@vue/cli/lib/options')
 const requiredVersion = require('../package.json').engines.node
 const leven = require('leven')
 
@@ -65,6 +66,14 @@ program
     if (process.argv.includes('-g') || process.argv.includes('--git')) {
       options.forceGit = true
     }
+
+    if (!process.argv.includes('-n') && !process.argv.includes('--no-git')) {
+      const enableGit = loadOptions(false).enableGit
+      if (enableGit === false || enableGit === 'false') {
+        options.git = false
+      }
+    }
+
     require('../lib/create')(name, options)
   })
 
