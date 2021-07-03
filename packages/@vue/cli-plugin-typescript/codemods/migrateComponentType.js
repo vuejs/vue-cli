@@ -50,7 +50,7 @@ module.exports = function migrateComponentType (file, api) {
         j.tsTypeParameterInstantiation([
           j.tsTypeLiteral([]),
           j.tsTypeLiteral([]),
-          j.tsAnyKeyword()
+          j.tsUnknownKeyword()
         ])
       )
     )
