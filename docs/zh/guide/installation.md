@@ -25,6 +25,10 @@ yarn global add @vue/cli
 vue --version
 ```
 
+vue --version 报错vue: command not found解决方法
+这是因为修改了全局包的下载路径造成的，需要把我们指定的全局包存放路径添加到系统环境变量
+
+
 ### 升级
 
 如需升级全局的 Vue CLI 包，请运行：
