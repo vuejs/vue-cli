@@ -297,6 +297,38 @@ You can now access your project on `https://<YOUR-PROJECT-ID>.firebaseapp.com` o
 
 Please refer to the [Firebase Documentation](https://firebase.google.com/docs/hosting/deploying) for more details.
 
+### Stormkit
+
+Seamlessly build, deploy and scale your modern javascript apps. Stormkit helps you easily manage your frontend infrastructure. It integrates perfectly with your git flow.
+
+#### Deploying to Stormkit
+
+1. Go to [app.stormkit.io](https://app.stormkit.io) and select your provider
+2. Once logged in, Stormkit will ask you in which provider your codebase is located. Click on the provider once more.
+3. If Github, click on ‘Connect more repositories’ and grant access to Stormkit.
+4. Next, select your repository. 
+
+Now it's connected. Once you have followed the steps above, you’ll be presented a page where you see the production environment:
+5. Click on <code>Details</code> under the production environment. You’ll be brought to a page where you can deploy your application. On top right of the screen, you’ll see a <code>Deploy now</code> button. Click on that. The default settings should be enough.
+
+Once you have deployed your application, Stormkit will generate a URL for you. Preview your application using that link. Later, you can connect your domain and publish this deployment so that the users will start to see that version of your application. You can also do staged rollouts by publishing multiple versions at the same time.
+
+#### For single page applications
+
+If you omit the <code>Server file</code> setting or turn off the <code>Serverless</code> switch your application will be directly served from our CDN, without hitting any Lambda function. Most of the time, you'll need to tell Stormkit to redirect all requests to <code>index.html</code>. To do so, simply add a <code>stormkit.config.yml</code> file at the root level of your repository and write the following configuration:
+
+
+```bash
+app:
+- redirects:
+    - from: /*
+      to: /index.html
+      assets: false
+```
+#### More instructions
+[Stormkit documentation](https://www.stormkit.io/docs/deployments/configuration)
+
+
 ### Vercel
 
 [Vercel](https://vercel.com/home) is a cloud platform that enables developers to host Jamstack websites and web services that deploy instantly, scale automatically, and requires no supervision, all with zero configuration. They provide a global edge network, SSL encryption, asset compression, cache invalidation, and more.
