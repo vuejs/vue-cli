@@ -49,26 +49,12 @@ jobs:
           at: ~/
       - run: yarn test -p cli,cli-service,cli-shared-utils
 
-  core-webpack-4:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p cli,cli-service,cli-shared-utils
-
   typescript:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
       - run: yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
-
-  typescript-webpack-4:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: VUE_CLI_USE_WEBPACK4=true yarn test 'ts(?:\w(?!E2e))+\.spec\.js$'
 
   plugins:
     <<: *defaults
@@ -79,13 +65,6 @@ jobs:
       - run: yarn check-links
       - run: yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
 
-  plugins-webpack-4:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p eslint,pwa,babel,babel-preset-app,vuex,router
-
   tests:
     <<: *defaults
     steps:
@@ -94,14 +73,6 @@ jobs:
       - run: yarn test -p unit-mocha,unit-jest,e2e-cypress
       # e2e-nightwatch was left out due to some unknown issues with selenium and the CI image
       - run: yarn test tsPluginE2e
-
-  tests-webpack-4:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: VUE_CLI_USE_WEBPACK4=true yarn test -p unit-mocha,unit-jest,e2e-cypress
-      - run: VUE_CLI_USE_WEBPACK4=true yarn test tsPluginE2e
 
   cli-ui:
     <<: *defaults
@@ -116,8 +87,6 @@ jobs:
       - store_artifacts:
           path: /home/circleci/.npm/_logs
 
-  # TODO: cli-ui-webpack-4
-
 workflows:
   version: 2
   test:
@@ -128,15 +97,7 @@ workflows:
           <<: *filters
           requires:
             - install
-      - core-webpack-4:
-          <<: *filters
-          requires:
-            - install
       - typescript:
-          <<: *filters
-          requires:
-            - install
-      - typescript-webpack-4:
           <<: *filters
           requires:
             - install
@@ -144,15 +105,7 @@ workflows:
           <<: *filters
           requires:
             - install
-      - plugins-webpack-4:
-          <<: *filters
-          requires:
-            - install
       - tests:
-          <<: *filters
-          requires:
-            - install
-      - tests-webpack-4:
           <<: *filters
           requires:
             - install
