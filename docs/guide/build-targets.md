@@ -50,6 +50,8 @@ A lib build outputs:
 
 - `dist/myLib.css`: Extracted CSS file (can be forced into inlined by setting `css: { extract: false }` in `vue.config.js`)
 
+- `dist/demo.html`: A basic HTML page which loads `myLib.umd.js` 
+
 ::: warning
 If you are developing a library or in a monorepo, please be aware that CSS imports **are side effects**. Make sure to **remove** `"sideEffects": false` in the `package.json`, otherwise CSS chunks will be dropped by webpack in production builds.
 :::
