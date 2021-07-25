@@ -4,6 +4,7 @@ replace:
   - !!js/regexp /<template>[^]*?<\/template>/
   - !!js/regexp /\n<script>[^]*?<\/script>\n/
   - !!js/regexp /  margin-top[^]*?<\/style>/
+  - !!js/regext /text-align: center;/
 ---
 
 <%# REPLACE %>
@@ -26,6 +27,7 @@ replace:
   <%_ if (!rootOptions.cssPreprocessor) { _%>
 #nav {
   padding: 30px;
+  text-align: center;
 }
 
 #nav a {
@@ -39,6 +41,7 @@ replace:
   <%_ } else { _%>
 #nav {
   padding: 30px;
+  text-align: center;
 
   a {
     font-weight: bold;
@@ -53,6 +56,7 @@ replace:
 <%_ } else { _%>
 #nav
   padding 30px
+  text-align center
   a
     font-weight bold
     color #2c3e50
