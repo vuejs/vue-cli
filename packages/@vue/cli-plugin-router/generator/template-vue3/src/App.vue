@@ -4,7 +4,7 @@ replace:
   - !!js/regexp /<template>[^]*?<\/template>/
   - !!js/regexp /\n<script>[^]*?<\/script>\n/
   - !!js/regexp /  margin-top[^]*?<\/style>/
-  - !!js/regext /text-align: center;/
+  - !!js/regexp /text-align: center;/
 ---
 
 <%# REPLACE %>
@@ -25,6 +25,10 @@ replace:
 
 <%_ if (rootOptions.cssPreprocessor !== 'stylus') { _%>
   <%_ if (!rootOptions.cssPreprocessor) { _%>
+.home {
+  text-align: center;
+}
+
 #nav {
   padding: 30px;
   text-align: center;
@@ -39,6 +43,10 @@ replace:
   color: #42b983;
 }
   <%_ } else { _%>
+.home {
+  text-align: center;
+}
+
 #nav {
   padding: 30px;
   text-align: center;
@@ -54,6 +62,10 @@ replace:
 }
   <%_ } _%>
 <%_ } else { _%>
+
+.home
+  text-align center
+  
 #nav
   padding 30px
   text-align center
