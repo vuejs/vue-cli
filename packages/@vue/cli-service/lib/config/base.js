@@ -144,6 +144,13 @@ module.exports = (api, options) => {
           }])
     }
 
+    // https://github.com/vuejs/vue-loader/issues/1435#issuecomment-869074949
+    webpackConfig.module
+      .rule('vue-style')
+        .test(/\.vue$/)
+          .resourceQuery(/type=style/)
+            .sideEffects(true)
+
     // Other common pre-processors ---------------------------------------------
     const maybeResolve = name => {
       try {
