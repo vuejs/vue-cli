@@ -57,7 +57,7 @@
     "slash": "^3.0.0",
     "strip-ansi": "^6.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "vue": "^2.6.12",
+    "vue": "^2.6.14",
     "vue-codemod": "^0.0.5",
     "yaml-front-matter": "^4.1.0"
   },

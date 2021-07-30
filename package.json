@@ -19,8 +19,7 @@
     "version": "node scripts/genChangelog.js && node scripts/genDocs.js && git add CHANGELOG.md && git add docs",
     "docs": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "patch-chromedriver": "node scripts/patchChromedriver.js",
-    "postinstall": "patch-package"
+    "patch-chromedriver": "node scripts/patchChromedriver.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
@@ -37,23 +36,23 @@
     "@typescript-eslint/parser": "^4.15.1",
     "@vue/eslint-config-airbnb": "^5.3.0",
     "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-standard": "^6.0.0",
+    "@vue/eslint-config-standard": "^6.1.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "@vuepress/plugin-pwa": "^1.8.1",
     "@vuepress/theme-vue": "^1.8.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^26.6.3",
-    "chromedriver": "^90.0.0",
+    "chromedriver": "^92.0.0",
     "debug": "^4.1.0",
-    "eslint": "^7.20.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.6.0",
     "execa": "^1.0.0",
-    "geckodriver": "^1.22.1",
+    "geckodriver": "^2.0.1",
     "globby": "^11.0.2",
     "graphql": "^15.5.0",
     "http-server": "^0.12.3",
@@ -65,7 +64,6 @@
     "memfs": "^3.2.0",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
-    "patch-package": "^6.2.2",
     "prettier": ">= 1.13.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.4",
@@ -78,7 +76,7 @@
   },
   "resolutions": {
     "puppeteer": "1.11.0",
-    "vue-template-compiler": "^2.6.12",
-    "vue-server-renderer": "^2.6.12"
+    "vue-template-compiler": "^2.6.14",
+    "vue-server-renderer": "^2.6.14"
   }
 }

@@ -53,8 +53,9 @@
     "@types/chai": "^4.2.15",
     "@types/jest": "^26.0.20",
     "@types/mocha": "^8.2.1",
-    "jscodeshift": "^0.12.0",
+    "jscodeshift": "^0.13.0",
     "typescript": "~4.1.5",
+
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2"
   }

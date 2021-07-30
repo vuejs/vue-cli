@@ -40,7 +40,7 @@
     "chromedriver": "*",
     "geckodriver": "*",
     "wdio-chromedriver-service": "^7.0.0",
-    "wdio-geckodriver-service": "^1.1.2"
+    "wdio-geckodriver-service": "^2.0.2"
   },
   "peerDependenciesMeta": {
     "chromedriver": {
@@ -57,10 +57,10 @@
     }
   },
   "devDependencies": {
-    "chromedriver": "^90.0.0",
-    "geckodriver": "^1.22.1",
+    "chromedriver": "^92.0.0",
+    "geckodriver": "^2.0.1",
     "ts-node": "^9.1.1",
     "wdio-chromedriver-service": "^7.0.0",
-    "wdio-geckodriver-service": "^1.1.2"
+    "wdio-geckodriver-service": "^2.0.2"
   }
 }

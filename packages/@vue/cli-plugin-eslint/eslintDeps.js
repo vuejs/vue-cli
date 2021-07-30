@@ -13,10 +13,10 @@ const DEPS_MAP = {
     prettier: '^2.2.1'
   },
   standard: {
-    '@vue/eslint-config-standard': '^6.0.0',
+    '@vue/eslint-config-standard': '^6.1.0',
     'eslint-plugin-import': '^2.20.2',
     'eslint-plugin-node': '^11.1.0',
-    'eslint-plugin-promise': '^4.3.1'
+    'eslint-plugin-promise': '^5.1.0'
   },
   typescript: {
     '@vue/eslint-config-typescript': '^7.0.0',

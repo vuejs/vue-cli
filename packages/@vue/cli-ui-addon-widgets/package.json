@@ -23,16 +23,16 @@
     "@vue/cli-plugin-babel": "^5.0.0-beta.2",
     "@vue/cli-plugin-eslint": "^5.0.0-beta.2",
     "@vue/cli-service": "^5.0.0-beta.2",
-    "@vue/eslint-config-standard": "^6.0.0",
+    "@vue/eslint-config-standard": "^6.1.0",
     "core-js": "^3.8.3",
-    "eslint": "^7.20.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.6.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^5.0.0",
-    "vue-template-compiler": "^2.6.12"
+    "vue-template-compiler": "^2.6.14"
   },
   "publishConfig": {
     "access": "public"
