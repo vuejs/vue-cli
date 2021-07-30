@@ -120,8 +120,7 @@
     "vue": "^2.6.12",
     "vue-router": "^3.5.1",
     "vue-template-compiler": "^2.6.12",
-    "vuex": "^3.6.2",
-    "webpack-4": "npm:webpack@^4.44.2"
+    "vuex": "^3.6.2"
   },
   "publishConfig": {
     "access": "public"

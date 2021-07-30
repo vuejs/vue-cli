@@ -60,22 +60,6 @@ Besides the internal changes that are only noticeable for custom configurations,
 1. Named exports from JSON modules are no longer supported. Instead of `import { version } from './package.json'; console.log(version);` use `import package from './package.json'; console.log(package.version);`
 2. Webpack 5 does no longer include polyfills for Node.js modules by default. You shall see an informative error message if your code relies on any of these modules. A detailed list of previously polyfilled modules is also available [here](https://github.com/webpack/webpack/pull/8460/commits/a68426e9255edcce7822480b78416837617ab065).
 
-#### Opt Out to Webpack 4
-
-Considering many ecosystem packages haven't catched up yet, we provided a plugin to opt out to webpack 4 for easier migration.
-
-It's as simple as running
-
-```sh
-vue add webpack-4
-```
-
-at the project root.
-
-Underlyingly, it uses the [`resolutions`](https://classic.yarnpkg.com/en/docs/selective-version-resolutions) field for Yarn and PNPM users, and [`module-alias`](https://github.com/ilearnio/module-alias) for NPM users.
-
-Though both work in all our tests, please be aware that the `module-alias` approach is still considered hacky, and may not be as stable as the `"resolutions"` one.
-
 #### Changes to the `build` command and modern mode
 
 Starting with v5.0.0-beta.0, running `vue-cli-service build` will automatically generate different bundles based on your browserslist configurations.
