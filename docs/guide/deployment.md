@@ -108,16 +108,11 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
           run: npm ci # or yarn install --frozen-lockfile
         - name: build
           run: npm run build # or yarn build
-        - name: push to gh-pages
-          run: |
-            cd dist
-            git config --global init.defaultBranch main
-            git init
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -A
-            git commit -m 'deploy'
-            git push -f https://github-actions[bot]:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git main:gh-pages
+        - name: deploy
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./dist
   ```
 
 #### Using Travis CI for automatic updates
