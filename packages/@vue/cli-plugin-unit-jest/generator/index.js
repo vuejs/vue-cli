@@ -12,6 +12,7 @@ module.exports = (api, options, rootOptions, invoking) => {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
+      'jest': '^26.6.3',
       'vue-jest': isVue3 ? '^5.0.0-0' : '^4.0.1',
       '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.3'
     },

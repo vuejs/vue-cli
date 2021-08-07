@@ -1,7 +1,9 @@
 /** @param {import('@vue/cli/lib/MigratorAPI')} api MigratorAPI */
 module.exports = (api) => {
   api.extendPackage(pkg => {
-    const newDevDeps = {}
+    const newDevDeps = {
+      'jest': '^26.6.3'
+    }
 
     const allDeps = {
       ...pkg.dependencies,
