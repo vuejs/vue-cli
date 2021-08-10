@@ -1,4 +1,34 @@
 
+## 5.0.0-beta.3 (2021-08-10)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-unit-jest`
+  * [#6625](https://github.com/vuejs/vue-cli/pull/6625) feat(unit-jest): add jest as a peer dependency ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6530](https://github.com/vuejs/vue-cli/pull/6530) feat(cli-service): add support new image format avif ([@muhamadamin1992](https://github.com/muhamadamin1992))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-webpack-4`, `@vue/cli-service`
+  * [#6598](https://github.com/vuejs/vue-cli/pull/6598) chore!: drop webpack-4 support in v5 ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6597](https://github.com/vuejs/vue-cli/pull/6597) fix: mark `sideEffects: true` for styles in Vue components ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-mocha`
+  * [#6560](https://github.com/vuejs/vue-cli/pull/6560) fix(mocha): do not ignore JavaScript tests when TypeScript plugin is installed ([@j-a-m-l](https://github.com/j-a-m-l))
+
+#### :memo: Documentation
+* `@vue/cli`
+  * [#6589](https://github.com/vuejs/vue-cli/pull/6589) Fix command description typo ([@martiliones](https://github.com/martiliones))
+
+#### Committers: 4
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Juan ([@j-a-m-l](https://github.com/j-a-m-l))
+- Muhammadamin ([@muhamadamin1992](https://github.com/muhamadamin1992))
+- martiliones ([@martiliones](https://github.com/martiliones))
+
+
+
 ## 5.0.0-beta.2 (2021-06-09)
 
 #### :rocket: New Features
