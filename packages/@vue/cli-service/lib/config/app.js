@@ -33,15 +33,10 @@ module.exports = (api, options) => {
         .filename(outputFilename)
         .chunkFilename(outputFilename)
 
-    const webpack = require('webpack')
-    const { semver } = require('@vue/cli-shared-utils')
-    const webpackMajor = semver.major(webpack.version)
-    if (webpackMajor !== 4) {
-      // FIXME: a temporary workaround to get accurate contenthash in `applyLegacy`
-      // Should use a better fix per discussions at <https://github.com/jantimon/html-webpack-plugin/issues/1554#issuecomment-753653580>
-      webpackConfig.optimization
-        .set('realContentHash', false)
-    }
+    // FIXME: a temporary workaround to get accurate contenthash in `applyLegacy`
+    // Should use a better fix per discussions at <https://github.com/jantimon/html-webpack-plugin/issues/1554#issuecomment-753653580>
+    webpackConfig.optimization
+      .set('realContentHash', false)
 
     // code splitting
     if (process.env.NODE_ENV !== 'test') {

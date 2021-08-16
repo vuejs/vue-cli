@@ -5,7 +5,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
-  const { log, error, semver } = require('@vue/cli-shared-utils')
+  const { log, error } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
     error(msg)
@@ -14,7 +14,6 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
 
   const cwd = api.getCwd()
   const webpack = require('webpack')
-  const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../../util/getVueMajor')(cwd)
   if (vueMajor === 3) {
     abort(`Vue 3 support of the web component target is still under development.`)
@@ -131,11 +130,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
 
     // to ensure that multiple copies of async wc bundles can co-exist
     // on the same page.
-    if (webpackMajor === 4) {
-      rawConfig.output.jsonpFunction = libName.replace(/-\w/g, c => c.charAt(1).toUpperCase()) + '_jsonp'
-    } else {
-      rawConfig.output.uniqueName = `vue-lib-${libName}`
-    }
+    rawConfig.output.uniqueName = `vue-lib-${libName}`
 
     return rawConfig
   }

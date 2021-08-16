@@ -1,5 +1,4 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { semver } = require('@vue/cli-shared-utils')
 
 const ID = 'vue-cli:pwa-html-plugin'
 
@@ -203,24 +202,12 @@ module.exports = class HtmlPwaPlugin {
         size: () => outputManifest.length
       }
 
-      let webpackMajor = 4
-      if (compiler.webpack) {
-        webpackMajor = semver.major(compiler.webpack.version)
-      }
-
-      if (webpackMajor === 4) {
-        compiler.hooks.emit.tapAsync(ID, (data, cb) => {
-          data.assets[manifestPath] = manifestAsset
-          cb(null, data)
-        })
-      } else {
-        compiler.hooks.compilation.tap(ID, compilation => {
-          compilation.hooks.processAssets.tap(
-            { name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS' },
-            assets => { assets[manifestPath] = manifestAsset }
-          )
-        })
-      }
+      compiler.hooks.compilation.tap(ID, compilation => {
+        compilation.hooks.processAssets.tap(
+          { name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS' },
+          assets => { assets[manifestPath] = manifestAsset }
+        )
+      })
     }
   }
 }
