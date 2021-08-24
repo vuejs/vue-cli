@@ -47,7 +47,7 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 
 The [instant prototyping functionalities](https://v4.cli.vuejs.org/guide/prototyping.html) are removed. Now the `vue serve` / `vue build` commands are aliases to `npm run serve` / `npm run build`, which in turn execute the scripts specified in the project `package.json`.
 
-If you need a minimum setup for developing standalone `.vue` components, please use [`vite`](https://github.com/vitejs/vite/#readme) instead.
+If you need a minimum setup for developing standalone `.vue` components, please use <https://sfc.vuejs.org/> or <https://vite.new/vue> instead.
 
 ### `@vue/cli-service`
 
