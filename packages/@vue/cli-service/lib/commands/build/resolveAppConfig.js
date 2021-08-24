@@ -27,7 +27,7 @@ module.exports = (api, args, options) => {
         .plugin('modern-mode-legacy')
         .use(ModernModePlugin, [{
           targetDir,
-          isModernBuild: false
+          isModuleBuild: false
         }])
     } else {
       config
