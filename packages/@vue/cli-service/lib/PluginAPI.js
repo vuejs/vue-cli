@@ -212,6 +212,35 @@ class PluginAPI {
     const cacheIdentifier = hash(variables)
     return { cacheDirectory, cacheIdentifier }
   }
+
+  /**
+   * Vue CLI enables the filesystem cache in webpack 5 by default.
+   * If your plugin depends on an additional config file (e.g. `stylelint.config.js`),
+   * the default cache config does not take that file into account,
+   * thus causing unexpected cache persistence.
+   *
+   * To avoid such problems, you should add that file to the `buildDependencies`
+   * of webpack by calling this function.
+   * (e.g. `api.addBuildDependencies('stylelint.config.js')`)
+   *
+   * Please be aware that these dependencies are not evaluated.
+   * So if you depend on some external environment variables, please
+   * use the `appendCacheIdentifier` API to explicitly monitor their changes.
+   *
+   * @param {string[]|Object} deps if an array of strings is passed, it will be
+   * appended to the cache.buildDependencies.config field; if an object is passed,
+   * it will be merged into the cache.buildDependencies filed
+   */
+  addBuildDependencies (deps) {
+    if (Array.isArray(deps)) {
+      this.configureWebpack(() => ({ cache: { buildDependencies: { config: deps } } }))
+    } else {
+      this.configureWebpack(() => ({ cache: { buildDependencies: deps } }))
+    }
+  }
+
+  // FIXME: Deal with random environment variables in `.js` buildDependencies
+  appendCacheIdentifier () {}
 }
 
 module.exports = PluginAPI

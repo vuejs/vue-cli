@@ -269,3 +269,5 @@ test(`should use formatter 'codeframe'`, async () => {
 
   await donePromise
 })
+
+test.todo('should not skip lint when `vue-cli-service serve` hits the filesystem cache')

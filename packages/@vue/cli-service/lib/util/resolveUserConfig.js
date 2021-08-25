@@ -63,6 +63,8 @@ module.exports = function resolveUserConfig ({
   } else {
     resolved = inlineOptions || {}
     resolvedFrom = 'inline options'
+
+    // FIXME: may need to call `api.appendCacheIdentifier` with inline options hash
   }
 
   // normalize some options
