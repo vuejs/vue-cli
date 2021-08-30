@@ -27,7 +27,6 @@
     "@types/webpack-env": "^1.15.2",
     "@vue/cli-shared-utils": "^5.0.0-beta.3",
     "babel-loader": "^8.2.2",
-    "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^6.1.0",
     "globby": "^11.0.2",
     "thread-loader": "^3.0.0",
