@@ -1,11 +1,9 @@
 const path = require('path')
-const { semver } = require('@vue/cli-shared-utils')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const cwd = api.getCwd()
   const webpack = require('webpack')
-  const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../util/getVueMajor')(cwd)
 
   api.chainWebpack(webpackConfig => {
@@ -13,12 +11,10 @@ module.exports = (api, options) => {
     const resolveLocal = require('../util/resolveLocal')
 
     // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
-    if (webpackMajor !== 4) {
-      webpackConfig.module
-        .rule('esm')
-          .test(/\.m?jsx?$/)
-          .resolve.set('fullySpecified', false)
-    }
+    webpackConfig.module
+      .rule('esm')
+        .test(/\.m?jsx?$/)
+        .resolve.set('fullySpecified', false)
 
     webpackConfig
       .mode('development')

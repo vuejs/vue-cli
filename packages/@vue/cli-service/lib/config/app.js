@@ -33,15 +33,10 @@ module.exports = (api, options) => {
         .filename(outputFilename)
         .chunkFilename(outputFilename)
 
-    const webpack = require('webpack')
-    const { semver } = require('@vue/cli-shared-utils')
-    const webpackMajor = semver.major(webpack.version)
-    if (webpackMajor !== 4) {
-      // FIXME: a temporary workaround to get accurate contenthash in `applyLegacy`
-      // Should use a better fix per discussions at <https://github.com/jantimon/html-webpack-plugin/issues/1554#issuecomment-753653580>
-      webpackConfig.optimization
-        .set('realContentHash', false)
-    }
+    // FIXME: a temporary workaround to get accurate contenthash in `applyLegacy`
+    // Should use a better fix per discussions at <https://github.com/jantimon/html-webpack-plugin/issues/1554#issuecomment-753653580>
+    webpackConfig.optimization
+      .set('realContentHash', false)
 
     // code splitting
     if (process.env.NODE_ENV !== 'test') {
@@ -72,13 +67,7 @@ module.exports = (api, options) => {
       scriptLoading: 'defer',
       templateParameters: (compilation, assets, assetTags, pluginOptions) => {
         // enhance html-webpack-plugin's built in template params
-        let stats
         return Object.assign({
-          // make stats lazy as it is expensive
-          // TODO: not sure if it's still needed as of <https://github.com/jantimon/html-webpack-plugin/issues/780#issuecomment-390651831>
-          get webpack () {
-            return stats || (stats = compilation.getStats().toJson())
-          },
           compilation: compilation,
           webpackConfig: compilation.options,
           htmlWebpackPlugin: {
