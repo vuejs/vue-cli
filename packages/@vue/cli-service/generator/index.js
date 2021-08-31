@@ -53,7 +53,7 @@ module.exports = (api, options) => {
       },
       stylus: {
         'stylus': '^0.54.8',
-        'stylus-loader': '^5.0.0'
+        'stylus-loader': '^6.1.0'
       }
     }
 

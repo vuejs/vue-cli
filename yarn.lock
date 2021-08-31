@@ -20506,10 +20506,10 @@ stylus-loader@^3.0.2:
     lodash.clonedeep "^4.5.0"
     when "~3.6.x"
 
-stylus-loader@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/stylus-loader/-/stylus-loader-5.0.0.tgz#d3f548887ab67808cc40d320079c44f8ffa3d9b8"
-  integrity sha512-1OaGgixTgC8IAaMCodZXg7XYsfP1qU0UzTHDyPaWACUh34j9geJL4iA583tFJDOtfNUOfDLaBpUywc5MicQ1aA==
+stylus-loader@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/stylus-loader/-/stylus-loader-6.1.0.tgz#7a3a719a27cb2b9617896d6da28fda94c3ed9762"
+  integrity sha512-qKO34QCsOtSJrXxQQmXsPeaVHh6hMumBAFIoJTcsSr2VzrA6o/CW9HCGR8spCjzJhN8oKQHdj/Ytx0wwXyElkw==
   dependencies:
     fast-glob "^3.2.5"
     klona "^2.0.4"

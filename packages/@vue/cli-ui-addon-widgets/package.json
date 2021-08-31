@@ -31,7 +31,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.6.0",
     "stylus": "^0.54.7",
-    "stylus-loader": "^5.0.0",
+    "stylus-loader": "^6.1.0",
     "vue-template-compiler": "^2.6.14"
   },
   "publishConfig": {
