@@ -7,19 +7,19 @@ module.exports = (api, options) => {
   if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
-        'vue': '^3.0.4'
+        'vue': '^3.2.6'
       },
       devDependencies: {
-        '@vue/compiler-sfc': '^3.0.4'
+        '@vue/compiler-sfc': '^3.2.6'
       }
     })
   } else {
     api.extendPackage({
       dependencies: {
-        'vue': '^2.6.11'
+        'vue': '^2.6.14'
       },
       devDependencies: {
-        'vue-template-compiler': '^2.6.11'
+        'vue-template-compiler': '^2.6.14'
       }
     })
   }
