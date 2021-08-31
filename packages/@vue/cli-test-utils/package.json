@@ -27,7 +27,7 @@
     "@types/node": "*",
     "@types/puppeteer": "^1.11.0",
     "execa": "^1.0.0",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^9.1.0",
     "json-server": "^0.16.1",
     "puppeteer": "^1.11.0",
     "serve-handler": "^6.1.2",
