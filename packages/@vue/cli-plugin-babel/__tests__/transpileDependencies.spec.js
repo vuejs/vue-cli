@@ -77,6 +77,7 @@ afterAll(async () => {
 })
 
 test('dep from node_modules should not been transpiled by default', async () => {
+  await project.write('vue.config.js', `module.exports = {}`)
   await project.run('vue-cli-service build')
   expect(await readLegacyVendorFile()).toMatch('() => "__TEST__"')
 })
