@@ -84,7 +84,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.6.0",
-    "lint-staged": "^10.5.4",
+    "lint-staged": "^11.1.2",
     "lodash.debounce": "^4.0.8",
     "portal-vue": "^2.1.7",
     "rimraf": "^3.0.2",
