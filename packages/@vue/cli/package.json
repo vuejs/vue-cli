@@ -38,7 +38,7 @@
     "download-git-repo": "^3.0.2",
     "ejs": "^3.1.6",
     "envinfo": "^7.7.4",
-    "fs-extra": "^9.1.0",
+    "fs-extra": "^10.0.0",
     "globby": "^11.0.2",
     "import-global": "^0.1.0",
     "ini": "^2.0.0",

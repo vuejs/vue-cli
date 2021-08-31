@@ -42,7 +42,7 @@
     "express": "^4.17.1",
     "express-history-api-fallback": "^2.2.1",
     "fkill": "^7.1.0",
-    "fs-extra": "^9.1.0",
+    "fs-extra": "^10.0.0",
     "globby": "^11.0.2",
     "graphql": "^15.5.0",
     "graphql-subscriptions": "^1.2.0",
