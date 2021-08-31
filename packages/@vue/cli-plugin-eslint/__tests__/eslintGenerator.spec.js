@@ -135,7 +135,7 @@ test('typescript', async () => {
 })
 
 test('lint on save', async () => {
-  const { pkg } = await generateWithPlugin({
+  const { files } = await generateWithPlugin({
     id: 'eslint',
     apply: require('../generator'),
     options: {
@@ -143,11 +143,11 @@ test('lint on save', async () => {
     }
   })
   // lintOnSave defaults to true so no need for the vue config
-  expect(pkg.vue).toBeFalsy()
+  expect(files['vue.config.js']).toBeUndefined()
 })
 
 test('lint on commit', async () => {
-  const { pkg } = await generateWithPlugin({
+  const { pkg, files } = await generateWithPlugin({
     id: 'eslint',
     apply: require('../generator'),
     options: {
@@ -159,9 +159,7 @@ test('lint on commit', async () => {
   expect(pkg['lint-staged']).toEqual({
     '*.{js,jsx,vue}': 'vue-cli-service lint'
   })
-  expect(pkg.vue).toEqual({
-    lintOnSave: false
-  })
+  expect(files['vue.config.js']).toMatch('lintOnSave: false')
 })
 
 test('should lint ts files when typescript plugin co-exists', async () => {
