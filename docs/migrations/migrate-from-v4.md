@@ -138,7 +138,7 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 ### Unit-Mocha Plugin
 
 * `mocha` is upgraded from v6 to v8, please refer to the release notes of [mocha v7](https://github.com/mochajs/mocha/releases/tag/v7.0.0) and [mocha v8](https://github.com/mochajs/mocha/releases/tag/v8.0.0) for a complete list of breaking changes.
-* `jsdom` is upgraded from v15 to v16, the breaking changes are listed at [`jsdom` v16.0.0 release](https://github.com/jsdom/jsdom/releases/tag/16.0.0)
+* `jsdom` is upgraded from v15 to v17, user-facing breaking changes are listed in the [`jsdom` v16.0.0 release notes](https://github.com/jsdom/jsdom/releases/tag/16.0.0).
 
 ### Internal Packages
 
