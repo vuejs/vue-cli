@@ -240,20 +240,27 @@ module.exports = (api, options) => {
 
     // copy static assets in public/
     const publicDir = api.resolve('public')
-    if (!isLegacyBundle && fs.existsSync(publicDir)) {
-      webpackConfig
-        .plugin('copy')
-          .use(require('copy-webpack-plugin'), [{
-            patterns: [{
-              from: publicDir,
-              to: outputDir,
-              toType: 'dir',
-              noErrorOnMissing: true,
-              globOptions: {
-                ignore: publicCopyIgnore
-              }
-            }]
-          }])
+    const CopyWebpackPlugin = require('copy-webpack-plugin')
+    const PlaceholderPlugin = class PlaceholderPlugin { apply () {} }
+
+    const copyOptions = {
+      patterns: [{
+        from: publicDir,
+        to: outputDir,
+        toType: 'dir',
+        noErrorOnMissing: true,
+        globOptions: {
+          ignore: publicCopyIgnore
+        }
+      }]
+    }
+
+    if (fs.existsSync(publicDir)) {
+      if (isLegacyBundle) {
+        webpackConfig.plugin('copy').use(PlaceholderPlugin, [copyOptions])
+      } else {
+        webpackConfig.plugin('copy').use(CopyWebpackPlugin, [copyOptions])
+      }
     }
   })
 }
