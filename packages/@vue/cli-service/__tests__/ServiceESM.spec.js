@@ -2,13 +2,21 @@ jest.setTimeout(200000)
 const path = require('path')
 const fs = require('fs-extra')
 
-const { defaultPreset } = require('@vue/cli/lib/options')
 const create = require('@vue/cli-test-utils/createTestProject')
 const { loadModule } = require('@vue/cli-shared-utils')
 
 let project
 beforeAll(async () => {
-  project = await create('service-esm-test', defaultPreset)
+  project = await create('service-esm-test', {
+    useConfigFiles: false,
+    cssPreprocessor: undefined,
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'base',
+        lintOn: ['save']
+      }
+    }
+  })
   const pkg = JSON.parse(await project.read('package.json'))
   pkg.type = 'module'
   pkg.vue = { lintOnSave: 'default' }
