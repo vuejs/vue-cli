@@ -21,7 +21,6 @@ beforeAll(async () => {
   pkg.type = 'module'
   pkg.vue = { lintOnSave: 'default' }
   await project.write('package.json', JSON.stringify(pkg, null, 2))
-  fs.renameSync(path.resolve(project.dir, 'babel.config.js'), path.resolve(project.dir, 'babel.config.cjs'))
 })
 
 const createService = async () => {
