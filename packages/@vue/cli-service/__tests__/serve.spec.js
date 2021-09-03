@@ -177,7 +177,8 @@ test('use a single websocket connection for HMR', async () => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
 
-      expect(requestUrls.filter(url => url.includes('sockjs-node')).length).toBe(1)
+      console.log(requestUrls)
+      expect(requestUrls.filter(url => url.includes('ws://')).length).toBe(1)
     }
   )
 })
