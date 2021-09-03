@@ -159,9 +159,7 @@ test('lint on commit', async () => {
   expect(pkg['lint-staged']).toEqual({
     '*.{js,jsx,vue}': 'vue-cli-service lint'
   })
-  expect(pkg.vue).toEqual({
-    lintOnSave: false
-  })
+  expect(pkg.vue.lintOnSave).toBe(false)
 })
 
 test('should lint ts files when typescript plugin co-exists', async () => {
