@@ -49,6 +49,7 @@ beforeAll(async () => {
   $packageJson.browserslist.push('safari 11') // to ensure optional chaining transformation is enabled
   $packageJson.dependencies['external-dep'] = '1.0.0'
   $packageJson.dependencies['@scope/external-dep'] = '1.0.0'
+  delete $packageJson.vue
   $packageJson = JSON.stringify($packageJson)
 
   await project.write(

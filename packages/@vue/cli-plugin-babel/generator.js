@@ -9,6 +9,9 @@ module.exports = api => {
     babel: {
       presets: ['@vue/cli-plugin-babel/preset']
     },
+    vue: {
+      transpileDependencies: true
+    },
     dependencies: {
       'core-js': '^3.8.3'
     }
