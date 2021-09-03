@@ -18,7 +18,15 @@ module.exports = async function launchPuppeteer (url) {
     interceptedRequest.continue()
   })
 
-  await page.goto(url)
+  const f12 = await page.target().createCDPSession()
+  await f12.send('Network.enable')
+  await f12.send('Page.enable')
 
+  f12.on('Network.webSocketCreated', ({ requestId, url: wsUrl }) => {
+    console.error('web socket created', requestId, wsUrl)
+    requestUrls.push(wsUrl)
+  })
+
+  await page.goto(url)
   return { browser, page, logs, requestUrls }
 }
