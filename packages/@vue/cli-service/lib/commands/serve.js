@@ -59,6 +59,14 @@ module.exports = (api, options) => {
         webpackConfig
           .output
             .globalObject(`(typeof self !== 'undefined' ? self : this)`)
+
+        if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
+          // fixme: progress plugin won't show progress due to infrastructreLogging.level
+          // should find another replacement
+          // webpackConfig
+          //   .plugin('progress')
+          //   .use(webpack.ProgressPlugin)
+        }
       }
     })
 
