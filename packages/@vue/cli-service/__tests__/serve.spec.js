@@ -177,7 +177,6 @@ test('use a single websocket connection for HMR', async () => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
 
-      console.log(requestUrls)
       expect(requestUrls.filter(url => url.includes('ws://')).length).toBe(1)
     }
   )

@@ -23,7 +23,6 @@ module.exports = async function launchPuppeteer (url) {
   await f12.send('Page.enable')
 
   f12.on('Network.webSocketCreated', ({ requestId, url: wsUrl }) => {
-    console.error('web socket created', requestId, wsUrl)
     requestUrls.push(wsUrl)
   })
 
