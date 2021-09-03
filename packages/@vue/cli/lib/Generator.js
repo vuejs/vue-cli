@@ -240,7 +240,6 @@ module.exports = class Generator {
         extract(key)
       }
     } else {
-      // by default, always extract vue.config.js
       if (!process.env.VUE_CLI_TEST) {
         // by default, always extract vue.config.js
         extract('vue')
