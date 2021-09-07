@@ -60,7 +60,7 @@ async function makeProjectMultiPage (project) {
   ))
 }
 
-test.only('serve w/ multi page', async () => {
+test('serve w/ multi page', async () => {
   const project = await create('e2e-multi-page-serve', defaultPreset)
 
   await makeProjectMultiPage(project)
