@@ -152,7 +152,7 @@ module.exports = (api, options) => {
 
       if (process.env.APPVEYOR) {
         webpackConfig.plugins.push(
-          new webpack.EntryPlugin(__dirname, 'webpack/hot/poll?500', 'hot-client-poll')
+          new webpack.EntryPlugin(__dirname, 'webpack/hot/poll?500', { name: undefined })
         )
       }
     }
@@ -161,7 +161,9 @@ module.exports = (api, options) => {
     const supportsIE = !!projectTargets
     if (supportsIE) {
       webpackConfig.plugins.push(
-        new webpack.EntryPlugin(__dirname, 'whatwg-fetch', 'fetch-polyfill-for-ie')
+        // must use undefined as name,
+        // to avoid dev server establishing an extra ws connection for the new entry
+        new webpack.EntryPlugin(__dirname, 'whatwg-fetch', { name: undefined })
       )
     }
 
