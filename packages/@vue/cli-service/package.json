@@ -68,6 +68,7 @@
     "portfinder": "^1.0.26",
     "postcss": "^8.2.6",
     "postcss-loader": "^6.1.1",
+    "progress-webpack-plugin": "^1.0.12",
     "ssri": "^8.0.1",
     "terser-webpack-plugin": "^5.1.1",
     "thread-loader": "^3.0.0",
