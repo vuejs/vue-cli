@@ -87,7 +87,7 @@ module.exports = (api, options) => {
     // expose advanced stats
     if (args.dashboard) {
       const DashboardPlugin = require('../webpack/DashboardPlugin')
-      ;(webpackConfig.plugins = webpackConfig.plugins || []).push(new DashboardPlugin({
+      webpackConfig.plugins.push(new DashboardPlugin({
         type: 'serve'
       }))
     }
@@ -151,12 +151,19 @@ module.exports = (api, options) => {
       }
 
       if (process.env.APPVEYOR) {
-        addDevClientToEntry(webpackConfig, [`webpack/hot/poll?500`])
+        webpackConfig.plugins.push(
+          new webpack.EntryPlugin(__dirname, 'webpack/hot/poll?500', 'hot-client-poll')
+        )
       }
     }
 
-    // fixme:
-    // add `whatwg-fetch` polyfill to the entry to support IE10/11
+    const { projectTargets } = require('../util/targets')
+    const supportsIE = !!projectTargets
+    if (supportsIE) {
+      webpackConfig.plugins.push(
+        new webpack.EntryPlugin(__dirname, 'whatwg-fetch', 'fetch-polyfill-for-ie')
+      )
+    }
 
     // fixme: temporary fix to suppress dev server logging
     // should be more robust to show necessary info but not duplicate errors
@@ -225,13 +232,6 @@ module.exports = (api, options) => {
         // allow other plugins to register middlewares, e.g. PWA
         // todo: migrate to the new API interface
         api.service.devServerConfigFns.forEach(fn => fn(server.app, server))
-
-        // apply in project middlewares
-        if (projectDevServerOptions.before) {
-          // soft deprecation in this beta
-          // todo: should throw error in RC
-          projectDevServerOptions.before(server.app, server)
-        }
 
         if (projectDevServerOptions.onBeforeSetupMiddleware) {
           projectDevServerOptions.onBeforeSetupMiddleware(server)
@@ -351,19 +351,6 @@ module.exports = (api, options) => {
       server.start().catch(err => reject(err))
     })
   })
-}
-
-function addDevClientToEntry (config, devClient) {
-  const { entry } = config
-  if (typeof entry === 'object' && !Array.isArray(entry)) {
-    Object.keys(entry).forEach((key) => {
-      entry[key] = devClient.concat(entry[key])
-    })
-  } else if (typeof entry === 'function') {
-    config.entry = entry(devClient)
-  } else {
-    config.entry = devClient.concat(entry)
-  }
 }
 
 // https://stackoverflow.com/a/20012536
