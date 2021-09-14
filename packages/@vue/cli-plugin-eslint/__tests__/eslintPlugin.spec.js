@@ -260,7 +260,8 @@ test(`should use formatter 'codeframe'`, async () => {
     } else if (data.match(/semi/)) {
       // check the format of output
       // https://eslint.org/docs/user-guide/formatters/#codeframe
-      expect(data).toMatch(`error: Missing semicolon (semi) at src${path.sep}main.js`)
+      expect(data).toMatch(`error`)
+      expect(data).toMatch(`Missing semicolon (semi) at src${path.sep}main.js`)
 
       server.stdin.write('close')
       done()
