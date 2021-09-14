@@ -3,7 +3,6 @@ const {
   error,
   hasProjectYarn,
   hasProjectPnpm,
-  openBrowser,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
 
@@ -217,8 +216,7 @@ module.exports = (api, options) => {
         ...projectDevServerOptions.client
       },
 
-      // avoid opening browser
-      open: false,
+      open: args.open || projectDevServerOptions.open,
       setupExitSignals: true,
 
       // eslint-disable-next-line no-shadow
@@ -318,14 +316,6 @@ module.exports = (api, options) => {
             console.log(`  Note this is for preview or E2E testing only.`)
           }
           console.log()
-
-          // fixme: `openPage` is unified into `open`
-          if (args.open || projectDevServerOptions.open) {
-            const pageUri = (projectDevServerOptions.openPage && typeof projectDevServerOptions.openPage === 'string')
-              ? projectDevServerOptions.openPage
-              : ''
-            openBrowser(localUrlForBrowser + pageUri)
-          }
 
           // Send final app URL
           if (args.dashboard) {
