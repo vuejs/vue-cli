@@ -139,11 +139,11 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 
 ### Unit-Jest Plugin
 
-* For Vue 2 projects, `vue-jest` is now required as a peer dependency, please install `vue-jest@^4.0.1` as a dev dependency to the project.
-* For TypeScript projects, `ts-jest` is now required as a peer dependency. Users need to install `ts-jest@26` manually to the project root.
-* The underlying `jest`-related packages are upgraded from v24 to v26. For most users the transition would be seamless. See their corresponding changelogs for more detail:
-  * [jest, babel-jest](https://github.com/facebook/jest/blob/v26.6.3/CHANGELOG.md)
-  * [ts-jest](https://github.com/kulshekhar/ts-jest/blob/v26.4.4/CHANGELOG.md)
+* For Vue 2 projects, `@vue/vue2-jest` is now required as a peer dependency, please install `@vue/vue2-jest` as a dev dependency to the project.
+* For TypeScript projects, `ts-jest` is now required as a peer dependency. Users need to install `ts-jest@27` manually to the project root.
+* The underlying `jest`-related packages are upgraded from v24 to v27. For most users the transition would be seamless. See their corresponding changelogs for more detail:
+  * [jest, babel-jest](https://github.com/facebook/jest/blob/v27.1.0/CHANGELOG.md)
+  * [ts-jest](https://github.com/kulshekhar/ts-jest/blob/v27.0.0/CHANGELOG.md)
 
 ### Unit-Mocha Plugin
 

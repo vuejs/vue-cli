@@ -12,8 +12,10 @@ module.exports = (api, options, rootOptions, invoking) => {
       'test:unit': 'vue-cli-service test:unit'
     },
     devDependencies: {
-      'jest': '^26.6.3',
-      'vue-jest': isVue3 ? '^5.0.0-0' : '^4.0.1',
+      'babel-jest': '^27.0.6',
+      'jest': '^27.0.5',
+      '@vue/vue2-jest': isVue3 ? undefined : '^27.0.0-alpha.2',
+      '@vue/vue3-jest': isVue3 ? '^27.0.0-alpha.1' : undefined,
       '@vue/test-utils': isVue3 ? '^2.0.0-0' : '^1.1.3'
     },
     jest: {
@@ -58,8 +60,8 @@ const applyTS = (module.exports.applyTS = (api, invoking) => {
         : '@vue/cli-plugin-unit-jest/presets/typescript'
     },
     devDependencies: {
-      '@types/jest': '^26.0.20',
-      'ts-jest': '^26.5.3'
+      '@types/jest': '^27.0.1',
+      'ts-jest': '^27.0.4'
     }
   })
 

@@ -41,7 +41,7 @@
     "@vuepress/plugin-pwa": "^1.8.1",
     "@vuepress/theme-vue": "^1.8.1",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^27.0.6",
     "chromedriver": "^92.0.0",
     "debug": "^4.1.0",
     "eslint": "^7.32.0",
@@ -57,7 +57,7 @@
     "graphql": "^15.5.0",
     "http-server": "^0.12.3",
     "inquirer": "^8.0.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.6",
     "lerna": "^4.0.0",
     "lerna-changelog": "^2.1.0",
     "lint-staged": "^11.1.2",
@@ -75,6 +75,7 @@
     "yorkie": "^2.0.0"
   },
   "resolutions": {
+    "postcss": "8.3.6",
     "puppeteer": "1.11.0",
     "vue-template-compiler": "^2.6.14",
     "vue-server-renderer": "^2.6.14"
