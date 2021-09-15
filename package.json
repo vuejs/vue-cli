@@ -64,6 +64,7 @@
     "memfs": "^3.2.0",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
+    "postcss": "8.3.6",
     "prettier": ">= 1.13.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.4",
@@ -75,7 +76,6 @@
     "yorkie": "^2.0.0"
   },
   "resolutions": {
-    "postcss": "8.3.6",
     "puppeteer": "1.11.0",
     "vue-template-compiler": "^2.6.14",
     "vue-server-renderer": "^2.6.14"
