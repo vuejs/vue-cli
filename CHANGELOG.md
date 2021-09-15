@@ -1,4 +1,46 @@
 
+## 5.0.0-beta.4 (2021-09-15)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`
+  * [#6627](https://github.com/vuejs/vue-cli/pull/6627) feat: update jest to v27 ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli-plugin-eslint`, `@vue/cli-service`, `@vue/cli-test-utils`
+  * [#6669](https://github.com/vuejs/vue-cli/pull/6669) feat!: upgrade to webpack-dev-server v4 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-babel`, `@vue/cli-plugin-eslint`
+  * [#6663](https://github.com/vuejs/vue-cli/pull/6663) feat: generate projects with `transpileDependencies: true` by default ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6662](https://github.com/vuejs/vue-cli/pull/6662) feat!: update cypress to 8.3 and require it to be a peer dependency ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-typescript`, `@vue/cli-plugin-unit-jest`
+  * [#6627](https://github.com/vuejs/vue-cli/pull/6627) feat: update jest to v27 ([@cexbrayat](https://github.com/cexbrayat))
+* `@vue/cli-plugin-eslint`, `@vue/cli-service`, `@vue/cli-test-utils`
+  * [#6669](https://github.com/vuejs/vue-cli/pull/6669) feat!: upgrade to webpack-dev-server v4 ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6662](https://github.com/vuejs/vue-cli/pull/6662) feat!: update cypress to 8.3 and require it to be a peer dependency ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6665](https://github.com/vuejs/vue-cli/pull/6665) fix: avoid copy-webpack plugin errors in module mode ([@sodatea](https://github.com/sodatea))
+  * [#6645](https://github.com/vuejs/vue-cli/pull/6645) fix(cli-service): wrong property name (typo) ([@Vinsea](https://github.com/Vinsea))
+
+#### :memo: Documentation
+* [#6653](https://github.com/vuejs/vue-cli/pull/6653) docs: recommend SFC playground and StackBlitz for instant prototyping ([@sodatea](https://github.com/sodatea))
+
+#### :house: Internal
+* `@vue/cli-plugin-pwa`, `@vue/cli-service`
+  * [#6638](https://github.com/vuejs/vue-cli/pull/6638) refactor: remove redundant Webpack version checks ([@KubesDavid](https://github.com/KubesDavid))
+* `@vue/cli-ui`
+  * [#6635](https://github.com/vuejs/vue-cli/pull/6635) fix(ui): stop depending on the `watch` package ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 4
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- David Kubeš ([@KubesDavid](https://github.com/KubesDavid))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Vinsea ([@Vinsea](https://github.com/Vinsea))
+
+
+
 ## 5.0.0-beta.3 (2021-08-10)
 
 #### :rocket: New Features
