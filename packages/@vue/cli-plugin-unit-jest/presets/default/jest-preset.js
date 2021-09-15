@@ -4,7 +4,7 @@ const semver = require('semver')
 let vueVersion = 2
 try {
   // eslint-disable-next-line node/no-extraneous-require
-  const Vue = require('vue')
+  const Vue = require('vue/package.json')
   vueVersion = semver.major(Vue.version)
 } catch (e) {}
 
