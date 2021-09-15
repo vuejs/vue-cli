@@ -60,7 +60,17 @@ Besides the internal changes that are only noticeable for custom configurations,
 1. Named exports from JSON modules are no longer supported. Instead of `import { version } from './package.json'; console.log(version);` use `import package from './package.json'; console.log(package.version);`
 2. Webpack 5 does no longer include polyfills for Node.js modules by default. You shall see an informative error message if your code relies on any of these modules. A detailed list of previously polyfilled modules is also available [here](https://github.com/webpack/webpack/pull/8460/commits/a68426e9255edcce7822480b78416837617ab065).
 
-#### Changes to the `build` command and modern mode
+#### Dev Server
+
+`webpack-dev-server` has been updated from v3 to v4. So there are breaking changes with regard to the `devServer` option in `vue.config.js`. Please check out the [`webpack-dev-server` migration guide](https://github.com/webpack/webpack-dev-server/blob/master/migration-v4.md) for more details.
+
+Most notably:
+
+* The `disableHostCheck` option was removed in favor `allowedHosts: 'all'`;
+* `public`, `sockHost`, `sockPath`, and `sockPort` options were removed in favor `client.webSocketURL` option.
+* IE9 support of the dev server is not enabled by default. If you need to develop under IE9, please manually set the `devServer.webSocketServer` option to `sockjs`.
+
+#### The `build` Command and Modern Mode
 
 Starting with v5.0.0-beta.0, running `vue-cli-service build` will automatically generate different bundles based on your browserslist configurations.
 The `--modern` flag is no longer needed because it is turned on by default.

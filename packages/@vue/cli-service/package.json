@@ -27,7 +27,7 @@
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@soda/get-current-script": "^1.0.2",
     "@types/minimist": "^1.2.0",
-    "@types/webpack-dev-server": "^3.11.0",
+    "@types/webpack-dev-server": "^4.1.0",
     "@vue/cli-overlay": "^5.0.0-beta.3",
     "@vue/cli-plugin-router": "^5.0.0-beta.3",
     "@vue/cli-plugin-vuex": "^5.0.0-beta.3",
@@ -68,6 +68,7 @@
     "portfinder": "^1.0.26",
     "postcss": "^8.2.6",
     "postcss-loader": "^6.1.1",
+    "progress-webpack-plugin": "^1.0.12",
     "ssri": "^8.0.1",
     "terser-webpack-plugin": "^5.1.1",
     "thread-loader": "^3.0.0",
@@ -77,9 +78,10 @@
     "webpack": "^5.22.0",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-chain": "^6.5.1",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.1.0",
     "webpack-merge": "^5.7.3",
-    "webpack-virtual-modules": "^0.4.2"
+    "webpack-virtual-modules": "^0.4.2",
+    "whatwg-fetch": "^3.6.2"
   },
   "peerDependencies": {
     "@vue/compiler-sfc": "^3.0.0-beta.14",
