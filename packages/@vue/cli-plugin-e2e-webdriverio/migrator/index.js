@@ -17,4 +17,12 @@ module.exports = (api) => {
       }
     })
   }
+
+  if (api.fromVersion('<= 5.0.0-beta.4')) {
+    api.extendPackage({
+      devDependencies: {
+        '@wdio/sync': '^7.0.7'
+      }
+    })
+  }
 }

@@ -32,7 +32,6 @@
     "@wdio/mocha-framework": "^7.0.7",
     "@wdio/sauce-service": "^7.0.7",
     "@wdio/spec-reporter": "^7.0.7",
-    "@wdio/sync": "^7.0.7",
     "eslint-plugin-wdio": "^7.0.0",
     "webdriverio": "^7.0.7"
   },
