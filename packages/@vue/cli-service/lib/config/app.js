@@ -251,6 +251,9 @@ module.exports = (api, options) => {
         noErrorOnMissing: true,
         globOptions: {
           ignore: publicCopyIgnore
+        },
+        info: {
+          minimized: true
         }
       }]
     }
