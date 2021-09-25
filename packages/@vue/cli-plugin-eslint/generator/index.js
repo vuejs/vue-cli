@@ -69,8 +69,8 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
     api.assertCliVersion('^4.0.0-beta.0')
   } catch (e) {
     if (config && config !== 'base') {
-      api.onCreateComplete(() => {
-        require('../lint')({ silent: true }, api)
+      api.onCreateComplete(async () => {
+        await require('../lint')({ silent: true }, api)
       })
     }
   }
@@ -84,9 +84,9 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
 // FIXME: at the moment we have to catch the bug and silently fail. Need to fix later.
 module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
-  api.afterAnyInvoke(() => {
+  api.afterAnyInvoke(async () => {
     try {
-      require('../lint')({ silent: true }, api)
+      await require('../lint')({ silent: true }, api)
     } catch (e) {}
   })
 }
