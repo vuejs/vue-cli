@@ -308,22 +308,15 @@ test(`should work with eslint args`, async () => {
   await write('src/main.js', `
 foo() // Check for apply --global
 $('hi!') // Check for apply --env
-$=42
+foo=42
 `)
   // result file name
   const resultsFile = 'lint_results.json'
-  try {
-    // lint
-    await run(`vue-cli-service lint --ext .js --plugin vue --env jquery --global foo:true --format json --output-file ${resultsFile}`)
-  } catch (e) {
-    // lint should fail
-    expect(e.code).toBe(1)
-    expect(e.failed).toBeTruthy()
-  }
+  // lint
+  await run(`vue-cli-service lint --ext .js --plugin vue --env jquery --global foo:true --format json --output-file ${resultsFile}`)
   expect(await read('src/main.js')).toMatch(';')
 
   const resultsContents = JSON.parse(await read(resultsFile))
   const resultForMain = resultsContents.find(({ filePath }) => filePath.endsWith('src/main.js'))
-  expect(resultForMain.messages.length).toBe(1)
-  expect(resultForMain.messages[0].ruleId).toBe('no-global-assign')
+  expect(resultForMain.messages.length).toBe(0)
 })
