@@ -293,3 +293,29 @@ test(`should work with eslint v8`, async () => {
   await run('vue-cli-service lint')
   expect(await read('src/main.js')).toMatch(';')
 })
+
+test(`should work with eslint args`, async () => {
+  const project = await create('eslint-with-args', {
+    plugins: {
+      '@vue/cli-plugin-babel': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'airbnb',
+        lintOn: 'save'
+      }
+    }
+  })
+  const { read, write, run } = project
+  await write('src/main.js', `
+foo() // Check for apply --global
+$('hi!') // Check for apply --env
+`)
+  // result file name
+  const resultsFile = 'lint_results.json'
+  // lint
+  await run(`vue-cli-service lint --ext .js --plugin vue --env jquery --global foo --format json --output-file ${resultsFile}`)
+  expect(await read('src/main.js')).toMatch(';')
+
+  const resultsContents = JSON.parse(await read(resultsFile))
+  const resultForMain = resultsContents.find(({ filePath }) => filePath.endsWith('src/main.js'))
+  expect(resultForMain.messages.length).toBe(0)
+})

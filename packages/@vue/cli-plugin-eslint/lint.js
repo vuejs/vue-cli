@@ -3,11 +3,14 @@ const globby = require('globby')
 
 const renamedArrayArgs = {
   ext: ['extensions'],
-  env: ['overrideConfig', 'env'],
-  global: ['overrideConfig', 'globals'],
   rulesdir: ['rulePaths'],
   plugin: ['overrideConfig', 'plugins'],
   'ignore-pattern': ['overrideConfig', 'ignorePatterns']
+}
+
+const renamedObjectArgs = {
+  env: { key: ['overrideConfig', 'env'], def: true },
+  global: { key: ['overrideConfig', 'globals'], def: false }
 }
 
 const renamedArgs = {
@@ -177,24 +180,35 @@ function normalizeConfig (args) {
   const config = {}
   for (const key in args) {
     if (renamedArrayArgs[key]) {
-      const keyPaths = [...renamedArrayArgs[key]]
-      const lastKey = keyPaths.pop()
-      for (const k of keyPaths) {
-        config[k] = {}
-      }
-      config[lastKey] = args[key].split(',')
+      applyConfig(renamedArrayArgs[key], args[key].split(','))
+    } else if (renamedObjectArgs[key]) {
+      const obj = arrayToBoolObject(args[key].split(','), renamedObjectArgs[key].def)
+      applyConfig(renamedObjectArgs[key].key, obj)
     } else if (renamedArgs[key]) {
-      const keyPaths = [...renamedArgs[key]]
-      const lastKey = keyPaths.pop()
-      for (const k of keyPaths) {
-        config[k] = {}
-      }
-      config[lastKey] = args[key]
+      applyConfig(renamedArgs[key], args[key])
     } else if (key !== '_') {
       config[camelize(key)] = args[key]
     }
   }
   return config
+
+  function applyConfig ([...keyPaths], value) {
+    let targetConfig = config
+    const lastKey = keyPaths.pop()
+    for (const k of keyPaths) {
+      targetConfig = targetConfig[k] || (targetConfig[k] = {})
+    }
+    targetConfig[lastKey] = value
+  }
+
+  function arrayToBoolObject (array, defaultBool) {
+    const object = {}
+    for (const element of array) {
+      const [key, value] = element.split(':')
+      object[key] = value != null ? value : defaultBool
+    }
+    return object
+  }
 }
 
 function camelize (str) {
