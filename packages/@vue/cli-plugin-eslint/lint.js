@@ -205,7 +205,7 @@ function normalizeConfig (args) {
     const object = {}
     for (const element of array) {
       const [key, value] = element.split(':')
-      object[key] = value != null ? value : defaultBool
+      object[key] = value != null ? value === 'true' : defaultBool
     }
     return object
   }
