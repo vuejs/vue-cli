@@ -249,7 +249,7 @@ test(`should use formatter 'codeframe'`, async () => {
   const updatedMain = main.replace(/;/g, '')
   await write('src/main.js', updatedMain)
 
-  const server = run('vue-cli-service serve')
+  const server = run('vue-cli-service serve --stdin')
 
   let isFirstMsg = true
   server.stdout.on('data', data => {
