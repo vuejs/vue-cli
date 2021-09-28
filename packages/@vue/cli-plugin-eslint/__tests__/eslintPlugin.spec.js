@@ -312,8 +312,14 @@ $=42
 `)
   // result file name
   const resultsFile = 'lint_results.json'
-  // lint
-  await run(`vue-cli-service lint --ext .js --plugin vue --env jquery --global foo:true --format json --output-file ${resultsFile}`)
+  try {
+    // lint
+    await run(`vue-cli-service lint --ext .js --plugin vue --env jquery --global foo:true --format json --output-file ${resultsFile}`)
+  } catch (e) {
+    // lint should fail
+    expect(e.code).toBe(1)
+    expect(e.failed).toBeTruthy()
+  }
   expect(await read('src/main.js')).toMatch(';')
 
   const resultsContents = JSON.parse(await read(resultsFile))
