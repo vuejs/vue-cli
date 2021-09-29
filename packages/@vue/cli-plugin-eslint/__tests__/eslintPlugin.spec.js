@@ -249,7 +249,7 @@ test(`should use formatter 'codeframe'`, async () => {
   const updatedMain = main.replace(/;/g, '')
   await write('src/main.js', updatedMain)
 
-  const server = run('vue-cli-service serve --stdin')
+  const server = run('vue-cli-service serve')
 
   let isFirstMsg = true
   server.stdout.on('data', data => {
@@ -282,7 +282,7 @@ test(`should work with eslint v8`, async () => {
     }
   })
   const { read, write, run } = project
-  await run('npm i -D eslint@^8.0.0-0 eslint-formatter-codeframe')
+  await run('yarn add -D eslint@^8.0.0-0 eslint-formatter-codeframe')
   // should've applied airbnb autofix
   const main = await read('src/main.js')
   expect(main).toMatch(';')
