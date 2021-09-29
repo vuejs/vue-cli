@@ -88,7 +88,7 @@ const release = async () => {
     })
     delete process.env.PREFIX
 
-    // buildEditorConfig()
+    // await buildEditorConfig()
 
     try {
       await execa('git', ['add', '-A'], { stdio: 'inherit' })

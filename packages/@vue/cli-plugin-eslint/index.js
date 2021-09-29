@@ -77,8 +77,8 @@ module.exports = (api, options) => {
       details:
         'For more options, see https://eslint.org/docs/user-guide/command-line-interface#options'
     },
-    args => {
-      require('./lint')(args, api)
+    async args => {
+      await require('./lint')(args, api)
     }
   )
 }
