@@ -271,7 +271,7 @@ test(`should use formatter 'codeframe'`, async () => {
   await donePromise
 })
 
-test(`should work with eslint v8`, async () => {
+test.skip(`should work with eslint v8`, async () => {
   const project = await create('eslint-v8', {
     plugins: {
       '@vue/cli-plugin-babel': {},
@@ -282,7 +282,7 @@ test(`should work with eslint v8`, async () => {
     }
   })
   const { read, write, run } = project
-  await run('yarn add -D eslint@^8.0.0-0 eslint-formatter-codeframe')
+  await run('npm add -D eslint@^8.0.0-0 eslint-formatter-codeframe')
   // should've applied airbnb autofix
   const main = await read('src/main.js')
   expect(main).toMatch(';')
