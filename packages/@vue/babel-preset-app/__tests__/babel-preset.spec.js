@@ -31,7 +31,7 @@ test('polyfill detection', () => {
   // usage-based detection
   expect(code).not.toMatch('core-js/modules/es.map')
 
-  ;({ code } = babel.transformSync(`
+  ; ({ code } = babel.transformSync(`
     const a = new Map()
   `.trim(), {
     babelrc: false,
@@ -78,7 +78,7 @@ test('modern mode always skips unnecessary polyfills', () => {
   // globalThis is not supported until safari 12.1
   expect(code).toMatch('es.global-this')
 
-  ;({ code } = babel.transformSync(`
+  ; ({ code } = babel.transformSync(`
     const a = new Map()
   `.trim(), {
     babelrc: false,
@@ -226,4 +226,48 @@ test('should not inject excluded polyfills', () => {
   })
 
   expect(code).not.toMatch('es.promise')
+})
+
+test('proposal-class-properties', () => {
+  const { code } = babel.transformSync(`
+  class Bork {
+    static a = "foo";
+    static b;
+
+    x = "bar";
+    y;
+  }
+`.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      loose: false
+    }]],
+    filename: 'test-entry-file.js'
+  })
+  expect(code).toMatch(`_defineProperty(this, "x", "bar");`)
+  expect(code).toMatch(`_defineProperty(this, "y", void 0);`)
+  expect(code).toMatch(`_defineProperty(Bork, "a", "foo");`)
+  expect(code).toMatch(`_defineProperty(Bork, "b", void 0);`)
+})
+
+test('proposal-class-properties loose mode ', () => {
+  const { code } = babel.transformSync(`
+  class Bork {
+    static a = "foo";
+    static b;
+
+    x = "bar";
+    y;
+  }
+`.trim(), {
+    babelrc: false,
+    presets: [[preset, {
+      loose: true
+    }]],
+    filename: 'test-entry-file.js'
+  })
+  expect(code).toMatch(`this.x = "bar"`)
+  expect(code).toMatch(`this.y = void 0`)
+  expect(code).toMatch(`Bork.a = "foo"`)
+  expect(code).toMatch(`Bork.b = void 0`)
 })

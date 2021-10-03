@@ -237,12 +237,10 @@ module.exports = (context, options = {}) => {
   // Babel 7 is removing stage presets altogether because people are using
   // too many unstable proposals. Let's be conservative in the defaults here.
   plugins.push(
-    require('@babel/plugin-syntax-dynamic-import'),
     [require('@babel/plugin-proposal-decorators'), {
       decoratorsBeforeExport,
       legacy: decoratorsLegacy !== false
-    }],
-    [require('@babel/plugin-proposal-class-properties'), { loose }]
+    }]
   )
 
   // transform runtime, but only for helpers
