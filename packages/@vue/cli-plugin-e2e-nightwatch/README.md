@@ -130,7 +130,7 @@ Since `v4`, the Selenium standalone server is not included anymore in this plugi
 
 It is still possible to use the Selenium server, by following these steps:
 
-__1.__ Install `selenium-server` NPM package:
+__1.__ Install `selenium-server` npm package:
 
   ```sh
   $ npm install selenium-server --save-dev

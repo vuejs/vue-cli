@@ -76,7 +76,7 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
   }
 }
 
-// In PNPM v4, due to their implementation of the module resolution mechanism,
+// In pnpm v4, due to their implementation of the module resolution mechanism,
 // put require('../lint') in the callback would raise a "Module not found" error,
 // But we cannot cache the file outside the callback,
 // because the node_module layout may change after the "intall additional dependencies"

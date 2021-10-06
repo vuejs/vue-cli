@@ -484,16 +484,16 @@ module.exports = class Creator extends EventEmitter {
 
       if (hasPnpm3OrLater()) {
         packageManagerChoices.push({
-          name: 'Use PNPM',
+          name: 'Use pnpm',
           value: 'pnpm',
-          short: 'PNPM'
+          short: 'pnpm'
         })
       }
 
       packageManagerChoices.push({
-        name: 'Use NPM',
+        name: 'Use npm',
         value: 'npm',
-        short: 'NPM'
+        short: 'npm'
       })
 
       outroPrompts.push({
