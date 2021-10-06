@@ -154,8 +154,6 @@ npx vue-cli-service build --skip-plugins @vue/cli-plugin-pwa
 
 ## Caching and Parallelization
 
-- `cache-loader` is enabled for Vue/Babel/TypeScript compilations by default. Files are cached inside `node_modules/.cache` - if running into compilation issues, always try deleting the cache directory first.
-
 - `thread-loader` will be enabled for Babel/TypeScript transpilation when the machine has more than 1 CPU cores.
 
 ## Git Hooks

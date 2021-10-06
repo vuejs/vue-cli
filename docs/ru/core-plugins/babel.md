@@ -18,10 +18,6 @@ module.exports = {
 }
 ```
 
-## Кэширование
-
-[cache-loader](https://github.com/webpack-contrib/cache-loader) используется по умолчанию, кэш хранится в `<projectRoot>/node_modules/.cache/babel-loader`.
-
 ## Параллелизация
 
 [thread-loader](https://github.com/webpack-contrib/thread-loader) используется по умолчанию, если машина имеет более 1 ядра CPU. Это можно отключить указав `parallel: false` в файле `vue.config.js`.
@@ -38,4 +34,3 @@ vue add babel
 
 - `config.rule('js')`
 - `config.rule('js').use('babel-loader')`
-- `config.rule('js').use('cache-loader')`

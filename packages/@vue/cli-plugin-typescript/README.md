@@ -12,10 +12,6 @@ Since `3.0.0-rc.6`, `typescript` is now a peer dependency of this package, so yo
 
 This plugin can be used alongside `@vue/cli-plugin-babel`. When used with Babel, this plugin will output ES2015 and delegate the rest to Babel for auto polyfill based on browser targets.
 
-## Caching
-
-[cache-loader](https://github.com/webpack-contrib/cache-loader) is enabled by default and cache is stored in `<projectRoot>/node_modules/.cache/ts-loader`.
-
 ## Parallelization
 
 [thread-loader](https://github.com/webpack-contrib/thread-loader) is enabled by default when the machine has more than 1 CPU cores. This can be turned off by setting `parallel: false` in `vue.config.js`.
@@ -33,5 +29,4 @@ vue add typescript
 - `config.rule('ts')`
 - `config.rule('ts').use('ts-loader')`
 - `config.rule('ts').use('babel-loader')` (when used alongside `@vue/cli-plugin-babel`)
-- `config.rule('ts').use('cache-loader')`
 - `config.plugin('fork-ts-checker')`
