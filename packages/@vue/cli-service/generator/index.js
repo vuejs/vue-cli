@@ -52,7 +52,7 @@ module.exports = (api, options) => {
         'less-loader': '^8.0.0'
       },
       stylus: {
-        'stylus': '^0.54.8',
+        'stylus': '^0.55.0',
         'stylus-loader': '^6.1.0'
       }
     }

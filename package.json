@@ -42,7 +42,7 @@
     "@vuepress/theme-vue": "^1.8.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^27.0.6",
-    "chromedriver": "^92.0.0",
+    "chromedriver": "^94.0.0",
     "debug": "^4.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-graphql": "^4.0.0",
@@ -51,7 +51,6 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.6.0",
-    "execa": "^1.0.0",
     "geckodriver": "^2.0.1",
     "globby": "^11.0.2",
     "graphql": "^15.5.0",
@@ -79,5 +78,6 @@
     "puppeteer": "1.11.0",
     "vue-template-compiler": "^2.6.14",
     "vue-server-renderer": "^2.6.14"
-  }
+  },
+  "packageManager": "yarn@1.22.11"
 }

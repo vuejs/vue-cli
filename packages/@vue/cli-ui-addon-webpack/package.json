@@ -30,7 +30,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.6.0",
-    "stylus": "^0.54.7",
+    "stylus": "^0.55.0",
     "stylus-loader": "^6.1.0",
     "vue-progress-path": "^0.0.2",
     "vue-template-compiler": "^2.6.14",
