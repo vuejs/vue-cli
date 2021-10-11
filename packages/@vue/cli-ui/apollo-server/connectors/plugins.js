@@ -648,7 +648,7 @@ function serveFile ({ pluginId, projectId = null, file }, res) {
   }
 
   res.status(404)
-  res.send(`Addon ${pluginId} not found in loaded addons. Try opening a vue-cli project first?`)
+  res.send('Addon not found in loaded addons. Try opening a vue-cli project first?')
 }
 
 function serve (req, res) {
