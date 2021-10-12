@@ -286,6 +286,12 @@ module.exports = (api, options) => {
         console.log()
         console.log(`  App running at:`)
         console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
+        
+        console.log(chalk.red.bold(`  This is a simple server for use in testing or debugging Vue CLI applications locally.`));
+        console.log(chalk.white.bgRed.bold(`  Don't use this in production!`));
+        console.log();
+        console.log(chalk.white(`  https://cli.vuejs.org/guide/deployment.html#general-guidelines`));
+
         if (!isInContainer) {
           console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
         } else {
