@@ -1,5 +1,5 @@
 const path = require('path')
-const execa = require('execa')
+const { execa } = require('@vue/cli-shared-utils')
 
 const CLI_PATH = path.resolve(__dirname, '..', 'bin', 'vue.js')
 

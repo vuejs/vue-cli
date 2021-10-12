@@ -317,6 +317,6 @@ foo=42
   expect(await read('src/main.js')).toMatch(';')
 
   const resultsContents = JSON.parse(await read(resultsFile))
-  const resultForMain = resultsContents.find(({ filePath }) => filePath.endsWith('src/main.js'))
+  const resultForMain = resultsContents.find(({ filePath }) => filePath.endsWith(path.join('src', 'main.js')))
   expect(resultForMain.messages.length).toBe(0)
 })

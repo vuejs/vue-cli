@@ -1,4 +1,21 @@
 
+## 5.0.0-beta.5 (2021-10-10)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-eslint`, `@vue/cli-service`
+  * [#6714](https://github.com/vuejs/vue-cli/pull/6714) feat(cli-plugin-eslint): use ESLint class instead of CLIEngine ([@ota-meshi](https://github.com/ota-meshi))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-e2e-webdriverio`
+  * [#6695](https://github.com/vuejs/vue-cli/pull/6695) refactor(webdriverio)!: don't include sync API support by default ([@sodatea](https://github.com/sodatea))
+
+#### Committers: 3
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Yosuke Ota ([@ota-meshi](https://github.com/ota-meshi))
+- [@zj9495](https://github.com/zj9495)
+
+
+
 ## 5.0.0-beta.4 (2021-09-15)
 
 #### :rocket: New Features
