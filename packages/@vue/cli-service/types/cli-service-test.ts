@@ -13,7 +13,7 @@ const servicePlugin: ServicePlugin = (api, options) => {
       description: 'lint and fix source files',
       usage: 'vue-cli-service lint [options] [...files]',
       options: {
-        '--format [formatter]': 'specify formatter (default: codeframe)'
+        '--format [formatter]': 'specify formatter (default: stylish)'
       },
       details: 'For more options, see https://eslint.org/docs/user-guide/command-line-interface#options'
     },

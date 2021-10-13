@@ -227,8 +227,8 @@ test('should persist cache', async () => {
   expect(has('node_modules/.cache/eslint/cache.json')).toBe(true)
 })
 
-test.skip(`should use formatter 'codeframe'`, async () => {
-  const project = await create('eslint-formatter-codeframe', {
+test(`should use formatter 'stylish'`, async () => {
+  const project = await create('eslint-formatter-stylish', {
     plugins: {
       '@vue/cli-plugin-babel': {},
       '@vue/cli-plugin-eslint': {
@@ -259,9 +259,13 @@ test.skip(`should use formatter 'codeframe'`, async () => {
       isFirstMsg = false
     } else if (data.match(/semi/)) {
       // check the format of output
-      // https://eslint.org/docs/user-guide/formatters/#codeframe
+      // https://eslint.org/docs/user-guide/formatters/#stylish
+      // it looks like:
+      // ERROR in .../packages/test/eslint-formatter-stylish/src/main.js
+      // 1:22  error  Missing semicolon  semi
+      expect(data).toMatch(`src${path.sep}main.js`)
       expect(data).toMatch(`error`)
-      expect(data).toMatch(`Missing semicolon (semi) at src${path.sep}main.js`)
+      expect(data).toMatch(`Missing semicolon  semi`)
 
       server.stdin.write('close')
       done()
@@ -282,7 +286,7 @@ test(`should work with eslint v8`, async () => {
     }
   })
   const { read, write, run } = project
-  await run('npm add -D eslint@^8.0.0-0 eslint-formatter-codeframe')
+  await run('npm add -D eslint@^8.0.0-0')
   // should've applied airbnb autofix
   const main = await read('src/main.js')
   expect(main).toMatch(';')

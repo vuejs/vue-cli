@@ -52,7 +52,7 @@ module.exports = (api, options) => {
           resolveModule('eslint/package.json', cwd) ||
             resolveModule('eslint/package.json', __dirname)
         ),
-        formatter: 'codeframe'
+        formatter: 'stylish'
       }
       webpackConfig.plugin('eslint').use(eslintWebpackPlugin, [eslintWebpackPluginOptions])
     })
@@ -64,7 +64,7 @@ module.exports = (api, options) => {
       description: 'lint and fix source files',
       usage: 'vue-cli-service lint [options] [...files]',
       options: {
-        '--format [formatter]': 'specify formatter (default: codeframe)',
+        '--format [formatter]': 'specify formatter (default: stylish)',
         '--no-fix': 'do not fix errors or warnings',
         '--no-fix-warnings': 'fix errors, but do not fix warnings',
         '--max-errors [limit]':
