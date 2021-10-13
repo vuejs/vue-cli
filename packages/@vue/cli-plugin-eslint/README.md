@@ -11,7 +11,7 @@
 
   Options:
 
-    --format [formatter] specify formatter (default: codeframe)
+    --format [formatter] specify formatter (default: stylish)
     --no-fix             do not fix errors
     --max-errors         specify number of errors to make build failed (default: 0)
     --max-warnings       specify number of warnings to make build failed (default: Infinity)
