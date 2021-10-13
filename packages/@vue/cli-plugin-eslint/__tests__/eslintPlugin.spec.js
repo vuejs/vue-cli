@@ -300,3 +300,88 @@ foo=42
   const resultForMain = resultsContents.find(({ filePath }) => filePath.endsWith(path.join('src', 'main.js')))
   expect(resultForMain.messages.length).toBe(0)
 })
+
+test('should work with prettier config', async () => {
+  const project = await create('eslint-prettier-config', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'prettier',
+        lintOn: 'save'
+      }
+    }
+  })
+
+  let done
+  const donePromise = new Promise(resolve => {
+    done = resolve
+  })
+  const { run } = project
+  const server = run('vue-cli-service serve')
+
+  server.stdout.on('data', data => {
+    data = data.toString()
+    if (data.match(/Compiled successfully/)) {
+      server.stdin.write('close')
+      done()
+    }
+  })
+
+  await donePromise
+})
+
+test('should work with standard config', async () => {
+  const project = await create('eslint-standard-config', {
+    plugins: {
+      '@vue/cli-plugin-eslint': {
+        config: 'standard',
+        lintOn: 'save'
+      }
+    }
+  })
+
+  let done
+  const donePromise = new Promise(resolve => {
+    done = resolve
+  })
+  const { run } = project
+  const server = run('vue-cli-service serve')
+
+  server.stdout.on('data', data => {
+    data = data.toString()
+    if (data.match(/Compiled successfully/)) {
+      server.stdin.write('close')
+      done()
+    }
+  })
+
+  await donePromise
+})
+
+test('should work with typescript config', async () => {
+  const project = await create('eslint-typescript-config', {
+    plugins: {
+      '@vue/cli-plugin-typescript': {},
+      '@vue/cli-plugin-eslint': {
+        config: 'typescript',
+        lintOn: 'save'
+      }
+    }
+  })
+
+  let done
+  const donePromise = new Promise(resolve => {
+    done = resolve
+  })
+  const { run } = project
+  const server = run('vue-cli-service serve')
+
+  server.stdout.on('data', data => {
+    data = data.toString()
+    if (data.match(/Compiled successfully/)) {
+      server.stdin.write('close')
+      done()
+    }
+  })
+
+  await donePromise
+})

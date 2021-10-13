@@ -16,8 +16,9 @@ const DEPS_MAP = {
   standard: {
     '@vue/eslint-config-standard': '^6.1.0',
     'eslint-plugin-import': '^2.25.3',
+    // https://github.com/mysticatea/eslint-plugin-node/issues/294 to track eslint v8 support
     'eslint-plugin-node': '^11.1.0',
-    'eslint-plugin-promise': '^5.1.0'
+    'eslint-plugin-promise': '^6.0.0'
   },
   typescript: {
     '@vue/eslint-config-typescript': '^9.1.0',
@@ -37,8 +38,8 @@ exports.getDeps = function (api, preset, rootOptions = {}) {
 
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     Object.assign(deps, {
-      '@babel/eslint-parser': '^7.12.16',
-      '@babel/core': '^7.12.16'
+      '@babel/eslint-parser': '^7.16.0',
+      '@babel/core': '^7.16.0'
     })
   }
 
