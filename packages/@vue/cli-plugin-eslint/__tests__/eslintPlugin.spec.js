@@ -257,7 +257,9 @@ test(`should use formatter 'stylish'`, async () => {
     if (isFirstMsg) {
       expect(data).toMatch(/Failed to compile with \d error/)
       isFirstMsg = false
-    } else if (data.match(/semi/)) {
+    }
+
+    if (data.match(/semi/)) {
       // check the format of output
       // https://eslint.org/docs/user-guide/formatters/#stylish
       // it looks like:
