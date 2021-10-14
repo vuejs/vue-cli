@@ -1,4 +1,15 @@
 
+## 5.0.0-beta.6 (2021-10-14)
+
+#### :rocket: New Features
+* `@vue/cli-plugin-eslint`, `@vue/cli-service`
+  * [#6748](https://github.com/vuejs/vue-cli/pull/6748) feat: switch to stylish formatter for eslint ([@cexbrayat](https://github.com/cexbrayat))
+
+#### Committers: 1
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+
+
+
 ## 5.0.0-beta.5 (2021-10-10)
 
 #### :rocket: New Features
