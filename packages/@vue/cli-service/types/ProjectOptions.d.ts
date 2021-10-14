@@ -164,9 +164,10 @@ interface ProjectOptions {
    */
   terser?: {
     /**
-     * 'default' use [terserMinify](https://github.com/webpack-contrib/terser-webpack-plugin#minify), 'esbuild' is [esbuildMinify](https://github.com/webpack-contrib/terser-webpack-plugin#esbuild), and so on
+     * Supported minify: [default(terser)](https://github.com/webpack-contrib/terser-webpack-plugin#minify), [esbuild](https://github.com/webpack-contrib/terser-webpack-plugin#esbuild), [swc](https://github.com/webpack-contrib/terser-webpack-plugin#swc), [uglifyJs](https://github.com/webpack-contrib/terser-webpack-plugin#uglify-js). currently we do not allow custom minify function
      *
-     * currently we do not allow custom minify function
+     * In the non-default case, you should install the corresponding package (eg. `npm install esbuild`)
+     *
      */
     minify: 'default' | 'esbuild' | 'swc' | 'uglifyJs';
     /**
