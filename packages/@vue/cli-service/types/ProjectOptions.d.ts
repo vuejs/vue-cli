@@ -1,6 +1,12 @@
 import ChainableWebpackConfig = require('webpack-chain')
 import { Configuration as WebpackOptions } from 'webpack'
 
+type InferDefaultType<T> = T extends infer U
+  ? U
+  : {
+      [key: string]: any
+    }
+
 type PageEntry = string | string[];
 
 interface PageConfig {
@@ -152,6 +158,29 @@ interface ProjectOptions {
    * Pass options to the [PWA Plugin](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa)
    */
   pwa?: object;
+
+  /**
+   * set terser-webpack-plugin minify and terserOptions
+   */
+  terser?: {
+    /**
+     * 'default' use [terserMinify](https://github.com/webpack-contrib/terser-webpack-plugin#minify), 'esbuild' is [esbuildMinify](https://github.com/webpack-contrib/terser-webpack-plugin#esbuild), and so on
+     * currently we do not allow custom minify function
+     */
+    minify: 'default' | 'esbuild' | 'swc' | 'uglifyJs';
+    /**
+     * `terserOptions` options will be passed to minify
+     *
+     * [All options for `terser`](https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions)
+     *
+     * [All options for `esbuild`](https://esbuild.github.io/api/#minify)
+     *
+     * [All options for `swc`](https://swc.rs/docs/config-js-minify)
+     *
+     * [All options for `uglifyJs`](https://github.com/mishoo/UglifyJS#minify-options)
+     */
+    terserOptions?: InferDefaultType<import("terser").MinifyOptions>;
+  };
 
   /**
    * This is an object that doesn't go through any schema validation, so it can be used to pass arbitrary options to 3rd party plugins
