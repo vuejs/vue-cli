@@ -90,7 +90,8 @@ const swcMinify = (options) => ({
 // Link to options - https://github.com/mishoo/UglifyJS#minify-options
 const uglifyJsMinify = (options) => ({
   minify: TerserPlugin.uglifyJsMinify,
-  terserOptions: genTerserOptions({}, options)
+  terserOptions: genTerserOptions({}, options),
+  parallel: options.parallel
 })
 
 // Currently we do not allow custom minify function
