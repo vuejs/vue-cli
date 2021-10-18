@@ -1,11 +1,7 @@
 import ChainableWebpackConfig = require('webpack-chain')
 import { Configuration as WebpackOptions } from 'webpack'
 
-type InferDefaultType<T> = T extends infer U
-  ? U
-  : {
-      [key: string]: any
-    }
+type PredefinedOptions<T> = T & { [key: string]: any }
 
 type PageEntry = string | string[];
 
@@ -181,7 +177,7 @@ interface ProjectOptions {
      *
      * [All options for `uglifyJs`](https://github.com/mishoo/UglifyJS#minify-options)
      */
-    terserOptions?: InferDefaultType<import("terser").MinifyOptions>;
+    terserOptions?: PredefinedOptions<import("terser").MinifyOptions>;
   };
 
   /**
