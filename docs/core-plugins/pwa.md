@@ -49,6 +49,12 @@ file, or the `"vue"` field in `package.json`.
 
   - Default: `'#000000'`
 
+- **pwa.maskIconColor**
+
+  - Default: `undefined`
+
+    For compatibility uses `pwa.themeColor` if value not passed.
+
 - **pwa.appleMobileWebAppCapable**
 
   - Default: `'no'`
