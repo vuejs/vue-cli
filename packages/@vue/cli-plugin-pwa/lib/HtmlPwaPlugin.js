@@ -73,6 +73,7 @@ module.exports = class HtmlPwaPlugin {
           name,
           themeColor,
           msTileColor,
+          maskIconColor,
           appleMobileWebAppCapable,
           appleMobileWebAppStatusBarStyle,
           assetsVersion,
@@ -158,7 +159,7 @@ module.exports = class HtmlPwaPlugin {
           data.headTags.push(makeTag('link', {
             rel: 'mask-icon',
             href: getTagHref(publicPath, iconPaths.maskIcon, assetsVersionStr),
-            color: themeColor
+            color: maskIconColor || themeColor
           }))
         }
 
