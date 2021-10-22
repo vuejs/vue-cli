@@ -93,13 +93,31 @@ The `css.requireModuleExtension` option is removed. If you do need to strip the 
 
 No longer supports generating project with `node-sass`. It has been [deprecated](https://sass-lang.com/blog/libsass-is-deprecated#how-do-i-migrate) for a while. Please use the `sass` package instead.
 
+#### Asset Modules
+
+`url-loader` and `file-loader` are removed in favor of [Asset Modules](https://webpack.js.org/guides/asset-modules/). If you want to adjust the size limit of inline image assets, now you need to set the [`Rule.parser.dataUrlCondition.maxSize`](https://webpack.js.org/configuration/module/#ruleparserdataurlcondition) option:
+
+``` js
+// vue.config.js
+module.exports = {
+  chainWebpack: config => {
+    config.module
+      .rule('images')
+        .set('parser', {
+          dataUrlCondition: {
+            maxSize: 4 * 1024 // 4KiB
+          }
+        })
+  }
+}
+```
+
 #### Underlying Loaders and Plugins
 
 * `html-webpack-plugin` is upgraded from v3 to v5. More details are available in the [release announcement of `html-webpack-plugin` v4](https://dev.to/jantimon/html-webpack-plugin-4-has-been-released-125d) and the [full changelog](https://github.com/jantimon/html-webpack-plugin/blob/master/CHANGELOG.md).
 * `sass-loader` v7 support is dropped. See the v8 breaking changes at its [changelog](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md#800-2019-08-29).
 * `postcss-loader` is upgraded from v3 to v5. Most notably, `PostCSS` options (`plugin` / `syntax` / `parser` / `stringifier`) are moved into the `postcssOptions` field. More details available at the [changelog](https://github.com/webpack-contrib/postcss-loader/blob/master/CHANGELOG.md#400-2020-09-07).
 * `copy-webpack-plugin` is upgraded from v5 to v8. If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 changelog](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md).
-* `file-loader` is upgraded from v4 to v6, and `url-loader` from v2 to v4. The `esModule` option is now turned on by default for non-Vue-2 projects. Full changelog available at [`file-loader` changelog](https://github.com/webpack-contrib/file-loader/blob/master/CHANGELOG.md) and [`url-loader` changelog](https://github.com/webpack-contrib/url-loader/blob/master/CHANGELOG.md).
 * `terser-webpack-plugin` is upgraded from v2 to v5, using terser 5 and some there are some changes in the options format. See full details in its [changelog](https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md).
 * When creating new projects, the default `less-loader` is updated from [v5 to v8](https://github.com/webpack-contrib/less-loader/blob/master/CHANGELOG.md); `less` from [v3 to v4](https://github.com/less/less.js/pull/3573); `sass-loader` from [v8 to v11](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md); `stylus-loader` from [v3 to v5](https://github.com/webpack-contrib/stylus-loader/blob/master/CHANGELOG.md).
 
