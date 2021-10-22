@@ -13,7 +13,7 @@ module.exports = (api) => {
 
     if (!allDeps['vue-jest']) {
       // Likely a Vue 2 project, and uses the builtin preset.
-      newDevDeps['@vue/vue3-jest'] = '^27.0.0.alpha.1'
+      newDevDeps['@vue/vue3-jest'] = '^27.0.0-alpha.1'
     }
 
     if (allDeps['@vue/cli-plugin-typescript'] && !allDeps['ts-jest']) {
