@@ -96,10 +96,10 @@ const uglifyJsMinify = (options) => ({
 
 // Currently we do not allow custom minify function
 const getMinify = (options) => {
-  const { minify = 'default' } = options.terser || {}
+  const { minify = 'terser' } = options.terser || {}
 
   const minifyMap = {
-    default: terserMinify,
+    terser: terserMinify,
     esbuild: esbuildMinify,
     swc: swcMinify,
     uglifyJs: uglifyJsMinify

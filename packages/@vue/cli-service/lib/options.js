@@ -61,7 +61,7 @@ const schema = createSchema(joi => joi.object({
 
   // terser
   terser: joi.object({
-    minify: joi.string().valid('default', 'esbuild', 'swc', 'uglifyJs'),
+    minify: joi.string().valid('terser', 'esbuild', 'swc', 'uglifyJs'),
     terserOptions: joi.object()
   }),
 
