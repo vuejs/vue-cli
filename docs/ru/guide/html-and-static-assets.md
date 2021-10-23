@@ -129,9 +129,9 @@ module.exports = {
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-Внутри используется `file-loader` для определения конечного расположения файла с хэшем версии и правильный путь относительно корня, а также `url-loader` для инлайн-встраивания ресурсов, чей размер меньше 4 КБайт, чтобы уменьшить количество HTTP-запросов к серверу.
+Внутри используется `file-loader` для определения конечного расположения файла с хэшем версии и правильный путь относительно корня, а также `url-loader` для инлайн-встраивания ресурсов, чей размер меньше 8 КБайт, чтобы уменьшить количество HTTP-запросов к серверу.
 
-Изменить размер можно через [chainWebpack](../config/#chainwebpack). Например, чтобы установить лимит в 10 КБайт:
+Изменить размер можно через [chainWebpack](../config/#chainwebpack). Например, чтобы установить лимит в 4 КБайт:
 
 ```js
 // vue.config.js
@@ -139,9 +139,11 @@ module.exports = {
   chainWebpack: config => {
     config.module
       .rule('images')
-        .use('url-loader')
-          .loader('url-loader')
-          .tap(options => Object.assign(options, { limit: 10240 }))
+        .set('parser', {
+          dataUrlCondition: {
+            maxSize: 4 * 1024 // 4KiB
+          }
+        })
   }
 }
 ```
