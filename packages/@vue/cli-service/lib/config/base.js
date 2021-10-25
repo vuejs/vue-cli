@@ -10,6 +10,9 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
 
+    // https://github.com/webpack/webpack/issues/14532#issuecomment-947525539
+    webpackConfig.output.set('hashFunction', 'xxhash64')
+
     // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
     webpackConfig.module
       .rule('esm')
