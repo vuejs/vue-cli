@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-e2e-nightwatch",
-  "version": "5.0.0-beta.6",
+  "version": "5.0.0-beta.7",
   "description": "e2e-nightwatch plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^5.0.0-beta.6",
+    "@vue/cli-shared-utils": "^5.0.0-beta.7",
     "deepmerge": "^4.2.2",
     "nightwatch": "^1.7.8"
   },

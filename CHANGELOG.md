@@ -1,4 +1,29 @@
 
+## 5.0.0-beta.7 (2021-10-26)
+
+#### :rocket: New Features
+* `@vue/cli-service`
+  * [#6771](https://github.com/vuejs/vue-cli/pull/6771) feat!: remove url-loader and file-loader in favor of asset modules ([@sodatea](https://github.com/sodatea))
+  * [#6752](https://github.com/vuejs/vue-cli/pull/6752) Add a top-level `terser` option to allow users to customize the minifier ([@screetBloom](https://github.com/screetBloom))
+
+#### :boom: Breaking Changes
+* `@vue/cli-service`
+  * [#6781](https://github.com/vuejs/vue-cli/pull/6781) fix!: set hashFunction to `xxhash64` to fix Node 17 compatibility ([@sodatea](https://github.com/sodatea))
+  * [#6771](https://github.com/vuejs/vue-cli/pull/6771) feat!: remove url-loader and file-loader in favor of asset modules ([@sodatea](https://github.com/sodatea))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6781](https://github.com/vuejs/vue-cli/pull/6781) fix!: set hashFunction to `xxhash64` to fix Node 17 compatibility ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-unit-jest`
+  * [#6775](https://github.com/vuejs/vue-cli/pull/6775) fix(migrator): fix invalid semver ([@stefanlivens](https://github.com/stefanlivens))
+
+#### Committers: 3
+- FM ([@screetBloom](https://github.com/screetBloom))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- [@stefanlivens](https://github.com/stefanlivens)
+
+
+
 ## 5.0.0-beta.6 (2021-10-14)
 
 #### :rocket: New Features
