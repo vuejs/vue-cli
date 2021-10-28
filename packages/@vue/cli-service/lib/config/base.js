@@ -66,6 +66,14 @@ module.exports = (api, options) => {
     webpackConfig.module
       .noParse(/^(vue|vue-router|vuex|vuex-router-sync)$/)
 
+    webpackConfig.module
+      .rule('mjs')
+        .test(/\.mjs$/)
+        .include
+          .add(/node_modules/)
+          .end()
+        .type('javascript/auto')
+
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
