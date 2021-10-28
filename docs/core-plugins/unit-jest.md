@@ -60,7 +60,7 @@ transformIgnorePatterns: ['/node_modules/']
 We have to add exceptions to this pattern with a RegExp negative lookahead:
 
 ```javascript
-transformIgnorePatterns: ['/node_modules/(?!name-of-lib-o-transform)']
+transformIgnorePatterns: ['/node_modules/(?!name-of-lib-to-transform)']
 ```
 
 To exclude multiple libraries:
