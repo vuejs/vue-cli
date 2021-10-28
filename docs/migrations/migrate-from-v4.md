@@ -87,7 +87,7 @@ Say we are building a simple single-page app with the default setup, here are so
 
 The `css.requireModuleExtension` option is removed. If you do need to strip the `.module` part in CSS Module file names, please refer to [Working with CSS > CSS Modules](../guide/css.md#css-modules) for more guidance.
 
-`css-loader` is upgraded from v3 to v5, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
+`css-loader` is upgraded from v3 to v6, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
 
 #### Sass/SCSS
 
