@@ -129,7 +129,7 @@ The [`transpileDependencies` option](../config/#transpiledependencies) now accep
 ### ESLint Plugin
 
 * `eslint-loader` is replaced by [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin), dropping support for ESLint <= 6.
-* New projects are now generated with `eslint-plugin-vue` v7, see its [release notes](https://github.com/vuejs/eslint-plugin-vue/releases/tag/v7.0.0) for breaking changes.
+* New projects are now generated with `eslint-plugin-vue` v8, see the  release notes ([v7](https://github.com/vuejs/eslint-plugin-vue/releases/tag/v7.0.0), [v8](https://github.com/vuejs/eslint-plugin-vue/releases/tag/v8.0.0)) for breaking changes.
 * `@vue/eslint-config-prettier` is deprecated. See <https://github.com/vuejs/eslint-config-prettier> for the migration guide.
 
 ### PWA Plugin
