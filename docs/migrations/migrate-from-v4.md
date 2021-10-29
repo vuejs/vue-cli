@@ -87,7 +87,7 @@ Say we are building a simple single-page app with the default setup, here are so
 
 The `css.requireModuleExtension` option is removed. If you do need to strip the `.module` part in CSS Module file names, please refer to [Working with CSS > CSS Modules](../guide/css.md#css-modules) for more guidance.
 
-`css-loader` is upgraded from v3 to v5, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
+`css-loader` is upgraded from v3 to v6, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
 
 #### Sass/SCSS
 
@@ -120,6 +120,7 @@ module.exports = {
 * `copy-webpack-plugin` is upgraded from v5 to v8. If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 changelog](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md).
 * `terser-webpack-plugin` is upgraded from v2 to v5, using terser 5 and some there are some changes in the options format. See full details in its [changelog](https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md).
 * When creating new projects, the default `less-loader` is updated from [v5 to v8](https://github.com/webpack-contrib/less-loader/blob/master/CHANGELOG.md); `less` from [v3 to v4](https://github.com/less/less.js/pull/3573); `sass-loader` from [v8 to v11](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md); `stylus-loader` from [v3 to v5](https://github.com/webpack-contrib/stylus-loader/blob/master/CHANGELOG.md).
+* `mini-css-extract-plugin` is upgraded from [v1 to v2](https://github.com/webpack-contrib/mini-css-extract-plugin/blob/master/CHANGELOG.md).
 
 ### Babel Plugin
 
