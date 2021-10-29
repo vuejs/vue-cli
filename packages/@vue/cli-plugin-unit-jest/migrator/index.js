@@ -1,5 +1,7 @@
 /** @param {import('@vue/cli/lib/MigratorAPI')} api MigratorAPI */
-module.exports = (api) => {
+module.exports = (api, options, rootOptions) => {
+  const isVue3 = rootOptions && rootOptions.vueVersion === '3'
+
   api.extendPackage(pkg => {
     const newDevDeps = {
       'jest': '^27.1.0'
@@ -12,8 +14,12 @@ module.exports = (api) => {
     }
 
     if (!allDeps['vue-jest']) {
-      // Likely a Vue 2 project, and uses the builtin preset.
-      newDevDeps['@vue/vue3-jest'] = '^27.0.0-alpha.1'
+      // Likely from @vue/cli@4
+      if (isVue3) {
+        newDevDeps['@vue/vue3-jest'] = '^27.0.0-alpha.3'
+      } else {
+        newDevDeps['@vue/vue2-jest'] = '^27.0.0-alpha.3'
+      }
     }
 
     if (allDeps['@vue/cli-plugin-typescript'] && !allDeps['ts-jest']) {
