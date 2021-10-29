@@ -1,6 +1,5 @@
 /** @param {import('@vue/cli/lib/MigratorAPI')} api MigratorAPI */
 module.exports = (api, options, rootOptions) => {
-
   const isVue3 = rootOptions && rootOptions.vueVersion === '3'
 
   api.extendPackage(pkg => {
