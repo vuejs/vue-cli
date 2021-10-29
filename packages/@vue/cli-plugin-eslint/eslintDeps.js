@@ -8,9 +8,9 @@ const DEPS_MAP = {
     'eslint-plugin-import': '^2.20.2'
   },
   prettier: {
-    '@vue/eslint-config-prettier': '^6.0.0',
-    'eslint-plugin-prettier': '^3.3.1',
-    prettier: '^2.2.1'
+    'eslint-config-prettier': '^8.3.0',
+    'eslint-plugin-prettier': '^4.0.0',
+    prettier: '^2.4.1'
   },
   standard: {
     '@vue/eslint-config-standard': '^6.1.0',

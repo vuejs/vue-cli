@@ -85,6 +85,7 @@ module.exports = async (api) => {
   api.exitLog(`ESLint upgraded from v${localESLintMajor}. to v7\n`)
 
   // TODO:
-  // transform `@vue/prettier` to `eslint:recommended` + `@vue/prettier`
+  // transform `@vue/prettier` to `eslint:recommended` + `plugin:prettier/recommended`
+  // remove `@vue/prettier/@typescript-eslint`
   // transform `@vue/typescript` to `@vue/typescript/recommended` and also fix prettier compatibility for it
 }
