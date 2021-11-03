@@ -285,7 +285,7 @@ test(`should work with eslint v8`, async () => {
     }
   })
   const { read, write, run } = project
-  await run('npm add -D eslint@8 --force')
+  await run('npm add -D eslint@8 --legacy-peer-deps')
   // should've applied airbnb autofix
   const main = await read('src/main.js')
   expect(main).toMatch(';')
