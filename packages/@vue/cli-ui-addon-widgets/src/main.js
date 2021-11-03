@@ -7,6 +7,7 @@ import VulnerabilityDetails from './components/VulnerabilityDetails.vue'
 import RunTask from './components/RunTask.vue'
 import News from './components/News.vue'
 
+/* eslint-disable vue/multi-word-component-names */
 ClientAddonApi.component('org.vue.widgets.components.welcome', Welcome)
 ClientAddonApi.component('org.vue.widgets.components.kill-port', KillPort)
 ClientAddonApi.component('org.vue.widgets.components.plugin-updates', PluginUpdates)
