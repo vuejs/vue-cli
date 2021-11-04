@@ -11,6 +11,7 @@ Some global configurations for `@vue/cli`, such as your preferred package manage
 You can also use the `vue config` command to inspect or modify the global CLI config.
 
 ## Target Browsers
+https://github.com/vercel/serve#api
 
 See the [Browser Compatibility](../guide/browser-compatibility.md#browserslist) section in guide.
 
