@@ -83,7 +83,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-vue": "^8.0.1",
+    "eslint-plugin-vue": "^8.0.3",
     "lint-staged": "^11.1.2",
     "lodash.debounce": "^4.0.8",
     "portal-vue": "^2.1.7",

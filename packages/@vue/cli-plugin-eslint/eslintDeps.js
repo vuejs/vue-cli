@@ -1,7 +1,7 @@
 const DEPS_MAP = {
   base: {
     eslint: '^7.20.0',
-    'eslint-plugin-vue': '^8.0.1'
+    'eslint-plugin-vue': '^8.0.3'
   },
   airbnb: {
     '@vue/eslint-config-airbnb': '^5.3.0',
@@ -19,7 +19,7 @@ const DEPS_MAP = {
     'eslint-plugin-promise': '^5.1.0'
   },
   typescript: {
-    '@vue/eslint-config-typescript': '^9.0.0',
+    '@vue/eslint-config-typescript': '^9.0.1',
     '@typescript-eslint/eslint-plugin': '^5.2.0',
     '@typescript-eslint/parser': '^5.2.0'
   }

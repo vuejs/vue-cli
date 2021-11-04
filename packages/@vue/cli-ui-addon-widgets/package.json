@@ -29,7 +29,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-vue": "^8.0.1",
+    "eslint-plugin-vue": "^8.0.3",
     "stylus": "^0.55.0",
     "stylus-loader": "^6.1.0",
     "vue-template-compiler": "^2.6.14"

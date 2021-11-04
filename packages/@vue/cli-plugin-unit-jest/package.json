@@ -32,18 +32,18 @@
     "jest": "^27.1.0",
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^2.0.0",
-    "jest-watch-typeahead": "^0.6.1"
+    "jest-watch-typeahead": "^1.0.0"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.1.3",
-    "@vue/vue2-jest": "^27.0.0-alpha.2",
-    "@vue/vue3-jest": "^27.0.0-alpha.1",
+    "@vue/vue2-jest": "^27.0.0-alpha.3",
+    "@vue/vue3-jest": "^27.0.0-alpha.3",
     "ts-jest": "^27.0.4"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0",
-    "@vue/vue2-jest": "^27.0.0-alpha.2",
-    "@vue/vue3-jest": "^27.0.0-alpha.1",
+    "@vue/vue2-jest": "^27.0.0-alpha.3",
+    "@vue/vue3-jest": "^27.0.0-alpha.3",
     "jest": "^27.1.0",
     "ts-jest": "^27.0.4"
   },
