@@ -19,7 +19,8 @@ module.exports = {
     'vue/html-self-closing': 'error',
     'vue/no-use-v-if-with-v-for': 'warn',
     'vue/no-unused-vars': 'warn',
-    'vue/return-in-computed-property': 'warn'
+    'vue/return-in-computed-property': 'warn',
+    'vue/multi-word-component-names': 'warn'
   },
 
   parserOptions: {

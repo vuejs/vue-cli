@@ -17,8 +17,8 @@ test('generate files', async () => {
   expect(files['src/main.ts']).toBeTruthy()
   expect(files['src/main.js']).toBeFalsy()
   expect(files['src/App.vue']).toMatch('<script lang="ts">')
-  // checks that the Home.vue file has not been created, even empty
-  expect(Object.prototype.hasOwnProperty.call(files, 'src/views/Home.vue')).toBeFalsy()
+  // checks that the HomeView.vue file has not been created, even empty
+  expect(Object.prototype.hasOwnProperty.call(files, 'src/views/HomeView.vue')).toBeFalsy()
 })
 
 test('classComponent', async () => {
@@ -92,7 +92,7 @@ test('use with router', async () => {
       options: {}
     }
   ])
-  expect(files['src/views/Home.vue']).toMatch('Welcome to Your Vue.js + TypeScript App')
+  expect(files['src/views/HomeView.vue']).toMatch('Welcome to Your Vue.js + TypeScript App')
 })
 
 test('tsconfig.json should be valid json', async () => {
