@@ -42,7 +42,7 @@
   "peerDependencies": {
     "@babel/core": "*",
     "core-js": "^3",
-    "vue": "^2 || ^3.0.0-0"
+    "vue": "^2 || ^3.2.13"
   },
   "peerDependenciesMeta": {
     "core-js": {

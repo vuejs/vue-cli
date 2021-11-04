@@ -7,10 +7,7 @@ module.exports = (api, options) => {
   if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
-        'vue': '^3.2.6'
-      },
-      devDependencies: {
-        '@vue/compiler-sfc': '^3.2.6'
+        'vue': '^3.2.13'
       }
     })
   } else {
