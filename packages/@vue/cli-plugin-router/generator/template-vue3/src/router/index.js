@@ -9,13 +9,13 @@ import { createRouter<%
     %>, RouteRecordRaw<%
   }
   %> } from 'vue-router'
-import Home from '../views/Home.vue'
+import HomeView from '../views/HomeView.vue'
 
 const routes<% if (hasTypeScript) { %>: Array<RouteRecordRaw><% } %> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: HomeView
   },
   {
     path: '/about',
@@ -24,10 +24,10 @@ const routes<% if (hasTypeScript) { %>: Array<RouteRecordRaw><% } %> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     <%_ if (doesCompile) { _%>
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
     <%_ } else { _%>
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/About.vue')
+      return import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
     }
     <%_ } _%>
   }
