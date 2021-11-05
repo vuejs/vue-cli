@@ -34,13 +34,12 @@ const transformJS = {
         }
       })
       return extendJSConfig(changedData, source)
+    } else if (filename === 'vue.config.js') {
+      return (
+        `const { defineConfig } = require('@vue/cli-service')\n` +
+        `module.exports = defineConfig(${stringifyJS(value, null, 2)})`
+      )
     } else {
-      if (filename === 'vue.config.js') {
-        return (
-          `const { defineConfig } = require('@vue/cli-service')\n` +
-          `module.exports = defineConfig(${stringifyJS(value, null, 2)})`
-        )
-      }
       return `module.exports = ${stringifyJS(value, null, 2)}`
     }
   }
