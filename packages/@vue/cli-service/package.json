@@ -82,14 +82,10 @@
     "whatwg-fetch": "^3.6.2"
   },
   "peerDependencies": {
-    "@vue/compiler-sfc": "^3.0.0-beta.14",
     "vue-template-compiler": "^2.0.0",
     "webpack-sources": "*"
   },
   "peerDependenciesMeta": {
-    "@vue/compiler-sfc": {
-      "optional": true
-    },
     "less-loader": {
       "optional": true
     },
