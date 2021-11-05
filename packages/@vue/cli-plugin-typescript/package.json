@@ -28,10 +28,10 @@
     "@vue/cli-shared-utils": "^5.0.0-beta.7",
     "babel-loader": "^8.2.2",
     "cache-loader": "^4.1.0",
-    "fork-ts-checker-webpack-plugin": "^6.1.0",
+    "fork-ts-checker-webpack-plugin": "^6.4.0",
     "globby": "^11.0.2",
     "thread-loader": "^3.0.0",
-    "ts-loader": "^8.0.17",
+    "ts-loader": "^9.2.5",
     "webpack": "^5.22.0",
     "yorkie": "^2.0.0"
   },
