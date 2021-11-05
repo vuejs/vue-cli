@@ -18,7 +18,7 @@ const transformJS = {
       return null
     }
   },
-  write: ({ value, existing, source }) => {
+  write: ({ value, existing, source, filename }) => {
     if (existing) {
       // We merge only the modified keys
       const changedData = {}
@@ -34,6 +34,11 @@ const transformJS = {
         }
       })
       return extendJSConfig(changedData, source)
+    } else if (filename === 'vue.config.js') {
+      return (
+        `const { defineConfig } = require('@vue/cli-service')\n` +
+        `module.exports = defineConfig(${stringifyJS(value, null, 2)})`
+      )
     } else {
       return `module.exports = ${stringifyJS(value, null, 2)}`
     }
