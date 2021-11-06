@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-typescript",
-  "version": "5.0.0-beta.7",
+  "version": "5.0.0-rc.0",
   "description": "typescript plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/core": "^7.12.16",
     "@types/webpack-env": "^1.15.2",
-    "@vue/cli-shared-utils": "^5.0.0-beta.7",
+    "@vue/cli-shared-utils": "^5.0.0-rc.0",
     "babel-loader": "^8.2.2",
     "cache-loader": "^4.1.0",
     "fork-ts-checker-webpack-plugin": "^6.4.0",
@@ -38,8 +38,8 @@
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0",
     "typescript": ">=2",
-    "vue-template-compiler": "^2.0.0",
-    "vue": "^2 || ^3.2.13"
+    "vue": "^2 || ^3.2.13",
+    "vue-template-compiler": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "vue-template-compiler": {
