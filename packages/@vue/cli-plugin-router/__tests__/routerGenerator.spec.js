@@ -13,7 +13,7 @@ test('base', async () => {
   expect(files['src/views/HomeView.vue']).toBeTruthy()
   expect(files['src/App.vue']).toMatch('<router-link to="/">Home</router-link>')
   expect(files['src/App.vue']).not.toMatch('<script>')
-  expect(files['src/App.vue']).toMatch('#nav a.router-link-exact-active')
+  expect(files['src/App.vue']).toMatch('nav a.router-link-exact-active')
 
   expect(pkg.dependencies).toHaveProperty('vue-router')
 })
@@ -33,7 +33,7 @@ test('history mode', async () => {
   expect(files['src/views/HomeView.vue']).toBeTruthy()
   expect(files['src/App.vue']).toMatch('<router-link to="/">Home</router-link>')
   expect(files['src/App.vue']).not.toMatch('<script>')
-  expect(files['src/App.vue']).toMatch('#nav a.router-link-exact-active')
+  expect(files['src/App.vue']).toMatch('nav a.router-link-exact-active')
 
   expect(pkg.dependencies).toHaveProperty('vue-router')
 })
@@ -58,7 +58,7 @@ test('use with Babel', async () => {
   expect(files['src/views/HomeView.vue']).toBeTruthy()
   expect(files['src/App.vue']).toMatch('<router-link to="/">Home</router-link>')
   expect(files['src/App.vue']).not.toMatch('<script>')
-  expect(files['src/App.vue']).toMatch('#nav a.router-link-exact-active')
+  expect(files['src/App.vue']).toMatch('nav a.router-link-exact-active')
 
   expect(pkg.dependencies).toHaveProperty('vue-router')
 })
