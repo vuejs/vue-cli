@@ -22,7 +22,8 @@ vue upgrade --next
 
 And then follow the command line instructions.
 
-See the following section for detailed breaking changes introduced in each package.
+Note that the migrator is not complete yet and doesn't cover all cases.
+Please read the following section for detailed breaking changes introduced in each package.
 
 ::: tip Note
 If you see errors like `setup compilation vue-loader-plugin(node:44156) UnhandledPromiseRejectionWarning: TypeError: The 'compilation' argument must be an instance of Compilation` after upgrading, please remove the lockfile (`yarn.lock` or `package-lock.json`) and `node_modules` in the project and reinstall all the dependencies.
