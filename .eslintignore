@@ -5,3 +5,4 @@ packages/test
 temp
 dist
 __testfixtures__
+!./docs/.vitepress/config.js
