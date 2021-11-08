@@ -24,12 +24,7 @@ module.exports = function loadFileConfig (context) {
       target: 'es2017',
       format: 'cjs'
     })
-    try {
-      fileConfig = compatESModuleRequire(require(fileConfigPath))
-    } catch (e) {
-      // Only jest will be executed here; Because extensions compile will not work
-      fileConfig = import(fileConfigPath)
-    }
+    fileConfig = compatESModuleRequire(require(fileConfigPath))
   }
 
   return {
