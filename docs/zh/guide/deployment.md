@@ -10,7 +10,7 @@
 
 `dist` 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 `publicPath` 配置为了一个相对的值)，所以以 `file://` 协议直接打开 `dist/index.html` 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/zeit/serve)：
 
-``` bash
+```bash
 npm install -g serve
 # -s 参数的意思是将其架设在 Single-Page Application 模式下
 # 这个模式会处理即将提到的路由问题
@@ -73,9 +73,9 @@ cloudbase framework:deploy
 ### GitHub Pages
 
 #### 手动推送更新
- 
+
 1. 在 `vue.config.js` 中设置正确的 `publicPath`。
-    
+
    如果打算将项目部署到 `https://<USERNAME>.github.io/` 上, `publicPath` 将默认被设为 `"/"`，你可以忽略这个参数。
 
    如果打算将项目部署到 `https://<USERNAME>.github.io/<REPO>/` 上 (即仓库地址为 `https://github.com/<USERNAME>/<REPO>`)，可将 `publicPath` 设为 `"/<REPO>/"`。举个例子，如果仓库名字为“my-project”，那么 `vue.config.js` 的内容应如下所示：
@@ -90,7 +90,7 @@ cloudbase framework:deploy
 
 2. 在项目目录下，创建内容如下的 `deploy.sh` (可以适当地取消注释) 并运行它以进行部署：
 
-    ``` bash{13,20,23}
+    ```bash{13,20,23}
     #!/usr/bin/env sh
 
     # 当发生错误时中止脚本
@@ -99,7 +99,7 @@ cloudbase framework:deploy
     # 构建
     npm run build
 
-    # cd 到构建输出的目录下 
+    # cd 到构建输出的目录下
     cd dist
 
     # 部署到自定义域域名
@@ -125,7 +125,7 @@ cloudbase framework:deploy
 3. 生成一个拥有“repo”权限的 GitHub [访问令牌](https://help.github.com/cn/articles/creating-a-personal-access-token-for-the-command-line)。
 4. 授予 Travis 访问仓库的权限：`travis set GITHUB_TOKEN=xxx` (`xxx` 是第三步中的个人访问令牌)
 5. 在项目根目录下创建一个 `.travis.yml` 文件。
-   
+
     ```yaml
     language: node_js
     node_js:
@@ -143,7 +143,7 @@ cloudbase framework:deploy
     on:
       branch: master
     ```
-  
+
 6. 将 `.travis.yml` 文件推送到仓库来触发第一次构建。
 
 ### GitLab Pages
@@ -151,7 +151,7 @@ cloudbase framework:deploy
 根据 [GitLab Pages 文档](https://docs.gitlab.com/ee/user/project/pages/)的描述，所有的配置都在根目录中的`.gitlab-ci.yml` 文件中。下面的范例是一个很好的入门:
 
 ```yaml
-# .gitlab-ci.yml 文件应放在你仓库的根目录下 
+# .gitlab-ci.yml 文件应放在你仓库的根目录下
 
 pages: # 必须定义一个名为 pages 的 job
   image: node:latest
@@ -249,7 +249,7 @@ Firebase 将会询问有关初始化项目的一些问题。
 
 - 选择需要 Firebase CLI 的功能。 一定要选择 `hosting` 。
 - 选择默认的 Firebase 项目。
-- 将 `public` 目录设为 `dist` (或构建输出的位置) 这将会上传到 Firebase Hosting。 
+- 将 `public` 目录设为 `dist` (或构建输出的位置) 这将会上传到 Firebase Hosting。
 
 ```javascript
 // firebase.json
@@ -328,7 +328,7 @@ vercel
 
 1. [安装 Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 2. 创建 `static.json` 文件：
-   
+
     ```json
     {
       "root": "dist",
@@ -394,7 +394,7 @@ npm install --global surge
 
 3. 在项目中， `deploy.sh` 使用以下内容创建并运行它以进行部署：
 
-    ``` bash{13,20,23}
+    ```bash{13,20,23}
     #!/usr/bin/env sh
 
     # 当发生错误时中止脚本

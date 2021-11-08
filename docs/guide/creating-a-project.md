@@ -4,7 +4,7 @@
 
 To create a new project, run:
 
-``` bash
+```bash
 vue create hello-world
 ```
 
@@ -33,7 +33,7 @@ During the project creation process, you may also be prompted to select a prefer
 
 The `vue create` command has a number of options and you can explore them all by running:
 
-``` bash
+```bash
 vue create --help
 ```
 
@@ -63,7 +63,7 @@ Options:
 
 You can also create and manage projects using a graphical interface with the `vue ui` command:
 
-``` bash
+```bash
 vue ui
 ```
 
@@ -75,7 +75,7 @@ The above command will open a browser window with a GUI that guides you through 
 
 Vue CLI >= 3 uses the same `vue` binary, so it overwrites Vue CLI 2 (`vue-cli`). If you still need the legacy `vue init` functionality, you can install a global bridge:
 
-``` bash
+```bash
 npm install -g @vue/cli-init
 # vue init now works exactly the same as vue-cli@2.x
 vue init webpack my-project

@@ -25,7 +25,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
 
 Install:
 
-``` bash
+```bash
 npm install -g @vue/cli
 # OR
 yarn global add @vue/cli
@@ -33,7 +33,7 @@ yarn global add @vue/cli
 
 Create a project:
 
-``` bash
+```bash
 vue create my-project
 # OR
 vue ui

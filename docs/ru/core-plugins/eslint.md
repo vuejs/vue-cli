@@ -66,7 +66,7 @@ module.exports = {
 
 ## Установка в уже созданный проект
 
-```sh
+```bash
 vue add eslint
 ```
 
