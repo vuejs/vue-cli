@@ -1,8 +1,5 @@
+// Todo: reduce test time. (e.g. esbuild-jest, swc-jest)
 module.exports = {
-  transform: {
-    '^.+\\.[j|t]sx?$': 'babel-jest',
-    '^.+\\.mjs$': 'babel-jest'
-  },
   testEnvironment: 'node',
   setupFiles: ['<rootDir>/scripts/testSetup.js'],
   testMatch: ['**/__tests__/**/*.spec.js']
