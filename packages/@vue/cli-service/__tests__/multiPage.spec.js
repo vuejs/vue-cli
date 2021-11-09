@@ -20,6 +20,10 @@ async function makeProjectMultiPage (project) {
           entry: 'src/main.js',
           template: 'public/baz.html',
           filename: 'qux.html'
+        },
+        m: {
+          from: /^\\/m(\\/.*)?$/,
+          entry: 'src/mobile.js',
         }
       },
       chainWebpack: config => {
@@ -53,6 +57,13 @@ async function makeProjectMultiPage (project) {
       render: h => h('h1', 'FooBar')
     })
   `)
+  await project.write('src/mobile.js', `
+    import Vue from 'vue'
+    new Vue({
+      el: '#app',
+      render: h => h('h1', 'Mobile')
+    })
+  `)
   const app = await project.read('src/App.vue')
   await project.write('src/App.vue', app.replace(
     `import HelloWorld from './components/HelloWorld.vue'`,
@@ -84,6 +95,18 @@ test('serve w/ multi page', async () => {
 
       await page.goto(`${url}foobar`)
       expect(await helpers.getText('h1')).toMatch(`FooBar`)
+
+      await page.goto(`${url}m`)
+      expect(await helpers.getText('h1')).toMatch(`Mobile`)
+
+      await page.goto(`${url}m/`)
+      expect(await helpers.getText('h1')).toMatch(`Mobile`)
+
+      await page.goto(`${url}m/oao`)
+      expect(await helpers.getText('h1')).toMatch(`Mobile`)
+
+      await page.goto(`${url}message`)
+      expect(await helpers.getText('h1')).not.toMatch(`Mobile`)
     }
   )
 })
@@ -193,6 +216,9 @@ test('build w/ multi page', async () => {
 
   await page.goto(`${url}bar.html`)
   expect(await getH1Text()).toMatch('Welcome to Your Vue.js App')
+
+  await page.goto(`${url}m.html`)
+  expect(await getH1Text()).toMatch('Mobile')
 })
 
 afterAll(async () => {

@@ -115,7 +115,7 @@ module.exports = defineConfig({
 
   在 multi-page 模式下构建应用。每个“page”应该有一个对应的 JavaScript 入口文件。其值应该是一个对象，对象的 key 是入口的名字，value 是：
 
-  - 一个指定了 `entry`, `template`, `filename`, `title` 和 `chunks` 的对象 (除了 `entry` 之外都是可选的)；
+  - 一个指定了 `entry`, `template`, `filename`, `title`, `from` 和 `chunks` 的对象 (除了 `entry` 之外都是可选的)；
   - 或一个指定其 `entry` 的字符串。
 
   ``` js
@@ -133,7 +133,11 @@ module.exports = defineConfig({
         title: 'Index Page',
         // 在这个页面中包含的块，默认情况下会包含
         // 提取出来的通用 chunk 和 vendor chunk。
-        chunks: ['chunk-vendors', 'chunk-common', 'index']
+        chunks: ['chunk-vendors', 'chunk-common', 'index'],
+        // devServer.historyApiFallback.rewrites
+        // 当使用开发服务器时，能进阶控制匹配路径
+        // 注意: 这个选项不会影响生产环境
+        from: /^\/m(\/.*)?$/
       },
       // 当使用只有入口的字符串格式时，
       // 模板会被推导为 `public/subpage.html`
