@@ -10,7 +10,7 @@ If you are developing your frontend app separately from your backend - i.e. your
 
 The `dist` directory is meant to be served by an HTTP server (unless you've configured `publicPath` to be a relative value), so it will not work if you open `dist/index.html` directly over `file://` protocol. The easiest way to preview your production build locally is using a Node.js static file server, for example [serve](https://github.com/zeit/serve):
 
-``` bash
+```bash
 npm install -g serve
 # -s flag means serve it in Single-Page Application mode
 # which deals with the routing problem below
@@ -45,7 +45,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
     ``` js
     // vue.config.js file to be placed in the root of your repository
-    
+
     module.exports = {
       publicPath: process.env.NODE_ENV === 'production'
         ? '/my-project/'
@@ -55,7 +55,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
 
-    ``` bash{13,20,23}
+    ```bash{13,20,23}
     #!/usr/bin/env sh
 
     # abort on errors
@@ -404,7 +404,7 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
 3. Inside your project, create `deploy.sh` with the following content and run it to deploy:
 
-    ``` bash{13,20,23}
+    ```bash{13,20,23}
     #!/usr/bin/env sh
 
     # abort on errors

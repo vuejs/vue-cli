@@ -10,7 +10,7 @@ All compiled CSS are processed by [css-loader](https://github.com/webpack-contri
 
 You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, the internal webpack config is still pre-configured to handle all of them. You just need to manually install the corresponding webpack loaders:
 
-``` bash
+```bash
 # Sass
 npm install -D sass-loader sass
 

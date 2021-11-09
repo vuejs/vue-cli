@@ -6,7 +6,7 @@ sidebar: auto
 
 First, install the latest Vue CLI globally:
 
-```sh
+```bash
 npm install -g @vue/cli@next
 # OR
 yarn global add @vue/cli@next
@@ -16,7 +16,7 @@ yarn global add @vue/cli@next
 
 In your existing projects, run:
 
-```sh
+```bash
 vue upgrade --next
 ```
 

@@ -52,7 +52,7 @@ With Babel we are able to leverage all the newest language features in ES2015+, 
 
 Vue CLI offers a "Modern Mode" to help you solve this problem. When building for production with the following command:
 
-``` bash
+```bash
 vue-cli-service build --modern
 ```
 

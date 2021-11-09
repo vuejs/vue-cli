@@ -14,7 +14,7 @@ You can install and manage Plugins using the GUI with the `vue ui` command.
 
 Each CLI plugin ships with a generator (which creates files) and a runtime plugin (which tweaks the core webpack config and injects commands). When you use `vue create` to create a new project, some plugins will be pre-installed for you based on your feature selection. In case you want to install a plugin into an already created project, you can do so with the `vue add` command:
 
-``` bash
+```bash
 vue add eslint
 ```
 
@@ -28,27 +28,27 @@ It is recommended to commit your project's current state before running `vue add
 
 The command resolves `@vue/eslint` to the full package name `@vue/cli-plugin-eslint`, installs it from npm, and invokes its generator.
 
-``` bash
+```bash
 # these are equivalent to the previous usage
 vue add cli-plugin-eslint
 ```
 
 Without the `@vue` prefix, the command will resolve to an unscoped package instead. For example, to install the 3rd party plugin `vue-cli-plugin-apollo`:
 
-``` bash
+```bash
 # installs and invokes vue-cli-plugin-apollo
 vue add apollo
 ```
 
 You can also use 3rd party plugins under a specific scope. For example, if a plugin is named `@foo/vue-cli-plugin-bar`, you can add it with:
 
-``` bash
+```bash
 vue add @foo/bar
 ```
 
 You can pass generator options to the installed plugin (this will skip the prompts):
 
-``` bash
+```bash
 vue add eslint --config airbnb --lintOn save
 ```
 
@@ -181,14 +181,14 @@ You can share a preset with other developers by publishing it in a git repo. The
 
 Once the repo is published, you can then use the `--preset` option to use the remote preset when creating a project:
 
-``` bash
+```bash
 # use preset from GitHub repo
 vue create --preset username/repo my-project
 ```
 
 GitLab and BitBucket are also supported. Make sure to use the `--clone` option if fetching from private repos:
 
-``` bash
+```bash
 vue create --preset gitlab:username/repo --clone my-project
 vue create --preset bitbucket:username/repo --clone my-project
 
@@ -201,7 +201,7 @@ vue create --preset direct:ssh://git@my-gitlab-server.com/group/projectname.git 
 
 When developing a remote preset, it can be tedious to have to repeatedly push the preset to a remote repo to test it. To simplify the workflow, you can directly work with local presets. Vue CLI will load local presets if the value for the `--preset` option is a relative or absolute file path, or ends with `.json`:
 
-``` bash
+```bash
 # ./my-preset should be a directory containing preset.json
 vue create --preset ./my-preset my-project
 

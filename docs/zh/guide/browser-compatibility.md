@@ -52,7 +52,7 @@
 
 Vue CLI 提供了一个“现代模式”帮你解决这个问题。以如下命令为生产环境构建：
 
-``` bash
+```bash
 vue-cli-service build --modern
 ```
 

@@ -30,7 +30,7 @@ Cache options of [babel-loader](https://github.com/babel/babel-loader#options) i
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add babel
 ```
 

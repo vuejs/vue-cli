@@ -489,7 +489,7 @@ The resolved answers object will be passed to the plugin's generator as options.
 
 Alternatively, the user can skip the prompts and directly initialize the plugin by passing options via the command line, e.g.:
 
-``` bash
+```bash
 vue invoke my-plugin --mode awesome
 ```
 

@@ -17,8 +17,8 @@
     "boot": "node scripts/bootstrap.js",
     "release": "yarn --pure-lockfile && yarn clean && node scripts/release.js",
     "version": "node scripts/genChangelog.js && node scripts/genDocs.js && git add CHANGELOG.md && git add docs",
-    "docs": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
+    "docs": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
     "patch-chromedriver": "node scripts/patchChromedriver.js"
   },
   "gitHooks": {
@@ -37,8 +37,6 @@
     "@vue/eslint-config-airbnb": "^5.3.0",
     "@vue/eslint-config-standard": "^6.1.0",
     "@vue/eslint-config-typescript": "^9.0.1",
-    "@vuepress/plugin-pwa": "^1.8.1",
-    "@vuepress/theme-vue": "^1.8.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^27.0.6",
     "chromedriver": "^94.0.0",
@@ -70,14 +68,13 @@
     "stylus-loader": "^3.0.2",
     "typescript": "~4.1.5",
     "verdaccio": "^5.0.1",
-    "vuepress": "^1.8.1",
+    "vite-plugin-pwa": "^0.11.3",
+    "vitepress": "^0.20.1",
     "webpack": "^5.22.0",
     "yorkie": "^2.0.0"
   },
   "resolutions": {
-    "puppeteer": "1.11.0",
-    "vue-template-compiler": "^2.6.14",
-    "vue-server-renderer": "^2.6.14"
+    "puppeteer": "1.13.0"
   },
   "packageManager": "yarn@1.22.11"
 }
