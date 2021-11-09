@@ -21,7 +21,7 @@ Note that directly running `jest` will fail because the Babel preset requires hi
 
 If you want to debug your tests via the Node inspector, you can run the following:
 
-```sh
+```bash
 # macOS or linux
 node --inspect-brk ./node_modules/.bin/vue-cli-service test:unit --runInBand
 
@@ -35,7 +35,7 @@ Jest can be configured via `jest.config.js` in your project root, or the `jest` 
 
 ## Installing in an Already Created Project
 
-```sh
+```bash
 vue add unit-jest
 ```
 
