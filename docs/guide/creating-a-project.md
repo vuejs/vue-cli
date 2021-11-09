@@ -28,7 +28,7 @@ If you chose to manually select features, at the end of the prompts you also hav
 ::: tip ~/.vuerc
 Saved presets will be stored in a JSON file named `.vuerc` in your user home directory. If you wish to modify saved presets / options, you can do so by editing this file.
 
-During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npm.taobao.org/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
+During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npmmirror.com/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
 :::
 
 The `vue create` command has a number of options and you can explore them all by running:
