@@ -130,10 +130,9 @@ test('keep publicPath when empty', async () => {
   expect(service.projectOptions.publicPath).toBe('')
 })
 
-const cliConfigPath = path.normalize(path.resolve('/', 'vue.config.js'))
 test('load project options from vue.config.js', async () => {
-  fs.writeFileSync(cliConfigPath, '') // only to ensure fs.existsSync returns true
-  jest.mock(cliConfigPath, () => ({ lintOnSave: false }), { virtual: true })
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '') // only to ensure fs.existsSync returns true
+  jest.mock(path.resolve('/', 'vue.config.js'), () => ({ lintOnSave: false }), { virtual: true })
   mockPkg({
     vue: {
       lintOnSave: 'default'
@@ -145,8 +144,8 @@ test('load project options from vue.config.js', async () => {
 })
 
 test('load project options from vue.config.js as a function', async () => {
-  fs.writeFileSync(cliConfigPath)
-  jest.mock(cliConfigPath, () => function () { return { lintOnSave: false } }, { virtual: true })
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'))
+  jest.mock(path.resolve('/', 'vue.config.js'), () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
     vue: {
       lintOnSave: 'default'

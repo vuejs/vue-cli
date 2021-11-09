@@ -2,6 +2,8 @@
 const { existsSync, unlinkSync, promises } = require('fs')
 const { join, extname, isAbsolute, dirname } = require('path')
 const { build } = require('esbuild')
+// @ts-ignore
+const { loadModule } = require('@vue/cli-shared-utils')
 
 const POSSIBLE_CONFIG_PATHS = [
   process.env.VUE_CLI_SERVICE_CONFIG_PATH,
@@ -91,7 +93,7 @@ function loadFileConfig (context) {
     // use esbuild to compile .ts config
     fileConfig = bundleConfig(fileConfigPath, context, true)
   } else if (ext) {
-    fileConfig = require(fileConfigPath)
+    fileConfig = loadModule(fileConfigPath, context)
   }
 
   return { fileConfig, fileConfigPath }
