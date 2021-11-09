@@ -46,7 +46,7 @@ tests/e2e/
 
 ## Установка в уже созданный проект
 
-```sh
+```bash
 vue add e2e-webdriverio
 ```
 
@@ -56,7 +56,7 @@ vue add e2e-webdriverio
 
 По умолчанию все тесты в каталоге `specs` будут запущены с помощью Chrome. Если необходимо запустить end-to-end тесты в Chrome (или Firefox) в безголовом режиме следует передать аргумент `--headless`. Тесты будут автоматически запускаться параллельно при выполнении в облаке.
 
-```sh
+```bash
 $ vue-cli-service test:e2e
 ```
 
@@ -64,7 +64,7 @@ $ vue-cli-service test:e2e
 
 Для запуска одного теста укажите путь к файлу. Например:
 
-```sh
+```bash
 $ vue-cli-service test:e2e --spec tests/e2e/specs/test.js
 ```
 
@@ -72,6 +72,6 @@ $ vue-cli-service test:e2e --spec tests/e2e/specs/test.js
 
 Если сервер разработки уже запущен и необходимо пропустить автоматический запуск, укажите аргумент `--url`:
 
-```sh
+```bash
 $ vue-cli-service test:e2e --baseUrl=http://localhost:8080/
 ```

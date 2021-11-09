@@ -24,7 +24,7 @@ This plugin can be used alongside `@vue/cli-plugin-babel`. When used with Babel,
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add typescript
 ```
 

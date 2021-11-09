@@ -10,7 +10,7 @@ Vue CLI 项目天生支持 [PostCSS](http://postcss.org/)、[CSS Modules](https:
 
 你可以在创建项目的时候选择预处理器 (Sass/Less/Stylus)。如果当时没有选好，内置的 webpack 仍然会被预配置为可以完成所有的处理。你也可以手动安装相应的 webpack loader：
 
-``` bash
+```bash
 # Sass
 npm install -D sass-loader sass
 
