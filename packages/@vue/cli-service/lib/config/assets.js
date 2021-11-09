@@ -5,7 +5,7 @@ module.exports = (api, options) => {
   const genAssetSubPath = dir => {
     return getAssetPath(
       options,
-      `${dir}/[name]${options.filenameHashing ? '.[hash:8]' : ''}.[ext]`
+      `${dir}/[name]${options.filenameHashing ? '.[hash:8]' : ''}[ext]`
     )
   }
 
