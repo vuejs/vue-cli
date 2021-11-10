@@ -32,7 +32,7 @@
     "globby": "^11.0.2",
     "thread-loader": "^3.0.0",
     "ts-loader": "^9.2.5",
-    "webpack": "^5.22.0",
+    "webpack": "^5.54.0",
     "yorkie": "^2.0.0"
   },
   "peerDependencies": {
