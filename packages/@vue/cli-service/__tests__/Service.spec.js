@@ -30,10 +30,12 @@ beforeEach(() => {
   delete process.env.BAZ
 })
 
+const removeFile = p => {
+  if (fs.existsSync(p)) fs.unlinkSync(p)
+}
+
 afterEach(() => {
-  if (fs.existsSync('/vue.config.js')) {
-    fs.unlinkSync('/vue.config.js')
-  }
+  removeFile('/vue.config.js')
 })
 
 test('env loading', async () => {
@@ -144,7 +146,7 @@ test('load project options from vue.config.js', async () => {
 })
 
 test('load project options from vue.config.js as a function', async () => {
-  fs.writeFileSync(path.resolve('/', 'vue.config.js'))
+  fs.writeFileSync(path.resolve('/', 'vue.config.js'), '')
   jest.mock(path.resolve('/', 'vue.config.js'), () => function () { return { lintOnSave: false } }, { virtual: true })
   mockPkg({
     vue: {
