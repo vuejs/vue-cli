@@ -62,3 +62,14 @@ test('load project options from vue.config.mjs', async () => {
   expect(service.projectOptions.lintOnSave).toBe(true)
   await fs.unlinkSync(configPath)
 })
+
+test('load project options from vue.config.ts', async () => {
+  const configPath = path.resolve(project.dir, './vue.config.ts')
+  fs.writeFileSync(configPath, `
+  const lintOnSave:boolean = true
+  export default { lintOnSave }
+  `)
+  const service = await createService()
+  expect(service.projectOptions.lintOnSave).toBe(true)
+  await fs.unlinkSync(configPath)
+})

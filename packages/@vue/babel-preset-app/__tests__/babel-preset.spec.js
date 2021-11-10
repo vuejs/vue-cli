@@ -201,6 +201,7 @@ test('should inject polyfills / helpers using "import" statements for an es modu
     new Promise()
   `.trim(), {
     babelrc: false,
+    configFile: false,
     presets: [[preset, {
       targets: { ie: 9 },
       absoluteRuntime: false

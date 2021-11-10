@@ -30,10 +30,12 @@ beforeEach(() => {
   delete process.env.BAZ
 })
 
+const removeFile = p => {
+  if (fs.existsSync(p)) fs.unlinkSync(p)
+}
+
 afterEach(() => {
-  if (fs.existsSync('/vue.config.js')) {
-    fs.unlinkSync('/vue.config.js')
-  }
+  removeFile('/vue.config.js')
 })
 
 test('env loading', async () => {
