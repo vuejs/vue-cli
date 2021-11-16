@@ -1,6 +1,23 @@
-const { VitePWA } = require('vite-plugin-pwa')
+const fs = require('fs')
+const path = require('path')
+
+const selfDestroyingSWVitePlugin = {
+  name: 'generate-self-destroying-service-worker',
+  buildStart() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'service-worker.js',
+      source: fs.readFileSync(path.join(__dirname, './self-destroying-service-worker.js'), 'utf-8')
+    })
+  }
+}
 
 module.exports = {
+  vite: {
+    // to destroy the service worker used by the previous vuepress build
+    plugins: [selfDestroyingSWVitePlugin]
+  },
+
   locales: {
     '/': {
       lang: 'en-US',
@@ -647,32 +664,4 @@ module.exports = {
       }
     }
   },
-
-  vite: {
-    plugins: [
-      VitePWA({
-        registerType: 'prompt',
-        manifest: {
-          'name': 'Vue CLI',
-          'short_name': 'Vue CLI',
-          'icons': [
-            {
-              'src': '/icons/android-chrome-192x192.png',
-              'sizes': '192x192',
-              'type': 'image/png'
-            },
-            {
-              'src': '/icons/android-chrome-512x512.png',
-              'sizes': '512x512',
-              'type': 'image/png'
-            }
-          ],
-          'start_url': '/index.html',
-          'display': 'standalone',
-          'background_color': '#fff',
-          'theme_color': '#3eaf7c'
-        }
-      })
-    ]
-  }
 }
