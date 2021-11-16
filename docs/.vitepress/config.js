@@ -163,7 +163,7 @@ module.exports = {
 
             {
               text: 'Installation',
-              link: '/guide/installation/'
+              link: '/guide/installation'
             },
 
             {
