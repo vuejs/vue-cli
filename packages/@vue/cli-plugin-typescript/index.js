@@ -6,7 +6,7 @@ module.exports = (api, projectOptions) => {
   const { semver, loadModule } = require('@vue/cli-shared-utils')
   const vue = loadModule('vue', api.service.context)
   const isVue3 = (vue && semver.major(vue.version) === 3)
-  const isBabelOnly = projectOptions.useTsWithBabelOnlyMode
+  const isBabelOnly = projectOptions.pluginOptions.useTsWithBabelOnlyMode
 
   api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))

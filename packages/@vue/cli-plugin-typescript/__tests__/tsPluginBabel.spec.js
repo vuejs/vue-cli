@@ -53,6 +53,7 @@ test('using correct loader in babel only mode', async () => {
   const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))
   expect(rule.use[0].loader).toMatch(require.resolve('cache-loader'))
   expect(rule.use[1].loader).toMatch(require.resolve('babel-loader'))
+  expect(rule.use[2]).toBeUndefined()
 })
 
 const babelOnlyCreatorOptions = {
