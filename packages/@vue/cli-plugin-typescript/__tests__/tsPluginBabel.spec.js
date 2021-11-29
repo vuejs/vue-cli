@@ -34,15 +34,15 @@ assertBuild('ts-babel-build', creatorOptions)
 
 test('using correct loader in babel only mode', async () => {
   const service = new Service('/', {
-    pkg: {},
+    pkg: {
+      vue: {
+        useTsWithBabelOnlyMode: true
+      }
+    },
     plugins: [
       { id: '@vue/cli-plugin-typescript', apply: require('../index') },
       { id: '@vue/cli-plugin-babel', apply: require('@vue/cli-plugin-babel') }
-    ],
-    pluginOptions: {
-      useTsWithBabel: true,
-      useTsWithBabelOnlyMode: true
-    }
+    ]
   })
 
   await service.init()

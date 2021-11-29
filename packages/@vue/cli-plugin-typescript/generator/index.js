@@ -18,6 +18,9 @@ module.exports = (
     api.extendPackage({
       devDependencies: {
         '@babel/preset-typescript': pluginDevDeps['@babel/preset-typescript']
+      },
+      vue: {
+        useTsWithBabelOnlyMode: true
       }
     })
 
