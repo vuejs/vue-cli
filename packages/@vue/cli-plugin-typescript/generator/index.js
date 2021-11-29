@@ -22,15 +22,14 @@ module.exports = (
     })
 
     api.extendPackage(pkg => {
-      if (!pkg.babel || !pkg.babel.presets) {
-        return pkg
-      }
+      const babel = pkg.babel || {}
+      const presets = babel.presets || []
 
       return {
         ...pkg,
         babel: {
-          ...pkg.babel,
-          presets: ['@babel/preset-typescript'].concat(pkg.babel.presets)
+          ...babel,
+          presets: ['@babel/preset-typescript'].concat(presets)
         }
       }
     }, {
