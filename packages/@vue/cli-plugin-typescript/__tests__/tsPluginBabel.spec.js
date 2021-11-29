@@ -39,11 +39,9 @@ test('using correct loader in babel only mode', async () => {
       { id: '@vue/cli-plugin-typescript', apply: require('../index') },
       { id: '@vue/cli-plugin-babel', apply: require('@vue/cli-plugin-babel') }
     ],
-    inlineOptions: {
-      pluginOptions: {
-        useTsWithBabel: true,
-        useTsWithBabelOnlyMode: true
-      }
+    pluginOptions: {
+      useTsWithBabel: true,
+      useTsWithBabelOnlyMode: true
     }
   })
 
