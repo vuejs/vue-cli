@@ -32,6 +32,41 @@ const creatorOptions = {
 assertServe('ts-babel-serve', creatorOptions)
 assertBuild('ts-babel-build', creatorOptions)
 
+test('using correct loader in babel only mode', async () => {
+  const service = new Service('/', {
+    pkg: {},
+    plugins: [
+      { id: '@vue/cli-plugin-typescript', apply: require('../index') },
+      { id: '@vue/cli-plugin-babel', apply: require('@vue/cli-plugin-babel') }
+    ],
+    inlineOptions: {
+      pluginOptions: {
+        useTsWithBabel: true,
+        useTsWithBabelOnlyMode: true
+      }
+    }
+  })
+
+  await service.init()
+  const config = service.resolveWebpackConfig()
+  // eslint-disable-next-line no-shadow
+  const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))
+  expect(rule.use[0].loader).toMatch(require.resolve('cache-loader'))
+  expect(rule.use[1].loader).toMatch(require.resolve('babel-loader'))
+})
+
+const babelOnlyCreatorOptions = {
+  plugins: {
+    '@vue/cli-plugin-typescript': {
+      useTsWithBabel: true,
+      useTsWithBabelOnlyMode: true
+    },
+    '@vue/cli-plugin-babel': {}
+  }
+}
+assertServe('ts-babel-only-serve', babelOnlyCreatorOptions)
+assertBuild('ts-babel-only-build', babelOnlyCreatorOptions)
+
 test('tsx-build', async () => {
   const project = await create('tsx', creatorOptions)
   await project.write('src/components/HelloWorld.vue', `

@@ -2,7 +2,7 @@ const pluginDevDeps = require('../package.json').devDependencies
 
 module.exports = (
   api,
-  { classComponent, skipLibCheck = true, convertJsToTs, allowJs },
+  { classComponent, skipLibCheck = true, useTsWithBabelOnlyMode, convertJsToTs, allowJs },
   rootOptions,
   invoking
 ) => {
@@ -13,6 +13,30 @@ module.exports = (
       typescript: pluginDevDeps.typescript
     }
   })
+
+  if (useTsWithBabelOnlyMode) {
+    api.extendPackage({
+      devDependencies: {
+        '@babel/preset-typescript': pluginDevDeps['@babel/preset-typescript']
+      }
+    })
+
+    api.extendPackage(pkg => {
+      if (!pkg.babel || !pkg.babel.presets) {
+        return pkg
+      }
+
+      return {
+        ...pkg,
+        babel: {
+          ...pkg.babel,
+          presets: ['@babel/preset-typescript'].concat(pkg.babel.presets)
+        }
+      }
+    }, {
+      merge: false
+    })
+  }
 
   if (classComponent) {
     if (isVue3) {

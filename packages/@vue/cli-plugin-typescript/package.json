@@ -47,6 +47,7 @@
     }
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.16.0",
     "@types/chai": "^4.2.15",
     "@types/jest": "^27.0.1",
     "@types/mocha": "^8.2.1",
