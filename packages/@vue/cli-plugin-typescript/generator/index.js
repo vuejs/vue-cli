@@ -32,7 +32,9 @@ module.exports = (
         ...pkg,
         babel: {
           ...babel,
-          presets: ['@babel/preset-typescript'].concat(presets)
+          presets: [
+            ['@babel/preset-typescript', { allExtensions: true }]
+          ].concat(presets)
         }
       }
     }, {

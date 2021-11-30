@@ -78,6 +78,21 @@ module.exports = (api, projectOptions) => {
         options.appendTsxSuffixTo = ['\\.vue$']
         return options
       })
+    } else {
+      tsxRule.use('babel-loader').loader(require.resolve('babel-loader')).tap(options => {
+        options = Object.assign({}, options)
+        delete options.presets
+        options.presets = [
+          [
+            '@babel/preset-typescript',
+            {
+              allExtensions: true,
+              isTSX: true
+            }
+          ]
+        ]
+        return options
+      })
     }
 
     // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow

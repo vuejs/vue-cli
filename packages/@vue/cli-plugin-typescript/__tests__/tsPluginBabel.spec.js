@@ -58,7 +58,8 @@ const babelOnlyCreatorOptions = {
   plugins: {
     '@vue/cli-plugin-typescript': {
       useTsWithBabel: true,
-      useTsWithBabelOnlyMode: true
+      useTsWithBabelOnlyMode: true,
+      classComponent: true
     },
     '@vue/cli-plugin-babel': {}
   }
@@ -68,6 +69,28 @@ assertBuild('ts-babel-only-build', babelOnlyCreatorOptions)
 
 test('tsx-build', async () => {
   const project = await create('tsx', creatorOptions)
+  await project.write('src/components/HelloWorld.vue', `
+  <script lang="tsx">
+  import Vue, { CreateElement } from 'vue'
+  import Component from 'vue-class-component'
+
+  @Component
+  export default class World extends Vue {
+    render (h: CreateElement) {
+      return (
+        <p>This is rendered via TSX</p>
+      )
+    }
+  }
+  </script>
+  `)
+
+  const { stdout } = await project.run('vue-cli-service build')
+  expect(stdout).toMatch('Build complete.')
+})
+
+test('tsx-babel-build', async () => {
+  const project = await create('tsx-babel', babelOnlyCreatorOptions)
   await project.write('src/components/HelloWorld.vue', `
   <script lang="tsx">
   import Vue, { CreateElement } from 'vue'

@@ -81,7 +81,15 @@ test('use with Babel only mode', async () => {
     }
   ])
 
-  expect(files['babel.config.js']).toMatch(`presets: [\n    '@babel/preset-typescript',\n    '@vue/cli-plugin-babel/preset'\n  ]`)
+  expect(files['babel.config.js']).toMatch(`presets: [
+    [
+      '@babel/preset-typescript',
+      {
+        allExtensions: true
+      }
+    ],
+    '@vue/cli-plugin-babel/preset'
+  ]`)
   expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
   expect(pkg.vue.useTsWithBabelOnlyMode).toBe(true)
 })
