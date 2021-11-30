@@ -22,6 +22,10 @@ test('with ESLint', async () => {
       confirm: true
     },
     {
+      message: 'Use Babel TypeScript toolchains?',
+      confirm: true
+    },
+    {
       message: 'Pick a linter / formatter',
       choices: ['ESLint with error prevention only', 'Airbnb', 'Standard', 'Prettier'],
       choose: [1]
@@ -41,7 +45,8 @@ test('with ESLint', async () => {
       },
       '@vue/cli-plugin-typescript': {
         classComponent: true,
-        useTsWithBabel: true
+        useTsWithBabel: true,
+        useTsWithBabelOnlyMode: true
       }
     }
   }

@@ -32,8 +32,65 @@ const creatorOptions = {
 assertServe('ts-babel-serve', creatorOptions)
 assertBuild('ts-babel-build', creatorOptions)
 
+test('using correct loader in babel only mode', async () => {
+  const service = new Service('/', {
+    pkg: {
+      vue: {
+        useTsWithBabelOnlyMode: true
+      }
+    },
+    plugins: [
+      { id: '@vue/cli-plugin-typescript', apply: require('../index') },
+      { id: '@vue/cli-plugin-babel', apply: require('@vue/cli-plugin-babel') }
+    ]
+  })
+
+  await service.init()
+  const config = service.resolveWebpackConfig()
+  // eslint-disable-next-line no-shadow
+  const rule = config.module.rules.find(rule => rule.test.test('foo.ts'))
+  expect(rule.use[0].loader).toMatch(require.resolve('cache-loader'))
+  expect(rule.use[1].loader).toMatch(require.resolve('babel-loader'))
+  expect(rule.use[2]).toBeUndefined()
+})
+
+const babelOnlyCreatorOptions = {
+  plugins: {
+    '@vue/cli-plugin-typescript': {
+      useTsWithBabel: true,
+      useTsWithBabelOnlyMode: true,
+      classComponent: true
+    },
+    '@vue/cli-plugin-babel': {}
+  }
+}
+assertServe('ts-babel-only-serve', babelOnlyCreatorOptions)
+assertBuild('ts-babel-only-build', babelOnlyCreatorOptions)
+
 test('tsx-build', async () => {
   const project = await create('tsx', creatorOptions)
+  await project.write('src/components/HelloWorld.vue', `
+  <script lang="tsx">
+  import Vue, { CreateElement } from 'vue'
+  import Component from 'vue-class-component'
+
+  @Component
+  export default class World extends Vue {
+    render (h: CreateElement) {
+      return (
+        <p>This is rendered via TSX</p>
+      )
+    }
+  }
+  </script>
+  `)
+
+  const { stdout } = await project.run('vue-cli-service build')
+  expect(stdout).toMatch('Build complete.')
+})
+
+test('tsx-babel-build', async () => {
+  const project = await create('tsx-babel', babelOnlyCreatorOptions)
   await project.write('src/components/HelloWorld.vue', `
   <script lang="tsx">
   import Vue, { CreateElement } from 'vue'

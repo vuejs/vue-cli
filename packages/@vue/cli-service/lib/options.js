@@ -65,6 +65,8 @@ const schema = createSchema(joi => joi.object({
     terserOptions: joi.object()
   }),
 
+  useTsWithBabelOnlyMode: joi.boolean(),
+
   // 3rd party plugin options
   pluginOptions: joi.object()
 }))

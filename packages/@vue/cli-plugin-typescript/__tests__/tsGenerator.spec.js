@@ -64,6 +64,36 @@ test('use with Babel', async () => {
   expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
 })
 
+test('use with Babel only mode', async () => {
+  const { files, pkg } = await generateWithPlugin([
+    {
+      id: 'babel',
+      apply: require('@vue/cli-plugin-babel/generator'),
+      options: {}
+    },
+    {
+      id: 'ts',
+      apply: require('../generator'),
+      options: {
+        useTsWithBabel: true,
+        useTsWithBabelOnlyMode: true
+      }
+    }
+  ])
+
+  expect(files['babel.config.js']).toMatch(`presets: [
+    [
+      '@babel/preset-typescript',
+      {
+        allExtensions: true
+      }
+    ],
+    '@vue/cli-plugin-babel/preset'
+  ]`)
+  expect(files['tsconfig.json']).toMatch(`"target": "esnext"`)
+  expect(pkg.vue.useTsWithBabelOnlyMode).toBe(true)
+})
+
 test('use with router', async () => {
   const tsApply = require('../generator')
 

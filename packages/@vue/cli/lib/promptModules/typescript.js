@@ -27,6 +27,15 @@ module.exports = cli => {
     default: answers => answers.features.includes('babel')
   })
 
+  cli.injectPrompt({
+    name: 'useTsWithBabelOnlyMode',
+    when: answers => answers.features.includes('ts') && answers.useTsWithBabel,
+    type: 'confirm',
+    message: 'Use Babel TypeScript toolchains?',
+    description: 'Use Babel TypeScript toolchains.',
+    default: false
+  })
+
   cli.onPromptComplete((answers, options) => {
     if (answers.features.includes('ts')) {
       const tsOptions = {
@@ -34,6 +43,9 @@ module.exports = cli => {
       }
       if (answers.useTsWithBabel) {
         tsOptions.useTsWithBabel = true
+      }
+      if (answers.useTsWithBabelOnlyMode) {
+        tsOptions.useTsWithBabelOnlyMode = true
       }
       options.plugins['@vue/cli-plugin-typescript'] = tsOptions
     }
