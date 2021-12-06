@@ -303,7 +303,7 @@ Please refer to the [Firebase Documentation](https://firebase.google.com/docs/ho
 
 #### Step 1: Deploying your Vue project to Vercel
 
-To deploy your Vue project with a [Vercel for Git Integration](https://vercel.com/docs/git-integrations), make sure it has been pushed to a Git repository.
+To deploy your Vue project with a [Vercel for Git Integration](https://vercel.com/docs/concepts/git), make sure it has been pushed to a Git repository.
 
 Import the project into Vercel using the [Import Flow](https://vercel.com/import/git). During the import, you will find all relevant [options](https://vercel.com/docs/build-step#build-&-development-settings) preconfigured for you with the ability to change as needed.
 
