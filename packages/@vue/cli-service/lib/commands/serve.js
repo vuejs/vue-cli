@@ -3,7 +3,8 @@ const {
   error,
   hasProjectYarn,
   hasProjectPnpm,
-  IpcMessenger
+  IpcMessenger,
+  openBrowser
 } = require('@vue/cli-shared-utils')
 
 const defaults = {
@@ -179,6 +180,8 @@ module.exports = (api, options) => {
       process.exit(1)
     })
 
+    const open = args.open || projectDevServerOptions.open
+
     // create server
     const server = new WebpackDevServer(Object.assign({
       historyApiFallback: {
@@ -216,7 +219,7 @@ module.exports = (api, options) => {
         ...projectDevServerOptions.client
       },
 
-      open: args.open || projectDevServerOptions.open,
+      // open,
       setupExitSignals: true,
 
       // eslint-disable-next-line no-shadow
@@ -288,6 +291,9 @@ module.exports = (api, options) => {
         console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
         if (!isInContainer) {
           console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
+          if (open) {
+            openBrowser(urls.localUrlForTerminal)
+          }
         } else {
           console.log()
           console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
