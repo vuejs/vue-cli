@@ -291,9 +291,6 @@ module.exports = (api, options) => {
         console.log(`  - Local:   ${chalk.cyan(urls.localUrlForTerminal)} ${copied}`)
         if (!isInContainer) {
           console.log(`  - Network: ${chalk.cyan(networkUrl)}`)
-          if (open) {
-            openBrowser(urls.localUrlForTerminal)
-          }
         } else {
           console.log()
           console.log(chalk.yellow(`  It seems you are running Vue CLI inside a container.`))
@@ -317,6 +314,9 @@ module.exports = (api, options) => {
             const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
+            if (open) {
+              openBrowser(urls.localUrlForTerminal)
+            }
           } else {
             console.log(`  App is served in production mode.`)
             console.log(`  Note this is for preview or E2E testing only.`)
