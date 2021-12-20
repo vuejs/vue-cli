@@ -12,7 +12,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
   // respect inline entry and filename
   if (entry) {
     filename = (
-      filename || 
+      filename ||
       name ||
       (
         api.service.pkg.name
@@ -23,29 +23,29 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
     api.chainWebpack((config) => {
       config.entryPoints.clear()
       config.entry(filename).add(api.resolve(entry))
-    });
+    })
   }
 
   const vueMajor = require('../../util/getVueMajor')(api.getCwd())
 
-  function genConfig (entries, filename, format, postfix = format, genHTML) {
-    const entry = entries.pop();
-    const fullEntryPath = api.resolve(entry)
+  function genConfig (entries, entryFilename, format, postfix = format, genHTML) {
+    const lastEntry = entries.pop()
+    const fullEntryPath = api.resolve(lastEntry)
 
     if (!fs.existsSync(fullEntryPath)) {
       abort(
-        `Failed to resolve lib entry: ${entry}${entry === `src/App.vue` ? ' (default)' : ''}. ` +
+        `Failed to resolve lib entry: ${lastEntry}${lastEntry === `src/App.vue` ? ' (default)' : ''}. ` +
         `Make sure to specify the correct entry file.`
       )
     }
 
-    const isVueEntry = /\.vue$/.test(entry)
+    const isVueEntry = /\.vue$/.test(lastEntry)
     const libName = (
       name ||
       (
         api.service.pkg.name
           ? api.service.pkg.name.replace(/^@.+\//, '')
-          : path.basename(entry).replace(/\.(jsx?|vue)$/, '')
+          : path.basename(lastEntry).replace(/\.(jsx?|vue)$/, '')
       )
     )
 
@@ -65,7 +65,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       config
         .plugin('extract-css')
           .tap(args => {
-            args[0].filename = `${filename}.css`
+            args[0].filename = `${entryFilename}.css`
             return args
           })
     }
@@ -86,13 +86,13 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
             filename: 'demo.html',
             libName,
             vueMajor,
-            assetsFileName: filename,
+            assetsFileName: entryFilename,
             cssExtract: config.plugins.has('extract-css')
           }])
     }
 
     // resolve entry/output
-    const entryName = `${filename}.${postfix}`
+    const entryName = `${entryFilename}.${postfix}`
     config.resolve
       .alias
         .set('~entry', fullEntryPath)
@@ -127,7 +127,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       }
     ].filter(Boolean)
 
-    entries.push(realEntry);
+    entries.push(realEntry)
 
     rawConfig.entry = {
       [entryName]: entries
@@ -143,7 +143,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       // https://github.com/webpack/webpack/issues/6525
       globalObject: `(typeof self !== 'undefined' ? self : this)`,
       filename: `${entryName}.js`,
-      chunkFilename: `${entryName}.[name].js`,
+      chunkFilename: `${entryName}.[name].js`
     }, rawConfig.output, {
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
@@ -161,11 +161,11 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
 
   const baseConfig = api.resolveChainableWebpackConfig()
 
-  return Object.entries(baseConfig.entryPoints.entries()).reduce((previousValue, [filename, entries]) => {
+  return Object.entries(baseConfig.entryPoints.entries()).reduce((previousValue, [entryFilename, entries]) => {
     const configMap = {
-      commonjs: genConfig(entries.values(), filename, 'commonjs2', 'common'),
-      umd: genConfig(entries.values(), filename, 'umd', undefined, true),
-      'umd-min': genConfig(entries.values(), filename, 'umd', 'umd.min')
+      commonjs: genConfig(entries.values(), entryFilename, 'commonjs2', 'common'),
+      umd: genConfig(entries.values(), entryFilename, 'umd', undefined, true),
+      'umd-min': genConfig(entries.values(), entryFilename, 'umd', 'umd.min')
     }
 
     const formatArray = (formats + '').split(',')
@@ -177,6 +177,6 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       )
     }
 
-    return previousValue.concat(configs);
-  }, []);
+    return previousValue.concat(configs)
+  }, [])
 }
