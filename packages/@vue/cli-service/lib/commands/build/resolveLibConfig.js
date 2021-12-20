@@ -9,30 +9,47 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
     process.exit(1)
   }
 
-  const vueMajor = require('../../util/getVueMajor')(api.getCwd())
-
-  const fullEntryPath = api.resolve(entry)
-
-  if (!fs.existsSync(fullEntryPath)) {
-    abort(
-      `Failed to resolve lib entry: ${entry}${entry === `src/App.vue` ? ' (default)' : ''}. ` +
-      `Make sure to specify the correct entry file.`
+  // respect inline entry and filename
+  if (entry) {
+    filename = (
+      filename || 
+      name ||
+      (
+        api.service.pkg.name
+          ? api.service.pkg.name.replace(/^@.+\//, '')
+          : path.basename(entry).replace(/\.(jsx?|vue)$/, '')
+      )
     )
+    api.chainWebpack((config) => {
+      config.entryPoints.clear()
+      config.entry(filename).add(api.resolve(entry))
+    });
   }
 
-  const isVueEntry = /\.vue$/.test(entry)
-  const libName = (
-    name ||
-    (
-      api.service.pkg.name
-        ? api.service.pkg.name.replace(/^@.+\//, '')
-        : path.basename(entry).replace(/\.(jsx?|vue)$/, '')
-    )
-  )
-  filename = filename || libName
-  function genConfig (format, postfix = format, genHTML) {
-    const config = api.resolveChainableWebpackConfig()
+  const vueMajor = require('../../util/getVueMajor')(api.getCwd())
 
+  function genConfig (entries, filename, format, postfix = format, genHTML) {
+    const entry = entries.pop();
+    const fullEntryPath = api.resolve(entry)
+
+    if (!fs.existsSync(fullEntryPath)) {
+      abort(
+        `Failed to resolve lib entry: ${entry}${entry === `src/App.vue` ? ' (default)' : ''}. ` +
+        `Make sure to specify the correct entry file.`
+      )
+    }
+
+    const isVueEntry = /\.vue$/.test(entry)
+    const libName = (
+      name ||
+      (
+        api.service.pkg.name
+          ? api.service.pkg.name.replace(/^@.+\//, '')
+          : path.basename(entry).replace(/\.(jsx?|vue)$/, '')
+      )
+    )
+
+    const config = api.resolveChainableWebpackConfig()
     const browserslist = require('browserslist')
     const targets = browserslist(undefined, { path: fullEntryPath })
     const supportsIE = targets.some(agent => agent.includes('ie'))
@@ -110,8 +127,10 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       }
     ].filter(Boolean)
 
+    entries.push(realEntry);
+
     rawConfig.entry = {
-      [entryName]: realEntry
+      [entryName]: entries
     }
 
     rawConfig.output = Object.assign({
@@ -122,10 +141,10 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       // libraryTarget: 'esm' or target: 'universal'
       // https://github.com/webpack/webpack/issues/6522
       // https://github.com/webpack/webpack/issues/6525
-      globalObject: `(typeof self !== 'undefined' ? self : this)`
-    }, rawConfig.output, {
+      globalObject: `(typeof self !== 'undefined' ? self : this)`,
       filename: `${entryName}.js`,
       chunkFilename: `${entryName}.[name].js`,
+    }, rawConfig.output, {
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
       // document.currentScript.src.
@@ -140,20 +159,24 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
     return rawConfig
   }
 
-  const configMap = {
-    commonjs: genConfig('commonjs2', 'common'),
-    umd: genConfig('umd', undefined, true),
-    'umd-min': genConfig('umd', 'umd.min')
-  }
+  const baseConfig = api.resolveChainableWebpackConfig()
 
-  const formatArray = (formats + '').split(',')
-  const configs = formatArray.map(format => configMap[format])
-  if (configs.indexOf(undefined) !== -1) {
-    const unknownFormats = formatArray.filter(f => configMap[f] === undefined).join(', ')
-    abort(
-      `Unknown library build formats: ${unknownFormats}`
-    )
-  }
+  return Object.entries(baseConfig.entryPoints.entries()).reduce((previousValue, [filename, entries]) => {
+    const configMap = {
+      commonjs: genConfig(entries.values(), filename, 'commonjs2', 'common'),
+      umd: genConfig(entries.values(), filename, 'umd', undefined, true),
+      'umd-min': genConfig(entries.values(), filename, 'umd', 'umd.min')
+    }
 
-  return configs
+    const formatArray = (formats + '').split(',')
+    const configs = formatArray.map(format => configMap[format])
+    if (configs.indexOf(undefined) !== -1) {
+      const unknownFormats = formatArray.filter(f => configMap[f] === undefined).join(', ')
+      abort(
+        `Unknown library build formats: ${unknownFormats}`
+      )
+    }
+
+    return previousValue.concat(configs);
+  }, []);
 }
