@@ -21,13 +21,13 @@
   -f, --filter          glob to filter tests by filename
   ```
 
-  Additionally, all [Nightwatch CLI options](https://nightwatchjs.org/guide/running-tests/#command-line-options) are also supported. 
+  Additionally, all [Nightwatch CLI options](https://nightwatchjs.org/guide/running-tests/#command-line-options) are also supported.
   E.g.: `--verbose`, `--retries` etc.
-  
+
 
 ## Project Structure
 
-The following structure will be generated when installing this plugin. There are examples for most testing concepts in Nightwatch available.    
+The following structure will be generated when installing this plugin. There are examples for most testing concepts in Nightwatch available.
 
 ```
 tests/e2e/
@@ -55,14 +55,14 @@ Files located here are loaded automatically by Nightwatch and placed onto the `.
 Files located here are loaded automatically by Nightwatch and placed onto the main `browser` api object to extend the built-in Nightwatch commands. See [writing custom commands](https://nightwatchjs.org/guide/extending-nightwatch/#writing-custom-commands) for details.
 
 #### `page objects`
-Working with page objects is a popular methodology in end-to-end UI testing. Files placed in this folder are automatically loaded onto the `.page` api namespace, with the name of the file being the name of the page object. See [working with page objects](https://nightwatchjs.org/guide/working-with-page-objects/) section for details.  
+Working with page objects is a popular methodology in end-to-end UI testing. Files placed in this folder are automatically loaded onto the `.page` api namespace, with the name of the file being the name of the page object. See [working with page objects](https://nightwatchjs.org/guide/working-with-page-objects/) section for details.
 
 #### `globals.js`
 The external globals file which can hold global properties or hooks. See [test globals](https://nightwatchjs.org/gettingstarted/configuration/#test-globals) section.
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add e2e-nightwatch
 ```
 
@@ -78,7 +78,7 @@ Consult Nightwatch docs for [configuration options](https://nightwatchjs.org/get
 
 By default, all tests inside the `specs` folder will be run using Chrome. If you'd like to run end-to-end tests against Chrome (or Firefox) in headless mode, simply pass the `--headless` argument.
 
-```sh
+```bash
 $ vue-cli-service test:e2e
 ```
 
@@ -86,7 +86,7 @@ $ vue-cli-service test:e2e
 
 To run a single test supply the filename path. E.g.:
 
-```sh
+```bash
 $ vue-cli-service test:e2e tests/e2e/specs/test.js
 ```
 
@@ -94,7 +94,7 @@ $ vue-cli-service test:e2e tests/e2e/specs/test.js
 
 If the development server is already running and you want to skip starting it automatically, pass the `--url` argument:
 
-```sh
+```bash
 $ vue-cli-service test:e2e --url http://localhost:8080/
 ```
 
@@ -102,7 +102,7 @@ $ vue-cli-service test:e2e --url http://localhost:8080/
 
 Support for running tests in Firefox is also available by default. Simply run the following (optionally add `--headless` to run Firefox in headless mode):
 
-```sh
+```bash
 $ vue-cli-service test:e2e --env firefox [--headless]
 ```
 
@@ -110,34 +110,34 @@ $ vue-cli-service test:e2e --env firefox [--headless]
 
 You can also run the tests simultaneously in both browsers by supplying both test environments separated by a comma (",") - no spaces.
 
-```sh
+```bash
 $ vue-cli-service test:e2e --env firefox,chrome [--headless]
 ```
 
 **Running Tests in Parallel**
 
-For a significantly faster test run, you can enable parallel test running when there are several test suites. Concurrency is performed at the file level and is distributed automatically per available CPU core.  
+For a significantly faster test run, you can enable parallel test running when there are several test suites. Concurrency is performed at the file level and is distributed automatically per available CPU core.
 
 For now, this is only available in Chromedriver. Read more about [parallel running](https://nightwatchjs.org/guide/running-tests/#parallel-running) in the Nightwatch docs.
 
-```sh
+```bash
 $ vue-cli-service test:e2e --parallel
 ```
 
 **Running with Selenium**
 
-Since `v4`, the Selenium standalone server is not included anymore in this plugin and in most cases running with Selenium is not required since Nightwatch v1.0. 
+Since `v4`, the Selenium standalone server is not included anymore in this plugin and in most cases running with Selenium is not required since Nightwatch v1.0.
 
 It is still possible to use the Selenium server, by following these steps:
 
 __1.__ Install `selenium-server` NPM package:
 
-  ```sh
+  ```bash
   $ npm install selenium-server --save-dev
   ```
-  
+
 __2.__ Run with `--use-selenium` cli argument:
 
-  ```sh
+  ```bash
   $ vue-cli-service test:e2e --use-selenium
   ```

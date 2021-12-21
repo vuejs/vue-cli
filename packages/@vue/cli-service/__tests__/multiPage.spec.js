@@ -70,10 +70,10 @@ test('serve w/ multi page', async () => {
     async ({ page, url, helpers }) => {
       expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
 
-      await page.goto(`${url}/foo.html`)
+      await page.goto(`${url}foo.html`)
       expect(await helpers.getText('h1')).toMatch(`Foo`)
 
-      await page.goto(`${url}/bar.html`)
+      await page.goto(`${url}bar.html`)
       expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
 
       await page.goto(`${url}foo`)

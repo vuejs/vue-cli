@@ -73,7 +73,7 @@ module.exports = api => {
         ? []
         : [
           api.hasPlugin('typescript')
-            ? `tests/unit/**/*.spec.ts`
+            ? `tests/unit/**/*.spec.[jt]s`
             : `tests/unit/**/*.spec.js`
         ])
     ]

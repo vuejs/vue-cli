@@ -109,7 +109,7 @@ program
 
 program
   .command('build')
-  .description('alias of "npm run serve" in the current project')
+  .description('alias of "npm run build" in the current project')
   .action((cmd) => {
     require('../lib/util/runNpmScript')('build', process.argv.slice(3))
   })

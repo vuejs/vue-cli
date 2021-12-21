@@ -63,9 +63,10 @@ test('prettier', async () => {
   expect(pkg.eslintConfig.extends).toEqual([
     'plugin:vue/essential',
     'eslint:recommended',
-    '@vue/prettier'
+    'plugin:prettier/recommended'
   ])
-  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-prettier')
 })
 
 test('babel', async () => {
@@ -127,10 +128,10 @@ test('typescript', async () => {
     'plugin:vue/essential',
     'eslint:recommended',
     '@vue/typescript/recommended',
-    '@vue/prettier',
-    '@vue/prettier/@typescript-eslint'
+    'plugin:prettier/recommended'
   ])
-  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
 })
 
@@ -159,9 +160,7 @@ test('lint on commit', async () => {
   expect(pkg['lint-staged']).toEqual({
     '*.{js,jsx,vue}': 'vue-cli-service lint'
   })
-  expect(pkg.vue).toEqual({
-    lintOnSave: false
-  })
+  expect(pkg.vue.lintOnSave).toBe(false)
 })
 
 test('should lint ts files when typescript plugin co-exists', async () => {

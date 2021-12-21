@@ -7,19 +7,16 @@ module.exports = (api, options) => {
   if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
-        'vue': '^3.0.4'
-      },
-      devDependencies: {
-        '@vue/compiler-sfc': '^3.0.4'
+        'vue': '^3.2.13'
       }
     })
   } else {
     api.extendPackage({
       dependencies: {
-        'vue': '^2.6.11'
+        'vue': '^2.6.14'
       },
       devDependencies: {
-        'vue-template-compiler': '^2.6.11'
+        'vue-template-compiler': '^2.6.14'
       }
     })
   }
@@ -41,19 +38,19 @@ module.exports = (api, options) => {
     const deps = {
       sass: {
         sass: '^1.32.7',
-        'sass-loader': '^11.0.1'
+        'sass-loader': '^12.0.0'
       },
       'dart-sass': {
         sass: '^1.32.7',
-        'sass-loader': '^11.0.1'
+        'sass-loader': '^12.0.0'
       },
       less: {
         'less': '^4.0.0',
         'less-loader': '^8.0.0'
       },
       stylus: {
-        'stylus': '^0.54.8',
-        'stylus-loader': '^5.0.0'
+        'stylus': '^0.55.0',
+        'stylus-loader': '^6.1.0'
       }
     }
 

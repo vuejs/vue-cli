@@ -2,7 +2,7 @@
 
 你可以使用 `vue serve` 和 `vue build` 命令对单个 `*.vue` 文件进行快速原型开发，不过这需要先额外安装一个全局的扩展：
 
-``` bash
+```bash
 npm install -g @vue/cli-service-global
 ```
 
@@ -33,13 +33,13 @@ Options:
 
 然后在这个 `App.vue` 文件所在的目录下运行：
 
-``` bash
+```bash
 vue serve
 ```
 
 `vue serve` 使用了和 `vue create` 创建的项目相同的默认设置 (webpack、Babel、PostCSS 和 ESLint)。它会在当前目录自动推导入口文件——入口可以是 `main.js`、`index.js`、`App.vue` 或 `app.vue` 中的一个。你也可以显式地指定入口文件：
 
-``` bash
+```bash
 vue serve MyComponent.vue
 ```
 
@@ -63,7 +63,7 @@ Options:
 
 你也可以使用 `vue build` 将目标文件构建成一个生产环境的包并用来部署：
 
-``` bash
+```bash
 vue build MyComponent.vue
 ```
 

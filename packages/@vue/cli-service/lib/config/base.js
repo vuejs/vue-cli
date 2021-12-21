@@ -1,24 +1,23 @@
 const path = require('path')
-const { semver } = require('@vue/cli-shared-utils')
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const cwd = api.getCwd()
   const webpack = require('webpack')
-  const webpackMajor = semver.major(webpack.version)
   const vueMajor = require('../util/getVueMajor')(cwd)
 
   api.chainWebpack(webpackConfig => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
 
+    // https://github.com/webpack/webpack/issues/14532#issuecomment-947525539
+    webpackConfig.output.set('hashFunction', 'xxhash64')
+
     // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
-    if (webpackMajor !== 4) {
-      webpackConfig.module
-        .rule('esm')
-          .test(/\.m?jsx?$/)
-          .resolve.set('fullySpecified', false)
-    }
+    webpackConfig.module
+      .rule('esm')
+        .test(/\.m?jsx?$/)
+        .resolve.set('fullySpecified', false)
 
     webpackConfig
       .mode('development')
@@ -102,8 +101,7 @@ module.exports = (api, options) => {
     } else if (vueMajor === 3) {
       // for Vue 3 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader/package.json').version,
-        '@vue/compiler-sfc': require('@vue/compiler-sfc/package.json').version
+        'vue-loader': require('vue-loader/package.json').version
       })
 
       webpackConfig.resolve
@@ -143,6 +141,13 @@ module.exports = (api, options) => {
             __VUE_PROD_DEVTOOLS__: 'false'
           }])
     }
+
+    // https://github.com/vuejs/vue-loader/issues/1435#issuecomment-869074949
+    webpackConfig.module
+      .rule('vue-style')
+        .test(/\.vue$/)
+          .resourceQuery(/type=style/)
+            .sideEffects(true)
 
     // Other common pre-processors ---------------------------------------------
     const maybeResolve = name => {
