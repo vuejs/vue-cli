@@ -325,6 +325,18 @@ You can deploy a fresh Vue project, with a Git repository set up for you, with t
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmaster%2Fexamples%2Fvue)
 
+### Layer0
+
+[Layer0](https://layer0.co) is the powerful CDN platform that integrates edge logic into your application code & extends the edge to the browser.
+
+See the official guide on [how to deploy a Vue.js application on Layer0]((https://docs.layer0.co/guides/vue)).
+
+#### Deploying a fresh Vue project on Layer0
+
+You can deploy a fresh Vue project on Layer0 with the following Deploy Button:
+
+[Deploy to Layer0](https://app.layer0.co/deploy?button&deploy&repo=https://github.com/layer0-docs/layer0-static-vuejs-example)
+
 ## References:
 
 - [Example Source](https://github.com/vercel/vercel/tree/master/examples/vue)
