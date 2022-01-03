@@ -32,7 +32,7 @@ If you have a default `NODE_ENV` in your environment, you should either remove i
 
 You can specify env variables by placing the following files in your project root:
 
-``` bash
+```bash
 .env                # loaded in all cases
 .env.local          # loaded in all cases, ignored by git
 .env.[mode]         # only loaded in specified mode
@@ -56,7 +56,7 @@ Note that only `NODE_ENV`, `BASE_URL`, and variables that start with `VUE_APP_` 
 
 For more detailed env parsing rules, please refer to [the documentation of `dotenv`](https://github.com/motdotla/dotenv#rules). We also use [dotenv-expand](https://github.com/motdotla/dotenv-expand) for variable expansion (available in Vue CLI 3.5+). For example:
 
-``` bash
+```bash
 FOO=foo
 BAR=bar
 

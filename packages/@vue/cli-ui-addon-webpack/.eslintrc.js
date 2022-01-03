@@ -15,5 +15,8 @@ module.exports = {
     babelOptions: {
       cwd: __dirname
     }
+  },
+  rules: {
+    'vue/multi-word-component-names': 'warn'
   }
 }

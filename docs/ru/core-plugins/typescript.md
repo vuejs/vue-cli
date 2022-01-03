@@ -24,7 +24,7 @@ TypeScript может быть сконфигурирован через `tsconf
 
 ## Установка в уже созданный проект
 
-```sh
+```bash
 vue add typescript
 ```
 

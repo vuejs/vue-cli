@@ -274,29 +274,6 @@ test.skip(`should use formatter 'stylish'`, async () => {
   await donePromise
 })
 
-test(`should work with eslint v8`, async () => {
-  const project = await create('eslint-v8', {
-    plugins: {
-      '@vue/cli-plugin-babel': {},
-      '@vue/cli-plugin-eslint': {
-        config: 'airbnb',
-        lintOn: 'save'
-      }
-    }
-  })
-  const { read, write, run } = project
-  await run('npm add -D eslint@^8.0.0-0')
-  // should've applied airbnb autofix
-  const main = await read('src/main.js')
-  expect(main).toMatch(';')
-  // remove semicolons
-  const updatedMain = main.replace(/;/g, '')
-  await write('src/main.js', updatedMain)
-  // lint
-  await run('vue-cli-service lint')
-  expect(await read('src/main.js')).toMatch(';')
-})
-
 test(`should work with eslint args`, async () => {
   const project = await create('eslint-with-args', {
     plugins: {

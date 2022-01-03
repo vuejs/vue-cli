@@ -101,8 +101,7 @@ module.exports = (api, options) => {
     } else if (vueMajor === 3) {
       // for Vue 3 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader/package.json').version,
-        '@vue/compiler-sfc': require('@vue/compiler-sfc/package.json').version
+        'vue-loader': require('vue-loader/package.json').version
       })
 
       webpackConfig.resolve

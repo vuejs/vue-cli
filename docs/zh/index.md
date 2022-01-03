@@ -23,7 +23,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
 
 安装：
 
-``` bash
+```bash
 npm install -g @vue/cli
 # OR
 yarn global add @vue/cli
@@ -31,7 +31,7 @@ yarn global add @vue/cli
 
 创建一个项目：
 
-``` bash
+```bash
 vue create my-project
 # OR
 vue ui

@@ -6,7 +6,7 @@ sidebar: auto
 
 First, install the latest Vue CLI globally:
 
-```sh
+```bash
 npm install -g @vue/cli@next
 # OR
 yarn global add @vue/cli@next
@@ -16,13 +16,14 @@ yarn global add @vue/cli@next
 
 In your existing projects, run:
 
-```sh
+```bash
 vue upgrade --next
 ```
 
 And then follow the command line instructions.
 
-See the following section for detailed breaking changes introduced in each package.
+Note that the migrator is not complete yet and doesn't cover all cases.
+Please read the following section for detailed breaking changes introduced in each package.
 
 ::: tip Note
 If you see errors like `setup compilation vue-loader-plugin(node:44156) UnhandledPromiseRejectionWarning: TypeError: The 'compilation' argument must be an instance of Compilation` after upgrading, please remove the lockfile (`yarn.lock` or `package-lock.json`) and `node_modules` in the project and reinstall all the dependencies.
@@ -87,7 +88,7 @@ Say we are building a simple single-page app with the default setup, here are so
 
 The `css.requireModuleExtension` option is removed. If you do need to strip the `.module` part in CSS Module file names, please refer to [Working with CSS > CSS Modules](../guide/css.md#css-modules) for more guidance.
 
-`css-loader` is upgraded from v3 to v5, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
+`css-loader` is upgraded from v3 to v6, a few CSS Module related options have been renamed, along with other changes. See [full changelog](https://github.com/webpack-contrib/css-loader/blob/master/CHANGELOG.md) for additional details.
 
 #### Sass/SCSS
 
@@ -120,6 +121,7 @@ module.exports = {
 * `copy-webpack-plugin` is upgraded from v5 to v8. If you never customized its config through `config.plugin('copy')`, there should be no user-facing breaking changes. A full list of breaking changes is available at [`copy-webpack-plugin` v6.0.0 changelog](https://github.com/webpack-contrib/copy-webpack-plugin/blob/master/CHANGELOG.md).
 * `terser-webpack-plugin` is upgraded from v2 to v5, using terser 5 and some there are some changes in the options format. See full details in its [changelog](https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md).
 * When creating new projects, the default `less-loader` is updated from [v5 to v8](https://github.com/webpack-contrib/less-loader/blob/master/CHANGELOG.md); `less` from [v3 to v4](https://github.com/less/less.js/pull/3573); `sass-loader` from [v8 to v11](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md); `stylus-loader` from [v3 to v5](https://github.com/webpack-contrib/stylus-loader/blob/master/CHANGELOG.md).
+* `mini-css-extract-plugin` is upgraded from [v1 to v2](https://github.com/webpack-contrib/mini-css-extract-plugin/blob/master/CHANGELOG.md).
 
 ### Babel Plugin
 
@@ -128,7 +130,8 @@ The [`transpileDependencies` option](../config/#transpiledependencies) now accep
 ### ESLint Plugin
 
 * `eslint-loader` is replaced by [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin), dropping support for ESLint <= 6.
-* New projects are now generated with `eslint-plugin-vue` v7, see its [release notes](https://github.com/vuejs/eslint-plugin-vue/releases/tag/v7.0.0) for breaking changes.
+* New projects are now generated with `eslint-plugin-vue` v8, see the  release notes ([v7](https://github.com/vuejs/eslint-plugin-vue/releases/tag/v7.0.0), [v8](https://github.com/vuejs/eslint-plugin-vue/releases/tag/v8.0.0)) for breaking changes.
+* `@vue/eslint-config-prettier` is deprecated. See <https://github.com/vuejs/eslint-config-prettier> for the migration guide.
 
 ### PWA Plugin
 
@@ -140,7 +143,7 @@ The [`transpileDependencies` option](../config/#transpiledependencies) now accep
 
 * Dropped TSLint support. As [TSLint has been deprecated](https://github.com/palantir/tslint/issues/4534), we [removed](https://github.com/vuejs/vue-cli/pull/5065) all TSLint-related code in this version.
 Please consider switching to ESLint. You can check out [`tslint-to-eslint-config`](https://github.com/typescript-eslint/tslint-to-eslint-config) for a mostly automatic migration experience.
-* `ts-loader` is upgraded from v6 to v8. It now only supports TypeScript >= 3.6.
+* `ts-loader` is upgraded from v6 to v9. It now only supports TypeScript >= 3.6.
 * `fork-ts-checker-webpack-plugin` is upgraded from v3.x to v6.x, you can see the detailed breaking changes in its release notes:
   * [v4.0.0](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v4.0.0)
   * [v5.0.0](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/releases/tag/v5.0.0)
@@ -166,7 +169,7 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 ### Unit-Mocha Plugin
 
 * `mocha` is upgraded from v6 to v8, please refer to the release notes of [mocha v7](https://github.com/mochajs/mocha/releases/tag/v7.0.0) and [mocha v8](https://github.com/mochajs/mocha/releases/tag/v8.0.0) for a complete list of breaking changes.
-* `jsdom` is upgraded from v15 to v17, user-facing breaking changes are listed in the [`jsdom` v16.0.0 release notes](https://github.com/jsdom/jsdom/releases/tag/16.0.0).
+* `jsdom` is upgraded from v15 to v18, user-facing breaking changes are listed in the [`jsdom` v16.0.0 release notes](https://github.com/jsdom/jsdom/releases/tag/16.0.0) and [v18.0.0 release notes](https://github.com/jsdom/jsdom/releases/tag/18.0.0).
 
 ### Internal Packages
 

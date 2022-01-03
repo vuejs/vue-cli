@@ -4,7 +4,7 @@
 
 运行以下命令来创建一个新项目：
 
-``` bash
+```bash
 vue create hello-world
 ```
 
@@ -27,12 +27,12 @@ vue create hello-world
 ::: tip ~/.vuerc
 被保存的 preset 将会存在用户的 home 目录下一个名为 `.vuerc` 的 JSON 文件里。如果你想要修改被保存的 preset / 选项，可以编辑这个文件。
 
-在项目创建的过程中，你也会被提示选择喜欢的包管理器或使用[淘宝 npm 镜像源](https://npm.taobao.org/)以更快地安装依赖。这些选择也将会存入 `~/.vuerc`。
+在项目创建的过程中，你也会被提示选择喜欢的包管理器或使用[淘宝 npm 镜像源](https://npmmirror.com/)以更快地安装依赖。这些选择也将会存入 `~/.vuerc`。
 :::
 
 `vue create` 命令有一些可选项，你可以通过运行以下命令进行探索：
 
-``` bash
+```bash
 vue create --help
 ```
 
@@ -62,7 +62,7 @@ vue create --help
 
 你也可以通过 `vue ui` 命令以图形化界面创建和管理项目：
 
-``` bash
+```bash
 vue ui
 ```
 
@@ -74,7 +74,7 @@ vue ui
 
 Vue CLI >= 3 和旧版使用了相同的 `vue` 命令，所以 Vue CLI 2 (`vue-cli`) 被覆盖了。如果你仍然需要使用旧版本的 `vue init` 功能，你可以全局安装一个桥接工具：
 
-``` bash
+```bash
 npm install -g @vue/cli-init
 # `vue init` 的运行效果将会跟 `vue-cli@2.x` 相同
 vue init webpack my-project

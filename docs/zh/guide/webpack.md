@@ -155,7 +155,7 @@ module.exports = {
 
 你可以将其输出重定向到一个文件以便进行查阅：
 
-``` bash
+```bash
 vue inspect > output.js
 ```
 
@@ -163,21 +163,21 @@ vue inspect > output.js
 
 你也可以通过指定一个路径来审查配置的一小部分：
 
-``` bash
+```bash
 # 只审查第一条规则
 vue inspect module.rules.0
 ```
 
 或者指向一个规则或插件的名字：
 
-``` bash
+```bash
 vue inspect --rule vue
 vue inspect --plugin html
 ```
 
 最后，你可以列出所有规则和插件的名字：
 
-``` bash
+```bash
 vue inspect --rules
 vue inspect --plugins
 ```

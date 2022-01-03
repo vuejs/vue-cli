@@ -48,14 +48,14 @@ test('serve with router', async () => {
     () => project.run('vue-cli-service serve'),
     async ({ page, helpers }) => {
       expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="#/"]', 'router-link-exact-active')).toBe(true)
       expect(await helpers.hasClass('a[href="#/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="#/about"]')
       await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="#/"]', 'router-link-exact-active')).toBe(false)
       expect(await helpers.hasClass('a[href="#/about"]', 'router-link-exact-active')).toBe(true)
     }
@@ -72,14 +72,14 @@ test('serve with legacy router option', async () => {
     () => project.run('vue-cli-service serve'),
     async ({ page, helpers }) => {
       expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="/"]', 'router-link-exact-active')).toBe(true)
       expect(await helpers.hasClass('a[href="/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="/about"]')
       await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="/"]', 'router-link-exact-active')).toBe(false)
       expect(await helpers.hasClass('a[href="/about"]', 'router-link-exact-active')).toBe(true)
     }
