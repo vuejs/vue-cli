@@ -219,22 +219,23 @@ module.exports = (api, options) => {
       open: args.open || projectDevServerOptions.open,
       setupExitSignals: true,
 
-      // eslint-disable-next-line no-shadow
-      onBeforeSetupMiddleware (server) {
+      setupMiddlewares (middlewares, devServer) {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay
-        server.app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
+        devServer.app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
           `To specify an editor, specify the EDITOR env variable or ` +
           `add "editor" field to your Vue project config.\n`
         )))
 
         // allow other plugins to register middlewares, e.g. PWA
         // todo: migrate to the new API interface
-        api.service.devServerConfigFns.forEach(fn => fn(server.app, server))
+        api.service.devServerConfigFns.forEach(fn => fn(devServer.app, devServer))
 
-        if (projectDevServerOptions.onBeforeSetupMiddleware) {
-          projectDevServerOptions.onBeforeSetupMiddleware(server)
+        if (projectDevServerOptions.setupMiddlewares) {
+          return projectDevServerOptions.setupMiddlewares(middlewares, devServer)
         }
+
+        return middlewares
       }
     }), compiler)
 
