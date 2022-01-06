@@ -73,7 +73,7 @@ const defaultSettings = {
 
       webdriver: {
         start_process: true,
-        server_path: ''
+        server_path: Services.geckodriver ? Services.geckodriver.path : ''
       }
     },
 
@@ -86,7 +86,7 @@ const defaultSettings = {
       },
       webdriver: {
         start_process: true,
-        server_path: ''
+        server_path: '/usr/bin/safaridriver'
       }
     },
 
@@ -103,7 +103,7 @@ const defaultSettings = {
       },
       webdriver: {
         start_process: true,
-        server_path: '',
+        server_path: Services.geckodriver ? Services.geckodriver.path : '',
         cli_args: [
           // very verbose geckodriver logs
           // '-vv'
@@ -125,7 +125,7 @@ const defaultSettings = {
 
       webdriver: {
         start_process: true,
-        server_path: '',
+        server_path: Services.chromedriver ? Services.chromedriver.path : '',
         cli_args: [
           // --verbose
         ]
@@ -299,10 +299,7 @@ const defaultSettings = {
       desiredCapabilities: {
         browserName: 'firefox',
         'moz:firefoxOptions': {
-          args: [
-            // '-headless',
-            // '-verbose'
-          ]
+          args: geckoArgs
         }
       }
     }
