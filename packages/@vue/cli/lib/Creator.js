@@ -77,7 +77,7 @@ module.exports = class Creator extends EventEmitter {
         preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
       } else if (cliOptions.default) {
         // vue create foo --default
-        preset = defaults.presets.default
+        preset = defaults.presets['Default (Vue 3)']
       } else if (cliOptions.inlinePreset) {
         // vue create foo --inlinePreset {...}
         try {
@@ -329,6 +329,8 @@ module.exports = class Creator extends EventEmitter {
 
     if (name in savedPresets) {
       preset = savedPresets[name]
+    } else if (name === 'default') {
+      preset = savedPresets['Default (Vue 3)']
     } else if (name.endsWith('.json') || /^\./.test(name) || path.isAbsolute(name)) {
       preset = await loadLocalPreset(path.resolve(name))
     } else if (name.includes('/')) {
@@ -399,10 +401,10 @@ module.exports = class Creator extends EventEmitter {
     const presets = this.getPresets()
     const presetChoices = Object.entries(presets).map(([name, preset]) => {
       let displayName = name
-      if (name === 'default') {
+      // Vue version will be showed as features anyway,
+      // so we shouldn't display it twice.
+      if (name === 'Default (Vue 2)' || name === 'Default (Vue 3)') {
         displayName = 'Default'
-      } else if (name === '__default_vue_3__') {
-        displayName = 'Default (Vue 3)'
       }
 
       return {
