@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import 'docsearch.js/dist/cdn/docsearch.min.css'
-import docsearch from 'docsearch.js/dist/cdn/docsearch.min.js'
 import { useRoute, useRouter, useData } from 'vitepress'
 import { getCurrentInstance, onMounted, watch } from 'vue'
 const props = defineProps<{
@@ -57,32 +55,37 @@ watch(
   }
 )
 function initialize(userOptions: any) {
-  const { algoliaOptions = {}} = userOptions
-  docsearch(Object.assign(
-    {},
-    userOptions,
-    {
-      inputSelector: '#algolia-search-input',
-      // #697 Make docsearch work well at i18n mode.
-      algoliaOptions: {
-        ...algoliaOptions,
-        facetFilters: [`lang:${lang.value}`].concat(algoliaOptions.facetFilters || [])
-      },
-      handleSelected: (input, event, suggestion) => {
-        const { pathname, hash } = new URL(suggestion.url)
+  Promise.all([
+    import('docsearch.js/dist/cdn/docsearch.min.js'),
+    import('docsearch.js/dist/cdn/docsearch.min.css')
+  ]).then(([docsearch]) => {
+    const { algoliaOptions = {}} = userOptions
+    docsearch.default(Object.assign(
+      {},
+      userOptions,
+      {
+        inputSelector: '#algolia-search-input',
+        // #697 Make docsearch work well at i18n mode.
+        algoliaOptions: {
+          ...algoliaOptions,
+          facetFilters: [`lang:${lang.value}`].concat(algoliaOptions.facetFilters || [])
+        },
+        handleSelected: (input, event, suggestion) => {
+          const { pathname, hash } = new URL(suggestion.url)
 
-        // Router doesn't handle same-page navigation so we use the native
-        // browser location API for anchor navigation
-        if (route.path === pathname) {
-          window.location.assign(suggestion.url)
-        } else {
-          const routepath = pathname.replace(site.base, '/')
-          const _hash = decodeURIComponent(hash)
-          router.go(`${routepath}${_hash}`)
+          // Router doesn't handle same-page navigation so we use the native
+          // browser location API for anchor navigation
+          if (route.path === pathname) {
+            window.location.assign(suggestion.url)
+          } else {
+            const routepath = pathname.replace(site.base, '/')
+            const _hash = decodeURIComponent(hash)
+            router.go(`${routepath}${_hash}`)
+          }
         }
-      }
-    })
-  )
+      })
+    )
+  })
 }
 </script>
 
