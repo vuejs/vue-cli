@@ -38,10 +38,19 @@ describe('Vue project manager', () => {
       cy.get('[data-testid="use-config-files"] .bullet').click()
       cy.get('.next').click()
     })
+
+    // choose vue 2
+    cy.get('.config').within(() => {
+      cy.get('.vue-ui-select').eq(0).click()
+    })
+    cy.get('.vue-ui-select-button').eq(1).click()
+
+    // choose standard eslint config
     cy.get('.config').within(() => {
       cy.get('.vue-ui-select').eq(1).click()
     })
     cy.get('.vue-ui-select-button').eq(2).click()
+
     cy.get('.config').within(() => {
       cy.get('.vue-ui-switch').click({ multiple: true })
       cy.get('.next').click()
