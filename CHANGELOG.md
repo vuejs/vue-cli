@@ -1,4 +1,30 @@
 
+## 5.0.0-rc.2 (2022-01-15)
+
+#### :rocket: New Features
+* `@vue/cli-ui`, `@vue/cli`
+  * [#6917](https://github.com/vuejs/vue-cli/pull/6917) feat!: make Vue 3 the default version for `vue create` ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-ui`, `@vue/cli`
+  * [#6917](https://github.com/vuejs/vue-cli/pull/6917) feat!: make Vue 3 the default version for `vue create` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6872](https://github.com/vuejs/vue-cli/pull/6872) chore: use vue-loader v17 ([@cexbrayat](https://github.com/cexbrayat))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6944](https://github.com/vuejs/vue-cli/pull/6944) fix: set mini-css-extract-plugin to 2.4.5 ([@cexbrayat](https://github.com/cexbrayat))
+  * [#6907](https://github.com/vuejs/vue-cli/pull/6907) fix: use `setupMiddlewares`, avoid dev server deprecation warnings ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6926](https://github.com/vuejs/vue-cli/pull/6926) fix: Update cypress api link to the latest ([@justforuse](https://github.com/justforuse))
+
+#### Committers: 3
+- Allen ([@justforuse](https://github.com/justforuse))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 5.0.0-rc.1 (2021-11-17)
 
 #### :rocket: New Features
