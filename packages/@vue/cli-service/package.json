@@ -61,7 +61,7 @@
     "launch-editor-middleware": "^2.2.1",
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.mapvalues": "^4.6.0",
-    "mini-css-extract-plugin": "^2.4.3",
+    "mini-css-extract-plugin": "~2.4.3",
     "minimist": "^1.2.5",
     "module-alias": "^2.2.2",
     "portfinder": "^1.0.26",
