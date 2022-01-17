@@ -330,7 +330,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 
 - Type: `Object`
 
-  [All options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are supported. Note that:
+  [All options for `webpack-dev-server`](https://v4.webpack.js.org/configuration/dev-server/) are supported. Note that:
 
   - Some values like `host`, `port` and `https` may be overwritten by command line flags.
 
@@ -382,7 +382,7 @@ In v3 this means the opposite of `css.requireModuleExtension`.
 - Type: `boolean`
 - Default: `true`
 
-  Toggle between the dev-server's two different modes. See [devServer.inline](https://webpack.js.org/configuration/dev-server/#devserverinline) for more details. Note that:
+  Toggle between the dev-server's two different modes. See [devServer.inline](https://v4.webpack.js.org/configuration/dev-server/#devserverinline) for more details. Note that:
 
   - To use the `iframe mode` no additional configuration is needed. Just navigate the browser to `http://<host>:<port>/webpack-dev-server/<path>` to debug your app. A notification bar with messages will appear at the top of your app.
   - To use the `inline mode`, just navigate to `http://<host>:<port>/<path>` to debug your app. The build messages will appear in the browser console.
