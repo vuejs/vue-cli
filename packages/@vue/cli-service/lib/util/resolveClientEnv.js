@@ -7,7 +7,7 @@ module.exports = function resolveClientEnv (options, raw) {
       env[key] = process.env[key]
     }
   })
-  env.BASE_URL = options.publicPath
+  env.BASE_URL = options.publicPath !== 'auto' ? options.publicPath : '/'
 
   if (raw) {
     return env
