@@ -62,7 +62,7 @@
     "lint-staged": "^11.1.2",
     "memfs": "^3.2.0",
     "minimist": "^1.2.5",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "postcss": "8.3.6",
     "prettier": ">= 1.13.0",
     "rimraf": "^3.0.2",
