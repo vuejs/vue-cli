@@ -141,13 +141,29 @@ module.exports = class Service {
     }
   }
 
-  setPluginsToSkip (args) {
-    const skipPlugins = args['skip-plugins']
-    const pluginsToSkip = skipPlugins
-      ? new Set(skipPlugins.split(',').map(id => resolvePluginId(id)))
-      : new Set()
-
+  setPluginsToSkip (args, rawArgv) {
+    let skipPlugins = args['skip-plugins']
+    const pluginsToSkip = new Set()
+    if (skipPlugins) {
+      // When only one appearence, convert to array to prevent duplicate code
+      if (!Array.isArray(skipPlugins)) {
+        skipPlugins = Array.from([skipPlugins])
+      }
+      // Iter over all --skip-plugins appearences
+      for (const value of skipPlugins.values()) {
+        for (const plugin of value.split(',').map(id => resolvePluginId(id))) {
+          pluginsToSkip.add(plugin)
+        }
+      }
+    }
     this.pluginsToSkip = pluginsToSkip
+
+    delete args['skip-plugins']
+    // Delete all --skip-plugin appearences
+    let index
+    while ((index = rawArgv.indexOf('--skip-plugins')) > -1) {
+      rawArgv.splice(index, 2) // Remove the argument and its value
+    }
   }
 
   resolvePlugins (inlinePlugins, useBuiltIn) {
@@ -225,7 +241,7 @@ module.exports = class Service {
     const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
 
     // --skip-plugins arg may have plugins that should be skipped during init()
-    this.setPluginsToSkip(args)
+    this.setPluginsToSkip(args, rawArgv)
 
     // load env variables, load user config, apply plugins
     await this.init(mode)
