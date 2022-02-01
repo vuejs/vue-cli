@@ -27,7 +27,6 @@
     "@soda/friendly-errors-webpack-plugin": "^1.8.0",
     "@soda/get-current-script": "^1.0.2",
     "@types/minimist": "^1.2.0",
-    "@types/webpack-dev-server": "^4.1.0",
     "@vue/cli-overlay": "^5.0.0-rc.2",
     "@vue/cli-plugin-router": "^5.0.0-rc.2",
     "@vue/cli-plugin-vuex": "^5.0.0-rc.2",
@@ -76,7 +75,7 @@
     "webpack": "^5.54.0",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-chain": "^6.5.1",
-    "webpack-dev-server": "^4.1.0",
+    "webpack-dev-server": "^4.7.3",
     "webpack-merge": "^5.7.3",
     "webpack-virtual-modules": "^0.4.2",
     "whatwg-fetch": "^3.6.2"
