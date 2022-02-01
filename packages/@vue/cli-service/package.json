@@ -76,7 +76,7 @@
     "webpack": "^5.54.0",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-chain": "^6.5.1",
-    "webpack-dev-server": "^4.1.0",
+    "webpack-dev-server": "^4.7.2",
     "webpack-merge": "^5.7.3",
     "webpack-virtual-modules": "^0.4.2",
     "whatwg-fetch": "^3.6.2"
