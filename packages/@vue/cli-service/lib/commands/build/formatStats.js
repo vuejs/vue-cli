@@ -68,5 +68,10 @@ module.exports = function formatStats (stats, dir, api) {
     )).join(`\n`)
   )
 
-  return `${ui.toString()}\n\n  ${chalk.gray(`Images and other types of assets omitted.`)}\n`
+  const time = stats.endTime - stats.startTime
+  const now = new Date().toISOString()
+  const hash = stats.hash
+  const info = `Build at: ${chalk.white(now)} - Hash: ${chalk.white(hash)} - Time: ${chalk.white(time)}ms`
+
+  return `${ui.toString()}\n\n  ${chalk.gray(`Images and other types of assets omitted.`)}\n  ${info}\n`
 }
