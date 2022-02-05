@@ -1,5 +1,6 @@
 jest.setTimeout(30000)
 
+const fs = require('fs-extra')
 const path = require('path')
 const portfinder = require('portfinder')
 const createServer = require('@vue/cli-test-utils/createServer')
@@ -16,8 +17,9 @@ test('build as wc', async () => {
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
-  expect(project.has('dist/build-wc.js')).toBe(true)
-  expect(project.has('dist/build-wc.min.js')).toBe(true)
+  const files = await fs.readdir(path.resolve(project.dir, 'dist'))
+  expect(files.filter(f => f.match(/build-wc\.\w{8}\.js$/)).length).toBe(1)
+  expect(files.filter(f => f.match(/build-wc\.\w{8}\.min\.js$/)).length).toBe(1)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
@@ -61,8 +63,9 @@ test('build as single wc', async () => {
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
-  expect(project.has('dist/single-wc.js')).toBe(true)
-  expect(project.has('dist/single-wc.min.js')).toBe(true)
+  const files = await fs.readdir(path.resolve(project.dir, 'dist'))
+  expect(files.filter(f => f.match(/single-wc\.\w{8}\.js$/)).length).toBe(1)
+  expect(files.filter(f => f.match(/single-wc\.\w{8}\.min\.js$/)).length).toBe(1)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
@@ -122,8 +125,9 @@ test('build as wc with --inline-vue', async () => {
   expect(stdout).toMatch('Build complete.')
 
   expect(project.has('dist/demo.html')).toBe(true)
-  expect(project.has('dist/single-wc.js')).toBe(true)
-  expect(project.has('dist/single-wc.min.js')).toBe(true)
+  const files = await fs.readdir(path.resolve(project.dir, 'dist'))
+  expect(files.filter(f => f.match(/single-wc\.\w{8}\.js$/)).length).toBe(1)
+  expect(files.filter(f => f.match(/single-wc\.\w{8}\.min\.js$/)).length).toBe(1)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })
