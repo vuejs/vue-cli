@@ -12,8 +12,9 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
     process.exit(1)
   }
 
-  const vue = loadModule('vue', api.resolve('.'))
-  if (vue && semver.satisfies(vue.version, '^3.0.0-0')) {
+  const cwd = api.getCwd()
+  const vueMajor = require('../../util/getVueMajor')(cwd)
+  if (vueMajor === 3) {
     abort(`Vue 3 support of the web component target is still under development.`)
   }
 
