@@ -127,7 +127,7 @@ async function loadNightwatchConfig (rawArgs, api) {
 
     process.env.VUE_NIGHTWATCH_USER_OPTIONS = JSON.stringify(userOptions || {})
 
-    rawArgs.push('--config', require.resolve('./nightwatch.config.js'))
+    rawArgs.push('--config', require.resolve('./nightwatch.conf.js'))
   }
 }
 

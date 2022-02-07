@@ -25,11 +25,11 @@
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.0-rc.2",
     "deepmerge": "^4.2.2",
-    "nightwatch": "^1.7.8"
+    "nightwatch": "^2.0.5"
   },
   "devDependencies": {
-    "chromedriver": "^94.0.0",
-    "geckodriver": "^2.0.1",
+    "chromedriver": "^96.0.0",
+    "geckodriver": "^3.0.1",
     "selenium-server": "^3.141.59"
   },
   "peerDependencies": {
