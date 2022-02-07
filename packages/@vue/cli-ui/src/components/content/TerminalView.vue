@@ -231,7 +231,7 @@ export default {
     },
 
     handleLink (event, uri) {
-      console.log('aaa')
+      console.log('linkTo', uri);
       if (this.openLinks) {
         window.open(uri, '_blank')
       }
