@@ -172,7 +172,7 @@ class PluginAPI {
     }
 
     try {
-      variables['cache-loader'] = require('cache-loader/package.json').version
+      variables['cache-loader'] = false // require('cache-loader/package.json').version
     } catch (e) {
       // cache-loader is only intended to be used for webpack 4
     }

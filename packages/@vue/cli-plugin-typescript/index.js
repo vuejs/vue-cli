@@ -30,6 +30,7 @@ module.exports = (api, projectOptions) => {
       tsxRule.use(name).loader(loader).options(options)
     }
 
+    /*
     addLoader({
       name: 'cache-loader',
       loader: require.resolve('cache-loader'),
@@ -39,6 +40,7 @@ module.exports = (api, projectOptions) => {
         modern: !!process.env.VUE_CLI_MODERN_BUILD
       }, 'tsconfig.json')
     })
+     */
 
     if (useThreads) {
       addLoader({
