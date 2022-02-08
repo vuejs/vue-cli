@@ -5,7 +5,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
   // Disable CSS extraction and turn on CSS shadow mode for vue-style-loader
   process.env.VUE_CLI_CSS_SHADOW_MODE = true
 
-  const { log, error, loadModule, semver } = require('@vue/cli-shared-utils')
+  const { log, error } = require('@vue/cli-shared-utils')
   const abort = msg => {
     log()
     error(msg)
