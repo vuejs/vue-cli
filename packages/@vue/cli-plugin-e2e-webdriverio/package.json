@@ -56,8 +56,8 @@
     }
   },
   "devDependencies": {
-    "chromedriver": "^94.0.0",
-    "geckodriver": "^2.0.1",
+    "chromedriver": "^97.0.4",
+    "geckodriver": "^3.0.1",
     "ts-node": "^9.1.1",
     "wdio-chromedriver-service": "^7.0.0",
     "wdio-geckodriver-service": "^2.0.2"
