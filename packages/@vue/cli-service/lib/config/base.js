@@ -72,11 +72,12 @@ module.exports = (api, options) => {
           )
 
       try {
+        const cacheLoaderPath = require.resolve('cache-loader')
         webpackConfig.module
           .rule('vue')
             .test(/\.vue$/)
             .use('cache-loader')
-              .loader(require.resolve('cache-loader'))
+              .loader(cacheLoaderPath)
               .options(vueLoaderCacheConfig)
       } catch (e) {}
 
@@ -119,11 +120,12 @@ module.exports = (api, options) => {
           )
 
       try {
+        const cacheLoaderPath = require.resolve('cache-loader')
         webpackConfig.module
           .rule('vue')
             .test(/\.vue$/)
             .use('cache-loader')
-              .loader(require.resolve('cache-loader'))
+              .loader(cacheLoaderPath)
               .options(vueLoaderCacheConfig)
       } catch (e) {}
 
