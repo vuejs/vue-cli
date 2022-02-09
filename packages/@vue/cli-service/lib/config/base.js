@@ -71,13 +71,18 @@ module.exports = (api, options) => {
               : 'vue/dist/vue.runtime.esm.js'
           )
 
+      try {
+        webpackConfig.module
+          .rule('vue')
+            .test(/\.vue$/)
+            .use('cache-loader')
+              .loader(require.resolve('cache-loader'))
+              .options(vueLoaderCacheConfig)
+      } catch (e) {}
+
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('@vue/vue-loader-v15'))
             .options(Object.assign({
@@ -113,21 +118,24 @@ module.exports = (api, options) => {
               : 'vue/dist/vue.runtime.esm-bundler.js'
           )
 
+      try {
+        webpackConfig.module
+          .rule('vue')
+            .test(/\.vue$/)
+            .use('cache-loader')
+              .loader(require.resolve('cache-loader'))
+              .options(vueLoaderCacheConfig)
+      } catch (e) {}
+
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('vue-loader'))
             .options({
               ...vueLoaderCacheConfig,
               babelParserPlugins: ['jsx', 'classProperties', 'decorators-legacy']
             })
-            .end()
-          .end()
 
       webpackConfig
         .plugin('vue-loader')

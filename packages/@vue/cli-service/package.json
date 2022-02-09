@@ -39,7 +39,6 @@
     "address": "^1.1.2",
     "autoprefixer": "^10.2.4",
     "browserslist": "^4.16.3",
-    "cache-loader": "^4.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "cli-highlight": "^2.1.10",
     "clipboardy": "^2.3.0",
@@ -85,6 +84,9 @@
     "webpack-sources": "*"
   },
   "peerDependenciesMeta": {
+    "cache-loader": {
+      "optional": true
+    },
     "less-loader": {
       "optional": true
     },
@@ -108,6 +110,7 @@
     }
   },
   "devDependencies": {
+    "cache-loader": "^4.1.0",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
     "stylus-loader": "^6.1.0",
