@@ -1,4 +1,32 @@
 
+## 5.0.0-rc.3 (2022-02-10)
+
+#### :rocket: New Features
+* `@vue/cli-service`
+  * [#6980](https://github.com/vuejs/vue-cli/pull/6980) feat: add build stats hash support ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#6520](https://github.com/vuejs/vue-cli/pull/6520) feat: Upgraded Nightwatch to 2.0, updated distribued config ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#6985](https://github.com/vuejs/vue-cli/pull/6985) feat!: make `cache-loader` optional ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#6520](https://github.com/vuejs/vue-cli/pull/6520) feat: Upgraded Nightwatch to 2.0, updated distribued config ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+
+#### :bug: Bug Fix
+* `@vue/cli-ui`
+  * [#6969](https://github.com/vuejs/vue-cli/pull/6969) fix: remove non standard rel=shortcut ([@Rotzbua](https://github.com/Rotzbua))
+
+#### Committers: 6
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Rotzbua ([@Rotzbua](https://github.com/Rotzbua))
+- Simon Stieger ([@sstieger](https://github.com/sstieger))
+- Vaibhav Singh ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+- ZHAO Jinxiang ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+- [@DarknessChaser](https://github.com/DarknessChaser)
+
+
+
 ## 5.0.0-rc.2 (2022-01-15)
 
 #### :rocket: New Features
