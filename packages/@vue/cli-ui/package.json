@@ -65,6 +65,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@graphql-eslint/eslint-plugin": "^3.8.0",
     "@vue/cli-plugin-babel": "^5.0.0-rc.3",
     "@vue/cli-plugin-e2e-cypress": "^5.0.0-rc.3",
     "@vue/cli-plugin-eslint": "^5.0.0-rc.3",
@@ -79,7 +80,6 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.17.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
