@@ -38,7 +38,7 @@ yarn global upgrade --latest @vue/cli
 
 #### Project Dependencies
 
-Upgrade commands shown above apply to the global Vue CLI installation. To upgrade one or more `@vue/cli` related packages (including packages starting with `@vue/cli-plugin-` or `vue-cli-plugin-`) inside your project, run `vue upgrade` inside the project directory:
+Upgrade commands shown above applies to the global Vue CLI installation. To upgrade one or more `@vue/cli` related packages (including packages starting with `@vue/cli-plugin-` or `vue-cli-plugin-`) inside your project, run `vue upgrade` inside the project directory:
 
 ```
 Usage: upgrade [options] [plugin-name]
