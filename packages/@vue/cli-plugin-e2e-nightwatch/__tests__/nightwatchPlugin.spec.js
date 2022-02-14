@@ -74,7 +74,7 @@ describe('nightwatch e2e plugin', () => {
     ])
   })
 
-  test('should run single test with custom nightwatch.json and selenium server', async () => {
+  test.skip('should run single test with custom nightwatch.json and selenium server', async () => {
     await project.run(`vue-cli-service test:e2e --headless --use-selenium -t tests/e2e/specs/test.js`)
     let results = await project.read('test_results.json')
     results = JSON.parse(results)
