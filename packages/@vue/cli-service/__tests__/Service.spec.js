@@ -208,6 +208,62 @@ test('api: --skip-plugins', async () => {
   expect(untouched).toEqual(true)
 })
 
+describe('internal: gather pluginsToSkip and cleanup args', () => {
+  let resultingArgs, resultingRawArgv
+
+  const testCommand = {
+    id: 'test-command',
+    apply: api => {
+      api.registerCommand('foo', (_args, _rawArgv) => {
+        resultingArgs = _args
+        resultingRawArgv = _rawArgv
+      })
+    }
+  }
+  const plugin1 = {
+    id: 'vue-cli-plugin-test-plugin1',
+    apply: api => {
+    }
+  }
+
+  test('Single --skip-plugins', async () => {
+    const service = await createMockService([
+      testCommand,
+      plugin1
+    ], false)
+    const args = { 'skip-plugins': 'test-plugin1' }
+    const rawArgv = ['foo', '--skip-plugins', 'test-plugin1']
+    await service.run('foo', args, rawArgv)
+    expect(resultingArgs).toEqual({ '_': [] })
+    expect(resultingRawArgv).toEqual([])
+    expect(...service.pluginsToSkip).toEqual('vue-cli-plugin-test-plugin1')
+  })
+
+  resultingArgs = resultingRawArgv = undefined
+  test('Multiple --skip-plugins', async () => {
+    const service = await createMockService([
+      testCommand,
+      plugin1,
+      {
+        id: 'vue-cli-plugin-test-plugin2',
+        apply: api => {
+        }
+      },
+      {
+        id: 'vue-cli-plugin-test-plugin3',
+        apply: api => {
+        }
+      }
+    ], false)
+    const args = { 'skip-plugins': ['test-plugin1,test-plugin2', 'test-plugin3'] }
+    const rawArgv = ['foo', '--skip-plugins', 'test-plugin1,test-plugin2', '--skip-plugins', 'test-plugin3']
+    await service.run('foo', args, rawArgv)
+    expect(resultingArgs).toEqual({ '_': [] })
+    expect(resultingRawArgv).toEqual([])
+    expect([...service.pluginsToSkip].sort()).toEqual(['vue-cli-plugin-test-plugin1', 'vue-cli-plugin-test-plugin2', 'vue-cli-plugin-test-plugin3'])
+  })
+})
+
 test('api: defaultModes', async () => {
   fs.writeFileSync('/.env.foo', `FOO=5\nBAR=6`)
   fs.writeFileSync('/.env.foo.local', `FOO=7\nBAZ=8`)
