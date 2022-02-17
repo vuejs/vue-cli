@@ -7,9 +7,9 @@ sidebar: auto
 First, install the latest Vue CLI globally:
 
 ```bash
-npm install -g @vue/cli@next
+npm install -g @vue/cli
 # OR
-yarn global add @vue/cli@next
+yarn global add @vue/cli
 ```
 
 ## Upgrade All Plugins at Once
@@ -17,7 +17,7 @@ yarn global add @vue/cli@next
 In your existing projects, run:
 
 ```bash
-vue upgrade --next
+vue upgrade
 ```
 
 And then follow the command line instructions.
