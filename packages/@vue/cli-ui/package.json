@@ -60,7 +60,7 @@
     "prismjs": "^1.23.0",
     "rss-parser": "^3.11.0",
     "shortid": "^2.2.15",
-    "typescript": "~4.1.5"
+    "typescript": "~4.5.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

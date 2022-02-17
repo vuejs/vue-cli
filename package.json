@@ -67,7 +67,7 @@
     "rimraf": "^3.0.2",
     "semver": "^7.3.4",
     "stylus-loader": "^3.0.2",
-    "typescript": "~4.1.5",
+    "typescript": "~4.5.5",
     "verdaccio": "^5.0.1",
     "vite-plugin-pwa": "^0.11.3",
     "vitepress": "^0.20.1",
