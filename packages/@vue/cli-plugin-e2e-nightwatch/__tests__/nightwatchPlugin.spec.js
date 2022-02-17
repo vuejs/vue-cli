@@ -90,7 +90,7 @@ describe('nightwatch e2e plugin', () => {
     ])
   })
 
-  test('should run tests in parallel', async () => {
+  test.skip('should run tests in parallel', async () => {
     await project.run(`vue-cli-service test:e2e --headless --parallel`)
     let results = await project.read('test_results.json')
     results = JSON.parse(results)
