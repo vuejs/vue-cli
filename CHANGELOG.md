@@ -1,3 +1,95 @@
+## 5.0.1 (2022-02-17)
+
+Same as 5.0.0.
+
+## 5.0.0 (2022-02-17)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6972](https://github.com/vuejs/vue-cli/pull/6972) Remove --skip-plugin from arguments ([@MatthijsBurgh](https://github.com/MatthijsBurgh))
+  * [#6987](https://github.com/vuejs/vue-cli/pull/6987) fix: update mini-css-extract-plugin to ^2.5.3 ([@darrinmn9](https://github.com/darrinmn9))
+
+#### :memo: Documentation
+* [#6706](https://github.com/vuejs/vue-cli/pull/6706) docs: update vue create --help output in "Basics/Creating a Project" ([@Lalaluka](https://github.com/Lalaluka))
+* [#6642](https://github.com/vuejs/vue-cli/pull/6642) docs: Update README.md ([@wxsms](https://github.com/wxsms))
+* [#6620](https://github.com/vuejs/vue-cli/pull/6620) Fix typo in deployment guide ([@Klikini](https://github.com/Klikini))
+* [#6623](https://github.com/vuejs/vue-cli/pull/6623) fix(docs): the plugin-dev in zh has a regexp lose the end / ([@HelloJiya](https://github.com/HelloJiya))
+* [#6377](https://github.com/vuejs/vue-cli/pull/6377) replace master with main to reflect GH default ([@anbnyc](https://github.com/anbnyc))
+* [#6359](https://github.com/vuejs/vue-cli/pull/6359) Fix master to main in heroku deployment ([@MowlCoder](https://github.com/MowlCoder))
+* [#6266](https://github.com/vuejs/vue-cli/pull/6266) Add note about loader incompatible with webpack 4 ([@JarnoRFB](https://github.com/JarnoRFB))
+* [#6239](https://github.com/vuejs/vue-cli/pull/6239) Update deployment.md ([@anzuj](https://github.com/anzuj))
+* [#6237](https://github.com/vuejs/vue-cli/pull/6237) fix code demo ([@yyzclyang](https://github.com/yyzclyang))
+
+#### Committers: 13
+- Alec Barrett ([@anbnyc](https://github.com/anbnyc))
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Andy Castille ([@Klikini](https://github.com/Klikini))
+- Anzelika  ([@anzuj](https://github.com/anzuj))
+- Ben Hutton ([@Relequestual](https://github.com/Relequestual))
+- Calvin Schröder ([@Lalaluka](https://github.com/Lalaluka))
+- Darrin Nagengast ([@darrinmn9](https://github.com/darrinmn9))
+- Matthijs van der Burgh ([@MatthijsBurgh](https://github.com/MatthijsBurgh))
+- Rüdiger Busche ([@JarnoRFB](https://github.com/JarnoRFB))
+- [@HelloJiya](https://github.com/HelloJiya)
+- [@MowlCoder](https://github.com/MowlCoder)
+- wxsm ([@wxsms](https://github.com/wxsms))
+- 鱼依藻常乐 ([@yyzclyang](https://github.com/yyzclyang))
+
+
+
+## 5.0.0-rc.3 (2022-02-10)
+
+#### :rocket: New Features
+* `@vue/cli-service`
+  * [#6980](https://github.com/vuejs/vue-cli/pull/6980) feat: add build stats hash support ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#6520](https://github.com/vuejs/vue-cli/pull/6520) feat: Upgraded Nightwatch to 2.0, updated distribued config ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#6985](https://github.com/vuejs/vue-cli/pull/6985) feat!: make `cache-loader` optional ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#6520](https://github.com/vuejs/vue-cli/pull/6520) feat: Upgraded Nightwatch to 2.0, updated distribued config ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+
+#### :bug: Bug Fix
+* `@vue/cli-ui`
+  * [#6969](https://github.com/vuejs/vue-cli/pull/6969) fix: remove non standard rel=shortcut ([@Rotzbua](https://github.com/Rotzbua))
+
+#### Committers: 6
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Rotzbua ([@Rotzbua](https://github.com/Rotzbua))
+- Simon Stieger ([@sstieger](https://github.com/sstieger))
+- Vaibhav Singh ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+- ZHAO Jinxiang ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+- [@DarknessChaser](https://github.com/DarknessChaser)
+
+
+
+## 5.0.0-rc.2 (2022-01-15)
+
+#### :rocket: New Features
+* `@vue/cli-ui`, `@vue/cli`
+  * [#6917](https://github.com/vuejs/vue-cli/pull/6917) feat!: make Vue 3 the default version for `vue create` ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-ui`, `@vue/cli`
+  * [#6917](https://github.com/vuejs/vue-cli/pull/6917) feat!: make Vue 3 the default version for `vue create` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6872](https://github.com/vuejs/vue-cli/pull/6872) chore: use vue-loader v17 ([@cexbrayat](https://github.com/cexbrayat))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6944](https://github.com/vuejs/vue-cli/pull/6944) fix: set mini-css-extract-plugin to 2.4.5 ([@cexbrayat](https://github.com/cexbrayat))
+  * [#6907](https://github.com/vuejs/vue-cli/pull/6907) fix: use `setupMiddlewares`, avoid dev server deprecation warnings ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6926](https://github.com/vuejs/vue-cli/pull/6926) fix: Update cypress api link to the latest ([@justforuse](https://github.com/justforuse))
+
+#### Committers: 3
+- Allen ([@justforuse](https://github.com/justforuse))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
 
 ## 5.0.0-rc.1 (2021-11-17)
 

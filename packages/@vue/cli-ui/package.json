@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "5.0.0-rc.1",
+  "version": "5.0.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -35,7 +35,7 @@
   ],
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^5.0.0-rc.1",
+    "@vue/cli-shared-utils": "^5.0.1",
     "apollo-server-express": "^2.21.0",
     "clone": "^2.1.1",
     "deepmerge": "^4.2.2",
@@ -60,15 +60,16 @@
     "prismjs": "^1.23.0",
     "rss-parser": "^3.11.0",
     "shortid": "^2.2.15",
-    "typescript": "~4.1.5"
+    "typescript": "~4.5.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "^5.0.0-rc.1",
-    "@vue/cli-plugin-e2e-cypress": "^5.0.0-rc.1",
-    "@vue/cli-plugin-eslint": "^5.0.0-rc.1",
-    "@vue/cli-service": "^5.0.0-rc.1",
+    "@graphql-eslint/eslint-plugin": "^3.8.0",
+    "@vue/cli-plugin-babel": "^5.0.1",
+    "@vue/cli-plugin-e2e-cypress": "^5.0.1",
+    "@vue/cli-plugin-eslint": "^5.0.1",
+    "@vue/cli-service": "^5.0.1",
     "@vue/eslint-config-standard": "^6.1.0",
     "@vue/ui": "^0.12.2",
     "ansi_up": "^5.0.0",
@@ -79,7 +80,6 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.17.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",

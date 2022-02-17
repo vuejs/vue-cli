@@ -30,15 +30,19 @@ module.exports = (api, projectOptions) => {
       tsxRule.use(name).loader(loader).options(options)
     }
 
-    addLoader({
-      name: 'cache-loader',
-      loader: require.resolve('cache-loader'),
-      options: api.genCacheConfig('ts-loader', {
-        'ts-loader': require('ts-loader/package.json').version,
-        'typescript': require('typescript/package.json').version,
-        modern: !!process.env.VUE_CLI_MODERN_BUILD
-      }, 'tsconfig.json')
-    })
+    try {
+      const cacheLoaderPath = require.resolve('cache-loader')
+
+      addLoader({
+        name: 'cache-loader',
+        loader: cacheLoaderPath,
+        options: api.genCacheConfig('ts-loader', {
+          'ts-loader': require('ts-loader/package.json').version,
+          'typescript': require('typescript/package.json').version,
+          modern: !!process.env.VUE_CLI_MODERN_BUILD
+        }, 'tsconfig.json')
+      })
+    } catch (e) {}
 
     if (useThreads) {
       addLoader({

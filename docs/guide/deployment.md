@@ -39,7 +39,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 1. Set correct `publicPath` in `vue.config.js`.
 
-    If you are deploying to `https://<USERNAME>.github.io/`, you can omit `publicPath` as it defaults to `"/"`.
+    If you are deploying to `https://<USERNAME>.github.io/` or to a custom domain, you can omit `publicPath` as it defaults to `"/"`.
 
     If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `publicPath` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
@@ -75,10 +75,10 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     git commit -m 'deploy'
 
     # if you are deploying to https://<USERNAME>.github.io
-    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
 
     # if you are deploying to https://<USERNAME>.github.io/<REPO>
-    # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
+    # git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
 
     cd -
     ```
@@ -112,7 +112,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
      github_token: $GITHUB_TOKEN
      local_dir: dist
      on:
-       branch: master
+       branch: main
     ```
 
 6. Push the `.travis.yml` file to your repository to trigger the first build.
@@ -363,7 +363,7 @@ heroku login
 heroku create
 heroku buildpacks:add heroku/nodejs
 heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
-git push heroku master
+git push heroku main
 ```
 
 More info: [Getting started with SPAs on Heroku](https://gist.github.com/hone/24b06869b4c1eca701f9)

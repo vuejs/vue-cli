@@ -53,9 +53,11 @@ Options:
   -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
   -n, --no-git                    Skip git initialization
   -f, --force                     Overwrite target directory if it exists
+  --merge                         Merge target directory if it exists
   -c, --clone                     Use git clone when fetching remote preset
   -x, --proxy                     Use specified proxy when creating project
   -b, --bare                      Scaffold project without beginner instructions
+  --skipGetStarted                Skip displaying "Get started" instructions
   -h, --help                      Output usage information
 ```
 

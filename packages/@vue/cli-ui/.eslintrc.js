@@ -11,10 +11,6 @@ module.exports = {
     name: 'off'
   },
 
-  plugins: [
-    'graphql'
-  ],
-
   rules: {
     'vue/html-self-closing': 'error',
     'vue/no-use-v-if-with-v-for': 'warn',
@@ -28,5 +24,16 @@ module.exports = {
     babelOptions: {
       cwd: __dirname
     }
-  }
+  },
+
+  overrides: [
+    {
+      files: ['*.graphql'],
+      parser: '@graphql-eslint/eslint-plugin',
+      plugins: ['@graphql-eslint'],
+      rules: {
+        '@graphql-eslint/known-type-names': 'error'
+      }
+    }
+  ]
 }
