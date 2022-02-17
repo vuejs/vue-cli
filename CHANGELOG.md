@@ -1,4 +1,39 @@
 
+## 5.0.0 (2022-02-17)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6972](https://github.com/vuejs/vue-cli/pull/6972) Remove --skip-plugin from arguments ([@MatthijsBurgh](https://github.com/MatthijsBurgh))
+  * [#6987](https://github.com/vuejs/vue-cli/pull/6987) fix: update mini-css-extract-plugin to ^2.5.3 ([@darrinmn9](https://github.com/darrinmn9))
+
+#### :memo: Documentation
+* [#6706](https://github.com/vuejs/vue-cli/pull/6706) docs: update vue create --help output in "Basics/Creating a Project" ([@Lalaluka](https://github.com/Lalaluka))
+* [#6642](https://github.com/vuejs/vue-cli/pull/6642) docs: Update README.md ([@wxsms](https://github.com/wxsms))
+* [#6620](https://github.com/vuejs/vue-cli/pull/6620) Fix typo in deployment guide ([@Klikini](https://github.com/Klikini))
+* [#6623](https://github.com/vuejs/vue-cli/pull/6623) fix(docs): the plugin-dev in zh has a regexp lose the end / ([@HelloJiya](https://github.com/HelloJiya))
+* [#6377](https://github.com/vuejs/vue-cli/pull/6377) replace master with main to reflect GH default ([@anbnyc](https://github.com/anbnyc))
+* [#6359](https://github.com/vuejs/vue-cli/pull/6359) Fix master to main in heroku deployment ([@MowlCoder](https://github.com/MowlCoder))
+* [#6266](https://github.com/vuejs/vue-cli/pull/6266) Add note about loader incompatible with webpack 4 ([@JarnoRFB](https://github.com/JarnoRFB))
+* [#6239](https://github.com/vuejs/vue-cli/pull/6239) Update deployment.md ([@anzuj](https://github.com/anzuj))
+* [#6237](https://github.com/vuejs/vue-cli/pull/6237) fix code demo ([@yyzclyang](https://github.com/yyzclyang))
+
+#### Committers: 13
+- Alec Barrett ([@anbnyc](https://github.com/anbnyc))
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Andy Castille ([@Klikini](https://github.com/Klikini))
+- Anzelika  ([@anzuj](https://github.com/anzuj))
+- Ben Hutton ([@Relequestual](https://github.com/Relequestual))
+- Calvin Schröder ([@Lalaluka](https://github.com/Lalaluka))
+- Darrin Nagengast ([@darrinmn9](https://github.com/darrinmn9))
+- Matthijs van der Burgh ([@MatthijsBurgh](https://github.com/MatthijsBurgh))
+- Rüdiger Busche ([@JarnoRFB](https://github.com/JarnoRFB))
+- [@HelloJiya](https://github.com/HelloJiya)
+- [@MowlCoder](https://github.com/MowlCoder)
+- wxsm ([@wxsms](https://github.com/wxsms))
+- 鱼依藻常乐 ([@yyzclyang](https://github.com/yyzclyang))
+
+
+
 ## 5.0.0-rc.3 (2022-02-10)
 
 #### :rocket: New Features
