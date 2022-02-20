@@ -125,11 +125,8 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       globalObject: `(typeof self !== 'undefined' ? self : this)`
     }, rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${entryName}.[name].js`,
-      // use dynamic publicPath so this can be deployed anywhere
-      // the actual path will be determined at runtime by checking
-      // document.currentScript.src.
-      publicPath: ''
+      chunkFilename: `${entryName}.[name].js`
+
     })
 
     if (format === 'commonjs2') {
