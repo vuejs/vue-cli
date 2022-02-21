@@ -28,7 +28,7 @@ module.exports = function validateWebpackConfig (
     )
   }
 
-  if (target === 'app' && singleConfig.output.publicPath !== options.publicPath) {
+  if (target === 'app' && ![options.publicPath, 'auto'].includes(singleConfig.output.publicPath)) {
     throw new Error(
       `\n\nConfiguration Error: ` +
       `Avoid modifying webpack output.publicPath directly. ` +
