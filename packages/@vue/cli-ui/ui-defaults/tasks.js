@@ -330,7 +330,7 @@ module.exports = api => {
 
       // the flag is different between v3/4 and v5 projects
       const servicePkg = loadModule('@vue/cli-service/package.json', api.getCwd())
-      const isV5Project = servicePkg && semver.satisfies(servicePkg.version, '^5.0.0-0')
+      const isV5Project = servicePkg && semver.satisfies(servicePkg.version, '^5.0.0')
 
       if (answers.modern) {
         args.push(isV5Project ? '--module' : '--modern')
