@@ -17,14 +17,14 @@ module.exports = function prepareUrls (protocol, host, port, pathname = '/') {
       protocol,
       hostname,
       port,
-      pathname
+      pathname: pathname === 'auto' ? '' : pathname
     })
   const prettyPrintUrl = hostname =>
     url.format({
       protocol,
       hostname,
       port: chalk.bold(port),
-      pathname
+      pathname: pathname === 'auto' ? '' : pathname
     })
 
   const isUnspecifiedHost = host === '0.0.0.0' || host === '::'
