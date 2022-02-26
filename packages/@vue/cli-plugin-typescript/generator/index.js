@@ -1,16 +1,11 @@
 const pluginDevDeps = require('../package.json').devDependencies
 
-module.exports = (api, {
-  classComponent,
-  tsLint,
-  lintOn = [],
-  skipLibCheck = true,
-  convertJsToTs,
-  allowJs
-}, rootOptions, invoking) => {
-  if (typeof lintOn === 'string') {
-    lintOn = lintOn.split(',')
-  }
+module.exports = (
+  api,
+  { classComponent, skipLibCheck = true, convertJsToTs, allowJs },
+  rootOptions,
+  invoking
+) => {
   const isVue3 = rootOptions && rootOptions.vueVersion === '3'
 
   api.extendPackage({
@@ -34,42 +29,6 @@ module.exports = (api, {
         }
       })
     }
-  }
-
-  if (tsLint) {
-    api.extendPackage({
-      scripts: {
-        lint: 'vue-cli-service lint'
-      }
-    })
-
-    if (!lintOn.includes('save')) {
-      api.extendPackage({
-        vue: {
-          lintOnSave: false
-        }
-      })
-    }
-
-    if (lintOn.includes('commit')) {
-      api.extendPackage({
-        devDependencies: {
-          'lint-staged': '^9.5.0'
-        },
-        gitHooks: {
-          'pre-commit': 'lint-staged'
-        },
-        'lint-staged': {
-          '*.ts': ['vue-cli-service lint', 'git add'],
-          '*.vue': ['vue-cli-service lint', 'git add']
-        }
-      })
-    }
-
-    // lint and fix files on creation complete
-    api.onCreateComplete(() => {
-      return require('../lib/tslint')({}, api, true)
-    })
   }
 
   // late invoke compat
@@ -110,5 +69,7 @@ module.exports = (api, {
     api.render((files) => delete files['src/shims-tsx.d.ts'])
   }
 
-  require('./convert')(api, { tsLint, convertJsToTs })
+  require('./convert')(api, { convertJsToTs })
 }
+
+module.exports.after = '@vue/cli-plugin-router'

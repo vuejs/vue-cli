@@ -30,10 +30,10 @@ test('pwa', async () => {
   const index = await project.read('dist/index.html')
 
   // should split and preload app.js & vendor.js
-  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js" rel="preload" as="script">/)
-  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js" rel="preload" as="script">/)
+  // expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js" rel="preload" as="script">/)
+  // expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js" rel="preload" as="script">/)
   // should preload css
-  expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
+  // expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
 
   // PWA specific directives
   expect(index).toMatch(`<link rel="manifest" href="/manifest.json">`)
@@ -59,7 +59,7 @@ test('pwa', async () => {
   browser = launched.browser
 
   // workbox plugin fetches scripts from CDN so it takes a while...
-  await new Promise(r => setTimeout(r, process.env.CI ? 5000 : 2000))
+  await new Promise(resolve => setTimeout(resolve, process.env.CI ? 5000 : 2000))
   const logs = launched.logs
   expect(logs.some(msg => msg.match(/Content has been cached for offline use/))).toBe(true)
   expect(logs.some(msg => msg.match(/App is being served from cache by a service worker/))).toBe(true)

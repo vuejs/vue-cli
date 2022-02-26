@@ -12,10 +12,6 @@ TypeScript может быть сконфигурирован через `tsconf
 
 Этот плагин может использоваться вместе с `@vue/cli-plugin-babel`. При использовании вместе с Babel, этот плагин должен генерировать ES2015 и делегировать остальное Babel для автоматического добавления полифилов на основе целевых браузеров.
 
-## Внедряемые команды
-
-При выборе [TSLint](https://palantir.github.io/tslint/) на этапе создания проекта, будет внедряться команда `vue-cli-service lint`.
-
 ## Кэширование
 
 [cache-loader](https://github.com/webpack-contrib/cache-loader) используется по умолчанию, кэш хранится в `<projectRoot>/node_modules/.cache/ts-loader`.
@@ -28,7 +24,7 @@ TypeScript может быть сконфигурирован через `tsconf
 
 ## Установка в уже созданный проект
 
-```sh
+```bash
 vue add typescript
 ```
 

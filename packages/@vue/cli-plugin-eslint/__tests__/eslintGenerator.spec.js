@@ -63,9 +63,10 @@ test('prettier', async () => {
   expect(pkg.eslintConfig.extends).toEqual([
     'plugin:vue/essential',
     'eslint:recommended',
-    '@vue/prettier'
+    'plugin:prettier/recommended'
   ])
-  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-prettier')
 })
 
 test('babel', async () => {
@@ -83,9 +84,26 @@ test('babel', async () => {
   ])
 
   expect(pkg.scripts.lint).toBeTruthy()
-  expect(pkg.devDependencies).toHaveProperty('babel-eslint')
+  expect(pkg.devDependencies).toHaveProperty('@babel/eslint-parser')
+  expect(pkg.devDependencies).toHaveProperty('@babel/core')
   expect(pkg.eslintConfig.parserOptions).toEqual({
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser'
+  })
+})
+
+test('no-@babel/eslint-parser', async () => {
+  const { pkg } = await generateWithPlugin([
+    {
+      id: 'eslint',
+      apply: require('../generator'),
+      options: {}
+    }
+  ])
+
+  expect(pkg.devDependencies).not.toHaveProperty('@babel/eslint-parser')
+  expect(pkg.devDependencies).not.toHaveProperty('@babel/core')
+  expect(pkg.eslintConfig.parserOptions).not.toMatchObject({
+    parser: '@babel/eslint-parser'
   })
 })
 
@@ -110,10 +128,10 @@ test('typescript', async () => {
     'plugin:vue/essential',
     'eslint:recommended',
     '@vue/typescript/recommended',
-    '@vue/prettier',
-    '@vue/prettier/@typescript-eslint'
+    'plugin:prettier/recommended'
   ])
-  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
 })
 
@@ -140,11 +158,9 @@ test('lint on commit', async () => {
   expect(pkg.gitHooks['pre-commit']).toBe('lint-staged')
   expect(pkg.devDependencies).toHaveProperty('lint-staged')
   expect(pkg['lint-staged']).toEqual({
-    '*.{js,jsx,vue}': ['vue-cli-service lint', 'git add']
+    '*.{js,jsx,vue}': 'vue-cli-service lint'
   })
-  expect(pkg.vue).toEqual({
-    lintOnSave: false
-  })
+  expect(pkg.vue.lintOnSave).toBe(false)
 })
 
 test('should lint ts files when typescript plugin co-exists', async () => {
@@ -159,7 +175,7 @@ test('should lint ts files when typescript plugin co-exists', async () => {
   const pkg = JSON.parse(await read('package.json'))
   expect(pkg).toMatchObject({
     'lint-staged': {
-      '*.{js,jsx,vue,ts,tsx}': ['vue-cli-service lint', 'git add']
+      '*.{js,jsx,vue,ts,tsx}': 'vue-cli-service lint'
     }
   })
 })

@@ -1,5 +1,6 @@
 jest.setTimeout(30000)
 
+const fs = require('fs-extra')
 const path = require('path')
 const portfinder = require('portfinder')
 const createServer = require('@vue/cli-test-utils/createServer')
@@ -19,10 +20,11 @@ test('build as wc in async mode', async () => {
   expect(project.has('dist/build-wc-async.min.js')).toBe(true)
 
   // code-split chunks
-  expect(project.has('dist/build-wc-async.1.js')).toBe(true)
-  expect(project.has('dist/build-wc-async.1.min.js')).toBe(true)
-  expect(project.has('dist/build-wc-async.2.js')).toBe(true)
-  expect(project.has('dist/build-wc-async.2.min.js')).toBe(true)
+  const files = await fs.readdir(path.resolve(project.dir, 'dist'))
+  const asyncOutputs = files.filter(f => f.match(/build-wc-async\.\d+\.js/))
+  const minifiedAsycnOutputs = files.filter(f => f.match(/build-wc-async\.\d+\.min\.js/))
+  expect(asyncOutputs.length).toBe(2)
+  expect(minifiedAsycnOutputs.length).toBe(2)
 
   const port = await portfinder.getPortPromise()
   server = createServer({ root: path.join(project.dir, 'dist') })

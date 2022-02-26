@@ -11,21 +11,12 @@ function generateWithOptions (options) {
 }
 
 test('sass (default)', async () => {
-  const { pkg, files } = await await generateWithOptions({
+  const { pkg, files } = await generateWithOptions({
     cssPreprocessor: 'sass'
   })
 
   expect(files['src/App.vue']).toMatch('<style lang="scss">')
   expect(pkg).toHaveProperty(['devDependencies', 'sass'])
-})
-
-test('node sass', async () => {
-  const { pkg, files } = await generateWithOptions({
-    cssPreprocessor: 'node-sass'
-  })
-
-  expect(files['src/App.vue']).toMatch('<style lang="scss">')
-  expect(pkg).toHaveProperty(['devDependencies', 'node-sass'])
 })
 
 test('dart sass', async () => {
@@ -42,8 +33,7 @@ test('Vue 3', async () => {
     vueVersion: '3'
   })
 
-  expect(pkg.dependencies.vue).toBe('^3.0.0')
-  expect(pkg).toHaveProperty(['devDependencies', '@vue/compiler-sfc'])
+  expect(pkg.dependencies.vue).toMatch('^3')
 
   expect(files['src/main.js']).toMatch(`import { createApp } from 'vue'`)
 

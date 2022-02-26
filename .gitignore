@@ -10,3 +10,4 @@ temp
 .versions
 .changelog
 package-lock.json
+.vscode

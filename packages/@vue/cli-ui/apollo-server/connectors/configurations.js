@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const yaml = require('js-yaml')
 const clone = require('clone')
-const stringifyJS = require('javascript-stringify')
+const stringifyJS = require('javascript-stringify').stringify
 // Connectors
 const cwd = require('./cwd')
 const plugins = require('./plugins')
@@ -77,7 +77,7 @@ function readFile (config, fileDescriptor, context) {
       if (file.type === 'json') {
         fileData = JSON.parse(rawContent)
       } else if (file.type === 'yaml') {
-        fileData = yaml.safeLoad(rawContent)
+        fileData = yaml.load(rawContent)
       }
     }
   }
@@ -121,7 +121,7 @@ function writeFile (config, fileId, data, changedFields, context) {
     if (file.type === 'json') {
       rawContent = JSON.stringify(data, null, 2)
     } else if (file.type === 'yaml') {
-      rawContent = yaml.safeDump(data)
+      rawContent = yaml.dump(data)
     } else if (file.type === 'js') {
       const source = fs.readFileSync(file.path, { encoding: 'utf8' })
       if (!source.trim()) {

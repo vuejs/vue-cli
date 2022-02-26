@@ -7,7 +7,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
     api.transformScript(api.entryFile, require('./injectUseRouter'))
     api.extendPackage({
       dependencies: {
-        'vue-router': '^4.0.0-0'
+        'vue-router': '^4.0.3'
       }
     })
   } else {
@@ -15,7 +15,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
 
     api.extendPackage({
       dependencies: {
-        'vue-router': '^3.2.0'
+        'vue-router': '^3.5.1'
       }
     })
   }

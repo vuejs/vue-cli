@@ -1,7 +1,6 @@
 jest.setTimeout(300000)
 
 const create = require('@vue/cli-test-utils/createTestProject')
-const createOutside = require('@vue/cli-test-utils/createUpgradableProject')
 
 test('should work', async () => {
   const project = await create('unit-jest', {
@@ -69,7 +68,7 @@ test('should work without Babel', async () => {
   await project.run(`vue-cli-service test:unit`)
 
   await project.run(`vue-cli-service test:unit --coverage --collectCoverageFrom="src/**/*.{js,vue}"`)
-  const appCoverage = await project.read('coverage/lcov-report/App.vue.html')
+  const appCoverage = await project.read('coverage/lcov-report/src/App.vue.html')
   expect(appCoverage).toBeTruthy()
 })
 
@@ -101,7 +100,7 @@ test('should work with tsx', async () => {
 
   await write('tests/unit/example.spec.ts', `
   import { shallowMount } from '@vue/test-utils'
-  import MyComponent from '@/components/HelloWorld.tsx'
+  import MyComponent from '@/components/HelloWorld'
 
   describe('HelloWorld.tsx', () => {
     it('renders props.msg when passed', () => {
@@ -125,17 +124,4 @@ test('should correctly configured eslint', async () => {
     }
   })
   await project.run(`vue-cli-service lint`)
-})
-
-test('should work with Vue 3', async () => {
-  const project = await createOutside('unit-jest-vue-3', {
-    vueVersion: '3',
-    plugins: {
-      '@vue/cli-plugin-babel': {},
-      '@vue/cli-plugin-unit-jest': {}
-    }
-  })
-  const pkg = JSON.parse(await project.read('package.json'))
-  expect(pkg.devDependencies['@vue/test-utils']).toMatch('^2')
-  await project.run(`vue-cli-service test:unit`)
 })

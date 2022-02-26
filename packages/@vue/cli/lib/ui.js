@@ -1,14 +1,19 @@
 const { log, error, openBrowser } = require('@vue/cli-shared-utils')
 const { portfinder, server } = require('@vue/cli-ui/server')
 const shortid = require('shortid')
+const { setNotificationCallback } = require('@vue/cli-ui/apollo-server/util/notification')
 
 function simpleCorsValidation (allowedHost) {
   return function (req, socket) {
     const { host, origin } = req.headers
-    // maybe we should just use strict string equal?
-    const hostRegExp = new RegExp(`^https?://(${host}|${allowedHost}|localhost)(:\\d+)?$`)
 
-    if (!origin || !hostRegExp.test(origin)) {
+    const safeOrigins = [
+      host,
+      allowedHost,
+      'localhost'
+    ]
+
+    if (!origin || !safeOrigins.includes(new URL(origin).hostname)) {
       socket.destroy()
     }
   }
@@ -77,6 +82,7 @@ async function ui (options = {}, context = process.cwd()) {
     if (options.headless) {
       console.log(port)
     } else {
+      setNotificationCallback(() => openBrowser(url))
       openBrowser(url)
     }
   })

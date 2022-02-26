@@ -1,28 +1,28 @@
 const DEPS_MAP = {
   base: {
-    eslint: '^6.7.2',
-    'eslint-plugin-vue': '^6.2.2'
+    eslint: '^7.32.0',
+    'eslint-plugin-vue': '^8.0.3'
   },
   airbnb: {
-    '@vue/eslint-config-airbnb': '^5.0.2',
-    'eslint-plugin-import': '^2.20.2'
+    '@vue/eslint-config-airbnb': '^6.0.0',
+    'eslint-plugin-import': '^2.25.3',
+    'eslint-plugin-vuejs-accessibility': '^1.1.0'
   },
   prettier: {
-    '@vue/eslint-config-prettier': '^6.0.0',
-    'eslint-plugin-prettier': '^3.1.3',
-    prettier: '^1.19.1'
+    'eslint-config-prettier': '^8.3.0',
+    'eslint-plugin-prettier': '^4.0.0',
+    prettier: '^2.4.1'
   },
   standard: {
-    '@vue/eslint-config-standard': '^5.1.2',
-    'eslint-plugin-import': '^2.20.2',
+    '@vue/eslint-config-standard': '^6.1.0',
+    'eslint-plugin-import': '^2.25.3',
     'eslint-plugin-node': '^11.1.0',
-    'eslint-plugin-promise': '^4.2.1',
-    'eslint-plugin-standard': '^4.0.0'
+    'eslint-plugin-promise': '^5.1.0'
   },
   typescript: {
-    '@vue/eslint-config-typescript': '^5.0.2',
-    '@typescript-eslint/eslint-plugin': '^2.33.0',
-    '@typescript-eslint/parser': '^2.33.0'
+    '@vue/eslint-config-typescript': '^9.1.0',
+    '@typescript-eslint/eslint-plugin': '^5.4.0',
+    '@typescript-eslint/parser': '^5.4.0'
   }
 }
 
@@ -31,17 +31,14 @@ exports.DEPS_MAP = DEPS_MAP
 exports.getDeps = function (api, preset, rootOptions = {}) {
   const deps = Object.assign({}, DEPS_MAP.base, DEPS_MAP[preset])
 
-  if (rootOptions.vueVersion === '3') {
-    Object.assign(deps, { 'eslint-plugin-vue': '^7.0.0-0' })
-  }
-
   if (api.hasPlugin('typescript')) {
     Object.assign(deps, DEPS_MAP.typescript)
   }
 
   if (api.hasPlugin('babel') && !api.hasPlugin('typescript')) {
     Object.assign(deps, {
-      'babel-eslint': '^10.1.0'
+      '@babel/eslint-parser': '^7.12.16',
+      '@babel/core': '^7.12.16'
     })
   }
 

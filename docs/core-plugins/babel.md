@@ -20,7 +20,7 @@ module.exports = {
 
 ## Caching
 
-[cache-loader](https://github.com/webpack-contrib/cache-loader) is enabled by default and cache is stored in `<projectRoot>/node_modules/.cache/babel-loader`.
+Cache options of [babel-loader](https://github.com/babel/babel-loader#options) is enabled by default and cache is stored in `<projectRoot>/node_modules/.cache/babel-loader`.
 
 ## Parallelization
 
@@ -30,7 +30,7 @@ module.exports = {
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add babel
 ```
 
@@ -38,4 +38,3 @@ vue add babel
 
 - `config.rule('js')`
 - `config.rule('js').use('babel-loader')`
-- `config.rule('js').use('cache-loader')`

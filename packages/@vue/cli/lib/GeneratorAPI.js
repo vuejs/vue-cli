@@ -17,7 +17,7 @@ const mergeArrayWithDedupe = (a, b) => Array.from(new Set([...a, ...b]))
 function pruneObject (obj) {
   if (typeof obj === 'object') {
     for (const k in obj) {
-      if (!obj.hasOwnProperty(k)) {
+      if (!Object.prototype.hasOwnProperty.call(obj, k)) {
         continue
       }
 
@@ -168,8 +168,8 @@ class GeneratorAPI {
    * @param {string} version - Plugin version. Defaults to ''
    * @return {boolean}
    */
-  hasPlugin (id, version) {
-    return this.generator.hasPlugin(id, version)
+  hasPlugin (id, versionRange) {
+    return this.generator.hasPlugin(id, versionRange)
   }
 
   /**
@@ -219,12 +219,15 @@ class GeneratorAPI {
    *    that dependency fields are always deep merged regardless of this option.
    * @param {boolean} [options.warnIncompatibleVersions=true] Output warning
    *    if two dependency version ranges don't intersect.
+   * @param {boolean} [options.forceOverwrite=false] force using the dependency
+   * version provided in the first argument, instead of trying to get the newer ones
    */
   extendPackage (fields, options = {}) {
     const extendOptions = {
       prune: false,
       merge: true,
-      warnIncompatibleVersions: true
+      warnIncompatibleVersions: true,
+      forceOverwrite: false
     }
 
     // this condition statement is added for compatibility reason, because
@@ -283,7 +286,7 @@ class GeneratorAPI {
       this._injectFileMiddleware(async (files) => {
         const data = this._resolveData(additionalData)
         const globby = require('globby')
-        const _files = await globby(['**/*'], { cwd: source })
+        const _files = await globby(['**/*'], { cwd: source, dot: true })
         for (const rawPath of _files) {
           const targetPath = rawPath.split('/').map(filename => {
             // dotfiles are ignored when published to npm, therefore in templates

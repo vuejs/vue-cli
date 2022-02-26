@@ -38,15 +38,15 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
 
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^9.5.0'
+      'lint-staged': '^11.1.2'
     })
     pkg.gitHooks = {
       'pre-commit': 'lint-staged'
     }
     const extensions = require('../eslintOptions').extensions(api)
-      .map(ext => ext.replace(/^\./, ''))  // remove the leading `.`
+      .map(ext => ext.replace(/^\./, '')) // remove the leading `.`
     pkg['lint-staged'] = {
-      [`*.{${extensions.join(',')}}`]: ['vue-cli-service lint', 'git add']
+      [`*.{${extensions.join(',')}}`]: 'vue-cli-service lint'
     }
   }
 
@@ -69,8 +69,8 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
     api.assertCliVersion('^4.0.0-beta.0')
   } catch (e) {
     if (config && config !== 'base') {
-      api.onCreateComplete(() => {
-        require('../lint')({ silent: true }, api)
+      api.onCreateComplete(async () => {
+        await require('../lint')({ silent: true }, api)
       })
     }
   }
@@ -84,9 +84,9 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
 // FIXME: at the moment we have to catch the bug and silently fail. Need to fix later.
 module.exports.hooks = (api) => {
   // lint & fix after create to ensure files adhere to chosen config
-  api.afterAnyInvoke(() => {
+  api.afterAnyInvoke(async () => {
     try {
-      require('../lint')({ silent: true }, api)
+      await require('../lint')({ silent: true }, api)
     } catch (e) {}
   })
 }

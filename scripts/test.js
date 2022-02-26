@@ -10,12 +10,24 @@ if (args.p) {
   rawArgs.splice(i, 2)
 }
 
+const e2ePathPattern = 'Migrator|Vue3|mochaPlugin|MochaPlugin|eslint8'
+
+if (args['e2e-only']) {
+  regex = e2ePathPattern
+  const i = rawArgs.indexOf('--e2e-only')
+  rawArgs.splice(i, 2)
+}
+
 const jestArgs = [
   '--env', 'node',
   '--runInBand',
   ...rawArgs,
   ...(regex ? [regex] : [])
 ]
+
+if (!args['e2e-only']) {
+  jestArgs.push('--testPathIgnorePatterns', e2ePathPattern)
+}
 
 console.log(`running jest with args: ${jestArgs.join(' ')}`)
 

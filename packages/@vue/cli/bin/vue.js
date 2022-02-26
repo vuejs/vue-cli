@@ -19,17 +19,6 @@ function checkNodeVersion (wanted, id) {
 
 checkNodeVersion(requiredVersion, '@vue/cli')
 
-const EOL_NODE_MAJORS = ['8.x', '9.x', '11.x', '13.x']
-for (const major of EOL_NODE_MAJORS) {
-  if (semver.satisfies(process.version, major)) {
-    console.log(chalk.red(
-      `You are using Node ${process.version}.\n` +
-      `Node.js ${major} has already reached end-of-life and will not be supported in future major releases.\n` +
-      `It's strongly recommended to use an active LTS version instead.`
-    ))
-  }
-}
-
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
@@ -68,9 +57,7 @@ program
   .option('-x, --proxy <proxyUrl>', 'Use specified proxy when creating project')
   .option('-b, --bare', 'Scaffold project without beginner instructions')
   .option('--skipGetStarted', 'Skip displaying "Get started" instructions')
-  .action((name, cmd) => {
-    const options = cleanArgs(cmd)
-
+  .action((name, options) => {
     if (minimist(process.argv.slice(3))._.length > 1) {
       console.log(chalk.yellow('\n Info: You provided more than one argument. The first one will be used as the app\'s name, the rest are ignored.'))
     }
@@ -108,28 +95,23 @@ program
   .option('--rules', 'list all module rule names')
   .option('--plugins', 'list all plugin names')
   .option('-v --verbose', 'Show full function definitions in output')
-  .action((paths, cmd) => {
-    require('../lib/inspect')(paths, cleanArgs(cmd))
+  .action((paths, options) => {
+    require('../lib/inspect')(paths, options)
   })
 
 program
-  .command('serve [entry]')
-  .description('serve a .js or .vue file in development mode with zero config')
-  .option('-o, --open', 'Open browser')
-  .option('-c, --copy', 'Copy local url to clipboard')
-  .option('-p, --port <port>', 'Port used by the server (default: 8080 or next available port)')
-  .action((entry, cmd) => {
-    loadCommand('serve', '@vue/cli-service-global').serve(entry, cleanArgs(cmd))
+  .command('serve')
+  .description('alias of "npm run serve" in the current project')
+  .allowUnknownOption()
+  .action(() => {
+    require('../lib/util/runNpmScript')('serve', process.argv.slice(3))
   })
 
 program
-  .command('build [entry]')
-  .description('build a .js or .vue file in production mode with zero config')
-  .option('-t, --target <target>', 'Build target (app | lib | wc | wc-async, default: app)')
-  .option('-n, --name <name>', 'name for lib or web-component mode (default: entry filename)')
-  .option('-d, --dest <dir>', 'output directory (default: dist)')
-  .action((entry, cmd) => {
-    loadCommand('build', '@vue/cli-service-global').build(entry, cleanArgs(cmd))
+  .command('build')
+  .description('alias of "npm run build" in the current project')
+  .action((cmd) => {
+    require('../lib/util/runNpmScript')('build', process.argv.slice(3))
   })
 
 program
@@ -140,9 +122,9 @@ program
   .option('-D, --dev', 'Run in dev mode')
   .option('--quiet', `Don't output starting messages`)
   .option('--headless', `Don't open browser on start and output port`)
-  .action((cmd) => {
+  .action((options) => {
     checkNodeVersion('>=8.6', 'vue ui')
-    require('../lib/ui')(cleanArgs(cmd))
+    require('../lib/ui')(options)
   })
 
 program
@@ -162,16 +144,16 @@ program
   .option('-d, --delete <path>', 'delete option from config')
   .option('-e, --edit', 'open config with default editor')
   .option('--json', 'outputs JSON result only')
-  .action((value, cmd) => {
-    require('../lib/config')(value, cleanArgs(cmd))
+  .action((value, options) => {
+    require('../lib/config')(value, options)
   })
 
 program
   .command('outdated')
   .description('(experimental) check for outdated vue cli service / plugins')
   .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
-  .action((cmd) => {
-    require('../lib/outdated')(cleanArgs(cmd))
+  .action((options) => {
+    require('../lib/outdated')(options)
   })
 
 program
@@ -182,17 +164,16 @@ program
   .option('-r, --registry <url>', 'Use specified npm registry when installing dependencies')
   .option('--all', 'Upgrade all plugins')
   .option('--next', 'Also check for alpha / beta / rc versions when upgrading')
-  .action((packageName, cmd) => {
-    require('../lib/upgrade')(packageName, cleanArgs(cmd))
+  .action((packageName, options) => {
+    require('../lib/upgrade')(packageName, options)
   })
 
 program
   .command('migrate [plugin-name]')
   .description('(experimental) run migrator for an already-installed cli plugin')
-  // TODO: use `requiredOption` after upgrading to commander 4.x
-  .option('-f, --from <version>', 'The base version for the migrator to migrate from')
-  .action((packageName, cmd) => {
-    require('../lib/migrate')(packageName, cleanArgs(cmd))
+  .requiredOption('-f, --from <version>', 'The base version for the migrator to migrate from')
+  .action((packageName, options) => {
+    require('../lib/migrate')(packageName, options)
   })
 
 program
@@ -217,14 +198,13 @@ program
   })
 
 // output help information on unknown commands
-program
-  .arguments('<command>')
-  .action((cmd) => {
-    program.outputHelp()
-    console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
-    console.log()
-    suggestCommands(cmd)
-  })
+program.on('command:*', ([cmd]) => {
+  program.outputHelp()
+  console.log(`  ` + chalk.red(`Unknown command ${chalk.yellow(cmd)}.`))
+  console.log()
+  suggestCommands(cmd)
+  process.exitCode = 1
+})
 
 // add some useful info on help
 program.on('--help', () => {
@@ -254,10 +234,6 @@ enhanceErrorMessages('optionMissingArgument', (option, flag) => {
 
 program.parse(process.argv)
 
-if (!process.argv.slice(2).length) {
-  program.outputHelp()
-}
-
 function suggestCommands (unknownCommand) {
   const availableCommands = program.commands.map(cmd => cmd._name)
 
@@ -273,23 +249,4 @@ function suggestCommands (unknownCommand) {
   if (suggestion) {
     console.log(`  ` + chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`))
   }
-}
-
-function camelize (str) {
-  return str.replace(/-(\w)/g, (_, c) => c ? c.toUpperCase() : '')
-}
-
-// commander passes the Command object itself as options,
-// extract only actual options into a fresh object.
-function cleanArgs (cmd) {
-  const args = {}
-  cmd.options.forEach(o => {
-    const key = camelize(o.long.replace(/^--/, ''))
-    // if an option is not present and Command has a method with the same name
-    // it should not be copied
-    if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {
-      args[key] = cmd[key]
-    }
-  })
-  return args
 }

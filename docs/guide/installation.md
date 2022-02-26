@@ -11,7 +11,7 @@ Vue CLI 4.x requires [Node.js](https://nodejs.org/) version 8.9 or above (v10+ r
 
 To install the new package, use one of the following commands. You need administrator privileges to execute these unless npm was installed on your system through a Node.js version manager (e.g. n or nvm).
 
-``` bash
+```bash
 npm install -g @vue/cli
 # OR
 yarn global add @vue/cli
@@ -29,7 +29,7 @@ vue --version
 
 To upgrade the global Vue CLI package, you need to run:
 
-``` bash
+```bash
 npm update -g @vue/cli
 
 # OR

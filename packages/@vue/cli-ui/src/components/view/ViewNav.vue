@@ -15,12 +15,13 @@
         class="vertical small-indicator left-indicator primary"
         indicator
       >
-        <ViewNavButton
-          v-for="view of views"
-          v-if="hasProjectType(view)"
-          :key="view.id"
-          :view="view"
-        />
+        <template v-for="view of views">
+          <ViewNavButton
+            v-if="hasProjectType(view)"
+            :key="view.id"
+            :view="view"
+          />
+        </template>
       </VueGroup>
 
       <ViewNavMore/>
@@ -207,7 +208,6 @@ export default {
         border none !important
         background $vue-ui-color-primary
 
-    >>> .v-popover .trigger,
     >>> .vue-ui-dropdown
       display block !important
 

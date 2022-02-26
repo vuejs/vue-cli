@@ -39,11 +39,8 @@
 
 <script>
 import { Terminal } from 'xterm'
-import * as fit from 'xterm/dist/addons/fit/fit'
-import * as webLinks from 'xterm/dist/addons/webLinks/webLinks'
-
-Terminal.applyAddon(fit)
-Terminal.applyAddon(webLinks)
+import { FitAddon } from 'xterm-addon-fit'
+import { WebLinksAddon } from 'xterm-addon-web-links'
 
 const defaultTheme = {
   foreground: '#2c3e50',
@@ -154,7 +151,7 @@ export default {
   },
 
   beforeDestroy () {
-    this.$_terminal.destroy()
+    this.$_terminal.dispose()
   },
 
   methods: {
@@ -165,11 +162,19 @@ export default {
         theme: this.theme,
         ...this.options
       })
-      webLinks.webLinksInit(term, this.handleLink)
+
+      const fitAddon = new FitAddon()
+      const webLinksAddon = new WebLinksAddon(this.handleLink)
+
+      this.$_fitAddon = fitAddon
+
+      term.loadAddon(fitAddon)
+      term.loadAddon(webLinksAddon)
+
       term.open(this.$refs.render)
 
-      term.on('blur', () => this.$emit('blur'))
-      term.on('focus', () => this.$emit('focus'))
+      term.element.addEventListener('blur', () => this.$emit('blur'))
+      term.element.addEventListener('focus', () => this.$emit('focus'))
 
       if (this.autoSize) {
         this.$nextTick(this.fit)
@@ -213,7 +218,7 @@ export default {
         if (emptySelection) {
           this.$_terminal.selectAll()
         }
-        var selection = this.$_terminal.getSelection()
+        const selection = this.$_terminal.getSelection()
         textarea.value = selection
         textarea.select()
         document.execCommand('copy')
@@ -238,7 +243,7 @@ export default {
 
       await this.$nextTick()
 
-      term.fit()
+      this.$_fitAddon.fit()
       term.element.style.display = ''
       term.refresh(0, term.rows - 1)
     },
@@ -255,7 +260,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import "~xterm/dist/xterm.css"
+@import "~xterm/css/xterm.css"
 </style>
 
 <style lang="stylus" scoped>

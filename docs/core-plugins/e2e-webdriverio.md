@@ -50,7 +50,7 @@ Your e2e tests.
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add e2e-webdriverio
 ```
 
@@ -60,7 +60,7 @@ For users with older CLI versions you may need to run `vue add @vue/e2e-webdrive
 
 By default, all tests inside the `specs` folder will be run using Chrome. If you'd like to run end-to-end tests against Chrome (or Firefox) in headless mode, simply pass the `--headless` argument. Tests will be automatically run in parallel when executed in the cloud.
 
-```sh
+```bash
 $ vue-cli-service test:e2e
 ```
 
@@ -68,7 +68,7 @@ $ vue-cli-service test:e2e
 
 To run a single test supply the filename path. E.g.:
 
-```sh
+```bash
 $ vue-cli-service test:e2e --spec tests/e2e/specs/test.js
 ```
 
@@ -76,6 +76,6 @@ $ vue-cli-service test:e2e --spec tests/e2e/specs/test.js
 
 If the development server is already running and you want to skip starting it automatically, pass the `--url` argument:
 
-```sh
+```bash
 $ vue-cli-service test:e2e --baseUrl=http://localhost:8080/
 ```

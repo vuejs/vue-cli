@@ -11,7 +11,7 @@ Vue CLI 4.x 需要 [Node.js](https://nodejs.org/) v8.9 或更高版本 (推荐 v
 
 可以使用下列任一命令安装这个新的包：
 
-``` bash
+```bash
 npm install -g @vue/cli
 # OR
 yarn global add @vue/cli
@@ -29,7 +29,7 @@ vue --version
 
 如需升级全局的 Vue CLI 包，请运行：
 
-``` bash
+```bash
 npm update -g @vue/cli
 
 # 或者

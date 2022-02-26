@@ -45,10 +45,6 @@ const testPromptAPI = (cli: PromptModuleAPI) => {
         value: 'dart-sass'
       },
       {
-        name: 'Sass/SCSS (with node-sass)',
-        value: 'node-sass'
-      },
-      {
         name: 'Less',
         value: 'less'
       },
@@ -116,7 +112,8 @@ const generator: GeneratorPlugin = (api, options, rootOptions, invoking) => {
     {
       merge: true,
       prune: true,
-      warnIncompatibleVersions: true
+      warnIncompatibleVersions: true,
+      forceOverwrite: true
     }
   )
 

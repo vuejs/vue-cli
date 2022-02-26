@@ -7,35 +7,35 @@ const schema = createSchema(joi => joi.object({
   indexPath: joi.string(),
   filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),
-  transpileDependencies: joi.array(),
+  transpileDependencies: joi.alternatives().try(
+    joi.boolean(),
+    joi.array()
+  ),
   productionSourceMap: joi.boolean(),
-  parallel: joi.alternatives().try([
+  parallel: joi.alternatives().try(
     joi.boolean(),
     joi.number().integer()
-  ]),
+  ),
   devServer: joi.object(),
   pages: joi.object().pattern(
     /\w+/,
-    joi.alternatives().try([
+    joi.alternatives().try(
       joi.string().required(),
       joi.array().items(joi.string().required()),
 
       joi.object().keys({
-        entry: joi.alternatives().try([
+        entry: joi.alternatives().try(
           joi.string().required(),
           joi.array().items(joi.string().required())
-        ]).required()
+        ).required()
       }).unknown(true)
-    ])
+    )
   ),
-  crossorigin: joi.string().valid(['', 'anonymous', 'use-credentials']),
+  crossorigin: joi.string().valid('', 'anonymous', 'use-credentials'),
   integrity: joi.boolean(),
 
   // css
   css: joi.object({
-    // TODO: deprecate this after joi 16 release
-    modules: joi.boolean(),
-    requireModuleExtension: joi.boolean(),
     extract: joi.alternatives().try(joi.boolean(), joi.object()),
     sourceMap: joi.boolean(),
     loaderOptions: joi.object({
@@ -56,8 +56,14 @@ const schema = createSchema(joi => joi.object({
   ),
 
   // known runtime options for built-in plugins
-  lintOnSave: joi.any().valid([true, false, 'error', 'warning', 'default']),
+  lintOnSave: joi.any().valid(true, false, 'error', 'warning', 'default'),
   pwa: joi.object(),
+
+  // terser
+  terser: joi.object({
+    minify: joi.string().valid('terser', 'esbuild', 'swc', 'uglifyJs'),
+    terserOptions: joi.object()
+  }),
 
   // 3rd party plugin options
   pluginOptions: joi.object()
@@ -97,10 +103,8 @@ exports.defaults = () => ({
   // boolean, use full build?
   runtimeCompiler: false,
 
-  // deps to transpile
-  transpileDependencies: [
-    /* string or regex */
-  ],
+  // whether to transpile all dependencies
+  transpileDependencies: false,
 
   // sourceMap for production build?
   productionSourceMap: !process.env.VUE_CLI_TEST,

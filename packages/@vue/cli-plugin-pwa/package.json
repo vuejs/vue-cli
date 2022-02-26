@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-pwa",
-  "version": "4.5.7",
+  "version": "5.0.1",
   "description": "pwa plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,14 +23,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^4.5.7",
-    "webpack": "^4.0.0",
-    "workbox-webpack-plugin": "^4.3.1"
+    "@vue/cli-shared-utils": "^5.0.1",
+    "html-webpack-plugin": "^5.1.0",
+    "webpack": "^5.54.0",
+    "workbox-webpack-plugin": "^6.1.0"
   },
   "devDependencies": {
-    "register-service-worker": "^1.7.1"
+    "register-service-worker": "^1.7.2"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
+    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
   }
 }

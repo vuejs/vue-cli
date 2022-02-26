@@ -1,5 +1,5 @@
 environment:
-  nodejs_version: "10"
+  nodejs_version: "12"
 
 install:
   - ps: Install-Product node $env:nodejs_version
@@ -10,15 +10,13 @@ test_script:
   - git --version
   - node --version
   - yarn --version
-  - yarn config set yarn-offline-mirror ./npm-packages-offline-cache
-  - yarn test
+  - yarn test --testPathIgnorePatterns globalService
   # ui tests temporarily disabled due to Cypress 3.0 issue on windows
   # - cd "packages/@vue/cli-ui" && yarn test
 
 cache:
   - node_modules -> appveyor.yml, **\package.json, yarn.lock
   - '%LOCALAPPDATA%\Yarn -> appveyor.yml, **\package.json, yarn.lock'
-  - npm-packages-offline-cache -> appveyor.yml, **\package.json, yarn.lock
 
 build: off
 

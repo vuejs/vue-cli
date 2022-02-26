@@ -28,7 +28,6 @@ const {
 const {
   chalk,
   execa,
-  semver,
 
   log,
   warn,
@@ -78,7 +77,7 @@ module.exports = class Creator extends EventEmitter {
         preset = await this.resolvePreset(cliOptions.preset, cliOptions.clone)
       } else if (cliOptions.default) {
         // vue create foo --default
-        preset = defaults.presets.default
+        preset = defaults.presets['Default (Vue 3)']
       } else if (cliOptions.inlinePreset) {
         // vue create foo --inlinePreset {...}
         try {
@@ -110,16 +109,6 @@ module.exports = class Creator extends EventEmitter {
       if (preset.routerHistoryMode) {
         preset.plugins['@vue/cli-plugin-router'].historyMode = true
       }
-    }
-
-    // Introducing this hack because typescript plugin must be invoked after router.
-    // Currently we rely on the `plugins` object enumeration order,
-    // which depends on the order of the field initialization.
-    // FIXME: Remove this ugly hack after the plugin ordering API settled down
-    if (preset.plugins['@vue/cli-plugin-router'] && preset.plugins['@vue/cli-plugin-typescript']) {
-      const tmp = preset.plugins['@vue/cli-plugin-typescript']
-      delete preset.plugins['@vue/cli-plugin-typescript']
-      preset.plugins['@vue/cli-plugin-typescript'] = tmp
     }
 
     // legacy support for vuex
@@ -161,7 +150,7 @@ module.exports = class Creator extends EventEmitter {
 
       if (!version) {
         if (isOfficialPlugin(dep) || dep === '@vue/cli-service' || dep === '@vue/babel-preset-env') {
-          version = isTestOrDebug ? `file:${path.resolve(__dirname, '../../../', dep)}` : `~${latestMinor}`
+          version = isTestOrDebug ? `latest` : `~${latestMinor}`
         } else {
           version = 'latest'
         }
@@ -183,15 +172,6 @@ module.exports = class Creator extends EventEmitter {
 
       await writeFileTree(context, {
         '.npmrc': pnpmConfig
-      })
-    }
-
-    if (packageManager === 'yarn' && semver.satisfies(process.version, '8.x')) {
-      // Vue CLI 4.x should support Node 8.x,
-      // but some dependenices already bumped `engines` field to Node 10
-      // and Yarn treats `engines` field too strictly
-      await writeFileTree(context, {
-        '.yarnrc': '# Hotfix for Node 8.x\n--install.ignore-engines true\n'
       })
     }
 
@@ -349,6 +329,8 @@ module.exports = class Creator extends EventEmitter {
 
     if (name in savedPresets) {
       preset = savedPresets[name]
+    } else if (name === 'default') {
+      preset = savedPresets['Default (Vue 3)']
     } else if (name.endsWith('.json') || /^\./.test(name) || path.isAbsolute(name)) {
       preset = await loadLocalPreset(path.resolve(name))
     } else if (name.includes('/')) {
@@ -419,10 +401,10 @@ module.exports = class Creator extends EventEmitter {
     const presets = this.getPresets()
     const presetChoices = Object.entries(presets).map(([name, preset]) => {
       let displayName = name
-      if (name === 'default') {
+      // Vue version will be showed as features anyway,
+      // so we shouldn't display it twice.
+      if (name === 'Default (Vue 2)' || name === 'Default (Vue 3)') {
         displayName = 'Default'
-      } else if (name === '__default_vue_3__') {
-        displayName = 'Default (Vue 3 Preview)'
       }
 
       return {

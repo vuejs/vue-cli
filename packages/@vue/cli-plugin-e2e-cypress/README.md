@@ -4,7 +4,9 @@
 
 This adds E2E testing support using [Cypress](https://www.cypress.io/).
 
-Cypress offers a rich interactive interface for running E2E tests, but currently only supports running the tests in Chromium. If you have a hard requirement on E2E testing in multiple browsers, consider using the Selenium-based [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch).
+Cypress offers a rich interactive interface for running E2E tests in Firefox and Chromium based browsers (Chrome, MS Edge, Brave, Electron). To learn more about cross browser testing, visit the [Cypress Cross Browser Testing Guide](https://on.cypress.io/cross-browser-testing).
+
+> **Note:** If you have a hard requirement on E2E testing in IE or Safari, consider using the Selenium-based [@vue/cli-plugin-e2e-nightwatch](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-e2e-nightwatch).
 
 ## Injected Commands
 
@@ -12,7 +14,7 @@ Cypress offers a rich interactive interface for running E2E tests, but currently
 
   Run e2e tests with `cypress run`.
 
-  By default it launches Cypress in interactive mode with a GUI. If you want to run the tests in headless mode (e.g. for CI), you can do so with the `--headless` option.
+  By default it launches Cypress in interactive mode with a GUI (via `cypress open`). If you want to run the tests in headless mode (e.g. for CI), you can do so with the `--headless` option.
 
   The command automatically starts a server in production mode to run the e2e tests against. If you want to run the tests multiple times without having to restart the server every time, you can start the server with `vue-cli-service serve --mode production` in one terminal, and then run e2e tests against that server using the `--url` option.
 
@@ -43,6 +45,6 @@ Cypress doesn't load .env files for your test files the same way as `vue-cli` do
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add e2e-cypress
 ```

@@ -125,9 +125,9 @@ module.exports = {
 h('img', { attrs: { src: require('./image.png') }})
 ```
 
-在其内部，我们通过 `file-loader` 用版本哈希值和正确的公共基础路径来决定最终的文件路径，再用 `url-loader` 将小于 4kb 的资源内联，以减少 HTTP 请求的数量。
+在其内部，我们通过 webpack 的 [Assets Modules](https://webpack.js.org/guides/asset-modules/) 配置，用版本哈希值和正确的公共基础路径来决定最终的文件路径，并将小于 8KiB 的资源内联，以减少 HTTP 请求的数量。
 
-你可以通过 [chainWebpack](../config/#chainwebpack) 调整内联文件的大小限制。例如，下列代码会将其限制设置为 10kb：
+你可以通过 [chainWebpack](../config/#chainwebpack) 调整内联文件的大小限制。例如，下列代码会将内联图片资源限制设置为 4KiB：
 
 ``` js
 // vue.config.js
@@ -135,9 +135,11 @@ module.exports = {
   chainWebpack: config => {
     config.module
       .rule('images')
-        .use('url-loader')
-          .loader('url-loader')
-          .tap(options => Object.assign(options, { limit: 10240 }))
+        .set('parser', {
+          dataUrlCondition: {
+            maxSize: 4 * 1024 // 4KiB
+          }
+        })
   }
 }
 ```

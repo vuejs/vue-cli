@@ -1,3 +1,5 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
 const ID = 'vue-cli:pwa-html-plugin'
 
 const defaults = {
@@ -43,6 +45,7 @@ const defaultManifest = {
 }
 
 const defaultIconPaths = {
+  faviconSVG: 'img/icons/favicon.svg',
   favicon32: 'img/icons/favicon-32x32.png',
   favicon16: 'img/icons/favicon-16x16.png',
   appleTouchIcon: 'img/icons/apple-touch-icon-152x152.png',
@@ -59,13 +62,13 @@ module.exports = class HtmlPwaPlugin {
 
   apply (compiler) {
     compiler.hooks.compilation.tap(ID, compilation => {
-      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync(ID, (data, cb) => {
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(ID, (data, cb) => {
         // wrap favicon in the base template with IE only comment
         data.html = data.html.replace(/<link rel="icon"[^>]+>/, '<!--[if IE]>$&<![endif]-->')
         cb(null, data)
       })
 
-      compilation.hooks.htmlWebpackPluginAlterAssetTags.tapAsync(ID, (data, cb) => {
+      HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(ID, (data, cb) => {
         const {
           name,
           themeColor,
@@ -82,8 +85,15 @@ module.exports = class HtmlPwaPlugin {
         const assetsVersionStr = assetsVersion ? `?v=${assetsVersion}` : ''
 
         // Favicons
+        if (iconPaths.faviconSVG != null) {
+          data.headTags.push(makeTag('link', {
+            rel: 'icon',
+            type: 'image/svg+xml',
+            href: getTagHref(publicPath, iconPaths.faviconSVG, assetsVersionStr)
+          }))
+        }
         if (iconPaths.favicon32 != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'icon',
             type: 'image/png',
             sizes: '32x32',
@@ -91,7 +101,7 @@ module.exports = class HtmlPwaPlugin {
           }))
         }
         if (iconPaths.favicon16 != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'icon',
             type: 'image/png',
             sizes: '16x16',
@@ -100,7 +110,7 @@ module.exports = class HtmlPwaPlugin {
         }
 
         // Add to home screen for Android and modern mobile browsers
-        data.head.push(
+        data.headTags.push(
           makeTag('link', manifestCrossorigin
             ? {
               rel: 'manifest',
@@ -115,7 +125,7 @@ module.exports = class HtmlPwaPlugin {
         )
 
         if (themeColor != null) {
-          data.head.push(
+          data.headTags.push(
             makeTag('meta', {
               name: 'theme-color',
               content: themeColor
@@ -124,7 +134,7 @@ module.exports = class HtmlPwaPlugin {
         }
 
         // Add to home screen for Safari on iOS
-        data.head.push(
+        data.headTags.push(
           makeTag('meta', {
             name: 'apple-mobile-web-app-capable',
             content: appleMobileWebAppCapable
@@ -139,13 +149,13 @@ module.exports = class HtmlPwaPlugin {
           })
         )
         if (iconPaths.appleTouchIcon != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'apple-touch-icon',
             href: getTagHref(publicPath, iconPaths.appleTouchIcon, assetsVersionStr)
           }))
         }
         if (iconPaths.maskIcon != null) {
-          data.head.push(makeTag('link', {
+          data.headTags.push(makeTag('link', {
             rel: 'mask-icon',
             href: getTagHref(publicPath, iconPaths.maskIcon, assetsVersionStr),
             color: themeColor
@@ -154,13 +164,13 @@ module.exports = class HtmlPwaPlugin {
 
         // Add to home screen for Windows
         if (iconPaths.msTileImage != null) {
-          data.head.push(makeTag('meta', {
+          data.headTags.push(makeTag('meta', {
             name: 'msapplication-TileImage',
             content: getTagHref(publicPath, iconPaths.msTileImage, assetsVersionStr)
           }))
         }
         if (msTileColor != null) {
-          data.head.push(
+          data.headTags.push(
             makeTag('meta', {
               name: 'msapplication-TileColor',
               content: msTileColor
@@ -173,35 +183,39 @@ module.exports = class HtmlPwaPlugin {
     })
 
     if (!isHrefAbsoluteUrl(this.options.manifestPath)) {
-      compiler.hooks.emit.tapAsync(ID, (data, cb) => {
-        const {
-          name,
-          themeColor,
-          manifestPath,
-          manifestOptions
-        } = this.options
-        const publicOptions = {
-          name,
-          short_name: name,
-          theme_color: themeColor
-        }
-        const outputManifest = JSON.stringify(
-          Object.assign(publicOptions, defaultManifest, manifestOptions)
+      const {
+        name,
+        themeColor,
+        manifestPath,
+        manifestOptions
+      } = this.options
+      const publicOptions = {
+        name,
+        short_name: name,
+        theme_color: themeColor
+      }
+      const outputManifest = JSON.stringify(
+        Object.assign(publicOptions, defaultManifest, manifestOptions)
+      )
+      const manifestAsset = {
+        source: () => outputManifest,
+        size: () => outputManifest.length
+      }
+
+      compiler.hooks.compilation.tap(ID, compilation => {
+        compilation.hooks.processAssets.tap(
+          { name: ID, stage: 'PROCESS_ASSETS_STAGE_ADDITIONS' },
+          assets => { assets[manifestPath] = manifestAsset }
         )
-        data.assets[manifestPath] = {
-          source: () => outputManifest,
-          size: () => outputManifest.length
-        }
-        cb(null, data)
       })
     }
   }
 }
 
-function makeTag (tagName, attributes, closeTag = false) {
+function makeTag (tagName, attributes, voidTag = true) {
   return {
     tagName,
-    closeTag,
+    voidTag,
     attributes
   }
 }

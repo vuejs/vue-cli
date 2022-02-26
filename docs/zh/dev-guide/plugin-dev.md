@@ -84,7 +84,7 @@ CLI 插件应该总是包含一个 [service 插件](#service-plugin) 做为主�
 
 一个 generator 应该导出一个接收三个参数的函数：
 
-1. 一个 [GeneratorAPI](generator-api.md) 实例；
+1. 一个 [GeneratorAPI](/dev-guide/generator-api.md) 实例；
 
 2. 插件的 generator 选项。这些选项在项目创建，或者从 `~/.vuerc` 载入预设时被解析。例如：如果保存的 `~/.vuerc` 像这样：
 
@@ -301,7 +301,7 @@ Service 插件在 Service 实例被创建后自动加载 - 例如，每次 `vue-
 
 一个 service 插件应该导出一个函数，这个函数接受两个参数：
 
-- 一个 [PluginAPI](plugin-api.md) 实例
+- 一个 [PluginAPI](/dev-guide/plugin-api.md) 实例
 
 - 一个包含 `vue.config.js` 内指定的项目本地选项的对象，或者在 `package.json` 内的 `vue` 字段。
 
@@ -855,7 +855,7 @@ module.exports = [
 
 Logo 应该是方形非透明图片（理想尺寸 84*84）。
 
-### 发布插件到 npm 
+### 发布插件到 npm
 
 为了发布插件，你需要在 [npmjs.com](https://www.npmjs.com) 上注册并且全局安装 `npm`。如果这是你的第一个发布的 npm 模块，请执行
 

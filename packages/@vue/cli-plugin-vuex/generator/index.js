@@ -5,7 +5,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
     api.transformScript(api.entryFile, require('./injectUseStore'))
     api.extendPackage({
       dependencies: {
-        vuex: '^4.0.0-0'
+        vuex: '^4.0.0'
       }
     })
     api.render('./template-vue3', {})
@@ -14,7 +14,7 @@ module.exports = (api, options = {}, rootOptions = {}) => {
 
     api.extendPackage({
       dependencies: {
-        vuex: '^3.4.0'
+        vuex: '^3.6.2'
       }
     })
 

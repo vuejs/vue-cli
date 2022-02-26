@@ -11,7 +11,7 @@
 
   Опции:
 
-    --format [formatter] определяет форматтер (по умолчанию: codeframe)
+    --format [formatter] определяет форматтер (по умолчанию: stylish)
     --no-fix             отключает автоматическое исправление ошибок
     --max-errors         количество ошибок, по достижению которого сборка заканчивается ошибкой (по умолчанию: 0)
     --max-warnings       количество предупреждений, по достижению которого сборка заканчивается ошибкой (по умолчанию: Infinity)
@@ -30,7 +30,7 @@
 ESLint можно настраивать через `.eslintrc` или поле `eslintConfig` в файле `package.json`. Подробнее см. в [документации конфигурации ESLint](https://eslint.org/docs/user-guide/configuring).
 
 ::: tip СОВЕТ
-Следующая опция находится в разделе [`vue.config.js`](../config/README.md#vue-config-js). Это соблюдается только при установке `@vue/cli-plugin-eslint`.
+Следующая опция находится в разделе [`vue.config.js`](../config/index.md#vue-config-js). Это соблюдается только при установке `@vue/cli-plugin-eslint`.
 :::
 
 Линтинг при сохранении (Lint-on-save) при разработке с помощью `eslint-loader` включён по умолчанию. Это можно отключить с помощью опции `lintOnSave` в файле `vue.config.js`:
@@ -70,7 +70,7 @@ module.exports = {
 
 ## Установка в уже созданный проект
 
-```sh
+```bash
 vue add eslint
 ```
 

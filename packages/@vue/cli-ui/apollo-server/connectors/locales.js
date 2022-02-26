@@ -49,8 +49,8 @@ function loadFolder (root, context) {
   const folder = path.join(root, './locales')
   if (process.env.VUE_APP_CLI_UI_DEV && !watchedTrees.get(root) && fs.existsSync(folder)) {
     watchedTrees.set(root, true)
-    const watch = require('watch')
-    watch.watchTree(folder, () => {
+    const chokidar = require('chokidar')
+    chokidar.watch(folder).on('all', () => {
       _loadFolder(root, context)
       log('Locales reloaded', root)
     })

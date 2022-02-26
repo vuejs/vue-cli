@@ -54,7 +54,6 @@ function executeNodeScript (scriptPath, url) {
       )
       console.log(chalk.cyan(scriptPath) + ' exited with code ' + code + '.')
       console.log()
-      return
     }
   })
   return true
@@ -95,7 +94,7 @@ function startBrowserProcess (browser, url) {
   // Fallback to open
   // (It will always open new tab)
   try {
-    var options = { app: browser, url: true }
+    const options = { app: { name: browser }, url: true }
     open(url, options).catch(() => {}) // Prevent `unhandledRejection` error.
     return true
   } catch (err) {

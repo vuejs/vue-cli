@@ -18,6 +18,7 @@ const rawArgv = process.argv.slice(2)
 const args = require('minimist')(rawArgv, {
   boolean: [
     // build
+    // FIXME: --no-module, --no-unsafe-inline, no-clean, etc.
     'modern',
     'report',
     'report-json',

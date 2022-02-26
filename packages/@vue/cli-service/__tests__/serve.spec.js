@@ -48,14 +48,14 @@ test('serve with router', async () => {
     () => project.run('vue-cli-service serve'),
     async ({ page, helpers }) => {
       expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="#/"]', 'router-link-exact-active')).toBe(true)
       expect(await helpers.hasClass('a[href="#/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="#/about"]')
       await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="#/"]', 'router-link-exact-active')).toBe(false)
       expect(await helpers.hasClass('a[href="#/about"]', 'router-link-exact-active')).toBe(true)
     }
@@ -72,14 +72,14 @@ test('serve with legacy router option', async () => {
     () => project.run('vue-cli-service serve'),
     async ({ page, helpers }) => {
       expect(await helpers.getText('h1')).toMatch(`Welcome to Your Vue.js App`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="/"]', 'router-link-exact-active')).toBe(true)
       expect(await helpers.hasClass('a[href="/about"]', 'router-link-exact-active')).toBe(false)
 
       await page.click('a[href="/about"]')
       await sleep(1000)
       expect(await helpers.getText('h1')).toMatch(`This is an about page`)
-      expect(await helpers.hasElement('#nav')).toBe(true)
+      expect(await helpers.hasElement('nav')).toBe(true)
       expect(await helpers.hasClass('a[href="/"]', 'router-link-exact-active')).toBe(false)
       expect(await helpers.hasClass('a[href="/about"]', 'router-link-exact-active')).toBe(true)
     }
@@ -168,17 +168,6 @@ test('serve with no public dir', async () => {
   )
 })
 
-test('dart sass', async () => {
-  const project = await create('test-dart-sass', exports.defaultPreset = {
-    useConfigFiles: false,
-    cssPreprocessor: 'dart-sass',
-    plugins: {}
-  })
-
-  // should build successfully
-  await project.run('vue-cli-service build')
-})
-
 test('use a single websocket connection for HMR', async () => {
   const project = await create('e2e-serve-hmr', defaultPreset)
 
@@ -188,8 +177,7 @@ test('use a single websocket connection for HMR', async () => {
       const msg = `Welcome to Your Vue.js App`
       expect(await helpers.getText('h1')).toMatch(msg)
 
-      expect(requestUrls.filter(url => url.includes('sockjs-node')).length).toBe(1)
+      expect(requestUrls.filter(url => url.includes('ws://')).length).toBe(1)
     }
   )
 })
-

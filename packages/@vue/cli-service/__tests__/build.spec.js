@@ -27,15 +27,19 @@ test('build', async () => {
   expect(project.has('dist/subfolder/index.html')).toBe(true)
 
   const index = await project.read('dist/index.html')
+
+  // should have set the title inferred from the project name
+  expect(index).toMatch(/<title>e2e-build<\/title>/)
+
   // should split and preload app.js & vendor.js
-  expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js" rel="preload" as="script">/)
-  expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js" rel="preload" as="script">/)
+  // expect(index).toMatch(/<link [^>]+js\/app[^>]+\.js" rel="preload" as="script">/)
+  // expect(index).toMatch(/<link [^>]+js\/chunk-vendors[^>]+\.js" rel="preload" as="script">/)
   // should preload css
-  expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
+  // expect(index).toMatch(/<link [^>]+app[^>]+\.css" rel="preload" as="style">/)
 
   // should inject scripts
-  expect(index).toMatch(/<script src="\/js\/chunk-vendors\.\w{8}\.js">/)
-  expect(index).toMatch(/<script src="\/js\/app\.\w{8}\.js">/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors-legacy\.\w{8}\.js" nomodule>/)
+  expect(index).toMatch(/<script defer="defer" src="\/js\/app-legacy\.\w{8}\.js" nomodule>/)
   // should inject css
   expect(index).toMatch(/<link href="\/css\/app\.\w{8}\.css" rel="stylesheet">/)
 
@@ -61,6 +65,44 @@ test('build', async () => {
   })
 
   expect(h1Text).toMatch('Welcome to Your Vue.js App')
+})
+
+test('build with --report-json', async () => {
+  const project = await create('e2e-build-report-json', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --report-json')
+  expect(stdout).toMatch('Build complete.')
+  // should generate report.json
+  expect(project.has('dist/report.json')).toBe(true)
+
+  const report = JSON.parse(await project.read('dist/report.json'))
+  // should contain entry points info
+  expect(report.entrypoints).toHaveProperty('app.chunks')
+  expect(report.entrypoints).toHaveProperty('app.assets')
+
+  const appChunk = report.chunks.find(chunk => chunk.names.includes('app'))
+  // Each chunk should contain meta info
+  expect(appChunk).toHaveProperty('rendered')
+  expect(appChunk).toHaveProperty('initial')
+  expect(appChunk).toHaveProperty('entry')
+  expect(appChunk).toHaveProperty('size')
+  expect(appChunk).toHaveProperty('names')
+  expect(appChunk).toHaveProperty('files')
+  expect(appChunk).toHaveProperty('modules')
+})
+
+test('build with --dest', async () => {
+  const project = await create('e2e-build-dest', defaultPreset)
+
+  const { stdout } = await project.run('vue-cli-service build --dest other_dist')
+  expect(stdout).toMatch('Build complete.')
+
+  expect(project.has('other_dist/index.html')).toBe(true)
+  expect(project.has('other_dist/favicon.ico')).toBe(true)
+  expect(project.has('other_dist/js')).toBe(true)
+  expect(project.has('other_dist/css')).toBe(true)
+
+  expect(project.has('dist')).toBe(false)
 })
 
 afterAll(async () => {

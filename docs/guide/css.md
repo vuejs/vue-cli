@@ -10,7 +10,7 @@ All compiled CSS are processed by [css-loader](https://github.com/webpack-contri
 
 You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, the internal webpack config is still pre-configured to handle all of them. You just need to manually install the corresponding webpack loaders:
 
-``` bash
+```bash
 # Sass
 npm install -D sass-loader sass
 
@@ -90,7 +90,7 @@ In the production build, Vue CLI optimizes your CSS and will drop unnecessary ve
 
 You can [use CSS Modules in `*.vue` files](https://vue-loader.vuejs.org/en/features/css-modules.html) out of the box with `<style module>`.
 
-To import CSS or other pre-processor files as CSS Modules in JavaScript, the filename should end with `.module.(css|less|sass|scss|styl)`:
+To import CSS or other pre-processor files as CSS Modules in JavaScript, the filename should end with `.module(s).(css|less|sass|scss|styl)`:
 
 ``` js
 import styles from './foo.module.css'
@@ -98,18 +98,7 @@ import styles from './foo.module.css'
 import sassStyles from './foo.module.scss'
 ```
 
-If you want to drop the `.module` in the filenames, set `css.requireModuleExtension` to `false` in `vue.config.js`:
-
-``` js
-// vue.config.js
-module.exports = {
-  css: {
-    requireModuleExtension: false
-  }
-}
-```
-
-If you wish to customize the generated CSS modules class names, you can do so via `css.loaderOptions.css` in `vue.config.js`. All `css-loader` options are supported here, for example `localIdentName` and `camelCase`:
+If you want to drop the `.module` in the file names and treat all style files as CSS Modules, you need to configure the `css-loader` option as follows:
 
 ``` js
 // vue.config.js
@@ -117,13 +106,32 @@ module.exports = {
   css: {
     loaderOptions: {
       css: {
-        // Note: the following config format is different between Vue CLI v4 and v3
-        // For Vue CLI v3 users, please refer to css-loader v1 documentations
-        // https://github.com/webpack-contrib/css-loader/tree/v1.0.1
+        modules: {
+          auto: () => true
+        }
+      }
+    }
+  }
+}
+```
+
+If you wish to customize the generated CSS Modules class names, you can do so via `css.loaderOptions.css` in `vue.config.js`, too. All `css-loader` options are supported here:
+
+``` js
+// vue.config.js
+module.exports = {
+  css: {
+    loaderOptions: {
+      css: {
+        // Note: the following config format is different between different Vue CLI versions
+        // See the corresponding css-loader documentation for more details.
+        // Vue CLI v3 uses css-loader v1: https://www.npmjs.com/package/css-loader/v/1.0.1
+        // Vue CLI v4 uses css-loader v3: https://www.npmjs.com/package/css-loader/v/3.6.0
+        // Vue CLI v5 uses css-loader v5: https://github.com/webpack-contrib/css-loader#readme
         modules: {
           localIdentName: '[name]-[hash]'
-        },
-        localsConvention: 'camelCaseOnly'
+          exportLocalsConvention: 'camelCaseOnly'
+        }
       }
     }
   }

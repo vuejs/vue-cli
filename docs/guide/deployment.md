@@ -10,7 +10,7 @@ If you are developing your frontend app separately from your backend - i.e. your
 
 The `dist` directory is meant to be served by an HTTP server (unless you've configured `publicPath` to be a relative value), so it will not work if you open `dist/index.html` directly over `file://` protocol. The easiest way to preview your production build locally is using a Node.js static file server, for example [serve](https://github.com/zeit/serve):
 
-``` bash
+```bash
 npm install -g serve
 # -s flag means serve it in Single-Page Application mode
 # which deals with the routing problem below
@@ -21,7 +21,7 @@ serve -s dist
 
 If you are using Vue Router in `history` mode, a simple static file server will fail. For example, if you used Vue Router with a route for `/todos/42`, the dev server has been configured to respond to `localhost:3000/todos/42` properly, but a simple static server serving a production build will respond with a 404 instead.
 
-To fix that, you will need to configure your production server to fallback to `index.html` for any requests that do not match a static file. The Vue Router docs provides [configuration instructions for common server setups](https://router.vuejs.org/guide/essentials/history-mode.html).
+To fix that, you will need to configure your production server to fallback to `index.html` for any requests that do not match a static file. The Vue Router docs provide [configuration instructions for common server setups](https://router.vuejs.org/guide/essentials/history-mode.html).
 
 ### CORS
 
@@ -44,8 +44,8 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, (i.e. your repository is at `https://github.com/<USERNAME>/<REPO>`), set `publicPath` to `"/<REPO>/"`. For example, if your repo name is "my-project", your `vue.config.js` should look like this:
 
     ``` js
-    // vue.config.js file to be place in the root of your repository
-    
+    // vue.config.js file to be placed in the root of your repository
+
     module.exports = {
       publicPath: process.env.NODE_ENV === 'production'
         ? '/my-project/'
@@ -55,7 +55,7 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
 
 2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately) and run it to deploy:
 
-    ``` bash{13,20,23}
+    ```bash{13,20,23}
     #!/usr/bin/env sh
 
     # abort on errors
@@ -364,7 +364,7 @@ More info: [Getting started with SPAs on Heroku](https://gist.github.com/hone/24
 
 To deploy with [Surge](http://surge.sh/) the steps are very straightforward.
 
-First you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
+First, you would need to build your project by running `npm run build`. And if you haven't installed Surge's command line tool, you can simply do so by running the command:
 
 ```bash
 npm install --global surge
@@ -388,15 +388,15 @@ Verify your project is successfully published by Surge by visiting `myawesomepro
 
 1. As described in the [Bitbucket documentation](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) you need to create a repository named exactly `<USERNAME>.bitbucket.io`.
 
-2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case set correct `publicPath` in `vue.config.js`.
+2. It is possible to publish to a subfolder of the main repository, for instance if you want to have multiple websites. In that case, set correct `publicPath` in `vue.config.js`.
 
     If you are deploying to `https://<USERNAME>.bitbucket.io/`, you can omit `publicPath` as it defaults to `"/"`.
 
-    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `publicPath` to `"/<SUBFOLDER>/"`. In this case the directory structure of the repository should reflect the url structure, for instance the repository should have a `/<SUBFOLDER>` directory.
+    If you are deploying to `https://<USERNAME>.bitbucket.io/<SUBFOLDER>/`, set `publicPath` to `"/<SUBFOLDER>/"`. In this case, the directory structure of the repository should reflect the url structure, for instance, the repository should have a `/<SUBFOLDER>` directory.
 
 3. Inside your project, create `deploy.sh` with the following content and run it to deploy:
 
-    ``` bash{13,20,23}
+    ```bash{13,20,23}
     #!/usr/bin/env sh
 
     # abort on errors

@@ -11,15 +11,20 @@
 
   Options:
 
-    --format [formatter] specify formatter (default: codeframe)
+    --format [formatter] specify formatter (default: stylish)
     --no-fix             do not fix errors
     --max-errors         specify number of errors to make build failed (default: 0)
     --max-warnings       specify number of warnings to make build failed (default: Infinity)
+    --output-file        specify file to write report to
   ```
 
-  Lints and fixes files. If no specific files are given, it lints all files in `src` and `tests`.
+Lints and fixes files. If no specific files are given, it lints all files in `src` and `tests`, as well as all JavaScript files in the root directory (these are most often config files such as `babel.config.js` or `.eslintrc.js`).
 
-  Other [ESLint CLI options](https://eslint.org/docs/user-guide/command-line-interface#options) are also supported.
+Other [ESLint CLI options](https://eslint.org/docs/user-guide/command-line-interface#options) are not supported.
+
+::: tip
+`vue-cli-service lint` will lint dotfiles `.*.js` by default. If you want to follow ESLint's default behavior instead, consider adding a `.eslintignore` file in your project.
+:::
 
 ## Configuration
 
@@ -66,7 +71,7 @@ module.exports = {
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add eslint
 ```
 

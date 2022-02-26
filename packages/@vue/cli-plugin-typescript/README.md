@@ -12,10 +12,6 @@ Since `3.0.0-rc.6`, `typescript` is now a peer dependency of this package, so yo
 
 This plugin can be used alongside `@vue/cli-plugin-babel`. When used with Babel, this plugin will output ES2015 and delegate the rest to Babel for auto polyfill based on browser targets.
 
-## Injected Commands
-
-If opted to use [TSLint](https://palantir.github.io/tslint/) during project creation, `vue-cli-service lint` will be injected.
-
 ## Caching
 
 [cache-loader](https://github.com/webpack-contrib/cache-loader) is enabled by default and cache is stored in `<projectRoot>/node_modules/.cache/ts-loader`.
@@ -28,7 +24,7 @@ If opted to use [TSLint](https://palantir.github.io/tslint/) during project crea
 
 ## Installing in an Already Created Project
 
-``` sh
+```bash
 vue add typescript
 ```
 
