@@ -98,8 +98,12 @@ module.exports = (api, options) => {
       }
     }
 
+    // Compatible with server in webpack5
+    const projectDevServerType = typeof projectDevServerOptions.server === 'string' ? projectDevServerOptions.server : typeof (projectDevServerOptions.server || {}).type === 'string' ? projectDevServerOptions.server.type : 'http'
+    const httpsTypes = ['https', 'spdy']
+
     // resolve server options
-    const useHttps = args.https || projectDevServerOptions.https || defaults.https
+    const useHttps = args.https || args.http2 || projectDevServerOptions.https || defaults.https || httpsTypes.includes(args['server-type']) || httpsTypes.includes(projectDevServerType)
     const protocol = useHttps ? 'https' : 'http'
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
