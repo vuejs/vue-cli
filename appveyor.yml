@@ -5,6 +5,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - yarn patch-chromedriver
   - yarn --network-timeout 600000
+  - yarn playwright install --with-deps
 
 test_script:
   - git --version
@@ -18,7 +19,7 @@ cache:
   - node_modules -> appveyor.yml, **\package.json, yarn.lock
   - '%LOCALAPPDATA%\Yarn -> appveyor.yml, **\package.json, yarn.lock'
 
-build: off
+build: false
 
 branches:
   except:

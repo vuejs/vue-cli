@@ -1,0 +1,36 @@
+{
+  "name": "@vue/cli-plugin-e2e-playwright",
+  "version": "5.0.1",
+  "description": "e2e-playwright plugin for vue-cli",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "directory": "packages/@vue/cli-plugin-e2e-playwright"
+  },
+  "keywords": [
+    "vue",
+    "cli",
+    "playwright",
+    "e2e-playwright"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/vue-cli/issues"
+  },
+  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-e2e-playwright#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@vue/cli-shared-utils": "^5.0.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.19.2"
+  },
+  "peerDependencies": {
+    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0",
+    "@playwright/test": "1.*"
+  }
+}

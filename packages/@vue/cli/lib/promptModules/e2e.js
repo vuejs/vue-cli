@@ -7,7 +7,7 @@ module.exports = cli => {
     short: 'E2E',
     description: 'Add an End-to-End testing solution to the app like Cypress or Nightwatch',
     link: 'https://github.com/vuejs/vue-cli/tree/dev/docs#e2e-testing',
-    plugins: ['e2e-cypress', 'e2e-nightwatch', 'e2e-webdriverio']
+    plugins: ['e2e-cypress', 'e2e-playwright', 'e2e-nightwatch', 'e2e-webdriverio']
   })
 
   cli.injectPrompt({
@@ -20,6 +20,11 @@ module.exports = cli => {
         name: 'Cypress (Test in Chrome, Firefox, MS Edge, and Electron)',
         value: 'cypress',
         short: 'Cypress'
+      },
+      {
+        name: 'Playwright (Test in Chrome, Firefox, Safari, Electron, and Android)',
+        value: 'playwright',
+        short: 'Playwright'
       },
       {
         name: 'Nightwatch (WebDriver-based)',
@@ -57,6 +62,8 @@ module.exports = cli => {
   cli.onPromptComplete((answers, options) => {
     if (answers.e2e === 'cypress') {
       options.plugins['@vue/cli-plugin-e2e-cypress'] = {}
+    } else if (answers.e2e === 'playwright') {
+      options.plugins['@vue/cli-plugin-e2e-playwright'] = {}
     } else if (answers.e2e === 'nightwatch') {
       options.plugins['@vue/cli-plugin-e2e-nightwatch'] = {
         webdrivers: answers.webdrivers

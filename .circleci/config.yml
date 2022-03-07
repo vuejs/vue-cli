@@ -3,7 +3,7 @@ version: 2.1
 defaults: &defaults
   working_directory: ~/project/vue
   docker:
-    - image: circleci/node:lts-browsers
+    - image: mcr.microsoft.com/playwright:v1.19.2-focal
 
 aliases:
   - &restore-yarn-cache
@@ -28,6 +28,7 @@ jobs:
       - checkout
       - restore_cache: *restore-yarn-cache
       - run: yarn --network-timeout 600000
+      - run: yarn playwright install
       - save_cache: *save-yarn-cache
       - persist_to_workspace:
           root: ~/
