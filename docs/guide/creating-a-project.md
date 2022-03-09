@@ -50,7 +50,7 @@ Options:
   -i, --inlinePreset <json>       Skip prompts and use inline JSON string as preset
   -m, --packageManager <command>  Use specified npm client when installing dependencies
   -r, --registry <url>            Use specified npm registry when installing dependencies
-  -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
+  -g, --git [message]             Force git initialization, optionally specify initial commit message
   -n, --no-git                    Skip git initialization
   -f, --force                     Overwrite target directory if it exists
   --merge                         Merge target directory if it exists
