@@ -11,6 +11,7 @@ interface PageConfig {
 interface LoaderOptions {
   css?: object;
   sass?: object;
+  scss?: object;
   less?: object;
   stylus?: object;
   postcss?: object;
