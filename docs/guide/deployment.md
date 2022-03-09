@@ -83,9 +83,41 @@ If you are using the PWA plugin, your app must be served over HTTPS so that [Ser
     cd -
     ```
 
+#### Using GitHub Actions for automatic updates
+
+1. Set correct `publicPath` in `vue.config.js` as explained in [Pushing updates manually].
+
+2. Create a `deploy.yml` file in `.github/workflows` in your project.
+
+  ```yaml
+  name: Deploy
+
+  on:
+    workflow_dispatch: # Example trigger for manual execution
+    # view https://docs.github.com/actions/reference/events-that-trigger-workflows for available triggers
+
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-node@v2
+          with:
+            node-version: 14.x # Specify a different Node version if necessary
+        - name: install dependencies
+          run: npm ci # or yarn install --frozen-lockfile
+        - name: build
+          run: npm run build # or yarn build
+        - name: deploy
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./dist
+  ```
+
 #### Using Travis CI for automatic updates
 
-1. Set correct `publicPath` in `vue.config.js` as explained above.
+1. Set correct `publicPath` in `vue.config.js` as explained in [Pushing updates manually].
 
 2. Install the Travis CLI client: `gem install travis && travis --login`
 
@@ -514,3 +546,5 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
+
+[Pushing updates manually]: #pushing-updates-manually
