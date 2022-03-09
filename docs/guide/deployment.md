@@ -392,6 +392,8 @@ Then cd into the `dist/` folder of your project and then run `surge` and follow 
 
 Verify your project is successfully published by Surge by visiting `myawesomeproject.surge.sh`, vola! For more setup details such as custom domains, you can visit [Surge's help page](https://surge.sh/help/).
 
+If you are using [Vue Router](https://router.vuejs.org/) in your project, remember to rename `index.html` from the `dist/` folder to `200.html`, before deploying it to Surge. This will make sure your app will handle all the routing correctly (even for invalid routes).
+
 ### Bitbucket Cloud
 
 1. As described in the [Bitbucket documentation](https://confluence.atlassian.com/bitbucket/publishing-a-website-on-bitbucket-cloud-221449776.html) you need to create a repository named exactly `<USERNAME>.bitbucket.io`.
