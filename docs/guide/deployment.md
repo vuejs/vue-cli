@@ -514,3 +514,14 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
+
+### Cleavr
+
+[Cleavr](https://cleavr.io) is a quick and easy way to deploy your site to popular VPS providers; such as: AWS, DigitalOcean, Hetzner, Vultr, UpCloud, Linode, and others. 
+
+1. Add a new **NodeJS Static** site
+2. Connect web app to code repo (GitHub, GitLab, Bitbucket)
+3. Set the web app's **Artifact Path** to `dist`
+4. Deploy! 
+
+Check out the [Cleavr documentation](https://docs.cleavr.io/) for more details. 
