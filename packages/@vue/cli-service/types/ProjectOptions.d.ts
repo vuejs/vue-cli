@@ -112,7 +112,7 @@ interface ProjectOptions {
   /**
    * [All options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are supported
    */
-  devServer?: { proxy: string | object, [key: string]: any };
+  devServer?: { proxy?: string | object, [key: string]: any };
   /**
    * Default: `undefined`
    *
