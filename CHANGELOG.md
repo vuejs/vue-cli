@@ -1,3 +1,16 @@
+
+## 5.0.2 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#7044](https://github.com/vuejs/vue-cli/pull/7044) fix(cli-service):  devServer proxy should be optional ([@ntnyq](https://github.com/ntnyq))
+  * [#7039](https://github.com/vuejs/vue-cli/pull/7039) chore: add scss to LoaderOptions ([@hiblacker](https://github.com/hiblacker))
+
+#### Committers: 2
+- Blacker ([@hiblacker](https://github.com/hiblacker))
+- ntnyq ([@ntnyq](https://github.com/ntnyq))
+
+
 ## 5.0.1 (2022-02-17)
 
 Same as 5.0.0.
