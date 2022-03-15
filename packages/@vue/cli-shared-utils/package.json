@@ -26,7 +26,7 @@
     "launch-editor": "^2.2.1",
     "lru-cache": "^6.0.0",
     "node-fetch": "^2.6.7",
-    "node-ipc": "^9.1.1",
+    "node-ipc": "9.2.1",
     "open": "^8.0.2",
     "ora": "^5.3.0",
     "read-pkg": "^5.1.1",

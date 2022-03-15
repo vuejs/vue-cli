@@ -7158,7 +7158,7 @@ colorette@^2.0.10, colorette@^2.0.16:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.16.tgz#713b9af84fdb000139f04546bd4a93f62a5085da"
   integrity sha512-hUewv7oMjCp+wkBv5Rm0v87eJhq4woh5rSR+42YSQJKecCqgIqNkZ6lAlQms/BwHPJA5NKMRlpxPRv0n8HQW6g==
 
-colors@1.4.0, colors@^1.1.2, colors@^1.4.0:
+colors@*, colors@1.4.0, colors@^1.1.2, colors@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
@@ -9411,6 +9411,11 @@ event-emitter@^0.3.5:
   dependencies:
     d "1"
     es5-ext "~0.10.14"
+
+event-pubsub@4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/event-pubsub/-/event-pubsub-4.2.3.tgz#0d3142f47ac7e0da38cdc38402d97e2510bc5ecc"
+  integrity sha1-DTFC9HrH4No4zcOEAtl+JRC8Xsw=
 
 event-pubsub@4.3.0:
   version "4.3.0"
@@ -12821,12 +12826,12 @@ js-beautify@^1.6.12:
     glob "^7.1.3"
     nopt "^5.0.0"
 
-js-message@1.0.7:
+js-message@1.0.7, js-message@>=1.0.5:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/js-message/-/js-message-1.0.7.tgz#fbddd053c7a47021871bb8b2c95397cc17c20e47"
   integrity sha512-efJLHhLjIyKRewNS9EGZ4UpI8NguuL6fKkhRxVuMmrGV2xN/0APGdQYwLFky5w9naebSZ0OwAGp0G6/2Cg90rA==
 
-js-queue@2.0.2:
+js-queue@2.0.2, js-queue@>=2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/js-queue/-/js-queue-2.0.2.tgz#0be590338f903b36c73d33c31883a821412cd482"
   integrity sha512-pbKLsbCfi7kriM3s1J4DDCo7jQkI58zPLHi0heXPzPlj0hjUsm+FesPUbE0DSbIVIK503A36aUBoCN7eMFedkA==
@@ -14919,7 +14924,7 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-ipc@^9.1.1:
+node-ipc@9.2.1:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.2.1.tgz#b32f66115f9d6ce841dc4ec2009d6a733f98bb6b"
   integrity sha512-mJzaM6O3xHf9VT8BULvJSbdVbmHUKRNOH7zDDkCrA1/T+CVjq2WVIDfLt0azZRXpgArJtl3rtmEozrbXPZ9GaQ==
@@ -14927,6 +14932,17 @@ node-ipc@^9.1.1:
     event-pubsub "4.3.0"
     js-message "1.0.7"
     js-queue "2.0.2"
+
+node-ipc@^9.2.1:
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.2.2.tgz#158df14dffeb4891ac048441ad175e34006e7a3f"
+  integrity sha512-e+cCHxf0zs4scDkTrFruxOFjhRsmgiGbKqMvcMrBHZnkvLUWHOBayDnKNADKndg3UkTnqHJ9nADcJbjFFaqTNQ==
+  dependencies:
+    colors "*"
+    event-pubsub "4.2.3"
+    js-message ">=1.0.5"
+    js-queue ">=2.0.0"
+    peacenotwar "^9.1.6"
 
 node-notifier@^10.0.0:
   version "10.0.1"
@@ -15860,6 +15876,11 @@ pause-stream@0.0.11:
   integrity sha1-/lo0sMvOErWqaitAPuLnO2AvFEU=
   dependencies:
     through "~2.3"
+
+peacenotwar@^9.1.6:
+  version "9.1.6"
+  resolved "https://registry.yarnpkg.com/peacenotwar/-/peacenotwar-9.1.6.tgz#8c96d0841fdd2af25a44002893d716fe5aabdee9"
+  integrity sha512-pApXV74SJsXxrJ7XQohl+oqLf00U0tKNrmHUa5ct7XfYUHnvGNaQfBFo9JpTpDbkn4bpNrPekVeO50Zfd/vMAA==
 
 pend@~1.2.0:
   version "1.2.0"
