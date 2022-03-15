@@ -25,7 +25,7 @@
     "execa": "^1.0.0",
     "launch-editor": "^2.2.1",
     "lru-cache": "^5.1.1",
-    "node-ipc": "^9.1.1",
+    "node-ipc": "9.2.1",
     "open": "^6.3.0",
     "ora": "^3.4.0",
     "read-pkg": "^5.1.1",
