@@ -116,7 +116,7 @@ module.exports = (api, options) => {
       protocol,
       host,
       port,
-      isAbsoluteUrl(options.publicPath) ? '/' : options.publicPath
+      isAbsoluteUrl(options.publicPath) || options.publicPath === 'auto' ? '/' : options.publicPath
     )
     const localUrlForBrowser = publicUrl || urls.localUrlForBrowser
 
