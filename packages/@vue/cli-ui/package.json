@@ -53,7 +53,7 @@
     "lodash.merge": "^4.6.1",
     "lowdb": "^1.0.0",
     "lru-cache": "^6.0.0",
-    "node-ipc": "^9.2.1",
+    "node-ipc": "9.2.1",
     "node-notifier": "^10.0.0",
     "parse-git-config": "^3.0.0",
     "portfinder": "^1.0.26",
