@@ -1,4 +1,15 @@
 
+## 4.5.16 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6366](https://github.com/vuejs/vue-cli/pull/6366) fix(build): demo-lib.html compatible Vue 3 ([@jeneser](https://github.com/jeneser))
+
+#### Committers: 1
+- Yazhe Wang ([@jeneser](https://github.com/jeneser))
+
+
+
 
 
 
