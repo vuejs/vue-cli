@@ -2824,6 +2824,23 @@
     pathval "1.1.1"
     type-detect "4.0.5"
 
+"@node-ipc/event-pubsub@6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@node-ipc/event-pubsub/-/event-pubsub-6.0.2.tgz#411831f26f058d7cf75a5c8bb5675e8bb8a209de"
+  integrity sha512-vdpnkrcBOHj/yQlSi78HiaPLWZFI/PdBRN34T64Th6Z4G600A7IDdb47/EFwKJh1trcR6q0ednyR8d8vJFsTcw==
+  dependencies:
+    strong-type "^1.1.0"
+
+"@node-ipc/node-ipc@^11.0.1":
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/@node-ipc/node-ipc/-/node-ipc-11.0.1.tgz#1a0f16852a7b55edb44d3ba87a48eb7791f9cc44"
+  integrity sha512-XybrgNeRFxAJEO1seFpQ1zSkv2w5Q7K7ZKF79pfifoFiRGU+Z1zLG+WSJ08SzEFYKVm7SNF7Ywt2EOLKjuzrUQ==
+  dependencies:
+    "@node-ipc/event-pubsub" "6.0.2"
+    js-message "1.0.7"
+    js-queue "2.0.2"
+    strong-type "1.1.0"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -9412,11 +9429,6 @@ event-emitter@^0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
-event-pubsub@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/event-pubsub/-/event-pubsub-4.3.0.tgz#f68d816bc29f1ec02c539dc58c8dd40ce72cb36e"
-  integrity sha512-z7IyloorXvKbFx9Bpie2+vMJKKx1fH1EN5yiTfp8CiLOTptSYy1g8H4yDpGlEdshL1PBiFtBHepF2cNsqeEeFQ==
-
 event-stream@=3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/event-stream/-/event-stream-3.3.4.tgz#4ab4c9a0f5a54db9338b4c34d86bfce8f4b35571"
@@ -14919,15 +14931,6 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-ipc@9.2.1:
-  version "9.2.1"
-  resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.2.1.tgz#b32f66115f9d6ce841dc4ec2009d6a733f98bb6b"
-  integrity sha512-mJzaM6O3xHf9VT8BULvJSbdVbmHUKRNOH7zDDkCrA1/T+CVjq2WVIDfLt0azZRXpgArJtl3rtmEozrbXPZ9GaQ==
-  dependencies:
-    event-pubsub "4.3.0"
-    js-message "1.0.7"
-    js-queue "2.0.2"
-
 node-notifier@^10.0.0:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/node-notifier/-/node-notifier-10.0.1.tgz#0e82014a15a8456c4cfcdb25858750399ae5f1c7"
@@ -18505,6 +18508,11 @@ strong-log-transformer@^2.1.0:
     duplexer "^0.1.1"
     minimist "^1.2.0"
     through "^2.3.4"
+
+strong-type@1.1.0, strong-type@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/strong-type/-/strong-type-1.1.0.tgz#8ab8feb3a26c37fa389c52a04581ffb53c7d3a29"
+  integrity sha512-X5Z6riticuH5GnhUyzijfDi1SoXas8ODDyN7K8lJeQK+Jfi4dKdoJGL4CXTskY/ATBcN+rz5lROGn1tAUkOX7g==
 
 stylehacks@^5.0.2:
   version "5.0.2"
