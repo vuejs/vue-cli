@@ -14919,7 +14919,7 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-ipc@^9.1.1:
+node-ipc@9.2.1:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.2.1.tgz#b32f66115f9d6ce841dc4ec2009d6a733f98bb6b"
   integrity sha512-mJzaM6O3xHf9VT8BULvJSbdVbmHUKRNOH7zDDkCrA1/T+CVjq2WVIDfLt0azZRXpgArJtl3rtmEozrbXPZ9GaQ==
