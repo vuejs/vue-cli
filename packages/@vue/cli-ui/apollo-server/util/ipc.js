@@ -1,4 +1,4 @@
-const ipc = require('@node-ipc/node-ipc').default
+const ipc = require('@node-ipc/compat')
 // Utils
 const { log, dumpObject } = require('../util/logger')
 

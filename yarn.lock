@@ -2824,22 +2824,14 @@
     pathval "1.1.1"
     type-detect "4.0.5"
 
-"@node-ipc/event-pubsub@6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@node-ipc/event-pubsub/-/event-pubsub-6.0.2.tgz#411831f26f058d7cf75a5c8bb5675e8bb8a209de"
-  integrity sha512-vdpnkrcBOHj/yQlSi78HiaPLWZFI/PdBRN34T64Th6Z4G600A7IDdb47/EFwKJh1trcR6q0ednyR8d8vJFsTcw==
+"@node-ipc/compat@^9.2.3":
+  version "9.2.3"
+  resolved "https://registry.yarnpkg.com/@node-ipc/compat/-/compat-9.2.3.tgz#1cc875f3b44ae93fca3f87de261da390b24a55e3"
+  integrity sha512-2ZH3Uip7yDzeLiKvINxsi5wkhx+ni4Mcs30B2xS6ipMqB/X20scxyQO/5D26r1xVOu+QMuZFxfddUOf6U3PoDg==
   dependencies:
-    strong-type "^1.1.0"
-
-"@node-ipc/node-ipc@^11.0.1":
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/@node-ipc/node-ipc/-/node-ipc-11.0.1.tgz#1a0f16852a7b55edb44d3ba87a48eb7791f9cc44"
-  integrity sha512-XybrgNeRFxAJEO1seFpQ1zSkv2w5Q7K7ZKF79pfifoFiRGU+Z1zLG+WSJ08SzEFYKVm7SNF7Ywt2EOLKjuzrUQ==
-  dependencies:
-    "@node-ipc/event-pubsub" "6.0.2"
-    js-message "1.0.7"
-    js-queue "2.0.2"
-    strong-type "1.1.0"
+    event-pubsub "4.2.3"
+    js-message "1.0.5"
+    js-queue "2.0.0"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -8639,7 +8631,7 @@ duplexer@^0.1.1, duplexer@^0.1.2, duplexer@~0.1.1:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-easy-stack@^1.0.1:
+easy-stack@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/easy-stack/-/easy-stack-1.0.1.tgz#8afe4264626988cabb11f3c704ccd0c835411066"
   integrity sha512-wK2sCs4feiiJeFXn3zvY0p41mdU5VUgbgs1rNsc/y5ngFUijdWd+iIN8eoyuZHKB8xN6BL4PdWmzqFmxNg6V2w==
@@ -9428,6 +9420,11 @@ event-emitter@^0.3.5:
   dependencies:
     d "1"
     es5-ext "~0.10.14"
+
+event-pubsub@4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/event-pubsub/-/event-pubsub-4.2.3.tgz#0d3142f47ac7e0da38cdc38402d97e2510bc5ecc"
+  integrity sha1-DTFC9HrH4No4zcOEAtl+JRC8Xsw=
 
 event-stream@=3.3.4:
   version "3.3.4"
@@ -12833,17 +12830,17 @@ js-beautify@^1.6.12:
     glob "^7.1.3"
     nopt "^5.0.0"
 
-js-message@1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/js-message/-/js-message-1.0.7.tgz#fbddd053c7a47021871bb8b2c95397cc17c20e47"
-  integrity sha512-efJLHhLjIyKRewNS9EGZ4UpI8NguuL6fKkhRxVuMmrGV2xN/0APGdQYwLFky5w9naebSZ0OwAGp0G6/2Cg90rA==
+js-message@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/js-message/-/js-message-1.0.5.tgz#2300d24b1af08e89dd095bc1a4c9c9cfcb892d15"
+  integrity sha1-IwDSSxrwjondCVvBpMnJz8uJLRU=
 
-js-queue@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/js-queue/-/js-queue-2.0.2.tgz#0be590338f903b36c73d33c31883a821412cd482"
-  integrity sha512-pbKLsbCfi7kriM3s1J4DDCo7jQkI58zPLHi0heXPzPlj0hjUsm+FesPUbE0DSbIVIK503A36aUBoCN7eMFedkA==
+js-queue@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/js-queue/-/js-queue-2.0.0.tgz#362213cf860f468f0125fc6c96abc1742531f948"
+  integrity sha1-NiITz4YPRo8BJfxslqvBdCUx+Ug=
   dependencies:
-    easy-stack "^1.0.1"
+    easy-stack "^1.0.0"
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -18508,11 +18505,6 @@ strong-log-transformer@^2.1.0:
     duplexer "^0.1.1"
     minimist "^1.2.0"
     through "^2.3.4"
-
-strong-type@1.1.0, strong-type@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/strong-type/-/strong-type-1.1.0.tgz#8ab8feb3a26c37fa389c52a04581ffb53c7d3a29"
-  integrity sha512-X5Z6riticuH5GnhUyzijfDi1SoXas8ODDyN7K8lJeQK+Jfi4dKdoJGL4CXTskY/ATBcN+rz5lROGn1tAUkOX7g==
 
 stylehacks@^5.0.2:
   version "5.0.2"
