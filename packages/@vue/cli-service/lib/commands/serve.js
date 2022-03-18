@@ -5,7 +5,7 @@ const {
   hasProjectPnpm,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
-const getBaseUrl = require('../util/getBaseUrl');
+const getBaseUrl = require('../util/getBaseUrl')
 
 const defaults = {
   host: '0.0.0.0',
@@ -15,7 +15,7 @@ const defaults = {
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
-  const baseUrl = getBaseUrl(options);
+  const baseUrl = getBaseUrl(options)
   api.registerCommand('serve', {
     description: 'start development server',
     usage: 'vue-cli-service serve [options] [entry]',
