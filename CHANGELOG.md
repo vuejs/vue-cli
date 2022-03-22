@@ -4,14 +4,18 @@
 #### :bug: Bug Fix
 * `@vue/cli-service`
   * [#7005](https://github.com/vuejs/vue-cli/pull/7005) Better handling of `publicPath: 'auto'` ([@AndreiSoroka](https://github.com/AndreiSoroka))
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * [75826d6](https://github.com/vuejs/vue-cli/commit/75826d6) fix: replace `node-ipc` with `@achrinza/node-ipc` to further secure the dependency chain
 
 #### Committers: 1
 - Andrei ([@AndreiSoroka](https://github.com/AndreiSoroka))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
 
+## 5.0.3 (2022-03-15)
 
-
-
-
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * Lock `node-ipc` to v9.2.1
 
 ## 5.0.2 (2022-03-15)
 
@@ -812,6 +816,24 @@ Ngo Wei Lin ([@Creastery](https://twitter.com/creastery)) of STAR Labs ([@starla
 - Tony Trinh ([@tony19](https://github.com/tony19))
 - Yazhe Wang ([@jeneser](https://github.com/jeneser))
 
+
+## 4.5.16 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * Fix demo-lib.html and demo-wc.html for Vue 2
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * Lock `node-ipc` to v9.2.1
+
+
+## 4.5.15 (2021-10-28)
+
+#### Bug Fixes
+
+* fix: set `.mjs` file type to `javascript/auto` [[15b1e1b]](https://github.com/vuejs/vue-cli/commit/15b1e1b6bfa40fe0b69db304a2439c66ff9ba65f)
+
+This change allows an `.mjs` file to import named exports from `.cjs` and plain `.js` files.
+Fixes compatibility with `pinia`.
 
 
 ## 4.5.14 (2021-10-14)
