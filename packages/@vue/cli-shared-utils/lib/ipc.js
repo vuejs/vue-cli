@@ -1,4 +1,4 @@
-const ipc = require('node-ipc')
+const ipc = require('@achrinza/node-ipc')
 
 const DEFAULT_ID = process.env.VUE_CLI_IPC || 'vue-cli'
 const DEFAULT_IDLE_TIMEOUT = 3000
