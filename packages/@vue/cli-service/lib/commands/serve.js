@@ -5,6 +5,7 @@ const {
   hasProjectPnpm,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
+const getBaseUrl = require('../util/getBaseUrl')
 
 const defaults = {
   host: '0.0.0.0',
@@ -14,6 +15,7 @@ const defaults = {
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
+  const baseUrl = getBaseUrl(options)
   api.registerCommand('serve', {
     description: 'start development server',
     usage: 'vue-cli-service serve [options] [entry]',
@@ -116,7 +118,7 @@ module.exports = (api, options) => {
       protocol,
       host,
       port,
-      isAbsoluteUrl(options.publicPath) ? '/' : options.publicPath
+      isAbsoluteUrl(baseUrl) ? '/' : baseUrl
     )
     const localUrlForBrowser = publicUrl || urls.localUrlForBrowser
 
@@ -187,7 +189,7 @@ module.exports = (api, options) => {
           'text/html',
           'application/xhtml+xml'
         ],
-        rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
+        rewrites: genHistoryApiFallbackRewrites(baseUrl, options.pages)
       },
       hot: !isProduction
     }, projectDevServerOptions, {
