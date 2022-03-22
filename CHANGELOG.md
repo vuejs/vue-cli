@@ -1,4 +1,15 @@
 
+## 5.0.4 (2022-03-22)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#7005](https://github.com/vuejs/vue-cli/pull/7005) Better handling of `publicPath: 'auto'` ([@AndreiSoroka](https://github.com/AndreiSoroka))
+
+#### Committers: 1
+- Andrei ([@AndreiSoroka](https://github.com/AndreiSoroka))
+
+
+
 
 
 
