@@ -8,7 +8,7 @@ function normalize (value) {
   if (value.length === 1) return value
   const lastChar = value.charAt(value.length - 1)
   if (lastChar === path.sep) {
-    value = value.substr(0, value.length - 1)
+    value = value.slice(0, -1)
   }
   return value
 }
