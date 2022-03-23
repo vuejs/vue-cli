@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-ui",
-  "version": "4.5.16",
+  "version": "4.5.17",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vuejs/vue-cli.git",
@@ -34,8 +34,9 @@
     "graphql-server.js"
   ],
   "dependencies": {
+    "@achrinza/node-ipc": "9.2.2",
     "@akryum/winattr": "^3.0.0",
-    "@vue/cli-shared-utils": "^4.5.16",
+    "@vue/cli-shared-utils": "^4.5.17",
     "apollo-server-express": "^2.13.1",
     "clone": "^2.1.1",
     "deepmerge": "^4.2.2",
@@ -53,7 +54,6 @@
     "lodash.merge": "^4.6.1",
     "lowdb": "^1.0.0",
     "lru-cache": "^5.1.1",
-    "@achrinza/node-ipc": "9.2.2",
     "node-notifier": "^9.0.0",
     "parse-git-config": "^2.0.2",
     "portfinder": "^1.0.26",
@@ -64,10 +64,10 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.16",
-    "@vue/cli-plugin-e2e-cypress": "^4.5.16",
-    "@vue/cli-plugin-eslint": "^4.5.16",
-    "@vue/cli-service": "^4.5.16",
+    "@vue/cli-plugin-babel": "^4.5.17",
+    "@vue/cli-plugin-e2e-cypress": "^4.5.17",
+    "@vue/cli-plugin-eslint": "^4.5.17",
+    "@vue/cli-service": "^4.5.17",
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/ui": "^0.9.2",
     "ansi_up": "^3.0.0",
