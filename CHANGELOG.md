@@ -817,6 +817,16 @@ Ngo Wei Lin ([@Creastery](https://twitter.com/creastery)) of STAR Labs ([@starla
 - Yazhe Wang ([@jeneser](https://github.com/jeneser))
 
 
+## 4.5.17 (2022-03-23)
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * [d7a9881](https://github.com/vuejs/vue-cli/commit/d7a9881) fix: replace `node-ipc` with `@achrinza/node-ipc` to further secure the dependency chain
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
 ## 4.5.16 (2022-03-15)
 
 #### :bug: Bug Fix
