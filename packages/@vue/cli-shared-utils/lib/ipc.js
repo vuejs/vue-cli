@@ -1,4 +1,5 @@
-const ipc = require('@achrinza/node-ipc')
+const { getPipePath, encodeIpcData, parseIpcData } = require('./env')
+const net = require('net')
 
 const DEFAULT_ID = process.env.VUE_CLI_IPC || 'vue-cli'
 const DEFAULT_IDLE_TIMEOUT = 3000
@@ -15,12 +16,18 @@ const PROJECT_ID = process.env.VUE_CLI_PROJECT_ID
 exports.IpcMessenger = class IpcMessenger {
   constructor (options = {}) {
     options = Object.assign({}, DEFAULT_OPTIONS, options)
-    ipc.config.id = this.id = options.networkId
-    ipc.config.retry = 1500
-    ipc.config.silent = true
+    this.id = options.networkId
+    this.retry = 1500
+    this.ipcTimer = null
+    this.reserveData = {
+      contentLength: -1,
+      rawData: ''
+    }
+    this.socket = null
 
     this.connected = false
     this.connecting = false
+    this.disconnected = false
     this.disconnecting = false
     this.queue = null
     this.options = options
@@ -40,7 +47,7 @@ exports.IpcMessenger = class IpcMessenger {
   }
 
   checkConnection () {
-    if (!ipc.of[this.id]) {
+    if (!this.socket) {
       this.connected = false
     }
   }
@@ -55,7 +62,8 @@ exports.IpcMessenger = class IpcMessenger {
         }
       }
 
-      ipc.of[this.id].emit(type, data)
+      const massages = encodeIpcData(type, data)
+      this.socket.write(massages)
 
       clearTimeout(this.idleTimer)
       if (this.options.disconnectOnIdle) {
@@ -76,14 +84,7 @@ exports.IpcMessenger = class IpcMessenger {
     if (this.connected || this.connecting) return
     this.connecting = true
     this.disconnecting = false
-    ipc.connectTo(this.id, () => {
-      this.connected = true
-      this.connecting = false
-      this.queue && this.queue.forEach(data => this.send(data))
-      this.queue = null
-
-      ipc.of[this.id].on('message', this._onMessage)
-    })
+    this._connectTo()
   }
 
   disconnect () {
@@ -92,18 +93,11 @@ exports.IpcMessenger = class IpcMessenger {
     this.disconnecting = true
     this.connecting = false
 
-    const ipcTimer = setTimeout(() => {
+    this.ipcTimer = setTimeout(() => {
       this._disconnect()
     }, this.disconnectTimeout)
 
     this.send({ done: true }, 'ack')
-
-    ipc.of[this.id].on('ack', data => {
-      if (data.ok) {
-        clearTimeout(ipcTimer)
-        this._disconnect()
-      }
-    })
   }
 
   on (listener) {
@@ -118,25 +112,85 @@ exports.IpcMessenger = class IpcMessenger {
   _reset () {
     this.queue = []
     this.connected = false
+    this.socket = null
   }
 
   _disconnect () {
+    if (!this.socket) {
+      return
+    }
     this.connected = false
     this.disconnecting = false
-    ipc.disconnect(this.id)
+    this.disconnected = true
+    this.socket.destroy()
     this._reset()
   }
 
-  _onMessage (data) {
-    this.listeners.forEach(fn => {
-      if (this.options.namespaceOnProject && data._projectId) {
-        if (data._projectId === PROJECT_ID) {
-          data = data._data
+  _onMessage (massage) {
+    let { type, data } = massage
+    if (type === 'ack') {
+      if (data.ok) {
+        clearTimeout(this.ipcTimer)
+        this._disconnect()
+      }
+    } else {
+      this.listeners.forEach((resolve, reject) => {
+        if (this.options.namespaceOnProject && data._projectId) {
+          if (data._projectId === PROJECT_ID) {
+            data = data._data
+          } else {
+            return
+          }
+        }
+        if (type === 'error') {
+          reject(data)
         } else {
+          resolve(data)
+        }
+      })
+    }
+  }
+
+  _connectTo () {
+    const pipPath = getPipePath(this.id)
+    const socket = net.createConnection({ path: pipPath })
+    socket.setEncoding('utf-8')
+
+    socket.on('connect', () => {
+      this.connected = true
+      this.connecting = false
+      this.queue && this.queue.forEach(data => this.send(data))
+      this.queue = null
+    })
+
+    socket.on('data', (massages) => {
+      const queue = parseIpcData(massages, this.reserveData)
+      queue.forEach(massage => {
+        this._onMessage(massage)
+      })
+    })
+
+    socket.on('close', () => {
+      if (this.disconnected) {
+        return
+      }
+      setTimeout(() => {
+        if (this.disconnected) {
+          this._disconnect()
           return
         }
-      }
-      fn(data)
+        this._connectTo()
+      }, this.retry)
     })
+
+    socket.on('error', (error) => {
+      const massage = {
+        type: 'error',
+        data: error
+      }
+      this._onMessage(massage)
+    })
+
+    this.socket = socket
   }
 }
