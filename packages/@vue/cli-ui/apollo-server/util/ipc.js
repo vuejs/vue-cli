@@ -3,7 +3,7 @@ const fs = require('fs')
 
 // Utils
 const { log, dumpObject } = require('../util/logger')
-const { getPipePath, encodeIpcData, parseIpcData } = require('@vue/cli-shared-utils')
+const { getPipePath, encodeIpcData, parseIpcData, isWindows } = require('@vue/cli-shared-utils')
 
 const id = process.env.VUE_CLI_IPC || 'vue-cli'
 
@@ -18,7 +18,14 @@ let reserveData = {
   rawData: ''
 }
 
-fs.unlink(pipePath, () => {
+if (isWindows) {
+  fs.unlink(pipePath, () => {
+    createServer()
+  })
+} else {
+  createServer()
+}
+function createServer () {
   const server = net.createServer((socket) => {
     curSocket = socket
     if (socket.setEncoding) {
@@ -55,7 +62,7 @@ fs.unlink(pipePath, () => {
   server.listen({
     path: pipePath
   })
-})
+}
 
 function on (cb) {
   listeners.push(cb)
