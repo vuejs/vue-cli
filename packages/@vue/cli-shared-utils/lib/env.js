@@ -224,6 +224,8 @@ exports.getPipePath = (id) => {
     id = id.replace(/^\//, '')
     id = id.replace(/\//g, '-')
     id = `\\\\.\\pipe\\${id}`
+  } else {
+    id = `/tmp/app.${id}`
   }
   return id
 }
