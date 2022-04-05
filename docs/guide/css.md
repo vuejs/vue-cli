@@ -6,6 +6,10 @@ Vue CLI projects come with support for [PostCSS](http://postcss.org/), [CSS Modu
 
 All compiled CSS are processed by [css-loader](https://github.com/webpack-contrib/css-loader), which parses `url()` and resolves them as module requests. This means you can refer to assets using relative paths based on the local file structure. Note if you want to reference a file inside an npm dependency or via webpack alias, the path must be prefixed with `~` to avoid ambiguity. See [Static Asset Handling](./html-and-static-assets.md#static-assets-handling) for more details.
 
+::: tip Note on Vue CLI 5
+The way css-loader handles absolute paths was changed in v4.0.0. Previously, absolute paths were left as-is; now they are resolved based on the server root. If you get a Webpack module resolution error for an absolute path inside your CSS, change it to use a relative path instead, or use `css.loaderOptions` below to pass an override for that file. The [css-loader docs](https://github.com/webpack-contrib/css-loader#url) have more information about passing url options.
+:::
+
 ## Pre-Processors
 
 You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, the internal webpack config is still pre-configured to handle all of them. You just need to manually install the corresponding webpack loaders:
