@@ -6,3 +6,6 @@ window.Date = Date
 global.ShadowRoot = window.ShadowRoot
 
 global.SVGElement = window.SVGElement
+
+// https://github.com/vuejs/test-utils/issues/1253
+global.XMLSerializer = window.XMLSerializer
