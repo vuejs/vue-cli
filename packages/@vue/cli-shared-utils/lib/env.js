@@ -15,7 +15,7 @@ const _gitProjects = new LRU({
   max: 10,
   maxAge: 1000
 })
-const CRLF = '\r\n'
+const DELIMITER = '\f'
 
 // env detection
 exports.hasYarn = () => {
@@ -219,70 +219,43 @@ exports.getInstalledBrowsers = () => {
   return browsers
 }
 
-exports.getPipePath = (id) => {
-  if (exports.isWindows && !id.startsWith('\\\\.\\pipe\\')) {
+exports.getIpcPath = (id) => {
+  id = '/tmp/app.' + id
+  if (exports.isWindows) {
     id = id.replace(/^\//, '')
     id = id.replace(/\//g, '-')
     id = `\\\\.\\pipe\\${id}`
-  } else {
-    id = `/tmp/app.${id}`
   }
   return id
 }
 
 exports.encodeIpcData = (type, data) => {
-  const jsonstr = JSON.stringify({
-    data,
-    type
-  })
-  const massage = `Content-Length: ${Buffer.byteLength(jsonstr)}${CRLF + CRLF}${jsonstr}`
-  return Buffer.from(massage)
+  if (!data && data !== false && data !== 0) {
+    data = {}
+  }
+  if (data._maxListeners) {
+    data = {}
+  }
+  const message = JSON.stringify({ type, data })
+  return Buffer.from(message + DELIMITER)
 }
 
-exports.parseIpcData = (data, reserveData) => {
-  let { contentLength, rawData } = reserveData
-  rawData += data
-  const messages = []
-  while (true) {
-    if (contentLength >= 0) {
-      if (rawData.length >= contentLength) {
-        const message = rawData.slice(0, contentLength)
-        rawData = rawData.slice(contentLength)
-        contentLength = -1
-        if (message.length > 0) {
-          let msg
-          try {
-            msg = JSON.parse(message)
-          } catch (error) {
-            msg = {
-              type: 'error',
-              data: `Error handling data: ${error}`
-            }
-          }
-          messages.push(msg)
-        }
-        continue
-      }
-    } else {
-      const idx = rawData.indexOf(CRLF + CRLF)
-      if (idx !== -1) {
-        const header = rawData.slice(0, idx)
-        const lines = header.split(CRLF)
-        for (let i = 0; i < lines.length; i++) {
-          const pair = lines[i].split(/: +/)
-          if (pair[0] === 'Content-Length') {
-            contentLength = +pair[1]
-          }
-        }
-        rawData = rawData.slice(idx + (CRLF + CRLF).length)
-        continue
-      }
-    }
-    break
+exports.decodeIpcData = (data) => {
+  if (data.slice(-1) !== DELIMITER || data.indexOf(DELIMITER) === -1) {
+    return
   }
-
-  reserveData.contentLength = contentLength
-  reserveData.rawData = rawData
-
+  const messages = []
+  const lines = data.split(DELIMITER)
+  lines.pop()
+  for (const line of lines) {
+    try {
+      messages.push(JSON.parse(line))
+    } catch (error) {
+      messages.push({
+        type: 'error',
+        data: `Error handling data: ${error}`
+      })
+    }
+  }
   return messages
 }

@@ -3,59 +3,72 @@ const fs = require('fs')
 
 // Utils
 const { log, dumpObject } = require('../util/logger')
-const { getPipePath, encodeIpcData, parseIpcData } = require('@vue/cli-shared-utils')
+const { getIpcPath, encodeIpcData, decodeIpcData } = require('@vue/cli-shared-utils')
 
 const id = process.env.VUE_CLI_IPC || 'vue-cli'
 
 const listeners = []
+let ipcSocket = null
 
-const pipePath = getPipePath(id)
+function start () {
+  const ipcPath = getIpcPath(id)
 
-let curSocket = null
+  fs.unlink(ipcPath, () => {
+    const server = net.createServer((socket) => {
+      ipcSocket = socket
+      if (socket.setEncoding) {
+        socket.setEncoding('utf-8')
+      }
 
-let reserveData = {
-  contentLength: -1,
-  rawData: ''
-}
+      socket.on('data', (data) => {
+        const messages = decodeIpcData(data)
+        messages.forEach(message => {
+          _onMessage(message)
+        })
+      })
 
-fs.unlink(pipePath, () => {
-  const server = net.createServer((socket) => {
-    curSocket = socket
-    if (socket.setEncoding) {
-      socket.setEncoding('utf-8')
-    }
+      socket.on('close', () => {
+        if (socket && socket.destroy) {
+          socket.destroy()
+        }
+        ipcSocket = null
+      })
 
-    socket.on('data', (massages) => {
-      const queue = parseIpcData(massages, reserveData)
-      queue.forEach(massage => {
-        _onMessage(massage)
+      socket.on('error', (error) => {
+        _onMessage({
+          type: 'error',
+          data: error
+        }, socket)
       })
     })
 
-    socket.on('close', () => {
-      if (curSocket && curSocket.destroy) {
-        curSocket.destroy()
-      }
-      reserveData = {
-        contentLength: -1,
-        rawData: ''
-      }
-      curSocket = null
-    })
-
-    socket.on('error', (error) => {
-      const massage = {
-        type: 'error',
-        data: error
-      }
-      _onMessage(massage)
+    server.listen({
+      path: ipcPath
     })
   })
+}
 
-  server.listen({
-    path: pipePath
-  })
-})
+function _onMessage (massage, socket) {
+  const { type, data } = massage
+  if (type === 'ack') {
+    log('IPC ack', dumpObject(data))
+    if (data.done) {
+      socket.write(encodeIpcData('ack', { ok: true }))
+    }
+  } else if (type === 'message') {
+    log('IPC message', dumpObject(data))
+    for (const listener of listeners) {
+      listener({
+        data,
+        emit: data => {
+          socket.write(encodeIpcData('message', data))
+        }
+      })
+    }
+  }
+}
+
+start()
 
 function on (cb) {
   listeners.push(cb)
@@ -69,36 +82,9 @@ function off (cb) {
 
 function send (data) {
   log('IPC send', dumpObject(data))
-  const massages = encodeIpcData('message', data)
-  curSocket.write(massages)
-}
-
-function _onMessage (massage) {
-  const { type, data } = massage
-  if (type === 'ack') {
-    log('IPC ack', dumpObject(data))
-    if (data.done) {
-      curSocket.write(encodeIpcData('ack', { ok: true }))
-    }
-  } else {
-    log('IPC message', dumpObject(data))
-    listeners.forEach((resolve, reject) => {
-      if (type === 'error') {
-        reject({
-          data,
-          emit: data => {
-            curSocket.write(encodeIpcData('error', data))
-          }
-        })
-      } else {
-        resolve({
-          data,
-          emit: data => {
-            curSocket.write(encodeIpcData('message', data))
-          }
-        })
-      }
-    })
+  const message = encodeIpcData('message', data)
+  if (ipcSocket) {
+    ipcSocket.write(message)
   }
 }
 
