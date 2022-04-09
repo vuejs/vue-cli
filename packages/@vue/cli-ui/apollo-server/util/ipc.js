@@ -23,7 +23,7 @@ function start () {
       socket.on('data', (data) => {
         const messages = decodeIpcData(data)
         messages.forEach(message => {
-          _onMessage(message)
+          _onMessage(message, socket)
         })
       })
 
