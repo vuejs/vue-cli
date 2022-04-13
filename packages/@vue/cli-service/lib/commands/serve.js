@@ -9,7 +9,7 @@ const {
 const defaults = {
   host: '0.0.0.0',
   port: 8080,
-  https: false
+  server: 'http'
 }
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
@@ -24,7 +24,7 @@ module.exports = (api, options) => {
       '--mode': `specify env mode (default: development)`,
       '--host': `specify host (default: ${defaults.host})`,
       '--port': `specify port (default: ${defaults.port})`,
-      '--https': `use https (default: ${defaults.https})`,
+      '--https': `use https (default: ${defaults.server ==='https' || defaults.server ==='spdy'})`,
       '--public': `specify the public network URL for the HMR client`,
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`
     }
@@ -101,9 +101,10 @@ module.exports = (api, options) => {
     // Compatible with server in webpack5
     const projectDevServerType = typeof projectDevServerOptions.server === 'string' ? projectDevServerOptions.server : typeof (projectDevServerOptions.server || {}).type === 'string' ? projectDevServerOptions.server.type : 'http'
     const httpsTypes = ['https', 'spdy']
+    const serverSetting = args['server-type'] || (process.env.HTTPS === 'true' ? 'https' : 'http') || projectDevServerOptions.server || defaults.server
 
     // resolve server options
-    const useHttps = args.https || args.http2 || projectDevServerOptions.https || defaults.https || httpsTypes.includes(args['server-type']) || httpsTypes.includes(projectDevServerType)
+    const useHttps = args.https || args.http2 || process.env.HTTPS === 'true' || httpsTypes.includes(defaults.https) || httpsTypes.includes(args['server-type']) || httpsTypes.includes(projectDevServerType)
     const protocol = useHttps ? 'https' : 'http'
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
@@ -197,7 +198,7 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       host,
       port,
-      https: useHttps,
+      server: serverSetting,
       proxy: proxySettings,
 
       static: {
