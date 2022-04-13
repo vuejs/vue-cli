@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
 const semver = require('semver')
+const { Buffer } = require('buffer')
 
 let _hasYarn
 const _yarnProjects = new LRU({
@@ -14,6 +15,7 @@ const _gitProjects = new LRU({
   max: 10,
   maxAge: 1000
 })
+const DELIMITER = '\f'
 
 // env detection
 exports.hasYarn = () => {
@@ -215,4 +217,45 @@ exports.getInstalledBrowsers = () => {
   }
 
   return browsers
+}
+
+exports.getIpcPath = (id) => {
+  id = '/tmp/app.' + id
+  if (exports.isWindows) {
+    id = id.replace(/^\//, '')
+    id = id.replace(/\//g, '-')
+    id = `\\\\.\\pipe\\${id}`
+  }
+  return id
+}
+
+exports.encodeIpcData = (type, data) => {
+  if (!data && data !== false && data !== 0) {
+    data = {}
+  }
+  if (data._maxListeners) {
+    data = {}
+  }
+  const message = JSON.stringify({ type, data })
+  return Buffer.from(message + DELIMITER)
+}
+
+exports.decodeIpcData = (data) => {
+  if (data.slice(-1) !== DELIMITER || data.indexOf(DELIMITER) === -1) {
+    return
+  }
+  const messages = []
+  const lines = data.split(DELIMITER)
+  lines.pop()
+  for (const line of lines) {
+    try {
+      messages.push(JSON.parse(line))
+    } catch (error) {
+      messages.push({
+        type: 'error',
+        data: `Error handling data: ${error}`
+      })
+    }
+  }
+  return messages
 }

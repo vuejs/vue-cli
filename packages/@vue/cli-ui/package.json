@@ -34,7 +34,6 @@
     "graphql-server.js"
   ],
   "dependencies": {
-    "@achrinza/node-ipc": "9.2.3",
     "@akryum/winattr": "^3.0.0",
     "@vue/cli-shared-utils": "^5.0.4",
     "apollo-server-express": "^2.21.0",
