@@ -81,11 +81,24 @@ import styles from './foo.module.css'
 import sassStyles from './foo.module.scss'
 ```
 
-如果你想去掉文件名中的 `.module`，可以设置 `vue.config.js` 中的 `css.requireModuleExtension` 为 `false`：
+如果你想去掉文件名中的 `.module`，可以设置 `vue.config.js` 中的 `css-loader` 选项，如下所示：
 
 ``` js
 // vue.config.js
 module.exports = {
+  // 注意：以下配置在 Vue CLI v5 与 v4 之间存在差异
+  // Vue CLI v5
+  css: {
+    loaderOptions: {
+      css: {
+        modules: {
+          auto: () => true
+        }
+      }
+    }
+  }
+
+  // Vue CLI v4
   css: {
     requireModuleExtension: false
   }
@@ -100,9 +113,19 @@ module.exports = {
   css: {
     loaderOptions: {
       css: {
-        // 注意：以下配置在 Vue CLI v4 与 v3 之间存在差异。
-        // Vue CLI v3 用户可参考 css-loader v1 文档
-        // https://github.com/webpack-contrib/css-loader/tree/v1.0.1
+        // 注意: 以下配置在不同Vue CLI版本间存在差异
+        // 更多信息请参阅 css-loader 文档
+        // Vue CLI v3 用户可参考 css-loader v1: https://www.npmjs.com/package/css-loader/v/1.0.1
+        // Vue CLI v4 用户可参考 css-loader v3: https://www.npmjs.com/package/css-loader/v/3.6.0
+        // Vue CLI v5 用户可参考 css-loader v5: https://github.com/webpack-contrib/css-loader#readme
+
+        // Vue CLI v5
+        modules: {
+          localIdentName: '[name]-[hash]'
+          exportLocalsConvention: 'camelCaseOnly'
+        }
+
+        //Vue CLI v4
         modules: {
           localIdentName: '[name]-[hash]'
         },
