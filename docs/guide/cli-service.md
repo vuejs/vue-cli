@@ -6,7 +6,7 @@ Inside a Vue CLI project, `@vue/cli-service` installs a binary named `vue-cli-se
 
 This is what you will see in the `package.json` of a project using the default preset:
 
-``` json
+```json
 {
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -63,7 +63,7 @@ The `vue-cli-service serve` command starts a dev server (based on [webpack-dev-s
 
 In addition to the command line flags, you can also configure the dev server using the [devServer](../config/#devserver) field in `vue.config.js`.
 
-`[entry]` in the CLI command is defined as *the entry file* (default: `src/main.js` or `src/main.ts` in TypeScript project), not *an additional entry file*. If you overwrite the entry in the CLI, then the entries from `config.pages` are no longer considered, which may cause an error.
+`[entry]` in the CLI command is defined as _the entry file_ (default: `src/main.js` or `src/main.ts` in TypeScript project), not _an additional entry file_. If you overwrite the entry in the CLI, then the entries from `config.pages` are no longer considered, which may cause an error.
 
 ## vue-cli-service build
 
@@ -85,6 +85,7 @@ Options:
   --report-json  generate report.json to help analyze bundle content
   --skip-plugins comma-separated list of plugin names to skip for this run
   --watch        watch for changes
+  --no-module    build app without generating <script type="module"> chunks for modern browsers
 ```
 
 `vue-cli-service build` produces a production-ready bundle in the `dist/` directory, with minification for JS/CSS/HTML and auto vendor chunk splitting for better caching. The chunk manifest is inlined into the HTML.
@@ -111,7 +112,7 @@ You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue
 
 ## Checking All Available Commands
 
-Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
+Some CLI plugins will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
 
 ```bash
 npx vue-cli-service help
@@ -162,7 +163,7 @@ npx vue-cli-service build --skip-plugins @vue/cli-plugin-pwa
 
 When installed, `@vue/cli-service` also installs [yorkie](https://github.com/yyx990803/yorkie), which allows you to easily specify Git hooks using the `gitHooks` field in your `package.json`:
 
-``` json
+```json
 {
   "gitHooks": {
     "pre-commit": "lint-staged"
