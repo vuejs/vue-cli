@@ -36,8 +36,8 @@ module.exports = (api, options) => {
       resolveModule('cypress/bin/cypress', __dirname)
     const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
     if (server) {
-      runner.on('exit', () => server.close())
-      runner.on('error', () => server.close())
+      runner.on('exit', () => server.stop())
+      runner.on('error', () => server.stop())
     }
 
     if (process.env.VUE_CLI_TEST) {
