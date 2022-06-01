@@ -192,7 +192,8 @@ module.exports = class Generator {
 
   async generate ({
     extractConfigFiles = false,
-    checkExisting = false
+    checkExisting = false,
+    sortPackageJson = true
   } = {}) {
     await this.initPlugins()
 
@@ -203,7 +204,9 @@ module.exports = class Generator {
     // wait for file resolve
     await this.resolveFiles()
     // set package.json
-    this.sortPkg()
+    if (sortPackageJson) {
+      this.sortPkg()
+    }
     this.files['package.json'] = JSON.stringify(this.pkg, null, 2) + '\n'
     // write/update file tree to disk
     await writeFileTree(this.context, this.files, initialFiles, this.filesModifyRecord)
