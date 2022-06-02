@@ -17,6 +17,12 @@ npm install -g @vue/cli
 yarn global add @vue/cli
 ```
 
+### Allow execution of PowerShell scripts on Windows
+__This step is only needed in Windows!__ Out of the box Microsoft Windows does not allow execution of PowerShell scripts. The vue command used later is a PowerShell script so you have to change that. Don't worry, you allow only _singed_ scripts and the PC is still pretty secure. In a Terminal with Administrator rights execute this command:
+```ps
+Set-xecutionPolicy RemoteSigned
+```
+
 After installation, you will have access to the `vue` binary in your command line. You can verify that it is properly installed by simply running `vue`, which should present you with a help message listing all available commands.
 
 You can check you have the right version with this command:
