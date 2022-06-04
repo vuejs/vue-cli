@@ -2,7 +2,6 @@ const getVersions = require('./getVersions')
 const {
   chalk,
   semver,
-
   clearConsole
 } = require('@vue/cli-shared-utils')
 
