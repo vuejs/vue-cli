@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = (api, options) => {
   const { info, chalk, execa, resolveModule } = require('@vue/cli-shared-utils')
 
@@ -32,8 +34,16 @@ module.exports = (api, options) => {
     ]
 
     // Use loadModule to allow users to customize their Cypress dependency version.
-    const cypressBinPath = resolveModule('cypress/bin/cypress', api.getCwd()) ||
-      resolveModule('cypress/bin/cypress', __dirname)
+    const cypressPackageJsonPath =
+      resolveModule('cypress/package.json', api.getCwd()) ||
+      resolveModule('cypress/package.json', __dirname)
+    const cypressPkg = require(cypressPackageJsonPath)
+    const cypressBinPath = path.resolve(
+      cypressPackageJsonPath,
+      '../',
+      cypressPkg.bin.cypress
+    )
+
     const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
     if (server) {
       runner.on('exit', () => server.close())
