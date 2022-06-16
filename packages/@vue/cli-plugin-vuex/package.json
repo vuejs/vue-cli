@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-vuex",
-  "version": "4.5.17",
+  "version": "4.5.18",
   "description": "Vuex plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@vue/cli-test-utils": "^4.5.17"
+    "@vue/cli-test-utils": "^4.5.18"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0-0"
