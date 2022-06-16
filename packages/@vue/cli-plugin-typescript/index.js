@@ -83,6 +83,20 @@ module.exports = (api, projectOptions) => {
     // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
     // so temporarily disabled for vue-cli tests
     if (!process.env.VUE_CLI_TEST) {
+      let compilerPath
+      try {
+        // Vue 2.7+
+        compilerPath = require.resolve('vue/compiler-sfc')
+      } catch (e) {
+        if (isVue3) {
+          // Vue 3.0.0-3.2.12
+          compilerPath = require.resolve('@vue/compiler-sfc')
+        } else {
+          // Vue <= 2.6
+          compilerPath = require.resolve('vue-template-compiler')
+        }
+      }
+
       if (isVue3) {
         config
           .plugin('fork-ts-checker')
@@ -91,7 +105,7 @@ module.exports = (api, projectOptions) => {
               extensions: {
                 vue: {
                   enabled: true,
-                  compiler: '@vue/compiler-sfc'
+                  compiler: compilerPath
                 }
               },
               diagnosticOptions: {
@@ -105,7 +119,7 @@ module.exports = (api, projectOptions) => {
         config
           .plugin('fork-ts-checker')
             .use(require('fork-ts-checker-webpack-plugin'), [{
-              vue: { enabled: true, compiler: 'vue-template-compiler' },
+              vue: { enabled: true, compiler: compilerPath },
               tslint: projectOptions.lintOnSave !== false && fs.existsSync(api.resolve('tslint.json')),
               formatter: 'codeframe',
               // https://github.com/TypeStrong/ts-loader#happypackmode-boolean-defaultfalse
