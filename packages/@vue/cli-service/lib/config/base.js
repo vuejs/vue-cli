@@ -61,16 +61,18 @@ module.exports = (api, options) => {
 
     if (vueMajor === 2) {
       // for Vue 2 projects
-      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
+      const partialIdentifier = {
         'vue-loader': require('@vue/vue-loader-v15/package.json').version,
-        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
-      })
+        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version
+      }
 
       try {
-        vueLoaderCacheConfig['vue-template-compiler'] = require('vue-template-compiler/package.json').version
+        partialIdentifier['vue-template-compiler'] = require('vue-template-compiler/package.json').version
       } catch (e) {
         // For Vue 2.7 projects, `vue-template-compiler` is not required
       }
+
+      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', partialIdentifier)
 
       webpackConfig.resolve
         .alias
