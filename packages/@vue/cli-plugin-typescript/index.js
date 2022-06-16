@@ -3,10 +3,6 @@ const path = require('path')
 module.exports = (api, projectOptions) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!projectOptions.parallel
 
-  const { semver, loadModule } = require('@vue/cli-shared-utils')
-  const vue = loadModule('vue', api.service.context)
-  const isVue3 = (vue && semver.major(vue.version) === 3)
-
   api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
