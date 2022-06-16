@@ -1,4 +1,19 @@
 
+## 5.0.5 (2022-06-16)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#7167](https://github.com/vuejs/vue-cli/pull/7167) feat(upgrade): prevent changing the structure of package.json file during upgrade ([@blzsaa](https://github.com/blzsaa))
+* `@vue/cli-service`
+  * [#7023](https://github.com/vuejs/vue-cli/pull/7023) fix: windows vue.config.mjs support ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+
+#### Committers: 3
+- Martijn Jacobs ([@maerteijn](https://github.com/maerteijn))
+- ZHAO Jinxiang ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+- [@blzsaa](https://github.com/blzsaa)
+
+
+
 ## 5.0.4 (2022-03-22)
 
 #### :bug: Bug Fix
