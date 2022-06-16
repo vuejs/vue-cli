@@ -80,8 +80,8 @@ module.exports = (api, options) => {
       const nightWatchBinPath = require.resolve('nightwatch/bin/nightwatch')
       const runner = execa(nightWatchBinPath, rawArgs, { stdio: 'inherit' })
       if (server) {
-        runner.on('exit', () => server.close())
-        runner.on('error', () => server.close())
+        runner.on('exit', () => server.stop())
+        runner.on('error', () => server.stop())
       }
 
       if (process.env.VUE_CLI_TEST) {
