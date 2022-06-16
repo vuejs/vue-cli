@@ -64,8 +64,13 @@ module.exports = (api, options) => {
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
         'vue-loader': require('@vue/vue-loader-v15/package.json').version,
         '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
-        'vue-template-compiler': require('vue-template-compiler/package.json').version
       })
+
+      try {
+        vueLoaderCacheConfig['vue-template-compiler'] = require('vue-template-compiler/package.json').version
+      } catch (e) {
+        // For Vue 2.7 projects, `vue-template-compiler` is not required
+      }
 
       webpackConfig.resolve
         .alias
