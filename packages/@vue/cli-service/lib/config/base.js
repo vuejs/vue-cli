@@ -85,7 +85,7 @@ module.exports = (api, options) => {
       // for Vue 2 projects
       const partialIdentifier = {
         'vue-loader': require('vue-loader/package.json').version,
-        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
+        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version
       }
 
       try {
