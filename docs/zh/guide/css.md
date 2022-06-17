@@ -138,11 +138,16 @@ module.exports = {
         additionalData: `@import "~@/variables.scss";`
       },
       // 给 less-loader 传递 Less.js 相关选项
+      // https://github.com/webpack-contrib/less-loader `lessLoaderOptions` 参数
       less:{
-        // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
-        // `primary` is global variables fields name
-        globalVars: {
-          primary: '#fff'
+        lessOptions: {
+          // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
+          // `primary` is global variables fields name
+          globalVars: {
+            primary: '#fff',
+            // 实现 Less 全局变量文件的自动导入
+            hack: `true; @import '~@/css/global/index.less';`
+          }
         }
       }
     }

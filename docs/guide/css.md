@@ -29,7 +29,7 @@ When using `webpack` version 4, the default in Vue CLI 4, you need to make sure 
 npm install -D sass-loader@^10 sass
 ```
 :::
- 
+
 Then you can import the corresponding file types, or use them in `*.vue` files with:
 
 ``` vue
@@ -163,11 +163,16 @@ module.exports = {
         additionalData: `@import "~@/variables.scss";`
       },
       // pass Less.js Options to less-loader
+      // https://github.com/webpack-contrib/less-loader `lessLoaderOptions` params
       less:{
-        // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
-        // `primary` is global variables fields name
-        globalVars: {
-          primary: '#fff'
+        lessOptions: {
+          // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
+          // `primary` is global variables fields name
+          globalVars: {
+            primary: '#fff',
+            // Implement automated import of Less global variable files
+            hack: `true; @import '~@/css/global/index.less';`
+          }
         }
       }
     }
