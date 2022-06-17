@@ -157,11 +157,14 @@ module.exports = {
         additionalData: `@import "~@/variables.scss";`
       },
       // передача настроек Less.js в less-loader
+      // https://github.com/webpack-contrib/less-loader `lessLoaderOptions` Параметры 
       less:{
-        // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
-        // `primary` — имя поля глобальных переменных
-        globalVars: {
-          primary: '#fff'
+        lessOptions: {
+          // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
+          // `primary` — имя поля глобальных переменных
+          globalVars: {
+            primary: '#fff'
+          }
         }
       }
     }
