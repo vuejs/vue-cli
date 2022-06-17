@@ -163,7 +163,8 @@ module.exports = {
           // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
           // `primary` — имя поля глобальных переменных
           globalVars: {
-            primary: '#fff'
+            primary: '#fff',
+            hack: `true; @import '~@/css/global/index.less';`
           }
         }
       }
