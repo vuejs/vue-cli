@@ -154,11 +154,14 @@ module.exports = {
         additionalData: `@import "~@/variables.scss";`
       },
       // pass Less.js Options to less-loader
+      // https://github.com/webpack-contrib/less-loader `lessLoaderOptions` params
       less:{
-        // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
-        // `primary` is global variables fields name
-        globalVars: {
-          primary: '#fff'
+        lessOptions: {
+          // http://lesscss.org/usage/#less-options-strict-units `Global Variables`
+          // `primary` is global variables fields name
+          globalVars: {
+            primary: '#fff'
+          }
         }
       }
     }
