@@ -19,6 +19,13 @@ yarn global add @vue/cli
 
 After installation, you will have access to the `vue` binary in your command line. You can verify that it is properly installed by simply running `vue`, which should present you with a help message listing all available commands.
 
+::: Additional step for Windows installations
+As ```vue``` commes as a PowerShell script (ps1.) you will need to allow the execution of scripts.
+```powershell
+Set-ExecutionPolicy RemoteSigned
+```
+:::
+
 You can check you have the right version with this command:
 
 ```bash
