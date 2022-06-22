@@ -104,7 +104,9 @@ async function build (args, api, options) {
     done,
     info,
     logWithSpinner,
-    stopSpinner
+    stopSpinner,
+    error
+
   } = require('@vue/cli-shared-utils')
 
   log()
@@ -204,6 +206,9 @@ async function build (args, api, options) {
       }
 
       if (stats.hasErrors()) {
+        const json = stats.toJson()
+        //we should print the error detail when stats has errors
+        error(json.errors.join("\n\n"))
         return reject(new Error('Build failed with errors.'))
       }
 
