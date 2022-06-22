@@ -207,8 +207,8 @@ async function build (args, api, options) {
 
       if (stats.hasErrors()) {
         const json = stats.toJson()
-        //we should print the error detail when stats has errors
-        error(json.errors.join("\n\n"))
+        // we should print the error detail when stats has errors
+        error(json.errors.join('\n\n'))
         return reject(new Error('Build failed with errors.'))
       }
 
