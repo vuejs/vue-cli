@@ -37,7 +37,7 @@
     "@achrinza/node-ipc": "^9.2.5",
     "@akryum/winattr": "^3.0.0",
     "@vue/cli-shared-utils": "^5.0.6",
-    "apollo-server-express": "^2.21.0",
+    "apollo-server-express": "^3.9.0",
     "clone": "^2.1.1",
     "deepmerge": "^4.2.2",
     "express": "^4.17.1",
