@@ -176,9 +176,21 @@ module.exports = (context, options = {}) => {
 
   // resolve targets for preset-env
   let targets = getTargets(rawTargets, { ignoreBrowserslistConfig, configPath })
+
+  // Webpack 4 uses acorn 6 underlyingly;
+  // The highest ESLint version that Vue CLI v4 supports is 6.x;
+  // Both can only parse ES2019 syntax + BigInt at most.
+  // Thus, newer syntaxes such as optional chaining and nullish coalescing won't
+  // be accept by webpack / ESLint, and must be processed by Babel first.
+  // Chrome 79 is the last Chrome version that doesn't support these syntaxes.
+  // So the targets set by the user cannot be higher than Chrome 79.
+  if (!targets.chrome || semver.gt(targets.chrome, '79.0.0')) {
+    targets.chrome = '79.0.0'
+  }
+
   if (process.env.VUE_CLI_BABEL_TARGET_NODE) {
     // running tests in Node.js
-    targets = { node: 'current' }
+    targets = { node: '12' }
   } else if (process.env.VUE_CLI_BUILD_TARGET === 'wc' || process.env.VUE_CLI_BUILD_TARGET === 'wc-async') {
     // targeting browsers that at least support ES2015 classes
     targets = getWCTargets(targets)
