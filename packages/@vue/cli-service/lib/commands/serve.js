@@ -199,7 +199,14 @@ module.exports = (api, options) => {
     }, projectDevServerOptions, {
       host,
       port,
-      https: useHttps,
+
+      server: {
+        type: protocol,
+        ...(typeof projectDevServerOptions.server === 'object'
+          ? projectDevServerOptions.server
+          : {})
+      },
+
       proxy: proxySettings,
 
       static: {
