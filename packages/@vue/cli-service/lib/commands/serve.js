@@ -62,7 +62,11 @@ module.exports = (api, options) => {
           .output
             .globalObject(`(typeof self !== 'undefined' ? self : this)`)
 
-        if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
+        if (
+          !process.env.VUE_CLI_TEST &&
+          (!options.devServer.client ||
+            options.devServer.client.progress !== false)
+        ) {
           // the default progress plugin won't show progress due to infrastructreLogging.level
           webpackConfig
             .plugin('progress')
