@@ -1,9 +1,11 @@
 
 ## 5.0.7 (2022-07-05)
 
-#### :bug: Bug Fix
 * `@vue/cli-service`
-  * [#7202](https://github.com/vuejs/vue-cli/pull/7202) fix: optimize the judgment on whether HTTPS has been set in options ([@backrunner](https://github.com/backrunner))
+  * [#7202](https://github.com/vuejs/vue-cli/pull/7202), [[558dea2](https://github.com/vuejs/vue-cli/commit/558dea2)] fix: support `devServer.server` option, avoid deprecation warnings ([@backrunner](https://github.com/backrunner), [@sodatea](https://github.com/sodatea))
+  * [[beffe8a](https://github.com/vuejs/vue-cli/commit/beffe8a)] fix: allow disabling progress plugin via `devServer.client.progress`
+* `@vue/cli-ui`
+  * [#7210](https://github.com/vuejs/vue-cli/pull/7210) chore: upgrade to apollo-server-express 3.x
 
 #### Committers: 2
 - BackRunner ([@backrunner](https://github.com/backrunner))
@@ -11,6 +13,11 @@
 
 
 
+## 5.0.6 (2022-06-16)
+
+Fix compatibility with the upcoming Vue 2.7 (currently in alpha) and Vue Loader 15.10 (currently in beta).
+
+In Vue 2.7, `vue-template-compiler` is no longer a required peer dependency. Rather, there's a new export under the main package as `vue/compiler-sfc`.
 
 
 
@@ -845,6 +852,26 @@ Ngo Wei Lin ([@Creastery](https://twitter.com/creastery)) of STAR Labs ([@starla
 - Shinigami ([@Shinigami92](https://github.com/Shinigami92))
 - Tony Trinh ([@tony19](https://github.com/tony19))
 - Yazhe Wang ([@jeneser](https://github.com/jeneser))
+
+
+## 4.5.19 (2022-06-28)
+
+IMPORTANT NOTE: [IE 11 has reached End-of-Life](https://docs.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge#what-is-the-lifecycle-policy-for-internet-explorer-). The default `browserslist` query no longer includes IE 11 as a target.
+If your project still has to support IE 11, you **MUST** manually add `IE 11` to the last line of the `.browserslistrc` file in the project (or `browserslist` field in `package.json`)
+
+#### :bug: Bug Fix
+
+* `@vue/babel-preset-app`
+  * [[c7fa1cf](https://github.com/vuejs/vue-cli/commit/c7fa1cf)] fix: always transpile syntaxes introduced in ES2020 or later, so that optional chaining and nullish coalescing syntaxes won't cause errors in webpack 4 and ESLint 6.
+* `@vue/cli-plugin-typescript`
+  * [[5b57792](https://github.com/vuejs/vue-cli/commit/5b57792)] fix: typechecking with Vue 2.7, fixes #7213
+
+
+## 4.5.18 (2022-06-16)
+
+Fix compatibility with the upcoming Vue 2.7 (currently in alpha) and Vue Loader 15.10 (currently in beta).
+
+In Vue 2.7, `vue-template-compiler` is no longer a required peer dependency. Rather, there's a new export under the main package as `vue/compiler-sfc`.
 
 
 ## 4.5.17 (2022-03-23)
