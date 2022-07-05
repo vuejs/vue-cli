@@ -19,7 +19,7 @@ function autoCall (fn, ...context) {
   return fn
 }
 
-module.exports = (options, cb = null) => {
+module.exports = async (options, cb = null) => {
   // Default options
   options = merge({
     integratedEngine: false
@@ -146,6 +146,7 @@ module.exports = (options, cb = null) => {
 
   // Apollo Server
   const server = new ApolloServer(apolloServerOptions)
+  await server.start()
 
   // Express middleware
   server.applyMiddleware({
