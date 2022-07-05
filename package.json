@@ -39,7 +39,7 @@
     "@vue/eslint-config-typescript": "^9.1.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^27.0.6",
-    "chromedriver": "^98.0.1",
+    "chromedriver": "^103.0.0",
     "debug": "^4.1.0",
     "docsearch.js": "^2.6.3",
     "eslint": "^7.32.0",
