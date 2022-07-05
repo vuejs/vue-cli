@@ -1,4 +1,16 @@
 
+## 5.0.7 (2022-07-05)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#7202](https://github.com/vuejs/vue-cli/pull/7202) fix: optimize the judgment on whether HTTPS has been set in options ([@backrunner](https://github.com/backrunner))
+
+#### Committers: 2
+- BackRunner ([@backrunner](https://github.com/backrunner))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 
 
 
