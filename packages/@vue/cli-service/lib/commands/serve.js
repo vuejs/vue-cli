@@ -108,7 +108,8 @@ module.exports = (api, options) => {
     const modesUseHttps = ['https', 'http2']
     const serversUseHttps = ['https', 'spdy']
     const optionsUseHttps = modesUseHttps.some(modeName => !!projectDevServerOptions[modeName]) ||
-      (typeof projectDevServerOptions.server === 'string' && serversUseHttps.includes(projectDevServerOptions.server))
+      (typeof projectDevServerOptions.server === 'string' && serversUseHttps.includes(projectDevServerOptions.server)) ||
+      (typeof projectDevServerOptions.server === 'object' && projectDevServerOptions.server !== null && serversUseHttps.includes(projectDevServerOptions.server.type))
     const useHttps = args.https || optionsUseHttps || defaults.https
     const protocol = useHttps ? 'https' : 'http'
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
