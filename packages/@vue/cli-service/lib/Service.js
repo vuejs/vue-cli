@@ -35,9 +35,8 @@ module.exports = class Service {
     try {
       this.plugins = this.resolvePlugins(plugins, useBuiltIn)
     } catch (e) {
-      error(e);
+      error(e)
     }
-    
     // pluginsToSkip will be populated during run()
     this.pluginsToSkip = new Set()
     // resolve the default mode to use for each command
