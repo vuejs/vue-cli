@@ -48,7 +48,7 @@ class SafariNomoduleFixPlugin {
             tagName: 'script',
             closeTag: true,
             attributes: {
-              src: fullSafariFixPath
+              src: '/' + fullSafariFixPath
             }
           }
         }
