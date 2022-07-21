@@ -41,8 +41,14 @@ class SafariNomoduleFixPlugin {
           }
         } else {
           // inject the fix as an external script
+          let urlPath = compilation.options.output.publicPath
+          let protocol = ''
+          if (/:\/\//.test(urlPath)) {
+            [protocol, urlPath] = urlPath.split('://')
+            protocol = `${protocol}://`
+          }
           const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
-          const fullSafariFixPath = path.join(compilation.options.output.publicPath, safariFixPath)
+          const fullSafariFixPath = `${protocol}${path.join(urlPath, safariFixPath)}`
           compilation.assets[safariFixPath] = new RawSource(safariFix)
           scriptTag = {
             tagName: 'script',
