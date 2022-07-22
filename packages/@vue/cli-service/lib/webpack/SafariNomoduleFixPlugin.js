@@ -5,6 +5,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { semver } = require('@vue/cli-shared-utils')
 const { projectModuleTargets } = require('../util/targets')
+const safeJoinPublicPath = require('../util/safeJoinPublicPath')
 
 const minSafariVersion = projectModuleTargets.safari
 const minIOSVersion = projectModuleTargets.ios
@@ -41,14 +42,8 @@ class SafariNomoduleFixPlugin {
           }
         } else {
           // inject the fix as an external script
-          let urlPath = compilation.options.output.publicPath
-          let protocol = ''
-          if (/:\/\//.test(urlPath)) {
-            [protocol, urlPath] = urlPath.split('://')
-            protocol = `${protocol}://`
-          }
           const safariFixPath = path.join(this.jsDirectory, 'safari-nomodule-fix.js')
-          const fullSafariFixPath = `${protocol}${path.join(urlPath, safariFixPath)}`
+          const fullSafariFixPath = safeJoinPublicPath(compilation.options.output.publicPath, safariFixPath)
           compilation.assets[safariFixPath] = new RawSource(safariFix)
           scriptTag = {
             tagName: 'script',
