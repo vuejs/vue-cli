@@ -6,9 +6,9 @@ This document covers some common Vue CLI issues and how to resolve them. You sho
 
 If you install `@vue/cli-service` as `root` user or with `sudo`, there might be issues when running package `postinstall` scripts.
 
-This is a security feature of npm. You should always avoid running npm with root privileges because install scripts can be unintentionally malicious.
+This is a security feature of npm. You should always avoid running npm with root privileges because installing scripts can be unintentionally malicious.
 
-If you must however, you can workaround this error by setting the `--unsafe-perm` flag of npm. This can be done by prefixing the command with an environment variable, i.e.
+However, if you have to, you can workaround this error by setting the `--unsafe-perm` flag of npm. This can be done by prefixing the command with an environment variable like this:
 
 ```bash
 npm_config_unsafe_perm=true vue create my-project
@@ -30,4 +30,4 @@ module.exports = {
 ```
 
 ::: warning
-Disabling `resolve.symlinks` may break hot module reloading if your dependencies are installed by third-party npm clients that utilized symbolic links, such as`cnpm` or `pnpm`.
+Disabling `resolve.symlinks` may break hot module reloading if your dependencies are installed by third-party npm clients that utilized symbolic links, such as `cnpm` or `pnpm`.
