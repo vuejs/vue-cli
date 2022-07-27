@@ -6,7 +6,7 @@ This document covers some common Vue CLI issues and how to resolve them. You sho
 
 If you install `@vue/cli-service` as `root` user or with `sudo`, there might be issues when running package `postinstall` scripts.
 
-This is a security feature of npm. You should always avoid running npm with root privileges because installing scripts can be unintentionally malicious.
+This is a security feature of npm. You should always avoid running npm with root privileges because installation scripts can be unintentionally malicious.
 
 However, if you have to, you can workaround this error by setting the `--unsafe-perm` flag of npm. This can be done by prefixing the command with an environment variable, i.e.
 
