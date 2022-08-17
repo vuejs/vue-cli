@@ -30,9 +30,13 @@ export default {
 
 function notice_en() {
   return h('div', { class: 'warning custom-block' }, [
-    h('p', { class: 'custom-block-title' }, '⚠️ Notice'),
+    h(
+      'p',
+      { class: 'custom-block-title' },
+      '⚠️ Vue CLI is in Maintenance Mode!'
+    ),
     h('p', [
-      'Vue CLI is now in maintenance mode. For new projects, please use ',
+      'For new projects, it is now recommended to use ',
       h(
         'a',
         {
@@ -44,10 +48,6 @@ function notice_en() {
       ' to scaffold ',
       h('a', { href: 'https://vitejs.dev', target: '_blank' }, 'Vite'),
       '-based projects. ',
-      h('code', 'create-vue'),
-      ' supports both Vue 2 and Vue 3.'
-    ]),
-    h('p', [
       'Also refer to the ',
       h(
         'a',
@@ -64,9 +64,9 @@ function notice_en() {
 
 function notice_zh_cn() {
   return h('div', { class: 'warning custom-block' }, [
-    h('p', { class: 'custom-block-title' }, '⚠️ Notice'),
+    h('p', { class: 'custom-block-title' }, '⚠️ Vue CLI 现已处于维护模式!'),
     h('p', [
-      'Vue CLI 现已处于维护模式。新项目请使用 ',
+      '现在官方推荐使用 ',
       h(
         'a',
         {
@@ -77,16 +77,12 @@ function notice_zh_cn() {
       ),
       ' 来创建基于 ',
       h('a', { href: 'https://cn.vitejs.dev', target: '_blank' }, 'Vite'),
-      ' 的项目. ',
-      h('code', 'create-vue'),
-      ' 同时支持 Vue 2 和 Vue 3.'
-    ]),
-    h('p', [
-      '另外，请参考 ',
+      ' 的新项目。 ',
+      '另外请参考 ',
       h(
         'a',
         {
-          href: 'https://vuejs.org/guide/scaling-up/tooling.html',
+          href: 'https://cn.vuejs.org/guide/scaling-up/tooling.html',
           target: '_blank'
         },
         'Vue 3 工具链指南'
