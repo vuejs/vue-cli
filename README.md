@@ -2,9 +2,9 @@
 
 ## ⚠️ Status
 
-Vue CLI is now in maintenance mode. For new projects, please use [create-vue](https://github.com/vuejs/create-vue) to scaffold [Vite](https://vitejs.dev/)-based projects, which supports both Vue 2 and Vue 3.
+Vue CLI is now in maintenance mode. For new projects, please use [create-vue](https://github.com/vuejs/create-vue) to scaffold [Vite](https://vitejs.dev/)-based projects. `create-vue` supports both Vue 2 and Vue 3.
 
-Also refer to the latest [Tooling Guide](https://vuejs.org/guide/scaling-up/tooling.html) on setting up a new Vue 3 project.
+Also refer to the [Vue 3 Tooling Guide](https://vuejs.org/guide/scaling-up/tooling.html) for the latest recommendations.
 
 For information on migrating from Vue CLI to Vite:
 
