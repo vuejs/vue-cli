@@ -242,9 +242,7 @@ module.exports = (api, options) => {
 
     // fix: webpack-dev-server doesn't exit on Ctrl+C
     ;['SIGINT', 'SIGTERM'].forEach(signal => {
-      process.on(signal, () => {
-        exitProcess()
-      })
+      process.on(signal, () => exitProcess)
     })
 
     if (args.stdin) {
