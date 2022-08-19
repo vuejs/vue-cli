@@ -1,6 +1,6 @@
 {
   "name": "@vue/cli-plugin-router",
-  "version": "5.0.0-beta.5",
+  "version": "5.0.8",
   "description": "router plugin for vue-cli",
   "main": "index.js",
   "repository": {
@@ -23,10 +23,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@vue/cli-shared-utils": "^5.0.0-beta.5"
+    "@vue/cli-shared-utils": "^5.0.8"
   },
   "devDependencies": {
-    "@vue/cli-test-utils": "^5.0.0-beta.5"
+    "@vue/cli-test-utils": "^5.0.8"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"

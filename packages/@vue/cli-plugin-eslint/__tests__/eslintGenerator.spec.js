@@ -63,9 +63,10 @@ test('prettier', async () => {
   expect(pkg.eslintConfig.extends).toEqual([
     'plugin:vue/essential',
     'eslint:recommended',
-    '@vue/prettier'
+    'plugin:prettier/recommended'
   ])
-  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-prettier')
 })
 
 test('babel', async () => {
@@ -127,10 +128,10 @@ test('typescript', async () => {
     'plugin:vue/essential',
     'eslint:recommended',
     '@vue/typescript/recommended',
-    '@vue/prettier',
-    '@vue/prettier/@typescript-eslint'
+    'plugin:prettier/recommended'
   ])
-  expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-config-prettier')
+  expect(pkg.devDependencies).toHaveProperty('eslint-plugin-prettier')
   expect(pkg.devDependencies).toHaveProperty('@vue/eslint-config-typescript')
 })
 

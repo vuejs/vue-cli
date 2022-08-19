@@ -124,7 +124,7 @@ module.exports = async function lint (args = {}, api) {
   const reportWarningCount = resultResults.reduce((p, c) => p + c.warningCount, 0)
   process.cwd = processCwd
 
-  const formatter = await eslint.loadFormatter(args.format || 'codeframe')
+  const formatter = await eslint.loadFormatter(args.format || 'stylish')
 
   if (config.outputFile) {
     const outputFilePath = path.resolve(config.outputFile)

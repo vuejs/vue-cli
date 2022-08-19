@@ -25,8 +25,11 @@ module.exports = (api, options) => {
 
     api.chainWebpack(webpackConfig => {
       const { lintOnSave } = options
-      const allWarnings = lintOnSave === true || lintOnSave === 'warning'
-      const allErrors = lintOnSave === 'error'
+      const treatAllAsWarnings = lintOnSave === true || lintOnSave === 'warning'
+      const treatAllAsErrors = lintOnSave === 'error'
+
+      const failOnWarning = treatAllAsErrors
+      const failOnError = !treatAllAsWarnings
 
       /** @type {import('eslint-webpack-plugin').Options & import('eslint').ESLint.Options} */
       const eslintWebpackPluginOptions = {
@@ -44,15 +47,15 @@ module.exports = (api, options) => {
         }),
         // plugin options
         context: cwd,
-        // https://github.com/webpack-contrib/eslint-webpack-plugin/issues/56
-        threads: false,
-        emitWarning: allWarnings,
-        emitError: allErrors,
+
+        failOnWarning,
+        failOnError,
+
         eslintPath: path.dirname(
           resolveModule('eslint/package.json', cwd) ||
             resolveModule('eslint/package.json', __dirname)
         ),
-        formatter: 'codeframe'
+        formatter: 'stylish'
       }
       webpackConfig.plugin('eslint').use(eslintWebpackPlugin, [eslintWebpackPluginOptions])
     })
@@ -64,7 +67,7 @@ module.exports = (api, options) => {
       description: 'lint and fix source files',
       usage: 'vue-cli-service lint [options] [...files]',
       options: {
-        '--format [formatter]': 'specify formatter (default: codeframe)',
+        '--format [formatter]': 'specify formatter (default: stylish)',
         '--no-fix': 'do not fix errors or warnings',
         '--no-fix-warnings': 'fix errors, but do not fix warnings',
         '--max-errors [limit]':

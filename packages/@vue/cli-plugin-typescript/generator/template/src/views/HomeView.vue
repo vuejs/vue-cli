@@ -1,5 +1,5 @@
 ---
-extend: '@vue/cli-plugin-router/generator/template/src/views/Home.vue'
+extend: '@vue/cli-plugin-router/generator/template/src/views/HomeView.vue'
 when: "rootOptions.plugins && rootOptions.plugins['@vue/cli-plugin-router']"
 replace:
   - !!js/regexp /Welcome to Your Vue\.js App/
@@ -17,7 +17,7 @@ import Vue from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
 export default Vue.extend({
-  name: 'Home',
+  name: 'HomeView',
   components: {
     HelloWorld,
   },
@@ -31,7 +31,7 @@ import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
     HelloWorld,
   },
 })
-export default class Home extends Vue {}
+export default class HomeView extends Vue {}
 <%_ } _%>
 </script>
 <%# END_REPLACE %>

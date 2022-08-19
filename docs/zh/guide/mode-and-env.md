@@ -32,7 +32,7 @@ vue-cli-service build --mode development
 
 你可以在你的项目根目录中放置下列文件来指定环境变量：
 
-``` bash
+```bash
 .env                # 在所有的环境中被载入
 .env.local          # 在所有的环境中被载入，但会被 git 忽略
 .env.[mode]         # 只在指定的模式中被载入
@@ -56,7 +56,7 @@ VUE_APP_NOT_SECRET_CODE=some_value
 
 想要了解解析环境文件规则的细节，请参考 [dotenv](https://github.com/motdotla/dotenv#rules)。我们也使用 [dotenv-expand](https://github.com/motdotla/dotenv-expand) 来实现变量扩展 (Vue CLI 3.5+ 支持)。例如：
 
-``` bash
+```bash
 FOO=foo
 BAR=bar
 

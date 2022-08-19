@@ -5,6 +5,7 @@ const {
   hasProjectPnpm,
   IpcMessenger
 } = require('@vue/cli-shared-utils')
+const getBaseUrl = require('../util/getBaseUrl')
 
 const defaults = {
   host: '0.0.0.0',
@@ -14,6 +15,7 @@ const defaults = {
 
 /** @type {import('@vue/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
+  const baseUrl = getBaseUrl(options)
   api.registerCommand('serve', {
     description: 'start development server',
     usage: 'vue-cli-service serve [options] [entry]',
@@ -60,7 +62,11 @@ module.exports = (api, options) => {
           .output
             .globalObject(`(typeof self !== 'undefined' ? self : this)`)
 
-        if (!process.env.VUE_CLI_TEST && options.devServer.progress !== false) {
+        if (
+          !process.env.VUE_CLI_TEST &&
+          (!options.devServer.client ||
+            options.devServer.client.progress !== false)
+        ) {
           // the default progress plugin won't show progress due to infrastructreLogging.level
           webpackConfig
             .plugin('progress')
@@ -99,7 +105,12 @@ module.exports = (api, options) => {
     }
 
     // resolve server options
-    const useHttps = args.https || projectDevServerOptions.https || defaults.https
+    const modesUseHttps = ['https', 'http2']
+    const serversUseHttps = ['https', 'spdy']
+    const optionsUseHttps = modesUseHttps.some(modeName => !!projectDevServerOptions[modeName]) ||
+      (typeof projectDevServerOptions.server === 'string' && serversUseHttps.includes(projectDevServerOptions.server)) ||
+      (typeof projectDevServerOptions.server === 'object' && projectDevServerOptions.server !== null && serversUseHttps.includes(projectDevServerOptions.server.type))
+    const useHttps = args.https || optionsUseHttps || defaults.https
     const protocol = useHttps ? 'https' : 'http'
     const host = args.host || process.env.HOST || projectDevServerOptions.host || defaults.host
     portfinder.basePort = args.port || process.env.PORT || projectDevServerOptions.port || defaults.port
@@ -116,7 +127,7 @@ module.exports = (api, options) => {
       protocol,
       host,
       port,
-      isAbsoluteUrl(options.publicPath) ? '/' : options.publicPath
+      isAbsoluteUrl(baseUrl) ? '/' : baseUrl
     )
     const localUrlForBrowser = publicUrl || urls.localUrlForBrowser
 
@@ -187,13 +198,20 @@ module.exports = (api, options) => {
           'text/html',
           'application/xhtml+xml'
         ],
-        rewrites: genHistoryApiFallbackRewrites(options.publicPath, options.pages)
+        rewrites: genHistoryApiFallbackRewrites(baseUrl, options.pages)
       },
       hot: !isProduction
     }, projectDevServerOptions, {
       host,
       port,
-      https: useHttps,
+
+      server: {
+        type: protocol,
+        ...(typeof projectDevServerOptions.server === 'object'
+          ? projectDevServerOptions.server
+          : {})
+      },
+
       proxy: proxySettings,
 
       static: {
@@ -219,22 +237,23 @@ module.exports = (api, options) => {
       open: args.open || projectDevServerOptions.open,
       setupExitSignals: true,
 
-      // eslint-disable-next-line no-shadow
-      onBeforeSetupMiddleware (server) {
+      setupMiddlewares (middlewares, devServer) {
         // launch editor support.
         // this works with vue-devtools & @vue/cli-overlay
-        server.app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
+        devServer.app.use('/__open-in-editor', launchEditorMiddleware(() => console.log(
           `To specify an editor, specify the EDITOR env variable or ` +
           `add "editor" field to your Vue project config.\n`
         )))
 
         // allow other plugins to register middlewares, e.g. PWA
         // todo: migrate to the new API interface
-        api.service.devServerConfigFns.forEach(fn => fn(server.app, server))
+        api.service.devServerConfigFns.forEach(fn => fn(devServer.app, devServer))
 
-        if (projectDevServerOptions.onBeforeSetupMiddleware) {
-          projectDevServerOptions.onBeforeSetupMiddleware(server)
+        if (projectDevServerOptions.setupMiddlewares) {
+          return projectDevServerOptions.setupMiddlewares(middlewares, devServer)
         }
+
+        return middlewares
       }
     }), compiler)
 

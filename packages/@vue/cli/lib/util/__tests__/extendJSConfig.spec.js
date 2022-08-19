@@ -28,6 +28,32 @@ test(`basic`, () => {
   )
 })
 
+test(`defineConfig`, () => {
+  const value = {
+    foo: true,
+    css: {
+      modules: true
+    }
+  }
+  const source =
+`const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  foo: false,
+  css: {
+    modules: false
+  }
+})`
+  expect(extend(value, source)).toMatch(
+    `const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  foo: true,
+  css: {
+    modules: true
+  }
+})`
+  )
+})
+
 test(`adding new property`, () => {
   const value = {
     foo: true

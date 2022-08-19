@@ -100,7 +100,7 @@ test('should work with tsx', async () => {
 
   await write('tests/unit/example.spec.ts', `
   import { shallowMount } from '@vue/test-utils'
-  import MyComponent from '@/components/HelloWorld.tsx'
+  import MyComponent from '@/components/HelloWorld'
 
   describe('HelloWorld.tsx', () => {
     it('renders props.msg when passed', () => {

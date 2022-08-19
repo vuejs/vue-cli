@@ -17,7 +17,7 @@ This is what you will see in the `package.json` of a project using the default p
 
 You can invoke these scripts using either npm or Yarn:
 
-``` bash
+```bash
 npm run serve
 # OR
 yarn serve
@@ -25,7 +25,7 @@ yarn serve
 
 If you have [npx](https://github.com/npm/npx) available (should be bundled with an up-to-date version of npm), you can also invoke the binary directly with:
 
-``` bash
+```bash
 npx vue-cli-service serve
 ```
 
@@ -113,13 +113,13 @@ You can use `vue-cli-service inspect` to inspect the webpack config inside a Vue
 
 Some CLI plugins  will inject additional commands to `vue-cli-service`. For example, `@vue/cli-plugin-eslint` injects the `vue-cli-service lint` command. You can see all injected commands by running:
 
-``` bash
+```bash
 npx vue-cli-service help
 ```
 
 You can also learn about the available options of each command with:
 
-``` bash
+```bash
 npx vue-cli-service help [command]
 ```
 
@@ -135,15 +135,15 @@ npx vue-cli-service build --skip-plugins pwa
 This option is available for _every_ `vue-cli-service` command, including custom ones added by other plugins.
 :::
 
-You can skip multiple plugins by passing their names as a comma-separated list:
+You can skip multiple plugins by passing their names as a comma-separated list or by repeating the argument:
 
 ```bash
-npx vue-cli-service build --skip-plugins pwa,apollo
+npx vue-cli-service build --skip-plugins pwa,apollo --skip-plugins eslint
 ```
 
 Plugin names are resolved the same way they are during install, as described [here](./plugins-and-presets.md#installing-plugins-in-an-existing-project)
 
-``` bash
+```bash
 # these are all equivalent
 npx vue-cli-service build --skip-plugins pwa
 

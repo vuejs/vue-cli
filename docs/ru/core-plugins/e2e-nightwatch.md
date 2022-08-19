@@ -60,7 +60,7 @@ tests/e2e/
 
 ## Установка в уже созданный проект
 
-```sh
+```bash
 vue add e2e-nightwatch
 ```
 
@@ -76,7 +76,7 @@ Nightwatch предварительно сконфигурирован для з
 
 По умолчанию, все тесты внутри каталога `specs` будут запускаться с использованием Chrome. Если необходимо запустить end-to-end тесты в headless-режиме в Chrome (или Firefox), укажите аргумент `--headless`.
 
-```sh
+```bash
 $ vue-cli-service test:e2e
 ```
 
@@ -84,7 +84,7 @@ $ vue-cli-service test:e2e
 
 Для запуска одного теста укажите путь к файлу. Например:
 
-```sh
+```bash
 $ vue-cli-service test:e2e tests/e2e/specs/test.js
 ```
 
@@ -92,7 +92,7 @@ $ vue-cli-service test:e2e tests/e2e/specs/test.js
 
 Если сервер разработки уже запущен и необходимо пропустить автоматический запуск, укажите аргумент `--url`:
 
-```sh
+```bash
 $ vue-cli-service test:e2e --url http://localhost:8080/
 ```
 
@@ -100,7 +100,7 @@ $ vue-cli-service test:e2e --url http://localhost:8080/
 
 По умолчанию также поддерживается запуск тестов в Firefox. Выполните следующую команду (опционально можно добавить `--headless` для запуска Firefox в безголовом режиме):
 
-```sh
+```bash
 $ vue-cli-service test:e2e --env firefox [--headless]
 ```
 
@@ -108,7 +108,7 @@ $ vue-cli-service test:e2e --env firefox [--headless]
 
 Можно запускать тесты одновременно в обоих браузерах, определяя требуемые тестовые окружения через запятую (",") — не используя пробелы.
 
-```sh
+```bash
 $ vue-cli-service test:e2e --env firefox,chrome [--headless]
 ```
 
@@ -118,7 +118,7 @@ $ vue-cli-service test:e2e --env firefox,chrome [--headless]
 
 На данный момент возможность доступна только в Chromedriver. Подробнее о [режиме параллельной работы](https://nightwatchjs.org/guide/running-tests/#parallel-running) можно прочитать в документации Nightwatch.
 
-```sh
+```bash
 $ vue-cli-service test:e2e --parallel
 ```
 
@@ -130,12 +130,12 @@ $ vue-cli-service test:e2e --parallel
 
 __1.__ Установите NPM-пакет `selenium-server`:
 
-  ```sh
+  ```bash
   $ npm install selenium-server --save-dev
   ```
 
 __2.__ Запустите команду с аргументом `--use-selenium`:
 
-  ```sh
+  ```bash
   $ vue-cli-service test:e2e --use-selenium
   ```

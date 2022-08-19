@@ -10,7 +10,7 @@ All compiled CSS are processed by [css-loader](https://github.com/webpack-contri
 
 You can select pre-processors (Sass/Less/Stylus) when creating the project. If you did not do so, the internal webpack config is still pre-configured to handle all of them. You just need to manually install the corresponding webpack loaders:
 
-``` bash
+```bash
 # Sass
 npm install -D sass-loader sass
 
@@ -21,6 +21,15 @@ npm install -D less-loader less
 npm install -D stylus-loader stylus
 ```
 
+::: tip Note on webpack 4
+When using `webpack` version 4, the default in Vue CLI 4, you need to make sure your loaders are compatible with it. Otherwise you will get errors about confliciting peer dependencies. In this case you can use an older version of the loader that is still compatible with `webpack` 4.
+
+``` bash
+# Sass
+npm install -D sass-loader@^10 sass
+```
+:::
+ 
 Then you can import the corresponding file types, or use them in `*.vue` files with:
 
 ``` vue

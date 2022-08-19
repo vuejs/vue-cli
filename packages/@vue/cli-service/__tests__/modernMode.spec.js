@@ -32,8 +32,8 @@ test('modern mode', async () => {
   const index = await project.read('dist/index.html')
 
   // should use <script type="module" crossorigin="use-credentials"> for modern bundle
-  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors\.\w{8}\.js" type="module">/)
-  expect(index).toMatch(/<script defer="defer" src="\/js\/app\.\w{8}\.js" type="module">/)
+  expect(index).toMatch(/<script defer="defer" type="module" src="\/js\/chunk-vendors\.\w{8}\.js">/)
+  expect(index).toMatch(/<script defer="defer" type="module" src="\/js\/app\.\w{8}\.js">/)
 
   // should use <link rel="modulepreload" crossorigin="use-credentials"> for modern bundle
   // expect(index).toMatch(/<link [^>]*js\/chunk-vendors\.\w{8}\.js" rel="modulepreload" as="script">/)
@@ -49,8 +49,8 @@ test('modern mode', async () => {
   expect(stdout2).toMatch('Build complete.')
   const index2 = await project.read('dist/index.html')
   // should use <script type="module" crossorigin="use-credentials"> for modern bundle
-  expect(index2).toMatch(/<script defer="defer" src="\/js\/chunk-vendors\.\w{8}\.js" crossorigin="use-credentials" type="module">/)
-  expect(index2).toMatch(/<script defer="defer" src="\/js\/app\.\w{8}\.js" crossorigin="use-credentials" type="module">/)
+  expect(index2).toMatch(/<script defer="defer" type="module" src="\/js\/chunk-vendors\.\w{8}\.js" crossorigin="use-credentials">/)
+  expect(index2).toMatch(/<script defer="defer" type="module" src="\/js\/app\.\w{8}\.js" crossorigin="use-credentials">/)
   // should use <link rel="modulepreload" crossorigin="use-credentials"> for modern bundle
   // expect(index2).toMatch(/<link [^>]*js\/chunk-vendors\.\w{8}\.js" rel="modulepreload" as="script" crossorigin="use-credentials">/)
   // expect(index2).toMatch(/<link [^>]*js\/app\.\w{8}\.js" rel="modulepreload" as="script" crossorigin="use-credentials">/)
@@ -133,7 +133,11 @@ test('should use correct hash for fallback bundles', async () => {
   const index = await project.read('dist/index.html')
   const jsFiles = (await fs.readdir(path.join(project.dir, 'dist/js'))).filter(f => f.endsWith('.js'))
   for (const f of jsFiles) {
-    expect(index).toMatch(`<script defer="defer" src="/js/${f}"`)
+    if (f.includes('legacy')) {
+      expect(index).toMatch(`<script defer="defer" src="/js/${f}"`)
+    } else {
+      expect(index).toMatch(`<script defer="defer" type="module" src="/js/${f}"`)
+    }
   }
 })
 

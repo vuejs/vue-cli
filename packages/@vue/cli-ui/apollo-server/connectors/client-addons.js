@@ -63,7 +63,7 @@ function serve (req, res) {
     }
   } else {
     res.status(404)
-    res.send(`Addon ${id} not found in loaded addons. Try opening a vue-cli project first?`)
+    res.send('Addon not found in loaded addons. Try opening a vue-cli project first?')
   }
 }
 

@@ -6,10 +6,14 @@ const { setNotificationCallback } = require('@vue/cli-ui/apollo-server/util/noti
 function simpleCorsValidation (allowedHost) {
   return function (req, socket) {
     const { host, origin } = req.headers
-    // maybe we should just use strict string equal?
-    const hostRegExp = new RegExp(`^https?://(${host}|${allowedHost}|localhost)(:\\d+)?$`)
 
-    if (!origin || !hostRegExp.test(origin)) {
+    const safeOrigins = [
+      host,
+      allowedHost,
+      'localhost'
+    ]
+
+    if (!origin || !safeOrigins.includes(new URL(origin).hostname)) {
       socket.destroy()
     }
   }
@@ -64,7 +68,7 @@ async function ui (options = {}, context = process.cwd()) {
     }
   }
 
-  const { httpServer } = server(opts, () => {
+  const { httpServer } = await server(opts, () => {
     // Reset for yarn/npm to work correctly
     if (typeof nodeEnv === 'undefined') {
       delete process.env.NODE_ENV

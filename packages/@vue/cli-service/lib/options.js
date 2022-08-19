@@ -59,6 +59,12 @@ const schema = createSchema(joi => joi.object({
   lintOnSave: joi.any().valid(true, false, 'error', 'warning', 'default'),
   pwa: joi.object(),
 
+  // terser
+  terser: joi.object({
+    minify: joi.string().valid('terser', 'esbuild', 'swc', 'uglifyJs'),
+    terserOptions: joi.object()
+  }),
+
   // 3rd party plugin options
   pluginOptions: joi.object()
 }))

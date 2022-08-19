@@ -10,6 +10,9 @@ module.exports = (api, options) => {
     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
     const resolveLocal = require('../util/resolveLocal')
 
+    // https://github.com/webpack/webpack/issues/14532#issuecomment-947525539
+    webpackConfig.output.set('hashFunction', 'xxhash64')
+
     // https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
     webpackConfig.module
       .rule('esm')
@@ -51,13 +54,25 @@ module.exports = (api, options) => {
     // js is handled by cli-plugin-babel ---------------------------------------
 
     // vue-loader --------------------------------------------------------------
+    let cacheLoaderPath
+    try {
+      cacheLoaderPath = require.resolve('cache-loader')
+    } catch (e) {}
+
     if (vueMajor === 2) {
       // for Vue 2 projects
-      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
+      const partialIdentifier = {
         'vue-loader': require('@vue/vue-loader-v15/package.json').version,
-        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version,
-        'vue-template-compiler': require('vue-template-compiler/package.json').version
-      })
+        '@vue/component-compiler-utils': require('@vue/component-compiler-utils/package.json').version
+      }
+
+      try {
+        partialIdentifier['vue-template-compiler'] = require('vue-template-compiler/package.json').version
+      } catch (e) {
+        // For Vue 2.7 projects, `vue-template-compiler` is not required
+      }
+
+      const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', partialIdentifier)
 
       webpackConfig.resolve
         .alias
@@ -68,20 +83,25 @@ module.exports = (api, options) => {
               : 'vue/dist/vue.runtime.esm.js'
           )
 
+      if (cacheLoaderPath) {
+        webpackConfig.module
+          .rule('vue')
+            .test(/\.vue$/)
+            .use('cache-loader')
+              .loader(cacheLoaderPath)
+              .options(vueLoaderCacheConfig)
+      }
+
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('@vue/vue-loader-v15'))
             .options(Object.assign({
               compilerOptions: {
                 whitespace: 'condense'
               }
-            }, vueLoaderCacheConfig))
+            }, cacheLoaderPath ? vueLoaderCacheConfig : {}))
 
       webpackConfig
         .plugin('vue-loader')
@@ -98,8 +118,7 @@ module.exports = (api, options) => {
     } else if (vueMajor === 3) {
       // for Vue 3 projects
       const vueLoaderCacheConfig = api.genCacheConfig('vue-loader', {
-        'vue-loader': require('vue-loader/package.json').version,
-        '@vue/compiler-sfc': require('@vue/compiler-sfc/package.json').version
+        'vue-loader': require('vue-loader/package.json').version
       })
 
       webpackConfig.resolve
@@ -111,21 +130,24 @@ module.exports = (api, options) => {
               : 'vue/dist/vue.runtime.esm-bundler.js'
           )
 
+      if (cacheLoaderPath) {
+        webpackConfig.module
+          .rule('vue')
+            .test(/\.vue$/)
+            .use('cache-loader')
+              .loader(cacheLoaderPath)
+              .options(vueLoaderCacheConfig)
+      }
+
       webpackConfig.module
         .rule('vue')
           .test(/\.vue$/)
-          .use('cache-loader')
-            .loader(require.resolve('cache-loader'))
-            .options(vueLoaderCacheConfig)
-            .end()
           .use('vue-loader')
             .loader(require.resolve('vue-loader'))
             .options({
               ...vueLoaderCacheConfig,
               babelParserPlugins: ['jsx', 'classProperties', 'decorators-legacy']
             })
-            .end()
-          .end()
 
       webpackConfig
         .plugin('vue-loader')

@@ -30,8 +30,8 @@ test('build', async () => {
   // expect(index).toMatch(/<link [^>]+app[^>]+\.css rel=preload as=style crossorigin>/)
 
   // should apply crossorigin and add integrity to scripts and css
-  expect(index).toMatch(/<script defer="defer" src="\/js\/chunk-vendors\.\w{8}\.js" crossorigin integrity="sha384-.{64}\s?" type="module">/)
-  expect(index).toMatch(/<script defer="defer" src="\/js\/app\.\w{8}\.js" crossorigin integrity="sha384-.{64}\s?" type="module">/)
+  expect(index).toMatch(/<script defer="defer" type="module" src="\/js\/chunk-vendors\.\w{8}\.js" crossorigin integrity="sha384-.{64}\s?">/)
+  expect(index).toMatch(/<script defer="defer" type="module" src="\/js\/app\.\w{8}\.js" crossorigin integrity="sha384-.{64}\s?">/)
   expect(index).toMatch(/<link href="\/css\/app\.\w{8}\.css" rel="stylesheet" crossorigin integrity="sha384-.{64}\s?">/)
 
   // verify integrity is correct by actually running it

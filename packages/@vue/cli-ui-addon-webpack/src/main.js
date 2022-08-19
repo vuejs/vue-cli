@@ -7,6 +7,7 @@ Vue.use(VueProgress, {
   defaultShape: 'circle'
 })
 
+/* eslint-disable vue/multi-word-component-names */
 ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 ClientAddonApi.component('org.vue.webpack.components.analyzer', WebpackAnalyzer)
 

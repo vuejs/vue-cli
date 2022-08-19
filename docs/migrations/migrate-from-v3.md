@@ -6,7 +6,7 @@ sidebar: auto
 
 First, install the latest Vue CLI globally:
 
-```sh
+```bash
 npm install -g @vue/cli
 # OR
 yarn global add @vue/cli
@@ -16,7 +16,7 @@ yarn global add @vue/cli
 
 In your existing projects, run:
 
-```sh
+```bash
 vue upgrade
 ```
 
@@ -223,7 +223,7 @@ It now requires `eslint`, `eslint-plugin-prettier` and `prettier` as peer depend
 
 For older projects, if you encountered issues like `Cannot find module: eslint-plugin-prettier`, please run the following command to fix it:
 
-```sh
+```bash
 npm install --save-dev eslint@5 @vue/eslint-config-prettier@5 eslint-plugin-prettier prettier
 ```
 

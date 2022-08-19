@@ -227,8 +227,8 @@ test('should persist cache', async () => {
   expect(has('node_modules/.cache/eslint/cache.json')).toBe(true)
 })
 
-test.skip(`should use formatter 'codeframe'`, async () => {
-  const project = await create('eslint-formatter-codeframe', {
+test.skip(`should use formatter 'stylish'`, async () => {
+  const project = await create('eslint-formatter-stylish', {
     plugins: {
       '@vue/cli-plugin-babel': {},
       '@vue/cli-plugin-eslint': {
@@ -251,17 +251,20 @@ test.skip(`should use formatter 'codeframe'`, async () => {
 
   const server = run('vue-cli-service serve')
 
-  let isFirstMsg = true
+  let output = ''
   server.stdout.on('data', data => {
-    data = data.toString()
-    if (isFirstMsg) {
-      expect(data).toMatch(/Failed to compile with \d error/)
-      isFirstMsg = false
-    } else if (data.match(/semi/)) {
+    output += data.toString()
+
+    if (/webpack compiled with 1 error/.test(output)) {
+      expect(output).toMatch(/Failed to compile with \d error/)
       // check the format of output
-      // https://eslint.org/docs/user-guide/formatters/#codeframe
-      expect(data).toMatch(`error`)
-      expect(data).toMatch(`Missing semicolon (semi) at src${path.sep}main.js`)
+      // https://eslint.org/docs/user-guide/formatters/#stylish
+      // it looks like:
+      // ERROR in .../packages/test/eslint-formatter-stylish/src/main.js
+      // 1:22  error  Missing semicolon  semi
+      expect(output).toMatch(`src${path.sep}main.js`)
+      expect(output).toMatch(`error`)
+      expect(output).toMatch(`Missing semicolon  semi`)
 
       server.stdin.write('close')
       done()
@@ -269,29 +272,6 @@ test.skip(`should use formatter 'codeframe'`, async () => {
   })
 
   await donePromise
-})
-
-test(`should work with eslint v8`, async () => {
-  const project = await create('eslint-v8', {
-    plugins: {
-      '@vue/cli-plugin-babel': {},
-      '@vue/cli-plugin-eslint': {
-        config: 'airbnb',
-        lintOn: 'save'
-      }
-    }
-  })
-  const { read, write, run } = project
-  await run('npm add -D eslint@^8.0.0-0 eslint-formatter-codeframe')
-  // should've applied airbnb autofix
-  const main = await read('src/main.js')
-  expect(main).toMatch(';')
-  // remove semicolons
-  const updatedMain = main.replace(/;/g, '')
-  await write('src/main.js', updatedMain)
-  // lint
-  await run('vue-cli-service lint')
-  expect(await read('src/main.js')).toMatch(';')
 })
 
 test(`should work with eslint args`, async () => {

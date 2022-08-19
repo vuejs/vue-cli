@@ -4,7 +4,7 @@
 
 To create a new project, run:
 
-``` bash
+```bash
 vue create hello-world
 ```
 
@@ -28,12 +28,12 @@ If you chose to manually select features, at the end of the prompts you also hav
 ::: tip ~/.vuerc
 Saved presets will be stored in a JSON file named `.vuerc` in your user home directory. If you wish to modify saved presets / options, you can do so by editing this file.
 
-During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npm.taobao.org/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
+During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npmmirror.com/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
 :::
 
 The `vue create` command has a number of options and you can explore them all by running:
 
-``` bash
+```bash
 vue create --help
 ```
 
@@ -53,9 +53,11 @@ Options:
   -g, --git [message|false]       Force / skip git initialization, optionally specify initial commit message
   -n, --no-git                    Skip git initialization
   -f, --force                     Overwrite target directory if it exists
+  --merge                         Merge target directory if it exists
   -c, --clone                     Use git clone when fetching remote preset
   -x, --proxy                     Use specified proxy when creating project
   -b, --bare                      Scaffold project without beginner instructions
+  --skipGetStarted                Skip displaying "Get started" instructions
   -h, --help                      Output usage information
 ```
 
@@ -63,7 +65,7 @@ Options:
 
 You can also create and manage projects using a graphical interface with the `vue ui` command:
 
-``` bash
+```bash
 vue ui
 ```
 
@@ -75,7 +77,7 @@ The above command will open a browser window with a GUI that guides you through 
 
 Vue CLI >= 3 uses the same `vue` binary, so it overwrites Vue CLI 2 (`vue-cli`). If you still need the legacy `vue init` functionality, you can install a global bridge:
 
-``` bash
+```bash
 npm install -g @vue/cli-init
 # vue init now works exactly the same as vue-cli@2.x
 vue init webpack my-project

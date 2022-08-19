@@ -1012,7 +1012,9 @@ test('api: addConfigTransform transform vue warn', async () => {
     extractConfigFiles: true
   })
 
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(`module.exports = {\n  lintOnSave: 'default'\n}`)
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(
+    `const { defineConfig } = require('@vue/cli-service')\nmodule.exports = defineConfig({\n  lintOnSave: 'default'\n})\n`
+  )
   expect(logs.warn.some(([msg]) => {
     return msg.match(/Reserved config transform 'vue'/)
   })).toBe(true)
@@ -1103,7 +1105,9 @@ test('extract config files', async () => {
   })
 
   const js = v => `module.exports = ${stringifyJS(v, null, 2)}`
-  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(js(configs.vue))
+  expect(fs.readFileSync('/vue.config.js', 'utf-8')).toMatch(
+    `const { defineConfig } = require('@vue/cli-service')\nmodule.exports = defineConfig(${stringifyJS(configs.vue, null, 2)})`
+  )
   expect(fs.readFileSync('/babel.config.js', 'utf-8')).toMatch(js(configs.babel))
   expect(fs.readFileSync('/postcss.config.js', 'utf-8')).toMatch(js(configs.postcss))
   expect(fs.readFileSync('/.eslintrc.js', 'utf-8')).toMatch(js(configs.eslintConfig))
