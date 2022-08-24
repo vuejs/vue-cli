@@ -39,7 +39,7 @@ serve -s dist
 
 1. Установите корректное значение `publicPath` в `vue.config.js`.
 
-    Если вы публикуете по адресу `https://<USERNAME>.github.io/`, вы можете опустить `publicPath`, так как оно по умолчанию `"/"`.
+    Если публикуете по адресу `https://<USERNAME>.github.io/` или на пользовательский домен, то можно опустить `publicPath`, так как оно по умолчанию `"/"`.
 
     Если вы публикуете по адресу `https://<USERNAME>.github.io/<REPO>/`, (т.е. ваш репозиторий находится по адресу `https://github.com/<USERNAME>/<REPO>`), установите `publicPath` в значение `"/<REPO>/"`. Например, если ваш репозиторий называется "my-project", то ваш `vue.config.js` будет выглядеть примерно так:
 
@@ -163,14 +163,31 @@ module.exports = {
 
 Также посмотрите [vue-cli-plugin-netlify-lambda](https://github.com/netlify/vue-cli-plugin-netlify-lambda).
 
-Для получения прямых хитов при использовании `режима history` во Vue Router, необходимо создавать файл `_redirects` в каталоге `/public` со следующим содержимым:
+#### Использование режима history во Vue Router
+
+Для получения прямых хитов при использовании `режима history` во Vue Router, необходимо перенаправлять весь трафик в файл `/index.html`.
+
+> Подробнее можно изучить в [документации Netlify по перенаправлениям](https://docs.netlify.com/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-apps).
+
+##### Рекомендуемый метод
+
+Создать файл `netlify.toml` в корневом каталоге репозитория со следующим содержимым:
+
+```toml
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+##### Альтернативный метод
+
+Создать файл `_redirects` в каталоге `/public` со следующим содержимым:
 
 ```
 # Настройки Netlify для одностраничных приложений (SPA)
 /*    /index.html   200
 ```
-
-Подробнее можно изучить в [документации Netlify по перенаправлениям](https://www.netlify.com/docs/redirects/#history-pushstate-and-single-page-apps).
 
 При использовании [@vue/cli-plugin-pwa](../core-plugins/pwa.md#vue-cli-plugin-pwa) убедитесь, что файл `_redirects` не кэшируется service worker.
 
@@ -194,11 +211,10 @@ module.exports = {
 
 [Render](https://render.com) предлагает [бесплатный хостинг статических сайтов](https://render.com/docs/static-sites) с полностью управляемым SSL, глобальным CDN и непрерывным автоматическим развёртыванием из GitHub.
 
-1. Создайте новый Web Service в Render, и предоставьте доступ для GitHub-приложения Render в репозиторий.
+1. Создайте новый Static Site в Render, и предоставьте доступ для GitHub-приложения Render в репозиторий.
 
 2. При создании используйте следующие значения:
 
-  - **Окружение:** `Static Site`
   - **Команда сборки:** `npm run build` или `yarn build`
   - **Каталог публикации:** `dist`
 

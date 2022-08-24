@@ -1,4 +1,167 @@
 
+
+
+
+## 5.0.7 (2022-07-05)
+
+* `@vue/cli-service`
+  * [#7202](https://github.com/vuejs/vue-cli/pull/7202), [[558dea2](https://github.com/vuejs/vue-cli/commit/558dea2)] fix: support `devServer.server` option, avoid deprecation warnings ([@backrunner](https://github.com/backrunner), [@sodatea](https://github.com/sodatea))
+  * [[beffe8a](https://github.com/vuejs/vue-cli/commit/beffe8a)] fix: allow disabling progress plugin via `devServer.client.progress`
+* `@vue/cli-ui`
+  * [#7210](https://github.com/vuejs/vue-cli/pull/7210) chore: upgrade to apollo-server-express 3.x
+
+#### Committers: 2
+- BackRunner ([@backrunner](https://github.com/backrunner))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 5.0.6 (2022-06-16)
+
+Fix compatibility with the upcoming Vue 2.7 (currently in alpha) and Vue Loader 15.10 (currently in beta).
+
+In Vue 2.7, `vue-template-compiler` is no longer a required peer dependency. Rather, there's a new export under the main package as `vue/compiler-sfc`.
+
+
+
+## 5.0.5 (2022-06-16)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#7167](https://github.com/vuejs/vue-cli/pull/7167) feat(upgrade): prevent changing the structure of package.json file during upgrade ([@blzsaa](https://github.com/blzsaa))
+* `@vue/cli-service`
+  * [#7023](https://github.com/vuejs/vue-cli/pull/7023) fix: windows vue.config.mjs support ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+
+#### Committers: 3
+- Martijn Jacobs ([@maerteijn](https://github.com/maerteijn))
+- ZHAO Jinxiang ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+- [@blzsaa](https://github.com/blzsaa)
+
+
+
+## 5.0.4 (2022-03-22)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#7005](https://github.com/vuejs/vue-cli/pull/7005) Better handling of `publicPath: 'auto'` ([@AndreiSoroka](https://github.com/AndreiSoroka))
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * [75826d6](https://github.com/vuejs/vue-cli/commit/75826d6) fix: replace `node-ipc` with `@achrinza/node-ipc` to further secure the dependency chain
+
+#### Committers: 1
+- Andrei ([@AndreiSoroka](https://github.com/AndreiSoroka))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+## 5.0.3 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * Lock `node-ipc` to v9.2.1
+
+## 5.0.2 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#7044](https://github.com/vuejs/vue-cli/pull/7044) fix(cli-service):  devServer proxy should be optional ([@ntnyq](https://github.com/ntnyq))
+  * [#7039](https://github.com/vuejs/vue-cli/pull/7039) chore: add scss to LoaderOptions ([@hiblacker](https://github.com/hiblacker))
+
+#### Committers: 2
+- Blacker ([@hiblacker](https://github.com/hiblacker))
+- ntnyq ([@ntnyq](https://github.com/ntnyq))
+
+
+## 5.0.1 (2022-02-17)
+
+Same as 5.0.0.
+
+## 5.0.0 (2022-02-17)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6972](https://github.com/vuejs/vue-cli/pull/6972) Remove --skip-plugin from arguments ([@MatthijsBurgh](https://github.com/MatthijsBurgh))
+  * [#6987](https://github.com/vuejs/vue-cli/pull/6987) fix: update mini-css-extract-plugin to ^2.5.3 ([@darrinmn9](https://github.com/darrinmn9))
+
+#### :memo: Documentation
+* [#6706](https://github.com/vuejs/vue-cli/pull/6706) docs: update vue create --help output in "Basics/Creating a Project" ([@Lalaluka](https://github.com/Lalaluka))
+* [#6642](https://github.com/vuejs/vue-cli/pull/6642) docs: Update README.md ([@wxsms](https://github.com/wxsms))
+* [#6620](https://github.com/vuejs/vue-cli/pull/6620) Fix typo in deployment guide ([@Klikini](https://github.com/Klikini))
+* [#6623](https://github.com/vuejs/vue-cli/pull/6623) fix(docs): the plugin-dev in zh has a regexp lose the end / ([@HelloJiya](https://github.com/HelloJiya))
+* [#6377](https://github.com/vuejs/vue-cli/pull/6377) replace master with main to reflect GH default ([@anbnyc](https://github.com/anbnyc))
+* [#6359](https://github.com/vuejs/vue-cli/pull/6359) Fix master to main in heroku deployment ([@MowlCoder](https://github.com/MowlCoder))
+* [#6266](https://github.com/vuejs/vue-cli/pull/6266) Add note about loader incompatible with webpack 4 ([@JarnoRFB](https://github.com/JarnoRFB))
+* [#6239](https://github.com/vuejs/vue-cli/pull/6239) Update deployment.md ([@anzuj](https://github.com/anzuj))
+* [#6237](https://github.com/vuejs/vue-cli/pull/6237) fix code demo ([@yyzclyang](https://github.com/yyzclyang))
+
+#### Committers: 13
+- Alec Barrett ([@anbnyc](https://github.com/anbnyc))
+- Alexander Sokolov ([@Alex-Sokolov](https://github.com/Alex-Sokolov))
+- Andy Castille ([@Klikini](https://github.com/Klikini))
+- Anzelika  ([@anzuj](https://github.com/anzuj))
+- Ben Hutton ([@Relequestual](https://github.com/Relequestual))
+- Calvin Schröder ([@Lalaluka](https://github.com/Lalaluka))
+- Darrin Nagengast ([@darrinmn9](https://github.com/darrinmn9))
+- Matthijs van der Burgh ([@MatthijsBurgh](https://github.com/MatthijsBurgh))
+- Rüdiger Busche ([@JarnoRFB](https://github.com/JarnoRFB))
+- [@HelloJiya](https://github.com/HelloJiya)
+- [@MowlCoder](https://github.com/MowlCoder)
+- wxsm ([@wxsms](https://github.com/wxsms))
+- 鱼依藻常乐 ([@yyzclyang](https://github.com/yyzclyang))
+
+
+
+## 5.0.0-rc.3 (2022-02-10)
+
+#### :rocket: New Features
+* `@vue/cli-service`
+  * [#6980](https://github.com/vuejs/vue-cli/pull/6980) feat: add build stats hash support ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#6520](https://github.com/vuejs/vue-cli/pull/6520) feat: Upgraded Nightwatch to 2.0, updated distribued config ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+
+#### :boom: Breaking Changes
+* `@vue/cli-plugin-typescript`, `@vue/cli-service`
+  * [#6985](https://github.com/vuejs/vue-cli/pull/6985) feat!: make `cache-loader` optional ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-nightwatch`
+  * [#6520](https://github.com/vuejs/vue-cli/pull/6520) feat: Upgraded Nightwatch to 2.0, updated distribued config ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+
+#### :bug: Bug Fix
+* `@vue/cli-ui`
+  * [#6969](https://github.com/vuejs/vue-cli/pull/6969) fix: remove non standard rel=shortcut ([@Rotzbua](https://github.com/Rotzbua))
+
+#### Committers: 6
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+- Rotzbua ([@Rotzbua](https://github.com/Rotzbua))
+- Simon Stieger ([@sstieger](https://github.com/sstieger))
+- Vaibhav Singh ([@vaibhavsingh97](https://github.com/vaibhavsingh97))
+- ZHAO Jinxiang ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+- [@DarknessChaser](https://github.com/DarknessChaser)
+
+
+
+## 5.0.0-rc.2 (2022-01-15)
+
+#### :rocket: New Features
+* `@vue/cli-ui`, `@vue/cli`
+  * [#6917](https://github.com/vuejs/vue-cli/pull/6917) feat!: make Vue 3 the default version for `vue create` ([@sodatea](https://github.com/sodatea))
+
+#### :boom: Breaking Changes
+* `@vue/cli-ui`, `@vue/cli`
+  * [#6917](https://github.com/vuejs/vue-cli/pull/6917) feat!: make Vue 3 the default version for `vue create` ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-service`
+  * [#6872](https://github.com/vuejs/vue-cli/pull/6872) chore: use vue-loader v17 ([@cexbrayat](https://github.com/cexbrayat))
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#6944](https://github.com/vuejs/vue-cli/pull/6944) fix: set mini-css-extract-plugin to 2.4.5 ([@cexbrayat](https://github.com/cexbrayat))
+  * [#6907](https://github.com/vuejs/vue-cli/pull/6907) fix: use `setupMiddlewares`, avoid dev server deprecation warnings ([@sodatea](https://github.com/sodatea))
+* `@vue/cli-plugin-e2e-cypress`
+  * [#6926](https://github.com/vuejs/vue-cli/pull/6926) fix: Update cypress api link to the latest ([@justforuse](https://github.com/justforuse))
+
+#### Committers: 3
+- Allen ([@justforuse](https://github.com/justforuse))
+- Cédric Exbrayat ([@cexbrayat](https://github.com/cexbrayat))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
 ## 5.0.0-rc.1 (2021-11-17)
 
 #### :rocket: New Features
@@ -693,6 +856,54 @@ Ngo Wei Lin ([@Creastery](https://twitter.com/creastery)) of STAR Labs ([@starla
 - Tony Trinh ([@tony19](https://github.com/tony19))
 - Yazhe Wang ([@jeneser](https://github.com/jeneser))
 
+
+## 4.5.19 (2022-06-28)
+
+IMPORTANT NOTE: [IE 11 has reached End-of-Life](https://docs.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge#what-is-the-lifecycle-policy-for-internet-explorer-). The default `browserslist` query no longer includes IE 11 as a target.
+If your project still has to support IE 11, you **MUST** manually add `IE 11` to the last line of the `.browserslistrc` file in the project (or `browserslist` field in `package.json`)
+
+#### :bug: Bug Fix
+
+* `@vue/babel-preset-app`
+  * [[c7fa1cf](https://github.com/vuejs/vue-cli/commit/c7fa1cf)] fix: always transpile syntaxes introduced in ES2020 or later, so that optional chaining and nullish coalescing syntaxes won't cause errors in webpack 4 and ESLint 6.
+* `@vue/cli-plugin-typescript`
+  * [[5b57792](https://github.com/vuejs/vue-cli/commit/5b57792)] fix: typechecking with Vue 2.7, fixes #7213
+
+
+## 4.5.18 (2022-06-16)
+
+Fix compatibility with the upcoming Vue 2.7 (currently in alpha) and Vue Loader 15.10 (currently in beta).
+
+In Vue 2.7, `vue-template-compiler` is no longer a required peer dependency. Rather, there's a new export under the main package as `vue/compiler-sfc`.
+
+
+## 4.5.17 (2022-03-23)
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * [d7a9881](https://github.com/vuejs/vue-cli/commit/d7a9881) fix: replace `node-ipc` with `@achrinza/node-ipc` to further secure the dependency chain
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+## 4.5.16 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * Fix demo-lib.html and demo-wc.html for Vue 2
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * Lock `node-ipc` to v9.2.1
+
+
+## 4.5.15 (2021-10-28)
+
+#### Bug Fixes
+
+* fix: set `.mjs` file type to `javascript/auto` [[15b1e1b]](https://github.com/vuejs/vue-cli/commit/15b1e1b6bfa40fe0b69db304a2439c66ff9ba65f)
+
+This change allows an `.mjs` file to import named exports from `.cjs` and plain `.js` files.
+Fixes compatibility with `pinia`.
 
 
 ## 4.5.14 (2021-10-14)

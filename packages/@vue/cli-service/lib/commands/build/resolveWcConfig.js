@@ -89,6 +89,7 @@ module.exports = (api, { target, entry, name, 'inline-vue': inlineVue }) => {
             inject: false,
             filename: 'demo.html',
             libName,
+            vueMajor,
             components:
               prefix === ''
                 ? [libName]

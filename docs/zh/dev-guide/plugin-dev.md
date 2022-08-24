@@ -152,7 +152,7 @@ export default {
 extend: '@vue/cli-service/generator/template/src/App.vue'
 replace:
   - !!js/regexp /Welcome to Your Vue\.js App/
-  - !!js/regexp /<script>[^]*?<\/script>
+  - !!js/regexp /<script>[^]*?<\/script>/
 ---
 
 <%# REPLACE %>
@@ -347,7 +347,7 @@ api.registerCommand(
     description: 'Write a greeting to the console',
     usage: 'vue-cli-service greet'
   },
-  () = > {
+  () => {
     console.log(`👋  Hello`)
   }
 )

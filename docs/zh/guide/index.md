@@ -4,10 +4,6 @@ sidebarDepth: 0
 
 # 介绍
 
-::: warning 警告
-这份文档是对应 `@vue/cli`。老版本的 `vue-cli` 文档请移步[这里](https://github.com/vuejs/vue-cli/tree/v2#vue-cli--)。
-:::
-
 Vue CLI 是一个基于 Vue.js 进行快速开发的完整系统，提供：
 
 - 通过 `@vue/cli` 实现的交互式的项目脚手架。

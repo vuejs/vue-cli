@@ -7,9 +7,9 @@ sidebar: auto
 First, install the latest Vue CLI globally:
 
 ```bash
-npm install -g @vue/cli@next
+npm install -g @vue/cli
 # OR
-yarn global add @vue/cli@next
+yarn global add @vue/cli
 ```
 
 ## Upgrade All Plugins at Once
@@ -17,7 +17,7 @@ yarn global add @vue/cli@next
 In your existing projects, run:
 
 ```bash
-vue upgrade --next
+vue upgrade
 ```
 
 And then follow the command line instructions.
@@ -122,6 +122,7 @@ module.exports = {
 * `terser-webpack-plugin` is upgraded from v2 to v5, using terser 5 and some there are some changes in the options format. See full details in its [changelog](https://github.com/webpack-contrib/terser-webpack-plugin/blob/master/CHANGELOG.md).
 * When creating new projects, the default `less-loader` is updated from [v5 to v8](https://github.com/webpack-contrib/less-loader/blob/master/CHANGELOG.md); `less` from [v3 to v4](https://github.com/less/less.js/pull/3573); `sass-loader` from [v8 to v11](https://github.com/webpack-contrib/sass-loader/blob/master/CHANGELOG.md); `stylus-loader` from [v3 to v5](https://github.com/webpack-contrib/stylus-loader/blob/master/CHANGELOG.md).
 * `mini-css-extract-plugin` is upgraded from [v1 to v2](https://github.com/webpack-contrib/mini-css-extract-plugin/blob/master/CHANGELOG.md).
+* `cache-loader` is removed. If you want to use it, please install it manually.
 
 ### Babel Plugin
 
@@ -157,6 +158,10 @@ Please consider switching to ESLint. You can check out [`tslint-to-eslint-config
 ### E2E-WebDriverIO Plugin
 
 * WebDriverIO is updated from v6 to v7. Not many user-facing breaking changes. See the [blog post on release](https://webdriver.io/blog/2021/02/09/webdriverio-v7-released) for more details.
+
+### E2E-Nightwatch Plugin
+
+* Nightwatch is updated from v1 to v2. See the [blog post](https://nightwatchjs.org/guide/getting-started/whats-new-v2.html) for more details. And there's a [migration guide](https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-2.0), too.
 
 ### Unit-Jest Plugin
 

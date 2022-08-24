@@ -110,14 +110,14 @@ test('build w/ multi page', async () => {
   const assertSharedAssets = file => {
     // should split and preload vendor chunk
     // expect(file).toMatch(/<link [^>]*js\/chunk-vendors[^>]*\.js" rel="preload" as="script">/)
-    expect(file).toMatch(/<script [^>]*src="\/js\/chunk-vendors\.\w+\.js" type="module">/)
+    expect(file).toMatch(/<script [^>]*type="module" src="\/js\/chunk-vendors\.\w+\.js">/)
   }
 
   const index = await project.read('dist/index.html')
   assertSharedAssets(index)
   // should split and preload common js and css
   // expect(index).toMatch(/<link [^>]*js\/chunk-common[^>]*\.js" rel="preload" as="script">/)
-  expect(index).toMatch(/<script [^>]*src="\/js\/chunk-common\.\w+\.js" type="module">/)
+  expect(index).toMatch(/<script [^>]*type="module" src="\/js\/chunk-common\.\w+\.js">/)
   expect(index).toMatch(/<link href="\/css\/chunk-common\.\w+\.css" rel="stylesheet">/)
   // expect(index).toMatch(/<link [^>]*chunk-common[^>]*\.css" rel="preload" as="style">/)
   // should preload correct page file
@@ -128,9 +128,9 @@ test('build w/ multi page', async () => {
   // expect(index).toMatch(/<link [^>]*css\/chunk-\w+\.\w+\.css" rel="prefetch">/)
   // expect(index).toMatch(/<link [^>]*js\/chunk-\w+\.\w+\.js" rel="prefetch">/)
   // should load correct page js
-  expect(index).toMatch(/<script [^>]*src="\/js\/index\.\w+\.js" type="module">/)
-  expect(index).not.toMatch(/<script [^>]*src="\/js\/foo\.\w+\.js" type="module">/)
-  expect(index).not.toMatch(/<script [^>]*src="\/js\/bar\.\w+\.js" type="module">/)
+  expect(index).toMatch(/<script [^>]*type="module" src="\/js\/index\.\w+\.js">/)
+  expect(index).not.toMatch(/<script [^>]*type="module" src="\/js\/foo\.\w+\.js">/)
+  expect(index).not.toMatch(/<script [^>]*type="module" src="\/js\/bar\.\w+\.js">/)
 
   const foo = await project.read('dist/foo.html')
   assertSharedAssets(foo)
@@ -143,9 +143,9 @@ test('build w/ multi page', async () => {
   // expect(foo).not.toMatch(/<link [^>]*css\/chunk-\w+\.\w+\.css" rel="prefetch">/)
   // expect(foo).not.toMatch(/<link [^>]*js\/chunk-\w+\.\w+\.js" rel="prefetch">/)
   // should load correct page js
-  expect(foo).not.toMatch(/<script [^>]*src="\/js\/index\.\w+\.js" type="module">/)
-  expect(foo).toMatch(/<script [^>]*src="\/js\/foo\.\w+\.js" type="module">/)
-  expect(foo).not.toMatch(/<script [^>]*src="\/js\/bar\.\w+\.js" type="module">/)
+  expect(foo).not.toMatch(/<script [^>]*type="module" src="\/js\/index\.\w+\.js">/)
+  expect(foo).toMatch(/<script [^>]*type="module" src="\/js\/foo\.\w+\.js">/)
+  expect(foo).not.toMatch(/<script [^>]*type="module" src="\/js\/bar\.\w+\.js">/)
 
   const bar = await project.read('dist/bar.html')
   assertSharedAssets(bar)
@@ -162,9 +162,9 @@ test('build w/ multi page', async () => {
   // expect(bar).toMatch(/<link [^>]*css\/chunk-\w+\.\w+\.css" rel="prefetch">/)
   // expect(bar).toMatch(/<link [^>]*js\/chunk-\w+\.\w+\.js" rel="prefetch">/)
   // should load correct page js
-  expect(bar).not.toMatch(/<script [^>]*src="\/js\/index\.\w+\.js" type="module">/)
-  expect(bar).not.toMatch(/<script [^>]*src="\/js\/foo\.\w+\.js" type="module">/)
-  expect(bar).toMatch(/<script [^>]*src="\/js\/bar\.\w+\.js" type="module">/)
+  expect(bar).not.toMatch(/<script [^>]*type="module" src="\/js\/index\.\w+\.js" >/)
+  expect(bar).not.toMatch(/<script [^>]*type="module" src="\/js\/foo\.\w+\.js" >/)
+  expect(bar).toMatch(/<script [^>]*type="module" src="\/js\/bar\.\w+\.js">/)
 
   // assert pages work
   const port = await portfinder.getPortPromise()

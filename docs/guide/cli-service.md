@@ -135,10 +135,10 @@ npx vue-cli-service build --skip-plugins pwa
 This option is available for _every_ `vue-cli-service` command, including custom ones added by other plugins.
 :::
 
-You can skip multiple plugins by passing their names as a comma-separated list:
+You can skip multiple plugins by passing their names as a comma-separated list or by repeating the argument:
 
 ```bash
-npx vue-cli-service build --skip-plugins pwa,apollo
+npx vue-cli-service build --skip-plugins pwa,apollo --skip-plugins eslint
 ```
 
 Plugin names are resolved the same way they are during install, as described [here](./plugins-and-presets.md#installing-plugins-in-an-existing-project)
