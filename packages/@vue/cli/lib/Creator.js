@@ -167,7 +167,8 @@ module.exports = class Creator extends EventEmitter {
     // generate a .npmrc file for pnpm, to persist the `shamefully-flatten` flag
     if (packageManager === 'pnpm') {
       const pnpmConfig = hasPnpmVersionOrLater('4.0.0')
-        ? 'shamefully-hoist=true\n'
+        // pnpm v7 makes breaking change to set strict-peer-dependencies=true by default, which may cause some problems when installing
+        ? 'shamefully-hoist=true\nstrict-peer-dependencies=false\n'
         : 'shamefully-flatten=true\n'
 
       await writeFileTree(context, {
