@@ -1,10 +1,9 @@
 const fs = require('fs-extra')
-const path = require('path')
-const homedir = require('os').homedir()
 const { get, set, unset, error, launch } = require('@vue/cli-shared-utils')
+const {getRcPath} = require('./util/rcPath');
 
 async function configure (value, options) {
-  const file = path.resolve(homedir, '.vuerc')
+  const file = getRcPath('.vuerc')
   const config = await fs.readJson(file)
 
   if (!options.delete && !options.get && !options.edit && !options.set) {
