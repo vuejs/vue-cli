@@ -194,7 +194,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 
   Whether to use the build of Vue core that includes the runtime compiler. Setting it to `true` will allow you to use the `template` option in Vue components, but will incur around an extra 10kb payload for your app.
 
-  See also: [Runtime + Compiler vs. Runtime only](https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only).
+  See also: [Runtime + Compiler vs. Runtime only](https://v2.vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only).
 
 ### transpileDependencies
 
