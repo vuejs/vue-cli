@@ -214,13 +214,14 @@ module.exports = (api, options) => {
 
       proxy: proxySettings,
 
-      static: {
-        directory: api.resolve('public'),
-        publicPath: options.publicPath,
-        watch: !isProduction,
-
-        ...projectDevServerOptions.static
-      },
+      static: genDevServerStatic(
+        {
+          directory: api.resolve('public'),
+          publicPath: options.publicPath,
+          watch: !isProduction
+        },
+        projectDevServerOptions.static
+      ),
 
       client: {
         webSocketURL,
@@ -390,6 +391,28 @@ function genHistoryApiFallbackRewrites (baseUrl, pages = {}) {
     ...multiPageRewrites,
     { from: /./, to: path.posix.join(baseUrl, 'index.html') }
   ]
+}
+
+function genDevServerStatic (defaultOptions, userStatic) {
+  if (typeof userStatic === 'boolean') {
+    return userStatic ? defaultOptions : undefined
+  }
+  if (typeof userStatic === 'string') {
+    return {
+      ...defaultOptions,
+      directory: userStatic
+    }
+  }
+  if (Array.isArray(userStatic)) {
+    return userStatic.map((s) => genDevServerStatic(defaultOptions, s))
+  }
+  if (typeof userStatic === 'object') {
+    return {
+      ...defaultOptions,
+      ...userStatic
+    }
+  }
+  return defaultOptions
 }
 
 module.exports.defaultModes = {
