@@ -369,6 +369,10 @@ function checkInContainer () {
     return true
   }
   const fs = require('fs')
+  // Detect cgroup v2 - https://unix.stackexchange.com/a/668244
+  if (fs.existsSync(`/sys/fs/cgroup/cgroup.controllers`)) { return true }
+
+  // Detect cgroup v1
   if (fs.existsSync(`/proc/1/cgroup`)) {
     const content = fs.readFileSync(`/proc/1/cgroup`, 'utf-8')
     return /:\/(lxc|docker|kubepods(\.slice)?)\//.test(content)
