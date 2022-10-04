@@ -370,7 +370,9 @@ function checkInContainer () {
   }
   const fs = require('fs')
   // Detect cgroup v2 - https://unix.stackexchange.com/a/668244
-  if (fs.existsSync(`/sys/fs/cgroup/cgroup.controllers`)) { return true }
+  if (fs.existsSync(`/sys/fs/cgroup/cgroup.controllers`)) {
+    return fs.existsSync(`/.dockerenv`)
+  }
 
   // Detect cgroup v1
   if (fs.existsSync(`/proc/1/cgroup`)) {
