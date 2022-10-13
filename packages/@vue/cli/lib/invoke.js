@@ -128,12 +128,8 @@ async function runGenerator (context, plugin, pkg = getPkg(context)) {
 
   if (afterInvokeCbs.length || afterAnyInvokeCbs.length) {
     logWithSpinner('⚓', `Running completion hooks...`)
-    for (const cb of afterInvokeCbs) {
-      await cb()
-    }
-    for (const cb of afterAnyInvokeCbs) {
-      await cb()
-    }
+    await Promise.all(afterInvokeCbs.map((cb) => cb()))
+    await Promise.all(afterAnyInvokeCbs.map((cb) => cb()))
     stopSpinner()
     log()
   }
