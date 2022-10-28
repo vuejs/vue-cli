@@ -134,6 +134,7 @@ pages: # the job must be named pages
     - mv dist public # rename the dist folder (result of npm run build)
     # optionally, you can activate gzip support with the following line:
     - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
+    - cp public/index.html public/404.html # without this, reloading on a route other than root throws error 404
   artifacts:
     paths:
       - public # artifact path must be /public for GitLab Pages to pick it up
