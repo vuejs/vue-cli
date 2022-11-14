@@ -33,7 +33,8 @@ module.exports = (api, options) => {
         .after('html')
 
     // generate /service-worker.js in production mode
-    if (process.env.NODE_ENV === 'production') {
+    // or when local service worker development is allowed
+    if (process.env.NODE_ENV === 'production' || process.env.VUE_APP_ALLOW_LOCAL_SW === 'true') {
       // Default to GenerateSW mode, though InjectManifest also might be used.
       const workboxPluginMode = userOptions.workboxPluginMode || 'GenerateSW'
       const workboxWebpackModule = require('workbox-webpack-plugin')
@@ -67,8 +68,11 @@ module.exports = (api, options) => {
   })
 
   // install dev server middleware for resetting service worker during dev
-  const createNoopServiceWorkerMiddleware = require('./lib/noopServiceWorkerMiddleware')
-  api.configureDevServer(app => {
-    app.use(createNoopServiceWorkerMiddleware())
-  })
+  // when local service worker development is not allowed (default)
+  if(process.env.VUE_APP_ALLOW_LOCAL_SW !== 'true') {
+    const createNoopServiceWorkerMiddleware = require('./lib/noopServiceWorkerMiddleware')
+    api.configureDevServer(app => {
+      app.use(createNoopServiceWorkerMiddleware())
+    })
+  }
 }
