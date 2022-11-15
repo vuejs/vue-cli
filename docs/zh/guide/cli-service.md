@@ -6,7 +6,7 @@
 
 这是你使用默认 preset 的项目的 `package.json`：
 
-``` json
+```json
 {
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -74,6 +74,7 @@ npx vue-cli-service serve
   --report      生成 report.html 以帮助分析包内容
   --report-json 生成 report.json 以帮助分析包内容
   --watch       监听文件变化
+  --no-module   为现代浏览器构建应用程序不会回退构建应用
 ```
 
 `vue-cli-service build` 会在 `dist/` 目录产生一个可用于生产环境的包，带有 JS/CSS/HTML 的压缩，和为更好的缓存而做的自动的 vendor chunk splitting。它的 chunk manifest 会内联在 HTML 里。
@@ -122,12 +123,12 @@ npx vue-cli-service help [command]
 
 在安装之后，`@vue/cli-service` 也会安装 [yorkie](https://github.com/yyx990803/yorkie)，它会让你在 `package.json` 的 `gitHooks` 字段中方便地指定 Git hook：
 
-``` json
+```json
 {
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
-   "lint-staged": {
+  "lint-staged": {
     "*.{js,vue}": "vue-cli-service lint"
   }
 }
