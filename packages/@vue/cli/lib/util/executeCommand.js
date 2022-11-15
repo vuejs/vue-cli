@@ -84,7 +84,7 @@ exports.executeCommand = function executeCommand (command, args, cwd) {
         if (str && command === 'yarn' && str.indexOf('"type":') !== -1) {
           const newLineIndex = str.lastIndexOf('\n')
           if (newLineIndex !== -1) {
-            str = str.substr(newLineIndex)
+            str = str.slice(newLineIndex)
           }
           try {
             const data = JSON.parse(str)

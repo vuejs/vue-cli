@@ -31,9 +31,9 @@ exports.buildDepModules = function (modules) {
       let name = pathParts[1]
       if (name.charAt(0) === '@') {
         // Scoped package
-        name = name.substr(0, name.indexOf('/', name.indexOf('/') + 1))
+        name = name.slice(0, name.indexOf('/', name.indexOf('/') + 1))
       } else {
-        name = name.substr(0, name.indexOf('/'))
+        name = name.slice(0, name.indexOf('/'))
       }
       let dep = deps.get(name)
       if (!dep) {

@@ -24,7 +24,7 @@ exports.auditProject = async function (cwd) {
         const errLines = child.stderr.split('\n').map(l => l.trim()).filter(l => l)
         const error = errLines.find(l => l.startsWith('Error:'))
         if (error) {
-          throw new Error(error.substr('Error:'.length).trim())
+          throw new Error(error.slice('Error:'.length).trim())
         }
       }
 

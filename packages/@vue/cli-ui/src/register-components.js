@@ -12,7 +12,7 @@ const requireComponent = require.context('./components', true, /[a-z0-9]+\.(jsx?
 requireComponent.keys().forEach(fileName => {
   const componentConfig = requireComponent(fileName)
   const componentName = fileName
-    .substr(fileName.lastIndexOf('/') + 1)
+    .slice(fileName.lastIndexOf('/') + 1)
     // Remove the file extension from the end
     .replace(/\.\w+$/, '')
   // Globally register the component

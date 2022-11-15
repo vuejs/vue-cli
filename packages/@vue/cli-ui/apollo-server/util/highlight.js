@@ -30,7 +30,7 @@ export function highlightCode (filename, content, lang = null) {
     language = languages.find(l => l.test.test(filename))
   }
   if (!language) {
-    const ext = path.extname(filename).substr(1)
+    const ext = path.extname(filename).slice(1)
     if (Prism.languages[ext]) {
       language = { lang: ext }
     }
