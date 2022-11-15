@@ -257,11 +257,16 @@ module.exports = (api, options) => {
       }
     }), compiler)
 
+    const exitProcess = () => process.exit(0)
+
+    // fix: webpack-dev-server doesn't exit on Ctrl+C
+    ;['SIGINT', 'SIGTERM'].forEach(signal => {
+      process.on(signal, exitProcess)
+    })
+
     if (args.stdin) {
       process.stdin.on('end', () => {
-        server.stopCallback(() => {
-          process.exit(0)
-        })
+        server.stopCallback(exitProcess)
       })
 
       process.stdin.resume()
@@ -273,9 +278,7 @@ module.exports = (api, options) => {
       process.stdin.on('data', data => {
         if (data.toString() === 'close') {
           console.log('got close signal!')
-          server.stopCallback(() => {
-            process.exit(0)
-          })
+          server.stopCallback(exitProcess)
         }
       })
     }
