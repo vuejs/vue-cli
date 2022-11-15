@@ -60,7 +60,7 @@ module.exports = (api, rootOptions) => {
 
     if (!hasPostCSSConfig) {
       // #6342
-      // NPM 6 may incorrectly hoist postcss 7 to the same level of autoprefixer
+      // npm 6 may incorrectly hoist postcss 7 to the same level of autoprefixer
       // So we have to run a preflight check to tell the users how to fix it
       const autoprefixerDirectory = path.dirname(require.resolve('autoprefixer/package.json'))
       const postcssPkg = loadModule('postcss/package.json', autoprefixerDirectory)

@@ -42,7 +42,7 @@ If you want to migrate manually and gradually, you can run `vue upgrade <the-plu
 ### For All Packages
 
 * Drop support of Node.js 8-11 and 13
-* Drop support of NPM 5
+* Drop support of npm 5
 
 ### The `vue` Command (The Global `@vue/cli` Package)
 
