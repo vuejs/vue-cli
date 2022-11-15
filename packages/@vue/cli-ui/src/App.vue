@@ -19,7 +19,7 @@ import ROUTE_REQUESTED from '@/graphql/app/routeRequested.gql'
 
 export default {
   metaInfo: {
-    titleTemplate: chunk => chunk ? `[Beta] ${chunk} - Vue CLI` : '[Beta] Vue CLI'
+    titleTemplate: chunk => chunk ? `${chunk} - Vue CLI` : 'Vue CLI'
   },
 
   computed: {
