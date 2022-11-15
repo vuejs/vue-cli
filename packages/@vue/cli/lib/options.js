@@ -53,7 +53,6 @@ const schema = createSchema(joi => joi.object().keys({
   latestVersion: joi.string().regex(/^\d+\.\d+\.\d+(-(alpha|beta|rc)\.\d+)?$/),
   lastChecked: joi.date().timestamp(),
   packageManager: joi.string().valid('yarn', 'npm', 'pnpm'),
-  useTaobaoRegistry: joi.boolean(),
   presets: joi.object().pattern(/^/, presetSchema)
 }))
 
@@ -78,7 +77,6 @@ exports.defaults = {
   latestVersion: undefined,
 
   packageManager: undefined,
-  useTaobaoRegistry: undefined,
   presets: {
     'Default (Vue 3)': Object.assign({ vueVersion: '3' }, exports.defaultPreset),
     'Default (Vue 2)': Object.assign({ vueVersion: '2' }, exports.defaultPreset)
