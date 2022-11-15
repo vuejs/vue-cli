@@ -46,6 +46,7 @@ const defaultManifest = {
 
 const defaultIconPaths = {
   faviconSVG: 'img/icons/favicon.svg',
+  favicon48: 'img/icons/favicon-48x48.png',
   favicon32: 'img/icons/favicon-32x32.png',
   favicon16: 'img/icons/favicon-16x16.png',
   appleTouchIcon: 'img/icons/apple-touch-icon-152x152.png',
@@ -90,6 +91,14 @@ module.exports = class HtmlPwaPlugin {
             rel: 'icon',
             type: 'image/svg+xml',
             href: getTagHref(publicPath, iconPaths.faviconSVG, assetsVersionStr)
+          }))
+        }
+        if (iconPaths.favicon48 != null) {
+          data.headTags.push(makeTag('link', {
+            rel: 'icon',
+            type: 'image/png',
+            sizes: '48x48',
+            href: getTagHref(publicPath, iconPaths.favicon48, assetsVersionStr)
           }))
         }
         if (iconPaths.favicon32 != null) {
