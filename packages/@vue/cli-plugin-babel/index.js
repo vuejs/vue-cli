@@ -10,7 +10,9 @@ function getDepPathRegex (dependencies) {
         ? depPath.replace(/\\/g, '\\\\') // double escape for windows style path
         : depPath
     } else if (dep instanceof RegExp) {
-      return dep.source
+      return isWindows
+        ? dep.source.replace(/\\\//g, '\\\\') // /@scope\/external-(dep1|dep2)/ >>> /@scope\\external-(dep1|dep2)/
+        : dep.source
     }
 
     throw new Error('transpileDependencies only accepts an array of string or regular expressions')
