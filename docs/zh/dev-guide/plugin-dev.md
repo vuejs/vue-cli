@@ -18,7 +18,7 @@ sidebarDepth: 3
 不要过度使用 vue-cli 插件！如果你仅希望包含特定的插件，例如，[Lodash](https://lodash.com/) - 相比创建一个特定的插件，通过 npm 手动安装更加简单。
 :::
 
-CLI 插件应该总是包含一个 [service 插件](#service-plugin) 做为主的导出，并且他能够选择性的包含 [generator](#generator), [prompt 文件](#prompts) 和 [Vue UI 集成](#ui-integration)。
+CLI 插件应该总是包含一个 [service 插件](#service-插件) 做为主的导出，并且他能够选择性的包含 [generator](#generator), [prompt 文件](#对话) 和 [Vue UI 集成](#ui-集成)。
 
 作为一个 npm 包，CLI 插件必须有一个 `package.json` 文件。通常建议在 `README.md` 中包含插件的描述，来帮助其他人在 npm 上发现你的插件。
 
@@ -226,13 +226,13 @@ module.exports = api => {
 }
 ```
 
-在上面这个例子中，我们添加了一个新的 `greet` 任务来执行一个创建在 [Service 部分](#add-a-new-cli-service-command) 的自定义 vue-cli 服务命令。
+在上面这个例子中，我们添加了一个新的 `greet` 任务来执行一个创建在 [Service 部分](#添加一个新的-cli-service-命令) 的自定义 vue-cli 服务命令。
 
 ### 修改主文件
 
 通过 generator 方法你能够修改项目中的文件。最有用的场景是针对 `main.js` 或 `main.ts` 文件的一些修改：新的导入，新的 `Vue.use()` 调用等。
 
-让我们来思考一个场景，当我们通过 [模板](#creating-new-templates) 创建了一个 `router.js` 文件，现在我们希望导入这个路由到主文件中。我们将用到两个 generator API 方法： `entryFile` 将返回项目的主文件（`main.js` 或 `main.ts`），`injectImports` 用于添加新的导入到主文件中：
+让我们来思考一个场景，当我们通过 [模板](#创建新的模板) 创建了一个 `router.js` 文件，现在我们希望导入这个路由到主文件中。我们将用到两个 generator API 方法： `entryFile` 将返回项目的主文件（`main.js` 或 `main.ts`），`injectImports` 用于添加新的导入到主文件中：
 
 ```js
 // generator/index.js
@@ -356,7 +356,7 @@ api.registerCommand(
 在这个例子中，我们提供了命令的名字（`'greet'`）、一个有 `description` 和 `usage` 选项的对象，和一个在执行 `vue-cli-service greet` 命令时会调用的函数。
 
 :::tip
-你可以 [通过 Generator](#extending-package) 添加一个新的命令到项目 `package.json` 文件的 npm 脚本列表中。
+你可以 [通过 Generator](#扩展包) 添加一个新的命令到项目 `package.json` 文件的 npm 脚本列表中。
 :::
 
 如果你在已经安装了插件的项目中运行新命令，你将看到下面的输出：
@@ -492,7 +492,7 @@ module.exports = pkg => {
 vue invoke my-plugin --mode awesome
 ```
 
-对话可以有[不同的类型](https://github.com/SBoudrias/Inquirer.js#prompt-types)，但是在 CLI 大多数使用的是 `checkbox` 和 `confirm`。让我们添加一个 `confirm` 对话，然后在插件的 generator 使用它，来创建一个有条件的[模板渲染](#creating-new-templates)。
+对话可以有[不同的类型](https://github.com/SBoudrias/Inquirer.js#prompt-types)，但是在 CLI 大多数使用的是 `checkbox` 和 `confirm`。让我们添加一个 `confirm` 对话，然后在插件的 generator 使用它，来创建一个有条件的[模板渲染](#创建新的模板)。
 
 ```js
 // prompts.js
@@ -584,9 +584,9 @@ module.exports = api => {
 
 ### 为任务增加 UI 界面
 
-Vue CLI 插件不仅允许你[通过 Generator](#extending-package) 为项目添加新的 npm 任务，也可以在 Vue UI 中为它们创建一个图形界面。如果你想通过 UI 运行任务并且直接看到输出，这是很有用的。
+Vue CLI 插件不仅允许你[通过 Generator](#扩展包) 为项目添加新的 npm 任务，也可以在 Vue UI 中为它们创建一个图形界面。如果你想通过 UI 运行任务并且直接看到输出，这是很有用的。
 
-让我们把之前通过 [Generator](#extending-package) 创建的 `greet` 任务添加到 UI 中。任务列表是从项目的 `package.json` 文件的 `scripts` 字段生成的。你可以根据 `api.describeTask` 方法 '补充' 额外的信息和钩子。让我们为任务添加一些额外的信息：
+让我们把之前通过 [Generator](#扩展包) 创建的 `greet` 任务添加到 UI 中。任务列表是从项目的 `package.json` 文件的 `scripts` 字段生成的。你可以根据 `api.describeTask` 方法 '补充' 额外的信息和钩子。让我们为任务添加一些额外的信息：
 
 ```js
 module.exports = api => {
@@ -608,7 +608,7 @@ module.exports = api => {
 
 ![UI Configuration Screen](/ui-configuration-default.png)
 
-让我们为你的插件建一个自定义的配置。第一步，在你的插件添加到已经存在的项目中之后，应该有个配置文件。这意味着你需要在[模板步骤](#creating-new-templates)将这个文件添加到 `template` 文件夹中。
+让我们为你的插件建一个自定义的配置。第一步，在你的插件添加到已经存在的项目中之后，应该有个配置文件。这意味着你需要在[模板步骤](#创建新的模板)将这个文件添加到 `template` 文件夹中。
 
 默认情况下，一个可配置的 UI 能够读取和写入以下文件类型：`json`，`yaml`，`js`，`package`。让我们命名文件为 `myConfig.js` 将它放入 `template` 的根文件夹：
 
@@ -817,7 +817,7 @@ module.exports = {
 
 ### 展示对话
 
-如果你想，你可以在 Vue UI 中展示[对话](#prompts)。当你通过 UI 安装插件时，对话将在插件的调用步骤中展示。
+如果你想，你可以在 Vue UI 中展示[对话](#对话)。当你通过 UI 安装插件时，对话将在插件的调用步骤中展示。
 
 你可以通过添加额外属性扩展  [inquirer 对象](#prompts-for-3rd-party-plugins)。他们是可选项且仅仅被 UI 使用：
 
