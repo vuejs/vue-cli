@@ -143,7 +143,10 @@ module.exports = (api, options) => {
           entry,
           template = `public/${name}.html`,
           filename = `${name}.html`,
-          chunks = ['chunk-vendors', 'chunk-common', name]
+          chunks = ['chunk-vendors', 'chunk-common', name],
+          templateParameters = (compilation, assets, pluginOptions) => {
+            return Object.assign(htmlOptions.templateParameters(compilation, assets, pluginOptions), templateParameters)
+          }
         } = pageConfig
 
         // Currently Cypress v3.1.0 comes with a very old version of Node,
