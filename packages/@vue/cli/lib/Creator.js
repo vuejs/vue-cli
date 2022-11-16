@@ -222,12 +222,8 @@ module.exports = class Creator extends EventEmitter {
     // run complete cbs if any (injected by generators)
     log(`⚓  Running completion hooks...`)
     this.emit('creation', { event: 'completion-hooks' })
-    for (const cb of afterInvokeCbs) {
-      await cb()
-    }
-    for (const cb of afterAnyInvokeCbs) {
-      await cb()
-    }
+    await Promise.all(afterInvokeCbs.map((cb) => cb()))
+    await Promise.all(afterAnyInvokeCbs.map((cb) => cb()))
 
     if (!generator.files['README.md']) {
       // generate README.md
