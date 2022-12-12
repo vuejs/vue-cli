@@ -60,7 +60,7 @@
     "lerna-changelog": "^2.2.0",
     "lint-staged": "^11.1.2",
     "memfs": "^3.2.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "node-fetch": "^2.6.7",
     "postcss": "8.3.6",
     "prettier": ">= 1.13.0",
