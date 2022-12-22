@@ -96,6 +96,13 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   ::: tip
   `assetsDir` is ignored when overwriting the filename or chunkFilename from the generated assets.
   :::
+ 
+ ### staticResourceDir
+
+- Type: `string`
+- Default: `'public'`
+
+  A static resource directory for `copy-webpack-plugin`.
 
 ### indexPath
 
