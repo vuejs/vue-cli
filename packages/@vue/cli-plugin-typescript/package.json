@@ -31,7 +31,7 @@
     "globby": "^11.0.2",
     "thread-loader": "^3.0.0",
     "ts-loader": "^9.2.5",
-    "webpack": "^5.54.0"
+    "webpack": "^5.77.0"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0",
