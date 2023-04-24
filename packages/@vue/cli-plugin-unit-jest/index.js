@@ -7,7 +7,7 @@ module.exports = api => {
     },
     details:
       `All jest command line options are supported.\n` +
-      `See https://facebook.github.io/jest/docs/en/cli.html for more details.`
+      `See https://jestjs.io/docs/cli for more details.`
   }, (args, rawArgv) => {
     // for @vue/babel-preset-app <= v4.0.0-rc.7
     process.env.VUE_CLI_BABEL_TARGET_NODE = true

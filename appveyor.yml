@@ -1,5 +1,5 @@
 environment:
-  nodejs_version: "12"
+  nodejs_version: "14"
 
 install:
   - ps: Install-Product node $env:nodejs_version
