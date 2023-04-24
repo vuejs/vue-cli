@@ -13,7 +13,7 @@
 
   Usage: `vue-cli-service test:unit [options] <regexForTestFiles>`
 
-  All [Jest command line options](https://facebook.github.io/jest/docs/en/cli.html) are also supported.
+  All [Jest command line options](https://jestjs.io/docs/cli) are also supported.
 
 ## Debugging Tests
 
