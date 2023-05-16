@@ -1,5 +1,5 @@
 const getModulePath = function (identifier) {
-  return identifier.replace(/.*!/, '').replace(/\\/g, '/')
+  return identifier.replace(/.*!/, '').replace(/.pnpm\//, '').replace(/\\/g, '/')
 }
 
 exports.filterModules = function (modules) {
@@ -27,6 +27,9 @@ exports.buildDepModules = function (modules) {
   for (const module of modules) {
     const path = getModulePath(module.identifier)
     const pathParts = path.split('/node_modules/')
+    while (pathParts.length > 2) {
+      pathParts.shift()
+    }
     if (pathParts.length === 2) {
       let name = pathParts[1]
       if (name.charAt(0) === '@') {
