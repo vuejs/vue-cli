@@ -195,7 +195,7 @@ module.exports = defineConfig({
 
   是否使用包含运行时编译器的 Vue 构建版本。设置为 `true` 后你就可以在 Vue 组件中使用 `template` 选项了，但是这会让你的应用额外增加 10kb 左右。
 
-  更多细节可查阅：[Runtime + Compiler vs. Runtime only](https://cn.vuejs.org/v2/guide/installation.html#运行时-编译器-vs-只包含运行时)。
+  更多细节可查阅：[Runtime + Compiler vs. Runtime only](https://v2.cn.vuejs.org/v2/guide/installation.html#运行时-编译器-vs-只包含运行时)。
 
 ### transpileDependencies
 
