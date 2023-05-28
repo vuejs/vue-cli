@@ -70,9 +70,7 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   ``` js
   module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
-      ? '/production-sub-path/'
-      : '/'
-  }
+       
   ```
 
 ### outputDir
@@ -80,16 +78,16 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
 - Type: `string`
 - Default: `'dist'`
 
-  The directory where the production build files will be generated in when running `vue-cli-service build`. Note the target directory contents will be removed before building (this behavior can be disabled by passing `--no-clean` when building).
+  The directory where the production build files will be generated in when running `vue-cli-service build`. Note the target directory contents will be removed before buil
 
   ::: tip
-  Always use `outputDir` instead of modifying webpack `output.path`.
-  :::
+  Always use `outputDir` 
 
 ### assetsDir
 
 - Type: `string`
-- Default: `''`
+- Default: `'index.html'`
+- Por defecto:clien
 
   A directory (relative to `outputDir`) to nest generated static assets (js, css, img, fonts) under.
 
@@ -151,9 +149,9 @@ Deprecated since Vue CLI 3.3, please use [`publicPath`](#publicPath) instead.
   When building in multi-page mode, the webpack config will contain different plugins (there will be multiple instances of `html-webpack-plugin` and `preload-webpack-plugin`). Make sure to run `vue inspect` if you are trying to modify the options for those plugins.
   :::
 
-### lintOnSave
+### pelusaOff
 
-- Type: `boolean | 'warning' | 'default' | 'error'`
+- Escriba: `booleano | 'advertencia' | 'predeterminad' | 'error'`f
 - Default: `'default'`
 
   Whether to perform lint-on-save during development using [eslint-loader](https://github.com/webpack-contrib/eslint-loader). This value is respected only when [`@vue/cli-plugin-eslint`](https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint) is installed.
