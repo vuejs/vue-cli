@@ -31,7 +31,8 @@ async function runMigrator (context, plugin, pkg = getPkg(context)) {
   log(`🚀  Running migrator of ${plugin.id}`)
   await migrator.generate({
     extractConfigFiles: true,
-    checkExisting: true
+    checkExisting: true,
+    sortPackageJson: false
   })
 
   const newDeps = migrator.pkg.dependencies

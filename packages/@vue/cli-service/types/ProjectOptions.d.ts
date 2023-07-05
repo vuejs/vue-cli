@@ -13,6 +13,7 @@ interface PageConfig {
 interface LoaderOptions {
   css?: object;
   sass?: object;
+  scss?: object;
   less?: object;
   stylus?: object;
   postcss?: object;
@@ -111,7 +112,7 @@ interface ProjectOptions {
   /**
    * [All options for `webpack-dev-server`](https://webpack.js.org/configuration/dev-server/) are supported
    */
-  devServer?: { proxy: string | object, [key: string]: any };
+  devServer?: { proxy?: string | object, [key: string]: any };
   /**
    * Default: `undefined`
    *
