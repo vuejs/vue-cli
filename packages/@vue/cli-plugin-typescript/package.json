@@ -23,7 +23,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/core": "^7.22.6",
     "@types/webpack-env": "^1.15.2",
     "@vue/cli-shared-utils": "^5.0.8",
     "babel-loader": "^8.2.2",
