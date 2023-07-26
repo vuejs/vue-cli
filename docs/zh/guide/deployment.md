@@ -326,37 +326,96 @@ vercel
 
 ### Heroku
 
-1. [安装 Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
-2. 创建 `static.json` 文件：
+官方文档
+https://github.com/heroku/heroku-buildpack-nginx
 
-    ```json
-    {
-      "root": "dist",
-      "clean_urls": true,
-      "routes": {
-        "/**": "index.html"
-      }
-    }
-    ```
+`heroku-buildpack-static` 已经被官方声明为弃用，建议使用 NGINX buildpack。这里是如何使用 NGINX buildpack 来部署您的 Vue.js 应用：
 
-3. 将 `static.json` 加入 Git
 
-    ```
-    git add static.json
-    git commit -m "add static configuration"
-    ```
+使用方法：
+1. 创建 Procfile 
+在应用的根目录中创建 Procfile，包含如下内容：
 
-4. 部署到 Heroku
+```
+web: bin/start-nginx-static
+``` 
 
-    ```
-    heroku login
-    heroku create
-    heroku buildpacks:add heroku/nodejs
-    heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
-    git push heroku master
-    ```
+2. 创建配置文件
+将配置文件添加到您的应用中，路径 `config/nginx.conf.erb`。设置应用的文档根目录（默认是 `dist`，这根据框架/构建系统而变化）。
+配置参考[官方文档](https://github.com/heroku/heroku-buildpack-nginx/blob/main/static.md#document-root) 
+config/nginx.conf.erb
+```
+daemon off;
 
-详细信息：https://gist.github.com/hone/24b06869b4c1eca701f9
+pid /app/nginx.pid;
+
+error_log stderr info;
+
+worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
+
+events {
+	use epoll;
+	accept_mutex on;
+	worker_connections <%= ENV['NGINX_WORKER_CONNECTIONS'] || 1024 %>;
+}
+
+http {
+	gzip on;
+	gzip_comp_level 2;
+	gzip_min_length 512;
+	gzip_proxied any;
+
+	server_tokens off;
+
+	log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
+	access_log /dev/stdout l2met;
+
+	include mime.types;
+	default_type application/octet-stream;
+	sendfile on;
+
+	client_body_timeout <%= ENV['NGINX_CLIENT_BODY_TIMEOUT'] || 5 %>;
+
+	server {
+		listen <%= ENV["PORT"] %>;
+		server_name _;
+		keepalive_timeout 5;
+		client_max_body_size <%= ENV['NGINX_CLIENT_MAX_BODY_SIZE'] || 1 %>M;
+
+		if ($http_x_forwarded_proto != "https") {
+			return 301 https://$host$request_uri;
+		}
+
+		root dist;
+
+		location / {
+
+		}
+
+	}
+
+}
+```
+3. **将 修改 加入 Git**。运行以下命令：
+
+```bash
+git commit -am "config for nginx buildpacks"
+```
+4. **部署到 Heroku**
+添加 Buildpack
+```bash
+heroku login
+heroku create
+heroku buildpacks:add heroku/nodejs
+heroku buildpacks:add heroku-community/nginx
+git push heroku main
+```
+
+5. **打开您的应用**。运行以下命令：
+
+```bash
+heroku open
+```
 
 ### Surge
 
