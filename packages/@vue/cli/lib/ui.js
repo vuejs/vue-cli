@@ -68,7 +68,7 @@ async function ui (options = {}, context = process.cwd()) {
     }
   }
 
-  const { httpServer } = server(opts, () => {
+  const { httpServer } = await server(opts, () => {
     // Reset for yarn/npm to work correctly
     if (typeof nodeEnv === 'undefined') {
       delete process.env.NODE_ENV

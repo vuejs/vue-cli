@@ -1,3 +1,74 @@
+
+
+
+
+## 5.0.7 (2022-07-05)
+
+* `@vue/cli-service`
+  * [#7202](https://github.com/vuejs/vue-cli/pull/7202), [[558dea2](https://github.com/vuejs/vue-cli/commit/558dea2)] fix: support `devServer.server` option, avoid deprecation warnings ([@backrunner](https://github.com/backrunner), [@sodatea](https://github.com/sodatea))
+  * [[beffe8a](https://github.com/vuejs/vue-cli/commit/beffe8a)] fix: allow disabling progress plugin via `devServer.client.progress`
+* `@vue/cli-ui`
+  * [#7210](https://github.com/vuejs/vue-cli/pull/7210) chore: upgrade to apollo-server-express 3.x
+
+#### Committers: 2
+- BackRunner ([@backrunner](https://github.com/backrunner))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+
+## 5.0.6 (2022-06-16)
+
+Fix compatibility with the upcoming Vue 2.7 (currently in alpha) and Vue Loader 15.10 (currently in beta).
+
+In Vue 2.7, `vue-template-compiler` is no longer a required peer dependency. Rather, there's a new export under the main package as `vue/compiler-sfc`.
+
+
+
+## 5.0.5 (2022-06-16)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#7167](https://github.com/vuejs/vue-cli/pull/7167) feat(upgrade): prevent changing the structure of package.json file during upgrade ([@blzsaa](https://github.com/blzsaa))
+* `@vue/cli-service`
+  * [#7023](https://github.com/vuejs/vue-cli/pull/7023) fix: windows vue.config.mjs support ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+
+#### Committers: 3
+- Martijn Jacobs ([@maerteijn](https://github.com/maerteijn))
+- ZHAO Jinxiang ([@xiaoxiangmoe](https://github.com/xiaoxiangmoe))
+- [@blzsaa](https://github.com/blzsaa)
+
+
+
+## 5.0.4 (2022-03-22)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#7005](https://github.com/vuejs/vue-cli/pull/7005) Better handling of `publicPath: 'auto'` ([@AndreiSoroka](https://github.com/AndreiSoroka))
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * [75826d6](https://github.com/vuejs/vue-cli/commit/75826d6) fix: replace `node-ipc` with `@achrinza/node-ipc` to further secure the dependency chain
+
+#### Committers: 1
+- Andrei ([@AndreiSoroka](https://github.com/AndreiSoroka))
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+## 5.0.3 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * Lock `node-ipc` to v9.2.1
+
+## 5.0.2 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * [#7044](https://github.com/vuejs/vue-cli/pull/7044) fix(cli-service):  devServer proxy should be optional ([@ntnyq](https://github.com/ntnyq))
+  * [#7039](https://github.com/vuejs/vue-cli/pull/7039) chore: add scss to LoaderOptions ([@hiblacker](https://github.com/hiblacker))
+
+#### Committers: 2
+- Blacker ([@hiblacker](https://github.com/hiblacker))
+- ntnyq ([@ntnyq](https://github.com/ntnyq))
+
+
 ## 5.0.1 (2022-02-17)
 
 Same as 5.0.0.
@@ -785,6 +856,54 @@ Ngo Wei Lin ([@Creastery](https://twitter.com/creastery)) of STAR Labs ([@starla
 - Tony Trinh ([@tony19](https://github.com/tony19))
 - Yazhe Wang ([@jeneser](https://github.com/jeneser))
 
+
+## 4.5.19 (2022-06-28)
+
+IMPORTANT NOTE: [IE 11 has reached End-of-Life](https://docs.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge#what-is-the-lifecycle-policy-for-internet-explorer-). The default `browserslist` query no longer includes IE 11 as a target.
+If your project still has to support IE 11, you **MUST** manually add `IE 11` to the last line of the `.browserslistrc` file in the project (or `browserslist` field in `package.json`)
+
+#### :bug: Bug Fix
+
+* `@vue/babel-preset-app`
+  * [[c7fa1cf](https://github.com/vuejs/vue-cli/commit/c7fa1cf)] fix: always transpile syntaxes introduced in ES2020 or later, so that optional chaining and nullish coalescing syntaxes won't cause errors in webpack 4 and ESLint 6.
+* `@vue/cli-plugin-typescript`
+  * [[5b57792](https://github.com/vuejs/vue-cli/commit/5b57792)] fix: typechecking with Vue 2.7, fixes #7213
+
+
+## 4.5.18 (2022-06-16)
+
+Fix compatibility with the upcoming Vue 2.7 (currently in alpha) and Vue Loader 15.10 (currently in beta).
+
+In Vue 2.7, `vue-template-compiler` is no longer a required peer dependency. Rather, there's a new export under the main package as `vue/compiler-sfc`.
+
+
+## 4.5.17 (2022-03-23)
+
+#### :bug: Bug Fix
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * [d7a9881](https://github.com/vuejs/vue-cli/commit/d7a9881) fix: replace `node-ipc` with `@achrinza/node-ipc` to further secure the dependency chain
+
+#### Committers: 1
+- Haoqun Jiang ([@sodatea](https://github.com/sodatea))
+
+
+## 4.5.16 (2022-03-15)
+
+#### :bug: Bug Fix
+* `@vue/cli-service`
+  * Fix demo-lib.html and demo-wc.html for Vue 2
+* `@vue/cli-shared-utils`, `@vue/cli-ui`
+  * Lock `node-ipc` to v9.2.1
+
+
+## 4.5.15 (2021-10-28)
+
+#### Bug Fixes
+
+* fix: set `.mjs` file type to `javascript/auto` [[15b1e1b]](https://github.com/vuejs/vue-cli/commit/15b1e1b6bfa40fe0b69db304a2439c66ff9ba65f)
+
+This change allows an `.mjs` file to import named exports from `.cjs` and plain `.js` files.
+Fixes compatibility with `pinia`.
 
 
 ## 4.5.14 (2021-10-14)

@@ -29,7 +29,7 @@ module.exports = api => {
             type: 'list',
             message: 'org.vue.pwa.config.pwa.workboxPluginMode.message',
             description: 'org.vue.pwa.config.pwa.workboxPluginMode.description',
-            link: 'https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#which_plugin_to_use',
+            link: 'https://developer.chrome.com/docs/workbox/modules/workbox-webpack-plugin/#which-plugin-to-use',
             default: 'GenerateSW',
             value: data.vue && data.vue.pwa && data.vue.pwa.workboxPluginMode,
             choices: [

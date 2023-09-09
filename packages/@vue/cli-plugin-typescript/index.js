@@ -3,10 +3,6 @@ const path = require('path')
 module.exports = (api, projectOptions) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!projectOptions.parallel
 
-  const { semver, loadModule } = require('@vue/cli-shared-utils')
-  const vue = loadModule('vue', api.service.context)
-  const isVue3 = (vue && semver.major(vue.version) === 3)
-
   api.chainWebpack(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
@@ -82,6 +78,15 @@ module.exports = (api, projectOptions) => {
     // this plugin does not play well with jest + cypress setup (tsPluginE2e.spec.js) somehow
     // so temporarily disabled for vue-cli tests
     if (!process.env.VUE_CLI_TEST) {
+      let vueCompilerPath
+      try {
+        // Vue 2.7+
+        vueCompilerPath = require.resolve('vue/compiler-sfc')
+      } catch (e) {
+        // Vue 2.6 and lower versions
+        vueCompilerPath = require.resolve('vue-template-compiler')
+      }
+
       config
         .plugin('fork-ts-checker')
         .use(require('fork-ts-checker-webpack-plugin'), [{
@@ -89,7 +94,7 @@ module.exports = (api, projectOptions) => {
             extensions: {
               vue: {
                 enabled: true,
-                compiler: isVue3 ? require.resolve('vue/compiler-sfc') : require.resolve('vue-template-compiler')
+                compiler: vueCompilerPath
               }
             },
             diagnosticOptions: {
