@@ -171,10 +171,13 @@ module.exports = defineConfig({
   // vue.config.js
   module.exports = {
     devServer: {
-      overlay: {
-        warnings: true,
-        errors: true
-      }
+      client: {
+        overlay: {
+          errors: true,
+          warnings: false,
+          runtimeErrors: true,
+        },
+      },
     }
   }
   ```
