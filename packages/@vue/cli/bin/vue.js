@@ -110,6 +110,7 @@ program
 program
   .command('build')
   .description('alias of "npm run build" in the current project')
+  .allowUnknownOption()
   .action((cmd) => {
     require('../lib/util/runNpmScript')('build', process.argv.slice(3))
   })
