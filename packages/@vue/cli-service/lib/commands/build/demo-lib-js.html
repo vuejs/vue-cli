@@ -7,5 +7,5 @@
 <% } %>
 
 <script>
-console.log(<%- htmlWebpackPlugin.options.libName %>)
+console.log(globalThis['<%- htmlWebpackPlugin.options.libName %>'])
 </script>

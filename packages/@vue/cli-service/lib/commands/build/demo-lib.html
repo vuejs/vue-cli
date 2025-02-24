@@ -15,13 +15,13 @@
 <% if (htmlWebpackPlugin.options.vueMajor === 3) { %>
 Vue.createApp({
   components: {
-    demo: <%- htmlWebpackPlugin.options.libName %>
+    demo: globalThis['<%- htmlWebpackPlugin.options.libName %>']
   }
 }).mount('#app')
 <% } else { %>
 new Vue({
   components: {
-    demo: <%- htmlWebpackPlugin.options.libName %>
+    demo: globalThis['<%- htmlWebpackPlugin.options.libName %>']
   }
 }).$mount('#app')
 <% } %>
