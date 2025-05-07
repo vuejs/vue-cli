@@ -40,20 +40,20 @@ test('inject import statement for service worker (with TS)', async () => {
 
   expect(files['src/main.ts']).toMatch(`import './registerServiceWorker'`)
 })
+
 test('ReDos test', async () => {
   HtmlWebpackPlugin.getHooks = () => ({
     beforeEmit: {
       tapAsync: (id, handler) => {
-        const hugeHtml = '<link rel="icon"'.repeat(100000) + '\u0000';
-        const data = { html: hugeHtml };
-        handler(data, (err, result) => {
-        });
+        const hugeHtml = '<link rel="icon"'.repeat(100000) + '\u0000'
+        const data = { html: hugeHtml }
+        handler(data, (_err, result) => {})
       }
     },
-    alterAssetTagGroups: { 
+    alterAssetTagGroups: {
       tapAsync: () => {}
     }
-  });
+  })
   const plugin = new HtmlPwaPlugin()
   const fakeCompiler = {
     options: { output: { publicPath: '/' } },
@@ -63,8 +63,7 @@ test('ReDos test', async () => {
           const fakeCompilation = {
             hooks: {
               processAssets: {
-                tap: (_opts, fn) => {
-                }
+                tap: (_opts, fn) => {}
               }
             }
           }
@@ -77,6 +76,6 @@ test('ReDos test', async () => {
   plugin.apply(fakeCompiler)
   const endTime = performance.now()
   const timeTaken = endTime - startTime
-  console.log(` time taken: ${timeTaken.toFixed(3)} ms`)
+  console.log(`time taken: ${timeTaken.toFixed(3)} ms`)
   expect(timeTaken).toBeLessThan(3000)
 }, 3000)
