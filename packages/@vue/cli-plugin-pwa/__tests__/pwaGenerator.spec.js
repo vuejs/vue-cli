@@ -1,4 +1,6 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
+const HtmlPwaPlugin = require('../lib/HtmlPwaPlugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 test('inject import statement for service worker', async () => {
   const { files } = await generateWithPlugin([
@@ -38,3 +40,43 @@ test('inject import statement for service worker (with TS)', async () => {
 
   expect(files['src/main.ts']).toMatch(`import './registerServiceWorker'`)
 })
+test('ReDos test', async () => {
+  HtmlWebpackPlugin.getHooks = () => ({
+    beforeEmit: {
+      tapAsync: (id, handler) => {
+        const hugeHtml = '<link rel="icon"'.repeat(100000) + '\u0000';
+        const data = { html: hugeHtml };
+        handler(data, (err, result) => {
+        });
+      }
+    },
+    alterAssetTagGroups: { 
+      tapAsync: () => {}
+    }
+  });
+  const plugin = new HtmlPwaPlugin()
+  const fakeCompiler = {
+    options: { output: { publicPath: '/' } },
+    hooks: {
+      compilation: {
+        tap: (_id, cb) => {
+          const fakeCompilation = {
+            hooks: {
+              processAssets: {
+                tap: (_opts, fn) => {
+                }
+              }
+            }
+          }
+          cb(fakeCompilation)
+        }
+      }
+    }
+  }
+  const startTime = performance.now()
+  plugin.apply(fakeCompiler)
+  const endTime = performance.now()
+  const timeTaken = endTime - startTime
+  console.log(` time taken: ${timeTaken.toFixed(3)} ms`)
+  expect(timeTaken).toBeLessThan(3000)
+}, 3000)
