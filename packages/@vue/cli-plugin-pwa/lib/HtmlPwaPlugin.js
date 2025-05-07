@@ -64,7 +64,7 @@ module.exports = class HtmlPwaPlugin {
     compiler.hooks.compilation.tap(ID, compilation => {
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(ID, (data, cb) => {
         // wrap favicon in the base template with IE only comment
-        data.html = data.html.replace(/<link rel="icon"[^>]+>/, '<!--[if IE]>$&<![endif]-->')
+        data.html = data.html.replace(/<link rel="icon"(?!<link rel="icon")[^>]+>/, '<!--[if IE]>$&<![endif]-->')
         cb(null, data)
       })
 
