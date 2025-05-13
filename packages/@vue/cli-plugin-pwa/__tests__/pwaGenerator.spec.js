@@ -1,6 +1,8 @@
 const generateWithPlugin = require('@vue/cli-test-utils/generateWithPlugin')
 const HtmlPwaPlugin = require('../lib/HtmlPwaPlugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { performance } = require('perf_hooks')
+global.performance = performance
 
 test('inject import statement for service worker', async () => {
   const { files } = await generateWithPlugin([
