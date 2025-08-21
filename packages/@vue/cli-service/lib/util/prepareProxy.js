@@ -54,7 +54,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     return !(isPublicFileRequest || isWdsEndpointRequest)
   }
 
-  function createProxyEntry (target, usersOnProxyReq, context) {
+  function createProxyEntry (target, usersOnProxyReq, usersOnError, context) {
     // #2478
     // There're a little-known use case that the `target` field is an object rather than a string
     // https://github.com/chimurai/http-proxy-middleware/blob/master/recipes/https.md
@@ -97,7 +97,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
           proxyReq.setHeader('origin', target)
         }
       },
-      onError: onProxyError(target)
+      onError: usersOnError ? (err, req, res) => usersOnError(err, req, res, target) : onDefaultProxyError(target)
     }
   }
 
@@ -129,7 +129,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
       )
       process.exit(1)
     }
-    const entry = createProxyEntry(config.target, config.onProxyReq, context)
+    const entry = createProxyEntry(config.target, config.onProxyReq, config.onError, context)
     return Object.assign({}, defaultConfig, config, entry)
   })
 }
@@ -163,9 +163,9 @@ function resolveLoopback (proxy) {
   return url.format(o)
 }
 
-// We need to provide a custom onError function for httpProxyMiddleware.
+// We need to provide a default custom onError function for httpProxyMiddleware.
 // It allows us to log custom error messages on the console.
-function onProxyError (proxy) {
+function onDefaultProxyError (proxy) {
   return (err, req, res) => {
     const host = req.headers && req.headers.host
     console.log(
