@@ -16,7 +16,7 @@ file, or the `"vue"` field in `package.json`.
 - **pwa.workboxPluginMode**
 
   This allows you to choose between the two modes supported by the underlying
-  [`workbox-webpack-plugin`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin).
+  [`workbox-webpack-plugin`](https://developers.chrome.com/docs/workbox/modules/workbox-webpack-plugin).
 
   - `'GenerateSW'` (default), will lead to a new service worker file being created
   each time you rebuild your web app.
@@ -24,7 +24,7 @@ file, or the `"vue"` field in `package.json`.
   - `'InjectManifest'` allows you to start with an existing service worker file,
   and creates a copy of that file with a "precache manifest" injected into it.
 
-  The "[Which Plugin to Use?](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#which_plugin_to_use)"
+  The "[Which Plugin to Use?](https://developer.chrome.com/docs/workbox/modules/workbox-webpack-plugin/#which-plugin-to-use)"
   guide can help you choose between the two modes.
 
 - **pwa.workboxOptions**
@@ -32,8 +32,8 @@ file, or the `"vue"` field in `package.json`.
   These options are passed on through to the underlying `workbox-webpack-plugin`.
 
   For more information on what values are supported, please see the guide for
-  [`GenerateSW`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_generatesw_config)
-  or for [`InjectManifest`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_injectmanifest_config).
+  [`GenerateSW`](https://developers.chrome.com/docs/workbox/modules/workbox-webpack-plugin#generatesw-plugin)
+  or for [`InjectManifest`](https://developers.chrome.com/docs/workbox/modules/workbox-webpack-plugin#injectmanifest-plugin).
 
 - **pwa.name**
 
