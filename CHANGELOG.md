@@ -1,4 +1,16 @@
 
+## 5.0.9 (2025-08-21)
+
+#### :bug: Bug Fix
+* `@vue/cli`
+  * [#7265](https://github.com/vuejs/vue-cli/pull/7265) fix: pnpm v7 install error ([@lvqq](https://github.com/lvqq))
+
+#### Committers: 2
+- Bob van de Vijver ([@bobvandevijver](https://github.com/bobvandevijver))
+- chlorine ([@lvqq](https://github.com/lvqq))
+
+
+
 
 
 
