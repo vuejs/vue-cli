@@ -340,9 +340,7 @@ module.exports = class Generator {
       }
     })
 
-    for (const postProcess of this.postProcessFilesCbs) {
-      await postProcess(files)
-    }
+    await Promise.all(this.postProcessFilesCbs.map((postProcess) => postProcess(files)))
     debug('vue:cli-files')(this.files)
   }
 
