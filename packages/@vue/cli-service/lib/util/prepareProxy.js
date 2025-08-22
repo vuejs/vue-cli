@@ -27,7 +27,7 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
   if (!proxy) {
     return undefined
   }
-  if (Array.isArray(proxy) || (typeof proxy !== 'object' && typeof proxy !== 'string')) {
+  if (typeof proxy !== 'object' && typeof proxy !== 'string') {
     console.log(
       chalk.red(
         'When specified, "proxy" in package.json must be a string or an object.'
@@ -115,6 +115,14 @@ module.exports = function prepareProxy (proxy, appPublicFolder) {
     return [
       Object.assign({}, defaultConfig, createProxyEntry(proxy))
     ]
+  }
+
+  // Support proxy as an array
+  if (Array.isArray(proxy)) {
+    return proxy.map(item => {
+      if (typeof item === 'function') return item
+      return Object.assign({}, defaultConfig, item)
+    })
   }
 
   // Otherwise, proxy is an object so create an array of proxies to pass to webpackDevServer
