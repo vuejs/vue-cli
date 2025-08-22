@@ -44,6 +44,16 @@ module.exports = api => {
           link: 'https://cli.vuejs.org/config/#assetsdir'
         },
         {
+          name: 'staticResourceDir',
+          type: 'input',
+          default: '',
+          value: data.vue && data.vue.staticResourceDir,
+          message: 'org.vue.vue-webpack.config.vue-cli.staticResourceDir.label',
+          description: 'org.vue.vue-webpack.config.vue-cli.staticResourceDir.description',
+          group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
+          link: 'https://cli.vuejs.org/config/#staticResourceDir'
+        },
+        {
           name: 'runtimeCompiler',
           type: 'confirm',
           default: false,

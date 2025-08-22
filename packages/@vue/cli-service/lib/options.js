@@ -4,6 +4,7 @@ const schema = createSchema(joi => joi.object({
   publicPath: joi.string().allow(''),
   outputDir: joi.string(),
   assetsDir: joi.string().allow(''),
+  staticResourceDir: joi.string(),
   indexPath: joi.string(),
   filenameHashing: joi.boolean(),
   runtimeCompiler: joi.boolean(),
@@ -93,6 +94,9 @@ exports.defaults = () => ({
 
   // where to put static assets (js/css/img/font/...)
   assetsDir: '',
+
+  // static resource dir
+  staticResourceDir: 'public',
 
   // filename for index.html (relative to outputDir)
   indexPath: 'index.html',

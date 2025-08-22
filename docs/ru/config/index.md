@@ -86,6 +86,14 @@ module.exports = {
   `assetsDir` игнорируется при перезаписи опций имени файла (filename) или имени фрагментов (chunkFilename) сгенерированных ресурсов.
   :::
 
+  
+### staticResourceDir
+
+- Type: `string`
+- Default: `'public'`
+
+  A static resource directory for `copy-webpack-plugin`.
+
 ### indexPath
 
 - Тип: `string`

@@ -239,7 +239,7 @@ module.exports = (api, options) => {
     }
 
     // copy static assets in public/
-    const publicDir = api.resolve('public')
+    const publicDir = api.resolve(options.staticResourceDir ?? 'public')
     const CopyWebpackPlugin = require('copy-webpack-plugin')
     const PlaceholderPlugin = class PlaceholderPlugin { apply () {} }
 

@@ -98,6 +98,13 @@ module.exports = defineConfig({
   从生成的资源覆写 filename 或 chunkFilename 时，`assetsDir` 会被忽略。
   :::
 
+### staticResourceDir
+
+- Type: `string`
+- Default: `'public'`
+
+  为`copy-webpack-plugin`设置的静态资源目录.
+
 ### indexPath
 
 - Type: `string`
