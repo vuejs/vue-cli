@@ -45,7 +45,7 @@ module.exports = (api, options) => {
     )
 
     const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
-    if (server) {
+    if (server && server.stop) {
       runner.on('exit', () => server.stop())
       runner.on('error', () => server.stop())
     }
