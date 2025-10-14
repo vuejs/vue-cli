@@ -14,6 +14,33 @@ test('pwa', async () => {
   const project = await create('pwa-build', defaultPreset)
   expect(project.has('src/registerServiceWorker.js')).toBe(true)
 
+  await project.write(
+    'my-service-worker.js',
+    `var manifest = self.__WB_MANIFEST; console.log('some string value')`
+  )
+  await project.write(
+    'vue.config.js',
+    `module.exports = {
+  pwa: {
+    name: 'NAME',
+    themeColor: '#123456',
+    msTileColor: '#234567',
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: './my-service-worker.js',
+      swDest: 'sw.js'
+    },
+    iconPaths: {
+      favicon32: 'path/to/favicon32.png',
+      favicon16: 'path/to/favicon16.png',
+      appleTouchIcon: 'path/to/apple-touch-icon.png',
+      maskIcon: 'path/to/safari-pinned-tab.svg',
+      msTileImage: 'path/to/mstile.png'
+    }
+  }
+}`
+  )
+
   const { stdout } = await project.run('vue-cli-service build')
   expect(stdout).toMatch('Build complete.')
 
@@ -25,6 +52,11 @@ test('pwa', async () => {
   // PWA specific files
   expect(project.has('dist/manifest.json')).toBe(true)
   expect(project.has('dist/img/icons/android-chrome-512x512.png')).toBe(true)
+
+  // PWA service worker files
+  expect(project.has('dist/sw.js')).toBe(true)
+  const sw = await project.read('dist/sw.js')
+  expect(sw).toMatch(`some string value`)
 
   // Make sure the base preload/prefetch are not affected
   const index = await project.read('dist/index.html')
@@ -40,6 +72,22 @@ test('pwa', async () => {
   // favicon is not minified because it's technically a comment
   expect(index).toMatch(`<!--[if IE]><link rel="icon" href="/favicon.ico"><![endif]-->`)
   expect(index).toMatch(`<meta name="apple-mobile-web-app-capable" content="no">`)
+  // check custom meta tags
+  expect(index).toMatch(`<meta name="theme-color" content="#123456">`)
+  expect(index).toMatch(`<meta name="msapplication-TileColor" content="#234567">`)
+  expect(index).toMatch(`<meta name="msapplication-TileImage" content="/path/to/mstile.png">`)
+  expect(index).toMatch(`<link rel="apple-touch-icon" href="/path/to/apple-touch-icon.png">`)
+  expect(index).toMatch(`<link rel="icon" type="image/png" sizes="32x32" href="/path/to/favicon32.png">`)
+  expect(index).toMatch(`<link rel="icon" type="image/png" sizes="16x16" href="/path/to/favicon16.png">`)
+
+  // PWA generated manifest
+  expect(project.has('dist/manifest.json')).toBe(true)
+  const manifest = JSON.parse(await project.read('dist/manifest.json'))
+  expect(manifest).toMatchObject({
+    'name': 'NAME',
+    'short_name': 'NAME',
+    'theme_color': '#123456'
+  })
 
   // should import service worker script
   const main = await project.read('src/main.js')
