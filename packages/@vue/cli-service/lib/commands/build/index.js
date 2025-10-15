@@ -46,7 +46,7 @@ module.exports = (api, options) => {
       }
     }
     args.entry = args.entry || args._[0]
-    if (args.target !== 'app') {
+    if (!['app', 'lib'].includes(args.target)) {
       args.entry = args.entry || 'src/App.vue'
     }
 
