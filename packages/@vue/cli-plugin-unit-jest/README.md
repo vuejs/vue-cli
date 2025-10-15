@@ -49,7 +49,7 @@ However, we have (at least) three cases where we do need to transpile code from 
 
 1. Usage of ES6 `import`/`export` statements, which have to be compiled to commonjs `module.exports`
 2. Single File Components (`.vue` files) which have to be run through `vue-jest`
-3. Typescript code
+3. TypeScript code
 
 To do this, we need to add an exception to the `transformIgnorePatterns` option of jest. This is its default value:
 

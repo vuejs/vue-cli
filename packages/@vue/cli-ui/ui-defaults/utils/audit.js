@@ -112,16 +112,16 @@ exports.auditProject = async function (cwd) {
       return {
         status: {
           status: 'error',
-          message: 'Not implemented for PNPM projects yet'
+          message: 'Not implemented for pnpm projects yet'
         },
         details: null
       }
     } else {
-      // TODO NPM audit
+      // TODO npm audit
       return {
         status: {
           status: 'error',
-          message: 'Not implemented for NPM projects yet'
+          message: 'Not implemented for npm projects yet'
         },
         details: null
       }

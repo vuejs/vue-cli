@@ -127,9 +127,9 @@ class PackageManager {
 
       if (semver.lt(npmVersion, MIN_SUPPORTED_NPM_VERSION)) {
         throw new Error(
-          'You are using an outdated version of NPM.\n' +
+          'You are using an outdated version of npm.\n' +
           'It does not support some core functionalities of Vue CLI.\n' +
-          'Please upgrade your NPM version.'
+          'Please upgrade your npm version.'
         )
       }
 
