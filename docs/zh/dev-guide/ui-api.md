@@ -670,7 +670,7 @@ module.exports = {
 在客户端 addon 资源中打开 `main.js` 文件并删除所有代码。
 
 ::: warning 警告
-别在客户端 addon 源文件总导入 Vue ，请从浏览器 `window` 使用全局的 `Vue` 对象。
+别在客户端 addon 源文件中导入 Vue ，请从浏览器 `window` 使用全局的 `Vue` 对象。
 :::
 
 这里是一个 `main.js` 的示例代码：
