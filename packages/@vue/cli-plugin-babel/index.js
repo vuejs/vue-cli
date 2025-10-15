@@ -32,6 +32,7 @@ module.exports = (api, options) => {
 
   api.chainWebpack(webpackConfig => {
     webpackConfig.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
+    const transpileDepRegex = genTranspileDepRegex(options.transpileDependencies)
 
     const jsRule = webpackConfig.module
       .rule('js')
