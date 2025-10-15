@@ -53,7 +53,7 @@ async function configure (value, options) {
   if (options.set && value) {
     set(config, options.set, value)
 
-    if (value.match('[0-9]')) {
+    if (/^\d+$/.test(value)) {
       set(config, options.set, parseInt(value))
     }
 
