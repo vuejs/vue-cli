@@ -225,7 +225,7 @@ async function save (id, context) {
               let field = key
               const dotIndex = key.indexOf('.')
               if (dotIndex !== -1) {
-                field = key.substr(0, dotIndex)
+                field = key.slice(0, dotIndex)
               }
               getChangedFields(fileId).push(field)
 

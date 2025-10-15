@@ -4,7 +4,7 @@ exports.resolveModuleRoot = function (filePath, id = null) {
   {
     const index = filePath.lastIndexOf(path.sep + 'index.js')
     if (index !== -1) {
-      filePath = filePath.substr(0, index)
+      filePath = filePath.slice(0, index)
     }
   }
   if (id) {
@@ -21,13 +21,13 @@ exports.resolveModuleRoot = function (filePath, id = null) {
       // Scoped (in dev env)
       index = id.lastIndexOf('/')
       if (index !== -1) {
-        search = id.substr(index + 1)
+        search = id.slice(index + 1)
         index = filePath.lastIndexOf(search)
       }
     }
 
     if (index !== -1) {
-      filePath = filePath.substr(0, index + search.length)
+      filePath = filePath.slice(0, index + search.length)
     }
   }
   return filePath

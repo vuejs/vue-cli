@@ -32,7 +32,7 @@ export default {
     snippet () {
       const text = this.item.contentSnippet
       if (text.length > 200) {
-        return text.substr(0, 197) + '...'
+        return text.slice(0, 197) + '...'
       }
       return text
     }

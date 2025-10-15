@@ -66,7 +66,7 @@ export default {
       if (types[type]) {
         type = types[type]
       }
-      type = type.charAt(0).toUpperCase() + type.substr(1)
+      type = type.charAt(0).toUpperCase() + type.slice(1)
       return require(`./Prompt${type}.vue`).default
     }
   }

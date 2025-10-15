@@ -39,7 +39,7 @@ function _loadFolder (root, context) {
   const paths = globby.sync(['./locales/*.json'], { cwd: root, absolute: true })
   paths.forEach(file => {
     const basename = path.basename(file)
-    const lang = basename.substr(0, basename.indexOf('.'))
+    const lang = basename.substring(0, basename.indexOf('.'))
     const strings = fs.readJsonSync(file)
     add({ lang, strings }, context)
   })

@@ -169,7 +169,7 @@ function parseFileFallback (s) {
   const t = (/\t.*|\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d(.\d+)?\s(\+|-)\d\d\d\d/).exec(s)
   if (t) { s = s.substring(0, t.index).trim() }
   // ignore git prefixes a/ or b/
-  if (s.match((/^(a|b)\//))) { return s.substr(2) } else { return s }
+  if (s.match((/^(a|b)\//))) { return s.slice(2) } else { return s }
 }
 
 function ltrim (s, chars) {
