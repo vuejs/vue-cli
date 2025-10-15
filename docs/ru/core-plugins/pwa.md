@@ -47,6 +47,12 @@
 
   - По умолчанию: `'#000000'`
 
+- **pwa.maskIconColor**
+
+  - По умолчанию: `undefined`
+
+    Для совместимости использует `pwa.themeColor` если не было передано значение.
+
 - **pwa.appleMobileWebAppCapable**
 
   - По умолчанию: `'no'`
