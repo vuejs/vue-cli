@@ -3,7 +3,8 @@ const {
   error,
   hasProjectYarn,
   hasProjectPnpm,
-  IpcMessenger
+  IpcMessenger,
+  openBrowser
 } = require('@vue/cli-shared-utils')
 const getBaseUrl = require('../util/getBaseUrl')
 
@@ -190,6 +191,8 @@ module.exports = (api, options) => {
       process.exit(1)
     })
 
+    const open = args.open || projectDevServerOptions.open
+
     // create server
     const server = new WebpackDevServer(Object.assign({
       historyApiFallback: {
@@ -234,7 +237,7 @@ module.exports = (api, options) => {
         ...projectDevServerOptions.client
       },
 
-      open: args.open || projectDevServerOptions.open,
+      // open,
       setupExitSignals: true,
 
       setupMiddlewares (middlewares, devServer) {
@@ -330,6 +333,9 @@ module.exports = (api, options) => {
             const buildCommand = hasProjectYarn(api.getCwd()) ? `yarn build` : hasProjectPnpm(api.getCwd()) ? `pnpm run build` : `npm run build`
             console.log(`  Note that the development build is not optimized.`)
             console.log(`  To create a production build, run ${chalk.cyan(buildCommand)}.`)
+            if (open) {
+              openBrowser(urls.localUrlForTerminal)
+            }
           } else {
             console.log(`  App is served in production mode.`)
             console.log(`  Note this is for preview or E2E testing only.`)
