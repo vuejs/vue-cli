@@ -6,6 +6,7 @@ module.exports = deepmerge(
   {
     globals: {
       'ts-jest': {
+        useESM: true,
         babelConfig: true
       }
     }
