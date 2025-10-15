@@ -114,11 +114,13 @@ module.exports = class HtmlPwaPlugin {
           makeTag('link', manifestCrossorigin
             ? {
               rel: 'manifest',
+              id: 'manifest',
               href: getTagHref(publicPath, manifestPath, assetsVersionStr),
               crossorigin: manifestCrossorigin
             }
             : {
               rel: 'manifest',
+              id: 'manifest',
               href: getTagHref(publicPath, manifestPath, assetsVersionStr)
             }
           )
