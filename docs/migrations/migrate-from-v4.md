@@ -67,9 +67,9 @@ Besides the internal changes that are only noticeable for custom configurations,
 
 Most notably:
 
-* The `disableHostCheck` option was removed in favor `allowedHosts: 'all'`;
-* `public`, `sockHost`, `sockPath`, and `sockPort` options were removed in favor `client.webSocketURL` option.
-* IE9 support of the dev server is not enabled by default. If you need to develop under IE9, please manually set the `devServer.webSocketServer` option to `sockjs`.
+* The `disableHostCheck` option was removed in favor of `allowedHosts: 'all'`.
+* `public`, `sockHost`, `sockPath`, and `sockPort` options were removed in favor of option `client.webSocketURL`.
+* IE9 support for the dev server is not enabled by default. If you need to develop under IE9, please manually set the `devServer.webSocketServer` option to `sockjs`.
 
 #### The `build` Command and Modern Mode
 
