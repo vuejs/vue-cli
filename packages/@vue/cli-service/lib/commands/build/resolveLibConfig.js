@@ -114,7 +114,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       [entryName]: realEntry
     }
 
-    rawConfig.output = Object.assign({
+    rawConfig.output = Object.assign(rawConfig.output, {
       library: libName,
       libraryExport: isVueEntry ? 'default' : undefined,
       libraryTarget: format,
@@ -123,7 +123,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       // https://github.com/webpack/webpack/issues/6522
       // https://github.com/webpack/webpack/issues/6525
       globalObject: `(typeof self !== 'undefined' ? self : this)`
-    }, rawConfig.output, {
+    }, {
       filename: `${entryName}.js`,
       chunkFilename: `${entryName}.[name].js`,
       // use dynamic publicPath so this can be deployed anywhere
