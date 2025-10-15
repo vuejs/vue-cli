@@ -16,15 +16,15 @@ file, or the `"vue"` field in `package.json`.
 - **pwa.workboxPluginMode**
 
   This allows you to choose between the two modes supported by the underlying
-  [`workbox-webpack-plugin`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin).
+  [`workbox-webpack-plugin`](https://developer.chrome.com/docs/workbox/modules/workbox-webpack-plugin).
 
   - `'GenerateSW'` (default), will lead to a new service worker file being created
-  each time you rebuild your web app.
+    each time you rebuild your web app.
 
   - `'InjectManifest'` allows you to start with an existing service worker file,
-  and creates a copy of that file with a "precache manifest" injected into it.
+    and creates a copy of that file with a "precache manifest" injected into it.
 
-  The "[Which Plugin to Use?](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#which_plugin_to_use)"
+  The "[Which Plugin to Use?](https://developer.chrome.com/docs/workbox/modules/workbox-webpack-plugin/#which-plugin-to-use)"
   guide can help you choose between the two modes.
 
 - **pwa.workboxOptions**
@@ -32,8 +32,8 @@ file, or the `"vue"` field in `package.json`.
   These options are passed on through to the underlying `workbox-webpack-plugin`.
 
   For more information on what values are supported, please see the guide for
-  [`GenerateSW`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_generatesw_config)
-  or for [`InjectManifest`](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#full_injectmanifest_config).
+  [`GenerateSW`](https://developer.chrome.com/docs/workbox/reference/workbox-webpack-plugin/#type-GenerateSWConfig)
+  or for [`InjectManifest`](https://developer.chrome.com/docs/workbox/reference/workbox-webpack-plugin/#type-InjectManifest).
 
 - **pwa.name**
 
@@ -78,11 +78,43 @@ file, or the `"vue"` field in `package.json`.
     The object will be used to generate the `manifest.json`
 
     If the following attributes are not defined in the object, the options of `pwa` or default options will be used instead.
-      - name: `pwa.name`
-      - short_name: `pwa.name`
-      - start_url: `'.'`
-      - display: `'standalone'`
-      - theme_color: `pwa.themeColor`
+
+    - name: `pwa.name`
+    - short_name: `pwa.name`
+    - start_url: `'.'`
+    - display: `'standalone'`
+    - theme_color: `pwa.themeColor`
+    - background_color: `#000000`
+    - icon:
+
+      - Defaults:
+
+        ```js
+        [
+          {
+            src: "./img/icons/android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "./img/icons/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "./img/icons/android-chrome-maskable-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "maskable",
+          },
+          {
+            src: "./img/icons/android-chrome-maskable-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ];
+        ```
 
 - **pwa.manifestCrossorigin**
 
@@ -114,21 +146,21 @@ file, or the `"vue"` field in `package.json`.
 module.exports = {
   // ...other vue-cli plugin options...
   pwa: {
-    name: 'My App',
-    themeColor: '#4DBA87',
-    msTileColor: '#000000',
-    appleMobileWebAppCapable: 'yes',
-    appleMobileWebAppStatusBarStyle: 'black',
+    name: "My App",
+    themeColor: "#4DBA87",
+    msTileColor: "#000000",
+    appleMobileWebAppCapable: "yes",
+    appleMobileWebAppStatusBarStyle: "black",
 
     // configure the workbox plugin
-    workboxPluginMode: 'InjectManifest',
+    workboxPluginMode: "InjectManifest",
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
-      swSrc: 'dev/sw.js',
+      swSrc: "dev/sw.js",
       // ...other Workbox options...
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ## Installing in an Already Created Project
