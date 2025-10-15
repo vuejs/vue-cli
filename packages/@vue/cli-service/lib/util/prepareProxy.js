@@ -17,7 +17,10 @@ const defaultConfig = {
   secure: false,
   changeOrigin: true,
   ws: true,
-  xfwd: true
+  xfwd: true,
+  headers: {
+    Connection: 'keep-alive'
+  }
 }
 
 module.exports = function prepareProxy (proxy, appPublicFolder) {
