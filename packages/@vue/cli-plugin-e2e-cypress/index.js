@@ -10,7 +10,8 @@ module.exports = (api, options) => {
       '--headless': 'run in headless mode without GUI',
       '--mode': 'specify the mode the dev server should run in. (default: production)',
       '--url': 'run e2e tests against given url instead of auto-starting dev server',
-      '-s, --spec': '(headless only) runs a specific spec file. defaults to "all"'
+      '-s, --spec': '(headless only) runs a specific spec file. defaults to "all"',
+      '--command': 'vue-cli-service command to run (default: serve)'
     },
     details:
       `All Cypress CLI options are also supported:\n` +
@@ -19,12 +20,15 @@ module.exports = (api, options) => {
     removeArg(rawArgs, 'mode')
     removeArg(rawArgs, 'url')
     removeArg(rawArgs, 'config')
+    removeArg(rawArgs, 'command')
 
     info(`Starting e2e tests...`)
 
+    const command = args.command || 'serve'
+
     const { url, server } = args.url
       ? { url: args.url }
-      : await api.service.run('serve')
+      : await api.service.run(command)
 
     const configs = typeof args.config === 'string' ? args.config.split(',') : []
     const cyArgs = [

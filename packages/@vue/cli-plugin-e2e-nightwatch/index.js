@@ -13,7 +13,8 @@ module.exports = (api, options) => {
       '--use-selenium': 'use Selenium standalone server instead of chromedriver or geckodriver',
       '-e, --env': 'specify comma-delimited browser envs to run in (default: chrome)',
       '-t, --test': 'specify a test to run by name',
-      '-f, --filter': 'glob to filter tests by filename'
+      '-f, --filter': 'glob to filter tests by filename',
+      '--command': 'vue-cli-service command to run (default: serve)'
     },
     details:
       `All Nightwatch CLI options are also supported.\n` +
@@ -42,7 +43,7 @@ module.exports = (api, options) => {
     }
 
     // remove args
-    ;['url', 'mode'].forEach(toRemove => removeArg(rawArgs, toRemove))
+    ;['url', 'mode', 'command'].forEach(toRemove => removeArg(rawArgs, toRemove))
     // remove flags
     ;['headless', 'use-selenium', 'parallel'].forEach(toRemove => removeArg(rawArgs, toRemove, 0))
 
@@ -100,13 +101,13 @@ module.exports.defaultModes = {
 }
 
 function startDevServer (args, api) {
-  const { url } = args
+  const { url, command } = args
 
   if (url) {
     return Promise.resolve({ url })
   }
 
-  return api.service.run('serve')
+  return api.service.run(command || 'serve')
 }
 
 async function loadNightwatchConfig (rawArgs, api) {
