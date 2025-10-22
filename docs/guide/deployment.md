@@ -325,7 +325,7 @@ You can deploy a fresh Vue project, with a Git repository set up for you, with t
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmaster%2Fexamples%2Fvue)
 
-## References:
+#### References:
 
 - [Example Source](https://github.com/vercel/vercel/tree/master/examples/vue)
 - [Official Vercel Guide](https://vercel.com/guides/deploying-vuejs-to-vercel)
@@ -514,3 +514,36 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
+### Appwrite
+
+[Appwrite](https://appwrite.io) is an open-source, all-in-one cloud development platform that offers developers built-in backend infrastructure and [web hosting](https://appwrite.io/products/sites) for their apps. All sites deployed on Appwrite benefit from a global CDN, automatic deployments from GitHub, and various security features, including DDoS protection, Web Application Firewall (WAF), and TLS encryption.
+
+#### Step 1: Create Vue.js app
+
+Create a new Vue.js app using the Vue CLI (or setup [Appwrite's Vue.js starter template](https://github.com/appwrite/templates-for-sites/tree/main/vue/starter)) and push this project to a [GitHub repo](https://github.com/new).
+
+#### Step 2: Setup Appwrite project
+
+Head to the [Appwrite Console](https://cloud.appwrite.io/) and create a project.
+
+#### Step 3: Deploy site
+
+Head to the **Sites** page in your Appwrite project from the sidebar, click on the **Create site** button, and select **Connect a repository**.
+
+Connect your GitHub account and select the repository you intend to deploy.
+
+1. Select the **production branch** and **root directory** from your repo.
+2. Verify that the **correct framework** is selected. In case an incorrect framework is visible, pick **Vue.js** from the drop-down list.
+3. Confirm the **install command**, **build command**, and **output directory** in the build settings. The default build settings for Vue.js are:
+    - **Install command:** `npm install`
+    - **Build command:** `npm run build`
+    - **Output directory:** `./dist`
+4. Add any environment variables required by the site.
+
+Click on the **Deploy** button. After successful deployment, you can visit your site.
+
+#### More resources
+
+- [Appwrite Sites docs](https://appwrite.io/docs/products/sites)
+- [Appwrite's Vue.js starter template](https://github.com/appwrite/templates-for-sites/tree/main/vue/starter)
+
