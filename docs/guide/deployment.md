@@ -514,9 +514,9 @@ Deploy your application using nginx inside of a docker container.
     curl localhost:8080
     # <!DOCTYPE html><html lang=en>...</html>
     ```
-### Appwrite
+### Appwrite Sites
 
-[Appwrite](https://appwrite.io) is an open-source, all-in-one cloud development platform that offers developers built-in backend infrastructure and [web hosting](https://appwrite.io/products/sites) for their apps. All sites deployed on Appwrite benefit from a global CDN, automatic deployments from GitHub, and various security features, including DDoS protection, Web Application Firewall (WAF), and TLS encryption.
+[Appwrite](https://appwrite.io) is an open-source, all-in-one cloud development platform that offers developers built-in backend infrastructure and web hosting for their apps. All web apps deployed on [Appwrite Sites](https://appwrite.io/products/sites) benefit from a global CDN, automatic deployments from GitHub, and various security features, including DDoS protection, Web Application Firewall (WAF), and TLS encryption.
 
 #### Step 1: Create Vue.js app
 
