@@ -114,6 +114,13 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       [entryName]: realEntry
     }
 
+    // Allow users to control chunk filename pattern via vue.config.js
+    // Support contenthash for better cache control
+    const userChunkFilename = rawConfig.output.chunkFilename
+    const defaultChunkFilename = userChunkFilename && userChunkFilename.includes('[contenthash')
+      ? userChunkFilename.replace(/\[name\]/g, `${entryName}.[name]`)
+      : `${entryName}.[name].js`
+
     rawConfig.output = Object.assign({
       library: libName,
       libraryExport: isVueEntry ? 'default' : undefined,
@@ -125,7 +132,7 @@ module.exports = (api, { entry, name, formats, filename, 'inline-vue': inlineVue
       globalObject: `(typeof self !== 'undefined' ? self : this)`
     }, rawConfig.output, {
       filename: `${entryName}.js`,
-      chunkFilename: `${entryName}.[name].js`,
+      chunkFilename: defaultChunkFilename,
       // use dynamic publicPath so this can be deployed anywhere
       // the actual path will be determined at runtime by checking
       // document.currentScript.src.
