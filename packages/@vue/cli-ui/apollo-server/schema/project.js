@@ -8,7 +8,12 @@ exports.types = gql`
 extend type Query {
   projects: [Project]
   projectCurrent: Project
-  projectCreation: ProjectCreation
+  projectCreation: ProjectCreation,
+  projectUserSettings: UserSettings
+}
+
+type UserSettings {
+  enableGit: Boolean
 }
 
 extend type Mutation {
@@ -94,7 +99,8 @@ exports.resolvers = {
   Query: {
     projects: (root, args, context) => projects.list(context),
     projectCurrent: (root, args, context) => projects.getCurrent(context),
-    projectCreation: (root, args, context) => projects.getCreation(context)
+    projectCreation: (root, args, context) => projects.getCreation(context),
+    projectUserSettings:(root, args, context) => projects.getUserSettings(context)
   },
 
   Mutation: {

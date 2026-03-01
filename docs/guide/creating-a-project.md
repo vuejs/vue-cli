@@ -31,6 +31,16 @@ Saved presets will be stored in a JSON file named `.vuerc` in your user home dir
 During the project creation process, you may also be prompted to select a preferred package manager, or use the [Taobao npm registry mirror](https://npmmirror.com/) for faster dependency installation. Your choices will also be saved in `~/.vuerc`.
 :::
 
+You can set whether to skip git initialization, package manager and NPM image source by default when creating a new project.
+
+```json
+{
+  "useTaobaoRegistry": true,
+  "packageManager": "yarn",
+  "enableGit": false
+}
+```
+
 The `vue create` command has a number of options and you can explore them all by running:
 
 ```bash
