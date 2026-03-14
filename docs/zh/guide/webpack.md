@@ -119,7 +119,7 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        return [/* 传递给 html-webpack-plugin's 构造函数的新参数 */]
+        return [/* 传递给 html-webpack-plugin 的构造函数的新参数 */]
       })
   }
 }
