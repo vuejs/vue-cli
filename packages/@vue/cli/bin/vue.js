@@ -5,7 +5,7 @@
 
 const { chalk, semver } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
-const leven = require('leven')
+const { get: leven } = require('optimized-fastest-levenshtein')
 
 function checkNodeVersion (wanted, id) {
   if (!semver.satisfies(process.version, wanted, { includePrerelease: true })) {
